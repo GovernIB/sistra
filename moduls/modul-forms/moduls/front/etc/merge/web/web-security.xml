@@ -1,0 +1,47 @@
+<security-constraint>
+    <web-resource-collection>
+        <web-resource-name>NORMAL</web-resource-name>
+        <url-pattern>/*</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+        <transport-guarantee>NONE</transport-guarantee>
+    </user-data-constraint>
+</security-constraint>
+
+<security-constraint>
+    <web-resource-collection>
+        <web-resource-name>AUTH</web-resource-name>
+        <url-pattern>/auth/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+        <role-name>*</role-name>
+    </auth-constraint>
+    <user-data-constraint>
+        <transport-guarantee>NONE</transport-guarantee>
+    </user-data-constraint>
+</security-constraint>
+
+<security-constraint>
+    <web-resource-collection>
+        <web-resource-name>SECURE</web-resource-name>
+        <url-pattern>/secure/*</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+        <transport-guarantee>INTEGRAL</transport-guarantee>
+    </user-data-constraint>
+</security-constraint>
+
+<security-constraint>
+    <web-resource-collection>
+        <web-resource-name>AUTH_SECURE</web-resource-name>
+        <url-pattern>/auth/secure/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+        <role-name>*</role-name>
+    </auth-constraint>
+    <user-data-constraint>
+        <transport-guarantee>INTEGRAL</transport-guarantee>
+    </user-data-constraint>
+</security-constraint>
+
+@web.login-config@

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+    <definition name=".verPantalla" path="/layout/mainLayout.jsp"
+        controllerClass="org.ibit.rol.form.front.action.VerPantallaController" >
+        <put name="title" value="-- fijado por el controller --"/>
+        <put name="contenido" value="/pages/verPantalla.jsp"/>
+    </definition>
+
+    <definition name=".penultima" path="/layout/mainLayout.jsp"
+        controllerClass="org.ibit.rol.form.front.action.PenultimaController">
+        <put name="title" value="-- fijado por el controller --"/>
+        <put name="contenido" value="/pages/penultima.jsp"/>
+    </definition>    
+
+    <definition name=".resultados" path="/layout/mainLayout.jsp"
+        controllerClass="org.ibit.rol.form.front.action.VerResultadosController">
+        <put name="title" value="-- fijado por el controller --"/>
+        <put name="contenido" value="/pages/resultados.jsp"/>
+    </definition>
+
+    <definition name=".popup" path="/layout/popLayout.jsp"
+        controllerClass="org.ibit.rol.form.front.action.PopupController" />
+
+    <definition name=".ayuda" extends=".popup">
+        <put name="contenido" value="/pages/ayuda.jsp"/>
+    </definition>
+
+    <definition name=".audio" extends=".popup">
+        <put name="contenido" value="/pages/audio.jsp"/>
+    </definition>
+
+    <definition name=".video" extends=".popup">
+        <put name="contenido" value="/pages/video.jsp"/>
+    </definition>
+
+    <definition name=".anexo.editar" extends=".popup" path="/layout/iframeLayout.jsp">
+        <put name="contenido" value="/pages/anexo/editarAnexo.jsp"/>
+    </definition>
+
+    <definition name=".anexo.ver" extends=".popup" path="/layout/iframeLayout.jsp">
+        <put name="contenido" value="/pages/anexo/verAnexo.jsp"/>
+    </definition>
+
+</tiles-definitions>

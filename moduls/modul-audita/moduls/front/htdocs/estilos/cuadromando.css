@@ -1,0 +1,115 @@
+/* CSS Document */
+
+body { margin:0; padding:0; font:.7em Arial, Helvetica, sans-serif; color:#254F7A; background-color:#FFFFFF; }
+
+/* marcosup */
+#marcosup { background:url(../images/cuadromando/sombra_general.gif) repeat-x bottom #94BCE6; }
+
+#capsalH {height: 42px;}
+#tituloPagina { position:absolute; top:10px; right:0; width:75%; height:25px; background:url(../images/cuadromando/marcosup_flecha.gif) no-repeat center left #336598; vertical-align:middle; color:#FFFFFF; }
+#tituloPagina span { font-size:1.4em; font-weight:bold; margin:0 15px; padding:0; line-height:1.5em; vertical-align:middle; }
+#tituloPagina img { vertical-align:middle; margin:0 15px 0 5px; }
+#tituloPagina a { color:#E5EEF7; padding:0 5px; }
+
+/* botonera pestanyas */
+#pesInicioOn, #pesResumenOn, #pesAnyoOn, #pesMesOn, #pesDiaOn {
+	width:10em; background-color:#FFFFFF; border-top:2px solid #FFFFFF; border-right:2px solid #FFFFFF; border-left:2px solid #FFFFFF; text-transform:uppercase;
+}
+#pesInicioOn a, #pesResumenOn a, #pesAnyoOn a, #pesMesOn a, #pesDiaOn a {
+	 font:bold 1em Arial, Helvetica, sans-serif; color:#336598; text-decoration:none;
+}
+#pesInicioOff, #pesResumenOff, #pesAnyoOff, #pesMesOff, #pesDiaOff {
+	width:10em; border-top:2px solid #336598; border-right:2px solid #336598; border-left:2px solid #336598;
+	background:url(../images/cuadromando/sombra_pestanya.gif) repeat-x bottom #336598;
+}
+#pesInicioOff a, #pesResumenOff a, #pesAnyoOff a, #pesMesOff a, #pesDiaOff a {
+	 font:bold 1em Arial, Helvetica, sans-serif; color:#FFFFFF;
+}
+#pesInicioOff img, #pesResumenOff img, #pesAnyoOff img, #pesMesOff img, #pesDiaOff img, #pesInicioOn img, #pesResumenOn img, #pesAnyoOn img, #pesMesOn img, #pesDiaOn img {
+	vertical-align:middle; margin-right:10px; width:33px; height:22px;
+}
+#pesInicioOff img { background:url(../images/cuadromando/pestanya_00inicio_off.gif) no-repeat #E5EEF7; }
+#pesInicioOn img { background:url(../images/cuadromando/pestanya_00inicio.gif) no-repeat #E5EEF7; }
+#pesResumenOff img { background:url(../images/cuadromando/pestanya_01resumen_off.gif) no-repeat #E5EEF7; }
+#pesResumenOn img { background:url(../images/cuadromando/pestanya_01resumen.gif) no-repeat #E5EEF7; }
+#pesAnyoOff img { background:url(../images/cuadromando/pestanya_02anyo_off.gif) no-repeat #E5EEF7; }
+#pesAnyoOn img { background:url(../images/cuadromando/pestanya_02anyo.gif) no-repeat #E5EEF7; }
+#pesMesOff img { background:url(../images/cuadromando/pestanya_03mes_off.gif) no-repeat #E5EEF7; }
+#pesMesOn img { background:url(../images/cuadromando/pestanya_03mes.gif) no-repeat #E5EEF7; }
+#pesDiaOff img { background:url(../images/cuadromando/pestanya_04dia_off.gif) no-repeat #E5EEF7; }
+#pesDiaOn img { background:url(../images/cuadromando/pestanya_04dia.gif) no-repeat #E5EEF7; }
+
+.pestanyaSombra { background:url(../images/cuadromando/sombra_general.gif) repeat-x top #94BCE6; }
+
+/* tabla tramitaciones */
+table#tramitaciones { width:100%; border:0; background-color:#F3F7FB; margin-bottom:10px; }
+table#tramitaciones img { margin-right:10px; vertical-align:middle; }
+
+/* tabla titulos graficas */
+table.titulo { width:100%; border:0; }
+table.titulo .txt {
+	border-top:3px double #72AAE2; border-right:3px double #72AAE2; border-left:3px double #72AAE2; width:20em; text-align:center; background-color:#72AAE2; color:#FFFFFF; font-weight:bold; line-height:1.5em;
+}
+table.titulo .linea { border-bottom:1px solid #72AAE2; }
+
+/* subtitulos */
+p.subtitulo { font-weight:bold; border-bottom:1px dotted #E5EEF7; }
+p.subtitulo span { font-weight:normal; }
+
+/* datos totales */
+table.datosTotales { width:90%; border:0; font-weight:bold; }
+
+table.datosTotales img { width:22px; height:22px; margin-right:10px; vertical-align:middle; }
+
+table.datosTotales td.colorNaranja { color:#A86000; width:33%; text-align:center; }
+table.datosTotales td.colorNaranja img { background-color:#F9D099; }
+table.datosTotales td.colorNaranja span { color:#F08900; }
+
+table.datosTotales td.colorVerde { color:#3E804A; text-align:center; }
+table.datosTotales td.colorVerde img { background-color:#BCE2C3; }
+table.datosTotales td.colorVerde span { color:#58B76A; }
+
+table.datosTotales td.colorMalva { color:#7F47C0; width:33%; text-align:center; }
+table.datosTotales td.colorMalva img { background-color:#D5B5FB; }
+table.datosTotales td.colorMalva span { color:#9547F4; }
+
+/* tablas los MAS */
+table.loMas { width:100%; border:1px solid #72AAE2; margin-bottom:20px; }
+table.loMas caption { background-color:#72AAE2; color:#FFFFFF; font-weight:bold; padding:3px; border-bottom:1px solid #FFFFFF; }
+table.loMas th { background-color:#E7EEF5; border-right:1px solid #FFFFFF; }
+table.loMas tr.lineaPar { background-color:#F7F9FB; }
+
+/* tabla cuadranteServicio */
+table#cuadranteServicio a { color:#000000; }
+
+/* objetos FORM */
+input, select { font-size:1em; }
+input.boton { color: #FFFFFF; border: 1px #000000 solid; background-color: #94BCE6; font-weight: bold; }
+input.botonClaro { color: #336598; border: 1px #94BCE6 solid; background-color: #E5EEF7; }
+
+/* enlaces */
+a { color:#CC0000; }
+a.buscarDesde, a.buscarHasta { font-weight:bold; border-left:1px solid #B3C8DC; border-right:1px solid #B3C8DC; background-color:#FFFFFF; padding:1px 10px; margin-top:2px; text-decoration:none; }
+a.buscarHasta { color:#009900; }
+
+/* tablas PAG DETALLE */
+table td.tituloDetalle { background-color:#94BCE6; color:#FFFFFF; font-weight:bold; text-align:center; }
+
+/* titulos */
+h1 { margin:0; padding:10px 0; font-size:1.5em; }
+h2 { margin:0; padding:0 10px; font-size:1.2em; }
+
+
+@media print {
+#losMasTramitados { page-break-before:always; }
+
+#pesInicioOn, #pesResumenOn, #pesAnyoOn, #pesMesOn, #pesDiaOn { font-size:1.5em; }
+#pesInicioOff, #pesResumenOff, #pesAnyoOff, #pesMesOff, #pesDiaOff { display:none; }
+	
+}	
+	/* capçal */
+
+#capsal { background:url(../images/fondo.gif) repeat-x #ff8400; color:#fff; border-bottom:5px solid #be6200; }
+#capsal a { float:right; margin-right:1em; display:block; padding:1em 2em 1em 0; background:url(../images/enllasos/tornar.gif) no-repeat right 1em; color:#fff; font-weight:bold; }
+#capsal img { float:left; }
+#capsal h1 { background:url(../images/titol_ico.gif) no-repeat; margin:0 0 0 140px; padding:.5em 0 .6em 75px; font-size:1.5em; }

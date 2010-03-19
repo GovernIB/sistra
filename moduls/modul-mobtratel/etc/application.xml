@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE application PUBLIC
+   '-//Sun Microsystems, Inc.//DTD J2EE Application 1.3//EN'
+   'http://java.sun.com/dtd/application_1_3.dtd'>
+
+<application>
+    <display-name>TEMPLATE</display-name>
+    <description><![CDATA[Proyecto MOBILITAT]]></description>
+
+    <module><java>mobtratel-model.jar</java></module>
+    <module><ejb>mobtratel-persistence.jar</ejb></module>
+    <module>
+        <web>
+            <web-uri>mobtratel-back.war</web-uri>
+            <context-root>mobtratelback</context-root>
+        </web>
+    </module>
+    
+    <module>
+        <web>
+            <web-uri>mobtratel-front.war</web-uri>
+            <context-root>mobtratelfront</context-root>
+        </web>
+    </module>
+    
+    <module>
+        <web>
+            <web-uri>mobtratel-admin.war</web-uri>
+            <context-root>mobtrateladmin</context-root>
+        </web>
+    </module>
+    
+    <module>
+        <web>
+            <web-uri>mobtratel-ws.war</web-uri>
+            <context-root>mobtratelws</context-root>
+        </web>
+    </module>
+
+
+</application>

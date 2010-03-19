@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+    <definition name=".mainLayout" path="/init.jsp"/>
+
+
+<!-- Componente que muestra las pestañas de idiomas, select es la seleccionada -->
+    <definition name=".langtabs" path="/moduls/langtabs.jsp"
+        controllerClass="es.caib.sistra.back.action.ListaIdiomasController">
+        <put name="select" value=""/>
+    </definition>
+
+    <definition name=".editar" path="/layouts/editarLayout.jsp">
+        <put name="title" value="-- no definido --"/>
+        <put name="alta.title" value="-- no definido --"/>
+        <put name="modificacion.title" value="-- no definido --"/>
+        <put name="subtitle" value="-- no definido --"/>
+        <put name="validateMethod" value="-- no definido --"/>
+        <put name="form.action" value="-- no definido --"/>
+        <put name="form.actionBaja" value=""/>
+        <put name="form.bean" value="-- no definido --"/>
+        <put name="paginaTramite" value="" />
+        <put name="paginaValues" value=""/>
+        <put name="paginaTraduccion" value=""/>
+        <put name="botonesTramite" value=""/>
+        <putList name="listaRelaciones">
+            <!-- Lista de elementos relacionados -->
+        </putList>
+        <putList name="listaRelaciones2">
+            <!-- Lista de elementos relacionados -->
+        </putList>
+    </definition>
+    
+    <definition name=".framesetTramitacion" path="/frameset.jsp" />
+    
+    
+            
+     <!-- ====================== ORGANO =================== -->
+    <definition name=".organo.editar" extends=".editar">
+        <put name="title" value="organo.title"/>
+        <put name="alta.title" value="organo.alta"/>
+        <put name="modificacion.title" value="organo.modificacion"/>
+        <put name="subtitle" value="organo.subtitulo"/>
+        <put name="validateMethod" value="validateOrganoForm"/>
+        <put name="form.action" value="/back/organo/editar"/>
+        <put name="form.bean" value="organoForm"/>
+        <put name="paginaValues" value="/organo/editarValues.jsp"/>
+<!--         
+        <putList name="listaRelaciones">
+            <add value=".tramite.lista" type="definition" />
+        </putList>
+-->      
+    </definition>
+
+    <definition name=".organo.lista" path="/organo/lista.jsp"
+        controllerClass="es.caib.sistra.back.action.organo.ListaOrganosController"/>
+    
+    <!-- ====================== TRAMITE =================== -->
+    <definition name=".tramite.editar" extends=".editar">
+        <put name="title" value="tramite.title"/>
+        <put name="alta.title" value="tramite.alta"/>
+        <put name="modificacion.title" value="tramite.modificacion"/>
+        <put name="subtitle" value="tramite.subtitulo"/>
+        <put name="validateMethod" value="validateTramiteForm"/>
+        <put name="form.action" value="/back/tramite/editar"/>
+        <put name="form.actionBaja" value="/back/tramite/baja"/>
+        <put name="form.bean" value="tramiteForm"/>
+        <put name="paginaValues" value="/tramite/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/tramite/editarTraduccion.jsp"/>
+<!-- 
+        <putList name="listaRelaciones">
+            <add value=".tramiteVersion.lista" type="definition" />
+        </putList>
+ -->                
+    </definition>
+
+    <definition name=".tramite.lista" path="/tramite/lista.jsp" controllerClass="es.caib.sistra.back.action.tramite.ListaTramitesController">
+        <put name="id" value="" />
+    </definition>
+    
+    
+    
+    <!-- Mensaje plataforma -->
+    <definition name=".mensajePlataforma.editar" extends=".editar">
+        <put name="title" value="mensajePlataforma.title"/>
+        <put name="alta.title" value="mensajePlataforma.alta"/>
+        <put name="modificacion.title" value="mensajePlataforma.modificacion"/>
+        <put name="subtitle" value="mensajePlataforma.subtitulo"/>        
+        <put name="validateMethod" value="validateMensajePlataformaForm"/>
+        <put name="form.action" value="/back/mensajePlataforma/editar"/>
+        <put name="form.actionBaja" value=""/>
+        <put name="form.bean" value="mensajePlataformaForm"/>
+        <put name="paginaValues" value="/mensajePlataforma/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/mensajePlataforma/editarTraduccion.jsp"/>
+<!-- 
+        <putList name="listaRelaciones">
+            <add value=".tramiteVersion.lista" type="definition" />
+        </putList>
+ -->                
+    </definition>
+
+    <definition name=".mensajePlataforma.lista" path="/mensajePlataforma/lista.jsp" controllerClass="es.caib.sistra.back.action.mensajePlataforma.ListaMensajePlataformaController">
+        <put name="id" value="" />
+    </definition>
+    
+    
+	<!--  Definicion para las especificaciones genericas  -->
+    <definition name=".especificacionesGenericas.editar" extends=".editar">
+        <put name="title" value="especificacionesGenericas.title"/>
+        <put name="alta.title" value="especificacionesGenericas.alta"/>
+        <put name="modificacion.title" value="especificacionesGenericas.modificacion"/>
+        <put name="subtitle" value="especificacionesGenericas.subtitulo"/>
+        <put name="validateMethod" value="validateEspecificacionesGenericasForm"/>
+        <put name="form.action" value="/back/especificacionesGenericas/editar"/>
+        <put name="form.bean" value="especificacionesGenericasForm"/>
+    	<put name="paginaValues" value="/especificacionesTramite/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/especificacionesTramite/editarTraduccion.jsp"/>
+    </definition>
+
+    <!--  Definicion para la estructura de un tramite version o un tramite nivel -->
+    <definition name=".especificacionesTramite.editar" extends=".editar">
+    	<put name="paginaTramite" value="" />
+    	<put name="paginaValues" value="/especificacionesTramite/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/especificacionesTramite/editarTraduccion.jsp"/>
+        <put name="botonesTramite" value="" />
+    </definition>
+    
+    <!-- ====================== VERSION TRAMITE=================== -->
+    <definition name=".tramiteVersion.editar" extends=".especificacionesTramite.editar" controllerClass="es.caib.sistra.back.action.tramiteVersion.TramiteVersionController">
+        <put name="title" value="tramiteVersion.title"/>
+        <put name="alta.title" value="tramiteVersion.alta"/>
+        <put name="modificacion.title" value="tramiteVersion.modificacion"/>
+        <put name="subtitle" value="tramiteVersion.subtitulo"/>
+        <put name="validateMethod" value="validateTramiteVersionForm"/>
+        <put name="form.action" value="/back/tramiteVersion/editar"/>
+        <put name="form.actionBaja" value="/back/tramiteVersion/baja"/>
+        <put name="form.bean" value="tramiteVersionForm"/>
+        <put name="paginaTramite" value=""/>
+        <put name="paginaTraduccion" value=""/>        
+      	<put name="paginaValues" value="/tramiteVersion/editarValues.jsp"/>
+    <!--     <put name="botonesTramite" value="/tramiteVersion/botonesTramite.jsp"/>    -->
+    </definition>
+    
+    <definition name=".arbolUnidades" path="/arbolUnidades.jsp" />
+    <definition name=".tramiteVersion.funcsNodesUnidades" path="/js/funcsNodesUnidades.jsp"
+     controllerClass="es.caib.sistra.back.action.tramiteVersion.FuncsNodesUnidadesController" />
+  
+    <definition name=".tramiteVersion.importar" path="/tramiteVersion/importar.jsp"/>
+	    
+    <definition name=".tramiteVersion.lista" path="/tramiteVersion/lista.jsp" controllerClass="es.caib.sistra.back.action.tramiteVersion.ListaTramiteVersionesController">
+        <put name="id" value="" />
+    </definition>
+    
+    <!-- ====================== NIVEL TRAMITE=================== -->
+    
+    <definition name=".tramiteNivel.editar" extends=".especificacionesTramite.editar">
+        <put name="title" value="tramiteNivel.title"/>
+        <put name="alta.title" value="tramiteNivel.alta"/>
+        <put name="modificacion.title" value="tramiteNivel.modificacion"/>
+        <put name="subtitle" value="tramiteNivel.subtitulo"/>
+        <put name="validateMethod" value="validateTramiteNivelForm"/>
+        <put name="form.action" value="/back/tramiteNivel/editar"/>
+        <put name="form.actionBaja" value="/back/tramiteNivel/baja"/>
+        <put name="form.bean" value="tramiteNivelForm"/>
+        <put name="paginaTramite" value="/tramiteNivel/editarValues.jsp"/>
+<!--          <put name="botonesTramite" value="/tramiteNivel/botonesTramite.jsp"/> -->
+    </definition>
+    
+    <definition name=".tramiteNivel.lista" path="/tramiteNivel/lista.jsp" controllerClass="es.caib.sistra.back.action.tramiteNivel.ListaTramiteNivelesController">
+        <put name="id" value="" />
+    </definition>
+    
+    <!-- ====================== DOCUMENTO =================== -->
+    <definition name=".documento.editar" extends=".editar" controllerClass="es.caib.sistra.back.action.documento.DocumentoController">
+        <put name="title" value="documento.title"/>
+        <put name="alta.title" value="documento.alta"/>
+        <put name="modificacion.title" value="documento.modificacion"/>
+        <put name="subtitle" value="documento.subtitulo"/>
+        <put name="validateMethod" value="validateDocumentoForm"/>
+        <put name="form.action" value="/back/documento/editar"/>
+        <put name="form.actionBaja" value="/back/documento/baja"/>
+        <put name="form.bean" value="documentoForm"/>
+        <put name="paginaValues" value="/documento/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/documento/editarTraduccion.jsp"/>
+<!--         <putList name="listaRelaciones">
+            <add value=".documentoNivel.lista" type="definition" />
+        </putList>
+ -->        
+    </definition>
+    
+    <definition name=".documento.lista" path="/documento/lista.jsp" controllerClass="es.caib.sistra.back.action.documento.ListaDocumentosController">
+        <put name="id" value="" />
+    </definition>
+    
+    <!-- ====================== DOCUMENTO NIVEL =================== -->
+    <definition name=".documentoNivel.editar" extends=".editar"  controllerClass="es.caib.sistra.back.action.documentoNivel.DocumentoNivelController">
+        <put name="title" value="documentoNivel.title"/>
+        <put name="alta.title" value="documentoNivel.alta"/>
+        <put name="modificacion.title" value="documentoNivel.modificacion"/>
+        <put name="subtitle" value="documentoNivel.subtitulo"/>
+        <put name="validateMethod" value="validateDocumentoNivelForm"/>
+        <put name="form.action" value="/back/documentoNivel/editar"/>
+        <put name="form.actionBaja" value="/back/documentoNivel/baja"/>
+        <put name="form.bean" value="documentoNivelForm"/>
+        <put name="paginaValues" value="/documentoNivel/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/documentoNivel/editarTraduccion.jsp"/>
+    </definition>
+    
+    <definition name=".documentoNivel2.lista" path="/documentoNivel/lista.jsp" controllerClass="es.caib.sistra.back.action.documentoNivel.ListaDocumentoNivelesController">
+        <put name="id" value="" />
+    </definition>
+    
+    <definition name=".documentoNivel.lista" path="/documentoNivel/lista.jsp" controllerClass="es.caib.sistra.back.action.documentoNivel.ListaDocumentoNivelesController">
+        <put name="id" value="" />
+    </definition>
+    
+    <definition name=".arbolForms" path="/arbolForms.jsp" />
+    <definition name=".documentoNivel.funcsNodesForms" path="/js/funcsNodesForms.jsp"
+     controllerClass="es.caib.sistra.back.action.documentoNivel.FuncsNodesFormsController" />
+    
+    
+    	<!-- ====================== MENSAJE TRAMITE =================== -->
+    <definition name=".mensajeTramite.editar" extends=".editar">
+        <put name="title" value="mensajeTramite.title"/>
+        <put name="alta.title" value="mensajeTramite.alta"/>
+        <put name="modificacion.title" value="mensajeTramite.modificacion"/>
+        <put name="subtitle" value="mensajeTramite.subtitulo"/>
+        <put name="validateMethod" value="validateMensajeTramiteForm"/>
+        <put name="form.action" value="/back/mensajeTramite/editar"/>
+        <put name="form.bean" value="mensajeTramiteForm"/>
+        <put name="paginaValues" value="/mensajeTramite/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/mensajeTramite/editarTraduccion.jsp"/>
+    </definition>
+    
+    <definition name=".mensajeTramite.lista" path="/mensajeTramite/lista.jsp" controllerClass="es.caib.sistra.back.action.mensajeTramite.ListaMensajesTramiteController">
+        <put name="id" value="" />
+    </definition>
+    
+    <!-- ====================== DATO JUSTIFICANTE =================== -->
+    <definition name=".datoJustificante.editar" extends=".editar">
+        <put name="title" value="datoJustificante.title"/>
+        <put name="alta.title" value="datoJustificante.alta"/>
+        <put name="modificacion.title" value="datoJustificante.modificacion"/>
+        <put name="subtitle" value="datoJustificante.subtitulo"/>
+        <put name="validateMethod" value="validateDatoJustificanteForm"/>
+        <put name="form.action" value="/back/datoJustificante/editar"/>
+        <put name="form.bean" value="datoJustificanteForm"/>
+        <put name="paginaValues" value="/datoJustificante/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/datoJustificante/editarTraduccion.jsp"/>
+    </definition>
+    
+    <definition name=".datoJustificante.lista" path="/datoJustificante/lista.jsp" controllerClass="es.caib.sistra.back.action.datoJustificante.ListaDatoJustificantesController">
+        <put name="id" value="" />
+    </definition>
+    
+    <definition name=".arbol" path="/arbol.jsp" />
+    <definition name=".funcsNodes" path="/js/funcsNodes.jsp"
+     controllerClass="es.caib.sistra.back.action.menu.FuncsNodesController" />
+    
+    <definition name=".exitoBaja" path="/exitoBaja.jsp" />
+    
+    <!-- ====================== dominio =================== -->
+    <definition name=".dominio.editar" extends=".editar" controllerClass="es.caib.sistra.back.action.dominio.DominioController">
+        <put name="title" value="dominio.title"/>
+        <put name="alta.title" value="dominio.alta"/>
+        <put name="modificacion.title" value="dominio.modificacion"/>
+        <put name="subtitle" value="dominio.subtitulo"/>
+        <put name="validateMethod" value="validateDominioForm"/>
+        <put name="form.action" value="/back/dominio/editar"/>
+        <put name="form.bean" value="dominioForm"/>
+        <put name="paginaValues" value="/dominio/editarValues.jsp"/>
+    </definition>
+     <definition name=".dominio.lista" path="/dominio/lista.jsp"
+        controllerClass="es.caib.sistra.back.action.dominio.ListaDominiosController"/>
+        
+	<definition name=".dominio.importar" path="/dominio/importar.jsp"/>        
+    
+    <definition name=".dominio.ping" path="/dominio/pingDominio.jsp"
+    	 controllerClass="es.caib.sistra.back.action.dominio.PingDominioController" />
+    
+    <!--  ============ Mensajes  -->
+    <definition name=".mensaje" path="/mensaje.jsp">       
+    </definition>
+    
+    <!-- ====================== gestores formularios =================== -->
+    <definition name=".gestorFormularios.editar" path="/layouts/editarLayoutFormularios.jsp" controllerClass="es.caib.sistra.back.action.gestorFormularios.GestorFormulariosController">
+        <put name="title" value="gestorFormularios.title"/>
+        <put name="alta.title" value="gestorFormularios.alta"/>
+        <put name="modificacion.title" value="gestorFormularios.modificacion"/>
+        <put name="subtitle" value="gestorFormularios.subtitulo"/>
+        <put name="validateMethod" value="validateGestorFormulariosForm"/>
+        <put name="form.action" value="/back/gestorFormularios/editar"/>
+        <put name="form.bean" value="gestorFormulariosForm"/>
+        <put name="form.actionBaja" value=""/>
+        <put name="paginaValues" value="/gestorFormularios/editarValues.jsp"/>
+        <put name="paginaTramite" value="" />
+        <put name="paginaTraduccion" value=""/>
+        <put name="botonesTramite" value=""/>
+        <putList name="listaRelaciones">
+            <!-- Lista de elementos relacionados -->
+        </putList>
+        <putList name="listaRelaciones2">
+            <!-- Lista de elementos relacionados -->
+        </putList>
+    </definition>
+    
+     <definition name=".gestorFormularios.lista" path="/gestorFormularios/lista.jsp"
+        controllerClass="es.caib.sistra.back.action.gestorFormularios.ListaFormulariosController"/>
+        
+	<definition name=".gestorFormularios.importar" path="/gestorFormularios/importar.jsp"/>        
+    
+</tiles-definitions>
