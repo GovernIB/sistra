@@ -4,7 +4,8 @@ Per instal·lar-les seguiu aquestes dependències s'ha de fer el següent:
 
 1. ClientE @FIRMA
 
-Baixar el clientE @firma de: http://www.ctt.map.es/web/clienteafirma
+Baixar el clientE @firma 2.4.x de: http://www.ctt.map.es/web/proyectos/afirma/pid/519
+
 Posar els fitxers:
 
 version.properties
