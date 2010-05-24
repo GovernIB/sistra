@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE application PUBLIC
+   '-//Sun Microsystems, Inc.//DTD J2EE Application 1.3//EN'
+   'http://java.sun.com/dtd/application_1_3.dtd'>
+
+<application>
+    <display-name>AUD</display-name>
+    <description><![CDATA[Proyecto IBCEGE - AUD]]></description>
+
+	<module><java>audit-model.jar</java></module>    
+    <module><ejb>audit-persistence.jar</ejb></module>
+    
+    <module>
+        <web>
+            <web-uri>audit-front.war</web-uri>
+            <context-root>auditfront</context-root>
+        </web>
+    </module>
+    
+         <module>
+        <web>
+            <web-uri>audit-admin.war</web-uri>
+            <context-root>auditadmin</context-root>
+        </web>
+    </module>
+    
+    
+ 
+</application>

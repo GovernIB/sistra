@@ -1,0 +1,4 @@
+   <filter>
+      <filter-name>SesionCaducadaFilter</filter-name>
+      <filter-class>org.ibit.rol.form.back.filter.SesionCaducadaFilter</filter-class>      
+   </filter>

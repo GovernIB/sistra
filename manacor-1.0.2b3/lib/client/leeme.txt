@@ -1,0 +1,4 @@
+Librerias cliente de interfaz
+
+Necesarias para compilar los módulos ya que tienen interdependencias. En caso de que se actualice alguna interfaz 
+de algún módulo habrá que actualizar la librería en este directorio.

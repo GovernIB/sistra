@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="es.caib.mobtratel.model.MensajeEmail" table="MOB_MSEMAI">
+        <cache usage="read-write"/>
+        <id name="codigo" unsaved-value="null" column="MSE_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">MOB_SEQMSE</param>
+          </generator>
+      	</id>
+
+        <property name="destinatarios" not-null="true" type="binary" column="MSE_EMAILS"/>
+        <property name="destinatariosEnviados" type="binary" column="MSE_EMAILE"/>
+        <property name="titulo" column="MSE_TITULO"/>
+        <property name="mensaje" not-null="true" type="binary" column="MSE_MENSAJ"/>
+        <property name="html" not-null="true" column="MSE_HTML"/>
+        <property name="estado" not-null="true" column="MSE_ESTADO"/>
+        <property name="error" length="500" column="MSE_ERROR"/>
+        <property name="fechaInicioEnvio" column="MSE_INIENV"/>
+        <property name="fechaFinEnvio" column="MSE_FINENV"/>
+        <property name="numeroDestinatarios" type="integer" column="MSE_NDEST"/>
+        <property name="numeroDestinatariosEnviados" type="integer" column="MSE_NDESTE"/>
+        
+        <many-to-one name="envio" column="MSE_IDENV" not-null="true"  foreign-key="MOB_MSEENV_FK"/>
+        
+
+    </class>
+
+</hibernate-mapping>

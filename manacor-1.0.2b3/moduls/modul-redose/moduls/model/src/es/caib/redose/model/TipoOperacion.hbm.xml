@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="es.caib.redose.model.TipoOperacion" table="RDS_TIOPER">
+    	<cache usage="read-only"/>
+    	
+    			
+		<id name="codigo" type="string" length="4" unsaved-value="null" column="TOP_CODIGO">
+            <generator class="assigned"/>
+        </id>
+    	
+        <property name="nombre" type="string" column="TOP_NOMBRE" length="50" not-null="true" />
+
+    </class>
+</hibernate-mapping>

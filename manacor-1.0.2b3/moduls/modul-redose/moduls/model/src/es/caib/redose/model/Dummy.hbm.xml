@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="es.caib.redose.model.Dummy" table="DUMMY">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="ID">
+            <generator class="sequence">
+                <param name="sequence">DUMMY_SEQ</param>
+            </generator>
+        </id>
+
+        <property name="attr1" not-null="true" column="ATTR1" />
+        <property name="attr2" not-null="true" column="ATTR2"/>
+
+    </class>
+
+</hibernate-mapping>
