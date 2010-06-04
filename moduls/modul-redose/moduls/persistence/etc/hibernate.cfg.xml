@@ -21,8 +21,6 @@
         <property name="cache.provider_class">net.sf.ehcache.hibernate.Provider</property>
         <property name="cache.use_query_cache">true</property>
 
-        <mapping resource="es/caib/redose/model/Dummy.hbm.xml" />
-        <mapping resource="es/caib/redose/model/RdsDoc.hbm.xml" />
         <mapping resource="es/caib/redose/model/Documento.hbm.xml" />
         <mapping resource="es/caib/redose/model/Fichero.hbm.xml" />
         <mapping resource="es/caib/redose/model/Firma.hbm.xml" />
