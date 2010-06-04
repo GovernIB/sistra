@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping 
+	PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+	  "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="es.caib.redose.model.Modelo" table="RDS_MODELO">
+    	<cache usage="read-write"/>
+        
+        <id name="codigo" unsaved-value="null" column="MOD_CODIGO">
+            <generator class="sequence">
+                <param name="sequence">RDS_SEQMOD</param>
+            </generator>
+        </id>
+        
+        <property name="modelo" column="MOD_MODELO" length="15" not-null="true" unique="true" />
+        <property name="nombre" column="MOD_NOMBRE" length="100" not-null="true" />
+        <property name="descripcion" column="MOD_DESC" length="400" />
+        <property name="estructurado" type="char" column="MOD_ESTRUC" length="1" not-null="true" />
+
+		<set name="versiones" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="VER_VERSIO">
+			<cache usage="read-write"/>
+		    <key column="VER_CODMOD"/>
+            <one-to-many class="es.caib.redose.model.Version"/>
+		</set>
+		        
+    </class>
+</hibernate-mapping>

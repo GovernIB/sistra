@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.form.model.AyudaPantalla" table="RFR_AYUPAN">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="AYU_CODI">
+            <generator class="sequence">
+                <param name="sequence">RFR_SECAYU</param>
+            </generator>
+        </id>
+
+
+        <many-to-one name="pantalla" not-null="true" column="AYU_CODPAN" foreign-key="RFR_AYUPAN_FK"/>
+        <many-to-one name="perfil" not-null="true" column="AYU_CODPER" foreign-key="RFR_AYUPER_FK"/>
+
+        <map name="traducciones" cascade="all" table="RFR_TRAYPA">
+            <cache usage="read-write"/>
+            <key column="TRA_CODAYU" foreign-key="RFR_AYUTRA_FK"/>
+            <index column="TRA_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.form.model.TraAyudaPantalla">
+                <property name="descripcionCorta" length="1024" column="TRA_DESCOR"/>
+                <property name="descripcionLarga" length="4000" column="TRA_DESLAR"/>
+                <property name="urlWeb" length="1024" column="TRA_URLWEB"/>
+                <property name="urlVideo" length="1024" column="TRA_URLVID"/>
+                <property name="urlSonido" length="1024"  column="TRA_URLSON"/>
+            </composite-element>
+        </map>
+    </class>
+</hibernate-mapping>

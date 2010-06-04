@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+    <definition
+        name=".layout"
+        path="/layout.jsp">
+        <put name="capsal" value=""/>
+        <put name="continguts" value=""/>
+        <put name="peu" value=""/>
+    </definition>
+
+	<!-- El look por defecto será el del AT ( asistente de tramitacion ) que de momento es el unico que se utilizará -->
+    <definition
+        name=".mainLayout"
+        extends=".layout">
+        <put name="capsalPO" value="/capsal/capsalPO.jsp"/>
+        <put name="capsalAT" value="/capsal/capsalAT.jsp"/>
+        <put name="peuPO" value="/peu/peuPO.jsp"/>
+        <put name="peuAT" value="/peu/peuAT.jsp"/>
+    </definition>
+    
+   <definition
+        name=".datosPAD" 
+        extends=".mainLayout" controller="es.caib.zonaper.filter.front.controller.DatosPADController">
+        <put name="continguts" value="/continguts/datosPAD.jsp"/>
+    </definition>
+    
+     <definition
+        name=".errorPAD" 
+        extends=".mainLayout" controller="es.caib.zonaper.filter.front.controller.ErrorPADController">
+        <put name="continguts" value="/continguts/errorPAD.jsp"/>
+    </definition>
+    
+</tiles-definitions>
+

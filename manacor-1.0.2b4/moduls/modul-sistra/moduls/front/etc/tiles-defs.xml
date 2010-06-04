@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+	<!-- Utilizará un controller con el tramite en su estado -->
+    <definition
+        name=".mainLayout"
+        path="/layout/mainLayout.jsp"
+        controller="es.caib.sistra.front.controller.TramiteController">
+        <put name="header" value="/moduls/header.jsp"/>
+        <put name="datosUsuario" value=".datosUsuario"/>
+        <put name="main" value=".tramitacion"/>
+        <!--  Atributo que se usara en la definicion .body para pintar el paso del tramite -->
+        <put name="zonaPasoTramite" value="" />
+        <!--  Atributo que indica si en el .body se pintara la zona .stepNav ( pasos de navegacion ) -->
+        <put name="mostrarPasosNav" value="true" />
+        <put name="footer" value="/moduls/footer.jsp"/>
+    </definition>
+	
+    <definition 
+    	name=".tramitacion" 
+    	path="/layout/tramitacion.jsp">        
+        <put name="body" value=".body"/>
+	</definition>
+	
+	<!-- datos usuario -->
+	<definition 
+    	name=".datosUsuario" 
+    	path="/moduls/datosUsuario.jsp">
+	</definition>    
+
+    <!-- titulo -->
+    <definition 
+    	name=".title" 
+    	path="/moduls/title.jsp">
+	</definition>
+    
+    <!-- Utilizará un controller con el paso actual -->
+    <definition 
+    	name=".body" 
+    	path="/layout/bodyLayout.jsp"
+    	controller="es.caib.sistra.front.controller.PasosNecesariosController">
+        <put name="stepTabs" value=".stepTabs"/>
+        <put name="message" value=".message"/>
+		<!-- en la zona central se pintara la zona indicada 
+		por "zonaPasoTramite" en la definicion de .mainLayout, o por defecto el paso indicado por .step<%= tramite.pasoActual.tipoPaso %> -->
+        <put name="stepNav" value=".stepNav"/>
+	</definition>
+	
+    <!-- pestañas pasos -->
+    <definition 
+    	name=".stepTabs" 
+    	path="/moduls/stepTabs.jsp">
+	</definition>
+    
+    <!-- botones anterior, siguiente -->
+    <definition 
+    	name=".stepNav" 
+    	path="/moduls/stepNav.jsp"
+    	controller="es.caib.sistra.front.controller.StepNavController">
+	</definition>
+	
+	<!--  Mensajes, ok, info o error  -->
+	<definition 
+    	name=".message" 
+    	path="/moduls/mensaje.jsp">
+	</definition>
+	
+	<!--  Mensaje error cuando el error se produce en un jsp -->
+	<definition 
+    	name=".messageErrorJsp" 
+    	path="/moduls/mensaje.jsp"
+    	controller="es.caib.sistra.front.controller.FailController">
+	</definition>
+
+	<!--  PASOS -->
+	<definition 
+    	name=".step0" 
+    	path="/pages/steps/pasoPasos.jsp">
+	</definition>
+	<definition 
+    	name=".step1" 
+    	path="/pages/steps/pasoDebeSaber.jsp">
+	</definition>
+	<definition 
+    	name=".step2" 
+    	path="/pages/steps/pasoRellenar.jsp"
+    	controller="es.caib.sistra.front.controller.RellenarController">
+	</definition>
+	<definition 
+    	name=".step3" 
+    	path="/pages/steps/pasoPagar.jsp"
+    	controller="es.caib.sistra.front.controller.PagarController">
+	</definition>
+	<definition 
+    	name=".step4" 
+    	path="/pages/steps/pasoAnexar.jsp"
+    	controller="es.caib.sistra.front.controller.AnexarController">
+	</definition>
+	<!--  envio a firma todavia no existe -->
+	<definition 
+    	name=".step5" 
+    	path="/pages/steps/pasoEnviarAFirmar.jsp">
+	</definition>
+	<definition 
+    	name=".step6" 
+    	path="/pages/steps/pasoRegistrar.jsp"
+    	controller="es.caib.sistra.front.controller.RegistroController">
+    	<put name="resumen" value=".resumen" />
+	</definition>
+	<!-- Paso justificante para tramites consulta : resultado consulta -->
+	<definition 
+    	name=".step7ResultadoConsulta" 
+    	path="/pages/steps/pasoResultadoConsulta.jsp"
+    	controller="es.caib.sistra.front.controller.ResultadoConsultaController">
+	</definition>
+	<!-- Paso finalizar -->
+	<definition 
+    	name=".step8" 
+    	path="/pages/steps/pasoFinalizar.jsp"
+    	controller="es.caib.sistra.front.controller.FinalizacionController">
+	</definition>  
+	<!-- Paso para tramites asistente : imprimir formularios -->
+	<definition 
+    	name=".step9" 
+    	path="/pages/steps/pasoResultadoAsistente.jsp"
+    	controller="es.caib.sistra.front.controller.ResultadoAsistenteController">
+	</definition>
+	
+	<!-- layout pagina de inicio para usuarios anonimos -->
+	<definition 
+    	name=".inicioAnonimo" 
+    	extends=".mainLayout">
+    	<put name="main" value=".inicioAnonimoBody"/>
+	</definition>
+	
+	<definition 
+    	name=".inicioAnonimoBody" 
+    	extends=".tramitacion">
+       <!--  <put name="datosUsuario" value=".datosUsuario"/>  -->
+        <put name="body" value="/pages/inicioAnonimo.jsp"/>
+	</definition>
+	
+	<!--  pagina de listado de tramites en la pad para usuarios autenticados -->
+	<definition 
+    	name=".tramitesAlmacenados" 
+	    extends=".mainLayout">
+        <put name="main" value=".tramitesPersistentes"/>
+	</definition>
+	
+	<definition 
+    	name=".tramitesPersistentes" 
+    	extends=".tramitacion">
+      <!--    <put name="datosUsuario" value=".datosUsuario"/> -->
+        <put name="body" value="/pages/tramitesAlmacenados.jsp"/>
+	</definition>
+	
+	<!--  layout para paso pasos -->
+	<definition 
+    	name=".pasoPasos" 
+    	extends=".mainLayout">
+    	<put name="main" value=".pasoPasosBody"/>
+	</definition>
+	
+	<definition 
+    	name=".pasoPasosBody" 
+    	controller="es.caib.sistra.front.controller.PasosNecesariosController"
+		path="/pages/pasoPasos.jsp">
+	</definition>
+	
+	<!-- Layout para ir a formulario -->
+	<definition
+		name=".irAFormulario"
+		path="/pages/redirectToForms.jsp">
+		<put name="urlCancel" value="/protected/sistrafront/irAPaso.do" />
+		<put name="urlTarget" value="/protected/sistrafront/fakeForm.do" />
+		<put name="urlReturn" value="/protected/sistrafront/guardarFormulario.do" />		
+	</definition>
+	
+	<!-- layout para simulacion salto a forms -->
+    
+    <definition
+        name=".fakeFormLayout"
+        extends=".mainLayout">
+        <put name="main" value=".fakeForm"/>
+    </definition>
+	
+    <definition 
+    	name=".fakeForm" 
+    	extends=".tramitacion">
+      <!--   <put name="datosUsuario" value=".datosUsuario"/>  -->
+        <put name="body" value="/pages/fake/fakeForm.jsp"/>
+	</definition>
+	
+	<!--  fake paso para retornar de un formulario -->
+	<definition
+		name=".fakeRetornarATramitacion"
+		path="/pages/fake/fakeRetornarATramitacion.jsp">
+	</definition>
+	
+	<!-- Layout para ir a anexar un documento -->
+	<definition
+		name=".irAAnexar"
+		extends=".mainLayout">
+		<put name="zonaPasoTramite" value=".anexarDocumento" />
+		<put name="mostrarPasosNav" value="false" />
+	</definition>
+	
+	<!--  paso para anexar un documento -->
+	<definition
+		name=".anexarDocumento"
+		path="/pages/anexarDocumento.jsp">
+	</definition>
+	
+	<!-- Layout para ir a firmar un documento -->
+	<definition
+		name=".irAFirmarFormulario"
+		extends=".mainLayout">
+		<put name="zonaPasoTramite" value=".firmarFormulario" />
+		<put name="mostrarPasosNav" value="false" />
+	</definition>
+	
+	<!--  paso para firmar un documento -->
+	<definition
+		name=".firmarFormulario"
+		path="/pages/firmarFormulario.jsp">
+	</definition>
+	
+	<!-- Layout de redirección -->
+	<definition
+		name=".redireccion"
+		path="/pages/redirect.jsp"/>
+
+	<!-- Layout para finalizar -->
+	<definition
+		name=".finalizar"
+		path="/pages/finalizar.jsp">
+		<put name="urlFin" value="index.jsp" />
+	</definition>
+	
+	<!-- Layout para errores -->
+    <definition
+        name=".error"
+        path="/layout/mainLayout.jsp"
+        controller="es.caib.sistra.front.controller.FailController">
+        <put name="header" value="/moduls/header.jsp"/>
+        <put name="main" value="/moduls/error.jsp"/>
+        <put name="footer" value="/moduls/footer.jsp"/>
+    </definition>
+    
+	<!-- Fallos incontrolados -->
+    <definition
+        name=".fail" extends=".error" />
+    
+    <!-- Layout para warnings -->
+    <definition
+        name=".info" extends=".error">
+        <put name="main" value="/moduls/info.jsp"/>
+    </definition>
+    
+        <!-- Layout para warnings -->
+    <definition
+        name=".exit" extends=".info"/>
+        
+    <!--  Layout para datos de la PAD -->    
+    <definition
+        name=".datosPAD"
+        path="/layout/mainLayout.jsp"
+        controller="es.caib.sistra.front.controller.DatosPADController">
+        <put name="header" value="/moduls/header.jsp"/>
+        <put name="main" value="/pages/datosPAD.jsp"/>
+        <put name="footer" value="/moduls/footer.jsp"/>
+    </definition>
+	
+	
+	<!--  seleccion notificacion telematica -->
+	<definition
+		name=".seleccionNotificacionTelematica"
+		path="/pages/seleccionNotificacionTelematica.jsp">
+	</definition>
+	
+</tiles-definitions>
+

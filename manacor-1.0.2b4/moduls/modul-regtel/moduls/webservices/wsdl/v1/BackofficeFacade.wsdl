@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:impl="urn:es:caib:regtel:ws:v1:services" xmlns:intf="urn:es:caib:regtel:ws:v1:model:BackofficeFacade" xmlns:tns1="urn:es:caib:regtel:ws:v1:model:DatosRegistroSalida" xmlns:tns2="urn:es:caib:regtel:ws:v1:model:DatosRegistroEntrada" xmlns:tns3="urn:es:caib:regtel:ws:v1:model:ResultadoRegistro" xmlns:tns4="urn:es:caib:regtel:ws:v1:model:AcuseRecibo" xmlns:tns5="urn:es:caib:regtel:ws:v1:model:ReferenciaRDS" xmlns:tns6="urn:es:caib:regtel:ws:v1:model:FirmaWS" targetNamespace="urn:es:caib:regtel:ws:v1:services" name="BackofficeFacade">
+	<wsdl:types>
+		<schema elementFormDefault="qualified" targetNamespace="urn:es:caib:regtel:ws:v1:model:BackofficeFacade" xmlns="http://www.w3.org/2001/XMLSchema" version="1.0">
+			<xsd:import namespace="urn:es:caib:regtel:ws:v1:model:DatosRegistroSalida" schemaLocation="DatosRegistroSalida.xsd"/>
+			<xsd:import namespace="urn:es:caib:regtel:ws:v1:model:DatosRegistroEntrada" schemaLocation="DatosRegistroEntrada.xsd"/>
+			<xsd:import namespace="urn:es:caib:regtel:ws:v1:model:ResultadoRegistro" schemaLocation="ResultadoRegistro.xsd"/>
+			<xsd:import namespace="urn:es:caib:regtel:ws:v1:model:AcuseRecibo" schemaLocation="AcuseRecibo.xsd"/>
+			<xsd:import namespace="urn:es:caib:regtel:ws:v1:model:ReferenciaRDS" schemaLocation="ReferenciaRDS.xsd"/>
+			<xsd:import namespace="urn:es:caib:regtel:ws:v1:model:FirmaWS" schemaLocation="FirmaWS.xsd"/>
+			<xsd:element name="registroEntrada">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="entrada" type="tns2:DatosRegistroEntrada"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="registroEntradaResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="registroEntradaReturn" type="tns3:ResultadoRegistro"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="prepararRegistroEntrada">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="entrada" type="tns2:DatosRegistroEntrada"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="prepararRegistroEntradaResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="prepararRegistroEntradaReturn" type="tns5:ReferenciaRDSAsientoRegistral"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="registroEntradaConFirma">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="referenciaRDS" type="tns5:ReferenciaRDSAsientoRegistral"/>
+						<xsd:element name="firma" type="tns6:FirmaWS"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="registroEntradaConFirmaResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="registroEntradaConFirmaReturn" type="tns3:ResultadoRegistro"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="registroSalida">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="notificacion" type="tns1:DatosRegistroSalida"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="registroSalidaResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="registroSalidaReturn" type="tns3:ResultadoRegistro"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="obtenerAcuseRecibo">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="numeroRegistro" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="obtenerAcuseReciboResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="obtenerAcuseReciboReturn" type="tns4:AcuseRecibo"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<complexType name="BackofficeFacadeException">
+				<sequence/>
+			</complexType>
+			<xsd:element name="fault" type="intf:BackofficeFacadeException"/>
+		</schema>
+	</wsdl:types>
+    <wsdl:message name="registroEntradaRequest">
+		<wsdl:part name="parameters" element="intf:registroEntrada"/>
+	</wsdl:message>
+	<wsdl:message name="BackofficeFacadeException">
+		<wsdl:part name="fault" element="intf:fault"/>
+	</wsdl:message>
+	<wsdl:message name="registroEntradaResponse">
+		<wsdl:part name="parameters" element="intf:registroEntradaResponse"/>
+	</wsdl:message>
+	<wsdl:message name="prepararRegistroEntradaRequest">
+		<wsdl:part name="parameters" element="intf:prepararRegistroEntrada"/>
+	</wsdl:message>
+	<wsdl:message name="prepararRegistroEntradaResponse">
+		<wsdl:part name="parameters" element="intf:prepararRegistroEntradaResponse"/>
+	</wsdl:message>
+	<wsdl:message name="registroEntradaConFirmaRequest">
+		<wsdl:part name="parameters" element="intf:registroEntradaConFirma"/>
+	</wsdl:message>
+	<wsdl:message name="registroEntradaConFirmaResponse">
+		<wsdl:part name="parameters" element="intf:registroEntradaConFirmaResponse"/>
+	</wsdl:message>
+	<wsdl:message name="registroSalidaRequest">
+		<wsdl:part name="parameters" element="intf:registroSalida"/>
+	</wsdl:message>
+	<wsdl:message name="registroSalidaResponse">
+		<wsdl:part name="parameters" element="intf:registroSalidaResponse"/>
+	</wsdl:message>
+	<wsdl:message name="obtenerAcuseReciboRequest">
+		<wsdl:part name="parameters" element="intf:obtenerAcuseRecibo"/>
+	</wsdl:message>
+	<wsdl:message name="obtenerAcuseReciboResponse">
+		<wsdl:part name="parameters" element="intf:obtenerAcuseReciboResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="BackofficeFacade">
+		<wsdl:operation name="registroEntrada">
+			<wsdl:input name="registroEntradaRequest" message="impl:registroEntradaRequest"/>
+			<wsdl:output name="registroEntradaResponse" message="impl:registroEntradaResponse"/>
+			<wsdl:fault name="BackofficeFacadeException" message="impl:BackofficeFacadeException"/>
+		</wsdl:operation>
+		<wsdl:operation name="prepararRegistroEntrada">
+			<wsdl:input name="prepararRegistroEntradaRequest" message="impl:prepararRegistroEntradaRequest"/>
+			<wsdl:output name="prepararRegistroEntradaResponse" message="impl:prepararRegistroEntradaResponse"/>
+			<wsdl:fault name="BackofficeFacadeException" message="impl:BackofficeFacadeException"/>
+		</wsdl:operation>
+		<wsdl:operation name="registroEntradaConFirma">
+			<wsdl:input name="registroEntradaConFirmaRequest" message="impl:registroEntradaConFirmaRequest"/>
+			<wsdl:output name="registroEntradaConFirmaResponse" message="impl:registroEntradaConFirmaResponse"/>
+			<wsdl:fault name="BackofficeFacadeException" message="impl:BackofficeFacadeException"/>
+		</wsdl:operation>
+		<wsdl:operation name="registroSalida">
+			<wsdl:input name="registroSalidaRequest" message="impl:registroSalidaRequest"/>
+			<wsdl:output name="registroSalidaResponse" message="impl:registroSalidaResponse"/>
+			<wsdl:fault name="BackofficeFacadeException" message="impl:BackofficeFacadeException"/>
+		</wsdl:operation>
+		<wsdl:operation name="obtenerAcuseRecibo">
+			<wsdl:input name="obtenerAcuseReciboRequest" message="impl:obtenerAcuseReciboRequest"/>
+			<wsdl:output name="obtenerAcuseReciboResponse" message="impl:obtenerAcuseReciboResponse"/>
+			<wsdl:fault name="BackofficeFacadeException" message="impl:BackofficeFacadeException"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="BackofficeFacadeSoapBinding" type="impl:BackofficeFacade">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="registroEntrada">
+			<soap:operation/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="BackofficeFacadeException">
+				<soap:fault name="BackofficeFacadeException" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="prepararRegistroEntrada">
+			<soap:operation/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="BackofficeFacadeException">
+				<soap:fault name="BackofficeFacadeException" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="registroEntradaConFirma">
+			<soap:operation/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="BackofficeFacadeException">
+				<soap:fault name="BackofficeFacadeException" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="registroSalida">
+			<soap:operation/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="BackofficeFacadeException">
+				<soap:fault name="BackofficeFacadeException" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="obtenerAcuseRecibo">
+			<soap:operation/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="BackofficeFacadeException">
+				<soap:fault name="BackofficeFacadeException" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="BackofficeFacadeService">
+		<wsdl:port name="BackofficeFacade" binding="impl:BackofficeFacadeSoapBinding">
+			<soap:address location="http://intranet.caib.es/regtelws/services/v1/BackofficeFacade"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

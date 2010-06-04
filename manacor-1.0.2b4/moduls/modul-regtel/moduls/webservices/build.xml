@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="InterfazWS" basedir=".">
+	
+	<property file="${basedir}/build.properties"/>
+	
+	<property name="home.dir" location="${basedir}/../.."/>
+	<property name="output.dir" location="${home.dir}/output"/>
+	<property name="cxf.home" location ="${home.dir}/../../lib/cxf"/>
+	<property name="etc.dir" location="${basedir}/etc/web"/>
+	<property name="modul.name" value="regtel-ws"/>		 
+	<property name="src.dir" location="${basedir}/src"/>
+    <property name="build.classes.dir" location="${output.dir}/webservices/classes"/>
+	<property name="jboss.lib" value="${home.dir}/../../lib/jboss" />
+	<property name="lib" value="${home.dir}/../../lib" />
+	<property name="wsdl.dir" location="${basedir}/wsdl"/>
+	<property name="web.product" location="${output.dir}/moduls"/>
+	<property name="distribucion.dir" location="${home.dir}/../../product"/>
+		
+	<path id="cxf.classpath">
+      <fileset dir="${cxf.home}">
+         <include name="*.jar"/>
+      </fileset>
+   	  <fileset dir="${jboss.lib}">
+   		 <include name="jboss*.jar" />
+	  </fileset>
+	  <fileset dir="${lib}">
+   		 <include name="*.jar" />
+   	  	 <exclude name="xerces*.jar"/>
+	  </fileset>
+	  <fileset dir="${lib}/client">
+   		 <include name="redose-client.jar" />
+	  </fileset>
+	  <fileset dir="${web.product}">
+      	<include name="regtel-model.jar" />
+        <include name="regtel-persistence-client.jar" />
+	 	<include name="regtel-persistence.jar" />
+      </fileset>
+	  <fileset dir="${distribucion.dir}/lib"> 
+	    <include name="sistra-util.jar"/>
+	    <include name="sistra-plugins.jar"/>
+	  </fileset>
+    </path>
+	
+    <target name="prepare">
+    	<mkdir dir="${web.product}"/>
+    </target>
+
+	<target name="doc" depends="web.javadoc" description="Realiza las tareas de documentación "/>
+	<target name="main" depends="war" description="Construeye el war"/>
+
+	<target name="war">
+		<cxfwar filename="${modul.name}.war"/>
+	</target>
+	
+    <macrodef name="cxfwar">
+        <attribute name="filename"/>
+        <attribute name="wsdl" default=""/>
+        <attribute name="dir" default="${web.product}"/>
+        <attribute name="classesdir" default="${build.classes.dir}"/>
+        <attribute name="webxml" default="${etc.dir}/web.xml" />
+        <sequential>
+        	<delete dir="${build.classes.dir}" />
+        	<mkdir dir="${build.classes.dir}"/>
+        	    	
+        	<antcall target="compile"/>
+           
+        	<delete file="@{dir}/@{filename}" />
+            <war destfile="@{dir}/@{filename}" webxml="@{webxml}">
+                <classes dir="@{classesdir}"/>
+                <webinf dir="${wsdl.dir}/..">
+                	<include name="wsdl/@{wsdl}"/>
+                </webinf>
+            	<webinf dir="${etc.dir}">
+	               	<include name="*cxf*.xml"/>
+            		<include name="*jboss*.xml"/>
+                </webinf>
+            	<lib dir="${cxf.home}">
+    				<include name="*.jar"/>
+  				</lib>            	
+            	<lib dir="${web.product}">
+            		<include name="*.jar"/>
+      	  		</lib>            
+            </war>
+        </sequential>
+    </macrodef>
+	
+	<target name="compile">
+	    <javac
+	        destdir="${build.classes.dir}"
+	        classpathref="cxf.classpath"
+	        debug="${javac.debug}"
+	        deprecation="${javac.deprecation}"
+	        optimize="${javac.optimize}"
+	     	source="1.5"
+	      	target="1.5">
+		     <src path="${src.dir}"/>
+	    </javac>
+	    <copy todir="${build.classes.dir}" overwrite="true">											
+	        <fileset dir="${src.dir}">
+	        	<include name="**/*.properties"/>
+	        	<include name="**/*.html"/>
+	        	<include name="**/*.xml"/>	    	    	
+	        </fileset> 
+	    </copy>
+	</target>
+	
+	<target name="web.javadoc">
+	        <!--<javadoc
+	            destdir="${web.doc.api}"
+	            classpathref="web.class.path"
+	            packagenames="${package}.*"
+	            overview="${web.doc}/overview.html"
+	            windowtitle="API del componente web ${modul}"
+	            doctitle="API del componente web ${modul}"
+	            bottom="${indra}">
+
+	            <sourcepath>
+	                <pathelement path="${web.gen.src}"/>
+	                <pathelement path="${web.src}"/>
+	            </sourcepath>
+
+	            <link href="http://java.sun.com/j2se/1.4.1/docs/api/"/>
+	            <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
+	            <link href="http://jakarta.apache.org/struts/api/"/>
+	        </javadoc>-->
+	</target>
+</project>

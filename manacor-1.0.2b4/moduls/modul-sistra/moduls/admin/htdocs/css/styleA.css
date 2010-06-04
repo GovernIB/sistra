@@ -1,0 +1,608 @@
+/*************************************************************/
+/* ******* ROL BackOffice Style Cascade Sheet ****** */
+/*************************************************************/
+body
+{
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 8pt;
+    color: #515b67;
+}
+input
+{
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 8pt;
+    color: #000000;
+    margin: 0px;
+    height: 16px;
+/*    width: 430px; */
+}
+inputLargo
+{
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 8pt;
+    color: #000000;
+    margin: 0px;
+    height: 16px;
+    width: 430px; 
+}
+textarea
+{
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 8pt;
+    color: #000000;
+    width: 430px; 
+    height: 60pt;
+    margin: 0px;
+    scrollbar-arrow-color: #000000;
+    scrollbar-base-color: #a4afbb;
+}
+textarea.doble
+{
+    height: 120pt;
+}
+select
+{
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 8pt;
+    color: black;
+    padding: 0px 0px;
+    width: 350px
+    vAlign: middle;
+}
+optgroup, option
+{
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 8pt;
+    color: #000000;
+}
+table
+{
+    font-family: verdana, arial, helvetica, sans-serif;
+    padding: 5px;
+    border-width: 0;
+    font-size: 8pt;
+    color: #000088;
+}
+td
+{
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 8pt;
+    color: #000088;
+}
+td.separador
+{
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 8pt;
+    font-weight:bold;
+    color: #d8dfe7 !important;
+    background-color: #515b67;
+    height: 23px;
+}
+
+a.enlaceAyuda
+{text-decoration: underline !important;}
+
+a:link
+{text-decoration: none;}
+a:visited
+{text-decoration: none;}
+a:hover
+{
+    text-decoration: none;
+}
+a:active
+{text-decoration: none;}
+input.button, button.button
+{
+    font-family: verdana, arial, helvetica, sans-serif;
+    vAlign: middle;
+    font-size: 8pt;
+    width: 80px;
+    heigth: 23px;
+}
+input.buttond, button.buttond
+{
+    font-family: verdana, arial, helvetica, sans-serif;
+    vAlign: middle;
+    font-size: 8pt;
+    width: 130px;
+    heigth: 23px;
+}
+
+button.buttonl
+{
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 8pt;
+    vAlign: middle;
+    heigth: 23px;
+}
+
+
+/* ********* ROL Styles del menu BackOffice ******** */
+/***********************************************************************/
+body.menu
+{
+    background-color: #515b67;
+    color: #ffffff;
+    margin: 0px 5px 0px 5px;
+}
+body.menu select
+{
+    font-size: 8pt;
+    color: black;
+    padding: 0px 0px;
+    width: 130px
+}
+body.menu table
+{
+    padding: 3px 3px;
+}
+body.menu td
+{
+    font-size: 9pt;
+    vAlign: middle;
+    color: #ffffff;
+    padding: 3px 3px;
+}
+body.menu td.user
+{
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    vAlign: middle;
+    color: #d8dfe7;
+    border: 1px solid #d8dfe7;
+    padding: 3px 3px;
+}
+body.menu td.salir
+{
+    color: #515b67;
+    text-align: center;
+    text-transform: uppercase;
+    vAlign: middle;
+    border: 1px solid #d8dfe7;
+    padding: 3px 3px;
+    background-image: url(../img/boton.jpg);
+}
+body.menu td.titulo
+{
+    font-weight: bold;
+    font-size: 14pt;
+    text-align: center;
+    padding: 5px;
+    color: #d8dfe7;
+}
+body.menu td.select1
+{
+    tex-align: left;
+    color: #515b67;
+    background-color: #d8dfe7;
+}
+body.menu td.select2
+{
+    padding: 0px 0px 0px 0px;
+    font-size: 8pt;
+    tex-align: left;
+    border: 2px solid #d8dfe7;
+}
+body.menu ul
+{
+    padding: 0px 0px 0px 8px;
+    margin: 0px 0px 0px 0px;
+    list-style-type: none;
+}
+body.menu ol
+{
+    padding: 0px 0px 0px 18px;
+    margin: 0px 0px 0px 0px;
+    list-style-type: decimal;
+}
+body.menu li.nom
+{
+    margin-top: 5px;
+    color: #d8dfe7;
+}
+body.menu a
+{
+    color: #d8dfe7;
+}
+td.select1 a
+{
+    color: #515b67;
+}
+body.menu a:hover
+{
+    text-decoration: none
+    color: #515b67;
+}
+body.menu a.boton
+{
+    text-decoration: none;
+    color: #ffffff;
+}
+body.menu a.boton:hover
+{   color: #d8dfe7;}
+td.salir a
+{   color: #515b67;}
+td.salir a:hover
+{   font-weight: bold;}
+body.menu .bot
+{
+    position: absolute;
+    bottom: 10px
+}
+/* ****** ROL Styles de la ventana BackOffice ***** */
+/***********************************************************************/
+body.ventana
+{
+    background-color: #ffffff;
+}
+body.ventana table.simple
+{
+    padding: 0;
+    border: none;
+    border-spacing: 0;
+}
+body.ventana table.marc
+{
+    background-color: #d8dfe7;
+    border-top: 3px solid #e9edf0;
+    border-right: 3px outset #e9edf0;
+    border-bottom: 3px outset #e9edf0;
+    border-left: 3px solid #e9edf0;
+    border-spacing: 2;
+    padding: 0px;
+    width: 800px;
+}
+body.ventana p.path
+{
+    width: 592px;
+    padding: 3px;
+    margin: 0px;
+    border: 1px solid #99a6b3;
+}
+body.ventana table.marcd
+{
+    background-color: #d8dfe7;
+    border-top: 3px solid #e9edf0;
+    border-right: 3px outset #e9edf0;
+    border-bottom: 3px outset #e9edf0;
+    border-left: 3px solid #e9edf0;
+    border-spacing: 2;
+    padding: 0px;
+    width: 100%;
+}
+body.ventana table.nomarc
+{
+    border-spacing: 0px;
+    padding: 0px;
+    width: 600px;
+}
+body.ventana table.nomarcd
+{
+    border-spacing: 0px;
+    padding: 0px;
+    width: 100%;
+}
+body.ventana table.tabs
+{
+    border-spacing: 0px;
+    padding: 0px;
+}
+body.ventana td
+{
+    color: #515b67;
+}
+body.ventana td.tab
+{
+    background-color: #e9edf0;
+    text-align: middle;
+    text-decoration: none;
+    padding: 1px 5px;
+    border-top: 2px solid #e9edf0;
+    border-right: 2px outset #e9edf0;
+    border-bottom: 2px none #e9edf0;
+    border-left: 2px solid #e9edf0;
+}
+body.ventana td.notab
+{
+    background-color: #99a6b3;
+    text-align: middle;
+    text-decoration: none;
+    padding: 1px 5px;
+    border-top: 1px solid #ffffff;
+    border-right: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    border-left: 1px solid #ffffff;
+}
+body.ventana td.titulo
+{
+    font-weight: bold;
+    font-size: 12pt;
+    text-align: center;
+    width: 100%;
+    padding: 0px 0px;
+}
+body.ventana td.subtitulo
+{
+    font-size: 8pt;
+    text-align: center;
+    width: 100%;
+    padding: 0px 0px;
+}
+body.ventana td.alert
+{
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ffffff;
+}
+body.ventana td.label
+{
+    text-align: right;
+    vertical-align: top;
+    width: 140px;
+    padding: 5px 5px;
+    border: 1px solid #ffffff;
+}
+body.ventana td.labelo
+{
+    text-align: right;
+    color: #d61029;
+    text-decoration: none;
+    vertical-align: top;
+    width: 140px;
+    padding: 5px 5px;
+    border: 1px solid #ffffff;
+}
+body.ventana td.labeld
+{
+    text-align: center;
+    vertical-align: top;
+    padding: 5px 5px;
+    border: 1px solid #ffffff;
+}
+body.ventana td.labela
+{
+    font-style: italic;
+    text-align: center;
+    vertical-align: top;
+    padding: 5px 5px;
+    border: 1px solid #ffffff;
+}
+body.ventana td.labelm
+{
+    text-align: left;
+    vertical-align: top;
+    padding: 5px 5px;
+    border: 1px solid #ffffff;
+}
+body.ventana td.labelv
+{
+    text-align: center;
+    vertical-align: top;
+    width: 140px;
+    padding: 5px 5px;
+    border: 1px solid #ffffff;
+}
+body.ventana td.input
+{
+    left: 0;
+ /*   width: 450px; */
+    padding: 0px 0px;
+}
+body.ventana td.output
+{
+    background-color: #ffffff;
+    left: 0;
+    vertical-align: middle;
+    width: 440px;
+    padding: 5px 5px;
+    color: #000000;
+}
+body.ventana td.outputd
+{
+    background-color: #ffffff;
+    left: 0;
+    vertical-align: middle;
+    padding: 5px 5px;
+    color: #000000;
+}
+body.ventana td.outputv
+{
+    background-color: #ffffff;
+    text-align: center;
+    vertical-align: middle;
+    width: 440px;
+    padding: 5px 5px;
+    color: #000000;
+}
+body.ventana .error
+{color: red;}
+body.ventana a:link
+{color: #515b67;}
+body.ventana a:visited
+{color: #515b67; }
+body.ventana a:hover
+{color: #0000ff;}
+body.ventana a:active
+{color: #515b67;}
+td.outputd a:link
+{
+    color: #515b67;
+    text-decoration: underline;
+}
+td.outputd a:visited
+{
+    color: #515b67;
+    text-decoration: underline;
+}
+td.outputd a:hover
+{
+    color: #d8dfe7;
+    text-decoration: underline;
+}
+td.outputd a:active
+{
+    color: #515b67;
+    text-decoration: underline;
+}
+td.output a:link
+{
+    color: #515b67;
+    text-decoration: underline;
+}
+td.output a:visited
+{
+    color: #515b67;
+    text-decoration: underline;
+}
+td.output a:hover
+{
+    color: #d8dfe7;
+    text-decoration: underline;
+}
+td.output a:active
+{
+    color: #515b67;
+    text-decoration: underline;
+}
+td.labeld a:link
+{text-decoration: underline;}
+td.labeld a:visited
+{text-decoration: underline;}
+td.labeld a:hover
+{
+    color: #d61029;
+    text-decoration: underline;
+}
+td.notab a:hover
+{
+    color: #e9edf0;
+    text-decoration: none;
+}
+table.nomarc a:link
+{
+    color: #515b67;
+    text-decoration: underline;
+}
+table.nomarc a:visited
+{
+    color: #515b67;
+    text-decoration: underline;
+}
+table.nomarc a:hover
+{
+    color: #d61029;
+    text-decoration: underline;
+}
+table.nomarc a:active
+{
+    color: #515b67;
+    text-decoration: underline;
+}
+body.ventana input.text, textarea
+{
+    padding: 3px 3px;
+    border: 1px solid #515b67;
+}
+body.ventana input.http
+{
+    padding: 3px 0px 3px 3px;
+    border: 1px solid #515b67;
+    border-right: none;
+    width: 42px;
+}
+body.ventana input.url
+{
+    padding: 3px 3px;
+    border: 1px solid #515b67;
+    width: 330px;
+}
+body.ventana input.file
+{
+    padding: 3px 10px;
+    margin: 0px 10px 0px 0px;
+    width: 150px;
+    height: 23px;
+}
+body.ventana input.curt
+{
+    padding: 3px 0px;
+    margin: 0px 10px 0px 0px;
+    border: 1px solid #515b67;
+    width: 330px;
+}
+body.ventana input.data
+{
+    padding: 3px 3px;
+    border: 1px solid #515b67;
+    width: 145px;
+}
+body.ventana input.t30
+{
+    padding: 3px 3px;
+    border: 1px solid #515b67;
+    width: 30px;
+}
+
+body.ventana input.t50
+{
+    padding: 3px 3px;
+    border: 1px solid #515b67;
+    width: 50px;
+}
+
+body.ventana input.check
+{
+    color: #000000;
+    width: 15px;
+    height: 15px;
+    margin: 5px 15px;
+    padding: 0px;
+}
+body.ventana input.button, input.buttond, button.button, button.buttond, button.buttonl
+{
+    padding: 2px 0px;
+    margin: 1px 0px;
+    height: 23px;
+    background-color: #d8dfe7;
+    background-image: url(../img/boton.jpg);
+    color: #515b67;
+    border-color: #d8dfe7
+}
+
+/* ****** ROL Styles del  calendario BackOffice ***** */
+/***********************************************************************/
+body.calendario
+{
+    font-family: arial, helvetica;
+    font-size: 10px;
+    color: #515b67;
+}
+body.calendario table.simple
+{
+    padding: 0;
+    border-spacing: 0;
+}
+body.calendario table.dia
+{
+    padding: 0;
+    border-spacing: 0;
+    border: 1px solid #515b67;
+    background-image: url(../img/boton.jpg);
+}
+
+
+input.textLargo
+{
+    padding: 3px 3px;
+    border: 1px solid #515b67;
+    width: 430px; 
+}
+
+input.botonEditar
+{
+	height:2em;
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE form-validation PUBLIC
+          "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.0//EN"
+          "http://jakarta.apache.org/commons/dtds/validator_1_0.dtd">
+
+<form-validation>
+
+    <formset>
+    	<form name="cuadernoCargaForm">
+			<field property="descripcion" depends="required">
+                <arg0 key="cuadernoCarga.descripcion" />
+            </field>
+   	    	<field property="rawFechaCarga" depends="required,mask">
+                <arg0 key="cuadernoCarga.fechaCarga" />
+                <var>
+                    <var-name>mask</var-name>
+                    <var-value>^\d{1,2}\/\d{1,2}\/\d{4}$</var-value>
+                </var>
+            </field>
+            
+    	</form>
+    	<form name="ficheroCuadernoForm" >
+			<field property="fitxer" depends="required">
+                <arg0 key="ficheroCuaderno.importar.fitxer" />
+            </field>
+    	</form>	
+    </formset>
+
+</form-validation>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Archivo para generar los scripts de la BD a partir de los archivos de hibernate -->
+<project name="modul-sistra.db" default="initdb" basedir=".">
+		
+	<property name="lib" location="${basedir}/../../lib"/>
+	
+    <property name="output.dir" location="${basedir}/output"/>
+    <property name="model.hbm" location="${basedir}/moduls/model/src"/>
+    <property name="moduls.dir" location="${output.dir}/moduls"/>
+
+    <path id="db.classpath">
+        <fileset dir="${lib}">
+    		<include name="hibernate2.jar"/>
+        	<include name="dom4j.jar"/>
+        	<include name="odmg-3.0.jar"/>
+        	<include name="cglib-asm.jar"/>
+        	<include name="commons-logging-1.0.4.jar"/>        	
+        	<include name="commons-collections-3.1.jar"/>
+        	
+        	<include name="commons-betwixt-0.7.jar"/>
+        	<include name="commons-digester-1.6.jar"/>
+        </fileset>
+        <fileset dir="${moduls.dir}" includes="sistra-model.jar"/>
+    </path>
+
+    <target name="initdb">
+
+        <taskdef
+            name="schemaexport"
+            classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask"
+            classpathref="db.classpath"/>
+
+        <schemaexport
+        	config="${output.dir}/persistence/gen-etc/hibernate.cfg.xml"
+        	drop="no"
+            quiet="no"
+            text="yes"
+            delimiter=";"
+            output="${output.dir}/schema.sql">
+            <!-- fileset dir="${model.hbm}" includes="**/*.hbm.xml" / -->        	
+        </schemaexport>
+    </target>
+	
+</project>
