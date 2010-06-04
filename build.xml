@@ -59,6 +59,26 @@
 	<delete>
 	    <fileset dir="moduls/modul-zonaper/moduls/front/htdocs/firma/aFirma" includes="*"/>		
 	</delete>	
-</target>	
+</target>
+
+<target name="generateScripts" depends="prepare" description="Genera los scripts de creación de base de datos">
+    <ant antfile="moduls/modul-bantel/build-db.xml" target="initdb" inheritall="false"/>
+    <copy file="moduls/modul-bantel/output/schema.sql" tofile="product/schema-bantel.sql"/>
+
+    <ant antfile="moduls/modul-forms/build-db.xml" target="initdb" inheritall="false"/>
+    <copy file="moduls/modul-forms/output/schema.sql" tofile="product/schema-forms.sql"/>
+
+    <ant antfile="moduls/modul-mobtratel/build-db.xml" target="initdb" inheritall="false"/>
+    <copy file="moduls/modul-mobtratel/output/schema.sql" tofile="product/schema-mobtratel.sql"/>
+
+    <ant antfile="moduls/modul-redose/build-db.xml" target="initdb" inheritall="false"/>
+    <copy file="moduls/modul-redose/output/schema.sql" tofile="product/schema-redose.sql"/>
+
+    <ant antfile="moduls/modul-sistra/build-db.xml" target="initdb" inheritall="false"/>
+    <copy file="moduls/modul-sistra/output/schema.sql" tofile="product/schema-sistra.sql"/>
+
+    <ant antfile="moduls/modul-zonaper/build-db.xml" target="initdb" inheritall="false"/>
+    <copy file="moduls/modul-zonaper/output/schema.sql" tofile="product/schema-zonaper.sql"/>
+</target>
 	
 </project>

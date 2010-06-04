@@ -2,8 +2,8 @@
 <project name="modul-redose" default="main" basedir=".">
 
 	<property name="projecte" value="${ant.project.name}"/>
+    <property file="${basedir}/../../config.properties"/>
     <property file="${basedir}/config.properties"/>
-	<property file="${basedir}/../../config.properties"/>
 
 	<property name="lib" location="${basedir}/lib"/>
 	<property name="etc" location="${basedir}/etc"/>
