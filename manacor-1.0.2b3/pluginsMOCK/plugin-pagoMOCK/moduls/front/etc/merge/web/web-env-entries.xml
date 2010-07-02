@@ -1,5 +1,0 @@
-  <env-entry>
-     <env-entry-name>release.cvs.tag</env-entry-name>
-     <env-entry-value>@release.cvs.tag@</env-entry-value>
-     <env-entry-type>java.lang.String</env-entry-type>
-  </env-entry>

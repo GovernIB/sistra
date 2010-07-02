@@ -1,4 +1,0 @@
-   <filter-mapping>
-      <filter-name>SesionCaducadaFilter</filter-name>
-      <url-pattern>*.do</url-pattern>
-   </filter-mapping>
