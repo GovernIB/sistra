@@ -135,6 +135,7 @@
         <replace file="${ejb.gen.etc}/hibernate.cfg.xml">
             <replacefilter token="@datasource.jndi@" value="${datasource.jndi}"/>
             <replacefilter token="@hibernate.dialect@" value="${hibernate.dialect}"/>
+            <replacefilter token="@hibernate.show_sql@" value="${hibernate.show_sql}"/>
         </replace>
 
     </target>

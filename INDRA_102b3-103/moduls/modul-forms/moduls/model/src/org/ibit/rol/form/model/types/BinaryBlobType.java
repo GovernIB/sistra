@@ -35,10 +35,12 @@ public class BinaryBlobType implements UserType {
 
     public Object nullSafeGet(ResultSet resultSet, String[] names, Object o) throws HibernateException, SQLException {
         String productName = resultSet.getStatement().getConnection().getMetaData().getDatabaseProductName();
-        if ("PostgreSQL".equals(productName)) {
+        if ("PostgreSQL".equalsIgnoreCase(productName)) {
+            // Codi específic per bytea de Postgresql
             return resultSet.getBytes(names[0]);
         } else {
             Blob blob = resultSet.getBlob(names[0]);
+            if (blob == null) return null;
             return blob.getBytes(1, (int) blob.length());
         }
     }
@@ -48,6 +50,11 @@ public class BinaryBlobType implements UserType {
         String productName = metaData.getDatabaseProductName();
         int driverMajorVersion = metaData.getDriverMajorVersion();
 
+        if (value == null) {
+            pst.setNull(i, sqlTypes()[0]);
+            return;
+        }
+        
         if ("Oracle".equals(productName) && driverMajorVersion <= 9) {
             // Tractament especial per drivers Oracle 9i o 8i
             Connection con = metaData.getConnection();
@@ -81,7 +88,7 @@ public class BinaryBlobType implements UserType {
     }
 
     public boolean isMutable() {
-        return true;
+        return false;
     }
 
 }
