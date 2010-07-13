@@ -37,7 +37,10 @@
         <mapping resource="es/caib/sistra/model/admin/FicheroCuaderno.hbm.xml" />
         <mapping resource="es/caib/sistra/model/MensajePlataforma.hbm.xml" />
 		<mapping resource="es/caib/sistra/model/GestorFormulario.hbm.xml" />		
-
+        <mapping resource="es/caib/sistra/model/Grupos.hbm.xml" />
+        <mapping resource="es/caib/sistra/model/RolGrupoTramite.hbm.xml" />
+        <mapping resource="es/caib/sistra/model/RolUsuarioTramite.hbm.xml" />
+        <mapping resource="es/caib/sistra/model/GrupoUsuario.hbm.xml" />
     </session-factory>
 
 </hibernate-configuration>

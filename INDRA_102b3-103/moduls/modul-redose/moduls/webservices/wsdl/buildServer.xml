@@ -34,6 +34,8 @@
 			<arg value="-p" />
 			<arg value="urn:es:caib:redose:ws:v1:model:ReferenciaRDS=es.caib.redose.ws.v1.model" />
 			<arg value="-p" />
+			<arg value="urn:es:caib:redose:ws:v1:model:TransformacionRDS=es.caib.redose.ws.v1.model" />
+			<arg value="-p" />
 			<arg value="urn:es:caib:redose:ws:v1:model:BackofficeFacade=es.caib.redose.ws.v1.model" />
 			
 			<arg value="-d" />

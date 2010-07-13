@@ -11,6 +11,7 @@ import org.apache.struts.action.ActionMapping;
 import org.ibit.rol.form.back.action.BaseAction;
 import org.ibit.rol.form.persistence.delegate.DelegateUtil;
 import org.ibit.rol.form.persistence.delegate.FormularioDelegate;
+import org.ibit.rol.form.persistence.delegate.GruposDelegate;
 
 /**
  * Action para preparar borrar un Formulario.
@@ -44,6 +45,16 @@ public class BajaFormularioAction extends BaseAction{
             return mapping.findForward("fail");
         }
 
+        if( Boolean.valueOf( DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("habilitar.permisos")).booleanValue()){
+    		GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
+        	if( !(gruposDelegate.existeUsuarioByGruposForm(request.getUserPrincipal().getName(),new Long(idString)) 
+        		|| gruposDelegate.existeUsuarioByForm(request.getUserPrincipal().getName(),new Long(idString)) 
+        		))
+        	{
+        		request.setAttribute("message","No tiene permisos para eliminar este formulario");
+        		return mapping.findForward("fail");
+        	}
+        }
         Long id = new Long(idString);
         formularioDelegate.borrarFormulario(id);
         request.setAttribute("reloadMenu", "true");

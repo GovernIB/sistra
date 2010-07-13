@@ -38,7 +38,7 @@
         <mapping resource="es/caib/redose/model/Uso.hbm.xml" />
         <mapping resource="es/caib/redose/model/Version.hbm.xml" />
 		<mapping resource="es/caib/redose/model/Formateador.hbm.xml" />
-
+		<mapping resource="es/caib/redose/model/VersionCustodia.hbm.xml" />
     </session-factory>
 
 </hibernate-configuration>

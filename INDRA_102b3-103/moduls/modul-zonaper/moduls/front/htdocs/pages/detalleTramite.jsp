@@ -65,7 +65,7 @@
 			<logic:notEqual name="tipo" value="<%= Character.toString( ConstantesAsientoXML.TIPO_REGISTRO_ENTRADA ) %>">
 				<tr>
 					<th scope="row"><bean:message key="detalleTramite.datosEnvio.numero" />:</th>
-					<td><logic:notEqual name="tipo" value="<%= Character.toString( ConstantesAsientoXML.TIPO_ENVIO ) %>"><bean:write name="entrada" property="numeroPreregistro"/></logic:notEqual><logic:equal name="tipo" value="<%= Character.toString( ConstantesAsientoXML.TIPO_ENVIO ) %>"><bean:write name="entrada" property="numeroRegistro"/></logic:equal></td>
+					<td><logic:notEqual name="tipo" value="<%= Character.toString( ConstantesAsientoXML.TIPO_ENVIO ) %>"><bean:write name="entrada" property="numeroPreregistro"/>&nbsp;&nbsp;&nbsp;&nbsp;( D.C.: <%=es.caib.util.StringUtil.calculaDC(entrada.getNumeroPreregistro())%> )</logic:notEqual><logic:equal name="tipo" value="<%= Character.toString( ConstantesAsientoXML.TIPO_ENVIO ) %>"><bean:write name="entrada" property="numeroRegistro"/></logic:equal></td>
 				</tr>
 				<tr>
 					<th scope="row"><bean:message key="detalleTramite.datosEnvio.fecha" />:</th>
@@ -181,7 +181,7 @@
 						<logic:notEqual name="documento" property="codigoRDS" value="0">
 							<logic:notEqual name="documento" property="identificador" value="<%=ConstantesAsientoXML.IDENTIFICADOR_DATOS_PROPIOS%>">
 								<li>
-									<html:link href="<%= urlMostrarDocumento + "&codigoEntrada=" + entrada.getCodigo() %>" paramId="codigoDocumento" paramName="documento" paramProperty="codigo">
+									<html:link href="<%= urlMostrarDocumento + "&amp;codigoEntrada=" + entrada.getCodigo() %>" paramId="codigoDocumento" paramName="documento" paramProperty="codigo">
 											<bean:write name="documento" property="descripcion" />
 									</html:link>									
 								</li>
@@ -241,7 +241,7 @@
 										</logic:equal>										
 										<logic:equal name="documento" property="tipo" value="F">
 											<td> 		
-												<html:link href="<%= urlMostrarDocumento + "&codigoEntrada=" + entrada.getCodigo() + "&codigoDocumento=" + codigosDocsPresenciales.get(documento.getIdentificador()).toString() %>" >								
+												<html:link href="<%= urlMostrarDocumento + "&amp;codigoEntrada=" + entrada.getCodigo() + "&amp;codigoDocumento=" + codigosDocsPresenciales.get(documento.getIdentificador()).toString() %>" >								
 													<bean:write name="documento" property="titulo" />
 												</html:link>
 											</td>
@@ -321,7 +321,7 @@
 			</script>
 		</logic:present>
 
-
+</div>
 
 
 

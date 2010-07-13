@@ -12,6 +12,8 @@
             <add type="definition" value=".menu.cuadernoCarga.finalizados" />
             <add type="definition" value=".menu.cuadernoCarga.pendientesA" />
             <add type="definition" value=".menu.cuadernoCarga.auditados" />
+			<add type="definition" value=".menu.grupos.tramites" />
+            <add type="definition" value=".menu.grupos.lista" />
         </putList>
     </definition>
 
@@ -65,5 +67,18 @@
         <put name="role" value="isAuditor" />
     </definition>
     
+     <definition name=".menu.grupos.tramites" extends=".menu.individual">
+        <put name="pre-titulo" value="menu.grupos.titulo"/>
+        <put name="titulo" value="menu.grupos.tramits"/>
+        <put name="link" value="/admin/tramites/lista"/>
+        <put name="role" value="isAdmin" />
+    </definition>
+    
+    <definition name=".menu.grupos.lista" extends=".menu.individual">
+        <put name="pre-titulo" value=""/>
+        <put name="titulo" value="menu.grupos.lista"/>
+        <put name="link" value="/admin/grupo/lista"/>
+        <put name="role" value="isAdmin" />
+    </definition>
 
 </tiles-definitions>

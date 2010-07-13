@@ -11,6 +11,8 @@ import org.apache.struts.action.ActionMapping;
 import org.ibit.rol.form.back.action.BaseAction;
 import org.ibit.rol.form.back.util.FormularioConfig;
 import org.ibit.rol.form.model.Formulario;
+import org.ibit.rol.form.persistence.delegate.DelegateUtil;
+import org.ibit.rol.form.persistence.delegate.GruposDelegate;
 
 /**
  * Action para consultar un Formulario.
@@ -42,7 +44,16 @@ public class SeleccionFormularioAction extends BaseAction{
         }
 
         log.debug("Seleccionar el formulario " + idString);
-
+        if( Boolean.valueOf( DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("habilitar.permisos")).booleanValue()){
+    		GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
+	        if( !(gruposDelegate.existeUsuarioByGruposForm(request.getUserPrincipal().getName(),new Long(idString)) 
+	        	|| gruposDelegate.existeUsuarioByForm(request.getUserPrincipal().getName(),new Long(idString)) 
+	        	))
+	        {
+	        	request.setAttribute("message","No tiene permisos para acceder a este formulario");
+	        	return mapping.findForward("fail");
+	        }
+        }
         Long id = new Long(idString);
         Formulario formulario = guardarFormulario(mapping, request, id);
 

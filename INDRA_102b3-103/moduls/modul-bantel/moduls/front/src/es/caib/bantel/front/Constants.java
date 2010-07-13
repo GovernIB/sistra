@@ -14,6 +14,8 @@ public class Constants implements Serializable {
     
     public static final String DEFAULT_LANG = "ca";
     
+	public static final String IMPLEMENTACION_FIRMA_KEY = "implementacionFirma";
+    
     public static String RESPUESTA_FRONT_KEY = "respuestaFront";
 	public static String TRAMITE_KEY = "tramite";
 	public static String MENSAJE_KEY = "message";
@@ -53,6 +55,7 @@ public class Constants implements Serializable {
 	
 	
 	public static String OPCION_SELECCIONADA_KEY = "opcionSeleccionada";
+	public static String OPCION_SELECCIONADA_KEY2 = "opcionSeleccionada2";
 	
 	
 	public static String MESSAGE_KEY = "message";

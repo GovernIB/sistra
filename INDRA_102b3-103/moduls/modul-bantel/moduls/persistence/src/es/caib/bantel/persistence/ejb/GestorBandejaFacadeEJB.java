@@ -140,6 +140,7 @@ public abstract class GestorBandejaFacadeEJB extends HibernateEJB
 	        	gest.setIntervaloInforme(obj.getIntervaloInforme());
 	        	gest.setPermitirCambioEstado(obj.getPermitirCambioEstado());
 	        	gest.setPermitirCambioEstadoMasivo(obj.getPermitirCambioEstadoMasivo());
+	        	gest.setPermitirGestionExpedientes(obj.getPermitirGestionExpedientes());
         	}else{        	
         		gest = obj;
         		nuevo = true;

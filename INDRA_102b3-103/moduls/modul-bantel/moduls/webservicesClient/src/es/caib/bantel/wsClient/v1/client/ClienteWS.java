@@ -2,10 +2,11 @@ package es.caib.bantel.wsClient.v1.client;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import java.util.List;
+import java.util.concurrent.Future;
 
 import javax.xml.namespace.QName;
+import javax.xml.ws.AsyncHandler;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.soap.SOAPFaultException;
 
@@ -17,6 +18,7 @@ import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 
 import es.caib.bantel.model.ReferenciaTramiteBandeja;
+import es.caib.bantel.wsClient.v1.model.AvisoEntradasResponse;
 
 /**
  * Cliente de WS para interfaz version 1 de backoffices para Sistra
@@ -35,13 +37,11 @@ public class ClienteWS {
 	 * @param url Endpoint del ws
 	 * @param user Usuario autenticación (nulo si no autenticación)
 	 * @param pass Password autenticación (nulo si no autenticación)
+	 * @param async indica si la llamada al Web Service se tiene que realizar de forma asincrona o no
 	 * @throws Exception 
 	 * @throws Exception
 	 */
-
-	
-	
-	public static void avisarEntradasWS(List entradas, String url, String user, String pass) throws Exception{
+	public static void avisarEntradasWS(List entradas, String url, String user, String pass, boolean async) throws Exception{
 		
 		log.debug("Avisar Entradas por webservice v1: url=" + url);
 		
@@ -55,13 +55,21 @@ public class ClienteWS {
 	    		refEnt.setClaveAcceso( ((ReferenciaTramiteBandeja) entradas.get(i)).getClaveAcceso());
 	    		refsEnt.getReferenciaEntrada().add(refEnt);
 	    	}
+	    	if(async){
+	    		AsyncHandler<AvisoEntradasResponse> handler = null;
+	    		Future<?> avisoEntradasReturn = port.avisoEntradasAsync(refsEnt, handler);
+	    	}else{
 	    	port.avisoEntradas(refsEnt);
+	    	}
 	    }catch(es.caib.bantel.wsClient.v1.services.BantelFacadeException e){
 	    	log.error("Error en el aviso de entradas: "+e.getMessage(),e);
 	    	throw new Exception(e);
 	    } catch(SOAPFaultException e){
 	    	log.error( "Error en el interceptor usuario incorrecto: " + e.getMessage(), e );
 	    	throw new Exception(e);
+	    } catch(Exception e){
+		   log.error("Error en el web service. "+e.getMessage(), e);
+		   throw e;
 	   }
 	}
 	

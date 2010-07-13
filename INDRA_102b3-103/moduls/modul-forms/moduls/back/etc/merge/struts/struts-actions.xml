@@ -9,6 +9,7 @@
     type="org.apache.struts.actions.ForwardAction"
     parameter=".formulario.lista"/>
 
+
 <action
     path="/back/formulario/versiones"
     type="org.apache.struts.actions.ForwardAction"

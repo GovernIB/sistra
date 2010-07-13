@@ -11,11 +11,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import es.caib.redose.model.Documento;
+import es.caib.redose.model.VersionCustodia;
 import es.caib.redose.modelInterfaz.ExcepcionRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.redose.persistence.delegate.DelegateException;
 import es.caib.redose.persistence.delegate.DelegateUtil;
 import es.caib.redose.persistence.delegate.RdsAdminDelegate;
+import es.caib.redose.persistence.delegate.VersionCustodiaDelegate;
+import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.custodia.PluginCustodiaIntf;
 
 
 /**
@@ -84,5 +88,33 @@ public abstract class RdsProcesosEJB implements SessionBean {
     	}
     	
     }   
+
+    /**
+	 * Proceso de borrado de documentos en custodia
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked = "true"
+     */
+    public void borradoDocumentosCustodia() throws ExcepcionRDS{
+    	log.debug( "Job borrado documentos en custodia");
+		VersionCustodiaDelegate delegate = DelegateUtil.getVersionCustodiaDelegate();
+		try{
+			PluginCustodiaIntf pluginCustodia = PluginFactory.getInstance().getPluginCustodia();
+			List documentosParaBorrar = delegate.listarVersionesCustodiaParaBorrar();
+			if(documentosParaBorrar != null){
+				for(int i=0;i<documentosParaBorrar.size();i++){
+					VersionCustodia vc = (VersionCustodia)documentosParaBorrar.get(i);
+					try{
+						pluginCustodia.eliminarDocumento(vc.getCodigo()+"");
+						delegate.borrarVersion(vc.getCodigo());
+					}catch(Exception e){
+						log.error("No se ha podido borrar el documento de Custodia con id= "+vc.getCodigo());
+					}
+				}				
+			}
+		}catch(Exception e){
+			throw new ExcepcionRDS("Error al eliminar los docuemntso de custodia ", e);
+		}
+    }
 
 }

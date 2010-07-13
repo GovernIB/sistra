@@ -414,3 +414,6 @@ h3.titEntrega { padding-left:2em; background:#fff url(../imgs/tramitacion/iconos
 
 /* NOTA PIE TEXTO*/
 p.notaPie {font-size: smaller;font-style: italic;}
+
+/* ESTILO IFRAME UPLOAD */
+#iframeUpload{position: absolute;  top:-30em; left:-30em; frameborder:0; width:0; height:0; scrolling:no; allowtransparency:true;}

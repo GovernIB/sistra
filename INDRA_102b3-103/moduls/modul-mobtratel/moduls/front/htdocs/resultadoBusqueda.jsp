@@ -26,6 +26,7 @@
 			<th><bean:message key="resultadoBusqueda.tipo"/></th>
 			<th><bean:message key="resultadoBusqueda.fechaProgramacion"/></th>
 			<th><bean:message key="resultadoBusqueda.fecha"/></th>
+			<th><bean:message key="resultadoBusqueda.fechaCaducidad"/></th>
 		</tr>				
 			<bean:define id="numeroPagina" name="page" property="page" type="java.lang.Integer"/>
 			<logic:iterate id="pagina" name="page" property="list">
@@ -62,6 +63,7 @@
 				</td>
 				<td><bean:write name="pagina" property="fechaProgramacionEnvio" format="dd/MM/yyyy HH:mm" /></td>
 				<td><bean:write name="pagina" property="fechaEnvio" format="dd/MM/yyyy HH:mm" /></td>
+				<td><bean:write name="pagina" property="fechaCaducidad" format="dd/MM/yyyy HH:mm" /></td>
 				
 			</tr>
 			</logic:iterate>														

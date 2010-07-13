@@ -4,7 +4,7 @@
 		<xs:sequence>
 			<xs:element name="unidadAdministrativa" type="xs:long"/>
 			<xs:element name="identificadorExpediente" type="xs:string"/>
-			<xs:element name="claveExpediente" type="xs:string"/>
+			<xs:element name="claveExpediente" type="xs:string" nillable="true"/>
 		</xs:sequence>
 	</xs:complexType>
 </xs:schema>

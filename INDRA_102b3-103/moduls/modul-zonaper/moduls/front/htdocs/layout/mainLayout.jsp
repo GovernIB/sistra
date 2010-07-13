@@ -56,12 +56,11 @@
 
 <body onload="doOnLoad()">
 <div style='visibility:hidden;position:absolute'>Version:<%=es.caib.zonaper.front.util.Util.getVersion()%></div>
-<div id="contenedor">
+<div id="contenidor">
 	<!-- capsal -->
 	<tiles:insert name="header"/>		
 	<!-- continguts -->
 	<div id="continguts">
-		
 		<!-- titol -->
 		<h1 id="titolPagina"></h1>
 		<div id="titolOmbra"></div>

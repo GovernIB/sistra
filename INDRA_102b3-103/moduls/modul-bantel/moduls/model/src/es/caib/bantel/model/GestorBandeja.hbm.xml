@@ -15,6 +15,7 @@
   	<property name="ultimoAviso" column="GES_AVISO"/>    
   	<property name="permitirCambioEstado" column="GES_UPDEST"/>  
   	<property name="permitirCambioEstadoMasivo" column="GES_UPDESM"/>  
+  	<property name="permitirGestionExpedientes" column="GES_GESEXP"/>  
 		
 	<set name="tramitesGestionados" table="BTE_GESTRA"  order-by="GAP_IDETRA">
          <key column="GAP_CODGES"/>

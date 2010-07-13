@@ -7,6 +7,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import es.caib.sistra.back.action.BaseAction;
 import es.caib.sistra.back.form.TramiteForm;
+import es.caib.sistra.back.util.MensajesUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +31,7 @@ public class AltaTramiteAction extends BaseAction{
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
+    	MensajesUtil.setMsg(this.getResources(request));
         String idOrganoString = request.getParameter("idOrgano");
         if (idOrganoString == null || idOrganoString.length() == 0) {
             log.info("idOrgano es null");

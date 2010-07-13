@@ -44,9 +44,9 @@ public class DatosRegistroEntrada {
 
     @XmlElement(required = true)
     protected OficinaRegistral oficinaRegistral;
-    @XmlElement(required = true)
+    @XmlElement(required = true, nillable = true)
     protected DatosInteresado datosInteresado;
-    @XmlElement(required = true)
+    @XmlElement(required = true, nillable = true)
     protected DatosRepresentado datosRepresentado;
     @XmlElement(required = true)
     protected DatosAsunto datosAsunto;

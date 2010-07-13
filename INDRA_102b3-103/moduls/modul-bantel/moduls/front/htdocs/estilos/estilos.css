@@ -107,6 +107,9 @@ div.atencio p img { vertical-align:middle; margin-left:1em; }
 #tabs ul li { display:inline; padding:.5em 1em; background:#F2F2F2; margin:1em 1em 0 1em; }
 #tabs ul li.selec { font-weight : bold; background:#FFF }
 
+#tabs2 ul { background:#fde5b6; margin:0; padding:1em 0 .5em 1em; }
+#tabs2 ul li { display:inline; padding:.5em 1em; background:#F2F2F2; margin:1em 1em 0 1em; }
+#tabs2 ul li.selec { font-weight : bold; background:#FFF }
 /* marcosup */
 #marcosup { background:url(../imgs/tabs/sombra_general.gif) repeat-x bottom #94BCE6; }
 

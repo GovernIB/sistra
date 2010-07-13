@@ -32,16 +32,16 @@ public class ObjectFactory {
     private final static QName _DocumentoDatosFichero_QNAME = new QName("", "datosFichero");
     private final static QName _DocumentoPlantilla_QNAME = new QName("", "plantilla");
     private final static QName _DocumentoVersion_QNAME = new QName("", "version");
-    private final static QName _DatosRegistroEntradaDocumentos_QNAME = new QName("", "documentos");
-    private final static QName _Fault_QNAME = new QName("urn:es:caib:regtel:ws:v1:model:BackofficeFacade", "fault");
-    private final static QName _AvisoTextoSMS_QNAME = new QName("", "textoSMS");
     private final static QName _FirmaWSFormato_QNAME = new QName("", "formato");
+    private final static QName _DatosRegistroSalidaDocumentos_QNAME = new QName("", "documentos");
+    private final static QName _Fault_QNAME = new QName("urn:es:caib:regtel:ws:v1:model:BackofficeFacade", "fault");
     private final static QName _DatosInteresadoCodigoPais_QNAME = new QName("", "codigoPais");
     private final static QName _DatosInteresadoCodigoProvincia_QNAME = new QName("", "codigoProvincia");
     private final static QName _DatosInteresadoNombreLocalidad_QNAME = new QName("", "nombreLocalidad");
     private final static QName _DatosInteresadoCodigoLocalidad_QNAME = new QName("", "codigoLocalidad");
     private final static QName _DatosInteresadoNombreProvincia_QNAME = new QName("", "nombreProvincia");
     private final static QName _DatosInteresadoNombrePais_QNAME = new QName("", "nombrePais");
+    private final static QName _AvisoTextoSMS_QNAME = new QName("", "textoSMS");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: es.caib.regtel.ws.v1.model
@@ -51,11 +51,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RegistroEntradaConFirmaResponse }
+     * Create an instance of {@link FirmasWS }
      * 
      */
-    public RegistroEntradaConFirmaResponse createRegistroEntradaConFirmaResponse() {
-        return new RegistroEntradaConFirmaResponse();
+    public FirmasWS createFirmasWS() {
+        return new FirmasWS();
+    }
+
+    /**
+     * Create an instance of {@link AcuseRecibo }
+     * 
+     */
+    public AcuseRecibo createAcuseRecibo() {
+        return new AcuseRecibo();
+    }
+
+    /**
+     * Create an instance of {@link OficinaRegistral }
+     * 
+     */
+    public OficinaRegistral createOficinaRegistral() {
+        return new OficinaRegistral();
     }
 
     /**
@@ -67,43 +83,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerAcuseReciboResponse }
+     * Create an instance of {@link Aviso }
      * 
      */
-    public ObtenerAcuseReciboResponse createObtenerAcuseReciboResponse() {
-        return new ObtenerAcuseReciboResponse();
+    public Aviso createAviso() {
+        return new Aviso();
     }
 
     /**
-     * Create an instance of {@link ReferenciaRDSAsientoRegistral }
+     * Create an instance of {@link Documento }
      * 
      */
-    public ReferenciaRDSAsientoRegistral createReferenciaRDSAsientoRegistral() {
-        return new ReferenciaRDSAsientoRegistral();
-    }
-
-    /**
-     * Create an instance of {@link ReferenciaRDS }
-     * 
-     */
-    public ReferenciaRDS createReferenciaRDS() {
-        return new ReferenciaRDS();
-    }
-
-    /**
-     * Create an instance of {@link AnexoItem }
-     * 
-     */
-    public AnexoItem createAnexoItem() {
-        return new AnexoItem();
-    }
-
-    /**
-     * Create an instance of {@link RegistroEntradaConFirma }
-     * 
-     */
-    public RegistroEntradaConFirma createRegistroEntradaConFirma() {
-        return new RegistroEntradaConFirma();
+    public Documento createDocumento() {
+        return new Documento();
     }
 
     /**
@@ -123,43 +115,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DatosInteresado }
+     * Create an instance of {@link AnexosMap }
      * 
      */
-    public DatosInteresado createDatosInteresado() {
-        return new DatosInteresado();
-    }
-
-    /**
-     * Create an instance of {@link Documento }
-     * 
-     */
-    public Documento createDocumento() {
-        return new Documento();
-    }
-
-    /**
-     * Create an instance of {@link RegistroEntradaResponse }
-     * 
-     */
-    public RegistroEntradaResponse createRegistroEntradaResponse() {
-        return new RegistroEntradaResponse();
-    }
-
-    /**
-     * Create an instance of {@link AcuseRecibo }
-     * 
-     */
-    public AcuseRecibo createAcuseRecibo() {
-        return new AcuseRecibo();
-    }
-
-    /**
-     * Create an instance of {@link OficioRemision }
-     * 
-     */
-    public OficioRemision createOficioRemision() {
-        return new OficioRemision();
+    public AnexosMap createAnexosMap() {
+        return new AnexosMap();
     }
 
     /**
@@ -171,27 +131,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link FirmasWS }
+     * Create an instance of {@link DatosNotificacion }
      * 
      */
-    public FirmasWS createFirmasWS() {
-        return new FirmasWS();
+    public DatosNotificacion createDatosNotificacion() {
+        return new DatosNotificacion();
     }
 
     /**
-     * Create an instance of {@link DatosRegistroSalida }
+     * Create an instance of {@link ReferenciaRDSAsientoRegistral }
      * 
      */
-    public DatosRegistroSalida createDatosRegistroSalida() {
-        return new DatosRegistroSalida();
+    public ReferenciaRDSAsientoRegistral createReferenciaRDSAsientoRegistral() {
+        return new ReferenciaRDSAsientoRegistral();
     }
 
     /**
-     * Create an instance of {@link BackofficeFacadeException }
+     * Create an instance of {@link ObtenerAcuseReciboResponse }
      * 
      */
-    public BackofficeFacadeException createBackofficeFacadeException() {
-        return new BackofficeFacadeException();
+    public ObtenerAcuseReciboResponse createObtenerAcuseReciboResponse() {
+        return new ObtenerAcuseReciboResponse();
     }
 
     /**
@@ -203,22 +163,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DatosExpediente }
-     * 
-     */
-    public DatosExpediente createDatosExpediente() {
-        return new DatosExpediente();
-    }
-
-    /**
-     * Create an instance of {@link Aviso }
-     * 
-     */
-    public Aviso createAviso() {
-        return new Aviso();
-    }
-
-    /**
      * Create an instance of {@link PrepararRegistroEntradaResponse }
      * 
      */
@@ -227,11 +171,43 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DatosNotificacion }
+     * Create an instance of {@link ReferenciaRDS }
      * 
      */
-    public DatosNotificacion createDatosNotificacion() {
-        return new DatosNotificacion();
+    public ReferenciaRDS createReferenciaRDS() {
+        return new ReferenciaRDS();
+    }
+
+    /**
+     * Create an instance of {@link AnexoItem }
+     * 
+     */
+    public AnexoItem createAnexoItem() {
+        return new AnexoItem();
+    }
+
+    /**
+     * Create an instance of {@link RegistroEntradaConFirmaResponse }
+     * 
+     */
+    public RegistroEntradaConFirmaResponse createRegistroEntradaConFirmaResponse() {
+        return new RegistroEntradaConFirmaResponse();
+    }
+
+    /**
+     * Create an instance of {@link RegistroEntradaResponse }
+     * 
+     */
+    public RegistroEntradaResponse createRegistroEntradaResponse() {
+        return new RegistroEntradaResponse();
+    }
+
+    /**
+     * Create an instance of {@link OficioRemision }
+     * 
+     */
+    public OficioRemision createOficioRemision() {
+        return new OficioRemision();
     }
 
     /**
@@ -243,51 +219,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link OficinaRegistral }
+     * Create an instance of {@link BackofficeFacadeException }
      * 
      */
-    public OficinaRegistral createOficinaRegistral() {
-        return new OficinaRegistral();
-    }
-
-    /**
-     * Create an instance of {@link RegistroEntrada }
-     * 
-     */
-    public RegistroEntrada createRegistroEntrada() {
-        return new RegistroEntrada();
-    }
-
-    /**
-     * Create an instance of {@link ReferenciasRDS }
-     * 
-     */
-    public ReferenciasRDS createReferenciasRDS() {
-        return new ReferenciasRDS();
-    }
-
-    /**
-     * Create an instance of {@link RegistroSalidaResponse }
-     * 
-     */
-    public RegistroSalidaResponse createRegistroSalidaResponse() {
-        return new RegistroSalidaResponse();
-    }
-
-    /**
-     * Create an instance of {@link DatosRegistroEntrada }
-     * 
-     */
-    public DatosRegistroEntrada createDatosRegistroEntrada() {
-        return new DatosRegistroEntrada();
-    }
-
-    /**
-     * Create an instance of {@link DatosAsunto }
-     * 
-     */
-    public DatosAsunto createDatosAsunto() {
-        return new DatosAsunto();
+    public BackofficeFacadeException createBackofficeFacadeException() {
+        return new BackofficeFacadeException();
     }
 
     /**
@@ -299,11 +235,75 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AnexosMap }
+     * Create an instance of {@link DatosExpediente }
      * 
      */
-    public AnexosMap createAnexosMap() {
-        return new AnexosMap();
+    public DatosExpediente createDatosExpediente() {
+        return new DatosExpediente();
+    }
+
+    /**
+     * Create an instance of {@link DatosAsunto }
+     * 
+     */
+    public DatosAsunto createDatosAsunto() {
+        return new DatosAsunto();
+    }
+
+    /**
+     * Create an instance of {@link DatosRegistroSalida }
+     * 
+     */
+    public DatosRegistroSalida createDatosRegistroSalida() {
+        return new DatosRegistroSalida();
+    }
+
+    /**
+     * Create an instance of {@link RegistroSalidaResponse }
+     * 
+     */
+    public RegistroSalidaResponse createRegistroSalidaResponse() {
+        return new RegistroSalidaResponse();
+    }
+
+    /**
+     * Create an instance of {@link DatosInteresado }
+     * 
+     */
+    public DatosInteresado createDatosInteresado() {
+        return new DatosInteresado();
+    }
+
+    /**
+     * Create an instance of {@link RegistroEntradaConFirma }
+     * 
+     */
+    public RegistroEntradaConFirma createRegistroEntradaConFirma() {
+        return new RegistroEntradaConFirma();
+    }
+
+    /**
+     * Create an instance of {@link DatosRegistroEntrada }
+     * 
+     */
+    public DatosRegistroEntrada createDatosRegistroEntrada() {
+        return new DatosRegistroEntrada();
+    }
+
+    /**
+     * Create an instance of {@link ReferenciasRDS }
+     * 
+     */
+    public ReferenciasRDS createReferenciasRDS() {
+        return new ReferenciasRDS();
+    }
+
+    /**
+     * Create an instance of {@link RegistroEntrada }
+     * 
+     */
+    public RegistroEntrada createRegistroEntrada() {
+        return new RegistroEntrada();
     }
 
     /**
@@ -379,12 +379,21 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "formato", scope = FirmaWS.class)
+    public JAXBElement<String> createFirmaWSFormato(String value) {
+        return new JAXBElement<String>(_FirmaWSFormato_QNAME, String.class, FirmaWS.class, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Documentos }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "", name = "documentos", scope = DatosRegistroEntrada.class)
-    public JAXBElement<Documentos> createDatosRegistroEntradaDocumentos(Documentos value) {
-        return new JAXBElement<Documentos>(_DatosRegistroEntradaDocumentos_QNAME, Documentos.class, DatosRegistroEntrada.class, value);
+    @XmlElementDecl(namespace = "", name = "documentos", scope = DatosRegistroSalida.class)
+    public JAXBElement<Documentos> createDatosRegistroSalidaDocumentos(Documentos value) {
+        return new JAXBElement<Documentos>(_DatosRegistroSalidaDocumentos_QNAME, Documentos.class, DatosRegistroSalida.class, value);
     }
 
     /**
@@ -394,24 +403,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "urn:es:caib:regtel:ws:v1:model:BackofficeFacade", name = "fault")
     public JAXBElement<BackofficeFacadeException> createFault(BackofficeFacadeException value) {
         return new JAXBElement<BackofficeFacadeException>(_Fault_QNAME, BackofficeFacadeException.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "textoSMS", scope = Aviso.class)
-    public JAXBElement<String> createAvisoTextoSMS(String value) {
-        return new JAXBElement<String>(_AvisoTextoSMS_QNAME, String.class, Aviso.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "formato", scope = FirmaWS.class)
-    public JAXBElement<String> createFirmaWSFormato(String value) {
-        return new JAXBElement<String>(_FirmaWSFormato_QNAME, String.class, FirmaWS.class, value);
     }
 
     /**
@@ -472,9 +463,18 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link Documentos }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "", name = "documentos", scope = DatosRegistroSalida.class)
-    public JAXBElement<Documentos> createDatosRegistroSalidaDocumentos(Documentos value) {
-        return new JAXBElement<Documentos>(_DatosRegistroEntradaDocumentos_QNAME, Documentos.class, DatosRegistroSalida.class, value);
+    @XmlElementDecl(namespace = "", name = "documentos", scope = DatosRegistroEntrada.class)
+    public JAXBElement<Documentos> createDatosRegistroEntradaDocumentos(Documentos value) {
+        return new JAXBElement<Documentos>(_DatosRegistroSalidaDocumentos_QNAME, Documentos.class, DatosRegistroEntrada.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "textoSMS", scope = Aviso.class)
+    public JAXBElement<String> createAvisoTextoSMS(String value) {
+        return new JAXBElement<String>(_AvisoTextoSMS_QNAME, String.class, Aviso.class, value);
     }
 
 }

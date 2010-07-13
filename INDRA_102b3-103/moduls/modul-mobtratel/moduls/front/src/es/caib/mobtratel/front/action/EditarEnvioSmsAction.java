@@ -1,7 +1,9 @@
 package es.caib.mobtratel.front.action;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +18,7 @@ import es.caib.mobtratel.model.Constantes;
 import es.caib.mobtratel.modelInterfaz.MensajeEnvio;
 import es.caib.mobtratel.modelInterfaz.MensajeEnvioSms;
 import es.caib.mobtratel.persistence.delegate.DelegateMobTraTelUtil;
+import es.caib.mobtratel.persistence.delegate.DelegateUtil;
 import es.caib.mobtratel.persistence.delegate.FormatoException;
 import es.caib.mobtratel.persistence.delegate.LimiteDestinatariosException;
 import es.caib.mobtratel.persistence.delegate.MaxCaracteresSMSException;
@@ -62,6 +65,20 @@ public class EditarEnvioSmsAction extends BaseAction
 			else fecha += " " + hora + ":00";
 			Date fechaCaducidad = df.parse(fecha);
 			mensaje.setFechaCaducidad(fechaCaducidad);
+		}else{
+			Properties config = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+			//si no esta definida la propiedad en mobtratel.properties por defecto le metemos 15 dias.
+			int dias = 15;
+			if(config.getProperty("envio.limite.sin.fecha.caducidad") != null && !"".equals(config.getProperty("envio.limite.sin.fecha.caducidad"))){
+				try{
+					dias = Integer.parseInt(config.getProperty("envio.limite.sin.fecha.caducidad"));
+				}catch(Exception e){
+					dias = 15;
+				}
+			}
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.DATE, dias);
+			mensaje.setFechaCaducidad(cal.getTime());
 		}
 		
 		if ("S".equals(formulario.getInmediato())){

@@ -14,7 +14,12 @@
 		<bean:write name="<%=es.caib.zonaper.front.Constants.ORGANISMO_INFO_KEY%>" property="urlSoporteIncidencias"/>
 	</bean:define>
 	<bean:define id="telefonoSoporte" type="String">
+		<logic:notEmpty name="<%=es.caib.zonaper.front.Constants.ORGANISMO_INFO_KEY%>" property="telefonoIncidencias">
 		<bean:write name="<%=es.caib.zonaper.front.Constants.ORGANISMO_INFO_KEY%>" property="telefonoIncidencias"/>
+		</logic:notEmpty>
+		<logic:empty name="<%=es.caib.zonaper.front.Constants.ORGANISMO_INFO_KEY%>" property="telefonoIncidencias" >
+			&nbsp;
+		</logic:empty>
 	</bean:define>
 	<%
 		// Construimos url de soporte reemplazando variables
@@ -63,8 +68,19 @@
 			<!-- /contacte -->
 			
 			<div class="dreta">
-				<strong><bean:message key="footer.necesitaAyuda"/></strong> <bean:message key="footer.soporte.inicio"/> <a id="equipSuport"><bean:message key="footer.soporte.fin"/></a>.
-			</div>
+				<strong><bean:message key="footer.necesitaAyuda"/></strong> <bean:message key="footer.soporte.inicio"/> 
+				<logic:notEmpty name="telefonoSoporte">
+					<logic:equal name="telefonoSoporte" value="&nbsp;">
+						<a href="<%=urlSoporteFinal%>" target="_blank"><bean:message key="footer.soporte.fin"/></a>.
+					</logic:equal>
+					<logic:notEqual name="telefonoSoporte" value="&nbsp;">
+						<a id="equipSuport"><bean:message key="footer.soporte.fin"/></a>.					
+					</logic:notEqual>
+				</logic:notEmpty>
+				<logic:empty name="telefonoSoporte">
+					<a href="<%=urlSoporteFinal%>" target="_blank"><bean:message key="footer.soporte.fin"/></a>.
+				</logic:empty>
 		
 		</div>
+		
 </div>

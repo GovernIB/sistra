@@ -32,6 +32,9 @@
 	name="anexarDocumentoForm"
 	type="es.caib.sistra.front.form.AnexarDocumentoForm"/>
 <form-bean
+	name="uploadDocumentoForm"
+	type="es.caib.sistra.front.form.AnexarDocumentoForm"/>
+<form-bean
 	name="borrarAnexoForm"
 	type="es.caib.sistra.front.form.BorrarAnexoForm"/>
 <form-bean

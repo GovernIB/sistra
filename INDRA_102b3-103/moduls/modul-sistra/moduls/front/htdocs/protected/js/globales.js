@@ -150,6 +150,12 @@ function mostrarCapa() {
 	}
 }
 
+// esconder las capas info
+function ocultarCapaInfo() {
+	document.getElementById('capaInfoForms').style.display = 'none';
+	document.getElementById('capaInfoFondo').style.display = 'none';
+}
+
 // capa de informaci?n. Puede ser: info, error, ok.
 function mostrarInfo() {
 	var capaI = document.getElementById('capaInfo');
@@ -270,7 +276,7 @@ function mostrarAyudaAdmin() {
 	capaInfoY = capaI.offsetHeight;
 	with (capaI) {
 		style.left = (ventanaX-capaInfoX)/2 + 'px';
-		style.top = (ventanaY-capaInfoY)/2 + 'px';
+		style.top = (((ventanaY-capaInfoY)/2)+ document.documentElement.scrollTop) + 'px';
 	}
 	
 	

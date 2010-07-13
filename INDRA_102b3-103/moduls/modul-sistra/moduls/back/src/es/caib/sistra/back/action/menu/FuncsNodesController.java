@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.Globals;
@@ -24,10 +25,12 @@ import es.caib.sistra.model.OrganoResponsable;
 import es.caib.sistra.model.Tramite;
 import es.caib.sistra.model.TramiteNivel;
 import es.caib.sistra.model.TramiteVersion;
+import es.caib.sistra.persistence.delegate.ConfiguracionDelegate;
 import es.caib.sistra.persistence.delegate.DelegateException;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
 import es.caib.sistra.persistence.delegate.DocumentoDelegate;
 import es.caib.sistra.persistence.delegate.DocumentoNivelDelegate;
+import es.caib.sistra.persistence.delegate.GruposDelegate;
 import es.caib.sistra.persistence.delegate.OrganoResponsableDelegate;
 import es.caib.sistra.persistence.delegate.TramiteDelegate;
 import es.caib.sistra.persistence.delegate.TramiteNivelDelegate;
@@ -127,15 +130,8 @@ public class FuncsNodesController implements Controller
 		}
 	}
     
-    private void iterateTramites( Nodo nodoPadre, ArrayList arlNodos, OrganoResponsable organo, HttpServletRequest request ) throws DelegateException
-    {
-    	TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
-    	Set tramites = tramiteDelegate.listarTramitesOrganoResponsable( organo.getCodigo() );
-    	
-    	for ( Iterator it = ( Iterator ) tramites.iterator(); it.hasNext(); )
-    	{
-    		Tramite tramite = ( Tramite ) it.next();
     		
+    private void anadirTramite(Nodo nodoPadre, ArrayList arlNodos, HttpServletRequest request, Tramite tramite) throws DelegateException{
     		String nodoId = obtenerId( "tramite", tramite.getCodigo() ); 
     		
 			Nodo nodo1 = new Nodo();
@@ -179,6 +175,29 @@ public class FuncsNodesController implements Controller
     		Set versiones = tramite.getVersiones();
     		iterateVersionesTramite( nodo3, arlNodos, tramite, request );
     	}
+    
+    private void iterateTramites( Nodo nodoPadre, ArrayList arlNodos, OrganoResponsable organo, HttpServletRequest request ) throws DelegateException
+    {
+       	if(StringUtils.isNotEmpty(request.getUserPrincipal().getName())){
+       		try{
+      			GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
+      			TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
+	    		Set tramites = tramiteDelegate.listarTramitesOrganoResponsable( organo.getCodigo() );
+		    	for ( Iterator it = ( Iterator ) tramites.iterator(); it.hasNext(); )
+		    	{
+		    		Tramite tramite = ( Tramite ) it.next();
+		    		if( Boolean.valueOf( DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("habilitar.permisos")).booleanValue()){
+		    			if(gruposDelegate.existeUsuarioByGruposTramite(request.getUserPrincipal().getName(),new Long(tramite.getCodigo())) || gruposDelegate.existeUsuarioByTramite(request.getUserPrincipal().getName(),new Long(tramite.getCodigo()))){
+		    				anadirTramite(nodoPadre, arlNodos, request, tramite);
+		    			}
+		    		}else{
+		    			anadirTramite(nodoPadre, arlNodos, request, tramite);
+		    		}
+   				}
+   	        }catch(DelegateException e){
+   	        	
+   	        }
+       	}    	    	
     }
     
     private void iterateVersionesTramite( Nodo nodoPadre, ArrayList arlNodos, Tramite tramite, HttpServletRequest request ) throws DelegateException

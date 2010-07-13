@@ -48,9 +48,9 @@ public class DatosRegistroSalida {
     protected DatosExpediente datosExpediente;
     @XmlElement(required = true)
     protected OficinaRegistral oficinaRegistral;
-    @XmlElement(required = true)
+    @XmlElement(required = true, nillable = true)
     protected DatosInteresado datosInteresado;
-    @XmlElement(required = true)
+    @XmlElement(required = true, nillable = true)
     protected DatosRepresentado datosRepresentado;
     @XmlElement(required = true)
     protected DatosNotificacion datosNotificacion;

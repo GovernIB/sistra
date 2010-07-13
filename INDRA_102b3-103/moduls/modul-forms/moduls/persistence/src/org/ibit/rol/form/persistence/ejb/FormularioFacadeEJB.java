@@ -3,6 +3,9 @@ package org.ibit.rol.form.persistence.ejb;
 import net.sf.hibernate.*;
 
 import org.ibit.rol.form.model.*;
+import org.ibit.rol.form.persistence.delegate.DelegateException;
+import org.ibit.rol.form.persistence.delegate.DelegateUtil;
+import org.ibit.rol.form.persistence.delegate.GruposDelegate;
 import org.ibit.rol.form.persistence.util.ClassUtils;
 
 import javax.ejb.CreateException;
@@ -382,6 +385,7 @@ public abstract class FormularioFacadeEJB extends HibernateEJB {
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public Formulario obtenerFormulario(Long idFormulario) {
         Session session = getSession();
@@ -668,8 +672,14 @@ public abstract class FormularioFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.form}"
      */
     public void borrarFormulario(Long id) {
+
+		// Borramos permisos de acceso		
+       	borrarPermisosAccesoFormulario(id);
+
+		// Borramos formulario
         Session session = getSession();
         try {
+        	
             Formulario formulario = (Formulario) session.load(Formulario.class, id);
             
             if (!formulario.isBloqueado()){
@@ -701,6 +711,20 @@ public abstract class FormularioFacadeEJB extends HibernateEJB {
         }
     }
 
+    /**
+     * Elimina permisos de acceso al tramite (grupos y usuarios) 
+     * @param id
+     */
+    private void borrarPermisosAccesoFormulario(Long id) {
+        try {
+        	GruposDelegate gdlg = DelegateUtil.getGruposDelegate();
+        	gdlg.borrarFormularioGrupos(id);
+        	gdlg.borrarFormularioUsuarios(id);
+        } catch (DelegateException de) {
+            throw new EJBException(de);
+        }
+    }
+    
     /**
      * bloquea el formulario representado por "formulario_id" para el usuario actual
      * @ejb.interface-method

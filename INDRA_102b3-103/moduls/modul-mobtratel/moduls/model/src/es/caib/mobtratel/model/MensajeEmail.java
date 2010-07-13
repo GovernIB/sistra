@@ -3,6 +3,7 @@ package es.caib.mobtratel.model;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
+import java.util.List;
 
 import es.caib.xml.ConstantesXML;
 
@@ -85,6 +86,11 @@ public class MensajeEmail implements Serializable
 	private int numeroDestinatariosEnviados;
 	
 
+	/**
+	 * Destinatarios a los que se ha podido enviar el mail
+	 */
+	private List destinatariosValidos;
+	
 	
 	public byte[] getDestinatariosEnviados() {
 		return destinatariosEnviados;
@@ -229,6 +235,14 @@ public class MensajeEmail implements Serializable
 
 	public void setHtml(boolean html) {
 		this.html = html;
+	}
+
+	public List getDestinatariosValidos() {
+		return destinatariosValidos;
+	}
+
+	public void setDestinatariosValidos(List destinatariosValidos) {
+		this.destinatariosValidos = destinatariosValidos;
 	}
 
 	

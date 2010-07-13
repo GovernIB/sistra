@@ -28,7 +28,12 @@
 		<bean:write name="descripcion" />	
 	</bean:define>
 	<bean:define id="telefonoSoporte" type="String">
+		<logic:notEmpty name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property="telefonoIncidencias" >
 		<bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property="telefonoIncidencias"/>
+		</logic:notEmpty>
+		<logic:empty  name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property="telefonoIncidencias" >
+			&nbsp;
+		</logic:empty>
 	</bean:define>
 	<%
 		// Construimos url de soporte reemplazando variables

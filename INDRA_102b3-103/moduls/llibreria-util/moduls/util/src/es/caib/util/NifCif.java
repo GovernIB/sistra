@@ -23,7 +23,8 @@ public class NifCif {
 	public static String SIN_NIF = "[0-9]{0,8}[" + LETRAS + "]{1}";
 	public static String SIN_CIAS = "[0-9]{0,13}[" + LETRAS + "]{1}";
 	public static String SIN_CIF = "[ABCDEFGHJKLMNPQRSUVW]{1}[0-9]{7}([0-9]||[ABCDEFGHIJ]){1}";	                                 
-	public static String SIN_NIE = "^\\s*[X|Y][\\/|\\s\\-]?[0-9]{1,8}[\\/|\\s\\-]?[A-Z]{1}\\s*$";
+	//public static String SIN_NIE = "^\\s*[X|Y][\\/|\\s\\-]?[0-9]{1,8}[\\/|\\s\\-]?[A-Z]{1}\\s*$";
+	public static String SIN_NIE = "[X|Y][0-9]{1,8}[A-Z]{1}";
 	public static String SIN_SS = "^\\s*[0-9]{2}[\\/|\\s\\-]?[0-9]{7,8}[\\/|\\s\\-]?[0-9]{2}\\s*$";
 	
 	public static HashMap sociedad = new HashMap();
@@ -137,7 +138,7 @@ public class NifCif {
 	 */
 	public static boolean esCIF(String valor) {
 		try {
-			valor = valor.replaceAll("[\\/\\s\\-]", "" );
+			//valor = valor.replaceAll("[\\/\\s\\-]", "" );
 			if ( !Pattern.matches(SIN_CIF, valor)) return false;
 
 			String codigoControl = valor.substring(valor.length() - 1, valor.length());
@@ -175,7 +176,7 @@ public class NifCif {
 		try
 		{
 			if ( !Pattern.matches(SIN_NIE, valor)) return false;
-			valor = valor.replaceAll("[\\/\\s\\-]", "" );
+			//valor = valor.replaceAll("[\\/\\s\\-]", "" );
 			return esNIEDC(valor);
 		}
 		catch( Exception exc )

@@ -11,6 +11,7 @@ import es.caib.redose.modelInterfaz.DocumentoVerifier;
 import es.caib.redose.modelInterfaz.ExcepcionRDS;
 import es.caib.redose.modelInterfaz.KeyVerifier;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
+import es.caib.redose.modelInterfaz.TransformacionRDS;
 import es.caib.redose.modelInterfaz.UsoRDS;
 import es.caib.redose.persistence.intf.RdsFacade;
 import es.caib.redose.persistence.util.RdsFacadeUtil;
@@ -33,6 +34,14 @@ public class RdsDelegate implements StatelessDelegate {
         }
     }
 	    
+    public ReferenciaRDS insertarDocumento(DocumentoRDS documento, TransformacionRDS transformacion) throws DelegateException{
+    	try {
+            return getFacade().insertarDocumento(documento,transformacion);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     /**
      * Actualiza un documento en el RDS    
      */
@@ -193,7 +202,32 @@ public class RdsDelegate implements StatelessDelegate {
         } 
     }
     
+    /**
+     * Cambia de UA un documento
+     */
+    public void cambiarUnidadAdministrativa(ReferenciaRDS refRDS, Long codUA) throws DelegateException{
+    	try {
+            getFacade().cambiarUnidadAdministrativa(refRDS,codUA);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        } 
+    }
 	
+    /**
+     * Convierte un fichero a PDF/A. Debe tener una extensión permitida: "doc","docx","ppt","xls","odt","jpg","txt"
+     * 
+     * @param documento
+     * @param extension
+     * @return
+     * @throws DelegateException
+     */
+    public byte[] convertirFicheroAPDF(byte[] documento,String extension) throws DelegateException{
+    	try {
+           return getFacade().convertirFicheroAPDF(documento,extension);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        } 
+    }        
 
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

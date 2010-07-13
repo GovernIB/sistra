@@ -11,9 +11,11 @@ import org.ibit.rol.form.persistence.intf.PropiedadSalidaFacade;
 import org.ibit.rol.form.persistence.util.PropiedadSalidaFacadeUtil;
 
 /**
+ * Created by IntelliJ IDEA.
  * User: mgonzalez
  * Date: 23-ene-2006
  * Time: 11:09:39
+ * To change this template use File | Settings | File Templates.
  */
 public class PropiedadSalidaDelegate implements StatelessDelegate {
     /* ========================================================= */

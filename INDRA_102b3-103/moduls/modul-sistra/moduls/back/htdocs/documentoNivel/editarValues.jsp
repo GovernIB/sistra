@@ -62,7 +62,7 @@
      function abrirForms(){
      	campoModelo = document.getElementsByName("values.formularioFormsModelo").item(0).value;
      	campoVersion = document.getElementsByName("values.formularioFormsVersion").item(0).value;
-     	window.open("/formback/index.jsp?modelo="+campoModelo+"&version="+campoVersion,"FORMS");
+     	window.open("/formback/init.do?modelo="+campoModelo+"&version="+campoVersion,"FORMS");
      }
      
      // -->

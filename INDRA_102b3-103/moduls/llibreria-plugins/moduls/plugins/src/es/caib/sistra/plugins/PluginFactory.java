@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import es.caib.sistra.plugins.login.PluginAutenticacionExplicitaIntf;
+import es.caib.sistra.plugins.custodia.PluginCustodiaIntf;
 import es.caib.sistra.plugins.firma.PluginFirmaIntf;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
 import es.caib.sistra.plugins.pagos.PluginPagosIntf;
@@ -69,7 +70,9 @@ public class PluginFactory {
 			if (pluginClass != null) return pluginClass;		
 			synchronized (clasesPlugins){
 				String className = props.getProperty(pluginName);
-				if (className == null || className.length()<=0) throw new Exception("No hay ningun classname configurado para el plugin '" + pluginName + "'");
+				if (className == null || className.length()<=0) {
+					throw new NoExistePluginException("No hay ningun classname configurado para el plugin '" + pluginName + "'");
+				}
 				try{
 					pluginClass = Class.forName(className);
 					clasesPlugins.put(pluginName,pluginClass);
@@ -133,5 +136,14 @@ public class PluginFactory {
 	 */
 	public PluginAutenticacionExplicitaIntf getPluginAutenticacionExplicita() throws Exception{
 		return  (PluginAutenticacionExplicitaIntf) getPlugin("plugin.autenticacionExplicita"); 
+	}
+	
+	/**
+	 * Obtiene plugin de custodia. Si no hay configurado sistema de custodia de
+	 * @return Plugin de login
+	 * @throws Exception
+	 */
+	public PluginCustodiaIntf getPluginCustodia() throws Exception{
+		return  (PluginCustodiaIntf) getPlugin("plugin.custodia");		
 	}
 }

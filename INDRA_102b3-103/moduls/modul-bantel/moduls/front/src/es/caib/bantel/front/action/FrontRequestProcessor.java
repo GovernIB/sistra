@@ -11,14 +11,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionServlet;
+import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.tiles.TilesRequestProcessor;
 
 import es.caib.bantel.front.Constants;
+import es.caib.bantel.model.GestorBandeja;
+import es.caib.bantel.persistence.delegate.DelegateUtil;
+import es.caib.bantel.persistence.delegate.GestorBandejaDelegate;
+import es.caib.sistra.plugins.PluginFactory;
 
 
 /**
@@ -32,6 +39,22 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
     private String defaultLang = null;
     private List supportedLangs = null;
 
+    
+ public void init(ActionServlet actionServlet,ModuleConfig moduleConfig) throws ServletException{
+    	
+    	super.init(actionServlet,moduleConfig);
+    	
+    	// Inicializamos implementacion de firma (almacenamos en contexto)
+        try{
+        	if (StringUtils.isEmpty((String) getServletContext().getAttribute(Constants.IMPLEMENTACION_FIRMA_KEY))){
+     			getServletContext().setAttribute(Constants.IMPLEMENTACION_FIRMA_KEY,PluginFactory.getInstance().getPluginFirma().getProveedor());
+     		}
+        }catch (Exception ex){
+        	log.error("Error obteniendo implementacion firma",ex);
+        	throw new ServletException(ex);
+        }
+    	
+    }
     /**
      * Inicializa los idiomas soportados por la aplicación
      */
@@ -107,21 +130,28 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
         session.setAttribute(Globals.LOCALE_KEY, new Locale(defaultLang));
     }
 
-    public void process(HttpServletRequest request,
-                        HttpServletResponse response)
-            throws IOException, ServletException {
+    public void process(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         if (request.getCharacterEncoding() == null) {
             request.setCharacterEncoding("ISO-8859-15");
         }
         super.process(request, response);
     }
 
-    protected void processPopulate(HttpServletRequest request,
-                                   HttpServletResponse response,
-                                   ActionForm form,
-                                   ActionMapping mapping)
-            throws ServletException {
+    protected void processPopulate(HttpServletRequest request, HttpServletResponse response, ActionForm form, ActionMapping mapping) throws ServletException {
         super.processPopulate(request, response, form, mapping);
+        try{
+        	if(request.getSession().getAttribute("permitirGestionExpedientes") == null){
+        		if(StringUtils.isNotEmpty(request.getUserPrincipal().getName())){
+        			GestorBandejaDelegate delegate = DelegateUtil.getGestorBandejaDelegate();
+        			GestorBandeja gestorBandeja = delegate.obtenerGestorBandeja(request.getUserPrincipal().getName());
+        			if(gestorBandeja != null && !"".equals(gestorBandeja.getPermitirGestionExpedientes())){
+        				request.getSession().setAttribute("permitirGestionExpedientes",gestorBandeja.getPermitirGestionExpedientes());
+        			}
+        		}
+        	}
+        }catch(Exception e){
+        	log.error("Error obteniendo los datos del gestor",e);
+        }
     }
 
 }

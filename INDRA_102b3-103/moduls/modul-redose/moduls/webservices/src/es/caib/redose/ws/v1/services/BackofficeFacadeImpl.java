@@ -8,6 +8,8 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 
+import org.apache.commons.lang.StringUtils;
+
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.redose.ws.v1.model.BackofficeFacadeException;
@@ -15,6 +17,7 @@ import es.caib.redose.ws.v1.model.DocumentoRDS;
 import es.caib.redose.ws.v1.model.FirmaWS;
 import es.caib.redose.ws.v1.model.FirmasWS;
 import es.caib.redose.ws.v1.model.ReferenciaRDS;
+import es.caib.redose.ws.v1.model.TransformacionRDS;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.firma.FirmaIntf;
 import es.caib.sistra.plugins.firma.PluginFirmaIntf;
@@ -39,6 +42,19 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		}
 	}
 
+	public DocumentoRDS consultarDocumentoFormateado(ReferenciaRDS referencia, String tipoPlantilla, String idioma) throws es.caib.redose.ws.v1.services.BackofficeFacadeException {
+		try{
+			es.caib.redose.modelInterfaz.ReferenciaRDS refInter = referenciaWSToReferenciaIntf(referencia);
+			RdsDelegate rdsD = DelegateRDSUtil.getRdsDelegate();
+			es.caib.redose.modelInterfaz.DocumentoRDS doc = rdsD.consultarDocumentoFormateado(refInter,(StringUtils.isEmpty(tipoPlantilla))?null:tipoPlantilla,(StringUtils.isEmpty(idioma))?null:idioma);
+			DocumentoRDS docWS = documentoIntToDocumentoWS(doc);
+			return docWS;
+		}catch( Exception exc ){
+			exc.printStackTrace();
+		     throw new es.caib.redose.ws.v1.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
+		}
+	}
+	
 	public ReferenciaRDS insertarDocumento(DocumentoRDS documento) throws es.caib.redose.ws.v1.services.BackofficeFacadeException {
 		try{
 			es.caib.redose.modelInterfaz.DocumentoRDS docInter = documentoWSToDocumentoInt(documento);
@@ -52,6 +68,19 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		}
 	}
 
+	public ReferenciaRDS insertarDocumentoConTransformacion(DocumentoRDS documento, TransformacionRDS transformacion) throws es.caib.redose.ws.v1.services.BackofficeFacadeException {
+		try{
+			es.caib.redose.modelInterfaz.DocumentoRDS docInter = documentoWSToDocumentoInt(documento);
+			es.caib.redose.modelInterfaz.TransformacionRDS transInter = transformacionWSToTransformacionInt(transformacion);
+			RdsDelegate rdsD = DelegateRDSUtil.getRdsDelegate();
+			es.caib.redose.modelInterfaz.ReferenciaRDS refInt = rdsD.insertarDocumento(docInter, transInter);
+			ReferenciaRDS refWS = referenciaIntfToReferenciaWS(refInt);
+			return refWS;
+		}catch( Exception exc ){
+			exc.printStackTrace();
+		     throw new es.caib.redose.ws.v1.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
+		}
+	}
 
 	//	 --------------------------------------------------------------
 	//		FUNCIONES AUXILIARES
@@ -187,5 +216,15 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		}
 		return firmasIntf;
 	}
+	
+	private es.caib.redose.modelInterfaz.TransformacionRDS transformacionWSToTransformacionInt(TransformacionRDS transformacion){
+		es.caib.redose.modelInterfaz.TransformacionRDS transInt = new es.caib.redose.modelInterfaz.TransformacionRDS();
+		if(transformacion != null){
+			transInt.setBarcodePDF(transformacion.isBarcodePDF());
+			transInt.setConvertToPDF(transformacion.isConvertToPDF());
+		}
+		return transInt;
+	}
+	
 	
 }

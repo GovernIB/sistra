@@ -6,6 +6,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import es.caib.sistra.back.action.BaseAction;
+import es.caib.sistra.back.util.MensajesUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +32,7 @@ public class SeleccionTramiteAction extends BaseAction{
                                  HttpServletResponse response) throws Exception {
 
         log.info("Entramos en SeleccionTramite");
-
+        MensajesUtil.setMsg(this.getResources(request));
         String idString = request.getParameter("codigo");
         if (idString == null || idString.length() == 0) {
             log.warn("El paràmetre codigo és null!!");

@@ -36,12 +36,12 @@ public class SesionCaducadaFilter  implements Filter{
 			HttpServletResponse res = ( HttpServletResponse ) response;
 	
 			// Si la sesion ha caducado redirigimos a inicio
-			
 	    	 HttpSession sesion = req.getSession(false);
-	    	 boolean esInit = Util.getUrl( req ).matches( "[\\S]*/init.do" );
+	    	 String url = Util.getUrl( req );
+	    	 boolean esInit = url.matches( "[\\S]*/init.do[\\S]*" );	    	 
 	    	 if(!esInit){
 	    		 if (sesion == null || sesion.getAttribute("org.ibit.rol.form.back.datosSesion") == null){
-	    		 	_log.debug("Sesion caducada. Redirigimos a init.do");
+	    		 	_log.debug("Sesion caducada o no existe. Redirigimos a init.do");
 	    		 	if (sesion != null) sesion.invalidate();
 	    		 	res.sendRedirect(req.getContextPath() + "/init.jsp");
 	    		 	return;

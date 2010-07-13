@@ -93,7 +93,7 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
             
             TramitePersistente tramitePersistente = (TramitePersistente)  query.uniqueResult(); 
                         
-            controlAccesoTramite(tramitePersistente,true);
+            controlAccesoTramite(tramitePersistente,true,null);
             
         	// Cargamos documentos
         	Hibernate.initialize(tramitePersistente.getDocumentos());        	
@@ -169,7 +169,7 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
         	// Cargamos tramitePersistente 
         	TramitePersistente tramitePersistente = obtenerTramitePersistente(id);
         	
-        	controlAccesoTramite(tramitePersistente,false);
+        	controlAccesoTramite(tramitePersistente,false,null);
         	
         	// Borramos documentos
         	tramitePersistente.getDocumentos().removeAll(tramitePersistente.getDocumentos());        	
@@ -196,7 +196,15 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
         		obj.setIdPersistencia(id);
         		session.save(obj);
         	}else{
-        		controlAccesoTramite(obj,false);        		
+        		// Controlamos acceso a tramite: solo usuario o helpdesk puede acceder al tramite
+        		
+        		// OBTENER USUARIO FLUJO ANTERIOR POR SI SE HA PRODUCIDO CAMBIO DE FLUJO
+        		Query query = session.createQuery( "SELECT t.usuarioFlujoTramitacion FROM TramitePersistente t where t.codigo = :codigo" );
+    			query.setParameter( "codigo", obj.getCodigo() );
+    			String usuarioFlujoAnterior = (String) query.uniqueResult();
+    			
+        		controlAccesoTramite(obj,false,usuarioFlujoAnterior);        		
+    		
         		session.update(obj);
         	}
         	                    	
@@ -542,13 +550,13 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
     /**
      * Realiza el control de acceso:
      * 	- si tiene role admin puede acceder
-     *  - si el tramite es autenticado y el usuario logeado es el iniciador o el que tiene el flujo
+     *  - si el tramite es autenticado y el usuario logeado es el iniciador o el que tiene el flujo (o tenía el flujo, si se ha realizado un cambio de flujo) 
      *  - si el tramite es anonimo y usuario anonimo puede acceder
      *   
      * @param tramitePersistente
      * @throws HibernateException 
      */
-    private void controlAccesoTramite(TramitePersistente tramitePersistente,boolean helpdesk) throws Exception {
+    private void controlAccesoTramite(TramitePersistente tramitePersistente,boolean helpdesk,String usuarioFlujoAnterior) throws Exception {
 		Principal sp = this.ctx.getCallerPrincipal();
 		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
     	String usuario = sp.getName();
@@ -556,6 +564,7 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
     	if (helpdesk && this.ctx.isCallerInRole(this.roleHelpdesk)) return;
 		if (tramitePersistente.getNivelAutenticacion() != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO && usuario.equals(tramitePersistente.getUsuario())) return;
 		if (tramitePersistente.getNivelAutenticacion() != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO && usuario.equals(tramitePersistente.getUsuarioFlujoTramitacion())) return;
+		if (tramitePersistente.getNivelAutenticacion() != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO && usuarioFlujoAnterior != null && usuario.equals(usuarioFlujoAnterior)) return;
 		if (tramitePersistente.getNivelAutenticacion() == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO && plgLogin.getMetodoAutenticacion(sp) == 'A') return;
 		throw new HibernateException("Acceso no permitido al tramite " + tramitePersistente.getIdPersistencia() + " - Usuario: " + usuario);
 	}

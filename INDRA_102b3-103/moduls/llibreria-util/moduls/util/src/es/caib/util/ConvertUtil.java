@@ -109,6 +109,11 @@ public class ConvertUtil {
     	return bytesToBase64( bytes, false );
     }
     
+    public static String bytesToBase64UrlSafe(byte[] bytes) throws Exception
+    {
+    	return bytesToBase64( bytes, true );
+    }
+    
 	// -------------------------------------------------------------------------------
 	//  FUNCIONES PRIVADAS
 	// -------------------------------------------------------------------------------
@@ -118,10 +123,6 @@ public class ConvertUtil {
      	String b64 = new sun.misc.BASE64Encoder().encode( bytes );    	
     	if ( safe ) b64 = escapeChars64UrlSafe( b64 );
     	return b64; 
-    }
-    private static String bytesToBase64UrlSafe(byte[] bytes) throws Exception
-    {
-    	return bytesToBase64( bytes, true );
     }
    private static byte[] base64UrlSafeToBytes(String cadenaB64) throws Exception
     {

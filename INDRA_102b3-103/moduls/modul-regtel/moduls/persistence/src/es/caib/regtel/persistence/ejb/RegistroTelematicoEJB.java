@@ -148,7 +148,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	 * @return Date Devuelve la fecha de la firma del acuse de recibo de la notificación. Nulo si no se ha entregado.
 	 * 
 	 * @ejb.interface-method
-	 * @ejb.permission role-name = "${role.gestor}"   
+	 * @ejb.permission role-name = "${role.user}"   
 	 */
    public Date obtenerAcuseRecibo(String numeroRegistro) throws ExcepcionRegistroTelematico
    {	
@@ -172,7 +172,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	 * @param refAsiento Referencia RDS del justificante de registro	  
 	 * 
 	 * @ejb.interface-method
-	 * @ejb.permission role-name = "${role.gestor}"   
+	 * @ejb.permission role-name = "${role.user}"   
 	 */
 	public void anularRegistroEntrada(ReferenciaRDS refJustificante) throws ExcepcionRegistroTelematico
 	{
@@ -291,6 +291,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	 * 
 	 * @ejb.interface-method
 	 * @ejb.permission role-name = "${role.user}"   	 
+	 * @ejb.permission role-name = "${role.auto}"   	 
 	 * 
 	 */
 	public List obtenerServiciosDestino()  throws ExcepcionRegistroTelematico{

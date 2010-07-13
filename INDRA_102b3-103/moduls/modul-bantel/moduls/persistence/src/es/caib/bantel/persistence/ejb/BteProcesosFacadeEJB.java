@@ -308,11 +308,13 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 	    	}	    		
 	    	
 	    	// Enviamos al modulo de movilidad los emails
+	    	if (enviosEmail.getEmails() != null && enviosEmail.getEmails().size() > 0){
 	    	enviosEmail.setNombre("Avisos a gestores");
 	    	enviosEmail.setCuentaEmisora(DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisosGestores.cuentaEnvio"));
 	    	enviosEmail.setFechaCaducidad(new Date(System.currentTimeMillis() + 86400000L )); // Damos 1 día para intentar enviar
 	    	enviosEmail.setInmediato(true);
 	    	DelegateMobTraTelUtil.getMobTraTelDelegate().envioMensaje(enviosEmail);
+	    	}
 	    	
     	}catch (Exception ex){
     		log.error("Excepción enviando correo a gestor",ex);

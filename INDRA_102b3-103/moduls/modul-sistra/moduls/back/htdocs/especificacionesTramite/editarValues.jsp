@@ -88,6 +88,13 @@
     <td class="input"><html:textarea tabindex="10" property="campoRdoNom" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=campoRdoNom&titulo=especificacionesTramite.campoRdoNom" %>');"/></td>
 </tr>
 <tr>
+	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.destinatarioTramite"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.destinatarioTramite"/></td>
+    <td class="input"><html:textarea tabindex="10" property="destinatarioTramite" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=destinatarioTramite&titulo=especificacionesTramite.destinatarioTramite" %>');"/></td>
+</tr>
+<tr>
 	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.opcionesFin"/></td>
 </tr>
 <tr>

@@ -43,6 +43,16 @@
     <definition name=".mascara.lista" path="/mascara/lista.jsp"
         controllerClass="org.ibit.rol.form.admin.action.mascara.ListaMascarasController" />
 
+ 	<!-- ====================== FORMULARIO =================== -->
+	 <definition name=".formulario.lista" path="/formulario/lista.jsp"
+        controllerClass="org.ibit.rol.form.admin.action.formulario.ListaFormulariosController"/>
+	<!-- ====================== GRUPOS =================== -->
+ 	<definition name=".grupos.lista" path="/grupos/lista.jsp"
+        controllerClass="org.ibit.rol.form.admin.action.grupos.ListaGruposController"/>	
+	
+	<definition name=".grupo.editar" path="/grupos/editar.jsp"/>
+	<definition name=".grupos.altaModif" path="/grupos/altaModificar.jsp" controllerClass="org.ibit.rol.form.admin.action.grupos.AltaGruposController"/>
+
     <!-- ====================== PATRON =================== -->
     <definition name=".patron.editar" extends=".editar">
         <put name="title" value="patron.titulo"/>
@@ -246,4 +256,19 @@
     <definition name=".puntosalida.lista" path="/puntosalida/lista.jsp"
         controllerClass="org.ibit.rol.form.admin.action.puntosalida.ListaPuntosSalidaController" />
 
+	<!-- ====================== FORMULARIO =================== -->
+    
+    <definition name=".formulario.editar" path="/formulario/editar.jsp" >
+        <putList name="listaRelaciones">
+            <add value=".grupo.listaFormulario" type="definition" />
+            <add value=".grupo.listaUsuarios" type="definition" />
+		</putList>   
+	</definition>
+    
+    <definition name=".grupo.listaFormulario" path="/grupos/listaFormulario.jsp" controllerClass="org.ibit.rol.form.admin.action.grupos.ListaGruposFormController">
+        <put name="id" value="" />
+    </definition>
+	<definition name=".grupo.listaUsuarios" path="/grupos/listaUsuarios.jsp" controllerClass="org.ibit.rol.form.admin.action.grupos.ListaUsuariosFormController">
+        <put name="id" value="" />
+    </definition>
 </tiles-definitions>

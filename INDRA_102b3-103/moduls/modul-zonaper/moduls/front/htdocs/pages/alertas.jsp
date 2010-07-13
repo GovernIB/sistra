@@ -5,8 +5,6 @@
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 <bean:define id="sesion" name="<%=es.caib.zonaper.front.Constants.DATOS_SESION_KEY%>" type="es.caib.zonaper.model.DatosSesion" />
 <bean:define id="firstPage" value="0" />
-<!-- continguts -->
-		<div id="continguts">
 				
 			<h1>
 				<bean:message key="alertas.titulo" />
@@ -19,7 +17,7 @@
 					<span class="etiqueta"><bean:message key="alertas.alertasTramitacion" /></span>
 					<div class="control">
 						<ul>
-							<li><label for="novaNotificacio"><html:checkbox property="habilitarAvisosExpediente" /><bean:message key="alertas.alertasTramitacion.expedientes" /></label></li>
+							<li><label for="habilitarAvisosExpediente"><html:checkbox property="habilitarAvisosExpediente" styleId="habilitarAvisosExpediente"/><bean:message key="alertas.alertasTramitacion.expedientes" /></label></li>
 						</ul>
 					</div>
 				</div>				
@@ -28,5 +26,3 @@
 				</div>				
 			</html:form>
 
-		</div>
-		<!-- /continguts -->

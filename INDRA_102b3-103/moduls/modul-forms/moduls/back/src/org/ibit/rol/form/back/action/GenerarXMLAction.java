@@ -22,6 +22,7 @@ import org.ibit.rol.form.model.Validacion;
 import org.ibit.rol.form.model.betwixt.Configurator;
 import org.ibit.rol.form.persistence.delegate.DelegateUtil;
 import org.ibit.rol.form.persistence.delegate.FormularioDelegate;
+import org.ibit.rol.form.persistence.delegate.GruposDelegate;
 
 /**
  * @struts.action
@@ -45,6 +46,16 @@ public class GenerarXMLAction extends BaseAction {
         FormularioDelegate delegate = DelegateUtil.getFormularioDelegate();
         Long idForm = new Long(request.getParameter("idForm"));
         
+        if( Boolean.valueOf( DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("habilitar.permisos")).booleanValue()){
+    		GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
+	        if( !(gruposDelegate.existeUsuarioByGruposForm(request.getUserPrincipal().getName(),idForm) 
+	        	|| gruposDelegate.existeUsuarioByForm(request.getUserPrincipal().getName(),idForm) 
+	        	))
+	        {
+	        	request.setAttribute("message","No tiene permisos para exportar este formulario");
+	        	return mapping.findForward("fail");
+	        }
+        }
         Formulario formulario = delegate.obtenerFormularioCompleto(idForm);
         formulario.setFechaExportacion(new Date());
         

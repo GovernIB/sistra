@@ -95,6 +95,16 @@ button.buttonl
 }
 
 
+input.buttondetalle,button.buttondetalle
+{
+    font-family: verdana, arial, helvetica, sans-serif;
+    vAlign: middle;
+    font-size: 8pt;
+    width: 200px;
+    heigth: 23px;
+}
+
+
 /* ********* ROL Styles del menu BackOffice ******** */
 /***********************************************************************/
 body.menu
@@ -470,6 +480,14 @@ body.ventana input.text, textarea
     padding: 3px 3px;
     border: 1px solid #515b67;
 }
+
+body.ventana input.textUser
+{
+    padding: 3px 3px;
+    border: 1px solid #515b67;
+    width: 50%;
+}
+
 body.ventana input.http
 {
     padding: 3px 0px 3px 3px;
@@ -524,7 +542,7 @@ body.ventana input.check
     margin: 5px 15px;
     padding: 0px;
 }
-body.ventana input.button, input.buttond, button.button, button.buttond, button.buttonl
+body.ventana input.button, input.buttond, button.button, button.buttond, button.buttonl,input.buttondetalle,button.buttondetalle 
 {
     padding: 2px 0px;
     margin: 1px 0px;
@@ -554,4 +572,8 @@ body.calendario table.dia
     border-spacing: 0;
     border: 1px solid #515b67;
     background-image: url(../img/boton.jpg);
+}
+
+.selectGrupos{
+	width: 50%;
 }

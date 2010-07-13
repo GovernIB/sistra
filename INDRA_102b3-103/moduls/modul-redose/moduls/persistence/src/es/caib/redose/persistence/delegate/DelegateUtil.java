@@ -59,4 +59,8 @@ public final class DelegateUtil {
         return (ConfiguracionDelegate) DelegateFactory.getDelegate(ConfiguracionDelegate.class);
     }
     
+    public static VersionCustodiaDelegate getVersionCustodiaDelegate() {
+        return (VersionCustodiaDelegate) DelegateFactory.getDelegate(VersionCustodiaDelegate.class);
+    }
+   
 }

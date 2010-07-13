@@ -21,6 +21,10 @@ public final class DelegateUtil {
         return (FormularioDelegate) DelegateFactory.getDelegate(FormularioDelegate.class);
     }
 
+    public static GruposDelegate getGruposDelegate() {
+        return (GruposDelegate) DelegateFactory.getDelegate(GruposDelegate.class);
+    }
+    
     public static IdiomaDelegate getIdiomaDelegate() {
         return (IdiomaDelegate) DelegateFactory.getDelegate(IdiomaDelegate.class);
     }
