@@ -3,9 +3,11 @@ package es.caib.mobtratel.persistence.ejb;
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.ejb.CreateException;
@@ -137,7 +139,28 @@ public abstract class MobTraTelFacadeEJB implements SessionBean
 			envio.setNombre(mensaje.getNombre());
 			Date now = new Date();
 			envio.setFechaRegistro(new Timestamp(now.getTime()));
-			if(mensaje.getFechaCaducidad() != null) envio.setFechaCaducidad(new Timestamp(mensaje.getFechaCaducidad().getTime()));
+			if(mensaje.getFechaCaducidad() != null) {
+				envio.setFechaCaducidad(new Timestamp(mensaje.getFechaCaducidad().getTime()));
+			}else{
+				int dias = 15;
+				try {
+					Properties config = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+					//si no esta definida la propiedad en mobtratel.properties por defecto le metemos 15 dias.
+					if(config.getProperty("envio.limite.sin.fecha.caducidad") != null && !"".equals(config.getProperty("envio.limite.sin.fecha.caducidad"))){
+						try{
+							dias = Integer.parseInt(config.getProperty("envio.limite.sin.fecha.caducidad"));
+						}catch(Exception e){
+							dias = 15;
+						}
+					}
+				}catch(Exception e){
+					//si hay algún problema al coger la configuración por defecto le metemos 15 días. 
+				}
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.DATE, dias);
+				envio.setFechaCaducidad(new Timestamp(cal.getTime().getTime()));
+			}
+			
 			if(mensaje.getFechaProgramacionEnvio() != null) envio.setFechaProgramacionEnvio(new Timestamp(mensaje.getFechaProgramacionEnvio().getTime()));
 			envio.setInmediato(mensaje.isInmediato());
 

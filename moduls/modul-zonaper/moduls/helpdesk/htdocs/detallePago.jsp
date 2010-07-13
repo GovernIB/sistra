@@ -24,15 +24,16 @@
 			<caption><bean:message key="detallePago.datosPago.datosPago"/></caption>
 			<tbody>
 				<tr>
-					<th><bean:message key="detallePago.datosPago.tipo"/></th>
-					<td>
-						<logic:equal name="pago" property="tipo" value='<%= Character.toString(Constants.PRESENCIAL) %>'>
-							<bean:message key="detallePago.datosPago.tipo.presencial"/>	
-						</logic:equal>
-						<logic:equal name="pago" property="tipo" value='<%= Character.toString(Constants.TELEMATICO) %>'>
-							<bean:message key="detallePago.datosPago.tipo.telematico"/>	
-						</logic:equal>
-					</td>
+					<th><bean:message key="detallePago.datosPago.nombre"/></th>
+					<td><bean:write name="pago" property="nombre"/>	</td>
+				</tr>
+				<tr>
+					<th><bean:message key="detallePago.datosPago.nif"/></th>
+					<td><bean:write name="pago" property="nif"/></td>
+				</tr>
+				<tr>
+					<th><bean:message key="detallePago.datosPago.tasa"/></th>
+					<td><bean:write name="pago" property="tasa"/></td>
 				</tr>
 				<tr>
 					<th><bean:message key="detallePago.datosPago.estadoPlataforma"/></th>
@@ -48,73 +49,79 @@
 						</logic:equal>
 					</td>
 				</tr>
-			<logic:equal name="pago" property="tipo" value="<%=Character.toString(Constants.TELEMATICO)%>">
 			
-			<!--  
-				NO APLICABLE DEBIDO A GENERALIZACION PLUGINS
+				<logic:equal name="pago" property="estadoPlataforma" value='<%= Constants.XMLPAGO_CONFIRMADO %>'>
 				<tr>
-					<th><bean:message key="detallePago.datosPago.estadoPortal"/></th>
+						<th><bean:message key="detallePago.datosPago.tipo"/></th>
 					<td>					
-						<logic:equal name="pago" property="estadoPortal" value='<%= Constants.PAGO_PAGADO %>'>
-							<bean:message key="detallePago.datosPago.portal.estado.pagado"/>	
+							<logic:equal name="pago" property="tipo" value='<%= Character.toString(Constants.PRESENCIAL) %>'>
+								<bean:message key="detallePago.datosPago.tipo.presencial"/>	
 						</logic:equal>
-						<logic:equal name="pago" property="estadoPortal" value='<%= Constants.PAGO_NO_PAGADO %>'>
-							<bean:message key="detallePago.datosPago.portal.estado.noPagado"/>	
-						</logic:equal>
-						<logic:equal name="pago" property="estadoPortal" value='<%= Constants.PAGO_NO_COMPROBADO %>'>
-							<bean:message key="detallePago.datosPago.portal.estado.noComprobado"/>	
+							<logic:equal name="pago" property="tipo" value='<%= Character.toString(Constants.TELEMATICO) %>'>
+								<bean:message key="detallePago.datosPago.tipo.telematico"/>	
 						</logic:equal>												
 					</td>
 				</tr>
-				 -->
 				 
 				 <tr>
 					<th><bean:message key="detallePago.datosPago.dui"/></th>
 					<td><bean:write name="pago" property="dui"/></td>
 				</tr>
 				 
-			</logic:equal>				
 				<tr>
 					<th><bean:message key="detallePago.datosPago.fecha"/></th>
 					<td><bean:write name="pago" property="fecha" format="dd/MM/yyyy HH:mm"/></td>
 				</tr>			
-				<tr>
-					<th><bean:message key="detallePago.datosPago.tasa"/></th>
-					<td><bean:write name="pago" property="tasa"/></td>
-				</tr>
-				<tr>
-					<th><bean:message key="detallePago.datosPago.nombre"/></th>
-					<td><bean:write name="pago" property="nombre"/>	</td>
-				</tr>
-				<tr>
-					<th><bean:message key="detallePago.datosPago.nif"/></th>
-					<td><bean:write name="pago" property="nif"/></td>
-				</tr>
-				<!-- 
-				<tr>
-					<th><bean:message key="detallePago.datosPago.codigoPostal"/></th>
-					<td><bean:write name="pago" property="codigoPostal"/></td>
-				</tr>
-				 -->
+				</logic:equal>								
+
 			</tbody>
 			</table>
 			
-			
+			<logic:present name="sesionPago">
 			<table class="pagament" cellpadding="0" cellspacing="0">
-			<caption><bean:message key="detallePago.asitentePago"/></caption>
+			<caption><bean:message key="detallePago.asistentePago"/></caption>
 			<tbody>
 				<tr>
-					<th><bean:message key="detallePago.datosPago.localizador"/></th>
-					<td><bean:write name="pago" property="localizador"/></td>
+					<th><bean:message key="detallePago.asistentePago.estado"/></th>					
+					<td>
+					<logic:equal name="sesionPago" property="estado" value="0">
+						<bean:message key="detallePago.asistentePago.estado.noExisteSesion"/>
+					</logic:equal>
+					<logic:equal name="sesionPago" property="estado" value="1">
+						<bean:message key="detallePago.asistentePago.estado.enCurso"/>
+					</logic:equal>
+					<logic:equal name="sesionPago" property="estado" value="2">
+						<bean:message key="detallePago.asistentePago.estado.pagoConfirmado"/>
+					</logic:equal>
+					<logic:equal name="sesionPago" property="estado" value="3">
+						<bean:message key="detallePago.asistentePago.estado.pagoPendienteConfirmar"/>
+					</logic:equal>
+					</td>
 				</tr>
-				<logic:notEmpty name="pago" property="descripcionEstado">
+				<logic:notEmpty name="sesionPago" property="descripcionEstado">
 					<tr>
-						<th><bean:message key="detallePago.datosPago.detalle"/></th>
-						<td><bean:write name="pago" property="descripcionEstado"/></td>
+						<th><bean:message key="detallePago.asistentePago.descripcionEstado"/></th>
+						<td><bean:write name="sesionPago" property="descripcionEstado"/></td>
 					</tr>
 				</logic:notEmpty>
+				<tr>
+					<th><bean:message key="detallePago.asistentePago.tipoPago"/></th>
+					<td>
+						<logic:equal name="sesionPago" property="tipo" value="T">
+							<bean:message key="detallePago.asistentePago.tipoPago.Telematico"/>
+						</logic:equal>
+						<logic:equal name="sesionPago" property="tipo" value="P">
+							<bean:message key="detallePago.asistentePago.tipoPago.Presencial"/>
+						</logic:equal>						
+					</td>
+				</tr>
+				<tr>
+					<th><bean:message key="detallePago.asistentePago.localizador"/></th>
+					<td><bean:write name="pago" property="localizador"/></td>
+				</tr>
 			</tbody>
 			</table>
+			</logic:present>
 			<!-- /justificant -->
 		
 		</div>

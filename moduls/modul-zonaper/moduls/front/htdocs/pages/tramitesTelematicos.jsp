@@ -50,5 +50,3 @@
 			</div>-->
 			<!-- /subscripcions -->
 		
-		</div>
-		<!-- /continguts -->

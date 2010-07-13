@@ -5,7 +5,7 @@
     <property file="${basedir}/config.properties"/>
 	<property file="${basedir}/../../config.properties"/>
 
-	<property name="lib" location="${basedir}/lib"/>
+	<property name="lib" location="${basedir}/../../lib"/>
 	<property name="etc" location="${basedir}/etc"/>
     <property name="etc.jboss" location="${etc}/jboss-${jboss.version}"/>
 
@@ -76,6 +76,9 @@
 			</manifest>
 			<metainf dir="${etc.jboss}" includes="jboss-app.xml"/>
 			<fileset dir="${moduls.dir}"/>
+			<archives dir="${lib}/openoffice" prefix="lib">
+				<include name="*.jar"/>
+			</archives>
 		</ear>
 	</target>
 
@@ -91,29 +94,9 @@
 			<fileset dir="${moduls.dir}">
                 <exclude name="${projecte}-back.war"/>
             </fileset>
-			<archives dir="${lib}" prefix="lib">
-                <!--
-				<include name="hibernate2.jar"/>
-				<include name="cglib-asm.jar"/>
-				<include name="dom4j.jar"/>
-				<include name="odmg.jar"/>
-                -->
-
-				<include name="ehcache.jar"/>
-
-                <include name="commons-collections.jar"/>
-				<include name="commons-beanutils.jar"/>
-				<include name="commons-lang.jar"/>
-				<include name="commons-validator.jar"/>
-				<include name="commons-fileupload.jar"/>
-				<include name="jakarta-oro.jar"/>
-
-				<include name="bsf.jar"/>
-				<include name="js.jar"/>
-				<include name="itext.jar"/>
-
+			<archives dir="${lib}/openoffice" prefix="lib">
+				<include name="*.jar"/>
            </archives>
-		
 		</ear>
 	</target>
 

@@ -35,6 +35,8 @@ public class Documento  extends Traducible {
      private char anexoDescargarPlantilla='N';
      private char anexoCompulsarPreregistro='N';
      private char anexoFotocopia='N';
+     private char anexoConversionPDF='N';
+     
      private Set niveles = new HashSet(0);
      // private Map niveles = new HashMap(0);
      
@@ -287,6 +289,16 @@ public class Documento  extends Traducible {
 
 	public void setFormularioJustificante(char formularioJustificante) {
 		this.formularioJustificante = formularioJustificante;
+	}
+	
+
+	public char getAnexoConversionPDF() {
+		return anexoConversionPDF;
+	}
+
+
+	public void setAnexoConversionPDF(char anexoConversionPDF) {
+		this.anexoConversionPDF = anexoConversionPDF;
 	}
 	
 	/*

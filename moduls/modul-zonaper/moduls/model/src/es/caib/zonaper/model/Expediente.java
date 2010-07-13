@@ -10,6 +10,7 @@ public class Expediente implements Serializable
 {
 	//	ESTADOS DE UN EXPEDIENTE
 	public final static String ESTADO_SOLICITUD_ENVIADA = "SE";
+	public final static String ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL = "SP";
 	public final static String ESTADO_AVISO_PENDIENTE = "AP";
 	public final static String ESTADO_AVISO_RECIBIDO = "AR";
 	public final static String ESTADO_NOTIFICACION_PENDIENTE = "NP";
@@ -150,20 +151,25 @@ public class Expediente implements Serializable
 		this.fechaInicio = fechaInicio;
 	}
 	
-	public void addElementoExpediente(ElementoExpediente e){
+	public void addElementoExpediente(ElementoExpediente e, ElementoExpedienteItf obj){
 		// Añadimos a lista de elementos
 		e.setExpediente(this);
 		getElementos().add(e);
 		
 		// Actualizamos expediente: estado y fecha inicio/fin
-		if (e.getTipoElemento().equals(ElementoExpediente.TIPO_ENTRADA_TELEMATICA))
+		if (e.getTipoElemento().equals(ElementoExpediente.TIPO_ENTRADA_TELEMATICA)){
 			setEstado(ESTADO_SOLICITUD_ENVIADA);
-		else if (e.getTipoElemento().equals(ElementoExpediente.TIPO_ENTRADA_PREREGISTRO))
+		}else if (e.getTipoElemento().equals(ElementoExpediente.TIPO_ENTRADA_PREREGISTRO)){
+			if ( ((EntradaPreregistro) obj).getFechaConfirmacion() != null){ 
 			setEstado(ESTADO_SOLICITUD_ENVIADA);
-		else if (e.getTipoElemento().equals(ElementoExpediente.TIPO_AVISO_EXPEDIENTE))
+			}else{
+				setEstado(ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL);
+			}
+		}else if (e.getTipoElemento().equals(ElementoExpediente.TIPO_AVISO_EXPEDIENTE)){			
 			setEstado(ESTADO_AVISO_PENDIENTE);
-		else if (e.getTipoElemento().equals(ElementoExpediente.TIPO_NOTIFICACION))
+		}else if (e.getTipoElemento().equals(ElementoExpediente.TIPO_NOTIFICACION)){
 			setEstado(ESTADO_NOTIFICACION_PENDIENTE);							
+		}
 		if (getElementos().size() == 1) this.setFechaInicio(e.getFecha());
 		setFechaFin(e.getFecha());		
 	}
@@ -197,8 +203,5 @@ public class Expediente implements Serializable
 	public void setHabilitarAvisos(String habilitarAvisos) {
 		this.habilitarAvisos = habilitarAvisos;
 	}
-		
-	
-	
 		
 }

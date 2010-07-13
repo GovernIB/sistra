@@ -12,10 +12,6 @@
 	</bean:define>
 	
 
-	<!-- contenidor -->
-	<div id="contenidor">
-		
-		
 		<!-- logo illes balears -->
 		<div id="cap">
 		<html:link href="<%=urlPortal%>" paramId="lang" paramName="lang" accesskey="0" >
@@ -42,3 +38,4 @@
 				<p id="titolAplicacio"><bean:write name="tituloPortal"/>: <span><bean:message key="head.miPortal.anonimo"/></span></p>
 			</logic:equal>
 		</logic:present>
+		</div>

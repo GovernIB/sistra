@@ -18,6 +18,7 @@ public class Modelo  implements java.io.Serializable {
      private String nombre;
      private String descripcion;
      private char estructurado;
+     private char custodiar;
      private Set versiones = new HashSet();
 
 
@@ -84,6 +85,14 @@ public class Modelo  implements java.io.Serializable {
 
 	public void setEstructurado(char estructurado) {
 		this.estructurado = estructurado;
+	}
+    
+	public char getCustodiar() {
+		return custodiar;
+	}
+
+	public void setCustodiar(char custodiar) {
+		this.custodiar = custodiar;
 	}
     
 }

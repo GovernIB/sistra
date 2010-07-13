@@ -2,6 +2,8 @@ package org.ibit.rol.form.admin.action;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
@@ -27,6 +29,7 @@ import java.io.IOException;
  * Action con métodos de utilidad.
  */
 public abstract class BaseAction extends Action {
+	 protected static Log log = LogFactory.getLog(BaseAction.class);
 
     /** Retorna true si se ha pulsado un botón submit de alta */
     protected boolean isAlta(HttpServletRequest request) {

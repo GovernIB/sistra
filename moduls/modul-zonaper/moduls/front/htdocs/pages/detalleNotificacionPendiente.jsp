@@ -172,8 +172,9 @@
 			</div>
 			<div class="pas">
 				<form name="formFirma" action="" id="formularioFirma">
-					<p><label for="PIN"><bean:message key="detalleNotificacion.acuse.pin"/></label></p>
-					<p><input name="PIN" id="PIN" type="password"  value="" /></p>						 				
+					<label for="PIN"><bean:message key="detalleNotificacion.acuse.pin"/>
+					  <input name="PIN" id="PIN" type="password"  value="" />			
+					</label>			 				
 				</form>
 			</div>		
 	</logic:equal>

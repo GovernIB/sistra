@@ -96,4 +96,7 @@ public final class DelegateUtil {
     	return (GestorFormularioDelegate) DelegateFactory.getDelegate(GestorFormularioDelegate.class);
     }
             
+    public static GruposDelegate getGruposDelegate(){
+    	return (GruposDelegate) DelegateFactory.getDelegate(GruposDelegate.class);
+    }
 }

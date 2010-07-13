@@ -25,6 +25,16 @@ public class ProcesosAutoDelegate implements StatelessDelegate
         }
 	}
 	
+	public void actualizaEstadoExpedienteDelElementoExpediente(String tipoElementoExpediente,Long codigoElementoExpediente) throws DelegateException {
+		try
+		{
+			getFacade().actualizaEstadoExpedienteDelElementoExpediente(tipoElementoExpediente,codigoElementoExpediente );
+		}
+		catch (Exception e) {
+            throw new DelegateException(e);
+        }
+	}
+	
 	public void avisoCreacionElementoExpediente(ElementoExpediente ele) throws DelegateException {
 		try
 		{

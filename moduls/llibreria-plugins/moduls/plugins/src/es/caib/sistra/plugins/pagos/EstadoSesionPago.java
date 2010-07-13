@@ -23,7 +23,7 @@ public class EstadoSesionPago implements Serializable{
 	 */
 	private String identificadorPago;
 	/**
-	 * Para pagos telemáticos confirmados establece fecha del pago 
+	 * Para pagos confirmados establece fecha del pago 
 	 */
 	private Date fechaPago;
 	/**
@@ -32,7 +32,7 @@ public class EstadoSesionPago implements Serializable{
 	 */	
 	private String reciboB64PagoTelematico;
 	/**
-	 * Mensaje de descripcion de estado en el caso de que un pago sea telemático y este pendiente de confirmación 
+	 * Mensaje de debug del plugin de pagos 
 	 */
 	private String descripcionEstado;
 	/**
@@ -52,14 +52,14 @@ public class EstadoSesionPago implements Serializable{
 		this.estado = estado;
 	}
 	/**
-	 * Para pagos telemáticos confirmados establece fecha del pago 
+	 * Para pagos confirmados establece fecha del pago 
 	 * @return Fecha pago
 	 */
 	public Date getFechaPago() {
 		return fechaPago;
 	}
 	/**
-	 * Para pagos telemáticos confirmados establece fecha del pago 
+	 * Para pagos confirmados establece fecha del pago 
 	 * @param fechaPago Fecha pago
 	 */
 	public void setFechaPago(Date fechaPago) {
@@ -112,14 +112,14 @@ public class EstadoSesionPago implements Serializable{
 		this.tipo = tipo;
 	}	
 	/**
-	 * Mensaje de descripcion de estado en el caso de que un pago sea telemático y este pendiente de confirmación 
+	 * Mensaje de debug del plugin de pagos 
 	 * @return descripción del estado
 	 */
 	public String getDescripcionEstado() {
 		return descripcionEstado;
 	}
 	/**
-	 * Mensaje de descripcion de estado en el caso de que un pago sea telemático y este pendiente de confirmación 
+	 * Mensaje de debug del plugin de pagos 
 	 * @param descripcionEstado descripción del estado
 	 */
 	 public void setDescripcionEstado(String descripcionEstado) {

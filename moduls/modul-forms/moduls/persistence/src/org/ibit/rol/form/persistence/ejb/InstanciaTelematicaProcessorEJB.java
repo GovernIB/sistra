@@ -216,8 +216,13 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
             Map variablesScript = variablesScript();
         	// Cargamos datos campos pantalla (excepto listas elementos)
             datosActual = PantallaUtils.valoresDefecto(pantallaActual, docXMLIni,variablesScript ,obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO));
-            // Precargamos datos de las listas de elementos de la pantalla
-            PantallaUtils.valoresDefectoDetalles(this.datosListasElementos,this.formulario,pantallaActual,docXMLIni,variablesScript, obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO));
+            // En caso de que la pantalla tenga un campo lista de elementos lo cargamos
+            ListaElementos lel = PantallaUtils.buscarCampoListaElementos(pantallaActual);
+            if (lel != null){
+            	List valoresLista = PantallaUtils.valoresDefectoListaElementos(lel,this.formulario,pantallaActual,docXMLIni,variablesScript, obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO));
+            	this.datosListasElementos.put(CampoUtils.getReferenciaListaElementos(pantallaActual.getNombre(),lel.getNombreLogico()),valoresLista);    
+            }
+            
             // INDRA: LISTA ELEMENTOS 
             log.debug("Generados valores por defecto");
 
@@ -311,8 +316,12 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
             	Map variablesScript = variablesScript();
             	// Cargamos datos campos pantalla (excepto listas elementos)
                 datosActual = PantallaUtils.valoresDefecto(pantallaActual, docXMLIni,variablesScript ,obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO));
-                // Precargamos datos de las listas de elementos de la pantalla
-                PantallaUtils.valoresDefectoDetalles(this.datosListasElementos,this.formulario,pantallaActual,docXMLIni,variablesScript, obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO));
+                // En caso de que la pantalla tenga un campo lista de elementos lo cargamos
+                ListaElementos lel = PantallaUtils.buscarCampoListaElementos(pantallaActual);
+                if (lel != null){
+                	List valoresLista = PantallaUtils.valoresDefectoListaElementos(lel,this.formulario,pantallaActual,docXMLIni,variablesScript, obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO));
+                	this.datosListasElementos.put(CampoUtils.getReferenciaListaElementos(pantallaActual.getNombre(),lel.getNombreLogico()),valoresLista);    
+                }
                 // INDRA: LISTA ELEMENTOS
             }
             log.debug("Pantalla Actual: " + pantallaActual.getNombre());
@@ -573,12 +582,39 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                         /*ListBox-> Campo de selección múltiple*/
                         String[] valoresIndex = (String[]) datosPantalla.get(campo.getNombreLogico());
                         Object[] valoresText  = (Object[]) datosPantalla.get(campo.getNombreLogico() + "_text");
+                        
+                        // INDRA: COMPROBACION OBLIGATORIO
+                        if (campo.findValidacion("required") != null) {
+                        	if (valoresIndex.length == 0) {
+                        		log.error("Error generando XML: campo con XPATH " + xPath + " debe contener valor");
+                        		throw new EJBException("Error generando XML: campo con XPATH " + xPath + " debe contener valor");
+                        	}
+                        }
+                        // INDRA: COMPROBACION OBLIGATORIO
+                        
                         for (int k = 0; k < valoresIndex.length; k++) {
                             if ( (valoresIndex[k] != null) && (valoresText[k] != null) ) {
                                 docXMLFin = crearNodo(docXMLFin, xPath, valoresIndex[k], true, String.valueOf(valoresText[k]));
                             }
                         }                       
                     } else {
+                    	
+                    	// INDRA: COMPROBACION OBLIGATORIO
+                        if ( 
+                        	 (campo.findValidacion("required") != null) || 
+                         	 ( 
+                         		(campo instanceof ComboBox) && 
+                         		(((ComboBox) campo).isObligatorio())) 
+                         	){
+                        	   	if ( (datosPantalla.get(campo.getNombreLogico()) == null) ||
+	                                 (datosPantalla.get(campo.getNombreLogico() + "_text") == null) ) {
+                        	   		log.error("Error generando XML: campo con XPATH " + xPath + " debe contener valor");
+	                        		throw new EJBException("Error generando XML: campo con XPATH " + xPath + " debe contener valor");
+	                        	}
+                        }
+                        // INDRA: COMPROBACION OBLIGATORIO
+                    	
+                    	
                         if ( (datosPantalla.get(campo.getNombreLogico()) != null) &&
                              (datosPantalla.get(campo.getNombreLogico() + "_text") != null) ){
                             String valorIndex = String.valueOf(datosPantalla.get(campo.getNombreLogico()));
@@ -601,6 +637,16 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                 		}                    		
                 	}else{
                 		String valorCampo = String.valueOf(datosPantalla.get(campo.getNombreLogico()));
+                		
+                		// INDRA: COMPROBACION OBLIGATORIO
+                        if (campo.findValidacion("required") != null) {
+                        	if (StringUtils.isBlank(valorCampo)) {
+                        		log.error("Error generando XML: campo con XPATH " + xPath + " debe contener valor");
+                        		throw new EJBException("Error generando XML: campo con XPATH " + xPath + " debe contener valor");
+                        	}
+                        }
+                        // INDRA: COMPROBACION OBLIGATORIO
+                		
                         if (valorCampo != null) {
                             docXMLFin = crearNodo(docXMLFin, xPath, valorCampo, false, null);
                         }
@@ -644,8 +690,16 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
      * @return Documento XML actualizado con valor del campo.
      */
     private Document crearNodo(Document doc,          String xPath,          String valorCampo,
-                               boolean campoIndexado, String valorTextCampo) {
+                               boolean campoIndexado, String valorTextCampo) throws EJBException {
+        
         String[] path = xPath.split("/");
+        
+        // Validamos que al menos tenga 2 elementos el xpath
+        if (path.length < 2){
+        	log.error("Campo configurado con xpath erroneo: '" + xPath + "'" );
+        	throw new EJBException("Campo configurado con xpath erroneo: '" + xPath + "'" );
+        }
+                
         if (doc.getRootElement() == null) {
             doc.setRootElement(doc.addElement(path[1]));
         }
@@ -789,4 +843,5 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
         }
     }
 
+   
 }

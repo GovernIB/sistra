@@ -22,8 +22,10 @@
 				<dl>
 					<dt><bean:message key="detalleExpediente.expediente"/>:</dt>
 					<dd><bean:write name="descripcionExpediente"/></dd>
+					<logic:notEmpty name="codigoExpediente">
 					<dt><bean:message key="detalleExpediente.codigoExpediente"/>:</dt>
-					<dd><logic:notEmpty name="codigoExpediente"><bean:write name="codigoExpediente"/></logic:notEmpty></dd>
+					<dd><bean:write name="codigoExpediente"/></dd>
+					</logic:notEmpty>
 				</dl>				
 			</div>
 			
@@ -54,16 +56,20 @@
 							</logic:equal>							 
 						</td>						
 						<td>
-							 <a href="<%="mostrarDetalleElemento.do?tipo=" + elemento.getTipoElemento() + "&codigo=" + elemento.getCodigoElemento() + "&expediente=" + (elemento.getExpediente() != null) %>">
+							 <a href="<%="mostrarDetalleElemento.do?tipo=" + elemento.getTipoElemento() + "&amp;codigo=" + elemento.getCodigoElemento() + "&amp;expediente=" + (elemento.getExpediente() != null) %>">
 							 	<%=(String) elementosExpedienteDescripcion.get(elemento.getTipoElemento() + elemento.getCodigoElemento())%>
 							 </a>
 						</td>
 						<td class="estat">
 							<logic:equal name="elemento" property="tipoElemento" value="<%=es.caib.zonaper.model.ElementoExpediente.TIPO_ENTRADA_TELEMATICA%>">								
-								<bean:message key="detalleExpediente.tramite.estado" />
+								<bean:message key="detalleExpediente.tramite.estado.enviada" />
 							</logic:equal>
 							<logic:equal name="elemento" property="tipoElemento" value="<%=es.caib.zonaper.model.ElementoExpediente.TIPO_ENTRADA_PREREGISTRO%>">
-								<bean:message key="detalleExpediente.tramite.estado" />
+								<% if (elementosExpedientePendientes.contains(elemento.getCodigo())){%>
+									<bean:message key="detalleExpediente.tramite.estado.pendienteDocumentacionPresencial" />
+								<%}else{%>
+									<bean:message key="detalleExpediente.tramite.estado.enviada" />
+								<%} %>																		
 							</logic:equal>
 							<logic:equal name="elemento" property="tipoElemento" value="<%=es.caib.zonaper.model.ElementoExpediente.TIPO_AVISO_EXPEDIENTE%>">
 								<% if (elementosExpedientePendientes.contains(elemento.getCodigo())){%>
@@ -87,3 +93,10 @@
 				</logic:iterate>				
 				</tbody>
 			</table>		
+			
+			<!-- Pie entrega doc presencial -->
+			<logic:equal name="pieDocPresencial" value="S">
+				<div id="pieDocPresencial">				
+					<bean:message key="detalleExpediente.pie.solicitudEnviadaPendienteDocumentacionPresencial" />				
+				</div>							
+			</logic:equal>

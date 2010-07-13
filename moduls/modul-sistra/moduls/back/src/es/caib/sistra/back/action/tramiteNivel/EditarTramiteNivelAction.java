@@ -85,6 +85,7 @@ public class EditarTramiteNivelAction extends BaseAction{
             tramiteNivel.getEspecificaciones().setAvisoEmail( tramiteNivelForm.getAvisoEmail().getBytes(ConstantesXML.ENCODING) );
             tramiteNivel.getEspecificaciones().setAvisoSMS( tramiteNivelForm.getAvisoSMS().getBytes(ConstantesXML.ENCODING) );
             tramiteNivel.getEspecificaciones().setCheckEnvio( tramiteNivelForm.getCheckEnvio().getBytes(ConstantesXML.ENCODING) );
+            tramiteNivel.getEspecificaciones().setDestinatarioTramite( tramiteNivelForm.getDestinatarioTramite().getBytes(ConstantesXML.ENCODING) );
             
             String [] nivelesAutenticacion = tramiteNivelForm.getNivelesAutenticacionSelected();
             if ( nivelesAutenticacion != null )

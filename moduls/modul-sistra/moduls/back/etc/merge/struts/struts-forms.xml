@@ -107,4 +107,3 @@
  <form-bean
     name="pingDominioForm"
     type="es.caib.sistra.back.form.PingDominioForm" />
-    

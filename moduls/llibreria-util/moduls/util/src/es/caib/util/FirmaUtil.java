@@ -27,6 +27,7 @@ public class FirmaUtil {
 	public final static String CAIB_ACUSE_NOTIFICACIO_CONTENT_TYPE = "contentType.acuseNotificacion";
 	public final static String CAIB_JUSTIFICANT_ENTRADA_CONTENT_TYPE = "contentType.justificanteEntrada";
 	public final static String CAIB_JUSTIFICANT_EIXIDA_CONTENT_TYPE = "contentType.justificanteSalida";
+	public final static String CAIB_DOCUMENT_NOTIFICACIO_CONTENT_TYPE = "contentType.documentoNotificacion";
 	
 	// Cacheamos los tipos de content type
 	private final static Map contentTypesCAIB = new HashMap();

@@ -28,6 +28,7 @@ import es.caib.sistra.model.TramiteFront;
 import es.caib.sistra.model.TramiteVersion;
 import es.caib.sistra.modelInterfaz.ConstantesDominio;
 import es.caib.sistra.persistence.ejb.ProcessorException;
+import es.caib.sistra.persistence.plugins.DestinatarioTramite;
 import es.caib.sistra.persistence.plugins.PluginFormularios;
 import es.caib.sistra.persistence.plugins.PluginPagos;
 import es.caib.util.NifCif;
@@ -65,13 +66,14 @@ public class GeneradorAsiento {
 	/**
 	 * 
 	 * Genera asiento registral a partir de la información del trámite	
+	 * @param dt 
 	 * @return
 	 */
 	public static String generarAsientoRegistral(
 			TramiteFront tramiteInfo,
 			TramiteVersion tramiteVersion,TramitePersistentePAD tramitePAD,			
 			String rpteNif,String rpteNom,String rpteProv,String rpteLoca,String rptePais,
-			String rpdoNif,String rpdoNombre) throws Exception{		
+			String rpdoNif,String rpdoNombre, DestinatarioTramite dt) throws Exception{		
 		
 		try{
 			RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
@@ -87,7 +89,7 @@ public class GeneradorAsiento {
 			
 			// Crear datos origen
 			DatosOrigen dOrigen = factoria.crearDatosOrigen();
-			dOrigen.setCodigoEntidadRegistralOrigen (tramiteVersion.getRegistroOficina());				
+			dOrigen.setCodigoEntidadRegistralOrigen (dt.getOficinaRegistral());				
 			if (isTramitePresencial( tramiteInfo.getTipoTramitacion(), tramiteInfo.getTipoTramitacionDependiente() )){
 				if (tramiteVersion.getDestino() == ConstantesSTR.DESTINO_REGISTRO){
 					dOrigen.setTipoRegistro(new Character(ConstantesAsientoXML.TIPO_PREREGISTRO));
@@ -224,13 +226,14 @@ public class GeneradorAsiento {
 			if (tramiteInfo.getDatosSesion().getLocale().getLanguage().equals("ca"))
 				dAsunto.setIdiomaAsunto (ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_CA);
 			else
-				dAsunto.setIdiomaAsunto (ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_ES); // TODO: El registro recoge es y ca. Si no es ca pondremos es
+				dAsunto.setIdiomaAsunto (ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_ES); // El registro recoge es y ca. Si no es ca pondremos es
 			dAsunto.setTipoAsunto (tramiteVersion.getRegistroAsunto());
 			dAsunto.setExtractoAsunto ( ((TraTramite) tramiteVersion.getTramite().getTraduccion(tramiteInfo.getDatosSesion().getLocale().getLanguage())).getDescripcion());
-			dAsunto.setCodigoOrganoDestino (tramiteVersion.getOrganoDestino().toString());
-			dAsunto.setDescripcionOrganoDestino(obtenerDescripcionOrgano(tramiteVersion.getOrganoDestino().toString()));
+			dAsunto.setCodigoOrganoDestino (dt.getOrganoDestino());
+			dAsunto.setDescripcionOrganoDestino(obtenerDescripcionOrgano(dt.getOrganoDestino()));
 			
-			dAsunto.setCodigoUnidadAdministrativa(tramiteVersion.getUnidadAdministrativa().toString());
+			dAsunto.setCodigoUnidadAdministrativa(dt.getUnidadAdministrativa().toString());
+			
 			dAsunto.setIdentificadorTramite(tramiteVersion.getTramite().getIdentificador() + "-" + tramiteVersion.getVersion());
 			asiento.setDatosAsunto (dAsunto);						
 			

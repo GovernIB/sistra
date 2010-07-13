@@ -9,6 +9,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.mail.SendFailedException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -313,6 +315,13 @@ public class PluginEnvio {
     				enviados.addAll(emailsParaEnviar);
     				me.setDestinatariosEnviados(MobUtils.compoundDestinatarios(enviados));
     		    	me.setNumeroDestinatariosEnviados(enviados.size());
+    			}else{
+    				if(me.getDestinatariosValidos() != null && me.getDestinatariosValidos().size() > 0){
+    					enviados.addAll(me.getDestinatariosValidos());
+    					me.setDestinatariosEnviados(MobUtils.compoundDestinatarios(enviados));
+    		    		me.setNumeroDestinatariosEnviados(enviados.size());
+    		    		me.setDestinatariosValidos(null);
+    				}
     			}
     			paraEnviar.clear();
     			emailsParaEnviar.clear();
@@ -324,6 +333,11 @@ public class PluginEnvio {
 			boolean result = enviarPaginaEmails(me,envio,paraEnviar,infoProceso.getFechaInicio());
 			if(result){
 				enviados.addAll(emailsParaEnviar);
+			}else{
+				if(me.getDestinatariosValidos() != null && me.getDestinatariosValidos().size() > 0){
+					enviados.addAll(me.getDestinatariosValidos());
+					me.setDestinatariosValidos(null);
+				}
 			}
     	}
     	
@@ -371,6 +385,40 @@ public class PluginEnvio {
     		
     		
     		return true;
+		}catch (SendFailedException ex){
+			List invalidAddresses = null;
+			List unsentAddresses = null;
+			List validAddresses = null;
+			if(ex.getInvalidAddresses() != null){
+				invalidAddresses = new ArrayList();
+				for(int i=0;i<ex.getInvalidAddresses().length;i++){
+					invalidAddresses.add(ex.getInvalidAddresses()[i].toString());
+				}
+			}
+			if(ex.getValidUnsentAddresses() != null){
+				unsentAddresses = new ArrayList();
+				for(int i=0;i<ex.getValidUnsentAddresses().length;i++){
+					unsentAddresses.add(ex.getValidUnsentAddresses()[i].toString());
+				}
+			}
+			if(ex.getValidSentAddresses() != null){
+				validAddresses = new ArrayList();
+				for(int i=0;i<ex.getValidSentAddresses().length;i++){
+					validAddresses.add(ex.getValidSentAddresses()[i].toString());
+				}
+			}
+			log.error("Error generando correo para el envio: " + envio.getNombre(),ex);
+			me.setError("Error generando correo para el envio: " + envio.getNombre() + "." + ex.getMessage());
+			me.setError(me.getError()+ " ERROR EMAILS: ");
+			if(invalidAddresses != null){
+				me.setError(me.getError()+ "-no validos-" + invalidAddresses.toString());
+			}
+			if(unsentAddresses != null){
+				me.setError(me.getError()+ "-no enviados-" + unsentAddresses.toString());
+			}
+			me.setError(me.getError() + ": " + ex.getMessage()+ ".");
+			me.setDestinatariosValidos(validAddresses);
+			me.setEstado(Envio.CON_ERROR);
 		} catch (DelegateException de) {
 			log.error("Error accediendo a la cuenta por defecto de EMAIL");
 			me.setError("Error accediendo a la cuenta por defecto de EMAIL");
@@ -539,6 +587,5 @@ public class PluginEnvio {
 		PluginEnvio.simularEnvioDuracion = simularEnvioDuracion;
 	}
 
-    
 }
 

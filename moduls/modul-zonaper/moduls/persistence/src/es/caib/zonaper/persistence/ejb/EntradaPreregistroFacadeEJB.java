@@ -38,12 +38,14 @@ import es.caib.zonaper.model.EntradaPreregistroBackup;
  * 
  * @ejb.env-entry name="roleHelpDesk" type="java.lang.String" value="${role.helpdesk}"
  * @ejb.env-entry name="roleRegistro" type="java.lang.String" value="${role.registro}"
+ * @ejb.env-entry name="roleGestor" type="java.lang.String" value="${role.gestor}"
  * 
  */
 public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
 
 	private String roleHelpDesk;
 	private String roleRegistro;
+	private String roleGestor;
 	
 	/**
      * @ejb.create-method
@@ -56,6 +58,7 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
 			InitialContext initialContext = new InitialContext();			 
 			roleHelpDesk = (( String ) initialContext.lookup( "java:comp/env/roleHelpDesk" ));	
 			roleRegistro = (( String ) initialContext.lookup( "java:comp/env/roleRegistro" ));		
+			roleGestor = (( String ) initialContext.lookup( "java:comp/env/roleGestor" ));
 		}catch(Exception ex){
 			log.error(ex);
 		}
@@ -237,7 +240,7 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
         try {        	
         	
         	// Control acceso: role registro salta check para actualizar la confirmación del preregistro
-        	if (!this.ctx.isCallerInRole(roleRegistro)){
+        	if (!this.ctx.isCallerInRole(roleRegistro) && !this.ctx.isCallerInRole(roleGestor)){
         		Principal sp = this.ctx.getCallerPrincipal();
         		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
 	        	if (plgLogin.getMetodoAutenticacion(sp) != 'A' && !sp.getName().equals(obj.getUsuario())){

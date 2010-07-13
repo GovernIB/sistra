@@ -119,7 +119,7 @@ public class RegistroController
 	}	
 	
 	
-	public ResultadoRegistrar consultar(char tipoAcceso,String jndi,boolean local,String url,char autenticacion,String user,String pass,Map datosFormulario)throws Exception {
+	public ResultadoRegistrar consultar(char tipoAcceso,String jndi,boolean local,String url,char autenticacion,String user,String pass,String identificadorTramite,Map datosFormulario)throws Exception {
 	// Realiza proceso de consulta (para tramites con destino consulta)		
 		log.debug("Realizamos consulta");
 		
@@ -160,7 +160,7 @@ public class RegistroController
 		if (tipoAcceso == TramiteVersion.CONSULTA_EJB){
 			return consultarImpl_EJB(jndi,local,url,userAuth,passAuth,datosFormulario);
 		}else{
-			return consultarImpl_WS(url,userAuth,passAuth,datosFormulario);
+			return consultarImpl_WS(url,userAuth,passAuth,identificadorTramite,datosFormulario);
 		}
 		
 	}
@@ -174,10 +174,10 @@ public class RegistroController
 	 * @return
 	 * @throws Exception
 	 */
-	private ResultadoRegistrar consultarImpl_WS(String url,String user,String pass,Map datosFormulario)throws Exception {
+	private ResultadoRegistrar consultarImpl_WS(String url,String user,String pass,String identificadorTramite,Map datosFormulario)throws Exception {
 		
 			// TODO GESTIONAR VERSIONADO WS EN INVOCACION
-			List docRes = es.caib.sistra.wsClient.v1.client.ClienteWS.realizarConsulta(url,user,pass,datosFormulario);
+			List docRes = es.caib.sistra.wsClient.v1.client.ClienteWS.realizarConsulta(url,user,pass,identificadorTramite,datosFormulario);
 		
 			// Devolvemos resultado consulta
 			ResultadoRegistrar res = new ResultadoRegistrar();

@@ -6,7 +6,10 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+import org.apache.commons.lang.StringUtils;
 
+import es.caib.sistra.back.util.MensajesUtil;
+import es.caib.sistra.model.TraTramite;
 import es.caib.sistra.model.Tramite;
 import es.caib.sistra.persistence.delegate.DelegateException;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
@@ -48,6 +51,25 @@ public class TramiteForm extends TraduccionValidatorForm
         		errors.add("values.identificador", new ActionError("errors.tramite.duplicado", tramite.getIdentificador() ));
         	}
             
+            if(isAlta(request) || isModificacion(request)){
+            	TraTramite traTra = (TraTramite)tramite.getTraduccion("es");
+            	if (traTra != null ){
+            		if(StringUtils.isEmpty(traTra.getDescripcion())){
+            			errors.add("values.traduccion", new ActionError("errors.descripcion.vacio",MensajesUtil.getValue("es")));
+            		}
+            	}else{
+            		errors.add("values.traduccion", new ActionError("errors.descripcion.vacio", MensajesUtil.getValue("es") ));
+            	}
+            	traTra = (TraTramite)tramite.getTraduccion("ca");
+            	if(traTra != null){
+            		if(StringUtils.isEmpty(traTra.getDescripcion())){
+            			errors.add("values.traduccion", new ActionError("errors.descripcion.vacio", MensajesUtil.getValue("ca") ));
+            		}
+            	}else{
+            		errors.add("values.traduccion", new ActionError("errors.descripcion.vacio", MensajesUtil.getValue("ca") ));
+            	}
+            	
+            }
             /*
             Set itTramites = delegate.listarTramitesOrganoResponsable( getIdOrgano() );
             for ( Iterator it = itTramites.iterator(); it.hasNext(); )

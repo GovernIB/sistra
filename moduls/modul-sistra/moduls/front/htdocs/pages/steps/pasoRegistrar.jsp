@@ -15,6 +15,10 @@
         <html:rewrite page="/protected/seleccionNotificacionTelematica.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
 
+<!--  Flujo de tramite -->
+<logic:present name="pasarFlujoTramitacion">
+</logic:present>
+
 <!--  Seleccion  notificacion -->
 <logic:present name="confirmarSeleccionNotificacionTelematica">
 	<div class="alerta">
@@ -32,7 +36,7 @@
 </logic:present>
 
 <!--  Registro solicitud -->
-<logic:notPresent name="confirmarSeleccionNotificacionTelematica">
+<logic:present name="permitirRegistrar">
 
 <bean:define id="asiento" name="asiento" type="java.lang.String"/>
 <bean:define id="instrucciones" name="instrucciones"/> 
@@ -430,4 +434,4 @@
 				window.open("<bean:write name="urlAcceso" filter="false"/>");
 			</script>
 		</logic:present>
-</logic:notPresent>
+</logic:present>

@@ -63,5 +63,3 @@ function validaFormulario( form )
 			 -->
 			<!-- /subscripcions -->
 		
-		</div>
-		<!-- /continguts -->

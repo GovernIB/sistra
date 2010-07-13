@@ -1,5 +1,6 @@
 package org.ibit.rol.form.back.form;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionError;
@@ -19,6 +20,10 @@ public class FormularioForm extends TraduccionValidatorForm {
     private String temp;
     private Long[] validadores_ids;
     private String rolesString;
+    private String[] grupos;
+    private String[] gruposNoAsoc;
+    private String usuario;
+    private String flag;
 
     
     // -- INDRA: MODOS FUNCIONAMIENTO
@@ -96,7 +101,7 @@ public class FormularioForm extends TraduccionValidatorForm {
         if (errors == null) {
             errors = new ActionErrors();
         }
-
+        if(StringUtils.isEmpty(flag)){
         try {
             Formulario formulario = (Formulario) getValues();
 
@@ -111,7 +116,7 @@ public class FormularioForm extends TraduccionValidatorForm {
         } catch (DelegateException e) {
             log.error(e);
         }
-
+        }
         return errors;
     }
 
@@ -122,5 +127,39 @@ public class FormularioForm extends TraduccionValidatorForm {
 	public void setModoFuncionamientoCod(Long modoFuncionamiento) {
 		this.modoFuncionamientoCod = modoFuncionamiento;
 	}    
+
+	public String[] getGrupos() {
+		return grupos;
+	}
+
+	public void setGrupos(String[] grupos) {
+		this.grupos = grupos;
+	}
+
+	public String[] getGruposNoAsoc() {
+		return gruposNoAsoc;
+	}
+
+	public void setGruposNoAsoc(String[] gruposNoAsoc) {
+		this.gruposNoAsoc = gruposNoAsoc;
+	}
+
+	public String getFlag() {
+		return flag;
+	}
+
+	public void setFlag(String flag) {
+		this.flag = flag;
+	}
+
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}   
+	
+	
 
 }

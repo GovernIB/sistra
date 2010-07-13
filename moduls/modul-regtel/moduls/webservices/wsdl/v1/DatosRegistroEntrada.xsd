@@ -8,8 +8,8 @@
 	<xs:complexType name="DatosRegistroEntrada">
 		<xs:sequence>
 			<xs:element name="oficinaRegistral" type="ns1:OficinaRegistral"/>
-			<xs:element name="datosInteresado" type="ns2:DatosInteresado"/>
-			<xs:element name="datosRepresentado" type="ns5:DatosRepresentado"/>
+			<xs:element name="datosInteresado" type="ns2:DatosInteresado"  nillable="true"/>
+			<xs:element name="datosRepresentado" type="ns5:DatosRepresentado"  nillable="true"/>
 			<xs:element name="datosAsunto" type="ns3:DatosAsunto"/>
 			<xs:element name="documentos" type="ns4:Documentos" nillable="true" minOccurs="0"/>
 		</xs:sequence>

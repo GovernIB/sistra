@@ -50,10 +50,12 @@
     		Permet realitzar una validaci&oacute; abans d'iniciar (o carregar de persistencia) un tr&agrave;mit. 
 	      	El tipus d'aquest camp és <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaScript.jsp">script</a> 
       		i no espera cap resultat. En cas de no permetre iniciar-se ha de generar 
-      		un error.      	</p>
+      		un error.      	
+      	</p>
       	<p>
 		    En este script a m&eacute;s  es permiteix establir propietats d'un tr&agrave;mit de forma din&agrave;mica. 
-    		El plugin <em>CONFIGURACION_DINAMICA</em> permiteix establir aquestes propietats:    	</p> 
+    		El plugin <em>CONFIGURACION_DINAMICA</em> permiteix establir aquestes propietats:
+    	</p> 
       	<p>
    			Els m&eacute;tods disponibles son:
    			<br/>
@@ -63,19 +65,24 @@
 		   		CONFIGURACION_DINAMICA.setPlazoDinamico(true);<br/>
 		   		CONFIGURACION_DINAMICA.setPlazoInicio('20070115080000');<br/>
 		        CONFIGURACION_DINAMICA.setPlazoFin('20070115235959');<br/>
-		      </em>    	</p>      </td>
+		      </em>    	
+		 </p>
+      </td>
   </tr>
   <tr> 
     <td>Procedència geogr&agrave;fica</td>
-    <td><p>Per a crear el seient de tràmits de <strong>tipus registre</strong> 
+    <td>
+    	<p>Per a crear el seient de tràmits de <strong>tipus registre</strong> 
         és necessari calcular la procedència geogr&agrave;fica.. Per a això cal 
         indicar els valors dels codis de província, localitat i pais. El tipus 
         d'aquestos camps és <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaScript.jsp">script</a> 
         i espera com resultat el valor del codi corresponent. 
+       </p>
       <p>Aquesta dada és <strong>obligatori</strong> especificar-la (bé en les 
         especificacions gen&egrave;riques o per nivell) <strong>per als tràmits 
         de tipus registre</strong>. Per la resta de tràmits s'inclourá en el 
-        seient si existeix.</p>
+        seient si existeix.
+       </p>
          <p>
         Els codis de prov&iacute;ncia, localitat i pa&iacute;s estan basats en la codificaci&oacute; INE. Existeixen dominis gen&egrave;rics per a l'obtenci&oacute; d'aquestes llistes de valors:
         <ul>
@@ -102,11 +109,41 @@
         amb accés an&ograve;nim sense identificar al sol.licitant.</p></td>
   </tr>
   <tr> 
-    <td>Referència representat</td>
-    <td><p>En cas de que existeixi representaci&oacute; és necessari indicar qui 
-        és el representat. Per a això cal indicar les <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaReferencia.jsp">referències</a> 
+    <td>Refer&egrave;ncia representat</td>
+    <td><p>En cas de que existeixi representaci&oacute; &eacute;s necessari indicar qui 
+        &eacute;s el representat. Per a aix&ograve; cal indicar les <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaReferencia.jsp">referències</a> 
         dels camps del formulari que continguin el DNI i el nom complet del representat.</p></td>
   </tr>
+   
+   <tr> 
+    <td>Script de destinatari tr&agrave;mit</td>
+    <td>
+    	<p>
+    		Aquest script permet establir din&agrave;micament el destinatari del tr&agrave;mit: oficina registral, organ destinació 
+    		i unitat administrativa. Encara que s'estableixi din&agrave;micament per script s'haurien d'establir uns valors 
+    		inicials en la fitxa de la versi&oacute; del tr&agrave;mit. Per defecte el destinatari tindr&agrave; aquests valors.
+    	</p>
+    	<p>
+    		El tipus d'aquest camp &eacute;s <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> 
+    		i no s'espera cap resultat. En cas d'error s'ha de generar un error de script. 
+    		<br/>
+			Per a establir els valors del destinatari es disposar&agrave; del plugin <em>DESTINATARIO_TRAMITE</em>.		    
+    	</p>	 
+   		<p>
+   			Els m&egrave;todes disponibles s&oacute;n:
+   			<br/>
+		   	<em>
+		   		// Establecer destinatario dinamicamente<br/>
+		   		DESTINATARIO_TRAMITE.setOficinaRegistral('OF1');<br/>
+		   		DESTINATARIO_TRAMITE.setOrganoDestino('1');<br/>
+		        DESTINATARIO_TRAMITE.setUnidadAdministrativa('2');<br/>
+		      </em>    	
+		 </p>
+	  </td>
+  </tr>
+  
+   
+   
   <tr>
     <td>Url fi</td>
     <td>Al finalitzar el tr&agrave;mit es redirigeix per defecte al portal del organisme. Mitjan&ccedil;ant aquest <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> es pot particularitzar aquesta redirecci&oacute;. S'ha de tornar una cadena indicant la url de finalitzaci&oacute;.  Si es retorna la cadena "[ZONAPER]" es redirigir&agrave; a la zona personal mostrant el tr&agrave;mit.</td>

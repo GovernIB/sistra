@@ -1,5 +1,6 @@
 package es.caib.zonaper.ws.v1.services;
 
+
 import org.apache.commons.lang.StringUtils;
 
 import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
@@ -7,7 +8,6 @@ import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeUtil;
-import es.caib.zonaper.ws.v1.model.BackofficeFacadeException;
 import es.caib.zonaper.ws.v1.model.DocumentoExpediente;
 import es.caib.zonaper.ws.v1.model.EventoExpediente;
 import es.caib.zonaper.ws.v1.model.Expediente;
@@ -44,12 +44,9 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		}
 	}
 	
-	
-	
 	// --------------------------------------------------------------
 	//		FUNCIONES AUXILIARES
 	// --------------------------------------------------------------
-	
 	private DocumentoExpedientePAD documentoWSToDocumentoPAD(DocumentoExpediente docWS) throws Exception{
 		DocumentoExpedientePAD docPAD = new DocumentoExpedientePAD();
 		if(docWS != null){
@@ -151,4 +148,5 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		}
 		return exPAD;		
 	}	
+
 }

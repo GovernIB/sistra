@@ -9,6 +9,9 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import es.caib.sistra.model.*;
+import es.caib.sistra.persistence.delegate.DelegateException;
+import es.caib.sistra.persistence.delegate.DelegateUtil;
+import es.caib.sistra.persistence.delegate.GruposDelegate;
 
 /**
  * SessionBean para mantener y consultar Tramite
@@ -147,6 +150,10 @@ public abstract class TramiteFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.sistra}"
      */
     public void borrarTramite(Long id) {
+    	// Eliminamos permisos acceso tramite
+    	borrarPermisosAccesoTramite(id);
+    	
+    	// Eliminamos tramite
         Session session = getSession();
         try {
             Tramite tramite = (Tramite) session.load(Tramite.class, id);
@@ -158,4 +165,17 @@ public abstract class TramiteFacadeEJB extends HibernateEJB {
         }
     }
     
+    /**
+     * Elimina permisos de acceso al tramite (grupos y usuarios) 
+     * @param id
+     */
+    private void borrarPermisosAccesoTramite(Long id) {
+        try {
+        	GruposDelegate gdlg = DelegateUtil.getGruposDelegate();
+        	gdlg.borrarTramiteGrupos(id);
+        	gdlg.borrarTramiteUsuarios(id);
+        } catch (DelegateException de) {
+            throw new EJBException(de);
+        }
+    }
 }

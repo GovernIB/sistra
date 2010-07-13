@@ -11,6 +11,7 @@ import org.apache.struts.action.ActionMapping;
 import org.ibit.rol.form.back.action.BaseAction;
 import org.ibit.rol.form.persistence.delegate.DelegateUtil;
 import org.ibit.rol.form.persistence.delegate.FormularioDelegate;
+import org.ibit.rol.form.persistence.delegate.GruposDelegate;
 
  /**
  * Action para preparar desbloquear un Formulario.
@@ -46,6 +47,16 @@ public class BloquearFormularioAction extends BaseAction {
         if ( (idString == null) || (idString.length() == 0) ) {
             log.warn("El paràmetre id és null!!");
             return mapping.findForward("fail");
+        }
+        if( Boolean.valueOf( DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("habilitar.permisos")).booleanValue()){
+    		GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
+	        if( !(gruposDelegate.existeUsuarioByGruposForm(request.getUserPrincipal().getName(),new Long(idString)) 
+	        	|| gruposDelegate.existeUsuarioByForm(request.getUserPrincipal().getName(),new Long(idString)) 
+	        	))
+	        {
+	        	request.setAttribute("message","No tiene permisos para bloquear este formulario");
+	        	return mapping.findForward("fail");
+	        }
         }
         //
         Long id = new Long(idString);

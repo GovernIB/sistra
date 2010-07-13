@@ -26,3 +26,13 @@
 <form-bean
     name="exportCSVTramitesForm"
     type="es.caib.bantel.front.form.ExportCSVTramitesForm" />
+<form-bean
+    name="detalleExpedienteForm"
+    type="es.caib.bantel.front.form.DetalleExpedienteForm" />          
+<form-bean
+    name="detalleAvisoForm"
+    type="es.caib.bantel.front.form.DetalleAvisoForm" />          
+<form-bean
+    name="detalleNotificacionForm"
+    type="es.caib.bantel.front.form.DetalleNotificacionForm" />          
+    

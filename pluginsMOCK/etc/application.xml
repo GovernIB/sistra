@@ -13,6 +13,7 @@
     <module><java>plugin-loginMOCK.jar</java></module>
     <module><java>plugin-firmaMOCK.jar</java></module> 
     <module><java>plugin-smsMOCK.jar</java></module>  
+    <module><java>plugin-custodiaMOCK.jar</java></module>  
     
     <!--  Asistente de pago Mock -->
     <module><java>pagosMOCK-model.jar</java></module>    

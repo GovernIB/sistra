@@ -14,7 +14,6 @@ import java.util.Properties;
 import java.util.Random;
 
 import javax.ejb.CreateException;
-import javax.ejb.EJBException;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
@@ -34,12 +33,14 @@ import es.caib.redose.model.TipoUso;
 import es.caib.redose.model.Ubicacion;
 import es.caib.redose.model.Uso;
 import es.caib.redose.model.Version;
+import es.caib.redose.model.VersionCustodia;
 import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.DocumentoVerifier;
 import es.caib.redose.modelInterfaz.ExcepcionRDS;
 import es.caib.redose.modelInterfaz.KeyVerifier;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
+import es.caib.redose.modelInterfaz.TransformacionRDS;
 import es.caib.redose.modelInterfaz.UsoRDS;
 import es.caib.redose.persistence.delegate.DelegateUtil;
 import es.caib.redose.persistence.delegate.PlantillaDelegate;
@@ -49,11 +50,13 @@ import es.caib.redose.persistence.formateadores.FormateadorDocumento;
 import es.caib.redose.persistence.formateadores.FormateadorDocumentoFactory;
 import es.caib.redose.persistence.plugin.PluginAlmacenamientoRDS;
 import es.caib.redose.persistence.plugin.PluginClassCache;
+import es.caib.redose.persistence.util.ConversorOpenOffice;
 import es.caib.redose.persistence.util.UtilRDS;
+import es.caib.sistra.plugins.NoExistePluginException;
 import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.custodia.PluginCustodiaIntf;
 import es.caib.sistra.plugins.firma.FirmaIntf;
 import es.caib.sistra.plugins.firma.PluginFirmaIntf;
-
 import es.caib.util.StringUtil;
 import es.indra.util.pdf.BarcodeStamp;
 import es.indra.util.pdf.ObjectStamp;
@@ -96,6 +99,10 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	private String URL_VERIFIER = null;
 	private String TEXT_VERIFIER = null;
 	private String ENTORNO = null;
+	private String OPENOFFICE_HOST = null;
+	private String OPENOFFICE_PUERTO = null;
+	
+	private boolean existeCustodia = false;
 	
 	/**
      * @ejb.create-method
@@ -110,6 +117,18 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 			URL_VERIFIER = props.getProperty("sistra.url") + "/redosefront/init.do?id=";
 			TEXT_VERIFIER=props.getProperty("verifier.text");
 			ENTORNO =props.getProperty("entorno");		
+			OPENOFFICE_HOST=props.getProperty("openoffice.host");
+			OPENOFFICE_PUERTO=props.getProperty("openoffice.port");						
+			
+			// Comprobamos si hay que integrarse con sistema de custodia			
+	    	try{
+	    		PluginFactory.getInstance().getPluginCustodia();
+	    		existeCustodia=true;
+	    	}catch(NoExistePluginException nep){
+	    		// En caso de que no este configurado el plugin no hay que hacer nada
+	    		existeCustodia = false;
+	    	}   
+			
 		}catch(Exception ex){
 			log.error("No se pueden acceder propiedades modulo",ex);
 			throw new CreateException("No se pueden obtener propiedades modulo");
@@ -125,7 +144,6 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.auto}"
      */
     public ReferenciaRDS insertarDocumento(DocumentoRDS documento) throws ExcepcionRDS{    	
-    	//TODO: Faltaría proceso background que borre documentos sin usos
     	// Realizamos operación
     	ReferenciaRDS ref = this.grabarDocumento(documento,true);
     	// Realizamos log    	
@@ -133,6 +151,64 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	return ref;
     }
 	    
+    /**
+	 * Inserta un documento en el RDS permitiendo transformar el documento (p.e. convertir a PDF). <br/>
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public ReferenciaRDS insertarDocumento(DocumentoRDS documento, TransformacionRDS transformacion) throws ExcepcionRDS{
+    	try{
+    	
+    		// 1.- Verificamos que se pueden realizar transformaciones
+    		//  	-- Si se realiza transformacion el documento no puede llevar asociadas firmas, ya que se modifica el documento
+    		if (transformacion.existeTransformacion() && documento.getFirmas() != null && documento.getFirmas().length > 0){
+    			throw new Exception("Si se realiza transformacion el documento no puede llevar asociadas firmas, ya que se modifica el documento");
+    		}
+    		// 		-- Verificamos extensiones validas para conversion a pdf
+    		if (transformacion.isConvertToPDF() && !verificarExtensionConversionPDF(documento.getExtensionFichero())){
+    			throw new Exception("No se permite la conversion a PDF para la extension " + documento.getExtensionFichero().toLowerCase() );
+    		}
+    		//		-- Verificamos que para stampar el barcode sea un pdf
+    		if (transformacion.isBarcodePDF() && !transformacion.isConvertToPDF() && !"pdf".equalsIgnoreCase(documento.getExtensionFichero()) ){
+    			throw new Exception("El barcode solo se aplica sobre pdf");
+    		}
+    		
+    		// 2.- Aplicamos transformaciones previas
+    		// 		-- En caso necesario realizamos conversion a PDF
+    		if (transformacion.isConvertToPDF()){
+		    	byte[] pdf = this.convertirFicheroAPDF(documento.getDatosFichero(),documento.getExtensionFichero());
+		    	documento.setDatosFichero(pdf);
+		    	documento.setExtensionFichero("pdf");
+		    	documento.setNombreFichero(documento.getNombreFichero().substring(0,documento.getNombreFichero().lastIndexOf(".")) + ".pdf");		    	
+    		}
+    		
+    		// 3.- Insertamos documento y obtenemos codigo RDS
+        	ReferenciaRDS ref = this.grabarDocumento(documento,true);
+    		documento.setReferenciaRDS(ref);
+        	
+    		
+    		// 4.- Aplicamos transformaciones posteriores: stamp barcode
+    		// 		-- En caso necesario ponemos barcode a PDF
+    		if (transformacion.isBarcodePDF()){
+	    		// Stampamos barcode
+    			this.stampBarCodeVerifier(documento,null,null);
+	    		// Actualizamos documento
+	    		this.grabarDocumento(documento,false);
+	    	}
+	    	
+	    	// 5.- Realizamos log de la operacion    	
+	    	this.doLogOperacion(getUsuario(),NUEVO_DOCUMENTO,"inserción documento " + ref.getCodigo());
+	    	return ref;
+	    	
+	    	
+    	}catch(Exception ex){
+    		throw new ExcepcionRDS("Error al insertar documento aplicando transformacion",ex);    	
+	    }
+    	
+    }
+    
     /**
      * Actualiza un documento en el RDS
      * 
@@ -170,7 +246,6 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.user}"
      */
     public void asociarFirmaDocumento(ReferenciaRDS refRds,FirmaIntf firma) throws ExcepcionRDS {
-    	//TODO: Comprobar firma
     	Session session = getSession();     	
         try {        	          	        	
         	// Obtenemos documento
@@ -197,9 +272,30 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
         	fir.setFormato(firma.getFormatoFirma());
         	doc.addFirma(fir);
         	session.update(doc);        	
+        	
+        	
+        	
+        	//
+        	// TODO DANI - ACTUALIZAR CUSTODIA
+        	//
+        	if(documento.getFirmas() == null){
+        		FirmaIntf[] firmasIntf = {firma};
+        		documento.setFirmas(firmasIntf);
+        	}else{
+        		FirmaIntf[] firmasIntf = new FirmaIntf[documento.getFirmas().length+1];
+        		for(int i=0;i<documento.getFirmas().length;i++){
+        			firmasIntf[i] = documento.getFirmas()[i];
+        		}
+        		firmasIntf[documento.getFirmas().length] = firma;
+        		documento.setFirmas(firmasIntf);
+        	}
+        	custodiarDocumento(documento,doc,session);
+        	
+        	
+        	
         } catch (HibernateException he) {
-        	log.error("Error insertando documento",he);
-            throw new EJBException(he);
+        	log.error("Error asociando firma a documento",he);
+            throw new ExcepcionRDS("Error asociando firma a documento",he);
         }
         catch( ExcepcionRDS rdse )
         {
@@ -280,7 +376,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
         	        	     
         } catch (HibernateException he) {
         	log.error("Error insertando uso",he);
-            throw new EJBException(he);
+            throw new ExcepcionRDS("Error insertando uso",he);
         } finally {        	        	
             close(session);
         }
@@ -331,7 +427,8 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    	// Mapeamos a documentoRDS
 	    	documentoRDS = establecerCamposDocumentoRDS(documento);	    		    	
 	    } catch (HibernateException he) {
-	        throw new EJBException(he);
+	    	log.error("Error consultando uso",he);
+	        throw new ExcepcionRDS("Error consultando uso",he);
 	    } finally {
 	        close(session);
 	    }            	
@@ -428,7 +525,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    	
 	    } catch (Exception he) {
 	    	log.error("No se ha podido obtener documento formateado ",he);
-	        throw new EJBException(he);
+	        throw new ExcepcionRDS("No se ha podido obtener documento formateado ",he);
 	    } finally {
 	        close(session);
 	    }            	
@@ -453,7 +550,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    	return documentoRDS;
 	    } catch (Exception he) {
 	    	log.error("No se ha podido obtener documento formateado ",he);
-	        throw new EJBException(he);
+	        throw new ExcepcionRDS("No se ha podido obtener documento formateado ",he);
 	    }
     }
     
@@ -472,6 +569,9 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    try {	    	
 	    	// Obtenemos documento
 	    	documentoRDS = consultarDocumento(refRds);
+	    	
+	    	// Si no es estructurado devolvemos documento sin formatear
+	    	if (!documentoRDS.isEstructurado()) return documentoRDS;
 	    	
 	    	// Obtenemos plantilla	    	
 	    	Documento documento = (Documento) session.load(Documento.class, new Long(refRds.getCodigo()));	        
@@ -523,7 +623,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    	
 	    } catch (Exception he) {
 	    	log.error("No se ha podido obtener documento formateado ",he);
-	        throw new EJBException(he);
+	        throw new ExcepcionRDS("No se ha podido obtener documento formateado ",he);
 	    } finally {
 	        close(session);
 	    }            	
@@ -544,6 +644,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     * 
     * @ejb.interface-method
     * @ejb.permission role-name="${role.user}"
+    * @ejb.permission role-name="${role.auto}"
     */
     public DocumentoRDS formatearDocumento(DocumentoRDS documentoRDS,String modelo,int version,String tipoPlantilla,String idioma) throws ExcepcionRDS {    	
     	try{    	
@@ -595,15 +696,6 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    		if (!stampSello(docFormateado,usos)) docValido=false;
 	    	}
 
-	    	/*	    	 
-	    	 	NO PUEDEN LLEVAR CODIGO DE BARRAS YA QUE EL DOCUMENTO NO EXISTE 
-	    	 	
-	    	// En caso de que se haya establecido generar codigo de barras lo generamos
-	    	if (plantilla.getPlantilla().getBarcode() == 'S' && docValido){
-	    		stampBarCodeVerifier(docFormateado,plantilla.getPlantilla().getTipo(),idioma);
-	    	}
-	    	*/	    		    	
-	    	
 	    	// En caso de que no sea produccion lo marcamos como borrador
 	    	if (isBorrador() || !docValido){
 	    		stampBorrador(docFormateado);
@@ -614,7 +706,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    	
 	    } catch (Exception he) {
 	    	log.error("No se ha podido formatear documento ",he);
-	        throw new EJBException(he);
+	        throw new ExcepcionRDS("No se ha podido formatear documento ",he);
 	    }          		           
     }
             
@@ -675,7 +767,8 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
             documentoSinUsos(session,documento);            
 	    		    	
 	    } catch (Exception he) {
-	        throw new EJBException(he);
+	    	log.error("No se ha podido eliminar uso", he);
+	        throw new ExcepcionRDS("No se ha podido eliminar uso", he);
 	    } finally {
 	        close(session);
 	    }            
@@ -726,7 +819,8 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
             }	    	            
             
 	    } catch (Exception he) {
-	        throw new EJBException(he);
+	    	log.error("No se ha podido eliminar usos documento",he);
+	        throw new ExcepcionRDS("No se ha podido eliminar usos documento",he);
 	    } finally {
 	        close(session);
 	    }            
@@ -790,7 +884,8 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
             }	    	
             
 	    } catch (HibernateException he) {
-	        throw new EJBException(he);
+	    	log.error("Error al listar usos",he);
+	        throw new ExcepcionRDS("Error al listar usos" ,he);
 	    } finally {
 	        close(session);
 	    }            
@@ -839,6 +934,75 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	}
     }
     
+    /**
+     * Cambia de UA un documento
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name = "${role.user}"
+     */
+    public void cambiarUnidadAdministrativa(ReferenciaRDS refRDS, Long codUA) throws ExcepcionRDS {       	
+    	Session session = getSession();  
+    	try{
+    		Documento documento;
+        	try{
+        		documento = (Documento) session.load(Documento.class,new Long(refRDS.getCodigo()));        		
+        	}catch(Exception e){
+        		log.error("No existe documento " + refRDS.getCodigo());
+        		throw new ExcepcionRDS("No existe documento " + refRDS.getCodigo(),e);
+        	}
+        	
+        	// Control de documento borrado
+	    	if ("S".equals(documento.getBorrado())) throw new ExcepcionRDS("El documento " + documento.getCodigo() + " ha sido borrado por no tener usos" );
+        	
+        	// Comprobamos clave
+    		if (!documento.getClave().equals(refRDS.getClave())){
+    			log.error("Clave de la referencia RDS no concuerda");
+        		throw new ExcepcionRDS("Clave de la referencia RDS no concuerda"); 
+    		}
+    		
+    		// Modificamos UA
+    		documento.setUnidadAdministrativa(codUA);
+    		
+    		session.update(documento);
+    		
+    	}catch(Exception ex){
+    		throw new ExcepcionRDS("Error al cambiar UA del documento",ex);
+    	}finally {
+	        close(session);
+	    }  
+    }
+    
+    
+    /**
+     * Convierte un fichero a PDF/A. Debe tener una extensión permitida: "doc","docx","ppt","xls","odt","jpg","txt"
+     * 
+     *
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name = "${role.user}"
+     */
+    public byte[] convertirFicheroAPDF(byte[] documento,String extension) throws ExcepcionRDS {       	    	
+    	try{
+    		// Verificamos si la extension se puede convertir    					   		
+    		if (!verificarExtensionConversionPDF(extension)) {
+    			throw new Exception("No se permite la conversion a PDF para la extension " + extension.toLowerCase() );
+    		}
+    		
+    		// Verficamos si se ha especificado la info de conexion
+    		if ( StringUtils.isBlank(OPENOFFICE_HOST) || StringUtils.isBlank(OPENOFFICE_PUERTO) ) {
+    			throw new Exception("No se ha configurado los parametros de conexion al OpenOffice");
+    		}    		
+    		
+    		// Realizamos conversion
+    		ConversorOpenOffice cof = new ConversorOpenOffice(OPENOFFICE_HOST,OPENOFFICE_PUERTO);
+    		byte[] documentoConvertido = cof.convertirFitxer(documento,extension.toLowerCase(),"pdf");    		
+    		return documentoConvertido;        		
+    	}catch(Exception ex){
+    		throw new ExcepcionRDS("Error al convertir documento a PDF",ex);    	
+	    }  
+    }    
+    
+  
     // ---------------------- Funciones auxiliares -------------------------------------------    
     /**
      *  Guarda documento en el RDS
@@ -865,9 +1029,20 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
         		session.update(doc);
         	}        	     
         	
+        	
+        	
+        	//
+        	// TODO DANI - ACTUALIZAR CUSTODIA
+        	//
+        	custodiarDocumento(documento,doc,session);
+        	
+        	
         } catch (HibernateException he) {
         	log.error("Error insertando documento",he);
-            throw new EJBException(he);
+            throw new ExcepcionRDS("Error insertando documento",he);
+        } catch (Exception e) {
+        	log.error("Error insertando documento",e);
+            throw new ExcepcionRDS("Error insertando documento",e);
         } finally {        	        	
             close(session);
         }
@@ -886,6 +1061,78 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    ref.setCodigo(doc.getCodigo().longValue());
 	    ref.setClave(doc.getClave());            
 	    return ref;
+    }
+    
+    /**
+     * Sincroniza con custodia los documentos
+     * @throws HibernateException 
+     */
+    private void custodiarDocumento(DocumentoRDS documento, Documento doc, Session session) throws HibernateException, Exception{
+    	
+    	if(existeCustodia && "S".equals(doc.getVersion().getModelo().getCustodiar()+"")){
+    		
+    		log.debug("Custodiando documento del tipo " + doc.getVersion().getModelo().getModelo() + " - " + doc.getVersion().getVersion() );
+    		
+    		if(doc.getFirmas() != null && doc.getFirmas().size() > 0){
+    			log.debug("Documento con firmas, insertamos en custodia");
+    			if(documento.getReferenciaRDS() == null){
+    				documento.setReferenciaRDS(new ReferenciaRDS(doc.getCodigo().longValue(),doc.getClave()));
+    			}
+				//Custodiamos el documento
+    			PluginCustodiaIntf pluginCustodia = PluginFactory.getInstance().getPluginCustodia();
+				String custodia = pluginCustodia.custodiarDocumento(documento);
+				//vamos a buscar las versiones de las custodias de este documento que no esten borradas y sean diferentes a si misma si existen.
+				List custodiasDocumento = null;
+		       	Query query;
+				query = session.createQuery("FROM VersionCustodia AS version WHERE version.documento.codigo = :codigoDocumento and version.codigo != :idVersion");
+		        query.setParameter("codigoDocumento", doc.getCodigo());
+		        query.setParameter("idVersion", custodia);
+		        custodiasDocumento = query.list();
+				if(custodiasDocumento != null){
+					//las marcamos para borrar.
+					log.debug("Marcamos custodias anteriores para borrar");
+					for(int i=0;i<custodiasDocumento.size();i++){
+						VersionCustodia cust = (VersionCustodia)custodiasDocumento.get(i);
+						cust.setBorrar('S');
+						cust.setFecha(new Date());
+						session.update(cust);
+					}
+				}
+				//vamos a buscar la version de la custodia de este documento que tenga el mismo id que estamos entrando y la actualizamos
+				VersionCustodia custodiaDocumento = (VersionCustodia) session.get(VersionCustodia.class, custodia);
+				log.debug("Custodiamos version actual");
+				if(custodiaDocumento == null){
+					// la creamos
+					custodiaDocumento = new VersionCustodia();
+					custodiaDocumento.setCodigo(custodia);
+					custodiaDocumento.setDocumento(doc);
+					custodiaDocumento.setFecha(new Date());
+					custodiaDocumento.setBorrar('N');
+					session.save(custodiaDocumento);
+				}else{
+					//la modificamos
+					custodiaDocumento.setDocumento(doc);
+					custodiaDocumento.setFecha(new Date());
+					custodiaDocumento.setBorrar('N');
+					session.update(custodiaDocumento);
+				}
+			}else{
+				//Documento no tiene firmas, si existe id custodia marcarla para borrar
+				log.debug("Documento sin firmas, borramos de custodia");
+				Query query = session.createQuery("FROM VersionCustodia AS version WHERE version.documento.codigo = :codigoDocumento and version.borrar = 'N'");
+				query.setParameter("codigoDocumento", doc.getCodigo());
+				List custodiasDocumento = query.list();
+				if(custodiasDocumento != null){
+					//las marcamos para borrar.
+					for(int i=0;i<custodiasDocumento.size();i++){
+						VersionCustodia cust = (VersionCustodia)custodiasDocumento.get(i);
+						cust.setBorrar('S');
+						cust.setFecha(new Date());
+						session.update(cust);
+					}
+				}
+			} 
+    	}
     }
     
     /**
@@ -1403,4 +1650,22 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 		
 		return content;		
 	 }
+    
+    
+    /**
+     * Verifica si la extension puede convertirse a PDF
+     * @param extension
+     * @return
+     */
+    private boolean verificarExtensionConversionPDF(String extension){
+    	String [] extensiones = {"doc","docx","ppt","xls","odt","jpg","txt"};
+		for (int i=0;i<extensiones.length;i++){
+			if (extension.toLowerCase().equals(extensiones[i])){
+				return true;
+			}
+		}    	
+	    return false;
+    }
+
+    
 }

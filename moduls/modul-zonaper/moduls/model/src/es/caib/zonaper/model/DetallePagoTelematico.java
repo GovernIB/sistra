@@ -25,7 +25,6 @@ public class DetallePagoTelematico implements Serializable{
     private String codigoPostal;
     private String nif;
     private char tipo;
-    private String descripcionEstado;
 
 	public String getEstadoPlataforma() {
 		return estadoPlataforma;
@@ -111,12 +110,7 @@ public class DetallePagoTelematico implements Serializable{
 	public void setDui(String dui) {
 		this.dui = dui;
 	}
-	public String getDescripcionEstado() {
-		return descripcionEstado;
-	}
-	public void setDescripcionEstado(String descripcionEstado) {
-		this.descripcionEstado = descripcionEstado;
-	}
+	
 
     
 }

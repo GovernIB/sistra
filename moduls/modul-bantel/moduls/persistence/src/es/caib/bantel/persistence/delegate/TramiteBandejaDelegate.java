@@ -47,6 +47,14 @@ public class TramiteBandejaDelegate implements StatelessDelegate {
         }
     }
     
+    public TramiteBandeja obtenerTramiteBandejaPorNumeroRegistro(String numeroRegistro)throws DelegateException {
+        try {
+            return getFacade().obtenerTramiteBandejaPorNumeroRegistro(numeroRegistro);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+   
     public TramiteBandeja obtenerTramiteBandeja(Long idTramiteBandeja) throws DelegateException {
         try {
             return getFacade().obtenerTramiteBandeja(idTramiteBandeja);

@@ -32,6 +32,15 @@
 
 <br />
 
+<logic:present name="message" scope="request">
+<table class=nomarc>
+<tr>
+	<td style="color:red"><bean:write name="message" scope="request" filter="false"/></td>
+</tr>
+</table>
+	<br />
+</logic:present>
+
 <logic:empty name="formularioOptions">
     <table class="marc">
       <tr><td class="alert"><bean:message key="formulario.selec.vacio" /></td></tr>

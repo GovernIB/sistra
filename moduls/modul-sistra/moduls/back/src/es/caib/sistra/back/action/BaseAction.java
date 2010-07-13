@@ -218,6 +218,9 @@ public abstract class BaseAction extends Action {
     		byte[] checkEnvio = espec.getCheckEnvio();
     		pForm.setCheckEnvio( checkEnvio != null ? new String( checkEnvio, ConstantesXML.ENCODING ) : null);
     	
+    		byte[] destinatarioTramite = espec.getDestinatarioTramite();
+    		pForm.setDestinatarioTramite( destinatarioTramite != null ? new String( destinatarioTramite, ConstantesXML.ENCODING ) : null);
+    		
     	}catch (Exception ex){
 			throw new DelegateException(ex);
 		}
@@ -327,6 +330,9 @@ public abstract class BaseAction extends Action {
     	
     		byte[] checkEnvio = espec.getCheckEnvio();
     		pForm.setCheckEnvio( checkEnvio != null ? new String( checkEnvio, ConstantesXML.ENCODING ) : null);
+    		
+    		byte[] destinatarioTramite = espec.getDestinatarioTramite();
+    		pForm.setDestinatarioTramite( checkEnvio != null ? new String( destinatarioTramite, ConstantesXML.ENCODING ) : null);
     		
     	}catch (Exception ex){
 			throw new DelegateException(ex);

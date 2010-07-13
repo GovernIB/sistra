@@ -220,6 +220,7 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 	 * Obtiene lista de servicios destinatarios
 	 * @ejb.interface-method
 	 * @ejb.permission role-name = "${role.user}"
+	 * @ejb.permission role-name = "${role.auto}"
 	 */
 	public List obtenerServiciosDestino() throws ExcepcionRegistroOrganismo{
 		try{
@@ -248,7 +249,7 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 	/**
 	 * Anula un registro de entrada. SOLO PARA REGISTRO CAIB.
 	 * @ejb.interface-method
-	 * @ejb.permission role-name = "${role.gestor}" 
+	 * @ejb.permission role-name = "${role.user}" 
 	 */
    public void anularRegistroEntrada(String numeroRegistro) throws ExcepcionRegistroOrganismo{
 	   try{

@@ -5,6 +5,21 @@
     parameter=".menu"/>
 
 <action
+    path="/admin/formulario/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".formulario.lista"/>
+
+<action
+    path="/admin/grupo/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".grupos.lista"/>
+
+<action
+    path="/admin/grupo/alta"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".grupos.altaModif"/>
+
+<action
     path="/admin/mascara/lista"
     type="org.apache.struts.actions.ForwardAction"
     parameter=".mascara.lista"/>

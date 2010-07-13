@@ -11,6 +11,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title><bean:message key="titulo.aplicacion" /></title>
 <link href="estilos/estilos.css" rel="stylesheet" type="text/css" />
+<link href="estilos/gestion-expedientes.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.4.1.min.js"></script>
+<script type="text/javascript">
+<!--
+	// texts
+	var txtTitol = "Títol";
+	var txtFitxer = "Fitxer";
+-->
+</script>
+
 <script type="text/javascript">
 <!--
 // capa de información. Puede ser: info, error, ok.

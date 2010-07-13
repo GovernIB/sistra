@@ -495,6 +495,14 @@ body.ventana input.text, textarea
     padding: 3px 3px;
     border: 1px solid #515b67;
 }
+
+body.ventana input.textUser
+{
+    padding: 3px 3px;
+    border: 1px solid #515b67;
+    width: 50%;
+}
+
 body.ventana input.http
 {
     padding: 3px 0px 3px 3px;
@@ -600,3 +608,7 @@ div#capaInfo p.atencion { text-align:center; font-weight:bold; }
 #continguts { background-color:#fff; }
 
 #continguts p { position:relative; }
+
+.selectGrupos{
+	width: 50%;
+}

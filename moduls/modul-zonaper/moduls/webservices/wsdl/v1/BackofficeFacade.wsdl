@@ -93,7 +93,7 @@
 	</wsdl:binding>
 	<wsdl:service name="BackofficeFacadeService">
 		<wsdl:port name="BackofficeFacade" binding="impl:BackofficeFacadeSoapBinding">
-			<soap:address location="http://dpardell-por.indra.es:8080/zonaperws/services/v1/BackofficeFacade"/>
+			<soap:address location="http://intranet.caib.es/zonaperws/services/v1/BackofficeFacade"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

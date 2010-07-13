@@ -106,22 +106,19 @@ public class DetallePagoAction extends BaseAction
 		
 		/*
 		 *  COMPROBACION DEL PAGO: YA NO SE PUEDE REALIZAR DEBIDO A LA GENERALIZACION EN PLUGINS  
+		 *  
+		 *  EN CASO DE QUE EL PAGO ESTE INICIADO, PODEMOS COMPROBAR EL ESTADO DE LA SESION DE PAGO  
+		 *    
 		 */
+		EstadoSesionPago esp  = null;
 		try{
-			if(!estadoPago.equals(Constants.XMLPAGO_CONFIRMADO)){
+			if(estadoPago.equals(Constants.XMLPAGO_PENDIENTE_CONFIRMAR)){
 				if(dpt.getLocalizador() != null){
-					EstadoSesionPago esp = PluginFactory.getInstance().getPluginPagos().comprobarEstadoSesionPago(dpt.getLocalizador());
-					boolean entrar = (esp.getDescripcionEstado() != null && !"".equals(esp.getDescripcionEstado())); 
-					if(entrar){
-						dpt.setDescripcionEstado(esp.getDescripcionEstado());
-					}else{
-						dpt.setDescripcionEstado(null);
-					}
+					esp = PluginFactory.getInstance().getPluginPagos().comprobarEstadoSesionPago(dpt.getLocalizador());					
 				}
 			}
 		}catch(Exception ex){
-			ex.printStackTrace();
-			dpt.setDescripcionEstado(null);
+			log.error("Error consultando estado sesion de pago",ex);			
 		}
 		
 		/* 
@@ -185,6 +182,7 @@ public class DetallePagoAction extends BaseAction
 		*/
 
 		request.setAttribute( "pago", dpt);
+		request.setAttribute("sesionPago",esp);
 		
 		return mapping.findForward( "success" );
     }

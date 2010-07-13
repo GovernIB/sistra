@@ -188,7 +188,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 				el.setFecha(entrada.getFecha());
 				el.setTipoElemento(entrada instanceof EntradaTelematica?ElementoExpediente.TIPO_ENTRADA_TELEMATICA:ElementoExpediente.TIPO_ENTRADA_PREREGISTRO);
 				el.setCodigoElemento(entrada.getCodigo());
-				exped.addElementoExpediente(el);
+				exped.addElementoExpediente(el,entrada);
 				
 				// En caso de que el expediente no tenga establecido la configuracion de avisos y la entrada sí, 
 				// cogemos automaticamente la configuracion de la entrada
@@ -227,7 +227,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 				ela.setFecha(evento.getFecha());
 				ela.setTipoElemento(ElementoExpediente.TIPO_AVISO_EXPEDIENTE);
 				ela.setCodigoElemento(evento.getCodigo());
-				exped.addElementoExpediente(ela);
+				exped.addElementoExpediente(ela,evento);
 			}
 			
 			// Si el expediente no tiene ningun elemento lo inicializamos con fecha inicio y fecha fin
@@ -413,7 +413,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 				el.setFecha(ev.getFecha());
 				el.setTipoElemento(ElementoExpediente.TIPO_AVISO_EXPEDIENTE);
 				el.setCodigoElemento(ev.getCodigo());
-				expediente.addElementoExpediente(el);
+				expediente.addElementoExpediente(el,ev);
 				DelegateUtil.getExpedienteDelegate().grabarExpediente( expediente );
 				
 				// Aviso de movilidad

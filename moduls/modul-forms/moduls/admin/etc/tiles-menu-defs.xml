@@ -14,6 +14,8 @@
             <add type="definition" value=".menu.paleta" />
             <add type="definition" value=".menu.validador" />
              <add type="definition" value=".menu.puntosalida" />
+            <add type="definition" value=".menu.formulario.listar" />
+			<add type="definition" value=".menu.grupos.lista" />
         </putList>
     </definition>
 
@@ -31,6 +33,20 @@
         <putList name="opciones">
             <item value="menu.crear" link="/admin/mascara/alta" />
             <item value="menu.seleccionar" link="/admin/mascara/lista" />
+        </putList>
+    </definition>
+
+	<definition name=".menu.formulario.listar" extends=".menu.apartado">
+       <put name="titulo" value="menu.formularios" />
+       <putList name="opciones">
+       		<item value="menu.formulario.lista" link="/admin/formulario/lista" />
+        </putList>
+    </definition>
+	
+ 	<definition name=".menu.grupos.lista" extends=".menu.apartado">
+ 	   <put name="titulo" value="menu.grupos" />
+       <putList name="opciones">
+       		<item value="menu.grupos.lista" link="/admin/grupo/lista" />
         </putList>
     </definition>
 

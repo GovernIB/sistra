@@ -39,5 +39,3 @@
 			-->
 			<!-- /subscripcions -->
 		
-		</div>
-		<!-- /continguts -->

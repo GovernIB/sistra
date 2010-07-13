@@ -41,6 +41,9 @@
         <fileset dir="${lib.dir}">
         	<include name="*.jar" />
         </fileset>
+    	<fileset dir="${lib.dir}/client">
+	    	<include name="zonaper-client.jar"/>
+	   	 </fileset>
         <fileset dir="${web.product}">
             <include name="model.jar" />
             <include name="form-persistence-client.jar" />

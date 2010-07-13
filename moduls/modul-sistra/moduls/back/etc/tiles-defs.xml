@@ -74,7 +74,8 @@
         <put name="paginaTraduccion" value="/tramite/editarTraduccion.jsp"/>
 <!-- 
         <putList name="listaRelaciones">
-            <add value=".tramiteVersion.lista" type="definition" />
+            <add value=".grupo.listaFormulario" type="definition" />
+            <add value=".grupo.listaUsuarios" type="definition" />
         </putList>
  -->                
     </definition>
@@ -83,6 +84,15 @@
         <put name="id" value="" />
     </definition>
     
+    <definition name=".grupo.listaFormulario" path="/grupos/listaFormulario.jsp" controllerClass="es.caib.sistra.back.action.grupos.ListaGruposTramiteController">
+        <put name="id" value="" />
+    </definition>
+	<definition name=".grupo.listaUsuarios" path="/grupos/listaUsuarios.jsp" controllerClass="es.caib.sistra.back.action.grupos.ListaUsuariosTramiteController">
+        <put name="id" value="" />
+    </definition>
+    
+     <definition name=".grupos.lista" path="/grupos/lista.jsp"
+        controllerClass="es.caib.sistra.back.action.grupos.ListaGruposController"/>
     
     
     <!-- Mensaje plataforma -->
@@ -313,5 +323,10 @@
         controllerClass="es.caib.sistra.back.action.gestorFormularios.ListaFormulariosController"/>
         
 	<definition name=".gestorFormularios.importar" path="/gestorFormularios/importar.jsp"/>        
+    
+    
+    <!-- GRUPOS -->
+	<definition name=".grupo.editar" path="/grupos/editar.jsp"/>
+	<definition name=".grupos.altaModif" path="/grupos/altaModificar.jsp" controllerClass="es.caib.sistra.back.action.grupos.AltaGruposController"/>
     
 </tiles-definitions>

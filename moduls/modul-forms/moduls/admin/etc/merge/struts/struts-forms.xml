@@ -9,6 +9,19 @@
 </form-bean>
 
 <form-bean
+    name="grupoForm"
+    type="org.ibit.rol.form.admin.form.GrupoForm" >
+</form-bean>
+
+<form-bean
+    name="formularioForm"
+    type="org.ibit.rol.form.admin.form.FormularioForm"
+    className="org.ibit.rol.form.admin.action.TraduccionFormBeanConfig">
+    <set-property property="valuesClassName" value="org.ibit.rol.form.model.Formulario" />
+    <set-property property="traduccionClassName" value="org.ibit.rol.form.model.TraFormulario" />
+</form-bean>
+
+<form-bean
     name="perfilForm"
     type="org.ibit.rol.form.admin.form.PerfilForm"
     className="org.ibit.rol.form.admin.action.TraduccionFormBeanConfig">

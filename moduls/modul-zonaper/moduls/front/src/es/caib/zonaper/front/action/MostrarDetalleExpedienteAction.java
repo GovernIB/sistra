@@ -80,14 +80,15 @@ public class MostrarDetalleExpedienteAction extends BaseAction {
 		}
 		
 		
-		
 		Set elementosExpe;
 		String descExpe;
 		String codigoExpe = null;
 		Set elementosExpePendientes = new HashSet();
 		Map elementosExpeDescripcion = new HashMap();
 		ElementoExpedienteDelegate ed = DelegateUtil.getElementoExpedienteDelegate();
+		String pieDocPresencial = "N"; 
 			
+		// Comprobamos si es un tramite sin expediente y generamos un ElementoExpediente virtual
 		if (tipoElemento.equals(EstadoExpediente.TIPO_ENTRADA_PREREGISTRO)){
 				// Tramite preregistro sin expediente
 				EntradaPreregistro entradaPre;
@@ -98,7 +99,7 @@ public class MostrarDetalleExpedienteAction extends BaseAction {
 				}				
 								
 				ElementoExpediente elemento = new ElementoExpediente();
-				elemento.setCodigo(null);
+				elemento.setCodigo(new Long(0)); // SOLO HABRA 1 ELEMENTO, EL PROPIO TRAMITE
 				elemento.setCodigoElemento(entradaPre.getCodigo());
 				elemento.setExpediente(null);
 				elemento.setFecha(entradaPre.getFecha());
@@ -112,6 +113,12 @@ public class MostrarDetalleExpedienteAction extends BaseAction {
 				elementosExpeDescripcion.put(ElementoExpediente.TIPO_ENTRADA_PREREGISTRO + entradaPre.getCodigo(),entradaPre.getDescripcionTramite());
 				
 				
+				// Comprobamos si no esta confirmada
+				if (entradaPre.getNumeroRegistro() == null){
+					elementosExpePendientes.add(elemento.getCodigo());
+					pieDocPresencial = "S";
+				}
+				
 		}else if (tipoElemento.equals(EstadoExpediente.TIPO_ENTRADA_TELEMATICA)){			
 				// Tramite telematico sin expediente
 				EntradaTelematica entradaTel;
@@ -122,7 +129,7 @@ public class MostrarDetalleExpedienteAction extends BaseAction {
 				}
 				
 				ElementoExpediente elemento = new ElementoExpediente();
-				elemento.setCodigo(null);
+				elemento.setCodigo(new Long(0)); // SOLO HABRA 1 ELEMENTO, EL PROPIO TRAMITE
 				elemento.setCodigoElemento(entradaTel.getCodigo());
 				elemento.setExpediente(null);
 				elemento.setFecha(entradaTel.getFecha());
@@ -170,6 +177,10 @@ public class MostrarDetalleExpedienteAction extends BaseAction {
 						}
 					}else if (elemento.getTipoElemento().equals(ElementoExpediente.TIPO_ENTRADA_PREREGISTRO)){
 						elementosExpeDescripcion.put(elemento.getTipoElemento() + elemento.getCodigoElemento(), ((Entrada) detalleElemento).getDescripcionTramite());
+						if (((Entrada) detalleElemento).getNumeroRegistro() == null){
+							elementosExpePendientes.add(elemento.getCodigo());
+							pieDocPresencial = "S";
+						}
 					}else if (elemento.getTipoElemento().equals(ElementoExpediente.TIPO_ENTRADA_TELEMATICA)){
 						elementosExpeDescripcion.put(elemento.getTipoElemento() + elemento.getCodigoElemento(), ((Entrada) detalleElemento).getDescripcionTramite());
 					}					
@@ -185,6 +196,7 @@ public class MostrarDetalleExpedienteAction extends BaseAction {
 		request.setAttribute("elementosExpediente",elementosExpe);
 		request.setAttribute("elementosExpedientePendientes",elementosExpePendientes);
 		request.setAttribute("elementosExpeDescripcion",elementosExpeDescripcion);
+		request.setAttribute( "pieDocPresencial", pieDocPresencial );
 		
 		if (this.getDatosSesion(request).getNivelAutenticacion() != 'A'){
 			return mapping.findForward("success");

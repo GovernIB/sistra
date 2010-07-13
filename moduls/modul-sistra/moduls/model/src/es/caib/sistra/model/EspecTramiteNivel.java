@@ -28,6 +28,10 @@ public class EspecTramiteNivel  extends Traducible {
      private List datosJustificante = new ArrayList();     
      private String flujoTramitacion="N";
      private byte[] checkEnvio;
+     /***
+      * Script que permite cambiar el destinatario del trámite (oficina registro,organo destino y unidad administrativa)
+      */
+     private byte[] destinatarioTramite;
      
     // Constructors
     /** default constructor */
@@ -299,6 +303,16 @@ public class EspecTramiteNivel  extends Traducible {
 
 	public void setCheckEnvio(byte[] checkEnvio) {
 		this.checkEnvio = checkEnvio;
+	}
+    
+	
+	public byte[] getDestinatarioTramite() {
+		return destinatarioTramite;
+	}
+
+
+	public void setDestinatarioTramite(byte[] destinatarioTramite) {
+		this.destinatarioTramite = destinatarioTramite;
 	}
     
 	

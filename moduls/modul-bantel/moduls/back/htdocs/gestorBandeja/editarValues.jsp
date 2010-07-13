@@ -38,6 +38,10 @@
     <td class="input">Si<html:radio property="values.permitirCambioEstadoMasivo" value="S"/> No<html:radio property="values.permitirCambioEstadoMasivo" value="N"/></td>    
 </tr>
 <tr>
+    <td class="labelo"><bean:message key="gestorBandeja.permitirGestionExpedientes"/></td>
+    <td class="input">Si<html:radio property="values.permitirGestionExpedientes" value="S"/> No<html:radio property="values.permitirGestionExpedientes" value="N"/></td>    
+</tr>
+<tr>
 	<td class="labelo"><bean:message key="gestorBandeja.tramitesGestionados"/></td>
 	<td class="labelo">
 	<div id="multibox">

@@ -10,9 +10,12 @@ import org.apache.struts.action.*;
 import org.ibit.rol.form.back.form.ImportarForm;
 import org.ibit.rol.form.back.util.Util;
 import org.ibit.rol.form.model.Formulario;
+import org.ibit.rol.form.model.RolUsuarioFormulario;
+import org.ibit.rol.form.model.RolUsuarioFormularioId;
 import org.ibit.rol.form.model.betwixt.Configurator;
 import org.ibit.rol.form.persistence.delegate.DelegateUtil;
 import org.ibit.rol.form.persistence.delegate.FormularioDelegate;
+import org.ibit.rol.form.persistence.delegate.GruposDelegate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -108,7 +111,11 @@ public class ImportarXMLAction extends BaseAction {
 
             log.debug("Gravant formulari: " + formulario.getModelo() + " - " + formulario.getVersion());
             Long idForm = delegate.gravarFormulario(formulario);
-
+            GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
+            if(StringUtils.isNotEmpty(request.getUserPrincipal().getName())){
+				RolUsuarioFormulario userForm = new RolUsuarioFormulario(new RolUsuarioFormularioId(request.getUserPrincipal().getName(),formulario.getId()));
+				gruposDelegate.asociarUsuarioFormulario(userForm);
+			 }
                         
             
             // INDRA: Al guardar nuevo se bloquea automaticamente para el usuario --> desbloqueamos

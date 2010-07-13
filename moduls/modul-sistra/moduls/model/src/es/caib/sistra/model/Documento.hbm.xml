@@ -29,6 +29,7 @@
     <property name="anexoDescargarPlantilla" column="DOC_ANEDPL" length="1"/>
     <property name="anexoCompulsarPreregistro" column="DOC_ANECOM" length="1"/>
     <property name="anexoFotocopia" column="DOC_ANEFOT" length="1"/>
+    <property name="anexoConversionPDF" column="DOC_ANEPDF" length="1"/>
     
     <many-to-one name="tramiteVersion" column="DOC_CODTRV" not-null="true"/>
  

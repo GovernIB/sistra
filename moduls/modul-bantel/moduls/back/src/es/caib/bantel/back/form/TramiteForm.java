@@ -52,6 +52,11 @@ public class TramiteForm extends BantelForm implements InitForm
 		        		}        			
         		}
         		
+        		// Jndi
+        		if (tramite.getTipoAcceso() == Tramite.ACCESO_EJB && StringUtils.isEmpty(tramite.getJndiEJB())){
+		    		errors.add("values.jndiEJB", new ActionError("errors.jndi.vacia"));		        	        		
+        		}
+        		
         		// Usr y pswd
         		if (tramite.getAutenticacionEJB() == Tramite.AUTENTICACION_ESTANDAR){        		
         			if (StringUtils.isEmpty(userPlain) || StringUtils.isEmpty(passPlain))
