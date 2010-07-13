@@ -55,9 +55,8 @@
 	</delete>
 	<delete>
 	    <fileset dir="moduls/modul-sistra/moduls/front/htdocs/firma/aFirma" includes="*"/>		
-	</delete>
-	<delete>
 	    <fileset dir="moduls/modul-zonaper/moduls/front/htdocs/firma/aFirma" includes="*"/>		
+	    <fileset dir="moduls/modul-bantel/moduls/front/htdocs/firma/aFirma" includes="*"/>
 	</delete>	
 </target>	
 	
