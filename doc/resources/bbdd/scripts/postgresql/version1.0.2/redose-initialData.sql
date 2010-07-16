@@ -1,5 +1,5 @@
 --
--- PostgreSQL database dump
+-- Variables inicials sessio Postgresql
 --
 
 SET statement_timeout = 0;
@@ -11,90 +11,26 @@ SET escape_string_warning = off;
 
 SET search_path = public, pg_catalog;
 
---
--- Name: rds_seqdoc; Type: SEQUENCE SET; Schema: public; Owner: -
---
+-- Seqüències
 
 SELECT pg_catalog.setval('rds_seqdoc', 1, false);
-
-
---
--- Name: rds_seqfir; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
 SELECT pg_catalog.setval('rds_seqfir', 1, false);
-
-
---
--- Name: rds_seqfor; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('rds_seqfor', 1, false);
-
-
---
--- Name: rds_seqlog; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
+SELECT pg_catalog.setval('rds_seqfor', 6, false);
 SELECT pg_catalog.setval('rds_seqlog', 1, false);
-
-
---
--- Name: rds_seqmod; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('rds_seqmod', 1, false);
-
-
---
--- Name: rds_seqpla; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('rds_seqpla', 1, false);
-
-
---
--- Name: rds_seqpli; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('rds_seqpli', 1, false);
-
-
---
--- Name: rds_sequbi; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('rds_sequbi', 1, false);
-
-
---
--- Name: rds_sequso; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
+SELECT pg_catalog.setval('rds_seqmod', 9, false);
+SELECT pg_catalog.setval('rds_seqpla', 3, false);
+SELECT pg_catalog.setval('rds_seqpli', 3, false);
+SELECT pg_catalog.setval('rds_sequbi', 2, false);
 SELECT pg_catalog.setval('rds_sequso', 1, false);
+SELECT pg_catalog.setval('rds_seqver', 9, false);
 
-
---
--- Name: rds_seqver; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('rds_seqver', 1, false);
-
-
---
--- Data for Name: rds_format; Type: TABLE DATA; Schema: public; Owner: -
---
+-- Inserts.
 
 INSERT INTO rds_format VALUES (1, 'es.caib.redose.persistence.formateadores.FormateadorPdfFormularios', 'Formateador basado en plantillas PDF');
 INSERT INTO rds_format VALUES (2, 'es.caib.redose.persistence.formateadores.FormateadorPdfPagos', 'Formateador basado en plantillas PDF para Justificantes de Pago');
 INSERT INTO rds_format VALUES (3, 'es.caib.redose.persistence.formateadores.FormateadorPdfJustificante', 'Formateador específico para Justificante');
 INSERT INTO rds_format VALUES (4, 'es.caib.redose.persistence.formateadores.FormateadorPdfJustificanteCopiaInteresado', 'Formateador específico para Justificante (copia interesado)');
 INSERT INTO rds_format VALUES (5, 'es.caib.redose.persistence.formateadores.FormateadorPdfJasper', 'Formateador basado en reportes JasperReport');
-
-
---
--- Data for Name: rds_modelo; Type: TABLE DATA; Schema: public; Owner: -
---
 
 INSERT INTO rds_modelo VALUES (1, 'GE0001JUSTIF', 'Justificant', 'Justificante', 'S');
 INSERT INTO rds_modelo VALUES (2, 'GE0002ASIENTO', 'ASIENTO REGISTRAL', 'ASIENTO REGISTRAL', 'S');
@@ -105,11 +41,6 @@ INSERT INTO rds_modelo VALUES (6, 'GE0006PAGO', 'Datos de Pago (Presencial y Tel
 INSERT INTO rds_modelo VALUES (7, 'GE0008AVINOT', 'Aviso de notificacion', 'Modelo para aviso de notificación', 'S');
 INSERT INTO rds_modelo VALUES (8, 'GE0009OFIREM', 'Oficio de remisión', 'Oficio de remisión para notificaciones', 'S');
 
-
---
--- Data for Name: rds_vers; Type: TABLE DATA; Schema: public; Owner: -
---
-
 INSERT INTO rds_vers VALUES (1, 1, 'Versión 1', 1);
 INSERT INTO rds_vers VALUES (2, 1, 'Versión 1', 2);
 INSERT INTO rds_vers VALUES (3, 1, 'Versión 1', 3);
@@ -119,67 +50,19 @@ INSERT INTO rds_vers VALUES (6, 1, 'Versión 1', 6);
 INSERT INTO rds_vers VALUES (7, 1, 'Versión 1', 7);
 INSERT INTO rds_vers VALUES (8, 1, 'Versión 1', 8);
 
-
---
--- Data for Name: rds_planti; Type: TABLE DATA; Schema: public; Owner: -
---
-
 INSERT INTO rds_planti VALUES (1, 1, 3, 'PDF', 'S', 'S', 'N');
 INSERT INTO rds_planti VALUES (2, 6, 2, 'PDF', 'S', 'S', 'N');
-
-
---
--- Data for Name: rds_plaidi; Type: TABLE DATA; Schema: public; Owner: -
---
 
 INSERT INTO rds_plaidi VALUES (1, 1, 'es', 'cambiar.txt');
 INSERT INTO rds_plaidi VALUES (2, 2, 'es', 'cambiar.txt');
 
-
---
--- Data for Name: rds_arcpli; Type: TABLE DATA; Schema: public; Owner: -
---
-
 INSERT INTO rds_arcpli VALUES (1, '');
 INSERT INTO rds_arcpli VALUES (2, '');
 
-
---
--- Data for Name: rds_ubica; Type: TABLE DATA; Schema: public; Owner: -
---
-
 INSERT INTO rds_ubica VALUES (1, 'RDS', 'RDS defecto', 'es.caib.redose.persistence.plugin.PluginDefaultRDS');
-
-
---
--- Data for Name: rds_docum; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
--- Data for Name: rds_ficher; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
--- Data for Name: rds_firmas; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
--- Data for Name: rds_idioma; Type: TABLE DATA; Schema: public; Owner: -
---
 
 INSERT INTO rds_idioma VALUES ('ca', 'Catalán');
 INSERT INTO rds_idioma VALUES ('es', 'Castellano');
-
-
---
--- Data for Name: rds_tioper; Type: TABLE DATA; Schema: public; Owner: -
---
 
 INSERT INTO rds_tioper VALUES ('ACDO', 'ACTUALIZAR DOCUMENTO');
 INSERT INTO rds_tioper VALUES ('ACFI', 'ACTUALIZAR FICHERO');
@@ -194,17 +77,6 @@ INSERT INTO rds_tioper VALUES ('LIUS', 'LISTAR USOS');
 INSERT INTO rds_tioper VALUES ('NUDO', 'NUEVO DOCUMENTO');
 INSERT INTO rds_tioper VALUES ('NUUS', 'NUEVO USO');
 
-
---
--- Data for Name: rds_logope; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
--- Data for Name: rds_tiuso; Type: TABLE DATA; Schema: public; Owner: -
---
-
 INSERT INTO rds_tiuso VALUES ('BTE', 'BTE');
 INSERT INTO rds_tiuso VALUES ('EDI', 'EDI');
 INSERT INTO rds_tiuso VALUES ('ENV', 'ENVIO');
@@ -214,15 +86,3 @@ INSERT INTO rds_tiuso VALUES ('PRE', 'PRE');
 INSERT INTO rds_tiuso VALUES ('RTE', 'RTE');
 INSERT INTO rds_tiuso VALUES ('RTS', 'RTS');
 INSERT INTO rds_tiuso VALUES ('TRA', 'TRA');
-
-
---
--- Data for Name: rds_usos; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
--- PostgreSQL database dump complete
---
-
