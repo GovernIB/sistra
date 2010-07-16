@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="org.ibit.rol.form.model.PropiedadSalida" table="RFR_PROSAL">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="PRS_CODI">
+            <generator class="sequence">
+                <param name="sequence">RFR_SECPRS</param>
+            </generator>
+        </id>
+
+        <property name="nombre" length="128" not-null="true" column="PRS_NOMBRE"/>
+        <property name="valor" length="4000" column="PRS_VALOR"/>
+        <property name="expresion" column="PRS_EXPRES"/>
+
+        <many-to-one name="salida" not-null="true" column="PRS_CODSAL" foreign-key="RFR_PRSSAL_FK"/>
+
+        <many-to-one name="plantilla" cascade="all" column="PRS_CODPLA" foreign-key="RFR_PRSARC_FK"/>
+
+    </class>
+</hibernate-mapping>

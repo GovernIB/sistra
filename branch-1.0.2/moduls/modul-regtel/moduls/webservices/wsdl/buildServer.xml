@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="buildServer" basedir="." default="main">
+
+	<property name="home.dir" location="${basedir}/../../../"/>
+	<property name="output.dir" location="${home.dir}/output"/>
+	<property name="cxf.home" location ="${home.dir}/../../lib/cxf"/>
+	<property name="src.dir" location="${basedir}/../src"/>
+	<property name="wsdl.dir" location="${basedir}/../wsdl"/>
+	<property name="lib" value="${home.dir}/../../lib" />
+
+	<path id="cxf.classpath">
+		<fileset dir="${cxf.home}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${lib}">
+			<include name="*.jar" />
+			<exclude name="xerces*.jar"/>
+		</fileset>
+	</path>
+
+	<target name="main">
+		<echo>
+			Para generar el servidor de una determinada versión hay que lanzar la tarea correspondiente	
+		</echo>
+	</target>
+
+	<target name="servidorV1">
+		<java classname="org.apache.cxf.tools.wsdlto.WSDLToJava" fork="true">
+
+			<arg value="-p" />
+			<arg value="urn:es:caib:regtel:ws:v1:model:AcuseRecibo=es.caib.regtel.ws.v1.model" />
+			<arg value="-p" />
+			<arg value="urn:es:caib:regtel:ws:v1:model:ReferenciaRDS=es.caib.regtel.ws.v1.model" />
+			<arg value="-p" />
+			<arg value="urn:es:caib:regtel:ws:v1:model:ResultadoRegistro=es.caib.regtel.ws.v1.model" />
+			<arg value="-p" />
+			<arg value="urn:es:caib:regtel:ws:v1:model:FirmaWS=es.caib.regtel.ws.v1.model" />
+			<arg value="-p" />
+			<arg value="urn:es:caib:regtel:ws:v1:model:Documento=es.caib.regtel.ws.v1.model" />
+			<arg value="-p" />
+			<arg value="urn:es:caib:regtel:ws:v1:model:DatosAsunto=es.caib.regtel.ws.v1.model" />
+			<arg value="-p" />
+			<arg value="urn:es:caib:regtel:ws:v1:model:DatosRepresentado=es.caib.regtel.ws.v1.model" />
+			<arg value="-p" />
+			<arg value="urn:es:caib:regtel:ws:v1:model:DatosInteresado=es.caib.regtel.ws.v1.model" />
+			<arg value="-p" />
+			<arg value="urn:es:caib:regtel:ws:v1:model:OficinaRegistral=es.caib.regtel.ws.v1.model" />
+			<arg value="-p" />
+			<arg value="urn:es:caib:regtel:ws:v1:model:Aviso=es.caib.regtel.ws.v1.model" />
+			<arg value="-p" />
+			<arg value="urn:es:caib:regtel:ws:v1:model:OficioRemision=es.caib.regtel.ws.v1.model" />
+			<arg value="-p" />
+			<arg value="urn:es:caib:regtel:ws:v1:model:DatosNotificacion=es.caib.regtel.ws.v1.model" />
+			<arg value="-p" />
+			<arg value="urn:es:caib:regtel:ws:v1:model:DatosExpediente=es.caib.regtel.ws.v1.model" />
+			<arg value="-p" />
+			<arg value="urn:es:caib:regtel:ws:v1:model:DatosRegistroEntrada=es.caib.regtel.ws.v1.model" />
+			<arg value="-p" />
+			<arg value="urn:es:caib:regtel:ws:v1:model:DatosRegistroSalida=es.caib.regtel.ws.v1.model" />
+			<arg value="-p" />
+			<arg value="urn:es:caib:regtel:ws:v1:model:BackofficeFacade=es.caib.regtel.ws.v1.model" />
+			
+			<arg value="-d" />
+			<arg value="${src.dir}" />
+			<arg value="-wsdlLocation" />
+			<arg value="WEB-INF/wsdl/v1/BackofficeFacade.wsdl" />
+			<arg value="${wsdl.dir}/v1/BackofficeFacade.wsdl" />
+			<classpath>
+				<path refid="cxf.classpath"/>
+			</classpath>
+		</java>
+	</target>
+</project>
+

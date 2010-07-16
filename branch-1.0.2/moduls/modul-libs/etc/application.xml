@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE application PUBLIC
+   '-//Sun Microsystems, Inc.//DTD J2EE Application 1.3//EN'
+   'http://java.sun.com/dtd/application_1_3.dtd'>
+
+<application>
+    <display-name>LIBRERIAS COMUNES SISTRA</display-name>
+    <description><![CDATA[Proyecto IBCEGE]]></description>
+	
+	<!--  AXIS 1.4 -->
+	<module><java>lib/axis-1.4.jar</java></module>
+	<module><java>lib/wsdl4j-1.6.2.jar</java></module>
+	
+	<!--  COMMONS -->
+	<module><java>lib/commons-codec-1.3.jar</java></module>
+    <module><java>lib/commons-beanutils-1.6.jar</java></module>
+    <module><java>lib/commons-collections-3.1.jar</java></module>
+    <module><java>lib/commons-digester-1.6.jar</java></module>
+    <module><java>lib/commons-discovery-1.0.jar</java></module>
+    <module><java>lib/commons-fileupload-1.0.jar</java></module>
+    <module><java>lib/commons-httpclient-3.0.1.jar</java></module>
+    <module><java>lib/commons-io-1.0.jar</java></module>    
+    <module><java>lib/commons-lang-2.4.jar</java></module>
+    <module><java>lib/commons-validator-1.1.4.jar</java></module>
+    <module><java>lib/commons-dbutils-1.0.jar</java></module>    
+    <module><java>lib/commons-betwixt-0.7.jar</java></module>       
+    <module><java>lib/jakarta-oro-2.0.7.jar</java></module>    
+	
+	<!-- JAXB 2 -->
+    <module><java>lib/jaxb-api-2.1.jar</java></module>    
+    <module><java>lib/jaxb-impl-2.1.9.jar</java></module>    
+    <module><java>lib/jaxp-api-1.3.jar</java></module>    
+   
+	<!--  StAX: Stream Api for XML -->   
+    <module><java>lib/stax-api-1.0.1.jar</java></module>    
+    
+    <!--  QUARTZ: GESTION PROCESOS BATCH -->
+    <module><java>lib/quartz-all-1.5.2.jar</java></module> 
+	
+	<!--  BSF  -->
+    <module><java>lib/bsf.jar</java></module>
+    <module><java>lib/js.jar</java></module>
+
+	<!--  EH CACHE -->
+    <module><java>lib/ehcache.jar</java></module>    
+    
+    <!--  ITEXT (PDF) -->
+    <module><java>lib/itext.jar</java></module> 
+    
+    <!--  JASPER REPORTS (PDF) -->
+	<!-- Para utilizar jasper reports hay que actualizar la libreria:
+		 \server\default\deploy\jbossweb-tomcat50.sar\commons-digester.jar.
+		 Es la versión 1.5 y necesitamos la 1.6  -->
+    <module><java>lib/jasperreports-3.0.0.jar</java></module>     
+    <module><java>lib/jasper-compiler-jdt.jar</java></module>    
+   
+   <!--  GRAFICOS -->
+   <module><java>lib/jfreechart-1.0.1.jar</java></module> 
+   <module><java>lib/jcommon-1.0.0.jar</java></module> 
+   <module><java>lib/graficos-util.jar</java></module>    
+      
+    <!--  UTILIDADES PLATAFORMA DE TRAMITACION -->    
+    <module><java>lib/sistra-pdf.jar</java></module>		<!-- Generación pdfs  -->
+    <module><java>lib/sistra-dbutils.jar</java></module>	<!-- Utilidades acceso a BBDD -->
+    <module><java>lib/sistra-xml.jar</java></module>		<!-- Generación XMLs Plataforma -->                
+    <module><java>lib/sistra-util.jar</java></module>	 	<!-- Utilidades manejo de cadenas, comprobación nifs, etc -->     
+    <!-- <module><java>lib/sistra-ws.jar</java></module> -->	 		<!-- Utilidades webservice (autenticador Jboss) -->  
+    <module><java>lib/sistra-plugins.jar</java></module> 	<!-- Interfaces plugins organismos -->                  
+    
+    <!--  XML BEANS -->
+    <module><java>lib/resolver.jar</java></module> 
+    <module><java>lib/xbean_xpath.jar</java></module> 
+    <module><java>lib/xbean.jar</java></module> 
+    <module><java>lib/xmlbeans-qname.jar</java></module> 
+    <module><java>lib/xmlpublic.jar</java></module> 
+    
+</application>

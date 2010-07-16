@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:es:caib:regtel:ws:v1:model:DatosRegistroEntrada" xmlns:ns1="urn:es:caib:regtel:ws:v1:model:OficinaRegistral" xmlns:ns2="urn:es:caib:regtel:ws:v1:model:DatosInteresado" xmlns:ns3="urn:es:caib:regtel:ws:v1:model:DatosAsunto" xmlns:ns4="urn:es:caib:regtel:ws:v1:model:Documento" xmlns:ns5="urn:es:caib:regtel:ws:v1:model:DatosRepresentado" targetNamespace="urn:es:caib:regtel:ws:v1:model:DatosRegistroEntrada" version="1.0">
+	<xs:import namespace="urn:es:caib:regtel:ws:v1:model:OficinaRegistral" schemaLocation="OficinaRegistral.xsd"/>
+	<xs:import namespace="urn:es:caib:regtel:ws:v1:model:DatosInteresado" schemaLocation="DatosInteresado.xsd"/>
+	<xs:import namespace="urn:es:caib:regtel:ws:v1:model:DatosRepresentado" schemaLocation="DatosRepresentado.xsd"/>
+	<xs:import namespace="urn:es:caib:regtel:ws:v1:model:DatosAsunto" schemaLocation="DatosAsunto.xsd"/>
+	<xs:import namespace="urn:es:caib:regtel:ws:v1:model:Documento" schemaLocation="Documento.xsd"/>
+	<xs:complexType name="DatosRegistroEntrada">
+		<xs:sequence>
+			<xs:element name="oficinaRegistral" type="ns1:OficinaRegistral"/>
+			<xs:element name="datosInteresado" type="ns2:DatosInteresado"/>
+			<xs:element name="datosRepresentado" type="ns5:DatosRepresentado"/>
+			<xs:element name="datosAsunto" type="ns3:DatosAsunto"/>
+			<xs:element name="documentos" type="ns4:Documentos" nillable="true" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+
+    <definition
+        name=".mainLayout"
+        path="/layout/mainLayout.jsp">
+        <put name="header" value="/moduls/header.jsp"/>
+        <put name="tabs" value="/moduls/tabs.jsp"/>
+        <put name="main" value=".formularioBusqueda"/>
+        <put name="footer" value="/moduls/footer.jsp"/>
+    </definition>
+
+
+        
+    <definition
+    	name=".formularioBusqueda"
+    	path="/formularioBusqueda.jsp" 
+    	controller="es.caib.mobtratel.front.controller.FormularioBusquedaController"/>
+    	
+    <definition
+    	name=".busqueda"
+    	extends=".mainLayout">	
+    	<put name="main" value=".resultadoBusqueda"/>
+   	</definition>
+   	
+   	<definition
+    	name=".resultadoBusqueda"
+    	path="/resultadoBusqueda.jsp" />
+
+   	<definition
+   		name=".detalle"
+   		extends=".mainLayout">	
+   		<put name="main" value=".detalleEnvio"/>
+	</definition>	
+    
+    <definition
+    	name=".detalleEnvio"
+    	path="/detalleEnvio.jsp" />
+    	
+    <definition
+    	name=".mensaje"
+    	extends=".mainLayout"
+    	controller="es.caib.mobtratel.front.controller.MessageController">	
+    	<put name="main" value="/moduls/mensaje.jsp"/>
+   	</definition>
+
+	<definition name=".error" extends=".mensaje"/>
+
+   	<definition
+   		name=".editarEmail"
+   		extends=".mainLayout">	
+   		<put name="main" value=".editarEnvioEmail"/>
+	</definition>	
+
+    <definition
+    	name=".editarEnvioEmail"
+    	path="/editarEnvioEmail.jsp"
+    	controller="es.caib.mobtratel.front.controller.EditarEnvioEmailController" />
+
+   	<definition
+   		name=".editarSMS"
+   		extends=".mainLayout">	
+   		<put name="main" value=".editarEnvioSMS"/>
+	</definition>	
+
+    <definition
+    	name=".editarEnvioSMS"
+    	path="/editarEnvioSms.jsp" 
+    	controller="es.caib.mobtratel.front.controller.EditarEnvioSmsController"/>
+
+   	<definition
+   		name=".editarFichero"
+   		extends=".mainLayout">	
+   		<put name="main" value=".editarEnvioFichero"/>
+	</definition>	
+
+    <definition
+    	name=".editarEnvioFichero"
+    	path="/editarEnvioFichero.jsp"/>
+    	
+    <definition
+    	name=".ayuda"
+    	path="/layout/ayudaLayout.jsp">	
+        <put name="header" value="/moduls/headerAyuda.jsp"/>    	
+    	<put name="main" value="/moduls/ayuda.jsp"/>
+        <put name="footer" value="/moduls/footerAyuda.jsp"/>        
+   	</definition>
+          
+</tiles-definitions>
+

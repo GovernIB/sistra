@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+        
+<hibernate-mapping>
+    <class name="es.caib.redose.model.TipoUso" table="RDS_TIUSO">
+    	<cache usage="read-only"/>
+    	
+    	<id name="codigo" type="string" length="3" unsaved-value="null" column="TIU_CODIGO">
+            <generator class="assigned"/>
+        </id>
+    	
+        <property name="nombre" type="string" column="TIU_NOMBRE" length="50" not-null="true" />
+
+    </class>
+</hibernate-mapping>

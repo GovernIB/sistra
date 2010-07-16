@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class name="es.caib.sistra.model.DatoJustificante" table="STR_DATJUS">
+	<cache usage="read-write"/>
+     <id name="codigo" unsaved-value="null" column="DJS_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">STR_SEQDJS</param>
+          </generator>
+      </id>
+
+    <property  name="tipo" column="DJS_BLQCAM" not-null="true" length="1"/>
+    <property  name="orden"  column="DJS_ORDEN"  not-null="true" length="4"/>
+    <property  name="referenciaCampo"  column="DJS_CAMPO" length="500"/>
+  	<property  name="valorCampoScript" type="binary"  column="DJS_CAMPS"/>
+	<property  name="visibleScript" type="binary"  column="DJS_VISIBLE"/>
+	
+    <many-to-one name="especTramiteNivel" column="DJS_CODETN" not-null="true"/>
+    
+    <map name="traducciones" cascade="all" table="STR_TRADJS">
+          <cache usage="read-write"/>
+          <key column="TDJ_CODDJS"/>
+          <index column="TDJ_CODIDI" type="string" length="2"/>
+          <composite-element class="es.caib.sistra.model.TraDatoJustificante">
+              <property name="descripcion" length="200" column="TDJ_DESC"/>
+          </composite-element>
+     </map>
+    
+</class>
+</hibernate-mapping>

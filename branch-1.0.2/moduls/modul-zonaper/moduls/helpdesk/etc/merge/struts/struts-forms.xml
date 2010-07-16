@@ -1,0 +1,24 @@
+
+<form-bean
+    name="consultaTramitacionForm"
+    type="es.caib.zonaper.helpdesk.front.form.ConsultaTramitacionForm" />
+<form-bean
+    name="busquedaClaveTramitacionForm"
+    type="es.caib.zonaper.helpdesk.front.form.BusquedaClaveTramitacionForm" />    
+<form-bean
+    name="estadoTramiteForm"
+    type="es.caib.zonaper.helpdesk.front.form.EstadoTramiteForm" />    
+<form-bean
+    name="pagosTelematicosForm"
+    type="es.caib.zonaper.helpdesk.front.form.PagosTelematicosForm" />     
+<form-bean
+    name="detallePagoForm"
+    type="es.caib.zonaper.helpdesk.front.form.DetallePagoForm" />     
+<form-bean
+    name="busquedaUsuarioForm"
+    type="es.caib.zonaper.helpdesk.front.form.BusquedaUsuarioForm" />     
+<form-bean
+    name="modificarUsuarioForm"
+    type="es.caib.zonaper.helpdesk.front.form.ModificarUsuarioForm" />         
+       
+
