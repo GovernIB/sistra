@@ -1,5 +1,5 @@
 --
--- PostgreSQL database dump
+-- Variables inicials sessio Postgresql
 --
 
 SET statement_timeout = 0;
@@ -11,16 +11,9 @@ SET escape_string_warning = off;
 
 SET search_path = public, pg_catalog;
 
---
--- Data for Name: aud_modul; Type: TABLE DATA; Schema: public; Owner: -
---
+-- Inserts.
 
 INSERT INTO aud_modul VALUES ('CATALG', 'Tramitación', 2, 'Tramitació');
-
-
---
--- Data for Name: aud_tipoev; Type: TABLE DATA; Schema: public; Owner: -
---
 
 INSERT INTO aud_tipoev VALUES ('AZPER', 'CATALG', 'S', 'Acceso a la Zona Personal', 3, 'TING', 'es.caib.audita.persistence.util.evento.CuadroMandoDetalleHandler', 'Número total de Accesos al Buzón Personal. Este contador representa los accesos a la Zona Personal de Usuarios Autenticados.', 'Accés a la Zona Personal', 'Nombre total d''Accesos a la Bustia Personal. Aquest contador representa els accesos a la Zona Personal d''Usuaris Autenticats.');
 INSERT INTO aud_tipoev VALUES ('CARTRA', 'CATALG', 'S', 'Carga de un trámite', 2, 'TINDG', 'es.caib.audita.persistence.util.evento.CuadroMandoDetalleHandler', 'Representa el número total de trámites cargados. El sistema permite recuperar los datos de un trámite que no se ha terminando, pudiendo así, acabar la tramitación.', 'Càrrega d''un tràmit', 'Representa el nombre total de tràmits carregats. El sistema permet recuperar les dades d''un tràmit que no s''haja acabat, podent així, acabar la tramitació en qualsevol moment.');
@@ -32,27 +25,4 @@ INSERT INTO aud_tipoev VALUES ('PAGO', 'CATALG', 'S', 'Pago', 7, 'TINDGX', 'es.c
 INSERT INTO aud_tipoev VALUES ('PATEAN', 'CATALG', 'S', 'Anular pago telemático', 8, NULL, NULL, 'Pagos telemáticos anulados', 'Pagament telemàtic anul·lat', 'Pagaments telemàtics anul·lats');
 INSERT INTO aud_tipoev VALUES ('PATECO', 'CATALG', 'S', 'Confirmar pago telemático', 9, NULL, NULL, 'Pagos telemáticos confirmados', 'Pagament telemàtic confirmat', 'Pagaments telemàtics confirmats');
 INSERT INTO aud_tipoev VALUES ('PRETRA', 'CATALG', 'S', 'Preregistro tramite', 5, 'TINDGX', 'es.caib.audita.persistence.util.evento.PreRegistroVisualizacionHandler', 'Número total de trámites con Preregistro terminados. Representa los trámites que se han almacenado en la zona de pre-registro. Para que el trámite se de por concluido tiene que confirmarse con la presentación de documentación', 'Preregistre tràmit', 'Nombre total de tràmits amb Preregistre acabats. Representa els tràmits que s''han emmagatzemat en la zona de pre-registre. Per a que el tràmit es done per acabat s''ha de confirmar amb la presentació de documentació');
-
-
---
--- Data for Name: aud_audit; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
--- Data for Name: aud_inici; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
--- Data for Name: aud_tabs; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
--- PostgreSQL database dump complete
---
 
