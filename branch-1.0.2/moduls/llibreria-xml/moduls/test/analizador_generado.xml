@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<nodo_raiz>
-    <nodo1>
-        <nodo1.1>SÍ</nodo1.1>
-        <nodo1.1>NO</nodo1.1>
-        <nodo1.2>Juan Ibañez</nodo1.2>
-    </nodo1>
-    <nodo2>Texto del nodo 2</nodo2>
-</nodo_raiz>

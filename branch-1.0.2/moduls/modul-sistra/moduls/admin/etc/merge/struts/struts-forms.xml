@@ -1,6 +1,0 @@
-<form-bean
-    name="cuadernoCargaForm"
-    type="es.caib.sistra.admin.form.CuadernoCargaForm" />
-<form-bean
-    name="ficheroCuadernoForm"
-    type="es.caib.sistra.admin.form.FicheroCuadernoForm" />    
