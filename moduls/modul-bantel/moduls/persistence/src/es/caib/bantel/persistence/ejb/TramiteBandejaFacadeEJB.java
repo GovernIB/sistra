@@ -22,6 +22,7 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
+import net.sf.hibernate.impl.SessionFactoryImpl;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -457,7 +458,8 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
         	String anyo = sdf.format(new Date());
         	 
          	// Obtenemos secuencia del año actual
-        	String sql = "SELECT BTE_SEQE" + anyo.substring(2) + ".NEXTVAL FROM DUAL";
+        	//String sql = "SELECT BTE_SEQE" + anyo.substring(2) + ".NEXTVAL FROM DUAL";
+        	String sql = ((SessionFactoryImpl)session.getSessionFactory()).getDialect().getSequenceNextValString("BTE_SEQE" + anyo.substring(2));
             pst = session.connection().prepareStatement(sql);
         	pst.execute(); 
         	ResultSet rs = pst.getResultSet();
