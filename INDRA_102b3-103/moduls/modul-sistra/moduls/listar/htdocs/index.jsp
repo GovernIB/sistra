@@ -38,8 +38,10 @@ try {
 	
 	con = datasource.getConnection();
 	
-	s = con.createStatement();         
-    s.setQueryTimeout(30);
+	s = con.createStatement();
+	// TODO: Incompatible amb drivers Postgresql. Si realment es necessari, cercar
+	// alternativa igual que a PluguinDominio, sinó llevar.
+    //s.setQueryTimeout(30);
 	rs = s.executeQuery("SELECT TRA_IDENTI, TRV_VERSIO,TTR_DESC FROM STR_TRAMIT,STR_TRAVER,STR_TRATRA WHERE STR_TRAMIT.TRA_CODIGO = STR_TRAVER.TRV_CODTRA AND STR_TRAMIT.TRA_CODIGO = STR_TRATRA.TTR_CODTRA AND STR_TRATRA.TTR_CODIDI = 'es'  ORDER BY TRA_IDENTI,TRV_VERSIO");            
 	
 	String id="",des,idAnt;
