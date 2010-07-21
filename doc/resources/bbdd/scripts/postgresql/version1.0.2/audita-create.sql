@@ -148,3 +148,4 @@ alter table AUD_TIPOEV
    add constraint AUD_TIPMOD_FK foreign key (TIP_MODUL)
       references AUD_MODUL (MOD_MODUL);
 
+create sequence AUD_AUDSEQ;

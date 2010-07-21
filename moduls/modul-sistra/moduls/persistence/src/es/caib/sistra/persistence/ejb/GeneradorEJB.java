@@ -9,6 +9,7 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
 import net.sf.hibernate.Session;
+import net.sf.hibernate.impl.SessionFactoryImpl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -54,8 +55,9 @@ public abstract class GeneradorEJB extends HibernateEJB {
 	       	String anyo = sdf.format(new Date());
 	       	 
 	        // Obtenemos secuencia del año actual
-	       	String sql = "SELECT STR_SEQP" + anyo.substring(2) + ".NEXTVAL FROM DUAL";
-	           pst = session.connection().prepareStatement(sql);
+	       	//String sql = "SELECT STR_SEQP" + anyo.substring(2) + ".NEXTVAL FROM DUAL";
+	       	String sql = ((SessionFactoryImpl)session.getSessionFactory()).getDialect().getSequenceNextValString("STR_SEQP" + anyo.substring(2));
+	        pst = session.connection().prepareStatement(sql);
 	       	pst.execute(); 
 	       	ResultSet rs = pst.getResultSet();
 	       	rs.next();
@@ -89,8 +91,9 @@ public abstract class GeneradorEJB extends HibernateEJB {
 	       	String anyo = sdf.format(new Date());
 	       	 
 	        // Obtenemos secuencia del año actual
-	       	String sql = "SELECT STR_SEQE" + anyo.substring(2) + ".NEXTVAL FROM DUAL";
-	        pst = session.connection().prepareStatement(sql);
+	       	//String sql = "SELECT STR_SEQE" + anyo.substring(2) + ".NEXTVAL FROM DUAL";
+	       	String sql = ((SessionFactoryImpl)session.getSessionFactory()).getDialect().getSequenceNextValString("STR_SEQE" + anyo.substring(2));
+	       	pst = session.connection().prepareStatement(sql);
 	       	pst.execute(); 
 	       	ResultSet rs = pst.getResultSet();
 	       	rs.next();
