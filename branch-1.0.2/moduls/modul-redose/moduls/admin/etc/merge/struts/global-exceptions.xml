@@ -1,0 +1,10 @@
+<global-exceptions>
+        
+    <exception 
+        key="errors.delegate" 
+        type="es.caib.redose.persistence.delegate.DelegateException"
+        path="/fail.jsp"
+        handler="es.caib.redose.admin.action.DelegateExceptionHandler"
+    />
+        
+</global-exceptions>

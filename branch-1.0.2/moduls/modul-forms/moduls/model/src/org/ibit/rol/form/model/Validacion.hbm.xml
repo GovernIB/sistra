@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.form.model.Validacion" table="RFR_VALIDA">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="VAL_CODI">
+            <generator class="sequence">
+                <param name="sequence">RFR_SEQVAL</param>
+            </generator>
+        </id>
+
+        <property name="orden" not-null="true" column="VAL_ORDEN"/>
+        <property name="valores" type="serializable" column="VAL_VALORE"/>
+        <many-to-one name="mascara" column="VAL_CODMAS" not-null="true" foreign-key="RFR_VALMAS_FK"/>
+        <many-to-one name="campo" column="VAL_CODCAM" not-null="true" foreign-key="RFR_VALCAM_FK"/>
+
+    </class>
+</hibernate-mapping>

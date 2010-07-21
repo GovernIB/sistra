@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class name="es.caib.zonaper.model.Expediente" table="ZPE_EXPEDI">
+
+	<cache usage="read-write"/>
+
+    <id name="codigo" unsaved-value="null" column="EXP_CODIGO">
+         <generator class="sequence">
+             <param name="sequence">ZPE_SEQEXP</param>
+         </generator>
+     </id>
+
+	<property name="claveExpediente"  column="EXP_CLAVE" length="50"/>
+	<property name="idioma"  column="EXP_IDIOMA" length="2"/>	
+	<property name="fecha" column="EXP_FECEXP" not-null="true"/>
+	<property name="fechaConsulta" column="EXP_FECCON" not-null="false"/>
+    <property name="idExpediente"  column="EXP_IDEXP"  not-null="true" unique="true" length="50"/>
+    <property name="descripcion"  column="EXP_DESC"  not-null="true" length="512"/>
+    <property name="seyconCiudadano"  column="EXP_SEYCIU" length="1536"/>
+    <property name="usuarioSeycon"  column="EXP_USER"  not-null="true" length="1536"/>
+    <property name="nifRepresentado"  column="EXP_NIFRDO" />    
+    <property name="nombreRepresentado"  column="EXP_NOMRDO" />    
+    <property name="unidadAdministrativa" column="EXP_UNIADM" not-null="true" length="19"/>
+   	<property name="numeroEntradaBTE"  column="EXP_NUMBTE" length="50"/>
+   	
+	<set name="elementos" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="ELE_FECHA">
+		<cache usage="read-write"/>
+	    <key column="ELE_CODEXP"/>
+        <one-to-many class="es.caib.zonaper.model.ElementoExpediente"/>
+	</set>
+	
+	<!--  Fecha inicio/fin: calculadas automaticamente a partir del primer/ultimo elemento -->
+	<property name="fechaInicio" column="EXP_FECINI" />
+	<property name="fechaFin" column="EXP_FECULT" />
+	
+	<!--  Estado expediente: calculado automaticamente a partir del ultimo elemento -->
+	<property name="estado" column="EXP_ESTADO" />
+   	
+	<!--  Opciones aviso movilidad -->
+	<property name="habilitarAvisos" column="EXP_AVISOS" />
+	<property name="avisoSMS" column="EXP_AVISMS" />
+	<property name="avisoEmail" column="EXP_AVIEMA" />
+	
+</class>
+</hibernate-mapping>

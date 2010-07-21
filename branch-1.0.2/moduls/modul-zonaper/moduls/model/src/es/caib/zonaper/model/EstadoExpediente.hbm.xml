@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+
+<hibernate-mapping>
+	<class name="es.caib.zonaper.model.EstadoExpediente"
+		table="ZPE_ESTEXP" >
+				
+		<id name="id" unsaved-value="null" column="EST_ID">
+			<generator class="assigned"/>
+		</id>
+				
+		<property name="tipo" column="EST_TIPO"/>
+		<property name="codigo"  column="EST_CODIGO"/>
+		<property name="descripcion"  column="EST_DESC"/>
+		<property name="fechaInicio"  column="EST_FECINI"/>
+		<property name="fechaActualizacion"  column="EST_FECFIN"/>				
+		<property name="estado"  column="EST_ESTADO"/>
+		<property name="autenticado"  column="EST_AUTENT"/>
+		<property name="user"  column="EST_USER"/>
+		<property name="nifRepresentado"  column="EST_NIFRDO"/>
+		<property name="idioma"  column="EST_IDIOMA"/>
+		<property name="codigoExpediente"  column="EST_CODEXP"/>
+		<property name="unidadAdministrativa"  column="EST_UNIADM"/>
+		
+		
+	</class>
+</hibernate-mapping>
