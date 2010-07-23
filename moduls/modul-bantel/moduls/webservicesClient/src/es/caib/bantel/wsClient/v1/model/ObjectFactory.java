@@ -34,11 +34,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link BantelFacadeException }
+     * Create an instance of {@link AvisoEntradasResponse }
      * 
      */
-    public BantelFacadeException createBantelFacadeException() {
-        return new BantelFacadeException();
+    public AvisoEntradasResponse createAvisoEntradasResponse() {
+        return new AvisoEntradasResponse();
     }
 
     /**
@@ -50,19 +50,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AvisoEntradasResponse }
+     * Create an instance of {@link BantelFacadeException }
      * 
      */
-    public AvisoEntradasResponse createAvisoEntradasResponse() {
-        return new AvisoEntradasResponse();
-    }
-
-    /**
-     * Create an instance of {@link ReferenciasEntrada }
-     * 
-     */
-    public ReferenciasEntrada createReferenciasEntrada() {
-        return new ReferenciasEntrada();
+    public BantelFacadeException createBantelFacadeException() {
+        return new BantelFacadeException();
     }
 
     /**
@@ -71,6 +63,14 @@ public class ObjectFactory {
      */
     public ReferenciaEntrada createReferenciaEntrada() {
         return new ReferenciaEntrada();
+    }
+
+    /**
+     * Create an instance of {@link ReferenciasEntrada }
+     * 
+     */
+    public ReferenciasEntrada createReferenciasEntrada() {
+        return new ReferenciasEntrada();
     }
 
     /**

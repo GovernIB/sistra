@@ -70,6 +70,6 @@
 </tr>
 <tiles:insert page="/moduls/editarExpresiones.jsp">
     <tiles:put name="tabindex" value="<%=new Integer(ti)%>" />
-    <tiles:put name="expresionesPermitidas" value="45" />
+    <tiles:put name="expresionesPermitidas" value="145" />
 </tiles:insert>
 <% ti += 5; %>

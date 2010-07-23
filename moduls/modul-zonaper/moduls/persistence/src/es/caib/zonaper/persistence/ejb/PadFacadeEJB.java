@@ -555,7 +555,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     {    
     	EntradaPreregistro entrada = null;
 		try {
-			entrada = DelegateUtil.getEntradaPreregistroDelegate().obtenerEntradaPreregistroReg( codigoPreregistro );
+			entrada = DelegateUtil.getEntradaPreregistroDelegate().obtenerEntradaPreregistro( codigoPreregistro );
 		} catch (es.caib.zonaper.persistence.delegate.DelegateException e) {
 			throw new ExcepcionPAD("No se puede acceder a la entrada de preregistro " + codigoPreregistro, e);
 		}
@@ -859,7 +859,8 @@ public abstract class PadFacadeEJB implements SessionBean{
 
     	// Guardamos en log de notificacion telematica
     	NotificacionTelematicaDelegate td = DelegateUtil.getNotificacionTelematicaDelegate();    	
-    	td.grabarNotificacionTelematica(notificacion);
+    	Long codigoNotificacion = td.grabarNotificacionTelematica(notificacion);
+    	notificacion.setCodigo(codigoNotificacion);
     	
     	// Creamos elemento expediente asociado a la notificacion y actualizamos expediente
     	ElementoExpediente el = new ElementoExpediente();
@@ -867,7 +868,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	el.setTipoElemento(ElementoExpediente.TIPO_NOTIFICACION);
     	el.setFecha(notificacion.getFechaRegistro());
     	el.setCodigoElemento(notificacion.getCodigo());
-    	expe.addElementoExpediente(el);
+    	expe.addElementoExpediente(el,notificacion);
     	DelegateUtil.getExpedienteDelegate().grabarExpediente(expe);
     	
     	// Realizamos aviso de movilidad
@@ -1346,6 +1347,13 @@ public abstract class PadFacadeEJB implements SessionBean{
 					generarUsosRDS(ConstantesRDS.TIPOUSO_REGISTROENTRADA,asiento,mapRefRDSDocumentos,refRDSAsiento,refRDSJustificante,numeroRegistro);
 			}
 			exitoProceso = true;
+			
+			
+			// En caso de que pertenezca a un expediente, acualizamos estado expediente
+			DelegateUtil.getProcesosAutoDelegate().actualizaEstadoExpedienteDelElementoExpediente(
+							ElementoExpediente.TIPO_ENTRADA_PREREGISTRO,
+							entrada.getCodigo());
+			
 			
 			// Realizamos log en AUDITA			
 			//	Si es la confirmacion de un preenvio con confirmacion automatica no lo auditamos ya que se audito al hacerlo automaticamente	

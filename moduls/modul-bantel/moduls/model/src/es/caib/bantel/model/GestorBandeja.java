@@ -15,6 +15,7 @@ public class GestorBandeja implements Serializable
 	private Date ultimoAviso;
 	private char permitirCambioEstado = 'N';
 	private char permitirCambioEstadoMasivo = 'N';
+	private char permitirGestionExpedientes = 'N';
 	
 	public String getEmail()
 	{
@@ -88,5 +89,11 @@ public class GestorBandeja implements Serializable
 	}
 	public void setPermitirCambioEstadoMasivo(char permitirCambioEstadoMasivo) {
 		this.permitirCambioEstadoMasivo = permitirCambioEstadoMasivo;
+	}
+	public char getPermitirGestionExpedientes() {
+		return permitirGestionExpedientes;
+	}
+	public void setPermitirGestionExpedientes(char permitirGestionExpedientes) {
+		this.permitirGestionExpedientes = permitirGestionExpedientes;
 	}
 }

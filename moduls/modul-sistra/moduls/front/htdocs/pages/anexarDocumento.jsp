@@ -9,12 +9,12 @@
 <bean:define id="urlBorrarAnexo">
         <html:rewrite page="/protected/borrarAnexo.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.2.3.pack.js"></script>
 <script type="text/javascript">
 <!--
 	
 	var mensajeEnviando = '<bean:message key="anexarDocumentos.mensajeAnexar"/>';
-	
-	
+	var mensajePreparando = '<bean:message key="anexar.documento.preparar"/>';
 	<logic:equal name="anexo" property="firmar" value="true">
 		<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
@@ -30,17 +30,19 @@
 		
 				applet.setPassword( pin );
 				
-				var rutaFichero = document.anexarDocumentoForm.datos.value;
-				if ( rutaFichero == '' )
+				var contenidoFichero = $('#documentoFirmar').val();
+				if ( contenidoFichero == '' )
 				{
+					ocultarCapaInfo();
 					alert( "<bean:message key="firmarDocumento.introducirFichero"/>" );
 					document.anexarDocumentoForm.datos.focus();
 					document.anexarDocumentoForm.datos.select();
 					return false;
 				}
 				
-				firma = applet.firmarFichero( rutaFichero, contentType );	
+				firma = applet.firmarFicheroB64( $('#documentoFirmar').val(), contentType );	
 				if (firma == null || firma == ''){
+					ocultarCapaInfo();
 					alert(applet.getLastError());
 					return false;
 				}
@@ -59,13 +61,15 @@
 			function firmarAFirma(form){
 			
 			  if (clienteFirma == undefined) { 
+		          ocultarCapaInfo();
 		          alert("No se ha podido instalar el entorno de firma");
 		          return false;
 	        	}
 			
-				var rutaFichero = document.anexarDocumentoForm.datos.value;
-				if ( rutaFichero == '' )
+				var contenidoFichero = $('#documentoFirmar').val();
+				if ( contenidoFichero == '' )
 				{
+					ocultarCapaInfo();
 					alert( "<bean:message key="firmarDocumento.introducirFichero"/>" );
 					document.anexarDocumentoForm.datos.focus();
 					document.anexarDocumentoForm.datos.select();
@@ -76,12 +80,20 @@
 				clienteFirma.setSignatureAlgorithm("sha1WithRsaEncryption");
 				clienteFirma.setSignatureMode("EXPLICIT");
 				clienteFirma.setSignatureFormat("CMS");
-				clienteFirma.setFileuri(rutaFichero);
+				if($('#documentoFirmar').val() == null || $('#documentoFirmar').val() == ''){
+					ocultarCapaInfo();
+					return false;
+				}
+		
+				// Pasamos de b64 urlSafe a b64
+				var b64 = b64UrlSafeToB64($('#documentoFirmar').val());
 				
+				clienteFirma.setData(b64);
 				clienteFirma.sign();
 				
 				if(clienteFirma.isError()){
 					error = 'Error: '+clienteFirma.getErrorMessage();
+					ocultarCapaInfo();
 					alert(error);
 					return false;
 				}else{	
@@ -118,12 +130,49 @@
 			</logic:equal>			
 		}
 				
+		ocultarCapaInfo();
 		accediendoEnviando(mensajeEnviando);
 
 		// Enviar formulario
 		form.submit();
 	}
 	
+	function fileUploaded(idInstancia){
+		var url_json = '<html:rewrite page="/recuperarDocumento.do"/>';
+		var data ='idInstancia='+idInstancia;
+		$.postJSON(
+			url_json,data,
+			function(datos){
+				if (datos.error==""){								
+					$('#documentoFirmar').val(datos.documento);
+					anexarDocumento(document.anexarDocumentoForm,<%=anexo.isFirmar()%>);
+				}else{
+					var mensajeErrorUpload = '<bean:message key="anexar.documento.null"/>';
+					alert(mensajeErrorUpload);
+					ocultarCapaInfo();
+				}
+			}
+		);
+		accediendoEnviando(mensajePreparando);
+	}
+	
+	function errorFileUploaded(error){
+		alert(error);
+	}
+	
+	$(document).ready(function(){
+		$.postJSON = function(url, data, callback) {
+        	return jQuery.ajax({
+		        'type': 'POST',
+		        'url': url,
+		        'data': data,
+		        'dataType': 'json',
+		        'success': callback
+		    });
+		};
+		        
+		}
+	);
 //-->
 </script>
 
@@ -202,7 +251,8 @@
 				<div id="anexarDocs">								
 					<!--  Anexar documento telematicamente -->
 					<logic:equal name="anexo" property="anexoPresentarTelematicamente" value="true">
-						<html:form action="/protected/anexarDocumento" enctype="multipart/form-data" >																			
+						<iframe id="iframeUpload" name="iframeUpload"></iframe>
+						<html:form method="post" action="/protected/anexarDocumento" enctype="multipart/form-data">																			
 							<logic:equal name="anexo" property="anexoGenerico" value="true">
 								<p class="apartado">
 									<bean:message key="anexarDocumentos.anexar.instrucciones.parrafoGenericos"/>
@@ -214,14 +264,24 @@
 								<!--  Instrucciones anexo -->
 								<bean:message key="anexarDocumentos.anexar.instrucciones.parrafo1"/>
 								<br/>
+								<input type='hidden' id='documentoFirmar' name='documentoFirmar' value='' />
 								<html:hidden name="irAAnexarForm" property="ID_INSTANCIA"/>
 								<html:hidden name="irAAnexarForm" property="instancia" />	
 								<html:hidden name="irAAnexarForm" property="identificador" />
 								<html:hidden property="firma" />
 								<html:hidden property="extensiones" value="<%=anexo.getAnexoExtensiones()%>" />
 								<html:hidden property="tamanyoMaximo"  value="<%=Integer.toString(anexo.getAnexoTamanyo())%>" />																					
+							</p>
+						</html:form>
+						<html:form method="post" action="/protected/uploadDocumento" enctype="multipart/form-data" target="iframeUpload">																			
+							<p class="apartado">
+								<html:hidden name="irAAnexarForm" property="ID_INSTANCIA"/>
+								<html:hidden name="irAAnexarForm" property="instancia" />	
+								<html:hidden name="irAAnexarForm" property="identificador" />
+								<html:hidden property="extensiones" value="<%=anexo.getAnexoExtensiones()%>" />
+								<html:hidden property="tamanyoMaximo"  value="<%=Integer.toString(anexo.getAnexoTamanyo())%>" />																					
 								<html:file property="datos" styleId="datos" size="70"/> 						
-								<input name="anexarDocsBoton" id="anexarDocsBoton" type="button" value="<bean:message key="anexarDocumentos.anexar.boton"/>" onclick="javascript:anexarDocumento(this.form,<%=anexo.isFirmar()%>);"/>
+								<input name="anexarDocsBoton" id="anexarDocsBoton" type="button" value="<bean:message key="anexarDocumentos.anexar.boton"/>" onclick="this.form.submit()"/>
 							</p>
 						</html:form>
 						<!--  alerta tamanyos -->

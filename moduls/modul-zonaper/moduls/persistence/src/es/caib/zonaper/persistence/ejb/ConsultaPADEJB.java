@@ -83,6 +83,8 @@ public abstract class ConsultaPADEJB implements SessionBean {
 	  */
 	 private PersonaPAD resetearDatosPersonaPAD(PersonaPAD p) {
 		 
+		 	if (p == null) return null;
+		 
 			if (this.ctx.getCallerPrincipal().getName().equals(p.getUsuarioSeycon())) return p; 
 			 
 			PersonaPAD pr = new PersonaPAD();

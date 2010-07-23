@@ -14,6 +14,7 @@
 	<property name="lib" value="${home.dir}/../../lib" />
 	<property name="wsdl.dir" location="${basedir}/wsdl"/>
 	<property name="web.product" location="${output.dir}/moduls"/>
+		
 	<path id="cxf.classpath">
       <fileset dir="${cxf.home}">
          <include name="*.jar"/>
@@ -25,13 +26,15 @@
    		 <include name="*.jar" />
    	  	 <exclude name="xerces*.jar"/>
 	  </fileset>
+	  <fileset dir="${lib}/client">
+		<include name="redose-client.jar"/>
+	  </fileset>       	
       <fileset dir="${web.product}">
       	<include name="zonaper-model.jar" />
         <include name="zonaper-persistence-client.jar" />
 	 	<include name="zonaper-persistence.jar" />
       </fileset>
     </path>
-	
     <target name="prepare">
     	<mkdir dir="${web.product}"/>
     </target>

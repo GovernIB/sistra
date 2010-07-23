@@ -38,6 +38,9 @@
         <fileset dir="${lib.dir}">
             <include name="*.jar"/>
         </fileset>
+    	<fileset dir="${lib.dir}/openoffice">
+            <include name="*.jar"/>
+        </fileset>
     	<fileset dir="${distribucion.dir}/lib"> 
             <include name="sistra-util.jar"/>
             <include name="sistra-plugins.jar"/>
@@ -168,6 +171,7 @@
             <fileset dir="${ejb.etc}" includes="ehcache.xml"/>
             <fileset dir="${ejb.src}/" includes="**/*.JPG"/>        	
             <fileset dir="${ejb.src}/" includes="**/*.properties"/>        	
+        	<fileset dir="${ejb.src}" includes="**/*.xml" />
         </jar>
     </target>
 

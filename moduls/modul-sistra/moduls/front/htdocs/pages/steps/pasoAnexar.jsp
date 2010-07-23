@@ -11,6 +11,9 @@
 <bean:define id="urlBorrarAnexo">
         <html:rewrite page="/protected/borrarAnexo.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
+<bean:define id="urlMostrarAnexo">
+        <html:rewrite page="/protected/mostrarDocumento.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
+</bean:define>
 <bean:define id="genericoAnterior" value="" type="java.lang.String"/>
 <%
 	boolean primero;
@@ -142,7 +145,14 @@
 								<%-- Si es una instancia del genérico la situamos debajo --%>
 								<logic:equal name="genericoAnterior" value="<%=anexo.getIdentificador()%>">
 									<br/>
-										&nbsp;&nbsp;<strong>- <bean:write name="anexo" property="anexoGenericoDescripcion" /> <logic:notEmpty name="anexo" property="anexoFichero">(<bean:write name="anexo" property="anexoFichero" />)</logic:notEmpty></strong>
+										&nbsp;&nbsp;
+										<strong>- <bean:write name="anexo" property="anexoGenericoDescripcion" /> 
+											<logic:notEmpty name="anexo" property="anexoFichero">
+											(<html:link href="<%= urlMostrarAnexo + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>">
+												<bean:write name="anexo" property="anexoFichero" />
+											</html:link>)
+											</logic:notEmpty>
+										</strong>
 										<logic:equal name="flujoDocumentos" property="<%=anexo.getIdentificador()%>" value="true">										
 										 - <html:link href="<%= urlBorrarAnexo + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>"><bean:message key="pasoAnexar.documentos.quitarFichero"/></html:link>																												
 										</logic:equal>
@@ -284,7 +294,7 @@
 												<bean:define id="genericoAnteriorMaxInstancias" name="anexo" property="anexoGenericoMax" type="java.lang.Integer"/> 
 												<bean:message key="pasoAnexar.documentos.ficherosGenericosAnexadoActualmente"/>
 												<br/>
-												 &nbsp;&nbsp;<strong>- <bean:write name="anexo" property="anexoGenericoDescripcion" /> <logic:notEmpty name="anexo" property="anexoFichero">(<bean:write name="anexo" property="anexoFichero" />)</logic:notEmpty></strong>
+												 &nbsp;&nbsp;<strong>- <bean:write name="anexo" property="anexoGenericoDescripcion" /> <logic:notEmpty name="anexo" property="anexoFichero">(<html:link href="<%= urlMostrarAnexo + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>"><bean:write name="anexo" property="anexoFichero" /></html:link>)</logic:notEmpty></strong>
 												 <logic:equal name="flujoDocumentos" property="<%=anexo.getIdentificador()%>" value="true">										
 													  - <html:link href="<%= urlBorrarAnexo + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>"><bean:message key="pasoAnexar.documentos.quitarFichero"/></html:link>												
 												 </logic:equal>
@@ -292,7 +302,7 @@
 											<%-- No Generico  --%>
 											<logic:equal name="anexo" property="anexoGenerico" value="false">
 												<bean:message key="pasoAnexar.documentos.ficheroAnexadoActualmente"/>
-												<strong><bean:write name="anexo" property="anexoFichero" /></strong>
+												<strong><html:link href="<%= urlMostrarAnexo + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>"><bean:write name="anexo" property="anexoFichero" /></html:link></strong>
 												<logic:equal name="flujoDocumentos" property="<%=anexo.getIdentificador()%>" value="true">										
 													 - <html:link href="<%= urlBorrarAnexo + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>"><bean:message key="pasoAnexar.documentos.quitarFichero"/></html:link>
 												</logic:equal>												
@@ -333,7 +343,7 @@
 													<bean:define id="genericoAnteriorMaxInstancias" name="anexo" property="anexoGenericoMax" type="java.lang.Integer"/> 
 													<bean:message key="pasoAnexar.documentos.ficherosGenericosAnexadoActualmente"/>
 													<br/>
-													 &nbsp;&nbsp;<strong>- <bean:write name="anexo" property="anexoGenericoDescripcion" /> <logic:notEmpty name="anexo" property="anexoFichero">(<bean:write name="anexo" property="anexoFichero" />)</logic:notEmpty></strong>
+													 &nbsp;&nbsp;<strong>- <bean:write name="anexo" property="anexoGenericoDescripcion" /> <logic:notEmpty name="anexo" property="anexoFichero">(<html:link href="<%= urlMostrarAnexo + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>"><bean:write name="anexo" property="anexoFichero" /></html:link>)</logic:notEmpty></strong>
 													 <logic:equal name="flujoDocumentos" property="<%=anexo.getIdentificador()%>" value="true">										
 														  - <html:link href="<%= urlBorrarAnexo + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>"><bean:message key="pasoAnexar.documentos.quitarFichero"/></html:link>												
 													 </logic:equal>

@@ -40,31 +40,13 @@ public class AnexarDocumentoAction extends BaseAction
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( formulario.getID_INSTANCIA(), request );
 		
 		ActionForward success = mapping.findForward("success"); 
-		
-		FormFile file = formulario.getDatos();
+		try{
+			byte[] file = (byte[])request.getSession().getAttribute(formulario.getID_INSTANCIA());
+			String fileName = (String)request.getSession().getAttribute(formulario.getID_INSTANCIA()+"Nombre");
+			String fileExtension = (String)request.getSession().getAttribute(formulario.getID_INSTANCIA()+"Extension");
 		// TODO : file extension instead content type
 		if ( file != null )
 		{
-			// Obtenemos extensión fichero
-			String fileName = file.getFileName();
-			String fileExtension = "";
-			int firstIndex = fileName.lastIndexOf( Constants.POINT_EXTENSION );
-			if ( firstIndex != -1 )
-			{
-				fileExtension = fileName.substring( firstIndex + 1 );
-			}
-			
-			// Validamos tamaño máximo			
-			if (formulario.getTamanyoMaximo() < (file.getFileSize() / 1024) ) {
-				this.setErrorRecoverableMessage(request,"anexarDocumentos.anexar.tamanyoNoValido");
-				return success;
-			}
-			
-			// Validamos extensiones					
-			if ((formulario.getExtensiones().toLowerCase() + ",").indexOf(fileExtension.toLowerCase() + ",") == -1){
-				this.setErrorRecoverableMessage(request,"anexarDocumentos.anexar.extensionNoValida");
-				return success;
-			}
 			
 			FirmaIntf firma = null;
 			if ( StringUtils.isNotEmpty(formulario.getFirma()) )
@@ -74,15 +56,23 @@ public class AnexarDocumentoAction extends BaseAction
 			}
 					
 			// Anexamos documento
-			this.setRespuestaFront( request, delegate.anexarDocumento( formulario.getIdentificador(), formulario.getInstancia(), file.getFileData(), fileName, fileExtension, formulario.getDescPersonalizada(), firma ) );
+				this.setRespuestaFront( request, delegate.anexarDocumento( formulario.getIdentificador(), formulario.getInstancia(), file, fileName, fileExtension, formulario.getDescPersonalizada(), firma ) );
+				request.removeAttribute(formulario.getID_INSTANCIA());
+				request.removeAttribute(formulario.getID_INSTANCIA()+"Nombre");
+				request.removeAttribute(formulario.getID_INSTANCIA()+"Extension");
 			return success;
 			
 		}else{
 			// PARA DOCUMENTOS PRESENCIALES NO HACE FALTA FICHERO
 			this.setRespuestaFront( request, delegate.anexarDocumento( formulario.getIdentificador(), formulario.getInstancia(), null, null,null,formulario.getDescPersonalizada(),null) );
+				request.removeAttribute(formulario.getID_INSTANCIA());
+				request.removeAttribute(formulario.getID_INSTANCIA()+"Nombre");
+				request.removeAttribute(formulario.getID_INSTANCIA()+"Extension");
 			return success;
 		}	
-		
+		}catch(Exception e){
+			return mapping.findForward( "fail" );
+		}
 		
 		/*
 		 * PARA FOTOCOPIAS NO HACE FALTA FICHERO

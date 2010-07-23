@@ -93,7 +93,7 @@
 						<td>					
 							<!--  Descripcion del trámite con link si puede continuarse -->
 							<logic:equal name="link" value="true">
-								<html:link href="<%= urlTramitacion + "&modelo=" + tramitePersistente.getTramite() + "&version=" + tramitePersistente.getVersion() %>" paramId="idPersistencia" paramName="tramitePersistente" paramProperty="idPersistencia">
+								<html:link href="<%= urlTramitacion + "&amp;modelo=" + tramitePersistente.getTramite() + "&amp;version=" + tramitePersistente.getVersion() %>" paramId="idPersistencia" paramName="tramitePersistente" paramProperty="idPersistencia">
 									<bean:write name="tramitePersistente" property="descripcion"/>								
 								</html:link>
 							</logic:equal>							

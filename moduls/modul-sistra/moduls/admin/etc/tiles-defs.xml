@@ -30,4 +30,19 @@
     
     <definition name=".exitoBaja" path="/exitoBaja.jsp" />
     
+    <!-- GRUPOS -->
+	<definition name=".grupo.editar" path="/grupos/editar.jsp"/>
+	<definition name=".grupos.altaModif" path="/grupos/altaModificar.jsp" controllerClass="es.caib.sistra.admin.action.grupos.AltaGruposController"/>
+	<definition name=".grupos.lista" path="/grupos/lista.jsp" controllerClass="es.caib.sistra.admin.action.grupos.ListaGruposController"/>   
+    <definition name=".tramites.lista" path="/tramites/lista.jsp" controllerClass="es.caib.sistra.admin.action.tramites.ListaTramitesController"/>
+    <definition name=".tramites.modif" path="/tramites/editar.jsp" >
+        <putList name="listaRelaciones">
+            <add value=".grupo.listaFormulario" type="definition" />
+            <add value=".grupo.listaUsuarios" type="definition" />
+		</putList>   
+	</definition>
+    <definition name=".grupo.listaFormulario" path="/grupos/listaFormulario.jsp" controllerClass="es.caib.sistra.admin.action.grupos.ListaGruposTramiteController" />
+	<definition name=".grupo.listaUsuarios" path="/grupos/listaUsuarios.jsp" controllerClass="es.caib.sistra.admin.action.grupos.ListaUsuariosTramiteController"/>
+    
+    
 </tiles-definitions>

@@ -13,6 +13,7 @@
 	
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
+	<property name="distribucion.dir" location="${home.dir}/../../product"/>
 
     <property name="lib.dir" location="${home.dir}/../../lib"/>
     <property name="etc.dir" location="${home.dir}/etc"/>
@@ -40,6 +41,9 @@
         <fileset dir="${lib.dir}">
             <include name="*.jar"/>
         </fileset>
+    	<fileset dir="${distribucion.dir}/lib"> 
+    	    <include name="sistra-plugins.jar"/>
+    	</fileset>
         <fileset dir="${web.product}">
             <include name="redose-model.jar" />
             <include name="redose-persistence-client.jar" />

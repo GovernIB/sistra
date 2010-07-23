@@ -24,6 +24,8 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
+    private final static QName _ValoresDominioDescripcionError_QNAME = new QName("", "descripcionError");
+    private final static QName _Fault_QNAME = new QName("urn:es:caib:sistra:ws:v1:model:SistraFacade", "fault");
     private final static QName _DocumentoConsultaCodigoRDS_QNAME = new QName("", "codigoRDS");
     private final static QName _DocumentoConsultaUrlNuevaVentana_QNAME = new QName("", "urlNuevaVentana");
     private final static QName _DocumentoConsultaClaveRDS_QNAME = new QName("", "claveRDS");
@@ -34,110 +36,12 @@ public class ObjectFactory {
     private final static QName _DocumentoConsultaModelo_QNAME = new QName("", "modelo");
     private final static QName _DocumentoConsultaPlantilla_QNAME = new QName("", "plantilla");
     private final static QName _DocumentoConsultaVersion_QNAME = new QName("", "version");
-    private final static QName _Fault_QNAME = new QName("urn:es:caib:sistra:ws:v1:model:SistraFacade", "fault");
-    private final static QName _ValoresDominioDescripcionError_QNAME = new QName("", "descripcionError");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: es.caib.sistra.wsClient.v1.model
      * 
      */
     public ObjectFactory() {
-    }
-
-    /**
-     * Create an instance of {@link Filas }
-     * 
-     */
-    public Filas createFilas() {
-        return new Filas();
-    }
-
-    /**
-     * Create an instance of {@link RealizarConsultaResponse }
-     * 
-     */
-    public RealizarConsultaResponse createRealizarConsultaResponse() {
-        return new RealizarConsultaResponse();
-    }
-
-    /**
-     * Create an instance of {@link DocumentoConsulta }
-     * 
-     */
-    public DocumentoConsulta createDocumentoConsulta() {
-        return new DocumentoConsulta();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerDominio }
-     * 
-     */
-    public ObtenerDominio createObtenerDominio() {
-        return new ObtenerDominio();
-    }
-
-    /**
-     * Create an instance of {@link ParametrosDominio }
-     * 
-     */
-    public ParametrosDominio createParametrosDominio() {
-        return new ParametrosDominio();
-    }
-
-    /**
-     * Create an instance of {@link Fila }
-     * 
-     */
-    public Fila createFila() {
-        return new Fila();
-    }
-
-    /**
-     * Create an instance of {@link SistraFacadeException }
-     * 
-     */
-    public SistraFacadeException createSistraFacadeException() {
-        return new SistraFacadeException();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerDominioResponse }
-     * 
-     */
-    public ObtenerDominioResponse createObtenerDominioResponse() {
-        return new ObtenerDominioResponse();
-    }
-
-    /**
-     * Create an instance of {@link FormularioConsulta }
-     * 
-     */
-    public FormularioConsulta createFormularioConsulta() {
-        return new FormularioConsulta();
-    }
-
-    /**
-     * Create an instance of {@link ValoresDominio }
-     * 
-     */
-    public ValoresDominio createValoresDominio() {
-        return new ValoresDominio();
-    }
-
-    /**
-     * Create an instance of {@link RealizarConsulta }
-     * 
-     */
-    public RealizarConsulta createRealizarConsulta() {
-        return new RealizarConsulta();
-    }
-
-    /**
-     * Create an instance of {@link FormulariosConsulta }
-     * 
-     */
-    public FormulariosConsulta createFormulariosConsulta() {
-        return new FormulariosConsulta();
     }
 
     /**
@@ -149,11 +53,125 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Fila }
+     * 
+     */
+    public Fila createFila() {
+        return new Fila();
+    }
+
+    /**
+     * Create an instance of {@link FormularioConsulta }
+     * 
+     */
+    public FormularioConsulta createFormularioConsulta() {
+        return new FormularioConsulta();
+    }
+
+    /**
+     * Create an instance of {@link RealizarConsultaResponse }
+     * 
+     */
+    public RealizarConsultaResponse createRealizarConsultaResponse() {
+        return new RealizarConsultaResponse();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerDominio }
+     * 
+     */
+    public ObtenerDominio createObtenerDominio() {
+        return new ObtenerDominio();
+    }
+
+    /**
+     * Create an instance of {@link RealizarConsulta }
+     * 
+     */
+    public RealizarConsulta createRealizarConsulta() {
+        return new RealizarConsulta();
+    }
+
+    /**
+     * Create an instance of {@link ValoresDominio }
+     * 
+     */
+    public ValoresDominio createValoresDominio() {
+        return new ValoresDominio();
+    }
+
+    /**
+     * Create an instance of {@link FormulariosConsulta }
+     * 
+     */
+    public FormulariosConsulta createFormulariosConsulta() {
+        return new FormulariosConsulta();
+    }
+
+    /**
+     * Create an instance of {@link Filas }
+     * 
+     */
+    public Filas createFilas() {
+        return new Filas();
+    }
+
+    /**
      * Create an instance of {@link Columna }
      * 
      */
     public Columna createColumna() {
         return new Columna();
+    }
+
+    /**
+     * Create an instance of {@link ParametrosDominio }
+     * 
+     */
+    public ParametrosDominio createParametrosDominio() {
+        return new ParametrosDominio();
+    }
+
+    /**
+     * Create an instance of {@link SistraFacadeException }
+     * 
+     */
+    public SistraFacadeException createSistraFacadeException() {
+        return new SistraFacadeException();
+    }
+
+    /**
+     * Create an instance of {@link DocumentoConsulta }
+     * 
+     */
+    public DocumentoConsulta createDocumentoConsulta() {
+        return new DocumentoConsulta();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerDominioResponse }
+     * 
+     */
+    public ObtenerDominioResponse createObtenerDominioResponse() {
+        return new ObtenerDominioResponse();
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "descripcionError", scope = ValoresDominio.class)
+    public JAXBElement<String> createValoresDominioDescripcionError(String value) {
+        return new JAXBElement<String>(_ValoresDominioDescripcionError_QNAME, String.class, ValoresDominio.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SistraFacadeException }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:es:caib:sistra:ws:v1:model:SistraFacade", name = "fault")
+    public JAXBElement<SistraFacadeException> createFault(SistraFacadeException value) {
+        return new JAXBElement<SistraFacadeException>(_Fault_QNAME, SistraFacadeException.class, null, value);
     }
 
     /**
@@ -244,24 +262,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "version", scope = DocumentoConsulta.class)
     public JAXBElement<Integer> createDocumentoConsultaVersion(Integer value) {
         return new JAXBElement<Integer>(_DocumentoConsultaVersion_QNAME, Integer.class, DocumentoConsulta.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link SistraFacadeException }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "urn:es:caib:sistra:ws:v1:model:SistraFacade", name = "fault")
-    public JAXBElement<SistraFacadeException> createFault(SistraFacadeException value) {
-        return new JAXBElement<SistraFacadeException>(_Fault_QNAME, SistraFacadeException.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "descripcionError", scope = ValoresDominio.class)
-    public JAXBElement<String> createValoresDominioDescripcionError(String value) {
-        return new JAXBElement<String>(_ValoresDominioDescripcionError_QNAME, String.class, ValoresDominio.class, value);
     }
 
 }

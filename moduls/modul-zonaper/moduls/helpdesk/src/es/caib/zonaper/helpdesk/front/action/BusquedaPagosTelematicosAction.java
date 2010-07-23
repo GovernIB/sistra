@@ -146,7 +146,7 @@ public class BusquedaPagosTelematicosAction extends BaseAction
 		return mapping.findForward( "success" );
     }
 
-	public void fillPagosTramitePersistentePorClave(String clave, List result) throws Exception
+	private void fillPagosTramitePersistentePorClave(String clave, List result) throws Exception
 	{
 		// Buscamos en la zona de persistencia
 		TramitePersistenteDelegate delegate = DelegateUtil.getTramitePersistenteDelegate();
@@ -166,7 +166,7 @@ public class BusquedaPagosTelematicosAction extends BaseAction
 	}
 	
 
-	public void fillPagosTramitesPersistentes(List tramites, List result, boolean backup) throws Exception
+	private void fillPagosTramitesPersistentes(List tramites, List result, boolean backup) throws Exception
 	{
 		for(Iterator it = tramites.iterator(); it.hasNext();)
 		{
@@ -175,7 +175,7 @@ public class BusquedaPagosTelematicosAction extends BaseAction
 		}
 	}
 	
-	public void fillPagosEntradasTelematicasPorClave(String clave, List result) throws Exception
+	private void fillPagosEntradasTelematicasPorClave(String clave, List result) throws Exception
 	{
 	 	EntradaTelematicaDelegate  etd = DelegateUtil.getEntradaTelematicaDelegate();
 	 	EntradaTelematica et = etd.obtenerEntradaTelematica(clave); 
@@ -187,7 +187,7 @@ public class BusquedaPagosTelematicosAction extends BaseAction
 	
 
 
-	public void fillPagosEntradasTelematicas(List tramites, List result) throws Exception
+	private void fillPagosEntradasTelematicas(List tramites, List result) throws Exception
 	{
 		EntradaTelematicaDelegate etd = DelegateUtil.getEntradaTelematicaDelegate();
 
@@ -199,7 +199,7 @@ public class BusquedaPagosTelematicosAction extends BaseAction
 		}
 	}
 	
-	public void fillPagosFromEntradaTelematica(EntradaTelematica et, List result)
+	private void fillPagosFromEntradaTelematica(EntradaTelematica et, List result)
 	{
 		Set documentos = et.getDocumentos();
 		
@@ -245,7 +245,7 @@ public class BusquedaPagosTelematicosAction extends BaseAction
 		}
 	}
 	
-	public void fillPagosFromPreRegistro(EntradaPreregistro ep, List result)
+	private void fillPagosFromPreRegistro(EntradaPreregistro ep, List result)
 	{
 		Set documentos = ep.getDocumentos();
 		
@@ -279,7 +279,7 @@ public class BusquedaPagosTelematicosAction extends BaseAction
 	
 	}
 
-	public void fillPagosPreRegistrosPorClave(String clave, List result) throws Exception
+	private void fillPagosPreRegistrosPorClave(String clave, List result) throws Exception
 	{
 		EntradaPreregistroDelegate  epd = DelegateUtil.getEntradaPreregistroDelegate();
 		EntradaPreregistro ep = epd.obtenerEntradaPreregistro(clave);    	
@@ -292,7 +292,7 @@ public class BusquedaPagosTelematicosAction extends BaseAction
 
 
 	
-	public void fillPagosFromTramitePersistente(TramitePersistente tp, List result, boolean backup)
+	private void fillPagosFromTramitePersistente(TramitePersistente tp, List result, boolean backup)
 	{
 		Set documentos = tp.getDocumentos();
 
@@ -338,7 +338,7 @@ public class BusquedaPagosTelematicosAction extends BaseAction
 	 * @return Datos del pago si es un doc de pago. Null si no es un documento de pago.
 	 * @throws Exception
 	 */
-	public PagoTelematico obtenerPago(ReferenciaRDS ref) throws Exception
+	private PagoTelematico obtenerPago(ReferenciaRDS ref) throws Exception
 	{
 		RdsDelegate rdsDelegate = DelegateRDSUtil.getRdsDelegate();
 		SimpleDateFormat sdf = new SimpleDateFormat( FORMATO_FECHAS );

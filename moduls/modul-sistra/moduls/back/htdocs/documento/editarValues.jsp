@@ -87,6 +87,15 @@
     <td class="input"><html:text styleClass="text" tabindex="1" property="values.anexoExtensiones" maxlength="50" /></td>
 </tr>
 <tr>
+    <td class="label"><bean:message key="documento.anexoConversionPDF"/></td>
+    <td class="input">
+    	Si<html:radio property="values.anexoConversionPDF" value="S"/> No<html:radio property="values.anexoConversionPDF" value="N"/>
+		&nbsp;&nbsp;&nbsp;
+    	<small><bean:message key="documento.anexoConversionPDFAviso"/></small>
+    	
+    </td>
+</tr>
+<tr>
     <td class="label"><bean:message key="documento.anexoTamanyoMax"/></td>
     <td class="input"><html:text styleClass="text" tabindex="1" property="values.anexoTamanyoMax" maxlength="5" /> Kb.</td>
 </tr>

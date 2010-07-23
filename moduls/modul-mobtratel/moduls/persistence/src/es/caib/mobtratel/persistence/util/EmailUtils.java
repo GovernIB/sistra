@@ -118,14 +118,14 @@ public class EmailUtils
     		try {
                 Transport.send(msg);
     		} catch (Exception ex) { 
-        		log.error("Excepción enviando correo "+ envio.getNombre(),ex);
+        		//log.error("Excepción enviando correo "+ envio.getNombre());
         		throw ex;
             }
 
     		return true;
 
     	}catch (Exception ex){
-    		log.error("Excepción generando correo "+ envio.getNombre(),ex);
+    		//log.error("Excepción generando correo "+ envio.getNombre());
     		throw ex;
     	}
     }    
@@ -152,7 +152,5 @@ public class EmailUtils
     	}
     	return direcciones;
     }
-
-	
 }	
 

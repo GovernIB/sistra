@@ -51,3 +51,17 @@
     parameter=".exitoBaja"/>
     
     
+    <action
+    path="/admin/grupo/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".grupos.lista"/>
+
+    <action
+    path="/admin/tramites/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".tramites.lista"/>
+
+	<action
+    path="/admin/grupo/alta"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".grupos.altaModif"/>

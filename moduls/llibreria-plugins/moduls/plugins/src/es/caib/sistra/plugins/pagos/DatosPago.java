@@ -7,6 +7,19 @@ import java.util.Date;
  * Datos de un pago
  */
 public class DatosPago implements Serializable{
+	
+	/**
+	 * Modelo trámite
+	 */
+	 private String modeloTramite;
+	/**
+	 * Versión trámite
+	 */
+	 private int versionTramite;
+	/**
+	 * Identificador trámite
+	 */
+	 private String identificadorTramite;
 	/**
 	 * Nombre trámite
 	 */
@@ -209,5 +222,47 @@ public class DatosPago implements Serializable{
 	 */
 	public void setNombreUsuario(String nombreUsuario) {
 		this.nombreUsuario = nombreUsuario;
+	}	
+	/**
+	 * Identificador del trámite
+	 * @return Identificador del trámite
+	 */
+	public String getIdentificadorTramite() {
+		return identificadorTramite;
+	}
+	/**
+	 * Identificador del trámite
+	 * @param identificadorTramite Identificador del trámite
+	 */
+	public void setIdentificadorTramite(String identificadorTramite) {
+		this.identificadorTramite = identificadorTramite;
+	}
+	/**
+	 * Modelo del trámite 
+	 * @return Modelo del trámite
+	 */
+	public String getModeloTramite() {
+		return modeloTramite;
+	}
+	/**
+	 * Modelo del trámite
+	 * @param modeloTramite Modelo del trámite
+	 */
+	public void setModeloTramite(String modeloTramite) {
+		this.modeloTramite = modeloTramite;
+	}
+	/**
+	 * Versión del trámite
+	 * @return Versión del trámite
+	 */
+	public int getVersionTramite() {
+		return versionTramite;
+	}
+	/**
+	 * Versión del trámite
+	 * @param versionTramite Versión del trámite
+	 */
+	public void setVersionTramite(int versionTramite) {
+		this.versionTramite = versionTramite;
 	}	
 }

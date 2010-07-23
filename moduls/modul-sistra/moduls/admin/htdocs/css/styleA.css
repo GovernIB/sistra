@@ -606,3 +606,14 @@ input.botonEditar
 {
 	height:2em;
 }
+
+body.ventana input.textUser
+{
+    padding: 3px 3px;
+    border: 1px solid #515b67;
+    width: 50%;
+}
+
+.selectGrupos{
+	width: 50%;
+}

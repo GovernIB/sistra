@@ -5,8 +5,10 @@ import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.Node;
 import org.ibit.rol.form.model.Campo;
+import org.ibit.rol.form.model.ListaElementos;
 import org.ibit.rol.form.model.TraValorPosible;
 import org.ibit.rol.form.model.ValorPosible;
+import org.ibit.rol.form.persistence.plugins.DatosListaElementos;
 import org.mozilla.javascript.NativeArray;
 
 import java.util.*;
@@ -91,6 +93,9 @@ public final class CampoUtils {
     // -- INDRA: UTILIDAD PARA EJECUTAR EXPRESION DE AUTORRELLENABLE
     /**
      * Executarà l'expressió de autorrelleno del camp i retorna llista de valors calculats
+     * 
+     * Para campos lista de elementos usará una variable de tipo ListaElementos
+     * 
      * @param campo
      * @param variables Map amb els valors dels camps emplenats (les claus són f_xxx per
      * els camps de la mateixa pantalla i f_yyy_xxx per els camps de la pantalla yyy.)
@@ -99,7 +104,21 @@ public final class CampoUtils {
         final String script = campo.getExpresionAutorellenable();
         List valores = new LinkedList();
         if (script != null && script.trim().length() > 0) {                    	 
+        	
+        	// Si es un campo lista de elementos usamos variable LISTAELEMENTOS
+        	if (campo instanceof ListaElementos){
+        		variables.put("LISTAELEMENTOS",new DatosListaElementos());
+        	}
+        	
              Object result = ScriptUtil.evalScript(script, variables);
+             
+             // Si es un campo lista de elementos no esperara ningun valor, ya que 
+             // los valores se han establecido mendiante la vble LISTAELEMENTOS
+             if (campo instanceof ListaElementos){
+            	 // Devolvemos como resultado la lista de elementos
+            	 valores.add(variables.get("LISTAELEMENTOS"));            	 
+             }else{
+             // Si no es un campo lista de elementos esperara un valor o lista de valores
              if (result != null) {
                  if (result instanceof Collection) {
                      valores.addAll((Collection) result);
@@ -136,6 +155,7 @@ public final class CampoUtils {
                      valores.add(vp);
                  }
              }
+        }
         }
         return valores;
     }

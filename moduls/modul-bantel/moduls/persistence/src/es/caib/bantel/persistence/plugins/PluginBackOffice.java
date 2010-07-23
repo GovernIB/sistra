@@ -1,8 +1,8 @@
 package es.caib.bantel.persistence.plugins;
 
 
-import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
@@ -125,7 +125,7 @@ public class PluginBackOffice {
 		}
 		catch( Exception exc )
 		{
-			log.error( exc );
+			log.error( "[" + tramite.getIdentificador() + "] - " +  exc );
 			throw exc;
 		}
 		finally
@@ -145,6 +145,8 @@ public class PluginBackOffice {
 	private void avisarEntradasWS(List entradas,String usuAuto,String passAuto)  throws Exception {
 		log.debug("[" + tramite.getIdentificador() + "] -Aviso a backoffice a través de WS");
 				
+		Properties config = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+		
 		//	 Comprobamos si requiere autenticacion explicita
 		String user = null,pass=null; 
 		switch (tramite.getAutenticacionEJB()){
@@ -157,7 +159,7 @@ public class PluginBackOffice {
 			// Requiere autenticacion explicita basada en usr/pass
 			case Tramite.AUTENTICACION_ESTANDAR:
 				log.debug("Autenticacion explicita con usuario/password");
-				String claveCifrada = (String)DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().get("clave.cifrado");
+				String claveCifrada = (String)config.get("clave.cifrado");
 				user = CifradoUtil.descifrar(claveCifrada,tramite.getUsr());
 				pass = CifradoUtil.descifrar(claveCifrada,tramite.getPwd());
 				break;
@@ -176,7 +178,12 @@ public class PluginBackOffice {
 				break;				
 		}
 		
-		ClienteWS.avisarEntradasWS(entradas,tramite.getUrl(),user,pass);
+		// Comprobamos si debemos hacer la llamada de forma asincrona: por defecto true
+		String prop =config.getProperty("webService.cliente.asincrono");
+		if (prop == null) prop = "true";
+		
+		
+		ClienteWS.avisarEntradasWS(entradas,tramite.getUrl(),user,pass,Boolean.valueOf(prop).booleanValue());
 		
 			
 	}

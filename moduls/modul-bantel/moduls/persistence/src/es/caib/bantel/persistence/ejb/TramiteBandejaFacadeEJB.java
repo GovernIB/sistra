@@ -35,7 +35,6 @@ import es.caib.bantel.model.TramiteBandeja;
 import es.caib.bantel.modelInterfaz.ConstantesBTE;
 import es.caib.bantel.modelInterfaz.DocumentoBTE;
 import es.caib.bantel.modelInterfaz.ExcepcionBTE;
-import es.caib.bantel.modelInterfaz.ReferenciaEntradaBTE;
 import es.caib.bantel.modelInterfaz.TramiteBTE;
 import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
@@ -136,7 +135,8 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.registro}"
-     */
+     * @ejb.permission role-name="${role.gestor}"
+     * */
     public TramiteBandeja obtenerTramiteBandejaPorNumeroPreregistro(String numeroPreregistro) {
         Session session = getSession();
         try {
@@ -159,6 +159,32 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
         }
     }
        
+ 	/**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.gestor}"
+     * */
+    public TramiteBandeja obtenerTramiteBandejaPorNumeroRegistro(String numeroRegistro) {
+        Session session = getSession();
+        try {
+            Query query = session.createQuery("FROM TramiteBandeja AS m WHERE m.numeroRegistro = :numeroRegistro");
+            query.setParameter("numeroRegistro", numeroRegistro);
+            
+            List result = query.list();
+            if (result.isEmpty()) {
+                return null;
+            }
+
+            TramiteBandeja t = (TramiteBandeja) result.get(0);            
+            // Cargamos documentos
+        	Hibernate.initialize(t.getDocumentos());     	
+            return t;
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
  	/**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.bantel}"
@@ -882,62 +908,71 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 		 return criteria;
     }    
     
+   
     private List obtenerReferenciasEntradaImpl(String identificadorTramite,String procesada,Date desde,Date hasta){
-    	Session session = getSession();
-		try 
-		{
-			 Criteria criteria = session.createCriteria( TramiteBandeja.class );
-			 criteria.setCacheable( false );
 						 
-			 // Especificamos tramite
-			Tramite tramite = (Tramite) session.load(Tramite.class,identificadorTramite);
-			criteria.add( Expression.eq("tramite",tramite ) );			
+		Session session = getSession();
+		boolean desdeBool = false;
+		boolean hastaBool = false;
+		boolean procesadaBool = false;
+		List  numeros = new  ArrayList();
+        try {
+        	String sql = "Select {TB.*} FROM BTE_TRAMIT {TB} WHERE {TB}.TRA_IDETRA = :idtramite ";
 			
 			 //Especificamos estado procesamiento entrada
-			 if ( !StringUtils.isEmpty(procesada) )
-			 {
-				 criteria.add( Expression.eq( "procesada" , procesada ) );
+        	if ( !StringUtils.isEmpty(procesada) ){
+        		sql = sql + " and {TB}.TRA_PROCES = :procesada ";
+        		procesadaBool = true;
 			 }
 			 
 			 // Especificamos fechas
-			 if ( desde != null && hasta != null )
-			 {
-				 criteria.add( Expression.between( "fecha", desde,hasta ) );
-			 }
-			 if ( desde != null && hasta == null )
-			 {
-				 criteria.add( Expression.ge( "fecha", desde) );
-			 }
-			 if ( desde == null && hasta != null )
-			 {
-				 criteria.add( Expression.le( "fecha", hasta) );
+        	if ( desde != null && hasta != null ){
+        		sql = sql + " and {TB}.TRA_FECHA between :desde and :hasta ";
+        		desdeBool = true;
+        		hastaBool = true;
+   			}
+   			if ( desde != null && hasta == null ){
+   				sql = sql + " and {TB}.TRA_FECHA >= :desde ";
+   				desdeBool = true;
+   			}
+   			if ( desde == null && hasta != null ){
+   				sql = sql + " and {TB}.TRA_FECHA <= :hasta ";
+   				hastaBool = true;
 			 }
 				
 			 // Ordenación
-			 criteria.addOrder( Order.desc("fecha") );
-			 
-			 // Realizamos consulta
-			 List results = criteria.list();  
+   			sql = sql + " order by {TB}.TRA_FECHA desc";
+        	//"Select {TB.*} FROM BTE_TRAMIT {TB} WHERE {TB}.TRA_IDETRA = :idtramite and {TB}.TRA_PROCES = :procesada and {TB}.TRA_FECHA >= :desde and {TB}.TRA_FECHA <= :hasta order by {TB}.TRA_FECHA desc"
+        	Query query = session.createSQLQuery(sql,"TB",TramiteBandeja.class );
+            query.setParameter("idtramite", identificadorTramite);
+            if (procesadaBool){
+            	query.setParameter("procesada", procesada);
+            }
+            if(desdeBool){
+            	query.setParameter("desde", desde);
+            }
+            if(hastaBool){
+            	query.setParameter("hasta", hasta);
+            }
+            List result = query.list();
+            if (result.isEmpty()) {
+                return numeros;
+            }
 			 
 			 // Devolvemos  referencias entradas
-			 List  numeros = new  ArrayList();
-			 for (int i=0;i<results.size();i++){
-				 TramiteBandeja t = (TramiteBandeja) results.get(i);
+			 for (int i=0;i<result.size();i++){
+				 TramiteBandeja t = (TramiteBandeja) result.get(i);
 				 ReferenciaTramiteBandeja r = new ReferenciaTramiteBandeja();
 				 r.setNumeroEntrada(t.getNumeroEntrada());
 				 r.setClaveAcceso(t.getClaveAcceso());
 				 numeros.add(r);
 			 }			 
 			 return numeros;
-					 
-	    } 
-		catch (HibernateException he) 
-		{
+        } catch (HibernateException he) {
 	        throw new EJBException(he);
-	    } 
-		finally 
-	    {
+        } finally {
 	        close(session);
 	    }
     }
+    
 }

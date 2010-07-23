@@ -27,6 +27,8 @@ public class MensajeFront implements Serializable{
 	public static final String MENSAJE_ASIENTOINCORRECTO = "mensaje.asiento_incorrecto";
 	public static final String MENSAJE_ASIENTOFIRMANTENOCOINCIDE = "mensaje.asiento_firmante_no_coincide";
 	public static final String MENSAJE_ANEXOEXTENSIONNOPERMITIDA = "mensaje.upload_anexo.extension_no_permitida";
+	public static final String MENSAJE_ANEXOERRORCONVERSION = "mensaje.upload_anexo.error_conversion";
+	public static final String MENSAJE_ANEXOVERIFICARCONVERSION = "mensaje.upload_anexo.verificar_conversion";
 	public static final String MENSAJE_ANEXOTAMANYONOPERMITIDO = "mensaje.upload_anexo.tamanyo_no_permitido";
 	public static final String MENSAJE_ANEXODATOSNULOS = "mensaje.upload_anexo.sin_datos";
 	public static final String MENSAJE_PLAZONOABIERTO = "mensaje.plazo.no_abierto";

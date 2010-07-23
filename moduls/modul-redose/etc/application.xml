@@ -6,6 +6,18 @@
 <application>
     <display-name>RDS</display-name>
     <description><![CDATA[Proyecto CIBGE - RDS]]></description>
+    
+    <!--  Librerías de Open Office 3.1 -->
+    <module><java>lib/jodconverter-2.2.2.jar</java></module>    
+    <module><java>lib/juh-3.0.1.jar</java></module>
+    <module><java>lib/jurt-3.0.1.jar</java></module>
+    <module><java>lib/ridl-3.0.1.jar</java></module>
+    <module><java>lib/slf4j-api-1.5.6.jar</java></module>
+    <module><java>lib/slf4j-jdk14-1.5.6.jar</java></module>
+    <module><java>lib/unoil-3.0.1.jar</java></module>
+    <!--  Librerías de Open Office 3.1 -->
+    
+    
     <module><java>redose-model.jar</java></module>    
     <module><ejb>redose-persistence.jar</ejb></module>    
     <module>

@@ -61,7 +61,7 @@ public class ExportCSVEnvioAction extends BaseAction
 			CSVExport csv = new CSVExport(envio);
 			
 			// Devolvemos csv
-			request.setAttribute( Constants.NOMBREFICHERO_KEY, csv.getNombre()+".csv" );		
+			request.setAttribute( Constants.NOMBREFICHERO_KEY,  "envio" + csv.getCodigo() + ".csv");		
 			request.setAttribute( Constants.DATOSFICHERO_KEY, csv.toCSV());		
 
 			return mapping.findForward("success");

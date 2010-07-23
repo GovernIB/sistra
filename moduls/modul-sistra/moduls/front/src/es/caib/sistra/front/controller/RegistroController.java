@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.tiles.ComponentContext;
 
+import org.apache.commons.lang.StringUtils;
+
 import es.caib.sistra.front.Constants;
 import es.caib.sistra.model.AsientoCompleto;
 import es.caib.sistra.model.ConstantesSTR;
@@ -15,6 +17,7 @@ import es.caib.sistra.model.DocumentoFront;
 import es.caib.sistra.model.TramiteFront;
 import es.caib.util.ConvertUtil;
 import es.caib.util.StringUtil;
+
 import es.caib.xml.datospropios.factoria.impl.Instrucciones;
 import es.caib.xml.registro.factoria.impl.DatosInteresado;
 
@@ -29,6 +32,19 @@ public class RegistroController extends FinalizacionController
 		
 		
 		TramiteFront tramite 			= this.getTramiteFront( request );
+		
+		
+		//
+		// 	COMPROBAMOS SI HAY FLUJO DE TRAMITACION Y HAY QUE PASAR EL TRAMITE
+		//
+		if (tramite.isFlujoTramitacion()) {			
+			// Si hay que pasarlo a algún Nif lo indicamos:
+			String nifFlujo=tramite.getFlujoTramitacionNif();
+			if (!StringUtils.isEmpty(nifFlujo)){
+				request.setAttribute("pasarFlujoTramitacion",nifFlujo);
+				return;
+			}				
+		}
 		
 		//
 		// 	COMPROBAMOS SI TENEMOS QUE PEDIR CONFIRMACION PARA NOTIFICACION TELEMATICA
@@ -139,7 +155,10 @@ public class RegistroController extends FinalizacionController
 		}
 		request.setAttribute( "presencial", presencial );
 				
+		// Indicamos que permitimos registrar (no hay que flujo ni hay que confirmar la notificacion)
+		request.setAttribute( "permitirRegistrar", "true" );
 	}
+	
 	
 	
 	

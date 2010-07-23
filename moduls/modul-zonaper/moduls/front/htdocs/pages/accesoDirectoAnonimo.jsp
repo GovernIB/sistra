@@ -57,6 +57,3 @@ function validaFormulario( form )
 				</p>
 			</div>
 			<!-- /meues dades -->
-			
-		</div>
-		<!-- /continguts -->

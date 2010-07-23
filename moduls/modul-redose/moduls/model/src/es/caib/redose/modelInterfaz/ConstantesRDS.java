@@ -91,7 +91,10 @@ public class ConstantesRDS {
 	 * Modelo oficio remision
 	 */
 	public static final String MODELO_OFICIO_REMISION = "GE0009OFIREM";
-	
+	/**
+	 * Modelo notificacion
+	 */
+	public static final String MODELO_NOTIFICACION= "GE0011NOTIFICA";
 
 	// VERSIONES ACTUALES DE MODELOS DE DOCUMENTOS UTILIZADOS
 	/**

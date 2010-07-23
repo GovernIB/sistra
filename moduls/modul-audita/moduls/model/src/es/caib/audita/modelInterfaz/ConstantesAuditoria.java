@@ -9,6 +9,7 @@ public class ConstantesAuditoria {
 	public static final String EVENTO_CONFIRMACION_PREREGISTRO = "CONPRE";		
 	public static final String EVENTO_ACCESO_ZONA_PERSONAL = "AZPER";
 	public static final String EVENTO_PAGO = "PAGO";
+	public static final String EVENTO_PAGO_TELEMATICO_INICIADO = "PATEIN";
 	public static final String EVENTO_PAGO_TELEMATICO_ANULADO = "PATEAN";
 	public static final String EVENTO_PAGO_TELEMATICO_CONFIRMADO = "PATECO";	
 

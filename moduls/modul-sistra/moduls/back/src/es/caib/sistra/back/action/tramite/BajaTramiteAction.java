@@ -53,7 +53,6 @@ public class BajaTramiteAction extends BaseAction{
         
         setReloadTree( request, Nodo.IR_A_ORGANO, organo.getCodigo() );
         
-        
         tramiteDelegate.borrarTramite(id);
         //request.setAttribute("reloadMenu", "true");
 

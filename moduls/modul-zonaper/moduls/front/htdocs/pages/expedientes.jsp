@@ -15,6 +15,7 @@
 					<!-- <li><img src="imgs/tramitaciontelematica/ex_visto.gif" alt="<bean:message key="expedientes.visto" />" /> <bean:message key="expedientes.visto" /></li> -->
 				</ul>
 			</div>
+			
 			<table cellpadding="8" cellspacing="0" id="tabla_ttNotificacions">
 			<tr>
 				<th><bean:message key="expedientes.tabla.fecha" /></th>
@@ -34,6 +35,7 @@
 			</tr>
 		</logic:iterate>	
 			</table>
+			
 			<div id="barraNav">
 			<logic:equal name="page" property="previousPage" value="true">
 			

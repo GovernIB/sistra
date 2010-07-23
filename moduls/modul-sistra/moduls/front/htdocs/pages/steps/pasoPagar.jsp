@@ -52,6 +52,7 @@
 				<div id="listadoTasas">	
 				<%-- Listado de las tasas  --%>
 				<logic:iterate id="pago" name="tramite" property="pagos" type="es.caib.sistra.model.DocumentoFront">			
+					<logic:notEqual name="pago" property="obligatorio" value='D'>
 					<%
 						String urlIrPago = urlPago + "&identificador=" + pago.getIdentificador() + "&instancia=" + pago.getInstancia();
 						String urlAnularPago = urlCancelarPago + "&identificador=" + pago.getIdentificador() + "&instancia=" + pago.getInstancia();
@@ -102,7 +103,7 @@
 							</logic:equal>	
 						</logic:equal>						
 					</p>																	
-					
+					</logic:notEqual>
 			</logic:iterate>			
 		</div>
 </logic:equal>							

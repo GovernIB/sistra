@@ -35,6 +35,15 @@ public class EspecificacionesGenericasForm extends TraduccionValidatorForm
     private String avisoSMS;
     private String avisoEmail;
     private String checkEnvio;
+    private String destinatarioTramite;
+
+    public String getDestinatarioTramite() {
+		return destinatarioTramite;
+	}
+
+	public void setDestinatarioTramite(String destinatarioTramite) {
+		this.destinatarioTramite = destinatarioTramite;
+	}
 
     public String getValidacionInicioScript()
 	{
@@ -94,6 +103,8 @@ public class EspecificacionesGenericasForm extends TraduccionValidatorForm
 		setHabilitarAvisos(null);
 		setAvisoEmail(null);
 		setAvisoSMS(null);
+		setCheckEnvio(null);
+		setDestinatarioTramite(null);
 	}
 
 	public String getLocalidadScript() {

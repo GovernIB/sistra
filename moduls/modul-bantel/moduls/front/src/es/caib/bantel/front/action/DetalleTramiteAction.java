@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.MessageResources;
 
+import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleTramiteForm;
 import es.caib.bantel.model.DocumentoBandeja;
 import es.caib.bantel.model.GestorBandeja;
@@ -53,6 +54,7 @@ public class DetalleTramiteAction extends BaseAction
 		Set documentosEstructurados = new HashSet();
 		
 		DetalleTramiteForm detalleTramiteFormulario = ( DetalleTramiteForm ) form;
+		request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,"3");
 		TramiteBandejaDelegate tramiteDelegate = DelegateUtil.getTramiteBandejaDelegate();
 		TramiteBandeja tramite = tramiteDelegate.obtenerTramiteBandeja( detalleTramiteFormulario.getCodigo() );
 		Set documentosTramite = tramite.getDocumentos();

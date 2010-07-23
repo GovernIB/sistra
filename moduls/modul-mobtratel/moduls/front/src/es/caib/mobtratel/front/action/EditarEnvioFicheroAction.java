@@ -2,8 +2,10 @@ package es.caib.mobtratel.front.action;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +25,7 @@ import es.caib.mobtratel.modelInterfaz.MensajeEnvio;
 import es.caib.mobtratel.modelInterfaz.MensajeEnvioEmail;
 import es.caib.mobtratel.modelInterfaz.MensajeEnvioSms;
 import es.caib.mobtratel.persistence.delegate.DelegateMobTraTelUtil;
+import es.caib.mobtratel.persistence.delegate.DelegateUtil;
 import es.caib.mobtratel.persistence.delegate.FormatoException;
 import es.caib.mobtratel.persistence.delegate.LimiteDestinatariosException;
 import es.caib.mobtratel.persistence.delegate.MaxCaracteresSMSException;
@@ -86,9 +89,23 @@ public class EditarEnvioFicheroAction extends BaseAction{
             mensaje.setNombre(envio.getNombre());
             mensaje.setCuentaEmisora(envio.getCuenta());
             SimpleDateFormat sdf = new SimpleDateFormat(Constants.FORMATO_FECHAS_XML);
-            if((envio.getFechaCaducidad() != null) && (!envio.getFechaCaducidad().equals("")))
+            if((envio.getFechaCaducidad() != null) && (!envio.getFechaCaducidad().equals(""))){
             	mensaje.setFechaCaducidad(sdf.parse(envio.getFechaCaducidad()));
-        
+            }else{
+    			Properties config = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+    			//si no esta definida la propiedad en mobtratel.properties por defecto le metemos 15 dias.
+    			int dias = 15;
+    			if(config.getProperty("envio.limite.sin.fecha.caducidad") != null && !"".equals(config.getProperty("envio.limite.sin.fecha.caducidad"))){
+    				try{
+    					dias = Integer.parseInt(config.getProperty("envio.limite.sin.fecha.caducidad"));
+    				}catch(Exception e){
+    					dias = 15;
+    				}
+    			}
+    			Calendar cal = Calendar.getInstance();
+    			cal.add(Calendar.DATE, dias);
+    			mensaje.setFechaCaducidad(cal.getTime());
+    		}
             
             // Si el mensaje se ha marcado como inmediato no hacemos caso de la fecha de programacion
             if ("S".equals(envio.getInmediato())){

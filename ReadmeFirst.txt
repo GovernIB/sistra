@@ -19,6 +19,7 @@ Dins els directoris
 
 moduls/modul-sistra/moduls/front/htdocs/firma/aFirma/
 moduls/modul-zonaper/moduls/front/htdocs/firma/aFirma/
+moduls/modul-bantel/moduls/front/htdocs/firma/aFirma/
 
 2. Drivers Oracle
 

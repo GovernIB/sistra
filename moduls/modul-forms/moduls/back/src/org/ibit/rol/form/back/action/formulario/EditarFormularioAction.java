@@ -1,21 +1,24 @@
 package org.ibit.rol.form.back.action.formulario;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.ibit.rol.form.back.action.BaseAction;
 import org.ibit.rol.form.back.form.FormularioForm;
 import org.ibit.rol.form.back.util.Util;
+import org.ibit.rol.form.model.Formulario;
+import org.ibit.rol.form.model.RolUsuarioFormulario;
+import org.ibit.rol.form.model.RolUsuarioFormularioId;
+import org.ibit.rol.form.model.TraFormulario;
 import org.ibit.rol.form.persistence.delegate.DelegateUtil;
 import org.ibit.rol.form.persistence.delegate.FormularioDelegate;
-import org.ibit.rol.form.model.Formulario;
-import org.ibit.rol.form.model.TraFormulario;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionForm;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import org.ibit.rol.form.persistence.delegate.GruposDelegate;
 
 /**
  * Action para editar un Formulario.
@@ -99,11 +102,16 @@ public class EditarFormularioAction extends BaseAction{
 
         // Elimina traducciones que no son validas
         formularioForm.validaTraduccion(mapping, request);
-
+	       GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
         if (isAlta(request) || isModificacion(request)) {
             log.debug("isAlta || isModificacio");
 
             formularioDelegate.gravarFormulario(formulario);
+	            if(StringUtils.isNotEmpty(request.getUserPrincipal().getName()) && isAlta(request)){
+					RolUsuarioFormulario userForm = new RolUsuarioFormulario(new RolUsuarioFormularioId(request.getUserPrincipal().getName(),formulario.getId()));
+					gruposDelegate.asociarUsuarioFormulario(userForm);
+				 }
+	            
 
             request.setAttribute("reloadMenu", "true");
             log.debug("Creat/Actualitzat " + formulario.getModelo() + "v" + formulario.getVersion());

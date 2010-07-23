@@ -130,7 +130,7 @@ div#subscripcions div.control span { float:left; padding:.2em .5em; background-c
 
 /* ajuda */
 
-#suportTecnic { position:absolute; top:-1000px; left:-1000px; width:40em; padding:1em; background-color:#fff; border:1em solid #ccc; z-index:10; }
+#suportTecnic { position:absolute; top:-1000px; left:0; width:40em; padding:1em; background-color:#fff; border:1em solid #ccc; z-index:10; }
 #suportTecnic h2 { margin-top:0; }
 #suportTecnic form { margin:0; padding:1em; }
 #suportTecnic form div.botonera { text-align:center; margin:0; }

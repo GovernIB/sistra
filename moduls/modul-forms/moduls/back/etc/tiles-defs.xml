@@ -51,6 +51,8 @@
     <definition name=".formulario.lista" path="/formulario/lista.jsp"
         controllerClass="org.ibit.rol.form.back.action.formulario.ListaFormulariosController"/>
 
+    
+
     <definition name=".formulario.versiones" path="/formulario/versiones.jsp"
         controllerClass="org.ibit.rol.form.back.action.formulario.VersionesFormularioController"/>
 
@@ -73,6 +75,8 @@
            <putList name="listaRelaciones">
                <add value=".pantalla.lista" type="definition" />
                <add value=".puntosalida.formulario.lista" type="definition"/>
+               <add value=".grupo.listaFormulario" type="definition" />
+               <add value=".grupo.listaUsuarios" type="definition" />
            </putList>
        </definition>
 
@@ -98,6 +102,8 @@
         <put name="id" value="" />
     </definition>
 
+
+	
 
     <!-- ====================== PALETAS ================== -->
     <definition name=".paleta.lista" path="/paleta/lista.jsp" controllerClass="org.ibit.rol.form.back.action.ListaPaletasController">
@@ -301,4 +307,5 @@
     
 	<definition name=".idOperacion.error" path="/errorIdOperacion/error.jsp"/>
 
+	
 </tiles-definitions>

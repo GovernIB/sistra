@@ -3,6 +3,8 @@ package es.caib.redose.modelInterfaz;
 import java.security.MessageDigest;
 
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang.StringUtils;
+
 
 import es.caib.util.FirmaUtil;
 
@@ -40,8 +42,10 @@ public class KeyVerifier implements java.io.Serializable {
 		String [] values = keyEncoded.split("-");		
 		this.idDocumento=new Long(values[0]);
 		this.claveDocumento=values[1];
+		if (values.length > 2){ // Comprobamos si se especifica plantilla/idioma
 		this.plantillaDocumento=fromHex(values[2]);
 		this.idiomaDocumento=fromHex(values[3]);
+		}
 								
 	}
 	
@@ -59,9 +63,9 @@ public class KeyVerifier implements java.io.Serializable {
 		
 		// Codificamos key
 		String cadena = this.idDocumento 	+ "-" +
-						this.claveDocumento + "-" +
-						toHex(this.plantillaDocumento) + "-" +
-						toHex(this.idiomaDocumento);
+						this.claveDocumento + 
+						(StringUtils.isNotBlank(this.plantillaDocumento)? "-" + toHex(this.plantillaDocumento):"") +
+						(StringUtils.isNotBlank(this.idiomaDocumento)? "-" + toHex(this.idiomaDocumento):"") ;						
 		this.keyEncoded=cadena;
 	}
 	

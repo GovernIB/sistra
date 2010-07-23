@@ -107,6 +107,34 @@
         contengan el DNI y el nombre completo del representado. El tipo de estos 
         campos es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> y espera en cada caso el valor del DNI y el nombre completo. </p></td>
   </tr>
+  
+    <tr> 
+    <td>Script de destinatario tr&aacute;mite</td>
+    <td>
+    	<p>
+    		Este script permite establecer din&aacute;micamente el destinatario del tr&aacute;mite: oficina registral, organo destino y unidad administrativa.
+    		Aunque se establezca din&aacute;micamente por script se deber&aacute;n establecer unos valores iniciales en la ficha de la versi&oacute;n del tr&aacute;mite.
+    		Por defecto el destinatario tendr&aacute; estos valores.
+    	</p>
+    	<p>
+	      	El tipo de este campo es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> 
+		    y no se espera ning&uacute;n resultado. En caso de error se debe generar un error de script.
+		    <br/>		
+		    Para establecer los valores del destinatario se dispondr&aacute; del plugin <em>DESTINATARIO_TRAMITE</em>.		    
+    	</p>	 
+   		<p>
+   			Los m&eacute;todos disponibles son:
+   			<br/>
+		   	<em>
+		   		// Establecer destinatario dinamicamente<br/>
+		   		DESTINATARIO_TRAMITE.setOficinaRegistral('OF1');<br/>
+		   		DESTINATARIO_TRAMITE.setOrganoDestino('1');<br/>
+		        DESTINATARIO_TRAMITE.setUnidadAdministrativa('2');<br/>
+		      </em>    	
+		 </p>
+	  </td>
+  </tr>
+  
   <tr>
     <td>Url fin </td>
     <td>Al finalizar el tr&aacute;mite se redirige por defecto al portal del organismo. Mediante este  <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> se puede particularizar esta redirecci&oacute;n. Debe devolver una cadena indicando la url de finalizaci&oacute;n. Si se devuelve la cadena "[ZONAPER]" se redirigir&aacute; a la zona personal mostrando el tr&aacute;mite. </td>

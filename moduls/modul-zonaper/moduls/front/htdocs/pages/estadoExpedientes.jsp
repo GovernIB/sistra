@@ -40,6 +40,9 @@
 					</bean:define>
 					 
 					<tr 
+						<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.model.Expediente.ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL%>">
+						class="novetat"
+						</logic:equal> 
 						<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.model.Expediente.ESTADO_AVISO_PENDIENTE%>">
 						class="novetat"
 						</logic:equal> 
@@ -66,6 +69,9 @@
 						<td class="estat">
 							<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.model.Expediente.ESTADO_SOLICITUD_ENVIADA%>">
 								<bean:message key="estadoExpedientes.estado.solicitudEnviada"/>	
+							</logic:equal>
+							<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.model.Expediente.ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL%>">
+								<bean:message key="estadoExpedientes.estado.solicitudEnviadaPendienteDocumentacionPresencial"/>	
 							</logic:equal>
 							<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.model.Expediente.ESTADO_AVISO_PENDIENTE%>">
 								<bean:message key="estadoExpedientes.estado.avisoPendiente"/>
@@ -98,6 +104,14 @@
 				</logic:iterate>
 				</table>
 				
+				<!-- Pie entrega doc presencial -->
+				<logic:equal name="pieDocPresencial" value="S">
+					<div id="pieDocPresencial">				
+						<bean:message key="estadoExpedientes.pie.solicitudEnviadaPendienteDocumentacionPresencial" />				
+					</div>							
+				</logic:equal>
+				
+				<!--  Barra navegacion -->
 				<div id="barraNav">
 					<logic:equal name="page" property="previousPage" value="true">			
 						&lt;&lt; 

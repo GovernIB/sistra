@@ -39,7 +39,7 @@ public class DatosExpediente {
     protected long unidadAdministrativa;
     @XmlElement(required = true)
     protected String identificadorExpediente;
-    @XmlElement(required = true)
+    @XmlElement(required = true, nillable = true)
     protected String claveExpediente;
 
     /**

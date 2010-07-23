@@ -1,11 +1,13 @@
 package es.caib.util;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -819,6 +821,116 @@ public class ValidacionesUtil
 			return fmt.format(Math.round(dImportIva*100.0d)/100.0d);  
 		}
 		
+		/**
+	 * Formatea un numero.
+	 * 
+	 * @param number Numero a formatear.
+	 * @param numDecimals Numero de decimales con los que quedara el numero.
+	 * @param lang Idioma que determinará el formato (puntos, comas para decimales o miles)
+	 * @param signe Si coge el valor S se añade el simbolo + a los numeros positivos
+	 * @param separadorDecimals Separador de decimales
+	 * @param separdorMilers Separador de miles (opcional)
+	 * @return Numero formateado segun las especificaciones o NaN en caso de error.
+	 */
+
+	public static String formatNumber(String number, String numDecimals,
+			String lang, String signe,
+			String separadorDecimals, String separdorMilers) {
+
+		if (separadorDecimals == null) {
+
+			return "NaN";
+
+		}
+
+		if (separadorDecimals.equals(separdorMilers)) {
+
+			return "NaN";
+
+		}
+
+		Locale locale = null;
+
+		if (lang == null) {
+
+			locale = new Locale("es");
+
+		} else {
+
+			locale = new Locale(lang);
+
+		}
+
+		try {
+
+			String numberNormalitzat = new String(number);
+
+			/*Eliminar separador de milers*/
+
+			if (separdorMilers != null) {
+
+				numberNormalitzat = numberNormalitzat.replace(separdorMilers
+						.charAt(0), ' ');
+
+				numberNormalitzat = numberNormalitzat.replaceAll(" ", "");
+
+			}
+
+			/*Assignar el punt com a separadors de decimals*/
+
+			numberNormalitzat = numberNormalitzat.replace(separadorDecimals
+					.charAt(0), '.');
+
+			double doubleValue = Double.parseDouble(numberNormalitzat);
+
+			int doubleNumDecimals;
+
+			if (numDecimals != null)
+
+				doubleNumDecimals = Integer.parseInt(numDecimals);
+
+			else {
+
+				doubleNumDecimals = numberNormalitzat.length()
+						- (numberNormalitzat.indexOf(".") != -1 ? numberNormalitzat
+								.indexOf(".")
+								: 0) - 1;
+
+			}
+
+			doubleValue = Math.round(doubleValue
+					* Math.pow(10, doubleNumDecimals))
+					/ Math.pow(10, doubleNumDecimals);
+
+			NumberFormat nf = NumberFormat.getNumberInstance(locale);
+
+			nf.setMinimumFractionDigits(doubleNumDecimals);
+
+			nf.setMaximumFractionDigits(doubleNumDecimals);
+
+			String formatedNumber = String.valueOf(nf.format(doubleValue));
+
+			if ("S".equals(signe) && doubleValue > 0.0d) {
+
+				return "+" + formatedNumber;
+
+			} else {
+
+				return formatedNumber;
+
+			}
+
+		} catch (NumberFormatException e) {
+
+			e.printStackTrace();
+
+			return "NaN";
+
+		}
+
+	}
+
+
 		
 
 

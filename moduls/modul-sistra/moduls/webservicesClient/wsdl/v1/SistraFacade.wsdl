@@ -28,6 +28,7 @@
 			<xsd:element name="realizarConsulta">
 				<complexType>
 					<sequence>
+						<element name="identificadorTramite" type="xsd:string"/>
 						<element name="forms" type="tns2:FormulariosConsulta"/>
 					</sequence>
 				</complexType>

@@ -36,6 +36,21 @@
 						<bean:message key="tabs.confirmacion"/>							
 					</html:link>	
 			</li>		
+			<logic:notEmpty name="permitirGestionExpedientes" scope="session">
+				<logic:equal name="permitirGestionExpedientes" scope="session" value="S">
+					<!--  OPCION 3: GESTION EXPEDIENTES -->
+					<logic:equal name="<%=es.caib.bantel.front.Constants.OPCION_SELECCIONADA_KEY%>" value="3">
+						<li class="selec">
+					</logic:equal>
+					<logic:notEqual name="<%=es.caib.bantel.front.Constants.OPCION_SELECCIONADA_KEY%>" value="3">
+						<li>
+					</logic:notEqual>				
+							<html:link action="inicioGestionExpediente">
+								<bean:message key="tabs.gestorExpediente"/>							
+							</html:link>	
+					</li>
+				</logic:equal>		
+			</logic:notEmpty>
 		</ul>
 	</logic:notPresent>		
 </div>

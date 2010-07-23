@@ -75,8 +75,49 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
 			lc = new LoginContext("client-login", handler);
 			lc.login();
 			
-			// Realizamos envio
+			// Actualizamos estado expediente
 			doActualizaEstadoExpediente(id);	
+			
+		}catch (Exception le){
+			throw new EJBException("No se puede hacer login con usuario auto",le);
+		}finally{				
+			// Hacemos el logout
+			if ( lc != null ){
+				try{lc.logout();}catch(Exception exl){}
+			}
+		}
+	}
+	
+	/**
+	 * Actualiza estado de un expediente a partir de un elemento del expediente.
+	 * Si el elemento no pertenece a un expediente no hace nada.
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked = "true"
+     * 
+     */
+	public void actualizaEstadoExpedienteDelElementoExpediente(String tipoElementoExpediente,Long codigoElementoExpediente)  
+	{
+		backupLog.debug("actualiza estado expediente del elemento expediente " + tipoElementoExpediente + " - " + codigoElementoExpediente );
+		
+		LoginContext lc = null;		
+		try{					
+			// Realizamos login JAAS con usuario para proceso automatico	
+			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+			String user = props.getProperty("auto.user");
+			String pass = props.getProperty("auto.pass");
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			lc = new LoginContext("client-login", handler);
+			lc.login();
+			
+			// Obtenemos elemento expediente
+			ElementoExpediente elementoExpe = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpediente(tipoElementoExpediente,codigoElementoExpediente);
+			
+			// Actualizamos estado expediente asociado
+			if (elementoExpe != null){
+				doActualizaEstadoExpediente(elementoExpe.getExpediente().getCodigo());
+			}
+				
 		}catch (Exception le){
 			throw new EJBException("No se puede hacer login con usuario auto",le);
 		}finally{				
@@ -170,7 +211,11 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
 			estado = Expediente.ESTADO_SOLICITUD_ENVIADA;
 			fechaFin = ((EntradaTelematica) de).getFecha();
 		}else if (e.getTipoElemento().equals(ElementoExpediente.TIPO_ENTRADA_PREREGISTRO)){
+			if ( ((EntradaPreregistro) de).getFechaConfirmacion() != null ){
 			estado = Expediente.ESTADO_SOLICITUD_ENVIADA;
+			}else{
+				estado = Expediente.ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL;				
+			}
 			fechaFin = ((EntradaPreregistro) de).getFecha();
 		}else if (e.getTipoElemento().equals(ElementoExpediente.TIPO_AVISO_EXPEDIENTE)){
 			if ( ((EventoExpediente) de).getFechaConsulta() != null){

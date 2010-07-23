@@ -39,6 +39,7 @@
         	<include name="*.jar" />
         </fileset> 
     	<fileset dir="${lib.dir}/client">    	
+    		<include name="zonaper-client.jar"/>
         	<include name="sistra-client.jar"/>
     	</fileset>        	
         <fileset dir="${distribucion.dir}/lib">    	

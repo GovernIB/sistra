@@ -536,7 +536,9 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
     /**
      * Devuelve el valor de autorellenar un campo.
      * 
-     * Devuelve un string para campos monovaluados o una lista (de strings) para campos multivaluados
+     * Devuelve:
+     * 	-  un string para campos monovaluados
+     *  -  una lista de strings para campos multivaluados
      * 
      * @ejb.interface-method
      */
@@ -549,11 +551,20 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
             return new ArrayList();
         }
 
-        Object result = ScriptUtil.evalScript(script, variablesScriptActuals());
+        // Obtenemos vbles actuales
+        Map variables = variablesScriptActuals();
+        
+        // La expresion autorrellenable para un campo lista de elementos sólo esta 
+        // permitida si depende de datos de pantallas anteriores
+    	if (campo instanceof ListaElementos){
+    		return "";
+    	}
+    	
+        Object result = ScriptUtil.evalScript(script, variables);
                 
         if (result instanceof NativeArray) {
         	
-        	List lstParams = new LinkedList();
+        	List resultList = new LinkedList();
         	
         	// Array de strings
         	NativeArray params = (NativeArray) result;        	
@@ -563,16 +574,15 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
     			for ( int i = 0; i < ids.length; i++ )
     			{
     				Object valorParametro = params.get( (( Integer ) ids[i] ).intValue() , params ); 
-    				lstParams.add( valorParametro.toString() );
+    				resultList.add( valorParametro.toString() );
     			}
     		}    
     		
-    		return lstParams;
+    		return resultList;
         }else {
         	// Cadena simple
         	return ((result!=null?result.toString():""));        	
         }
-             
     }
 
     

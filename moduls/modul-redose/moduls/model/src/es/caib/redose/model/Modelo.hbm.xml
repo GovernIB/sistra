@@ -18,6 +18,10 @@
         <property name="descripcion" column="MOD_DESC" length="400" />
         <property name="estructurado" type="char" column="MOD_ESTRUC" length="1" not-null="true" />
 
+        
+        <property name="custodiar" type="char" column="MOD_CUSTOD" length="1" not-null="true" />
+        
+
 		<set name="versiones" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="VER_VERSIO">
 			<cache usage="read-write"/>
 		    <key column="VER_CODMOD"/>

@@ -32,6 +32,8 @@ import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.redose.modelInterfaz.UsoRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
+import es.caib.regtel.model.ValorOrganismo;
+import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
 import es.caib.sistra.model.AsientoCompleto;
 import es.caib.sistra.model.ConfiguracionFormulario;
 import es.caib.sistra.model.ConfiguracionGestorFlujoFormulario;
@@ -60,6 +62,7 @@ import es.caib.sistra.model.TraTramite;
 import es.caib.sistra.model.TramiteFront;
 import es.caib.sistra.model.TramiteNivel;
 import es.caib.sistra.model.TramiteVersion;
+import es.caib.sistra.modelInterfaz.ConstantesDominio;
 import es.caib.sistra.modelInterfaz.DocumentoConsulta;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
 import es.caib.sistra.persistence.delegate.TramiteVersionDelegate;
@@ -67,12 +70,14 @@ import es.caib.sistra.persistence.plugins.CalculoPago;
 import es.caib.sistra.persistence.plugins.ConfiguracionDinamica;
 import es.caib.sistra.persistence.plugins.ConfiguracionDinamicaTramitePlugin;
 import es.caib.sistra.persistence.plugins.DatosIniciales;
+import es.caib.sistra.persistence.plugins.DestinatarioTramite;
 import es.caib.sistra.persistence.plugins.PluginFormularios;
 import es.caib.sistra.persistence.plugins.PluginPagos;
 import es.caib.sistra.persistence.util.GeneradorAsiento;
 import es.caib.sistra.persistence.util.Literales;
 import es.caib.sistra.persistence.util.LoggerRegistro;
 import es.caib.sistra.persistence.util.ScriptUtil;
+import es.caib.sistra.persistence.util.UtilDominios;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.firma.FirmaIntf;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
@@ -83,7 +88,6 @@ import es.caib.sistra.plugins.pagos.SesionPago;
 import es.caib.sistra.plugins.pagos.SesionSistra;
 import es.caib.util.CredentialUtil;
 import es.caib.util.DataUtil;
-import es.caib.util.FirmaUtil;
 import es.caib.util.NifCif;
 import es.caib.util.StringUtil;
 import es.caib.xml.ConstantesXML;
@@ -875,6 +879,11 @@ public class TramiteProcessorEJB implements SessionBean {
     		// Obtensmos configuracion nivel
 	    	DocumentoNivel docNivel = doc.getDocumentoNivel(datosSesion.getNivelAutenticacion());
 	    	
+	    	// Comprobamos que el pago no sea dependiente tras ejecutar el script de obligatoriedad (es decir obligatorio/opcional)
+	    	if (tramiteInfo.getPago(identificador,instancia).getObligatorio() == DocumentoFront.DEPENDIENTE  ){
+	    		throw new Exception("El script de obligatoriedad indica que el pago no se puede realizar");
+	    	}
+	    	
 	    	// Obtenemos datos actuales del pago	   
 	    	HashMap param = new HashMap();
 	    	String ls_id = identificador + "-" + instancia;
@@ -957,7 +966,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	        		
 	        		// Si no es positiva es que existe un error en el calculo
 	        		if (impInt < 0) {
-	        			throw new Exception("Estado del pago no es correcto");
+	        			throw new Exception("Error al calcular el importe de la tasa");
 	        		}
 	        		
 	        		// Creamos los datos del pago
@@ -979,7 +988,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	        		datosPago.setDomicilioVia(calc.getDomicilioVia()); 
 	        		datosPago.setFax(calc.getFax()); 
 	        		datosPago.setLocalidad(calc.getLocalidad()); 
-	        		datosPago.setNif(calc.getNif()); 
+	        		datosPago.setNif( NifCif.normalizarDocumento(calc.getNif())); 
 	        		datosPago.setNombre(calc.getNombre()); 
 	        		datosPago.setProvincia(calc.getProvincia()); 
 	        		datosPago.setTelefono(calc.getTelefono()); 
@@ -994,6 +1003,9 @@ public class TramiteProcessorEJB implements SessionBean {
 	        		dp.setModelo(datosPago.getModelo());
 	        		dp.setNifDeclarante(datosPago.getNif());
 	        		dp.setNombreDeclarante(datosPago.getNombre());
+	        		dp.setModeloTramite(this.tramiteInfo.getModelo());
+	        		dp.setVersionTramite(this.tramiteInfo.getVersion());
+	        		dp.setIdentificadorTramite(this.tramiteInfo.getIdPersistencia());
 	        		dp.setNombreTramite(this.tramiteInfo.getDescripcion());
 	        		dp.setNombreUsuario(this.datosSesion.getNombreCompletoUsuario());	        		
 	        		dp.setTipoPago(datosPago.getTipoPago());
@@ -1143,17 +1155,14 @@ public class TramiteProcessorEJB implements SessionBean {
     		// Apuntamos en auditoria	
     		if (confirmado){
     			logAuditoria(ConstantesAuditoria.EVENTO_PAGO,"S","Pago confirmado",Character.toString(datosPago.getTipoPago()));
-    			if (datosPago.getTipoPago() == 'T') 
-    				logAuditoria(ConstantesAuditoria.EVENTO_PAGO_TELEMATICO_CONFIRMADO,"S","",datosPago.getNumeroDUI());
     		}
     	}
     }
     
     /**
      * Anular pago :
-     * 	- Un pago telemático se puede anular si esta iniciado pero no terminado
-     *  - Un pago presencial se puede anular si esta iniciado o terminado
-     *  
+     * 	Desde el asistente de tramitación sólo se permite anular pagos presenciales finalizados.
+     *  En realidad no se anula, sino que se deshecha el pago anterior y se crea otro nuevo.
      *  
      * @ejb.interface-method    
      * @ejb.permission role-name="${role.user}"
@@ -1161,8 +1170,6 @@ public class TramiteProcessorEJB implements SessionBean {
     public RespuestaFront anularPago(String identificador,int instancia) {    	
     	
     	DatosPago datosPago = null; // Datos del pago
-    	boolean anulado = false;   // Indica si se ha anulado pago
-    	boolean confirmado = true; // Indica que el pago se ha confirmado
     	
     	try{
 
@@ -1180,69 +1187,10 @@ public class TramiteProcessorEJB implements SessionBean {
 	    		throw new Exception("No existen datos pago");
 	    	}
 	    	
-	    	// Procedemos segun el estado del documento
-	    	switch (docPAD.getEstado()){
-	    		case DocumentoPersistentePAD.ESTADO_NORELLENADO:
-	    			// Sea presencial o telemático sólo se podrá anular si ha sido iniciado
-	    	    	throw new Exception("Se ha invocado a anular Pago y el pago no ha sido iniciado");	    	    	
-	    		case DocumentoPersistentePAD.ESTADO_CORRECTO:
-	    			// Solo se admite xa presencial
-	    			if (datosPago.getEstado() == 'T'){
-	    	    		throw new Exception("Se ha invocado a anular Pago y el pago es telemático y ha sido finalizado");
-	    	    	}	    			
-	    			break;
-	    		case DocumentoPersistentePAD.ESTADO_INCORRECTO:
-	    			// Si el pago esta iniciado antes comprobamos su estado
-	    	    	PluginPagosIntf pluginPago = PluginFactory.getInstance().getPluginPagos();
-	    	    	EstadoSesionPago estadoSesionPago = pluginPago.comprobarEstadoSesionPago(datosPago.getLocalizador());
-	    	    	
-	    	    	MensajeFront mens;	    				
-    				switch (estadoSesionPago.getEstado()){
-    					case ConstantesPago.SESIONPAGO_NO_EXISTE_SESION:
-    						// No existe sesion de pago. Dejamos anular pago.
-    						break;
-    					case ConstantesPago.SESIONPAGO_EN_CURSO:
-    						// Sesion en curso. Dejamos anular pago.
-    						// -- Finalizamos sesion de pago en el plugin
-    						pluginPago.finalizarSesionPago(datosPago.getLocalizador());
-    						break;
-    					case ConstantesPago.SESIONPAGO_PAGO_PENDIENTE_CONFIRMAR:
-    						// Pago pendiente de confirmacion. No dejamos anular.
-    						mens = new MensajeFront();
-	    		    		mens.setTipo(MensajeFront.TIPO_WARNING);
-	    		    		mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ANULARPAGOPENDIENTECONFIRMAR));	    		    		
-	    		    		mens.setMensajeExcepcion("No se puede anular el pago porque esta pendiente de confirmacion");
-	    		    		return generarRespuestaFront(mens,null);   	 	
-    					case ConstantesPago.SESIONPAGO_PAGO_CONFIRMADO:
-    						// Pago ha sido realizado
-    						// - Si es presencial dejamos anularlo. Finalizamos sesion de pago en plugin.
-    						if (estadoSesionPago.getTipo() == 'P'){
-    							pluginPago.finalizarSesionPago(datosPago.getLocalizador());
-    						}else{    						
-	    						// Si es telematico no dejamos anular.
-	    						//  -- Actualizamos datos pago
-	    	    		    	datosPago.setTipoPago(estadoSesionPago.getTipo());
-	    	    		    	datosPago.setNumeroDUI(estadoSesionPago.getIdentificadorPago());
-	    	    		    	datosPago.setJustificantePago(estadoSesionPago.getReciboB64PagoTelematico());
-	    	    		    	datosPago.setFechaPago(estadoSesionPago.getFechaPago());
-	    	    				//  -- Actualizamos documento de pago en PAD y RDS	    	
-	    	    		    	RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();	    		    		    	
-	    	    		    	rds.actualizarFichero(docPAD.getRefRDS(),datosPago.getBytes());
-	    	    		    	docPAD.setEstado(DocumentoPersistentePAD.ESTADO_CORRECTO);	    	
-	    	    		    	actualizarPAD();
-	    	    		    	// -- Actualizamos estado paso Pagar    		
-	    			        	pasoRellenar.setCompletado(this.evaluarEstadoPaso(pasoActual));
-	    						// -- Mostramos mensaje
-		    			    	mens = new MensajeFront();
-		    		    		mens.setTipo(MensajeFront.TIPO_WARNING);
-		    		    		mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ANULARPAGOTELEMATICOREALIZADO));	    		    		
-		    		    		mens.setMensajeExcepcion("No se puede anular el pago telemático porque ya esta pagado");
-		    		    		return generarRespuestaFront(mens,null);   	 	 
-    						}
-	    		    	default:
-	    		    		throw new Exception("Estado sesion de pago desconocido: " + estadoSesionPago.getEstado());
-    				}	    	    	
-	    	    	break;		    	    
+	    	// Solo se admite anular desde asistente tramitacion para presencial y pago finalizado
+			if (docPAD.getEstado() != DocumentoPersistentePAD.ESTADO_CORRECTO || 
+				datosPago.getTipoPago() != 'P'){
+	    		throw new Exception("Desde el asistente de tramitación sólo se permite anular pagos presenciales finalizados");
 	    	}
 	    	
 	    	// Anulamos pago: borramos pago del RDS, actualizamos PAD y borrar de listas pagos
@@ -1253,9 +1201,6 @@ public class TramiteProcessorEJB implements SessionBean {
 	    		    	
 	    	// Devolvemos estado tramite
 	    	RespuestaFront res =  this.generarRespuestaFront(null,null);
-	    	
-	    	// Indicamos que el pago se ha anulado
-	    	anulado = true;
 	    	
 	    	return res;
     		
@@ -1281,16 +1226,6 @@ public class TramiteProcessorEJB implements SessionBean {
     		RespuestaFront resFront = generarRespuestaFront(mens,null);
     		this.context.setRollbackOnly();
     		return resFront;
-    	} finally{
-    		// Auditamos si anulamos pago y es telematico
-    		if (anulado && datosPago.getTipoPago() == 'T')
-    			logAuditoria(ConstantesAuditoria.EVENTO_PAGO_TELEMATICO_ANULADO,"S","",datosPago.getNumeroDUI());
-    		// Auditamos si se confirma
-    		if (confirmado){
-    			logAuditoria(ConstantesAuditoria.EVENTO_PAGO,"S","Pago confirmado",Character.toString(datosPago.getTipoPago()));
-    			if (datosPago.getTipoPago() == 'T') 
-    				logAuditoria(ConstantesAuditoria.EVENTO_PAGO_TELEMATICO_CONFIRMADO,"S","",datosPago.getNumeroDUI());
-    		}
     	} 	
     }
     
@@ -1739,12 +1674,18 @@ public class TramiteProcessorEJB implements SessionBean {
     public RespuestaFront anexarDocumento(String identificador,int instancia,byte[] datosDocumento,String nomFichero,String extension,String descPersonalizada,FirmaIntf firma) {
     	//TODO: Contemplar anexo de documentos desde la PAD
     	//TODO: Blindar para q no puedan anexarse docs q pertenecen a otro flujo
+    	
+    	boolean conversion = false;
+    	
     	try{	    	
     		// Comprobamos que estamos en el paso de anexar
     		PasoTramitacion pasoRellenar = (PasoTramitacion) pasosTramitacion.get(pasoActual);
     		if (pasoRellenar.getTipoPaso() != PasoTramitacion.PASO_ANEXAR){
     			throw new Exception("Se ha invocado a anexar documento desde un paso distinto a anexar");
     		}
+    		
+    		// Delegate del RDS
+    		RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
     		
 	    	// Obtenemos configuracion anexo
 	    	Documento doc = obtenerDocumentoAnexo(identificador);
@@ -1801,8 +1742,25 @@ public class TramiteProcessorEJB implements SessionBean {
 		    	    	return generarRespuestaFront(mens,null);
 		    		}
 
+	    		}else{
+	    			// Comprobamos si hay que convertir documento a PDF
+	    			// SOLO EXTENSIONES: DOC,DOCX y ODT
+	    			if (doc.getAnexoConversionPDF() == 'S' &&	    				
+	    				(("doc,docx,odt,").indexOf(extension.toLowerCase() + ",") != -1)){
+	    				try{
+	    					conversion = true;
+	    					datosDocumento = rds.convertirFicheroAPDF(datosDocumento,extension);
+	    					nomFichero = nomFichero.substring(0,nomFichero.length() - extension.length()) + "pdf";
+	    					extension="pdf";
+	    				}catch(Exception ex){
+	    					MensajeFront mens = new MensajeFront();
+	    	    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
+	    	    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ANEXOERRORCONVERSION));
+	    	    	    	mens.setMensajeExcepcion("Error al convertir a PDF fichero con extension: " + extension + ": " +  ex.getMessage());
+	    	    	    	return generarRespuestaFront(mens,null); 
+	    				}
+	    			}	    			
 	    		}
-
 	    	}
 	    	
 	    	// Obtenemos estado persistencia documento
@@ -1834,7 +1792,6 @@ public class TramiteProcessorEJB implements SessionBean {
 	    	// Insertamos / actualizamos los documentos en el RDS
 	    	// (si no hay que presentarlo telemáticamente no es necesario)
 	    	if (doc.getAnexoPresentarTelematicamente() == 'S'){
-		    	RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
 		    	ReferenciaRDS refRds;	    
 		    	DocumentoRDS docRds = new DocumentoRDS();
 	    		docRds.setModelo(doc.getModelo());
@@ -1893,7 +1850,14 @@ public class TramiteProcessorEJB implements SessionBean {
 	    	pasoRellenar.setCompletado(evaluarEstadoPaso(pasoActual));
 	    	    	
 	    	// Establecemos respuesta front	    	
-	    	return this.generarRespuestaFront(null,null);
+	    	//  (Si se ha convertido el doc a PDF mostramos mensaje al usuario para que lo verifique)
+	    	MensajeFront mensFinal = null;
+	    	if (conversion){
+	    		mensFinal = new MensajeFront();	    		
+	    		mensFinal.setTipo(MensajeFront.TIPO_INFO);
+	    		mensFinal.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ANEXOVERIFICARCONVERSION));    	    	
+	    	}	    	
+	    	return this.generarRespuestaFront(mensFinal,null);
 	    	
     	}catch (ProcessorException pe){
     		log.error(mensajeLog("ProcessorException al anexar"),pe);
@@ -2424,7 +2388,6 @@ public class TramiteProcessorEJB implements SessionBean {
     		return null;
     	}
     }
-    
     
     
     /**
@@ -3342,11 +3305,16 @@ public class TramiteProcessorEJB implements SessionBean {
 			}
 			
 			// Si todavía no se ha enviado y hay algo pendiente de flujo
-			if (ultimoPasoCompletado < tramite.getPasoNoRetorno() && pendienteFlujo){		
+			if (ultimoPasoCompletado <= tramite.getPasoNoRetorno() && pendienteFlujo){		
 				PasoTramitacion paso = (PasoTramitacion) tramite.getPasos().get(ultimoPasoCompletado);			
+				PasoTramitacion pasoSiguiente = (PasoTramitacion) tramite.getPasos().get(ultimoPasoCompletado + 1);
 				String nifFlujo = "";
-				// Se ha llegado hasta anexar -> Permitimos el pase			
-				if (paso.getTipoPaso() == PasoTramitacion.PASO_ANEXAR){
+				
+				// Si hay paso anexar, se debe llegar hasta paso anexar. Sino vale con llegar hasta rellenar.
+				if ( (paso.getTipoPaso() == PasoTramitacion.PASO_ANEXAR)
+						||
+					(paso.getTipoPaso() == PasoTramitacion.PASO_RELLENAR && pasoSiguiente.getTipoPaso() != PasoTramitacion.PASO_ANEXAR)
+					){
 					// Buscamos al siguiente a quien debemos pasar
 					// ¿Hay formularios pendientes?				
 					for (int i=0;i<tramite.getFormularios().size();i++){
@@ -3383,7 +3351,14 @@ public class TramiteProcessorEJB implements SessionBean {
 				
 				// Se ha llegado hasta registrar -> Permitimos el pase
 				if (paso.getTipoPaso() == PasoTramitacion.PASO_REGISTRAR){
-					// TODO PENDIENTE DE IMPLEMENTAR (ADECUAR TB FRONT)
+					// Si esta pendiente de flujo, es que los demas anteriores estan completados
+					if (paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_FLUJO)){
+						// Quién debe registrar es el que aparece como representante
+						String nifRpte = this.calcularNifRepresentante();
+						if (!tramite.getDatosSesion().getNifUsuario().equals(nifRpte)){
+							nifFlujo = nifRpte;
+						}						
+					}
 				}
 				
 				// Si hay que pasarlo a algún Nif lo indicamos y calculamos los datos de la persona
@@ -3698,9 +3673,18 @@ public class TramiteProcessorEJB implements SessionBean {
     			}    			    		
     			break;    		
     		case PasoTramitacion.PASO_REGISTRAR:
-    			// Este paso se marcará como correcto en el paso de firma/envío
-    			completado = paso.getCompletado();
-    			break;
+    			if (PasoTramitacion.ESTADO_COMPLETADO.equals(paso.getCompletado())){
+    				completado = PasoTramitacion.ESTADO_COMPLETADO;
+    			}else{    				
+    				// En caso de que este activado el control de flujo controlamos si se debe pasar el tramite a 
+        			// otro usuario para registrar
+    				if (!tramiteInfo.isFlujoTramitacion() || tramiteInfo.getDatosSesion().getNifUsuario().equals(calcularNifRepresentante())){    							
+    					completado = PasoTramitacion.ESTADO_PENDIENTE;    					 
+    				}else{
+   						completado = PasoTramitacion.ESTADO_PENDIENTE_FLUJO;    					
+    				}   	    				
+    			}
+
     	}
     	return completado;
     }
@@ -3719,11 +3703,25 @@ public class TramiteProcessorEJB implements SessionBean {
     			// SI HAY PAGOS CON ESTADO ES INCORRECTO  
     			//eliminarPagosNoFinalizados();
     			
-    			// Generamos asiento (no podemos generar si hay notificacion y todavia no se ha seleccionado)
-    			if ( tramiteInfo.getSeleccionNotificacionTelematica() != null || 
-    				 tramiteInfo.getHabilitarNotificacionTelematica().equals(ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA)
-    				){
-	    				AsientoCompleto asiento = generaAsientoRegistral();
+    			// No generar asiento si:
+    			//		- esta pendiente de flujo
+    			//	    - esta pendiente de seleccionar notificacion telematica
+    			boolean pendienteFlujo = paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_FLUJO);
+    			boolean pendienteSeleccionarNotif = (!tramiteInfo.getHabilitarNotificacionTelematica().equals(ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA) && tramiteInfo.getSeleccionNotificacionTelematica() == null);
+    			if (  !(pendienteFlujo || pendienteSeleccionarNotif) ) {
+    					// Generar asiento
+
+    					// Calculamos destinatario tramite (por si se especifica dinamicamente) 
+        				DestinatarioTramite dt = this.calcularDestinatarioTramite();
+    				
+        				// Generamos asiento (le pasamos destinatario tramite por si se especifica dinamicamente)
+	    				AsientoCompleto asiento = generaAsientoRegistral(dt);
+		    			
+	    				// En caso de que el destinatario se haya especificado dinamicamente
+	    				// cambiamos de UA todos los docs en el RDS
+	    				if (dt.isCalculado()) cambiarUADocs(dt);
+	    				
+	    				// Establecemos el asiento como parametro del paso
 		    			param.put("asiento",asiento);    			    			
     			}
     			break;
@@ -3739,6 +3737,31 @@ public class TramiteProcessorEJB implements SessionBean {
     	return param;
     }
     
+    /**
+     * Cambia de UA los documentos del tramite en caso de que se haya calculado
+     * dinamicamente el destinatario
+     * @param dt Destinatario tramite
+     * @throws Exception 
+     */
+    private void cambiarUADocs(DestinatarioTramite dt) throws Exception {
+		try{
+	    	RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();    	
+	    	String key;
+	    	DocumentoPersistentePAD doc;
+	    	Long codUA = Long.parseLong(dt.getUnidadAdministrativa());
+	    	for (Iterator it = tramitePersistentePAD.getDocumentos().keySet().iterator();it.hasNext();){
+	    		key = (String) it.next();
+	    		doc = (DocumentoPersistentePAD) tramitePersistentePAD.getDocumentos().get(key);
+	    		if (doc.getRefRDS()!=null){
+	    			rds.cambiarUnidadAdministrativa(doc.getRefRDS(),codUA);
+	    		}
+	    	}
+		}catch (Exception ex){
+			throw new Exception("Excepcion actualizando unidad administrativa de los documentos",ex);
+		}
+		
+	}
+
     // Establece respuesta
     private RespuestaFront generarRespuestaFront(MensajeFront mensaje,HashMap parametros){
     	try{
@@ -3766,13 +3789,13 @@ public class TramiteProcessorEJB implements SessionBean {
     }
     
     // Genera asiento registral y datos propios y los almacena en el RDS y la PAD
-    private AsientoCompleto generaAsientoRegistral() throws Exception{    	        	    	
+    private AsientoCompleto generaAsientoRegistral(DestinatarioTramite dt) throws Exception{    	        	    	
     	
     	// Generamos datos propios almacenandolos en el RDS
     	String xmlDatosPropios = generarDatosPropios();
     		
     	// Generamos asiento a partir información trámite y lo almacenamos en el RDS
-    	String xmlAsiento =  generarAsiento();    		    		
+    	String xmlAsiento =  generarAsiento(dt);    		    		
 
     	// Actualizamos PAD para que recoger los documentos generados
     	actualizarPAD();
@@ -3785,7 +3808,7 @@ public class TramiteProcessorEJB implements SessionBean {
     }
      
     // Genera XML de asiento y lo almacena en RDS
-    private String generarAsiento() throws Exception{
+    private String generarAsiento(DestinatarioTramite dt) throws Exception{
     	
     	// Calculamos datos representante y representado
     	String rpteNif="",rpteNom="",rpteProv=null,rpteLoca=null,rptePais=null,rpdoNif=null,rpdoNom=null;    	
@@ -3808,7 +3831,7 @@ public class TramiteProcessorEJB implements SessionBean {
     	// Generamos asiento
     	String xmlAsiento = GeneradorAsiento.generarAsientoRegistral(tramiteInfo,tramiteVersion,tramitePersistentePAD,			
 			rpteNif,rpteNom,rpteProv,rpteLoca,rptePais,
-			rpdoNif,rpdoNom);
+			rpdoNif,rpdoNom,dt);
     	
     	// Almacenamos asiento en el RDS y creamos documento en PAD
     	byte [] datosAsiento = GeneradorAsiento.XMLtoBytes(xmlAsiento);
@@ -3990,7 +4013,7 @@ public class TramiteProcessorEJB implements SessionBean {
     	ResultadoRegistrar res;
     	if (tramiteVersion.getDestino() == ConstantesSTR.DESTINO_CONSULTA) {    		
     		res = dest.consultar(tramiteVersion.getConsultaTipoAcceso(),tramiteVersion.getConsultaEJB(),tramiteVersion.getConsultaLocalizacion() == TramiteVersion.EJB_LOCAL ,tramiteVersion.getConsultaUrl(),
-    				tramiteVersion.getConsultaAuth(),tramiteVersion.getConsultaAuthUser(),tramiteVersion.getConsultaAuthPwd(),this.datosFormularios);
+    				tramiteVersion.getConsultaAuth(),tramiteVersion.getConsultaAuthUser(),tramiteVersion.getConsultaAuthPwd(),this.tramiteVersion.getTramite().getIdentificador(),this.datosFormularios);
     	}else {
     		res = dest.registrar(tramiteVersion.getDestino(),tramitePersistentePAD.getIdPersistencia(),asientoCompleto,referenciasRDS);
     		
@@ -4311,6 +4334,48 @@ public class TramiteProcessorEJB implements SessionBean {
     		rpteNom = this.evaluarScript(scriptRpteNom,null);
     	}
     	return rpteNom;
+	}
+	
+	/**
+	 * Calcula destinatario tramite dinamico según el script
+	 * @return
+	 */
+	private DestinatarioTramite calcularDestinatarioTramite() throws Exception{
+		EspecTramiteNivel especVersion = tramiteVersion.getEspecificaciones();
+    	EspecTramiteNivel especNivel = tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
+    	
+    	byte scriptDestinatario[];    	
+    	if (especNivel.getDestinatarioTramite() != null && especNivel.getDestinatarioTramite().length > 0 ){
+    		scriptDestinatario = especNivel.getDestinatarioTramite();
+    	}else{
+    		scriptDestinatario = especVersion.getDestinatarioTramite();
+    	}
+    	
+    	DestinatarioTramite destTra = new DestinatarioTramite();
+    	destTra.setCalculado(false);
+    	destTra.setOficinaRegistral(tramiteVersion.getRegistroOficina());
+    	destTra.setOrganoDestino(tramiteVersion.getOrganoDestino());
+    	destTra.setUnidadAdministrativa(tramiteVersion.getUnidadAdministrativa().toString());
+    	
+		if (scriptDestinatario != null && scriptDestinatario.length>0){
+			// Realizamos calculo destinatario
+			HashMap params = new HashMap();
+			params.put("DESTINATARIO_TRAMITE",destTra);
+			this.evaluarScript(scriptDestinatario,params);
+			
+			// Validamos resultado calculo
+			destTra.setCalculado(true);
+			
+			if (!this.validarCodigoOficina(destTra.getOficinaRegistral())) 
+				throw new Exception("El codigo de oficina establecido por el script no es valido");
+			if (!this.validarCodigoOrgano(destTra.getOrganoDestino())) 
+				throw new Exception("El codigo de organo destino establecido por el script no es valido");
+			if (!this.validarCodigoUA(destTra.getUnidadAdministrativa())) 
+				throw new Exception("El codigo de unidad administrativa establecido por el script no es valido");
+			
+		}
+		
+		return destTra;
 	}
 	
 	/**
@@ -4806,6 +4871,66 @@ public class TramiteProcessorEJB implements SessionBean {
 	    	return doc;
 	 }
 	 
+	 /**
+	  * Valida si la oficina de registro es válida
+	  * @param codOrgano Codigo oficina
+	  * @return true/false
+	  * @throws Exception
+	  */
+	 private boolean validarCodigoOficina(String codOficina) throws Exception{
+		List oficinas = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerOficinasRegistro();
+		for (Iterator it = oficinas.iterator();it.hasNext();){
+			ValorOrganismo vo = (ValorOrganismo) it.next();
+			if (vo.getCodigo().equals(codOficina)){
+				return true;
+			}
+		}
+		return false;
+	}
 	 
+	 
+	 /**
+	  * Valida si el codigo de organo destino es válido
+	  * @param codOrgano Codigo organos destino
+	  * @return true/false
+	  * @throws Exception
+	  */
+	 private boolean validarCodigoOrgano(String codOrgano) throws Exception{
+		List organos = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerServiciosDestino();
+		for (Iterator it = organos.iterator();it.hasNext();){
+			ValorOrganismo vo = (ValorOrganismo) it.next();
+			if (vo.getCodigo().equals(codOrgano)){
+				return true;
+			}
+		}
+		return false;
+	}
 	
+	 /**
+	  * Valida si el codigo de unidad administrativa es válido
+	  * @param codUA Codigo UA
+	  * @return true/false
+	  * @throws Exception
+	  */
+	 private boolean validarCodigoUA(String codUA) throws Exception{
+	 
+		// Comprobamos q es un long 
+		try{
+			Long.parseLong(codUA);
+		}catch (Exception ex){
+			return false;
+		}
+	
+		// Buscamos en la lista 
+		List lstParametros = new ArrayList();
+		lstParametros.add(codUA);
+		List lstValores = UtilDominios.obtenerValoresDominio(
+				ConstantesDominio.DOMINIO_SAC_NOMBRE_UNIDAD_ADMINISTRATIVA,
+				lstParametros);
+		if (lstValores.size() == 1) {
+			return true;
+		} else {
+			return false;
+		}			
+	}
 }

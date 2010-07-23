@@ -7,8 +7,7 @@
 <bean:define id="firstPage" value="0" />
 		<!-- informacio -->		
 		<div id="info">
-			<!-- continguts -->
-		<div id="continguts">
+
 			<!-- titol -->
 			<h1>
 				<bean:message key="actualizarDatosPersonales.titulo"/>
@@ -24,43 +23,41 @@
 			<html:form action="/protected/actualizarDatosPersonales" styleId="formConfirmacion">
 				
 				<p>
-					<label for="nif">
 						<span class="etiqueta"><bean:message key="actualizarDatosPersonales.nif"/></span>
 						<bean:write name="actualizarDatosPersonalesForm" property="nif"/>
-					</label>
 				</p>
 				<p>
-					<label for="nom">
+					<label for="nombre">
 						<span class="etiqueta"><bean:message key="actualizarDatosPersonales.nombre"/></span>
-						<html:text property="nombre" maxlength="50" size="20"/>						
+						<html:text property="nombre" styleId="nombre" maxlength="50" size="20"/>						
 					</label>
 				</p>
 				
 				<p>
-					<label for="llinatge1">
+					<label for="apellido1">
 						<span class="etiqueta"><bean:message key="actualizarDatosPersonales.apellido1"/></span>
-						<html:text property="apellido1" maxlength="50" size="20"/>
+						<html:text property="apellido1" styleId="apellido1" maxlength="50" size="20"/>
 					</label>
 				</p>
 				
 				<p>
-					<label for="llinatge2">
+					<label for="apellido2">
 						<span class="etiqueta"><bean:message key="actualizarDatosPersonales.apellido2"/></span>
-						<html:text property="apellido2" maxlength="50" size="20"/>
+						<html:text property="apellido2" styleId="apellido2" maxlength="50" size="20"/>
 					</label>
 				</p>
 				
 				<p>
-					<label for="adresa">
+					<label for="direccion">
 						<span class="etiqueta"><bean:message key="actualizarDatosPersonales.direccion"/></span>
-						<html:text property="direccion" maxlength="200" size="50"/>
+						<html:text property="direccion" styleId="direccion" maxlength="200" size="50"/>
 					</label>
 				</p>
 				
 				<p>
-					<label for="cp">
+					<label for="codigoPostal">
 						<span class="etiqueta"><bean:message key="actualizarDatosPersonales.codigoPostal"/></span>
-						<html:text property="codigoPostal" maxlength="5" size="5"/>
+						<html:text property="codigoPostal" styleId="codigoPostal" maxlength="5" size="5"/>
 					</label>
 				</p>
 				<p>
@@ -74,7 +71,7 @@
 					</label>
 				</p>
 				<p>
-					<label for="localitat">
+					<label for="municipio">
 						<span class="etiqueta"><bean:message key="actualizarDatosPersonales.municipio"/></span>
 						<html:select property="municipio" styleId="municipio">
 							<logic:present name="municipios">
@@ -87,23 +84,23 @@
 				</p>
 				
 				<p>
-					<label for="telefonFixe">
+					<label for="telefonoFijo">
 						<span class="etiqueta"><bean:message key="actualizarDatosPersonales.telefonoFijo"/></span>
-						<html:text property="telefonoFijo" maxlength="10" size="10"/>					
+						<html:text property="telefonoFijo" styleId="telefonoFijo" maxlength="10" size="10"/>					
 					</label>
 				</p>
 				
 				<p>
-					<label for="telefonMobil">
+					<label for="telefonoMovil">
 						<span class="etiqueta"><bean:message key="actualizarDatosPersonales.telefonoMovil"/></span>						
-						<html:text property="telefonoMovil" maxlength="10" size="10"/>
+						<html:text property="telefonoMovil" styleId="telefonoMovil" maxlength="10" size="10"/>
 					</label>
 				</p>
 				
 				<p>
 					<label for="email">
 						<span class="etiqueta"><bean:message key="actualizarDatosPersonales.email"/></span>
-						<html:text property="email" maxlength="50" size="50"/>
+						<html:text property="email" styleId="email" maxlength="50" size="50"/>
 					</label>
 				</p>
 				
@@ -124,7 +121,7 @@
 			 -->	
 		</div>
 		
-		<script>
+		<script type="text/javascript">
 			function llenarMunicipios(){
 				codProv = $("#provincia").val();						
 				$.ajaxSetup({

@@ -27,7 +27,10 @@
     <property name="campoRteNom" type="binary" column="ETN_RTENOM"/>
     <property name="campoRdoNif" type="binary" column="ETN_RDONIF"/>
     <property name="campoRdoNom" type="binary" column="ETN_RDONOM"/>
+    
     <property name="checkEnvio" type="binary" column="ETN_CHKENV"/>
+    
+    <property name="destinatarioTramite" type="binary" column="ETN_DSTTRA"/>
     
     <property name="urlFin" type="binary" column="ETN_URLFIN"/>
 

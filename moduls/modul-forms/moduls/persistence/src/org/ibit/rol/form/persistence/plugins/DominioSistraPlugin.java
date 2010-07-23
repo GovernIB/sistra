@@ -33,17 +33,29 @@ public class DominioSistraPlugin extends ValorPosiblePlugin
 	private boolean caching = true;
 	
 	//private static String urlSistra = null;
-	private String idKeyColumn,valueKeyColumn,parentKeyColumn;
+	private String idKeyColumn,valueKeyColumn,parentKeyColumn,defaultValue;
 	
 	private Boolean inicializado = null;
 	private String urlSistra = null; // Url sistra en caso de que este en servidor distinto de la plataforma
 	
-	public DominioSistraPlugin( String nombreDominio, NativeArray params,String idKeyColumn,String valueKeyColumn,String parentKeyColumn)
+	
+	/**
+	 * Recupera valores de un dominio. El resto de funciones de recuperar valores invocara a esta usando menos parametros.
+	 * 
+	 * @param nombreDominio Identificador del dominio
+	 * @param params Parametros del dominio
+	 * @param idKeyColumn Columna que se empleara como codigo para montar los ValoresPosibles
+	 * @param valueKeyColumn Columna que se empleara como valor para montar los ValoresPosibles
+	 * @param parentKeyColumn Permite establecer jerarquía entre los valores indicando que columna se utiliza para establecer el padre (el valor de esta columna será null para roots). Se utiliza para controles de selección en árbol. 
+	 * @param defaultValue Valor que será marcado como valor por defecto
+	 */
+	public DominioSistraPlugin( String nombreDominio, NativeArray params,String idKeyColumn,String valueKeyColumn,String parentKeyColumn, String defaultValue)
 	{
 		this.nombreDominio = nombreDominio;
 		this.idKeyColumn=idKeyColumn;
 		this.valueKeyColumn=valueKeyColumn;
 		this.parentKeyColumn=parentKeyColumn;
+		this.defaultValue = defaultValue;
 		this.params = params;
 		if ( inicializado == null )
 		{
@@ -63,6 +75,11 @@ public class DominioSistraPlugin extends ValorPosiblePlugin
 				log.error( "Error obteniendo configuracion del plugin", exc );
 			}
 		}
+	}	
+	
+	public DominioSistraPlugin( String nombreDominio, NativeArray params,String idKeyColumn,String valueKeyColumn,String parentKeyColumn)
+	{
+		this(nombreDominio,params,idKeyColumn,valueKeyColumn,parentKeyColumn,null);
 	}	
 	
 	public DominioSistraPlugin( String nombreDominio, NativeArray params,String idKeyColumn,String valueKeyColumn)
@@ -139,7 +156,7 @@ public class DominioSistraPlugin extends ValorPosiblePlugin
 		ValoresDominio vd = getValoresDominio(lang,this.caching);
 		
 		// Convertimos a valores posibles
-		ValorPosible[] valorsPosibles = valoresDominioToValoresPosible(vd,idKeyColumn,valueKeyColumn,parentKeyColumn,lang);
+		ValorPosible[] valorsPosibles = valoresDominioToValoresPosible(vd,idKeyColumn,valueKeyColumn,parentKeyColumn,lang,defaultValue);
 		
 		// Devolvemos valores posibles
 		return valorsPosibles;		
@@ -222,7 +239,7 @@ public class DominioSistraPlugin extends ValorPosiblePlugin
 	 * @param lang
 	 * @return
 	 */
-	private ValorPosible[] valoresDominioToValoresPosible(ValoresDominio vd,String columKey,String columValue,String parentKeyColumn, String lang){
+	private ValorPosible[] valoresDominioToValoresPosible(ValoresDominio vd,String columKey,String columValue,String parentKeyColumn, String lang, String defaultValue){
 		
 		String keyCol = columKey;
 		String valCol = columValue;
@@ -253,6 +270,10 @@ public class DominioSistraPlugin extends ValorPosiblePlugin
 					valorsPosibles[i - 1] = this.crearValorPosible( vd.getValor( i, keyCol ), lang, vd.getValor( i, valCol ) );
 				}else{
 					valorsPosibles[i - 1] = this.crearValorPosible( vd.getValor( i, keyCol ), lang, vd.getValor( i, valCol ), vd.getValor( i, parentKeyColumn ));
+				}
+				// Comprobamos si es el valor x defecto
+				if (defaultValue!= null && defaultValue.equals(valorsPosibles[i - 1].getValor())){
+					valorsPosibles[i - 1].setDefecto(true);
 				}
 			}		
 		}

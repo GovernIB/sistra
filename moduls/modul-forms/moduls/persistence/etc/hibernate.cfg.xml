@@ -36,9 +36,11 @@
         <mapping resource="org/ibit/rol/form/model/PuntoSalida.hbm.xml" />
         <mapping resource="org/ibit/rol/form/model/Salida.hbm.xml" />
         <mapping resource="org/ibit/rol/form/model/PropiedadSalida.hbm.xml" />
+        <mapping resource="org/ibit/rol/form/model/Grupos.hbm.xml" />
         <mapping resource="org/ibit/rol/form/model/ValidadorFirma.hbm.xml" />
-        
-        
+        <mapping resource="org/ibit/rol/form/model/RolGrupoFormulario.hbm.xml" />
+        <mapping resource="org/ibit/rol/form/model/RolUsuarioFormulario.hbm.xml" />
+        <mapping resource="org/ibit/rol/form/model/GrupoUsuario.hbm.xml" />
 		<mapping resource="org/ibit/rol/form/model/Version.hbm.xml" />
 
 

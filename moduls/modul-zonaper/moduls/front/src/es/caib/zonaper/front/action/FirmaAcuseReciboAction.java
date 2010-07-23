@@ -52,13 +52,16 @@ public class FirmaAcuseReciboAction extends BaseAction
 			firma =  plgFirma.parseFirmaFromHtmlForm( formulario.getFirma() );
 		}
 		
-		// Obtenemos notificacion
+		// Obtenemos notificacion y elemento expediente asociado
 		NotificacionTelematicaDelegate notificacionDelegate = DelegateUtil.getNotificacionTelematicaDelegate();
 		NotificacionTelematica notificacion;
+		ElementoExpediente elementoExpediente;
 		if (this.getDatosSesion(request).getNivelAutenticacion() == 'A'){
 			notificacion = notificacionDelegate.obtenerNotificacionTelematicaAnonima(formulario.getCodigo(),this.getIdPersistencia(request));					
+			elementoExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpedienteAnonimo(ElementoExpediente.TIPO_NOTIFICACION,notificacion.getCodigo(),this.getIdPersistencia(request));
 		}else{
 			notificacion = notificacionDelegate.obtenerNotificacionTelematicaAutenticada(formulario.getCodigo());			
+			elementoExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpedienteAutenticado(ElementoExpediente.TIPO_NOTIFICACION,notificacion.getCodigo());
 		}
 		
 		// Realizamos firma del acuse
@@ -70,14 +73,18 @@ public class FirmaAcuseReciboAction extends BaseAction
 				result = notificacionDelegate.firmarAcuseReciboNotificacionAutenticada(formulario.getCodigo(),asientoXML,firma);			
 			}		
 				
+			// Comprobamos si la firma es valida
 			if (!result){				
+				// Volvemos a mostrar la notificacion
 				request.setAttribute("notificacion",notificacion);
+				request.setAttribute("elementoExpediente",elementoExpediente);
 				request.setAttribute( "messageKey", "detalleNotificacion.firmanteNoAdecuado" );
 				return mapping.findForward( "fail" );
 			}
 		}catch (Exception ex){
 			_log.error("Error firmando acuse",ex);
 			request.setAttribute("notificacion",notificacion);
+			request.setAttribute("elementoExpediente",elementoExpediente);
 			request.setAttribute( "messageKey", "detalleNotificacion.firmaNoValida" );
 			return mapping.findForward( "fail" );
 		}

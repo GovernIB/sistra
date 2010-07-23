@@ -65,7 +65,7 @@ public class ClienteWS {
         	log.error( "Error resolviendo Dominio: " + e.getMessage(), e );
 			throw e;
         } catch(SOAPFaultException e){
-        	log.error( "Error en el interceptor usuari incorrecto: " + e.getMessage(), e );
+        	log.error( "Error resolviendo Dominio: " + e.getMessage(), e );
 			throw e;
         }			
 	}
@@ -79,7 +79,7 @@ public class ClienteWS {
 	 * @return Lista de documentos retornados
 	 * @throws Exception
 	 */
-	public static List realizarConsulta(String url,String user,String pass,Map datosFormulario) throws Exception {
+	public static List realizarConsulta(String url,String user,String pass,String identificadorTramite, Map datosFormulario) throws Exception {
 		
 		 log.debug("Realizando tramite consulta por webservice v1: url=" + url);
 			
@@ -99,8 +99,7 @@ public class ClienteWS {
 				form.setXml( ((DatosFormulario) datosFormulario.get(key)).getString() );
 				forms.getFormularios().add(form);
 			}	
-    		
-           es.caib.sistra.wsClient.v1.model.DocumentosConsulta docs = port.realizarConsulta(forms);
+           es.caib.sistra.wsClient.v1.model.DocumentosConsulta docs = port.realizarConsulta(identificadorTramite,forms);
            DocumentoConsulta doc;
            // Devolvemos resultado
             //convertimos el DocumentosConsulta que nos devuelve el WS y lo convertimos a DocumentoConsulta de la interfaz.

@@ -82,7 +82,6 @@
 	<classpathentry kind="lib" path="lib/commons-discovery-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-fileupload-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-httpclient-3.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/commons-io-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.0.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-validator-1.1.4.jar"/>
 	<classpathentry kind="lib" path="lib/dom4j.jar"/>
@@ -130,18 +129,27 @@
 	<classpathentry kind="lib" path="lib/jboss/jbosssx.jar"/>
 	<classpathentry kind="lib" path="lib/axis-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/aopalliance-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/cxf/cxf-2.2.2.jar"/>
-	<classpathentry kind="lib" path="lib/cxf/FastInfoset-1.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/geronimo-annotation_1.0_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/geronimo-jaxws_2.1_spec-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/geronimo-ws-metadata_2.0_spec-1.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/neethi-2.0.4.jar"/>
-	<classpathentry kind="lib" path="lib/cxf/spring-beans-2.5.5.jar"/>
-	<classpathentry kind="lib" path="lib/cxf/spring-context-2.5.5.jar"/>
-	<classpathentry kind="lib" path="lib/cxf/spring-core-2.5.5.jar"/>
-	<classpathentry kind="lib" path="lib/cxf/spring-web-2.5.5.jar"/>
-	<classpathentry kind="lib" path="lib/cxf/velocity-1.5.jar"/>
-	<classpathentry kind="lib" path="lib/cxf/wstx-asl-3.2.8.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/XmlSchema-1.4.5.jar"/>
+	<classpathentry kind="lib" path="lib/openoffice/jodconverter-2.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/openoffice/juh-3.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/openoffice/jurt-3.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/openoffice/ridl-3.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/openoffice/slf4j-api-1.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/openoffice/slf4j-jdk14-1.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/openoffice/unoil-3.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/jboss/jbossall-client.jar"/>
+	<classpathentry kind="lib" path="lib/cxf/cxf-2.2.7.jar"/>
+	<classpathentry kind="lib" path="lib/cxf/FastInfoset-1.2.7.jar"/>
+	<classpathentry kind="lib" path="lib/cxf/spring-beans-2.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/cxf/spring-context-2.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/cxf/spring-core-2.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/cxf/spring-web-2.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/cxf/velocity-1.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/cxf/wstx-asl-3.2.9.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
