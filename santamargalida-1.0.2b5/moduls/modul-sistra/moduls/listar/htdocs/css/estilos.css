@@ -1,0 +1,564 @@
+body { font:normal 75% Arial, Helvetica, Verdana, Times, sans-serif; color:#494949; background:url(../imgs/bkg_site.png) repeat-x top #9ec9e3; margin:0; padding:.8em 0 0 0; }
+#contenedor { margin:0 auto; width:64em; }
+#continguts { margin:0; padding-bottom:2em; background-color:#fff; }
+
+a { color:#0047b2; }
+a.pdf { padding:.5em 0 .5em 2em; background:url(../imgs/listados/ico_pdf.gif) no-repeat center left; line-height:2em; }
+a.doc { padding:.5em 0 .5em 2em; background:url(../imgs/listados/ico_doc.gif) no-repeat center left; line-height:2em; }
+a.veureTot { color:#900; padding-right:1.5em; background:url(../imgs/enlaces/veuretot.gif) no-repeat right center; }
+a.important { color:#c00; }
+
+a.nou { background:url(../imgs/enlaces/nou.gif) no-repeat top left #fff; padding-left:1.8em; margin-right:3em; }
+a.borrar { background:url(../imgs/enlaces/borrar.gif) no-repeat top left #fff; color:#c00; padding-left:1.8em; }
+a.editar { background:url(../imgs/enlaces/editar.gif) no-repeat top left #fff; padding-left:1.8em; }
+a.tornar { background:url(../imgs/enlaces/tornar.gif) no-repeat top left #fff; padding-left:1.8em; }
+
+img { border:0; }
+img#fotoConseller { float:left; margin:0 1em 1em 0; }
+img#titolImg { position:relative; float:right; padding-right:1em; margin:0 -1em 0 0; z-index:1; }
+img.fotoPresident { float:left; clear:left; margin:0 2em 2em 0; }
+
+input, select { vertical-align:middle; }
+select.tipoPetit { font-size:1em; }
+textarea { font:normal 70% Arial, Helvetica, sans-serif; font-size:1em; }
+fieldset { border:.09em solid #e3e3e3; margin:0 0 1em 0; padding:1em; }
+fieldset legend { font-weight:bold; padding:0 1em; }
+
+label.invisible { display:none; }
+
+form div.etiqueta { display:block; float:left; width:35%; padding-right:.5em; text-align:right; padding-top:.25em; }
+form span.etiqueta { display:block; float:left; width:35%; padding-right:.5em; text-align:right; padding-top:.25em; }
+form div.separacio { display:table; clear:both; font-size:.4em; height:1em; }
+form div.listado { float:left; }
+form div.listado ul { margin:0; padding:0; }
+form div.listado ul li { margin:0; padding:0; }
+form ul { list-style:none; margin:0; padding:0 1.5em; }
+form p.botonera { background-color:#efefef; padding:.5em; text-align:center; }
+
+form.formGris { background-color:#f7f7f7; width:50%; padding:1em; margin:0 auto; }
+form.formGris p { text-align:center; margin-bottom:0; }
+
+form.formComplet { border:.1em solid #ccc; padding:0; }
+form.formComplet div { padding:0 1.5em 1em 1.5em; }
+form.formComplet div h2 { margin:1.5em 0 0 0; font-size:1.2em; }
+form.formComplet div p { margin:.5em 0; }
+form.formComplet p.boton { padding:2em; background-color:#ebebeb; text-align:center; clear:both; margin-bottom:0; }
+form.formComplet div p.lineaInf { padding-bottom:2em; border-bottom:.1em solid #ebebeb; }
+form.formComplet div img { position:relative; top:.3em; }
+
+form.formComplet div#boibCercaComLateral { float:left; width:23%; background-color:#f7f7f7; }
+form.formComplet div#boibCercaComCentral { float:right; width:67%; }
+
+form input#cercadorSL_txt { width:9em !important; }
+
+ol.letras { list-style:lower-alpha; }
+
+ul.pdf { list-style:none; margin-left:2em; padding:0; }
+ul.pdf li { background:url(../imgs/listados/ico_pdf.gif) no-repeat left top; padding-left:2em; }
+ul li.pdf { background:url(../imgs/listados/ico_pdf.gif) no-repeat left top; padding-left:2em; }
+ul li.doc { background:url(../imgs/listados/ico_doc.gif) no-repeat left top; padding-left:2em; }
+ul.listado { list-style:none; margin-left:2em; padding:0; }
+ul.listado li { padding-bottom:1em; }
+ul.listado li ul { margin-top:1em; }
+ul li.powerpoint { background:url(../imgs/listados/powerpoint.gif) no-repeat left top; padding-left:2em; }
+ul li.txt { background:url(../imgs/listados/txt.gif) no-repeat left top; padding-left:2em; }
+ul li.excel { background:url(../imgs/listados/excel.gif) no-repeat left top; padding-left:2em; }
+ul li.son { background:url(../imgs/listados/son.gif) no-repeat left top; padding-left:2em; }
+ul li.gif { background:url(../imgs/listados/gif.gif) no-repeat left top; padding-left:2em; }
+ul li.jpg { background:url(../imgs/listados/jpg.gif) no-repeat left top; padding-left:2em; }
+ul li.tiff { background:url(../imgs/listados/tiff.gif) no-repeat left top; padding-left:2em; }
+ul li.mpeg { background:url(../imgs/listados/son.gif) no-repeat left top; padding-left:2em; }
+
+ul li.doc_PDF { list-style-image:url(../imgs/listados/ico_pdf.gif); }
+
+ul.senseEstil { list-style:none; margin-left:2em; padding:0; }
+
+ul.conSep li { padding-bottom:1em; }
+ul.conSep li ul { margin-top:1em; }
+
+dl.dreseres { padding:0 0 .3em 0; }
+dl.dreseres dt { font-weight:bold; }
+dl.dreseres dd { margin:0 0 .4em 0; padding-left:1.5em; }
+dl.dreseres dt span { font:italic normal 1.7em "Times New Roman", Times, serif; color:#000; margin-left:.1em; }
+
+p { margin:1em 0; }
+p.parrafFinal { padding-top:1em; border-top:.08em dashed #b8d7ef; }
+
+span.invisible { display:none; }
+
+div.sep { clear:both; height:.1em; font-size:.1em; }
+div.sepMarc { clear:right; height:.1em; font-size:.1em; width:150em; }
+div.dobleColumna { float:left; width:47%; padding:.5em .1em; margin-right:1em; }
+div.dobleColumna img { float:left; }
+div.dobleColumna p { margin:0 0 0 5em; }
+div.dobleColumnaTxt { float:left; width:48%; padding:.5em .1em; }
+div.dobleColumnaTxt p { margin:.5em 0 0 1em; }
+div#barraNav { clear:both; padding:1em; background-color:#f7f7f7; text-align:center; }
+
+h1.invisible, h2.invisible { display:none; }
+h1 { font-size:1.3em; margin:0 0 1em 0; background:none; }
+h2 { font-size:1.3em; margin:1em 0; clear:left; }
+h3 { font-size:1.1em; margin:1em 0; }
+h4 { font-size:1em; margin:1em 0; }
+
+ul#capsalpestanyes { margin:0; padding:0; list-style:none; line-height:1.95em; }
+ul#capsalpestanyes li { display:inline; padding:.25em 1em; margin-right:1em; background-color:#efefef; border:.1em solid #fff; }
+ul#capsalpestanyes li.seleccionado { color:#fff; background-color:#003575; border:.1em solid #003575; }
+ul#capsalpestanyes li a { color:#000; }
+
+a#botarMarc { display:none; background-color:#fff; }
+
+#capsal { padding:0.5em 1em 0.8em 1em; background-color:#003575; color:#fff; text-align:right; border-bottom:.3em solid #85bbe4; }
+#capsal a { color:#fff; }
+#capsal img.logo { float:left; }
+#capsal span.sep { margin:0 .5em; }
+#capsalIdioma { margin:0 0 .7em 0; }
+#capsalIdioma ul { display:inline; margin:0; padding:0; }
+#capsalIdioma ul li { display:inline; margin:0; padding:0; }
+#capsalFerramentes form { display:inline; }
+#capsalFerramentes form img { position:relative; vertical-align:bottom; margin-right:.5em; }
+
+ul#capsalEnllasos, ul#capsalEnllasosG, ul#capsalEnllasosR { background-color:#efefef; margin:0; padding:.3em .7em; text-align:right; color:#000; }
+ul#capsalEnllasos li, ul#capsalEnllasosG li, ul#capsalEnllasosR li { display:inline; padding-left:1.8em; margin-left:.5em; }
+ul#capsalEnllasos li a, ul#capsalEnllasosG li a, ul#capsalEnllasosR li a { color:#002e63; margin-right:.5em; }
+ul#capsalEnllasos { border-bottom:.05em solid #85bbe4; }
+ul#capsalEnllasosG { border-bottom:.05em solid #facb00; }
+ul#capsalEnllasosR { border-bottom:.05em solid #f88787; }
+ul#capsalEnllasos li.atencio, ul#capsalEnllasosG li.atencio, ul#capsalEnllasosR li.atencio { background:url(../imgs/capsal/ico_atencio.gif) no-repeat left center; }
+ul#capsalEnllasos li.mapaWeb, ul#capsalEnllasosG li.mapaWeb, ul#capsalEnllasosR li.mapaWeb { background:url(../imgs/capsal/ico_mapaweb.gif) no-repeat left center; }
+ul#capsalEnllasos li.elMeuPortal, ul#capsalEnllasosG li.elMeuPortal, ul#capsalEnllasosR li.elMeuPortal { background:url(../imgs/capsal/ico_elmeuportal.gif) no-repeat left center; }
+ul#capsalEnllasos li.elMeuPortal a, ul#capsalEnllasosG li.elMeuPorta a, ul#capsalEnllasosR li.elMeuPortal a { color:#a00; }
+
+#peu { padding-top:1em; height:3.5em; color:#000; border-top:.3em solid #85bbe4; background:url(../imgs/peu/fondo_peu.gif) repeat-x; }
+#peu img#logoAD { float:left; position:relative; top:-0.5em; }
+#peu span.sep { margin:0 .5em; }
+#peu ul#enllasos { float:right; margin:0; }
+#peu ul#enllasos li { display:inline; margin-left:.7em; }
+#peu ul#enllasos li a { color:#000; margin-right:.7em; }
+
+ul#mollaPa { position:relative; margin:0; padding-left:.7em; line-height:2em; }
+ul#mollaPa li { list-style:none; display:inline; padding-right:1.3em; background:url(../imgs/mollapa/flecha.gif) no-repeat right center #fff; }
+
+#enllasDest { position:relative; height:10em; overflow:hidden; border-top:.05em solid #e3e3e3; }
+#enllasDest #enllas { display:block; position:absolute; top:0em; left:0em; width:40em; height:100%; padding:2.8em 0 0 30em; text-decoration:none; background:url(../imgs/index/bp_cortina.gif) no-repeat 25em 0em; }
+#enllasDest #enllas .frase1 { font:normal 1.7em "Times New Roman", Times, serif; color:#000; }
+#enllasDest #enllas .frase2 { font:normal 3em "Times New Roman", Times, serif; color:#00276c; line-height:.7em; }
+
+#enllasDestPeu { background:url(../imgs/index/bp_sombra.gif) repeat-x #fff; height:1em; font-size:.5em; border-top:.05em solid #fff; }
+
+#seccions { float:right; margin:1em .5em 1em 0; width:41.5em; }
+#seccions p { text-align:justify; }
+
+#seccions #sac div, #seccions #lca div, #seccions #boib div, #seccions #ai div { background:url(../imgs/index/fondo_img.gif) repeat-x bottom #fff; }
+#seccions #sac { float:left; width:48%; }
+#seccions #lca { float:right; width:49%; }
+#seccions #boib { float:left; width:48%; }
+#seccions #ai { float:right; width:49%; }
+#seccions h1 { margin-top:.5em; }
+#seccions h2 { margin-top:.5em; }
+
+#lateralEsquerra { margin:1em; width:20em; text-align:justify; }
+
+#lateralEsquerra #novetats { padding:.5em 1em; background-color:#ecf4fb; margin-bottom:1em; }
+#lateralEsquerra #novetats h2 {margin-top:.5em; }
+#lateralEsquerra #novetats ul { list-style-image:url(../imgs/listados/rombo.gif); margin:0 0 0 1em; padding:0; }
+#lateralEsquerra #novetats ul li { margin-bottom:1em; }
+#lateralEsquerra #novetats p { border-top:.09em dashed #85bbe4; padding-top:.8em; text-align:right; }
+#lateralEsquerra #novetats p a { padding-right:1em; background:url(../imgs/enlaces/flecha_derecha.gif) no-repeat right center; }
+#lateralEsquerra #novetats a { color:#00548e; }
+
+a#bannerIllesBalears { display:block; padding:1em 1em 0 1em; color:#000; height:12em; border:.05em solid #d1e3f4; background:url(../imgs/index/illesbalears.jpg) no-repeat top left #fff; }
+a#bannerIllesBalears span { display:block; padding-top:50em; }
+
+ul#banners { clear:both; margin:2em .5em 1em .5em; padding:0; text-align:center; }
+ul#banners li { display:inline; list-style:none; margin-right:1em; }
+ul#banners li.ultim { margin-right:0; }
+
+#continguts h1#titolPagina { position:relative; font-size:1.7em; padding:1em .7em; margin:0; border-top:.05em solid #e3e3e3; border-bottom:.05em solid #fff; letter-spacing:.05em; }
+#continguts #titolOmbra { height:1em; font-size:.5em; background:url(../imgs/titulo/titolombra.gif) repeat-x #fff; }
+
+#info { padding:0 1em 1em 1em; }
+#infoMarc { float:left; width:43em; padding-left:1em; }
+#infoMarcComunicat { float:left; width:43em; padding-left:1em; }
+
+#info p { position:relative; }
+
+#marc { border-left:45em solid #fff; margin-right:1em; padding-top:1em; }
+
+#infoMarcFi { clear:both; position:relative; font-size:.5em; height:.5em; }
+
+#marc div { padding:1em; margin-bottom:1em; }
+#marc div h3 { margin-top:0; margin-left:2.4em; }
+
+#marc #marcAC { border:.05em solid #d1e3f4; background:url(../imgs/marc/atenciociutada.gif) no-repeat .7em 1em #fff; }
+#marc #marcAC_groc { border:.05em solid #fae690; background:url(../imgs/marc/atenciociutada_groc.gif) no-repeat .7em 1em #fff; }
+
+#marc #marcCercador { border:.05em solid #d1e3f4; background:url(../imgs/marc/cercadorserveis.gif) no-repeat .7em 1em #fff; }
+#marc #marcCercador_groc { border:.05em solid #fae690; background:url(../imgs/marc/cercadorserveis_groc.gif) no-repeat .7em 1em #fff; }
+#marc #marcCercador input.txt, #marc #marcCercador_groc input.txt { width:64%; }
+#marc #marcCercador form, #marc #marcCercador_groc form { margin-bottom:0; }
+
+#marc #marcABS { background:url(../imgs/serveis/ajuts.jpg) no-repeat right top #f9f6f3; padding-top:5em; }
+#marc #marcABS h3 { margin-left:0; font-variant:small-caps; font-size:1.3em; }
+#marc #marcABS a { color:#00548e; }
+
+#marc #marcDE { background:url(../imgs/marc/directori.gif) no-repeat .7em 1em #ecf4fb; }
+#marc #marcDE ul { margin:0; padding-left:2em; list-style-image:url(../imgs/listados/circulo.gif); }
+#marc #marcDE ul li { padding-bottom:.5em; }
+#marc #marcDE ul li ul { margin-top:.5em; }
+#marc #marcDE a { color:#00548e; }
+
+#serveisEN { background:url(../imgs/serveis/economia.jpg) no-repeat left top #fff; margin-top:1em; }
+#serveisCS { background:url(../imgs/serveis/cultura.jpg) no-repeat left top #fff; margin-top:2em; }
+#serveisET { background:url(../imgs/serveis/estudiar.jpg) no-repeat left top #fff; }
+#serveisEnT { background:url(../imgs/serveis/entorn.jpg) no-repeat left top #fff; }
+#serveisR { background:url(../imgs/serveis/relacions.jpg) no-repeat left top #fff; }
+#serveisEN, #serveisCS, #serveisET, #serveisEnT, #serveisR { padding-left:6em; }
+#serveisCS, #serveisEnT { margin-bottom:2em; width:14em; border-right:.08em dashed #d1e3f4; }
+#serveisEN, #serveisET { float:right; width:16em; }
+#serveisEN h2, #serveisCS h2, #serveisET h2, #serveisEnT h2, #serveisR h2 { margin-top:0; color:#00276c; }
+#serveisEN ul, #serveisCS ul, #serveisET ul, #serveisEnT ul, #serveisR ul { margin:0; padding-left:2em; list-style-image:url(../imgs/listados/rombo.gif); }
+#serveisEN ul li, #serveisCS ul li, #serveisET ul li, #serveisEnT ul li, #serveisR ul li { padding-bottom:.5em; }
+
+#serveisProcediments h2, #serveisOrg h2, #serveisInfoInteres h2, #serveisAjuts h2 { border-top:.13em solid #85bbe4; padding:.5em 0 0 2em; margin-top:2em; color:#00276c; background:url(../imgs/titulo/ico_blau.gif) no-repeat left top #fff; }
+
+#serveisProcediments ul { list-style:none; margin:0 0 0 1em; padding:0; }
+#serveisProcediments ul li { padding:0 0 1em 2em; background:url(../imgs/serveis/materia/ico_tramit.gif) no-repeat left top #fff; }
+#serveisProcediments ul li.tt { background:url(../imgs/serveis/materia/ico_tramittelematic.gif) no-repeat left top #fff; }
+
+#serveisOrg ul li { list-style-image:url(../imgs/listados/flecha.gif); }
+#serveisOrg ul li ul { margin-top:.5em; }
+#serveisOrg ul li ul li { padding-bottom:.5em; list-style-image:url(../imgs/listados/circulo.gif); }
+
+#serveisInfoInteres ul { margin:0 0 0 2em; padding:0; }
+#serveisInfoInteres ul li { list-style:none; clear:left; margin-bottom:.7em; min-height:2.2em; }
+#serveisInfoInteres ul img { float:left; margin:0 .5em 0 0; width:2.2em; height:2.2em; }
+
+#serveisAjuts form { background-color:#f7f7f7; padding:1em; }
+#serveisAjuts form p { text-align:center; margin-bottom:0; }
+
+#marc #marcSerNov { position:relative; background:url(../imgs/marc/novetats.gif) no-repeat .7em 1em #ecf4fb; }
+#marc #marcSerNov ul { margin:0 0 0 2em; padding:0; }
+#marc #marcSerNov ul li { margin-bottom:.5em; }
+#marc #marcSerNov p { padding-top:1em; border-top:.1em dashed #b8d7ef; }
+#marc #marcSerNov a { color:#00548e; }
+
+#marc #marcWV { border:.05em solid #d1e3f4; background:url(../imgs/marc/websvinculades.gif) no-repeat .7em .7em #fff; }
+#marc #marcWV h3 { position:relative; }
+#marc #marcWV ul { margin:0; padding:0; }
+#marc #marcWV ul li { list-style:none; clear:right; width:98%; margin-bottom:.7em; min-height:4.2em; }
+#marc #marcWV ul img { float:left; margin:0 .5em .5em 0; border:.05em solid #e3e3e3; width:4.2em; height:4.2em; }
+#marc #marcWV ul a { position:relative; }
+
+#marc #marcEnll { background:url(../imgs/marc/enllasos.gif) no-repeat .7em .7em #ecf4fb; }
+#marc #marcEnll ul { margin:0; padding:0; }
+#marc #marcEnll ul li { list-style:none; padding-bottom:1em; }
+#marc #marcEnll ul img { float:left; margin-right:.5em; border:.05em solid #e3e3e3; width:2em; height:2em; }
+#marc #marcEnll a { color:#00548e; }
+
+#marc #marcInfoInteres { background:url(../imgs/marc/info.gif) no-repeat .7em 1em #ecf4fb; }
+#marc #marcInfoInteres ul { margin:0 0 0 2em; padding:0; }
+#marc #marcInfoInteres ul li { margin-bottom:.5em; }
+#marc #marcInfoInteres a { color:#00548e; }
+
+#ajudesConselleria { float:left; width:42%; padding-right:2em; margin-right:2em; border-right:.08em dashed #d1e3f4; }
+#ajudesMateria h3 { margin-top:2em; }
+#ajudesConselleria span.boto, #ajudesMateria span.boto { display:block; margin-top:1em; }
+
+#infoTramit { padding:0 1em 1em 1em; }
+#infoTramit h2 { border-top:.13em solid #85bbe4; padding:.5em 0 0 2em; margin-top:2em; color:#00276c; background:url(../imgs/titulo/ico_blau.gif) no-repeat left top #fff; }
+#infoTramit h3 { background-color:#f2f2f2; padding:.3em 1em; }
+#infoTramit ul li, #infoTramit ol li { padding-bottom:.5em; }
+
+#infoTramit div#tramitTelematic { background:url(../imgs/serveis/tramit/iniciar_b.gif) no-repeat top left #ecf4fb; padding:6em 1em 1em 1em; float:right; clear:right; margin:0 0 2em 2em; width:20em; border-left:2em solid #fff; border-bottom:2em solid #fff; }
+#infoTramit div#tramitTelematic a.accesTramit { color:#00548e; background:url(../imgs/enlaces/siguiente.gif) no-repeat left center; padding-left:2em; }
+#infoTramit div#tramitTelematicPre { height:2em; background:url(../imgs/serveis/tramit/iniciar_a.gif) no-repeat bottom left #fff; float:right; width:22em; margin-left:2em; border-left:2em solid #fff; }
+#infoTramit div#tramitTelematic p { margin-top:0; }
+
+#infoOA, #infoEA, #infoH, #infoS { padding-left:6em; margin-bottom:2em; }
+#infoOA { background:url(../imgs/comunitat/govern.jpg) no-repeat left top #fff; }
+#infoEA { background:url(../imgs/comunitat/estatut.jpg) no-repeat left top #fff; }
+#infoH { background:url(../imgs/comunitat/historia.jpg) no-repeat left top #fff; }
+#infoS { background:url(../imgs/comunitat/simbols.jpg) no-repeat left top #fff; }
+#infoOA ul { list-style-image:url(../imgs/listados/flecha_groc.gif); }
+#infoOA ul li { margin-bottom:.7em; }
+
+#marc #marcAI { background:url(../imgs/marc/websinstitucionals.gif) no-repeat .7em .7em #fcf0bd; color:#333333; }
+#marc #marcAI a { color:#000; }
+#marc #marcAI ul { margin:0; padding:0; }
+#marc #marcAI ul li { margin:0 0 .2em 0; padding:.2em 0 .6em 2.3em; list-style:none; }
+#marc #marcAI ul li.parlament { background:url(../imgs/institucions/parlament.gif) no-repeat left top; }
+#marc #marcAI ul li.cmallorca { background:url(../imgs/institucions/cmallorca.gif) no-repeat left top; }
+#marc #marcAI ul li.cmenorca { background:url(../imgs/institucions/cmenorca.gif) no-repeat left top; }
+#marc #marcAI ul li.ceivissa { background:url(../imgs/institucions/ceivissa.gif) no-repeat left top; }
+#marc #marcAI ul li.scomptes { background:url(../imgs/institucions/scomptes.gif) no-repeat left top; }
+
+#conMi h2 { padding:0 0 0 2em; color:#6d5900; background:url(../imgs/titulo/ico_groc.gif) no-repeat 0 -0.5em #fff; }
+#conEs h2, #conServeis h2, #conWebsInst h2 { border-top:.13em solid #facb00; padding:.5em 0 0 2em; margin-top:2em; color:#6d5900; background:url(../imgs/titulo/ico_groc.gif) no-repeat left top #fff; }
+
+#conEs img, #conWebsInst img { width:4.2em; height:4.2em; }
+
+#conMi img { float:left; margin:0 2em 2em 0; }
+
+#conServeis ul { list-style:none; margin:0 0 0 1em; padding:0; }
+#conServeis ul li { padding:0 0 1em 2em; background:url(../imgs/serveis/materia/ico_tramit_groc.gif) no-repeat left top #fff; }
+#conServeis ul li.tt { background:url(../imgs/serveis/materia/ico_tramittelematic_groc.gif) no-repeat left top #fff; }
+#conServeis ul li ul li.doc { background:url(../imgs/listados/ico_doc.gif) no-repeat left top #fff; margin-top:.5em; padding-bottom:.1em; }
+#conServeis ul li ul li.img { background:url(../imgs/listados/imatge.gif) no-repeat left top #fff; margin-top:.5em; padding-bottom:.1em; }
+#conServeis ul li ul li.so { background:url(../imgs/listados/ico_so.gif) no-repeat left top #fff; margin-top:.5em; padding-bottom:.1em; }
+#conServeis ul li ul li.altre { background:url(../imgs/listados/ico_comun.gif) no-repeat left top #fff; margin-top:.5em; padding-bottom:.1em; }
+
+#marc #marcInCo { position:relative; background:url(../imgs/marc/info_groc.gif) no-repeat .7em 1em #fcf0bd; color:#333; }
+#marc #marcInCo ul { margin:0 0 0 2em; padding:0; }
+#marc #marcInCo a { color:#333; }
+#marc #marcEsOr { position:relative; border:.05em solid #fae690; background:url(../imgs/marc/estructura_groc.gif) no-repeat .7em 1em #fff; }
+#marc #marcEsOr ul { margin:0 0 0 2em; padding:0; list-style-image:url(../imgs/listados/circulo_groc.gif); }
+#marc #marcEsOr ul li { margin-bottom:.5em; }
+
+#marc #marcInfGov { background:url(../imgs/marc/info_groc.gif) no-repeat .7em 1em #fcf0bd; }
+#marc #marcInfGov ul { margin:0 0 0 2em; padding:0; }
+#marc #marcInfGov ul li { margin-bottom:.5em; }
+#marc #marcInfGov a { color:#333; }
+
+#marc #marcEnllasos { background:url(../imgs/marc/enllasos_groc.gif) no-repeat .7em .7em #fcf0bd; color:#333; }
+#marc #marcEnllasos a { color:#333; }
+#marc #marcEnllasos ul { margin:0; padding:0; }
+#marc #marcEnllasos ul li { list-style:none; padding-bottom:1em; }
+#marc #marcEnllasos ul img { float:left; margin-right:.5em; border:.05em solid #e3e3e3; width:2em; height:2em; }
+#marc #marcInfoIn { background:url(../imgs/marc/infointeres_groc.gif) no-repeat .7em .7em #fcf0bd; color:#333; }
+#marc #marcInfoIn a { color:#333; }
+#marc #marcInfoIn ul { margin:0; padding:0; }
+#marc #marcInfoIn ul li { list-style:none; padding-bottom:1em; }
+#marc #marcInfoIn ul img { float:left; margin-right:.5em; border:.05em solid #e3e3e3; width:2em; height:2em; }
+
+#marc #marcPagCo { background:url(../imgs/marc/pag_conseller_groc.gif) no-repeat .7em .7em #fcf0bd; }
+#marc #marcPagCo img { width:25%; height:25%; float:left; margin:0 1em 0 0; }
+#marc #marcPagCo p { height:4.2em; margin:0; }
+#marc #marcPagCo a { color:#333; }
+
+div.centre { border-bottom:.09em dashed #facb00; }
+div.centre span { display:block; margin-bottom:1em; }
+div.centre span.amagar { display:none; }
+
+#boibCalendari h2, #boibTipus h2, #boibCompleta h2 { border-top:.13em solid #facb00; padding:.5em 0 0 2em; margin-top:2em; color:#6d5900; background:url(../imgs/titulo/ico_groc.gif) no-repeat left top #fff; }
+
+#boibCalendari span.co { font-weight:bold; padding-left:1.5em; margin-left:1em; color:#0047b2; background:url(../imgs/boib/co.gif) no-repeat left center #fff; }
+#boibCalendari span.ce { font-weight:bold; padding-left:1.5em; margin-left:1em; color:#cc0000; background:url(../imgs/boib/ce.gif) no-repeat left center #fff; }
+
+#calendariTabla { border:.1em solid #ccc; width:25em; }
+#calendariTabla caption { margin-bottom:.3em; }
+#calendariTabla th { padding:.5em; background-color:#efefef; color:#000; }
+#calendariTabla tr.par { background-color:#f7f7f7; }
+#calendariTabla td { text-align:center; padding:.2em; border:.05em solid #efefef; border-collapse:collapse; }
+#calendariTabla td.setmanaConsell { font-weight:bold; background-color:#0047b2; }
+#calendariTabla td.setmanaConsell a { display:block; color:#fff; }
+#calendariTabla td.setmanaConsellEx { font-weight:bold; background-color:#cc0000; }
+#calendariTabla td.setmanaConsellEx a { display:block; color:#fff; }
+
+#boibCalendariA { float:right; width:17em; }
+#boibCalendariA form span.etiqueta { display:block; float:left; width:20%; padding-right:.5em; text-align:right; padding-top:.25em; }
+#boibCalendariA form p { margin-left:20%; }
+
+#boibCalendari #boibCalendariNav { text-align:center; width:24.8em; background-color:#fffbeb; padding:.3em 0; border-right:.1em solid #ccc; border-bottom:.1em solid #ccc; border-left:.1em solid #ccc; }
+#boibCalendari #boibCalendariNav a { color:#000; }
+
+#boibTipus form { text-align:center; background-color:#f7f7f7; padding:.1em; }
+#boibTipus form p { margin:1em 0; }
+
+#marc #marcBoibSB { border:.05em solid #fae690; background:url(../imgs/marc/subscripcions_groc.gif) no-repeat .7em .7em #fff; }
+#marc #marcBoibCN { background:url(../imgs/marc/cercadorserveis_groc.gif) no-repeat .5em .7em #fcf0bd; color:#333; }
+#marc #marcBoibCN form { margin:0; }
+#marc #marcBoibCN form { text-align:center; }
+#marc #marcBoibCR { border:.05em solid #fae690; background:url(../imgs/marc/cercarapida_groc.gif) no-repeat .7em .7em #fff; }
+#marc #marcBoibCR input.txt { width:95%; }
+#marc #marcBoibCR form p { text-align:center; }
+#marc #marcBoibBI { background:url(../imgs/marc/indexar_groc.gif) no-repeat .7em .7em #fcf0bd; color:#333; }
+#marc #marcBoibBI a { color:#333; }
+#marc #marcBoibAO { background:url(../imgs/marc/enllasos_groc.gif) no-repeat .7em .7em #fcf0bd; color:#333; }
+#marc #marcBoibAO ul { margin:0 0 0 2em; padding:0; }
+#marc #marcBoibAO ul li { margin-bottom:.5em; }
+#marc #marcBoibAO a { color:#333; }
+
+#infoMarcBoib { float:left; width:43em; padding-left:1em; }
+#infoMarcBoib ul li { padding-bottom:.5em; }
+
+#marc #marcBoibSeccions { background:url(../imgs/marc/indexar_groc.gif) no-repeat .7em .7em #fcf0bd; color:#333; }
+#marc #marcBoibSeccions ul { margin:0 0 0 2em; padding:0; }
+#marc #marcBoibSeccions ul li { margin-bottom:.5em; }
+#marc #marcBoibSeccions a { color:#333; }
+
+#marc #marcBoibNR { background:url(../imgs/marc/cercarapida_groc.gif) no-repeat .7em 1em #fcf0bd; color:#333; }
+#marc #marcBoibNR form { margin:0; }
+#marc #marcBoibNR form select#ct_tipus { width:14em; }
+#marc #marcBoibNR form p.boton { text-align:center; }
+
+#marc #marcBoibCompleta { border:.05em solid #fae690; background:url(../imgs/marc/cercadorserveis_groc.gif) no-repeat .7em 1em #fff; color:#333; }
+
+#actualitatEGED h2, #actualitatCP h2, #actualitatP h2, #actialitatCo h2 { border-top:.13em solid #fdaaa6; padding:.5em 0 0 2em; margin-top:2em; color:#6c0000; background:url(../imgs/titulo/ico_roig.gif) no-repeat left top #fff; }
+
+#actualitatEGED #enDirecte { background:url(../imgs/actualitat/endirecte.gif) no-repeat 1.5em 1em #f7f7f7; padding:1em 1em 1em 8em; font-weight:bold; }
+#actualitatEGED #enDirecte span { display:block; font-style:italic; font-weight:normal; margin-top:.5em; }
+
+#actualitatCP #darrerCP { background-color:#f7f7f7; padding:.1em 1em; }
+#actualitatCP #darrerCP a { color:#00548e; }
+
+#actualitatCP ul { list-style:none; margin:0 0 0 1em; padding:0; }
+#actualitatCP ul li { padding:0 0 .5em 2em; }
+#actualitatCP ul li#comAvui { background:url(../imgs/actualitat/avui_roig.gif) no-repeat 0 .3em #fff; }
+#actualitatCP ul li#comAhir { background:url(../imgs/actualitat/ahir_roig.gif) no-repeat 0 .3em #fff; }
+#actualitatCP ul li#comDAhir { background:url(../imgs/actualitat/despusahir_roig.gif) no-repeat 0 .3em #fff; }
+
+#actualitatP form { text-align:center; background-color:#f7f7f7; padding:.7em 0; }
+#actualitatP form p { margin-bottom:0; }
+
+#actialitatCo span.co { font-weight:bold; padding-left:1.5em; margin-left:1em; color:#0047b2; background:url(../imgs/boib/co.gif) no-repeat left center #fff; }
+#actialitatCo span.ce { font-weight:bold; padding-left:1.5em; margin-left:1em; color:#cc0000; background:url(../imgs/boib/ce.gif) no-repeat left center #fff; }
+#actialitatCoA { float:right; width:17em; }
+#actialitatCoA form label { display:block; float:left; width:20%; padding-right:.5em; text-align:right; padding-top:.25em; }
+#actialitatCoA form p { margin-left:20%; }
+
+#marc #marcActV { background:url(../imgs/marc/videoteca_roig.gif) no-repeat .7em .7em #faedec; color:#333; }
+#marc #marcActV a { color:#333; }
+#marc #marcActGC { border:.05em solid #f9d5d2; background:url(../imgs/marc/guiacomunicacio_roig.gif) no-repeat .7em .5em #fff; }
+#marc #marcActDMC { position:relative; border:.05em solid #f9d5d2; background:url(../imgs/marc/directori_roig.gif) no-repeat .7em 1em #fff; }
+#marc #marcActDMC ul li { padding-bottom:.5em; }
+
+#marc #marcCom { position:relative; border:1px solid #f9d5d2; background:url(../imgs/marc/indexar_roig.gif) no-repeat .7em .5em #fff; }
+#marc #marcCom ul { list-style:none; margin:0 0 0 1em; padding:0; }
+#marc #marcCom ul li { padding:0 0 .5em 2em; }
+#marc #marcCom ul li#comAvui { background:url(../imgs/actualitat/avui_roig.gif) no-repeat 0 .3em #fff; }
+#marc #marcCom ul li#comAhir { background:url(../imgs/actualitat/ahir_roig.gif) no-repeat 0 .3em #fff; }
+#marc #marcCom ul li#comDAhir { background:url(../imgs/actualitat/despusahir_roig.gif) no-repeat 0 .3em #fff; }
+
+ul#comunLlistat { margin-left:1em; padding:0; }
+ul#comunLlistat li { list-style:none; padding:0 0 1em 2em; background:url(../imgs/listados/comunicats.gif) no-repeat left top #fff; }
+ul#comunLlistat li ul { margin-top:.5em; }
+ul#comunLlistat li ul li.doc { background:url(../imgs/listados/ico_doc.gif) no-repeat left top #fff }
+ul#comunLlistat li ul li.img { background:url(../imgs/listados/imatge.gif) no-repeat left top #fff }
+ul#comunLlistat li ul li.so { background:url(../imgs/listados/ico_so.gif) no-repeat left top #fff }
+ul#comunLlistat li ul li.altre { background:url(../imgs/listados/ico_comun.gif) no-repeat left top #fff }
+
+ul#videoLlistat { margin-left:1em; padding:0; }
+ul#videoLlistat li { list-style:none; padding:0 0 1em 2em; background:url(../imgs/listados/video.gif) no-repeat left top #fff; }
+
+div#pantallaVideo { text-align:center; margin-top:2em; }
+
+ul#directori li { padding-bottom:1em; list-style-image:url(../imgs/listados/comunicats.gif); }
+ul#directori li ul { margin-top:1em; }
+ul#directori li ul li { list-style-image:none; }
+
+ul#videoConsell { padding:1em 1em 1em 5em; background:url(../imgs/marc/videoteca_roig.gif) no-repeat .5em .5em #faedec; }
+ul#videoConsell li { padding-bottom:.5em; }
+ul#videoConsell a { color:#000; }
+
+form#hemComplet { background-color:#f2f2f2; border:1px solid #ebebeb; }
+form#hemComplet #data { float:left; width:23%; padding:1em; }
+form#hemComplet #data input { width:6em; }
+form#hemComplet #data img { vertical-align:middle; }
+form#hemComplet div { margin-bottom:.5em; }
+form#hemComplet #text { margin-left:28%; margin-bottom:0; padding:1em 1em 1em 1em; background-color:#f8f8f8; }
+form#hemComplet #opcions { margin-left:28%; margin-bottom:0; padding:0 1em 1em 1em; background-color:#f8f8f8; }
+form#hemComplet #botonera { text-align:center; margin-bottom:0; padding:1em; background-color:#ebebeb; }
+
+ul#hemResultats li { list-style-image:url(../imgs/listados/comunicats.gif); }
+ul#hemResultats p { font-size:.9em; margin-top:.5em; }
+
+ul#resumComplet li { padding-bottom:1em; list-style-image:url(../imgs/listados/comunicats.gif); }
+ul#resumComplet li ul { margin-top:1em; padding-left:2em; }
+ul#resumComplet li ul li { list-style-image:url(../imgs/listados/organisme.gif); }
+ul#resumComplet li ul li.portada { list-style-image:url(../imgs/listados/comunicats.gif); }
+ul#resumComplet li ul li ul li { list-style-image:none; }
+
+div#dadesUsuari { float:left; padding:.3em 0 0 4.5em; color:#000; background-color:#efefef; }
+
+#entradaEMP { margin:0 auto; width:75%; height:15em; }
+#entradaEMP #entradaCD, #entradaEMP #entradaUC { width:44%; padding:.1em 1em; text-align:justify; height:34em; margin-bottom:2em; }
+#entradaEMP #entradaCD { float:left; background:url(../imgs/elmeuportal/entrada_cd.gif) no-repeat top left #ecf4fb; }
+#entradaEMP #entradaUC { float:right; background:url(../imgs/elmeuportal/entrada_uc.gif) no-repeat top left #ecf4fb; }
+#entradaEMP h2, #entradaEMP  h2 { text-align:right; margin-top:3.5em; }
+#entradaEMP form, #entradaEMP form { text-align:right; }
+#entradaEMP p.formBotonera { text-align:center; }
+#entradaEMP h3, #entradaEMP h3 { border-top:.09em dashed #b8d7ef; padding-top:1em; }
+
+#indexCD, #indexUC, #indexAN { float:left; width:29%; height:29em; padding:1em; margin-bottom:1em; }
+#indexCD, #indexUC { margin-right:1.2%; }
+#indexAN { width:29%; padding:1em; }
+#indexCD { background:url(../imgs/elmeuportal/entrada_cd.gif) no-repeat left top #ecf4fb; }
+#indexUC { background:url(../imgs/elmeuportal/entrada_uc.gif) no-repeat left top #ecf4fb; }
+#indexAN { background:url(../imgs/elmeuportal/entrada_an.gif) no-repeat left top #ecf4fb; }
+
+#indexCD a, #indexUC a, #indexAN a { color:#00548e; }
+
+#indexCD h2, #indexUC h2, #indexAN h2 { font-size:1.3em; text-align:right; margin-top:3.5em; }
+#indexCD p, #indexUC p, #indexAN p { text-align:justify; }
+#indexCD p.separacio, #indexUC p.separacio, #indexAN p.separacio { border-top:.09em dashed #b8d7ef; padding-top:1em; }
+#indexCD p.formBotonera, #indexUC p.formBotonera, #indexAN p.formBotonera { text-align:center; }
+
+#indexCD form label, #indexUC form label, #indexAN form label { display:block; float:left; width:40%; padding-right:.5em; text-align:right; line-height:1.6em; }
+#indexCD form input.txt, #indexUC form input.txt { width:8em; }
+
+#infoMarc.cd { float:left; width:43em; padding-left:1em; background:url(../imgs/elmeuportal/titol_cd.gif) no-repeat 1em 0 #fff; }
+#infoMarc.uc { float:left; width:43em; padding-left:1em; background:url(../imgs/elmeuportal/titol_uc.gif) no-repeat 1em 0 #fff; }
+#infoMarc.cd h2, #infoMarc.uc h2 { padding-left:7em; }
+#infoMarc.cd p.ambImg, #infoMarc.uc p.ambImg { padding-left:8.2em; }
+
+#formRegistreEMP { margin:1em auto; width:55%; }
+
+#elMeuPortal_En h2, #elMeuPortal_Re h2, #elMeuPortal_Su h2 { border-top:.13em solid #85bbe4; padding:.5em 0 0 2em; margin-top:2em; color:#00276c; background:url(../imgs/titulo/ico_blau.gif) no-repeat left top #fff; }
+
+#elMeuPortal_En ul, #elMeuPortal_Re ul, #elMeuPortal_Su ul { margin:1em; padding:0; list-style:none; }
+#elMeuPortal_En ul li { background:url(../imgs/listados/ico_enllasextern.gif) no-repeat top left #fff; padding-left:2em; padding-bottom:.5em; }
+#elMeuPortal_Re ul li { background:url(../imgs/listados/ico_recerca.gif) no-repeat top left #fff; padding-left:2em; padding-bottom:.5em; }
+#elMeuPortal_Su ul li { background:url(../imgs/listados/ico_subscripcions.gif) no-repeat top left #fff; padding-left:2em; padding-bottom:.5em; }
+
+#marc #zonaPR { background:url(../imgs/marc/ayuda.gif) no-repeat .7em .7em #fff; border:.05em solid #d1e3f4; }
+#marc #zonaPR ul { margin:0 0 0 2em; padding:0; }
+#marc #zonaPR ul li { padding-bottom:.5em; }
+
+#marc #zonaOV { background:url(../imgs/marc/opcionsvisuals.gif) no-repeat .7em .7em #ecf4fb; }
+#marc #zonaOV ul { margin:0 0 0 2em; padding:0; }
+
+#marc #zonaTT { border:.05em solid #d1e3f4; background:url(../imgs/marc/tramitaciontelem.gif) no-repeat .7em .7em #fff; }
+
+#marc p.margen { padding-top:1em; border-top:.09em dashed #b8d7ef; }
+
+img.imatgeInfo { float:right; padding:1em; border:.05em solid #f7f7f7; margin:1em 0 2em 2em; }
+
+#marc #zonaAtencio { border:.05em solid #d1e3f4; background:url(../imgs/marc/info.gif) no-repeat .7em .7em #fff; position:relative; }
+
+ul.tramitsInacabats { list-style:none; margin:0 0 0 1em; padding:0; }
+ul.tramitsInacabats li { padding:0 0 1em 2em;  background:url(../imgs/serveis/materia/ico_tramittelematic.gif) no-repeat left top #fff; }
+ul.tramitsInacabats li ul { padding-bottom:0; }
+ul.tramitsInacabats li ul li { padding:0; background:none; }
+
+dl#cuadreTT dt { font-weight:bold; font-size:1.2em; padding-bottom:.5em; }
+dl#cuadreTT dd { padding-bottom:1em; }
+
+table#tabla_elMeuPortal { border:.1em solid #ccc; width:100%; }
+table#tabla_elMeuPortal th { background-color:#f7f7f7; text-align:left; }
+table#tabla_elMeuPortal tr.nou { background-color:#ecf4fb; }
+table#tabla_elMeuPortal tr.perDamunt { cursor:pointer; background-color:#ffffe4; }
+table#tabla_elMeuPortal td { border-top:.1em solid #f7f7f7; }
+
+div#opcionsVisuals { border:.05em solid #f2f2f2; padding:1em 1em 0 1em; }
+div#opcionsVisuals form { margin:0; }
+div#opcionsVisuals form div.etiqueta { width:50%; }
+
+div#nouEnllas { border:.05em solid #f2f2f2; padding:1em 1em 0 1em; }
+
+ul.mapaWeb { list-style:none; padding:0; margin:1em 2em; }
+ul.mapaWeb li { margin-bottom:1em; background:url(../imgs/enlaces/mapawebnivel1.gif) no-repeat top left #fff; padding-left:2em; }
+ul.mapaWeb li span { display:block; margin-top:.5em; }
+
+div#capaCorreu { }
+div#capaCarta { display:none; }
+
+#marc #marcNormativa { background:url(../imgs/marc/directori.gif) no-repeat .7em 1em #ecf4fb; }
+#marc #marcNormativa ul { margin:0; padding-left:2em; list-style-image:url(../imgs/listados/circulo.gif); }
+#marc #marcNormativa ul li { padding-bottom:.5em; }
+#marc #marcNormativa ul li ul { margin-top:.5em; }
+#marc #marcNormativa a { color:#00548e; }
+
+#cercadorNormes { padding:1em 0 0 0; }
+
+

@@ -1,0 +1,44 @@
+V1.0.2 Build 1
+----------------------------------------------------------------------------------------------------------------
+Inclusión de las librerías de gráficos, pdf y dbutils.
+Por temas de licencias se eliminan del proyecto los jars de ojdbc.jar (oracle) y cliente de  @firma y se establecen
+las instrucciones para su descarga e inclusión en el proyecto.
+
+- Xml:
+	Bug xml analizador
+	Parser Xerces y ws en entornos Linux (explicar en docs)
+		
+- Zonaper:
+ 	Bug en helpdesk para comprobar pagos telematicos pendientes de confirmar en un tramite autenticado
+	En helpdesk se muestra detalle sesion pago asistente (pago telemático no confirmado)
+	En zonaperback se arregla bug al mostrar mensaje de preregistro confirmado
+	Modificacion interfaz para que en la consulta de expediente se permita recoger todos los elementos (trámites, avisos y notificaciones)
+	Nueva propiedad para enlazar zonaperback con aplicacion de registro (back.urlAplicacionRegistro)
+	
+- Forms: 
+	Control de errores al abrir 2 elementos dentro de la misma sesion de navegador
+	Bug refresco desplegables en pantalla lista elementos				
+	
+- Redose: 
+	En back ajustar tamaño texto formateadores
+	Quitar enlaces a plantillas desde formateador
+	Control de errores al añadir mas de un fichero de plantilla 
+		
+- Plugin pago:
+	Añadir a EstadoSesionPago campo descripcion para poder establecer texto genérico descriptivo del estado
+	Si se accede al plugin de pago y el token no es valido, te muestra una pantalla de error.
+	
+- Bantel:
+	Bug en filtrado de entradas por estado		
+	Bug cifrado usuarios	
+	Bug envio a gestores. No se reseteaba la variable que construye el envio de un gestor a otro, con lo que
+	se producían concatenaciones.
+
+- Regtel:
+	Simplificacion interfaz de webservices
+	
+----------------------------------------------------------------------------------------------------------------
+V1.0.2 Build 2
+
+- Inclusión de librerías pdf, graficos y dbutils como parte del proyecto
+

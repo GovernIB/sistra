@@ -1,0 +1,9 @@
+<action
+	path="/datosPAD"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".datosPAD"/>
+
+<action
+	path="/errorPAD"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".errorPAD"/>

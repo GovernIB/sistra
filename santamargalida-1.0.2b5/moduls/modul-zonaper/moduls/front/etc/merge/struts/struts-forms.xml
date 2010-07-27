@@ -1,0 +1,43 @@
+<form-bean
+    name="initForm"
+    type="es.caib.zonaper.front.form.InitForm"/>
+
+<form-bean
+	name="actualizarDatosPersonalesForm"
+	type="es.caib.zonaper.front.form.ActualizarDatosPersonalesForm" />
+      
+<form-bean
+	name="actualizarAlertasForm"
+	type="es.caib.zonaper.front.form.ActualizarAlertasForm" />
+
+<form-bean
+    name="abrirNotificacionForm"
+    type="es.caib.zonaper.front.form.AbrirNotificacionForm"/>
+
+<form-bean
+    name="mostrarDocumentoForm"
+    type="es.caib.zonaper.front.form.MostrarDocumentoForm"/> 
+
+<form-bean
+    name="infoTramiteAnonimoForm"
+    type="es.caib.zonaper.front.form.InfoTramiteAnonimoForm"/>
+
+<form-bean
+    name="mostrarDocumentoAvisoForm"
+    type="es.caib.zonaper.front.form.MostrarDocumentoAvisoForm"/>                           	    
+
+<form-bean
+    name="accesoDirectoAnonimoForm"
+    type="es.caib.zonaper.front.form.AccesoDirectoAnonimoForm"/>                           	    
+
+<form-bean
+    name="detalleElementoForm"
+    type="es.caib.zonaper.front.form.DetalleElementoForm"/>                           	        
+    
+<!--  sin verificar -->         
+<form-bean
+    name="mostrarDocumentoNotificacionForm"
+    type="es.caib.zonaper.front.form.notificaciones.MostrarDocumentoNotificacionForm"/>
+    
+
+

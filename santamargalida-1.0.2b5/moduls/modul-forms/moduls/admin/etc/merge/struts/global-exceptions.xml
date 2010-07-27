@@ -1,0 +1,10 @@
+<global-exceptions>
+        
+    <exception 
+        key="errors.delegate" 
+        type="org.ibit.rol.form.persistence.delegate.DelegateException"
+        path="/error.jsp"
+        handler="org.ibit.rol.form.admin.action.DelegateExceptionHandler"
+    />
+        
+</global-exceptions>

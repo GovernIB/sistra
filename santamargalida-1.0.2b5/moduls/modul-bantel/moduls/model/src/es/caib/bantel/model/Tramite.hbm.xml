@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class  name="es.caib.bantel.model.Tramite" table="BTE_TRAAPL">
+	<cache usage="read-write"/>
+    <id name="identificador" unsaved-value="null" column="TAP_IDETRA" >
+      <generator class="assigned"/>
+    </id>	
+	
+	<property name="descripcion"  column="TAP_DESC" not-null="true" length="100"/>
+    <property name="inmediata"  column="TAP_INMED" length="1"/>
+    <property name="intervaloInforme" column="TAP_INFORM"/>    
+  	<property name="tipoAcceso"  column="TAP_TIPACC" length="1" not-null="true"/> 
+  	<property name="url"  column="TAP_URL" length="200" />   	
+  	<property name="localizacionEJB"  column="TAP_EJBREM" length="1" not-null="true"/> 
+  	<property name="autenticacionEJB"  column="TAP_EJBAUT" length="1" not-null="true"/>   	 
+  	<property name="jndiEJB"  column="TAP_JNDI" length="100" />
+  	<property name="usr"  column="TAP_USR" length="200" /> 
+  	<property name="pwd"  column="TAP_PWD" length="50" />   	
+  	<property name="rolAcceso" column="TAP_ROL" length="100"/>
+  	<property name="ultimoAviso" column="TAP_AVISO"/>
+  	
+	<property name="nombreFicheroExportacion"  column="TAP_NOMFIC" />
+  	  	
+  	<set name="gestores" table="BTE_GESTRA" inverse="true">
+        <key column="GAP_IDETRA"/>
+        <many-to-many column="GAP_CODGES" class="es.caib.bantel.model.GestorBandeja"/>
+    </set>
+  	
+  	  <!-- bi-directional one-to-one association to fic -->
+	    <one-to-one
+	        name="archivoFicheroExportacion"
+	        cascade="all"
+	        class="es.caib.bantel.model.FicheroExportacion"
+	        outer-join="false" />
+  	
+</class>
+</hibernate-mapping>

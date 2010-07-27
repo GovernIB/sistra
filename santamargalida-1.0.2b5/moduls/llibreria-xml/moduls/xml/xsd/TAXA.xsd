@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="TAXA">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="LOCALIZADOR"/>
+        <xs:element ref="MODELO"/>
+        <xs:element ref="IDTAXA"/>
+        <xs:choice>
+          <xs:element minOccurs="0" ref="SUBCONCEPTE"/>
+          <xs:sequence>
+            <xs:element ref="IMPORT"/>
+            <xs:element ref="CONCEPTE"/>
+          </xs:sequence>
+        </xs:choice>
+        <xs:element ref="DECLARANT"/>
+      </xs:sequence>
+      <xs:attribute name="versio" use="required"/>
+      <xs:attribute name="accio" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="imprimir"/>
+            <xs:enumeration value="pagar"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LOCALIZADOR" type="xs:string"/>
+  <xs:element name="MODELO" type="xs:string"/>
+  <xs:element name="IDTAXA">
+    <xs:complexType mixed="true">
+      <xs:attribute name="codi" default="c04">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="c04"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SUBCONCEPTE">
+    <xs:complexType mixed="true">
+      <xs:attribute name="codi" default="c24">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="c24"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IMPORT">
+    <xs:complexType mixed="true">
+      <xs:attribute name="codi" default="c75">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="c75"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CONCEPTE">
+    <xs:complexType mixed="true">
+      <xs:attribute name="codi" default="c22">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="c22"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DECLARANT">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="NIF"/>
+        <xs:element ref="NOM"/>
+        <xs:element minOccurs="0" ref="DOMICILI"/>
+        <xs:element minOccurs="0" ref="TELEFON"/>
+        <xs:element minOccurs="0" ref="FAX"/>
+        <xs:element minOccurs="0" ref="LOCALITAT"/>
+        <xs:element minOccurs="0" ref="PROVINCIA"/>
+        <xs:element minOccurs="0" ref="CODI_POSTAL"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NIF">
+    <xs:complexType mixed="true">
+      <xs:attribute name="codi" default="c05">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="c05"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NOM">
+    <xs:complexType mixed="true">
+      <xs:attribute name="codi" default="c06">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="c06"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DOMICILI">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="SIGLES"/>
+        <xs:element minOccurs="0" ref="NOM_VIA"/>
+        <xs:element minOccurs="0" ref="NUMERO"/>
+        <xs:element minOccurs="0" ref="LLETRA"/>
+        <xs:element minOccurs="0" ref="ESCALA"/>
+        <xs:element minOccurs="0" ref="PIS"/>
+        <xs:element minOccurs="0" ref="PORTA"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SIGLES">
+    <xs:complexType mixed="true">
+      <xs:attribute name="codi" default="c07">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="c07"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NOM_VIA">
+    <xs:complexType mixed="true">
+      <xs:attribute name="codi" default="c08">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="c08"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NUMERO">
+    <xs:complexType mixed="true">
+      <xs:attribute name="codi" default="c09">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="c09"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LLETRA">
+    <xs:complexType mixed="true">
+      <xs:attribute name="codi" default="c10">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="c10"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ESCALA">
+    <xs:complexType mixed="true">
+      <xs:attribute name="codi" default="c11">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="c11"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PIS">
+    <xs:complexType mixed="true">
+      <xs:attribute name="codi" default="c12">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="c12"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PORTA">
+    <xs:complexType mixed="true">
+      <xs:attribute name="codi" default="c13">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="c13"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TELEFON">
+    <xs:complexType mixed="true">
+      <xs:attribute name="codi" default="c14">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="c14"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FAX">
+    <xs:complexType mixed="true">
+      <xs:attribute name="codi" default="c15">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="c15"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LOCALITAT">
+    <xs:complexType mixed="true">
+      <xs:attribute name="codi" default="c16">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="c16"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PROVINCIA">
+    <xs:complexType mixed="true">
+      <xs:attribute name="codi" default="c17">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="c17"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CODI_POSTAL">
+    <xs:complexType mixed="true">
+      <xs:attribute name="codi" default="c18">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="c18"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

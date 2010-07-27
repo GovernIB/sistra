@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-2.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>
+
+        <property name="connection.datasource">java:/@datasource.jndi@</property>
+        <property name="dialect">@hibernate.dialect@</property>
+
+        <property name="show_sql">@hibernate.show_sql@</property>
+        <property name="use_outer_join">true</property>
+        <property name="jdbc.batch_size">50</property>
+
+        <property name="transaction.factory_class">net.sf.hibernate.transaction.JTATransactionFactory</property>
+        <property name="transaction.manager_lookup_class">net.sf.hibernate.transaction.JBossTransactionManagerLookup</property>
+
+        <property name="cache.provider_class">net.sf.ehcache.hibernate.Provider</property>
+        <property name="cache.use_query_cache">true</property>
+
+		<mapping resource="es/caib/bantel/model/Tramite.hbm.xml" />
+        <mapping resource="es/caib/bantel/model/TramiteBandeja.hbm.xml" />
+        <mapping resource="es/caib/bantel/model/DocumentoBandeja.hbm.xml" />
+        <mapping resource="es/caib/bantel/model/GestorBandeja.hbm.xml" />
+        <mapping resource="es/caib/bantel/model/FicheroExportacion.hbm.xml" />                                                
+
+    </session-factory>
+
+</hibernate-configuration>

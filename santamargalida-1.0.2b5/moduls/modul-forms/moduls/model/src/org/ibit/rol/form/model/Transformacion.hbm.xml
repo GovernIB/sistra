@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.form.model.Transformacion" table="RFR_TRANSF">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="TNF_CODI">
+            <generator class="sequence">
+                <param name="sequence">RFR_SECTNF</param>
+            </generator>
+        </id>
+
+        <many-to-one name="pantalla" not-null="true" column="TNF_CODPAN" foreign-key="RFR_TNFPAN_FK"/>
+        <many-to-one name="perfil" not-null="true" column="TNF_CODPER" foreign-key="RFR_TNFPER_FK"/>
+
+        <property name="xslt" column="TNF_XSLT" type="clob"/>
+    </class>
+</hibernate-mapping>

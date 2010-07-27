@@ -1,0 +1,19 @@
+
+<form-bean
+    name="busquedaPreregistroForm"
+    type="es.caib.zonaper.back.form.BusquedaPreregistroForm" />
+<form-bean
+    name="detallePreregistroForm"
+    type="es.caib.zonaper.back.form.DetallePreregistroForm" />    
+<form-bean
+    name="confirmarPreregistroForm"
+    type="es.caib.zonaper.back.form.ConfirmarPreregistroForm" />    
+<form-bean
+    name="mostrarDocumentoForm"
+    type="es.caib.zonaper.back.form.MostrarDocumentoForm" />
+<form-bean
+    name="imprimirSelloForm"
+    type="es.caib.zonaper.back.form.ImprimirSelloForm" />  
+    
+    
+
