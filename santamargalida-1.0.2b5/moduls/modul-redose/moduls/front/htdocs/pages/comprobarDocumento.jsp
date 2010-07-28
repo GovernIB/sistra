@@ -11,9 +11,11 @@
 
 <div id="vdDetalles">	
 
+<%--
 	<p class="validado">
 		<bean:message key="comprobarDocumento.existe"/> 						
 	</p>
+--%>
 
 	<ul>
 			<!-- Fecha documento -->
