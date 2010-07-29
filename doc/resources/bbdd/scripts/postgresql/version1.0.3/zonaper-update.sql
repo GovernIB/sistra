@@ -1,6 +1,6 @@
 -- Actualizacion vista para contemplar estado de solicitud enviada pendiente de entregar doc presencial (preregistros)
 -- Per un bug als scripts anteriors de 1.0.2 per PostgreSQL, es creà com una taula, que s'ha d'eliminar.
-DROP TABLE ZPE_ESTEXP IF EXISTS;
+DROP TABLE IF EXISTS ZPE_ESTEXP;
 
 CREATE OR REPLACE VIEW ZPE_ESTEXP
 (EST_ID, EST_TIPO, EST_CODIGO, EST_DESC, EST_FECINI, 
