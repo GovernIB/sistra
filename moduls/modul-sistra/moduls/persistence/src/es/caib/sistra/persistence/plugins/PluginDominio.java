@@ -2,8 +2,11 @@ package es.caib.sistra.persistence.plugins;
 
 import java.io.Serializable;
 import java.sql.Connection;
+import java.sql.ParameterMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -307,8 +310,15 @@ public class PluginDominio {
 		    //stmt.setQueryTimeout(60);
 	        			      
 			// Establecemos parametros
+		    ParameterMetaData paramMetaData = stmt.getParameterMetaData();
 		    for (int i=0;i<parametros.size();i++){
-		    	stmt.setString(i+1,(String) parametros.get(i));
+		    	int type;
+		    	try { // Intentar obtenir tipus específic del paràmetre.
+		    		type = paramMetaData.getParameterType(i+1);
+	    		} catch (SQLException sqle) { // Si no està soportat emprarem VARCHAR ja que és el més compatible
+	    			type = Types.VARCHAR;
+    			}
+	    		stmt.setObject(i+1,(String) parametros.get(i), type);
 		    }
 		    
 		    // Ejecutamos sentencia
