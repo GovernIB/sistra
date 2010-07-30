@@ -71,6 +71,8 @@
 	<classpathentry kind="src" path="pluginsMOCK/plugin-pagoMOCK/output/persistence/gen-src"/>
 	<classpathentry kind="src" path="pluginsMOCK/plugin-regtelMOCK/moduls/plugins/src"/>
 	<classpathentry kind="src" path="pluginsMOCK/plugin-smsMOCK/moduls/plugins/src"/>
+	<classpathentry kind="src" path="plugins/plugin-sms/moduls/plugins/src"/>
+	<classpathentry kind="src" path="plugins/plugin-regtel/moduls/plugins/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/bsf.jar"/>
 	<classpathentry kind="lib" path="lib/cglib-asm.jar"/>
@@ -143,5 +145,11 @@
 	<classpathentry kind="lib" path="lib/cxf/velocity-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/wstx-asl-3.2.8.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/XmlSchema-1.4.5.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/eclipse/plugins/org.apache.axis_1.4.0.v200807230600/lib/axis.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/eclipse/plugins/org.apache.commons.discovery_0.2.0.v200806030120/lib/commons-discovery-0.2.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/eclipse/plugins/javax.xml.rpc_1.1.0.v200806030420/lib/jaxrpc.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/eclipse/plugins/javax.xml.soap_1.2.0.v200806030421/lib/saaj.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/eclipse/plugins/javax.wsdl_1.5.1.v200806030408.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/eclipse/plugins/org.apache.commons.logging_1.0.4.v20080605-1930.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
