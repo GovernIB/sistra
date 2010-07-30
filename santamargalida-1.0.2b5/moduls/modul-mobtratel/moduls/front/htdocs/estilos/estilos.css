@@ -5,14 +5,14 @@ body { font:normal 75% Arial, Helvetica, sans-serif; color:#494949; background-c
 
 /* capçal */
 
-#capsal { background:url(../imgs/capsal/fondo.gif) repeat-x #ff8400; color:#fff; border-bottom:5px solid #be6200; }
+#capsal { background:url(../imgs/capsal/fondo.gif) repeat-x #c5cf28; color:#fff; border-bottom:5px solid #467c14; }
 #capsal a { float:right; margin-right:1em; display:block; padding:1em 2em 1em 0; background:url(../imgs/enllasos/tornar.gif) no-repeat right 1em; color:#fff; font-weight:bold; }
-#capsal img { float:left; }
-#capsal h1 { background:url(../imgs/capsal/titol_ico.gif) no-repeat; margin:0 0 0 140px; padding:.5em 0 .6em 75px; font-size:1.5em; }
+#capsal img { float:left; margin-left: 11px; }
+#capsal h1 { /*background:url(../imgs/capsal/titol_ico.gif) no-repeat;*/ margin:0 0 0 140px; padding:.5em 0 .6em 75px; font-size:1.5em; }
 
 /* peu */
 
-#peu { padding-top:1em; height:3.5em; color:#000; border-top:.3em solid #ff8400; background:url(../imgs/peu/fondo_peu.gif) repeat-x; }
+#peu { padding-top:1em; height:1.5em; color:#000; border-top:.3em solid #c5cf28; background:url(../imgs/peu/fondo_peu.gif) repeat-x #f2f2f2; }
 #peu img#logoAD { float:left; margin-left:1em; }
 
 /* resultats */
@@ -100,9 +100,11 @@ div.atencio p img { vertical-align:middle; margin-left:1em; }
 
 .pestanyaSombra { background:url(../imgs/tabs/sombra_general.gif) repeat-x top #94BCE6; }
 
-#tabs ul { background:#ffcc66; margin:0; padding:1em 0 .5em 1em; }
+#tabs ul { background:#d8de67; margin:0; padding:1em 0 .5em 1em; }
 #tabs ul li { display:inline; padding:.5em 1em; background:#F2F2F2; margin:1em 1em 0 1em; }
 #tabs ul li.selec { font-weight : bold; background:#FFF }
+#tabs ul li a { color:#000000;}
+#tabs ul li.selec a { color:#000000;}
 
 /* marcosup */
 #marcosup { background:url(../imgs/tabs/sombra_general.gif) repeat-x bottom #94BCE6; }
