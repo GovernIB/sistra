@@ -1,0 +1,175 @@
+body {
+	background-color:#ece9d8;
+	margin:0;
+	padding:0;
+	outline:0;
+}
+#contenidor{
+	margin:0px auto 0px auto;
+	/*width:988px;*/
+	width:991px;
+	background:url(../images/fons_central.gif) 0px 0px repeat-y;
+}
+#contenidor .header{
+	width:984px;
+	height:150px;
+	margin:0px 0px 0px 0px;
+	background:url(../images/fons_capcalera.jpg) 10px 0px no-repeat;
+	overflow:hidden;
+}
+
+#contenidor .header ol,
+#contenidor .header ul ,
+#contenidor .footer ol,
+#contenidor .footer ul {
+    list-style: none;
+	padding:0;
+}
+
+#contenidor .header h1{
+	font:bold 22px/103px arial,verdana,sans-serif;
+	color:white;
+	text-transform:uppercase;
+	display:block;
+	height:103px;
+	background:url(../images/logo_santa_margalida.png) 0px -10px no-repeat;
+	margin:0px 0px 0px 0px;
+	padding:0px 0px 0px 113px;
+	float:left;
+	width:600px;
+}
+#contenidor .header h2{
+	font:bold 20px arial,verdana,sans-serif;
+	color:white;
+	float:right;
+	margin:40px 7px 0px 0px;
+}
+#contenidor .header ul li {
+	margin:0px 20px 0px 0px;
+}
+#contenidor .header ul li, 
+#contenidor .header ul li a{
+	font:normal 11px arial,verdana,sans-serif;
+	color:#534747;
+	float:left;
+	text-decoration:none;
+}
+#contenidor .header ul li a:hover{
+	text-decoration:underline;
+}
+#contenidor .header ul li strong{
+	color:#5b8cd5;
+}
+#contenidor .header ul.dades {
+	margin:-15px 0px 0px 113px;
+	clear:both;
+	float:left;
+	width:460px;
+}
+#contenidor .header ul.opcions{
+	margin:-15px 17px 0px 0px;
+	float:right;
+	width:208px;
+} 
+#contenidor .header ul.opcions li a {
+	display:block;
+	padding:0px 0px 0px 18px;
+	background-position:left top;
+	background-repeat:no-repeat;
+}
+#contenidor .header ul.opcions li a.desa {
+	background-image:url(../images/icona_desa.gif);
+}
+#contenidor .header ul.opcions li a.elimina {
+	background-image:url(../images/icona_elimina.gif);
+}
+#contenidor .header h3 {
+	float:left;
+	margin:5px 0px 0px 113px;
+	font:bold 20px arial,verdana,sans-serif;
+	color:#534747;
+	width:830px;
+}
+#contenidor  .content{
+	padding:30px 109px 30px 109px;
+	min-height:400px;
+/*
+	clear:both;
+	width:762px;
+	min-height:400px;
+	margin:0px 0px 0px 7px;
+	font:normal 11px arial,verdana,sans-serif;
+	color:#534747;
+*/
+}
+#contenidor .footer{
+	width:988px;
+	/*327px*/
+	height:201px;
+	margin:0px 0px 0px 7px;
+	padding:126px 0px 0px 0px;
+	background:url(../images/logo_drago_peu.gif) 40px 0px no-repeat;
+}
+#contenidor .footer .interior {
+	background:url(../images/fons_peu.jpg) 3px 0px no-repeat;
+	padding:12px 0px 0px 50px;
+	font:normal 12px arial,verdana,sans-serif;
+	color:#333333;
+	overflow:hidden;
+	height:189px;
+}
+
+#contenidor .footer .interior h4 {
+	font-weight:bold;
+	font-size:13px;
+	margin:0;
+}
+#contenidor .footer .interior  address{
+	font-style:normal;
+	display:block;
+	margin:0px 0px 10px 0px;
+}
+
+#contenidor .footer .interior  ul.menupeu li {
+	margin:0px 0px 9px 0px;
+}
+#contenidor .footer .interior  ul.menupeu li a{
+	font-size:11px;
+	color:#3f79cf;
+	text-decoration:underline;
+	background-color:white;
+}
+
+#contenidor .footer .interior  ul.accessibilitat{
+	margin:32px 0px 0px 0px;
+	float:left;
+
+}
+#contenidor .footer .interior  ul.accessibilitat li {
+	float:left;
+	margin:0px 8px 0px 0px;
+}
+
+#contenidor .footer .interior  ul.accessibilitat li.rss{
+	margin:0px 0px 0px 10px;
+	width:145px;
+}
+#contenidor .footer .interior  ul.accessibilitat li.rss a{
+	text-decoration:none;
+}
+#contenidor .footer .interior  ul.accessibilitat li.rss a img {
+	float:left;
+	margin:0px 5px 0px 0px;
+}
+#contenidor .footer .interior  ul.accessibilitat li.rss a span{
+	display:block;
+	color:#666666;
+}
+object#instalador{
+/* Por defecto aparece un espacio inferior debido al "object" 
+   de "com.telventi.afirma.cliente.instalador.InstaladorCliente.class"
+   Si se pone display:none ya no aparece el espacio pero parece como si
+   no se ejecutara el objeto. De momento dejamos que se vea el espacio.
+	display:none;
+*/
+}
