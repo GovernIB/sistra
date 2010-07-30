@@ -189,11 +189,11 @@ p#nomTramit { padding:1em 1em 1em 4.2em; background:url(../imgs/index/nom_tramit
 #tramitacion ul#pesPasos { font-family:Arial, Helvetica, sans-serif; margin:0; padding:0; }
 #tramitacion ul#pesPasos li { display:inline; float:left; width:8.5em; font-size:.9em; text-align:center; padding:5px 23px 5px 2px; background:url(../imgs/tramitacion/pestanyas/flecha.gif) no-repeat center right #f4f4f4; border-bottom:2px solid #fff; }
 #tramitacion ul#pesPasos li.ultimo { padding:5px; background:none; background-color:#f4f4f4; }
-#tramitacion ul#pesPasos li.seleccionado { background-color:#ffeacc; color:#000; font-weight:bold; border-bottom:0; padding-bottom:7px; }
+#tramitacion ul#pesPasos li.seleccionado { background-color:#ced738; color:#000; font-weight:bold; border-bottom:0; padding-bottom:7px; }
 #tramitacion ul#pesPasos li.deshabilitado { background-color:#f8f8f8; }
 #tramitacion ul#pesPasos li a {display:block; }
 
-#tramitacion div.barraAzul { clear:both; background-color:#ffeacc; height:1em; font-size:.5em; }
+#tramitacion div.barraAzul { clear:both; background-color:#ced738; height:1em; font-size:.5em; }
 
 /* capa información */
 
@@ -227,13 +227,13 @@ div#capaInfoFondo { position:absolute; display:none; top:0; left:0; width:100%; 
 /* navegación enlaces pasos */
 
 #tramitacion div#pasosNav { overflow:hidden; width:100%; height:3em; margin-bottom:1em; border-top:2px solid #fff; }
-#tramitacion div#pasosNav a#pasoAnterior, #tramitacion div#pasosNav a#pasoSiguiente { width:46.8%; display:block; line-height:3em; color:#000; background-color:#fff; }
-#tramitacion div#pasosNav a#pasoAnterior { float:left; text-align:right; padding-right:1.7em; background:url(../imgs/tramitacion/iconos/enlace_anterior.gif) no-repeat 60% center #ffeacc; }
-#tramitacion div#pasosNav a#pasoSiguiente { float:right; padding-left:1.7em; background:url(../imgs/tramitacion/iconos/enlace_siguiente.gif) no-repeat 40% center #ffeacc; }
+#tramitacion div#pasosNav a#pasoAnterior, #tramitacion div#pasosNav a#pasoSiguiente { width:46.8%; display:block; line-height:3em; color:#000; background-color:#fff; text-decoration: underline;}
+#tramitacion div#pasosNav a#pasoAnterior { float:left; text-align:right; padding-right:1.7em; background:url(../imgs/tramitacion/iconos/enlace_anterior.gif) no-repeat 60% center #ced738; }
+#tramitacion div#pasosNav a#pasoSiguiente { float:right; padding-left:1.7em; background:url(../imgs/tramitacion/iconos/enlace_siguiente.gif) no-repeat 40% center #ced738; font-weight: bold;}
 
-#tramitacion div#pasosNav div#pasoAnteriorDIV, #tramitacion div#pasosNav div#pasoSiguienteDIV { width:47%; display:block; height:3em; color:#000; text-transform:uppercase; background-color:#ffeacc; }
-#tramitacion div#pasosNav div#pasoAnteriorDIV { float:left; text-align:right; padding-right:1.7em; }
-#tramitacion div#pasosNav div#pasoSiguienteDIV { float:right; padding-left:1.7em; }
+#tramitacion div#pasosNav div#pasoAnteriorDIV, #tramitacion div#pasosNav div#pasoSiguienteDIV { width:47%; display:block; height:3em; color:#000; text-transform:uppercase; background-color:#ced738; }
+#tramitacion div#pasosNav div#pasoAnteriorDIV { float:left; text-align:right; padding-right:1.7em; background-color: #edf0b5;}
+#tramitacion div#pasosNav div#pasoSiguienteDIV { float:right; padding-left:1.7em; background-color: #edf0b5;}
 
 /* listado plantillas */
 

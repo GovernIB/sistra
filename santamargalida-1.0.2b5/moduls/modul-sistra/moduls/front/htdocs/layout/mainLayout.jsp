@@ -1,5 +1,8 @@
+<%--
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+--%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <%@ page language="java" contentType="text/html; charset=ISO-8859-15" %>
 <%@ page import="org.apache.struts.Globals"%>
 <%@ page import="es.caib.sistra.front.util.TramiteRequestHelper"%>
@@ -7,11 +10,16 @@
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
+<%--
 <html:html xhtml="true">
+--%>
+<bean:define id="lang" value="<%=((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage()%>" type="java.lang.String"/>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<%= lang %>" lang="<%= lang %>" />
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-15" />
 <title><bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property="nombre"/></title>
 <link href="estilos/sistrafront-0.0.2.css" rel="stylesheet" type="text/css" />
+<link href="estilos/stamargalida.css" rel="stylesheet" type="text/css" />	
 <logic:notEmpty name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property="urlCssCustom">
 	<link href="<bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property="urlCssCustom" />" rel="stylesheet" type="text/css" />
 </logic:notEmpty>
@@ -78,16 +86,24 @@
 <div id="contenidor">
 	<!--  cabecera -->
 	<tiles:insert name="header"/>
+<%-- Para StaMargalida, el header comprende tambien los datosUsuario 
 	<!--  datos usuario -->
 	<tiles:insert name="datosUsuario"/>
-	<div id="capsalfranja"></div>
-	<!-- continguts -->
-	<div id="continguts">
-	<tiles:insert name="main"/>
+--%>
+	<%-- <div id="capsalfranja"></div>--%>
+	<div class='content'>
+		<!-- continguts -->
+		<div id="continguts">
+		
+		<tiles:insert name="main"/>
+		</div>
 	</div>
 	<!-- pie pagina -->
 	<!--  <div id="peuVora"></div> -->
 	<tiles:insert name="footer"/>
 </div><!-- contenedor -->
 </body>
+<%--
 </html:html>
+--%>
+</html>

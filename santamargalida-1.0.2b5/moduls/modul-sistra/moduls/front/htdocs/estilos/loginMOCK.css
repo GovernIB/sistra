@@ -5,7 +5,7 @@ body { font:normal 75% Arial, Helvetica, sans-serif; color:#494949; background:u
 */
 body { font:normal 80% 'TrebuchetMS', 'Trebuchet MS', Arial, Helvetica, sans-serif; color:#666; background-color:#fff; }
 #contenedor { margin:0 auto; width:65em; }
-#continguts { margin:0; padding:.5em 0 0 0; background-color:#fff; /*border-bottom:.3em solid #85bbe4;*/ }
+#continguts { margin:0; padding:.5em 0 0 0; /*background-color:#fff; border-bottom:.3em solid #85bbe4;*/ }
 
 #continguts p { position:relative; }
 

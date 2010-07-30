@@ -318,7 +318,7 @@ body { font:normal 80% 'TrebuchetMS', 'Trebuchet MS', Arial, Helvetica, sans-ser
 
 /* enllaços */
 
-a { color:#000; text-decoration:none; }
+a { color:#000; text-decoration: underline; }
 a.importante { color:#c33; }
 
 /* imatges */
@@ -381,17 +381,17 @@ h1.document { /*background:url(../images/03document.gif) no-repeat #fff;*/ }
 table#botoneraForms { border:0; width:100%; background-color:#fff; margin-top:1em; }
 table#botoneraForms td { width:25%; text-align:center; padding:.5em 0; }
 table#botoneraForms td#abandonar { border:1px solid #fadfdf; }
-table#botoneraForms td#pantallaAnterior { background-color:#ffffcc; }
-table#botoneraForms td#pantallaSiguiente { background-color:#ffffcc; }
+table#botoneraForms td#pantallaAnterior { background-color:#edf0b5; }
+table#botoneraForms td#pantallaSiguiente { background-color:#ced738; }
 table#botoneraForms td#terminarTramite { border:1px solid #ceecce; }
 table#botoneraForms td#abandonar a { color:#c00; padding:1em 0; line-height:2.3em; }
 table#botoneraForms td#pantallaAnterior a { color:#000; padding:1em 0; line-height:2.3em; }
-table#botoneraForms td#pantallaSiguiente a { color:#000; padding:1em 0; line-height:2.3em; }
+table#botoneraForms td#pantallaSiguiente a { color:#000; padding:1em 0; line-height:2.3em; font-weight: bold;}
 table#botoneraForms td#terminarTramite a { color:#038000; padding: 1em 0; line-height:2.3em; text-decoration:underline; } 
 table#botoneraForms td img { vertical-align:middle; margin:0 .5em; }
 
-form span.formEtiqueta { display:block; float:left; clear:left; width:30%; padding-right:.5em; text-align:right; padding-top:.25em; }
-form span.formEtiquetaOb { display:block; float:left; width:30%; padding-right:.5em; text-align:right; padding-top:.25em; color:#0011b8; }
+form span.formEtiqueta { display:block; float:left; clear:left; width:30%; padding-right:.5em; text-align:right; padding-top:.25em; font-weight: bold; }
+form span.formEtiquetaOb { display:block; float:left; width:30%; padding-right:.5em; text-align:right; padding-top:.25em; color:#cc0000; font-weight: bold; }
 form span.formSep { display:block; clear:both; font-size:.3em; height:.3em; }
 form span.formListado { display:block; float:left; }
 

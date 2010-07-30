@@ -10,14 +10,14 @@
         name=".mainLayout"
         path="/layout/mainLayout.jsp"
         controller="es.caib.sistra.front.controller.TramiteController">
-        <put name="header" value="/moduls/header.jsp"/>
+        <put name="header" value="/moduls/headerStaMargalida.jsp"/>
         <put name="datosUsuario" value=".datosUsuario"/>
         <put name="main" value=".tramitacion"/>
         <!--  Atributo que se usara en la definicion .body para pintar el paso del tramite -->
         <put name="zonaPasoTramite" value="" />
         <!--  Atributo que indica si en el .body se pintara la zona .stepNav ( pasos de navegacion ) -->
         <put name="mostrarPasosNav" value="true" />
-        <put name="footer" value="/moduls/footer.jsp"/>
+        <put name="footer" value="/moduls/footerStaMargalida.jsp"/>
     </definition>
 	
     <definition 
@@ -246,9 +246,9 @@
         name=".error"
         path="/layout/mainLayout.jsp"
         controller="es.caib.sistra.front.controller.FailController">
-        <put name="header" value="/moduls/header.jsp"/>
+        <put name="header" value="/moduls/headerStaMargalida.jsp"/>
         <put name="main" value="/moduls/error.jsp"/>
-        <put name="footer" value="/moduls/footer.jsp"/>
+        <put name="footer" value="/moduls/footerStaMargalida.jsp"/>
     </definition>
     
 	<!-- Fallos incontrolados -->
@@ -270,9 +270,9 @@
         name=".datosPAD"
         path="/layout/mainLayout.jsp"
         controller="es.caib.sistra.front.controller.DatosPADController">
-        <put name="header" value="/moduls/header.jsp"/>
+        <put name="header" value="/moduls/headerStaMargalida.jsp"/>
         <put name="main" value="/pages/datosPAD.jsp"/>
-        <put name="footer" value="/moduls/footer.jsp"/>
+        <put name="footer" value="/moduls/footerStaMargalida.jsp"/>
     </definition>
 	
 	

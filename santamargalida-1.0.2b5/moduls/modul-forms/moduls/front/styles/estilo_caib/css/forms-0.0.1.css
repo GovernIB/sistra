@@ -392,7 +392,7 @@ table#botoneraForms td#terminarTramite a { color:#038000; padding: 1em 0; line-h
 table#botoneraForms td img { vertical-align:middle; margin:0 .5em; }
 
 form span.formEtiqueta { display:block; float:left; width:30%; padding-right:.5em; text-align:right; padding-top:.25em; }
-form span.formEtiquetaOb { display:block; float:left; width:30%; padding-right:.5em; text-align:right; padding-top:.25em; color:#0011b8; }
+form span.formEtiquetaOb { display:block; float:left; width:30%; padding-right:.5em; text-align:right; padding-top:.25em; color:#cc0000; }
 form span.formSep { display:block; clear:both; font-size:.3em; height:.3em; }
 form span.formListado { display:block; float:left; }
 
