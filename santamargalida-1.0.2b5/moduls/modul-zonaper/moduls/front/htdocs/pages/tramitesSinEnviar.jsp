@@ -116,3 +116,4 @@
 			</table>		
 		</logic:notEmpty>
 	</div>
+</div>

@@ -131,15 +131,12 @@
 				</logic:notEmpty>
 			</h2>
 			<div>
-				<%-- Datos del Usuario --%>
-				<ul class="dades">					
-				</ul>
-				<ul class="opcions">
-				</ul>
+				
 				<h3>
 					<logic:notEmpty name="propiedadesForm">
 						<bean:write name="propiedadesForm" property="formulario"/>
 					</logic:notEmpty>
+				</h3>
 			</div>
 		</div>
 		

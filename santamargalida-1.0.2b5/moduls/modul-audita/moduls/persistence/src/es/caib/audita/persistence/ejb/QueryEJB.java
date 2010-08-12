@@ -205,7 +205,9 @@ public abstract class QueryEJB extends DbUtilQueryExecutor implements SessionBea
 		if ( resultadoConsulta != null && resultadoConsulta.size() == 1 )
 		{
 			Map row = ( Map ) resultadoConsulta.get( 0 );
-			return new Long( ( ( BigDecimal ) row.get( "NEXTVAL" ) ).longValue() );
+			// Modificacion motivada por el cambio de la SQL de Oracle a PostgreSQL 
+			//return new Long( ( ( BigDecimal ) row.get( "NEXTVAL" ) ).longValue() );
+			return ( Long) row.get( "NEXTVAL" );
 		}
 		throw new SQLException( "No se puede obtener el valor de la secuencia " + key  );
 	}

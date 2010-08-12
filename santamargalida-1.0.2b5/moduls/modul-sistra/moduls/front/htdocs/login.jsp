@@ -13,7 +13,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" />
-<%--<title><bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property="nombre"/></title>--%>
+<title><bean:message key="organismo.nombre" /></title>
 <link href="../estilos/loginMOCK.css" rel="stylesheet" type="text/css" />
 <link href="../estilos/stamargalida.css" rel="stylesheet" type="text/css" />
 

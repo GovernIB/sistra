@@ -19,8 +19,8 @@
 	<%
 		// Construimos url de soporte reemplazando variables
 		String textoAsunto = es.caib.util.StringUtil.replace(asunto,"\"","\\\"");
-	    String urlSoporteFinal = es.caib.util.StringUtil.replace(urlSoporte,"@asunto@",textoAsunto);
-	    urlSoporteFinal = es.caib.util.StringUtil.replace(urlSoporteFinal,"@idioma@",lang);			
+		String urlSoporteFinal = es.caib.util.StringUtil.replace(urlSoporte,"@asunto@",textoAsunto);
+		urlSoporteFinal = es.caib.util.StringUtil.replace(urlSoporteFinal,"@idioma@",lang);			
 	%>
 	
 	<!-- ayuda -->
@@ -51,20 +51,33 @@
 			</p>			
 		</div>
 		<!-- /ayuda -->	
-	
-		<div id="peu">
-			
-			<div class="esquerra">&copy; <bean:write name="<%=es.caib.zonaper.front.Constants.ORGANISMO_INFO_KEY%>" property="nombre" /></div>
-			
-			<!-- contacte -->
-			<div class="centre">
-				<bean:write name="<%=es.caib.zonaper.front.Constants.ORGANISMO_INFO_KEY%>" property="pieContactoHTML" filter="false"/>				
-			</div>
-			<!-- /contacte -->
-			
-			<div class="dreta">
-				<strong><bean:message key="footer.necesitaAyuda"/></strong> <bean:message key="footer.soporte.inicio"/> <a id="equipSuport"><bean:message key="footer.soporte.fin"/></a>.
-			</div>
-		
+	</div>
+	<%
+		String idioma = es.caib.zonaper.front.util.LangUtil.getLang(request);
+		if (idioma == null) {
+			idioma = "ct";
+		} else {
+			if (idioma.equals("ca")) {
+				idioma = "ct";
+			}
+		}
+	%>
+	<div class="footer">
+		<div class="interior">
+			<h4><bean:write name="<%=es.caib.zonaper.front.Constants.ORGANISMO_INFO_KEY%>" property="nombre"/></h4>
+			<address><bean:write name="<%=es.caib.zonaper.front.Constants.ORGANISMO_INFO_KEY%>" property="pieContactoHTML" filter="false"/></address>
+			<ul class="menupeu">
+				<li><a href="http://www.ajsantamargalida.net/dadesPeu/avis.<%= idioma %>.html" target="_blank"><bean:message key="pie.avisoLegal" /></a></li>
+				<li><a href="http://www.ajsantamargalida.net/contacte/index.<%= idioma %>.html" target="_blank"><bean:message key="pie.contacto" /></a></li>
+				<li><a href="http://www.ajsantamargalida.net/dadesPeu/proteccio_dades.<%= idioma %>.html" target="_blank"><bean:message key="pie.proteccion" /></a></li>
+			</ul>
+			<ul class="accessibilitat">
+				<li><a href="http://jigsaw.w3.org/css-validator/check/refererr" target="_blank"><img src="imgs/css21.gif" width="66" height="31" alt="CSS 2.1" /></a></li>
+				<li><a href="http://validator.w3.org/check?uri=referer" target="_blank"><img src="imgs/xhtml10.gif" width="64" height="31" alt="XHTML 1.0" /></a></li>
+				<li><a href="http://www.w3.org/WAI/WCAG1AA-Conformance" target="_blank"><img src="imgs/wai.gif" width="66" height="31" alt="WAI-AA" /></a></li>
+				<li class="rss"><a href="http://www.ajsantamargalida.net/dadesPeu/rss.<%= idioma %>.html" target="_blank"><img src="imgs/rss.gif" width="31" height="31" alt="WAI-AA" /><span><bean:message key="pie.sindicacion" /></span></a></li>
+			</ul>
 		</div>
+	</div>
+	
 </div>

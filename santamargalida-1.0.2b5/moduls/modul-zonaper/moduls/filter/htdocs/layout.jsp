@@ -3,12 +3,14 @@
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">--%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html:html xhtml="true">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title><bean:message key="actualizarDatosPAD.titulo"/> - <bean:write name="<%=es.caib.zonaper.filter.front.Constants.ORGANISMO_INFO_KEY%>" property="urlPortal" /></title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" />
+<title><bean:message key="actualizarDatosPAD.titulo"/> - <bean:write name="<%=es.caib.zonaper.filter.front.Constants.ORGANISMO_INFO_KEY%>" property="nombre" /></title>
 <link href="estilos/zonaperfilter-0.0.2.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="estilos/stamargalida.css" rel="stylesheet" type="text/css" media="screen" />
 <logic:notEmpty name="<%=es.caib.zonaper.filter.front.Constants.ORGANISMO_INFO_KEY%>" property="urlCssCustom">
 	<link href="<bean:write name="<%=es.caib.zonaper.filter.front.Constants.ORGANISMO_INFO_KEY%>" property="urlCssCustom" />" rel="stylesheet" type="text/css" />
 </logic:notEmpty>
@@ -24,8 +26,11 @@ function ayudaAdmin() {
 </head>
 <body>
 <div id="contenidor">
+
 	<tiles:insert name="capsal"/>
-	<tiles:insert name="continguts" />
+	<div class="content">
+		<tiles:insert name="continguts" />
+	</div>
 	<tiles:insert name="peu"/>
 </div>
 </body>
