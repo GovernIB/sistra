@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ===================================================================== -->
+<!--                                                                       -->
+<!--  JBoss Server Configuration                                           -->
+<!--                                                                       -->
+<!-- ===================================================================== -->
+
+<!-- $Id: sistra-ds.xml,v 1.1 2009/06/23 05:47:10 rsanz Exp $ -->
+
+<!-- ===================================================================== -->
+<!-- ATTENTION:  DO NOT FORGET TO SET Pad=true IN transaction-service.xml  -->
+<!-- ===================================================================== -->
+
+<datasources>
+  <xa-datasource>
+    <jndi-name>es.caib.sistra.db</jndi-name>
+    <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
+	<xa-datasource-property name="ServerName">localhost</xa-datasource-property>
+	<xa-datasource-property name="PortNumber">5432</xa-datasource-property>
+	<xa-datasource-property name="DatabaseName">sistra_db</xa-datasource-property>
+	<xa-datasource-property name="User">sistra</xa-datasource-property>
+	<xa-datasource-property name="Password">sistra</xa-datasource-property>
+  </xa-datasource>
+</datasources>

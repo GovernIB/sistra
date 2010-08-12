@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+  <local-tx-datasource>
+    <jndi-name>es.caib.audita.db</jndi-name>
+    <connection-url>jdbc:postgresql://localhost:5432/sistra_db</connection-url>
+	<driver-class>org.postgresql.Driver</driver-class>
+    <user-name>audita</user-name>
+	<password>audita</password>
+    <min-pool-size>1</min-pool-size>
+	<max-pool-size>20</max-pool-size>
+  </local-tx-datasource>
+
+</datasources>

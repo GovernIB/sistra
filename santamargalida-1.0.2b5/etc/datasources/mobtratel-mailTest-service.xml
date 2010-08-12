@@ -1,0 +1,18 @@
+<!DOCTYPE server>
+<server>
+  <mbean code="org.jboss.mail.MailService"
+      name="jboss:service=MobtratelMailTest">
+      <attribute name="JNDIName">java:/es.caib.mobtratel.mailTest</attribute>    
+    <attribute name="User"></attribute>
+    <attribute name="Password"></attribute>        
+    <attribute name="Configuration">
+        <configuration>
+            <property name="mail.transport.protocol" value="smtp"/>
+            <property name="mail.smtp.host" value="localhost"/>            
+            <property name="mail.from" value="no-reply@at4.net"/>
+            <property name="mail.debug" value="false"/>
+            <property name="mail.smtp.auth" value="false"/> 
+        </configuration>
+    </attribute>
+  </mbean>
+</server>
