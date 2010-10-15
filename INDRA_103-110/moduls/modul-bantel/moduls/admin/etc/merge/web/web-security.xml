@@ -1,0 +1,15 @@
+<security-constraint>
+    <web-resource-collection>
+        <web-resource-name>banteladmin</web-resource-name>
+        <url-pattern>/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+        <role-name>@role.bantel@</role-name>
+    </auth-constraint>
+</security-constraint>
+
+@web.login-config@
+
+<security-role>
+    <role-name>@role.bantel@</role-name>
+</security-role>

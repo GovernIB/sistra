@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:es:caib:regtel:ws:v1:model:AcuseRecibo" targetNamespace="urn:es:caib:regtel:ws:v1:model:AcuseRecibo" version="1.0">
+	<xs:complexType name="AcuseRecibo">
+		<xs:sequence>
+			<xs:element name="fechaAcuseRecibo" type="xs:date"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

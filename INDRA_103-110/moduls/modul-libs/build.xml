@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="modul-libsistra" default="main" basedir=".">
+
+<property name="projecte" value="${ant.project.name}"/>
+
+<target name="main" depends="clean,assemble,distribute"/>
+
+<property name="distribucion.dir" location="${basedir}/../../product"/>
+		
+	<property file="${basedir}/../../config.properties"/>
+	
+<property name="lib" location="${basedir}/../../lib"/>	
+
+<target name="clean" description="Destruye los directorios de trabajo">
+	<delete dir="out" quiet="yes"/>
+</target>
+
+<target name="assemble" description="assemble ear">
+	<mkdir dir="out"/>
+	<jar destfile="out/0-${projecte}.ear">
+		<manifest>
+			<attribute name="Created-By" value="${indra}"/>
+		    <attribute name="Specification-Title" value="${projecte}"/>				
+		    <attribute name="Specification-Version" value="${release.version} build${release.build} ${release.date}"/>
+		</manifest>
+		<zipfileset dir="${lib}" prefix="lib">
+			<exclude name="activation.jar"/>
+			<exclude name="struts.jar"/>
+			<exclude name="cglib-asm.jar"/>
+			<exclude name="commons-logging-1.0.4.jar"/>
+			<exclude name="ejb-2_0.jar"/>
+			<exclude name="hibernate2.jar"/>
+			<exclude name="jms.jar"/>
+			<exclude name="mail.jar"/>
+			<exclude name="ojdbc14.jar"/>
+			<exclude name="mail.jar"/>
+			<exclude name="saaj-api.jar"/>
+			<exclude name="servlet.jar"/>
+			<exclude name="xercesImpl.jar"/>
+			<exclude name="jaxb-xjc-2.1.9.jar"/>			
+			<exclude name="client*"/>
+			<exclude name="client/*"/>
+			<exclude name="cxf*"/>
+			<exclude name="cxf/*"/>
+			<exclude name="jboss*"/>
+			<exclude name="jboss/*"/>
+		</zipfileset>
+		<zipfileset dir="${distribucion.dir}/lib" prefix="lib"/>					
+		<zipfileset dir="etc" prefix="META-INF"/>
+	</jar>
+</target>
+	
+	<target name="distribute" description="Distribucion">
+			<copy file="out/0-${projecte}.ear" todir="${distribucion.dir}/ear"/>		
+		</target>
+</project>

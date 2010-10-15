@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">           
+
+<tiles-definitions>
+
+    <definition name=".mainLayout" path="/init.jsp"/>
+
+    
+<!-- Componente que muestra las pestañas de idiomas, select es la seleccionada -->
+    <definition name=".langtabs" path="/moduls/langtabs.jsp"
+        controllerClass="es.caib.redose.back.action.ListaIdiomasController">
+        <put name="select" value=""/>
+    </definition>
+
+    <definition name=".editar" path="/layouts/editarLayout.jsp">
+        <put name="title" value="-- no definido --"/>
+        <put name="alta.title" value="-- no definido --"/>
+        <put name="modificacion.title" value="-- no definido --"/>
+        <put name="subtitle" value="-- no definido --"/>
+        <put name="validateMethod" value="-- no definido --"/>
+        <put name="form.action" value="-- no definido --"/>
+        <put name="form.bean" value="-- no definido --"/>
+        <put name="paginaValues" value=""/>
+        <put name="paginaTraduccion" value=""/>
+        <putList name="listaRelaciones">
+            <!-- Lista de elementos relacionados -->
+        </putList>
+        <putList name="listaRelaciones2">
+            <!-- Lista de elementos relacionados -->
+        </putList>
+    </definition>
+            
+     <!-- ====================== MODELO =================== -->
+    <definition name=".modelo.editar" extends=".editar">
+        <put name="title" value="modelo.title"/>
+        <put name="alta.title" value="modelo.alta"/>
+        <put name="modificacion.title" value="modelo.modificacion"/>
+        <put name="subtitle" value="modelo.subtitulo"/>
+        <put name="validateMethod" value="validateModeloForm"/>
+        <put name="form.action" value="/back/modelo/editar"/>
+        <put name="form.bean" value="modeloForm"/>
+        <put name="paginaValues" value="/modelo/editarValues.jsp"/>
+        <putList name="listaRelaciones">
+            <add value=".version.lista" type="definition" />
+        </putList>
+    </definition>
+
+    <definition name=".modelo.lista" path="/modelo/lista.jsp"
+        controllerClass="es.caib.redose.back.action.modelo.ListaModelosController"/>
+    
+    <!-- ====================== VERSION =================== -->
+    <definition name=".version.editar" extends=".editar">
+        <put name="title" value="version.title"/>
+        <put name="alta.title" value="version.alta"/>
+        <put name="modificacion.title" value="version.modificacion"/>
+        <put name="subtitle" value="version.subtitulo"/>
+        <put name="validateMethod" value="validateVersionForm"/>
+        <put name="form.action" value="/back/version/editar"/>
+        <put name="form.bean" value="versionForm"/>
+        <put name="paginaValues" value="/version/editarValues.jsp"/>
+        <putList name="listaRelaciones">
+            <add value=".plantilla.lista" type="definition" />
+        </putList>
+    </definition>
+    
+    <definition name=".version.lista" path="/version/lista.jsp" controllerClass="es.caib.redose.back.action.version.ListaVersionesController">
+        <put name="id" value="" />
+    </definition>
+    
+    <!-- ====================== PLANTILLA =================== -->
+    <definition name=".plantilla.editar" extends=".editar" controllerClass="es.caib.redose.back.action.plantilla.EditarPlantillaController">
+        <put name="title" value="plantilla.title"/>
+        <put name="alta.title" value="plantilla.alta"/>
+        <put name="modificacion.title" value="plantilla.modificacion"/>
+        <put name="subtitle" value="plantilla.subtitulo"/>
+        <put name="validateMethod" value="validatePlantillaForm"/>
+        <put name="form.action" value="/back/plantilla/editar"/>
+        <put name="form.bean" value="plantillaForm"/>
+        <put name="paginaValues" value="/plantilla/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/plantilla/editarTraduccion.jsp"/>       
+    </definition>
+
+    <definition name=".plantilla.lista" path="/plantilla/lista.jsp" controllerClass="es.caib.redose.back.action.plantilla.ListaPlantillasController">
+        <put name="id" value="" />
+    </definition>    
+    
+    
+     <!-- ====================== UBICACION =================== -->
+    <definition name=".ubicacion.editar" extends=".editar">
+        <put name="title" value="ubicacion.title"/>
+        <put name="alta.title" value="ubicacion.alta"/>
+        <put name="modificacion.title" value="ubicacion.modificacion"/>
+        <put name="subtitle" value="ubicacion.subtitulo"/>
+        <put name="validateMethod" value="validateUbicacionForm"/>
+        <put name="form.action" value="/back/ubicacion/editar"/>
+        <put name="form.bean" value="ubicacionForm"/>
+        <put name="paginaValues" value="/ubicacion/editarValues.jsp"/>
+    </definition>
+    
+    <definition name=".ubicacion.lista" path="/ubicacion/lista.jsp" controllerClass="es.caib.redose.back.action.ubicacion.ListaUbicacionesController">
+        <put name="id" value="" />
+    </definition>
+    
+    
+    <!-- ====================== HISTORICO =================== -->
+    <definition name=".historico.editar" extends=".editar">
+        <put name="title" value="historico.title"/>
+        <put name="alta.title" value="historico.alta"/>
+        <put name="modificacion.title" value="historico.modificacion"/>
+        <put name="subtitle" value="historico.subtitulo"/>
+        <put name="validateMethod" value="validateModeloForm"/>
+        <put name="form.action" value="/back/historico/editar"/>
+        <put name="form.bean" value="historicoForm"/>
+        <put name="paginaValues" value="/historico/editarValues.jsp"/>
+    </definition>
+    
+    <definition name=".historico.lista" path="/historico/lista.jsp" controllerClass="es.caib.redose.back.action.historico.ListaLogsOperacionesController">
+        <put name="id" value="" />
+    </definition>        
+    
+   <!-- ====================== FORMATEADORES =================== -->
+    <definition name=".formateadores.editar" path="/layouts/editarFormateadoresLayout.jsp">
+        <put name="title" value="formateadores.title"/>
+        <put name="alta.title" value="formateadores.alta"/>
+        <put name="modificacion.title" value="formateadores.modificacion"/>
+        <put name="subtitle" value="formateadores.subtitulo"/>
+        <put name="validateMethod" value="validateFormateadorForm"/>
+        <put name="form.action" value="/back/formateadores/editar"/>
+        <put name="form.bean" value="formateadoresForm"/>
+        <put name="paginaValues" value="/formateadores/editarValues.jsp"/>
+        <put name="paginaTraduccion" value=""/>
+    </definition>
+    
+    <definition name=".formateadores.lista" path="/formateadores/lista.jsp" controllerClass="es.caib.redose.back.action.formateadores.ListaFormateadoresController">
+        <put name="id" value="" />
+    </definition>
+    
+</tiles-definitions>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:es:caib:regtel:ws:v1:model:ResultadoRegistro" xmlns:ns1="urn:es:caib:regtel:ws:v1:model:ReferenciaRDS" targetNamespace="urn:es:caib:regtel:ws:v1:model:ResultadoRegistro" version="1.0">
+	<xs:import namespace="urn:es:caib:regtel:ws:v1:model:ReferenciaRDS" schemaLocation="ReferenciaRDS.xsd"/>
+	<xs:complexType name="ResultadoRegistro">
+		<xs:sequence>
+			<xs:element name="numeroRegistro" type="xs:string"/>
+			<xs:element name="fechaRegistro" type="xs:date"/>
+			<xs:element name="referecinaRDSJustificante" type="ns1:ReferenciaRDS"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

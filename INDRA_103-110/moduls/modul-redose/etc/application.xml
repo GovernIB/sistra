@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE application PUBLIC
+   '-//Sun Microsystems, Inc.//DTD J2EE Application 1.3//EN'
+   'http://java.sun.com/dtd/application_1_3.dtd'>
+
+<application>
+    <display-name>RDS</display-name>
+    <description><![CDATA[Proyecto CIBGE - RDS]]></description>
+    
+    <!--  Librerías de Open Office 3.1 -->
+    <module><java>lib/jodconverter-2.2.2.jar</java></module>    
+    <module><java>lib/juh-3.0.1.jar</java></module>
+    <module><java>lib/jurt-3.0.1.jar</java></module>
+    <module><java>lib/ridl-3.0.1.jar</java></module>
+    <module><java>lib/slf4j-api-1.5.6.jar</java></module>
+    <module><java>lib/slf4j-jdk14-1.5.6.jar</java></module>
+    <module><java>lib/unoil-3.0.1.jar</java></module>
+    <!--  Librerías de Open Office 3.1 -->
+    
+    
+    <module><java>redose-model.jar</java></module>    
+    <module><ejb>redose-persistence.jar</ejb></module>    
+    <module>
+        <web>
+            <web-uri>redose-back.war</web-uri>
+            <context-root>redoseback</context-root>
+        </web>
+    </module>
+    <module>
+        <web>
+            <web-uri>redose-front.war</web-uri>
+            <context-root>redosefront</context-root>
+        </web>
+    </module>
+	<module>
+        <web>
+            <web-uri>redose-admin.war</web-uri>
+            <context-root>redoseadmin</context-root>
+        </web>
+    </module>
+
+    <module>
+		<web>
+			<web-uri>redose-ws.war</web-uri>
+			<context-root>redosews</context-root>
+		</web>
+	</module>
+
+</application>

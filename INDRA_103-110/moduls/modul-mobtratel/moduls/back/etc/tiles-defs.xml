@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+    <definition name=".mainLayout" path="/init.jsp"/>
+
+
+    <definition name=".editar" path="/layouts/editarLayout.jsp">
+        <put name="title" value="-- no definido --"/>
+        <put name="alta.title" value="-- no definido --"/>
+        <put name="modificacion.title" value="-- no definido --"/>
+        <put name="subtitle" value="-- no definido --"/>
+        <put name="validateMethod" value="-- no definido --"/>
+        <put name="form.action" value="-- no definido --"/>
+        <put name="form.bean" value="-- no definido --"/>
+        
+        <put name="values.codigo" value="values.codigo" />
+        
+        <put name="paginaValues" value=""/>
+        <put name="paginaTraduccion" value=""/>
+        <putList name="listaRelaciones">
+            <!-- Lista de elementos relacionados -->
+        </putList>
+        <putList name="listaRelaciones2">
+            <!-- Lista de elementos relacionados -->
+        </putList>
+    </definition>
+    
+    <!-- ====================== cuenta =================== -->
+    <definition name=".cuenta.editar" extends=".editar">
+        <put name="title" value="cuenta.title"/>
+        <put name="alta.title" value="cuenta.alta"/>
+        <put name="modificacion.title" value="cuenta.modificacion"/>
+        <put name="subtitle" value="cuenta.subtitulo"/>
+        <put name="validateMethod" value="validateCuentaForm"/>
+        <put name="form.action" value="/back/cuenta/editar"/>
+        <put name="form.bean" value="cuentaForm"/>
+        <put name="values.codigo" value="values.codigo" />
+        <put name="paginaValues" value="/cuenta/editarValues.jsp"/>
+    </definition>
+     <definition name=".cuenta.lista" path="/cuenta/lista.jsp"
+        controllerClass="es.caib.mobtratel.back.action.cuenta.ListaCuentasController"/>
+        
+        
+   <!-- ====================== permiso =================== -->
+    <definition name=".permiso.editar" extends=".editar"
+    	controllerClass="es.caib.mobtratel.back.action.cuenta.ListaCuentasController">
+        <put name="title" value="permiso.title"/>
+        <put name="alta.title" value="permiso.alta"/>
+        <put name="modificacion.title" value="permiso.modificacion"/>
+        <put name="subtitle" value="permiso.subtitulo"/>
+        <put name="validateMethod" value="validatePermisoForm"/>
+        <put name="form.action" value="/back/permiso/editar"/>
+        <put name="form.bean" value="permisoForm"/>
+        <put name="values.codigo" value="values.codigo" />
+        <put name="paginaValues" value="/permiso/editarValues.jsp"/>
+    </definition>
+    <definition name=".permiso.lista" path="/permiso/lista.jsp"
+        controllerClass="es.caib.mobtratel.back.action.permiso.ListaPermisosController"/>     
+	
+
+</tiles-definitions>

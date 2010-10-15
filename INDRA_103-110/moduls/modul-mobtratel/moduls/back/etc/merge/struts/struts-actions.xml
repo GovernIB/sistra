@@ -1,0 +1,26 @@
+
+   <action
+    path="/init"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".mainLayout"/>
+
+
+   <action
+    path="/menu"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".menu"/>
+    
+    <action
+    path="/back/cuenta/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".cuenta.lista"/>
+    
+    <action
+    path="/back/permiso/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".permiso.lista"/>
+
+
+
+
+

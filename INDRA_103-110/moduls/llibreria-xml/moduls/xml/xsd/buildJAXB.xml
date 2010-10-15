@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="sistra-xml-jaxb" default="properties" basedir=".">
+
+	<property name="projecte" value="${ant.project.name}"/>
+<!--    <property file="${basedir}/config.properties"/> -->
+
+	<property name="lib.dir" location="${basedir}/../../../../../lib"/>
+	<property name="src.dir" location="${basedir}/../src"/>
+
+		
+	<target name="properties" description="Muestra las propiedades del sistema">
+		<echo>
+            -----------------------------------------------------
+            Propiedades del sistema:
+
+            basedir=${basedir}
+            ant.file=${ant.file}
+            ant.version=${ant.version}
+            ant.project.name=${ant.project.name}
+            ant.java.version=${ant.java.version}
+            -----------------------------------------------------
+        </echo>
+	</target>
+	
+	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+		<classpath>
+	 		<fileset dir="${lib.dir}" includes="*.jar"/>
+			<fileset dir="${lib.dir}">	
+				<include name="stax-api-1.0.1.jar"/>
+				<include name="activation.jar"/>
+			</fileset>
+		</classpath>
+	</taskdef>
+	
+	
+
+	<target name="avisoNotificacion" description="Genera jaxb para Aviso Notificacion">
+		<xjc schema="AVISO_NOTIFICACION.xsd"  destdir="${src.dir}" package="es.caib.xml.avisonotificacion.modelo" />						
+	</target>
+	
+	<target name="datosPropios" description="Genera jaxb para Datos Propios">
+		<xjc schema="DATOS_PROPIOS.xsd" destdir="${src.dir}" package="es.caib.xml.datospropios.modelo" />			
+	</target>
+	
+	<target name="configuracionForms" description="Genera jaxb para Configuracion Forms">
+		<xjc schema="CONFIGURACION_FORMS.xsd" destdir="${src.dir}" package="es.caib.xml.formsconf.modelo" />			
+	</target>
+	
+	<target name="justificantePago" description="Genera jaxb para Justificante Pago">
+		<xjc schema="JUSTIFICANTE_PAGO.xsd" destdir="${src.dir}" package="es.caib.xml.justificantepago.modelo" />			
+	</target>
+	
+	<target name="movilidad" description="Genera jaxb para Movilidad">
+		<xjc schema="MOVILIDAD.xsd" destdir="${src.dir}" package="es.caib.xml.movilidad.modelo" />			
+	</target>
+	
+	<target name="oficioRemision" description="Genera jaxb para Oficio Remision">
+		<xjc schema="OFICIO_REMISION.xsd" destdir="${src.dir}" package="es.caib.xml.oficioremision.modelo" />			
+	</target>
+	
+	<target name="registro" description="Genera jaxb para Registro">
+		<xjc schema="JUSTIFICANTE_REGISTRO.xsd" destdir="${src.dir}" package="es.caib.xml.registro.modelo" />			
+	</target>
+	
+	<target name="taxa" description="Genera jaxb para Taxa">
+		<xjc schema="TAXA.xsd" destdir="${src.dir}" package="es.caib.xml.taxa.modelo" />			
+	</target>
+		
+</project>

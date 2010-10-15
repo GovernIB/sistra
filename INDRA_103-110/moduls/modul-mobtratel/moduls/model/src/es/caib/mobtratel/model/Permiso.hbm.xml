@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="es.caib.mobtratel.model.Permiso" table="MOB_PERMIS">
+        <cache usage="read-write"/>
+        <id name="codigo" unsaved-value="null" column="PER_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">MOB_SEQPER</param>
+          </generator>
+      	</id>
+        
+   	    <property name="usuarioSeycon" column="PER_SEYCON"/>
+        <property name="sms" not-null="true" column="PER_SMS" />
+        <property name="email" not-null="true" column="PER_EMAIL" />
+
+        <many-to-one name="cuenta" column="PER_CODCUE" foreign-key="MOB_PERCUE_FK"/>
+
+    </class>
+
+</hibernate-mapping>
