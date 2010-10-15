@@ -1,0 +1,192 @@
+<p>Estas propiedades se pueden establecer de forma genérica para todos los niveles 
+  de autenticación soportados y también se pueden particularizar por niveles, 
+  de forma que si una propiedad no esta rellena para un nivel se tomará el valor 
+  de la propiedad de las especificaciones genéricas. <br/>
+  Para que un nivel de autenticación este soportado por el trámite tiene que aparecer 
+  habilitado en una especificación por nivel. </p>
+<p><br/>
+</p>
+<table width="100%" border="1">
+  <tr> 
+    <td width="22%"><div align="center"><strong>Campo</strong></div></td>
+    <td width="78%"><div align="center"><strong>Descripci&oacute;n</strong></div></td>
+  </tr>
+  <tr> 
+    <td>Activo</td>
+    <td>Indica si el tr&aacute;mite est&aacute; activo o no</td>
+  </tr>
+  <tr> 
+    <td>Flujo Tramitaci&oacute;n</td>
+    <td>Indica si el tr&aacute;mite permite flujo de tramitaci&oacute;n: permite 
+      que el tr&aacute;mite se vaya remitiendo a diferentes usuarios para que 
+      sea completado (s&oacute;lo con autenticaci&oacute;n)</td>
+  </tr>
+  <tr> 
+    <td>D&iacute;as de persistencia</td>
+    <td>
+    Indica el n&uacute;mero de d&iacute;as que se permitir&aacute; que el tr&aacute;mite se mantenga sin modificarse en la zona de persistencia. 
+    Una vez pasados estos d&iacute;as el tr&aacute;mite ser&aacute; eliminado. 
+    <br/>
+    Para que se tenga en cuenta debe tomar un valor mayor que 0.     </td>
+  </tr>
+  <tr> 
+    <td>D&iacute;as de preregistro</td>
+    <td>Indica el n&uacute;mero de d&iacute;as que, una vez enviado el tr&aacute;mite, este se mantendr&aacute; en la zona de preregistro
+      para que el ciudadano vaya al punto de registro a confirmarlo mediante la entrega de la documentaci&oacute;n presencial. 
+      <br/>
+      La fecha l&iacute;mite de presentaci&oacute;n resultante no exceder&aacute; de la fecha de fin de plazo 
+      (si queremos que se pueda confirmar durante todo el plazo deberemos establecer tantos días de preregistro como días tenga el plazo).
+      <br/>
+      Para que se tenga en cuenta debe tomar un valor mayor que 0. </td>
+  </tr>
+  <tr> 
+    <td>Script de validacion de inicio</td>
+    <td>
+    	<p>
+    		Permite realizar una validaci&oacute;n antes de iniciar (o cargar de persistencia) un tr&aacute;mite. 
+	      	El tipo de este campo es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> 
+		    y no se espera ning&uacute;n resultado. En caso de no permitir iniciar se debe generar un error.		</p>		
+		<p>
+		    En este script adem&aacute;s se permiten establecer propiedades de un tr&aacute;mite de forma din&aacute;mica. 
+    		La forma de indicar estas propiedades es mediante el plugin <em>CONFIGURACION_DINAMICA</em>:    	</p> 
+   		<p>
+   			Los m&eacute;todos disponibles son:
+   			<br/>
+		   	<em>
+		   		// Establecer plazo presentacion dinamicamente<br/>
+		   		// (formato fechas: YYYYMMDDHHMISS)<br/>
+		   		CONFIGURACION_DINAMICA.setPlazoDinamico(true);<br/>
+		   		CONFIGURACION_DINAMICA.setPlazoInicio('20070115080000');<br/>
+		        CONFIGURACION_DINAMICA.setPlazoFin('20070115235959');<br/>
+		      </em>    	</p>   </td>
+
+      
+     </td>
+  </tr>
+  <tr> 
+    <td>Procedencia geogr&aacute;fica</td>
+    <td><p>Para crear el asiento de tramites de <strong>tipo registro</strong> 
+        es necesario calcular la procedencia geogr&aacute;fica.. Para ello hay 
+        que indicar los valores de los c&oacute;digos de provincia, localidad y pa&iacute;s. 
+        El tipo de estos campos es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> 
+        y espera como resultado el valor del c&oacute;digo correspondiente. 
+      <p>Este dato es <strong>obligatorio</strong> especificarlo (bien en las 
+        especificaciones gen&eacute;ricas o por nivel) <strong>para los tramites 
+        de tipo registro</strong>. Para el resto de trámites se incluirá en el 
+        asiento si existe.</p>
+        <p>
+        Los c&oacute;digos de provincia, localidad y pa&iacute;s est&aacute;n basados en la codificaci&oacute;n INE.
+        Existen dominios gen&eacute;ricos para la obtenci&oacute;n de estas listas de valores:
+        <ul>
+        <li>Pa&iacute;s: Dominio GEPAISES</li>
+        <li>Provincias (España): Dominio GEPROVINCI</li>
+        <li>Municipios de una provincia: Dominio GEGMUNICI</li>
+        </ul>
+        </p></td>
+  </tr>
+  <tr> 
+    <td>Referencia representante</td>
+    <td><p>Para crear el asiento es necesario indicar qui&eacute;n es el representante. 
+        Para ello hay que indicar los valores de los campos del formulario que 
+        contengan el DNI y el nombre completo del representante. El tipo de estos 
+        campos es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> 
+        y espera en cada caso el valor del DNI y el nombre completo. </p>
+      <p>Este dato es <strong>obligatorio</strong> especificarlo (bien en las 
+        especificaciones gen&eacute;ricas o por nivel). <br>
+        <br>
+        La &uacute;nica excepci&oacute;n permitida es para acceso An&oacute;nimo 
+        siempre que el destino del tr&aacute;mite no sea registro. Para este caso 
+        se permitir&aacute; no establecer esta informaci&oacute;n o bien que el 
+        script devuelva vac&iacute;o. Esta funcionalidad nos permitir&aacute; 
+        tr&aacute;mites con acceso an&oacute;nimo sin identificar al solicitante.</p></td>
+  </tr>
+  <tr> 
+    <td>Referencia representado</td>
+    <td><p>En caso de que exista representaci&oacute;n es necesario indicar qui&eacute;n 
+        es el representado. Para ello hay que indicar los valores de los campos del formulario que 
+        contengan el DNI y el nombre completo del representado. El tipo de estos 
+        campos es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> y espera en cada caso el valor del DNI y el nombre completo. </p></td>
+  </tr>
+  
+    <tr> 
+    <td>Script de destinatario tr&aacute;mite</td>
+    <td>
+    	<p>
+    		Este script permite establecer din&aacute;micamente el destinatario del tr&aacute;mite: oficina registral, organo destino y unidad administrativa.
+    		Aunque se establezca din&aacute;micamente por script se deber&aacute;n establecer unos valores iniciales en la ficha de la versi&oacute;n del tr&aacute;mite.
+    		Por defecto el destinatario tendr&aacute; estos valores.
+    	</p>
+    	<p>
+	      	El tipo de este campo es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> 
+		    y no se espera ning&uacute;n resultado. En caso de error se debe generar un error de script.
+		    <br/>		
+		    Para establecer los valores del destinatario se dispondr&aacute; del plugin <em>DESTINATARIO_TRAMITE</em>.		    
+    	</p>	 
+   		<p>
+   			Los m&eacute;todos disponibles son:
+   			<br/>
+		   	<em>
+		   		// Establecer destinatario dinamicamente<br/>
+		   		DESTINATARIO_TRAMITE.setOficinaRegistral('OF1');<br/>
+		   		DESTINATARIO_TRAMITE.setOrganoDestino('1');<br/>
+		        DESTINATARIO_TRAMITE.setUnidadAdministrativa('2');<br/>
+		      </em>    	
+		 </p>
+	  </td>
+  </tr>
+  
+  <tr>
+    <td>Url fin </td>
+    <td>Al finalizar el tr&aacute;mite se redirige por defecto al portal del organismo. Mediante este  <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> se puede particularizar esta redirecci&oacute;n. Debe devolver una cadena indicando la url de finalizaci&oacute;n. Si se devuelve la cadena "[ZONAPER]" se redirigir&aacute; a la zona personal mostrando el tr&aacute;mite. </td>
+  </tr>
+   <tr>
+     <td>Script validaci&oacute;n de fin </td>
+     <td><p>Permite realizar una validaci&oacute;n antes de finalizar el tr&aacute;mite (previo al envio/registro). 
+       El tipo de este campo es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> y no se espera ning&uacute;n resultado. En caso de no permitir finalizar se debe generar un error e indicar el mensaje oportuno.</p>     </td>
+   </tr>
+   <tr>
+    <td>Configuraci&oacute;n avisos movilidad</td>
+    <td><p>Permite establecer si se deben generar los avisos autom&aacute;ticos de tramitaci&oacute;n (nuevo aviso expediente y nueva notificaci&oacute;n telem&aacute;tica) para el expediente que crear&aacute; esta solicitud. </p>
+     <p>La generaci&oacute;n autom&aacute;tica de estos avisos tendr&aacute; la siguiente l&oacute;gica:<br />
+       1) En el propio expediente (generado por el backoffice) se puede indicar si se deben o no generar estos avisos<br />
+       2) Si no se indica nada en el expediente, se har&aacute; caso de lo que se indique en la solicitud (es decir, a estos scripts)<br />
+       3) Si no se indica nada en el expediente ni en la solicitud se har&aacute; caso de la configuraci&oacute;n general de alertas de la zona personal.</p>
+     <p>Los valores a establecer (de tipo   <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a>  ) son los siguientes:</p>
+     <p>- Habilitar avisos: debe devolver &quot;S&quot; o &quot;N&quot;, en funci&oacute;n de si deben generar los avisos o no.<br />
+       - Email: email para avisos email (si es nulo o vac&iacute;o no se generar&aacute; email)<br />
+       - M&oacute;vil: tel&eacute;fono m&oacute;vil para avisos SMS (
+si es nulo o vac&iacute;o no se generar&aacute; SMS )</p></td>
+  </tr>
+   <tr>
+     <td>Notificaci&oacute;n telem&aacute;tica</td>
+     <td>Indica si  un tr&aacute;mite puede generar notificaciones telem&aacute;ticas. En caso de permitirse se recoger&aacute; la conformidad del ciudadano para ser notificado telem&aacute;ticamente. </td>
+   </tr>
+  <tr> 
+    <td>Datos justificante</td>
+    <td>Permite generar datos particularizados en el Justificante de Registro 
+      seg&uacute;n los datos de los formularios.</td>
+  </tr>
+  <tr> 
+    <td height="49">Instrucciones Inicio (texto HTML)</td>
+    <td>Se pueden indicar instrucciones que aparecer&iacute;an en el paso inicial 
+      &quot;Debe saber&quot;.</td>
+  </tr> 
+  <tr> 
+    <td>Mensaje Inactividad</td>
+    <td>En caso de marcar un tr&aacute;mite como inactivo se permite particularizar 
+      el mensaje que le aparecer&aacute; al usuario.</td>
+  </tr>
+  <tr>
+    <td>Instrucciones fin</td>
+    <td>Permite personalizar el mensaje de finalizaci&oacute;n del tr&aacute;mite. Este mensaje aparecerá en el justificante.</td>
+  </tr>
+  <tr> 
+    <td>Instrucciones entrega  </td>
+    <td>Cuando haya que entregar documentacion presencial pueden establecerse 
+      instrucciones de entrega especificas.</td>
+  </tr>
+  <tr>
+    <td>Fecha l&iacute;mite entrega presencial</td>
+    <td>Cuando haya que entregar documentaci&oacute;n presencial pueden establecer un mensaje particularizado para la fecha tope de entrega en lugar del mensaje est&aacute;ndard: &quot;La fecha l&iacute;mite de entrega es ...&quot; </td>
+  </tr>
+</table>

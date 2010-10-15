@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.form.model.Pantalla" table="RFR_PANTAL">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="PAN_CODI">
+            <generator class="sequence">
+                <param name="sequence">RFR_SECPAN</param>
+            </generator>
+        </id>
+
+        <property name="nombre" length="128" not-null="true" column="PAN_NOMBRE"/>
+        <property name="orden" not-null="true" column="PAN_ORDEN"/>
+        <property name="expresion" length="4000" column="PAN_EXPRES"/>
+        <property name="ultima" column="PAN_ULTIMA"/>
+        <property name="inicial" column="PAN_INICIA"/>
+        
+        <!--  INDRA: PANTALLA DETALLE DE COMPONENTE LISTA ELEMENTOS -->
+        <property name="componenteListaElementos" length="300" column="PAN_DETALL"/>
+        <!--  INDRA: PANTALLA DETALLE DE COMPONENTE LISTA ELEMENTOS -->
+        
+
+        <many-to-one name="formulario" not-null="true" column="PAN_CODFOR" foreign-key="RFR_PANFOR_FK"/>
+
+        <set name="ayudas" cascade="all" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="AYU_CODPAN" foreign-key="RFR_PANAYU_FK"/>
+            <one-to-many class="org.ibit.rol.form.model.AyudaPantalla"/>
+        </set>
+
+        <list name="componentes" cascade="all" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="COM_CODPAN" foreign-key="RFR_PANCOM_FK"/>
+            <index column="COM_ORDEN"/>
+            <one-to-many class="org.ibit.rol.form.model.Componente"/>
+        </list>
+
+        <map name="traducciones" cascade="all" table="RFR_TRAPAN">
+            <cache usage="read-write"/>
+            <key column="TRP_CODPAN" foreign-key="RFR_PANTRA_FK"/>
+            <index column="TRP_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.form.model.TraPantalla">
+                <property name="titulo" length="256" not-null="true" column="TRP_TITULO"/>
+            </composite-element>
+        </map>
+    </class>
+</hibernate-mapping>

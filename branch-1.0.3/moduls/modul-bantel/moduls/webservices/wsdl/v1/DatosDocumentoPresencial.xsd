@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"  xmlns:tns="urn:es:caib:bantel:ws:v1:model:DatosDocumentoPresencial" targetNamespace="urn:es:caib:bantel:ws:v1:model:DatosDocumentoPresencial" version="1.0">
+	<xs:complexType name="DatosDocumentoPresencial">
+			<xs:sequence>
+				<xs:element name="identificador" type="xs:string"/>
+				<xs:element name="numeroInstancia" type="xs:int"/>
+				<xs:element name="tipoDocumento" type="xs:string"/>
+				<xs:element name="compulsarDocumento" type="xs:string"/>
+				<xs:element name="fotocopia" type="xs:string"/>
+				<xs:element name="firma" type="xs:string"/>
+			</xs:sequence>
+	</xs:complexType>
+</xs:schema>

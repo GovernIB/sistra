@@ -1,0 +1,7 @@
+<action
+    path="/ayuda"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".ayuda"/>   
+
+
+

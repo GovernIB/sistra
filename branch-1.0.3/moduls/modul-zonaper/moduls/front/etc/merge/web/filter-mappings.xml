@@ -1,0 +1,4 @@
+   <filter-mapping>
+      <filter-name>PADFilter</filter-name>
+      <url-pattern>*.do</url-pattern>
+   </filter-mapping>

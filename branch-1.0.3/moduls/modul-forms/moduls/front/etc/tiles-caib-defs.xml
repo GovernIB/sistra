@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+    <definition name=".verPantalla_caib" path="/layout/caibLayout.jsp"
+        controllerClass="org.ibit.rol.form.front.action.VerPantallaController" >
+        <put name="title" value="-- fijado por el controller --"/>
+        <put name="contenido" value="/pages/verPantallaCaib.jsp"/>
+    </definition>
+
+    <definition name=".penultima_caib" path="/layout/caibLayout.jsp"
+        controllerClass="org.ibit.rol.form.front.action.PenultimaController">
+        <put name="title" value="-- fijado por el controller --"/>
+        <put name="contenido" value="/pages/penultimaCaib.jsp"/>
+    </definition>    
+
+    <definition name=".anexo.editar_caib" extends=".popup" path="/layout/iframeLayout.jsp">
+        <put name="contenido" value="/pages/anexo/editarAnexoCaib.jsp"/>
+    </definition>
+
+    <definition name=".anexo.ver_caib" extends=".popup" path="/layout/iframeLayout.jsp">
+        <put name="contenido" value="/pages/anexo/verAnexoCaib.jsp"/>
+    </definition>
+
+</tiles-definitions>

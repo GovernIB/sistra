@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="OFICIO_REMISION">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="1" ref="TITULO"/>
+        <xs:element minOccurs="1" maxOccurs="1" ref="TEXTO"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+ 
+  <xs:element name="TITULO" type="string_no_vacio"/>
+  <xs:element name="TEXTO" type="string_no_vacio"/>
+   
+  <xs:simpleType name='string_no_vacio'>
+  	<xs:restriction base='xs:string'>
+    	<xs:minLength value='1'/>
+  	</xs:restriction>
+  </xs:simpleType>
+      
+</xs:schema>

@@ -1,0 +1,12 @@
+<form-bean
+    name="cuentaForm"
+    type="es.caib.mobtratel.back.form.CuentaForm"
+    className="es.caib.mobtratel.back.action.TraFormBeanConfig">
+    <set-property property="valuesClassName" value="es.caib.mobtratel.model.Cuenta" />
+</form-bean>
+<form-bean
+    name="permisoForm"
+    type="es.caib.mobtratel.back.form.PermisoForm"
+    className="es.caib.mobtratel.back.action.TraFormBeanConfig">
+    <set-property property="valuesClassName" value="es.caib.mobtratel.model.Permiso" />
+</form-bean>

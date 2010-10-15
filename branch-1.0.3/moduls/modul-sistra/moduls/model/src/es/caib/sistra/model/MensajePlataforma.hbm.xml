@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class name="es.caib.sistra.model.MensajePlataforma" table="STR_MENPLA">
+	 <cache usage="read-write"/>	
+     <id name="codigo" unsaved-value="null" column="MPL_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">STR_SEQMPL</param>
+          </generator>
+      </id>
+
+	<property name="identificador" column="MPL_IDENTI" not-null="true" unique="true" length="10"/>
+	<property name="activo" column="MPL_ACTIVO" not-null="true" length="1"/>
+
+	<map name="traducciones" cascade="all" table="STR_TRAMPL">
+          <cache usage="read-write"/>
+          <key column="TMP_CODMPL"/>
+          <index column="TMP_CODIDI" type="string" length="2"/>
+          <composite-element class="es.caib.sistra.model.TraMensajePlataforma">
+              <property name="descripcion" column="TMP_DESC"/>
+          </composite-element>
+     </map>
+
+</class>
+</hibernate-mapping>

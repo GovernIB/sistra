@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class  name="es.caib.zonaper.model.DocumentoEntradaPreregistroBackup" table="ZPE_DPRBCK">
+	<cache usage="read-write"/>
+     <id name="codigo" unsaved-value="any" column="DRB_CODIGO">
+          <generator class="assigned"/>
+      </id>
+
+	<many-to-one name="entradaPreregistroBackup" column="DRB_CODPRE" not-null="true"/>
+
+    <property name="presencial"  column="DRB_PRESE" length="1" />
+
+    <property name="identificador"  column="DRB_DOCIDE" length="5" />
+    <property name="numeroInstancia"  column="DRB_DOCNUM" length="2" />
+    <property name="descripcion"  column="DRB_DESC" length="500"/>
+    <property name="codigoRDS"  column="DRB_RDSCOD" length="20"/>
+    <property name="claveRDS"   column="DRB_RDSCLA" length="10"/>
+    
+    <property name="tipoDocumento"  column="DRB_TIPDOC" length="1" />
+    <property name="compulsarDocumento"  column="DRB_COMPUL" length="1" />
+    <property name="fotocopia"  column="DRB_FOTPIA" length="1" />
+    <property name="firma"  column="DRB_FIRMA" length="1" />
+    <property name="confirmado"  column="DRB_OK" length="1" />    
+
+</class>
+</hibernate-mapping>

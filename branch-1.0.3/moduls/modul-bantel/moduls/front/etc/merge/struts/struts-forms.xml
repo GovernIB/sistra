@@ -1,0 +1,38 @@
+
+<form-bean
+    name="busquedaTramitesForm"
+    type="es.caib.bantel.front.form.BusquedaTramitesForm" />
+<form-bean
+    name="cambioEstadoMasivoForm"
+    type="es.caib.bantel.front.form.CambioEstadoMasivoForm" />    
+<form-bean
+    name="detalleTramiteForm"
+    type="es.caib.bantel.front.form.DetalleTramiteForm" />    
+<form-bean
+    name="detalleEntradaForm"
+    type="es.caib.bantel.front.form.DetalleEntradaForm" />        
+<form-bean
+    name="cambiarEstadoTramiteForm"
+    type="es.caib.bantel.front.form.CambiarEstadoTramiteForm" />    
+<form-bean
+    name="mostrarDocumentoForm"
+    type="es.caib.bantel.front.form.MostrarDocumentoForm" />        
+<form-bean
+    name="mostrarJustificanteForm"
+    type="es.caib.bantel.front.form.MostrarJustificanteForm" />  
+<form-bean
+    name="confirmacionForm"
+    type="es.caib.bantel.front.form.ConfirmacionForm" />          
+<form-bean
+    name="exportCSVTramitesForm"
+    type="es.caib.bantel.front.form.ExportCSVTramitesForm" />
+<form-bean
+    name="detalleExpedienteForm"
+    type="es.caib.bantel.front.form.DetalleExpedienteForm" />          
+<form-bean
+    name="detalleAvisoForm"
+    type="es.caib.bantel.front.form.DetalleAvisoForm" />          
+<form-bean
+    name="detalleNotificacionForm"
+    type="es.caib.bantel.front.form.DetalleNotificacionForm" />          
+    

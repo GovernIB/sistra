@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.form.model.Paleta" table="RFR_PALETA">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="PAL_CODI">
+            <generator class="sequence">
+                <param name="sequence">RFR_SECPAL</param>
+            </generator>
+        </id>
+
+        <property name="nombre" length="128" not-null="true" column="PAL_NOMBRE"/>
+
+        <list name="componentes" cascade="all" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="COM_CODPAL" foreign-key="RFR_PALCOM_FK"/>
+            <index column="COM_ORDEN"/>
+            <one-to-many class="org.ibit.rol.form.model.Componente"/>
+        </list>
+
+    </class>
+</hibernate-mapping>
