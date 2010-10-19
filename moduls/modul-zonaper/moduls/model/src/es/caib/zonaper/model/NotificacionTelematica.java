@@ -31,6 +31,12 @@ public class NotificacionTelematica implements java.io.Serializable,ElementoExpe
      private Date fechaAcuse;
      private boolean firmarAcuse;
      private String gestorSeycon;
+     
+     private String tramiteSubsanacionDescripcion;
+     private String tramiteSubsanacionIdentificador;
+     private Integer tramiteSubsanacionVersion;
+     private String tramiteSubsanacionParametros;
+     
      private Set documentos = new HashSet(0);  
                 
 	// Constructors
@@ -238,6 +244,40 @@ public class NotificacionTelematica implements java.io.Serializable,ElementoExpe
 
 	public void setGestorSeycon(String gestorSeycon) {
 		this.gestorSeycon = gestorSeycon;
+	}	
+    
+	public String getTramiteSubsanacionDescripcion() {
+		return tramiteSubsanacionDescripcion;
+	}
+
+	public void setTramiteSubsanacionDescripcion(
+			String tramiteSubsanacionDescripcion) {
+		this.tramiteSubsanacionDescripcion = tramiteSubsanacionDescripcion;
+	}
+
+	public String getTramiteSubsanacionIdentificador() {
+		return tramiteSubsanacionIdentificador;
+	}
+
+	public void setTramiteSubsanacionIdentificador(
+			String tramiteSubsanacionIdentificador) {
+		this.tramiteSubsanacionIdentificador = tramiteSubsanacionIdentificador;
+	}
+
+	public String getTramiteSubsanacionParametros() {
+		return tramiteSubsanacionParametros;
+	}
+
+	public void setTramiteSubsanacionParametros(String tramiteSubsanacionParametros) {
+		this.tramiteSubsanacionParametros = tramiteSubsanacionParametros;
+	}
+
+	public Integer getTramiteSubsanacionVersion() {
+		return tramiteSubsanacionVersion;
+	}
+
+	public void setTramiteSubsanacionVersion(Integer tramiteSubsanacionVersion) {
+		this.tramiteSubsanacionVersion = tramiteSubsanacionVersion;
 	}	
     
 }

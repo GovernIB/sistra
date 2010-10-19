@@ -147,6 +147,12 @@ public class RegistroEntradaHelper{
 			datosRpdo = factReg.crearDatosInteresado();
 			datosRpdo.setTipoInteresado(ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTADO);
 			datosRpdo.setNumeroIdentificacion(nif);
+			if (NifCif.esNIF(nif))
+				datosRpdo.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIF));
+			else if (NifCif.esCIF(nif))
+				datosRpdo.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_CIF));
+			else if (NifCif.esNIE(nif))
+				datosRpdo.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE));
 			datosRpdo.setFormatoDatosInteresado(ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
 			datosRpdo.setIdentificacionInteresado(apellidosNombre);			
 		} catch (EstablecerPropiedadException e) {
@@ -314,6 +320,8 @@ public class RegistroEntradaHelper{
 				if (anexo instanceof DocumentoRDS){
 					// Insertamos en RDS
 					docRDSAnexo = (DocumentoRDS) anexo;
+					// Establecemos idioma anexo
+					docRDSAnexo.setIdioma(datosAsunto.getIdiomaAsunto());
 					ref = redoseEJB.insertarDocumento(docRDSAnexo);
 					docRDSAnexo.setReferenciaRDS(ref);	
 				}else if (anexo instanceof ReferenciaRDS){
@@ -344,6 +352,7 @@ public class RegistroEntradaHelper{
 			docRDSAsiento.setUnidadAdministrativa(Long.parseLong(datosAsunto.getCodigoUnidadAdministrativa(),10));
 			docRDSAsiento.setUsuarioSeycon(datosRpte.getUsuarioSeycon());			
 			docRDSAsiento.setNif(datosRpte.getNumeroIdentificacion());
+			docRDSAsiento.setIdioma(this.datosAsunto.getIdiomaAsunto());
 			ref = redoseEJB.insertarDocumento(docRDSAsiento);
 			
 			// Devolvemos referencia asiento registral y sus anexos

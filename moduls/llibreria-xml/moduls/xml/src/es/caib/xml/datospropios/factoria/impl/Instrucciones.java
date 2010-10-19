@@ -24,6 +24,7 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 	private String habilitarAvisos;
 	private String avisoSMS;
 	private String avisoEmail;
+	private TramiteSubsanacion tramiteSubsanacion;
 	
 	Instrucciones (){
 		textoInstrucciones = null;
@@ -119,6 +120,9 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 			//  Comprobar habilitar notificacion
 			if (!objetosIguales (getHabilitarNotificacionTelematica(), inst.getHabilitarNotificacionTelematica())) return false;
 			
+			//  Comprobar tramite subsanacino
+			if (!objetosIguales (getTramiteSubsanacion(), inst.getTramiteSubsanacion())) return false;
+			
 			// OK los objetos son equivalentes
 			return true;
 		}
@@ -173,6 +177,14 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 	public void setHabilitarNotificacionTelematica(
 			String habilitarNotificacionTelematica) {
 		this.habilitarNotificacionTelematica = habilitarNotificacionTelematica;
+	}
+
+	public TramiteSubsanacion getTramiteSubsanacion() {
+		return tramiteSubsanacion;
+	}
+
+	public void setTramiteSubsanacion(TramiteSubsanacion tramiteSubsanacion) {
+		this.tramiteSubsanacion = tramiteSubsanacion;
 	}
 
 	

@@ -27,7 +27,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
@@ -36,7 +36,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 	  	
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Documento obtenerDocumento(Long id) {
         Session session = getSession();
@@ -57,7 +57,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
     
     /*
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"     
+     * @ejb.permission role-name="${role.operador}"     
     public Documento obtenerDocumento(String idTramite,int idVersion,String idDocumento){
         Session session = getSession();
         try {        	        	
@@ -89,7 +89,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
     
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long grabarDocumento(Documento obj,Long idTramiteVersion) {        
     	Session session = getSession();
@@ -112,7 +112,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
         
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Set listarDocumentos(Long idTramiteVersion) {
         Session session = getSession();
@@ -129,7 +129,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarDocumento(Long id) {
         Session session = getSession();

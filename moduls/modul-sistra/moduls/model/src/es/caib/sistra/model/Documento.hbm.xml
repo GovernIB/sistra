@@ -15,7 +15,7 @@
 
     <property  name="identificador" column="DOC_IDENTI" not-null="true" length="5"/>
     <property  name="idPad"  column="DOC_PAD" length="20"/>
-    <property  name="modelo" column="DOC_MODELO" not-null="true" length="15"/>
+    <property  name="modelo" column="DOC_MODELO" not-null="true" length="20"/>
     <property  name="generico" column="DOC_ANEGCO" not-null="true" length="1"/>    
     <property  name="maxGenericos" column="DOC_ANEGMA" length="2"/>
     <property name="tipo" column="DOC_TIPO" not-null="true" length="1"/>

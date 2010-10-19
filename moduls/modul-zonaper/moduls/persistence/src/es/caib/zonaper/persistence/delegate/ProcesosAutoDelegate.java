@@ -45,6 +45,21 @@ public class ProcesosAutoDelegate implements StatelessDelegate
         }
 	}
 
+	public void revisarRegistrosEfectuados() throws DelegateException {
+		try{
+			getFacade().revisarRegistrosEfectuados();
+		}catch (Exception e) {
+			throw new DelegateException(e);
+        }
+	}
+	
+	public void actualizarExpedienteTramiteSubsanacion(Long codigoEntrada, String tipoEntrada) throws DelegateException {
+		try{
+			getFacade().actualizarExpedienteTramiteSubsanacion(codigoEntrada, tipoEntrada);
+		}catch (Exception e) {
+			throw new DelegateException(e);
+        }
+	}
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

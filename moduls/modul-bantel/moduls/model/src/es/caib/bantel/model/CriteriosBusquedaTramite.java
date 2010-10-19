@@ -14,6 +14,7 @@ public class CriteriosBusquedaTramite implements Serializable
 	private char procesada = TODOS;
 	private char nivelAutenticacion = TODOS;
 	private String identificadorTramite;
+	private String numeroEntrada;
 		
 	public String getIdentificadorTramite()
 	{
@@ -78,5 +79,11 @@ public class CriteriosBusquedaTramite implements Serializable
 	public void setNivelAutenticacion(char nivelAutenticacion)
 	{
 		this.nivelAutenticacion = nivelAutenticacion;
+	}	
+	public String getNumeroEntrada() {
+		return numeroEntrada;
+	}
+	public void setNumeroEntrada(String numeroEntrada) {
+		this.numeroEntrada = numeroEntrada;
 	}	
 }

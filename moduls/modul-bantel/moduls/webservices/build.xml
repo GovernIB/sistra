@@ -29,9 +29,9 @@
 	  	 <include name="sistra-plugins.jar" />
 	  </fileset>
       <fileset dir="${web.product}">
-      	<include name="bantel-model.jar" />
-        <include name="bantel-persistence-client.jar" />
-	 	<include name="bantel-persistence.jar" />
+      	<include name="4-bantel-model.jar" />
+        <include name="4-bantel-persistence-client.jar" />
+	 	<include name="4-bantel-persistence.jar" />
       </fileset>
     </path>
 	
@@ -43,7 +43,7 @@
 	<target name="main" depends="war" description="Construeye el war"/>
 
 	<target name="war">
-		<cxfwar filename="${modul.name}.war"/>
+		<cxfwar filename="4-${modul.name}.war"/>
 	</target>
 	
     <macrodef name="cxfwar">

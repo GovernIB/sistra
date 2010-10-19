@@ -11,6 +11,7 @@
         <html:rewrite page="/protected/firmarFormulario.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
 
+<logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="S">		
 <script type="text/javascript">
 <!--
 	var mensajeFirmando = '<bean:message key="firmarDocumento.mensajeFirmar"/>';
@@ -41,7 +42,7 @@
 				 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
 			
 			function prepararEntornoFirma(){
-				cargarAppletFirma();
+				cargarAppletFirma(sistra_ClienteaFirma_buildVersion);
 			}
 			
 			function firmarAFirma(){
@@ -53,9 +54,10 @@
 				var formB64 = b64UrlSafeToB64(document.formFirma.base64XmlForm.value);
 			
 				clienteFirma.initialize();
-				clienteFirma.setSignatureAlgorithm("sha1WithRsaEncryption");
-				clienteFirma.setSignatureMode("EXPLICIT");
-				clienteFirma.setSignatureFormat("CMS");
+				clienteFirma.setShowErrors(false);
+				clienteFirma.setSignatureAlgorithm(sistra_ClienteaFirma_SignatureAlgorithm);
+				clienteFirma.setSignatureMode(sistra_ClienteaFirma_SignatureMode);
+				clienteFirma.setSignatureFormat(sistra_ClienteaFirma_SignatureFormat);
 				clienteFirma.setData(formB64);
 				
 				clienteFirma.sign();
@@ -66,10 +68,13 @@
 					return false;
 				}else{	
 				     firma = clienteFirma.getSignatureBase64Encoded();
+				    firma = b64ToB64UrlSafe(firma);
 				     document.firmarFormularioForm.firma.value = firma;
 				     return true;
 				}
 		}
+		
+		prepararEntornoFirma();
 	</logic:equal>
 
 	
@@ -92,6 +97,7 @@
 	
 //-->
 </script>
+</logic:equal>
 
 <h2>
 	<bean:message key="firmarDocumento.firmarDocumento"/> 
@@ -99,7 +105,8 @@
 </h2>
 
 
-<!--  Instrucciones firma -->
+<!--  Instrucciones firma digital-->
+<logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="S">		
 <p>
 	<!--  Si se comprueba el nif firmante -->
 	<logic:notEmpty name="formulario" property="firmante">
@@ -153,6 +160,29 @@
 		
 	</form>
 </logic:equal>
+</logic:equal>
+
+<!--  Instrucciones de firma delegada -->
+<logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="D">		
+	<p>
+	<logic:match name="formulario" property="firmante" value="#">
+		<bean:message key="firmarDocumento.instrucciones.firmarOtros" arg0="<%=es.caib.util.StringUtil.replace(formulario.getFirmante(),"#"," - ")%>"/>
+	</logic:match>	
+	<logic:notMatch name="formulario" property="firmante" value="#">
+		<bean:message key="firmarDocumento.instrucciones.firmarOtro" arg0="<%=formulario.getFirmante()%>"/>
+	</logic:notMatch>	
+	</p>
+	<p>
+		<bean:message key="firmarDocumento.instrucciones.firmaDelegada" />	
+	</p>
+	
+	<!--  BOTON FIRMAR -->
+	<p class="formBotonera">
+		<input name="formCDboton" type="button" value="<bean:message key="firmarDocumento.boton.firmaDelegada" />" 
+			title="<bean:message key="firmarDocumento.boton.firmaDelegada" />" 
+			onclick="document.firmarFormularioForm.submit();" />
+	</p>
+</logic:equal>
 
 <!-- Form para envio de datos -->
 <html:form action="/protected/firmarFormulario.do" method="POST">
@@ -160,6 +190,12 @@
 	<html:hidden name="irAFirmarFormularioForm" property="ID_INSTANCIA"/>
 	<html:hidden name="irAFirmarFormularioForm" property="instancia" />
 	<html:hidden name="irAFirmarFormularioForm" property="identificador" />
+	<logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="D">	
+		<input type="hidden" id="firmaDelegada" name="firmaDelegada" value="S" />
+	</logic:equal>	
+	<logic:notEqual name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="D">	
+		<input type="hidden" id="firmaDelegada" name="firmaDelegada" value="N" />
+	</logic:notEqual>	
 </html:form>
 
 <!--  Enlace volver  -->

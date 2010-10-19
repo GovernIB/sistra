@@ -7,19 +7,19 @@
     <display-name>AUD</display-name>
     <description><![CDATA[Proyecto IBCEGE - AUD]]></description>
 
-	<module><java>audit-model.jar</java></module>    
-    <module><ejb>audit-persistence.jar</ejb></module>
+	<module><java>1-audit-model.jar</java></module>    
+    <module><ejb>1-audit-persistence.jar</ejb></module>
     
     <module>
         <web>
-            <web-uri>audit-front.war</web-uri>
+            <web-uri>1-audit-front.war</web-uri>
             <context-root>auditfront</context-root>
         </web>
     </module>
     
          <module>
         <web>
-            <web-uri>audit-admin.war</web-uri>
+            <web-uri>1-audit-admin.war</web-uri>
             <context-root>auditadmin</context-root>
         </web>
     </module>

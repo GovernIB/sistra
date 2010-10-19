@@ -1,41 +1,29 @@
 package es.caib.bantel.front.action;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.Globals;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.util.MessageResources;
 
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleNotificacionForm;
 import es.caib.bantel.front.util.DocumentoFirmar;
 import es.caib.bantel.front.util.DocumentosUtil;
-import es.caib.bantel.front.util.Dominios;
-import es.caib.bantel.front.util.MensajesUtil;
-import es.caib.bantel.front.util.ValorOrganismo;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
-import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
-import es.caib.regtel.persistence.delegate.RegistroTelematicoDelegate;
 
 /**
  * @struts.action
- *  name="detalleNotificacionForm"
+ *  name="uploadNotificacionForm"
  *  path="/altaDocumentoNotificacion"
  *  validate="true"
- *  input = ".altaAviso"
- *  
- * @struts.action-forward
- *  name="success" path=".altaNotificacion"
- *
- * @struts.action-forward
- *  name="fail" path=".error"
  */
 public class AltaDocumentoNotificacionAction extends BaseAction
 {
@@ -45,7 +33,9 @@ public class AltaDocumentoNotificacionAction extends BaseAction
 		DetalleNotificacionForm notificacionForm = (DetalleNotificacionForm)form;
 		request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,"3");
 		ArrayList documentos;
+		String funcion;
 		try{
+			funcion = "parent.fileUploaded()";
  			if (notificacionForm.getDocumentoAnexoOficio() != null && StringUtils.isNotEmpty(notificacionForm.getDocumentoAnexoOficio().getFileName()) &&  StringUtils.isNotEmpty(notificacionForm.getTituloAnexoOficio())){
  				if(DocumentosUtil.extensionCorrecta(notificacionForm.getDocumentoAnexoOficio().getFileName())){
 	 				//if(DocumentosUtil.noExisteDocumento(notificacionForm.getTituloAnexoOficio(),request,"documentosAltaNotificacion")){
@@ -60,11 +50,8 @@ public class AltaDocumentoNotificacionAction extends BaseAction
 						try{
 							documentRDS = DocumentosUtil.crearDocumentoRDS(documento,notificacionForm.getUnidadAdministrativa());
 						}catch(Exception e){
-							carregarLlistes(request, notificacionForm.getCodigoProvincia());
-							ActionErrors errors = new ActionErrors();
-		 					errors.add("altaNotificacion", new ActionError("error.aviso.guardar.fichero"));
-		 					saveErrors(request,errors);
-		 					return mapping.findForward( "success" );
+							MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));
+							funcion="parent.errorFileUploaded(\""+resources.getMessage( getLocale( request ), "error.aviso.guardar.fichero")+"\")";
 						}
 						documento.setTitulo(documentRDS.getTitulo());
 						documento.setContenidoFichero(null);
@@ -86,53 +73,31 @@ public class AltaDocumentoNotificacionAction extends BaseAction
 					notificacionForm.setDocumentoAnexoOficio(null);
 					notificacionForm.setTituloAnexoOficio("");
  				}else{
- 					ActionErrors errors = new ActionErrors();
- 					errors.add("altaNotificacion", new ActionError("error.aviso.extensiones.fichero"));
- 					saveErrors(request,errors);
+ 					throw new Exception("error.aviso.extensiones.fichero");
  				}
 			}
-			carregarLlistes(request, notificacionForm.getCodigoProvincia());
-		}catch(Exception e){
-			e.printStackTrace();
-			String mensajeOk = MensajesUtil.getValue("error.excepcion.general");
-			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk);
-			return mapping.findForward("fail");
-		}
-		return mapping.findForward( "success" );
-    }
-	
-	private void carregarLlistes(HttpServletRequest request, String provincia) throws Exception{
-		List unidades=Dominios.listarUnidadesAdministrativas();
-		request.setAttribute("unidades",unidades);
-		List paises = Dominios.listarPaises();
-		request.setAttribute("paises",paises);
-		List provincias = Dominios.listarProvincias();
-		request.setAttribute("provincias",provincias);
-		List municipios = new ArrayList();
-		if(StringUtils.isNotEmpty(provincia)){
-			municipios = Dominios.listarLocalidadesProvincia(provincia);
-		}
-		request.setAttribute("municipios",municipios);
-		RegistroTelematicoDelegate dlgRte = DelegateRegtelUtil.getRegistroTelematicoDelegate();
-        List organosDestino = dlgRte.obtenerServiciosDestino();
-        request.setAttribute( "listaorganosdestino", regtelToBantel(organosDestino));
-        List oficinasRegistro = dlgRte.obtenerOficinasRegistro();
-        request.setAttribute( "listaoficinasregistro", regtelToBantel(oficinasRegistro));
-        List tiposAsunto = dlgRte.obtenerTiposAsunto();
-        request.setAttribute("tiposAsunto", regtelToBantel(tiposAsunto));
-	}
-	
-	private List regtelToBantel(List lista){
-		List listaBantel = new ArrayList();
-		if(lista != null){
-			for(int i=0;i<lista.size();i++){
-				ValorOrganismo vo = new ValorOrganismo();
-				vo.setCodigo(((es.caib.regtel.model.ValorOrganismo)lista.get(i)).getCodigo());
-				vo.setDescripcion(((es.caib.regtel.model.ValorOrganismo)lista.get(i)).getDescripcion());
-				listaBantel.add(vo);
+		}catch(Exception ex){
+			MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));
+			if(ex.getMessage() != null && ex.getMessage().startsWith("error.aviso.extensiones.fichero")){
+				funcion="parent.errorFileUploaded(\"" + resources.getMessage( getLocale( request ), ex.getMessage()) + "\")";				
+			}else{
+				funcion="parent.errorFileUploaded(\""+resources.getMessage( getLocale( request ), "error.excepcion.general")+"\")";
 			}
 		}
-		return listaBantel;
+		response.setContentType("text/html");		    
+		PrintWriter pw = response.getWriter();
+		pw.println("<html>");
+		pw.println("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
+		pw.println("<script type=\"text/javascript\">");
+		pw.println("<!--");
+		pw.println(funcion);
+		pw.println("-->");
+		pw.println("</script>");
+		pw.println("</head>");
+		pw.println("<body>");
+		pw.println("</body>");
+		pw.println("</html>");
+		return null;
 	}
 	
 }

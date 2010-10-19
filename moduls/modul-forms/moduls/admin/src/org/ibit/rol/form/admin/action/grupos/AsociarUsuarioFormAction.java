@@ -33,20 +33,20 @@ public class AsociarUsuarioFormAction extends Action {
     			List usuarios = new ArrayList();
     			String tabla = "";
     			try{
+    				 GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
     				 request.setCharacterEncoding("UTF-8");
     				 String usuario = request.getParameter("usuario");
     				 String formulario = request.getParameter("formulario");
     				 String flag = request.getParameter("flag");
     				 //si viene de modificación
-    				 if(StringUtils.isNotEmpty(usuario) && StringUtils.isNotEmpty(formulario) && StringUtils.isEmpty(flag)){
-    					GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
-    					RolUsuarioFormulario userForm = new RolUsuarioFormulario(new RolUsuarioFormularioId(usuario,new Long(formulario)));
+    				 if(StringUtils.isNotBlank(usuario) && StringUtils.isNotBlank(formulario) && StringUtils.isEmpty(flag)){
+    					RolUsuarioFormulario userForm = new RolUsuarioFormulario(new RolUsuarioFormularioId(usuario.trim(),new Long(formulario)));
     					gruposDelegate.asociarUsuarioFormulario(userForm);
-    					usuarios = gruposDelegate.listarUsuariosByForm(new Long(formulario));
     				 }else if(StringUtils.isNotEmpty(flag)){
-    					GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
-     					RolUsuarioFormulario userForm = gruposDelegate.obtenerUsuarioForm(new RolUsuarioFormularioId(usuario, new Long(formulario)));
+     					RolUsuarioFormulario userForm = gruposDelegate.obtenerUsuarioForm(new RolUsuarioFormularioId(usuario.trim(), new Long(formulario)));
      					gruposDelegate.eliminarUsuarioFormulario(userForm);
+    				 }
+   					 if(StringUtils.isNotBlank(formulario)){
      					usuarios = gruposDelegate.listarUsuariosByForm(new Long(formulario));
     				 }
     				 //formatea los datos para la recarga del div

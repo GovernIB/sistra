@@ -53,6 +53,12 @@ public class DetalleNotificacionForm extends ValidatorForm
 	private String modeloAnexo;
     private String versionAnexo;
     
+    private String descripcionTramiteSubsanacion; 
+    private String identificadorTramiteSubsanacion;
+    private String versionTramiteSubsanacion;
+    private String codigoParametroTramiteSubsanacion;
+    private String valorParametroTramiteSubsanacion;
+    
     private String firmar;
 	private String flagValidacion;
 	
@@ -374,6 +380,68 @@ public class DetalleNotificacionForm extends ValidatorForm
 		this.tipoAsunto = tipoAsunto;
 	}
 
+	public String getDescripcionTramiteSubsanacion() {
+		return descripcionTramiteSubsanacion;
+	}
+
+
+	public void setDescripcionTramiteSubsanacion(
+			String descripcionTramiteSubsanacion) {
+		this.descripcionTramiteSubsanacion = descripcionTramiteSubsanacion;
+	}
+
+
+	public String getIdentificadorTramiteSubsanacion() {
+		return identificadorTramiteSubsanacion;
+	}
+
+
+	public void setIdentificadorTramiteSubsanacion(
+			String identificadorTramiteSubsanacion) {
+		this.identificadorTramiteSubsanacion = identificadorTramiteSubsanacion;
+	}
+
+
+	public String getVersionTramiteSubsanacion() {
+		return versionTramiteSubsanacion;
+	}
+
+
+	public void setVersionTramiteSubsanacion(String versionTramiteSubsanacion) {
+		this.versionTramiteSubsanacion = versionTramiteSubsanacion;
+	}
+	
+			
+	public String getCodigoParametroTramiteSubsanacion() {
+		return codigoParametroTramiteSubsanacion;
+	}
+
+
+	public void setCodigoParametroTramiteSubsanacion(
+			String codigoParametroTramiteSubsanacion) {
+		this.codigoParametroTramiteSubsanacion = codigoParametroTramiteSubsanacion;
+	}
+
+
+	public String getValorParametroTramiteSubsanacion() {
+		return valorParametroTramiteSubsanacion;
+	}
+
+
+	public void setValorParametroTramiteSubsanacion(
+			String valorParametroTramiteSubsanacion) {
+		this.valorParametroTramiteSubsanacion = valorParametroTramiteSubsanacion;
+	}
+
+
+	public Integer getVersionTramiteSubsanacionInteger() {
+		try{
+			return new Integer(versionTramiteSubsanacion);
+		}catch(Exception e){
+			return null;			
+		}
+	}
+
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
         ActionErrors errors = super.validate(mapping, request);
         if (errors == null) 
@@ -421,6 +489,23 @@ public class DetalleNotificacionForm extends ValidatorForm
         	if(StringUtils.isEmpty(tipoAsunto)){
         		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.tipo.asunto")));
         		error = true;
+        	}
+        	if(StringUtils.isNotBlank(descripcionTramiteSubsanacion) || StringUtils.isNotBlank(identificadorTramiteSubsanacion) || StringUtils.isNotBlank(versionTramiteSubsanacion)){
+        		if(StringUtils.isBlank(descripcionTramiteSubsanacion)){
+        			errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.subsanacion.descripcion")));
+            		error = true;
+        		}
+        		if(StringUtils.isBlank(identificadorTramiteSubsanacion)){
+        			errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.subsanacion.identificador")));
+            		error = true;
+        		}
+        		if(StringUtils.isBlank(versionTramiteSubsanacion)){
+        			errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.subsanacion.version")));
+            		error = true;
+        		}else if(getVersionTramiteSubsanacionInteger() == null){
+        			errors.add("altaNotificacion", new ActionError("errors.integer", MensajesUtil.getValue("valida.notificacion.subsanacion.version")));
+            		error = true;
+            	}
         	}
         	if(error){
 				try {

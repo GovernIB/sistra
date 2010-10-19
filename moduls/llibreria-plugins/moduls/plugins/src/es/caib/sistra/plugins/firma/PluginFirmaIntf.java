@@ -53,7 +53,7 @@ public interface PluginFirmaIntf extends PluginSistraIntf{
 	public FirmaIntf parseFirmaFromHtmlForm(String signatureHtmlForm) throws Exception;
 	
 	/**
-	 * Crea una firma a partir de un array de bytes
+	 * Crea una firma a partir de un array de bytes que proviene de BBDD
 	 * 
 	 * @param firmaBytes Firma serializada en bytes
 	 * @param formatoFirma Formato de la firma
@@ -75,4 +75,18 @@ public interface PluginFirmaIntf extends PluginSistraIntf{
 	 */
 	public FicheroFirma parseFirmaToFile(InputStream datosFirmados,FirmaIntf firma) throws Exception;
 	
+	/**
+	 * Crea una firma a partir de un array de bytes proveniente del api de WS
+	 * 
+	 * @param firmaBytes Firma serializada en bytes
+	 * @param formatoFirma Formato de la firma
+	 * @return Firma serializada en bytes
+	 */
+	public FirmaIntf parseFirmaFromWS(byte[] firmaBytes, String formatoFirma) throws Exception;
+	
+	/**
+	 * Serializa la firma en un byte array para pasarla a través del api de WS
+	 * @return contenido de la firma en bytes
+	 */
+	public byte[] parseFirmaToWS(FirmaIntf firma) throws Exception;
 }

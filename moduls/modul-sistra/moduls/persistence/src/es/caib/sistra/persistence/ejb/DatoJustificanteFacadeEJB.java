@@ -24,7 +24,7 @@ public abstract class DatoJustificanteFacadeEJB extends HibernateEJB {
 
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
@@ -33,7 +33,7 @@ public abstract class DatoJustificanteFacadeEJB extends HibernateEJB {
 	  
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public DatoJustificante obtenerDatoJustificante(Long id) {
         Session session = getSession();
@@ -50,7 +50,7 @@ public abstract class DatoJustificanteFacadeEJB extends HibernateEJB {
  
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long grabarDatoJustificante(DatoJustificante obj,Long idEspecTramiteNivel) {        
     	Session session = getSession();
@@ -73,7 +73,7 @@ public abstract class DatoJustificanteFacadeEJB extends HibernateEJB {
         
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public List listarDatosJustificante(Long idEspecTramiteNivel) {
         Session session = getSession();
@@ -90,7 +90,7 @@ public abstract class DatoJustificanteFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarDatoJustificante(Long id) {
         Session session = getSession();
@@ -106,7 +106,7 @@ public abstract class DatoJustificanteFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void upDatoJustificante(Long id) {
         Session session = getSession();
@@ -123,7 +123,7 @@ public abstract class DatoJustificanteFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void downDatoJustificante(Long id) {
         Session session = getSession();

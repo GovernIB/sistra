@@ -11,7 +11,7 @@
       </id>
 
     <property name="idPersistencia"  column="TPB_IDEPER"  not-null="true" unique="true"/>
-    <property name="tramite"  column="TPB_TRAMOD"  not-null="true" length="10"/>
+    <property name="tramite"  column="TPB_TRAMOD"  not-null="true" length="20"/>
     <property name="version"  column="TPB_TRAVER"  not-null="true" length="2"/>
     <property name="descripcion"  column="TPB_TRADES"  not-null="true" length="200"/>
     <property name="nivelAutenticacion"  column="TPB_NIVAUT"  not-null="true" length="1"/>

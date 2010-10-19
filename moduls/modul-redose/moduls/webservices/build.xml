@@ -14,6 +14,8 @@
 	<property name="plugins" value="${home.dir}/../../product/lib" />
 	<property name="wsdl.dir" location="${basedir}/wsdl"/>
 	<property name="web.product" location="${output.dir}/moduls"/>
+	<property name="distribucion.dir" location="${home.dir}/../../product"/>
+		
 	<path id="cxf.classpath">
       <fileset dir="${cxf.home}">
          <include name="*.jar"/>
@@ -29,9 +31,12 @@
 	  	 <include name="sistra-plugins.jar" />
 	  </fileset>
       <fileset dir="${web.product}">
-      	<include name="redose-model.jar" />
-        <include name="redose-persistence-client.jar" />
-	 	<include name="redose-persistence.jar" />
+      	<include name="2-redose-model.jar" />
+        <include name="2-redose-persistence-client.jar" />
+	 	<include name="2-redose-persistence.jar" />
+      </fileset>
+		<fileset dir="${distribucion.dir}/lib"> 
+		   <include name="sistra-utilWs.jar"/>
       </fileset>
     </path>
 	
@@ -43,8 +48,9 @@
 	<target name="main" depends="war" description="Construeye el war"/>
 
 	<target name="war">
-		<cxfwar filename="${modul.name}.war"/>
+		<cxfwar filename="2-${modul.name}.war"/>
 	</target>
+	
 	
     <macrodef name="cxfwar">
         <attribute name="filename"/>

@@ -14,7 +14,7 @@
     <module><java>plugin-firmaMOCK.jar</java></module> 
     <module><java>plugin-smsMOCK.jar</java></module>  
     <module><java>plugin-custodiaMOCK.jar</java></module>  
-    
+    <module><java>plugin-gestorDocumentalMOCK.jar</java></module>
     <!--  Asistente de pago Mock -->
     <module><java>pagosMOCK-model.jar</java></module>    
     <module><ejb>pagosMOCK-persistence.jar</ejb></module>    

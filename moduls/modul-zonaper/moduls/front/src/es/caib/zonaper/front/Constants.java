@@ -70,4 +70,5 @@ public class Constants implements Serializable
      */
     public static final String IMPLEMENTACION_FIRMA_KEY 			= "implementacionFirma";
 	
+    public static final String MOSTRAR_EN_IFRAME = "mostrarSistraEnIframe";
 }

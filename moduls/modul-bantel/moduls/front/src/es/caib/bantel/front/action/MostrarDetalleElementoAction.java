@@ -4,6 +4,7 @@ package es.caib.bantel.front.action;
 import java.io.ByteArrayInputStream;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +32,7 @@ import es.caib.xml.datospropios.factoria.FactoriaObjetosXMLDatosPropios;
 import es.caib.xml.datospropios.factoria.ServicioDatosPropiosXML;
 import es.caib.xml.datospropios.factoria.impl.DatosPropios;
 import es.caib.xml.registro.factoria.ConstantesAsientoXML;
+import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD;
@@ -79,9 +81,13 @@ public class MostrarDetalleElementoAction extends BaseAction
 				if(exp.getElementos() != null && exp.getElementos().size() >= Integer.parseInt(codigo)){
 					if(tipo.equals("A") && exp.getElementos().get(Integer.parseInt(codigo)) instanceof EventoExpedientePAD) {
 						request.setAttribute("elemento",exp.getElementos().get(Integer.parseInt(codigo)));
+						EventoExpedientePAD evento = ((EventoExpedientePAD)exp.getElementos().get(Integer.parseInt(codigo)));
+						cargarFirmas(evento.getDocumentos(),request,tipo);
 						return mapping.findForward("succesAviso");
 					}else if(tipo.equals("N") && exp.getElementos().get(Integer.parseInt(codigo)) instanceof NotificacionExpedientePAD){
 						request.setAttribute("elemento",exp.getElementos().get(Integer.parseInt(codigo)));
+						NotificacionExpedientePAD notif = ((NotificacionExpedientePAD)exp.getElementos().get(Integer.parseInt(codigo)));
+						cargarFirmas(notif.getDocumentos(),request,tipo);
 						return mapping.findForward("succesNotificacion");
 					}else if(tipo.equals("T") && exp.getElementos().get(Integer.parseInt(codigo)) instanceof TramiteExpedientePAD){
 						String numeroRegistro = ((TramiteExpedientePAD)exp.getElementos().get(Integer.parseInt(codigo))).getNumeroRegistro();
@@ -126,6 +132,7 @@ public class MostrarDetalleElementoAction extends BaseAction
 									if (documentoRDS.isEstructurado()){
 										documentosEstructurados.add(documento.getCodigo());
 									}
+									cargarFirmas(documento,request);
 								}
 							}
 						}		
@@ -171,4 +178,37 @@ public class MostrarDetalleElementoAction extends BaseAction
 			return mapping.findForward("fail");
 		}
     }
+	
+	private void cargarFirmas(DocumentoBandeja documento, HttpServletRequest request) throws Exception{
+		RdsDelegate rdsDeleg = DelegateRDSUtil.getRdsDelegate();
+		
+//		vamos a buscar las firmas de los documentos si existen y las meteremos en la request
+		if(documento != null && documento.getRdsCodigo() != null && documento.getRdsClave() != null){
+			ReferenciaRDS ref =  new ReferenciaRDS(documento.getRdsCodigo(),documento.getRdsClave());
+			String codigo = documento.getCodigo()+"";
+			DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
+			if(doc != null && doc.getFirmas() != null){
+				request.setAttribute(codigo,doc.getFirmas());
+			}
+		}
+	}
+	
+	private void cargarFirmas(List documentos, HttpServletRequest request, String tipo) throws Exception{
+		RdsDelegate rdsDeleg = DelegateRDSUtil.getRdsDelegate();
+		
+//		vamos a buscar las firmas de los documentos si existen y las meteremos en la request
+		if(documentos != null){
+			ReferenciaRDS ref = null;
+			String codigo = null;
+			for(int i=0;i<documentos.size();i++){
+				DocumentoExpedientePAD docTipo = (DocumentoExpedientePAD)documentos.get(i);
+				ref = new ReferenciaRDS(docTipo.getCodigoRDS(),docTipo.getClaveRDS());
+				codigo = docTipo.getCodigoRDS()+docTipo.getClaveRDS();
+				DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
+				if(doc != null && doc.getFirmas() != null){
+					request.setAttribute(codigo,doc.getFirmas());
+				}
+			}
+		}
+	}
 }

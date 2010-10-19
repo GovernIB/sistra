@@ -61,7 +61,7 @@
         <tstamp>
             <format property="TODAY" pattern="dd-MM-yy"/>
         </tstamp>
-    	<fail unless="role.user" message="La propiedad role.user no está definida en config.properties"/>
+    	<fail unless="role.todos" message="La propiedad role.todos no está definida en config.properties"/>
         <fail unless="persistence.auth.domain" message="La propiedad persistence.auth.domain no está definida en config.properties"/>
         <fail unless="persistence.auth.principal" message="La propiedad persistence.auth.principal no está definida en config.properties"/>
     </target>

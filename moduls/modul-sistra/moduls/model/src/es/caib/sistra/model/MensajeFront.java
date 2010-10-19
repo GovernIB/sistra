@@ -15,6 +15,7 @@ public class MensajeFront implements Serializable{
 	
 	// Mensajes predefinidos
 	public static final String MENSAJE_ERRORDESCONOCIDO = "mensaje.error_desconocido";
+	public static final String MENSAJE_ERRORCAMBIOESPECIFICACIONES = "mensaje.error_cambio_especificaciones";
 	public static final String MENSAJE_TRAMITEBORRADO = "mensaje.tramite_borrado";	
 	public static final String MENSAJE_TRAMITEINACTIVO = "mensaje.tramite_inactivo";
 	public static final String MENSAJE_ERRORSCRIPT = "mensaje.error_script";
@@ -51,7 +52,12 @@ public class MensajeFront implements Serializable{
 	public static final String MENSAJE_ERROR_DOCUMENTO_NO_FIRMADO="mensaje.error.firma.documentoNoFirmado";
 	public static final String MENSAJE_ERROR_FLUJO_NO_USUARIO_SEYCON="mensaje.error.firma.flujoNoUsuarioSeycon";
 	public static final String MENSAJE_FLUJO_TRAMITE_ENVIADO="mensaje.firma.flujoTramiteEnviado";	
-			
+	public static final String MENSAJE_DELEGADO_NO_PERMISO_RELLENAR = "mensaje.delegado.no_permiso_rellenar";	
+	public static final String MENSAJE_DELEGADO_TRAMITE_PENDIENTE_PRESENTAR="mensaje.delegado.pendiente_presentar";
+	public static final String MENSAJE_DELEGADO_TRAMITE_NO_MODIFICAR_PENDIENTE_PRESENTAR="mensaje.delegado.no_modificar_pendiente_presentar";
+	public static final String MENSAJE_DELEGADO_TRAMITE_PENDIENTE_FIRMA="mensaje.delegado.pendiente_firma";
+	public static final String MENSAJE_DELEGADO_TRAMITE_NO_MODIFICAR_PENDIENTE_FIRMA="mensaje.delegado.no_modificar_pendiente_firma";
+	public static final String MENSAJE_ERROR_MODIFICACION_FORM_POR_PENDIENTE_FIRMA = "mensaje.delegado.no_modif_form_por_pendiente_firma";
 		
 	private String mensaje;	
 	private int tipo=TIPO_ERROR;

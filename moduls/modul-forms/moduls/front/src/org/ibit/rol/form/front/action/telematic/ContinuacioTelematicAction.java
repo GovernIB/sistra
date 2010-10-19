@@ -30,7 +30,7 @@ public class ContinuacioTelematicAction extends BaseAction {
 
         String idInstancia = request.getParameter(RegistroManager.ID_INSTANCIA);
 
-        log.info("Recibida continuación telemática: " + idInstancia);
+        log.debug("Recibida continuación telemática: " + idInstancia);
 
         boolean success = RegistroManager.asignarInstanciaPreregistrada(request, idInstancia);
 

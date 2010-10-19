@@ -66,4 +66,8 @@
 		<xjc schema="TAXA.xsd" destdir="${src.dir}" package="es.caib.xml.taxa.modelo" />			
 	</target>
 		
+	<target name="autorizacionDelegacion" description="Genera jaxb para Autorizacion Delegacion">
+		<xjc schema="AUTORIZACION_DELEGACION.xsd" destdir="${src.dir}" package="es.caib.xml.delegacion.modelo" />			
+	</target>
+	
 </project>

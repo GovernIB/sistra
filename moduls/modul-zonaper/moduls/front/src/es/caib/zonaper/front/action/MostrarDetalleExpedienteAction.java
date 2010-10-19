@@ -15,6 +15,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import es.caib.zonaper.front.Constants;
+import es.caib.zonaper.model.DatosSesion;
 import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.ElementoExpedienteItf;
 import es.caib.zonaper.model.Entrada;
@@ -24,6 +25,7 @@ import es.caib.zonaper.model.EstadoExpediente;
 import es.caib.zonaper.model.EventoExpediente;
 import es.caib.zonaper.model.Expediente;
 import es.caib.zonaper.model.NotificacionTelematica;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.ElementoExpedienteDelegate;
 
@@ -43,6 +45,10 @@ import es.caib.zonaper.persistence.delegate.ElementoExpedienteDelegate;
 public class MostrarDetalleExpedienteAction extends BaseAction {
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		DatosSesion datosSesion = this.getDatosSesion(request);
+		
+		boolean accesoDelegado = (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals( datosSesion.getPerfilAcceso()));
 		
 		// Cargamos estado expediente
 		String id = request.getParameter("id");
@@ -65,7 +71,7 @@ public class MostrarDetalleExpedienteAction extends BaseAction {
 		// Si es así, mostramos el expediente
 		if (ElementoExpediente.TIPO_ENTRADA_PREREGISTRO.equals(tipoElemento) || ElementoExpediente.TIPO_ENTRADA_TELEMATICA.equals(tipoElemento)){
 			ElementoExpediente e;
-			if (this.getDatosSesion(request).getNivelAutenticacion() == 'A'){
+			if (datosSesion.getNivelAutenticacion() == 'A'){
 				e = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpedienteAnonimo(tipoElemento,codigoElemento,this.getIdPersistencia(request));
 			}else{
 				e = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpedienteAutenticado(tipoElemento,codigoElemento);
@@ -79,7 +85,6 @@ public class MostrarDetalleExpedienteAction extends BaseAction {
 			
 		}
 		
-		
 		Set elementosExpe;
 		String descExpe;
 		String codigoExpe = null;
@@ -92,7 +97,7 @@ public class MostrarDetalleExpedienteAction extends BaseAction {
 		if (tipoElemento.equals(EstadoExpediente.TIPO_ENTRADA_PREREGISTRO)){
 				// Tramite preregistro sin expediente
 				EntradaPreregistro entradaPre;
-				if (this.getDatosSesion(request).getNivelAutenticacion() == 'A'){
+				if (datosSesion.getNivelAutenticacion() == 'A'){
 					entradaPre = DelegateUtil.getEntradaPreregistroDelegate().obtenerEntradaPreregistroAnonima(codigoElemento,this.getIdPersistencia(request));
 				}else{
 					entradaPre = DelegateUtil.getEntradaPreregistroDelegate().obtenerEntradaPreregistroAutenticada(codigoElemento);
@@ -122,7 +127,7 @@ public class MostrarDetalleExpedienteAction extends BaseAction {
 		}else if (tipoElemento.equals(EstadoExpediente.TIPO_ENTRADA_TELEMATICA)){			
 				// Tramite telematico sin expediente
 				EntradaTelematica entradaTel;
-				if (this.getDatosSesion(request).getNivelAutenticacion() == 'A'){
+				if (datosSesion.getNivelAutenticacion() == 'A'){
 					entradaTel = DelegateUtil.getEntradaTelematicaDelegate().obtenerEntradaTelematicaAnonima(codigoElemento,this.getIdPersistencia(request));
 				}else{
 					entradaTel = DelegateUtil.getEntradaTelematicaDelegate().obtenerEntradaTelematicaAutenticada(codigoElemento);
@@ -144,7 +149,7 @@ public class MostrarDetalleExpedienteAction extends BaseAction {
 		}else if (tipoElemento.equals(EstadoExpediente.TIPO_EXPEDIENTE)){
 				// Expediente
 				Expediente expe;
-				if (this.getDatosSesion(request).getNivelAutenticacion() == 'A'){
+				if (datosSesion.getNivelAutenticacion() == 'A'){
 					expe = DelegateUtil.getExpedienteDelegate().obtenerExpedienteAnonimo(codigoElemento,this.getIdPersistencia(request));
 				}else{
 					expe = DelegateUtil.getExpedienteDelegate().obtenerExpedienteAutenticado(codigoElemento);
@@ -159,7 +164,7 @@ public class MostrarDetalleExpedienteAction extends BaseAction {
 					ElementoExpediente elemento = (ElementoExpediente) it.next();
 					
 					ElementoExpedienteItf detalleElemento;
-					if (this.getDatosSesion(request).getNivelAutenticacion() == 'A'){
+					if (datosSesion.getNivelAutenticacion() == 'A'){
 						detalleElemento = ed.obtenerDetalleElementoExpedienteAnonimo(elemento.getCodigo(),this.getIdPersistencia(request));
 					}else{
 						detalleElemento = ed.obtenerDetalleElementoExpedienteAutenticado(elemento.getCodigo());
@@ -198,7 +203,7 @@ public class MostrarDetalleExpedienteAction extends BaseAction {
 		request.setAttribute("elementosExpeDescripcion",elementosExpeDescripcion);
 		request.setAttribute( "pieDocPresencial", pieDocPresencial );
 		
-		if (this.getDatosSesion(request).getNivelAutenticacion() != 'A'){
+		if (datosSesion.getNivelAutenticacion() != 'A'){
 			return mapping.findForward("success");
 		}else{
 			return mapping.findForward("successAnonimo");

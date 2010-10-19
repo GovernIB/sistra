@@ -160,4 +160,22 @@ public class Util
 			
 	}	
 	
+	/**
+	 * Obtiene datos delegado del asiento
+	 */	
+	public static DatosInteresado obtenerDatosDelegado( AsientoRegistral asiento )
+	{
+			for ( Iterator it = asiento.getDatosInteresado().iterator(); it.hasNext(); )
+			{
+				DatosInteresado datosInteresado = ( DatosInteresado ) it.next();
+				if ( ConstantesAsientoXML.DATOSINTERESADO_TIPO_DELEGADO.equals( datosInteresado.getTipoInteresado() ) )
+				{
+					return datosInteresado;
+				}				
+			}
+			
+			return null;
+			
+	}	
+	
 }

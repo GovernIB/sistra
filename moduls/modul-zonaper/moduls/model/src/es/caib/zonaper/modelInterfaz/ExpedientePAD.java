@@ -22,6 +22,7 @@ public class ExpedientePAD implements Serializable
 	private String descripcion;
 	private boolean autenticado = true;
 	private String identificadorUsuario;
+	private String nifRepresentante; // Por compatibilidad si no se establece se extraera automaticamente del usuario seycon o de la info de la entrada si es anonimo 
 	private String nifRepresentado;
 	private String nombreRepresentado;
 	private String numeroEntradaBTE;
@@ -234,6 +235,12 @@ public class ExpedientePAD implements Serializable
 	protected void setConfiguracionAvisos(
 			ConfiguracionAvisosExpedientePAD configuracionAvisos) {
 		this.configuracionAvisos = configuracionAvisos;
+	}
+	public String getNifRepresentante() {
+		return nifRepresentante;
+	}
+	public void setNifRepresentante(String nifRepresentante) {
+		this.nifRepresentante = nifRepresentante;
 	}
 		
 }

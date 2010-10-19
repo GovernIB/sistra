@@ -36,6 +36,10 @@
                         <bean:define id="nombre" name="propiedad" property="nombre" type="java.lang.String"/>
                         <bean:define id="mensajeBaja"><bean:message arg0='<%=nombre%>' key='propiedadsalida.baja' /></bean:define>
                         <bean:define id="urlBaja"><html:rewrite page='<%="/back/propiedadsalida/baja.do?idSalida=" + idSalida %>' paramId="idPropiedad" paramName="propiedad" paramProperty="id"/></bean:define>
+                        <%
+                        mensajeBaja = mensajeBaja.replace("\'","&#145;");
+                        mensajeBaja = mensajeBaja.replace("\"","&#34;");
+    	                %>
                         <button class="button" type="button" onclick="confirmAndForward('<%=mensajeBaja%>', '<%=urlBaja%>')"><bean:message key="boton.baixa" /></button>
                     </logic:equal>
                 </td>

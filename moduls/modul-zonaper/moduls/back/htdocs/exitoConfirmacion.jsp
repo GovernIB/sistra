@@ -22,7 +22,6 @@
 	function imprimirSello()
 	{
 		document.forms["fImprimirSello"].submit();
-		//document.location.href = '<%= imprimirSelloAction %>';
 	}
 -->
 </script>
@@ -32,6 +31,6 @@
 		<p class="centrado"><html:button title="<%= botonImprimir %>" value="<%= botonImprimir %>" property="enviar" onclick="javascript:imprimirSello()" /></p>
 		<p class="tornarArrere"><strong><html:link action="init.do"><bean:message key="mensajes.enlaceVolver" /></html:link></strong></p>
 		
-		<form name="fImprimirSello" id="fImprimirSello" action="init.do" method="POST">
-			<input type="hidden" name="codigoSello" value="<%=mapActionParams.get("codigo").toString()%>"/>
+		<form name="fImprimirSello" id="fImprimirSello" action="imprimirSello.do" method="POST">
+			<input type="hidden" name="codigo" value="<%=mapActionParams.get("codigo").toString()%>"/>
 		</form>

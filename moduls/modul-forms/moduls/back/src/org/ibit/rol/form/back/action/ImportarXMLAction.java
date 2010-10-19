@@ -8,14 +8,22 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.*;
 import org.ibit.rol.form.back.form.ImportarForm;
+import org.ibit.rol.form.back.taglib.Constants;
 import org.ibit.rol.form.back.util.Util;
+import org.ibit.rol.form.model.Campo;
+import org.ibit.rol.form.model.Componente;
 import org.ibit.rol.form.model.Formulario;
+import org.ibit.rol.form.model.Pantalla;
+import org.ibit.rol.form.model.Patron;
 import org.ibit.rol.form.model.RolUsuarioFormulario;
 import org.ibit.rol.form.model.RolUsuarioFormularioId;
 import org.ibit.rol.form.model.betwixt.Configurator;
 import org.ibit.rol.form.persistence.delegate.DelegateUtil;
 import org.ibit.rol.form.persistence.delegate.FormularioDelegate;
 import org.ibit.rol.form.persistence.delegate.GruposDelegate;
+import org.ibit.rol.form.persistence.delegate.PatronDelegate;
+
+import es.caib.util.ConvertUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,7 +49,7 @@ public class ImportarXMLAction extends BaseAction {
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
         FormularioDelegate delegate = DelegateUtil.getFormularioDelegate();
-
+        try{
         ImportarForm iForm = (ImportarForm) form;
         if (iForm.getFitxer() != null) {
 
@@ -50,6 +58,12 @@ public class ImportarXMLAction extends BaseAction {
 
             Formulario formulario = (Formulario) beanReader.parse(iForm.getFitxer().getInputStream());
             
+	            //para cada componente de cada pagina del formulario si tiene un patrón asignado
+	            //vamos a buscar en la BBDD por nombre para coger el id del patrón correcto
+	            //según el entorno de instalación, tambine para cada componente que tenga algun 
+	            //script asociado miramos si nos llega en b64 y si es así lo pasamos a String 
+	            modificarIdPatronesYScripts(formulario);
+	            
             // No guardamos informacion de bloqueo
             formulario.setBloqueado(false);
             formulario.setBloqueadoPor(null);
@@ -126,7 +140,64 @@ public class ImportarXMLAction extends BaseAction {
             
             return mapping.findForward("success");
         }
-
+        }catch(Exception e){
+        	ActionErrors errors = new ActionErrors();
+        	if("errors.importacion.patrones".equals(e.getMessage())){
+        		errors.add("version", new ActionError("errors.importacion.patrones"));
+        	}else{
+        		errors.add("version", new ActionError("errors.importacion.general"));
+        	}
+            saveErrors(request, errors);
+        }
         return mapping.findForward("fail");
+    }
+    
+    private void modificarIdPatronesYScripts(Formulario form) throws Exception{
+    	try{
+    		PatronDelegate patDeleg = DelegateUtil.getPatronDelegate();
+	    	if(form != null && form.getPantallas() != null && form.getPantallas().size() > 0){
+	    		for(int i=0;i<form.getPantallas().size();i++){
+	    			Pantalla pant = (Pantalla)form.getPantallas().get(i);
+	    			if(pant.getExpresion() != null && !"".equals(pant.getExpresion())){
+	    				if(pant.getExpresion().startsWith(Constants.TAG_B64)){
+	    					pant.setExpresion(ConvertUtil.base64UrlSafeToCadena(pant.getExpresion().substring(Constants.TAG_B64.length(),pant.getExpresion().length())));
+	    				}
+					}
+	    			if(pant != null && pant.getComponentes() != null && pant.getComponentes().size() > 0){
+	    				for(int j=0;j<pant.getComponentes().size();j++){
+	    					Componente comp = (Componente)pant.getComponentes().get(j);
+	    					if(comp != null && comp instanceof Campo){
+	    						Campo camp = (Campo)comp;
+	    						if(camp.getPatron() != null){
+	    							Patron pat = patDeleg.obtenerPatron(camp.getPatron().getNombre());
+	    							camp.setPatron(pat);
+	    						}
+	    						if(camp.getExpresionAutocalculo() != null && !"".equals(camp.getExpresionAutocalculo()) && camp.getExpresionAutocalculo().startsWith(Constants.TAG_B64)){
+    								camp.setExpresionAutocalculo(ConvertUtil.base64UrlSafeToCadena(camp.getExpresionAutocalculo().substring(Constants.TAG_B64.length(),camp.getExpresionAutocalculo().length())));
+	    						}
+	    						if(camp.getExpresionAutorellenable() != null && !"".equals(camp.getExpresionAutorellenable()) && camp.getExpresionAutorellenable().startsWith(Constants.TAG_B64)){
+    								camp.setExpresionAutorellenable(ConvertUtil.base64UrlSafeToCadena(camp.getExpresionAutorellenable().substring(Constants.TAG_B64.length(),camp.getExpresionAutorellenable().length())));
+	    						}
+	    						if(camp.getExpresionDependencia() != null && !"".equals(camp.getExpresionDependencia()) && camp.getExpresionDependencia().startsWith(Constants.TAG_B64)){
+    								camp.setExpresionDependencia(ConvertUtil.base64UrlSafeToCadena(camp.getExpresionDependencia().substring(Constants.TAG_B64.length(),camp.getExpresionDependencia().length())));
+	    						}
+	    						if(camp.getExpresionPostProceso() != null && !"".equals(camp.getExpresionPostProceso()) && camp.getExpresionPostProceso().startsWith(Constants.TAG_B64)){
+    								camp.setExpresionPostProceso(ConvertUtil.base64UrlSafeToCadena(camp.getExpresionPostProceso().substring(Constants.TAG_B64.length(),camp.getExpresionPostProceso().length())));
+	    						}
+	    						if(camp.getExpresionValidacion() != null && !"".equals(camp.getExpresionValidacion()) && camp.getExpresionValidacion().startsWith(Constants.TAG_B64)){
+    								camp.setExpresionValidacion(ConvertUtil.base64UrlSafeToCadena(camp.getExpresionValidacion().substring(Constants.TAG_B64.length(),camp.getExpresionValidacion().length())));
+	    						}
+	    						if(camp.getExpresionValoresPosibles() != null && !"".equals(camp.getExpresionValoresPosibles()) && camp.getExpresionValoresPosibles().startsWith(Constants.TAG_B64)){
+    								camp.setExpresionValoresPosibles(ConvertUtil.base64UrlSafeToCadena(camp.getExpresionValoresPosibles().substring(Constants.TAG_B64.length(),camp.getExpresionValoresPosibles().length())));
+	    						}
+	    					}
+	    				}
+	    			}
+	    		}
+	    	}
+    	}catch(Exception e){
+    		log.error("Error en el proceso de importación: ",e);
+    		throw new Exception("errors.importacion.patrones");
+    	}
     }
 }

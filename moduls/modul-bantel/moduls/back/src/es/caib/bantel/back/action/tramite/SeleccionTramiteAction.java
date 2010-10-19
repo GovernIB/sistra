@@ -42,7 +42,7 @@ public class SeleccionTramiteAction extends BaseAction{
         guardarTramite(mapping, request, idString);
 
         request.setAttribute( "idReadOnly", new Boolean( true ) );
-        
+        request.setAttribute( "codigoTramiteError", idString );
         return mapping.findForward("success");
     }
 }

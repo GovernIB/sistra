@@ -32,13 +32,11 @@ public abstract class HibernateEJB implements SessionBean {
     }
 
     public void ejbCreate() throws CreateException {
-        log.info("ejbCreate: " + this.getClass());
         sf = HibernateLocator.getSessionFactory();
 
     }
 
     public void ejbRemove() {
-        log.info("ejbRemove: " + this.getClass());
         sf = null;
     }
 

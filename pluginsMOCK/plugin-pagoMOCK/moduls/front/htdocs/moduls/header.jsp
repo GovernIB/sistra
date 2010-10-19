@@ -6,17 +6,19 @@
 
 <bean:define id="lang" value="<%=((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage()%>" type="java.lang.String"/>
 
+<logic:equal name="<%=es.caib.pagos.front.Constants.MOSTRAR_EN_IFRAME%>" value="false">
 <!-- capçal -->
 <div id="capsal">
 	<html:link href="http://www.caib.es" paramId="lang" paramName="lang" accesskey="0" >
 		<img id="logoCAIB" class="logo" src="imgs/capsal/logo.gif" alt="Logo del Govern de les Illes Balears" />
 	</html:link>
 </div>
+</logic:equal>
 
 <!-- titol -->
 <p id="titolAplicacio"><bean:message key="tituloAplicacion"/></p>
 
- 
+<logic:equal name="<%=es.caib.pagos.front.Constants.MOSTRAR_EN_IFRAME%>" value="false">
 <div id="contactoAdministrador" class="contactoAdministrador">
 	
 	<%
@@ -50,4 +52,4 @@
 	 	<input type="hidden" name="language" value="<%=lang%>" />	 	
 	 </form>
 </div>
-
+</logic:equal>

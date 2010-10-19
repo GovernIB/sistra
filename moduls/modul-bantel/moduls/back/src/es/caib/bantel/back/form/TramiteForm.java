@@ -51,6 +51,12 @@ public class TramiteForm extends BantelForm implements InitForm
 		        			errors.add("values.url", new ActionError("errors.url.vacia"));
 		        		}        			
         		}
+        		//version WS
+        		if(tramite.getTipoAcceso() == Tramite.ACCESO_WEBSERVICE){
+        			if (StringUtils.isEmpty(tramite.getVersionWS())){
+	        			errors.add("values.versionWS", new ActionError("errors.versionWS.vacia"));
+	        		}
+        		}
         		
         		// Jndi
         		if (tramite.getTipoAcceso() == Tramite.ACCESO_EJB && StringUtils.isEmpty(tramite.getJndiEJB())){

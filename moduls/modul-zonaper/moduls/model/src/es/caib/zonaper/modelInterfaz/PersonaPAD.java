@@ -37,6 +37,7 @@ public class PersonaPAD implements Serializable{
 	private String telefonoMovil;
 	private String email;
 	private boolean habilitarAvisosExpediente=false;
+	private boolean habilitarDelegacion=false;
 	
 	
 	public String getApellido1() {
@@ -140,4 +141,11 @@ public class PersonaPAD implements Serializable{
 	public void setTelefonoFijo(String telefonoFijo) {
 		this.telefonoFijo = telefonoFijo;
 	}
+	public boolean isHabilitarDelegacion() {
+		return habilitarDelegacion;
+	}
+	public void setHabilitarDelegacion(boolean habilitarDelegacion) {
+		this.habilitarDelegacion = habilitarDelegacion;
+	}
+	
 }

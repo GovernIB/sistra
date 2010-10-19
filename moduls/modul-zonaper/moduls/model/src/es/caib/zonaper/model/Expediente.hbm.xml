@@ -20,8 +20,9 @@
 	<property name="fechaConsulta" column="EXP_FECCON" not-null="false"/>
     <property name="idExpediente"  column="EXP_IDEXP"  not-null="true" unique="true" length="50"/>
     <property name="descripcion"  column="EXP_DESC"  not-null="true" length="512"/>
-    <property name="seyconCiudadano"  column="EXP_SEYCIU" length="1536"/>
     <property name="usuarioSeycon"  column="EXP_USER"  not-null="true" length="1536"/>
+    <property name="seyconCiudadano"  column="EXP_SEYCIU" length="1536"/>
+    <property name="nifRepresentante"  column="EXP_NIFRTE" />
     <property name="nifRepresentado"  column="EXP_NIFRDO" />    
     <property name="nombreRepresentado"  column="EXP_NOMRDO" />    
     <property name="unidadAdministrativa" column="EXP_UNIADM" not-null="true" length="19"/>

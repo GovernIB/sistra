@@ -1,5 +1,7 @@
 package es.caib.zonaper.persistence.ejb;
 
+import java.security.Principal;
+
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
@@ -10,6 +12,9 @@ import net.sf.hibernate.Session;
 
 import org.apache.commons.lang.StringUtils;
 
+import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.login.PluginLoginIntf;
+import es.caib.util.CredentialUtil;
 import es.caib.zonaper.model.EstadoExpediente;
 import es.caib.zonaper.model.Expediente;
 import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
@@ -33,7 +38,7 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 	/**
      * @ejb.create-method
      * @ejb.permission role-name="${role.gestor}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      */
 	public void ejbCreate() throws CreateException 
@@ -43,7 +48,7 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 	
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public Expediente obtenerExpedienteAutenticado( Long id )
 	{
@@ -53,14 +58,13 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 			Expediente expediente = ( Expediente )session.load( Expediente.class, id );
 			Hibernate.initialize( expediente.getElementos() );			
 			
-			// Solo el usuario puede acceder al expediente
-			if (!this.ctx.getCallerPrincipal().getName().equals(expediente.getSeyconCiudadano())){
-				throw new HibernateException("Acceso no autorizado al expediente");
-			}
+			
+			// Comprobamos que accede el usuario o si es un delegado
+			controlAccesoExpedienteAutenticado(expediente);
 			
 			return expediente;		
 		} 
-		catch (HibernateException he) 
+		catch (Exception he) 
 		{	        
 			throw new EJBException(he);
 	    } 
@@ -70,11 +74,10 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 	    }
 	}
 	
-	
 	 /**
      * @throws ExcepcionPAD 
 	 * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public Expediente obtenerExpedienteAnonimo(Long id, String idPersistencia )
 	{
@@ -159,6 +162,7 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 	    }
 	}
 	
+		
 	/**
 	 * @ejb.interface-method
      * @ejb.permission role-name="${role.gestor}"
@@ -190,11 +194,15 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 	    }
 	}		
 	
+	
+	
+	
+	
 	/**
 	 * Obtiene numero de expedientes pendientes de revisar por el usuario (con avisos pendientes o con notificaciones pendientes)
 	 * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public int obtenerNumeroExpedientesPendientesUsuario() 
 	{
@@ -218,6 +226,21 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 	}
 	
 	
+	
+	private void controlAccesoExpedienteAutenticado(Expediente expediente) throws Exception{
+		Principal sp =this.ctx.getCallerPrincipal();
+		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
+		if (plgLogin.getMetodoAutenticacion(sp) == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO){
+    		throw new HibernateException("Acceso solo permitido para autenticado");
+    	}
+		if (!plgLogin.getNif(this.ctx.getCallerPrincipal()).equals(expediente.getNifRepresentante())){
+			// Si no es el usuario quien accede miramos si es un delegado
+        	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(expediente.getNifRepresentante());
+        	if (StringUtils.isEmpty(permisos)){
+        		throw new Exception("Acceso no autorizado al expediente " + expediente.getCodigo() + " - usuario " + sp.getName());
+        	}
+		}
+	}
 	
 	
 }

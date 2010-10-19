@@ -25,6 +25,7 @@ public class Expediente implements Serializable
 	private Timestamp fechaConsulta;
 	private String descripcion;
 	private String seyconCiudadano;
+	private String nifRepresentante;
 	private String nifRepresentado;
 	private String nombreRepresentado;
 	private String usuarioSeycon;
@@ -202,6 +203,12 @@ public class Expediente implements Serializable
 	}
 	public void setHabilitarAvisos(String habilitarAvisos) {
 		this.habilitarAvisos = habilitarAvisos;
+	}
+	public String getNifRepresentante() {
+		return nifRepresentante;
+	}
+	public void setNifRepresentante(String nifRepresentante) {
+		this.nifRepresentante = nifRepresentante;
 	}
 		
 }

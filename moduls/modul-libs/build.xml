@@ -3,7 +3,8 @@
 
 <property name="projecte" value="${ant.project.name}"/>
 
-<target name="main" depends="clean,assemble,distribute"/>
+<!-- <target name="main" depends="clean,assemble,distribute"/> -->
+<target name="main" depends="clean,assemble"/>
 
 <property name="distribucion.dir" location="${basedir}/../../product"/>
 		

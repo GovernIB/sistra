@@ -17,4 +17,6 @@ public class Constants implements Serializable {
      */
     public static final String ORGANISMO_INFO_KEY = "org.ibit.rol.form.front.infoOrganismo";
 
+    
+    public static final String MOSTRAR_EN_IFRAME = "mostrarSistraEnIframe";
 }

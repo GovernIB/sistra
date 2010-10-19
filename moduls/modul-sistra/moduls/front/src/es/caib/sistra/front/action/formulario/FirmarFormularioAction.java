@@ -36,13 +36,21 @@ public class FirmarFormularioAction extends BaseAction
     {
 		FirmarFormularioForm formulario = ( FirmarFormularioForm ) form;
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( formulario.getID_INSTANCIA(), request );
+		
 		FirmaIntf firma = null;
+		boolean firmaDelegada = false;
+		
+		if ("S".equals(formulario.getFirmaDelegada())){
+			firmaDelegada = true;
+		}else{		
 		if ( formulario.getFirma() != null )
 		{
 			PluginFirmaIntf plgFirma = PluginFactory.getInstance().getPluginFirma();
 			firma = plgFirma.parseFirmaFromHtmlForm( formulario.getFirma() );
 		}
-		this.setRespuestaFront( request, delegate.firmarFormulario( formulario.getIdentificador(), formulario.getInstancia(), firma ) );
+		}
+		
+		this.setRespuestaFront( request, delegate.firmarFormulario( formulario.getIdentificador(), formulario.getInstancia(), firma, firmaDelegada ) );
 		return mapping.findForward("success");
     }
 

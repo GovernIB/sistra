@@ -85,7 +85,7 @@ public abstract class GestorFormularioFacadeEJB extends HibernateEJB  {
         
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public String grabarFormularioAlta(GestorFormulario obj) {        
     	Session session = getSession();
@@ -102,7 +102,7 @@ public abstract class GestorFormularioFacadeEJB extends HibernateEJB  {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public String grabarFormularioUpdate(GestorFormulario obj) {        
     	Session session = getSession();
@@ -119,7 +119,7 @@ public abstract class GestorFormularioFacadeEJB extends HibernateEJB  {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarFormulario(String id) {
         Session session = getSession();

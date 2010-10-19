@@ -26,6 +26,7 @@ public class Tramite implements Serializable{
 	private Long intervaloInforme;
 	private char tipoAcceso=ACCESO_EJB;
 	private String url;
+	private String versionWS;
 	private char localizacionEJB = EJB_LOCAL;
 	private char autenticacionEJB = AUTENTICACION_SIN;
 	private String jndiEJB;
@@ -36,6 +37,8 @@ public class Tramite implements Serializable{
 	
 	private String nombreFicheroExportacion;
 	private FicheroExportacion archivoFicheroExportacion;
+	
+	private byte[] errores;
 	
 	private Set gestores = new HashSet(0);
 		
@@ -106,6 +109,12 @@ public class Tramite implements Serializable{
 	public void setUrl(String url) {
 		this.url = url;
 	}
+	public String getVersionWS() {
+		return versionWS;
+	}
+	public void setVersionWS(String versionWS) {
+		this.versionWS = versionWS;
+	}
 	public String getUsr() {
 		return usr;
 	}
@@ -144,6 +153,12 @@ public class Tramite implements Serializable{
 	public void setArchivoFicheroExportacion(
 			FicheroExportacion archivoFicheroExportacion) {
 		this.archivoFicheroExportacion = archivoFicheroExportacion;
+	}
+	public byte[] getErrores() {
+		return errores;
+	}
+	public void setErrores(byte[] errores) {
+		this.errores = errores;
 	}
 	
 }

@@ -38,7 +38,7 @@ public abstract class FormularioFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long gravarFormulario(Formulario formulario) {
         Session session = getSession();
@@ -63,7 +63,7 @@ public abstract class FormularioFacadeEJB extends HibernateEJB {
      * Copia un formulari.
      * @param id
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long gravarNuevoFormulario(Long id) {
         Session session = getSession();
@@ -304,7 +304,7 @@ public abstract class FormularioFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long anyadirSalida(Long idFormulario, Long idPunto) {
         Session session = getSession();
@@ -329,7 +329,7 @@ public abstract class FormularioFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void eliminarSalida(Long idSalida) {
         Session session = getSession();
@@ -384,7 +384,7 @@ public abstract class FormularioFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      * @ejb.permission role-name="${role.admin}"
      */
     public Formulario obtenerFormulario(Long idFormulario) {
@@ -416,8 +416,9 @@ public abstract class FormularioFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      * @ejb.permission role-name="${role.audit}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public Formulario obtenerFormularioCompleto(Long idFormulario) {
         Session session = getSession();
@@ -669,11 +670,10 @@ public abstract class FormularioFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarFormulario(Long id) {
-
-		// Borramos permisos de acceso		
+        // Borramos permisos
        	borrarPermisosAccesoFormulario(id);
 
 		// Borramos formulario
@@ -728,7 +728,7 @@ public abstract class FormularioFacadeEJB extends HibernateEJB {
     /**
      * bloquea el formulario representado por "formulario_id" para el usuario actual
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void bloquearFormulario(Long formulario_id) {
         Session session = getSession();
@@ -752,7 +752,7 @@ public abstract class FormularioFacadeEJB extends HibernateEJB {
     /**
      * desbloquea el formulario representado por "formulario_id"
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void desbloquearFormulario(Long formulario_id) {
         Session session = getSession();
@@ -775,7 +775,7 @@ public abstract class FormularioFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarLogotipo1(Long id_formulario, Long id_archivo) {
         Session session = getSession();
@@ -810,7 +810,7 @@ public abstract class FormularioFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarLogotipo2(Long id_formulario, Long id_archivo) {
         Session session = getSession();
@@ -845,7 +845,7 @@ public abstract class FormularioFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarPlantilla(Long id_formulario, String lang) {
         Session session = getSession();

@@ -71,6 +71,14 @@ public class RegistroTelematicoDelegate implements StatelessDelegate {
         }
     }
 	
+	public boolean existeOficinaRegistro(String oficinaRegistro) throws DelegateException { 
+        try {
+            return getFacade().existeOficinaRegistro(oficinaRegistro);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+	
 	public List obtenerOficinasRegistroUsuario(String usuario) throws DelegateException { 
         try {
             return getFacade().obtenerOficinasRegistroUsuario(usuario);
@@ -87,9 +95,25 @@ public class RegistroTelematicoDelegate implements StatelessDelegate {
         }
     }
 	
+	public boolean existeTipoAsunto(String tipoAsunto) throws DelegateException { 
+        try {
+            return getFacade().existeTipoAsunto(tipoAsunto);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+	
 	public List obtenerServiciosDestino() throws DelegateException { 
         try {
             return getFacade().obtenerServiciosDestino();
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+	
+	public boolean existeServicioDestino(String servicioDestino) throws DelegateException { 
+        try {
+            return getFacade().existeServicioDestino(servicioDestino);
         } catch (Exception e) {
             throw new DelegateException(e);
         }

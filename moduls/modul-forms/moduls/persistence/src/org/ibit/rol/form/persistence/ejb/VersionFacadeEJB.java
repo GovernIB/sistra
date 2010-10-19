@@ -36,7 +36,7 @@ public abstract class VersionFacadeEJB extends HibernateEJB {
     /**
      * Lista todas las máscaras.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form},${role.admin}"
+     * @ejb.permission role-name="${role.operador},${role.admin}"
      */
     public List listar() {
         Session session = getSession();
@@ -57,7 +57,7 @@ public abstract class VersionFacadeEJB extends HibernateEJB {
     /**
      * Obtiene version
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form},${role.admin}"
+     * @ejb.permission role-name="${role.operador},${role.admin}"
      */
     public Version obtener(Long id) {
         Session session = getSession();

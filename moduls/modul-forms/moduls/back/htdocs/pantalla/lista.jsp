@@ -47,6 +47,10 @@
 	                        <bean:define id="nombre" name="pantalla" property="nombre" type="java.lang.String"/>
 	                        <bean:define id="mensajeBaja"><bean:message arg0='<%=nombre%>' key='pantalla.baja' /></bean:define>
 	                        <bean:define id="urlBaja"><html:rewrite page='<%="/back/pantalla/baja.do?idFormulario=" + idFormulario%>' paramId="id" paramName="pantalla" paramProperty="id"/></bean:define>
+	                        <%
+	                        mensajeBaja = mensajeBaja.replace("\'","&#145;");
+	                        mensajeBaja = mensajeBaja.replace("\"","&#34;");
+    	                    %>
 	                        <button class="button" type="button" onclick="confirmAndForward('<%=mensajeBaja%>', '<%=urlBaja%>')"><bean:message key="boton.baixa" /></button>	                        
 	                    </logic:present>
 	                </td>

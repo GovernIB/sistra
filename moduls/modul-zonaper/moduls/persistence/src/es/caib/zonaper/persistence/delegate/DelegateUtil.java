@@ -77,5 +77,21 @@ public final class DelegateUtil {
     public static ConfiguracionDelegate getConfiguracionDelegate() {
         return (ConfiguracionDelegate) DelegateFactory.getDelegate(ConfiguracionDelegate.class);
     }
+    
+    public static RegistroExternoDelegate getRegistroExternoDelegate() {
+        return (RegistroExternoDelegate) DelegateFactory.getDelegate(RegistroExternoDelegate.class);
+    }
+    
+    public static LogRegistroDelegate getLogRegistroDelegate() {
+        return (LogRegistroDelegate) DelegateFactory.getDelegate(LogRegistroDelegate.class);
+    }
+    
+    public static DelegacionDelegate getDelegacionDelegate() {
+        return (DelegacionDelegate) DelegateFactory.getDelegate(DelegacionDelegate.class);
+    }
+    
+    public static BandejaFirmaDelegate getBandejaFirmaDelegate() {
+        return (BandejaFirmaDelegate) DelegateFactory.getDelegate(BandejaFirmaDelegate.class);
+    }
 }
 

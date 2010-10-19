@@ -49,7 +49,7 @@ public abstract class ComponenteFacadeEJB extends HibernateEJB {
     /**
      * Crea o actualiza un componente de una pantalla.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void gravarComponentePantalla(Componente componente, Long pantalla_id) {
         Session session = getSession();
@@ -138,7 +138,7 @@ public abstract class ComponenteFacadeEJB extends HibernateEJB {
      * @param componente_id
      * @param pantalla_id
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long copiarComponente(Long componente_id, Long pantalla_id) {
          Session session = getSession();
@@ -237,7 +237,7 @@ public abstract class ComponenteFacadeEJB extends HibernateEJB {
     /**
      * Lista todos los componentes de una paleta.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.admin},${role.form}"
+     * @ejb.permission role-name="${role.admin},${role.operador}"
      */
     public List listarComponentesPaleta(Long paleta_id) {
         Session session = getSession();
@@ -276,7 +276,7 @@ public abstract class ComponenteFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form},${role.admin}"
+     * @ejb.permission role-name="${role.operador},${role.admin}"
      */
     public void cambiarOrden(Long comp1_id, Long comp2_id) {
         Session session = getSession();
@@ -318,7 +318,7 @@ public abstract class ComponenteFacadeEJB extends HibernateEJB {
     /**
      * Borra un componente.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form},${role.admin}"
+     * @ejb.permission role-name="${role.operador},${role.admin}"
      */
     public void borrarComponente(Long id) {
         Session session = getSession();
@@ -362,7 +362,7 @@ public abstract class ComponenteFacadeEJB extends HibernateEJB {
     /**
      * Borra las validaciones de un campo.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form},${role.admin}"
+     * @ejb.permission role-name="${role.operador},${role.admin}"
      */
     public void borrarValidacionesCampo(Long campo_id) {
         Session session = getSession();

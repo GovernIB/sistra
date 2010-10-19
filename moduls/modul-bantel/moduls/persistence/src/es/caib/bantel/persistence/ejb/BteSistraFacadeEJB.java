@@ -73,7 +73,7 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public void ejbCreate() throws CreateException {		
 	}
@@ -95,7 +95,7 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
      * Crea entrada para registros/envios telemáticos
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public String crearEntradaTelematica(ReferenciaRDS refAsiento,ReferenciaRDS refJustificante,Map refDocumentos)  throws ExcepcionBTE{
     	return crearEntrada(refAsiento,refJustificante,refDocumentos,null,null,null);
@@ -115,7 +115,7 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
      * Confirmacion automatica de preenvios
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public String crearEntradaPreenvioAutomatico(ReferenciaRDS refAsiento,ReferenciaRDS refJustificante,Map refDocumentos,String numregistro,Date fechaRegistro)  throws ExcepcionBTE{
     	return crearEntrada(refAsiento,refJustificante,refDocumentos,numregistro,fechaRegistro,ConstantesBTE.CONFIRMACIONPREREGISTRO_AUTOMATICA);
@@ -200,6 +200,9 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 	    		}else if (di.getTipoInteresado().equals(ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTADO)){
 	    			tramiteBTE.setRepresentadoNif(di.getNumeroIdentificacion());
 	    			tramiteBTE.setRepresentadoNombre(di.getIdentificacionInteresado());
+	    		}else if (di.getTipoInteresado().equals(ConstantesAsientoXML.DATOSINTERESADO_TIPO_DELEGADO)){
+	    			tramiteBTE.setDelegadoNif(di.getNumeroIdentificacion());
+	    			tramiteBTE.setDelegadoNombre(di.getIdentificacionInteresado());
 	    		}
 	    	}
 	    	
@@ -281,6 +284,12 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 	    	
 	    	// Establecemos informacion notificacion telematica
 	    	tramiteBTE.setHabilitarNotificacionTelematica(datosPropios.getInstrucciones().getHabilitarNotificacionTelematica());
+	    	
+	    	// Establecemos info tramite subsanacion
+	    	if (datosPropios.getInstrucciones().getTramiteSubsanacion() != null){
+	    		tramiteBTE.setSubsanacionExpedienteCodigo(datosPropios.getInstrucciones().getTramiteSubsanacion().getExpedienteCodigo());
+	    		tramiteBTE.setSubsanacionExpedienteUnidadAdministrativa(datosPropios.getInstrucciones().getTramiteSubsanacion().getExpedienteUnidadAdministrativa());
+	    	}
 	    	
 	    	// Establecemos informacion documentos presenciales	(para preregistro / preenvio)
 	    	if (asiento.getDatosOrigen().getTipoRegistro().charValue() == ConstantesAsientoXML.TIPO_PREREGISTRO ||
@@ -409,11 +418,15 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 	    	t.setUsuarioNombre(tramBte.getUsuarioNombre());  			    		
     		t.setRepresentadoNif(tramBte.getRepresentadoNif());
     		t.setRepresentadoNombre(tramBte.getRepresentadoNombre());
+    		t.setDelegadoNif(tramBte.getDelegadoNif());
+    		t.setDelegadoNombre(tramBte.getDelegadoNombre());	
     		t.setTipoConfirmacionPreregistro(tramBte.getTipoConfirmacionPreregistro());
     		t.setHabilitarAvisos(tramBte.getHabilitarAvisos());
     		t.setAvisoEmail(tramBte.getAvisoEmail());
     		t.setAvisoSMS(tramBte.getAvisoSMS());
     		t.setHabilitarNotificacionTelematica(tramBte.getHabilitarNotificacionTelematica());
+    		t.setSubsanacionExpedienteId(tramBte.getSubsanacionExpedienteCodigo());
+    		t.setSubsanacionExpedienteUA(tramBte.getSubsanacionExpedienteUnidadAdministrativa());
     		// Establecemos documentos	    	
 	    	for (Iterator it = tramBte.getDocumentos().iterator();it.hasNext();){	    		
 	    		DocumentoBTE dbantel = (DocumentoBTE) it.next();

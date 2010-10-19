@@ -32,7 +32,7 @@ public class TramitesCaducadosJob implements Job
 	{
 		BackupDelegate delegate = DelegateUtil.getBackupDelegate();
 		SchedulerConfiguration configuration = SchedulerConfiguration.getInstance();
-		boolean scheduleBorradoPreregistro = Boolean.valueOf( configuration.get( "scheduler.schedule.borradoPreregistro" ) ).booleanValue();
+		boolean scheduleBorradoPreregistro = Boolean.valueOf( configuration.get( "scheduler.backup.schedule.borradoPreregistro" ) ).booleanValue();
 		log.debug( "Job borrado tramites caducados [borrado prerregistros = " + scheduleBorradoPreregistro + "]");
 		
 		LoginContext lc = null;

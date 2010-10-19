@@ -75,9 +75,12 @@ public class PADAuth implements AuthInterface
 				return seycon;
 			}
 			
-			// 3º Si no se encuentra registrado comprobamos si existe alguna persona con ese nif
-			if (delegate.obtenerDatosPersonaPADporNif(plgLogin.getNif(seycon)) != null){
-				throw new AuthException(AuthException.ERROR_NIF_YA_EXISTE);
+			// 3º Si no se encuentra registrado comprobamos si existe alguna persona con ese nif.
+			//    En caso de que haya alguien registrado, actualizamos usuario seycon asociado
+			PersonaPAD p = delegate.obtenerDatosPersonaPADporNif(plgLogin.getNif(seycon));
+			if ( p != null){
+				delegate.actualizarCodigoUsuario(p.getUsuarioSeycon(),seycon.getName());
+				return seycon;
 			}	
 		
 		}catch (DelegateException de){

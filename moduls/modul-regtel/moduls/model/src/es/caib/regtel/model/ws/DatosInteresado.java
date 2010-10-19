@@ -3,6 +3,7 @@ package es.caib.regtel.model.ws;
 
 public class DatosInteresado {
 
+    private Boolean autenticado; // A partir v1.1.0 sustituye en la llamada a identificador usuario
     private String identificadorUsuario;
     private String nif;
     private String nombreApellidos;
@@ -84,5 +85,13 @@ public class DatosInteresado {
     public void setNombreLocalidad(String value) {
         this.nombreLocalidad = value;
     }
+
+	public Boolean getAutenticado() {
+		return autenticado;
+	}
+
+	public void setAutenticado(Boolean autenticado) {
+		this.autenticado = autenticado;
+	}
 
 }

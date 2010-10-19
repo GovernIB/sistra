@@ -25,6 +25,15 @@ public class BackupDelegate implements StatelessDelegate
         }
 	}
 	
+	public void procesaEliminarTramitesBackup( Date fechaMaxima ) throws DelegateException {
+		try
+		{
+			getFacade().procesaEliminarTramitesBackup( fechaMaxima );
+		}
+		catch (Exception e) {
+            throw new DelegateException(e);
+        }
+	}
 	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

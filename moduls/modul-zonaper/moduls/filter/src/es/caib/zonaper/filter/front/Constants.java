@@ -20,7 +20,7 @@ public class Constants implements Serializable {
     public static final String LOOK_PARAM = "look";
     public static final String AT_LOOK = "AT";
     
-    
+    public static final String MOSTRAR_EN_IFRAME = "mostrarSistraEnIframe";
     
     
     

@@ -34,10 +34,22 @@
     name="detalleElementoForm"
     type="es.caib.zonaper.front.form.DetalleElementoForm"/>                           	        
     
+<form-bean
+    name="detalleDelegacionForm"
+    type="es.caib.zonaper.front.form.DetalleDelegacionForm"/>
+<form-bean
+    name="firmarDocumentoDelegadoForm"
+    type="es.caib.zonaper.front.form.FirmarDocumentoDelegadoForm"/>
+
+<form-bean
+    name="tramiteSubsanacionForm"
+    type="es.caib.zonaper.front.form.TramiteSubsanacionForm"/>     
+    
 <!--  sin verificar -->         
 <form-bean
     name="mostrarDocumentoNotificacionForm"
     type="es.caib.zonaper.front.form.notificaciones.MostrarDocumentoNotificacionForm"/>
     
+
 
 

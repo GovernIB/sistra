@@ -15,6 +15,9 @@ public class DocumentoPersistente implements java.io.Serializable {
      private String rdsClave;
      private String nombreFicheroAnexo;
      private String descripcionGenerico;
+     private String delegacionEstado;
+     private String delegacionFirmantes;
+     private String delegacionFirmantesPendientes;     
 
     // Constructors
     /** default constructor */
@@ -91,6 +94,31 @@ public class DocumentoPersistente implements java.io.Serializable {
 
 	public void setDescripcionGenerico(String descripcionGenerico) {
 		this.descripcionGenerico = descripcionGenerico;
+	}
+
+	public String getDelegacionEstado() {
+		return delegacionEstado;
+	}
+
+	public void setDelegacionEstado(String delegacionEstado) {
+		this.delegacionEstado = delegacionEstado;
+	}
+
+	public String getDelegacionFirmantes() {
+		return delegacionFirmantes;
+	}
+
+	public void setDelegacionFirmantes(String delegacionFirmantes) {
+		this.delegacionFirmantes = delegacionFirmantes;
+	}
+
+	public String getDelegacionFirmantesPendientes() {
+		return delegacionFirmantesPendientes;
+	}
+
+	public void setDelegacionFirmantesPendientes(
+			String delegacionFirmantesPendientes) {
+		this.delegacionFirmantesPendientes = delegacionFirmantesPendientes;
 	}
 
 

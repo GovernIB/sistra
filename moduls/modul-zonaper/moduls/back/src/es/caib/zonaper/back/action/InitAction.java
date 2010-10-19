@@ -1,5 +1,7 @@
 package es.caib.zonaper.back.action;
 
+import java.util.Enumeration;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -41,6 +43,12 @@ public class InitAction extends BaseAction
 		}
 		request.getSession().setAttribute(Constants.URL_APLICACION_REGISTRO,urlAplicRegistro);
 		
+		// ELIMINAR TODAS LAS PETICIONES ANTIGUAS
+		Enumeration ats = request.getSession().getAttributeNames();
+		while (ats.hasMoreElements()){
+			String key = (String) ats.nextElement();
+			if (key.startsWith(Constants.IMPRESION_SELLO_KEY)) request.getSession().removeAttribute(key);
+		}
 		return mapping.findForward( "success" );
     }
 

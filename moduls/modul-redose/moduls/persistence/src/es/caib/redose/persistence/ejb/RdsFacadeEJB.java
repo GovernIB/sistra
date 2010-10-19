@@ -25,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
 
 import es.caib.redose.model.Documento;
 import es.caib.redose.model.Firma;
+import es.caib.redose.model.LogGestorDocumentalError;
 import es.caib.redose.model.LogOperacion;
 import es.caib.redose.model.Plantilla;
 import es.caib.redose.model.PlantillaIdioma;
@@ -43,21 +44,24 @@ import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.redose.modelInterfaz.TransformacionRDS;
 import es.caib.redose.modelInterfaz.UsoRDS;
 import es.caib.redose.persistence.delegate.DelegateUtil;
+import es.caib.redose.persistence.delegate.LogGestorDocumentalErroresDelegate;
 import es.caib.redose.persistence.delegate.PlantillaDelegate;
 import es.caib.redose.persistence.delegate.UbicacionDelegate;
+import es.caib.redose.persistence.delegate.VersionCustodiaDelegate;
 import es.caib.redose.persistence.delegate.VersionDelegate;
 import es.caib.redose.persistence.formateadores.FormateadorDocumento;
 import es.caib.redose.persistence.formateadores.FormateadorDocumentoFactory;
 import es.caib.redose.persistence.plugin.PluginAlmacenamientoRDS;
 import es.caib.redose.persistence.plugin.PluginClassCache;
+import es.caib.redose.persistence.util.CacheSincronizacionGestorDocumental;
 import es.caib.redose.persistence.util.ConversorOpenOffice;
 import es.caib.redose.persistence.util.UtilRDS;
-import es.caib.sistra.plugins.NoExistePluginException;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.custodia.PluginCustodiaIntf;
 import es.caib.sistra.plugins.firma.FirmaIntf;
 import es.caib.sistra.plugins.firma.PluginFirmaIntf;
 import es.caib.util.StringUtil;
+import es.caib.xml.ConstantesXML;
 import es.indra.util.pdf.BarcodeStamp;
 import es.indra.util.pdf.ObjectStamp;
 import es.indra.util.pdf.SelloEntradaStamp;
@@ -72,14 +76,11 @@ import es.indra.util.pdf.UtilPDF;
  *  name="redose/persistence/RdsFacade"
  *  jndi-name="es.caib.redose.persistence.RdsFacade"
  *  type="Stateless"
- *  view-type="remote" *  transaction-type="Container"
+ *  view-type="remote" 
+ *  transaction-type="Container"
  *
  * @ejb.transaction type="Required"
  * 
- * 
- * 
- * TODO: Hay que implementar acceso local a los EJBs
- *
  */
 public abstract class RdsFacadeEJB extends HibernateEJB {
 
@@ -103,6 +104,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	private String OPENOFFICE_PUERTO = null;
 	
 	private boolean existeCustodia = false;
+	private boolean existeGestionDocumental = false;
 	
 	/**
      * @ejb.create-method
@@ -120,14 +122,23 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 			OPENOFFICE_HOST=props.getProperty("openoffice.host");
 			OPENOFFICE_PUERTO=props.getProperty("openoffice.port");						
 			
-			// Comprobamos si hay que integrarse con sistema de custodia			
+			// Comprobamos si hay que integrarse con sistema de custodia y gestion documental			
 	    	try{
 	    		PluginFactory.getInstance().getPluginCustodia();
 	    		existeCustodia=true;
-	    	}catch(NoExistePluginException nep){
+	    	}catch(Exception nep){
 	    		// En caso de que no este configurado el plugin no hay que hacer nada
 	    		existeCustodia = false;
 	    	}   
+			
+			// Comprobamos si hay que integrarse con sistema de gestion documental	    	
+	    	try{
+	    		PluginFactory.getInstance().getPluginGestionDocumental();
+	    		existeGestionDocumental=true;
+	    	}catch(Exception nep){
+	    		// En caso de que no este configurado el plugin no hay que hacer nada
+	    		existeGestionDocumental = false;
+	    	}
 			
 		}catch(Exception ex){
 			log.error("No se pueden acceder propiedades modulo",ex);
@@ -140,7 +151,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	 * Inserta un documento en el RDS
 	 * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      */
     public ReferenciaRDS insertarDocumento(DocumentoRDS documento) throws ExcepcionRDS{    	
@@ -155,7 +166,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	 * Inserta un documento en el RDS permitiendo transformar el documento (p.e. convertir a PDF). <br/>
 	 * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      */
     public ReferenciaRDS insertarDocumento(DocumentoRDS documento, TransformacionRDS transformacion) throws ExcepcionRDS{
@@ -213,9 +224,19 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * Actualiza un documento en el RDS
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public void actualizarDocumento(DocumentoRDS documento) throws ExcepcionRDS {
+    	
+    	// Solo permitimos actualizar fichero si tiene uso de persistencia
+    	List usos = this.listarUsos(documento.getReferenciaRDS());
+    	for (Iterator it=usos.iterator();it.hasNext();){
+    		UsoRDS uso = (UsoRDS) it.next();
+    		if (!uso.getTipoUso().equals(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE)){
+    			throw new ExcepcionRDS("No se puede modificar un documento si no tiene tipo de uso de persistencia");
+    		}
+    	}
+    	
     	this.grabarDocumento(documento,false);	   	
     	this.doLogOperacion(getUsuario(),ACTUALIZAR_DOCUMENTO,"actualización documento " + documento.getReferenciaRDS().getCodigo());
     }   
@@ -224,9 +245,18 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * Actualiza el fichero de un documento en el RDS. Recalcula el hash y elimina las firmas asociadas.
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public void actualizarFichero(ReferenciaRDS ref, byte[] datos) throws ExcepcionRDS {
+    	
+    	// Solo permitimos actualizar fichero si tiene uso de persistencia
+    	List usos = this.listarUsos(ref);
+    	for (Iterator it=usos.iterator();it.hasNext();){
+    		UsoRDS uso = (UsoRDS) it.next();
+    		if (!uso.getTipoUso().equals(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE)){
+    			throw new ExcepcionRDS("No se puede modificar un documento si no tiene tipo de uso de persistencia");
+    		}
+    	}
     	
     	// Obtenemos documento y realizamos cambios
     	DocumentoRDS doc = this.consultarDocumento(ref,false);    	
@@ -243,7 +273,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * Añadir firma a un documento en el RDS
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public void asociarFirmaDocumento(ReferenciaRDS refRds,FirmaIntf firma) throws ExcepcionRDS {
     	Session session = getSession();     	
@@ -273,11 +303,10 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
         	doc.addFirma(fir);
         	session.update(doc);        	
         	
+        	//Si el documento no tenia firmas creamos el array de firmas y la añadimos 
+        	//en caso contrario si ya existia la añadimos una vez añadida llamamos a custodiar
+        	//documento
         	
-        	
-        	//
-        	// TODO DANI - ACTUALIZAR CUSTODIA
-        	//
         	if(documento.getFirmas() == null){
         		FirmaIntf[] firmasIntf = {firma};
         		documento.setFirmas(firmasIntf);
@@ -317,7 +346,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      *	Crea un uso para un documento 
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      */
     public void crearUso(UsoRDS usoRDS) throws ExcepcionRDS {
@@ -388,7 +417,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * Consulta un documento del RDS (datos del documento y fichero asociado)
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      */
     public DocumentoRDS consultarDocumento(ReferenciaRDS refRds)  throws ExcepcionRDS{
@@ -400,7 +429,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * Consulta un documento del RDS. Permite indicar si sólo se recuperan los datos del documento o también el fichero asociado
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      */
     public DocumentoRDS consultarDocumento(ReferenciaRDS refRds,boolean recuperarFichero) throws ExcepcionRDS {    	
@@ -453,83 +482,22 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * Consulta un documento del RDS de tipo estructurado formateado con una plantilla
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
+     */  
+    public DocumentoRDS consultarDocumentoFormateado(ReferenciaRDS refRds) throws ExcepcionRDS {    	
+    	return consultarDocumentoFormateado(refRds,null,null);
+	    }            	
+	            
+    /**
+     * Consulta un documento del RDS de tipo estructurado formateado con una plantilla
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      */  
     public DocumentoRDS consultarDocumentoFormateado(ReferenciaRDS refRds,String idioma) throws ExcepcionRDS {    	
-    	Session session = getSession();
-    	DocumentoRDS documentoRDS;
-	    try {	    	
-	    	// Obtenemos documento
-	    	documentoRDS = consultarDocumento(refRds);
-	    	    	
-	    	// Si no es estructurado devolvemos documento sin formatear
-	    	if (!documentoRDS.isEstructurado()) return documentoRDS;
-	    	
-	    	// Si el documento tiene una plantilla especifica la utilizamos
-	    	// si no obtenemos plantilla por defecto
-	    	// y si no tiene plantilla por defecto cogemos la primera	    	
-	    	Documento documento = (Documento) session.load(Documento.class, new Long(refRds.getCodigo()));	   
-	    	PlantillaIdioma plantilla = null;
-	    	if (documento.getVersion().getPlantillas().size() <= 0){
-	    		return documentoRDS;
-	    		//throw new ExcepcionRDS("El documento no tiene plantillas");
-	    	}	    		    	
-	    	if (documento.getPlantilla() != null ){
-	    		plantilla = (PlantillaIdioma) documento.getPlantilla().getTraduccion(idioma);
-	    	}else{
-		    	for (Iterator it = documento.getVersion().getPlantillas().iterator();it.hasNext();){
-		    		Plantilla p = (Plantilla) it.next();	    			    		
-		    		if (p.getDefecto() == 'S'){
-		    			plantilla = (PlantillaIdioma) p.getTraduccion(idioma);
-		    			break;
-		    		}
-		    	}
-		    	if (plantilla == null) {
-		    		plantilla =  (PlantillaIdioma) (
-		    						((Plantilla) documento.getVersion().getPlantillas().iterator().next()).getTraduccion(idioma)
-		    					 );	    		
-		    	}
-	    	}
-	    	
-	    	// Obtenemos usos
-	    	List usos = listarUsos(refRds);
-	    	
-	    	// Generamos PDF	    	
-	    	FormateadorDocumento format = FormateadorDocumentoFactory.getInstance().getFormateador( plantilla.getPlantilla().getFormateador().getClase() );
-	    	DocumentoRDS docFormateado = format.formatearDocumento(documentoRDS,plantilla,usos);
-	    
-//	    	 En caso de que se haya establecido generar sello de registro/preregistro (envio/preenvio) lo generamos
-	    	boolean docValido=true;
-	    	if (plantilla.getPlantilla().getSello() == 'S'){
-	    		// Si no hay sello marcamos como doc no valido -> no barcode + marca de agua
-	    		if (!stampSello(docFormateado,usos)) docValido=false;
-	    	}
-	    	
-	    	
-	    	// En caso de que se haya establecido generar codigo de barras lo generamos
-	    	if (plantilla.getPlantilla().getBarcode() == 'S' && docValido){
-	    		stampBarCodeVerifier(docFormateado,plantilla.getPlantilla().getTipo(),idioma);
-	    	}	
-	    	
-	    	// En caso de que no sea produccion lo marcamos como borrador
-	    	if (isBorrador() || !docValido){
-	    		stampBorrador(docFormateado);
-	    	}
-	    	
-	    	// Realizamos apunte en el log de operaciones
-	    	this.doLogOperacion(getUsuario(),CONSULTAR_DOCUMENTO_FORMATEADO,"consulta documento formateado " + refRds.getCodigo() );
-	    	
-	    	// Devolvemos documento RDS formateado
-	    	return docFormateado;
-	    	
-	    } catch (Exception he) {
-	    	log.error("No se ha podido obtener documento formateado ",he);
-	        throw new ExcepcionRDS("No se ha podido obtener documento formateado ",he);
-	    } finally {
-	        close(session);
-	    }            	
-	            
+    	return consultarDocumentoFormateado(refRds,null,idioma);
     }
     
     
@@ -538,7 +506,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * generando una copia para el interesado y otra para la administracion
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      */  
     public DocumentoRDS consultarDocumentoFormateadoCopiasInteresadoAdmon(ReferenciaRDS refRds,String idioma) throws ExcepcionRDS {    	
@@ -560,26 +528,58 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * Consulta un documento del RDS de tipo estructurado formateado con una plantilla
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      */    
     public DocumentoRDS consultarDocumentoFormateado(ReferenciaRDS refRds,String tipoPlantilla,String idioma) throws ExcepcionRDS {    	
     	Session session = getSession();
     	DocumentoRDS documentoRDS;
 	    try {	    	
-	    	// Obtenemos documento
+	    	// Realizamos consulta doc RDS
 	    	documentoRDS = consultarDocumento(refRds);
 	    	
 	    	// Si no es estructurado devolvemos documento sin formatear
 	    	if (!documentoRDS.isEstructurado()) return documentoRDS;
 	    	
-	    	// Obtenemos plantilla	    	
+	    	// Obtenemos documento de bd y verificamos clave	    	
 	    	Documento documento = (Documento) session.load(Documento.class, new Long(refRds.getCodigo()));	        
-	    	// Comprobamos que la clave coincida
-	    	if (!documento.getClave().equals(refRds.getClave())){
-	    		throw new ExcepcionRDS("La clave no coincide");
+	    	
+	    	// Establecemos idioma de formateo: si no se especifica nada cogemos el de creacion del documento y si no esta alimentado ca
+	    	if (idioma == null){
+	    		idioma = documento.getIdioma();
+	    		if (idioma == null){
+	    			idioma = "ca";
 	    	}	    	
+	    	}
+	    	
+	    	// Si no se especifica plantilla, comprobamos si el doc tiene una específica y sino cogemos la por defecto
 	    	PlantillaIdioma plantilla = null;
+	    	if (tipoPlantilla==null){
+	    		// Si el doc no tiene plantillas, devolvemos el doc original
+	    		if (documento.getVersion().getPlantillas().size() <= 0){
+		    		return documentoRDS;		    		
+		    	}	    		    	
+	    		// Si el documento tiene una plantilla específica, usamos dicha plantilla
+		    	if (documento.getPlantilla() != null ){
+		    		plantilla = (PlantillaIdioma) documento.getPlantilla().getTraduccion(idioma);
+		    	}else{
+		    		// Si no tiene plantilla específica, buscamos plantilla por defecto
+			    	for (Iterator it = documento.getVersion().getPlantillas().iterator();it.hasNext();){
+			    		Plantilla p = (Plantilla) it.next();	    			    		
+			    		if (p.getDefecto() == 'S'){
+			    			plantilla = (PlantillaIdioma) p.getTraduccion(idioma);
+			    			break;
+			    		}
+			    	}
+			    	// Si no hay una marcada por defecto, cogemos la primera
+			    	if (plantilla == null) {
+			    		plantilla =  (PlantillaIdioma) (
+			    						((Plantilla) documento.getVersion().getPlantillas().iterator().next()).getTraduccion(idioma)
+			    					 );
+			    	}
+		    	}	    		
+	    	}else{
+	    	// Si se especifica una plantilla usamos dicha plantilla
 	    	for (Iterator it = documento.getVersion().getPlantillas().iterator();it.hasNext();){
 	    		Plantilla p = (Plantilla) it.next();
 	    		if (p.getTipo().equals(tipoPlantilla)){
@@ -590,30 +590,10 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    	if (plantilla == null) {
 	    		throw new Exception("No se encuentra plantilla");
 	    	}
-	    	
-	    	// Obtenemos usos
-	    	List usos = listarUsos(refRds);
-	    	
-	    	// Generamos PDF
-	    	FormateadorDocumento format = FormateadorDocumentoFactory.getInstance().getFormateador( plantilla.getPlantilla().getFormateador().getClase() );
-	    	DocumentoRDS docFormateado = format.formatearDocumento(documentoRDS,plantilla,usos);
-	    	    		    	
-	    	// En caso de que se haya establecido generar sello de registro/preregistro (envio/preenvio) lo generamos
-	    	boolean docValido=true;
-	    	if (plantilla.getPlantilla().getSello() == 'S'){
-	    		// Si no hay sello marcamos como doc no valido -> no barcode + marca de agua
-	    		if (!stampSello(docFormateado,usos)) docValido=false;
 	    	}
 	    	
-	    	//	En caso de que se haya establecido generar codigo de barras lo generamos
-	    	if (plantilla.getPlantilla().getBarcode() == 'S' && docValido){
-	    		stampBarCodeVerifier(docFormateado,tipoPlantilla,idioma);
-	    	}
-	    	
-	    	// En caso de que no sea produccion lo marcamos como borrador
-	    	if (isBorrador()  || !docValido){
-	    		stampBorrador(docFormateado);
-	    	}
+	    	// Formateamos documento
+	    	DocumentoRDS docFormateado = formatearDocumentoImpl(documentoRDS,plantilla);
 	    	
 	    	// Realizamos apunte en el log de operaciones
 	    	this.doLogOperacion(getUsuario(),CONSULTAR_DOCUMENTO_FORMATEADO,"consulta documento formateado " + refRds.getCodigo() );
@@ -643,11 +623,15 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     * @throws ExcepcionRDS
     * 
     * @ejb.interface-method
-    * @ejb.permission role-name="${role.user}"
+    * @ejb.permission role-name="${role.todos}"
     * @ejb.permission role-name="${role.auto}"
     */
     public DocumentoRDS formatearDocumento(DocumentoRDS documentoRDS,String modelo,int version,String tipoPlantilla,String idioma) throws ExcepcionRDS {    	
     	try{    	
+    		
+    		// El documento no existe en el RDS
+    		documentoRDS.setReferenciaRDS(null);
+    		
 	    	// Obtenemos plantilla a utilizar
 	    	VersionDelegate vd = DelegateUtil.getVersionDelegate();
 	    	Version v = vd.obtenerVersionCompleta(modelo,version);
@@ -680,26 +664,8 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    		throw new Exception("No se encuentra plantilla");
 	    	}
 	    		
-
-	    	// No existen usos ya que el documento no existe en el RDS
-	    	List usos = new ArrayList();
-	    	
 			// Formateamos documento    
-	    	FormateadorDocumento format = FormateadorDocumentoFactory.getInstance().getFormateador( plantilla.getPlantilla().getFormateador().getClase() );
-	    	DocumentoRDS docFormateado = format.formatearDocumento(documentoRDS,plantilla,usos);
-	    		
-	    	// En caso de que se haya establecido generar sello de registro/preregistro (envio/preenvio) lo generamos
-	    	//  (Sera siempre sin validez ya que no existen usos)
-	    	boolean docValido=true;
-	    	if (plantilla.getPlantilla().getSello() == 'S'){
-	    		// Si no hay sello marcamos como doc no valido -> no barcode + marca de agua
-	    		if (!stampSello(docFormateado,usos)) docValido=false;
-	    	}
-
-	    	// En caso de que no sea produccion lo marcamos como borrador
-	    	if (isBorrador() || !docValido){
-	    		stampBorrador(docFormateado);
-	    	}
+	    	DocumentoRDS docFormateado = formatearDocumentoImpl(documentoRDS,plantilla);
 	    	
 		    // Devolvemos documento RDS formateado
 		    return docFormateado;
@@ -714,7 +680,8 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * Elimina uso para un documento del RDS
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
      */
     public void eliminarUso(UsoRDS usoRDS) throws ExcepcionRDS {
     	// Borramos uso
@@ -780,7 +747,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * Eliminar usos que tienen una determinada referencia para varios documentos del RDS
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public void eliminarUsos(String tipoUsoId,String referencia)throws ExcepcionRDS {
     	// Borramos uso
@@ -832,7 +799,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * Consulta usos para un documento del RDS
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      */
     public List listarUsos(ReferenciaRDS refRDS) throws ExcepcionRDS {
@@ -846,8 +813,8 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
         	try{
         		documento = (Documento) session.load(Documento.class,new Long(refRDS.getCodigo()));        		
         	}catch(Exception e){
-        		log.error("No existe documento " + refRDS.getCodigo());
-        		throw new ExcepcionRDS("No existe documento " + refRDS.getCodigo(),e);
+        		//si no existe el documento devolvemos un arraylist vacio.
+        		return new ArrayList();
         	}
         	
         	// Control de documento borrado
@@ -880,6 +847,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
             	usoRDS.setReferencia(uso.getReferencia());            	
             	usoRDS.setReferenciaRDS(refRDS);     
             	usoRDS.setFechaSello(uso.getFechaSello());
+            	usoRDS.setFechaUso(uso.getFecha());
             	listaUsosRDS.add(usoRDS);
             }	    	
             
@@ -938,7 +906,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * Cambia de UA un documento
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name = "${role.user}"
+     * @ejb.permission role-name = "${role.todos}"
      */
     public void cambiarUnidadAdministrativa(ReferenciaRDS refRDS, Long codUA) throws ExcepcionRDS {       	
     	Session session = getSession();  
@@ -979,7 +947,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      *
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name = "${role.user}"
+     * @ejb.permission role-name = "${role.todos}"
      */
     public byte[] convertirFicheroAPDF(byte[] documento,String extension) throws ExcepcionRDS {       	    	
     	try{
@@ -1002,6 +970,76 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    }  
     }    
     
+    /**
+     * Consolida documento en gestion documental
+     * @param refRDS Referencia RDS
+     * @return String Referencia del documento en el Gestor Documental
+     * @throws ExcepcionRDS
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name = "${role.todos}"
+     * @ejb.permission role-name = "${role.auto}"
+     */
+    public String consolidarDocumento(ReferenciaRDS refRDS) throws ExcepcionRDS{
+    	try{
+    		// Si no hay gestion documental retornamos nulo
+	    	if (!existeGestionDocumental){
+	    		return null;
+	    	}
+	    	// Consultamos doc y usos asociados
+    		DocumentoRDS doc = this.consultarDocumento(refRDS);
+    		// Si esta consolidado devolvemos referencia
+    		if (doc.getReferenciaGestorDocumental() != null){
+    			return doc.getReferenciaGestorDocumental();
+    		}
+    		List usos = this.listarUsos(refRDS);
+    		
+    		// Si no tiene uso, no se tiene que consolidar
+    		if (usos.size() == 0){
+    			throw new ExcepcionRDS("No se puede consolidar un documento si no tiene usos");
+    		}
+    		
+    		// Solo se pueden consolidar documentos de tramites que se hayan completado (tramites en persistencia
+    		// y preregistros no confirmados)
+    		boolean consolidar=false;
+    		for (Iterator it=usos.iterator();it.hasNext();){
+        		UsoRDS uso = (UsoRDS) it.next();
+        		if (!uso.getTipoUso().equals(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE) &&
+        			!uso.getTipoUso().equals(ConstantesRDS.TIPOUSO_PREREGISTRO)){
+        			consolidar=true;
+        			break;
+        		}
+        	}
+    		if (!consolidar){
+    			throw new Exception("No puede consolidarse el documento ya que el tramite no se ha completado");
+    		}
+    		    		
+    		// Consolidamos en Gestor Documental
+    		Session session = getSession();
+    		String referenciaGD = null;
+    		try{
+    			// Controlamos que no se intente consolidar a la vez el mismo documento
+        		if (!CacheSincronizacionGestorDocumental.guardar(Long.toString(refRDS.getCodigo()))){
+        			throw new Exception("El documento " + refRDS.getCodigo() + " esta siendo consolidado en estos momentos");
+        		}
+        		// Invocamos al plugin
+        		referenciaGD = PluginFactory.getInstance().getPluginGestionDocumental().consolidarDocumento(doc,usos);
+        		// Actualizamos documento
+        		Documento documento = (Documento) session.load(Documento.class, new Long(refRDS.getCodigo()));
+            	documento.setReferenciaGestorDocumental(referenciaGD);
+            	session.update(documento);
+            }finally{
+            	CacheSincronizacionGestorDocumental.borrar(Long.toString(refRDS.getCodigo()));
+            	close(session);
+            }
+	    		
+	        return referenciaGD;
+	        
+    	}catch(Exception ex){
+    		doLogErrorGestorDocumental(ex,new Long(refRDS.getCodigo()),getUsuario());
+	    	throw new ExcepcionRDS("Error al consolidar documento " + refRDS.getCodigo() + " en gestion documental",ex);
+	    }    		
+    }
   
     // ---------------------- Funciones auxiliares -------------------------------------------    
     /**
@@ -1031,9 +1069,9 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
         	
         	
         	
-        	//
-        	// TODO DANI - ACTUALIZAR CUSTODIA
-        	//
+        	//Una vez se ha modificado el documento tambien lo modidifcamos en custodia,
+        	//si hace falta
+        	
         	custodiarDocumento(documento,doc,session);
         	
         	
@@ -1068,7 +1106,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * @throws HibernateException 
      */
     private void custodiarDocumento(DocumentoRDS documento, Documento doc, Session session) throws HibernateException, Exception{
-    	
+    	//si existe el plugin de custodia y se tiene que custodiar el documento lo custodiamos
     	if(existeCustodia && "S".equals(doc.getVersion().getModelo().getCustodiar()+"")){
     		
     		log.debug("Custodiando documento del tipo " + doc.getVersion().getModelo().getModelo() + " - " + doc.getVersion().getVersion() );
@@ -1164,6 +1202,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     		log.error("No se ha podido obtener versión " + documento.getModelo() + " - " + documento.getVersion(),e);
     		throw new ExcepcionRDS("No se ha podido obtener modelo / version en RDS",e);
     	}    	        	
+    	    	
     	// --------- Obtenemos ubicación        
     	Ubicacion ubicacion;
     	try{
@@ -1256,6 +1295,19 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    	}
     	}
     	
+    	// Idioma visualizacion: solo para docs estructurados
+    	if (version.getModelo().getEstructurado() == 'S'){
+    		//Si el modelo es estructurado, debemos indicar el idioma
+        	if (documento.getIdioma() == null){
+        		// Por motivos de compatibilidad con integraciones ejb anteriores, ponemos idioma por defecto
+        		doc.setIdioma("ca");
+        		// throw new ExcepcionRDS("Si el documento es estructurado debe indicarse el idioma de visualizacion del documento");
+        	}else{
+        		doc.setIdioma(documento.getIdioma());
+        	}
+    	}
+   
+    	
     	// --- Establecemos campos calculados por RDS ---
     	// ------- Establecemos fecha    	
     	doc.setFecha(new Timestamp(System.currentTimeMillis()));
@@ -1304,6 +1356,17 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	documentoRDS.setTitulo(doc.getTitulo());
     	documentoRDS.setNombreFichero(doc.getNombreFichero());
     	documentoRDS.setUnidadAdministrativa(doc.getUnidadAdministrativa().longValue());
+    	documentoRDS.setIdioma(doc.getIdioma());
+    	documentoRDS.setReferenciaGestorDocumental(doc.getReferenciaGestorDocumental());
+    	
+    	VersionCustodiaDelegate vcDelg = DelegateUtil.getVersionCustodiaDelegate();
+    	try {
+			documentoRDS.setCodigoDocumentoCustodia(vcDelg.obtenerCodigoVersionCustodia(doc.getCodigo()));
+		} catch (Exception e) {
+			throw new ExcepcionRDS( "Error obteniendo el codigo de custodia desde el codigo del documento.", e );
+		}
+    	
+    	
     	if (doc.getPlantilla() != null){
     		documentoRDS.setPlantilla(doc.getPlantilla().getTipo());
     	}
@@ -1369,7 +1432,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    query.setParameter("documento", documento);            	    
 	    //query.setCacheable(true);
 	    List result = query.list();	    
-	    if (result.isEmpty()) {
+	    if (result.isEmpty() && !documentoEnCustodia(session, documento)) {
 	    	
 	    	// Obtenemos plugin almacenamiento
 	    	ls_plugin = documento.getUbicacion().getPluginAlmacenamiento();
@@ -1390,6 +1453,29 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	        // Realizamos apunte en el log
 	        doLogOperacionImpl(getUsuario(),BORRADO_AUTOMATICO_DOCUMENTO_SIN_USOS,"Borrado automático de documento " + documento.getCodigo() + " por no tener usos",session);
 	    }
+    }
+    
+    //Funcion que se llama desde documentoSinUsos para poder eliminar el documentos
+    //si el documento esta en custodia lo marca para eliminar de custodia
+    //y te devuelve que no se puede eliminar
+    private boolean documentoEnCustodia(Session session,Documento documento) throws Exception{
+    	Query query = session.createQuery("FROM VersionCustodia AS version WHERE version.documento.codigo = :codigoDocumento");
+		query.setParameter("codigoDocumento", documento.getCodigo());
+		List custodiasDocumento = query.list();
+		if(custodiasDocumento != null && custodiasDocumento.size() > 0){
+			//las marcamos para borrar.
+			for(int i=0;i<custodiasDocumento.size();i++){
+				VersionCustodia cust = (VersionCustodia)custodiasDocumento.get(i);
+				if("N".equals(cust.getBorrar()+"")){
+					cust.setBorrar('S');
+					cust.setFecha(new Date());
+					session.update(cust);
+				}
+			}
+			return true;
+		}
+		return false;
+		
     }
     
     /**
@@ -1667,5 +1753,67 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    return false;
     }
 
+    
+    /**
+     * Formatea el fichero en base a la plantilla
+     * 
+     * @param documentoRDS  Documento a formatear
+     * @param plantilla Plantilla con la que se debe formatear
+     * @param usos Usos del documento por si es necesario stampar sello de registro
+     * @throws Exception
+     */
+    private DocumentoRDS formatearDocumentoImpl(DocumentoRDS documentoRDS, PlantillaIdioma plantilla) throws Exception{
+    	
+    	// Consultamos usos del documento
+    	List usos = null;
+    	if (documentoRDS.getReferenciaRDS() != null){
+    		// Documento existente en RDS, obtenemos sus usos
+    		usos = listarUsos(documentoRDS.getReferenciaRDS());
+    	}else{
+    		// Documento no existente en el RDS. Usado para formatear docs que no existen en el RDS.
+    		usos = new ArrayList();
+    	}
+    	
+    	// Generamos PDF
+    	FormateadorDocumento format = FormateadorDocumentoFactory.getInstance().getFormateador( plantilla.getPlantilla().getFormateador().getClase() );
+    	DocumentoRDS docFormateado = format.formatearDocumento(documentoRDS,plantilla,usos);
+    	    		    	
+    	// En caso de que se haya establecido generar sello de registro/preregistro (envio/preenvio) lo generamos
+    	boolean docValido=true;
+    	if (plantilla.getPlantilla().getSello() == 'S'){
+    		// Si no hay sello marcamos como doc no valido -> no barcode + marca de agua
+    		if (!stampSello(docFormateado,usos)) docValido=false;
+    	}
+    	
+    	//	En caso de que se haya establecido generar codigo de barras lo generamos (el documento debe existir en 
+    	//  el RDS)
+    	if (documentoRDS.getReferenciaRDS() != null && plantilla.getPlantilla().getBarcode() == 'S' && docValido){
+    		stampBarCodeVerifier(docFormateado,plantilla.getPlantilla().getTipo(),plantilla.getIdioma());
+    	}
+    	
+    	// En caso de que no sea produccion lo marcamos como borrador
+    	if (isBorrador()  || !docValido){
+    		stampBorrador(docFormateado);
+    	}
+    	
+    	return docFormateado;
+    }
+    
+    private void doLogErrorGestorDocumental(Exception excepcion, Long codigoDoc, String usuarioSeycon){
+    	try{
+			LogGestorDocumentalError logError = new LogGestorDocumentalError();
+			logError.setDescripcionError(excepcion.getMessage());
+			Documento doc = new Documento();
+			doc.setCodigo(codigoDoc);
+			logError.setDocumento(doc);
+			logError.setError(es.caib.util.StringUtil.stackTraceToString(excepcion).getBytes(ConstantesXML.ENCODING));
+			logError.setFecha(new Timestamp(System.currentTimeMillis()));
+			logError.setUsuarioSeycon(usuarioSeycon);
+			LogGestorDocumentalErroresDelegate logDelegate = DelegateUtil.getLogErrorGestorDocumentalDelegate();
+			logDelegate.grabarError(logError);
+		}catch (Exception e){    		
+    		log.error("No se ha podido guardar en el logGestorDocumentalErrores",e);
+    	}
+    }
     
 }

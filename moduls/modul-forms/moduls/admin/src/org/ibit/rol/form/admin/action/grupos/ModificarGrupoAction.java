@@ -43,8 +43,8 @@ public class ModificarGrupoAction extends BaseAction {
     	 try{
     		 
     		 GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
-    		 Grupos grp = gruposDelegate.obtenerGrupo(codigo);
-    		 List usuarios = gruposDelegate.obtenerUsuariosByGrupo(codigo);
+    		 Grupos grp = gruposDelegate.obtenerGrupo(codigo.trim());
+    		 List usuarios = gruposDelegate.obtenerUsuariosByGrupo(codigo.trim());
     		 
     		 request.setAttribute("grupo", grp);
     		 request.setAttribute("usuarios",usuarios);

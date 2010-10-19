@@ -5,24 +5,38 @@ import java.io.Serializable;
 import org.apache.commons.lang.StringUtils;
 
 import es.caib.sistra.model.DatosSesion;
+import es.caib.sistra.plugins.login.ConstantesLogin;
+import es.caib.zonaper.modelInterfaz.PersonaPAD;
 
 /**
+ * 
  * Clase para que los scripts accedan a datos de la sesión
+ *
+ * Si existe delegacion se mostraran los datos de la entidad delegada
  *
  */
 public class PluginDatosSesion implements Serializable{
 
 	DatosSesion datosSesion;
+	PersonaPAD persona;
+	
 	public void setDatosSesion(DatosSesion datosSesion) {
 		this.datosSesion = datosSesion;
+		if (datosSesion.getNivelAutenticacion() != ConstantesLogin.LOGIN_ANONIMO){		
+			this.persona = datosSesion.getPersonaPAD();			
+		}else{
+			// Para anonimos creamos persona vacia para q no hacerlo null safe
+			persona = new PersonaPAD();
+		}
+		
 	}
 	
 	public String getCodigoUsuario() {
-		return datosSesion.getCodigoUsuario();
+		return this.persona.getUsuarioSeycon();
 	}
 	
 	public String getNifUsuario() {
-		return datosSesion.getNifUsuario();
+		return this.persona.getNif();
 	}
 	
 	public char getNivelAutenticacion() {
@@ -30,20 +44,19 @@ public class PluginDatosSesion implements Serializable{
 	}
 	
 	public String getNombreCompletoUsuario() {
-		return 
-			datosSesion.getNombreCompletoUsuario();
+		return this.persona.getNombreCompleto();
 	}
 	
 	public String getNombreUsuario() {
-		return datosSesion.getNombreUsuario();
+		return this.persona.getNombre();
 	}
 	
 	public String getApellido1Usuario(){
-		return (StringUtils.isNotEmpty(datosSesion.getApellido1Usuario())?datosSesion.getApellido1Usuario():"");
+		return (StringUtils.isNotEmpty(this.persona.getApellido1())?this.persona.getApellido1():"");
 	}
 	
 	public String getApellido2Usuario(){
-		return (StringUtils.isNotEmpty(datosSesion.getApellido2Usuario())?datosSesion.getApellido2Usuario():"");
+		return (StringUtils.isNotEmpty(this.persona.getApellido2())?this.persona.getApellido2():"");
 	}
 	
 	public String getIdioma() {
@@ -51,32 +64,56 @@ public class PluginDatosSesion implements Serializable{
 	}
 
 	public String getEmail() {
-		return datosSesion.getEmail();
+		return this.persona.getEmail();
 	}
 	
 	public String getTelefonoMovil() {
-		return datosSesion.getTelefonoMovil();
+		return this.persona.getTelefonoMovil();
 	}
 	
 	public String getCodigoPostal() {
-		return datosSesion.getCodigoPostal();
+		return this.persona.getCodigoPostal();
 	}
 	
 	public String getDireccion() {
-		return datosSesion.getDireccion();
+		return this.persona.getDireccion();
 	}
 	public String getMunicipio() {
-		return datosSesion.getMunicipio();
+		return this.persona.getMunicipio();
 	}
 	public String getProvincia() {
-		return datosSesion.getProvincia();
+		return this.persona.getProvincia();
 	}
 	public String getTelefonoFijo() {
-		return datosSesion.getTelefonoFijo();
+		return this.persona.getTelefonoFijo();
 	}
 	
 	public String getHabilitarAvisos() {
-		return Boolean.toString(datosSesion.getHabilitarAvisos());
+		return Boolean.toString(this.persona.isHabilitarAvisosExpediente());
+	}
+	
+	public String getNifDelegado() {
+		return this.datosSesion.getNifDelegado();
+	}
+	
+	public String getNombreCompletoDelegado() {
+		return this.datosSesion.getNombreCompletoDelegado();
+	}
+	
+	public String getNombreDelegado() {
+		return this.datosSesion.getNombreDelegado();
+	}
+	
+	public String getApellido1Delegado(){
+		return (StringUtils.isNotEmpty(this.datosSesion.getApellido1Delegado())?this.datosSesion.getApellido1Delegado():"");
+	}
+	
+	public String getApellido2Delegado(){
+		return (StringUtils.isNotEmpty(this.datosSesion.getApellido2Delegado())?this.datosSesion.getApellido2Delegado():"");
+	}
+	
+	public String getPerfilAcceso(){
+		return this.datosSesion.getPerfilAcceso();
 	}
 	
 }

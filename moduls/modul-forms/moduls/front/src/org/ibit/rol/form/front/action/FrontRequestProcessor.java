@@ -21,6 +21,7 @@ import org.apache.struts.tiles.DefinitionsFactoryException;
 import org.apache.struts.tiles.ComponentDefinition;
 import org.ibit.rol.form.front.Constants;
 import org.ibit.rol.form.front.registro.RegistroManager;
+import org.ibit.rol.form.persistence.delegate.ConfiguracionDelegate;
 import org.ibit.rol.form.persistence.delegate.DelegateException;
 import org.ibit.rol.form.persistence.delegate.DelegateUtil;
 import org.ibit.rol.form.persistence.delegate.IdiomaDelegate;
@@ -70,6 +71,14 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
             	throw new ServletException(ex);
             }
             
+            //Indicamos si se tiene que ejecutar dentro de un iframe o no
+            try{
+            	ConfiguracionDelegate configuracion = DelegateUtil.getConfiguracionDelegate();
+            	getServletContext().setAttribute(Constants.MOSTRAR_EN_IFRAME,new Boolean(configuracion.obtenerConfiguracion().getProperty("sistra.iframe")).booleanValue());
+            }catch(Exception ex){
+            	log.error("Error obteniendo la variable iframe",ex);
+            	throw new ServletException(ex);
+            }
         } catch (DelegateException e) {
             throw new ServletException(e);
         }

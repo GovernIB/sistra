@@ -21,6 +21,7 @@ import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.tiles.TilesRequestProcessor;
 import es.caib.sistra.front.Constants;
 import es.caib.sistra.front.util.InstanciaManager;
+import es.caib.sistra.persistence.delegate.ConfiguracionDelegate;
 import es.caib.sistra.persistence.delegate.DelegateException;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
 import es.caib.sistra.persistence.delegate.IdiomaDelegate;
@@ -63,6 +64,15 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
         	throw new ServletException(ex);
         }
     	
+        //Indicamos si se tiene que ejecutar dentro de un iframe o no
+        try{
+        	ConfiguracionDelegate config = DelegateUtil.getConfiguracionDelegate();
+        	getServletContext().setAttribute(Constants.MOSTRAR_EN_IFRAME,new Boolean(config.obtenerConfiguracion().getProperty("sistra.iframe")).booleanValue());
+        }catch(Exception ex){
+        	log.error("Error obteniendo la variable iframe",ex);
+        	throw new ServletException(ex);
+        }
+        
     }
     
     

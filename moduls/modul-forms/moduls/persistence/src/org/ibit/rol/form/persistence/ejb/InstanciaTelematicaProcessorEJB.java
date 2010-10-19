@@ -173,7 +173,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                 throw new CreateException("El formulario " + obtenerValor(MODELO) + " versión " +obtenerValor(VERSION)+ " no existe");
             }
             formulario = (Formulario) formularios.get(0);
-            log.info("Formulario " + obtenerValor(MODELO) + " version " + obtenerValor(VERSION) + " cargado");
+            log.debug("Formulario " + obtenerValor(MODELO) + " version " + obtenerValor(VERSION) + " cargado");
             /*
               Inicializo la estructura.
             */
@@ -360,7 +360,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
      * @ejb.permission unchecked="true"
      */
     public String tramitarFormulario() {
-        log.info("voy a tramitar el formulario...");
+        log.debug("voy a tramitar el formulario...");
         String urlSisTra = obtenerValor(URL_SIS_TRA_OK);
         if (urlSisTra == null) {
             throw new EJBException("urlSisTraOK no encontrada");
@@ -383,7 +383,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
             urlRedireccion = insertarParametro(urlRedireccion,
                                                obtenerValor(NOM_PARAM_TOKEN_RETORNO),
                                                respuesta);
-            log.info("redirecciono a " + urlRedireccion);
+            log.debug("redirecciono a " + urlRedireccion);
             return urlRedireccion;
         }
     }
@@ -395,7 +395,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
      * @ejb.permission unchecked="true"
      */
     public String cancelarFormulario() {
-        log.info("voy a cancelar el formulario...");
+        log.debug("voy a cancelar el formulario...");
         String urlSisTra = obtenerValor(URL_SIS_TRA_CANCEL);
         if (urlSisTra == null) {
             throw new EJBException("urlSisTraKO no encontrada");
@@ -411,7 +411,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
             urlRedireccion = insertarParametro(urlRedireccion,
                                                obtenerValor(NOM_PARAM_TOKEN_RETORNO),
                                                respuesta);
-            log.info("redirecciono...");
+            log.debug("redirecciono...");
             return urlRedireccion;
         }
     }

@@ -10,9 +10,11 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.tiles.ComponentContext;
 
 
+import es.caib.zonaper.model.DatosSesion;
 import es.caib.zonaper.model.EstadoExpediente;
 import es.caib.zonaper.model.Expediente;
 import es.caib.zonaper.model.Page;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 
 public class EstadoExpedientesController extends BaseController
@@ -22,6 +24,8 @@ public class EstadoExpedientesController extends BaseController
 	
 	public void execute(ComponentContext tileContext, HttpServletRequest request, HttpServletResponse response, ServletContext servletContext) throws Exception
 	{		 
+		DatosSesion datosSesion = this.getDatosSesion(request);
+		
 		// Obtenemos pagina a mostrar
 		String strPage = request.getParameter( PAGE_PARAM );
 		if (StringUtils.isEmpty( strPage)){
@@ -34,7 +38,12 @@ public class EstadoExpedientesController extends BaseController
 		request.getSession().setAttribute(PAGE_PARAM,strPage);
 		
 		// Realizamos consulta de la pagina
-		Page page = DelegateUtil.getEstadoExpedienteDelegate().busquedaPaginadaExpedientes( pagina, LONGITUD_PAGINA );
+		Page page = null;
+		if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals( datosSesion.getPerfilAcceso())){
+			page = DelegateUtil.getEstadoExpedienteDelegate().busquedaPaginadaExpedientesEntidadDelegada( pagina, LONGITUD_PAGINA, datosSesion.getNifEntidad() );
+		}else{
+			page = DelegateUtil.getEstadoExpedienteDelegate().busquedaPaginadaExpedientes( pagina, LONGITUD_PAGINA );
+		}
 		
 		// Comprobamos si hay que poner pie de entrega documentacion presencial
 		String pieDocPresencial = "N"; 

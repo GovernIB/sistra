@@ -49,7 +49,10 @@ public class UsoRDS  implements java.io.Serializable {
 	 * Fecha registro(para usos de tipo RTE,RTS,ENV,PRE indica la fecha de registro a establecer en el sello)
 	 */
 	private Date fechaSello;
-	
+	/**
+	 * Fecha en la que se inserto el uso
+	 */
+	private Date fechaUso;
 	
 	// Getters / Setters	
 	/**
@@ -104,6 +107,12 @@ public class UsoRDS  implements java.io.Serializable {
 	*/
 	public void setFechaSello(Date fechaRegistro) {
 		this.fechaSello = fechaRegistro;
+	}
+	public Date getFechaUso() {
+		return fechaUso;
+	}
+	public void setFechaUso(Date fechaUso) {
+		this.fechaUso = fechaUso;
 	}
 	
 	

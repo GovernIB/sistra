@@ -18,6 +18,7 @@ public class BusquedaTramitesForm extends ValidatorForm
 	private char nivelAutenticacion = TODOS;
 	private String identificadorTramite = "-1";
 	private int pagina;
+	private String numeroEntrada = "";
 	
 	public int getAnyo()
 	{
@@ -90,6 +91,12 @@ public class BusquedaTramitesForm extends ValidatorForm
 	public void setUsuarioNombre(String usuarioNombre)
 	{
 		this.usuarioNombre = usuarioNombre;
+	}
+	public String getNumeroEntrada() {
+		return numeroEntrada;
+	}
+	public void setNumeroEntrada(String numeroEntrada) {
+		this.numeroEntrada = numeroEntrada;
 	}
 
 }

@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-15" %>
+<%@ page import="es.caib.zonaper.modelInterfaz.ConstantesZPE"%>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
@@ -104,9 +105,18 @@
 					</label>
 				</p>
 				
+				
+				<logic:equal name="es.caib.zonaper.front.DATOS_SESION" property="perfilAcceso" scope="session" value="<%=ConstantesZPE.DELEGACION_PERFIL_ACCESO_CIUDADANO%>">	
 				<div class="botonera">
 					<button type="submit" tabindex="9"><bean:message key="actualizarDatosPersonales.guardar"/></button>
 				</div>
+				</logic:equal>
+				
+				<logic:equal name="es.caib.zonaper.front.DATOS_SESION" property="perfilAcceso" scope="session" value="<%=ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO%>">		
+					<p class="alerta">
+						<bean:message key="actualizarDatosPersonales.noGuardarDelegado" />
+					</p>
+				</logic:equal>				
 					
 			</html:form>
 			

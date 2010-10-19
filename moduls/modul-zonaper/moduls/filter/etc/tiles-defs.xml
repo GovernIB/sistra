@@ -35,5 +35,11 @@
         <put name="continguts" value="/continguts/errorPAD.jsp"/>
     </definition>
     
+    <definition
+        name=".perfilAccesoPAD" 
+        extends=".mainLayout" controller="es.caib.zonaper.filter.front.controller.PerfilAccesoPADController">
+        <put name="continguts" value="/continguts/perfilAccesoPAD.jsp"/>
+    </definition>
+    
 </tiles-definitions>
 

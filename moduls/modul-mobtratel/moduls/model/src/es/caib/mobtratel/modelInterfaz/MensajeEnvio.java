@@ -77,14 +77,14 @@ public class MensajeEnvio implements Serializable{
 		this.cuentaEmisora = cuentaEmisora;
 	}
 	/**
-	 * Devuelve la Fecha de Caducidad del Envío. Si no se rellena el Envío no caducara
+	 * Devuelve la Fecha de Caducidad del Envío. Si no se especifica tomara la caducidad por defecto establecida en el sistema.
 	 * @return
 	 */
 	public Date getFechaCaducidad() {
 		return fechaCaducidad;
 	}
 	/**
-	 * Establece la Fecha de Caducidad del Envío. Si no se rellena el Envío no caducara
+	 * Establece la Fecha de Caducidad del Envío. Si no se especifica tomara la caducidad por defecto establecida en el sistema.
 	 * @param fechaCaducidad
 	 */
 	public void setFechaCaducidad(Date fechaCaducidad) {

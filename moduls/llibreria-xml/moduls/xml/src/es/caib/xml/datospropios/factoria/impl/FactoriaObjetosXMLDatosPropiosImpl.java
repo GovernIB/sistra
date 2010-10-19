@@ -36,6 +36,7 @@ import es.caib.xml.datospropios.modelo.DOCUMENTOSENTREGAR;
 import es.caib.xml.datospropios.modelo.INSTRUCCIONES;
 import es.caib.xml.datospropios.modelo.ObjectFactory;
 import es.caib.xml.datospropios.modelo.SOLICITUD;
+import es.caib.xml.datospropios.modelo.TRAMITESUBSANACION;
 
 
 /** Implementa una factoría capaz de crear objetos que encapsulan el acceso
@@ -424,6 +425,10 @@ public class FactoriaObjetosXMLDatosPropiosImpl implements
 			if (instJAXB.getAVISOEMAIL() != null){
 				instrucciones.setAvisoEmail(instJAXB.getAVISOEMAIL());
 			}
+			
+			if (instJAXB.getTRAMITESUBSANACION() != null){
+				instrucciones.setTramiteSubsanacion(this.crearTramiteSubsanacion(instJAXB.getTRAMITESUBSANACION()));
+			}
 		}
 		
 		return instrucciones;
@@ -569,6 +574,10 @@ public class FactoriaObjetosXMLDatosPropiosImpl implements
 			if (instrucciones.getAvisoEmail() != null){
 				instruccionesJAXB.setAVISOEMAIL(instrucciones.getAvisoEmail());
 			}
+			
+			if (instrucciones.getTramiteSubsanacion() != null){
+				instruccionesJAXB.setTRAMITESUBSANACION( this.crearTramiteSubsanacionJAXB(instrucciones.getTramiteSubsanacion()) );
+			}
 		}
 		
 		return instruccionesJAXB;
@@ -611,4 +620,34 @@ public class FactoriaObjetosXMLDatosPropiosImpl implements
 		return solicitudJAXB;
 	}
 	
+
+	public TramiteSubsanacion crearTramiteSubsanacion() {
+		return new TramiteSubsanacion();
+	}
+	
+	
+	private TRAMITESUBSANACION crearTramiteSubsanacionJAXB (TramiteSubsanacion tramiteSubsanacion) throws EstablecerPropiedadException{
+		TRAMITESUBSANACION tramiteSubsanacionJAXB = null;
+		
+		if (tramiteSubsanacion != null){
+			tramiteSubsanacionJAXB = new TRAMITESUBSANACION ();
+			tramiteSubsanacionJAXB.setEXPEDIENTECODIGO(tramiteSubsanacion.getExpedienteCodigo());
+			tramiteSubsanacionJAXB.setEXPEDIENTEUNIDADADMINISTRATIVA(tramiteSubsanacion.getExpedienteUnidadAdministrativa().longValue());			
+		}
+		
+		return tramiteSubsanacionJAXB;
+	}
+	
+	
+	private TramiteSubsanacion crearTramiteSubsanacion (TRAMITESUBSANACION tramiteSubsanacionJAXB) throws EstablecerPropiedadException{
+		TramiteSubsanacion tramiteSubsanacion = null;
+		
+		if (tramiteSubsanacionJAXB != null){
+			tramiteSubsanacion = new TramiteSubsanacion ();
+			tramiteSubsanacion.setExpedienteCodigo(tramiteSubsanacionJAXB.getEXPEDIENTECODIGO());
+			tramiteSubsanacion.setExpedienteUnidadAdministrativa(new Long(tramiteSubsanacionJAXB.getEXPEDIENTEUNIDADADMINISTRATIVA()));			
+		}
+		
+		return tramiteSubsanacion;
+	}
 }

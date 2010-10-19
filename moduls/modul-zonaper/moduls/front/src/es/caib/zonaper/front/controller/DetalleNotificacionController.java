@@ -31,6 +31,7 @@ import es.caib.zonaper.front.util.Util;
 import es.caib.zonaper.model.DatosSesion;
 import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.NotificacionTelematica;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 
 public class DetalleNotificacionController extends BaseController
@@ -61,10 +62,21 @@ public class DetalleNotificacionController extends BaseController
 			request.setAttribute( "oficioNotificacion", oficio );
 		}
 		
+		// Comprobamos si tiene permisos para abrir la notificacion: es el interesado o es un delegado
+		String puedeAbrir = "S";
+		DatosSesion datosSesion = this.getDatosSesion(request);
+		if (datosSesion.getPerfilAcceso().equals(ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO)){
+			if (datosSesion.getPermisosDelegacion().indexOf(ConstantesZPE.DELEGACION_PERMISO_ABRIR_NOTIFICACION) == -1){
+				puedeAbrir = "N";
+			}
+		}
+		
+		
 		request.setAttribute("codigoExpediente",elementoExpediente.getExpediente().getIdExpediente());
 		request.setAttribute( "unidadAdministrativa", DelegateUtil.getDominiosDelegate().obtenerDescripcionUA(asiento.getDatosAsunto().getCodigoUnidadAdministrativa()));
 		request.setAttribute( "representado",Util.obtenerDatosRepresentado(asiento));
 		request.setAttribute( "representante",Util.obtenerDatosRepresentante(asiento));
+		request.setAttribute( "puedeAbrir",puedeAbrir);
 		
 	}
 	

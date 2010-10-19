@@ -33,7 +33,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.create-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
@@ -42,7 +43,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Devuelve una lista de grupos.
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public List listarGrupos() {
         Session session = getSession();
@@ -60,7 +62,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Devuelve un grupo por su código.
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public Grupos obtenerGrupo(String codigoGrupo){
     	Session session = getSession();
@@ -78,7 +81,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Guarda el contenido de un grupo.
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void guardarGrupo(Grupos grupo){
     	Session session = getSession();
@@ -95,7 +99,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Modificar el contenido de un grupo.
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void modificarGrupo(Grupos grupo){
     	Session session = getSession();
@@ -111,7 +116,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Eliminar un grupo.
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void eliminarGrupo(Grupos grupo){
     	Session session = getSession();
@@ -128,7 +134,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * lista de grupos asociados a un formulario.
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public List listarGruposByForm(Long id){
     	Session session = getSession();
@@ -149,7 +156,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * lista de usuarios asociados a un formulario.
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public List listarUsuariosByForm(Long id){
     	Session session = getSession();
@@ -170,7 +178,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * lista de grupos no asociados a un formulario.
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public List listarGruposByNotForm(Long id){
     	Session session = getSession();
@@ -191,7 +200,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Existen grupos
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public boolean existenGrupos(){
     	Session session = getSession();
@@ -215,7 +225,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Asociar un grupo a un formulario
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void asociarGrupo(String grupoAsociar, String formulario){
     	Session session = getSession();
@@ -234,7 +245,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Desasociar un grupo a un formulario 
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void desAsociarGrupo(String grupoAsociar, String formulario){
     	Session session = getSession();
@@ -254,13 +266,12 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * lista de usuarios asociados a un grupo
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public List obtenerUsuariosByGrupo(String codigo){
     	Session session = getSession();
         try {
-        	
-   			
         	Query query = session.createQuery("from GrupoUsuario g where g.id.codiGrup = ? order by g.id.usuario");
         	query.setString(0,codigo);
             query.setCacheable(true);
@@ -276,7 +287,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * comprueba si existe usuarios asociados a un grupo.
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public boolean existeUsuariosByGrupo(String codigo){
     	Session session = getSession();
@@ -296,7 +308,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Asociar usuario a un grupo
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void asociarUsuario(GrupoUsuario grpUser){
     	Session session = getSession();
@@ -312,7 +325,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Asociar usuario a un formulario
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void asociarUsuarioFormulario(RolUsuarioFormulario userForm){
     	Session session = getSession();
@@ -328,7 +342,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * obtener usuario formulario
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public RolUsuarioFormulario obtenerUsuarioForm(RolUsuarioFormularioId id){
     	Session session = getSession();
@@ -344,7 +359,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * eliminar usuario formulario
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void eliminarUsuarioFormulario(RolUsuarioFormulario userForm){
     	Session session = getSession();
@@ -360,7 +376,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Obtener asociación usuario grupo
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public GrupoUsuario obtenerUsuarioGrupo(GrupoUsuarioId id){
     	Session session = getSession();
@@ -375,7 +392,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Eliminar asociación usuario grupo
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void eliminarUsuarioGrupo(GrupoUsuario grpUser){
     	Session session = getSession();
@@ -392,7 +410,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Existen usuarios relacionados con el formulario
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public boolean existeUsuarioByForm(String usuario, Long formulario){
     	Session session = getSession();
@@ -417,7 +436,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Existe usuario en el grupo relacionado con el formulario
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public boolean existeUsuarioByGruposForm(String usuario, Long formulario){
     	Session session = getSession();
@@ -446,7 +466,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
      * Borra todas las referencias de los grupos con este formulario
      * Se da permiso al operador, porque si borra el formulario se deben borrar las referencias
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void borrarFormularioGrupos(Long formulario){
     	Session session = getSession();
@@ -471,7 +492,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
      * Borra todas las referencias de los usuaris con este formulario
      * Se da permiso al operador, porque si borra el formulario se deben borrar las referencias
      * @ejb.interface-method
-     * @ejb.permission unchecked="true"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void borrarFormularioUsuarios(Long formulario){
     	// Borramos referencias formulario

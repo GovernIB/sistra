@@ -47,9 +47,9 @@
     		<include name="sistra-xml.jar"/>
     	</fileset>
         <fileset dir="${web.product}">
-            <include name="${prj.name}-model.jar" />
-            <include name="${prj.name}-persistence-client.jar" />
-            <include name="${prj.name}-persistence.jar" />
+            <include name="7-${prj.name}-model.jar" />
+            <include name="7-${prj.name}-persistence-client.jar" />
+            <include name="7-${prj.name}-persistence.jar" />
         </fileset>
     </path>
 
@@ -69,7 +69,7 @@
         <tstamp>
             <format property="TODAY" pattern="dd-MM-yy"/>
         </tstamp>
-        <fail unless="role.mobtratel" message="La propiedad role.mobtratel no está definida en config.properties"/>
+        <fail unless="role.admin" message="La propiedad role.admin no está definida en config.properties"/>
         <fail unless="role.gestor" message="La propiedad role.gestor no está definida en config.properties"/>
         <fail unless="front.auth.domain" message="La propiedad front.auth.domain no está definida en config.properties"/>
     	<fail unless="web.login-config" message="La propiedad web.login-config no está definida en config.properties"/>
@@ -151,9 +151,34 @@
 
         </webdoclet>
 
+        	<!-- cas: config comentarios -->
+        	<condition property="cas.enabled.comment.init" value="${comment.init}" else="">
+        	    <equals arg1="${login-config}" arg2="CAS"/>
+        	</condition>
+        	<condition property="cas.enabled.comment.end" value="${comment.end}" else="">
+        	    <equals arg1="${login-config}" arg2="CAS"/>
+        	</condition>
+        	<condition property="cas.enabled.noComment.init" value="" else="${comment.init}">
+        	    <equals arg1="${login-config}" arg2="CAS"/>
+        	</condition>
+        	<condition property="cas.enabled.noComment.end" value="" else="${comment.end}">
+        	    <equals arg1="${login-config}" arg2="CAS"/>
+        	</condition>
+        	<!-- cas: config comentarios -->	
+    	
        <replace file="${web.gen.etc}/web.xml">
           <replacefilter token="@role.gestor@" value="${role.gestor}"/>
        	<replacefilter token="@web.login-config@" value="${web.login-config}"/>   
+       	
+       	<!-- cas: reemplazo comentarios -->
+       	  <replacefilter token="@cas.enabled.comment.init@" value="${cas.enabled.comment.init}"/>        	 
+       	  <replacefilter token="@cas.enabled.comment.end@" value="${cas.enabled.comment.end}"/>        	 
+       	  <replacefilter token="@cas.enabled.noComment.init@" value="${cas.enabled.noComment.init}"/>        	 
+       	  <replacefilter token="@cas.enabled.noComment.end@" value="${cas.enabled.noComment.end}"/>       
+       	  <replacefilter token="@cas.urlCas@" value="${cas.urlCas}"/>              	  
+       	  <replacefilter token="@cas.urlSistra@" value="${cas.urlSistra.back}"/>       
+       	  <!-- cas: reemplazo comentarios -->
+       	
        </replace>
 
     </target>
@@ -172,8 +197,8 @@
     </target>
 
     <target name="web.war" depends="web.compile">
-        <delete file="${web.product}/${prj.name}-${modul}.war" quiet="yes"/>
-        <war warfile="${web.product}/${prj.name}-${modul}.war"
+        <delete file="${web.product}/7-${prj.name}-${modul}.war" quiet="yes"/>
+        <war warfile="${web.product}/7-${prj.name}-${modul}.war"
             basedir="${web.htdocs}"
             webxml="${web.gen.etc}/web.xml"
             excludes="WEB-INF/**">

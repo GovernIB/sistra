@@ -24,7 +24,6 @@
 	function imprimirSello()
 	{
 		window.open('<%= imprimirSelloAction %>','mywindow','width=400,height=200');
-		document.location.href = 'init.do';
 	}
 -->
 </script>

@@ -22,7 +22,7 @@ public abstract class DocumentoBandejaFacadeEJB extends HibernateEJB {
 
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.gestor}"
      */
 	public void ejbCreate() throws CreateException {
@@ -32,7 +32,7 @@ public abstract class DocumentoBandejaFacadeEJB extends HibernateEJB {
 	  
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.gestor}"
      */
     public DocumentoBandeja obtenerDocumentoBandeja(Long id) {
@@ -50,7 +50,7 @@ public abstract class DocumentoBandejaFacadeEJB extends HibernateEJB {
         
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public Long grabarDocumentoBandeja(DocumentoBandeja obj,Long id) {        
     	Session session = getSession();
@@ -74,7 +74,7 @@ public abstract class DocumentoBandejaFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void borrarDocumentoBandeja(Long id) {
         Session session = getSession();

@@ -60,7 +60,10 @@
 			 -->
 					</p>					
 					<div id="recercaAv">
-						<p><bean:message key="formularioBusqueda.tramite"/>
+						<p>
+							<bean:message key="confirmacion.numeroEntrada"/>
+							<html:text property="numeroEntrada" size="50"/>
+							<bean:message key="formularioBusqueda.tramite"/>
 							<html:select property="identificadorTramite">
 								<html:option value="-1" ><bean:message key="formularioBusqueda.tramite.todos"/></html:option>
 								<logic:iterate id="tramite" name="tramites" type="es.caib.bantel.model.Tramite">															

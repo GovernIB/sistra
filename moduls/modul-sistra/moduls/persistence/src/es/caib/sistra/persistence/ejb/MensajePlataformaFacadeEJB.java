@@ -26,7 +26,7 @@ public abstract class MensajePlataformaFacadeEJB extends HibernateEJB {
 
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
@@ -35,7 +35,7 @@ public abstract class MensajePlataformaFacadeEJB extends HibernateEJB {
 	  
     /**
      * @ejb.interface-method
-     *  @ejb.permission role-name="${role.user}"
+     *  @ejb.permission role-name="${role.todos}"
      */
     public MensajePlataforma obtenerMensajePlataforma(Long id) {
         Session session = getSession();
@@ -52,7 +52,7 @@ public abstract class MensajePlataformaFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     *  @ejb.permission role-name="${role.user}"
+     *  @ejb.permission role-name="${role.todos}"
      */
     public MensajePlataforma obtenerMensajePlataforma(String id){
         Session session = getSession();
@@ -78,7 +78,7 @@ public abstract class MensajePlataformaFacadeEJB extends HibernateEJB {
         
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long grabarMensajePlataforma(MensajePlataforma obj) {        
     	Session session = getSession();
@@ -99,7 +99,7 @@ public abstract class MensajePlataformaFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     *  @ejb.permission role-name="${role.user}"
+     *  @ejb.permission role-name="${role.todos}"
      */
     public List listarMensajePlataformas() {
         Session session = getSession();

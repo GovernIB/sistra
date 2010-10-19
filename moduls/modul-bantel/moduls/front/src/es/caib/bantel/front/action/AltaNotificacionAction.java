@@ -43,6 +43,7 @@ public class AltaNotificacionAction extends BaseAction
 		request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,"3");
 		PadBackOfficeDelegate ejb = new PadBackOfficeDelegate();
 		request.getSession().setAttribute("documentosAltaNotificacion",null);
+		request.getSession().setAttribute("parametrosAltaNotificacion",null);
 		MensajesUtil.setMsg(this.getResources(request));
 		ExpedientePAD exp;
 		try{

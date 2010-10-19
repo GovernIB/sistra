@@ -40,5 +40,8 @@ public class ConstantesSTR {
 	// TIEMPO EN CACHE PARA DOMINIOS
 	public static int TIEMPO_EN_CACHE = 60 * 60 * 24;
 
+	// SUBSANACION: NOMBRE DE PARAMETROS
+	public static String SUBSANACION_PARAMETER_EXPEDIENTE_ID = "subsanacionExpedienteId";
+	public static String SUBSANACION_PARAMETER_EXPEDIENTE_UA = "subsanacionExpedienteUA";
 	
 }

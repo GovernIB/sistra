@@ -407,7 +407,7 @@ public class PluginEnvio {
 					validAddresses.add(ex.getValidSentAddresses()[i].toString());
 				}
 			}
-			log.error("Error generando correo para el envio: " + envio.getNombre(),ex);
+			log.debug("Error generando correo para el envio: " + envio.getNombre(), ex);
 			me.setError("Error generando correo para el envio: " + envio.getNombre() + "." + ex.getMessage());
 			me.setError(me.getError()+ " ERROR EMAILS: ");
 			if(invalidAddresses != null){
@@ -420,11 +420,11 @@ public class PluginEnvio {
 			me.setDestinatariosValidos(validAddresses);
 			me.setEstado(Envio.CON_ERROR);
 		} catch (DelegateException de) {
-			log.error("Error accediendo a la cuenta por defecto de EMAIL");
+			log.debug("Error accediendo a la cuenta por defecto de EMAIL");
 			me.setError("Error accediendo a la cuenta por defecto de EMAIL");
 			me.setEstado(Envio.CON_ERROR);
 		} catch (Exception e) {
-			log.error("Error generando correo para el envio: " + envio.getNombre());
+			log.debug("Error generando correo para el envio: " + envio.getNombre());
 			me.setError("Error generando correo para el envio: " + envio.getNombre() + "." + e.getMessage());
 			me.setError(me.getError()+ "ERROR EMAILS: " + destinatarios.toString() + ": " + e.getMessage()+ ".");
 			me.setEstado(Envio.CON_ERROR);

@@ -1,5 +1,8 @@
 package es.caib.zonaper.front.action;
 
+import java.util.Iterator;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -9,8 +12,16 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import es.caib.redose.modelInterfaz.DocumentoRDS;
+import es.caib.redose.modelInterfaz.ReferenciaRDS;
+import es.caib.redose.persistence.delegate.DelegateRDSUtil;
+import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.zonaper.front.Constants;
 import es.caib.zonaper.front.form.DetalleElementoForm;
+import es.caib.zonaper.model.DocumentoEntradaPreregistro;
+import es.caib.zonaper.model.DocumentoEntradaTelematica;
+import es.caib.zonaper.model.DocumentoEventoExpediente;
+import es.caib.zonaper.model.DocumentoNotificacionTelematica;
 import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.EntradaPreregistro;
 import es.caib.zonaper.model.EntradaTelematica;
@@ -60,14 +71,12 @@ public class MostrarDetalleElementoAction extends BaseAction {
 		try{
 			// Recuperamos elemento (codigo + tipo) e info acerca de si esta asociado a un expediente o es un tramite sin expe
 			DetalleElementoForm def = (DetalleElementoForm) form;
-			
 			Long codigo 	= def.getCodigo();
 			String tipo 	= def.getTipo();			
 			boolean existeExpe = def.isExpediente();
 		
 			log.debug("mostrarDetalleElemento: codigo=" + codigo.longValue() + " tipo=" +  tipo + " expediente=" + existeExpe);
 						
-			
 			if (existeExpe){
 				ElementoExpediente elementoExpediente;
 				if (this.getDatosSesion(request).getNivelAutenticacion() == 'A'){
@@ -96,6 +105,7 @@ public class MostrarDetalleElementoAction extends BaseAction {
 					aviso = DelegateUtil.getEventoExpedienteDelegate().obtenerEventoExpedienteAutenticado(codigo);
 				}
 				request.setAttribute("aviso",aviso);
+				cargarFirmas(aviso.getDocumentos(),request,tipo);
 				return mapping.findForward("aviso"+anonimo);
 			}else if (ElementoExpediente.TIPO_NOTIFICACION.equals(tipo)){
 				NotificacionTelematica not;			
@@ -106,6 +116,7 @@ public class MostrarDetalleElementoAction extends BaseAction {
 				}
 				request.setAttribute("notificacion",not);
 				if (not.getFechaAcuse() != null){			
+					cargarFirmas(not.getDocumentos(),request,tipo);
 					return mapping.findForward("notificacionRecibida"+anonimo);
 				}else{
 					return mapping.findForward("notificacionPendiente"+anonimo);
@@ -118,6 +129,7 @@ public class MostrarDetalleElementoAction extends BaseAction {
 					entrada = DelegateUtil.getEntradaTelematicaDelegate().obtenerEntradaTelematicaAutenticada(codigo);		
 				}
 				request.setAttribute("tramite",entrada);
+				cargarFirmas(entrada.getDocumentos(),request,tipo);
 				return mapping.findForward("tramite"+anonimo);
 			}else if (ElementoExpediente.TIPO_ENTRADA_PREREGISTRO.equals(tipo)){
 				EntradaPreregistro entrada; 
@@ -127,6 +139,7 @@ public class MostrarDetalleElementoAction extends BaseAction {
 					entrada = DelegateUtil.getEntradaPreregistroDelegate().obtenerEntradaPreregistroAutenticada(codigo);		
 				}
 				request.setAttribute("tramite",entrada);
+				cargarFirmas(entrada.getDocumentos(),request,tipo);
 				return mapping.findForward("tramite"+anonimo);
 			}else{
 				throw new Exception ("Tipo no soportado " + tipo);
@@ -138,6 +151,39 @@ public class MostrarDetalleElementoAction extends BaseAction {
 		}
 	}
 
+	private void cargarFirmas(Set documentos, HttpServletRequest request, String tipo) throws Exception{
+		RdsDelegate rdsDeleg = DelegateRDSUtil.getRdsDelegate();
+		
+//		vamos a buscar las firmas de los documentos si existen y las meteremos en la request
+		if(documentos != null){
+			Iterator it = documentos.iterator();
+			ReferenciaRDS ref = null;
+			String codigo = null;
+			while(it.hasNext()){
+				if (ElementoExpediente.TIPO_AVISO_EXPEDIENTE.equals(tipo)){
+					DocumentoEventoExpediente docTipo = (DocumentoEventoExpediente)it.next();
+					ref = new ReferenciaRDS(docTipo.getRdsCodigo(),docTipo.getRdsClave());
+					codigo = docTipo.getCodigo()+"";
+				}else if (ElementoExpediente.TIPO_NOTIFICACION.equals(tipo)){
+					DocumentoNotificacionTelematica docTipo = (DocumentoNotificacionTelematica)it.next();
+					ref = new ReferenciaRDS(docTipo.getCodigoRDS(),docTipo.getClaveRDS());
+					codigo = docTipo.getCodigo()+"";
+				}else if (ElementoExpediente.TIPO_ENTRADA_TELEMATICA.equals(tipo)){
+					DocumentoEntradaTelematica docTipo = (DocumentoEntradaTelematica)it.next();
+					ref = new ReferenciaRDS(docTipo.getCodigoRDS(),docTipo.getClaveRDS());
+					codigo = docTipo.getCodigo()+"";
+				}else {
+					DocumentoEntradaPreregistro docTipo = (DocumentoEntradaPreregistro)it.next();
+					ref = new ReferenciaRDS(docTipo.getCodigoRDS(),docTipo.getClaveRDS());
+					codigo = docTipo.getCodigo()+"";
+				}
+				DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
+				if(doc != null && doc.getFirmas() != null){
+					request.setAttribute(codigo,doc.getFirmas());
+				}
+			}
+		}
+	}
 	
 	
 }

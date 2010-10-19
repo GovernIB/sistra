@@ -109,4 +109,5 @@ public class Constants implements Serializable {
 	
 	public static final String MOSTRAR_FIRMA_DIGITAL="mostrarFirmaDigital";
 
+	public static final String MOSTRAR_EN_IFRAME = "mostrarSistraEnIframe";
 }

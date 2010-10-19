@@ -122,7 +122,7 @@ public abstract class AuditaFacadeEJB implements SessionBean
 	 * Devuelve código de evento. Si falla retorna nulo.
 	 * 
 	 * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
 	 */
 	public Long logEvento( Evento eventoAuditado ){
 		try{

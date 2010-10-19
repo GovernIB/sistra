@@ -1,12 +1,11 @@
 package es.caib.zonaper.model;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
+
+import es.caib.util.StringUtil;
 
 public class TramitePersistente implements java.io.Serializable {
     
@@ -29,9 +28,8 @@ public class TramitePersistente implements java.io.Serializable {
      private String idioma;
      private Set documentos = new HashSet(0);     
      private String parametrosInicio;
-     
-     
-     private final static String SEPARADOR_PARAMETROS_INICIO = "#-@";
+     private String delegado;
+     private String estadoDelegacion;
      
     // Constructors
     /** default constructor */
@@ -138,48 +136,11 @@ public class TramitePersistente implements java.io.Serializable {
 	}	    
     
 	public void setParametrosInicioMap(Map parametrosInicio) throws Exception{
-		this.setParametrosInicio(this.serializarMap(parametrosInicio));		
+		this.setParametrosInicio(StringUtil.serializarMap(parametrosInicio));		
 	}
 		
 	public Map getParametrosInicioMap() throws Exception {
-		return (this.getParametrosInicio()!=null?this.deserializarMap(this.getParametrosInicio()):null);
-	}
-	
-	private String serializarMap(Map map) throws Exception{		
-		if (map == null) return null;		
-		String str="";		
-		boolean primer = true;
-		String name,value;
-		for (Iterator it = map.keySet().iterator();it.hasNext();){
-			name = (String) it.next();				
-			if (!primer) {
-				str = str + SEPARADOR_PARAMETROS_INICIO;
-			}else{
-				primer = false;
-			}
-			
-			if (map.get(name) != null) 
-				value = (String) map.get(name);
-			else
-				value ="";	
-			
-			str = str +  name + SEPARADOR_PARAMETROS_INICIO + value;
-		}
-		return str;
-	}
-	
-	private Map deserializarMap(String mapStr) throws Exception{
-		if (mapStr == null || mapStr.length() <= 0) return null;
-		HashMap map = new HashMap();
-		StringTokenizer st = new StringTokenizer(mapStr,SEPARADOR_PARAMETROS_INICIO);		
-		String key,value;
-		while (st.hasMoreElements()){
-			key = (String) st.nextElement();			
-			if (st.hasMoreElements()) value = (String) st.nextElement();
-				else value=null;
-			map.put(key,value);
-		}
-		return map;
+		return (this.getParametrosInicio()!=null?StringUtil.deserializarMap(this.getParametrosInicio()):null);
 	}
 
 	public Timestamp getFechaCaducidad() {
@@ -204,5 +165,21 @@ public class TramitePersistente implements java.io.Serializable {
 
 	public void setUsuarioFlujoTramitacion(String usuarioFlujoTramitacion) {
 		this.usuarioFlujoTramitacion = usuarioFlujoTramitacion;
+	}
+
+	public String getDelegado() {
+		return delegado;
+	}
+
+	public void setDelegado(String delegado) {
+		this.delegado = delegado;
+	}
+
+	public String getEstadoDelegacion() {
+		return estadoDelegacion;
+	}
+
+	public void setEstadoDelegacion(String estadoDelegacion) {
+		this.estadoDelegacion = estadoDelegacion;
 	}
 }

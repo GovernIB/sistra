@@ -24,7 +24,7 @@
 	    String urlSoporteFinal = es.caib.util.StringUtil.replace(urlSoporte,"@asunto@",tituloTramite);
 	    urlSoporteFinal = es.caib.util.StringUtil.replace(urlSoporteFinal,"@idioma@",lang);			
 	%>
-
+<logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_EN_IFRAME%>" value="false">
 		<!-- peu -->
 		<div id="peu">
 			
@@ -54,3 +54,4 @@
 			</div>
 		
 		</div>
+</logic:equal>

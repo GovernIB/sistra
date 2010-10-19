@@ -38,7 +38,7 @@
         	<include name="*.jar"/>        	
         </fileset>
         <fileset dir="${ejb.product}">
-            <include name="audit-model.jar"/>
+            <include name="1-audit-model.jar"/>
         </fileset>    	
 	   	<fileset dir="${distribucion.dir}/lib">    	
     	   	<include name="graficos-util.jar"/>	 
@@ -62,7 +62,7 @@
         <tstamp>
             <format property="TODAY" pattern="dd-MM-yy"/>
         </tstamp>
-    	<fail unless="role.user" message="La propiedad role.user no está definida en config.properties"/>
+    	<fail unless="role.todos" message="La propiedad role.todos no está definida en config.properties"/>
     	<fail unless="role.gestor" message="La propiedad role.gestor no está definida en config.properties"/>
         <fail unless="persistence.auth.domain" message="La propiedad persistence.auth.domain no está definida en config.properties"/>
         <fail unless="persistence.auth.principal" message="La propiedad persistence.auth.principal no está definida en config.properties"/>
@@ -106,7 +106,7 @@
             </utilobject>
 
             <deploymentdescriptor
-                clientjar="audit-${modul}-client.jar"
+                clientjar="1-audit-${modul}-client.jar"
                 xmlencoding="UTF-8"
                 destdir="${ejb.gen.etc}"
                 validatexml="true"
@@ -151,9 +151,9 @@
     </target>
 
     <target name="ejb.jar" depends="ejb.compile">
-        <delete file="${ejb.product}/audit-${modul}.jar" quiet="yes"/>
+        <delete file="${ejb.product}/1-audit-${modul}.jar" quiet="yes"/>
         <jar
-            jarfile="${ejb.product}/audit-${modul}.jar"
+            jarfile="${ejb.product}/1-audit-${modul}.jar"
             basedir="${ejb.classes}">
             <manifest>
                 <attribute name="Created-By" value="${indra}"/>
@@ -168,9 +168,9 @@
     </target>
 
     <target name="ejb.client" depends="ejb.compile">
-        <delete file="${ejb.product}/audit-${modul}-client.jar" quiet="yes"/>
+        <delete file="${ejb.product}/1-audit-${modul}-client.jar" quiet="yes"/>
         <jar
-            jarfile="${ejb.product}/audit-${modul}-client.jar"
+            jarfile="${ejb.product}/1-audit-${modul}-client.jar"
             basedir="${ejb.classes}">
             <manifest>
                 <attribute name="Created-By" value="${indra}"/>

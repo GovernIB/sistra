@@ -3,12 +3,20 @@
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <html:xhtml/>
+<script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.4.1.min.js"></script>
 <script type="text/javascript">
      <!--
      function viewAyuda() {
         var url = '<html:rewrite page="/tramite/ayuda.jsp" />';
         obrir(url, "Edicion", 540, 400);
      }
+     
+     
+     function mostrarErrores(){
+        var url = "<html:rewrite page="/tramite/erroresIntegracion.jsp" />";
+        url = url + "?codigoTramiteError=<%=request.getAttribute("codigoTramiteError")%>";
+        obrir(url, '<bean:message key="tramite.errores.popup.titulo.value"/>', 540, 400);
+	}
      // -->
 </script>
 <tr>
@@ -45,6 +53,14 @@
     <td class="input"><html:text styleClass="textLargo" tabindex="10" property="values.url" maxlength="200"/></td>
 </tr>
 <tr>
+    <td class="label"><bean:message key="tramite.versionWS"/></td>
+    <td class="input">
+    	<html:select property="values.versionWS">
+   			<html:options collection="listaVersionesWS" property="CODIGO" labelProperty="DESCRIPCION" />
+    	</html:select>
+    </td>
+</tr>
+<tr>
     <td class="label"><bean:message key="tramite.jndiEJB"/></td>
     <td class="input"><html:text styleClass="textLargo" tabindex="10" property="values.jndiEJB" maxlength="100"/></td>
 </tr>
@@ -67,6 +83,12 @@
 	    Password <html:text styleClass="text" tabindex="10" property="passPlain" maxlength="50"/>
     </td>
 </tr>
+<logic:present name="tramiteForm" property="values.errores">
+	<tr>
+		<td class="label">&nbsp;</td>
+		<td class="input"><input type="button" onclick="mostrarErrores();" value="<bean:message key="tramite.verErrores.value"/>"  class="button"/></td>            
+	</tr>
+</logic:present>
 <!--  
 <tr>
 	<td class="separador" colspan="2"><bean:message key="tramite.accesoEntradas"/></td>

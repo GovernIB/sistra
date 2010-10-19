@@ -7,6 +7,8 @@ public interface Entrada extends ElementoExpedienteItf
 {
 	public String getDescripcionTramite();
 	
+	public char getNivelAutenticacion();
+	
 	public Date getFecha();
 	
 	public Date getFechaConfirmacion();
@@ -44,5 +46,10 @@ public interface Entrada extends ElementoExpedienteItf
 	public String getTramite();
 	
 	public Integer getVersion();
+	
+	public String getSubsanacionExpedienteCodigo();
+	
+	public Long getSubsanacionExpedienteUA();
+	
 	
 }

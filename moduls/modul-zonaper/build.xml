@@ -81,7 +81,7 @@
 		<antcall target="propagate">
 			<param name="task" value="main"/>
 		</antcall>
-		<antcall target="assemble"/>
+		<!-- <antcall target="assemble"/> -->
 		<antcall target="interfaz"/>	
 		<antcall target="docItf"/>
 		<antcall target="distribute"/>
@@ -100,6 +100,7 @@
 		<ant dir="moduls/filter" target="${task}" inheritall="false"/>
 		<ant dir="moduls/helpdesk" target="${task}" inheritall="false"/>
 		<ant dir="moduls/webservices" target="${task}" inheritall="false"/>
+		<ant dir="moduls/delega" target="${task}" inheritall="false"/>
 	</target>
 	
 	<target name="interfaz" depends="prepare">
@@ -164,7 +165,7 @@
 	<target name="distribute" description="Distribucion">
 		<copy file="${product.dir}/zonaper-client.jar" todir="${distribucion.dir}/client"/>		
 		<copydir  src="${output.dir}/docInterfaz"  dest="${distribucion.dir}/javadoc/zonaper-client"/>
-		<copy file="${product.dir}/3-${projecte}.ear" todir="${distribucion.dir}/ear"/>			
+		<!-- <copy file="${product.dir}/3-${projecte}.ear" todir="${distribucion.dir}/ear"/> -->			
 	</target>
 	
 </project>

@@ -7,3 +7,8 @@
 	path="/errorPAD"
     type="org.apache.struts.actions.ForwardAction"
     parameter=".errorPAD"/>
+    
+<action
+	path="/perfilAccesoPAD"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".perfilAccesoPAD"/>

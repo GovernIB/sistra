@@ -18,7 +18,13 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
 
+import es.caib.zonaper.persistence.delegate.DelegateUtil;
+import es.caib.redose.modelInterfaz.ReferenciaRDS;
+import es.caib.redose.modelInterfaz.UsoRDS;
+import es.caib.redose.persistence.delegate.DelegateRDSUtil;
+import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
 import es.caib.util.CredentialUtil;
@@ -26,6 +32,7 @@ import es.caib.zonaper.model.DocumentoPersistente;
 import es.caib.zonaper.model.DocumentoPersistenteBackup;
 import es.caib.zonaper.model.TramitePersistente;
 import es.caib.zonaper.model.TramitePersistenteBackup;
+import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.persistence.util.GeneradorId;
 
 /**
@@ -51,7 +58,7 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
 	/**
      * @ejb.create-method
      * @ejb.permission role-name="${role.auto}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
@@ -70,7 +77,7 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
 	/**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.auto}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.helpdesk}"
      */
     public TramitePersistente obtenerTramitePersistente(String id) {
@@ -161,7 +168,7 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.auto}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public void borrarDocumentosTramitePersistente(String id) {
         Session session = getSession();
@@ -169,6 +176,7 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
         	// Cargamos tramitePersistente 
         	TramitePersistente tramitePersistente = obtenerTramitePersistente(id);
         	
+        	// Controlamos acceso a tramite (de forma adicional a obtenerTramitePersistente por si accede con role helpdesk)
         	controlAccesoTramite(tramitePersistente,false,null);
         	
         	// Borramos documentos
@@ -185,7 +193,7 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
 	/**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.auto}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public String grabarTramitePersistente(TramitePersistente obj) {        
     	Session session = getSession();
@@ -204,7 +212,6 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
     			String usuarioFlujoAnterior = (String) query.uniqueResult();
     			
         		controlAccesoTramite(obj,false,usuarioFlujoAnterior);        		
-    		
         		session.update(obj);
         	}
         	                    	
@@ -223,7 +230,7 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
      * o bien ha remitido a otro usuario 
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public List listarTramitePersistentesUsuario() {
         Session session = getSession();
@@ -254,11 +261,61 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
     }         
     
     /**
+     * 
+     * Obtiene lista de tramites persistentes que tiene pendientes por completar la entidad
+     * o bien ha remitido a otro usuario 
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public List listarTramitePersistentesEntidadDelegada(String nifEntidad) {
+        Session session = getSession();
+        try {       	
+        	Principal sp = this.ctx.getCallerPrincipal(); 
+        	PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
+        	if (plgLogin.getMetodoAutenticacion(sp) == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO) throw new HibernateException("Debe estar autenticado");
+        	
+        	// Comprobamos que el usuario es delegado de la entidad
+        	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(nifEntidad);
+        	if (StringUtils.isEmpty(permisos)){
+        		throw new Exception("El usuario no es delegado de la entidad");
+        	}
+        	
+        	// Buscamos usuario asociada a la entidad
+        	PersonaPAD entidad = DelegateUtil.getPadAplicacionDelegate().obtenerDatosPersonaPADporNif(nifEntidad);
+        	if (entidad == null){
+        		throw new Exception("No se encuentra entidad con nif/cif " + nifEntidad);
+        	}
+        	
+        	// Buscamos tramites de la entidad
+            Query query = session
+            .createQuery("FROM TramitePersistente AS m WHERE (m.usuarioFlujoTramitacion = :usuario or m.usuario = :usuario) ORDER BY m.fechaModificacion DESC")
+            .setParameter("usuario",entidad.getUsuarioSeycon());
+            //query.setCacheable(true);
+            List tramites = query.list();
+            
+            // Cargamos documentos
+            for (Iterator it=tramites.iterator();it.hasNext();){
+            	TramitePersistente tramitePersistente = (TramitePersistente) it.next();
+            	Hibernate.initialize(tramitePersistente.getDocumentos());
+            }
+            
+            return tramites;
+            
+        } catch (Exception he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }         
+       
+    
+    /**
      * Obtiene lista de tramites persistentes (de un determinado tramite/version) que tiene pendientes por completar el usuario,
      * o bien ha remitido a otro usuario 
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public List listarTramitePersistentesUsuario(String tramite,int version) {
         Session session = getSession();
@@ -295,7 +352,7 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
      * o bien ha remitido a otro usuario  
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public int numeroTramitesPersistentesUsuario()
     {
@@ -457,7 +514,7 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.auto}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public void borrarTramitePersistente(String id) {
     	
@@ -531,6 +588,153 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
     	}
     }
     
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}" 
+     * @param tramitePersistenteBackup
+     * @return
+     */
+    public void borrarTramitePersistenteBackup( TramitePersistenteBackup tramitePersistenteBackup )
+    {
+    	Session session = getSession();
+    	try
+    	{
+    		RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
+    		if(tramitePersistenteBackup != null && tramitePersistenteBackup.getDocumentosBackup() != null){
+    			for(Iterator it = tramitePersistenteBackup.getDocumentosBackup().iterator(); it.hasNext();){
+    				boolean trobat = true;
+    				DocumentoPersistenteBackup backup = ( DocumentoPersistenteBackup ) it.next();
+    				ReferenciaRDS ref = new ReferenciaRDS();
+    				if(backup.getRdsCodigo() != null){
+    					ref.setCodigo(backup.getRdsCodigo().longValue());
+    					ref.setClave(backup.getRdsClave());
+    					List usos = rds.listarUsos(ref);
+    					for(int i=0;i<usos.size();i++){
+    						rds.eliminarUso((UsoRDS)usos.get(i));
+    					}
+    				}
+    			}
+//    			 Borramos documentos
+            	tramitePersistenteBackup.getDocumentosBackup().removeAll(tramitePersistenteBackup.getDocumentosBackup());        	
+    		}
+    		session.delete(tramitePersistenteBackup);
+    	}
+    	catch( Exception exc )
+    	{
+    		throw new EJBException( exc );
+        } finally {
+            close(session);
+        }
+    	
+    }
+    
+    
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public List listarTramitePersistentesBackup( Date fecha ) {
+        Session session = getSession();
+        try {      
+            Query query = session
+            .createQuery("FROM TramitePersistenteBackup AS m WHERE m.fechaModificacion < :fecha")
+            .setParameter("fecha", fecha );
+            //query.setCacheable(true);
+            List tramites = query.list();
+            
+            // Cargamos documentos
+            for (Iterator it=tramites.iterator();it.hasNext();){
+            	TramitePersistenteBackup tramitePersistenteBackup = (TramitePersistenteBackup) it.next();
+            	Hibernate.initialize(tramitePersistenteBackup.getDocumentosBackup());
+            }
+            
+            return tramites;
+            
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
+    
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public DocumentoPersistente obtenerDocumentoTramitePersistente(Long codigo) {
+        Session session = getSession();
+        try {
+        	// Recuperamos documento
+        	DocumentoPersistente documento = (DocumentoPersistente) session.load(DocumentoPersistente.class, codigo);
+        	// Controlamos acceso tramite            
+            controlAccesoTramite(documento.getTramitePersistente(),false,null);
+            // Devolvemos documento
+            Hibernate.initialize(documento.getTramitePersistente());
+            return documento;
+        } catch (Exception he) {        	
+        	throw new EJBException("No se puede obtener documento con codigo " + codigo,  he);
+        } finally {
+            close(session);
+        }
+    }
+    
+    
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public void actualizarInfoDelegacionDocumentoTramitePersistente(Long codigo, String estadoDelegacion,
+    		String firmantes, String firmantesPendientes) {
+        
+    	// Recuperamos documento (se valida control de acceso al recuperar el documento)
+    	DocumentoPersistente doc = this.obtenerDocumentoTramitePersistente(codigo);
+    	if (doc == null){
+    		throw new EJBException("No existe documento");
+    	}
+    	
+    	// Establecemos info delegacion
+    	doc.setDelegacionEstado(estadoDelegacion);
+    	doc.setDelegacionFirmantes(firmantes);
+    	doc.setDelegacionFirmantesPendientes(firmantesPendientes);
+    	
+    	// Actualizamos documento
+    	Session session = getSession();
+        try {
+        	session.update(doc);
+        } catch (Exception he) {        	
+        	throw new EJBException("No se puede actualizar documento con codigo " + codigo,  he);
+        } finally {
+            close(session);
+        }
+    }
+    
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public void actualizarInfoDelegacionTramitePersistente(String idPersistencia, String estadoDelegacion) {
+        
+    	// Recuperamos tramite (se valida control de acceso al recuperar el tramite)
+    	TramitePersistente tramite = this.obtenerTramitePersistente(idPersistencia);
+    	if (tramite == null){
+    		throw new EJBException("No existe tramite");
+    	}
+    	
+    	// Establecemos info delegacion
+    	tramite.setEstadoDelegacion(estadoDelegacion);
+    	
+    	// Actualizamos tramite
+    	Session session = getSession();
+        try {
+        	session.update(tramite);
+        } catch (Exception he) {        	
+        	throw new EJBException("No se puede actualizar tramite con idPersistencia " + idPersistencia,  he);
+        } finally {
+            close(session);
+        }
+    }
+    
     // ------------------------------------------------------------------------------------------------------
     // 			FUNCIONES AUXILIARES
     // ------------------------------------------------------------------------------------------------------
@@ -562,10 +766,22 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
     	String usuario = sp.getName();
     	if (this.ctx.isCallerInRole(this.roleAuto)) return;
     	if (helpdesk && this.ctx.isCallerInRole(this.roleHelpdesk)) return;
-		if (tramitePersistente.getNivelAutenticacion() != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO && usuario.equals(tramitePersistente.getUsuario())) return;
-		if (tramitePersistente.getNivelAutenticacion() != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO && usuario.equals(tramitePersistente.getUsuarioFlujoTramitacion())) return;
-		if (tramitePersistente.getNivelAutenticacion() != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO && usuarioFlujoAnterior != null && usuario.equals(usuarioFlujoAnterior)) return;
-		if (tramitePersistente.getNivelAutenticacion() == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO && plgLogin.getMetodoAutenticacion(sp) == 'A') return;
+		if (tramitePersistente.getNivelAutenticacion() != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO) {
+			// Usuario es el propietario del tramite
+			if (usuario.equals(tramitePersistente.getUsuario())) return;
+			// Usuario es al que se le va a pasar el flujo de tramitacin
+			if (usuario.equals(tramitePersistente.getUsuarioFlujoTramitacion())) return;
+			//	Usuario es el que tenia antes el flujo de tramitacin
+			if (usuarioFlujoAnterior != null && usuario.equals(usuarioFlujoAnterior)) return;
+			// Usuario es delegado de la entidad
+			PersonaPAD p = DelegateUtil.getConsultaPADDelegate().obtenerDatosPADporUsuarioSeycon(tramitePersistente.getUsuario());
+			String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(p.getNif());
+			if (StringUtils.isNotEmpty(permisos)) return;
+			
+		}else{
+			if (plgLogin.getMetodoAutenticacion(sp) == 'A') return;
+		}
+		
 		throw new HibernateException("Acceso no permitido al tramite " + tramitePersistente.getIdPersistencia() + " - Usuario: " + usuario);
 	}
     

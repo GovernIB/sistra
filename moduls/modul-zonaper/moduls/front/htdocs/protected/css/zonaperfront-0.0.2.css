@@ -199,3 +199,19 @@ div#signatura div.pas p.botonera { text-align:center; }
 div#signatura div.pas p #btnFirmar { overflow:visible; font-size:1.1em; font-weight:bold; text-transform:uppercase; padding:.3em 1em; }
 
 div#notaLegalPie p { font-size:.9em; margin-top:0; line-height:1.5em; }
+
+/* firmat */
+
+th.opcions { white-space:nowrap; }
+
+td ul { list-style:none; }
+
+td span.firmat { font-size:.9em; font-variant:small-caps; margin-left:1em; }
+td span.fSi { color:#060; }
+td span.fNo { color:#c00; }
+
+a.veure { padding-left:1.5em; margin-left:.5em; background:transparent url(../imgs/botonets/veure.gif) no-repeat left center; }
+a.signar { color:#060; padding-left:1.5em; margin-left:.5em; background:transparent url(../imgs/botonets/signar.gif) no-repeat left center; }
+a.rebutjar { color:#c00; padding-left:1.5em; margin-left:.5em; background:transparent url(../imgs/botonets/rebutjar.gif) no-repeat left center; }
+
+

@@ -140,7 +140,7 @@
         </webdoclet>
 
        <replace file="${web.gen.etc}/web.xml">
-          <replacefilter token="@role.user@" value="${role.user}"/>
+          <replacefilter token="@role.todos@" value="${role.todos}"/>
 	      <replacefilter token="@release.cvs.tag@" value="${release.cvs.tag}"/>
        </replace>
 

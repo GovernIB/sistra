@@ -21,6 +21,9 @@
 	<property name="rdsClave" column="DPE_RDSCLA" length="10"/>
 	<property name="nombreFicheroAnexo" column="DPE_NOMFIC" length="255"/>
 	<property name="descripcionGenerico" column="DPE_GENDES" length="255"/>
+	<property name="delegacionEstado" column="DPE_DLGEST" length="2"/>
+	<property name="delegacionFirmantes" column="DPE_DLGFIR"/>
+	<property name="delegacionFirmantesPendientes" column="DPE_DLGFIP"/>
 	
 </class>
 </hibernate-mapping>

@@ -38,7 +38,7 @@ public abstract class DominioFacadeEJB extends HibernateEJB {
 	  
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Dominio obtenerDominio(Long id) {
         Session session = getSession();
@@ -73,7 +73,7 @@ public abstract class DominioFacadeEJB extends HibernateEJB {
         
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long grabarDominio(Dominio obj, Long idOrg) {        
     	Session session = getSession();
@@ -110,7 +110,7 @@ public abstract class DominioFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public List listarDominios() {
         Session session = getSession();
@@ -127,7 +127,7 @@ public abstract class DominioFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */    
     public List listarDominios( Long idOrganoOrigen )
     {
@@ -147,7 +147,7 @@ public abstract class DominioFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarDominio(Long id) {
         Session session = getSession();

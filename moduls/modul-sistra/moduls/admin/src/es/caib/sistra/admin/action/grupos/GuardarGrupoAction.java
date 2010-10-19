@@ -65,8 +65,8 @@ public class GuardarGrupoAction extends BaseAction {
 
 	private Grupos asignarGrupo(GrupoForm grupoForm) {
 		Grupos g = new Grupos();
-		g.setCodigo(grupoForm.getCodigo());
-		g.setNombre(grupoForm.getNombre());
+		g.setCodigo(grupoForm.getCodigo().trim());
+		g.setNombre(grupoForm.getNombre().trim());
 		g.setDescripcion(grupoForm.getDescripcion());
 		return g;
 	}

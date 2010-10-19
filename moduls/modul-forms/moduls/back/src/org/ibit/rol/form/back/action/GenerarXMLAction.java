@@ -11,18 +11,26 @@ import org.apache.commons.betwixt.io.BeanWriter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.ibit.rol.form.back.taglib.Constants;
 import org.ibit.rol.form.back.util.Util;
 import org.ibit.rol.form.model.Campo;
+import org.ibit.rol.form.model.Componente;
 import org.ibit.rol.form.model.Formulario;
 import org.ibit.rol.form.model.Pantalla;
+import org.ibit.rol.form.model.Patron;
 import org.ibit.rol.form.model.Validacion;
 import org.ibit.rol.form.model.betwixt.Configurator;
 import org.ibit.rol.form.persistence.delegate.DelegateUtil;
 import org.ibit.rol.form.persistence.delegate.FormularioDelegate;
 import org.ibit.rol.form.persistence.delegate.GruposDelegate;
+import org.ibit.rol.form.persistence.delegate.PatronDelegate;
+
+import es.caib.util.ConvertUtil;
 
 /**
  * @struts.action
@@ -58,8 +66,14 @@ public class GenerarXMLAction extends BaseAction {
         }
         Formulario formulario = delegate.obtenerFormularioCompleto(idForm);
         formulario.setFechaExportacion(new Date());
-        
-        
+        try{
+        	modificarScriptsB64(formulario);
+        }catch(Exception ex){
+        	ActionErrors errors = new ActionErrors();
+        	errors.add("version", new ActionError("errors.exportacion.saltoLineasScripts"));
+            saveErrors(request, errors);
+        	return mapping.findForward("fail");	
+        }
         // No generamos info de bloqueo
         formulario.setBloqueado(false);
         formulario.setBloqueadoPor(null);
@@ -108,5 +122,49 @@ public class GenerarXMLAction extends BaseAction {
         beanWriter.close();
 
         return null;
+    }
+    
+    private void modificarScriptsB64(Formulario form) throws Exception{
+    	try{
+	    	if(form != null && form.getPantallas() != null && form.getPantallas().size() > 0){
+	    		for(int i=0;i<form.getPantallas().size();i++){
+	    			Pantalla pant = (Pantalla)form.getPantallas().get(i);
+	    			if(pant != null){
+	    				if(pant.getExpresion() != null && !"".equals(pant.getExpresion())){
+	    					pant.setExpresion(Constants.TAG_B64+ConvertUtil.cadenaToBase64UrlSafe(pant.getExpresion()));
+	    				}
+	    				if(pant.getComponentes() != null && pant.getComponentes().size() > 0){
+		    				for(int j=0;j<pant.getComponentes().size();j++){
+		    					Componente comp = (Componente)pant.getComponentes().get(j);
+		    					if(comp != null && comp instanceof Campo){
+		    						Campo camp = (Campo)comp;
+		    						if(camp.getExpresionAutocalculo() != null && !"".equals(camp.getExpresionAutocalculo())){
+		    							camp.setExpresionAutocalculo(Constants.TAG_B64+ConvertUtil.cadenaToBase64UrlSafe(camp.getExpresionAutocalculo()));
+		    						}
+		    						if(camp.getExpresionAutorellenable() != null && !"".equals(camp.getExpresionAutorellenable())){
+		    							camp.setExpresionAutorellenable(Constants.TAG_B64+ConvertUtil.cadenaToBase64UrlSafe(camp.getExpresionAutorellenable()));
+		    						}
+		    						if(camp.getExpresionDependencia() != null && !"".equals(camp.getExpresionDependencia())){
+		    							camp.setExpresionDependencia(Constants.TAG_B64+ConvertUtil.cadenaToBase64UrlSafe(camp.getExpresionDependencia()));
+		    						}
+		    						if(camp.getExpresionPostProceso() != null && !"".equals(camp.getExpresionPostProceso())){
+		    							camp.setExpresionPostProceso(Constants.TAG_B64+ConvertUtil.cadenaToBase64UrlSafe(camp.getExpresionPostProceso()));
+		    						}
+		    						if(camp.getExpresionValidacion() != null && !"".equals(camp.getExpresionValidacion())){
+		    							camp.setExpresionValidacion(Constants.TAG_B64+ConvertUtil.cadenaToBase64UrlSafe(camp.getExpresionValidacion()));
+		    						}
+		    						if(camp.getExpresionValoresPosibles() != null && !"".equals(camp.getExpresionValoresPosibles())){
+		    							camp.setExpresionValoresPosibles(Constants.TAG_B64+ConvertUtil.cadenaToBase64UrlSafe(camp.getExpresionValoresPosibles()));
+		    						}
+		    					}
+		    				}
+		    			}
+	    			}
+	    		}
+	    	}
+    	}catch(Exception e){
+    		log.error("Error en el proceso de exportación: ",e);
+    		throw new Exception("errors.exportacion.saltoLineasScripts");
+    	}
     }
 }

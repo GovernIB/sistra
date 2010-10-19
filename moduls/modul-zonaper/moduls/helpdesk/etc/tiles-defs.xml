@@ -141,6 +141,31 @@
     	path="/resultadoBusquedaUsuario.jsp" />
     	
 
+	<definition
+   		name=".backup"
+   		extends=".mainLayout">	
+   		<put name="main" value=".formularioBusquedaBackup"/>
+	</definition>    
+
+    <definition
+    	name=".formularioBusquedaBackup"
+    	path="/formularioBusquedaBackup.jsp" />
+    	
+    <definition
+    	name=".busquedaTramitesBackup"
+    	extends=".mainLayout">	
+    	<put name="main" value=".resultadoBusquedaBackup"/>
+   	</definition>
+   	
+   	<definition
+    	name=".resultadoBusquedaBackup"
+    	path="/resultadoBusquedaBackup.jsp" />
+
+	<definition
+    	name=".detalleTramitesBackup" extends=".mainLayout">
+   		<put name="main" value="/detalleTramite.jsp"/>
+	</definition>	
+	
 	<definition name=".error" extends=".mensaje"/>
      
 </tiles-definitions>

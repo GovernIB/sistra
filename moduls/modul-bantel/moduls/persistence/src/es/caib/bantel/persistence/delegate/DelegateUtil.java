@@ -37,4 +37,8 @@ public final class DelegateUtil {
         return (ConsultaPADDelegate) DelegateFactory.getDelegate(ConsultaPADDelegate.class);
     }
     
+    public static VersionWSDelegate getVersionWSDelegate() {
+        return (VersionWSDelegate) DelegateFactory.getDelegate(VersionWSDelegate.class);
+    }
+    
 }

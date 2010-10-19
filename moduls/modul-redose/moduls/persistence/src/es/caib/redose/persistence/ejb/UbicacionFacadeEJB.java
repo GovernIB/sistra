@@ -26,9 +26,10 @@ public abstract class UbicacionFacadeEJB extends HibernateEJB {
 
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.redose}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
+     * @ejb.permission role-name="${role.operador}"
      */
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
@@ -37,7 +38,8 @@ public abstract class UbicacionFacadeEJB extends HibernateEJB {
 	  
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Ubicacion obtenerUbicacion(Long id) {
         Session session = getSession();
@@ -54,9 +56,10 @@ public abstract class UbicacionFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Ubicacion obtenerUbicacion(String id){
         Session session = getSession();
@@ -82,7 +85,8 @@ public abstract class UbicacionFacadeEJB extends HibernateEJB {
         
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long grabarUbicacion(Ubicacion obj) {        
     	Session session = getSession();
@@ -99,7 +103,8 @@ public abstract class UbicacionFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public List listarUbicaciones() {
         Session session = getSession();
@@ -117,7 +122,8 @@ public abstract class UbicacionFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarUbicacion(Long id) {
         Session session = getSession();

@@ -45,12 +45,39 @@
 			<arg value="-d" />
 			<arg value="${src.dir}" />
 			<arg value="-wsdlLocation" />
-			<arg value="WEB-INF/wsdl/v1/BackofficeFacade.wsdl" />
-			<arg value="${wsdl.dir}/v1/BackofficeFacade.wsdl" />
+			<arg value="WEB-INF/wsdl/bantel/v1/BackofficeFacade.wsdl" />
+			<arg value="${wsdl.dir}/bantel/v1/BackofficeFacade.wsdl" />
 			<classpath>
 				<path refid="cxf.classpath"/>
 			</classpath>
 		</java>
 	</target>
+	<target name="clienteV2">
+			<java classname="org.apache.cxf.tools.wsdlto.WSDLToJava" fork="true">
 
+				<arg value="-p" />
+				<arg value="urn:es:caib:bantel:ws:v2:model:DatosDocumentoPresencial=es.caib.bantel.ws.v2.model" />
+				<arg value="-p" />
+				<arg value="urn:es:caib:bantel:ws:v2:model:DatosDocumentoTelematico=es.caib.bantel.ws.v2.model" />
+				<arg value="-p" />
+				<arg value="urn:es:caib:bantel:ws:v2:model:DocumentoBTE=es.caib.bantel.ws.v2.model" />
+				<arg value="-p" />
+				<arg value="urn:es:caib:bantel:ws:v2:model:TramiteBTE=es.caib.bantel.ws.v2.model" />
+				<arg value="-p" />
+				<arg value="urn:es:caib:bantel:ws:v2:model:FirmaWS=es.caib.bantel.ws.v2.model" />
+				<arg value="-p" />
+				<arg value="urn:es:caib:bantel:ws:v2:model:ReferenciaEntrada=es.caib.bantel.ws.v2.model" />
+				<arg value="-p" />
+				<arg value="urn:es:caib:bantel:ws:v2:model:BackofficeFacade=es.caib.bantel.ws.v2.model" />
+				
+				<arg value="-d" />
+				<arg value="${src.dir}" />
+				<arg value="-wsdlLocation" />
+				<arg value="WEB-INF/wsdl/bantel/v2/BackofficeFacade.wsdl" />
+				<arg value="${wsdl.dir}/bantel/v2/BackofficeFacade.wsdl" />
+				<classpath>
+					<path refid="cxf.classpath"/>
+				</classpath>
+			</java>
+	</target>
 </project>

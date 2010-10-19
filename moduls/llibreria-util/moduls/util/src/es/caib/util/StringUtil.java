@@ -7,9 +7,14 @@ import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Utilidades con cadenas
@@ -507,4 +512,93 @@ public class StringUtil {
 	        return bytes.toString();
 	    }
 	    	 
+	    /**
+	     * Serializa map en un string 
+	     * @param map
+	     * @param separador
+	     * @return
+	     * @throws Exception
+	     */
+	    public static String serializarMap(Map map) throws Exception{
+	    	
+	    	String separador = "#-@";
+	    	
+			if (map == null) return null;		
+			String str="";		
+			boolean primer = true;
+			String name,value;
+			
+			StringBuffer sb = new StringBuffer(map.size() * 50);
+			
+			for (Iterator it = map.keySet().iterator();it.hasNext();){
+				name = it.next().toString();				
+				if (!primer) {
+					//str = str + separador;
+					sb.append(separador);
+				}else{
+					primer = false;
+				}
+				
+				if (map.get(name) != null) 
+					value = map.get(name).toString();
+				else
+					value ="";	
+				
+				sb.append(str).append(name).append(separador).append(value);
+				//str = str +  name + separador + value;
+			}
+			return sb.toString();
+			//return str;
+		}
+	    
+	    /**
+	     * Deserializa map 
+	     * @param mapStr
+	     * @return
+	     * @throws Exception
+	     */
+	    public static Map deserializarMap(String mapStr) throws Exception{
+	    	String separador = "#-@";
+	    	if (mapStr == null || mapStr.length() <= 0) return null;
+			HashMap map = new HashMap();
+			StringTokenizer st = new StringTokenizer(mapStr,separador);		
+			String key,value;
+			while (st.hasMoreElements()){
+				key = (String) st.nextElement();			
+				if (st.hasMoreElements()) value = (String) st.nextElement();
+					else value=null;
+				map.put(key,value);
+			}
+			return map;
+		}
+	    
+	    /**
+	     * Formatea nombre y apellidos según formato indicado:
+	     * 	AN: Apellidos, Nombre
+	     *  NA: Nombre Apellido1 Apellido2
+	     *  
+	     * @param formato
+	     * @param nombre
+	     * @param apellido1
+	     * @param apellido2
+	     * @return
+	     * @throws Exception
+	     */
+	    public static String formatearNombreApellidos(String formato, String nombre, String apellido1, String apellido2) throws Exception{
+	    	if ("AN".equals(formato)){
+	    		String ape = ((StringUtils.isNotEmpty(apellido1))?apellido1:"") + 
+	    					 ((StringUtils.isNotEmpty(apellido2))?" " + apellido2:"");
+	    		if (ape.length() > 0){
+	    			ape += ", ";
+	    		}
+	    		return ape + (StringUtils.isNotEmpty(nombre)?nombre:"") ;	    		
+	    	}else if ("NA".equals(formato)){
+	    		return (StringUtils.isNotEmpty(nombre)?nombre:"") +
+			    		 ((StringUtils.isNotEmpty(apellido1))?" " + apellido1:"") + 
+						 ((StringUtils.isNotEmpty(apellido2))?" " + apellido2:"");
+	    	}else{
+	    		throw new Exception("Formato " + formato + " no soportado");
+	    	}
+	    }
+	    
 }

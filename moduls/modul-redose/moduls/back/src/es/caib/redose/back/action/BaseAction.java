@@ -12,6 +12,7 @@ import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.RequestUtils;
 
+import es.caib.redose.back.form.ErroresGestorDocumentalForm;
 import es.caib.redose.back.form.FormateadoresForm;
 import es.caib.redose.back.form.HistoricoForm;
 import es.caib.redose.back.form.ModeloForm;
@@ -21,6 +22,7 @@ import es.caib.redose.back.form.VersionForm;
 import es.caib.redose.back.taglib.Constants;
 import es.caib.redose.model.ArchivoPlantilla;
 import es.caib.redose.model.Formateador;
+import es.caib.redose.model.LogGestorDocumentalError;
 import es.caib.redose.model.LogOperacion;
 import es.caib.redose.model.Modelo;
 import es.caib.redose.model.Plantilla;
@@ -29,6 +31,7 @@ import es.caib.redose.model.Version;
 import es.caib.redose.persistence.delegate.DelegateException;
 import es.caib.redose.persistence.delegate.DelegateUtil;
 import es.caib.redose.persistence.delegate.FormateadorDelegate;
+import es.caib.redose.persistence.delegate.LogGestorDocumentalErroresDelegate;
 import es.caib.redose.persistence.delegate.LogOperacionDelegate;
 import es.caib.redose.persistence.delegate.ModeloDelegate;
 import es.caib.redose.persistence.delegate.PlantillaDelegate;
@@ -199,6 +202,22 @@ public abstract class BaseAction extends Action {
 		request.setAttribute("idHistorico", idLogOperacion);
 		
 		return operacion;
+	}
+
+    
+    protected LogGestorDocumentalError guardarErrorGestorDocumental(ActionMapping mapping, HttpServletRequest request, Long idLogError)
+    throws DelegateException 
+    {
+		ErroresGestorDocumentalForm pForm = (ErroresGestorDocumentalForm) obtenerActionForm(mapping, request, "/back/erroresGestorDocumental/editar");
+		
+		LogGestorDocumentalErroresDelegate delegate = DelegateUtil.getLogErrorGestorDocumentalDelegate();
+        LogGestorDocumentalError logError = delegate.obtenerLogGestorDocumentalError(idLogError);
+		
+		pForm.setValues(logError);
+		
+		request.setAttribute("idErrorGestor", idLogError);
+		
+		return logError;
 	}
 
 }

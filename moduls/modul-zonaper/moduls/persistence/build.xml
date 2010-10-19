@@ -54,7 +54,7 @@
     		<include name="sistra-xml.jar"/>
         </fileset>    	
         <fileset dir="${ejb.product}">
-            <include name="zonaper-model.jar"/>
+            <include name="3-zonaper-model.jar"/>
         </fileset>    	
     </path>
 
@@ -74,8 +74,8 @@
         <tstamp>
             <format property="TODAY" pattern="dd-MM-yy"/>
         </tstamp>
-        <fail unless="role.pad" message="La propiedad role.pad no está definida en config.properties"/>
-    	<fail unless="role.user" message="La propiedad role.user no está definida en config.properties"/>
+        <fail unless="role.admin" message="La propiedad role.admin no está definida en config.properties"/>
+    	<fail unless="role.todos" message="La propiedad role.todos no está definida en config.properties"/>
         <fail unless="persistence.auth.domain" message="La propiedad persistence.auth.domain no está definida en config.properties"/>
         <fail unless="persistence.auth.principal" message="La propiedad persistence.auth.principal no está definida en config.properties"/>
     </target>
@@ -122,7 +122,7 @@
             </utilobject>
 
             <deploymentdescriptor
-                clientjar="zonaper-${modul}-client.jar"
+                clientjar="3-zonaper-${modul}-client.jar"
                 xmlencoding="UTF-8"
                 destdir="${ejb.gen.etc}"
                 validatexml="true"
@@ -148,10 +148,10 @@
         	
         </ejbdoclet>
 
-        <copy file="${ejb.etc}/hibernate.cfg.xml" todir="${ejb.gen.etc}" overwrite="true"/>
-    	<copy file="${ejb.etc}/hibernate.properties" todir="${ejb.gen.etc}" overwrite="true"/>
+        <copy file="${ejb.etc}/zonaper-hibernate.cfg.xml" todir="${ejb.gen.etc}" overwrite="true"/>
+    	<copy file="${ejb.etc}/zonaper-hibernate.properties" todir="${ejb.gen.etc}" overwrite="true"/>
 
-        <replace file="${ejb.gen.etc}/hibernate.cfg.xml">
+        <replace file="${ejb.gen.etc}/zonaper-hibernate.cfg.xml">
             <replacefilter token="@datasource.jndi@" value="${datasource.jndi}"/>
             <replacefilter token="@hibernate.dialect@" value="${hibernate.dialect}"/>
         	<replacefilter token="@hibernate.show_sql@" value="${hibernate.show_sql}"/>
@@ -187,25 +187,25 @@
     </target>
 
     <target name="ejb.jar" depends="ejb.compile">
-        <delete file="${ejb.product}/zonaper-${modul}.jar" quiet="yes"/>
+        <delete file="${ejb.product}/3-zonaper-${modul}.jar" quiet="yes"/>
         <jar
-            jarfile="${ejb.product}/zonaper-${modul}.jar"
+            jarfile="${ejb.product}/3-zonaper-${modul}.jar"
             basedir="${ejb.classes}">
             <manifest>
                 <attribute name="Created-By" value="${indra}"/>
             </manifest>
-            <metainf dir="${ejb.gen.etc}" includes="*.xml" excludes="hibernate.cfg.xml,web-service.xml"/>
-            <fileset dir="${ejb.gen.etc}" includes="hibernate.cfg.xml"/>
-        	<fileset dir="${ejb.gen.etc}" includes="hibernate.properties"/>
+            <metainf dir="${ejb.gen.etc}" includes="*.xml" excludes="zonaper-hibernate.cfg.xml,web-service.xml"/>
+            <fileset dir="${ejb.gen.etc}" includes="zonaper-hibernate.cfg.xml"/>
+        	<fileset dir="${ejb.gen.etc}" includes="zonaper-hibernate.properties"/>
             <fileset dir="${ejb.etc}" includes="ehcache.xml"/>
         	<fileset dir="${ejb.resources}" includes="*.properties"/>
         </jar>
     </target>
 
     <target name="ejb.client" depends="ejb.compile">
-        <delete file="${ejb.product}/zonaper-${modul}-client.jar" quiet="yes"/>
+        <delete file="${ejb.product}/3-zonaper-${modul}-client.jar" quiet="yes"/>
         <jar
-            jarfile="${ejb.product}/zonaper-${modul}-client.jar"
+            jarfile="${ejb.product}/3-zonaper-${modul}-client.jar"
             basedir="${ejb.classes}">
             <manifest>
                 <attribute name="Created-By" value="${indra}"/>

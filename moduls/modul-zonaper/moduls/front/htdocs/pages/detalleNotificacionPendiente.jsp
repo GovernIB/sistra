@@ -4,6 +4,7 @@
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 <%@ page import="es.caib.util.StringUtil"%>
+<%@ page import="es.caib.zonaper.modelInterfaz.ConstantesZPE"%>
 
 <bean:define id="codigoNotificacion" name="notificacion" property="codigo"/>
 <bean:define id="nifRepresentante" name="notificacion" property="nifRepresentante" type="java.lang.String"/>
@@ -18,6 +19,7 @@
  	mensajeHtml = StringUtil.replace(mensajeHtml,"\n","<br/>");
 %>
 
+<logic:equal name="puedeAbrir" value="S">
 <script type="text/javascript">
 	<!-- 
 	<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
@@ -48,7 +50,7 @@
 				 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
 				 
 			function prepararEntornoFirma(){			
-				cargarAppletFirma();
+				cargarAppletFirma(sistra_ClienteaFirma_buildVersion);
 			}
 				 
 			function firmarAFirma(){
@@ -63,9 +65,10 @@
 				var asientoB64 = b64UrlSafeToB64(formulario.asiento.value);
 			
 				clienteFirma.initialize();
-				clienteFirma.setSignatureAlgorithm("sha1WithRsaEncryption");
-				clienteFirma.setSignatureMode("EXPLICIT");
-				clienteFirma.setSignatureFormat("CMS");
+				clienteFirma.setShowErrors(false);
+				clienteFirma.setSignatureAlgorithm(sistra_ClienteaFirma_SignatureAlgorithm);
+				clienteFirma.setSignatureMode(sistra_ClienteaFirma_SignatureMode);
+				clienteFirma.setSignatureFormat(sistra_ClienteaFirma_SignatureFormat);
 				clienteFirma.setData(asientoB64);
 				
 				clienteFirma.sign();
@@ -76,10 +79,12 @@
 					return false;
 				}else{	
 				     firma = clienteFirma.getSignatureBase64Encoded();
+				    firma = b64ToB64UrlSafe(firma);
 				     formulario.firma.value = firma;
 				     return true;
 				}
 			}
+			prepararEntornoFirma();
 	</logic:equal>	
 
 
@@ -104,6 +109,7 @@
 	}
 	 -->	
 </script>
+</logic:equal>
 
 <h1><bean:message key="detalleNotificacion.avisoNotificacion" /></h1>
 
@@ -134,16 +140,24 @@
 
 <!-- firma -->
 <logic:equal name="notificacion" property="firmarAcuse" value="true">
-	
 	<h2><bean:message key="detalleNotificacion.acuse.titulo"/></h2>
 	
 	<p><bean:message key="detalleNotificacion.notaLegal"/></p>
+	
+	
+	<logic:equal name="puedeAbrir" value="S">
 	
 	<logic:present name="messageKey">
 		<p class="alerta"><bean:message name="messageKey" arg0="<%= nifRepresentante %>"/></p>
 	</logic:present>
 	
+	
+	<logic:equal name="es.caib.zonaper.front.DATOS_SESION" property="perfilAcceso" scope="session" value="<%=ConstantesZPE.DELEGACION_PERFIL_ACCESO_CIUDADANO%>">		
 	<p><bean:message key="detalleNotificacion.acuse.texto" arg0="<%= nifRepresentante %>"/></p>
+	</logic:equal>
+	<logic:equal name="es.caib.zonaper.front.DATOS_SESION" property="perfilAcceso" scope="session" value="<%=ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO%>">		
+		<p><bean:message key="detalleNotificacion.acuse.accesoDelegado.texto" arg0="<%= nifRepresentante %>"/></p>
+	</logic:equal>	
 		
 	
 	<!--  Form para envio de datos -->
@@ -189,14 +203,21 @@
 			</p>
 		</div>
 	</div>
+	</logic:equal>
 		
+	<logic:equal name="puedeAbrir" value="N">	
+		<p class="alerta"><bean:message key="detalleNotificacion.acuse.accesoDelegado.texto"/></p>
+	</logic:equal>	
 	
 </logic:equal>
+
 <!-- /firma -->
 
 <!--  envio sin acuse -->
 <logic:equal name="notificacion" property="firmarAcuse" value="false">
 	<div id="signaturaAFirma">
+	
+		<logic:equal name="puedeAbrir" value="S">		
 		<html:form action="/protected/abrirNotificacion" styleId="formularioEnvio">
 			<html:hidden property="codigo" value="<%= String.valueOf( codigoNotificacion ) %>" />
 			<html:hidden property="asiento" value="<%= xmlAsientoAcuseRecibo %>"/>
@@ -212,6 +233,12 @@
 				</p>
 			</div>
 		</html:form>
+		</logic:equal>
+		
+		<logic:equal name="puedeAbrir" value="N">	
+			<p class="alerta"><bean:message key="detalleNotificacion.acuse.accesoDelegado.texto"/></p>
+		</logic:equal>	
+		
 	</div>
 </logic:equal>
 

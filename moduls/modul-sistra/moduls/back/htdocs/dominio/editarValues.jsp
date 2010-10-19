@@ -32,7 +32,7 @@
 </tr>
 <tr>
     <td class="labelo"><bean:message key="dominio.identificador"/></td>
-    <td class="input"><html:text styleClass="data" tabindex="1" property="values.identificador" maxlength="10" /></td>
+    <td class="input"><html:text styleClass="data" tabindex="1" property="values.identificador" maxlength="20" /></td>
 </tr>
 <tr>
 	<td class="separador" colspan="2"><bean:message key="dominio.parametrosDominio"/></td>
@@ -60,6 +60,14 @@
 <tr>
     <td class="label"><bean:message key="dominio.url"/></td>
     <td class="input"><html:text styleClass="textLargo" tabindex="10" property="values.url" maxlength="200"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="dominio.versionWS"/></td>
+    <td class="input">
+    	<html:select property="values.versionWS">
+   			<html:options collection="listaVersionesWS" property="CODIGO" labelProperty="DESCRIPCION" />
+    	</html:select>
+    </td>
 </tr>
 <tr>
     <td class="label"><bean:message key="dominio.sql"/></td>

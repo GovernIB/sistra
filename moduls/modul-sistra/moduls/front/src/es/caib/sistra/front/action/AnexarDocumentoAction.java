@@ -7,9 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.upload.FormFile;
 
-import es.caib.sistra.front.Constants;
 import es.caib.sistra.front.form.AnexarDocumentoForm;
 import es.caib.sistra.front.util.InstanciaManager;
 import es.caib.sistra.persistence.delegate.InstanciaDelegate;
@@ -56,7 +54,7 @@ public class AnexarDocumentoAction extends BaseAction
 			}
 					
 			// Anexamos documento
-				this.setRespuestaFront( request, delegate.anexarDocumento( formulario.getIdentificador(), formulario.getInstancia(), file, fileName, fileExtension, formulario.getDescPersonalizada(), firma ) );
+				this.setRespuestaFront( request, delegate.anexarDocumento( formulario.getIdentificador(), formulario.getInstancia(), file, fileName, fileExtension, formulario.getDescPersonalizada(), firma, "S".equals(formulario.getFirmaDelegada()) ) );
 				request.removeAttribute(formulario.getID_INSTANCIA());
 				request.removeAttribute(formulario.getID_INSTANCIA()+"Nombre");
 				request.removeAttribute(formulario.getID_INSTANCIA()+"Extension");
@@ -64,7 +62,7 @@ public class AnexarDocumentoAction extends BaseAction
 			
 		}else{
 			// PARA DOCUMENTOS PRESENCIALES NO HACE FALTA FICHERO
-			this.setRespuestaFront( request, delegate.anexarDocumento( formulario.getIdentificador(), formulario.getInstancia(), null, null,null,formulario.getDescPersonalizada(),null) );
+				this.setRespuestaFront( request, delegate.anexarDocumento( formulario.getIdentificador(), formulario.getInstancia(), null, null,null,formulario.getDescPersonalizada(),null,false) );
 				request.removeAttribute(formulario.getID_INSTANCIA());
 				request.removeAttribute(formulario.getID_INSTANCIA()+"Nombre");
 				request.removeAttribute(formulario.getID_INSTANCIA()+"Extension");

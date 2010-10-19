@@ -39,6 +39,7 @@
 				un.focus();
 				return false;
 			}
+			if(!caracter(un.value,"es_numero")){
 			if(!validaNIF(un.value))
 			{
 				if(!validaCIF(un.value))
@@ -51,7 +52,7 @@
 					}
 				}
 			}
-
+			}
 			
 			// Limpiamos espacios en blanco
 			TrimField('horaInicial');

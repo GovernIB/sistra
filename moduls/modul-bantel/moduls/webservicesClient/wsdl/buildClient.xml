@@ -47,4 +47,27 @@
 		</java>
 	</target>
 
+	<target name="clienteV2">
+			<java classname="org.apache.cxf.tools.wsdlto.WSDLToJava" fork="true">
+
+				<arg value="-p"/>
+				<arg value="urn:es:caib:bantel:ws:v2:services=es.caib.bantel.wsClient.v2.services" />
+				<arg value="-p" />
+				<arg value="urn:es:caib:bantel:ws:v2:model:BantelFacade=es.caib.bantel.wsClient.v2.model" />
+				<arg value="-p" />
+				<arg value="urn:es:caib:bantel:ws:v2:model:ReferenciaEntrada=es.caib.bantel.wsClient.v2.model" />
+				<arg value="-d" />
+				<arg value="${src.dir}" />
+				<arg value="-client" />
+				<arg value="-b" />
+				<arg value="${wsdl.dir}/async_binding.xml" />
+				<arg value="-wsdlLocation" />
+				<arg value="WEB-INF/wsdl/v2/BantelFacade.wsdl" />
+				<arg value="${wsdl.dir}/v2/BantelFacade.wsdl" />
+				<classpath>
+					<path refid="cxf.classpath"/>
+				</classpath>
+			</java>
+		</target>
+
 </project>

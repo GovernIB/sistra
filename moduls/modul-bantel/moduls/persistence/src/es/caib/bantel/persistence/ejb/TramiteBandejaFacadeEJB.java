@@ -71,8 +71,8 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 	
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.bantel}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
      */
@@ -83,8 +83,8 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 	  
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.gestor}"
      */
     public TramiteBandeja obtenerTramiteBandeja(Long id) {
@@ -104,8 +104,8 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
      */
@@ -186,8 +186,8 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     
  	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.gestor}"
      */
     public Long grabarTramiteBandeja(TramiteBandeja obj) {        
@@ -210,7 +210,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void borrarTramiteBandeja(Long id) {
         Session session = getSession();
@@ -226,7 +226,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     
     /*
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      
     public List listarTramitesOrganoDestino(Long id) {
         Session session = getSession();
@@ -249,7 +249,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void borrarDocumentosTramite(Long id) {
         Session session = getSession();
@@ -266,7 +266,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.gestor}"
      */
     public Page busquedaPaginadaTramites( CriteriosBusquedaTramite criteriosBusqueda, int pagina, int longitudPagina )
@@ -322,7 +322,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.gestor}"
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.auto}"
      */
     public String[] obtenerNumerosEntradas(String identificadorTramite,String procesada,Date desde,Date hasta)
@@ -452,6 +452,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 					t.setFechaProcesamiento(new Date());
 				}else{
 					t.setFechaProcesamiento(null);
+					t.setResultadoProcesamiento(null);
 				}
 				session.update(t);
 			}
@@ -472,7 +473,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
      * @return Numero de entrada
      *
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public String generarNumeroEntrada(){
     	 Session session = getSession();
@@ -505,7 +506,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.gestor}"
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.auto}"
      */
     public long obtenerTotalEntradas(String identificadorTramite,String procesada,Date desde,Date hasta) throws ExcepcionBTE{
@@ -544,7 +545,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.gestor}"
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.auto}"
      */
     public String[] exportarCSV(String numEntrada,PropertiesOrdered configuracionExportacion) throws ExcepcionBTE{
@@ -855,7 +856,11 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 			 // Tramites a los que esta asociado el gestor			  			
 			 criteria.add( Expression.in( "tramite",gestor.getTramitesGestionados()) );	 
 		 }
-		 
+		 //	 Especificamos número de entrada
+		 if ( !StringUtils.isEmpty(criteriosBusqueda.getNumeroEntrada()) )
+		 {
+			 criteria.add( Expression.eq( "numeroEntrada", criteriosBusqueda.getNumeroEntrada()));
+		 }
 		 // Especificamos nivel autenticacion
 		 if ( criteriosBusqueda.getNivelAutenticacion() != CriteriosBusquedaTramite.TODOS )
 		 {
@@ -906,7 +911,6 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 		 return criteria;
     }    
     
-   
     private List obtenerReferenciasEntradaImpl(String identificadorTramite,String procesada,Date desde,Date hasta){
 						 
 		Session session = getSession();
@@ -972,5 +976,4 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 	        close(session);
 	    }
     }
-    
 }

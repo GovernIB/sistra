@@ -34,15 +34,6 @@
 		obrir('/zonaperback/calcularDC.do?numeroPreregistro='+document.forms[0].numeroPreregistro.value, 'calcularDC', 540, 200);
 	}
 	
-	// Comprobamos si debemos imprimir el sello
-	<%	
-		if (request.getParameter("codigoSello") != null && request.getParameter("codigoSello").length() > 0){			
-	%>
-			document.location.href ='imprimirSello.do?codigo=<%=request.getParameter("codigoSello")%>';
-	<%
-		}
-	%>
-	
 			
 //-->
 </script>

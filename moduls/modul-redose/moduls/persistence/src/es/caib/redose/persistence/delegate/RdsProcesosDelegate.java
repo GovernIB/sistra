@@ -33,6 +33,23 @@ public class RdsProcesosDelegate implements StatelessDelegate {
 	        throw new DelegateException(e);
 	    }
 	}
+	
+	public void consolidacionGestorDocumental() throws DelegateException{
+		 try {
+	       getFacade().consolidacionGestorDocumental();
+	    } catch (Exception e) {
+	        throw new DelegateException(e);
+	    }
+	}
+	
+	public void borradoDocumentosDefinitivamente() throws DelegateException{
+		 try {
+		       getFacade().borradoDocumentosDefinitivamente();
+		    } catch (Exception e) {
+		        throw new DelegateException(e);
+		    }
+		}
+	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

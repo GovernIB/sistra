@@ -1,6 +1,7 @@
 package es.caib.zonaper.persistence.delegate;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
@@ -87,7 +88,6 @@ public class PadAplicacionDelegate implements StatelessDelegate {
         }
 	}
 	
-	
     public PersonaPAD obtenerHelpdeskDatosPersonaPorUsuario( String codUsu) throws DelegateException{
 		try
 		{
@@ -121,6 +121,16 @@ public class PadAplicacionDelegate implements StatelessDelegate {
         }
 	}
 	
+	public List buscarEntidades( String nifEntidad) throws DelegateException{
+		try
+		{
+			return getFacade().buscarEntidades( nifEntidad );
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
 	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

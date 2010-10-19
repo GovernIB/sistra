@@ -75,7 +75,7 @@ public class FinalitzarTelematicAction extends BaseAction {
 
             } else if (request.getParameter("DISCARD") != null) {
 
-                log.info("Cancel·lant formulari");
+                log.debug("Cancel·lant formulari");
 
                 try {
                     String redirectUrl = tDelegate.cancelarFormulario();

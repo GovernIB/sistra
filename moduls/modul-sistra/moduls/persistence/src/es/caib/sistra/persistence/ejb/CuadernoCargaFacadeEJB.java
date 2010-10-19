@@ -18,8 +18,7 @@ import es.caib.sistra.model.admin.CuadernoCarga;
  *  type="Stateless"
  *  view-type="remote"
  *  
- *  @ejb.env-entry name="role.sistra" type="java.lang.String" value="${role.sistra}"
- *  @ejb.env-entry name="role.auditor" type="java.lang.String" value="${role.auditor}"
+ *  @ejb.env-entry name="role.audit" type="java.lang.String" value="${role.audit}"
  *  
  * @author clmora
  *
@@ -27,7 +26,6 @@ import es.caib.sistra.model.admin.CuadernoCarga;
 public abstract class CuadernoCargaFacadeEJB extends HibernateEJB
 {
 	
-	private String roleSistra;
 	private String roleAuditor;
 	
 	/**
@@ -40,8 +38,7 @@ public abstract class CuadernoCargaFacadeEJB extends HibernateEJB
 		try
 		{
 			javax.naming.InitialContext initialContext = new javax.naming.InitialContext();
-			roleSistra = ( String ) initialContext.lookup( "java:comp/env/role.sistra" );
-			roleAuditor =( String ) initialContext.lookup( "java:comp/env/role.auditor" );
+			roleAuditor =( String ) initialContext.lookup( "java:comp/env/role.audit" );
 		}
 		catch( Exception exc )
 		{
@@ -53,8 +50,8 @@ public abstract class CuadernoCargaFacadeEJB extends HibernateEJB
 	
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
-     * @ejb.permission role-name="${role.auditor}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.audit}"
      */
 	public Long grabarCuadernoCarga( CuadernoCarga obj )
 	{
@@ -72,8 +69,8 @@ public abstract class CuadernoCargaFacadeEJB extends HibernateEJB
 	
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
-     * @ejb.permission role-name="${role.auditor}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.audit}"
      */
 	public CuadernoCarga obtenerCuadernoCarga( Long id )
 	{
@@ -93,7 +90,7 @@ public abstract class CuadernoCargaFacadeEJB extends HibernateEJB
 	
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.admin}"
      */
 	public void borrarCuadernoCarga( Long id )
 	{
@@ -113,8 +110,8 @@ public abstract class CuadernoCargaFacadeEJB extends HibernateEJB
 	
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
-     * @ejb.permission role-name="${role.auditor}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.audit}"
      */
 	public List listarCuadernosCarga()
 	{
@@ -136,7 +133,7 @@ public abstract class CuadernoCargaFacadeEJB extends HibernateEJB
 	 * pendientes de envio o pendientes de auditar, o en su caso aquellos que no han sido importados y
 	 * ( están auditados o no requieren auditoría )  
 	 * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.admin}"
 	 * @return
 	 */
 	public List listarCuadernosPendientesDesarrollador()
@@ -157,7 +154,7 @@ public abstract class CuadernoCargaFacadeEJB extends HibernateEJB
 	/**
 	 * Método que devuelve todos los cuadernos pendientes de auditar para un usuario auditor
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.auditor}"
+     * @ejb.permission role-name="${role.audit}"
      */
 	public List listarCuadernosPendientesAuditoria()
 	{
@@ -178,8 +175,8 @@ public abstract class CuadernoCargaFacadeEJB extends HibernateEJB
 	/**
 	 * Método que obtiene cuadernos pendientes en función de que el usuario tenga rol de auditor o sólamente de desarrollador
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
-     * @ejb.permission role-name="${role.auditor}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.audit}"
      */
 	public List listarCuadernosPendientes()
 	{
@@ -208,7 +205,7 @@ public abstract class CuadernoCargaFacadeEJB extends HibernateEJB
 	 * Método que obtiene para un usuario desarrollador los cuadernos finalizados, es decir,
 	 * rechazados, o auditados e importados, o que no requieren auditoria e importados 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.admin}"
      */
 	public List listarCuadernosFinalizados()
 	{
@@ -228,7 +225,7 @@ public abstract class CuadernoCargaFacadeEJB extends HibernateEJB
 	/**
 	 * Método que devuelve los cuadernos auditados o rechazados para un usuario con rol auditor
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.auditor}"
+     * @ejb.permission role-name="${role.audit}"
      */
 	public List listarCuadernosAuditados()
 	{
@@ -248,8 +245,8 @@ public abstract class CuadernoCargaFacadeEJB extends HibernateEJB
 	/**
 	 * Método que en función del rol del usuario llamante depende los cuadernos que han finalizado su gestión
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
-     * @ejb.permission role-name="${role.auditor}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.audit}"
      */
 	public List listarCuadernosGestionados()
 	{
@@ -281,9 +278,4 @@ public abstract class CuadernoCargaFacadeEJB extends HibernateEJB
     	return this.ctx.isCallerInRole( roleAuditor );
     }
     
-    private boolean isUserAdmin()
-    {
-    	return this.ctx.isCallerInRole( roleSistra ) && !this.ctx.isCallerInRole( roleAuditor );
-    }
-
 }

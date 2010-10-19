@@ -27,6 +27,9 @@
         <property name="hashFichero" type="string" column="DOC_HASH" length="500" not-null="true" />
         
         <property name="borrado" type="string" column="DOC_DELETE" length="1" />
+        <property name="idioma" type="string" column="DOC_IDIOMA" length="2" />
+        <property name="referenciaGestorDocumental" type="string" column="DOC_REFGD"/>
+        
 
 		<many-to-one name="plantilla" class="es.caib.redose.model.Plantilla" column="DOC_CODPLA" />
 

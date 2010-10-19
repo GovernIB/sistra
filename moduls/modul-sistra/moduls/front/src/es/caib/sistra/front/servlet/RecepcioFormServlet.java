@@ -13,6 +13,8 @@ import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import es.caib.sistra.front.Constants;
 import es.caib.sistra.front.formulario.GestorFlujoFormulario;
@@ -24,14 +26,16 @@ import es.caib.sistra.front.util.FlujoFormularioRequestHelper;
  */
 public class RecepcioFormServlet extends HttpServlet 
 {
+	private static Log logger = LogFactory.getLog(RecepcioFormServlet.class);
+	
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        log("Recepció formulari");        
-        log("Charset: " + request.getCharacterEncoding());
+    	logger.debug("Recepció formulari");        
+    	logger.debug("Charset: " + request.getCharacterEncoding());
         
         String tokenGestionFormulario = "";
         String xmlInicial = "";
@@ -74,8 +78,8 @@ public class RecepcioFormServlet extends HttpServlet
             tokenGestionFormulario = request.getParameter( Constants.GESTOR_FORM_PARAM_ALMACENAMIENTO_GESTOR_FORMULARIO );
         }
 
-        log("XML Inicial: " + xmlInicial);
-        log("XML Final: " + xmlFinal);
+        logger.debug("XML Inicial: " + xmlInicial);
+        logger.debug("XML Final: " + xmlFinal);
         
     	String token = null;
     	try

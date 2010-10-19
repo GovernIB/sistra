@@ -57,7 +57,7 @@ public abstract class PaletaFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.admin},${role.form}"
+     * @ejb.permission role-name="${role.admin},${role.operador}"
      */
     public List/*Paleta*/ listarPaletas() {
         Session session = getSession();
@@ -74,7 +74,7 @@ public abstract class PaletaFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.admin},${role.form}"
+     * @ejb.permission role-name="${role.admin},${role.operador}"
      */
     public Paleta obtenerPaleta(Long id) {
         Session session = getSession();

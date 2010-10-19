@@ -39,6 +39,14 @@ public class FirmaUtil {
 	public final static String CAIB_PARAMETER_PIN = "pin";
 	public final static String CAIB_PARAMETER_CONTENT_TYPE = "contentType";
 	
+	
+	/*
+	 * PARAMETROS PLUGIN AFirma
+	 * 
+	 */
+	public final static String AFIRMA_PARAMETER_ARCHIVO = "archivo";
+	
+	
 	/**
 	 * Prepara una cadena para ser firmada. La convierte a bytes con el charset UTF8
 	 * @param cadena

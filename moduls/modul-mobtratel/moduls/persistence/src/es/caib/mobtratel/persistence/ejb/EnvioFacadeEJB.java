@@ -46,7 +46,7 @@ public abstract class EnvioFacadeEJB extends HibernateEJB {
 	
     /**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.gestor},${role.mobtratel},${role.auto}"
+     * @ejb.permission role-name="${role.gestor},${role.admin},${role.auto}"
      */
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
@@ -99,7 +99,7 @@ public abstract class EnvioFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.gestor},${role.mobtratel},${role.auto}"
+     * @ejb.permission role-name="${role.gestor},${role.admin},${role.auto}"
      */
     public Envio obtenerEnvio(Long codigo) {
         Session session = getSession();
@@ -116,7 +116,7 @@ public abstract class EnvioFacadeEJB extends HibernateEJB {
 
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.gestor},${role.mobtratel},${role.auto}"
+     * @ejb.permission role-name="${role.gestor},${role.admin},${role.auto}"
      */
     public Long grabarEnvio(Envio obj) {        
     	Session session = getSession();
@@ -137,7 +137,7 @@ public abstract class EnvioFacadeEJB extends HibernateEJB {
      * Cancelar envio desde el front. Comprueba que el envio no este bloqueado por proceso de envio.
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.gestor},${role.mobtratel}"
+     * @ejb.permission role-name="${role.gestor},${role.admin}"
      */
     public boolean cancelarEnvio(Long idEnvio) {        
     	Session session = getSession();
@@ -172,7 +172,7 @@ public abstract class EnvioFacadeEJB extends HibernateEJB {
 	 * Comprueba si un envio se esta enviando
 	 * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.gestor},${role.mobtratel}"
+     * @ejb.permission role-name="${role.gestor},${role.admin}"
      */
 	public boolean isEnviando(Long idEnvio){
 		return CacheProcesamiento.existe(idEnvio.toString());
@@ -180,7 +180,7 @@ public abstract class EnvioFacadeEJB extends HibernateEJB {
 	
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.gestor},${role.mobtratel}"
+     * @ejb.permission role-name="${role.gestor},${role.admin}"
      */
     public Page busquedaPaginadaEnvios( CriteriosBusquedaEnvio criteriosBusqueda, int pagina, int longitudPagina )
     {

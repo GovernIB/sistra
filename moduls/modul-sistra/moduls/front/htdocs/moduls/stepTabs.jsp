@@ -11,9 +11,19 @@
 		<bean:define id="urlIrAPaso">
 		        <html:rewrite page="/protected/irAPaso.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 		</bean:define>
+		
 		<bean:define id="urlRemitirFlujo">
 		        <html:rewrite page="/protected/remitirFlujo.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 		</bean:define>
+		
+		<bean:define id="urlRemitirDelegacionPresentacion">
+		        <html:rewrite page="/protected/remitirDelegacionPresentacion.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
+		</bean:define>
+		
+		<bean:define id="urlRemitirDelegacionFirma">
+		        <html:rewrite page="/protected/remitirDelegacionFirma.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
+		</bean:define>
+		
 		<bean:define id="estadoTramite" name="tramite" type="es.caib.sistra.model.TramiteFront"/>
 		<bean:define id="pasoActual" name="tramite" property="pasoActual" type="java.lang.Integer"/>
 		<bean:define id="indicePasoNoRetorno" name="tramite" property="pasoNoRetorno" type="java.lang.Integer"/>
@@ -106,6 +116,50 @@
 						<bean:message key="flujoTramitacion.noExisteUsuario" arg0="<%=estadoTramite.getFlujoTramitacionNif()%>"/>
 					</p>
 				</logic:empty>				
+			</div>
+		</logic:present>
+		
+		<logic:present name="pendienteDelegacionPresentacion">
+					
+			<script type="text/javascript">
+				function remitir(){
+					document.location='<%= urlRemitirDelegacionPresentacion %>';
+					return;
+				}
+			</script>
+				
+			<div class="alerta">				
+				<p>
+					<bean:message key="delegacion.noPermisoPresentarTramite"/>
+				</p>
+				<br/>
+				<div align="center">
+					<html:button property="enviar" onclick="javascript:remitir();"> 
+						<bean:message key="delegacion.abandonarTramitePresentacion"/>
+					</html:button>					
+				</div>
+			</div>
+		</logic:present>
+			
+		<logic:present name="pendienteDelegacionFirma">
+					
+			<script type="text/javascript">
+				function remitir(){
+					document.location='<%= urlRemitirDelegacionFirma %>';
+					return;
+				}
+			</script>
+				
+			<div class="alerta">				
+				<p>
+					<bean:message key="delegacion.remitirDelegacionFirma"/>
+				</p>
+				<br/>
+				<div align="center">
+					<html:button property="enviar" onclick="javascript:remitir();"> 
+						<bean:message key="delegacion.abandonarTramiteFirma"/>
+					</html:button>					
+				</div>
 			</div>
 		</logic:present>
 		

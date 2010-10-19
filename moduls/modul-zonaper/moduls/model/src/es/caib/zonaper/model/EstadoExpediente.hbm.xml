@@ -19,6 +19,7 @@
 		<property name="estado"  column="EST_ESTADO"/>
 		<property name="autenticado"  column="EST_AUTENT"/>
 		<property name="user"  column="EST_USER"/>
+		<property name="nifRepresentante"  column="EST_NIFRTE"/>		
 		<property name="nifRepresentado"  column="EST_NIFRDO"/>
 		<property name="idioma"  column="EST_IDIOMA"/>
 		<property name="codigoExpediente"  column="EST_CODEXP"/>

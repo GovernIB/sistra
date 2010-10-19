@@ -29,9 +29,10 @@ public abstract class PlantillaFacadeEJB extends HibernateEJB {
 
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.redose}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
+     * @ejb.permission role-name="${role.operador}"
      */
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
@@ -40,7 +41,8 @@ public abstract class PlantillaFacadeEJB extends HibernateEJB {
 	  
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Plantilla obtenerPlantilla(Long id) {
         Session session = getSession();
@@ -57,8 +59,9 @@ public abstract class PlantillaFacadeEJB extends HibernateEJB {
    
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Plantilla obtenerPlantilla(Version version,String id) {
     	Session session = getSession();
@@ -85,7 +88,8 @@ public abstract class PlantillaFacadeEJB extends HibernateEJB {
     
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long grabarPlantilla(Plantilla obj,Long idVersion) {    	
         Session session = getSession();
@@ -107,7 +111,8 @@ public abstract class PlantillaFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Set listarPlantillasVersion(Long id) {    	
     	Session session = getSession();
@@ -124,7 +129,8 @@ public abstract class PlantillaFacadeEJB extends HibernateEJB {
         
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarPlantilla(Long id) {
     	Session session = getSession();
@@ -140,7 +146,8 @@ public abstract class PlantillaFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public boolean puedoBorrarPlantilla(Long id) {
     	

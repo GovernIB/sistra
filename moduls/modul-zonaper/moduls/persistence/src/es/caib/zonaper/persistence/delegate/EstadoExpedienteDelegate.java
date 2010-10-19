@@ -27,6 +27,18 @@ public class EstadoExpedienteDelegate implements StatelessDelegate
         }
 	}
 	
+	public Page busquedaPaginadaExpedientesEntidadDelegada(int pagina, int longitudPagina, String nifEntidad )  throws DelegateException
+	{
+		try
+		{
+			return getFacade().busquedaPaginadaExpedientesEntidadDelegada(pagina, longitudPagina, nifEntidad );
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
 	public EstadoExpediente obtenerExpedienteAnonimo(String idPersistencia ) throws DelegateException
 	{
 		try

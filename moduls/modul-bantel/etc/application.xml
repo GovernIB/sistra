@@ -7,33 +7,33 @@
     <display-name>BTE</display-name>
     <description><![CDATA[Proyecto IBCEGE - BTE]]></description>
 
-    <module><java>bantel-model.jar</java></module>
-    <module><ejb>bantel-persistence.jar</ejb></module>
-    <module><java>bantel-wsClient.jar</java></module>
+    <module><java>4-bantel-model.jar</java></module>
+    <module><ejb>4-bantel-persistence.jar</ejb></module>
+    <module><java>4-bantel-wsClient.jar</java></module>
     <module>
         <web>
-            <web-uri>bantel-front.war</web-uri>
+            <web-uri>4-bantel-front.war</web-uri>
             <context-root>bantelfront</context-root>
         </web>
     </module>
     
      <module>
         <web>
-            <web-uri>bantel-admin.war</web-uri>
+            <web-uri>4-bantel-admin.war</web-uri>
             <context-root>banteladmin</context-root>
         </web>
     </module>
     
     <module>
         <web>
-            <web-uri>bantel-back.war</web-uri>
+            <web-uri>4-bantel-back.war</web-uri>
             <context-root>bantelback</context-root>
         </web>
     </module>
     
     <module>
         <web>
-            <web-uri>bantel-ws.war</web-uri>
+            <web-uri>4-bantel-ws.war</web-uri>
             <context-root>bantelws</context-root>
         </web>
     </module>

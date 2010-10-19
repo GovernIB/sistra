@@ -62,41 +62,43 @@ h1 { font-size:1.7em; font-weight:normal; color:#8a4700; padding:.5em .7em .5em 
 .continguts ul { margin-left:3em; }
 .continguts ul li { padding-bottom:.5em; }
 
-form.remarcar { padding:.1em 2em; margin:2em 0; background-color:#f2f2f2; }
+form.remarcar, div.remarcar { padding:.1em 2em; margin:2em 0; background-color:#f2f2f2; }
 
 p.titol { font-size:1.2em; font-weight:bold; }
 
-form.opcions label { display:block; float:left; width:20%; text-align:right; padding-right:1em;position:relative;}
-form.opcions label.enLinia { display:inline; float:none; margin-left:2em; }
-form.opcions SPAN {display:block; float:left; width:70%; text-align:left; padding-right:1em;position:relative;}
+form.opcions label, div.remarcar label { display:block; float:left; width:20%; text-align:right; padding-right:1em;position:relative;}
+form.opcions label.enLinia, div.remarcar label.enLinia { display:inline; float:none; margin-left:2em; }
+form.opcions SPAN, div.remarcar SPAN {display:block; float:left; width:70%; text-align:left; padding-right:1em;position:relative;}
 
-form.opcions input.pc70 { width:70%; }
-form.opcions input.pc60 { width:60%; }
-form.opcions input.pc50 { width:50%; }
-form.opcions select.pc30 { width:30%; }
-form.opcions select.pc40 { width:40%; }
-form.opcions select.pc20 { width:20%; }
-form.opcions select.pc15 { width:11%; }
-form.opcions input.pc40 { width:40%; }
-form.opcions input.pc30 { width:30%; }
-form.opcions textarea.pc40 { width:40%; }
+form.opcions input.pc70, div.remarcar input.pc70 { width:70%; }
+form.opcions input.pc60, div.remarcar input.pc60 { width:60%; }
+form.opcions input.pc50, div.remarcar input.pc50 { width:50%; }
+form.opcions select.pc30, div.remarcar select.pc30 { width:30%; }
+form.opcions select.pc40, div.remarcar select.pc40 { width:40%; }
+form.opcions select.pc20, div.remarcar select.pc20 { width:20%; }
+form.opcions select.pc15, div.remarcar select.pc15 { width:11%; }
+form.opcions input.pc40, div.remarcar input.pc40 { width:40%; }
+form.opcions input.pc30, div.remarcar input.pc30 { width:30%; }
+form.opcions textarea.pc40, div.remarcar textarea.pc40 { width:40%; }
 
-form.opcions p.sep { padding-bottom:1em; border-bottom:1px dashed #ccc; }
+form.opcions p.sep, div.remarcar p.sep { padding-bottom:1em; border-bottom:1px dashed #ccc; }
 
-form.opcions p.botonera { clear:both; width:100%; text-align:center; padding-top:2em; border-top:1px solid #ccc; }
-form.opcions p.botonera button, form.opcions p.botonera input { font-size:1.3em; margin:0 1em; }
+form.opcions p.botonera, div.remarcar p.botonera { clear:both; width:100%; text-align:center; padding-top:2em; border-top:1px solid #ccc; }
+form.opcions p.botonera button, form.opcions p.botonera input, div.remarcar p.botonera button, div.remarcar p.botonera input { font-size:1.3em; margin:0 1em; }
 
-form.opcions ul { list-style:none; margin:0; }
-form.opcions ul li { padding-bottom:0; }
-form.opcions ul li a.esborrar { color:#c00; margin-left:1.5em; }
+form.opcions ul, div.remarcar ul { list-style:none; margin:0; }
+form.opcions ul li, div.remarcar ul li { padding-bottom:0; }
+form.opcions ul li a.esborrar, div.remarcar ul li a.esborrar { color:#c00; margin-left:1.5em;  cursor:pointer;}
 
-form.opcions p.titol { width:20%; font-size:1em; text-align:right; margin-top:1.5em; }
-form.opcions p.major { font-size:1.2em; }
+form.opcions p.titol, div.remarcar p.titol{ width:20%; font-size:1em; text-align:right; margin-top:1.5em; }
+form.opcions p.major, div.remarcar p.major { font-size:1.2em; }
 
-form.opcions p.enllas { width:20%; text-align:right; }
-form.opcions dl { overflow:hidden; width:95%; font-size:1.4em; }
-form.opcions dt { float:left; clear:left; width:20%; font-size:.9em; font-variant:small-caps; font-weight:bold; text-align:right; line-height:1.2em; padding:.1em 1em .1em 0; }
-form.opcions dd { float:left; width:75%; line-height:1.2em; padding:.1em 0 .5em 0;}
+form.opcions p.enllas, div.remarcar p.enllas { width:20%; text-align:right; }
+form.opcions a.enllas, div.remarcar a.enllas { color:#c00; margin-left:1.5em;  cursor:pointer; }
+
+form.opcions dl, div.remarcar dl { overflow:hidden; width:95%; font-size:1.4em; }
+form.opcions dt, div.remarcar dt { float:left; clear:left; width:20%; font-size:.9em; font-variant:small-caps; font-weight:bold; text-align:right; line-height:1.2em; padding:.1em 1em .1em 0; }
+form.opcions dd, div.remarcar dd { float:left; width:75%; line-height:1.2em; padding:.1em 0 .5em 0;}
 
 /**estils correcte o incorrecte*/
 .correcte { font-size:1.4em; padding:1em 3em 1em 6em; margin:2em 0; background:#fff url(../imgs/fons/correcte.gif) no-repeat 1em 1em; }
@@ -179,6 +181,11 @@ th.ajudaColumna:hover { background-color:#dcf9bb; }
 #documentos ul li { padding-bottom:.4em; }
 #documentos a.firmar { color:#c00; }
 
+#parametro {  }
+#parametro ul { list-style:circle; margin-left:2em; margin-bottom:1em; }
+#parametro ul li { padding-bottom:.4em; }
+#parametro a { color:#c00; }
+
 #anexar { padding-left:1em; border:1px solid #ccc; }
 #anexar div.form { overflow:hidden; width:100%; }
 #anexar div.col { float:left; width:30%; }
@@ -203,3 +210,5 @@ div.atencion { background:#fff url(../imgs/mensaje/atencion.gif) no-repeat 1em 1
 div.informacion { background:#fff url(../imgs/mensaje/informacion.gif) no-repeat 1em 1.5em; border:1em solid #d3eff0; }
 
 #fondo { display:none; position:absolute; z-index:2; top:0; left:0; background-color:#fff; }
+/* ESTILO IFRAME UPLOAD */
+#iframeDocumento{position: absolute;  top:-30em; left:-30em; frameborder:0; width:0; height:0; scrolling:no; allowtransparency:true;}

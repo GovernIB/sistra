@@ -28,7 +28,7 @@ public abstract class GeneradorEJB extends HibernateEJB {
 	
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name = "${role.user}"
+     * @ejb.permission role-name = "${role.todos}"
      */
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
@@ -43,7 +43,7 @@ public abstract class GeneradorEJB extends HibernateEJB {
      *  - Numero entrada: Secuencia por año
 	 * 
      * @ejb.interface-method
-     * @ejb.permission role-name = "${role.user}"
+     * @ejb.permission role-name = "${role.todos}"
      */
     public String generarNumeroPreregistro(char tipoDestino) {    	
     	Session session = getSession();
@@ -78,7 +78,7 @@ public abstract class GeneradorEJB extends HibernateEJB {
      *  - Numero envio: Secuencia por año
 	 * 
      * @ejb.interface-method
-     * @ejb.permission role-name = "${role.user}"
+     * @ejb.permission role-name = "${role.todos}"
      */
     public String generarNumeroEnvio() {    	
     	Session session = getSession();

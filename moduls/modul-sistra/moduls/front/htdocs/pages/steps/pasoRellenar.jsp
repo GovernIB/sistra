@@ -139,13 +139,26 @@
 						<logic:equal name="formulario" property="estado" value="S">								
 							<logic:equal name="formulario" property="firmado" value="false">	
 								<br/>							
+								<logic:equal name="formulario" property="pendienteFirmaDelegada" value="false">							 							
 								<bean:message key="pasoRellenar.formularios.debeFirmarseDigitalmente"/> - <html:link  href="<%= urlFirmarDocumento + "&identificador=" + formulario.getIdentificador() + "&instancia=" + formulario.getInstancia() %>"><bean:message key="pasoRellenar.formularios.firmarFormulario"/></html:link>
+							</logic:equal>						
+								<logic:equal name="formulario" property="pendienteFirmaDelegada" value="true">							 							
+									<span class="detalleDoc"> 
+											<img src="imgs/tramitacion/iconos/doc_firmar.gif"/>
+											<bean:message key="pasoRellenar.documentos.pendienteFirmaDelegada"/>													
+									</span>
+								</logic:equal>
 							</logic:equal>						
 							<logic:equal name="formulario" property="firmado" value="true">
 								<span class="detalleDoc"> 
 									<img src="imgs/tramitacion/iconos/doc_firmar.gif"/>		
 									<logic:notEmpty name="formulario" property="firmante">						
+										<logic:match name="formulario" property="firmante" value="#">
+											<bean:message key="pasoRellenar.formularios.firmadosDigitalmente" arg0="<%=es.caib.util.StringUtil.replace(formulario.getFirmante(),"#"," - ")%>"/>
+										</logic:match>	
+										<logic:notMatch name="formulario" property="firmante" value="#">
 										<bean:message key="pasoRellenar.formularios.firmadoDigitalmente" arg0="<%=formulario.getFirmante()%>"/>
+										</logic:notMatch>																									
 									</logic:notEmpty>
 									<logic:empty name="formulario" property="firmante">						
 										<bean:message key="pasoRellenar.formularios.firmadoDigitalmente.noComprobarFirmante"/>

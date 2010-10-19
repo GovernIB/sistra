@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-15" %>
+<%@ page import="es.caib.zonaper.modelInterfaz.ConstantesZPE"%>
+<%@ page import="es.caib.zonaper.modelInterfaz.TramitePersistentePAD"%>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
@@ -59,9 +61,33 @@
 						String iconoAcceso = tramitePersistente.getNivelAutenticacion() == 'U' ? "accesUC" : "accesCD" ;
 						String titulo;	
 						String setLink;
-						if (tramitePersistente.getNivelAutenticacion() == nivelAutenticacion.charValue() && tramitePersistente.getUsuarioFlujoTramitacion().equals(request.getUserPrincipal().getName())){
+						String paramLink = "";
+						if (tramitePersistente.getNivelAutenticacion() == nivelAutenticacion.charValue() && 
+								(
+										(tramitePersistente.getUsuarioFlujoTramitacion().equals(request.getUserPrincipal().getName())) 
+										|| 
+										(ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(sesion.getPerfilAcceso()) && tramitePersistente.getUsuarioFlujoTramitacion().equals(sesion.getCodigoEntidad()))
+								)										
+							){
 								titulo="tramitesSinEnviar.continuarTramite";
 								setLink="true";
+								
+								if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(sesion.getPerfilAcceso())) {
+									paramLink = "&amp;perfilAF="+ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO+"&amp;entidadAF="+sesion.getNifEntidad();									
+									if (TramitePersistentePAD.ESTADO_PENDIENTE_DELEGACION_PRESENTACION.equals(tramitePersistente.getEstadoDelegacion()) && 
+										 (sesion.getPermisosDelegacion().indexOf(ConstantesZPE.DELEGACION_PERMISO_PRESENTAR_TRAMITE) == -1) ){
+											titulo="tramitesSinEnviar.accesDelegadoPresentacion";
+											setLink="false";																						
+									}
+								}else{
+									paramLink = "&amp;perfilAF="+ConstantesZPE.DELEGACION_PERFIL_ACCESO_CIUDADANO;
+								}
+								
+								if (TramitePersistentePAD.ESTADO_PENDIENTE_DELEGACION_FIRMA.equals(tramitePersistente.getEstadoDelegacion())){
+											titulo="tramitesSinEnviar.remitidoDelegacionFirma";
+											setLink="false";																						
+									}
+								
 						}else{
 							if (!tramitePersistente.getUsuarioFlujoTramitacion().equals(request.getUserPrincipal().getName())){
 								titulo="tramitesSinEnviar.remitido";						
@@ -93,7 +119,7 @@
 						<td>					
 							<!--  Descripcion del trámite con link si puede continuarse -->
 							<logic:equal name="link" value="true">
-								<html:link href="<%= urlTramitacion + "&amp;modelo=" + tramitePersistente.getTramite() + "&amp;version=" + tramitePersistente.getVersion() %>" paramId="idPersistencia" paramName="tramitePersistente" paramProperty="idPersistencia">
+								<html:link href="<%= urlTramitacion + "&amp;modelo=" + tramitePersistente.getTramite() + "&amp;version=" + tramitePersistente.getVersion() + paramLink%>" paramId="idPersistencia" paramName="tramitePersistente" paramProperty="idPersistencia">
 									<bean:write name="tramitePersistente" property="descripcion"/>								
 								</html:link>
 							</logic:equal>							
@@ -110,6 +136,14 @@
 									<br/><i><bean:message key="tramitesSinEnviar.remitidoA" arg0="<%=usuarioTramitacion.getNombreCompleto()%>"/></i>
 								</logic:equal>
 							</logic:notEqual>
+							
+							<!--  Si el tramite se tramita en forma delegada y esta pendiente de presentarse o de firmar -->
+							<logic:equal name="tramitePersistente" property="estadoDelegacion" value="<%=TramitePersistentePAD.ESTADO_PENDIENTE_DELEGACION_PRESENTACION%>">
+								<br/><i><bean:message key="tramitesSinEnviar.remitidoDelegacionPresentacion"/></i>
+							</logic:equal>						
+							<logic:equal name="tramitePersistente" property="estadoDelegacion" value="<%=TramitePersistentePAD.ESTADO_PENDIENTE_DELEGACION_FIRMA%>">
+								<br/><i><bean:message key="tramitesSinEnviar.remitidoDelegacionFirma"/></i>
+							</logic:equal>						
 						</td>
 					</tr>							
 				</logic:iterate>			

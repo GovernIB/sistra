@@ -35,7 +35,7 @@ public abstract class AyudaFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long gravarAyuda(AyudaPantalla ayuda, Long pantalla_id, Long perfil_id) {
         Session session = getSession();
@@ -107,7 +107,7 @@ public abstract class AyudaFacadeEJB extends HibernateEJB {
     }
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public List listarAyudasPantalla(Long pantalla_id) {
         Session session = getSession();
@@ -123,7 +123,7 @@ public abstract class AyudaFacadeEJB extends HibernateEJB {
     }
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarAyuda(Long id) {
         Session session = getSession();
