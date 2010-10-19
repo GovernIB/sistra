@@ -3,8 +3,6 @@ package es.caib.sistra.model;
 import java.io.Serializable;
 import java.util.Locale;
 
-import org.apache.commons.lang.StringUtils;
-
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 
 /**
@@ -13,10 +11,29 @@ import es.caib.zonaper.modelInterfaz.PersonaPAD;
  */
 public class DatosSesion implements Serializable{
 	
-	// Datos autenticacion seycon
-	private Locale locale;
-	private String codigoUsuario;
+	// Nivel autenticacion
 	private char nivelAutenticacion;
+	
+	// Autenticacion usuario
+	private String codigoUsuario;
+	
+	// Perfil acceso: CIUDADANO / DELEGADO
+	private String perfilAcceso;
+		
+	// Usuario autenticado o en caso de delegacion la entidad delegada
+	private PersonaPAD personaPAD;
+	
+	// En caso de delegacion seria el usuario delegado (usuario autenticado)
+	private PersonaPAD delegadoPAD;
+	
+	// En caso de delegacion indica los permisos de delegacion
+	private String permisosDelegacion;
+	
+	// Idioma
+	private Locale locale;
+
+	
+	
 	
 	public void setNivelAutenticacion(char nivelAutenticacion) {
 		this.nivelAutenticacion = nivelAutenticacion;
@@ -37,9 +54,6 @@ public class DatosSesion implements Serializable{
 		this.locale = locale;
 	}
 	
-	// Datos PAD
-	private PersonaPAD personaPAD; // En caso de estar autenticado
-	
 	public void setPersonaPAD(PersonaPAD p){
 		personaPAD = p;
 	}
@@ -47,44 +61,54 @@ public class DatosSesion implements Serializable{
 	public String getNifUsuario() {
 		return (personaPAD != null?personaPAD.getNif():null);
 	}
-	public String getNombreUsuario() {
-		return (personaPAD != null?personaPAD.getNombre():null);
-	}
-	public String getApellido1Usuario() {
-		return (personaPAD != null?personaPAD.getApellido1():null);
-	}
-	public String getApellido2Usuario() {
-		return (personaPAD != null?personaPAD.getApellido2():null);
-	}
+	
 	public String getNombreCompletoUsuario() {
-		return 
-			(StringUtils.isNotEmpty(getNombreUsuario())?" " + getNombreUsuario():"") +
-			(StringUtils.isNotEmpty(getApellido1Usuario())?" " + getApellido1Usuario():"") + 
-			(StringUtils.isNotEmpty(getApellido2Usuario())?" " + getApellido2Usuario():"");
-	}
-	public String getCodigoPostal() {
-		return (personaPAD != null?personaPAD.getCodigoPostal():null);
-	}
-	public String getDireccion() {
-		return (personaPAD != null?personaPAD.getDireccion():null);
-	}
-	public String getEmail() {
-		return (personaPAD != null?personaPAD.getEmail():null);
-	}
-	public String getMunicipio() {
-		return (personaPAD != null?personaPAD.getMunicipio():null);
-	}
-	public String getProvincia() {
-		return (personaPAD != null?personaPAD.getProvincia():null);
-	}
-	public String getTelefonoFijo() {
-		return (personaPAD != null?personaPAD.getTelefonoFijo():null);
-	}	
-	public String getTelefonoMovil() {
-		return (personaPAD != null?personaPAD.getTelefonoMovil():null);
-	}	
-	public boolean getHabilitarAvisos() {
-		return (personaPAD != null?personaPAD.isHabilitarAvisosExpediente():false);
+		return (personaPAD != null?personaPAD.getNombreCompleto():null);			
 	}
 	
+	public String getCodigoDelegado() {
+		return (delegadoPAD != null?delegadoPAD.getUsuarioSeycon():null);
+	}
+	
+	public String getNifDelegado() {
+		return (delegadoPAD != null?delegadoPAD.getNif():null);
+	}
+	
+	public String getNombreCompletoDelegado() {
+		return (delegadoPAD != null?delegadoPAD.getNombreCompleto():null);			
+	}
+	
+	public String getNombreDelegado() {
+		return (delegadoPAD != null?delegadoPAD.getNombre():null);			
+	}
+	
+	public String getApellido1Delegado() {
+		return (delegadoPAD != null?delegadoPAD.getApellido1():null);			
+	}
+	
+	public String getApellido2Delegado() {
+		return (delegadoPAD != null?delegadoPAD.getApellido2():null);			
+	}
+	
+	public PersonaPAD getDelegadoPAD() {
+		return delegadoPAD;
+	}
+	public void setDelegadoPAD(PersonaPAD delegadoPAD) {
+		this.delegadoPAD = delegadoPAD;
+	}
+	public String getPerfilAcceso() {
+		return perfilAcceso;
+	}	
+	public void setPerfilAcceso(String perfilAcceso) {
+		this.perfilAcceso = perfilAcceso;
+	}	
+	public PersonaPAD getPersonaPAD() {
+		return personaPAD;
+	}
+	public String getPermisosDelegacion() {
+		return permisosDelegacion;
+	}
+	public void setPermisosDelegacion(String permisosDelegacion) {
+		this.permisosDelegacion = permisosDelegacion;
+	}
 }

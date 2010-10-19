@@ -142,8 +142,8 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 	
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
-     * @ejb.permission role-name="${role.auditor}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.audit}"
      */
 	public boolean auditoriaRequerida( Long codigoCuadernoCarga ) throws Exception
 	{
@@ -223,7 +223,7 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 	
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.auditor}"
+     * @ejb.permission role-name="${role.audit}"
      */
 	public DatosAuditoriaCuaderno auditoriaCuaderno( Long codigoCuadernoCarga ) throws Exception
 	{ 

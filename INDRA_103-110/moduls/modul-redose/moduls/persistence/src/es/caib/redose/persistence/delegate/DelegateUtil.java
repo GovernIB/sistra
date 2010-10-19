@@ -63,4 +63,7 @@ public final class DelegateUtil {
         return (VersionCustodiaDelegate) DelegateFactory.getDelegate(VersionCustodiaDelegate.class);
     }
    
+    public static LogGestorDocumentalErroresDelegate getLogErrorGestorDocumentalDelegate() {
+        return (LogGestorDocumentalErroresDelegate) DelegateFactory.getDelegate(LogGestorDocumentalErroresDelegate.class);
+    }
 }

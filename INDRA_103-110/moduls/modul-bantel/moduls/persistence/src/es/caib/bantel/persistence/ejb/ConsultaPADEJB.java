@@ -23,7 +23,7 @@ import es.caib.zonaper.persistence.delegate.PadDelegate;
  *  type="Stateless"
  *  view-type="local"
  *  
- *  @ejb.security-identity run-as = "${role.autoZPE}"
+ *  @ejb.security-identity run-as = "${role.auto}"
  */
 public abstract class ConsultaPADEJB implements SessionBean {
 	
@@ -33,6 +33,7 @@ public abstract class ConsultaPADEJB implements SessionBean {
 	/**
      * @ejb.create-method
      * @ejb.permission role-name="${role.gestor}"
+     * @ejb.permission role-name="${role.auto}"
      */
 	public void ejbCreate() throws CreateException {
 		log.info("ejbCreate: " + this.getClass());
@@ -46,6 +47,7 @@ public abstract class ConsultaPADEJB implements SessionBean {
 	 *  Calcula datos persona a partir de un nif
      * @ejb.interface-method
      * @ejb.permission role-name="${role.gestor}"
+     * @ejb.permission role-name="${role.auto}"
      */
 	 public PersonaPAD obtenerDatosPADporNif(String nif) {
 		 try{
@@ -64,6 +66,7 @@ public abstract class ConsultaPADEJB implements SessionBean {
 	  * Calcula datos persona a partir de usuario Seycon
 	  *  @ejb.interface-method
       *  @ejb.permission role-name="${role.gestor}"
+      *  @ejb.permission role-name="${role.auto}"
 	  */	 
 	 public PersonaPAD obtenerDatosPADporUsuarioSeycon(String usuarioSeycon){
 		 try{

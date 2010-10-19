@@ -6,20 +6,20 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.tiles.ComponentContext;
-
 import org.apache.commons.lang.StringUtils;
+import org.apache.struts.tiles.ComponentContext;
 
 import es.caib.sistra.front.Constants;
 import es.caib.sistra.model.AsientoCompleto;
 import es.caib.sistra.model.ConstantesSTR;
 import es.caib.sistra.model.DocumentoFront;
+import es.caib.sistra.model.PasoTramitacion;
 import es.caib.sistra.model.TramiteFront;
 import es.caib.util.ConvertUtil;
 import es.caib.util.StringUtil;
-
 import es.caib.xml.datospropios.factoria.impl.Instrucciones;
 import es.caib.xml.registro.factoria.impl.DatosInteresado;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 
 public class RegistroController extends FinalizacionController
 {
@@ -29,8 +29,6 @@ public class RegistroController extends FinalizacionController
 	{
 		
 		//super.execute( tileContext, request, response, servletContext );
-		
-		
 		TramiteFront tramite 			= this.getTramiteFront( request );
 		
 		
@@ -44,6 +42,14 @@ public class RegistroController extends FinalizacionController
 				request.setAttribute("pasarFlujoTramitacion",nifFlujo);
 				return;
 			}				
+		}
+		
+		//
+		// 	COMPROBAMOS SI HAY DELEGACION Y HAY QUE PASAR EL TRAMITE
+		//
+		if (tramite.getPasoTramitacion().getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_DELEGACION_PRESENTACION)) {
+			request.setAttribute("pendienteDelegacionPresentacion","true");
+			return;
 		}
 		
 		//
@@ -157,8 +163,8 @@ public class RegistroController extends FinalizacionController
 				
 		// Indicamos que permitimos registrar (no hay que flujo ni hay que confirmar la notificacion)
 		request.setAttribute( "permitirRegistrar", "true" );
-	}
 	
+	}
 	
 	
 	

@@ -38,7 +38,7 @@ public abstract class PropiedadSalidaFacadeEJB extends HibernateEJB{
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long grabarPropiedadSalida(PropiedadSalida propiedad, Long salida_id) {
         Session session = getSession();
@@ -61,7 +61,7 @@ public abstract class PropiedadSalidaFacadeEJB extends HibernateEJB{
 
      /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
    public void borrarPropiedadSalida(Long id) {
         Session session = getSession();
@@ -116,7 +116,7 @@ public abstract class PropiedadSalidaFacadeEJB extends HibernateEJB{
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarPlantilla(Long id_propiedadSalida, Long id_plantilla) {
         Session session = getSession();

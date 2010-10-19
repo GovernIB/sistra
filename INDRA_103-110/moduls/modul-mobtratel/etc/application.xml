@@ -7,32 +7,32 @@
     <display-name>TEMPLATE</display-name>
     <description><![CDATA[Proyecto MOBILITAT]]></description>
 
-    <module><java>mobtratel-model.jar</java></module>
-    <module><ejb>mobtratel-persistence.jar</ejb></module>
+    <module><java>7-mobtratel-model.jar</java></module>
+    <module><ejb>7-mobtratel-persistence.jar</ejb></module>
     <module>
         <web>
-            <web-uri>mobtratel-back.war</web-uri>
+            <web-uri>7-mobtratel-back.war</web-uri>
             <context-root>mobtratelback</context-root>
         </web>
     </module>
     
     <module>
         <web>
-            <web-uri>mobtratel-front.war</web-uri>
+            <web-uri>7-mobtratel-front.war</web-uri>
             <context-root>mobtratelfront</context-root>
         </web>
     </module>
     
     <module>
         <web>
-            <web-uri>mobtratel-admin.war</web-uri>
+            <web-uri>7-mobtratel-admin.war</web-uri>
             <context-root>mobtrateladmin</context-root>
         </web>
     </module>
     
     <module>
         <web>
-            <web-uri>mobtratel-ws.war</web-uri>
+            <web-uri>7-mobtratel-ws.war</web-uri>
             <context-root>mobtratelws</context-root>
         </web>
     </module>

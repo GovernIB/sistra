@@ -3,6 +3,9 @@
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
+
+<bean:define id="sesion" name="<%=es.caib.zonaper.front.Constants.DATOS_SESION_KEY%>" type="es.caib.zonaper.model.DatosSesion" />
+
 		<!-- titol -->
 			<h1>
 				<bean:message key="menuAutenticado.encabezamiento" />
@@ -29,13 +32,15 @@
 			</div>
 			<!-- /tramits -->
 			
-			<!-- subscripcions 
+			<!-- delegaciones --> 
+			<logic:equal name="sesion" property="permitirDelegacion" value="S">
 		 	<div class="modul marc">
-				<h2><bean:message key="menuAutenticado.misSuscripciones"/></h2>
+				<h2><bean:message key="menuAutenticado.misDelegaciones"/></h2>
 				<ul>
-					<li><bean:message key="menuAutenticado.misSuscripciones.proximamente" /></li>
+					<li><html:link action="/protected/mostrarDelegaciones"><bean:message key="menuAutenticado.misDelegaciones.delegaciones" /></html:link></li>
+					<li><html:link action="/protected/mostrarBandejaFirma"><bean:message key="menuAutenticado.misDelegaciones.bandejaFirma" /></html:link></li>						
 				</ul>
 			</div>
-			-->
-			<!-- /subscripcions -->
+			</logic:equal>
+			
 		

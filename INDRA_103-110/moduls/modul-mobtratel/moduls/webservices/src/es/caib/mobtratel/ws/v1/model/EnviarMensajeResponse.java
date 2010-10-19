@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="obtenerNumerosEntradasReturn" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="enviarMensajeReturn" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,36 +29,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "obtenerNumerosEntradasReturn"
+    "enviarMensajeReturn"
 })
 @XmlRootElement(name = "enviarMensajeResponse")
 public class EnviarMensajeResponse {
 
     @XmlElement(namespace = "urn:es:caib:mobtratel:ws:v1:model:BackofficeFacade", required = true)
-    protected String obtenerNumerosEntradasReturn;
+    protected String enviarMensajeReturn;
 
     /**
-     * Gets the value of the obtenerNumerosEntradasReturn property.
+     * Gets the value of the enviarMensajeReturn property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getObtenerNumerosEntradasReturn() {
-        return obtenerNumerosEntradasReturn;
+    public String getEnviarMensajeReturn() {
+        return enviarMensajeReturn;
     }
 
     /**
-     * Sets the value of the obtenerNumerosEntradasReturn property.
+     * Sets the value of the enviarMensajeReturn property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setObtenerNumerosEntradasReturn(String value) {
-        this.obtenerNumerosEntradasReturn = value;
+    public void setEnviarMensajeReturn(String value) {
+        this.enviarMensajeReturn = value;
     }
 
 }

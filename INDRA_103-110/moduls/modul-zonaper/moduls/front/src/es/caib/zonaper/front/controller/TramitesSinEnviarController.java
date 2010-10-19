@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.tiles.ComponentContext;
 
+import es.caib.zonaper.model.DatosSesion;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
 import es.caib.zonaper.persistence.delegate.ConsultaPADDelegate;
@@ -25,8 +27,18 @@ public class TramitesSinEnviarController extends BaseController
 		PadDelegate zonaPersonalDelegate = DelegatePADUtil.getPadDelegate();
 		ConsultaPADDelegate consultaPAD = DelegateUtil.getConsultaPADDelegate();
 		
+		DatosSesion datosSesion = this.getDatosSesion(request);
+		
+		List lResult = null;
+		
+		if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(datosSesion.getPerfilAcceso())){
+			// Obtenemos tramites persistentes asociados a la entidad delegada	
+			lResult = zonaPersonalDelegate.obtenerTramitesPersistentesEntidadDelegada(datosSesion.getNifEntidad());
+		}else{			
 		// Obtenemos tramites persistentes asociados al usuario	
-		List lResult = zonaPersonalDelegate.obtenerTramitesPersistentesUsuario();
+			lResult = zonaPersonalDelegate.obtenerTramitesPersistentesUsuario();
+		}
+		
 		request.setAttribute( "tramitesPersistentes", lResult );
 		
 		// Obtenemos datos usuarios implicados en los trámites persistentes (blindamos ante posible error de que el usuario no este en PAD)

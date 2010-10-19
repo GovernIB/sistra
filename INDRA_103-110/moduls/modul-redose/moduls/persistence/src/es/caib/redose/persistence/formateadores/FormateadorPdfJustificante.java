@@ -18,12 +18,16 @@ import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.redose.persistence.ejb.ResolveRDS;
 import es.caib.redose.persistence.util.UtilRDS;
 import es.caib.util.StringUtil;
+import es.caib.xml.ConstantesXML;
 import es.caib.xml.datospropios.factoria.ConstantesDatosPropiosXML;
 import es.caib.xml.datospropios.factoria.FactoriaObjetosXMLDatosPropios;
 import es.caib.xml.datospropios.factoria.ServicioDatosPropiosXML;
 import es.caib.xml.datospropios.factoria.impl.Dato;
 import es.caib.xml.datospropios.factoria.impl.DatosPropios;
 import es.caib.xml.datospropios.factoria.impl.Documento;
+import es.caib.xml.oficioremision.factoria.FactoriaObjetosXMLOficioRemision;
+import es.caib.xml.oficioremision.factoria.ServicioOficioRemisionXML;
+import es.caib.xml.oficioremision.factoria.impl.OficioRemision;
 import es.caib.xml.registro.factoria.ConstantesAsientoXML;
 import es.caib.xml.registro.factoria.FactoriaObjetosXMLRegistro;
 import es.caib.xml.registro.factoria.ServicioRegistroXML;
@@ -63,6 +67,7 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
 	public DocumentoRDS formatearDocumento(DocumentoRDS documento, PlantillaIdioma plantilla,List usos) throws Exception {
 		
 		boolean hayDocumentacionAportar = false;
+		boolean registroSalida = false;
 		PDFDocument docPDF;
 		String cabecera;
 		String letras[] = {"A","B","C","D","E","F"};
@@ -80,11 +85,21 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
 		// -- Leemos lista de documentos aportados		
 		Lista lista = new Lista();    	
     	ReferenciaRDS refDatosPropios=null;
+    	ReferenciaRDS refOficioRemision=null;
+    	ReferenciaRDS refAvisoNotificacion=null;
     	Iterator itd = asiento.getDatosAnexoDocumentacion().iterator();
     	while (itd.hasNext()){
     		DatosAnexoDocumentacion da = (DatosAnexoDocumentacion) itd.next();    	    		
     		if (da.getTipoDocumento().charValue() == ConstantesAsientoXML.DATOSANEXO_DATOS_PROPIOS){
     			refDatosPropios = 
+    				ResolveRDS.getInstance().resuelveRDS(Long.parseLong(da.getCodigoRDS()));
+    		}
+    		else if (da.getTipoDocumento().charValue() == ConstantesAsientoXML.DATOSANEXO_OFICIO_REMISION){
+    			refOficioRemision = 
+    				ResolveRDS.getInstance().resuelveRDS(Long.parseLong(da.getCodigoRDS()));
+    		}
+    		else if (da.getTipoDocumento().charValue() == ConstantesAsientoXML.DATOSANEXO_AVISO_NOTIFICACION){
+    			refAvisoNotificacion = 
     				ResolveRDS.getInstance().resuelveRDS(Long.parseLong(da.getCodigoRDS()));
     		}
     		else
@@ -93,13 +108,18 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
     		}
     	}
     	
-    	// Parseamos datos propios
     	RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
+    	DatosPropios datosPropios = null;
+    	if(asiento.getDatosOrigen().getTipoRegistro().charValue() != ConstantesAsientoXML.TIPO_REGISTRO_SALIDA){
+    		//Parseamos datos propios si no es de salida
     	if (refDatosPropios == null) throw new Exception("No se encuentra documento de datos propios");
     	DocumentoRDS docRDS = rds.consultarDocumento(refDatosPropios);
     	FactoriaObjetosXMLDatosPropios factoriaDatosPropios = ServicioDatosPropiosXML.crearFactoriaObjetosXML();
-    	DatosPropios datosPropios = factoriaDatosPropios.crearDatosPropios(new ByteArrayInputStream (docRDS.getDatosFichero()));
-				
+	    	datosPropios = factoriaDatosPropios.crearDatosPropios(new ByteArrayInputStream (docRDS.getDatosFichero()));
+    	}else {
+    		if (refOficioRemision == null) throw new Exception("No se encuentra documento de oficio de rimisión");
+    		if (refAvisoNotificacion == null) throw new Exception("No se encuentra documento de aviso de notificación");
+    	}
     	// Según el tipo de asiento establecemos textos
 		String tipoRegistro = "envio";
     	switch (asiento.getDatosOrigen().getTipoRegistro().charValue()){
@@ -118,6 +138,11 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
     			cabecera = props.getProperty("cabecera.preEnvio");
     			hayDocumentacionAportar = true;
     			break;	    
+    		case ConstantesAsientoXML.TIPO_REGISTRO_SALIDA:
+    			cabecera = props.getProperty("cabecera.registroSalida");
+    			tipoRegistro = "registro";
+    			registroSalida = true;
+    			break;
     		default:
     			cabecera = "JUSTIFICANTE";	    			
     	}	    	
@@ -153,14 +178,24 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
 		propiedad = new Propiedad(props.getProperty("datosRegistro.organoDestino"),
 				destinatario);		
 		seccion.addCampo(propiedad);		
-    	Iterator it =  asiento.getDatosInteresado().iterator();
+    	
     	String tipoInteresado = "";
     	String keyTipoId;
     	char nivelAutenticacion='?';
-    	while (it.hasNext()){    		
+    	
+    	boolean existeRepresentado = false;
+    	for (Iterator it =  asiento.getDatosInteresado().iterator();it.hasNext();){    	    	
+    		DatosInteresado di = (DatosInteresado) it.next();
+    		if (di.getTipoInteresado().equals(ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTADO)){
+    			existeRepresentado = true;
+    			break;
+    		}
+    	}
+    	
+    	for (Iterator it =  asiento.getDatosInteresado().iterator();it.hasNext();){    		
     		DatosInteresado di = (DatosInteresado) it.next();
     		if (di.getTipoInteresado().equals(ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTANTE)){
-    			if (asiento.getDatosInteresado().size() > 1){
+    			if (existeRepresentado){
     				tipoInteresado="Representante";
     			}else{
     				tipoInteresado="";
@@ -168,6 +203,8 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
     			nivelAutenticacion = di.getNivelAutenticacion()!=null?di.getNivelAutenticacion().charValue():'?';
     		}else if (di.getTipoInteresado().equals(ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTADO)){
     			tipoInteresado="Representado";
+    		}else if (di.getTipoInteresado().equals(ConstantesAsientoXML.DATOSINTERESADO_TIPO_DELEGADO)){
+    			tipoInteresado="Delegado";
     		}
     		
 			   
@@ -195,21 +232,25 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
 			}
     	}
     	
+    	if(!registroSalida){
+    		// Solo en los casos que no sean registro de salida miraremos esto, ya que con los registros de salida no nos llegan los datos propios
     	// Identificador de persistencia (sólo para anónimo)
     	if (nivelAutenticacion == 'A' && datosPropios.getInstrucciones() != null && StringUtils.isNotEmpty(datosPropios.getInstrucciones().getIdentificadorPersistencia())){
 	    	propiedad = new Propiedad(props.getProperty("datosRegistro.identificadorPersistencia"),
 	    			datosPropios.getInstrucciones().getIdentificadorPersistencia());		    		    
 			seccion.addCampo(propiedad);
     	}
-    	
+    	}
     	docPDF.addSeccion(seccion);
 		
+    	//Si no es registro de salida haremos lo mismo que se hacia hasta el momento.
+    	if(!registroSalida){
     	// SECCION DATOS SOLICITUD   	    
     	if (datosPropios.getSolicitud() != null) {
     		seccion = new Seccion(letras[numSecciones], props.getProperty("datosSolicitud.titulo"));
     		numSecciones++;
     		Subseccion ss = null;    	
-	    	for (it = datosPropios.getSolicitud().getDato().iterator();it.hasNext();){
+		    	for (Iterator it = datosPropios.getSolicitud().getDato().iterator();it.hasNext();){
 	    		Dato dato = (Dato) it.next();
 	    		if(dato.getTipo().charValue() == ConstantesDatosPropiosXML.DATOSOLICITUD_TIPO_BLOQUE){
 	    			if(ss !=  null){
@@ -257,7 +298,7 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
     		String key;
     		Vector cp;    		    		
     		
-    		for (it = datosPropios.getInstrucciones().getDocumentosEntregar().getDocumento().iterator();it.hasNext();){
+	    		for (Iterator it = datosPropios.getInstrucciones().getDocumentosEntregar().getDocumento().iterator();it.hasNext();){
     			
     			key = "documentacionAportar.accion.";
     			
@@ -293,7 +334,6 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
 	    		
 	   		docPDF.addSeccion(seccion);
 	   		
-	   		
 	   		// SECCION DE FIRMA
 			Parrafo p;
 			Seccion seccionFirmar = new Seccion(letras[numSecciones], props.getProperty("declaracion.titulo"));
@@ -316,6 +356,33 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
 				seccionFirmar.addCampo(p);
 			}
 			docPDF.addSeccion(seccionFirmar);
+    	}
+    	}else{
+    		
+    		//SECCION OFICIO REMISION
+    		seccion = new Seccion(letras[numSecciones], props.getProperty("oficioRemision.titulo"));//props.getProperty("datosSolicitud.titulo"));
+    		numSecciones++;
+    		FactoriaObjetosXMLOficioRemision factOfi = ServicioOficioRemisionXML.crearFactoriaObjetosXML();
+    		factOfi.setEncoding(ConstantesXML.ENCODING);
+    		DocumentoRDS docRDSOficio = rds.consultarDocumento(refOficioRemision);
+    		OficioRemision oficioRemision =factOfi.crearOficioRemision(new ByteArrayInputStream(docRDSOficio.getDatosFichero()));
+    		propiedad = new Propiedad(props.getProperty("oficioRemision.tituloOficio"),  oficioRemision.getTitulo());		
+    		seccion.addCampo(propiedad);
+    		propiedad = new Propiedad(props.getProperty("oficioRemision.textoOficio"),  oficioRemision.getTexto());		
+    		seccion.addCampo(propiedad);
+    		if(oficioRemision.getTramiteSubsanacion() != null){
+    			propiedad = new Propiedad(props.getProperty("oficioRemision.tramiteSubsanacion"),  oficioRemision.getTramiteSubsanacion().getDescripcionTramite());
+    			seccion.addCampo(propiedad);
+    		}
+    		
+    		
+    		docPDF.addSeccion(seccion);
+    		
+    		//SECCION DOCUMENTOS APORTADOS    	
+    		seccion = new Seccion(letras[numSecciones], props.getProperty("documentosAportados.titulo"));
+    		numSecciones++;
+    		seccion.addCampo(lista);
+    		docPDF.addSeccion(seccion);
     	}
     	
     	// Generamos pdf

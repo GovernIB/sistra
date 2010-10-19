@@ -39,6 +39,9 @@ public class ExpedienteDelegate implements StatelessDelegate
         }
 	}
 	
+		
+	
+	
 	public Expediente obtenerExpediente( long unidadAdministrativa, String identificadorExpediente) throws DelegateException
 	{
 		try

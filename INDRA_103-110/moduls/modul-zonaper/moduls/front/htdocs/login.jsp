@@ -74,19 +74,29 @@ if (browser == "Firefox" && parseFloat( version, 10) < 1.5 ){
 
 
 <!--  FIRMA DIGITAL -->
-<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/constantes.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/deployJava.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/time.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/appletHelper.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/instalador.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/firma.js"></script>	
+<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/utils.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/constantes.js"></script>
+
+
 <script type="text/javascript">
 <!--			
+		<%
+			String urlSistra = "";
+			try{
+				es.caib.zonaper.persistence.delegate.ConfiguracionDelegate delegate = es.caib.zonaper.persistence.delegate.DelegateUtil.getConfiguracionDelegate();
+				urlSistra = delegate.obtenerConfiguracion().getProperty("sistra.url");
+			}catch(Exception e){}
+		%>
 
-		baseDownloadURL = "<%=request.getContextPath()%>/firma/aFirma";
-		base = "<%=request.getContextPath()%>/firma/aFirma";
+		baseDownloadURL = "<%=urlSistra%><%=request.getContextPath()%>/firma/aFirma";
+		base = "<%=urlSistra%><%=request.getContextPath()%>/firma/aFirma";
 
 		function prepararEntornoFirma(){
-			cargarAppletFirma();
+			cargarAppletFirma('COMPLETA');
 		}
 		
 		function loginCertificado(){
@@ -99,6 +109,7 @@ if (browser == "Firefox" && parseFloat( version, 10) < 1.5 ){
 			var cadena = document.formCD.j_username.value;
 		
 			clienteFirma.initialize();
+			clienteFirma.setShowErrors(false);
 			clienteFirma.setSignatureAlgorithm("sha1WithRsaEncryption");
 			clienteFirma.setSignatureMode("EXPLICIT");
 			clienteFirma.setSignatureFormat("CMS");
@@ -116,7 +127,7 @@ if (browser == "Firefox" && parseFloat( version, 10) < 1.5 ){
 			     return true;
 			}
 		}
-	
+		prepararEntornoFirma();
 //-->
 </script>
 
@@ -127,7 +138,7 @@ if (browser == "Firefox" && parseFloat( version, 10) < 1.5 ){
 
 </head>
 
-<body onload="prepararEntornoFirma()">
+<body>
 <div id="contenedor">
 	<!-- capçal -->	
 	<div id="capsal">

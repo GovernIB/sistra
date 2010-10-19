@@ -40,7 +40,7 @@ public class DatosInteresado extends NodoRegistroBase {
 			throws EstablecerPropiedadException {
 		
 		// Avlidar longitud maxima, campo obligatrio y valor en lista
-		String valoresPermitidos[] = {ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTANTE, ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTADO};
+		String valoresPermitidos[] = {ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTANTE, ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTADO, ConstantesAsientoXML.DATOSINTERESADO_TIPO_DELEGADO};
 		validaLongitudCampo("DatosInteresado", "TipoInteresado", tipoInteresado, ConstantesAsientoXML.DATOSINTERESADO_TIPOINTERESADO_MAX);
 		validaCampoObligatorio ("DatosInteresado", "TipoInteresado", tipoInteresado);
 		validaCampoConListaValores ("DatosInteresado", "TipoInteresado", tipoInteresado, valoresPermitidos);

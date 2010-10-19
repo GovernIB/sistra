@@ -8,6 +8,7 @@ import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
 import es.caib.zonaper.model.EntradaPreregistro;
+import es.caib.zonaper.model.EntradaPreregistroBackup;
 import es.caib.zonaper.persistence.intf.EntradaPreregistroFacade;
 import es.caib.zonaper.persistence.util.EntradaPreregistroFacadeUtil;
 
@@ -134,6 +135,20 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }    
+    public List listarEntradaPreregistroBackup( Date fecha ) throws DelegateException {
+    	try {
+           return getFacade().listarEntradaPreregistroBackup( fecha );            
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    public void borrarEntradaPreregistroBackup( EntradaPreregistroBackup entradaPreregistroBackup ) throws DelegateException {
+    	try {
+            getFacade().borrarEntradaPreregistroBackup( entradaPreregistroBackup );            
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
     
     public List listarEntradaPreregistrosCaducados( Date fecha ) throws DelegateException 
     {

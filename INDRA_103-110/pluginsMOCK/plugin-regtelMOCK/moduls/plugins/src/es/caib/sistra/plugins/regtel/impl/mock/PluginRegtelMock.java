@@ -83,4 +83,12 @@ public class PluginRegtelMock implements PluginRegistroIntf{
 		return lista;
 	}
 
+	public void anularRegistroEntrada(String numeroRegistro, Date fechaRegistro) throws Exception {
+		
+	}
+
+	public void anularRegistroSalida(String numeroRegistro, Date fechaRegistro) throws Exception {
+		
+	}
+
 }

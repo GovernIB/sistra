@@ -41,12 +41,14 @@ import es.caib.redose.persistence.delegate.RdsDelegate;
  *  view-type="remote"
  *  transaction-type="Container"
  *
+ * @ejb.env-entry name="role.auto" type="java.lang.String" value="${role.auto}"
+ * 
  * @ejb.transaction type="Required"
  */
 public abstract class BteFacadeEJB implements SessionBean  {
 
 	private SessionContext context;
-	
+	private String roleAuto;
 	
 	public void setSessionContext(SessionContext ctx) throws EJBException, RemoteException{
 		this.context = ctx;
@@ -58,6 +60,15 @@ public abstract class BteFacadeEJB implements SessionBean  {
      * @ejb.permission role-name="${role.auto}"
      */
 	public void ejbCreate() throws CreateException {		
+		try
+		{
+			javax.naming.InitialContext initialContext = new javax.naming.InitialContext();
+			roleAuto = ( String ) initialContext.lookup( "java:comp/env/role.auto" );
+		}
+		catch( Exception exc )
+		{
+			exc.printStackTrace();
+		}
 	}
 	
 	
@@ -259,8 +270,11 @@ public abstract class BteFacadeEJB implements SessionBean  {
      */
     private TramiteBTE tramiteBandejaToTramiteBTE(TramiteBandeja t, boolean recuperarRDS) throws ExcepcionBTE{    	
     	try{
+    		RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
+    		
 	    	TramiteBTE tramBte = new TramiteBTE();	  
 	    	tramBte.setNumeroEntrada(t.getNumeroEntrada());
+	    	tramBte.setClaveAcceso(t.getClaveAcceso());
 	    	tramBte.setCodigoEntrada(t.getCodigo());
 	    	tramBte.setUnidadAdministrativa(t.getUnidadAdministrativa());
 	    	tramBte.setFecha(t.getFecha());
@@ -274,10 +288,22 @@ public abstract class BteFacadeEJB implements SessionBean  {
 	    	tramBte.setDescripcionTramite(t.getDescripcionTramite());
 	    	tramBte.setRepresentadoNif(t.getRepresentadoNif());
 	    	tramBte.setRepresentadoNombre(t.getRepresentadoNombre());	    	
+	    	tramBte.setDelegadoNif(t.getDelegadoNif());
+	    	tramBte.setDelegadoNombre(t.getDelegadoNombre());
 	    	tramBte.setCodigoReferenciaRDSAsiento(t.getCodigoRdsAsiento().longValue());
 	    	tramBte.setClaveReferenciaRDSAsiento(t.getClaveRdsAsiento());	    	
+	    	
+	    	DocumentoRDS docRDSAsiento = rds.consultarDocumento(new ReferenciaRDS(t.getCodigoRdsAsiento().longValue(),t.getClaveRdsAsiento()),false);	    				
+	    	tramBte.setReferenciaGestorDocumentalAsiento(docRDSAsiento.getReferenciaGestorDocumental());
+	    	tramBte.setCodigoDocumentoCustodiaAsiento(docRDSAsiento.getCodigoDocumentoCustodia());
+	    	
 	    	tramBte.setCodigoReferenciaRDSJustificante(t.getCodigoRdsJustificante().longValue());
 	    	tramBte.setClaveReferenciaRDSJustificante(t.getClaveRdsJustificante());	    	
+	    	
+	    	DocumentoRDS docRDSJustificante = rds.consultarDocumento(new ReferenciaRDS(t.getCodigoRdsJustificante().longValue(),t.getClaveRdsJustificante()),false);	    				
+	    	tramBte.setReferenciaGestorDocumentalJustificante(docRDSJustificante.getReferenciaGestorDocumental());
+	    	tramBte.setCodigoDocumentoCustodiaJustificante(docRDSJustificante.getCodigoDocumentoCustodia());	    	
+	    	
 	    	tramBte.setNumeroRegistro(t.getNumeroRegistro());	    
 	    	tramBte.setFechaRegistro(t.getFechaRegistro());
 	    	tramBte.setNumeroPreregistro(t.getNumeroPreregistro());
@@ -290,6 +316,8 @@ public abstract class BteFacadeEJB implements SessionBean  {
 	    	tramBte.setAvisoSMS(t.getAvisoSMS());
 	    	tramBte.setHabilitarNotificacionTelematica(t.getHabilitarNotificacionTelematica());
 	    	tramBte.setFirmadaDigitalmente(t.getFirmada() == 'S');
+	    	tramBte.setSubsanacionExpedienteCodigo(t.getSubsanacionExpedienteId());
+	    	tramBte.setSubsanacionExpedienteUnidadAdministrativa(t.getSubsanacionExpedienteUA());
 	    	
 	    	for (Iterator it = t.getDocumentos().iterator();it.hasNext();){    		
 	    		DocumentoBandeja d = (DocumentoBandeja) it.next();
@@ -310,13 +338,14 @@ public abstract class BteFacadeEJB implements SessionBean  {
 	    				    			
 	    			// Recuperamos información del RDS
 	    			if (recuperarRDS){
-	    				RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
 	    				DocumentoRDS docRDS = rds.consultarDocumento(ref);	    				
 	    				fic.setNombre(docRDS.getNombreFichero());
 	    				fic.setExtension(docRDS.getExtensionFichero());
 	    				fic.setEstructurado(docRDS.isEstructurado());
 	    				fic.setContent(docRDS.getDatosFichero());
 	    				fic.setFirmas(docRDS.getFirmas());	    				    
+	    				fic.setReferenciaGestorDocumental(docRDS.getReferenciaGestorDocumental());
+	    				fic.setCodigoDocumentoCustodia(docRDS.getCodigoDocumentoCustodia());
 	    			}
 	    			
 	    			dbantel.setPresentacionTelematica(fic);
@@ -376,7 +405,7 @@ public abstract class BteFacadeEJB implements SessionBean  {
     	}
     	
     	// Comprobamos que gestor tenga acceso a los tramites (excepto para auto)
-    	if (!this.context.isCallerInRole("BTE_AUTO")){
+    	if (!this.context.isCallerInRole(roleAuto)){
     		try{
 	    		GestorBandejaDelegate gd = DelegateUtil.getGestorBandejaDelegate();    		
 	    		GestorBandeja gestor = gd.obtenerGestorBandeja(this.context.getCallerPrincipal().getName());

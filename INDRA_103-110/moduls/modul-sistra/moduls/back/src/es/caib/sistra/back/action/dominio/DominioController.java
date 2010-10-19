@@ -1,6 +1,7 @@
 package es.caib.sistra.back.action.dominio;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -15,6 +16,7 @@ import es.caib.sistra.back.action.BaseController;
 import es.caib.sistra.persistence.delegate.DelegateException;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
 import es.caib.sistra.persistence.delegate.OrganoResponsableDelegate;
+import es.caib.sistra.persistence.delegate.VersionWSDelegate;
 
 public class DominioController extends BaseController
 {
@@ -31,6 +33,11 @@ public class DominioController extends BaseController
             OrganoResponsableDelegate organoDelegate = DelegateUtil.getOrganoResponsableDelegate();
             request.setAttribute("organoOptions", organoDelegate.listarOrganoResponsables() );
            
+            // Obtenemos lista de versiones
+            VersionWSDelegate vWSdelegate = DelegateUtil.getVersionWSDelegate();
+            List versiones = vWSdelegate.obtenerVersiones();
+            request.setAttribute( "listaVersionesWS", versiones);
+          
 			
 		 } catch (DelegateException e) {
 	         throw new ServletException(e);

@@ -58,6 +58,9 @@
    		<form name="historicoForm">
 		</form>
 
+		<form name="erroresGestorForm">
+		</form>
+		
         <form name="importarForm">
             <field property="model" depends="mask">
                 <arg0 key="formulario.importar.model" />

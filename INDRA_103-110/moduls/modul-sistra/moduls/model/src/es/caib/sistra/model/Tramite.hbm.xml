@@ -12,7 +12,7 @@
           </generator>
       </id>
 
-	<property name="identificador" column="TRA_IDENTI" not-null="true" unique="true" length="10"/>
+	<property name="identificador" column="TRA_IDENTI" not-null="true" unique="true" length="20"/>
     
     <many-to-one name="organoResponsable" column="TRA_CODORG" not-null="true"/>
     

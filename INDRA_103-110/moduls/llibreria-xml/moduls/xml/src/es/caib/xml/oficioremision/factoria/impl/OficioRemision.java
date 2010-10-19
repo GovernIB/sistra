@@ -1,6 +1,10 @@
 package es.caib.xml.oficioremision.factoria.impl;
 
+import javax.xml.bind.JAXBException;
+
 import es.caib.xml.EstablecerPropiedadException;
+import es.caib.xml.oficioremision.modelo.OFICIOREMISION;
+import es.caib.xml.oficioremision.modelo.ObjectFactory;
 
 /** Objeto de Instrucciones que encapsula el nodo XML INSTRUCCIONES de los documentos
  * XML de oficio remision. Para la implementación se usa un objeto
@@ -15,11 +19,13 @@ public class OficioRemision extends NodoBaseOficioRemision  {
 			
 	private String titulo;
 	private String texto;
+	private TramiteSubsanacion tramiteSubsanacion;
 	
 	
 	OficioRemision (){
 		titulo = null;
 		texto = null;
+		tramiteSubsanacion = null;
 	}
 			
 
@@ -40,6 +46,7 @@ public class OficioRemision extends NodoBaseOficioRemision  {
 						
 			if (!objetosIguales (getTitulo(), inst.getTitulo())) return false;
 			if (!objetosIguales (getTexto(), inst.getTexto())) return false;
+			if (!objetosIguales (getTramiteSubsanacion(), inst.getTramiteSubsanacion())) return false;
 			
 			// OK los objetos son equivalentes
 			return true;
@@ -64,4 +71,39 @@ public class OficioRemision extends NodoBaseOficioRemision  {
 		this.titulo = titulo;
 	}
 
+	
+	// étodos para realizar la conversión JAXB -> Jerarquía propia de objetos
+	public static OficioRemision fromJAXB (OFICIOREMISION oficioRemisionJAXB) throws JAXBException{
+		OficioRemision oficioRemision = null;
+		if ( oficioRemisionJAXB != null){
+			oficioRemision = new OficioRemision();
+			oficioRemision.setTitulo(oficioRemisionJAXB.getTITULO());
+			oficioRemision.setTexto(oficioRemisionJAXB.getTEXTO());
+			oficioRemision.setTramiteSubsanacion(TramiteSubsanacion.fromJAXB(oficioRemisionJAXB.getTRAMITESUBSANACION()));
+		}
+		return oficioRemision;
+	}
+	
+	
+	//	Métodos para realizar la conversión Jerarquía propia de objetos -> JAXB  
+	public static  OFICIOREMISION toJAXB (OficioRemision oficioRemision) throws JAXBException{
+		OFICIOREMISION oficioRemisionJAXB = null;
+		if ( (oficioRemision != null)){
+			oficioRemisionJAXB = (new ObjectFactory()).createOFICIOREMISION();
+			oficioRemisionJAXB.setTITULO(oficioRemision.getTitulo());
+			oficioRemisionJAXB.setTEXTO(oficioRemision.getTexto());
+			oficioRemisionJAXB.setTRAMITESUBSANACION(TramiteSubsanacion.toJAXB(oficioRemision.getTramiteSubsanacion()));
+		}
+		return oficioRemisionJAXB;
+	}
+
+
+	public TramiteSubsanacion getTramiteSubsanacion() {
+		return tramiteSubsanacion;
+	}
+
+
+	public void setTramiteSubsanacion(TramiteSubsanacion tramiteSubsanacion) {
+		this.tramiteSubsanacion = tramiteSubsanacion;
+	}
 }

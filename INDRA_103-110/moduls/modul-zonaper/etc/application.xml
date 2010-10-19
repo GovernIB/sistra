@@ -7,8 +7,8 @@
     <display-name>PAD</display-name>
     <description><![CDATA[Proyecto IBCEGE - ZONAPER]]></description>
     
-    <module><java>zonaper-model.jar</java></module>    
-    <module><ejb>zonaper-persistence.jar</ejb></module>
+    <module><java>3-zonaper-model.jar</java></module>    
+    <module><ejb>3-zonaper-persistence.jar</ejb></module>
     
 <!-- 
     <module><java>zonaper-persistence-webservice.wsr</java></module>
@@ -16,42 +16,42 @@
      
     <module>
         <web>
-            <web-uri>zonaper-front.war</web-uri>
+            <web-uri>3-zonaper-front.war</web-uri>
             <context-root>zonaperfront</context-root>
         </web>
     </module>
  
      <module>
         <web>
-            <web-uri>zonaper-admin.war</web-uri>
+            <web-uri>3-zonaper-admin.war</web-uri>
             <context-root>zonaperadmin</context-root>
         </web>
     </module>
     
     <module>
         <web>
-            <web-uri>zonaper-back.war</web-uri>
+            <web-uri>3-zonaper-back.war</web-uri>
             <context-root>zonaperback</context-root>
         </web>
     </module>
     
     <module>
         <web>
-            <web-uri>zonaper-filter.war</web-uri>
+            <web-uri>3-zonaper-filter.war</web-uri>
             <context-root>zonaperfilter</context-root>
         </web>
     </module>
  
     <module>
         <web>
-            <web-uri>zonaper-helpdesk.war</web-uri>
+            <web-uri>3-zonaper-helpdesk.war</web-uri>
             <context-root>zonaperhelpdesk</context-root>
         </web>
     </module>
     
     <module>
 		<web>
-			<web-uri>zonaper-ws.war</web-uri>
+			<web-uri>3-zonaper-ws.war</web-uri>
 			<context-root>zonaperws</context-root>
 		</web>
 	</module>

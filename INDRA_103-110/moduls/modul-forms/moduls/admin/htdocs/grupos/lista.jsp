@@ -59,6 +59,10 @@
                     <bean:define id="urlBaja"><html:rewrite page="/admin/grupo/eliminar.do" paramId="codigo" paramName="grupo" paramProperty="codigo"/></bean:define>
                     <bean:define id="nombre" name="grupo" property="nombre" type="java.lang.String"/>
     	            <bean:define id="mensaje"><bean:message arg0='<%=nombre%>' key='grupo.baja'/></bean:define>
+	       	        <%
+    	               	mensaje = mensaje.replace("\'","&#145;");
+	    	            mensaje = mensaje.replace("\"","&#34;");
+                    %>
         	        <button class="button" type="button" onclick="confirmAndForward('<%=mensaje%>', '<%=urlBaja%>')"><bean:message key="boton.baixa"/></button>
                 </td>
             </tr>

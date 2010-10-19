@@ -56,6 +56,20 @@ public class PasosNecesariosController extends TramiteController
 			}				
 		}
 		
+		//
+		// 	COMPROBAMOS SI HAY DELEGACION Y HAY QUE PASAR EL TRAMITE
+		//
+		
+		if (tramite.isRemitirDelegacionFirma()){
+			request.setAttribute("pendienteDelegacionFirma","true");
+			return;
+		}
+		if (tramite.isRemitirDelegacionPresentacion()) {
+			request.setAttribute("pendienteDelegacionPresentacion","true");
+			return;
+		}
+		
+		
 		// En caso de trámite de consulta y paso justificante, enviamos a la configuración de resultado consulta
 		if ( tramite.isConsultar() && tramite.getPasoTramitacion().getTipoPaso() == PasoTramitacion.PASO_FINALIZAR )
 		{
@@ -90,12 +104,28 @@ public class PasosNecesariosController extends TramiteController
 			PasoTramitacion paso = ( PasoTramitacion ) tramite.getPasos().get( i );			
 			
 			// Comprobación de pasos anteriores completados
+			// (damos por completados los pendientes de flujo y de delegacion)
+			PasoTramitacion pasoAnterior =  null;
 			if (i>0){
-				if (!(( PasoTramitacion ) tramite.getPasos().get( i-1 )).getCompletado().equals(PasoTramitacion.ESTADO_COMPLETADO)) completadosAnteriores = false;
+				pasoAnterior = ( PasoTramitacion ) tramite.getPasos().get( i-1 );
+				if (pasoAnterior.getCompletado().equals(PasoTramitacion.ESTADO_COMPLETADO)
+					||
+					pasoAnterior.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_FLUJO)
+					||
+					pasoAnterior.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_DELEGACION_PRESENTACION)
+					||
+					pasoAnterior.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_DELEGACION_FIRMA)	){
+						completadosAnteriores = true;
+				}else{
+						completadosAnteriores = false;
+				}
 			}			
 			
+			
 			// SE HA ENVIADO EL TRAMITE			
-			if ( i < tramite.getPasoActual() &&  tramite.getPasoActual() > tramite.getPasoNoRetorno() && i <= tramite.getPasoNoRetorno()) {
+			if ( i < tramite.getPasoActual() &&
+				 tramite.getPasoActual() > tramite.getPasoNoRetorno() &&
+				 i <= tramite.getPasoNoRetorno()) {
 				// Si es un paso anterior al de no retorno (registrar) no mostramos enlaces
 				habilitarSiguiente = false;
 				habilitarAnterior  = false;
@@ -124,7 +154,7 @@ public class PasosNecesariosController extends TramiteController
 				/**
 				 * MODIFICACION: NO MOSTRAMOS PAGINA DE PASOS
 				 */
-				if ( i > 0 && ((PasoTramitacion) tramite.getPasos().get( i - 1 )).getTipoPaso() == PasoTramitacion.PASO_PASOS)
+				if ( i > 0 && pasoAnterior.getTipoPaso() == PasoTramitacion.PASO_PASOS)
 					habilitarAnterior = false;
 				
 				siguientes.add(i,new Boolean(habilitarSiguiente));
@@ -133,7 +163,12 @@ public class PasosNecesariosController extends TramiteController
 			}
 			
 			// PASO PENDIENTE DE FLUJO 
-			if (paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_FLUJO)){
+			if (paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_FLUJO)
+				||
+				paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_DELEGACION_PRESENTACION)
+				||
+				paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_DELEGACION_FIRMA)
+				){
 				
 				// Permitimos anterior
 				habilitarAnterior = true;							
@@ -150,7 +185,7 @@ public class PasosNecesariosController extends TramiteController
 				/**
 				 * MODIFICACION: NO MOSTRAMOS PAGINA DE PASOS
 				 */
-				if (i > 0 && ((PasoTramitacion) tramite.getPasos().get( i - 1 )).getTipoPaso() == PasoTramitacion.PASO_PASOS)
+				if (i > 0 && pasoAnterior.getTipoPaso() == PasoTramitacion.PASO_PASOS)
 					habilitarAnterior = false;
 				
 				siguientes.add(i,new Boolean(habilitarSiguiente));
@@ -166,23 +201,19 @@ public class PasosNecesariosController extends TramiteController
 				habilitarAnterior = false;
 				
 				// Si se han completado todas los anteriores mostramos anterior				
-				if (completadosAnteriores) habilitarAnterior = true;					
-				
-				// Si no se han completado todos los anteriores mostramos anterior si el paso es anexar y esta en estado pendiente de flujo
-				if (!completadosAnteriores && paso.getTipoPaso() == PasoTramitacion.PASO_ANEXAR && 
-						((PasoTramitacion) tramite.getPasos().get( i - 1 )).getTipoPaso() == PasoTramitacion.PASO_RELLENAR && 
-						((PasoTramitacion) tramite.getPasos().get( i - 1 )).getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_FLUJO)) habilitarAnterior = true;
-				
-				
+				if (completadosAnteriores){
+					habilitarAnterior = true;
+				}
 
 				/**
 				 * MODIFICACION: NO MOSTRAMOS PAGINA DE PASOS
 				 */
-				if (i > 0 && ((PasoTramitacion) tramite.getPasos().get( i - 1 )).getTipoPaso() == PasoTramitacion.PASO_PASOS)
+				if (i > 0 && pasoAnterior.getTipoPaso() == PasoTramitacion.PASO_PASOS)
 					habilitarAnterior = false;
 				
 				siguientes.add(i,new Boolean(habilitarSiguiente));
 				anteriores.add(i,new Boolean(habilitarAnterior));
+								
 			}						
 						
 		}		

@@ -17,6 +17,7 @@ import es.caib.util.ConvertUtil;
 import es.caib.zonaper.front.form.AbrirNotificacionForm;
 import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.NotificacionTelematica;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.NotificacionTelematicaDelegate;
 
@@ -78,7 +79,11 @@ public class FirmaAcuseReciboAction extends BaseAction
 				// Volvemos a mostrar la notificacion
 				request.setAttribute("notificacion",notificacion);
 				request.setAttribute("elementoExpediente",elementoExpediente);
+				if (this.getDatosSesion(request).getPerfilAcceso().equals(ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO)){
+					request.setAttribute( "messageKey", "detalleNotificacion.firmanteNoAdecuado.delegado" );
+				}else{
 				request.setAttribute( "messageKey", "detalleNotificacion.firmanteNoAdecuado" );
+				}
 				return mapping.findForward( "fail" );
 			}
 		}catch (Exception ex){

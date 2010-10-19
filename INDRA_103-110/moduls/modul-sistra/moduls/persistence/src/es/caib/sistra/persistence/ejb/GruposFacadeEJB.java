@@ -27,22 +27,38 @@ import es.caib.sistra.model.RolUsuarioTramiteId;
  *  view-type="remote"
  *  transaction-type="Container"
  *
+ *  @ejb.env-entry name="role.operador" type="java.lang.String" value="${role.operador}"
+ *
  * @ejb.transaction type="Required"
  */
 public abstract class GruposFacadeEJB extends HibernateEJB {
 
+	private String roleOperador;
+	
     /**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
+        
+        try
+		{
+			javax.naming.InitialContext initialContext = new javax.naming.InitialContext();
+			roleOperador = ( String ) initialContext.lookup( "java:comp/env/role.operador" );			
+		}
+		catch( Exception exc )
+		{
+			exc.printStackTrace();
+		}
     }
 
     /**
      * Devuelve una lista de grupos.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public List listarGrupos() {
         Session session = getSession();
@@ -60,7 +76,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Devuelve un grupo por su código.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public Grupos obtenerGrupo(String codigoGrupo){
     	Session session = getSession();
@@ -78,7 +95,7 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Guarda el contenido de un grupo.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void guardarGrupo(Grupos grupo){
     	Session session = getSession();
@@ -95,7 +112,7 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Modificar el contenido de un grupo.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void modificarGrupo(Grupos grupo){
     	Session session = getSession();
@@ -111,7 +128,7 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Eliminar un grupo.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void eliminarGrupo(Grupos grupo){
     	Session session = getSession();
@@ -128,7 +145,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * lista de grupos asociados a un tramite.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public List listarGruposByTramite(Long id){
     	Session session = getSession();
@@ -149,7 +167,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * lista de usuarios asociados a un tramite.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public List listarUsuariosByTramite(Long id){
     	Session session = getSession();
@@ -170,7 +189,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * lista de grupos no asociados a un tramite.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public List listarGruposByNotTramite(Long id){
     	Session session = getSession();
@@ -191,7 +211,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Existen grupos
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public boolean existenGrupos(){
     	Session session = getSession();
@@ -215,7 +236,7 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Asociar un grupo a un tramite
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void asociarGrupo(String grupoAsociar, String tramite){
     	Session session = getSession();
@@ -234,7 +255,7 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Desasociar un grupo a un tramite 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void desAsociarGrupo(String grupoAsociar, String tramite){
     	Session session = getSession();
@@ -254,7 +275,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * lista de usuarios asociados a un grupo
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public List obtenerUsuariosByGrupo(String codigo){
     	Session session = getSession();
@@ -276,7 +298,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * comprueba si existe usuarios asociados a un grupo.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public boolean existeUsuariosByGrupo(String codigo){
     	Session session = getSession();
@@ -296,7 +319,7 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Asociar usuario a un grupo
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void asociarUsuario(GrupoUsuario grpUser){
     	Session session = getSession();
@@ -311,10 +334,23 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     
     /**
      * Asociar usuario a un tramite
+     * Se da permisos al operador para que en un nuevo tramite este de alta como usuario del tramite
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void asociarUsuarioTramite(RolUsuarioTramite userTra){
+    	
+    	// Si es operador, comprobamos que el tramite sea nuevo (no tenga asociado ningun permiso)
+    	if (this.ctx.isCallerInRole(roleOperador)){
+    		if( this.listarUsuariosByTramite(userTra.getId().getCodiTra()).size() > 0 ||
+    				this.listarGruposByTramite(userTra.getId().getCodiTra()).size() > 0
+    		   ){
+    				throw new EJBException("Usuario no puede darse permisos de acceso sobre tramite");
+    			}
+    	}
+    	
+    	// Asociamos usuario a tramite
     	Session session = getSession();
         try {
         	session.save(userTra);
@@ -328,7 +364,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * obtener usuario tramite
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public RolUsuarioTramite obtenerUsuarioTramite(RolUsuarioTramiteId id){
     	Session session = getSession();
@@ -344,7 +381,7 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * eliminar usuario tramite
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void eliminarUsuarioTramite(RolUsuarioTramite userTra){
     	Session session = getSession();
@@ -360,7 +397,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Obtener asociación usuario grupo
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public GrupoUsuario obtenerUsuarioGrupo(GrupoUsuarioId id){
     	Session session = getSession();
@@ -375,7 +413,7 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Eliminar asociación usuario grupo
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void eliminarUsuarioGrupo(GrupoUsuario grpUser){
     	Session session = getSession();
@@ -391,7 +429,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Existen usuarios relacionados con el tramite
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public boolean existeUsuarioByTramite(String usuario, Long tramite){
     	Session session = getSession();
@@ -416,7 +455,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     /**
      * Existe usuario en el grupo relacionado con el tramite
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public boolean existeUsuarioByGruposTramite(String usuario, Long tramite){
     	Session session = getSession();
@@ -443,10 +483,22 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     
     /**
      * Borra todas las referencias de los grupos con este tramite
+     * Se da permiso al operador, porque si borra el tramite se deben borrar las referencias
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void borrarTramiteGrupos(Long tramite){
+    	
+    	// Si es operador, comprobamos que tiene permisos de acceso al tramite
+    	if (this.ctx.isCallerInRole(roleOperador)){
+    		if(!this.existeUsuarioByGruposTramite(this.ctx.getCallerPrincipal().getName(),tramite) &&
+    		   !this.existeUsuarioByTramite(this.ctx.getCallerPrincipal().getName(),tramite)
+    		   ){
+    				throw new EJBException("Usuario no tiene permisos de acceso al tramite");
+    			}
+    	}
+    	
     	Session session = getSession();
         try {
         	List grupos = listarGruposByTramite(tramite);
@@ -467,10 +519,23 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     
     /**
      * Borra todas las referencias de los usuaris con este tramite
+     * Se da permiso al operador, porque si borra el tramite se deben borrar las referencias
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void borrarTramiteUsuarios(Long tramite){
+    	
+    	// Si es operador, comprobamos que tiene permisos de acceso al tramite
+    	if (this.ctx.isCallerInRole(roleOperador)){
+    		if(!this.existeUsuarioByGruposTramite(this.ctx.getCallerPrincipal().getName(),tramite) &&
+    		   !this.existeUsuarioByTramite(this.ctx.getCallerPrincipal().getName(),tramite)
+    		   ){
+    				throw new EJBException("Usuario no tiene permisos de acceso al tramite");
+    			}
+    	}
+    	
+    	// Borramos referencias tramite
     	Session session = getSession();
         try {
         	List usuarios = listarUsuariosByTramite(tramite);

@@ -8,6 +8,7 @@ import java.util.Properties;
 import es.caib.sistra.plugins.login.PluginAutenticacionExplicitaIntf;
 import es.caib.sistra.plugins.custodia.PluginCustodiaIntf;
 import es.caib.sistra.plugins.firma.PluginFirmaIntf;
+import es.caib.sistra.plugins.gestionDocumental.PluginGestorDocumentalIntf;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
 import es.caib.sistra.plugins.pagos.PluginPagosIntf;
 import es.caib.sistra.plugins.regtel.PluginRegistroIntf;
@@ -131,7 +132,7 @@ public class PluginFactory {
 	
 	/**
 	 * Obtiene plugin de autenticacion
-	 * @return Plugin de login
+	 * @return Plugin de autenticacion
 	 * @throws Exception
 	 */
 	public PluginAutenticacionExplicitaIntf getPluginAutenticacionExplicita() throws Exception{
@@ -139,11 +140,23 @@ public class PluginFactory {
 	}
 	
 	/**
-	 * Obtiene plugin de custodia. Si no hay configurado sistema de custodia de
-	 * @return Plugin de login
+	 * Obtiene plugin de custodia
+	 * @return Plugin de custodia
 	 * @throws Exception
 	 */
 	public PluginCustodiaIntf getPluginCustodia() throws Exception{
 		return  (PluginCustodiaIntf) getPlugin("plugin.custodia");		
 	}
+	
+	/**
+	 * Obtiene plugin de gestion documental
+	 * @return Plugin de gestion documental
+	 * @throws Exception
+	 */
+	public PluginGestorDocumentalIntf getPluginGestionDocumental() throws Exception{
+		return  (PluginGestorDocumentalIntf) getPlugin("plugin.gestionDocumental");		
+	}
+	
+	
+	
 }

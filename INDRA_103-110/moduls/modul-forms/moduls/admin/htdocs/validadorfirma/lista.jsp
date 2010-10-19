@@ -43,6 +43,10 @@
 
                     <bean:define id="mensajeBaja"><bean:message arg0='<%=nombre%>' key='validador.baja' /></bean:define>
                     <bean:define id="urlBaja"><html:rewrite page="/admin/validador/baja.do" paramId="id" paramName="validador" paramProperty="id"/></bean:define>
+                    <%
+                    mensajeBaja = mensajeBaja.replace("\'","&#145;");
+                    mensajeBaja = mensajeBaja.replace("\"","&#34;");
+                    %>
                     <button class="button" type="button" onclick="confirmAndForward('<%=mensajeBaja%>', '<%=urlBaja%>')"><bean:message key="boton.baixa" /></button>
                 </td>
             </tr>

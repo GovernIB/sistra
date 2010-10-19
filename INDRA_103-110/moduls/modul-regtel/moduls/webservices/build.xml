@@ -31,9 +31,9 @@
    		 <include name="redose-client.jar" />
 	  </fileset>
 	  <fileset dir="${web.product}">
-      	<include name="regtel-model.jar" />
-        <include name="regtel-persistence-client.jar" />
-	 	<include name="regtel-persistence.jar" />
+      	<include name="8-regtel-model.jar" />
+        <include name="8-regtel-persistence-client.jar" />
+	 	<include name="8-regtel-persistence.jar" />
       </fileset>
 	  <fileset dir="${distribucion.dir}/lib"> 
 	    <include name="sistra-util.jar"/>
@@ -49,7 +49,7 @@
 	<target name="main" depends="war" description="Construeye el war"/>
 
 	<target name="war">
-		<cxfwar filename="${modul.name}.war"/>
+		<cxfwar filename="8-${modul.name}.war"/>
 	</target>
 	
     <macrodef name="cxfwar">

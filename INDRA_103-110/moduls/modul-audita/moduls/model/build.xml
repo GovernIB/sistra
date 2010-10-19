@@ -51,9 +51,9 @@
     </target>
 
     <target name="jar.jar" depends="jar.compile">
-        <delete file="${jar.product}/audit-${modul}.jar" quiet="yes"/>
+        <delete file="${jar.product}/1-audit-${modul}.jar" quiet="yes"/>
         <jar
-            jarfile="${jar.product}/audit-${modul}.jar"
+            jarfile="${jar.product}/1-audit-${modul}.jar"
             basedir="${jar.classes}">
             <manifest>
                 <attribute name="Created-By" value="${indra}"/>

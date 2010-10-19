@@ -139,6 +139,10 @@
 						<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.asunto.nombreRepresentado"/>:</span> <span><bean:write name="tramite" property="representadoNombre"/></span></li>
 						<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.asunto.nifRepresentado"/>:</span> <span><bean:write name="tramite" property="representadoNif"/></span></li>
 					 </logic:notEmpty>
+					<logic:notEmpty name="tramite" property="delegadoNif">
+						<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.asunto.nombreDelegado"/>:</span> <span><bean:write name="tramite" property="delegadoNombre"/></span></li>
+						<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.asunto.nifDelegado"/>:</span> <span><bean:write name="tramite" property="delegadoNif"/></span></li>
+					</logic:notEmpty>
 				</ul>
 				
 				<!--  accesso al justificante para entradas telematicas -->										
@@ -222,6 +226,15 @@
 												[XML]
 											</html:link>
 										<%}%>
+										<bean:define id="codigoFirma" type="java.lang.String">
+											<bean:write name="documento" property="codigo" />
+										</bean:define>
+										<logic:notEmpty name="<%=codigoFirma %>" scope="request">
+											<bean:message key="comprobarDocumento.firmadoPor"/>
+											<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request">							
+												&nbsp;<bean:write name="firma" property="nombreApellidos"/>
+											</logic:iterate>			
+										</logic:notEmpty>
 									</li>
 							</logic:notEqual>					
 						</logic:notEmpty>

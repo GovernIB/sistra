@@ -1,6 +1,7 @@
 package es.caib.regtel.persistence.delegate;
 
 import java.rmi.RemoteException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -49,11 +50,21 @@ public class RegistroOrganismoDelegate implements StatelessDelegate {
 	    }	 	 
 	 }
 	
-	 public void anularRegistroEntrada(String numeroRegistro) throws DelegateException
+	 public void anularRegistroEntrada(String numeroRegistro, Date fechaRegistro) throws DelegateException
 		{
 			try
 			{			
-				getFacade().anularRegistroEntrada(numeroRegistro);				
+				getFacade().anularRegistroEntrada(numeroRegistro, fechaRegistro);				
+			} catch (Exception e) {
+		        throw new DelegateException(e);
+		    }	 	 
+		 }
+	 
+	 public void anularRegistroSalida(String numeroRegistro, Date fechaRegistro) throws DelegateException
+		{
+			try
+			{			
+				getFacade().anularRegistroSalida(numeroRegistro, fechaRegistro);				
 			} catch (Exception e) {
 		        throw new DelegateException(e);
 		    }	 	 
@@ -99,6 +110,35 @@ public class RegistroOrganismoDelegate implements StatelessDelegate {
 	    }	 	 
 	 }
 	
+	public boolean existeOficinaRegistro(String oficinaRegistro) throws DelegateException 
+	{ 
+		try
+		{			
+			return getFacade().existeOficinaRegistro(oficinaRegistro);				
+		} catch (Exception e) {
+	        throw new DelegateException(e);
+	    }	 	 
+	 } 
+	
+	public boolean existeTipoAsunto(String tipoAsunto) throws DelegateException 
+	{
+		try
+		{			
+			return getFacade().existeTipoAsunto(tipoAsunto);				
+		} catch (Exception e) {
+	        throw new DelegateException(e);
+	    }	 	 
+	 }
+	
+	public boolean existeServicioDestino(String servicioDestino) throws DelegateException
+	{
+		try
+		{			
+			return getFacade().existeServicioDestino(servicioDestino);				
+		} catch (Exception e) {
+	        throw new DelegateException(e);
+	    }	 	 
+	 }
 	
 	
     /* ========================================================= */

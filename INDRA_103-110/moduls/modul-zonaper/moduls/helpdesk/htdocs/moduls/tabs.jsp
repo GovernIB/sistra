@@ -71,6 +71,18 @@
 					</html:link>		
 			</logic:notEqual>
 		
+			<!--  OPCION 6: USUARIOS -->
+			<logic:equal name="<%=Constants.OPCION_SELECCIONADA_KEY%>" value="<%=Constants.BACKUP_TAB%>">
+				<span>
+						<bean:message key="tabs.backup"/>	
+				</span>
+			</logic:equal>
+			<logic:notEqual name="<%=Constants.OPCION_SELECCIONADA_KEY%>" value="<%=Constants.BACKUP_TAB%>">
+					<html:link action="backup">
+						<bean:message key="tabs.backup"/>	
+					</html:link>		
+			</logic:notEqual>
+		
 		
 		</td>
 	</tr>

@@ -24,8 +24,8 @@
     </target>
 
     <target name="web.war">
-        <delete file="${web.product}/${prj.name}-${modul}.war" quiet="yes"/>
-        <war warfile="${web.product}/${prj.name}-${modul}.war"
+        <delete file="${web.product}/5-${prj.name}-${modul}.war" quiet="yes"/>
+        <war warfile="${web.product}/5-${prj.name}-${modul}.war"
             basedir="${web.htdocs}" webxml="${etc.dir}/web.xml">
             <manifest>
                 <attribute name="Created-By" value="${indra}"/>

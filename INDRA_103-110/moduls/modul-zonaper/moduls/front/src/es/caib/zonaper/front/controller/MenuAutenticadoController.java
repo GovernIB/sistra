@@ -13,6 +13,7 @@ public class MenuAutenticadoController extends BaseController
 			ServletContext servletContext) throws Exception
 	{
 		
+		
 	}
 	
 	

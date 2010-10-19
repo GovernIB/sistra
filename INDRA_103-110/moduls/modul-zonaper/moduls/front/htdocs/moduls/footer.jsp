@@ -27,7 +27,7 @@
 	    String urlSoporteFinal = es.caib.util.StringUtil.replace(urlSoporte,"@asunto@",textoAsunto);
 	    urlSoporteFinal = es.caib.util.StringUtil.replace(urlSoporteFinal,"@idioma@",lang);			
 	%>
-	
+<logic:equal name="<%=es.caib.zonaper.front.Constants.MOSTRAR_EN_IFRAME%>" value="false">	
 	<!-- ayuda -->
 		<div id="suportTecnic">
 			<h2><bean:message key="footer.soporte.ayuda"/></h2>
@@ -84,3 +84,4 @@
 		</div>
 		
 </div>
+</logic:equal>

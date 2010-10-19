@@ -5,12 +5,41 @@
       <xs:sequence>
         <xs:element minOccurs="1" maxOccurs="1" ref="TITULO"/>
         <xs:element minOccurs="1" maxOccurs="1" ref="TEXTO"/>
+        <xs:element  minOccurs="0" maxOccurs="1" ref="TRAMITE_SUBSANACION"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
  
   <xs:element name="TITULO" type="string_no_vacio"/>
   <xs:element name="TEXTO" type="string_no_vacio"/>
+   
+  <xs:element name="TRAMITE_SUBSANACION">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="DESCRIPCION_TRAMITE" type="xs:string"/>
+				<xs:element name="IDENTIFICADOR_TRAMITE" type="xs:string"/>
+				<xs:element name="VERSION_TRAMITE" type="xs:int"/>		
+				<xs:element minOccurs="0" maxOccurs="1" ref="PARAMETROS_TRAMITE"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="PARAMETROS_TRAMITE">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="unbounded" ref="PARAMETRO_TRAMITE"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>	
+	
+	<xs:element name="PARAMETRO_TRAMITE">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="PARAMETRO" type="xs:string"/>
+				<xs:element name="VALOR" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType> 
+	</xs:element>
    
   <xs:simpleType name='string_no_vacio'>
   	<xs:restriction base='xs:string'>

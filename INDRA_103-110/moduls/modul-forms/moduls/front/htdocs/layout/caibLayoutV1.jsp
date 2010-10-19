@@ -44,6 +44,13 @@
                
                 // La pagina ha terminado de cargar.
                 bLoaded = true;
+								
+								// està dins d'un iframe?
+								if(top.window.location != self.window.location) {
+									contenidor_H = document.getElementById("contenidor").offsetHeight;
+									top.window.document.getElementById("frm").style.height = parseInt((contenidor_H/14.5), 10) + "em";
+								}
+								
             }
 						
 						/* para mantener la ayuda en pantalla */
@@ -112,9 +119,11 @@
 		</div>
     <div id="contenidor">
         <!-- capçal -->
+        <logic:equal name="<%=org.ibit.rol.form.front.Constants.MOSTRAR_EN_IFRAME%>" value="false">
         <div id="cap">
 	    	<img class="logo" src="<bean:write name="<%=org.ibit.rol.form.front.Constants.ORGANISMO_INFO_KEY%>" property="urlLogo"/>" alt="Logo <bean:write name="<%=org.ibit.rol.form.front.Constants.ORGANISMO_INFO_KEY%>" property="nombre"/>" />		    	
         </div>
+				</logic:equal>
 				<!-- titol -->
 				<p id="titolAplicacio">
 				<logic:notEmpty name="propiedadesForm">
@@ -194,6 +203,7 @@
             <!-- FORM fin -->
         </div>
     </div>
+    <logic:equal name="<%=org.ibit.rol.form.front.Constants.MOSTRAR_EN_IFRAME%>" value="false">
     <!-- peu -->
 		<div id="peu">
 			<div class="esquerra">
@@ -203,6 +213,7 @@
 				<input type="button" onclick="obrir('<%=urlLog%>','log',600,600)" value="Debug script" />
 			<% } %>	
 		</div>
+		</logic:equal>
 </div>
 
 <!-- capa enviando -->

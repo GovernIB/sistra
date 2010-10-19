@@ -11,6 +11,7 @@
 	<property name="lib.dir" location="${home.dir}/../../lib"/>
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
+	<property name="distribucion.dir" location="${home.dir}/../../product"/>
 
 	<property file="${home.dir}/../../config.properties"/>
 	
@@ -30,6 +31,9 @@
     	<fileset dir="${lib.dir}/client">
         	<include name="redose-client.jar"/>
        	</fileset>  
+    	<fileset dir="${distribucion.dir}/lib"> 
+    	    <include name="sistra-util.jar"/>
+ 	    </fileset>  
     </path>
 
     <target name="prepare">
@@ -53,9 +57,9 @@
     </target>
 
     <target name="jar.jar" depends="jar.compile">
-        <delete file="${jar.product}/zonaper-${modul}.jar" quiet="yes"/>
+        <delete file="${jar.product}/3-zonaper-${modul}.jar" quiet="yes"/>
         <jar
-            jarfile="${jar.product}/zonaper-${modul}.jar"
+            jarfile="${jar.product}/3-zonaper-${modul}.jar"
             basedir="${jar.classes}">
             <manifest>
                 <attribute name="Created-By" value="${indra}"/>

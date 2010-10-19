@@ -11,6 +11,7 @@ import es.caib.xml.datospropios.factoria.impl.Documento;
 import es.caib.xml.datospropios.factoria.impl.DocumentosEntregar;
 import es.caib.xml.datospropios.factoria.impl.Instrucciones;
 import es.caib.xml.datospropios.factoria.impl.Solicitud;
+import es.caib.xml.datospropios.factoria.impl.TramiteSubsanacion;
 
 /** Objeto que crea una factoria capaz de crear objetos para manejar
  * datos del documento XML de datos propios
@@ -94,4 +95,6 @@ public interface FactoriaObjetosXMLDatosPropios extends FactoriaObjetosXML {
 	 * @return Objeto de DocumentosEntregar
 	 */
 	public DocumentosEntregar crearDocumentosEntregar ();				
+	
+	public TramiteSubsanacion crearTramiteSubsanacion ();	
 }

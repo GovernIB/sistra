@@ -28,6 +28,8 @@
     <property name="habilitarAvisosExpediente"  column="PER_AVIEXP"/>                
     <property name="fechaAlta"  column="PER_FECALT" not-null="true" />    
     <property name="fechaUltimaMod"  column="PER_FECULM" not-null="true" />        	
+    <property name="habilitarDelegacion"  column="PER_DELEGA" not-null="true" /> 
+    <property name="modificacionesUsuarioSeycon"  column="PER_SEYMOD" />                    	
 	
 </class>
 </hibernate-mapping>

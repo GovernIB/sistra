@@ -16,7 +16,6 @@ import es.caib.sistra.back.form.TramiteForm;
 import es.caib.sistra.model.RolUsuarioTramite;
 import es.caib.sistra.model.RolUsuarioTramiteId;
 import es.caib.sistra.model.Tramite;
-import es.caib.sistra.persistence.delegate.DelegateException;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
 import es.caib.sistra.persistence.delegate.GruposDelegate;
 import es.caib.sistra.persistence.delegate.TramiteDelegate;
@@ -90,16 +89,19 @@ public class EditarTramiteAction extends BaseAction{
             	Tramite tramiteAntesGrabar = tramiteDelegate.obtenerTramite( tramite.getCodigo() );
             	recargarArbol = !tramiteAntesGrabar.getIdentificador().equals( tramite.getIdentificador() );
             }
+            
             if(StringUtils.isNotEmpty(request.getUserPrincipal().getName())){
-            	GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
             tramiteDelegate.grabarTramite(tramite, idOrgano);
+            	// Para nuevos tramites,da de alta el usuario como usuario del tramite
             	if(isAlta(request)){
+            		GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
             		RolUsuarioTramite userTramite = new RolUsuarioTramite(new RolUsuarioTramiteId(request.getUserPrincipal().getName(),tramite.getCodigo()));
 					gruposDelegate.asociarUsuarioTramite(userTramite);
 				 }
             log.info("Creat/Actualitzat " + tramite.getCodigo());
             guardarTramite(mapping, request, tramite.getCodigo());
             }
+            
             if ( recargarArbol )
             {
             	this.setReloadTree( request, Nodo.IR_A_DEFINICION_TRAMITE, tramite.getCodigo() );

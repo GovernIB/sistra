@@ -88,7 +88,7 @@ public class JustificanteController extends TramiteController
 			{
 				representante = datosInteresado;
 			}
-			else
+			else if ( ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTADO.equals( datosInteresado.getTipoInteresado() ) )
 			{
 				representado = datosInteresado;
 			}

@@ -432,3 +432,15 @@ function b64UrlSafeToB64(b64UrlSafe){
 	b64 = b64.replace(/_/g, "/");
 	return b64;
 }
+
+function b64ToB64UrlSafe(b64){
+	var b64UrlSafe = b64.replace(/\+/g,"-");
+	b64UrlSafe = b64UrlSafe.replace(/\//g,"_");
+	b64UrlSafe = b64UrlSafe.replace(/(\r\n|[\r\n])/g,"");
+	return b64UrlSafe;
+}
+
+function estaIframe() {
+	contenidor_H = document.getElementById("contenidor").offsetHeight;
+	top.window.document.getElementById("frm").style.height = parseInt((contenidor_H/14.5), 10) + "em";
+}

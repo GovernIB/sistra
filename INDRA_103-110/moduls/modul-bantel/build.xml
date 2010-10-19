@@ -77,7 +77,7 @@
 		<antcall target="propagate">
 			<param name="task" value="main"/>
 		</antcall>
-		<antcall target="assemble"/>
+		<!-- <antcall target="assemble"/> -->
 		<antcall target="interfaz"/>
 		<antcall target="docItf"/>
 		<antcall target="distribute"/>
@@ -171,7 +171,7 @@
 	<target name="distribute" description="Distribucion">
 			<copy file="${product.dir}/bantel-client.jar" todir="${distribucion.dir}/client"/>
 		<copydir  src="${output.dir}/docInterfaz"  dest="${distribucion.dir}/javadoc/bantel-client"/>
-			<copy file="${product.dir}/4-${projecte}.ear" todir="${distribucion.dir}/ear"/>		
+		<!-- <copy file="${product.dir}/4-${projecte}.ear" todir="${distribucion.dir}/ear"/> -->		
 		</target>
 	
 

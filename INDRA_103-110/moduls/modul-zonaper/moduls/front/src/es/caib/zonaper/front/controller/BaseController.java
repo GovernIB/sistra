@@ -24,6 +24,8 @@ import es.caib.zonaper.front.Constants;
 import es.caib.zonaper.front.util.ZonapersFrontRequestHelper;
 import es.caib.zonaper.model.DatosSesion;
 import es.caib.zonaper.model.OrganismoInfo;
+import es.caib.zonaper.persistence.delegate.ConfiguracionDelegate;
+import es.caib.zonaper.persistence.delegate.DelegateUtil;
 
 /**
  * Controller con métodos de utilidad.
@@ -55,6 +57,16 @@ public abstract class BaseController implements Controller {
 		request.setAttribute( "enlaces", buildEnlacesNavegacion( resources, entryKey, locale, info) );
 		request.setAttribute( "backAction", tileContext.getAttribute( "backAction" ) );						
         
+		if(request.getSession().getAttribute("urlSistraAFirma") == null || "".equals(request.getSession().getAttribute("urlSistraAFirma"))){
+			String urlSistra = "";
+			try{
+				ConfiguracionDelegate delegate = DelegateUtil.getConfiguracionDelegate();
+				urlSistra = delegate.obtenerConfiguracion().getProperty("sistra.url");
+			}catch (Exception e) {
+				urlSistra = "";
+			}
+			request.getSession().setAttribute( "urlSistraAFirma", urlSistra );
+		}
     }
 
     abstract public void execute(ComponentContext tileContext,
@@ -105,7 +117,7 @@ public abstract class BaseController implements Controller {
 		
 		try {
 			if (texto.equals("#ZONA_PERSONAL#")){
-					texto = StringUtil.replace(texto,"#ZONA_PERSONAL#",(String) info.getTituloPortal().get(locale.getCountry()));			
+					texto = StringUtil.replace(texto,"#ZONA_PERSONAL#",(String) info.getTituloPortal().get(locale.getLanguage()));			
 			}
 		} catch (Exception e) {}
 		

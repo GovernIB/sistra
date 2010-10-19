@@ -10,6 +10,7 @@ public class AnexarDocumentoForm  extends DocumentoForm
 	private int tamanyoMaximo;
 	private String firma;
 	private String documentoFirmar;
+	private String firmaDelegada;
 	
 	
 	public FormFile getDatos()
@@ -51,6 +52,12 @@ public class AnexarDocumentoForm  extends DocumentoForm
 	}
 	public void setDocumentoFirmar(String documentoFirmar) {
 		this.documentoFirmar = documentoFirmar;
+	} 
+	public String getFirmaDelegada() {
+		return firmaDelegada;
+	}
+	public void setFirmaDelegada(String firmaDelegada) {
+		this.firmaDelegada = firmaDelegada;
 	} 
 	
 }

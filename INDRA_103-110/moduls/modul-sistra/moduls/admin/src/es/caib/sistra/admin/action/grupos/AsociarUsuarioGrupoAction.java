@@ -41,33 +41,41 @@ public class AsociarUsuarioGrupoAction extends Action {
     				 String usuario = request.getParameter("usuario");
     				 String grupo = request.getParameter("grupo");
     				 String flag = request.getParameter("flag");
+    				 GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
 
     				 //si viene de modificación
-    				 if(StringUtils.isNotEmpty(usuario) && StringUtils.isNotEmpty(grupo) && StringUtils.isNotEmpty(flag)){
-    					GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
-    					GrupoUsuario grpUser = new GrupoUsuario(new GrupoUsuarioId(grupo,usuario));
+    				 if(StringUtils.isNotBlank(usuario) && StringUtils.isNotBlank(grupo) && StringUtils.isNotEmpty(flag)){
+    					GrupoUsuario grpUser = new GrupoUsuario(new GrupoUsuarioId(grupo,usuario.trim()));
     					gruposDelegate.asociarUsuario(grpUser);
     					usuarios = gruposDelegate.obtenerUsuariosByGrupo(grupo);
     				 }
     				 //si viene de alta
-    				 else if(StringUtils.isNotEmpty(usuario)){
+    				 else if(StringUtils.isNotBlank(usuario)){
     					boolean trobat = false;
     					if(request.getSession().getAttribute("usuarios")!=null){
     						usuarios = (List) request.getSession().getAttribute("usuarios");
     						for(int i=0;i<usuarios.size() && !trobat;i++){
     							GrupoUsuario gu = (GrupoUsuario)usuarios.get(i);
-    							if(gu.getId() != null && usuario.equals(gu.getId().getUsuario())){
+    							if(gu.getId() != null && usuario.trim().equals(gu.getId().getUsuario())){
     								trobat = true;
     							}
     						}
     					}
     					if(!trobat){
     						GrupoUsuarioId id = new GrupoUsuarioId();
-	     					id.setUsuario(usuario);
+	     					id.setUsuario(usuario.trim());
 	     					GrupoUsuario grpUser = new GrupoUsuario(id);
 	     					usuarios.add(grpUser);
 	     					request.getSession().setAttribute("usuarios",usuarios);
     					}
+    				 }else{
+    					 if(request.getSession().getAttribute("usuarios") != null){
+    						 usuarios = (List)request.getSession().getAttribute("usuarios");
+    					 }else{
+    						 if(StringUtils.isNotBlank(grupo)){
+    							 usuarios = gruposDelegate.obtenerUsuariosByGrupo(grupo); 
+    						 }
+    					 }
     				 }
     				 //formatea los datos para la recarga del div
     				 if(usuarios!=null && usuarios.size()>0){

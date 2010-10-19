@@ -6,7 +6,7 @@
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 
 <script type="text/javascript" src="js/xmlhttp.js"></script>
-<script type="text/javascript" src="js/exportCVS.js"></script>
+<script type="text/javascript" src="js/exportCSV.js"></script>
 
 <script type="text/javascript">
 <!--

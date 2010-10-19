@@ -31,7 +31,8 @@ public class Documento  implements java.io.Serializable {
      private Set firmas = new HashSet(0);
      private Plantilla plantilla;
      private String borrado;
-
+     private String idioma;
+     private String referenciaGestorDocumental;
 
     // Constructors
 
@@ -189,6 +190,33 @@ public class Documento  implements java.io.Serializable {
 	public void setBorrado(String borrado) {
 		this.borrado = borrado;
 	}
+   
+
+
+	public String getIdioma() {
+		return idioma;
+	}
+
+
+
+	public void setIdioma(String idioma) {
+		this.idioma = idioma;
+	}
+
+
+
+	public String getReferenciaGestorDocumental() {
+		return referenciaGestorDocumental;
+	}
+
+
+
+	public void setReferenciaGestorDocumental(String referenciaGestorDocumental) {
+		this.referenciaGestorDocumental = referenciaGestorDocumental;
+	}
+
+
+
    
 
 }

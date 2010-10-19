@@ -53,4 +53,32 @@
 		</java>
 	</target>
 
+	<target name="clienteV2">
+		<java classname="org.apache.cxf.tools.wsdlto.WSDLToJava" fork="true">
+
+			<arg value="-p"/>
+			<arg value="urn:es:caib:sistra:ws:v2:services=es.caib.sistra.wsClient.v2.services" />
+			<arg value="-p" />
+			<arg value="urn:es:caib:sistra:ws:v2:model:DocumentoConsulta=es.caib.sistra.wsClient.v2.model" />
+			<arg value="-p" />
+			<arg value="urn:es:caib:sistra:ws:v2:model:FormularioConsulta=es.caib.sistra.wsClient.v2.model" />
+			<arg value="-p" />
+			<arg value="urn:es:caib:sistra:ws:v2:model:ValoresDominio=es.caib.sistra.wsClient.v2.model" />
+			<arg value="-p" />
+			<arg value="urn:es:caib:sistra:ws:v2:model:SistraFacade=es.caib.sistra.wsClient.v2.model" />
+
+			<arg value="-d" />
+			<arg value="${src.dir}" />
+			
+			
+			<!-- Metemos wsdllocation pero luego no se utiliza. Evitamos que se genere automaticamente con ruta local -->
+			<arg value="-wsdlLocation" />
+			<arg value="SistraFacade.wsdl" />
+			
+			<arg value="${wsdl.dir}/v2/SistraFacade.wsdl" />
+			<classpath>
+				<path refid="cxf.classpath"/>
+			</classpath>
+		</java>
+	</target>
 </project>

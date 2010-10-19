@@ -29,9 +29,9 @@ public class IniciTelematicAction extends BaseAction {
                                  HttpServletResponse response) throws Exception {
 
         IniciTelematicForm itForm = (IniciTelematicForm) form;
-        log.info("Recibida petición telemática");
-        log.info("XML Data: " + itForm.getXmlData());
-        log.info("XML Config: " + itForm.getXmlConfig());
+        log.debug("Recibida petición telemática");
+        log.debug("XML Data: " + itForm.getXmlData());
+        log.debug("XML Config: " + itForm.getXmlConfig());
 
         InstanciaTelematicaDelegate delegate = DelegateUtil.getInstanciaTelematica();
 

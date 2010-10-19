@@ -32,7 +32,7 @@ public abstract class GestorBandejaFacadeEJB extends HibernateEJB
 	
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
      */
@@ -43,7 +43,7 @@ public abstract class GestorBandejaFacadeEJB extends HibernateEJB
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.gestor}"
      */
     public GestorBandeja obtenerGestorBandeja(String id) {
@@ -65,7 +65,7 @@ public abstract class GestorBandejaFacadeEJB extends HibernateEJB
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public GestorBandeja findGestorBandeja(String id) 
     {
@@ -91,7 +91,7 @@ public abstract class GestorBandejaFacadeEJB extends HibernateEJB
         
 	/* 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      
     public String grabarGestorBandeja(GestorBandeja obj) {        
     	Session session = getSession();
@@ -125,7 +125,7 @@ public abstract class GestorBandejaFacadeEJB extends HibernateEJB
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public String grabarGestorBandeja(GestorBandeja obj, String[] identificadoresTramites ) {        
     	Session session = getSession();
@@ -208,7 +208,7 @@ public abstract class GestorBandejaFacadeEJB extends HibernateEJB
         
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void borrarGestorBandeja(String id) {
         Session session = getSession();
@@ -224,7 +224,7 @@ public abstract class GestorBandejaFacadeEJB extends HibernateEJB
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.auto}"
      */
     public List listarGestoresBandeja()

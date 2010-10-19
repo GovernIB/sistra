@@ -17,12 +17,12 @@ import es.caib.sistra.plugins.firma.FirmaIntf;
 public class InstanciaLocalDelegate implements InstanciaDelegate
 {
 
-	public void create(String tramite, int version, char nivel, Locale idioma,Map parametrosInicio)
+	public void create(String tramite, int version, char nivel, Locale idioma,Map parametrosInicio, String perfilAcceso, String nifEntidad)
 			throws DelegateException
 	{
 		try
 		{
-			local = TramiteProcessorUtil.getLocalHome().create( tramite, version, nivel, idioma, parametrosInicio );
+			local = TramiteProcessorUtil.getLocalHome().create( tramite, version, nivel, idioma, parametrosInicio,  perfilAcceso,  nifEntidad );
 		} catch (CreateException e) {
 	        throw new DelegateException(e);
 	    } catch (EJBException e) {
@@ -180,11 +180,11 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 
 	public RespuestaFront anexarDocumento(String identificador, int instancia,
 			byte[] datosDocumento, String nomFichero, String extension,
-			String descPersonalizada,FirmaIntf firma) throws DelegateException
+			String descPersonalizada,FirmaIntf firma, boolean firmaDelegada) throws DelegateException
 	{
         try 
         {
-        	return local.anexarDocumento( identificador, instancia, datosDocumento, nomFichero, extension, descPersonalizada, firma );
+        	return local.anexarDocumento( identificador, instancia, datosDocumento, nomFichero, extension, descPersonalizada, firma, firmaDelegada );
         } catch (EJBException e) 
         {
             throw new DelegateException(e);
@@ -288,11 +288,11 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 	        }
 	}
 	
-	public RespuestaFront firmarFormulario(String identificador,int instancia,FirmaIntf firma) throws DelegateException 
+	public RespuestaFront firmarFormulario(String identificador,int instancia,FirmaIntf firma,boolean firmaDelegada) throws DelegateException 
 	{
 		try
 		{
-			return local.firmarFormulario( identificador, instancia, firma );
+			return local.firmarFormulario( identificador, instancia, firma, firmaDelegada );
 		}
 		catch( EJBException e )
 		{
@@ -382,6 +382,40 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 		
 	}
 	
+	public RespuestaFront mostrarFormularioDebug(String idDocumento, int instancia) throws DelegateException {
+		try
+		{
+			return local.mostrarFormularioDebug(idDocumento, instancia);
+		}
+		catch( EJBException e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	public RespuestaFront remitirDelegacionPresentacionTramite()  throws DelegateException{
+		try
+		{
+			return local.remitirDelegacionPresentacionTramite();
+		}
+		catch( EJBException e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	public RespuestaFront remitirDelegacionFirmaDocumentos()  throws DelegateException{
+		try
+		{
+			return local.remitirDelegacionFirmaDocumentos();
+		}
+		catch( EJBException e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	
 	public void destroy()
 	{
 		try {
@@ -407,5 +441,6 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
     protected InstanciaLocalDelegate() 
     {
     }
+	
 	
 }

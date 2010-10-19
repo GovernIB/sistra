@@ -10,6 +10,7 @@ import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
+import es.caib.zonaper.modelInterfaz.ParametrosTramiteSubsanacionPAD;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.modelInterfaz.PreregistroPAD;
 import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
@@ -48,9 +49,25 @@ public class PadDelegate implements StatelessDelegate {
         }
     }
 	
+    public List obtenerTramitesPersistentesEntidadDelegada(String nifEntidad)throws DelegateException {
+        try {
+            return getFacade().obtenerTramitesPersistentesEntidadDelegada(nifEntidad);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+	
 	public  String obtenerEstadoTramiteUsuario(String idPersistencia) throws DelegateException {
         try {
             return getFacade().obtenerEstadoTramiteUsuario(idPersistencia) ;
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+	
+	public String obtenerEstadoTramiteEntidadDelegada(String idPersistencia, String nifEntidad) throws DelegateException {
+        try {
+            return getFacade().obtenerEstadoTramiteEntidadDelegada(idPersistencia, nifEntidad) ;
         } catch (Exception e) {
             throw new DelegateException(e);
         }
@@ -201,6 +218,18 @@ public class PadDelegate implements StatelessDelegate {
         }
 	}
 	
+	public void actualizarCodigoUsuario( String usuOld, String usuNew)  throws DelegateException
+	{
+		try
+		{
+			getFacade().actualizarCodigoUsuario(  usuOld, usuNew );
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
 	public Date obtenerAcuseRecibo(String numeroRegistro )throws DelegateException
 	{
 		try
@@ -211,6 +240,99 @@ public class PadDelegate implements StatelessDelegate {
 		{
             throw new DelegateException(e);
         }
+	}
+	
+	public void logRegistro(char tipo, String numeroRegistro, Date fechaRegistro, String error) throws DelegateException{
+		try{
+			getFacade().logRegistro(tipo,numeroRegistro,fechaRegistro,error);
+		}catch (Exception e){
+            throw new DelegateException(e);
+        }
+	}
+	
+	public boolean esDelegado() throws DelegateException	
+	{
+		try
+		{
+			return getFacade().esDelegado( );
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	public ParametrosTramiteSubsanacionPAD recuperaParametrosTramiteSubsanacion(String key) throws DelegateException	
+	{
+		try
+		{
+			return getFacade().recuperaParametrosTramiteSubsanacion(key );
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	/**
+     * Obtiene permisos de delegacion sobre la entidad del usuario autenticado
+     * 
+     * @param nif nif/cif entidad
+     * @return permisos entidad
+     * 
+     */
+	public String obtenerPermisosDelegacion(String nifEntidad)throws DelegateException	
+	{
+		try
+		{
+			return getFacade().obtenerPermisosDelegacion( nifEntidad);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	/**
+     * Obtiene permisos de delegacion sobre la entidad del nif indicado
+     * 
+     * @param nif nif/cif entidad
+     * @param nif nif usuario
+     * @return permisos entidad
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+	public String obtenerPermisosDelegacion(String nifEntidad, String nifUsuario) throws DelegateException	
+	{
+		try
+		{
+			return getFacade().obtenerPermisosDelegacion( nifEntidad, nifUsuario);			
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	/**
+     * Indica si la entidad tiene habilitada la delegacion
+     * 
+     * @param nif nif/cif entidad
+     * @return boolean
+     * 
+     */
+	public boolean habilitadaDelegacion(String nifEntidad) throws DelegateException	
+	{
+		try
+		{
+			return getFacade().habilitadaDelegacion( nifEntidad);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
 	}
 	
     /* ========================================================= */

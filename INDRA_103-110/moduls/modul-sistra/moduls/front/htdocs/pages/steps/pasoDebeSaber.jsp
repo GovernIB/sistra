@@ -122,12 +122,14 @@ function mostrarPasos(obj) {
 	document.getElementById('pasosExplicacion').style.display = 'block';
 	obj.innerHTML = '<bean:message key="pasoDebeSaber.enlaceOcultarPasos"/>';
 	obj.onclick = function() { esconderPasos(this); };
+	estaIframe();
 }
 
 function esconderPasos(obj) {
 	document.getElementById('pasosExplicacion').style.display = 'none';
 	obj.innerHTML = '<bean:message key="pasoDebeSaber.enlaceMostrarPasos"/>';
 	obj.onclick = function() { mostrarPasos(this); };
+	estaIframe();
 }
 
 tamanyo = 1;

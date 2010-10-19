@@ -16,10 +16,22 @@ public class PasoTramitacion  implements Serializable{
 	 */
 	public static final String ESTADO_PENDIENTE = "N";
 	/**
-	 * El usuario que tiene actualmente el trámite ha realizado todas sus acciones sobre el paso pero 
-	 * queda que otros usuarios realicen otras acciones
+	 * Para trámites con flujo de tramitación indica que el usuario que tiene actualmente el trámite 
+	 * ha realizado todas sus acciones sobre el paso pero queda que otros usuarios realicen otras acciones
 	 */
 	public static final String ESTADO_PENDIENTE_FLUJO = "F";
+	
+	/**
+	 * Para trámites que se ejecutan de forma delegada indica que el usuario que tiene actualmente el trámite 
+	 * ha realizado todas sus acciones sobre el paso pero queda que otro usuario presente el trámite
+	 */
+	public static final String ESTADO_PENDIENTE_DELEGACION_PRESENTACION = "DP";
+	
+	/**
+	 * Para trámites que se ejecutan de forma delegada indica que el usuario que tiene actualmente el trámite 
+	 * ha realizado todas sus acciones sobre el paso pero queda que otro delegado firme algun formulario o anexo
+	 */
+	public static final String ESTADO_PENDIENTE_DELEGACION_FIRMA = "DF";
 	
 	
 	public static final int PASO_PASOS = 0;

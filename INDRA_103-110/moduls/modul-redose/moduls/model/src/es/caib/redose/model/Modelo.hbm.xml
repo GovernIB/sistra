@@ -13,7 +13,7 @@
             </generator>
         </id>
         
-        <property name="modelo" column="MOD_MODELO" length="15" not-null="true" unique="true" />
+        <property name="modelo" column="MOD_MODELO" length="20" not-null="true" unique="true" />
         <property name="nombre" column="MOD_NOMBRE" length="100" not-null="true" />
         <property name="descripcion" column="MOD_DESC" length="400" />
         <property name="estructurado" type="char" column="MOD_ESTRUC" length="1" not-null="true" />

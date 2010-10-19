@@ -1,120 +1,318 @@
-/* CSS Document */
+@charset "utf-8";
 
-body { font:normal 75% Arial, Helvetica, sans-serif; color:#494949; background:url(../images/bkg_site.png) repeat-x top #9ec9e3; margin:0; padding:1em 0 0 0; }
-#contenedor { margin:0 auto; width:65em; }
-#continguts { margin:0; padding:.5em 0 0 0; background-color:#fff; border-bottom:.3em solid #85bbe4; }
+/* formateig */
 
-#continguts p { position:relative; }
-
-/* enllaços */
-
-a { color:#0047b2; position:relative; }
-a.importante { color:#c00; }
-
-/* imatges */
-
+body, form, table, caption, tr, tr, td, ul, ol, li, dl, img, button, p, h1, h2, h3, h4, h5, h6, dl, dt, dd, object, iframe, dl, dt, dd, legend, fieldset { margin:0; padding:0; outline:0; }
 img { border:0; }
 
-/* titols */
+/* comuns */
 
-h1 { font-size:1.3em; margin:0 0 1em 0; background:none; }
-h2 { font-size:1.2em; margin:1em 0; position:relative; }
-h2.marca { background-color:#f4f3ed; }
-h3 { font-size:1.1em; margin:0 0 1em 0; position:relative; }
-h4 { font-size:1em; margin:0 0 1em 0; }
-h1.invisible, h2.invisible, h3.invisible, h4.invisible { display:none; }
+body { font:normal 80% 'TrebuchetMS', 'Trebuchet MS', Arial, Helvetica, sans-serif; color:#666; background-color:#fff; }
+a { color:#000; text-decoration:underline; cursor:pointer; }
+a:hover { color:#c33; }
 
-#pieTitulo { background:url(../images/pietitulo.gif) repeat-x #fff; border-top:1px solid #e3e3e3; height:.5em; font-size:.5em; }
+a.destacat { color:#c33; }
+a.destacat:hover { color:#000; }
 
-/* pàrrafs */
+.invisible { display:none; }
+.important { font-weight:bold; }
 
-p { margin:1em 0; }
-p.centrado { text-align:center; }
+input, select, textarea, button { font:normal 1em Arial, Helvetica, sans-serif; color:#666; line-height:1.3em !important; }
 
-p#titolAplicacio { font-size:1.4em; margin:0; color:#000f21; background-color:#85bbe4; padding:.2em 0 .2em 3em; font-weight:bold; }
-p#titolAplicacio a { text-decoration:none; display:block; color:#000f21; }
+/* ids */
 
-#tramitacion #pasoInf p.ultimo { border-bottom:1px dashed #d1e3f4; padding-bottom:10px; }
-#tramitacion p.importante { background-color:#ecf4fb; text-align:center; padding:1em;}
-#tramitacion p.error { padding:1em 1em 1em 3.5em; background:url(../images/ico_error.gif) no-repeat 1em 1em #f9f3f2; border:1px solid #ffbbb5; }
-#tramitacion p.error strong { color:#900; }
+#contenidor { width:58em; margin:1.2em auto; }
 
-/* capes */
-div.sep { clear:both; height:.1em; font-size:.1em; }
-div.ultimo { border-bottom:1px dashed #d1e3f4; height:1em; font-size:.2em; }
-div.sepFinal { clear:both; height:1em; background-color:#fff; }
-#tramitacion div.alerta { margin:1em 0; padding:0 1em 1em 3.5em; background:url(../images/ico_atencion.gif) no-repeat 1em 1em #ffffe8; border:1px solid #f3f3d2; }
+#cap { text-align:center; }
 
+#mollaPa { overflow:hidden; width:100%; list-style:none; text-align:center; margin-top:1.1em; }
 
-ul#capsalEnllasos { position:relative; background-color:#efefef; margin:0; padding:.3em .7em; text-align:right; color:#000; }
-ul#capsalEnllasos li { display:inline; list-style:none; }
-ul#capsalEnllasos li a { color:#002e63; }
-ul#capsalEnllasos li span.sep { margin:0 .5em; }
+#mollaPa li { display:inline; }
 
-div#capsalUsuari { position:relative; background-color:#fff; padding:.3em 0 .3em 1em; color:#000; border-bottom:1px solid #e3e3e3;  }
-div#capsalUsuari img { vertical-align:middle; margin:0 .3em; }
+p#titolAplicacio { font-size:1.4em; font-weight:bold; text-align:center; margin:.8em; }
 
-#titolMS { font-size:1.2em; background-color:#85bbe4; border-bottom:1px solid #fff; color:#000; padding:.3em 0 .3em 4em; font-weight:bold; }
-#capsalfranja2 { height:1em; background-color:#003575; font-size:.5em; color:#000; }
+#capsalUsuari { font-size:.9em; text-align:center; margin-bottom:1em; }
 
-/* peu */
+#continguts { overflow:hidden; width:100%; margin-bottom:4em; }
+#continguts .esquerra { float:left; width:13.9em; margin-right:.9em; }
+#continguts .centreDreta { float:left; width:43em; line-height:1.2em; }
 
-#peu { padding-top:0.5em; height:4em; color:#000; border-top:.4em solid #003574; }
-#peu img#logoAD { vertical-align:text-top; }
-#peu span.sep { margin:0 .5em; }
+#ajudaEsquerre p { font-size:.9em; }
 
-/* CONTINGUTS */
+#eines, #peu { overflow:hidden; width:100%; }
+#peu { font-size:.9em; padding-top:.3em; margin-top:.5em; border-top:1px solid #ccc; }
+#eines .esquerra { float:left; width:13.9em; margin-right:.9em; }
+#eines .centre { float:left; width:28.2em; line-height:1.2em; }
+#eines .dreta { float:right; width:13.7em; }
+#peu .esquerra { float:left; width:15.5em; margin-right:1em; }
+#peu .centre { float:left; width:46.5em; line-height:1.4em; }
+#peu .dreta { float:right; width:15.2em; line-height:1.3em; }
+#eines .centre .tamanyLletra { float:left; }
+#eines .centre .tamanyLletra a { cursor:pointer; }
+#eines .centre .idiomes { display:block; float:right; width:21em; margin:0; }
 
-h1.autenticacio, h1.certDig, h1.usuCont, h1.anonim, h1.document, h1.ayuda  
-{ position:relative; font-size:1.7em; font-weight:normal; color:#003878; padding:.5em .7em .5em 4em; margin:0; border-bottom:1px solid #fff; }
-h1.autenticacio { background:url(../images/01autenticacion.gif) no-repeat #fff; }
-h1.certDig { background:url(../images/02_01cd.gif) no-repeat #fff; }
-h1.usuCont { background:url(../images/02_02uc.gif) no-repeat #fff; }
-h1.anonim { background:url(../images/02_03an.gif) no-repeat #fff; }
-h1.document { background:url(../images/03document.gif) no-repeat #fff; }
-h1.ayuda { background:url(../images/ayuda.gif) no-repeat #fff; }
+#peu .centre a { text-decoration:none; }
 
-/* tramitacio */
+a.btnPujar img { width:1.3em; }
 
-#tramitacion { padding:1em 1em 0 1em; }
+/* generals */
+
+h1 { font-size:1.2em; margin-bottom:.8em; }
+h2 { font-size:1.1em; margin-top:2em;  }
+h3 { font-size:1em; }
+
+p { line-height:1.2em; margin:.6em 0; }
+p.alerta { padding:1em 1em 1em 3.7em; margin:1em 0; background:#f2f2f2 url(../imgs/icones/atencio.gif) no-repeat 1em 1em; }
+p.volver { margin-top:2em; }
+
+#fondo { position:absolute; display:none; top:0; left:0; width:100%; height:200px; background-color:#000; z-index:2; }
 
 /* index */
 
-p#nomTramit { padding:1em 1em 1em 4.2em; background:url(../images/nom_tramit.gif) no-repeat 1em .5em #ffffe4; font-size:1.2em; font-weight:bold; font-style:italic; text-align:justify; width:89%; }
+p#nomTramit { width:89%; font-size:1em; font-weight:bold; font-style:italic; padding:.8em 1em .8em 5em; margin-bottom:2em; background:url(../imgs/index/nom_tramit.gif) no-repeat 1em .5em #ffffe4; }
 
-#tramitacion #indexCD, #tramitacion #indexUC { float:left; width:30%; height:33em; padding:10px; margin-bottom:10px; }
-#tramitacion #indexAN { float:left; width:29%; height:33em; padding:10px; margin-bottom:10px; }
-#tramitacion #indexCD, #tramitacion #indexUC { margin-right:1.2%; }
-#tramitacion #indexCD { background:url(../images/entrada_cd.gif) no-repeat left top #ecf4fb; }
-#tramitacion #indexUC { background:url(../images/entrada_uc.gif) no-repeat left top #ecf4fb; }
-#tramitacion #indexAN { background:url(../images/entrada_an.gif) no-repeat left top #ecf4fb; }
+div#opcions { width:50em; margin:0 auto; }
+div#opcions div { padding:.5em 1em; cursor:pointer; }
+div#opcions div.over { background-color:#f2f2f2; }
+div#opcions div h2 { margin-top:0; }
+div#opcions p.intro { font-size:.9em; }
+div#opcions object { display:inline-block; vertical-align:top; }
+/*div#opcions object embed{ display:inline; vertical-align:top; }*/
+div#opcions span.noJava { color:#c00; }
 
-#tramitacion #indexCD a, #tramitacion #indexUC a, #tramitacion #indexAN a { color:#00548e; }
+div#opcions form.js { display:none; }
+form p span.etiqueta { float:left; width:15em; text-align:right; padding-right:.8em; }
+form p.botonera { padding-left:16em; }
 
-#tramitacion #indexCD h2, #tramitacion #indexUC h2, #tramitacion #indexAN h2 { font-size:1.3em; text-align:right; margin-top:3.5em; }
-#tramitacion #indexCD p, #tramitacion #indexUC p, #tramitacion #indexAN p { text-align:justify; }
-#tramitacion #indexCD p.separacio, #tramitacion #indexUC p.separacio, #tramitacion #indexAN p.separacio { border-top:1px dashed #b8d7ef; padding-top:10px; }
-#tramitacion #indexCD p.formBotonera, #tramitacion #indexUC p.formBotonera, #tramitacion #indexAN p.formBotonera { text-align:center; }
+/* internes */
 
-#tramitacion #indexCD form label, #tramitacion #indexUC form label, #tramitacion #indexAN form label { display:block; float:left; width:40%; padding-right:5px; text-align:right; line-height:1.6em; }
-#tramitacion #indexCD form input.txt, #tramitacion #indexUC form input.txt { width:7em; }
+/* uso certificado digital */
 
-#continguts #datosUsuario { color:#00276c; padding:.4em 0; border-bottom:1px dashed #ccc; margin:0 1em 1em 1em; }
-#continguts #datosUsuario span#explicacion { font-size:.9em; }
+div#cdSumario ul { padding:0 0 1em 4em; border-bottom:1px dashed #ccc; margin:1em 0; list-style:circle; position:relative; }
 
+ul#cdTipos { overflow:hidden; width:58em; list-style:none; padding:0 1em; margin:0; }
+ul#cdTipos li { float:left; width:16em; height:7em; padding:1em; margin:0 .5em; border:1px solid #ddd; }
+ul#cdTipos li.ceres { padding-top:6em; background:#fff url(../imgs/certificadoDigital/ceres.gif) no-repeat center 1em; }
+ul#cdTipos li.eDNI { padding-top:6em; background:#fff url(../imgs/certificadoDigital/eDNI.gif) no-repeat center 1em; }
+ul#cdTipos li.tradise { padding-top:6em; background:#fff url(../imgs/certificadoDigital/tradise.gif) no-repeat center 1em; }
 
-#tramitacion div.barraAzul { clear:both; background-color:#ecf4fb; height:1em; font-size:.5em; }
+ul#cdOficinas { margin-left:3em; }
+ul#cdOficinas li { padding-bottom:.3em; }
+ul#cdOficinas li ul { margin:.5em 0 0 3em; }
 
-#capsal { padding:0.5em 1em 0.8em 1em; background-color:#003575; color:#fff; text-align:right; border-bottom:.3em solid #85bbe4; height: 4em; }
-#capsal a { color:#fff; }
-#capsal img.logo { float:left; }
-#capsal span.sep { margin:0 .5em; }
-#capsalIdioma { margin:0 0 .7em 0; }
-#capsalIdioma ul { display:inline; margin:0; padding:0; }
-#capsalIdioma ul li { display:inline; margin:0; padding:0; }
+a#cdComprobar { padding-left:2em; background:#fff url(../imgs/icones/correcte.gif) no-repeat left center; }
 
-/* capçal
-#capsal { padding:0.5em 1em 0.8em 1em; background:url(../images/fondo.gif) repeat-x #003575; color:#fff; }
-#capsal p#ayuda { float:right; font-size:.9em; margin:0; }
-#capsal p#ayuda a { color:#fff; }
- */
+/* navegacion */
+
+h1#nomTramitPas { font-size:1em; font-weight:bold; font-style:italic; line-height:1.2em; padding:.8em 1em .8em 5em; margin:0; background:url(../imgs/index/nom_tramit.gif) no-repeat 1em .5em #ffffe4; }
+
+#pesPasos { list-style:none; margin-bottom:2em; }
+#pesPasos li { padding:.3em 1em; margin:0; }
+#pesPasos li.seleccionado { font-weight:bold; text-align:right; background-color:#ffffe4; }
+#pesPasos li a { color:#c33; }
+#pesPasos li a.anterior { color:#000; }
+
+#pasosNav { clear:both; list-style:none; height:2.5em; padding-top:2em; }
+#pasosNav li { display:block; width:27em; margin:.5em;  }
+#pasosNav li#pasoAnterior { float:left; }
+#pasosNav li#pasoSiguiente { float:right; }
+#pasosNav li a { display:block; width:25em; padding:.5em 0; }
+#pasosNav li#pasoAnterior a { text-align:right; padding-right:2em; background:#ffffe4 url(../imgs/nav/pasanterior.gif) no-repeat right center; }
+#pasosNav li#pasoSiguiente a { padding-left:2em; background:#ffffe4 url(../imgs/nav/passeguent.gif) no-repeat left center; }
+
+/* paso 1 */
+
+div.missatge { position:absolute; top:0; left:0; width:51em; color:#666; padding:0 1em 0 4em; background:url(../imgs/icones/atencio.gif) no-repeat 1em 1em #fff; border:1em solid #f2f2f2; z-index:3; }
+div.missatge p { margin:1em 0; }
+div.missatge div.botonera { text-align:center; padding:1em; }
+div.missatge button { font-size:.9em; padding:.1em .5em; overflow:visible; vertical-align:middle;}
+div.missatge button img { vertical-align:middle; margin-right:.3em; }
+
+#contactoAdministrador h2 { margin-top:1em; }
+
+#pasosExplicacion { display:none; padding:0 2em; }
+#pasosExplicacion dl { font-size:.9em; margin-top:1em; }
+#pasosExplicacion dl dt strong { font-size:1.1em; }
+#pasosExplicacion dl dd { padding:0 0 .5em 3.7em; }
+
+#iconografia { margin-top:1em; }
+#iconografia h2 { margin-top:0; padding-top:0; }
+#iconografia h2 a { font-size:.8em; font-weight:normal; margin-left:1em; }
+#iconografia ul { list-style:none; font-size:.9em; margin-top:.5em; }
+#iconografia ul li { padding-bottom:.5em; line-height:1.2em; }
+#iconografia ul li img { margin-right:.5em; }
+#iconografia ul li span { display:none; }
+#iconografia ul.masInfo { font-weight:bold; }
+#iconografia ul.masInfo span { font-weight:normal; }
+
+#listadoPlantillas { margin-top:2em; }
+#listadoPlantillas ul { list-style:none; margin-top:1em; }
+#listadoPlantillas ul li { overflow:hidden; clear:left; width:40em; margin-bottom:1em; }
+
+#listadoPlantillas ul li div.iconos { position:relative; float:left; width:4.3em; height:2em; text-align:right; margin-right:.7em; }
+#listadoPlantillas ul li div.iconos img.tipus { position:absolute; top:0; right:0; z-index:1; }
+#listadoPlantillas ul li div.iconos img.clase { position:absolute; top:1.1em; right:1.1em; z-index:3; }
+
+#listadoPlantillas ul li div.detalle { float:left; display:block; width:34em; margin-top:0; }
+#listadoPlantillas ul li div.detalle p { margin:0; }
+#listadoPlantillas ul li div.detalle a { font-size:.9em; }
+#listadoPlantillas ul li div.detalle span { font-style:italic; }
+
+#listadoPlantillas ul li div.instruccionesInfo { display:none; font-size:.9em; padding:.2em 1em .5em 1em; }
+
+/* paso 2 */
+
+#listadoFormularios { margin-top:2em; }
+#listadoFormularios ul { list-style:none; margin-top:1em; }
+#listadoFormularios ul li { overflow:hidden; clear:left; width:40em; margin-bottom:1em; }
+
+#listadoFormularios ul li div.iconos { position:relative; float:left; width:4.3em; height:2em; text-align:right; margin-right:.7em; }
+#listadoFormularios ul li div.iconos img.tipus { position:absolute; top:0; right:0; z-index:1; }
+#listadoFormularios ul li div.iconos img.clase { position:absolute; top:1.1em; right:1.1em; z-index:3; }
+#listadoFormularios ul li div.iconos img.estat { position:absolute; top:.7em; right:1.9em; z-index:2; }
+
+#listadoFormularios ul li div.detalle { float:left; display:block; width:34em; margin-top:0; }
+#listadoFormularios ul li div.detalle p { margin:0; }
+#listadoFormularios ul li div.detalle a { font-size:.9em; }
+#listadoFormularios ul li div.detalle span { font-style:italic; }
+
+/* paso 3 */
+
+h3.docObl, h3.docOpc { font-size:1.2em; font-weight:normal; text-transform:uppercase; padding-left:1.7em; }
+h3.docObl { background:#fff url(../imgs/icona/clase_obligatori.gif) no-repeat 0 50%; }
+h3.docOpc { background:#fff url(../imgs/icona/clase_opcional.gif) no-repeat 0 50%; }
+
+#anexarDocs { margin-top:2em; }
+#anexarDocs ul { list-style:none; margin-top:1em; margin-bottom:1em; }
+#anexarDocs ul li { overflow:hidden; clear:left; width:40em; margin-bottom:1em; }
+#anexarDocs ul li div.iconos { float:left; width:4.3em; text-align:right; margin-right:.7em; }
+
+#anexarDocs ul li div.detalle { float:left; display:block; width:34em; margin-top:0; }
+#anexarDocs ul li div.detalle p { margin:0; }
+#anexarDocs ul li div.detalle a { font-size:.9em; }
+#anexarDocs ul li div.detalle span { font-style:italic; }
+
+#anexarDocs ul li div.infoDoc { display:none; font-size:.9em; padding:.2em 1em .5em 1em; }
+
+#anexarDocs ul li div.detalle p.separacio { margin-top:.5em; }
+#anexarDocs ul li div.detalle p.fitxerAnexat { padding-left:1.5em; margin-left:2em; background:#fff url(../imgs/icona/estat_realitzat.gif) no-repeat left center; }
+
+#anexarDocs ul li div.detalle ul { list-style:none !important; margin-top:0 !important; margin-left:2em; }
+#anexarDocs ul li div.detalle ul li { clear:none; width:31em; margin-bottom:.1em !important; padding-left:1.5em; background:#fff url(../imgs/icona/estat_realitzat.gif) no-repeat left center; }
+
+#anexarDocs span.infoDoc { display:none; font-size:.9em; padding:.5em 1em 1em; }
+
+h2 span.titolDocument { font-style:italic; font-weight:normal; }
+div.infoDocument { font-size:.9em; }
+div.infoDocument img { margin-right:.5em; vertical-align:middle; }
+
+/* paso 4 */
+
+div#pagoBEA, div#pagoFPA { width:21em; font-size:.9em; padding:0 1em; margin-bottom:2em; border:1px solid #f2f2f2; }
+div#pagoBEA { float:left; }
+div#pagoFPA { float:right; }
+div#pagoBEA h3, div#pagoFPA h3 { font-size:1em; font-weight:normal; text-transform:uppercase; padding:.5em 0; }
+div#pagoBEA div.instrucciones, div#pagoFPA div.instrucciones { display:none; }
+div#pagoBEA div.instrucciones ul, div#pagoFPA div.instrucciones ul { list-style:circle; margin:1em 1em 1em 2em; }
+
+div#tasasPagar { clear:both; width:57.5em; padding:0; border:1px solid #fff; }
+
+div#listadoTasas { }
+div#listadoTasas h2 { margin-top:0; }
+
+div#listadoTasas ul { list-style:none; margin-top:1em; }
+div#listadoTasas ul li { overflow:hidden; clear:left; margin-bottom:1em; }
+
+div#listadoTasas ul li div.iconos { position:relative; float:left; width:4.3em; height:2em; text-align:right; margin-right:.7em; }
+div#listadoTasas ul li div.iconos img.tipus { position:absolute; top:0; right:0; z-index:1; }
+div#listadoTasas ul li div.iconos img.clase { position:absolute; top:1.1em; right:1.1em; z-index:3; }
+div#listadoTasas ul li div.iconos img.estat { position:absolute; top:.7em; right:1.9em; z-index:2; }
+
+div#listadoTasas ul li div.detalle { float:left; display:block; width:34em; margin-top:0; }
+div#listadoTasas ul li div.detalle p { margin:0 0 .3em 0; }
+div#listadoTasas ul li div.detalle a { font-size:.9em; }
+div#listadoTasas ul li div.detalle span { font-style:italic; }
+div#listadoTasas ul li div.detalle input { overflow:visible; padding:0 .5em; font-size:.9em; text-transform:uppercase; }
+
+#datosPago { width:30em; padding:1em; margin:1em auto; border:1px solid #ccc; }
+#datosPago h3 { text-align:center; text-transform:uppercase; margin-bottom:1em; }
+#datosPago ul { list-style:none; }
+#datosPago ul li { font-size:1.2em; padding:.2em 0; }
+#datosPago span.label { display:block; float:left; width:17em; font-size:.7em; text-align:right; margin-right:.8em; }
+
+#getAdobeReader { font-size:.9em; padding:.5em .5em .5em 3.5em; margin:1.5em 0; background:#fff url(../imgs/icones/desar_pdf.gif) no-repeat left center; }
+
+form div.botonera { font-size:1.3em; text-align:center; padding:1em; }
+
+/* paso 5 */
+
+ul.resumenFormularios, ul.resumenAnexos { list-style:none; margin:1em 0 1.5em 3em; }
+ul.resumenFormularios li { padding-bottom:.5em; padding-left:2em; background:#fff url(../imgs/icona/form_emplenat.gif) no-repeat left top; }
+ul.resumenAnexos li { padding-bottom:.5em; padding-left:2em; background:#fff url(../imgs/icona/doc_anexat.gif) no-repeat left top; }
+
+/* paso 6 */
+
+table#aportarDocs { width:95%; margin:1em auto 2em auto; background-color:#fff; empty-cells:show; border:1px solid #ccc; border-collapse:collapse; border-spacing:0; }
+table#aportarDocs th { text-align:left; padding:.5em 1em; background-color:#f7f7f7; }
+table#aportarDocs td { padding:.5em 1em; vertical-align:top; }
+table#aportarDocs td.doc { width:14em; padding-left:3.7em; background:#fff url(../imgs/icona/mode_presencial.gif) no-repeat 1em .5em; }
+
+/* nuevo usuario */
+
+/* formulari */
+
+form#nuevoUsuario { padding:2em 0 1em 0; margin:1em 0; background-color:#f7f7f7; border:1px solid #e0e0e0; }
+
+form#nuevoUsuario h3 { margin-left:1em; margin-bottom:1em; }
+
+form#nuevoUsuario div.fila { overflow:hidden; width:57.5em; padding:0; margin-bottom:1.5em; }
+
+form#nuevoUsuario div.element { overflow:hidden; float:left; padding:0; margin-left:1em; }
+
+form#nuevoUsuario div.t25 { width:13em; }
+form#nuevoUsuario div.t25 input.text, form div.t25 select { width:12.5em; background-color:#fff; border:1px solid #7f9db9; }
+form#nuevoUsuario div.t25 input.text { height:1.2em; }
+form#nuevoUsuario div.t25 ul.seleccioMultiple { width:12.5em; }
+
+form#nuevoUsuario div.t50 { width:27em; }
+form#nuevoUsuario div.t50 input.text, form div.t50 select { width:26.5em; background-color:#fff; border:1px solid #7f9db9; }
+form#nuevoUsuario div.t50 input.text { height:1.2em; }
+form#nuevoUsuario div.t50 textarea { width:26.5em; }
+form#nuevoUsuario div.t50 textarea.textareaOn { background-color:#ddfeff; border:1px solid #7f9db9; }
+form#nuevoUsuario div.t50 ul.seleccioMultiple { width:26.5em; }
+
+form#nuevoUsuario div input.on { background-color:#ddfeff !important; border:1px solid #7f9db9 !important; }
+form#nuevoUsuario div input.t8 { width:6em !important; }
+form#nuevoUsuario div input.t17 { width:12.5em !important; }
+
+form#nuevoUsuario textarea { width:54.5em; height:5.5em; background-color:#fff; border:1px solid #7f9db9; }
+form#nuevoUsuario textarea.textareaOn { background-color:#ddfeff; }
+
+form#nuevoUsuario ul.seleccioMultiple { overflow:auto; width:20em; height:5.5em; background-color:#fff; border:1px solid #7f9db9; }
+form#nuevoUsuario ul.seleccioMultiple li { padding-left:.5em; }
+form#nuevoUsuario ul.enLinia li { display:inline; padding-left:.5em; border-left:1px solid #e0e0e0; }
+
+form#nuevoUsuario div.etiqueta { }
+form#nuevoUsuario div.etiqueta:after { content:":"; }
+
+form#nuevoUsuario div.control { }
+form#nuevoUsuario div.control ul { list-style:none; }
+
+form#nuevoUsuario div.ajuda { display:none; padding-bottom:.5em; background:#f7f7f7 url(../imgs/ajudaFons.gif) no-repeat 0 .5em; }
+form#nuevoUsuario div.ajuda p { font-size:.9em; margin:0; padding:.5em 1em 0 2em; }
+
+form#nuevoUsuario div.informacio { width:49.7em; padding:0 1em 0 5em; margin:0 0 1em 1em; background:#f5f5e7 url(../imgs/atencio.gif) no-repeat 1.5em .7em; border:1px solid #ededd9; }
+form#nuevoUsuario div.informacio p, form#nuevoUsuario div.informacio ul, form#nuevoUsuario div.informacio ol { margin:.5em 0; }
+form#nuevoUsuario div.informacio ul, form#nuevoUsuario div.informacio ol { padding-left:2em; }
+
+p.botoneraForm { text-align:center; }
+p.botoneraForm button { overflow:visible; font-weight:bold; padding:.2em .5em; cursor:pointer; }
+
+p.formOK, p.usuariOK { font-size:1.1em; font-weight:bold; padding:1em 0 1em 4em; margin:2em 0; }
+p.formOK { background:#f2f2f2 url(../imgs/fons/form_ok.gif) no-repeat 1em 50%; }
+p.usuariOK { background:#f2f2f2 url(../imgs/fons/usuari_ok.gif) no-repeat 1em 50%; }
+
+p.iniciar { font-weight:bold; text-align:center; margin-top:2em; }
+
+div.error { padding:1em 0 1em 4em; margin:2em 0; background:#f2f2f2 url(../imgs/fons/error.gif) no-repeat 1em 1em; }
+div.error h2 { margin-top:0; }

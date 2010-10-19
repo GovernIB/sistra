@@ -6,11 +6,11 @@
 <application>
     <display-name>RTE</display-name>
     <description><![CDATA[Proyecto IBCEGE - RTE]]></description>
-    <module><java>regtel-model.jar</java></module>    
-    <module><ejb>regtel-persistence.jar</ejb></module>
+    <module><java>8-regtel-model.jar</java></module>    
+    <module><ejb>8-regtel-persistence.jar</ejb></module>
     <module>
 		<web>
-			<web-uri>regtel-ws.war</web-uri>
+			<web-uri>8-regtel-ws.war</web-uri>
 			<context-root>regtelws</context-root>
 		</web>
 	</module>

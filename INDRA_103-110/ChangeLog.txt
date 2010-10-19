@@ -70,7 +70,7 @@ V1.0.3
 		 Control de campos obligatorios al generar el xml (como medida de seguridad) 		 
 		  
 - Bantel: Módulo de generacion de expedientes/avisos/notifs
-		  Avisos entradas mediante ws asincronos (configurable en bantel.properties)	
+		  Avisos entradas mediante ws asincronos (configurable en bantel.propertiess)	
 
 - Mobtratel: limite de dias envio xa envios sin fecha caducidad (propiedad en mobtratel.properties)		  
 			 mejora gestion de envios email (control mails enviados)
@@ -82,3 +82,41 @@ V1.0.3
 		   ZonaperHelpdesk: revisión información estado pagos en función de la info del asistente de pagos
 		   
 - Webservices: cambio a cxf 2.2.7		   
+
+
+----------------------------------------------------------------------------------------------------------------
+V1.1.0
+
+- Aplanamiento de roles e integracion en un unico ear
+
+- Interfaz WS:
+	Se introduce versión 2 de api de ws para implementar últimas funcionalidades (se mantiene operativa la v1 para las integraciones existentes).
+	Ws orientados a nif, no a codigo usuario.
+	Se habilita poder elegir basic auth o ws-security usernametoken. (Para ws-security hay que cambiar el SAX del Jboss)
+
+- @firma: Se ha actualizado la versión del cliente de @firma
+
+- Plugins: Registro: añadir funcion anular
+           GestorDocumental: nuevo plugin para consolidar docs en un gestor documental
+           Firma: se separa formato usado para bd y para ws
+
+- Sistra: 
+		  Asistente: muestra para entorno desarrollo el xml de los formularios en paso registrar
+		  Tramitación en modo delegado
+
+- Regtel: Logica compensacion para conexion no transaccional a registro organismo
+		  Trámite de subsanación al generar una notificación	
+		 
+- Zonaper: Se realiza el log de los registros efectuados para periodicamente chequear si deben ser anulados (lógica compensación 
+           conexión no transaccional a registro organismo).
+           Se muestra justificante registro salida al mostrar la notificación.
+           Proceso eliminación trámites backup.
+           Acceso a zona personal de forma delegada.
+           
+- Forms: Arreglados bugs exportacion scripts con saltos de linea y de patrones
+
+- Redose: Se añade idioma para documentos estructurados. 
+		  Sincronizacion gestor documental
+          Permitir acceso redoseback al perfil operador
+		  El sello de registro generado por el RDS debe aparecer con la hora
+		  Proceso eliminación definitiva de documentos marcados para borrar

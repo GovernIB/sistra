@@ -67,7 +67,6 @@
 					.</p>
 				<%}%>
 				
-				</p>
 					
 				<p class="ultimo">					
 					<!--  Instrucciones anexar -->
@@ -265,13 +264,25 @@
 											<span class="detalleDoc"> 
 													<img src="imgs/tramitacion/iconos/doc_firmar.gif"/>
 													<logic:notEmpty name="anexo" property="firmante">
+														<logic:match name="anexo" property="firmante" value="#">
+															<bean:message key="pasoAnexar.documentos.documentoFirmadosDigitalmente" arg0="<%=es.caib.util.StringUtil.replace(anexo.getFirmante(),"#"," - ")%>"/>
+														</logic:match>	
+														<logic:notMatch name="anexo" property="firmante" value="#">
 														<bean:message key="pasoAnexar.documentos.documentoFirmadoDigitalmente" arg0="<%=anexo.getFirmante()%>"/>
+														</logic:notMatch>															
 													</logic:notEmpty>
 													<logic:empty name="anexo" property="firmante">
 														<bean:message key="pasoAnexar.documentos.documentoFirmadoDigitalmente.noComprobarFirmante"/>
 													</logic:empty>
 											</span>
 										</logic:equal>								
+										<!--  * pendiente firma delegada -->																	
+										<logic:equal name="anexo" property="pendienteFirmaDelegada" value="true">
+											<span class="detalleDoc"> 
+													<img src="imgs/tramitacion/iconos/doc_firmar.gif"/>
+													<bean:message key="pasoAnexar.documentos.pendienteFirmaDelegada"/>													
+											</span>
+										</logic:equal>										
 									 									
 									<br/>									 									
 									

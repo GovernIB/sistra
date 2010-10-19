@@ -81,8 +81,8 @@
 			</manifest>
 			<metainf dir="${etc.jboss}" includes="jboss-app.xml"/>
 			<fileset dir="${moduls.dir}">
-                <exclude name="form-back.war"/>
-                <exclude name="form-admin.war"/>
+                <exclude name="6-form-back.war"/>
+                <exclude name="6-form-admin.war"/>
             </fileset>			
         </ear>
 	</target>
@@ -91,7 +91,7 @@
 		<antcall target="propagate">
 			<param name="task" value="main"/>
 		</antcall>
-		<antcall target="assemble"/>
+		<!-- <antcall target="assemble"/> -->
 		<antcall target="interfaz"/>
 		<antcall target="distribute"/>		
 	</target>
@@ -138,7 +138,8 @@
     </target>
 	
     <target name="distribute" description="Distribucion">
-		<copy file="${product.dir}/6-${projecte}.ear" todir="${distribucion.dir}/ear"/>		
+    	<copy file="${product.dir}/forms-client.jar" todir="${distribucion.dir}/client"/>
+		<!-- <copy file="${product.dir}/6-${projecte}.ear" todir="${distribucion.dir}/ear"/> -->		
 	</target>
 	
 </project>

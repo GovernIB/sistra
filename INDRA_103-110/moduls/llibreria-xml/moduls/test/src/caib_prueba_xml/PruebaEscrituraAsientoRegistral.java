@@ -68,9 +68,21 @@ public class PruebaEscrituraAsientoRegistral {
 			//direccion.setDomicilio ("Calle");
 			dInteresado.setDireccionCodificada (direccion);
 			
-			
 			asiento.getDatosInteresado().add (dInteresado);								
 									
+			// Datos delegado
+			DatosInteresado dDelegado = factoria.crearDatosInteresado();
+			dDelegado.setNivelAutenticacion(null);
+			dDelegado.setTipoInteresado (ConstantesAsientoXML.DATOSINTERESADO_TIPO_DELEGADO);
+			dDelegado.setTipoIdentificacion (new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE));
+			//dInteresado.setNumeroIdentificacion ("1111111Z");
+			dDelegado.setNumeroIdentificacion ("");
+			dDelegado.setFormatoDatosInteresado (ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
+			//dInteresado.setIdentificacionInteresado ("Nombre Apellido");											
+			dDelegado.setIdentificacionInteresado ("");
+			
+			asiento.getDatosInteresado().add (dDelegado);
+			
 			// Crear datos asunto
 			DatosAsunto dAsunto = factoria.crearDatosAsunto();
 			dAsunto.setFechaAsunto(new Date());

@@ -120,6 +120,33 @@
     	<put name="main" value="/pages/detalleAviso.jsp" />
     </definition>
     
+    <!--  Pantalla de delegaciones (autenticado) -->
+	<definition
+    	name=".delegaciones"	
+    	extends=".mainLayout"
+    	controller="es.caib.zonaper.front.controller.DelegacionesController">
+		<put name="menu.navegacion" value="menuAutenticado.delegaciones" />
+    	<put name="main" value="/pages/delegaciones.jsp" />
+    </definition>	
+
+    <!--  Pantalla de bandeja firma (autenticado) -->
+	<definition
+    	name=".bandejaFirma"	
+    	extends=".mainLayout"
+    	controller="es.caib.zonaper.front.controller.BandejaFirmaController">
+		<put name="menu.navegacion" value="menuAutenticado.bandejaFirma" />
+    	<put name="main" value="/pages/bandejaFirma.jsp" />
+    </definition>	
+    
+    <!--  Pantalla de firma (autenticado) -->
+	<definition
+    	name=".irFirmarDocumento"	
+    	extends=".mainLayout"
+    	controller="es.caib.zonaper.front.controller.BandejaFirmaController">
+		<put name="menu.navegacion" value="menuAutenticado.bandejaFirma.irFirmarDocumento" />
+    	<put name="main" value="/pages/irFirmarDocumento.jsp" />
+    </definition>	
+        
      <!-- Pantalla tramite anonimo sin enviar -->
     <definition
     	name=".tramiteAnonimoSinEnviar"

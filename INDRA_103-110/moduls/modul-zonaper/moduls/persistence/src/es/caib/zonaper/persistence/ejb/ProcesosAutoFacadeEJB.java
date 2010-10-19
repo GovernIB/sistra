@@ -1,7 +1,9 @@
 package es.caib.zonaper.persistence.ejb;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 import javax.ejb.CreateException;
@@ -16,14 +18,20 @@ import net.sf.hibernate.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import es.caib.regtel.persistence.delegate.RegistroOrganismoDelegate;
+import es.caib.xml.registro.factoria.ConstantesAsientoXML;
 import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.ElementoExpedienteItf;
+import es.caib.zonaper.model.Entrada;
 import es.caib.zonaper.model.EntradaPreregistro;
 import es.caib.zonaper.model.EntradaTelematica;
 import es.caib.zonaper.model.EventoExpediente;
 import es.caib.zonaper.model.Expediente;
+import es.caib.zonaper.model.LogRegistro;
 import es.caib.zonaper.model.NotificacionTelematica;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
+import es.caib.zonaper.persistence.delegate.ExpedienteDelegate;
+import es.caib.zonaper.persistence.delegate.LogRegistroDelegate;
 import es.caib.zonaper.persistence.util.AvisosMovilidad;
 import es.caib.zonaper.persistence.util.UsernamePasswordCallbackHandler;
 
@@ -79,7 +87,7 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
 			doActualizaEstadoExpediente(id);	
 			
 		}catch (Exception le){
-			throw new EJBException("No se puede hacer login con usuario auto",le);
+			throw new EJBException("Excepcion al ejecutar proceso",le);
 		}finally{				
 			// Hacemos el logout
 			if ( lc != null ){
@@ -119,7 +127,7 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
 			}
 				
 		}catch (Exception le){
-			throw new EJBException("No se puede hacer login con usuario auto",le);
+			throw new EJBException("Excepcion al ejecutar proceso",le);
 		}finally{				
 			// Hacemos el logout
 			if ( lc != null ){
@@ -153,7 +161,7 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
 			// Realizamos aviso
 			AvisosMovilidad.getInstance().avisoCreacionElementoExpediente(ele);
 		}catch (LoginException le){
-			throw new EJBException("No se puede hacer login con usuario auto",le);
+			throw new EJBException("Excepcion al ejecutar proceso",le);
 		}catch (Exception e){
 			throw new EJBException("Error realizando aviso creacion elemento expediente con usuario auto",e);
 		}finally{				
@@ -164,6 +172,77 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
 		}
 		
 	}
+	
+	
+	/**
+	 * Revisa si los registros efectuados se han consolidado
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked = "true"
+     * 
+     */
+	public void revisarRegistrosEfectuados()  
+	{
+		backupLog.debug("Revisar registros efectuados");
+		
+		LoginContext lc = null;		
+		try{					
+			// Realizamos login JAAS con usuario para proceso automatico	
+			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+			String user = props.getProperty("auto.user");
+			String pass = props.getProperty("auto.pass");
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			lc = new LoginContext("client-login", handler);
+			lc.login();
+			
+			// Revisar registros efectuados
+			doRevisarRegistrosEfectuados();
+			
+		}catch (Exception le){
+			throw new EJBException("Excepcion al ejecutar proceso",le);
+		}finally{				
+			// Hacemos el logout
+			if ( lc != null ){
+				try{lc.logout();}catch(Exception exl){}
+			}
+		}
+	}
+	
+	
+	/**
+     * Actualiza estado expediente con la informacion de un tramite de subsanacion
+     * @param entrada
+     * @param tramiteSubsanacion
+     * @throws Exception
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked = "true"
+     */
+    public void actualizarExpedienteTramiteSubsanacion(Long codigoEntrada, String tipoEntrada) throws Exception{    
+    	backupLog.debug("Actualizar expediente con tramite subsanacion");		
+		LoginContext lc = null;		
+		try{	
+			
+			// Realizamos login JAAS con usuario para proceso automatico	
+			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+			String user = props.getProperty("auto.user");
+			String pass = props.getProperty("auto.pass");
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			lc = new LoginContext("client-login", handler);
+			lc.login();
+			
+			doActualizarExpedienteTramiteSubsanacion(codigoEntrada, tipoEntrada);
+			
+    }catch (Exception le){
+		throw new EJBException("Excepcion al ejecutar proceso",le);
+	}finally{				
+		// Hacemos el logout
+		if ( lc != null ){
+			try{lc.logout();}catch(Exception exl){}
+		}
+	}
+	}
+    
 	
 	// ----------------------------------------------------------------------------------------------
 	//	FUNCIONES AUXILIARES
@@ -253,5 +332,66 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
 	        close(session);
 	    }
 	}
+    /**
+     * Revisa registros efectuados para ver si se han consolidado
+     *
+     */
+	private void doRevisarRegistrosEfectuados() throws Exception{
+		LogRegistroDelegate dlg = DelegateUtil.getLogRegistroDelegate();
+		RegistroOrganismoDelegate dlgOrg = es.caib.regtel.persistence.delegate.DelegateUtil.getRegistroOrganismoDelegate();
+		List logRegs = dlg.listarLogRegistro();
+		if(logRegs != null){
+			for(int i=0;i<logRegs.size();i++){
+				LogRegistro logReg = (LogRegistro)logRegs.get(i);
+				//Añadimos 15 minutos a la fecha de registro.
+				Date dateAux = new Date();
+	            int minutesToAdd = 15;  // 15 minutos
+                Calendar cal = Calendar.getInstance();
+	            cal.setTime(logReg.getFechaRegistro());
+	            cal.add(Calendar.MINUTE, minutesToAdd);
+	            /*  miramos si se ha registrado por lo menos 15 minutos antes de la ejecución del proceso, para dar tiempo
+	             *	a que termine la TX global
+	             */
+				if(cal.getTime().before(dateAux)){
+					if(dlg.tieneUsos(logReg)){
+						dlg.borrarLogRegistro(logReg.getId());
+					}else{
+						if(logReg.getId().getTipoRegistro().equals(ConstantesAsientoXML.TIPO_REGISTRO_SALIDA+"")){
+							dlgOrg.anularRegistroSalida(logReg.getId().getNumeroRegistro(), logReg.getFechaRegistro());
+						}else{
+							dlgOrg.anularRegistroEntrada(logReg.getId().getNumeroRegistro(), logReg.getFechaRegistro());
+						}
+						logReg.setAnulado("S");
+						dlg.grabarLogRegistro(logReg);
+					}
+				}
+			}
+		}
+	}
     
+	
+	private void doActualizarExpedienteTramiteSubsanacion(Long codigoEntrada, String tipoEntrada) throws Exception{
+		Entrada entrada = null;
+		if (tipoEntrada.equals(ElementoExpediente.TIPO_ENTRADA_TELEMATICA)){
+			entrada = DelegateUtil.getEntradaTelematicaDelegate().obtenerEntradaTelematica(codigoEntrada);
+		}else{
+			entrada = DelegateUtil.getEntradaPreregistroDelegate().obtenerEntradaPreregistro(codigoEntrada);
+		}
+		if (entrada == null){
+			throw new Exception("No se encuentra entrada con codigo " + tipoEntrada + "-" + codigoEntrada);
+		}
+		
+		ExpedienteDelegate ed = DelegateUtil.getExpedienteDelegate();
+		Expediente expe = ed.obtenerExpediente(entrada.getSubsanacionExpedienteUA().longValue(),entrada.getSubsanacionExpedienteCodigo());
+		if (expe == null){
+			throw new Exception("No existe expediente indicado en datos propios: " + entrada.getSubsanacionExpedienteUA()+ " - " + entrada.getSubsanacionExpedienteCodigo());
+		}    	
+    	ElementoExpediente el = new ElementoExpediente();
+    	el.setExpediente(expe);
+    	el.setTipoElemento(entrada instanceof EntradaTelematica?ElementoExpediente.TIPO_ENTRADA_TELEMATICA:ElementoExpediente.TIPO_ENTRADA_PREREGISTRO);
+    	el.setFecha(entrada.getFecha());
+    	el.setCodigoElemento(entrada.getCodigo());
+    	expe.addElementoExpediente(el,entrada);
+    	DelegateUtil.getExpedienteDelegate().grabarExpediente(expe);
+	}
 }

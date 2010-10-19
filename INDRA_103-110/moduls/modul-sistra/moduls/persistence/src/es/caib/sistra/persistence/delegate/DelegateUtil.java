@@ -99,4 +99,8 @@ public final class DelegateUtil {
     public static GruposDelegate getGruposDelegate(){
     	return (GruposDelegate) DelegateFactory.getDelegate(GruposDelegate.class);
     }
+    
+    public static VersionWSDelegate getVersionWSDelegate(){
+    	return (VersionWSDelegate) DelegateFactory.getDelegate(VersionWSDelegate.class);
+    }
 }

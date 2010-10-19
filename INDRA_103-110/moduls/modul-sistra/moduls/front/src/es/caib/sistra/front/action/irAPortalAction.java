@@ -3,6 +3,7 @@ package es.caib.sistra.front.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -23,7 +24,7 @@ public class irAPortalAction extends Action
             HttpServletResponse response) throws Exception 
     {				 	 	
 		OrganismoInfo oi = (OrganismoInfo) request.getSession().getServletContext().getAttribute(Constants.ORGANISMO_INFO_KEY);
-		response.sendRedirect(oi.getUrlPortal());
+		response.sendRedirect("/sistrafront/redireccion.jsp?url=" + StringEscapeUtils.escapeHtml(oi.getUrlPortal()));
  		return null;
 	}
 

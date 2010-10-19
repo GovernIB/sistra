@@ -40,8 +40,15 @@
   </tr>
   <tr> 
     <td>Campo DNI Firmante</td>
-    <td>Indica quien debe firmar el documento. Este campo es de tipo <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a>.
-    En caso de dejar vacio este script el firmante ser&aacute; el iniciador del tr&aacute; mite. 
+    <td>Indica quien debe firmar el documento. Este campo es de tipo <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> y debe
+    devolver un nif. En caso de dejar vacio este script el firmante ser&aacute; el iniciador del tr&aacute;mite. 
+    <br/>
+    Para tr&aacute;mites que se tramiten de forma delegada en caso de que el nif no sea del usuario que esta rellenado el tr&aacute;mite
+    se remitir&aacute; el documento a la bandeja de firma de la zona de entidad, siendo requisito que el nif del firmante este registrado como delegado de 
+    la entidad. Adem&aacute;s en caso de tramitaci&oacute;n en forma delegada se permitir&aacute;
+    indicar varios nifs separados por #. 
+    <br/>
+    
     </td>
   </tr>
   <tr> 

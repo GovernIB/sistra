@@ -11,7 +11,7 @@ import es.caib.sistra.plugins.PluginSistraIntf;
  * que tengan firma en el sistema de custodia.  
  * 
  * REDOSE llamara a custodiarDocumento cada vez que el documento o sus firmas sean modificadas. 
- * En caso de integraciones no transaccionales esta funcion puede ir devolviendo cada vez un identificador distinto.
+ * En caso de integraciones no transaccionales esta funcion debe ir devolviendo cada vez un identificador distinto.
  * De esta forma se iran almacenando las distintas versiones de custodia en REDOSE y luego el proceso de borrado de 
  * documentos borrará las versiones antiguas. De esta forma se aseguraría la transaccionalidad de forma que un rollback
  * en la transacción de REDOSE mantendría el documento en custodia equivalente.

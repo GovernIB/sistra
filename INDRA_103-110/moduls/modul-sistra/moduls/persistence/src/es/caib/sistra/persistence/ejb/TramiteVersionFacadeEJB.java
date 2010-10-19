@@ -39,7 +39,7 @@ public abstract class TramiteVersionFacadeEJB extends HibernateEJB {
 	  
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public TramiteVersion obtenerTramiteVersion(Long id) {
         Session session = getSession();
@@ -151,7 +151,7 @@ public abstract class TramiteVersionFacadeEJB extends HibernateEJB {
         
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long grabarTramiteVersion(TramiteVersion obj,Long idTramite) {        
     	Session session = getSession();
@@ -182,7 +182,7 @@ public abstract class TramiteVersionFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void bloquearTramiteVersion(Long idTramiteVersion,String bloquear,String usuario) {        
     	Session session = getSession();
@@ -221,7 +221,7 @@ public abstract class TramiteVersionFacadeEJB extends HibernateEJB {
         
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Set listarTramiteVersiones(Long idTramite) {
         Session session = getSession();
@@ -238,7 +238,7 @@ public abstract class TramiteVersionFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarTramiteVersion(Long id) {
         Session session = getSession();

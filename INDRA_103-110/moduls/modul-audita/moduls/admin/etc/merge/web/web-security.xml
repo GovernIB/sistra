@@ -1,3 +1,4 @@
+@cas.enabled.comment.init@
 <security-constraint>
     <web-resource-collection>
         <web-resource-name>auditadmin</web-resource-name>
@@ -14,3 +15,4 @@
 <security-role>
     <role-name>@role.gestor@</role-name>
 </security-role>
+@cas.enabled.comment.end@

@@ -40,7 +40,6 @@ public class FactoriaObjetosXMLOficioRemisionImpl implements
 	private JAXBContext contextoJAXBOficioRemision;
 	private Unmarshaller unmshOficioRemision;
 	private Marshaller mshOficioRemision;
-	private ObjectFactory ofOficioRemision;
 
 	/** Crea la factoría. Se necesita que exista en el paquete un fichero properies (oficioremision_JAXB.properties),
 	 * que debe contener la propiedad PAQUETE_MODELO_OFICIOREMISION_IMPL, cuyo valor indicará cual es el
@@ -57,7 +56,6 @@ public class FactoriaObjetosXMLOficioRemisionImpl implements
 			contextoJAXBOficioRemision = JAXBContext.newInstance (obtenerPaqueteImplOficioRemision (propsJAXB));
 			unmshOficioRemision = contextoJAXBOficioRemision.createUnmarshaller();
 			mshOficioRemision = contextoJAXBOficioRemision.createMarshaller();	
-			ofOficioRemision = new ObjectFactory ();
 		} catch (JAXBException e) {
 			throw new InicializacionFactoriaException (e.getClass().getName() + " -> " + e.getLocalizedMessage(), 
 					"JAXB");
@@ -101,6 +99,11 @@ public class FactoriaObjetosXMLOficioRemisionImpl implements
 		return new OficioRemision ();					
 	}
 
+	public TramiteSubsanacion crearTramiteSubsanacion() {		
+		return new TramiteSubsanacion ();					
+	}
+	
+	
 	/* (non-Javadoc)
 	 * @see es.caib.xml.oficioremision.factoria.FactoriaObjetosXMLOficioRemision#crearOficioRemision(java.io.InputStream)
 	 */
@@ -111,9 +114,7 @@ public class FactoriaObjetosXMLOficioRemisionImpl implements
 		
 		try {			
 			OFICIOREMISION oficioRemisionJAXB = (OFICIOREMISION) unmshOficioRemision.unmarshal(datosXMLOficioRemision);
-			oficioRemision = crearOficioRemision ();
-			cargarDatosDesdeJAXB (oficioRemisionJAXB, oficioRemision);
-											
+			oficioRemision = OficioRemision.fromJAXB(oficioRemisionJAXB);										
 		} catch (Exception e) {
 			throw new CargaObjetoXMLException (e.getClass().getName() + ": " + e.getLocalizedMessage(), "OficioRemision", datosXMLOficioRemision);
 		}		
@@ -165,17 +166,12 @@ public class FactoriaObjetosXMLOficioRemisionImpl implements
 		
 		// Crear objetos JAXB equivalentes
 		OFICIOREMISION oficioRemisionImplInterno = null;
-		
 		try {
-			oficioRemisionImplInterno = ofOficioRemision.createOFICIOREMISION();
+			oficioRemisionImplInterno =  OficioRemision.toJAXB(oficioRemision);		
 		} catch (Exception e1) {
 			throw new es.caib.xml.GuardaObjetoXMLException ("Se ha producido una excepción al crear un objetos OficioRemision JAXB", 
 					"OficioRemision", (OutputStream) null);
 		}
-		
-		
-		cargarDatosHaciaJAXB (oficioRemision, oficioRemisionImplInterno);		
-		
 		
 		//	Hemos obtenido el objeto JAXB equivalente al nodo oficio remision, podemos guardar el XML		
 		try {
@@ -276,21 +272,6 @@ public class FactoriaObjetosXMLOficioRemisionImpl implements
 
 	}
 	
-	// Métodos para realizar la conversión JAXB -> Jerarquía propia de objetos
-	private void cargarDatosDesdeJAXB (OFICIOREMISION oficioRemisionJAXB, OficioRemision oficioRemision) throws EstablecerPropiedadException{
-		if ( (oficioRemision != null) && (oficioRemisionJAXB != null) ){
-			oficioRemision.setTitulo(oficioRemisionJAXB.getTITULO());
-			oficioRemision.setTexto(oficioRemisionJAXB.getTEXTO());
-		}
-	}
 	
-	
-	//	Métodos para realizar la conversión Jerarquía propia de objetos -> JAXB  
-	private void cargarDatosHaciaJAXB (OficioRemision oficioRemision, OFICIOREMISION oficioRemisionJAXB) throws EstablecerPropiedadException{
-		if ( (oficioRemision != null) && (oficioRemisionJAXB != null) ){
-			oficioRemisionJAXB.setTITULO(oficioRemision.getTitulo());
-			oficioRemisionJAXB.setTEXTO(oficioRemision.getTexto());
-		}
-	}
 	
 }

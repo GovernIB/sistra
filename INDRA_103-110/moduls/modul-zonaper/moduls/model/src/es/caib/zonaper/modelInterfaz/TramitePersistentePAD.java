@@ -12,6 +12,18 @@ public class TramitePersistentePAD implements Serializable {
 	public final static char AUTENTICACION_USUARIOPASSWORD = 'U';
 	public final static char AUTENTICACION_ANONIMO = 'A';
 		
+	/**
+	 * Para trámites que se ejecutan de forma delegada indica que el usuario que tiene actualmente el trámite 
+	 * ha realizado todas sus acciones sobre el paso pero queda que otro usuario presente el trámite
+	 */
+	public static final String ESTADO_PENDIENTE_DELEGACION_PRESENTACION = "DP";
+	
+	/**
+	 * Para trámites que se ejecutan de forma delegada indica que el usuario que tiene actualmente el trámite 
+	 * ha realizado todas sus acciones sobre el paso pero queda que otro delegado firme algun formulario o anexo
+	 */
+	public static final String ESTADO_PENDIENTE_DELEGACION_FIRMA = "DF";	
+		
 	private String idPersistencia;
 	private String tramite;  
     private int version;
@@ -25,7 +37,15 @@ public class TramitePersistentePAD implements Serializable {
     private String idioma;
     private Map documentos = new HashMap(0);
     private Map parametrosInicio;
+    private String delegado;
+	private String estadoDelegacion;
 	
+    public String getDelegado() {
+		return delegado;
+	}
+	public void setDelegado(String delegado) {
+		this.delegado = delegado;
+	}
     public Map getDocumentos() {
 		return documentos;
 	}
@@ -172,6 +192,12 @@ public class TramitePersistentePAD implements Serializable {
 	}
 	public void setUsuarioFlujoTramitacion(String usuarioFlujoTramitacion) {
 		this.usuarioFlujoTramitacion = usuarioFlujoTramitacion;
+	}
+	public String getEstadoDelegacion() {
+		return estadoDelegacion;
+	}
+	public void setEstadoDelegacion(String estadoDelegacion) {
+		this.estadoDelegacion = estadoDelegacion;
 	}
         
     

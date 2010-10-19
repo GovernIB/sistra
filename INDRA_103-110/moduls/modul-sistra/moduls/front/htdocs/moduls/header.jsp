@@ -9,12 +9,14 @@
 	<bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property="urlPortal"/>
 </bean:define>
 
+<logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_EN_IFRAME%>" value="false">
 <!-- capçal -->
 <div id="cap">
 	<html:link href="<%=urlPortal%>" paramId="lang" paramName="lang" accesskey="0" >
 		<img id="logoCAIB" class="logo" src="<bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property="urlLogo"/>" alt="Logo <bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property="nombre"/>" />
 	</html:link>
 </div>
+</logic:equal>
 
 <!-- titol -->
 <p id="titolAplicacio"><bean:message key="aplicacion.titulo"/></p>
@@ -41,7 +43,7 @@
 	    String urlSoporteFinal = es.caib.util.StringUtil.replace(urlSoporte,"@asunto@",tituloTramite);
 	    urlSoporteFinal = es.caib.util.StringUtil.replace(urlSoporteFinal,"@idioma@",lang);			
 	%>
-
+<logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_EN_IFRAME%>" value="false">
 <div id="contactoAdministrador" class="contactoAdministrador">
 	<h1 class="ayuda"><bean:message key="administrador.ayuda"/></h1>
 	<p>
@@ -57,4 +59,4 @@
 		</a>
 	</p>	
 </div>
-
+</logic:equal>

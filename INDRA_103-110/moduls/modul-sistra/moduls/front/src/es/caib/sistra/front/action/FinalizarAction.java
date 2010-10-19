@@ -1,5 +1,7 @@
 package es.caib.sistra.front.action;
 
+import java.net.URLEncoder;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -54,7 +56,7 @@ public class FinalizarAction extends BaseAction
 		if (urlFin == null){
 			return mapping.findForward( "success" );
 		}else{
-			response.sendRedirect(urlFin);
+			response.sendRedirect("/sistrafront/redireccion.jsp?url=" + URLEncoder.encode(urlFin));
 			return null;
 		}
 	}

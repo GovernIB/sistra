@@ -52,6 +52,7 @@ import es.caib.xml.registro.factoria.impl.AsientoRegistral;
 import es.caib.xml.registro.factoria.impl.DatosAnexoDocumentacion;
 import es.caib.xml.registro.factoria.impl.DatosInteresado;
 import es.caib.xml.registro.factoria.impl.Justificante;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
 import es.caib.zonaper.persistence.delegate.PadDelegate;
 
@@ -76,7 +77,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name = "${role.user}"
+     * @ejb.permission role-name = "${role.todos}"
      * @ejb.permission role-name = "${role.auto}"
      */
 	public void ejbCreate() throws CreateException 
@@ -131,7 +132,8 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	 * @return ResultadoRegistroTelematico
 	 * 
 	 * @ejb.interface-method
-	 * @ejb.permission role-name = "${role.user}"   
+	 * @ejb.permission role-name = "${role.todos}"   
+	 * @ejb.permission role-name = "${role.auto}"
 	 */
 	public ResultadoRegistroTelematico registroEntrada(ReferenciaRDS refAsiento, Map refDocs)  throws ExcepcionRegistroTelematico
 	{
@@ -148,7 +150,8 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	 * @return Date Devuelve la fecha de la firma del acuse de recibo de la notificación. Nulo si no se ha entregado.
 	 * 
 	 * @ejb.interface-method
-	 * @ejb.permission role-name = "${role.user}"   
+	 * @ejb.permission role-name = "${role.todos}"   
+	 * @ejb.permission role-name = "${role.auto}"
 	 */
    public Date obtenerAcuseRecibo(String numeroRegistro) throws ExcepcionRegistroTelematico
    {	
@@ -172,7 +175,8 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	 * @param refAsiento Referencia RDS del justificante de registro	  
 	 * 
 	 * @ejb.interface-method
-	 * @ejb.permission role-name = "${role.user}"   
+	 * @ejb.permission role-name = "${role.todos}"   
+	 * @ejb.permission role-name = "${role.auto}"
 	 */
 	public void anularRegistroEntrada(ReferenciaRDS refJustificante) throws ExcepcionRegistroTelematico
 	{
@@ -203,7 +207,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 			// Invocamos al registro organismo para anular
 			try{
 				log.debug("Llamamamos a registro organismo para anular");
-				DelegateUtil.getRegistroOrganismoDelegate().anularRegistroEntrada(justificanteXML.getNumeroRegistro());				
+				DelegateUtil.getRegistroOrganismoDelegate().anularRegistroEntrada(justificanteXML.getNumeroRegistro(),justificanteXML.getFechaRegistro());				
 			}catch (Exception ex){
 				throw new ExcepcionRegistroTelematico("Excepcion anulando registro en organismo",ex);
 			}  
@@ -235,7 +239,8 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	 * @throws ExcepcionRegistroTelematico
 	 * 
 	 * @ejb.interface-method
-	 * @ejb.permission role-name = "${role.user}"   	 
+	 * @ejb.permission role-name = "${role.todos}"
+	 * @ejb.permission role-name = "${role.auto}"   	 
 	 * 
 	 */
 	public List obtenerOficinasRegistro()  throws ExcepcionRegistroTelematico{
@@ -246,6 +251,28 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 		} 
    }
 	
+	
+	/**
+	 * Mira si existe o no una oficina de registro  
+	 * 
+	 * @param oficinaRegistro identificador de la oficina de registro
+	 * @return boolean
+	 * @throws ExcepcionRegistroTelematico
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission role-name = "${role.todos}"   	 
+	 * 
+	 */
+	public boolean existeOficinaRegistro(String oficinaRegistro) throws ExcepcionRegistroTelematico { 
+	    try{
+			return DelegateUtil.getRegistroOrganismoDelegate().existeOficinaRegistro(oficinaRegistro);				
+		}catch (Exception ex){
+			throw new ExcepcionRegistroTelematico("Excepcion obteniendo lista oficinas en registro organismo",ex);
+		} 
+   }
+	
+	
+	
 	/**
 	 * Obtiene lista de oficinas de registro   
 	 * 
@@ -253,7 +280,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	 * @throws ExcepcionRegistroTelematico
 	 * 
 	 * @ejb.interface-method
-	 * @ejb.permission role-name = "${role.user}"   	 
+	 * @ejb.permission role-name = "${role.todos}"   	 
 	 * 
 	 */
 	public List obtenerOficinasRegistroUsuario(String usuario)  throws ExcepcionRegistroTelematico{
@@ -271,7 +298,8 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	 * @throws ExcepcionRegistroTelematico
 	 * 
 	 * @ejb.interface-method
-	 * @ejb.permission role-name = "${role.user}"   	 
+	 * @ejb.permission role-name = "${role.todos}"
+	 * @ejb.permission role-name = "${role.auto}"   	 
 	 * 
 	 */
 	public List obtenerTiposAsunto()  throws ExcepcionRegistroTelematico{
@@ -284,13 +312,32 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	
 	
 	/**
+	 * Mira si existe o no un tipo de asunto  
+	 * 
+	 * @param tipoAsunto identificador del tipo de asunto
+	 * @return boolean
+	 * @throws ExcepcionRegistroTelematico
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission role-name = "${role.todos}"   	 
+	 * 
+	 */
+	public boolean existeTipoAsunto(String tipoAsunto) throws ExcepcionRegistroTelematico { 
+	    try{
+			return DelegateUtil.getRegistroOrganismoDelegate().existeTipoAsunto(tipoAsunto);				
+		}catch (Exception ex){
+			throw new ExcepcionRegistroTelematico("Excepcion obteniendo lista oficinas en registro organismo",ex);
+		} 
+   }
+	
+	/**
 	 * Obtiene lista de servicios destino
 	 * 
 	 * @return Lista de ValorOrganismo
 	 * @throws ExcepcionRegistroTelematico
 	 * 
 	 * @ejb.interface-method
-	 * @ejb.permission role-name = "${role.user}"   	 
+	 * @ejb.permission role-name = "${role.todos}" 
 	 * @ejb.permission role-name = "${role.auto}"   	 
 	 * 
 	 */
@@ -302,6 +349,24 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 		} 
    }
 	
+	/**
+	 * Mira si existe o no un servicio de destino
+	 * 
+	 * @param servicioDestino identificador del servicio de destino
+	 * @return boolean
+	 * @throws ExcepcionRegistroTelematico
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission role-name = "${role.todos}"   	 
+	 * 
+	 */
+	public boolean existeServicioDestino(String servicioDestino) throws ExcepcionRegistroTelematico { 
+	    try{
+			return DelegateUtil.getRegistroOrganismoDelegate().existeServicioDestino(servicioDestino);				
+		}catch (Exception ex){
+			throw new ExcepcionRegistroTelematico("Excepcion obteniendo lista oficinas en registro organismo",ex);
+		} 
+   }
    
    // --------------------- 	FUNCIONES UTILIDAD ---------------------------------------------------------
 		
@@ -348,16 +413,19 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 			
 			
 			// 3 - VALIDAMOS ANEXOS OBLIGATORIOS
+			DatosPropios datosPropios = null;
+			AvisoNotificacion avisoNotificacion = null;
+			OficioRemision oficioRemision = null;
 			if (entrada){
 				// Si el registro de entrada es un tramite telematico implementado por la plataforma de tramitacion
 				// debera tener asociado el anexo de Datos propios
 				if (StringUtils.isNotEmpty(asientoXML.getDatosAsunto().getIdentificadorTramite())){
-					validarDatosPropios(asientoXML, refDocs );
+					datosPropios = validarDatosPropios(asientoXML, refDocs );
 				}
 			}else{
 				// Para registros de salida chequeamos documento de aviso de notificacion y de oficio de remision
-				validarAvisoNotificacion(asientoXML, refDocs );
-				validarOficioRemision(asientoXML,refDocs);
+				avisoNotificacion = validarAvisoNotificacion(asientoXML, refDocs );
+				oficioRemision = validarOficioRemision(asientoXML,refDocs);
 			}
 			
 			
@@ -386,26 +454,19 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 			ReferenciaRDS refRDSJustificante = generarJustificante(asientoBin,asientoXML,res);
 			
 			// Genera usos RDS para asiento, justificante y documentos asociados
-			generarUsosRDS(entrada ? ConstantesRDS.TIPOUSO_REGISTROENTRADA : ConstantesRDS.TIPOUSO_REGISTROSALIDA ,asientoXML,refDocs,refAsiento,refRDSJustificante,res);
+			generarUsosRDS(entrada ? ConstantesRDS.TIPOUSO_REGISTROENTRADA : ConstantesRDS.TIPOUSO_REGISTROSALIDA ,asientoXML,refDocs,refAsiento,refRDSJustificante,res,datosPropios);
 			
 			//
 			//	---- REALIZAMOS LOG EN LA PAD
 			//
 			
-			// Generamos log en la zona personal:
-			//		- registro de entrada  (SOLO para tramites telematicos de la plataforma)
-			//		- registro de salida
-			if ( 
-					(entrada && StringUtils.isNotEmpty(asientoXML.getDatosAsunto().getIdentificadorTramite())) ||
-					(!entrada)
-				){	
+			// Generamos log en la zona personal
 					try{
 						PadDelegate pad = DelegatePADUtil.getPadDelegate();
 						pad.logPad(refAsiento,refRDSJustificante,refDocs);
 					}catch(Exception ex){
 						throw new ExcepcionRegistroTelematico("Excepcion generando log registro en la zona personal",ex);
 					}
-			}
 			
 			//
 			//	---- DEVOLVEMOS RESULTADO	
@@ -455,23 +516,28 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	}
 	
 	/**
-	 * Si se trata de un registro de entrada, chequeamos que el DNI del firmante coincide con el DNI
+	 * Si se trata de un registro de entrada, chequeamos que el nif del firmante coincide con el nif del representante
+	 *  o bien coincide con el nif delegado 
 	 * @param firmas
 	 * @param asientoRegistral
 	 */
 	private void chequeoIdentidadFirmanteASientoRegistral( FirmaIntf[] firmas, AsientoRegistral asientoRegistral ) throws ExcepcionRegistroTelematico
 	{
-		String numeroIdentificacionAsientoRegistral = null;
+		String nifRpte = null;
+		String nifDlgdo = null;
 		List lstDatosInteresados = asientoRegistral.getDatosInteresado();
 		for ( Iterator it = lstDatosInteresados.iterator(); it.hasNext(); )
 		{
 			DatosInteresado datosInteresado = ( DatosInteresado ) it.next();
 			if ( ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTANTE.equals( datosInteresado.getTipoInteresado() ) )
 			{
-				numeroIdentificacionAsientoRegistral = datosInteresado.getNumeroIdentificacion();
+				nifRpte = datosInteresado.getNumeroIdentificacion();
+			}else if ( ConstantesAsientoXML.DATOSINTERESADO_TIPO_DELEGADO.equals( datosInteresado.getTipoInteresado() ) )
+			{
+				nifDlgdo = datosInteresado.getNumeroIdentificacion();				
 			}
 		}
-		if ( numeroIdentificacionAsientoRegistral == null )
+		if ( nifRpte == null )
 		{
 			throw new ExcepcionRegistroTelematico( "En el asiento registral no existe el numero de documento identificativo del representante" );
 		}
@@ -479,19 +545,46 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 		{
 			throw new ExcepcionRegistroTelematico( "El asiento registral no está firmado para el registro de entrada" );
 		}
+		if ( nifDlgdo != null){
+			// Comprobamos que el delegado tenga permiso de presentar tramites para la entidad
+			try {
+				String permisos = DelegatePADUtil.getPadDelegate().obtenerPermisosDelegacion(nifRpte,nifDlgdo);
+				if (StringUtils.isEmpty(permisos) || permisos.indexOf(ConstantesZPE.DELEGACION_PERMISO_PRESENTAR_TRAMITE) == -1){
+					throw new ExcepcionRegistroTelematico("Delegado " + nifDlgdo + " no tiene permisos para presentar tramites para la entidad " + nifRpte);
+				}
+			} catch (es.caib.zonaper.persistence.delegate.DelegateException e) {
+				throw new ExcepcionRegistroTelematico("No se puede comprobar permisos del delegado sobre la entidad");
+			}
+		}
+		
+		boolean existeFirma = false;
 		for ( int i = 0 ; i < firmas.length; i++ )
 		{
 			FirmaIntf firma = firmas[ i ];			
 			try{
-				if (numeroIdentificacionAsientoRegistral.equals(firma.getNif())) return;
+				if (nifDlgdo != null){
+					if (nifDlgdo.equals(firma.getNif())) {
+						existeFirma = true;
+						break;
+					}
+				}else {
+					if (nifRpte.equals(firma.getNif())) {
+						existeFirma = true;
+						break;
+					}
+				}
 			}catch(Exception ex){
 				log.error("No se pudo comprobar si el numero de documento identificativo del firmante del asiento registral coincide con el nº de documento identificativo del representante en el asiento registral",ex );
 				throw new ExcepcionRegistroTelematico( "No se pudo comprobar si el numero de documento identificativo del firmante del asiento registral coincide con el nº de documento identificativo del representante en el asiento registral",ex );
 			}
 		}
+		
 		// En caso de no encontrar dni generamos excepcion
+		if (!existeFirma){
 		log.error( "El numero de documento identificativo del firmante del asiento registral no coincide con el nº de documento identificativo del representante en el asiento registral" );
 		throw new ExcepcionRegistroTelematico( "El numero de documento identificativo del firmante del asiento registral no coincide con el nº de documento identificativo del representante en el asiento registral" );
+	}
+	
 	}
 	
 	private DocumentoRDS consultarDocumentoRDS( ReferenciaRDS referenciaRDS )
@@ -561,6 +654,12 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 						}
 						// Establecemos pin certificado
 						params.put(FirmaUtil.CAIB_PARAMETER_PIN,this.pinCertificado);
+					}else if(plgFirma.getProveedor().equals(PluginFirmaIntf.PROVEEDOR_AFIRMA)){
+						if (asientoXML.getDatosOrigen().getTipoRegistro().charValue() == ConstantesAsientoXML.TIPO_REGISTRO_SALIDA){
+							params.put(FirmaUtil.AFIRMA_PARAMETER_ARCHIVO, "justificanteSalida.xml" );
+						}else{
+							params.put(FirmaUtil.AFIRMA_PARAMETER_ARCHIVO, "justificanteEntrada.xml" );
+						}
 					}
 					
 					// Firmamos
@@ -600,6 +699,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
     			break;
     		}
     	}
+		docRds.setIdioma(asientoXML.getDatosAsunto().getIdiomaAsunto());
 				
 		// Insertamos justificante en el RDS y devolvemos referencia
 		try{
@@ -614,10 +714,11 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	
 	 /**
 	 * Genera usos RDS en preregistro para asiento, justificante y documentos asociados
+	 * @param datosPropios 
 	 */
 	private void generarUsosRDS(String tipoUso,AsientoRegistral asientoXML,Map referenciasRDS,
 			ReferenciaRDS refAsiento, ReferenciaRDS refJustificante,
-			ResultadoRegistro resRegistro) throws ExcepcionRegistroTelematico{
+			ResultadoRegistro resRegistro, DatosPropios datosPropios) throws ExcepcionRegistroTelematico{
 		
 		try{
 			RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
@@ -645,7 +746,28 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 			Iterator it = asientoXML.getDatosAnexoDocumentacion().iterator();
 	    	while (it.hasNext()){
 	    		DatosAnexoDocumentacion da = (DatosAnexoDocumentacion) it.next();
-				uso.setReferenciaRDS((ReferenciaRDS) referenciasRDS.get(da.getIdentificadorDocumento()));
+	    		ReferenciaRDS refRDS = (ReferenciaRDS) referenciasRDS.get(da.getIdentificadorDocumento()); 
+	    		
+	    		// Comprobamos que el documento no se este siendo usado previamente 
+	    		// (solo podria tener usos de persistencia en caso de registro de entrada de un tramite sistra)
+	    		List usos = rds.listarUsos(refRDS);
+	    		if (usos.size() > 0){
+	    			if (tipoUso.equals(ConstantesRDS.TIPOUSO_REGISTROENTRADA) && usos.size() == 1){	    				
+	    				UsoRDS usoPers = (UsoRDS) usos.get(0);
+	    				if (usoPers.getTipoUso().equals(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE) &&
+	    					usoPers.getReferencia().equals(datosPropios.getInstrucciones().getIdentificadorPersistencia())){
+	    						// Uso correcto, es el proceso de registro y todavia tiene el uso de persistencia
+	    				}else{
+	    					throw new Exception("El documento con codigo " + refRDS.getCodigo() + " ya se esta utilizando en el sistema (existen usos asociados)");
+	    				}
+	    			}else{	    			
+	    				throw new Exception("El documento con codigo " + refRDS.getCodigo() + " ya se esta utilizando en el sistema (existen usos asociados)");
+	    			}
+				}
+				
+	    		
+	    		// Creamos uso
+	    		uso.setReferenciaRDS(refRDS);
 				uso.setReferencia(resRegistro.getNumeroRegistro());
 				uso.setTipoUso(tipoUso);
 				uso.setFechaSello(fcReg);	
@@ -663,9 +785,10 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	 * 
 	 * @param asientoRegistralNotificacion
 	 * @param referenciasRDS
+	 * @return 
 	 * @throws ExcepcionRegistroTelematico
 	 */
-	private void validarAvisoNotificacion( AsientoRegistral asientoRegistralNotificacion, Map referenciasRDS ) throws ExcepcionRegistroTelematico
+	private AvisoNotificacion validarAvisoNotificacion( AsientoRegistral asientoRegistralNotificacion, Map referenciasRDS ) throws ExcepcionRegistroTelematico
 	{		
 		try
 		{
@@ -678,6 +801,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 			FactoriaObjetosXMLAvisoNotificacion factoriaAvisoNotificacion = ServicioAvisoNotificacionXML.crearFactoriaObjetosXML();
 			AvisoNotificacion avisoNotificacion = factoriaAvisoNotificacion.crearAvisoNotificacion( new ByteArrayInputStream( docRDSAvisoNotificacion.getDatosFichero() ) );
 			if (avisoNotificacion == null) throw new Exception("Aviso de notificacion generado es nulo");
+			return avisoNotificacion;
 		}
 		catch( Exception exc )
 		{
@@ -692,9 +816,10 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	 * 
 	 * @param asientoRegistralNotificacion
 	 * @param referenciasRDS
+	 * @return 
 	 * @throws ExcepcionRegistroTelematico
 	 */
-	private void validarOficioRemision( AsientoRegistral asientoRegistralNotificacion, Map referenciasRDS ) throws ExcepcionRegistroTelematico
+	private OficioRemision validarOficioRemision( AsientoRegistral asientoRegistralNotificacion, Map referenciasRDS ) throws ExcepcionRegistroTelematico
 	{		
 		try
 		{
@@ -707,6 +832,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 			FactoriaObjetosXMLOficioRemision factoriaOficioRemision = ServicioOficioRemisionXML.crearFactoriaObjetosXML();
 			OficioRemision oficioRemision = factoriaOficioRemision.crearOficioRemision( new ByteArrayInputStream( docRDSOficioRemision.getDatosFichero() ) );
 			if (oficioRemision == null) throw new Exception("Oficion de remision generado es nulo");
+			return oficioRemision;
 		}
 		catch( Exception exc )
 		{
@@ -723,7 +849,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	 * @param referenciasRDS
 	 * @throws ExcepcionRegistroTelematico
 	 */
-	private void validarDatosPropios( AsientoRegistral asientoRegistralNotificacion, Map referenciasRDS ) throws ExcepcionRegistroTelematico
+	private DatosPropios validarDatosPropios( AsientoRegistral asientoRegistralNotificacion, Map referenciasRDS ) throws ExcepcionRegistroTelematico
 	{		
 		try
 		{
@@ -736,6 +862,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 			FactoriaObjetosXMLDatosPropios factoriaDatosPropios = ServicioDatosPropiosXML.crearFactoriaObjetosXML();
 			DatosPropios datosPropios = factoriaDatosPropios.crearDatosPropios( new ByteArrayInputStream( docRDSDatosPropios.getDatosFichero() ) );
 			if (datosPropios == null) throw new Exception("Datos propios generado es nulo");
+			return datosPropios;
 		}
 		catch( Exception exc )
 		{

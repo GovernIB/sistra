@@ -1,11 +1,18 @@
 package es.caib.zonaper.persistence.ejb;
 
+import java.security.Principal;
+
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
+
+import org.apache.commons.lang.StringUtils;
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
+import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.login.PluginLoginIntf;
+import es.caib.util.CredentialUtil;
 import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.ElementoExpedienteItf;
 import es.caib.zonaper.model.Expediente;
@@ -27,7 +34,7 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 {
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"    
      */
 	public void ejbCreate() throws CreateException 
@@ -36,10 +43,10 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 	}
 		
 	/**
-	 * Acceso autenticado
+	 * Acceso autenticado. Solo accesible por usuario y delegados.
 	 * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public ElementoExpediente obtenerElementoExpedienteAutenticado( String tipoElemento,Long codigoElemento )
 	{	
@@ -56,7 +63,7 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 	 * Acceso anonimo
 	 * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public ElementoExpediente obtenerElementoExpedienteAnonimo( String tipoElemento,Long codigoElemento, String idPersistencia )
 	{
@@ -88,7 +95,7 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 	
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public ElementoExpedienteItf obtenerDetalleElementoExpedienteAutenticado(String tipo, Long codigo)
 	{
@@ -103,7 +110,7 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 	
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public ElementoExpedienteItf obtenerDetalleElementoExpedienteAnonimo(String tipo, Long codigo,String idPersistencia)
 	{
@@ -143,7 +150,7 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 	
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public ElementoExpedienteItf obtenerDetalleElementoExpedienteAutenticado(Long id)
 	{
@@ -167,7 +174,7 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 	
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public ElementoExpedienteItf obtenerDetalleElementoExpedienteAnonimo(Long id,String idPersistencia)
 	{
@@ -217,9 +224,19 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 			return null;
 		}
 		
-		// Comprobamos que el expediente pertenezca al usuario
-		if (!this.ctx.getCallerPrincipal().getName().equals(ee.getExpediente().getSeyconCiudadano())){
-			throw new Exception("El expediente no pertenece al usuario");
+		// Comprobamos que el expediente pertenezca al usuario o si es un delegado
+		Principal sp =this.ctx.getCallerPrincipal();
+		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
+		if (plgLogin.getMetodoAutenticacion(sp) == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO){
+    		throw new HibernateException("Acceso solo permitido para autenticado");
+    	}
+		if (!plgLogin.getNif(sp).equals(ee.getExpediente().getNifRepresentante())){
+			
+			// Si no es el usuario quien accede miramos si es un delegado
+        	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(ee.getExpediente().getNifRepresentante());
+        	if (StringUtils.isEmpty(permisos)){
+        		throw new Exception("El elememto de expediente " +  tipoElemento + " - " + codigoElemento + " no pertenece al usuario ni es delegado - usuario " + sp.getName());
+        	}
 		}
 		
 		return ee;

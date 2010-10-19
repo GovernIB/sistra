@@ -14,6 +14,7 @@ public class Util
 	private static String urlMantenimientoSesion = null;
 	
 	private static Log log = LogFactory.getLog(Util.class);
+	private static Boolean entornoDesarrollo = null;
 	
 	/**
 	 * Obtiene version (en web.xml)
@@ -69,6 +70,23 @@ public class Util
 			}		
 		}
 		return (urlMantenimientoSesion + idInstancia);
+		
+	}
+	
+	/**
+	 * Indica si es entorno de desarrollo
+	 * @return true: entorno desarrollo / false: entorno produccion
+	 */
+	public static boolean esEntornoDesarrollo(){
+		if (entornoDesarrollo  == null) {
+			try{
+				entornoDesarrollo = new Boolean ("DESARROLLO".equals(DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("entorno")));				
+			}catch(Exception ex){
+				log.error("Error obteniendo propiedad 'entorno'",ex);
+				entornoDesarrollo = null;
+			}		
+		}
+		return (entornoDesarrollo != null?entornoDesarrollo.booleanValue():false);
 		
 	}
 }

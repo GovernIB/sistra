@@ -43,7 +43,7 @@ public class PagosFacadeEJB implements SessionBean {
 	
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name = "${role.user}"
+     * @ejb.permission role-name = "${role.todos}"
      */
 	public void ejbCreate() throws CreateException {		
 	}
@@ -52,7 +52,7 @@ public class PagosFacadeEJB implements SessionBean {
 	 * Inicia sesion de pago
 	 * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public SesionPago iniciarSesionPago(DatosPago datosPago, SesionSistra sesionSistra) {
 		
@@ -100,7 +100,7 @@ public class PagosFacadeEJB implements SessionBean {
 	 * Reanuda sesion de pago existente
 	 * 
 	 * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
 	 */
 	public SesionPago reanudarSesionPago(String localizador, SesionSistra sesionSistra) {
 		try{
@@ -144,7 +144,7 @@ public class PagosFacadeEJB implements SessionBean {
 	 * Comprueba estado sesion de pago
 	 * 
 	 * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
 	 */
 	public EstadoSesionPago comprobarEstadoSesionPago(String localizador) {
 		try{
@@ -170,7 +170,7 @@ public class PagosFacadeEJB implements SessionBean {
 	 * Finaliza sesion de pago
 	 * 
 	 * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
 	 */
 	public void finalizarSesionPago(String localizador){
 		try{
@@ -187,7 +187,7 @@ public class PagosFacadeEJB implements SessionBean {
 	 * Consulta el importe de una tasa
 	 * 
 	 * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
 	 */
 	public long consultarImporteTasa(String idTasa) {
 		log.debug("consultarImporteTasa");

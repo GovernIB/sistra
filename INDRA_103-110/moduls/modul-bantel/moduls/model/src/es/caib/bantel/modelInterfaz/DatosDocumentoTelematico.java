@@ -34,6 +34,10 @@ public class DatosDocumentoTelematico implements Serializable {
 		 */		
 	    private String claveReferenciaRds;
 	    /**
+	     * En caso de que el RDS este sincronizado con un gestor documental, indicara la referencia del documento en el Gestor Documental
+	     */
+	    private String referenciaGestorDocumental;
+	    /**
 	     * Nombre del fichero
 	     */	    
 	    private String nombre;
@@ -53,6 +57,10 @@ public class DatosDocumentoTelematico implements Serializable {
 	     * Indica si el documento es estructurado (XML)
 	     */
 	    private boolean estructurado;
+	    /**
+	     * En caso de que se haya guardado en custodia, indicara el codigo del documento en custodia
+	     */
+	    private String codigoDocumentoCustodia;
 		
 	    
 	    // UTILIDADES
@@ -181,5 +189,36 @@ public class DatosDocumentoTelematico implements Serializable {
 			this.numeroInstancia = numeroInstancia;
 		}
 
+		/**
+		 *  En caso de que el RDS este sincronizado con un gestor documental, indicara la referencia del documento en el Gestor Documental.
+		 * @return
+		 */
+		public String getReferenciaGestorDocumental() {
+			return referenciaGestorDocumental;
+		}
+
+		/**
+		 *  En caso de que el RDS este sincronizado con un gestor documental, indicara la referencia del documento en el Gestor Documental.
+		 * @param referenciaGestorDocumental
+		 */
+		public void setReferenciaGestorDocumental(String referenciaGestorDocumental) {
+			this.referenciaGestorDocumental = referenciaGestorDocumental;
+		}
+
+		/**
+	     * En caso de que se haya guardado en custodia, indicara el codigo del documento en custodia
+	     * @return
+	     */
+		public String getCodigoDocumentoCustodia() {
+			return codigoDocumentoCustodia;
+		}
+
+		/**
+	     * En caso de que se haya guardado en custodia, indicara el codigo del documento en custodia
+	     * @param codigoDocumentoCustodia
+	     */
+		public void setCodigoDocumentoCustodia(String codigoDocumentoCustodia) {
+			this.codigoDocumentoCustodia = codigoDocumentoCustodia;
+		}
 		
 }

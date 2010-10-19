@@ -1,37 +1,29 @@
 package es.caib.bantel.front.action;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.Globals;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.util.MessageResources;
 
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleAvisoForm;
 import es.caib.bantel.front.util.DocumentoFirmar;
 import es.caib.bantel.front.util.DocumentosUtil;
-import es.caib.bantel.front.util.Dominios;
-import es.caib.bantel.front.util.MensajesUtil;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 
 /**
  * @struts.action
- *  name="detalleAvisoForm"
+ *  name="uploadAvisoForm"
  *  path="/altaDocumentoAviso"
  *  validate="true"
- *  
- * @struts.action-forward
- *  name="success" path=".altaAviso"
- *  
- * @struts.action-forward
- *  name="fail" path=".error"
  */
 public class AltaDocumentoAvisoAction extends BaseAction
 {
@@ -41,7 +33,9 @@ public class AltaDocumentoAvisoAction extends BaseAction
 		DetalleAvisoForm avisoForm = (DetalleAvisoForm)form;
 		ArrayList documentos;
 		request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,"3");
+		String funcion;
 		try{
+			funcion = "parent.fileUploaded()";
  			if (avisoForm.getDocumentoAnexoFichero() != null && StringUtils.isNotEmpty(avisoForm.getDocumentoAnexoFichero().getFileName()) &&  StringUtils.isNotEmpty(avisoForm.getDocumentoAnexoTitulo()) ){
  				if(DocumentosUtil.extensionCorrecta(avisoForm.getDocumentoAnexoFichero().getFileName())){
 	 				if("documento".equals(avisoForm.getFlagValidacion())){
@@ -56,12 +50,8 @@ public class AltaDocumentoAvisoAction extends BaseAction
 						try{
 							documentRDS = DocumentosUtil.crearDocumentoRDS(documento,avisoForm.getUnidadAdministrativa());
 						}catch(Exception e){
-							List unidades=Dominios.listarUnidadesAdministrativas();
-							request.setAttribute("unidades",unidades);
-							ActionErrors errors = new ActionErrors();
-		 					errors.add("altaAviso", new ActionError("error.aviso.guardar.fichero"));
-		 					saveErrors(request,errors);
-		 					return mapping.findForward("success");
+							MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));
+							funcion="parent.errorFileUploaded(\""+resources.getMessage( getLocale( request ), "error.aviso.guardar.fichero")+"\")";
 						}
 						documento.setTitulo(documentRDS.getTitulo());
 						documento.setContenidoFichero(null);
@@ -84,20 +74,30 @@ public class AltaDocumentoAvisoAction extends BaseAction
 	 				avisoForm.setDocumentoAnexoFichero(null);
 	 				avisoForm.setDocumentoAnexoTitulo("");
  				}else{
- 					ActionErrors errors = new ActionErrors();
- 					errors.add("altaAviso", new ActionError("error.aviso.extensiones.fichero"));
- 					saveErrors(request,errors);
+ 					throw new Exception("error.aviso.extensiones.fichero");
  				}
 			}
-			List unidades=Dominios.listarUnidadesAdministrativas();
-			request.setAttribute("unidades",unidades);
-		}catch(Exception e){
-			e.printStackTrace();
-			String mensajeOk = MensajesUtil.getValue("error.excepcion.general");
-			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk);
-			return mapping.findForward("fail");
+		}catch(Exception ex){
+			MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));
+			if(ex.getMessage() != null && ex.getMessage().startsWith("error.aviso.extensiones.fichero")){
+				funcion="parent.errorFileUploaded(\"" + resources.getMessage( getLocale( request ), ex.getMessage()) + "\")";				
+			}else{
+				funcion="parent.errorFileUploaded(\""+resources.getMessage( getLocale( request ), "error.excepcion.general")+"\")";
 		}
-		return mapping.findForward( "success" );
     }
-	
+		response.setContentType("text/html");		    
+		PrintWriter pw = response.getWriter();
+		pw.println("<html>");
+		pw.println("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
+		pw.println("<script type=\"text/javascript\">");
+		pw.println("<!--");
+		pw.println(funcion);
+		pw.println("-->");
+		pw.println("</script>");
+		pw.println("</head>");
+		pw.println("<body>");
+		pw.println("</body>");
+		pw.println("</html>");
+		return null;
+    }
 }

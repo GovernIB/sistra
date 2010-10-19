@@ -33,6 +33,12 @@
     name="detalleAvisoForm"
     type="es.caib.bantel.front.form.DetalleAvisoForm" />          
 <form-bean
+    name="uploadAvisoForm"
+    type="es.caib.bantel.front.form.DetalleAvisoForm" />                
+<form-bean
     name="detalleNotificacionForm"
     type="es.caib.bantel.front.form.DetalleNotificacionForm" />          
+<form-bean
+    name="uploadNotificacionForm"
+    type="es.caib.bantel.front.form.DetalleNotificacionForm" />                
     

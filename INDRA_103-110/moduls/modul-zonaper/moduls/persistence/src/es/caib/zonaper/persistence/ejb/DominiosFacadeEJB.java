@@ -3,6 +3,7 @@ package es.caib.zonaper.persistence.ejb;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -14,6 +15,10 @@ import org.apache.commons.logging.LogFactory;
 
 import es.caib.regtel.model.ValorOrganismo;
 import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
+import es.caib.sistra.modelInterfaz.ConstantesDominio;
+import es.caib.sistra.modelInterfaz.ValoresDominio;
+import es.caib.sistra.persistence.delegate.DelegateException;
+import es.caib.sistra.persistence.delegate.DelegateSISTRAUtil;
 import es.caib.zonaper.model.ValorDominio;
 import es.caib.zonaper.persistence.util.Dominios;
 
@@ -41,7 +46,7 @@ public abstract class DominiosFacadeEJB implements SessionBean {
 
     /**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public void ejbCreate() throws CreateException 
     {     
@@ -51,7 +56,7 @@ public abstract class DominiosFacadeEJB implements SessionBean {
      * Lista provincias
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public List listarProvincias(){
     	try{
@@ -65,7 +70,7 @@ public abstract class DominiosFacadeEJB implements SessionBean {
      *  Lista de municipios de una provincia
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public List listarLocalidadesProvincia(String codProv) {
     	try{
@@ -84,7 +89,7 @@ public abstract class DominiosFacadeEJB implements SessionBean {
      * @throws Exception
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public String obtenerDescripcionMunicipio(String codProvincia, String codMunicipio) throws Exception{
     	try{
@@ -102,7 +107,7 @@ public abstract class DominiosFacadeEJB implements SessionBean {
      * @throws Exception
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public String obtenerDescripcionPais(String codPais) throws Exception{
     	try{
@@ -117,7 +122,7 @@ public abstract class DominiosFacadeEJB implements SessionBean {
      * Obtiene descripcion de unidad
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public String obtenerDescripcionUA(String codUA) {
     	try{
@@ -174,6 +179,31 @@ public abstract class DominiosFacadeEJB implements SessionBean {
     		}
 		}
 		return values;
+    }
+   
+    /**
+     * Convierte lista de valores organismos a lista de ValorDominio
+     * @param listVO
+     * @return
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public String obtenerRaizUnidadesOrganicas(){
+    	String codigo = "";
+    	//Obtenemos valores dominio del EJB
+		try{
+	    	ValoresDominio dom;
+			dom = DelegateSISTRAUtil.getSistraDelegate().obtenerDominio( ConstantesDominio.DOMINIO_SAC_ARBOL_UNIDADES_ADMINISTRATIVAS , null);
+			if(dom.getFilas().size() > 0){
+				Map datos = (Map)dom.getFilas().get(0);
+				return (String) datos.get("CODIGO");
+			}else{
+				throw new Exception("No se han encontrado unidades.");
+			}
+		}catch(Exception ex){
+			throw new EJBException(ex);    
+		}
     }
    
 }

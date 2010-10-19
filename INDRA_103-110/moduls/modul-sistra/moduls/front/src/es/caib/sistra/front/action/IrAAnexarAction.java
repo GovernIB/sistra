@@ -40,19 +40,36 @@ public class IrAAnexarAction extends BaseAction
 		RespuestaFront respuestaFront = delegate.pasoActual();
 		TramiteFront tramite = respuestaFront.getInformacionTramite();
 		ArrayList arlAnexos = tramite.getAnexos();
+		String mostrarFirmaDigital = "N";
+		
+		// Buscamos anexo
+		boolean enc = false;
+		DocumentoFront anexo = null;
 		for ( int i = 0; i < arlAnexos.size(); i++ )
 		{
-			DocumentoFront anexo = ( DocumentoFront ) arlAnexos.get( i );
+			anexo = ( DocumentoFront ) arlAnexos.get( i );
 			if ( formulario.getIdentificador().equals( anexo.getIdentificador() ) )
 			{
-				request.setAttribute( "anexo", anexo );
-				// Si debe firmarse digitalmente establecemos atributo para la carga de entorno de firma
-				if (anexo.isFirmar()){
-					request.setAttribute(Constants.MOSTRAR_FIRMA_DIGITAL,"S");
-				}
+				enc = true;
 				break;
 			}
 		}
+		if (!enc){
+			throw new Exception("No se encuentra anexo");
+		}
+		
+		// Comprobamos si hay que realizar la firma delegada o digital
+		if (anexo.isFirmar()){
+			if (anexo.isFirmaDelegada()){
+				mostrarFirmaDigital = "D";
+			}else{
+				mostrarFirmaDigital = "S";
+			}
+		}
+
+		
+		request.setAttribute( "anexo", anexo );
+		request.setAttribute(Constants.MOSTRAR_FIRMA_DIGITAL,mostrarFirmaDigital);
 
 		this.setRespuestaFront( request, respuestaFront );
 		return mapping.findForward("success");

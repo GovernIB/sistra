@@ -59,6 +59,7 @@ public class DetalleTramiteController extends BaseController
 		request.setAttribute( "asiento", asiento );
 		request.setAttribute( "representado",Util.obtenerDatosRepresentado(asiento));
 		request.setAttribute( "representante",Util.obtenerDatosRepresentante(asiento));
+		request.setAttribute("delegado",Util.obtenerDatosDelegado(asiento));
 		request.setAttribute( "datosPropios", datosPropios);
 		request.setAttribute("telematico",(entrada instanceof EntradaTelematica?"S":"N"));
 		request.setAttribute("codigosDocsPresenciales",codigosDocsPresenciales);

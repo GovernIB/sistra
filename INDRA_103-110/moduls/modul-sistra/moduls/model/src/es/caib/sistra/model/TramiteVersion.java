@@ -50,6 +50,7 @@ public class TramiteVersion  implements TramiteEspecificado, Serializable {
      private String consultaEJB;
      private char consultaLocalizacion = EJB_LOCAL;     
      private String consultaUrl;     
+     private String consultaWSVersion;
      private char consultaAuth=AUTENTICACION_EXPLICITA_SINAUTENTICAR ;
      private String consultaAuthUser;
      private String consultaAuthPwd;
@@ -385,6 +386,14 @@ public class TramiteVersion  implements TramiteEspecificado, Serializable {
 
 	public void setConsultaUrl(String consultaUrl) {
 		this.consultaUrl = consultaUrl;
+	}
+
+	public String getConsultaWSVersion() {
+		return consultaWSVersion;
+	}
+
+	public void setConsultaWSVersion(String consultaWSVersion) {
+		this.consultaWSVersion = consultaWSVersion;
 	}
 
 	public char getConsultaAuth() {

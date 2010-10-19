@@ -18,30 +18,30 @@
     <!--  Librerías de Open Office 3.1 -->
     
     
-    <module><java>redose-model.jar</java></module>    
-    <module><ejb>redose-persistence.jar</ejb></module>    
+    <module><java>2-redose-model.jar</java></module>    
+    <module><ejb>2-redose-persistence.jar</ejb></module>    
     <module>
         <web>
-            <web-uri>redose-back.war</web-uri>
+            <web-uri>2-redose-back.war</web-uri>
             <context-root>redoseback</context-root>
         </web>
     </module>
     <module>
         <web>
-            <web-uri>redose-front.war</web-uri>
+            <web-uri>2-redose-front.war</web-uri>
             <context-root>redosefront</context-root>
         </web>
     </module>
 	<module>
         <web>
-            <web-uri>redose-admin.war</web-uri>
+            <web-uri>2-redose-admin.war</web-uri>
             <context-root>redoseadmin</context-root>
         </web>
     </module>
 
     <module>
 		<web>
-			<web-uri>redose-ws.war</web-uri>
+			<web-uri>2-redose-ws.war</web-uri>
 			<context-root>redosews</context-root>
 		</web>
 	</module>

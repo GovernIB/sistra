@@ -26,9 +26,9 @@
    	  	 <exclude name="xerces*.jar"/>
 	  </fileset>
 	  <fileset dir="${web.product}">
-      	<include name="mobtratel-model.jar" />
-        <include name="mobtratel-persistence-client.jar" />
-	 	<include name="mobtratel-persistence.jar" />
+      	<include name="7-mobtratel-model.jar" />
+        <include name="7-mobtratel-persistence-client.jar" />
+	 	<include name="7-mobtratel-persistence.jar" />
       </fileset>
     </path>
 	
@@ -40,7 +40,7 @@
 	<target name="main" depends="war" description="Construeye el war"/>
 
 	<target name="war">
-		<cxfwar filename="${modul.name}.war"/>
+		<cxfwar filename="7-${modul.name}.war"/>
 	</target>
 	
     <macrodef name="cxfwar">

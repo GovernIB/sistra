@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:es:caib:regtel:ws:v2:model:DatosAsunto" targetNamespace="urn:es:caib:regtel:ws:v2:model:DatosAsunto" version="1.0">
+	<xs:complexType name="DatosAsunto">
+		<xs:sequence>
+			<xs:element name="idioma" type="xs:string"/>
+			<xs:element name="asunto" type="xs:string"/>
+			<xs:element name="tipoAsunto" type="xs:string"/>
+			<xs:element name="codigoUnidadAdministrativa" type="xs:long"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

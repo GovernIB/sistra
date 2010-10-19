@@ -210,6 +210,14 @@
     <td class="input"><html:text styleClass="textLargo" tabindex="1" property="values.consultaUrl" maxlength="500" /></td>
 </tr>
 <tr>
+    <td class="label"><bean:message key="tramiteVersion.consultaWSVersion"/></td>
+    <td class="input">
+    	<html:select property="values.consultaWSVersion">
+   			<html:options collection="listaVersionesWS" property="CODIGO" labelProperty="DESCRIPCION" />
+    	</html:select>
+    </td>
+</tr>
+<tr>
     <td class="label"><bean:message key="tramiteVersion.consultaEJB"/></td>
     <td class="input"><html:text styleClass="textLargo" tabindex="1" property="values.consultaEJB" maxlength="500" /></td>
 </tr>

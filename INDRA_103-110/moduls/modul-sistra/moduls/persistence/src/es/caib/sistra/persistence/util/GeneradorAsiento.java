@@ -31,7 +31,9 @@ import es.caib.sistra.persistence.ejb.ProcessorException;
 import es.caib.sistra.persistence.plugins.DestinatarioTramite;
 import es.caib.sistra.persistence.plugins.PluginFormularios;
 import es.caib.sistra.persistence.plugins.PluginPagos;
+import es.caib.sistra.plugins.login.ConstantesLogin;
 import es.caib.util.NifCif;
+import es.caib.util.StringUtil;
 import es.caib.util.ValidacionesUtil;
 import es.caib.xml.ConstantesXML;
 import es.caib.xml.datospropios.factoria.ConstantesDatosPropiosXML;
@@ -43,6 +45,7 @@ import es.caib.xml.datospropios.factoria.impl.Documento;
 import es.caib.xml.datospropios.factoria.impl.DocumentosEntregar;
 import es.caib.xml.datospropios.factoria.impl.Instrucciones;
 import es.caib.xml.datospropios.factoria.impl.Solicitud;
+import es.caib.xml.datospropios.factoria.impl.TramiteSubsanacion;
 import es.caib.xml.registro.factoria.ConstantesAsientoXML;
 import es.caib.xml.registro.factoria.FactoriaObjetosXMLRegistro;
 import es.caib.xml.registro.factoria.ServicioRegistroXML;
@@ -52,6 +55,7 @@ import es.caib.xml.registro.factoria.impl.DatosAsunto;
 import es.caib.xml.registro.factoria.impl.DatosInteresado;
 import es.caib.xml.registro.factoria.impl.DatosOrigen;
 import es.caib.xml.registro.factoria.impl.DireccionCodificada;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.modelInterfaz.DocumentoPersistentePAD;
 import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
 
@@ -66,6 +70,9 @@ public class GeneradorAsiento {
 	/**
 	 * 
 	 * Genera asiento registral a partir de la información del trámite	
+	 * 
+	 * Si hay autenticación, comprueba que quién envia es el usuario autenticado en la sesión
+	 * 
 	 * @param dt 
 	 * @return
 	 */
@@ -107,7 +114,7 @@ public class GeneradorAsiento {
 			asiento.setDatosOrigen (dOrigen);						
 			
 			// Crear datos representante
-			DatosInteresado dInteresadoRpte,dInteresadoRpdo=null;
+			DatosInteresado dInteresadoRpte,dInteresadoRpdo=null,dInteresadoDlgdo=null;
 			dInteresadoRpte = factoria.crearDatosInteresado();
 
 			// -- Validamos nif y nombre			 
@@ -145,12 +152,6 @@ public class GeneradorAsiento {
 			dInteresadoRpte.setFormatoDatosInteresado (ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
 			dInteresadoRpte.setIdentificacionInteresado (rpteNom);
 			
-			// Si hay autenticación, comprobamos que quien envia es el usuario de la sesión
-			if (StringUtils.isNotEmpty(dInteresadoRpte.getUsuarioSeycon()) &&
-				!tramiteInfo.getDatosSesion().getNifUsuario().equals(dInteresadoRpte.getNumeroIdentificacion())){
-				throw new Exception("El usuario que envia no es el que está indicado como representante");
-			}
-						
 			// Verificamos datos procedencia geográfica
 	    	if (StringUtils.isNotEmpty(rptePais)){
 	    		
@@ -194,6 +195,22 @@ public class GeneradorAsiento {
 			
 			asiento.getDatosInteresado().add(dInteresadoRpte);
 			
+	    	// Si hay autenticación:
+			//		- si hay delegacion comprobamos que el delegado tiene permisos de enviar
+			//		- si no hay delegacion comprobamos que quien envia es el usuario de la sesión
+			if (tramiteInfo.getDatosSesion().getNivelAutenticacion() != ConstantesLogin.LOGIN_ANONIMO){
+				if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(tramiteInfo.getDatosSesion().getPerfilAcceso())){
+					if (tramiteInfo.getDatosSesion().getPermisosDelegacion().indexOf(ConstantesZPE.DELEGACION_PERMISO_PRESENTAR_TRAMITE) == -1){
+						throw new Exception("El usuario no tiene permisos para presentar tramites en nombre de la entidad");
+					}
+				}else{
+					if (!tramiteInfo.getDatosSesion().getNifUsuario().equals(dInteresadoRpte.getNumeroIdentificacion())){
+						throw new Exception("El usuario que envia no es el que está indicado como representante");
+					}
+				}
+			}
+	    	
+			
 			// Creamos datos representado (si corresponde)
 			if (rpdoNif != null && !rpteNif.equals(rpdoNif)){
 				dInteresadoRpdo = factoria.crearDatosInteresado();
@@ -218,6 +235,40 @@ public class GeneradorAsiento {
 		    	}   				
 				dInteresadoRpdo.setIdentificacionInteresado (rpdoNombre);
 				asiento.getDatosInteresado().add(dInteresadoRpdo);				
+			}
+																							
+			// Creamos datos de delegado si hay delegacion
+			if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(tramiteInfo.getDatosSesion().getPerfilAcceso())){
+				String dlgdoNif = tramiteInfo.getDatosSesion().getNifDelegado();
+				String dlgdoNombre = StringUtil.formatearNombreApellidos(
+						ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM,
+						tramiteInfo.getDatosSesion().getNombreDelegado(),
+						tramiteInfo.getDatosSesion().getApellido1Delegado(),
+						tramiteInfo.getDatosSesion().getApellido2Delegado());
+				
+				dInteresadoDlgdo = factoria.crearDatosInteresado();
+				dInteresadoDlgdo.setTipoInteresado (ConstantesAsientoXML.DATOSINTERESADO_TIPO_DELEGADO);		
+				switch (NifCif.validaDocumento(dlgdoNif)){
+					case NifCif.TIPO_DOCUMENTO_NIF:
+						dInteresadoDlgdo.setTipoIdentificacion (new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIF));
+						break;
+					case NifCif.TIPO_DOCUMENTO_CIF:
+						dInteresadoDlgdo.setTipoIdentificacion (new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_CIF));
+						break;
+					case NifCif.TIPO_DOCUMENTO_NIE:
+						dInteresadoDlgdo.setTipoIdentificacion (new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE));
+						break;
+					default:
+						throw new Exception("El número de identificación del delegado ni es nif, ni cif, ni nie");
+				}					
+				dInteresadoDlgdo.setNumeroIdentificacion (dlgdoNif);
+				dInteresadoDlgdo.setFormatoDatosInteresado (ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
+				if (StringUtils.isEmpty (dlgdoNombre)){
+		    		throw new Exception("Se ha indicado el nif del delegado pero no el nombre");
+		    	}   				
+				dInteresadoDlgdo.setIdentificacionInteresado (dlgdoNombre);
+				asiento.getDatosInteresado().add(dInteresadoDlgdo);
+				
 			}
 																							
 			// Crear datos asunto
@@ -288,13 +339,15 @@ public class GeneradorAsiento {
 	 * @param tramiteVersion
 	 * @param tramitePAD
 	 * @param plgForms
+	 * @param expeUA 
+	 * @param expeId 
 	 * @return
 	 * @throws Exception
 	 */
 	public static String generarDatosPropios(
 			TramiteFront tramiteInfo,
 			TramiteVersion tramiteVersion,TramitePersistentePAD tramitePAD,
-			PluginFormularios plgForms,PluginPagos plgPagos
+			PluginFormularios plgForms,PluginPagos plgPagos, String expeId, Long expeUA
 			) throws Exception{				
 		try{
 			EspecTramiteNivel especVersion = tramiteVersion.getEspecificaciones();
@@ -515,6 +568,15 @@ public class GeneradorAsiento {
 				instrucciones.setDocumentosEntregar( docsEntregar );
 			}
 			
+			// Compramos si es un tramite de subsanacion y hay que añadir el expediente
+			if (expeId != null){
+				TramiteSubsanacion ts = factoria.crearTramiteSubsanacion();
+				ts.setExpedienteCodigo(expeId);
+				ts.setExpedienteUnidadAdministrativa(expeUA);
+				instrucciones.setTramiteSubsanacion(ts);
+			}
+			
+			// Añadimos datos propios a instrucciones
 			datosPropios.setInstrucciones(instrucciones);
 			
 			// Generamos datos solicitud

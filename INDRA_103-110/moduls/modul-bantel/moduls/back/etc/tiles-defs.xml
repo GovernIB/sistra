@@ -36,7 +36,8 @@
     </definition>
     
     <!-- ====================== tramite =================== -->
-    <definition name=".tramite.editar" extends=".editar">
+    <definition name=".tramite.editar" extends=".editar"  
+    	controllerClass="es.caib.bantel.back.action.tramite.versionWSController">
         <put name="title" value="tramite.title"/>
         <put name="alta.title" value="tramite.alta"/>
         <put name="modificacion.title" value="tramite.modificacion"/>

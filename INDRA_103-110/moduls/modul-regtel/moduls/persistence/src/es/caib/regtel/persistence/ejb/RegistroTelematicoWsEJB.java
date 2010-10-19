@@ -6,7 +6,7 @@ import java.util.Date;
 import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
 
-
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -26,10 +26,12 @@ import es.caib.regtel.model.ws.DatosRegistroSalida;
 import es.caib.regtel.model.ws.DatosRepresentado;
 import es.caib.regtel.model.ws.OficinaRegistral;
 import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
+import es.caib.regtel.persistence.delegate.DelegateUtil;
 import es.caib.regtel.persistence.delegate.RegistroTelematicoDelegate;
 import es.caib.regtel.persistence.util.RegistroEntradaHelper;
 import es.caib.regtel.persistence.util.RegistroSalidaHelper;
 import es.caib.sistra.plugins.firma.FirmaIntf;
+import es.caib.zonaper.modelInterfaz.PersonaPAD;
 
 
 
@@ -68,6 +70,20 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
      * @ejb.permission role-name = "${role.auto}"
      */
 	public ResultadoRegistroTelematico registroEntrada(DatosRegistroEntrada dEnt)  throws Exception{
+		
+		/* ------------------------------------------------------------------------------------- 
+		 * Anterior a version 1.1.0 era obligatorio introducir el usuario seycon y el nif.
+		 * A partir de la version 1.1.0 no es obligatorio introducir el usuario seycon. Se introduce
+		 * el parametro autenticado (boolean) y el nif.
+		 * 
+		 * Por motivos de compatibilidad introduce el usuario seycon a partir del nif en caso de que
+		 * sea autenticado y no se informe
+		 * 
+		 * ------------------------------------------------------------------------------------- */		 
+		 establecerUsuarioSeycon(dEnt);
+		 /* ------------------------------------------------------------------------------------- */
+		
+		
 		RegistroEntradaHelper r = new RegistroEntradaHelper();
 		inicializarRegistroEntrada(r, dEnt);
 		ReferenciaRDSAsientoRegistral ar = r.generarAsientoRegistral("LOCAL");
@@ -86,6 +102,18 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
      */
 	
 	public ReferenciaRDSAsientoRegistral prepararRegistroEntrada(DatosRegistroEntrada dEnt) throws Exception {
+		
+		/* ------------------------------------------------------------------------------------- 
+		  Anterior a version 1.1.0 era obligatorio introducir el usuario seycon y el nif.
+		 * A partir de la version 1.1.0 no es obligatorio introducir el usuario seycon. Se introduce
+		 * el parametro autenticado (boolean) y el nif.
+		 * 
+		 * Por motivos de compatibilidad introduce el usuario seycon a partir del nif en caso de que
+		 * sea autenticado y no se informe
+		 * ------------------------------------------------------------------------------------- */		 
+		 establecerUsuarioSeycon(dEnt);
+		 /* ------------------------------------------------------------------------------------- */
+		
 		RegistroEntradaHelper r = new RegistroEntradaHelper();
 		inicializarRegistroEntrada(r, dEnt);
 		ReferenciaRDSAsientoRegistral raWS = r.generarAsientoRegistral("LOCAL");
@@ -118,6 +146,19 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
      * @ejb.permission role-name = "${role.auto}"
      */
 	public ResultadoRegistroTelematico registroSalida(DatosRegistroSalida notificacion) throws Exception {
+		
+		/* ------------------------------------------------------------------------------------- 
+		  Anterior a version 1.1.0 era obligatorio introducir el usuario seycon y el nif.
+		 * A partir de la version 1.1.0 no es obligatorio introducir el usuario seycon. Se introduce
+		 * el parametro autenticado (boolean) y el nif.
+		 * 
+		 * Por motivos de compatibilidad introduce el usuario seycon a partir del nif en caso de que
+		 * sea autenticado y no se informe
+		 * ------------------------------------------------------------------------------------- */		 
+		 establecerUsuarioSeycon(notificacion);
+		 /* ------------------------------------------------------------------------------------- */		
+		
+		
 		RegistroSalidaHelper r = new RegistroSalidaHelper();
 		if(notificacion != null){
 			if(notificacion.getDatosExpediente() != null){
@@ -140,6 +181,9 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 				DatosNotificacion dn = notificacion.getDatosNotificacion();
 				if(dn.getAviso() != null && dn.getOficioRemision() != null){
 					r.setDatosNotificacion(dn.getIdioma(), dn.getTipoAsunto(), dn.getAviso().getTitulo(), dn.getAviso().getTexto(), dn.getAviso().getTextoSMS(), dn.getOficioRemision().getTitulo(), dn.getOficioRemision().getTexto(), dn.isAcuseRecibo());
+				}
+				if (dn.getOficioRemision().getTramiteSubsanacion() != null){
+					r.setTramiteSubsanacion(dn.getOficioRemision().getTramiteSubsanacion().getDescripcionTramite(),dn.getOficioRemision().getTramiteSubsanacion().getIdentificadorTramite(),dn.getOficioRemision().getTramiteSubsanacion().getVersionTramite().intValue(),dn.getOficioRemision().getTramiteSubsanacion().getParametrosTramite());
 				}
 			}
 			if(notificacion.getDocumentos() != null){
@@ -165,6 +209,7 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 	 * 
 	 * @ejb.interface-method 
 	 * @ejb.permission role-name = "${role.gestor}"
+	 * @ejb.permission role-name = "${role.auto}"
      */
 	public AcuseRecibo obtenerAcuseRecibo(String numeroRegistro) throws Exception {
 		AcuseRecibo ar = null;
@@ -203,6 +248,66 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 						r.addDocumento((ReferenciaRDS)docs.get(i));
 					}
 				}
+			}
+		}
+	}
+	
+	
+	/**
+	 * 
+	 * 
+	 * Anterior a version 1.1.0 era obligatorio introducir el usuario seycon y el nif.
+	 * A partir de la version 1.1.0 no es obligatorio introducir el usuario seycon. Se introduce
+	 * el parametro autenticado (boolean) y el nif.
+	 * 
+	 * Por motivos de compatibilidad introduce el usuario seycon a partir del nif en caso de que
+	 * sea autenticado y no se informe
+	 *
+	 * @param dEnt
+	 * @throws Exception 
+	 */
+	private void establecerUsuarioSeycon(DatosRegistroEntrada dEnt) throws Exception{
+		// Comprobamos version usada dependiendo de si tiene establecido parametro autenticado
+		if (dEnt.getDatosInteresado().getAutenticado() == null){
+			// Version anterior a 1.1.0: se rellena identificador usuario y nif. Establecemos parametro autenticado.
+			dEnt.getDatosInteresado().setAutenticado(new Boolean(StringUtils.isBlank(dEnt.getDatosInteresado().getIdentificadorUsuario())));		
+		}else{
+			// Version posterior a 1.1.0: se rellena autenticado y nif. Establecemos usuario seycon.
+			if (dEnt.getDatosInteresado().getAutenticado().booleanValue()){
+				PersonaPAD p = DelegateUtil.getConsultaPADDelegate().obtenerDatosPADporNif(dEnt.getDatosInteresado().getNif());
+				if (p == null){
+					throw new Exception("No existe un usuario con el nif " + dEnt.getDatosInteresado().getNif());
+				}
+				dEnt.getDatosInteresado().setIdentificadorUsuario(p.getUsuarioSeycon());
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * Anterior a version 1.1.0 era obligatorio introducir el usuario seycon y el nif.
+	 * A partir de la version 1.1.0 no es obligatorio introducir el usuario seycon. Se introduce
+	 * el parametro autenticado (boolean) y el nif.
+	 * 
+	 * Por motivos de compatibilidad introduce el usuario seycon a partir del nif en caso de que
+	 * sea autenticado y no se informe
+	 * 
+	 * @param dSal
+	 * @throws Exception 
+	 */
+	private void establecerUsuarioSeycon(DatosRegistroSalida dSal) throws Exception{
+		// Comprobamos version usada dependiendo de si tiene establecido parametro autenticado
+		if (dSal.getDatosInteresado().getAutenticado() == null){
+			// Version anterior a 1.1.0: se rellena identificador usuario y nif. Establecemos parametro autenticado.
+			dSal.getDatosInteresado().setAutenticado(new Boolean(StringUtils.isBlank(dSal.getDatosInteresado().getIdentificadorUsuario())));		
+		}else{
+			// Version posterior a 1.1.0: se rellena autenticado y nif. Establecemos usuario seycon.
+			if (dSal.getDatosInteresado().getAutenticado().booleanValue()){
+				PersonaPAD p = DelegateUtil.getConsultaPADDelegate().obtenerDatosPADporNif(dSal.getDatosInteresado().getNif());
+				if (p == null){
+					throw new Exception("No existe un usuario con el nif " + dSal.getDatosInteresado().getNif());
+				}
+				dSal.getDatosInteresado().setIdentificadorUsuario(p.getUsuarioSeycon());
 			}
 		}
 	}

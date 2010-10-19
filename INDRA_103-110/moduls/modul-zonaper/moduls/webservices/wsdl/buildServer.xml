@@ -41,12 +41,35 @@
 			<arg value="-d" />
 			<arg value="${src.dir}" />
 			<arg value="-wsdlLocation" />
-			<arg value="WEB-INF/wsdl/v1/BackofficeFacade.wsdl" />
-			<arg value="${wsdl.dir}/v1/BackofficeFacade.wsdl" />
+			<arg value="WEB-INF/wsdl/zonaper/v1/BackofficeFacade.wsdl" />
+			<arg value="${wsdl.dir}/zonaper/v1/BackofficeFacade.wsdl" />
 			<classpath>
 				<path refid="cxf.classpath"/>
 			</classpath>
 		</java>
 	</target>
+	<target name="serverV2">
+			<java classname="org.apache.cxf.tools.wsdlto.WSDLToJava" fork="true">
 
+				<arg value="-p" />
+				<arg value="urn:es:caib:zonaper:ws:v2:model:ConfiguracionAvisosExpediente=es.caib.zonaper.ws.v2.model" />
+				<arg value="-p" />
+				<arg value="urn:es:caib:zonaper:ws:v2:model:DocumentoExpediente=es.caib.zonaper.ws.v2.model" />
+				<arg value="-p" />
+				<arg value="urn:es:caib:zonaper:ws:v2:model:EventoExpediente=es.caib.zonaper.ws.v2.model" />
+				<arg value="-p" />
+				<arg value="urn:es:caib:zonaper:ws:v2:model:Expediente=es.caib.zonaper.ws.v2.model" />
+				<arg value="-p" />
+				<arg value="urn:es:caib:zonaper:ws:v2:model:BackofficeFacade=es.caib.zonaper.ws.v2.model" />
+											
+				<arg value="-d" />
+				<arg value="${src.dir}" />
+				<arg value="-wsdlLocation" />
+				<arg value="WEB-INF/wsdl/zonaper/v2/BackofficeFacade.wsdl" />
+				<arg value="${wsdl.dir}/zonaper/v2/BackofficeFacade.wsdl" />
+				<classpath>
+					<path refid="cxf.classpath"/>
+				</classpath>
+			</java>
+		</target>
 </project>

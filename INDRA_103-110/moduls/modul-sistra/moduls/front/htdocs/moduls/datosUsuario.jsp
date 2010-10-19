@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-15" %>
 <%@ page import="org.apache.struts.Globals"%>
+<%@ page import="es.caib.zonaper.modelInterfaz.ConstantesZPE"%>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
@@ -46,6 +47,11 @@ function cancelarTramite( url )
 	<logic:present name="datossesion">
 		<bean:define id="datosSesion" name="datossesion" type="es.caib.sistra.model.DatosSesion" />
 		<bean:message key="datosUsuario.usuario" />: <strong><%= datosSesion.getNombreCompletoUsuario() %></strong>. 
+		<logic:equal name="datosSesion" property="perfilAcceso" value="<%=ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO %>">
+		 - <bean:message key="datosUsuario.accesoDelegado" arg0="<%=datosSesion.getNombreCompletoDelegado() %>" />
+		</logic:equal>
+		
+		
 	</logic:present>	
 	<logic:present name="tramite">
 		<bean:define id="pasoNoRetorno" name="tramite" property="pasoNoRetorno" /> 

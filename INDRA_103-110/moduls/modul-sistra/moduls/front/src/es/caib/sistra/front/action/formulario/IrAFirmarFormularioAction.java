@@ -39,23 +39,44 @@ public class IrAFirmarFormularioAction extends BaseAction
     {
 		IrAFirmarFormularioForm formulario = ( IrAFirmarFormularioForm ) form;
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request );
+		
 		RespuestaFront respuestaFront = delegate.pasoActual();
+		
 		TramiteFront tramite = respuestaFront.getInformacionTramite();
+		
+		// Buscamos formulario a firmar
 		ArrayList arlFormularios = tramite.getFormularios();
+		DocumentoFront f = null; 
 		for ( int i = 0; i < arlFormularios.size(); i++ )
 		{
-			DocumentoFront f = ( DocumentoFront ) arlFormularios.get( i );
+			f = ( DocumentoFront ) arlFormularios.get( i );
 			if ( formulario.getIdentificador().equals( f.getIdentificador() ) )
 			{
 				request.setAttribute( "formulario", f );
 				break;
 			}
 		}
+		
+		// Pasamos a firmar formulario 
 		respuestaFront = delegate.irAFirmarFormulario( formulario.getIdentificador(), formulario.getInstancia() );
+		
+		// Establecemos datos formulario
 		String xmlFormulario = ( String )respuestaFront.getParametros().get( "datos" );
 		String base64EncXml = ConvertUtil.cadenaToBase64UrlSafe( xmlFormulario );
 		request.setAttribute( "base64XmlForm", base64EncXml );
-		request.setAttribute(Constants.MOSTRAR_FIRMA_DIGITAL,"S");
+		
+		// Indicamos si debemos mostrar la firma digital o firma delegada
+		String mostrarFirmaDigital = "N";
+		if (f.isFirmar()){
+			if (f.isFirmaDelegada()){
+				mostrarFirmaDigital = "D";
+			}else{
+				mostrarFirmaDigital = "S";
+			}
+		}
+		request.setAttribute(Constants.MOSTRAR_FIRMA_DIGITAL,mostrarFirmaDigital);
+		
+				
 		this.setRespuestaFront( request, respuestaFront );
 		return mapping.findForward("success");
 	}

@@ -5,24 +5,21 @@
 <web-app>
  <display-name>cxf</display-name>
     <description>cxf</description>
-    <context-param>
-    	<param-name>contextConfigLocation</param-name>
-    	<param-value>classpath:es/caib/bantel/ws/server-beans.xml</param-value>
-    </context-param>
-    <!-- <listener>
-   		<listener-class>
-    	  org.springframework.web.context.ContextLoaderListener
-    	</listener-class>
-    </listener>--> 
     <servlet>
-        <servlet-name>cxf</servlet-name>
-        <display-name>cxf</display-name>
+        <servlet-name>cxfbantel</servlet-name>
+        <display-name>cxfbantel</display-name>
         <description>Apache CXF Endpoint</description>
         <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+        <init-param>
+        	<param-name>config-location</param-name>
+			<param-value>
+				/WEB-INF/cxfbantel-servlet.xml
+			</param-value>    
+	    </init-param>  
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>cxf</servlet-name>
+        <servlet-name>cxfbantel</servlet-name>
         <url-pattern>/services/*</url-pattern>
     </servlet-mapping>
     <session-config>

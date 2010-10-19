@@ -28,7 +28,7 @@ public abstract class DocumentoNivelFacadeEJB extends HibernateEJB {
 
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
@@ -37,7 +37,7 @@ public abstract class DocumentoNivelFacadeEJB extends HibernateEJB {
 	  
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public DocumentoNivel obtenerDocumentoNivel(Long id) {
         Session session = getSession();
@@ -55,7 +55,7 @@ public abstract class DocumentoNivelFacadeEJB extends HibernateEJB {
  
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long grabarDocumentoNivel(DocumentoNivel obj,Long idDocumento) {        
     	Session session = getSession();
@@ -95,7 +95,7 @@ public abstract class DocumentoNivelFacadeEJB extends HibernateEJB {
         
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Set listarNivelesDocumento(Long idDocumento) {
         Session session = getSession();
@@ -112,7 +112,7 @@ public abstract class DocumentoNivelFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarDocumentoNivel(Long id) {
         Session session = getSession();

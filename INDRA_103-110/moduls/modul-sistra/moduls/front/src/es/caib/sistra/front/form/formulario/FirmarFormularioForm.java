@@ -6,6 +6,16 @@ public class FirmarFormularioForm extends DocumentoForm
 {
 	private String firma;
 
+	private String firmaDelegada;
+
+	public String getFirmaDelegada() {
+		return firmaDelegada;
+	}
+
+	public void setFirmaDelegada(String firmaDelegada) {
+		this.firmaDelegada = firmaDelegada;
+	}
+
 	/**
 	 * @return Returns the firma.
 	 */

@@ -1,7 +1,9 @@
 package es.caib.bantel.front.action;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -66,7 +68,13 @@ public class RealizarAltaNotificacionAction extends BaseAction
 			r.setExpediente(Long.parseLong(notificacionForm.getUnidadAdministrativa()),notificacionForm.getIdentificadorExpediente(),notificacionForm.getClaveExpediente());
 			r.setDatosInteresado(notificacionForm.getNif(),notificacionForm.getApellidos(), StringUtils.isEmpty(notificacionForm.getUsuarioSey())?null:notificacionForm.getUsuarioSey(),notificacionForm.getCodigoPais(),notificacionForm.getNombrePais(),notificacionForm.getCodigoProvincia(),notificacionForm.getNombreProvincia(),notificacionForm.getCodigoMunicipio(),notificacionForm.getNombreMunicipio());
 			r.setDatosNotificacion(notificacionForm.getIdioma(),notificacionForm.getTipoAsunto(),notificacionForm.getTituloAviso(),notificacionForm.getTextoAviso(),(StringUtils.isNotEmpty(notificacionForm.getTextoSmsAviso())?notificacionForm.getTextoSmsAviso():null),notificacionForm.getTituloOficio(),notificacionForm.getTextoOficio(),"S".equals(notificacionForm.getAcuse()));
-				
+			if(StringUtils.isNotBlank(notificacionForm.getDescripcionTramiteSubsanacion()) && StringUtils.isNotBlank(notificacionForm.getIdentificadorTramiteSubsanacion())){
+				Map parametros = null;
+				if(request.getSession().getAttribute("parametrosAltaNotificacion") != null){
+					parametros = (HashMap)request.getSession().getAttribute("parametrosAltaNotificacion");
+				}
+				r.setTramiteSubsanacion(notificacionForm.getDescripcionTramiteSubsanacion(),notificacionForm.getIdentificadorTramiteSubsanacion(),notificacionForm.getVersionTramiteSubsanacionInteger().intValue(),parametros);
+			}
 			if(documentos != null){
 				
 				for(int i=0;i<documentos.size();i++){
@@ -82,6 +90,7 @@ public class RealizarAltaNotificacionAction extends BaseAction
 				exp = ejb.consultaExpediente( new Long(notificacionForm.getUnidadAdministrativa()), notificacionForm.getIdentificadorExpediente());
 			}
 			request.getSession().setAttribute("documentosAltaNotificacion",null);
+			request.getSession().setAttribute("parametrosAltaNotificacion",null);
 			
 			
 			// Redirigimos a la consulta del expediente

@@ -25,7 +25,7 @@ public abstract class OrganoResponsableFacadeEJB extends HibernateEJB {
 
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
@@ -34,7 +34,7 @@ public abstract class OrganoResponsableFacadeEJB extends HibernateEJB {
 	  
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public OrganoResponsable obtenerOrganoResponsable(Long id) {
         Session session = getSession();
@@ -54,7 +54,7 @@ public abstract class OrganoResponsableFacadeEJB extends HibernateEJB {
         
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long grabarOrganoResponsable(OrganoResponsable obj) {        
     	Session session = getSession();
@@ -71,7 +71,7 @@ public abstract class OrganoResponsableFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public List listarOrganoResponsables() {
         Session session = getSession();
@@ -89,7 +89,7 @@ public abstract class OrganoResponsableFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarOrganoResponsable(Long id) {
         Session session = getSession();

@@ -101,6 +101,13 @@ public class TramiteVersionForm extends  TraForm implements InitForm
         		}
         	}
         	
+        	//Debe indicarse la versión en el caso de ser de tipo webservice
+        	if (tramiteVersion.getConsultaTipoAcceso() == TramiteVersion.CONSULTA_WEBSERVICE){
+        		if (Util.esCadenaVacia(tramiteVersion.getConsultaWSVersion())){
+        			errors.add("values.consultaWSVersion", new ActionError("errors.tramiteVersion.wsVersionVacia"));
+        		}
+        	}
+        	
         	// Debe indicarse el usuario/password en caso de tener autenticacion explicita estandard
         	if ( tramiteVersion.getConsultaAuth() == Dominio.AUTENTICACION_EXPLICITA_ESTANDAR){
           		if (Util.esCadenaVacia(userPlain)){

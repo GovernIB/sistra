@@ -51,9 +51,9 @@ public class VersionCustodiaDelegate implements StatelessDelegate {
         }
     } 
     
-    public String obtenerNumeroVersionCustodia(Long id) throws DelegateException{
+    public String obtenerCodigoVersionCustodia(Long id) throws DelegateException{
     	try {
-            return getFacade().obtenerNumeroVersionCustodia(id);
+            return getFacade().obtenerCodigoVersionCustodia(id);
         } catch (Exception e) {
             throw new DelegateException(e);
         } 

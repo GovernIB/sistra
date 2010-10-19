@@ -52,7 +52,7 @@ public class HibernateLocator {
         }
         try {
             ClassLoader cl = Thread.currentThread().getContextClassLoader();
-            URL url = cl.getResource("hibernate.cfg.xml");
+            URL url = cl.getResource("redose-hibernate.cfg.xml");
             Configuration cfg = new Configuration().configure(url);
             return cfg.buildSessionFactory();
         } catch (HibernateException e) {

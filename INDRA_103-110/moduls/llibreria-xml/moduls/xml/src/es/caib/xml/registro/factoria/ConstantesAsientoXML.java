@@ -115,6 +115,10 @@ public class ConstantesAsientoXML {
 	 */
 	public static final String DATOSINTERESADO_TIPO_REPRESENTADO = "RPD";	
 	/**
+	 * Constante de tipo de interesado delegado 
+	 */
+	public static final String DATOSINTERESADO_TIPO_DELEGADO = "DLG";
+	/**
 	 * Constante de tipo de identificación NIF
 	 */
 	public static final char DATOSINTERESADO_TIPO_IDENTIFICACION_NIF = 'N';	

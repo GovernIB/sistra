@@ -53,7 +53,7 @@ public abstract class MascaraFacadeEJB extends HibernateEJB {
     /**
      * Lista todas las máscaras.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form},${role.admin}"
+     * @ejb.permission role-name="${role.operador},${role.admin}"
      */
     public List listarMascaras() {
         Session session = getSession();

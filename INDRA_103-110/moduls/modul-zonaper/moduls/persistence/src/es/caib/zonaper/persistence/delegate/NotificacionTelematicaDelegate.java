@@ -8,7 +8,7 @@ import javax.naming.NamingException;
 
 import es.caib.sistra.plugins.firma.FirmaIntf;
 import es.caib.zonaper.model.NotificacionTelematica;
-import es.caib.zonaper.model.Page;
+import es.caib.zonaper.model.ParametrosSubsanacion;
 import es.caib.zonaper.persistence.intf.NotificacionTelematicaFacade;
 import es.caib.zonaper.persistence.util.NotificacionTelematicaFacadeUtil;
 
@@ -113,6 +113,30 @@ public class NotificacionTelematicaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }                  
+
+    public String iniciarTramiteSubsanacionNotificacionAnonima(Long codigoNotificacion,String idPersistencia) throws DelegateException {
+        try {
+            return getFacade().iniciarTramiteSubsanacionNotificacionAnonima(codigoNotificacion,idPersistencia);            
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    } 
+    
+    public String iniciarTramiteSubsanacionNotificacionAutenticada(Long codigoNotificacion) throws DelegateException {
+        try {
+            return getFacade().iniciarTramiteSubsanacionNotificacionAutenticada(codigoNotificacion);            
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    } 
+    
+    public ParametrosSubsanacion recuperarParametrosTramiteSubsanacion(String key) throws DelegateException {
+        try {
+            return getFacade().recuperarParametrosTramiteSubsanacion(key);            
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    } 
 
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

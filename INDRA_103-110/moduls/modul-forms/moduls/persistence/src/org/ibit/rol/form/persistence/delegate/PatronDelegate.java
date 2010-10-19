@@ -42,7 +42,13 @@ public class PatronDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    public Patron obtenerPatron(String nombre) throws DelegateException{
+    	try {
+            return getFacade().obtenerPatron(nombre);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
     public void borrarPatron(Long id) throws DelegateException {
         try {
             getFacade().borrarPatron(id);

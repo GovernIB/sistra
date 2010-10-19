@@ -47,6 +47,10 @@ import es.caib.xml.datospropios.factoria.FactoriaObjetosXMLDatosPropios;
 import es.caib.xml.datospropios.factoria.ServicioDatosPropiosXML;
 import es.caib.xml.datospropios.factoria.impl.DatosPropios;
 import es.caib.xml.datospropios.factoria.impl.Documento;
+import es.caib.xml.datospropios.factoria.impl.TramiteSubsanacion;
+import es.caib.xml.oficioremision.factoria.FactoriaObjetosXMLOficioRemision;
+import es.caib.xml.oficioremision.factoria.ServicioOficioRemisionXML;
+import es.caib.xml.oficioremision.factoria.impl.OficioRemision;
 import es.caib.xml.registro.factoria.ConstantesAsientoXML;
 import es.caib.xml.registro.factoria.FactoriaObjetosXMLRegistro;
 import es.caib.xml.registro.factoria.ServicioRegistroXML;
@@ -58,14 +62,20 @@ import es.caib.zonaper.model.DocumentoEntradaPreregistro;
 import es.caib.zonaper.model.DocumentoEntradaTelematica;
 import es.caib.zonaper.model.DocumentoNotificacionTelematica;
 import es.caib.zonaper.model.DocumentoPersistente;
+import es.caib.zonaper.model.DocumentoRegistro;
 import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.EntradaPreregistro;
 import es.caib.zonaper.model.EntradaTelematica;
 import es.caib.zonaper.model.Expediente;
+import es.caib.zonaper.model.LogRegistro;
+import es.caib.zonaper.model.LogRegistroId;
 import es.caib.zonaper.model.NotificacionTelematica;
+import es.caib.zonaper.model.ParametrosSubsanacion;
+import es.caib.zonaper.model.RegistroExterno;
 import es.caib.zonaper.model.TramitePersistente;
 import es.caib.zonaper.modelInterfaz.DocumentoPersistentePAD;
 import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
+import es.caib.zonaper.modelInterfaz.ParametrosTramiteSubsanacionPAD;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.modelInterfaz.PreregistroPAD;
 import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
@@ -73,8 +83,10 @@ import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.EntradaPreregistroDelegate;
 import es.caib.zonaper.persistence.delegate.EntradaTelematicaDelegate;
 import es.caib.zonaper.persistence.delegate.ExpedienteDelegate;
+import es.caib.zonaper.persistence.delegate.LogRegistroDelegate;
 import es.caib.zonaper.persistence.delegate.NotificacionTelematicaDelegate;
 import es.caib.zonaper.persistence.delegate.PadAplicacionDelegate;
+import es.caib.zonaper.persistence.delegate.RegistroExternoDelegate;
 import es.caib.zonaper.persistence.delegate.TramitePersistenteDelegate;
 import es.caib.zonaper.persistence.util.LoggerRegistro;
 
@@ -110,7 +122,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.registro}"
      * @ejb.permission role-name="${role.auto}"
      * @ejb.permission role-name="${role.gestor}"
@@ -135,7 +147,7 @@ public abstract class PadFacadeEJB implements SessionBean{
      * Obtiene tramite persistencia por identificador de persistencia
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public TramitePersistentePAD obtenerTramitePersistente(String idPersistencia) throws ExcepcionPAD{
     	// Cargamos tramitePersistente      	
@@ -158,7 +170,7 @@ public abstract class PadFacadeEJB implements SessionBean{
      * 
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public List obtenerTramitesPersistentesUsuario() throws ExcepcionPAD{
     	// Cargamos tramitePersistente  
@@ -179,12 +191,41 @@ public abstract class PadFacadeEJB implements SessionBean{
     	return tramitesPAD;    	
     }
     
+    
+    /**
+     * Obtiene lista de tramites persistentes que tiene pendientes por completar el usuario,
+     * o bien ha remitido a otro usuario 
+     * 
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public List obtenerTramitesPersistentesEntidadDelegada(String nifEntidad) throws ExcepcionPAD{
+    	
+    	// Cargamos tramitePersistente  
+    	List tramites;
+    	try{
+    		TramitePersistenteDelegate td = DelegateUtil.getTramitePersistenteDelegate();
+    		tramites = td.listarTramitePersistentesEntidadDelegada(nifEntidad);    		
+    	}catch (Exception ex){
+    		throw new ExcepcionPAD("No se ha podido recuperar trámites persistentes del usuario: " + nifEntidad,ex);
+    	}
+        	
+        // Pasamos a TramitePersistentePAD
+    	List tramitesPAD = new ArrayList(tramites.size());
+    	for (Iterator it = tramites.iterator();it.hasNext();){
+    		TramitePersistente tramitePersistente = (TramitePersistente) it.next();
+    		tramitesPAD.add(tramitePersistenteToTramitePersistentePAD(tramitePersistente));
+    	}
+    	return tramitesPAD;    	
+    }
+    
     /**
      * Obtiene lista de tramites persistentes (de un determinado tramite/version) que tiene pendientes por completar el usuario,
      * o bien ha remitido a otro usuario. 
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public List obtenerTramitesPersistentesUsuario(String modelo,int version) throws ExcepcionPAD{
     	// Cargamos tramitePersistente  
@@ -211,74 +252,25 @@ public abstract class PadFacadeEJB implements SessionBean{
      * @return No existe ("N") / Terminado ("T") /  Pendiente confirmación ("C") / Pendiente en persistencia ("P") / Remitido a otro usuario por flujo tramitación ("F") 
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public String obtenerEstadoTramiteUsuario(String idPersistencia) throws ExcepcionPAD{
-
-    	Principal sp = this.ctx.getCallerPrincipal();
-    	PluginLoginIntf plgLogin;
-		try {
-			plgLogin = PluginFactory.getInstance().getPluginLogin();
-		} catch (Exception e) {
-			throw new ExcepcionPAD("Error al crear plugin login",e);
-		}
-    	String usuario = sp.getName();
-    	String nif = plgLogin.getNif(sp);
-    	if (nif != null) nif = nif.toUpperCase();    	
-    	
-    	// Buscamos en Zona Persistencia      	
-    	try{
-    		TramitePersistenteDelegate td = DelegateUtil.getTramitePersistenteDelegate();
-    		TramitePersistente tp = td.obtenerTramitePersistente(idPersistencia);
-    		
-    		if (tp.getNivelAutenticacion() != 'A') {
-    			// Tramite pendiente de completar por el usuario 
-    			if (tp.getUsuarioFlujoTramitacion().equals(usuario)) return "P";
-    			// Tramite remitido a otro usuario 
-    			if (tp.getUsuarioFlujoTramitacion().equals(usuario) && !tp.getUsuario().equals(usuario)) return "R";
-    		}
-    				   
-    		// Tramite pertenece a otro usuario
-    		return "N";
-    	}catch (Exception ex){
-    		// Pasamos a buscar en preregistro
-    	}
-        	
-        // Buscamos en preregistro
-    	try{
-    		EntradaPreregistroDelegate  epd = DelegateUtil.getEntradaPreregistroDelegate();
-    		EntradaPreregistro ep = epd.obtenerEntradaPreregistro(idPersistencia);    		
-    		if (ep.getNivelAutenticacion() != 'A'){
-    			// Comprobamos que el trámite pertenezca al usuario (es quien lo ha enviado o es el representado)
-    			if (ep.getUsuario().equals(usuario) ||  (ep.getNifRepresentado() != null && ep.getNifRepresentado().equals(nif))) {
-    				// Comprobamos si esta confirmado
-		    		if (ep.getFechaConfirmacion() != null) return "T";
-		    			else return "C";	    		
-    			}
-    		}
-    		// Tramite pertenece a otro usuario
-    		return "N";
-    	}catch (Exception ex){
-    		// Pasamos a buscar en registro/envio
+    	return obtenerEstadoTramiteAutenticadoImpl(idPersistencia,null);	
     	}    	
     	
-    	// Buscamos en registro/envio
-    	try{
-    	 	EntradaTelematicaDelegate  etd = DelegateUtil.getEntradaTelematicaDelegate();
-    	 	EntradaTelematica et = etd.obtenerEntradaTelematica(idPersistencia);    		
-    		if (et.getNivelAutenticacion() != 'A'){
-    			// Comprobamos que el trámite pertenezca al usuario (es quien lo ha enviado o es el representado)
-    			if (et.getUsuario().equals(usuario) ||  (et.getNifRepresentado() != null && et.getNifRepresentado().equals(nif))) {
-    				return "T";
-    			}
-    		}
-    		// Tramite pertenece a otro usuario
-    		return "N";
-    	}catch (Exception ex){    		
-    	}
     	
-    	// No existe
-    	return "N";    	
+    /**
+     * Obtiene estado de un trámite mediante identificador de persistencia para los trámites de la entidad de la que
+     * es delegado el usuario
+     * 
+     * Se tiene en cuenta la representación y el flujo de tramitación 
+     * @return No existe ("N") / Terminado ("T") /  Pendiente confirmación ("C") / Pendiente en persistencia ("P") / Remitido a otro usuario por flujo tramitación ("F") 
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public String obtenerEstadoTramiteEntidadDelegada(String idPersistencia, String nifEntidad) throws ExcepcionPAD{
+    	return obtenerEstadoTramiteAutenticadoImpl(idPersistencia,nifEntidad);    	
     }
     
     
@@ -287,7 +279,7 @@ public abstract class PadFacadeEJB implements SessionBean{
      * @return No existe ("N") / Terminado ("T") / Pendiente confirmación ("C") / Pendiente en persistencia ("P") 
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public String obtenerEstadoTramiteAnonimo(String idPersistencia) throws ExcepcionPAD{
 
@@ -340,7 +332,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public String grabarTramitePersistente(TramitePersistentePAD obj)  throws ExcepcionPAD{            	
     	
@@ -365,7 +357,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public void borrarTramitePersistente(String idPersistencia) throws ExcepcionPAD{     
     	try{
@@ -384,10 +376,11 @@ public abstract class PadFacadeEJB implements SessionBean{
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.auto}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public void logPad(ReferenciaRDS refAsiento, ReferenciaRDS refJustificante,Map refDocumentos)  throws ExcepcionPAD{
     	try{
+ 		
 	    	// Obtenemos asiento del RDS
 	    	RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
 	    	
@@ -407,6 +400,12 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    	// Según el tipo de asiento realizamos log	    	
 	    	switch (asiento.getDatosOrigen().getTipoRegistro().charValue()){
 	    		case ConstantesAsientoXML.TIPO_REGISTRO_ENTRADA:
+	    			if(StringUtils.isNotEmpty(asiento.getDatosAsunto().getIdentificadorTramite())){
+	    				logPadEntradaTelematica(justificante,refAsiento,refJustificante,refDocumentos);
+	    			}else{
+	    				logPadRegistroExterno(justificante,refAsiento,refJustificante,refDocumentos);
+	    			}
+	    			break;
 	    		case ConstantesAsientoXML.TIPO_ENVIO:
 	    			logPadEntradaTelematica(justificante,refAsiento,refJustificante,refDocumentos);
 	    			break;	    		
@@ -518,7 +517,7 @@ public abstract class PadFacadeEJB implements SessionBean{
      * Lo único que realiza es realizar el pase a Bandeja. 
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public void confirmacionAutomaticaPreenvio(String idPersistencia, String numeroPreregistro,Timestamp fechaPreregistro) throws ExcepcionPAD
     {    	
@@ -567,7 +566,7 @@ public abstract class PadFacadeEJB implements SessionBean{
      * Obtiene datos persona almacenados en PAD buscando por usuario
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      */
     public PersonaPAD obtenerDatosPersonaPADporUsuario( String usuario ) throws ExcepcionPAD
@@ -584,7 +583,7 @@ public abstract class PadFacadeEJB implements SessionBean{
      * Verifica si existe usuario seycon en la PAD 
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      */
     public boolean existePersonaPADporUsuario( String usuario ) throws ExcepcionPAD
@@ -601,7 +600,7 @@ public abstract class PadFacadeEJB implements SessionBean{
      * Obtiene datos persona almacenados en PAD buscando por nif
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      */
     public PersonaPAD obtenerDatosPersonaPADporNif( String nif ) throws ExcepcionPAD
@@ -620,7 +619,7 @@ public abstract class PadFacadeEJB implements SessionBean{
      * Da de alta una persona en la PAD
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      * 
      * @param personaPAD
      * @return
@@ -632,6 +631,30 @@ public abstract class PadFacadeEJB implements SessionBean{
     	{
 	    	PadAplicacionDelegate padAplic = DelegateUtil.getPadAplicacionDelegate();
 	    	return padAplic.altaPersona( personaPAD );
+    	}
+    	catch(Exception ex)
+    	{
+    		throw new ExcepcionPAD("Error modificando datos de la PAD",ex);
+    	}
+    }
+    
+    /**
+     * 
+     * Actualiza usuario de una persona en la PAD
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     * 
+     * @param personaPAD
+     * @return
+     * @throws ExcepcionPAD
+     */
+    public void actualizarCodigoUsuario( String usuOld, String usuNew) throws ExcepcionPAD
+    {
+    	try
+    	{
+	    	PadAplicacionDelegate padAplic = DelegateUtil.getPadAplicacionDelegate();
+	    	padAplic.modificarHelpdeskCodigoUsuario( usuOld, usuNew );
     	}
     	catch(Exception ex)
     	{
@@ -659,6 +682,142 @@ public abstract class PadFacadeEJB implements SessionBean{
             	        
     }
     
+    /**
+     * Realiza el log de los registros efectuados para despues comprobar si estan enlazados a elementos de
+     * la plataforma.
+     * Este log se ejecuta en una nueva transaccion para asegurar que se apunta el numero de registro aunque 
+     * se haga un rollback global del proceso
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     * @ejb.permission role-name="${role.todos}"
+     * @ejb.transaction type = "RequiresNew"
+     * 
+     * @param tipo Entrada (E) / Salida (S)
+     * @param numeroRegistro Numero de registro
+     * @param fechaRegistro Fecha de registro
+     */
+    public void logRegistro(char tipo, String numeroRegistro, Date fechaRegistro, String error) throws ExcepcionPAD{
+    	try{
+    		LogRegistroDelegate dlg = DelegateUtil.getLogRegistroDelegate();
+    		LogRegistro logReg = new LogRegistro();
+    		LogRegistroId logRegId = new LogRegistroId(tipo+"",numeroRegistro);
+    		logReg.setId(logRegId);
+    		logReg.setFechaRegistro(fechaRegistro);
+    		logReg.setDescripcionError(error);
+    		logReg.setAnulado("N");
+    		dlg.grabarLogRegistro(logReg);
+    	}catch(Exception e){
+    		throw new ExcepcionPAD("No se ha podido guardar el log de Registro con numero: " + numeroRegistro,e);
+    	}
+    
+    }
+    
+    
+    /**
+     * Indica si el usuario autenticado es delegado o representante de alguna entidad
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public boolean esDelegado() throws ExcepcionPAD
+    {	
+    	try{    		 
+    		return (DelegateUtil.getDelegacionDelegate().obtenerDelegacionesUsuario().size() > 0);    	
+    	}catch (Exception ex){
+    		throw new ExcepcionPAD("Error comprobando si el usuario es delegado de alguna entidad",ex);
+    	}
+            	        
+    }
+    
+    
+    /**
+     * Obtiene permisos de delegacion sobre la entidad del usuario autenticado
+     * 
+     * @param nif nif/cif entidad
+     * @return permisos entidad
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+	public String obtenerPermisosDelegacion(String nifEntidad) throws ExcepcionPAD
+	{
+		// NOTA: Damos permiso al role auto porque puede provenir de una consulta hecha a traves
+		//       de ConsultaPADEJB que se ejecuta con role auto
+		try{    		 
+    		return DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(nifEntidad);    	
+    	}catch (Exception ex){
+    		throw new ExcepcionPAD("Error obteniendo permisos delegacion",ex);
+    	}          
+	}
+   
+	
+	/**
+     * Obtiene permisos de delegacion sobre la entidad del nif indicado
+     * 
+     * @param nif nif/cif entidad
+     * @param nif nif usuario
+     * @return permisos entidad
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+	public String obtenerPermisosDelegacion(String nifEntidad, String nifUsuario) throws ExcepcionPAD
+	{
+		try{    		 
+    		return DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(nifEntidad,nifUsuario);    	
+    	}catch (Exception ex){
+    		throw new ExcepcionPAD("Error obteniendo permisos delegacion",ex);
+    	}          
+	}
+    
+	
+	/**
+     * Indica si la entidad tiene habilitada la delegacion
+     * 
+     * @param nif nif/cif entidad
+     * @return boolean
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+	public boolean habilitadaDelegacion(String nifEntidad) throws ExcepcionPAD
+	{
+		try{    		 
+    		return DelegateUtil.getDelegacionDelegate().habilitadaDelegacion(nifEntidad);    	
+    	}catch (Exception ex){
+    		throw new ExcepcionPAD("Error obteniendo permisos delegacion",ex);
+    	}          
+	}
+	
+	/**
+     * Recupera parametros tramite subsanacion a partir de la clave de acceso
+     * 
+     * @param key clave acceso
+     * @return ParametrosTramiteSubsanacionPAD
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+	public ParametrosTramiteSubsanacionPAD recuperaParametrosTramiteSubsanacion(String key) throws ExcepcionPAD
+	{
+		try{    		 
+    		ParametrosSubsanacion p = DelegateUtil.getNotificacionTelematicaDelegate().recuperarParametrosTramiteSubsanacion(key);
+    		
+    		ParametrosTramiteSubsanacionPAD res = new ParametrosTramiteSubsanacionPAD();
+    		res.setExpedienteCodigo(p.getExpedienteCodigo());
+    		res.setExpedienteUnidadAdministrativa(p.getExpedienteUnidadAdministrativa());
+    		res.setParametros(StringUtil.deserializarMap(p.getParametros()));
+    		return res;
+    		
+    	}catch (Exception ex){
+    		throw new ExcepcionPAD("Error obteniendo parametros tramite subsanacion",ex);
+    	}          
+	}
+	
     // ------------------------ Funciones utilidad ----------------------------------------------------------------   
     /**
      * Crea entrada en el log de entradas telemáticas
@@ -688,6 +847,9 @@ public abstract class PadFacadeEJB implements SessionBean{
     		}else if (di.getTipoInteresado().equals(ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTADO)){
     			entrada.setNifRepresentado(di.getNumeroIdentificacion());
     			entrada.setNombreRepresentado(di.getIdentificacionInteresado());    		
+    		}else if (di.getTipoInteresado().equals(ConstantesAsientoXML.DATOSINTERESADO_TIPO_DELEGADO)){
+    			entrada.setNifDelegado(di.getNumeroIdentificacion());
+    			entrada.setNombreDelegado(di.getIdentificacionInteresado());    		
     		}
     	}
     	    	
@@ -695,6 +857,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	String idPersistencia = null;
     	String habilitarAvisos= null,avisoSMS= null,avisoEmail= null,habilitarNotificacionTelematica=null;
     	it = asiento.getDatosAnexoDocumentacion().iterator();    	
+    	TramiteSubsanacion tramiteSubsanacion = null;
     	while (it.hasNext()){
     		DatosAnexoDocumentacion da = (DatosAnexoDocumentacion) it.next();
     		DocumentoEntradaTelematica doc = new DocumentoEntradaTelematica();
@@ -715,6 +878,11 @@ public abstract class PadFacadeEJB implements SessionBean{
     			avisoEmail = datosPropios.getInstrucciones().getAvisoEmail();
     			avisoSMS = datosPropios.getInstrucciones().getAvisoSMS();
     			habilitarNotificacionTelematica = datosPropios.getInstrucciones().getHabilitarNotificacionTelematica();
+    			if(datosPropios.getInstrucciones().getTramiteSubsanacion() !=  null){
+    				tramiteSubsanacion = datosPropios.getInstrucciones().getTramiteSubsanacion();
+    				entrada.setSubsanacionExpedienteCodigo(tramiteSubsanacion.getExpedienteCodigo());
+    				entrada.setSubsanacionExpedienteUA(tramiteSubsanacion.getExpedienteUnidadAdministrativa());
+    			}
     		}
     			    		
     		entrada.addDocumento(doc);    		
@@ -745,8 +913,79 @@ public abstract class PadFacadeEJB implements SessionBean{
     	
     	// Guardamos en log de entrada telematica    	
     	EntradaTelematicaDelegate td = DelegateUtil.getEntradaTelematicaDelegate();
-    	td.grabarEntradaTelematica(entrada);    		
+    	Long codEntrada = td.grabarEntradaTelematica(entrada);    
+    	entrada.setCodigo(codEntrada);
+    	
+    	// Si es un tramite de subsanacion, creamos elemento expediente asociado y actualizamos expediente
+    	if (tramiteSubsanacion != null){
+    		DelegateUtil.getProcesosAutoDelegate().actualizarExpedienteTramiteSubsanacion(entrada.getCodigo(),ElementoExpediente.TIPO_ENTRADA_TELEMATICA);    		
+    	}    	
     	    	    	
+    }
+    
+    
+    /**
+     * Realiza log de un registro telematico que no procede de sistra
+     * @param justificante
+     * @param refAsiento
+     * @param refJustificante
+     * @param refDocumentos
+     * @throws Exception
+     */
+	private void logPadRegistroExterno(Justificante justificante, ReferenciaRDS refAsiento, ReferenciaRDS refJustificante,Map refDocumentos) throws Exception{
+    	AsientoRegistral asiento = justificante.getAsientoRegistral();
+    	Principal sp = this.ctx.getCallerPrincipal();
+    	PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
+    	RegistroExterno registro = new RegistroExterno();
+
+    	// Obtenemos datos de representante/representado
+    	Iterator it =asiento.getDatosInteresado().iterator(); 
+    	while (it.hasNext()){
+    		DatosInteresado di = (DatosInteresado) it.next();
+    		if (di.getTipoInteresado().equals(ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTANTE)){
+    			//Informamos si existe info de nivel de autenticacion de como se ha autenticado el usuario (opcional)
+    			if(di.getNivelAutenticacion() != null){
+    				registro.setNivelAutenticacion(di.getNivelAutenticacion().charValue());
+    			}
+    			registro.setUsuario(di.getUsuarioSeycon()); 
+    			registro.setNifRepresentante(di.getNumeroIdentificacion());
+    			registro.setNombreRepresentante(di.getIdentificacionInteresado());    			
+    		}else if (di.getTipoInteresado().equals(ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTADO)){
+    			registro.setNifRepresentado(di.getNumeroIdentificacion());
+    			registro.setNombreRepresentado(di.getIdentificacionInteresado());    		
+    		}
+    	}
+    	    	
+    	// Obtenemos documentos
+    	String idPersistencia = null;
+    	String habilitarAvisos= null,avisoSMS= null,avisoEmail= null,habilitarNotificacionTelematica=null;
+    	it = asiento.getDatosAnexoDocumentacion().iterator();    	
+    	while (it.hasNext()){
+    		DatosAnexoDocumentacion da = (DatosAnexoDocumentacion) it.next();
+    		DocumentoRegistro doc = new DocumentoRegistro();
+    		doc.setRegistroExterno(registro);
+    		doc.setIdentificador(StringUtil.getModelo(da.getIdentificadorDocumento()));
+    		doc.setNumeroInstancia(StringUtil.getVersion(da.getIdentificadorDocumento()));
+    		doc.setDescripcion(da.getExtractoDocumento());
+    		ReferenciaRDS ref = (ReferenciaRDS) refDocumentos.get(da.getIdentificadorDocumento());
+    		doc.setCodigoRDS(ref.getCodigo());    		
+    		doc.setClaveRDS(ref.getClave());
+    		registro.addDocumento(doc);    		
+    	}
+    
+    	// Establecemos datos entrada
+    	registro.setDescripcionTramite(asiento.getDatosAsunto().getExtractoAsunto());
+    	registro.setCodigoRdsAsiento(refAsiento.getCodigo());
+    	registro.setClaveRdsAsiento(refAsiento.getClave());
+    	registro.setCodigoRdsJustificante(refJustificante.getCodigo());
+    	registro.setClaveRdsJustificante(refJustificante.getClave());
+    	registro.setIdioma( asiento.getDatosAsunto().getIdiomaAsunto() );
+    	registro.setNumeroRegistro(justificante.getNumeroRegistro());    	
+    	registro.setFecha(justificante.getFechaRegistro());   
+    	    	    	
+    	// Guardamos en log de entrada telematica    	
+    	RegistroExternoDelegate td = DelegateUtil.getRegistroExternoDelegate();
+    	td.grabarRegistroExterno(registro);
     }
         
     /**
@@ -810,9 +1049,20 @@ public abstract class PadFacadeEJB implements SessionBean{
     				if (expe.getClaveExpediente() != null && !expe.getClaveExpediente().equals(avisoNotificacion.getExpediente().getClaveExpediente())){
     					throw new Exception("Clave de acceso al expediente incorrecta: " + avisoNotificacion.getExpediente().getIdentificadorExpediente() + " - " + avisoNotificacion.getExpediente().getUnidadAdministrativa());
     				}
+
+    				// A PARTIR V1.1.0 COMPROBAMOS POR NIF, NO POR USUARIO SEYCON 
+    				/* 
     				if (
     					(expe.getSeyconCiudadano() != null && !expe.getSeyconCiudadano().equals(notificacion.getUsuarioSeycon())) ||
     					(expe.getSeyconCiudadano() == null && notificacion.getUsuarioSeycon() != null)
+    					){
+    						throw new Exception("No concuerda usuario seycon indicado en la notificacion con el del expediente");
+    				}
+    				*/
+    				if (
+    						( expe.getSeyconCiudadano() != null && !expe.getNifRepresentante().equals(notificacion.getNifRepresentante())) 
+    						||
+    						( expe.getSeyconCiudadano() == null && notificacion.getUsuarioSeycon() != null)
     					){
     						throw new Exception("No concuerda usuario seycon indicado en la notificacion con el del expediente");
     				}
@@ -823,10 +1073,32 @@ public abstract class PadFacadeEJB implements SessionBean{
     				notificacion.setTituloAviso(avisoNotificacion.getTitulo().length()<500?avisoNotificacion.getTitulo():avisoNotificacion.getTitulo().substring(0,500));    				
     				notificacion.setFirmarAcuse(avisoNotificacion.getAcuseRecibo().booleanValue());
     				break;
+    				
     		    //  Datos oficio remision: establecemos datos oficio en notificacion
     			case ConstantesAsientoXML.DATOSANEXO_OFICIO_REMISION:
+    				FactoriaObjetosXMLOficioRemision factoriaOR = ServicioOficioRemisionXML.crearFactoriaObjetosXML();
+    				OficioRemision oficioRemision = factoriaOR.crearOficioRemision (new ByteArrayInputStream (consultarDocumentoRDS(ref.getCodigo(),ref.getClave())));
+    				
     				notificacion.setCodigoRdsOficio(ref.getCodigo());
     				notificacion.setClaveRdsOficio(ref.getClave());
+    				if (oficioRemision.getTramiteSubsanacion() != null){
+    					// Verificamos datos obligatorios
+    					if (StringUtils.isEmpty(oficioRemision.getTramiteSubsanacion().getDescripcionTramite())){
+    						throw new Exception("No se ha indicado la descripcion del tramite de subsanacion");
+    					}
+    					if (StringUtils.isEmpty(oficioRemision.getTramiteSubsanacion().getIdentificadorTramite())){
+    						throw new Exception("No se ha indicado el id del tramite de subsanacion");
+    					}
+    					if (oficioRemision.getTramiteSubsanacion().getVersionTramite() == null){
+    						throw new Exception("No se ha indicado la version del tramite de subsanacion");
+    					}
+    					// Establecemos datos
+    					notificacion.setTramiteSubsanacionDescripcion(oficioRemision.getTramiteSubsanacion().getDescripcionTramite());
+    					notificacion.setTramiteSubsanacionIdentificador(oficioRemision.getTramiteSubsanacion().getIdentificadorTramite());
+    					notificacion.setTramiteSubsanacionVersion(oficioRemision.getTramiteSubsanacion().getVersionTramite());
+    					notificacion.setTramiteSubsanacionParametros(StringUtil.serializarMap(oficioRemision.getTramiteSubsanacion().getParametrosTramite()));
+    				}
+    				
     				break;	    		
     			// Anexo asociado a notificacion	
     			default:
@@ -906,6 +1178,9 @@ public abstract class PadFacadeEJB implements SessionBean{
     		}else if (di.getTipoInteresado().equals(ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTADO)){
     			entrada.setNifRepresentado(di.getNumeroIdentificacion());
     			entrada.setNombreRepresentado(di.getIdentificacionInteresado());    		
+    		}else if (di.getTipoInteresado().equals(ConstantesAsientoXML.DATOSINTERESADO_TIPO_DELEGADO)){
+    			entrada.setNifDelegado(di.getNumeroIdentificacion());
+    			entrada.setNombreDelegado(di.getIdentificacionInteresado());    		
     		}
     	}
     	
@@ -948,6 +1223,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     			FactoriaObjetosXMLDatosPropios factoria = ServicioDatosPropiosXML.crearFactoriaObjetosXML();
     			datosPropios = factoria.crearDatosPropios(new ByteArrayInputStream (consultarDocumentoRDS(ref.getCodigo(),ref.getClave())));
     			idPersistencia = datosPropios.getInstrucciones().getIdentificadorPersistencia();    			    	
+    			
     		}
     		
     		docsPre.put(da.getIdentificadorDocumento(),doc);
@@ -1009,10 +1285,23 @@ public abstract class PadFacadeEJB implements SessionBean{
     		entrada.addDocumento(doc);    	
     	}    	
     	    	
+    	// Si es un tramite de subsanacion, creamos elemento expediente asociado y actualizamos expediente
+    	TramiteSubsanacion tramiteSubsanacion = null;
+    	if( datosPropios.getInstrucciones().getTramiteSubsanacion() != null){
+    		tramiteSubsanacion = datosPropios.getInstrucciones().getTramiteSubsanacion();
+    		entrada.setSubsanacionExpedienteCodigo(tramiteSubsanacion.getExpedienteCodigo());
+    		entrada.setSubsanacionExpedienteUA(tramiteSubsanacion.getExpedienteUnidadAdministrativa());
+    	}
     	// Guardamos en log de entrada preregistro    	
     	EntradaPreregistroDelegate td = DelegateUtil.getEntradaPreregistroDelegate();
-    	td.grabarEntradaPreregistro(entrada);
+    	Long codEntrada = td.grabarEntradaPreregistro(entrada);
+    	entrada.setCodigo(codEntrada);
     	
+    	
+    	// Si es un tramite de subsanacion actualizamos expediente
+    	if (tramiteSubsanacion != null){
+    		DelegateUtil.getProcesosAutoDelegate().actualizarExpedienteTramiteSubsanacion(entrada.getCodigo(),ElementoExpediente.TIPO_ENTRADA_PREREGISTRO);    		
+    	}
     }   
     
     /**
@@ -1035,6 +1324,9 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    	tpad.setFechaCaducidad(t.getFechaCaducidad());
 	    	tpad.setIdioma(t.getIdioma());
 	    	tpad.setParametrosInicio(t.getParametrosInicioMap());	    	
+	    	tpad.setDelegado(t.getDelegado());
+	    	tpad.setEstadoDelegacion(t.getEstadoDelegacion());
+	    	
 	    	for (Iterator it = t.getDocumentos().iterator();it.hasNext();){    		
 	    		DocumentoPersistente d = (DocumentoPersistente) it.next();
 	    		DocumentoPersistentePAD dpad = new DocumentoPersistentePAD();
@@ -1051,6 +1343,10 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    			ref.setClave(d.getRdsClave());
 	    			dpad.setReferenciaRDS(ref);
 	    		}
+	    		
+	    		dpad.setDelegacionEstado(d.getDelegacionEstado());
+	    		dpad.setDelegacionFirmantes(d.getDelegacionFirmantes());
+	    		dpad.setDelegacionFirmantesPendientes(d.getDelegacionFirmantesPendientes());
 	    		
 	    		tpad.getDocumentos().put(dpad.getIdentificador() + "-"+d.getNumeroInstancia(),dpad);
 	    	}    	
@@ -1088,6 +1384,9 @@ public abstract class PadFacadeEJB implements SessionBean{
     			if (!t.getTramite().equals(tpad.getTramite())) throw new ExcepcionPAD("El tramite no coincide");
     			if (t.getVersion() != tpad.getVersion()) throw new ExcepcionPAD("La versión no coincide");
     			if (t.getNivelAutenticacion() != tpad.getNivelAutenticacion()) throw new ExcepcionPAD("El nivel de autenticación no coincide");
+    			
+    			if (!t.getFechaModificacion().equals(tpad.getFechaModificacion()))  throw new ExcepcionPAD("Se ha modificado el trámite en otra sesión");
+    			
     		}else{    			
     			// Si es nuevo creamos objeto   
     			t = new TramitePersistente();
@@ -1104,6 +1403,10 @@ public abstract class PadFacadeEJB implements SessionBean{
     		
     		// Establecemos usuario que tiene actualmente el trámite
     		t.setUsuarioFlujoTramitacion(tpad.getUsuarioFlujoTramitacion());
+    		
+    		// En caso de delegacion establecemos delegado
+    		t.setDelegado(tpad.getDelegado());
+    		t.setEstadoDelegacion(tpad.getEstadoDelegacion());
     		
     		// Establecemos fecha modificacion y caducidad
     		t.setFechaModificacion(ahora);
@@ -1125,6 +1428,10 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    			d.setRdsCodigo(new Long(dpad.getRefRDS().getCodigo()));
 	    			d.setRdsClave(dpad.getRefRDS().getClave());    			
 	    		}
+	    		
+	    		d.setDelegacionEstado(dpad.getDelegacionEstado());
+	    		d.setDelegacionFirmantes(dpad.getDelegacionFirmantes());
+	    		d.setDelegacionFirmantesPendientes(dpad.getDelegacionFirmantesPendientes());
 	    		
 	    		t.addDocumento(d);
 	    	}    	
@@ -1391,6 +1698,111 @@ public abstract class PadFacadeEJB implements SessionBean{
     }
 	
 
+	/**
+	 *  Obtiene el estado de un tramite autenticado
+	 * @param idPersistencia Id persistencia del tramite
+	 * @param nifEntidad En caso de delegacion se indica la entidad delegada
+	 * @return
+	 * @throws ExcepcionPAD
+	 */
+	private String obtenerEstadoTramiteAutenticadoImpl(String idPersistencia, String nifEntidad) throws ExcepcionPAD{
+
+			// Obtenemos datos usuario autenticado
+	    	Principal sp = this.ctx.getCallerPrincipal();
+	    	PluginLoginIntf plgLogin;
+			try {
+				plgLogin = PluginFactory.getInstance().getPluginLogin();
+			} catch (Exception e) {
+				throw new ExcepcionPAD("Error al crear plugin login",e);
+			}
+	    	String usuario = sp.getName();
+	    	String nif = plgLogin.getNif(sp);
+	    	if (nif != null) nif = nif.toUpperCase();    	
+	    	
+	    	// En caso de delegacion obtenemos datos de la entidad
+	    	PersonaPAD entidad = null;
+	    	if (nifEntidad != null){
+	    		try {
+					entidad = DelegateUtil.getConsultaPADDelegate().obtenerDatosPADporNif(nifEntidad);
+				} catch (es.caib.zonaper.persistence.delegate.DelegateException e) {
+					throw new ExcepcionPAD("Error al consultar datos entidad delegada: " + nifEntidad);
+				}
+	    	}
+	    	
+	    	/*
+	    	 * Al acceder a tramite persistente, entrada preregistro o entrada telematica
+	    	 * se controla si es el propio usuario o si el usuario es delegado
+	    	 * 
+	    	 * A la hora de comprobar si el tramite es del usuario, hay que tener en cuenta
+	    	 * que si se accede de forma delegado el tramite pertenece a la entidad, no al usuario autenticado
+	    	 * 
+	    	 */ 
+	    	String nifTramite, usuarioTramite;
+			if (nifEntidad != null){
+				nifTramite = nifEntidad;
+				usuarioTramite = entidad.getUsuarioSeycon();
+			}else{
+				nifTramite = nif;
+				usuarioTramite = usuario;
+			}
+	    	
+	    	
+	    	// Buscamos en Zona Persistencia      	
+	    	try{
+	    		TramitePersistenteDelegate td = DelegateUtil.getTramitePersistenteDelegate();
+	    		TramitePersistente tp = td.obtenerTramitePersistente(idPersistencia);
+	    		
+	    		if (tp.getNivelAutenticacion() != 'A') {
+	    			// Tramite pendiente de completar por el usuario 
+		    		if (tp.getUsuarioFlujoTramitacion().equals(usuarioTramite)) return "P";	    			
+		    		// Tramite remitido a otro usuario 
+		    		if (tp.getUsuarioFlujoTramitacion().equals(usuarioTramite) && !tp.getUsuario().equals(usuarioTramite)) return "R";    				    			
+	    		}
+	    				   
+	    		// Tramite pertenece a otro usuario
+	    		return "N";
+	    	}catch (Exception ex){
+	    		// Pasamos a buscar en preregistro
+	    	}
+	        	
+	        // Buscamos en preregistro
+	    	try{
+	    		EntradaPreregistroDelegate  epd = DelegateUtil.getEntradaPreregistroDelegate();
+	    		EntradaPreregistro ep = epd.obtenerEntradaPreregistro(idPersistencia);    		
+	    		if (ep.getNivelAutenticacion() != 'A'){
+	    			// Comprobamos que el trámite pertenezca al usuario (es quien lo ha enviado o es el representado)
+	    			if (ep.getNifRepresentante().equals(nifTramite) ||  
+	    				(ep.getNifRepresentado() != null && ep.getNifRepresentado().equals(nifTramite))) {
+	    				// Comprobamos si esta confirmado
+			    		if (ep.getFechaConfirmacion() != null) return "T";
+			    			else return "C";	    		
+	    			}
+    			}
+	    		// Tramite pertenece a otro usuario
+	    		return "N";
+	    	}catch (Exception ex){
+	    		// Pasamos a buscar en registro/envio
+	    	}    	
+	    	
+	    	// Buscamos en registro/envio
+	    	try{
+	    	 	EntradaTelematicaDelegate  etd = DelegateUtil.getEntradaTelematicaDelegate();
+	    	 	EntradaTelematica et = etd.obtenerEntradaTelematica(idPersistencia);    		
+	    		if (et.getNivelAutenticacion() != 'A'){
+	    			// Comprobamos que el trámite pertenezca al usuario (es quien lo ha enviado o es el representado)
+	    			if (et.getNifRepresentante().equals(nifTramite) || 
+	    				(et.getNifRepresentado() != null && et.getNifRepresentado().equals(nifTramite))) {
+	    				return "T";
+	    			}
+	    		}
+	    		// Tramite pertenece a otro usuario
+	    		return "N";
+	    	}catch (Exception ex){    		
+	    	}
+	    	
+	    	// No existe
+	    	return "N";    	
+	    }
 	
 		
 	    

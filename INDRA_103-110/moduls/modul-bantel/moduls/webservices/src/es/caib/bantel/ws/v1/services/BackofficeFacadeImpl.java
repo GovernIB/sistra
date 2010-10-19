@@ -213,9 +213,9 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			PluginFirmaIntf plgFirma = PluginFactory.getInstance().getPluginFirma();
 			for(int i=0;i<firmas.length;i++){
 				es.caib.bantel.ws.v1.model.FirmaWS firma = new es.caib.bantel.ws.v1.model.FirmaWS();
-				firma.setFirma(plgFirma.parseFirmaToBytes(firmas[i]));
+				firma.setFirma(plgFirma.parseFirmaToWS(firmas[i]));
 				if(firmas[i].getFormatoFirma() != null){
-					firma.setFormato(new JAXBElement<String>(new QName("formatoFirma"),String.class,firmas[i].getFormatoFirma()));
+					firma.setFormato(new JAXBElement<String>(new QName("formato"),String.class,firmas[i].getFormatoFirma()));
 				}
 				firmasWS.getFirmas().add(firma);
 			}

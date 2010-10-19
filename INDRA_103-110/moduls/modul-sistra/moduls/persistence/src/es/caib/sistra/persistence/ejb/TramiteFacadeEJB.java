@@ -29,9 +29,10 @@ public abstract class TramiteFacadeEJB extends HibernateEJB {
 
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      * @ejb.permission role-name="${role.helpdesk}"
-     * @ejb.permission role-name="${role.auditor}"
+     * @ejb.permission role-name="${role.audit}"
+     * @ejb.permission role-name="${role.admin}"
      */
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
@@ -40,7 +41,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB {
 	  
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Tramite obtenerTramite(Long id) {
         Session session = getSession();
@@ -60,8 +62,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
-     * @ejb.permission role-name="${role.auditor}"
+     * @ejb.permission role-name="${role.operador}"
+     * @ejb.permission role-name="${role.audit}"
      */
     public Tramite obtenerTramite(String id){
         Session session = getSession();
@@ -88,7 +90,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB {
         
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long grabarTramite(Tramite obj,Long idOrg) {        
     	Session session = getSession();
@@ -111,7 +113,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      * @ejb.permission role-name="${role.helpdesk}"
      */
     public List listarTramites() {
@@ -129,7 +132,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Set listarTramitesOrganoResponsable(Long id) {
         Session session = getSession();
@@ -147,7 +150,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarTramite(Long id) {
     	// Eliminamos permisos acceso tramite

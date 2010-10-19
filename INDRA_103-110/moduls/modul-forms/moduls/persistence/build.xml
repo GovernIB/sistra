@@ -46,7 +46,7 @@
         	<include name="sistra-util.jar"/>
         </fileset>
         <fileset dir="${ejb.product}">
-            <include name="model.jar"/>
+            <include name="6-model.jar"/>
         </fileset>
     </path>
 
@@ -67,7 +67,7 @@
             <format property="TODAY" pattern="dd-MM-yy"/>
         </tstamp>
         <fail unless="role.admin" message="La propiedad role.admin no está definida en config.properties"/>
-        <fail unless="role.form" message="La propiedad role.form no está definida en config.properties"/>
+        <fail unless="role.operador" message="La propiedad role.operador no está definida en config.properties"/>
         <fail unless="persistence.auth.domain" message="La propiedad persistence.auth.domain no está definida en config.properties"/>
         <fail unless="persistence.auth.principal" message="La propiedad persistence.auth.principal no está definida en config.properties"/>
     </target>
@@ -110,7 +110,7 @@
             </utilobject>
 
             <deploymentdescriptor
-                clientjar="form-${modul}-client.jar"
+                clientjar="6-form-${modul}-client.jar"
                 xmlencoding="UTF-8"
                 destdir="${ejb.gen.etc}"
                 validatexml="true"
@@ -128,9 +128,9 @@
 
         </ejbdoclet>
 
-        <copy file="${ejb.etc}/hibernate.cfg.xml" todir="${ejb.gen.etc}" overwrite="true"/>
+        <copy file="${ejb.etc}/forms-hibernate.cfg.xml" todir="${ejb.gen.etc}" overwrite="true"/>
 
-        <replace file="${ejb.gen.etc}/hibernate.cfg.xml">
+        <replace file="${ejb.gen.etc}/forms-hibernate.cfg.xml">
             <replacefilter token="@datasource.jndi@" value="${datasource.jndi}"/>
             <replacefilter token="@hibernate.dialect@" value="${hibernate.dialect}"/>
             <replacefilter token="@hibernate.query.substitutions@" value="${hibernate.query.substitutions}"/>
@@ -164,24 +164,24 @@
     </target>
 
     <target name="ejb.jar" depends="ejb.compile">
-        <delete file="${ejb.product}/form-${modul}.jar" quiet="yes"/>
+        <delete file="${ejb.product}/6-form-${modul}.jar" quiet="yes"/>
         <jar
-            jarfile="${ejb.product}/form-${modul}.jar"
+            jarfile="${ejb.product}/6-form-${modul}.jar"
             basedir="${ejb.classes}">
             <manifest>
                 <attribute name="Created-By" value="Fundació IBIT"/>
             </manifest>
-            <metainf dir="${ejb.gen.etc}" includes="*.xml" excludes="hibernate.cfg.xml"/>
+            <metainf dir="${ejb.gen.etc}" includes="*.xml" excludes="forms-hibernate.cfg.xml"/>
         	<fileset dir="${ejb.classes}" includes="*.properties" />
-            <fileset dir="${ejb.gen.etc}" includes="hibernate.cfg.xml"/>
+            <fileset dir="${ejb.gen.etc}" includes="forms-hibernate.cfg.xml"/>
             <fileset dir="${ejb.etc}" includes="ehcache.xml"/>
         </jar>
     </target>
 
     <target name="ejb.client" depends="ejb.compile">
-        <delete file="${ejb.product}/form-${modul}-client.jar" quiet="yes"/>
+        <delete file="${ejb.product}/6-form-${modul}-client.jar" quiet="yes"/>
         <jar
-            jarfile="${ejb.product}/form-${modul}-client.jar"
+            jarfile="${ejb.product}/6-form-${modul}-client.jar"
             basedir="${ejb.classes}">
             <manifest>
                 <attribute name="Created-By" value="Fundació IBIT"/>

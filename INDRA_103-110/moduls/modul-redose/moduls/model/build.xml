@@ -57,9 +57,9 @@
     </target>
 
     <target name="jar.jar" depends="jar.compile">
-        <delete file="${jar.product}/redose-${modul}.jar" quiet="yes"/>
+        <delete file="${jar.product}/2-redose-${modul}.jar" quiet="yes"/>
         <jar
-            jarfile="${jar.product}/redose-${modul}.jar"
+            jarfile="${jar.product}/2-redose-${modul}.jar"
             basedir="${jar.classes}">
             <manifest>
                 <attribute name="Created-By" value="${indra}"/>

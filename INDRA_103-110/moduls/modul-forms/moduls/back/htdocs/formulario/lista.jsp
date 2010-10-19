@@ -31,7 +31,7 @@
 </table>
 
 <br />
-
+<html:errors/>
 <logic:present name="message" scope="request">
 <table class=nomarc>
 <tr>
@@ -79,6 +79,10 @@
                     	<logic:equal name="formulario" property="bloqueadoPor" value="<%=request.getUserPrincipal().getName()%>">
 	                        <bean:define id="urlBaja"><html:rewrite page="/back/formulario/baja.do" paramId="id" paramName="formulario" paramProperty="id"/></bean:define>
     	                    <bean:define id="mensaje"><bean:message arg0='<%=modelo%>' arg1='<%=StringUtils.escape(titulo)%>' arg2='<%=version.toString()%>' key='formulario.baja' /></bean:define>
+    	                    <%
+    	                    	mensaje = mensaje.replace("\'","&#145;");
+	    	                    mensaje = mensaje.replace("\"","&#34;");
+    	                    %>
         	                <button class="button" type="button" onclick="confirmAndForward('<%=mensaje%>', '<%=urlBaja%>')"><bean:message key="boton.baixa"/></button>
 	       	           </logic:equal>
 	       	           <logic:notEqual name="formulario" property="bloqueadoPor" value="<%=request.getUserPrincipal().getName()%>">

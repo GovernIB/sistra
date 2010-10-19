@@ -96,13 +96,15 @@
 	
 	<definition
    		name=".altaAviso"
-   		extends=".mainLayout">	
+   		extends=".mainLayout"
+   		controller="es.caib.bantel.front.controller.ExpedientesController">		
    		<put name="main" value="/altaAviso.jsp"/>
 	</definition>   
 
 	<definition
    		name=".altaNotificacion"
-   		extends=".mainLayout">	
+   		extends=".mainLayout"
+   		controller="es.caib.bantel.front.controller.ExpedientesController">		
    		<put name="main" value="/altaNotificacion.jsp"/>
 	</definition>   
 	

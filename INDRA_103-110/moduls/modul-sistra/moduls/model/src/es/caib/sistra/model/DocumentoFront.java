@@ -69,6 +69,19 @@ public class DocumentoFront  implements Serializable{
 	 */
 	private boolean firmar;
 	/**
+	 * En caso de que se tenga que firmar indica los formularios que intervienene en el script de firma que indica el firmante
+	 */
+	private String formulariosScriptFirma;	
+	/**
+	 * Indica si el documento debe firmarse por delegados de la entidad a traves bandeja de firma
+	 */
+	private boolean firmaDelegada;
+	/**
+	 * Indica si el documento debe firmarse por delegados de la entidad a traves bandeja de firma.
+	 * (marca el estado una vez se ha incorporado el documento)
+	 */
+	private boolean pendienteFirmaDelegada;
+	/**
 	 * DNI del firmante del documento (después de evaluar campo firmante).
 	 * Si esta vacío deberá firmarlo quien inicia el trámite
 	 */
@@ -336,6 +349,24 @@ public class DocumentoFront  implements Serializable{
 	}
 	public void setFormularioJustificante(boolean formularioJustificante) {
 		this.formularioJustificante = formularioJustificante;
+	}
+	public boolean isPendienteFirmaDelegada() {
+		return pendienteFirmaDelegada;
+	}
+	public void setPendienteFirmaDelegada(boolean pendienteFirmaDelegada) {
+		this.pendienteFirmaDelegada = pendienteFirmaDelegada;
+	}
+	public String getFormulariosScriptFirma() {
+		return formulariosScriptFirma;
+	}
+	public void setFormulariosScriptFirma(String formulariosScriptFirma) {
+		this.formulariosScriptFirma = formulariosScriptFirma;
+	}
+	public boolean isFirmaDelegada() {
+		return firmaDelegada;
+	}
+	public void setFirmaDelegada(boolean firmaDelegada) {
+		this.firmaDelegada = firmaDelegada;
 	}
 	
 	

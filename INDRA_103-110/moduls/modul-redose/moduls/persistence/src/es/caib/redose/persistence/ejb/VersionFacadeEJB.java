@@ -30,8 +30,9 @@ public abstract class VersionFacadeEJB extends HibernateEJB {
 
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.redose}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.operador}"
      * @ejb.permission role-name="${role.auto}"
      */
 	public void ejbCreate() throws CreateException {
@@ -41,7 +42,8 @@ public abstract class VersionFacadeEJB extends HibernateEJB {
 	  
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Version obtenerVersion(Long id) {
         Session session = getSession();
@@ -58,9 +60,10 @@ public abstract class VersionFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Version obtenerVersion(String idModelo,int idVersion){
         Session session = getSession();
@@ -90,9 +93,10 @@ public abstract class VersionFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Version obtenerVersionCompleta(String idModelo,int idVersion){
         Session session = getSession();
@@ -127,7 +131,8 @@ public abstract class VersionFacadeEJB extends HibernateEJB {
     
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long grabarVersion(Version obj,Long idModelo) {    	
         Session session = getSession();
@@ -149,7 +154,8 @@ public abstract class VersionFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Set listarVersionesModelo(Long id) {    	
     	Session session = getSession();
@@ -166,7 +172,8 @@ public abstract class VersionFacadeEJB extends HibernateEJB {
         
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarVersion(Long id) {
     	Session session = getSession();
@@ -182,7 +189,8 @@ public abstract class VersionFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public boolean puedoBorrarVersion(Long id) {
     	

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" errorPage="/moduls/errorEnJsp.jsp"%>
 <%@ page import="org.apache.commons.lang.StringUtils"%>
+<%@ page import="es.caib.zonaper.modelInterfaz.ConstantesZPE"%>
 <%@ page import="es.caib.sistra.model.ConstantesSTR"%>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
@@ -14,10 +15,16 @@
 <bean:define id="urlSeleccionNotificacionTelematica">
         <html:rewrite page="/protected/seleccionNotificacionTelematica.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
+<bean:define id="entornoDesarrollo" value="<%=Boolean.toString(es.caib.sistra.front.util.Util.esEntornoDesarrollo())%>"/>
 
 <!--  Flujo de tramite -->
 <logic:present name="pasarFlujoTramitacion">
 </logic:present>
+
+<!--  Pendiente presentacion delegacion -->
+<logic:present name="pendienteDelegacionPresentacion">
+</logic:present>
+
 
 <!--  Seleccion  notificacion -->
 <logic:present name="confirmarSeleccionNotificacionTelematica">
@@ -45,6 +52,9 @@
 <bean:define id="urlMostrarDocumento">
         <html:rewrite page="/protected/mostrarDocumento.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
+<bean:define id="urlMostrarFormularioDebug">
+      <html:rewrite page="/protected/mostrarFormularioDebug.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
+</bean:define>
 
 <script type="text/javascript">
 <!--
@@ -59,6 +69,13 @@
 		url = "<%=urlMostrarDocumento%>&identificador=" + identificador + "&instancia=" + instancia;
 		document.location = url;
 	}
+	
+	<logic:equal name="entornoDesarrollo" value="true">
+	function mostrarFormularioDebug(identificador,instancia){
+		url = "<%=urlMostrarFormularioDebug%>&identificador=" + identificador + "&instancia=" + instancia;
+		document.location = url;
+	}
+	</logic:equal>
 //-->
 </script>
 
@@ -108,15 +125,29 @@
 								<bean:write name="formulario" property="descripcion" />
 							</html:link>
 
+							<logic:equal name="entornoDesarrollo" value="true">
+							 <% 
+						    	String urlFormDebug = "javascript:mostrarFormularioDebug('" + formulario.getIdentificador()+ "','" + formulario.getInstancia()+ "');";						    	
+						    %>	
+								<html:link styleClass="pequenyo" href="<%=urlFormDebug%>">
+									&nbsp;[XML]
+								</html:link>
+							</logic:equal>
+							
 							<!--  Información firmante -->
 							<logic:equal name="formulario" property="firmar" value="true">
 								<span class="detalleDoc"> 
 									<img src="imgs/tramitacion/iconos/doc_firmar.gif"/>		
 									<logic:empty name="formulario" property="firmante">
-										<bean:message key="finalizacion.resumen.documentos.firmadopor.noComprobarFirmante" arg0="<%=formulario.getFirmante()%>"/>							
+										<bean:message key="finalizacion.resumen.documentos.firmadopor.noComprobarFirmante"/>							
 									</logic:empty>
 									<logic:notEmpty name="formulario" property="firmante">
+										<logic:match name="formulario" property="firmante" value="#">
+											<bean:message key="finalizacion.resumen.documentos.firmadospor" arg0="<%=es.caib.util.StringUtil.replace(formulario.getFirmante(),"#"," - ")%>"/>
+										</logic:match>	
+										<logic:notMatch name="formulario" property="firmante" value="#">
 										<bean:message key="finalizacion.resumen.documentos.firmadopor" arg0="<%=formulario.getFirmante()%>"/>							
+										</logic:notMatch>											
 									</logic:notEmpty>
 								</span>
 							</logic:equal>
@@ -162,7 +193,12 @@
 											<bean:message key="finalizacion.resumen.documentos.firmadopor.noComprobarFirmante" arg0="<%=anexo.getFirmante()%>"/>							
 										</logic:empty>
 										<logic:notEmpty name="anexo" property="firmante">
+											<logic:match name="anexo" property="firmante" value="#">
+												<bean:message key="finalizacion.resumen.documentos.firmadospor" arg0="<%=es.caib.util.StringUtil.replace(anexo.getFirmante(),"#"," - ")%>"/>
+											</logic:match>	
+											<logic:notMatch name="anexo" property="firmante" value="#">
 											<bean:message key="finalizacion.resumen.documentos.firmadopor" arg0="<%=anexo.getFirmante()%>"/>							
+											</logic:notMatch>											
 										</logic:notEmpty>
 									</span>
 								</logic:equal>
@@ -295,7 +331,13 @@
 			<logic:present name="representante">		
 					<bean:define id="representante" name="representante" type="es.caib.xml.registro.factoria.impl.DatosInteresado"/>
 					<p>
+						<logic:equal name="tramite" property="datosSesion.perfilAcceso" value="<%=ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO%>">
+							<bean:message key="finalizacion.general.firmaSolicitud.delegado.instrucciones" arg0="<%=representante.getNumeroIdentificacion()%>"/>							
+						</logic:equal>
+						<logic:equal name="tramite" property="datosSesion.perfilAcceso" value="<%=ConstantesZPE.DELEGACION_PERFIL_ACCESO_CIUDADANO%>">
 						<bean:message key="finalizacion.general.firmaSolicitud.instrucciones" arg0="<%=representante.getNumeroIdentificacion()%>"/>
+						</logic:equal>
+						
 					</p>
 			</logic:present>	
 			<!--  MOSTRAMOS APPLET FIRMA SEGUN IMPLEMENTACION -->
@@ -363,7 +405,7 @@
 						 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">									 
 						 
 					function prepararEntornoFirma(){
-						cargarAppletFirma();
+						cargarAppletFirma(sistra_ClienteaFirma_buildVersion);
 					}
 						 
 					function firmarAFirma(formulario){
@@ -376,9 +418,10 @@
 						var asientoB64 = b64UrlSafeToB64(formulario.asiento.value);
 					
 						clienteFirma.initialize();
-						clienteFirma.setSignatureAlgorithm("sha1WithRsaEncryption");
-						clienteFirma.setSignatureMode("EXPLICIT");
-						clienteFirma.setSignatureFormat("CMS");
+						clienteFirma.setShowErrors(false);
+						clienteFirma.setSignatureAlgorithm(sistra_ClienteaFirma_SignatureAlgorithm);
+						clienteFirma.setSignatureMode(sistra_ClienteaFirma_SignatureMode);
+						clienteFirma.setSignatureFormat(sistra_ClienteaFirma_SignatureFormat);
 						clienteFirma.setData(asientoB64);
 						
 						clienteFirma.sign();
@@ -389,10 +432,13 @@
 							return false;
 						}else{	
 						     firma = clienteFirma.getSignatureBase64Encoded();
+						    firma = b64ToB64UrlSafe(firma);
 						     formulario.firma.value = firma;
 						     return true;
 						}
 					}
+					
+					prepararEntornoFirma();
 			</logic:equal>			
 		
 			function enviar(formulario)

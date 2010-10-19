@@ -37,7 +37,7 @@ public abstract class ValorPosibleFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form},${role.admin}"
+     * @ejb.permission role-name="${role.operador},${role.admin}"
      */
     public Long gravarValorPosible(ValorPosible valorPosible, Long campo_id) {
         Session session = getSession();
@@ -59,7 +59,7 @@ public abstract class ValorPosibleFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form},${role.admin}"
+     * @ejb.permission role-name="${role.operador},${role.admin}"
      */
     public List listarValoresPosiblesCampo(Long campo_id) {
         Session session = getSession();
@@ -76,7 +76,7 @@ public abstract class ValorPosibleFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form},${role.admin}"
+     * @ejb.permission role-name="${role.operador},${role.admin}"
      */
     public ValorPosible obtenerValorPosible(Long vp_id) {
         Session session = getSession();
@@ -92,7 +92,7 @@ public abstract class ValorPosibleFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form},${role.admin}"
+     * @ejb.permission role-name="${role.operador},${role.admin}"
      */
     public Archivo obtenerImagenValorPosible(Long vp_id, String lang) {
         Session session = getSession();
@@ -117,7 +117,7 @@ public abstract class ValorPosibleFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form},${role.admin}"
+     * @ejb.permission role-name="${role.operador},${role.admin}"
      */
     public void cambiarOrden(Long vp1_id, Long vp2_id) {
         Session session = getSession();
@@ -140,7 +140,7 @@ public abstract class ValorPosibleFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form},${role.admin}"
+     * @ejb.permission role-name="${role.operador},${role.admin}"
      */
     public void borrarValorPosible(Long id) {
         Session session = getSession();

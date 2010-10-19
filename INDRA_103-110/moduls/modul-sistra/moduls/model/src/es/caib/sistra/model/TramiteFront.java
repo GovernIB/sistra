@@ -71,6 +71,15 @@ public class TramiteFront  implements Serializable{
 	 */
 	private PersonaPAD flujoTramitacionDatosPersonaIniciador;
 	/**
+	 * En caso de delegacion, indica si se puede remitir el tramite a la bandeja de firma para que se firmen
+	 * los documentos pendientes
+	 */
+	private boolean remitirDelegacionFirma=false;
+	/**
+	 * En caso de delegacion, indica si hay que remitir el tramite para su presentacion
+	 */
+	private boolean remitirDelegacionPresentacion=false;
+	/**
 	 * Descargar plantillas 
 	 */
 	private boolean descargarPlantillas=false;
@@ -502,6 +511,19 @@ public class TramiteFront  implements Serializable{
 	public void setSeleccionNotificacionTelematica(
 			Boolean seleccionNotificacionTelematica) {
 		this.seleccionNotificacionTelematica = seleccionNotificacionTelematica;
+	}
+	public boolean isRemitirDelegacionFirma() {
+		return remitirDelegacionFirma;
+	}
+	public void setRemitirDelegacionFirma(boolean remitirDelegacionFirma) {
+		this.remitirDelegacionFirma = remitirDelegacionFirma;
+	}
+	public boolean isRemitirDelegacionPresentacion() {
+		return remitirDelegacionPresentacion;
+	}
+	public void setRemitirDelegacionPresentacion(
+			boolean remitirDelegacionPresentacion) {
+		this.remitirDelegacionPresentacion = remitirDelegacionPresentacion;
 	}
 	
 }

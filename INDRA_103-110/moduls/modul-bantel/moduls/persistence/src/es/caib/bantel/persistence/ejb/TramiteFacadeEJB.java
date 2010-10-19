@@ -28,8 +28,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB {
 
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.bantel}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      */
 	public void ejbCreate() throws CreateException {
@@ -39,8 +39,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB {
 	  
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public Tramite obtenerTramite(String id) {
         Session session = getSession();
@@ -57,8 +57,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB {
     /**
      * Se distingue del anterior en que devuelve null si no existe el tramite, no hace throw de la excepción
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public Tramite obtenerTramitePorId(String id) {
         Session session = getSession();
@@ -82,7 +82,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB {
     
    /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.auto}"
      */
     public String grabarTramite(Tramite obj) {        
     	Session session = getSession();
@@ -108,7 +109,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void borrarTramite(String id) {
         Session session = getSession();
@@ -124,7 +125,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.auto}"
      */
     public List listarTramites()
@@ -176,7 +177,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB {
     /**
      * Comprueba si hay entradas de este tramite en la bandeja 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public boolean puedoBorrarTramite(String id) {
 		Session session = getSession();    	    	    	
@@ -201,7 +202,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB {
     /**
      * Borra fichero guia de exportacion 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void borrarFicheroExportacion(String id) {
 		Session session = getSession();    	    	    	

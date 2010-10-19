@@ -15,6 +15,7 @@
     <property name="intervaloInforme" column="TAP_INFORM"/>    
   	<property name="tipoAcceso"  column="TAP_TIPACC" length="1" not-null="true"/> 
   	<property name="url"  column="TAP_URL" length="200" />   	
+  	<property name="versionWS"  column="TAP_WSVER" length="10" />
   	<property name="localizacionEJB"  column="TAP_EJBREM" length="1" not-null="true"/> 
   	<property name="autenticacionEJB"  column="TAP_EJBAUT" length="1" not-null="true"/>   	 
   	<property name="jndiEJB"  column="TAP_JNDI" length="100" />
@@ -24,7 +25,7 @@
   	<property name="ultimoAviso" column="TAP_AVISO"/>
   	
 	<property name="nombreFicheroExportacion"  column="TAP_NOMFIC" />
-  	  	
+  	<property name="errores" type="binary" column="TAP_ERRORS"/>  	
   	<set name="gestores" table="BTE_GESTRA" inverse="true">
         <key column="GAP_IDETRA"/>
         <many-to-many column="GAP_CODGES" class="es.caib.bantel.model.GestorBandeja"/>

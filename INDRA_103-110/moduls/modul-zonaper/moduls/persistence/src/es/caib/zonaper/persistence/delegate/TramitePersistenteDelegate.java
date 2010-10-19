@@ -7,7 +7,9 @@ import java.util.List;
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
+import es.caib.zonaper.model.DocumentoPersistente;
 import es.caib.zonaper.model.TramitePersistente;
+import es.caib.zonaper.model.TramitePersistenteBackup;
 import es.caib.zonaper.persistence.intf.TramitePersistenteFacade;
 import es.caib.zonaper.persistence.util.TramitePersistenteFacadeUtil;
 
@@ -49,6 +51,14 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
             return getFacade().listarTramitePersistentesUsuario();
         } catch (Exception e) {
         	e.printStackTrace();	
+            throw new DelegateException(e);
+        }
+    }
+        
+    public List listarTramitePersistentesEntidadDelegada(String nifEntidad) throws DelegateException {
+        try {
+            return getFacade().listarTramitePersistentesEntidadDelegada(nifEntidad);
+        } catch (Exception e) {
             throw new DelegateException(e);
         }
     }
@@ -137,6 +147,68 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
         }
     }
     
+    public void borrarTramitePersistenteBackup( TramitePersistenteBackup tramitePersistenteBackup ) throws DelegateException{
+    	try
+    	{
+    		getFacade().borrarTramitePersistenteBackup( tramitePersistenteBackup );
+    	}
+    	catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public List listarTramitePersistentesBackup( Date fecha ) throws DelegateException{
+    	try
+    	{
+    		return getFacade().listarTramitePersistentesBackup( fecha );
+    	}
+    	catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+
+    /**
+     * Obtiene documento persistente
+     * 
+     * @param codigo del documento
+     * @return Documento relacionado con el codigo entrado
+     * 
+     */
+	public DocumentoPersistente obtenerDocumentoTramitePersistente(Long codigo) throws DelegateException	
+	{
+		try
+		{
+			return getFacade().obtenerDocumentoTramitePersistente(  codigo );
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	 public void actualizarInfoDelegacionDocumentoTramitePersistente(Long codigo, String estadoDelegacion,
+	    		String firmantes, String firmantesPendientes) throws DelegateException	{
+		 try
+			{
+			 	getFacade().actualizarInfoDelegacionDocumentoTramitePersistente(codigo, estadoDelegacion,
+			    		firmantes, firmantesPendientes);
+			}
+			catch( Exception e )
+			{
+				throw new DelegateException( e );
+			}
+	 }
+	 
+	 public void actualizarInfoDelegacionTramitePersistente(String idPersistencia, String estadoDelegacion)throws DelegateException	{
+		 try
+			{
+			 	getFacade().actualizarInfoDelegacionTramitePersistente(idPersistencia, estadoDelegacion);
+			}
+			catch( Exception e )
+			{
+				throw new DelegateException( e );
+			}
+	 }
 
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

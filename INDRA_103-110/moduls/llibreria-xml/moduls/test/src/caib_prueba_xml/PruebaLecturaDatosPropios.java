@@ -12,8 +12,15 @@ import es.caib.xml.datospropios.factoria.impl.Documento;
 import es.caib.xml.datospropios.factoria.impl.DocumentosEntregar;
 import es.caib.xml.datospropios.factoria.impl.Instrucciones;
 import es.caib.xml.datospropios.factoria.impl.Solicitud;
+import es.caib.xml.datospropios.factoria.impl.TramiteSubsanacion;
 
 public class PruebaLecturaDatosPropios {
+	
+	private static void imprimirTramiteSubsanacion (TramiteSubsanacion ts){
+		System.out.println ("TRAMITE SUBSANACION");
+		System.out.println ("Expe codigo: " + ts.getExpedienteCodigo());
+		System.out.println ("Expe UA: " + ts.getExpedienteUnidadAdministrativa());		
+	}
 	
 	private static void imprimirDato (Dato dato){
 		System.out.println ("DATO");
@@ -53,6 +60,10 @@ public class PruebaLecturaDatosPropios {
 		
 		DocumentosEntregar docs = inst.getDocumentosEntregar();
 		if (docs != null) imprimirDocumentosEntregar (docs);
+		
+		if (inst.getTramiteSubsanacion() != null){
+			imprimirTramiteSubsanacion(inst.getTramiteSubsanacion());
+		}
 	}
 	
 	private static void imprimirDocumentosEntregar (DocumentosEntregar docs){

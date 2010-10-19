@@ -1,7 +1,7 @@
 package es.caib.regtel.persistence.ejb;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +22,11 @@ import es.caib.sistra.plugins.regtel.PluginRegistroIntf;
 import es.caib.sistra.plugins.regtel.ServicioDestinatario;
 import es.caib.sistra.plugins.regtel.TipoAsunto;
 import es.caib.util.StringUtil;
+import es.caib.xml.registro.factoria.ConstantesAsientoXML;
 import es.caib.xml.registro.factoria.impl.AsientoRegistral;
 import es.caib.xml.registro.factoria.impl.Justificante;
+import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
+import es.caib.zonaper.persistence.delegate.PadDelegate;
 
 /**
  * SessionBean de registro organismo. Trasladará las operaciones al plugin de registro
@@ -42,7 +45,7 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 		
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name = "${role.user}"
+     * @ejb.permission role-name = "${role.todos}"
      * @ejb.permission role-name = "${role.auto}"
      * @ejb.permission role-name = "${role.gestor}"
      * @ejb.permission role-name = "${role.registro}"
@@ -59,7 +62,8 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 	 * Realiza apunte registral de entrada
 	 * 
      * @ejb.interface-method
-	 * @ejb.permission role-name = "${role.user}"   	 
+	 * @ejb.permission role-name = "${role.todos}" 
+	 * @ejb.permission role-name = "${role.auto}"  	 
     */
 	public ResultadoRegistro registroEntrada(AsientoRegistral asiento,ReferenciaRDS refAsiento,Map refAnexos) throws ExcepcionRegistroOrganismo{
 		try{
@@ -71,6 +75,8 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 			ResultadoRegistro res = new ResultadoRegistro();
 			res.setFechaRegistro(StringUtil.fechaACadena(datosRegistro.getFechaRegistro(),StringUtil.FORMATO_REGISTRO));
 			res.setNumeroRegistro(datosRegistro.getNumeroRegistro());
+			PadDelegate pad = DelegatePADUtil.getPadDelegate();
+			pad.logRegistro(ConstantesAsientoXML.TIPO_REGISTRO_ENTRADA,datosRegistro.getNumeroRegistro(),datosRegistro.getFechaRegistro(),null);
 			log.debug( "Registro realizado contra registro organismo" );
 			return res;
 		}catch(Exception ex){
@@ -95,6 +101,8 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 			ResultadoRegistro res = new ResultadoRegistro();
 			res.setFechaRegistro(StringUtil.fechaACadena(datosRegistro.getFechaRegistro(),StringUtil.FORMATO_REGISTRO));
 			res.setNumeroRegistro(datosRegistro.getNumeroRegistro());
+			PadDelegate pad = DelegatePADUtil.getPadDelegate();
+			pad.logRegistro(ConstantesAsientoXML.TIPO_REGISTRO_SALIDA,datosRegistro.getNumeroRegistro(),datosRegistro.getFechaRegistro(),null);
 			log.debug( "Registro realizado contra registro organismo" );
 			return res;
 		}catch(Exception ex){
@@ -118,6 +126,8 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 			ResultadoRegistro res = new ResultadoRegistro();
 			res.setFechaRegistro(StringUtil.fechaACadena(datosRegistro.getFechaRegistro(),StringUtil.FORMATO_REGISTRO));
 			res.setNumeroRegistro(datosRegistro.getNumeroRegistro());
+			PadDelegate pad = DelegatePADUtil.getPadDelegate();
+			pad.logRegistro(ConstantesAsientoXML.TIPO_PREREGISTRO,datosRegistro.getNumeroRegistro(),datosRegistro.getFechaRegistro(),null);
 			log.debug( "Confirmacion registro realizado contra registro organismo" );
 			return res;
 		}catch(Exception ex){
@@ -129,7 +139,8 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 	 * Obtiene lista de oficinas registrales
 	 * 
 	 * @ejb.interface-method
-	 * @ejb.permission role-name = "${role.user}"
+	 * @ejb.permission role-name = "${role.todos}"
+	 * @ejb.permission role-name = "${role.auto}"
 	 * 
 	 */
 	public List obtenerOficinasRegistro() throws ExcepcionRegistroOrganismo{
@@ -159,7 +170,8 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 	 * Obtiene lista de oficinas registrales para los que el usuario de registro tiene permiso
 	 * 
 	 * @ejb.interface-method
-	 * @ejb.permission role-name = "${role.user}"
+	 * @ejb.permission role-name = "${role.todos}"
+	 * @ejb.permission role-name = "${role.auto}"
 	 * 
 	 */
 	public List obtenerOficinasRegistroUsuario(String usuario) throws ExcepcionRegistroOrganismo{
@@ -191,7 +203,8 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 	 * Obtiene tipos de asunto
 	 * 
 	 * @ejb.interface-method
-	 * @ejb.permission role-name = "${role.user}"	 
+	 * @ejb.permission role-name = "${role.todos}"
+	 * @ejb.permission role-name = "${role.auto}"	 
 	 */
 	public List obtenerTiposAsunto() throws ExcepcionRegistroOrganismo{
 		try{
@@ -219,7 +232,7 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 	/**
 	 * Obtiene lista de servicios destinatarios
 	 * @ejb.interface-method
-	 * @ejb.permission role-name = "${role.user}"
+	 * @ejb.permission role-name = "${role.todos}"
 	 * @ejb.permission role-name = "${role.auto}"
 	 */
 	public List obtenerServiciosDestino() throws ExcepcionRegistroOrganismo{
@@ -246,30 +259,126 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 		}  			
 	}
    
+	
 	/**
-	 * Anula un registro de entrada. SOLO PARA REGISTRO CAIB.
+	 * Mira si existe la oficina registral
+	 * 
 	 * @ejb.interface-method
-	 * @ejb.permission role-name = "${role.user}" 
+	 * @ejb.permission role-name = "${role.todos}"
+	 * 
 	 */
-   public void anularRegistroEntrada(String numeroRegistro) throws ExcepcionRegistroOrganismo{
-	   try{
+	public boolean existeOficinaRegistro(String oficinaRegistro) throws ExcepcionRegistroOrganismo 
+	{ 	
+		try
+		{	
 			log.debug("Obtenemos plugin de registro");
 			PluginRegistroIntf	plgRegistro = PluginFactory.getInstance().getPluginRegistro();
-			log.debug("Comprobamos si el plugin tiene la funcion de anular registro");
-			Method m = null;
-			try{
-				Class[] params = new Class[] {String.class};
-				m = plgRegistro.getClass().getDeclaredMethod("anularRegistroEntrada", params);
-			}catch (java.lang.NoSuchMethodException ex){
-				throw new Exception ("El plugin no tiene la funcion de anular registro entrada");
+			log.debug("Invocamos el plugin con la funcion de obtener oficinas registro usuario");
+			
+			List resReg = plgRegistro.obtenerOficinasRegistro();			
+ 			if (resReg != null){
+				for (Iterator it = resReg.iterator();it.hasNext();){
+					OficinaRegistro s = (OficinaRegistro) it.next();
+					if(s.getCodigo().equals(oficinaRegistro)){
+						return true;
+					}
+				}
+ 			}
+ 			return false;
+		} catch (Exception e) {
+	        throw new ExcepcionRegistroOrganismo("Excepcion obteniendo oficina de registro del plugin de registro",e);
+	    }	 	 
+	 } 
+	
+	/**
+	 * Mira si existe el tipo de asunto
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission role-name = "${role.todos}"
+	 * 
+	 */
+	public boolean existeTipoAsunto(String tipoAsunto) throws ExcepcionRegistroOrganismo 
+	{
+		try
+		{		
+			log.debug("Obtenemos plugin de registro");
+			PluginRegistroIntf	plgRegistro = PluginFactory.getInstance().getPluginRegistro();
+			log.debug("Invocamos el plugin con la funcion de obtener tipos de asunto");
+			List resReg = plgRegistro.obtenerTiposAsunto();			
+ 			if (resReg != null){
+				for (Iterator it = resReg.iterator();it.hasNext();){
+					TipoAsunto s = (TipoAsunto) it.next();
+					if(s.getCodigo().equals(tipoAsunto)){
+						return true;
+					}
+				}
+ 			}	
+ 			return false;
+		} catch (Exception e) {
+	        throw new ExcepcionRegistroOrganismo("Excepcion obteniendo tipo de asunto del plugin de registro",e);
 			}			
+	 }
+	
+	/**
+	 * Mira si existe el servicio destino
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission role-name = "${role.todos}"
+	 * 
+	 */
+	public boolean existeServicioDestino(String servicioDestino) throws ExcepcionRegistroOrganismo
+	{
+		try
+		{	
+			log.debug("Obtenemos plugin de registro");
+			PluginRegistroIntf	plgRegistro = PluginFactory.getInstance().getPluginRegistro();
+			log.debug("Invocamos el plugin con la funcion de obtener servicios destino");
+			List resReg = plgRegistro.obtenerServiciosDestino();
+			if (resReg != null){
+				for (Iterator it = resReg.iterator();it.hasNext();){
+					ServicioDestinatario s = (ServicioDestinatario) it.next();
+					if(s.getCodigo().equals(servicioDestino)){
+						return true;
+					}
+				}
+			}		
+			return false;
+		} catch (Exception e) {
+	        throw new ExcepcionRegistroOrganismo("Excepcion obteniendo servicio de destino del plugin de registro",e);
+	    }	 	 
+	 }
+	
 		
-			log.debug("Invocamos el plugin con la funcion de anular registro");
-			Object[] values = new Object[] {numeroRegistro};
-           m.invoke(plgRegistro, values);
+	/**
+	 * Anula un registro de entrada
+	 * @ejb.interface-method
+	 * @ejb.permission role-name = "${role.todos}"
+	 *  @ejb.permission role-name = "${role.auto}"
+	 */
+   public void anularRegistroEntrada(String numeroRegistro, Date fechaRegistro) throws ExcepcionRegistroOrganismo{
+	   try{
+			log.debug("Obtenemos plugin de registro");
+			PluginRegistroIntf	plgRegistro = PluginFactory.getInstance().getPluginRegistro();			
+			log.debug("Invocamos el plugin con la funcion de anular registro entrada");
+			plgRegistro.anularRegistroEntrada(numeroRegistro, fechaRegistro);			
 		}catch (Exception ex){
 			throw new ExcepcionRegistroOrganismo("Excepcion accediendo al plugin de registro",ex);
 		}  
    }
    
+   /**
+	 * Anula un registro de salida
+	 * @ejb.interface-method
+	 *  @ejb.permission role-name = "${role.auto}"
+	 */
+  public void anularRegistroSalida(String numeroRegistro, Date fechaRegistro) throws ExcepcionRegistroOrganismo{
+	   try{
+			log.debug("Obtenemos plugin de registro");
+			PluginRegistroIntf	plgRegistro = PluginFactory.getInstance().getPluginRegistro();			
+			log.debug("Invocamos el plugin con la funcion de anular registro salida");
+			plgRegistro.anularRegistroSalida(numeroRegistro, fechaRegistro);			
+		}catch (Exception ex){
+			throw new ExcepcionRegistroOrganismo("Excepcion accediendo al plugin de registro",ex);
+		}  
+  }
 }

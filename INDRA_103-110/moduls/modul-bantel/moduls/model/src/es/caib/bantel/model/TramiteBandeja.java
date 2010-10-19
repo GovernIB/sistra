@@ -35,6 +35,8 @@ public class TramiteBandeja implements java.io.Serializable {
      private String usuarioNombre;
      private String representadoNif;
      private String representadoNombre;
+   	 private String delegadoNif;
+ 	 private String delegadoNombre;
      private String idioma;
      private String tipoConfirmacionPreregistro;
      // Opciones de aviso movilidad
@@ -44,6 +46,10 @@ public class TramiteBandeja implements java.io.Serializable {
   	// Opciones de notificacion telematica
      private String habilitarNotificacionTelematica;
      private char firmada;
+    // Tramite subsanacion
+ 	private String subsanacionExpedienteId;
+ 	private Long subsanacionExpedienteUA;
+ 	
      
      private Set documentos = new HashSet(0);     
      
@@ -351,6 +357,39 @@ public class TramiteBandeja implements java.io.Serializable {
 	public void setClaveAcceso(String claveAcceso) {
 		this.claveAcceso = claveAcceso;
 	}
+
+	public String getDelegadoNif() {
+		return delegadoNif;
+	}
+
+	public void setDelegadoNif(String delegadoNif) {
+		this.delegadoNif = delegadoNif;
+	}
+
+	public String getDelegadoNombre() {
+		return delegadoNombre;
+	}
+
+	public void setDelegadoNombre(String delegadoNombre) {
+		this.delegadoNombre = delegadoNombre;
+	}
+
+	public String getSubsanacionExpedienteId() {
+		return subsanacionExpedienteId;
+	}
+
+	public void setSubsanacionExpedienteId(String subsanacionExpedienteId) {
+		this.subsanacionExpedienteId = subsanacionExpedienteId;
+	}
+
+	public Long getSubsanacionExpedienteUA() {
+		return subsanacionExpedienteUA;
+	}
+
+	public void setSubsanacionExpedienteUA(Long subsanacionExpedienteUA) {
+		this.subsanacionExpedienteUA = subsanacionExpedienteUA;
+	}
+
 
 
 }

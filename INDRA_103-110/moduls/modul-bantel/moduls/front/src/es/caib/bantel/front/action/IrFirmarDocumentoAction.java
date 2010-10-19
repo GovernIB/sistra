@@ -9,7 +9,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-
 import es.caib.bantel.front.json.JSONObject;
 import es.caib.bantel.front.util.DocumentoFirmar;
 import es.caib.bantel.front.util.MensajesUtil;
@@ -17,7 +16,6 @@ import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
-import es.caib.sistra.plugins.firma.PluginFirmaIntf;
 import es.caib.util.ConvertUtil;
 
 /**

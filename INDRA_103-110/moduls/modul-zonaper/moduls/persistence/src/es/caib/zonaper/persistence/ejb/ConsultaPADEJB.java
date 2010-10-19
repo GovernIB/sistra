@@ -7,6 +7,7 @@ import javax.ejb.EJBException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -24,18 +25,33 @@ import es.caib.zonaper.persistence.delegate.PadDelegate;
  *  view-type="local"
  *  
  *  @ejb.security-identity run-as = "${role.auto}"
+ *  
+ *  @ejb.env-entry name="roleAuto" type="java.lang.String" value="${role.auto}"
  */
 public abstract class ConsultaPADEJB implements SessionBean {
 	
 	protected static Log log = LogFactory.getLog(ConsultaPADEJB.class);
 	protected SessionContext ctx;
+	private String ROLE_AUTO;
 	
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
      */
 	public void ejbCreate() throws CreateException {
 		log.info("ejbCreate: " + this.getClass());
+		try
+		{
+			javax.naming.InitialContext initialContext = new javax.naming.InitialContext();
+			
+			ROLE_AUTO = (String) initialContext.lookup( "java:comp/env/roleAuto" );			
+		}
+		catch( Exception exc )
+		{			
+			log.error( exc );
+			throw new CreateException( exc.getLocalizedMessage() );
+		}
 	}
 		
 	public void setSessionContext(SessionContext ctx) throws EJBException, RemoteException {
@@ -45,7 +61,8 @@ public abstract class ConsultaPADEJB implements SessionBean {
 	/**
 	 *  Calcula datos persona a partir de un nif
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
      */
 	 public PersonaPAD obtenerDatosPADporNif(String nif){		 
 		 try{
@@ -63,7 +80,8 @@ public abstract class ConsultaPADEJB implements SessionBean {
 	/**
 	  * Calcula datos persona a partir de usuario Seycon
 	  *  @ejb.interface-method
-      *  @ejb.permission role-name="${role.user}"
+      *  @ejb.permission role-name="${role.todos}"
+      *  @ejb.permission role-name="${role.auto}"
 	  */	 
 	 public PersonaPAD obtenerDatosPADporUsuarioSeycon(String usuarioSeycon){	
 		 try{
@@ -81,12 +99,27 @@ public abstract class ConsultaPADEJB implements SessionBean {
 	  * @param p
 	  * @return
 	  */
-	 private PersonaPAD resetearDatosPersonaPAD(PersonaPAD p) {
+	 private PersonaPAD resetearDatosPersonaPAD(PersonaPAD p) throws Exception{
+		 if(p == null){
+			return null;
+		 }
 		 
-		 	if (p == null) return null;
+		// Comprobamos si el propio usuario
+		if (this.ctx.getCallerPrincipal().getName().equals(p.getUsuarioSeycon())){
+			return p; 
+		}
 		 
-			if (this.ctx.getCallerPrincipal().getName().equals(p.getUsuarioSeycon())) return p; 
+		// Comprobamos que si es un delegado de la entidad le permitimos obtener todos los valores
+		// (No tiene sentido para usuario auto)
+		if (!this.ctx.isCallerInRole(ROLE_AUTO)){
+			PadDelegate pad = DelegatePADUtil.getPadDelegate();
+			String permisos =  pad.obtenerPermisosDelegacion(p.getNif());
+			if (StringUtils.isNotEmpty(permisos)){
+				return p;
+			}
+		}
 			 
+		// Si no es el usuario o un delegado reseteamos datos
 			PersonaPAD pr = new PersonaPAD();
 			pr.setNif(p.getNif());
 			pr.setUsuarioSeycon(p.getUsuarioSeycon());

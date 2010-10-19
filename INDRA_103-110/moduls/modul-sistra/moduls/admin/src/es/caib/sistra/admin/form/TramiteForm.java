@@ -2,16 +2,9 @@ package es.caib.sistra.admin.form;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.upload.FormFile;
 import org.apache.struts.validator.ValidatorForm;
-
-import es.caib.sistra.model.Tramite;
-import es.caib.sistra.persistence.delegate.DelegateException;
-import es.caib.sistra.persistence.delegate.DelegateUtil;
-import es.caib.sistra.persistence.delegate.TramiteDelegate;
 
 
 public class TramiteForm extends ValidatorForm{

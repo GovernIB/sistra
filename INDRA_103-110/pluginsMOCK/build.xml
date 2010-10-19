@@ -24,6 +24,7 @@
 	<ant dir="plugin-smsMOCK" target="${task}" inheritall="false"/>
 	<ant dir="plugin-custodiaMOCK" target="${task}" inheritall="false"/>
 	<ant dir="plugin-pagoMOCK" target="${task}" inheritall="false"/>
+	<ant dir="plugin-gestorDocumentalMOCK" target="${task}" inheritall="false"/>
 </target>	
 	
 <target name="compilePlugins" description="Compila plugins">
@@ -40,7 +41,7 @@
 </target>
 
 <target name="assemble" description="assemble ear">
-	<ear earfile="${output.dir}/ear/0-${projecte}.ear" appxml="${etc}/application.xml">
+	<ear earfile="${output.dir}/ear/2-${projecte}.ear" appxml="${etc}/application.xml">
 		<manifest>
 			<attribute name="Created-By" value="${indra}"/>
 		    <attribute name="Specification-Title" value="${projecte} for ${release.env}"/>				
@@ -61,6 +62,9 @@
 		</fileset>
 		<fileset dir="plugin-custodiaMOCK/output/product">
 			<filename name="plugin-custodiaMOCK.jar"/>
+		</fileset>
+		<fileset dir="plugin-gestorDocumentalMOCK/output/product">
+			<filename name="plugin-gestorDocumentalMOCK.jar"/>
 		</fileset>
 		<fileset dir="plugin-pagoMOCK/output/moduls"/>
 	</ear>	

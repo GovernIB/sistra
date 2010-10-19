@@ -7,6 +7,7 @@ import java.util.Properties;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -15,7 +16,6 @@ import es.caib.bantel.model.Tramite;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.intf.BteConectorFacade;
 import es.caib.bantel.persistence.intf.BteConectorFacadeHome;
-import es.caib.bantel.wsClient.v1.client.ClienteWS;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.login.AutenticacionExplicitaInfo;
 import es.caib.util.CifradoUtil;
@@ -31,14 +31,22 @@ public class PluginBackOffice {
 	 * Configuración del trámite con información del acceso al BackOffice
 	 */
 	private Tramite tramite;
-	
+	private String url;
 	
 	/**
 	 * Crea plugin a partir configuración trámite
 	 * @param tramite
 	 */
-	public PluginBackOffice(Tramite tramite){
+	public PluginBackOffice(Tramite tramite) throws Exception{
 		this.tramite = tramite;
+		try{
+			url = tramite.getUrl();
+    		if(url != null && !"".equals(url)){
+    			url = StringUtils.replace(url,"@backoffice.url@",DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("backoffice.url"));
+    		}
+		}catch(Exception e){
+			throw new Exception("No existe la propiedad backoffice.url en el global.properties.");
+		}
 	}
 		
 	/**
@@ -117,7 +125,7 @@ public class PluginBackOffice {
 			}			
 			
 			// Procesamiento original: realizamos avisos de n numeros de entradas
-			BteConectorFacadeHome homeCF = (BteConectorFacadeHome) EjbBackOfficeFactory.getInstance().getHome(tramite.getJndiEJB(),(tramite.getLocalizacionEJB() == Tramite.EJB_LOCAL?"LOCAL":tramite.getUrl()));
+			BteConectorFacadeHome homeCF = (BteConectorFacadeHome) EjbBackOfficeFactory.getInstance().getHome(tramite.getJndiEJB(),(tramite.getLocalizacionEJB() == Tramite.EJB_LOCAL?"LOCAL":url));
 			BteConectorFacade ejbCF= homeCF.create();
 			ejbCF.avisoEntradas(ents);					
 			
@@ -125,7 +133,7 @@ public class PluginBackOffice {
 		}
 		catch( Exception exc )
 		{
-			log.error( "[" + tramite.getIdentificador() + "] - " +  exc );
+			log.debug("[" + tramite.getIdentificador() + "] - " + exc );
 			throw exc;
 		}
 		finally
@@ -182,9 +190,13 @@ public class PluginBackOffice {
 		String prop =config.getProperty("webService.cliente.asincrono");
 		if (prop == null) prop = "true";
 		
-		
-		ClienteWS.avisarEntradasWS(entradas,tramite.getUrl(),user,pass,Boolean.valueOf(prop).booleanValue());
-		
+		if(tramite.getVersionWS() != null && "v1".equals(tramite.getVersionWS())){
+			es.caib.bantel.wsClient.v1.client.ClienteWS.avisarEntradasWS(entradas,url,user,pass,Boolean.valueOf(prop).booleanValue());
+		}else if(tramite.getVersionWS() != null && "v2".equals(tramite.getVersionWS())){
+			es.caib.bantel.wsClient.v2.client.ClienteWS.avisarEntradasWS(entradas,url,user,pass,Boolean.valueOf(prop).booleanValue());
+		}else{
+			throw new Exception("Excepcion obteniendo la versión "+tramite.getVersionWS()+" del WS de aviso de entradas. ");
+		}
 			
 	}
 					

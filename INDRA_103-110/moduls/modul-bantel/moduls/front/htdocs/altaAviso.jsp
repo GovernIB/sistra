@@ -19,15 +19,16 @@
 <!--  Scripts para firma (depende implementacion) -->
 	<logic:equal name="<%=es.caib.bantel.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
-	
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/constantes.js"></script>
+	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/deployJava.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/time.js"></script>
-	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/appletHelper.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/instalador.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/firma.js"></script>	
+	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/utils.js"></script>
+	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/configClienteaFirmaSistra.js"></script>
 	<script type="text/javascript">		
-		baseDownloadURL = "<%=request.getContextPath()%>/firma/aFirma";
-		base = "<%=request.getContextPath()%>/firma/aFirma";
+		base = "<%=request.getAttribute("urlSistraAFirma")%><%=request.getContextPath()%>/firma/aFirma";
+		baseDownloadURL = "<%=request.getAttribute("urlSistraAFirma")%><%=request.getContextPath()%>/firma/aFirma";
 	</script>
 	</logic:equal>
 		
@@ -68,7 +69,7 @@
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
 		
 		function prepararEntornoFirma(){
-			cargarAppletFirma();
+			cargarAppletFirma(sistra_ClienteaFirma_buildVersion);
 		}
 		
 		function firmarAFirma(form){
@@ -79,13 +80,13 @@
 	          return false;
 	       	}
 	       	clienteFirma.initialize();
-			clienteFirma.setSignatureAlgorithm("sha1WithRsaEncryption");
-			clienteFirma.setSignatureMode("EXPLICIT");
-			clienteFirma.setSignatureFormat("CMS");
+	       	clienteFirma.setShowErrors(false);
+			clienteFirma.setSignatureAlgorithm(sistra_ClienteaFirma_SignatureAlgorithm);
+			clienteFirma.setSignatureMode(sistra_ClienteaFirma_SignatureMode);
+			clienteFirma.setSignatureFormat(sistra_ClienteaFirma_SignatureFormat);
 			if($('#documentoB64').val() == null || $('#documentoB64').val() == ''){
 				return false;
 			}
-			
 			// Pasamos de b64 urlSafe a b64
 			var b64 = b64UrlSafeToB64($('#documentoB64').val());
 			clienteFirma.setData(b64);
@@ -96,11 +97,13 @@
 				return false;
 			}else{	
 			     firma = clienteFirma.getSignatureBase64Encoded();
+			     firma = b64ToB64UrlSafe(firma);
 			}
 			document.getElementById("firma").value=firma;
 			return true;
 		}
 	</logic:equal>	
+	
 	
 	function anexarDocumento(form)
 	{
@@ -148,7 +151,6 @@
 		        Mensaje.cancelar();	
         	});
         	
-
 	}
 	<logic:equal name="<%=es.caib.bantel.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
@@ -166,8 +168,8 @@
 
 var htmlInfoFirmado = "- <strong><bean:message key="detalleTramite.datosTramite.envio.firmado"/></strong>";
 
-
-function altaDocument(){
+//funcion que anexa un documento, se ejecuta desde el iframe
+function altaDocument(form){
 	
 	Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "Enviando datos..."});
 	
@@ -187,10 +189,14 @@ function altaDocument(){
 	}
 	
 	if(permitida){
-		document.forms["0"].action='<html:rewrite page="/altaDocumentoAviso.do"/>';
-		document.forms["0"].flagValidacion.value ="documento";
-		document.forms["0"].rutaFitxer.value = document.forms["0"].documentoAnexoFichero.value;
-		document.forms["0"].submit();
+		form.flagValidacion.value ="documento";
+		form.idioma.value =document.detalleAvisoForm.idioma.value;
+		form.identificadorExpediente.value =document.detalleAvisoForm.identificadorExpediente.value;
+		form.unidadAdministrativa.value =document.detalleAvisoForm.unidadAdministrativa.value;
+		form.claveExpediente.value =document.detalleAvisoForm.claveExpediente.value;
+		form.descripcionExpediente.value =document.detalleAvisoForm.descripcionExpediente.value;
+		form.rutaFitxer.value =form.documentoAnexoFichero.value;
+		form.submit();
 	}else{				
 		alert("<bean:message key="error.aviso.extensiones.fichero"/>");
 		Mensaje.cancelar();
@@ -198,18 +204,19 @@ function altaDocument(){
 	
 	return permitida;
 }
-
+//funcion que da de alta el aviso
 function alta(){
 	if(confirm ( "<bean:message key='aviso.alta.confirmacion' />" )){
 		Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "Enviando datos..."});
-		document.forms["0"].rutaFitxer.value = document.forms["0"].documentoAnexoFichero.value;
-		document.forms["0"].action='<html:rewrite page="/realizarAltaAviso.do"/>';
-		document.forms["0"].submit();
+		document.detalleAvisoForm.rutaFitxer.value = document.uploadAvisoForm.documentoAnexoFichero.value;
+		document.detalleAvisoForm.action='<html:rewrite page="/realizarAltaAviso.do"/>';
+		document.detalleAvisoForm.submit();
 		return true;
 	}else{
 		return false;
 	}
 }
+//funcion que muestra el div de firmar y que a su vez carga el contenido del fichero a firmar en el formulario de firma
 function mostrarFirmar(nombre,codigoRDS,claveRDS){
 	var url_json = '<html:rewrite page="/irFirmarDocumento.do"/>';
 	var data ='atributo=documentosAltaAviso&nombre='+nombre+'&codigoRDS='+codigoRDS+'&claveRDS='+claveRDS;
@@ -219,8 +226,6 @@ function mostrarFirmar(nombre,codigoRDS,claveRDS){
 		function(datos){
 			if (datos.error==""){								
 				var nombreF = '<p class="titol"> <bean:message key="aviso.firmar"/> </p>'; 
-				//$('#divNombreFirmar').html(nombreF);			
-				//$('#documentos').html(datos.taula);
 				$('#documentoB64').val(datos.base64);
 				$('#firmarDocumentosApplet').show('slow');
 				$('#anexar').hide('slow');
@@ -235,24 +240,28 @@ function mostrarFirmar(nombre,codigoRDS,claveRDS){
 		}
 	);
 }
-
+//funcion que muestra el div de anexar documentos
 function mostrarAnexarDocumentos(){
 	$('#anexar').show('slow');
 	$('#firmarDocumentosApplet').hide('slow');
 	$("#botonMostrarAnexar").attr("disabled","disabled");
 }
-
+//funcion que esconde el div que se muestra para anexar documentos
 function esconderAnexarDocumentos(){
+	document.uploadAvisoForm.documentoAnexoFichero.value = null;
+	document.uploadAvisoForm.documentoAnexoTitulo.value = '';
 	$('#anexar').hide('slow');
 	$('#firmarDocumentosApplet').hide('slow');
 	$("#botonMostrarAnexar").removeAttr("disabled");
 }
 
+//funcion que te devuelve al detalle del expediente
 function volver(identificadorExp,unidadAdm,claveExp){
-	document.forms["0"].action='<html:rewrite page="/recuperarExpediente.do?identificadorExp='+identificadorExp+'&unidadAdm='+unidadAdm+'&claveExp='+claveExp+'" />';
-	document.forms["0"].submit();
+	document.detalleAvisoForm.action='<html:rewrite page="/recuperarExpediente.do?identificadorExp='+identificadorExp+'&unidadAdm='+unidadAdm+'&claveExp='+claveExp+'" />';
+	document.detalleAvisoForm.submit();
 }
 
+//funcion que se ejecutan solo entrar en la pagina
 $(document).ready(function(){
 		$('#firmarDocumentosApplet').hide();
 		$('#anexar').hide();
@@ -270,6 +279,31 @@ $(document).ready(function(){
 	}
 );
 
+//funcion para el iframe, una vez hecho el submit del formulario donde se encuentra el documento
+//llamamos a esta función para modificar el div de los documentos que tenemos.
+function fileUploaded(){
+	var url_json = '<html:rewrite page="/irBuscarDocumentos.do"/>';
+	var data ='atributo=documentosAltaAviso';
+	// $.ajaxSetup({scriptCharset: "utf-8", contentType: "application/json; charset=utf-8"});
+	$.postJSON(
+		url_json,data,
+		function(datos){
+			if (datos.error==""){								
+				$('#documentos').html(datos.divDocuments);
+			}else{
+				alert(datos.error);
+			}
+			Mensaje.cancelar();
+			esconderAnexarDocumentos();
+		}
+	);
+}
+//funcion para el iframe, una vez hecho el submit del formulario donde se encuentra el documento
+//llamamos a esta función si ha fallado la carga del documento y muestra un alert con el error
+function errorFileUploaded(error){
+	alert(error);
+	Mensaje.cancelar();
+}
 </script>
 <bean:define id="urlConfirmacion" type="java.lang.String">
 	<html:rewrite href="/zonaperback/init.do" paramId="lang" paramName="<%= Globals.LOCALE_KEY  %>" paramProperty="language" paramScope="session"/>
@@ -311,7 +345,7 @@ $(document).ready(function(){
 			<%--<h1><bean:write  name="detalleAvisoForm" property="descripcionExpediente"/></h1>--%>
 		
 			<p class="titol"><bean:message key="aviso.alta"/></p>
-			
+			<div class="remarcar">
 			<html:form action="realizarAltaAviso" enctype="multipart/form-data" styleClass="remarcar opcions">
 			<html:hidden property="descripcionExpediente"/>
 			<html:hidden property="flagValidacion" value="alta"/>
@@ -334,7 +368,7 @@ $(document).ready(function(){
 					<label for="textoSMS"><bean:message key="aviso.textoSMS"/></label>
 					<html:textarea property="textoSMS" rows="5"  styleClass="pc40"/>
 				</p>
-				
+			</html:form>
 				<!-- escritorio_docs -->
 				<div id="escritorio_docs">
 				
@@ -352,7 +386,7 @@ $(document).ready(function(){
 						<div id="documentos">
 						
 								<logic:empty name="documentosAltaAviso" scope="session">
-									<p class="noHay">No hay documentos</p>
+							<p class="noHay"><bean:message key="no.hay.documentos"/></p>
 								</logic:empty>
 								
 								<logic:notEmpty name="documentosAltaAviso" scope="session">
@@ -388,6 +422,14 @@ $(document).ready(function(){
 						
 						<!-- anexar -->
 						<div id="anexar">
+						<html:form method="post" action="altaDocumentoAviso" enctype="multipart/form-data" target="iframeDocumento" styleClass="remarcar opcions">																			
+						<html:hidden property="descripcionExpediente"/>
+						<html:hidden property="flagValidacion" value="alta"/>
+						<html:hidden property="rutaFitxer"/>
+						<html:hidden property="unidadAdministrativa" />
+						<html:hidden property="identificadorExpediente" />
+						<html:hidden property="claveExpediente" />
+						<html:hidden property="idioma" />
 							<p>
 								<bean:message key="aviso.explicativo.fichero"/>
 							</p>
@@ -399,16 +441,17 @@ $(document).ready(function(){
 								<html:text property="documentoAnexoTitulo"/>
 								<label class="enLinia"><bean:message key="aviso.fichero"/></label>
 								<html:file property="documentoAnexoFichero" />
-
 								<!--<html:submit styleId="botonAlta" styleClass="botonAlta" onclick="if(altaDocument()){return true;}else{return false;}"><bean:message key="aviso.alta.documento"/></html:submit>-->
-								<input id="botonAlta" class="botonAlta" type='button' value='<bean:message key="aviso.alta.documento"/>' onclick="if(altaDocument()){return true;}else{return false;}"/>
+							<input id="botonAlta" class="botonAlta" type='button' value='<bean:message key="aviso.alta.documento"/>' onclick="if(altaDocument(this.form)){return true;}else{return false;}"/>
 								, o <a id="botonCancelar" onclick="esconderAnexarDocumentos();">Cancelar</a>
 							</p>
+						</html:form>																			
 						</div>
 						<!-- /anexar -->
 						
 						<!-- firmar -->
 						<div id="firmarDocumentosApplet">
+						<form name="formFirma">	
 							<input type='hidden' id='documentoB64' name='documentoB64' value='' />
 							<input type='hidden' id='firma' name='firma' value=''/>
 							<input type='hidden' id='nombreFirmar' name='nombreFirmar' value=''/>
@@ -447,6 +490,7 @@ $(document).ready(function(){
 								<label>&nbsp;</label>
 								<input type="button" value="<bean:message key='aviso.firmar'/>" onclick="anexarDocumento(this.form);"/>, o <a onclick="botonCancelarFirmar();">Cancelar</a>
 							</p>
+						</form>	
 						</div>
 						<!-- /firmar -->
 					
@@ -459,11 +503,10 @@ $(document).ready(function(){
 					<html:submit onclick="if(alta()){return true;}else{return false;}"><bean:message key="aviso.alta"/></html:submit>
 					<input type="button" onclick="volver('<bean:write name="detalleAvisoForm" property="identificadorExpediente"/>','<bean:write name="detalleAvisoForm" property="unidadAdministrativa"/>','<bean:write name="detalleAvisoForm" property="claveExpediente"/>')" value="<bean:message key="aviso.cancelar"/>"/>
 				</p>
-			
-			</html:form>
-			
+			</div>
 		</div>
 		<!-- /continguts -->
 		
 		<div id="fondo"></div>
+		<iframe id="iframeDocumento" name="iframeDocumento"></iframe>
 		

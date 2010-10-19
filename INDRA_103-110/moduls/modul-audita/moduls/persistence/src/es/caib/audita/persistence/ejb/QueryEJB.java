@@ -50,12 +50,10 @@ public abstract class QueryEJB extends DbUtilQueryExecutor implements SessionBea
     
     public void ejbCreate() throws CreateException 
     {
-        log.info("ejbCreate: " + this.getClass());
     }
 
 	public void ejbRemove() throws EJBException, RemoteException
 	{
-		log.info("ejbRemove: " + this.getClass());
 	}
 	
 	protected String getQuery( String propertyName ) throws SQLException

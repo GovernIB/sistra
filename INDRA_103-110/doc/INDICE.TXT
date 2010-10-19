@@ -10,6 +10,8 @@ Indice de documentación:
 					* SISTRA-PLUGINSMS
 					* SISTRA-PLUGINPAGOS
 					* SISTRA-PLUGINAUTEX
+					* SISTRA-PLUGINCUSTODIA
+					* SISTRA-PLUGINGESTDOC
 	
 	- SISTRA-VERSIONES: Documento con las releases notes de cada versión liberada
 	

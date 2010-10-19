@@ -193,9 +193,9 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		if(firmas != null){
 			for(int i=0;i<firmas.length;i++){
 				FirmaWS firma = new FirmaWS();
-				firma.setFirma(plgFirma.parseFirmaToBytes(firmas[i]));
+				firma.setFirma(plgFirma.parseFirmaToWS(firmas[i]));
 				if(firmas[i].getFormatoFirma() != null){
-					firma.setFormato(new JAXBElement<String>(new QName("formatoFirma"),String.class,firmas[i].getFormatoFirma()));
+					firma.setFormato(new JAXBElement<String>(new QName("formato"),String.class,firmas[i].getFormatoFirma()));
 				}
 				firmasWS.getFirmas().add(firma);
 			}
@@ -210,7 +210,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			PluginFirmaIntf plgFirma = PluginFactory.getInstance().getPluginFirma();
 			for(int i=0;i<firmas.getFirmas().size();i++){
 				if(firmas.getFirmas().get(i).getFormato() != null){
-					firmasIntf[i] = plgFirma.parseFirmaFromBytes(firmas.getFirmas().get(i).getFirma(),firmas.getFirmas().get(i).getFormato().getValue());
+					firmasIntf[i] = plgFirma.parseFirmaFromWS(firmas.getFirmas().get(i).getFirma(),firmas.getFirmas().get(i).getFormato().getValue());
 				}
 			}
 		}

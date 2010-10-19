@@ -35,6 +35,11 @@
     <property name="firmarAcuse"  column="NOT_FIRACU" not-null="true"/>
     <property name="gestorSeycon"  column="NOT_SEYGES" not-null="true"/>
    
+    <property name="tramiteSubsanacionDescripcion"  column="NOT_SUBDES"/>
+    <property name="tramiteSubsanacionIdentificador"  column="NOT_SUBIDE"/>
+    <property name="tramiteSubsanacionVersion"  column="NOT_SUBVER"/>
+    <property name="tramiteSubsanacionParametros"  column="NOT_SUBPAR"/>
+        	   
 	<set name="documentos" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="DNO_ORDEN">
 		<cache usage="read-write"/>
 	    <key column="DNO_CODNOT"/>
