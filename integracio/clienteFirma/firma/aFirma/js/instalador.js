@@ -89,7 +89,7 @@ function cargarAppletFirma(build)
 	// Cargamos el applet de firma
 	if(clienteFirma == undefined)
 	{
-		/* Definici?n de las constantes necesarias */
+		/* Definición de las constantes necesarias */
 
 		var installationDirectory = instalador.getInstallationDirectory();
 		var jarArchive = 'file:///' + installationDirectory + '/afirma5_coreV3.jar';
@@ -112,7 +112,7 @@ function cargarAppletFirma(build)
 		/* Realizamos una espera para que de tiempo a cargarse el applet */
 		for(var i=0; i<100; i++) {
 			try {
-				setTimeout("clienteFirma != undefined && clienteFirma.isInitialized()", 100);
+				setTimeOut("clienteFirma != undefined && clienteFirma.isInitialized()", 100);
 				break;
 			} catch(e) {
 				// Capturamos la excepcion que se produciria si no se hubiese cargado aun el applet, aunque no se lanzaria
@@ -135,7 +135,8 @@ function cargarAppletInstalador()
 
 		var attributes = {id:'instaladorApplet',
 					code:'es.gob.afirma.install.AfirmaBootLoader.class',	
-					archive:codeBaseVar+'/afirmaBootLoader.jar',
+					archive:'afirmaBootLoader.jar',
+					codebase:codeBaseVar,
 					width:1, height:1};
 		var parameters = {userAgent:window.navigator.userAgent,
 					appName:window.navigator.appName,
@@ -152,7 +153,7 @@ function cargarAppletInstalador()
 
 		for(var i=0; i<100; i++) {
 			try {
-				setTimeout("instalador != undefined && instalador.isIniciado()", 100);
+				setTimeOut("instalador != undefined && instalador.isIniciado()", 100);
 				break;
 			} catch(e) {
 				// Capturamos la excepcion que se produciria si no se hubiese cargado aun el applet, aunque no se lanzaria
