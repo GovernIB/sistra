@@ -57,13 +57,13 @@ var showErrors = 'false'; // Valor por defecto
 var certFilter; // Valor por defecto
 
 /*******************************************************************************
- * Directorio donde se instalar? las librer?as del cliente                     *
+ * Directorio donde se instalará las librerías del cliente                     *
  * Por defecto: USER_HOME/afirma.5/								 *
  ******************************************************************************/
 var installDirectory = "afirma.5";
 
 /*******************************************************************************
- * Acci?n establecida a realizar cuando durante la instalacion se detecten	 *
+ * Acción establecida a realizar cuando durante la instalacion se detecten	 *
  * versiones antiguas del cliente (v2.4 y anteriores).				 *
  * Opciones disponibles:									 *
  * 	- 1: Preguntar al usuario.								 *
