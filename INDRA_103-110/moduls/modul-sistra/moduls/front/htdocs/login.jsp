@@ -91,8 +91,8 @@ if (browser == "Firefox" && parseFloat( version, 10) < 1.5 ){
 			}catch(Exception e){}
 		%>
 
-		base = "<%=urlSistra%><%=request.getContextPath()%>/firma/aFirma/";
-		baseDownloadURL = "<%=urlSistra%><%=request.getContextPath()%>/firma/aFirma/";
+		base = "<%=urlSistra%><%=request.getContextPath()%>/firma/aFirma";
+		baseDownloadURL = "<%=urlSistra%><%=request.getContextPath()%>/firma/aFirma";
 
 		function prepararEntornoFirma(){
 			cargarAppletFirma('COMPLETA');
