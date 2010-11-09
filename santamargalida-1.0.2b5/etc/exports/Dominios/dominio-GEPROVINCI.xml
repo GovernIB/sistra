@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <Dominio autenticacionExplicita="N" cacheable="N" descripcion="Lista de provincias" identificador="GEPROVINCI" localizacionEJB="L" secured="false" sql="SELECT PRO_CODIGO as &quot;CODIGO&quot;, PRO_DENCAT as &quot;DESCRIPCION&quot; FROM STR_DPROVI ORDER BY &quot;CODIGO&quot;" tipo="S" url="es.caib.sistra.db"/>

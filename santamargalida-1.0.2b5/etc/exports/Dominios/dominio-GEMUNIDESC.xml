@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <Dominio autenticacionExplicita="N" cacheable="N" descripcion="Descripción de un municipio. Parametrizado por código provincia y por código municipio." identificador="GEMUNIDESC" localizacionEJB="L" secured="false" sql="SELECT MUN_CODIGO as &quot;CODIGO&quot;, MUN_DENOFI as &quot;DESCRIPCION&quot; FROM STR_DMUNIC WHERE MUN_PROVIN = ? AND MUN_CODIGO = ?" tipo="S" url="es.caib.sistra.db"/>

@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <Dominio autenticacionExplicita="N" cacheable="N" descripcion="Lista de paises" identificador="GEPAISES" localizacionEJB="L" secured="false" sql="SELECT TRIM( PAI_CODALF ) as &quot;CODIGO&quot;, UPPER( PAI_DENCAS ) as &quot;DESCRIPCION&quot; FROM STR_DPAIS WHERE PAI_VIGENC = &apos;S&apos; ORDER BY &quot;DESCRIPCION&quot;" tipo="S" url="es.caib.sistra.db"/>

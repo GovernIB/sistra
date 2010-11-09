@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <Dominio autenticacionExplicita="N" cacheable="N" descripcion="Tipus d&apos;ocupacions" identificador="SMOCUPACIO" localizacionEJB="L" secured="false" sql="SELECT OCU_CODIGO AS &quot;CODIGO&quot;, CASE WHEN ?=&apos;ca&apos; THEN OCU_DESC_CA ELSE OCU_DESC_ES END AS &quot;DESCRIPCION&quot;, OCU_PREU AS &quot;PRECIO&quot; FROM STR_OCUPAC ORDER BY &quot;CODIGO&quot;" tipo="S" url="es.caib.sistra.db"/>

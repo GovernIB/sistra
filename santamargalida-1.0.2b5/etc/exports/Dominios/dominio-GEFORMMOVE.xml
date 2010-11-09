@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <Dominio autenticacionExplicita="N" cacheable="N" descripcion="Arbol de formularios y versiones" identificador="GEFORMMOVE" localizacionEJB="R" secured="false" sql="SELECT RFR_FORMUL.FOR_MODELO as &quot;MODELO&quot;,
+	   RFR_FORMUL.FOR_MODELO || &apos; - &apos; || RFR_TRAFOR.TRF_TITULO as &quot;DESCRIPCION&quot;,
+	   RFR_FORMUL.FOR_VERSIO as &quot;VERSION&quot;
+FROM RFR_FORMUL,RFR_TRAFOR
+WHERE RFR_TRAFOR.TRF_CODFOR = RFR_FORMUL.FOR_CODI AND RFR_TRAFOR.TRF_CODIDI = &apos;es&apos;
+ORDER BY 1,3" tipo="S" url="es.caib.rolforms.db"/>

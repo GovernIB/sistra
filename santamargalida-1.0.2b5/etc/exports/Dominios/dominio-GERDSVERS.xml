@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <Dominio autenticacionExplicita="N" cacheable="N" descripcion="Lista de versiones de un modelo de documento del RDS. Parametrizado por código modelo." identificador="GERDSVERS" localizacionEJB="L" secured="false" sql="SELECT RDS_VERS.VER_VERSIO as &quot;CODIGO&quot;, TO_CHAR(RDS_VERS.VER_VERSIO, &apos;999&apos;) as &quot;DESCRIPCION&quot; FROM RDS_VERS, RDS_MODELO WHERE RDS_MODELO.MOD_CODIGO =  RDS_VERS.VER_CODMOD AND RDS_MODELO.MOD_MODELO = ? ORDER BY 1" tipo="S" url="es.caib.redose.db"/>

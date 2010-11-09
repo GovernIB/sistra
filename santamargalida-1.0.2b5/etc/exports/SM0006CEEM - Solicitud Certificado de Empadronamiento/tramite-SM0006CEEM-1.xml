@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <TramiteVersion anonimoDefecto="N" bloqueadoModificacion="N" consultaAuth="N" consultaEJB="es.caib.sistra.persistence.ConsultaPadronEJB" consultaLocalizacion="R" consultaTipoAcceso="E" consultaUrl="http://sistra.in.at4.net:8080/invoker/JNDIFactory" destino="C" fechaExportacion="Tue Nov 09 08:59:06 CET 2010" firmar="N" idiomasSoportados="es,ca" motivo="Creación de la Solicitud" organoDestino="S1" preenvioConfirmacionAutomatica="N" redireccionFin="N" reducido="N" registroAsunto="A1" registroOficina="OF1" unidadAdministrativa="2" version="1">
+    <documentos>
+      <documento anexoCompulsarPreregistro="N" anexoDescargarPlantilla="N" anexoFotocopia="N" anexoPresentarTelematicamente="S" formularioJustificante="S" formularioPreregistro="N" generico="N" identificador="FORM1" maxGenericos="0" modelo="SM0006CEEM" orden="1" tipo="F">
+        <niveles>
+          <nivele firmar="N" formularioConfiguracionScript="Q09ORklHVVJBQ0lPTkZPUk1VTEFSSU8uc2V0RGF0b1NvbG9MZWN0dXJhKCdEQVRPU19TT0xJQ0lUQU5URS5DRFROT01CUkVBUEVMTElET1NTT0xJQ0lUQU5URScpOw0KDQovL0NPTkZJR1VSQUNJT05GT1JNVUxBUklPLnNldERhdG9Tb2xvTGVjdHVyYSgnREFUT1NfU09MSUNJVEFOVEUuQ0RUTklGU09MSUNJVEFOVEUnKTs=" formularioDatosInicialesScript="Ly9Ob21icmUgY29tcGxldG8gZGVsIHVzdWFyaW8gcmVnc2l0cmFkbw0KREFUT1NJTklDSUFMRVMuc2V0RGF0b0luaWNpYWwoJ0RBVE9TX1NPTElDSVRBTlRFLkNEVE5PTUJSRUFQRUxMSURPU1NPTElDSVRBTlRFJywgUExVR0lOX0RBVE9TU0VTSU9OLmdldE5vbWJyZUNvbXBsZXRvVXN1YXJpbygpKTsNCi8vRE5JIGRlbCB1c3VhcmlvIHJlZ3NpdHJhZG8NCkRBVE9TSU5JQ0lBTEVTLnNldERhdG9JbmljaWFsKCdEQVRPU19TT0xJQ0lUQU5URS5DRFROSUZTT0xJQ0lUQU5URScsIFBMVUdJTl9EQVRPU1NFU0lPTi5nZXROaWZVc3VhcmlvKCkpOw0KDQovL1BsYW50aWxsYQ0KREFUT1NJTklDSUFMRVMuc2V0RGF0b0luaWNpYWwoJ0RBVE9TX1NPTElDSVRBTlRFLkNEVFBMQU5USUxMQScsIlBERiIpOw0KDQovL05vbWJyZSBkZWwgRG9jdW1lbnRvDQpEQVRPU0lOSUNJQUxFUy5zZXREYXRvSW5pY2lhbCgnREFUT1NfU09MSUNJVEFOVEUuQ0RUTk9NQlJFRE9DVU1FTlRPJywgUExVR0lOX1RSQU1JVEUuZ2V0VHJhbWl0ZVZlcnNpb24oKS5nZXRUcmFtaXRlKCkuZ2V0VHJhZHVjY2lvbihQTFVHSU5fREFUT1NTRVNJT04uZ2V0SWRpb21hKCkpLmdldERlc2NyaXBjaW9uKCkpOw0KDQovL1VuaWRhZCBBZG1pbmlzdHJhdGl2YQ0KREFUT1NJTklDSUFMRVMuc2V0RGF0b0luaWNpYWwoJ0RBVE9TX1NPTElDSVRBTlRFLkNEVFVOSURBREFETUlOSVNUUkFUSVZBJywgUExVR0lOX1RSQU1JVEUuZ2V0VHJhbWl0ZVZlcnNpb24oKS5nZXRVbmlkYWRBZG1pbmlzdHJhdGl2YSgpKTsNCg==" formularioFormsModelo="006" formularioFormsVersion="1" formularioGestorFormulario="forms" nivelAutenticacion="CU" obligatorio="S" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Sol·licitud Certificat d&apos;Empadronament"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Solicitud Certificado de Empadronamiento"/>
+          </entry>
+        </traducciones>
+      </documento>
+    </documentos>
+    <especificaciones activo="S" campoRteNif="UExVR0lOX0RBVE9TU0VTSU9OLmdldE5pZlVzdWFyaW8oKTs=" campoRteNom="UExVR0lOX0RBVE9TU0VTSU9OLmdldE5vbWJyZUNvbXBsZXRvVXN1YXJpbygpOw==" diasPersistencia="15" diasPrerregistro="15" flujoTramitacion="N" habilitarNotificacionTelematica="X">
+      <datosJustificante/>
+      <traducciones/>
+    </especificaciones>
+    <mensajes>
+      <entry>
+        <key>NOTA01</key>
+        <value identificador="NOTA01">
+          <traducciones>
+            <entry>
+              <key>ca</key>
+              <value mensaje="Moltes gràcies per completar els formularis anteriors. Amb la informació que ens ha subministrat, s&apos;ha generat un imprès de sol·licitud que pot descarregar al seu equip i que ha d&apos;imprir i presentar al registre, amb la documentació requerida adjunta."/>
+            </entry>
+            <entry>
+              <key>es</key>
+              <value mensaje="Muchas gracias por completar los formularios anteriores. Con la información que nos ha suministrado, se ha generado un impreso de solicitud que puede descargar a su equipo y que debe imprimir y presentar en el registro, con la documentación requerida adjunta."/>
+            </entry>
+          </traducciones>
+        </value>
+      </entry>
+    </mensajes>
+    <niveles>
+      <nivele nivelAutenticacion="CU">
+        <especificaciones activo="S" diasPersistencia="15" diasPrerregistro="15" flujoTramitacion="N" habilitarNotificacionTelematica="X">
+          <datosJustificante/>
+          <traducciones/>
+        </especificaciones>
+      </nivele>
+    </niveles>
+  </TramiteVersion>

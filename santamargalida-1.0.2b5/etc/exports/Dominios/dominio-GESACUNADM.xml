@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <Dominio autenticacionExplicita="N" cacheable="N" descripcion="Lista de unidades administrativas" identificador="GESACUNADM" localizacionEJB="L" secured="false" sql="SELECT  a.UNA_CODI as &quot;CODIGO&quot;, a.UNA_CODI || &apos; - &apos; || trim ( replace( b.tun_nombre, &apos;-&apos;, &apos;&apos; ) ) as &quot;DESCRIPCION&quot; FROM RSC_UNIADM a, RSC_TRAUNA b where a.UNA_CODI = b.TUN_CODUNA and b.TUN_CODIDI = &apos;ca&apos; ORDER BY &quot;CODIGO&quot;" tipo="S" url="es.caib.rolsac.db"/>

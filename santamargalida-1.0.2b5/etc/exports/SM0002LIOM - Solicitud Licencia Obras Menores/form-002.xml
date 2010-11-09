@@ -1,0 +1,1123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <Formulario bloqueado="false" fechaExportacion="Tue Nov 09 08:56:09 CET 2010" hasBarcode="false" lastVersion="true" modelo="002" posBarcodeX="0" posBarcodeY="0" version="1">
+    <modoFuncionamiento codigo="1" fecha="Sat Feb 09 00:00:00 CET 2008" nombre="VERSION 1: MODIFICACION INDRA (FEBRERO 08)" sufijo="V1">
+      <traducciones/>
+    </modoFuncionamiento>
+    <pantallas>
+      <pantalla expresion="if (f_cCsuDatosRepresentante==&apos;t&apos;){
+	&apos;pDatosRepresentante&apos;;
+}else{
+	if(f_cCsuDatosRepresentante==&apos;f&apos;){
+	&apos;pDatosObra&apos;;
+	}
+}" inicial="true" nombre="pDatosSolicitante" orden="0" ultima="false">
+        <ayudas/>
+        <componentes>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="52" etiquetaPDF="/FORMULARIO/DATOS_SOLICITANTE/CDTNOMBREAPELLIDOSRAZONSOCIALSOLICITANTE" expresionValidacion="f_cCdtNombreApellidosRazonSocialSolicitante !=&apos;&apos;;" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtNombreApellidosRazonSocialSolicitante" numero="0" oculto="false" orden="0" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="* Nom i cognoms / Raó social"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="* Nombre y apellidos / Razón social"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>256</valor>
+                </valores>
+              </validacion>
+              <validacion orden="1">
+                <mascara id="8" nombre="required"/>
+                <valores/>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="10" etiquetaPDF="/FORMULARIO/DATOS_SOLICITANTE/CDTNIFCIFSOLICITANTE" expresionValidacion="ValidacionesPlugin.esNie(f_cCdtNifCifSolicitante.toUpperCase()) || ValidacionesPlugin.esNif(f_cCdtNifCifSolicitante.toUpperCase()) || ValidacionesPlugin.esCif(f_cCdtNifCifSolicitante.toUpperCase());" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtNifCifSolicitante" numero="0" oculto="false" orden="1" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="* NIF / CIF"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="* NIF / CIF"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>16</valor>
+                </valores>
+              </validacion>
+              <validacion orden="1">
+                <mascara id="8" nombre="required"/>
+                <valores/>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="52" etiquetaPDF="/FORMULARIO/DATOS_SOLICITANTE/CDTDIRECCIONSOLICITANTE" expresionValidacion="f_cCdtDireccionSolicitante !=&apos;&apos;;" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtDireccionSolicitante" numero="0" oculto="false" orden="2" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="* Adreça"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="* Dirección"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>256</valor>
+                </valores>
+              </validacion>
+              <validacion orden="1">
+                <mascara id="8" nombre="required"/>
+                <valores/>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="10" etiquetaPDF="/FORMULARIO/DATOS_SOLICITANTE/CDTCPSOLICITANTE" expresionValidacion="f_cCdtCPSolicitante !=&apos;&apos;;" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtCPSolicitante" numero="0" oculto="false" orden="3" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="* Codi postal"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="* Código postal"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>5</valor>
+                </valores>
+              </validacion>
+              <validacion orden="1">
+                <mascara id="8" nombre="required"/>
+                <valores/>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="52" etiquetaPDF="/FORMULARIO/DATOS_SOLICITANTE/CDTMUNICIPIOSOLICITANTE" expresionValidacion="f_cCdtMunicipioSolicitante !=&apos;&apos;;" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtMunicipioSolicitante" numero="0" oculto="false" orden="4" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="* Municipi"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="* Municipio"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>128</valor>
+                </valores>
+              </validacion>
+              <validacion orden="1">
+                <mascara id="8" nombre="required"/>
+                <valores/>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="52" etiquetaPDF="/FORMULARIO/DATOS_SOLICITANTE/CDTEMAILSOLICITANTE" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtEmailSolicitante" numero="0" oculto="false" orden="5" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>es</key>
+                <value nombre="E-mail"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>256</valor>
+                </valores>
+              </validacion>
+              <validacion orden="1">
+                <mascara id="9" nombre="email"/>
+                <valores/>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="14" etiquetaPDF="/FORMULARIO/DATOS_SOLICITANTE/CDTTELEFONOSOLICITANTE" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtTelefonoSolicitante" numero="0" oculto="false" orden="6" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="Telèfon"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="Teléfono"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>16</valor>
+                </valores>
+              </validacion>
+              <validacion orden="1">
+                <mascara id="2" nombre="integer"/>
+                <valores/>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="14" etiquetaPDF="/FORMULARIO/DATOS_SOLICITANTE/CDTMOVILSOLICITANTE" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtMovilSolicitante" numero="0" oculto="false" orden="7" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="Mòbil"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="Móvil"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>16</valor>
+                </valores>
+              </validacion>
+              <validacion orden="1">
+                <mascara id="2" nombre="integer"/>
+                <valores/>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="0" etiquetaPDF="/FORMULARIO/DATOS_INTERESADO/CDTFECHAACTUALOCULTO" expresionAutorellenable="f_cCdtFechaActualOculto = DataPlugin.aFormatLlarg(lang, DataPlugin.avui());" filas="0" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtFechaActualOculto" numero="0" oculto="true" orden="8" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>es</key>
+                <value nombre="Fecha Actual Oculto"/>
+              </entry>
+            </traducciones>
+            <validaciones/>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.RadioButton" etiquetaPDF="/FORMULARIO/DATOS_INTERESADO/CSUDATOSREPRESENTANTE" expresionValidacion="f_cCsuDatosRepresentante !=&apos;&apos;;" indexed="true" mostrarEnTabla="false" nombreLogico="cCsuDatosRepresentante" numero="0" oculto="false" orden="9" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="&lt;font color=&apos;#cc0000&apos;&gt;* Incloure dades del representant&lt;/font&gt;"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="&lt;font color=&apos;#cc0000&apos;&gt;* Incluir datos del representante&lt;/font&gt;"/>
+              </entry>
+            </traducciones>
+            <validaciones/>
+            <valoresPosibles>
+              <valorPosible defecto="false" orden="0" valor="t">
+                <traducciones>
+                  <entry>
+                    <key>ca</key>
+                    <value etiqueta="Si"/>
+                  </entry>
+                  <entry>
+                    <key>es</key>
+                    <value etiqueta="Sí"/>
+                  </entry>
+                </traducciones>
+              </valorPosible>
+              <valorPosible defecto="false" orden="1" valor="f">
+                <traducciones>
+                  <entry>
+                    <key>ca</key>
+                    <value etiqueta="No"/>
+                  </entry>
+                  <entry>
+                    <key>es</key>
+                    <value etiqueta="No"/>
+                  </entry>
+                </traducciones>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente class="org.ibit.rol.form.model.Label" nombreLogico="cEtqObligatoria" orden="10" posicion="0">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value etiqueta="&lt;font size=&quot;1&quot;&gt;Els camps amb asterisc &lt;font color=&quot;#cc0000&quot;&gt;(*)&lt;/font&gt; són obligatoris.&lt;/font&gt;"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value etiqueta="&lt;font size=&quot;1&quot;&gt;Los campos con asterisco &lt;font color=&quot;#cc0000&quot;&gt;(*)&lt;/font&gt; son obligatorios.&lt;/font&gt;"/>
+              </entry>
+            </traducciones>
+          </componente>
+        </componentes>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value titulo="Dades del Sol·licitant"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value titulo="Datos del Solicitante"/>
+          </entry>
+        </traducciones>
+      </pantalla>
+      <pantalla expresion="&apos;pDatosObra&apos;;" inicial="false" nombre="pDatosRepresentante" orden="1" ultima="false">
+        <ayudas/>
+        <componentes>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="52" etiquetaPDF="/FORMULARIO/DATOS_REPRESENTANTE/CDTNOMBREAPELLIDOSRAZONSOCIALREPRESENTANTE" expresionValidacion="f_cCdtNombreApellidosRazonSocialRepresentante !=&apos;&apos;;" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtNombreApellidosRazonSocialRepresentante" numero="0" oculto="false" orden="0" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="* Nom i cognoms / Raó social"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="* Nombre y apellidos / Razón social"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>256</valor>
+                </valores>
+              </validacion>
+              <validacion orden="1">
+                <mascara id="8" nombre="required"/>
+                <valores/>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="10" etiquetaPDF="/FORMULARIO/DATOS_REPRESENTANTE/CDTNIFCIFREPRESENTANTE" expresionValidacion="ValidacionesPlugin.esNie(f_cCdtNifCifRepresentante.toUpperCase()) || ValidacionesPlugin.esNif(f_cCdtNifCifRepresentante.toUpperCase()) || ValidacionesPlugin.esCif(f_cCdtNifCifRepresentante.toUpperCase());" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtNifCifRepresentante" numero="0" oculto="false" orden="1" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="* NIF / CIF"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="* NIF / CIF"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>16</valor>
+                </valores>
+              </validacion>
+              <validacion orden="1">
+                <mascara id="8" nombre="required"/>
+                <valores/>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="52" etiquetaPDF="/FORMULARIO/DATOS_REPRESENTANTE/CDTDIRECCIONREPRESENTANTE" expresionValidacion="f_cCdtDireccionRepresentante !=&apos;&apos;;" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtDireccionRepresentante" numero="0" oculto="false" orden="2" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="* Adreça"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="* Dirección"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>256</valor>
+                </valores>
+              </validacion>
+              <validacion orden="1">
+                <mascara id="8" nombre="required"/>
+                <valores/>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="10" etiquetaPDF="/FORMULARIO/DATOS_REPRESENTANTE/CDTCPREPRESENTANTE" expresionValidacion="f_cCdtCPRepresentante !=&apos;&apos;;" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtCPRepresentante" numero="0" oculto="false" orden="3" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="* Codi postal"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="* Código postal"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>5</valor>
+                </valores>
+              </validacion>
+              <validacion orden="1">
+                <mascara id="8" nombre="required"/>
+                <valores/>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="52" etiquetaPDF="/FORMULARIO/DATOS_REPRESENTANTE/CDTMUNICIPIOREPRESENTANTE" expresionValidacion="f_cCdtMunicipioRepresentante !=&apos;&apos;;" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtMunicipioRepresentante" numero="0" oculto="false" orden="4" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="* Municipi"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="* Municipio"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>128</valor>
+                </valores>
+              </validacion>
+              <validacion orden="1">
+                <mascara id="8" nombre="required"/>
+                <valores/>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="52" etiquetaPDF="/FORMULARIO/DATOS_REPRESENTANTE/CDTEMAILREPRESENTANTE" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtEmailRepresentante" numero="0" oculto="false" orden="5" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="E-mail"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="E-mail"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>256</valor>
+                </valores>
+              </validacion>
+              <validacion orden="1">
+                <mascara id="9" nombre="email"/>
+                <valores/>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="10" etiquetaPDF="/FORMULARIO/DATOS_REPRESENTANTE/CDTTELEFONOREPRESENTANTE" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtTelefonoRepresentante" numero="0" oculto="false" orden="6" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="Telèfon"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="Teléfono"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>16</valor>
+                </valores>
+              </validacion>
+              <validacion orden="1">
+                <mascara id="2" nombre="integer"/>
+                <valores/>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="10" etiquetaPDF="/FORMULARIO/DATOS_REPRESENTANTE/CDTMOVILREPRESENTANTE" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtMovilRepresentante" numero="0" oculto="false" orden="7" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="Mòbil"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="Móvil"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>16</valor>
+                </valores>
+              </validacion>
+              <validacion orden="1">
+                <mascara id="2" nombre="integer"/>
+                <valores/>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.RadioButton" etiquetaPDF="/FORMULARIO/DATOS_REPRESENTANTE/CSUDOCUMENTOS" expresionValidacion="f_cCsuDocumentos!=&apos;&apos;;" indexed="true" mostrarEnTabla="false" nombreLogico="cCsuDocumentos" numero="0" oculto="false" orden="8" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="&lt;font color=&apos;#cc0000&apos;&gt;* Quin document annexarà?&lt;/font&gt;"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="&lt;font color=&apos;#cc0000&apos;&gt;* ¿Que documento va a anexar?&lt;/font&gt;"/>
+              </entry>
+            </traducciones>
+            <validaciones/>
+            <valoresPosibles>
+              <valorPosible defecto="false" orden="0" valor="V">
+                <traducciones>
+                  <entry>
+                    <key>ca</key>
+                    <value etiqueta="Poder verbal"/>
+                  </entry>
+                  <entry>
+                    <key>es</key>
+                    <value etiqueta="Poder verbal"/>
+                  </entry>
+                </traducciones>
+              </valorPosible>
+              <valorPosible defecto="false" orden="1" valor="N">
+                <traducciones>
+                  <entry>
+                    <key>ca</key>
+                    <value etiqueta="Poder notarial"/>
+                  </entry>
+                  <entry>
+                    <key>es</key>
+                    <value etiqueta="Poder notarial"/>
+                  </entry>
+                </traducciones>
+              </valorPosible>
+              <valorPosible defecto="false" orden="2" valor="A">
+                <traducciones>
+                  <entry>
+                    <key>ca</key>
+                    <value etiqueta="Poder administratiu"/>
+                  </entry>
+                  <entry>
+                    <key>es</key>
+                    <value etiqueta="Poder administrativo"/>
+                  </entry>
+                </traducciones>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente class="org.ibit.rol.form.model.Label" nombreLogico="cEtqObligatoria" orden="9" posicion="0">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value etiqueta="&lt;font size=&quot;1&quot;&gt;Els camps amb asterisc &lt;font color=&quot;#cc0000&quot;&gt;(*)&lt;/font&gt; són obligatoris.&lt;/font&gt;"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value etiqueta="&lt;font size=&quot;1&quot;&gt;Los campos con asterisco &lt;font color=&quot;#cc0000&quot;&gt;(*)&lt;/font&gt; son obligatorios.&lt;/font&gt;"/>
+              </entry>
+            </traducciones>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="0" etiquetaPDF="/FORMULARIO/DATOS_REPRESENTANTE/CDTPODERVERBALOCULTO" expresionAutorellenable="var poder=&apos;&apos;;
+if (f_cCsuDocumentos==&apos;V&apos;){
+	poder=&apos;x&apos;;
+}
+poder;" filas="0" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtPoderVerbalOculto" numero="0" oculto="true" orden="10" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>es</key>
+                <value nombre="Poder Verbal Oculto"/>
+              </entry>
+            </traducciones>
+            <validaciones/>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="0" etiquetaPDF="/FORMULARIO/DATOS_REPRESENTANTE/CDTPODERNOTARIALOCULTO" expresionAutorellenable="var poder=&apos;&apos;;
+if (f_cCsuDocumentos==&apos;N&apos;){
+	poder=&apos;x&apos;;
+}
+poder;" filas="0" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtPoderNotarialOculto" numero="0" oculto="true" orden="11" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>es</key>
+                <value nombre="Poder Notarial Oculto"/>
+              </entry>
+            </traducciones>
+            <validaciones/>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="0" etiquetaPDF="/FORMULARIO/DATOS_REPRESENTANTE/CDTPODERADMINISTRATIVOOCULTO" expresionAutorellenable="var poder=&apos;&apos;;
+if (f_cCsuDocumentos==&apos;A&apos;){
+	poder=&apos;x&apos;;
+}
+poder;" filas="0" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtPoderAdministrativoOculto" numero="0" oculto="true" orden="12" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>es</key>
+                <value nombre="Poder Administrativo Oculto"/>
+              </entry>
+            </traducciones>
+            <validaciones/>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+        </componentes>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value titulo="Dades del representant"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value titulo="Datos del representante"/>
+          </entry>
+        </traducciones>
+      </pantalla>
+      <pantalla inicial="false" nombre="pDatosObra" orden="2" ultima="true">
+        <ayudas/>
+        <componentes>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.RadioButton" etiquetaPDF="/FORMULARIO/DATOS_OBRA/CSUTIPOOBRAMENOR" expresionValidacion="f_cCsuTipoObraMenor !=&apos;&apos;;" indexed="true" mostrarEnTabla="false" nombreLogico="cCsuTipoObraMenor" numero="0" oculto="false" orden="0" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value mensajeValidacion="Cal seleccionar un tipus d&apos;obra." nombre="&lt;font color=&apos;#cc0000&apos;&gt;* Tipus d&apos;obra menor&lt;/font&gt;"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value mensajeValidacion="Hay que seleccionar un tipo de obra." nombre="&lt;font color=&apos;#cc0000&apos;&gt;* Tipo de obra menor&lt;/font&gt;"/>
+              </entry>
+            </traducciones>
+            <validaciones/>
+            <valoresPosibles>
+              <valorPosible defecto="false" orden="0" valor="u">
+                <traducciones>
+                  <entry>
+                    <key>ca</key>
+                    <value etiqueta="Urbà"/>
+                  </entry>
+                  <entry>
+                    <key>es</key>
+                    <value etiqueta="Urbano"/>
+                  </entry>
+                </traducciones>
+              </valorPosible>
+              <valorPosible defecto="false" orden="1" valor="r">
+                <traducciones>
+                  <entry>
+                    <key>ca</key>
+                    <value etiqueta="Rústic"/>
+                  </entry>
+                  <entry>
+                    <key>es</key>
+                    <value etiqueta="Rústico"/>
+                  </entry>
+                </traducciones>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="0" etiquetaPDF="/FORMULARIO/DATOS_OBRA/CDTRUSTICOOCULTO" expresionAutorellenable="var tipo=&apos;&apos;;
+if (f_cCsuTipoObraMenor==&apos;r&apos;){
+	tipo=&apos;x&apos;;
+}
+tipo;" filas="0" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtRusticoOculto" numero="0" oculto="true" orden="1" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>es</key>
+                <value nombre="Rustico Oculto"/>
+              </entry>
+            </traducciones>
+            <validaciones/>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="0" etiquetaPDF="/FORMULARIO/DATOS_OBRA/CDTURBANOOCULTO" expresionAutorellenable="var tipo=&apos;&apos;;
+if (f_cCsuTipoObraMenor==&apos;u&apos;){
+	tipo=&apos;x&apos;;
+}
+tipo;" filas="0" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtUrbanoOculto" numero="0" oculto="true" orden="2" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>es</key>
+                <value nombre="Urbano Oculto"/>
+              </entry>
+            </traducciones>
+            <validaciones/>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="52" etiquetaPDF="/FORMULARIO/DATOS_OBRA/CDTCALLE" expresionValidacion="if(f_cCsuTipoObraMenor==&apos;u&apos;){
+f_cCdtCalle!=&apos;&apos;;
+}else{
+true;
+}" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtCalle" numero="0" oculto="false" orden="3" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value mensajeValidacion="Es necessari indicar l&apos;adreça." nombre="Adreça"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value mensajeValidacion="Es necesario indicar la dirección." nombre="Dirección"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>256</valor>
+                </valores>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="52" etiquetaPDF="/FORMULARIO/DATOS_OBRA/CDTPOLIGONO" expresionValidacion="if(f_cCsuTipoObraMenor==&apos;r&apos;){
+f_cCdtPoligono!=&apos;&apos;;
+}else{
+true;
+}" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtPoligono" numero="0" oculto="false" orden="4" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value mensajeValidacion="Es necessari indicar el polígon." nombre="Polígon"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value mensajeValidacion="Es necesario indicar el polígono." nombre="Polígono"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>256</valor>
+                </valores>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="52" etiquetaPDF="/FORMULARIO/DATOS_OBRA/CDTPARCELA" expresionValidacion="if(f_cCsuTipoObraMenor==&apos;r&apos;){
+f_cCdtParcela!=&apos;&apos;;
+}else{
+true;
+}" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtParcela" numero="0" oculto="false" orden="5" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value mensajeValidacion="Es necessari indicar la parcel·la." nombre="Parcel·la"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value mensajeValidacion="Es necesario indicar la parcela." nombre="Parcela"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>256</valor>
+                </valores>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente class="org.ibit.rol.form.model.Label" nombreLogico="cEtqObligatoria" orden="6" posicion="0">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value etiqueta="&lt;font size=&quot;1&quot;&gt;Si és rústic s&apos;han d&apos;informar els camps &lt;font color=&quot;#cc0000&quot;&gt;&quot;polígon&quot;&lt;/font&gt; i &lt;font color=&quot;#cc0000&quot;&gt;&quot;parcel·la&quot;&lt;/font&gt;, si és urbà s&apos;ha d&apos;informar el camp &lt;font color=&quot;#cc0000&quot;&gt;&quot;adreça&quot;&lt;/font&gt;.&lt;/font&gt;"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value etiqueta="&lt;font size=&quot;1&quot;&gt;Si es rústico hay que informar los campos &lt;font color=&quot;#cc0000&quot;&gt;&quot;polígono&quot;&lt;/font&gt; y &lt;font color=&quot;#cc0000&quot;&gt;&quot;parcela&quot;&lt;/font&gt;, si es urbano hay que informar el campo &lt;font color=&quot;#cc0000&quot;&gt;&quot;dirección&quot;&lt;/font&gt;.&lt;/font&gt;"/>
+              </entry>
+            </traducciones>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="52" etiquetaPDF="/FORMULARIO/DATOS_OBRA/CDTNUMEROREFERENCIACATASTRAL" expresionValidacion="f_cCdtNumeroReferenciaCatastral !=&apos;&apos;;" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtNumeroReferenciaCatastral" numero="0" oculto="false" orden="7" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="* Nombre de referència cadastral"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="* Número de referéncia catastral"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>36</valor>
+                </valores>
+              </validacion>
+              <validacion orden="1">
+                <mascara id="8" nombre="required"/>
+                <valores/>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="77" etiquetaPDF="/FORMULARIO/DATOS_OBRA/CDTDESCRIPCION" expresionValidacion="f_cCdtDescripcion !=&apos;&apos;;" filas="10" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtDescripcion" numero="0" oculto="false" orden="8" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="* Descripció de les obres"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="* Descripción de las obras"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>4000</valor>
+                </valores>
+              </validacion>
+              <validacion orden="1">
+                <mascara id="8" nombre="required"/>
+                <valores/>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="0" etiquetaPDF="/FORMULARIO/DATOS_OBRA/CDTPRESUPUESTO" expresionValidacion="f_cCdtPresupuesto !=&apos;&apos;;" filas="0" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtPresupuesto" numero="0" oculto="false" orden="9" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="* Import del pressupost"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="* Importe del presupuesto"/>
+              </entry>
+            </traducciones>
+            <validaciones>
+              <validacion orden="0">
+                <mascara id="1" nombre="maxlength"/>
+                <valores>
+                  <valor>16</valor>
+                </valores>
+              </validacion>
+              <validacion orden="1">
+                <mascara id="3" nombre="float"/>
+                <valores/>
+              </validacion>
+              <validacion orden="2">
+                <mascara id="8" nombre="required"/>
+                <valores/>
+              </validacion>
+              <validacion orden="3">
+                <mascara id="10" nombre="mask"/>
+                <valores>
+                  <valor>^\d{1,12}(|\.\d{0,2})$</valor>
+                </valores>
+              </validacion>
+            </validaciones>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.RadioButton" etiquetaPDF="/FORMULARIO/DATOS_OBRA/CSUAUTORIZACION" expresionValidacion="f_cCsuAutorizacion !=&apos;&apos;;" indexed="true" mostrarEnTabla="false" nombreLogico="cCsuAutorizacion" numero="0" oculto="false" orden="10" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value mensajeValidacion="Necessita indicar si autoritza a l&apos;ajuntament a comprovar el rebut de l&apos;IBI i el pagament de la seguretat social." nombre="&lt;font color=&apos;#cc0000&apos;&gt;* Autoritza l&apos;ajuntament que comprovi el rebut de l&apos;IBI i el pagament de la seguretat social?&lt;/font&gt;"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value mensajeValidacion="Necesita indicar si autoriza al ayuntamiento a comprobar el recibo del IBI y el pago de la seguridad social." nombre="&lt;font color=&apos;#cc0000&apos;&gt;* ¿Autoriza al ayuntamiento a que compruebe el recibo del IBI y el pago de la seguridad social?&lt;/font&gt;"/>
+              </entry>
+            </traducciones>
+            <validaciones/>
+            <valoresPosibles>
+              <valorPosible defecto="false" orden="0" valor="t">
+                <traducciones>
+                  <entry>
+                    <key>ca</key>
+                    <value etiqueta="Si"/>
+                  </entry>
+                  <entry>
+                    <key>es</key>
+                    <value etiqueta="Sí"/>
+                  </entry>
+                </traducciones>
+              </valorPosible>
+              <valorPosible defecto="false" orden="1" valor="f">
+                <traducciones>
+                  <entry>
+                    <key>ca</key>
+                    <value etiqueta="No"/>
+                  </entry>
+                  <entry>
+                    <key>es</key>
+                    <value etiqueta="No"/>
+                  </entry>
+                </traducciones>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.RadioButton" etiquetaPDF="/FORMULARIO/DATOS_OBRA/CSUOCUPACIONvIA" expresionValidacion="f_cCsuOcupacionVia!=&apos;&apos;;" indexed="true" mostrarEnTabla="false" nombreLogico="cCsuOcupacionVia" numero="0" oculto="false" orden="11" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value mensajeValidacion="Ha d&apos;indicar si adjuntarà el document d&apos;Ocupació de Via Pública." nombre="&lt;font color=&quot;#cc0000&quot;&gt;* Adjunta un document d&apos;Ocupació de Via Pública?&lt;/font&gt;"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value mensajeValidacion="Debe indicar si va a adjuntar el documento de Ocupación de Vía Pública." nombre="&lt;font color=&quot;#cc0000&quot;&gt;* ¿Adjunta un documento de Ocupación de Vía Pública?&lt;/font&gt;"/>
+              </entry>
+            </traducciones>
+            <validaciones/>
+            <valoresPosibles>
+              <valorPosible defecto="false" orden="0" valor="t">
+                <traducciones>
+                  <entry>
+                    <key>ca</key>
+                    <value etiqueta="Si"/>
+                  </entry>
+                  <entry>
+                    <key>es</key>
+                    <value etiqueta="Sí"/>
+                  </entry>
+                </traducciones>
+              </valorPosible>
+              <valorPosible defecto="false" orden="1" valor="f">
+                <traducciones>
+                  <entry>
+                    <key>ca</key>
+                    <value etiqueta="No"/>
+                  </entry>
+                  <entry>
+                    <key>es</key>
+                    <value etiqueta="No"/>
+                  </entry>
+                </traducciones>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="0" etiquetaPDF="/FORMULARIO/DATOS_OBRA/CDTCODIGOAUTORIZACIONOCULTO" expresionAutorellenable="f_cCsuAutorizacion;" filas="0" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtCodigoAutorizacionOculto" numero="0" oculto="true" orden="12" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>es</key>
+                <value nombre="Codigo Autorizacion Oculto"/>
+              </entry>
+            </traducciones>
+            <validaciones/>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="0" etiquetaPDF="/FORMULARIO/DATOS_OBRA/CDTPERMISOOCULTO" expresionAutorellenable="var permiso=&apos;&apos;;
+if (f_cCsuAutorizacion==&apos;f&apos;){
+	permiso=&apos;x&apos;;
+}
+permiso;" filas="0" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtPermisoOculto" numero="0" oculto="true" orden="13" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>es</key>
+                <value nombre="Permiso Oculto"/>
+              </entry>
+            </traducciones>
+            <validaciones/>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="0" etiquetaPDF="/FORMULARIO/DATOS_OBRA/CDTVIAPUBLICAOCULTO" expresionAutorellenable="ocupacion=&apos;&apos;;
+if (f_cCsuOcupacionVia==&apos;t&apos;){
+ocupacion=&apos;x&apos;;
+}
+ocupacion;" filas="0" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cCdtViaPublicaOculto" numero="0" oculto="true" orden="14" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>es</key>
+                <value nombre="Solicitud Via Publica Oculto"/>
+              </entry>
+            </traducciones>
+            <validaciones/>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente class="org.ibit.rol.form.model.Label" nombreLogico="cEtqObligatoria" orden="15" posicion="0">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value etiqueta="&lt;font size=&apos;1&apos;&gt;Els camps amb asterisc &lt;font color=&apos;#cc0000&apos;&gt;(*)&lt;/font&gt; són obligatoris.&lt;/font&gt;"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value etiqueta="&lt;font size=&apos;1&apos;&gt;Los campos con asterisco &lt;font color=&apos;#cc0000&apos;&gt;(*)&lt;/font&gt; son obligatorios.&lt;/font&gt;"/>
+              </entry>
+            </traducciones>
+          </componente>
+        </componentes>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value titulo="Dades de l&apos;obra"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value titulo="Datos de la Obra"/>
+          </entry>
+        </traducciones>
+      </pantalla>
+    </pantallas>
+    <salidas/>
+    <traducciones>
+      <entry>
+        <key>ca</key>
+        <value titulo="SM0002LIOM - Sol·licitud Llicencia Obres Menors"/>
+      </entry>
+      <entry>
+        <key>es</key>
+        <value titulo="SM0002LIOM - Solicitud Licencia Obras Menores"/>
+      </entry>
+    </traducciones>
+  </Formulario>

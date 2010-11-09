@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <TramiteVersion anonimoDefecto="N" bloqueadoModificacion="N" consultaAuth="N" consultaLocalizacion="L" consultaTipoAcceso="E" destino="B" fechaExportacion="Tue Nov 09 08:58:44 CET 2010" firmar="N" idiomasSoportados="es,ca" motivo="Creación de la Solicitud" organoDestino="S1" preenvioConfirmacionAutomatica="N" redireccionFin="N" reducido="N" registroAsunto="A1" registroOficina="OF2" unidadAdministrativa="2" version="1">
+    <documentos>
+      <documento anexoCompulsarPreregistro="N" anexoDescargarPlantilla="N" anexoExtensiones="pdf,zip,doc,odt" anexoFotocopia="N" anexoPresentarTelematicamente="S" anexoTamanyoMax="5000" formularioJustificante="N" formularioPreregistro="N" generico="N" identificador="ANEX1" maxGenericos="0" modelo="GE0005ANEXGEN" orden="1" tipo="A">
+        <niveles>
+          <nivele firmar="N" formularioGestorFormulario="forms" nivelAutenticacion="CU" obligatorio="D" obligatorioScript="cmVzdWx0ID0gJyc7DQpkb2N1bWVudG8gPSBQTFVHSU5fRk9STVVMQVJJT1MuZ2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0xJywxLCdEQVRPU19DQU1CSU9fRE9NSUNJTElPLkNEVEFDUkVESVRBQ0lPTk9DVUxUTycpOw0KaWYoZG9jdW1lbnRvPT0neCcpew0KCXJlc3VsdD0nUyc7DQp9ZWxzZXsNCglyZXN1bHQ9J0QnOw0KfQ0KcmVzdWx0Ow==" pagoMetodos="A" version="1">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value informacion="Escriptura de compravenda o contracte d&amp;#8217;arrendament de l&amp;#8217;habitatge vigent o contracte de subministrament de serveis (aigua, gas, llum, telèfon). En cas de no ser titular, a més, caldrà portar acreditació per escrit a favor de la persona que canviï per part del titular de l&amp;#8217;habitatge amb la fotocòpia del seu DNI."/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value informacion="Escritura de compraventa o contrato de arrendamiento de la vivienda vigente o contrato de suministro de servicios (agua, gas, luz, teléfono).&lt;br&gt;
+En caso de no ser titular, además, tendrá que traer la acreditación por escrito a favor de la persona que cambie por parte del titular de la vivienda con la fotocopia de su DNI. "/>
+              </entry>
+            </traducciones>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Acreditació habitatge"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Acreditación vivienda"/>
+          </entry>
+        </traducciones>
+      </documento>
+      <documento anexoCompulsarPreregistro="N" anexoDescargarPlantilla="N" anexoExtensiones="pdf,zip,doc,odt" anexoFotocopia="N" anexoPresentarTelematicamente="S" anexoTamanyoMax="5000" formularioJustificante="N" formularioPreregistro="N" generico="N" identificador="ANEX2" maxGenericos="0" modelo="GE0005ANEXGEN" orden="2" tipo="A">
+        <niveles>
+          <nivele firmar="N" formularioGestorFormulario="forms" nivelAutenticacion="CU" obligatorio="D" obligatorioScript="cmVzdWx0ID0gJyc7DQpkb2N1bWVudG8gPSBQTFVHSU5fRk9STVVMQVJJT1MuZ2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0xJywxLCdEQVRPU19DQU1CSU9fRE9NSUNJTElPLkNEVEFVVE9SSVpBQ0lPTk9DVUxUTycpOw0KaWYoZG9jdW1lbnRvPT0neCcpew0KCXJlc3VsdD0nUyc7DQp9ZWxzZXsNCglyZXN1bHQ9J0QnOw0KfQ0KcmVzdWx0Ow==" pagoMetodos="A" version="1">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value informacion="Acreditació per escrit de la persona major d&amp;#8217;edat, que resideixi en l&amp;#8217;habitatge amb la fotocòpia del seu document d&amp;#8217;identitat. Qualsevol document privat, haurà d&amp;#8217;anar acompanyat de la fotocòpia del DNI d&amp;#8217;ambdues parts."/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value informacion="Acreditación por escrito de la persona mayor de edad, que resida en la vivienda con la fotocopia de su documento de identidad. Cualquier documento privado, tendrá que ir acompañado de la fotocopia del DNI de ambas partes."/>
+              </entry>
+            </traducciones>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Autorització"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Autorización"/>
+          </entry>
+        </traducciones>
+      </documento>
+      <documento anexoCompulsarPreregistro="N" anexoDescargarPlantilla="N" anexoExtensiones="doc, odt, pdf, zip" anexoFotocopia="N" anexoPresentarTelematicamente="S" anexoTamanyoMax="5000" formularioJustificante="N" formularioPreregistro="N" generico="N" identificador="ANEX3" maxGenericos="0" modelo="GE0005ANEXGEN" orden="3" tipo="A">
+        <niveles>
+          <nivele firmar="N" formularioGestorFormulario="forms" nivelAutenticacion="CU" obligatorio="D" obligatorioScript="cmVzdWx0ID0gJyc7DQpkb2N1bWVudG8gPSBQTFVHSU5fRk9STVVMQVJJT1MuZ2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0xJywxLCdEQVRPU19DQU1CSU9fRE9NSUNJTElPLkNEVE9UUk9TRE9DVU1FTlRPU09DVUxUTycpOw0KaWYoZG9jdW1lbnRvPT0neCcpew0KCXJlc3VsdD0nUyc7DQp9ZWxzZXsNCglyZXN1bHQ9J0QnOw0KfQ0KcmVzdWx0Ow==" pagoMetodos="A" version="1">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value informacion="Si ve a l&amp;#8217;ajuntament la persona que canvia de domicili&lt;br&gt;
+DNI&lt;br&gt;
+&lt;br&gt;
+Si ve una persona autoritzada&lt;br&gt;
+DNI, autorització per escrit de tots els majors d&amp;#8217;edat que canvien de domicili amb les fotocòpies dels seus DNI&apos;s&lt;br&gt;
+&lt;br&gt;
+En el cas de menors d&amp;#8217;edat&lt;br&gt;
+Si canvien amb els dos pares cal aportar el llibre de família.&lt;br&gt;
+Si no canvien amb els dos pares cal aportar l&apos;autorització per escrit d&amp;#8217;aquell amb qui no canviï, amb la fotocòpia del seu DNI o, en el seu cas, document legal de la guàrdia i custòdia del menor.&lt;br&gt;
+En el cas de menors sense nacionalitat espanyola es necessita DNI del menor i l&amp;#8217;autorització per escrit d&amp;#8217;un dels pares."/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value informacion="Si viene al ayuntamiento la persona que cambia de domicilio&lt;br&gt;
+DNI&lt;br&gt;
+&lt;br&gt;
+Si viene al ayuntamiento una persona autorizada&lt;br&gt;
+DNI, Autorización por escrito de todos los mayores de edad que cambian de domicilio y sus fotocopias de DNI&lt;br&gt;
+&lt;br&gt;
+En el caso de menores de edad&lt;br&gt;
+Si cambian con los dos padres hay que aportar el libro de familia&lt;br&gt;
+Si no cambian con los dos padres hay que aportar una autorización por escrito de quien no cambia de domicilio con la fotocopia de su DNI o, en su caso, documento legal de guardia y custodia del menor.&lt;br&gt;
+&amp;#65279;En el caso de menores sin nacionalidad española se necesita DNI del menor y la autorización por escrito de uno de los padres."/>
+              </entry>
+            </traducciones>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Altres documents"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Otros documentos"/>
+          </entry>
+        </traducciones>
+      </documento>
+      <documento anexoCompulsarPreregistro="N" anexoDescargarPlantilla="N" anexoFotocopia="N" anexoPresentarTelematicamente="S" formularioJustificante="S" formularioPreregistro="N" generico="N" identificador="FORM1" maxGenericos="0" modelo="SM0005CADO" orden="1" tipo="F">
+        <niveles>
+          <nivele firmar="N" formularioConfiguracionScript="Q09ORklHVVJBQ0lPTkZPUk1VTEFSSU8uc2V0RGF0b1NvbG9MZWN0dXJhKCdEQVRPU19TT0xJQ0lUQU5URS5DRFROT01CUkVBUEVMTElET1NSQVpPTlNPQ0lBTFNPTElDSVRBTlRFJyk7DQoNCkNPTkZJR1VSQUNJT05GT1JNVUxBUklPLnNldERhdG9Tb2xvTGVjdHVyYSgnREFUT1NfU09MSUNJVEFOVEUuQ0RUTklGQ0lGU09MSUNJVEFOVEUnKTs=" formularioDatosInicialesScript="REFUT1NJTklDSUFMRVMuc2V0RGF0b0luaWNpYWwoJ0RBVE9TX1NPTElDSVRBTlRFLkNEVE5PTUJSRUFQRUxMSURPU1JBWk9OU09DSUFMU09MSUNJVEFOVEUnLCBQTFVHSU5fREFUT1NTRVNJT04uZ2V0Tm9tYnJlQ29tcGxldG9Vc3VhcmlvKCkpOw0KREFUT1NJTklDSUFMRVMuc2V0RGF0b0luaWNpYWwoJ0RBVE9TX1NPTElDSVRBTlRFLkNEVE5JRkNJRlNPTElDSVRBTlRFJywgUExVR0lOX0RBVE9TU0VTSU9OLmdldE5pZlVzdWFyaW8oKSk7" formularioFormsModelo="005" formularioFormsVersion="1" formularioGestorFormulario="forms" nivelAutenticacion="CU" obligatorio="S" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Sol·licitud Canvi de Domicili"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Solicitud Cambio de Domicilio"/>
+          </entry>
+        </traducciones>
+      </documento>
+    </documentos>
+    <especificaciones activo="S" campoRteNif="UExVR0lOX0RBVE9TU0VTSU9OLmdldE5pZlVzdWFyaW8oKTs=" campoRteNom="UExVR0lOX0RBVE9TU0VTSU9OLmdldE5vbWJyZUNvbXBsZXRvVXN1YXJpbygpOw==" diasPersistencia="15" diasPrerregistro="15" flujoTramitacion="N" habilitarNotificacionTelematica="X">
+      <datosJustificante/>
+      <traducciones/>
+    </especificaciones>
+    <mensajes>
+      <entry>
+        <key>NOTA01</key>
+        <value identificador="NOTA01">
+          <traducciones>
+            <entry>
+              <key>ca</key>
+              <value mensaje="Moltes gràcies per completar els formularis anteriors. Amb la informació que ens ha subministrat, s&apos;ha generat un imprès de sol·licitud que pot descarregar al seu equip i que ha d&apos;imprir i presentar al registre, amb la documentació requerida adjunta."/>
+            </entry>
+            <entry>
+              <key>es</key>
+              <value mensaje="Muchas gracias por completar los formularios anteriores. Con la información que nos ha suministrado, se ha generado un impreso de solicitud que puede descargar a su equipo y que debe imprimir y presentar en el registro, con la documentación requerida adjunta."/>
+            </entry>
+          </traducciones>
+        </value>
+      </entry>
+    </mensajes>
+    <niveles>
+      <nivele nivelAutenticacion="CU">
+        <especificaciones activo="S" diasPersistencia="15" diasPrerregistro="15" flujoTramitacion="N" habilitarNotificacionTelematica="X">
+          <datosJustificante/>
+          <traducciones>
+            <entry>
+              <key>ca</key>
+              <value instruccionesInicio="&lt;b&gt;Departament d&apos;Estadística. Ajuntament de Santa Margalida o Oficines  Municipals de Can Picafort&lt;/b&gt;&lt;br&gt;
+Passeig des Pouàs 23  Santa Margalida&lt;br&gt;
+Enginyer Gabriel Roca 6 Can Picafort&lt;br&gt;
+Telf. 971 523030 (Santa Margalida)  971 850310 (Can Picafort)"/>
+            </entry>
+            <entry>
+              <key>es</key>
+              <value instruccionesInicio="&lt;b&gt;Departament d&apos;Estadística. Ajuntament de Santa Margalida o Oficines  Municipals de Can Picafort&lt;/b&gt;&lt;br&gt;
+Passeig des Pouàs 23  Santa Margalida&lt;br&gt;
+Enginyer Gabriel Roca 6 Can Picafort&lt;br&gt;
+Telf. 971 523030 (Santa Margalida)  971 850310 (Can Picafort)"/>
+            </entry>
+          </traducciones>
+        </especificaciones>
+      </nivele>
+    </niveles>
+  </TramiteVersion>

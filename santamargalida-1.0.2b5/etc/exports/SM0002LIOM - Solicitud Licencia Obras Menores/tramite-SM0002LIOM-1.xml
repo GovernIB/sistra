@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <TramiteVersion anonimoDefecto="N" bloqueadoModificacion="N" consultaAuth="N" consultaLocalizacion="L" consultaTipoAcceso="E" destino="B" fechaExportacion="Tue Nov 09 08:58:12 CET 2010" firmar="N" idiomasSoportados="es,ca" motivo="Creación de la Solicitud" organoDestino="S1" preenvioConfirmacionAutomatica="N" redireccionFin="N" reducido="N" registroAsunto="A1" registroOficina="OF1" unidadAdministrativa="2" version="1">
+    <documentos>
+      <documento anexoCompulsarPreregistro="N" anexoDescargarPlantilla="N" anexoExtensiones="jpg, zip" anexoFotocopia="N" anexoPresentarTelematicamente="S" anexoTamanyoMax="5000" formularioJustificante="N" formularioPreregistro="N" generico="N" identificador="ANEX1" maxGenericos="0" modelo="GE0005ANEXGEN" orden="1" tipo="A">
+        <niveles>
+          <nivele firmar="N" formularioGestorFormulario="forms" nivelAutenticacion="CU" obligatorio="S" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Fotografia de l&apos;edificació"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Fotografía de la edificación"/>
+          </entry>
+        </traducciones>
+      </documento>
+      <documento anexoCompulsarPreregistro="N" anexoDescargarPlantilla="N" anexoExtensiones="pdf, zip" anexoFotocopia="N" anexoPresentarTelematicamente="S" anexoTamanyoMax="5000" formularioJustificante="N" formularioPreregistro="N" generico="N" identificador="ANEX2" maxGenericos="0" modelo="GE0005ANEXGEN" orden="2" tipo="A">
+        <niveles>
+          <nivele firmar="N" formularioGestorFormulario="forms" nivelAutenticacion="CU" obligatorio="S" pagoMetodos="A" version="1">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value informacion="Si no té el plànol el pot obtenir en &lt;a href=&quot;https://www1.sedecatastro.gob.es/OVCFrames.aspx?TIPO=CONSULTA&quot; target=&quot;_blank&quot;&gt;aquesta pàgina.&lt;/a&gt;"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value informacion="Si no tiene el plano lo puede obtener en &lt;a href=&quot;https://www1.sedecatastro.gob.es/OVCFrames.aspx?TIPO=CONSULTA&quot; target=&quot;_blank&quot;&gt;esta página.&lt;/a&gt;"/>
+              </entry>
+            </traducciones>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Planol de situació"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Plano de Situación"/>
+          </entry>
+        </traducciones>
+      </documento>
+      <documento anexoCompulsarPreregistro="N" anexoDescargarPlantilla="N" anexoExtensiones="pdf, zip" anexoFotocopia="N" anexoPresentarTelematicamente="S" anexoTamanyoMax="5000" formularioJustificante="N" formularioPreregistro="N" generico="N" identificador="ANEX3" maxGenericos="0" modelo="GE0005ANEXGEN" orden="3" tipo="A">
+        <niveles>
+          <nivele firmar="N" formularioGestorFormulario="forms" nivelAutenticacion="CU" obligatorio="S" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Pressupost de l&apos;obra signat pel mestre d&apos;obres i el promotor"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Presupuesto de la obra firmado por el maestro de obras y el promotor"/>
+          </entry>
+        </traducciones>
+      </documento>
+      <documento anexoCompulsarPreregistro="N" anexoDescargarPlantilla="N" anexoExtensiones="pdf, zip" anexoFotocopia="N" anexoPresentarTelematicamente="S" anexoTamanyoMax="5000" formularioJustificante="N" formularioPreregistro="N" generico="N" identificador="ANEX4" maxGenericos="0" modelo="GE0005ANEXGEN" orden="4" tipo="A">
+        <niveles>
+          <nivele firmar="N" formularioGestorFormulario="forms" nivelAutenticacion="CU" obligatorio="S" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Declaració jurada del promotor especificant l&apos;empresa constructora encarregada de l&apos;obra"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Declaración jurada del promotor especificando la empresa constructora encargada de la obra"/>
+          </entry>
+        </traducciones>
+      </documento>
+      <documento anexoCompulsarPreregistro="N" anexoDescargarPlantilla="N" anexoExtensiones="pdf, zip" anexoFotocopia="N" anexoPresentarTelematicamente="S" anexoTamanyoMax="5000" formularioJustificante="N" formularioPreregistro="N" generico="N" identificador="ANEX5" maxGenericos="0" modelo="GE0005ANEXGEN" orden="5" tipo="A">
+        <niveles>
+          <nivele firmar="N" formularioGestorFormulario="forms" nivelAutenticacion="CU" obligatorio="D" obligatorioScript="cmVzdWx0ID0gJyc7DQpvY3VwYWNpb24gPSBQTFVHSU5fRk9STVVMQVJJT1MuZ2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0xJywxLCdEQVRPU19PQlJBLkNEVFZJQVBVQkxJQ0FPQ1VMVE8nKTsNCmlmKG9jdXBhY2lvbj09J3gnKQ0KCXsNCglyZXN1bHQ9J1MnOw0KfWVsc2V7DQoJcmVzdWx0PSdEJzsNCn0NCnJlc3VsdDs=" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Sol·licitud d&apos;ocupació de via pública"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Solicitud de ocupación de vía pública"/>
+          </entry>
+        </traducciones>
+      </documento>
+      <documento anexoCompulsarPreregistro="N" anexoDescargarPlantilla="N" anexoExtensiones="pdf, zip" anexoFotocopia="N" anexoPresentarTelematicamente="S" anexoTamanyoMax="5000" formularioJustificante="N" formularioPreregistro="N" generico="N" identificador="ANEX6" maxGenericos="0" modelo="GE0005ANEXGEN" orden="6" tipo="A">
+        <niveles>
+          <nivele firmar="N" formularioGestorFormulario="forms" nivelAutenticacion="CU" obligatorio="D" obligatorioScript="cmVzdWx0ID0gJyc7DQphdXRvcml6YWNpb24gPSBQTFVHSU5fRk9STVVMQVJJT1MuZ2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0xJywxLCdEQVRPU19PQlJBLkNEVENPRElHT0FVVE9SSVpBQ0lPTk9DVUxUTycpOw0KaWYoYXV0b3JpemFjaW9uPT0ndCcpDQoJew0KCXJlc3VsdD0nRCc7DQp9ZWxzZXsNCglyZXN1bHQ9J1MnOw0KfQ0KcmVzdWx0Ow==" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Rebut de l&apos;IBI"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Recibo del IBI"/>
+          </entry>
+        </traducciones>
+      </documento>
+      <documento anexoCompulsarPreregistro="N" anexoDescargarPlantilla="N" anexoExtensiones="pdf, zip" anexoFotocopia="N" anexoPresentarTelematicamente="S" anexoTamanyoMax="5000" formularioJustificante="N" formularioPreregistro="N" generico="N" identificador="ANEX7" maxGenericos="0" modelo="GE0005ANEXGEN" orden="7" tipo="A">
+        <niveles>
+          <nivele firmar="N" formularioGestorFormulario="forms" nivelAutenticacion="CU" obligatorio="D" obligatorioScript="cmVzdWx0ID0gJyc7DQphdXRvcml6YWNpb24gPSBQTFVHSU5fRk9STVVMQVJJT1MuZ2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0xJywxLCdEQVRPU19PQlJBLkNEVENPRElHT0FVVE9SSVpBQ0lPTk9DVUxUTycpOw0KaWYoYXV0b3JpemFjaW9uPT0ndCcpDQoJew0KCXJlc3VsdD0nRCc7DQp9ZWxzZXsNCglyZXN1bHQ9J1MnOw0KfQ0KcmVzdWx0Ow0K" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Declaració jurada d&apos;estar al corrent en les cotitzacions de la seguretat social"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Declaración jurada de estar al corriente en las cotizaciones de la seguridad social"/>
+          </entry>
+        </traducciones>
+      </documento>
+      <documento anexoCompulsarPreregistro="N" anexoDescargarPlantilla="N" anexoExtensiones="pdf,zip,doc,odt" anexoFotocopia="N" anexoPresentarTelematicamente="S" anexoTamanyoMax="5000" formularioJustificante="N" formularioPreregistro="N" generico="N" identificador="ANEX8" maxGenericos="0" modelo="GE0005ANEXGEN" orden="8" tipo="A">
+        <niveles>
+          <nivele firmar="N" formularioGestorFormulario="forms" nivelAutenticacion="CU" obligatorio="D" obligatorioScript="cmVzdWx0ID0gJyc7DQp2ZXJiYWwgPSBQTFVHSU5fRk9STVVMQVJJT1MuZ2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0xJywxLCdEQVRPU19SRVBSRVNFTlRBTlRFLkNEVFBPREVSVkVSQkFMT0NVTFRPJyk7DQpub3RhcmlhbCA9IFBMVUdJTl9GT1JNVUxBUklPUy5nZXREYXRvRm9ybXVsYXJpbygnRk9STTEnLDEsJ0RBVE9TX1JFUFJFU0VOVEFOVEUuQ0RUUE9ERVJOT1RBUklBTE9DVUxUTycpOw0KYWRtaW5pc3RyYXRpdm8gPSBQTFVHSU5fRk9STVVMQVJJT1MuZ2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0xJywxLCdEQVRPU19SRVBSRVNFTlRBTlRFLkNEVFBPREVSQURNSU5JU1RSQVRJVk9PQ1VMVE8nKTsNCmlmKCh2ZXJiYWw9PSd4Jyl8fChub3RhcmlhbCA9PSd4Jyl8fChhZG1pbmlzdHJhdGl2byA9PSd4JykpDQoJew0KCXJlc3VsdD0nUyc7DQp9ZWxzZXsNCglyZXN1bHQ9J0QnOw0KfQ0KcmVzdWx0Ow==" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Poder Verbal, Poder Notarial o Poder Administratiu"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Poder Verbal, Poder Notarial o Poder Administrativo"/>
+          </entry>
+        </traducciones>
+      </documento>
+      <documento anexoCompulsarPreregistro="N" anexoDescargarPlantilla="N" anexoFotocopia="N" anexoPresentarTelematicamente="S" formularioJustificante="S" formularioPreregistro="N" generico="N" identificador="FORM1" maxGenericos="0" modelo="SM0002LIOM" orden="1" tipo="F">
+        <niveles>
+          <nivele firmar="N" formularioConfiguracionScript="Q09ORklHVVJBQ0lPTkZPUk1VTEFSSU8uc2V0RGF0b1NvbG9MZWN0dXJhKCdEQVRPU19TT0xJQ0lUQU5URS5DRFROT01CUkVBUEVMTElET1NSQVpPTlNPQ0lBTFNPTElDSVRBTlRFJyk7DQoNCkNPTkZJR1VSQUNJT05GT1JNVUxBUklPLnNldERhdG9Tb2xvTGVjdHVyYSgnREFUT1NfU09MSUNJVEFOVEUuQ0RUTklGQ0lGU09MSUNJVEFOVEUnKTs=" formularioDatosInicialesScript="REFUT1NJTklDSUFMRVMuc2V0RGF0b0luaWNpYWwoJ0RBVE9TX1NPTElDSVRBTlRFLkNEVE5PTUJSRUFQRUxMSURPU1JBWk9OU09DSUFMU09MSUNJVEFOVEUnLCBQTFVHSU5fREFUT1NTRVNJT04uZ2V0Tm9tYnJlQ29tcGxldG9Vc3VhcmlvKCkpOw0KREFUT1NJTklDSUFMRVMuc2V0RGF0b0luaWNpYWwoJ0RBVE9TX1NPTElDSVRBTlRFLkNEVE5JRkNJRlNPTElDSVRBTlRFJywgUExVR0lOX0RBVE9TU0VTSU9OLmdldE5pZlVzdWFyaW8oKSk7DQoNCg0KLy9EQVRPU0lOSUNJQUxFUy5zZXREYXRvSW5pY2lhbCgnREFUT1NfT0JSQS5DRFRWSUFQVUJMSUNBT0NVTFRPJywgUExVR0lOX0FORVhPUy5nZXRFc3RhZG9BbmV4bygiQU5FWDUiLCAxKSk7" formularioFormsModelo="002" formularioFormsVersion="1" formularioGestorFormulario="forms" nivelAutenticacion="CU" obligatorio="S" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Sol·licitud Llicència d&apos;Obres Menors"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Solicitud Licencia Obras Menores"/>
+          </entry>
+        </traducciones>
+      </documento>
+      <documento anexoCompulsarPreregistro="N" anexoDescargarPlantilla="N" anexoFotocopia="N" anexoPresentarTelematicamente="S" formularioJustificante="N" formularioPreregistro="N" generico="N" identificador="PAGO1" maxGenericos="0" modelo="GE0006PAGO" orden="1" tipo="P">
+        <niveles>
+          <nivele firmar="N" formularioGestorFormulario="forms" nivelAutenticacion="CU" obligatorio="S" pagoCalcularPagoScript="Ly9EQVRPU1BBR08uc2V0TW9kZWxvKCdNb2RlbG8nKTsNCkRBVE9TUEFHTy5zZXRJZFRhc2EoJ1BBR08xJyk7DQpEQVRPU1BBR08uc2V0Q29uY2VwdG8oJ0F1dG9saXF1aWRhY2nDsyB0YXhhJyk7DQoNCkRBVE9TUEFHTy5zZXRJbXBvcnRlKFBMVUdJTl9GT1JNVUxBUklPUy5nZXREYXRvRm9ybXVsYXJpbygnRk9STTEnLCAxLCAnREFUT1NfT0JSQS5DRFRQUkVTVVBVRVNUTycpKjEwMCowLjAxKTs=" pagoMetodos="T" version="1">
+            <traducciones/>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Autoliquidació de taxa"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Autoliquidación de tasa"/>
+          </entry>
+        </traducciones>
+      </documento>
+      <documento anexoCompulsarPreregistro="N" anexoDescargarPlantilla="N" anexoFotocopia="N" anexoPresentarTelematicamente="S" formularioJustificante="N" formularioPreregistro="N" generico="N" identificador="PAGO2" maxGenericos="0" modelo="GE0006PAGO" orden="2" tipo="P">
+        <niveles>
+          <nivele firmar="N" formularioGestorFormulario="forms" nivelAutenticacion="CU" obligatorio="S" pagoCalcularPagoScript="Ly9EQVRPU1BBR08uc2V0TW9kZWxvKCdNb2RlbG8nKTsNCkRBVE9TUEFHTy5zZXRJZFRhc2EoJ1BBR08yJyk7DQpEQVRPU1BBR08uc2V0Q29uY2VwdG8oJ0F1dG9saXF1aWRhY2nDsyBJQ08nKTsNCg0KREFUT1NQQUdPLnNldEltcG9ydGUoUExVR0lOX0ZPUk1VTEFSSU9TLmdldERhdG9Gb3JtdWxhcmlvKCdGT1JNMScsIDEsICdEQVRPU19PQlJBLkNEVFBSRVNVUFVFU1RPJykqMTAwKjAuMDI1KTs=" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Autoliquidació ICO"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Autoliquidación ICO"/>
+          </entry>
+        </traducciones>
+      </documento>
+    </documentos>
+    <especificaciones activo="S" campoRteNif="UExVR0lOX0RBVE9TU0VTSU9OLmdldE5pZlVzdWFyaW8oKTs=" campoRteNom="UExVR0lOX0RBVE9TU0VTSU9OLmdldE5vbWJyZUNvbXBsZXRvVXN1YXJpbygpOw==" diasPersistencia="15" diasPrerregistro="15" flujoTramitacion="N" habilitarNotificacionTelematica="X">
+      <datosJustificante/>
+      <traducciones/>
+    </especificaciones>
+    <mensajes>
+      <entry>
+        <key>NOTA01</key>
+        <value identificador="NOTA01">
+          <traducciones>
+            <entry>
+              <key>ca</key>
+              <value mensaje="Moltes gràcies per completar els formularis anteriors. Amb la informació que ens ha subministrat, s&apos;ha generat un imprès de sol·licitud que pot descarregar al seu equip i que ha d&apos;imprir i presentar al registre, amb la documentació requerida adjunta."/>
+            </entry>
+            <entry>
+              <key>es</key>
+              <value mensaje="Muchas gracias por completar los formularios anteriores. Con la información que nos ha suministrado, se ha generado un impreso de solicitud que puede descargar a su equipo y que debe imprimir y presentar en el registro, con la documentación requerida adjunta."/>
+            </entry>
+          </traducciones>
+        </value>
+      </entry>
+    </mensajes>
+    <niveles>
+      <nivele nivelAutenticacion="CU">
+        <especificaciones activo="S" diasPersistencia="15" diasPrerregistro="15" flujoTramitacion="N" habilitarNotificacionTelematica="X">
+          <datosJustificante/>
+          <traducciones/>
+        </especificaciones>
+      </nivele>
+    </niveles>
+  </TramiteVersion>

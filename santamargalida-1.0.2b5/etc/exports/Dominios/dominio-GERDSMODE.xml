@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <Dominio autenticacionExplicita="N" cacheable="N" descripcion="Lista de modelos de documentos del RDS" identificador="GERDSMODE" localizacionEJB="L" secured="false" sql="SELECT MOD_MODELO as &quot;CODIGO&quot;, MOD_MODELO || &apos; - &apos; || MOD_NOMBRE as &quot;DESCRIPCION&quot; FROM RDS_MODELO ORDER BY 1" tipo="S" url="es.caib.redose.db"/>

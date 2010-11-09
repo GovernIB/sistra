@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <Dominio autenticacionExplicita="N" cacheable="N" descripcion="Lista de municipios de una provincia. Parametrizado por código provincia." identificador="GEGMUNICI" localizacionEJB="L" secured="false" sql="SELECT MUN_CODIGO as &quot;CODIGO&quot;, MUN_DENOFI as &quot;DESCRIPCION&quot; FROM STR_DMUNIC WHERE MUN_PROVIN = ? ORDER BY &quot;DESCRIPCION&quot;" tipo="S" url="es.caib.sistra.db"/>
