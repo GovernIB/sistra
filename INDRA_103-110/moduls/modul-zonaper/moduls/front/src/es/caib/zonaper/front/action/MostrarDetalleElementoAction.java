@@ -76,7 +76,7 @@ public class MostrarDetalleElementoAction extends BaseAction {
 			boolean existeExpe = def.isExpediente();
 		
 			log.debug("mostrarDetalleElemento: codigo=" + codigo.longValue() + " tipo=" +  tipo + " expediente=" + existeExpe);
-						
+			
 			if (existeExpe){
 				ElementoExpediente elementoExpediente;
 				if (this.getDatosSesion(request).getNivelAutenticacion() == 'A'){
@@ -115,7 +115,7 @@ public class MostrarDetalleElementoAction extends BaseAction {
 					not = DelegateUtil.getNotificacionTelematicaDelegate().obtenerNotificacionTelematicaAutenticada(codigo);
 				}
 				request.setAttribute("notificacion",not);
-				if (not.getFechaAcuse() != null){			
+				if (not.getFechaAcuse() != null){
 					cargarFirmas(not.getDocumentos(),request,tipo);
 					return mapping.findForward("notificacionRecibida"+anonimo);
 				}else{
@@ -177,13 +177,15 @@ public class MostrarDetalleElementoAction extends BaseAction {
 					ref = new ReferenciaRDS(docTipo.getCodigoRDS(),docTipo.getClaveRDS());
 					codigo = docTipo.getCodigo()+"";
 				}
-				DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
-				if(doc != null && doc.getFirmas() != null){
-					request.setAttribute(codigo,doc.getFirmas());
+				if (ref.getCodigo() > 0){
+					DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
+					if(doc != null && doc.getFirmas() != null){
+						request.setAttribute(codigo,doc.getFirmas());
+					}
 				}
 			}
 		}
 	}
-	
+
 	
 }

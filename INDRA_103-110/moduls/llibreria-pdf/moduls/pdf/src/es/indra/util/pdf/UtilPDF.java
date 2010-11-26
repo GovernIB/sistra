@@ -1,7 +1,6 @@
 package es.indra.util.pdf;
 
 import java.awt.Color;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ import com.lowagie.text.pdf.BarcodePDF417;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfCopyFields;
+import com.lowagie.text.pdf.PdfEncryptor;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 import com.lowagie.text.pdf.PdfWriter;
@@ -328,5 +328,15 @@ public class UtilPDF {
 		int n = reader.getNumberOfPages();
 		return n;		
 	}
+	
+	/**
+	 * Establece permisos pdf a solo impresion
+	 * @param pdfOut Outputstream al pdf de salida con los permisos aplicados
+	 * @param pdfIn InputStreams del pdf sobre el que se deben aplicar los permisos
+	 */
+	public static void establecerSoloImpresion(OutputStream pdfOut,InputStream pdfIn) throws Exception{
+		PdfReader reader = new PdfReader(pdfIn);
+		PdfEncryptor.encrypt(reader, pdfOut, null,null, PdfWriter.AllowPrinting, false);		
+    }
 	
 }
