@@ -59,7 +59,7 @@ public abstract class BteFacadeEJB implements SessionBean  {
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
      */
-	public void ejbCreate() throws CreateException {		
+	public void ejbCreate() throws CreateException {	
 		try
 		{
 			javax.naming.InitialContext initialContext = new javax.naming.InitialContext();
@@ -104,6 +104,7 @@ public abstract class BteFacadeEJB implements SessionBean  {
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.gestor}"
+     * @ejb.permission role-name="${role.auto}"
      */
     public ReferenciaEntradaBTE[] obtenerReferenciasEntradas(String identificadorTramite,String procesada,Date desde,Date hasta) throws ExcepcionBTE{
     	
@@ -119,19 +120,21 @@ public abstract class BteFacadeEJB implements SessionBean  {
      	}	 
     	
     	 // Comprobamos que el usuario tiene acceso al tramite
-    	 String usu = this.context.getCallerPrincipal().getName();
-    	 boolean permitido = false;
-    	 for (Iterator it = tramite.getGestores().iterator();it.hasNext();){
-    		 GestorBandeja g = (GestorBandeja) it.next();
-    		 if (g.getSeyconID().equals(usu)) {
-    			 permitido = true;
-    			 break;
-    		 }
-    	 }    	
-    	 if (!permitido) {
-    		 throw new ExcepcionBTE("Usuario " + usu + " no tiene acceso al tramite con identificador: " + identificadorTramite);
-    	 }
-    	 
+    	if (!this.context.isCallerInRole(roleAuto)){
+	    	 String usu = this.context.getCallerPrincipal().getName();
+	    	 boolean permitido = false;
+	    	 for (Iterator it = tramite.getGestores().iterator();it.hasNext();){
+	    		 GestorBandeja g = (GestorBandeja) it.next();
+	    		 if (g.getSeyconID().equals(usu)) {
+	    			 permitido = true;
+	    			 break;
+	    		 }
+	    	 }    	
+	    	 if (!permitido) {
+	    		 throw new ExcepcionBTE("Usuario " + usu + " no tiene acceso al tramite con identificador: " + identificadorTramite);
+	    	 }
+    	}
+    	
     	// Devolvemos referencias a entradas    
      	try{
      		TramiteBandejaDelegate td = DelegateUtil.getTramiteBandejaDelegate();  
@@ -287,7 +290,7 @@ public abstract class BteFacadeEJB implements SessionBean  {
 	    	tramBte.setUsuarioSeycon(t.getUsuarioSeycon());
 	    	tramBte.setDescripcionTramite(t.getDescripcionTramite());
 	    	tramBte.setRepresentadoNif(t.getRepresentadoNif());
-	    	tramBte.setRepresentadoNombre(t.getRepresentadoNombre());	    	
+	    	tramBte.setRepresentadoNombre(t.getRepresentadoNombre());	
 	    	tramBte.setDelegadoNif(t.getDelegadoNif());
 	    	tramBte.setDelegadoNombre(t.getDelegadoNombre());
 	    	tramBte.setCodigoReferenciaRDSAsiento(t.getCodigoRdsAsiento().longValue());
@@ -298,7 +301,7 @@ public abstract class BteFacadeEJB implements SessionBean  {
 	    	tramBte.setCodigoDocumentoCustodiaAsiento(docRDSAsiento.getCodigoDocumentoCustodia());
 	    	
 	    	tramBte.setCodigoReferenciaRDSJustificante(t.getCodigoRdsJustificante().longValue());
-	    	tramBte.setClaveReferenciaRDSJustificante(t.getClaveRdsJustificante());	    	
+	    	tramBte.setClaveReferenciaRDSJustificante(t.getClaveRdsJustificante());	 
 	    	
 	    	DocumentoRDS docRDSJustificante = rds.consultarDocumento(new ReferenciaRDS(t.getCodigoRdsJustificante().longValue(),t.getClaveRdsJustificante()),false);	    				
 	    	tramBte.setReferenciaGestorDocumentalJustificante(docRDSJustificante.getReferenciaGestorDocumental());
@@ -343,7 +346,7 @@ public abstract class BteFacadeEJB implements SessionBean  {
 	    				fic.setExtension(docRDS.getExtensionFichero());
 	    				fic.setEstructurado(docRDS.isEstructurado());
 	    				fic.setContent(docRDS.getDatosFichero());
-	    				fic.setFirmas(docRDS.getFirmas());	    				    
+	    				fic.setFirmas(docRDS.getFirmas());	    
 	    				fic.setReferenciaGestorDocumental(docRDS.getReferenciaGestorDocumental());
 	    				fic.setCodigoDocumentoCustodia(docRDS.getCodigoDocumentoCustodia());
 	    			}

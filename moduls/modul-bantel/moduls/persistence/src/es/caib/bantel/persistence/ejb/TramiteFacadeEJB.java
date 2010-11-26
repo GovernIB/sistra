@@ -57,6 +57,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB {
     /**
      * Se distingue del anterior en que devuelve null si no existe el tramite, no hace throw de la excepción
      * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
      * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.todos}"
      */

@@ -131,10 +131,12 @@ public class DetalleTramiteAction extends BaseAction
 //		vamos a buscar las firmas de los documentos si existen y las meteremos en la request
 		if(documento != null && documento.getRdsCodigo() != null && documento.getRdsClave() != null){
 			ReferenciaRDS ref =  new ReferenciaRDS(documento.getRdsCodigo(),documento.getRdsClave());
-			String codigo = documento.getCodigo()+"";
-			DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
-			if(doc != null && doc.getFirmas() != null){
-				request.setAttribute(codigo,doc.getFirmas());
+			if (ref.getCodigo() > 0){
+				String codigo = documento.getCodigo()+"";
+				DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
+				if(doc != null && doc.getFirmas() != null){
+					request.setAttribute(codigo,doc.getFirmas());
+				}
 			}
 		}
 	}

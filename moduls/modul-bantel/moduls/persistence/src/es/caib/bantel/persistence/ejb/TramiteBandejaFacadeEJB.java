@@ -157,8 +157,8 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-       
- 	/**
+
+    /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.gestor}"
      * */
@@ -310,6 +310,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
      * @ejb.permission role-name="${role.gestor}"    
      */
     public List obtenerReferenciasEntradas(String identificadorTramite,String procesada,Date desde,Date hasta)
@@ -912,7 +913,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     }    
     
     private List obtenerReferenciasEntradaImpl(String identificadorTramite,String procesada,Date desde,Date hasta){
-						 
+    	
 		Session session = getSession();
 		boolean desdeBool = false;
 		boolean hastaBool = false;
@@ -920,14 +921,14 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 		List  numeros = new  ArrayList();
         try {
         	String sql = "Select {TB.*} FROM BTE_TRAMIT {TB} WHERE {TB}.TRA_IDETRA = :idtramite ";
-			
-			 //Especificamos estado procesamiento entrada
+
+        	//Especificamos estado procesamiento entrada
         	if ( !StringUtils.isEmpty(procesada) ){
         		sql = sql + " and {TB}.TRA_PROCES = :procesada ";
         		procesadaBool = true;
-			 }
-			 
-			 // Especificamos fechas
+        	}
+        	
+        	//Especificamos fechas
         	if ( desde != null && hasta != null ){
         		sql = sql + " and {TB}.TRA_FECHA between :desde and :hasta ";
         		desdeBool = true;
@@ -940,14 +941,14 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
    			if ( desde == null && hasta != null ){
    				sql = sql + " and {TB}.TRA_FECHA <= :hasta ";
    				hastaBool = true;
-			 }
-				
-			 // Ordenación
+			}
+        		
+        	//Ordenación
    			sql = sql + " order by {TB}.TRA_FECHA desc";
         	//"Select {TB.*} FROM BTE_TRAMIT {TB} WHERE {TB}.TRA_IDETRA = :idtramite and {TB}.TRA_PROCES = :procesada and {TB}.TRA_FECHA >= :desde and {TB}.TRA_FECHA <= :hasta order by {TB}.TRA_FECHA desc"
         	Query query = session.createSQLQuery(sql,"TB",TramiteBandeja.class );
             query.setParameter("idtramite", identificadorTramite);
-            if (procesadaBool){
+            if(procesadaBool){
             	query.setParameter("procesada", procesada);
             }
             if(desdeBool){
@@ -960,8 +961,8 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
             if (result.isEmpty()) {
                 return numeros;
             }
-			 
-			 // Devolvemos  referencias entradas
+            
+//             Devolvemos  referencias entradas			 
 			 for (int i=0;i<result.size();i++){
 				 TramiteBandeja t = (TramiteBandeja) result.get(i);
 				 ReferenciaTramiteBandeja r = new ReferenciaTramiteBandeja();
@@ -971,9 +972,9 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 			 }			 
 			 return numeros;
         } catch (HibernateException he) {
-	        throw new EJBException(he);
+            throw new EJBException(he);
         } finally {
-	        close(session);
-	    }
+            close(session);
+        }
     }
 }

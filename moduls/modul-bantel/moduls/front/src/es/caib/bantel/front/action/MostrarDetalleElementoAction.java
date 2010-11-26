@@ -185,10 +185,12 @@ public class MostrarDetalleElementoAction extends BaseAction
 //		vamos a buscar las firmas de los documentos si existen y las meteremos en la request
 		if(documento != null && documento.getRdsCodigo() != null && documento.getRdsClave() != null){
 			ReferenciaRDS ref =  new ReferenciaRDS(documento.getRdsCodigo(),documento.getRdsClave());
-			String codigo = documento.getCodigo()+"";
-			DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
-			if(doc != null && doc.getFirmas() != null){
-				request.setAttribute(codigo,doc.getFirmas());
+			if (ref.getCodigo() > 0){
+				String codigo = documento.getCodigo()+"";
+				DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
+				if(doc != null && doc.getFirmas() != null){
+					request.setAttribute(codigo,doc.getFirmas());
+				}
 			}
 		}
 	}
@@ -203,10 +205,12 @@ public class MostrarDetalleElementoAction extends BaseAction
 			for(int i=0;i<documentos.size();i++){
 				DocumentoExpedientePAD docTipo = (DocumentoExpedientePAD)documentos.get(i);
 				ref = new ReferenciaRDS(docTipo.getCodigoRDS(),docTipo.getClaveRDS());
-				codigo = docTipo.getCodigoRDS()+docTipo.getClaveRDS();
-				DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
-				if(doc != null && doc.getFirmas() != null){
-					request.setAttribute(codigo,doc.getFirmas());
+				if (ref.getCodigo() > 0){
+					codigo = docTipo.getCodigoRDS()+docTipo.getClaveRDS();
+					DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
+					if(doc != null && doc.getFirmas() != null){
+						request.setAttribute(codigo,doc.getFirmas());
+					}
 				}
 			}
 		}
