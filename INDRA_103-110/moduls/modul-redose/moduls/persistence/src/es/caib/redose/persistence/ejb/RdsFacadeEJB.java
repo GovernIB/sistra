@@ -118,7 +118,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
 			URL_VERIFIER = props.getProperty("sistra.url") + "/redosefront/init.do?id=";
 			TEXT_VERIFIER=props.getProperty("verifier.text");
-			ENTORNO =props.getProperty("entorno");	
+			ENTORNO =props.getProperty("entorno");		
 			OPENOFFICE_HOST=props.getProperty("openoffice.host");
 			OPENOFFICE_PUERTO=props.getProperty("openoffice.port");						
 			
@@ -129,8 +129,8 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    	}catch(Exception nep){
 	    		// En caso de que no este configurado el plugin no hay que hacer nada
 	    		existeCustodia = false;
-	    	}
-	    	
+	    	}   
+			
 			// Comprobamos si hay que integrarse con sistema de gestion documental	    	
 	    	try{
 	    		PluginFactory.getInstance().getPluginGestionDocumental();
@@ -275,7 +275,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
-    public void asociarFirmaDocumento(ReferenciaRDS refRds,FirmaIntf firma) throws ExcepcionRDS {    	
+    public void asociarFirmaDocumento(ReferenciaRDS refRds,FirmaIntf firma) throws ExcepcionRDS {
     	Session session = getSession();     	
         try {        	          	        	
         	// Obtenemos documento
@@ -301,7 +301,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
         	fir.setFirma( bytesFirma );
         	fir.setFormato(firma.getFormatoFirma());
         	doc.addFirma(fir);
-        	session.update(doc);  
+        	session.update(doc);        	
         	
         	//Si el documento no tenia firmas creamos el array de firmas y la añadimos 
         	//en caso contrario si ya existia la añadimos una vez añadida llamamos a custodiar
@@ -341,8 +341,8 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	
     	this.doLogOperacion(getUsuario(),ASOCIAR_FIRMA,"asociar firma a documento " + refRds.getCodigo());
     }   
-    
-	/**
+       
+    /**
      *	Crea un uso para un documento 
      * 
      * @ejb.interface-method
@@ -487,8 +487,8 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      */  
     public DocumentoRDS consultarDocumentoFormateado(ReferenciaRDS refRds) throws ExcepcionRDS {    	
     	return consultarDocumentoFormateado(refRds,null,null);
-    }
-    
+	    }            	
+	            
     /**
      * Consulta un documento del RDS de tipo estructurado formateado con una plantilla
      * 
@@ -542,14 +542,14 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    	if (!documentoRDS.isEstructurado()) return documentoRDS;
 	    	
 	    	// Obtenemos documento de bd y verificamos clave	    	
-	    	Documento documento = (Documento) session.load(Documento.class, new Long(refRds.getCodigo()));	  
+	    	Documento documento = (Documento) session.load(Documento.class, new Long(refRds.getCodigo()));	        
 	    	
 	    	// Establecemos idioma de formateo: si no se especifica nada cogemos el de creacion del documento y si no esta alimentado ca
 	    	if (idioma == null){
 	    		idioma = documento.getIdioma();
 	    		if (idioma == null){
 	    			idioma = "ca";
-	    		}
+	    	}	    	
 	    	}
 	    	
 	    	// Si no se especifica plantilla, comprobamos si el doc tiene una específica y sino cogemos la por defecto
@@ -580,16 +580,16 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 		    	}	    		
 	    	}else{
 	    	// Si se especifica una plantilla usamos dicha plantilla
-	    		for (Iterator it = documento.getVersion().getPlantillas().iterator();it.hasNext();){
-		    		Plantilla p = (Plantilla) it.next();
-		    		if (p.getTipo().equals(tipoPlantilla)){
-		    			plantilla = (PlantillaIdioma) p.getTraduccion(idioma);
-		    			break;
-		    		}
-		    	}
-		    	if (plantilla == null) {
-		    		throw new Exception("No se encuentra plantilla");
-		    	}
+	    	for (Iterator it = documento.getVersion().getPlantillas().iterator();it.hasNext();){
+	    		Plantilla p = (Plantilla) it.next();
+	    		if (p.getTipo().equals(tipoPlantilla)){
+	    			plantilla = (PlantillaIdioma) p.getTraduccion(idioma);
+	    			break;
+	    		}
+	    	}
+	    	if (plantilla == null) {
+	    		throw new Exception("No se encuentra plantilla");
+	    	}
 	    	}
 	    	
 	    	// Formateamos documento
@@ -610,7 +610,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	            
     }
    
-    /**
+/**
     * 
     * Formatea un documento que no existe en el RDS a partir de una plantilla
     * 
@@ -664,7 +664,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    		throw new Exception("No se encuentra plantilla");
 	    	}
 	    		
-	    	// Formateamos documento
+			// Formateamos documento    
 	    	DocumentoRDS docFormateado = formatearDocumentoImpl(documentoRDS,plantilla);
 	    	
 		    // Devolvemos documento RDS formateado
@@ -1081,7 +1081,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
         } catch (Exception e) {
         	log.error("Error insertando documento",e);
             throw new ExcepcionRDS("Error insertando documento",e);
-		} finally {        	        	
+        } finally {        	        	
             close(session);
         }
                         
@@ -1100,7 +1100,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    ref.setClave(doc.getClave());            
 	    return ref;
     }
-	       
+    
     /**
      * Sincroniza con custodia los documentos
      * @throws HibernateException 
@@ -1299,8 +1299,8 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	if (version.getModelo().getEstructurado() == 'S'){
     		//Si el modelo es estructurado, debemos indicar el idioma
         	if (documento.getIdioma() == null){
-        		// Por motivos de compatibilidad con integraciones ejb anteriores, ponemos idioma por defecto        		
-        		documento.setIdioma("ca");
+        		// Por motivos de compatibilidad con integraciones ejb anteriores, ponemos idioma por defecto
+        		doc.setIdioma("ca");
         		// throw new ExcepcionRDS("Si el documento es estructurado debe indicarse el idioma de visualizacion del documento");
         	}else{
         		doc.setIdioma(documento.getIdioma());
