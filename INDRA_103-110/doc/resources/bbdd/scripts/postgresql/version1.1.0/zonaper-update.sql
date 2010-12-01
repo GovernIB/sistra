@@ -37,7 +37,7 @@ alter table ZPE_DOCREG
    
 create table ZPE_REGLOG  (
    RLG_TIPREG           VARCHAR(1)                  not null,
-   RLG_NUMREG           VARCHAR(5)                  not null,
+   RLG_NUMREG           VARCHAR(50)                  not null,
    RLG_FECREG           timestamp                   not null,
    RLG_ERROR            VARCHAR(2000),
    RLG_ANULAD           VARCHAR(1)
