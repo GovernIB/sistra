@@ -313,7 +313,11 @@ public class PluginDominio {
 	    	con = datasource.getConnection();
 			// Creamos sentencia
 		    PreparedStatement stmt = con.prepareStatement(dominio.getSql());
-		    stmt.setQueryTimeout(60);
+		    
+		    // TODO: Incompatible amb drivers Postgresql. Detectar del tipu de base de dades i emprar-ho o no condicionalment.
+		    // I documentar com es pot aconseguir el mateix efecte a la configuració per exemple del datasource per evitar 
+		    // "long running queries" que puguin tombar el servidor de base de dades.
+		    //stmt.setQueryTimeout(60);
 	        			      
 			// Establecemos parametros
 		    for (int i=0;i<parametros.size();i++){
