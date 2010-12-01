@@ -98,9 +98,11 @@
 	<delete>
 	    <fileset dir="lib" includes="ojdbc14.jar"/>
 	</delete>
+	<!--
 	<delete>
 	    <fileset dir="integracio/clienteFirma/firma/aFirma" includes="*"/>		
 	</delete>	
+	-->
 </target>
 
 <target name="generateScripts" depends="prepare" description="Genera los scripts de creación de base de datos">
