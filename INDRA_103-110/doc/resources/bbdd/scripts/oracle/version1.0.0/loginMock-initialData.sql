@@ -1,7 +1,4 @@
 INSERT INTO SC_WL_USUARI (USU_CODI, USU_PASS, USU_NOM, USU_NIF) 
-VALUES ( 'nobody', 'nobody' , 'Anónimo' ,null );
-
-INSERT INTO SC_WL_USUARI (USU_CODI, USU_PASS, USU_NOM, USU_NIF) 
 VALUES ( 'admin', 'admin' , 'Usuario administrador' ,null );
 
 INSERT INTO SC_WL_USUARI (USU_CODI, USU_PASS, USU_NOM, USU_NIF) 
@@ -18,9 +15,6 @@ VALUES ( 'auto', 'auto' , 'Usuario procesos automaticos' ,null );
 
 INSERT INTO SC_WL_USUARI (USU_CODI, USU_PASS, USU_NOM, USU_NIF) 
 VALUES ( 'demo', 'demo' , 'Jose García García' ,'00000000T' );
-
-INSERT INTO SC_WL_USUGRU ( UGR_CODUSU, UGR_CODGRU ) VALUES ( 
-'nobody', 'tothom'); 
 
 INSERT INTO SC_WL_USUGRU ( UGR_CODUSU, UGR_CODGRU ) VALUES ( 
 'admin', 'tothom'); 

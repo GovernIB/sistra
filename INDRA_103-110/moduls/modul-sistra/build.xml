@@ -2,8 +2,8 @@
 <project name="modul-sistra" default="main" basedir=".">
 
 	<property name="projecte" value="${ant.project.name}"/>
+    <property file="${basedir}/../../config.properties"/>
     <property file="${basedir}/config.properties"/>
-	<property file="${basedir}/../../config.properties"/>
 
 	<property name="lib" location="${basedir}/../../lib"/>
 	<property name="etc" location="${basedir}/etc"/>
@@ -52,7 +52,7 @@
 		<delete dir="${output.dir}" quiet="yes"/>
 	</target>
 	<target name="update.model" description="Actualitzar el modelo de datos">
-		<ant dir="moduls/model" target="main" inheritall="false" depends="clean"/>
+		<ant dir="moduls/model" target="main" inheritall="false"/>
 	</target>
 	<target name="update.persistence" depends="update.model" description="Actualitzar la capa de persistencia">
 		<ant dir="moduls/persistence" target="main" inheritall="false"/>

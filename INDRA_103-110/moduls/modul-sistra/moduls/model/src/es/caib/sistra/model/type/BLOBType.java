@@ -1,12 +1,10 @@
 package es.caib.sistra.model.type;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.sql.Blob;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +12,6 @@ import java.sql.Types;
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.UserType;
-import oracle.sql.BLOB;
 
 public class BLOBType implements UserType {
 	
@@ -75,31 +72,25 @@ public class BLOBType implements UserType {
 	public void nullSafeSet(PreparedStatement pst, Object data, int index)
 			throws HibernateException, SQLException 
 	{
-		
-		/*
 		try
 		{			
-			if (data == null) data = "";
+			String in = (String)data;
+			if (in == null) in = "";
 			
-			if (data != null){
-				String in = (String)data;			
-				//byte[] buf = in.getBytes();
-				byte[] buf = in.getBytes( CHAR_SET );
-				int len = buf.length;
+									
+			byte[] buf = in.getBytes( CHAR_SET );
+			int len = buf.length;
 				
-				ByteArrayInputStream bais = new ByteArrayInputStream(buf);
-				pst.setBinaryStream(index,bais,len);
+			ByteArrayInputStream bais = new ByteArrayInputStream(buf);
+			pst.setBinaryStream(index,bais,len);
 				
-			}else{
-				//pst.setNull(index,Types.BINARY);				
-			}
 		}
 		catch( UnsupportedEncodingException uee )
 		{
 			throw new HibernateException( uee );
 		}
-		*/
 		
+		/*
 		try
 		{			
 			String in = (String)data;
@@ -125,6 +116,7 @@ public class BLOBType implements UserType {
 		{
 			throw new HibernateException( uee );
 		}
+		*/
 	}
 
 	public Object deepCopy(Object arg0) throws HibernateException 

@@ -72,7 +72,11 @@ if (browser == "Firefox" && parseFloat( version, 10) < 1.5 ){
 -->
 </script>
 
+<!--  PARTICULARIZACION LOGIN (para zonaperfront y sistrafront todo lo demas igual)-->
+<%@ include file="loginCustom.jsp" %>
+<!--  PARTICULARIZACION LOGIN -->
 
+<% if (niveles.indexOf("C")>=0){ %>
 <!--  FIRMA DIGITAL -->
 <script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/deployJava.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/time.js"></script>
@@ -130,11 +134,15 @@ if (browser == "Firefox" && parseFloat( version, 10) < 1.5 ){
 		prepararEntornoFirma();
 //-->
 </script>
-
-
-<!--  PARTICULARIZACION LOGIN (para zonaperfront y sistrafront todo lo demas igual)-->
-<%@ include file="loginCustom.jsp" %>
-<!--  PARTICULARIZACION LOGIN -->
+<% } else { %>
+<script type="text/javascript">
+<!--			
+		function prepararEntornoFirma() {
+			// no fer res
+		}
+//-->
+</script>
+<% } %>
 
 </head>
 
