@@ -20,7 +20,7 @@
         	<include name="commons-betwixt-0.7.jar"/>
         	<include name="commons-digester-1.6.jar"/>        	
         </fileset>
-        <fileset dir="${moduls.dir}" includes="model.jar"/>
+        <fileset dir="${moduls.dir}" includes="6-model.jar"/>
     </path>
 
     <target name="initdb">
@@ -31,7 +31,7 @@
             classpathref="db.classpath"/>
 
         <schemaexport
-        	config="${output.dir}/persistence/gen-etc/hibernate.cfg.xml"
+        	config="${output.dir}/persistence/gen-etc/forms-hibernate.cfg.xml"
         	drop="no"
             quiet="no"
             text="yes"
