@@ -74,6 +74,8 @@
 	<classpathentry kind="src" path="pluginsMOCK/plugin-pagoMOCK/output/persistence/gen-src"/>
 	<classpathentry kind="src" path="pluginsMOCK/plugin-regtelMOCK/moduls/plugins/src"/>
 	<classpathentry kind="src" path="pluginsMOCK/plugin-smsMOCK/moduls/plugins/src"/>
+	<classpathentry kind="src" path="pluginsMOCK/plugin-custodiaMOCK/moduls/plugins/src"/>
+	<classpathentry kind="src" path="pluginsMOCK/plugin-gestorDocumentalMOCK/moduls/plugins/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/bsf.jar"/>
 	<classpathentry kind="lib" path="lib/cglib-asm.jar"/>
