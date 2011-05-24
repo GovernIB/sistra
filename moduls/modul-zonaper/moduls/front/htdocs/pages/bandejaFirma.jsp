@@ -5,8 +5,6 @@
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 
-<link href="css/estilos.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="js/jquery-1.4.1.min.js"></script>
 <script type="text/javascript" src="js/mensaje.js"></script>
 <script type="text/javascript">
 <!--

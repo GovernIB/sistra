@@ -6,10 +6,7 @@
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
-<link href="css/calendar.css" rel="stylesheet" type="text/css" />
-<link href="css/estilos.css" rel="stylesheet" type="text/css" />
 
-<script type="text/javascript" src="js/jquery-1.4.1.min.js"></script>
 <script type="text/javascript" src="js/calendar.js"></script>
 <script type="text/javascript" src="js/lang/calendar-es.js"></script>
 <script type="text/javascript" src="js/calendar-setup.js"></script>
@@ -114,7 +111,7 @@ $(document).ready(function(){
 
 function llenarNombreDelegado(){
 	var nif = $("#nifDelegado").val();	
-	var url_json = '<html:rewrite page="/buscarNombreDelegado.do"/>';
+	var url_json = '<html:rewrite page="/protected/buscarNombreDelegado.do"/>';
 	var data ='nif='+nif;
 	$.postJSON(url_json, data, 
 		function(datos){
