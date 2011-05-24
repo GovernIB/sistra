@@ -93,6 +93,17 @@ public class PersonaPAD implements Serializable{
 			((getApellido1()!=null)?" " + getApellido1():"") + 
 			((getApellido2()!=null)?" " + getApellido2():"");
 	}
+	
+	public String getApellidosNombre() {
+		String apellidos = 
+			((getApellido1()!=null)? getApellido1():"") + 
+			((getApellido2()!=null)? " " + getApellido2():"");
+		if (apellidos.length() > 0){
+			apellidos = apellidos + ", ";
+		}
+		return apellidos + ((getNombre()!=null)?getNombre():""); 
+	}
+	
 	public String getEmail() {
 		return email;
 	}
