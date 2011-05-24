@@ -19,7 +19,7 @@ import es.caib.zonaper.persistence.delegate.DelegateUtil;
 
 /**
  * @struts.action
- *  path="/buscarNombreDelegado"
+ *  path="/protected/buscarNombreDelegado"
  * 
  */
 public class BuscarNombreDelegadoAction extends Action
