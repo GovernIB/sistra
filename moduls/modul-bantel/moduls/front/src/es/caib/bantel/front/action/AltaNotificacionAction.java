@@ -58,7 +58,9 @@ public class AltaNotificacionAction extends BaseAction
 				notificacionForm.setIdiomaExp(exp.getIdioma());
 				PersonaPAD p = DelegateUtil.getConsultaPADDelegate().obtenerDatosPADporUsuarioSeycon(exp.getIdentificadorUsuario());	
 				notificacionForm.setNif(p.getNif());
-				notificacionForm.setApellidos(p.getNombreCompleto());
+				//notificacionForm.setApellidos(p.getNombreCompleto());
+				notificacionForm.setApellidos(p.getApellidosNombre());
+				notificacionForm.setAcuse(p.getApellidosNombre());
 				carregarLlistes(request);
 			}else{
 				return mapping.findForward("fail");
