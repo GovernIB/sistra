@@ -37,6 +37,8 @@ public class AnexarController extends BaseController
 		String firmarFicheros = "N";
 		String debeAportar = "N";
 		Hashtable instanciasGenericos = new Hashtable();
+		Hashtable pendienteFirmaDelegada = new Hashtable();
+		Hashtable rechazoFirmaDelegada = new Hashtable();
 		HashMap flujoDocumentos = new HashMap();
 		HashMap iconos = new HashMap();
 		iconos.put("S","false");	
@@ -46,6 +48,7 @@ public class AnexarController extends BaseController
 		iconos.put("X","false");
 		iconos.put("P","false");
 		iconos.put("T","false");
+				
 		for (Iterator it=tramite.getAnexos().iterator();it.hasNext();){
 			 DocumentoFront doc = ((DocumentoFront) it.next());			 
 			 
@@ -58,9 +61,20 @@ public class AnexarController extends BaseController
 				  iconos.put("F","true");		
 			 }
 			 
-			 // Calculamos numero de instancias para genericos
+			 // Generico: 
+			 // - Calculamos numero de instancias para genericos			 
 			 if (doc.isAnexoGenerico()){
-				 instanciasGenericos.put(doc.getIdentificador(),new Integer(tramite.getAnexoNumeroInstancias(doc.getIdentificador())));
+				 instanciasGenericos.put(doc.getIdentificador(),new Integer(tramite.getAnexoNumeroInstancias(doc.getIdentificador())));				
+			 }
+			 
+			 // Comprobamos si esta pendiente de firma desde bandeja de firma (lo hacemos así para tener en cuenta todas las instancias de los genericos)
+			 if (!("S".equals(pendienteFirmaDelegada.get(doc.getIdentificador())))){
+				 pendienteFirmaDelegada.put(doc.getIdentificador(),doc.isPendienteFirmaDelegada()?"S":"N");
+			 }
+			 
+			 // Comprobamos rechazo desde bandeja de firma (lo hacemos así para tener en cuenta todas las instancias de los genericos)
+			 if (!("S".equals(rechazoFirmaDelegada.get(doc.getIdentificador())))){
+				 rechazoFirmaDelegada.put(doc.getIdentificador(),doc.isRechazadaFirmaDelegada()?"S":"N");
 			 }
 			 
 			 // Comprobamos si debe anexar algun fichero
@@ -104,6 +118,8 @@ public class AnexarController extends BaseController
 		request.setAttribute( "firmarFicheros", firmarFicheros);
 		request.setAttribute( "debeAportar", debeAportar);
 		request.setAttribute( "instanciasGenericos", instanciasGenericos);
+		request.setAttribute( "pendienteFirmaDelegada", pendienteFirmaDelegada);
+		request.setAttribute( "rechazoFirmaDelegada", rechazoFirmaDelegada);
 		request.setAttribute( "iconos", iconos);
 	}
 }

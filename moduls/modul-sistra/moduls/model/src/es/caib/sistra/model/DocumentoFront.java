@@ -82,10 +82,19 @@ public class DocumentoFront  implements Serializable{
 	 */
 	private boolean pendienteFirmaDelegada;
 	/**
-	 * DNI del firmante del documento (después de evaluar campo firmante).
+	 * Indica si el documento se ha rechazado en la bandeja de firma
+	 */
+	private boolean rechazadaFirmaDelegada;
+	/**
+	 * DNI del firmante(s) del documento (después de evaluar campo firmante). En caso de existir varios estarian separados por #.
 	 * Si esta vacío deberá firmarlo quien inicia el trámite
 	 */
 	private String firmante;
+	/**
+	 * En caso de que se indiquen firmante(s) del documento se intentara buscar el nombre en el registro de personas de la zona personal.
+	 * En caso de existir varios estarian separados por # 
+	 */
+	private String nombreFirmante;
 	/**
 	 * Indica si el documento ha sido firmado
 	 */
@@ -367,6 +376,18 @@ public class DocumentoFront  implements Serializable{
 	}
 	public void setFirmaDelegada(boolean firmaDelegada) {
 		this.firmaDelegada = firmaDelegada;
+	}
+	public String getNombreFirmante() {
+		return nombreFirmante;
+	}
+	public void setNombreFirmante(String nombreFirmantes) {
+		this.nombreFirmante = nombreFirmantes;
+	}
+	public boolean isRechazadaFirmaDelegada() {
+		return rechazadaFirmaDelegada;
+	}
+	public void setRechazadaFirmaDelegada(boolean rechazadaFirmaDelegada) {
+		this.rechazadaFirmaDelegada = rechazadaFirmaDelegada;
 	}
 	
 	

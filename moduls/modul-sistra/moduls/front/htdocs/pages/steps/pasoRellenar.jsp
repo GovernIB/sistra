@@ -140,24 +140,32 @@
 							<logic:equal name="formulario" property="firmado" value="false">	
 								<br/>							
 								<logic:equal name="formulario" property="pendienteFirmaDelegada" value="false">							 							
-								<bean:message key="pasoRellenar.formularios.debeFirmarseDigitalmente"/> - <html:link  href="<%= urlFirmarDocumento + "&identificador=" + formulario.getIdentificador() + "&instancia=" + formulario.getInstancia() %>"><bean:message key="pasoRellenar.formularios.firmarFormulario"/></html:link>
-							</logic:equal>						
+									<logic:equal name="formulario" property="rechazadaFirmaDelegada" value="false">		
+										<bean:message key="pasoRellenar.formularios.debeFirmarseDigitalmente"/> - <html:link  href="<%= urlFirmarDocumento + "&identificador=" + formulario.getIdentificador() + "&instancia=" + formulario.getInstancia() %>"><bean:message key="pasoRellenar.formularios.firmarFormulario"/></html:link>
+									</logic:equal>								
+								</logic:equal>
 								<logic:equal name="formulario" property="pendienteFirmaDelegada" value="true">							 							
 									<span class="detalleDoc"> 
-											<img src="imgs/tramitacion/iconos/doc_firmar.gif"/>
+											<img src="imgs/tramitacion/iconos/ico_firma_pendiente.gif" alt="<bean:message key="pasoRellenar.iconografia.firmaDocumentoPendienteBandeja"/>" title="<bean:message key="pasoRellenar.iconografia.firmaDocumentoPendienteBandeja"/>"/>
 											<bean:message key="pasoRellenar.documentos.pendienteFirmaDelegada"/>													
+									</span>
+								</logic:equal>
+								<logic:equal name="formulario" property="rechazadaFirmaDelegada" value="true">							 							
+									<span class="detalleDoc"> 
+											<img src="imgs/tramitacion/iconos/ico_firma_rechazada.gif" alt="<bean:message key="pasoRellenar.iconografia.firmaDocumentoRechazadaBandeja"/>" title="<bean:message key="pasoRellenar.iconografia.firmaDocumentoRechazadaBandeja"/>"/>
+											<bean:message key="pasoRellenar.documentos.rechazadaFirmaDelegada"/>													
 									</span>
 								</logic:equal>
 							</logic:equal>						
 							<logic:equal name="formulario" property="firmado" value="true">
 								<span class="detalleDoc"> 
-									<img src="imgs/tramitacion/iconos/doc_firmar.gif"/>		
-									<logic:notEmpty name="formulario" property="firmante">						
+									<img src="imgs/tramitacion/iconos/ico_firma_aceptada.gif" alt="<bean:message key="pasoRellenar.iconografia.firmaDocumentoRealizada"/>" title="<bean:message key="pasoRellenar.iconografia.firmaDocumentoRealizada"/>"/>
+									<logic:notEmpty name="formulario" property="firmante">
 										<logic:match name="formulario" property="firmante" value="#">
 											<bean:message key="pasoRellenar.formularios.firmadosDigitalmente" arg0="<%=es.caib.util.StringUtil.replace(formulario.getFirmante(),"#"," - ")%>"/>
 										</logic:match>	
 										<logic:notMatch name="formulario" property="firmante" value="#">
-										<bean:message key="pasoRellenar.formularios.firmadoDigitalmente" arg0="<%=formulario.getFirmante()%>"/>
+											<bean:message key="pasoRellenar.formularios.firmadoDigitalmente" arg0="<%=formulario.getFirmante()%>"/>
 										</logic:notMatch>																									
 									</logic:notEmpty>
 									<logic:empty name="formulario" property="firmante">						

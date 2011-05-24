@@ -6,6 +6,7 @@
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 <html:xhtml/>
 <bean:define id="formulario" name="formulario" type="es.caib.sistra.model.DocumentoFront"/>
+<bean:define id="listaFirmantes" name="listaFirmantes" type="java.lang.String"/>
 <bean:define id="contentTypeFirma" name="formulario" type="java.lang.String" property="contentType" />
 <bean:define id="urlFirmarDocumento">
         <html:rewrite page="/protected/firmarFormulario.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
@@ -67,10 +68,10 @@
 					alert(error);
 					return false;
 				}else{	
-				     firma = clienteFirma.getSignatureBase64Encoded();
+				    firma = clienteFirma.getSignatureBase64Encoded();
 				    firma = b64ToB64UrlSafe(firma);
-				     document.firmarFormularioForm.firma.value = firma;
-				     return true;
+   					document.firmarFormularioForm.firma.value = firma;
+				    return true;
 				}
 		}
 		
@@ -107,70 +108,65 @@
 
 <!--  Instrucciones firma digital-->
 <logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="S">		
-<p>
-	<!--  Si se comprueba el nif firmante -->
-	<logic:notEmpty name="formulario" property="firmante">
-		<bean:message key="firmarDocumento.instrucciones.firmarOtro" arg0="<%=formulario.getFirmante()%>"/>
-	</logic:notEmpty>
+	<p>
+		<!--  Si se comprueba el nif firmante -->
+		<logic:notEmpty name="formulario" property="firmante">
+			<bean:message key="firmarDocumento.instrucciones.firmarOtro" arg0="<%=formulario.getFirmante()%>"/>
+		</logic:notEmpty>
+		
+		<!--  Si no se comprueba el nif firmante -->
+		<logic:empty name="formulario" property="firmante">
+			<bean:message key="firmarDocumento.instrucciones"/>
+		</logic:empty>	
 	
-	<!--  Si no se comprueba el nif firmante -->
-	<logic:empty name="formulario" property="firmante">
-		<bean:message key="firmarDocumento.instrucciones"/>
-	</logic:empty>	
-
-</p>
-<!--  Instrucciones firma y Applet firma (depende de implementacion firma) -->
-<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
-			 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
-	<form name="formFirma">
-		<input type="hidden" name="base64XmlForm" value="<bean:write name="base64XmlForm" />"/>
-		
-		<p><bean:message key="firmarDocumento.aFirma.formulario.instrucciones"/></p>
-		
-		<!--  BOTON FIRMAR -->
-		<p class="formBotonera">
-			<input name="formCDboton" type="button" value="<bean:message key="firmarDocumento.boton.iniciar" />" title="<bean:message key="firmarDocumento.boton.iniciar" />" onclick="firmarDocumento();" />
-		</p>			
-		
-	</form>
-</logic:equal>
-<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>" 
-			value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
-	<!--  Applet firma CAIB-->
-	<form name="formFirma">
-		<input type="hidden" name="base64XmlForm" value="<bean:write name="base64XmlForm" />"/>
-		
-		<p><bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo" /></p>
+	</p>
+	<!--  Instrucciones firma y Applet firma (depende de implementacion firma) -->
+	<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+				 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
+		<form name="formFirma">
+			<input type="hidden" name="base64XmlForm" value="<bean:write name="base64XmlForm" />"/>
 			
-		<p class="formBotonera"><input type="button" value="<bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo.boton" />" title="<bean:message key="login.certificado.instrucciones.iniciarDispositivo.boton" />" onclick="cargarCertificado();" /></p>
-		<p><bean:message key="firmarDocumento.certificadosDisponibles" /></p>
-		<p>	
-			<jsp:include page="/firma/caib/applet.jsp" flush="false"/>	
-		</p>	
-		
-		<!--  PIN  -->
-		<span style="position: relative;">
-			<bean:message key="firmarDocumento.PINCertificado" /><input type="password" name="PIN" id="PIN" class="txt"/>
-		</span>
-		
-		<!--  BOTON FIRMAR -->
-		<p class="formBotonera">
-			<input name="formCDboton" type="button" value="<bean:message key="firmarDocumento.boton.iniciar" />" title="<bean:message key="firmarDocumento.boton.iniciar" />" onclick="firmarDocumento();" />
-		</p>			
-		
-	</form>
-</logic:equal>
+			<p><bean:message key="firmarDocumento.aFirma.formulario.instrucciones"/></p>
+			
+			<!--  BOTON FIRMAR -->
+			<p class="formBotonera">
+				<input name="formCDboton" type="button" value="<bean:message key="firmarDocumento.boton.iniciar" />" title="<bean:message key="firmarDocumento.boton.iniciar" />" onclick="firmarDocumento();" />
+			</p>			
+			
+		</form>
+	</logic:equal>
+	<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>" 
+				value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
+		<!--  Applet firma CAIB-->
+		<form name="formFirma">
+			<input type="hidden" name="base64XmlForm" value="<bean:write name="base64XmlForm" />"/>
+			
+			<p><bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo" /></p>
+				
+			<p class="formBotonera"><input type="button" value="<bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo.boton" />" title="<bean:message key="login.certificado.instrucciones.iniciarDispositivo.boton" />" onclick="cargarCertificado();" /></p>
+			<p><bean:message key="firmarDocumento.certificadosDisponibles" /></p>
+			<p>	
+				<jsp:include page="/firma/caib/applet.jsp" flush="false"/>	
+			</p>	
+			
+			<!--  PIN  -->
+			<span style="position: relative;">
+				<bean:message key="firmarDocumento.PINCertificado" /><input type="password" name="PIN" id="PIN" class="txt"/>
+			</span>
+			
+			<!--  BOTON FIRMAR -->
+			<p class="formBotonera">
+				<input name="formCDboton" type="button" value="<bean:message key="firmarDocumento.boton.iniciar" />" title="<bean:message key="firmarDocumento.boton.iniciar" />" onclick="firmarDocumento();" />
+			</p>			
+			
+		</form>
+	</logic:equal>
 </logic:equal>
 
 <!--  Instrucciones de firma delegada -->
 <logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="D">		
 	<p>
-	<logic:match name="formulario" property="firmante" value="#">
-		<bean:message key="firmarDocumento.instrucciones.firmarOtros" arg0="<%=es.caib.util.StringUtil.replace(formulario.getFirmante(),"#"," - ")%>"/>
-	</logic:match>	
-	<logic:notMatch name="formulario" property="firmante" value="#">
-		<bean:message key="firmarDocumento.instrucciones.firmarOtro" arg0="<%=formulario.getFirmante()%>"/>
-	</logic:notMatch>	
+		<bean:message key="firmarDocumento.instrucciones.firmarOtros" arg0="<%=listaFirmantes%>"/>
 	</p>
 	<p>
 		<bean:message key="firmarDocumento.instrucciones.firmaDelegada" />	
@@ -184,7 +180,7 @@
 	</p>
 </logic:equal>
 
-<!-- Form para envio de datos -->
+<!--  Form para envio de datos -->
 <html:form action="/protected/firmarFormulario.do" method="POST">
 	<html:hidden property="firma"/>
 	<html:hidden name="irAFirmarFormularioForm" property="ID_INSTANCIA"/>
