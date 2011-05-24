@@ -124,7 +124,7 @@ public class InitAction extends BaseAction
 				nifEntidad = (String) request.getSession().getAttribute(ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO_ENTIDAD_KEY);
 			}	
 			
-	 		delegate = DelegateUtil.getInstanciaDelegate( true );
+			delegate = DelegateUtil.getInstanciaDelegate( true );
 			delegate.create( initForm.getModelo(), initForm.getVersion(),modoAutenticacionUsuario,
 					getLocale( request ),obtenerParametrosInicio(request),
 					perfilAcceso, nifEntidad);
@@ -146,15 +146,9 @@ public class InitAction extends BaseAction
         RespuestaFront respuestaFront = null;
         respuestaFront = delegate.informacionInicial();
         
-        // Validamos que el método de autenticación del usuario está configurado para el trámite
+        // Recuperamos parametros respuesta
         HashMap hsmParametros = respuestaFront.getParametros();
-        String cadenaNivelesAutenticacion = ( String ) hsmParametros.get( Constants.NIVELES_AUTENTICACION_PARAMS_KEY );
         
-        if ( cadenaNivelesAutenticacion.indexOf( String.valueOf( modoAutenticacionUsuario ) ) < 0 ) 
-        {
-        	this.setErrorMessage( request, "errors.tramite.modoAuthNoValido" );
-        	return mapping.findForward("error");
-        }
         
         // Obtenemos de los parametros de vuelta de la llamada a infoLogin
         // la descripcion y los dias de persistencia del tramite, para mostrarlos en la cabecera.
@@ -166,6 +160,15 @@ public class InitAction extends BaseAction
         request.setAttribute( Constants.DESCRIPCION_TRAMITE_PARAMS_KEY, descripcion );
         request.setAttribute( Constants.DIAS_PERSISTENCIA_PARAMS_KEY, diaspersistencia );
         request.setAttribute( Constants.DATOS_SESION_PARAMS_KEY, datosSesion );
+        
+        // Validamos que el método de autenticación del usuario está configurado para el trámite
+        String cadenaNivelesAutenticacion = ( String ) hsmParametros.get( Constants.NIVELES_AUTENTICACION_PARAMS_KEY );
+        if ( cadenaNivelesAutenticacion.indexOf( String.valueOf( modoAutenticacionUsuario ) ) < 0 ) 
+        {
+        	this.setErrorMessage( request, "errors.tramite.modoAuthNoValido" );
+        	return mapping.findForward("error");
+        }
+        
         
         // Si se trata de un trámite reducido, siempre a la pantalla de trámite nuevo
         Boolean isCircuitoReducido = ( Boolean ) hsmParametros.get( Constants.TRAMITE_REDUCIDO_KEY );
