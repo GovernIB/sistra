@@ -389,8 +389,6 @@ function volver(){
 							 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">	
 							<!--  Instrucciones firma -->
 							<p>		
-								<bean:message key="delegaciones.firmar.descripcion"/>
-								
 								<bean:message key="firmarDocumento.instrucciones"/>	<bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo" />
 							</p>
 							<p>
