@@ -43,6 +43,12 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
          </constructor-arg>
 	</bean>
 
+	<bean id="Redose_UsernameTokenSecurityInterceptorOut" class="es.caib.util.ws.server.UsernameTokenAuthorizationInterceptorOut">
+		<constructor-arg>
+            <map></map>
+        </constructor-arg>
+	</bean>
+
 	<bean id="Redose_PasswordCallback" class="es.caib.util.ws.server.ServerPasswordCallback">
 		<property name="securityDomain" value="java:/jaas/seycon" />
     </bean>
@@ -65,8 +71,17 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
    	 	  <!--  Interceptor security basic authentication -->
 	      <ref bean="Redose_BasicSecurityInterceptor"/>	      
 	 </jaxws:inInterceptors>
+	 
+	  <jaxws:outInterceptors>	 
+	 	  <!--  Interceptor ws-security timestamp -->	 	 
+	 	 <ref bean="Redose_UsernameTokenSecurityInterceptorOut"/>	 	 	 	  	         	 	   
+	 </jaxws:outInterceptors>
                 
-                
+     <jaxws:outFaultInterceptors>	 
+ 	  <!--  Interceptor ws-security timestamp -->	 	 
+ 	 <ref bean="Redose_UsernameTokenSecurityInterceptorOut"/>	 	 	 	  	         	 	   
+ 	</jaxws:outFaultInterceptors>    
+	 	           
     </jaxws:endpoint>
     
     
@@ -87,6 +102,15 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 	      <ref bean="Redose_BasicSecurityInterceptor"/>	
 	   </jaxws:inInterceptors>
                 
+        <jaxws:outInterceptors>	 
+		 	  <!--  Interceptor ws-security timestamp -->	 	 
+	 		 <ref bean="Redose_UsernameTokenSecurityInterceptorOut"/>	 	 	 	  	         	 	   
+		 </jaxws:outInterceptors>         
+                
+         <jaxws:outFaultInterceptors>	 
+ 	  <!--  Interceptor ws-security timestamp -->	 	 
+ 	 <ref bean="Redose_UsernameTokenSecurityInterceptorOut"/>	 	 	 	  	         	 	   
+ 	</jaxws:outFaultInterceptors>  
                 
     </jaxws:endpoint>
 </beans>
