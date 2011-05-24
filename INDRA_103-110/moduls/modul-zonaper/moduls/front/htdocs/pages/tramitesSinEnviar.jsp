@@ -114,7 +114,7 @@
 						<td>
 							<bean:message key="<%="tramitesSinEnviar.idioma." + tramitePersistente.getIdioma()%>"/>
 						</td>												
-						<td><bean:write name="tramitePersistente" property="fechaModificacion" format="dd/MM/yyyy hh:mm"/></td>												
+						<td><bean:write name="tramitePersistente" property="fechaModificacion" format="dd/MM/yyyy HH:mm"/></td>												
 						<td><bean:write name="tramitePersistente" property="fechaCaducidad" format="dd/MM/yyyy"/></td>												
 						<td>					
 							<!--  Descripcion del trámite con link si puede continuarse -->
