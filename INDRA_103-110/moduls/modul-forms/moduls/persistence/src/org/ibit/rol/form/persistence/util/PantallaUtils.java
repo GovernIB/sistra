@@ -613,18 +613,19 @@ public final class PantallaUtils {
      * @param pantalla
      * @return Devuelve campo ListaElementos si existe y null si no existe
      */
-    public static ListaElementos buscarCampoListaElementos(Pantalla pantalla){
+    public static List buscarCamposListaElementos(Pantalla pantalla){
     	// Buscamos si la pantalla tiene un campo lista de elementos
+    	List lista = new ArrayList();
     	Campo campo = null;
     	boolean enc = false;
     	List campos = pantalla.getCampos();
         for (Iterator iterator = campos.iterator(); iterator.hasNext();) {
         	campo = (Campo) iterator.next();
         	if ((campo instanceof ListaElementos)) {
-        		return (ListaElementos) campo;
+        		lista.add(campo);        		
         	}
         }
-        return null;
+        return lista;
     }    
          
     /**
