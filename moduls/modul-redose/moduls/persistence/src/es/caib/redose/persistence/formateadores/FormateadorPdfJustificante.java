@@ -111,11 +111,15 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
     	RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
     	DatosPropios datosPropios = null;
     	if(asiento.getDatosOrigen().getTipoRegistro().charValue() != ConstantesAsientoXML.TIPO_REGISTRO_SALIDA){
-    		//Parseamos datos propios si no es de salida
-    	if (refDatosPropios == null) throw new Exception("No se encuentra documento de datos propios");
-    	DocumentoRDS docRDS = rds.consultarDocumento(refDatosPropios);
-    	FactoriaObjetosXMLDatosPropios factoriaDatosPropios = ServicioDatosPropiosXML.crearFactoriaObjetosXML();
-	    	datosPropios = factoriaDatosPropios.crearDatosPropios(new ByteArrayInputStream (docRDS.getDatosFichero()));
+    		//Parseamos datos propios si es de entrada
+    		if (refDatosPropios != null) {
+		    	DocumentoRDS docRDS = rds.consultarDocumento(refDatosPropios);
+		    	FactoriaObjetosXMLDatosPropios factoriaDatosPropios = ServicioDatosPropiosXML.crearFactoriaObjetosXML();
+		    	datosPropios = factoriaDatosPropios.crearDatosPropios(new ByteArrayInputStream (docRDS.getDatosFichero()));
+    		}else{
+    			// Registro de entrada externo
+    			datosPropios = null;
+    		}
     	}else {
     		if (refOficioRemision == null) throw new Exception("No se encuentra documento de oficio de rimisión");
     		if (refAvisoNotificacion == null) throw new Exception("No se encuentra documento de aviso de notificación");
@@ -137,7 +141,7 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
     		case ConstantesAsientoXML.TIPO_PREENVIO:
     			cabecera = props.getProperty("cabecera.preEnvio");
     			hayDocumentacionAportar = true;
-    			break;	    
+    			break;	
     		case ConstantesAsientoXML.TIPO_REGISTRO_SALIDA:
     			cabecera = props.getProperty("cabecera.registroSalida");
     			tipoRegistro = "registro";
@@ -234,129 +238,129 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
     	
     	if(!registroSalida){
     		// Solo en los casos que no sean registro de salida miraremos esto, ya que con los registros de salida no nos llegan los datos propios
-    	// Identificador de persistencia (sólo para anónimo)
-    	if (nivelAutenticacion == 'A' && datosPropios.getInstrucciones() != null && StringUtils.isNotEmpty(datosPropios.getInstrucciones().getIdentificadorPersistencia())){
-	    	propiedad = new Propiedad(props.getProperty("datosRegistro.identificadorPersistencia"),
-	    			datosPropios.getInstrucciones().getIdentificadorPersistencia());		    		    
-			seccion.addCampo(propiedad);
-    	}
+	    	// Identificador de persistencia (sólo para anónimo)
+	    	if (nivelAutenticacion == 'A' && datosPropios != null && datosPropios.getInstrucciones() != null && StringUtils.isNotEmpty(datosPropios.getInstrucciones().getIdentificadorPersistencia())){
+		    	propiedad = new Propiedad(props.getProperty("datosRegistro.identificadorPersistencia"),
+		    			datosPropios.getInstrucciones().getIdentificadorPersistencia());		    		    
+				seccion.addCampo(propiedad);
+	    	}
     	}
     	docPDF.addSeccion(seccion);
 		
     	//Si no es registro de salida haremos lo mismo que se hacia hasta el momento.
     	if(!registroSalida){
-    	// SECCION DATOS SOLICITUD   	    
-    	if (datosPropios.getSolicitud() != null) {
-    		seccion = new Seccion(letras[numSecciones], props.getProperty("datosSolicitud.titulo"));
-    		numSecciones++;
-    		Subseccion ss = null;    	
+	    	// SECCION DATOS SOLICITUD   	    
+	    	if (datosPropios != null && datosPropios.getSolicitud() != null) {
+	    		seccion = new Seccion(letras[numSecciones], props.getProperty("datosSolicitud.titulo"));
+	    		numSecciones++;
+	    		Subseccion ss = null;    	
 		    	for (Iterator it = datosPropios.getSolicitud().getDato().iterator();it.hasNext();){
-	    		Dato dato = (Dato) it.next();
-	    		if(dato.getTipo().charValue() == ConstantesDatosPropiosXML.DATOSOLICITUD_TIPO_BLOQUE){
-	    			if(ss !=  null){
-	    				seccion.addCampo(ss);
-	    			}
-	    			ss = new Subseccion(dato.getDescripcion());
-	    		}
-	    		else{
-	    			propiedad = new Propiedad(dato.getDescripcion(),dato.getValor());
-	    			if(ss == null)
-	    			{
-	    				seccion.addCampo(propiedad);
-	    			}
-	    			else
-	    			{
-	    				ss.addCampo(propiedad);
-	    			}
-	    		}
+		    		Dato dato = (Dato) it.next();
+		    		if(dato.getTipo().charValue() == ConstantesDatosPropiosXML.DATOSOLICITUD_TIPO_BLOQUE){
+		    			if(ss !=  null){
+		    				seccion.addCampo(ss);
+		    			}
+		    			ss = new Subseccion(dato.getDescripcion());
+		    		}
+		    		else{
+		    			propiedad = new Propiedad(dato.getDescripcion(),dato.getValor());
+		    			if(ss == null)
+		    			{
+		    				seccion.addCampo(propiedad);
+		    			}
+		    			else
+		    			{
+		    				ss.addCampo(propiedad);
+		    			}
+		    		}
+		    	}
+		    	if(ss != null)
+		    	{
+		        	seccion.addCampo(ss);
+		    	}
+		    	docPDF.addSeccion(seccion);
 	    	}
-	    	if(ss != null)
-	    	{
-	        	seccion.addCampo(ss);
-	    	}
-	    	docPDF.addSeccion(seccion);
-    	}
     	
-    	// SECCION DOCUMENTOS APORTADOS    	
-    	seccion = new Seccion(letras[numSecciones], props.getProperty("documentosAportados.titulo"));
-    	numSecciones++;
-    	seccion.addCampo(lista);
-    	docPDF.addSeccion(seccion);
+	    	// SECCION DOCUMENTOS APORTADOS    	
+	    	seccion = new Seccion(letras[numSecciones], props.getProperty("documentosAportados.titulo"));
+	    	numSecciones++;
+	    	seccion.addCampo(lista);
+	    	docPDF.addSeccion(seccion);
     	    	    	 
-    	if(hayDocumentacionAportar)
-    	{    		
-    		// SECCION DE DOCUMENTACION A APORTAR
-    		seccion = new Seccion(letras[numSecciones], props.getProperty("documentacionAportar.titulo"));
-    		seccion.setKeepTogether(true);
-    		numSecciones++;
-    		Vector columnas = new Vector();
-    		columnas.add(props.getProperty("documentacionAportar.documento"));
-    		columnas.add(props.getProperty("documentacionAportar.accion"));
-    		Vector campos = new Vector();
-    		boolean compulsar = false;
-    		boolean fotocopia = false;    		
-    		String key;
-    		Vector cp;    		    		
-    		
-	    		for (Iterator it = datosPropios.getInstrucciones().getDocumentosEntregar().getDocumento().iterator();it.hasNext();){
-    			
-    			key = "documentacionAportar.accion.";
-    			
-    			Documento docPres = (Documento) it.next();
-    			
-    			switch (docPres.getTipo().charValue()){
-    				case ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_JUSTIFICANTE:
-    					/// El justificante no se muestra en la tabla de documentación a aportar (se presupone)
-    					continue;
-    				case ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_PAGO:
-    					key += "pago";
-    					break;
-    				case ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_FORMULARIO:
-    					key += "firmar";
-    					break;	
-    				case ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_ANEXO:
-    					fotocopia = docPres.isFotocopia().booleanValue();
-    	    			compulsar = docPres.isCompulsar().booleanValue();    	    			
-    	    			key += fotocopia ? "fotocopia" : "";
-    	    			key += compulsar ? "compulsar" : "";
-    	    			key += (!fotocopia && !compulsar) ? "original" : "";    	    			
-    					break;		
-    			}
-    			
-    			cp = new Vector();
-    			cp.add(docPres.getTitulo());
-    			cp.add(props.getProperty(key));
-    			campos.add(cp);
-    		}
-    		
-	   		Tabla tabla =  new Tabla(columnas,campos);
-	   		seccion.addCampo(tabla);
+    	    if(hayDocumentacionAportar)
+	    	{    		
+	    		// SECCION DE DOCUMENTACION A APORTAR
+	    		seccion = new Seccion(letras[numSecciones], props.getProperty("documentacionAportar.titulo"));
+	    		seccion.setKeepTogether(true);
+	    		numSecciones++;
+	    		Vector columnas = new Vector();
+	    		columnas.add(props.getProperty("documentacionAportar.documento"));
+	    		columnas.add(props.getProperty("documentacionAportar.accion"));
+	    		Vector campos = new Vector();
+	    		boolean compulsar = false;
+	    		boolean fotocopia = false;    		
+	    		String key;
+	    		Vector cp;    		    		
 	    		
-	   		docPDF.addSeccion(seccion);
-	   		
-	   		// SECCION DE FIRMA
-			Parrafo p;
-			Seccion seccionFirmar = new Seccion(letras[numSecciones], props.getProperty("declaracion.titulo"));
-			seccionFirmar.setKeepTogether(true);
-			numSecciones++;
-			int numBloques = Integer.parseInt(props.getProperty("declaracion.numBloques"));
-			String keyBloques = "declaracion.bloque";
-			for(int i=0; i<numBloques; i++)
-			{
-				String texto = props.getProperty(keyBloques + (i+1) + ".texto");
-				if (i == 0){
-					// Fecha limite entrega: texto particularizado o texto por defecto
-					if (StringUtils.isNotEmpty(datosPropios.getInstrucciones().getTextoFechaTopeEntrega())){
-						texto += " " + datosPropios.getInstrucciones().getTextoFechaTopeEntrega();
-					}else{						
-						texto += props.getProperty(keyBloques + (i+1) + ".texto.fechaLimite") + " " + StringUtil.fechaACadena(datosPropios.getInstrucciones().getFechaTopeEntrega()) + ".";
-					}
-				}    				
-				p = new Parrafo(texto,Integer.parseInt(props.getProperty(keyBloques + (i+1) + ".alignment")));
-				seccionFirmar.addCampo(p);
-			}
-			docPDF.addSeccion(seccionFirmar);
-    	}
+	    		for (Iterator it = datosPropios.getInstrucciones().getDocumentosEntregar().getDocumento().iterator();it.hasNext();){
+	    			
+	    			key = "documentacionAportar.accion.";
+	    			
+	    			Documento docPres = (Documento) it.next();
+	    			
+	    			switch (docPres.getTipo().charValue()){
+	    				case ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_JUSTIFICANTE:
+	    					/// El justificante no se muestra en la tabla de documentación a aportar (se presupone)
+	    					continue;
+	    				case ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_PAGO:
+	    					key += "pago";
+	    					break;
+	    				case ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_FORMULARIO:
+	    					key += "firmar";
+	    					break;	
+	    				case ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_ANEXO:
+	    					fotocopia = docPres.isFotocopia().booleanValue();
+	    	    			compulsar = docPres.isCompulsar().booleanValue();    	    			
+	    	    			key += fotocopia ? "fotocopia" : "";
+	    	    			key += compulsar ? "compulsar" : "";
+	    	    			key += (!fotocopia && !compulsar) ? "original" : "";    	    			
+	    					break;		
+	    			}
+	    			
+	    			cp = new Vector();
+	    			cp.add(docPres.getTitulo());
+	    			cp.add(props.getProperty(key));
+	    			campos.add(cp);
+	    		}
+	    		
+		   		Tabla tabla =  new Tabla(columnas,campos);
+		   		seccion.addCampo(tabla);
+		    		
+		   		docPDF.addSeccion(seccion);
+	    	
+		   		// SECCION DE FIRMA
+				Parrafo p;
+				Seccion seccionFirmar = new Seccion(letras[numSecciones], props.getProperty("declaracion.titulo"));
+				seccionFirmar.setKeepTogether(true);
+				numSecciones++;
+				int numBloques = Integer.parseInt(props.getProperty("declaracion.numBloques"));
+				String keyBloques = "declaracion.bloque";
+				for(int i=0; i<numBloques; i++)
+				{
+					String texto = props.getProperty(keyBloques + (i+1) + ".texto");
+					if (i == 0){
+						// Fecha limite entrega: texto particularizado o texto por defecto
+						if (StringUtils.isNotEmpty(datosPropios.getInstrucciones().getTextoFechaTopeEntrega())){
+							texto += " " + datosPropios.getInstrucciones().getTextoFechaTopeEntrega();
+						}else{						
+							texto += props.getProperty(keyBloques + (i+1) + ".texto.fechaLimite") + " " + StringUtil.fechaACadena(datosPropios.getInstrucciones().getFechaTopeEntrega()) + ".";
+						}
+					}    				
+					p = new Parrafo(texto,Integer.parseInt(props.getProperty(keyBloques + (i+1) + ".alignment")));
+					seccionFirmar.addCampo(p);
+				}
+				docPDF.addSeccion(seccionFirmar);
+	    	}
     	}else{
     		
     		//SECCION OFICIO REMISION
