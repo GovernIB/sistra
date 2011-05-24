@@ -52,7 +52,8 @@ public class FillPersonaAction extends Action
 		JSONObject json = new JSONObject();
 		json.put("usuarioSeycon", StringUtils.defaultString(p.getUsuarioSeycon()));
 		json.put("nif",StringUtils.defaultString(p.getNif()));
-		json.put("nombre",StringUtils.defaultString(p.getApellido2()) + " " + StringUtils.defaultString(p.getApellido1()) + " " + StringUtils.defaultString(p.getNombre()));
+		//json.put("nombre",StringUtils.defaultString(p.getApellido2()) + " " + StringUtils.defaultString(p.getApellido1()) + " " + StringUtils.defaultString(p.getNombre()));
+		json.put("nombre",p.getApellidosNombre());
 		json.put("municipio",StringUtils.defaultString(p.getMunicipio()));
 		json.put("provincia",StringUtils.defaultString(p.getProvincia()));		
 		// Devolvemos expe
