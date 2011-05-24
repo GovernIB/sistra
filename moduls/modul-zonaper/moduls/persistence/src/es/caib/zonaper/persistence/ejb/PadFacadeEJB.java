@@ -256,9 +256,9 @@ public abstract class PadFacadeEJB implements SessionBean{
      */
     public String obtenerEstadoTramiteUsuario(String idPersistencia) throws ExcepcionPAD{
     	return obtenerEstadoTramiteAutenticadoImpl(idPersistencia,null);	
-    	}    	
-    	
-    	
+    }
+    
+    
     /**
      * Obtiene estado de un trámite mediante identificador de persistencia para los trámites de la entidad de la que
      * es delegado el usuario
@@ -668,12 +668,13 @@ public abstract class PadFacadeEJB implements SessionBean{
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.gestor}"
+     * @ejb.permission role-name="${role.auto}"
      */
     public Date obtenerAcuseRecibo(String numeroRegistro) throws ExcepcionPAD
     {	
     	try{
     		NotificacionTelematicaDelegate td = DelegateUtil.getNotificacionTelematicaDelegate();
-    		NotificacionTelematica not =td.obtenerNotificacionTelematica(numeroRegistro);
+    		NotificacionTelematica not = td.obtenerNotificacionTelematica(numeroRegistro);
     		if (not == null) return null;
     		return not.getFechaAcuse();
     	}catch (Exception ex){
@@ -818,6 +819,41 @@ public abstract class PadFacadeEJB implements SessionBean{
     	}          
 	}
 	
+	/**
+     * Indica que se ha remitido el tramite para la firma de documentos
+     * 
+     *  @ejb.interface-method
+     *  @ejb.permission role-name="${role.todos}"
+     * 
+     */
+	public void avisarPendienteFirmarDocumentos(String idPersistencia) throws ExcepcionPAD	
+	{
+		try
+		{
+			DelegateUtil.getAvisosDelegacionDelegate().avisarPendienteFirmarDocumentos(idPersistencia);		
+		}catch (Exception ex){
+			throw new ExcepcionPAD("Error obteniendo parametros tramite subsanacion",ex);
+		} 
+	}
+	
+	
+	/**
+     * Indica que se ha remitido el tramite para su presentacion
+     * 
+     *  @ejb.interface-method
+     *  @ejb.permission role-name="${role.todos}"
+     * 
+     */
+	public void avisarPendientePresentacionTramite(String idPersistencia)throws ExcepcionPAD	
+	{
+		try
+		{
+			DelegateUtil.getAvisosDelegacionDelegate().avisarPendientePresentacionTramite(idPersistencia);		
+		}catch (Exception ex){
+			throw new ExcepcionPAD("Error obteniendo parametros tramite subsanacion",ex);
+		} 
+	}
+	
     // ------------------------ Funciones utilidad ----------------------------------------------------------------   
     /**
      * Crea entrada en el log de entradas telemáticas
@@ -856,7 +892,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	// Obtenemos documentos
     	String idPersistencia = null;
     	String habilitarAvisos= null,avisoSMS= null,avisoEmail= null,habilitarNotificacionTelematica=null;
-    	it = asiento.getDatosAnexoDocumentacion().iterator();    	
+    	it = asiento.getDatosAnexoDocumentacion().iterator();    
     	TramiteSubsanacion tramiteSubsanacion = null;
     	while (it.hasNext()){
     		DatosAnexoDocumentacion da = (DatosAnexoDocumentacion) it.next();
@@ -982,7 +1018,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	registro.setIdioma( asiento.getDatosAsunto().getIdiomaAsunto() );
     	registro.setNumeroRegistro(justificante.getNumeroRegistro());    	
     	registro.setFecha(justificante.getFechaRegistro());   
-    	    	    	
+    	
     	// Guardamos en log de entrada telematica    	
     	RegistroExternoDelegate td = DelegateUtil.getRegistroExternoDelegate();
     	td.grabarRegistroExterno(registro);
@@ -1066,7 +1102,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     					){
     						throw new Exception("No concuerda usuario seycon indicado en la notificacion con el del expediente");
     				}
-    					    					
+    				
     				// Establecemos datos    				
     				notificacion.setCodigoRdsAviso(ref.getCodigo());
     				notificacion.setClaveRdsAviso(ref.getClave());
@@ -1099,7 +1135,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     					notificacion.setTramiteSubsanacionParametros(StringUtil.serializarMap(oficioRemision.getTramiteSubsanacion().getParametrosTramite()));
     				}
     				
-    				break;	    		
+    				break;	
     			// Anexo asociado a notificacion	
     			default:
     	    		DocumentoNotificacionTelematica doc = new DocumentoNotificacionTelematica();
@@ -1111,7 +1147,7 @@ public abstract class PadFacadeEJB implements SessionBean{
 	        		doc.setCodigoRDS(ref.getCodigo());    		
 	        		doc.setClaveRDS(ref.getClave());
 	
-    				notificacion.addDocumento(doc);  
+	        		notificacion.addDocumento(doc);
 	        		index++;
     		}
     		  		
@@ -1130,7 +1166,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	notificacion.setNumeroRegistro(justificante.getNumeroRegistro());
 
     	// Guardamos en log de notificacion telematica
-    	NotificacionTelematicaDelegate td = DelegateUtil.getNotificacionTelematicaDelegate();    	
+    	NotificacionTelematicaDelegate td = DelegateUtil.getNotificacionTelematicaDelegate();
     	Long codigoNotificacion = td.grabarNotificacionTelematica(notificacion);
     	notificacion.setCodigo(codigoNotificacion);
     	
@@ -1222,7 +1258,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     			// Obtenemos id persistencia
     			FactoriaObjetosXMLDatosPropios factoria = ServicioDatosPropiosXML.crearFactoriaObjetosXML();
     			datosPropios = factoria.crearDatosPropios(new ByteArrayInputStream (consultarDocumentoRDS(ref.getCodigo(),ref.getClave())));
-    			idPersistencia = datosPropios.getInstrucciones().getIdentificadorPersistencia();    			    	
+    			idPersistencia = datosPropios.getInstrucciones().getIdentificadorPersistencia();   
     			
     		}
     		
@@ -1283,8 +1319,8 @@ public abstract class PadFacadeEJB implements SessionBean{
     		doc.setFotocopia((docPres.isFotocopia().booleanValue()?'S':'N'));	
     		
     		entrada.addDocumento(doc);    	
-    	}    	
-    	    	
+    	}    
+    	
     	// Si es un tramite de subsanacion, creamos elemento expediente asociado y actualizamos expediente
     	TramiteSubsanacion tramiteSubsanacion = null;
     	if( datosPropios.getInstrucciones().getTramiteSubsanacion() != null){
@@ -1323,7 +1359,7 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    	tpad.setFechaModificacion(t.getFechaModificacion());
 	    	tpad.setFechaCaducidad(t.getFechaCaducidad());
 	    	tpad.setIdioma(t.getIdioma());
-	    	tpad.setParametrosInicio(t.getParametrosInicioMap());	    	
+	    	tpad.setParametrosInicio(t.getParametrosInicioMap());	
 	    	tpad.setDelegado(t.getDelegado());
 	    	tpad.setEstadoDelegacion(t.getEstadoDelegacion());
 	    	
@@ -1395,7 +1431,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	    	t.setVersion(tpad.getVersion());
     	    	t.setDescripcion( tpad.getDescripcion());
     	    	t.setNivelAutenticacion(tpad.getNivelAutenticacion());
-    	    	t.setUsuario(tpad.getUsuario());
+    	    	t.setUsuario(tpad.getUsuario());    	    	
     	    	t.setFechaCreacion(ahora);    	    	
     	    	t.setIdioma(tpad.getIdioma());
     	    	t.setParametrosInicioMap(tpad.getParametrosInicio());

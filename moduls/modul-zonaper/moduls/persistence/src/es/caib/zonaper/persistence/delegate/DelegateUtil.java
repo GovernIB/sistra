@@ -93,5 +93,9 @@ public final class DelegateUtil {
     public static BandejaFirmaDelegate getBandejaFirmaDelegate() {
         return (BandejaFirmaDelegate) DelegateFactory.getDelegate(BandejaFirmaDelegate.class);
     }
+    
+    public static AvisosDelegacionDelegate getAvisosDelegacionDelegate() {
+        return (AvisosDelegacionDelegate) DelegateFactory.getDelegate(AvisosDelegacionDelegate.class);
+    }
 }
 

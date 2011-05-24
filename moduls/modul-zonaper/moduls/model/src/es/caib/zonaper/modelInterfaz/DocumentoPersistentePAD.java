@@ -16,6 +16,12 @@ public class DocumentoPersistentePAD  implements Serializable {
 	 */
 	public static final String ESTADO_PENDIENTE_DELEGACION_FIRMA = "DF";
 	
+	/**
+	 * Para trámites que se ejecutan de forma delegada indica que se ha rechazado el documento 
+	 * desde la bandeja de firma y debe subsanarlo
+	 */
+	public static final String ESTADO_RECHAZADO_DELEGACION_FIRMA = "RF";
+	
     // Fields    	     
      private String identificador;
      private int numeroInstancia=1;
