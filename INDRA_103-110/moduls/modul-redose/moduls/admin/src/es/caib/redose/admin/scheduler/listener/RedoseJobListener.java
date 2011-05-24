@@ -17,13 +17,13 @@ public class RedoseJobListener implements JobListener
 
 	public void jobToBeExecuted(JobExecutionContext arg0)
 	{
-		log.debug( "Job to be executed" );
+		log.debug( "Job to be executed: " + arg0.getJobDetail().getName());
 
 	}
 
 	public void jobExecutionVetoed(JobExecutionContext arg0)
 	{
-		log.debug( "Job execution vetoed" );
+		log.debug( "Job execution vetoed: " + arg0.getJobDetail().getName());
 
 	}
 
@@ -31,12 +31,10 @@ public class RedoseJobListener implements JobListener
 			JobExecutionException exception)
 	{
 		
-		log.debug ( "Job executed at time " + new java.util.Date() );
+		log.debug ( "Job : " + arg0.getJobDetail().getName()+ " executed at time " + new java.util.Date() );
 	
 		if (exception != null) {
-			log.error("Job error");
-			exception.printStackTrace();
-			log.error( "Executing job " + arg0.getJobDetail().getName(), exception );
+			log.error("Job error : " + arg0.getJobDetail().getName(),exception);		
 		}
 
 	}

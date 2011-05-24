@@ -30,9 +30,7 @@ public class BantelJobListener implements JobListener
 	{		
 		log.debug ( "Job executed : " + arg0.getJobDetail().getName() + " at time " + new java.util.Date() );	
 		if (exception != null) {
-			log.error( "Executing job " + arg0.getJobDetail().getName(), exception );
-			exception.printStackTrace();
-			//TODO Auditar?
+			log.error( "Executing job " + arg0.getJobDetail().getName(), exception );			
 		}
 
 	}

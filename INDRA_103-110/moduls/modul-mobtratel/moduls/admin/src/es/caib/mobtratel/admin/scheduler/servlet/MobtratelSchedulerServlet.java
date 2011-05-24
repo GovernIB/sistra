@@ -17,7 +17,6 @@ import org.quartz.ee.servlet.QuartzInitializerServlet;
 import org.quartz.impl.StdSchedulerFactory;
 
 import es.caib.mobtratel.admin.scheduler.conf.SchedulerConfiguration;
-import es.caib.mobtratel.admin.scheduler.listener.MobtratelJobListener;
 
 
 /**
@@ -45,7 +44,7 @@ public class MobtratelSchedulerServlet implements Servlet
 			SchedulerConfiguration configuration = SchedulerConfiguration.getInstance();
 			StdSchedulerFactory schedFact = this.getSchedulerFactory( config );
 			sched = schedFact.getScheduler();
-			sched.addGlobalJobListener( new MobtratelJobListener() );
+			//ssched.addJobListener( new MobtratelJobListener() );
 			
 			// Programación Jobs
 			jobNumber = Integer.parseInt(configuration.get( "scheduler.jobs.number" ));

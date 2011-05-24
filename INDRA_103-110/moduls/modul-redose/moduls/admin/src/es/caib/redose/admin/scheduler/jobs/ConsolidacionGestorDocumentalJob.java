@@ -5,7 +5,6 @@ import org.apache.commons.logging.LogFactory;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.quartz.SchedulerException;
 
 import es.caib.redose.admin.scheduler.servlet.RedoseSchedulerServlet;
 import es.caib.redose.persistence.delegate.DelegateUtil;
@@ -35,6 +34,7 @@ public class ConsolidacionGestorDocumentalJob implements Job
 				PluginFactory.getInstance().getPluginGestionDocumental();
 			} catch (Exception e) {
 				if(context.getScheduler() != null){
+					log.debug( "No existe plugin gestion documental: desactivamos job consolidacion gestor documental");
 					context.getScheduler().deleteJob(RedoseSchedulerServlet.NAMEBORRADOGESTIONDOCUMENTAL,RedoseSchedulerServlet.GROUP);
 				}
 				existePluginGestionDocumental = false;
