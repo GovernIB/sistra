@@ -2,9 +2,11 @@ package es.caib.zonaper.filter.front.form;
 
 import org.apache.struts.validator.ValidatorForm;
 
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
+
 public class ElegirPerfilAccesoPADForm extends ValidatorForm
 {
-	private String perfil;
+	private String perfil = ConstantesZPE.DELEGACION_PERFIL_ACCESO_CIUDADANO;
 	private String urlOriginal;
 	private String nifEntidad;
 	
