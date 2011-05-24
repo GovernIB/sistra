@@ -20,7 +20,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="numeroRegistro" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="fechaRegistro" type="{http://www.w3.org/2001/XMLSchema}date"/>
+ *         &lt;element name="fechaRegistro" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
  *         &lt;element name="referenciaRDSJustificante" type="{urn:es:caib:regtel:ws:v2:model:ReferenciaRDS}ReferenciaRDS"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -41,7 +41,7 @@ public class ResultadoRegistro {
     @XmlElement(required = true)
     protected String numeroRegistro;
     @XmlElement(required = true)
-    @XmlSchemaType(name = "date")
+    @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar fechaRegistro;
     @XmlElement(required = true)
     protected ReferenciaRDS referenciaRDSJustificante;

@@ -4,7 +4,7 @@
 	<xs:complexType name="ResultadoRegistro">
 		<xs:sequence>
 			<xs:element name="numeroRegistro" type="xs:string"/>
-			<xs:element name="fechaRegistro" type="xs:date"/>
+			<xs:element name="fechaRegistro" type="xs:dateTime"/>
 			<xs:element name="referenciaRDSJustificante" type="ns1:ReferenciaRDS"/>
 		</xs:sequence>
 	</xs:complexType>
