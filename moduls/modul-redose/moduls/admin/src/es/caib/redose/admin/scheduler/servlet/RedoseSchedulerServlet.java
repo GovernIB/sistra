@@ -21,7 +21,6 @@ import es.caib.redose.admin.scheduler.jobs.BorrarDocumentosDefinitivamenteJob;
 import es.caib.redose.admin.scheduler.jobs.ConsolidacionGestorDocumentalJob;
 import es.caib.redose.admin.scheduler.jobs.DocumentosSinUsosJob;
 import es.caib.redose.admin.scheduler.jobs.EliminarDocumentosCustodiaJob;
-import es.caib.redose.admin.scheduler.listener.RedoseJobListener;
 
 /**
  * @web.servlet name="redoseSchedulerServlet" load-on-startup="2"
@@ -38,48 +37,46 @@ public class RedoseSchedulerServlet implements Servlet
 	public static String GROUP = "Redose";
 	private static int SCHEDULER_DELAY_MINUTES = 5;
 	
-	private Scheduler schedSinUsos = null;
-	private Scheduler schedCustodia = null;
-	private Scheduler schedGestorDocumental = null;
-	private Scheduler schedBorradoDefinitivo = null;
+	private Scheduler scheduler = null;
 	
 	public void init(ServletConfig config) throws ServletException
 	{
 		try{
 			//Prepraramos scheduler
-		 SchedulerConfiguration configuration = SchedulerConfiguration.getInstance();
+			SchedulerConfiguration configuration = SchedulerConfiguration.getInstance();
 			StdSchedulerFactory schedFact = this.getSchedulerFactory( config );
-
+			scheduler = schedFact.getScheduler();
+			//scheduler.addJobListener( new RedoseJobListener() );
+			
 			//inicializamos el Job de borrado de documentos sin uso
 			 boolean schedule = Boolean.valueOf( configuration.get( "scheduler.jobBorradoDocsSinUsos.schedule" ) ).booleanValue();
 			 String cronExpression = configuration.get( "scheduler.jobBorradoDocsSinUsos.cron.expression" );
-		 
-		 _log.info( "SCHEDULE [" + schedule + "]" );
-		 _log.info( "TIME EXPRESSION [" + cronExpression + "]" );
-		 
-		 if ( schedule )
-		 {
-				 CronTrigger triggerSinUsos = new CronTrigger(NAMEBORRADOSINUSOS, GROUP);
-			 try 
+			 
+			 _log.info( "SCHEDULE [" + schedule + "]" );
+			 _log.info( "TIME EXPRESSION [" + cronExpression + "]" );
+			 
+			 if ( schedule )
 			 {
+				 CronTrigger triggerSinUsos = new CronTrigger(NAMEBORRADOSINUSOS, GROUP);
+				 try 
+				 {
 					 JobDetail jobDetailSinUsos = new JobDetail( NAMEBORRADOSINUSOS, GROUP, DocumentosSinUsosJob.class );
 					 triggerSinUsos.setCronExpression( cronExpression );
-				 
+					 
 					 // Retrasamos 5 minutos
-				java.util.Date startTime = new java.util.Date();					
-				startTime.setTime( startTime.getTime() + ( SCHEDULER_DELAY_MINUTES * 60 * 1000 ) );
+					java.util.Date startTime = new java.util.Date();					
+					startTime.setTime( startTime.getTime() + ( SCHEDULER_DELAY_MINUTES * 60 * 1000 ) );
 					_log.debug( "Job " + NAMEBORRADOSINUSOS + ": Fecha de inicio[ " + startTime + "]");
-				 
-					schedSinUsos = schedFact.getScheduler();
-					schedSinUsos.addGlobalJobListener( new RedoseJobListener() );
-					schedSinUsos.scheduleJob( jobDetailSinUsos, triggerSinUsos );
+					triggerSinUsos.setStartTime(startTime);
+					
+					scheduler.scheduleJob( jobDetailSinUsos, triggerSinUsos );
+				 }
+				 catch (Exception e) 
+				 {
+				  	_log.error( "Exception scheduling : ", e );
+					 //e.printStackTrace();
+				 }
 			 }
-			 catch (Exception e) 
-			 {
-			  	_log.error( "Exception scheduling : ", e );
-				 //e.printStackTrace();
-			 }
-		 }
 			
 			 //inicializamos el Job de borrado de documetnos en custodia			 
 			 schedule = Boolean.valueOf( configuration.get( "scheduler.jobBorradoDocsCustodia.schedule" ) ).booleanValue();;
@@ -99,10 +96,9 @@ public class RedoseSchedulerServlet implements Servlet
 					java.util.Date startTime2 = new java.util.Date();					
 					startTime2.setTime( startTime2.getTime() + ( SCHEDULER_DELAY_MINUTES * 60 * 1000 ) );
 					_log.debug( "Job " + NAMEBORRADOCUSTODIA + ": Fecha de inicio[ " + startTime2 + "]");
-					 
-					schedCustodia = schedFact.getScheduler();
-					schedCustodia.addGlobalJobListener( new RedoseJobListener() );
-					schedCustodia.scheduleJob( jobDetailCustodia, triggerCustodia );
+					triggerCustodia.setStartTime(startTime2);
+					
+					scheduler.scheduleJob( jobDetailCustodia, triggerCustodia );
 				 }
 				 catch (Exception e) 
 				 {
@@ -129,10 +125,9 @@ public class RedoseSchedulerServlet implements Servlet
 					java.util.Date startTime2 = new java.util.Date();					
 					startTime2.setTime( startTime2.getTime() + ( SCHEDULER_DELAY_MINUTES * 60 * 1000 ) );
 					_log.debug( "Job " + NAMEBORRADOGESTIONDOCUMENTAL + ": Fecha de inicio[ " + startTime2 + "]");
-					 
-					schedGestorDocumental = schedFact.getScheduler();
-					schedGestorDocumental.addGlobalJobListener( new RedoseJobListener() );
-					schedGestorDocumental.scheduleJob( jobDetailGestionDocumental, triggerGestionDocumental );
+					triggerGestionDocumental.setStartTime(startTime2);
+					
+					scheduler.scheduleJob( jobDetailGestionDocumental, triggerGestionDocumental );
 				 }
 				 catch (Exception e) 
 				 {
@@ -169,10 +164,9 @@ public class RedoseSchedulerServlet implements Servlet
 					java.util.Date startTime2 = new java.util.Date();					
 					startTime2.setTime( startTime2.getTime() + ( SCHEDULER_DELAY_MINUTES * 60 * 1000 ) );
 					_log.debug( "Job " + NAMEBORRADODEFINITIVO + ": Fecha de inicio[ " + startTime2 + "]");
-					 
-					schedBorradoDefinitivo = schedFact.getScheduler();
-					schedBorradoDefinitivo.addGlobalJobListener( new RedoseJobListener() );
-					schedBorradoDefinitivo.scheduleJob( jobDetailBorradoDefinitivo, triggerBorradoDefinitivo );
+					triggerBorradoDefinitivo.setStartTime(startTime2);
+					
+					scheduler.scheduleJob( jobDetailBorradoDefinitivo, triggerBorradoDefinitivo );
 				 }
 				 catch (Exception e) 
 				 {
@@ -186,8 +180,7 @@ public class RedoseSchedulerServlet implements Servlet
 
 	public ServletConfig getServletConfig()
 	{
-
-		return null;
+		return this.getServletConfig();
 	}
 
 	public void service(ServletRequest req, ServletResponse res)
@@ -199,23 +192,12 @@ public class RedoseSchedulerServlet implements Servlet
 
 	public String getServletInfo()
 	{
-
-		return null;
+		return "RedoseSchedulerServlet";
 	}
 
 	public void destroy()
 	{
-		try
-		{
-			schedSinUsos.shutdown( true );
-			schedCustodia.shutdown( true );
-			schedGestorDocumental.shutdown( true );
-		}
-		catch ( Exception exc )
-		{
-			_log.error ( exc );
-		}
-
+		try{scheduler.shutdown( true );}catch(Exception ex){}
 	}
 	
 	private StdSchedulerFactory getSchedulerFactory( ServletConfig config )

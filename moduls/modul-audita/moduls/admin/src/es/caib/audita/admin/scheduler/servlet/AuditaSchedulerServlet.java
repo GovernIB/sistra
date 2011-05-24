@@ -18,7 +18,6 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import es.caib.audita.admin.scheduler.conf.SchedulerConfiguration;
 import es.caib.audita.admin.scheduler.jobs.GeneracionEstadisticasJob;
-import es.caib.audita.admin.scheduler.listener.AuditJobListener;
 
 /**
  * @web.servlet name="auditaSchedulerServlet" load-on-startup="2"
@@ -58,7 +57,7 @@ public class AuditaSchedulerServlet implements Servlet
 				 trigger.setStartTime( startTime );
 				 //Scheduler sched = schedFact.getDefaultScheduler();
 				 sched = schedFact.getScheduler();
-				 sched.addGlobalJobListener( new AuditJobListener() );
+				 //sched.addJobListener( new AuditJobListener() );
 				 sched.scheduleJob( jobDetail, trigger );
 			 }
 			 catch (Exception e) 
