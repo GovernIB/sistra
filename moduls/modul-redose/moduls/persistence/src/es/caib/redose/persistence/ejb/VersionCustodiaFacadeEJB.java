@@ -27,7 +27,6 @@ public abstract class VersionCustodiaFacadeEJB extends HibernateEJB {
 
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      */
@@ -110,7 +109,6 @@ public abstract class VersionCustodiaFacadeEJB extends HibernateEJB {
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
-     * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.auto}"
      */
     public String obtenerCodigoVersionCustodia(Long id) {
