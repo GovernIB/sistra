@@ -177,7 +177,9 @@ public class MostrarDetalleElementoAction extends BaseAction {
 					ref = new ReferenciaRDS(docTipo.getCodigoRDS(),docTipo.getClaveRDS());
 					codigo = docTipo.getCodigo()+"";
 				}
-				if (ref.getCodigo() > 0){
+				
+				// En caso de que sea presencial no tendra referencia RDS
+				if (ref.getCodigo() > 0){				
 					DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
 					if(doc != null && doc.getFirmas() != null){
 						request.setAttribute(codigo,doc.getFirmas());
