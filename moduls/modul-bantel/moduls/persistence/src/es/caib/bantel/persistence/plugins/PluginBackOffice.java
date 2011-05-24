@@ -158,11 +158,11 @@ public class PluginBackOffice {
 		//	 Comprobamos si requiere autenticacion explicita
 		String user = null,pass=null; 
 		switch (tramite.getAutenticacionEJB()){
-			// No requiere autenticacion explicita (utilizara usr/pass auto)
+			// No requiere autenticacion explicita 
 			case Tramite.AUTENTICACION_SIN:
-				log.debug("Autenticacion implicita con usuario auto");
-				user = usuAuto;
-				pass = passAuto; 
+				log.debug("Autenticacion sin autenticacion");
+				//user = usuAuto;
+				//pass = passAuto; 
 				break;
 			// Requiere autenticacion explicita basada en usr/pass
 			case Tramite.AUTENTICACION_ESTANDAR:
@@ -185,7 +185,7 @@ public class PluginBackOffice {
 				pass = authInfo.getPassword(); 
 				break;				
 		}
-		
+
 		// Comprobamos si debemos hacer la llamada de forma asincrona: por defecto true
 		String prop =config.getProperty("webService.cliente.asincrono");
 		if (prop == null) prop = "true";
