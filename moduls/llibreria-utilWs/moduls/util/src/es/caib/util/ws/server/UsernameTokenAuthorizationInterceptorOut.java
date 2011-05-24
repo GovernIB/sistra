@@ -1,0 +1,35 @@
+package es.caib.util.ws.server;
+
+import java.util.Map;
+import java.util.Properties;
+
+import org.apache.cxf.binding.soap.SoapMessage;
+import org.apache.cxf.interceptor.Fault;
+import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
+import org.apache.ws.security.handler.WSHandlerConstants;
+
+import es.caib.util.ws.ConfigurationUtil;
+
+public class UsernameTokenAuthorizationInterceptorOut extends WSS4JOutInterceptor{
+	
+	public UsernameTokenAuthorizationInterceptorOut(Map<String, Object> properties) {
+		
+		super(properties);
+		
+		try{		
+			 Properties props = ConfigurationUtil.getInstance().obtenerPropiedades();
+			 String timestamp = props.getProperty("sistra.ws.authenticacion.usernameToken.generateTimestamp");
+			 if ("true".equals(timestamp)){
+				 properties.put( "action", WSHandlerConstants.TIMESTAMP);
+			 }			 
+		 }catch (Exception ex){
+			 throw new Fault(ex);
+		 }		 
+		 
+	}
+		
+	public void handleMessage(SoapMessage msg) throws Fault {
+		 super.handleMessage(msg);
+	}
+
+}
