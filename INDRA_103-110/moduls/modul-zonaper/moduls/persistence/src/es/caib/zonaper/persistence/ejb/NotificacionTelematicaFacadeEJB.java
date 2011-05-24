@@ -104,8 +104,8 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
         	
         	
         	// Comprobamos que accede el usuario o si es un delegado
-        	Principal sp = this.ctx.getCallerPrincipal();
-        	PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
+        	Principal sp =this.ctx.getCallerPrincipal();
+    		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
     		if (plgLogin.getMetodoAutenticacion(sp) == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO){
         		throw new HibernateException("Acceso solo permitido para autenticado");
         	}
@@ -115,8 +115,8 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
             	if (StringUtils.isEmpty(permisos)){
             		throw new Exception("Acceso no permitido a notificacion telematica " + id + " - usuario " + sp.getName());
             	}
-        	}
-        	
+    		}
+        	        	
         	// Cargamos documentos
     		Hibernate.initialize(notificacionTelematica.getDocumentos());
         	
@@ -204,6 +204,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
     /**
      * @ejb.interface-method     
      * @ejb.permission role-name="${role.gestor}"
+     * @ejb.permission role-name="${role.auto}"
      */
     public NotificacionTelematica obtenerNotificacionTelematica(String numeroRegistro) {
         Session session = getSession();
@@ -440,7 +441,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			return realizarFirmaAcuse(notificacion,asientoAcuse,firmaAcuse,idPersistencia);	    	
 	    }catch( Exception exc ){
         	throw new EJBException( exc );
-        }
+        }		
 	}
 		
 	/**
@@ -512,14 +513,14 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
         			// Seguimos comprobando caducados
         		}
         	}
-			
+        	
         	return psRes;            
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
             close(session);
         }
-	}
+	}   
     
   	//--------------------------------------------------------
     //	FUNCIONES AUXILIARES
@@ -673,7 +674,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			// Obtenemos nif firmante
 			String nifFirmante = getNifFirma(firmaAcuse);
 			
-			if  (!nifFirmante.equals(nifRepresentanteNotificacion)){
+			if (!nifFirmante.equals(nifRepresentanteNotificacion)){
 				// Si es autenticada, comprobamos si se esta accediendo en modo delegado
 				if  (notificacion.getUsuarioSeycon() != null){
 					// Si no es el usuario quien firma el acuse es un delegado con permiso para abrir notificaciones
@@ -692,9 +693,9 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 				// Si no es el usuario quien firma el acuse es un delegado con permiso para abrir notificaciones
             	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(notificacion.getNifRepresentante());
             	if (StringUtils.isEmpty(permisos) || permisos.indexOf(ConstantesZPE.DELEGACION_PERMISO_ABRIR_NOTIFICACION) == -1){
-				return false;
+            		return false;
+            	}								
 			}
-		}
 			
 		}
 			

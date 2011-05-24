@@ -192,6 +192,7 @@ public abstract class BandejaFirmaEJB extends HibernateEJB{
 			//Si no quedan documentos pendientes de firma en el tramite resetemos info delegacion tramite
 			if(!this.quedanDocumentosPendientesFirma(doc.getTramitePersistente())){
 				tpDelegate.actualizarInfoDelegacionTramitePersistente(doc.getTramitePersistente().getIdPersistencia(),null);
+				DelegateUtil.getAvisosDelegacionDelegate().avisarContinuarTramite(doc.getTramitePersistente().getIdPersistencia());
 			}
 			
 		} catch (Exception e) {
@@ -236,11 +237,13 @@ public abstract class BandejaFirmaEJB extends HibernateEJB{
 			this.borrarFirmasDocumento(doc);
 			
 			// Reseteamos info delegacion documento
-			tpDelegate.actualizarInfoDelegacionDocumentoTramitePersistente(codigo,null,null,null);
+			tpDelegate.actualizarInfoDelegacionDocumentoTramitePersistente(codigo,DocumentoPersistentePAD.ESTADO_RECHAZADO_DELEGACION_FIRMA,null,null);
+			DelegateUtil.getAvisosDelegacionDelegate().avisarRechazoDocumento(doc.getTramitePersistente().getIdPersistencia(),codigo);
 			
 			//Si no quedan documentos pendientes de firma en el tramite resetemos info delegacion tramite
 			if(!this.quedanDocumentosPendientesFirma(doc.getTramitePersistente())){
 				tpDelegate.actualizarInfoDelegacionTramitePersistente(doc.getTramitePersistente().getIdPersistencia(),null);
+				DelegateUtil.getAvisosDelegacionDelegate().avisarContinuarTramite(doc.getTramitePersistente().getIdPersistencia());
 			}
 						
 		} catch (Exception e) {

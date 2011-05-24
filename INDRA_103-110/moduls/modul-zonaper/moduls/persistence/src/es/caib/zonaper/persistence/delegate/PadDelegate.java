@@ -48,7 +48,7 @@ public class PadDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-	
+		
     public List obtenerTramitesPersistentesEntidadDelegada(String nifEntidad)throws DelegateException {
         try {
             return getFacade().obtenerTramitesPersistentesEntidadDelegada(nifEntidad);
@@ -335,6 +335,42 @@ public class PadDelegate implements StatelessDelegate {
 		}
 	}
 	
+	/**
+     * Indica que se ha remitido el tramite para la firma de documentos
+     * 
+     * @param idPersistencia
+     * 
+     */
+	public void avisarPendienteFirmarDocumentos(String idPersistencia) throws DelegateException	
+	{
+		try
+		{
+			getFacade().avisarPendienteFirmarDocumentos( idPersistencia);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	
+	/**
+     * Indica que se ha remitido el tramite para su presentacion
+     * 
+     * @param idPersistencia
+     * 
+     */
+	public void avisarPendientePresentacionTramite(String idPersistencia) throws DelegateException	
+	{
+		try
+		{
+			getFacade().avisarPendientePresentacionTramite( idPersistencia);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
