@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.struts.config.ActionConfig;
 import org.apache.struts.tiles.ComponentContext;
 
 import es.caib.sistra.front.Constants;
@@ -60,13 +61,18 @@ public class PasosNecesariosController extends TramiteController
 		// 	COMPROBAMOS SI HAY DELEGACION Y HAY QUE PASAR EL TRAMITE
 		//
 		
-		if (tramite.isRemitirDelegacionFirma()){
-			request.setAttribute("pendienteDelegacionFirma","true");
-			return;
-		}
-		if (tramite.isRemitirDelegacionPresentacion()) {
-			request.setAttribute("pendienteDelegacionPresentacion","true");
-			return;
+		// Si estamos en pantalla de anexar documento no mostramos la zona de remitir
+		//org.apache.struts.action.mapping.instance=ActionConfig[path=/protected/irAAnexar,name=irAAnexarForm,scope=request,type=es.caib.sistra.front.action.IrAAnexarAction
+		ActionConfig action = (ActionConfig) request.getAttribute("org.apache.struts.action.mapping.instance");
+		if  (!(action != null && "es.caib.sistra.front.action.IrAAnexarAction".equals(action.getType()))){
+			if (tramite.isRemitirDelegacionFirma()){
+				request.setAttribute("pendienteDelegacionFirma","true");
+				return;
+			}
+			if (tramite.isRemitirDelegacionPresentacion()) {
+				request.setAttribute("pendienteDelegacionPresentacion","true");
+				return;
+			}
 		}
 		
 		
@@ -119,7 +125,7 @@ public class PasosNecesariosController extends TramiteController
 				}else{
 						completadosAnteriores = false;
 				}
-			}			
+			}
 			
 			
 			// SE HA ENVIADO EL TRAMITE			
@@ -199,12 +205,12 @@ public class PasosNecesariosController extends TramiteController
 				
 				habilitarSiguiente = false;
 				habilitarAnterior = false;
-				
+								
 				// Si se han completado todas los anteriores mostramos anterior				
 				if (completadosAnteriores){
 					habilitarAnterior = true;
 				}
-
+								
 				/**
 				 * MODIFICACION: NO MOSTRAMOS PAGINA DE PASOS
 				 */
