@@ -11,6 +11,8 @@ import org.apache.struts.action.ActionMapping;
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleExpedienteForm;
 import es.caib.bantel.front.util.MensajesUtil;
+import es.caib.bantel.modelInterfaz.TramiteBTE;
+import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
@@ -40,28 +42,33 @@ public class RealizarAltaExpedienteAction extends BaseAction
 		PadBackOfficeDelegate ejb = new PadBackOfficeDelegate();
 		request.getSession().setAttribute("nombreUnidad",expedienteForm.getNombreUnidad());
 		try{
+			
+			// Montamos expediente
 			ExpedientePAD expediente = new ExpedientePAD();
 			expediente.setDescripcion(expedienteForm.getDescripcion());
 			expediente.setIdioma(expedienteForm.getIdioma());
 			expediente.setIdentificadorExpediente(expedienteForm.getIdentificadorExp());
 			expediente.setClaveExpediente(expedienteForm.getClaveExp());
-			if(StringUtils.isNotEmpty(expedienteForm.getNif()) && StringUtils.isNotEmpty(expedienteForm.getNombre())){
-				PersonaPAD p = DelegateUtil.getConsultaPADDelegate().obtenerDatosPADporNif(expedienteForm.getNif());	
-				if(p!=null){//&& StringUtils.equals(expedienteForm.getNombre(),p.getNombre()) || StringUtils.equals(expedienteForm.getNombre(),p.getNombreCompleto())
-					expediente.setAutenticado(true);
-					expedienteForm.setUsuarioSeycon(p.getUsuarioSeycon());
-				}else{
-					throw new Exception("Usuario inexistente");
-				}
-
-			}else{
-				expediente.setAutenticado(StringUtils.isNotEmpty(expedienteForm.getUsuarioSeycon()));
-			}
-			if (expediente.isAutenticado()){
-				expediente.setIdentificadorUsuario(expedienteForm.getUsuarioSeycon());
-			}
-			expediente.setUnidadAdministrativa( new Long( expedienteForm.getUnidadAdm() ) );
+			
+			// Si tiene entrada asociada, dependera del nivel de autenticacion de la entrada
 			expediente.setNumeroEntradaBTE(expedienteForm.getNumeroEntrada());
+			if (StringUtils.isNotEmpty(expedienteForm.getNumeroEntrada())){ 
+				TramiteBTE entrada = DelegateBTEUtil.getBteDelegate().obtenerEntrada(expedienteForm.getNumeroEntrada());				
+				if (entrada.getNivelAutenticacion() == 'A'){
+					expediente.setAutenticado(false);
+				}else{
+					expediente.setAutenticado(true);
+					expediente.setNifRepresentante(entrada.getUsuarioNif());
+					expediente.setNifRepresentado(entrada.getRepresentadoNif());
+					expediente.setNombreRepresentado(entrada.getRepresentadoNombre());
+				}								
+			}else{
+			// Si no tiene entrada asociada, debe ser autenticado
+				expediente.setAutenticado(true);
+				expediente.setNifRepresentante(expedienteForm.getNif());				
+			}
+			
+			expediente.setUnidadAdministrativa( new Long( expedienteForm.getUnidadAdm() ) );			
 			if(!StringUtils.isEmpty(expedienteForm.getHabilitarAvisos()) ){
 				expediente.getConfiguracionAvisos().setHabilitarAvisos(new Boolean(expedienteForm.getHabilitarAvisos().equals("S")));
 				expediente.getConfiguracionAvisos().setAvisoEmail(expedienteForm.getEmail());
@@ -82,6 +89,7 @@ public class RealizarAltaExpedienteAction extends BaseAction
 			return mapping.findForward( "success" );
 			*/
 		}catch(Exception e){
+			
 			String mensajeOk = "";
 			
 			if(e.getMessage().equals("Usuario inexistente")){
@@ -89,7 +97,7 @@ public class RealizarAltaExpedienteAction extends BaseAction
 			}else if(e.getMessage().equals("La entrada ya tiene un expediente enlazado")){
 				mensajeOk = MensajesUtil.getValue("error.expediente.ExpedienteEnlazado");
 			}else{
-				mensajeOk = MensajesUtil.getValue("error.expediente.Excepcion");
+				mensajeOk = MensajesUtil.getValue("error.expediente.Excepcion") + ": " + e.getMessage();
 			}
 			
 			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk);

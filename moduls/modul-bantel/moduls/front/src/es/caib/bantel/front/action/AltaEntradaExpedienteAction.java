@@ -6,9 +6,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.struts.Globals;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.util.MessageResources;
 
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleExpedienteForm;
@@ -34,12 +36,20 @@ public class AltaEntradaExpedienteAction extends BaseAction
 {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception 
-    {
-		try{
+    {		
+		MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));
+		try{			
 			DetalleExpedienteForm expForm = (DetalleExpedienteForm)form;
 			request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,"3");
 			TramiteBTE entrada = consultaEntradaBTE(expForm.getNumeroEntrada());	
 			if (entrada != null){
+				
+				if (entrada.getNivelAutenticacion() == 'A' && StringUtils.isEmpty(entrada.getUsuarioNif())){
+					request.setAttribute("message",resources.getMessage( getLocale( request ), "errors.anomimoSinNif"));
+					return mapping.findForward( "fail" );
+				}
+				
+				request.setAttribute("existeEntrada","S");
 				expForm.setUsuarioSeycon(StringUtils.defaultString(entrada.getUsuarioSeycon()));
 				expForm.setDescripcion(StringUtils.defaultString(entrada.getDescripcionTramite()));
 				expForm.setIdioma(StringUtils.defaultString(entrada.getIdioma(),"es"));
@@ -54,13 +64,15 @@ public class AltaEntradaExpedienteAction extends BaseAction
 				expForm.setEmail(entrada.getAvisoEmail());
 				expForm.setHabilitarAvisos(entrada.getHabilitarAvisos());
 				expForm.setMovil(entrada.getAvisoSMS());
-				List unidades=Dominios.listarUnidadesAdministrativas();
+				List unidades=Dominios.listarUnidadesAdministrativas();												
 				request.setAttribute("unidades",unidades);
 				return mapping.findForward( "success" );
 			}else{
+				request.setAttribute("message",resources.getMessage( getLocale( request ), "errors.tramiteNoExiste"));
 				return mapping.findForward( "fail" );
 			}
 		}catch(Exception ex){
+			request.setAttribute("message",ex.getMessage());
 			return mapping.findForward( "fail" );	
 		}
 		
