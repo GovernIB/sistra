@@ -48,9 +48,9 @@ public class LogGestorDocumentalErroresDelegate implements StatelessDelegate {
     }
     
     
-    public void borrarLogGestorDocumentalErrores(Date startDate, Date endDate, String idUsuario) throws DelegateException {
+    public void borrarLogGestorDocumentalErrores() throws DelegateException {
         try {
-            getFacade().borrarLogGestorDocumentalErrores(startDate,endDate,idUsuario);
+            getFacade().borrarLogGestorDocumentalErrores();
         } catch (Exception e) {
         	e.printStackTrace();	
             throw new DelegateException(e);

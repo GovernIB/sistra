@@ -74,6 +74,11 @@
 		<logic:equal name="page" property="nextPage" value="true">			 
 		<html:link action="/back/erroresGestorDocumental/lista" paramId="pagina" paramName="page" paramProperty="nextPageNumber"><bean:message key="erroresGestorDocumental.paginacion.siguiente" /></html:link> &gt; <html:link action="/back/erroresGestorDocumental/lista" paramId="pagina" paramName="page" paramProperty="lastPageNumber"><bean:message key="erroresGestorDocumental.paginacion.final" /></html:link> &gt;&gt;
 		</logic:equal>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<bean:define id="urlBorrarLog"><html:rewrite page="/back/erroresGestorDocumental/borrarLog.do"/></bean:define>
+		<button class="button" type="button" onclick="forward('<%=urlBorrarLog%>')">
+			<bean:message key="erroresGestorDocumental.borrarLog" />
+		</button>
 	</div>
 </logic:notEmpty>
 

@@ -1,8 +1,8 @@
 package es.caib.redose.persistence.ejb;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
+
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
@@ -134,18 +134,13 @@ public abstract class LogGestorDocumentalErroresFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.operador}"
      */
-    public void borrarLogGestorDocumentalErrores(Date startDate, Date endDate, String idUsuario){
-        
-    	// Obtenemos lista logs
-    	List logs = this.listarLogGestorDocumentalErrores(startDate,endDate,idUsuario);
-    	
-    	// Eliminamos logs
+    public void borrarLogGestorDocumentalErrores(){
+        // Eliminamos logs
     	Session session = getSession();
-        try {              	
-        	for (Iterator it=logs.iterator();it.hasNext();){
-        		session.delete((LogGestorDocumentalError)it.next());
-        	}        	
-        } catch (HibernateException he) {
+        try {      
+        	//session.delete("from LogGestorDocumentalError");
+        	session.connection().prepareStatement("delete from RDS_LOGEGD").executeUpdate();        	
+        } catch (Exception he) {
             throw new EJBException(he);
         } finally {
             close(session);
