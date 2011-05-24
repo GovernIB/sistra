@@ -9,11 +9,13 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -266,7 +268,7 @@ public class TramiteProcessorEJB implements SessionBean {
 				this.parametrosInicio.put(ConstantesSTR.SUBSANACION_PARAMETER_EXPEDIENTE_ID,pts.getExpedienteCodigo());
 				this.parametrosInicio.put(ConstantesSTR.SUBSANACION_PARAMETER_EXPEDIENTE_UA,pts.getExpedienteUnidadAdministrativa().toString());
 			}else{
-			this.parametrosInicio = parametrosInicio; 
+				this.parametrosInicio = parametrosInicio;
 			}
 			this.URL_CONSULTA = props.getProperty("backoffice.url");
 			
@@ -492,7 +494,7 @@ public class TramiteProcessorEJB implements SessionBean {
      * @ejb.interface-method    
      * @ejb.permission role-name="${role.todos}"
      */
-    public RespuestaFront cargarTramite(String idPersistencia) {
+    public RespuestaFront cargarTramite(String idPersistencia) {    	    
     	String res = "N";
     	String  mensAudit="";
     	try{    		
@@ -602,9 +604,9 @@ public class TramiteProcessorEJB implements SessionBean {
     		logAuditoria(ConstantesAuditoria.EVENTO_CARGA_TRAMITE,res,mensAudit,null);
     	}    	
     }
-    
+   
 
-    /**
+	/**
      * Pasa trámite a siguiente usario del flujo de tramitación
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
@@ -695,6 +697,7 @@ public class TramiteProcessorEJB implements SessionBean {
     		// Establecemos que el tramite esta pendiente de entregarse
     		this.tramitePersistentePAD.setEstadoDelegacion(TramitePersistentePAD.ESTADO_PENDIENTE_DELEGACION_PRESENTACION);
     		this.actualizarPAD();
+    		DelegatePADUtil.getPadDelegate().avisarPendientePresentacionTramite(this.tramitePersistentePAD.getIdPersistencia());
     		
 	    	// Mostramos mensaje de que el trámite ha sido remitido
 	    	res = "S";
@@ -767,6 +770,7 @@ public class TramiteProcessorEJB implements SessionBean {
     		// Establecemos que el tramite esta pendiente de firmar documentos
     		this.tramitePersistentePAD.setEstadoDelegacion(TramitePersistentePAD.ESTADO_PENDIENTE_DELEGACION_FIRMA);
     		this.actualizarPAD();
+    		DelegatePADUtil.getPadDelegate().avisarPendienteFirmarDocumentos(this.tramitePersistentePAD.getIdPersistencia());    		
     		
 	    	// Mostramos mensaje de que el trámite ha sido remitido
 	    	res = "S";
@@ -1349,16 +1353,16 @@ public class TramiteProcessorEJB implements SessionBean {
     	}finally{
     		// Apuntamos en auditoria	
     		if (confirmado){
-    			logAuditoria(ConstantesAuditoria.EVENTO_PAGO,"S","Pago confirmado",Character.toString(datosPago.getTipoPago()));
+    			logAuditoria(ConstantesAuditoria.EVENTO_PAGO,"S","Pago confirmado",Character.toString(datosPago.getTipoPago()));    			
     		}
     	}
     }
     
     /**
-     * Anular pago :
+     * Anular pago: 
      * 	Desde el asistente de tramitación sólo se permite anular pagos presenciales finalizados.
      *  En realidad no se anula, sino que se deshecha el pago anterior y se crea otro nuevo.
-     *  
+     * 
      * @ejb.interface-method    
      * @ejb.permission role-name="${role.todos}"
      */
@@ -1387,8 +1391,8 @@ public class TramiteProcessorEJB implements SessionBean {
 				datosPago.getTipoPago() != 'P'){
 	    		throw new Exception("Desde el asistente de tramitación sólo se permite anular pagos presenciales finalizados");
 	    	}
-	    	
-	    	// Anulamos pago: borramos pago del RDS, actualizamos PAD y borrar de listas pagos
+			
+			// Anulamos pago: borramos pago del RDS, actualizamos PAD y borrar de listas pagos
 	    	borrarPago(identificador,instancia);
 	    	
 	    	// Evaluamos paso
@@ -1422,7 +1426,7 @@ public class TramiteProcessorEJB implements SessionBean {
     		RespuestaFront resFront = generarRespuestaFront(mens,null);
     		this.context.setRollbackOnly();
     		return resFront;
-    	} 	
+    	} 
     }
     
     
@@ -1805,13 +1809,13 @@ public class TramiteProcessorEJB implements SessionBean {
     		if (pasoRellenar.getTipoPaso() != PasoTramitacion.PASO_RELLENAR){
     			throw new Exception("Se ha invocado a guardar formulario desde un paso distinto a rellenar");
     		}
-    		
+    		    		
     		// Si ya se han comenzado los pagos no se deja salvar
     		if (tramiteInfo.iniciadoPagos()){
     			throw new ProcessorException("No se puede salvar formulario si se han iniciado los pagos",MensajeFront.MENSAJE_PAGOSINICIADOS);
     		}
     		
-	    	// Obtenemos configuracion formulario
+    		// Obtenemos configuracion formulario
     		Documento doc = obtenerDocumentoFormulario(identificador);    	
 	    	DocumentoNivel docNivel = doc.getDocumentoNivel(datosSesion.getNivelAutenticacion());
 	    		    	
@@ -1819,7 +1823,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	    	if (docNivel.getFirmar() != 'S'){
 	    		throw new Exception("El documento no esta configurado para firmar");
 	    	}
-	    		    	
+	    	
 	    	// Obtenemos documento PAD
 	    	String ls_id = identificador + "-" + instancia;
 	    	DocumentoPersistentePAD docPad = (DocumentoPersistentePAD) tramitePersistentePAD.getDocumentos().get(ls_id);
@@ -1842,28 +1846,28 @@ public class TramiteProcessorEJB implements SessionBean {
 				
 			}else{
 				// En caso de firma digital verificamos firmante	
-    		if ( !verificaFirmanteAdecuado( tramiteInfo.getFormulario( identificador, instancia ), firma ) )
-    		{
-    			MensajeFront mens = new MensajeFront();
-    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
-    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ERROR_FIRMANTE_INCORRECTO ));
-    	    	mens.setMensajeExcepcion( "Firmante incorrecto" );
-    	    	return generarRespuestaFront(mens,null);
-    		}
-
-	    	// Guardamos la firma
-	    	RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();	
-	    	rds.asociarFirmaDocumento(docPad.getRefRDS(),firma);
-	    	
-	    	// Cacheamos firma
+		    	if ( !verificaFirmanteAdecuado( tramiteInfo.getFormulario( identificador, instancia ).getFirmante(), firma ) )
+	    		{
+	    			MensajeFront mens = new MensajeFront();
+	    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
+	    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ERROR_FIRMANTE_INCORRECTO ));
+	    	    	mens.setMensajeExcepcion( "Firmante incorrecto" );
+	    	    	return generarRespuestaFront(mens,null);
+	    		}
+		    	
+		    	// Guardamos la firma
+		    	RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();	
+		    	rds.asociarFirmaDocumento(docPad.getRefRDS(),firma);
+		    	
+		    	// Cacheamos firma
 		    	List firmas = new ArrayList();
 		    	firmas.add(firma);
 		    	this.firmaDocumentos.put(docPad.getRefRDS().toString(),firmas);
 			}
-	    	
+
 	    	// Actualizamos tramite info
 	    	this.actualizarTramiteInfo();
-	    	
+	    		    	
 	    	// Vamos a paso actual
 	    	return irAPaso(pasoActual);
 	    	
@@ -1940,7 +1944,7 @@ public class TramiteProcessorEJB implements SessionBean {
     		return resFront;
     	}    	
     }
-    
+            
     /**
      * 
      * Anexar documento
@@ -2020,24 +2024,26 @@ public class TramiteProcessorEJB implements SessionBean {
 	    					throw new ProcessorException("No puede indicarse firma delegada si la entidad no admite delegacion",MensajeFront.MENSAJE_ERRORDESCONOCIDO);
 	    				}	    					    				
 	    			}else{
-	    			// Verificamos que se haya firmado
-	    			if ( firma == null )
-	    			{
-	    				MensajeFront mens = new MensajeFront();
-		    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
-		    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ERROR_DOCUMENTO_NO_FIRMADO ));
-		    	    	mens.setMensajeExcepcion("No se ha firmado el documento" );
-		    	    	return generarRespuestaFront(mens,null);	    			
-		    	    }
-	    			// Verificamos quien lo firma
-		    		if ( !verificaFirmanteAdecuado( tramiteInfo.getAnexo( identificador, instancia ), firma ) )
-		    		{
-		    			MensajeFront mens = new MensajeFront();
-		    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
-		    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ERROR_FIRMANTE_INCORRECTO ));
-		    	    	mens.setMensajeExcepcion( "Firmante incorrecto" );
-		    	    	return generarRespuestaFront(mens,null);
-		    		}
+		    			// Verificamos que se haya firmado
+		    			if ( firma == null )
+		    			{
+		    				MensajeFront mens = new MensajeFront();
+			    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
+			    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ERROR_DOCUMENTO_NO_FIRMADO ));
+			    	    	mens.setMensajeExcepcion("No se ha firmado el documento" );
+			    	    	return generarRespuestaFront(mens,null);	    			
+			    	    }
+		    			// Verificamos quien lo firma
+		    			//   (cogemos info del firmante de la primera instancia, asi nos aseguramos para los genericos ya que las nueva instancias a anexar todavia no esta en tramiteInfo)
+		    			//if ( !verificaFirmanteAdecuado( tramiteInfo.getAnexo( identificador, instancia ).getFirmante(), firma ) )
+		    			if ( !verificaFirmanteAdecuado( tramiteInfo.getAnexo( identificador, 1 ).getFirmante(), firma ) )
+			    		{
+			    			MensajeFront mens = new MensajeFront();
+			    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
+			    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ERROR_FIRMANTE_INCORRECTO ));
+			    	    	mens.setMensajeExcepcion( "Firmante incorrecto" );
+			    	    	return generarRespuestaFront(mens,null);
+			    		}
 	    			}
 	    		}else{
 	    			// Comprobamos si hay que convertir documento a PDF
@@ -2091,7 +2097,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	    	
 	    	// Insertamos / actualizamos los documentos en el RDS
 	    	// (si no hay que presentarlo telemáticamente no es necesario)
-	    	if (doc.getAnexoPresentarTelematicamente() == 'S'){
+	    	if (doc.getAnexoPresentarTelematicamente() == 'S'){		    	
 		    	ReferenciaRDS refRds;	    
 		    	DocumentoRDS docRds = new DocumentoRDS();
 	    		docRds.setModelo(doc.getModelo());
@@ -2125,9 +2131,9 @@ public class TramiteProcessorEJB implements SessionBean {
 		    			docPad.setDelegacionFirmantesPendientes(docPad.getDelegacionFirmantes());
 		    		}else{
 		    			// Si se ha firmado, establecemos firma	    			
-		    		FirmaIntf [] firmas = {firma};
-		    		docRds.setFirmas(firmas);
-	    		}
+		    			FirmaIntf [] firmas = {firma};
+		    			docRds.setFirmas(firmas);
+		    		}
 	    		}
 	    		
 	    		// Establecemos idioma
@@ -2168,7 +2174,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	    	// Actualizamos estado paso anexar documentos	    	
 	    	pasoRellenar.setCompletado(evaluarEstadoPaso(pasoActual));
 	    	    	
-	    	// Establecemos respuesta front	    	
+	    	// Establecemos respuesta front
 	    	//  (Si se ha convertido el doc a PDF mostramos mensaje al usuario para que lo verifique)
 	    	MensajeFront mensFinal = null;
 	    	if (conversion){
@@ -2718,27 +2724,27 @@ public class TramiteProcessorEJB implements SessionBean {
     	try
     	{
     		byte[] scriptUrlFin;
-    		String urlFin=null;    
+    		String urlFin=null;        		
     		
     		// Ejecutamos script para calcular url de fin
         	EspecTramiteNivel especVersion = tramiteVersion.getEspecificaciones();
-        	EspecTramiteNivel especNivel = tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
+        	EspecTramiteNivel especNivel = tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();        	
         	if (especNivel.getUrlFin() != null && especNivel.getUrlFin().length > 0){    	
         		scriptUrlFin = especNivel.getUrlFin();
         	}else{
         		scriptUrlFin = especVersion.getUrlFin();
-        	}
+        	}        	        	       
         	if (scriptUrlFin != null && scriptUrlFin.length > 0){	        	
-        	// Ejecutamos script
-        	urlFin = this.evaluarScript(scriptUrlFin,null);
+	        	// Ejecutamos script
+	        	urlFin = this.evaluarScript(scriptUrlFin,null);
 	        	if (!StringUtils.isEmpty ( urlFin )){
-        	// Validamos construccion url
-        	try{
+	        		// Validamos construccion url
+	            	try{
 	            		if (!("[ZONAPER]".equals(urlFin))){
-        		new URL(urlFin);
+	            			new URL(urlFin);
 	            		}
-        	}catch(MalformedURLException mue){
-        		log.error("Url de finalizacion '" + urlFin + "' no valida: "  + mue.getMessage(),mue);
+	            	}catch(MalformedURLException mue){
+	            		log.error("Url de finalizacion '" + urlFin + "' no valida: "  + mue.getMessage(),mue);
 	            		urlFin = null;
 	            	}
 	            }        	
@@ -3252,8 +3258,8 @@ public class TramiteProcessorEJB implements SessionBean {
 				if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(datosSesion.getPerfilAcceso())){
 					existe = pad.obtenerEstadoTramiteEntidadDelegada(idPersistencia,datosSesion.getNifUsuario());
 				}else{
-				existe = pad.obtenerEstadoTramiteUsuario(idPersistencia);
-			}
+					existe = pad.obtenerEstadoTramiteUsuario(idPersistencia);
+				}				
 			}
 	    	
 	    	// ----- Tramite no existe o pertenece a otro usuario 
@@ -3359,7 +3365,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	    			// Cacheamos estado firma
 	    			if (docNivel.getFirmar() == 'S'){		    			
 						if ( docRds.getFirmas() != null && docRds.getFirmas().length > 0 )
-						{																
+						{	
 							List firmas = new ArrayList();
 							for (int i=0;i<docRds.getFirmas().length;i++){
 								firmas.add(docRds.getFirmas()[i]);
@@ -3738,7 +3744,7 @@ public class TramiteProcessorEJB implements SessionBean {
 			
 			// Si todavía no se ha enviado y hay algo pendiente de flujo
 			if (ultimoPasoCompletado <= tramite.getPasoNoRetorno() && pendienteFlujo){		
-				PasoTramitacion paso = (PasoTramitacion) tramite.getPasos().get(ultimoPasoCompletado);			
+				PasoTramitacion paso = (PasoTramitacion) tramite.getPasos().get(ultimoPasoCompletado);
 				PasoTramitacion pasoSiguiente = (PasoTramitacion) tramite.getPasos().get(ultimoPasoCompletado + 1);
 				String nifFlujo = "";
 				
@@ -3932,32 +3938,61 @@ public class TramiteProcessorEJB implements SessionBean {
 			
 			// Por defecto indicamos que no se compruebe el firmante
 			docInfo.setFirmante("");
+			docInfo.setNombreFirmante("");
 			
 			// Evaluamos script firmante: si la entidad permite delegacion, permitimos varios nifs
 			int numFirmantes = 1;
-			String scriptFirmante = docNivel.getFirmante();
+			String scriptFirmante = docNivel.getFirmante();			
 			if ( !StringUtils.isEmpty( scriptFirmante ) )
-			{
+			{				
 				try
 				{
 					// Evalua script firmante
 					String firmante = this.evaluarScript(scriptFirmante.getBytes( ConstantesXML.ENCODING ),null);
 					String firmantesRes = "";
+					String nomFirmante;
+					String nomFirmantes = "";
 					if (StringUtils.isNotEmpty(firmante)){
 						String[] firmantes = firmante.split("#");
-						numFirmantes = firmantes.length;
-						if (firmantes.length > 1){
+						
+						// Controlamos duplicados
+						Set listaFirmantes = new HashSet();
+						for (int i=0;i<firmantes.length;i++){
+							if (!listaFirmantes.contains(firmantes[i])){
+								listaFirmantes.add(firmantes[i]);
+							}
+						}
+						
+						numFirmantes = listaFirmantes.size();
+						if (numFirmantes > 1){
 							// Firma multiple solo para delegacion (y delegacion solo para autenticado)
 							if (this.datosSesion.getNivelAutenticacion() == ConstantesLogin.LOGIN_ANONIMO 
 								|| !this.datosSesion.getPersonaPAD().isHabilitarDelegacion()){
 								throw new Exception("Solo se permite firma multiple para delegacion");
 							}
-					}
-						for (int i=0;i<firmantes.length;i++){
-							if (i>0) firmantesRes += "#";
-							firmantesRes += NifCif.normalizarDocumento(firmantes[i]);
 						}
+						
+						boolean primerFmte = true;
+						for (Iterator it = listaFirmantes.iterator();it.hasNext();){
+							String fmte = (String) it.next();
+							if (!primerFmte) {
+								firmantesRes += "#";
+								nomFirmantes += "#";
+							}else{
+								primerFmte = false;
+							}
+							firmantesRes += NifCif.normalizarDocumento(fmte);
+							PersonaPAD persona = obtenerDatosPADporNif(fmte);
+							if (persona != null){
+								nomFirmante = persona.getNombreCompleto();
+							}else{
+								nomFirmante = "";
+							}
+							nomFirmantes += nomFirmante;
+						}
+						
 						docInfo.setFirmante(firmantesRes);
+						docInfo.setNombreFirmante(nomFirmantes);
 					}
 					
 					//  Obtenemos lista de formularios que intervienen en el script de firma
@@ -3966,7 +4001,7 @@ public class TramiteProcessorEJB implements SessionBean {
 				catch( Exception exc )
 				{
 					throw new ProcessorException( "Error evaluando script de firmante", MensajeFront.MENSAJE_EXCEPCIONSCRIPT, exc );
-				}
+				}				
 			}
 			
 			
@@ -4002,11 +4037,13 @@ public class TramiteProcessorEJB implements SessionBean {
 						}
 					}
 				}
-				docInfo.setFirmaDelegada(firmaDelegada);
+				docInfo.setFirmaDelegada(firmaDelegada);				
 			}
 			
 			// Indicamos si esta pendiente de que la firme un delegado
 			docInfo.setPendienteFirmaDelegada(DocumentoPersistentePAD.ESTADO_PENDIENTE_DELEGACION_FIRMA.equals(docPad.getDelegacionEstado()));
+			// Indicamos si la ha rechazado un delegado
+			docInfo.setRechazadaFirmaDelegada(DocumentoPersistentePAD.ESTADO_RECHAZADO_DELEGACION_FIRMA.equals(docPad.getDelegacionEstado()));
 		}
 		
 		
@@ -4119,10 +4156,10 @@ public class TramiteProcessorEJB implements SessionBean {
 			    					if (doc.isPendienteFirmaDelegada()){
 										pendienteFirmaDelegacion = true;
 									}else{
-	        						completado = PasoTramitacion.ESTADO_PENDIENTE;
-	        						break;
+										completado = PasoTramitacion.ESTADO_PENDIENTE;
+										break;
+									}    					
             		}    				
-    			}    			
     			}    			
     			break;
     		case PasoTramitacion.PASO_PAGAR:
@@ -4147,7 +4184,7 @@ public class TramiteProcessorEJB implements SessionBean {
 								completado = PasoTramitacion.ESTADO_PENDIENTE_FLUJO;
 								continue; // Seguimos buscando por si existen docs a ser rellenados por usuario actual
 							}
-						}
+						}    					    					
     				}    				
     				
     				// Opcionales empezados deben estar terminados correctamente
@@ -4162,14 +4199,14 @@ public class TramiteProcessorEJB implements SessionBean {
     		case PasoTramitacion.PASO_ANEXAR:
     			// Sólo se puede dar por completado si se han anexado los documentos obligatorios
     			// y los documentos que se han anexado y tengan que ir firmados se hayan firmado
-    			completado = PasoTramitacion.ESTADO_COMPLETADO;
+    			completado = PasoTramitacion.ESTADO_COMPLETADO;    			
     			for (Iterator it=this.tramiteInfo.getAnexos().iterator();it.hasNext();){
     				
     				DocumentoFront doc = (DocumentoFront) it.next();
     				
     				// Obligatorios deben estar completados
     				if (doc.getObligatorio() == DocumentoFront.OBLIGATORIO &&
-    					doc.getEstado() != DocumentoFront.ESTADO_CORRECTO ){
+    					doc.getEstado() != DocumentoFront.ESTADO_CORRECTO ){    						
     					// El documento debe rellenarlo el usuario actual
 						if (  (!tramiteInfo.isFlujoTramitacion()) || 
 							  (tramiteInfo.isFlujoTramitacion() &&	doc.getNifFlujo().equals(tramiteInfo.getDatosSesion().getNifUsuario()))
@@ -4182,14 +4219,14 @@ public class TramiteProcessorEJB implements SessionBean {
 								completado = PasoTramitacion.ESTADO_PENDIENTE_FLUJO;
 								continue; // Seguimos buscando por si existen docs a ser rellenados por usuario actual
 							}
-						}
+						}						
     				}
     				
     				// Opcionales empezados deben estar terminados correctamente
     				// (No controlamos quien los debe rellenar ya que si se han empezado es que tenía que hacerlos)
     				if (doc.getObligatorio() == DocumentoFront.OPCIONAL &&
         				doc.getEstado() == DocumentoFront.ESTADO_INCORRECTO){
-    						completado = PasoTramitacion.ESTADO_PENDIENTE;
+    						completado = PasoTramitacion.ESTADO_PENDIENTE;    						
     						break;
         			}    				
     				
@@ -4201,9 +4238,9 @@ public class TramiteProcessorEJB implements SessionBean {
     							if (doc.isPendienteFirmaDelegada()){
     								pendienteFirmaDelegacion = true;
     							}else{
-    							completado = PasoTramitacion.ESTADO_PENDIENTE;
-        						break;
-            		}    		
+    								completado = PasoTramitacion.ESTADO_PENDIENTE;
+    								break;
+    							}
             		}    		
     				
     				// Para documento genéricos obligatorio comprobamos que al menos exista uno
@@ -4215,21 +4252,21 @@ public class TramiteProcessorEJB implements SessionBean {
         				}        				
         			}
     				
-    			}    			    		
+    			}    	
     			break;    		
     		case PasoTramitacion.PASO_REGISTRAR:
     			// Este paso se marcará como correcto en el paso de firma/envío
     			if (PasoTramitacion.ESTADO_COMPLETADO.equals(paso.getCompletado())){
     				completado = PasoTramitacion.ESTADO_COMPLETADO;
-    			}else{    				
+    			}else{    		
     				
     				// Si esta activado el flujo de tramitacion
     				if (tramiteInfo.isFlujoTramitacion()){
     					if (tramiteInfo.getDatosSesion().getNifUsuario().equals(calcularNifRepresentante())){    							
-    					completado = PasoTramitacion.ESTADO_PENDIENTE;    					 
-    				}else{
-   						completado = PasoTramitacion.ESTADO_PENDIENTE_FLUJO;    					
-    				}   	    				
+        					completado = PasoTramitacion.ESTADO_PENDIENTE;    					 
+        				}else{
+       						completado = PasoTramitacion.ESTADO_PENDIENTE_FLUJO;    					
+        				}
     				// Si esta en modo delegado comprobamos si el usuario tiene permiso para presentar el tramite
     				// si no tiene permisos debera abandonar el tramite
     				}else if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(tramiteInfo.getDatosSesion().getPerfilAcceso())){
@@ -4245,12 +4282,12 @@ public class TramiteProcessorEJB implements SessionBean {
     			break;
     	}
     	
-
+    	
 		// Si se da por completado este paso, y esta pendiente de firma por delegados
     	// indicamos que el paso esta pendiente de delegacion
 		if (completado.equals(PasoTramitacion.ESTADO_COMPLETADO) && pendienteFirmaDelegacion ){
 			completado = PasoTramitacion.ESTADO_PENDIENTE_DELEGACION_FIRMA;
-    	}
+		}
 		
     	return completado;
     }
@@ -4278,20 +4315,20 @@ public class TramiteProcessorEJB implements SessionBean {
     			boolean pendienteDelegacion = paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_DELEGACION_PRESENTACION);
     			boolean pendienteSeleccionarNotif = (!tramiteInfo.getHabilitarNotificacionTelematica().equals(ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA) && tramiteInfo.getSeleccionNotificacionTelematica() == null);
     			if (  !(pendienteDelegacion || pendienteFlujo || pendienteSeleccionarNotif) ) {
-    					// Generar asiento
-
-    					// Calculamos destinatario tramite (por si se especifica dinamicamente) 
-        				DestinatarioTramite dt = this.calcularDestinatarioTramite();
+    						// Generar asiento
     				
-        				// Generamos asiento (le pasamos destinatario tramite por si se especifica dinamicamente)
-	    				AsientoCompleto asiento = generaAsientoRegistral(dt);
-		    			
-	    				// En caso de que el destinatario se haya especificado dinamicamente
-	    				// cambiamos de UA todos los docs en el RDS
-	    				if (dt.isCalculado()) cambiarUADocs(dt);
-	    				
-	    				// Establecemos el asiento como parametro del paso
-		    			param.put("asiento",asiento);    			    			
+		    				// Calculamos destinatario tramite (por si se especifica dinamicamente) 
+		    				DestinatarioTramite dt = this.calcularDestinatarioTramite();
+						
+		    				// Generamos asiento (le pasamos destinatario tramite por si se especifica dinamicamente)
+		    				AsientoCompleto asiento = generaAsientoRegistral(dt);
+			    			
+		    				// En caso de que el destinatario se haya especificado dinamicamente
+		    				// cambiamos de UA todos los docs en el RDS
+		    				if (dt.isCalculado()) cambiarUADocs(dt);
+		    				
+		    				// Establecemos el asiento como parametro del paso
+		    				param.put("asiento",asiento);
     				
     			}
     			
@@ -4333,7 +4370,7 @@ public class TramiteProcessorEJB implements SessionBean {
 		
 	}
 
-    // Establece respuesta
+	// Establece respuesta
     private RespuestaFront generarRespuestaFront(MensajeFront mensaje,HashMap parametros){
     	try{
 	    	// Actualizamos estado tramite
@@ -4509,7 +4546,7 @@ public class TramiteProcessorEJB implements SessionBean {
     		docRds.setTitulo("Datos propios trámite");    		
     		docRds.setNombreFichero("DatosPropios.xml");	    		
     		docRds.setExtensionFichero("xml");
-    		docRds.setUnidadAdministrativa(tramiteVersion.getUnidadAdministrativa().longValue());
+    		docRds.setUnidadAdministrativa( tramiteVersion.getUnidadAdministrativa().longValue());
     		if (datosSesion.getNivelAutenticacion() != 'A'){
     			docRds.setNif(datosSesion.getNifUsuario());
     			docRds.setUsuarioSeycon(datosSesion.getCodigoUsuario());
@@ -4596,7 +4633,7 @@ public class TramiteProcessorEJB implements SessionBean {
     	// Realizamos registro / envío / consulta
     	RegistroController dest = new RegistroController();
     	ResultadoRegistrar res;
-    	if (tramiteVersion.getDestino() == ConstantesSTR.DESTINO_CONSULTA) {    		
+    	if (tramiteVersion.getDestino() == ConstantesSTR.DESTINO_CONSULTA) {
     		String urlConsulta = tramiteVersion.getConsultaUrl();
     		if(urlConsulta != null && !"".equals(urlConsulta)){
     			urlConsulta = StringUtil.replace(urlConsulta,"@backoffice.url@",URL_CONSULTA);
@@ -4830,7 +4867,7 @@ public class TramiteProcessorEJB implements SessionBean {
 			PadDelegate delegate = DelegatePADUtil.getPadDelegate();
 			PersonaPAD personaPAD = delegate.obtenerDatosPersonaPADporUsuario( sp.getName() );
 			
-			datosSesion.setPersonaPAD( personaPAD );					
+			datosSesion.setPersonaPAD( personaPAD );
 			
 			if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(perfilAcceso)){
 				// Buscamos entidad delegada
@@ -5210,20 +5247,6 @@ public class TramiteProcessorEJB implements SessionBean {
 	}
 	
 	/**
-	 * Verifica si el firmante del documento es el correcto
-	 * @param documentoAFirmar Documento a firmar
-	 * @param firma Firma
-	 * @return true/false
-	 * @throws ProcessorException
-	 */
-	private boolean verificaFirmanteAdecuado( DocumentoFront documentoAFirmar, FirmaIntf firma ) throws ProcessorException 
-	{
-    	// Verificamos quien lo firma
-		String firmanteDocumento = documentoAFirmar.getFirmante();
-		return verificaFirmanteAdecuado( firmanteDocumento, firma );
-	}
-	
-	/**
 	 * Verifica la firma del asiento registral. Debe estar firmado por el representante o por un delegado con permiso de presentacion
 	 * @param asientoRegistral Asiento registral
 	 * @param firma Firma
@@ -5268,7 +5291,7 @@ public class TramiteProcessorEJB implements SessionBean {
 			}
 			
 			// El firmante debera ser el propio interesado o si se tramita de forma delegada un delegado con permiso de presentacion
-			boolean firmanteOk = nifFirma.equalsIgnoreCase( firmanteNecesario ); 
+			boolean firmanteOk = nifFirma.equalsIgnoreCase( firmanteNecesario );
 			if ( !firmanteOk )
 			{
 				log.debug( "Firmante incorrecto. Requerido [" + firmanteNecesario+ "]; Firmado con [" + nifFirma + "]" );
@@ -5554,14 +5577,14 @@ public class TramiteProcessorEJB implements SessionBean {
 	  * @throws Exception
 	  */
 	 private boolean validarCodigoUA(String codUA) throws Exception{
-	 
+		
 		// Comprobamos q es un long 
 		try{
 			Long.parseLong(codUA);
 		}catch (Exception ex){
 			return false;
 		}
-	
+		
 		// Buscamos en la lista 
 		List lstParametros = new ArrayList();
 		lstParametros.add(codUA);
