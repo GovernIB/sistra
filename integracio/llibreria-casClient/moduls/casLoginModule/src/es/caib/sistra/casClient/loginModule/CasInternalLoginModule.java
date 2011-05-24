@@ -7,6 +7,7 @@ import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -139,7 +140,8 @@ public class CasInternalLoginModule extends UsernamePasswordLoginModule {
 			cp=CasPrincipal.deserializar(up[1]);			
 		}else if (username.equals(nameUnauthenticatedIdentity)){
 			log.debug("Creamos identity para " + nameUnauthenticatedIdentity );
-			cp = new CasPrincipal(username,username,null,'A',null);			
+			List<String> roles = this.autenticador.obtenerRoles(this.propsPlugin,nameUnauthenticatedIdentity);
+			cp = new CasPrincipal(nameUnauthenticatedIdentity,nameUnauthenticatedIdentity,null,'A',roles);			
 		}else{
 			log.debug("Creamos identity a partir usuario a partir usuario/password");
 			UserInfo ui = this.autenticador.autenticar(this.propsPlugin,username,up[1]);
