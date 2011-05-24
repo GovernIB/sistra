@@ -33,7 +33,7 @@ public class EntidadesController extends BaseController
 			}
 			
 			ConfiguracionDelegate delegate = DelegateUtil.getConfiguracionDelegate();
-			urlSistra = delegate.obtenerConfiguracion().getProperty("sistra.url");
+			urlSistra = delegate.obtenerConfiguracion().getProperty("sistra.url.back");
 		}catch (Exception e) {
 			urlSistra = "";
 		}
