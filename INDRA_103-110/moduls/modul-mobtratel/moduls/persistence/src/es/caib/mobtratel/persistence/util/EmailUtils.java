@@ -114,7 +114,7 @@ public class EmailUtils
 	    	msg.setContent(contenido, "text/html");
     		msg.setHeader("X-Mailer", "JavaMailer");
     		msg.setSentDate(new java.util.Date());
-    		log.debug("Vamos a enviar Email: " + msg.getContent());
+    		// log.debug("Vamos a enviar Email: " + msg.getContent());
     		try {
                 Transport.send(msg);
     		} catch (Exception ex) { 
