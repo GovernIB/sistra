@@ -28,17 +28,6 @@
 			<div class="avis">
 			
 				<dl>
-					<dt><bean:message key="detalle.aviso.organo"/>:</dt>
-					<dd>
-						<logic:empty name="expediente" property="unidadAdministrativa">
-							&nbsp;
-						</logic:empty>
-						<logic:notEmpty name="expediente" property="unidadAdministrativa">
-							<bean:write name="expediente" property="unidadAdministrativa"/>
-						</logic:notEmpty>	
-					</dd>
-					<dt><bean:message key="detalle.aviso.expediente"/></dt>
-					<dd><bean:write name="expediente" property="identificadorExpediente"/></dd>
 					<dt><bean:message key="detalle.aviso.fechaEmision"/></dt>
 					<dd><bean:write name="aviso" property="fecha" format="dd/MM/yyyy '-' HH:mm"/></dd>
 					<dt><bean:message key="detalle.aviso.asunto"/></dt>
