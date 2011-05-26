@@ -34,6 +34,7 @@ import es.caib.sistra.model.RolUsuarioTramiteId;
 public abstract class GruposFacadeEJB extends HibernateEJB {
 
 	private String roleOperador;
+	private boolean permisosHabilitados;
 	
     /**
      * @ejb.create-method
@@ -46,7 +47,8 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
         try
 		{
 			javax.naming.InitialContext initialContext = new javax.naming.InitialContext();
-			roleOperador = ( String ) initialContext.lookup( "java:comp/env/role.operador" );			
+			roleOperador = ( String ) initialContext.lookup( "java:comp/env/role.operador" );
+			permisosHabilitados = "true".equals(ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("habilitar.permisos"));
 		}
 		catch( Exception exc )
 		{
@@ -491,7 +493,7 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     public void borrarTramiteGrupos(Long tramite){
     	
     	// Si es operador, comprobamos que tiene permisos de acceso al tramite
-    	if (this.ctx.isCallerInRole(roleOperador)){
+    	if (permisosHabilitados && this.ctx.isCallerInRole(roleOperador)){
     		if(!this.existeUsuarioByGruposTramite(this.ctx.getCallerPrincipal().getName(),tramite) &&
     		   !this.existeUsuarioByTramite(this.ctx.getCallerPrincipal().getName(),tramite)
     		   ){
@@ -527,7 +529,7 @@ public abstract class GruposFacadeEJB extends HibernateEJB {
     public void borrarTramiteUsuarios(Long tramite){
     	
     	// Si es operador, comprobamos que tiene permisos de acceso al tramite
-    	if (this.ctx.isCallerInRole(roleOperador)){
+    	if (permisosHabilitados && this.ctx.isCallerInRole(roleOperador)){
     		if(!this.existeUsuarioByGruposTramite(this.ctx.getCallerPrincipal().getName(),tramite) &&
     		   !this.existeUsuarioByTramite(this.ctx.getCallerPrincipal().getName(),tramite)
     		   ){
