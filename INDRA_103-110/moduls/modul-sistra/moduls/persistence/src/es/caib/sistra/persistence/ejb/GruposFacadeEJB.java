@@ -16,6 +16,7 @@ import es.caib.sistra.model.RolGrupoTramite;
 import es.caib.sistra.model.RolGrupoTramiteId;
 import es.caib.sistra.model.RolUsuarioTramite;
 import es.caib.sistra.model.RolUsuarioTramiteId;
+import es.caib.sistra.persistence.util.ConfigurationUtil;
 
 /**
  * SessionBean para consultar idiomas.
