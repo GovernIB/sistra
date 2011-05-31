@@ -179,8 +179,11 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
 		String destinatario = asiento.getDatosAsunto().getCodigoOrganoDestino();
 		if ( StringUtils.isNotEmpty(asiento.getDatosAsunto().getDescripcionOrganoDestino())) 
 			destinatario = asiento.getDatosAsunto().getDescripcionOrganoDestino();
-		propiedad = new Propiedad(props.getProperty("datosRegistro.organoDestino"),
-				destinatario);		
+		if(asiento.getDatosOrigen().getTipoRegistro().charValue() != ConstantesAsientoXML.TIPO_REGISTRO_SALIDA){
+			propiedad = new Propiedad(props.getProperty("datosRegistro.organoDestino"),destinatario);
+		}else{
+			propiedad = new Propiedad(props.getProperty("datosRegistro.organoRemitente"),destinatario);
+		}
 		seccion.addCampo(propiedad);		
     	
     	String tipoInteresado = "";
