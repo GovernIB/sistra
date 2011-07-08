@@ -165,19 +165,6 @@ var htmlInfoFirmado = "- <strong><bean:message key="detalleTramite.datosTramite.
 
 var municipioLoaded="";
 
-function fillDestinatario(){
-	nif = document.detalleNotificacionForm.nif.value;
-	var url_json = '<html:rewrite page="/fillPersona.do"/>';
-	var data ='nif='+nif;
-	$.postJSON(
-		url_json,data, 
-		function(datos){	
-			$("#nif").val(datos.nif);		
-			document.detalleNotificacionForm.apellidos.value=datos.nombre;
-			document.detalleNotificacionForm.usuarioSey.value=datos.usuarioSeycon;
-		});
-	}
-	
 function llenarMunicipios(){
 	codProv = $("#codigoProvincia").val();	
 	var url_json = '<html:rewrite page="/listarMunicipios.do"/>';
@@ -242,9 +229,6 @@ function altaDocument(form){
 	if(permitida){
 		form.flagValidacion.value ="documento";
 		form.idiomaExp.value =document.detalleNotificacionForm.idiomaExp.value;
-		form.identificadorExpediente.value =document.detalleNotificacionForm.identificadorExpediente.value;
-		form.unidadAdministrativa.value =document.detalleNotificacionForm.unidadAdministrativa.value;
-		form.claveExpediente.value =document.detalleNotificacionForm.claveExpediente.value;
 		form.descripcionExpediente.value =document.detalleNotificacionForm.descripcionExpediente.value;
 		form.rutaFitxer.value =form.documentoAnexoOficio.value;
 		form.submit();
@@ -414,6 +398,10 @@ function repintarParametros(datos){
 <bean:define id="urlAbrirDocumento"  type="java.lang.String" >
 	<html:rewrite page="/abrirDocumento.do"/>
 </bean:define>
+<bean:define id="autenticado"  type="java.lang.String" >
+	<bean:write name="autenticado"/>
+</bean:define>
+
 		<!-- ajuda boto -->
 		<button id="ajudaBoto" type="button" title="Activar ajuda"><img src="imgs/botons/ajuda.gif" alt="" /> <bean:message key="confirmacion.ayuda"/></button>
 		<!-- /ajuda boto -->
@@ -455,42 +443,13 @@ function repintarParametros(datos){
 		
 			<p class="titol"><bean:message key="notificacion.alta"/></p>
 			<div class="remarcar">
-			<html:form action="realizarAltaNotificacion" enctype="multipart/form-data" styleClass="remarcar opcions">
-			<html:hidden property="descripcionExpediente"/>
-			<html:hidden property="flagValidacion" value="altaNotificacion"/>
-			<html:hidden property="rutaFitxer"/>
-			<html:hidden property="unidadAdministrativa" />
-			<html:hidden property="identificadorExpediente" />
-			<html:hidden property="claveExpediente" />
-			<html:hidden property="usuarioSey" />
-			<html:hidden property="idiomaExp" />
+				<html:form action="realizarAltaNotificacion" enctype="multipart/form-data" styleClass="remarcar opcions">
+				<html:hidden property="descripcionExpediente"/>
+				<html:hidden property="flagValidacion" value="altaNotificacion"/>
+				<html:hidden property="rutaFitxer"/>				
+				<html:hidden property="usuarioSey" />
+				<html:hidden property="idiomaExp" />
 				
-					
-				<%-- <p class="titol major">
-					<bean:message key="notificacion.datos.expediente"/>
-				</p>
-				
-				<p>
-					<label for="identificadorExpediente"><bean:message key="confirmacion.identificadorExpediente"/></label>
-					<html:text property="identificadorExpediente" readonly="true"/>
-				</p>
-				
-				<p>
-					<label for="unidadAdministrativa"><bean:message key="confirmacion.unidadAdministrativa"/></label>
-					
-					<html:select property="unidadAdministrativa" styleId="unidadAdministrativa" disabled="true">
-						<logic:iterate id="unidad" name="unidades">	
-							<html:option value="<%=((es.caib.bantel.front.json.UnidadAdministrativa)unidad).getCodigo()%>" ><bean:write name="unidad" property="descripcion"/></html:option>
-						</logic:iterate>
-					</html:select>
-					<button type="button" onclick="mostrarArbolUnidades('=urlArbol + "?id=unidadAdministrativa" ');"><bean:message key="confirmacion.seleccionar"/></button>
-				</p>
-				
-				<p>
-					<label for="claveExpediente"><bean:message key="confirmacion.claveExpediente"/></label>
-					<html:text property="claveExpediente" readonly="true"/>
-				</p>
-			--%>
 				<p class="titol major">
 					<bean:message key="notificacion.datos.oficina"/>
 				</p>
@@ -521,20 +480,14 @@ function repintarParametros(datos){
 					<bean:message key="notificacion.datos.destinatario"/>
 				</p>
 				
-				<%--<p>
-					<label for="usuarioSey"><bean:message key="expediente.usuarioSeycon"/></label>
-					<html:text property="usuarioSey" /><a href="javascript:fillDestinatario();"><bean:message key="notificacion.rellenar.seycon"/></a>
-				</p>
-				--%>
 				<p>
 					<label for="nif"><bean:message key="expediente.nif"/></label>
-					<html:text property="nif" />
-					<img src="imgs/botons/cercar.gif" alt="<bean:message key='botons.cercar'/>"  onclick="javascript:fillDestinatario();"/>
+					<html:text property="nif" readonly="<%=Boolean.parseBoolean(autenticado)%>"/>					
 				</p>
 				
 				<p>
 					<label for="apellidos"><bean:message key="notificacion.nombre.apellisos"/></label>
-					<html:text property="apellidos" styleClass="pc40" />
+					<html:text property="apellidos" styleClass="pc40" readonly="<%=Boolean.parseBoolean(autenticado)%>" />
 				</p>
 				
 				<p>
@@ -578,6 +531,7 @@ function repintarParametros(datos){
 					<html:select  property="idioma">
 						<html:option value="es"><bean:message key="expediente.castellano"/></html:option>
 						<html:option value="ca"><bean:message key="expediente.catalan"/></html:option>
+						<html:option value="en"><bean:message key="expediente.ingles"/></html:option>
 					  </html:select>
 				</p>
 				
@@ -650,7 +604,7 @@ function repintarParametros(datos){
 						<html:text property="versionTramiteSubsanacion" styleClass="pc40" />
 					</p>
 				
-					<p class="titol">
+					<p class="label">
 						<bean:message key="tramite.subsanacion.parametros"/>
 					</p>
 
@@ -719,10 +673,7 @@ function repintarParametros(datos){
 								<html:form method="post" action="altaDocumentoNotificacion" enctype="multipart/form-data" target="iframeDocumento" styleClass="remarcar opcions">																			
 								<html:hidden property="descripcionExpediente"/>
 								<html:hidden property="flagValidacion" value="alta"/>
-								<html:hidden property="rutaFitxer"/>
-								<html:hidden property="unidadAdministrativa" />
-								<html:hidden property="identificadorExpediente" />
-								<html:hidden property="claveExpediente" />
+								<html:hidden property="rutaFitxer"/>								
 								<html:hidden property="idiomaExp" />
 							<p>
 								<bean:message key="aviso.explicativo.fichero"/>
@@ -794,7 +745,7 @@ function repintarParametros(datos){
 				<!-- /escritorio_docs  --> 
 				<p class="botonera">
 					<html:submit onclick="if(alta()){return true;}else{return false;}"><bean:message key="notificacion.alta"/></html:submit>
-					<input type="button" onclick="volver('<bean:write name="detalleNotificacionForm" property="identificadorExpediente"/>','<bean:write name="detalleNotificacionForm" property="unidadAdministrativa"/>','<bean:write name="detalleNotificacionForm" property="claveExpediente"/>')" value="<bean:message key="notificacion.cancelar"/>"/>
+					<input type="button" onclick="volver('<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY%>" />','<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY%>"/>','<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY%>"/>')" value="<bean:message key="notificacion.cancelar"/>"/>
 				</p>
 			</div>
 		</div>
