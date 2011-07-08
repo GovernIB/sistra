@@ -97,14 +97,14 @@
 	<definition
    		name=".altaAviso"
    		extends=".mainLayout"
-   		controller="es.caib.bantel.front.controller.ExpedientesController">		
+   		controller="es.caib.bantel.front.controller.AltaAvisoController">		
    		<put name="main" value="/altaAviso.jsp"/>
 	</definition>   
 
 	<definition
    		name=".altaNotificacion"
    		extends=".mainLayout"
-   		controller="es.caib.bantel.front.controller.ExpedientesController">		
+   		controller="es.caib.bantel.front.controller.AltaNotificacionController">		
    		<put name="main" value="/altaNotificacion.jsp"/>
 	</definition>   
 	
@@ -134,7 +134,8 @@
 	
 	<definition
    		name=".recuperarExpediente"
-   		extends=".mainLayout">	
+   		extends=".mainLayout"
+   		controller="es.caib.bantel.front.controller.RecuperacionExpedienteController">	
    		<put name="main" value="/detalleExpediente.jsp"/>
 	</definition>   
 	
