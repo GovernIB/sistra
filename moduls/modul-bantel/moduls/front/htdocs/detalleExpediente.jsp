@@ -70,12 +70,15 @@
 					<dd><logic:notEmpty name="nombreUnidad" ><bean:write name="nombreUnidad" /></logic:notEmpty></dd>
 					<dt><bean:message key="expediente.descripcion"/>:</dt>
 					<dd><logic:notEmpty name="expediente" property="descripcion"><bean:write name="expediente" property="descripcion"/></logic:notEmpty></dd>
-				</dl>
-				
-				
+					<dt><bean:message key="expediente.idioma"/>:</dt>
+					<dd>
+						<logic:equal name="expediente" property="idioma" value="es"><bean:message key="expediente.castellano"/></logic:equal>
+						<logic:equal name="expediente" property="idioma" value="ca"><bean:message key="expediente.catalan"/></logic:equal>
+						<logic:equal name="expediente" property="idioma" value="en"><bean:message key="expediente.ingles"/></logic:equal>
+					</dd>
+				</dl>				
 			</div>
-			
-			
+						
 			<p class="titol"><bean:message key="detalle.expediente.historial"/></p>
 			
 			<table class="historic">
@@ -145,11 +148,7 @@
 					</logic:iterate>
 				</tbody>
 			</table>
-			<html:form  action="confirmarPreregistro" styleClass="remarcar opcions" >
-				<html:hidden name="expediente" property="identificadorExpediente"/>
-				<html:hidden name="expediente" property="unidadAdministrativa"/>
-				<html:hidden name="expediente" property="claveExpediente"/>
-				
+			<html:form  action="altaAviso" styleClass="remarcar opcions" >
 				<p class="botonera">
 					<html:submit value="<%=btnAltaAvis%>" onclick="aviso();"/>
 					<html:submit value="<%=btnAltaNotif%>" onclick="notificacion();"/>
