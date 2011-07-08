@@ -26,16 +26,7 @@ public class StringUtil {
 	public final static String FORMATO_TIMESTAMP = "dd/MM/yyyy HH:mm:ss";
 	public final static String FORMATO_REGISTRO = "yyyyMMddHHmmss";
 	public final static String LANG_CA = "ca";
-	public final static String REGISTRO_LANG_CA = "2";
-	public final static String REGISTRO_LANG_ES = "1";
 	
-	
-	// --- FUNCIONES PARA OBTENER EL IDENTIFICADOR DE IDIOMA PARA EL SISTEMA DE REGISTRO
-	
-    public static String getIdiomaRegistro( String codigoAlfanumericoIdioma )
-    {
-    	return LANG_CA.equals( codigoAlfanumericoIdioma ) ? REGISTRO_LANG_CA : REGISTRO_LANG_ES;
-    }
 	
 	// --- FUNCIONES PARA OBTENER MODELO/VERSION PARA IDENTIFICADOR CON FORMATO "MODELO-VERSION"
 	
