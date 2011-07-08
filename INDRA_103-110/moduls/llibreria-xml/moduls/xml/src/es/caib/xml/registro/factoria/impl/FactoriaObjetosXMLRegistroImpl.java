@@ -787,10 +787,7 @@ public class FactoriaObjetosXMLRegistroImpl
 			datosAsuntoRaw.setCODIGOORGANODESTINO (datosAsunto.getCodigoOrganoDestino ());
 			datosAsuntoRaw.setDESCRIPCIONORGANODESTINO(datosAsunto.getDescripcionOrganoDestino());
 			datosAsuntoRaw.setEXTRACTOASUNTO (datosAsunto.getExtractoAsunto ());
-			String idiomaAsunto = datosAsunto.getIdiomaAsunto();
-			
-			if ( (idiomaAsunto.equals (ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_CA)) || (idiomaAsunto.equals (ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_ES)) )
-				datosAsuntoRaw.setIDIOMAASUNTO ("" + datosAsunto.getIdiomaAsunto());
+			datosAsuntoRaw.setIDIOMAASUNTO ("" + datosAsunto.getIdiomaAsunto());
 			
 			datosAsuntoRaw.setTIPOASUNTO (datosAsunto.getTipoAsunto());			
 			datosAsuntoRaw.setIDENTIFICADORTRAMITE (datosAsunto.getIdentificadorTramite());

@@ -156,6 +156,10 @@ public class ConstantesAsientoXML {
 	 * Constante de idioma catalan
 	 */
 	public final static String DATOSASUNTO_IDIOMA_ASUNTO_CA = "ca";
+	/**
+	 * Constante de idioma ingles
+	 */
+	public final static String DATOSASUNTO_IDIOMA_ASUNTO_EN = "en";
 	
 	// -----------------	DATOS ANEXO	----------------------------------------------	
 	/**
