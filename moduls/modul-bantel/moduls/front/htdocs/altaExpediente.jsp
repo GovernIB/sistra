@@ -23,6 +23,7 @@
 				document.forms[0].usuarioSeycon.value=json.usuarioSeycon;
 			});
 		}
+		
 		function alta(){		
 			if(confirm ( "<bean:message key='expediente.alta.confirmacion' />" )){
 				var index = document.forms["0"].unidadAdm.selectedIndex;
@@ -139,6 +140,7 @@
 					<html:select property="idioma" styleClass="pc15">
 						<html:option value="es"><bean:message key="expediente.castellano"/></html:option>
 						<html:option value="ca"><bean:message key="expediente.catalan"/></html:option>
+						<html:option value="en"><bean:message key="expediente.ingles"/></html:option>
 					</html:select>
 				</p>
 				<p>
