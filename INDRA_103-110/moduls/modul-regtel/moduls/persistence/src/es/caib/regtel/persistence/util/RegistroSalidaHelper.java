@@ -354,7 +354,12 @@ public class RegistroSalidaHelper{
 			
 			// Generamos xml de aviso			
 			String xmlAviso = factAvi.guardarAvisoNotificacion(aviso);
-			String nomDocAviso = datosAsunto.getIdiomaAsunto().equals("es")?"Aviso de notificación":"Avís de notificació";			
+			String nomDocAviso = "Aviso de notificación";
+			if (datosAsunto.getIdiomaAsunto().equals("ca")){
+				nomDocAviso = "Avís de notificació";				
+			}else if (datosAsunto.getIdiomaAsunto().equals("en")){
+				nomDocAviso = "Warning notification";
+			}
 			
 			DocumentoRDS docRDSAviso = new DocumentoRDS();
 			docRDSAviso.setModelo(ConstantesRDS.MODELO_AVISO_NOTIFICACION);			
@@ -373,7 +378,12 @@ public class RegistroSalidaHelper{
 			
 			// Generamos xml de oficio
 			String xmlOficio = factOfi.guardarOficioRemision(oficio);
-			String nomDocOficio = datosAsunto.getIdiomaAsunto().equals("es")?"Oficio de remisión":"Ofici de remissió";
+			String nomDocOficio = "Oficio de remisión";
+			if (datosAsunto.getIdiomaAsunto().equals("ca")){
+				 nomDocOficio = "Ofici de remissió";
+			}else if (datosAsunto.getIdiomaAsunto().equals("en")){
+				nomDocOficio = "Office referral";
+			}
 			
 			DocumentoRDS docRDSOficio = new DocumentoRDS();
 			docRDSOficio.setModelo(ConstantesRDS.MODELO_OFICIO_REMISION);			
