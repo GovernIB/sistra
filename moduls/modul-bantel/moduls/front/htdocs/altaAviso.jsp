@@ -191,9 +191,6 @@ function altaDocument(form){
 	if(permitida){
 		form.flagValidacion.value ="documento";
 		form.idioma.value =document.detalleAvisoForm.idioma.value;
-		form.identificadorExpediente.value =document.detalleAvisoForm.identificadorExpediente.value;
-		form.unidadAdministrativa.value =document.detalleAvisoForm.unidadAdministrativa.value;
-		form.claveExpediente.value =document.detalleAvisoForm.claveExpediente.value;
 		form.descripcionExpediente.value =document.detalleAvisoForm.descripcionExpediente.value;
 		form.rutaFitxer.value =form.documentoAnexoFichero.value;
 		form.submit();
@@ -350,9 +347,6 @@ function errorFileUploaded(error){
 			<html:hidden property="descripcionExpediente"/>
 			<html:hidden property="flagValidacion" value="alta"/>
 			<html:hidden property="rutaFitxer"/>
-			<html:hidden property="unidadAdministrativa" />
-			<html:hidden property="identificadorExpediente" />
-			<html:hidden property="claveExpediente" />
 			<html:hidden property="idioma" />
 				<p>
 					<label for="titulo"><bean:message key="aviso.titulo"/></label>
@@ -426,9 +420,6 @@ function errorFileUploaded(error){
 						<html:hidden property="descripcionExpediente"/>
 						<html:hidden property="flagValidacion" value="alta"/>
 						<html:hidden property="rutaFitxer"/>
-						<html:hidden property="unidadAdministrativa" />
-						<html:hidden property="identificadorExpediente" />
-						<html:hidden property="claveExpediente" />
 						<html:hidden property="idioma" />
 							<p>
 								<bean:message key="aviso.explicativo.fichero"/>
@@ -501,7 +492,7 @@ function errorFileUploaded(error){
 				
 				<p class="botonera">
 					<html:submit onclick="if(alta()){return true;}else{return false;}"><bean:message key="aviso.alta"/></html:submit>
-					<input type="button" onclick="volver('<bean:write name="detalleAvisoForm" property="identificadorExpediente"/>','<bean:write name="detalleAvisoForm" property="unidadAdministrativa"/>','<bean:write name="detalleAvisoForm" property="claveExpediente"/>')" value="<bean:message key="aviso.cancelar"/>"/>
+					<input type="button" onclick="volver('<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY%>" />','<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY%>"/>','<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY%>"/>')" value="<bean:message key="aviso.cancelar"/>"/>
 				</p>
 			</div>
 		</div>
