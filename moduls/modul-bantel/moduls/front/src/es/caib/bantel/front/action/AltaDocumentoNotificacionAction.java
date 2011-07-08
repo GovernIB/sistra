@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.MessageResources;
+import org.jfree.util.Log;
 
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleNotificacionForm;
@@ -23,7 +24,7 @@ import es.caib.redose.modelInterfaz.DocumentoRDS;
  * @struts.action
  *  name="uploadNotificacionForm"
  *  path="/altaDocumentoNotificacion"
- *  validate="true"
+ *  validate="false"
  */
 public class AltaDocumentoNotificacionAction extends BaseAction
 {
@@ -34,6 +35,12 @@ public class AltaDocumentoNotificacionAction extends BaseAction
 		request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,"3");
 		ArrayList documentos;
 		String funcion;
+		
+		// Recuperamos de sesion el expediente actual
+		String idExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY);
+		Long uniAdm = (Long) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY);
+		String claveExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY);
+		
 		try{
 			funcion = "parent.fileUploaded()";
  			if (notificacionForm.getDocumentoAnexoOficio() != null && StringUtils.isNotEmpty(notificacionForm.getDocumentoAnexoOficio().getFileName()) &&  StringUtils.isNotEmpty(notificacionForm.getTituloAnexoOficio())){
@@ -48,8 +55,9 @@ public class AltaDocumentoNotificacionAction extends BaseAction
 						//Guardo un documento con la extension que tiene y me devueve el documento con el contenido en pdf
 						DocumentoRDS documentRDS = null;
 						try{
-							documentRDS = DocumentosUtil.crearDocumentoRDS(documento,notificacionForm.getUnidadAdministrativa());
+							documentRDS = DocumentosUtil.crearDocumentoRDS(documento,uniAdm.toString());
 						}catch(Exception e){
+							Log.error("Error creando documento rds",e);
 							MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));
 							funcion="parent.errorFileUploaded(\""+resources.getMessage( getLocale( request ), "error.aviso.guardar.fichero")+"\")";
 						}
@@ -84,6 +92,8 @@ public class AltaDocumentoNotificacionAction extends BaseAction
 				funcion="parent.errorFileUploaded(\""+resources.getMessage( getLocale( request ), "error.excepcion.general")+"\")";
 			}
 		}
+		
+		// Devolvemos respuesta
 		response.setContentType("text/html");		    
 		PrintWriter pw = response.getWriter();
 		pw.println("<html>");

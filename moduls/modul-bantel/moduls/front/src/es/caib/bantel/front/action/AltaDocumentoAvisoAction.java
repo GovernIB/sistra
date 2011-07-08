@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.MessageResources;
+import org.jfree.util.Log;
 
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleAvisoForm;
@@ -23,7 +24,7 @@ import es.caib.redose.modelInterfaz.DocumentoRDS;
  * @struts.action
  *  name="uploadAvisoForm"
  *  path="/altaDocumentoAviso"
- *  validate="true"
+ *  validate="false"
  */
 public class AltaDocumentoAvisoAction extends BaseAction
 {
@@ -34,6 +35,12 @@ public class AltaDocumentoAvisoAction extends BaseAction
 		ArrayList documentos;
 		request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,"3");
 		String funcion;
+		
+		// Recuperamos de sesion el expediente actual
+		String idExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY);
+		Long uniAdm = (Long) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY);
+		String claveExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY);
+		
 		try{
 			funcion = "parent.fileUploaded()";
  			if (avisoForm.getDocumentoAnexoFichero() != null && StringUtils.isNotEmpty(avisoForm.getDocumentoAnexoFichero().getFileName()) &&  StringUtils.isNotEmpty(avisoForm.getDocumentoAnexoTitulo()) ){
@@ -48,8 +55,9 @@ public class AltaDocumentoAvisoAction extends BaseAction
 						//Guardo un documento con la extension que tiene y me devueve el documento con el contenido en pdf
 						DocumentoRDS documentRDS = null;
 						try{
-							documentRDS = DocumentosUtil.crearDocumentoRDS(documento,avisoForm.getUnidadAdministrativa());
+							documentRDS = DocumentosUtil.crearDocumentoRDS(documento, uniAdm.toString());
 						}catch(Exception e){
+							Log.error("Error creando documento rds",e);
 							MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));
 							funcion="parent.errorFileUploaded(\""+resources.getMessage( getLocale( request ), "error.aviso.guardar.fichero")+"\")";
 						}
@@ -77,14 +85,17 @@ public class AltaDocumentoAvisoAction extends BaseAction
  					throw new Exception("error.aviso.extensiones.fichero");
  				}
 			}
+ 			
 		}catch(Exception ex){
-			MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));
-			if(ex.getMessage() != null && ex.getMessage().startsWith("error.aviso.extensiones.fichero")){
-				funcion="parent.errorFileUploaded(\"" + resources.getMessage( getLocale( request ), ex.getMessage()) + "\")";				
-			}else{
-				funcion="parent.errorFileUploaded(\""+resources.getMessage( getLocale( request ), "error.excepcion.general")+"\")";
-		}
-    }
+				MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));
+				if(ex.getMessage() != null && ex.getMessage().startsWith("error.aviso.extensiones.fichero")){
+					funcion="parent.errorFileUploaded(\"" + resources.getMessage( getLocale( request ), ex.getMessage()) + "\")";				
+				}else{
+					funcion="parent.errorFileUploaded(\""+resources.getMessage( getLocale( request ), "error.excepcion.general")+"\")";
+			}
+		}		
+		
+		// Devolvemos resultado
 		response.setContentType("text/html");		    
 		PrintWriter pw = response.getWriter();
 		pw.println("<html>");
