@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -13,9 +15,7 @@ import es.caib.bantel.front.form.DetalleExpedienteForm;
 import es.caib.bantel.front.util.MensajesUtil;
 import es.caib.bantel.modelInterfaz.TramiteBTE;
 import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
-import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
-import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
 
 /**
@@ -33,6 +33,8 @@ import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
  */
 public class RealizarAltaExpedienteAction extends BaseAction
 {
+	protected static Log log = LogFactory.getLog(RealizarAltaExpedienteAction.class);
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception 
     {
@@ -89,6 +91,8 @@ public class RealizarAltaExpedienteAction extends BaseAction
 			return mapping.findForward( "success" );
 			*/
 		}catch(Exception e){
+			
+			log.error("Excepcion alta expediente",e);
 			
 			String mensajeOk = "";
 			
