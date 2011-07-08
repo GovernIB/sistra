@@ -18,7 +18,7 @@ button { padding:.1em .5em; }
 button img { vertical-align:middle; margin-right:.3em; }
 
 .formulari { margin:0 auto 0 auto; border:1px solid #ccc; background-color:#f7f7f7; padding:0 1em; text-align:center; }
-.formulari select, .formulari label.separacio { margin-right:2em; }
+.formulari select, .formulari label.separacio p.label { margin-right:2em; }
 .formulari input.hora { text-align:right; }
 
 .noVisible { display:none; }
