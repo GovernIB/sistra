@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -33,6 +35,8 @@ import es.caib.bantel.front.util.MensajesUtil;
  */
 public class AltaExpedienteAction extends BaseAction
 {
+	protected static Log log = LogFactory.getLog(AltaExpedienteAction.class);
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception 
     {
@@ -51,6 +55,7 @@ public class AltaExpedienteAction extends BaseAction
 			request.setAttribute("unidades",unidades);
 			return mapping.findForward( "success" );
 		}catch(Exception e){
+			log.error("Excepcion mostrando alta expediente",e);
 			return mapping.findForward("fail");
 		}
     }
