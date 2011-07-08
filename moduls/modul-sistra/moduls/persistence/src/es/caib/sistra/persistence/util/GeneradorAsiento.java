@@ -276,8 +276,12 @@ public class GeneradorAsiento {
 			dAsunto.setFechaAsunto(new Date());
 			if (tramiteInfo.getDatosSesion().getLocale().getLanguage().equals("ca"))
 				dAsunto.setIdiomaAsunto (ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_CA);
+			else if (tramiteInfo.getDatosSesion().getLocale().getLanguage().equals("es"))
+				dAsunto.setIdiomaAsunto (ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_ES);
+			else if (tramiteInfo.getDatosSesion().getLocale().getLanguage().equals("en"))
+				dAsunto.setIdiomaAsunto (ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_EN);				
 			else
-				dAsunto.setIdiomaAsunto (ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_ES); // El registro recoge es y ca. Si no es ca pondremos es
+				throw new Exception("Idioma no soportado: " + tramiteInfo.getDatosSesion().getLocale().getLanguage());
 			dAsunto.setTipoAsunto (tramiteVersion.getRegistroAsunto());
 			dAsunto.setExtractoAsunto ( ((TraTramite) tramiteVersion.getTramite().getTraduccion(tramiteInfo.getDatosSesion().getLocale().getLanguage())).getDescripcion());
 			dAsunto.setCodigoOrganoDestino (dt.getOrganoDestino());
@@ -600,8 +604,12 @@ public class GeneradorAsiento {
 					}
 					
 					Dato datS = factoria.crearDato();
-					datS.setTipo(new Character(datJ.getTipo()));					
-					datS.setDescripcion(((TraDatoJustificante) datJ.getTraduccion(tramiteInfo.getDatosSesion().getLocale().getLanguage())).getDescripcion());
+					datS.setTipo(new Character(datJ.getTipo()));
+					TraDatoJustificante tradatjus = ((TraDatoJustificante) datJ.getTraduccion(tramiteInfo.getDatosSesion().getLocale().getLanguage()));
+					if (tradatjus == null){
+						throw new Exception("No se ha establecido la traducción de un dato de justificante para idioma " + tramiteInfo.getDatosSesion().getLocale().getLanguage());
+					}
+					datS.setDescripcion(tradatjus.getDescripcion());
 					if (datJ.getTipo() == DatoJustificante.TIPO_CAMPO){
 						
 						// Comprobamos si se ha especificado una referencia a campo o un script

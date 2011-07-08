@@ -101,6 +101,10 @@ public class DatosRegistroEntradaController extends BaseController
 		vd.setCodigo("ca");
 		vd.setDescripcion(resources.getMessage( getLocale( request ), "idioma.catalan"));
 		idiomas.add(vd);
+		vd = new ValorDominio();
+		vd.setCodigo("en");
+		vd.setDescripcion(resources.getMessage( getLocale( request ), "idioma.ingles"));
+		idiomas.add(vd);
 				
 		// Fecha de entrada en registro
 		String fechaEntrada = StringUtil.fechaACadena(new Date(),StringUtil.FORMATO_FECHA);
