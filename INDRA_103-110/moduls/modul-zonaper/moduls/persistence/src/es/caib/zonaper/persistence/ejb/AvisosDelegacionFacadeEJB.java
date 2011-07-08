@@ -250,10 +250,18 @@ public abstract class AvisosDelegacionFacadeEJB extends HibernateEJB
 	private String getFirmantesDocumento(DocumentoPersistente dp, String idioma) throws Exception{
 		String[] firmantes = dp.getDelegacionFirmantes().split("#");
 		String res = "";
+		
+		String partY = " y ";
+		if ("ca".equals(idioma)){
+			partY = " i ";
+		}else if ("en".equals(idioma)){
+			partY = " and ";
+		}
+		
 		for (int i=0;i<firmantes.length;i++){
 			if (i>0){
 				if (i == (firmantes.length - 1)){
-					res +=  ("es".equals(idioma)? " y ":" i ");
+					res +=  partY;
 				}else{
 					res += ", ";
 				}

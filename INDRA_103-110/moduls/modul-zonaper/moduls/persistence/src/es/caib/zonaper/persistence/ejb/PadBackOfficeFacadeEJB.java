@@ -734,8 +734,8 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		if (expPAD.getIdioma() == null){
 			throw new ExcepcionPAD("Debe especificarse el idioma de tramitacion del expediente");
 		}
-		if (!expPAD.getIdioma().equals("es") && !expPAD.getIdioma().equals("ca")){
-			throw new ExcepcionPAD("El idioma de tramitacion del expediente debe ser 'es' o 'ca'");
+		if (!expPAD.getIdioma().equals("es") && !expPAD.getIdioma().equals("ca") && !expPAD.getIdioma().equals("en")){
+			throw new ExcepcionPAD("El idioma de tramitacion del expediente debe ser 'es', 'ca' o 'en'");
 		}		
 	}
 	

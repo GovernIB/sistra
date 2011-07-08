@@ -72,10 +72,17 @@ public class IrAAnexarAction extends BaseAction
 			String[] nifFirmantes = anexo.getFirmante().split("#");
 			String[] nomFirmantes = anexo.getNombreFirmante().split("#");
 			
+			String partY = " y ";
+			if ("ca".equals(this.getLang(request))){
+				partY = " i ";
+			}else if ("en".equals(this.getLang(request))){
+				partY = " and ";
+			}
+			
 			for (int i=0;i<nifFirmantes.length;i++){
 				if (i>0){
 					if (i == (nifFirmantes.length - 1)){
-						listaFirmantes +=  ("es".equals(this.getLang(request))? " y ":" i ");
+						listaFirmantes +=  partY;
 					}else{
 						listaFirmantes += ", ";
 					}

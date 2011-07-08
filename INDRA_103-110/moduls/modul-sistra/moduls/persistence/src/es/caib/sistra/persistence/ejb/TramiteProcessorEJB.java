@@ -250,6 +250,8 @@ public class TramiteProcessorEJB implements SessionBean {
 			TramiteVersionDelegate td = DelegateUtil.getTramiteVersionDelegate();
 			tramiteVersion = td.obtenerTramiteVersionCompleto(tramite,version);
 			if (tramiteVersion == null) throw new Exception("No existe tramite " + tramite + " - " + version);
+			if (tramiteVersion.getIdiomasSoportados().indexOf(idioma.getLanguage()) == -1) throw new Exception("Idioma " + idioma + " no soportado para " + tramite + " - " + version);
+			
 			tramiteVersion.setCurrentLang(idioma.getLanguage());
 			//tramiteVersion.getTramite().setCurrentLang( idioma.getLanguage());
 			
