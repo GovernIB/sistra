@@ -62,5 +62,10 @@ public class Constants implements Serializable {
 	public static String MESSAGE_ACTION_KEY = "messageAction";
 	public static String MESSAGE_ACTION_PARAMS_KEY = "messageActionParams";
 	public static String MESSAGE_ACTION_LABEL_KEY = "messageActionLabelKey";
+	
+	
+	public static String EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY = "es.caib.bantel.front.expedienteActual.identificador";
+	public static String EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY = "es.caib.bantel.front.expedienteActual.unidadAdministrativa";
+	public static String EXPEDIENTE_ACTUAL_CLAVE_KEY = "es.caib.bantel.front.expedienteActual.claveAcceso";
 		
 }
