@@ -43,7 +43,8 @@ public class DatosAsunto extends NodoRegistroBase {
 		// validar longitud de camo, campo requerido, campo en lista de valores
 		String valoresPermitidos[] = {
 			ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_CA,
-			ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_ES
+			ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_ES,
+			ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_EN
 		};
 		validaLongitudCampo("DatosAsunto", "IdiomaAsunto", idiomaAsunto, ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_MAX);
 		validaCampoObligatorio ("DatosAsunto", "IdiomaAsunto", idiomaAsunto);
@@ -143,12 +144,14 @@ public class DatosAsunto extends NodoRegistroBase {
 		idiomaAsuntoRaw = idiomaAsuntoRaw.trim ();
 		if (idiomaAsuntoRaw.equals("")) throw new CampoObligatorioException ("DatosAsunto", "IdiomaAsunto");
 		if ( (!idiomaAsuntoRaw.equals("" + ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_CA)) &&
-				(!idiomaAsuntoRaw.equals("" + ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_ES))
+				(!idiomaAsuntoRaw.equals("" + ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_ES)) && 
+				 (!idiomaAsuntoRaw.equals("" + ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_EN))
 			)
 		{
 			String valoresPermitidos[] = {
 				"" + ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_CA,
-				"" + ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_ES
+				"" + ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_ES,
+				"" + ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_EN
 			};
 			throw new ValorFueraListaValoresPermitidosException ("DatosAsunto", "IdiomaAsunto", idiomaAsuntoRaw, valoresPermitidos);
 		}
