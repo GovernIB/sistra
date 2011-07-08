@@ -65,7 +65,8 @@ public abstract class ConfiguracionFacadeEJB extends HibernateEJB  {
     		oi.setUrlPortal(props.getProperty("organismo.portal.url"));
     		oi.setPieContactoHTML(props.getProperty("organismo.footer.contacto"));
     		oi.setTelefonoIncidencias(props.getProperty("organismo.soporteTecnico.telefono"));
-    		oi.setUrlSoporteIncidencias(props.getProperty("organismo.soporteTecnico.url"));    		
+    		oi.setUrlSoporteIncidencias(props.getProperty("organismo.soporteTecnico.url"));
+    		oi.setEmailSoporteIncidencias(props.getProperty("organismo.soporteTecnico.email")); 
     		oi.setUrlCssCustom(props.getProperty("organismo.cssCustom"));
     		return oi;
     	}catch(Exception ex){
