@@ -10,13 +10,17 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.MessageResources;
 
+import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleTramiteForm;
+import es.caib.bantel.front.util.MensajesUtil;
 import es.caib.bantel.model.DocumentoBandeja;
 import es.caib.bantel.model.GestorBandeja;
 import es.caib.bantel.model.Tramite;
@@ -58,22 +62,25 @@ import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
  */
 public class MostrarDetalleElementoAction extends BaseAction
 {
+	protected static Log log = LogFactory.getLog(MostrarDetalleElementoAction.class);
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception 
     {
 		PadBackOfficeDelegate ejb = new PadBackOfficeDelegate();
-		String clave = request.getParameter("clave");
-		String unidad = request.getParameter("unidad");
-		String identificador = request.getParameter("identificador");
+		
 		String codigo = request.getParameter("codigo");
 		String tipo = request.getParameter("tipo");
 		ExpedientePAD exp;
+		
+		// Recuperamos de sesion el expediente actual
+		String idExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY);
+		Long uniAdm = (Long) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY);
+		String claveExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY);
+		
 		try{
-			if(clave!=null && !"".equals(clave)){
-				exp = ejb.consultaExpediente( new Long(unidad), identificador,clave);
-			}else{
-				exp = ejb.consultaExpediente( new Long(unidad), identificador);
-			}
+			exp = ejb.consultaExpediente( uniAdm, idExpe, claveExpe);
+			
 			//si existe el expediente miramos si hay elementos y si existe el que nos estan pasando.
 			if(exp != null){
 				request.setAttribute("expediente", exp);
@@ -166,15 +173,18 @@ public class MostrarDetalleElementoAction extends BaseAction
 						request.setAttribute("detalleTramiteForm",detalleTramiteForm);
 						return mapping.findForward("succesTramite");
 					}else{
-						return mapping.findForward("fail");
+						throw new Exception("Tipo elemento expediente no soportado");
 					}
 				}else{
-					return mapping.findForward("fail");
+					throw new Exception("No existe elemento expediente");
 				}
 			}else{
-				return mapping.findForward("fail");
+				throw new Exception("Expediente no existe");
 			}
 		}catch(Exception e){
+			log.error("Excepcion mostrando detalle elemento",e);			
+			String mensajeOk = MensajesUtil.getValue("error.excepcion.general") + ": " + e.getMessage();
+			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk);
 			return mapping.findForward("fail");
 		}
     }
