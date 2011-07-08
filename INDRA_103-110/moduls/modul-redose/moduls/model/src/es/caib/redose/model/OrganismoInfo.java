@@ -13,6 +13,7 @@ public class OrganismoInfo {
 	private String pieContactoHTML;
 	private String telefonoIncidencias;
 	private String urlSoporteIncidencias;	
+	private String emailSoporteIncidencias;
 	private String urlCssCustom;
 	
 	public String getUrlCssCustom() {
@@ -56,6 +57,12 @@ public class OrganismoInfo {
 	}
 	public void setUrlSoporteIncidencias(String urlTramiteIncidencias) {
 		this.urlSoporteIncidencias = urlTramiteIncidencias;
+	}
+	public String getEmailSoporteIncidencias() {
+		return emailSoporteIncidencias;
+	}
+	public void setEmailSoporteIncidencias(String emailSoporteIncidencias) {
+		this.emailSoporteIncidencias = emailSoporteIncidencias;
 	}	
 	
 }
