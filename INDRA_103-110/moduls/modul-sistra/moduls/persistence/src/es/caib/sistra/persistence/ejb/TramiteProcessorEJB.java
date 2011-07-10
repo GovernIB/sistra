@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -249,11 +250,18 @@ public class TramiteProcessorEJB implements SessionBean {
 			// Cargamos definición trámite
 			TramiteVersionDelegate td = DelegateUtil.getTramiteVersionDelegate();
 			tramiteVersion = td.obtenerTramiteVersionCompleto(tramite,version);
-			if (tramiteVersion == null) throw new Exception("No existe tramite " + tramite + " - " + version);
-			if (tramiteVersion.getIdiomasSoportados().indexOf(idioma.getLanguage()) == -1) throw new Exception("Idioma " + idioma + " no soportado para " + tramite + " - " + version);
+			if (tramiteVersion == null) throw new Exception("No existe tramite '" + tramite + "' version " + version);
 			
-			tramiteVersion.setCurrentLang(idioma.getLanguage());
-			//tramiteVersion.getTramite().setCurrentLang( idioma.getLanguage());
+			// Establecemos como idioma el de la sesion, si no esta soportado establecemos por defecto el primer idioma soportado
+			if (StringUtils.isEmpty(tramiteVersion.getIdiomasSoportados())){
+				throw new Exception("No esta soportado ningun idioma para el tramite");
+			}
+			if (tramiteVersion.getIdiomasSoportados().indexOf(idioma.getLanguage()) == -1) {
+				StringTokenizer st = new StringTokenizer(tramiteVersion.getIdiomasSoportados(),",");
+				tramiteVersion.setCurrentLang(st.nextToken());
+			}else{
+				tramiteVersion.setCurrentLang(idioma.getLanguage());
+			}
 			
 			//  Parámetros de inicio (sólo se almacenarán si se inicia un nuevo trámite)
 			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
@@ -278,7 +286,7 @@ public class TramiteProcessorEJB implements SessionBean {
 			this.entornoDesarrollo = "DESARROLLO".equals(props.getProperty("entorno"));
 			
 		} catch (Exception e) {            
-            throw new EJBException(e);
+            throw new EJBException("Excepcion al iniciar tramite: " + e.getMessage(), e);
         }
 	}
 	
@@ -338,11 +346,12 @@ public class TramiteProcessorEJB implements SessionBean {
     		for (Iterator it = this.tramiteVersion.getNiveles().iterator();it.hasNext();){    			
     			ls_niveles += ((TramiteNivel) it.next()).getNivelAutenticacion();
     		}
-    		
+    		    		
     		// Devolvemos como parámetros la descripción del trámite y los niveles
     		HashMap param = new HashMap();
     		RespuestaFront res = new RespuestaFront();
-    		param.put("descripcion", ((TraTramite) this.tramiteVersion.getTramite().getTraduccion( this.datosSesion.getLocale().getLanguage())).getDescripcion());
+    		//param.put("descripcion", ((TraTramite) this.tramiteVersion.getTramite().getTraduccion( this.datosSesion.getLocale().getLanguage())).getDescripcion());
+    		param.put("descripcion", ((TraTramite) this.tramiteVersion.getTramite().getTraduccion()).getDescripcion());
     		param.put("niveles",ls_niveles);    		
     		// En caso de pasar un nivel obtenemos dias persistencia del nivel
     		String ls_dias = Integer.toString(((EspecTramiteNivel) this.tramiteVersion.getEspecificaciones()).getDiasPersistencia()) ;
@@ -447,7 +456,9 @@ public class TramiteProcessorEJB implements SessionBean {
     	try{    		
     		// Protegemos en caso de que el trámite ya ha sido inicializado
     		if (tramitePersistentePAD != null) return this.irAPaso(pasoActual);    		
-    		log.debug(mensajeLog("Iniciar tramite nivel autenticacion " +  datosSesion.getNivelAutenticacion())); 	    	           		    
+    		log.debug(mensajeLog("Iniciar tramite nivel autenticacion " +  datosSesion.getNivelAutenticacion()));
+    		// Comprobamos si el idioma esta soportado
+   		 	comprobarIdioma(this.datosSesion.getLocale().getLanguage());
 	    	// Obtenemos pasos
 	    	calcularPasos();
 	    	// Inicializamos formularios guardando en PAD y RDS
@@ -5444,19 +5455,38 @@ public class TramiteProcessorEJB implements SessionBean {
 	  * 
 	  * @param idPersistencia
 	  */
-	 private void ajustarIdioma(String idPersistencia) throws DelegateException{
-		 PadDelegate pad = DelegatePADUtil.getPadDelegate();
-		 TramitePersistentePAD t = pad.obtenerTramitePersistente(idPersistencia);
+	 private void ajustarIdioma(String idPersistencia) throws ProcessorException{
+		 // Cargamos tramite de persistencia
+		 TramitePersistentePAD t = null;
+		 try {
+			 PadDelegate pad = DelegatePADUtil.getPadDelegate();
+			 t = pad.obtenerTramitePersistente(idPersistencia);
+		 }catch(DelegateException dex){
+			 throw new ProcessorException("Error cargando de persistencia el tramite con id " + idPersistencia + ": " + dex.getMessage(), MensajeFront.MENSAJE_ERRORDESCONOCIDO, dex);
+		 }
 		 
-		 // Si el lenguage de la sesion no coincide con el del trámite, cambiamos el 
-		 // lenguage de la sesión
+		 // Comprobamos si el idioma esta soportado
+		 comprobarIdioma(t.getIdioma());
+		 
+		 // Si el lenguage de la sesion no coincide con el del trámite, cambiamos el lenguage de la sesión
 		 if (!this.datosSesion.getLocale().getLanguage().equals(t.getIdioma())){			 
 			 tramiteVersion.setCurrentLang(t.getIdioma());
 			 datosSesion.setLocale(new Locale(t.getIdioma()));
-		 }
-		 
+		 }		 		 		 
 	 }
 	 
+	 /**
+	  * Comprueba si el idioma esta soportado
+	  * @param idioma
+	  */
+	 private void comprobarIdioma(String idioma) throws ProcessorException{
+		 if (tramiteVersion.getIdiomasSoportados().indexOf(idioma) == -1) {
+			 throw new ProcessorException("Idioma '" + idioma + "' no soportado para " +
+					 "tramite '" +   this.tramiteVersion.getTramite().getIdentificador() + "' " +
+					 "version " +  this.tramiteVersion.getVersion(),
+					 MensajeFront.MENSAJE_ERROR_IDIOMA_NO_SOPORTADO);
+		 }
+	 }
 	 
 	 /**
 	  * Convierte un texto html en el que se pueden haber establecido tags especiales.
@@ -5619,6 +5649,7 @@ public class TramiteProcessorEJB implements SessionBean {
 				 	MensajeFront.MENSAJE_TRAMITEPENDIENTECONFIRMACION.equals(pe.getCodigoError()) ||
 				 	MensajeFront.MENSAJE_TRAMITETERMINADO.equals(pe.getCodigoError()) ||
 				 	MensajeFront.MENSAJE_DELEGADO_NO_PERMISO_RELLENAR.equals(pe.getCodigoError()) || 
+				 	MensajeFront.MENSAJE_ERROR_IDIOMA_NO_SOPORTADO.equals(pe.getCodigoError()) ||
 				 	MensajeFront.MENSAJE_TRAMITETERMINADO.equals(pe.getCodigoError())				 	
 			){
 			 		debug = true;
