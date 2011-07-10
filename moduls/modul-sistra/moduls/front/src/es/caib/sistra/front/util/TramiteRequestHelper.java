@@ -84,7 +84,7 @@ public class TramiteRequestHelper
 	// -- Mensajes de Tipo Warning
 	public static void setWarnMessage( HttpServletRequest request, String messageKey, Object args[],ParametrosMensaje param )
     {
-    	setMessage( request, messageKey, MensajeFront.TIPO_WARNING, args,param );
+    	setMessage( request, messageKey, MensajeFront.TIPO_WARNING, args,param, null );
     }
 	
 	public static void setWarnMessage( HttpServletRequest request, String messageKey, Object args[] )
@@ -103,9 +103,14 @@ public class TramiteRequestHelper
     }
     
 	// -- Mensajes de Tipo Error
+	public static void setErrorMessage( HttpServletRequest request, String errorMessageKey, Object args[],ParametrosMensaje param, String exceptionMessage )
+    {
+    	setMessage( request, errorMessageKey, MensajeFront.TIPO_ERROR, args, param, exceptionMessage );
+    }
+	
 	public static void setErrorMessage( HttpServletRequest request, String errorMessageKey, Object args[],ParametrosMensaje param )
     {
-    	setMessage( request, errorMessageKey, MensajeFront.TIPO_ERROR, args, param );
+    	setMessage( request, errorMessageKey, MensajeFront.TIPO_ERROR, args, param, null );
     }
 	
 	public static void setErrorMessage( HttpServletRequest request, String errorMessageKey, Object args[] )
@@ -126,7 +131,7 @@ public class TramiteRequestHelper
 	// -- Mensajes de Tipo Error Recuperable
 	public static void setErrorRecoverableMessage( HttpServletRequest request, String errorMessageKey, Object args[] ,ParametrosMensaje param )
     {
-    	setMessage( request, errorMessageKey, MensajeFront.TIPO_ERROR_CONTINUABLE, args,param );
+    	setMessage( request, errorMessageKey, MensajeFront.TIPO_ERROR_CONTINUABLE, args,param, null );
     }
 	
 	public static void setErrorRecoverableMessage( HttpServletRequest request, String errorMessageKey, Object args[] )
@@ -148,7 +153,7 @@ public class TramiteRequestHelper
 	// -- Mensajes de Tipo Información
 	public static void setInfoMessage( HttpServletRequest request, String errorMessageKey, Object args[],ParametrosMensaje param )
     {
-    	setMessage( request, errorMessageKey, MensajeFront.TIPO_INFO, args ,param);
+    	setMessage( request, errorMessageKey, MensajeFront.TIPO_INFO, args ,param, null);
     }
 	
 	public static void setInfoMessage( HttpServletRequest request, String errorMessageKey, Object args[] )
@@ -172,7 +177,7 @@ public class TramiteRequestHelper
      * @param messageKey
      * @param tipoMensaje
      */
-    private static void setMessage( HttpServletRequest request, String messageKey, int tipoMensaje, Object args[],ParametrosMensaje param )
+    private static void setMessage( HttpServletRequest request, String messageKey, int tipoMensaje, Object args[],ParametrosMensaje param, String exceptionMessage )
     {
     	MensajeFront mensaje = new MensajeFront();
 		//mensaje.setTipo( MensajeFront.TIPO_ERROR );
@@ -181,6 +186,7 @@ public class TramiteRequestHelper
 		//MessageResources resources = this.getResources( request );
 		MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));
 		mensaje.setMensaje( resources.getMessage( getLocale( request ), messageKey, args ) );
+		mensaje.setMensajeExcepcion(exceptionMessage);
 		request.setAttribute( Constants.MENSAJE_KEY, mensaje );
 		if (param != null) {
 			request.setAttribute( Constants.MENSAJE_PARAM, param );

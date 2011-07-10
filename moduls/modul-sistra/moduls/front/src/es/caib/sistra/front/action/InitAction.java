@@ -126,9 +126,8 @@ public class InitAction extends BaseAction
 			
 			delegate = DelegateUtil.getInstanciaDelegate( true );
 			delegate.create( initForm.getModelo(), initForm.getVersion(),modoAutenticacionUsuario,
-					getLocale( request ),obtenerParametrosInicio(request),
-					perfilAcceso, nifEntidad);
-			
+						getLocale( request ),obtenerParametrosInicio(request),
+						perfilAcceso, nifEntidad);
 			
 			// Aun no existiria ninguna informacion referente al tramite, simplemente se ha creado el delegado.
 			// Registramos la instancia asociada al procesador del trámite

@@ -42,7 +42,7 @@ try {
 	// TODO: Incompatible amb drivers Postgresql. Si realment es necessari, cercar
 	// alternativa igual que a PluguinDominio, sinó llevar.
     //s.setQueryTimeout(30);
-	rs = s.executeQuery("SELECT TRA_IDENTI, TRV_VERSIO,TTR_DESC FROM STR_TRAMIT,STR_TRAVER,STR_TRATRA WHERE STR_TRAMIT.TRA_CODIGO = STR_TRAVER.TRV_CODTRA AND STR_TRAMIT.TRA_CODIGO = STR_TRATRA.TTR_CODTRA AND STR_TRATRA.TTR_CODIDI = 'es'  ORDER BY TRA_IDENTI,TRV_VERSIO");            
+	rs = s.executeQuery("SELECT TRA_IDENTI, TRV_VERSIO,TTR_DESC, TRV_IDISOP FROM STR_TRAMIT,STR_TRAVER,STR_TRATRA WHERE STR_TRAMIT.TRA_CODIGO = STR_TRAVER.TRV_CODTRA AND STR_TRAMIT.TRA_CODIGO = STR_TRATRA.TTR_CODTRA AND STR_TRATRA.TTR_CODIDI = 'es'  ORDER BY TRA_IDENTI,TRV_VERSIO");            
 	
 	String id="",des,idAnt;
 	int version;
@@ -58,10 +58,17 @@ try {
 <%		} %>
 		&nbsp;&nbsp;&nbsp;Versión <%=version%>  - 
 		Inicio directo:
-		[<a href="/sistrafront/inicio?language=es&modelo=<%=id%>&version=<%=version%>">es</a>]
-		&nbsp;
-		[<a href="/sistrafront/inicio?language=ca&modelo=<%=id%>&version=<%=version%>">ca</a>]
-		&nbsp;		
+<%		
+		StringTokenizer st = new StringTokenizer(rs.getString("TRV_IDISOP"),",");
+   		String idioma;
+   		while (st.hasMoreTokens()){
+   			idioma = st.nextToken();
+%>
+			[<a href="/sistrafront/inicio?language=<%=idioma%>&modelo=<%=id%>&version=<%=version%>"><%=idioma%></a>]
+			&nbsp;
+<%   			
+   		}
+%>					
 		<br>		
 <% 		
 	}	  
