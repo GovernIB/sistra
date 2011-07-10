@@ -54,7 +54,8 @@ public class ConfigurationUtil {
 				organismoInfo.setUrlPortal(propiedades.getProperty("organismo.portal.url"));
 				organismoInfo.setPieContactoHTML(propiedades.getProperty("organismo.footer.contacto"));
 				organismoInfo.setTelefonoIncidencias(propiedades.getProperty("organismo.soporteTecnico.telefono"));
-				organismoInfo.setUrlSoporteIncidencias(propiedades.getProperty("organismo.soporteTecnico.url"));    		
+				organismoInfo.setUrlSoporteIncidencias(propiedades.getProperty("organismo.soporteTecnico.url"));  
+				organismoInfo.setEmailSoporteIncidencias(propiedades.getProperty("organismo.soporteTecnico.email"));
 				organismoInfo.setUrlCssCustom(propiedades.getProperty("organismo.cssCustom"));
 	    		
 	    		// Obtenemos titulo y referencia a la zona personal
