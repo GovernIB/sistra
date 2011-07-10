@@ -1,8 +1,8 @@
 package es.caib.bantel.front.action;
 
 
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,9 +30,9 @@ public class AltaParametroNotificacionAction extends BaseAction
 		String codi = request.getParameter("codi");
 		String valor = request.getParameter("valor");
 		JSONArray params = new JSONArray();
-		Map parametros = (HashMap)request.getSession().getAttribute("parametrosAltaNotificacion");
+		Map parametros = (Map)request.getSession().getAttribute("parametrosAltaNotificacion");
 		if(parametros == null){
-			parametros = new HashMap();
+			parametros = new LinkedHashMap();
 		}
 		if(StringUtils.isNotBlank(codi) && StringUtils.isNotBlank(valor)){
 			if(!parametros.containsKey(codi)){
