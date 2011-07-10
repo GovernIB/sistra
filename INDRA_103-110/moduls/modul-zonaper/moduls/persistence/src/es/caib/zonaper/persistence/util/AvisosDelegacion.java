@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -131,10 +132,13 @@ public class AvisosDelegacion {
 		String tituloEmail=LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.delegacion.titulo");
 		tituloEmail=StringUtil.replace(tituloEmail,"{0}",oi.getNombre().toUpperCase());
 		
-		String textoEmail = cargarPlantillaMail("mailAvisoDelegacion_" + idioma + ".html");
+		String textoEmail = cargarPlantillaMail("mailAvisoDelegacion.html");
 		textoEmail = StringUtil.replace(textoEmail,"[#ORGANISMO.NOMBRE#]",oi.getNombre());
 		textoEmail = StringUtil.replace(textoEmail,"[#ORGANISMO.LOGO#]",oi.getUrlLogo());
 		textoEmail = StringUtil.replace(textoEmail,"[#AVISODELEGACION.MENSAJE#]",mensajeDelega);
+		textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AVISOTRAMITACION#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.email.cuerpo.avisoTramitacion")));
+		textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AVISODELEGACION#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.email.cuerpo.avisoDelegacion")));
+		textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.SOPORTE#]",LiteralesAvisosMovilidad.calcularTextoSoporte(oi, idioma));
 		
 		// Creamos MensajeEnvio
 		log.debug("Creamos mensajeEnvio");

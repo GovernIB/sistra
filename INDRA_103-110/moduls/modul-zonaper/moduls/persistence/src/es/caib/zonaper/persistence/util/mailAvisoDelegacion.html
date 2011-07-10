@@ -4,7 +4,7 @@
 <head>
 
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-	<title>Notificaci&oacute;n - [#ORGANISMO.NOMBRE#]</title>
+	<title>[#TEXTO.AVISOTRAMITACION#] - [#ORGANISMO.NOMBRE#]</title>
 	
 	<!-- css -->
 	<style type="text/css">
@@ -15,7 +15,7 @@
 		#continguts h1 { font-size:1.4em; margin-top:0; margin-bottom:1em; }
 		#continguts dl { padding-bottom:1em; margin-bottom:.5em; }
 		#continguts dl dt { float:left; width:10em; font-size:1.1em; font-variant:small-caps; text-align:right; padding-right:.8em; }
-		#continguts dd { font-weight:bold; padding-bottom:.5em; }
+		#continguts dd { font-weight:bold; padding-bottom:.5em; width:50em;  }
 		#continguts h2 { font-size:1.1em; margin:.8em 0; }
 		#continguts p { margin:.8em 0; }
 		#contenidor p.peu { margin:1.5em 0; padding:1em; border:1px solid #ccc; }
@@ -42,35 +42,18 @@
 		
 			<!-- titol -->
 			<h1>
-				Aviso de notificaci&oacute;n
+				[#TEXTO.AVISODELEGACION#]
 			</h1>
 			<!-- /titol -->
-			
-			<dl>
-				<dt>&Oacute;rganO:</dt>
-				<dd>[#UNIDAD_ADMINISTRATIVA#]</dd>
-				<dt>ExpedientE:</dt>
-				<dd>[#EXPEDIENTE#]</dd>
-				<dt>Data dE avIsO:</dt>
-				<dd>[#FECHA#]</dd>
-				<dt>AsuNtO:</dt>
-				<dd>[#TITULO#]</dd>
-				<dt>Descripci&Oacute;N:</dt>
-				<dd>[#TEXTO#]</dd>				
-			</dl>
-			
-			<a href="[#URL_ACCESO#]" class="accedir">Acceder a la notificaci&oacute;n</a>						
-			
-		    <p>[#NOTA_LEGAL#]</p>
-			
-	  </div>
+			[#AVISODELEGACION.MENSAJE#]	
 		<!-- /continguts -->
-		
-		<p class="peu">
-			Si tiene alguna duda puede ponerse en contacto con el tel&eacute;fono de atenci&oacute;n al ciudadano: <strong>[#ORGANISMO.TELEFONOINCIDENCIAS#]</strong>.		</p>
 	
+		<!--  URL SOPORTE  -->
+		<p class="peu">
+			[#TEXTO.SOPORTE#]
+		</p>
+		
 	</div>
 	<!-- /contenidor -->
-
 </body>
 </html>
