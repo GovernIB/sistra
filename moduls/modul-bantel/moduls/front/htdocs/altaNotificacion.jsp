@@ -378,7 +378,7 @@ function repintarParametros(datos){
 			divParametros = divParametros+"</p></li>";
 		}
 	); 
-	divParametros = divParametros+"</ul> <br/>";
+	divParametros = "<br/>" + divParametros+"</ul> <br/>";
 	$('#parametros').html(divParametros);
 }
 </script>
@@ -604,10 +604,9 @@ function repintarParametros(datos){
 						<html:text property="versionTramiteSubsanacion" styleClass="pc40" />
 					</p>
 				
-					<p class="label">
-						<bean:message key="tramite.subsanacion.parametros"/>
+					<p>
+						<label><bean:message key="tramite.subsanacion.parametros"/></label>						
 					</p>
-
 					<div id="parametros"></div>
 					<ul id="parametro">
 						<li>
@@ -620,6 +619,7 @@ function repintarParametros(datos){
 							</p>
 						</li>
 					</ul>
+					
 					</html:form>
 				<!-- escritorio_docs  -->
 				<div id="escritorio_docs">
