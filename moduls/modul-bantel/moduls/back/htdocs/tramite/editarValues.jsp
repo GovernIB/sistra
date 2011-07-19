@@ -15,7 +15,7 @@
      function mostrarErrores(){
         var url = "<html:rewrite page="/tramite/erroresIntegracion.jsp" />";
         url = url + "?codigoTramiteError=<%=request.getAttribute("codigoTramiteError")%>";
-        obrir(url, '<bean:message key="tramite.errores.popup.titulo.value"/>', 540, 400);
+        obrir(url, "Errores", 540, 400);
 	}
      // -->
 </script>
