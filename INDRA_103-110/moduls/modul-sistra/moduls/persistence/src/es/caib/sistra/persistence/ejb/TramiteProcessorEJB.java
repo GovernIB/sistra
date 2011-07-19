@@ -457,8 +457,8 @@ public class TramiteProcessorEJB implements SessionBean {
     		// Protegemos en caso de que el trámite ya ha sido inicializado
     		if (tramitePersistentePAD != null) return this.irAPaso(pasoActual);    		
     		log.debug(mensajeLog("Iniciar tramite nivel autenticacion " +  datosSesion.getNivelAutenticacion()));
-    		// Comprobamos si el idioma esta soportado
-   		 	comprobarIdioma(this.datosSesion.getLocale().getLanguage());
+    		// Comprobamos si el idioma esta soportado, si no esta disponible el idioma que se pide se intentará en es o ca.
+    		ajustarIdiomaIniciar();   		 	
 	    	// Obtenemos pasos
 	    	calcularPasos();
 	    	// Inicializamos formularios guardando en PAD y RDS
@@ -519,7 +519,7 @@ public class TramiteProcessorEJB implements SessionBean {
     		// Comprobamos si existe tramite en la PAD
     		existeTramitePad(idPersistencia);
     		// Ajustamos idioma sesion en funcion del idioma del tramite
-    		ajustarIdioma(idPersistencia);
+    		ajustarIdiomaCargar(idPersistencia);
 	    	// Obtenemos pasos
 	    	calcularPasos();
 	    	// Inicializamos formularios guardando en PAD y RDS
@@ -5458,12 +5458,37 @@ public class TramiteProcessorEJB implements SessionBean {
 		 }		
 	 }
 	 
+	 
 	 /**
-	  * Ajusta el idioma del trámite al cargar un trámite persistente
+	  * Ajusta el idioma del trámite al iniciar un trámite, si no esta disponible el idioma que se pide se intentará en es o ca.
 	  * 
 	  * @param idPersistencia
 	  */
-	 private void ajustarIdioma(String idPersistencia) throws ProcessorException{
+	 private void ajustarIdiomaIniciar() throws ProcessorException{
+
+		// Si no esta disponible el idioma solicitado se intentará con otro 
+		String idioma = this.datosSesion.getLocale().getLanguage();
+		if (tramiteVersion.getIdiomasSoportados().indexOf(idioma) == -1) {
+			StringTokenizer st = new StringTokenizer(tramiteVersion.getIdiomasSoportados(),",");
+			idioma = st.nextToken();			
+		}
+		
+		 // Comprobamos si el idioma esta soportado (lo hacemos porque tb se comprueba si esta establecido los literales a nivel de tramite)
+		 comprobarIdioma(idioma);
+		 
+		 // Establecemos idioma a nivel de version y de sesion
+		 tramiteVersion.setCurrentLang(idioma);
+		 if (!this.datosSesion.getLocale().getLanguage().equals(idioma)){			 			 
+			 datosSesion.setLocale(new Locale(idioma));
+		 }		 		 		 
+	 }
+	 
+	 /**
+	  * Ajusta el idioma del trámite al cargar un trámite persistente con el idioma con el que se había tramitado
+	  * 
+	  * @param idPersistencia
+	  */
+	 private void ajustarIdiomaCargar(String idPersistencia) throws ProcessorException{
 		 // Cargamos tramite de persistencia
 		 TramitePersistentePAD t = null;
 		 try {
@@ -5476,9 +5501,9 @@ public class TramiteProcessorEJB implements SessionBean {
 		 // Comprobamos si el idioma esta soportado
 		 comprobarIdioma(t.getIdioma());
 		 
-		 // Si el lenguage de la sesion no coincide con el del trámite, cambiamos el lenguage de la sesión
-		 if (!this.datosSesion.getLocale().getLanguage().equals(t.getIdioma())){			 
-			 tramiteVersion.setCurrentLang(t.getIdioma());
+  		 // Establecemos idioma a nivel de version y de sesion
+		 tramiteVersion.setCurrentLang(t.getIdioma());
+		 if (!this.datosSesion.getLocale().getLanguage().equals(t.getIdioma())){			 			 
 			 datosSesion.setLocale(new Locale(t.getIdioma()));
 		 }		 		 		 
 	 }
@@ -5488,6 +5513,14 @@ public class TramiteProcessorEJB implements SessionBean {
 	  * @param idioma
 	  */
 	 private void comprobarIdioma(String idioma) throws ProcessorException{
+		 
+		 if (StringUtils.isEmpty(idioma)) {
+			 throw new ProcessorException("Idioma no soportado para " +
+					 "tramite '" +   this.tramiteVersion.getTramite().getIdentificador() + "' " +
+					 "version " +  this.tramiteVersion.getVersion(),
+					 MensajeFront.MENSAJE_ERROR_IDIOMA_NO_SOPORTADO); 
+		 }
+		 
 		 if (tramiteVersion.getIdiomasSoportados().indexOf(idioma) == -1) {
 			 throw new ProcessorException("Idioma '" + idioma + "' no soportado para " +
 					 "tramite '" +   this.tramiteVersion.getTramite().getIdentificador() + "' " +
@@ -5496,9 +5529,8 @@ public class TramiteProcessorEJB implements SessionBean {
 		 }
 		 
 		 if (this.tramiteVersion.getTramite().getTraduccion(idioma) == null) {
-			 throw new ProcessorException("Falta la tradución para el idioma '" + idioma + "' para " +
-					 "tramite '" +   this.tramiteVersion.getTramite().getIdentificador() + "' " +
-					 "version " +  this.tramiteVersion.getVersion(),
+			 throw new ProcessorException("Falta la tradución para el idioma '" + idioma + "' a nivel de tramite '" +
+					 this.tramiteVersion.getTramite().getIdentificador() ,
 					 MensajeFront.MENSAJE_ERROR_IDIOMA_NO_SOPORTADO);
 		 }
 		 
