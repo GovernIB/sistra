@@ -12,15 +12,15 @@ function validaFormulario( form )
 		form.idPersistencia.value = form.idPersistencia.value.replace(/^\s+|\s+$/g,'');
     
 		if ( form.idPersistencia.value == null || form.idPersistencia.value == '' )
-		{
-			alert( "Introduzca un identificador de persistencia" );	
+		{			
+			alert( "<bean:message key="menuAnonimo.claveVacia" />" );	
 			form.idPersistencia.focus();
 			return;
 		}
         var filter  = /^\w{8}\-\w{8}\-\w{8}$/;
         if ( !filter.test( form.idPersistencia.value ) )
         {
-        	alert( "Introduzca un identificador de persistencia valido" );	
+        	alert( "<bean:message key="menuAnonimo.claveInvalida" />" );
 			form.idPersistencia.focus();
 			return;
         }
@@ -34,6 +34,6 @@ function validaFormulario( form )
 			<p><bean:message key="inicioAnonimo.parrafo1.texto" /></p>
 			<h2><bean:message key="inicioAnonimo.titulo" /></h2>
 			<p><bean:message key="inicioAnonimo.encabezamiento" /></p>
-			<p><html:text property="idPersistencia" size="70"/> <input type="button" value="Iniciar" onclick="javascript:validaFormulario( this.form );"/></p>
+			<p><html:text property="idPersistencia" size="70"/> <input type="button" value="<bean:message key="menuAnonimo.misTramites.boton" />" onclick="javascript:validaFormulario( this.form );"/></p>
 			</html:form>
 		</div>	
