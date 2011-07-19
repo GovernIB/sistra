@@ -44,7 +44,7 @@ function validaFormulario( form )
 					<html:form action="/protected/infoTramiteAnonimo">
 						<p>
 							<html:text property="idPersistencia" size="35"/> 
-							<input type="button" value="Iniciar" onclick="javascript:validaFormulario( this.form );"/>
+							<input type="button" value="<bean:message key="menuAnonimo.misTramites.boton" />" onclick="javascript:validaFormulario( this.form );"/>
 						</p>
 					</html:form>					
 				
