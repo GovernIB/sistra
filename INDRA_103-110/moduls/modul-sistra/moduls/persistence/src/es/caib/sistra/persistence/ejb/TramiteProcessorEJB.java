@@ -3481,8 +3481,16 @@ public class TramiteProcessorEJB implements SessionBean {
     		tramiteInfo = new TramiteFront();
     		tramiteInfo.setModelo( this.tramiteVersion.getTramite().getIdentificador() );
     		tramiteInfo.setVersion( this.tramiteVersion.getVersion() );
-    		tramiteInfo.setDatosSesion(this.datosSesion);    		
-    		tramiteInfo.setDescripcion( ((TraTramite) this.tramiteVersion.getTramite().getTraduccion(datosSesion.getLocale().getLanguage())).getDescripcion());
+    		tramiteInfo.setDatosSesion(this.datosSesion); 
+    		
+    		// Protegemos por si falta el literal del tramite en el idioma actual
+    		TraTramite tratra = (TraTramite) this.tramiteVersion.getTramite().getTraduccion(datosSesion.getLocale().getLanguage());
+    		if (tratra == null){
+    			tratra = (TraTramite) this.tramiteVersion.getTramite().getTraduccion("es");
+    		}
+    		tramiteInfo.setDescripcion(tratra.getDescripcion());
+    		
+    		
     		tramiteInfo.setRegistrar(tramiteVersion.getDestino() == ConstantesSTR.DESTINO_REGISTRO);
     		tramiteInfo.setConsultar(tramiteVersion.getDestino() ==  ConstantesSTR.DESTINO_CONSULTA);
     		tramiteInfo.setAsistente(tramiteVersion.getDestino() ==  ConstantesSTR.DESTINO_ASISTENTE);
@@ -5476,7 +5484,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	 }
 	 
 	 /**
-	  * Comprueba si el idioma esta soportado
+	  * Comprueba si el idioma esta soportado y si esta establecida la traducción a nivel del trámite
 	  * @param idioma
 	  */
 	 private void comprobarIdioma(String idioma) throws ProcessorException{
@@ -5486,6 +5494,14 @@ public class TramiteProcessorEJB implements SessionBean {
 					 "version " +  this.tramiteVersion.getVersion(),
 					 MensajeFront.MENSAJE_ERROR_IDIOMA_NO_SOPORTADO);
 		 }
+		 
+		 if (this.tramiteVersion.getTramite().getTraduccion(idioma) == null) {
+			 throw new ProcessorException("Falta la tradución para el idioma '" + idioma + "' para " +
+					 "tramite '" +   this.tramiteVersion.getTramite().getIdentificador() + "' " +
+					 "version " +  this.tramiteVersion.getVersion(),
+					 MensajeFront.MENSAJE_ERROR_IDIOMA_NO_SOPORTADO);
+		 }
+		 
 	 }
 	 
 	 /**
