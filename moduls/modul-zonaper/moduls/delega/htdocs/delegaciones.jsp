@@ -154,7 +154,7 @@ function asignarRepresentante(form){
 		alert("<bean:message key="delegaciones.buscar.usuario"/>");
 		return;
 	}
-	Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "Enviando datos..."});
+	Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "<bean:message key="delegaciones.enviando"/>"});
 	var nifDelegante = $("#nif").val();	
 	var nifDelegado = $("#nifDelegado").val();	
 	var fechaInicioDelegacion = $("#fechaInicioDelegacion").val();	
@@ -164,7 +164,7 @@ function asignarRepresentante(form){
 	$.postJSON(url_json, data, 
 		function(datos){
 			if (datos.error==""){
-				Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "Firmando datos..."});
+				Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "<bean:message key="firmarDocumento.firmando"/>"});
 				$('#documentoB64').val(datos.datos);
 				<logic:equal name="<%=es.caib.zonaper.delega.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 						 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
@@ -211,7 +211,7 @@ function asignarRepresentante(form){
 
 
 function habilitarEntidad(){
-	Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "Enviando datos..."});
+	Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "<bean:message key="delegaciones.enviando"/>"});
 	var nifDelegante = $("#nif").val();	
 	var url_json = '<html:rewrite page="/habilitarEntidad.do"/>';
 	var data ='nif='+nifDelegante+'&habilitar=S';
@@ -229,7 +229,7 @@ function habilitarEntidad(){
 }
 
 function deshabilitarEntidad(){
-	Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "Enviando datos..."});
+	Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "<bean:message key="delegaciones.enviando"/>"});
 	var nifDelegante = $("#nif").val();	
 	var url_json = '<html:rewrite page="/habilitarEntidad.do"/>';
 	var data ='nif='+nifDelegante+'&habilitar=N';
@@ -247,7 +247,7 @@ function deshabilitarEntidad(){
 }
 
 function anularRepresentante(codigo){
-	Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "Enviando datos..."});
+	Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "<bean:message key="delegaciones.enviando"/>"});
 	var url_json = '<html:rewrite page="/anularRepresentante.do"/>';
 	var data ='codigoDelegacion='+codigo;
 	$.postJSON(url_json, data, 
