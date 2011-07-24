@@ -161,6 +161,9 @@
      controllerClass="es.caib.sistra.back.action.tramiteVersion.FuncsNodesUnidadesController" />
   
     <definition name=".tramiteVersion.importar" path="/tramiteVersion/importar.jsp"/>
+    
+     <definition name=".tramiteVersion.importarPreview" path="/tramiteVersion/importarPreview.jsp"
+     controllerClass="es.caib.sistra.back.action.xml.ImportarXMLPreviewController" />
 	    
     <definition name=".tramiteVersion.lista" path="/tramiteVersion/lista.jsp" controllerClass="es.caib.sistra.back.action.tramiteVersion.ListaTramiteVersionesController">
         <put name="id" value="" />

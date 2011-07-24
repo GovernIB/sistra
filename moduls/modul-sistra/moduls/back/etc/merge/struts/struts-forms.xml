@@ -33,6 +33,10 @@
     type="es.caib.sistra.back.form.ImportarVersionTramiteForm" />
 
 <form-bean
+    name="importarVersionTramiteProcessForm"
+    type="es.caib.sistra.back.form.ImportarVersionTramiteProcessForm" />
+
+<form-bean
     name="tramiteNivelForm"
     type="es.caib.sistra.back.form.TramiteNivelForm"
     className="es.caib.sistra.back.action.TramiteFormBeanConfig">
