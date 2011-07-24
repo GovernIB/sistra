@@ -34,7 +34,7 @@
 
 <html:errors/>
 
-<html:form action="/importar/xml" styleId="importarForm" enctype="multipart/form-data">
+<html:form action="/importar/xmlPreview" styleId="importarForm" enctype="multipart/form-data">
 	<html:hidden property="codigoTramite" value="<%= request.getParameter( "codigoTramite" ) %>"/>
 <table class="marc">
     <tr>
