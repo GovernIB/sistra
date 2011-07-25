@@ -724,14 +724,14 @@ public class ValidacionesUtil
 		
 		/**
 		 * Realiza la validacion del telefono movil que se pasa como parametro.Solo valida
-		 * aquellos telefonos con 9 cifras que empiecen por 6
+		 * aquellos telefonos con 9 cifras que empiecen por 6 o 7
 		 * @param movil
 		 * @return
 		 */
 		public static boolean validarMovil( String movil)
 		{  
 			// validar email 
-			Pattern p = Pattern.compile("6[0-9]{8}");
+			Pattern p = Pattern.compile("[6-7][0-9]{8}");
 			Matcher m = p.matcher(movil);
 			boolean b = m.matches();
 			return b;
