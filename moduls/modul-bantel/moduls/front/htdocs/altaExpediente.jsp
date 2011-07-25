@@ -122,7 +122,7 @@
 						<html:text  property="nif"  readonly="true"/>					
 					</logic:present>
 					<logic:notPresent name="existeEntrada">
-						<html:text  property="nif"/>					
+						<html:text property="nif" onblur="this.value=this.value.toUpperCase()"/>					
 						<img src="imgs/botons/cercar.gif" alt="<bean:message key='botons.cercar'/>"  onclick="javascript:fillDestinatario();"/> 
 					</logic:notPresent>
 				</p>
