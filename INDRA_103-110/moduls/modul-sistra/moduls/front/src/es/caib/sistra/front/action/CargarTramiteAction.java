@@ -56,7 +56,7 @@ public class CargarTramiteAction extends BaseAction
 		
 		if(mensaje != null && MensajeFront.MENSAJE_TRAMITETERMINADO.equals(mensaje.getMensaje())){
 			 // Redirigimos a zonaperfront
-	 	    response.sendRedirect("/zonaperfront/protected/init.do?tramite="+idPersistencia);
+	 	    response.sendRedirect("/zonaperfront/protected/init.do?tramite=" + idPersistencia + (StringUtils.isBlank(formulario.getLanguage())?"":"&language="+formulario.getLanguage()));
 	 	    return null;
 		}
 		this.setRespuestaFront( request, respuestaFront );
