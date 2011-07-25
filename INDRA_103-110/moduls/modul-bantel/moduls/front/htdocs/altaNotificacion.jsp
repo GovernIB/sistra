@@ -482,7 +482,7 @@ function repintarParametros(datos){
 				
 				<p>
 					<label for="nif"><bean:message key="expediente.nif"/></label>
-					<html:text property="nif" readonly="<%=Boolean.parseBoolean(autenticado)%>"/>					
+					<html:text property="nif" readonly="<%=Boolean.parseBoolean(autenticado)%>" onblur="this.value=this.value.toUpperCase()"/>					
 				</p>
 				
 				<p>
