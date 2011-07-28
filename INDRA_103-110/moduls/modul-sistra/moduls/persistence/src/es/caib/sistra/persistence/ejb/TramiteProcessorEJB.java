@@ -2757,7 +2757,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	            			new URL(urlFin);
 	            		}
 	            	}catch(MalformedURLException mue){
-	            		log.error("Url de finalizacion '" + urlFin + "' no valida: "  + mue.getMessage(),mue);
+	            		log.error("Url de finalizacion '" + urlFin + "' no valida para trámite " + this.tramiteVersion.getTramite().getIdentificador() + "-" + this.tramiteVersion.getVersion() + ": "  + mue.getMessage(),mue);
 	            		urlFin = null;
 	            	}
 	            }        	
