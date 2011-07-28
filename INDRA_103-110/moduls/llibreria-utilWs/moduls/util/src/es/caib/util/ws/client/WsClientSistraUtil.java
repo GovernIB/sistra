@@ -10,6 +10,7 @@ public class WsClientSistraUtil {
 
 	/**
 	 * Configura puerto segun la configuracion de sistra
+	 * 
 	 * @param port
 	 * @param url
 	 * @param user
@@ -18,21 +19,28 @@ public class WsClientSistraUtil {
 	 */
 	public static void configurePort(BindingProvider port, String url,
 			String user, String pass) throws Exception {
-		
+
 		Properties props = ConfigurationUtil.getInstance().obtenerPropiedades();
-		
+
 		String auth = props.getProperty("sistra.ws.authenticacion");
-		
-		boolean generateTimestamp = (props.getProperty("sistra.ws.authenticacion.usernameToken.generateTimestamp") != null?
-										"true".equals(props.getProperty("sistra.ws.authenticacion.usernameToken.generateTimestamp")):false);
-		boolean logCalls = (props.getProperty("sistra.ws.client.logCalls") != null?
-								"true".equals(props.getProperty("sistra.ws.client.logCalls")):false);
-		boolean disableCnCheck = (props.getProperty("sistra.ws.client.disableCnCheck") != null?
-									"true".equals(props.getProperty("sistra.ws.client.disableCnCheck")):false);
-				
-		
-		WsClientUtil.configurePort(port,url,user,pass,auth,generateTimestamp,logCalls,disableCnCheck);
-		
+
+		boolean generateTimestamp = "USERNAMETOKEN".equals(auth)
+				&& (props
+						.getProperty("sistra.ws.authenticacion.usernameToken.generateTimestamp") != null ? "true"
+						.equals(props
+								.getProperty("sistra.ws.authenticacion.usernameToken.generateTimestamp"))
+						: false);
+		boolean logCalls = (props.getProperty("sistra.ws.client.logCalls") != null ? "true"
+				.equals(props.getProperty("sistra.ws.client.logCalls"))
+				: false);
+		boolean disableCnCheck = (props
+				.getProperty("sistra.ws.client.disableCnCheck") != null ? "true"
+				.equals(props.getProperty("sistra.ws.client.disableCnCheck"))
+				: false);
+
+		WsClientUtil.configurePort(port, url, user, pass, auth,
+				generateTimestamp, logCalls, disableCnCheck);
+
 	}
-	
+
 }
