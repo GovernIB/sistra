@@ -54,7 +54,7 @@ public class MostrarErroresAction extends BaseAction{
     				}
     				String tablaErrores = "";
     				for(int i=0;i<errores.size();i++){
-    					tablaErrores = tablaErrores + "<H2>Error "+(i+1)+" </H2> <br> "+errores.get(i)+"<br>";
+    					tablaErrores = tablaErrores + "<br/> "+errores.get(i)+"<br/>";
     				}
     				jsonObject.put("StringErrors",tablaErrores);
             		jsonObject.put("error","");

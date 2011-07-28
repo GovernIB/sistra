@@ -72,6 +72,18 @@ public class TramiteDelegate implements StatelessDelegate {
         }
     }
     
+    public void errorConexion(String id,byte[] error) throws DelegateException 
+    {
+  	   try
+  	   {
+  		   getFacade().errorConexion( id, error);
+  	   }
+  	   catch (Exception e) 
+  	   {
+             throw new DelegateException(e);
+         }
+     }
+    
     public boolean puedoBorrarTramite(String id)throws DelegateException 
     {
   	   try
