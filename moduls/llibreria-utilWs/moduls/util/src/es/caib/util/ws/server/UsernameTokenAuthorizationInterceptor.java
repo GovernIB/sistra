@@ -18,9 +18,12 @@ public class UsernameTokenAuthorizationInterceptor extends WSS4JInInterceptor{
 		
 		try{		
 			 Properties props = ConfigurationUtil.getInstance().obtenerPropiedades();
+			 String auth = props.getProperty("sistra.ws.authenticacion");
 			 String timestamp = props.getProperty("sistra.ws.authenticacion.usernameToken.generateTimestamp");
-			 if ("true".equals(timestamp)){
+			 if ("USERNAMETOKEN".equals(auth) && "true".equals(timestamp)){
 				 properties.put( "action", WSHandlerConstants.TIMESTAMP + " " + properties.get("action"));
+			 } else {
+				 properties.put( "action", WSHandlerConstants.NO_SECURITY);				
 			 }			 
 		 }catch (Exception ex){
 			 throw new Fault(ex);
