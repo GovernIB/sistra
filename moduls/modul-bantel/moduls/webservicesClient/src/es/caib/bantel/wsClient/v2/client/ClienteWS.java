@@ -60,10 +60,10 @@ public class ClienteWS {
 	    	log.debug("Error en el aviso de entradas: "+e.getMessage(),e);
 	    	throw new Exception(e);
 	    } catch(SOAPFaultException e){
-	    	log.debug( "Error en el interceptor usuario incorrecto: " + e.getMessage(), e );
+	    	log.debug( "Error en el web service: " + e.getMessage(), e );
 	    	throw new Exception(e);
 	    } catch(Exception e){
-		   log.debug("Error en el web service. "+e.getMessage(), e);
+		   log.debug("Error en el web service: "+e.getMessage(), e);
 		   throw e;
 	    }
 	}

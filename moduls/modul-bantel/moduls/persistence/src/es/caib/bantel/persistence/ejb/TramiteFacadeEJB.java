@@ -97,6 +97,9 @@ public abstract class TramiteFacadeEJB extends HibernateEJB {
         	}
         	else
         	{
+        		// Protegemos la fecha del ultimo aviso
+        		obj.setUltimoAviso(tramite.getUltimoAviso());
+        		// Update
         		session.update( obj );
         	}
         	//session.saveOrUpdate(obj);
@@ -167,6 +170,33 @@ public abstract class TramiteFacadeEJB extends HibernateEJB {
             }
             Tramite tramite = ( Tramite ) query.uniqueResult();
             tramite.setUltimoAviso(fecha);
+            session.update(tramite);
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
+    
+    /**
+     * Indica que ha habido un error de conexion
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public void errorConexion(String id,byte[] error) {        
+        Session session = getSession();
+        try {       	
+        	Query query = session
+            .createQuery("FROM Tramite AS t WHERE t.identificador = :identificador")
+            .setParameter("identificador",id);
+        	//query.setCacheable(true);
+            if (query.list().isEmpty()){
+            	throw new HibernateException("No existe trámite con id: " + id);
+            }
+            Tramite tramite = ( Tramite ) query.uniqueResult();
+            tramite.setErrores(error);
             session.update(tramite);
         } catch (HibernateException he) {
             throw new EJBException(he);

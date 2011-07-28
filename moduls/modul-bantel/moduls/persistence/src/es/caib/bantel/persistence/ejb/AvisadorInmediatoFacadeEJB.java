@@ -1,6 +1,7 @@
 package es.caib.bantel.persistence.ejb;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -189,24 +190,17 @@ public class AvisadorInmediatoFacadeEJB implements MessageDrivenBean, MessageLis
 				PluginBackOffice bo = new PluginBackOffice(tramite.getTramite());									
 				bo.avisarEntradas(referenciasParaAvisar,userAuto,passAuto);				
 			}
+			
+			
 			log.debug("Aviso entradas realizado");	
 			
 		}catch (Exception ex){
 			// Informamos al log			
 			log.debug("No se puede enviar aviso de nuevas entradas al BackOffice: " + ex.getMessage(),ex);
-			if(tramite != null){
-				try {
-					TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
-					Tramite tra = tramite.getTramite();
-					String error = ConstantesBTE.MARCA_ERROR + es.caib.util.StringUtil.stackTraceToString(ex);
-					String errorAntiguo = reconstruirError(tra.getErrores());
-					error = error + errorAntiguo;
-					tra.setErrores(error.getBytes(ConstantesXML.ENCODING));
-					tramiteDelegate.grabarTramite(tra);
-				} catch (Exception e) {
-					log.debug("error al guardar la excepción en el tramite.",e);
-				}
-			}
+			
+			// Actualizamos error último aviso
+			actualizarErrorUltimoAviso(tramite, ex);
+			
 		}finally{
 			
 			// Nos aseguramos de que todas las entradas incluidas en el aviso se borren de cache
@@ -215,6 +209,27 @@ public class AvisadorInmediatoFacadeEJB implements MessageDrivenBean, MessageLis
 			// Hacemos el logout
 			if ( lc != null ){
 				try{lc.logout();}catch(Exception exl){}
+			}
+		}
+	}
+
+	private void actualizarErrorUltimoAviso(TramiteBandeja tramite, Exception ex) {
+		if(tramite != null){
+			try {
+				TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
+				Tramite tra = tramite.getTramite();
+				String error = ConstantesBTE.MARCA_ERROR +
+								es.caib.util.StringUtil.fechaACadena(new Date(),es.caib.util.StringUtil.FORMATO_TIMESTAMP) + ": " + 
+								es.caib.util.StringUtil.stackTraceToString(ex);
+				
+				/* MODIFICACION: SOLO MOSTRAMOS ULTIMO ERROR DE CONEXION, ANTES 2 ULTIMOS
+				String errorAntiguo = reconstruirError(tra.getErrores());
+				error = error + errorAntiguo;
+				*/
+				
+				tramiteDelegate.errorConexion(tra.getIdentificador(),error.getBytes(ConstantesXML.ENCODING));
+			} catch (Exception e) {
+				log.debug("error al guardar la excepción en el tramite.",e);
 			}
 		}
 	}	

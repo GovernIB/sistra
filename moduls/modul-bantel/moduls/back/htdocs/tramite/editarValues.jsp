@@ -36,7 +36,7 @@
 <tr>
     <td class="label"><bean:message key="tramite.intervaloInforme"/></td>
     <td class="input">
-    	<html:text styleClass="text" tabindex="10" property="values.intervaloInforme" maxlength="2"/>
+    	<html:text styleClass="textCorto" tabindex="10" property="values.intervaloInforme" maxlength="2"/>
     	<i><bean:message key="tramite.intervaloInformeNulo"/></i>
     </td>
 </tr>
@@ -83,21 +83,24 @@
 	    Password <html:text styleClass="text" tabindex="10" property="passPlain" maxlength="50"/>
     </td>
 </tr>
-<logic:present name="tramiteForm" property="values.errores">
+
+<logic:notEmpty name="tramiteForm" property="values.ultimoAviso">
 	<tr>
-		<td class="label">&nbsp;</td>
-		<td class="input"><input type="button" onclick="mostrarErrores();" value="<bean:message key="tramite.verErrores.value"/>"  class="button"/></td>            
+		<td class="separador" colspan="2"><bean:message key="tramite.ultimoAviso"/></td>
 	</tr>
-</logic:present>
-<!--  
-<tr>
-	<td class="separador" colspan="2"><bean:message key="tramite.accesoEntradas"/></td>
-</tr>
-<tr>
-    <td class="label"><bean:message key="tramite.rolAcceso"/></td>
-    <td class="input"><html:text styleClass="text" tabindex="10" property="values.rolAcceso" maxlength="100"/></td>
-</tr>
--->
+	<tr>
+	    <td class="label"><bean:message key="tramite.fechaAviso"/></td>
+	    <td class="input">
+		    <bean:write name="tramiteForm" property="values.ultimoAviso" format="dd/MM/yyyy HH:mm"/>
+	    </td>
+	</tr>		
+	<logic:present name="tramiteForm" property="values.errores">
+		<tr>
+			<td class="label"><bean:message key="tramite.erroresAviso"/></td>
+			<td class="input"><input type="button" onclick="mostrarErrores();" value="<bean:message key="tramite.verErrores.value"/>"  class="button"/></td>            
+		</tr>
+	</logic:present>
+</logic:notEmpty>
 
 <tr>
 	<td class="separador" colspan="2"><bean:message key="tramite.exportacion"/></td>
