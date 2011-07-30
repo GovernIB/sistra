@@ -23,7 +23,7 @@ public class DelegateExceptionHandler extends ExceptionHandler {
                                  ActionMapping mapping, ActionForm form,
                                  HttpServletRequest request, HttpServletResponse response)
             throws ServletException {
-        log.info("Excepción en la petición: " + mapping.getPath());
+        log.error("Excepción en la petición " + mapping.getPath() + ": " + e.getMessage(),e);
         return super.execute(e, exceptionConfig, mapping, form, request, response);
     }
 }

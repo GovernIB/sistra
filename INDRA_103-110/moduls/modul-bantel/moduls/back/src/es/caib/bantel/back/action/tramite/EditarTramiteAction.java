@@ -49,14 +49,14 @@ public class EditarTramiteAction extends BaseAction{
 
     	request.setAttribute( "idReadOnly", new Boolean( true ) );
     	
-        log.info("Entramos en EditarTramite");
+        log.debug("Entramos en EditarTramite");
 
         TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
         TramiteForm tramiteForm = (TramiteForm) form;
         Tramite tramite = (Tramite) tramiteForm.getValues();
 
         if (isCancelled(request)) {
-            log.info("isCancelled");
+            log.debug("isCancelled");
             return mapping.findForward("cancel");
         }
 
@@ -80,7 +80,7 @@ public class EditarTramiteAction extends BaseAction{
         
         
         if (isAlta(request) || isModificacion(request)) {
-            log.info("isAlta || isModificacio");                      
+            log.debug("isAlta || isModificacio");                      
             
             String claveCifrado = (String) DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().get("clave.cifrado");
             tramite.setUsr(CifradoUtil.cifrar(claveCifrado,tramiteForm.getUserPlain()));
@@ -88,7 +88,7 @@ public class EditarTramiteAction extends BaseAction{
             
             tramiteDelegate.grabarTramite( tramite );
             //request.setAttribute("reloadMenu", "true");
-            log.info("Creat/Actualitzat " + tramite.getIdentificador());
+            log.debug("Creat/Actualitzat " + tramite.getIdentificador());
 
             guardarTramite(mapping, request, tramite.getIdentificador());
 

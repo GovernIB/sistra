@@ -33,7 +33,7 @@ public class BajaTramiteAction extends BaseAction{
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en BajaTramite");
+        log.debug("Entramos en BajaTramite");
         TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
 
         String idString = request.getParameter("codigo");
