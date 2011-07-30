@@ -32,7 +32,19 @@ public class UsernameTokenAuthorizationInterceptorOut extends WSS4JOutIntercepto
 	}
 		
 	public void handleMessage(SoapMessage msg) throws Fault {
-		 super.handleMessage(msg);
+		String auth = null;
+		 try{		
+			 Properties props = ConfigurationUtil.getInstance().obtenerPropiedades();
+			 auth = props.getProperty("sistra.ws.authenticacion");			 
+		 }catch (Exception ex){
+			 throw new Fault(ex);
+		 }
+		 
+		 if (!"USERNAMETOKEN".equals(auth)) {
+			 return;
+		 }else{
+			 super.handleMessage(msg);
+		 }
 	}
 
 }
