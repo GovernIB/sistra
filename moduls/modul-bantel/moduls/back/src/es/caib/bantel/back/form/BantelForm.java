@@ -25,24 +25,24 @@ protected static Log log = LogFactory.getLog(BantelForm.class);
 	
 	public void init(ActionMapping mapping, HttpServletRequest request) 
 	{
-        log.info("llamada a Init");
-        log.info(mapping.getName());
+        log.debug("llamada a Init");
+        log.debug(mapping.getName());
         if (!inicialitat) {
             ModuleConfig config = RequestUtils.getModuleConfig(request, getServlet().getServletContext());
             TraFormBeanConfig beanConfig = (TraFormBeanConfig) config.findFormBeanConfig(mapping.getName());
             valuesClassName = beanConfig.getValuesClassName();
-            log.info("valuesClassName=" + valuesClassName);
+            log.debug("valuesClassName=" + valuesClassName);
             inicialitat = true;
         }
 	}
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
-        log.info("llamada a Reset");
-        log.info(mapping.getName());
+        log.debug("llamada a Reset");
+        log.debug(mapping.getName());
         init(mapping, request);
     }
 	
 	public void destroy(ActionMapping mapping, HttpServletRequest request) {
-        log.info("llamada a destroy " + mapping.getName());
+        log.debug("llamada a destroy " + mapping.getName());
         setValues(null);
         setPage(1);
     }

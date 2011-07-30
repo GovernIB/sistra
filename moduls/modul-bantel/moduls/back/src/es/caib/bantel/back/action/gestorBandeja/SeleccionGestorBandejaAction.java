@@ -29,7 +29,7 @@ public class SeleccionGestorBandejaAction extends BaseAction{
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en SeleccionGestorBandeja");
+        log.debug("Entramos en SeleccionGestorBandeja");
 
         String idString = request.getParameter("codigo");
         if (idString == null || idString.length() == 0) {
@@ -37,7 +37,7 @@ public class SeleccionGestorBandejaAction extends BaseAction{
             return mapping.findForward("fail");
         }
 
-        log.info("Seleccionar el gestorBandeja " + idString);
+        log.debug("Seleccionar el gestorBandeja " + idString);
 
         guardarGestorBandeja(mapping, request, idString);
         

@@ -29,7 +29,7 @@ public class ListaGestoresBandejaController implements Controller
 	{
 		try 
 		{
-            log.info("Entramos en ListaGestoresBandejaController");
+            log.debug("Entramos en ListaGestoresBandejaController");
 
             GestorBandejaDelegate gestorBandejaDelegate = DelegateUtil.getGestorBandejaDelegate();
             request.setAttribute("gestorBandejaOptions", gestorBandejaDelegate.listarGestoresBandeja() );

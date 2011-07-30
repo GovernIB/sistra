@@ -29,7 +29,7 @@ public class ListaTramitesController implements Controller
 	{
 		try 
 		{
-            log.info("Entramos en ListaTramitesController");
+            log.debug("Entramos en ListaTramitesController");
 
             TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
             request.setAttribute("tramiteOptions", tramiteDelegate.listarTramites() );

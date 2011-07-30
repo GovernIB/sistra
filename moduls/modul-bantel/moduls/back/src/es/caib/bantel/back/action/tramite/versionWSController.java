@@ -31,7 +31,7 @@ public class versionWSController implements Controller
 	{
 		try 
 		{
-            log.info("Entramos en versionWSController");
+            log.debug("Entramos en versionWSController");
             
             // Obtenemos lista de versiones
             VersionWSDelegate vWSdelegate = DelegateUtil.getVersionWSDelegate();
