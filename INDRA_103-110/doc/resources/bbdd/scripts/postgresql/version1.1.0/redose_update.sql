@@ -24,7 +24,7 @@ CREATE TABLE RDS_LOGEGD
 (
   LOG_CODIGO  INT8                        NOT NULL,
   LOG_SEYCON  VARCHAR(1536)               NOT NULL,
-  LOG_DESERR  VARCHAR(1000)               NOT NULL,
+  LOG_DESERR  VARCHAR(4000)               NOT NULL,
   LOG_ERROR   bytea                       NOT NULL,
   LOG_FECHA   timestamp                   NOT NULL,
   LOG_CODDOC  INT8                        NOT NULL
