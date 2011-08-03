@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ===================================================================== -->
+<!--                                                                       -->
+<!--  JBoss Server Configuration                                           -->
+<!--                                                                       -->
+<!-- ===================================================================== -->
+
+<!-- $Id: mobtratel-ds.xml,v 1.1 2009/06/23 05:47:10 rsanz Exp $ -->
+
+<!-- ===================================================================== -->
+<!-- ATTENTION:  DO NOT FORGET TO SET Pad=true IN transaction-service.xml  -->
+<!-- ===================================================================== -->
+
+<datasources>
+  <xa-datasource>
+    <jndi-name>es.caib.mobtratel.db</jndi-name>
+    <track-connection-by-tx/>
+    <isSameRM-override-value>false</isSameRM-override-value>
+    <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
+     <xa-datasource-property name="ServerName">localhost</xa-datasource-property>
+     <xa-datasource-property name="PortNumber">5432</xa-datasource-property>
+     <xa-datasource-property name="DatabaseName">mobtratel</xa-datasource-property>
+    <xa-datasource-property name="User">mobtratel</xa-datasource-property>
+    <xa-datasource-property name="Password">mobtratel</xa-datasource-property>
+    <!-- Uses the pingDatabase method to check a connection is still valid before handing it out from the pool -->
+    <!--valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLValidConnectionChecker</valid-connection-checker-class-name-->
+    <!-- Checks the PostgreSQL error codes and messages for fatal errors -->
+    <exception-sorter-class-name>org.jboss.resource.adapter.jdbc.vendor.PostgreSQLExceptionSorter</exception-sorter-class-name>
+    <!-- PostgreSQL XA datasource cannot reuse a connection outside a transaction once enlisted in a global transaction and vice-versa -->
+    <no-tx-separate-pools/>
+
+      <!-- corresponding type-mapping in the standardjbosscmp-jdbc.xml (optional) -->
+      <metadata>
+         <type-mapping>PostgreSQL</type-mapping>
+      </metadata>
+  </xa-datasource>
+</datasources>
