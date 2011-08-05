@@ -1,0 +1,13 @@
+<!--  Trabajamos con el usuario por defecto
+   <env-entry>
+      <env-entry-name>AS400Usr</env-entry-name>
+      <env-entry-value>regtel</env-entry-value>
+      <env-entry-type>java.lang.String</env-entry-type>
+   </env-entry>
+   <env-entry>
+      <env-entry-name>AS400Pwd</env-entry-name>
+      <env-entry-value>telreg</env-entry-value>
+      <env-entry-type>java.lang.String</env-entry-type>
+   </env-entry>
+   
+  -->  

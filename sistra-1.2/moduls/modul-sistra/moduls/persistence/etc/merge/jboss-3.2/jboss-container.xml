@@ -1,0 +1,32 @@
+
+<container-configurations>
+
+    <container-configuration extends="Standard Stateful SessionBean">
+        <container-name>InstanciaProcessor Stateful SessionBean</container-name>
+        
+        <!--  Configuración de la cache (solo para Entity y Stateful) -->
+        <container-cache-conf>
+        	<!--  Clase que implementa la cache -->
+            <cache-policy>org.jboss.ejb.plugins.LRUStatefulContextCachePolicy</cache-policy>
+            
+            <!--  Configuracion de la cache -->
+            <cache-policy-conf>
+                <min-capacity>50</min-capacity>  		<!-- Capacidad minima -->
+                <max-capacity>1000000</max-capacity>	<!-- Maxima capacidad de la cache -->
+                
+                <remover-period>900</remover-period>	<!-- [15 minutos] Periodicidad (segs.) de proceso de borrado de beans pasivados sin acceder durante 'max-bean-life' segs.-->
+                <max-bean-life>3600</max-bean-life>		<!-- [60 minutos] Maximo periodo de inactividad (segs) estando pasivado-->                
+                
+                <overager-period>300</overager-period>	<!-- [5 minutos] Periodicidad (segs.) de proceso de pasivacion. -->                
+                <max-bean-age>600</max-bean-age>		<!-- [10 minutos] Maximo periodo de inactividad en memoria antes de ser pasivado -->
+                                
+                <resizer-period>400</resizer-period>    <!--  Parametros para expandir/contraer la cache -->           
+                <max-cache-miss-period>60</max-cache-miss-period>
+                <min-cache-miss-period>1</min-cache-miss-period>
+                <cache-load-factor>0.75</cache-load-factor>
+                
+            </cache-policy-conf>
+        </container-cache-conf>
+    </container-configuration>
+
+</container-configurations>

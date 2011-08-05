@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+    <definition
+        name=".mainLayout"
+        path="/layout/mainLayout.jsp" controller="es.caib.audita.front.controller.InicioController">
+        <put name="header" value=".header"/>
+        <put name="main" value="/inicio.jsp"/>
+    </definition>
+    
+    <definition
+    	name=".header" controller="es.caib.audita.front.controller.HeaderController"
+    	path="/moduls/header.jsp" />
+    	
+    <definition
+    	name=".cuadroMandoTemporal" path="/moduls/cuadroMandoTemporal.jsp" controller="es.caib.audita.front.controller.CuadroMandoTemporalController"/>	
+
+    <definition
+    	name=".inicio" extends=".mainLayout" controller="es.caib.audita.front.controller.InicioController"/>
+    	
+    <definition
+    	name=".resumen" extends=".mainLayout" controller="es.caib.audita.front.controller.ResumenController">	
+    	<put name="main" value="/resumen.jsp"/>
+    </definition>
+    
+    <definition
+    	name=".anual" extends=".mainLayout">	
+    	<put name="main" value="/anual.jsp"/>
+    </definition>
+    
+    <definition
+    	name=".mensual" extends=".mainLayout">	
+    	<put name="main" value="/mensual.jsp"/>
+    </definition>
+    
+    <definition
+    	name=".diario" extends=".mainLayout">	
+    	<put name="main" value="/diario.jsp"/>
+    </definition>
+    
+    <definition
+    	name=".detalle" extends=".mainLayout">	
+    	<put name="main" value="/cuadromando_detalle.jsp"/>
+    </definition>
+
+    <definition
+    	name=".grafico" extends=".mainLayout">	
+    	<put name="main" value="/cuadromando_grafico.jsp"/>
+    </definition>
+    
+    <definition
+    	name=".cuadranteServicios" extends=".mainLayout">	
+    	<put name="main" value="/cuadranteservicios.jsp"/>
+    </definition>
+    
+    <definition
+    	name=".error" extends=".mainLayout">	
+    	<put name="main" value="/fail.jsp"/>
+    </definition>
+    
+    
+     
+</tiles-definitions>
+

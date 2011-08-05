@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class name="es.caib.zonaper.model.ParametrosSubsanacion" table="ZPE_SUBPAR">
+
+	<cache usage="read-write"/>
+	
+    <id name="codigo" length="50" column="SBP_CODIGO" >
+        <generator class="assigned"/>
+    </id>
+    <property name="expedienteUnidadAdministrativa"  column="SBP_UNIADM" not-null="true"/>
+	<property name="expedienteCodigo"  column="SBP_IDEXP" not-null="true"/>	
+	<property name="parametros" column="SBP_PARAMS"/>
+	<property name="fecha"  column="SBP_FECHA" not-null="true"/>	
+</class>
+</hibernate-mapping>

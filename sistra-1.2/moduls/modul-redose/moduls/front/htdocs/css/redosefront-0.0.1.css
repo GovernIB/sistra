@@ -1,0 +1,122 @@
+/* CSS Document */
+
+body { font:normal 80% 'TrebuchetMS', 'Trebuchet MS', Arial, Helvetica, sans-serif; color:#666; background-color:#fff; }
+
+#contenidor { width:58em; margin:1.2em auto; }
+#continguts { background-color:#fff; }
+
+.invisible { display:none; }
+
+/* enllaços */
+a { color:#000; text-decoration:none; }
+a:hover { color:#c33; }
+
+/* imatges */
+img { border:0; }
+
+/* formularis */
+input, select { vertical-align:middle; }
+select.tipoPetit { font-size:1em; }
+textarea { font:normal 70% Arial, Helvetica, sans-serif; font-size:1em; }
+fieldset { border:1px solid #e3e3e3; margin:0 0 1em 0; padding:1em; }
+fieldset legend { font-weight:bold; padding:0 1em; }
+
+form div.etiqueta { display:block; float:left; width:35%; padding-right:.5em; text-align:right; padding-top:.25em; }
+form div.separacio { display:table; clear:both; font-size:.4em; height:1em; }
+form div.listado { float:left; }
+form div.listado ul { margin:0; padding:0; }
+form div.listado ul li { margin:0; padding:0; }
+form ul { list-style:none; margin:0; padding:0 1.5em; }
+form p.botonera { background-color:#efefef; padding:.5em; text-align:center; }
+
+/* llistes */
+ul.letras { list-style:lower-latin; }
+ul.pdf { list-style:none; margin-left:2em; padding:0; }
+ul.pdf li { background:url(../imgs/listados/ico_pdf.gif) no-repeat left top; padding-left:2em; }
+ul li.pdf { background:url(../imgs/listados/ico_pdf.gif) no-repeat left top; padding-left:2em; }
+ul li.doc { background:url(../imgs/listados/ico_doc.gif) no-repeat left top; padding-left:2em; }
+
+ul.senseEstil { list-style:none; margin-left:2em; padding:0; }
+
+ul.conSep li { padding-bottom:1em; }
+
+/* tables */
+
+/* pàrrafs */
+
+p { margin:1em 0; }
+p.parrafFinal { padding-top:1em; border-top:1px dashed #b8d7ef; }
+p.alerta { font-size:0.7em;padding:1em 1em 1em 3.5em; background:url(../imgs/tramitaciontelematica/ico_atencion.gif) no-repeat 1em 1em #ffffe8; border:1px solid #f3f3d2; }
+
+/*
+p#titolAplicacio { font-size:1.4em; margin:0; color:#000f20; background-color:#85bbe4; padding:.2em 0 .2em 3em; font-weight:bold; }
+p#titolAplicacio a { text-decoration:none; display:block; color:#000f20; }
+*/
+
+p#titolAplicacio { font-size:1.4em; font-weight:bold; text-align:center; margin:.8em; }
+
+/* capes */
+
+div.sep { clear:both; height:.1em; font-size:.1em; }
+div.sepMarc { clear:right; height:.1em; font-size:.1em; width:150em; }
+div.dobleColumna { float:left; width:48%; padding:.5em .1em; }
+div.dobleColumna img { float:left; }
+div.dobleColumna p { margin:0 0 0 5em; }
+div.dobleColumnaTxt { float:left; width:48%; padding:.5em .1em; }
+div.dobleColumnaTxt p { margin:.5em 0 0 1em; }
+div#barraNav { clear:both; padding:1em; background-color:#f7f7f7; text-align:center; }
+
+/* titols */
+
+h1.invisible, h2.invisible { display:none; }
+h1 { font-size:1.3em; margin:0 0 1em 0; background:none; }
+h2 { font-size:1.3em; margin:1em 0; clear:left; background-color:#ecf4fb; padding:.5em 1em; }
+h3 { font-size:1.1em; margin:1em 0; }
+h4 { font-size:1em; margin:1em 0; }
+
+/* capçal */
+/*
+#capsal { height:4em;padding:0.5em 1em 0.8em 1em; background-color:#003575; color:#fff; text-align:right; border-bottom:.3em solid #85bbe4; }
+#capsal a { color:#fff; }
+#capsal img.logo { float:left; }
+#capsal span.sep { margin:0 .5em; }
+*/
+#cap { text-align:center; }
+
+#capsalIdioma { margin-top:2em; text-align:center; font-size:0.5em;}
+#capsalIdioma ul { display:inline; margin:0; padding:0; }
+#capsalIdioma ul li { display:inline; margin:0; padding:0; }
+
+#capsalFerramentes form { display:inline; }
+#capsalFerramentes form img { position:relative; vertical-align:bottom; margin-right:.5em; }
+
+div#dadesUsuari { float:left; padding:.3em 0 0 4.5em; color:#000; background-color:#efefef; }
+
+/* peu */
+#peu { height:3em; font-size:.9em; padding-top:0.5em; border-top:1px solid #ccc; }
+/*
+#peu { padding-top:1em; height:3.5em; color:#000; border-top:.3em solid #85bbe4; background:url(../imgs/peu/fondo_peu.gif) repeat-x; }
+*/
+#peu img#logoAD { float:left; position:relative; top:-0.5em; }
+#peu span.sep { margin:0 .5em; }
+
+/* index */
+
+/* PÀGINES INTERNES */
+h1#titolPagina { background-color:#efefef; margin:0; padding:.3em .7em; text-align:left; color:#000; }
+#continguts  { position:relative; font-size:1.7em; padding:.3em .7em; margin:0; } /* background:url(../imgs/titulo/titulo.gif) no-repeat right center #fff;  */
+#continguts #titolOmbra { height:1em; font-size:.5em; background:url(../imgs/titulo/titolombra.gif) repeat-x #fff; }
+
+/* verificacion documentos */
+
+#vdDetalles { width:89%; font-size:0.6em; background-color:#ffffe8; border:1px solid #f3f3d2; padding:.5em 3em; margin:.5em auto; text-align:left; list-style:none; }
+#vdDetalles li { padding-left:2.5em; margin-bottom:.5em; background-repeat:no-repeat; background-position:left center; }
+#vdDetalles li.fecha { background-image:url(../imgs/iconos/ico_fecha.gif); }
+#vdDetalles li.tipo { background-image:url(../imgs/iconos/ico_tipo.gif); }
+#vdDetalles li.visualizacion { background-image:url(../imgs/iconos/ico_visualizacion.gif); }
+#vdDetalles li.firma { background-image:url(../imgs/iconos/ico_firma.gif); }
+#vdDetalles li.documento { background-image:url(../imgs/iconos/ico_document.gif); }
+#vdDetalles p.validado {font-size:1.0em;font-weight:bold;}
+
+#vdDocumento { border:0; width:100%; height:40em; border:2px solid #ccc; }
+

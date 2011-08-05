@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class  name="es.caib.zonaper.model.EntradaTelematica" table="ZPE_ENTTEL">
+	<cache usage="read-write"/>
+     <id name="codigo" unsaved-value="null" column="ENT_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">ZPE_SEQENT</param>
+          </generator>
+      </id>
+
+    <property name="idPersistencia"  column="ENT_IDEPER"  not-null="true" unique="true"/>
+    <property name="tipo"  column="ENT_TIPO"  not-null="true" length="1"/>
+    <property name="nivelAutenticacion"  column="ENT_NIVAUT"  not-null="true" length="1"/>    
+    <property name="usuario"  column="ENT_USER"/>
+    <property name="descripcionTramite"  column="ENT_DESC"/>
+    <property name="numeroRegistro"  column="ENT_NUMREG" length="50" not-null="true"/>
+    <property name="fecha"  column="ENT_FECHA" not-null="true" />    
+    <property name="codigoRdsAsiento"  column="ENT_CODASI"  not-null="true" length="20"/>
+    <property name="claveRdsAsiento"   column="ENT_CLAASI"  not-null="true" length="10"/>    
+    <property name="codigoRdsJustificante"  column="ENT_CODJUS"  not-null="true" length="20"/>
+    <property name="claveRdsJustificante"   column="ENT_CLAJUS"  not-null="true" length="10"/>
+    
+    <property name="idioma"  column="ENT_IDIOMA" not-null="true" length="2"/>
+    
+    <property name="nifRepresentante"  column="ENT_NIFRTE"/>
+    <property name="nombreRepresentante"  column="ENT_NOMRTE"/>
+    <property name="nifRepresentado"  column="ENT_NIFRDO"/>
+    <property name="nombreRepresentado"  column="ENT_NOMRDO"/>
+    <property name="nifDelegado"  column="ENT_NIFDLG"/>
+    <property name="nombreDelegado"  column="ENT_NOMDLG"/>
+    
+    <property name="tramite"  column="ENT_TRAMOD"  length="20"/>
+    <property name="version"  column="ENT_TRAVER"  length="2"/>
+    
+    <property name="subsanacionExpedienteCodigo"  column="ENT_SBEXID" />
+    <property name="subsanacionExpedienteUA"  column="ENT_SBEXUA" />
+    
+	<set name="documentos" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="DEN_DOCIDE">
+		<cache usage="read-write"/>
+	    <key column="DEN_CODENT"/>
+        <one-to-many class="es.caib.zonaper.model.DocumentoEntradaTelematica"/>
+	</set>
+	
+	<!--  Opciones aviso movilidad -->
+	<property name="habilitarAvisos" column="ENT_AVISOS" />
+	<property name="avisoSMS" column="ENT_AVISMS" />
+	<property name="avisoEmail" column="ENT_AVIEMA" />
+	
+	<!--  Opciones notificacion telematica -->
+	<property name="habilitarNotificacionTelematica" column="ENT_NOTTEL" />
+	
+</class>
+</hibernate-mapping>

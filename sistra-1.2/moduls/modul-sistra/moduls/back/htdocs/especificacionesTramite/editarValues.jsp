@@ -1,0 +1,156 @@
+<%@ page language="java" %>
+<%@ page import="org.apache.commons.lang.StringUtils"%>
+<%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
+<%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
+<%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
+<%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
+<bean:define id="bean" name="form.beanName" type="java.lang.String"/>
+<bean:define id="urlDatoJustificante">
+    <html:rewrite page="/back/datoJustificante/lista.do" paramId="idEspecTramiteNivel" paramName="<%= bean %>" paramProperty="values.codigo"/>
+</bean:define>
+<bean:define id="urlEditarText">
+    <html:rewrite page="/editarText.jsp"/>
+</bean:define>
+<html:xhtml/>
+<script type="text/javascript">
+     <!--
+     function viewAyudaExpresion() {
+        var url = '<html:rewrite page="/especificacionesTramite/ayudaPantalla.jsp" />';
+        obrir(url, "Edicion", 540, 400);
+     }
+     // -->
+</script>
+<script type="text/javascript">
+     <!--
+     function edit(url) {
+       obrir(url, "Edicion", 940, 600);
+     }
+     // -->
+</script>
+<tr>
+	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.parametrosInicio"/></td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="especificacionesTramite.activo"/></td>
+    <td class="input">Si<html:radio property="values.activo" value="S"/> No<html:radio property="values.activo" value="N"/></td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="especificacionesTramite.flujoTramitacion"/></td>
+    <td class="input">Si<html:radio property="values.flujoTramitacion" value="S"/> No<html:radio property="values.flujoTramitacion" value="N"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.diasPersistencia"/></td>
+    <td class="input"><html:text styleClass="text" tabindex="1" property="values.diasPersistencia" maxlength="3" /></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.diasPrerregistro"/></td>
+    <td class="input"><html:text styleClass="text" tabindex="1" property="values.diasPrerregistro" maxlength="3" /></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.validacionInicioScript"/></td>
+    <td class="input"><html:textarea tabindex="10" property="validacionInicioScript" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=validacionInicioScript&titulo=especificacionesTramite.validacionInicioScript" %>');"/></td>
+</tr>
+<tr>
+	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.procedenciaGeografica"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.campoCodigoProvincia"/></td>
+    <td class="input"><html:textarea tabindex="10" property="provinciaScript" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=provinciaScript&titulo=especificacionesTramite.campoCodigoProvincia" %>');"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.campoCodigoLocalidad"/></td>
+    <td class="input"><html:textarea tabindex="10" property="localidadScript" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=localidadScript&titulo=especificacionesTramite.campoCodigoLocalidad" %>');"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.campoCodigoPais"/></td>
+    <td class="input"><html:textarea tabindex="10" property="paisScript" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=paisScript&titulo=especificacionesTramite.campoCodigoPais" %>');"/></td>
+</tr>
+<tr>
+	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.referenciaRepresentante"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.campoRteNif"/></td>
+    <td class="input"><html:textarea tabindex="10" property="campoRteNif" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=campoRteNif&titulo=especificacionesTramite.campoRteNif" %>');"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.campoRteNom"/></td>
+    <td class="input"><html:textarea tabindex="10" property="campoRteNom" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=campoRteNom&titulo=especificacionesTramite.campoRteNom" %>');"/></td>
+</tr>
+<tr>
+	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.referenciaRepresentado"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.campoRdoNif"/></td>
+    <td class="input"><html:textarea tabindex="10" property="campoRdoNif" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=campoRdoNif&titulo=especificacionesTramite.campoRdoNif" %>');"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.campoRdoNom"/></td>
+    <td class="input"><html:textarea tabindex="10" property="campoRdoNom" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=campoRdoNom&titulo=especificacionesTramite.campoRdoNom" %>');"/></td>
+</tr>
+<tr>
+	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.destinatarioTramite"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.destinatarioTramite"/></td>
+    <td class="input"><html:textarea tabindex="10" property="destinatarioTramite" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=destinatarioTramite&titulo=especificacionesTramite.destinatarioTramite" %>');"/></td>
+</tr>
+<tr>
+	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.opcionesFin"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.urlFin"/></td>
+    <td class="input"><html:textarea tabindex="10" property="urlFin" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=urlFin&titulo=especificacionesTramite.urlFin" %>');"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.checkEnvio"/></td>
+    <td class="input"><html:textarea tabindex="10" property="checkEnvio" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=checkEnvio&titulo=especificacionesTramite.checkEnvio" %>');"/></td>
+</tr>
+<tr>
+	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.avisosMovilidad"/></td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAvisos"/></td>
+    <td class="input"><html:textarea tabindex="10" property="habilitarAvisos" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=habilitarAvisos&titulo=especificacionesTramite.habilitarAvisos" %>');"/></td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="especificacionesTramite.avisoEmail"/></td>
+    <td class="input"><html:textarea tabindex="10" property="avisoEmail" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=avisoEmail&titulo=especificacionesTramite.avisoEmail" %>');"/></td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="especificacionesTramite.avisoSMS"/></td>
+    <td class="input"><html:textarea tabindex="10" property="avisoSMS" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=avisoSMS&titulo=especificacionesTramite.avisoSMS" %>');"/></td>
+</tr>
+
+<tr>
+	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.notificacionTelematica"/></td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="especificacionesTramite.habilitarNotificacionTelematica"/></td>
+    <td class="input">
+	    <bean:message key="especificacionesTramite.habilitarNotificacionTelematica.sinEspecificar"/><html:radio property="values.habilitarNotificacionTelematica" value="X"/> 
+    	<bean:message key="especificacionesTramite.habilitarNotificacionTelematica.noPermitida"/><html:radio property="values.habilitarNotificacionTelematica" value="N"/> 
+    	<bean:message key="especificacionesTramite.habilitarNotificacionTelematica.permitida"/><html:radio property="values.habilitarNotificacionTelematica" value="S"/> 
+    	<bean:message key="especificacionesTramite.habilitarNotificacionTelematica.obligatoria"/><html:radio property="values.habilitarNotificacionTelematica" value="O"/> 
+    </td>
+</tr>
+
+
+<logic:present name="<%=bean%>" property="values.codigo">
+	<bean:define id="codigo" name="<%= bean %>" property="values.codigo"/>
+<%
+	String parametroBack = "tramiteNivelForm".equals( bean ) ? "idTramiteNivel" : "codigo";
+	codigo = "tramiteNivelForm".equals( bean ) ? request.getAttribute( "idTramiteNivel" ) : codigo;
+	codigo = ( codigo == null ? request.getParameter( "codigo" ) : codigo );
+%>
+<tr>
+	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.datosJustificante"/></td>
+</tr>
+<tr>
+    <td class="label">&nbsp;</td>
+    <td class="input">
+    <button class="buttond" type="button" onclick="forward('<%=urlDatoJustificante + "&" + parametroBack + "=" + codigo %>')">
+        <bean:message key="boton.datoJustificante" />
+    </button>
+    </td>
+</tr>
+</logic:present>

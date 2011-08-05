@@ -1,0 +1,110 @@
+/* CSS Document */
+
+body { font:normal .75em Arial, Helvetica, sans-serif; color:#494949; background-color:#fff; }
+body, form, table, caption, tr, tr, td, ul, ol, li, dl, img, button, p, h1, h2, h3, h4, h5, h6, dl, dt, dd, object, iframe, dl, dt, dd { margin:0; padding:0; outline:0; }
+
+/* form */
+
+a { color:#0047b2; }
+p { margin:1em 0; }
+button { font-size:.9em; overflow:visible; vertical-align:middle; }
+img { border:0; }
+
+/* objetos FORM */
+
+input, select { font-size:1.1em; vertical-align:middle; }
+button { padding:.1em .5em; }
+button img { vertical-align:middle; margin-right:.3em; }
+
+.formulari { margin:0 auto 0 auto; border:1px solid #ccc; background-color:#f7f7f7; padding:0 1em; text-align:center; }
+.formulari select, .formulari label.separacio { margin-right:2em; }
+.formulari input.hora { text-align:right; }
+
+.noVisible { display:none; }
+
+/* capçalera */
+
+#cap { background:url(../imgs/cap/fondo.gif) repeat-x #ff8400; color:#fff; border-bottom:5px solid #be6200; }
+/*#cap { background:url(../imgs/cap/fons.gif) repeat-x left bottom #ff982b; width:100%; overflow:hidden; }*/
+#cap h1 { background:url(../imgs/cap/titol_ico.gif) no-repeat; margin:0 0 0 140px; padding:.5em 0 .6em 75px; font-size:1.5em;color:#fff; }
+#cap img#logo { float:left; margin-left:.2em; }
+
+#capTM { width:99.9%; border:0; }
+#capTitol { background-color:#be6200; padding:.3em .5em .3em 2.5em; font-size:1.3em; width:20%; color:#fff; }
+
+#capMenu { padding:.5em 0 0 1em; background-color:#be6200; }
+#capMenu a { display:block; float:left; width:15%; padding:.3em 0 .7em 0; margin-right:1em; border-left:1px solid #fff; color:#fff; text-align:center; background-color:#e57700; text-decoration:none; }
+#capMenu a:hover { text-decoration:underline; }
+#capMenu span { display:block; float:left; font-weight:bold; width:15%; padding:.3em 0 .7em 0; margin-right:1em; border-left:1px solid #ffe; text-align:center; background-color:#fff; text-decoration:none; }
+
+/* peu */
+
+#peu { padding-top:1em; height:3.5em; color:#000; border-top:.3em solid #ff8400; background:url(../imgs/peu/fondo_peu.gif) repeat-x; clear:both; }
+#peu img#logoAD { float:left; margin-left:1em; }
+
+/* titols */
+
+h1.inici, h1.anual, h1.mensual, h1.diari, h1.grafic, h1.detall, h1.ajuda { font-size:1.7em; font-weight:normal; color:#8a4700; padding:.5em .7em .5em 4em; margin:0; border-bottom:1px solid #fff; }
+h1.inici { background:url(../imgs/titols/inici.gif) no-repeat #fff; }
+h1.anual { background:url(../imgs/titols/anual.gif) no-repeat #fff; }
+h1.mensual { background:url(../imgs/titols/mensual.gif) no-repeat #fff; }
+h1.diari { background:url(../imgs/titols/diari.gif) no-repeat #fff; }
+h1.grafic { background:url(../imgs/titols/grafic.gif) no-repeat #fff; }
+h1.detall { background:url(../imgs/titols/detall.gif) no-repeat #fff; }
+h1.ajuda { background:url(../imgs/titols/ajuda.gif) no-repeat #fff; }
+#titolOmbra { height:1em; font-size:.5em; background:url(../imgs/titols/titolombra.gif) repeat-x #fff; }
+h2 { clear:left; font-size:1.4em; background-color:#f9eee3; padding:.5em 1em; margin-bottom:1em; }
+h2 span { font-size:.8em; position:relative; margin-left:1em; }
+
+/* continguts */
+
+.continguts { padding:1em; clear:both; }
+
+table.resultats { width:100%; border:1px solid #ffbd77; margin-bottom:2em; padding:1px; }
+table.resultats th { background-color:#ececec; border-right:1px solid #fff; padding:.4em 1em; text-align:left; }
+table.resultats td { border-bottom:1px solid #f2f2f2; padding:.4em 1em; }
+table.resultats td.dada { font-weight:bold; color:#00276c; border-bottom:1px solid #fff; font-size:1.2em; }
+table.resultats tr.perDamunt { cursor:pointer; background-color:#ffc; }
+
+/* dades any */
+
+#capaMensaje { position:absolute; visibility:hidden; font-size:.9em; border:2px solid #f3f3d2; background-color:#ffc; padding:.8em; width:30em; overflow:hidden; z-index:2; }
+
+/* arrere */
+
+#tornarArrere { background-color:#ff9423; padding:1em 1em 3em 2em; margin-top:2em; }
+#tornarArrere a { color:#fff; font-weight:bold; background:url(../imgs/botons/tornar.gif) no-repeat left center #ff9423; padding:.2em 2em; }
+
+/* justificant de pagament */
+
+#justificant { margin:2em auto; padding-top:1em; width:50%; background:url(../imgs/justificant/fons.gif) no-repeat right top #d8e7ee; }
+#justificant table { width:100%; border:0; }
+#justificant table caption { font-size:1.4em; padding:1em 0 .5em 3em; font-weight:bold; text-align:left; background:url(../imgs/tables/justificant_caption.gif) no-repeat 3% 65%; }
+#justificant table.pagament { margin-bottom:2em; }
+#justificant table.usuari { background-color:#e5f5fb; padding-bottom:2em; }
+#justificant table.usuari caption { background-color:#e5f5fb; }
+#justificant table th, #justificant table td { padding:0 .5em .8em .5em; }
+#justificant table th { font-weight:normal; text-align:right; width:40%; }
+#justificant table th:after { content:":"; }
+#justificant table th.tramits { width:20%;  }
+#justificant table th.tramits:after { content:"";  }
+#justificant table td { font:bold 1.0em Georgia, "Times New Roman", Times, serif; }
+
+.botonera { text-align:center; padding:1em; }
+
+p.alerta { padding:1em 1em 1em 3.5em; background:url(../imgs/icones/ico_atencio.gif) no-repeat 1em 1em #ffffe8; border:1px solid #f3f3d2; }
+p.mensaje { padding:1em 1em 1em 3.5em;background: 1em 1em #ffffe8; border:1px solid #f3f3d2; font:bold 1.0em;}
+
+/* ajuda */
+
+#ajudaBoto { float:right; margin:1em 1em 0 0; }
+
+#ajuda { float:right; display:none; width:17%; background-color:#dcf9bb; padding:1em; font-size:.9em; margin-top:1em; border-top:1px solid #93cd52; border-left:1px solid #93cd52; }
+#ajuda h2 { background:url(../imgs/botons/ajuda.gif) no-repeat 0em 50% #dcf9bb; font-size:1.2em; padding-left:2em; }
+.contingutsAjuda { padding:1em; clear:none; float:left; width:78%; }
+
+th.ajudaColumna { background:url(../imgs/botons/ajuda.gif) no-repeat 1em 50%; padding-left:3em !important; cursor:help; }
+th.ajudaColumna:hover { background-color:#dcf9bb; }
+#ajudaColumna { position:absolute; top:0; left:0; width:40%; display:none; padding:1em 1em 1em 2em; background-color:#dcf9bb; font-size:.9em; border:1px solid #93cd52; border-bottom:0; }
+
+.selectTramites {width: 700px }
