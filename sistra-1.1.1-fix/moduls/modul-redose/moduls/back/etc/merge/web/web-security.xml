@@ -1,0 +1,20 @@
+@cas.enabled.comment.init@
+<security-constraint>
+    <web-resource-collection>
+        <web-resource-name>redoseback</web-resource-name>
+        <url-pattern>/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+        <role-name>@role.admin@</role-name>
+        <role-name>@role.operador@</role-name>
+    </auth-constraint>
+</security-constraint>
+
+@web.login-config@
+
+<security-role>
+    <role-name>@role.admin@</role-name>
+    <role-name>@role.operador@</role-name>
+</security-role>
+
+@cas.enabled.comment.end@

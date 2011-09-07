@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="es.caib.redose.model.Uso" table="RDS_USOS">
+    	<cache usage="read-write"/>
+    	
+        <id name="codigo" unsaved-value="null" column="USO_CODIGO">
+            <generator class="sequence">
+                <param name="sequence">RDS_SEQUSO</param>
+            </generator>
+        </id>
+        
+        <many-to-one name="documento" class="es.caib.redose.model.Documento" column="USO_CODDOC" not-null="true" />
+        <many-to-one name="tipoUso" class="es.caib.redose.model.TipoUso" column="USO_CODTIU" not-null="true" />
+
+        <property name="referencia" type="string" column="USO_REF" length="50" not-null="true" />
+        <property name="fechaSello" column="USO_FCSELL" />
+        
+        <property name="fecha" column="USO_FECHA" not-null="true" />
+
+    </class>
+</hibernate-mapping>

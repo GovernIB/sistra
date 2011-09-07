@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="sistra-xml" default="main" basedir=".">
+
+	<property name="projecte" value="${ant.project.name}"/>
+    <property file="${basedir}/config.properties"/>
+	<property file="${basedir}/../../config.properties"/>
+
+	<property name="lib" location="${basedir}/../../lib"/>
+
+	<property name="output.dir" location="${basedir}/output"/>
+	<property name="product.dir" location="${output.dir}/product"/>
+	<property name="moduls.dir" location="${output.dir}/moduls"/>
+	<property name="doc.dir" location="${output.dir}/doc"/>
+	
+	<property name="distribucion.dir" location="${basedir}/../../product"/>
+	
+	<property name="package" value="es.caib.xml"/>
+    	
+	<target name="properties" description="Muestra las propiedades del sistema">
+		<echo>
+            -----------------------------------------------------
+            Propiedades del sistema:
+
+            basedir=${basedir}
+            ant.file=${ant.file}
+            ant.version=${ant.version}
+            ant.project.name=${ant.project.name}
+            ant.java.version=${ant.java.version}
+            -----------------------------------------------------
+        </echo>
+	</target>
+	
+	<target name="prepare" description="Crea los directorios necesarios para la construcción de la aplicación">
+		<mkdir dir="${output.dir}"/>
+		<mkdir dir="${product.dir}"/>
+		<mkdir dir="${moduls.dir}"/>
+		<mkdir dir="${doc.dir}"/>
+		<antcall target="propagate">
+			<param name="task" value="prepare"/>
+		</antcall>
+	</target>
+	
+	<target name="clean" description="Destruye los directorios de trabajo">
+		<delete dir="${output.dir}" quiet="yes"/>
+	</target>
+
+	<target name="assemble" description="Realiza ensamblado">
+		<delete file="${product.dir}/${projecte}.jar" quiet="yes"/>
+		<copy file="${moduls.dir}/${projecte}.jar" todir="${product.dir}"/>
+	</target>
+
+	<target name="main" depends="clean,prepare" description="Realiza todo el proceso de construccion">
+		<antcall target="propagate">
+			<param name="task" value="main"/>
+		</antcall>
+		<antcall target="assemble"/>
+		<antcall target="distribute"/>
+	</target>
+
+	<target name="doc" depends="prepare" description="Genera la documentación">
+		<antcall target="propagate">
+			<param name="task" value="doc"/>
+		</antcall>
+	</target>
+	
+	<target name="propagate">
+		<ant dir="moduls/xml" target="${task}" inheritall="false"/>
+	</target>
+	
+	<target name="distribute" description="Distribucion">
+		<copy file="${product.dir}/${projecte}.jar" todir="${distribucion.dir}/lib"/>		
+	</target>
+
+</project>

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+        
+<hibernate-mapping>
+    <class name="es.caib.redose.model.PlantillaIdioma" table="RDS_PLAIDI">
+    	<cache usage="read-write"/>
+    	
+        <id name="codigo" unsaved-value="null" column="PLI_CODIGO">
+            <generator class="sequence">
+                <param name="sequence">RDS_SEQPLI</param>
+            </generator>
+        </id>
+        
+        <many-to-one name="plantilla" class="es.caib.redose.model.Plantilla" column="PLI_CODPLA" not-null="true" />
+        
+		<property name="idioma" type="string" column="PLI_CODIDI" not-null="true" />
+        <property name="nombreFichero" type="string" column="PLI_NOMFIC" not-null="true" />
+        
+         <!-- bi-directional one-to-one association to RdsArcpli -->
+	    <one-to-one
+	        name="archivo"
+	        cascade="all"
+	        class="es.caib.redose.model.ArchivoPlantilla"
+	        outer-join="false" />
+
+    </class>
+</hibernate-mapping>

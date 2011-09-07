@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+    <definition name=".menu" path="/menu.jsp">
+        <putList name="independientes">
+            <add type="definition" value=".menu.formulario.listar" />
+            <add type="definition" value=".menu.formulario.importar" />
+        </putList>
+        <putList name="bloques">
+            <add type="definition" value=".menu.arbol" />
+        </putList>
+    </definition>
+
+    <!-- ============================================================= -->
+    <!-- ==================== Definicions generals =================== -->
+    <!-- ============================================================= -->
+
+    <definition name=".menu.bloque" path="/moduls/blocMenu.jsp">
+        <put name="titulo" value="-- undefined --" />
+        <putList name="apartados"></putList>
+    </definition>
+
+    <definition name=".menu.individual" path="/moduls/individual.jsp">
+        <put name="titulo" value="-- undefined --" />
+        <put name="link" value="--undefined--"/>
+    </definition>
+
+    <definition name=".menu.apartado" path="/moduls/apartatMenu.jsp">
+        <put name="expand" value="none" />
+        <put name="name" value="-- undefined --" />
+        <put name="titulo" value="-- undefined --" />
+        <putList name="opciones"></putList>
+    </definition>
+
+    <definition name=".menu.independiente" path="/moduls/apartatMenu.jsp">
+        <put name="expand" value="none" />
+        <put name="name" value="-- undefined --" />
+        <put name="titulo" value="-- undefined --" />
+        <putList name="opciones"></putList>
+    </definition>
+
+    <definition name=".menu.raiz" path="/arbol/raiz.jsp">
+        <put name="expand" value="none" />
+        <put name="titulo" value="-- undefined --" />
+        <put name="nodos" value="-- undefined --" type="definition" />
+        <!--putList name="nodos"></putList-->
+    </definition>
+
+    <definition name=".menu.nodo" path="/arbol/nodo.jsp">
+        <put name="expand" value="none" />
+        <put name="name" value="-- undefined --" />
+        <put name="titulo" value="-- undefined --" />
+        <putList name="nodos"></putList>
+    </definition>
+
+
+    <!-- ============================================================= -->
+    <!-- ====================== Especificacions ====================== -->
+    <!-- ============================================================= -->
+
+    <definition name=".menu.formulario.listar" extends=".menu.individual">
+        <put name="titulo" value="menu.formulario.lista"/>
+        <put name="link" value="/back/formulario/lista"/>
+    </definition>
+
+    <definition name=".menu.formulario.importar" extends=".menu.individual">
+        <put name="titulo" value="menu.formulario.importar"/>
+        <put name="link" value="/back/formulario/importar"/>
+    </definition>
+
+    <definition name=".menu.arbol" extends=".menu.bloque">
+        <put name="titulo" value="menu.arbol" />
+        <put name="name" value="arbol" />
+        <putList name="apartados">
+            <add type="definition" value=".menu.formularios" />
+        </putList>
+    </definition>
+
+    <definition name=".menu.formularios" extends=".menu.raiz">
+        <put name="titulo" value="arbol.formulario" />
+        <put name="nodos" value=".menu.formulario.lista" type="definition" />
+    </definition>
+
+    <definition name=".menu.formulario.lista" path="/arbol/select.jsp" controllerClass="org.ibit.rol.form.back.action.formulario.ListaFormulariosController" >
+        <put name="options" value="" />
+        <put name="prop" value="" />
+        <put name="nodos" value=".menu.pantalla.lista" type="definition" />
+    </definition>
+
+    <definition name=".menu.pantalla.lista" path="/arbol/pantalla.jsp" controllerClass="org.ibit.rol.form.back.action.pantalla.ListaPantallasController" >
+        <put name="titulo" value="arbol.pantalla" />
+        <put name="id" value="" />
+        <put name="options" value="" />
+        <put name="prop" value="" />
+        <put name="nodos" value=".menu.componente.lista" type="definition" />
+    </definition>
+
+    <definition name=".menu.componente.lista" path="/arbol/componente.jsp" controllerClass="org.ibit.rol.form.back.action.componente.ListaComponentesController" >
+        <put name="titulo" value="arbol.componente" />
+        <put name="id" value="" />
+        <put name="options" value="" />
+        <put name="prop" value="" />
+    </definition>
+
+</tiles-definitions>

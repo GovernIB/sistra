@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+    <definition name=".menu" path="/menu.jsp">
+        <putList name="apartados">
+            <add type="definition" value=".menu.mascara" />
+            <add type="definition" value=".menu.patron" />
+            <add type="definition" value=".menu.perfil" />
+            <add type="definition" value=".menu.paleta" />
+            <add type="definition" value=".menu.validador" />
+             <add type="definition" value=".menu.puntosalida" />
+            <add type="definition" value=".menu.formulario.listar" />
+			<add type="definition" value=".menu.grupos.lista" />
+        </putList>
+    </definition>
+
+    <definition name=".menu.apartado" path="/moduls/apartatMenu.jsp">
+        <put name="titulo" value="-- undefined --" />
+        <putList name="opciones"></putList>
+    </definition>
+
+    <!-- ============================================================= -->
+    <!-- ====================== Apartatdos del menú ================== -->
+    <!-- ============================================================= -->
+
+    <definition name=".menu.mascara" extends=".menu.apartado">
+        <put name="titulo" value="menu.mascara" />
+        <putList name="opciones">
+            <item value="menu.crear" link="/admin/mascara/alta" />
+            <item value="menu.seleccionar" link="/admin/mascara/lista" />
+        </putList>
+    </definition>
+
+	<definition name=".menu.formulario.listar" extends=".menu.apartado">
+       <put name="titulo" value="menu.formularios" />
+       <putList name="opciones">
+       		<item value="menu.formulario.lista" link="/admin/formulario/lista" />
+        </putList>
+    </definition>
+	
+ 	<definition name=".menu.grupos.lista" extends=".menu.apartado">
+ 	   <put name="titulo" value="menu.grupos" />
+       <putList name="opciones">
+       		<item value="menu.grupos.lista" link="/admin/grupo/lista" />
+        </putList>
+    </definition>
+
+    <definition name=".menu.patron" extends=".menu.apartado">
+        <put name="titulo" value="menu.patron" />
+        <putList name="opciones">
+            <item value="menu.crear" link="/admin/patron/alta" />
+            <item value="menu.seleccionar" link="/admin/patron/lista" />
+        </putList>
+    </definition>
+
+    <definition name=".menu.perfil" extends=".menu.apartado">
+        <put name="titulo" value="menu.perfil" />
+        <putList name="opciones">
+            <item value="menu.crear" link="/admin/perfil/alta" />
+            <item value="menu.seleccionar" link="/admin/perfil/lista" />
+        </putList>
+    </definition>
+
+    <definition name=".menu.paleta" extends=".menu.apartado">
+        <put name="titulo" value="menu.paleta" />
+        <putList name="opciones">
+            <item value="menu.crear" link="/admin/paleta/alta" />
+            <item value="menu.seleccionar" link="/admin/paleta/lista" />
+        </putList>
+    </definition>
+
+    <definition name=".menu.validador" extends=".menu.apartado">
+        <put name="titulo" value="menu.validador" />
+        <putList name="opciones">
+            <item value="menu.crear" link="/admin/validador/alta" />
+            <item value="menu.seleccionar" link="/admin/validador/lista" />
+        </putList>
+    </definition>
+
+     <definition name=".menu.puntosalida" extends=".menu.apartado">
+        <put name="titulo" value="menu.puntosalida" />
+        <putList name="opciones">
+            <item value="menu.crear" link="/admin/puntosalida/alta" />
+            <item value="menu.seleccionar" link="/admin/puntosalida/lista" />
+        </putList>
+    </definition>
+
+</tiles-definitions>
