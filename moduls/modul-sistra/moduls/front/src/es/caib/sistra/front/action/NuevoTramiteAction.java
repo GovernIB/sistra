@@ -1,5 +1,7 @@
 package es.caib.sistra.front.action;
 
+import java.util.Locale;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -49,12 +51,19 @@ public class NuevoTramiteAction extends BaseAction
 			return mapping.findForward("error");
 		}
 		
+        // En caso de que el trámite este en un idioma diferente al de la sesión  ajustamos el 
+		// idioma de la sesión
+		if ( !respuestaFront.getInformacionTramite().getDatosSesion().getLocale().getLanguage().equals(this.getLocale(request).getLanguage()) )			
+        {
+        	this.setLocale(request,new Locale(respuestaFront.getInformacionTramite().getDatosSesion().getLocale().getLanguage()));
+        }
+		
         // Si es tramite reducido, vamos directamente al formulario
         if ( respuestaFront.getInformacionTramite().isCircuitoReducido() )
         {
         	return mapping.findForward( "tramiteReducido" );
         }
-		
+		        
         /*
          * MODIFICACION: NO MOSTRAMOS PAGINA DE PASOS
          * 
