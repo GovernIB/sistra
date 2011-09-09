@@ -114,6 +114,7 @@
 	
 		<logic:equal name="anexo" property="anexoGenerico" value="true">			
 			if 	(form.descPersonalizada.value==''){
+				ocultarCapaInfo();
 				alert( "<bean:message key="anexarDocumento.generico.descPersonalizada.nulo" />" );
 				return;
 			}
