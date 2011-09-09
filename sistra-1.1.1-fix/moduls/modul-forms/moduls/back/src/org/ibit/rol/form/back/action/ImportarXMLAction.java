@@ -1,5 +1,6 @@
 package org.ibit.rol.form.back.action;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.betwixt.io.BeanReader;
@@ -13,14 +14,17 @@ import org.ibit.rol.form.back.util.Util;
 import org.ibit.rol.form.model.Campo;
 import org.ibit.rol.form.model.Componente;
 import org.ibit.rol.form.model.Formulario;
+import org.ibit.rol.form.model.Mascara;
 import org.ibit.rol.form.model.Pantalla;
 import org.ibit.rol.form.model.Patron;
 import org.ibit.rol.form.model.RolUsuarioFormulario;
 import org.ibit.rol.form.model.RolUsuarioFormularioId;
+import org.ibit.rol.form.model.Validacion;
 import org.ibit.rol.form.model.betwixt.Configurator;
 import org.ibit.rol.form.persistence.delegate.DelegateUtil;
 import org.ibit.rol.form.persistence.delegate.FormularioDelegate;
 import org.ibit.rol.form.persistence.delegate.GruposDelegate;
+import org.ibit.rol.form.persistence.delegate.MascaraDelegate;
 import org.ibit.rol.form.persistence.delegate.PatronDelegate;
 
 import es.caib.util.ConvertUtil;
@@ -58,11 +62,11 @@ public class ImportarXMLAction extends BaseAction {
 
             Formulario formulario = (Formulario) beanReader.parse(iForm.getFitxer().getInputStream());
             
-	            //para cada componente de cada pagina del formulario si tiene un patrón asignado
-	            //vamos a buscar en la BBDD por nombre para coger el id del patrón correcto
-	            //según el entorno de instalación, tambine para cada componente que tenga algun 
-	            //script asociado miramos si nos llega en b64 y si es así lo pasamos a String 
-	            modificarIdPatronesYScripts(formulario);
+	            //BUGS IMPORTACION: para cada componente de cada pagina del formulario si tiene un patrón asignado
+	            //	* Patrones: se debe relacionar el codigo del patron con el id especifico del entorno
+            	//  * Mascaras: se debe relacionar el codigo del patron con el id especifico del entorno
+            	//  * Scripts: se pasan los scripts a b64 para solventar los saltos de linea
+	            modificarIdPatronesMascarasYScripts(formulario);
 	            
             // No guardamos informacion de bloqueo
             formulario.setBloqueado(false);
@@ -152,26 +156,51 @@ public class ImportarXMLAction extends BaseAction {
         return mapping.findForward("fail");
     }
     
-    private void modificarIdPatronesYScripts(Formulario form) throws Exception{
+    private void modificarIdPatronesMascarasYScripts(Formulario form) throws Exception{
     	try{
     		PatronDelegate patDeleg = DelegateUtil.getPatronDelegate();
+    		MascaraDelegate masDeleg = DelegateUtil.getMascaraDelegate();
 	    	if(form != null && form.getPantallas() != null && form.getPantallas().size() > 0){
 	    		for(int i=0;i<form.getPantallas().size();i++){
 	    			Pantalla pant = (Pantalla)form.getPantallas().get(i);
+	    			
+	    			// Modificacion scripts pantalla
 	    			if(pant.getExpresion() != null && !"".equals(pant.getExpresion())){
 	    				if(pant.getExpresion().startsWith(Constants.TAG_B64)){
 	    					pant.setExpresion(ConvertUtil.base64UrlSafeToCadena(pant.getExpresion().substring(Constants.TAG_B64.length(),pant.getExpresion().length())));
 	    				}
 					}
+	    			
 	    			if(pant != null && pant.getComponentes() != null && pant.getComponentes().size() > 0){
 	    				for(int j=0;j<pant.getComponentes().size();j++){
 	    					Componente comp = (Componente)pant.getComponentes().get(j);
 	    					if(comp != null && comp instanceof Campo){
 	    						Campo camp = (Campo)comp;
+	    						
+	    						// Modificacion patron campo
 	    						if(camp.getPatron() != null){
 	    							Patron pat = patDeleg.obtenerPatron(camp.getPatron().getNombre());
+	    							if (pat == null) {
+	    								throw new Exception("No existe patron: " + camp.getPatron().getNombre());
+	    							}
 	    							camp.setPatron(pat);
 	    						}
+	    						
+	    						// Modificacion mascaras validaciones campo
+	    						if (camp.getValidaciones() != null && camp.getValidaciones().size() > 0) {
+	    							for (Iterator it = camp.getValidaciones().iterator(); it.hasNext();){
+	    								Validacion validacion = (Validacion) it.next();
+	    								if (validacion.getMascara() != null) {
+	    									Mascara masc = masDeleg.obtenerMascara(validacion.getMascara().getNombre());
+	    									if (masc == null) {
+	    	    								throw new Exception("No existe mascara: " + validacion.getMascara().getNombre());
+	    	    							}
+	    									validacion.setMascara(masc);
+	    								}
+	    							}
+	    						}
+	    							    						
+	    						// Modificacion scripts asociados a campo
 	    						if(camp.getExpresionAutocalculo() != null && !"".equals(camp.getExpresionAutocalculo()) && camp.getExpresionAutocalculo().startsWith(Constants.TAG_B64)){
     								camp.setExpresionAutocalculo(ConvertUtil.base64UrlSafeToCadena(camp.getExpresionAutocalculo().substring(Constants.TAG_B64.length(),camp.getExpresionAutocalculo().length())));
 	    						}
