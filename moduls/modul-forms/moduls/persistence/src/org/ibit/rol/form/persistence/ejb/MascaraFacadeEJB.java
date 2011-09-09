@@ -10,6 +10,7 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Query;
 import org.ibit.rol.form.model.Mascara;
+import org.ibit.rol.form.model.Patron;
 import org.ibit.rol.form.model.Validacion;
 
 /**
@@ -87,6 +88,25 @@ public abstract class MascaraFacadeEJB extends HibernateEJB {
         }
     }
 
+    /**
+     * Obtiene un máscara.
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public Mascara obtenerMascara(String nombre) {
+        Session session = getSession();
+        try {
+           	Query query = session.createQuery("from Mascara p WHERE p.nombre =:nombre");
+           	query.setParameter("nombre",nombre);        	
+           	Mascara mascara = (Mascara) query.uniqueResult();
+            return mascara;
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
     /**
      * Borra una máscara.
      * @ejb.interface-method
