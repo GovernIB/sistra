@@ -53,7 +53,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		try{
 			RegistroTelematicoWsDelegate delegate = DelegateUtil.getRegistroTelematicoWsDelegate();
 			es.caib.regtel.model.ws.DatosRegistroEntrada dEnt = prepararDatosRegistroEntradaIntf(entrada);
-			es.caib.regtel.model.ReferenciaRDSAsientoRegistral ar = delegate.prepararRegistroEntrada(dEnt);
+			es.caib.regtel.model.ReferenciaRDSAsientoRegistral ar = delegate.prepararRegistroEntrada(dEnt, 0);
 			raWS = referenciaRDSAsientoRegistralIntfToReferenciaRDSAsientoRegistralWS(ar);
 		} catch (Exception ex) {
 			ex.printStackTrace();

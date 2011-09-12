@@ -250,6 +250,14 @@ public class PadDelegate implements StatelessDelegate {
         }
 	}
 	
+	public void logRegistroExternoPreparado(ReferenciaRDS referenciaAsiento, Map referenciaAnexos, String identificadorPersistencia, int diasPersistencia) throws DelegateException{
+		try{
+			getFacade().logRegistroExternoPreparado(referenciaAsiento, referenciaAnexos, identificadorPersistencia, diasPersistencia);
+		}catch (Exception e){
+            throw new DelegateException(e);
+        }
+	}
+	
 	public boolean esDelegado() throws DelegateException	
 	{
 		try

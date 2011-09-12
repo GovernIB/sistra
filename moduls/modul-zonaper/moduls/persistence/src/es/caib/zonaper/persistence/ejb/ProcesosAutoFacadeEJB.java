@@ -18,6 +18,9 @@ import net.sf.hibernate.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import es.caib.redose.modelInterfaz.ConstantesRDS;
+import es.caib.redose.persistence.delegate.DelegateRDSUtil;
+import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.regtel.persistence.delegate.RegistroOrganismoDelegate;
 import es.caib.xml.registro.factoria.ConstantesAsientoXML;
 import es.caib.zonaper.model.ElementoExpediente;
@@ -29,9 +32,11 @@ import es.caib.zonaper.model.EventoExpediente;
 import es.caib.zonaper.model.Expediente;
 import es.caib.zonaper.model.LogRegistro;
 import es.caib.zonaper.model.NotificacionTelematica;
+import es.caib.zonaper.model.RegistroExternoPreparado;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.ExpedienteDelegate;
 import es.caib.zonaper.persistence.delegate.LogRegistroDelegate;
+import es.caib.zonaper.persistence.delegate.RegistroExternoPreparadoDelegate;
 import es.caib.zonaper.persistence.util.AvisosMovilidad;
 import es.caib.zonaper.persistence.util.UsernamePasswordCallbackHandler;
 
@@ -175,7 +180,7 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
 	
 	
 	/**
-	 * Revisa si los registros efectuados se han consolidado
+	 * Revisa si los registros efectuados se han consolidado y registros externos que se han preparado para firmar a ver si se han relizado
 	 * 
      * @ejb.interface-method
      * @ejb.permission unchecked = "true"
@@ -197,6 +202,9 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
 			
 			// Revisar registros efectuados
 			doRevisarRegistrosEfectuados();
+			
+			// Revisar registros externos
+			doRevisarRegistrosExternosPreparados();					
 			
 		}catch (Exception le){
 			throw new EJBException("Excepcion al ejecutar proceso",le);
@@ -364,7 +372,7 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
 						logReg.setAnulado("S");
 						dlg.grabarLogRegistro(logReg);
 					}
-				}
+				}			
 			}
 		}
 	}
@@ -394,4 +402,23 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
     	expe.addElementoExpediente(el,entrada);
     	DelegateUtil.getExpedienteDelegate().grabarExpediente(expe);
 	}
+	
+	/**
+	 * Comprueba si hay registros externos preparados caducados y los elimina.
+	 */
+	private void doRevisarRegistrosExternosPreparados() throws Exception{
+		RegistroExternoPreparadoDelegate dlg = DelegateUtil.getRegistroExternoPreparadoDelegate();
+		RdsDelegate rdsDlg = DelegateRDSUtil.getRdsDelegate();
+		List regs = dlg.listarCaducados();
+		if (regs != null) {
+			for (Iterator it = regs.iterator();it.hasNext();){
+				RegistroExternoPreparado r = (RegistroExternoPreparado) it.next();				
+				// Borramos usos de persistencia
+				rdsDlg.eliminarUsos(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE, r.getIdPersistencia());
+				// Borramos log registro
+				dlg.borrarRegistroExternoPreparado(r.getCodigoRdsAsiento());
+			}			
+		}		
+	}
+	
 }
