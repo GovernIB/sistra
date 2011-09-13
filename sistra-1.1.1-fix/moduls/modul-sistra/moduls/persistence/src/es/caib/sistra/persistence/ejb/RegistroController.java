@@ -237,8 +237,7 @@ public class RegistroController
 			}			
 			
 			// Realizamos consulta
-			//DocumentoConsulta docs[] = ejb.realizarConsulta(identificadorTramite,forms);
-			DocumentoConsulta docs[] = ejb.realizarConsulta(forms);
+			DocumentoConsulta docs[] = ejb.realizarConsulta(identificadorTramite,forms);			
 			log.debug("Consulta realizada: " + docs.length + "docs.");
 			
 			// Devolvemos resultado
