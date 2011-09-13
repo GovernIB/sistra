@@ -4002,13 +4002,19 @@ public class TramiteProcessorEJB implements SessionBean {
 							}else{
 								primerFmte = false;
 							}
-							firmantesRes += NifCif.normalizarDocumento(fmte);
+							fmte = NifCif.normalizarDocumento(fmte);
+							int validarNif = NifCif.validaDocumento(fmte);
+							if (validarNif != NifCif.TIPO_DOCUMENTO_NIF && validarNif != NifCif.TIPO_DOCUMENTO_CIF && validarNif != NifCif.TIPO_DOCUMENTO_NIE ){
+								throw new Exception("El valor '" + fmte + "' no es un NIF/CIF/NIE valido");
+							}
 							PersonaPAD persona = obtenerDatosPADporNif(fmte);
 							if (persona != null){
 								nomFirmante = persona.getNombreCompleto();
 							}else{
 								nomFirmante = "";
 							}
+							
+							firmantesRes += fmte;
 							nomFirmantes += nomFirmante;
 						}
 						
