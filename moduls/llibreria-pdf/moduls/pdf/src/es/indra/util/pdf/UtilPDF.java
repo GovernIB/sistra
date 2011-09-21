@@ -47,7 +47,9 @@ public class UtilPDF {
             // Establecemos permisos del primer documento
             if (f==0){
             	permission = reader.getPermissions();
-            	writer.setEncryption(null, null,permission, PdfWriter.STRENGTH40BITS);
+            	if (permission != 0){
+            		writer.setEncryption(null, null,permission, PdfWriter.STRENGTH40BITS);
+            	}
             }
                         
             writer.addDocument(reader);
@@ -84,7 +86,9 @@ public class UtilPDF {
       
         PdfReader reader = new PdfReader(pdfIn);
         permission = reader.getPermissions();
-	    writer.setEncryption(null, null,permission, PdfWriter.STRENGTH40BITS);
+        if (permission != 0){
+        	writer.setEncryption(null, null,permission, PdfWriter.STRENGTH40BITS);
+        }
 	    writer.addDocument(reader,pagesToKeep);
         
         writer.close();
@@ -180,7 +184,9 @@ public class UtilPDF {
         PdfStamper stamp = new PdfStamper(reader, pdfOut);
 
         // Volvemos a establecer los permisos que tuviera
-        stamp.setEncryption(null, null, permission, PdfWriter.STRENGTH40BITS);
+        if (permission != 0) {
+        	stamp.setEncryption(null, null, permission, PdfWriter.STRENGTH40BITS);
+        }
 
         PdfContentByte under;
         PdfContentByte over;
