@@ -343,8 +343,7 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 		}
 	}
 	
-	
-	 /**
+	  /**
 	 * Genera para un registro preparado para firmar los usos RDS de tipo tramite persistente para el asiento y documentos asociados.
 	 */
 	private String generarUsosRDSPrepararRegistro(String idPersistencia, ReferenciaRDSAsientoRegistral ra ) throws Exception {
@@ -364,6 +363,14 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 			Iterator it = ra.getAnexos().keySet().iterator();
 	    	while (it.hasNext()){
 	    		ReferenciaRDS refAnexo = (ReferenciaRDS) ra.getAnexos().get((String) it.next());
+	    		
+	    		// Verificamos que no se este usando el doc en otra parte
+	    		List usos = rds.listarUsos(refAnexo);
+	    		if (usos.size() > 0) {
+	    			throw new Exception("Existen usos asociados para el documento " + refAnexo.getCodigo());
+	    		}
+	    		
+	    		// Creamos el uso
 	    		uso = new UsoRDS();
 				uso.setReferenciaRDS(refAnexo);
 				uso.setReferencia(idPersistencia);
