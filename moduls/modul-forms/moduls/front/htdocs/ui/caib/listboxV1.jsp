@@ -21,7 +21,6 @@
         disabled="<%=(disabled || bloqueado)%>"
         onchange='<%=(!autocalculo) ? "onFieldChange(this.form, this.name)" : ""%>'
         styleClass='<%=(autocalculo || bloqueado? "frmro" : "frm")%>'
-        style="width: 200px"
         onfocus='<%="setAyuda(" + campo.getOrden() + ")" + (autocalculo? "; this.blur()":"")%>'
         tabindex="<%=Integer.toString((autocalculo) ? 0 : campo.getOrden()+1)%>"
     >

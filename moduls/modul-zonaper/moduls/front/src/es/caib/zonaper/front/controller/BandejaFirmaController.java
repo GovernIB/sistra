@@ -31,31 +31,31 @@ public class BandejaFirmaController extends BaseController
 			ServletContext servletContext) throws Exception
 	{
 		List lResult = new ArrayList();
-		try{
-			//Buscamos Documentos pendientes de firma de la entidad delegante
-			BandejaFirmaDelegate firmas = DelegateUtil.getBandejaFirmaDelegate();
-			
-			String nifEntidad;
-			DatosSesion datosSesion = this.getDatosSesion(request);
-			
-			if (datosSesion.getPerfilAcceso().equals(ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO)){
-				nifEntidad = datosSesion.getNifEntidad();
-			}else{
-				nifEntidad = datosSesion.getNifUsuario();
-			}
-			
-			List docs = firmas.obtenerDocumentosPendientesFirma(nifEntidad);
-			
-			for(int i=0;i<docs.size();i++){
-				DocumentoPersistenteFront docPer = docPerToDocFront((DocumentoPersistente)docs.get(i));
-				ReferenciaRDS ref = new ReferenciaRDS();
-				ref.setClave(docPer.getRdsClave());
-				ref.setCodigo(docPer.getRdsCodigo());
-				DocumentoRDS doc = DelegateRDSUtil.getRdsDelegate().consultarDocumento(ref,false);
-				docPer.setDescripcionDocumento(doc.getTitulo());
-				lResult.add(docPer);
-			}
-		}catch(Exception e){}
+		
+		//Buscamos Documentos pendientes de firma de la entidad delegante
+		BandejaFirmaDelegate firmas = DelegateUtil.getBandejaFirmaDelegate();
+		
+		String nifEntidad;
+		DatosSesion datosSesion = this.getDatosSesion(request);
+		
+		if (datosSesion.getPerfilAcceso().equals(ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO)){
+			nifEntidad = datosSesion.getNifEntidad();
+		}else{
+			nifEntidad = datosSesion.getNifUsuario();
+		}
+		
+		List docs = firmas.obtenerDocumentosPendientesFirma(nifEntidad);
+		
+		for(int i=0;i<docs.size();i++){
+			DocumentoPersistenteFront docPer = docPerToDocFront((DocumentoPersistente)docs.get(i));
+			ReferenciaRDS ref = new ReferenciaRDS();
+			ref.setClave(docPer.getRdsClave());
+			ref.setCodigo(docPer.getRdsCodigo());
+			DocumentoRDS doc = DelegateRDSUtil.getRdsDelegate().consultarDocumento(ref,false);
+			docPer.setDescripcionDocumento(doc.getTitulo());
+			lResult.add(docPer);
+		}
+		
 		request.setAttribute( "documentosPendientesFirma", lResult );
 	}
 	

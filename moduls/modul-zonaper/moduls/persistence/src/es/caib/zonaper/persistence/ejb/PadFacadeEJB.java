@@ -72,6 +72,7 @@ import es.caib.zonaper.model.LogRegistroId;
 import es.caib.zonaper.model.NotificacionTelematica;
 import es.caib.zonaper.model.ParametrosSubsanacion;
 import es.caib.zonaper.model.RegistroExterno;
+import es.caib.zonaper.model.RegistroExternoPreparado;
 import es.caib.zonaper.model.TramitePersistente;
 import es.caib.zonaper.modelInterfaz.DocumentoPersistentePAD;
 import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
@@ -87,6 +88,7 @@ import es.caib.zonaper.persistence.delegate.LogRegistroDelegate;
 import es.caib.zonaper.persistence.delegate.NotificacionTelematicaDelegate;
 import es.caib.zonaper.persistence.delegate.PadAplicacionDelegate;
 import es.caib.zonaper.persistence.delegate.RegistroExternoDelegate;
+import es.caib.zonaper.persistence.delegate.RegistroExternoPreparadoDelegate;
 import es.caib.zonaper.persistence.delegate.TramitePersistenteDelegate;
 import es.caib.zonaper.persistence.util.LoggerRegistro;
 
@@ -710,6 +712,57 @@ public abstract class PadFacadeEJB implements SessionBean{
     		dlg.grabarLogRegistro(logReg);
     	}catch(Exception e){
     		throw new ExcepcionPAD("No se ha podido guardar el log de Registro con numero: " + numeroRegistro,e);
+    	}
+    
+    }
+    
+    
+    /**
+     * Realiza el log de la preparación de registros de entrada externos para ser firmados con posterioridad que necesitan persistencia de días.
+     * Este log servira para purgar estos registros si no se llegan a registrar.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     * @ejb.permission role-name="${role.gestor}"
+     * 
+     * @param referenciaAsiento Referencia RDS del asiento preparado para registrar
+     * @param referenciaAnexos Referencias RDS de los anexos
+     * @param identificadorPersistencia Identificador de persistencia utilizado para los usos
+     * @param diasPersistencia Días que estará disponible el registro para ser registrado
+     */
+    public void logRegistroExternoPreparado(ReferenciaRDS referenciaAsiento, Map referenciaAnexos, String identificadorPersistencia, int diasPersistencia) throws ExcepcionPAD{
+    	try{
+    		
+    		// Convertimos map de referencias de anexos en una map de string: key=codigo RDS / value= clave  RDS
+    		String refAnexos = null;
+    		if (referenciaAnexos != null) {
+    			Map refs = new HashMap();
+	    		for (Iterator it=referenciaAnexos.keySet().iterator(); it.hasNext();){
+	    			ReferenciaRDS refAnexo = (ReferenciaRDS) referenciaAnexos.get(it.next());
+	    			refs.put( Long.toString(refAnexo.getCodigo()), refAnexo.getClave());
+	    		}
+	    		refAnexos = StringUtil.serializarMap(refs);
+    		}
+    		
+    		// Calculamos fecha de eliminacion
+    		Date fechaHoy = new Date();
+    		long delay = diasPersistencia * (24 * 3600 * 1000); 
+    		Date fechaElim = new Date(fechaHoy.getTime() +  delay);
+    		
+    		// Realizamos log
+    		RegistroExternoPreparado r = new RegistroExternoPreparado();
+    		r.setCodigoRdsAsiento(new Long(referenciaAsiento.getCodigo()));
+    		r.setClaveRdsAsiento(referenciaAsiento.getClave());
+    		r.setReferenciasAnexos(refAnexos);
+    		r.setIdPersistencia(identificadorPersistencia);
+    		r.setFechaCreacion(fechaHoy);
+    		r.setFechaEliminacion(fechaElim);
+    		
+    		RegistroExternoPreparadoDelegate dlg = DelegateUtil.getRegistroExternoPreparadoDelegate();
+    		dlg.grabarRegistroExternoPreparado(r);
+    		
+    	}catch(Exception e){
+    		throw new ExcepcionPAD("No se ha podido guardar el log de registro externo preparado",e);
     	}
     
     }

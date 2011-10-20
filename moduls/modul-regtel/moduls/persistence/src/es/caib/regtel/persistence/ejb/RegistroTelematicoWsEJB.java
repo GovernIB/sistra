@@ -2,6 +2,8 @@ package es.caib.regtel.persistence.ejb;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
@@ -10,8 +12,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
+import es.caib.redose.modelInterfaz.UsoRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.regtel.model.ReferenciaRDSAsientoRegistral;
@@ -28,10 +32,13 @@ import es.caib.regtel.model.ws.OficinaRegistral;
 import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
 import es.caib.regtel.persistence.delegate.DelegateUtil;
 import es.caib.regtel.persistence.delegate.RegistroTelematicoDelegate;
+import es.caib.regtel.persistence.util.Constantes;
 import es.caib.regtel.persistence.util.RegistroEntradaHelper;
 import es.caib.regtel.persistence.util.RegistroSalidaHelper;
 import es.caib.sistra.plugins.firma.FirmaIntf;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
+import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
+import es.caib.zonaper.persistence.delegate.PadDelegate;
 
 
 
@@ -101,7 +108,7 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
      * @ejb.permission role-name = "${role.auto}"
      */
 	
-	public ReferenciaRDSAsientoRegistral prepararRegistroEntrada(DatosRegistroEntrada dEnt) throws Exception {
+	public ReferenciaRDSAsientoRegistral prepararRegistroEntrada(DatosRegistroEntrada dEnt, int diasPersistencia) throws Exception {
 		
 		/* ------------------------------------------------------------------------------------- 
 		  Anterior a version 1.1.0 era obligatorio introducir el usuario seycon y el nif.
@@ -117,6 +124,22 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 		RegistroEntradaHelper r = new RegistroEntradaHelper();
 		inicializarRegistroEntrada(r, dEnt);
 		ReferenciaRDSAsientoRegistral raWS = r.generarAsientoRegistral("LOCAL");
+		
+		// Si se indican dias de persistencia se crearan para el asiento y los anexos un uso de persistencia
+		// y se realizara el log de este registro preparado en la zona personal para que una vez pasen los dias
+		// de persistencia se eliminen estos usos
+		if (diasPersistencia > 0) {
+			// Generamos un id de persistencia unico
+			String idPersistencia = generarIdPersistenciaAsiento(raWS);
+			
+			// Crear uso de persistencia para asiento y anexo
+			generarUsosRDSPrepararRegistro(idPersistencia, raWS);
+			
+			// Realizar log en la zona personal
+			PadDelegate pad = DelegatePADUtil.getPadDelegate();
+			pad.logRegistroExternoPreparado(raWS.getAsientoRegistral(), raWS.getAnexos(), idPersistencia, diasPersistencia);
+		}
+		
 		return raWS;
 	}
 
@@ -134,6 +157,14 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 		RdsDelegate rdsDelegate = DelegateRDSUtil.getRdsDelegate();
 		rdsDelegate.asociarFirmaDocumento(referenciaRDS.getAsientoRegistral(), firma);
 		ResultadoRegistroTelematico res = r.registrar("LOCAL",referenciaRDS);
+		
+		// Tras registrar comprobamos si el registro tenia usos de persistencia y si es asi los borramos
+		 List lu = rdsDelegate.listarUsos(referenciaRDS.getAsientoRegistral());
+		 if (lu != null && lu.size() > 1) {
+			 String idPersistencia = generarIdPersistenciaAsiento(referenciaRDS);
+			 rdsDelegate.eliminarUsos(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE, idPersistencia);
+		 }
+		
 		return res;
 	}
    
@@ -310,5 +341,55 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 				dSal.getDatosInteresado().setIdentificadorUsuario(p.getUsuarioSeycon());
 			}
 		}
+	}
+	
+	  /**
+	 * Genera para un registro preparado para firmar los usos RDS de tipo tramite persistente para el asiento y documentos asociados.
+	 */
+	private String generarUsosRDSPrepararRegistro(String idPersistencia, ReferenciaRDSAsientoRegistral ra ) throws Exception {
+		
+		try{
+			RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
+			UsoRDS uso;
+			
+			// Creamos uso para asiento					
+			uso = new UsoRDS();
+			uso.setReferenciaRDS(ra.getAsientoRegistral());
+			uso.setReferencia(idPersistencia);
+			uso.setTipoUso(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE);
+			rds.crearUso(uso);
+			
+			// Creamos usos para documentos asiento
+			Iterator it = ra.getAnexos().keySet().iterator();
+	    	while (it.hasNext()){
+	    		ReferenciaRDS refAnexo = (ReferenciaRDS) ra.getAnexos().get((String) it.next());
+	    		
+	    		// Verificamos que no se este usando el doc en otra parte
+	    		List usos = rds.listarUsos(refAnexo);
+	    		if (usos.size() > 0) {
+	    			throw new Exception("Existen usos asociados para el documento " + refAnexo.getCodigo());
+	    		}
+	    		
+	    		// Creamos el uso
+	    		uso = new UsoRDS();
+				uso.setReferenciaRDS(refAnexo);
+				uso.setReferencia(idPersistencia);
+				uso.setTipoUso(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE);
+				rds.crearUso(uso);	    		
+	    	}    	
+	    	
+	    	return idPersistencia;
+	    	
+		}catch(Exception ex){
+			log.error("Excepcion generando usos RDS para registro preparado",ex);
+			throw new Exception("Excepcion generando usos RDS para registro preparado: " + ex.getMessage());
+		}
+		
+	}
+
+
+	private String generarIdPersistenciaAsiento(ReferenciaRDSAsientoRegistral ra) {
+		String idPersistencia = Constantes.PREFIJO_USO_PREPARARREGISTRO + ra.getAsientoRegistral().getCodigo();
+		return idPersistencia;
 	}
 }
