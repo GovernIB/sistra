@@ -82,6 +82,10 @@ public final class DelegateUtil {
         return (RegistroExternoDelegate) DelegateFactory.getDelegate(RegistroExternoDelegate.class);
     }
     
+    public static RegistroExternoPreparadoDelegate getRegistroExternoPreparadoDelegate() {
+        return (RegistroExternoPreparadoDelegate) DelegateFactory.getDelegate(RegistroExternoPreparadoDelegate.class);
+    }
+    
     public static LogRegistroDelegate getLogRegistroDelegate() {
         return (LogRegistroDelegate) DelegateFactory.getDelegate(LogRegistroDelegate.class);
     }

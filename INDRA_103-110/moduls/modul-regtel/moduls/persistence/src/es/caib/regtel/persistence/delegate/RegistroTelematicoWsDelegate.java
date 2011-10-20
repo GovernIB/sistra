@@ -37,9 +37,9 @@ public class RegistroTelematicoWsDelegate implements StatelessDelegate {
         }
     }
 
-	public ReferenciaRDSAsientoRegistral prepararRegistroEntrada(DatosRegistroEntrada entrada) throws DelegateException { 
+	public ReferenciaRDSAsientoRegistral prepararRegistroEntrada(DatosRegistroEntrada entrada, int diasPersistencia) throws DelegateException { 
         try {
-            return getFacade().prepararRegistroEntrada(entrada);
+            return getFacade().prepararRegistroEntrada(entrada, diasPersistencia);
         } catch (Exception e) {
             throw new DelegateException(e);
         }

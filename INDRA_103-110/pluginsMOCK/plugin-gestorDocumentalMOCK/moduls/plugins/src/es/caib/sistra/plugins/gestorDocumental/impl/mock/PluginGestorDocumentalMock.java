@@ -80,12 +80,12 @@ public class PluginGestorDocumentalMock implements PluginGestorDocumentalIntf{
 					throw new Exception("El documento no tiene los usos asociados correctos");
 				}
 			}catch(Exception e){
-				log.debug("Error al consolidar el documento. ",e);
+				log.error("Error al consolidar el documento. ",e);
 				throw e;
 			
 			}
 		}else{
-			log.debug("El documento no tiene usos asociados");
+			log.error("El documento no tiene usos asociados");
 			throw new Exception("El documento no tiene usos asociados");
 		}
 	}
@@ -98,7 +98,7 @@ public class PluginGestorDocumentalMock implements PluginGestorDocumentalIntf{
 		if (!dir.exists()) {
 			if(!dir.mkdir()){
 				log.debug("Error: No se puede crear el directorio "+path);
-				throw new Exception("Error: No se puede crear el directorio.");
+				throw new Exception("Error: No se puede crear el directorio:"+path);
 			}
 		}
 		if (dir.isDirectory()) {
@@ -140,11 +140,11 @@ public class PluginGestorDocumentalMock implements PluginGestorDocumentalIntf{
 				return path.substring(Constants.DIRECTORIO_RAIZ.length());
 			}else{
 				log.debug("Error: El Directorio "+path+" no existe. ");
-				throw new Exception("Error: El Directorio no existe.");
+				throw new Exception("Error: El Directorio "+path+" no existe.");
 			}
 		}else{
 			log.debug("Error: El Directorio "+path+" no existe. ");
-			throw new Exception("Error: El Directorio no existe.");
+			throw new Exception("Error: El Directorio "+path+" no existe.");
 		}
 				
 	}
@@ -160,7 +160,7 @@ public class PluginGestorDocumentalMock implements PluginGestorDocumentalIntf{
 			carpeta[0] = new File(path+"/"+nuevaCarpeta);
 			if (!carpeta[0].exists()) {
 				if(!carpeta[0].mkdir()){
-					throw new Exception("Error: No se puede crear el directorio.");
+					throw new Exception("Error: No se puede crear el directorio " + path+"/"+nuevaCarpeta);
 				}
 			}
 		}

@@ -29,6 +29,7 @@ import es.caib.regtel.model.ResultadoRegistro;
 import es.caib.regtel.model.ResultadoRegistroTelematico;
 import es.caib.regtel.persistence.delegate.DelegateUtil;
 import es.caib.regtel.persistence.util.Configuracion;
+import es.caib.regtel.persistence.util.Constantes;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.firma.FirmaIntf;
 import es.caib.sistra.plugins.firma.PluginFirmaIntf;
@@ -753,10 +754,16 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	    		List usos = rds.listarUsos(refRDS);
 	    		if (usos.size() > 0){
 	    			if (tipoUso.equals(ConstantesRDS.TIPOUSO_REGISTROENTRADA) && usos.size() == 1){	    				
-	    				UsoRDS usoPers = (UsoRDS) usos.get(0);
+	    				UsoRDS usoPers = (UsoRDS) usos.get(0);	    				
 	    				if (usoPers.getTipoUso().equals(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE) &&
-	    					usoPers.getReferencia().equals(datosPropios.getInstrucciones().getIdentificadorPersistencia())){
+	    						( 	usoPers.getReferencia().startsWith(Constantes.PREFIJO_USO_PREPARARREGISTRO)
+	    								||
+	    							( datosPropios != null && usoPers.getReferencia().equals(datosPropios.getInstrucciones().getIdentificadorPersistencia()))
+	    						)
+	    					){
 	    						// Uso correcto, es el proceso de registro y todavia tiene el uso de persistencia
+	    						// (bien es un registro asociado a un tramite de sistra o bien a un registro externo que se
+	    						//  ha preparado para que se registre con firma con posterioridad)
 	    				}else{
 	    					throw new Exception("El documento con codigo " + refRDS.getCodigo() + " ya se esta utilizando en el sistema (existen usos asociados)");
 	    				}

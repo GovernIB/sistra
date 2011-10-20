@@ -14,6 +14,8 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.commons.lang.StringUtils;
+
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.regtel.model.ResultadoRegistroTelematico;
@@ -51,12 +53,22 @@ import es.caib.util.StringUtil;
         endpointInterface = "es.caib.regtel.ws.v2.services.BackofficeFacade")
 public class BackofficeFacadeImpl implements BackofficeFacade {
 	
-	public ReferenciaRDSAsientoRegistral prepararRegistroEntrada(DatosRegistroEntrada entrada) throws BackofficeFacadeException {
+	public ReferenciaRDSAsientoRegistral prepararRegistroEntrada(DatosRegistroEntrada entrada, String diasPersistencia) throws BackofficeFacadeException {
 		ReferenciaRDSAsientoRegistral raWS = null;
 		try{
 			RegistroTelematicoWsDelegate delegate = DelegateUtil.getRegistroTelematicoWsDelegate();
 			es.caib.regtel.model.ws.DatosRegistroEntrada dEnt = prepararDatosRegistroEntradaIntf(entrada);
-			es.caib.regtel.model.ReferenciaRDSAsientoRegistral ar = delegate.prepararRegistroEntrada(dEnt);
+			
+			int dp = 0;
+			if (StringUtils.isNotEmpty(diasPersistencia)) {
+				try {
+					dp = Integer.parseInt(diasPersistencia);
+				} catch (NumberFormatException nfe) {
+					throw new Exception("El valor indicado en dias de persistencia no es un entero: " + diasPersistencia);
+				}
+			}
+			
+			es.caib.regtel.model.ReferenciaRDSAsientoRegistral ar = delegate.prepararRegistroEntrada(dEnt, dp);
 			raWS = referenciaRDSAsientoRegistralIntfToReferenciaRDSAsientoRegistralWS(ar);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -402,9 +414,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		FirmaIntf firmaIntf = null;
 		if(firma != null){
 			PluginFirmaIntf plgFirma = PluginFactory.getInstance().getPluginFirma();
-			if(firma.getFormato() != null){
-				firmaIntf = plgFirma.parseFirmaFromWS(firma.getFirma(), firma.getFormato().getValue());
-			}
+			firmaIntf = plgFirma.parseFirmaFromWS(firma.getFirma(), firma.getFormato()!=null?firma.getFormato().getValue():null);			
 		}
 		return firmaIntf;
 	}
@@ -465,4 +475,5 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		}
 		return anexos;
 	}
+
 }

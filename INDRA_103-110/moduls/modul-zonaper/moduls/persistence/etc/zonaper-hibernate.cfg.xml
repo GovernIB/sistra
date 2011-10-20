@@ -44,6 +44,7 @@
 		
 		<mapping resource="es/caib/zonaper/model/Delegacion.hbm.xml" />
 		<mapping resource="es/caib/zonaper/model/ParametrosSubsanacion.hbm.xml" />
+		<mapping resource="es/caib/zonaper/model/RegistroExternoPreparado.hbm.xml" />		
 		
     </session-factory>
 

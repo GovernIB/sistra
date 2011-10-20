@@ -274,6 +274,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
      */
     public void asociarFirmaDocumento(ReferenciaRDS refRds,FirmaIntf firma) throws ExcepcionRDS {    	
     	Session session = getSession();     	
@@ -749,6 +750,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
      */
     public void eliminarUsos(String tipoUsoId,String referencia)throws ExcepcionRDS {
     	// Borramos uso

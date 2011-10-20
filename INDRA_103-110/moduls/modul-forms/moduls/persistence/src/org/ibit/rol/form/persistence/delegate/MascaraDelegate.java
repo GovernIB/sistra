@@ -45,6 +45,15 @@ public class MascaraDelegate implements StatelessDelegate {
         }
 
     }
+    
+    public Mascara obtenerMascara(String nombre) throws DelegateException {
+        try {
+            return getFacade().obtenerMascara(nombre);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+
+    }
 
     public void borrarMascara(Long id) throws DelegateException {
         try {
