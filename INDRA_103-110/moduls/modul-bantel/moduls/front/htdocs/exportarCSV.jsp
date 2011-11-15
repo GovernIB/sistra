@@ -112,7 +112,7 @@ function validDate(fecha){
 		<h2><bean:message key="exportCSV.exportarTramites"/></h2>
 		
 		<logic:empty name="tramites">
-			<bean:message key="errors.noGestor" />
+			<bean:message key="errors.noGestorCSV" />
 		</logic:empty>
 		
 		<logic:notEmpty name="tramites">	
