@@ -49,6 +49,12 @@ public class PruebaEscrituraDatosPropios {
 			dato.setDescripcion ("XXXX2");
 			dato.setValor ("YYYY2");
 			solicitud.getDato().add (dato);
+			
+			dato = factoria.crearDato();
+			dato.setTipo (new Character (ConstantesDatosPropiosXML.DATOSOLICITUD_TIPO_INDICE));
+			dato.setDescripcion ("XXXX3");
+			dato.setValor ("YYYY3");
+			solicitud.getDato().add (dato);
 						
 			datosPropios.setSolicitud (solicitud);
 			

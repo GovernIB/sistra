@@ -265,7 +265,7 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
 		    			}
 		    			ss = new Subseccion(dato.getDescripcion());
 		    		}
-		    		else{
+		    		else if(dato.getTipo().charValue() == ConstantesDatosPropiosXML.DATOSOLICITUD_TIPO_CAMPO){
 		    			propiedad = new Propiedad(dato.getDescripcion(),dato.getValor());
 		    			if(ss == null)
 		    			{

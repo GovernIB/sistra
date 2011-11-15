@@ -4,8 +4,10 @@ import java.io.ByteArrayInputStream;
 import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
@@ -36,6 +38,7 @@ import es.caib.zonaper.model.Entrada;
 import es.caib.zonaper.model.EntradaTelematica;
 import es.caib.zonaper.model.EventoExpediente;
 import es.caib.zonaper.model.Expediente;
+import es.caib.zonaper.model.IndiceElemento;
 import es.caib.zonaper.model.NotificacionTelematica;
 import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ElementoExpedientePAD;
@@ -52,6 +55,7 @@ import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.ElementoExpedienteDelegate;
 import es.caib.zonaper.persistence.delegate.EventoExpedienteDelegate;
 import es.caib.zonaper.persistence.delegate.ExpedienteDelegate;
+import es.caib.zonaper.persistence.delegate.IndiceElementoDelegate;
 import es.caib.zonaper.persistence.delegate.PadDelegate;
 
 
@@ -286,7 +290,9 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 				{
 					if ("ca".equals(expediente.getIdioma())){
 						evento.setTitulo("Avís de tramitació");
-					}else{
+					} else if ("en".equals(expediente.getIdioma())) {
+						evento.setTitulo("Processing Notice");
+					} else{
 						evento.setTitulo("Aviso de tramitación");
 					}
 				}
@@ -321,6 +327,12 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 					DelegateUtil.getProcesosAutoDelegate().avisoCreacionElementoExpediente(ele);					
 			}			
 			
+			// Generamos indices de busqueda para expedientes y avisos (solo autenticados)
+			if (StringUtils.isNotEmpty(exped.getSeyconCiudadano())) {
+				crearIndicesExpediente(exped);
+			}
+			
+			
 			return expediente.getIdentificadorExpediente();
 		} catch (Exception e) {
 			log.debug("Excepcion al crear expediente: " + e.getMessage(),e);
@@ -328,6 +340,8 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		}
 	}
 	
+	
+
 	/**
      
      NO SE PERMITEN BAJAS
@@ -494,6 +508,16 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 				
 			} catch (Exception e) {
 				throw new ExcepcionPAD("Excepcion grabando evento expediente: " + e.getMessage(),e);
+			}
+			
+			
+			// Creamos indices de busqueda (solo autenticados)
+			try {
+				if (StringUtils.isNotEmpty(expediente.getUsuarioSeycon())) {
+					crearIndicesEventoExpediente(expediente.getNifRepresentante(), ev);
+				}
+			} catch (Exception e) {
+				throw new ExcepcionPAD("Excepcion creando indices evento expediente: " + e.getMessage(),e);
 			}
 		
 	}	
@@ -1113,6 +1137,72 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		}finally{
 			try {bis.close();}catch(Exception ex){}
 		}
+	}
+	
+	/**
+	 * Crea indices de busqueda para el expediente
+	 * @param expediente
+	 * @throws Exception 
+	 */
+	private void crearIndicesExpediente(Expediente expediente) throws Exception {
+		// Creamos indices expedientes
+		Map indices = new HashMap();
+    	indices.put("Número expediente",  expediente.getIdExpediente());
+    	indices.put("Título", expediente.getDescripcion());
+    	if (expediente.getNifRepresentado() != null) {
+    		indices.put("Nif representado", expediente.getNifRepresentado());
+    		indices.put("Nombre representado", expediente.getNombreRepresentado());
+    	}
+    	crearIndicesBusqueda(expediente.getNifRepresentante(),IndiceElemento.TIPO_EXPEDIENTE,expediente.getCodigo(), indices);
+    	
+		// Creamos indices avisos creados con el expediente
+    	if (expediente.getElementos() != null) {
+    		EventoExpedienteDelegate dlg = DelegateUtil.getEventoExpedienteDelegate();
+    		for (Iterator it = expediente.getElementos().iterator(); it.hasNext();) {
+    			ElementoExpediente ee = (ElementoExpediente) it.next();
+    			if (ee.getTipoElemento().equals(ElementoExpediente.TIPO_AVISO_EXPEDIENTE) ) {
+    				EventoExpediente eve = dlg.obtenerEventoExpediente(ee.getCodigo());
+    				indices = new HashMap();
+    				indices.put("Título", eve.getTitulo());
+    				indices.put("Texto", eve.getTexto());
+    				crearIndicesBusqueda(expediente.getNifRepresentante(),IndiceElemento.TIPO_AVISO_EXPEDIENTE,eve.getCodigo(), indices);
+    			}
+    		}
+    	}
+	}
+	
+	/**
+	 * Crea indices de busqueda para el expediente
+	 * @param nif 
+	 * @param expediente
+	 * @throws Exception 
+	 */
+	private void crearIndicesEventoExpediente(String nif, EventoExpediente evento) throws Exception {
+		Map indices = new HashMap();
+		indices.put("Título", evento.getTitulo());
+		indices.put("Texto", evento.getTexto());
+		crearIndicesBusqueda(nif,IndiceElemento.TIPO_AVISO_EXPEDIENTE,evento.getCodigo(), indices);
+		
+	}
+	
+	/**
+     * Da de alta los indices de busqueda.
+     * @param indices
+     */
+	private void crearIndicesBusqueda(String nif, String tipoElemento, Long idElemento, Map indices) throws Exception {
+		
+		IndiceElementoDelegate dlg = DelegateUtil.getIndiceElementoDelegate();
+		
+		for (Iterator it = indices.keySet().iterator(); it.hasNext();) {
+			String key = (String) it.next();
+			IndiceElemento indiceElemento = new IndiceElemento();
+			indiceElemento.setNif(nif);
+			indiceElemento.setTipoElemento(tipoElemento);
+			indiceElemento.setCodigoElemento(idElemento);
+			indiceElemento.setDescripcion(key);
+			indiceElemento.setValor((String) indices.get(key));
+			dlg.grabarIndiceElemento(indiceElemento);
+		}		
 	}
 	
 }

@@ -663,7 +663,7 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 		for ( Iterator it = datosJustificante.iterator(); it.hasNext(); )
 		{
 			DatoJustificante datoJustificante = ( DatoJustificante ) it.next();
-			if ( datoJustificante.getTipo() == DatoJustificante.TIPO_CAMPO )
+			if ( datoJustificante.getTipo() == DatoJustificante.TIPO_CAMPO || datoJustificante.getTipo() == DatoJustificante.TIPO_INDICE)
 			{
 				inspectEntidad( AuditoriaUtil.getIdTraVerJust( idTramite, version, datoJustificante.getTipo(), datoJustificante.getOrden()), 
 						datoJustificante, lhmScripts, setDominios );

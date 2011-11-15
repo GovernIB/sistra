@@ -1,18 +1,24 @@
 package es.caib.zonaper.persistence.ejb;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import org.apache.commons.lang.StringUtils;
-
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
+
+import org.apache.commons.lang.StringUtils;
+
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
 import es.caib.util.CredentialUtil;
+import es.caib.zonaper.model.CodigoElementoExpediente;
 import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.ElementoExpedienteItf;
 import es.caib.zonaper.model.Expediente;
@@ -57,6 +63,70 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 			throw new EJBException(e);
 		}					
 		
+	}	
+	
+	/**
+	 * Acceso autenticado. Solo accesible por usuario y delegados.
+	 * 
+	 * Recupera lista de ids de expedientes asociadas a los elementos. 
+	 * Retorna Map con key=codigo elemento y value=id expediente asociado. Si un elemento no tiene asociado expediente no estará en la map.
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+	public Map obtenerIdsExpedienteElementos( List codigosElementos )
+	{	
+		Session session = getSession();
+        try 
+        {
+        	Map res = new HashMap();
+        	
+        	if (codigosElementos == null || codigosElementos.size() <= 0) {
+        		return res;
+        	}
+        	
+        	// Generamos where
+        	StringBuilder where = new StringBuilder(codigosElementos.size()); 
+        	for (int i=0;i<codigosElementos.size();i++) {
+        		if (i > 0) {
+        			where.append(" OR ");
+        		}
+        		where.append(" (e.tipoElemento = :tipo" + i + " AND e.codigoElemento = :codigo" + i + " ) " );        		
+        	}
+        	
+        	// Generamos query para obtener lista de ids de expediente
+			Query query = 
+        		session.createQuery("FROM ElementoExpediente e WHERE " + where.toString()  );
+			for (int i=0;i<codigosElementos.size();i++) {
+				CodigoElementoExpediente cee =  (CodigoElementoExpediente) codigosElementos.get(i);
+				query.setParameter("tipo" + i, cee.getTipo());
+				query.setParameter("codigo" + i, cee.getCodigo());
+			}
+			   
+			
+			// Ejecutamos query
+			List listaElem = query.list();
+			for (Iterator it = listaElem.iterator();it.hasNext();) {
+				ElementoExpediente ee = (ElementoExpediente) it.next();
+				res.put(new CodigoElementoExpediente(ee.getTipoElemento(), ee.getCodigoElemento()), ee.getExpediente().getCodigo());
+			}
+			
+        	// Devolvemos map
+			return res;
+        }
+        catch( HibernateException he )
+        {
+        	throw new EJBException( he );
+        }
+        catch( Exception exc )
+        {
+        	throw new EJBException( exc );
+        }
+        finally
+        {
+        	close( session );
+        }
+        
 	}	
 	
 	/**

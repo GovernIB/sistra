@@ -3,6 +3,19 @@
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
+
+<script type="text/javascript">
+<!--
+function limpiarFiltro()
+    {
+    	var form = document.getElementById("formFiltro");
+    	var filtro = document.getElementById("filtro");
+    	filtro.value = "";
+        form.submit();
+	}
+-->
+</script>
+
 <bean:define id="sesion" name="<%=es.caib.zonaper.front.Constants.DATOS_SESION_KEY%>" type="es.caib.zonaper.model.DatosSesion" />
 <bean:define id="firstPage" value="0" />
 		<!-- informacio -->
@@ -11,13 +24,36 @@
 			<p><bean:message key="estadoExpedientes.encabezado.parrafo1.texto" /></p>
 			
 			<logic:empty name="page" property="list">
-				<p class="alerta">
-					<bean:message key="estadoExpedientes.noExisten" />
-				</p>
+				<logic:empty name="filtro">
+					<p class="alerta">
+						<bean:message key="estadoExpedientes.noExisten" />
+					</p>
+				</logic:empty>
+				<logic:notEmpty name="filtro">
+					<p>
+						<html:form styleId="formFiltro" action="/protected/filtrarExpedientes">
+							<html:text property="filtro" styleId="filtro"/> 
+							<html:submit><bean:message key="estadoExpedientes.filtro.buscar" /></html:submit> 
+							<a id="verTodo" href="#" onclick="javascript:limpiarFiltro();"><bean:message key="estadoExpedientes.filtro.eliminar" /></a>
+						</html:form>
+					</p>
+					<p class="alerta">
+						<bean:message key="estadoExpedientes.filtro.noExisten" />
+					</p>					
+				</logic:notEmpty>
 			</logic:empty>
 			
 			<logic:notEmpty name="page" property="list" >
 				<p><bean:message key="estadoExpedientes.encabezado.parrafo2.texto" /></p>
+				<p>
+					<html:form styleId="formFiltro" action="/protected/filtrarExpedientes">
+						<html:text property="filtro"  styleId="filtro"/> 
+						<html:submit><bean:message key="estadoExpedientes.filtro.buscar" /></html:submit>
+						<logic:notEmpty name="filtro">
+						<a id="verTodo" href="#" onclick="javascript:limpiarFiltro();"><bean:message key="estadoExpedientes.filtro.eliminar" /></a>
+						</logic:notEmpty>
+					</html:form>
+				</p>
 				<table class="llistatElements">
 				<thead>
 						<tr>

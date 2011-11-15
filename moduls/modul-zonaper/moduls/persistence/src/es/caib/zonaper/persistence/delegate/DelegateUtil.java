@@ -101,5 +101,9 @@ public final class DelegateUtil {
     public static AvisosDelegacionDelegate getAvisosDelegacionDelegate() {
         return (AvisosDelegacionDelegate) DelegateFactory.getDelegate(AvisosDelegacionDelegate.class);
     }
+    
+    public static IndiceElementoDelegate getIndiceElementoDelegate() {
+        return (IndiceElementoDelegate) DelegateFactory.getDelegate(IndiceElementoDelegate.class);
+    }
 }
 

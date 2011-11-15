@@ -278,4 +278,10 @@ div.informacion { background:#fff url(../imgs/mensaje/informacion.gif) no-repeat
 form.opcions input.pcCalendario, div.remarcar input.pcCalendario { margin-right:0.5em; }
 form.opcions button.pcbuttonCalendario, div.remarcar button.pcbuttonCalendario { margin-right:1.5em; }
 
+/* Buscador expedientes */
+#formFiltro { padding:.8em 1em; margin-bottom:1.5em; border:1px solid #f2f2f2; }
+#filtro { width:25em; padding:.2em .2em .2em 2.3em; background:#fff url(../imgs/iconos/ico_cerca.gif) no-repeat .5em 50%; border:1px solid #7f9db9; }
+#filtro:focus { background-color:#ffc; }
+#formFiltro a { text-decoration:underline; text-transform:uppercase; margin-left:3em; }
+
 
