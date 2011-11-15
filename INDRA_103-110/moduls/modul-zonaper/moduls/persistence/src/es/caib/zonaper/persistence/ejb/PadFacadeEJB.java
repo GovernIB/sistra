@@ -2024,12 +2024,19 @@ public abstract class PadFacadeEJB implements SessionBean{
 		
 		for (Iterator it = indices.keySet().iterator(); it.hasNext();) {
 			String key = (String) it.next();
+			String valor = (String) indices.get(key);
+			
+			// Si el valor es nulo, no tiene sentido crear indice
+			if (StringUtils.isBlank(valor)) {
+				continue;
+			}
+			
 			IndiceElemento indiceElemento = new IndiceElemento();
 			indiceElemento.setNif(nif);
 			indiceElemento.setTipoElemento(tipoElemento);
 			indiceElemento.setCodigoElemento(idElemento);
 			indiceElemento.setDescripcion(key);
-			indiceElemento.setValor((String) indices.get(key));
+			indiceElemento.setValor(valor);
 			dlg.grabarIndiceElemento(indiceElemento);
 		}
 		
