@@ -46,7 +46,7 @@ function showCalendar(id, format) {
     // uncomment the following line to hide the week numbers
     // cal.weekNumbers = false;
     calendar = cal;                  // remember it in the global var
-    cal.setRange(2003, 2010);        // min/max year allowed.
+    cal.setRange(2003, 2050);        // min/max year allowed.
     cal.create();
   }
   calendar.setDateFormat(format);    // set the specified date format
