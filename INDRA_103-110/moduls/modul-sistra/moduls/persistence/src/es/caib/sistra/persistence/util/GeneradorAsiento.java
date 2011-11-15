@@ -610,7 +610,7 @@ public class GeneradorAsiento {
 						throw new Exception("No se ha establecido la traducción de un dato de justificante para idioma " + tramiteInfo.getDatosSesion().getLocale().getLanguage());
 					}
 					datS.setDescripcion(tradatjus.getDescripcion());
-					if (datJ.getTipo() == DatoJustificante.TIPO_CAMPO){
+					if (datJ.getTipo() == DatoJustificante.TIPO_CAMPO || datJ.getTipo() == DatoJustificante.TIPO_INDICE){
 						
 						// Comprobamos si se ha especificado una referencia a campo o un script
 						if (StringUtils.isNotEmpty(datJ.getReferenciaCampo())){						

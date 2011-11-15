@@ -72,6 +72,7 @@
           <xs:restriction base="xs:token">
             <xs:enumeration value="C"/>
             <xs:enumeration value="B"/>
+            <xs:enumeration value="I"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>

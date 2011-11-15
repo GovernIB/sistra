@@ -8,5 +8,9 @@ public interface DocumentoEntrada
 	public long getCodigoRDS();
 
 	public String getIdentificador();
+	
+	public int getNumeroInstancia();
+	
+	public String getDescripcion();
 
 }

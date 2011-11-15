@@ -29,7 +29,7 @@
 </tr>
 <tr>
     <td class="labelo"><bean:message key="datoJustificante.tipo"/></td>
-    <td class="input"><bean:message key="datoJustificante.separadorBloques"/><html:radio property="values.tipo" value="B"/> <bean:message key="datoJustificante.campo"/><html:radio property="values.tipo" value="C"/></td>
+    <td class="input"><bean:message key="datoJustificante.separadorBloques"/><html:radio property="values.tipo" value="B"/> <bean:message key="datoJustificante.campo"/><html:radio property="values.tipo" value="C"/> <bean:message key="datoJustificante.indice"/><html:radio property="values.tipo" value="I"/></td>
 </tr>
 <!-- 
 <tr>

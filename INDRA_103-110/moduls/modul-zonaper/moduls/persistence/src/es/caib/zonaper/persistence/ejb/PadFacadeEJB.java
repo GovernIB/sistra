@@ -45,6 +45,7 @@ import es.caib.xml.avisonotificacion.factoria.impl.AvisoNotificacion;
 import es.caib.xml.datospropios.factoria.ConstantesDatosPropiosXML;
 import es.caib.xml.datospropios.factoria.FactoriaObjetosXMLDatosPropios;
 import es.caib.xml.datospropios.factoria.ServicioDatosPropiosXML;
+import es.caib.xml.datospropios.factoria.impl.Dato;
 import es.caib.xml.datospropios.factoria.impl.DatosPropios;
 import es.caib.xml.datospropios.factoria.impl.Documento;
 import es.caib.xml.datospropios.factoria.impl.TramiteSubsanacion;
@@ -58,15 +59,18 @@ import es.caib.xml.registro.factoria.impl.AsientoRegistral;
 import es.caib.xml.registro.factoria.impl.DatosAnexoDocumentacion;
 import es.caib.xml.registro.factoria.impl.DatosInteresado;
 import es.caib.xml.registro.factoria.impl.Justificante;
+import es.caib.zonaper.model.DocumentoEntrada;
 import es.caib.zonaper.model.DocumentoEntradaPreregistro;
 import es.caib.zonaper.model.DocumentoEntradaTelematica;
 import es.caib.zonaper.model.DocumentoNotificacionTelematica;
 import es.caib.zonaper.model.DocumentoPersistente;
 import es.caib.zonaper.model.DocumentoRegistro;
 import es.caib.zonaper.model.ElementoExpediente;
+import es.caib.zonaper.model.Entrada;
 import es.caib.zonaper.model.EntradaPreregistro;
 import es.caib.zonaper.model.EntradaTelematica;
 import es.caib.zonaper.model.Expediente;
+import es.caib.zonaper.model.IndiceElemento;
 import es.caib.zonaper.model.LogRegistro;
 import es.caib.zonaper.model.LogRegistroId;
 import es.caib.zonaper.model.NotificacionTelematica;
@@ -84,6 +88,7 @@ import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.EntradaPreregistroDelegate;
 import es.caib.zonaper.persistence.delegate.EntradaTelematicaDelegate;
 import es.caib.zonaper.persistence.delegate.ExpedienteDelegate;
+import es.caib.zonaper.persistence.delegate.IndiceElementoDelegate;
 import es.caib.zonaper.persistence.delegate.LogRegistroDelegate;
 import es.caib.zonaper.persistence.delegate.NotificacionTelematicaDelegate;
 import es.caib.zonaper.persistence.delegate.PadAplicacionDelegate;
@@ -434,12 +439,15 @@ public abstract class PadFacadeEJB implements SessionBean{
      */
     public void confirmarPreregistro( Long codigoPreregistro, String oficina, String codProvincia,String codMunicipio, String descMunicipio) throws ExcepcionPAD
     {    		
+    		// Obtenemos entrada preregistro
     		EntradaPreregistro entrada = null;
 			try {
 				entrada = DelegateUtil.getEntradaPreregistroDelegate().obtenerEntradaPreregistroReg( codigoPreregistro );
 			} catch (es.caib.zonaper.persistence.delegate.DelegateException e) {
 				throw new ExcepcionPAD("No se puede acceder a la entrada de preregistro " + codigoPreregistro, e);
 			}
+			
+			// Realizamos confirmacion preregistro
 	    	confirmarPreregistroImpl(entrada,ConstantesBTE.CONFIRMACIONPREREGISTRO_REGISTRO,oficina,codProvincia, codMunicipio, descMunicipio,null,null);
     
     }
@@ -945,6 +953,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	// Obtenemos documentos
     	String idPersistencia = null;
     	String habilitarAvisos= null,avisoSMS= null,avisoEmail= null,habilitarNotificacionTelematica=null;
+    	DatosPropios datosPropios = null;
     	it = asiento.getDatosAnexoDocumentacion().iterator();    
     	TramiteSubsanacion tramiteSubsanacion = null;
     	while (it.hasNext()){
@@ -961,7 +970,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     		// Si el documento es el de datos propios obtenemos id persistencia
     		if (da.getTipoDocumento().charValue() == ConstantesAsientoXML.DATOSANEXO_DATOS_PROPIOS){
     			FactoriaObjetosXMLDatosPropios factoria = ServicioDatosPropiosXML.crearFactoriaObjetosXML();
-    			DatosPropios datosPropios = factoria.crearDatosPropios(new ByteArrayInputStream (consultarDocumentoRDS(ref.getCodigo(),ref.getClave())));
+    			datosPropios = factoria.crearDatosPropios(new ByteArrayInputStream (consultarDocumentoRDS(ref.getCodigo(),ref.getClave())));
     			idPersistencia = datosPropios.getInstrucciones().getIdentificadorPersistencia();
     			habilitarAvisos = datosPropios.getInstrucciones().getHabilitarAvisos();
     			avisoEmail = datosPropios.getInstrucciones().getAvisoEmail();
@@ -1008,10 +1017,15 @@ public abstract class PadFacadeEJB implements SessionBean{
     	// Si es un tramite de subsanacion, creamos elemento expediente asociado y actualizamos expediente
     	if (tramiteSubsanacion != null){
     		DelegateUtil.getProcesosAutoDelegate().actualizarExpedienteTramiteSubsanacion(entrada.getCodigo(),ElementoExpediente.TIPO_ENTRADA_TELEMATICA);    		
-    	}    	
+    	}
+    	
+    	// Generamos indices de busqueda (solo para autenticados)
+    	if (entrada.getNivelAutenticacion() != 'A') {
+    		 // Crea los indices para la entrada
+    		crearIndicesEntrada(entrada, datosPropios);    		 
+    	}
     	    	    	
     }
-    
     
     /**
      * Realiza log de un registro telematico que no procede de sistra
@@ -1116,6 +1130,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	}
     	    	
     	// Obtenemos documentos: datos aviso, datos oficio y documentos anexos
+    	OficioRemision oficioRemision = null;
     	int index=0;
     	it = asiento.getDatosAnexoDocumentacion().iterator();    	
     	while (it.hasNext()){
@@ -1166,7 +1181,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     		    //  Datos oficio remision: establecemos datos oficio en notificacion
     			case ConstantesAsientoXML.DATOSANEXO_OFICIO_REMISION:
     				FactoriaObjetosXMLOficioRemision factoriaOR = ServicioOficioRemisionXML.crearFactoriaObjetosXML();
-    				OficioRemision oficioRemision = factoriaOR.crearOficioRemision (new ByteArrayInputStream (consultarDocumentoRDS(ref.getCodigo(),ref.getClave())));
+    				oficioRemision = factoriaOR.crearOficioRemision (new ByteArrayInputStream (consultarDocumentoRDS(ref.getCodigo(),ref.getClave())));
     				
     				notificacion.setCodigoRdsOficio(ref.getCodigo());
     				notificacion.setClaveRdsOficio(ref.getClave());
@@ -1234,12 +1249,17 @@ public abstract class PadFacadeEJB implements SessionBean{
     	
     	// Realizamos aviso de movilidad
     	DelegateUtil.getProcesosAutoDelegate().avisoCreacionElementoExpediente(el);    	
-    	        	
+
+    	// Si no requiere acuse generamos indices de busqueda. Si requiere acuse se indexara en el momento de firmar el acuse (solo para autenticados)
+    	if (StringUtils.isNotEmpty(notificacion.getUsuarioSeycon()) && !notificacion.isFirmarAcuse()) {
+    		 // Crea los indices para la entrada
+    		crearIndicesSalida(notificacion, oficioRemision);    		 
+    	}
+    	
     }
     
-        
-    
-    /**
+
+	/**
      * Crea entrada en el log de preregistro
      * @param idPersistencia
      * @param justificante
@@ -1390,6 +1410,12 @@ public abstract class PadFacadeEJB implements SessionBean{
     	// Si es un tramite de subsanacion actualizamos expediente
     	if (tramiteSubsanacion != null){
     		DelegateUtil.getProcesosAutoDelegate().actualizarExpedienteTramiteSubsanacion(entrada.getCodigo(),ElementoExpediente.TIPO_ENTRADA_PREREGISTRO);    		
+    	}
+    	
+    	// Generamos indices de busqueda (solo para autenticados)
+    	if (entrada.getNivelAutenticacion() != 'A') {
+    		 // Crea los indices para la entrada
+    		crearIndicesEntrada(entrada, datosPropios);    		 
     	}
     }   
     
@@ -1751,6 +1777,20 @@ public abstract class PadFacadeEJB implements SessionBean{
 							entrada.getCodigo());
 			
 			
+			
+			// En caso de confirmarse por registro de entrada añadimos el indice de num de registro (solo autenticados)
+			if ( entrada.getNivelAutenticacion() != 'A' && 
+					(
+						tipoConfirmacionPreregistro.equals(ConstantesBTE.CONFIRMACIONPREREGISTRO_REGISTRO) ||
+						tipoConfirmacionPreregistro.equals(ConstantesBTE.CONFIRMACIONPREREGISTRO_AUTOMATICA_REGISTRO)
+				 	)
+				){				
+					Map indices = new HashMap();
+					indices.put("Número registro", numeroRegistro);
+					crearIndicesBusqueda(entrada.getNifRepresentante(), IndiceElemento.TIPO_ENTRADA_PREREGISTRO, entrada.getCodigo(), indices);								
+			}
+			
+			
 			// Realizamos log en AUDITA			
 			//	Si es la confirmacion de un preenvio con confirmacion automatica no lo auditamos ya que se audito al hacerlo automaticamente	
 			if (!tipoConfirmacionPreregistro.equals(ConstantesBTE.CONFIRMACIONPREREGISTRO_AUTOMATICA_REGISTRO)){
@@ -1892,6 +1932,108 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    	// No existe
 	    	return "N";    	
 	    }
+
+	/**
+     * Crea los indices de búsqueda para una entrada autenticada (registro, envio, preregistro o preeenvio)
+     * @param justificante
+     * @param datosPropios
+	 * @throws Exception 
+     */
+    private void crearIndicesEntrada(Entrada entrada, DatosPropios datosPropios) throws Exception {
+		
+		// Establecemos indices a crear
+    	Map indices = new HashMap();
+    	
+    	// - Número registro / preregistro
+    	if (entrada instanceof EntradaTelematica) {
+    		indices.put("Número registro",  entrada.getNumeroRegistro());
+    	} else if (entrada instanceof EntradaPreregistro) {
+    		indices.put("Número preregistro",  entrada.getNumeroPreregistro());
+    	}
+    	
+    	// - Titulo tramite
+    	indices.put("Título trámite", entrada.getDescripcionTramite());
+    	
+    	// - Representado
+    	indices.put("Nif representado",  entrada.getNifRepresentado());
+    	indices.put("Nombre representado",  entrada.getNombreRepresentado());
+    	
+    	// - Título documentos aportados
+    	Iterator it = entrada.getDocumentos().iterator();    
+    	while (it.hasNext()){
+    		DocumentoEntrada doc = (DocumentoEntrada) it.next();
+    		if (!doc.getIdentificador().equals(ConstantesAsientoXML.IDENTIFICADOR_DATOS_PROPIOS)) {
+    			indices.put(doc.getIdentificador() + " (" + doc.getNumeroInstancia() + ")", doc.getDescripcion());
+    		}    		    	
+    	}
+    	
+    	// - Datos propios
+    	if (datosPropios.getSolicitud() != null &&
+        		datosPropios.getSolicitud().getDato() != null ) {
+    		it = datosPropios.getSolicitud().getDato().iterator();
+    		while (it.hasNext()) {
+    			Dato dato = (Dato) it.next ();
+    			if (dato.getTipo().charValue() == ConstantesDatosPropiosXML.DATOSOLICITUD_TIPO_INDICE || 
+    				dato.getTipo().charValue() == ConstantesDatosPropiosXML.DATOSOLICITUD_TIPO_CAMPO) {
+    					indices.put(dato.getDescripcion(), dato.getValor());
+    			}    				
+    		}
+    	}
+    	
+    	// Creamos indices
+    	// 	- Obtenemos nif y tipo elemento
+    	String nif = null;
+    	String tipoElemento = null;
+    	if (entrada instanceof EntradaTelematica) {
+    		nif = ((EntradaTelematica) entrada).getNifRepresentante(); 
+    		tipoElemento = IndiceElemento.TIPO_ENTRADA_TELEMATICA;
+    	} else if (entrada instanceof EntradaPreregistro) {
+    		nif = ((EntradaPreregistro) entrada).getNifRepresentante();
+    		tipoElemento = IndiceElemento.TIPO_ENTRADA_PREREGISTRO;    
+    	}
+    	// - Insertamos en bbdd
+    	crearIndicesBusqueda(nif, tipoElemento, entrada.getCodigo(), indices);
+    	
+	}
+    
+    
+    /**
+     * Crea indices para una notificacion.
+     * @param notificacion Notificacion
+     * @param oficioRemision 
+     * @throws Exception 
+     */
+    private void crearIndicesSalida(NotificacionTelematica notificacion, OficioRemision oficioRemision) throws Exception {
+
+		// Establecemos indices a crear
+    	Map indices = new HashMap();
+    	indices.put("Número registro",  notificacion.getNumeroRegistro());
+    	indices.put("Título oficio", oficioRemision.getTitulo());
+    	indices.put("Texto oficio", oficioRemision.getTexto());
+    	crearIndicesBusqueda(notificacion.getNifRepresentante(), IndiceElemento.TIPO_NOTIFICACION, notificacion.getCodigo(), indices);
+		
+	}
+
+    /**
+     * Da de alta los indices de busqueda.
+     * @param indices
+     */
+	private void crearIndicesBusqueda(String nif, String tipoElemento, Long idElemento, Map indices) throws Exception {
+		
+		IndiceElementoDelegate dlg = DelegateUtil.getIndiceElementoDelegate();
+		
+		for (Iterator it = indices.keySet().iterator(); it.hasNext();) {
+			String key = (String) it.next();
+			IndiceElemento indiceElemento = new IndiceElemento();
+			indiceElemento.setNif(nif);
+			indiceElemento.setTipoElemento(tipoElemento);
+			indiceElemento.setCodigoElemento(idElemento);
+			indiceElemento.setDescripcion(key);
+			indiceElemento.setValor((String) indices.get(key));
+			dlg.grabarIndiceElemento(indiceElemento);
+		}
+		
+	}
 	
 		
 	    

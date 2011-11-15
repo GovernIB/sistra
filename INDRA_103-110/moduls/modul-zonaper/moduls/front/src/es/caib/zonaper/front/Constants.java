@@ -71,4 +71,17 @@ public class Constants implements Serializable
     public static final String IMPLEMENTACION_FIRMA_KEY 			= "implementacionFirma";
 	
     public static final String MOSTRAR_EN_IFRAME = "mostrarSistraEnIframe";
+    
+    /**
+     * Atributo de sesión para almacenar la página de expedientes actual.
+     */
+    public static final String PAGE_KEY = "es.caib.zonaper.front.pagina";
+    
+    /**
+     * Atributos de sesión para guardar el filtrado de expedientes.
+     */
+    public static final String FILTRO_KEY = "es.caib.zonaper.front.filtro"; // Palabra de filtro
+    public static final String FILTRO_LISTA_KEY = "es.caib.zonaper.front.filtroLista"; // Expedientes filtrados
+    
+    
 }

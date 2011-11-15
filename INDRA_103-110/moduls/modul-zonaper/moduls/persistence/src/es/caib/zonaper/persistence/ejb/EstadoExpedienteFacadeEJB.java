@@ -1,6 +1,8 @@
 package es.caib.zonaper.persistence.ejb;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -50,15 +52,38 @@ public abstract class EstadoExpedienteFacadeEJB extends HibernateEJB
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}" 
      */
-	public Page busquedaPaginadaExpedientes(int pagina, int longitudPagina )
+	public Page busquedaPaginadaExpedientes(int pagina, int longitudPagina, List filtroExpe )
 	{
 		Session session = getSession();
         try 
         {
+        	// Obtenemos nif usuario autenticado
         	String nifUser = PluginFactory.getInstance().getPluginLogin().getNif(this.ctx.getCallerPrincipal());
+        	
+        	// Construimos sql de filtro expedientes
+        	String sqlFiltro = "";
+        	if (filtroExpe != null) {
+        		// Añadimos lista de expedientes	
+	        	sqlFiltro = " AND e.id in (:filtroExpe) ";        		
+        	}
+        	
+        	// Realizamos busqueda paginada
         	Query query = 
-        		session.createQuery( "FROM EstadoExpediente AS e WHERE e.nifRepresentante = :nifUser and e.autenticado = 'S' ORDER BY e.fechaActualizacion DESC,e.id DESC" )
-        		.setParameter("nifUser",nifUser);        	
+        		session.createQuery( 
+        				"FROM EstadoExpediente AS e WHERE e.nifRepresentante = :nifUser and e.autenticado = 'S'" +
+        				sqlFiltro + 
+        				" ORDER BY e.fechaActualizacion DESC,e.id DESC" )
+        		.setParameter("nifUser",nifUser);   
+        	if (filtroExpe != null) {
+        		if (filtroExpe.size() > 0) {
+        	  		query.setParameterList("filtroExpe",filtroExpe);
+        		} else {
+        			// Si no se ha especificado ningun expediente en el filtro no debemos devolver ningun resultado
+        			List listaVacia = new ArrayList();
+        			listaVacia.add("");
+        			query.setParameterList("filtroExpe",listaVacia);
+        		}
+        	}
             Page page = new Page( query, pagina, longitudPagina );
             return page;
         }
@@ -83,11 +108,12 @@ public abstract class EstadoExpedienteFacadeEJB extends HibernateEJB
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}" 
      */
-	public Page busquedaPaginadaExpedientesEntidadDelegada(int pagina, int longitudPagina, String nifEntidad )
+	public Page busquedaPaginadaExpedientesEntidadDelegada(int pagina, int longitudPagina, String nifEntidad, List filtroExpe )
 	{
 		Session session = getSession();
         try 
         {
+        	// Comprobamos si usuario esta autenticado
         	Principal sp = this.ctx.getCallerPrincipal(); 
         	PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
         	if (plgLogin.getMetodoAutenticacion(sp) == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO) throw new HibernateException("Debe estar autenticado");
@@ -98,9 +124,30 @@ public abstract class EstadoExpedienteFacadeEJB extends HibernateEJB
         		throw new Exception("El usuario no es delegado de la entidad");
         	}
         	
+        	// Construimos sql viendo si aplicamos filtro expedientes
+        	String sqlFiltro = "";
+        	if (filtroExpe != null) {
+        		// Añadimos lista de expedientes	
+        		sqlFiltro = " AND e.id in (:filtroExpe) "; 	        		        
+        	}
+        	
+        	// Realizamos busqueda paginada
         	Query query = 
-        		session.createQuery( "FROM EstadoExpediente AS e WHERE e.nifRepresentante = :nifEntidad and e.autenticado = 'S' ORDER BY e.fechaActualizacion DESC,e.id DESC" )
-        		.setParameter("nifEntidad",nifEntidad);        	
+        		session.createQuery( 
+        				"FROM EstadoExpediente AS e WHERE e.nifRepresentante = :nifEntidad and e.autenticado = 'S'" + 
+        				sqlFiltro + 
+        				" ORDER BY e.fechaActualizacion DESC,e.id DESC" )
+        		.setParameter("nifEntidad",nifEntidad);    
+        	if (filtroExpe != null) {
+        		if (filtroExpe.size() > 0) {
+        	  		query.setParameterList("filtroExpe",filtroExpe);
+        		} else {
+        			// Si no se ha especificado ningun expediente en el filtro no debemos devolver ningun resultado
+        			List listaVacia = new ArrayList();
+        			listaVacia.add("");
+        			query.setParameterList("filtroExpe",listaVacia);
+        		}
+        	}
             Page page = new Page( query, pagina, longitudPagina );
             return page;
         }

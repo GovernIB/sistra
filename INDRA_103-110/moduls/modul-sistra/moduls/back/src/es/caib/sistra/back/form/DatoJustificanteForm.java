@@ -89,9 +89,9 @@ public class DatoJustificanteForm extends TraduccionValidatorForm
 	        		}
 	        	}
 	        	
-	        	// Valida que si es de tipo campo este rellenado la referencia o el script
+	        	// Valida que si es de tipo campo o indice este rellenado la referencia o el script
 	        	DatoJustificante dj = (DatoJustificante) getValues();
-	        	if (dj.getTipo() == DatoJustificante.TIPO_CAMPO){
+	        	if (dj.getTipo() == DatoJustificante.TIPO_CAMPO || dj.getTipo() == DatoJustificante.TIPO_INDICE){
 		        	if ( StringUtils.isEmpty(this.getValorCampoScript()) && StringUtils.isEmpty(dj.getReferenciaCampo()) ){
 		        		errors.add( "traduccion.descripcion", new ActionError( "errors.datoJustificante.campo.noValor") );
 		        	}

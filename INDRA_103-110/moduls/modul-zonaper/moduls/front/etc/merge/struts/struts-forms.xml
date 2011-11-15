@@ -44,6 +44,11 @@
 <form-bean
     name="tramiteSubsanacionForm"
     type="es.caib.zonaper.front.form.TramiteSubsanacionForm"/>     
+
+<form-bean
+    name="filtroExpedientesForm"
+    type="es.caib.zonaper.front.form.FiltroExpedientesForm"/>
+
     
 <!--  sin verificar -->         
 <form-bean

@@ -1,6 +1,7 @@
 package es.caib.zonaper.persistence.delegate;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
@@ -15,11 +16,11 @@ public class EstadoExpedienteDelegate implements StatelessDelegate
 	/* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
-	public Page busquedaPaginadaExpedientes( int pagina, int longitudPagina )  throws DelegateException
+	public Page busquedaPaginadaExpedientes( int pagina, int longitudPagina, List filtroExpe )  throws DelegateException
 	{
 		try
 		{
-			return getFacade().busquedaPaginadaExpedientes(pagina, longitudPagina );
+			return getFacade().busquedaPaginadaExpedientes(pagina, longitudPagina, filtroExpe );
 		}
 		catch (Exception e) 
 		{
@@ -27,11 +28,11 @@ public class EstadoExpedienteDelegate implements StatelessDelegate
         }
 	}
 	
-	public Page busquedaPaginadaExpedientesEntidadDelegada(int pagina, int longitudPagina, String nifEntidad )  throws DelegateException
+	public Page busquedaPaginadaExpedientesEntidadDelegada(int pagina, int longitudPagina, String nifEntidad, List filtroExpe )  throws DelegateException
 	{
 		try
 		{
-			return getFacade().busquedaPaginadaExpedientesEntidadDelegada(pagina, longitudPagina, nifEntidad );
+			return getFacade().busquedaPaginadaExpedientesEntidadDelegada(pagina, longitudPagina, nifEntidad, filtroExpe);
 		}
 		catch (Exception e) 
 		{

@@ -3,8 +3,10 @@ package es.caib.zonaper.persistence.ejb;
 import java.io.ByteArrayInputStream;
 import java.security.Principal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -21,6 +23,7 @@ import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.redose.modelInterfaz.UsoRDS;
+import es.caib.redose.persistence.delegate.DelegateException;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.sistra.plugins.PluginFactory;
@@ -29,6 +32,9 @@ import es.caib.sistra.plugins.login.PluginLoginIntf;
 import es.caib.util.CredentialUtil;
 import es.caib.util.NifCif;
 import es.caib.xml.ConstantesXML;
+import es.caib.xml.oficioremision.factoria.FactoriaObjetosXMLOficioRemision;
+import es.caib.xml.oficioremision.factoria.ServicioOficioRemisionXML;
+import es.caib.xml.oficioremision.factoria.impl.OficioRemision;
 import es.caib.xml.registro.factoria.ConstantesAsientoXML;
 import es.caib.xml.registro.factoria.FactoriaObjetosXMLRegistro;
 import es.caib.xml.registro.factoria.ServicioRegistroXML;
@@ -36,10 +42,12 @@ import es.caib.xml.registro.factoria.impl.AsientoRegistral;
 import es.caib.xml.registro.factoria.impl.DatosInteresado;
 import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.Expediente;
+import es.caib.zonaper.model.IndiceElemento;
 import es.caib.zonaper.model.NotificacionTelematica;
 import es.caib.zonaper.model.ParametrosSubsanacion;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
+import es.caib.zonaper.persistence.delegate.IndiceElementoDelegate;
 import es.caib.zonaper.persistence.util.GeneradorId;
 
 /**
@@ -416,7 +424,20 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
     		}
 			
 	    	// Realizamos acuse de recibo
-			return realizarFirmaAcuse(notificacion,asientoAcuse,firmaAcuse,null);	    	
+			boolean res = realizarFirmaAcuse(notificacion,asientoAcuse,firmaAcuse,null);
+			
+			// En caso correcto, generamos indices de busqueda 
+			if (res) {
+				// Obtenemos documento de oficio
+				FactoriaObjetosXMLOficioRemision factoriaOR = ServicioOficioRemisionXML.crearFactoriaObjetosXML();
+				OficioRemision oficioRemision = factoriaOR.crearOficioRemision (new ByteArrayInputStream (consultarDocumentoRDS(notificacion.getCodigoRdsOficio(),notificacion.getClaveRdsOficio())));
+				
+				// Generamos indices
+				crearIndicesSalida(notificacion, oficioRemision);
+			}
+			
+			// Retornamos resultado
+			return res;			
 	    }catch( Exception exc ){
         	throw new EJBException( exc );
         }
@@ -793,5 +814,50 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
         } finally {
             close(session);
         }
+	}
+	
+	/**
+     * Crea indices para una notificacion.
+     * @param notificacion Notificacion
+     * @param oficioRemision 
+     * @throws Exception 
+     */
+    private void crearIndicesSalida(NotificacionTelematica notificacion, OficioRemision oficioRemision) throws Exception {
+
+		// Establecemos indices a crear
+    	Map indices = new HashMap();
+    	indices.put("Número registro",  notificacion.getNumeroRegistro());
+    	indices.put("Título oficio", oficioRemision.getTitulo());
+    	indices.put("Texto oficio", oficioRemision.getTexto());
+    	crearIndicesBusqueda(notificacion.getNifRepresentante(), IndiceElemento.TIPO_NOTIFICACION, notificacion.getCodigo(), indices);
+		
+	}
+
+    /**
+     * Da de alta los indices de busqueda.
+     * @param indices
+     */
+	private void crearIndicesBusqueda(String nif, String tipoElemento, Long idElemento, Map indices) throws Exception {
+		
+		IndiceElementoDelegate dlg = DelegateUtil.getIndiceElementoDelegate();
+		
+		for (Iterator it = indices.keySet().iterator(); it.hasNext();) {
+			String key = (String) it.next();
+			IndiceElemento indiceElemento = new IndiceElemento();
+			indiceElemento.setNif(nif);
+			indiceElemento.setTipoElemento(tipoElemento);
+			indiceElemento.setCodigoElemento(idElemento);
+			indiceElemento.setDescripcion(key);
+			indiceElemento.setValor((String) indices.get(key));
+			dlg.grabarIndiceElemento(indiceElemento);
+		}		
+	}
+	
+	private byte[] consultarDocumentoRDS( long codigo, String clave ) throws DelegateException
+	{
+		ReferenciaRDS referenciaRDS = new ReferenciaRDS(codigo, clave);
+		RdsDelegate rdsDelegate 	= DelegateRDSUtil.getRdsDelegate();
+		DocumentoRDS documentoRDS 	= rdsDelegate.consultarDocumento( referenciaRDS );
+		return documentoRDS.getDatosFichero();
 	}
 }
