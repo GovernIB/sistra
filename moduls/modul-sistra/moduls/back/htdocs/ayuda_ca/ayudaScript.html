@@ -72,6 +72,20 @@
     <br>
     <em>valor = PLUGIN_FORMULARIOS.getDatoFormulario('FOR1',1,'campo1[CODIGO]');</em>
     <br/>
+    <br/>
+    Si el camp del formulari és <strong>multivaluat</strong> (llista desplegada, llista arbre, ...) es pot accedir al nombre de valors i a cada valor en particular de la següent forma:
+    <br>
+    <br/>
+    <em>numValores = PLUGIN_FORMULARIOS.getNumeroValoresCampo('FOR1',1,'campo1'); </em>
+    <br/>
+    for (i = 0; i < numValores; i++) {
+    <br/>
+    <em> valor = PLUGIN_FORMULARIOS.getDatoFormulario('FOR1',1,'campo1',i); </em>
+    <br/>
+    <em> codigo = PLUGIN_FORMULARIOS.getDatoFormulario('FOR1',1,'campo1[CODIGO]',i); </em>
+	<br/>
+	<em>} </em>
+	<br/>
     <br>Per accedir al estat actual d'un formulari (p.e. per consultar si un formulari s'ha completat correctament):
     <br>
     <br>

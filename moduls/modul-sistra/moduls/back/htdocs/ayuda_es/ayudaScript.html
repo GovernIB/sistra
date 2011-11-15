@@ -67,9 +67,23 @@
     <em> valor = PLUGIN_FORMULARIOS.getDatoFormulario('FOR1',1,'campo1');</em> 
     <br>
     <br>
-    Si el elemento del formulario es una <strong>lista desplegable</strong> se puede acceder al código del elemento seleccionado de la siguiente forma: <br>
+    Si el campo del formulario es una <strong>lista desplegable</strong> se puede acceder al código del elemento seleccionado de la siguiente forma: <br>
     <br>
     <em>valor = PLUGIN_FORMULARIOS.getDatoFormulario('FOR1',1,'campo1[CODIGO]');</em> 
+    <br/>
+    <br/>
+    Si el campo del formulario es <strong>multivaluado</strong> (lista desplegada, lista árbol, ...) se puede acceder al número de valores y a cada valor en particular de la siguiente forma: <br>
+    <br/>
+    <em>numValores = PLUGIN_FORMULARIOS.getNumeroValoresCampo('FOR1',1,'campo1'); </em>
+    <br/>
+    for (i = 0; i < numValores; i++) {
+    <br/>
+    <em> valor = PLUGIN_FORMULARIOS.getDatoFormulario('FOR1',1,'campo1',i); </em>
+    <br/>
+    <em> codigo = PLUGIN_FORMULARIOS.getDatoFormulario('FOR1',1,'campo1[CODIGO]',i); </em>
+	<br/>
+	<em>} </em>
+	<br/>
     <br/>
     <br>
     Para acceder al estado actual de un formulario (p.e. para saber si un formulario se ha completado correctamente): <br>
