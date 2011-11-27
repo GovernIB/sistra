@@ -1,0 +1,5 @@
+<action path="/error"
+		type="org.apache.struts.actions.ForwardAction"
+		parameter=".error" />
+
+				

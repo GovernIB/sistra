@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="projecte-sistra" default="main">
+
+<property file="${basedir}/config.properties"/>
+<property name="projecte" value="${ant.project.name}"/>
+<property name="output.dir" value="product"/>
+<property name="etc.dir" value="etc"/>
+<property name="lib" value="lib"/>
+
+<target name="main" depends="clean,prepare,compileModuls"/>
+
+<target name="clean" description="Destruye los directorios de trabajo">
+	<delete dir="${output.dir}" quiet="yes"/>
+</target>
+	
+<target name="prepare" description="Prepara los directorios de trabajo">
+	<mkdir dir="${output.dir}"/>
+	<mkdir dir="${output.dir}/ear"/>
+	<mkdir dir="${output.dir}/lib"/>
+	<mkdir dir="${output.dir}/client"/>	
+	<mkdir dir="${output.dir}/javadoc"/>	
+</target>
+	
+<target name="propagate">
+	<ant dir="moduls/llibreria-dbutils" target="${task}" inheritall="false"/>
+	<ant dir="moduls/llibreria-graficos" target="${task}" inheritall="false"/>
+	<ant dir="moduls/llibreria-pdf" target="${task}" inheritall="false"/>
+	<ant dir="moduls/llibreria-xml" target="${task}" inheritall="false"/>
+	<ant dir="moduls/llibreria-plugins" target="${task}" inheritall="false"/>
+	<ant dir="moduls/llibreria-util" target="${task}" inheritall="false"/>	
+	<ant dir="moduls/llibreria-utilWs" target="${task}" inheritall="false"/>	
+	<ant dir="moduls/modul-audita" target="${task}" inheritall="false"/>
+	<ant dir="moduls/modul-redose" target="${task}" inheritall="false"/>
+	<ant dir="moduls/modul-zonaper" target="${task}" inheritall="false"/>
+	<ant dir="moduls/modul-bantel" target="${task}" inheritall="false"/>
+	<ant dir="moduls/modul-sistra" target="${task}" inheritall="false"/>
+	<ant dir="moduls/modul-forms" target="${task}" inheritall="false"/>
+	<ant dir="moduls/modul-mobtratel" target="${task}" inheritall="false"/>
+	<ant dir="moduls/modul-regtel" target="${task}" inheritall="false"/>
+	<!-- <ant dir="moduls/modul-libs" target="${task}" inheritall="false"/>-->
+</target>	
+	
+<target name="compileModuls" description="Compila modulos">
+	<antcall target="propagate">
+		<param name="task" value="main"/>
+	</antcall>
+	<delete file="${output.dir}/ear/1-sistra.ear" quiet="yes"/>
+	<ear earfile="${output.dir}/ear/1-sistra.ear" appxml="${etc.dir}/application.xml">
+		<manifest>
+			<attribute name="Created-By" value="${indra}"/>
+		    <attribute name="Specification-Title" value="${projecte}"/>				
+		    <attribute name="Specification-Version" value="${release.version} build${release.build} ${release.date}"/>
+		</manifest>
+		<metainf dir="${etc.dir}/jboss-${jboss.version}" includes="jboss-app.xml"/>
+		<fileset dir="moduls/modul-audita/output/moduls"/>
+		<fileset dir="moduls/modul-bantel/output/moduls"/>
+		<fileset dir="moduls/modul-forms/output/moduls"/>
+		<!--<fileset dir="moduls/modul-libs/out"/>-->
+		<fileset dir="moduls/modul-mobtratel/output/moduls"/>
+		<fileset dir="moduls/modul-redose/output/moduls"/>
+		<fileset dir="moduls/modul-regtel/output/moduls"/>
+		<fileset dir="moduls/modul-sistra/output/moduls"/>
+		<fileset dir="moduls/modul-zonaper/output/moduls"/>
+		<zipfileset dir="${lib}" prefix="lib">
+			<exclude name="activation.jar"/>
+			<exclude name="struts.jar"/>
+			<exclude name="cglib-asm.jar"/>
+			<exclude name="commons-logging-1.0.4.jar"/>
+			<exclude name="ejb-2_0.jar"/>
+			<exclude name="hibernate2.jar"/>
+			<exclude name="jms.jar"/>
+			<exclude name="mail.jar"/>
+			<exclude name="ojdbc14.jar"/>
+			<exclude name="mail.jar"/>
+			<exclude name="saaj-api.jar"/>
+			<exclude name="servlet.jar"/>
+			<exclude name="xercesImpl.jar"/>
+			<exclude name="jaxb-xjc-2.1.9.jar"/>			
+			<exclude name="client*"/>
+			<exclude name="client/*"/>
+			<exclude name="cxf*"/>
+			<exclude name="cxf/*"/>
+			<exclude name="jboss*"/>
+			<exclude name="jboss/*"/>
+		</zipfileset>
+		<zipfileset dir="${output.dir}/lib" prefix="lib"/>					
+	</ear>
+</target>	
+	
+<target name="cleanModuls" description="Destruye los directorios de trabajo de todos los modulos">
+	<antcall target="clean"/>
+	<antcall target="propagate">
+		<param name="task" value="clean"/>
+	</antcall>
+</target>
+	
+<target name="cleanLibsLicencia" description="Borra las librerias afectadas por temas de licencia">
+	<delete>
+	    <fileset dir="lib" includes="ojdbc14.jar"/>
+	</delete>
+	<!--
+	<delete>
+	    <fileset dir="integracio/clienteFirma/firma/aFirma" includes="*"/>		
+	</delete>	
+	-->
+</target>
+
+<target name="generateScripts" depends="prepare" description="Genera los scripts de creación de base de datos">
+    <ant antfile="moduls/modul-bantel/build-db.xml" target="initdb" inheritall="false"/>
+    <copy file="moduls/modul-bantel/output/schema.sql" tofile="product/schema-bantel.sql"/>
+
+    <ant antfile="moduls/modul-forms/build-db.xml" target="initdb" inheritall="false"/>
+    <copy file="moduls/modul-forms/output/schema.sql" tofile="product/schema-forms.sql"/>
+
+    <ant antfile="moduls/modul-mobtratel/build-db.xml" target="initdb" inheritall="false"/>
+    <copy file="moduls/modul-mobtratel/output/schema.sql" tofile="product/schema-mobtratel.sql"/>
+
+    <ant antfile="moduls/modul-redose/build-db.xml" target="initdb" inheritall="false"/>
+    <copy file="moduls/modul-redose/output/schema.sql" tofile="product/schema-redose.sql"/>
+
+    <ant antfile="moduls/modul-sistra/build-db.xml" target="initdb" inheritall="false"/>
+    <copy file="moduls/modul-sistra/output/schema.sql" tofile="product/schema-sistra.sql"/>
+
+    <ant antfile="moduls/modul-zonaper/build-db.xml" target="initdb" inheritall="false"/>
+    <copy file="moduls/modul-zonaper/output/schema.sql" tofile="product/schema-zonaper.sql"/>
+</target>
+	
+</project>

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+
+<class name="es.caib.sistra.model.admin.FicheroCuaderno" table="STR_IMPFIC">
+ 	 <cache usage="read-write"/>	
+     <id name="codigo" unsaved-value="null" column="IMF_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">STR_SEQIFI</param>
+          </generator>
+      </id>
+      
+      <property name="tipo" column="IMF_TIPO" length="1"  not-null="true"/>
+      <property name="nombre" column="IMF_NOMFIC" length="100"  not-null="true"/>
+      <property name="contenido" type="binary" column="IMF_XML"/>
+      
+      <many-to-one name="cuadernoCarga" column="IMF_CODIMP" not-null="true"/>
+
+</class>
+</hibernate-mapping>      

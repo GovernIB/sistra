@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta http-equiv="Cache-Control" content="no-cache" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	
+	<title>Bandeja Telemática</title>
+	<link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+	
+	<!-- css -->
+	<link href="css/gestion-expedientes.css" rel="stylesheet" type="text/css" />
+	<!-- /css -->
+	
+	<script type="text/javascript" src="js/ajuda.js"></script>
+	
+</head>
+
+<body>
+
+	<div id="contenidor">
+	
+		<!-- cap -->
+		<div id="cap">
+			<img id="logo" src="imgs/cap/logo.gif" alt="Govern de les Illes Balears" />
+			<span>Bandeja Telemática</span>
+		</div>
+		<!-- /cap -->
+		
+		<!-- seccions -->
+		<ul id="seccions">
+			<li>
+				<a href="interna.html">Bandeja Telemática</a>
+			</li>
+			<li>
+				<a href="interna.html">Confirmación de entradas</a>
+			</li>
+			<li class="selec">
+				Gestión de expedientes
+			</li>
+		</ul>
+		<!-- /seccions -->
+		
+		<!-- ajuda boto -->
+		<button id="ajudaBoto" type="button" title="Activar ajuda"><img src="imgs/botons/ajuda.gif" alt="" /> Ajuda</button>
+		<!-- /ajuda boto -->
+		
+		<ul id="opcions">
+			<li class="selec">
+				<a href="index.html">Alta expedientes</a>
+			</li>
+			<li>
+				<a href="altas.html">Alta avisos y notificaciones</a>
+			</li>
+			<li>
+				<a href="recuperar.html">Recuperar Expedientes</a>
+			</li>
+		</ul>
+			
+		<!-- titol -->
+		<!--<h1>Gestión de expedientes</h1>-->
+		<!-- /titol -->
+		
+		<!-- ajuda -->
+		<div id="ajuda">
+			<h2>Ajuda general</h2>
+			<p>Con esta opción podremos recuperar la Clave de Tramitación para aquellos trámites con autenticación Anónima.</p>
+			<p>Se buscará a partir del NIF y del Código del Trámite. Buscará en las Tablas de Persistencia, Backup de Persistencia, Entradas Telemáticas y Pre-Registro.</p>
+			<p>En el caso de Persistencia y Backup de Persistencia buscará el NIF entre los datos del Formulario.</p>
+		</div>
+		<!-- /ajuda -->
+		
+		<!-- continguts -->
+		<div class="continguts">
+		
+			<p>Aquesta opció ens permet crear un nou expedient:</p>
+			
+			<ul>
+				<li>
+					a partir d’un número d’entrada a la bandeja Telemàtica
+				</li>
+				<li>
+					creant-lo de nou
+				</li>
+			</ul>
+			
+			<form id="forumari" name="forumari" action="index_alta_expediente.html" method="post" class="remarcar opcions">
+			
+				<p>
+					<label for="numero">Número d’entrada a la bandeja:</label>
+					<input id="numero" name="numero" type="text" />
+				</p>
+				
+				<p class="botonera">
+					<input id="aPartirDeNumero" name="aPartirDeNumero" type="submit" value="Generar a partir d’un número d’entrada" />
+					<input id="nou" name="nou" type="submit" value="Generar un nou expedient" />
+				</p>
+			
+			</form>
+			
+		</div>
+		<!-- /continguts -->
+		
+		<!-- peu -->
+		<div id="peu">&copy; Govern de les Illes Balears</div>
+		<!-- /peu -->
+		
+	</div>
+
+</body>
+</html>
+

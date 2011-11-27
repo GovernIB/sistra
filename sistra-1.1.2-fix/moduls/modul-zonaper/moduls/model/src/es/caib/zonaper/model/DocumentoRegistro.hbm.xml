@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class  name="es.caib.zonaper.model.DocumentoRegistro" table="ZPE_DOCREG">
+	<cache usage="read-write"/>
+     <id name="codigo" unsaved-value="null" column="DRE_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">ZPE_SEQDRE</param>
+          </generator>
+      </id>
+
+	<many-to-one name="registroExterno" column="DRE_CODREG" not-null="true"/>
+
+    <property name="identificador"  column="DRE_DOCIDE" length="5" not-null="true"/>
+    <property name="numeroInstancia"  column="DRE_DOCNUM" length="2" not-null="true"/>
+    <property name="descripcion"  column="DRE_DESC"  not-null="true" length="500"/>
+    <property name="codigoRDS"  column="DRE_RDSCOD"  not-null="true" length="20"/>
+    <property name="claveRDS"   column="DRE_RDSCLA"  not-null="true" length="10"/>    
+
+</class>
+</hibernate-mapping>
