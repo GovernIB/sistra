@@ -57,7 +57,10 @@ function enviarFormulario( form )
 {
 
 	var oficinaList = form.oficina;
-	var oficina = oficinaList.options[ oficinaList.selectedIndex ].value;
+	var oficina = '';
+	if (oficinaList.options.length > 0) {
+	 oficina = oficinaList.options[ oficinaList.selectedIndex ].value;
+	}
 	if ( oficina == null || oficina == '' )
 	{
 		alert( '<bean:message key="datosRegistroEntrada.mensajeOficina" />' );
