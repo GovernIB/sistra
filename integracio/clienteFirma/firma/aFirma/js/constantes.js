@@ -1,18 +1,33 @@
+/*
+ * Este fichero forma parte del Cliente @firma. 
+ * El Cliente @firma es un applet de libre distribución cuyo código fuente puede ser consultado
+ * y descargado desde www.ctt.map.es.
+ * Copyright 2009,2010 Ministerio de la Presidencia, Gobierno de España (opcional: correo de contacto)
+ * Este fichero se distribuye bajo las licencias EUPL versión 1.1  y GPL versión 3  según las
+ * condiciones que figuran en el fichero 'licence' que se acompaña.  Si se   distribuyera este 
+ * fichero individualmente, deben incluirse aquí las condiciones expresadas allí.
+ */
+
 /*******************************************************************************
- * Ruta al directorio de los instalables.                                      *
- * Si no se establece, supone que estan en el mismo directorio(que el HTML).   *
- * Para indicar un directorio en local se debe usar el prefijo "file://", por  *
- * ejemplo "file://C:/Instalables". Se debe usar siempre el separador "/"	 *
- * (nunca "\").											 *
+ * Ruta al directorio de los instalables.                           	  	 *
+ * Si no se establece, supone que estan en el mismo directorio que el HTML	 *
+ * desde el que se carga el cliente.							 *
+ * Las rutas absolutas deben comenzar por "file:///", "http://" o "https://"	 *
+ * (por ejemplo, "file:///C:/ficheros", "http://www.mpr.es/ficheros",...)	 *
+ * y las rutas relativas no pueden empezar por "/" (por ejemplo,			 *
+ * "afirma/ficheros"). Se debe usar siempre el separador "/", nunca "\". 	 *
+ * El fichero "version.properties" se toma de esta ruta.				 *
  ******************************************************************************/
 var baseDownloadURL;
 
 /*******************************************************************************
- * Ruta directorio del instalador.                                             *
- * Si no se establece, supone que est?n en el mismo directorio(que el HTML).   *
- * Para indicar un directorio en local se debe usar el prefijo "file://", por  *
- * ejemplo "file://C:/Instalador". Se debe usar siempre el separador "/"	 *
- * (nunca "\").											 *
+ * Ruta al directorio del instalador.							 *
+ * Si no se establece, supone que esta en el mismo directorio que el HTML	 *
+ * desde el que se carga el cliente.							 *
+ * Si es una ruta absoluta debe comenzar por "file:///", "http://" o "https://"*
+ * (por ejemplo, "file:///C:/Instalador", "http://www.mpr.es/instalador",...)	 *
+ * y si es una ruta relativa no puede empezar por "/" (por ejemplo,		 *
+ * "afirma/Instalador"). Se debe usar siempre el separador "/", nunca "\".	 *
  ******************************************************************************/
 var base;
 
@@ -27,7 +42,6 @@ var signatureAlgorithm = 'SHA1withRSA'; // Valor por defecto
  * Se estable al llamar a configuraFirma en firma.js      				 *
  * Por defecto: CMS.										 *
  ******************************************************************************/
-//var signatureFormat = 'XADES-BES'; // Valor por defecto
 var signatureFormat = 'CMS'; // Valor por defecto
 
 /*******************************************************************************
@@ -38,40 +52,39 @@ var signatureFormat = 'CMS'; // Valor por defecto
 var showErrors = 'false'; // Valor por defecto
 
 /*******************************************************************************
- * Filtro de certificados (expresi?n que determina qu? certificados se le      *
- * permite elegir al usuario). Ver la documentaci?n.                           *
+ * Filtro de certificados (expresión que determina que certificados se le      *
+ * permite elegir al usuario). Ver la documentación.                           *
  * Se estable al llamar a configuraFirma en firma.js                           *
  *                                                                             *
  * Ejemplos:                                                                   *
- * - S?lo mostrar certificados de DNIe de firma:                               *
+ * - Solo mostrar certificados de DNIe de firma:                               *
  * var certFilter = '{ISSUER.DN#MATCHES#{"CN=AC DNIE 00(1|2|3),OU=DNIE,'+      *
  *      'O=DIRECCION GENERAL DE LA POLICIA,C=ES"}&&{SUBJECT.DN#MATCHES#'+      *
  *      '{".*(FIRMA).*"}}}';                                                   *
  *                                                                             *
- * - S?lo mostrar certificados de la FNMT:                                     *
+ * - Sólo mostrar certificados de la FNMT:                                     *
  * var certFilter = '{ISSUER.DN={"OU = FNMT Clase 2 CA,O= FNMT,C = ES"}}';     *
  *                                                                             *
- * - Mostrar todos los certificados menos el de validaci?n:                    *
- * var certFilter = '{SUBJECT.DN#NOT_MATCHES#{".*(AUTENTICACI?N).*"}}}'        *
+ * - Mostrar todos los certificados menos el de validacion:                    *
+ * var certFilter = '{SUBJECT.DN#NOT_MATCHES#{".*(AUTENTICACIÓN).*"}}}'        *
  ******************************************************************************/
 var certFilter; // Valor por defecto
 
 /*******************************************************************************
- * Directorio donde se instalará las librerías del cliente                     *
- * Por defecto: USER_HOME/afirma.5/								 *
+ * Indica si se debe mostrar una advertencia a los usuarios de Mozilla Firefox *
+ * en el momento de arrancar el cliente de firma. Ya que en los navegadores	 *
+ * Mozilla los certificados de los tokens externos, como las tarjetas		 *
+ * inteligentes, sólo se mostrarán si estaban insertados en el momento de abrir*
+ * el almacén, será necesario que los usuarios los mantengan insertados en sus *
+ * correspondientes lectores desde el inicio de la aplicación. Esta opción	 *
+ * permite avisar a los usuarios para que actúen de esta forma. Las distintas	 *
+ * opciones que se pueden indicar y los comportamientos asociados son los	 *
+ * siguientes:											 *
+ * 	- true: Mostrar advertencia.								 *
+ *	- false: No mostrar advertencia.							 *
+ * Por defecto: true (Mostrar advertencia).						 *
  ******************************************************************************/
-var installDirectory = "afirma.5";
-
-/*******************************************************************************
- * Acción establecida a realizar cuando durante la instalacion se detecten	 *
- * versiones antiguas del cliente (v2.4 y anteriores).				 *
- * Opciones disponibles:									 *
- * 	- 1: Preguntar al usuario.								 *
- *	- 2: No eliminar.										 *
- *	- 3: Eliminar sin preguntar.								 *
- * Por defecto: 1 (Preguntar al usuario).							 *
- ******************************************************************************/
-var oldVersionsAction = 1;
+var showMozillaSmartCardWarning = 'false';
 
 /*******************************************************************************
  * Mostrar los certificados caducados en la listas de seleccion de		 *
@@ -89,5 +102,4 @@ var showExpiratedCertificates = 'true';
  *   - 'COMPLETA': Incluye los formatos de firma de la MEDIA + PDF.		 *
  * Por defecto: 'LITE'.										 *
  ******************************************************************************/
-var defaultBuild;
-
+var defaultBuild = 'MEDIA';
