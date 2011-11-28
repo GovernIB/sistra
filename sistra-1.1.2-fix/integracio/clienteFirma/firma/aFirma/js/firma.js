@@ -1,4 +1,14 @@
 /*
+ * Este fichero forma parte del Cliente @firma. 
+ * El Cliente @firma es un applet de libre distribución cuyo código fuente puede ser consultado
+ * y descargado desde www.ctt.map.es.
+ * Copyright 2009,2010 Ministerio de la Presidencia, Gobierno de España (opcional: correo de contacto)
+ * Este fichero se distribuye bajo las licencias EUPL versión 1.1  y GPL versión 3  según las
+ * condiciones que figuran en el fichero 'licence' que se acompaña.  Si se   distribuyera este 
+ * fichero individualmente, deben incluirse aquí las condiciones expresadas allí.
+ */
+
+/*
  * Depende de instalador.js y de constantes.js (opcional)
  *
  * initialize():
@@ -163,7 +173,7 @@ function dividir(text, delimitator)
 	/* Contamos el numero de cadenas que debemos extraer de la principal. */
 	while((tempPos = text.indexOf(delimitator, tempPos)) != -1) {
 		nDel++;
-		tempPos += delimitator.length();
+		tempPos += delimitator.length;
 	}
 	
 	/* Creamos el array en donde almacenaremos las cadenas. */
@@ -174,7 +184,7 @@ function dividir(text, delimitator)
 	for(var i=0; i < nDel; i++) {
 		tempPos2 = text.indexOf(delimitator, tempPos);
 		substrings[i] = text.substring(tempPos, tempPos2);
-		tempPos = tempPos2 + delimitator.length();
+		tempPos = tempPos2 + delimitator.length;
 	}
 	substrings[nDel] = text.substring(tempPos);
 

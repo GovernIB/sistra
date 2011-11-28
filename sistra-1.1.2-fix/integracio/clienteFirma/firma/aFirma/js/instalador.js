@@ -1,219 +1,203 @@
+/*
+ * Este fichero forma parte del Cliente @firma. 
+ * El Cliente @firma es un applet de libre distribución cuyo código fuente puede ser consultado
+ * y descargado desde www.ctt.map.es.
+ * Copyright 2009,2010 Ministerio de la Presidencia, Gobierno de España (opcional: correo de contacto)
+ * Este fichero se distribuye bajo las licencias EUPL versión 1.1  y GPL versión 3  según las
+ * condiciones que figuran en el fichero 'licence' que se acompaña.  Si se   distribuyera este 
+ * fichero individualmente, deben incluirse aquí las condiciones expresadas allí.
+ */
+
 /**
- * Depende de deployJava.js, de time.js y de constantes.js [opcional].
+ *
+ * Version: 2.0.0
+ *
+ * Depende de deployJava.js y de constantes.js [opcional].
  *
  * Si se ha definido baseDownloadURL se usa como URL base para la descarga de los instalables.
  *
  * cargarAppletFirma(build):
- *      Carga el applet de firma en la variable "clienteFirma". El applet no esta cargado hasta que clienteFirmaCargado= true.
- *      La carga del applet verificara que se tiene instalada una construccion igual o superior a la indicada, si no lo esta
- *      se carga el instalador e inicia el proceso de instalacion el applet en local.
+ *      Carga el applet de firma en la variable "clienteFirma". El applet no esta cargado hasta que clienteFirmaCargado==true.
  *
- * cargarAppletInstalador():
- *      Carga el applet de carga (BootLoader) en la variable "instalador".
- *
- * instalar(build):
- *      Carga el applet instalador (si no se ha cargado), instala la construccion del cliente en local y devuelve el directorio de
- *      instalacion (null si no).
- *
- * actualizar(baseDownloadUrl):
- *      Carga el applet instalador (si no se ha cargado), actualiza la version instalada en local y devuelve true si el proceso
- *      finaliza correctamente (false si no).
+ * instalar(build, jsMethodName, jsMethodParams):
+ *      Carga el applet instalador (si no se ha cargado), e instala las dependencias del cliente en local.
+ *      build          - Tipo de ckliente para el cual deben integrarse las dependencias: 'LITE', 'MEDIA' o 'COMPLETA'
+ *      jsMethodName   - Metodo JavaScript a invocar una vez terminado el proceso de instalacion
+ *      jsMethodParams - Parametros del metodo JavaScript a invocar una vez terminado el proceso de instalacion
+ *	Este metodo debe ser llamado por los integradores unicamente en el caso de que deseen tener control sobre los procesos de
+ *      instalacion, y no debe nunca combinarse manualmente con la carga del Applet de Firma en una misma pagina Web.
  *
  * desinstalar():
  *      Carga el applet instalador (si no se ha cargado), desinstala el cliente de firma de local y devuelve true si el proceso
  *      finaliza correctamente (false si no).
- *
- * isInstalado(build):
- *      Carga el applet instalador (si no se ha cargado) y comprueba que este instalada la construccion indicada o una superior.
- *      Si no se indica ninguna se comprueba que este instalada la construccion basica del cliente. Devuelve true si la comprobacion
- *      fue positiva y false en caso contrario.
- *
- * isActualizado():
- *      Carga el applet instalador (si no se ha cargado) y devuelve true si el cliente de firma esta actualizado (coinciden las
- *      versiones local/remota) en local (false si no).
- *
- * getDirectorioInstalacion():
- *      Carga el applet instalador (si no se ha cargado) y devuelve la ruta de instalacion del cliente de firma en local.
+ *	Este metodo debe ser llamado por los integradores unicamente en el caso de que deseen tener control sobre los procesos de
+ *      instalacion, y no debe nunca combinarse manualmente con la carga del Applet de Firma en una misma pagina Web.
  *
  * getVersion():
  *      Carga el applet instalador (si no se ha cargado) y devuelve la version del instalador.
+ *	Este metodo debe ser llamado por los integradores unicamente en el caso de que deseen tener control sobre los procesos de
+ *      instalacion, y no debe nunca combinarse manualmente con la carga del Applet de Firma en una misma pagina Web.
  *
- * getVersionCliente():
- *      Carga el applet instalador (si no se ha cargado), comprueba que el cliente este instalado y si lo esta devuelve la version del cliente.
- *
- */ 
+ */
 
 var instalador;
 var instaladorCargado = false;
 var clienteFirma;
+var appletArq;
 
 function cargarAppletFirma(build)
 {
-	// Comprobamos que el instalador esta cargado
-	if(instalador == undefined)
-	{
-		cargarAppletInstalador();
-	}
-	
-	// Comprobamos que el applet de firma esta instalado
-	if( instaladorCargado == false )
-	{
-		whenTry("instaladorCargado == true", "cargarAppletFirma(build)", "No se ha podido cargar el applet instalador");
+	/* Si ya esta cargado, no continuamos con el proceso */
+	if (clienteFirma != undefined) {
 		return;
 	}
 
-	// Comprobamos que el applet de firma esta instalado
-	if( isInstalado(build) == false )
-	{
-		instalar(build);
+	/* Definimos las contruccion que se va a utilizar */
+	var confBuild = configureBuild(build);
 
-		// Si fallo o se cancelo la instalacion, informamos de ello
-		if( isInstalado(build) == false )
-		{
-			alert("No se ha finalizado la instalaci\u00F3n del cliente \u0040firma por lo que no se podr\u00E1n realizar operaciones de firma electr\u00F3nica.");
-			return;
-		}
-	}
-	else if( isActualizado() == false )
-	{
-		actualizar(baseDownloadURL);
-
-		// Si fallo o se cancelo la instalacion, informamos de ello
-		if( isActualizado() == false )
-		{
-			alert("No se ha podido actualizar el cliente \u0040firma a la \u00FAltima versi\u00F3n disponible. Por motivos de seguridad se cancelar\u00E1 la carga del mismo.");
-			return;
-		}
+	/* Cargamos el instalador e instalamos en cualquier caso menos con Google Chrome, que no deja tener dos
+           Applets en la misma pagina cuando Java esta desactualizado. Revisaremos esta parte cuando salga 
+           Chrome 64 bits para Windows, entorno que requerira instalacion. */
+	if (deployJava.browserName2 != 'Chrome') {
+		instalar(confBuild, null, null);
 	}
 
-	// Cargamos el applet de firma
-	if(clienteFirma == undefined)
-	{
-		/* Definición de las constantes necesarias */
+	var jarArchive = (baseDownloadURL != undefined ? baseDownloadURL : '.') + '/' + confBuild + "_j6_afirma5_core__V3.2.jar";
+	if (deployJava.versionCheck('1.6.0+') == false) {
+                jarArchive = (baseDownloadURL != undefined ? baseDownloadURL : '.') + '/' + confBuild + "_j5_afirma5_core__V3.2.jar";
+	}
 
-		var installationDirectory = instalador.getInstallationDirectory();
-		var jarArchive = 'file:///' + installationDirectory + '/afirma5_coreV3.jar';
+	var installercodeBase = base;
+	if (installercodeBase == undefined || installercodeBase == null) {
+		installercodeBase = '.';
+	}
+	var codeBase = baseDownloadURL;
+	if (codeBase == undefined || codeBase == null) {
+		codeBase = '.';
+	}
 
-		var attributes = {id:'firmaApplet',
-					code:'es.gob.afirma.cliente.SignApplet.class',
-					archive:jarArchive,
-					width:1, height:1};
-		var parameters = {userAgent:window.navigator.userAgent,
-					appName:window.navigator.appName,
-					installDirectory:installDirectory,
-					showExpiratedCertificates:showExpiratedCertificates,
-					java_arguments:'-Djnlp.packEnabled=true -Xmx512M'};
-		var version = '1.5';
+	var attributes = {
+		id: 'firmaApplet',
+	 	width: 1,
+		height: 1
+	};
+	var parameters = {
+		jnlp_href: installercodeBase + "/" + confBuild + '_afirma.jnlp',
+		userAgent: window.navigator.userAgent,
+		appName: window.navigator.appName,
+		showExpiratedCertificates: showExpiratedCertificates,
+		showMozillaSmartCardWarning: showMozillaSmartCardWarning,
+		code: 'es.gob.afirma.cliente.SignApplet.class',
+		archive: jarArchive,
+		codebase: codeBase,
+		java_arguments: '-Djnlp.versionEnabled=true -Djnlp.packEnabled=true -Xms512M -Xmx512M',
+		separate_jvm: true
+	};
 
-		deployJava.runApplet(attributes, parameters, version);
+ 	deployJava.runApplet(attributes, parameters, '1.5');
 
-		clienteFirma = document.getElementById("firmaApplet");
+	clienteFirma = document.getElementById("firmaApplet");
 
-		/* Realizamos una espera para que de tiempo a cargarse el applet */
-		for(var i=0; i<100; i++) {
-			try {
-				setTimeOut("clienteFirma != undefined && clienteFirma.isInitialized()", 100);
-				break;
-			} catch(e) {
-				// Capturamos la excepcion que se produciria si no se hubiese cargado aun el applet, aunque no se lanzaria
-				// una vez estuviese cargado aunque no iniciado
-			}
+	/* Realizamos una espera para que de tiempo a cargarse el applet */
+	for (var i = 0; i < 100; i++) {
+		try {
+			setTimeout("clienteFirma != undefined && clienteFirma.isInitialized()", 100);
+			break;
+		} catch (e) {
+			/*
+			 * Capturamos la excepcion que se produciria si no se hubiese cargado aun el applet, aunque no se lanzaria
+			 * una vez estuviese cargado aunque no iniciado
+			 */
 		}
 	}
 }
 
+
 function cargarAppletInstalador()
 {
-
 	if(instalador == undefined)
 	{
 		/* Definicion de las constantes necesarias */
 		var codeBaseVar = '.';
 		if(base != undefined) {
-			codeBaseVar = base;
+			if(base.toLowerCase().substring(0, 7) != "file://" && 
+					base.toLowerCase().substring(0, 7) != "http://" &&
+					base.toLowerCase().substring(0, 8) != "https://") {
+				codeBaseVar = './' + base;
+			}
+			else {
+				codeBaseVar = base;
+			}
 		}
 
 		var attributes = {id:'instaladorApplet',
 					code:'es.gob.afirma.install.AfirmaBootLoader.class',	
-					archive:'afirmaBootLoader.jar',
-					codebase:codeBaseVar,
+					archive:codeBaseVar+'/afirmaBootLoader.jar',
 					width:1, height:1};
-		var parameters = {userAgent:window.navigator.userAgent,
-					appName:window.navigator.appName,
-					installDirectory:installDirectory,
-					oldVersionsAction:oldVersionsAction};
 		var version = '1.5';
 
-		deployJava.runApplet(attributes, parameters, version);
+		try {
+			deployJava.runApplet(attributes, null, version);
+		} catch(e) {}
 
 		instalador = document.getElementById("instaladorApplet");
 		
-		/* Realizamos una espera para que de tiempo a cargarse el applet */
-		whenTry("instalador.isIniciado() == true", "instaladorCargado = true");
-
 		for(var i=0; i<100; i++) {
 			try {
-				setTimeOut("instalador != undefined && instalador.isIniciado()", 100);
+				setTimeout("instalador != undefined && (instalador.getVersion() != null)", 100);
+				instaladorCargado = true;
 				break;
 			} catch(e) {
+				instaladorCargado = false;
 				// Capturamos la excepcion que se produciria si no se hubiese cargado aun el applet, aunque no se lanzaria
 				// una vez estuviese cargado aunque no iniciado
+			}
+		}
+
+
+		// Si hay definida una URL desde la que descargar los instalables, la establecemos
+		if(baseDownloadURL != undefined) {
+			if(baseDownloadURL.toLowerCase().substring(0, 7) != "file://" && 
+					baseDownloadURL.toLowerCase().substring(0, 7) != "http://" &&
+					baseDownloadURL.toLowerCase().substring(0, 8) != "https://") {
+
+				var url = document.location.toString();
+				instalador.setBaseDownloadURL(url.substring(0, url.lastIndexOf("/")) + '/' + baseDownloadURL);
+			}
+			else {
+				instalador.setBaseDownloadURL(baseDownloadURL);
 			}
 		}
 	}
 }
 
 
-function instalar(build)
+function instalar(build, jsMethodName, jsMethodParams)
 {
+
+	// Definimos las contruccion que se va a utilizar
+	var confBuild = configureBuild(build);
+
 	if(instalador == undefined)
 	{
 		cargarAppletInstalador();
 	}
 	
-	if(isInstalado(build)) {
-		alert("El cliente de @firma 5 v3 ya est\u00E1 instalado");
-		return true;
-	}
-
-	// Si hay definida una URL desde la que descargar los instalables, la establecemos
-	if(baseDownloadURL != undefined) {
-		instalador.setBaseDownloadURL(baseDownloadURL);
-	}
-
-	// Si no se ha indicado una construccion por parametro ni hay establecida una por defecto en "constantes.js", se instala la 'LITE'
-	var confBuild = null;
-	if(build == null || build == undefined)
-	{
-		if(defaultBuild == null || defaultBuild == undefined)
-		{
-			return instalador.instalar();
-		} else {
-			confBuild = defaultBuild;
-		}
-	} else {
-		confBuild = build;
-	}
-
 	// Si se ha indicado una construccion de alguna manera (por defecto o por parametro), se instala esa
-
-	return instalador.instalar(confBuild);
-}
-
-function actualizar(baseDownloadURL)
-{
-	if(instalador == undefined)
+	var allOK;
+	if(jsMethodName == undefined || jsMethodName == null)
 	{
-		cargarAppletInstalador();
-	}
-	
-	// Si se ha establecido una URL base, la establecemos para tomar de ahi los paquetes.
-	if(baseDownloadURL != undefined)
-	{
-		instalador.setBaseDownloadURL(baseDownloadURL);
+		allOK = instalador.instalar(confBuild);
+	} else {
+		if(jsMethodParams == undefined)
+		{
+			jsMethodParams = null;
+		}
+
+		allOK = instalador.instalar(confBuild, jsMethodName, jsMethodParams);
 	}
 
-	return instalador.actualizar();
+	return allOK;
 }
 
 function desinstalar()
@@ -222,53 +206,8 @@ function desinstalar()
 	{
 		cargarAppletInstalador();
 	}
+
 	return instalador.desinstalar();
-}
-
-function isInstalado(build)
-{
-	if(instalador == undefined)
-	{
-		cargarAppletInstalador();
-	}
-	
-	// Si no se ha indicado una construccion por parametro ni hay establecida una por defecto en "constantes.js", se comprueba la 'LITE'
-	var confBuild = null;
-	if(build == null || build == undefined)
-	{
-		if(defaultBuild == null || defaultBuild == undefined)
-		{
-			return instalador.isInstalado();
-		} else {
-			confBuild = defaultBuild;
-		}
-	} else {
-		confBuild = build;
-	}
-
-	// Si se ha indicado una construccion de alguna manera (por defecto o por parametro), se comprueba esa
-
-	return instalador.isInstalado(confBuild);
-}
-
-function isActualizado()
-{
-	if(instalador == undefined)
-	{
-		cargarAppletInstalador();
-	}
-	
-	return instalador.isActualizado();
-}
-
-function getDirectorioInstalacion()
-{
-	if(instalador == undefined)
-	{
-		cargarAppletInstalador();
-	}
-	
-	return instalador.getInstallationDirectory();
 }
 
 function getVersion()
@@ -281,12 +220,52 @@ function getVersion()
 	return instalador.getVersion();
 }
 
-function getVersionCliente()
+/**
+ * Si no se ha indicado una construccion por parametro, ni hay establecida una por defecto en "constantes.js", se instala la 'LITE'
+ */
+function configureBuild(build)
 {
-	if(instalador == undefined)
+	var confBuild = null;
+	if(build != null && build != undefined)
 	{
-		cargarAppletInstalador();
+		confBuild = build;
 	}
-	
-	return instalador.getClientVersion();
+	else if(defaultBuild != null && defaultBuild != undefined) {
+		confBuild = defaultBuild;
+	}
+	else {
+		confBuild = 'LITE';
+	}
+	return confBuild;
+}
+
+function cargarAppletArquitectura()
+{
+	if(appletArq == undefined)
+	{
+		/* Definicion de las constantes necesarias */
+		var codeBaseVar = '.';
+		if(base != undefined) {
+			if(base.toLowerCase().substring(0, 7) != "file://" && 
+					base.toLowerCase().substring(0, 7) != "http://" &&
+					base.toLowerCase().substring(0, 8) != "https://") {
+				codeBaseVar = './' + base;
+			}
+			else {
+				codeBaseVar = base;
+			}
+		}
+
+		var attributes = {id:'arqApplet',
+					code:'es.gob.afirma.deploy.util.JREArchDetector.class',	
+					archive:codeBaseVar+'/archDetector.jar',
+					width:1, height:1};
+		var version = '1.5';
+
+		try {
+			deployJava.runApplet(attributes, null, version);
+		} catch(e) {}
+
+		appletArq = document.getElementById("arqApplet");
+	}
 }
