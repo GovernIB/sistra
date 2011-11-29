@@ -408,7 +408,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 	public boolean firmarAcuseReciboNotificacionAutenticada(Long codigo,String asientoAcuse,FirmaIntf firmaAcuse)
 	{
 		 try {
-			// Obtenemos notificacion
+			// Obtenemos notificacion (no tiene docs asociados pq no esta firmada)
 			NotificacionTelematica notificacion = obtenerNotificacionTelematicaAutenticada(codigo);
 			
 			// Comprobamos que si se accede de forma delegada, el delegado tenga permisos para recibir notificaciones
@@ -428,6 +428,10 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			
 			// En caso correcto, generamos indices de busqueda 
 			if (res) {
+				
+				// Volvemos a cargar la notificacion para que esten los documentos asociados
+				notificacion = obtenerNotificacionTelematicaAutenticada(codigo);
+				
 				// Obtenemos documento de oficio
 				FactoriaObjetosXMLOficioRemision factoriaOR = ServicioOficioRemisionXML.crearFactoriaObjetosXML();
 				OficioRemision oficioRemision = factoriaOR.crearOficioRemision (new ByteArrayInputStream (consultarDocumentoRDS(notificacion.getCodigoRdsOficio(),notificacion.getClaveRdsOficio())));
