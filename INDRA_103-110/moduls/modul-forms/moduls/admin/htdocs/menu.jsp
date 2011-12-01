@@ -8,7 +8,7 @@
 <tiles:importAttribute name="apartados" scope="page" />
 <html:html locale="true" xhtml="true">
 <head>
-   <title><bean:message key="menu.title" /></title>
+   <title>FORMSADMIN</title>
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
    <link rel="stylesheet" href='<html:rewrite page="/css/styleA.css"/>' type="text/css" />
 </head>
