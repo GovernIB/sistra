@@ -258,7 +258,9 @@ public class TramiteProcessorEJB implements SessionBean {
 			}
 			if (tramiteVersion.getIdiomasSoportados().indexOf(idioma.getLanguage()) == -1) {
 				StringTokenizer st = new StringTokenizer(tramiteVersion.getIdiomasSoportados(),",");
-				tramiteVersion.setCurrentLang(st.nextToken());
+				String idiomaNew = st.nextToken();
+				tramiteVersion.setCurrentLang(idiomaNew);
+				datosSesion.setLocale(new Locale(idiomaNew));
 			}else{
 				tramiteVersion.setCurrentLang(idioma.getLanguage());
 			}
@@ -350,8 +352,7 @@ public class TramiteProcessorEJB implements SessionBean {
     		// Devolvemos como parámetros la descripción del trámite y los niveles
     		HashMap param = new HashMap();
     		RespuestaFront res = new RespuestaFront();
-    		//param.put("descripcion", ((TraTramite) this.tramiteVersion.getTramite().getTraduccion( this.datosSesion.getLocale().getLanguage())).getDescripcion());
-    		param.put("descripcion", ((TraTramite) this.tramiteVersion.getTramite().getTraduccion()).getDescripcion());
+    		param.put("descripcion", ((TraTramite) this.tramiteVersion.getTramite().getTraduccion( this.datosSesion.getLocale().getLanguage())).getDescripcion());
     		param.put("niveles",ls_niveles);    		
     		// En caso de pasar un nivel obtenemos dias persistencia del nivel
     		String ls_dias = Integer.toString(((EspecTramiteNivel) this.tramiteVersion.getEspecificaciones()).getDiasPersistencia()) ;
@@ -3150,7 +3151,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	    	tramitePersistentePAD = new TramitePersistentePAD();
 	    	tramitePersistentePAD.setTramite(tramiteVersion.getTramite().getIdentificador());
 	    	tramitePersistentePAD.setVersion(tramiteVersion.getVersion());
-	    	tramitePersistentePAD.setDescripcion( ( ( TraTramite ) tramiteVersion.getTramite().getTraduccion() ).getDescripcion() );
+	    	tramitePersistentePAD.setDescripcion( ( ( TraTramite ) tramiteVersion.getTramite().getTraduccion(datosSesion.getLocale().getLanguage()) ).getDescripcion() );
 	    	tramitePersistentePAD.setNivelAutenticacion(datosSesion.getNivelAutenticacion());
 	    	tramitePersistentePAD.setIdioma(this.datosSesion.getLocale().getLanguage());	    		    		    	
 	    	if (datosSesion.getNivelAutenticacion() != 'A'){
