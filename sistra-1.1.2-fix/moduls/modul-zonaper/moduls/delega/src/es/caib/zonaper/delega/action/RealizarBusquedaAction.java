@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -36,7 +37,12 @@ public class RealizarBusquedaAction extends BaseAction
 		BusquedaEntidadesForm busquedaForm = (BusquedaEntidadesForm)form;
 		PadAplicacionDelegate padAplic = DelegateUtil.getPadAplicacionDelegate();
 		try{
-			List entidades = padAplic.buscarEntidades(busquedaForm.getEntidadNif());
+			List entidades;
+			if (StringUtils.isNotBlank(busquedaForm.getEntidadNif())) {			
+				entidades = padAplic.buscarEntidades(busquedaForm.getEntidadNif());
+			} else {
+				entidades = padAplic.buscarEntidadesPorNombre(busquedaForm.getEntidadNombre());
+			}
 			request.setAttribute("entidades", entidades);
 			return mapping.findForward( "success" );
 		}catch(Exception e){

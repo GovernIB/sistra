@@ -1,7 +1,5 @@
 package es.caib.zonaper.delega.action;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -46,7 +44,7 @@ public class BuscarNombreDelegadoAction extends Action
 		}
 		if (nombre == null){  
 			nombre= "";
-			error = "error.nombre.persona";
+			error = this.getResources(request).getMessage("error.nombre.persona");
 		}
 		JSONObject json = new JSONObject();
        	json.put("nombre",nombre); 
