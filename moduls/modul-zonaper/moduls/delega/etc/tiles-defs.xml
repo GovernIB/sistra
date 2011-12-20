@@ -31,7 +31,7 @@
    	<definition
     	name=".delegacionesManejar"
     	extends=".mainLayout"
-    	controller="es.caib.zonaper.delega.controller.EntidadesController">	
+    	controller="es.caib.zonaper.delega.controller.DelegacionesController">	
     	<put name="main" value="/delegaciones.jsp"/>
    	</definition>
    	

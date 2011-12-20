@@ -4,6 +4,7 @@ package es.caib.zonaper.delega.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.Action;
@@ -42,8 +43,11 @@ public class AsignarRepresentanteAction extends Action
 		
 		// Damos de alta la delegacion de representante
 		DelegacionDelegate deleg = DelegateUtil.getDelegacionDelegate();
-		PluginFirmaIntf plgFirma = PluginFactory.getInstance().getPluginFirma();
-		FirmaIntf firma = plgFirma.parseFirmaFromHtmlForm(firmaJSP);
+		FirmaIntf firma = null;
+		if (StringUtils.isNotBlank(firmaJSP)) {
+			PluginFirmaIntf plgFirma = PluginFactory.getInstance().getPluginFirma();
+			firma = plgFirma.parseFirmaFromHtmlForm(firmaJSP);
+		}
 		ReferenciaRDS refRDS = new ReferenciaRDS(Long.parseLong(codigoRDS),claveRDS);
 		try{
 			int res = deleg.altaDelegacion(refRDS,firma);

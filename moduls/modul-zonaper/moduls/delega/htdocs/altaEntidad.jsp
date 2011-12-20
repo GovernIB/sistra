@@ -18,6 +18,29 @@
 <script type="text/javascript">
 //funcion que se ejecutan solo entrar en la pagina
 $(document).ready(function(){
+
+	<logic:present name="detalleEntidadForm">
+		<logic:notEqual name="detalleEntidadForm" property="modificacio"  value="S">
+		 	$('#divApellidos').hide();
+	     	$('#documentoId').text('CIF'); 
+	     </logic:notEqual>	
+	
+	     <logic:equal name="detalleEntidadForm" property="modificacio"  value="S">
+		     <logic:equal name="detalleEntidadForm" property="tipo"  value="CIF">
+			 	$('#divApellidos').hide();
+		  		$('#documentoId').text('CIF'); 
+			 </logic:equal>		  	
+			 <logic:notEqual name="detalleEntidadForm" property="tipo"  value="CIF">
+			 	$('#documentoId').text('NIF'); 
+			 </logic:notEqual>
+	  	 </logic:equal>
+	  </logic:present>
+
+	  <logic:notPresent name="detalleEntidadForm">
+		 	$('#divApellidos').hide();
+	     	$('#documentoId').text('CIF'); 	    	
+	  </logic:notPresent>
+	 	
 		$.postJSON = function(url, data, callback) {
         	return jQuery.ajax({
 		        'type': 'POST',
@@ -52,6 +75,26 @@ function volver(){
 	document.detalleEntidadForm.submit();
 }
 </script>
+
+<script type="text/javascript"> 
+ 
+$(function() 
+{ 
+  $('input.tipoPersonaClass').click( function( event ) 
+  { 
+    var val = ($('input:radio[name=tipoPersona]:checked').val()); 
+    if (val == "nif") {
+      $('#divApellidos').show();     
+      $('#documentoId').text('NIF');  
+    } else {
+      $('#divApellidos').hide();
+      $('#documentoId').text('CIF'); 
+    }
+  }) 
+} ); 
+ 
+</script> 
+
 		<bean:define id="urlHabilitarEntidad"  type="java.lang.String">
 			<html:rewrite page="/habilitarEntidad.do"/>
 		</bean:define>
@@ -67,8 +110,17 @@ function volver(){
 				<html:hidden styleId="representante" property="representante"/>
 				<html:hidden styleId="personaJuridica" property="persona.personaJuridica"/>
 				<html:hidden styleId="altaCorrecta" property="altaCorrecta"/>
+				<logic:notEqual name="detalleEntidadForm" property="modificacio"  value="S">
+					<p>
+						<label for="tipoPersona"><bean:message key="entidad.tipoPersona"/></label>
+						<input class="tipoPersonaClass" type="radio" name="tipoPersona" id="tipoPersonaCif" value="cif" checked="checked"/> 
+					    <bean:message key="entidad.tipoPersonaCif"/>					    
+					    <input class="tipoPersonaClass" type="radio" name="tipoPersona" id="tipoPersonaNif" value="nif"/> 
+					    <bean:message key="entidad.tipoPersonaNif"/>
+					</p>
+				</logic:notEqual>
 				<p>
-					<label for="persona.nif"><bean:message key="entidad.documentoIdLegal"/></label>
+					<label for="persona.nif" id="documentoId"><bean:message key="entidad.documentoIdLegal"/></label>
 					<logic:equal name="detalleEntidadForm" property="modificacio" value="S">
 						<html:text styleId="nif" property="persona.nif" styleClass="pc40" readonly="true"/>
 					</logic:equal>
@@ -80,6 +132,7 @@ function volver(){
 					<label for="persona.nombre"><bean:message key="entidad.nombre"/></label>
 					<html:text styleId="nombre" property="persona.nombre" styleClass="pc40"/>
 				</p>
+				<div id="divApellidos">
 				<p>
 					<label for="persona.apellido1"><bean:message key="entidad.apellido1"/></label>
 					<html:text styleId="apellido1" property="persona.apellido1" styleClass="pc40"/>
@@ -88,6 +141,7 @@ function volver(){
 					<label for="persona.apellido2"><bean:message key="entidad.apellido2"/></label>
 					<html:text styleId="apellido2" property="persona.apellido2" styleClass="pc40"/>
 				</p>
+				</div>
 				<p>
 					<label for="persona.direccion"><bean:message key="entidad.direccion"/></label>
 					<html:text styleId="direccion" property="persona.direccion" styleClass="pc40"/>
