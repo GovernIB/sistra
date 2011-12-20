@@ -37,6 +37,7 @@ import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.persistence.delegate.ConsultaPADDelegate;
 import es.caib.zonaper.persistence.delegate.DelegateException;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
+import es.caib.zonaper.persistence.util.ConfigurationUtil;
 
 /**
  * SessionBean para mantener y consultar Delegacion
@@ -56,6 +57,8 @@ public abstract class DelegacionFacadeEJB extends HibernateEJB
 {
 	private String roleDelegacion;
 	
+	private boolean firmarDelegacionRepresentante;
+	
 	/**
      * @ejb.create-method     
      * @ejb.permission role-name="${role.todos}"
@@ -67,6 +70,14 @@ public abstract class DelegacionFacadeEJB extends HibernateEJB
 		try{
 			InitialContext initialContext = new InitialContext();			 
 			roleDelegacion = (( String ) initialContext.lookup( "java:comp/env/roleDelegacion" ));
+			
+			String firmarDlgRpte = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("delega.firmarDelegacionRepresentante");
+			if (firmarDlgRpte != null && firmarDlgRpte.equals("false")) {
+				firmarDelegacionRepresentante = false;
+			} else {
+				firmarDelegacionRepresentante = true;
+			}
+			
 		}catch(Exception ex){
 			log.error(ex);
 		}
@@ -498,11 +509,6 @@ public abstract class DelegacionFacadeEJB extends HibernateEJB
 			}
 			String nifUsuario = plgLogin.getNif(this.ctx.getCallerPrincipal());
 			
-			// Comprobamos que quien firma es el usuario autenticado
-			if (!firma.getNif().equals(nifUsuario)){
-				return -6;
-			}
-			
 			// En caso de que la delegacion sea de representacion solo puede darla de alta con role delegacion,
 			// no debe existir un representante activo
 			if (delegXml.getPermisos().indexOf(ConstantesZPE.DELEGACION_PERMISO_REPRESENTANTE_ENTIDAD) != -1){
@@ -520,14 +526,27 @@ public abstract class DelegacionFacadeEJB extends HibernateEJB
 			}
 			
 			// Asociamos firma al documento
-			try{					
-				rds.asociarFirmaDocumento(refRDS, firma);
-			}catch (Exception ex){
-				if (!this.ctx.getRollbackOnly()){
-					this.ctx.setRollbackOnly();
+			// (Si es role delegacion para asignar representante no hace falta firma si esta configurado que no se firme)
+			boolean requiereFirma = true;
+			if (delegXml.getPermisos().indexOf(ConstantesZPE.DELEGACION_PERMISO_REPRESENTANTE_ENTIDAD) != -1 
+					&& !firmarDelegacionRepresentante) {
+				requiereFirma = false;
+			}
+			if (requiereFirma) {
+				// Comprobamos que quien firma es el usuario autenticado
+				if (!firma.getNif().equals(nifUsuario)){
+					return -6;
 				}
-				log.error("Error validando firma",ex);
-				return -7;	
+				// Asociamos firma a documento
+				try{					
+					rds.asociarFirmaDocumento(refRDS, firma);
+				}catch (Exception ex){
+					if (!this.ctx.getRollbackOnly()){
+						this.ctx.setRollbackOnly();
+					}
+					log.error("Error validando firma",ex);
+					return -7;	
+				}
 			}
 			
 			// Creamos delegacion

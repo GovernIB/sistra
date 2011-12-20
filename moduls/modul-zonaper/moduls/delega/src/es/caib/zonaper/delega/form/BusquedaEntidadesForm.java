@@ -10,7 +10,15 @@ public class BusquedaEntidadesForm extends ValidatorForm
 {
 		
 	private String entidadNif;
+	
+	private String entidadNombre;
 		
+	public String getEntidadNombre() {
+		return entidadNombre;
+	}
+	public void setEntidadNombre(String entidadNombre) {
+		this.entidadNombre = entidadNombre;
+	}
 	public String getEntidadNif() {
 		return entidadNif;
 	}

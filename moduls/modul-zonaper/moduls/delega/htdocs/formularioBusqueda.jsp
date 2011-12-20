@@ -9,6 +9,16 @@
 
 <script type="text/javascript" src="js/formularioBusqueda.js"></script>
 <script type="text/javascript">
+ $(document).ready(function () {
+	  $('#entidadNif').focus(function() {
+	    $('#entidadNombre').val("");
+	  });
+	  $('#entidadNombre').focus(function() {
+	    $('#entidadNif').val("");
+	  });
+	});
+
+
 //funcion que envia a dar de alta una entidad
 function irAlta(){
 	document.busquedaEntidadesForm.action='<html:rewrite page="/irAltaEntidad.do"/>';
@@ -35,7 +45,9 @@ function irBuscar(){
 		<p>
 			
 			<bean:message key="formularioBusqueda.nif"/>
-			<html:text property="entidadNif" size="12" maxlength="12" />
+			<html:text property="entidadNif" styleId="entidadNif" size="12" maxlength="12" />
+			<bean:message key="formularioBusqueda.nombre"/>
+			<html:text property="entidadNombre"  styleId="entidadNombre" size="25" maxlength="50" />
 			<input name="buscar" id="buscar" type="button" value="<bean:message key="boton.enviarBusqueda" />" onclick="javascript:irBuscar();"/> 			
 		</p>
 		<p>

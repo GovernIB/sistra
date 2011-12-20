@@ -11,6 +11,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import es.caib.zonaper.delega.Constants;
+import es.caib.zonaper.persistence.delegate.DelegateUtil;
 
 /**
  * @struts.action
@@ -48,7 +49,8 @@ public class InitAction extends Action
 				}
 			}
 			setLocale(request,new Locale(ls_language));
-		}
+		}		
+		
 		return mapping.findForward("success");    
 	}
 

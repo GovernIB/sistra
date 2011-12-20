@@ -132,6 +132,17 @@ public class PadAplicacionDelegate implements StatelessDelegate {
         }
 	}
 	
+	public List buscarEntidadesPorNombre( String nombreEntidad) throws DelegateException{
+		try
+		{
+			return getFacade().buscarEntidadesPorNombre( nombreEntidad );
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

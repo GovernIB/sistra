@@ -8,6 +8,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
 
+import es.caib.util.NifCif;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.persistence.delegate.DelegacionDelegate;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
@@ -18,6 +19,16 @@ public class DetalleEntidadForm extends ValidatorForm
 	private String modificacio;
 	private String altaCorrecta;
 	
+	public String getTipo() {
+		if (NifCif.esCIF(persona.getNif())) {
+			return "CIF";
+		} else {
+			return "NIF";
+		}
+	}
+
+	public void setTipo(String tipo) {}
+
 	public PersonaPAD getPersona() {
 		if(persona == null){
 			persona = new PersonaPAD();
