@@ -513,6 +513,47 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
         } 
     }
     
+    /**
+     * 
+     * Realiza la busqueda de entidades por nombre
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.delegacion}"
+     * 
+     * @param nifEntidad
+     * @return Lsta con las entidades
+     * @throws ExcepcionPAD
+     */
+    public List buscarEntidadesPorNombre( String nombreEntidad) throws ExcepcionPAD
+    {
+    	List entidadesPAD = new ArrayList();
+    	if (StringUtils.isNotBlank(nombreEntidad)) {
+	    	Session session = getSession();
+	       	try
+	    	{
+	       		String select = "FROM Persona AS p WHERE upper(p.nombre) like :clave or upper(p.apellido1) like :clave or upper(p.apellido2) like :clave ";
+	       		String clave = "%" +  nombreEntidad.toUpperCase() + "%";
+	       		Query query = session.createQuery(select);
+	       		query.setParameter("clave",clave);
+	           
+	       		List entidades = query.list();
+	       		if (!entidades.isEmpty()){
+	            	for(int i=0;i<entidades.size();i++){
+	            		entidadesPAD.add(personaToPersonaPAD((Persona)entidades.get(i)));
+	            	}
+	            }	                  		
+	    	}
+	    	catch( Exception ex )
+	    	{
+	    		throw new ExcepcionPAD("Error obteniendo las entidades",ex);
+	    	}
+	    	finally 
+	        {
+	            close(session);
+	        } 
+    	}
+    	return  entidadesPAD;
+    }
 	
 	// ----------------------------------------------
 	//	FUNCIONES AUXILIARES

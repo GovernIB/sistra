@@ -15,5 +15,5 @@ public class Constants implements Serializable
 	public static final String DATOS_SESION_KEY		= "es.caib.zonaper.back.DATOS_SESION";
 	
 	public static final String IMPLEMENTACION_FIRMA_KEY = "implementacionFirma";
-    
+	 
 }
