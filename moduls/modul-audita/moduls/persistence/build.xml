@@ -135,7 +135,38 @@
 		-->
     </target>
 
-    <target name="ejb.compile" depends="ejb.gen.all">
+	<target name="checkBBDD">
+	   <delete file="./src/es/caib/audita/persistence/ejb/LoggerEvento.properties" quiet="yes" />
+	   <delete file="./src/es/caib/audita/persistence/ejb/Auditoria.properties" quiet="yes" />
+	   <delete file="./src/es/caib/audita/persistence/ejb/CuadroMandoInicio.properties" quiet="yes" />
+	   <condition property="isPostgreSQL" >
+         <equals arg1="${hibernate.dialect}" arg2="net.sf.hibernate.dialect.PostgreSQLDialect" />
+       </condition>
+	   <condition property="isOracle" >
+         <equals arg1="${hibernate.dialect}" arg2="net.sf.hibernate.dialect.Oracle9Dialect" />
+       </condition>
+	</target>
+	
+	<target name="oracle" if="isOracle">
+	    <echo message="============ ORACLE ==================" />
+	    <copy file="./src/es/caib/audita/persistence/ejb/LoggerEvento.properties_oracle" tofile="./src/es/caib/audita/persistence/ejb/LoggerEvento.properties"/>
+		<copy file="./src/es/caib/audita/persistence/ejb/Auditoria.properties_oracle" tofile="./src/es/caib/audita/persistence/ejb/Auditoria.properties"/>
+		<copy file="./src/es/caib/audita/persistence/ejb/CuadroMandoInicio.properties_oracle" tofile="./src/es/caib/audita/persistence/ejb/CuadroMandoInicio.properties"/>
+	</target>
+	
+	<target name="postgresql" if="isPostgreSQL">
+	    <echo message="============ POSTGRESQL ==================" />
+	    <copy file="./src/es/caib/audita/persistence/ejb/LoggerEvento.properties_postgresql" tofile="./src/es/caib/audita/persistence/ejb/LoggerEvento.properties"/>
+		<copy file="./src/es/caib/audita/persistence/ejb/Auditoria.properties_postgresql" tofile="./src/es/caib/audita/persistence/ejb/Auditoria.properties"/>
+		<copy file="./src/es/caib/audita/persistence/ejb/CuadroMandoInicio.properties_postgresql" tofile="./src/es/caib/audita/persistence/ejb/CuadroMandoInicio.properties"/>
+	</target>
+
+	<target name="sqlproperties" depends="checkBBDD, oracle, postgresql" >
+	    
+	</target>
+
+
+    <target name="ejb.compile" depends="sqlproperties, ejb.gen.all">
         <javac
             destdir="${ejb.classes}"
             classpathref="ejb.class.path"
