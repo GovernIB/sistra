@@ -52,7 +52,11 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
             IdiomaDelegate delegate = DelegateUtil.getIdiomaDelegate();
 
             // Lenguaje por defecto.
-            defaultLang = delegate.lenguajePorDefecto();
+            defaultLang = delegate.lenguajePorDefecto();		
+            if (defaultLang == null) {
+              log.debug("Default lang es NULL. Poniendo defaultlang a [ca].");
+              defaultLang = "ca";
+            }
             log.debug("Default lang: " + defaultLang);
             getServletContext().setAttribute(Constants.DEFAULT_LANG_KEY, defaultLang);
 

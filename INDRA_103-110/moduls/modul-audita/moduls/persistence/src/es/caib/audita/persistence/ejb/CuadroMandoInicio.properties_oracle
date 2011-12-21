@@ -1,3 +1,4 @@
+#SQL ORACLE
 #Consultas para obtener las estadisticas correspondientes, usadas por AuditoriaFacadeEJB
 sql.select.ejemplo=select to_char( sysdate ) as test from dual where 1=? and 'Hola' = ?
 sql.select.modulos=select * from AUD_MODUL

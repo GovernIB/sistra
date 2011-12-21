@@ -15,9 +15,6 @@
         <new-connection-sql>some arbitrary sql</new-connection-sql>
         -->
 
-        <!-- sql to call on an existing pooled connection when it is obtained from pool - the PostgreSQLValidConnectionChecker is prefered
-    <check-valid-connection-sql>select 1 from dual</check-valid-connection-sql>
-        -->
     <min-pool-size>1</min-pool-size>
     <max-pool-size>20</max-pool-size>
 
