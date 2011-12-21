@@ -23,8 +23,13 @@
 			<!--  formulario -->
 			<html:form action="/protected/actualizarDatosPersonales" styleId="formConfirmacion">
 				
-				<p>
-						<span class="etiqueta"><bean:message key="actualizarDatosPersonales.nif"/></span>
+				<p>	
+						<logic:equal name="actualizarDatosPersonalesForm" property="tipoPersona" value="NIF">
+							<span class="etiqueta"><bean:message key="actualizarDatosPersonales.nif"/></span>
+						</logic:equal>
+						<logic:equal name="actualizarDatosPersonalesForm" property="tipoPersona" value="CIF">
+							<span class="etiqueta"><bean:message key="actualizarDatosPersonales.cif"/></span>
+						</logic:equal>
 						<bean:write name="actualizarDatosPersonalesForm" property="nif"/>
 				</p>
 				<p>
@@ -33,7 +38,7 @@
 						<html:text property="nombre" styleId="nombre" maxlength="50" size="20"/>						
 					</label>
 				</p>
-				
+				<logic:equal name="actualizarDatosPersonalesForm" property="tipoPersona" value="NIF">
 				<p>
 					<label for="apellido1">
 						<span class="etiqueta"><bean:message key="actualizarDatosPersonales.apellido1"/></span>
@@ -47,7 +52,7 @@
 						<html:text property="apellido2" styleId="apellido2" maxlength="50" size="20"/>
 					</label>
 				</p>
-				
+				</logic:equal>
 				<p>
 					<label for="direccion">
 						<span class="etiqueta"><bean:message key="actualizarDatosPersonales.direccion"/></span>
