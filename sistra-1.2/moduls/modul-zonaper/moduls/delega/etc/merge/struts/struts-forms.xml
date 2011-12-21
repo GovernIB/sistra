@@ -1,7 +1,0 @@
-<form-bean
-    name="detalleEntidadForm"
-    type="es.caib.zonaper.delega.form.DetalleEntidadForm" />  
-    
-<form-bean
-    name="busquedaEntidadesForm"
-    type="es.caib.zonaper.delega.form.BusquedaEntidadesForm" />  

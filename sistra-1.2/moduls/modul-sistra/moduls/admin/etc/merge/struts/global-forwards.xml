@@ -1,3 +1,0 @@
-<global-forwards>
-    <forward name="mensaje" path="/mensaje.do" />
-</global-forwards>

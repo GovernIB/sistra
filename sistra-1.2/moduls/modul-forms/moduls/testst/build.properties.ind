@@ -1,8 +1,0 @@
-# Opciones de compilación.
-javac.debug=on
-javac.optimize=off
-javac.deprecation=on
-
-# Configuració
-tramitacio.inici.url=http://192.168.145.39:8080/formfront/iniciTelematic.do
-tramitacio.redireccio.url=/formfront/continuacioTelematic.do

@@ -1,8 +1,0 @@
-<global-exceptions>
-	<exception
-        handler="es.caib.zonaper.delega.action.FrontExceptionHandler"
-        key="errors.exception"
-        type="java.lang.Throwable"
-        path="/moduls/mensaje.jsp"
-    />
-</global-exceptions>
