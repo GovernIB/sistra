@@ -13,6 +13,7 @@ import es.caib.util.ValidacionesUtil;
 
 public class ActualizarDatosPersonalesForm extends ValidatorForm
 {
+	private String tipoPersona; // NIF(Fisica) / CIF (Juridica)
 	private String nif;
 	private String nombre;
 	private String apellido1;
@@ -25,6 +26,12 @@ public class ActualizarDatosPersonalesForm extends ValidatorForm
     private String telefonoMovil;
     private String email;
     
+    public String getTipoPersona() {
+		return tipoPersona;
+	}
+	public void setTipoPersona(String tipoPersona) {
+		this.tipoPersona = tipoPersona;
+	}
 	public String getApellido1() {
 		return apellido1;
 	}
