@@ -8,6 +8,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import es.caib.util.NifCif;
 import es.caib.zonaper.front.form.ActualizarDatosPersonalesForm;
 import es.caib.zonaper.model.DatosSesion;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
@@ -39,6 +40,7 @@ public class MostrarDatosPersonalesAction extends BaseAction {
 	
 		ActualizarDatosPersonalesForm f = (ActualizarDatosPersonalesForm)  obtenerActionForm(mapping,request, "/protected/actualizarDatosPersonales");
 		BeanUtils.copyProperties(f,persona);
+		f.setTipoPersona(NifCif.esCIF(f.getNif())?"CIF":"NIF");
 		
 		return mapping.findForward("success");
 		
