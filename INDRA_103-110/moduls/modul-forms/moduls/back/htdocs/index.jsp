@@ -11,7 +11,7 @@ Página principal.
 --%>
 <html:html locale="true" xhtml="true">
 <head>
-   <title>FORMSBACK</title>
+   <title>FORMBACK</title>
    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-15" />
 </head>
 <%--

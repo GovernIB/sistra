@@ -5,7 +5,7 @@
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <html:html locale="true" xhtml="true">
 <head>
-   <title>FORMSBACK</title>
+   <title>FORMBACK</title>
    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-15" />
    <link rel="stylesheet" href='<html:rewrite page="/css/styleA.css"/>' type="text/css" />
 </head>
