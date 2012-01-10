@@ -650,9 +650,9 @@ public class TramiteProcessorEJB implements SessionBean {
         		return generarRespuestaFront(mens,null);
     		}
     		
-    		// Pasamos trámite a usuario
+    		// Pasamos trámite a usuario. Actualizamos PAD indicando que ha habido cambio de flujo.
     		tramitePersistentePAD.setUsuarioFlujoTramitacion(persona.getUsuarioSeycon());
-    		this.actualizarPAD();
+    		this.actualizarPAD(true);
     		
 	    	// Mostramos mensaje de que el trámite ha sido remitido
 	    	res = "S";
@@ -5221,6 +5221,19 @@ public class TramiteProcessorEJB implements SessionBean {
 	 * @throws Exception
 	 */
 	private String actualizarPAD() throws Exception{
+		return actualizarPAD(false);
+	}
+	
+	/**
+	 * Actualiza la PAD con la información de persistencia calculando la fecha de caducidad del trámite
+	 * y actualizando fecha de modificacion.
+	 * La fecha de caducidad del trámite no podrá sobrepasar la fecha de fin de plazo
+	 * 
+	 * @param cambioFlujo Actualiza PAD teniendo en cuenta de que se ha producido un cambio de flujo.
+	 * 
+	 * @throws Exception
+	 */
+	private String actualizarPAD(boolean cambioFlujo) throws Exception{
 		// Actualizamos fecha de caducidad
 		tramitePersistentePAD.setFechaCaducidad(getFechaCaducidad());
 		// Actualizamos PAD
@@ -5228,12 +5241,15 @@ public class TramiteProcessorEJB implements SessionBean {
 		String idPersistencia = pad.grabarTramitePersistente(this.tramitePersistentePAD);
 		tramitePersistentePAD.setIdPersistencia(idPersistencia);
 		// Recargamos tramite desde la PAD para obtener la fecha de modificacion
-		// que servira para evitar accesos concurrentes
-    	tramitePersistentePAD = pad.obtenerTramitePersistente(idPersistencia);
-    	if (tramitePersistentePAD == null){
-    		throw new ProcessorException("No se ha podido cargar tramite",
-    				MensajeFront.MENSAJE_ERRORDESCONOCIDO);	  
-    	}
+		// que servira para evitar accesos concurrentes (comprobamos que no haya habido un cambio de flujo,
+		// con lo que no podriamos acceder al tramite persistente)
+		if (!cambioFlujo) {
+			tramitePersistentePAD = pad.obtenerTramitePersistente(idPersistencia);
+	    	if (tramitePersistentePAD == null){
+	    		throw new ProcessorException("No se ha podido cargar tramite",
+	    				MensajeFront.MENSAJE_ERRORDESCONOCIDO);	  
+	    	}
+		}
 		return idPersistencia;
 	}
 	
