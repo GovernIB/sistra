@@ -327,9 +327,10 @@ public abstract class DelegacionFacadeEJB extends HibernateEJB
 		Session session = getSession();
 		try
 		{			
-			Query query = session.createQuery( "SELECT d FROM Delegacion d where d.codigo = :codigo and d.anulada <> 'S' and d.fechaInicioDelegacion <= :ahora and d.fechaFinDelegacion > :ahora"  );
+			// Query query = session.createQuery( "SELECT d FROM Delegacion d where d.codigo = :codigo and d.anulada <> 'S' and d.fechaInicioDelegacion <= :ahora and d.fechaFinDelegacion > :ahora"  );
+			Query query = session.createQuery( "SELECT d FROM Delegacion d where d.codigo = :codigo"  );
 			query.setParameter( "codigo", new Long(codigo));
-			query.setParameter( "ahora", new Date() );
+			// query.setParameter( "ahora", new Date() );
 			query.setCacheable( true );
 			Delegacion del = (Delegacion) query.uniqueResult();
 			String nifRpte = this.obtenerRepresentanteEntidad(del.getNifDelegante());
