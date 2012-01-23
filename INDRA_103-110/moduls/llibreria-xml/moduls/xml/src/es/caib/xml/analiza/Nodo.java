@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+
+
 public class Nodo extends Par implements Serializable{
 	private List atributos = new ArrayList();
 	private String xpath = "";
