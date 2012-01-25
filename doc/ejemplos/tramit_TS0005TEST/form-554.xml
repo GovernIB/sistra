@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <Formulario bloqueado="false" fechaExportacion="Tue Jan 10 14:14:38 CET 2012" hasBarcode="false" lastVersion="true" modelo="554" posBarcodeX="0" posBarcodeY="0" version="1">
+    <modoFuncionamiento codigo="1" fecha="Sat Feb 09 00:00:00 CET 2008" nombre="VERSION 1: MODIFICACION INDRA (FEBRERO 08)" sufijo="V1">
+      <traducciones/>
+    </modoFuncionamiento>
+    <pantallas>
+      <pantalla inicial="true" nombre="pMenu" orden="0" ultima="true">
+        <ayudas/>
+        <componentes>
+          <componente class="org.ibit.rol.form.model.Label" nombreLogico="cEtiqueta13" orden="0" posicion="0">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value etiqueta="&lt;b&gt;&lt;u&gt;Aquesta és la informació amb la que s&apos;ha identificat l&apos;usuari que representau&lt;/u&gt;&lt;/b&gt;"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value etiqueta="&lt;b&gt;&lt;u&gt;Ésta es la información con la que se ha identificado el usuario al que representa&lt;/u&gt;&lt;/b&gt;"/>
+              </entry>
+            </traducciones>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="15" etiquetaPDF="/FORMULARIO/VALIDACION/NIF" expresionValidacion="B64#Zl9jTmlmPT1mX2NOaWZPY3VsdG87" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cNif" numero="0" oculto="false" orden="1" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value ayuda="Nif" nombre="Nif"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value ayuda="Nif" nombre="NIF"/>
+              </entry>
+            </traducciones>
+            <validaciones/>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="52" etiquetaPDF="/FORMULARIO/VALIDACION/NOMBRE" filas="1" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cNombre" numero="0" oculto="false" orden="2" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value ayuda="Nom" nombre="Nom"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value ayuda="Nombre" nombre="Nombre"/>
+              </entry>
+            </traducciones>
+            <validaciones/>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="0" etiquetaPDF="/FORMULARIO/VALIDACION/NIFOCULTO" filas="0" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cNifOculto" numero="0" oculto="true" orden="3" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="nif"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="nif"/>
+              </entry>
+            </traducciones>
+            <validaciones/>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+          <componente class="org.ibit.rol.form.model.Label" nombreLogico="cobligatorio" orden="4" posicion="0">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value etiqueta="&lt;font size=&apos;1&apos; color=&apos;#0015dd&apos;&gt;Els camps amb asterisc (*) són obligatoris&lt;/font&gt;"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value etiqueta="&lt;font size=&apos;1&apos; color=&apos;#0015dd&apos;&gt;Los campos con asterisco (*) son obligatorios&lt;/font&gt;"/>
+              </entry>
+            </traducciones>
+          </componente>
+          <componente array="false" bloqueado="false" class="org.ibit.rol.form.model.TextBox" columnas="0" etiquetaPDF="/FORMULARIO/VALIDACION/NIFSESION" filas="0" indexed="false" mostrarEnTabla="false" multilinea="false" nombreLogico="cNifSesion" numero="0" oculto="true" orden="5" posicion="0" tipoValor="java.lang.String">
+            <traducciones>
+              <entry>
+                <key>ca</key>
+                <value nombre="nifSesió"/>
+              </entry>
+              <entry>
+                <key>es</key>
+                <value nombre="nifSesión"/>
+              </entry>
+            </traducciones>
+            <validaciones/>
+            <valoresPosibles>
+              <valorPosible defecto="true" orden="0">
+                <traducciones/>
+              </valorPosible>
+            </valoresPosibles>
+          </componente>
+        </componentes>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value titulo="Selecció de proves a realitzar"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value titulo="Selección de pruebas a realizar"/>
+          </entry>
+        </traducciones>
+      </pantalla>
+    </pantallas>
+    <salidas/>
+    <traducciones>
+      <entry>
+        <key>ca</key>
+        <value titulo="TS0005TESTF4 - Test de Plataforma de Tramitació i Notificació Telemàtica II"/>
+      </entry>
+      <entry>
+        <key>es</key>
+        <value titulo="TS0005TESTF4 - Test de Plataforma de Tramitación y Notificación Telemática II"/>
+      </entry>
+    </traducciones>
+  </Formulario>
