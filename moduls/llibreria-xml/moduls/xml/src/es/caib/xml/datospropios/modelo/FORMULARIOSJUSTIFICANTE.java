@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{}DOCUMENTO" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element ref="{}FORMULARIO_JUSTIFICANTE" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -38,41 +38,41 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "documento"
+    "formulariojustificante"
 })
-@XmlRootElement(name = "DOCUMENTOS_ENTREGAR")
-public class DOCUMENTOSENTREGAR {
+@XmlRootElement(name = "FORMULARIOS_JUSTIFICANTE")
+public class FORMULARIOSJUSTIFICANTE {
 
-    @XmlElement(name = "DOCUMENTO")
-    protected List<DOCUMENTO> documento;
+    @XmlElement(name = "FORMULARIO_JUSTIFICANTE")
+    protected List<FORMULARIOJUSTIFICANTE> formulariojustificante;
 
     /**
-     * Gets the value of the documento property.
+     * Gets the value of the formulariojustificante property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the documento property.
+     * This is why there is not a <CODE>set</CODE> method for the formulariojustificante property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getDOCUMENTO().add(newItem);
+     *    getFORMULARIOJUSTIFICANTE().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link DOCUMENTO }
+     * {@link FORMULARIOJUSTIFICANTE }
      * 
      * 
      */
-    public List<DOCUMENTO> getDOCUMENTO() {
-        if (documento == null) {
-            documento = new ArrayList<DOCUMENTO>();
+    public List<FORMULARIOJUSTIFICANTE> getFORMULARIOJUSTIFICANTE() {
+        if (formulariojustificante == null) {
+            formulariojustificante = new ArrayList<FORMULARIOJUSTIFICANTE>();
         }
-        return this.documento;
+        return this.formulariojustificante;
     }
 
 }

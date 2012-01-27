@@ -25,12 +25,14 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 	private String avisoSMS;
 	private String avisoEmail;
 	private TramiteSubsanacion tramiteSubsanacion;
+	private FormulariosJustificante formulariosJustificante;
+	
 	
 	Instrucciones (){
 		textoInstrucciones = null;
 		documentosEntregar = null;
 		fechaTopeEntrega = null;
-		identificadorPersistencia = null;
+		identificadorPersistencia = null;		
 	}
 			
 	/* (non-Javadoc)
@@ -120,8 +122,11 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 			//  Comprobar habilitar notificacion
 			if (!objetosIguales (getHabilitarNotificacionTelematica(), inst.getHabilitarNotificacionTelematica())) return false;
 			
-			//  Comprobar tramite subsanacino
+			//  Comprobar tramite subsanacion
 			if (!objetosIguales (getTramiteSubsanacion(), inst.getTramiteSubsanacion())) return false;
+			
+			//  Comprobar formularios justificante
+			if (!objetosIguales (getFormulariosJustificante(), inst.getFormulariosJustificante())) return false;
 			
 			// OK los objetos son equivalentes
 			return true;
@@ -187,6 +192,14 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 		this.tramiteSubsanacion = tramiteSubsanacion;
 	}
 
-	
+	public FormulariosJustificante getFormulariosJustificante() {
+		return formulariosJustificante;
+	}
+
+	public void setFormulariosJustificante(
+			FormulariosJustificante formulariosJustificante) {
+		this.formulariosJustificante = formulariosJustificante;
+	}
+
 
 }

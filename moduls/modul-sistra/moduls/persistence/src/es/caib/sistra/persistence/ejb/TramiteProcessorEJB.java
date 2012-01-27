@@ -1,6 +1,8 @@
 package es.caib.sistra.persistence.ejb;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -109,6 +111,7 @@ import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
 import es.caib.zonaper.persistence.delegate.DelegateException;
 import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
 import es.caib.zonaper.persistence.delegate.PadDelegate;
+import es.indra.util.pdf.UtilPDF;
 
 // TODO FLUJO TRAMITACION PARA PAGOS
 // TODO CONTROLAR XA CUANDO AUTENTICACION Y NO HAY FLUJO, Q EL PASO DE FORMULARIO DE FORMULARIOS NO ESTE COMPLETADO HASTA Q EL REPRESENTANTE NO SEA EL USUARIO Q INICIA SESIÓN
@@ -2589,15 +2592,24 @@ public class TramiteProcessorEJB implements SessionBean {
     		}    		
     		    		
     		// Comprobamos si mostramos justificante standard o formulario justificante
+    		// y en el caso de justificante standard si se deben anexar al justificante
     		String identificadorFJ = null;
     		int instanciaFJ=1;
+    		List formsJustif = new ArrayList();
     		for (Iterator it=this.tramiteInfo.getFormularios().iterator();it.hasNext();){
 				DocumentoFront doc = (DocumentoFront) it.next();
-				if (doc.getEstado() == DocumentoFront.ESTADO_CORRECTO && doc.isFormularioJustificante()){
+				
+				// Formulario justificante (nos quedamos con el primero)
+				if (identificadorFJ == null && doc.getEstado() == DocumentoFront.ESTADO_CORRECTO && doc.isFormularioJustificante()){
 					identificadorFJ=doc.getIdentificador();
-					instanciaFJ=doc.getInstancia();
-					break;
+					instanciaFJ=doc.getInstancia();														
 				}
+				
+				// Formularios a anexar al justificante standard
+				if (doc.isFormularioAnexarJustificante()) {
+					formsJustif.add(doc.getIdentificador() + "-" + doc.getInstancia());
+				}
+				
     		}
     		    	
     		String nomfic=null;
@@ -2609,6 +2621,24 @@ public class TramiteProcessorEJB implements SessionBean {
 	    		DocumentoRDS docRds = rds.consultarDocumentoFormateado(refRds,this.datosSesion.getLocale().getLanguage());
 	    		nomfic=docRds.getNombreFichero();
 	    		content=docRds.getDatosFichero();
+	    		
+	    		// En caso de justificante estandar comprobamos si hay que anexar formularios al justificante.	    		
+	    		if (formsJustif.size() > 0) {
+	    			InputStream [] pdfIn = new ByteArrayInputStream[formsJustif.size() + 1];
+	    			pdfIn[0] = new ByteArrayInputStream(content);
+	    			int i = 1;
+	    			for (Iterator it = formsJustif.iterator(); it.hasNext();) {
+	    				String refDoc = (String) it.next();
+	    				DocumentoPersistentePAD docPAD = (DocumentoPersistentePAD) this.tramitePersistentePAD.getDocumentos().get(refDoc);
+	    				DocumentoRDS docRdsForJus = rds.consultarDocumentoFormateado(docPAD.getRefRDS(),this.datosSesion.getLocale().getLanguage());
+	    				pdfIn[i] = new ByteArrayInputStream(docRdsForJus.getDatosFichero());
+	    				i++;	    				
+	    			}	    	
+	    			ByteArrayOutputStream bos = new ByteArrayOutputStream(8192);
+	    			UtilPDF.concatenarPdf(bos, pdfIn);
+	    			content = bos.toByteArray();
+	    		}
+	    		
     		}else{
     			// Consultamos documento formateado al RDS generando copias para interesado y administracion
         		DocumentoPersistentePAD docPAD = (DocumentoPersistentePAD) this.tramitePersistentePAD.getDocumentos().get(identificadorFJ + "-" + instanciaFJ);
@@ -3940,6 +3970,7 @@ public class TramiteProcessorEJB implements SessionBean {
 		docInfo.setFirmar(docNivel.getFirmar() == 'S');
 		docInfo.setPrerregistro( doc.getFormularioPreregistro() == 'S' );
 		docInfo.setFormularioJustificante( doc.getFormularioJustificante() == 'S' );
+		docInfo.setFormularioAnexarJustificante( doc.getFormularioAnexarJustificante() == 'S' );
 		
 		// Evaluamos quien debe completar el documento
 		String nifFlujo="",formulariosFlujo="";

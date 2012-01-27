@@ -27,7 +27,8 @@ public class Documento  extends Traducible {
      private char tipo='F';
      private int orden;
      private char formularioPreregistro='N';
-     private char formularioJustificante='N';     
+     private char formularioJustificante='N';   
+     private char formularioAnexarJustificante='S';     
      private char anexoPresentarTelematicamente='S';
      private String anexoExtensiones;
      private Integer anexoTamanyoMax;
@@ -299,6 +300,15 @@ public class Documento  extends Traducible {
 
 	public void setAnexoConversionPDF(char anexoConversionPDF) {
 		this.anexoConversionPDF = anexoConversionPDF;
+	}
+	
+	public char getFormularioAnexarJustificante() {
+		return formularioAnexarJustificante;
+	}
+
+
+	public void setFormularioAnexarJustificante(char formularioAnexarJustificante) {
+		this.formularioAnexarJustificante = formularioAnexarJustificante;
 	}
 	
 	/*
