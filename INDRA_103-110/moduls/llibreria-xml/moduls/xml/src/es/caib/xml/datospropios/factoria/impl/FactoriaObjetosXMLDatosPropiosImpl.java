@@ -33,6 +33,8 @@ import es.caib.xml.datospropios.modelo.DATOSPROPIOS;
 import es.caib.xml.datospropios.modelo.DATO;
 import es.caib.xml.datospropios.modelo.DOCUMENTO;
 import es.caib.xml.datospropios.modelo.DOCUMENTOSENTREGAR;
+import es.caib.xml.datospropios.modelo.FORMULARIOJUSTIFICANTE;
+import es.caib.xml.datospropios.modelo.FORMULARIOSJUSTIFICANTE;
 import es.caib.xml.datospropios.modelo.INSTRUCCIONES;
 import es.caib.xml.datospropios.modelo.ObjectFactory;
 import es.caib.xml.datospropios.modelo.SOLICITUD;
@@ -429,6 +431,10 @@ public class FactoriaObjetosXMLDatosPropiosImpl implements
 			if (instJAXB.getTRAMITESUBSANACION() != null){
 				instrucciones.setTramiteSubsanacion(this.crearTramiteSubsanacion(instJAXB.getTRAMITESUBSANACION()));
 			}
+			
+			if (instJAXB.getFORMULARIOSJUSTIFICANTE() != null){
+				instrucciones.setFormulariosJustificante(this.crearFormulariosJustificante(instJAXB.getFORMULARIOSJUSTIFICANTE()));
+			}
 		}
 		
 		return instrucciones;
@@ -578,6 +584,10 @@ public class FactoriaObjetosXMLDatosPropiosImpl implements
 			if (instrucciones.getTramiteSubsanacion() != null){
 				instruccionesJAXB.setTRAMITESUBSANACION( this.crearTramiteSubsanacionJAXB(instrucciones.getTramiteSubsanacion()) );
 			}
+			
+			if (instrucciones.getFormulariosJustificante() != null){
+				instruccionesJAXB.setFORMULARIOSJUSTIFICANTE(this.crearFormulariosJustificanteJAXB(instrucciones.getFormulariosJustificante()) );
+			}
 		}
 		
 		return instruccionesJAXB;
@@ -649,5 +659,40 @@ public class FactoriaObjetosXMLDatosPropiosImpl implements
 		}
 		
 		return tramiteSubsanacion;
+	}
+	
+	public FormulariosJustificante crearFormulariosJustificante() {
+		return new FormulariosJustificante();
+	}
+	
+	
+	private FORMULARIOSJUSTIFICANTE crearFormulariosJustificanteJAXB (FormulariosJustificante formularioJustificante) throws EstablecerPropiedadException{
+		FORMULARIOSJUSTIFICANTE formularioJustificanteJAXB = null;		
+		if (formularioJustificante != null){
+			formularioJustificanteJAXB = new FORMULARIOSJUSTIFICANTE ();			
+			if (formularioJustificante.getFormularios() != null) {
+				for (int i=0; i < formularioJustificante.getFormularios().size(); i++) {
+					String idForm = (String) formularioJustificante.getFormularios().get(i);
+					FORMULARIOJUSTIFICANTE fj = new FORMULARIOJUSTIFICANTE();
+					fj.setIDENTIFICADOR(idForm);
+					formularioJustificanteJAXB.getFORMULARIOJUSTIFICANTE().add(fj );
+				}
+			}							
+		}		
+		return formularioJustificanteJAXB;
+	}
+	
+	
+	private FormulariosJustificante crearFormulariosJustificante (FORMULARIOSJUSTIFICANTE formularioJustificanteJAXB) throws EstablecerPropiedadException{
+		FormulariosJustificante formularioJustificante = null;
+		if (formularioJustificanteJAXB != null){
+			formularioJustificante = new FormulariosJustificante ();
+			if (formularioJustificanteJAXB.getFORMULARIOJUSTIFICANTE() != null) {
+				for (FORMULARIOJUSTIFICANTE fj : formularioJustificanteJAXB.getFORMULARIOJUSTIFICANTE()) {
+					formularioJustificante.getFormularios().add(fj.getIDENTIFICADOR());
+				}
+			}					
+		}
+		return formularioJustificante;
 	}
 }

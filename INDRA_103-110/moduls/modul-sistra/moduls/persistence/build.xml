@@ -50,6 +50,7 @@
             <include name="sistra-util.jar"/>
             <include name="sistra-plugins.jar"/>
     		<include name="sistra-xml.jar"/>
+    		<include name="sistra-pdf.jar"/>
         </fileset>
         <fileset dir="${ejb.product}">
             <include name="5-sistra-model.jar"/>

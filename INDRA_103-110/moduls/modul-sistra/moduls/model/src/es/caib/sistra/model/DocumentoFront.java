@@ -65,6 +65,10 @@ public class DocumentoFront  implements Serializable{
 	 */
 	private boolean formularioJustificante;
 	/**
+	 * Indica si el formulario debe anexarse al justificante (no presencial).
+	 */
+	private boolean formularioAnexarJustificante;
+	/**
 	 * Indica si el documento debe firmarse digitalmente individualmente
 	 */
 	private boolean firmar;
@@ -388,6 +392,12 @@ public class DocumentoFront  implements Serializable{
 	}
 	public void setRechazadaFirmaDelegada(boolean rechazadaFirmaDelegada) {
 		this.rechazadaFirmaDelegada = rechazadaFirmaDelegada;
+	}
+	public boolean isFormularioAnexarJustificante() {
+		return formularioAnexarJustificante;
+	}
+	public void setFormularioAnexarJustificante(boolean formularioAnexarJustificante) {
+		this.formularioAnexarJustificante = formularioAnexarJustificante;
 	}
 	
 	

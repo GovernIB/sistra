@@ -10,11 +10,19 @@ import es.caib.xml.datospropios.factoria.impl.Dato;
 import es.caib.xml.datospropios.factoria.impl.DatosPropios;
 import es.caib.xml.datospropios.factoria.impl.Documento;
 import es.caib.xml.datospropios.factoria.impl.DocumentosEntregar;
+import es.caib.xml.datospropios.factoria.impl.FormulariosJustificante;
 import es.caib.xml.datospropios.factoria.impl.Instrucciones;
 import es.caib.xml.datospropios.factoria.impl.Solicitud;
 import es.caib.xml.datospropios.factoria.impl.TramiteSubsanacion;
 
 public class PruebaLecturaDatosPropios {
+	
+	private static void imprimirFormulariosJustificante (FormulariosJustificante fj){
+		System.out.println ("FORMULARIOS JUSTIFICANTE");
+		for (int i=0; i < fj.getFormularios().size(); i++) {
+			System.out.println (fj.getFormularios().get(i));
+		}				
+	}
 	
 	private static void imprimirTramiteSubsanacion (TramiteSubsanacion ts){
 		System.out.println ("TRAMITE SUBSANACION");
@@ -63,6 +71,10 @@ public class PruebaLecturaDatosPropios {
 		
 		if (inst.getTramiteSubsanacion() != null){
 			imprimirTramiteSubsanacion(inst.getTramiteSubsanacion());
+		}
+		
+		if (inst.getFormulariosJustificante() != null){
+			imprimirFormulariosJustificante(inst.getFormulariosJustificante());
 		}
 	}
 	

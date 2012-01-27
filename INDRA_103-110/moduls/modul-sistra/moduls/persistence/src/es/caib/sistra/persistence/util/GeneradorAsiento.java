@@ -43,6 +43,7 @@ import es.caib.xml.datospropios.factoria.impl.Dato;
 import es.caib.xml.datospropios.factoria.impl.DatosPropios;
 import es.caib.xml.datospropios.factoria.impl.Documento;
 import es.caib.xml.datospropios.factoria.impl.DocumentosEntregar;
+import es.caib.xml.datospropios.factoria.impl.FormulariosJustificante;
 import es.caib.xml.datospropios.factoria.impl.Instrucciones;
 import es.caib.xml.datospropios.factoria.impl.Solicitud;
 import es.caib.xml.datospropios.factoria.impl.TramiteSubsanacion;
@@ -570,6 +571,24 @@ public class GeneradorAsiento {
 				
 				// Añadimos lista de documentos
 				instrucciones.setDocumentosEntregar( docsEntregar );
+			} else {
+				// Si no es presencial comprobamos si debemos anexar formularios al justificante
+				FormulariosJustificante fj = null;
+				for ( Iterator it = tramiteInfo.getFormularios().iterator();it.hasNext(); )
+				{
+					DocumentoFront doc = (DocumentoFront) it.next();
+					if (doc.getEstado() != DocumentoFront.ESTADO_CORRECTO) continue;
+					
+					if ( doc.isFormularioAnexarJustificante()){						
+						if (fj == null) {
+							fj = factoria.crearFormulariosJustificante();
+						}
+						fj.getFormularios().add(doc.getIdentificador() + "-" + doc.getInstancia());						
+					}					
+				}
+				if (fj != null) {
+					instrucciones.setFormulariosJustificante(fj);
+				}				
 			}
 			
 			// Compramos si es un tramite de subsanacion y hay que añadir el expediente

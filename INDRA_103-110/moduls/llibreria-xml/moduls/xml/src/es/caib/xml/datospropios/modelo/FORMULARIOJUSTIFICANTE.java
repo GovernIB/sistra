@@ -25,8 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="EXPEDIENTE_CODIGO" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="EXPEDIENTE_UNIDAD_ADMINISTRATIVA" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="IDENTIFICADOR" type="{}string_no_vacio"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -37,55 +36,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "expedientecodigo",
-    "expedienteunidadadministrativa"
+    "identificador"
 })
-@XmlRootElement(name = "TRAMITE_SUBSANACION")
-public class TRAMITESUBSANACION {
+@XmlRootElement(name = "FORMULARIO_JUSTIFICANTE")
+public class FORMULARIOJUSTIFICANTE {
 
-    @XmlElement(name = "EXPEDIENTE_CODIGO", required = true)
-    protected String expedientecodigo;
-    @XmlElement(name = "EXPEDIENTE_UNIDAD_ADMINISTRATIVA")
-    protected long expedienteunidadadministrativa;
+    @XmlElement(name = "IDENTIFICADOR", required = true)
+    protected String identificador;
 
     /**
-     * Gets the value of the expedientecodigo property.
+     * Gets the value of the identificador property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getEXPEDIENTECODIGO() {
-        return expedientecodigo;
+    public String getIDENTIFICADOR() {
+        return identificador;
     }
 
     /**
-     * Sets the value of the expedientecodigo property.
+     * Sets the value of the identificador property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setEXPEDIENTECODIGO(String value) {
-        this.expedientecodigo = value;
-    }
-
-    /**
-     * Gets the value of the expedienteunidadadministrativa property.
-     * 
-     */
-    public long getEXPEDIENTEUNIDADADMINISTRATIVA() {
-        return expedienteunidadadministrativa;
-    }
-
-    /**
-     * Sets the value of the expedienteunidadadministrativa property.
-     * 
-     */
-    public void setEXPEDIENTEUNIDADADMINISTRATIVA(long value) {
-        this.expedienteunidadadministrativa = value;
+    public void setIDENTIFICADOR(String value) {
+        this.identificador = value;
     }
 
 }

@@ -22,6 +22,7 @@
     <property name="orden" column="DOC_ORDEN" not-null="true"/>
     <property name="formularioPreregistro" column="DOC_FORPRG" length="1"/>
     <property name="formularioJustificante" column="DOC_FORJUS" length="1"/>    
+    <property name="formularioAnexarJustificante" column="DOC_FORAJU" length="1"/>
     <property name="anexoPresentarTelematicamente" column="DOC_ANETEL" length="1"/>
     <property name="anexoExtensiones" column="DOC_ANEEXT" length="50"/>
     <property name="anexoTamanyoMax" column="DOC_ANETAM" length="5"/>
