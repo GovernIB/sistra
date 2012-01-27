@@ -34,7 +34,7 @@ public class ExportCSVProcessAction extends BaseAction
             HttpServletResponse response) throws Exception 
     {
 		
-		String res = "ERROR";
+		String res; 
 		try{
 			String id = request.getParameter("id");
 			if (id!=null){				
@@ -48,9 +48,12 @@ public class ExportCSVProcessAction extends BaseAction
 				}				
 				// Devolvemos estado trabajo
 				res = "PROCESS:" + csv.getIndex() + "-"+ csv.getEntradas().length;				
-			}						
+			}	else {
+				res = "ERROR: Faltan parametros";
+			}
 		}catch(Exception ex){
 			log.error("Excepcion procesando csv: " + ex.getMessage(),ex);
+			res = "ERROR:" + ex.getMessage();
 		}
 		
 		// Devolvemos respuesta

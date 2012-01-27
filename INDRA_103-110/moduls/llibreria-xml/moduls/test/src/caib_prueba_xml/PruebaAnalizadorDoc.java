@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Iterator;
 
+import es.caib.util.StringUtil;
 import es.caib.xml.ConstantesXML;
 import es.caib.xml.analiza.Generador;
 import es.caib.xml.analiza.Nodo;
@@ -13,6 +14,8 @@ import es.caib.xml.util.HashMapIterable;
 
 /**
  * Clase para probar el funcionamiento de AnalizadorDoc
+ * con el documento FormularioProcedimiento.docx (passwd 1234). 
+ *  
  * @author ihdelpino
  *
  */
@@ -22,12 +25,12 @@ public class PruebaAnalizadorDoc {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String inputFilename = args[0];
+		String inputFilename = "moduls/llibreria-xml/moduls/test/FormularioProcedimiento.docx";
 		try {
-			System.out.println("Inicio prueba");
+			System.out.println("Inicio prueba" );
 			String[] aux = inputFilename.split("\\.");
 			System.out.println("Fichero: " + inputFilename);
-			System.out.println("Tipo fichero: " + aux[1]);
+			System.out.println("Tipo fichero: " + StringUtil.getExtension(inputFilename));
 			FileInputStream contenido = new FileInputStream(inputFilename);
 			AnalizadorDoc analizador = new AnalizadorDoc();
 			HashMapIterable resultado = analizador.analizar(contenido, aux[1]);
