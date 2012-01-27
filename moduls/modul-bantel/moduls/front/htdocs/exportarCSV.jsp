@@ -13,6 +13,18 @@
 
 var IDTRABAJO = "";
 
+function asyncPostJquery(urlString,postString, funcionCallBSuccess, funcionCallBError)
+{
+ $.ajax({
+  type: 'POST',
+  url: urlString,
+  data: postString,
+  success: funcionCallBSuccess,
+  error: funcionCallBError,
+  dataType: 'text'
+});
+}
+
 function exportCSV(){
 
 	IDTRABAJO = "";
@@ -43,7 +55,7 @@ function exportCSV(){
 	
 	// 	Iniciamos proceso exportacion
 	IDTRABAJO = "INIT";
-	asyncPost("exportCSVInitAction.do",params,exportProcesed);	
+	asyncPostJquery("exportCSVInitAction.do",params,exportProcesed,errorExport);	
 	accediendoEnviando("<bean:message key="exportCSV.iniciandoProceso"/>");
 		
 }
@@ -52,7 +64,7 @@ function exportCSV(){
 function cancelExport(){
 	ocultarEnviando();
 	if (IDTRABAJO == "CANCEL" || IDTRABAJO == "")  return;
-	asyncPost("exportCSVCancelAction.do","id="+IDTRABAJO,null);	
+	asyncPostJquery("exportCSVCancelAction.do","id="+IDTRABAJO,null,errorExport);	
 }
 
 
@@ -71,7 +83,7 @@ function exportProcesed(result){
 	if (result.indexOf("INIT:") != -1){
 		IDTRABAJO =  result.substring("INIT:".length);				
 		
-		asyncPost("exportCSVProcessAction.do","id="+IDTRABAJO,exportProcesed);
+		asyncPostJquery("exportCSVProcessAction.do","id="+IDTRABAJO,exportProcesed,errorExport);
 		accediendoEnviando("<bean:message key="exportCSV.iniciadoProceso"/>");
 		return;
 	}
@@ -84,16 +96,32 @@ function exportProcesed(result){
 			// finalizado
 			accediendoEnviando("<bean:message key="exportCSV.procesandoEntradasInicio"/> " + numProcesadas + " <bean:message key="exportCSV.procesandoEntradasFin"/> " + numTotal);
 			ocultarEnviando();
-			this.document.location = "exportCSVDownloadAction.do?id="+IDTRABAJO;						
+			
+			mostrarDownloadCSV();
+			
+			//this.document.location = "exportCSVDownloadAction.do?id="+IDTRABAJO;
+      //window.open ("exportCSVDownloadAction.do?id="+IDTRABAJO,"donwloadExport");						
 		}else{
-			asyncPost("exportCSVProcessAction.do","id="+IDTRABAJO,exportProcesed);
+			asyncPostJquery("exportCSVProcessAction.do","id="+IDTRABAJO,exportProcesed,errorExport);
 			accediendoEnviando("<bean:message key="exportCSV.procesandoEntradasInicio"/> " + numProcesadas + " <bean:message key="exportCSV.procesandoEntradasFin"/> " + numTotal);
 		}		
 		return;
 	}
-	
-	
-	
+}
+
+function errorExport(result){
+ 	if (result.indexOf("ERROR:") != -1){
+		error = result.substring("ERROR:".length);	
+	} else {
+    error = '';
+  }
+	alert("<bean:message key="exportCSV.errorProceso"/>" + " \n\n<bean:message key="exportCSV.detalleErrorProceso"/>\n" + error );
+	ocultarEnviando();		
+}
+
+function downloadCSV(){
+  ocultarDownloadCSV();
+  this.document.location = "exportCSVDownloadAction.do?id="+IDTRABAJO;
 }
 
 function validDate(fecha){
@@ -155,3 +183,4 @@ function validDate(fecha){
 		<!-- capa accediendo formularios -->
 		<div id="capaInfoFondo"></div>
 		<div id="capaInfoForms"><span id="mensajeEnviando"></span><br/><br/><input type="button" onclick="javascript:cancelExport();" value="<bean:message key="exportCSV.cancelar"/>"/></div>
+		<div id="capaDownloadExport"><bean:message key="exportCSV.exportacionFinalizada"/><br/><input type="button" onclick="javascript:downloadCSV();" value="<bean:message key="exportCSV.downloadCSV"/>"/></a></div>

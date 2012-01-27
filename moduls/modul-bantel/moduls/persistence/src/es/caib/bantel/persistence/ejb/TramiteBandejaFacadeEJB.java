@@ -1,5 +1,6 @@
 package es.caib.bantel.persistence.ejb;
 
+import java.io.ByteArrayInputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
@@ -46,6 +47,7 @@ import es.caib.xml.ConstantesXML;
 import es.caib.xml.analiza.Analizador;
 import es.caib.xml.analiza.Nodo;
 import es.caib.xml.analiza.Par;
+import es.caib.xml.analiza.formdoc.AnalizadorDoc;
 import es.caib.xml.registro.factoria.ConstantesAsientoXML;
 import es.caib.xml.util.HashMapIterable;
 ;
@@ -568,70 +570,14 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 	    		
 	    		// Verificamos si el XPath corresponde a formulario o a la informacion de la entrada
 	    		if (columnXPath.startsWith("FORMULARIO.")) {
-	    			idForm = columnXPath.substring("FORMULARIO.".length(),columnXPath.indexOf(".","FORMULARIO.".length()));	    			
-	    			idInstancia=columnXPath.substring(("FORMULARIO."+idForm+".").length(),columnXPath.indexOf(".",("FORMULARIO."+idForm+".").length()));	    				
-	    			xpath= columnXPath.substring(("FORMULARIO."+idForm+"."+idInstancia+".").length());	    			
-	    				
-	    			keyForm = idForm + "-" + idInstancia;
-	    			
-	    			// Parseamos XML Formulario
-	    			if (!forms.containsKey(keyForm)){
-	    				DocumentoBTE doc = entrada.getDocumento(idForm,Integer.parseInt(idInstancia));
-	    				if (doc.getPresentacionTelematica() != null){	    					
-	    					Analizador analiza = new Analizador ();
-	    			    	HashMapIterable hti = analiza.analizar (new String(doc.getPresentacionTelematica().getContent(),ConstantesXML.ENCODING));
-	    			    	forms.put(keyForm,hti);	    			    			
-	    				}
-	    			}
-	    			
-	    			// Obtenemos valor 
-	    			valuesForm = (HashMapIterable) forms.get(keyForm);
-	    			csv[i] = "";
-	    			if (valuesForm != null){
-	    				
-	    				Object o = valuesForm.get(referenciaXPath(xpath));
-	    				List valores;
-	    				
-	    				if (o != null){
-	    					
-	    					if (o instanceof Nodo){
-	    						Nodo n = (Nodo) o;
-	    						valores = new ArrayList();
-	    						valores.add(n);	    					    						    					
-	    					}else{
-	    						valores = (List) o;	    						
-	    					}
-	    					
-	    					for (int j=0;j<valores.size();j++){
-	    						
-	    						if (j>0) {
-	    							csv[i] += ", ";
-	    						}
-	    						
-	    						Nodo nodo = (Nodo) valores.get(j);
-		    					if (xpath.endsWith(TramiteBandejaFacadeEJB.CODIGO_LISTAS)){
-		    			    		if (nodo.getAtributos() != null && nodo.getAtributos().size() > 0){
-		    			    			for (Iterator it2 = nodo.getAtributos().iterator();it2.hasNext();){
-		    			    				Par atributo = (Par) it2.next();
-		    			    				if (atributo.getNombre().equals(INDICE_LISTAS)){
-		    			    					csv[i] += atributo.getValor();
-		    			    					break;
-		    			    				}
-		    			    			}	
-		    			    		}  	    						
-		    					}else{
-		    						csv[i] += nodo.getValor();
-		    					}
-	    					}
-	    					
-	    				}
-	    			}
-	    			
-	    		}else if (columnXPath.startsWith("TRAMITE.")) {
+	    			csv[i] = extractCSVDocumento("FORMULARIO", entrada, columnXPath, forms);
+	    		} else if (columnXPath.startsWith("DOCUMENTO.")) {
+	    			csv[i] = extractCSVDocumento("DOCUMENTO", entrada, columnXPath, forms);
+	    		} else if (columnXPath.startsWith("TRAMITE.")) {
 	    			// Valor obtenido de la entrada
 	    			xpath= columnXPath.substring(("TRAMITE.").length());	
 	    			csv[i] = getValorTramite(xpath,entrada);
-	    		}else {
+	    		} else {
 	    			throw new Exception("XPath no valido: " + columnXPath);
 	    		}
 	    			  
@@ -642,9 +588,97 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     		throw new ExcepcionBTE("Excepcion generando csv para la entrada " + numEntrada,ex);
     	}
     	
-    }    
-    
-    
+    }
+
+    /**
+     * Extrae valor csv de un xpath de documento.
+     * @param tipoDocumento
+     * @param entrada
+     * @param columnXPath
+     * @param forms
+     * @return csv
+     * @throws Exception
+     */
+	private String extractCSVDocumento(String tipoDocumento, TramiteBTE entrada, String columnXPath,
+			Map forms) throws Exception {
+		String xpath;
+		String idForm;
+		String idInstancia;
+		String keyForm;
+		HashMapIterable valuesForm;
+		
+		String prefix = tipoDocumento + ".";
+		
+		idForm = columnXPath.substring(prefix.length(),columnXPath.indexOf(".",prefix.length()));	    			
+		idInstancia=columnXPath.substring((prefix+idForm+".").length(),columnXPath.indexOf(".",(prefix+idForm+".").length()));	    				
+		xpath= columnXPath.substring((prefix+idForm+"."+idInstancia+".").length());	    			
+			
+		keyForm = idForm + "-" + idInstancia;
+		
+		// Parseamos XML Formulario / anexo
+		if (!forms.containsKey(keyForm)){
+			DocumentoBTE doc = entrada.getDocumento(idForm,Integer.parseInt(idInstancia));
+			if (doc != null && doc.getPresentacionTelematica() != null){	  
+				if (tipoDocumento.equals("FORMULARIO")) {
+					Analizador analiza = new Analizador ();
+			    	HashMapIterable hti = analiza.analizar (new String(doc.getPresentacionTelematica().getContent(),ConstantesXML.ENCODING));
+			    	forms.put(keyForm,hti);	    			    			
+				} else if (tipoDocumento.equals("DOCUMENTO")) {
+					AnalizadorDoc analizaDoc = new AnalizadorDoc();
+					HashMapIterable hti = analizaDoc.analizar (new ByteArrayInputStream(doc.getPresentacionTelematica().getContent()),doc.getPresentacionTelematica().getExtension());
+			    	forms.put(keyForm,hti);					
+				} else {
+	    			throw new Exception("XPath no valido: " + columnXPath);
+	    		}			
+			}
+		}
+		
+		// Obtenemos valor 
+		valuesForm = (HashMapIterable) forms.get(keyForm);
+		String csv = "";
+		if (valuesForm != null){
+			
+			Object o = valuesForm.get(referenciaXPath(xpath));
+			List valores;
+			
+			if (o != null){
+				
+				if (o instanceof Nodo){
+					Nodo n = (Nodo) o;
+					valores = new ArrayList();
+					valores.add(n);	    					    						    					
+				}else{
+					valores = (List) o;	    						
+				}
+				
+				for (int j=0;j<valores.size();j++){
+					
+					if (j>0) {
+						csv += ", ";
+					}
+					
+					Nodo nodo = (Nodo) valores.get(j);
+					if (xpath.endsWith(TramiteBandejaFacadeEJB.CODIGO_LISTAS)){
+			    		if (nodo.getAtributos() != null && nodo.getAtributos().size() > 0){
+			    			for (Iterator it2 = nodo.getAtributos().iterator();it2.hasNext();){
+			    				Par atributo = (Par) it2.next();
+			    				if (atributo.getNombre().equals(INDICE_LISTAS)){
+			    					csv += atributo.getValor();
+			    					break;
+			    				}
+			    			}	
+			    		}  	    						
+					}else{
+						csv += nodo.getValor();
+					}
+				}
+				
+			}
+		}		
+		return csv;
+	}    
+	
+	         
     private String getValorTramite(String xpath,TramiteBTE entrada){
     	
     	if (xpath.equals("NUMEROENTRADA"))

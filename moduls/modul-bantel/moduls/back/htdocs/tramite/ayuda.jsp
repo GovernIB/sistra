@@ -41,6 +41,9 @@
 				   </ul>
 				   <p>VALORES FORMULARIO</p>
 				   <p>Se construyen de la siguiente forma: FORMULARIO.<i>ID FORMULARIO</i>.<i>INSTANCIA FORMULARIO</i>.<i>XPATH DATOS</i></p>
+				   <br/>				   
+					<p>VALORES ANEXO</p>
+				   <p>Para anexos que sean formularios normalizados se pueden extraer los datos de la siguiente forma: DOCUMENTO.<i>ID ANEXO</i>.<i>INSTANCIA ANEXO</i>.<i>XPATH DATOS</i></p>
 				   <br/>
 				   <br/>
 				   <p>Ejemplo de fichero:</p>
@@ -53,6 +56,7 @@
 						FORMULARIO.FORM1.1.DATOS.DATO1=Dato 1<br/>						
 						FORMULARIO.FORM1.1.DATOS.DATO2=Dato 2<br/>
 						FORMULARIO.FORM1.1.DATOS.DATO3=Dato 3<br/>
+						DOCUMENTO.ANEX1.1.DATOS.DATO1=Dato 1 anexo<br/>
 					</p>				    					    	
 				    </td>
 				  </tr>				 

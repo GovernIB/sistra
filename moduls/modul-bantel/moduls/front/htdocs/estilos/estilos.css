@@ -125,3 +125,4 @@ textArea.detalleExt {background-color: #ffffe8;}
 
 div#capaInfoForms { position:absolute; display:none; top:0; left:0; width:45em; text-align:center; background:url(../imgs/enviando.gif) no-repeat center 1em #fff; border:1em solid #85bbe4; padding:5em 1em 2em 1em; z-index:12; }
 div#capaInfoFondo { position:absolute; display:none; top:0; left:0; width:100%; background-color:#000; z-index:11; padding-bottom:1em; }
+div#capaDownloadExport { position:absolute; display:none; top:0; left:0; width:45em; text-align:center; background:url(../imgs/iconos/exportCSV.jpg) no-repeat center 1em #fff; border:1em solid #85bbe4; padding:5em 1em 2em 1em; z-index:12; }

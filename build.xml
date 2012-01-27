@@ -75,7 +75,8 @@
 			<exclude name="saaj-api.jar"/>
 			<exclude name="servlet.jar"/>
 			<exclude name="xercesImpl.jar"/>
-			<exclude name="jaxb-xjc-2.1.9.jar"/>			
+			<exclude name="jaxb-xjc-2.1.9.jar"/>
+			<exclude name="log4j-1.2.14.jar"/>
 			<exclude name="client*"/>
 			<exclude name="client/*"/>
 			<exclude name="cxf*"/>
