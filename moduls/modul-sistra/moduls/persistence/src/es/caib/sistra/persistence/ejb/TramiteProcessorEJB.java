@@ -2590,6 +2590,11 @@ public class TramiteProcessorEJB implements SessionBean {
     		if (pasoRegistrar.getTipoPaso() != PasoTramitacion.PASO_FINALIZAR){
     			throw new Exception("Se ha invocado a guardar justificante desde un paso distinto a finalizar");
     		}    		
+    		
+    		// Calculamos si la tramitacion es presencial o telematica
+    		boolean tramitacionPresencial = tramiteInfo.getTipoTramitacion() == ConstantesSTR.TIPO_TRAMITACION_PRESENCIAL ||
+			( tramiteInfo.getTipoTramitacion() == ConstantesSTR.TIPO_TRAMITACION_DEPENDIENTE &&
+			  tramiteInfo.getTipoTramitacionDependiente() == ConstantesSTR.TIPO_TRAMITACION_PRESENCIAL);
     		    		
     		// Comprobamos si mostramos justificante standard o formulario justificante
     		// y en el caso de justificante standard si se deben anexar al justificante
@@ -2622,8 +2627,8 @@ public class TramiteProcessorEJB implements SessionBean {
 	    		nomfic=docRds.getNombreFichero();
 	    		content=docRds.getDatosFichero();
 	    		
-	    		// En caso de justificante estandar comprobamos si hay que anexar formularios al justificante.	    		
-	    		if (formsJustif.size() > 0) {
+	    		// En caso de que la tramitacion sea telematica y que el justificante sea estandar comprobamos si hay que anexar formularios al justificante.	    		
+	    		if (!tramitacionPresencial && formsJustif.size() > 0) {
 	    			InputStream [] pdfIn = new ByteArrayInputStream[formsJustif.size() + 1];
 	    			pdfIn[0] = new ByteArrayInputStream(content);
 	    			int i = 1;
@@ -2647,10 +2652,7 @@ public class TramiteProcessorEJB implements SessionBean {
         		DocumentoRDS docRds;
         		
         		// En caso de que no sea completamente telematico mostramos 2 copias
-        		if (tramiteInfo.getTipoTramitacion() == ConstantesSTR.TIPO_TRAMITACION_PRESENCIAL ||
-        			( tramiteInfo.getTipoTramitacion() == ConstantesSTR.TIPO_TRAMITACION_DEPENDIENTE &&
-        			  tramiteInfo.getTipoTramitacionDependiente() == ConstantesSTR.TIPO_TRAMITACION_PRESENCIAL)
-        			)
+        		if (tramitacionPresencial)
         		{
         			docRds = rds.consultarDocumentoFormateadoCopiasInteresadoAdmon(refRds,this.datosSesion.getLocale().getLanguage());
         		}else{
