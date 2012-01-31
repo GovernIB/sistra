@@ -2611,7 +2611,7 @@ public class TramiteProcessorEJB implements SessionBean {
 				}
 				
 				// Formularios a anexar al justificante standard
-				if (doc.isFormularioAnexarJustificante()) {
+				if (doc.isFormularioAnexarJustificante() && doc.getEstado() == DocumentoFront.ESTADO_CORRECTO) {
 					formsJustif.add(doc.getIdentificador() + "-" + doc.getInstancia());
 				}
 				
