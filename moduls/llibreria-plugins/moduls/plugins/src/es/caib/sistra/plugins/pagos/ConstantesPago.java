@@ -10,7 +10,6 @@ public class ConstantesPago {
 	/**
 	 * Tipo de pago: tipo de pago telemático
 	 */
-	//TODO --> deprecated se debe eliminar una vez implementada la mejora del pago
 	public final static char TIPOPAGO_TELEMATICO = 'T';
 	/**
 	 * Tipo de pago: tipo de pago presencial
