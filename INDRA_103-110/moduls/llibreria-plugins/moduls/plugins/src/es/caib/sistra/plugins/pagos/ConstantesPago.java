@@ -10,6 +10,7 @@ public class ConstantesPago {
 	/**
 	 * Tipo de pago: tipo de pago telemático
 	 */
+	//TODO --> deprecated se debe eliminar una vez implementada la mejora del pago
 	public final static char TIPOPAGO_TELEMATICO = 'T';
 	/**
 	 * Tipo de pago: tipo de pago presencial
@@ -19,8 +20,7 @@ public class ConstantesPago {
 	 * Tipo de pago: tipo de pago telemático y presencial
 	 */
 	public final static char TIPOPAGO_AMBOS = 'A';
-	
-	
+		
 	// SESION DE PAGOS
 	/**
 	 * No existe sesión de pagos para un determinado localizador de sesión
