@@ -18,6 +18,7 @@ import es.caib.bantel.persistence.intf.BteConectorFacade;
 import es.caib.bantel.persistence.intf.BteConectorFacadeHome;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.login.AutenticacionExplicitaInfo;
+import es.caib.sistra.plugins.login.ConstantesLogin;
 import es.caib.util.CifradoUtil;
 
 /**
@@ -99,7 +100,7 @@ public class PluginBackOffice {
 					log.debug("Autenticacion explicita con plugin organismo");
 					AutenticacionExplicitaInfo authInfo = null;
 					try{
-						authInfo = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo();
+						authInfo = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo(ConstantesLogin.TIPO_TRAMITE, tramite.getIdentificador());
 						log.debug("Usuario plugin autenticacion organismo: " + authInfo.getUser());
 					}catch (Exception ex){
 						throw new Exception("Excepcion obteniendo informacion autenticacion explicita a traves de plugin organismo",ex);
@@ -176,7 +177,7 @@ public class PluginBackOffice {
 				log.debug("Autenticacion explicita con plugin organismo");
 				AutenticacionExplicitaInfo authInfo = null;
 				try{
-					authInfo = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo();
+					authInfo = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo(ConstantesLogin.TIPO_TRAMITE, tramite.getIdentificador());
 					log.debug("Usuario plugin autenticacion organismo: " + authInfo.getUser());
 				}catch (Exception ex){
 					throw new Exception("Excepcion obteniendo informacion autenticacion explicita a traves de plugin organismo",ex);

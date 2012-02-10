@@ -20,4 +20,14 @@ public class ConstantesLogin {
 	 */
 	public final static char LOGIN_CERTIFICADO = 'C';
 	
+	/**
+	 * Tipo de elemento Dominio.
+	 */
+	public final static char TIPO_DOMINIO = 'D';
+	
+	/**
+	 * Tipo de elemento Tramite.
+	 */
+	public final static char TIPO_TRAMITE = 'T';
+	
 }
