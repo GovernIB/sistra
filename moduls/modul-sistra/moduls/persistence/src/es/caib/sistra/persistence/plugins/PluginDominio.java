@@ -35,6 +35,7 @@ import es.caib.sistra.persistence.intf.DominioEJBHome;
 import es.caib.sistra.persistence.util.UsernamePasswordCallbackHandler;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.login.AutenticacionExplicitaInfo;
+import es.caib.sistra.plugins.login.ConstantesLogin;
 import es.caib.util.CifradoUtil;
 import es.caib.util.EjbUtil;
 
@@ -212,7 +213,7 @@ public class PluginDominio {
 						log.debug("Autenticación explicita a traves de plugin autenticacion organismo");
 						AutenticacionExplicitaInfo authInfo = null;
 						try{
-							authInfo = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo();
+							authInfo = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo(ConstantesLogin.TIPO_DOMINIO, dominio.getIdentificador());
 							log.debug("Usuario plugin autenticacion organismo: " + authInfo.getUser());
 						}catch (Exception ex){
 							throw new Exception("Excepcion obteniendo informacion autenticacion explicita a traves de plugin organismo",ex);
@@ -277,7 +278,7 @@ public class PluginDominio {
 				log.debug("Autenticación explicita a traves de plugin autenticacion organismo");
 				AutenticacionExplicitaInfo authInfo = null;
 				try{
-					authInfo = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo();
+					authInfo = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo(ConstantesLogin.TIPO_DOMINIO, dominio.getIdentificador());
 					log.debug("Usuario plugin autenticacion organismo: " + authInfo.getUser());
 				}catch (Exception ex){
 					throw new Exception("Excepcion obteniendo informacion autenticacion explicita a traves de plugin organismo",ex);

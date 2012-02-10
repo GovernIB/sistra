@@ -39,6 +39,7 @@ import es.caib.sistra.persistence.intf.ConsultaEJBHome;
 import es.caib.sistra.persistence.util.UsernamePasswordCallbackHandler;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.login.AutenticacionExplicitaInfo;
+import es.caib.sistra.plugins.login.ConstantesLogin;
 import es.caib.util.CifradoUtil;
 import es.caib.util.EjbUtil;
 import es.caib.util.StringUtil;
@@ -145,7 +146,7 @@ public class RegistroController
 				log.debug("Autenticación explicita manejada por organismo");
 				AutenticacionExplicitaInfo infoAuth = null;
 				try{
-					infoAuth = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo();
+					infoAuth = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo(ConstantesLogin.TIPO_TRAMITE, identificadorTramite);
 					log.debug("Usuario plugin autenticacion organismo: " + infoAuth.getUser());
 				}catch (Exception ex){
 					throw new Exception("Excepcion obteniendo informacion autenticacion explicita a traves de plugin organismo",ex);
