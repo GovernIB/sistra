@@ -1,0 +1,137 @@
+/* CSS Document */
+
+/*
+body { font:normal 75% Arial, Helvetica, sans-serif; color:#494949; background:url(../images/bkg_site.png) repeat-x top #9ec9e3; margin:0; padding:1em 0 0 0; }
+*/
+body { font:normal 80% 'TrebuchetMS', 'Trebuchet MS', Arial, Helvetica, sans-serif; color:#666; background-color:#fff; }
+#contenedor { margin:0 auto; width:65em; }
+#continguts { margin:0; padding:.5em 0 0 0; background-color:#fff; /*border-bottom:.3em solid #85bbe4;*/ }
+
+#continguts p { position:relative; }
+
+/* enllaços */
+
+a { color:#0047b2; position:relative; }
+a.importante { color:#c00; }
+
+/* imatges */
+
+img { border:0; }
+
+/* titols */
+p#titolAplicacio { font-size:1.4em; font-weight:bold; text-align:center; margin:.8em; }
+h1 { font-size:1.3em; margin:0 0 1em 0; background:none; }
+h2 { font-size:1.2em; margin:1em 0; position:relative; }
+h2.marca { background-color:#f4f3ed; }
+h3 { font-size:1.1em; margin:0 0 1em 0; position:relative; }
+h4 { font-size:1em; margin:0 0 1em 0; }
+h1.invisible, h2.invisible, h3.invisible, h4.invisible { display:none; }
+
+#pieTitulo { background:url(../images/pietitulo.gif) repeat-x #fff; border-top:1px solid #e3e3e3; height:.5em; font-size:.5em; }
+
+/* pàrrafs */
+
+p { margin:1em 0; }
+p.centrado { text-align:center; }
+
+/*
+p#titolAplicacio { font-size:1.4em; margin:0; color:#000f21; background-color:#85bbe4; padding:.2em 0 .2em 3em; font-weight:bold; }
+p#titolAplicacio a { text-decoration:none; display:block; color:#000f21; }
+
+#tramitacion #pasoInf p.ultimo { border-bottom:1px dashed #d1e3f4; padding-bottom:10px; }
+#tramitacion p.importante { background-color:#ecf4fb; text-align:center; padding:1em;}
+#tramitacion p.error { padding:1em 1em 1em 3.5em; background:url(../images/ico_error.gif) no-repeat 1em 1em #f9f3f2; border:1px solid #ffbbb5; }
+#tramitacion p.error strong { color:#900; }
+
+/* capes */
+div.sep { clear:both; height:.1em; font-size:.1em; }
+div.ultimo { border-bottom:1px dashed #d1e3f4; height:1em; font-size:.2em; }
+div.sepFinal { clear:both; height:1em; background-color:#fff; }
+#tramitacion div.alerta { margin:1em 0; padding:0 1em 1em 3.5em; background:url(../images/ico_atencion.gif) no-repeat 1em 1em #ffffe8; border:1px solid #f3f3d2; }
+
+
+ul#capsalEnllasos { position:relative; background-color:#efefef; margin:0; padding:.3em .7em; text-align:right; color:#000; }
+ul#capsalEnllasos li { display:inline; list-style:none; }
+ul#capsalEnllasos li a { color:#002e63; }
+ul#capsalEnllasos li span.sep { margin:0 .5em; }
+
+div#capsalUsuari { position:relative; background-color:#fff; padding:.3em 0 .3em 1em; color:#000; border-bottom:1px solid #e3e3e3;  }
+div#capsalUsuari img { vertical-align:middle; margin:0 .3em; }
+
+#titolMS { font-size:1.2em; background-color:#85bbe4; border-bottom:1px solid #fff; color:#000; padding:.3em 0 .3em 4em; font-weight:bold; }
+#capsalfranja2 { height:1em; background-color:#003575; font-size:.5em; color:#000; }
+
+/* peu */
+/*
+#peu { padding-top:0.5em; height:4em; color:#000; border-top:.4em solid #003574; }
+#peu img#logoAD { vertical-align:text-top; }
+#peu span.sep { margin:0 .5em; }
+*/
+#peu { height:3em; font-size:.9em; padding-top:0.5em; border-top:1px solid #ccc; }
+#peu img#logoAD { display:none; vertical-align:text-top; }
+#peu span.sep { margin:0 .5em; }
+#peu .esquerra { float:left; width:15.5em; margin-right:1em; }
+#peu .centre { float:left; width:32.5em; line-height:1.4em; }
+#peu .dreta { float:right; width:15.2em; line-height:1.3em; }
+
+/* CONTINGUTS */
+
+h1.autenticacio, h1.certDig, h1.usuCont, h1.anonim, h1.document, h1.ayuda  
+{ position:relative; font-size:1.7em; font-weight:normal; color:#003878; padding:.5em .7em .5em 4em; margin:0; border-bottom:1px solid #fff; }
+h1.autenticacio { background:url(../images/01autenticacion.gif) no-repeat #fff; }
+h1.certDig { background:url(../images/02_01cd.gif) no-repeat #fff; }
+h1.usuCont { background:url(../images/02_02uc.gif) no-repeat #fff; }
+h1.anonim { background:url(../images/02_03an.gif) no-repeat #fff; }
+h1.document { background:url(../images/03document.gif) no-repeat #fff; }
+h1.ayuda { background:url(../images/ayuda.gif) no-repeat #fff; }
+
+/* tramitacio */
+
+#tramitacion { padding:1em 1em 0 1em; }
+
+/* index */
+
+p#nomTramit { padding:1em 1em 1em 4.2em; background:url(../images/nom_tramit.gif) no-repeat 1em .5em #ffffe4; font-size:1.2em; font-weight:bold; font-style:italic; text-align:justify; width:89%; }
+
+#tramitacion #indexCD, #tramitacion #indexUC { float:left; width:30%; height:17em; padding:5px; margin-bottom:1px; }
+#tramitacion #indexAN { float:left; width:29%; height:17em; padding:5px; margin-bottom:1px; }
+#tramitacion #indexCD, #tramitacion #indexUC { margin-right:1.2%; }
+/*
+#tramitacion #indexCD { background:url(../images/entrada_cd.gif) no-repeat left top #ecf4fb; }
+#tramitacion #indexUC { background:url(../images/entrada_uc.gif) no-repeat left top #ecf4fb; }
+#tramitacion #indexAN { background:url(../images/entrada_an.gif) no-repeat left top #ecf4fb; }
+*/
+
+#tramitacion #indexCD a, #tramitacion #indexUC a, #tramitacion #indexAN a { color:#00548e; }
+
+#tramitacion #indexCD h2, #tramitacion #indexUC h2, #tramitacion #indexAN h2 { font-size:1.3em; text-align:center; margin-top:1em; }
+#tramitacion #indexCD p, #tramitacion #indexUC p, #tramitacion #indexAN p { text-align:justify; }
+#tramitacion #indexCD p.separacio, #tramitacion #indexUC p.separacio, #tramitacion #indexAN p.separacio { border-top:1px dashed #b8d7ef; padding-top:10px; }
+#tramitacion #indexCD p.formBotonera, #tramitacion #indexUC p.formBotonera, #tramitacion #indexAN p.formBotonera { text-align:center; }
+
+#tramitacion #indexCD form label, #tramitacion #indexUC form label, #tramitacion #indexAN form label { display:block; float:left; width:40%; padding-right:5px; text-align:right; line-height:1.6em; }
+#tramitacion #indexCD form input.txt, #tramitacion #indexUC form input.txt { width:7em; }
+
+#continguts #datosUsuario { color:#00276c; padding:.4em 0; border-bottom:1px dashed #ccc; margin:0 1em 1em 1em; }
+#continguts #datosUsuario span#explicacion { font-size:.9em; }
+
+
+#tramitacion div.barraAzul { clear:both; background-color:#ecf4fb; height:1em; font-size:.5em; }
+
+#capsal { text-align:center; }
+
+/*
+#capsal { padding:0.5em 1em 0.8em 1em; background-color:#003575; color:#fff; text-align:right; border-bottom:.3em solid #85bbe4; height: 4em; }
+#capsal a { color:#fff; }
+#capsal img.logo { float:left; }
+#capsal span.sep { margin:0 .5em; }
+#capsalIdioma { margin:0 0 .7em 0; }
+#capsalIdioma ul { display:inline; margin:0; padding:0; }
+#capsalIdioma ul li { display:inline; margin:0; padding:0; }
+*/
+
+/* capçal
+#capsal { padding:0.5em 1em 0.8em 1em; background:url(../images/fondo.gif) repeat-x #003575; color:#fff; }
+#capsal p#ayuda { float:right; font-size:.9em; margin:0; }
+#capsal p#ayuda a { color:#fff; }
+ */

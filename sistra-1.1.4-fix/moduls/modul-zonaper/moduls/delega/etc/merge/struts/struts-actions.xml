@@ -1,0 +1,4 @@
+   <action
+    path="/irAltaEntidad"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".altaEntidad"/>

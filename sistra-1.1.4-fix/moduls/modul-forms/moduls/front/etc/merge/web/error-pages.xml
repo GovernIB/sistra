@@ -1,0 +1,6 @@
+<!--
+<error-page>
+    <exception-type>java.lang.Throwable</exception-type>
+    <location>/error.do</location>
+</error-page>
+-->

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+    <!--  Layout aplicacion -->
+    <definition
+        name=".mainLayout"
+        path="/layout/mainLayout.jsp">
+        <put name="header" value="/moduls/header.jsp"/>
+       	<put name="menu.navegacion" value="" />
+        <put name="main" value=""/>
+        <put name="footer" value="/moduls/footer.jsp"/>
+    </definition>
+    
+    <!-- Molla Pa  -->
+    <definition name=".enlacesNavegacion" path="/moduls/enlacesNavegacion.jsp"/>
+    
+    
+    <!-- Menu acceso autenticado-->
+    <definition
+        name=".menuAutenticado"
+        extends=".mainLayout"
+       	controller="es.caib.zonaper.front.controller.MenuAutenticadoController">
+       	<put name="menu.navegacion" value="menuAutenticado" />
+        <put name="main" value="/pages/menuAutenticado.jsp"/>
+    </definition>
+        
+     
+    <!-- Menu acceso anonimo -->
+    <definition
+    	name=".menuAnonimo"
+    	extends=".mainLayout"
+    	controller="es.caib.zonaper.front.controller.MenuAnonimoController">
+    	<put name="menu.navegacion" value="menuAnonimo" />
+    	<put name="main" value="/pages/menuAnonimo.jsp" />
+    </definition>    
+        
+        
+     <!-- Pantalla de tramites sin enviar -->    
+    <definition
+    	name=".tramitesSinEnviar"	
+    	extends=".mainLayout"
+    	controller="es.caib.zonaper.front.controller.TramitesSinEnviarController">
+    	<put name="menu.navegacion" value="menuAutenticado.tramitesSinEnviar" />
+    	<put name="main" value="/pages/tramitesSinEnviar.jsp" />
+    </definition>
+  
+      <!-- Pantalla de datos personales -->    
+    <definition
+    	name=".datosPersonales"	
+    	extends=".mainLayout"
+    	controller="es.caib.zonaper.front.controller.DatosPersonalesController">
+	   	<put name="menu.navegacion" value="menuAutenticado.datosPersonales" />
+    	<put name="main" value="/pages/datosPersonales.jsp" />
+    </definition>	
+ 
+ 	<!--  Pantalla de alertas -->
+	<definition
+    	name=".alertas"	
+    	extends=".mainLayout"
+    	controller="es.caib.zonaper.front.controller.AlertasController">
+		<put name="menu.navegacion" value="menuAutenticado.alertas" />
+    	<put name="main" value="/pages/alertas.jsp" />
+    </definition>	
+ 
+  <!-- Pantalla de estado de mis expedientes -->
+    <definition
+    	name=".estadoExpedientes"
+    	extends=".mainLayout"
+    	controller="es.caib.zonaper.front.controller.EstadoExpedientesController">
+    	<put name="menu.navegacion" value="menuAutenticado.estadoExpedientes" />
+    	<put name="main" value="/pages/estadoExpedientes.jsp" />
+    </definition>
+    
+   <!-- Pantalla detalle expediente (autenticado)-->
+    <definition
+    	name=".detalleExpediente"
+    	extends=".mainLayout"
+    	controller="es.caib.zonaper.front.controller.DetalleExpedienteController">
+    	<put name="menu.navegacion" value="menuAutenticado.estadoExpedientes.detalleExpediente" />
+    	<put name="main" value="/pages/detalleExpediente.jsp" />
+    </definition>
+    
+     <!-- Pantalla detalle tramite (autenticado) -->
+    <definition
+    	name=".detalleTramite"
+    	extends=".mainLayout"
+    	controller="es.caib.zonaper.front.controller.DetalleTramiteController">
+    	<put name="menu.navegacion" value="menuAutenticado.estadoExpedientes.detalleExpediente.detalleTramite" />
+    	<put name="main" value="/pages/detalleTramite.jsp" />
+    </definition>
+    
+    <!-- Pantalla detalle notificacion pendiente (autenticado) -->
+    <definition
+    	name=".detalleNotificacionPendiente"
+    	extends=".mainLayout"
+    	controller="es.caib.zonaper.front.controller.DetalleNotificacionController">
+    	<put name="menu.navegacion" value="menuAutenticado.estadoExpedientes.detalleExpediente.detalleNotificacion" />
+    	<put name="main" value="/pages/detalleNotificacionPendiente.jsp" />
+    </definition>
+    
+    <!-- Pantalla detalle notificacion recibida (autenticado) -->
+    <definition
+    	name=".detalleNotificacionRecibida"
+    	extends=".mainLayout"
+    	controller="es.caib.zonaper.front.controller.DetalleNotificacionController">
+    	<put name="menu.navegacion" value="menuAutenticado.estadoExpedientes.detalleExpediente.detalleNotificacion" />
+    	<put name="main" value="/pages/detalleNotificacionRecibida.jsp" />
+    </definition>
+    
+     <!-- Pantalla detalle aviso (autenticado) -->
+    <definition
+    	name=".detalleAviso"
+    	extends=".mainLayout"
+    	controller="es.caib.zonaper.front.controller.DetalleAvisoController">
+    	<put name="menu.navegacion" value="menuAutenticado.estadoExpedientes.detalleExpediente.detalleAviso" />
+    	<put name="main" value="/pages/detalleAviso.jsp" />
+    </definition>
+    
+    <!--  Pantalla de delegaciones (autenticado) -->
+	<definition
+    	name=".delegaciones"	
+    	extends=".mainLayout"
+    	controller="es.caib.zonaper.front.controller.DelegacionesController">
+		<put name="menu.navegacion" value="menuAutenticado.delegaciones" />
+    	<put name="main" value="/pages/delegaciones.jsp" />
+    </definition>	
+
+    <!--  Pantalla de bandeja firma (autenticado) -->
+	<definition
+    	name=".bandejaFirma"	
+    	extends=".mainLayout"
+    	controller="es.caib.zonaper.front.controller.BandejaFirmaController">
+		<put name="menu.navegacion" value="menuAutenticado.bandejaFirma" />
+    	<put name="main" value="/pages/bandejaFirma.jsp" />
+    </definition>	
+    
+    <!--  Pantalla de firma (autenticado) -->
+	<definition
+    	name=".irFirmarDocumento"	
+    	extends=".mainLayout"
+    	controller="es.caib.zonaper.front.controller.BandejaFirmaController">
+		<put name="menu.navegacion" value="menuAutenticado.bandejaFirma.irFirmarDocumento" />
+    	<put name="main" value="/pages/irFirmarDocumento.jsp" />
+    </definition>	
+        
+     <!-- Pantalla tramite anonimo sin enviar -->
+    <definition
+    	name=".tramiteAnonimoSinEnviar"
+    	extends=".mainLayout"
+    	controller="es.caib.zonaper.front.controller.TramiteAnonimoSinEnviarController">
+    	<put name="menu.navegacion" value="menuAnonimo.tramiteAnonimoSinEnviar" />
+    	<put name="main" value="/pages/tramiteAnonimoSinEnviar.jsp" />
+    </definition>
+
+   <!-- Pantalla detalle expediente (anonimo)-->
+    <definition
+    	name=".detalleExpedienteAnonimo"
+    	extends=".detalleExpediente">
+    	<put name="menu.navegacion" value="menuAnonimo.detalleExpediente" />
+    </definition>
+    
+     <!-- Pantalla detalle expediente (anonimo)-->
+    <definition
+    	name=".detalleExpedienteAnonimo"
+    	extends=".detalleExpediente">
+    	<put name="menu.navegacion" value="menuAnonimo.detalleExpediente" />
+    </definition>
+
+  
+     <!-- Pantalla detalle tramite (anonimo) -->
+    <definition
+    	name=".detalleTramiteAnonimo"
+    	extends=".detalleTramite">
+    	<put name="menu.navegacion" value="menuAnonimo.detalleExpediente.detalleTramite" />
+    </definition>
+    
+    <!-- Pantalla detalle notificacion pendiente (anonimo) -->
+    <definition
+    	name=".detalleNotificacionPendienteAnonimo"
+    	extends=".detalleNotificacionPendiente">
+    	<put name="menu.navegacion" value="menuAnonimo.detalleExpediente.detalleNotificacion" />    	
+    </definition>
+    
+    <!-- Pantalla detalle notificacion recibida (anonimo) -->
+    <definition
+    	name=".detalleNotificacionRecibidaAnonimo"
+    	extends=".detalleNotificacionRecibida">
+    	<put name="menu.navegacion" value="menuAnonimo.detalleExpediente.detalleNotificacion" />    	
+    </definition>
+    
+     <!-- Pantalla detalle aviso (anonimo) -->
+    <definition
+    	name=".detalleAvisoAnonimo"
+    	extends=".detalleAviso">
+    	<put name="menu.navegacion" value="menuAnonimo.detalleExpediente.detalleAviso" />
+    </definition>
+    
+    
+    <!-- Pantalla peticion id persistencia acceso directo anonimo a aviso/notificacion -->
+    <definition
+    	name=".accesoDirectoAnonimo"
+    	extends=".mainLayout"
+    	controller="es.caib.zonaper.front.controller.MenuAnonimoController">
+    	<put name="menu.navegacion" value="menuAnonimo" />
+    	<put name="main" value="/pages/accesoDirectoAnonimo.jsp" />
+    </definition>    
+
+	<!-- Mensaje de error -->    	 
+   	 <definition
+    	name=".mensaje"
+    	extends=".mainLayout" 
+    	controller="es.caib.zonaper.front.controller.MensajeController">
+    	<put name="main" value="/pages/mensaje.jsp" />
+    	<put name="menu.navegacion" value="mensaje" />
+    	<put name="subtitulo" value="mensaje.subtitulo.errorGenerico" />
+    	<put name="texto" value="mensaje.texto.errorGenerico" />
+    </definition>   	
+    
+</tiles-definitions>
+

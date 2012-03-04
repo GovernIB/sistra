@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+		
+	<xs:element name="AUTORIZACION_DELEGACION">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ENTIDAD_ID" type="string_no_vacio" />
+				<xs:element name="ENTIDAD_NOMBRE" type="string_no_vacio" />
+				<xs:element name="DELEGADO_ID" type="string_no_vacio" />
+				<xs:element name="DELEGADO_NOMBRE" type="string_no_vacio" />
+				<xs:element name="PERMISOS" type="string_no_vacio" />
+				<xs:element name="FECHA_INICIO" type="string_fecha"/>
+				<xs:element name="FECHA_FIN" type="string_fecha"/>				
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+		
+   <xs:simpleType name="string_no_vacio">
+  	<xs:restriction base="xs:string">
+    	<xs:minLength value="1"/>
+  	</xs:restriction>
+  </xs:simpleType>
+      	
+	
+  <!--  FECHA: AAAAMMDD (25-12-2008 = 20081225 -->
+    <xs:simpleType name="string_fecha">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0123456789]{8}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+</xs:schema>

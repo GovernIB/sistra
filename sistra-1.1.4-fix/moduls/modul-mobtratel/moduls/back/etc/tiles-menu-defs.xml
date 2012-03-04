@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+    <definition name=".menu" path="/menu.jsp">
+        <putList name="independientes">
+            <add type="definition" value=".menu.cuenta.listar" />
+            <add type="definition" value=".menu.permiso.listar" />
+        </putList>
+    </definition>
+
+    <!-- ============================================================= -->
+    <!-- ==================== Definicions generals =================== -->
+    <!-- ============================================================= -->
+
+
+    <definition name=".menu.individual" path="/moduls/individual.jsp">
+        <put name="titulo" value="-- undefined --" />
+        <put name="link" value="--undefined--"/>
+    </definition>
+
+    <definition name=".menu.independiente" path="/moduls/apartatMenu.jsp">
+        <put name="expand" value="none" />
+        <put name="name" value="-- undefined --" />
+        <put name="titulo" value="-- undefined --" />
+        <putList name="opciones"></putList>
+    </definition>
+
+
+    <!-- ============================================================= -->
+    <!-- ====================== Especificacions ====================== -->
+    <!-- ============================================================= -->
+
+    <definition name=".menu.cuenta.listar" extends=".menu.individual">
+        <put name="titulo" value="menu.cuenta.lista"/>
+        <put name="link" value="/back/cuenta/lista"/>
+    </definition>
+    <definition name=".menu.permiso.listar" extends=".menu.individual">
+        <put name="titulo" value="menu.permiso.lista"/>
+        <put name="link" value="/back/permiso/lista"/>
+    </definition>
+
+
+</tiles-definitions>

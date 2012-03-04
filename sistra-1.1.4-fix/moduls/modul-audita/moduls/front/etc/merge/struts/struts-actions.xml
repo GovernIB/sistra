@@ -1,0 +1,50 @@
+<!--
+<action
+    path="/init"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".mainLayout"/>
+    -->
+
+<action
+    path="/resumen"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".resumen"/>    
+    
+<!--     
+<action
+    path="/inicio"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".inicio"/>
+
+<action
+    path="/anual"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".anual"/>    
+    
+<action
+    path="/mensual"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".mensual"/>    
+    
+<action
+    path="/diario"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".diario"/>
+    
+<action
+    path="/detalle"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".detalle"/>        
+    
+<action
+    path="/grafico"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".grafico"/>    
+    
+<action
+    path="/cuadranteServicios"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".cuadranteServicios"/>    
+
+ -->
+    

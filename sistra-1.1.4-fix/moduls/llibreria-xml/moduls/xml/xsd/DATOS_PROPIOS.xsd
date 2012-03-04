@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="DATOS_PROPIOS">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="1" ref="INSTRUCCIONES"/>
+        <xs:element minOccurs="0" ref="SOLICITUD"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="INSTRUCCIONES">
+  	<xs:complexType>
+  		<xs:sequence>
+  			<xs:element minOccurs="1" maxOccurs="1" name="TEXTO_INSTRUCCIONES" type="string_no_vacio" />
+  			<xs:element minOccurs="0" maxOccurs="1" ref="DOCUMENTOS_ENTREGAR" />
+  			<xs:element minOccurs="0" maxOccurs="1" ref="FECHA_TOPE_ENTREGA" />
+  			<xs:element minOccurs="0" maxOccurs="1" ref="TEXTO_FECHA_TOPE_ENTREGA" />
+  			<xs:element minOccurs="0" maxOccurs="1" ref="IDENTIFICADOR_PERSISTENCIA" />
+  			<xs:element minOccurs="0" maxOccurs="1" ref="HABILITAR_NOTIFICACION_TELEMATICA" />
+  			<xs:element minOccurs="0" maxOccurs="1" ref="HABILITAR_AVISOS" />
+  			<xs:element minOccurs="0" maxOccurs="1" ref="AVISO_SMS" />
+  			<xs:element minOccurs="0" maxOccurs="1" ref="AVISO_EMAIL" />
+  			<xs:element minOccurs="0" maxOccurs="1" ref="TRAMITE_SUBSANACION" />  			
+  		</xs:sequence>
+  	</xs:complexType>
+  </xs:element>
+  <xs:element name="DOCUMENTOS_ENTREGAR">
+  	<xs:complexType>
+  		<xs:sequence>
+  			<xs:element minOccurs="0" maxOccurs="unbounded" ref="DOCUMENTO" />
+  		</xs:sequence>
+  	</xs:complexType>
+  </xs:element>
+  <xs:element name="DOCUMENTO">
+  	<xs:complexType>
+  		<xs:sequence>
+  			<xs:element minOccurs="1" maxOccurs="1" name="TITULO" type="string_no_vacio" />
+  			<xs:element minOccurs="0" maxOccurs="1" name="IDENTIFICADOR" type="string_no_vacio" />
+  		</xs:sequence>
+  		
+  		<xs:attribute name="TIPO" use="required">
+	        <xs:simpleType>
+	          <xs:restriction base="xs:token">
+	            <xs:enumeration value="J"/>
+	            <xs:enumeration value="F"/>
+	            <xs:enumeration value="A"/>
+	            <xs:enumeration value="P"/>
+	          </xs:restriction>
+	        </xs:simpleType>        
+      	</xs:attribute>
+      	
+      	<xs:attribute name="FIRMAR" use="optional" type="xs:boolean" />
+      	<xs:attribute name="COMPULSAR" use="optional" type="xs:boolean" />
+      	<xs:attribute name="FOTOCOPIA" use="optional" type="xs:boolean" />      	
+  	</xs:complexType>
+  </xs:element>  
+  <xs:element name="SOLICITUD">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="DATO"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DATO">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="DESCRIPCION"/>
+        <xs:element minOccurs="0" ref="VALOR"/>
+      </xs:sequence>
+      <xs:attribute name="TIPO" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="C"/>
+            <xs:enumeration value="B"/>
+            <xs:enumeration value="I"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DESCRIPCION" type="xs:string"/>
+  <xs:element name="VALOR" type="xs:string"/>
+  
+  <xs:element name="FECHA_TOPE_ENTREGA" type="xs:string"/>
+  <xs:element name="IDENTIFICADOR_PERSISTENCIA" type="xs:string"/>  
+  <xs:element name="TEXTO_FECHA_TOPE_ENTREGA" type="xs:string"/>
+  
+  <xs:element name="HABILITAR_NOTIFICACION_TELEMATICA" type="string_si_no"/>
+  <xs:element name="HABILITAR_AVISOS" type="string_si_no"/>
+  <xs:element name="AVISO_SMS" type="xs:string"/>
+  <xs:element name="AVISO_EMAIL" type="xs:string"/>
+  
+  <xs:element name="TRAMITE_SUBSANACION">
+	<xs:complexType>
+		<xs:sequence>
+			<xs:element name="EXPEDIENTE_CODIGO" type="xs:string"/>
+			<xs:element name="EXPEDIENTE_UNIDAD_ADMINISTRATIVA" type="xs:long"/>
+		</xs:sequence>
+	</xs:complexType>
+  </xs:element>
+  
+  <xs:simpleType name='string_no_vacio'>
+  	<xs:restriction base='xs:string'>
+    	<xs:minLength value='1'/>
+  	</xs:restriction>
+  </xs:simpleType>
+  
+        	
+	<xs:simpleType name="string_si_no">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="S|N"/>
+		</xs:restriction>
+	</xs:simpleType>
+    
+</xs:schema>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+
+    <definition
+        name=".mainLayout"
+        path="/layout/mainLayout.jsp">
+        <put name="header" value="/moduls/header.jsp"/>
+        <put name="tabs" value="/moduls/tabs.jsp"/>
+        <put name="tabs2" value="/moduls/tabsExpediente.jsp"/>
+        <put name="main" value=".formularioBusqueda"/>
+        <put name="footer" value="/moduls/footer.jsp"/>
+    </definition>
+
+
+    <!--  debera usar un controller para recuperar de base de datos los criterios de busqueda -->
+    <definition
+   		name=".exportarCSV"
+   		extends=".mainLayout"
+   		controller="es.caib.bantel.front.controller.ExportCSVController">	
+   		<put name="main" value="/exportarCSV.jsp"/>
+	</definition>  
+    
+    
+  	<definition
+   		name=".confirmacionPreregistros"
+   		extends=".mainLayout">	
+   		<put name="main" value="/confirmacionPreregistros.jsp"/>
+	</definition>    
+        
+  	<definition
+   		name=".informacionPreregistro"
+   		extends=".mainLayout">	
+   		<put name="main" value="/informacionPreregistro.jsp"/>
+	</definition>    
+        
+    <definition
+    	name=".formularioBusqueda"
+    	path="/formularioBusqueda.jsp" 
+    	controller="es.caib.bantel.front.controller.FormularioBusquedaController"/>
+    	
+    <definition
+    	name=".busqueda"
+    	extends=".mainLayout">	
+    	<put name="main" value=".resultadoBusqueda"/>
+   	</definition>
+   	
+   	<definition
+    	name=".resultadoBusqueda"
+    	path="/resultadoBusqueda.jsp" />
+
+   	<definition
+   		name=".detalle"
+   		extends=".mainLayout">	
+   		<put name="main" value=".detalleTramite"/>
+	</definition>	
+    
+    <definition
+    	name=".detalleTramite"
+    	path="/detalleTramite.jsp" />
+    	
+    <definition
+    	name=".mensaje"
+    	extends=".mainLayout"
+    	controller="es.caib.bantel.front.controller.MessageController">	
+    	<put name="main" value="/moduls/mensaje.jsp"/>
+   	</definition>
+
+	<definition
+   		name=".confirmacionRecuperacionExpediente"
+   		extends=".mainLayout">	
+   		<put name="main" value="/confirmacionRecuperacionExpediente.jsp"/>
+	</definition>   
+	
+	<definition
+   		name=".inicioExpediente"
+   		extends=".mainLayout">	
+   		<put name="main" value="/inicioExpediente.jsp"/>
+	</definition>
+	
+	<definition
+   		name=".altaExpediente"
+   		extends=".mainLayout">	
+   		<put name="main" value="/altaExpediente.jsp"/>
+	</definition>  
+	
+	<definition
+   		name=".entradaAltaExpediente"
+   		extends=".mainLayout">	
+   		<put name="main" value="/entradaAltaExpediente.jsp"/>
+	</definition>    
+	
+	<definition
+   		name=".altaAviso"
+   		extends=".mainLayout"
+   		controller="es.caib.bantel.front.controller.AltaAvisoController">		
+   		<put name="main" value="/altaAviso.jsp"/>
+	</definition>   
+
+	<definition
+   		name=".altaNotificacion"
+   		extends=".mainLayout"
+   		controller="es.caib.bantel.front.controller.AltaNotificacionController">		
+   		<put name="main" value="/altaNotificacion.jsp"/>
+	</definition>   
+	
+	<definition
+   		name=".realizarAltaExpediente"
+   		extends=".mainLayout">	
+   		<put name="main" value="/confirmacionAltaExpediente.jsp"/>
+	</definition>   
+	
+	<definition
+   		name=".realizarAltaAviso"
+   		extends=".mainLayout">	
+   		<put name="main" value="/confirmacionAltaExpediente.jsp"/>
+	</definition>   
+
+	<definition
+   		name=".realizarAltaNotificacion"
+   		extends=".mainLayout">	
+   		<put name="main" value="/confirmacionAltaExpediente.jsp"/>
+	</definition>   
+
+	<definition
+   		name=".confirmacionRecuperacionExpediente"
+   		extends=".mainLayout">	
+   		<put name="main" value="/confirmacionRecuperacionExpediente.jsp"/>
+	</definition>   
+	
+	<definition
+   		name=".recuperarExpediente"
+   		extends=".mainLayout"
+   		controller="es.caib.bantel.front.controller.RecuperacionExpedienteController">	
+   		<put name="main" value="/detalleExpediente.jsp"/>
+	</definition>   
+	
+	<definition
+   		name=".detalleAviso"
+   		extends=".mainLayout">	
+   		<put name="main" value="/detalleAviso.jsp"/>
+	</definition>   
+	
+	<definition
+   		name=".detalleNotificacion"
+   		extends=".mainLayout">	
+   		<put name="main" value="/detalleNotificacion.jsp"/>
+	</definition>   
+	
+	<definition
+   		name=".detalleTramiteRecuperado"
+   		extends=".mainLayout">	
+   		<put name="main" value="/detalleTramiteRecuperado.jsp"/>
+	</definition>   
+
+	<definition name=".error" extends=".mensaje"/>
+     
+    <definition name=".arbolUnidades" path="/arbolUnidades.jsp" />
+    <definition name=".funcsNodesUnidades" path="/js/funcsNodesUnidades.jsp"
+     controllerClass="es.caib.bantel.front.controller.FuncsNodesUnidadesController" />
+  
+  	<definition
+   		name=".firmarDocumentosAviso"
+   		extends=".mainLayout">	
+   		<put name="main" value="/firmarDocumentosAviso.jsp"/>
+	</definition>   
+  	
+  	<definition
+   		name=".firmarDocumentosNotificacion"
+   		extends=".mainLayout">	
+   		<put name="main" value="/firmarDocumentosNotificacion.jsp"/>
+	</definition>
+	
+</tiles-definitions>
+

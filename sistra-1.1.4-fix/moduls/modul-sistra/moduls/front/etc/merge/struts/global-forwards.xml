@@ -1,0 +1,10 @@
+<global-forwards>
+
+    <forward name="main" path="/main.do" />
+    <forward name="fail" path="/fail.do" />
+    <forward name="error" path="/fail.do" />
+    <forward name="pasoActual" path="/protected/irAPaso.do" />
+    <forward name="redirect" path="/redirect.do" />
+    <forward name="irAPortal" path="/irAPortal.do" />
+    
+</global-forwards>
