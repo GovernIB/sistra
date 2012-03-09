@@ -98,4 +98,5 @@ public class Constants implements Serializable {
 	public static String AUDITORIA_TAB = "4"; 
 	public static String USUARIOS_TAB = "5";
 	public static String BACKUP_TAB = "6";
+	public static String PREREGISTRO_TAB = "7";
 }

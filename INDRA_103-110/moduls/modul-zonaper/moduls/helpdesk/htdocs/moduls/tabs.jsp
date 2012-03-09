@@ -71,7 +71,7 @@
 					</html:link>		
 			</logic:notEqual>
 		
-			<!--  OPCION 6: USUARIOS -->
+			<!--  OPCION 6: BACKUP -->
 			<logic:equal name="<%=Constants.OPCION_SELECCIONADA_KEY%>" value="<%=Constants.BACKUP_TAB%>">
 				<span>
 						<bean:message key="tabs.backup"/>	
@@ -80,6 +80,17 @@
 			<logic:notEqual name="<%=Constants.OPCION_SELECCIONADA_KEY%>" value="<%=Constants.BACKUP_TAB%>">
 					<html:link action="backup">
 						<bean:message key="tabs.backup"/>	
+					</html:link>		
+			</logic:notEqual>
+			<!--  OPCION 7: PREREGISTRO -->
+			<logic:equal name="<%=Constants.OPCION_SELECCIONADA_KEY%>" value="<%=Constants.PREREGISTRO_TAB%>">
+				<span>
+						<bean:message key="tabs.preregistro"/>	
+				</span>
+			</logic:equal>
+			<logic:notEqual name="<%=Constants.OPCION_SELECCIONADA_KEY%>" value="<%=Constants.PREREGISTRO_TAB%>">
+					<html:link action="preregistro">
+						<bean:message key="tabs.preregistro"/>	
 					</html:link>		
 			</logic:notEqual>
 		

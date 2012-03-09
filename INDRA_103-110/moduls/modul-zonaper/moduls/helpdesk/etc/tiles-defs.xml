@@ -166,6 +166,32 @@
    		<put name="main" value="/detalleTramite.jsp"/>
 	</definition>	
 	
+	<definition
+   		name=".preregistro"
+   		extends=".mainLayout">	
+   		<put name="main" value=".formularioBusquedaPreregistro"/>
+	</definition>    
+
+    <definition
+    	name=".formularioBusquedaPreregistro"
+    	path="/formularioBusquedaPreregistro.jsp"
+    	controller="es.caib.zonaper.helpdesk.front.controller.FormularioBusquedaController" />
+    	
+    <definition
+    	name=".busquedaTramitesPreregistro"
+    	extends=".mainLayout">	
+    	<put name="main" value=".resultadoBusquedaPreregistro"/>
+   	</definition>
+   	
+   	<definition
+    	name=".resultadoBusquedaPreregistro"
+    	path="/resultadoBusquedaPreregistro.jsp" />
+
+	<definition
+    	name=".detalleTramitesPreregistro" extends=".mainLayout">
+   		<put name="main" value="/detalleTramitePreregistro.jsp"/>
+	</definition>
+	
 	<definition name=".error" extends=".mensaje"/>
      
 </tiles-definitions>
