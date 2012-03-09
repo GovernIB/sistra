@@ -161,6 +161,16 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
         }
     }
 
+    public List listarEntradaPreregistrosNoConfirmados( String modelo, char caducidad, Date fechaInicial, Date fechaFinal ) throws DelegateException 
+    {
+    	try
+    	{
+    		return getFacade().listarEntradaPreregistrosNoConfirmados( modelo, caducidad, fechaInicial, fechaFinal );
+    	}
+    	catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

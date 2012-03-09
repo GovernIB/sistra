@@ -25,6 +25,9 @@
     type="es.caib.zonaper.helpdesk.front.form.BusquedaTramiteBackupForm" />    
 <form-bean
     name="detalleTramiteForm"
-    type="es.caib.zonaper.helpdesk.front.form.DetalleTramiteForm" />    
+    type="es.caib.zonaper.helpdesk.front.form.DetalleTramiteForm" />
+<form-bean
+    name="busquedaTramitePreregistroForm"
+    type="es.caib.zonaper.helpdesk.front.form.BusquedaTramitePreregistroForm" />        
        
 

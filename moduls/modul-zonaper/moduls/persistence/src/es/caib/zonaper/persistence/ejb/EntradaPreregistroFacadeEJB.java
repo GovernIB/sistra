@@ -572,9 +572,62 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
     	}
     }
     	
-    
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.helpdesk}"
+     */
+    public List listarEntradaPreregistrosNoConfirmados( String modelo, char caducidad, Date fechaInicial, Date fechaFinal ) {
 
-    
+    	Session session = getSession();
+        try {
+        	String hql_from = "FROM EntradaPreregistro AS m ";
+        	String hql_where = "WHERE m.fechaConfirmacion IS NULL AND m.fecha >= :fechaInicial AND m.fecha <= :fechaFinal ";
+        	String hql_order = "ORDER BY m.tramite ";
+        	
+        	String hql_modelo;
+        	
+        	if ("0".equals(modelo)) {
+        		hql_modelo = " AND :modelo = :modelo ";
+        	} else {
+        		hql_modelo = " AND m.tramite = :modelo ";
+        	}
+        	
+        	String hql_caducidad;
+        	
+        	switch(caducidad){
+        		case 'S' : 
+        			hql_caducidad = " AND m.fechaCaducidad <= :fechaActual ";
+        			break;
+        		case 'N' : 
+        			hql_caducidad = " AND m.fechaCaducidad > :fechaActual ";
+        			break;
+        		default: 
+        			hql_caducidad = " AND :fechaActual = :fechaActual ";
+        			break;
+        	}
+        	int size = hql_from.length() + hql_where.length() + hql_caducidad.length() + hql_modelo.length() + hql_order.length();
+        	StringBuilder hql = new StringBuilder(size);
+        	hql.append(hql_from);
+        	hql.append(hql_where);
+        	hql.append(hql_modelo);
+        	hql.append(hql_caducidad);
+        	hql.append(hql_order);
+        	Query query = session.createQuery(hql.toString());
+            query.setParameter("fechaInicial", fechaInicial );
+            query.setParameter("fechaFinal", fechaFinal);
+            query.setParameter("modelo", modelo);
+            query.setParameter("fechaActual", new Date());
+            
+            List entradas = query.list();
+            
+            return entradas;
+            
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
     
   	
 }

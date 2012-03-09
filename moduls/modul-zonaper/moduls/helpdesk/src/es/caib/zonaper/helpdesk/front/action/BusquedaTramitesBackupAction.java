@@ -20,17 +20,13 @@ import org.apache.struts.action.ActionMapping;
 
 import es.caib.zonaper.helpdesk.front.Constants;
 import es.caib.zonaper.helpdesk.front.form.BusquedaTramiteBackupForm;
-import es.caib.zonaper.helpdesk.front.form.EstadoTramiteForm;
 import es.caib.zonaper.helpdesk.front.plugins.PluginAudita;
 import es.caib.zonaper.model.Entrada;
 import es.caib.zonaper.model.EntradaPreregistro;
-import es.caib.zonaper.model.EntradaTelematica;
 import es.caib.zonaper.model.TramitePersistente;
 import es.caib.zonaper.model.TramitePersistenteResumen;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
-import es.caib.zonaper.persistence.delegate.EntradaPreregistroDelegate;
-import es.caib.zonaper.persistence.delegate.EntradaTelematicaDelegate;
 import es.caib.zonaper.persistence.delegate.TramitePersistenteDelegate;
 
 /**
