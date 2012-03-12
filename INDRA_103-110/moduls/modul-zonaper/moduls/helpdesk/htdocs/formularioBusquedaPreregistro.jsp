@@ -115,7 +115,7 @@
 			<p>
 				<label for="diaInicial" class="separacio">
 					<bean:message key="formularioBusqueda.diaInicial"/>: 
-					<html:text property="fechaInicial" styleId="fecha" readonly="true" size="10" />
+					<html:text property="fechaInicial" styleId="fechaInicial" readonly="true" size="10" />
 					 <button id="dia_calendario_inicial" type="button" title="Mostrar calendari"><img src="imgs/botons/calendari.gif" alt="" /></button> <button type="button" title="Esborrar dia" onclick="esborrarDia('fechaInicial');"><img src="imgs/botons/calendari_borrar.gif" alt="" /></button>
 				</label> 
 				<script type="text/javascript">
@@ -127,7 +127,7 @@
 				</script>
 				<label for="diaFinal" class="separacio">
 					<bean:message key="formularioBusqueda.diaFinal"/>: 
-					<html:text property="fechaFinal" styleId="fecha" readonly="true" size="10" />
+					<html:text property="fechaFinal" styleId="fechaFinal" readonly="true" size="10" />
 					 <button id="dia_calendario_final" type="button" title="Mostrar calendari"><img src="imgs/botons/calendari.gif" alt="" /></button> <button type="button" title="Esborrar dia" onclick="esborrarDia('fechaFinal');"><img src="imgs/botons/calendari_borrar.gif" alt="" /></button>
 				</label> 
 				<script type="text/javascript">
