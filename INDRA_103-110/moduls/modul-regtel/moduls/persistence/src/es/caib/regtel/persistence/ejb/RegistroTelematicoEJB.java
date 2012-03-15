@@ -452,7 +452,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 			log.debug("Generamos justificante registro");
 			
 			// Generamos justificante de registro creando los usos RDS correspondientes
-			ReferenciaRDS refRDSJustificante = generarJustificante(asientoBin,asientoXML,res);
+			ReferenciaRDS refRDSJustificante = generarJustificante(asientoBin,asientoXML,res, datosPropios, refDocs);
 			
 			// Genera usos RDS para asiento, justificante y documentos asociados
 			generarUsosRDS(entrada ? ConstantesRDS.TIPOUSO_REGISTROENTRADA : ConstantesRDS.TIPOUSO_REGISTROSALIDA ,asientoXML,refDocs,refAsiento,refRDSJustificante,res,datosPropios);
@@ -606,81 +606,34 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	/**
 	 * Generar justificante de registro y lo almacena en el RDS
 	 */
-	private ReferenciaRDS generarJustificante(byte[] asientoBin,AsientoRegistral asientoXML,ResultadoRegistro resultadoRegistro) throws ExcepcionRegistroTelematico{
+	private ReferenciaRDS generarJustificante(byte[] asientoBin,AsientoRegistral asientoXML,ResultadoRegistro resultadoRegistro, DatosPropios datosPropios, Map refDocs) throws ExcepcionRegistroTelematico{
 			
-		// Generamos justificante a partir asiento
-		String asiento=null;
-		try {
-			asiento = new String(asientoBin,ConstantesXML.ENCODING);
-		} catch (UnsupportedEncodingException e) {
-			throw new ExcepcionRegistroTelematico("Codificacion no soportada " + ConstantesXML.ENCODING );
-		}
-		
-		String justificante = 
-			"<?xml version=\"1.0\" encoding=\"" + ConstantesXML.ENCODING + "\" standalone=\"yes\"?>" +
-			"<JUSTIFICANTE version=\"1.0\">" +  
-			asiento.substring(asiento.indexOf("<ASIENTO_REGISTRAL")) +
-			//asiento.substring(asiento.indexOf("?>") + 3) + 
-			"  <NUMERO_REGISTRO>"+ resultadoRegistro.getNumeroRegistro() +"</NUMERO_REGISTRO> " + 
-			"  <FECHA_REGISTRO>"+ resultadoRegistro.getFechaRegistro() + "</FECHA_REGISTRO> " +
-			" </JUSTIFICANTE> ";									
-		
-		
-		DocumentoRDS docRds = new DocumentoRDS();
-		
+		// Generamos justificante a partir asiento y resultado registro
+		String justificante = generarXmlJustificante(asientoBin,
+				resultadoRegistro);									
 		
 		// Firmamos justificante (en caso de que se haya configurado)		
-		if (
-				(asientoXML.getDatosOrigen().getTipoRegistro().charValue() == ConstantesAsientoXML.TIPO_REGISTRO_ENTRADA  
-						&& this.firmarEntrada)
-				||
-				(asientoXML.getDatosOrigen().getTipoRegistro().charValue() == ConstantesAsientoXML.TIPO_REGISTRO_SALIDA  
-						&& this.firmarSalida)
-			)
-		{
-			
-				InputStream is = null;
-				try {
-					
-					PluginFirmaIntf plgFirma = PluginFactory.getInstance().getPluginFirma();
-					
-					// Según implementación tendrá parámetros específicos
-					Map params = new HashMap();
-					if (plgFirma.getProveedor().equals(PluginFirmaIntf.PROVEEDOR_CAIB)){						
-						// Establecemos content type correspondiente
-						if (asientoXML.getDatosOrigen().getTipoRegistro().charValue() == ConstantesAsientoXML.TIPO_REGISTRO_SALIDA){
-							params.put(FirmaUtil.CAIB_PARAMETER_CONTENT_TYPE, FirmaUtil.obtenerContentTypeCAIB(FirmaUtil.CAIB_JUSTIFICANT_EIXIDA_CONTENT_TYPE) );
-						}else{
-							params.put(FirmaUtil.CAIB_PARAMETER_CONTENT_TYPE, FirmaUtil.obtenerContentTypeCAIB(FirmaUtil.CAIB_JUSTIFICANT_ENTRADA_CONTENT_TYPE) );
-						}
-						// Establecemos pin certificado
-						params.put(FirmaUtil.CAIB_PARAMETER_PIN,this.pinCertificado);
-					}else if(plgFirma.getProveedor().equals(PluginFirmaIntf.PROVEEDOR_AFIRMA)){
-						if (asientoXML.getDatosOrigen().getTipoRegistro().charValue() == ConstantesAsientoXML.TIPO_REGISTRO_SALIDA){
-							params.put(FirmaUtil.AFIRMA_PARAMETER_ARCHIVO, "justificanteSalida.xml" );
-						}else{
-							params.put(FirmaUtil.AFIRMA_PARAMETER_ARCHIVO, "justificanteEntrada.xml" );
-						}
-					}
-					
-					// Firmamos
-					is = FirmaUtil.cadenaToInputStream(justificante);
-					FirmaIntf firma = plgFirma.firmar(is,this.nombreCertificado,params);
-					
-					// Asociamos firma al documento
-					FirmaIntf [] firmas = new FirmaIntf[1];
-					firmas[0]=firma;
-					docRds.setFirmas(firmas);			
-				} catch (Exception ex) {
-					log.error("Excepcion firmando justificante registro",ex);
-					throw new ExcepcionRegistroTelematico("Excepcion firmando justificante registro",ex);
-				}finally{
-					try{is.close();}catch(Exception e){}
-				}
-						
-		}		
+		FirmaIntf firmaJustificante = firmarJustificante(asientoXML,
+				justificante, datosPropios, refDocs);		
 		
-		// Insertamos justificante en RDS				
+		// Insertamos justificante en RDS
+		ReferenciaRDS refRDSJustificante = insertarJustificante(asientoXML, justificante, firmaJustificante);
+				
+		return refRDSJustificante;
+	}
+
+	/**
+	 * Inserta justificante en RDS.
+	 * @param asientoXML Asiento XML
+	 * @param justificante XML Justificante
+	 * @param firmaJustificante Firma justificante
+	 * @return Ref RDS justificante
+	 * @throws ExcepcionRegistroTelematico
+	 */
+	private ReferenciaRDS insertarJustificante(AsientoRegistral asientoXML,
+			String justificante, FirmaIntf firmaJustificante)
+			throws ExcepcionRegistroTelematico {
+		DocumentoRDS docRds = new DocumentoRDS();
 		docRds.setModelo(ConstantesRDS.MODELO_JUSTIFICANTE_REGISTRO);
 		docRds.setVersion(ConstantesRDS.VERSION_JUSTIFICANTE);
 		try {
@@ -701,6 +654,11 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
     		}
     	}
 		docRds.setIdioma(asientoXML.getDatosAsunto().getIdiomaAsunto());
+		if (firmaJustificante != null) {
+			FirmaIntf [] firmas = new FirmaIntf[1];
+			firmas[0]=firmaJustificante;
+			docRds.setFirmas(firmas);
+		}
 				
 		// Insertamos justificante en el RDS y devolvemos referencia
 		try{
@@ -711,6 +669,106 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 			log.error("Excepcion insertando justificante en el RDS",ex);
 			throw new ExcepcionRegistroTelematico("Excepcion insertando justificante en el RDS",ex);
 		}
+	}
+
+	/**
+	 * Firma justificante y formularios solicitud indicados.
+	 * @param asientoXML Asiento registral
+	 * @param justificante Xml justificante
+	 * @param datosPropios Datos propios
+	 * @param refDocs Referencia rds docs asiento
+	 * @return Firma justificante
+	 * @throws ExcepcionRegistroTelematico
+	 */
+	private FirmaIntf firmarJustificante(AsientoRegistral asientoXML,
+			String justificante, DatosPropios datosPropios, Map refDocs) throws ExcepcionRegistroTelematico {
+		char tipoRegistro = asientoXML.getDatosOrigen().getTipoRegistro().charValue();
+		boolean firmar = (tipoRegistro == ConstantesAsientoXML.TIPO_REGISTRO_ENTRADA && this.firmarEntrada)
+				|| (tipoRegistro == ConstantesAsientoXML.TIPO_REGISTRO_SALIDA && this.firmarSalida);
+		FirmaIntf firmaJustificante = null;
+		if (firmar) {
+			InputStream is = null;
+			try {
+				// Obtenemos plugin firma
+				PluginFirmaIntf plgFirma = PluginFactory.getInstance().getPluginFirma();
+				
+				// Según implementación tendrá parámetros específicos
+				Map params = paramsPluginFirma(tipoRegistro, plgFirma);
+				
+				// Firmamos justificante
+				is = FirmaUtil.cadenaToInputStream(justificante);
+				firmaJustificante = plgFirma.firmar(is,this.nombreCertificado,params);
+				
+				// Buscamos si hay que firmar formularios para un registro de entrada
+				if (tipoRegistro == ConstantesAsientoXML.TIPO_REGISTRO_ENTRADA) {
+					RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();				
+					if (datosPropios != null && datosPropios.getInstrucciones().getFormulariosJustificante() != null && 
+							datosPropios.getInstrucciones().getFormulariosJustificante().getFormularios() != null) {					
+						for (Iterator it = datosPropios.getInstrucciones().getFormulariosJustificante().getFormularios().iterator(); it.hasNext();) {
+							String refDoc = (String) it.next();
+							ReferenciaRDS refRdsForm = (ReferenciaRDS) refDocs.get(refDoc);
+							DocumentoRDS form = rds.consultarDocumento(refRdsForm);
+							FirmaIntf firmaForm = plgFirma.firmar(new ByteArrayInputStream(form.getDatosFichero()),this.nombreCertificado,params);
+							rds.asociarFirmaDocumento(refRdsForm, firmaForm);
+						}
+					}
+				}
+				 
+							
+			} catch (Exception ex) {
+				log.error("Excepcion firmando justificante registro",ex);
+				throw new ExcepcionRegistroTelematico("Excepcion firmando justificante registro",ex);
+			}finally{
+				try{is.close();}catch(Exception e){}
+			}						
+		}
+		return firmaJustificante;
+	}
+
+	/**
+	 * Genera xml de justificante.
+	 */
+	private String generarXmlJustificante(byte[] asientoBin,
+			ResultadoRegistro resultadoRegistro)
+			throws ExcepcionRegistroTelematico {
+		String asiento=null;
+		try {
+			asiento = new String(asientoBin,ConstantesXML.ENCODING);
+		} catch (UnsupportedEncodingException e) {
+			throw new ExcepcionRegistroTelematico("Codificacion no soportada " + ConstantesXML.ENCODING );
+		}
+		
+		String justificante = 
+			"<?xml version=\"1.0\" encoding=\"" + ConstantesXML.ENCODING + "\" standalone=\"yes\"?>" +
+			"<JUSTIFICANTE version=\"1.0\">" +  
+			asiento.substring(asiento.indexOf("<ASIENTO_REGISTRAL")) +
+			//asiento.substring(asiento.indexOf("?>") + 3) + 
+			"  <NUMERO_REGISTRO>"+ resultadoRegistro.getNumeroRegistro() +"</NUMERO_REGISTRO> " + 
+			"  <FECHA_REGISTRO>"+ resultadoRegistro.getFechaRegistro() + "</FECHA_REGISTRO> " +
+			" </JUSTIFICANTE> ";
+		return justificante;
+	}
+
+	private Map paramsPluginFirma(char tipoRegistro, PluginFirmaIntf plgFirma)
+			throws Exception {
+		Map params = new HashMap();
+		if (plgFirma.getProveedor().equals(PluginFirmaIntf.PROVEEDOR_CAIB)){						
+			// Establecemos content type correspondiente
+			if (tipoRegistro == ConstantesAsientoXML.TIPO_REGISTRO_SALIDA){
+				params.put(FirmaUtil.CAIB_PARAMETER_CONTENT_TYPE, FirmaUtil.obtenerContentTypeCAIB(FirmaUtil.CAIB_JUSTIFICANT_EIXIDA_CONTENT_TYPE) );
+			}else{
+				params.put(FirmaUtil.CAIB_PARAMETER_CONTENT_TYPE, FirmaUtil.obtenerContentTypeCAIB(FirmaUtil.CAIB_JUSTIFICANT_ENTRADA_CONTENT_TYPE) );
+			}
+			// Establecemos pin certificado
+			params.put(FirmaUtil.CAIB_PARAMETER_PIN,this.pinCertificado);
+		}else if(plgFirma.getProveedor().equals(PluginFirmaIntf.PROVEEDOR_AFIRMA)){
+			if (tipoRegistro == ConstantesAsientoXML.TIPO_REGISTRO_SALIDA){
+				params.put(FirmaUtil.AFIRMA_PARAMETER_ARCHIVO, "justificanteSalida.xml" );
+			}else{
+				params.put(FirmaUtil.AFIRMA_PARAMETER_ARCHIVO, "justificanteEntrada.xml" );
+			}
+		}
+		return params;
 	}
 	
 	 /**
