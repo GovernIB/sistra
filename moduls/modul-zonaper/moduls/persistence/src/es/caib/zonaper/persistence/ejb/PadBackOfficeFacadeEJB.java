@@ -1161,7 +1161,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
     		for (Iterator it = expediente.getElementos().iterator(); it.hasNext();) {
     			ElementoExpediente ee = (ElementoExpediente) it.next();
     			if (ee.getTipoElemento().equals(ElementoExpediente.TIPO_AVISO_EXPEDIENTE) ) {
-    				EventoExpediente eve = dlg.obtenerEventoExpediente(ee.getCodigo());
+    				EventoExpediente eve = dlg.obtenerEventoExpediente(ee.getCodigoElemento());
     				indices = new HashMap();
     				indices.put("Título", eve.getTitulo());
     				indices.put("Texto", eve.getTexto());
