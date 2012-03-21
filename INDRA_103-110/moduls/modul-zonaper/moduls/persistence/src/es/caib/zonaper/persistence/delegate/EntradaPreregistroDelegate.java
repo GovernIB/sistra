@@ -2,6 +2,7 @@ package es.caib.zonaper.persistence.delegate;
 
 import java.rmi.RemoteException;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 
 import javax.ejb.CreateException;
@@ -161,16 +162,39 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
         }
     }
 
-    public List listarEntradaPreregistrosNoConfirmados( String modelo, char caducidad, Date fechaInicial, Date fechaFinal ) throws DelegateException 
+    public List listarEntradaPreregistrosNoConfirmados( Date fechaInicial, Date fechaFinal, String modelo, String caducidad, String tipo, String nivel ) throws DelegateException 
     {
     	try
     	{
-    		return getFacade().listarEntradaPreregistrosNoConfirmados( modelo, caducidad, fechaInicial, fechaFinal );
+    		return getFacade().listarEntradaPreregistrosNoConfirmados( fechaInicial, fechaFinal, modelo, caducidad, tipo, nivel );
     	}
     	catch (Exception e) {
             throw new DelegateException(e);
         }
     }
+    
+    public List listarEntradaPreregistrosConfirmados( Date fechaInicial, Date fechaFinal, String modelo, String caducidad, String tipo, String nivel ) throws DelegateException 
+    {
+    	try
+    	{
+    		return getFacade().listarEntradaPreregistrosConfirmados( fechaInicial, fechaFinal, modelo, caducidad, tipo, nivel );
+    	}
+    	catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public List listarEntradaPreregistros( Date fechaInicial, Date fechaFinal, String modelo, String caducidad, String tipo, String nivel ) throws DelegateException 
+    {
+    	try
+    	{
+    		return getFacade().listarEntradaPreregistros( fechaInicial, fechaFinal, modelo, caducidad, tipo, nivel );
+    	}
+    	catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

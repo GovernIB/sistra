@@ -39,12 +39,10 @@ function mostrarDatosTramite(clave){
 			<tr>
 				<th><bean:message key="resultadoBusqueda.numero"/></th>
 				<th><bean:message key="resultadoBusqueda.tramite"/></th>
-				<th><bean:message key="resultadoBusqueda.version"/></th>
-				<th><bean:message key="resultadoBusqueda.idioma"/></th>
 				<th><bean:message key="resultadoBusqueda.descripcion"/></th>
+				<th><bean:message key="resultadoBusqueda.tipo"/></th>
 				<th><bean:message key="resultadoBusqueda.nivelAutenticacion"/></th>
-				<th><bean:message key="resultadoBusqueda.nifRepresentante"/></th>
-				<th><bean:message key="resultadoBusqueda.nombreRepresentante"/></th>
+				<th><bean:message key="resultadoBusqueda.confirmado"/></th>
 				<th><bean:message key="resultadoBusqueda.fechaCaducidad"/></th>
 			</tr>	
 			</thead>
@@ -54,16 +52,15 @@ function mostrarDatosTramite(clave){
 				<tr onmouseover="selecItemTabla(this);" onclick="mostrarDatosTramite('<bean:write name="tramite" property="idPersistencia"/>');" class="nou">
 					<td><bean:write name="tramite" property="numeroPreregistro"/></td>
 					<td><bean:write name="tramite" property="tramite"/></td>
-					<td><bean:write name="tramite" property="version"/></td>
+					<td><bean:write name="tramite" property="descripcionTramite"/></td>
 					<td>
-						<logic:equal name="tramite" property="idioma" value='<%= Constants.CATALAN %>'>
-							<bean:message key="resultadoBusqueda.idioma.catalan"/>	
+						<logic:equal name="tramite" property="tipo" value='<%= Constants.TIPO_REGISTRO %>'>
+							<bean:message key="resultadoBusqueda.tipo.registro"/>
 						</logic:equal>
-						<logic:equal name="tramite" property="idioma" value='<%= Constants.CASTELLANO %>'>
-							<bean:message key="resultadoBusqueda.idioma.castellano"/>	
+						<logic:equal name="tramite" property="tipo" value='<%= Constants.TIPO_BANDEJA %>'>
+							<bean:message key="resultadoBusqueda.tipo.bandeja"/>
 						</logic:equal>
 					</td>
-					<td><bean:write name="tramite" property="descripcionTramite"/></td>
 					<td>
 						<logic:equal name="tramite" property="nivelAutenticacion" value='<%= String.valueOf(Constants.MODO_AUTENTICACION_USUARIO_PWD) %>'>
 							<bean:message key="resultadoBusqueda.usuarioPassword"/>	
@@ -75,8 +72,15 @@ function mostrarDatosTramite(clave){
 							<bean:message key="resultadoBusqueda.anonimo"/>	
 						</logic:equal>
 					</td>
-					<td><bean:write name="tramite" property="nifRepresentante"/></td>
-					<td><bean:write name="tramite" property="nombreRepresentante"/></td>											
+					<td>
+						<logic:empty name="tramite" property="fechaConfirmacion">
+							<bean:message key="resultadoBusqueda.confirmado.no"/>	
+						</logic:empty>
+						 <logic:notEmpty name="tramite" property="fechaConfirmacion">
+							<bean:message key="resultadoBusqueda.confirmado.si"/>	
+						</logic:notEmpty>
+					</td>
+					
 					<td><bean:write name="tramite" property="fechaCaducidad" format="dd/MM/yyyy HH:mm"/></td>
 				</tr>
 				</logic:iterate>														

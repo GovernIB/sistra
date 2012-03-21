@@ -2,6 +2,7 @@ package es.caib.zonaper.persistence.ejb;
 
 import java.security.Principal;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -52,6 +53,17 @@ import es.caib.zonaper.persistence.delegate.DelegateUtil;
  */
 public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
 
+	private static final String HQL_FROM = "FROM EntradaPreregistro AS m ";
+	private static final String HQL_ORDER = "ORDER BY m.tramite ";
+	private static final String HQL_FECHAS = "m.fecha >= :fechaInicial AND m.fecha <= :fechaFinal ";
+	private static final String KEY_MODELO = "MODELO";
+	private static final String KEY_FECHA_INICIO = "FECHA_INICIO";
+	private static final String KEY_FECHA_FIN = "FECHA_FIN";
+	private static final String KEY_CADUCIDAD = "CADUCIDAD";
+	private static final String KEY_TIPO = "TIPO";
+	private static final String KEY_NIVEL = "NIVEL";
+	private static final String KEY_WHERE = "WHERE";
+	
 	private String roleHelpDesk;
 	private String roleRegistro;
 	private String roleGestor;
@@ -576,58 +588,159 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.helpdesk}"
      */
-    public List listarEntradaPreregistrosNoConfirmados( String modelo, char caducidad, Date fechaInicial, Date fechaFinal ) {
+    public List listarEntradaPreregistrosNoConfirmados( Date fechaInicial, Date fechaFinal, String modelo, String caducidad, String tipo, String nivel ) {
 
-    	Session session = getSession();
-        try {
-        	String hql_from = "FROM EntradaPreregistro AS m ";
-        	String hql_where = "WHERE m.fechaConfirmacion IS NULL AND m.fecha >= :fechaInicial AND m.fecha <= :fechaFinal ";
-        	String hql_order = "ORDER BY m.tramite ";
-        	
-        	String hql_modelo;
-        	
-        	if ("0".equals(modelo)) {
-        		hql_modelo = " AND :modelo = :modelo ";
-        	} else {
-        		hql_modelo = " AND m.tramite = :modelo ";
-        	}
-        	
-        	String hql_caducidad;
-        	
-        	switch(caducidad){
-        		case 'S' : 
-        			hql_caducidad = " AND m.fechaCaducidad <= :fechaActual ";
-        			break;
-        		case 'N' : 
-        			hql_caducidad = " AND m.fechaCaducidad > :fechaActual ";
-        			break;
-        		default: 
-        			hql_caducidad = " AND :fechaActual = :fechaActual ";
-        			break;
-        	}
-        	int size = hql_from.length() + hql_where.length() + hql_caducidad.length() + hql_modelo.length() + hql_order.length();
-        	StringBuilder hql = new StringBuilder(size);
-        	hql.append(hql_from);
-        	hql.append(hql_where);
-        	hql.append(hql_modelo);
-        	hql.append(hql_caducidad);
-        	hql.append(hql_order);
-        	Query query = session.createQuery(hql.toString());
-            query.setParameter("fechaInicial", fechaInicial );
-            query.setParameter("fechaFinal", fechaFinal);
-            query.setParameter("modelo", modelo);
-            query.setParameter("fechaActual", new Date());
-            
-            List entradas = query.list();
-            
-            return entradas;
-            
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
+    	Hashtable filtro = getFiltro(fechaInicial, fechaFinal, modelo, caducidad, tipo, nivel);
+    	Hashtable condiciones = getCondiciones(filtro);
+    	condiciones.put(KEY_WHERE, "WHERE m.fechaConfirmacion IS NULL AND ");
+    	return getListaEntradaPreregistro(condiciones, filtro);
     }
     
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.helpdesk}"
+     */
+    public List listarEntradaPreregistrosConfirmados( Date fechaInicial, Date fechaFinal, String modelo, String caducidad, String tipo, String nivel ) {
+    	
+    	Hashtable filtro = getFiltro(fechaInicial, fechaFinal, modelo, caducidad, tipo, nivel);
+    	Hashtable condiciones = getCondiciones(filtro);
+    	condiciones.put(KEY_WHERE, "WHERE m.fechaConfirmacion IS NOT NULL AND ");
+    	return getListaEntradaPreregistro(condiciones, filtro);
+    }
+
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.helpdesk}"
+     */
+    public List listarEntradaPreregistros( Date fechaInicial, Date fechaFinal, String modelo, String caducidad, String tipo, String nivel ) {
+    	
+    	Hashtable filtro = getFiltro(fechaInicial, fechaFinal, modelo, caducidad, tipo, nivel);
+    	Hashtable condiciones = getCondiciones(filtro);
+    	condiciones.put(KEY_WHERE, "WHERE ");
+    	return getListaEntradaPreregistro(condiciones, filtro);
+    }
+
+    /**
+     * Genera un Hashtable a partir de los filtros 
+     * @param fechaInicial
+     * @param fechaFinal
+     * @param modelo
+     * @param caducidad
+     * @param tipo
+     * @param nivel
+     * @return
+     */
+    private Hashtable getFiltro(Date fechaInicial, Date fechaFinal, String modelo, String caducidad, String tipo, String nivel) {
+    	Hashtable filtro = new Hashtable();
+		
+		filtro.put(KEY_MODELO, modelo);
+		filtro.put(KEY_FECHA_INICIO, fechaInicial);
+		filtro.put(KEY_FECHA_FIN, fechaFinal);
+		filtro.put(KEY_CADUCIDAD, caducidad);
+		filtro.put(KEY_TIPO, tipo);
+		filtro.put(KEY_NIVEL, nivel);
+		return filtro;
+    }
+    
+    /**
+     * Genera las condiciones a partir de los valores de filtro
+     * @param filtro
+     * @return
+     */
+    private Hashtable getCondiciones(Hashtable filtro){
+    	
+    	Hashtable condiciones = new Hashtable();
+    	String modelo = (String)filtro.get(KEY_MODELO);
+    	String caducidad = (String)filtro.get(KEY_CADUCIDAD);
+    	String tipo = (String)filtro.get(KEY_TIPO);
+    	String nivel = (String)filtro.get(KEY_NIVEL);
+    	
+    	String hql_modelo;
+
+    	if ("0".equals(modelo)) {
+    		hql_modelo = " AND :modelo = :modelo ";
+    	} else {
+    		hql_modelo = " AND m.tramite = :modelo ";
+    	}
+    	
+    	condiciones.put(KEY_MODELO, hql_modelo);
+    	
+    	String hql_caducidad;
+    	
+    	if ("S".equals(caducidad)) {
+    		hql_caducidad = " AND m.fechaCaducidad <= :fechaActual ";
+    	} else if ("N".equals(caducidad)) {
+    		hql_caducidad = " AND m.fechaCaducidad > :fechaActual ";
+    	} else {
+    		hql_caducidad = " AND :fechaActual = :fechaActual ";
+    	}
+    	
+    	condiciones.put(KEY_CADUCIDAD, hql_caducidad);
+    	
+    	String hql_tipo;
+    	
+    	if ("T".equals(tipo)) {
+    		hql_tipo = " AND :tipo = :tipo ";
+    	} else {
+    		hql_tipo = " AND m.tipo = :tipo ";
+    	}
+    	
+    	condiciones.put(KEY_TIPO, hql_tipo);
+    	
+    	String hql_nivel;
+    	
+    	if ("T".equals(nivel)) {
+    		hql_nivel = " AND :nivel = :nivel ";
+    	} else {
+    		hql_nivel = " AND m.nivelAutenticacion = :nivel ";
+    	}
+    	
+    	condiciones.put(KEY_NIVEL, hql_nivel);
+    	
+    	return condiciones;
+    }
+    
+    /**
+     * Ejecuta la consulta a partir de las condiciones y el valor de los filtros
+     * @param condiciones
+     * @param filtro
+     * @return
+     */
+    private List getListaEntradaPreregistro(Hashtable condiciones, Hashtable filtro) {
+    	
+    	Session session = getSession();
+
+		String hql_where = (String)condiciones.get(KEY_WHERE);
+		String hql_caducidad = (String)condiciones.get(KEY_CADUCIDAD);
+		String hql_modelo = (String)condiciones.get(KEY_MODELO);
+		String hql_tipo = (String)condiciones.get(KEY_TIPO);
+		String hql_nivel = (String)condiciones.get(KEY_NIVEL);
+
+		int size = HQL_FROM.length() + hql_where.length() + hql_caducidad.length() + hql_modelo.length() + HQL_ORDER.length();
+    	StringBuilder hql = new StringBuilder(size);
+    	hql.append(HQL_FROM);
+    	hql.append(hql_where);
+    	hql.append(HQL_FECHAS);
+    	hql.append(hql_modelo);
+    	hql.append(hql_tipo);
+    	hql.append(hql_nivel);
+    	hql.append(hql_caducidad);
+    	hql.append(HQL_ORDER);
+    	try {
+    		Query query = session.createQuery(hql.toString());
+    		query.setParameter("fechaInicial", filtro.get(KEY_FECHA_INICIO));
+    		query.setParameter("fechaFinal", filtro.get(KEY_FECHA_FIN));
+    		query.setParameter("modelo", filtro.get(KEY_MODELO));
+    		query.setParameter("tipo", filtro.get(KEY_TIPO));
+    		query.setParameter("nivel", filtro.get(KEY_NIVEL));
+    		query.setParameter("fechaActual", new Date());
+    		return query.list();
+    	} catch(HibernateException he) {
+    		throw new EJBException(he);
+    	} finally {
+    		close(session);
+    	}
+
+    }
   	
 }

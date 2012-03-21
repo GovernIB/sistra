@@ -8,7 +8,10 @@ public class BusquedaTramitePreregistroForm extends ValidatorForm
 	private String fechaInicial;
 	private String fechaFinal;
 	private String modelo;
-	private char caducidad;
+	private String caducidad;
+	private char estadoConfirmacion;
+	private String tipo;
+	private String nivel;
 	
 	public String getFechaInicial() {
 		return fechaInicial;
@@ -28,12 +31,31 @@ public class BusquedaTramitePreregistroForm extends ValidatorForm
 	public void setModelo(String modelo) {
 		this.modelo = modelo;
 	}
-	public char getCaducidad() {
+	public String getCaducidad() {
 		return caducidad;
 	}
-	public void setCaducidad(char caducidad) {
+	public void setCaducidad(String caducidad) {
 		this.caducidad = caducidad;
 	}
+	public char getEstadoConfirmacion() {
+		return estadoConfirmacion;
+	}
+	public void setEstadoConfirmacion(char estadoConfirmacion) {
+		this.estadoConfirmacion = estadoConfirmacion;
+	}
+	public String getTipo() {
+		return tipo;
+	}
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	public String getNivel() {
+		return nivel;
+	}
+	public void setNivel(String nivel) {
+		this.nivel = nivel;
+	}
+
 	
 		
 

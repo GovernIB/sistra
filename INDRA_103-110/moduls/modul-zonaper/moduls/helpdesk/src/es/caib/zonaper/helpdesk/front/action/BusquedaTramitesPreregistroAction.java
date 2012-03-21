@@ -1,7 +1,9 @@
 package es.caib.zonaper.helpdesk.front.action;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,21 +50,50 @@ public class BusquedaTramitesPreregistroAction extends BaseAction
 		Date fechaInicial = df.parse(preregistroForm.getFechaInicial());
 		Date fechaFinal = df.parse(preregistroForm.getFechaFinal());
 		String modelo = preregistroForm.getModelo();
-		char caducidad = preregistroForm.getCaducidad(); 
+		String caducidad = preregistroForm.getCaducidad(); 
+		char estadoConfirmacion = preregistroForm.getEstadoConfirmacion();
+		String tipo = preregistroForm.getTipo();
+		String nivel = preregistroForm.getNivel();
 		
 		EntradaPreregistroDelegate epd = DelegateUtil.getEntradaPreregistroDelegate();
 		try {
-			List result = epd.listarEntradaPreregistrosNoConfirmados(modelo, caducidad, fechaInicial, fechaFinal);
+			List result;
+			switch (estadoConfirmacion) {
+				case 'S' :
+					result = epd.listarEntradaPreregistrosConfirmados(fechaInicial, fechaFinal, modelo, caducidad, tipo, nivel);
+					break;
+				case 'N' :
+					result = epd.listarEntradaPreregistrosNoConfirmados(fechaInicial, fechaFinal, modelo, caducidad, tipo, nivel);
+					break;
+				default :
+					result = epd.listarEntradaPreregistros(fechaInicial, fechaFinal, modelo, caducidad, tipo, nivel);
+					break;
+			}
+				
 			request.setAttribute( "lstTramites", result);
 			return mapping.findForward( "success" );
 		} catch (DelegateException e) {
 			request.setAttribute("estado", "X");
 			return mapping.findForward( "success" );
 		}
-		
-		
+
     }
 
-    
+	/**
+	 *
+	 * @param form
+	 * @return
+	 */
+//	private Hashtable crearFiltro(BusquedaTramitePreregistroForm form) throws ParseException {
+//		Hashtable filtro = new Hashtable();
+//		SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+//		filtro.put(Constants.KEY_MODELO, form.getModelo());
+//		filtro.put(Constants.KEY_FECHA_INICIO, df.parse(form.getFechaInicial()));
+//		filtro.put(Constants.KEY_FECHA_FIN, df.parse(form.getFechaFinal()));
+//		filtro.put(Constants.KEY_CADUCIDAD, form.getCaducidad());
+//		filtro.put(Constants.KEY_TIPO, form.getTipo());
+//		filtro.put(Constants.KEY_NIVEL, form.getNivel());
+//		return filtro;
+//	}
    
 }

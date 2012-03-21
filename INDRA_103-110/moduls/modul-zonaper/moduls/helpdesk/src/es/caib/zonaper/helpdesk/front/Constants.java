@@ -43,9 +43,7 @@ public class Constants implements Serializable {
 	public static String NO_EXISTE = "N";
 	
 	public static String ERROR_BUSQUEDA = "X";
-
-
-    
+ 
     public static String RESPUESTA_FRONT_KEY = "respuestaFront";
 	public static String TRAMITE_KEY = "tramite";
 	public static String MENSAJE_KEY = "message";
@@ -99,4 +97,8 @@ public class Constants implements Serializable {
 	public static String USUARIOS_TAB = "5";
 	public static String BACKUP_TAB = "6";
 	public static String PREREGISTRO_TAB = "7";
+	
+	public static String TIPO_REGISTRO  = "P";
+	public static String TIPO_BANDEJA  = "N";
+
 }
