@@ -109,7 +109,32 @@
 			    		<html:option value="N"><bean:message key="formularioBusqueda.caducidad.noCaducados"/></html:option>
 			    	</html:select>
 				</label>  
-					
+				<label for="estadoConfirmacion">
+					<bean:message key="formularioBusqueda.estadoConfirmacion"/>: 
+			    	<html:select property="estadoConfirmacion">
+			    		<html:option value="T"><bean:message key="formularioBusqueda.estadoConfirmacion.todos"/></html:option>
+			    		<html:option value="S"><bean:message key="formularioBusqueda.estadoConfirmacion.confirmados"/></html:option>
+			    		<html:option value="N"><bean:message key="formularioBusqueda.estadoConfirmacion.noConfirmados"/></html:option>
+			    	</html:select>
+				</label>
+		
+				<label for="tipo">
+					<bean:message key="formularioBusqueda.tipo"/>: 
+			    	<html:select property="tipo">
+			    		<html:option value="T"><bean:message key="formularioBusqueda.tipo.todos"/></html:option>
+			    		<html:option value="N"><bean:message key="formularioBusqueda.tipo.bandeja"/></html:option>
+			    		<html:option value="P"><bean:message key="formularioBusqueda.tipo.registro"/></html:option>
+			    	</html:select>
+				</label>
+				<label for="nivelAutenticacion">
+					<bean:message key="formularioBusqueda.nivelAutencicacion"/>:
+			    	<html:select property="nivel">
+			    		<html:option value="T"><bean:message key="formularioBusqueda.todos"/></html:option>
+			    		<html:option value="C"><bean:message key="formularioBusqueda.nivel.certificado"/></html:option>
+			    		<html:option value="U"><bean:message key="formularioBusqueda.nivel.usuario"/></html:option>
+			    		<html:option value="A"><bean:message key="formularioBusqueda.nivel.anonimo"/></html:option>
+			    	</html:select>
+				</label>        
 			</p>
 			<div id="horario">
 			<p>
