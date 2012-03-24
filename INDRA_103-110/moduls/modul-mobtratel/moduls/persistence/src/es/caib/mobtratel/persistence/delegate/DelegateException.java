@@ -8,4 +8,5 @@ public class DelegateException extends Exception {
     public DelegateException(Throwable cause) {
         super(cause.getMessage());
     }
+    
 }

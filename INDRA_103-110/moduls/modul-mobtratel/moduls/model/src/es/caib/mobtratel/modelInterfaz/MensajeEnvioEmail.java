@@ -25,6 +25,12 @@ public class MensajeEnvioEmail implements Serializable{
 	 * Titulo email
 	 */
 	private String titulo;	
+	
+	/**
+	 * Indica si se ha de verificar el envío (solo si hay un único destinatario).
+	 */
+	private boolean verificarEnvio;
+	
 	/**
 	 * Devuelve el titulo del Email
 	 * @return
@@ -81,6 +87,20 @@ public class MensajeEnvioEmail implements Serializable{
 	 */
 	public void setHtml(boolean html) {
 		this.html = html;
+	}
+	/**
+	 * Indica si se debe verificar el envio.
+	 * @return boolean
+	 */
+	public boolean isVerificarEnvio() {
+		return verificarEnvio;
+	}
+	/**
+	 * Indica si se debe verificar el envio.
+	 * @param verificarEnvio boolean
+	 */
+	public void setVerificarEnvio(boolean verificarEnvio) {
+		this.verificarEnvio = verificarEnvio;
 	}
 	
 

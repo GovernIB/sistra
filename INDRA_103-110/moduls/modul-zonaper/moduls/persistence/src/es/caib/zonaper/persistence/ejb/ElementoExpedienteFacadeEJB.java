@@ -265,6 +265,29 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 		}
 	}
 	
+	/**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+	public void establecerAvisoElementoExpediente(Long id, String idAviso)
+	{
+		Session session = getSession();
+		try
+		{
+			ElementoExpediente elementoExpediente = ( ElementoExpediente ) session.load( ElementoExpediente.class, id );			
+			elementoExpediente.setCodigoAviso(idAviso);
+			session.update(elementoExpediente);
+		}
+		catch (HibernateException he) 
+		{   
+			throw new EJBException(he);
+	    } 
+		finally 
+		{
+	        close(session);
+	    }
+	}
+	
 	// ----------------------------------------------------------------------------------------------------------------
 	// 		FUNCIONES AUXILIARES
 	// ----------------------------------------------------------------------------------------------------------------

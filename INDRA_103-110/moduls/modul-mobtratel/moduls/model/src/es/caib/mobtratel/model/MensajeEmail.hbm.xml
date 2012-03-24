@@ -25,9 +25,12 @@
         <property name="numeroDestinatarios" type="integer" column="MSE_NDEST"/>
         <property name="numeroDestinatariosEnviados" type="integer" column="MSE_NDESTE"/>
         
+        <property name="verificarEnvio" column="MSE_ACKENV"/>
+        <property name="estadoVerificarEnvio" column="MSE_ACKEST"/>
+        <property name="errorVerificarEnvio" column="MSE_ACKERR"/>
+        
         <many-to-one name="envio" column="MSE_IDENV" not-null="true"  foreign-key="MOB_MSEENV_FK"/>
         
-
     </class>
 
 </hibernate-mapping>

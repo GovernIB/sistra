@@ -149,7 +149,7 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
      * @ejb.permission unchecked = "true"
      * 
      */
-	public void avisoCreacionElementoExpediente(ElementoExpediente ele) {
+	public String avisoCreacionElementoExpediente(ElementoExpediente ele) {
 		
 		backupLog.debug("aviso creacion elemento expediente");
 		
@@ -164,7 +164,12 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
 			lc.login();
 			
 			// Realizamos aviso
-			AvisosMovilidad.getInstance().avisoCreacionElementoExpediente(ele);
+			String idEnvio = AvisosMovilidad.getInstance().avisoCreacionElementoExpediente(ele);
+			
+			// Asociamos aviso al elemento del expediente
+			DelegateUtil.getElementoExpedienteDelegate().establecerAvisoElementoExpediente(ele.getCodigo(), idEnvio);
+			
+			return idEnvio;
 		}catch (LoginException le){
 			throw new EJBException("Excepcion al ejecutar proceso",le);
 		}catch (Exception e){

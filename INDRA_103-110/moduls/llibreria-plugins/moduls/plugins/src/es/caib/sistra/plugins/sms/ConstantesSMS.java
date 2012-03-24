@@ -6,8 +6,11 @@ package es.caib.sistra.plugins.sms;
  */
 public class ConstantesSMS {
 	/**
+	 * Si la plataforma de envíos no tiene la funcionalidad para saber el estado de un envío puede devolver este estado 
+	 */
+	public static final char ESTADO_NO_IMPLEMENTADO = 'X';
+	/**
 	 * Estado desconocido.
-	 * <br/> Si la plataforma de envíos no tiene la funcionalidad para saber el estado de un envío puede devolver este estado 
 	 */
 	public static final char ESTADO_DESCONOCIDO = 'D';
 	/**
@@ -18,4 +21,8 @@ public class ConstantesSMS {
 	 * Estado enviado 
 	 */
 	public static final char ESTADO_ENVIADO = 'E';	
+	/**
+	 * Estado no enviado 
+	 */
+	public static final char ESTADO_NO_ENVIADO = 'N';	
 }

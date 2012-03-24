@@ -47,6 +47,10 @@ public class AvisosMovilidad {
 
 	private static AvisosMovilidad avisos;
 	private static String cuentaSistra;
+	private static boolean confirmacionEnvioNotificacionesEmail;
+	private static boolean confirmacionEnvioNotificacionesSms;
+	private static boolean confirmacionEnvioEventosEmail;
+	private static boolean confirmacionEnvioEventosSms;
 	private static Log log = LogFactory.getLog(AvisosMovilidad.class);
 	private static Map plantillas = new HashMap();
 	
@@ -59,6 +63,30 @@ public class AvisosMovilidad {
 			avisos = new AvisosMovilidad();
 			cuentaSistra = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisos.cuentaEnvio");
 			if (StringUtils.isEmpty(cuentaSistra)) throw new Exception("No se ha especificado cuenta envío");
+			String confNotifEmail = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisos.confirmacionEnvio.notificaciones.email");
+			if (StringUtils.isNotBlank(confNotifEmail) && "true".equals(confNotifEmail)) {
+				confirmacionEnvioNotificacionesEmail = true;
+			} else {
+				confirmacionEnvioNotificacionesEmail = false;
+			}
+			String confNotifSms = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisos.confirmacionEnvio.notificaciones.sms");
+			if (StringUtils.isNotBlank(confNotifSms) && "true".equals(confNotifSms)) {
+				confirmacionEnvioNotificacionesSms = true;
+			} else {
+				confirmacionEnvioNotificacionesSms = false;
+			}
+			String confEnvEmail = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisos.confirmacionEnvio.eventosExpediente.email");
+			if (StringUtils.isNotBlank(confEnvEmail) && "true".equals(confEnvEmail)) {
+				confirmacionEnvioEventosEmail = true;
+			} else {
+				confirmacionEnvioEventosEmail = false;
+			}
+			String confEnvSms = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisos.confirmacionEnvio.eventosExpediente.sms");
+			if (StringUtils.isNotBlank(confEnvSms) && "true".equals(confEnvSms)) {
+				confirmacionEnvioEventosSms = true;
+			} else {
+				confirmacionEnvioEventosSms = false;
+			}
 			
 		}
 		return avisos;
@@ -69,14 +97,14 @@ public class AvisosMovilidad {
 	 * Ejecutado con usu auto
 	 * @throws Exception 
 	 */
-	public void avisoCreacionElementoExpediente(ElementoExpediente ele) throws Exception{
+	public String avisoCreacionElementoExpediente(ElementoExpediente ele) throws Exception{
 		String email=null;
 		String sms=null;
 		
 		// Los tipos de elementos de los que se avisa son los eventos y las notificaciones
 		if (!ele.getTipoElemento().equals(ElementoExpediente.TIPO_AVISO_EXPEDIENTE) && 
 			!ele.getTipoElemento().equals(ElementoExpediente.TIPO_NOTIFICACION) ){			
-				return;
+				return null;
 		}
 		
 		Expediente expe = ele.getExpediente();
@@ -95,7 +123,7 @@ public class AvisosMovilidad {
 			// Si expediente no esta autenticado no tiene configuracion en zona personal
 			if (StringUtils.isEmpty(expe.getSeyconCiudadano())){
 				log.debug("No existe configuracion a nivel de zona personal: Expediente no autenticado");
-				return;
+				return null;
 			}
 			// Si esta autenticado expediente obtenemos configuracion zona personal 
 			PadAplicacionDelegate pad = DelegateUtil.getPadAplicacionDelegate();
@@ -110,7 +138,7 @@ public class AvisosMovilidad {
 		// Comprobamos si hay que enviar
 		if (StringUtils.isEmpty(email) && StringUtils.isEmpty(sms)){
 			log.debug("No existe configuracion para avisos: sms y email nulos");
-			return;
+			return null;
 		}
 				
 		// Obtenemos detalle elemento: aviso expediente o notificacion
@@ -122,8 +150,13 @@ public class AvisosMovilidad {
 		String urlSistra = cfd.obtenerConfiguracion().getProperty("sistra.url");
 		
 		// Establecemos textos de email y SMS 
-		String tituloEmail,textoEmail,textoSMS;				
+		String tituloEmail,textoEmail,textoSMS;		
+		boolean verificarEnvioEmail = false;
+		boolean verificarEnvioSms = false;
 		if (ele.getTipoElemento().equals(ElementoExpediente.TIPO_AVISO_EXPEDIENTE)){
+			
+			verificarEnvioEmail = confirmacionEnvioEventosEmail;
+			verificarEnvioSms = confirmacionEnvioEventosSms;
 			
 			EventoExpediente evento = (EventoExpediente) detalleEle;
 			
@@ -166,6 +199,10 @@ public class AvisosMovilidad {
 			}
 			
 		}else if (ele.getTipoElemento().equals(ElementoExpediente.TIPO_NOTIFICACION)){
+			
+			verificarEnvioEmail = confirmacionEnvioNotificacionesEmail;
+			verificarEnvioSms = confirmacionEnvioNotificacionesSms;
+			
 			NotificacionTelematica notif = (NotificacionTelematica) detalleEle;
 			AvisoNotificacion aviso = getAvisoNotificacion(notif);
 			
@@ -200,7 +237,8 @@ public class AvisosMovilidad {
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDERNOTIFICACION#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.accederNotificacion")));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.SOPORTE#]",LiteralesAvisosMovilidad.calcularTextoSoporte(oi, expe.getIdioma()));
 			
-			
+			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.DESTINATARIO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.destinatario")));
+			textoEmail = StringUtil.replace(textoEmail,"[#DESTINATARIO#]",StringEscapeUtils.escapeHtml(notif.getNifRepresentante() + " - " + notif.getNombreRepresentante()));
 			
 			// Textos SMS
 			if (StringUtils.isNotEmpty(aviso.getTextoSMS())){
@@ -228,7 +266,8 @@ public class AvisosMovilidad {
 			mensEmail.setTitulo(tituloEmail);
 			mensEmail.setTexto(textoEmail);
 			mensEmail.setHtml(true);
-			mens.addEmail(mensEmail);
+			mensEmail.setVerificarEnvio(verificarEnvioEmail);
+			mens.addEmail(mensEmail);			
 		}
 		
 		if (StringUtils.isNotEmpty(sms)){
@@ -237,11 +276,12 @@ public class AvisosMovilidad {
 			String dest [] = {sms};
 			mensSMS.setDestinatarios(dest);
 			mensSMS.setTexto(textoSMS);
+			mensSMS.setVerificarEnvio(verificarEnvioSms);
 			mens.addSMS(mensSMS);
 		}
 		
 		// Realizamos envio del mensaje
-		enviarMensaje(mens);
+		return enviarMensaje(mens);
 		
 	}
 	
@@ -251,10 +291,10 @@ public class AvisosMovilidad {
 	/**
 	 * Realizamos envio del mensaje al modulo de movilidad con usuario auto  
 	 */
-	private void enviarMensaje(MensajeEnvio mensaje) throws Exception{
+	private String enviarMensaje(MensajeEnvio mensaje) throws Exception{
 		// Realizamos envio
 		MobTraTelDelegate mob = DelegateMobTraTelUtil.getMobTraTelDelegate();
-		mob.envioMensaje(mensaje);			
+		return mob.envioMensaje(mensaje);			
 	}
 	
 	/**

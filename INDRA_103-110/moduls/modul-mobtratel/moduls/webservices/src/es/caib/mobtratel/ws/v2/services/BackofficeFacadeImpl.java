@@ -63,6 +63,9 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 				email.setHtml(mensaje.getMensajes().get(i).isHtml());
 				email.setTexto(mensaje.getMensajes().get(i).getTexto());
 				email.setTitulo(mensaje.getMensajes().get(i).getTitulo());
+				if (mensaje.getMensajes().get(i).isVerificarEnvio() != null) {
+					email.setVerificarEnvio(mensaje.getMensajes().get(i).isVerificarEnvio().booleanValue());
+				}
 				emails.add(email);
 			}
 		}
@@ -76,6 +79,9 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 				es.caib.mobtratel.modelInterfaz.MensajeEnvioSms sms = new es.caib.mobtratel.modelInterfaz.MensajeEnvioSms();
 				sms.setDestinatarios(mensaje.getMensajes().get(i).getDestinatarios().toArray(new String[0]));
 				sms.setTexto(mensaje.getMensajes().get(i).getTexto());
+				if (mensaje.getMensajes().get(i).isVerificarEnvio() != null) {
+					sms.setVerificarEnvio(mensaje.getMensajes().get(i).isVerificarEnvio().booleanValue());
+				}
 				smss.add(sms);
 			}
 		}

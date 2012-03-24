@@ -18,6 +18,8 @@ public class ElementoExpediente implements Serializable
 	private Date fecha;
 	private String tipoElemento;
 	private Long codigoElemento;
+	// En caso de que se haya generado aviso movilidad para avisar del elemento
+	private String codigoAviso;
 	
 	public Long getCodigo() {
 		return codigo;
@@ -48,6 +50,12 @@ public class ElementoExpediente implements Serializable
 	}
 	public void setCodigoElemento(Long codigoElemento) {
 		this.codigoElemento = codigoElemento;
+	}
+	public String getCodigoAviso() {
+		return codigoAviso;
+	}
+	public void setCodigoAviso(String codigoAviso) {
+		this.codigoAviso = codigoAviso;
 	}
 	
 

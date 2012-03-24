@@ -6,13 +6,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import es.caib.mobtratel.modelInterfaz.ConstantesMobtratel;
+
 public class Envio implements Serializable 
 {
-	public static int PENDIENTE_ENVIO = 0;
-	public static int ENVIADO = 1;
-	public static int CON_ERROR = 2;
-	public static int CANCELADO = 3;
-	public static int PROCESANDOSE = 4;
 	
 	public static String TIPO_EMAIL = "EMAIL";
 	public static String TIPO_SMS = "SMS";
@@ -49,7 +46,7 @@ public class Envio implements Serializable
 	/**
 	 *	Estado del envio
 	 */
-	private int estado = PENDIENTE_ENVIO;
+	private int estado = ConstantesMobtratel.PENDIENTE_ENVIO;
 	/**
 	 *	Usuario Seycon
 	 */
@@ -254,11 +251,11 @@ public class Envio implements Serializable
 	public boolean isCompletado(){
 		for (Iterator it = this.getEmails().iterator();it.hasNext();){
 			MensajeEmail me = (MensajeEmail) it.next();
-			if (me.getEstado() != Envio.ENVIADO && me.getEstado() != Envio.CANCELADO) return false;
+			if (me.getEstado() != ConstantesMobtratel.ENVIADO && me.getEstado() != ConstantesMobtratel.CANCELADO) return false;
 		}
 		for (Iterator it = this.getSmss().iterator();it.hasNext();){
 			MensajeSms ms = (MensajeSms) it.next();
-			if (ms.getEstado() != Envio.ENVIADO && ms.getEstado() != Envio.CANCELADO) return false;
+			if (ms.getEstado() != ConstantesMobtratel.ENVIADO && ms.getEstado() != ConstantesMobtratel.CANCELADO) return false;
 		}
 		return true;
 	}
@@ -270,11 +267,11 @@ public class Envio implements Serializable
 	public boolean isConError(){
 		for (Iterator it = this.getEmails().iterator();it.hasNext();){
 			MensajeEmail me = (MensajeEmail) it.next();
-			if (me.getEstado() == Envio.CON_ERROR) return true;
+			if (me.getEstado() == ConstantesMobtratel.CON_ERROR) return true;
 		}
 		for (Iterator it = this.getSmss().iterator();it.hasNext();){
 			MensajeSms ms = (MensajeSms) it.next();
-			if (ms.getEstado() == Envio.CON_ERROR) return true;
+			if (ms.getEstado() == ConstantesMobtratel.CON_ERROR) return true;
 		}
 		return false;
 	}

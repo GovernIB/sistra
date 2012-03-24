@@ -9,6 +9,8 @@ import javax.naming.NamingException;
 
 import es.caib.mobtratel.model.CriteriosBusquedaEnvio;
 import es.caib.mobtratel.model.Envio;
+import es.caib.mobtratel.model.MensajeEmail;
+import es.caib.mobtratel.model.MensajeSms;
 import es.caib.mobtratel.model.Page;
 import es.caib.mobtratel.persistence.intf.EnvioFacade;
 import es.caib.mobtratel.persistence.intf.EnvioFacadeHome;
@@ -58,13 +60,45 @@ public class EnvioDelegate implements StatelessDelegate {
         }
     }
     
+    public MensajeEmail obtenerMensajeEmail(Long codigo) throws DelegateException {
+        try {
+            return getFacade().obtenerMensajeEmail(codigo);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public MensajeSms obtenerMensajeSms(Long codigo) throws DelegateException {
+        try {
+            return getFacade().obtenerMensajeSms(codigo);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public void establecerEstadoVerificarMensajeEmail(Long codigo, char estado, String descError) throws DelegateException {
+        try {
+            getFacade().establecerEstadoVerificarMensajeEmail(codigo, estado, descError);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public void establecerEstadoVerificarMensajeSms(Long codigo, char estado, String descError) throws DelegateException {
+        try {
+            getFacade().establecerEstadoVerificarMensajeSms(codigo, estado, descError);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     public boolean cancelarEnvio(Long idEnvio)throws DelegateException {
         try {
             return getFacade().cancelarEnvio(idEnvio);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
-    }
+    }     
     
     public Page busquedaPaginadaEnvios( CriteriosBusquedaEnvio criteriosBusqueda, int pagina, int longitudPagina ) throws DelegateException
     {
@@ -83,6 +117,24 @@ public class EnvioDelegate implements StatelessDelegate {
         try {
             return getFacade().isEnviando(idEnvio);
         } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public List listarEmailsPendientesVerificar() throws DelegateException {
+        try {
+            return getFacade().listarEmailsPendientesVerificar();
+        } catch (RemoteException e) {
+        	e.printStackTrace();	
+            throw new DelegateException(e);
+        }
+    }
+    
+    public List listarSmssPendientesVerificar() throws DelegateException {
+        try {
+            return getFacade().listarSmssPendientesVerificar();
+        } catch (RemoteException e) {
+        	e.printStackTrace();	
             throw new DelegateException(e);
         }
     }
