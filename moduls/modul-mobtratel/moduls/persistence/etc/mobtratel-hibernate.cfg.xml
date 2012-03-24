@@ -12,6 +12,7 @@
 
         <property name="show_sql">@hibernate.show_sql@</property>
         <property name="use_outer_join">true</property>
+        <property name="query.substitutions">@hibernate.query.substitutions@</property>
 
 		<!-- LO PONEMOS A 0 PORQUE SINO DA ERROR CON EL TIPO PERSONALIZADO BLOBTYPE -->
         <property name="jdbc.batch_size">0</property>

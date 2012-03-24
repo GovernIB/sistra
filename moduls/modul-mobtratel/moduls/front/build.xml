@@ -17,8 +17,10 @@
     <property name="lib.dir" location="${home.dir}/../../lib"/>
     <property name="etc.dir" location="${home.dir}/etc"/>
     <property name="xdoclet.dir" location="${home.dir}/../../xdoclet"/>
-
+	<property name="plugins" value="${home.dir}/../../product/lib" />
+	
 	<property name="distribucion.dir" location="${home.dir}/../../product"/>
+	
 	
     <property name="web.src" location="${basedir}/src"/>
     <property name="web.etc" location="${basedir}/etc"/>
@@ -51,6 +53,9 @@
             <include name="7-${prj.name}-persistence-client.jar" />
             <include name="7-${prj.name}-persistence.jar" />
         </fileset>
+    	<fileset dir="${plugins}">
+  		  	<include name="sistra-plugins.jar" />
+	    </fileset>
     </path>
 
     <path id="doclet.class.path">

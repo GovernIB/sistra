@@ -1247,9 +1247,9 @@ public abstract class PadFacadeEJB implements SessionBean{
     	expe.addElementoExpediente(el,notificacion);
     	DelegateUtil.getExpedienteDelegate().grabarExpediente(expe);
     	
-    	// Realizamos aviso de movilidad
-    	DelegateUtil.getProcesosAutoDelegate().avisoCreacionElementoExpediente(el);    	
-
+    	// Realizamos aviso de movilidad y actualizamos notificacion
+    	DelegateUtil.getProcesosAutoDelegate().avisoCreacionElementoExpediente(el);
+    	
     	// Si no requiere acuse generamos indices de busqueda. Si requiere acuse se indexara en el momento de firmar el acuse (solo para autenticados)
     	if (StringUtils.isNotEmpty(notificacion.getUsuarioSeycon()) && !notificacion.isFirmarAcuse()) {
     		 // Crea los indices para la entrada

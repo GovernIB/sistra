@@ -17,7 +17,7 @@ public class PluginSmsMock implements PluginSmsIntf{
 	
 	public EstadoEnvio consultarEstadoEnvio(String idEnvio) throws Exception{
 		EstadoEnvio e = new EstadoEnvio();
-		e.setEstado(ConstantesSMS.ESTADO_DESCONOCIDO);
+		e.setEstado(ConstantesSMS.ESTADO_NO_IMPLEMENTADO);
 		e.setDescripcionEstado("Operacion no soportada");
 		return e;
 	}

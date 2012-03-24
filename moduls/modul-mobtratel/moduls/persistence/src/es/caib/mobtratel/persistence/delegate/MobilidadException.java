@@ -11,9 +11,7 @@ import es.caib.mobtratel.persistence.delegate.DelegateException;
  *
  */
 public class MobilidadException extends DelegateException {
-	
-
-
+		
 	/**
 	 * @param cause
 	 */

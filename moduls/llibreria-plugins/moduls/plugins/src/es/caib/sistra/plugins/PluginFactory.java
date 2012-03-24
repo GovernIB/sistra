@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import es.caib.sistra.plugins.login.PluginAutenticacionExplicitaIntf;
 import es.caib.sistra.plugins.custodia.PluginCustodiaIntf;
+import es.caib.sistra.plugins.email.PluginEmailIntf;
 import es.caib.sistra.plugins.firma.PluginFirmaIntf;
 import es.caib.sistra.plugins.gestionDocumental.PluginGestorDocumentalIntf;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
@@ -157,6 +158,13 @@ public class PluginFactory {
 		return  (PluginGestorDocumentalIntf) getPlugin("plugin.gestionDocumental");		
 	}
 	
-	
+	/**
+	 * Obtiene plugin de envio email
+	 * @return Plugin de envio email
+	 * @throws Exception
+	 */
+	public PluginEmailIntf getPluginEnvioEmail() throws Exception{
+		return  (PluginEmailIntf) getPlugin("plugin.envioEmail");		
+	}
 	
 }

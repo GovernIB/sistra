@@ -13,6 +13,7 @@
 	<property name="lib.dir" location="${home.dir}/lib"/>
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
+	<property name="distribucion.dir" location="${home.dir}/../../product"/>
 
     <property name="jar.src" location="${basedir}/src"/>
     <property name="jar.doc" location="${basedir}/doc"/>
@@ -24,7 +25,7 @@
     <property name="jar.product" location="${output.dir}/moduls"/>
 
     <path id="jar.class.path">
-    	<fileset dir="${lib.dir}">
+    	<fileset dir="${distribucion.dir}/lib">
     		<include name="sistra-plugins.jar"/>    		
    		</fileset>	
     </path>	

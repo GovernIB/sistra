@@ -22,6 +22,7 @@
 	<ant dir="plugin-loginMOCK" target="${task}" inheritall="false"/>
 	<ant dir="plugin-regtelMOCK" target="${task}" inheritall="false"/>
 	<ant dir="plugin-smsMOCK" target="${task}" inheritall="false"/>
+	<ant dir="plugin-emailMOCK" target="${task}" inheritall="false"/>
 	<ant dir="plugin-custodiaMOCK" target="${task}" inheritall="false"/>
 	<ant dir="plugin-pagoMOCK" target="${task}" inheritall="false"/>
 	<ant dir="plugin-gestorDocumentalMOCK" target="${task}" inheritall="false"/>
@@ -59,6 +60,9 @@
 		</fileset>
 		<fileset dir="plugin-smsMOCK/output/product">
 			<filename name="plugin-smsMOCK.jar"/>
+		</fileset>
+		<fileset dir="plugin-emailMOCK/output/product">
+			<filename name="plugin-emailMOCK.jar"/>
 		</fileset>
 		<fileset dir="plugin-custodiaMOCK/output/product">
 			<filename name="plugin-custodiaMOCK.jar"/>

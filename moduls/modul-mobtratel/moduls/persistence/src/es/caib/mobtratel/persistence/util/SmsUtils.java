@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 
 import es.caib.mobtratel.model.MensajeSms;
 import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.sms.EstadoEnvio;
 import es.caib.sistra.plugins.sms.PluginSmsIntf;
 import es.caib.xml.ConstantesXML;
 
@@ -48,6 +49,21 @@ public class SmsUtils
 		pluginSms.enviarSMS(cuenta,telefono,mens,ms.getEnvio().isInmediato());
 		log.debug("Mensaje enviado a traves del plugin");
     }   
+	
+	
+	/**
+	 * Verifica envio de mensaje
+	 * @param ms Mensaje
+	 * @throws Exception
+	 */
+	public EstadoEnvio verificarEnvioMensaje(MensajeSms ms) throws Exception{
+		log.debug("Verificando envio mensaje a traves del plugin");
+		EstadoEnvio estado = pluginSms.consultarEstadoEnvio(ms.getCodigo().toString());
+		log.debug("Mensaje verificado a traves del plugin: estado = " + estado.getEstado());
+		return estado;
+    }   
+	
+	
 
 }	
 

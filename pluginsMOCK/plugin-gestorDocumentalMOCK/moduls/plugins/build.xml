@@ -29,7 +29,7 @@
     	<fileset dir="${lib.dir}"> 
     		<include name="commons-logging-1.0.4.jar"/>
    		</fileset> 
-    	<fileset dir="${lib.dir}/client"> 
+    	<fileset dir="${distribucion.dir}/client"> 
             <include name="redose-client.jar"/>
    		</fileset>    	
         <fileset dir="${distribucion.dir}/lib"> 

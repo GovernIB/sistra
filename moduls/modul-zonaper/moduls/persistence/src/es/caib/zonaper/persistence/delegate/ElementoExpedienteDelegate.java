@@ -125,6 +125,18 @@ public class ElementoExpedienteDelegate implements StatelessDelegate
         }
 	}
 	
+	public void establecerAvisoElementoExpediente(Long id, String idAviso) throws DelegateException
+	{
+		try
+		{
+			getFacade().establecerAvisoElementoExpediente(id, idAviso);
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

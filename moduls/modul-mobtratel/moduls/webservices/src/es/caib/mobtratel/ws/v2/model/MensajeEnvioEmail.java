@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="titulo" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="html" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="texto" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="verificarEnvio" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,7 +37,8 @@ import javax.xml.bind.annotation.XmlType;
     "destinatarios",
     "titulo",
     "html",
-    "texto"
+    "texto",
+    "verificarEnvio"
 })
 public class MensajeEnvioEmail {
 
@@ -47,6 +49,7 @@ public class MensajeEnvioEmail {
     protected boolean html;
     @XmlElement(required = true)
     protected String texto;
+    protected Boolean verificarEnvio;
 
     /**
      * Gets the value of the destinatarios property.
@@ -139,6 +142,30 @@ public class MensajeEnvioEmail {
      */
     public void setTexto(String value) {
         this.texto = value;
+    }
+
+    /**
+     * Gets the value of the verificarEnvio property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isVerificarEnvio() {
+        return verificarEnvio;
+    }
+
+    /**
+     * Sets the value of the verificarEnvio property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setVerificarEnvio(Boolean value) {
+        this.verificarEnvio = value;
     }
 
 }

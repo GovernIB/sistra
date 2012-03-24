@@ -40,11 +40,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link EnviarMensaje }
+     * Create an instance of {@link MensajeEnvioEmail }
      * 
      */
-    public EnviarMensaje createEnviarMensaje() {
-        return new EnviarMensaje();
+    public MensajeEnvioEmail createMensajeEnvioEmail() {
+        return new MensajeEnvioEmail();
     }
 
     /**
@@ -56,22 +56,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link MensajesEnvioEmail }
-     * 
-     */
-    public MensajesEnvioEmail createMensajesEnvioEmail() {
-        return new MensajesEnvioEmail();
-    }
-
-    /**
-     * Create an instance of {@link MensajeEnvioEmail }
-     * 
-     */
-    public MensajeEnvioEmail createMensajeEnvioEmail() {
-        return new MensajeEnvioEmail();
-    }
-
-    /**
      * Create an instance of {@link MensajesEnvioSMS }
      * 
      */
@@ -80,11 +64,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link MensajesEnvioEmail }
+     * 
+     */
+    public MensajesEnvioEmail createMensajesEnvioEmail() {
+        return new MensajesEnvioEmail();
+    }
+
+    /**
      * Create an instance of {@link MensajeEnvio }
      * 
      */
     public MensajeEnvio createMensajeEnvio() {
         return new MensajeEnvio();
+    }
+
+    /**
+     * Create an instance of {@link EnviarMensaje }
+     * 
+     */
+    public EnviarMensaje createEnviarMensaje() {
+        return new EnviarMensaje();
     }
 
     /**

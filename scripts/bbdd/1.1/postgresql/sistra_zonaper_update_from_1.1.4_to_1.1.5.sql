@@ -1,0 +1,1 @@
+ALTER table ZPE_ELEEX  ADD   ELE_CODAVI           VARCHAR(50);

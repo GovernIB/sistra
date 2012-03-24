@@ -35,10 +35,10 @@ public class ProcesosAutoDelegate implements StatelessDelegate
         }
 	}
 	
-	public void avisoCreacionElementoExpediente(ElementoExpediente ele) throws DelegateException {
+	public String avisoCreacionElementoExpediente(ElementoExpediente ele) throws DelegateException {
 		try
 		{
-			getFacade().avisoCreacionElementoExpediente(ele);
+			return getFacade().avisoCreacionElementoExpediente(ele);
 		}
 		catch (Exception e) {
             throw new DelegateException(e);

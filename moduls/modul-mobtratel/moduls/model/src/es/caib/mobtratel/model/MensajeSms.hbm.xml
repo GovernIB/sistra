@@ -23,6 +23,10 @@
         <property name="fechaInicioEnvio" column="MSS_INIENV"/>
         <property name="fechaFinEnvio" column="MSS_FINENV"/>
         
+        <property name="verificarEnvio" column="MSS_ACKENV"/>
+        <property name="estadoVerificarEnvio" column="MSS_ACKEST"/>
+        <property name="errorVerificarEnvio" column="MSS_ACKERR"/>
+        
         <many-to-one name="envio" column="MSS_IDENV" not-null="true" foreign-key="MOB_MSSENV_FK"/>
         
 
