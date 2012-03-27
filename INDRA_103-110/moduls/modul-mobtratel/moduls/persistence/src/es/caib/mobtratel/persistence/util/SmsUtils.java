@@ -46,7 +46,7 @@ public class SmsUtils
 		log.debug("Enviando mensaje a traves del plugin");
 		byte[] mensaje = ms.getMensaje();
 		String mens = (mensaje != null ? new String( mensaje, ConstantesXML.ENCODING ):"");
-		pluginSms.enviarSMS(cuenta,telefono,mens,ms.getEnvio().isInmediato());
+		pluginSms.enviarSMS(ms.getCodigo().toString(), cuenta,telefono,mens,ms.getEnvio().isInmediato());
 		log.debug("Mensaje enviado a traves del plugin");
     }   
 	
