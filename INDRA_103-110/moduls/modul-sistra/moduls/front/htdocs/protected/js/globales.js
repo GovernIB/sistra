@@ -357,11 +357,8 @@ function URLDecode(text )
 
 function checkIt(string)
 {
-	alert('string: ' + string);
 	place = navigator.userAgent.toLowerCase().indexOf(string) + 1;
-	alert('place: ' + place);
 	thestring = string;
-	alert('thestring: ' + thestring);
 	return place;
 }
 
