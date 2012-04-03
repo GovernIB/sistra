@@ -34,6 +34,8 @@
     <property name="fechaAcuse"  column="NOT_FECACU"/>
     <property name="firmarAcuse"  column="NOT_FIRACU" not-null="true"/>
     <property name="gestorSeycon"  column="NOT_SEYGES" not-null="true"/>
+    <property name="fechaFinPlazo"  column="NOT_FECPLZ" not-null="true"/>
+    <property name="rechazada"  column="NOT_RECHAZ" not-null="true"/>
    
     <property name="tramiteSubsanacionDescripcion"  column="NOT_SUBDES"/>
     <property name="tramiteSubsanacionIdentificador"  column="NOT_SUBIDE"/>

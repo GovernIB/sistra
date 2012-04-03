@@ -16,6 +16,7 @@ import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
 import javax.naming.InitialContext;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -43,6 +44,8 @@ import es.caib.mobtratel.persistence.delegate.MobilidadException;
 import es.caib.mobtratel.persistence.delegate.PermisoDelegate;
 import es.caib.mobtratel.persistence.delegate.PermisoException;
 import es.caib.mobtratel.persistence.util.MobUtils;
+import es.caib.sistra.plugins.email.ConstantesEmail;
+import es.caib.sistra.plugins.sms.ConstantesSMS;
 import es.caib.xml.ConstantesXML;
 
 
@@ -111,7 +114,7 @@ public abstract class MobTraTelFacadeEJB implements SessionBean
 		String erroresFormato = "";
 		try {
 			Envio envio = new Envio();
-			envio.setEstado(ConstantesMobtratel.PENDIENTE_ENVIO);
+			envio.setEstado(ConstantesMobtratel.ESTADOENVIO_PENDIENTE);
 			envio.setUsuarioSeycon(ctx.getCallerPrincipal().getName());
 			// Comprobamos la cuenta
 			Cuenta cuenta = null;
@@ -184,7 +187,7 @@ public abstract class MobTraTelFacadeEJB implements SessionBean
 				{
 					throw new LimiteDestinatariosException(new Error("Se ha superado el límite de destinatarios por mensaje Email."));
 				}
-				me.setEstado(ConstantesMobtratel.PENDIENTE_ENVIO);
+				me.setEstado(ConstantesMobtratel.ESTADOENVIO_PENDIENTE);
 				me.setMensaje(mee.getTexto().getBytes(ConstantesXML.ENCODING));
 				me.setTitulo(mee.getTitulo());
 				
@@ -208,7 +211,7 @@ public abstract class MobTraTelFacadeEJB implements SessionBean
 				{
 					throw new LimiteDestinatariosException(new Error("Se ha superado el límite de destinatarios por mensaje SMS."));
 				}
-				ms.setEstado(ConstantesMobtratel.PENDIENTE_ENVIO);
+				ms.setEstado(ConstantesMobtratel.ESTADOENVIO_PENDIENTE);
 				if(mes.getTexto().length() > utils.getMaxCaracteres().intValue())
 				{
 					throw new MaxCaracteresSMSException(new Error("Se ha superado el límite de caracteres por mensaje SMS."));
@@ -275,9 +278,17 @@ public abstract class MobTraTelFacadeEJB implements SessionBean
 					estadoMensEmail.setEstado(mensEmail.getEstado());
 					estadoMensEmail.setFechaInicioEnvio(mensEmail.getFechaInicioEnvio());
 					estadoMensEmail.setFechaFinEnvio(mensEmail.getFechaFinEnvio());
-					estadoMensEmail.setVerificacionEnvio(mensEmail.isVerificarEnvio());				
-					estadoMensEmail.setEstadoVerificacionEnvio(mensEmail.isVerificarEnvio());
-					estadoMensEmail.setErrorVerificacionEnvio(mensEmail.getErrorVerificarEnvio());
+					estadoMensEmail.setVerificacionEnvio(mensEmail.isVerificarEnvio());	
+					if (StringUtils.isNotBlank(mensEmail.getEstadoVerificarEnvio())) {
+						if ( ConstantesEmail.ESTADO_ENVIADO.equals(mensEmail.getEstadoVerificarEnvio())) {
+							estadoMensEmail.setEstadoVerificacionEnvio(ConstantesMobtratel.CONFIRMACION_OK);
+						} else if ( ConstantesEmail.ESTADO_NO_ENVIADO.equals(mensEmail.getEstadoVerificarEnvio())) {
+							estadoMensEmail.setEstadoVerificacionEnvio(ConstantesMobtratel.CONFIRMACION_KO);
+							estadoMensEmail.setErrorVerificacionEnvio(mensEmail.getErrorVerificarEnvio());
+						} else {
+							estadoMensEmail.setEstadoVerificacionEnvio(ConstantesMobtratel.CONFIRMACION_PENDIENTE);
+						}
+					}
 					estadoMensEmail.setDestinatarios(new String(mensEmail.getDestinatarios(),ConstantesXML.ENCODING).split(Constantes.SEPARADOR_DESTINATARIOS));
 					if (mensEmail.getDestinatariosEnviados() != null) {
 						estadoMensEmail.setDestinatariosEnviados(new String(mensEmail.getDestinatariosEnviados(),ConstantesXML.ENCODING).split(Constantes.SEPARADOR_DESTINATARIOS));
@@ -288,15 +299,23 @@ public abstract class MobTraTelFacadeEJB implements SessionBean
 			
 			if (envio.getSmss() != null && envio.getSmss().size() > 0) {
 				em.setEstadoSmss(new ArrayList());
-				for (Iterator it = envio.getEmails().iterator(); it.hasNext();) {
+				for (Iterator it = envio.getSmss().iterator(); it.hasNext();) {
 					MensajeSms mensSms = (MensajeSms) it.next();
 					EstadoMensajeEnvioSms estadoMensSms = new EstadoMensajeEnvioSms();
 					estadoMensSms.setEstado(mensSms.getEstado());
 					estadoMensSms.setFechaInicioEnvio(mensSms.getFechaInicioEnvio());
 					estadoMensSms.setFechaFinEnvio(mensSms.getFechaFinEnvio());
-					estadoMensSms.setVerificacionEnvio(mensSms.isVerificarEnvio());				
-					estadoMensSms.setEstadoVerificacionEnvio(mensSms.isVerificarEnvio());
-					estadoMensSms.setErrorVerificacionEnvio(mensSms.getErrorVerificarEnvio());
+					estadoMensSms.setVerificacionEnvio(mensSms.isVerificarEnvio());		
+					if (StringUtils.isNotBlank(mensSms.getEstadoVerificarEnvio())) {
+						if ( ConstantesSMS.ESTADO_ENVIADO.equals(mensSms.getEstadoVerificarEnvio())) {
+							estadoMensSms.setEstadoVerificacionEnvio(ConstantesMobtratel.CONFIRMACION_OK);
+						} else if ( ConstantesSMS.ESTADO_NO_ENVIADO.equals(mensSms.getEstadoVerificarEnvio())) {
+							estadoMensSms.setEstadoVerificacionEnvio(ConstantesMobtratel.CONFIRMACION_KO);
+							estadoMensSms.setErrorVerificacionEnvio(mensSms.getErrorVerificarEnvio());
+						} else {
+							estadoMensSms.setEstadoVerificacionEnvio(ConstantesMobtratel.CONFIRMACION_PENDIENTE);
+						}
+					}										
 					estadoMensSms.setDestinatarios(new String(mensSms.getDestinatarios(),ConstantesXML.ENCODING).split(Constantes.SEPARADOR_DESTINATARIOS));
 					if (mensSms.getDestinatariosEnviados() != null) {
 						estadoMensSms.setDestinatariosEnviados(new String(mensSms.getDestinatariosEnviados(),ConstantesXML.ENCODING).split(Constantes.SEPARADOR_DESTINATARIOS));

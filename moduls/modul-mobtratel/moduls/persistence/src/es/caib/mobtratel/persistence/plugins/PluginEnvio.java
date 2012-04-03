@@ -48,6 +48,7 @@ public class PluginEnvio {
 	private static Boolean simularEnvio;
 	private static int simularEnvioDuracion;
 	private static int limiteDiasVerificar;
+	private static String prefijoEnvioEmail;
 	
 	/**
 	 * Obtiene si se debe simular los envios
@@ -247,14 +248,14 @@ public class PluginEnvio {
         	
         	// Si ha caducado lo marcamos como cancelado automaticamente
         	if (envio.getFechaCaducidad() != null && envio.getFechaCaducidad().getTime() <= System.currentTimeMillis()){
-        		envio.setEstado(ConstantesMobtratel.CANCELADO);
+        		envio.setEstado(ConstantesMobtratel.ESTADOENVIO_CANCELADO);
         		delegate.grabarEnvio(envio);
         		return;
         	}
         	
         	// Si estaba pendiente de envio indicamos que envio comienza a procesarse			
-        	if (envio.getEstado() == ConstantesMobtratel.PENDIENTE_ENVIO){
-        		envio.setEstado(ConstantesMobtratel.PROCESANDOSE);
+        	if (envio.getEstado() == ConstantesMobtratel.ESTADOENVIO_PENDIENTE){
+        		envio.setEstado(ConstantesMobtratel.ESTADOENVIO_PROCESANDO);
         		delegate.grabarEnvio(envio);
         	}        	        	
         	
@@ -268,13 +269,13 @@ public class PluginEnvio {
 			envio = delegate.obtenerEnvio(envio.getCodigo());	
 			// Si se ha completado todo el envio indicamos que se ha enviado				
 			if (envio.isCompletado()){			
-				envio.setEstado(ConstantesMobtratel.ENVIADO);
+				envio.setEstado(ConstantesMobtratel.ESTADOENVIO_ENVIADO);
 				envio.setFechaEnvio(new Timestamp(System.currentTimeMillis()));
 				delegate.grabarEnvio(envio);
 			}
 			// Si se ha producido un error indicamos que el envio tiene errores
 			if (envio.isConError()){			
-				envio.setEstado(ConstantesMobtratel.CON_ERROR);
+				envio.setEstado(ConstantesMobtratel.ESTADOENVIO_ERROR);
 				delegate.grabarEnvio(envio);
 			}
 			
@@ -312,12 +313,12 @@ public class PluginEnvio {
 				MensajeSms ms = (MensajeSms)ite.next();
 				
 				// Mensaje ya enviado
-				if(ms.getEstado() == ConstantesMobtratel.ENVIADO) continue;
+				if(ms.getEstado() == ConstantesMobtratel.ESTADOENVIO_ENVIADO) continue;
 				
 				// Mensaje pendiente -> pasamos a procesarlo
-				if(ms.getEstado() == ConstantesMobtratel.PENDIENTE_ENVIO)
+				if(ms.getEstado() == ConstantesMobtratel.ESTADOENVIO_PENDIENTE)
 				{
-					ms.setEstado(ConstantesMobtratel.PROCESANDOSE);
+					ms.setEstado(ConstantesMobtratel.ESTADOENVIO_PROCESANDO);
 					ms.setError("");
 					ms.setFechaInicioEnvio(new Timestamp(System.currentTimeMillis()));
 					delegate.grabarEnvio(envio);
@@ -326,7 +327,7 @@ public class PluginEnvio {
 				// Si ya se han enviado a todos los destinatarios. Proteccion
 				if(ms.getNumeroDestinatarios() == ms.getNumeroDestinatariosEnviados())
 				{
-					ms.setEstado(ConstantesMobtratel.ENVIADO);						
+					ms.setEstado(ConstantesMobtratel.ESTADOENVIO_ENVIADO);						
 					delegate.grabarEnvio(envio);
 					continue;
 				}
@@ -340,7 +341,7 @@ public class PluginEnvio {
 				{
 					// En caso de error al enviar marcamos mensajeSMS con el error
 					ms.setError(ms.getError() + "." + e.getMessage());
-					ms.setEstado(ConstantesMobtratel.CON_ERROR);
+					ms.setEstado(ConstantesMobtratel.ESTADOENVIO_ERROR);
 					delegate.grabarEnvio(envio);										
 				}					
 				
@@ -365,12 +366,12 @@ public class PluginEnvio {
 				MensajeEmail me = (MensajeEmail)ite.next();
 				
 				// Comprobamos si el mensajeEmail ya esta enviado
-				if(me.getEstado() == ConstantesMobtratel.ENVIADO) continue;
+				if(me.getEstado() == ConstantesMobtratel.ESTADOENVIO_ENVIADO) continue;
 				
 				// Si el mensajeEmail esta pendiente de envio pasa a procesandose
-				if(me.getEstado() == ConstantesMobtratel.PENDIENTE_ENVIO)
+				if(me.getEstado() == ConstantesMobtratel.ESTADOENVIO_PENDIENTE)
 				{
-					me.setEstado(ConstantesMobtratel.PROCESANDOSE);
+					me.setEstado(ConstantesMobtratel.ESTADOENVIO_PROCESANDO);
 					me.setError("");
 					me.setFechaInicioEnvio(new Timestamp(System.currentTimeMillis()));					
 					delegate.grabarEnvio(envio);
@@ -379,7 +380,7 @@ public class PluginEnvio {
 				// Si ya se han enviado a todos los destinatarios. Proteccion
 				if(me.getNumeroDestinatarios() == me.getNumeroDestinatariosEnviados())
 				{
-					me.setEstado(ConstantesMobtratel.ENVIADO);						
+					me.setEstado(ConstantesMobtratel.ESTADOENVIO_ENVIADO);						
 					me.setFechaFinEnvio(new Timestamp(System.currentTimeMillis()));
 					delegate.grabarEnvio(envio);
 					continue;
@@ -393,7 +394,7 @@ public class PluginEnvio {
 				catch(Exception e)
 				{
 					me.setError(e.getMessage());
-					me.setEstado(ConstantesMobtratel.CON_ERROR);
+					me.setEstado(ConstantesMobtratel.ESTADOENVIO_ERROR);
 					delegate.grabarEnvio(envio);
 				}					
 				
@@ -496,7 +497,7 @@ public class PluginEnvio {
     	me.setNumeroDestinatariosEnviados(enviados.size());
     	if(me.getNumeroDestinatarios() == me.getNumeroDestinatariosEnviados())
     	{
-    		me.setEstado(ConstantesMobtratel.ENVIADO);
+    		me.setEstado(ConstantesMobtratel.ESTADOENVIO_ENVIADO);
     		me.setError("");
     		me.setFechaFinEnvio(new Timestamp(System.currentTimeMillis()));
     	}    	    	
@@ -530,7 +531,7 @@ public class PluginEnvio {
 				}
 				log.debug("Email envio simulado");
 			}else{
-				emailUtils.enviar(me,envio,destinatarios);
+				emailUtils.enviar(prefijoEnvioEmail, me,envio,destinatarios);
 			}
     		
     		
@@ -568,16 +569,16 @@ public class PluginEnvio {
 			}
 			me.setError(me.getError() + ": " + ex.getMessage()+ ".");
 			me.setDestinatariosValidos(validAddresses);
-			me.setEstado(ConstantesMobtratel.CON_ERROR);
+			me.setEstado(ConstantesMobtratel.ESTADOENVIO_ERROR);
 		} catch (DelegateException de) {
 			log.debug("Error accediendo a la cuenta por defecto de EMAIL");
 			me.setError("Error accediendo a la cuenta por defecto de EMAIL");
-			me.setEstado(ConstantesMobtratel.CON_ERROR);
+			me.setEstado(ConstantesMobtratel.ESTADOENVIO_ERROR);
 		} catch (Exception e) {
 			log.debug("Error generando correo para el envio: " + envio.getNombre());
 			me.setError("Error generando correo para el envio: " + envio.getNombre() + "." + e.getMessage());
 			me.setError(me.getError()+ "ERROR EMAILS: " + destinatarios.toString() + ": " + e.getMessage()+ ".");
-			me.setEstado(ConstantesMobtratel.CON_ERROR);
+			me.setEstado(ConstantesMobtratel.ESTADOENVIO_ERROR);
 		}
 		return false;
     }
@@ -677,7 +678,7 @@ public class PluginEnvio {
     			numErroresConexion++;
     			log.error("Enviando mensaje al telefono: " + telefonos[i],e);
     			ms.setError(ms.getError()+ "ERROR SMS: " + telefonos[i] + ": " + e.getMessage()+ ".");
-    			ms.setEstado(ConstantesMobtratel.CON_ERROR);
+    			ms.setEstado(ConstantesMobtratel.ESTADOENVIO_ERROR);
     		}
 
     	}
@@ -688,7 +689,7 @@ public class PluginEnvio {
     	ms.setNumeroDestinatariosEnviados(enviados.size());
     	if(ms.getNumeroDestinatarios() == ms.getNumeroDestinatariosEnviados())
     	{
-    		ms.setEstado(ConstantesMobtratel.ENVIADO);
+    		ms.setEstado(ConstantesMobtratel.ESTADOENVIO_ENVIADO);
     		ms.setError("");
     		ms.setFechaFinEnvio(new Timestamp(System.currentTimeMillis()));
     	}    	    	
@@ -717,6 +718,14 @@ public class PluginEnvio {
 	private static Date calcularFechaCaducidadVerificarEnvio(Date fechaEnvio) {
 		Date fechaCaducidad = new Date(fechaEnvio.getTime() + (getLimiteDiasVerificar() * 24 * 60 * 60 * 1000) );
 		return fechaCaducidad;
+	}
+
+	public static String getPrefijoEnvioEmail() {
+		return prefijoEnvioEmail;
+	}
+
+	public static void setPrefijoEnvioEmail(String prefijoEnvioEmail) {
+		PluginEnvio.prefijoEnvioEmail = prefijoEnvioEmail;
 	}
 	
 }

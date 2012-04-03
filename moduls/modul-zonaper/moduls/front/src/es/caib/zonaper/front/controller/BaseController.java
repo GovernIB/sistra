@@ -105,6 +105,11 @@ public abstract class BaseController implements Controller {
     	return ZonapersFrontRequestHelper.getDatosSesion( request );
     }
 	
+    
+    public boolean isControlarEntregaNotificaciones(HttpServletRequest request ) {
+    	return ZonapersFrontRequestHelper.isControlarEntregaNotificaciones( request );    	
+    }
+    
     private List buildEnlacesNavegacion( MessageResources resources, String entryKey, Locale locale, OrganismoInfo info )
 	{
 		List arlResult = new ArrayList();

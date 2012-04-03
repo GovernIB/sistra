@@ -33,7 +33,6 @@ import es.caib.regtel.persistence.util.Constantes;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.firma.FirmaIntf;
 import es.caib.sistra.plugins.firma.PluginFirmaIntf;
-
 import es.caib.util.FirmaUtil;
 import es.caib.util.StringUtil;
 import es.caib.xml.ConstantesXML;
@@ -164,6 +163,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 		   throw new ExcepcionRegistroTelematico("Excepcion obteniendo acuse de recibo con numero de registro: " + numeroRegistro ,ex);
 	   }
    }
+   
    
    /**
 	 * 

@@ -18,6 +18,7 @@ import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.redose.modelInterfaz.UsoRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
+import es.caib.regtel.model.ExcepcionRegistroTelematico;
 import es.caib.regtel.model.ReferenciaRDSAsientoRegistral;
 import es.caib.regtel.model.ResultadoRegistroTelematico;
 import es.caib.regtel.model.ws.AcuseRecibo;
@@ -36,8 +37,10 @@ import es.caib.regtel.persistence.util.Constantes;
 import es.caib.regtel.persistence.util.RegistroEntradaHelper;
 import es.caib.regtel.persistence.util.RegistroSalidaHelper;
 import es.caib.sistra.plugins.firma.FirmaIntf;
+import es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
+import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
 import es.caib.zonaper.persistence.delegate.PadDelegate;
 
 
@@ -250,6 +253,24 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 		ar.setFechaAcuseRecibo(date);
 		return ar;
 	}
+	
+	/**
+	 * @param numeroRegistro numero de registro para obtener el acuse de recibo
+	 * @return AcuseRecibo
+	 * 
+	 * @ejb.interface-method 
+	 * @ejb.permission role-name = "${role.gestor}"
+	 * @ejb.permission role-name = "${role.auto}"
+     */
+	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String numeroRegistro)  throws Exception {
+		try {
+			PadBackOfficeDelegate 	ejb = new PadBackOfficeDelegate();
+			return ejb.obtenerDetalleAcuseRecibo(numeroRegistro);		
+		} catch (Exception ex) {
+			throw new ExcepcionRegistroTelematico("Excepcion obteniendo detalle acuse recibo: " + numeroRegistro + " - error: " + ex.getMessage(), ex);
+		}
+	}
+	
 	
 	private void inicializarRegistroEntrada(RegistroEntradaHelper r, DatosRegistroEntrada dEnt) throws Exception{
 		if(dEnt != null){

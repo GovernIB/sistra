@@ -155,6 +155,7 @@
             <replacefilter token="@datasource.jndi@" value="${datasource.jndi}"/>
             <replacefilter token="@hibernate.dialect@" value="${hibernate.dialect}"/>
         	<replacefilter token="@hibernate.show_sql@" value="${hibernate.show_sql}"/>
+        	<replacefilter token="@hibernate.query.substitutions@" value="${hibernate.query.substitutions}"/>
         </replace>
     	
     	<!-- ¿bug? jboss-net no hace caso del parametro securityDomain, lo reemplazamos a pelo

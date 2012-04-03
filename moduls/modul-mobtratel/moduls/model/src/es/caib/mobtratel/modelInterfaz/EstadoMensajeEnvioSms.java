@@ -34,9 +34,9 @@ public class EstadoMensajeEnvioSms implements Serializable{
 	 */
 	private boolean verificacionEnvio;
 	/**
-	 * Estado de verificación.
+	 * Estado de verificación (ver constantes).
 	 */
-	private boolean estadoVerificacionEnvio;
+	private int estadoVerificacionEnvio;
 	/**
 	 * Si existe error verificación indica el mensaje.
 	 */
@@ -78,10 +78,10 @@ public class EstadoMensajeEnvioSms implements Serializable{
 	public void setVerificacionEnvio(boolean habilitarVerificacionEnvio) {
 		this.verificacionEnvio = habilitarVerificacionEnvio;
 	}
-	public boolean isEstadoVerificacionEnvio() {
+	public int getEstadoVerificacionEnvio() {
 		return estadoVerificacionEnvio;
 	}
-	public void setEstadoVerificacionEnvio(boolean estadoVerificacionEnvio) {
+	public void setEstadoVerificacionEnvio(int estadoVerificacionEnvio) {
 		this.estadoVerificacionEnvio = estadoVerificacionEnvio;
 	}
 	public String getErrorVerificacionEnvio() {

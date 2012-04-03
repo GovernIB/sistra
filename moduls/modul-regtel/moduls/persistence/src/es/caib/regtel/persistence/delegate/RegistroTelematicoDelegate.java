@@ -117,7 +117,9 @@ public class RegistroTelematicoDelegate implements StatelessDelegate {
         } catch (Exception e) {
             throw new DelegateException(e);
         }
-    }
+    }	
+	
+	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
@@ -126,5 +128,7 @@ public class RegistroTelematicoDelegate implements StatelessDelegate {
     }
 
     protected RegistroTelematicoDelegate() throws DelegateException {       
-    }                  
+    }
+
+	                
 }

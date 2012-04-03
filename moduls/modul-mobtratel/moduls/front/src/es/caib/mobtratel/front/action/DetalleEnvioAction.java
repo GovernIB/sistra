@@ -65,7 +65,7 @@ public class DetalleEnvioAction extends BaseAction
 		for(Iterator it=smss.iterator(); it.hasNext();)
 		{
 			MensajeSms ms = (MensajeSms) it.next();
-			if((ms.getEstado() == ConstantesMobtratel.CON_ERROR) && (ms.getError() != null ) &&
+			if((ms.getEstado() == ConstantesMobtratel.ESTADOENVIO_ERROR) && (ms.getError() != null ) &&
 				!ms.getError().equals(""))
 				result.add(ms);
 		}
@@ -77,7 +77,7 @@ public class DetalleEnvioAction extends BaseAction
 		for(Iterator it=emails.iterator(); it.hasNext();)
 		{
 			MensajeEmail me = (MensajeEmail) it.next();
-			if((me.getEstado() == ConstantesMobtratel.CON_ERROR) && (me.getError() != null ) &&
+			if((me.getEstado() == ConstantesMobtratel.ESTADOENVIO_ERROR) && (me.getError() != null ) &&
 				!me.getError().equals(""))
 				result.add(me);
 		}

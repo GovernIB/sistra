@@ -105,5 +105,9 @@ public final class DelegateUtil {
     public static IndiceElementoDelegate getIndiceElementoDelegate() {
         return (IndiceElementoDelegate) DelegateFactory.getDelegate(IndiceElementoDelegate.class);
     }
+    
+    public static ProcesoRechazarNotificacionDelegate getProcesoRechazarNotificacionDelegate() {
+        return (ProcesoRechazarNotificacionDelegate) DelegateFactory.getDelegate(ProcesoRechazarNotificacionDelegate.class);
+    }
 }
 

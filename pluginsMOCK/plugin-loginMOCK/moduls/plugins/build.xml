@@ -3,16 +3,15 @@
 <project name="login.pluginMOCK" default="main" basedir=".">
 
 	<property name="home.dir" location="${basedir}/../.."/>
-	
+		
     <property file="${basedir}/build.properties"/>
 	<property file="${home.dir}/config.properties"/>
 	<property file="${home.dir}/../../config.properties"/>
 	
     <property name="modul" value="plugins"/>
     <property name="package" value="es.caib.sistra.plugins.login.impl.mock"/>
-    
+    	
 	<property name="lib.dir" location="${home.dir}/../../lib"/>
-	<property name="lib.plugins.dir" location="${home.dir}/../lib"/>
 	<property name="distribucion.dir" location="${home.dir}/../../product"/>
 		
     <property name="output.dir" location="${home.dir}/output"/>
@@ -31,9 +30,6 @@
     	<fileset dir="${lib.dir}">
     		<include name="*.jar"/>		
    		</fileset>	
-    	<fileset dir="${lib.plugins.dir}">
-			<include name="*.jar"/>		
-		</fileset>
     	<fileset dir="${distribucion.dir}/lib">     	           
             <include name="sistra-plugins.jar"/>
         </fileset>   	

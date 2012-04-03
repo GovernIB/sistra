@@ -208,5 +208,8 @@ public class ConstantesAsientoXML {
 	public final static char DATOSANEXO_NO_FIRMADO_POR_TERCEROS = 'N';
 	
 	
+	// ------- TIPOS DE ACUSE DE RECIBO -----------------
+	public final static String ACUSERECIBO_ENTREGADA = "ENTREGADA";
+	public final static String ACUSERECIBO_RECHAZADA = "RECHAZADA";
 	
 }

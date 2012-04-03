@@ -36,6 +36,8 @@ import es.caib.zonaper.model.RegistroExternoPreparado;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.ExpedienteDelegate;
 import es.caib.zonaper.persistence.delegate.LogRegistroDelegate;
+import es.caib.zonaper.persistence.delegate.ProcesoBackupDelegate;
+import es.caib.zonaper.persistence.delegate.ProcesoRechazarNotificacionDelegate;
 import es.caib.zonaper.persistence.delegate.RegistroExternoPreparadoDelegate;
 import es.caib.zonaper.persistence.util.AvisosMovilidad;
 import es.caib.zonaper.persistence.util.UsernamePasswordCallbackHandler;
@@ -211,6 +213,51 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
 			// Revisar registros externos
 			doRevisarRegistrosExternosPreparados();					
 			
+		}catch (Exception le){
+			throw new EJBException("Excepcion al ejecutar proceso",le);
+		}finally{				
+			// Hacemos el logout
+			if ( lc != null ){
+				try{lc.logout();}catch(Exception exl){}
+			}
+		}
+	}
+	
+	
+	/**
+	 * Control entrega de las notificaciones
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked = "true"
+     * 
+     */
+	public void controlEntregaNotificaciones()  
+	{
+		backupLog.debug("Control entrega notificaciones");
+		
+		LoginContext lc = null;		
+		try{					
+			// Realizamos login JAAS con usuario para proceso automatico	
+			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+			String user = props.getProperty("auto.user");
+			String pass = props.getProperty("auto.pass");
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			lc = new LoginContext("client-login", handler);
+			lc.login();
+			
+			// Recuperamos notificaciones fuera de plazo
+			List notificaciones = DelegateUtil.getNotificacionTelematicaDelegate().listarNotificacionesTelematicasFueraPlazo();
+			
+			// Marcamos como rechazada cada notificacion
+			ProcesoRechazarNotificacionDelegate dlg = DelegateUtil.getProcesoRechazarNotificacionDelegate();
+			for (Iterator it = notificaciones.iterator(); it.hasNext();) {
+				NotificacionTelematica not = (NotificacionTelematica) it.next();
+				try {
+					dlg.rechazarNotificacion(not.getCodigo());
+				}catch (Exception e){
+					backupLog.error("Error rechazando notificacion " + not.getCodigo() + " :" + e.getMessage(), e);
+				}					
+			}			
 		}catch (Exception le){
 			throw new EJBException("Excepcion al ejecutar proceso",le);
 		}finally{				

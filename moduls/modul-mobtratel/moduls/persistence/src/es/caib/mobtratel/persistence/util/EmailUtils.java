@@ -20,6 +20,7 @@ import es.caib.mobtratel.model.MensajeEmail;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.email.EstadoEnvio;
 import es.caib.sistra.plugins.email.PluginEmailIntf;
+import es.caib.util.StringUtil;
 import es.caib.xml.ConstantesXML;
 
 
@@ -101,7 +102,7 @@ public class EmailUtils
     	}
     }    
 */
-    public boolean enviar(MensajeEmail me, Envio envio, List destinatarios)  throws Exception{
+    public boolean enviar(String prefijoEmail, MensajeEmail me, Envio envio, List destinatarios)  throws Exception{
     	try {    		
     		InitialContext jndiContext = new InitialContext();
     		Session mailSession = (Session)jndiContext.lookup("java:/" + envio.getCuenta().getEmail());
@@ -110,7 +111,13 @@ public class EmailUtils
 
     		InternetAddress[] direcciones = getDirecciones(destinatarios);
     		msg.setRecipients(javax.mail.Message.RecipientType.BCC, direcciones);
-    		msg.setSubject("(Avís: " + me.getCodigo() + ") - " + me.getTitulo());
+    		
+    		// Si se verifica envio añadimos prefijo para poder tracear el envio
+    		String prefijo = "";
+    		if (me.isVerificarEnvio()) {    			
+    			prefijo = StringUtil.replace(prefijoEmail, "?", me.getCodigo().toString()) + " - "; 
+    		}
+    		msg.setSubject(prefijo + me.getTitulo());
     		
 	    	byte[] mensaje = me.getMensaje();
 	    	

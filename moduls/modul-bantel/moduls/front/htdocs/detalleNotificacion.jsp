@@ -24,16 +24,60 @@
 			<div class="avis">
 			
 				<dl>
-					<dt><bean:message key="detalle.aviso.fechaEmision"/>:</dt>
+					<dt><bean:message key="detalle.notificacion.fechaEmision"/>:</dt>
 					<dd><bean:write name="notificacion" property="fecha" format="dd/MM/yyyy '-' HH:mm"/></dd>
-					<dt><bean:message key="detalle.notificacion.fechaApertura"/>:</dt>
-					<dd><bean:write name="notificacion" property="fechaFirmaAcuse" format="dd/MM/yyyy '-' HH:mm"/><logic:equal name="notificacion" property="requiereAcuse" value="true"> *</logic:equal></dd>
-					<dt><bean:message key="detalle.aviso.asunto"/>:</dt>
+					
+					<dt><bean:message key="detalle.notificacion.estado"/>:</dt>
+					<logic:equal name="notificacion" property="detalleAcuseRecibo.estado" value="PENDIENTE">
+						<dd><bean:message key="detalle.notificacion.estado.pendiente"/></dd>
+					</logic:equal>
+					<logic:equal name="notificacion" property="detalleAcuseRecibo.estado" value="ENTREGADA">
+						<dd><bean:message key="detalle.notificacion.estado.entregada"/></dd>
+					</logic:equal>
+					<logic:equal name="notificacion" property="detalleAcuseRecibo.estado" value="RECHAZADA">
+						<dd><bean:message key="detalle.notificacion.estado.rechazada"/></dd>
+					</logic:equal>
+					
+					<dt><bean:message key="detalle.notificacion.asunto"/>:</dt>
 					<dd><bean:write name="notificacion" property="tituloOficio"/></dd>
-					<dt><bean:message key="expediente.descripcion"/>:</dt>
-					<dd><bean:write name="notificacion" property="textoOficio"/></dd>	
+					
+					<dt><bean:message key="detalle.notificacion.descripcion"/>:</dt>
+					<dd><bean:write name="notificacion" property="textoOficio"/></dd>
+					
+					<logic:notEmpty name="notificacion" property="detalleAcuseRecibo.avisos">		
+						<dt><bean:message key="detalle.notificacion.avisos" />:</dt>
+						<dd>
+							<ul class="docs">
+								<logic:iterate id="aviso" name="notificacion" property="detalleAcuseRecibo.avisos" type="es.caib.zonaper.modelInterfaz.DetalleAviso">
+								<bean:define id="enviado" type="java.lang.String"><bean:write name="aviso" property="enviado" /></bean:define>
+								<li>
+									<bean:write name="aviso" property="tipo" /> - 
+									<bean:write name="aviso" property="destinatario" /> - 
+									<logic:equal  name="enviado" value="true">
+									  <bean:message key="detalle.notificacion.avisoEnviado" />  
+									</logic:equal>
+									<logic:equal  name="enviado" value="false">
+									  <bean:message key="detalle.notificacion.avisoNoEnviado" />  
+									</logic:equal>
+									<logic:equal  name="aviso"  property="confirmadoEnvio" value="CONFIRMADO_ENVIADO">
+									  [  <bean:message key="detalle.notificacion.avisoConfirmado.OK" /> ]  
+									</logic:equal>	
+									<logic:equal  name="aviso"  property="confirmadoEnvio" value="CONFIRMADO_NO_ENVIADO">
+									  [  <bean:message key="detalle.notificacion.avisoConfirmado.KO" /> ]  
+									</logic:equal>								
+								</li>
+								</logic:iterate>
+							</ul>
+						</dd>				
+					</logic:notEmpty>
+					
+					<logic:equal name="notificacion" property="detalleAcuseRecibo.estado" value="ENTREGADA">
+						<dt><bean:message key="detalle.notificacion.fechaApertura"/>:</dt>
+						<dd><bean:write name="notificacion" property="detalleAcuseRecibo.fechaAcuseRecibo" format="dd/MM/yyyy '-' HH:mm"/><logic:equal name="notificacion" property="requiereAcuse" value="true"> </logic:equal></dd>
+					</logic:equal>
+												
 					<logic:notEmpty name="notificacion" property="documentos">		
-						<dt><bean:message key="aviso.documentoanexo" />:</dt>
+						<dt><bean:message key="detalle.notificacion.documentoanexo" />:</dt>
 						<dd>
 							<ul class="docs">
 								<logic:iterate id="documento" name="notificacion" property="documentos" type="es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD">

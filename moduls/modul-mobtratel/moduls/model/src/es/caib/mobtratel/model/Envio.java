@@ -46,7 +46,7 @@ public class Envio implements Serializable
 	/**
 	 *	Estado del envio
 	 */
-	private int estado = ConstantesMobtratel.PENDIENTE_ENVIO;
+	private int estado = ConstantesMobtratel.ESTADOENVIO_PENDIENTE;
 	/**
 	 *	Usuario Seycon
 	 */
@@ -251,11 +251,11 @@ public class Envio implements Serializable
 	public boolean isCompletado(){
 		for (Iterator it = this.getEmails().iterator();it.hasNext();){
 			MensajeEmail me = (MensajeEmail) it.next();
-			if (me.getEstado() != ConstantesMobtratel.ENVIADO && me.getEstado() != ConstantesMobtratel.CANCELADO) return false;
+			if (me.getEstado() != ConstantesMobtratel.ESTADOENVIO_ENVIADO && me.getEstado() != ConstantesMobtratel.ESTADOENVIO_CANCELADO) return false;
 		}
 		for (Iterator it = this.getSmss().iterator();it.hasNext();){
 			MensajeSms ms = (MensajeSms) it.next();
-			if (ms.getEstado() != ConstantesMobtratel.ENVIADO && ms.getEstado() != ConstantesMobtratel.CANCELADO) return false;
+			if (ms.getEstado() != ConstantesMobtratel.ESTADOENVIO_ENVIADO && ms.getEstado() != ConstantesMobtratel.ESTADOENVIO_CANCELADO) return false;
 		}
 		return true;
 	}
@@ -267,11 +267,11 @@ public class Envio implements Serializable
 	public boolean isConError(){
 		for (Iterator it = this.getEmails().iterator();it.hasNext();){
 			MensajeEmail me = (MensajeEmail) it.next();
-			if (me.getEstado() == ConstantesMobtratel.CON_ERROR) return true;
+			if (me.getEstado() == ConstantesMobtratel.ESTADOENVIO_ERROR) return true;
 		}
 		for (Iterator it = this.getSmss().iterator();it.hasNext();){
 			MensajeSms ms = (MensajeSms) it.next();
-			if (ms.getEstado() == ConstantesMobtratel.CON_ERROR) return true;
+			if (ms.getEstado() == ConstantesMobtratel.ESTADOENVIO_ERROR) return true;
 		}
 		return false;
 	}

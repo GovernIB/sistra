@@ -64,7 +64,7 @@ public abstract class EnvioFacadeEJB extends HibernateEJB {
         Date now = new Date();
         try {
         	Query query = session.createQuery("FROM Envio AS e where ((e.fechaProgramacionEnvio <= :fechaActual) or e.fechaProgramacionEnvio is null) and e.fechaEnvio is null  " +
-        			" and ((e.estado = " + ConstantesMobtratel.PENDIENTE_ENVIO + ") or (e.estado = " + ConstantesMobtratel.CON_ERROR + ")  or (e.estado = " + ConstantesMobtratel.PROCESANDOSE + "))  " +
+        			" and ((e.estado = " + ConstantesMobtratel.ESTADOENVIO_PENDIENTE + ") or (e.estado = " + ConstantesMobtratel.ESTADOENVIO_ERROR + ")  or (e.estado = " + ConstantesMobtratel.ESTADOENVIO_PROCESANDO + "))  " +
         			" ORDER BY e.fechaProgramacionEnvio DESC,e.codigo DESC");
             query.setParameter("fechaActual", now);            
             return query.list();
@@ -85,7 +85,7 @@ public abstract class EnvioFacadeEJB extends HibernateEJB {
         Session session = getSession();
         try {
         	Query query = session.createQuery("FROM MensajeEmail AS me " + 
-        			" where me.estado = " + ConstantesMobtratel.ENVIADO + " and me.verificarEnvio = true and me.estadoVerificarEnvio is null");        			                      
+        			" where me.estado = " + ConstantesMobtratel.ESTADOENVIO_ENVIADO + " and me.verificarEnvio = true and me.estadoVerificarEnvio is null");        			                      
             return query.list();
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -104,7 +104,7 @@ public abstract class EnvioFacadeEJB extends HibernateEJB {
         Session session = getSession();
         try {
         	Query query = session.createQuery("FROM MensajeSms AS me " + 
-        			" where me.estado = " + ConstantesMobtratel.ENVIADO + " and me.verificarEnvio = true and me.estadoVerificarEnvio is null");        			                      
+        			" where me.estado = " + ConstantesMobtratel.ESTADOENVIO_ENVIADO + " and me.verificarEnvio = true and me.estadoVerificarEnvio is null");        			                      
             return query.list();
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -124,7 +124,7 @@ public abstract class EnvioFacadeEJB extends HibernateEJB {
         Date now = new Date();
         try {
         	Query query = session.createQuery("FROM Envio AS e where (e.inmediato = 1) and e.fechaEnvio is null " + 
-        			" and ((e.estado = " + ConstantesMobtratel.PENDIENTE_ENVIO + ") or (e.estado = " + ConstantesMobtratel.CON_ERROR + ")  or (e.estado = " + ConstantesMobtratel.PROCESANDOSE + "))  " +
+        			" and ((e.estado = " + ConstantesMobtratel.ESTADOENVIO_PENDIENTE + ") or (e.estado = " + ConstantesMobtratel.ESTADOENVIO_ERROR + ")  or (e.estado = " + ConstantesMobtratel.ESTADOENVIO_PROCESANDO + "))  " +
         			" ORDER BY e.fechaProgramacionEnvio DESC");
             query.setParameter("fechaActual", now);            
             return query.list();
@@ -193,12 +193,12 @@ public abstract class EnvioFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.auto}"
      */
-    public void establecerEstadoVerificarMensajeEmail(Long codigo, char estado, String descError) {
+    public void establecerEstadoVerificarMensajeEmail(Long codigo, String estado, String descError) {
         Session session = getSession();
         try {        	   
         	MensajeEmail envio = (MensajeEmail) session.load(MensajeEmail.class, codigo);
         	if (envio != null) { 
-        		envio.setEstadoVerificarEnvio(Character.toString(estado));
+        		envio.setEstadoVerificarEnvio(estado);
         		envio.setErrorVerificarEnvio(descError);
         		session.update(envio);    
         	}        	
@@ -213,12 +213,12 @@ public abstract class EnvioFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.auto}"
      */
-    public void establecerEstadoVerificarMensajeSms(Long codigo, char estado, String descError) {
+    public void establecerEstadoVerificarMensajeSms(Long codigo, String estado, String descError) {
         Session session = getSession();
         try {
         	MensajeSms envio = (MensajeSms) session.load(MensajeSms.class, codigo);
         	if (envio != null) { 
-        		envio.setEstadoVerificarEnvio(Character.toString(estado));
+        		envio.setEstadoVerificarEnvio(estado);
         		envio.setErrorVerificarEnvio(descError);
         		session.update(envio);    
         	}        	
@@ -268,11 +268,11 @@ public abstract class EnvioFacadeEJB extends HibernateEJB {
     		Envio envio = (Envio) session.load(Envio.class, idEnvio);
     		
     		// El envio no puede cancelarse si ya esta enviado o esta cancelado
-    		if (envio.getEstado() == ConstantesMobtratel.ENVIADO || envio.getEstado() == ConstantesMobtratel.CANCELADO ){
+    		if (envio.getEstado() == ConstantesMobtratel.ESTADOENVIO_ENVIADO || envio.getEstado() == ConstantesMobtratel.ESTADOENVIO_CANCELADO ){
     			throw new HibernateException("El envio esta en estado " + envio.getEstado() + ". No puede cancelarse.");
     		}
     		
-    		envio.setEstado(ConstantesMobtratel.CANCELADO);
+    		envio.setEstado(ConstantesMobtratel.ESTADOENVIO_CANCELADO);
     		session.update(envio);
         	return true;            
         } catch (HibernateException he) {
@@ -367,14 +367,14 @@ public abstract class EnvioFacadeEJB extends HibernateEJB {
 		 //Especificamos estado procesamiento entrada
 		 if ( !criteriosBusqueda.getEnviado().equals(CriteriosBusquedaEnvio.TODOS)  )
 		 {
-			 if (criteriosBusqueda.getEnviado().equals(String.valueOf(ConstantesMobtratel.ENVIADO))  )
-				 criteria.add( Expression.eq( "estado" , new Integer(ConstantesMobtratel.ENVIADO) ) );
-			 if (criteriosBusqueda.getEnviado().equals(String.valueOf(ConstantesMobtratel.CANCELADO))  )
-				 criteria.add( Expression.eq( "estado" , new Integer(ConstantesMobtratel.CANCELADO)) );
-			 if (criteriosBusqueda.getEnviado().equals(String.valueOf(ConstantesMobtratel.CON_ERROR))  )
-				 criteria.add( Expression.eq( "estado", new Integer(ConstantesMobtratel.CON_ERROR) ) );
-			 if (criteriosBusqueda.getEnviado().equals(String.valueOf(ConstantesMobtratel.PENDIENTE_ENVIO))  )
-				 criteria.add( Expression.eq( "estado", new Integer(ConstantesMobtratel.PENDIENTE_ENVIO) ) );				 
+			 if (criteriosBusqueda.getEnviado().equals(String.valueOf(ConstantesMobtratel.ESTADOENVIO_ENVIADO))  )
+				 criteria.add( Expression.eq( "estado" , new Integer(ConstantesMobtratel.ESTADOENVIO_ENVIADO) ) );
+			 if (criteriosBusqueda.getEnviado().equals(String.valueOf(ConstantesMobtratel.ESTADOENVIO_CANCELADO))  )
+				 criteria.add( Expression.eq( "estado" , new Integer(ConstantesMobtratel.ESTADOENVIO_CANCELADO)) );
+			 if (criteriosBusqueda.getEnviado().equals(String.valueOf(ConstantesMobtratel.ESTADOENVIO_ERROR))  )
+				 criteria.add( Expression.eq( "estado", new Integer(ConstantesMobtratel.ESTADOENVIO_ERROR) ) );
+			 if (criteriosBusqueda.getEnviado().equals(String.valueOf(ConstantesMobtratel.ESTADOENVIO_PENDIENTE))  )
+				 criteria.add( Expression.eq( "estado", new Integer(ConstantesMobtratel.ESTADOENVIO_PENDIENTE) ) );				 
 		 }
 		
 		 // Especificamos cuenta particular 

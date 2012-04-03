@@ -86,21 +86,13 @@
 					<tr>
 						<th><bean:message key="detalle.expediente.tabla.accion" /></th>
 						<th><bean:message key="detalle.expediente.tabla.titulo" /></th>
-						<th><bean:message key="detalle.expediente.tabla.estado" /></th>
 						<th><bean:message key="detalle.expediente.tabla.fecha" /></th>
+						<th><bean:message key="detalle.expediente.tabla.estado" /></th>
 					</tr>
 				</thead>
 				<tbody>
 					<logic:iterate name="expediente" property="elementos" id="elemento" indexId="indice">
-						<%if (elemento instanceof es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD) {%>
-							<% if (((es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD)elemento).getFechaFirmaAcuse() == null){%>
-								<tr class="novetat">
-							<%}else{%>
-								<tr>
-							<%}
-						}else{ %>
-							<tr>
-						<%} %>
+					<tr>
 							<td>
 							<%if (elemento instanceof es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD) {%>
 								<bean:message key="detalle.expediente.notificacion" />
@@ -131,19 +123,21 @@
 								</a>
 							<%} %>
 						</td>
+						<td><bean:write name="elemento" property="fecha" format="dd/MM/yyyy  HH:mm"/></td>
 						<td class="estat">
 							<%if (elemento instanceof es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD) {%>
-								<% if (((es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD)elemento).getFechaFirmaAcuse() == null){%>
-									<bean:message key="detalle.expediente.notificacion.estado.pendiente" />
-								<%}else{%>
-									<bean:message key="detalle.expediente.notificacion.estado.recibida" />
+								<% if (((es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD)elemento).getDetalleAcuseRecibo().getEstado().equals("PENDIENTE")){%>
+									<bean:message key="detalle.notificacion.estado.pendiente"/>
+								<%}else if (((es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD)elemento).getDetalleAcuseRecibo().getEstado().equals("ENTREGADA")){%>
+									<bean:message key="detalle.notificacion.estado.entregada"/>
+								<%}else if (((es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD)elemento).getDetalleAcuseRecibo().getEstado().equals("RECHAZADA")){%>
+									<bean:message key="detalle.notificacion.estado.rechazada"/>	
 								<%} %>
 							<!--los avisos no tienen estado-->
 							<%}else if (elemento instanceof es.caib.zonaper.modelInterfaz.TramiteExpedientePAD) {%>
 								<bean:message key="detalle.expediente.tramite.estado" />
 							<%} %>
 						</td>
-						<td><bean:write name="elemento" property="fecha" format="dd/MM/yyyy  HH:mm"/></td>
 					</tr>
 					</logic:iterate>
 				</tbody>

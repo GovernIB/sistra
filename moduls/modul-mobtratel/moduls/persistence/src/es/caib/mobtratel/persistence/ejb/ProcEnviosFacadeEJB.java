@@ -48,8 +48,9 @@ public abstract class ProcEnviosFacadeEJB extends HibernateEJB {
         		Properties config = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
     			PluginEnvio.setSimularEnvio( new Boolean (config.getProperty("envio.simularEnvio")));
     			PluginEnvio.setSimularEnvioDuracion( Integer.parseInt(config.getProperty("envio.simularEnvio.duracion")));
-    			if (StringUtils.isNotBlank(config.getProperty("envio.limite.verificarEnvio"))) {
-    				PluginEnvio.setLimiteDiasVerificar(Integer.parseInt(config.getProperty("envio.limite.verificarEnvio")));
+    			PluginEnvio.setPrefijoEnvioEmail(config.getProperty("envio.verificarEnvio.prefijoEmail"));
+    			if (StringUtils.isNotBlank(config.getProperty("envio.verificarEnvio.limite"))) {
+    				PluginEnvio.setLimiteDiasVerificar(Integer.parseInt(config.getProperty("envio.verificarEnvio.limite")));
     			} else {
     				PluginEnvio.setLimiteDiasVerificar(5);
     			}
