@@ -76,7 +76,7 @@ public class EnvioDelegate implements StatelessDelegate {
         }
     }
     
-    public void establecerEstadoVerificarMensajeEmail(Long codigo, char estado, String descError) throws DelegateException {
+    public void establecerEstadoVerificarMensajeEmail(Long codigo, String estado, String descError) throws DelegateException {
         try {
             getFacade().establecerEstadoVerificarMensajeEmail(codigo, estado, descError);
         } catch (Exception e) {
@@ -84,7 +84,7 @@ public class EnvioDelegate implements StatelessDelegate {
         }
     }
     
-    public void establecerEstadoVerificarMensajeSms(Long codigo, char estado, String descError) throws DelegateException {
+    public void establecerEstadoVerificarMensajeSms(Long codigo, String estado, String descError) throws DelegateException {
         try {
             getFacade().establecerEstadoVerificarMensajeSms(codigo, estado, descError);
         } catch (Exception e) {

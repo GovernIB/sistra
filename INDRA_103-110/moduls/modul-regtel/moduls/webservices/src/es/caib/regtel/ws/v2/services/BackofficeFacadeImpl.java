@@ -10,9 +10,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.namespace.QName;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -42,10 +44,16 @@ import es.caib.regtel.ws.v2.model.OficinaRegistral;
 import es.caib.regtel.ws.v2.model.ParametroTramite;
 import es.caib.regtel.ws.v2.model.ReferenciaRDSAsientoRegistral;
 import es.caib.regtel.ws.v2.model.ResultadoRegistro;
+import es.caib.regtel.ws.v2.model.detalleacuserecibo.Avisos;
+import es.caib.regtel.ws.v2.model.detalleacuserecibo.DetalleAcuseRecibo;
+import es.caib.regtel.ws.v2.model.detalleacuserecibo.TipoAviso;
+import es.caib.regtel.ws.v2.model.detalleacuserecibo.TipoConfirmacion;
+import es.caib.regtel.ws.v2.model.detalleacuserecibo.TipoEstado;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.firma.FirmaIntf;
 import es.caib.sistra.plugins.firma.PluginFirmaIntf;
 import es.caib.util.StringUtil;
+import es.caib.zonaper.modelInterfaz.DetalleAviso;
 
 
 @javax.jws.WebService(portName = "BackofficeFacade", serviceName = "BackofficeFacadeService", 
@@ -133,10 +141,123 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			throw new es.caib.regtel.ws.v2.services.BackofficeFacadeException(ex.getMessage(), new es.caib.regtel.ws.v2.model.BackofficeFacadeException());
 		}
 	}
+	
+	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String numeroRegistro) throws BackofficeFacadeException {
+		DetalleAcuseRecibo acuse = null;
+		try{
+			RegistroTelematicoWsDelegate rtd = DelegateUtil.getRegistroTelematicoWsDelegate();
+			es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo acuseIntf = rtd.obtenerDetalleAcuseRecibo(numeroRegistro);
+			if (acuseIntf == null)  {
+				throw new Exception("No existe notificacion: " + numeroRegistro);
+			}	
+			acuse = detalleAcuseIntfToDetalleAcuseWS(acuseIntf);
+			return acuse;
+		}catch(Exception ex){
+			ex.printStackTrace();
+			throw new es.caib.regtel.ws.v2.services.BackofficeFacadeException(ex.getMessage(), new es.caib.regtel.ws.v2.model.BackofficeFacadeException());
+		}
+	}
+
+
+	private DetalleAcuseRecibo detalleAcuseIntfToDetalleAcuseWS(
+			es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo acuse) throws Exception {
+		DetalleAcuseRecibo da = new DetalleAcuseRecibo();
+		
+		// Estado notificacion
+		if (acuse.getEstado().equals(es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo.ESTADO_ENTREGADA)) {
+			da.setEstado(TipoEstado.ENTREGADA);
+		} else if (acuse.getEstado().equals(es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo.ESTADO_RECHAZADA)) {
+			da.setEstado(TipoEstado.RECHAZADA);
+		} else {
+			da.setEstado(TipoEstado.PENDIENTE);
+		}
+		
+		// Fecha acuse recibo
+		if (acuse.getFechaAcuseRecibo() != null) {
+			GregorianCalendar c = new GregorianCalendar();
+			c.setTime(acuse.getFechaAcuseRecibo());
+			XMLGregorianCalendar fcAcuse = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+			JAXBElement<XMLGregorianCalendar> fechaAcuse = new JAXBElement<XMLGregorianCalendar>(
+						new QName("fechaAcuseRecibo"),
+						XMLGregorianCalendar.class,
+						fcAcuse
+						);
+			da.setFechaAcuseRecibo(fechaAcuse);
+		}
+		
+		// Fichero acuse recibo
+		if (acuse.getCodigoRdsAcuseRecibo() != null && acuse.getCodigoRdsAcuseRecibo().longValue() > 0) {
+			es.caib.regtel.ws.v2.model.ReferenciaRDS refRDS = new es.caib.regtel.ws.v2.model.ReferenciaRDS();
+			refRDS.setCodigo(acuse.getCodigoRdsAcuseRecibo());
+			refRDS.setClave(acuse.getClaveRdsAcuseRecibo());
+			JAXBElement<es.caib.regtel.ws.v2.model.ReferenciaRDS> value = new JAXBElement<es.caib.regtel.ws.v2.model.ReferenciaRDS>(
+					new QName("ficheroAcuseRecibo"),
+					es.caib.regtel.ws.v2.model.ReferenciaRDS.class,
+					refRDS
+					);
+			da.setFicheroAcuseRecibo(value);
+		}
+
+		// Avisos
+		if (acuse.getAvisos() != null && acuse.getAvisos().size() > 0) {
+			Avisos avisos = new Avisos();
+			for (Iterator it = acuse.getAvisos().iterator(); it.hasNext();) {
+				DetalleAviso a = (DetalleAviso) it.next();
+				es.caib.regtel.ws.v2.model.detalleacuserecibo.Aviso aviso = new es.caib.regtel.ws.v2.model.detalleacuserecibo.Aviso();
+				if (a.getTipo().equals(DetalleAviso.TIPO_EMAIL)) {
+					aviso.setTipo(TipoAviso.EMAIL);
+				} else {
+					aviso.setTipo(TipoAviso.SMS);	
+				}
+				aviso.setDestinatario(a.getDestinatario());
+				aviso.setEnviado(a.isEnviado());
+				if (a.getFechaEnvio() != null) {
+					GregorianCalendar c = new GregorianCalendar();
+					c.setTime(a.getFechaEnvio());
+					XMLGregorianCalendar fcAviso = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+					JAXBElement<XMLGregorianCalendar> fechaAviso = new JAXBElement<XMLGregorianCalendar>(
+							new QName("fechaEnvio"),
+							XMLGregorianCalendar.class,
+							fcAviso
+							);
+					aviso.setFechaEnvio(fechaAviso);
+				}
+				
+				aviso.setConfirmarEnvio(a.isConfirmarEnvio());
+				if (a.isConfirmarEnvio()) {
+					TipoConfirmacion confirmadoEnvio = TipoConfirmacion.DESCONOCIDO;
+					if (a.getConfirmadoEnvio() == DetalleAviso.CONFIRMADO_ENVIADO) {
+						confirmadoEnvio = TipoConfirmacion.ENVIADO;
+					} else if (a.getConfirmadoEnvio() == DetalleAviso.CONFIRMADO_NO_ENVIADO) {
+						confirmadoEnvio = TipoConfirmacion.NO_ENVIADO;
+					}
+					JAXBElement<TipoConfirmacion> confEnvio = new JAXBElement<TipoConfirmacion>(
+							new QName("confirmadoEnvio"),
+							TipoConfirmacion.class,
+							confirmadoEnvio
+							);					
+					aviso.setConfirmadoEnvio(confEnvio  );
+				}				
+				avisos.getAviso().add(aviso);
+			}
+			
+			JAXBElement<Avisos> value = new JAXBElement<Avisos>(
+					new QName("avisos"),
+					Avisos.class,
+					avisos
+					);
+			da.setAvisos(value );
+		}
+		
+		return da;
+	}
+
+	
 
 	//	 --------------------------------------------------------------
 	//		FUNCIONES AUXILIARES
 	// --------------------------------------------------------------
+
 
 	private AcuseRecibo  acuseIntfToAcuseWS(es.caib.regtel.model.ws.AcuseRecibo acuseIntf) throws Exception{
 		AcuseRecibo acuse = null;
@@ -475,5 +596,5 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		}
 		return anexos;
 	}
-
+	
 }

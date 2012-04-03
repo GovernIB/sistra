@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:impl="urn:es:caib:regtel:ws:v2:services" xmlns:intf="urn:es:caib:regtel:ws:v2:model:BackofficeFacade" xmlns:tns1="urn:es:caib:regtel:ws:v2:model:DatosRegistroSalida" xmlns:tns2="urn:es:caib:regtel:ws:v2:model:DatosRegistroEntrada" xmlns:tns3="urn:es:caib:regtel:ws:v2:model:ResultadoRegistro" xmlns:tns4="urn:es:caib:regtel:ws:v2:model:AcuseRecibo" xmlns:tns5="urn:es:caib:regtel:ws:v2:model:ReferenciaRDS" xmlns:tns6="urn:es:caib:regtel:ws:v2:model:FirmaWS" targetNamespace="urn:es:caib:regtel:ws:v2:services" name="BackofficeFacade">
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:impl="urn:es:caib:regtel:ws:v2:services" xmlns:intf="urn:es:caib:regtel:ws:v2:model:BackofficeFacade" xmlns:tns1="urn:es:caib:regtel:ws:v2:model:DatosRegistroSalida" xmlns:tns2="urn:es:caib:regtel:ws:v2:model:DatosRegistroEntrada" xmlns:tns3="urn:es:caib:regtel:ws:v2:model:ResultadoRegistro" xmlns:tns4="urn:es:caib:regtel:ws:v2:model:AcuseRecibo" xmlns:tns5="urn:es:caib:regtel:ws:v2:model:ReferenciaRDS" xmlns:tns6="urn:es:caib:regtel:ws:v2:model:FirmaWS" xmlns:tns7="urn:es:caib:regtel:ws:v2:model:DetalleAcuseRecibo" targetNamespace="urn:es:caib:regtel:ws:v2:services" name="BackofficeFacade">
 	<wsdl:types>
 		<schema elementFormDefault="qualified" targetNamespace="urn:es:caib:regtel:ws:v2:model:BackofficeFacade" xmlns="http://www.w3.org/2001/XMLSchema" version="1.0">
 			<xsd:import namespace="urn:es:caib:regtel:ws:v2:model:DatosRegistroSalida" schemaLocation="DatosRegistroSalida.xsd"/>
 			<xsd:import namespace="urn:es:caib:regtel:ws:v2:model:DatosRegistroEntrada" schemaLocation="DatosRegistroEntrada.xsd"/>
 			<xsd:import namespace="urn:es:caib:regtel:ws:v2:model:ResultadoRegistro" schemaLocation="ResultadoRegistro.xsd"/>
 			<xsd:import namespace="urn:es:caib:regtel:ws:v2:model:AcuseRecibo" schemaLocation="AcuseRecibo.xsd"/>
+			<xsd:import namespace="urn:es:caib:regtel:ws:v2:model:DetalleAcuseRecibo" schemaLocation="DetalleAcuseRecibo.xsd"/>
 			<xsd:import namespace="urn:es:caib:regtel:ws:v2:model:ReferenciaRDS" schemaLocation="ReferenciaRDS.xsd"/>
 			<xsd:import namespace="urn:es:caib:regtel:ws:v2:model:FirmaWS" schemaLocation="FirmaWS.xsd"/>
 			<xsd:element name="registroEntrada">
@@ -80,6 +81,20 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:element name="obtenerDetalleAcuseRecibo">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="numeroRegistro" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="obtenerDetalleAcuseReciboResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="obtenerDetalleAcuseReciboReturn" type="tns7:DetalleAcuseRecibo"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 			<complexType name="BackofficeFacadeException">
 				<sequence/>
 			</complexType>
@@ -119,6 +134,12 @@
 	<wsdl:message name="obtenerAcuseReciboResponse">
 		<wsdl:part name="parameters" element="intf:obtenerAcuseReciboResponse"/>
 	</wsdl:message>
+	<wsdl:message name="obtenerDetalleAcuseReciboRequest">
+		<wsdl:part name="parameters" element="intf:obtenerDetalleAcuseRecibo"/>
+	</wsdl:message>
+	<wsdl:message name="obtenerDetalleAcuseReciboResponse">
+		<wsdl:part name="parameters" element="intf:obtenerDetalleAcuseReciboResponse"/>
+	</wsdl:message>
 	<wsdl:portType name="BackofficeFacade">
 		<wsdl:operation name="registroEntrada">
 			<wsdl:input name="registroEntradaRequest" message="impl:registroEntradaRequest"/>
@@ -143,6 +164,11 @@
 		<wsdl:operation name="obtenerAcuseRecibo">
 			<wsdl:input name="obtenerAcuseReciboRequest" message="impl:obtenerAcuseReciboRequest"/>
 			<wsdl:output name="obtenerAcuseReciboResponse" message="impl:obtenerAcuseReciboResponse"/>
+			<wsdl:fault name="BackofficeFacadeException" message="impl:BackofficeFacadeException"/>
+		</wsdl:operation>
+		<wsdl:operation name="obtenerDetalleAcuseRecibo">
+			<wsdl:input name="obtenerDetalleAcuseReciboRequest" message="impl:obtenerDetalleAcuseReciboRequest"/>
+			<wsdl:output name="obtenerDetalleAcuseReciboResponse" message="impl:obtenerDetalleAcuseReciboResponse"/>
 			<wsdl:fault name="BackofficeFacadeException" message="impl:BackofficeFacadeException"/>
 		</wsdl:operation>
 	</wsdl:portType>
@@ -197,6 +223,18 @@
 			</wsdl:fault>
 		</wsdl:operation>
 		<wsdl:operation name="obtenerAcuseRecibo">
+			<soap:operation/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="BackofficeFacadeException">
+				<soap:fault name="BackofficeFacadeException" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="obtenerDetalleAcuseRecibo">
 			<soap:operation/>
 			<wsdl:input>
 				<soap:body use="literal"/>

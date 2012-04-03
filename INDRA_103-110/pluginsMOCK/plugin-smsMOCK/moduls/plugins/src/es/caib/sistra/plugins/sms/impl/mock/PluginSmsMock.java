@@ -11,8 +11,8 @@ import es.caib.sistra.plugins.sms.PluginSmsIntf;
  */
 public class PluginSmsMock implements PluginSmsIntf{
 
-	public String enviarSMS(String cuentaSMS,String telefono,String mensaje,boolean inmediato) throws Exception{
-		return "" + System.currentTimeMillis();
+	public void enviarSMS(String idEnvio, String cuentaSMS,String telefono,String mensaje,boolean inmediato) throws Exception{
+		return;
 	}
 	
 	public EstadoEnvio consultarEstadoEnvio(String idEnvio) throws Exception{

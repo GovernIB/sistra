@@ -95,6 +95,8 @@ import es.caib.zonaper.persistence.delegate.PadAplicacionDelegate;
 import es.caib.zonaper.persistence.delegate.RegistroExternoDelegate;
 import es.caib.zonaper.persistence.delegate.RegistroExternoPreparadoDelegate;
 import es.caib.zonaper.persistence.delegate.TramitePersistenteDelegate;
+import es.caib.zonaper.persistence.util.CalendarioUtil;
+import es.caib.zonaper.persistence.util.ConfigurationUtil;
 import es.caib.zonaper.persistence.util.LoggerRegistro;
 
 /**
@@ -674,7 +676,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     
     
     /**
-     * Obtiene fecha de acuse de recibo
+     * Obtiene fecha de acuse de recibo (para notificaciones entregadas)
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.gestor}"
@@ -685,7 +687,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	try{
     		NotificacionTelematicaDelegate td = DelegateUtil.getNotificacionTelematicaDelegate();
     		NotificacionTelematica not = td.obtenerNotificacionTelematica(numeroRegistro);
-    		if (not == null) return null;
+    		if (not == null || not.isRechazada()) return null;
     		return not.getFechaAcuse();
     	}catch (Exception ex){
     		throw new ExcepcionPAD("No se ha podido obtener notificacion con numero de registro: " + numeroRegistro,ex);
@@ -1154,6 +1156,14 @@ public abstract class PadFacadeEJB implements SessionBean{
     					throw new Exception("Clave de acceso al expediente incorrecta: " + avisoNotificacion.getExpediente().getIdentificadorExpediente() + " - " + avisoNotificacion.getExpediente().getUnidadAdministrativa());
     				}
 
+    				// Si el expediente es autenticado, la notificacion debe serlo (y vicecersa)
+    				if (notificacion.getUsuarioSeycon() != null && expe.getUsuarioSeycon() == null) {
+    					throw new Exception("No se pueden generar notificaciones autenticadas sobre expediente anonimo");
+    				}
+    				if (notificacion.getUsuarioSeycon() == null && expe.getUsuarioSeycon() != null) {
+    					throw new Exception("No se pueden generar notificaciones anonimas sobre expediente autenticado");
+    				}
+    					 
     				// A PARTIR V1.1.0 COMPROBAMOS POR NIF, NO POR USUARIO SEYCON 
     				/* 
     				if (
@@ -1232,7 +1242,14 @@ public abstract class PadFacadeEJB implements SessionBean{
     	
     	notificacion.setIdioma( asiento.getDatosAsunto().getIdiomaAsunto() );
     	notificacion.setNumeroRegistro(justificante.getNumeroRegistro());
-
+    	
+    	// En caso de que se controle la entrega de la notificacion con acuse calculamos fin de plazo
+    	if (notificacion.isFirmarAcuse() && 
+    			"true".equals(ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("notificaciones.controlEntrega"))) {
+    		Date finPlazo = CalendarioUtil.getInstance().calcularPlazoFinNotificacion(new Date(), 10, true, false);
+    		notificacion.setFechaFinPlazo(finPlazo);
+    	}
+    	
     	// Guardamos en log de notificacion telematica
     	NotificacionTelematicaDelegate td = DelegateUtil.getNotificacionTelematicaDelegate();
     	Long codigoNotificacion = td.grabarNotificacionTelematica(notificacion);
@@ -1245,7 +1262,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	el.setFecha(notificacion.getFechaRegistro());
     	el.setCodigoElemento(notificacion.getCodigo());
     	expe.addElementoExpediente(el,notificacion);
-    	DelegateUtil.getExpedienteDelegate().grabarExpediente(expe);
+    	DelegateUtil.getExpedienteDelegate().grabarExpediente(expe);    	    	
     	
     	// Realizamos aviso de movilidad y actualizamos notificacion
     	DelegateUtil.getProcesosAutoDelegate().avisoCreacionElementoExpediente(el);

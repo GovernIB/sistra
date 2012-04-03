@@ -97,7 +97,7 @@ public class CSVExport {
 			try {
 				MensajeEmail me = (MensajeEmail) it.next();
 				entradas = new String[cabeceras.length];							
-				if (me.getEstado() == ConstantesMobtratel.ENVIADO ){
+				if (me.getEstado() == ConstantesMobtratel.ESTADOENVIO_ENVIADO ){
 					entradas[i++] = "COMPLETADO";
 				}else{
 					entradas[i++] = "PENDIENTE";
@@ -126,7 +126,7 @@ public class CSVExport {
 			try {
 				MensajeSms me = (MensajeSms) it.next();
 				entradas = new String[cabeceras.length];
-                if (me.getEstado() == ConstantesMobtratel.ENVIADO ){
+                if (me.getEstado() == ConstantesMobtratel.ESTADOENVIO_ENVIADO ){
   					entradas[i++] = "COMPLETADO";
   				}else{
   					entradas[i++] = "PENDIENTE";
@@ -208,22 +208,16 @@ public class CSVExport {
 	private String getLiteralEstadoVerificacionEnvioEmail(String estado)  {
 		String res = "";
 		if (!StringUtils.isBlank(estado)) {
-			switch (estado.charAt(0)) {
-				case ConstantesEmail.ESTADO_DESCONOCIDO:
-					res = "DESCONOCIDO";
-					break;
-				case ConstantesEmail.ESTADO_ENVIADO:
-					res = "ENVIADO";
-					break;	
-				case ConstantesEmail.ESTADO_NO_ENVIADO:
+			if (estado.equals(ConstantesEmail.ESTADO_DESCONOCIDO)) {
+				res = "DESCONOCIDO";
+			} else if (estado.equals(ConstantesEmail.ESTADO_ENVIADO)) {				
+					res = "ENVIADO";	
+			} else if (estado.equals(ConstantesEmail.ESTADO_NO_ENVIADO)) {
 					res = "NO ENVIADO";
-					break;
-				case ConstantesEmail.ESTADO_NO_IMPLEMENTADO:
+			} else if (estado.equals(ConstantesEmail.ESTADO_NO_IMPLEMENTADO)) {
 					res = "NO IMPLEMENTADO";
-					break;
-				case ConstantesEmail.ESTADO_PENDIENTE:
+			} else if (estado.equals(ConstantesEmail.ESTADO_PENDIENTE)) {
 					res = "PENDIENTE";
-					break;
 			}
 		}
 		return res;
@@ -232,22 +226,16 @@ public class CSVExport {
 	private String getLiteralEstadoVerificacionEnvioSms(String estado)  {
 		String res = "";
 		if (!StringUtils.isBlank(estado)) {
-			switch (estado.charAt(0)) {
-				case ConstantesSMS.ESTADO_DESCONOCIDO:
+			if (estado.equals(ConstantesSMS.ESTADO_DESCONOCIDO)) {
 					res = "DESCONOCIDO";
-					break;
-				case ConstantesSMS.ESTADO_ENVIADO:
+			} else if (estado.equals(ConstantesSMS.ESTADO_ENVIADO)) {
 					res = "ENVIADO";
-					break;	
-				case ConstantesSMS.ESTADO_NO_ENVIADO:
+			} else if (estado.equals(ConstantesSMS.ESTADO_NO_ENVIADO)) {
 					res = "NO ENVIADO";
-					break;
-				case ConstantesSMS.ESTADO_NO_IMPLEMENTADO:
+			} else if (estado.equals(ConstantesSMS.ESTADO_NO_IMPLEMENTADO)) {
 					res = "NO IMPLEMENTADO";
-					break;
-				case ConstantesSMS.ESTADO_PENDIENTE:
+			} else if (estado.equals(ConstantesSMS.ESTADO_PENDIENTE)) {			
 					res = "PENDIENTE";
-					break;
 			}
 		}
 		return res;

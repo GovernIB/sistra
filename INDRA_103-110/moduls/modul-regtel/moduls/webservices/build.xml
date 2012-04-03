@@ -29,6 +29,7 @@
 	  </fileset>
 	  <fileset dir="${lib}/client">
    		 <include name="redose-client.jar" />
+	  	<include name="zonaper-client.jar" />
 	  </fileset>
 	  <fileset dir="${web.product}">
       	<include name="8-regtel-model.jar" />

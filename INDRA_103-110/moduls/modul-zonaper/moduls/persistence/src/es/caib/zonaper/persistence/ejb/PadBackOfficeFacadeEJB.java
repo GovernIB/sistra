@@ -3,6 +3,7 @@ package es.caib.zonaper.persistence.ejb;
 import java.io.ByteArrayInputStream;
 import java.security.Principal;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,6 +20,11 @@ import org.apache.commons.logging.LogFactory;
 import es.caib.bantel.modelInterfaz.TramiteBTE;
 import es.caib.bantel.persistence.delegate.BteDelegate;
 import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
+import es.caib.mobtratel.modelInterfaz.ConstantesMobtratel;
+import es.caib.mobtratel.modelInterfaz.EstadoMensajeEnvio;
+import es.caib.mobtratel.modelInterfaz.EstadoMensajeEnvioEmail;
+import es.caib.mobtratel.modelInterfaz.EstadoMensajeEnvioSms;
+import es.caib.mobtratel.persistence.delegate.DelegateMobTraTelUtil;
 import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
@@ -40,6 +46,8 @@ import es.caib.zonaper.model.EventoExpediente;
 import es.caib.zonaper.model.Expediente;
 import es.caib.zonaper.model.IndiceElemento;
 import es.caib.zonaper.model.NotificacionTelematica;
+import es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo;
+import es.caib.zonaper.modelInterfaz.DetalleAviso;
 import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ElementoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
@@ -567,6 +575,36 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 	
 	
 	/**
+	 * 
+	 * Obtiene detalle acuse recibo de una notificacion
+     * 
+	 * @param numeroRegistro numero registro
+	 * @throws ExcepcionPAD
+	 *  
+	 * @ejb.interface-method
+     * @ejb.permission role-name="${role.gestor}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String numeroRegistro) throws ExcepcionPAD
+    {
+    	try
+    	{
+    		NotificacionTelematica not = DelegateUtil.getNotificacionTelematicaDelegate().obtenerNotificacionTelematica(numeroRegistro);
+    		if (not == null) {
+    			return null;
+    		}
+    		ElementoExpediente elementoExpe = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpediente(ElementoExpediente.TIPO_NOTIFICACION, not.getCodigo());
+    		NotificacionExpedientePAD notPAD = (NotificacionExpedientePAD) notificacionExpedienteToNotificacionExpedientePAD(elementoExpe, not);
+    		return notPAD.getDetalleAcuseRecibo();
+    	}
+    	catch( Exception ex )
+    	{
+    		throw new ExcepcionPAD("Error obteniendo acuse recibo",ex);
+    	}
+    	
+    }	
+	
+	/**
     
     NO SE PERMITEN BAJAS
 	public void bajaEvento( long unidadAdministrativa, String identificadorExpediente, String fechaEvento )	
@@ -816,7 +854,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 					  ele.getTipoElemento().equals(ElementoExpediente.TIPO_ENTRADA_TELEMATICA)) {
 				elp = tramiteExpedienteToTramiteExpedientePAD( (Entrada) dee );
 			}else if (ele.getTipoElemento().equals(ElementoExpediente.TIPO_NOTIFICACION)) {
-				elp = notificacionExpedienteToNotificacionExpedientePAD( (NotificacionTelematica) dee );
+				elp = notificacionExpedienteToNotificacionExpedientePAD(ele, (NotificacionTelematica) dee );
 			}else{
 				throw new ExcepcionPAD("Tipo de elemento expediente no soportado: " + ele.getTipoElemento());
 			}
@@ -828,7 +866,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		return expPAD;
 	}
 	
-	private ElementoExpedientePAD notificacionExpedienteToNotificacionExpedientePAD(NotificacionTelematica notificacion) throws ExcepcionPAD {
+	private ElementoExpedientePAD notificacionExpedienteToNotificacionExpedientePAD(ElementoExpediente elementoExpediente, NotificacionTelematica notificacion) throws ExcepcionPAD {
 		
 		// Obtenemos datos del oficio de remision
 		OficioRemision oficio = getOficioRemision(notificacion);
@@ -839,8 +877,25 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		nep.setTituloOficio(oficio.getTitulo());
 		nep.setTextoOficio(oficio.getTitulo());
 		nep.setRequiereAcuse(notificacion.isFirmarAcuse());
-		nep.setFechaFirmaAcuse(notificacion.getFechaAcuse());
 		
+		// Obtenemos detalle acuse
+		DetalleAcuseRecibo detalleAcuse = new DetalleAcuseRecibo();
+		detalleAcuse.setFechaAcuseRecibo(notificacion.getFechaAcuse());
+		if (notificacion.isRechazada()) {
+			detalleAcuse.setEstado(DetalleAcuseRecibo.ESTADO_RECHAZADA);
+		} else if (notificacion.getFechaAcuse() != null) {
+			detalleAcuse.setEstado(DetalleAcuseRecibo.ESTADO_ENTREGADA);
+		} else {
+			detalleAcuse.setEstado(DetalleAcuseRecibo.ESTADO_PENDIENTE);
+		}
+		if (notificacion.getCodigoRdsAcuse() > 0) {
+			detalleAcuse.setCodigoRdsAcuseRecibo(new Long(notificacion.getCodigoRdsAcuse()));
+			detalleAcuse.setClaveRdsAcuseRecibo(notificacion.getClaveRdsAcuse());
+		}
+		detalleAcuse.setAvisos(obtenerDetalleAvisosElementoExpediente(elementoExpediente.getCodigoAviso()));
+		nep.setDetalleAcuseRecibo(detalleAcuse);
+		
+		// Establecemos documentos notificacion
 		DocumentoNotificacionTelematica docNotif = null;
 		DocumentoExpedientePAD docPAD = null;
 		for (Iterator it=notificacion.getDocumentos().iterator();it.hasNext();){
@@ -853,6 +908,86 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		}
 		
 		return nep;
+	}
+
+	private List obtenerDetalleAvisosElementoExpediente(String codigoAviso) throws ExcepcionPAD {
+		if (StringUtils.isEmpty(codigoAviso)) {
+			return null;
+		}
+		try {
+			EstadoMensajeEnvio estadoMensaje = DelegateMobTraTelUtil.getMobTraTelDelegate().estadoMensaje(codigoAviso);
+			if (estadoMensaje == null) {
+				return null;
+			}
+			List avisos = new ArrayList();
+			if (estadoMensaje.getEstadoEmails() != null) {
+				for (Iterator it = estadoMensaje.getEstadoEmails().iterator(); it.hasNext();) {
+					EstadoMensajeEnvioEmail eme = (EstadoMensajeEnvioEmail) it.next();
+					DetalleAviso da = new DetalleAviso();
+					da.setTipo(DetalleAviso.TIPO_EMAIL);
+					da.setDestinatario(convertirListaDestinatarios(eme.getDestinatarios()));				
+					if (eme.getEstado() == ConstantesMobtratel.ESTADOENVIO_ENVIADO) {
+						da.setEnviado(true);
+						da.setFechaEnvio(eme.getFechaFinEnvio());
+						da.setConfirmarEnvio(eme.isVerificacionEnvio());
+						if (eme.getEstadoVerificacionEnvio() == ConstantesMobtratel.CONFIRMACION_OK) {
+							da.setConfirmadoEnvio(DetalleAviso.CONFIRMADO_ENVIADO);
+						} else if (eme.getEstadoVerificacionEnvio() == ConstantesMobtratel.CONFIRMACION_OK) {
+							da.setConfirmadoEnvio(DetalleAviso.CONFIRMADO_NO_ENVIADO);
+						} else {
+							da.setConfirmadoEnvio(DetalleAviso.CONFIRMADO_DESCONOCIDO);
+						}						
+					} else {
+						da.setEnviado(false);
+					}
+					avisos.add(da);
+				}
+			}
+			if (estadoMensaje.getEstadoSmss() != null) {
+				for (Iterator it = estadoMensaje.getEstadoSmss().iterator(); it.hasNext();) {
+					EstadoMensajeEnvioSms ems = (EstadoMensajeEnvioSms) it.next();
+					DetalleAviso da = new DetalleAviso();
+					da.setTipo(DetalleAviso.TIPO_SMS);
+					if (ems.getEstado() == ConstantesMobtratel.ESTADOENVIO_ENVIADO) {
+						da.setEnviado(true);
+						da.setFechaEnvio(ems.getFechaFinEnvio());
+						da.setConfirmarEnvio(ems.isVerificacionEnvio());
+						if (ems.getEstadoVerificacionEnvio() == ConstantesMobtratel.CONFIRMACION_OK) {
+							da.setConfirmadoEnvio(DetalleAviso.CONFIRMADO_ENVIADO);
+						} else if (ems.getEstadoVerificacionEnvio() == ConstantesMobtratel.CONFIRMACION_OK) {
+							da.setConfirmadoEnvio(DetalleAviso.CONFIRMADO_NO_ENVIADO);
+						} else {
+							da.setConfirmadoEnvio(DetalleAviso.CONFIRMADO_DESCONOCIDO);
+						}					
+						da.setDestinatario(convertirListaDestinatarios(ems.getDestinatarios()));	
+					} else {
+						da.setEnviado(false);
+					}
+					avisos.add(da);
+				}
+			}
+			return avisos;
+		} catch (es.caib.mobtratel.persistence.delegate.DelegateException e) {
+			throw new ExcepcionPAD("No se puede recuperar el estado del mensaje envio " + codigoAviso + " asociado al elemento de expediente");
+		}
+		
+	}
+	
+	private String convertirListaDestinatarios(String[] destinatarios) {
+		if (destinatarios == null) {
+			return null;
+		}
+		StringBuffer sb = new StringBuffer(destinatarios.length * 25);
+		for(int i = 0; i < destinatarios.length; i++)
+		{
+			if (i > 0) {
+				sb.append(",");
+			}
+			sb.append(destinatarios[i]);
+						
+		}
+		String result = sb.toString();
+		return result;
 	}
 
 	private ElementoExpedientePAD tramiteExpedienteToTramiteExpedientePAD(Entrada entrada) {

@@ -6,9 +6,8 @@ import java.util.Hashtable;
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
-import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
+import es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo;
 import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
-import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.persistence.intf.PadBackOfficeFacade;
 import es.caib.zonaper.persistence.util.PadBackOfficeFacadeUtil;
@@ -90,6 +89,17 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 		}
 	}
 		
+	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String numeroRegistro) throws DelegateException	
+	{
+		try
+		{
+			return getFacade().obtenerDetalleAcuseRecibo( numeroRegistro);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
 
 	/*
 	public EventoExpedientePAD obtenerEventoExpediente( long unidadAdministrativa, String idExpediente, String fechaEvento ) throws DelegateException

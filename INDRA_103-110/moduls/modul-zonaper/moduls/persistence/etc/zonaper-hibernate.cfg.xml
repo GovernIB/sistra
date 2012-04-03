@@ -12,6 +12,8 @@
 
 		<property name="show_sql">@hibernate.show_sql@</property>        
         <property name="use_outer_join">true</property>
+         <property name="query.substitutions">@hibernate.query.substitutions@</property>
+         
         <property name="jdbc.batch_size">50</property>
 
         <property name="transaction.factory_class">net.sf.hibernate.transaction.JTATransactionFactory</property>

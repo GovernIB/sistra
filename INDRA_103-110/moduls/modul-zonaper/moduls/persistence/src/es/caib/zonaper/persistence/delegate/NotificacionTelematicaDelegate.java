@@ -7,6 +7,7 @@ import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
 import es.caib.sistra.plugins.firma.FirmaIntf;
+import es.caib.xml.registro.factoria.impl.AsientoRegistral;
 import es.caib.zonaper.model.NotificacionTelematica;
 import es.caib.zonaper.model.ParametrosSubsanacion;
 import es.caib.zonaper.persistence.intf.NotificacionTelematicaFacade;
@@ -133,6 +134,30 @@ public class NotificacionTelematicaDelegate implements StatelessDelegate {
     public ParametrosSubsanacion recuperarParametrosTramiteSubsanacion(String key) throws DelegateException {
         try {
             return getFacade().recuperarParametrosTramiteSubsanacion(key);            
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    } 
+    
+    public AsientoRegistral generarAcuseReciboNotificacion( Long idNotificacion, boolean rechazada) throws DelegateException {
+        try {
+            return getFacade().generarAcuseReciboNotificacion(idNotificacion, rechazada);            
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    } 
+    
+    public List listarNotificacionesTelematicasFueraPlazo() throws DelegateException {
+        try {
+            return getFacade().listarNotificacionesTelematicasFueraPlazo();            
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    } 
+    
+    public void rechazarNotificacion(Long codigo)throws DelegateException {
+        try {
+            getFacade().rechazarNotificacion(codigo);            
         } catch (Exception e) {
             throw new DelegateException(e);
         }

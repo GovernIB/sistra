@@ -31,6 +31,8 @@ public class NotificacionTelematica implements java.io.Serializable,ElementoExpe
      private Date fechaAcuse;
      private boolean firmarAcuse;
      private String gestorSeycon;
+     private Date fechaFinPlazo;
+     private boolean rechazada;
      
      private String tramiteSubsanacionDescripcion;
      private String tramiteSubsanacionIdentificador;
@@ -278,6 +280,22 @@ public class NotificacionTelematica implements java.io.Serializable,ElementoExpe
 
 	public void setTramiteSubsanacionVersion(Integer tramiteSubsanacionVersion) {
 		this.tramiteSubsanacionVersion = tramiteSubsanacionVersion;
+	}
+
+	public Date getFechaFinPlazo() {
+		return fechaFinPlazo;
+	}
+
+	public void setFechaFinPlazo(Date fechaFinPlazo) {
+		this.fechaFinPlazo = fechaFinPlazo;
+	}
+
+	public boolean isRechazada() {
+		return rechazada;
+	}
+
+	public void setRechazada(boolean rechazada) {
+		this.rechazada = rechazada;
 	}	
     
 }

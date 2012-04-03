@@ -8,21 +8,21 @@ public class ConstantesSMS {
 	/**
 	 * Si la plataforma de envíos no tiene la funcionalidad para saber el estado de un envío puede devolver este estado 
 	 */
-	public static final char ESTADO_NO_IMPLEMENTADO = 'X';
+	public static final String ESTADO_NO_IMPLEMENTADO = "X";
 	/**
 	 * Estado desconocido.
 	 */
-	public static final char ESTADO_DESCONOCIDO = 'D';
+	public static final String ESTADO_DESCONOCIDO = "D";
 	/**
 	 * Estado pendiente de enviar 
 	 */	
-	public static final char ESTADO_PENDIENTE = 'P';
+	public static final String ESTADO_PENDIENTE = "P";
 	/**
 	 * Estado enviado 
 	 */
-	public static final char ESTADO_ENVIADO = 'E';	
+	public static final String ESTADO_ENVIADO = "E";	
 	/**
 	 * Estado no enviado 
 	 */
-	public static final char ESTADO_NO_ENVIADO = 'N';	
+	public static final String ESTADO_NO_ENVIADO = "N";	
 }

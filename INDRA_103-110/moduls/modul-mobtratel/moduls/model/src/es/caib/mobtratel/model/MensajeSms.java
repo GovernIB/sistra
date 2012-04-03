@@ -33,7 +33,7 @@ public class MensajeSms implements Serializable
 	/**
 	 *	Estado de envio del mensaje
 	 */
-	private int estado = ConstantesMobtratel.PENDIENTE_ENVIO;
+	private int estado = ConstantesMobtratel.ESTADOENVIO_PENDIENTE;
 
 	
 	/**

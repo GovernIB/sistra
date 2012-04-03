@@ -12,7 +12,7 @@ public class EstadoEnvio implements Serializable{
 	 * Estado del envío
 	 * @see ConstantesEmail
 	 */
-	public char estado;
+	public String estado;
 	
 	/**
 	 * Descripción del estado 
@@ -40,7 +40,7 @@ public class EstadoEnvio implements Serializable{
 	 * @return estado
 	 * @see ConstantesSMS
 	 */
-	public char getEstado() {
+	public String getEstado() {
 		return estado;
 	}
 	/**
@@ -48,7 +48,7 @@ public class EstadoEnvio implements Serializable{
 	 * @return estado
 	 * @see ConstantesSMS
 	 */
-	public void setEstado(char estado) {
+	public void setEstado(String estado) {
 		this.estado = estado;
 	}
 	

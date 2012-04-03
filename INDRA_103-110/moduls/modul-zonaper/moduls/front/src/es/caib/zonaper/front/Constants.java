@@ -70,7 +70,15 @@ public class Constants implements Serializable
      */
     public static final String IMPLEMENTACION_FIRMA_KEY 			= "implementacionFirma";
 	
+    /**
+     * Atributo de contexto para indicar si se ejecuta en un iframe.
+     */
     public static final String MOSTRAR_EN_IFRAME = "mostrarSistraEnIframe";
+    
+    /**
+     * Atributo de contexto para indicar si se controla la entrega de las notificaciones.
+     */
+    public static final String CONTROLAR_ENTREGA_NOTIFICACIONES = "controlarEntregaNotificaciones";
     
     /**
      * Atributo de sesión para almacenar la página de expedientes actual.
