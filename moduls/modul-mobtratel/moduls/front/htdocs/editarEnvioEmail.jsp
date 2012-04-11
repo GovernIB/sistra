@@ -125,7 +125,7 @@
         		&nbsp;<label for="horaProgramacion"><bean:message key="editarEnvio.email.mensaje.horaProgramacion"/></label>
 				<html:select property="horaProgramacion" tabindex="8" >
 					<logic:iterate id="tmpHora" name="horas">
-						<html:option value="<%= tmpHora.toString() %>"><%= tmpHora.toString() %></html:option>
+						<html:option value="<%= tmpHora.toString() %>"><%= tmpHora.toString() %></html:option>						
 					</logic:iterate>			
 				</html:select>				
 		</div>
@@ -143,6 +143,16 @@
 				</html:select>				
 		</div>
 	</div>			
+	<div class="element">
+		<div class="etiqueta"><label for="confirmarEnvio"><bean:message key="editarEnvio.email.mensaje.confirmarEnvio"/></label></div>
+		<div class="control">
+				<!-- Envio inmediato o programado -->	
+				<html:radio property="confirmarEnvio" value="S">Si</html:radio>
+				<html:radio property="confirmarEnvio" value="N">No</html:radio>
+				&nbsp;
+				<bean:message key="editarEnvio.email.mensaje.confirmarEnvio.detalle"/>
+		</div>
+	</div>		
 	<script type="text/javascript">
 	<!--
 		Calendar.setup({

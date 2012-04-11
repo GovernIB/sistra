@@ -139,6 +139,16 @@
 			</html:select>				
 		</div>
 	</div>			
+	<div class="element">
+		<div class="etiqueta"><label for="confirmarEnvio"><bean:message key="editarEnvio.sms.mensaje.confirmarEnvio"/></label></div>
+		<div class="control">
+				<!-- Envio inmediato o programado -->	
+				<html:radio property="confirmarEnvio" value="S">Si</html:radio>
+				<html:radio property="confirmarEnvio" value="N">No</html:radio>
+				 &nbsp;
+				<bean:message key="editarEnvio.sms.mensaje.confirmarEnvio.detalle"/>
+		</div>
+	</div>		
 	<script type="text/javascript">
 	<!--
 		Calendar.setup({

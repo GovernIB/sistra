@@ -21,7 +21,8 @@ public class EditarEnvioEmailForm extends ValidatorForm
 	private String horaProgramacion;
 	private String horaCaducidad;
 	private String inmediato="N";
-
+	
+	private String confirmarEnvio="N";
 	
 
 
@@ -204,6 +205,8 @@ public class EditarEnvioEmailForm extends ValidatorForm
             if((destinatarios == null) || (destinatarios.equals("")))
             {
             	errors.add("destinatarios", new ActionError("errors.noDestinatarios"));
+            } else if (destinatarios.indexOf(";") != -1 && "S".equals(confirmarEnvio)) {
+            	errors.add("destinatarios", new ActionError("errors.confirmarUnicoDestinatario"));
             }
                         
 
@@ -248,6 +251,22 @@ public class EditarEnvioEmailForm extends ValidatorForm
 
 	public void setInmediato(String inmediato) {
 		this.inmediato = inmediato;
+	}
+
+
+
+
+
+	public String getConfirmarEnvio() {
+		return confirmarEnvio;
+	}
+
+
+
+
+
+	public void setConfirmarEnvio(String confirmarEnvio) {
+		this.confirmarEnvio = confirmarEnvio;
 	}
 
 
