@@ -13,7 +13,7 @@
             </generator>
         </id>
 
-        <property name="modelo" length="3" not-null="true" unique="false" column="FOR_MODELO" />
+        <property name="modelo" length="20" not-null="true" unique="false" column="FOR_MODELO" />
         <property name="ultNumSeq" not-null="true" column="FOR_ULNUSE"/>
         <property name="urlEntidad1" length="256" column="FOR_URLEN1"/>
         <property name="urlEntidad2" length="256" column="FOR_URLEN2"/>

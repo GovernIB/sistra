@@ -62,7 +62,7 @@
 
     <!-- ====================== FORMULARIO SEGURO=================== -->
        <definition name=".formularioseguro.editar" extends=".editar" 
-       		controllerClass="org.ibit.rol.form.back.action.formulario.FormularioSeguroController">
+       		controllerClass="org.ibit.rol.form.back.action.formularioseguro.FormularioSeguroController">
            <put name="title" value="formulario.title"/>
            <put name="alta.title" value="formulario.alta"/>
            <put name="modificacion.title" value="formulario.modificacion"/>
