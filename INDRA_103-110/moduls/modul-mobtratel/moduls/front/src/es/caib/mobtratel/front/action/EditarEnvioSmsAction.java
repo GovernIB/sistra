@@ -54,6 +54,7 @@ public class EditarEnvioSmsAction extends BaseAction
 		String[] destinatarios = telefonos.split(Constantes.SEPARADOR_DESTINATARIOS);
 		mes.setDestinatarios(destinatarios);
 		mes.setTexto(formulario.getMensaje());
+		mes.setVerificarEnvio("S".equals(formulario.getConfirmarEnvio()));
 		mensaje.addSMS(mes);
 		
 		SimpleDateFormat df = new SimpleDateFormat(Constants.FORMATO_FECHAS);
