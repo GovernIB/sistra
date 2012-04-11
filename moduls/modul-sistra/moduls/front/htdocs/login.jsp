@@ -19,7 +19,7 @@ function checkIt(string)
 
 
 var detect = navigator.userAgent.toLowerCase();
-var OS,browser,version,total,thestring;
+var OS,browser,version,total,thestring,aux,posDecimal;
 
 if (checkIt('konqueror'))
 {
@@ -31,8 +31,8 @@ else if (checkIt('omniweb')) browser = "OmniWeb";
 else if (checkIt('opera')) browser = "Opera";
 else if (checkIt('webtv')) browser = "WebTV";
 else if (checkIt('icab')) browser = "iCab";
-else if (checkIt('msie')) browser = "Internet Explorer";
-else if (checkIt('firefox')) browser = "Firefox";
+else if (checkIt('msie')) {browser = "Internet Explorer"; thestring = "msie";}
+else if (checkIt('firefox')) {browser = "Firefox"; thestring = "firefox";}
 else if (!checkIt('compatible'))
 {
 	browser = "Netscape Navigator"
@@ -42,14 +42,14 @@ else browser = "An unknown browser";
 
 
 if (!version) {
-	version = detect.charAt(place + thestring.length);
-	posDecimal = place + thestring.length + 1;
-	if (detect.charAt(posDecimal) == '.'){	
-		do{
-		  version = version + '' + detect.charAt(posDecimal);		
-		  posDecimal++;								
-		}while (!isNaN(detect.charAt(posDecimal)));		
-	}
+	aux = detect.substring(place + thestring.length);
+		
+	posDecimal = aux.indexOf('.');
+	version = aux.substring(0, posDecimal);
+	do{
+	  version = version + '' + aux.charAt(posDecimal);
+	  posDecimal++;
+	}while (!isNaN(aux.charAt(posDecimal)) && posDecimal < aux.length);		
 }
 
 
