@@ -20,7 +20,7 @@
 
 <tr>
     <td class="labelo"><bean:message key="formulario.modelo"/></td>
-    <td class="input"><html:text styleClass="data" tabindex="1" property="values.modelo" maxlength="3" /></td>
+    <td class="input"><html:text styleClass="data" tabindex="1" property="values.modelo" maxlength="20" /></td>
 </tr>
 <tr>
     <td class="label"><bean:message key="formulario.version"/></td>

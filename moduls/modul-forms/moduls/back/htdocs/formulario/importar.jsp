@@ -52,7 +52,7 @@
     </tr>
     <tr>
         <td class="label"><bean:message key="formulario.importar.model"/></td>
-        <td class="input"><html:text styleClass="data" tabindex="102" property="model" maxlength="3" /></td>
+        <td class="input"><html:text styleClass="data" tabindex="102" property="model" maxlength="20" /></td>
     </tr>
     <tr>
         <td class="label"><bean:message key="formulario.importar.version"/></td>

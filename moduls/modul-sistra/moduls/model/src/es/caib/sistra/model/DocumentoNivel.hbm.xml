@@ -20,7 +20,7 @@
     <property name="firmar" column="DNV_FIRMAR" not-null="true" length="1"/>
     <property name="firmante" column="DNV_FIRMTE" length="500"/>
     <property name="formularioGestorFormulario" column="DNV_FORGST" length="20"/>    
-    <property name="formularioFormsModelo" column="DNV_FORFOR" length="3"/>
+    <property name="formularioFormsModelo" column="DNV_FORFOR" length="20"/>
     <property name="formularioFormsVersion" column="DNV_FORVER" length="2"/>
     <property name="formularioDatosInicialesScript" type="binary" column="DNV_FORINI"/>
     <property name="formularioConfiguracionScript" type="binary" column="DNV_FORCON"/>    
