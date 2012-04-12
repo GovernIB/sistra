@@ -1,7 +1,6 @@
 package es.caib.audita.persistence.util.evento;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -221,7 +220,7 @@ public class CuadroMandoDetalleHandler extends
 						do_organismo.setTitulo(organismo);
 						result.add(do_organismo);
 					}
-					BigDecimal total = (BigDecimal) mResult.get("total");
+					Number total = (Number) mResult.get("total");
 					LineaDetalle ld = new LineaDetalle();
 					ld.setTitulo(descripcion);
 					ld.setTotal(String.valueOf(total.intValue()));
@@ -393,7 +392,7 @@ public class CuadroMandoDetalleHandler extends
 				List lst = null;
 				lst = this.queryForMapListConstructed(con, ls_sql,  new Object[]{ this.getTipoEvento() });
 				Map mResult = ( Map ) lst.get(0);
-				BigDecimal total = ( BigDecimal ) mResult.get( "total" );
+				Number total = ( Number ) mResult.get( "total" );
 				ls_datos = total.toString();
 				// Añadimos dato a vector de valores				
 				linea.addValor(ls_fecha,ls_datos);
@@ -673,7 +672,7 @@ public class CuadroMandoDetalleHandler extends
 					{
 						key = Util.getDescripcionMes(getIdioma(), key);
 					}
-					BigDecimal total = (BigDecimal) mResult.get("total");
+					Number total = (Number) mResult.get("total");
 					
 					{
 						int i_total = total.intValue();

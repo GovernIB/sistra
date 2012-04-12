@@ -2,6 +2,7 @@ package es.caib.audita.persistence.ejb;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.Number;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -113,7 +114,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		eventoAuditado.setDescripcion(ls_descripcion);
 		String ls_ayuda = ( String ) resultadoConsulta.get( (idioma.equals(ConstantesAuditoria.LANGUAGE_CATALAN)) ? "tip_ayudac" : "tip_ayuda" );
 		eventoAuditado.setAyuda(ls_ayuda);
-		BigDecimal orden = ( BigDecimal ) resultadoConsulta.get( "tip_orden" );
+		Number orden = ( Number ) resultadoConsulta.get( "tip_orden" );
 		eventoAuditado.setOrden(orden.intValue());
 		String ls_opciones = (String) resultadoConsulta.get("tip_prpcls");
 		if(ls_opciones == null)
@@ -150,7 +151,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 					lst = this.queryForMapList( ls_query, new Object[]{ ls_tipo, ls_fechaInicio, ls_fechaFinal } );
 				}
 				Map mResult = ( Map ) lst.get(0);
-				BigDecimal total = ( BigDecimal ) mResult.get( "total" );
+				Number total = ( Number ) mResult.get( "total" );
 				eventoAuditado.setTotal(total.intValue());
 			}
 			catch( Exception exc )
@@ -183,7 +184,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 				{
 					Map mResult = ( Map ) lst.get(i);
 					String ls_idioma = ( String ) mResult.get( "idioma" );
-					BigDecimal total = ( BigDecimal ) mResult.get( "total" );
+					Number total = ( Number ) mResult.get( "total" );
 					totalIdioma.put(ls_idioma,total);
 				}
 				eventoAuditado.setTotalesIdioma(totalIdioma);
@@ -230,7 +231,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 				{
 					Map mResult = ( Map ) lst.get(i);
 					String ls_nivel = ( String ) mResult.get( "nivel" );
-					BigDecimal total = ( BigDecimal ) mResult.get( "total" );
+					Number total = ( Number ) mResult.get( "total" );
 					totalNivelAutenticacion.put(ls_nivel.trim(),total);
 				}
 				*/
@@ -313,7 +314,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 			Map mResult = ( Map ) modulos.get(i);
 			String ls_nombre = ( String ) mResult.get( "mod_modul" );
 			modulo.setModulo(ls_nombre);
-			BigDecimal orden =   (BigDecimal) mResult.get( "mod_orden" );
+			Number orden =   (Number) mResult.get( "mod_orden" );
 			modulo.setOrden(orden.intValue());
 			String ls_descripcion = ( String ) mResult.get( (idioma.equals(ConstantesAuditoria.LANGUAGE_CATALAN)) ? "mod_descca" : "mod_desc" );
 			modulo.setDescripcion(ls_descripcion);
@@ -366,8 +367,8 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 			String clave = ( String ) mResult.get( "nivel" );
 			if(clave.equals(tipo))
 			{
-				BigDecimal total = (BigDecimal) mResult.get( "total" );
-				return total;
+				Number total = (Number) mResult.get( "total" );
+				return new BigDecimal(total.longValue());
 			}
 		}
 		return BigDecimal.valueOf(0);
@@ -785,42 +786,42 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 			/* Portal */
 
 			InicioPortal portal = new InicioPortal();
-//			BigDecimal valor = (BigDecimal)mResult.get("ini_ressrv");
+//			Number valor = (Number)mResult.get("ini_ressrv");
 //			portal.setServiciosActivos(valor.intValue());
-			BigDecimal valor = (BigDecimal)mResult.get("ini_ressrt");
+			Number valor = (Number)mResult.get("ini_ressrt");
 			portal.setServiciosActivosTelematicos(valor.intValue());
-			valor = (BigDecimal)mResult.get("ini_rescrt");
+			valor = (Number)mResult.get("ini_rescrt");
 			portal.setNivelCertificados(valor.intValue());
-			valor = (BigDecimal)mResult.get("ini_resusu");
+			valor = (Number)mResult.get("ini_resusu");
 			portal.setNivelUsuario(valor.intValue());
-			valor = (BigDecimal)mResult.get("ini_resan");
+			valor = (Number)mResult.get("ini_resan");
 			portal.setNivelAnonimos(valor.intValue());
-			valor = (BigDecimal)mResult.get("ini_resreg");
+			valor = (Number)mResult.get("ini_resreg");
 			portal.setEnvioRegistro(valor.intValue());
-			valor = (BigDecimal)mResult.get("ini_resbd");
+			valor = (Number)mResult.get("ini_resbd");
 			portal.setEnvioBandeja(valor.intValue());
-			valor = (BigDecimal)mResult.get("ini_rescs");
+			valor = (Number)mResult.get("ini_rescs");
 			portal.setEnvioConsulta(valor.intValue());
-			valor = (BigDecimal)mResult.get("ini_respag");
+			valor = (Number)mResult.get("ini_respag");
 			portal.setDocumentoTipoPago(valor.intValue());
 
-//			valor = (BigDecimal)mResult.get("ini_ptlsrv");
+//			valor = (Number)mResult.get("ini_ptlsrv");
 //			portal.setServicios(valor.intValue());
-//			valor = (BigDecimal)mResult.get("ini_ptlsrt");
+//			valor = (Number)mResult.get("ini_ptlsrt");
 //			portal.setServiciosTelematicos(valor.intValue());
-			valor = (BigDecimal)mResult.get("ini_ptlbz");
+			valor = (Number)mResult.get("ini_ptlbz");
 			portal.setAccesosBuzon(valor.intValue());
 			cuadroMando.setPortal(portal);
 			
 			/* Tramitacion */
 			InicioTramitacion tramitacion = new InicioTramitacion();
-			valor = (BigDecimal)mResult.get("ini_restmx");
+			valor = (Number)mResult.get("ini_restmx");
 			tramitacion.setNumeroMaximoTramites(valor.intValue());
 			ls_valor = (String) mResult.get("ini_resfmx");
 			tramitacion.setFechaMaximoTramites(ls_valor);
-			valor = (BigDecimal)mResult.get("ini_trarr");
+			valor = (Number)mResult.get("ini_trarr");
 			tramitacion.setTramitesTelematicos(valor.intValue());
-			valor = (BigDecimal)mResult.get("ini_trapr");
+			valor = (Number)mResult.get("ini_trapr");
 			tramitacion.setTramitesPreRegistro(valor.intValue());
 			cuadroMando.setTramitacion(tramitacion);
 			
@@ -837,7 +838,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 				tramitados.setModelo(ls_valor);
 				ls_valor = (String) mResult.get("ini_mtro" + (i+1));
 				tramitados.setOrganismo(ls_valor);
-				valor = (BigDecimal)mResult.get("ini_mtrn" + (i+1));
+				valor = (Number)mResult.get("ini_mtrn" + (i+1));
 				tramitados.setValor(valor.intValue());
 				cuadroMando.addDetalleTramitados(tramitados);
 			}
@@ -856,7 +857,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 				accedidos.setModelo(ls_valor);
 				ls_valor = (String) mResult.get("ini_maco" + (i+1));
 				accedidos.setOrganismo(ls_valor);
-				valor = (BigDecimal)mResult.get("ini_macn" + (i+1));
+				valor = (Number)mResult.get("ini_macn" + (i+1));
 				accedidos.setValor(valor.intValue());
 				cuadroMando.addDetalleAccedidos(accedidos);
 			}
@@ -876,7 +877,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 				ultimos.setOrganismo(ls_valor);
 				ls_valor = (String) mResult.get("ini_usaf" + (i+1));
 				ultimos.setFecha(ls_valor);
-				valor = (BigDecimal)mResult.get("ini_usan" + (i+1));
+				valor = (Number)mResult.get("ini_usan" + (i+1));
 				ultimos.setValor(valor.intValue());
 				cuadroMando.addDetalleUltimos(ultimos);
 			}

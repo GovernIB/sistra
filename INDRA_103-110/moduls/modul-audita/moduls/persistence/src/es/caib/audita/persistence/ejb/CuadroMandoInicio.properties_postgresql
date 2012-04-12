@@ -14,33 +14,33 @@ sql.select.servicios.catalogo.telematicos.sistra=select count(*) as total from s
 sql.select.servicios.catalogo.activos.sistra=select distinct str_traver.trv_codtra as tramite from str_traver, str_espniv where str_traver.trv_codetn = str_espniv.etn_codigo and str_espniv.etn_activo = 'S' 
 sql.select.servicios.autenticacion.certificado=select count(*) as total from (select * from str_tramit where str_tramit.tra_codigo in \
                                                    (select distinct str_traver.trv_codtra \
-                                                       from str_traniv, str_traver, str_tramit where str_traniv.tnv_nivaut like '%C%' and str_traver.trv_codigo = str_traniv.tnv_codtrv)) where tra_codigo in
+                                                       from str_traniv, str_traver, str_tramit where str_traniv.tnv_nivaut like '%C%' and str_traver.trv_codigo = str_traniv.tnv_codtrv)) as fromtotal where tra_codigo in
 ssql.select.servicios.autenticacion.usuario=select count(*) as total  from (select str_traver.trv_codtra  from str_traniv, str_traver \
                                               where str_traniv.tnv_nivaut like '%U%' and \
-                                                    str_traver.trv_codigo = str_traniv.tnv_codtrv group by str_traver.trv_codtra)
+                                                    str_traver.trv_codigo = str_traniv.tnv_codtrv group by str_traver.trv_codtra) as fromtotal 
 sql.select.servicios.autenticacion.usuario=select count(*) as total from (select * from str_tramit where str_tramit.tra_codigo in \
                                                    (select distinct str_traver.trv_codtra \
-                                                       from str_traniv, str_traver, str_tramit where str_traniv.tnv_nivaut like '%U%' and str_traver.trv_codigo = str_traniv.tnv_codtrv)) where tra_codigo in
+                                                       from str_traniv, str_traver, str_tramit where str_traniv.tnv_nivaut like '%U%' and str_traver.trv_codigo = str_traniv.tnv_codtrv)) as fromtotal where tra_codigo in
 ssql.select.servicios.autenticacion.anonimo=select count(*)  as total from (select str_traver.trv_codtra  from str_traniv, str_traver  \
                                               where str_traniv.tnv_nivaut like '%A%' and \
-                                                    str_traver.trv_codigo = str_traniv.tnv_codtrv group by str_traver.trv_codtra)
+                                                    str_traver.trv_codigo = str_traniv.tnv_codtrv group by str_traver.trv_codtra) as fromtotal
 sql.select.servicios.autenticacion.anonimo=select count(*) as total from (select * from str_tramit where str_tramit.tra_codigo in \
                                                    (select distinct str_traver.trv_codtra \
-                                                       from str_traniv, str_traver, str_tramit where str_traniv.tnv_nivaut like '%A%' and str_traver.trv_codigo = str_traniv.tnv_codtrv)) where tra_codigo in
+                                                       from str_traniv, str_traver, str_tramit where str_traniv.tnv_nivaut like '%A%' and str_traver.trv_codigo = str_traniv.tnv_codtrv)) as fromtotal where tra_codigo in
 ssql.select.servicios.envio.registro=select count(*)  as total from \
                                       (select str_traver.trv_codtra from str_traver where str_traver.trv_destin like '%R%' group by str_traver.trv_codtra)
-sql.select.servicios.envio.registro=select count(*) as total from (select * from str_tramit where str_tramit.tra_codigo in (select distinct trv_codtra from str_traver where str_traver.trv_destin like '%R%')) where tra_codigo in
+sql.select.servicios.envio.registro=select count(*) as total from (select * from str_tramit where str_tramit.tra_codigo in (select distinct trv_codtra from str_traver where str_traver.trv_destin like '%R%')) as fromtotal where tra_codigo in
 ssql.select.servicios.envio.bandeja=select count(*) as total  from \
-                                      (select str_traver.trv_codtra from str_traver where str_traver.trv_destin like '%B%' group by str_traver.trv_codtra)
-sql.select.servicios.envio.bandeja=select count(*) as total from (select * from str_tramit where str_tramit.tra_codigo in (select distinct trv_codtra from str_traver where str_traver.trv_destin like '%B%')) where tra_codigo in
+                                      (select str_traver.trv_codtra from str_traver where str_traver.trv_destin like '%B%' group by str_traver.trv_codtra) as fromtotal
+sql.select.servicios.envio.bandeja=select count(*) as total from (select * from str_tramit where str_tramit.tra_codigo in (select distinct trv_codtra from str_traver where str_traver.trv_destin like '%B%')) as fromtotal where tra_codigo in
 ssql.select.servicios.envio.consulta=select count(*) as total  from \
-                                      (select str_traver.trv_codtra from str_traver where str_traver.trv_destin like '%C%' group by str_traver.trv_codtra)
-sql.select.servicios.envio.consulta=select count(*) as total from (select * from str_tramit where str_tramit.tra_codigo in (select distinct trv_codtra from str_traver where str_traver.trv_destin like '%C%')) where tra_codigo in
+                                      (select str_traver.trv_codtra from str_traver where str_traver.trv_destin like '%C%' group by str_traver.trv_codtra) as fromtotal
+sql.select.servicios.envio.consulta=select count(*) as total from (select * from str_tramit where str_tramit.tra_codigo in (select distinct trv_codtra from str_traver where str_traver.trv_destin like '%C%')) as fromtotal where tra_codigo in
 ssql.select.servicios.pagos=select count(*) as total  from \
                              (select str_traver.trv_codtra from str_traver,str_docum \
                                  where str_traver.trv_codigo = str_docum.doc_codtrv and \
-                                       str_docum.doc_tipo = 'P' group by str_traver.trv_codtra)
-sql.select.servicios.pagos=select count(*) as total from (select * from str_tramit where str_tramit.tra_codigo in (select distinct trv_codtra from str_traver, str_docum where str_traver.trv_codigo = str_docum.doc_codtrv and str_docum.doc_tipo = 'P')) where tra_codigo in
+                                       str_docum.doc_tipo = 'P' group by str_traver.trv_codtra) as fromtotal 
+sql.select.servicios.pagos=select count(*) as total from (select * from str_tramit where str_tramit.tra_codigo in (select distinct trv_codtra from str_traver, str_docum where str_traver.trv_codigo = str_docum.doc_codtrv and str_docum.doc_tipo = 'P')) as fromtotal where tra_codigo in
 sql.select.servicios.maximoConcurrentes= select to_char(aud_audit.aud_fecha,'DD/MM/YYYY HH24') dia, count(*) total from aud_audit \
                                             where (aud_tipo = 'ENVTRA') or  (aud_tipo = 'PRETRA') \
                                                        group by to_char(aud_audit.aud_fecha,'DD/MM/YYYY HH24')  order by 2 desc
