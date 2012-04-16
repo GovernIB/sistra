@@ -77,7 +77,7 @@ create table RDS_DOCUM (
    DOC_CODUBI int8 not null,
    DOC_CODVER int8 not null,
    DOC_CLAVE varchar(10) not null,
-   DOC_TITULO varchar(100) not null,
+   DOC_TITULO varchar(200) not null,
    DOC_FECHA timestamp not null,
    DOC_NIF varchar(10),
    DOC_SEYCON varchar(10),
