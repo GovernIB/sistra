@@ -932,7 +932,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 						da.setConfirmarEnvio(eme.isVerificacionEnvio());
 						if (eme.getEstadoVerificacionEnvio() == ConstantesMobtratel.CONFIRMACION_OK) {
 							da.setConfirmadoEnvio(DetalleAviso.CONFIRMADO_ENVIADO);
-						} else if (eme.getEstadoVerificacionEnvio() == ConstantesMobtratel.CONFIRMACION_OK) {
+						} else if (eme.getEstadoVerificacionEnvio() == ConstantesMobtratel.CONFIRMACION_KO) {
 							da.setConfirmadoEnvio(DetalleAviso.CONFIRMADO_NO_ENVIADO);
 						} else {
 							da.setConfirmadoEnvio(DetalleAviso.CONFIRMADO_DESCONOCIDO);
@@ -954,7 +954,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 						da.setConfirmarEnvio(ems.isVerificacionEnvio());
 						if (ems.getEstadoVerificacionEnvio() == ConstantesMobtratel.CONFIRMACION_OK) {
 							da.setConfirmadoEnvio(DetalleAviso.CONFIRMADO_ENVIADO);
-						} else if (ems.getEstadoVerificacionEnvio() == ConstantesMobtratel.CONFIRMACION_OK) {
+						} else if (ems.getEstadoVerificacionEnvio() == ConstantesMobtratel.CONFIRMACION_KO) {
 							da.setConfirmadoEnvio(DetalleAviso.CONFIRMADO_NO_ENVIADO);
 						} else {
 							da.setConfirmadoEnvio(DetalleAviso.CONFIRMADO_DESCONOCIDO);
