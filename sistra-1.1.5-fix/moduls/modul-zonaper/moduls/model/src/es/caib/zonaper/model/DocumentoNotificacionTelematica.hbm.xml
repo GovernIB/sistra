@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class  name="es.caib.zonaper.model.DocumentoNotificacionTelematica" table="ZPE_DOCNOT">
+	<cache usage="read-write"/>
+     <id name="codigo" unsaved-value="null" column="DNO_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">ZPE_SEQDNO</param>
+          </generator>
+      </id>
+
+	<many-to-one name="notificacionTelematica" column="DNO_CODNOT" not-null="true"/>
+
+    <property name="identificador"  column="DNO_DOCIDE" length="5" not-null="true"/>
+    <property name="numeroInstancia"  column="DNO_DOCNUM" length="2" not-null="true"/>
+    <property name="descripcion"  column="DNO_DESC"  not-null="true" length="500"/>
+    <property name="codigoRDS"  column="DNO_RDSCOD"  not-null="true" length="20"/>
+    <property name="claveRDS"   column="DNO_RDSCLA"  not-null="true" length="10"/>    
+
+	<property name="orden" column="DNO_ORDEN" />
+
+</class>
+</hibernate-mapping>

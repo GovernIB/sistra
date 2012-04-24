@@ -1,0 +1,67 @@
+	<action
+	path="/mensaje"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".mensaje"/>
+
+   <action
+    path="/menu"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".menu"/>
+    
+   <action
+    path="/admin/cuadernoCarga/pendientesDesarrollador"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".cuadernoCarga.pendientesDesarrollador"/>
+    
+   <action
+    path="/admin/cuadernoCarga/pendientesAuditoria"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".cuadernoCarga.pendientesAuditoria"/>
+
+   <action
+    path="/admin/cuadernoCarga/auditados"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".cuadernoCarga.auditados"/>
+
+   <action
+    path="/admin/cuadernoCarga/finalizados"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".cuadernoCarga.finalizados"/>    
+    
+   <action
+    path="/admin/cuadernoCarga/pendientes"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".cuadernoCarga.pendientes"/>
+    
+    
+    
+<!--  a borrar
+
+    
+   <action
+    path="/admin/cuadernoCarga/gestionados"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".cuadernoCarga.gestionados"/>
+ -->        
+    
+    
+	<action
+    path="/admin/exitoBaja"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".exitoBaja"/>
+    
+    
+    <action
+    path="/admin/grupo/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".grupos.lista"/>
+
+    <action
+    path="/admin/tramites/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".tramites.lista"/>
+
+	<action
+    path="/admin/grupo/alta"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".grupos.altaModif"/>

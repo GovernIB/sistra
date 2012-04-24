@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <Dominio autenticacionExplicita="N" cacheable="S" descripcion="REVISAR DESCRIPCION" identificador="GEGMUNICI" localizacionEJB="L" secured="false" sql="SELECT MUN_CODIGO CODIGO, MUN_DENOFI DESCRIPCION FROM STR_DMUNIC WHERE MUN_PROVIN = ? ORDER BY DESCRIPCION" tipo="S" url="es.caib.sistra.db"/>

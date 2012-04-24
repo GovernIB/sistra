@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="sistra.listar" default="main" basedir=".">
+
+    <property file="${basedir}/build.properties"/>
+
+    <property name="modul" value="listar"/>
+
+    <property name="home.dir" location="${basedir}/../.."/>
+    <property file="${home.dir}/config.properties"/>
+	<property file="${home.dir}/../../config.properties"/>
+	
+    <property name="output.dir" location="${home.dir}/output"/>
+    <property name="modul.output.dir" location="${output.dir}/${modul}"/>
+
+    <property name="etc.dir" location="${basedir}/etc"/>
+	
+    <property name="web.htdocs" location="${basedir}/htdocs"/>
+    <property name="web.product" location="${output.dir}/moduls"/>
+	
+    <!-- Crea tots els directoris de treball necessaris -->
+    <target name="prepare">
+        <mkdir dir="${web.product}"/>
+    </target>
+
+    <target name="web.war">
+        <delete file="${web.product}/5-${prj.name}-${modul}.war" quiet="yes"/>
+        <war warfile="${web.product}/5-${prj.name}-${modul}.war"
+            basedir="${web.htdocs}" webxml="${etc.dir}/web.xml">
+            <manifest>
+                <attribute name="Created-By" value="${indra}"/>
+            </manifest>
+        </war>
+    </target>
+
+
+   <target name="main" depends="web.war" description="Construeye el war"/>
+
+</project>

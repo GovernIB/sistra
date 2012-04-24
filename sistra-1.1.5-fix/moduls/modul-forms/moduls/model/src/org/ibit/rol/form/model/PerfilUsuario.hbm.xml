@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.form.model.PerfilUsuario" table="RFR_PERUSU">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="PER_CODI">
+            <generator class="sequence">
+                <param name="sequence">RFR_SECPER</param>
+            </generator>
+        </id>
+
+        <property name="codigoEstandard" length="10" not-null="true" column="PER_CODEST"/>
+        <property name="pathIconografia" length="1024" not-null="true" column="PER_PATICO"/>
+
+        <map name="traducciones" cascade="all" table="RFR_TRPEUS">
+            <cache usage="read-write"/>
+            <key column="TPE_CODPER" foreign-key="RFR_PERTRP_FK"/>
+            <index column="TPE_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.form.model.TraPerfilUsuario">
+                <property name="nombre" length="256" not-null="true" column="TPE_NOMBRE" />
+                <property name="descripcion" length="4000" column="TPE_DESCRI"/>
+            </composite-element>
+        </map>
+
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,57 @@
+
+<action
+    path="/menu"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".menu"/>
+
+<action
+    path="/back/formulario/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".formulario.lista"/>
+
+
+<action
+    path="/back/formulario/versiones"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".formulario.versiones"/>
+
+<action
+    path="/back/formulario/importar"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".formulario.importar"/>
+
+<action
+    path="/back/pantalla/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".pantalla.lista"/>
+
+<action
+    path="/back/puntosalida/lista"
+    name="salidaForm"
+    scope="request"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".puntosalida.lista"/>
+
+<action
+    path="/back/salida/propiedades"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".salida.propiedades.lista"/>
+
+<action
+    path="/back/paleta/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".paleta.lista"/>
+
+<action
+    path="/back/paleta/componentes"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".paleta.listaComponentes"/>
+
+<action
+    path="/back/componente/listaEleccion"
+    name="eleccionComponenteForm"
+    scope="request"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".componente.listaEleccion"/>
+
+
