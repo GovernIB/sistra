@@ -67,7 +67,7 @@ public class MostrarJustificanteAction extends BaseAction
 			//Comprobamos si la entrada tiene un formulario marcado como justificante
 			for (Iterator it= entrada.getDocumentos().iterator();it.hasNext();){
 				DocumentoEntradaPreregistro d = (DocumentoEntradaPreregistro) it.next();
-				if (d.getTipoDocumento() == 'G') {
+				if (d.getTipoDocumento() != null && d.getTipoDocumento().charValue() == 'G') {
 					codForJust = d.getCodigoRDS();
 					claForJust = d.getClaveRDS();
 					break;

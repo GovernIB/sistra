@@ -19,11 +19,11 @@ public class DocumentoEntradaPreregistroBackup
     private String claveRDS;
     
     // Parametros presentación presencial
-    private char tipoDocumento;
-    private char compulsarDocumento;
-    private char fotocopia;
-    private char firma;
-    private char confirmado;
+    private Character tipoDocumento;
+    private Character compulsarDocumento;
+    private Character fotocopia;
+    private Character firma;
+    private Character confirmado;
     
 	
 	public String getClaveRDS() {
@@ -55,22 +55,22 @@ public class DocumentoEntradaPreregistroBackup
 	}
 
 	
-	public char getCompulsarDocumento() {
+	public Character getCompulsarDocumento() {
 		return compulsarDocumento;
 	}
 
 	
-	public void setCompulsarDocumento(char compulsarDocumento) {
+	public void setCompulsarDocumento(Character compulsarDocumento) {
 		this.compulsarDocumento = compulsarDocumento;
 	}
 
 	
-	public char getConfirmado() {
+	public Character getConfirmado() {
 		return confirmado;
 	}
 
 
-	public void setConfirmado(char confirmado) {
+	public void setConfirmado(Character confirmado) {
 		this.confirmado = confirmado;
 	}
 
@@ -94,22 +94,22 @@ public class DocumentoEntradaPreregistroBackup
 	}
 
 	
-	public char getFirma() {
+	public Character getFirma() {
 		return firma;
 	}
 
 	
-	public void setFirma(char firma) {
+	public void setFirma(Character firma) {
 		this.firma = firma;
 	}
 
 	
-	public char getFotocopia() {
+	public Character getFotocopia() {
 		return fotocopia;
 	}
 
 	
-	public void setFotocopia(char fotocopia) {
+	public void setFotocopia(Character fotocopia) {
 		this.fotocopia = fotocopia;
 	}
 
@@ -144,12 +144,12 @@ public class DocumentoEntradaPreregistroBackup
 	}
 
 	
-	public char getTipoDocumento() {
+	public Character getTipoDocumento() {
 		return tipoDocumento;
 	}
 
 	
-	public void setTipoDocumento(char tipoDocumento) {
+	public void setTipoDocumento(Character tipoDocumento) {
 		this.tipoDocumento = tipoDocumento;
 	}
 

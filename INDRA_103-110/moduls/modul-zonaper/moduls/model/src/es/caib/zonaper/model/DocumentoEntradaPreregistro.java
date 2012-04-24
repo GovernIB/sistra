@@ -20,11 +20,11 @@ public class DocumentoEntradaPreregistro implements java.io.Serializable, Docume
      private String claveRDS;
      
      // Parametros presentación presencial
-     private char tipoDocumento;
-     private char compulsarDocumento;
-     private char fotocopia;
-     private char firma;
-     private char confirmado;
+     private Character tipoDocumento;
+     private Character compulsarDocumento;
+     private Character fotocopia;
+     private Character firma;
+     private Character confirmado;
          
     // Constructors
     /** default constructor */
@@ -61,11 +61,11 @@ public class DocumentoEntradaPreregistro implements java.io.Serializable, Docume
 		this.codigoRDS = codigoRDS;
 	}
 
-	public char getCompulsarDocumento() {
+	public Character getCompulsarDocumento() {
 		return compulsarDocumento;
 	}
 
-	public void setCompulsarDocumento(char compulsarDocumento) {
+	public void setCompulsarDocumento(Character compulsarDocumento) {
 		this.compulsarDocumento = compulsarDocumento;
 	}
 
@@ -85,19 +85,19 @@ public class DocumentoEntradaPreregistro implements java.io.Serializable, Docume
 		this.entradaPreregistro = entradaPreregistro;
 	}
 
-	public char getFirma() {
+	public Character getFirma() {
 		return firma;
 	}
 
-	public void setFirma(char firma) {
+	public void setFirma(Character firma) {
 		this.firma = firma;
 	}
 
-	public char getFotocopia() {
+	public Character getFotocopia() {
 		return fotocopia;
 	}
 
-	public void setFotocopia(char fotocopia) {
+	public void setFotocopia(Character fotocopia) {
 		this.fotocopia = fotocopia;
 	}
 
@@ -128,11 +128,11 @@ public class DocumentoEntradaPreregistro implements java.io.Serializable, Docume
 		this.presencial = presencial;
 	}
 
-	public char getTipoDocumento() {
+	public Character getTipoDocumento() {
 		return tipoDocumento;
 	}
 
-	public void setTipoDocumento(char tipoDocumento) {
+	public void setTipoDocumento(Character tipoDocumento) {
 		this.tipoDocumento = tipoDocumento;
 	}
     
