@@ -1403,10 +1403,10 @@ public abstract class PadFacadeEJB implements SessionBean{
     		
     		// Establecemos parametros presenciales
     		doc.setPresencial('S');    		
-    		doc.setTipoDocumento(docPres.getTipo().charValue());    		    		    		
-    		doc.setCompulsarDocumento((docPres.isCompulsar().booleanValue()?'S':'N'));
-    		doc.setFirma((docPres.isFirmar().booleanValue()?'S':'N'));
-    		doc.setFotocopia((docPres.isFotocopia().booleanValue()?'S':'N'));	
+    		doc.setTipoDocumento(docPres.getTipo());    		    		    		
+    		doc.setCompulsarDocumento((docPres.isCompulsar().booleanValue()?new Character('S'):new Character('N')));
+    		doc.setFirma((docPres.isFirmar().booleanValue()?new Character('S'):new Character('N')));
+    		doc.setFotocopia((docPres.isFotocopia().booleanValue()?new Character('S'):new Character('N')));	
     		
     		entrada.addDocumento(doc);    	
     	}    
