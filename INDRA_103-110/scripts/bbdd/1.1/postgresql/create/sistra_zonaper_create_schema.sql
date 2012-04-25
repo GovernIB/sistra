@@ -82,6 +82,7 @@ create table ZPE_PREBCK (
    PRB_AVISOS varchar(255),
    PRB_AVISMS varchar(255),
    PRB_AVIEMA varchar(255),
+   PRB_NOTTEL char(1) not null,
    PRB_NIFDLG VARCHAR(12),
    PRB_NOMDLG VARCHAR(500),
    prb_sbexid VARCHAR(50),
