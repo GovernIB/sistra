@@ -150,13 +150,13 @@
 										 <logic:equal name="anexo" property="firmado" value="true"><img src="imgs/tramitacion/iconos/ico_firma_aceptada.gif" alt="<bean:message key="pasoAnexar.iconografia.firmaDocumentoRealizada"/>" title="<bean:message key="pasoAnexar.iconografia.firmaDocumentoRealizada"/>"/></logic:equal>
 										  <strong> - <bean:write name="anexo" property="anexoGenericoDescripcion" /> 
 											<logic:notEmpty name="anexo" property="anexoFichero">
-											(<html:link href="<%= urlMostrarAnexo + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>">
+											(<html:link href="<%= urlMostrarAnexo + \"&identificador=\" + anexo.getIdentificador() + \"&instancia=\" + anexo.getInstancia() %>">
 												<bean:write name="anexo" property="anexoFichero" />
 											</html:link>)
 											</logic:notEmpty>
 										</strong>
 										<logic:equal name="flujoDocumentos" property="<%=anexo.getIdentificador()%>" value="true">										
-										 - <html:link href="<%= urlBorrarAnexo + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>"><bean:message key="pasoAnexar.documentos.quitarFichero"/></html:link>																												
+										 - <html:link href="<%= urlBorrarAnexo + \"&identificador=\" + anexo.getIdentificador() + \"&instancia=\" + anexo.getInstancia() %>"><bean:message key="pasoAnexar.documentos.quitarFichero"/></html:link>																												
 										</logic:equal>
 								</logic:equal>
 								<%-- Si la anterior era la última instancia colocamos el botón de Añadir --%>
@@ -165,7 +165,7 @@
 									<logic:greaterThan name="genericoAnteriorMaxInstancias" value="<%=maxInstancia.toString()%>"> 																				
 										<logic:equal name="flujoDocumentos" property="<%=genericoAnterior%>" value="true">										
 											<br/>
-												<html:link href="<%= urlAnexar + "&identificador=" + genericoAnterior + "&instancia=" + (maxInstancia.intValue() + 1) %>">
+												<html:link href="<%= urlAnexar + \"&identificador=\" + genericoAnterior + \"&instancia=\" + (maxInstancia.intValue() + 1) %>">
 													<bean:message key="pasoAnexar.documentos.anexarDocumento"/>
 												</html:link>
 										</logic:equal>										
@@ -270,7 +270,7 @@
 															<img src="imgs/tramitacion/iconos/ico_firma_aceptada.gif" alt="<bean:message key="pasoAnexar.iconografia.firmaDocumentoRealizada"/>" title="<bean:message key="pasoAnexar.iconografia.firmaDocumentoRealizada"/>"/>															
 															<logic:notEmpty name="anexo" property="firmante">
 																<logic:match name="anexo" property="firmante" value="#">
-																	<bean:message key="pasoAnexar.documentos.documentoFirmadosDigitalmente" arg0="<%=es.caib.util.StringUtil.replace(anexo.getFirmante(),"#"," - ")%>"/>
+																	<bean:message key="pasoAnexar.documentos.documentoFirmadosDigitalmente" arg0="<%=es.caib.util.StringUtil.replace(anexo.getFirmante(),\"#\",\" - \")%>"/>
 																</logic:match>	
 																<logic:notMatch name="anexo" property="firmante" value="#">
 																	<bean:message key="pasoAnexar.documentos.documentoFirmadoDigitalmente" arg0="<%=anexo.getFirmante()%>"/>
@@ -313,7 +313,7 @@
 										<%--  Documento no se ha anexado  --%>
 										<logic:equal name="anexo" property="estado" value='V'>
 											<logic:equal name="flujoDocumentos" property="<%=anexo.getIdentificador()%>" value="true">										
-											 	<html:link href="<%= urlAnexar + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>"><bean:message key="pasoAnexar.documentos.anexarDocumento"/></html:link>				
+											 	<html:link href="<%= urlAnexar + \"&identificador=\" + anexo.getIdentificador() + \"&instancia=\" + anexo.getInstancia() %>"><bean:message key="pasoAnexar.documentos.anexarDocumento"/></html:link>				
 											</logic:equal>										
 										</logic:equal>
 										
@@ -329,17 +329,17 @@
 												 <logic:equal name="anexo" property="pendienteFirmaDelegada" value="true"><img src="imgs/tramitacion/iconos/ico_firma_pendiente.gif" alt="<bean:message key="pasoAnexar.iconografia.firmaDocumentoPendienteBandeja"/>" title="<bean:message key="pasoAnexar.iconografia.firmaDocumentoPendienteBandeja"/>"/></logic:equal>
 												 <logic:equal name="anexo" property="rechazadaFirmaDelegada" value="true"><img src="imgs/tramitacion/iconos/ico_firma_rechazada.gif" alt="<bean:message key="pasoAnexar.iconografia.firmaDocumentoRechazadaBandeja"/>" title="<bean:message key="pasoAnexar.iconografia.firmaDocumentoRechazadaBandeja"/>"/></logic:equal>
 												 <logic:equal name="anexo" property="firmado" value="true"><img src="imgs/tramitacion/iconos/ico_firma_aceptada.gif" alt="<bean:message key="pasoAnexar.iconografia.firmaDocumentoRealizada"/>" title="<bean:message key="pasoAnexar.iconografia.firmaDocumentoRealizada"/>"/></logic:equal>
-												 <strong> - <bean:write name="anexo" property="anexoGenericoDescripcion" /> <logic:notEmpty name="anexo" property="anexoFichero">(<html:link href="<%= urlMostrarAnexo + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>"><bean:write name="anexo" property="anexoFichero" /></html:link>)</logic:notEmpty></strong>
+												 <strong> - <bean:write name="anexo" property="anexoGenericoDescripcion" /> <logic:notEmpty name="anexo" property="anexoFichero">(<html:link href="<%= urlMostrarAnexo + \"&identificador=\" + anexo.getIdentificador() + \"&instancia=\" + anexo.getInstancia() %>"><bean:write name="anexo" property="anexoFichero" /></html:link>)</logic:notEmpty></strong>
 												 <logic:equal name="flujoDocumentos" property="<%=anexo.getIdentificador()%>" value="true">										
-													  - <html:link href="<%= urlBorrarAnexo + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>"><bean:message key="pasoAnexar.documentos.quitarFichero"/></html:link>												
+													  - <html:link href="<%= urlBorrarAnexo + \"&identificador=\" + anexo.getIdentificador() + \"&instancia=\" + anexo.getInstancia() %>"><bean:message key="pasoAnexar.documentos.quitarFichero"/></html:link>												
 												 </logic:equal>
 											</logic:equal>
 											<%-- No Generico  --%>
 											<logic:equal name="anexo" property="anexoGenerico" value="false">
 												<bean:message key="pasoAnexar.documentos.ficheroAnexadoActualmente"/>
-												<strong><html:link href="<%= urlMostrarAnexo + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>"><bean:write name="anexo" property="anexoFichero" /></html:link></strong>
+												<strong><html:link href="<%= urlMostrarAnexo + \"&identificador=\" + anexo.getIdentificador() + \"&instancia=\" + anexo.getInstancia() %>"><bean:write name="anexo" property="anexoFichero" /></html:link></strong>
 												<logic:equal name="flujoDocumentos" property="<%=anexo.getIdentificador()%>" value="true">										
-													 - <html:link href="<%= urlBorrarAnexo + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>"><bean:message key="pasoAnexar.documentos.quitarFichero"/></html:link>
+													 - <html:link href="<%= urlBorrarAnexo + \"&identificador=\" + anexo.getIdentificador() + \"&instancia=\" + anexo.getInstancia() %>"><bean:message key="pasoAnexar.documentos.quitarFichero"/></html:link>
 												</logic:equal>												
 											</logic:equal>											
 										</logic:equal>																				
@@ -353,7 +353,7 @@
 											<logic:equal name="anexo" property="anexoGenerico" value="false">
 												<logic:notEmpty name="anexo" property="anexoPlantilla">
 													<logic:equal name="flujoDocumentos" property="<%=anexo.getIdentificador()%>" value="true">										
-														<html:link href="<%= urlAnexar + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>"><bean:message key="pasoAnexar.documentos.descargarPlantilla"/></html:link>
+														<html:link href="<%= urlAnexar + \"&identificador=\" + anexo.getIdentificador() + \"&instancia=\" + anexo.getInstancia() %>"><bean:message key="pasoAnexar.documentos.descargarPlantilla"/></html:link>
 													</logic:equal>
 												</logic:notEmpty>
 											</logic:equal>
@@ -365,7 +365,7 @@
 											<%--  Documento no se ha anexado  --%>
 											<logic:equal name="anexo" property="estado" value='V'>
 												<logic:equal name="flujoDocumentos" property="<%=anexo.getIdentificador()%>" value="true">										
-												 	<html:link href="<%= urlAnexar + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>"><bean:message key="pasoAnexar.documentos.presentarDocumento"/></html:link>				
+												 	<html:link href="<%= urlAnexar + \"&identificador=\" + anexo.getIdentificador() + \"&instancia=\" + anexo.getInstancia() %>"><bean:message key="pasoAnexar.documentos.presentarDocumento"/></html:link>				
 												 </logic:equal>
 											</logic:equal>																						
 											
@@ -382,9 +382,9 @@
 													 <logic:equal name="anexo" property="pendienteFirmaDelegada" value="true"><img src="imgs/tramitacion/iconos/ico_firma_pendiente.gif" alt="<bean:message key="pasoAnexar.iconografia.firmaDocumentoPendienteBandeja"/>" title="<bean:message key="pasoAnexar.iconografia.firmaDocumentoPendienteBandeja"/>"/></logic:equal>
 													 <logic:equal name="anexo" property="rechazadaFirmaDelegada" value="true"><img src="imgs/tramitacion/iconos/ico_firma_rechazada.gif" alt="<bean:message key="pasoAnexar.iconografia.firmaDocumentoRechazadaBandeja"/>" title="<bean:message key="pasoAnexar.iconografia.firmaDocumentoRechazadaBandeja"/>"/></logic:equal>
 													 <logic:equal name="anexo" property="firmado" value="true"><img src="imgs/tramitacion/iconos/ico_firma_aceptada.gif" alt="<bean:message key="pasoAnexar.iconografia.firmaDocumentoRealizada"/>" title="<bean:message key="pasoAnexar.iconografia.firmaDocumentoRealizada"/>"/></logic:equal>
-													 <strong> - <bean:write name="anexo" property="anexoGenericoDescripcion" /> <logic:notEmpty name="anexo" property="anexoFichero">(<html:link href="<%= urlMostrarAnexo + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>"><bean:write name="anexo" property="anexoFichero" /></html:link>)</logic:notEmpty></strong>
+													 <strong> - <bean:write name="anexo" property="anexoGenericoDescripcion" /> <logic:notEmpty name="anexo" property="anexoFichero">(<html:link href="<%= urlMostrarAnexo + \"&identificador=\" + anexo.getIdentificador() + \"&instancia=\" + anexo.getInstancia() %>"><bean:write name="anexo" property="anexoFichero" /></html:link>)</logic:notEmpty></strong>
 													 <logic:equal name="flujoDocumentos" property="<%=anexo.getIdentificador()%>" value="true">										
-														  - <html:link href="<%= urlBorrarAnexo + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>"><bean:message key="pasoAnexar.documentos.quitarFichero"/></html:link>												
+														  - <html:link href="<%= urlBorrarAnexo + \"&identificador=\" + anexo.getIdentificador() + \"&instancia=\" + anexo.getInstancia() %>"><bean:message key="pasoAnexar.documentos.quitarFichero"/></html:link>												
 													 </logic:equal>
 												</logic:equal>
 												<%-- No Generico  --%>
@@ -392,7 +392,7 @@
 													<bean:message key="pasoAnexar.documentos.ficheroAnexadoActualmente"/>
 													<strong><bean:write name="anexo" property="anexoFichero" /></strong>
 													<logic:equal name="flujoDocumentos" property="<%=anexo.getIdentificador()%>" value="true">										
-														 - <html:link href="<%= urlBorrarAnexo + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>"><bean:message key="pasoAnexar.documentos.quitarFichero"/></html:link>
+														 - <html:link href="<%= urlBorrarAnexo + \"&identificador=\" + anexo.getIdentificador() + \"&instancia=\" + anexo.getInstancia() %>"><bean:message key="pasoAnexar.documentos.quitarFichero"/></html:link>
 													</logic:equal>												
 												</logic:equal>			
 																							
@@ -423,7 +423,7 @@
 						<logic:greaterThan name="genericoAnteriorMaxInstancias" value="<%=maxInstancia.toString()%>"> 
 							<br/>
 							<logic:equal name="flujoDocumentos" property="<%=genericoAnterior%>" value="true">										
-								<html:link href="<%= urlAnexar + "&identificador=" + genericoAnterior + "&instancia=" + (maxInstancia.intValue() + 1) %>">
+								<html:link href="<%= urlAnexar + \"&identificador=\" + genericoAnterior + \"&instancia=\" + (maxInstancia.intValue() + 1) %>">
 									<bean:message key="pasoAnexar.documentos.anexarDocumento"/>
 								</html:link>
 							</logic:equal>

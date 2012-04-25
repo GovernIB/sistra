@@ -36,7 +36,7 @@
         disabled="<%=(disabled)%>"
         onchange='<%=(!autocalculo && !bloqueado) ? "onFieldChange(this.form, this.name)" : ""%>'
         size="<%=String.valueOf(campo.getColumnas())%>"
-        maxlength="<%=(vmaxlength != null ? vmaxlength.getValores()[0] : "")%>"
+        maxlength="<%=(vmaxlength != null ? vmaxlength.getValores()[0] : \"\")%>"
         styleClass='<%=(autocalculo || bloqueado? "frmro" : "frm")%>'
         onfocus='<%="setAyuda(" + campo.getOrden() + ")"%>'
         tabindex="<%=Integer.toString((autocalculo) ? 0 : campo.getOrden()+1)%>"

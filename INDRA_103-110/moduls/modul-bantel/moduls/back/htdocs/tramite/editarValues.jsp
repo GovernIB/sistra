@@ -24,7 +24,7 @@
 </tr>
 <tr>
     <td class="labelo"><bean:message key="tramite.identificador"/></td>
-    <td class="input"><html:text styleClass="data" tabindex="1" property="values.identificador" maxlength="20" readonly="<%= request.getAttribute( "idReadOnly" ) != null %>" /></td>
+    <td class="input"><html:text styleClass="data" tabindex="1" property="values.identificador" maxlength="20" readonly="<%= request.getAttribute( \"idReadOnly\" ) != null %>" /></td>
 </tr>
 <tr>
     <td class="labelo"><bean:message key="tramite.descripcion"/></td>

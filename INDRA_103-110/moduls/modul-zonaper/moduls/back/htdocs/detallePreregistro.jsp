@@ -90,7 +90,7 @@ function volver( formulario )
 		</bean:define>
 		
 			<h2><bean:message key="detalle.titulo" /></h2>
-			<p align="right"><html:link href="#" onclick="<%= "javascript:obrir('" + urlAyuda + "', 'Edicion', 540, 400);"%>"><img src="imgs/icones/ico_ayuda.gif" border="0"/><bean:message key="ayuda.enlace" /></html:link></p>
+			<p align="right"><html:link href="#" onclick="<%= \"javascript:obrir('\" + urlAyuda + \"', 'Edicion', 540, 400);\"%>"><img src="imgs/icones/ico_ayuda.gif" border="0"/><bean:message key="ayuda.enlace" /></html:link></p>
 			<h3><bean:message key="detalle.datosTramite" /></h3>
 			<p><strong><bean:message key="busqueda.numeroEntrada" /></strong>: <bean:write name="preregistro" property="numeroPreregistro" /></p>
 			<p><strong><bean:message key="detalle.asunto" /></strong>: <bean:write name="datosAsunto" property="extractoAsunto" /></p>

@@ -74,7 +74,7 @@
 
 <logic:notPresent name="ok">
 <h2><bean:message key="editarEnvio.email.titulo"/></h2>
-<p align="right"><html:link href="#" onclick="<%= "javascript:obrir('" + urlAyuda + "', 'Edicion', 540, 400);"%>"><img src="imgs/icones/ico_ayuda.gif" border="0"/><bean:message key="ayuda.enlace" /></html:link></p>
+<p align="right"><html:link href="#" onclick="<%= \"javascript:obrir('\" + urlAyuda + \"', 'Edicion', 540, 400);\"%>"><img src="imgs/icones/ico_ayuda.gif" border="0"/><bean:message key="ayuda.enlace" /></html:link></p>
 
 <div id="contenedor">	
 			

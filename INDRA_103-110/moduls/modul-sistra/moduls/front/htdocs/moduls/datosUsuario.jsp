@@ -35,7 +35,7 @@ function cancelarTramite( url )
 			<logic:lessEqual name="tramite" property="pasoActual" value="<%= String.valueOf( pasoNoRetorno ) %>">
 				<bean:message key="datosUsuario.claveTramite" />: <strong><bean:write name="tramite" property="idPersistencia"/></strong>
 				 &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;
-				   <html:link styleClass="guardar" href="<%= urlGuardarClave + "&idPersistencia=" + idPersistencia %>"><bean:message key="datosUsuario.guardarClaveTextoEnlace" /></html:link>
+				   <html:link styleClass="guardar" href="<%= urlGuardarClave + \"&idPersistencia=\" + idPersistencia %>"><bean:message key="datosUsuario.guardarClaveTextoEnlace" /></html:link>
 				   <a href="#" class="cancelar" onclick="javascript:cancelarTramite( '<%= urlEliminarTramite %>' )" title="<bean:message key="datosUsuario.cancelarTramiteTextoEnlace" />"><bean:message key="datosUsuario.cancelarTramiteTextoEnlace" /></a>
 			</logic:lessEqual>
 		</logic:equal>

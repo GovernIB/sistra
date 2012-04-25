@@ -686,7 +686,7 @@ function unsetAyuda() {
 	<logic:equal name="pantallaDetalle" value="true">
 		<%action = "procesarDetalle"; %>	
 	</logic:equal>
-	<bean:define id="detalleAccion" value="<%=request.getParameter("listaelementos@accion")%>"/>
+	<bean:define id="detalleAccion" value="<%=request.getParameter(\"listaelementos@accion\")%>"/>
 </logic:present>
 
 

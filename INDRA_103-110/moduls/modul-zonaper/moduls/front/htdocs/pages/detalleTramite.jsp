@@ -203,7 +203,7 @@
 						<logic:notEqual name="documento" property="codigoRDS" value="0">
 							<logic:notEqual name="documento" property="identificador" value="<%=ConstantesAsientoXML.IDENTIFICADOR_DATOS_PROPIOS%>">
 								<li>
-									<html:link href="<%= urlMostrarDocumento + "&amp;codigoEntrada=" + entrada.getCodigo() %>" paramId="codigoDocumento" paramName="documento" paramProperty="codigo">
+									<html:link href="<%= urlMostrarDocumento + \"&amp;codigoEntrada=\" + entrada.getCodigo() %>" paramId="codigoDocumento" paramName="documento" paramProperty="codigo">
 											<bean:write name="documento" property="descripcion" />
 									</html:link>									
 									<bean:define id="codigoFirma" type="java.lang.String">
@@ -272,7 +272,7 @@
 										</logic:equal>										
 										<logic:equal name="documento" property="tipo" value="F">
 											<td> 		
-												<html:link href="<%= urlMostrarDocumento + "&amp;codigoEntrada=" + entrada.getCodigo() + "&amp;codigoDocumento=" + codigosDocsPresenciales.get(documento.getIdentificador()).toString() %>" >								
+												<html:link href="<%= urlMostrarDocumento + \"&amp;codigoEntrada=\" + entrada.getCodigo() + \"&amp;codigoDocumento=\" + codigosDocsPresenciales.get(documento.getIdentificador()).toString() %>" >								
 													<bean:write name="documento" property="titulo" />
 												</html:link>
 											</td>

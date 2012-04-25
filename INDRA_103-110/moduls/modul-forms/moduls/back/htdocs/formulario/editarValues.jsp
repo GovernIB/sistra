@@ -10,7 +10,7 @@
 <logic:present name="bloqueadoPor">
 	<tr>
 		<td>&nbsp;</td>
-		<td><bean:message key="formulario.bloqueadoPor" arg0="<%=(String) request.getAttribute("bloqueadoPor")%>"/></td>
+		<td><bean:message key="formulario.bloqueadoPor" arg0="<%=(String) request.getAttribute(\"bloqueadoPor\")%>"/></td>
 	</tr>
 </logic:present>
 <tr>

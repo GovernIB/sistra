@@ -26,7 +26,7 @@
 -->
 </script>
 		<h2><bean:message key="ayuda.impresionSello.titulo" /></h2>
-		<p align="right"><html:link href="#" onclick="<%= "javascript:obrir('" + urlAyuda + "', 'Edicion', 540, 400);"%>"><img src="imgs/icones/ico_ayuda.gif" border="0"/><bean:message key="ayuda.enlace" /></html:link></p>
+		<p align="right"><html:link href="#" onclick="<%= \"javascript:obrir('\" + urlAyuda + \"', 'Edicion', 540, 400);\"%>"><img src="imgs/icones/ico_ayuda.gif" border="0"/><bean:message key="ayuda.enlace" /></html:link></p>
 		<p class="centrado"><bean:write name="message" filter="false"/></p>
 		<p class="centrado"><html:button title="<%= botonImprimir %>" value="<%= botonImprimir %>" property="enviar" onclick="javascript:imprimirSello()" /></p>
 		<p class="tornarArrere"><strong><html:link action="init.do"><bean:message key="mensajes.enlaceVolver" /></html:link></strong></p>

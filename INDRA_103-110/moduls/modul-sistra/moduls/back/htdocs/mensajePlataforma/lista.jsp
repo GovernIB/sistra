@@ -47,7 +47,7 @@
         <logic:iterate  id="mensajePlataforma" name="mensajePlataformaOptions" type="es.caib.sistra.model.MensajePlataforma">
             <tr>
                 <td class="outputd" width="70%" >                	
-                	<bean:message key="<%="mensajePlataforma."+mensajePlataforma.getIdentificador()%>"/>
+                	<bean:message key="<%=\"mensajePlataforma.\"+mensajePlataforma.getIdentificador()%>"/>
                 </td>
                 <td class="alert">
 		      		<logic:equal name="mensajePlataforma" property="activo" value="S">

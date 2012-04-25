@@ -100,19 +100,19 @@
 								<bean:define id="marcarNoProcesado" type="java.lang.String">
 									<bean:message key="detalleTramite.datosTramite.marcarNoProcesado"/> 
 								</bean:define>
-								<html:button value="<%=marcarNoProcesado%>" property="no_procesada" onclick="<%= "javascript:document.location.href='" + urlCambioEstado + "&estado=N&estadoOld=" + estadoOld + "'" %>"/>
+								<html:button value="<%=marcarNoProcesado%>" property="no_procesada" onclick="<%= \"javascript:document.location.href='\" + urlCambioEstado + \"&estado=N&estadoOld=\" + estadoOld + \"'\" %>"/>
 							</logic:equal>
 							<logic:equal name="tramite" property="procesada" value='S'>					
 								<bean:define id="marcarNoProcesado" type="java.lang.String">
 									<bean:message key="detalleTramite.datosTramite.marcarNoProcesado"/> 
 								</bean:define>
-								<html:button value="<%=marcarNoProcesado%>" property="no_procesada" onclick="<%= "javascript:document.location.href='" + urlCambioEstado + "&estado=N&estadoOld=" + estadoOld + "'" %>"/>
+								<html:button value="<%=marcarNoProcesado%>" property="no_procesada" onclick="<%= \"javascript:document.location.href='\" + urlCambioEstado + \"&estado=N&estadoOld=\" + estadoOld + \"'\" %>"/>
 							</logic:equal>
 							<logic:equal name="tramite" property="procesada" value='N'>
 								<bean:define id="marcarProcesado" type="java.lang.String">
 									<bean:message key="detalleTramite.datosTramite.marcarProcesado"/> 
 								</bean:define>
-								<html:button value="<%=marcarProcesado%>" property="procesar" onclick="<%= "javascript:document.location.href='" + urlCambioEstado + "&estado=S&estadoOld=" + estadoOld + "'" %>"/>						
+								<html:button value="<%=marcarProcesado%>" property="procesar" onclick="<%= \"javascript:document.location.href='\" + urlCambioEstado + \"&estado=S&estadoOld=\" + estadoOld + \"'\" %>"/>						
 							</logic:equal>						
 						</p>
 					</logic:equal>
