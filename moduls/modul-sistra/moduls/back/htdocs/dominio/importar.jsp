@@ -43,7 +43,7 @@
 </logic:present>
 
 <html:form action="/back/dominio/importarXML" styleId="importarForm" enctype="multipart/form-data">
-	<html:hidden property="codigoOrganoOrigen" value="<%= request.getParameter( "codigoOrganoOrigen" ) %>"/>
+	<html:hidden property="codigoOrganoOrigen" value="<%= request.getParameter( \"codigoOrganoOrigen\" ) %>"/>
 <table class="marc">
     <tr>
         <td class="label"><bean:message key="dominio.importar.fitxer"/></td>

@@ -90,21 +90,21 @@
 								
 								<!-- Pagos iniciados: sólo dejamos ver pdf -->
 								<logic:equal name="iniciadoPagos" value="true">
-									<html:link href="<%= urlMostrarDocumento + "&identificador=" + formulario.getIdentificador() + "&instancia=" + formulario.getInstancia() %>" >
+									<html:link href="<%= urlMostrarDocumento + \"&identificador=\" + formulario.getIdentificador() + \"&instancia=\" + formulario.getInstancia() %>" >
 										<strong><bean:write name="formulario" property="descripcion" /></strong>
 									</html:link>
 								</logic:equal>
 								
 								<!--  Pagos no iniciados: permitimos modificar -->
 								<logic:equal name="iniciadoPagos" value="false">
-									<html:link href="<%= urlFormulario + "&identificador=" + formulario.getIdentificador() + "&instancia=" + formulario.getInstancia() %>" onclick="accediendoEnviando(mensajeEnviando);"><strong><bean:write name="formulario" property="descripcion" /></strong></html:link>										
+									<html:link href="<%= urlFormulario + \"&identificador=\" + formulario.getIdentificador() + \"&instancia=\" + formulario.getInstancia() %>" onclick="accediendoEnviando(mensajeEnviando);"><strong><bean:write name="formulario" property="descripcion" /></strong></html:link>										
 								</logic:equal>
 							</logic:equal>																																						
 							 
 							<!--  Formulario a rellenar por otro usuario: en caso de estar completado, mostramos pdf --> 
 							<logic:equal name="flujoDocumentos" property="<%=formulario.getIdentificador()%>" value="false">
 								<logic:equal name="formulario" property="estado" value="S">
-									<html:link href="<%= urlMostrarDocumento + "&identificador=" + formulario.getIdentificador() + "&instancia=" + formulario.getInstancia() %>"><strong><bean:write name="formulario" property="descripcion" /></strong></html:link>										
+									<html:link href="<%= urlMostrarDocumento + \"&identificador=\" + formulario.getIdentificador() + \"&instancia=\" + formulario.getInstancia() %>"><strong><bean:write name="formulario" property="descripcion" /></strong></html:link>										
 								</logic:equal>
 								<logic:notEqual name="formulario" property="estado" value="S">																	
 									<strong><bean:write name="formulario" property="descripcion" /></strong>
@@ -141,7 +141,7 @@
 								<br/>							
 								<logic:equal name="formulario" property="pendienteFirmaDelegada" value="false">							 							
 									<logic:equal name="formulario" property="rechazadaFirmaDelegada" value="false">		
-										<bean:message key="pasoRellenar.formularios.debeFirmarseDigitalmente"/> - <html:link  href="<%= urlFirmarDocumento + "&identificador=" + formulario.getIdentificador() + "&instancia=" + formulario.getInstancia() %>"><bean:message key="pasoRellenar.formularios.firmarFormulario"/></html:link>
+										<bean:message key="pasoRellenar.formularios.debeFirmarseDigitalmente"/> - <html:link  href="<%= urlFirmarDocumento + \"&identificador=\" + formulario.getIdentificador() + \"&instancia=\" + formulario.getInstancia() %>"><bean:message key="pasoRellenar.formularios.firmarFormulario"/></html:link>
 									</logic:equal>								
 								</logic:equal>
 								<logic:equal name="formulario" property="pendienteFirmaDelegada" value="true">							 							
@@ -162,7 +162,7 @@
 									<img src="imgs/tramitacion/iconos/ico_firma_aceptada.gif" alt="<bean:message key="pasoRellenar.iconografia.firmaDocumentoRealizada"/>" title="<bean:message key="pasoRellenar.iconografia.firmaDocumentoRealizada"/>"/>
 									<logic:notEmpty name="formulario" property="firmante">
 										<logic:match name="formulario" property="firmante" value="#">
-											<bean:message key="pasoRellenar.formularios.firmadosDigitalmente" arg0="<%=es.caib.util.StringUtil.replace(formulario.getFirmante(),"#"," - ")%>"/>
+											<bean:message key="pasoRellenar.formularios.firmadosDigitalmente" arg0="<%=es.caib.util.StringUtil.replace(formulario.getFirmante(),\"#\",\" - \")%>"/>
 										</logic:match>	
 										<logic:notMatch name="formulario" property="firmante" value="#">
 											<bean:message key="pasoRellenar.formularios.firmadoDigitalmente" arg0="<%=formulario.getFirmante()%>"/>

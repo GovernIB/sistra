@@ -31,11 +31,11 @@
 	<div class="alerta">
 		<p><bean:message key="finalizacion.notificacionTelematica.confirmacion" arg0="<%=referenciaPortal%>"/></p>
 		<p align="center">
-			<html:link href="<%=urlSeleccionNotificacionTelematica + "&seleccion=S"%>">
+			<html:link href="<%=urlSeleccionNotificacionTelematica + \"&seleccion=S\"%>">
 				<bean:message key="finalizacion.notificacionTelematica.habilitar"/>
 			</html:link>
 			 &nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp; 
-			<html:link href="<%=urlSeleccionNotificacionTelematica + "&seleccion=N"%>">
+			<html:link href="<%=urlSeleccionNotificacionTelematica + \"&seleccion=N\"%>">
 				<bean:message key="finalizacion.notificacionTelematica.deshabilitar"/>
 			</html:link>
 		</p>
@@ -94,7 +94,7 @@
 				</logic:notEmpty>
 				<!--  mensaje x defecto  -->				
 				<logic:empty name="tramite" property="mensajeFechaLimiteEntregaPresencial">
-					<strong><bean:message key="registro.importante.fechaLimiteEntrega" arg0="<%= ( String ) request.getAttribute( "fechaTopeEntrega" ) %>"/></strong>
+					<strong><bean:message key="registro.importante.fechaLimiteEntrega" arg0="<%= ( String ) request.getAttribute( \"fechaTopeEntrega\" ) %>"/></strong>
 				</logic:empty>								
 			</logic:equal>		
 		</p>
@@ -143,7 +143,7 @@
 									</logic:empty>
 									<logic:notEmpty name="formulario" property="firmante">
 										<logic:match name="formulario" property="firmante" value="#">
-											<bean:message key="finalizacion.resumen.documentos.firmadospor" arg0="<%=es.caib.util.StringUtil.replace(formulario.getFirmante(),"#"," - ")%>"/>
+											<bean:message key="finalizacion.resumen.documentos.firmadospor" arg0="<%=es.caib.util.StringUtil.replace(formulario.getFirmante(),\"#\",\" - \")%>"/>
 										</logic:match>	
 										<logic:notMatch name="formulario" property="firmante" value="#">
 										<bean:message key="finalizacion.resumen.documentos.firmadopor" arg0="<%=formulario.getFirmante()%>"/>							
@@ -176,7 +176,7 @@
 							<p>
 								<span style="position: relative;">
 								
-								<html:link href="<%= urlMostrarDocumento + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>">
+								<html:link href="<%= urlMostrarDocumento + \"&identificador=\" + anexo.getIdentificador() + \"&instancia=\" + anexo.getInstancia() %>">
 									<logic:equal name="anexo" property="anexoGenerico" value="false"> 
 										<bean:write name="anexo" property="descripcion" />
 									</logic:equal>
@@ -194,7 +194,7 @@
 										</logic:empty>
 										<logic:notEmpty name="anexo" property="firmante">
 											<logic:match name="anexo" property="firmante" value="#">
-												<bean:message key="finalizacion.resumen.documentos.firmadospor" arg0="<%=es.caib.util.StringUtil.replace(anexo.getFirmante(),"#"," - ")%>"/>
+												<bean:message key="finalizacion.resumen.documentos.firmadospor" arg0="<%=es.caib.util.StringUtil.replace(anexo.getFirmante(),\"#\",\" - \")%>"/>
 											</logic:match>	
 											<logic:notMatch name="anexo" property="firmante" value="#">
 											<bean:message key="finalizacion.resumen.documentos.firmadopor" arg0="<%=anexo.getFirmante()%>"/>							
@@ -225,7 +225,7 @@
 							</div>
 							<p>
 								<span style="position: relative;">
-									<html:link href="<%= urlMostrarDocumento + "&identificador=" + pago.getIdentificador() + "&instancia=" + pago.getInstancia() %>"><bean:write name="pago" property="descripcion" /></html:link>	
+									<html:link href="<%= urlMostrarDocumento + \"&identificador=\" + pago.getIdentificador() + \"&instancia=\" + pago.getInstancia() %>"><bean:write name="pago" property="descripcion" /></html:link>	
 								</span>
 							</p>
 						</logic:equal>
@@ -309,7 +309,7 @@
 						<bean:message key="finalizacion.notificacionTelematica.textoHabilitada" arg0="<%=referenciaPortal%>"/>
 					</p>
 					<p class="notaPie">
-						<bean:message key="finalizacion.notificacionTelematica.cambioDecision"/> <html:link href="<%=urlSeleccionNotificacionTelematica + "&seleccion=N"%>"><bean:message key="finalizacion.notificacionTelematica.deshabilitar"/></html:link>
+						<bean:message key="finalizacion.notificacionTelematica.cambioDecision"/> <html:link href="<%=urlSeleccionNotificacionTelematica + \"&seleccion=N\"%>"><bean:message key="finalizacion.notificacionTelematica.deshabilitar"/></html:link>
 					</p>					
 				</logic:equal>
 			</logic:equal>
@@ -318,7 +318,7 @@
 					<bean:message key="finalizacion.notificacionTelematica.textoDeshabilitada" arg0="<%=referenciaPortal%>"/>
 				</p>
 				<p class="notaPie">
-					<bean:message key="finalizacion.notificacionTelematica.cambioDecision"/>&nbsp;<html:link href="<%=urlSeleccionNotificacionTelematica + "&seleccion=S"%>"><bean:message key="finalizacion.notificacionTelematica.habilitar"/></html:link>
+					<bean:message key="finalizacion.notificacionTelematica.cambioDecision"/>&nbsp;<html:link href="<%=urlSeleccionNotificacionTelematica + \"&seleccion=S\"%>"><bean:message key="finalizacion.notificacionTelematica.habilitar"/></html:link>
 				</p>					
 			</logic:equal>			
 		</logic:present>

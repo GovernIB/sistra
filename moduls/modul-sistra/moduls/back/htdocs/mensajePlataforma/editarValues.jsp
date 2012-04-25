@@ -19,7 +19,7 @@
 </tr>
 <tr>
     <td class="labelo"><bean:message key="mensajePlataforma.identificador"/></td>    
-    <td class="input"><bean:message key="<%="mensajePlataforma."+identificador%>"/></td>
+    <td class="input"><bean:message key="<%=\"mensajePlataforma.\"+identificador%>"/></td>
 </tr>
 <tr>
     <td class="labelo"><bean:message key="mensajePlataforma.activo"/></td>    

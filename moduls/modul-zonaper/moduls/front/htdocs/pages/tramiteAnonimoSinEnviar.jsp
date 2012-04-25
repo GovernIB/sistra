@@ -32,13 +32,13 @@
 			</thead>
 			<tr onmouseover="selecItemTabla(this);">								
 				<td>
-					<bean:message key="<%="tramiteAnonimoSinEnviar.idioma." + tramitePersistente.getIdioma()%>"/>
+					<bean:message key="<%=\"tramiteAnonimoSinEnviar.idioma.\" + tramitePersistente.getIdioma()%>"/>
 				</td>												
 				<td><bean:write name="tramitePersistente" property="fechaModificacion" format="dd/MM/yyyy hh:mm"/></td>												
 				<td><bean:write name="tramitePersistente" property="fechaCaducidad" format="dd/MM/yyyy"/></td>												
 				<td>					
 						<!--  Descripcion del trámite con link si puede continuarse -->
-						<html:link href="<%= urlTramitacion + "&modelo=" + tramitePersistente.getTramite() + "&version=" + tramitePersistente.getVersion() %>" paramId="idPersistencia" paramName="tramitePersistente" paramProperty="idPersistencia">
+						<html:link href="<%= urlTramitacion + \"&modelo=\" + tramitePersistente.getTramite() + \"&version=\" + tramitePersistente.getVersion() %>" paramId="idPersistencia" paramName="tramitePersistente" paramProperty="idPersistencia">
 								<bean:write name="tramitePersistente" property="descripcion"/>								
 						</html:link>
 				</td>

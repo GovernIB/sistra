@@ -20,7 +20,7 @@
 <bean:define id="nivelAutenticacion" name="es.caib.zonaper.front.DATOS_SESION" property="nivelAutenticacion" scope="session" type="java.lang.Character"/>
 
 <bean:define id="nivelAutenticacionDescripcion" type="java.lang.String">
-	<bean:message key="<%="tramitesSinEnviar.nivelAutenticacion."+nivelAutenticacion%>" />
+	<bean:message key="<%=\"tramitesSinEnviar.nivelAutenticacion.\"+nivelAutenticacion%>" />
 </bean:define>
 
 <bean:define id="urlAbrirDocumento" type="java.lang.String">

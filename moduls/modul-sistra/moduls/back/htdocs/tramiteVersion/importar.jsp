@@ -35,7 +35,7 @@
 <html:errors/>
 
 <html:form action="/importar/xmlPreview" styleId="importarForm" enctype="multipart/form-data">
-	<html:hidden property="codigoTramite" value="<%= request.getParameter( "codigoTramite" ) %>"/>
+	<html:hidden property="codigoTramite" value="<%= request.getParameter( \"codigoTramite\" ) %>"/>
 <table class="marc">
     <tr>
         <td class="label"><bean:message key="tramiteVersion.importar.fitxer"/></td>

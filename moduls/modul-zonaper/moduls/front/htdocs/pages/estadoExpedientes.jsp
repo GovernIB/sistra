@@ -97,7 +97,7 @@ function limpiarFiltro()
 						<!--  Idioma -->
 						<td>  
 							<logic:notEmpty name="tramiteCompletado" property="idioma">
-								<bean:message key="<%="estadoExpedientes.idioma." + tramiteCompletado.getIdioma()%>"/>
+								<bean:message key="<%=\"estadoExpedientes.idioma.\" + tramiteCompletado.getIdioma()%>"/>
 							</logic:notEmpty>
 						</td>
 						

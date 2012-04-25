@@ -39,10 +39,10 @@
 	<!--
 	<logic:equal name="<%=es.caib.zonaper.delega.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
-			
+		
 		var contentType = '<%= es.caib.util.FirmaUtil.obtenerContentTypeCAIB(es.caib.util.FirmaUtil.CAIB_DOCUMENT_NOTIFICACIO_CONTENT_TYPE) %>';
 		var mensajeEnviando = '<bean:message key="anexarDocumentos.mensajeAnexar"/>';
-			
+		
 		function firmarCAIB(form){		
 			var firma = '';	
 			var i = 0;
@@ -61,30 +61,31 @@
 		}
 		
 	</logic:equal>	
-		
+
+	
 	<logic:equal name="<%=es.caib.zonaper.delega.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
-			
+		
 		function prepararEntornoFirma(){
 			cargarAppletFirma(sistra_ClienteaFirma_buildVersion);
 		}
-			
+		
 		function firmarAFirma(form){
-		    var firma = '';
+	    	var firma = '';
 		    var i = 0;
 			if (clienteFirma == undefined) { 
-		       alert("No se ha podido instalar el entorno de firma");
-		       return false;
+	    	  alert("No se ha podido instalar el entorno de firma");
+	    	  return false;
 		   	}
 		   	clienteFirma.initialize();
-		   	clienteFirma.setShowErrors(false);
-		   	clienteFirma.setSignatureAlgorithm(sistra_ClienteaFirma_SignatureAlgorithm);
+	   		clienteFirma.setShowErrors(false);
+	   		clienteFirma.setSignatureAlgorithm(sistra_ClienteaFirma_SignatureAlgorithm);
 			clienteFirma.setSignatureMode(sistra_ClienteaFirma_SignatureMode);
 			clienteFirma.setSignatureFormat(sistra_ClienteaFirma_SignatureFormat);
 			if($('#documentoB64').val() == null || $('#documentoB64').val() == ''){
 				return false;
 			}
-			
+		
 			// Pasamos de b64 urlSafe a b64
 			var b64 = b64UrlSafeToB64($('#documentoB64').val());
 			clienteFirma.setData(b64);
@@ -94,14 +95,14 @@
 				alert(error);
 				return false;
 			}else{	
-			    firma = clienteFirma.getSignatureBase64Encoded();
+		    	firma = clienteFirma.getSignatureBase64Encoded();
 				firma = b64ToB64UrlSafe(firma);
-	   		}
+   			}
 			document.getElementById("firma").value=firma;
 			return true;
 		}
 	</logic:equal>	
-	
+
 	<logic:equal name="<%=es.caib.zonaper.delega.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
 		prepararEntornoFirma();
@@ -332,7 +333,7 @@ function volver(){
 									<tr>
 										<td><bean:write name="delegacion" property="nifDelegado"/> - <bean:write name="delegacion" property="nombreDelegado"/></td>
 										<td>			
-											<bean:message key="<%="delegaciones.permiso." + PermisosUtil.getPermisosOrdenados(delegacion.getPermisos())%>" />										
+											<bean:message key="<%=\"delegaciones.permiso.\" + PermisosUtil.getPermisosOrdenados(delegacion.getPermisos())%>" />										
 										</td>
 										<td><bean:write name="delegacion" property="fechaInicioDelegacion" format="dd/MM/yyyy"/></td>
 										<td><bean:write name="delegacion" property="fechaFinDelegacion" format="dd/MM/yyyy"/></td>

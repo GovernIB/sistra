@@ -7,7 +7,7 @@
 <html:xhtml/>
 <bean:define id="lang" value="<%=((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage()%>" type="java.lang.String"/>
 <bean:define id="referenciaPortal"  type="java.lang.String">
-	<bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="referenciaPortal("+ lang +")"%>'/>
+	<bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="referenciaPortal("+ lang + ")"%>'/>
 </bean:define>
 <bean:define id="urlMostrarDocumento">
         <html:rewrite page="/protected/mostrarDocumento.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
@@ -73,18 +73,18 @@
 			<tr>
 				<td class="doc"><bean:write name="documento" property="titulo" /></td>
 			<logic:equal name="documento" property="tipo" value="J">					
-				<td><html:link href="<%= urlMostrarDocumento + "&identificador=JUSTIFICANTE"%>" title="Justificante"><bean:message key="finalizacion.instrucciones.justificante.firmar"/></html:link></td>
+				<td><html:link href="<%= urlMostrarDocumento + \"&identificador=JUSTIFICANTE\"%>" title="Justificante"><bean:message key="finalizacion.instrucciones.justificante.firmar"/></html:link></td>
 			</logic:equal>
 			<logic:equal name="documento" property="tipo" value="G">
 				<td> 
-					<html:link href="<%= urlMostrarDocumento + "&identificador=JUSTIFICANTE"%>" title="Justificante">
+					<html:link href="<%= urlMostrarDocumento + \"&identificador=JUSTIFICANTE\"%>" title="Justificante">
 						<bean:message key="finalizacion.instrucciones.formularioJustificante.firmar"/>					
 					</html:link>
 				</td>
 			</logic:equal>
 			<logic:equal name="documento" property="tipo" value="F">
 				<td> 
-					<html:link href="<%= urlMostrarDocumento + "&identificador=" + StringUtil.getModelo(documento.getIdentificador()) + "&instancia=" + StringUtil.getVersion(documento.getIdentificador()) %>" title="Firmar formulario">
+					<html:link href="<%= urlMostrarDocumento + \"&identificador=\" + StringUtil.getModelo(documento.getIdentificador()) + \"&instancia=\" + StringUtil.getVersion(documento.getIdentificador()) %>" title="Firmar formulario">
 						<bean:message key="finalizacion.instrucciones.formulario.firmar"/>					
 					</html:link>
 				</td>

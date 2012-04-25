@@ -7,7 +7,7 @@
 		<ul id="mollaPa">		
 		<logic:iterate id="line" name="enlaces"  type="java.util.Map">
 			<logic:equal name="line" property="hasLink" value="true">
-			<li><html:link action="<%= ( String ) line.get( "action") %>"><bean:write name="line" property="label"/> &gt; </html:link></li>
+			<li><html:link action="<%= ( String ) line.get( \"action\") %>"><bean:write name="line" property="label"/> &gt; </html:link></li>
 			</logic:equal>
 			<logic:notEqual name="line" property="hasLink" value="true">
 			<li><bean:write name="line" property="label"/></li>

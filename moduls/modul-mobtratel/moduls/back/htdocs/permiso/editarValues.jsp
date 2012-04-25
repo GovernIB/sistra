@@ -16,7 +16,7 @@
 </tr>
 <tr>
     <td class="labelo"><bean:message key="permiso.usuarioSeycon"/></td>
-    <td class="input"><html:text styleClass="data" tabindex="1" property="values.usuarioSeycon" maxlength="50" readonly="<%= request.getAttribute( "idReadOnly" ) != null %>"/></td>
+    <td class="input"><html:text styleClass="data" tabindex="1" property="values.usuarioSeycon" maxlength="50" readonly="<%= request.getAttribute(\"idReadOnly\" ) != null %>"/></td>
 </tr>
 <tr>
 	<td class="separador" colspan="2"><bean:message key="permiso.propiedades"/></td>

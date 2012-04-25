@@ -217,7 +217,7 @@ function anularDelegacion(codigo){
 									<tr>
 										<td><bean:write name="delegacion" property="nifDelegado"/> - <bean:write name="delegacion" property="nombreDelegado"/></td>
 										<td>
-											<bean:message key="<%="delegaciones.permiso." + PermisosUtil.getPermisosOrdenados(delegacion.getPermisos())%>" />										
+											<bean:message key="<%=\"delegaciones.permiso.\" + PermisosUtil.getPermisosOrdenados(delegacion.getPermisos())%>" />										
 										</td>
 										<td><bean:write name="delegacion" property="fechaInicioDelegacion"  format="dd/MM/yyyy"/></td>
 										<td><bean:write name="delegacion" property="fechaFinDelegacion"  format="dd/MM/yyyy"/></td>
