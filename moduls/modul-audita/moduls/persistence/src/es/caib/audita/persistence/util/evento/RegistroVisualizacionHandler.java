@@ -98,7 +98,7 @@ public class RegistroVisualizacionHandler extends
 			}
 			if(clave.equals(tipo))
 			{
-				BigDecimal total = (BigDecimal) mResult.get( "total" );
+				Number total = (Number) mResult.get( "total" );
 				return total.intValue();
 			}
 		}
