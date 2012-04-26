@@ -439,6 +439,18 @@ public class ValidacionesUtil
 	    return hayDiasDistancia (fechaIni, fechaFin, diasDist, DEFAULT_FORMAT);
 	  }
 
+	  
+	  /**
+		 * Añade a la fecha actual un numero de dias.
+		 * @param diasSumar Dias a sumar
+		 * @param data Fecha actual
+		 * @param format Formato fecha
+		 * @return Fecha final
+		 */
+	  public static String fechaSumaDias(int diasSumar, String data, String format) {
+		return 	DataUtil.fechaSumaDias(diasSumar, data, format);
+	  }
+	  
 	  /*************************************************************************************************/
 	  /* hayDiasDistancia (String fechaEvl, int diasDist, String formatoFecha)        		   */
 	  /*											           */
@@ -930,7 +942,7 @@ public class ValidacionesUtil
 
 	}
 
-
+	
 		
 
 

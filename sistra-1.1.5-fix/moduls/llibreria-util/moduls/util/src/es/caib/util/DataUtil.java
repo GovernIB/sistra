@@ -156,4 +156,23 @@ public class DataUtil {
 		return calendario2.getTime();
 	}
 
+	/**
+	 * Añade a la fecha actual un numero de dias.
+	 * @param diasSumar Dias a sumar
+	 * @param data Fecha actual
+	 * @param format Formato fecha
+	 * @return Fecha final
+	 */
+	public static String fechaSumaDias(int diasSumar, String data, String format) 
+    {
+	  Date d = data(data, format);
+      if (d == null) return data;
+      
+      Calendar calendar = Calendar.getInstance();
+      calendar.setTime(d);
+      calendar.add(Calendar.DAY_OF_MONTH, diasSumar);
+      
+      return new SimpleDateFormat(format).format(calendar.getTime());
+   }
+
 }
