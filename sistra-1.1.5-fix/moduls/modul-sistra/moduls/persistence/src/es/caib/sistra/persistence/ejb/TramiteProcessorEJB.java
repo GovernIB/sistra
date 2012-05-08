@@ -5020,13 +5020,19 @@ public class TramiteProcessorEJB implements SessionBean {
     	}else{
     		scriptRpteNif = especVersion.getCampoRteNif();
     	}
-    	if (scriptRpteNif != null && scriptRpteNif.length > 0 ){    		
+    	if (scriptRpteNif != null && scriptRpteNif.length > 0 ){
+    		// Evaluamos script
     		rpteNif = this.evaluarScript(scriptRpteNif,null);
+    		// El script puede devolver un nif/cif valido o la cadena "NO-NIF" para especificar que no se especificará NIF.
+    		if (!"NO-NIF".equals(rpteNif)) {
+	    		// Normalizamos documento de identificación
+	        	rpteNif = NifCif.normalizarDocumento(rpteNif);
+	        	// Si se mete script de representante debe devolver un nif valido
+	    		if (!NifCif.esNIF(rpteNif) && !NifCif.esCIF(rpteNif)) {
+	    			throw new Exception("El script de nif de representante no devuelve un nif valido");
+	    		}
+    		}
     	}
-    	rpteNif = rpteNif.toUpperCase();
-    	
-    	// Normalizamos documento de identificación
-    	rpteNif = NifCif.normalizarDocumento(rpteNif);
     	
     	return rpteNif;
 	}

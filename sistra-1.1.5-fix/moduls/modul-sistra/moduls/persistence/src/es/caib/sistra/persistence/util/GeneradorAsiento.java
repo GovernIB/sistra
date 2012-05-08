@@ -119,10 +119,10 @@ public class GeneradorAsiento {
 			DatosInteresado dInteresadoRpte,dInteresadoRpdo=null,dInteresadoDlgdo=null;
 			dInteresadoRpte = factoria.crearDatosInteresado();
 
-			// -- Validamos nif y nombre			 
-			boolean requiereRpte = (tramiteVersion.getDestino() == ConstantesSTR.DESTINO_REGISTRO || tramitePAD.getNivelAutenticacion() != 'A');
+			// Si el trámite es autenticado se requiere nif y nombre
+			boolean requiereRpte = (tramitePAD.getNivelAutenticacion() != 'A');
 	    	if ( StringUtils.isBlank(rpteNif) && requiereRpte){
-	    		throw new Exception("El nif nombre del rpte no puede estar vacío");
+	    		throw new Exception("El nif del rpte no puede estar vacío");
 	    	}
 	    	if ( StringUtils.isBlank (rpteNom) && requiereRpte){
 				throw new Exception("El nombre del rpte no puede estar vacío");
