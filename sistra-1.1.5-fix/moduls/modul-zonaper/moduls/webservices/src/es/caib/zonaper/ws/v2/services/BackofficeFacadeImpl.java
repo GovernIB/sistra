@@ -55,6 +55,20 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		}
 	}
 	
+	public String altaZonaPersonalUsuario(String nif, String nombre,
+			String apellido1, String apellido2)
+			throws BackofficeFacadeException {
+		try {
+			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
+			return pad.altaZonaPersonalUsuario(nif, nombre, apellido1, apellido2);		
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
+		}
+		
+	}
+
+	
 	
 	// --------------------------------------------------------------
 	//		FUNCIONES AUXILIARES

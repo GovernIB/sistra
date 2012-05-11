@@ -14,26 +14,76 @@
      }
      
      function fillDestinatario(){
-		nif = document.forms[0].nif.value;
-		$.ajaxSetup({scriptCharset: "utf-8" , contentType: "application/json; charset=utf-8"});
-		$.getJSON("fillPersona.do", {  nif: nif }, 
-			function(json){										
-				$("#nif").val(json.nif);
-				document.forms[0].nombre.value=json.nombre;
-				document.forms[0].usuarioSeycon.value=json.usuarioSeycon;
-			});
-		}
-		
-		function alta(){		
-			if(confirm ( "<bean:message key='expediente.alta.confirmacion' />" )){
-				var index = document.forms["0"].unidadAdm.selectedIndex;
-				document.forms["0"].nombreUnidad.value=document.forms["0"].unidadAdm.options[index].text;
-				document.forms["0"].submit();
-				return true;
-			}else{
-				return false;
-			}						
-		}
+ 		nif = $("#nif").val();
+ 		$.ajaxSetup({scriptCharset: "utf-8" , contentType: "application/json; charset=utf-8"});
+ 		$.getJSON("fillPersona.do", {  nif: nif }, 
+ 			function(json){				
+ 				if (json.nif == "") {
+ 					alert("<bean:message key="expediente.alta.noExisteDestinatario"/>");
+ 				}				
+ 				$("#nombre").val(json.nombre);
+ 				$("#usuarioSeycon").val(json.usuarioSeycon);				
+ 			});
+ 		}
+
+
+     function mostrarAltaDestinatario(mostrar) {
+     	var capaI = document.getElementById('altaDestinatario');
+         if (mostrar) {
+
+         	$("#nifAltaDestinatario").val("");
+      		$("#nombreAltaDestinatario").val("");
+      		$("#apellido1AltaDestinatario").val("");
+      		$("#apellido2AltaDestinatario").val("");
+             
+     		var ventanaX = document.documentElement.clientWidth;
+     		var ventanaY = document.documentElement.clientHeight;
+     		var capaY = document.getElementById('contenedor').offsetHeight;
+     		
+     		// mostramos, miramos su tama?o y centramos la capaInfo con respecto a la ventana
+     		capaI.style.display = 'block';
+     		capaInfoX = capaI.offsetWidth;
+     		capaInfoY = capaI.offsetHeight;
+     		with (capaI) {
+     			style.left = (ventanaX-capaInfoX)/2 + 'px';
+     			style.top = (ventanaY-capaInfoY)/2 + 'px';
+     		}		
+         } else {
+         	capaI.style.display = 'none';
+     	}
+     }
+
+      function realizarAltaDestinatario(){
+  		var nifAlta = $("#nifAltaDestinatario").val();
+  		var nombreAlta = $("#nombreAltaDestinatario").val();
+  		var ape1Alta = $("#apellido1AltaDestinatario").val();
+  		var ape2Alta = $("#apellido2AltaDestinatario").val();
+
+  		if(confirm ( "<bean:message key='expediente.alta.altaDestinatario.confirmacion' />" )){
+ 	 		$.ajaxSetup({scriptCharset: "utf-8" , contentType: "application/json; charset=utf-8"});
+ 	 		$.getJSON("altaPersona.do", {  nif: nifAlta, nombre : nombreAlta, apellido1: ape1Alta, apellido2: ape2Alta }, 
+ 	 			function(json){				
+ 	 				if (json.error == "") {
+ 	 					alert("<bean:message key="expediente.alta.altaDestinatario.altaRealizada"/>");
+ 	 					mostrarAltaDestinatario(false);
+ 	 				} else {
+ 	 	 				alert(json.error);
+ 	 				}				 							
+ 	 			});
+  		}
+  	}
+ 		
+ 		function alta(){		
+ 			if(confirm ( "<bean:message key='expediente.alta.confirmacion' />" )){
+ 				var index = document.forms["0"].unidadAdm.selectedIndex;
+ 				document.forms["0"].nombreUnidad.value=document.forms["0"].unidadAdm.options[index].text;
+ 				document.forms["0"].submit();
+ 				return true;
+ 			}else{
+ 				return false;
+ 			}						
+ 		}
+ 		
      // -->
 </script>
 <bean:define id="urlConfirmacion" type="java.lang.String">
@@ -86,7 +136,7 @@
 				<html:hidden property="tipo"/>
 				<html:hidden property="numeroEntrada"/>
 				<html:hidden property="flagValidacion" value="altaExpedient"/>
-				<html:hidden property="usuarioSeycon"/>
+				<html:hidden property="usuarioSeycon" styleId="usuarioSeycon"/>
 				<html:hidden property="nombreUnidad"/>
 				
 				<p class="titol major">
@@ -119,16 +169,17 @@
 				<p>
 					<label for="nif"><bean:message key="expediente.nif"/></label>
 					<logic:present name="existeEntrada">
-						<html:text  property="nif"  readonly="true"/>					
+						<html:text  property="nif" styleId="nif" readonly="true"/>					
 					</logic:present>
 					<logic:notPresent name="existeEntrada">
-						<html:text property="nif" onblur="this.value=this.value.toUpperCase()"/>					
-						<img src="imgs/botons/cercar.gif" alt="<bean:message key='botons.cercar'/>"  onclick="javascript:fillDestinatario();"/> 
+						<html:text property="nif" styleId="nif" onblur="this.value=this.value.toUpperCase()"/>					
+						<img src="imgs/botons/cercar.gif" alt="<bean:message key='botons.cercar'/>"  onclick="javascript:fillDestinatario();"/>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" onclick="mostrarAltaDestinatario(true);" value="<bean:message key='expediente.alta.altaDestinatario.botonAlta'/>"/>  
 					</logic:notPresent>
 				</p>
 				<p>
 					<label for="nombre"><bean:message key="expediente.nombre"/></label>
-					<html:text  property="nombre" styleClass="pc40" readonly="true"/>
+					<html:text  property="nombre" styleId="nombre"  styleClass="pc40" readonly="true"/>
 				</p>
 				
 				
@@ -178,4 +229,35 @@
 			
 		</div>
 		<!-- /continguts -->
+		
+						
+ <!--  capa alta destinatario -->
+ <div id="altaDestinatario" class="altaDestinatario">	
+ 	<p>
+		<bean:message key="expediente.alta.altaDestinatario.intro"/>
+	</p>	
+ 	<form  class="remarcar opcions">
+ 		<p>
+			<label for="nifAltaDestinatario"><bean:message key="expediente.alta.altaDestinatario.nif"/></label>
+			<input type="text" id="nifAltaDestinatario" name="nifAltaDestinatario" size="12"  class="nif"/>
+		</p>
+ 		<p>
+			<label for="nombreAltaDestinatario"><bean:message key="expediente.alta.altaDestinatario.nombre"/></label>
+			<input type="text" id="nombreAltaDestinatario" name="nombreAltaDestinatario" class="pc40" />
+		</p>
+		<p>
+			<label for="apellido1AltaDestinatario"><bean:message key="expediente.alta.altaDestinatario.apellido1"/></label>
+			<input type="text" id="apellido1AltaDestinatario" name="apellido1AltaDestinatario" class="pc40" />
+		</p>
+		<p>
+			<label for="apellido2AltaDestinatario"><bean:message key="expediente.alta.altaDestinatario.apellido2"/></label>
+			<input type="text" id="apellido2AltaDestinatario" name="apellido2AltaDestinatario" class="pc40" />
+		</p>
+		<p class="botonera">
+			<input type="button" onclick="realizarAltaDestinatario();" value="<bean:message key="expediente.alta.altaDestinatario.botonAlta"/>"/>
+			<input type="button" onclick="mostrarAltaDestinatario(false);" value="<bean:message key="expediente.alta.altaDestinatario.botonCancelar"/>"/>
+		</p>
+ 	</form> 	
+</div>					
+		
 				

@@ -88,6 +88,18 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 			throw new DelegateException( e );
 		}
 	}
+	
+	public String altaZonaPersonalUsuario( String nif, String nombre, String apellido1, String apellido2)  throws DelegateException	
+	{
+		try
+		{
+			return getFacade().altaZonaPersonalUsuario( nif, nombre, apellido1, apellido2) ;
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
 		
 	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String numeroRegistro) throws DelegateException	
 	{

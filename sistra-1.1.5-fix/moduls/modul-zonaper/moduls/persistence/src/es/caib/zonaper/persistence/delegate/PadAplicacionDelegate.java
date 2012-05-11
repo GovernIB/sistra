@@ -64,6 +64,18 @@ public class PadAplicacionDelegate implements StatelessDelegate {
         }
 	}
 	
+	public PersonaPAD altaPersonaCodigoUsuarioAuto(PersonaPAD personaPAD ) throws DelegateException
+	{
+		try
+		{
+			return getFacade().altaPersonaCodigoUsuarioAuto(personaPAD );
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
 	public void modificarPersona( PersonaPAD personaPAD ) throws DelegateException
 	{
 		try
@@ -110,10 +122,10 @@ public class PadAplicacionDelegate implements StatelessDelegate {
         }
 	}
 	
-	public void modificarHelpdeskCodigoUsuario( String usuOld, String usuNew) throws DelegateException{
+	public void actualizarCodigoUsuario( String usuOld, String usuNew) throws DelegateException{
 		try
 		{
-			getFacade().modificarHelpdeskCodigoUsuario( usuOld, usuNew);
+			getFacade().actualizarCodigoUsuario( usuOld, usuNew);
 		}
 		catch (Exception e) 
 		{

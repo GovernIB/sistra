@@ -626,17 +626,17 @@ public abstract class PadFacadeEJB implements SessionBean{
     	
     }
     
-    /**
+    /* NO SE USA
      * 
      * Da de alta una persona en la PAD
      * 
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.todos}"
+     * ejb.interface-method
+     * ejb.permission role-name="${role.todos}"
      * 
      * @param personaPAD
      * @return
      * @throws ExcepcionPAD
-     */
+     
     public PersonaPAD altaPersona( PersonaPAD personaPAD ) throws ExcepcionPAD
     {
     	try
@@ -649,6 +649,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     		throw new ExcepcionPAD("Error modificando datos de la PAD",ex);
     	}
     }
+    */
     
     /**
      * 
@@ -666,7 +667,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	try
     	{
 	    	PadAplicacionDelegate padAplic = DelegateUtil.getPadAplicacionDelegate();
-	    	padAplic.modificarHelpdeskCodigoUsuario( usuOld, usuNew );
+	    	padAplic.actualizarCodigoUsuario( usuOld, usuNew );
     	}
     	catch(Exception ex)
     	{

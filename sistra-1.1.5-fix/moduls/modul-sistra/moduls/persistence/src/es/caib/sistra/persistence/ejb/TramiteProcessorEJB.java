@@ -5024,7 +5024,9 @@ public class TramiteProcessorEJB implements SessionBean {
     		// Evaluamos script
     		rpteNif = this.evaluarScript(scriptRpteNif,null);
     		// El script puede devolver un nif/cif valido o la cadena "NO-NIF" para especificar que no se especificará NIF.
-    		if (!"NO-NIF".equals(rpteNif)) {
+    		if ("NO-VALOR".equals(rpteNif)) {
+    			rpteNif="";  
+    		} else {	
 	    		// Normalizamos documento de identificación
 	        	rpteNif = NifCif.normalizarDocumento(rpteNif);
 	        	// Si se mete script de representante debe devolver un nif valido
@@ -5056,6 +5058,14 @@ public class TramiteProcessorEJB implements SessionBean {
     	}
     	if (scriptRpteNom != null && scriptRpteNom.length > 0 ){
     		rpteNom = this.evaluarScript(scriptRpteNom,null);
+    		// El script puede devolver un nif/cif valido o la cadena "NO-VALOR" para especificar que no se especificará nombre.
+    		if ("NO-VALOR".equals(rpteNom)) {
+    			rpteNom = "";
+    		} else {
+    			if (StringUtils.isBlank(rpteNom)) {
+    				throw new Exception("El script de nombre de representante no devuelve un nombre");
+    			}
+    		}
     	}
     	return rpteNom;
 	}

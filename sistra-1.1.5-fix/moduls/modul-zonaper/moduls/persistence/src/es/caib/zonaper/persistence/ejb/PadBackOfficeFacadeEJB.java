@@ -65,6 +65,7 @@ import es.caib.zonaper.persistence.delegate.EventoExpedienteDelegate;
 import es.caib.zonaper.persistence.delegate.ExpedienteDelegate;
 import es.caib.zonaper.persistence.delegate.IndiceElementoDelegate;
 import es.caib.zonaper.persistence.delegate.PadDelegate;
+import es.caib.zonaper.persistence.util.ConfigurationUtil;
 
 
 /**
@@ -569,6 +570,41 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
     	catch( Exception ex )
     	{
     		throw new ExcepcionPAD("Error verificando si existe persona en PAD",ex);
+    	}
+    	
+    }	
+	
+	/**
+	 * 
+	 * Da de alta un ciudadano en la zona personal
+     * 
+	 * @param nif Nif
+	 * @param nombre Nombre
+	 * @param apellido1 Apellido1
+	 * @param apellido2 Apellido2 
+	 * @throws ExcepcionPAD
+	 *  
+	 * @ejb.interface-method
+     * @ejb.permission role-name="${role.gestor}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+	public String altaZonaPersonalUsuario( String nif, String nombre, String apellido1, String apellido2) throws ExcepcionPAD
+    {
+    	try
+    	{	
+    		// Realizamos alta
+    		PersonaPAD persona = new PersonaPAD();
+    		persona.setNif(nif);
+    		persona.setNombre(nombre);
+    		persona.setApellido1(apellido1);
+    		persona.setApellido2(apellido2);
+    		PersonaPAD p = DelegateUtil.getPadAplicacionDelegate().altaPersonaCodigoUsuarioAuto(persona);
+    		return p.getUsuarioSeycon();
+    		
+    	}
+    	catch( Exception ex )
+    	{
+    		throw new ExcepcionPAD("Error realizando alta usuario en PAD",ex);
     	}
     	
     }	

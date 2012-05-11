@@ -38,8 +38,8 @@ public class PersonaPAD implements Serializable{
 	private String email;
 	private boolean habilitarAvisosExpediente=false;
 	private boolean habilitarDelegacion=false;
-	
-	
+	private boolean usuarioSeyconGeneradoAuto=false; // indica codigo generado automaticamente
+		
 	public String getApellido1() {
 		return apellido1;
 	}
@@ -157,6 +157,12 @@ public class PersonaPAD implements Serializable{
 	}
 	public void setHabilitarDelegacion(boolean habilitarDelegacion) {
 		this.habilitarDelegacion = habilitarDelegacion;
+	}
+	public boolean isUsuarioSeyconGeneradoAuto() {
+		return usuarioSeyconGeneradoAuto;
+	}
+	public void setUsuarioSeyconGeneradoAuto(boolean usuarioSeyconGeneradoAuto) {
+		this.usuarioSeyconGeneradoAuto = usuarioSeyconGeneradoAuto;
 	}
 	
 }

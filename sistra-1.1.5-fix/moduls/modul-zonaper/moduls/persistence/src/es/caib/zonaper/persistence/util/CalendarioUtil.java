@@ -47,7 +47,7 @@ public class CalendarioUtil {
 	
 	
 	/**
-	 * Calcula fecha fin tras un plazo teniendo en cuenta los dias inhabiles (fin de semana y festivos).
+	 * Calcula fecha fin tras un plazo teniendo en cuenta los dias inhabiles (domingos y festivos).
 	 * 
 	 */
 	public Date calcularPlazoFinNotificacion(Date fechaInicio, int plazo, boolean primerDiaHabil, boolean siguientesDiasHabiles) throws Exception{
@@ -77,7 +77,7 @@ public class CalendarioUtil {
             if ( (primer && primerDiaHabil) || siguientesDiasHabiles) {
             	int diaSemana = calendar1.get(Calendar.DAY_OF_WEEK);
                 int diaMes = calendar1.get(Calendar.DAY_OF_MONTH);
-	            if (diaSemana != Calendar.SATURDAY && diaSemana != Calendar.SUNDAY && !festivos.contains(Integer.toString(diaMes))) {
+	            if (diaSemana != Calendar.SUNDAY && !festivos.contains(Integer.toString(diaMes))) {
 	            	primer = false;
 	            	numDias++;
 	            }

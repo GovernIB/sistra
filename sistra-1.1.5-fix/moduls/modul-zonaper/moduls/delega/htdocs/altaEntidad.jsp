@@ -185,6 +185,7 @@ $(function()
 					<html:radio property="persona.habilitarAvisosExpediente" value="true"/>Si
 					<html:radio property="persona.habilitarAvisosExpediente" value="false"/>No
 				</p>
+				<!-- 
 				<p>
 					<label for="persona.usuarioSeycon"><bean:message key="entidad.usuarioSeycon"/></label>
 					<logic:equal name="detalleEntidadForm" property="modificacio"  value="S">
@@ -195,6 +196,7 @@ $(function()
 					</logic:notEqual>
 					
 				</p>
+				-->
 				<p class="botonera">
 					<logic:equal name="detalleEntidadForm" property="modificacio"  value="S">
 						<html:submit><bean:message key="entidad.modifica"/></html:submit>

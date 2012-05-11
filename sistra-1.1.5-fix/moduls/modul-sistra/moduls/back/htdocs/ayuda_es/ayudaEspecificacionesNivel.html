@@ -95,10 +95,9 @@
       <p>Este dato es <strong>obligatorio</strong> especificarlo si el trámite es autenticado (en las 
         especificaciones gen&eacute;ricas o por nivel).  <br>
         <br>
-        La &uacute;nica excepci&oacute;n permitida es para acceso An&oacute;nimo. Para este caso 
-        se permitir&aacute; no establecer el script de NIF de representante o bien que el 
-        script devuelva la cadena "NO-NIF". Esta funcionalidad nos permitir&aacute; 
-        tr&aacute;mites con acceso an&oacute;nimo sin establecer el nif del solicitante.</p></td>
+        La &uacute;nica excepci&oacute;n permitida es para acceso An&oacute;nimo. Si el destino es registro el nif podr&aacute; ser opcional pero el
+        nombre ser&aacute; obligatorio. Si el destino no es registro el nif y el nombre podr&aacute;n ser opcionales.
+        Para no establecer el nif o el nombre se deber&aacute; dejar vac&iacute;o el script o bien que el script devuelva la cadena "NO-VALOR".</p></td>
   </tr>
   <tr> 
     <td>Referencia representado</td>
