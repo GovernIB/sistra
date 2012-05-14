@@ -115,9 +115,9 @@ public class EmailUtils
     		// Si se verifica envio añadimos prefijo para poder tracear el envio
     		String prefijo = "";
     		if (me.isVerificarEnvio()) {    			
-    			prefijo = StringUtil.replace(prefijoEmail, "?", me.getCodigo().toString()) + " - "; 
+    			prefijo = " - " + StringUtil.replace(prefijoEmail, "?", me.getCodigo().toString()) ; 
     		}
-    		msg.setSubject(prefijo + me.getTitulo());
+    		msg.setSubject(me.getTitulo() + prefijo);
     		
 	    	byte[] mensaje = me.getMensaje();
 	    	
