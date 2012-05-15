@@ -522,7 +522,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 			
 			// Creamos indices de busqueda (solo autenticados)
 			try {
-				if (StringUtils.isNotEmpty(expediente.getUsuarioSeycon())) {
+				if (StringUtils.isNotEmpty(expediente.getSeyconCiudadano())) {
 					crearIndicesEventoExpediente(expediente.getNifRepresentante(), ev);
 				}
 			} catch (Exception e) {
