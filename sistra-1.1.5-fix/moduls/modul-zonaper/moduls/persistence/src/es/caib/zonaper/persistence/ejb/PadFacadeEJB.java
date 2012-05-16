@@ -1158,10 +1158,10 @@ public abstract class PadFacadeEJB implements SessionBean{
     				}
 
     				// Si el expediente es autenticado, la notificacion debe serlo (y vicecersa)
-    				if (notificacion.getUsuarioSeycon() != null && expe.getUsuarioSeycon() == null) {
+    				if (notificacion.getUsuarioSeycon() != null && expe.getSeyconCiudadano() == null) {
     					throw new Exception("No se pueden generar notificaciones autenticadas sobre expediente anonimo");
     				}
-    				if (notificacion.getUsuarioSeycon() == null && expe.getUsuarioSeycon() != null) {
+    				if (notificacion.getUsuarioSeycon() == null && expe.getSeyconCiudadano() != null) {
     					throw new Exception("No se pueden generar notificaciones anonimas sobre expediente autenticado");
     				}
     					 
