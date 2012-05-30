@@ -5,30 +5,28 @@ public class FicheroExportacion  implements java.io.Serializable
 {
 
     // Fields   
-	 private String codigo;
-     private byte[] datos;     
-     private Tramite tramite;
+	 private String identificadorTramite;
+	 private String nombre;
+     private ArchivoFicheroExportacion archivoFicheroExportacion;     
      
-	public String getCodigo() {
-		return codigo;
+	public String getIdentificadorTramite() {
+		return identificadorTramite;
 	}
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
+	public void setIdentificadorTramite(String codigo) {
+		this.identificadorTramite = codigo;
+	}	
+	public String getNombre() {
+		return nombre;
 	}
-	public byte[] getDatos() {
-		return datos;
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
-	public void setDatos(byte[] datos) {
-		this.datos = datos;
+	public ArchivoFicheroExportacion getArchivoFicheroExportacion() {
+		return archivoFicheroExportacion;
 	}
-	public Tramite getTramite() {
-		return tramite;
+	public void setArchivoFicheroExportacion(
+			ArchivoFicheroExportacion archivoFicheroExportacion) {
+		this.archivoFicheroExportacion = archivoFicheroExportacion;
 	}
-	public void setTramite(Tramite tramite) {
-		this.tramite = tramite;
-	}
-
-
-
-   
+	   
 }

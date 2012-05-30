@@ -17,7 +17,7 @@ import org.apache.struts.util.MessageResources;
 
 import es.caib.bantel.front.form.ConfirmacionForm;
 import es.caib.bantel.model.GestorBandeja;
-import es.caib.bantel.model.Tramite;
+import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.util.StringUtil;
 import es.caib.zonaper.modelInterfaz.PreregistroPAD;
@@ -78,8 +78,8 @@ public class ConfirmarPreregistroAction extends BaseAction
 		// Verificamos que el gestor tenga acceso al tramite
 		boolean acceso = false;
 		GestorBandeja gestor = DelegateUtil.getGestorBandejaDelegate().obtenerGestorBandeja(request.getUserPrincipal().getName());
-		for (Iterator it=gestor.getTramitesGestionados().iterator();it.hasNext();){
-				Tramite tramite = (Tramite) it.next();
+		for (Iterator it=gestor.getProcedimientosGestionados().iterator();it.hasNext();){
+				Procedimiento tramite = (Procedimiento) it.next();
 				if (tramite.getIdentificador().equals(StringUtil.getModelo(preregistro.getIdentificadorTramite()))){
 					acceso = true;
 					break;

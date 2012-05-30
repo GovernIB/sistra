@@ -12,7 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import es.caib.bantel.model.ReferenciaTramiteBandeja;
-import es.caib.bantel.model.Tramite;
+import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.intf.BteConectorFacade;
 import es.caib.bantel.persistence.intf.BteConectorFacadeHome;
@@ -31,14 +31,14 @@ public class PluginBackOffice {
 	/**
 	 * Configuración del trámite con información del acceso al BackOffice
 	 */
-	private Tramite tramite;
+	private Procedimiento tramite;
 	private String url;
 	
 	/**
 	 * Crea plugin a partir configuración trámite
 	 * @param tramite
 	 */
-	public PluginBackOffice(Tramite tramite) throws Exception{
+	public PluginBackOffice(Procedimiento tramite) throws Exception{
 		this.tramite = tramite;
 		try{
 			url = tramite.getUrl();
@@ -60,10 +60,10 @@ public class PluginBackOffice {
 		log.debug("[" + tramite.getIdentificador() + "] - Aviso entradas a BackOffice para tramite " + tramite.getIdentificador());
 		switch (tramite.getTipoAcceso())
 		{
-			case Tramite.ACCESO_EJB:
+			case Procedimiento.ACCESO_EJB:
 				avisarEntradasEJB(entradas);	
 				break;
-			case Tramite.ACCESO_WEBSERVICE:
+			case Procedimiento.ACCESO_WEBSERVICE:
 				avisarEntradasWS(entradas,usuAuto,passAuto);	
 				break;
 			default:
@@ -85,10 +85,10 @@ public class PluginBackOffice {
 			CallbackHandler handler = null; 
 			switch (tramite.getAutenticacionEJB()){
 				// No requiere autenticacion explicita (utilizara usuario/pass auto)
-				case Tramite.AUTENTICACION_SIN:
+				case Procedimiento.AUTENTICACION_SIN:
 					break;
 				// Requiere autenticacion explicita basada en usr/pass
-				case Tramite.AUTENTICACION_ESTANDAR:
+				case Procedimiento.AUTENTICACION_ESTANDAR:
 					log.debug("Autenticacion explicita con usuario/password");
 					String claveCifrada = (String)DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().get("clave.cifrado");
 					String user = CifradoUtil.descifrar(claveCifrada,tramite.getUsr());
@@ -96,7 +96,7 @@ public class PluginBackOffice {
 					handler = new UsernamePasswordCallbackHandler( user, pass ); 
 					break;
                 // Requiere autenticacion explicita basada en plugin autenticacion explicita organismo
-				case Tramite.AUTENTICACION_ORGANISMO:
+				case Procedimiento.AUTENTICACION_ORGANISMO:
 					log.debug("Autenticacion explicita con plugin organismo");
 					AutenticacionExplicitaInfo authInfo = null;
 					try{
@@ -126,7 +126,7 @@ public class PluginBackOffice {
 			}			
 			
 			// Procesamiento original: realizamos avisos de n numeros de entradas
-			BteConectorFacadeHome homeCF = (BteConectorFacadeHome) EjbBackOfficeFactory.getInstance().getHome(tramite.getJndiEJB(),(tramite.getLocalizacionEJB() == Tramite.EJB_LOCAL?"LOCAL":url));
+			BteConectorFacadeHome homeCF = (BteConectorFacadeHome) EjbBackOfficeFactory.getInstance().getHome(tramite.getJndiEJB(),(tramite.getLocalizacionEJB() == Procedimiento.EJB_LOCAL?"LOCAL":url));
 			BteConectorFacade ejbCF= homeCF.create();
 			ejbCF.avisoEntradas(ents);					
 			
@@ -160,20 +160,20 @@ public class PluginBackOffice {
 		String user = null,pass=null; 
 		switch (tramite.getAutenticacionEJB()){
 			// No requiere autenticacion explicita 
-			case Tramite.AUTENTICACION_SIN:
+			case Procedimiento.AUTENTICACION_SIN:
 				log.debug("Autenticacion sin autenticacion");
 				//user = usuAuto;
 				//pass = passAuto; 
 				break;
 			// Requiere autenticacion explicita basada en usr/pass
-			case Tramite.AUTENTICACION_ESTANDAR:
+			case Procedimiento.AUTENTICACION_ESTANDAR:
 				log.debug("Autenticacion explicita con usuario/password");
 				String claveCifrada = (String)config.get("clave.cifrado");
 				user = CifradoUtil.descifrar(claveCifrada,tramite.getUsr());
 				pass = CifradoUtil.descifrar(claveCifrada,tramite.getPwd());
 				break;
             // Requiere autenticacion explicita basada en plugin autenticacion explicita organismo
-			case Tramite.AUTENTICACION_ORGANISMO:
+			case Procedimiento.AUTENTICACION_ORGANISMO:
 				log.debug("Autenticacion explicita con plugin organismo");
 				AutenticacionExplicitaInfo authInfo = null;
 				try{

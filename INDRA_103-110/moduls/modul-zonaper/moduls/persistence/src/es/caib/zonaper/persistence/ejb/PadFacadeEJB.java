@@ -626,17 +626,17 @@ public abstract class PadFacadeEJB implements SessionBean{
     	
     }
     
-    /**
+    /* NO SE USA
      * 
      * Da de alta una persona en la PAD
      * 
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.todos}"
+     * ejb.interface-method
+     * ejb.permission role-name="${role.todos}"
      * 
      * @param personaPAD
      * @return
      * @throws ExcepcionPAD
-     */
+     
     public PersonaPAD altaPersona( PersonaPAD personaPAD ) throws ExcepcionPAD
     {
     	try
@@ -649,6 +649,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     		throw new ExcepcionPAD("Error modificando datos de la PAD",ex);
     	}
     }
+    */
     
     /**
      * 
@@ -666,7 +667,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	try
     	{
 	    	PadAplicacionDelegate padAplic = DelegateUtil.getPadAplicacionDelegate();
-	    	padAplic.modificarHelpdeskCodigoUsuario( usuOld, usuNew );
+	    	padAplic.actualizarCodigoUsuario( usuOld, usuNew );
     	}
     	catch(Exception ex)
     	{
@@ -1004,6 +1005,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	entrada.setIdioma( asiento.getDatosAsunto().getIdiomaAsunto() );
     	entrada.setNumeroRegistro(justificante.getNumeroRegistro());    	
     	entrada.setFecha(justificante.getFechaRegistro());   
+    	entrada.setProcedimiento(datosPropios.getInstrucciones().getIdentificadorProcedimiento());
     	entrada.setTramite(StringUtil.getModelo(justificante.getAsientoRegistral().getDatosAsunto().getIdentificadorTramite()));
     	entrada.setVersion(new Integer(StringUtil.getVersion(justificante.getAsientoRegistral().getDatosAsunto().getIdentificadorTramite())));
     	entrada.setHabilitarAvisos(habilitarAvisos);
@@ -1157,10 +1159,10 @@ public abstract class PadFacadeEJB implements SessionBean{
     				}
 
     				// Si el expediente es autenticado, la notificacion debe serlo (y vicecersa)
-    				if (notificacion.getUsuarioSeycon() != null && expe.getUsuarioSeycon() == null) {
+    				if (notificacion.getUsuarioSeycon() != null && expe.getSeyconCiudadano() == null) {
     					throw new Exception("No se pueden generar notificaciones autenticadas sobre expediente anonimo");
     				}
-    				if (notificacion.getUsuarioSeycon() == null && expe.getUsuarioSeycon() != null) {
+    				if (notificacion.getUsuarioSeycon() == null && expe.getSeyconCiudadano() != null) {
     					throw new Exception("No se pueden generar notificaciones anonimas sobre expediente autenticado");
     				}
     					 
@@ -1363,6 +1365,9 @@ public abstract class PadFacadeEJB implements SessionBean{
     		throw new Exception("No se ha establecido el identificador de persistencia en el documento de datos propios");
     	}
     	entrada.setIdPersistencia(idPersistencia);
+    	
+    	// Procedimiento
+    	entrada.setProcedimiento(datosPropios.getInstrucciones().getIdentificadorProcedimiento());
     	
     	// Fecha limite de entrega
     	entrada.setFechaCaducidad(datosPropios.getInstrucciones().getFechaTopeEntrega());

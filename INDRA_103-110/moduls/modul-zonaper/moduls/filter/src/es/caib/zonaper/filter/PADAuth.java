@@ -77,8 +77,11 @@ public class PADAuth implements AuthInterface
 			
 			// 3º Si no se encuentra registrado comprobamos si existe alguna persona con ese nif.
 			//    En caso de que haya alguien registrado, actualizamos usuario seycon asociado
+			//    Contemplaremos tambien si el codigo de usuario ha sido generado de forma automatica
+			//	  de forma que le salga la pantalla de verificacion de datos (ya se actualizara el codigo de usuario 
+			// 	  en la pantalla de verificacion de datos)
 			PersonaPAD p = delegate.obtenerDatosPersonaPADporNif(plgLogin.getNif(seycon));
-			if ( p != null){
+			if ( p != null && !p.isUsuarioSeyconGeneradoAuto()){
 				delegate.actualizarCodigoUsuario(p.getUsuarioSeycon(),seycon.getName());
 				return seycon;
 			}	

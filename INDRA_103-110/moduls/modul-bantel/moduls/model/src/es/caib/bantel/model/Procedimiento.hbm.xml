@@ -4,9 +4,9 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
     
 <hibernate-mapping>
-<class  name="es.caib.bantel.model.Tramite" table="BTE_TRAAPL">
+<class  name="es.caib.bantel.model.Procedimiento" table="BTE_PROAPL">
 	<cache usage="read-write"/>
-    <id name="identificador" unsaved-value="null" column="TAP_IDETRA" >
+    <id name="identificador" unsaved-value="null" column="TAP_IDEPRO" >
       <generator class="assigned"/>
     </id>	
 	
@@ -23,20 +23,12 @@
   	<property name="pwd"  column="TAP_PWD" length="50" />   	
   	<property name="rolAcceso" column="TAP_ROL" length="100"/>
   	<property name="ultimoAviso" column="TAP_AVISO"/>
-  	
-	<property name="nombreFicheroExportacion"  column="TAP_NOMFIC" />
   	<property name="errores" type="binary" column="TAP_ERRORS"/>  	
-  	<set name="gestores" table="BTE_GESTRA" inverse="true">
-        <key column="GAP_IDETRA"/>
-        <many-to-many column="GAP_CODGES" class="es.caib.bantel.model.GestorBandeja"/>
-    </set>
   	
-  	  <!-- bi-directional one-to-one association to fic -->
-	    <one-to-one
-	        name="archivoFicheroExportacion"
-	        cascade="all"
-	        class="es.caib.bantel.model.FicheroExportacion"
-	        outer-join="false" />
+  	<set name="gestores" table="BTE_GESPRO" inverse="true">
+        <key column="GAP_IDEPRO"/>
+        <many-to-many column="GAP_CODGES" class="es.caib.bantel.model.GestorBandeja"/>
+    </set>    
   	
 </class>
 </hibernate-mapping>

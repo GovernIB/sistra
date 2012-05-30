@@ -65,6 +65,7 @@ public class PruebaEscrituraDatosPropios {
 			instrucciones.setFechaTopeEntrega(new Date());
 			instrucciones.setTextoFechaTopeEntrega("Texto de fecha de entrega particularizado");			
 			instrucciones.setIdentificadorPersistencia("ENV/2006/002222");
+			instrucciones.setIdentificadorProcedimiento("PROC1");
 			
 			instrucciones.setHabilitarNotificacionTelematica("N");
 			

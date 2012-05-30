@@ -10,10 +10,10 @@ import org.apache.struts.action.ActionMapping;
 
 import es.caib.bantel.back.action.BaseAction;
 import es.caib.bantel.back.json.JSONObject;
-import es.caib.bantel.model.Tramite;
+import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.modelInterfaz.ConstantesBTE;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
-import es.caib.bantel.persistence.delegate.TramiteDelegate;
+import es.caib.bantel.persistence.delegate.ProcedimientoDelegate;
 import es.caib.xml.ConstantesXML;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,8 +39,8 @@ public class MostrarErroresAction extends BaseAction{
     		jsonObject.put("error",this.getResources(request).getMessage("tramite.error.mostrarError.no.codigo"));
         }else{
         	try {
-        		TramiteDelegate delegate = DelegateUtil.getTramiteDelegate();
-	    		Tramite tramite = delegate.obtenerTramite(idString);
+        		ProcedimientoDelegate delegate = DelegateUtil.getTramiteDelegate();
+	    		Procedimiento tramite = delegate.obtenerProcedimiento(idString);
 	    		if(tramite != null && tramite.getErrores() != null){
     			
     				ArrayList errores = new ArrayList();

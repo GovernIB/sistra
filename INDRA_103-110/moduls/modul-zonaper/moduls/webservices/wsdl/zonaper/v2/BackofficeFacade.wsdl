@@ -45,6 +45,23 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:element name="altaZonaPersonalUsuario">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="nif" type="xsd:string"/>
+						<xsd:element name="nombre" type="xsd:string"/>
+						<xsd:element name="apellido1" type="xsd:string"/>
+						<xsd:element name="apellido2" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="altaZonaPersonalUsuarioResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="altaZonaPersonalUsuarioReturn" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 			<complexType name="BackofficeFacadeException">
 				<sequence/>
 			</complexType>
@@ -72,6 +89,12 @@
 	<wsdl:message name="existeZonaPersonalUsuarioResponse">
 		<wsdl:part name="parameters" element="intf:existeZonaPersonalUsuarioResponse"/>
 	</wsdl:message>
+	<wsdl:message name="altaZonaPersonalUsuarioRequest">
+		<wsdl:part name="parameters" element="intf:altaZonaPersonalUsuario"/>
+	</wsdl:message>
+	<wsdl:message name="altaZonaPersonalUsuarioResponse">
+		<wsdl:part name="parameters" element="intf:altaZonaPersonalUsuarioResponse"/>
+	</wsdl:message>
 	<wsdl:portType name="BackofficeFacade">
 		<wsdl:operation name="altaExpediente">
 			<wsdl:input name="altaExpedienteRequest" message="impl:altaExpedienteRequest"/>
@@ -86,6 +109,11 @@
 		<wsdl:operation name="existeZonaPersonalUsuario">
 			<wsdl:input name="existeZonaPersonalUsuarioRequest" message="impl:existeZonaPersonalUsuarioRequest"/>
 			<wsdl:output name="existeZonaPersonalUsuarioResponse" message="impl:existeZonaPersonalUsuarioResponse"/>
+			<wsdl:fault name="BackofficeFacadeException" message="impl:BackofficeFacadeException"/>
+		</wsdl:operation>
+		<wsdl:operation name="altaZonaPersonalUsuario">
+			<wsdl:input name="altaZonaPersonalUsuarioRequest" message="impl:altaZonaPersonalUsuarioRequest"/>
+			<wsdl:output name="altaZonaPersonalUsuarioResponse" message="impl:altaZonaPersonalUsuarioResponse"/>
 			<wsdl:fault name="BackofficeFacadeException" message="impl:BackofficeFacadeException"/>
 		</wsdl:operation>
 	</wsdl:portType>
@@ -116,6 +144,18 @@
 			</wsdl:fault>
 		</wsdl:operation>
 		<wsdl:operation name="existeZonaPersonalUsuario">
+			<soap:operation/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="BackofficeFacadeException">
+				<soap:fault name="BackofficeFacadeException" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="altaZonaPersonalUsuario">
 			<soap:operation/>
 			<wsdl:input>
 				<soap:body use="literal"/>

@@ -107,7 +107,7 @@ public class ValoresDominio  implements Serializable{
 				numfila = addFila();
 				for (Iterator it = fila.keySet().iterator();it.hasNext();){
 					String ls_key = (String) it.next();
-					setValor(numfila, ls_key.toUpperCase(), (String) fila.get(ls_key.toUpperCase()));							
+					setValor(numfila, ls_key.toUpperCase(), (String) fila.get(ls_key));							
 				}				
 			}
 		}	

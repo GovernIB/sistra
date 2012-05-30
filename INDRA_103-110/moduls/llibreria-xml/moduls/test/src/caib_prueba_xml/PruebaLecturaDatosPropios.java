@@ -61,6 +61,7 @@ public class PruebaLecturaDatosPropios {
 		System.out.println ("Fecha Tope Entrega: " + inst.getFechaTopeEntrega());
 		System.out.println ("Texto Tope Entrega: " + inst.getTextoFechaTopeEntrega());
 		System.out.println ("Identificador persistencia: " + inst.getIdentificadorPersistencia());
+		System.out.println ("Identificador procedimiento: " + inst.getIdentificadorProcedimiento());
 		System.out.println ("Habilitar notificacion telematica: " + inst.getHabilitarNotificacionTelematica());
 		System.out.println ("Habilitar avisos: " + inst.getHabilitarAvisos());
 		System.out.println ("Aviso sms: " + inst.getAvisoSMS());

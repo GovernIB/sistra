@@ -97,16 +97,16 @@
     <td>Referència representant</td>
     <td><p>Per a crear el seient caldrà indicar qui és el representant. Per a 
         això cal indicar els valors dels camps del formulari que continguin el 
-        DNI i el nom complet del representant. El tipus d'aquests camps és <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaScript.jsp">script</a> 
-        i espera en cada cas el valor del DNI i el nom complet (segons format seient registral). </p>
-      <p>Aquesta dada és <strong>obligatori</strong> especificar-la (bé en les 
+        NIF i el nom complet del representant. El tipus d'aquests camps és <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaScript.jsp">script</a> 
+        i espera en cada cas el valor del NIF i el nom complet (segons format seient registral). </p>
+        
+      <p>Aquesta dada és <strong>obligatori</strong> especificar-la en els tr&agrave;mits autenticats (en les 
         especificacions gen&egrave;riques o per nivell). <br>
         <br>
-        L'&uacute;nica excepci&oacute; permesa és per a l'accés An&ograve;nim 
-        sempre que la destinació del tr&agrave;mite no siga registre. Per a aquest 
-        cas es permetr&agrave; no establir aquesta informaci&oacute; o bé que 
-        l'script retorni buit. Aquesta funcionalitat ens permetr&agrave; tr&agrave;mits 
-        amb accés an&ograve;nim sense identificar al sol.licitant.</p></td>
+        L'&uacute;nica excepci&oacute; permesa és per a l'accés An&ograve;nim. 
+        Si la destinaci&oacute; &eacute;s registre el nif podrà ser opcional però el nom ser&agrave; obligatori. 
+        Si la destinaci&oacute; no &eacute;s registre el nif i el nom podran ser opcionals. 
+        Per a no establir el nif o el nom s'haur&agrave; de deixar buit el script o b&eacute; que el script retorni la cadena "NO-VALOR".</p></td>
   </tr>
   <tr> 
     <td>Refer&egrave;ncia representat</td>
@@ -119,7 +119,7 @@
     <td>Script de destinatari tr&agrave;mit</td>
     <td>
     	<p>
-    		Aquest script permet establir din&agrave;micament el destinatari del tr&agrave;mit: oficina registral, organ destinació 
+    		Aquest script permet establir din&agrave;micament el destinatari del tr&agrave;mit: procediment, oficina registral, organ destinació 
     		i unitat administrativa. Encara que s'estableixi din&agrave;micament per script s'haurien d'establir uns valors 
     		inicials en la fitxa de la versi&oacute; del tr&agrave;mit. Per defecte el destinatari tindr&agrave; aquests valors.
     	</p>
@@ -134,6 +134,7 @@
    			<br/>
 		   	<em>
 		   		// Establecer destinatario dinamicamente<br/>
+		   		DESTINATARIO_TRAMITE.setProcedimiento('PROC1');<br/>
 		   		DESTINATARIO_TRAMITE.setOficinaRegistral('OF1');<br/>
 		   		DESTINATARIO_TRAMITE.setOrganoDestino('1');<br/>
 		        DESTINATARIO_TRAMITE.setUnidadAdministrativa('2');<br/>

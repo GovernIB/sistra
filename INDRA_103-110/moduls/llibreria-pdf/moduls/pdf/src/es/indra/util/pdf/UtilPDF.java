@@ -26,10 +26,9 @@ public class UtilPDF {
 	
 	
 	/**
-	 * Concatena dos Pdfs
+	 * Concatena varios pdfs
 	 * @param pdfOut Outputstream al pdf de salida
 	 * @param pdfIn InputStreams de los pdfs a concatenar
-	 * @param pdfIn2
 	 */
 	public static void concatenarPdf(OutputStream pdfOut,InputStream [] pdfIn) throws Exception{
 		if (pdfIn.length < 2) {

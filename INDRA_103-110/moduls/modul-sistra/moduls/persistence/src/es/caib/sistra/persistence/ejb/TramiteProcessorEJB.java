@@ -4461,7 +4461,7 @@ public class TramiteProcessorEJB implements SessionBean {
     private AsientoCompleto generaAsientoRegistral(DestinatarioTramite dt) throws Exception{    	        	    	
     	
     	// Generamos datos propios almacenandolos en el RDS
-    	String xmlDatosPropios = generarDatosPropios();
+    	String xmlDatosPropios = generarDatosPropios(dt);
     		
     	// Generamos asiento a partir información trámite y lo almacenamos en el RDS
     	String xmlAsiento =  generarAsiento(dt);    		    		
@@ -4554,7 +4554,7 @@ public class TramiteProcessorEJB implements SessionBean {
     
     
     // Genera XML de datos propios (instrucciones + datos solicitud) y lo almacena en la PAD y RDS
-    private String generarDatosPropios() throws Exception{
+    private String generarDatosPropios(DestinatarioTramite dt) throws Exception{
     	
     	// Generamos XML Datos Propios
     	PluginFormularios plgForms = new PluginFormularios(true);
@@ -4578,7 +4578,7 @@ public class TramiteProcessorEJB implements SessionBean {
 			expeUA = new Long((String) this.parametrosInicio.get(ConstantesSTR.SUBSANACION_PARAMETER_EXPEDIENTE_UA));			
 		}
 		
-    	String strDatosPropios = GeneradorAsiento.generarDatosPropios(tramiteInfo,tramiteVersion,tramitePersistentePAD,plgForms,plgPagos,expeId , expeUA); 
+    	String strDatosPropios = GeneradorAsiento.generarDatosPropios(tramiteInfo,tramiteVersion,tramitePersistentePAD,plgForms,plgPagos,expeId , expeUA, dt); 
     	byte [] datosPropios = GeneradorAsiento.XMLtoBytes(strDatosPropios);
     	
     	// Comprobamos si existe en la PAD, si no lo creamos
@@ -5020,13 +5020,21 @@ public class TramiteProcessorEJB implements SessionBean {
     	}else{
     		scriptRpteNif = especVersion.getCampoRteNif();
     	}
-    	if (scriptRpteNif != null && scriptRpteNif.length > 0 ){    		
+    	if (scriptRpteNif != null && scriptRpteNif.length > 0 ){
+    		// Evaluamos script
     		rpteNif = this.evaluarScript(scriptRpteNif,null);
+    		// El script puede devolver un nif/cif valido o la cadena "NO-NIF" para especificar que no se especificará NIF.
+    		if ("NO-VALOR".equals(rpteNif)) {
+    			rpteNif="";  
+    		} else {	
+	    		// Normalizamos documento de identificación
+	        	rpteNif = NifCif.normalizarDocumento(rpteNif);
+	        	// Si se mete script de representante debe devolver un nif valido
+	    		if (!NifCif.esNIF(rpteNif) && !NifCif.esCIF(rpteNif)) {
+	    			throw new Exception("El script de nif de representante no devuelve un nif valido");
+	    		}
+    		}
     	}
-    	rpteNif = rpteNif.toUpperCase();
-    	
-    	// Normalizamos documento de identificación
-    	rpteNif = NifCif.normalizarDocumento(rpteNif);
     	
     	return rpteNif;
 	}
@@ -5050,6 +5058,14 @@ public class TramiteProcessorEJB implements SessionBean {
     	}
     	if (scriptRpteNom != null && scriptRpteNom.length > 0 ){
     		rpteNom = this.evaluarScript(scriptRpteNom,null);
+    		// El script puede devolver un nif/cif valido o la cadena "NO-VALOR" para especificar que no se especificará nombre.
+    		if ("NO-VALOR".equals(rpteNom)) {
+    			rpteNom = "";
+    		} else {
+    			if (StringUtils.isBlank(rpteNom)) {
+    				throw new Exception("El script de nombre de representante no devuelve un nombre");
+    			}
+    		}
     	}
     	return rpteNom;
 	}
@@ -5074,6 +5090,7 @@ public class TramiteProcessorEJB implements SessionBean {
     	destTra.setOficinaRegistral(tramiteVersion.getRegistroOficina());
     	destTra.setOrganoDestino(tramiteVersion.getOrganoDestino());
     	destTra.setUnidadAdministrativa(tramiteVersion.getUnidadAdministrativa().toString());
+    	destTra.setProcedimiento(tramiteVersion.getTramite().getProcedimiento());
     	
 		if (scriptDestinatario != null && scriptDestinatario.length>0){
 			// Realizamos calculo destinatario

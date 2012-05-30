@@ -39,6 +39,7 @@
     <property name="nifDelegado"  column="PRE_NIFDLG"/>
     <property name="nombreDelegado"  column="PRE_NOMDLG"/>
     
+    <property name="procedimiento"  column="PRE_IDEPRO"  not-null="true"/>
     <property name="tramite"  column="PRE_TRAMOD"  length="20"/>
     <property name="version"  column="PRE_TRAVER"  length="2"/>
   	

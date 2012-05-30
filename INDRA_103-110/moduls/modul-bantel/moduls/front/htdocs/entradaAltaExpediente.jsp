@@ -72,16 +72,16 @@
 			
 			<html:form action="recuperarExpediente" styleClass="remarcar opcions">
 				<html:hidden property="tipo"/>
-				<p>
-					<label for="numero"><bean:message key="confirmacion.numeroEntrada"/>:</label>
-					<html:text property="numeroEntrada"/>
-				</p>
-
 				
-				<p class="botonera">
-					<html:submit  value="<%=btnAlta%>" onclick="alta();"/>
+				<p class="botonera2">
 					<html:submit value="<%=btnAltaEntrada%>" onclick="recuperar();"/>
+					<html:text property="numeroEntrada" styleId="numeroEntrada"/>
 				</p>
+				
+				<p class="botonera2">
+					<html:submit  value="<%=btnAlta%>" onclick="alta();"/>
+				</p>
+				
 			
 			</html:form>
 			

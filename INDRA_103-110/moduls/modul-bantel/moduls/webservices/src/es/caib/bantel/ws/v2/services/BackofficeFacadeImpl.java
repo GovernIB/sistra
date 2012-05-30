@@ -58,7 +58,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		}
 	}
 
-	public es.caib.bantel.ws.v2.model.ReferenciasEntrada obtenerNumerosEntradas(String identificadorTramite, String procesada, XMLGregorianCalendar desde, XMLGregorianCalendar hasta) throws es.caib.bantel.ws.v2.services.BackofficeFacadeException {
+	public es.caib.bantel.ws.v2.model.ReferenciasEntrada obtenerNumerosEntradas(String identificadorProcesamiento, String identificadorTramite, String procesada, XMLGregorianCalendar desde, XMLGregorianCalendar hasta) throws es.caib.bantel.ws.v2.services.BackofficeFacadeException {
 		try{
 			Date desdeDate=null;
 			Date hastaDate=null;
@@ -68,7 +68,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			}if(hasta != null){
 				hastaDate = hasta.toGregorianCalendar().getTime();
 			}
-			ReferenciaEntradaBTE[] entradas = bd.obtenerReferenciasEntradas(identificadorTramite,procesada,desdeDate, hastaDate);
+			ReferenciaEntradaBTE[] entradas = bd.obtenerReferenciasEntradas(identificadorProcesamiento, identificadorTramite,procesada,desdeDate, hastaDate);
 			return referenciasEntradaIntfToReferenciasEntradaWS(entradas);
 		}catch(Exception ex){
 			throw new es.caib.bantel.ws.v2.services.BackofficeFacadeException(ex.getMessage(),new es.caib.bantel.ws.v2.model.BackofficeFacadeException());

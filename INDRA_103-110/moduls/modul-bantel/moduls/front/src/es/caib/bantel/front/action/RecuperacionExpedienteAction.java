@@ -18,6 +18,8 @@ import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleExpedienteForm;
 import es.caib.bantel.front.util.Dominios;
 import es.caib.bantel.front.util.MensajesUtil;
+import es.caib.bantel.model.Procedimiento;
+import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
 
@@ -65,8 +67,16 @@ public class RecuperacionExpedienteAction extends BaseAction
 				request.getSession().setAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY, new Long(expedienteForm.getUnidadAdm()));
 				request.getSession().setAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY, expedienteForm.getClaveExp());
 				
-				// Establecesmos expediente en la request 
+				// Buscamos descripcion procedimiento
+				String descProc = exp.getIdentificadorProcedimiento();
+				Procedimiento procedimiento = DelegateUtil.getTramiteDelegate().obtenerProcedimiento(exp.getIdentificadorProcedimiento());
+				if (procedimiento != null) {
+					descProc += " - " + procedimiento.getDescripcion();
+				}
+				
+				// Establecemos expediente en la request 
 				request.setAttribute("expediente", exp);
+				request.setAttribute("descripcionProcedimiento", descProc);
 				return mapping.findForward( "success" );
 			}else{
 				ActionErrors errors = new ActionErrors();

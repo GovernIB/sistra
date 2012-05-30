@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="identificadorExpediente" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="unidadAdministrativa" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *         &lt;element name="claveExpediente" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="identificadorProcedimiento" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="idioma" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="descripcion" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="autenticado" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
@@ -44,6 +45,7 @@ import javax.xml.bind.annotation.XmlType;
     "identificadorExpediente",
     "unidadAdministrativa",
     "claveExpediente",
+    "identificadorProcedimiento",
     "idioma",
     "descripcion",
     "autenticado",
@@ -61,6 +63,8 @@ public class Expediente {
     protected long unidadAdministrativa;
     @XmlElement(required = true)
     protected String claveExpediente;
+    @XmlElementRef(name = "identificadorProcedimiento", type = JAXBElement.class)
+    protected JAXBElement<String> identificadorProcedimiento;
     @XmlElement(required = true)
     protected String idioma;
     @XmlElement(required = true)
@@ -141,6 +145,30 @@ public class Expediente {
      */
     public void setClaveExpediente(String value) {
         this.claveExpediente = value;
+    }
+
+    /**
+     * Gets the value of the identificadorProcedimiento property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     
+     */
+    public JAXBElement<String> getIdentificadorProcedimiento() {
+        return identificadorProcedimiento;
+    }
+
+    /**
+     * Sets the value of the identificadorProcedimiento property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     
+     */
+    public void setIdentificadorProcedimiento(JAXBElement<String> value) {
+        this.identificadorProcedimiento = ((JAXBElement<String> ) value);
     }
 
     /**

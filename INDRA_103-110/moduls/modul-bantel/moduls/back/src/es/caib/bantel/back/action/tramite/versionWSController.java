@@ -16,7 +16,7 @@ import org.apache.struts.tiles.Controller;
 
 import es.caib.bantel.persistence.delegate.DelegateException;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
-import es.caib.bantel.persistence.delegate.TramiteDelegate;
+import es.caib.bantel.persistence.delegate.ProcedimientoDelegate;
 import es.caib.bantel.persistence.delegate.VersionWSDelegate;
 
 

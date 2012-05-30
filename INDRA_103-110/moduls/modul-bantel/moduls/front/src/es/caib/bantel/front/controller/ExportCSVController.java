@@ -10,10 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.tiles.ComponentContext;
 
+import es.caib.bantel.model.FicheroExportacion;
 import es.caib.bantel.model.GestorBandeja;
-import es.caib.bantel.model.Tramite;
+import es.caib.bantel.model.Procedimiento;
+import es.caib.bantel.model.TramiteExportarCSV;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
+import es.caib.bantel.persistence.delegate.FicheroExportacionDelegate;
 import es.caib.bantel.persistence.delegate.GestorBandejaDelegate;
+import es.caib.bantel.persistence.delegate.TramiteBandejaDelegate;
 
 public class ExportCSVController extends BaseController
 {
@@ -22,20 +26,35 @@ public class ExportCSVController extends BaseController
 			HttpServletRequest request, HttpServletResponse response,
 			ServletContext servletContext) throws Exception
 	{
-		// Obtenemos tramites accesibles al gestor
+		
+		
+		// Obtenemos tramites con ficheros de exportacion de procedimientos accesibles al gestor
 		GestorBandejaDelegate gestorBandejaDelegate = DelegateUtil.getGestorBandejaDelegate();
 		GestorBandeja gestor = gestorBandejaDelegate.obtenerGestorBandeja(this.getPrincipal(request).getName());
-		List lstTramites = new ArrayList();
-		// Si no existe devolvemos lista de tramites gestionados vacía
+		TramiteBandejaDelegate tramiteBandejaDelegate = DelegateUtil.getTramiteBandejaDelegate();
+		FicheroExportacionDelegate ficheroExportacionDelegate = DelegateUtil.getFicheroExportacionDelegate();
+		List lstTramitesCSV = new ArrayList();
 		if (gestor != null){			
-			for (Iterator it = gestor.getTramitesGestionados().iterator(); it.hasNext();){
-				Tramite tramite = (Tramite) it.next();				
-				if (tramite.getArchivoFicheroExportacion() != null) lstTramites.add(tramite);
+			for (Iterator it = gestor.getProcedimientosGestionados().iterator(); it.hasNext();){
+				Procedimiento procedimiento = (Procedimiento) it.next();
+				// Buscamos tramites del procedimiento
+				String[] idsTramite = tramiteBandejaDelegate.obtenerIdTramitesProcedimiento(procedimiento.getIdentificador(), null, null, null);
+				// Comprobamos si los tramites del procedimiento tienen ficheros de exportacion
+				for (int i = 0 ; i < idsTramite.length ; i++){
+					FicheroExportacion fic = ficheroExportacionDelegate.findFicheroExportacion(idsTramite[i]);
+					if (fic != null) {
+						TramiteExportarCSV tcsv = new TramiteExportarCSV();
+						tcsv.setIdProcedimientoTramite(procedimiento.getIdentificador() + "@#@" + fic.getIdentificadorTramite());
+						tcsv.setDescripcion("Procedimiento: " + procedimiento.getIdentificador() + " - Trámite: " + fic.getIdentificadorTramite());
+						lstTramitesCSV.add(tcsv);
+					}
+				}				
 			}
 		}
 		
 		// Establcemos valores combos
-		request.setAttribute( "tramites", lstTramites );		
+		request.setAttribute( "tramitesCSV", lstTramitesCSV );
+				
 	}
 	
 }

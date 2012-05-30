@@ -3,6 +3,7 @@ package es.caib.bantel.front.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -36,8 +37,13 @@ public class BusquedaTramitesAction extends BaseAction
 		BusquedaTramitesForm formularioBusqueda = ( BusquedaTramitesForm ) form;
 		TramiteBandejaDelegate delegate = DelegateUtil.getTramiteBandejaDelegate();
 		CriteriosBusquedaTramite criterios = new CriteriosBusquedaTramite();
-		criterios.setAnyo( formularioBusqueda.getAnyo() );		
-		criterios.setIdentificadorTramite( formularioBusqueda.getIdentificadorTramite() );
+		criterios.setAnyo( formularioBusqueda.getAnyo() );	
+		if (!("-1".equals(formularioBusqueda.getIdentificadorProcedimiento()))) {
+			criterios.setIdentificadorProcedimiento( formularioBusqueda.getIdentificadorProcedimiento() );
+		}		
+		if (StringUtils.isNotBlank(formularioBusqueda.getIdentificadorTramite())) {
+			criterios.setIdentificadorTramite(formularioBusqueda.getIdentificadorTramite());
+		}
 		criterios.setMes( formularioBusqueda.getMes() );
 		criterios.setNivelAutenticacion( formularioBusqueda.getNivelAutenticacion() );
 		criterios.setProcesada( formularioBusqueda.getProcesada() );

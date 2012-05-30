@@ -67,7 +67,10 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			}if(hasta != null){
 				hastaDate = hasta.toGregorianCalendar().getTime();
 			}
-			ReferenciaEntradaBTE[] entradas = bd.obtenerReferenciasEntradas(identificadorTramite,procesada,desdeDate, hastaDate);
+			
+			// NOTA: Para la v1 mantenemos como identificadorprocedimiento = identificadortramite
+			//  	Por tanto no se podrían preguntar por tramites que no cumpliesen esta condicion
+			ReferenciaEntradaBTE[] entradas = bd.obtenerReferenciasEntradas(identificadorTramite, identificadorTramite,procesada,desdeDate, hastaDate);
 			return referenciasEntradaIntfToReferenciasEntradaWS(entradas);
 		}catch(Exception ex){
 			throw new es.caib.bantel.ws.v1.services.BackofficeFacadeException(ex.getMessage(),new es.caib.bantel.ws.v1.model.BackofficeFacadeException());

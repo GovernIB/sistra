@@ -13,13 +13,14 @@
 		#cap { font-size:1.2em; font-weight:bold; text-align:center; margin-bottom:1em; }
 		#continguts { padding:1em 2em; border:1em solid #f2f2f2; }
 		#continguts h1 { font-size:1.4em; margin-top:0; margin-bottom:1em; }
-		#continguts dl { padding-bottom:1em; margin-bottom:.5em; }
-		#continguts dl dt { float:left; width:10em; font-size:1.1em; font-variant:small-caps; text-align:right; padding-right:.8em; }
-		#continguts dd { font-weight:bold; padding-bottom:.5em; }
+		#continguts table { margin-bottom:1.5em; border:0; empty-cells:hide; border-collapse:collapse; }
+		#continguts table th { float:left; width:10em; font-size:1.1em; font-variant:small-caps; font-weight:normal; text-align:right; padding-right:.8em; }
+		#continguts table td { font-weight:bold; padding-bottom:.5em; }
 		#continguts h2 { font-size:1.1em; margin:.8em 0; }
 		#continguts p { margin:.8em 0; }
 		#contenidor p.peu { margin:1.5em 0; padding:1em; border:1px solid #ccc; }
 		#contenidor a.accedir { display:block; font-size:1.5em; text-align:center; padding:1em; background-color:#f7f7f7; }
+
 	-->
 	</style>
 	<!-- /css -->
@@ -46,20 +47,34 @@
 			</h1>
 			<!-- /titol -->
 			
-			<dl>
-				<dt>[#TEXTO.DESTINATARIO#]:</dt>
-				<dd>[#DESTINATARIO#]</dd>
-				<dt>[#TEXTO.ORGANO#]:</dt>
-				<dd>[#UNIDAD_ADMINISTRATIVA#]</dd>
-				<dt>[#TEXTO.EXPEDIENTE#]:</dt>
-				<dd>[#EXPEDIENTE#]</dd>
-				<dt>[#TEXTO.FECHAAVISO#]:</dt>
-				<dd>[#FECHA#]</dd>
-				<dt>[#TEXTO.ASUNTO#]:</dt>
-				<dd>[#TITULO#]</dd>
-				<dt>[#TEXTO.DESCRIPCION#]:</dt>
-				<dd>[#TEXTO#]</dd>				
-			</dl>
+			<table>
+				<tbody>
+					<tr>
+						<th>[#TEXTO.DESTINATARIO#]:</th>
+						<td>[#DESTINATARIO#]</td>
+					</tr>
+					<tr>
+						<th>[#TEXTO.ORGANO#]:</th>
+						<td>[#UNIDAD_ADMINISTRATIVA#]</td>
+					</tr>
+					<tr>
+						<th>[#TEXTO.EXPEDIENTE#]:</th>
+						<td>[#EXPEDIENTE#]</td>
+					</tr>
+					<tr>
+						<th>[#TEXTO.FECHAAVISO#]:</th>
+						<td>[#FECHA#]</td>
+					</tr>
+					<tr>
+						<th>[#TEXTO.ASUNTO#]:</th>
+						<td>[#TITULO#]</td>
+					</tr>
+					<tr>
+						<th>[#TEXTO.DESCRIPCION#]:</th>
+						<td>[#TEXTO#]</td>
+					</tr>
+				</tbody>			
+			</table>
 			
 			<a href="[#URL_ACCESO#]" class="accedir">[#TEXTO.ACCEDERNOTIFICACION#]</a>						
 			

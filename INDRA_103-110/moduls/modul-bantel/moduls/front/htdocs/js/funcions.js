@@ -55,3 +55,4 @@ function b64ToB64UrlSafe(b64){
 	b64UrlSafe = b64UrlSafe.replace(/(\r\n|[\r\n])/g,"");
 	return b64UrlSafe;
 }
+

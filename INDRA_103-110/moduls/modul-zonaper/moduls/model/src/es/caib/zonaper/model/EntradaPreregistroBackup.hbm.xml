@@ -37,6 +37,7 @@
     <property name="nifDelegado"  column="PRB_NIFDLG"/>
     <property name="nombreDelegado"  column="PRB_NOMDLG"/>
   	
+  	<property name="procedimiento"  column="PRB_IDEPRO" not-null="true" />
   	<property name="tramite"  column="PRB_TRAMOD"  length="20"/>
     <property name="version"  column="PRB_TRAVER"  length="2"/>
   	

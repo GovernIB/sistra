@@ -92,11 +92,11 @@ public class TramiteBandejaDelegate implements StatelessDelegate {
     
     }
     
-    public List obtenerReferenciasEntradas(String identificadorTramite,String procesada,Date desde,Date hasta) throws DelegateException
+    public List obtenerReferenciasEntradas(String identificadorProcedimiento, String identificadorTramite,String procesada,Date desde,Date hasta) throws DelegateException
     {
     	try 
     	{
-    		return getFacade().obtenerReferenciasEntradas(identificadorTramite, procesada, desde, hasta );
+    		return getFacade().obtenerReferenciasEntradas(identificadorProcedimiento, identificadorTramite, procesada, desde, hasta );
     	} 
     	catch (Exception e) 
     	{
@@ -105,17 +105,18 @@ public class TramiteBandejaDelegate implements StatelessDelegate {
     }
     
     
-    public String[] obtenerNumerosEntradas(String identificadorTramite,String procesada,Date desde,Date hasta) throws DelegateException
+    public String[] obtenerNumerosEntradas(String identificadorProcedimiento, String identificadorTramite,String procesada,Date desde,Date hasta) throws DelegateException
     {
     	try 
     	{
-    		return getFacade().obtenerNumerosEntradas(identificadorTramite, procesada, desde, hasta );
+    		return getFacade().obtenerNumerosEntradas(identificadorProcedimiento, identificadorTramite, procesada, desde, hasta );
     	} 
     	catch (Exception e) 
     	{
     		throw new DelegateException(e);
     	}    
     }
+       
     
     public void procesarEntrada(String numeroEntrada,String procesada) throws DelegateException
     {
@@ -142,11 +143,11 @@ public class TramiteBandejaDelegate implements StatelessDelegate {
     } 
     
     
-    public void procesarEntradas(CriteriosBusquedaTramite criteriosBusqueda,String procesada) throws DelegateException
+    public void procesarEntradas(CriteriosBusquedaTramite criteriosBusqueda,String procesada, String resultadoProcesamiento) throws DelegateException
     {
     	try 
     	{
-    		getFacade().procesarEntradas(criteriosBusqueda,procesada);
+    		getFacade().procesarEntradas(criteriosBusqueda,procesada,resultadoProcesamiento);
     	} 
     	catch (Exception e) 
     	{
@@ -166,17 +167,29 @@ public class TramiteBandejaDelegate implements StatelessDelegate {
     	}    
     } 
     
-    public long obtenerTotalEntradas(String identificadorTramite,String procesada,Date desde,Date hasta)throws DelegateException
+    public long obtenerTotalEntradasProcedimiento(String identificadorProcedimiento,String procesada,Date desde,Date hasta) throws DelegateException
     {
     	try 
     	{
-    		return getFacade().obtenerTotalEntradas(identificadorTramite, procesada, desde, hasta );
+    		return getFacade().obtenerTotalEntradasProcedimiento(identificadorProcedimiento,procesada, desde, hasta );
     	} 
     	catch (Exception e) 
     	{
     		throw new DelegateException(e);
     	}    
     } 
+    
+    public String[] obtenerIdTramitesProcedimiento(String identificadorProcedimiento,String procesada,Date desde,Date hasta) throws DelegateException
+    {
+    	try 
+    	{
+    		return getFacade().obtenerIdTramitesProcedimiento(identificadorProcedimiento,procesada, desde, hasta );
+    	} 
+    	catch (Exception e) 
+    	{
+    		throw new DelegateException(e);
+    	}    
+    }
     
     public String[] exportarCSV(String numEntrada,PropertiesOrdered configuracionExportacion)throws DelegateException
     {

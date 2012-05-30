@@ -1,6 +1,7 @@
 package es.caib.bantel.persistence.ejb;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -23,14 +24,16 @@ import javax.security.auth.login.LoginContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import es.caib.bantel.model.CriteriosBusquedaTramite;
 import es.caib.bantel.model.GestorBandeja;
-import es.caib.bantel.model.Tramite;
+import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.modelInterfaz.ConstantesBTE;
 import es.caib.bantel.modelInterfaz.ExcepcionBTE;
+import es.caib.bantel.persistence.delegate.DelegateException;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.delegate.GestorBandejaDelegate;
+import es.caib.bantel.persistence.delegate.ProcedimientoDelegate;
 import es.caib.bantel.persistence.delegate.TramiteBandejaDelegate;
-import es.caib.bantel.persistence.delegate.TramiteDelegate;
 import es.caib.bantel.persistence.plugins.UsernamePasswordCallbackHandler;
 import es.caib.bantel.persistence.util.StringUtil;
 import es.caib.mobtratel.modelInterfaz.MensajeEnvio;
@@ -59,6 +62,7 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 
 	private static Log log = LogFactory.getLog(BteProcesosFacadeEJB.class);
 	private long intervaloSeguridad=0;
+	private int maximoDiasAviso=0;
 		
 	/**
      * @ejb.create-method
@@ -66,10 +70,16 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
      */
 	public void ejbCreate() throws CreateException {	
 		try{			 
-			intervaloSeguridad =  Long.parseLong(DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisoPeriodico.intervaloSeguridad"));
+			intervaloSeguridad =  Long.parseLong(DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisoPeriodico.intervaloSeguridad"));			
 		}catch(Exception ex){
 			log.error("Excepcion obteniendo parametro de intervalo de seguridad. Se tomara valor="+intervaloSeguridad,ex );
 		}
+		try{			 
+			maximoDiasAviso =  Integer.parseInt(DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisoPeriodico.maxDiasAviso"));			
+		}catch(Exception ex){
+			log.error("Excepcion obteniendo parametro de maximo dias aviso. Se tomara valor="+maximoDiasAviso,ex );
+		}
+		
 	}
 	
     /**
@@ -91,9 +101,9 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 			lc = new LoginContext("client-login", handler);
 			lc.login();	
     		
-	    	// Recuperamos lista de tramites
-	    	TramiteDelegate td = DelegateUtil.getTramiteDelegate();
-	    	List list = td.listarTramites();
+	    	// Recuperamos lista de procedimientos
+	    	ProcedimientoDelegate td = DelegateUtil.getTramiteDelegate();
+	    	List list = td.listarProcedimientos();
 	    		    	
 	    	// Para los tramites que tengan configurado el proceso de aviso consultamos nuevas entradas (aplicando intervalo de seguridad para evitar
 	    	// solapamiento entre aviso inmediato y periodico)
@@ -102,20 +112,23 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 	    	
 	    	
 	    	for (Iterator it = list.iterator();it.hasNext();){
-	    		Tramite t =  (Tramite) it.next();
+	    		Procedimiento procedimiento =  (Procedimiento) it.next();
 	    		
 	    		// Si no tiene un intervalo positivo no esta habilitado el proceso de aviso para el trámite 
-	    		if (t.getIntervaloInforme() == null || t.getIntervaloInforme().intValue() <= 0) continue;
+	    		if (procedimiento.getIntervaloInforme() == null || procedimiento.getIntervaloInforme().intValue() <= 0) continue;
 	    		
 	    		// Comprobamos si se ha cumplido el intervalo
-	    		if (t.getUltimoAviso() != null &&
-	    			( (t.getUltimoAviso().getTime() + (t.getIntervaloInforme().longValue() * 60 * 1000)) > ahora.getTime() ) ) continue;
+	    		if (procedimiento.getUltimoAviso() != null &&
+	    			( (procedimiento.getUltimoAviso().getTime() + (procedimiento.getIntervaloInforme().longValue() * 60 * 1000)) > ahora.getTime() ) ) continue;
+	    		
+	    		// Marcamos con error las entradas que no han sido procesadas
+	    		controlEntradasCaducadas(procedimiento);
 	    		
 	    		// Si se ha cumplido el intervalo avisamos al backoffice de las nuevas entradas
-	    		avisoBackOffice(t,hasta);
+	    		avisoBackOffice(procedimiento,hasta);
 	    		
 	    		// Guardamos tiempo en que se ha realizado el aviso	    		
-	    		td.avisoRealizado(t.getIdentificador(),ahora);	   
+	    		td.avisoRealizado(procedimiento.getIdentificador(),ahora);	   
 	    	}	    		    	
     	}catch(Exception ex){
     		log.error("Excepción en proceso de aviso a BackOffices",ex);
@@ -130,6 +143,30 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
     }
     
     /**
+     * Marca las entradas como procesadas con error si no se han procesado dentro del limite de dias establecido.
+     * @param procedimiento Procedimiento
+     * @param hasta Fecha limite busqueda
+     * @throws DelegateException 
+     */
+    private void controlEntradasCaducadas(Procedimiento procedimiento) throws DelegateException {
+		if (maximoDiasAviso > 0) {
+    		// Calculamos fecha limite: restamos a fecha actual el numero maximo de dias limite para avisar
+    		Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.add(Calendar.DAY_OF_MONTH, maximoDiasAviso * -1);
+    		Date fechaLimite = calendar.getTime();
+    		
+    		// Marcamos como procesadas con error las que han caducado
+	    	CriteriosBusquedaTramite criterios = new CriteriosBusquedaTramite();
+	    	criterios.setIdentificadorProcedimiento(procedimiento.getIdentificador());
+	    	criterios.setProcesada(ConstantesBTE.ENTRADA_NO_PROCESADA.charAt(0));
+	    	criterios.setFechaInicioProcesamientoMaximo(fechaLimite);
+	    	TramiteBandejaDelegate delegate = DelegateUtil.getTramiteBandejaDelegate();
+			delegate.procesarEntradas(criterios,ConstantesBTE.ENTRADA_PROCESADA_ERROR, "Ha pasado el limite maximo establecido para avisarse al backoffice");
+    	}        	
+	}
+
+	/**
      * Realiza proceso de aviso de nuevas entradas a Gestores
      * 
      * @ejb.interface-method
@@ -153,7 +190,7 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
     		List list = gb.listarGestoresBandeja();
     		String numEntradas,intervalo,titulo;
     		StringBuffer mensajeIntervalo,mensaje;
-    		Hashtable entradasTramite = new Hashtable();
+    		Hashtable entradasProcedimiento = new Hashtable();
     		boolean existenEntradasTramite,existenEntradas;
     		long num;
     		
@@ -205,10 +242,10 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 	    		existenEntradas=false;
 	    		
 	    		// Obtenemos entradas nuevas para los tramites asociados al gestor
-	    		for (Iterator it2 = g.getTramitesGestionados().iterator();it2.hasNext();){	    				    			
+	    		for (Iterator it2 = g.getProcedimientosGestionados().iterator();it2.hasNext();){	    				    			
 	    			
 	    			// Obtenemos siguiente tramite gestionado por el gestor
-	    			Tramite t = (Tramite) it2.next();	   	    			
+	    			Procedimiento procedimiento = (Procedimiento) it2.next();	   	    			
 	    			
 	    			// Creamos mensaje para el intervalo / tramite en cuestion
 	    			mensajeIntervalo = new StringBuffer(1024);
@@ -217,21 +254,21 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 	    			existenEntradasTramite=false;
 	    			
 	    			// TODO Para nueva version sustituir quitarAcentos por escapeHtml de commonslang
-	    			String desc = t.getDescripcion(); 
+	    			String desc = procedimiento.getDescripcion(); 
 	    			try{
-	    				desc = es.caib.util.StringUtil.quitaAcentos(t.getDescripcion());
+	    				desc = es.caib.util.StringUtil.quitaAcentos(procedimiento.getDescripcion());
 	    			}catch(Throwable tw){}	    				    		
 	    			
-	    			mensajeIntervalo.append("<strong> * " + t.getIdentificador() + " - " + desc + "</strong> <br/>");
+	    			mensajeIntervalo.append("<strong> * " + procedimiento.getIdentificador() + " - " + desc + "</strong> <br/>");
 	    			mensajeIntervalo.append(" 	Noves entrades produ&iuml;des en l'interval <br/>");	    			
 	    			
 	    			// Buscar entradas procesadas ok / ko / no proc en el intervalo	    			
 	    			
 	    			// - procesadas OK
-	    			numEntradas = (String) entradasTramite.get(t.getIdentificador() + " " + intervalo + " " + ConstantesBTE.ENTRADA_PROCESADA);
+	    			numEntradas = (String) entradasProcedimiento.get(procedimiento.getIdentificador() + " " + intervalo + " " + ConstantesBTE.ENTRADA_PROCESADA);
 	    			if (numEntradas==null){	    			
-	    				num = tbd.obtenerTotalEntradas(t.getIdentificador(),ConstantesBTE.ENTRADA_PROCESADA,desde,hasta);	    				
-	    				entradasTramite.put(t.getIdentificador() + " " + intervalo + " " + ConstantesBTE.ENTRADA_PROCESADA,Long.toString(num));	
+	    				num = tbd.obtenerTotalEntradasProcedimiento(procedimiento.getIdentificador(),ConstantesBTE.ENTRADA_PROCESADA,desde,hasta);	    				
+	    				entradasProcedimiento.put(procedimiento.getIdentificador() + " " + intervalo + " " + ConstantesBTE.ENTRADA_PROCESADA,Long.toString(num));	
 	    			}else{
 	    				num = Long.parseLong(numEntradas);
 	    			}	
@@ -239,10 +276,10 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 	    			mensajeIntervalo.append("	 	- Processades correctament:" + num + " <br/>");
 	    			
 	    			// - procesadas KO
-	    			numEntradas = (String) entradasTramite.get(t.getIdentificador() + " " + intervalo + " " + ConstantesBTE.ENTRADA_PROCESADA_ERROR);
+	    			numEntradas = (String) entradasProcedimiento.get(procedimiento.getIdentificador() + " " + intervalo + " " + ConstantesBTE.ENTRADA_PROCESADA_ERROR);
 	    			if (numEntradas==null){	    			
-	    				num = tbd.obtenerTotalEntradas(t.getIdentificador(),ConstantesBTE.ENTRADA_PROCESADA_ERROR,desde,hasta);	    				
-	    				entradasTramite.put(t.getIdentificador() + " " + intervalo + " " + ConstantesBTE.ENTRADA_PROCESADA_ERROR,Long.toString(num));	
+	    				num = tbd.obtenerTotalEntradasProcedimiento(procedimiento.getIdentificador(),ConstantesBTE.ENTRADA_PROCESADA_ERROR,desde,hasta);	    				
+	    				entradasProcedimiento.put(procedimiento.getIdentificador() + " " + intervalo + " " + ConstantesBTE.ENTRADA_PROCESADA_ERROR,Long.toString(num));	
 	    			}else{
 	    				num = Long.parseLong(numEntradas);
 	    			}
@@ -250,10 +287,10 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 	    			mensajeIntervalo.append("	 	- Processades amb error:" + num + " <br/>");
 	    			
 	    			// - no procesadas
-	    			numEntradas = (String) entradasTramite.get(t.getIdentificador() + " " + intervalo + " " + ConstantesBTE.ENTRADA_NO_PROCESADA);
+	    			numEntradas = (String) entradasProcedimiento.get(procedimiento.getIdentificador() + " " + intervalo + " " + ConstantesBTE.ENTRADA_NO_PROCESADA);
 	    			if (numEntradas==null){	    			
-	    				num = tbd.obtenerTotalEntradas(t.getIdentificador(),ConstantesBTE.ENTRADA_NO_PROCESADA,desde,hasta);	    				
-	    				entradasTramite.put(t.getIdentificador() + " " + intervalo + " " + ConstantesBTE.ENTRADA_NO_PROCESADA,Long.toString(num));	
+	    				num = tbd.obtenerTotalEntradasProcedimiento(procedimiento.getIdentificador(),ConstantesBTE.ENTRADA_NO_PROCESADA,desde,hasta);	    				
+	    				entradasProcedimiento.put(procedimiento.getIdentificador() + " " + intervalo + " " + ConstantesBTE.ENTRADA_NO_PROCESADA,Long.toString(num));	
 	    			}else{
 	    				num = Long.parseLong(numEntradas);
 	    			}
@@ -263,16 +300,16 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 	    			
 	    			
 	    			// Avisos especiales (sólo para tramites con procesos automaticos)
-	    			if (t.getIntervaloInforme() != null && t.getIntervaloInforme().longValue() > 0){
+	    			if (procedimiento.getIntervaloInforme() != null && procedimiento.getIntervaloInforme().longValue() > 0){
 		    			// 	- Buscar entradas ko (sin intervalo)
-		    			num = tbd.obtenerTotalEntradas(t.getIdentificador(),ConstantesBTE.ENTRADA_PROCESADA_ERROR,null,hasta);
+		    			num = tbd.obtenerTotalEntradasProcedimiento(procedimiento.getIdentificador(),ConstantesBTE.ENTRADA_PROCESADA_ERROR,null,hasta);
 		    			if (num > 0) {
 		    				existenEntradasTramite=true;	    			
 		    				mensajeIntervalo.append(" 	ATENCI&Oacute;: EXISTEIXEN ENTRADES PROCESSADES AMB ERROR QUE HAN DE SER REVISADES (TOTAL:" + num + ") <br/>") ;
 		    			}
 		    			
 		    			//   - Buscar entradas sin procesar anteriores al intervalo
-		    			num = tbd.obtenerTotalEntradas(t.getIdentificador(),ConstantesBTE.ENTRADA_NO_PROCESADA,null,desde);
+		    			num = tbd.obtenerTotalEntradasProcedimiento(procedimiento.getIdentificador(),ConstantesBTE.ENTRADA_NO_PROCESADA,null,desde);
 		    			if (num > 0) {
 		    				existenEntradasTramite=true;	    			
 		    				mensajeIntervalo.append(" 	ATENCI&Oacute;: SEGUEIXEN HAVENT ENTRADES SENSE PROCESSAR ANTERIORS A L'INTERVAL ACTUAL (TOTAL:" + num + ") <br/>" );
@@ -331,31 +368,42 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
     /**
      * Realiza proceso de aviso a BackOffice para un trámite. Metemos en cola asíncrona.
      * En caso de error lanza mensaje al log y permite continuar.
-     * @param tramite
+     * @param procedimiento
      */
-    private void avisoBackOffice(Tramite tramite,Date hasta){    	
+    private void avisoBackOffice(Procedimiento procedimiento,Date hasta){    	
     	try{    		
+    		
+    		log.debug("Aviso a backoffice procedimiento  " + procedimiento.getIdentificador() + " (hasta " + es.caib.util.StringUtil.fechaACadena(hasta,es.caib.util.StringUtil.FORMATO_TIMESTAMP) + ")");
+    		
     		// Obtenemos entradas no procesadas    		    		    	
     		TramiteBandejaDelegate tbd = (TramiteBandejaDelegate) DelegateUtil.getTramiteBandejaDelegate();
-    		String  entradas [] = tbd.obtenerNumerosEntradas(tramite.getIdentificador(),ConstantesBTE.ENTRADA_NO_PROCESADA,null,hasta);    		
-    		log.debug("Aviso de " + entradas.length + " nuevas entradas para backoffice trámite " + tramite.getIdentificador() + " hasta " + es.caib.util.StringUtil.fechaACadena(hasta,es.caib.util.StringUtil.FORMATO_TIMESTAMP));
     		
-    		if (entradas.length > 0){
-				// Dejamos entrada en la cola de avisos
-		    	InitialContext ctx = new InitialContext();
-		    	String colaAvisos = (String) ctx.lookup("java:comp/env/colaAvisos");
-			    Queue queue = (Queue) ctx.lookup(colaAvisos);		 
-			    QueueConnectionFactory factory = (QueueConnectionFactory) ctx.lookup("java:/XAConnectionFactory");
-			    QueueConnection cnn = factory.createQueueConnection();
-			    QueueSession sess = cnn.createQueueSession(false,QueueSession.AUTO_ACKNOWLEDGE);    		  
-				TextMessage msg = sess.createTextMessage(StringUtil.numeroEntradasToString(entradas));
-				QueueSender sender = sess.createSender(queue);
-				sender.send(msg,DeliveryMode.NON_PERSISTENT,4,0);				
+    		// Obtenemos tramites del procedimiento que tienen entradas pendientes y generamos un mensaje por tramite
+    		String idTramites[] = tbd.obtenerIdTramitesProcedimiento(procedimiento.getIdentificador(),ConstantesBTE.ENTRADA_NO_PROCESADA,null,hasta);
+    		if (idTramites != null) {
+    			for (int i = 0; i < idTramites.length; i++) {
+    		
+    				String  entradas [] = tbd.obtenerNumerosEntradas(procedimiento.getIdentificador(), idTramites[i], ConstantesBTE.ENTRADA_NO_PROCESADA,null,hasta);
+		    		
+		    		log.debug("Aviso de " + entradas.length + " nuevas entradas para backoffice trámite " + idTramites[i] + " hasta " + es.caib.util.StringUtil.fechaACadena(hasta,es.caib.util.StringUtil.FORMATO_TIMESTAMP) + " (Procedimiento: " + procedimiento.getIdentificador() + ")");
+		    		
+		    		if (entradas.length > 0){
+						// Dejamos entrada en la cola de avisos
+				    	InitialContext ctx = new InitialContext();
+				    	String colaAvisos = (String) ctx.lookup("java:comp/env/colaAvisos");
+					    Queue queue = (Queue) ctx.lookup(colaAvisos);		 
+					    QueueConnectionFactory factory = (QueueConnectionFactory) ctx.lookup("java:/XAConnectionFactory");
+					    QueueConnection cnn = factory.createQueueConnection();
+					    QueueSession sess = cnn.createQueueSession(false,QueueSession.AUTO_ACKNOWLEDGE);    		  
+						TextMessage msg = sess.createTextMessage(StringUtil.numeroEntradasToString(entradas));
+						QueueSender sender = sess.createSender(queue);
+						sender.send(msg,DeliveryMode.NON_PERSISTENT,4,0);				
+		    		}
+    			}
     		}
-			
     	}catch(Exception ex){
-    		log.error("Excepción en proceso de aviso a BackOffice para tramite " + tramite.getIdentificador(),ex);    		
+    		log.error("Excepción en proceso de aviso a BackOffice para procedimiento " + procedimiento.getIdentificador(),ex);    		
     	}    		
-    }
+    }    	    
     
 }

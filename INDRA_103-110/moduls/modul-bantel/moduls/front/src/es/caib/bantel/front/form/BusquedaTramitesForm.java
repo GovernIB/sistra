@@ -16,7 +16,8 @@ public class BusquedaTramitesForm extends ValidatorForm
 	private char tipo = TODOS;
 	private char procesada = TODOS;
 	private char nivelAutenticacion = TODOS;
-	private String identificadorTramite = "-1";
+	private String identificadorProcedimiento = "-1";
+	private String identificadorTramite;
 	private int pagina;
 	private String numeroEntrada = "";
 	
@@ -28,13 +29,13 @@ public class BusquedaTramitesForm extends ValidatorForm
 	{
 		this.anyo = anyo;
 	}	
-	public String getIdentificadorTramite()
+	public String getIdentificadorProcedimiento()
 	{
-		return identificadorTramite;
+		return identificadorProcedimiento;
 	}
-	public void setIdentificadorTramite(String identificadorTramite)
+	public void setIdentificadorProcedimiento(String idProc)
 	{
-		this.identificadorTramite = identificadorTramite;
+		this.identificadorProcedimiento = idProc;
 	}
 	public int getMes()
 	{
@@ -97,6 +98,12 @@ public class BusquedaTramitesForm extends ValidatorForm
 	}
 	public void setNumeroEntrada(String numeroEntrada) {
 		this.numeroEntrada = numeroEntrada;
+	}
+	public String getIdentificadorTramite() {
+		return identificadorTramite;
+	}
+	public void setIdentificadorTramite(String identificadorTramite) {
+		this.identificadorTramite = identificadorTramite;
 	}
 
 }

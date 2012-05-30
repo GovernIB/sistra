@@ -68,6 +68,8 @@
 					<dd><logic:notEmpty name="expediente" property="identificadorExpediente"><bean:write name="expediente" property="identificadorExpediente"/></logic:notEmpty></dd>
 					<dt><bean:message key="confirmacion.unidadAdministrativa"/>:</dt>					
 					<dd><logic:notEmpty name="nombreUnidad" ><bean:write name="nombreUnidad" /></logic:notEmpty></dd>
+					<dt><bean:message key="expediente.identificadorProcedimiento"/>:</dt>
+					<dd><logic:notEmpty name="descripcionProcedimiento" ><bean:write name="descripcionProcedimiento" /></logic:notEmpty></dd>
 					<dt><bean:message key="expediente.descripcion"/>:</dt>
 					<dd><logic:notEmpty name="expediente" property="descripcion"><bean:write name="expediente" property="descripcion"/></logic:notEmpty></dd>
 					<dt><bean:message key="expediente.idioma"/>:</dt>
@@ -75,7 +77,7 @@
 						<logic:equal name="expediente" property="idioma" value="es"><bean:message key="expediente.castellano"/></logic:equal>
 						<logic:equal name="expediente" property="idioma" value="ca"><bean:message key="expediente.catalan"/></logic:equal>
 						<logic:equal name="expediente" property="idioma" value="en"><bean:message key="expediente.ingles"/></logic:equal>
-					</dd>
+					</dd>					
 				</dl>				
 			</div>
 						

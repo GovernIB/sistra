@@ -406,6 +406,10 @@ public class FactoriaObjetosXMLDatosPropiosImpl implements
 				instrucciones.setIdentificadorPersistencia(instJAXB.getIDENTIFICADORPERSISTENCIA());
 			}
 			
+			if (instJAXB.getIDENTIFICADORPROCEDIMIENTO() != null){
+				instrucciones.setIdentificadorProcedimiento(instJAXB.getIDENTIFICADORPROCEDIMIENTO());
+			}
+			
 			if (instJAXB.getTEXTOFECHATOPEENTREGA() != null){
 				instrucciones.setTextoFechaTopeEntrega(instJAXB.getTEXTOFECHATOPEENTREGA());
 			}
@@ -561,6 +565,10 @@ public class FactoriaObjetosXMLDatosPropiosImpl implements
 			
 			if (instrucciones.getIdentificadorPersistencia() != null){
 				instruccionesJAXB.setIDENTIFICADORPERSISTENCIA(instrucciones.getIdentificadorPersistencia());
+			}
+			
+			if (instrucciones.getIdentificadorProcedimiento() != null){
+				instruccionesJAXB.setIDENTIFICADORPROCEDIMIENTO(instrucciones.getIdentificadorProcedimiento());
 			}
 			
 			instruccionesJAXB.setDOCUMENTOSENTREGAR (crearDocumentosEntregarJAXB (instrucciones.getDocumentosEntregar()));

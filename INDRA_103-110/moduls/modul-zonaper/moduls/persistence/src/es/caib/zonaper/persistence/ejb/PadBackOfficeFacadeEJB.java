@@ -65,6 +65,7 @@ import es.caib.zonaper.persistence.delegate.EventoExpedienteDelegate;
 import es.caib.zonaper.persistence.delegate.ExpedienteDelegate;
 import es.caib.zonaper.persistence.delegate.IndiceElementoDelegate;
 import es.caib.zonaper.persistence.delegate.PadDelegate;
+import es.caib.zonaper.persistence.util.ConfigurationUtil;
 
 
 /**
@@ -195,8 +196,8 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		
 		// Si se indica el tramite que origina el expediente buscamos tramite y chequeamos enlace
 		if (StringUtils.isNotEmpty(expediente.getNumeroEntradaBTE())){
-			BteDelegate bte = DelegateBTEUtil.getBteDelegate();
 			TramiteBTE entradaBTE=null;
+			BteDelegate bte = DelegateBTEUtil.getBteDelegate();
 			try {
 				entradaBTE = bte.obtenerEntrada(expediente.getNumeroEntradaBTE());
 			} catch (Exception e1) {
@@ -208,6 +209,16 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 			if (entradaBTE == null){
 				log.debug("No existe entrada en bandeja con numero entrada: " + expediente.getNumeroEntradaBTE());
 				throw new ExcepcionPAD("No existe entrada en bandeja con numero entrada: " + expediente.getNumeroEntradaBTE());
+			}
+			
+			// Por compatibilidad con versiones anteriores si no indicamos procedimiento asociamos el de la entrada
+			if (expediente.getIdentificadorProcedimiento() == null) {
+				expediente.setIdentificadorProcedimiento(entradaBTE.getIdentificadorProcedimiento());
+			} else {
+				// Si se indica procedimiento en el expediente debe ser el mismo que el de la entrada
+				if (!expediente.getIdentificadorProcedimiento().equals(entradaBTE.getIdentificadorProcedimiento())) {
+					throw new ExcepcionPAD("No concuerda el procedimiento del expediente (" + expediente.getIdentificadorProcedimiento() + ") con el de la entrada que genera el expediente (" + entradaBTE.getIdentificadorProcedimiento() + ")");
+				}
 			}
 			
 			// Si el expediente es autenticado comprobamos que el trámite sea autenticado y tenga el mismo usuario
@@ -521,7 +532,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 			
 			// Creamos indices de busqueda (solo autenticados)
 			try {
-				if (StringUtils.isNotEmpty(expediente.getUsuarioSeycon())) {
+				if (StringUtils.isNotEmpty(expediente.getSeyconCiudadano())) {
 					crearIndicesEventoExpediente(expediente.getNifRepresentante(), ev);
 				}
 			} catch (Exception e) {
@@ -569,6 +580,41 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
     	catch( Exception ex )
     	{
     		throw new ExcepcionPAD("Error verificando si existe persona en PAD",ex);
+    	}
+    	
+    }	
+	
+	/**
+	 * 
+	 * Da de alta un ciudadano en la zona personal
+     * 
+	 * @param nif Nif
+	 * @param nombre Nombre
+	 * @param apellido1 Apellido1
+	 * @param apellido2 Apellido2 
+	 * @throws ExcepcionPAD
+	 *  
+	 * @ejb.interface-method
+     * @ejb.permission role-name="${role.gestor}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+	public String altaZonaPersonalUsuario( String nif, String nombre, String apellido1, String apellido2) throws ExcepcionPAD
+    {
+    	try
+    	{	
+    		// Realizamos alta
+    		PersonaPAD persona = new PersonaPAD();
+    		persona.setNif(nif);
+    		persona.setNombre(nombre);
+    		persona.setApellido1(apellido1);
+    		persona.setApellido2(apellido2);
+    		PersonaPAD p = DelegateUtil.getPadAplicacionDelegate().altaPersonaCodigoUsuarioAuto(persona);
+    		return p.getUsuarioSeycon();
+    		
+    	}
+    	catch( Exception ex )
+    	{
+    		throw new ExcepcionPAD("Error realizando alta usuario en PAD",ex);
     	}
     	
     }	
@@ -718,6 +764,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 	{
 		validateExpedientePAD( expPAD );
 		Expediente expediente = new Expediente();
+		expediente.setIdProcedimiento(expPAD.getIdentificadorProcedimiento());
 		expediente.setIdExpediente( expPAD.getIdentificadorExpediente() );
 		expediente.setUnidadAdministrativa(expPAD.getUnidadAdministrativa());
 		expediente.setClaveExpediente(expPAD.getClaveExpediente());
@@ -807,7 +854,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		
 		expPAD.setIdentificadorExpediente( expediente.getIdExpediente() );
 		expPAD.setUnidadAdministrativa( expediente.getUnidadAdministrativa() );
-		
+		expPAD.setIdentificadorProcedimiento(expediente.getIdProcedimiento());
 		expPAD.setClaveExpediente(expediente.getClaveExpediente());
 		expPAD.setIdioma(expediente.getIdioma());
 		

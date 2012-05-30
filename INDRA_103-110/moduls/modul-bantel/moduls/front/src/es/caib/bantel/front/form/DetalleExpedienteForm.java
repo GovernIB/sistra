@@ -23,6 +23,7 @@ public class DetalleExpedienteForm extends ValidatorForm
 	private String identificadorExp;
 	private String unidadAdm;
 	private String claveExp;
+	private String identificadorProcedimiento;
 	private String descripcion;
 	private String idioma;
 	private String usuarioSeycon;
@@ -159,6 +160,15 @@ public class DetalleExpedienteForm extends ValidatorForm
 		this.nombreUnidad = nombreUnidad;
 	}
 
+
+	public String getIdentificadorProcedimiento() {
+		return identificadorProcedimiento;
+	}
+
+	public void setIdentificadorProcedimiento(String identificadorProcedimiento) {
+		this.identificadorProcedimiento = identificadorProcedimiento;
+	}
+	
 	/**
 	 * Método que valida el formulario. Solo se comprueban los casos en caso de la alta de expediente o cuando se selecciona que tipo de alta 
 	 * se realizará
@@ -178,6 +188,10 @@ public class DetalleExpedienteForm extends ValidatorForm
         	}
         }
         if(StringUtils.isNotEmpty(flagValidacion) && flagValidacion.equals("altaExpedient")){
+        	if(StringUtils.isEmpty(identificadorProcedimiento)){
+        		errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("expediente.identificadorProcedimiento")));
+        		error = true;
+        	}
         	if(StringUtils.isEmpty(identificadorExp)){
         		errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("confirmacion.identificadorExpediente")));
         		error = true;

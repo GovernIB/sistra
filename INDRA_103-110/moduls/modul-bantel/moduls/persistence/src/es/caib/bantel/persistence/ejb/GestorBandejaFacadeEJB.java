@@ -12,7 +12,7 @@ import net.sf.hibernate.ObjectNotFoundException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import es.caib.bantel.model.GestorBandeja;
-import es.caib.bantel.model.Tramite;
+import es.caib.bantel.model.Procedimiento;
 ;
 
 /**
@@ -51,7 +51,7 @@ public abstract class GestorBandejaFacadeEJB extends HibernateEJB
         try {
         	// Cargamos GestorBandeja        	
         	GestorBandeja gestorBandeja = (GestorBandeja) session.load(GestorBandeja.class, id);
-        	Hibernate.initialize( gestorBandeja.getTramitesGestionados() ); 
+        	Hibernate.initialize( gestorBandeja.getProcedimientosGestionados() ); 
             return gestorBandeja;
         } catch (ObjectNotFoundException onf){
         	// No encontrado
@@ -154,7 +154,7 @@ public abstract class GestorBandejaFacadeEJB extends HibernateEJB
         	{        		                		
         		for ( int i = 0; i < identificadoresTramites.length; i++  )
         		{        			
-        			Tramite tramite = ( Tramite ) session.load( Tramite.class, identificadoresTramites[i] );
+        			Procedimiento tramite = ( Procedimiento ) session.load( Procedimiento.class, identificadoresTramites[i] );
         			gest.addTramiteGestionado( tramite );     
         		}
         	}               	

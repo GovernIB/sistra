@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Tramite implements Serializable{
+public class Procedimiento implements Serializable{
 	
 	// Tipo de acceso al BackOffice para realizar los avisos
 	public final static char ACCESO_EJB='E';
@@ -33,13 +33,8 @@ public class Tramite implements Serializable{
 	private String usr;
 	private String pwd;
 	private String rolAcceso;
-	private Date ultimoAviso;
-	
-	private String nombreFicheroExportacion;
-	private FicheroExportacion archivoFicheroExportacion;
-	
+	private Date ultimoAviso;	
 	private byte[] errores;
-	
 	private Set gestores = new HashSet(0);
 		
 	public String getIdentificador() {
@@ -140,20 +135,7 @@ public class Tramite implements Serializable{
 	}
 	public void setUltimoAviso(Date ultimoAviso) {
 		this.ultimoAviso = ultimoAviso;
-	}
-	public String getNombreFicheroExportacion() {
-		return nombreFicheroExportacion;
-	}
-	public void setNombreFicheroExportacion(String nombreFicheroExportacion) {
-		this.nombreFicheroExportacion = nombreFicheroExportacion;
-	}
-	public FicheroExportacion getArchivoFicheroExportacion() {
-		return archivoFicheroExportacion;
-	}
-	public void setArchivoFicheroExportacion(
-			FicheroExportacion archivoFicheroExportacion) {
-		this.archivoFicheroExportacion = archivoFicheroExportacion;
-	}
+	}	
 	public byte[] getErrores() {
 		return errores;
 	}

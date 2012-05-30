@@ -33,6 +33,7 @@
     <property name="nifDelegado"  column="ENT_NIFDLG"/>
     <property name="nombreDelegado"  column="ENT_NOMDLG"/>
     
+    <property name="procedimiento"  column="ENT_IDEPRO" not-null="true" />
     <property name="tramite"  column="ENT_TRAMOD"  length="20"/>
     <property name="version"  column="ENT_TRAVER"  length="2"/>
     

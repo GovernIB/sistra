@@ -55,6 +55,18 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		}
 	}
 	
+	public String altaZonaPersonalUsuario(String nif, String nombre,
+			String apellido1, String apellido2)
+			throws BackofficeFacadeException {
+		try {
+			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
+			return pad.altaZonaPersonalUsuario(nif, nombre, apellido1, apellido2);		
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
+		}
+		
+	}
 	
 	// --------------------------------------------------------------
 	//		FUNCIONES AUXILIARES
@@ -123,6 +135,9 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			exPAD.setClaveExpediente(StringUtils.defaultIfEmpty(exWS.getClaveExpediente(),null));
 			exPAD.setDescripcion(StringUtils.defaultIfEmpty(exWS.getDescripcion(),null));
 			exPAD.setIdentificadorExpediente(StringUtils.defaultIfEmpty(exWS.getIdentificadorExpediente(),null));
+			if (exWS.getIdentificadorProcedimiento() != null) {
+				exPAD.setIdentificadorProcedimiento(StringUtils.defaultIfEmpty(exWS.getIdentificadorProcedimiento().getValue(),null));
+			}
 			if(exWS.getNifRepresentante() != null){
 				exPAD.setNifRepresentante(StringUtils.defaultIfEmpty(exWS.getNifRepresentante().getValue(),null));
 			}
@@ -136,7 +151,8 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			if(exWS.getNumeroEntradaBTE() != null){
 				exPAD.setNumeroEntradaBTE(StringUtils.defaultIfEmpty(exWS.getNumeroEntradaBTE().getValue(),null));
 			}
-			exPAD.setUnidadAdministrativa(exWS.getUnidadAdministrativa());
+			exPAD.setUnidadAdministrativa(exWS.getUnidadAdministrativa());			
+			
 			// Copiamos eventos	
 			if (exWS.getEventos() != null && exWS.getEventos().getValue() != null && exWS.getEventos().getValue().getEvento() != null ){
 				for (int i=0;i<exWS.getEventos().getValue().getEvento().size();i++){

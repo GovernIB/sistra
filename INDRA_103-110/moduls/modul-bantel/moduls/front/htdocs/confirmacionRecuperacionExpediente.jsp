@@ -51,10 +51,9 @@
 			<h2><bean:message key="ajuda.titulo"/></h2>
 			<br/>
 			<bean:message key="ajuda.CampoObligarorio"/>
-				<bean:message key="ajuda.expediente.alta.identificador"/>
-				<bean:message key="ajuda.expediente.unidad"/>
+			<bean:message key="ajuda.expediente.alta.identificador"/>
+			<bean:message key="ajuda.expediente.unidad"/>
 			<bean:message key="ajuda.finCampoObligarorio"/>
-			
 			<bean:message key="ajuda.expediente.consulta.clave"/>
 		</div>
 		<!-- /ajuda -->

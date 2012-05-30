@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.tiles.ComponentContext;
 
 import es.caib.bantel.model.GestorBandeja;
-import es.caib.bantel.model.Tramite;
+import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.delegate.GestorBandejaDelegate;
 
@@ -41,19 +41,19 @@ public class FormularioBusquedaController extends BaseController
 		// Obtenemos tramites accesibles al gestor
 		GestorBandejaDelegate gestorBandejaDelegate = DelegateUtil.getGestorBandejaDelegate();
 		GestorBandeja gestor = gestorBandejaDelegate.obtenerGestorBandeja(this.getPrincipal(request).getName());
-		List lstTramites = new ArrayList();
+		List procedimientos = new ArrayList();
 		// Si no existe devolvemos lista de tramites gestionados vacía
 		String permitirCambioEstadoMasivo = "N";
 		if (gestor != null){			
-			for (Iterator it = gestor.getTramitesGestionados().iterator(); it.hasNext();){
-				Tramite tramite = (Tramite) it.next();
-				lstTramites.add(tramite);
+			for (Iterator it = gestor.getProcedimientosGestionados().iterator(); it.hasNext();){
+				Procedimiento proc = (Procedimiento) it.next();
+				procedimientos.add(proc);
 			}
 			permitirCambioEstadoMasivo = Character.toString(gestor.getPermitirCambioEstadoMasivo());
 		}
 		
 		// Establcemos valores combos
-		request.setAttribute( "tramites", lstTramites );
+		request.setAttribute( "procedimientos", procedimientos );
 		request.setAttribute( "anyos", getYears() );
 		request.setAttribute( "meses", getMonths() );
 		request.setAttribute("permitirCambioEstadoMasivo",permitirCambioEstadoMasivo);

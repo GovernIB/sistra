@@ -43,6 +43,8 @@ public interface Entrada extends ElementoExpedienteItf
 	
 	public String getHabilitarNotificacionTelematica();
 	
+	public String getProcedimiento();
+	
 	public String getTramite();
 	
 	public Integer getVersion();

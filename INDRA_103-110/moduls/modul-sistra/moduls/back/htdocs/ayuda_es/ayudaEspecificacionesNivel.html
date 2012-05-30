@@ -88,17 +88,16 @@
     <td>Referencia representante</td>
     <td><p>Para crear el asiento es necesario indicar qui&eacute;n es el representante. 
         Para ello hay que indicar los valores de los campos del formulario que 
-        contengan el DNI y el nombre completo del representante (seg&uacute;n formato asiento registral). El tipo de estos 
+        contengan el NIF y el nombre completo del representante (seg&uacute;n formato asiento registral). El tipo de estos 
         campos es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> 
-        y espera en cada caso el valor del DNI y el nombre completo. </p>
-      <p>Este dato es <strong>obligatorio</strong> especificarlo (bien en las 
-        especificaciones gen&eacute;ricas o por nivel). <br>
+        y espera en cada caso el valor del NIF y el nombre completo. </p>
+        
+      <p>Este dato es <strong>obligatorio</strong> especificarlo si el trámite es autenticado (en las 
+        especificaciones gen&eacute;ricas o por nivel).  <br>
         <br>
-        La &uacute;nica excepci&oacute;n permitida es para acceso An&oacute;nimo 
-        siempre que el destino del tr&aacute;mite no sea registro. Para este caso 
-        se permitir&aacute; no establecer esta informaci&oacute;n o bien que el 
-        script devuelva vac&iacute;o. Esta funcionalidad nos permitir&aacute; 
-        tr&aacute;mites con acceso an&oacute;nimo sin identificar al solicitante.</p></td>
+        La &uacute;nica excepci&oacute;n permitida es para acceso An&oacute;nimo. Si el destino es registro el nif podr&aacute; ser opcional pero el
+        nombre ser&aacute; obligatorio. Si el destino no es registro el nif y el nombre podr&aacute;n ser opcionales.
+        Para no establecer el nif o el nombre se deber&aacute; dejar vac&iacute;o el script o bien que el script devuelva la cadena "NO-VALOR".</p></td>
   </tr>
   <tr> 
     <td>Referencia representado</td>
@@ -112,7 +111,7 @@
     <td>Script de destinatario tr&aacute;mite</td>
     <td>
     	<p>
-    		Este script permite establecer din&aacute;micamente el destinatario del tr&aacute;mite: oficina registral, organo destino y unidad administrativa.
+    		Este script permite establecer din&aacute;micamente el destinatario del tr&aacute;mite: procedimiento, oficina registral, organo destino y unidad administrativa.
     		Aunque se establezca din&aacute;micamente por script se deber&aacute;n establecer unos valores iniciales en la ficha de la versi&oacute;n del tr&aacute;mite.
     		Por defecto el destinatario tendr&aacute; estos valores.
     	</p>
@@ -127,6 +126,7 @@
    			<br/>
 		   	<em>
 		   		// Establecer destinatario dinamicamente<br/>
+		   		DESTINATARIO_TRAMITE.setProcedimiento('PROC1');<br/>
 		   		DESTINATARIO_TRAMITE.setOficinaRegistral('OF1');<br/>
 		   		DESTINATARIO_TRAMITE.setOrganoDestino('1');<br/>
 		        DESTINATARIO_TRAMITE.setUnidadAdministrativa('2');<br/>

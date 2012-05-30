@@ -9,6 +9,7 @@ public class Tramite extends Traducible {
     // Fields    	
      private Long codigo;
      private String identificador;
+     private String procedimiento;
      private Set versiones = new HashSet(0);     
      private OrganoResponsable organoResponsable;
 
@@ -69,6 +70,14 @@ public class Tramite extends Traducible {
 
 	public void setOrganoResponsable(OrganoResponsable organoResponsable) {
 		this.organoResponsable = organoResponsable;
+	}
+
+	public String getProcedimiento() {
+		return procedimiento;
+	}
+
+	public void setProcedimiento(String procedimiento) {
+		this.procedimiento = procedimiento;
 	}
 
 }

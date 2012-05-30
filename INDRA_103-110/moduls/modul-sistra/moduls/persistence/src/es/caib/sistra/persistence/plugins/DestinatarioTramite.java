@@ -13,6 +13,8 @@ public class DestinatarioTramite {
 	
 	private String unidadAdministrativa;
 
+	private String procedimiento;
+	
 	public String getOficinaRegistral() {
 		return oficinaRegistral;
 	}
@@ -43,6 +45,14 @@ public class DestinatarioTramite {
 
 	public void setCalculado(boolean calculado) {
 		this.calculado = calculado;
+	}
+
+	public String getProcedimiento() {
+		return procedimiento;
+	}
+
+	public void setProcedimiento(String procedimiento) {
+		this.procedimiento = procedimiento;
 	}
 	
 	
