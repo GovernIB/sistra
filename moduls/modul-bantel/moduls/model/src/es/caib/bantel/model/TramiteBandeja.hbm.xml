@@ -18,8 +18,9 @@
     <property name="tipo"  column="TRA_TIPO"  not-null="true" length="1"/>
     <property name="procesada"  column="TRA_PROCES"  not-null="true" length="1"/>
   	
-  	<many-to-one name="tramite" column="TRA_IDETRA" not-null="true"/>
+  	<many-to-one name="procedimiento" column="TRA_IDEPRO" not-null="true"/>
   	
+  	<property name="identificadorTramite"  column="TRA_IDETRA"  not-null="true" length="20"/>
     <property name="versionTramite"  column="TRA_VERTRA"  not-null="true" length="2"/>
     <property name="unidadAdministrativa"  column="TRA_UNIADM"  not-null="true"/>
     <property name="nivelAutenticacion"  column="TRA_NIVAUT"  not-null="true" length="1"/>
@@ -41,6 +42,7 @@
 	<property name="delegadoNombre"  column="TRA_NOMDLG"  length="500"/>
 	<property name="idioma"  column="TRA_IDIOMA"  length="2" not-null="true"/>
 	<property name="tipoConfirmacionPreregistro"  column="TRA_TICOPR" />
+	<property name="fechaInicioProcesamiento"  column="TRA_INIPRO"/>
 	<property name="resultadoProcesamiento"  column="TRA_RESPRO"/>
 	<property name="fechaProcesamiento"  column="TRA_FECPRO"/>
 	<property name="firmada"  column="TRA_FIRMAD"/>

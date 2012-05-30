@@ -3,6 +3,7 @@ package es.caib.bantel.front.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -37,8 +38,13 @@ public class CambioEstadoMasivoAction extends BaseAction
 		// Construimos criterios de busqueda
 		CambioEstadoMasivoForm formularioBusqueda = ( CambioEstadoMasivoForm ) form;
 		CriteriosBusquedaTramite criterios = new CriteriosBusquedaTramite();
-		criterios.setAnyo( formularioBusqueda.getAnyo() );		
-		criterios.setIdentificadorTramite( formularioBusqueda.getIdentificadorTramite() );
+		criterios.setAnyo( formularioBusqueda.getAnyo() );	
+		if (!("-1".equals(formularioBusqueda.getIdentificadorProcedimiento()))) {
+			criterios.setIdentificadorProcedimiento( formularioBusqueda.getIdentificadorProcedimiento() );
+		}
+		if (StringUtils.isNotBlank(formularioBusqueda.getIdentificadorTramite())) {
+			criterios.setIdentificadorTramite(formularioBusqueda.getIdentificadorTramite());
+		}
 		criterios.setMes( formularioBusqueda.getMes() );
 		criterios.setNivelAutenticacion( formularioBusqueda.getNivelAutenticacion() );
 		criterios.setProcesada( formularioBusqueda.getProcesada() );
@@ -49,7 +55,7 @@ public class CambioEstadoMasivoAction extends BaseAction
 		
 		// Marcamos entradas con nuevo estado
 		TramiteBandejaDelegate delegate = DelegateUtil.getTramiteBandejaDelegate();
-		delegate.procesarEntradas(criterios,Character.toString(formularioBusqueda.getEstadoNuevo()));
+		delegate.procesarEntradas(criterios,Character.toString(formularioBusqueda.getEstadoNuevo()), "Estado cambiado por gestor " + this.getPrincipal(request).getName());
 		
 		// Indicamos que el cambio se ha realizado correctamente
 		request.setAttribute("message",resources.getMessage( getLocale( request ), "cambioEstadoMasivo.realizado"));

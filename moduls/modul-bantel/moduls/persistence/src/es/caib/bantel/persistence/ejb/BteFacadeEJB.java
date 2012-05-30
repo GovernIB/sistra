@@ -13,7 +13,7 @@ import javax.ejb.SessionContext;
 import es.caib.bantel.model.DocumentoBandeja;
 import es.caib.bantel.model.GestorBandeja;
 import es.caib.bantel.model.ReferenciaTramiteBandeja;
-import es.caib.bantel.model.Tramite;
+import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.model.TramiteBandeja;
 import es.caib.bantel.modelInterfaz.DatosDocumentoPresencial;
 import es.caib.bantel.modelInterfaz.DatosDocumentoTelematico;
@@ -81,7 +81,7 @@ public abstract class BteFacadeEJB implements SessionBean  {
     /**
      * Obtiene números de entradas de la BTE pendientes de procesar
      * 
-     * 
+     * @param identificadorProcedimiento Identificador de procedimiento a consultar
      * @param identificadorTramite Identificador de trámite a consultar
      * @return Números de entradas
      * @throws ExcepcionBTE
@@ -90,14 +90,14 @@ public abstract class BteFacadeEJB implements SessionBean  {
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
      */
-    public String[] obtenerNumerosEntradas(String identificadorTramite) throws ExcepcionBTE{
-    	return obtenerNumerosEntradas(identificadorTramite,"N",null,null); 
+    public String[] obtenerNumerosEntradas(String identificadorProcedimiento, String identificadorTramite) throws ExcepcionBTE{
+    	return obtenerNumerosEntradas(identificadorProcedimiento, identificadorTramite,"N",null,null); 
     }
        
     /**
      * Obtiene números de entradas de la BTE pendientes de procesar
      * 
-     * 
+     * @param identificadorProcedimiento Identificador de procedimiento a consultar
      * @param identificadorTramite Identificador de trámite a consultar
      * @return Números de entradas
      * @throws ExcepcionBTE
@@ -106,14 +106,14 @@ public abstract class BteFacadeEJB implements SessionBean  {
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
      */
-    public ReferenciaEntradaBTE[] obtenerReferenciasEntradas(String identificadorTramite,String procesada,Date desde,Date hasta) throws ExcepcionBTE{
+    public ReferenciaEntradaBTE[] obtenerReferenciasEntradas(String identificadorProcedimiento, String identificadorTramite,String procesada,Date desde,Date hasta) throws ExcepcionBTE{
     	
     	// Comprobamos que el usuario tiene acceso al tramite
-    	Tramite tramite = null;
+    	Procedimiento procedimiento = null;
     	try{
-	    	 tramite = DelegateUtil.getTramiteDelegate().obtenerTramitePorId(identificadorTramite);
-	    	 if (tramite == null) {
-	    		 throw new ExcepcionBTE("No existe tramite con identificador: " + identificadorTramite);
+	    	 procedimiento = DelegateUtil.getTramiteDelegate().obtenerProcedimientoPorId(identificadorProcedimiento);
+	    	 if (procedimiento == null) {
+	    		 throw new ExcepcionBTE("No existe procedimiento con identificador: " + identificadorProcedimiento);
 	    	 }
     	}catch (Exception ex){
      		throw new ExcepcionBTE("No se ha podido recuperar los números de entrada",ex);
@@ -123,7 +123,7 @@ public abstract class BteFacadeEJB implements SessionBean  {
     	if (!this.context.isCallerInRole(roleAuto)){
 	    	 String usu = this.context.getCallerPrincipal().getName();
 	    	 boolean permitido = false;
-	    	 for (Iterator it = tramite.getGestores().iterator();it.hasNext();){
+	    	 for (Iterator it = procedimiento.getGestores().iterator();it.hasNext();){
 	    		 GestorBandeja g = (GestorBandeja) it.next();
 	    		 if (g.getSeyconID().equals(usu)) {
 	    			 permitido = true;
@@ -138,7 +138,7 @@ public abstract class BteFacadeEJB implements SessionBean  {
     	// Devolvemos referencias a entradas    
      	try{
      		TramiteBandejaDelegate td = DelegateUtil.getTramiteBandejaDelegate();  
-     		List refs = td.obtenerReferenciasEntradas(identificadorTramite,procesada,desde,hasta);
+     		List refs = td.obtenerReferenciasEntradas(identificadorProcedimiento,identificadorTramite,procesada,desde,hasta);
      		ReferenciaEntradaBTE[] result = new ReferenciaEntradaBTE[refs.size()] ;
      		int i=0;	
      		for (Iterator it=refs.iterator();it.hasNext();){
@@ -159,6 +159,7 @@ public abstract class BteFacadeEJB implements SessionBean  {
     
     /**
      * Obtiene números de entradas de la BTE
+     * @param identificadorProcedimiento Identificador de procedimiento a consultar (obligatorio)
      * @param identificadorTramite Identificador de trámite a consultar (obligatorio)
      * @param procesada	Indica si recupera entradas procesadas / no procesadas / con error ( "S" / "N" / "X"). Si este parametro es nulo recupera todas las entradas. 
      * @param desde Permite establecer la fecha inicial a partir de la cual se recuperarán las entradas. Si este parametro es nulo no se toma en cuenta.
@@ -170,7 +171,7 @@ public abstract class BteFacadeEJB implements SessionBean  {
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
      */
-    public String[] obtenerNumerosEntradas(String identificadorTramite,String procesada,Date desde,Date hasta) throws ExcepcionBTE{
+    public String[] obtenerNumerosEntradas(String identificadorProcedimiento, String identificadorTramite,String procesada,Date desde,Date hasta) throws ExcepcionBTE{
     	
     	// Obtenemos información del trámite para establecer validación de acceso
     	// TODO Verificar comprobación acceso desde BackOffices: comprobación de rol o comprobación de usuario seycon
@@ -178,7 +179,7 @@ public abstract class BteFacadeEJB implements SessionBean  {
     	// Obtenemos números entradas    	
     	try{
     		TramiteBandejaDelegate td = DelegateUtil.getTramiteBandejaDelegate();        	        	
-    		return td.obtenerNumerosEntradas(identificadorTramite,procesada,desde,hasta);
+    		return td.obtenerNumerosEntradas(identificadorProcedimiento, identificadorTramite,procesada,desde,hasta);
     	}catch (Exception ex){
     		throw new ExcepcionBTE("No se ha podido recuperar los números de entrada",ex);
     	}
@@ -284,7 +285,8 @@ public abstract class BteFacadeEJB implements SessionBean  {
 	    	tramBte.setTipo(t.getTipo());
 	    	tramBte.setProcesada(t.getProcesada());
 	    	tramBte.setIdioma(t.getIdioma());
-	    	tramBte.setIdentificadorTramite(t.getTramite().getIdentificador());
+	    	tramBte.setIdentificadorProcedimiento(t.getProcedimiento().getIdentificador());
+	    	tramBte.setIdentificadorTramite(t.getIdentificadorTramite());
 	    	tramBte.setVersionTramite(t.getVersionTramite());
 	    	tramBte.setNivelAutenticacion(t.getNivelAutenticacion());
 	    	tramBte.setUsuarioSeycon(t.getUsuarioSeycon());
@@ -407,7 +409,7 @@ public abstract class BteFacadeEJB implements SessionBean  {
     		}
     	}
     	
-    	// Comprobamos que gestor tenga acceso a los tramites (excepto para auto)
+    	// Comprobamos que gestor tenga acceso al procedimiento al que pertenece el tramite (excepto para auto)
     	if (!this.context.isCallerInRole(roleAuto)){
     		try{
 	    		GestorBandejaDelegate gd = DelegateUtil.getGestorBandejaDelegate();    		
@@ -416,14 +418,14 @@ public abstract class BteFacadeEJB implements SessionBean  {
 	    			throw new ExcepcionBTE("Gestor " + this.context.getCallerPrincipal().getName() + " no esta registrado");
 	    		}
 				boolean pertenece=false;
-				for (Iterator it=gestor.getTramitesGestionados().iterator();it.hasNext();){
-					Tramite tramiteBandeja = (Tramite) it.next();
-					if (tramiteBandeja.getIdentificador().equals(tramite.getTramite().getIdentificador())){
+				for (Iterator it=gestor.getProcedimientosGestionados().iterator();it.hasNext();){
+					Procedimiento procedimiento = (Procedimiento) it.next();
+					if (procedimiento.getIdentificador().equals(tramite.getProcedimiento().getIdentificador())){
 						pertenece = true;
 						break;
 					}
 				}
-				if (!pertenece) throw new ExcepcionBTE("Gestor " + this.context.getCallerPrincipal().getName() + " no tiene acceso al tramite " + tramite.getTramite().getIdentificador() );	    		    	
+				if (!pertenece) throw new ExcepcionBTE("Gestor " + this.context.getCallerPrincipal().getName() + " no tiene acceso al procedimiento " + tramite.getProcedimiento().getIdentificador() );	    		    	
     		}catch(DelegateException dex){
     			throw new ExcepcionBTE("No se puede comprobar el acceso para gestor " + this.context.getCallerPrincipal().getName(),dex);
     		}

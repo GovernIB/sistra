@@ -46,7 +46,7 @@
 	<td class="labelo">
 	<div id="multibox">
 		<table width="100%">		
-			<logic:iterate id="tramite" name="tramiteOptions" type="es.caib.bantel.model.Tramite">		
+			<logic:iterate id="tramite" name="tramiteOptions" type="es.caib.bantel.model.Procedimiento">		
 				<tr>			
 					<td align="left">
 						<html:multibox property="tramites" value="<%= tramite.getIdentificador() %>"/> <bean:write name="tramite" property="descripcion" />

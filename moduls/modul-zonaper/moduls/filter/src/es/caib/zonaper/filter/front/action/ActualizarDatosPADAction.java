@@ -19,6 +19,7 @@ import es.caib.zonaper.filter.front.form.ActualizarDatosPADForm;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
+import es.caib.zonaper.persistence.delegate.PadAplicacionDelegate;
 import es.caib.zonaper.persistence.delegate.PadDelegate;
 
 /**
@@ -47,7 +48,7 @@ public class ActualizarDatosPADAction extends Action
 			throws Exception
 	{
 		ActualizarDatosPADForm formulario = ( ActualizarDatosPADForm ) form;
-		PadDelegate delegate = DelegatePADUtil.getPadDelegate();
+		PadAplicacionDelegate delegate = DelegateUtil.getPadAplicacionDelegate();	
 		Principal seyconPrincipal = request.getUserPrincipal();
 		String nombre = formulario.getNombre().trim().replaceAll( "\\s+", " " );
 		
@@ -78,9 +79,15 @@ public class ActualizarDatosPADAction extends Action
 		
 		if ( _log.isDebugEnabled() ) _log.debug( "Actualizando datos PAD para el usuario " + seyconPrincipal.getName() );
 		// Evitamos rebotes
-		if( !delegate.existePersonaPADporUsuario( seyconPrincipal.getName() ) )
-		{
+		PersonaPAD personaOld = delegate.obtenerDatosPersonaPADporNif(personaPAD.getNif());
+		if (personaOld == null) {	
 			delegate.altaPersona( personaPAD );
+		} else {
+			// Comprobamos si es un usuario generado de forma automatica: actualizamos codigo usuario y modificamos datos
+			if (personaOld.isUsuarioSeyconGeneradoAuto()) {					
+				delegate.actualizarCodigoUsuario(personaOld.getUsuarioSeycon(), seyconPrincipal.getName());
+				delegate.modificarPersona(personaPAD);				
+			}
 		}
 		
 		response.sendRedirect( formulario.getUrlOriginal() );

@@ -10,7 +10,7 @@
 
 <!-- Componente que muestra las pestañas de idiomas, select es la seleccionada -->
     <definition name=".langtabs" path="/moduls/langtabs.jsp"
-        controllerClass="es.caib.redose.back.action.ListaIdiomasController">
+        controllerClass="es.caib.bantel.back.action.ListaIdiomasController">
         <put name="select" value=""/>
     </definition>
 
@@ -35,7 +35,7 @@
         </putList>
     </definition>
     
-    <!-- ====================== tramite =================== -->
+    <!-- ====================== procedimiento =================== -->
     <definition name=".tramite.editar" extends=".editar"  
     	controllerClass="es.caib.bantel.back.action.tramite.versionWSController">
         <put name="title" value="tramite.title"/>
@@ -68,5 +68,18 @@
     <definition name=".gestorBandeja.lista" path="/gestorBandeja/lista.jsp"
         controllerClass="es.caib.bantel.back.action.gestorBandeja.ListaGestoresBandejaController"/>     
 	
-
+ 	<!-- ====================== fichero exportacion=================== -->
+    <definition name=".ficheroExportacion.editar" extends=".editar" >
+        <put name="title" value="ficheroExportacion.title"/>
+        <put name="alta.title" value="ficheroExportacion.alta"/>
+        <put name="modificacion.title" value="ficheroExportacion.modificacion"/>
+        <put name="subtitle" value="ficheroExportacion.subtitulo"/>
+        <put name="validateMethod" value="validateFicheroExportacionForm"/>
+        <put name="form.action" value="/back/ficheroExportacion/editar"/>
+        <put name="form.bean" value="ficheroExportacionForm"/>
+        <put name="values.codigo" value="values.identificadorTramite" />
+        <put name="paginaValues" value="/ficheroExportacion/editarValues.jsp"/>
+    </definition>
+     <definition name=".ficheroExportacion.lista" path="/ficheroExportacion/lista.jsp"
+     	 controllerClass="es.caib.bantel.back.action.ficheroExportacion.ListaFicheroExportacionController"/>
 </tiles-definitions>

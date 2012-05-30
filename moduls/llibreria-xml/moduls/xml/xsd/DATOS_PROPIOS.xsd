@@ -16,6 +16,7 @@
   			<xs:element minOccurs="0" maxOccurs="1" ref="FECHA_TOPE_ENTREGA" />
   			<xs:element minOccurs="0" maxOccurs="1" ref="TEXTO_FECHA_TOPE_ENTREGA" />
   			<xs:element minOccurs="0" maxOccurs="1" ref="IDENTIFICADOR_PERSISTENCIA" />
+  			<xs:element minOccurs="0" maxOccurs="1" ref="IDENTIFICADOR_PROCEDIMIENTO" />
   			<xs:element minOccurs="0" maxOccurs="1" ref="HABILITAR_NOTIFICACION_TELEMATICA" />
   			<xs:element minOccurs="0" maxOccurs="1" ref="HABILITAR_AVISOS" />
   			<xs:element minOccurs="0" maxOccurs="1" ref="AVISO_SMS" />
@@ -84,7 +85,8 @@
   <xs:element name="VALOR" type="xs:string"/>
   
   <xs:element name="FECHA_TOPE_ENTREGA" type="xs:string"/>
-  <xs:element name="IDENTIFICADOR_PERSISTENCIA" type="xs:string"/>  
+  <xs:element name="IDENTIFICADOR_PERSISTENCIA" type="xs:string"/>
+  <xs:element name="IDENTIFICADOR_PROCEDIMIENTO" type="xs:string"/>    
   <xs:element name="TEXTO_FECHA_TOPE_ENTREGA" type="xs:string"/>
   
   <xs:element name="HABILITAR_NOTIFICACION_TELEMATICA" type="string_si_no"/>

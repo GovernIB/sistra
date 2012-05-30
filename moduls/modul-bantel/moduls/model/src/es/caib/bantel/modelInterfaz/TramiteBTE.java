@@ -46,7 +46,11 @@ public class TramiteBTE implements Serializable {
 	/**
 	 * Indica si ha sido procesada por el BackOffice (ver ConstantesBTE)
 	 */
-	private char procesada;         
+	private char procesada;     
+	/**
+	 * Identificador procedimiento.
+	 */
+	private String identificadorProcedimiento;
 	/**
 	 * Identificador del trámite
 	 */
@@ -709,6 +713,12 @@ public class TramiteBTE implements Serializable {
 	public void setReferenciaGestorDocumentalJustificante(
 			String referenciaGestorDocumentalJustificante) {
 		this.referenciaGestorDocumentalJustificante = referenciaGestorDocumentalJustificante;
+	}
+	public String getIdentificadorProcedimiento() {
+		return identificadorProcedimiento;
+	}
+	public void setIdentificadorProcedimiento(String identificadorProcedimiento) {
+		this.identificadorProcedimiento = identificadorProcedimiento;
 	}
 	
 }

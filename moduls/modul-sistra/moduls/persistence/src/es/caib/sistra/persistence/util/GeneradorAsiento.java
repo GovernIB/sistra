@@ -119,10 +119,10 @@ public class GeneradorAsiento {
 			DatosInteresado dInteresadoRpte,dInteresadoRpdo=null,dInteresadoDlgdo=null;
 			dInteresadoRpte = factoria.crearDatosInteresado();
 
-			// -- Validamos nif y nombre			 
-			boolean requiereRpte = (tramiteVersion.getDestino() == ConstantesSTR.DESTINO_REGISTRO || tramitePAD.getNivelAutenticacion() != 'A');
+			// Si el trámite es autenticado se requiere nif y nombre
+			boolean requiereRpte = (tramitePAD.getNivelAutenticacion() != 'A');
 	    	if ( StringUtils.isBlank(rpteNif) && requiereRpte){
-	    		throw new Exception("El nif nombre del rpte no puede estar vacío");
+	    		throw new Exception("El nif del rpte no puede estar vacío");
 	    	}
 	    	if ( StringUtils.isBlank (rpteNom) && requiereRpte){
 				throw new Exception("El nombre del rpte no puede estar vacío");
@@ -347,13 +347,14 @@ public class GeneradorAsiento {
 	 * @param plgForms
 	 * @param expeUA 
 	 * @param expeId 
+	 * @param dt 
 	 * @return
 	 * @throws Exception
 	 */
 	public static String generarDatosPropios(
 			TramiteFront tramiteInfo,
 			TramiteVersion tramiteVersion,TramitePersistentePAD tramitePAD,
-			PluginFormularios plgForms,PluginPagos plgPagos, String expeId, Long expeUA
+			PluginFormularios plgForms,PluginPagos plgPagos, String expeId, Long expeUA, DestinatarioTramite dt
 			) throws Exception{				
 		try{
 			EspecTramiteNivel especVersion = tramiteVersion.getEspecificaciones();
@@ -366,7 +367,7 @@ public class GeneradorAsiento {
 			// Generar instrucciones
 			Instrucciones instrucciones = generarInstrucciones(tramiteInfo,
 					tramiteVersion, tramitePAD, plgForms, expeId, expeUA,
-					especVersion, especNivel, factoria);
+					especVersion, especNivel, dt, factoria);
 			datosPropios.setInstrucciones(instrucciones);
 			
 			// Generamos datos solicitud
@@ -390,7 +391,7 @@ public class GeneradorAsiento {
 			TramiteVersion tramiteVersion, TramitePersistentePAD tramitePAD,
 			PluginFormularios plgForms, String expeId, Long expeUA,
 			EspecTramiteNivel especVersion, EspecTramiteNivel especNivel,
-			FactoriaObjetosXMLDatosPropios factoria)
+			DestinatarioTramite dt, FactoriaObjetosXMLDatosPropios factoria)
 			throws EstablecerPropiedadException, Exception, ProcessorException {
 		//--- Texto instrucciones
 		// ¿Hay que presentar documentación? 
@@ -425,6 +426,9 @@ public class GeneradorAsiento {
 		// ---- Identificador de persistencia
 		instrucciones.setIdentificadorPersistencia(tramiteInfo.getIdPersistencia());
 		
+		// ---- Identificador de procedimiento
+		instrucciones.setIdentificadorProcedimiento(dt.getProcedimiento());
+				
 		// ---- Opciones notificacion telematica
 		establecerOpcionesNotificacion(tramiteInfo, instrucciones);
 		
@@ -623,11 +627,12 @@ public class GeneradorAsiento {
 				}					
 				datosSolicitud.getDato().add(datS);			
 			}
+
+			if (datosSolicitud.getDato() != null && datosSolicitud.getDato().size() > 0){
+				datosSolicitud = null;
+			}
 		}
 		
-		if (datosSolicitud.getDato() != null && datosSolicitud.getDato().size() > 0){
-			datosSolicitud = null;
-		}
 		
 		return datosSolicitud;
 	}

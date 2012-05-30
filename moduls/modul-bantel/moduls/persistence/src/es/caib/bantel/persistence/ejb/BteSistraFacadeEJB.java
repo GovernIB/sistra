@@ -21,7 +21,7 @@ import javax.naming.InitialContext;
 import org.apache.commons.lang.StringUtils;
 
 import es.caib.bantel.model.DocumentoBandeja;
-import es.caib.bantel.model.Tramite;
+import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.model.TramiteBandeja;
 import es.caib.bantel.modelInterfaz.ConstantesBTE;
 import es.caib.bantel.modelInterfaz.DatosDocumentoPresencial;
@@ -31,7 +31,7 @@ import es.caib.bantel.modelInterfaz.ExcepcionBTE;
 import es.caib.bantel.modelInterfaz.TramiteBTE;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.delegate.TramiteBandejaDelegate;
-import es.caib.bantel.persistence.delegate.TramiteDelegate;
+import es.caib.bantel.persistence.delegate.ProcedimientoDelegate;
 import es.caib.bantel.persistence.util.StringUtil;
 import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
@@ -328,14 +328,26 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 		    		
 		    	}  	    		    	
 	    	}
+
+	    	// Obtenemos id procedimiento al que pertenece el tramite
+	    	// (si xml datos propios ha sido generado antes de la version 1.1.6 no tendra idprocedimiento,
+	    	//   ponemos como idprocedimiento el idtramite)
+	    	String identificadorProcedimiento = datosPropios.getInstrucciones().getIdentificadorProcedimiento();
+	    	if (identificadorProcedimiento == null) {
+	    		identificadorProcedimiento = tramiteBTE.getIdentificadorTramite();
+	    	}
+	    	tramiteBTE.setIdentificadorProcedimiento(identificadorProcedimiento);
+	  
 	    	
 	    	// Convertimos TramiteBTE a TramiteBandeja
 	    	TramiteBandejaDelegate td;
 	    	TramiteBandeja tramite;
 	    	comprobarTramiteBTE(tramiteBTE);
-	    	tramite = tramiteBTEToTramiteBandeja(tramiteBTE);    	
+			tramite = tramiteBTEToTramiteBandeja(tramiteBTE);    	
 	    	
-	    	
+	    	// Especificamos fecha inicio procesamiento (se renovara cada vez que pase a no procesada)
+			tramite.setFechaInicioProcesamiento(ahora);
+			
 	    	// Especificamos tipo de confirmacion
 	    	tramite.setTipoConfirmacionPreregistro(tipoConfirmacionPreregistro);
 	    	
@@ -365,13 +377,13 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
     }
         
     /**
-     * Convierte TramiteBTE a TramiteBandeja
+     * Convierte TramiteBTE a TramiteBandeja 
      * @param t
      * @return
      */
     private TramiteBandeja tramiteBTEToTramiteBandeja(TramiteBTE tramBte) throws ExcepcionBTE{
     	try{   		
-    		TramiteDelegate od;
+    		ProcedimientoDelegate od;
     		try{
         		od = DelegateUtil.getTramiteDelegate();
         	}catch (Exception ex){
@@ -382,13 +394,13 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
         		throw new ExcepcionBTE("No se permite la modificación, sólo se permiten nuevas entradas");
         	}
         	
-        	// Comprobamos si existe un tramite con ese codigo
-        	Tramite tram;
+        	// Comprobamos si existe el procedimiento del tramite
+        	Procedimiento procedimiento;
         	try{
-        		tram = (Tramite) od.obtenerTramite(tramBte.getIdentificadorTramite());
-        		if (tram == null) throw new Exception("Consulta devuelve nulo");
+        		procedimiento = (Procedimiento) od.obtenerProcedimiento(tramBte.getIdentificadorProcedimiento());
+        		if (procedimiento == null) throw new Exception("No existe procedimiento");
         	}catch(Exception e){
-        		throw new ExcepcionBTE("En la Bandeja Telemática no esta definido el trámite con id " + tramBte.getIdentificadorTramite()+ ". Revise la configuración de la Bandeja.",e);
+        		throw new ExcepcionBTE("En la Bandeja Telemática no esta definido el procedimiento con id " + tramBte.getIdentificadorTramite()+ ". Revise la configuración de la Bandeja.",e);
         	}
         	
         	// Establecemos datos tramite
@@ -401,7 +413,8 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 	    	t.setProcesada('N');
 	    	t.setFirmada(tramBte.isFirmadaDigitalmente()?'S':'N');
 	    	t.setIdioma(tramBte.getIdioma());
-	    	t.setTramite(tram);
+	    	t.setIdentificadorTramite(tramBte.getIdentificadorTramite());
+	    	t.setProcedimiento(procedimiento);
 	    	t.setVersionTramite(tramBte.getVersionTramite());
 	    	t.setNivelAutenticacion(tramBte.getNivelAutenticacion());
 	    	t.setUsuarioSeycon(tramBte.getUsuarioSeycon());
@@ -548,8 +561,8 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 		TramiteBandeja tramiteBandeja = td.obtenerTramiteBandeja(numeroEntrada);
 		
 		// Comprobamos si tiene habilitado el aviso inmediato
-		if (tramiteBandeja.getTramite().avisosEnabled() &&
-			tramiteBandeja.getTramite().getInmediata() == 'S'){
+		if (tramiteBandeja.getProcedimiento().avisosEnabled() &&
+			tramiteBandeja.getProcedimiento().getInmediata() == 'S'){
 			
 			// Dejamos entrada en la cola de avisos inmediatos
 	    	InitialContext ctx = new InitialContext();

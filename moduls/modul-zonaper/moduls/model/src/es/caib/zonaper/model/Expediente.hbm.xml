@@ -15,6 +15,7 @@
      </id>
 
 	<property name="claveExpediente"  column="EXP_CLAVE" length="50"/>
+	<property name="idProcedimiento"  column="EXP_IDEPRO"  not-null="true"/>
 	<property name="idioma"  column="EXP_IDIOMA" length="2"/>	
 	<property name="fecha" column="EXP_FECEXP" not-null="true"/>
 	<property name="fechaConsulta" column="EXP_FECCON" not-null="false"/>

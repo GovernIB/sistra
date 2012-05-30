@@ -20,6 +20,7 @@ public class Expediente implements Serializable
 	private Long codigo;
 	private String idExpediente;
 	private String claveExpediente;
+	private String idProcedimiento;
 	private String idioma;
 	private Timestamp fecha;
 	private Timestamp fechaConsulta;
@@ -209,6 +210,12 @@ public class Expediente implements Serializable
 	}
 	public void setNifRepresentante(String nifRepresentante) {
 		this.nifRepresentante = nifRepresentante;
+	}
+	public String getIdProcedimiento() {
+		return idProcedimiento;
+	}
+	public void setIdProcedimiento(String idProcedimiento) {
+		this.idProcedimiento = idProcedimiento;
 	}
 		
 }

@@ -24,6 +24,7 @@
 			<th><bean:message key="resultadoBusqueda.fecha"/></th>			
 			<th><bean:message key="resultadoBusqueda.numeroRegistro"/></th>
 			<th>NIF</th>
+			<th><bean:message key="resultadoBusqueda.procedimiento"/></th>
 			<th><bean:message key="resultadoBusqueda.tramite"/></th>
 		</tr>				
 			<bean:define id="numeroPagina" name="page" property="page" type="java.lang.Integer"/>
@@ -93,7 +94,8 @@
 				</logic:equal>			
 								
 				<td><bean:write name="pagina" property="usuarioNif" /></td>
-				<td><bean:write name="pagina" property="descripcionTramite" /></td>
+				<td><bean:write name="pagina" property="procedimiento.identificador" /></td>
+				<td>[<bean:write name="pagina" property="identificadorTramite" />] <bean:write name="pagina" property="descripcionTramite" /></td>
 			</tr>
 			</logic:iterate>														
 		</table> 

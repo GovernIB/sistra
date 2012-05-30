@@ -749,7 +749,7 @@ public class FactoriaObjetosXMLRegistroImpl
 		DATOSINTERESADO dInteresadoRaw = null;
 		
 		if (datosInteresado != null){
-		
+			
 			dInteresadoRaw = new DATOSINTERESADO ();		
 			
 			// Crear objeto de dirección codificada
@@ -757,10 +757,14 @@ public class FactoriaObjetosXMLRegistroImpl
 			
 			// Crear objeto de datos de interesado
 			dInteresadoRaw.setDIRECCIONCODIFICADA (rawDir);
-			dInteresadoRaw.setFORMATODATOSINTERESADO (datosInteresado.getFormatoDatosInteresado());
+			if (datosInteresado.getFormatoDatosInteresado() != null) {
+				dInteresadoRaw.setFORMATODATOSINTERESADO (datosInteresado.getFormatoDatosInteresado());
+			}
 			dInteresadoRaw.setIDENTIFICACIONINTERESADO (datosInteresado.getIdentificacionInteresado());
-			dInteresadoRaw.setNUMEROIDENTIFICACION (datosInteresado.getNumeroIdentificacion());			
-			dInteresadoRaw.setTIPOIDENTIFICACION ("" + datosInteresado.getTipoIdentificacion());
+			dInteresadoRaw.setNUMEROIDENTIFICACION (datosInteresado.getNumeroIdentificacion());		
+			if (datosInteresado.getTipoIdentificacion() != null) {
+				dInteresadoRaw.setTIPOIDENTIFICACION ("" + datosInteresado.getTipoIdentificacion());
+			}
 			dInteresadoRaw.setTIPOINTERESADO (datosInteresado.getTipoInteresado());
 			if (datosInteresado.getNivelAutenticacion() != null)
 				dInteresadoRaw.setNIVELAUTENTICACION("" + datosInteresado.getNivelAutenticacion());			

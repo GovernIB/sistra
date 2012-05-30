@@ -205,7 +205,7 @@ public class PadDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
 	}
-	
+	/* NO SE USA
 	public PersonaPAD altaPersona( PersonaPAD personaPAD ) throws DelegateException
 	{
 		try
@@ -217,7 +217,7 @@ public class PadDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
 	}
-	
+	*/
 	public void actualizarCodigoUsuario( String usuOld, String usuNew)  throws DelegateException
 	{
 		try

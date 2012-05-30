@@ -20,6 +20,7 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 	private Date fechaTopeEntrega;
 	private String textoFechaTopeEntrega;
 	private String identificadorPersistencia;
+	private String identificadorProcedimiento;
 	private String habilitarNotificacionTelematica;
 	private String habilitarAvisos;
 	private String avisoSMS;
@@ -32,7 +33,8 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 		textoInstrucciones = null;
 		documentosEntregar = null;
 		fechaTopeEntrega = null;
-		identificadorPersistencia = null;		
+		identificadorPersistencia = null;	
+		identificadorProcedimiento = null;
 	}
 			
 	/* (non-Javadoc)
@@ -110,6 +112,9 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 			// Comprobar Id Persistencia
 			if (!objetosIguales (getIdentificadorPersistencia(), inst.getIdentificadorPersistencia())) return false;
 			
+			// Comprobar Id Procedimiento
+			if (!objetosIguales (getIdentificadorProcedimiento(), inst.getIdentificadorProcedimiento())) return false;
+						
 			// Comprobar aviso sms
 			if (!objetosIguales (getAvisoSMS(), inst.getAvisoSMS())) return false;
 
@@ -199,6 +204,14 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 	public void setFormulariosJustificante(
 			FormulariosJustificante formulariosJustificante) {
 		this.formulariosJustificante = formulariosJustificante;
+	}
+
+	public String getIdentificadorProcedimiento() {
+		return identificadorProcedimiento;
+	}
+
+	public void setIdentificadorProcedimiento(String identificadorProcedimiento) {
+		this.identificadorProcedimiento = identificadorProcedimiento;
 	}
 
 

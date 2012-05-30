@@ -29,6 +29,7 @@ public class EntradaTelematica implements java.io.Serializable, Entrada {
      private String nombreRepresentado;
      private String nifDelegado;
      private String nombreDelegado;
+     private String procedimiento;
      private String tramite;
      private Integer version;
  	// Opciones de aviso movilidad
@@ -307,6 +308,14 @@ public class EntradaTelematica implements java.io.Serializable, Entrada {
 
 	public void setSubsanacionExpedienteUA(Long subsanacionExpedienteUA) {
 		this.subsanacionExpedienteUA = subsanacionExpedienteUA;
+	}
+
+	public String getProcedimiento() {
+		return procedimiento;
+	}
+
+	public void setProcedimiento(String procedimiento) {
+		this.procedimiento = procedimiento;
 	}
 
 }

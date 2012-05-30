@@ -10,6 +10,7 @@
         <putList name="independientes">
             <add type="definition" value=".menu.tramite.listar" />
             <add type="definition" value=".menu.gestorBandeja.listar" />
+            <add type="definition" value=".menu.ficheroExportacion.listar" />
         </putList>
     </definition>
 
@@ -43,5 +44,8 @@
         <put name="titulo" value="menu.gestorBandeja.lista"/>
         <put name="link" value="/back/gestorBandeja/lista"/>
     </definition>
-
+	<definition name=".menu.ficheroExportacion.listar" extends=".menu.individual">
+        <put name="titulo" value="menu.ficheroExportacion.lista"/>
+        <put name="link" value="/back/ficheroExportacion/lista"/>
+    </definition>
 </tiles-definitions>

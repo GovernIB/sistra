@@ -20,11 +20,12 @@
         <property name="cache.provider_class">net.sf.ehcache.hibernate.Provider</property>
         <property name="cache.use_query_cache">true</property>
 
-		<mapping resource="es/caib/bantel/model/Tramite.hbm.xml" />
+		<mapping resource="es/caib/bantel/model/Procedimiento.hbm.xml" />
         <mapping resource="es/caib/bantel/model/TramiteBandeja.hbm.xml" />
         <mapping resource="es/caib/bantel/model/DocumentoBandeja.hbm.xml" />
         <mapping resource="es/caib/bantel/model/GestorBandeja.hbm.xml" />
-        <mapping resource="es/caib/bantel/model/FicheroExportacion.hbm.xml" />                                                
+        <mapping resource="es/caib/bantel/model/FicheroExportacion.hbm.xml" />
+        <mapping resource="es/caib/bantel/model/ArchivoFicheroExportacion.hbm.xml" />                                                  
 
     </session-factory>
 

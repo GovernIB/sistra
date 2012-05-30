@@ -18,6 +18,7 @@ public class ExpedientePAD implements Serializable
 	private String identificadorExpediente;
 	private Long unidadAdministrativa;
 	private String claveExpediente=null;
+	private String identificadorProcedimiento;
 	private String idioma="ca"; // Defecto ca para hacerlo compatible con version 1.3.7
 	private String descripcion;
 	private boolean autenticado = true;
@@ -241,6 +242,12 @@ public class ExpedientePAD implements Serializable
 	}
 	public void setNifRepresentante(String nifRepresentante) {
 		this.nifRepresentante = nifRepresentante;
+	}
+	public String getIdentificadorProcedimiento() {
+		return identificadorProcedimiento;
+	}
+	public void setIdentificadorProcedimiento(String identificadorProcedimiento) {
+		this.identificadorProcedimiento = identificadorProcedimiento;
 	}
 		
 }

@@ -54,7 +54,7 @@ public class ExportCSVInitAction extends BaseAction
 			ExportCSVTramitesForm f  = ( ExportCSVTramitesForm ) form;
 			
 			// Verificamos parametros de entrada
-			if (StringUtils.isEmpty(f.getIdentificadorTramite())) {
+			if (StringUtils.isEmpty(f.getIdentificadorProcedimientoTramite())) {
 				result = "ERROR:" + resources.getMessage( getLocale( request ), "exportCSV.identificadorTramiteNoExiste");
 				throw new Exception("No existe identificador tramite");			
 			}
@@ -88,21 +88,25 @@ public class ExportCSVInitAction extends BaseAction
 		
 		
 			// Buscamos entradas a exportar
+			String [] ids = f.getIdentificadorProcedimientoTramite().split("@#@");
+			String idProcedimiento = ids[0];
+			String idTramite = ids[1];
+			
 			TramiteBandejaDelegate delegate = DelegateUtil.getTramiteBandejaDelegate();
-			String [] numEntradas = delegate.obtenerNumerosEntradas(f.getIdentificadorTramite(),procesada,desde,hasta);
+			String [] numEntradas = delegate.obtenerNumerosEntradas(idProcedimiento, idTramite,procesada,desde,hasta);
 			
 			if (numEntradas == null || numEntradas.length == 0){
 				result = "ERROR:" + resources.getMessage( getLocale( request ), "exportCSV.noHayEntradas");				
 			}else{					
 				// Obtenemos fichero guia de exportacion y lo parseamos
-				FicheroExportacion ficheroExportacion = DelegateUtil.getTramiteDelegate().obtenerTramite(f.getIdentificadorTramite()).getArchivoFicheroExportacion();
+				FicheroExportacion ficheroExportacion = DelegateUtil.getFicheroExportacionDelegate().obtenerFicheroExportacion(idTramite);
 				if (ficheroExportacion == null){
 					result = "ERROR:" + resources.getMessage( getLocale( request ), "exportCSV.noFicheroExportacion");
 					throw new Exception("No hay configurado fichero de exportacion para el tramite");
 				}		
 				PropertiesOrdered propsExport = null;
 				try{
-					ByteArrayInputStream bis = new ByteArrayInputStream(ficheroExportacion.getDatos());			
+					ByteArrayInputStream bis = new ByteArrayInputStream(ficheroExportacion.getArchivoFicheroExportacion().getDatos());			
 					propsExport = new PropertiesOrdered();
 					propsExport.load(bis);
 					bis.close();	    	 
@@ -112,7 +116,7 @@ public class ExportCSVInitAction extends BaseAction
 				}		
 				
 				// Creamos trabajo y lo guardamos en la sesion
-				CSVExport trabajo = new CSVExport(f.getIdentificadorTramite(),numEntradas,propsExport);
+				CSVExport trabajo = new CSVExport(idTramite,numEntradas,propsExport);
 				CSVExportWorks works = (CSVExportWorks) request.getSession().getAttribute(CSVExportWorks.KEY_CSV_WORKS);
 				if (works == null) {
 					works = new CSVExportWorks();

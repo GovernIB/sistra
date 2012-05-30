@@ -334,9 +334,9 @@ function cambioEstadoMasivo(mensajeConfirmacion,mensajeTodosTramites){
  	fc.tipo.value = fb.tipo.options[fb.tipo.selectedIndex].value;
  	fc.procesada.value = fb.procesada.options[fb.procesada.selectedIndex].value;
  	fc.nivelAutenticacion.value = fb.nivelAutenticacion.options[fb.nivelAutenticacion.selectedIndex].value;
- 	fc.identificadorTramite.value = fb.identificadorTramite.options[fb.identificadorTramite.selectedIndex].value;
+ 	fc.identificadorProcedimiento.value = fb.identificadorProcedimiento.options[fb.identificadorProcedimiento.selectedIndex].value;
  	
- 	if (fb.identificadorTramite.selectedIndex == 0){ 	
+ 	if (fb.identificadorProcedimiento.selectedIndex == 0){ 	
  		alert(mensajeTodosTramites);	
  		return;
  	}

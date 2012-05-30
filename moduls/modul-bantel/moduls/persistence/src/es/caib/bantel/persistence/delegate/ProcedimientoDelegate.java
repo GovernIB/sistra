@@ -7,54 +7,54 @@ import java.util.List;
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
-import es.caib.bantel.model.Tramite;
-import es.caib.bantel.persistence.intf.TramiteFacade;
-import es.caib.bantel.persistence.util.TramiteFacadeUtil;
+import es.caib.bantel.model.Procedimiento;
+import es.caib.bantel.persistence.intf.ProcedimientoFacade;
+import es.caib.bantel.persistence.util.ProcedimientoFacadeUtil;
 
 /**
- * Business delegate para operar con Tramite.
+ * Business delegate para operar con Procedimiento.
  */
-public class TramiteDelegate implements StatelessDelegate {
+public class ProcedimientoDelegate implements StatelessDelegate {
 
     /* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
-    public String grabarTramite(Tramite tramite) throws DelegateException {
+    public String grabarProcedimiento(Procedimiento procedimiento) throws DelegateException {
         try {
-            return getFacade().grabarTramite(tramite);
+            return getFacade().grabarProcedimiento(procedimiento);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
     }
 
-    public Tramite obtenerTramite(String idTramite) throws DelegateException {
+    public Procedimiento obtenerProcedimiento(String idproc) throws DelegateException {
         try {
-            return getFacade().obtenerTramite(idTramite);
+            return getFacade().obtenerProcedimiento(idproc);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
     }
     
-    public Tramite obtenerTramitePorId(String idTramite) throws DelegateException {
+    public Procedimiento obtenerProcedimientoPorId(String idproc) throws DelegateException {
         try {
-            return getFacade().obtenerTramitePorId(idTramite);
+            return getFacade().obtenerProcedimientoPorId(idproc);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
     }
         
-    public void borrarTramite(String id) throws DelegateException {
+    public void borrarProcedimiento(String id) throws DelegateException {
         try {
-            getFacade().borrarTramite(id);            
+            getFacade().borrarProcedimiento(id);            
         } catch (Exception e) {
             throw new DelegateException(e);
         }
     }
     
-    public List listarTramites() throws DelegateException {
+    public List listarProcedimientos() throws DelegateException {
         try {
-            return getFacade().listarTramites();            
+            return getFacade().listarProcedimientos();            
         } catch (Exception e) {
             throw new DelegateException(e);
         }
@@ -84,39 +84,27 @@ public class TramiteDelegate implements StatelessDelegate {
          }
      }
     
-    public boolean puedoBorrarTramite(String id)throws DelegateException 
+    public boolean puedoBorrarProcedimiento(String id)throws DelegateException 
     {
   	   try
   	   {
-  		   return getFacade().puedoBorrarTramite(id);
+  		   return getFacade().puedoBorrarProcedimiento(id);
   	   }
   	   catch (Exception e) 
   	   {
              throw new DelegateException(e);
          }
      }
-    
-    public void borrarFicheroExportacion(String id)throws DelegateException 
-    {
-   	   try
-   	   {
-   		   getFacade().borrarFicheroExportacion(id);
-   	   }
-   	   catch (Exception e) 
-   	   {
-              throw new DelegateException(e);
-          }
-      }
-   
+       
         
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-   private TramiteFacade getFacade() throws NamingException,CreateException,RemoteException {      	    	
-    	return TramiteFacadeUtil.getHome( ).create();
+   private ProcedimientoFacade getFacade() throws NamingException,CreateException,RemoteException {      	    	
+    	return ProcedimientoFacadeUtil.getHome( ).create();
     }
 
-    protected TramiteDelegate() throws DelegateException {       
+    protected ProcedimientoDelegate() throws DelegateException {       
     }                  
 }
 

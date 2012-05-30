@@ -15,7 +15,7 @@ import org.apache.struts.tiles.Controller;
 
 import es.caib.bantel.persistence.delegate.DelegateException;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
-import es.caib.bantel.persistence.delegate.TramiteDelegate;
+import es.caib.bantel.persistence.delegate.ProcedimientoDelegate;
 
 
 public class ListaTramitesController implements Controller
@@ -31,8 +31,8 @@ public class ListaTramitesController implements Controller
 		{
             log.debug("Entramos en ListaTramitesController");
 
-            TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
-            request.setAttribute("tramiteOptions", tramiteDelegate.listarTramites() );
+            ProcedimientoDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
+            request.setAttribute("tramiteOptions", tramiteDelegate.listarProcedimientos() );
 
         } catch (DelegateException e) {
             throw new ServletException(e);

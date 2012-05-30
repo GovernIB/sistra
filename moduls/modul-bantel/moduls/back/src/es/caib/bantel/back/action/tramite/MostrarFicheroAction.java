@@ -8,9 +8,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import es.caib.bantel.model.Tramite;
+import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
-import es.caib.bantel.persistence.delegate.TramiteDelegate;
+import es.caib.bantel.persistence.delegate.ProcedimientoDelegate;
 
 /**
  * @struts.action
@@ -31,15 +31,19 @@ public class MostrarFicheroAction extends Action  {
 			throws Exception
 	{
 			
+		// TODO PARA REHACER
+		throw new RuntimeException("PENDIENTE");
+		/*
 		String id = request.getParameter("codigo");
 		
 		TramiteDelegate pd = DelegateUtil.getTramiteDelegate();
-		Tramite tramite = pd.obtenerTramite(id);
+		Procedimiento tramite = pd.obtenerTramite(id);
 			
 		request.setAttribute("nombreFichero", tramite.getNombreFicheroExportacion() );		
 		request.setAttribute(  "datosFichero", tramite.getArchivoFicheroExportacion().getDatos() );
 		
 		return mapping.findForward("success");
+		*/
 	}
 	
 }

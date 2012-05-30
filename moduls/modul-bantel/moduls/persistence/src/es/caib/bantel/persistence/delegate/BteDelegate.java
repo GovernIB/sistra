@@ -35,25 +35,25 @@ public class BteDelegate implements StatelessDelegate {
         }
     }
     
-    public String[] obtenerNumerosEntradas(String identificadorTramite) throws DelegateException {
+    public String[] obtenerNumerosEntradas(String identificadorProcedimiento, String identificadorTramite) throws DelegateException {
         try {
-            return getFacade().obtenerNumerosEntradas(identificadorTramite);
+            return getFacade().obtenerNumerosEntradas(identificadorProcedimiento, identificadorTramite);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
     }
     
-    public String[] obtenerNumerosEntradas(String identificadorTramite,String procesada,Date desde,Date hasta) throws DelegateException {
+    public String[] obtenerNumerosEntradas(String identificadorProcedimiento,String identificadorTramite,String procesada,Date desde,Date hasta) throws DelegateException {
         try {
-            return getFacade().obtenerNumerosEntradas(identificadorTramite,procesada,desde,hasta);
+            return getFacade().obtenerNumerosEntradas(identificadorProcedimiento, identificadorTramite,procesada,desde,hasta);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
     }
     
-    public ReferenciaEntradaBTE[] obtenerReferenciasEntradas(String identificadorTramite,String procesada,Date desde,Date hasta) throws DelegateException {
+    public ReferenciaEntradaBTE[] obtenerReferenciasEntradas(String identificadorProcedimiento, String identificadorTramite,String procesada,Date desde,Date hasta) throws DelegateException {
         try {
-            return getFacade().obtenerReferenciasEntradas(identificadorTramite,procesada,desde,hasta);
+            return getFacade().obtenerReferenciasEntradas(identificadorProcedimiento, identificadorTramite,procesada,desde,hasta);
         } catch (Exception e) {
             throw new DelegateException(e);
         }

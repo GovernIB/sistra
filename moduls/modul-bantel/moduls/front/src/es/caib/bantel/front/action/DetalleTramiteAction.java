@@ -18,7 +18,7 @@ import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleTramiteForm;
 import es.caib.bantel.model.DocumentoBandeja;
 import es.caib.bantel.model.GestorBandeja;
-import es.caib.bantel.model.Tramite;
+import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.model.TramiteBandeja;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.delegate.GestorBandejaDelegate;
@@ -103,16 +103,16 @@ public class DetalleTramiteAction extends BaseAction
 		// TODO RAFA HABRIA QUE IMPLEMENTARLO EN CAPA DE NEGOCIO
 		// Verificamos que el gestor tenga acceso al tramite
 		boolean acceso = false;		
-		for (Iterator it=gestor.getTramitesGestionados().iterator();it.hasNext();){
-				Tramite tram = (Tramite) it.next();
-				if (tram.getIdentificador().equals(tramite.getTramite().getIdentificador())){
+		for (Iterator it=gestor.getProcedimientosGestionados().iterator();it.hasNext();){
+				Procedimiento procedimiento = (Procedimiento) it.next();
+				if (procedimiento.getIdentificador().equals(tramite.getProcedimiento().getIdentificador())){
 					acceso = true;
 					break;
 				}
 		}
 		if (!acceso){
 			MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));
-			request.setAttribute("message",resources.getMessage( getLocale( request ), "errors.tramiteNoAcceso", new Object[] {tramite.getTramite().getIdentificador()}));			
+			request.setAttribute("message",resources.getMessage( getLocale( request ), "errors.tramiteNoAcceso", new Object[] {tramite.getProcedimiento().getIdentificador()}));			
 			return mapping.findForward( "fail" );
 		}
 		// ------------------------------------------------------------------------------------------------------------------

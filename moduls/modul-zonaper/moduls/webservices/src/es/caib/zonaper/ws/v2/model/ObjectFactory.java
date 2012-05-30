@@ -24,13 +24,14 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _EventoExpedienteDocumentos_QNAME = new QName("", "documentos");
-    private final static QName _EventoExpedienteFecha_QNAME = new QName("", "fecha");
-    private final static QName _EventoExpedienteEnlaceConsulta_QNAME = new QName("", "enlaceConsulta");
-    private final static QName _EventoExpedienteTextoSMS_QNAME = new QName("", "textoSMS");
-    private final static QName _ConfiguracionAvisosExpedienteAvisoEmail_QNAME = new QName("", "avisoEmail");
-    private final static QName _ConfiguracionAvisosExpedienteAvisoSMS_QNAME = new QName("", "avisoSMS");
-    private final static QName _ConfiguracionAvisosExpedienteHabilitarAvisos_QNAME = new QName("", "habilitarAvisos");
+    private final static QName _ExpedienteConfiguracionAvisos_QNAME = new QName("", "configuracionAvisos");
+    private final static QName _ExpedienteNumeroEntradaBTE_QNAME = new QName("", "numeroEntradaBTE");
+    private final static QName _ExpedienteNifRepresentante_QNAME = new QName("", "nifRepresentante");
+    private final static QName _ExpedienteIdentificadorProcedimiento_QNAME = new QName("", "identificadorProcedimiento");
+    private final static QName _ExpedienteEventos_QNAME = new QName("", "eventos");
+    private final static QName _ExpedienteNifRepresentado_QNAME = new QName("", "nifRepresentado");
+    private final static QName _ExpedienteNombreRepresentado_QNAME = new QName("", "nombreRepresentado");
+    private final static QName _Fault_QNAME = new QName("urn:es:caib:zonaper:ws:v2:model:BackofficeFacade", "fault");
     private final static QName _DocumentoExpedienteNombre_QNAME = new QName("", "nombre");
     private final static QName _DocumentoExpedienteCodigoRDS_QNAME = new QName("", "codigoRDS");
     private final static QName _DocumentoExpedienteClaveRDS_QNAME = new QName("", "claveRDS");
@@ -39,43 +40,19 @@ public class ObjectFactory {
     private final static QName _DocumentoExpedienteContenidoFichero_QNAME = new QName("", "contenidoFichero");
     private final static QName _DocumentoExpedienteEstructurado_QNAME = new QName("", "estructurado");
     private final static QName _DocumentoExpedienteVersionRDS_QNAME = new QName("", "versionRDS");
-    private final static QName _Fault_QNAME = new QName("urn:es:caib:zonaper:ws:v2:model:BackofficeFacade", "fault");
-    private final static QName _ExpedienteConfiguracionAvisos_QNAME = new QName("", "configuracionAvisos");
-    private final static QName _ExpedienteNumeroEntradaBTE_QNAME = new QName("", "numeroEntradaBTE");
-    private final static QName _ExpedienteNifRepresentante_QNAME = new QName("", "nifRepresentante");
-    private final static QName _ExpedienteEventos_QNAME = new QName("", "eventos");
-    private final static QName _ExpedienteNifRepresentado_QNAME = new QName("", "nifRepresentado");
-    private final static QName _ExpedienteNombreRepresentado_QNAME = new QName("", "nombreRepresentado");
+    private final static QName _EventoExpedienteDocumentos_QNAME = new QName("", "documentos");
+    private final static QName _EventoExpedienteFecha_QNAME = new QName("", "fecha");
+    private final static QName _EventoExpedienteEnlaceConsulta_QNAME = new QName("", "enlaceConsulta");
+    private final static QName _EventoExpedienteTextoSMS_QNAME = new QName("", "textoSMS");
+    private final static QName _ConfiguracionAvisosExpedienteAvisoEmail_QNAME = new QName("", "avisoEmail");
+    private final static QName _ConfiguracionAvisosExpedienteAvisoSMS_QNAME = new QName("", "avisoSMS");
+    private final static QName _ConfiguracionAvisosExpedienteHabilitarAvisos_QNAME = new QName("", "habilitarAvisos");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: es.caib.zonaper.ws.v2.model
      * 
      */
     public ObjectFactory() {
-    }
-
-    /**
-     * Create an instance of {@link EventoExpediente }
-     * 
-     */
-    public EventoExpediente createEventoExpediente() {
-        return new EventoExpediente();
-    }
-
-    /**
-     * Create an instance of {@link DocumentosExpediente }
-     * 
-     */
-    public DocumentosExpediente createDocumentosExpediente() {
-        return new DocumentosExpediente();
-    }
-
-    /**
-     * Create an instance of {@link ConfiguracionAvisosExpediente }
-     * 
-     */
-    public ConfiguracionAvisosExpediente createConfiguracionAvisosExpediente() {
-        return new ConfiguracionAvisosExpediente();
     }
 
     /**
@@ -87,43 +64,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DocumentoExpediente }
+     * Create an instance of {@link Expediente }
      * 
      */
-    public DocumentoExpediente createDocumentoExpediente() {
-        return new DocumentoExpediente();
-    }
-
-    /**
-     * Create an instance of {@link BackofficeFacadeException }
-     * 
-     */
-    public BackofficeFacadeException createBackofficeFacadeException() {
-        return new BackofficeFacadeException();
-    }
-
-    /**
-     * Create an instance of {@link AltaEventoExpediente }
-     * 
-     */
-    public AltaEventoExpediente createAltaEventoExpediente() {
-        return new AltaEventoExpediente();
-    }
-
-    /**
-     * Create an instance of {@link AltaExpediente }
-     * 
-     */
-    public AltaExpediente createAltaExpediente() {
-        return new AltaExpediente();
-    }
-
-    /**
-     * Create an instance of {@link ExisteZonaPersonalUsuario }
-     * 
-     */
-    public ExisteZonaPersonalUsuario createExisteZonaPersonalUsuario() {
-        return new ExisteZonaPersonalUsuario();
+    public Expediente createExpediente() {
+        return new Expediente();
     }
 
     /**
@@ -135,11 +80,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AltaEventoExpedienteResponse }
+     * Create an instance of {@link DocumentosExpediente }
      * 
      */
-    public AltaEventoExpedienteResponse createAltaEventoExpedienteResponse() {
-        return new AltaEventoExpedienteResponse();
+    public DocumentosExpediente createDocumentosExpediente() {
+        return new DocumentosExpediente();
+    }
+
+    /**
+     * Create an instance of {@link AltaZonaPersonalUsuarioResponse }
+     * 
+     */
+    public AltaZonaPersonalUsuarioResponse createAltaZonaPersonalUsuarioResponse() {
+        return new AltaZonaPersonalUsuarioResponse();
+    }
+
+    /**
+     * Create an instance of {@link AltaEventoExpediente }
+     * 
+     */
+    public AltaEventoExpediente createAltaEventoExpediente() {
+        return new AltaEventoExpediente();
     }
 
     /**
@@ -151,74 +112,139 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Expediente }
+     * Create an instance of {@link AltaExpediente }
      * 
      */
-    public Expediente createExpediente() {
-        return new Expediente();
+    public AltaExpediente createAltaExpediente() {
+        return new AltaExpediente();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DocumentosExpediente }{@code >}}
+     * Create an instance of {@link DocumentoExpediente }
      * 
      */
-    @XmlElementDecl(namespace = "", name = "documentos", scope = EventoExpediente.class)
-    public JAXBElement<DocumentosExpediente> createEventoExpedienteDocumentos(DocumentosExpediente value) {
-        return new JAXBElement<DocumentosExpediente>(_EventoExpedienteDocumentos_QNAME, DocumentosExpediente.class, EventoExpediente.class, value);
+    public DocumentoExpediente createDocumentoExpediente() {
+        return new DocumentoExpediente();
+    }
+
+    /**
+     * Create an instance of {@link EventoExpediente }
+     * 
+     */
+    public EventoExpediente createEventoExpediente() {
+        return new EventoExpediente();
+    }
+
+    /**
+     * Create an instance of {@link AltaEventoExpedienteResponse }
+     * 
+     */
+    public AltaEventoExpedienteResponse createAltaEventoExpedienteResponse() {
+        return new AltaEventoExpedienteResponse();
+    }
+
+    /**
+     * Create an instance of {@link AltaZonaPersonalUsuario }
+     * 
+     */
+    public AltaZonaPersonalUsuario createAltaZonaPersonalUsuario() {
+        return new AltaZonaPersonalUsuario();
+    }
+
+    /**
+     * Create an instance of {@link ConfiguracionAvisosExpediente }
+     * 
+     */
+    public ConfiguracionAvisosExpediente createConfiguracionAvisosExpediente() {
+        return new ConfiguracionAvisosExpediente();
+    }
+
+    /**
+     * Create an instance of {@link BackofficeFacadeException }
+     * 
+     */
+    public BackofficeFacadeException createBackofficeFacadeException() {
+        return new BackofficeFacadeException();
+    }
+
+    /**
+     * Create an instance of {@link ExisteZonaPersonalUsuario }
+     * 
+     */
+    public ExisteZonaPersonalUsuario createExisteZonaPersonalUsuario() {
+        return new ExisteZonaPersonalUsuario();
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ConfiguracionAvisosExpediente }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "configuracionAvisos", scope = Expediente.class)
+    public JAXBElement<ConfiguracionAvisosExpediente> createExpedienteConfiguracionAvisos(ConfiguracionAvisosExpediente value) {
+        return new JAXBElement<ConfiguracionAvisosExpediente>(_ExpedienteConfiguracionAvisos_QNAME, ConfiguracionAvisosExpediente.class, Expediente.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "", name = "fecha", scope = EventoExpediente.class)
-    public JAXBElement<String> createEventoExpedienteFecha(String value) {
-        return new JAXBElement<String>(_EventoExpedienteFecha_QNAME, String.class, EventoExpediente.class, value);
+    @XmlElementDecl(namespace = "", name = "numeroEntradaBTE", scope = Expediente.class)
+    public JAXBElement<String> createExpedienteNumeroEntradaBTE(String value) {
+        return new JAXBElement<String>(_ExpedienteNumeroEntradaBTE_QNAME, String.class, Expediente.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "", name = "enlaceConsulta", scope = EventoExpediente.class)
-    public JAXBElement<String> createEventoExpedienteEnlaceConsulta(String value) {
-        return new JAXBElement<String>(_EventoExpedienteEnlaceConsulta_QNAME, String.class, EventoExpediente.class, value);
+    @XmlElementDecl(namespace = "", name = "nifRepresentante", scope = Expediente.class)
+    public JAXBElement<String> createExpedienteNifRepresentante(String value) {
+        return new JAXBElement<String>(_ExpedienteNifRepresentante_QNAME, String.class, Expediente.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "", name = "textoSMS", scope = EventoExpediente.class)
-    public JAXBElement<String> createEventoExpedienteTextoSMS(String value) {
-        return new JAXBElement<String>(_EventoExpedienteTextoSMS_QNAME, String.class, EventoExpediente.class, value);
+    @XmlElementDecl(namespace = "", name = "identificadorProcedimiento", scope = Expediente.class)
+    public JAXBElement<String> createExpedienteIdentificadorProcedimiento(String value) {
+        return new JAXBElement<String>(_ExpedienteIdentificadorProcedimiento_QNAME, String.class, Expediente.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link EventosExpediente }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "eventos", scope = Expediente.class)
+    public JAXBElement<EventosExpediente> createExpedienteEventos(EventosExpediente value) {
+        return new JAXBElement<EventosExpediente>(_ExpedienteEventos_QNAME, EventosExpediente.class, Expediente.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "", name = "avisoEmail", scope = ConfiguracionAvisosExpediente.class)
-    public JAXBElement<String> createConfiguracionAvisosExpedienteAvisoEmail(String value) {
-        return new JAXBElement<String>(_ConfiguracionAvisosExpedienteAvisoEmail_QNAME, String.class, ConfiguracionAvisosExpediente.class, value);
+    @XmlElementDecl(namespace = "", name = "nifRepresentado", scope = Expediente.class)
+    public JAXBElement<String> createExpedienteNifRepresentado(String value) {
+        return new JAXBElement<String>(_ExpedienteNifRepresentado_QNAME, String.class, Expediente.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "", name = "avisoSMS", scope = ConfiguracionAvisosExpediente.class)
-    public JAXBElement<String> createConfiguracionAvisosExpedienteAvisoSMS(String value) {
-        return new JAXBElement<String>(_ConfiguracionAvisosExpedienteAvisoSMS_QNAME, String.class, ConfiguracionAvisosExpediente.class, value);
+    @XmlElementDecl(namespace = "", name = "nombreRepresentado", scope = Expediente.class)
+    public JAXBElement<String> createExpedienteNombreRepresentado(String value) {
+        return new JAXBElement<String>(_ExpedienteNombreRepresentado_QNAME, String.class, Expediente.class, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Boolean }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link BackofficeFacadeException }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "", name = "habilitarAvisos", scope = ConfiguracionAvisosExpediente.class)
-    public JAXBElement<Boolean> createConfiguracionAvisosExpedienteHabilitarAvisos(Boolean value) {
-        return new JAXBElement<Boolean>(_ConfiguracionAvisosExpedienteHabilitarAvisos_QNAME, Boolean.class, ConfiguracionAvisosExpediente.class, value);
+    @XmlElementDecl(namespace = "urn:es:caib:zonaper:ws:v2:model:BackofficeFacade", name = "fault")
+    public JAXBElement<BackofficeFacadeException> createFault(BackofficeFacadeException value) {
+        return new JAXBElement<BackofficeFacadeException>(_Fault_QNAME, BackofficeFacadeException.class, null, value);
     }
 
     /**
@@ -294,66 +320,66 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link BackofficeFacadeException }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DocumentosExpediente }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "urn:es:caib:zonaper:ws:v2:model:BackofficeFacade", name = "fault")
-    public JAXBElement<BackofficeFacadeException> createFault(BackofficeFacadeException value) {
-        return new JAXBElement<BackofficeFacadeException>(_Fault_QNAME, BackofficeFacadeException.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link ConfiguracionAvisosExpediente }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "configuracionAvisos", scope = Expediente.class)
-    public JAXBElement<ConfiguracionAvisosExpediente> createExpedienteConfiguracionAvisos(ConfiguracionAvisosExpediente value) {
-        return new JAXBElement<ConfiguracionAvisosExpediente>(_ExpedienteConfiguracionAvisos_QNAME, ConfiguracionAvisosExpediente.class, Expediente.class, value);
+    @XmlElementDecl(namespace = "", name = "documentos", scope = EventoExpediente.class)
+    public JAXBElement<DocumentosExpediente> createEventoExpedienteDocumentos(DocumentosExpediente value) {
+        return new JAXBElement<DocumentosExpediente>(_EventoExpedienteDocumentos_QNAME, DocumentosExpediente.class, EventoExpediente.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "", name = "numeroEntradaBTE", scope = Expediente.class)
-    public JAXBElement<String> createExpedienteNumeroEntradaBTE(String value) {
-        return new JAXBElement<String>(_ExpedienteNumeroEntradaBTE_QNAME, String.class, Expediente.class, value);
+    @XmlElementDecl(namespace = "", name = "fecha", scope = EventoExpediente.class)
+    public JAXBElement<String> createEventoExpedienteFecha(String value) {
+        return new JAXBElement<String>(_EventoExpedienteFecha_QNAME, String.class, EventoExpediente.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "", name = "nifRepresentante", scope = Expediente.class)
-    public JAXBElement<String> createExpedienteNifRepresentante(String value) {
-        return new JAXBElement<String>(_ExpedienteNifRepresentante_QNAME, String.class, Expediente.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link EventosExpediente }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "eventos", scope = Expediente.class)
-    public JAXBElement<EventosExpediente> createExpedienteEventos(EventosExpediente value) {
-        return new JAXBElement<EventosExpediente>(_ExpedienteEventos_QNAME, EventosExpediente.class, Expediente.class, value);
+    @XmlElementDecl(namespace = "", name = "enlaceConsulta", scope = EventoExpediente.class)
+    public JAXBElement<String> createEventoExpedienteEnlaceConsulta(String value) {
+        return new JAXBElement<String>(_EventoExpedienteEnlaceConsulta_QNAME, String.class, EventoExpediente.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "", name = "nifRepresentado", scope = Expediente.class)
-    public JAXBElement<String> createExpedienteNifRepresentado(String value) {
-        return new JAXBElement<String>(_ExpedienteNifRepresentado_QNAME, String.class, Expediente.class, value);
+    @XmlElementDecl(namespace = "", name = "textoSMS", scope = EventoExpediente.class)
+    public JAXBElement<String> createEventoExpedienteTextoSMS(String value) {
+        return new JAXBElement<String>(_EventoExpedienteTextoSMS_QNAME, String.class, EventoExpediente.class, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "", name = "nombreRepresentado", scope = Expediente.class)
-    public JAXBElement<String> createExpedienteNombreRepresentado(String value) {
-        return new JAXBElement<String>(_ExpedienteNombreRepresentado_QNAME, String.class, Expediente.class, value);
+    @XmlElementDecl(namespace = "", name = "avisoEmail", scope = ConfiguracionAvisosExpediente.class)
+    public JAXBElement<String> createConfiguracionAvisosExpedienteAvisoEmail(String value) {
+        return new JAXBElement<String>(_ConfiguracionAvisosExpedienteAvisoEmail_QNAME, String.class, ConfiguracionAvisosExpediente.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "avisoSMS", scope = ConfiguracionAvisosExpediente.class)
+    public JAXBElement<String> createConfiguracionAvisosExpedienteAvisoSMS(String value) {
+        return new JAXBElement<String>(_ConfiguracionAvisosExpedienteAvisoSMS_QNAME, String.class, ConfiguracionAvisosExpediente.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link Boolean }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "habilitarAvisos", scope = ConfiguracionAvisosExpediente.class)
+    public JAXBElement<Boolean> createConfiguracionAvisosExpedienteHabilitarAvisos(Boolean value) {
+        return new JAXBElement<Boolean>(_ConfiguracionAvisosExpedienteHabilitarAvisos_QNAME, Boolean.class, ConfiguracionAvisosExpediente.class, value);
     }
 
 }

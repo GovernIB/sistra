@@ -17,9 +17,9 @@
   	<property name="permitirCambioEstadoMasivo" column="GES_UPDESM"/>  
   	<property name="permitirGestionExpedientes" column="GES_GESEXP"/>  
 		
-	<set name="tramitesGestionados" table="BTE_GESTRA"  order-by="GAP_IDETRA">
+	<set name="procedimientosGestionados" table="BTE_GESPRO"  order-by="GAP_IDEPRO">
          <key column="GAP_CODGES"/>
-         <many-to-many column="GAP_IDETRA" class="es.caib.bantel.model.Tramite"/>
+         <many-to-many column="GAP_IDEPRO" class="es.caib.bantel.model.Procedimiento"/>
     </set>
 	
 </class>

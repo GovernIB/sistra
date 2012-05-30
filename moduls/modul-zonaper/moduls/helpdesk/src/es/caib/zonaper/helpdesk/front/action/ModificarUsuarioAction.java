@@ -41,7 +41,7 @@ public class ModificarUsuarioAction extends BaseAction
 		// Buscamos usuario segun filtro de busqueda
 		ModificarUsuarioForm modificarForm = ( ModificarUsuarioForm ) form;
 		PadAplicacionDelegate pd = DelegateUtil.getPadAplicacionDelegate();
-		pd.modificarHelpdeskCodigoUsuario(modificarForm.getUsuarioCodiOld(),
+		pd.actualizarCodigoUsuario(modificarForm.getUsuarioCodiOld(),
 					modificarForm.getUsuarioCodiNew());
 		
 		

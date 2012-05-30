@@ -51,6 +51,7 @@ public class RealizarAltaExpedienteAction extends BaseAction
 			expediente.setIdioma(expedienteForm.getIdioma());
 			expediente.setIdentificadorExpediente(expedienteForm.getIdentificadorExp());
 			expediente.setClaveExpediente(expedienteForm.getClaveExp());
+			expediente.setIdentificadorProcedimiento(expedienteForm.getIdentificadorProcedimiento());
 			
 			// Si tiene entrada asociada, dependera del nivel de autenticacion de la entrada
 			expediente.setNumeroEntradaBTE(expedienteForm.getNumeroEntrada());
@@ -82,14 +83,7 @@ public class RealizarAltaExpedienteAction extends BaseAction
 			response.sendRedirect("recuperarExpediente.do?unidadAdm=" + expediente.getUnidadAdministrativa() + "&identificadorExp=" + expediente.getIdentificadorExpediente() + ( expediente.getClaveExpediente() != null?"&claveExp=" + expediente.getClaveExpediente():"") );
 			return null;
 			
-			/*
-			ActionMessages mensajes = new ActionMessages();
-			mensajes.add("msg", new ActionMessage("altaExpedienteOk"));
-			saveMessages(request,mensajes);
-			//request.setAttribute("expediente", expediente);
 			
-			return mapping.findForward( "success" );
-			*/
 		}catch(Exception e){
 			
 			log.error("Excepcion alta expediente",e);

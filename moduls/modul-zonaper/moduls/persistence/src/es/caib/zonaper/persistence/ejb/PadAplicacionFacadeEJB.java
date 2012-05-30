@@ -28,6 +28,7 @@ import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
+import es.caib.zonaper.persistence.util.ConfigurationUtil;
 
 
 /**
@@ -42,9 +43,10 @@ import es.caib.zonaper.persistence.delegate.DelegateUtil;
  *
  * @ejb.transaction type="Required"
  * 
-  * @ejb.env-entry name="roleAuto" type="java.lang.String" value="${role.auto}"
+ * @ejb.env-entry name="roleAuto" type="java.lang.String" value="${role.auto}"
  * @ejb.env-entry name="roleDelegacion" type="java.lang.String" value="${role.delegacion}"
  * @ejb.env-entry name="roleHelpdesk" type="java.lang.String" value="${role.helpdesk}"
+ * @ejb.env-entry name="roleGestor" type="java.lang.String" value="${role.gestor}"
  */
 public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
 
@@ -52,6 +54,8 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
 	private String roleAuto;
 	private String roleDelegacion;
 	private String roleHelpdesk;
+	private String roleGestor;
+	private String prefijoAuto;
 			
     public void setSessionContext(SessionContext ctx) {
         this.ctx = ctx;
@@ -70,6 +74,14 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
 			roleAuto = (( String ) initialContext.lookup( "java:comp/env/roleAuto" ));			
 			roleDelegacion = (( String ) initialContext.lookup( "java:comp/env/roleDelegacion" ));
 			roleHelpdesk = (( String ) initialContext.lookup( "java:comp/env/roleHelpdesk" ));
+			roleGestor = (( String ) initialContext.lookup( "java:comp/env/roleGestor" ));
+			
+			// Obtenemos prefijo para alta automatica
+    		String prefijo = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("usuario.prefijoAuto");
+    		if (StringUtils.isBlank(prefijo)) {
+    			throw new Exception("No se ha configurado prefijo para el alta automatica de usuario");
+    		}
+    		prefijoAuto = StringUtils.trim(prefijo);			
 		}catch(Exception ex){
 			log.error(ex);
 		}
@@ -81,7 +93,6 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
-     * @ejb.permission role-name="${role.delegacion}"
      */
     public PersonaPAD obtenerDatosPersonaPADporUsuario( String usuario ) throws ExcepcionPAD
     {
@@ -89,12 +100,12 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
     	{
     		Persona persona = obtenerDatosPersonaPorUsuarioSeycon( usuario );
     		
-    		// Solo puede acceder el propio usuario o el usuario auto o un usuario con rol delegacion
-   			if (!this.ctx.isCallerInRole(roleDelegacion) && !this.ctx.isCallerInRole(roleAuto) && !usuario.equals(this.ctx.getCallerPrincipal().getName())){
+    		// Solo puede acceder el propio usuario o el usuario auto o un usuario con rol delegacion o rol gestor
+   			if (!this.ctx.isCallerInRole(roleGestor) && !this.ctx.isCallerInRole(roleDelegacion) && !this.ctx.isCallerInRole(roleAuto) && !usuario.equals(this.ctx.getCallerPrincipal().getName())){
     			// Comprobamos si es un delegado de la entidad
     			String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(persona.getDocumentoIdLegal());
     			if (StringUtils.isEmpty(permisos)){
-    				throw new Exception("Solo puede acceder el propio usuario, un delegado, el usuario auto o un usuario con rol delegación");
+    				throw new Exception("Solo puede acceder el propio usuario, un delegado, el usuario auto o un usuario con rol delegación o rol gestor");
     			}
     		}
     		
@@ -113,7 +124,6 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
-     * @ejb.permission role-name="${role.delegacion}"     
      */
     public PersonaPAD obtenerDatosPersonaPADporNif( String nif ) throws ExcepcionPAD
     {
@@ -122,11 +132,11 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
     		// Solo puede acceder el propio usuario, el usuario auto o un usuario delegado
     		Principal sp = this.ctx.getCallerPrincipal();
     		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
-    		if (!this.ctx.isCallerInRole(roleDelegacion) && !this.ctx.isCallerInRole(roleAuto) && ! plgLogin.getNif(sp).equalsIgnoreCase(nif)){
+    		if (!this.ctx.isCallerInRole(roleGestor) && !this.ctx.isCallerInRole(roleDelegacion) && !this.ctx.isCallerInRole(roleAuto) && ! plgLogin.getNif(sp).equalsIgnoreCase(nif)){
     			// Comprobamos si es un delegado de la entidad
     			String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(nif);
     			if (StringUtils.isEmpty(permisos)){
-    				throw new Exception("Solo puede acceder el propio usuario, un delegado, el usuario auto o un usuario con rol delegación");
+    				throw new Exception("Solo puede acceder el propio usuario, un delegado, el usuario auto o un usuario con rol delegación o role gestor");
     		}
     		
     		}
@@ -163,7 +173,30 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
     
     /**
      * 
-     * Da de alta una persona en la PAD
+     * Da de alta una persona en la PAD generando el codigo de usuario forma automatica.
+     * Usado por gestores y delegacion.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.gestor}"
+     * @ejb.permission role-name="${role.delegacion}"
+     * @ejb.permission role-name="${role.auto}"
+     * 
+     * @param personaPAD
+     * @return
+     * @throws ExcepcionPAD
+     */
+    public PersonaPAD altaPersonaCodigoUsuarioAuto( PersonaPAD personaPAD) throws ExcepcionPAD {
+    	// Establecemos codigo usuario de forma automatica
+    	personaPAD.setUsuarioSeycon(prefijoAuto + personaPAD.getNif());
+    	// Realizamos el alta
+    	return altaPersonaPADImpl(personaPAD);    	
+    }
+    
+    
+    /**
+     * 
+     * Da de alta una persona en la PAD.
+     * Debe ser el mismo usuario quien se de de alta.
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
@@ -174,23 +207,33 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
      */
     public PersonaPAD altaPersona( PersonaPAD personaPAD ) throws ExcepcionPAD
     {
+    	// Verificamos acceso
     	try
     	{
-    		Principal sp = this.ctx.getCallerPrincipal();
-    		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
-    		
-    		//Si no tiene el rol STR_DELEGA, tenemos que mirar que sea el mismo
-    		if(!this.ctx.isCallerInRole(roleDelegacion)){
-    		// Solo podra darse de alta uno mismo
-    		if (!personaPAD.getUsuarioSeycon().equals(sp.getName())){
-    			throw new Exception("Solo puede darse de alta el propio usuario");
-    		}
-    		
-    		// Comprobamos que concuerde el nif de seycon y personaPAD
-    		if (!plgLogin.getNif(sp).equalsIgnoreCase(personaPAD.getNif())){
-    			throw new Exception("No concuerda el nif especificado con el de seycon");
-    		}
-    		}	
+	    	// Comprobamos que sea el mismo usuario
+	    	Principal sp = this.ctx.getCallerPrincipal();
+			PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
+			// Comprobamos que el usuario seycon a especificar sea el mismo
+			if (!personaPAD.getUsuarioSeycon().equals(sp.getName())){
+	    		throw new Exception("Solo puede darse de alta el propio usuario");
+	    	}
+			// Comprobamos que concuerde el nif de seycon y personaPAD
+	    	if (!plgLogin.getNif(sp).equalsIgnoreCase(personaPAD.getNif())){
+	    		throw new Exception("No concuerda el nif especificado con el de seycon");    		
+	    	}
+    	} catch(Exception ex)
+    	{
+    		throw new ExcepcionPAD("Error actualizando datos de la PAD",ex);
+    	}
+    	
+    	// Realizamos el alta
+    	return altaPersonaPADImpl(personaPAD);
+    }
+
+	private PersonaPAD altaPersonaPADImpl(PersonaPAD personaPAD)
+			throws ExcepcionPAD {
+		try
+    	{
     		// Comprobamos que no exista persona con mismo nif o mismo seycon
     		if (obtenerDatosPersonaPADporNif(personaPAD.getNif()) != null){
     			throw new Exception("Ya existe una persona con nif " + personaPAD.getNif());
@@ -205,17 +248,18 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
     		// Damos de alta la persona
     		Date fechaModificacion = new Date();
     		persona.setFechaAlta( fechaModificacion );
-    		persona.setFechaUltimaMod( fechaModificacion );
+    		persona.setFechaUltimaMod( fechaModificacion );    		
     		
     		grabarPersona( persona );
     		
+    		personaPAD.setUsuarioSeyconGeneradoAuto(personaPAD.getUsuarioSeycon().startsWith(prefijoAuto));
     		return personaPAD;
     	}
     	catch(Exception ex)
     	{
     		throw new ExcepcionPAD("Error actualizando datos de la PAD",ex);
     	}
-    }
+	}
     
     /**
      * 
@@ -266,6 +310,7 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
     		persona.setFechaAlta(p.getFechaAlta());
     		persona.setFechaUltimaMod( fechaModificacion );
     		persona.setHabilitarDelegacion(p.getHabilitarDelegacion());
+    		persona.setModificacionesUsuarioSeycon(p.getModificacionesUsuarioSeycon());
     		
     		grabarPersona( persona );
     		
@@ -376,6 +421,7 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
     		result.setNombre(persona.getNombre());
     		result.setApellido1(persona.getApellido1());
     		result.setApellido2(persona.getApellido2());
+    		result.setUsuarioSeyconGeneradoAuto(persona.getUsuarioSeycon().startsWith(prefijoAuto));
     		
     		return result;
     	}
@@ -413,6 +459,7 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
     		result.setNombre(persona.getNombre());
     		result.setApellido1(persona.getApellido1());
     		result.setApellido2(persona.getApellido2());
+    		result.setUsuarioSeyconGeneradoAuto(persona.getUsuarioSeycon().startsWith(prefijoAuto));
     		
     		return result;
     	}
@@ -436,7 +483,7 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
      * @return
      * @throws ExcepcionPAD
      */
-    public void modificarHelpdeskCodigoUsuario( String usuOld, String usuNew) throws ExcepcionPAD
+    public void actualizarCodigoUsuario( String usuOld, String usuNew) throws ExcepcionPAD
     {
     	log.debug("Modificando usuario " + usuOld + " a " + usuNew);
     	
@@ -657,6 +704,7 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
 		personaPAD.setTelefonoMovil(persona.getTelefonoMovil());
 		personaPAD.setEmail(persona.getEmail());
 		personaPAD.setHabilitarDelegacion("S".equals(persona.getHabilitarDelegacion()));
+		personaPAD.setUsuarioSeyconGeneradoAuto(personaPAD.getUsuarioSeycon().startsWith(prefijoAuto));
 		
     	return personaPAD;
     }

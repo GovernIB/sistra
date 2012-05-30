@@ -13,6 +13,8 @@
       </id>
 
 	<property name="identificador" column="TRA_IDENTI" not-null="true" unique="true" length="20"/>
+	<property name="procedimiento" column="TRA_IDPROC" not-null="true" unique="true" length="100"/>
+	
     
     <many-to-one name="organoResponsable" column="TRA_CODORG" not-null="true"/>
     

@@ -20,6 +20,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
+ *         &lt;element name="identificadorProcedimiento" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="identificadorTramite" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="procesada" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="desde" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
@@ -34,6 +35,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
+    "identificadorProcedimiento",
     "identificadorTramite",
     "procesada",
     "desde",
@@ -42,6 +44,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
 @XmlRootElement(name = "obtenerNumerosEntradas")
 public class ObtenerNumerosEntradas {
 
+    @XmlElement(namespace = "urn:es:caib:bantel:ws:v2:model:BackofficeFacade")
+    protected String identificadorProcedimiento;
     @XmlElement(namespace = "urn:es:caib:bantel:ws:v2:model:BackofficeFacade", required = true)
     protected String identificadorTramite;
     @XmlElement(namespace = "urn:es:caib:bantel:ws:v2:model:BackofficeFacade", required = true)
@@ -52,6 +56,30 @@ public class ObtenerNumerosEntradas {
     @XmlElement(namespace = "urn:es:caib:bantel:ws:v2:model:BackofficeFacade", required = true)
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar hasta;
+
+    /**
+     * Gets the value of the identificadorProcedimiento property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getIdentificadorProcedimiento() {
+        return identificadorProcedimiento;
+    }
+
+    /**
+     * Sets the value of the identificadorProcedimiento property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setIdentificadorProcedimiento(String value) {
+        this.identificadorProcedimiento = value;
+    }
 
     /**
      * Gets the value of the identificadorTramite property.

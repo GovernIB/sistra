@@ -53,10 +53,10 @@ public class FileDownloadAction extends Action {
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			_log.error(exc);
 		}
 		finally{
-        	try{if ( !response.isCommitted() ) response.flushBuffer();}catch(Exception ex){ex.printStackTrace();}
+        	try{if ( !response.isCommitted() ) response.flushBuffer();}catch(Exception ex){_log.error(ex);}
             if(bis != null)
             	bis.close();
         }

@@ -32,7 +32,7 @@ function exportCSV(){
 	var form = document.getElementById("export");
 	var params;
 	
-	params = "identificadorTramite="+form.identificadorTramite.options[form.identificadorTramite.selectedIndex].value;
+	params = "identificadorProcedimientoTramite="+form.identificadorProcedimientoTramite.options[form.identificadorProcedimientoTramite.selectedIndex].value;
 	params+= "&procesada="+form.procesada.options[form.procesada.selectedIndex].value;
 	
 	if (form.desde.value != ''){
@@ -139,18 +139,18 @@ function validDate(fecha){
 
 		<h2><bean:message key="exportCSV.exportarTramites"/></h2>
 		
-		<logic:empty name="tramites">
+		<logic:empty name="tramitesCSV">
 			<bean:message key="errors.noGestorCSV" />
 		</logic:empty>
 		
-		<logic:notEmpty name="tramites">	
+		<logic:notEmpty name="tramitesCSV">	
 			<form name="export" id="export" class="centrat">
 			<p>
 				<bean:message key="exportCSV.tramite"/>
-				<select name="identificadorTramite">
-					<logic:iterate id="tramite" name="tramites" type="es.caib.bantel.model.Tramite">															
-						<option value="<%=tramite.getIdentificador()%>">
-							<%=tramite.getIdentificador() + "-" + (tramite.getDescripcion().length()>60?tramite.getDescripcion().substring(0,60)+"...":tramite.getDescripcion())%>
+				<select name="identificadorProcedimientoTramite">
+					<logic:iterate id="tramiteCSV" name="tramitesCSV" type="es.caib.bantel.model.TramiteExportarCSV">															
+						<option value="<%=tramiteCSV.getIdProcedimientoTramite()%>">
+							<%=tramiteCSV.getDescripcion()%>
 						</option>
 					</logic:iterate>
 				</select>

@@ -6,6 +6,7 @@
 			<xsd:element name="obtenerNumerosEntradas">
 				<xsd:complexType>
 					<xsd:sequence>
+						<xsd:element name="identificadorProcedimiento" type="xsd:string"/>
 						<xsd:element name="identificadorTramite" type="xsd:string"/>
 						<xsd:element name="procesada" type="xsd:string"/>
 						<xsd:element name="desde" type="xsd:dateTime"/>
