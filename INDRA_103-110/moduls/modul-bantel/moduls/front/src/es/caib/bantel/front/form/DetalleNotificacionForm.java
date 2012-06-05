@@ -39,10 +39,13 @@ public class DetalleNotificacionForm extends ValidatorForm
 	private String textoSmsAviso;
 	private String tituloOficio;
 	private String textoOficio;
+	
+	
+	private String tipoDocumento; // URL / FICHERO
 	private String tituloAnexoOficio;
-	private FormFile documentoAnexoOficio;
-	private String modeloAnexo;
-    private String versionAnexo;
+	private FormFile documentoAnexoOficio;	
+	private String  urlAnexoOficio;
+	
     
     private String descripcionTramiteSubsanacion; 
     private String identificadorTramiteSubsanacion;
@@ -213,27 +216,7 @@ public class DetalleNotificacionForm extends ValidatorForm
 
 	public void setUsuarioSey(String usuarioSey) {
 		this.usuarioSey = usuarioSey;
-	}
-
-
-	public String getModeloAnexo() {
-		return modeloAnexo;
-	}
-
-
-	public void setModeloAnexo(String modeloAnexo) {
-		this.modeloAnexo = modeloAnexo;
-	}
-
-
-	public String getVersionAnexo() {
-		return versionAnexo;
-	}
-
-
-	public void setVersionAnexo(String versionAnexo) {
-		this.versionAnexo = versionAnexo;
-	}
+	}	
 
 	public String getCodigoMunicipio() {
 		return codigoMunicipio;
@@ -477,5 +460,25 @@ public class DetalleNotificacionForm extends ValidatorForm
         }  
         return errors;
     }
+
+
+	public String getTipoDocumento() {
+		return tipoDocumento;
+	}
+
+
+	public void setTipoDocumento(String tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
+	}
+
+
+	public String getUrlAnexoOficio() {
+		return urlAnexoOficio;
+	}
+
+
+	public void setUrlAnexoOficio(String urlAnexoOficio) {
+		this.urlAnexoOficio = urlAnexoOficio;
+	}
 	
 }

@@ -26,6 +26,8 @@ public class DocumentoFirmar extends DocumentoExpedientePAD{
 	private String rutaFichero;
 	private String firma;
 	private boolean vistoPDF;
+	private String tipoDocumento; // FICHERO / URL
+	private String url;
 	
 	public boolean isVistoPDF() {
 		return vistoPDF;
@@ -67,7 +69,17 @@ public class DocumentoFirmar extends DocumentoExpedientePAD{
 		}
 		return "";
 	}
-	
-	
+	public String getTipoDocumento() {
+		return tipoDocumento;
+	}
+	public void setTipoDocumento(String tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}	
 	
 }

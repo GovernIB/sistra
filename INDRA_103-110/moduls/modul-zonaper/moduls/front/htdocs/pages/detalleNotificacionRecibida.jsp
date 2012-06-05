@@ -55,12 +55,22 @@
 				<ul class="docs">
 					<logic:iterate id="documento" name="notificacion" property="documentos">
 					<li>
-						<html:link href="<%=urlMostrarDocumento%>" paramId="codigo" paramName="documento" paramProperty="codigo">
-							<bean:write name="documento" property="descripcion" />
-						</html:link>
 						<bean:define id="codigoFirma" type="java.lang.String">
 							<bean:write name="documento" property="codigo" />
 						</bean:define>
+						
+						<logic:notEmpty name="<%="URL-" + codigoFirma %>" scope="request">
+							<a href="<bean:write name="<%="URL-" + codigoFirma %>" scope="request"/>" target="_blank">
+								<bean:write name="documento" property="descripcion" />
+							</a>																				
+						</logic:notEmpty>
+						
+						<logic:empty name="<%="URL-" + codigoFirma %>" scope="request">
+							<html:link href="<%=urlMostrarDocumento%>" paramId="codigo" paramName="documento" paramProperty="codigo">
+								<bean:write name="documento" property="descripcion" />
+							</html:link>
+						</logic:empty>
+						
 						<logic:notEmpty name="<%=codigoFirma %>" scope="request">
 							<bean:message key="comprobarDocumento.firmadoPor"/>
 							<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request">							

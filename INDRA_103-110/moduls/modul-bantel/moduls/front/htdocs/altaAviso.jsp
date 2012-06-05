@@ -168,38 +168,68 @@
 var htmlInfoFirmado = "- <strong><bean:message key="detalleTramite.datosTramite.envio.firmado"/></strong>";
 
 //funcion que anexa un documento, se ejecuta desde el iframe
-function altaDocument(form){
+function altaDocument(form, url){
 	
 	Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "Enviando datos..."});
-	
-	var archivo = $('input[type=file]').val();
+
 	var permitida = false;
-	if(archivo != null && archivo != ''){
-		var extension = (archivo.substring(archivo.lastIndexOf("."))).toLowerCase();
-		if(extension != null && extension != ''){
-			var extensiones_permitidas = new Array(".docx", ".doc", ".odt"); 
-			for (var i = 0; i < extensiones_permitidas.length; i++) {
-				if (extensiones_permitidas[i] == extension) {
-					permitida = true;
-					break;	
-				}
-			} 			
-		}
-	}
+	var error = "";
+
+	form.flagValidacion.value ="documento";
+	form.idioma.value =document.detalleAvisoForm.idioma.value;
+	form.descripcionExpediente.value =document.detalleAvisoForm.descripcionExpediente.value;	
 	
-	if(permitida){
-		form.flagValidacion.value ="documento";
-		form.idioma.value =document.detalleAvisoForm.idioma.value;
-		form.descripcionExpediente.value =document.detalleAvisoForm.descripcionExpediente.value;
-		form.rutaFitxer.value =form.documentoAnexoFichero.value;
-		form.submit();
-	}else{				
-		alert("<bean:message key="error.aviso.extensiones.fichero"/>");
-		Mensaje.cancelar();
+	if (url) {
+		if (form.tituloAnexoOficioUrl.value == '') {
+			error = "<bean:message key="error.aviso.titulo.fichero"/>";
+			permitida = false;					
+		} else if (!checkURL(form.documentoUrlAnexo.value)) {
+			error = "<bean:message key="error.aviso.url.fichero"/>";
+			permitida = false;	
+		} else {
+			form.tipoDocumento.value = "URL";
+			form.documentoAnexoTitulo.value=form.tituloAnexoOficioUrl.value;			
+			permitida = true;
+		}				
+	} else {
+		var archivo = $('input[type=file]').val();
+
+		if (form.tituloAnexoOficioFichero.value == '') {
+			error = "<bean:message key="error.aviso.titulo.fichero"/>";
+			permitida = false;					
+		} else if(archivo == null || archivo == ''){
+			error = "<bean:message key="error.aviso.extensiones.fichero"/>";
+			permitida = false;
+		} else {
+			var extension = (archivo.substring(archivo.lastIndexOf("."))).toLowerCase();
+			if(extension != null && extension != ''){
+				var extensiones_permitidas = new Array(".docx", ".doc", ".odt"); 
+				for (var i = 0; i < extensiones_permitidas.length; i++) {
+					if (extensiones_permitidas[i] == extension) {
+						permitida = true;
+						break;	
+					}
+				} 			
+			}
+			if(permitida){
+				form.tipoDocumento.value = "FICHERO";
+				form.documentoAnexoTitulo.value=form.tituloAnexoOficioFichero.value;
+				form.rutaFitxer.value =form.documentoAnexoFichero.value;					
+			}else{				
+				error = "<bean:message key="error.aviso.extensiones.fichero"/>";
+			}
+		}		
 	}	
-	
+
+	if (permitida) {
+		form.submit();	
+	} else {
+		alert(error);
+		Mensaje.cancelar();
+	}
 	return permitida;
 }
+
 //funcion que da de alta el aviso
 function alta(){
 	if(confirm ( "<bean:message key='aviso.alta.confirmacion' />" )){
@@ -241,6 +271,12 @@ function mostrarAnexarDocumentos(){
 	$('#anexar').show('slow');
 	$('#firmarDocumentosApplet').hide('slow');
 	$("#botonMostrarAnexar").attr("disabled","disabled");
+
+
+	// Reseteamos valores
+	$('#tituloAnexoOficioFichero').val("");
+	$('#tituloAnexoOficioUrl').val("");
+	$('#documentoUrlAnexo').val("");	
 }
 //funcion que esconde el div que se muestra para anexar documentos
 function esconderAnexarDocumentos(){
@@ -391,6 +427,7 @@ function errorFileUploaded(error){
 												<bean:define id="codigoRDS" name="document" property="codigoRDS" type="java.lang.Long" />
 												<bean:define id="claveRDS" name="document" property="claveRDS" type="java.lang.String" />
 												
+												<logic:equal name="document" property="tipoDocumento" value="FICHERO">	
 													<a href='<%=urlAbrirDocumento%>?codigo=<%=codigoRDS %>&clave=<%=claveRDS %>' > 
 														 <bean:write name="document" property="titulo" />
 													</a>
@@ -405,6 +442,15 @@ function errorFileUploaded(error){
 															</logic:equal>
 														</div>
 													</logic:equal>
+												</logic:equal>
+												
+												<logic:equal name="document" property="tipoDocumento" value="URL">
+													<a href="<%=document.getUrl()%>" target="_blank"> 
+														 <bean:write name="document" property="titulo" />
+													</a>
+													&nbsp;&nbsp;<img src="imgs/icones/ico_url.jpg" alt="<bean:message key="aviso.documento.externo"/>" />
+												</logic:equal>
+												
 											</li>
 									</logic:iterate>
 									</ul>
@@ -414,28 +460,58 @@ function errorFileUploaded(error){
 						<!-- /documentos -->
 						
 						<!-- anexar -->
-						<div id="anexar">
-						<html:form method="post" action="altaDocumentoAviso" enctype="multipart/form-data" target="iframeDocumento" styleClass="remarcar opcions">																			
-						<html:hidden property="descripcionExpediente"/>
-						<html:hidden property="flagValidacion" value="alta"/>
-						<html:hidden property="rutaFitxer"/>
-						<html:hidden property="idioma" />
-							<p>
-								<bean:message key="aviso.explicativo.fichero"/>
-							</p>
-							<p>
-								<bean:message key="aviso.extensiones.fichero"/>
-							</p>
-							<p>
-								<label><bean:message key="aviso.titulo"/></label>
-								<html:text property="documentoAnexoTitulo"/>
-								<label class="enLinia"><bean:message key="aviso.fichero"/></label>
-								<html:file property="documentoAnexoFichero" />
-								<!--<html:submit styleId="botonAlta" styleClass="botonAlta" onclick="if(altaDocument()){return true;}else{return false;}"><bean:message key="aviso.alta.documento"/></html:submit>-->
-							<input id="botonAlta" class="botonAlta" type='button' value='<bean:message key="aviso.alta.documento"/>' onclick="if(altaDocument(this.form)){return true;}else{return false;}"/>
-								, o <a id="botonCancelar" onclick="esconderAnexarDocumentos();">Cancelar</a>
-							</p>
-						</html:form>																			
+						<div id="anexar"  class="remarcar">
+							<html:form method="post" action="altaDocumentoAviso" enctype="multipart/form-data" target="iframeDocumento" styleClass="remarcar opcions2">																			
+								<html:hidden property="descripcionExpediente"/>
+								<html:hidden property="flagValidacion" value="alta"/>
+								<html:hidden property="rutaFitxer"/>
+								<html:hidden property="idioma" />
+								<html:hidden property="tipoDocumento" />
+								<html:hidden property="documentoAnexoTitulo"/>
+								
+								
+								<p class="titol2">
+									<bean:message key="aviso.anexarFichero"/>
+								</p>	
+								<p>
+									<bean:message key="aviso.explicativo.fichero"/> <bean:message key="aviso.extensiones.fichero"/>
+								</p>
+								<p>
+									<label><bean:message key="aviso.titulo"/></label>
+									<input type="text" id="tituloAnexoOficioFichero" class="pc40"/>
+								</p>
+								<p>
+									<label><bean:message key="aviso.fichero"/></label>
+									<html:file property="documentoAnexoFichero" styleClass="pc40" size="100"/>
+								</p>
+								<p>
+									<input id="botonAlta" class="botonAlta" type='button' value='<bean:message key="aviso.alta.documento"/>' 
+									onclick="if(altaDocument(this.form, false)){return true;}else{return false;}"/>								
+								</p>
+								
+								<p class="titol2">
+									<bean:message key="aviso.anexarUrl"/>
+								</p>	
+								<p>
+									<bean:message key="aviso.explicativo.url"/>
+								</p>
+								<p>
+									<label><bean:message key="aviso.titulo"/></label>
+									<input type="text" id="tituloAnexoOficioUrl" class="pc40"/>
+								</p>
+								<p>
+									<label><bean:message key="aviso.url"/></label>
+									<html:text property="documentoUrlAnexo" styleId="documentoUrlAnexo" styleClass="pc40"/>
+								</p>
+								<p>
+									<input id="botonAlta" class="botonAlta" type='button' value='<bean:message key="aviso.alta.documento"/>' onclick="if(altaDocument(this.form, true)){return true;}else{return false;}"/>							
+								</p>
+								<br/>
+								<p>
+									<a id="botonCancelar" onclick="esconderAnexarDocumentos();"><bean:message key="aviso.alta.cancelar"/></a>
+								</p>
+									
+							</html:form>																													
 						</div>
 						<!-- /anexar -->
 						

@@ -20,8 +20,13 @@ public class DetalleAvisoForm extends ValidatorForm
 	private String titulo;
 	private String texto;
 	private String textoSMS;
+	
+	private String tipoDocumento; // URL / FICHERO
 	private String documentoAnexoTitulo;
-	private FormFile documentoAnexoFichero;
+	private FormFile documentoAnexoFichero;	
+	private String  documentoUrlAnexo;
+	
+	
 	private String descripcionExpediente;
     private String firmar;
     private String flagValidacion;
@@ -143,5 +148,21 @@ public class DetalleAvisoForm extends ValidatorForm
     	
         return errors;
     }
+
+	public String getTipoDocumento() {
+		return tipoDocumento;
+	}
+
+	public void setTipoDocumento(String tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
+	}
+
+	public String getDocumentoUrlAnexo() {
+		return documentoUrlAnexo;
+	}
+
+	public void setDocumentoUrlAnexo(String urlAnexo) {
+		this.documentoUrlAnexo = urlAnexo;
+	}
 	
 }

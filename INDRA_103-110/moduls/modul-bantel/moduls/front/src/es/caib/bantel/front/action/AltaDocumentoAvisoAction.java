@@ -1,6 +1,10 @@
 package es.caib.bantel.front.action;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +23,11 @@ import es.caib.bantel.front.form.DetalleAvisoForm;
 import es.caib.bantel.front.util.DocumentoFirmar;
 import es.caib.bantel.front.util.DocumentosUtil;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
+import es.caib.xml.ConstantesXML;
+import es.caib.xml.documentoExternoNotificacion.factoria.FactoriaObjetosXMLDocumentoExternoNotificacion;
+import es.caib.xml.documentoExternoNotificacion.factoria.ServicioDocumentoExternoNotificacionXML;
+import es.caib.xml.documentoExternoNotificacion.factoria.impl.DocumentoExternoNotificacion;
+import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
 
 /**
  * @struts.action
@@ -32,68 +41,51 @@ public class AltaDocumentoAvisoAction extends BaseAction
             HttpServletResponse response) throws Exception 
     {
 		DetalleAvisoForm avisoForm = (DetalleAvisoForm)form;
-		ArrayList documentos;
+		
 		request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,"3");
-		String funcion;
+		
 		
 		// Recuperamos de sesion el expediente actual
 		String idExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY);
 		Long uniAdm = (Long) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY);
 		String claveExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY);
 		
+		// Recuperamos documentos, si no existen los creamos
+		ArrayList documentos;
+		if(request.getSession().getAttribute("documentosAltaAviso") == null){
+			documentos = new ArrayList();
+			request.getSession().setAttribute("documentosAltaAviso", documentos);
+		}else{
+			documentos = (ArrayList)request.getSession().getAttribute("documentosAltaAviso");
+		}
+		
+		DocumentoFirmar documento = null;
 		try{
-			funcion = "parent.fileUploaded()";
- 			if (avisoForm.getDocumentoAnexoFichero() != null && StringUtils.isNotEmpty(avisoForm.getDocumentoAnexoFichero().getFileName()) &&  StringUtils.isNotEmpty(avisoForm.getDocumentoAnexoTitulo()) ){
- 				if(DocumentosUtil.extensionCorrecta(avisoForm.getDocumentoAnexoFichero().getFileName())){
-	 				if("documento".equals(avisoForm.getFlagValidacion())){
-	 					DocumentoFirmar documento = new DocumentoFirmar();
-						documento.setTitulo(avisoForm.getDocumentoAnexoTitulo());
-						documento.setContenidoFichero(avisoForm.getDocumentoAnexoFichero().getFileData());
-						documento.setNombre(avisoForm.getDocumentoAnexoFichero().getFileName());
-						documento.setRutaFichero(DocumentosUtil.formatearFichero(avisoForm.getRutaFitxer()));
-	
-						//Guardo un documento con la extension que tiene y me devueve el documento con el contenido en pdf
-						DocumentoRDS documentRDS = null;
-						try{
-							documentRDS = DocumentosUtil.crearDocumentoRDS(documento, uniAdm.toString());
-						}catch(Exception e){
-							Log.error("Error creando documento rds",e);
-							MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));
-							funcion="parent.errorFileUploaded(\""+resources.getMessage( getLocale( request ), "error.aviso.guardar.fichero")+"\")";
-						}
-						documento.setTitulo(documentRDS.getTitulo());
-						documento.setContenidoFichero(null);
-						documento.setNombre(documentRDS.getNombreFichero());
-						documento.setClaveRDS(documentRDS.getReferenciaRDS().getClave());
-						documento.setCodigoRDS(documentRDS.getReferenciaRDS().getCodigo());
-						documento.setModeloRDS(documentRDS.getModelo());
-						documento.setVersionRDS(documentRDS.getVersion());
-						documento.setVistoPDF(true);
-						documento.setFirmar(false);
-						if(request.getSession().getAttribute("documentosAltaAviso") == null){
-							documentos = new ArrayList();
-						}else{
-							documentos = (ArrayList)request.getSession().getAttribute("documentosAltaAviso");
-						}
-						documentos.add(documento);
-						request.getSession().setAttribute("documentosAltaAviso", documentos);
-						avisoForm.setFlagValidacion("");
-	 				}
-	 				avisoForm.setDocumentoAnexoFichero(null);
-	 				avisoForm.setDocumentoAnexoTitulo("");
- 				}else{
- 					throw new Exception("error.aviso.extensiones.fichero");
- 				}
-			}
- 			
+			if("documento".equals(avisoForm.getFlagValidacion())){
+				if (avisoForm.getTipoDocumento().equals("URL")) {
+					documento = altaDocumentoUrl(avisoForm, uniAdm);
+				} else {
+					documento = altaDocumentoFichero(avisoForm, uniAdm);
+				}
+			}			
 		}catch(Exception ex){
-				MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));
-				if(ex.getMessage() != null && ex.getMessage().startsWith("error.aviso.extensiones.fichero")){
-					funcion="parent.errorFileUploaded(\"" + resources.getMessage( getLocale( request ), ex.getMessage()) + "\")";				
-				}else{
-					funcion="parent.errorFileUploaded(\""+resources.getMessage( getLocale( request ), "error.excepcion.general")+"\")";
-			}
-		}		
+			Log.debug("Error alta documento", ex);			
+		}	
+		
+		// Reseteamos valores
+		avisoForm.setFlagValidacion("");
+		avisoForm.setDocumentoAnexoFichero(null);
+		avisoForm.setDocumentoAnexoTitulo("");
+		
+		// Establecemos funcion resultado
+		String funcion;
+		if (documento != null) {
+			documentos.add(documento);
+			funcion = "parent.fileUploaded()";
+		} else {
+			MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));
+			funcion="parent.errorFileUploaded(\""+resources.getMessage( getLocale( request ), "error.excepcion.general")+"\")";
+		}
 		
 		// Devolvemos resultado
 		response.setContentType("text/html");		    
@@ -111,4 +103,89 @@ public class AltaDocumentoAvisoAction extends BaseAction
 		pw.println("</html>");
 		return null;
     }
+
+	private DocumentoFirmar altaDocumentoUrl(DetalleAvisoForm avisoForm,
+			Long uniAdm) throws Exception {
+		DocumentoFirmar documento;
+		
+		
+		if (StringUtils.isEmpty(avisoForm.getDocumentoAnexoTitulo()) ||
+				StringUtils.isEmpty(avisoForm.getDocumentoUrlAnexo())){
+				Log.error("Faltan datos referencia");
+				return null;
+			}
+				
+		if (!avisoForm.getDocumentoUrlAnexo().toLowerCase().startsWith("http://") && 
+				!avisoForm.getDocumentoUrlAnexo().toLowerCase().startsWith("https://")) {
+			avisoForm.setDocumentoUrlAnexo("http://" + avisoForm.getDocumentoUrlAnexo());
+		}		
+		
+		// Generamos xml		
+		FactoriaObjetosXMLDocumentoExternoNotificacion factoria = ServicioDocumentoExternoNotificacionXML.crearFactoriaObjetosXML();
+		factoria.setEncoding("UTF-8");
+		DocumentoExternoNotificacion documentoExternoNotificacion = factoria.crearDocumentoExternoNotificacion();		
+		factoria.setIndentacion(true);
+		documentoExternoNotificacion.setNombre(avisoForm.getDocumentoAnexoTitulo());
+		documentoExternoNotificacion.setUrl(avisoForm.getDocumentoUrlAnexo());
+		String xml = factoria.guardarDocumentoExternoNotificacion(documentoExternoNotificacion);
+		
+		documento = new DocumentoFirmar();
+		documento.setTipoDocumento("URL");
+		documento.setTitulo(avisoForm.getDocumentoAnexoTitulo());
+		documento.setContenidoFichero(xml.getBytes(ConstantesXML.ENCODING));
+		documento.setNombre("enlace.xml");
+		documento.setUrl(avisoForm.getDocumentoUrlAnexo());
+		documento.setRutaFichero(null);
+
+		//Guardo un documento con la extension que tiene y me devueve el documento con el contenido en pdf
+		DocumentoRDS documentRDS = null;
+		documentRDS = DocumentosUtil.crearDocumentoRDS(documento, uniAdm.toString());
+		
+		documento.setTitulo(documentRDS.getTitulo());
+		documento.setContenidoFichero(null);
+		documento.setNombre(documentRDS.getNombreFichero());
+		documento.setClaveRDS(documentRDS.getReferenciaRDS().getClave());
+		documento.setCodigoRDS(documentRDS.getReferenciaRDS().getCodigo());
+		documento.setModeloRDS(documentRDS.getModelo());
+		documento.setVersionRDS(documentRDS.getVersion());
+		documento.setVistoPDF(true);
+		documento.setFirmar(false);
+		return documento;
+	}
+
+	private DocumentoFirmar altaDocumentoFichero(DetalleAvisoForm avisoForm,
+			Long uniAdm) throws FileNotFoundException, IOException,
+			ExcepcionPAD {
+		DocumentoFirmar documento;
+		if (avisoForm.getDocumentoAnexoFichero() == null ||
+				StringUtils.isEmpty(avisoForm.getDocumentoAnexoFichero().getFileName()) ||
+				StringUtils.isEmpty(avisoForm.getDocumentoAnexoTitulo()) ){
+				return null;
+		}
+		if(!DocumentosUtil.extensionCorrecta(avisoForm.getDocumentoAnexoFichero().getFileName())){
+			return null;
+		}
+		
+		documento = new DocumentoFirmar();
+		documento.setTipoDocumento("FICHERO");
+		documento.setTitulo(avisoForm.getDocumentoAnexoTitulo());
+		documento.setContenidoFichero(avisoForm.getDocumentoAnexoFichero().getFileData());
+		documento.setNombre(avisoForm.getDocumentoAnexoFichero().getFileName());
+		documento.setRutaFichero(DocumentosUtil.formatearFichero(avisoForm.getRutaFitxer()));
+
+		//Guardo un documento con la extension que tiene y me devueve el documento con el contenido en pdf
+		DocumentoRDS documentRDS = null;
+		documentRDS = DocumentosUtil.crearDocumentoRDS(documento, uniAdm.toString());
+		
+		documento.setTitulo(documentRDS.getTitulo());
+		documento.setContenidoFichero(null);
+		documento.setNombre(documentRDS.getNombreFichero());
+		documento.setClaveRDS(documentRDS.getReferenciaRDS().getClave());
+		documento.setCodigoRDS(documentRDS.getReferenciaRDS().getCodigo());
+		documento.setModeloRDS(documentRDS.getModelo());
+		documento.setVersionRDS(documentRDS.getVersion());
+		documento.setVistoPDF(true);
+		documento.setFirmar(false);
+		return documento;
+	}
 }

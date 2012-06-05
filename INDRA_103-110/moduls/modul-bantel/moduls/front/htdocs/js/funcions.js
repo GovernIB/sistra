@@ -56,3 +56,11 @@ function b64ToB64UrlSafe(b64){
 	return b64UrlSafe;
 }
 
+function checkURL(value) {
+    var urlregex = new RegExp("^(http:\/\/|https:\/\/){1}([0-9A-Za-z]+\.)");
+    if (urlregex.test(value)) {
+        return (true);
+    }
+    return (false);
+}
+

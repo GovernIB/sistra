@@ -28,13 +28,18 @@ import es.caib.bantel.model.TramiteBandeja;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.delegate.GestorBandejaDelegate;
 import es.caib.bantel.persistence.delegate.TramiteBandejaDelegate;
+import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
+import es.caib.xml.ConstantesXML;
 import es.caib.xml.datospropios.factoria.FactoriaObjetosXMLDatosPropios;
 import es.caib.xml.datospropios.factoria.ServicioDatosPropiosXML;
 import es.caib.xml.datospropios.factoria.impl.DatosPropios;
+import es.caib.xml.documentoExternoNotificacion.factoria.FactoriaObjetosXMLDocumentoExternoNotificacion;
+import es.caib.xml.documentoExternoNotificacion.factoria.ServicioDocumentoExternoNotificacionXML;
+import es.caib.xml.documentoExternoNotificacion.factoria.impl.DocumentoExternoNotificacion;
 import es.caib.xml.registro.factoria.ConstantesAsientoXML;
 import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
@@ -208,18 +213,29 @@ public class MostrarDetalleElementoAction extends BaseAction
 	private void cargarFirmas(List documentos, HttpServletRequest request, String tipo) throws Exception{
 		RdsDelegate rdsDeleg = DelegateRDSUtil.getRdsDelegate();
 		
-//		vamos a buscar las firmas de los documentos si existen y las meteremos en la request
+		//		vamos a buscar las firmas de los documentos si existen y las meteremos en la request
 		if(documentos != null){
 			ReferenciaRDS ref = null;
-			String codigo = null;
+			Long codigo = null;
 			for(int i=0;i<documentos.size();i++){
 				DocumentoExpedientePAD docTipo = (DocumentoExpedientePAD)documentos.get(i);
 				ref = new ReferenciaRDS(docTipo.getCodigoRDS(),docTipo.getClaveRDS());
 				if (ref.getCodigo() > 0){
-					codigo = docTipo.getCodigoRDS()+docTipo.getClaveRDS();
+					codigo = docTipo.getCodigoRDS();
 					DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
+					// Cargamos firmas
 					if(doc != null && doc.getFirmas() != null){
-						request.setAttribute(codigo,doc.getFirmas());
+						request.setAttribute(codigo.toString(),doc.getFirmas());
+					}
+					// Establecemos en la request si es una referencia a un doc externo (modelo GE0013NOTIFEXT)
+					if (doc.getModelo().equals(ConstantesRDS.MODELO_NOTIFICACION_EXTERNO)) {
+						// Buscamos url
+						doc = rdsDeleg.consultarDocumento(ref, true);
+						FactoriaObjetosXMLDocumentoExternoNotificacion factoria = ServicioDocumentoExternoNotificacionXML.crearFactoriaObjetosXML();
+						factoria.setEncoding(ConstantesXML.ENCODING);
+						factoria.setIndentacion(true);
+						DocumentoExternoNotificacion documentoExternoNotificacion = factoria.crearDocumentoExternoNotificacion(new ByteArrayInputStream(doc.getDatosFichero()));
+						request.setAttribute("URL-"+docTipo.getCodigoRDS(),documentoExternoNotificacion.getUrl());
 					}
 				}
 			}

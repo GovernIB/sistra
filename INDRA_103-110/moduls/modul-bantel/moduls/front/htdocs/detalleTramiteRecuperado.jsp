@@ -227,7 +227,7 @@
 											</html:link>
 										<%}%>
 										<bean:define id="codigoFirma" type="java.lang.String">
-											<bean:write name="documento" property="codigo" />
+											<bean:write name="documento" property="rdsCodigo" />
 										</bean:define>
 										<logic:notEmpty name="<%=codigoFirma %>" scope="request">
 											<bean:message key="comprobarDocumento.firmadoPor"/>
