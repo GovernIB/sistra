@@ -32,7 +32,7 @@ public class AltaPersonaAction extends Action
 		String error = "";
 		
 		try{
-			 request.setCharacterEncoding("UTF-8");
+			 //request.setCharacterEncoding("UTF-8");
 			 String nif = StringUtils.trim(request.getParameter("nif"));
 			 String nombre = StringUtils.trim(request.getParameter("nombre"));
 			 String apellido1 = StringUtils.trim(request.getParameter("apellido1"));	

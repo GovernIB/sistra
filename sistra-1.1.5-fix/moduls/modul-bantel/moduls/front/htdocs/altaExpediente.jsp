@@ -60,16 +60,29 @@
   		var ape2Alta = $("#apellido2AltaDestinatario").val();
 
   		if(confirm ( "<bean:message key='expediente.alta.altaDestinatario.confirmacion' />" )){
- 	 		$.ajaxSetup({scriptCharset: "utf-8" , contentType: "application/json; charset=utf-8"});
- 	 		$.getJSON("altaPersona.do", {  nif: nifAlta, nombre : nombreAlta, apellido1: ape1Alta, apellido2: ape2Alta }, 
- 	 			function(json){				
- 	 				if (json.error == "") {
- 	 					alert("<bean:message key="expediente.alta.altaDestinatario.altaRealizada"/>");
- 	 					mostrarAltaDestinatario(false);
- 	 				} else {
- 	 	 				alert(json.error);
- 	 				}				 							
- 	 			});
+  			var mapVars = {};
+ 			mapVars["nif"] = nifAlta;
+ 			mapVars["nombre"] = nombreAlta;
+ 			mapVars["apellido1"] = ape1Alta;
+ 			mapVars["apellido2"] = ape2Alta;
+
+ 			$.ajax({
+				type: "POST",
+				url: "altaPersona.do",
+				data: mapVars,
+				dataType: "json",
+				error: function() {
+					alert("Error enviando datos al servidor. Intentelo de nuevo.");					
+				},
+				success: function(json) {					
+					if (json.error == "") {
+	 					alert("<bean:message key="expediente.alta.altaDestinatario.altaRealizada"/>");
+	 					mostrarAltaDestinatario(false);
+	 				} else {
+	 	 				alert(json.error);
+	 				}						
+				}
+			});
   		}
   	}
  		
