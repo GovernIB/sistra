@@ -96,9 +96,16 @@ public class ConstantesRDS {
 	 */
 	public static final String MODELO_OFICIO_REMISION = "GE0009OFIREM";
 	/**
-	 * Modelo notificacion
+	 * Modelo documento notificacion: usado para documentos binarios anexos de notificaciones y avisos.
 	 */
 	public static final String MODELO_NOTIFICACION= "GE0011NOTIFICA";
+	/**
+	 * Modelo documento externo notificacion: usado para documentos externos de anexos de
+	 * notificaciones y avisos en los que se indica una url al documento. En el redose se 
+	 * almacenara un xml con la url de acceso.
+	 */
+	public static final String MODELO_NOTIFICACION_EXTERNO= "GE0013NOTIFEXT";
+	
 	/**
 	 * Modelo autorizacion delegacion
 	 */

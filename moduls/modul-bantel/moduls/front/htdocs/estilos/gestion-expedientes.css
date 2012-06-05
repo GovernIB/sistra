@@ -65,8 +65,10 @@ h1 { font-size:1.7em; font-weight:normal; color:#8a4700; padding:.5em .7em .5em 
 form.remarcar, div.remarcar { padding:.1em 2em; margin:2em 0; background-color:#f2f2f2; }
 
 p.titol { font-size:1.2em; font-weight:bold; }
+p.titol2 { font-size:1.2em; font-weight:bold; width:30%;}
 
 form.opcions label, div.remarcar label { display:block; float:left; width:20%; text-align:right; padding-right:1em;position:relative;}
+form.opcions2 label, div.remarcar label { display:block; float:left; width:10%; text-align:right; padding-right:1em;position:relative;}
 form.opcions label.enLinia, div.remarcar label.enLinia { display:inline; float:none; margin-left:2em; }
 form.opcions SPAN, div.remarcar SPAN {display:block; float:left; width:70%; text-align:left; padding-right:1em;position:relative;}
 
@@ -91,6 +93,7 @@ form.opcions ul li, div.remarcar ul li { padding-bottom:0; }
 form.opcions ul li a.esborrar, div.remarcar ul li a.esborrar { color:#c00; margin-left:1.5em;  cursor:pointer;}
 
 form.opcions p.titol, div.remarcar p.titol{ width:20%; font-size:1em; text-align:right; margin-top:1.5em; }
+form.opcions2 p.titol2, div.remarcar p.titol2{ width:30%; font-size:1em; text-align:left; margin-top:1.5em; }
 form.opcions p.major, div.remarcar p.major { font-size:1.2em; }
 
 form.opcions p.enllas, div.remarcar p.enllas { width:20%; text-align:right; }
@@ -189,8 +192,10 @@ th.ajudaColumna:hover { background-color:#dcf9bb; }
 #anexar { padding-left:1em; border:1px solid #ccc; }
 #anexar div.form { overflow:hidden; width:100%; }
 #anexar div.col { float:left; width:30%; }
+/*
 #anexar p label { display:inline; width:inherit; padding:0 .5em 0 0 !important; margin:0 !important; }
 #anexar p label.enLinia { margin-left:3em; }
+*/
 
 #botonAlta { margin-right:.5em !important; }
 

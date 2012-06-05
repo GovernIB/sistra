@@ -40,16 +40,30 @@
 							<ul class="docs">
 								<logic:iterate id="documento" name="aviso" property="documentos"  type="es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD">
 								<li>
-									<a href='<%=url%>?codigo=<%=documento.getCodigoRDS() %>&clave=<%=documento.getClaveRDS() %>&idioma=<%=expediente.getIdioma() %>'> <bean:write name="documento" property="titulo" /></a>
+									
 									<bean:define id="codigoFirma" type="java.lang.String">
-										<bean:write name="documento" property="codigoRDS" /><bean:write name="documento" property="claveRDS" />
+										<bean:write name="documento" property="codigoRDS" />
 									</bean:define>
+									
+									<logic:empty name="<%="URL-" + codigoFirma %>" scope="request">
+										<a href='<%=url%>?codigo=<%=documento.getCodigoRDS() %>&clave=<%=documento.getClaveRDS() %>&idioma=<%=expediente.getIdioma() %>'> 
+											<bean:write name="documento" property="titulo" />
+										</a>																
+									</logic:empty>	
+									
+									<logic:notEmpty name="<%="URL-" + codigoFirma %>" scope="request">
+										<a href="<bean:write name="<%="URL-" + codigoFirma %>" scope="request"/>" target="_blank">
+											<bean:write name="documento" property="titulo" />
+										</a>													
+									</logic:notEmpty>
+									
 									<logic:notEmpty name="<%=codigoFirma %>" scope="request">
 										<bean:message key="comprobarDocumento.firmadoPor"/>
 										<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request">							
 											&nbsp;<bean:write name="firma" property="nombreApellidos"/>
 										</logic:iterate>			
-									</logic:notEmpty>	
+									</logic:notEmpty>
+									
 								</li>
 								</logic:iterate>
 							</ul>

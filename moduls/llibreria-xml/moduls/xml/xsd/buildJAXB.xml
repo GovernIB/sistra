@@ -70,4 +70,8 @@
 		<xjc schema="AUTORIZACION_DELEGACION.xsd" destdir="${src.dir}" package="es.caib.xml.delegacion.modelo" />			
 	</target>
 	
+	<target name="documentoExternoNotificacion" description="Genera jaxb para Documento Externo Notificacion">
+		<xjc schema="DOCUMENTO_EXTERNO_NOTIFICACION.xsd" destdir="${src.dir}" package="es.caib.xml.documentoExternoNotificacion.modelo" />			
+	</target>
+	
 </project>

@@ -1,29 +1,20 @@
 package es.caib.bantel.front.action;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.struts.Globals;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.MessageResources;
 
-import es.caib.bantel.front.Constants;
-import es.caib.bantel.front.form.DetalleAvisoForm;
 import es.caib.bantel.front.json.JSONObject;
 import es.caib.bantel.front.util.DocumentoFirmar;
-import es.caib.bantel.front.util.DocumentosUtil;
-import es.caib.bantel.front.util.Dominios;
 import es.caib.bantel.front.util.MensajesUtil;
-import es.caib.redose.modelInterfaz.DocumentoRDS;
 
 /**
  * @struts.action
@@ -76,7 +67,8 @@ public class BuscarDocumentos extends BaseAction
 		for(int i=0;i<documentos.size();i++){
 			DocumentoFirmar documento = (DocumentoFirmar)documentos.get(i);
 			contenido = contenido+"<li>";
-			contenido = contenido+"<a href=\"/bantelfront/abrirDocumento.do?codigo="+documento.getCodigoRDS()+"&clave="+documento.getClaveRDS()+"\" >"+documento.getTitulo()+"</a>";
+			if (documento.getTipoDocumento().equals("FICHERO")) { 
+			contenido = contenido+"<a href=\"/bantelfront/abrirDocumento.do?codigo="+documento.getCodigoRDS()+"&clave="+documento.getClaveRDS()+"\" >"+StringEscapeUtils.escapeHtml(documento.getTitulo())+"</a>";
 			contenido = contenido+"<div id=\"infoFirmado-"+documento.getCodigoRDS()+"\" style=\"display:inline;\">";
 			if(!documento.isFirmar()){
 				contenido = contenido+" - <a class=\"firmar\" onclick=\"mostrarFirmar('"+documento.getTituloB64()+"','"+documento.getCodigoRDS()+"','"+documento.getClaveRDS()+"')\">Firmar</a>";
@@ -84,6 +76,10 @@ public class BuscarDocumentos extends BaseAction
 				contenido = contenido+" - <strong>"+resources.getMessage( getLocale( request ), "detalleTramite.datosTramite.envio.firmado")+"</strong>";
 			}
 			contenido = contenido+"</div>";
+			} else {
+				contenido = contenido + "<a href=\""+ documento.getUrl() + "\" target=\"_blank\">" + StringEscapeUtils.escapeHtml(documento.getTitulo()) + "</a>";
+				contenido = contenido + "&nbsp;&nbsp;<img src=\"imgs/icones/ico_url.jpg\" alt=\"" + resources.getMessage( getLocale( request ), "aviso.documento.externo") + "\" />";
+			}
 			contenido = contenido+"</li>";
 		}
 		return contenido + "</ul>";

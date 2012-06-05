@@ -628,7 +628,7 @@ public class GeneradorAsiento {
 				datosSolicitud.getDato().add(datS);			
 			}
 
-			if (datosSolicitud.getDato() != null && datosSolicitud.getDato().size() > 0){
+			if (datosSolicitud.getDato() == null || datosSolicitud.getDato().size() == 0){
 				datosSolicitud = null;
 			}
 		}

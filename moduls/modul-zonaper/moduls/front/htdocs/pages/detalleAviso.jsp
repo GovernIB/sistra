@@ -56,12 +56,22 @@
 							<html:rewrite page="/protected/mostrarDocumentoAviso.do" paramId="codigoAviso" paramName="aviso" paramProperty="codigo"/>
 						</bean:define>
 						
-						<html:link href="<%=urlMostrarDocumento%>" paramId="codigo" paramName="documento" paramProperty="codigo">
-							<bean:write name="documento" property="titulo" />
-						</html:link>
 						<bean:define id="codigoFirma" type="java.lang.String">
 							<bean:write name="documento" property="codigo" />
 						</bean:define>
+						
+						<logic:notEmpty name="<%="URL-" + codigoFirma %>" scope="request">
+							<a href="<bean:write name="<%="URL-" + codigoFirma %>" scope="request"/>" target="_blank">
+								<bean:write name="documento" property="titulo" />
+							</a>																				
+						</logic:notEmpty>
+						
+						<logic:empty name="<%="URL-" + codigoFirma %>" scope="request">
+							<html:link href="<%=urlMostrarDocumento%>" paramId="codigo" paramName="documento" paramProperty="codigo">
+								<bean:write name="documento" property="titulo" />
+							</html:link>						
+						</logic:empty>												
+						
 						<logic:notEmpty name="<%=codigoFirma %>" scope="request">
 							<bean:message key="comprobarDocumento.firmadoPor"/>
 							<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request">							
