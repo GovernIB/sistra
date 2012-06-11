@@ -5030,8 +5030,8 @@ public class TramiteProcessorEJB implements SessionBean {
 	    		// Normalizamos documento de identificación
 	        	rpteNif = NifCif.normalizarDocumento(rpteNif);
 	        	// Si se mete script de representante debe devolver un nif valido
-	    		if (!NifCif.esNIF(rpteNif) && !NifCif.esCIF(rpteNif)) {
-	    			throw new Exception("El script de nif de representante no devuelve un nif valido");
+	    		if (!NifCif.esNIF(rpteNif) && !NifCif.esCIF(rpteNif) && !NifCif.esNIE(rpteNif)) {
+	    			throw new Exception("El script de nif de representante no devuelve un nif/cif/nie valido");
 	    		}
     		}
     	}
@@ -5138,6 +5138,12 @@ public class TramiteProcessorEJB implements SessionBean {
         	
         	// Normalizamos documento de identificación
         	rpdoNif = NifCif.normalizarDocumento(rpdoNif);
+        	
+        	// Si se mete valor debe devolver un nif valido
+    		if (!NifCif.esNIF(rpdoNif) && !NifCif.esCIF(rpdoNif) && !NifCif.esNIE(rpdoNif)) {
+    			throw new Exception("El script de nif de representado no devuelve un nif/cif/nie valido");
+    		}
+        	
         	
     	}    	
     	return rpdoNif;
