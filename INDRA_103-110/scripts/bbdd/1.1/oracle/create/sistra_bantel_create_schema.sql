@@ -71,7 +71,7 @@ create index BTE_DOCTRA_FK_I on BTE_DOCUM (
 
 create table BTE_FICEXP  (
    FIC_IDETRA           VARCHAR2(20)                    not null,
-   FIC_DATOS            BLOB                            not null
+   FIC_NOMFIC           VARCHAR2(500)
 );
 
 comment on column BTE_FICEXP.FIC_IDETRA is
@@ -116,25 +116,28 @@ COMMENT ON COLUMN BTE_GESTOR.GES_GESEXP IS 'PERMITE GESTIONAR EXPEDIENTES';
 alter table BTE_GESTOR
    add constraint BTE_GES_PK primary key (GES_SEYCON);
 
-create table BTE_GESTRA  (
+create table BTE_GESPRO  (
    GAP_CODGES           VARCHAR2(1536)                  not null,
-   GAP_IDETRA           VARCHAR2(20)                    not null
+   GAP_IDEPRO           VARCHAR2(100)                    not null
 );
 
-comment on table BTE_GESTRA is
+comment on table BTE_GESPRO is
 'TRAMITES ASOCIADOS AL GESTOR';
 
-comment on column BTE_GESTRA.GAP_CODGES is
+comment on column BTE_GESPRO.GAP_CODGES is
 'USUARIO SEYCON DEL GESTOR';
 
-comment on column BTE_GESTRA.GAP_IDETRA is
+comment on column BTE_GESPRO.GAP_IDETRA is
 'IDENTIFICADOR DEL TRÁMITE';
 
-alter table BTE_GESTRA
+alter table BTE_GESPRO
    add constraint BTE_GAP_PK primary key (GAP_CODGES, GAP_IDETRA);
+   
+alter table BTE_GESPRO add constraint BTE_GAPTAP_FK foreign key (GAP_IDEPRO)
+      references BTE_PROAPL (TAP_IDEPRO);    
 
-create table BTE_TRAAPL  (
-   TAP_IDETRA           VARCHAR2(20)                    not null,
+create table BTE_PROAPL  (
+   TAP_IDEPRO           VARCHAR2(100)                    not null,
    TAP_DESC             VARCHAR2(100)                   not null,
    TAP_INMED            VARCHAR2(1)                    default 'N' not null,
    TAP_INFORM           NUMBER(2),
@@ -147,7 +150,8 @@ create table BTE_TRAAPL  (
    TAP_PWD              VARCHAR2(500),
    TAP_ROL              VARCHAR2(100),
    TAP_AVISO            DATE,
-   TAP_NOMFIC           VARCHAR2(500),
+-- removed in 1.1.6
+--   TAP_NOMFIC           VARCHAR2(500),
    TAP_WSVER            VARCHAR2(10 BYTE),
    TAP_ERRORS           BLOB
 );
@@ -155,60 +159,60 @@ create table BTE_TRAAPL  (
 
 
 
-comment on table BTE_TRAAPL is
+comment on table BTE_PROAPL is
 'LISTA DE TRAMITES QUE SE PUEDEN REGISTRAR EN LA BANDEJA. PARA CADA TRAMITE SE INDICA QUE APLICACIÓN LO GESTIONA.';
 
-comment on column BTE_TRAAPL.TAP_IDETRA is
+comment on column BTE_PROAPL.TAP_IDETRA is
 'IDENTIFICADOR DEL TRÁMITE';
 
-comment on column BTE_TRAAPL.TAP_DESC is
+comment on column BTE_PROAPL.TAP_DESC is
 'DESCRIPCION APLICACION';
 
-comment on column BTE_TRAAPL.TAP_INMED is
+comment on column BTE_PROAPL.TAP_INMED is
 'INDICA SI TRAS UNA ENTRADA SE REALIZARÁ UN AVISO PARA DICHA ENTRADA. ESTE AVISO SE REALIZARÁ DE FORMA ASINCRONA.';
 
-comment on column BTE_TRAAPL.TAP_INFORM is
+comment on column BTE_PROAPL.TAP_INFORM is
 'PERMITE INDICAR CADA CUANTO TIEMPO (EN HORAS) SE AVISARA AL EJB CON LOS TRAMITES RECIBIDOS (NO PROCESADOS). SI TIENE VALOR 0 NO SE INFORMARÁ.';
 
-comment on column BTE_TRAAPL.TAP_TIPACC is
+comment on column BTE_PROAPL.TAP_TIPACC is
 'TIPO DE ACCESO AL BACKOFFICE: EJB (E) / WEBSERVICE (W)';
 
-comment on column BTE_TRAAPL.TAP_URL is
+comment on column BTE_PROAPL.TAP_URL is
 'INDICA SEGÚN TIPO DE ACCESO: 
 - EJB: JNDI EJB
 - WEBSERVICE: URL WEBSERVICE
 ';
 
-comment on column BTE_TRAAPL.TAP_JNDI is
+comment on column BTE_PROAPL.TAP_JNDI is
 'PARA TIPO DOMINIO EJB INDICA JNDI NAME DEL EJB A INVOCAR';
 
-comment on column BTE_TRAAPL.TAP_EJBREM is
+comment on column BTE_PROAPL.TAP_EJBREM is
 'PARA TIPO DOMINIO EJB INDICA SI EL EJB ES REMOTO: REMOTO (R) / LOCAL (L)';
 
-comment on column BTE_TRAAPL.TAP_EJBAUT is
+comment on column BTE_PROAPL.TAP_EJBAUT is
 'PARA TIPO DOMINIO EJB/WS INDICA:
  - N: autenticación implícita de forma que el contenedor EJBs traspasa autenticacion
  - S: explícita a traves de usuario/password 
  - C: explícita a través plugin autenticación del organismo';
 
-comment on column BTE_TRAAPL.TAP_USR is
+comment on column BTE_PROAPL.TAP_USR is
 'PARA TIPO AUTENTICACION EXPLICITA POR USUARIO/PASSWORD INDICA EL USUARIO';
 
-comment on column BTE_TRAAPL.TAP_PWD is
+comment on column BTE_PROAPL.TAP_PWD is
 'PARA TIPO AUTENTICACION EXPLICITA POR USUARIO/PASSWORD INDICA EL PASSWORD';
 
-comment on column BTE_TRAAPL.TAP_ROL is
+comment on column BTE_PROAPL.TAP_ROL is
 'PERMITE ESTABLECER LA COMPROBACIÓN DE ROL QUE TIENE QUE TENER LA APLICACIÓN QUE INVOCA AL EJB DE BANDEJA PARA OBTENER ENTRADAS PENDIENTES';
 
-comment on column BTE_TRAAPL.TAP_AVISO is
+comment on column BTE_PROAPL.TAP_AVISO is
 'FECHA ULTIMO AVISO REALIZADO';
 
-comment on column BTE_TRAAPL.TAP_NOMFIC is
-'NOMBRE FICHERO GUIA EXPORTACION';
+-- removed in 1.1.6
+-- comment on column BTE_PROAPL.TAP_NOMFIC is 'NOMBRE FICHERO GUIA EXPORTACION';
 
-COMMENT ON COLUMN BTE_TRAAPL.TAP_ERRORS IS 'MUESTRA LOS DOS ULTIMOS ERRORES QUE HAN SUCEDIDO DURANTE LAS INTEGACIONES';
+COMMENT ON COLUMN BTE_PROAPL.TAP_ERRORS IS 'MUESTRA LOS DOS ULTIMOS ERRORES QUE HAN SUCEDIDO DURANTE LAS INTEGACIONES';
 
-alter table BTE_TRAAPL
+alter table BTE_PROAPL
    add constraint BTE_TAP_PK primary key (TAP_IDETRA);
 
 create table BTE_TRAMIT  (
@@ -248,7 +252,9 @@ create table BTE_TRAMIT  (
    TRA_NIFDLG           VARCHAR2(12),
    TRA_NOMDLG           VARCHAR2(500),
    TRA_SBEXID           VARCHAR2(50),
-   TRA_SBEXUA           NUMBER(19)
+   TRA_SBEXUA           NUMBER(19),
+   TRA_IDEPRO           VARCHAR2(100)                   not null,
+   TRA_INIPRO           DATE                            not null 
 );
 
 
@@ -369,6 +375,9 @@ comment on column BTE_TRAMIT.TRA_SBEXID is
 comment on column BTE_TRAMIT.TRA_SBEXUA is
 'EN CASO DE TRAMITE DE SUBSANACION INDICA UNIDAD ADMINISTRATIVA EXPEDIENTE';
 
+comment on column BTE_TRAMIT.TRA_INIPRO is
+'INDICA FECHA DE INICIO DE PROCESO. SE REINICIARA CADA VEZ QUE PASE A ESTADO NO PROCESADA';
+
 alter table BTE_TRAMIT
    add constraint BTE_TRA_PK primary key (TRA_CODIGO);
 
@@ -385,24 +394,57 @@ create index BTE_TRATAP_FK_I on BTE_TRAMIT (
    TRA_IDETRA ASC
 );
 
+alter table BTE_TRAMIT add constraint BTE_TRATAP_FK foreign key (TRA_IDEPRO)
+      references BTE_PROAPL (TAP_IDEPRO);
+
+	  
 alter table BTE_DOCUM
    add constraint BTE_DOCTRA_FK foreign key (DOC_CODTRA)
       references BTE_TRAMIT (TRA_CODIGO);
 
-alter table BTE_FICEXP
-   add constraint BTE_FICTAP_FK foreign key (FIC_IDETRA)
-      references BTE_TRAAPL (TAP_IDETRA);
+-- Removed in 1.1.6
+-- alter table BTE_FICEXP
+--   add constraint BTE_FICTAP_FK foreign key (FIC_IDETRA)
+--      references BTE_TRAAPL (TAP_IDETRA);
 
-alter table BTE_GESTRA
+alter table BTE_GESPRO
    add constraint BTE_GAPGES_FK foreign key (GAP_CODGES)
       references BTE_GESTOR (GES_SEYCON);
 
-alter table BTE_GESTRA
-   add constraint BTE_GAPTAP_FK foreign key (GAP_IDETRA)
-      references BTE_TRAAPL (TAP_IDETRA);
+-- Removed in 1.1.6
+-- alter table BTE_GESTRA
+--   add constraint BTE_GAPTAP_FK foreign key (GAP_IDETRA)
+--      references BTE_TRAAPL (TAP_IDETRA);
 
-alter table BTE_TRAMIT
-   add constraint BTE_TRATAP_FK foreign key (TRA_IDETRA)
-      references BTE_TRAAPL (TAP_IDETRA);
+-- Removed in 1.1.6
+-- alter table BTE_TRAMIT
+--   add constraint BTE_TRATAP_FK foreign key (TRA_IDETRA)
+--      references BTE_TRAAPL (TAP_IDETRA);
 
 CREATE INDEX BTE_TRA_BUSENT_I ON BTE_TRAMIT (TRA_IDETRA, TRA_PROCES, TRA_FECHA);
+
+
+create table BTE_ARCFEX  (
+   AFE_IDEFIC           VARCHAR2(20)                    not null,
+   AFE_DATOS            BLOB                            not null
+);
+
+comment on table BTE_ARCFEX is
+'Archivo fichero exportacion';
+
+comment on column BTE_ARCFEX.AFE_IDEFIC is
+'IDENTIFICADOR DEL TRÁMITE';
+
+comment on column BTE_ARCFEX.AFE_DATOS is
+'DATOS FICHERO';
+
+alter table BTE_ARCFEX
+   add constraint BTE_AFE_PK primary key (AFE_IDEFIC);
+
+alter table BTE_ARCFEX
+   add constraint BTE_AFEFIC_FK foreign key (AFE_IDEFIC)
+      references BTE_FICEXP (FIC_IDETRA);      
+
+INSERT INTO BTE_ARCFEX 
+	SELECT BTE_FICEXP.FIC_IDETRA, BTE_FICEXP.FIC_DATOS
+		FROM BTE_FICEXP;

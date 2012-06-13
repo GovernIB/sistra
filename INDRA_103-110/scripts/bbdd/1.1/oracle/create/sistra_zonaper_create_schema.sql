@@ -449,7 +449,8 @@ create table ZPE_ENTTEL  (
    ENT_NIFDLG           VARCHAR2(12),
    ENT_NOMDLG           VARCHAR2(500),
    ent_sbexid           VARCHAR2(50),
-   ent_sbexua           NUMBER(19)
+   ent_sbexua           NUMBER(19),
+   ENT_IDEPRO           VARCHAR2(100)
 );
 
 
@@ -537,6 +538,7 @@ COMMENT ON COLUMN zpe_enttel.ent_sbexid IS
 COMMENT ON COLUMN zpe_enttel.ent_sbexua IS
 'En caso de que sea un tramite de subsanacion indica la unidad administrativa que da de alta el expediente';
 
+comment on column ZPE_ENTTEL.ENT_IDEPRO is 'IDENTIFICADOR PROCEDIMIENTO';
 
 alter table ZPE_ENTTEL
    add constraint ZPE_ENT_PK primary key (ENT_CODIGO);
@@ -565,7 +567,8 @@ create table ZPE_EXPEDI  (
    EXP_AVISOS           VARCHAR2(1),   
    EXP_AVISMS           VARCHAR2(10),
    EXP_AVIEMA           VARCHAR2(500),
-   EXP_NIFRTE          VARCHAR2(12)
+   EXP_NIFRTE           VARCHAR2(12),
+   EXP_IDEPRO           VARCHAR2(100)                   not null
 );
 
 
@@ -938,7 +941,8 @@ create table ZPE_PREBCK  (
    PRB_NIFDLG           VARCHAR2(12),
    PRB_NOMDLG           VARCHAR2(500),
    prb_sbexid           VARCHAR2(50);
-   prb_sbexua           NUMBER(19)
+   prb_sbexua           NUMBER(19),
+   PRB_IDEPRO           VARCHAR2(100)
 );
 
 
@@ -1038,7 +1042,7 @@ COMMENT ON COLUMN zpe_prebck.prb_sbexid IS
 COMMENT ON COLUMN zpe_prebck.prb_sbexua IS
 'En caso de que sea un tramite de subsanacion indica la unidad administrativa que da de alta el expediente';
 
-
+comment on column ZPE_PREBCK.PRB_IDEPRO is 'IDENTIFICADOR PROCEDIMIENTO';
 
 alter table ZPE_PREBCK
    add constraint ZPE_PRB_PK primary key (PRB_CODIGO);
@@ -1074,16 +1078,9 @@ create table ZPE_PREREG  (
    PRE_NIFDLG           VARCHAR2(12),
    PRE_NOMDLG           VARCHAR2(500),
    pre_sbexid           VARCHAR2(50),
-   pre_sbexua           NUMBER(19)
+   pre_sbexua           NUMBER(19),
+   PRE_IDEPRO           VARCHAR2(100)
 );
-
-
-
-
-
-
-
-
 
 
 comment on table ZPE_PREREG is
@@ -1182,6 +1179,7 @@ COMMENT ON COLUMN zpe_prereg.pre_sbexid IS
 COMMENT ON COLUMN zpe_prereg.pre_sbexua IS
 'En caso de que sea un tramite de subsanacion indica la unidad administrativa que da de alta el expediente';
 
+comment on column ZPE_PREREG.PRE_IDEPRO is 'IDENTIFICADOR PROCEDIMIENTO';
 
 alter table ZPE_PREREG
    add constraint ZPE_PRE_PK primary key (PRE_CODIGO);
