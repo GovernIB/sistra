@@ -746,7 +746,8 @@ alter table STR_TRAETN
 create table STR_TRAMIT  (
    TRA_CODIGO           NUMBER(20)                      not null,
    TRA_CODORG           NUMBER(20)                      not null,
-   TRA_IDENTI           VARCHAR2(20)                    not null
+   TRA_IDENTI           VARCHAR2(20)                    not null,
+   TRA_IDPROC           VARCHAR2(100)                   not null
 );
 
 comment on table STR_TRAMIT is
@@ -754,6 +755,10 @@ comment on table STR_TRAMIT is
 
 comment on column STR_TRAMIT.TRA_IDENTI is
 'Identificador funcional del trámite';
+
+comment on column STR_TRAMIT.TRA_IDPROC is
+'Identificador del procedimiento al que pertenece el trámite';
+
 
 alter table STR_TRAMIT
    add constraint STR_TRAIDE_UNI unique (TRA_IDENTI);

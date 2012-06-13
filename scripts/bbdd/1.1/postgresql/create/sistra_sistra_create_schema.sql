@@ -231,8 +231,14 @@ create table STR_TRAMIT (
    TRA_CODIGO int8 not null,
    TRA_IDENTI varchar(20) not null unique,
    TRA_CODORG int8 not null,
+   TRA_IDPROC VARCHAR(100) not null,
    primary key (TRA_CODIGO)
 );
+
+comment on column STR_TRAMIT.TRA_IDPROC is
+'Identificador del procedimiento al que pertenece el trámite';
+
+
 create table STR_TRAMPL (
    TMP_CODMPL int8 not null,
    TMP_DESC varchar(255),

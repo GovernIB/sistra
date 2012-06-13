@@ -52,8 +52,13 @@ create table ZPE_ENTTEL (
    ENT_NOMDLG VARCHAR(500),
    ent_sbexid VARCHAR(50),
    ent_sbexua INT8,
+   ENT_IDEPRO  VARCHAR(100),
    primary key (ENT_CODIGO)
 );
+
+
+comment on column ZPE_ENTTEL.ENT_IDEPRO is 'IDENTIFICADOR PROCEDIMIENTO';
+
 
 create table ZPE_PREBCK (
    PRB_CODIGO int8 not null,
@@ -87,8 +92,13 @@ create table ZPE_PREBCK (
    PRB_NOMDLG VARCHAR(500),
    prb_sbexid VARCHAR(50),
    prb_sbexua INT8,
+   PRB_IDEPRO VARCHAR(100),
    primary key (PRB_CODIGO)
 );
+
+
+comment on column ZPE_PREBCK.PRB_IDEPRO is 'IDENTIFICADOR PROCEDIMIENTO';
+
 
 create table ZPE_TPEBCK (
    TPB_CODIGO int8 not null,
@@ -194,8 +204,10 @@ create table ZPE_EXPEDI (
    EXP_AVISMS varchar(255),
    EXP_AVIEMA varchar(255),
    EXP_NIFRTE VARCHAR(12),
+   EXP_IDEPRO VARCHAR(100) not null,
    primary key (EXP_CODIGO)
 );
+
 
 create table ZPE_DOCPRE (
    DPR_CODIGO int8 not null,
@@ -252,8 +264,12 @@ create table ZPE_PREREG (
    PRE_NOMDLG VARCHAR(500),
    pre_sbexid VARCHAR(50),
    pre_sbexua INT8,
+   PRE_IDEPRO VARCHAR(100),
    primary key (PRE_CODIGO)
 );
+
+comment on column ZPE_PREREG.PRE_IDEPRO is 'IDENTIFICADOR PROCEDIMIENTO';
+
 
 create table ZPE_NOTTEL (
    NOT_CODIGO int8 not null,
