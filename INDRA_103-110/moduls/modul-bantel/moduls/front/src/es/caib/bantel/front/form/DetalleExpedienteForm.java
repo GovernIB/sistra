@@ -1,8 +1,5 @@
 package es.caib.bantel.front.form;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -11,7 +8,6 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
 
-import es.caib.bantel.front.util.Dominios;
 import es.caib.bantel.front.util.MensajesUtil;
 import es.caib.util.ValidacionesUtil;
 
@@ -21,7 +17,6 @@ public class DetalleExpedienteForm extends ValidatorForm
 {
 	private String numeroEntrada;
 	private String identificadorExp;
-	private String unidadAdm;
 	private String claveExp;
 	private String identificadorProcedimiento;
 	private String descripcion;
@@ -32,7 +27,6 @@ public class DetalleExpedienteForm extends ValidatorForm
 	private String movil;
 	private String nombre;
 	private String nif;
-	private String nombreUnidad;
 	/*tipo si el valor es A significa alta expediente, 
 	 * si el valor es E alta expediente desde entrada*/
 	private String tipo;
@@ -109,15 +103,7 @@ public class DetalleExpedienteForm extends ValidatorForm
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-
-	public String getUnidadAdm() {
-		return unidadAdm;
-	}
-
-	public void setUnidadAdm(String unidadAdm) {
-		this.unidadAdm = unidadAdm;
-	}
-
+	
 	public String getUsuarioSeycon() {
 		return usuarioSeycon;
 	}
@@ -150,16 +136,6 @@ public class DetalleExpedienteForm extends ValidatorForm
 		this.flagValidacion = flagValidacion;
 	}
 	
-	
-
-	public String getNombreUnidad() {
-		return nombreUnidad;
-	}
-
-	public void setNombreUnidad(String nombreUnidad) {
-		this.nombreUnidad = nombreUnidad;
-	}
-
 
 	public String getIdentificadorProcedimiento() {
 		return identificadorProcedimiento;
@@ -196,14 +172,14 @@ public class DetalleExpedienteForm extends ValidatorForm
         		errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("confirmacion.identificadorExpediente")));
         		error = true;
         	}
-        	if(StringUtils.isEmpty(unidadAdm)){
-        		errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("confirmacion.unidadAdministrativa")));
-        		error = true;
-        	}
+        	
+        	/* 
+        	 * PASA A GENERARSE AUTOMATICAMENTE DESDE MODULO DE BANTELFRONT
         	if(StringUtils.isEmpty(claveExp)){
         		errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("confirmacion.claveExpediente")));
         		error = true;
         	}
+        	*/
         	if(StringUtils.isEmpty(nif)){
     			errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("expediente.nif")));
         		error = true;
@@ -224,26 +200,19 @@ public class DetalleExpedienteForm extends ValidatorForm
         		errors.add("altaExpediente", new ActionError("error.expediente.movilNOK"));
         		error = true;
         	}
+        	if ("S".equals(habilitarAvisos) && StringUtils.isEmpty(email)) {
+        		errors.add("altaExpediente", new ActionError("error.expediente.emailObligatorio"));
+        		error = true;
+        	}
         }
         
         if(StringUtils.isNotEmpty(flagValidacion) && flagValidacion.equals("consulta")){
         	if(StringUtils.isEmpty(identificadorExp)){
         		errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("confirmacion.identificadorExpediente")));
         		error = true;
-        	}
-        	if(StringUtils.isEmpty(unidadAdm)){
-        		errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("confirmacion.unidadAdministrativa")));
-        		error = true;
-        	}
+        	}        	
         }
-        if(error){
-    		List unidades = new ArrayList();
-			try {
-				unidades = Dominios.listarUnidadesAdministrativas();
-				
-			} catch (Exception e) {}
-			request.setAttribute("unidades",unidades);
-    	}
+        
         return errors;
     }
 

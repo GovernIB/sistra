@@ -36,7 +36,8 @@
 
     <property name="habilitarNotificacionTelematica" length="1" column="ETN_NOTTEL"/>
     
-    <property name="habilitarAvisos" type="binary" column="ETN_AVISOS"/>
+    <property name="habilitarAvisos" column="ETN_AVISOS" length="1" not-null="true"/>
+     <property name="permitirSMS" column="ETN_PERSMS" length="1" not-null="true"/>
     <property name="avisoSMS" type="binary" column="ETN_AVISMS"/>
     <property name="avisoEmail" type="binary" column="ETN_AVIEMA"/>
     

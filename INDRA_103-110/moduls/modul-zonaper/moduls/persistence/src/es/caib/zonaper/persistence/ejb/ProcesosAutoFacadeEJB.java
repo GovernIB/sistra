@@ -33,10 +33,10 @@ import es.caib.zonaper.model.Expediente;
 import es.caib.zonaper.model.LogRegistro;
 import es.caib.zonaper.model.NotificacionTelematica;
 import es.caib.zonaper.model.RegistroExternoPreparado;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.ExpedienteDelegate;
 import es.caib.zonaper.persistence.delegate.LogRegistroDelegate;
-import es.caib.zonaper.persistence.delegate.ProcesoBackupDelegate;
 import es.caib.zonaper.persistence.delegate.ProcesoRechazarNotificacionDelegate;
 import es.caib.zonaper.persistence.delegate.RegistroExternoPreparadoDelegate;
 import es.caib.zonaper.persistence.util.AvisosMovilidad;
@@ -347,29 +347,29 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
 		String estado = null;
 		Date fechaFin = null;
 		if (e.getTipoElemento().equals(ElementoExpediente.TIPO_ENTRADA_TELEMATICA)){
-			estado = Expediente.ESTADO_SOLICITUD_ENVIADA;
+			estado = ConstantesZPE.ESTADO_SOLICITUD_ENVIADA;
 			fechaFin = ((EntradaTelematica) de).getFecha();
 		}else if (e.getTipoElemento().equals(ElementoExpediente.TIPO_ENTRADA_PREREGISTRO)){
 			if ( ((EntradaPreregistro) de).getFechaConfirmacion() != null ){
-			estado = Expediente.ESTADO_SOLICITUD_ENVIADA;
+			estado = ConstantesZPE.ESTADO_SOLICITUD_ENVIADA;
 			}else{
-				estado = Expediente.ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL;				
+				estado = ConstantesZPE.ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL;				
 			}
 			fechaFin = ((EntradaPreregistro) de).getFecha();
 		}else if (e.getTipoElemento().equals(ElementoExpediente.TIPO_AVISO_EXPEDIENTE)){
 			if ( ((EventoExpediente) de).getFechaConsulta() != null){
-				estado 	 = Expediente.ESTADO_AVISO_RECIBIDO;
+				estado 	 = ConstantesZPE.ESTADO_AVISO_RECIBIDO;
 				fechaFin = ((EventoExpediente) de).getFecha();
 			}else{
-				estado = Expediente.ESTADO_AVISO_PENDIENTE;
+				estado = ConstantesZPE.ESTADO_AVISO_PENDIENTE;
 				fechaFin = ((EventoExpediente) de).getFecha();
 			}
 		}else if (e.getTipoElemento().equals(ElementoExpediente.TIPO_NOTIFICACION)){
 			if ( ((NotificacionTelematica) de).getFechaAcuse() != null){
-				estado = Expediente.ESTADO_NOTIFICACION_RECIBIDA;
+				estado = ConstantesZPE.ESTADO_NOTIFICACION_RECIBIDA;
 				fechaFin = ((NotificacionTelematica) de).getFechaRegistro();
 			}else{
-				estado = Expediente.ESTADO_NOTIFICACION_PENDIENTE;
+				estado = ConstantesZPE.ESTADO_NOTIFICACION_PENDIENTE;
 				fechaFin = ((NotificacionTelematica) de).getFechaRegistro();
 			}
 		}
@@ -442,7 +442,7 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
 		}
 		
 		ExpedienteDelegate ed = DelegateUtil.getExpedienteDelegate();
-		Expediente expe = ed.obtenerExpediente(entrada.getSubsanacionExpedienteUA().longValue(),entrada.getSubsanacionExpedienteCodigo());
+		Expediente expe = ed.obtenerExpedienteAuto(entrada.getSubsanacionExpedienteUA().longValue(),entrada.getSubsanacionExpedienteCodigo());
 		if (expe == null){
 			throw new Exception("No existe expediente indicado en datos propios: " + entrada.getSubsanacionExpedienteUA()+ " - " + entrada.getSubsanacionExpedienteCodigo());
 		}    	

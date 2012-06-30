@@ -74,15 +74,19 @@ import es.caib.zonaper.model.IndiceElemento;
 import es.caib.zonaper.model.LogRegistro;
 import es.caib.zonaper.model.LogRegistroId;
 import es.caib.zonaper.model.NotificacionTelematica;
+import es.caib.zonaper.model.Page;
 import es.caib.zonaper.model.ParametrosSubsanacion;
 import es.caib.zonaper.model.RegistroExterno;
 import es.caib.zonaper.model.RegistroExternoPreparado;
 import es.caib.zonaper.model.TramitePersistente;
 import es.caib.zonaper.modelInterfaz.DocumentoPersistentePAD;
 import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
+import es.caib.zonaper.modelInterfaz.FiltroBusquedaExpedientePAD;
+import es.caib.zonaper.modelInterfaz.PaginaPAD;
 import es.caib.zonaper.modelInterfaz.ParametrosTramiteSubsanacionPAD;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.modelInterfaz.PreregistroPAD;
+import es.caib.zonaper.modelInterfaz.ResumenExpedientePAD;
 import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.EntradaPreregistroDelegate;
@@ -124,6 +128,8 @@ public abstract class PadFacadeEJB implements SessionBean{
     protected SessionContext ctx = null;
 	
 	private String ROLE_AUTO,ROLE_GESTOR;
+	
+	private boolean AVISOS_OBLIG_NOTIF = false;
     
     public void setSessionContext(SessionContext ctx) {
         this.ctx = ctx;
@@ -144,6 +150,10 @@ public abstract class PadFacadeEJB implements SessionBean{
 			ROLE_AUTO = (String) initialContext.lookup( "java:comp/env/roleAuto" );
 			ROLE_GESTOR = (String) initialContext.lookup( "java:comp/env/roleGestor" );
 			
+			String strAvisosNotif = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.avisoObligatorioNotificaciones");
+			if (StringUtils.isNotBlank(strAvisosNotif)) {
+				AVISOS_OBLIG_NOTIF = Boolean.parseBoolean(strAvisosNotif);
+			}
 		}
 		catch( Exception exc )
 		{			
@@ -918,6 +928,40 @@ public abstract class PadFacadeEJB implements SessionBean{
 		} 
 	}
 	
+	/**
+     * Busca expedientes gestionados por gestor.
+     * 
+     *  @ejb.interface-method
+     *  @ejb.permission role-name="${role.gestor}"
+     * 
+     */
+	public PaginaPAD busquedaPaginadaExpedientesGestor(FiltroBusquedaExpedientePAD filtro, int numPagina, int longPagina) throws ExcepcionPAD	
+	{
+		try
+		{
+			// Realizamos busqueda paginada
+			Page page = DelegateUtil.getExpedienteDelegate().busquedaPaginadaExpedientesGestor(filtro, numPagina, longPagina);
+			
+			// Convertimos a PaginaPAD
+			PaginaPAD paginaPAD = new PaginaPAD();
+			List results = new ArrayList();
+			for (Iterator iterator = page.getList().iterator(); iterator.hasNext();) {
+				Expediente exp = (Expediente) iterator.next();
+				ResumenExpedientePAD resExp = expedienteToResumenExpedientePAD(exp);
+				results.add(resExp);
+			}
+			
+			paginaPAD.setNumeroPagina(numPagina);
+			paginaPAD.setList(results);
+			paginaPAD.setNextPage(page.isNextPage());
+			paginaPAD.setPreviousPage(page.isPreviousPage());
+			return paginaPAD;
+			
+		}catch (Exception ex){
+			throw new ExcepcionPAD("Error obteniendo expedientes gestor",ex);
+		} 
+	}
+	
     // ------------------------ Funciones utilidad ----------------------------------------------------------------   
     /**
      * Crea entrada en el log de entradas telemáticas
@@ -1150,7 +1194,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     				
     				// Obtenemos expediente asociado a la notificacion    				    			
     				ExpedienteDelegate ed = DelegateUtil.getExpedienteDelegate();
-    				expe = ed.obtenerExpediente(Long.parseLong(avisoNotificacion.getExpediente().getUnidadAdministrativa()),avisoNotificacion.getExpediente().getIdentificadorExpediente());
+    				expe = ed.obtenerExpediente(Long.parseLong(avisoNotificacion.getExpediente().getUnidadAdministrativa()),avisoNotificacion.getExpediente().getIdentificadorExpediente(), avisoNotificacion.getExpediente().getClaveExpediente());    				
     				if (expe == null){
     					throw new Exception("No existe expediente indicado en la notificacion: " + avisoNotificacion.getExpediente().getIdentificadorExpediente() + " - " + avisoNotificacion.getExpediente().getUnidadAdministrativa());
     				}
@@ -1233,6 +1277,11 @@ public abstract class PadFacadeEJB implements SessionBean{
     		  		
     	}
     	
+    	// Verificamos que tenga activados los avisos el expediente si estan activados como obligatorios para las notifs con acuse
+    	if (AVISOS_OBLIG_NOTIF && !"S".equals(expe.getHabilitarAvisos())) {
+    		throw new Exception("El expediente no tiene habilitado los avisos");
+    	}
+    	
     	// Establecemos datos notificacion
     	notificacion.setNumeroRegistro(asiento.getDatosOrigen().getNumeroRegistro());
     	notificacion.setFechaRegistro(justificante.getFechaRegistro());
@@ -1244,6 +1293,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	
     	notificacion.setIdioma( asiento.getDatosAsunto().getIdiomaAsunto() );
     	notificacion.setNumeroRegistro(justificante.getNumeroRegistro());
+    	
     	
     	// En caso de que se controle la entrega de la notificacion con acuse calculamos fin de plazo
     	if (notificacion.isFirmarAcuse() && 
@@ -2062,6 +2112,46 @@ public abstract class PadFacadeEJB implements SessionBean{
 			dlg.grabarIndiceElemento(indiceElemento);
 		}
 		
+	}
+	
+	
+
+	private ResumenExpedientePAD expedienteToResumenExpedientePAD( Expediente expediente ) throws ExcepcionPAD
+	{
+		ResumenExpedientePAD expPAD = new ResumenExpedientePAD();
+		
+		expPAD.setIdentificadorExpediente( expediente.getIdExpediente() );
+		expPAD.setUnidadAdministrativa( expediente.getUnidadAdministrativa() );
+		expPAD.setIdentificadorProcedimiento(expediente.getIdProcedimiento());
+		expPAD.setClaveExpediente(expediente.getClaveExpediente());
+		expPAD.setIdioma(expediente.getIdioma());
+		expPAD.setDescripcion( expediente.getDescripcion() );
+		
+		expPAD.setEstado(expediente.getEstado());
+		expPAD.setFechaInicio(expediente.getFecha());
+		expPAD.setFechaUltimaActualizacion(expediente.getFechaFin());
+		
+		if (!StringUtils.isEmpty(expediente.getSeyconCiudadano())){
+			expPAD.setAutenticado(true);
+			expPAD.setIdentificadorUsuario( expediente.getSeyconCiudadano() );
+			expPAD.setNifRepresentante( expediente.getNifRepresentante());
+		}else{
+			expPAD.setAutenticado(false);
+		}
+		
+		expPAD.setNifRepresentado(expediente.getNifRepresentado());
+		expPAD.setNombreRepresentado(expediente.getNombreRepresentado());
+		
+		expPAD.setNumeroEntradaBTE(expediente.getNumeroEntradaBTE());
+		
+		if (StringUtils.isNotEmpty(expediente.getHabilitarAvisos())){
+			expPAD.getConfiguracionAvisos().setHabilitarAvisos(new Boolean("S".equals(expediente.getHabilitarAvisos())));
+			expPAD.getConfiguracionAvisos().setAvisoEmail(expediente.getAvisoEmail());
+			expPAD.getConfiguracionAvisos().setAvisoSMS(expediente.getAvisoSMS());
+		}
+		
+		
+		return expPAD;
 	}
 	
 		

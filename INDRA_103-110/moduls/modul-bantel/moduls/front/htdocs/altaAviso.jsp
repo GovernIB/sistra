@@ -268,20 +268,34 @@ function mostrarFirmar(nombre,codigoRDS,claveRDS){
 }
 //funcion que muestra el div de anexar documentos
 function mostrarAnexarDocumentos(){
-	$('#anexar').show('slow');
-	$('#firmarDocumentosApplet').hide('slow');
-	$("#botonMostrarAnexar").attr("disabled","disabled");
 
+	// Quitamos capa firma
+	$('#firmarDocumentosApplet').hide();
 
 	// Reseteamos valores
 	$('#tituloAnexoOficioFichero').val("");
 	$('#tituloAnexoOficioUrl').val("");
-	$('#documentoUrlAnexo').val("");	
+	$('#documentoUrlAnexo').val("");
+
+	Tamanyos.iniciar();
+	Fondo.mostrar();
+	  
+	// Mostramos capa anexos
+	$('#anexar').css({
+         position:'absolute',
+         left: '200px',
+        top: ($(window).scrollTop() + 50)
+ 	});
+
+	$('#anexar').show();
+	
+	var capaI = document.getElementById('anexar');
+		
 }
+
 //funcion que esconde el div que se muestra para anexar documentos
 function esconderAnexarDocumentos(){
-	document.uploadAvisoForm.documentoAnexoFichero.value = null;
-	document.uploadAvisoForm.documentoAnexoTitulo.value = '';
+	Fondo.esconder();
 	$('#anexar').hide('slow');
 	$('#firmarDocumentosApplet').hide('slow');
 	$("#botonMostrarAnexar").removeAttr("disabled");
@@ -384,19 +398,20 @@ function errorFileUploaded(error){
 			<html:hidden property="rutaFitxer"/>
 			<html:hidden property="idioma" />
 				<p>
-					<label for="titulo"><bean:message key="aviso.titulo"/></label>
+					<label for="titulo"><bean:message key="aviso.titulo"/><sup>*</sup></label>
 					<html:text property="titulo" styleClass="pc40"/>
 				</p>
 				
 				<p>
-					<label for="texto"><bean:message key="aviso.texto"/></label>
+					<label for="texto"><bean:message key="aviso.texto"/><sup>*</sup></label>
 					<html:textarea property="texto" rows="5"   styleClass="pc40"/>
 				</p>
-				
-				<p>
-					<label for="textoSMS"><bean:message key="aviso.textoSMS"/></label>
-					<html:textarea property="textoSMS" rows="5"  styleClass="pc40"/>
-				</p>
+				<logic:equal name="detalleAvisoForm" property="permitirSms" value="S">
+					<p>
+						<label for="textoSMS"><bean:message key="aviso.textoSMS"/></label>
+						<html:textarea property="textoSMS" rows="5"  styleClass="pc40"/>
+					</p>
+				</logic:equal>
 			</html:form>
 				<!-- escritorio_docs -->
 				<div id="escritorio_docs">
@@ -406,8 +421,12 @@ function errorFileUploaded(error){
 					</p>
 					
 					<p class="boton">
+						<a href="javascript:mostrarAnexarDocumentos();" class="adjuntar"><bean:message key='aviso.anexar.documento'/> </a>
+						<!-- 						
 						<input id="botonMostrarAnexar" type="button" value="<bean:message key='aviso.anexar.documento'/>" onclick="mostrarAnexarDocumentos();"/>
+						-->						 						 
 					</p>
+					
 					
 					<div id="contenido_docs">
 						
@@ -567,9 +586,16 @@ function errorFileUploaded(error){
 				
 				<p class="botonera">
 					<html:submit onclick="if(alta()){return true;}else{return false;}"><bean:message key="aviso.alta"/></html:submit>
+					<!-- 
 					<input type="button" onclick="volver('<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY%>" />','<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY%>"/>','<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY%>"/>')" value="<bean:message key="aviso.cancelar"/>"/>
+					 -->
 				</p>
 			</div>
+			
+			<div id="enrere">
+					<a onclick="javascript:volver('<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY%>" />','<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY%>"/>','<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY%>"/>')" href="#"> <bean:message key="aviso.cancelar"/> </a>
+				</div>
+				
 		</div>
 		<!-- /continguts -->
 		

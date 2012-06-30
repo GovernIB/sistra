@@ -17,6 +17,8 @@ import org.apache.struts.action.ActionMapping;
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleNotificacionForm;
 import es.caib.bantel.front.util.MensajesUtil;
+import es.caib.bantel.persistence.delegate.ConfiguracionDelegate;
+import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.regtel.model.ReferenciaRDSAsientoRegistral;
 import es.caib.regtel.model.ResultadoRegistroTelematico;
@@ -36,9 +38,6 @@ import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
  *
  * @struts.action-forward
  *  name="errorExtension" path=".altaNotificacion"
- *
- * @struts.action-forward
- *  name="successNoExp" path=".confirmacionRecuperacionExpediente"
  *
  * @struts.action-forward
  *  name="fail" path=".error"
@@ -61,7 +60,6 @@ public class RealizarAltaNotificacionAction extends BaseAction
 		Long uniAdm = (Long) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY);
 		String claveExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY);
 		
-		
 		try{
 			if(request.getSession().getAttribute("documentosAltaNotificacion") == null){
 				documentos = new ArrayList();
@@ -73,7 +71,7 @@ public class RealizarAltaNotificacionAction extends BaseAction
 			r.setExpediente(uniAdm,idExpe,claveExpe);
 			r.setDatosInteresado(notificacionForm.getNif(),notificacionForm.getApellidos(), StringUtils.isEmpty(notificacionForm.getUsuarioSey())?null:notificacionForm.getUsuarioSey(),notificacionForm.getCodigoPais(),notificacionForm.getNombrePais(),notificacionForm.getCodigoProvincia(),notificacionForm.getNombreProvincia(),notificacionForm.getCodigoMunicipio(),notificacionForm.getNombreMunicipio());
 			r.setDatosNotificacion(notificacionForm.getIdioma(),notificacionForm.getTipoAsunto(),notificacionForm.getTituloAviso(),notificacionForm.getTextoAviso(),(StringUtils.isNotEmpty(notificacionForm.getTextoSmsAviso())?notificacionForm.getTextoSmsAviso():null),notificacionForm.getTituloOficio(),notificacionForm.getTextoOficio(),"S".equals(notificacionForm.getAcuse()));
-			if(StringUtils.isNotBlank(notificacionForm.getDescripcionTramiteSubsanacion()) && StringUtils.isNotBlank(notificacionForm.getIdentificadorTramiteSubsanacion())){
+			if("S".equals(notificacionForm.getTramiteSubsanacion())){
 				Map parametros = null;
 				if(request.getSession().getAttribute("parametrosAltaNotificacion") != null){
 					parametros = (HashMap)request.getSession().getAttribute("parametrosAltaNotificacion");

@@ -1,6 +1,5 @@
 package es.caib.sistra.persistence.ejb;
 
-import java.util.Iterator;
 import java.util.Properties;
 
 import javax.ejb.CreateException;

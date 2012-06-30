@@ -5,12 +5,7 @@ import java.io.Serializable;
 /**
  * Configuración de avisos de movilidad para el expediente
  * 
- *  Si no se establece este parámetro en la creación del expediente se establecerá esta información 
- *  automáticamente a partir de la entrada BTE que generó el expediente (en caso de que la entrada tenga 
- *  establecida la configuración de los avisos).
- * 
- * 	Si no se establece información ni al crear el expediente ni en la entrada que lo genera se 
- * 	hará caso de la configuración de avisos por defecto establecida en la zona personal
+ *  Permite especificar avisos específicos a nivel del expediente.
  *  
  * 
  */

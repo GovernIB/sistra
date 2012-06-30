@@ -23,7 +23,11 @@
   	<property name="pwd"  column="TAP_PWD" length="50" />   	
   	<property name="rolAcceso" column="TAP_ROL" length="100"/>
   	<property name="ultimoAviso" column="TAP_AVISO"/>
-  	<property name="errores" type="binary" column="TAP_ERRORS"/>  	
+  	<property name="errores" type="binary" column="TAP_ERRORS"/>  
+  	
+  	<property name="unidadAdministrativa" column="TAP_UNIADM"/>
+  	<property name="permitirSms" column="TAP_SMS" not-null="true"/>
+  		
   	
   	<set name="gestores" table="BTE_GESPRO" inverse="true">
         <key column="GAP_IDEPRO"/>

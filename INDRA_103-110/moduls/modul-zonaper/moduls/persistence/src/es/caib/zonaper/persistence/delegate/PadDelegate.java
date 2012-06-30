@@ -10,6 +10,9 @@ import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
+import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
+import es.caib.zonaper.modelInterfaz.FiltroBusquedaExpedientePAD;
+import es.caib.zonaper.modelInterfaz.PaginaPAD;
 import es.caib.zonaper.modelInterfaz.ParametrosTramiteSubsanacionPAD;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.modelInterfaz.PreregistroPAD;
@@ -373,6 +376,18 @@ public class PadDelegate implements StatelessDelegate {
 		try
 		{
 			getFacade().avisarPendientePresentacionTramite( idPersistencia);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	public PaginaPAD busquedaPaginadaExpedientesGestor(FiltroBusquedaExpedientePAD filtro, int numPagina, int longPagina) throws DelegateException	
+	{
+		try
+		{
+		 return	getFacade().busquedaPaginadaExpedientesGestor( filtro, numPagina, longPagina);
 		}
 		catch( Exception e )
 		{

@@ -17,6 +17,10 @@
 		document.forms["0"].action='<html:rewrite page="/confirmacionRecuperacionExpediente.do"/>';
 		document.forms["0"].submit();
 	}
+
+	function volver(){
+		document.location='<html:rewrite page="/busquedaExpedientes.do"/>';
+	}
 </script>
 <script type="text/javascript">
      <!--
@@ -56,4 +60,13 @@
 		
 	</div>
 
+	<!-- tornar enrere -->
+		<div id="enrere">
+			<html:form style="background-color:white" action="recuperarExpediente" >
+			<a href="#" onclick="javascript:volver()">
+				<bean:message key="detalle.aviso.tornar" />				
+			</a>	
+			</html:form>
+		</div>
+			<!-- /tornar enrere -->
 

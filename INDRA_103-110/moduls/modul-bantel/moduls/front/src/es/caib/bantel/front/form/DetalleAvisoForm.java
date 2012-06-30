@@ -19,6 +19,7 @@ public class DetalleAvisoForm extends ValidatorForm
 {
 	private String titulo;
 	private String texto;
+	private String permitirSms = "N"; // S / N 
 	private String textoSMS;
 	
 	private String tipoDocumento; // URL / FICHERO
@@ -163,6 +164,14 @@ public class DetalleAvisoForm extends ValidatorForm
 
 	public void setDocumentoUrlAnexo(String urlAnexo) {
 		this.documentoUrlAnexo = urlAnexo;
+	}
+
+	public String getPermitirSms() {
+		return permitirSms;
+	}
+
+	public void setPermitirSms(String permitirSms) {
+		this.permitirSms = permitirSms;
 	}
 	
 }

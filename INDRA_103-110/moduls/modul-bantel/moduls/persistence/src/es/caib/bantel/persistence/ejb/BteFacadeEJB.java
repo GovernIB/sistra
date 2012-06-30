@@ -111,7 +111,7 @@ public abstract class BteFacadeEJB implements SessionBean  {
     	// Comprobamos que el usuario tiene acceso al tramite
     	Procedimiento procedimiento = null;
     	try{
-	    	 procedimiento = DelegateUtil.getTramiteDelegate().obtenerProcedimientoPorId(identificadorProcedimiento);
+	    	 procedimiento = DelegateUtil.getTramiteDelegate().obtenerProcedimiento(identificadorProcedimiento);
 	    	 if (procedimiento == null) {
 	    		 throw new ExcepcionBTE("No existe procedimiento con identificador: " + identificadorProcedimiento);
 	    	 }

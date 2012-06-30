@@ -17,7 +17,6 @@ import es.caib.bantel.front.util.MensajesUtil;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
-import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
 
 /**
@@ -32,9 +31,6 @@ import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
  *
  * @struts.action-forward
  *  name="errorExtensiones" path=".altaAviso"
- *
- * @struts.action-forward
- *  name="successNoExp" path=".confirmacionRecuperacionExpediente"
  *
  * @struts.action-forward
  *  name="fail" path=".error"

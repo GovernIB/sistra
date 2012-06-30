@@ -206,9 +206,6 @@ public abstract class BaseAction extends Action {
     		byte[] urlFin = espec.getUrlFin();
     		pForm.setUrlFin( urlFin != null ? new String( urlFin, ConstantesXML.ENCODING ) : null);
     		
-    		byte[] habilitarAvisos = espec.getHabilitarAvisos();
-    		pForm.setHabilitarAvisos( habilitarAvisos != null ? new String( habilitarAvisos, ConstantesXML.ENCODING ) : null);
-    		
     		byte[] avisoEmail = espec.getAvisoEmail();
     		pForm.setAvisoEmail( avisoEmail != null ? new String( avisoEmail, ConstantesXML.ENCODING ) : null);
     		
@@ -318,9 +315,6 @@ public abstract class BaseAction extends Action {
     		
     		byte[] urlFin = espec.getUrlFin();
     		pForm.setUrlFin( urlFin != null ? new String( urlFin, ConstantesXML.ENCODING ) : null);
-    		
-    		byte[] habilitarAvisos = espec.getHabilitarAvisos();
-    		pForm.setHabilitarAvisos( habilitarAvisos != null ? new String( habilitarAvisos, ConstantesXML.ENCODING ) : null);
     		
     		byte[] avisoEmail = espec.getAvisoEmail();
     		pForm.setAvisoEmail( avisoEmail != null ? new String( avisoEmail, ConstantesXML.ENCODING ) : null);

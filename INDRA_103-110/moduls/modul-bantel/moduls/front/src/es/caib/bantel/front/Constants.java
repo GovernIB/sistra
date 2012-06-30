@@ -55,7 +55,7 @@ public class Constants implements Serializable {
 	
 	
 	public static String OPCION_SELECCIONADA_KEY = "opcionSeleccionada";
-	public static String OPCION_SELECCIONADA_KEY2 = "opcionSeleccionada2";
+	//public static String OPCION_SELECCIONADA_KEY2 = "opcionSeleccionada2";
 	
 	
 	public static String MESSAGE_KEY = "message";

@@ -161,10 +161,8 @@
 <script type="text/javascript">
 var htmlInfoFirmado = "- <strong><bean:message key="detalleTramite.datosTramite.envio.firmado"/></strong>";
 
-
-var municipioLoaded="";
-
 function llenarMunicipios(){
+	$("#codigoMunicipio").val("");
 	codProv = $("#codigoProvincia").val();	
 	var url_json = '<html:rewrite page="/listarMunicipios.do"/>';
 	var data ='provincia='+codProv;
@@ -172,11 +170,7 @@ function llenarMunicipios(){
 		function(datos){
 			$("#codigoMunicipio").removeOption(/./);
 			$("#codigoMunicipio").removeOption(""); 
-			$("#codigoMunicipio").addOption(datos, false); 	
-			if (municipioLoaded != "") {
-				$("#codigoMunicipio").val(municipioLoaded);
-				municipioLoaded="";
-			}
+			$("#codigoMunicipio").addOption(datos, false); 						
 	});
 }	
 
@@ -193,8 +187,12 @@ function llenarProvincias(){
 }		
 
 function vaciarProvincias(){
+	$("#codigoProvincia").val("");
+	$("#codigoMunicipio").val("");
 	$("#codigoProvincia").removeOption(/./);
 	$("#codigoProvincia").removeOption(""); 
+	$("#codigoMunicipio").removeOption(/./);
+	$("#codigoMunicipio").removeOption("");	
 }
 
 
@@ -215,29 +213,15 @@ function altaDocument(form, url){
 	form.descripcionExpediente.value =document.detalleNotificacionForm.descripcionExpediente.value;
 
 	var permitida = false;
-	var error = "";
 	
 	if (url) {
-		if (form.tituloAnexoOficioUrl.value == '') {
-			error = "<bean:message key="error.aviso.titulo.fichero"/>";
-			permitida = false;					
-		} else if (!checkURL(form.urlAnexoOficio.value)) {
-			error = "<bean:message key="error.aviso.url.fichero"/>";
-			permitida = false;	
-		} else {
-			form.tipoDocumento.value = "URL";
-			form.tituloAnexoOficio.value=form.tituloAnexoOficioUrl.value;	
-			permitida = true;
-		}					
+		form.tipoDocumento.value = "URL";
+		form.tituloAnexoOficio.value=form.tituloAnexoOficioUrl.value;
+		form.submit();
+		permitida = true;				
 	} else {
 		var archivo = $('input[type=file]').val();		
-		if (form.tituloAnexoOficioFichero.value == '') {
-			error = "<bean:message key="error.aviso.titulo.fichero"/>";
-			permitida = false;					
-		} else if(archivo == null || archivo == ''){
-			error = "<bean:message key="error.aviso.extensiones.fichero"/>";
-			permitida = false;
-		} else {
+		if(archivo != null && archivo != ''){
 			var extension = (archivo.substring(archivo.lastIndexOf("."))).toLowerCase();
 			if(extension != null && extension != ''){
 				var extensiones_permitidas = new Array(".docx", ".doc", ".odt"); 
@@ -248,22 +232,16 @@ function altaDocument(form, url){
 					}
 				} 			
 			}
-			if(permitida){
-				form.tipoDocumento.value = "FICHERO";
-				form.tituloAnexoOficio.value=form.tituloAnexoOficioFichero.value;
-				form.rutaFitxer.value =form.documentoAnexoOficio.value;			
-			}else{				
-				error = "<bean:message key="error.aviso.extensiones.fichero"/>";			
-			}	
 		}
-		
-	}
-
-	if (permitida) {
-		form.submit();	
-	} else {
-		alert(error);
-		Mensaje.cancelar();
+		if(permitida){
+			form.tipoDocumento.value = "FICHERO";
+			form.tituloAnexoOficio.value=form.tituloAnexoOficioFichero.value;
+			form.rutaFitxer.value =form.documentoAnexoOficio.value;
+			form.submit();
+		}else{				
+			alert("<bean:message key="error.aviso.extensiones.fichero"/>");
+			Mensaje.cancelar();
+		}	
 	}
 	
 	return permitida;
@@ -318,8 +296,16 @@ function volver(identificadorExp,unidadAdm,claveExp){
 }
 
 function mostrarAnexarDocumentos(){
-	$('#anexar').show('slow');
-	$('#firmarDocumentosApplet').hide('slow');
+
+   $('#anexar').css({
+           position:'absolute',
+           left: '200px',
+          top: ($(window).scrollTop() + 50)
+   });
+  Tamanyos.iniciar();
+  Fondo.mostrar();
+	$('#anexar').show();
+	$('#firmarDocumentosApplet').hide();
 	$("#botonMostrarAnexar").attr("disabled","disabled");
 
 	// Reseteamos valores
@@ -329,11 +315,20 @@ function mostrarAnexarDocumentos(){
 }
 
 function esconderAnexarDocumentos(){
+  Fondo.esconder();
 	document.uploadNotificacionForm.documentoAnexoOficio.value = null;
 	document.uploadNotificacionForm.tituloAnexoOficio.value = '';
 	$('#anexar').hide('slow');
 	$('#firmarDocumentosApplet').hide('slow');
 	$("#botonMostrarAnexar").removeAttr("disabled");
+}
+
+function habilitarTramiteSubsanacion() {
+	if ($('#tramiteSubsanacion').val() == "S") {
+		$('#divSubsanacion').show();
+	} else {
+		$('#divSubsanacion').hide();
+	}
 }
 
 $(document).ready(function(){
@@ -348,7 +343,8 @@ $(document).ready(function(){
 		        'success': callback
 		    });
 		};
-		afegirParametre();
+		habilitarTramiteSubsanacion();
+		afegirParametre();		
 	}
 );
 
@@ -413,7 +409,7 @@ function repintarParametros(datos){
 			divParametros = divParametros+"</p></li>";
 		}
 	); 
-	divParametros = "<br/>" + divParametros+"</ul> <br/>";
+	divParametros = divParametros+"</ul> <br/>";
 	$('#parametros').html(divParametros);
 }
 </script>
@@ -490,7 +486,7 @@ function repintarParametros(datos){
 				</p>
 				
 				<p>
-					<label for="oficinaRegistro"><bean:message key="notificacion.oficina"/></label>
+					<label for="oficinaRegistro"><bean:message key="notificacion.oficina"/><sup>*</sup></label>
 					<html:select property="oficinaRegistro" styleClass="pc40" >
 			   			<logic:present name="listaoficinasregistro">
 							<logic:iterate id="oficina" name="listaoficinasregistro">	
@@ -501,7 +497,7 @@ function repintarParametros(datos){
 				</p>
 				
 				<p>
-					<label for="organo_destino"><bean:message key="notificacion.organo"/></label>
+					<label for="organo_destino"><bean:message key="notificacion.organo"/><sup>*</sup></label>
 					<html:select property="organoDestino" styleClass="pc40">
 			   			<logic:present name="listaorganosdestino">
 							<logic:iterate id="organo" name="listaorganosdestino">	
@@ -516,17 +512,17 @@ function repintarParametros(datos){
 				</p>
 				
 				<p>
-					<label for="nif"><bean:message key="expediente.nif"/></label>
+					<label for="nif"><bean:message key="expediente.nif"/><sup>*</sup></label>
 					<html:text property="nif" readonly="<%=Boolean.parseBoolean(autenticado)%>" onblur="this.value=this.value.toUpperCase()"/>					
 				</p>
 				
 				<p>
-					<label for="apellidos"><bean:message key="notificacion.nombre.apellisos"/></label>
+					<label for="apellidos"><bean:message key="notificacion.nombre.apellisos"/><sup>*</sup></label>
 					<html:text property="apellidos" styleClass="pc40" readonly="<%=Boolean.parseBoolean(autenticado)%>" />
 				</p>
 				
 				<p>
-					<label for="codigoPais"><bean:message key="notificacion.pais"/></label>
+					<label for="codigoPais"><bean:message key="notificacion.pais"/><sup>*</sup></label>
 					<html:select property="codigoPais" onchange="recargaProvincias();" styleClass="pc20">
 						<logic:iterate id="pais" name="paises">	
 							<html:option value="<%=((es.caib.bantel.front.json.Pais)pais).getCodigo()%>" ><bean:write name="pais" property="descripcion"/></html:option>
@@ -562,7 +558,15 @@ function repintarParametros(datos){
 				</p>
 				
 				<p>
-					<label for="idioma"><bean:message key="expediente.idioma"/></label>
+					<label for="acuse"><bean:message key="notificacion.acuse"/><sup>*</sup></label>
+					<html:select  property="acuse">
+						<html:option value="S"><bean:message key="expediente.si"/></html:option>
+						<html:option value="N"><bean:message key="expediente.no"/></html:option>
+					  </html:select>
+				</p>
+				
+				<p>
+					<label for="idioma"><bean:message key="expediente.idioma"/><sup>*</sup></label>
 					<html:select  property="idioma">
 						<html:option value="es"><bean:message key="expediente.castellano"/></html:option>
 						<html:option value="ca"><bean:message key="expediente.catalan"/></html:option>
@@ -571,7 +575,7 @@ function repintarParametros(datos){
 				</p>
 				
 				<p>
-					<label for=tiposAsunto><bean:message key="notificacion.tipoAsunto"/></label>
+					<label for=tiposAsunto><bean:message key="notificacion.tipoAsunto"/><sup>*</sup></label>
 					<html:select property="tipoAsunto">
 			   			<logic:present name="tiposAsunto">
 							<logic:iterate id="tipoAs" name="tiposAsunto">	
@@ -581,44 +585,39 @@ function repintarParametros(datos){
 			    	</html:select>
 				</p>
 				
-				<p>
-					<label for="acuse"><bean:message key="notificacion.acuse"/></label>
-					<html:select  property="acuse">
-						<html:option value="S"><bean:message key="expediente.si"/></html:option>
-						<html:option value="N"><bean:message key="expediente.no"/></html:option>
-					  </html:select>
-				</p>
-				
 				<p class="titol">
 					<bean:message key="notificacion.datos.aviso"/>
 				</p>
 				
 				<p>
-					<label for="tituloAviso"><bean:message key="aviso.titulo"/></label>
-					<html:textarea rows="5" cols="49" property="tituloAviso" styleClass="pc40" />
+					<label for="tituloAviso"><bean:message key="aviso.titulo"/><sup>*</sup></label>
+					<html:text property="tituloAviso" styleClass="pc40" />					
 				</p>
 				
 				<p>
-					<label for="textoAviso"><bean:message key="aviso.texto"/></label>
+					<label for="textoAviso"><bean:message key="aviso.texto"/><sup>*</sup></label>
 					<html:textarea rows="5" cols="49" property="textoAviso" styleClass="pc40" />
 				</p>
 				
+				
+				<logic:equal name="detalleNotificacionForm" property="permitirSms" value="S">
 				<p>
 					<label for="textoSmsAviso"><bean:message key="aviso.textoSMS"/></label>
 					<html:textarea rows="5" cols="49" property="textoSmsAviso" styleClass="pc40" />
 				</p>
+				</logic:equal>
 		     
 				<p class="titol">
 					<bean:message key="notificacion.datos.oficio.remision"/>
 				</p>
 				
 				<p>
-					<label for="tituloOficio"><bean:message key="aviso.titulo"/></label>
+					<label for="tituloOficio"><bean:message key="aviso.titulo"/><sup>*</sup></label>
 					<html:text property="tituloOficio" styleClass="pc40" />
 				</p>
 				
 				<p>
-					<label for="textoOficio"><bean:message key="aviso.texto"/></label>
+					<label for="textoOficio"><bean:message key="aviso.texto"/><sup>*</sup></label>
 					<html:textarea rows="5" cols="49" property="textoOficio" styleClass="pc40" />
 				</p>
 					<p class="titol">
@@ -626,34 +625,40 @@ function repintarParametros(datos){
 					</p>
 					
 					<p>
-						<label for="descripcionTramiteSubsanacion"><bean:message key="tramite.subsanacion.descripcion"/></label>
-						<html:text property="descripcionTramiteSubsanacion" styleClass="pc40" />
+						<label for="tramiteSubsanacion"><bean:message key="notificacion.datos.tramite.subsanacion"/><sup>*</sup></label>
+						<html:select property="tramiteSubsanacion" styleId="tramiteSubsanacion" onchange="habilitarTramiteSubsanacion()">
+							<html:option value="S"><bean:message key="expediente.si"/></html:option>
+							<html:option value="N"><bean:message key="expediente.no"/></html:option>
+						  </html:select>
 					</p>
 					
-					<p>
-						<label for="identificadorTramiteSubsanacion"><bean:message key="tramite.subsanacion.identificador"/></label>
-						<html:text property="identificadorTramiteSubsanacion" styleClass="pc40" />
-					</p>
-					<p>
-						<label for="versionTramiteSubsanacion"><bean:message key="tramite.subsanacion.version"/></label>
-						<html:text property="versionTramiteSubsanacion" styleClass="pc40" />
-					</p>
-				
-					<p>
-						<label><bean:message key="tramite.subsanacion.parametros"/></label>						
-					</p>
-					<div id="parametros"></div>
-					<ul id="parametro">
-						<li>
-							<p>
-								<label><bean:message key="tramite.subsanacion.parametros.codi"/></label>
-								<html:text property="codigoParametroTramiteSubsanacion" styleId="codigoParametroTramiteSubsanacion"/>
-								<label class="enLinia"><bean:message key="tramite.subsanacion.parametros.valor"/></label>
-								<html:text property="valorParametroTramiteSubsanacion" styleId="valorParametroTramiteSubsanacion"/>
-								<a id="afegirEnllas" onclick="afegirParametre();" class="enllas"><bean:message key="tramite.subsanacion.parametros.afegir"/></a>
-							</p>
-						</li>
-					</ul>
+					<div id="divSubsanacion">
+						<p>
+							<label for="descripcionTramiteSubsanacion"><bean:message key="tramite.subsanacion.descripcion"/><sup>*</sup></label>
+							<html:text property="descripcionTramiteSubsanacion" styleClass="pc40" />
+						</p>
+						
+						<p>
+							<label for="identificadorTramiteSubsanacion"><bean:message key="tramite.subsanacion.identificador"/><sup>*</sup></label>
+							<html:text property="identificadorTramiteSubsanacion" styleClass="pc40" />
+						</p>
+						<p>
+							<label for="versionTramiteSubsanacion"><bean:message key="tramite.subsanacion.version"/><sup>*</sup></label>
+							<html:text property="versionTramiteSubsanacion" styleClass="pc40" />
+						</p>
+					
+						<p>
+							<label><bean:message key="tramite.subsanacion.parametros"/></label>	
+							<div id="divAddParam">
+									<label class="enLinia"><bean:message key="tramite.subsanacion.parametros.codi"/></label>
+									<html:text property="codigoParametroTramiteSubsanacion" styleId="codigoParametroTramiteSubsanacion"/>
+									<label class="enLinia"><bean:message key="tramite.subsanacion.parametros.valor"/></label>
+									<html:text property="valorParametroTramiteSubsanacion" styleId="valorParametroTramiteSubsanacion"/>
+									<a id="afegirEnllas" onclick="afegirParametre();" class="enllas"><bean:message key="tramite.subsanacion.parametros.afegir"/></a>
+							</div>			
+						</p>
+						<div id="parametros"></div>
+					</div>
 					
 					</html:form>
 				<!-- escritorio_docs  -->
@@ -662,7 +667,10 @@ function repintarParametros(datos){
 						<bean:message key="aviso.documentoanexo"/>
 					</p>
 					<p class="boton">
+						<!-- 
 						<input id="botonMostrarAnexar" type="button" value="<bean:message key='aviso.anexar.documento'/>" onclick="mostrarAnexarDocumentos();"/>
+						 -->
+						<a href="javascript:mostrarAnexarDocumentos();" class="adjuntar"><bean:message key='aviso.anexar.documento'/> </a>
 					</p>
 					
 					<div id="contenido_docs">
@@ -816,9 +824,16 @@ function repintarParametros(datos){
 				<!-- /escritorio_docs  --> 
 				<p class="botonera">
 					<html:submit onclick="if(alta()){return true;}else{return false;}"><bean:message key="notificacion.alta"/></html:submit>
+					<!-- 
 					<input type="button" onclick="volver('<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY%>" />','<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY%>"/>','<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY%>"/>')" value="<bean:message key="notificacion.cancelar"/>"/>
-				</p>
+					 -->
+				</p>								
+				
 			</div>
+			
+			<div id="enrere">
+					<a onclick="javascript:volver('<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY%>" />','<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY%>"/>','<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY%>"/>')" href="#"> <bean:message key="notificacion.cancelar"/> </a>
+				</div>
 		</div>
 		<!-- /continguts -->
 		<div id="fondo"></div>

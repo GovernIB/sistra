@@ -64,3 +64,6 @@
 <form-bean
 	name="guardarClaveForm"
 	type="es.caib.sistra.front.form.GuardarClaveForm"/>
+<form-bean
+	name="seleccionNotificacionAvisosForm"
+	type="es.caib.sistra.front.form.SeleccionNotificacionAvisosForm"/>

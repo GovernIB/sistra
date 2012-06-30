@@ -36,6 +36,7 @@ public class DetalleNotificacionForm extends ValidatorForm
 	private String tipoAsunto;
 	private String tituloAviso;
 	private String textoAviso;
+	private String permitirSms = "N"; // S / N 
 	private String textoSmsAviso;
 	private String tituloOficio;
 	private String textoOficio;
@@ -46,7 +47,8 @@ public class DetalleNotificacionForm extends ValidatorForm
 	private FormFile documentoAnexoOficio;	
 	private String  urlAnexoOficio;
 	
-    
+	private String tramiteSubsanacion = "N"; // S / N 
+	
     private String descripcionTramiteSubsanacion; 
     private String identificadorTramiteSubsanacion;
     private String versionTramiteSubsanacion;
@@ -439,7 +441,7 @@ public class DetalleNotificacionForm extends ValidatorForm
         		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.tipo.asunto")));
         		error = true;
         	}
-        	if(StringUtils.isNotBlank(descripcionTramiteSubsanacion) || StringUtils.isNotBlank(identificadorTramiteSubsanacion) || StringUtils.isNotBlank(versionTramiteSubsanacion)){
+        	if("S".equals(tramiteSubsanacion)){
         		if(StringUtils.isBlank(descripcionTramiteSubsanacion)){
         			errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.subsanacion.descripcion")));
             		error = true;
@@ -479,6 +481,26 @@ public class DetalleNotificacionForm extends ValidatorForm
 
 	public void setUrlAnexoOficio(String urlAnexoOficio) {
 		this.urlAnexoOficio = urlAnexoOficio;
+	}
+
+
+	public String getTramiteSubsanacion() {
+		return tramiteSubsanacion;
+	}
+
+
+	public void setTramiteSubsanacion(String tramiteSubsanacion) {
+		this.tramiteSubsanacion = tramiteSubsanacion;
+	}
+
+
+	public String getPermitirSms() {
+		return permitirSms;
+	}
+
+
+	public void setPermitirSms(String permitirSms) {
+		this.permitirSms = permitirSms;
 	}
 	
 }

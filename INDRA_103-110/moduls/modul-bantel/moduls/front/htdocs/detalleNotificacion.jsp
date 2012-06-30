@@ -8,8 +8,7 @@
 <script type="text/javascript" src="js/jquery.selectboxes.pack.js"></script>
 <script type="text/javascript">
 	function volver(identificadorExp,unidadAdm,claveExp){
-		document.forms["0"].action='<html:rewrite page="/recuperarExpediente.do?identificadorExp='+identificadorExp+'&unidadAdm='+unidadAdm+'&claveExp='+claveExp+'" />';
-		document.forms["0"].submit();
+		document.location='<html:rewrite page="/recuperarExpediente.do?identificadorExp='+identificadorExp+'&unidadAdm='+unidadAdm+'&claveExp='+claveExp+'" />';		
 	}
 </script>
 <bean:define id="notificacion" name="elemento" type="es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD" />
@@ -27,6 +26,16 @@
 					<dt><bean:message key="detalle.notificacion.fechaEmision"/>:</dt>
 					<dd><bean:write name="notificacion" property="fecha" format="dd/MM/yyyy '-' HH:mm"/></dd>
 					
+					<dt><bean:message key="detalle.notificacion.acuseRecibo"/>:</dt>
+					<dd>
+						<logic:equal  name="notificacion" property="requiereAcuse" value="true">
+							Si
+						</logic:equal> 
+						<logic:equal  name="notificacion" property="requiereAcuse" value="false">
+							No
+						</logic:equal>
+					</dd>
+					
 					<dt><bean:message key="detalle.notificacion.estado"/>:</dt>
 					<logic:equal name="notificacion" property="detalleAcuseRecibo.estado" value="PENDIENTE">
 						<dd><bean:message key="detalle.notificacion.estado.pendiente"/></dd>
@@ -36,6 +45,11 @@
 					</logic:equal>
 					<logic:equal name="notificacion" property="detalleAcuseRecibo.estado" value="RECHAZADA">
 						<dd><bean:message key="detalle.notificacion.estado.rechazada"/></dd>
+					</logic:equal>
+					
+					<logic:equal name="notificacion" property="detalleAcuseRecibo.estado" value="ENTREGADA">
+						<dt><bean:message key="detalle.notificacion.fechaApertura"/>:</dt>
+						<dd><bean:write name="notificacion" property="detalleAcuseRecibo.fechaAcuseRecibo" format="dd/MM/yyyy '-' HH:mm"/><logic:equal name="notificacion" property="requiereAcuse" value="true"> </logic:equal></dd>
 					</logic:equal>
 					
 					<dt><bean:message key="detalle.notificacion.asunto"/>:</dt>
@@ -70,11 +84,6 @@
 							</ul>
 						</dd>				
 					</logic:notEmpty>
-					
-					<logic:equal name="notificacion" property="detalleAcuseRecibo.estado" value="ENTREGADA">
-						<dt><bean:message key="detalle.notificacion.fechaApertura"/>:</dt>
-						<dd><bean:write name="notificacion" property="detalleAcuseRecibo.fechaAcuseRecibo" format="dd/MM/yyyy '-' HH:mm"/><logic:equal name="notificacion" property="requiereAcuse" value="true"> </logic:equal></dd>
-					</logic:equal>
 												
 					<logic:notEmpty name="notificacion" property="documentos">		
 						<dt><bean:message key="detalle.notificacion.documentoanexo" />:</dt>
@@ -116,11 +125,9 @@
 
 			<!-- tornar enrere -->
 			<div id="enrere">
-				<html:form style="background-color:white" action="recuperarExpediente" >
 				<a href="#" onclick="javascript:volver('<%=expediente.getIdentificadorExpediente()%>','<%=expediente.getUnidadAdministrativa()%>','<%=expediente.getClaveExpediente()%>')">
 					<bean:message key="detalle.aviso.tornar" />				
-				</a>	
-				</html:form>
+				</a>					
 			</div>
 			<!-- /tornar enrere -->
 			

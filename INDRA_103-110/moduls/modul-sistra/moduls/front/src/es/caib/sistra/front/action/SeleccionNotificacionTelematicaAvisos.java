@@ -7,13 +7,17 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import es.caib.sistra.front.form.SeleccionNotificacionAvisosForm;
 import es.caib.sistra.front.util.InstanciaManager;
 import es.caib.sistra.persistence.delegate.InstanciaDelegate;
 
 /**
  * @struts.action
- *  path="/protected/seleccionNotificacionTelematica"
+ *  name="seleccionNotificacionAvisosForm"
+ *  validate="true"
+ *  path="/protected/seleccionNotificacionTelematicaAvisos"
  *  scope="request"
+ *  input=".mainLayout"
  *
  *  @struts.action-forward
  *  name="success" path="/protected/irAPaso.do"
@@ -21,16 +25,19 @@ import es.caib.sistra.persistence.delegate.InstanciaDelegate;
  * @struts.action-forward
  *  name="fail" path="/index.jsp"
  */
-public class SeleccionNotificacionTelematica extends BaseAction
+public class SeleccionNotificacionTelematicaAvisos extends BaseAction
 {
 	public ActionForward executeTask(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception 
     {
 		
-		String seleccion = request.getParameter("seleccion");
+		SeleccionNotificacionAvisosForm selecForm = (SeleccionNotificacionAvisosForm) form;
 		
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request );
-		delegate.habilitarNotificacionTelematica("S".equals(seleccion));
+		delegate.habilitarNotificacionAvisos("true".equals(selecForm.getSeleccionNotificacion()),
+				"true".equals(selecForm.getSeleccionAvisos()),
+				selecForm.getEmailSeleccionAviso(),
+				selecForm.getSmsSeleccionAviso());
 		
 		return mapping.findForward("success");
     }

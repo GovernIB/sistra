@@ -1,6 +1,7 @@
 package es.caib.sistra.front.controller;
 
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -15,11 +16,11 @@ import es.caib.sistra.model.ConstantesSTR;
 import es.caib.sistra.model.DocumentoFront;
 import es.caib.sistra.model.PasoTramitacion;
 import es.caib.sistra.model.TramiteFront;
+import es.caib.sistra.persistence.delegate.DelegateUtil;
 import es.caib.util.ConvertUtil;
 import es.caib.util.StringUtil;
 import es.caib.xml.datospropios.factoria.impl.Instrucciones;
 import es.caib.xml.registro.factoria.impl.DatosInteresado;
-import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 
 public class RegistroController extends FinalizacionController
 {
@@ -30,7 +31,8 @@ public class RegistroController extends FinalizacionController
 		
 		//super.execute( tileContext, request, response, servletContext );
 		TramiteFront tramite 			= this.getTramiteFront( request );
-		
+		Map params = this.getParametros(request);
+	
 		
 		//
 		// 	COMPROBAMOS SI HAY FLUJO DE TRAMITACION Y HAY QUE PASAR EL TRAMITE
@@ -54,16 +56,50 @@ public class RegistroController extends FinalizacionController
 		
 		//
 		// 	COMPROBAMOS SI TENEMOS QUE PEDIR CONFIRMACION PARA NOTIFICACION TELEMATICA
-		//		
+		//
+		
+		boolean pendienteConfirmacionNotificacionAvisos = false;
 		if (!ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA.equals(tramite.getHabilitarNotificacionTelematica())){
 			if (tramite.getSeleccionNotificacionTelematica() == null){
-				request.setAttribute( "confirmarSeleccionNotificacionTelematica","true" );
-				return;
-			}else{
-				request.setAttribute("seleccionNotificacionTelematica",tramite.getSeleccionNotificacionTelematica());
+				request.setAttribute( "confirmarSeleccionNotificacionTelematica","true");
+				request.setAttribute("seleccionNotificacionTelematica","true");
+				pendienteConfirmacionNotificacionAvisos = true;
+			} else {
+				request.setAttribute("seleccionNotificacionTelematica",tramite.getSeleccionNotificacionTelematica().toString());
 			}
+		} else {
+			request.setAttribute("seleccionNotificacionTelematica", "false");
 		}
 		
+		//
+		// 	COMPROBAMOS SI TENEMOS QUE PEDIR CONFIRMACION PARA AVISOS
+		//		
+		if (!ConstantesSTR.AVISO_NOPERMITIDO.equals(tramite.getHabilitarAvisos())){
+			if (tramite.getSeleccionAvisos() == null){
+				request.setAttribute("seleccionAvisos","true");
+				request.setAttribute( "confirmarSeleccionAvisos","true" );
+				request.setAttribute( "obligatorioSeleccionAvisos", Boolean.toString(tramite.getHabilitarAvisos().equals(ConstantesSTR.AVISO_OBLIGATORIO)) );
+				request.setAttribute( "permitirAvisoSMS",Boolean.toString(tramite.isPermiteSMS()) );
+				request.setAttribute("emailAvisoDefault", params.get("emailAvisoDefault"));
+				request.setAttribute("smsAvisoDefault", params.get("smsAvisoDefault"));
+				pendienteConfirmacionNotificacionAvisos = true;
+			}else{
+				request.setAttribute("seleccionAvisos",tramite.getSeleccionAvisos().toString());
+				if (StringUtils.isNotBlank(tramite.getSeleccionEmailAviso())) {
+					request.setAttribute("seleccionEmailAviso",tramite.getSeleccionEmailAviso());
+				}
+				if (StringUtils.isNotBlank(tramite.getSeleccionSmsAviso())) {
+					request.setAttribute("seleccionSmsAviso",tramite.getSeleccionSmsAviso());
+				}
+			}
+		} else {
+			request.setAttribute("seleccionAvisos","false");
+		}
+
+		if (pendienteConfirmacionNotificacionAvisos) {
+			request.setAttribute( "confirmarSeleccion","true");
+			return;
+		}
 		
 		//
 		//	EXTRAEMOS ETIQUETAS SEGUN CIRCUITO

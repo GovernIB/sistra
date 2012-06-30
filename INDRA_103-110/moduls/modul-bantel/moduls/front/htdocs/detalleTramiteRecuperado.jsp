@@ -21,8 +21,7 @@
 </script>
 <script type="text/javascript">
 	function volver(identificadorExp,unidadAdm,claveExp){
-		document.forms["0"].action='<html:rewrite page="/recuperarExpediente.do?identificadorExp='+identificadorExp+'&unidadAdm='+unidadAdm+'&claveExp='+claveExp+'" />';
-		document.forms["0"].submit();
+		document.location='<html:rewrite page="/recuperarExpediente.do?identificadorExp='+identificadorExp+'&unidadAdm='+unidadAdm+'&claveExp='+claveExp+'" />';		
 	}
 </script>
 <bean:define id="expediente" name="expediente" type="es.caib.zonaper.modelInterfaz.ExpedientePAD" />
@@ -144,6 +143,40 @@
 						<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.asunto.nifDelegado"/>:</span> <span><bean:write name="tramite" property="delegadoNif"/></span></li>
 					</logic:notEmpty>
 				</ul>
+				
+				<!-- Notificaciones telematicas y avisos -->
+				<logic:notEmpty name="datosPropios">
+						<logic:notEmpty name="datosPropios" property="instrucciones">
+							<logic:notEmpty name="datosPropios" property="instrucciones.habilitarNotificacionTelematica">
+								<logic:equal name="datosPropios" property="instrucciones.habilitarNotificacionTelematica" value="S">
+								<ul>	
+									<li>
+										<span class="label"><bean:message key="detalleTramite.datosSolicitud.habilitarNotificaciones"/>:</span> 
+										<span>Si</span>
+									</li>
+								</ul>									
+								</logic:equal>
+							</logic:notEmpty>
+							<logic:notEmpty name="datosPropios" property="instrucciones.habilitarAvisos">
+								<logic:equal name="datosPropios" property="instrucciones.habilitarAvisos" value="S">
+								<ul>	
+									<li>
+										<span class="label"><bean:message key="detalleTramite.datosSolicitud.habilitarAvisos"/>:</span> 
+										<span>
+											<logic:notEmpty name="datosPropios" property="instrucciones.avisoEmail">
+												Email: <bean:write name="datosPropios" property="instrucciones.avisoEmail"/>
+											</logic:notEmpty>
+											&nbsp;
+											<logic:notEmpty name="datosPropios" property="instrucciones.avisoSMS">
+												SMS: <bean:write name="datosPropios" property="instrucciones.avisoSMS"/>
+											</logic:notEmpty>											
+										</span>
+									</li>
+								</ul>									
+								</logic:equal>
+							</logic:notEmpty>							
+						</logic:notEmpty>
+				</logic:notEmpty>
 				
 				<!--  accesso al justificante para entradas telematicas -->										
 				<logic:notEqual name="tramite" property="tipo" value="<%=Character.toString(ConstantesAsientoXML.TIPO_PREENVIO)%>">
@@ -286,10 +319,11 @@
 					</logic:notEmpty>	
 			</div>
 			
-			<p class="tornarArrere"><strong>
-			<html:form style="background-color:white" action="recuperarExpediente" >
+			<!-- tornar enrere -->
+			<div id="enrere">
 				<a href="#" onclick="javascript:volver('<%=expediente.getIdentificadorExpediente()%>','<%=expediente.getUnidadAdministrativa()%>','<%=expediente.getClaveExpediente()%>')">
 					<bean:message key="detalle.aviso.tornar" />				
-				</a>	
-				</html:form>
-			</strong></p>
+				</a>					
+			</div>
+			<!-- /tornar enrere -->
+			
