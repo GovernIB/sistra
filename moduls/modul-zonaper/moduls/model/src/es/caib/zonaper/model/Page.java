@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import java.util.List; 
 
+import net.sf.hibernate.Criteria;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.ScrollableResults; 
@@ -46,6 +47,16 @@ public class Page implements Serializable
 		 scrollableResults.last();
 		 totalResults = scrollableResults.getRowNumber() + 1;
 	 }
+	 
+	 public Page( Criteria criteria, int page, int pageSize ) throws HibernateException
+		{
+			this.page = page;
+			this.pageSize = pageSize;
+					
+			 results = criteria.setFirstResult(page * pageSize)
+			.setMaxResults(pageSize+1)
+	        .list();        	
+		}
 
 	 public boolean isFirstPage()
 	 {

@@ -38,47 +38,28 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB {
 	  
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.admin}"
-     * @ejb.permission role-name="${role.todos}"
-     */
-    public Procedimiento obtenerProcedimiento(String id) {
-        Session session = getSession();
-        try {       	
-        	Procedimiento tramite = (Procedimiento) session.load(Procedimiento.class, id); 
-            return tramite;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-    
-    /**
-     * Se distingue del anterior en que devuelve null si no existe el tramite, no hace throw de la excepción
-     * @ejb.interface-method
      * @ejb.permission role-name="${role.auto}"
      * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.todos}"
      */
-    public Procedimiento obtenerProcedimientoPorId(String id) {
-        Session session = getSession();
-        try {       	
-        	Query query = session
-            .createQuery("FROM Procedimiento AS t WHERE t.identificador = :identificador")
-            .setParameter("identificador",id);
-        	//query.setCacheable(true);
-            if (query.list().isEmpty()){
-            	return null;
-            	//throw new HibernateException("No existe trámite con id " + id);
-            }
-            Procedimiento tramite = ( Procedimiento ) query.uniqueResult();
-            return tramite;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
+    public Procedimiento obtenerProcedimiento(String id) {
+    	 Session session = getSession();
+         try {       	
+         	Query query = session
+             .createQuery("FROM Procedimiento AS t WHERE t.identificador = :identificador")
+             .setParameter("identificador",id);
+         	//query.setCacheable(true);
+             if (query.list().isEmpty()){
+             	return null;             	
+             }
+             Procedimiento tramite = ( Procedimiento ) query.uniqueResult();
+             return tramite;
+         } catch (HibernateException he) {
+             throw new EJBException(he);
+         } finally {
+             close(session);
+         }
+    }    
     
    /**
      * @ejb.interface-method
@@ -89,7 +70,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB {
     	Session session = getSession();
         try {
         	
-        	Procedimiento tramite = obtenerProcedimientoPorId(obj.getIdentificador()); 
+        	Procedimiento tramite = obtenerProcedimiento(obj.getIdentificador()); 
         	if ( tramite == null )
         	{
         		session.save( obj );

@@ -11,7 +11,14 @@
 				<bean:message key="alertas.titulo" />
 			</h1>
 						
-			<p><bean:message key="alertas.instrucciones" /></p>
+			<p>
+				<logic:equal name="alertasSmsZonaPersonal" value="true">
+					<bean:message key="alertas.instrucciones.emailSms" />
+				</logic:equal>
+				<logic:equal name="alertasSmsZonaPersonal" value="false">
+					<bean:message key="alertas.instrucciones.email" />
+				</logic:equal>
+			</p>
 
 			<html:form action="/protected/actualizarAlertas" styleId="formConfirmacion">
 				<div class="element">

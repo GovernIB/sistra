@@ -25,6 +25,12 @@ public class ConstantesSTR {
 	public final static String NOTIFICACIONTELEMATICA_PERMITIDA = "S";
 	public final static String NOTIFICACIONTELEMATICA_OBLIGATORIA = "O";
 	
+	// AVISOS
+	public final static String AVISO_SINESPECIFICAR = "X";
+	public final static String AVISO_NOPERMITIDO = "N";
+	public final static String AVISO_PERMITIDO = "S";
+	public final static String AVISO_OBLIGATORIO = "O";
+	
 	// CODIGO DE PAIS ESPAÑA
 	public final static String PAIS_ESPANYA = "ESPAÑA";
 	public final static String CODIGO_PAIS_ESPANYA = "ESP";

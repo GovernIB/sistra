@@ -34,15 +34,7 @@ public class ProcedimientoDelegate implements StatelessDelegate {
         } catch (Exception e) {
             throw new DelegateException(e);
         }
-    }
-    
-    public Procedimiento obtenerProcedimientoPorId(String idproc) throws DelegateException {
-        try {
-            return getFacade().obtenerProcedimientoPorId(idproc);
-        } catch (Exception e) {
-            throw new DelegateException(e);
-        }
-    }
+    }        
         
     public void borrarProcedimiento(String id) throws DelegateException {
         try {

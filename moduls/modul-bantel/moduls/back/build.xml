@@ -43,7 +43,10 @@
         <fileset dir="${lib.dir}">
         	<include name="*.jar" />
         </fileset>
-    	 <fileset dir="${distribucion.dir}/lib">    	
+    	<fileset dir="${lib.dir}/client">
+    	   <include name="sistra-client.jar"/>    	        
+        </fileset>
+    	<fileset dir="${distribucion.dir}/lib">    	
     	 	<include name="sistra-xml.jar"/>
         	<include name="sistra-util.jar"/>	        	        	
         </fileset>

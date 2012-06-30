@@ -65,10 +65,10 @@ h1 { font-size:1.7em; font-weight:normal; color:#8a4700; padding:.5em .7em .5em 
 form.remarcar, div.remarcar { padding:.1em 2em; margin:2em 0; background-color:#f2f2f2; }
 
 p.titol { font-size:1.2em; font-weight:bold; }
-p.titol2 { font-size:1.2em; font-weight:bold; width:30%;}
+p.titol2 { font-size:1.2em; font-weight:bold; width:60%;}
 
 form.opcions label, div.remarcar label { display:block; float:left; width:20%; text-align:right; padding-right:1em;position:relative;}
-form.opcions2 label, div.remarcar label { display:block; float:left; width:10%; text-align:right; padding-right:1em;position:relative;}
+form.opcions2 label, div.remarcar label { display:block; float:left; width:20%; text-align:right; padding-right:1em;position:relative;}
 form.opcions label.enLinia, div.remarcar label.enLinia { display:inline; float:none; margin-left:2em; }
 form.opcions SPAN, div.remarcar SPAN {display:block; float:left; width:70%; text-align:left; padding-right:1em;position:relative;}
 
@@ -87,6 +87,7 @@ form.opcions p.sep, div.remarcar p.sep { padding-bottom:1em; border-bottom:1px d
 
 form.opcions p.botonera, div.remarcar p.botonera { clear:both; width:100%; text-align:center; padding-top:2em; border-top:1px solid #ccc; }
 form.opcions p.botonera button, form.opcions p.botonera input, div.remarcar p.botonera button, div.remarcar p.botonera input { font-size:1.3em; margin:0 1em; }
+.nifBusqueda {margin:0em; }
 
 form.opcions ul, div.remarcar ul { list-style:none; margin:0; }
 form.opcions ul li, div.remarcar ul li { padding-bottom:0; }
@@ -189,7 +190,7 @@ th.ajudaColumna:hover { background-color:#dcf9bb; }
 #parametro ul li { padding-bottom:.4em; }
 #parametro a { color:#c00; }
 
-#anexar { padding-left:1em; border:1px solid #ccc; }
+#anexar { padding-left:1em; border:5px solid #ccc; z-index:50;}
 #anexar div.form { overflow:hidden; width:100%; }
 #anexar div.col { float:left; width:30%; }
 /*
@@ -217,3 +218,12 @@ div.informacion { background:#fff url(../imgs/mensaje/informacion.gif) no-repeat
 #fondo { display:none; position:absolute; z-index:2; top:0; left:0; background-color:#fff; }
 /* ESTILO IFRAME UPLOAD */
 #iframeDocumento{position: absolute;  top:-30em; left:-30em; frameborder:0; width:0; height:0; scrolling:no; allowtransparency:true;}
+
+.adjuntar { padding:.2em 2em; background:url(../imgs/iconos/ico_anexado.gif) no-repeat left center; margin-right: 0.5em;}
+
+
+#formModifAvisos {height:90%; width:90%;}
+#divModificacionAvisos { padding-left:1em; border:5px solid #ccc; width:70%; height: 300px; z-index:50;}
+#divModificacionAvisos div.form { overflow:hidden; width:100%; }
+#divModificacionAvisos div.col { float:left; width:30%; }
+#divModificacionAvisos a { text-decoration:underline; cursor:pointer; }

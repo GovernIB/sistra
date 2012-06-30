@@ -94,7 +94,7 @@
     <td class="label"><bean:message key="especificacionesTramite.destinatarioTramite"/></td>
     <td class="input"><html:textarea tabindex="10" property="destinatarioTramite" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=destinatarioTramite&titulo=especificacionesTramite.destinatarioTramite" %>');"/></td>
 </tr>
-<tr>
+<tr>	
 	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.opcionesFin"/></td>
 </tr>
 <tr>
@@ -106,34 +106,46 @@
     <td class="input"><html:textarea tabindex="10" property="checkEnvio" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=checkEnvio&titulo=especificacionesTramite.checkEnvio" %>');"/></td>
 </tr>
 <tr>
-	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.avisosMovilidad"/></td>
-</tr>
-<tr>
-    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAvisos"/></td>
-    <td class="input"><html:textarea tabindex="10" property="habilitarAvisos" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=habilitarAvisos&titulo=especificacionesTramite.habilitarAvisos" %>');"/></td>
-</tr>
-<tr>
-    <td class="labelo"><bean:message key="especificacionesTramite.avisoEmail"/></td>
-    <td class="input"><html:textarea tabindex="10" property="avisoEmail" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=avisoEmail&titulo=especificacionesTramite.avisoEmail" %>');"/></td>
-</tr>
-<tr>
-    <td class="labelo"><bean:message key="especificacionesTramite.avisoSMS"/></td>
-    <td class="input"><html:textarea tabindex="10" property="avisoSMS" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=avisoSMS&titulo=especificacionesTramite.avisoSMS" %>');"/></td>
-</tr>
-
-<tr>
 	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.notificacionTelematica"/></td>
 </tr>
 <tr>
     <td class="labelo"><bean:message key="especificacionesTramite.habilitarNotificacionTelematica"/></td>
     <td class="input">
-	    <bean:message key="especificacionesTramite.habilitarNotificacionTelematica.sinEspecificar"/><html:radio property="values.habilitarNotificacionTelematica" value="X"/> 
-    	<bean:message key="especificacionesTramite.habilitarNotificacionTelematica.noPermitida"/><html:radio property="values.habilitarNotificacionTelematica" value="N"/> 
-    	<bean:message key="especificacionesTramite.habilitarNotificacionTelematica.permitida"/><html:radio property="values.habilitarNotificacionTelematica" value="S"/> 
-    	<bean:message key="especificacionesTramite.habilitarNotificacionTelematica.obligatoria"/><html:radio property="values.habilitarNotificacionTelematica" value="O"/> 
+    	<html:select property="values.habilitarNotificacionTelematica">                    
+    		<logic:iterate id="opcion" name="habilitarNotificacionOptions" type="es.caib.sistra.model.Opcion">
+    			<html:option value="<%=opcion.getCodigo()%>"  key="<%=opcion.getDescripcion()%>"  />
+	    	</logic:iterate>
+	    </html:select>    	    	
     </td>
 </tr>
-
+<tr>
+	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.habilitarAvisos"/></td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAvisos"/></td>
+    <td class="input">
+    	<html:select property="values.habilitarAvisos">                    
+    		<logic:iterate id="opcion" name="habilitarAvisosOptions" type="es.caib.sistra.model.Opcion">
+    			<html:option value="<%=opcion.getCodigo()%>"  key="<%=opcion.getDescripcion()%>"  />
+	    	</logic:iterate>
+	    </html:select>    	
+   	</td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAvisos.permitirSMS"/></td>    
+    <td class="input">
+    	<bean:message key="afirmacion"/><html:radio property="values.permitirSMS" value="S"/> 
+    	<bean:message key="negacion"/><html:radio property="values.permitirSMS" value="N"/> 
+   	</td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAvisos.avisoEmail"/></td>
+    <td class="input"><html:textarea tabindex="10" property="avisoEmail" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=avisoEmail&titulo=especificacionesTramite.avisoEmail" %>');"/></td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAvisos.avisoSMS"/></td>
+    <td class="input"><html:textarea tabindex="10" property="avisoSMS" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=avisoSMS&titulo=especificacionesTramite.avisoSMS" %>');"/></td>
+</tr>
 
 <logic:present name="<%=bean%>" property="values.codigo">
 	<bean:define id="codigo" name="<%= bean %>" property="values.codigo"/>

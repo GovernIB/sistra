@@ -50,6 +50,31 @@ public class ConstantesZPE {
 	 */
 	public final static String SUBSANACION_PARAMETER_KEY = "subsanacionkey";
 	
+	/**
+	 * 	ESTADOS DE UN EXPEDIENTE: Solicitud enviada.
+	 */
+	public final static String ESTADO_SOLICITUD_ENVIADA = "SE";
+	/**
+	 * 	ESTADOS DE UN EXPEDIENTE: Solicitud enviada pendiente preregistro.
+	 */
+	public final static String ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL = "SP";
+	/**
+	 * 	ESTADOS DE UN EXPEDIENTE: Aviso pendiente.
+	 */
+	public final static String ESTADO_AVISO_PENDIENTE = "AP";
+	/**
+	 * 	ESTADOS DE UN EXPEDIENTE: Aviso recibido.
+	 */
+	public final static String ESTADO_AVISO_RECIBIDO = "AR";
+	/**
+	 * 	ESTADOS DE UN EXPEDIENTE: Notificacion pendiente.
+	 */
+	public final static String ESTADO_NOTIFICACION_PENDIENTE = "NP";
+	/**
+	 * 	ESTADOS DE UN EXPEDIENTE: Notificacion recibida.
+	 */
+	public final static String ESTADO_NOTIFICACION_RECIBIDA = "NR";
+	
 	
 
 }

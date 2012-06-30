@@ -46,6 +46,7 @@ import es.caib.zonaper.model.EventoExpediente;
 import es.caib.zonaper.model.Expediente;
 import es.caib.zonaper.model.IndiceElemento;
 import es.caib.zonaper.model.NotificacionTelematica;
+import es.caib.zonaper.modelInterfaz.ConfiguracionAvisosExpedientePAD;
 import es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo;
 import es.caib.zonaper.modelInterfaz.DetalleAviso;
 import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
@@ -65,7 +66,6 @@ import es.caib.zonaper.persistence.delegate.EventoExpedienteDelegate;
 import es.caib.zonaper.persistence.delegate.ExpedienteDelegate;
 import es.caib.zonaper.persistence.delegate.IndiceElementoDelegate;
 import es.caib.zonaper.persistence.delegate.PadDelegate;
-import es.caib.zonaper.persistence.util.ConfigurationUtil;
 
 
 /**
@@ -80,6 +80,8 @@ import es.caib.zonaper.persistence.util.ConfigurationUtil;
  *
  * @ejb.transaction type="Required"
  * 
+ * @ejb.env-entry name="roleAuto" type="java.lang.String" value="${role.auto}"
+ * 
  *
  */
 public abstract class PadBackOfficeFacadeEJB implements SessionBean
@@ -88,6 +90,8 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 	private Log log = LogFactory.getLog( PadBackOfficeFacadeEJB.class );
 	
 	private javax.ejb.SessionContext ctx;
+
+	private String ROLE_AUTO;
 	
 	/**
      * @ejb.create-method
@@ -96,7 +100,18 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
      */
 	public void ejbCreate() throws CreateException 
 	{
-		
+		try
+		{
+			javax.naming.InitialContext initialContext = new javax.naming.InitialContext();
+			
+			ROLE_AUTO = (String) initialContext.lookup( "java:comp/env/roleAuto" );			
+			
+		}
+		catch( Exception exc )
+		{			
+			log.error( exc );
+			throw new CreateException( exc.getLocalizedMessage() );
+		}
 	}
 	
     public void setSessionContext(javax.ejb.SessionContext ctx) 
@@ -185,7 +200,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		
 		// Comprobamos si ya existe el expediente				
 		try {
-			if (delegate.obtenerExpediente(expediente.getUnidadAdministrativa().longValue(), expediente.getIdentificadorExpediente()) != null){
+			if (delegate.existeExpediente(expediente.getUnidadAdministrativa().longValue(), expediente.getIdentificadorExpediente())){
 				throw new ExcepcionPAD("Ya existe un expediente con codigo: " + expediente.getIdentificadorExpediente());
 			}
 		}catch (DelegateException e1) {
@@ -284,17 +299,6 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 				el.setTipoElemento(entrada instanceof EntradaTelematica?ElementoExpediente.TIPO_ENTRADA_TELEMATICA:ElementoExpediente.TIPO_ENTRADA_PREREGISTRO);
 				el.setCodigoElemento(entrada.getCodigo());
 				exped.addElementoExpediente(el,entrada);
-				
-				// En caso de que el expediente no tenga establecido la configuracion de avisos y la entrada sí, 
-				// cogemos automaticamente la configuracion de la entrada
-				if (StringUtils.isEmpty(exped.getHabilitarAvisos())){
-					if (StringUtils.isNotEmpty(entrada.getHabilitarAvisos())){
-						exped.setHabilitarAvisos(entrada.getHabilitarAvisos());
-						exped.setAvisoEmail(entrada.getAvisoEmail());
-						exped.setAvisoSMS(entrada.getAvisoSMS());
-					}
-				}
-				
 			}					
 			
 			// Creamos los eventos indicados en el expediente y actualizamos expediente
@@ -339,7 +343,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 			delegate.grabarExpediente( exped );
 						
 			// Realizamos aviso de movilidad si en el alta se han generado eventos
-			exped = delegate.obtenerExpediente(exped.getUnidadAdministrativa().longValue(),exped.getIdExpediente());
+			exped = delegate.obtenerExpediente(exped.getUnidadAdministrativa().longValue(),exped.getIdExpediente(), exped.getClaveExpediente());
 			for ( Iterator it = exped.getElementos().iterator(); it.hasNext(); ){
 				ElementoExpediente ele = (ElementoExpediente) it.next();
 				if (ele.getTipoElemento().equals(ElementoExpediente.TIPO_AVISO_EXPEDIENTE))
@@ -429,27 +433,43 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		ExpedientePAD expPAD = null;
 		Expediente expediente=null;
 		try {
-			expediente = DelegateUtil.getExpedienteDelegate().obtenerExpediente( unidadAdministrativa, identificadorExpediente );
+			expediente = DelegateUtil.getExpedienteDelegate().obtenerExpediente( unidadAdministrativa, identificadorExpediente, claveExpediente );
 		} catch (DelegateException e) {
 			throw new ExcepcionPAD("Excepcion obteniendo expediente",e);
 		}
 		
 		if ( expediente != null )
 		{
-			
-			// En caso de que el expediente este protegido controlamos que se proporcione la clave correcta
-			if (StringUtils.isNotEmpty(expediente.getClaveExpediente())){
-				if (!expediente.getClaveExpediente().equals(claveExpediente)) 
-					throw new ExcepcionPAD("No se ha proporcionado la clave correcta de acceso al expediente");
-			}
-			
-			
 			expPAD = expedienteToExpedientePAD( expediente );
 		}
 		return expPAD;
 		
 	}
 
+	/**
+	 * Modificar configuracion de avisos de un expediente
+	 * @param unidadAdministrativa Unidad administrativa al que pertenece el expediente
+	 * @param identificadorExpediente Identificador expediente
+	 * @param claveExpediente Clave acceso expediente
+	 * @param configuracionAvisos Configuracion avisos expediente
+	 * @return Expediente
+	 * @throws ExcepcionPAD 	 
+	 * @ejb.interface-method
+     * @ejb.permission role-name="${role.gestor}"
+     * @ejb.permission role-name="${role.auto}"
+	 */
+	public void modificarAvisosExpediente( long unidadAdministrativa, String identificadorExpediente , String claveExpediente, ConfiguracionAvisosExpedientePAD configuracionAvisos) throws ExcepcionPAD	
+	{
+		log.debug( "Modificar avisos expediente" + identificadorExpediente );
+					
+		try {
+			DelegateUtil.getExpedienteDelegate().modificarAvisosExpediente(unidadAdministrativa, identificadorExpediente, claveExpediente, configuracionAvisos);
+		} catch (DelegateException e) {
+			throw new ExcepcionPAD("Excepcion modificando avisos expediente",e);
+		}
+		
+	}
+	
 	
 	/**
 	 * Alta evento expediente
@@ -470,19 +490,13 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		
 			Expediente expediente=null;
 			try {
-				expediente = DelegateUtil.getExpedienteDelegate().obtenerExpediente( unidadAdministrativa, identificadorExpediente );
+				expediente = DelegateUtil.getExpedienteDelegate().obtenerExpediente( unidadAdministrativa, identificadorExpediente, claveExpediente );
 			} catch (DelegateException e) {
 				throw new ExcepcionPAD("Excepcion accediendo al expediente: " + e.getMessage(),e);
 			}
 			
 			if (expediente == null) {
 				throw new ExcepcionPAD("No existe expediente con codigo " + identificadorExpediente + " para unidad administrativa " + unidadAdministrativa);
-			}
-			
-			// En caso de que el expediente este protegido controlamos que se proporcione la clave correcta
-			if (StringUtils.isNotEmpty(expediente.getClaveExpediente())){
-				if (!expediente.getClaveExpediente().equals(claveExpediente)) 
-					throw new ExcepcionPAD("No se ha proporcionado la clave correcta de acceso al expediente");
 			}
 			
 			// Las siguientes dos lineas son para establecer las propiedades que el documento obtiene del expediente
@@ -790,6 +804,8 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 			expediente.setHabilitarAvisos(expPAD.getConfiguracionAvisos().getHabilitarAvisos().booleanValue()?"S":"N");
 			expediente.setAvisoEmail(expPAD.getConfiguracionAvisos().getAvisoEmail());
 			expediente.setAvisoSMS(expPAD.getConfiguracionAvisos().getAvisoSMS());
+		} else {
+			expediente.setHabilitarAvisos("N");
 		}
 		
 		return expediente;
@@ -1054,6 +1070,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		eventoPAD.setTitulo( evento.getTitulo() );
 		eventoPAD.setTexto( evento.getTexto() );
 		eventoPAD.setTextoSMS( evento.getTextoSMS() );
+		eventoPAD.setFechaConsulta(evento.getFechaConsulta());
 		
 		DocumentoEventoExpediente documento = null;
 		DocumentoExpedientePAD docPAD = null;

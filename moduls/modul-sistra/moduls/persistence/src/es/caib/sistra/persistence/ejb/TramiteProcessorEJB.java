@@ -183,6 +183,15 @@ public class TramiteProcessorEJB implements SessionBean {
 	// Indica si aceptamos notificacion telematica (en caso de que se permita)
 	private Boolean habilitarNotificacionTelematica;
 	
+	// Indica si aceptamos aviso (en caso de que se permita)
+	private Boolean habilitarAvisos;
+	
+	// Indica email de aviso (en caso de que se permita)
+	private String emailAviso;
+	
+	// Indica sms de aviso (en caso de que se permita)
+	private String smsAviso;
+	
 	// Indica si es entorno de desarrollo
 	private boolean entornoDesarrollo;
 	
@@ -2836,17 +2845,35 @@ public class TramiteProcessorEJB implements SessionBean {
     }
     
     /**
-     * En caso de que se permita la notificacion telematica se establece si se desea notificacion telematica
+     * Establece los valores de seleccion de confirmacion de notificaciones y avisos.
      * 
      * @ejb.interface-method    
      * @ejb.permission role-name="${role.todos}"
      * 
      */
-    public void habilitarNotificacionTelematica(boolean habilitar)
+    public void habilitarNotificacionAvisos(boolean habilitarNotificacion, boolean habilitarAvisos, String emailAviso, String smsAviso)
     {
-    	this.habilitarNotificacionTelematica = new Boolean(habilitar);    	    	
-    }
+    	this.habilitarNotificacionTelematica = new Boolean(habilitarNotificacion);
+    	this.habilitarAvisos = new Boolean(habilitarAvisos);
+    	this.emailAviso = emailAviso;
+    	this.smsAviso = smsAviso;    	
+    }   
     
+    /**
+     * Resetea los valores de seleccion de confirmacion de notificaciones y avisos.
+     * 
+     * @ejb.interface-method    
+     * @ejb.permission role-name="${role.todos}"
+     * 
+     */
+    public void resetHabilitarNotificacionAvisos() {
+    	if (!ConstantesSTR.NOTIFICACIONTELEMATICA_OBLIGATORIA.equals(tramiteInfo.getHabilitarNotificacionTelematica())) {
+    		this.habilitarNotificacionTelematica = null;
+    	}
+    	this.habilitarAvisos = null;
+    	this.emailAviso = null;
+    	this.smsAviso = null;    	
+    }
     
     //  -------------------------------------------------------  
     // 	---------- Funciones auxiliares -----------------------
@@ -3650,6 +3677,18 @@ public class TramiteProcessorEJB implements SessionBean {
     		if (tramiteInfo.getHabilitarNotificacionTelematica().equals(ConstantesSTR.NOTIFICACIONTELEMATICA_OBLIGATORIA)){
     			this.habilitarNotificacionTelematica = new Boolean(true);
     		}
+    		
+    		// Establecemos info de si el tramite permite avisos
+    		if ( !ConstantesSTR.AVISO_SINESPECIFICAR.equals(espNivel.getHabilitarAvisos())){
+    			tramiteInfo.setHabilitarAvisos(espNivel.getHabilitarAvisos());
+    			tramiteInfo.setPermiteSMS("S".equals(espNivel.getPermitirSMS()));
+    		}else if ( !ConstantesSTR.AVISO_SINESPECIFICAR.equals(espTramite.getHabilitarAvisos())){
+    			tramiteInfo.setHabilitarAvisos(espTramite.getHabilitarAvisos());
+    			tramiteInfo.setPermiteSMS("S".equals(espTramite.getPermitirSMS()));
+    		}else{
+    			tramiteInfo.setHabilitarAvisos(ConstantesSTR.AVISO_NOPERMITIDO);
+    		}    		    		
+    		
     	}    	   
     	
     	// Si el tipo de tramitación es dependiente habrá que calcular el estado actual de esta dependencia 
@@ -3730,7 +3769,18 @@ public class TramiteProcessorEJB implements SessionBean {
     	tramiteInfo.setRedireccionFin(tramiteVersion.getRedireccionFin()== 'S');
     	
     	// Establece seleccion de notificacion telematica
-    	tramiteInfo.setSeleccionNotificacionTelematica(this.habilitarNotificacionTelematica);
+    	if (tramiteInfo.getHabilitarNotificacionTelematica() != ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA) {
+    		tramiteInfo.setSeleccionNotificacionTelematica(this.habilitarNotificacionTelematica);
+    	}
+    	
+    	// Establece seleccion de avisos
+    	if (tramiteInfo.getHabilitarAvisos() != ConstantesSTR.AVISO_NOPERMITIDO) {
+	    	tramiteInfo.setSeleccionAvisos(this.habilitarAvisos);
+	    	tramiteInfo.setSeleccionEmailAviso(this.emailAviso);
+	    	if (tramiteInfo.isPermiteSMS()) {
+	    		tramiteInfo.setSeleccionSmsAviso(this.smsAviso);
+	    	}
+    	}
     	    	
     	// Establece en caso de flujo de tramitación si esta en estado de pasar y a quien
     	// Si esta pendiente de pasar establece el campo flujoTramitacionNif
@@ -4369,28 +4419,29 @@ public class TramiteProcessorEJB implements SessionBean {
     			
     			// No generar asiento si:
     			//		- esta pendiente de flujo
-    			//	    - esta pendiente de seleccionar notificacion telematica
+    			//	    - esta pendiente de seleccionar notificacion telematica o selecciona avisos
     			//		- se esta tramitando en forma delegada y el usuario no tiene permiso para presentar el tramite
     			
     			boolean pendienteFlujo = paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_FLUJO);
     			boolean pendienteDelegacion = paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_DELEGACION_PRESENTACION);
     			boolean pendienteSeleccionarNotif = (!tramiteInfo.getHabilitarNotificacionTelematica().equals(ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA) && tramiteInfo.getSeleccionNotificacionTelematica() == null);
-    			if (  !(pendienteDelegacion || pendienteFlujo || pendienteSeleccionarNotif) ) {
-    						// Generar asiento
-    				
-		    				// Calculamos destinatario tramite (por si se especifica dinamicamente) 
+    			boolean pendienteSeleccionarAvisos = (!tramiteInfo.getHabilitarAvisos().equals(ConstantesSTR.AVISO_NOPERMITIDO) && tramiteInfo.getSeleccionAvisos() == null);
+    			if (  !(pendienteDelegacion || pendienteFlujo || pendienteSeleccionarNotif || pendienteSeleccionarAvisos) ) {
+    						// Calculamos destinatario tramite (por si se especifica dinamicamente) 
 		    				DestinatarioTramite dt = this.calcularDestinatarioTramite();
-						
-		    				// Generamos asiento (le pasamos destinatario tramite por si se especifica dinamicamente)
+							// Generamos asiento (le pasamos destinatario tramite por si se especifica dinamicamente)
 		    				AsientoCompleto asiento = generaAsientoRegistral(dt);
-			    			
-		    				// En caso de que el destinatario se haya especificado dinamicamente
+			    			// En caso de que el destinatario se haya especificado dinamicamente
 		    				// cambiamos de UA todos los docs en el RDS
 		    				if (dt.isCalculado()) cambiarUADocs(dt);
-		    				
 		    				// Establecemos el asiento como parametro del paso
-		    				param.put("asiento",asiento);
-    				
+		    				param.put("asiento",asiento);    				
+    			}
+    			
+    			// Si esta pendiente de seleccionar avisos calculamos email/sms por defecto
+    			if (pendienteSeleccionarAvisos) {
+    				param.put("emailAvisoDefault", calcularEmailAvisoDefecto());
+    				param.put("smsAvisoDefault", calcularSmsAvisoDefecto());
     			}
     			
     			break;
@@ -4407,6 +4458,74 @@ public class TramiteProcessorEJB implements SessionBean {
     }
     
     /**
+     * Calcula email por defecto para los avisos. Si esta rellenado el script de avisos lo ejecutara y si no 
+     * devolvera el email del usuario que esta intentando registrar.
+     * @return Email por defecto
+     * @throws ProcessorException 
+     */
+    private String calcularEmailAvisoDefecto() throws ProcessorException {
+		String emailDefecto="";    	
+    	byte[] scriptEmail = null;
+    	
+    	EspecTramiteNivel especVersion = tramiteVersion.getEspecificaciones();
+    	EspecTramiteNivel especNivel = tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
+    			
+    	if (ConstantesSTR.AVISO_PERMITIDO.equals(especNivel.getHabilitarAvisos()) && especNivel.getAvisoEmail() != null && especNivel.getAvisoEmail().length > 0 ){
+    		scriptEmail = especNivel.getAvisoEmail();
+    	}else if (ConstantesSTR.AVISO_PERMITIDO.equals(especVersion.getHabilitarAvisos())) {
+    		scriptEmail = especVersion.getAvisoEmail();
+    	}
+    	
+    	if (scriptEmail != null && scriptEmail.length > 0 ){
+    		emailDefecto = this.evaluarScript(scriptEmail,null);    		
+    	}
+    	
+    	if (StringUtils.isBlank(emailDefecto)) {
+    		emailDefecto = tramiteInfo.getFlujoTramitacionDatosPersonaIniciador().getEmail();
+    	}
+    	
+    	if (emailDefecto == null) {
+    		emailDefecto = "";
+    	}
+    	
+    	return emailDefecto;
+	}
+    
+    /**
+     * Calcula sms por defecto para los avisos. Si esta rellenado el script de avisos lo ejecutara y si no 
+     * devolvera el sms del usuario que esta intentando registrar.
+     * @return sms por defecto
+     * @throws ProcessorException 
+     */
+    private String calcularSmsAvisoDefecto() throws ProcessorException {
+		String smsDefecto="";    	
+    	byte[] scriptSms = null;
+    	
+    	EspecTramiteNivel especVersion = tramiteVersion.getEspecificaciones();
+    	EspecTramiteNivel especNivel = tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
+    			
+    	if (ConstantesSTR.AVISO_PERMITIDO.equals(especNivel.getHabilitarAvisos()) && especNivel.getAvisoSMS() != null && especNivel.getAvisoSMS().length > 0 ){
+    		scriptSms = especNivel.getAvisoSMS();
+    	}else if (ConstantesSTR.AVISO_PERMITIDO.equals(especVersion.getHabilitarAvisos())) {
+    		scriptSms = especVersion.getAvisoSMS();
+    	}
+    	
+    	if (scriptSms != null && scriptSms.length > 0 ){
+    		smsDefecto = this.evaluarScript(scriptSms,null);    		
+    	}
+    	
+    	if (StringUtils.isBlank(smsDefecto)) {
+    		smsDefecto = tramiteInfo.getFlujoTramitacionDatosPersonaIniciador().getTelefonoMovil();
+    	}
+    	
+    	if (smsDefecto == null) {
+    		smsDefecto = "";
+    	}
+    	
+    	return smsDefecto;
+	}
+
+	/**
      * Cambia de UA los documentos del tramite en caso de que se haya calculado
      * dinamicamente el destinatario
      * @param dt Destinatario tramite
@@ -5030,8 +5149,8 @@ public class TramiteProcessorEJB implements SessionBean {
 	    		// Normalizamos documento de identificación
 	        	rpteNif = NifCif.normalizarDocumento(rpteNif);
 	        	// Si se mete script de representante debe devolver un nif valido
-	    		if (!NifCif.esNIF(rpteNif) && !NifCif.esCIF(rpteNif)) {
-	    			throw new Exception("El script de nif de representante no devuelve un nif valido");
+	    		if (!NifCif.esNIF(rpteNif) && !NifCif.esCIF(rpteNif) && !NifCif.esNIE(rpteNif)) {
+	    			throw new Exception("El script de nif de representante no devuelve un nif/cif/nie valido");
 	    		}
     		}
     	}
@@ -5139,6 +5258,11 @@ public class TramiteProcessorEJB implements SessionBean {
         	
         	// Normalizamos documento de identificación
         	rpdoNif = NifCif.normalizarDocumento(rpdoNif);
+        	
+        	// Si se mete valor debe devolver un nif valido
+    		if (!NifCif.esNIF(rpdoNif) && !NifCif.esCIF(rpdoNif) && !NifCif.esNIE(rpdoNif)) {
+    			throw new Exception("El script de nif de representado no devuelve un nif/cif/nie valido");
+    		}
         	
     	}    	
     	return rpdoNif;

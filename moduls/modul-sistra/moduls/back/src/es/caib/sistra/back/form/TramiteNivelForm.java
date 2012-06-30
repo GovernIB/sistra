@@ -27,8 +27,7 @@ public class TramiteNivelForm extends TramiteValidatorForm
 	private String campoRteNom;
 	private String campoRdoNif;
 	private String campoRdoNom;
-	private String urlFin;
-	private String habilitarAvisos;
+	private String urlFin;	
     private String avisoSMS;
     private String avisoEmail;
     private String checkEnvio;
@@ -64,7 +63,6 @@ public class TramiteNivelForm extends TramiteValidatorForm
         this.setCampoRteNom( null );
         this.setCampoRdoNom( null );
         this.setUrlFin( null );
-        this.setHabilitarAvisos(null);
         this.setAvisoEmail(null);
         this.setAvisoSMS(null);
         this.setCheckEnvio(null);
@@ -222,14 +220,6 @@ public class TramiteNivelForm extends TramiteValidatorForm
 
 	public void setAvisoSMS(String avisoSMS) {
 		this.avisoSMS = avisoSMS;
-	}
-
-	public String getHabilitarAvisos() {
-		return habilitarAvisos;
-	}
-
-	public void setHabilitarAvisos(String habilitarAvisos) {
-		this.habilitarAvisos = habilitarAvisos;
 	}
 
 	public String getCheckEnvio() {

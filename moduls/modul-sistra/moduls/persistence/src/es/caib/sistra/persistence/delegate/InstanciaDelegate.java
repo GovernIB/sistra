@@ -38,7 +38,8 @@ public interface InstanciaDelegate extends Delegate
 	RespuestaFront mostrarDocumentoConsulta( int numDoc ) throws DelegateException;
 	public String obtenerUrlFin() throws DelegateException; 
 	public String obtenerIdPersistencia() throws DelegateException;	   
-	public void habilitarNotificacionTelematica(boolean habilitar) throws DelegateException;
+	public void habilitarNotificacionAvisos(boolean habilitarNotificacion, boolean habilitarAvisos, String emailAviso, String smsAviso) throws DelegateException;
+	public void resetHabilitarNotificacionAvisos() throws DelegateException;
 	public RespuestaFront mostrarFormularioDebug( String idDocumento, int instancia ) throws DelegateException;
 	public RespuestaFront remitirDelegacionPresentacionTramite()  throws DelegateException;
 	public RespuestaFront remitirDelegacionFirmaDocumentos()  throws DelegateException;

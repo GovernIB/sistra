@@ -12,8 +12,8 @@
 	<bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="referenciaPortal("+ lang +")"%>'/>
 </bean:define>
 <bean:define id="ID_INSTANCIA" name="ID_INSTANCIA" type="java.lang.String"/>
-<bean:define id="urlSeleccionNotificacionTelematica">
-        <html:rewrite page="/protected/seleccionNotificacionTelematica.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
+<bean:define id="urlResetSeleccionNotificacionTelematica">
+        <html:rewrite page="/protected/resetSeleccionNotificacionTelematicaAvisos.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
 <bean:define id="entornoDesarrollo" value="<%=Boolean.toString(es.caib.sistra.front.util.Util.esEntornoDesarrollo())%>"/>
 
@@ -26,21 +26,86 @@
 </logic:present>
 
 
-<!--  Seleccion  notificacion -->
-<logic:present name="confirmarSeleccionNotificacionTelematica">
+<!--  Pendiente confirmar notificacion y/o avisos: inicio capa -->
+<logic:present name="confirmarSeleccion">
+	
+	<bean:define id="seleccionNotificacionTelematica" name="seleccionNotificacionTelematica" type="java.lang.String"/>
+	<bean:define id="seleccionAvisos" name="seleccionAvisos" type="java.lang.String"/>
+	
 	<div class="alerta">
-		<p><bean:message key="finalizacion.notificacionTelematica.confirmacion" arg0="<%=referenciaPortal%>"/></p>
-		<p align="center">
-			<html:link href="<%=urlSeleccionNotificacionTelematica + \"&seleccion=S\"%>">
-				<bean:message key="finalizacion.notificacionTelematica.habilitar"/>
-			</html:link>
-			 &nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp; 
-			<html:link href="<%=urlSeleccionNotificacionTelematica + \"&seleccion=N\"%>">
-				<bean:message key="finalizacion.notificacionTelematica.deshabilitar"/>
-			</html:link>
-		</p>
+		<html:form action="/protected/seleccionNotificacionTelematicaAvisos">
+		<html:hidden property="ID_INSTANCIA" value="<%=ID_INSTANCIA%>"/>			
+		<html:hidden property="seleccionNotificacion"  styleId="seleccionNotificacion" value="<%=seleccionNotificacionTelematica%>"/>
+		<html:hidden property="seleccionAvisos" styleId="seleccionAvisos" value="<%=seleccionAvisos%>"/>
+		
+		<!--  Seleccion  notificacion -->
+		
+		
+		<!-- Si notif no obligatoria mostramos confirmacion -->
+		<logic:present name="confirmarSeleccionNotificacionTelematica">
+				<p><bean:message key="finalizacion.notificacionTelematica.confirmacion" arg0="<%=referenciaPortal%>"/></p>
+				<p align="center">
+					<input type="radio" name="opc" <%=("true".equals(seleccionNotificacionTelematica)? "checked=\"checked\"" : "")%>  onclick="document.getElementById('seleccionNotificacion').value='true';" />
+					<bean:message key="finalizacion.notificacionTelematica.habilitar"/>
+					<input type="radio" name="opc" <%=("false".equals(seleccionNotificacionTelematica)? "checked=\"checked\"" : "")%>  onclick="document.getElementById('seleccionNotificacion').value='false';" />
+					<bean:message key="finalizacion.notificacionTelematica.deshabilitar"/>					
+				</p>
+				<br/>
+		</logic:present>
+		<!--  Si notif obligatoria mostramos mensaje -->
+		<logic:notPresent name="confirmarSeleccionNotificacionTelematica">
+			<logic:present name="seleccionNotificacionTelematica">
+				<logic:equal name="seleccionNotificacionTelematica" value="true">
+					<p><bean:message key="finalizacion.notificacionTelematica.textoObligatoria"  arg0="<%=referenciaPortal%>"/></p>
+					<br/>
+				</logic:equal>
+			</logic:present>
+		</logic:notPresent>
+		
+		
+		<!--  Seleccion  avisos -->
+		<logic:present name="confirmarSeleccionAvisos">
+				<bean:define id="emailAvisoDefault" name="emailAvisoDefault" type="java.lang.String"/>
+				<bean:define id="smsAvisoDefault" name="smsAvisoDefault" type="java.lang.String"/>				
+				<logic:equal name="obligatorioSeleccionAvisos" value="true">
+					<p><bean:message key="finalizacion.avisos.confirmacion.obligatoria"/></p>					
+				</logic:equal>
+				<logic:equal name="obligatorioSeleccionAvisos" value="false">
+					<p><bean:message key="finalizacion.avisos.confirmacion.opcional"/></p>			
+				</logic:equal>				
+				<p align="center">
+					Email: <html:text property="emailSeleccionAviso"  value="<%=emailAvisoDefault%>" size="30"/>
+					<logic:equal name="permitirAvisoSMS" value="true">
+						&nbsp;&nbsp;&nbsp;
+						Sms: <html:text property="smsSeleccionAviso" value="<%=smsAvisoDefault%>" size="12"/>
+					</logic:equal>					
+				</p>
+				<logic:equal name="obligatorioSeleccionAvisos" value="false">	
+					<p class="notaRecibirAvisos">
+					<i>
+						<input type="checkbox" checked="checked" onclick="document.getElementById('seleccionAvisos').value=(this.checked?'true':'false')"/>
+						<bean:message key="finalizacion.avisos.confirmacionCheck"/>
+					</i>
+					</p>
+				</logic:equal>
+				<br/>
+		</logic:present>
+
+		<!--  Pendiente confirmar notificacion y/o avisos: fin capa-->
+		<br/>
+		<p align="center">	
+			<html:submit><bean:message key="finalizacion.notificacionAvisos.continuar"/></html:submit>
+		</p>	
+		</html:form>
+		
+		<!--  Errores validacion -->
+		<html:errors/>
+		
 	</div>
 </logic:present>
+
+
+
 
 <!--  Registro solicitud -->
 <logic:present name="permitirRegistrar">
@@ -309,7 +374,7 @@
 						<bean:message key="finalizacion.notificacionTelematica.textoHabilitada" arg0="<%=referenciaPortal%>"/>
 					</p>
 					<p class="notaPie">
-						<bean:message key="finalizacion.notificacionTelematica.cambioDecision"/> <html:link href="<%=urlSeleccionNotificacionTelematica + \"&seleccion=N\"%>"><bean:message key="finalizacion.notificacionTelematica.deshabilitar"/></html:link>
+						<bean:message key="finalizacion.notificacionTelematica.cambioDecision"/> <html:link href="<%=urlResetSeleccionNotificacionTelematica%>"><bean:message key="finalizacion.notificacionTelematica.aqui"/></html:link>
 					</p>					
 				</logic:equal>
 			</logic:equal>
@@ -318,7 +383,38 @@
 					<bean:message key="finalizacion.notificacionTelematica.textoDeshabilitada" arg0="<%=referenciaPortal%>"/>
 				</p>
 				<p class="notaPie">
-					<bean:message key="finalizacion.notificacionTelematica.cambioDecision"/>&nbsp;<html:link href="<%=urlSeleccionNotificacionTelematica + \"&seleccion=S\"%>"><bean:message key="finalizacion.notificacionTelematica.habilitar"/></html:link>
+					<bean:message key="finalizacion.notificacionTelematica.cambioDecision"/>&nbsp;<html:link href="<%=urlResetSeleccionNotificacionTelematica%>"><bean:message key="finalizacion.notificacionTelematica.aqui"/></html:link>
+				</p>					
+			</logic:equal>			
+		</logic:present>
+		
+		<!--  Opcion de avisos -->
+		<logic:present name="seleccionAvisos">
+			<br/>
+			<h3><bean:message key="finalizacion.avisos.titulo"/></h3>
+			<logic:equal name="seleccionAvisos" value="true">
+				<logic:equal name="tramite" property="habilitarAvisos" value="<%=ConstantesSTR.AVISO_OBLIGATORIO%>">
+					<p><bean:message key="finalizacion.avisos.textoObligatoria"/></p>
+				</logic:equal>
+				<logic:equal name="tramite" property="habilitarAvisos" value="<%=ConstantesSTR.AVISO_PERMITIDO%>">			
+					<p>
+						<bean:message key="finalizacion.avisos.textoHabilitada"/>
+					</p>
+					<p>
+						<logic:notEmpty name="seleccionEmailAviso">Email: <bean:write name="seleccionEmailAviso"/></logic:notEmpty>
+						<logic:notEmpty name="seleccionSmsAviso"> - Sms: <bean:write name="seleccionSmsAviso"/></logic:notEmpty>
+					</p>
+					<p class="notaPie">
+						<bean:message key="finalizacion.avisos.cambioDecision"/> <html:link href="<%=urlResetSeleccionNotificacionTelematica%>"><bean:message key="finalizacion.avisos.aqui"/></html:link>
+					</p>					
+				</logic:equal>
+			</logic:equal>
+			<logic:equal name="seleccionAvisos" value="false">
+				<p>
+					<bean:message key="finalizacion.avisos.textoDeshabilitada"/>
+				</p>
+				<p class="notaPie">
+					<bean:message key="finalizacion.avisos.cambioDecision"/>&nbsp;<html:link href="<%=urlResetSeleccionNotificacionTelematica%>"><bean:message key="finalizacion.avisos.aqui"/></html:link>
 				</p>					
 			</logic:equal>			
 		</logic:present>

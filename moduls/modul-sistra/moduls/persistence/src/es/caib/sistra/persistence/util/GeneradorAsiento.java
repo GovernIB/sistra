@@ -510,7 +510,13 @@ public class GeneradorAsiento {
 			if (tramiteInfo.getSeleccionNotificacionTelematica() == null){
 				throw new Exception("No se ha establecido seleccion para notificacion telematica");
 			}
+			if (ConstantesSTR.NOTIFICACIONTELEMATICA_OBLIGATORIA.equals(tramiteInfo.getHabilitarNotificacionTelematica()) && 
+					!tramiteInfo.getSeleccionNotificacionTelematica().booleanValue()){
+				throw new Exception("La notificacion telematica debe ser obligatoria");
+			}
+			
 			instrucciones.setHabilitarNotificacionTelematica(tramiteInfo.getSeleccionNotificacionTelematica().booleanValue()?"S":"N");
+			
 		}
 	}
 
@@ -519,40 +525,33 @@ public class GeneradorAsiento {
 			PluginFormularios plgForms, EspecTramiteNivel especVersion,
 			EspecTramiteNivel especNivel, Instrucciones instrucciones)
 			throws ProcessorException, Exception {
-		byte script[];
-		String resScriptMov;
-		script = getScriptNivelOrGenerico(especNivel.getHabilitarAvisos(),especVersion.getHabilitarAvisos());
-		if (script != null && script.length>0){
-			resScriptMov = ScriptUtil.evaluarScriptTramitacion(script,null,tramiteVersion,(HashMap) plgForms.getDatosFormularios(),tramitePAD,tramiteInfo.getDatosSesion());
-			if (!("S".equals(resScriptMov)) && !("N".equals(resScriptMov))){
-				throw new Exception("Error evaluando script de habilitar avisos: valor devuelto '" + resScriptMov + "' no es 'S' o 'N' ");						
+		
+		if (!ConstantesSTR.AVISO_NOPERMITIDO.equals(tramiteInfo.getHabilitarAvisos())){
+			if (tramiteInfo.getSeleccionAvisos() == null){
+				throw new Exception("No se ha establecido seleccion para avisos");
 			}
-			instrucciones.setHabilitarAvisos(resScriptMov);
-			if ("S".equals(resScriptMov)){
-				// Aviso email
-				script = getScriptNivelOrGenerico(especNivel.getAvisoEmail(),especVersion.getAvisoEmail());
-				if (script != null && script.length>0){
-					resScriptMov = ScriptUtil.evaluarScriptTramitacion(script,null,tramiteVersion,(HashMap) plgForms.getDatosFormularios(),tramitePAD,tramiteInfo.getDatosSesion());
-					if (StringUtils.isNotEmpty(resScriptMov)){ 
-						if (!ValidacionesUtil.validarEmail(resScriptMov)){
-							throw new Exception("Error evaluando script de aviso email: valor devuelto '" + resScriptMov + "' no es un email valido ");						
-						}
-						instrucciones.setAvisoEmail(resScriptMov);
-					}
-				}					
-				// Aviso sms
-				script = getScriptNivelOrGenerico(especNivel.getAvisoSMS(),especVersion.getAvisoSMS());
-				if (script != null && script.length>0){
-					resScriptMov = ScriptUtil.evaluarScriptTramitacion(script,null,tramiteVersion,(HashMap) plgForms.getDatosFormularios(),tramitePAD,tramiteInfo.getDatosSesion());
-					if (StringUtils.isNotEmpty(resScriptMov)){
-						if (!ValidacionesUtil.validarMovil(resScriptMov)){
-							throw new Exception("Error evaluando script de aviso sms: valor devuelto '" + resScriptMov + "' no es un telefono movil valido ");						
-						}
-						instrucciones.setAvisoSMS(resScriptMov);
-					}
+			if (ConstantesSTR.AVISO_NOPERMITIDO.equals(tramiteInfo.getHabilitarAvisos()) && 
+					!tramiteInfo.getSeleccionAvisos().booleanValue()){
+				throw new Exception("Los avisos deben ser obligatorios");
+			}
+			instrucciones.setHabilitarAvisos(tramiteInfo.getSeleccionAvisos().booleanValue()?"S":"N");
+			
+			if (tramiteInfo.getSeleccionAvisos().booleanValue()) {
+				if (!ValidacionesUtil.validarEmail(tramiteInfo.getSeleccionEmailAviso())) {
+					throw new Exception("El email de aviso no es valido");					
 				}
+				instrucciones.setAvisoEmail(tramiteInfo.getSeleccionEmailAviso());
+				
+				if (tramiteInfo.isPermiteSMS() && StringUtils.isNotBlank(tramiteInfo.getSeleccionSmsAviso())) {
+					if (!ValidacionesUtil.validarMovil(tramiteInfo.getSeleccionSmsAviso())) {
+						throw new Exception("El movil de aviso no es valido");
+					}
+					instrucciones.setAvisoSMS(tramiteInfo.getSeleccionSmsAviso());
+				}				
 			}
+			
 		}
+		
 	}
 
 	private static TramiteSubsanacion generarTramiteSubsanacion(String expeId,

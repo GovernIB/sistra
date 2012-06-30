@@ -1,23 +1,31 @@
 package es.caib.zonaper.persistence.ejb;
 
 import java.security.Principal;
+import java.util.GregorianCalendar;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
+import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
+import net.sf.hibernate.expression.Expression;
 
 import org.apache.commons.lang.StringUtils;
 
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
 import es.caib.util.CredentialUtil;
+import es.caib.util.DataUtil;
 import es.caib.zonaper.model.EstadoExpediente;
 import es.caib.zonaper.model.Expediente;
+import es.caib.zonaper.model.Page;
+import es.caib.zonaper.modelInterfaz.ConfiguracionAvisosExpedientePAD;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
+import es.caib.zonaper.modelInterfaz.FiltroBusquedaExpedientePAD;
 import es.caib.zonaper.persistence.delegate.DelegateException;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 
@@ -136,22 +144,72 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
      */
-	public Expediente obtenerExpediente( long unidadAdministrativa, String identificadorExpediente )
+	public boolean existeExpediente( long unidadAdministrativa, String identificadorExpediente)
 	{
+		Expediente expe = obtenerExpedienteImpl(unidadAdministrativa,
+				identificadorExpediente);
+		return (expe != null);		
+	}
+	
+	/**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+	public Expediente obtenerExpedienteAuto( long unidadAdministrativa, String identificadorExpediente )
+	{
+		return obtenerExpedienteImpl(unidadAdministrativa,
+				identificadorExpediente);
+	}
+	
+	
+	/**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.gestor}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+	public Expediente obtenerExpediente( long unidadAdministrativa, String identificadorExpediente, String claveExpediente )
+	{
+		Expediente expe = obtenerExpedienteImpl(unidadAdministrativa,
+				identificadorExpediente);
+		
+		if (expe.getClaveExpediente() != null && !expe.getClaveExpediente().equals(claveExpediente)) {
+			throw new EJBException("No se ha proporcionado la clave correcta de acceso al expediente");
+		}
+		
+		return expe;
+		
+	}
+	
+	/**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.gestor}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+	public void modificarAvisosExpediente( long unidadAdministrativa, String identificadorExpediente, String claveExpediente, ConfiguracionAvisosExpedientePAD configuracionAvisos)  {
+		
+		// Obtenemos expediente
+		Expediente expe = this.obtenerExpediente(unidadAdministrativa, identificadorExpediente, claveExpediente);
+		
+		// Modificamos avisos
 		Session session = getSession();
 		try
 		{
-			Query query = session.createQuery( "FROM Expediente e where e.idExpediente = :id and e.unidadAdministrativa = :ua" );
-			query.setParameter( "id", identificadorExpediente );
-			query.setParameter( "ua", new Long( unidadAdministrativa ) );
-			//query.setCacheable( true );
-			Expediente expediente = ( Expediente ) query.uniqueResult();
-			if ( expediente != null )
-			{
-				Hibernate.initialize( expediente.getElementos() );				
+			if (configuracionAvisos.getHabilitarAvisos() != null) {
+				expe.setHabilitarAvisos(configuracionAvisos.getHabilitarAvisos().booleanValue()?"S":"N");
+				if (configuracionAvisos.getHabilitarAvisos().booleanValue()) {
+					expe.setAvisoEmail(configuracionAvisos.getAvisoEmail());
+					expe.setAvisoSMS(configuracionAvisos.getAvisoSMS());
+				} else {
+					expe.setAvisoEmail(null);
+					expe.setAvisoSMS(null);
+				}
+			} else {
+				expe.setHabilitarAvisos("N");
+				expe.setAvisoEmail(null);
+				expe.setAvisoSMS(null);
 			}
-			return expediente;
-		}	
+			session.update( expe );
+		}
 		catch (HibernateException he) 
 		{   
 			throw new EJBException(he);
@@ -211,7 +269,7 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 		{
 			String user = this.ctx.getCallerPrincipal().getName();
 			Query query = session
-			.createQuery( "SELECT count(e) FROM Expediente e where e.seyconCiudadano = :user and (e.estado='" + Expediente.ESTADO_AVISO_PENDIENTE + "' or e.estado='" + Expediente.ESTADO_NOTIFICACION_PENDIENTE + "' )" )
+			.createQuery( "SELECT count(e) FROM Expediente e where e.seyconCiudadano = :user and (e.estado='" + ConstantesZPE.ESTADO_AVISO_PENDIENTE + "' or e.estado='" + ConstantesZPE.ESTADO_NOTIFICACION_PENDIENTE + "' )" )
 			.setParameter("user",user);
 			return Integer.parseInt(query.uniqueResult().toString());	
 		}
@@ -225,6 +283,69 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 	    }
 	}
 	
+	
+	/**
+	 * Obtiene expedientes gestionados por el gestor
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.gestor}"
+     */
+	public Page busquedaPaginadaExpedientesGestor(
+			FiltroBusquedaExpedientePAD filtro, int numPagina, int longPagina) {
+		Session session = getSession();
+        try 
+        {
+        	Criteria criteria = session.createCriteria( Expediente.class );
+        	criteria.setCacheable( false );        
+        	// Filtro procedimientos
+        	criteria.add(Expression.in( "idProcedimiento", filtro.getIdentificadorProcedimientos()) );
+        	// Filtro año / mes
+	   		if ( filtro.getAnyo() > 0 )
+	   		 {
+	   			 GregorianCalendar gregorianCalendar1 = null;
+	   			 GregorianCalendar gregorianCalendar2 = null;
+	   			 if ( filtro.getMes() <= 0 )
+	   			 {
+	   			 	 gregorianCalendar1 = new GregorianCalendar( filtro.getAnyo(), 0, 1 );
+	   			 	 gregorianCalendar2 = new GregorianCalendar( filtro.getAnyo(), 11, 31 );
+	   			 }
+	   			 else
+	   			 {
+	   				 gregorianCalendar1 = new GregorianCalendar( filtro.getAnyo(), filtro.getMes(), 1 );
+	   				 int year =  filtro.getAnyo();
+	   				 int month = filtro.getMes();
+	   				 gregorianCalendar2 = new GregorianCalendar( year, month, gregorianCalendar1.getMaximum( GregorianCalendar.DAY_OF_MONTH ) );				 
+	   			 }
+	   			criteria.add( Expression.between( "fecha", new java.sql.Date(gregorianCalendar1.getTime().getTime()), new java.sql.Date( DataUtil.obtenerUltimaHora(gregorianCalendar2.getTime()).getTime() )) );	   			
+	   		 }
+	   		// Filtro nif
+	   		if (StringUtils.isNotBlank(filtro.getNifRepresentante())) {
+	   			criteria.add(Expression.like("nifRepresentante", filtro.getNifRepresentante()));
+	   		}
+	   		// Filtro numero entrada
+	   		if (StringUtils.isNotBlank(filtro.getNumeroEntradaBTE())) {
+	   			criteria.add(Expression.eq("numeroEntradaBTE", filtro.getNumeroEntradaBTE()));
+	   		}
+	   		
+	   		// Realizamos busqueda paginada
+			Page page = new Page( criteria, numPagina, longPagina );
+						
+            return page;
+        }
+        catch( HibernateException he )
+        {
+        	throw new EJBException( he );
+        }
+        catch( Exception exc )
+        {
+        	throw new EJBException( exc );
+        }
+        finally
+        {
+        	close( session );
+        }
+		
+	}
 	
 	
 	private void controlAccesoExpedienteAutenticado(Expediente expediente) throws Exception{
@@ -242,5 +363,31 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 		}
 	}
 	
+	
+	private Expediente obtenerExpedienteImpl(long unidadAdministrativa,
+			String identificadorExpediente) {
+		Session session = getSession();
+		try
+		{
+			Query query = session.createQuery( "FROM Expediente e where e.idExpediente = :id and e.unidadAdministrativa = :ua" );
+			query.setParameter( "id", identificadorExpediente );
+			query.setParameter( "ua", new Long( unidadAdministrativa ) );
+			//query.setCacheable( true );
+			Expediente expediente = ( Expediente ) query.uniqueResult();
+			if ( expediente != null )
+			{
+				Hibernate.initialize( expediente.getElementos() );				
+			}
+			return expediente;
+		}	
+		catch (HibernateException he) 
+		{   
+			throw new EJBException(he);
+	    } 
+		finally 
+		{
+	        close(session);
+	    }
+	}
 	
 }

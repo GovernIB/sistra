@@ -14,7 +14,7 @@
      
      function mostrarErrores(){
         var url = "<html:rewrite page="/tramite/erroresIntegracion.jsp" />";
-        url = url + "?codigoTramiteError=<%=request.getAttribute("codigoTramiteError")%>";
+        url = url + "?codigoTramiteError=" + $("#identificadorProcedimiento").val();
         obrir(url, "Errores", 540, 400);
 	}
      // -->
@@ -24,12 +24,30 @@
 </tr>
 <tr>
     <td class="labelo"><bean:message key="tramite.identificador"/></td>
-    <td class="input"><html:text styleClass="data" tabindex="1" property="values.identificador" maxlength="20" readonly="<%= request.getAttribute( \"idReadOnly\" ) != null %>" /></td>
+    <td class="input"><html:text styleClass="data" tabindex="1" property="values.identificador" styleId="identificadorProcedimiento" maxlength="20" readonly="<%= request.getAttribute( \"idReadOnly\" ) != null %>" /></td>
 </tr>
 <tr>
     <td class="labelo"><bean:message key="tramite.descripcion"/></td>
     <td class="input"><html:text styleClass="textLargo" tabindex="10" property="values.descripcion" maxlength="100"/></td>
 </tr>
+
+
+<tr>
+	<td class="separador" colspan="2"><bean:message key="tramite.gestionExpedientes"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="tramite.gestionExpedientes.unidadAdministrativa"/></td>
+    <td class="input">
+    	<html:select property="values.unidadAdministrativa">
+   			<html:options collection="listaUnidadesAdministrativa" property="codigo" labelProperty="descripcion" />
+    	</html:select>
+    </td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="tramite.gestionExpedientes.permitirSmsAvisos"/></td>
+    <td class="input">Si<html:radio property="values.permitirSms" value="S"/> No <html:radio property="values.permitirSms" value="N"/></td>
+</tr>
+
 <tr>
 	<td class="separador" colspan="2"><bean:message key="tramite.avisoBackOffice"/></td>
 </tr>
@@ -101,3 +119,5 @@
 		</tr>
 	</logic:present>
 </logic:notEmpty>
+
+	

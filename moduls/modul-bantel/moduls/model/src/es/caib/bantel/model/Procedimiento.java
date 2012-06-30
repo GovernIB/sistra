@@ -37,6 +37,11 @@ public class Procedimiento implements Serializable{
 	private byte[] errores;
 	private Set gestores = new HashSet(0);
 		
+	private Long unidadAdministrativa;
+	private String permitirSms = "S";
+	
+	
+	
 	public String getIdentificador() {
 		return identificador;
 	}
@@ -141,6 +146,18 @@ public class Procedimiento implements Serializable{
 	}
 	public void setErrores(byte[] errores) {
 		this.errores = errores;
+	}
+	public Long getUnidadAdministrativa() {
+		return unidadAdministrativa;
+	}
+	public void setUnidadAdministrativa(Long unidadAdministrativa) {
+		this.unidadAdministrativa = unidadAdministrativa;
+	}
+	public String getPermitirSms() {
+		return permitirSms;
+	}
+	public void setPermitirSms(String permitirSms) {
+		this.permitirSms = permitirSms;
 	}
 	
 }

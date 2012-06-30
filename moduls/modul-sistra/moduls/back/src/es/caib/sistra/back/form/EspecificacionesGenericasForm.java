@@ -31,7 +31,6 @@ public class EspecificacionesGenericasForm extends TraduccionValidatorForm
 	private String campoRdoNif;
 	private String campoRdoNom;
 	private String urlFin;
-	private String habilitarAvisos;
     private String avisoSMS;
     private String avisoEmail;
     private String checkEnvio;
@@ -100,7 +99,6 @@ public class EspecificacionesGenericasForm extends TraduccionValidatorForm
 		setCampoRdoNif(null);
 		setCampoRdoNom(null);
 		setUrlFin(null);
-		setHabilitarAvisos(null);
 		setAvisoEmail(null);
 		setAvisoSMS(null);
 		setCheckEnvio(null);
@@ -225,7 +223,7 @@ public class EspecificacionesGenericasForm extends TraduccionValidatorForm
 	        	}	
 	        	if (mensajeFecha > 0 && mensajeFecha != numLangs){	        		
 	        		errors.add( "traduccion.mensajeFechaLimiteEntregaPresencial", new ActionError("errors.revisarTraducciones","Mensaje fecha límite") );
-	        	}
+	        	}	        		        
 	        	
 	        }
 	    	catch (DelegateException e) 
@@ -259,14 +257,6 @@ public class EspecificacionesGenericasForm extends TraduccionValidatorForm
 
 	public void setAvisoSMS(String avisoSMS) {
 		this.avisoSMS = avisoSMS;
-	}
-
-	public String getHabilitarAvisos() {
-		return habilitarAvisos;
-	}
-
-	public void setHabilitarAvisos(String habilitarAvisos) {
-		this.habilitarAvisos = habilitarAvisos;
 	}
 
 	public String getCheckEnvio() {

@@ -8,8 +8,7 @@
 <script type="text/javascript" src="js/jquery.selectboxes.pack.js"></script>
 <script type="text/javascript">
 	function volver(identificadorExp,unidadAdm,claveExp){
-		document.forms["0"].action='<html:rewrite page="/recuperarExpediente.do?identificadorExp='+identificadorExp+'&unidadAdm='+unidadAdm+'&claveExp='+claveExp+'" />';
-		document.forms["0"].submit();
+		document.location='<html:rewrite page="/recuperarExpediente.do?identificadorExp='+identificadorExp+'&unidadAdm='+unidadAdm+'&claveExp='+claveExp+'" />';		
 	}
 </script>
 <bean:define id="aviso" name="elemento" type="es.caib.zonaper.modelInterfaz.EventoExpedientePAD" />
@@ -30,6 +29,12 @@
 				<dl>
 					<dt><bean:message key="detalle.aviso.fechaEmision"/></dt>
 					<dd><bean:write name="aviso" property="fecha" format="dd/MM/yyyy '-' HH:mm"/></dd>
+					<dt><bean:message key="detalle.aviso.fechaLectura"/></dt>
+					<dd>
+						<logic:notEmpty name="aviso" property="fechaConsulta">
+							<bean:write name="aviso" property="fechaConsulta" format="dd/MM/yyyy '-' HH:mm"/>
+						</logic:notEmpty>
+					</dd>
 					<dt><bean:message key="detalle.aviso.asunto"/></dt>
 					<dd><bean:write name="aviso" property="titulo"/></dd>
 					<dt><bean:message key="expediente.descripcion"/></dt>
@@ -76,11 +81,9 @@
 			<!-- tornar enrere -->
 			
 			<div id="enrere">
-				<html:form style="background-color:white" action="recuperarExpediente" >
 				<a href="#" onclick="javascript:volver('<%=expediente.getIdentificadorExpediente()%>','<%=expediente.getUnidadAdministrativa()%>','<%=expediente.getClaveExpediente()%>')">
 					<bean:message key="detalle.aviso.tornar" />				
-				</a>	
-				</html:form>
+				</a>					
 			</div>
 			
 			<!-- /tornar enrere -->

@@ -6,6 +6,7 @@ import java.util.Hashtable;
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
+import es.caib.zonaper.modelInterfaz.ConfiguracionAvisosExpedientePAD;
 import es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo;
 import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
@@ -111,6 +112,18 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 		{
 			throw new DelegateException( e );
 		}
+	}
+	
+	public void modificarAvisosExpediente( long unidadAdministrativa, String identificadorExpediente, String claveExpediente, ConfiguracionAvisosExpedientePAD configuracionAvisos) throws DelegateException
+	{
+		try
+		{
+			getFacade().modificarAvisosExpediente( unidadAdministrativa, identificadorExpediente, claveExpediente, configuracionAvisos );
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
 	}
 
 	/*

@@ -3,6 +3,7 @@ package es.caib.bantel.front.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
@@ -56,7 +57,11 @@ public class AltaAvisoAction extends BaseAction
 			if(exp != null){
 				// Establecemos descripcion expediente e idioma
 				avisoForm.setDescripcionExpediente(exp.getDescripcion());
-				avisoForm.setIdioma(exp.getIdioma());				
+				avisoForm.setIdioma(exp.getIdioma());
+				if (exp.getConfiguracionAvisos() != null && exp.getConfiguracionAvisos().getHabilitarAvisos() != null && 
+						exp.getConfiguracionAvisos().getHabilitarAvisos().booleanValue() && StringUtils.isNotBlank(exp.getConfiguracionAvisos().getAvisoSMS())) {
+					avisoForm.setPermitirSms("S");
+				}
 			}else{
 				throw new Exception("No se ha encontrado expediente");
 			}

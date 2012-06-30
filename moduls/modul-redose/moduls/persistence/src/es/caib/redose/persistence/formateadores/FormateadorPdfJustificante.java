@@ -240,11 +240,30 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
     	}
     	
     	if(!registroSalida){
-    		// Solo en los casos que no sean registro de salida miraremos esto, ya que con los registros de salida no nos llegan los datos propios
-	    	// Identificador de persistencia (sólo para anónimo)
+    		// Identificador de persistencia (sólo para anónimo)
 	    	if (nivelAutenticacion == 'A' && datosPropios != null && datosPropios.getInstrucciones() != null && StringUtils.isNotEmpty(datosPropios.getInstrucciones().getIdentificadorPersistencia())){
 		    	propiedad = new Propiedad(props.getProperty("datosRegistro.identificadorPersistencia"),
 		    			datosPropios.getInstrucciones().getIdentificadorPersistencia());		    		    
+				seccion.addCampo(propiedad);
+	    	}
+	    	// Notificacion telematica
+	    	if (datosPropios != null && datosPropios.getInstrucciones() != null && StringUtils.isNotEmpty(datosPropios.getInstrucciones().getHabilitarNotificacionTelematica())){
+		    	propiedad = new Propiedad(props.getProperty("datosRegistro.notificacionTelematica"),
+			    			("S".equals(datosPropios.getInstrucciones().getHabilitarNotificacionTelematica()))?props.getProperty("datosRegistro.notificacionTelematica.si"):props.getProperty("datosRegistro.notificacionTelematica.no"));		    		    
+				seccion.addCampo(propiedad);
+	    	}
+	    	// Avisos
+	    	if (datosPropios != null && datosPropios.getInstrucciones() != null && StringUtils.isNotEmpty(datosPropios.getInstrucciones().getHabilitarAvisos())){
+	    		String valueAvisos;
+	    		if ("S".equals(datosPropios.getInstrucciones().getHabilitarNotificacionTelematica())) {
+	    			valueAvisos = datosPropios.getInstrucciones().getAvisoEmail() ;
+	    			if (StringUtils.isNotBlank(datosPropios.getInstrucciones().getAvisoSMS())) {
+	    				valueAvisos +=  " - " + datosPropios.getInstrucciones().getAvisoSMS();
+	    			}
+	    		} else {
+	    			valueAvisos = props.getProperty("datosRegistro.avisos.no");
+	    		}
+	    		propiedad = new Propiedad(props.getProperty("datosRegistro.avisos"),valueAvisos);		    		    
 				seccion.addCampo(propiedad);
 	    	}
     	}

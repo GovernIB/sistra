@@ -51,6 +51,7 @@ public class AvisosMovilidad {
 	private static boolean confirmacionEnvioNotificacionesSms;
 	private static boolean confirmacionEnvioEventosEmail;
 	private static boolean confirmacionEnvioEventosSms;
+	private static boolean alertasSmsZonaPersonal;
 	private static Log log = LogFactory.getLog(AvisosMovilidad.class);
 	private static Map plantillas = new HashMap();
 	
@@ -88,6 +89,12 @@ public class AvisosMovilidad {
 				confirmacionEnvioEventosSms = false;
 			}
 			
+			String confAlertasSmsZonaPersonal = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisos.smsAlertas");
+			if (StringUtils.isNotBlank(confAlertasSmsZonaPersonal) && "true".equals(confAlertasSmsZonaPersonal)) {
+				alertasSmsZonaPersonal = true;
+			} else {
+				alertasSmsZonaPersonal = false;
+			}			
 		}
 		return avisos;
 	}			
@@ -98,9 +105,13 @@ public class AvisosMovilidad {
 	 * @throws Exception 
 	 */
 	public String avisoCreacionElementoExpediente(ElementoExpediente ele) throws Exception{
-		String email=null;
-		String sms=null;
 		
+		String emailZP=null;
+		String smsZP=null;
+		String emailExpe=null;
+		String smsExpe=null;
+		
+
 		// Los tipos de elementos de los que se avisa son los eventos y las notificaciones
 		if (!ele.getTipoElemento().equals(ElementoExpediente.TIPO_AVISO_EXPEDIENTE) && 
 			!ele.getTipoElemento().equals(ElementoExpediente.TIPO_NOTIFICACION) ){			
@@ -108,36 +119,36 @@ public class AvisosMovilidad {
 		}
 		
 		Expediente expe = ele.getExpediente();
-		
+
 		log.debug("Aviso creacion elemento expediente: " + expe.getUnidadAdministrativa() + " - " + expe.getIdExpediente());
 		
-		// Obtenemos configuracion avisos
-		if (StringUtils.isNotEmpty(expe.getHabilitarAvisos())){
-			// Config a nivel de expe
-			log.debug("Existe configuracion a nivel de expediente");
-			email = expe.getAvisoEmail();
-			sms = expe.getAvisoSMS();
-		}else{
-			// Config a nivel de zona personal
-			log.debug("Buscamos configuracion a nivel de zona personal");
-			// Si expediente no esta autenticado no tiene configuracion en zona personal
-			if (StringUtils.isEmpty(expe.getSeyconCiudadano())){
-				log.debug("No existe configuracion a nivel de zona personal: Expediente no autenticado");
-				return null;
-			}
-			// Si esta autenticado expediente obtenemos configuracion zona personal 
+		// Obtenemos configuracion avisos zona personal
+		
+		// Config a nivel de zona personal (si expe autenticado)
+		log.debug("Buscamos configuracion a nivel de zona personal");
+		if (StringUtils.isNotEmpty(expe.getSeyconCiudadano())){
 			PadAplicacionDelegate pad = DelegateUtil.getPadAplicacionDelegate();
 			PersonaPAD ciud = pad.obtenerDatosPersonaPADporUsuario(expe.getSeyconCiudadano());			
 			if (ciud.isHabilitarAvisosExpediente()){
-				email=ciud.getEmail();
-				sms=ciud.getTelefonoMovil();
+				emailZP=ciud.getEmail();
+				if (alertasSmsZonaPersonal) {
+					smsZP=ciud.getTelefonoMovil();
+				}
 			}
-			
+		}
+		
+		// Config a nivel de expediente
+		if ("S".equals(expe.getHabilitarAvisos())){
+			// Config a nivel de expe
+			log.debug("Existe configuracion a nivel de expediente");
+			emailExpe = expe.getAvisoEmail();
+			smsExpe = expe.getAvisoSMS();
 		}
 		
 		// Comprobamos si hay que enviar
-		if (StringUtils.isEmpty(email) && StringUtils.isEmpty(sms)){
-			log.debug("No existe configuracion para avisos: sms y email nulos");
+		if (StringUtils.isEmpty(emailZP) && StringUtils.isEmpty(smsZP) && 
+				StringUtils.isEmpty(emailExpe) && StringUtils.isEmpty(smsExpe)	){
+			log.debug("No hay que enviar, no existen direcciones de envio");
 			return null;
 		}
 				
@@ -174,8 +185,8 @@ public class AvisosMovilidad {
 			textoEmail = StringUtil.replace(textoEmail,"[#EXPEDIENTE#]",StringEscapeUtils.escapeHtml(expe.getIdExpediente() + " - " + expe.getDescripcion() ));
 			textoEmail = StringUtil.replace(textoEmail,"[#UNIDAD_ADMINISTRATIVA#]", StringEscapeUtils.escapeHtml(Dominios.obtenerDescripcionUA(expe.getUnidadAdministrativa().toString())));
 			textoEmail = StringUtil.replace(textoEmail,"[#FECHA#]", StringUtil.fechaACadena(evento.getFecha(),StringUtil.FORMATO_FECHA));
-			textoEmail = StringUtil.replace(textoEmail,"[#TITULO#]",StringEscapeUtils.escapeHtml(evento.getTitulo()));
-			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO#]",StringUtil.replace(StringEscapeUtils.escapeHtml(evento.getTexto()),"\n","</br>"));			
+			// textoEmail = StringUtil.replace(textoEmail,"[#TITULO#]",StringEscapeUtils.escapeHtml(evento.getTitulo()));
+			// textoEmail = StringUtil.replace(textoEmail,"[#TEXTO#]",StringUtil.replace(StringEscapeUtils.escapeHtml(evento.getTexto()),"\n","</br>"));			
 			textoEmail = StringUtil.replace(textoEmail,"[#URL_ACCESO#]",urlEventoExpediente + evento.getCodigo() + autenticacion);
 			textoEmail = StringUtil.replace(textoEmail,"[#ORGANISMO.NOMBRE#]",oi.getNombre());
 			textoEmail = StringUtil.replace(textoEmail,"[#ORGANISMO.LOGO#]",oi.getUrlLogo());
@@ -184,8 +195,8 @@ public class AvisosMovilidad {
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ORGANO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.organo")));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.EXPEDIENTE#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.expediente")));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.FECHAAVISO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.fechaAviso")));
-			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ASUNTO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.asunto")));
-			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.DESCRIPCION#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.descripcion")));
+			// textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ASUNTO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.asunto")));
+			// textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.DESCRIPCION#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.descripcion")));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDERAVISO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.accederAviso")));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.SOPORTE#]",LiteralesAvisosMovilidad.calcularTextoSoporte(oi, expe.getIdioma()));
 			
@@ -258,10 +269,11 @@ public class AvisosMovilidad {
 		mens.setCuentaEmisora(cuentaSistra);
 		mens.setInmediato(true);
 		
-		if (StringUtils.isNotEmpty(email)){
-			log.debug("Creamos mensaje email");
+		// Generamos en mensajes distintos para poder verificar envio
+		if (StringUtils.isNotEmpty(emailZP)){
+			log.debug("Creamos mensaje email para " + emailZP);
 			MensajeEnvioEmail mensEmail = new MensajeEnvioEmail();
-			String dest [] = {email};
+			String dest [] = {emailZP};
 			mensEmail.setDestinatarios(dest);
 			mensEmail.setTitulo(tituloEmail);
 			mensEmail.setTexto(textoEmail);
@@ -269,11 +281,30 @@ public class AvisosMovilidad {
 			mensEmail.setVerificarEnvio(verificarEnvioEmail);
 			mens.addEmail(mensEmail);			
 		}
-		
-		if (StringUtils.isNotEmpty(sms)){
-			log.debug("Creamos mensaje sms");
+		if (StringUtils.isNotEmpty(emailExpe) && !emailExpe.equals(emailZP)){
+			log.debug("Creamos mensaje email para " + emailExpe);
+			MensajeEnvioEmail mensEmail = new MensajeEnvioEmail();
+			String dest [] = {emailExpe};
+			mensEmail.setDestinatarios(dest);
+			mensEmail.setTitulo(tituloEmail);
+			mensEmail.setTexto(textoEmail);
+			mensEmail.setHtml(true);
+			mensEmail.setVerificarEnvio(verificarEnvioEmail);
+			mens.addEmail(mensEmail);			
+		}
+		if (StringUtils.isNotEmpty(smsZP)){
+			log.debug("Creamos mensaje sms para " + smsZP);
 			MensajeEnvioSms mensSMS = new MensajeEnvioSms();
-			String dest [] = {sms};
+			String dest [] = {smsZP};
+			mensSMS.setDestinatarios(dest);
+			mensSMS.setTexto(textoSMS);
+			mensSMS.setVerificarEnvio(verificarEnvioSms);
+			mens.addSMS(mensSMS);
+		}
+		if (StringUtils.isNotEmpty(smsExpe) && !smsExpe.equals(smsZP)){
+			log.debug("Creamos mensaje sms para " + smsExpe);
+			MensajeEnvioSms mensSMS = new MensajeEnvioSms();
+			String dest [] = {smsExpe};
 			mensSMS.setDestinatarios(dest);
 			mensSMS.setTexto(textoSMS);
 			mensSMS.setVerificarEnvio(verificarEnvioSms);

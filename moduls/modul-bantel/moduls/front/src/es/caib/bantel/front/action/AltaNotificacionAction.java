@@ -3,6 +3,7 @@ package es.caib.bantel.front.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
@@ -12,6 +13,7 @@ import org.apache.struts.action.ActionMapping;
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleNotificacionForm;
 import es.caib.bantel.front.util.MensajesUtil;
+import es.caib.bantel.persistence.delegate.ConfiguracionDelegate;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
@@ -43,6 +45,7 @@ public class AltaNotificacionAction extends BaseAction
 		request.getSession().setAttribute("parametrosAltaNotificacion",null);
 		MensajesUtil.setMsg(this.getResources(request));
 		ExpedientePAD exp;
+		String codMensajeError = "error.notificacio.Excepcion";
 		try{
 			
 			// Recuperamos de sesion el expediente actual
@@ -52,35 +55,58 @@ public class AltaNotificacionAction extends BaseAction
 			
 			// Recuperamos expediente
 			exp = ejb.consultaExpediente(uniAdm, idExpe,claveExpe);
-						
-			if(exp != null){
-				notificacionForm.setDescripcionExpediente(exp.getDescripcion());
-				notificacionForm.setIdiomaExp(exp.getIdioma());
-				
-				// Si expediente es autenticado recuperamos datos persona
-				if (exp.isAutenticado()){
-					PersonaPAD p = DelegateUtil.getConsultaPADDelegate().obtenerDatosPADporNif(exp.getNifRepresentante());
-					if (p == null){
-						throw new Exception("No se encuentra usuario en la tabla de personas asociado a usuario: " + exp.getIdentificadorUsuario());
-					}
-					notificacionForm.setUsuarioSey(exp.getIdentificadorUsuario());
-					notificacionForm.setNif(p.getNif());
-					//notificacionForm.setApellidos(p.getNombreCompleto());
-					notificacionForm.setApellidos(p.getApellidosNombre());
-					notificacionForm.setAcuse(p.getApellidosNombre());
-					notificacionForm.setIdioma(exp.getIdioma());
-				}
-				
-				return mapping.findForward( "success" );
-				
-			}else{
+			if(exp == null){
+				codMensajeError = "error.expediente.consulta";
 				throw new Exception("No se ha encontrado expediente");
 			}
+						
+			// Verificamos que el expediente tenga activados los avisos (si la notif requiere avisos)
+			ConfiguracionDelegate delegate = DelegateUtil.getConfiguracionDelegate();
+			String strAvisosNotif = delegate.obtenerConfiguracion().getProperty("sistra.avisoObligatorioNotificaciones");
+			boolean avisosNotif = false;
+			if (!StringUtils.isBlank(strAvisosNotif)) {
+				avisosNotif = Boolean.parseBoolean(strAvisosNotif);
+			}
+			if (avisosNotif && 
+					!(exp.getConfiguracionAvisos() != null && exp.getConfiguracionAvisos().getHabilitarAvisos() != null && exp.getConfiguracionAvisos().getHabilitarAvisos().booleanValue()) ) {
+				codMensajeError = "error.notificacio.AvisosObligatorios";
+				throw new Exception("Expediente no tiene habilitado los avisos");
+			}
+			
+			
+			// Precargamos datos expediente
+			notificacionForm.setDescripcionExpediente(exp.getDescripcion());
+			notificacionForm.setIdiomaExp(exp.getIdioma());
+			notificacionForm.setCodigoPais("ESP");
+			notificacionForm.setCodigoProvincia("7");
+			notificacionForm.setCodigoMunicipio("");
+			if (exp.getConfiguracionAvisos() != null && exp.getConfiguracionAvisos().getHabilitarAvisos() != null && 
+					exp.getConfiguracionAvisos().getHabilitarAvisos().booleanValue() && StringUtils.isNotBlank(exp.getConfiguracionAvisos().getAvisoSMS())) {
+				notificacionForm.setPermitirSms("S");
+			}
+			
+			
+			
+			// Si expediente es autenticado recuperamos datos persona
+			if (exp.isAutenticado()){
+				PersonaPAD p = DelegateUtil.getConsultaPADDelegate().obtenerDatosPADporNif(exp.getNifRepresentante());
+				if (p == null){
+					throw new Exception("No se encuentra usuario en la tabla de personas asociado a usuario: " + exp.getIdentificadorUsuario());
+				}
+				notificacionForm.setUsuarioSey(exp.getIdentificadorUsuario());
+				notificacionForm.setNif(p.getNif());
+				//notificacionForm.setApellidos(p.getNombreCompleto());
+				notificacionForm.setApellidos(p.getApellidosNombre());
+				notificacionForm.setAcuse(p.getApellidosNombre());
+				notificacionForm.setIdioma(exp.getIdioma());
+			}
+						
+			return mapping.findForward( "success" );							
 			
 		}catch(Exception e){
 			log.error("Excepcion mostrando alta notificacion",e);
-			String mensajeOk = MensajesUtil.getValue("error.notificacio.Excepcion");
-			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk);
+			String mensajeError = MensajesUtil.getValue(codMensajeError);
+			request.setAttribute( Constants.MESSAGE_KEY,mensajeError);
 			return mapping.findForward("fail");
 		}		
     }

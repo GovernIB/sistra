@@ -57,7 +57,7 @@ public class EstadoExpedientesController extends BaseController
 		String pieDocPresencial = "N"; 
 		for (Iterator it=page.getList().iterator();it.hasNext();){
 			EstadoExpediente ee = (EstadoExpediente) it.next();
-			if (Expediente.ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL.equals(ee.getEstado())){
+			if (ConstantesZPE.ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL.equals(ee.getEstado())){
 				pieDocPresencial = "S";
 				break;
 			}

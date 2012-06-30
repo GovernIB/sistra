@@ -71,7 +71,7 @@ public class TramiteForm extends BantelForm implements InitForm
         	// Comprobamos que no exista otro trámite con ese código
         	if (  request.getParameter(Constants.ALTA_PROPERTY) != null  ) {
 		    	ProcedimientoDelegate delegate = DelegateUtil.getTramiteDelegate();
-		    	Procedimiento tramiteTmp = delegate.obtenerProcedimientoPorId( tramite.getIdentificador() );
+		    	Procedimiento tramiteTmp = delegate.obtenerProcedimiento( tramite.getIdentificador() );
 		    	if ( tramiteTmp != null ) 		    	{
 		    		errors.add("values.identificador", new ActionError("errors.tramite.duplicado", tramite.getIdentificador() ));
 		    	} 

@@ -1,7 +1,6 @@
 package es.caib.bantel.front.action;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,11 +12,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.MessageResources;
 
-import java.util.Iterator;
-
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleExpedienteForm;
-import es.caib.bantel.front.util.Dominios;
 import es.caib.bantel.model.GestorBandeja;
 import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.modelInterfaz.TramiteBTE;
@@ -83,7 +79,6 @@ public class AltaEntradaExpedienteAction extends BaseAction
 				return mapping.findForward( "fail" );
 			}
 			
-			
 			request.setAttribute("existeEntrada","S");
 			expForm.setIdentificadorProcedimiento(entrada.getIdentificadorProcedimiento());
 			expForm.setUsuarioSeycon(StringUtils.defaultString(entrada.getUsuarioSeycon()));
@@ -91,25 +86,17 @@ public class AltaEntradaExpedienteAction extends BaseAction
 			expForm.setIdioma(StringUtils.defaultString(entrada.getIdioma(),"es"));
 			expForm.setNif(StringUtils.defaultString(entrada.getUsuarioNif()));
 			expForm.setNombre(StringUtils.defaultString(entrada.getUsuarioNombre()));
-			if(entrada.getUnidadAdministrativa() != null){
-				expForm.setUnidadAdm(entrada.getUnidadAdministrativa()+"");
-			}else{
-				expForm.setUnidadAdm("");
-			}
 			expForm.setNumeroEntrada(entrada.getNumeroEntrada());
 			expForm.setEmail(entrada.getAvisoEmail());
-			expForm.setHabilitarAvisos(entrada.getHabilitarAvisos());
-			expForm.setMovil(entrada.getAvisoSMS());
 			
-			// Combo unidades administrativas
-			List unidades=Dominios.listarUnidadesAdministrativas();												
-			request.setAttribute("unidades",unidades);
-			
-			// Combo procedimientos gestor: solo el proc de la entrada
-			List procs = new ArrayList();
-			procs.add(procExpe);
-			request.setAttribute("procedimientosGestor", procs);
-						
+			if ("S".equals(entrada.getHabilitarAvisos())) {
+				expForm.setHabilitarAvisos(entrada.getHabilitarAvisos());
+				expForm.setMovil(entrada.getAvisoSMS());
+				expForm.setEmail(entrada.getAvisoEmail());
+			} else {
+				expForm.setHabilitarAvisos("N");
+			}
+												
 			return mapping.findForward( "success" );
 			
 		}catch(Exception ex){

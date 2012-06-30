@@ -5,6 +5,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.ejb.CreateException;
+import javax.ejb.EJBException;
 import javax.ejb.Handle;
 import javax.ejb.RemoveException;
 import javax.naming.NamingException;
@@ -366,10 +367,10 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 		}
 	}
 	
-	public void habilitarNotificacionTelematica(boolean habilitar) throws DelegateException {
+	public void habilitarNotificacionAvisos(boolean habilitarNotificacion, boolean habilitarAvisos, String emailAviso, String smsAviso)  throws DelegateException {
 		try
 		{
-			 getRemote().habilitarNotificacionTelematica(habilitar);			             
+			 getRemote().habilitarNotificacionAvisos(habilitarNotificacion, habilitarAvisos, emailAviso, smsAviso);			             
 		}
 		catch( RemoteException e )
 		{
@@ -425,7 +426,19 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 		}
 		
 	}
+	
 
+	public void resetHabilitarNotificacionAvisos() throws DelegateException {
+		try
+		{
+			getRemote().resetHabilitarNotificacionAvisos();
+		}
+		catch( RemoteException e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
 	public void destroy() 
 	{
         try 
@@ -450,6 +463,11 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 
     protected InstanciaRemoteDelegate() {
     }
+
+
+
+
+	
 	
 
 

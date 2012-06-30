@@ -48,13 +48,16 @@ public class AltaNotificacionController extends BaseController
 
 	
 	private void carregarLlistes(HttpServletRequest request) throws Exception{
+		
+		DetalleNotificacionForm notificacionForm = (DetalleNotificacionForm) request.getAttribute("detalleNotificacionForm");
+		
 		List unidades=Dominios.listarUnidadesAdministrativas();
 		request.setAttribute("unidades",unidades);
 		List paises = Dominios.listarPaises();
 		request.setAttribute("paises",paises);
 		List provincias = Dominios.listarProvincias();
 		request.setAttribute("provincias",provincias);
-		List municipios = new ArrayList();
+		List municipios = Dominios.listarLocalidadesProvincia(notificacionForm.getCodigoProvincia());
 		request.setAttribute("municipios",municipios);
 		RegistroTelematicoDelegate dlgRte = DelegateRegtelUtil.getRegistroTelematicoDelegate();
         List organosDestino = dlgRte.obtenerServiciosDestino();

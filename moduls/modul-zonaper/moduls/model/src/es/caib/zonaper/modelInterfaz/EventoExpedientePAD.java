@@ -1,6 +1,7 @@
 package es.caib.zonaper.modelInterfaz;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,7 +22,10 @@ public class EventoExpedientePAD extends ElementoExpedientePAD
 	private String texto;
 	private String textoSMS;
 	private String enlaceConsulta;
-	private List documentos = new ArrayList();
+	private Date fechaConsulta;
+	private List documentos = new ArrayList();	
+	
+	
 	/**
 	 * Devuelve Enlace de consulta del evento. Opcionalmente se puede establecer un link a una url externa relacionada con el evento. 
 	 * 
@@ -107,6 +111,12 @@ public class EventoExpedientePAD extends ElementoExpedientePAD
 	 */
 	public void setTextoSMS(String textoSMS) {
 		this.textoSMS = textoSMS;
+	}
+	public Date getFechaConsulta() {
+		return fechaConsulta;
+	}
+	public void setFechaConsulta(Date fechaConsulta) {
+		this.fechaConsulta = fechaConsulta;
 	}
 	
 }
