@@ -74,7 +74,9 @@ public class ConstantesZPE {
 	 * 	ESTADOS DE UN EXPEDIENTE: Notificacion recibida.
 	 */
 	public final static String ESTADO_NOTIFICACION_RECIBIDA = "NR";
+	/**
+	 * 	ESTADOS DE UN EXPEDIENTE: Notificacion rechazada.
+	 */
+	public final static String ESTADO_NOTIFICACION_RECHAZADA = "NX";
 	
-	
-
 }

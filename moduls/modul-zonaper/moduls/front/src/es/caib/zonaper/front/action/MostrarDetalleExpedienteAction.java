@@ -46,6 +46,22 @@ public class MostrarDetalleExpedienteAction extends BaseAction {
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
+		// Codigo expediente
+		String codigoExpe = null;
+		// Descripcion expediente
+		String descExpe;
+		// Elementos expedientes
+		Set elementosExpe;
+		// Descripcion elemento expediente
+		Map elementosExpeDescripcion = new HashMap();
+		// Estado elementos expediente (key literal, vacio si no hay que mostrar estado)
+		Map elementosExpeEstado = new HashMap();
+		// Indica si el elemento del expediente se marca como novedad (true/false)
+		Map elementosExpeNovedad = new HashMap();
+		// Indica si hay que poner el pie de entregar doc presencial
+		String pieDocPresencial = "N";
+		
+		
 		DatosSesion datosSesion = this.getDatosSesion(request);
 		
 		boolean accesoDelegado = (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals( datosSesion.getPerfilAcceso()));
@@ -85,15 +101,9 @@ public class MostrarDetalleExpedienteAction extends BaseAction {
 			
 		}
 		
-		Set elementosExpe;
-		String descExpe;
-		String codigoExpe = null;
-		Set elementosExpePendientes = new HashSet();
-		Map elementosExpeDescripcion = new HashMap();
-		ElementoExpedienteDelegate ed = DelegateUtil.getElementoExpedienteDelegate();
-		String pieDocPresencial = "N"; 
-			
+		
 		// Comprobamos si es un tramite sin expediente y generamos un ElementoExpediente virtual
+		ElementoExpedienteDelegate ed = DelegateUtil.getElementoExpedienteDelegate();
 		if (tipoElemento.equals(EstadoExpediente.TIPO_ENTRADA_PREREGISTRO)){
 				// Tramite preregistro sin expediente
 				EntradaPreregistro entradaPre;
@@ -115,13 +125,17 @@ public class MostrarDetalleExpedienteAction extends BaseAction {
 				
 				elementosExpe = elementos;
 				descExpe = entradaPre.getDescripcionTramite();
-				elementosExpeDescripcion.put(ElementoExpediente.TIPO_ENTRADA_PREREGISTRO + entradaPre.getCodigo(),entradaPre.getDescripcionTramite());
+				elementosExpeDescripcion.put(elemento.getCodigo().toString(),entradaPre.getDescripcionTramite());
 				
 				
 				// Comprobamos si no esta confirmada
 				if (entradaPre.getNumeroRegistro() == null){
-					elementosExpePendientes.add(elemento.getCodigo());
+					elementosExpeNovedad.put(elemento.getCodigo().toString(),"true");
+					elementosExpeEstado.put(elemento.getCodigo().toString(), "detalleExpediente.tramite.estado.pendienteDocumentacionPresencial");
 					pieDocPresencial = "S";
+				} else {
+					elementosExpeNovedad.put(elemento.getCodigo().toString(),"false");
+					elementosExpeEstado.put(elemento.getCodigo().toString(), "detalleExpediente.tramite.estado.enviada");
 				}
 				
 		}else if (tipoElemento.equals(EstadoExpediente.TIPO_ENTRADA_TELEMATICA)){			
@@ -145,7 +159,9 @@ public class MostrarDetalleExpedienteAction extends BaseAction {
 				
 				elementosExpe = elementos;
 				descExpe = entradaTel.getDescripcionTramite();
-				elementosExpeDescripcion.put(ElementoExpediente.TIPO_ENTRADA_TELEMATICA + entradaTel.getCodigo(),entradaTel.getDescripcionTramite());
+				elementosExpeDescripcion.put(elemento.getCodigo().toString(),entradaTel.getDescripcionTramite());
+				elementosExpeNovedad.put(elemento.getCodigo().toString(),"false");
+				elementosExpeEstado.put(elemento.getCodigo().toString(), "detalleExpediente.tramite.estado.enviada");
 		}else if (tipoElemento.equals(EstadoExpediente.TIPO_EXPEDIENTE)){
 				// Expediente
 				Expediente expe;
@@ -170,25 +186,48 @@ public class MostrarDetalleExpedienteAction extends BaseAction {
 						detalleElemento = ed.obtenerDetalleElementoExpedienteAutenticado(elemento.getCodigo());
 					}
 					
+					String novedad = "false";
+					String keyEstado = "";
+					String  descripcion= "";
+					
 					if (elemento.getTipoElemento().equals(ElementoExpediente.TIPO_AVISO_EXPEDIENTE)){
-						elementosExpeDescripcion.put(elemento.getTipoElemento() + elemento.getCodigoElemento(), ((EventoExpediente) detalleElemento).getTitulo());						
-						if  (((EventoExpediente) detalleElemento).getFechaConsulta() == null){
-							elementosExpePendientes.add(elemento.getCodigo());
+						descripcion = ((EventoExpediente) detalleElemento).getTitulo();
+						if  (((EventoExpediente) detalleElemento).getFechaConsulta() == null){	
+							novedad = "true";
+							keyEstado = "detalleExpediente.aviso.estado.pendiente";							
+						} else {
+							keyEstado = "detalleExpediente.aviso.estado.recibido";		
 						}
 					}else if (elemento.getTipoElemento().equals(ElementoExpediente.TIPO_NOTIFICACION)){
-						elementosExpeDescripcion.put(elemento.getTipoElemento() + elemento.getCodigoElemento(), ((NotificacionTelematica) detalleElemento).getTituloAviso());
-						if (((NotificacionTelematica) detalleElemento).getFechaAcuse() == null){							
-							elementosExpePendientes.add(elemento.getCodigo());
+						NotificacionTelematica notificacionTelematica = (NotificacionTelematica) detalleElemento;
+						descripcion = notificacionTelematica.getTituloAviso();						
+						if (notificacionTelematica.isRechazada()){
+							novedad = "true";
+							keyEstado = "detalleExpediente.notificacion.estado.rechazada";							
+						} else if (notificacionTelematica.getFechaAcuse() == null){							
+							novedad = "true";
+							keyEstado = "detalleExpediente.notificacion.estado.pendiente";
+						} else {
+							keyEstado = "detalleExpediente.notificacion.estado.recibida";
 						}
 					}else if (elemento.getTipoElemento().equals(ElementoExpediente.TIPO_ENTRADA_PREREGISTRO)){
-						elementosExpeDescripcion.put(elemento.getTipoElemento() + elemento.getCodigoElemento(), ((Entrada) detalleElemento).getDescripcionTramite());
+						descripcion = ((Entrada) detalleElemento).getDescripcionTramite();
 						if (((Entrada) detalleElemento).getNumeroRegistro() == null){
-							elementosExpePendientes.add(elemento.getCodigo());
+							novedad = "true";
+							keyEstado = "detalleExpediente.tramite.estado.pendienteDocumentacionPresencial";							
 							pieDocPresencial = "S";
+						} else {
+							keyEstado = "detalleExpediente.tramite.estado.enviada";							
 						}
 					}else if (elemento.getTipoElemento().equals(ElementoExpediente.TIPO_ENTRADA_TELEMATICA)){
-						elementosExpeDescripcion.put(elemento.getTipoElemento() + elemento.getCodigoElemento(), ((Entrada) detalleElemento).getDescripcionTramite());
-					}					
+						descripcion = ((Entrada) detalleElemento).getDescripcionTramite();
+						keyEstado = "detalleExpediente.tramite.estado.enviada";
+					}		
+					
+					elementosExpeDescripcion.put(elemento.getCodigo().toString(), descripcion);
+					elementosExpeNovedad.put(elemento.getCodigo().toString(),novedad);
+					elementosExpeEstado.put(elemento.getCodigo().toString(), keyEstado);
+					
 				}
 				
 		}else{
@@ -196,12 +235,13 @@ public class MostrarDetalleExpedienteAction extends BaseAction {
 		}
 		
 		
-		request.setAttribute("descripcionExpediente",descExpe);
 		request.setAttribute("codigoExpediente",codigoExpe);
+		request.setAttribute("descripcionExpediente",descExpe);
 		request.setAttribute("elementosExpediente",elementosExpe);
-		request.setAttribute("elementosExpedientePendientes",elementosExpePendientes);
 		request.setAttribute("elementosExpeDescripcion",elementosExpeDescripcion);
-		request.setAttribute( "pieDocPresencial", pieDocPresencial );
+		request.setAttribute("elementosExpeEstado",elementosExpeEstado);
+		request.setAttribute("elementosExpeNovedad",elementosExpeNovedad);
+		request.setAttribute("pieDocPresencial", pieDocPresencial );		
 		
 		if (datosSesion.getNivelAutenticacion() != 'A'){
 			return mapping.findForward("success");

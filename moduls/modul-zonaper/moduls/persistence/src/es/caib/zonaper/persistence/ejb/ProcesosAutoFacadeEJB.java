@@ -365,12 +365,16 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
 				fechaFin = ((EventoExpediente) de).getFecha();
 			}
 		}else if (e.getTipoElemento().equals(ElementoExpediente.TIPO_NOTIFICACION)){
-			if ( ((NotificacionTelematica) de).getFechaAcuse() != null){
+			NotificacionTelematica notificacionTelematica = (NotificacionTelematica) de;
+			if ( notificacionTelematica.isRechazada()) {
+				estado = ConstantesZPE.ESTADO_NOTIFICACION_RECHAZADA;
+				fechaFin = notificacionTelematica.getFechaRegistro();
+			} else if ( notificacionTelematica.getFechaAcuse() != null){
 				estado = ConstantesZPE.ESTADO_NOTIFICACION_RECIBIDA;
-				fechaFin = ((NotificacionTelematica) de).getFechaRegistro();
+				fechaFin = notificacionTelematica.getFechaRegistro();
 			}else{
 				estado = ConstantesZPE.ESTADO_NOTIFICACION_PENDIENTE;
-				fechaFin = ((NotificacionTelematica) de).getFechaRegistro();
+				fechaFin = notificacionTelematica.getFechaRegistro();
 			}
 		}
 		

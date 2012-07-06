@@ -37,7 +37,7 @@
 			</logic:notEmpty>			
 		</dd>
 		<dt><bean:message key="detalleAviso.expediente"/>:</dt>
-		<dd><bean:write name="codigoExpediente"/></dd>
+		<dd><bean:write name="codigoExpediente"/> - <bean:write name="descExpediente"/></dd>
 		<dt><bean:message key="detalleAviso.fechaEmision"/>:</dt>
 		<dd><bean:write name="aviso" property="fecha" format="dd/MM/yyyy '-' HH:mm"/></dd>
 		<dt><bean:message key="detalleAviso.fechaApertura"/>:</dt>

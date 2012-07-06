@@ -399,12 +399,12 @@ function errorFileUploaded(error){
 			<html:hidden property="idioma" />
 				<p>
 					<label for="titulo"><bean:message key="aviso.titulo"/><sup>*</sup></label>
-					<html:text property="titulo" styleClass="pc40"/>
+					<html:text property="titulo" styleClass="pc40" maxlength="400"/>
 				</p>
 				
 				<p>
 					<label for="texto"><bean:message key="aviso.texto"/><sup>*</sup></label>
-					<html:textarea property="texto" rows="5"   styleClass="pc40"/>
+					<html:textarea property="texto" rows="5"  styleClass="pc40"/>
 				</p>
 				<logic:equal name="detalleAvisoForm" property="permitirSms" value="S">
 					<p>
@@ -590,6 +590,11 @@ function errorFileUploaded(error){
 					<input type="button" onclick="volver('<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY%>" />','<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY%>"/>','<bean:write name="<%=es.caib.bantel.front.Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY%>"/>')" value="<bean:message key="aviso.cancelar"/>"/>
 					 -->
 				</p>
+				
+				<p align="center">
+					<strong><i><sup>*</sup> <bean:message key="campo.obligatorio"/></i></strong> 
+				</p>
+				
 			</div>
 			
 			<div id="enrere">

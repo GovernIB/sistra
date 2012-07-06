@@ -84,6 +84,7 @@ public class DetalleNotificacionController extends BaseController
 		
 		
 		request.setAttribute("codigoExpediente",elementoExpediente.getExpediente().getIdExpediente());
+		request.setAttribute("descExpediente",elementoExpediente.getExpediente().getDescripcion());
 		request.setAttribute( "unidadAdministrativa", DelegateUtil.getDominiosDelegate().obtenerDescripcionUA(asiento.getDatosAsunto().getCodigoUnidadAdministrativa()));
 		request.setAttribute( "representado",Util.obtenerDatosRepresentado(asiento));
 		request.setAttribute( "representante",Util.obtenerDatosRepresentante(asiento));

@@ -829,6 +829,10 @@ function repintarParametros(datos){
 					 -->
 				</p>								
 				
+				<p align="center">
+					<strong><i><sup>*</sup> <bean:message key="campo.obligatorio"/></i></strong> 
+				</p>
+				
 			</div>
 			
 			<div id="enrere">

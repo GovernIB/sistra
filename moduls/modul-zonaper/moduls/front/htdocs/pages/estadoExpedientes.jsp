@@ -76,13 +76,16 @@ function limpiarFiltro()
 					</bean:define>
 					 
 					<tr 
-						<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.model.Expediente.ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL%>">
+						<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.modelInterfaz.ConstantesZPE.ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL%>">
 						class="novetat"
 						</logic:equal> 
-						<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.model.Expediente.ESTADO_AVISO_PENDIENTE%>">
+						<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.modelInterfaz.ConstantesZPE.ESTADO_AVISO_PENDIENTE%>">
 						class="novetat"
 						</logic:equal> 
-						<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.model.Expediente.ESTADO_NOTIFICACION_PENDIENTE%>">
+						<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.modelInterfaz.ConstantesZPE.ESTADO_NOTIFICACION_PENDIENTE%>">
+						class="novetat"
+						</logic:equal>
+						<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.modelInterfaz.ConstantesZPE.ESTADO_NOTIFICACION_RECHAZADA%>">
 						class="novetat"
 						</logic:equal>
 					>
@@ -103,24 +106,27 @@ function limpiarFiltro()
 						
 						<!--  Estado -->
 						<td class="estat">
-							<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.model.Expediente.ESTADO_SOLICITUD_ENVIADA%>">
+							<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.modelInterfaz.ConstantesZPE.ESTADO_SOLICITUD_ENVIADA%>">
 								<bean:message key="estadoExpedientes.estado.solicitudEnviada"/>	
 							</logic:equal>
-							<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.model.Expediente.ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL%>">
+							<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.modelInterfaz.ConstantesZPE.ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL%>">
 								<bean:message key="estadoExpedientes.estado.solicitudEnviadaPendienteDocumentacionPresencial"/>	
 							</logic:equal>
-							<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.model.Expediente.ESTADO_AVISO_PENDIENTE%>">
+							<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.modelInterfaz.ConstantesZPE.ESTADO_AVISO_PENDIENTE%>">
 								<bean:message key="estadoExpedientes.estado.avisoPendiente"/>
 							</logic:equal>
-							<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.model.Expediente.ESTADO_AVISO_RECIBIDO%>">
+							<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.modelInterfaz.ConstantesZPE.ESTADO_AVISO_RECIBIDO%>">
 								<bean:message key="estadoExpedientes.estado.avisoRecibido"/>
 							</logic:equal>
-							<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.model.Expediente.ESTADO_NOTIFICACION_PENDIENTE%>">
+							<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.modelInterfaz.ConstantesZPE.ESTADO_NOTIFICACION_PENDIENTE%>">
 								<bean:message key="estadoExpedientes.estado.notificacionPendiente"/>
 							</logic:equal>
-							<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.model.Expediente.ESTADO_NOTIFICACION_RECIBIDA%>">
+							<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.modelInterfaz.ConstantesZPE.ESTADO_NOTIFICACION_RECIBIDA%>">
 								<bean:message key="estadoExpedientes.estado.notificacionRecibida"/>
 							</logic:equal>				
+							<logic:equal name="tramiteCompletado" property="estado" value="<%=es.caib.zonaper.modelInterfaz.ConstantesZPE.ESTADO_NOTIFICACION_RECHAZADA%>">
+								<bean:message key="estadoExpedientes.estado.notificacionRechazada"/>
+							</logic:equal>
 						</td>
 									
 						<!--  Fecha modificacion -->	

@@ -52,6 +52,11 @@ public class TramiteForm extends TraduccionValidatorForm
         	}
             
             if(isAlta(request) || isModificacion(request)){
+            	
+            	if(StringUtils.isEmpty(tramite.getProcedimiento())){
+        			errors.add("values.procedimiento", new ActionError("errors.procedimiento.vacio"));
+        		}
+            	
             	TraTramite traTra = (TraTramite)tramite.getTraduccion("es");
             	if (traTra != null ){
             		if(StringUtils.isEmpty(traTra.getDescripcion())){
