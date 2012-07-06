@@ -188,6 +188,8 @@
 					<dd><logic:notEmpty name="descripcionProcedimiento" ><bean:write name="descripcionProcedimiento" /></logic:notEmpty></dd>
 					<dt><bean:message key="expediente.descripcion"/>:</dt>
 					<dd><logic:notEmpty name="expediente" property="descripcion"><bean:write name="expediente" property="descripcion"/></logic:notEmpty></dd>
+					<dt><bean:message key="expediente.nif"/>:</dt>
+					<dd><logic:notEmpty name="expediente" property="nifRepresentante"><bean:write name="expediente" property="nifRepresentante"/></logic:notEmpty></dd>
 					<dt><bean:message key="expediente.idioma"/>:</dt>
 					<dd>
 						<logic:equal name="expediente" property="idioma" value="es"><bean:message key="expediente.castellano"/></logic:equal>
@@ -274,11 +276,11 @@
 						<td><bean:write name="elemento" property="fecha" format="dd/MM/yyyy  HH:mm"/></td>
 						<td class="estat">
 							<%if (elemento instanceof es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD) {%>
-								<% if (((es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD)elemento).getDetalleAcuseRecibo().getEstado().equals("PENDIENTE")){%>
+								<% if (((es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD)elemento).getDetalleAcuseRecibo().getEstado().equals(es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo.ESTADO_PENDIENTE)){%>
 									<bean:message key="detalle.notificacion.estado.pendiente"/>
-								<%}else if (((es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD)elemento).getDetalleAcuseRecibo().getEstado().equals("ENTREGADA")){%>
+								<%}else if (((es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD)elemento).getDetalleAcuseRecibo().getEstado().equals(es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo.ESTADO_ENTREGADA)){%>
 									<bean:message key="detalle.notificacion.estado.entregada"/>
-								<%}else if (((es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD)elemento).getDetalleAcuseRecibo().getEstado().equals("RECHAZADA")){%>
+								<%}else if (((es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD)elemento).getDetalleAcuseRecibo().getEstado().equals(es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo.ESTADO_RECHAZADA)){%>
 									<bean:message key="detalle.notificacion.estado.rechazada"/>	
 								<%} %>							
 							<%}else if (elemento instanceof es.caib.zonaper.modelInterfaz.EventoExpedientePAD) {%>

@@ -49,6 +49,9 @@
 				<logic:equal name="pagina" property="estado" value="<%=ConstantesZPE.ESTADO_NOTIFICACION_RECIBIDA%>">
 					<bean:message key="resultadoBusquedaExpedientes.estado.notificacionRecibida"/>
 				</logic:equal>
+				<logic:equal name="pagina" property="estado" value="<%=ConstantesZPE.ESTADO_NOTIFICACION_RECHAZADA%>">
+					<bean:message key="resultadoBusquedaExpedientes.estado.notificacionRechazada"/>
+				</logic:equal>
 				<logic:equal name="pagina" property="estado" value="<%=ConstantesZPE.ESTADO_SOLICITUD_ENVIADA%>">
 					<bean:message key="resultadoBusquedaExpedientes.estado.solicitudEnviada"/>
 				</logic:equal>

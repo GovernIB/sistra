@@ -12,6 +12,7 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
+import net.sf.hibernate.expression.Order;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -326,6 +327,9 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 	   		if (StringUtils.isNotBlank(filtro.getNumeroEntradaBTE())) {
 	   			criteria.add(Expression.eq("numeroEntradaBTE", filtro.getNumeroEntradaBTE()));
 	   		}
+	   		
+	   		// Ordenación
+			criteria.addOrder( Order.desc("fecha") );
 	   		
 	   		// Realizamos busqueda paginada
 			Page page = new Page( criteria, numPagina, longPagina );

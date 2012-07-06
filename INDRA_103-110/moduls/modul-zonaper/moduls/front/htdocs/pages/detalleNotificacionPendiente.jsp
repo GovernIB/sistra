@@ -126,7 +126,7 @@
 			</logic:notEmpty>			
 		</dd>
 		<dt><bean:message key="detalleNotificacion.expediente"/>:</dt>
-		<dd><bean:write name="codigoExpediente"/></dd>
+		<dd><bean:write name="codigoExpediente"/> - <bean:write name="descExpediente"/></dd>
 		<dt><bean:message key="detalleNotificacion.fechaEmision"/>:</dt>
 		<dd><bean:write name="notificacion" property="fechaRegistro" format="dd/MM/yyyy '-' HH:mm"/></dd>
 		<logic:equal name="controlEntrega" value="S">

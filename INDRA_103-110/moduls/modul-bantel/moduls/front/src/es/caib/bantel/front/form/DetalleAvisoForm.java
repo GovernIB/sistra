@@ -144,7 +144,13 @@ public class DetalleAvisoForm extends ValidatorForm
         	}
         	if(StringUtils.isEmpty(texto)){
         		errors.add("altaAviso", new ActionError("errors.required", MensajesUtil.getValue("aviso.texto")));
-        	}        	
+        	}   
+        	if(StringUtils.isNotEmpty(titulo) && titulo.length() > 500){
+        		errors.add("altaAviso", new ActionError("errors.maxlength", MensajesUtil.getValue("aviso.titulo"), "500"));
+        	}
+        	if(StringUtils.isNotEmpty(texto) && texto.length() > 4000){
+        		errors.add("altaAviso", new ActionError("errors.maxlength", MensajesUtil.getValue("aviso.texto"), "4000"));
+        	}
         }
     	
         return errors;

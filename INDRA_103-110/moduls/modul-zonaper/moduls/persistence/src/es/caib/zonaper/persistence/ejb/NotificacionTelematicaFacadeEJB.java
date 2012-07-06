@@ -526,10 +526,14 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			notif.setRechazada(true);
 			grabarNotificacionTelematica(notif);
 	
+			// Actualizamos estado expediente
+			ElementoExpediente elemento = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpediente(ElementoExpediente.TIPO_NOTIFICACION, notif.getCodigo());
+			DelegateUtil.getProcesosAutoDelegate().actualizaEstadoExpediente(elemento.getExpediente().getCodigo());
+			
 		 }catch( Exception exc ){
         	throw new EJBException( exc );
         }
-
+		 
 	}
 	/**
 	 * Realiza la firma del acuse de la notificacion (en caso de que la notificacion tenga acuse) y marca la notificacion como entregada

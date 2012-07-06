@@ -204,6 +204,11 @@ public class DetalleExpedienteForm extends ValidatorForm
         		errors.add("altaExpediente", new ActionError("error.expediente.emailObligatorio"));
         		error = true;
         	}
+        	
+        	if(StringUtils.isNotEmpty(descripcion) && descripcion.length() > 500){
+        		errors.add("altaExpediente", new ActionError("errors.maxlength", MensajesUtil.getValue("expediente.descripcion"), "500"));
+        	}
+        	
         }
         
         if(StringUtils.isNotEmpty(flagValidacion) && flagValidacion.equals("consulta")){

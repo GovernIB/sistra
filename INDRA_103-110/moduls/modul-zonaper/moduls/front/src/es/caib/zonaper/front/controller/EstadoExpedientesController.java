@@ -13,7 +13,6 @@ import org.apache.struts.tiles.ComponentContext;
 import es.caib.zonaper.front.Constants;
 import es.caib.zonaper.model.DatosSesion;
 import es.caib.zonaper.model.EstadoExpediente;
-import es.caib.zonaper.model.Expediente;
 import es.caib.zonaper.model.Page;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
