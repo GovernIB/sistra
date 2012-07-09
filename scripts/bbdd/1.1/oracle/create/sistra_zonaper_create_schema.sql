@@ -940,7 +940,7 @@ create table ZPE_PREBCK  (
    PRB_NOTTEL           VARCHAR2(1),
    PRB_NIFDLG           VARCHAR2(12),
    PRB_NOMDLG           VARCHAR2(500),
-   prb_sbexid           VARCHAR2(50);
+   prb_sbexid           VARCHAR2(50),
    prb_sbexua           NUMBER(19),
    PRB_IDEPRO           VARCHAR2(100)
 );
