@@ -47,48 +47,52 @@ URL_SISTRA_MANTENIMIENTO_SESION="<%=request.getAttribute("urlSisTraMantenimiento
 
  
  // Funcion para calcular los valores de los campos
- function getUrlParams(form) { 
+ // MODIFICACION: resetValoresIndexed - tras la primera llamada en las sucesivas llamadas puede pasar q los campos indexados no tengan actualizada la lista de valores posibles, con lo
+ //				que respetamos el valor previo para intentar establecerlo FALTARIA METER LA LOGICA XA EL TREE Y LISTBOX
+ function getUrlParams(form, resetValoresIndexed) { 
     var parametersPost = new Array();
     // Definicion de los valores de los campos de esta pantalla
 <logic:iterate id="campo" name="pantalla" property="campos" type="org.ibit.rol.form.model.Campo">
     <bean:define id="nombre" name="campo" property="nombreLogico"/>
     <% if (campo instanceof ComboBox)  { %>
-    f_<%=nombre%>='';
-    f_<%=nombre%>_text='';
-    if (form.<%=nombre%>.selectedIndex >= 0) {
-        f_<%=nombre%> = form.<%=nombre%>.options[form.<%=nombre%>.selectedIndex].value;
-        f_<%=nombre%>_text = form.<%=nombre%>.options[form.<%=nombre%>.selectedIndex].text;
-        parametersPost[parametersPost.length] = new ParametroPost("<%=nombre%>",f_<%=nombre%>);
+    if (resetValoresIndexed) {
+	    f_<%=nombre%>='';
+	    f_<%=nombre%>_text='';
+	    if (form.<%=nombre%>.selectedIndex >= 0) {
+	        f_<%=nombre%> = form.<%=nombre%>.options[form.<%=nombre%>.selectedIndex].value;
+	        f_<%=nombre%>_text = form.<%=nombre%>.options[form.<%=nombre%>.selectedIndex].text;
+	        parametersPost[parametersPost.length] = new ParametroPost("<%=nombre%>",f_<%=nombre%>);
+	    }
+    } else {
+    	parametersPost[parametersPost.length] = new ParametroPost("<%=nombre%>",f_<%=nombre%>);
     }
     <% } else if (campo instanceof CheckBox) { %>
      f_<%=nombre%> = (""+form.<%=nombre%>.checked == "true");     
      parametersPost[parametersPost.length] = new ParametroPost("<%=nombre%>",f_<%=nombre%>);
-    <% } else if (campo instanceof ListBox) { %>
-    f_<%=nombre%> = new Array();
-    f_<%=nombre%>_text = new Array();
-    for (i = 0; i < form.<%=nombre%>.length; i++) {
-        if (form.<%=nombre%>.options[i].selected) {
-            f_<%=nombre%>.push(form.<%=nombre%>.options[i].value);
-            f_<%=nombre%>_text.push(form.<%=nombre%>.options[i].text);
-            parametersPost[parametersPost.length] = new ParametroPost("<%=nombre%>",form.<%=nombre%>.options[i].value);
-            
-        }
-    }   
-    <% } else if (campo instanceof TreeBox) { %>
-    
-    	f_<%=nombre%> = new Array();
-		f_<%=nombre%>_text = new Array();
+    <% } else if (campo instanceof ListBox) { %>    
+	    f_<%=nombre%> = new Array();
+	    f_<%=nombre%>_text = new Array();
+	    for (i = 0; i < form.<%=nombre%>.length; i++) {
+	        if (form.<%=nombre%>.options[i].selected) {
+	            f_<%=nombre%>.push(form.<%=nombre%>.options[i].value);
+	            f_<%=nombre%>_text.push(form.<%=nombre%>.options[i].text);
+	            parametersPost[parametersPost.length] = new ParametroPost("<%=nombre%>",form.<%=nombre%>.options[i].value);
+	            
+	        }
+	    }    
+    <% } else if (campo instanceof TreeBox) { %>    	
+	    	f_<%=nombre%> = new Array();
+			f_<%=nombre%>_text = new Array();
+		    
+	     	chksArbol = document.getElementsByName("<%=nombre%>");
 	    
-     	chksArbol = document.getElementsByName("<%=nombre%>");
-    
-  		for (i = 0; i < chksArbol.length; i++) {
-        	if (chksArbol[i].checked) {
-            	f_<%=nombre%>.push(chksArbol[i].value);
-	            f_<%=nombre%>_text.push(document.getElementById('tree_check_text_'+chksArbol[i].value).value);
-    	        parametersPost[parametersPost.length] = new ParametroPost("<%=nombre%>",chksArbol[i].value);            
-	        }        
-	    } 	  	    
-   
+	  		for (i = 0; i < chksArbol.length; i++) {
+	        	if (chksArbol[i].checked) {
+	            	f_<%=nombre%>.push(chksArbol[i].value);
+		            f_<%=nombre%>_text.push(document.getElementById('tree_check_text_'+chksArbol[i].value).value);
+	    	        parametersPost[parametersPost.length] = new ParametroPost("<%=nombre%>",chksArbol[i].value);            
+		        }        
+		    } 	  	    		 
     <% } else if (campo instanceof FileBox) { %>
     <%--
         TODO Veure quin és el value que passam
@@ -225,7 +229,7 @@ function onFieldChange_imp() {
     }
 
 	// Valores actuales formulario
-	var parametersPost = getUrlParams(form);
+	var parametersPost = getUrlParams(form, true);
 
 // Expresiones de autorrelleno
 <logic:iterate id="campo" name="pantalla" property="campos" type="org.ibit.rol.form.model.Campo">
@@ -235,7 +239,7 @@ function onFieldChange_imp() {
     if (depends("<%=deps%>", modificados)) {
 	    
 	    // Obtener valores actuales formulario	    
-	    parametersPost = getUrlParams(form);
+	    parametersPost = getUrlParams(form, false);
 	    
 		// Indicamos que el campo esta modificado
         modificados.push("f_<%=nombre%>");
@@ -303,7 +307,7 @@ function onFieldChange_imp() {
     if (  <%=campo.getExpresionAutocalculo().trim().length()>0%> && (!fieldName || depends("<%=deps%>", modificados)) ) {
 	    
 	    // Obtener valores actuales formulario	    
-	    parametersPost = getUrlParams(form);
+	    parametersPost = getUrlParams(form, false);
 	    
 		// Indicamos que el campo esta modificado
         modificados.push("f_<%=nombre%>");
@@ -376,7 +380,7 @@ function onFieldChange_imp() {
 	        if (depends("<%=deps%>", modificados)) {				
     				
     				// Obtener valores actuales formulario	    
-					parametersPost = getUrlParams(form);
+					parametersPost = getUrlParams(form, false);
 				
 					// Actualizamos valores posibles
 					<% if (campo instanceof TreeBox)  { %>
@@ -401,7 +405,7 @@ function onFieldChange_imp() {
 
 // Calculo de dependencias
 	// Obtener valores actuales formulario (para asegurar que sean los ultimos valores a la hora de evaluar las dependencias)  
-	parametersPost = getUrlParams(form);	
+	parametersPost = getUrlParams(form, true);	
 <logic:iterate id="campo" name="pantalla" property="campos" type="org.ibit.rol.form.model.Campo">
     <bean:define id="nombre" name="campo" property="nombreLogico"/>
     <logic:notEmpty name="campo" property="expresionDependencia">
@@ -686,7 +690,7 @@ function unsetAyuda() {
 	<logic:equal name="pantallaDetalle" value="true">
 		<%action = "procesarDetalle"; %>	
 	</logic:equal>
-	<bean:define id="detalleAccion" value="<%=request.getParameter("listaelementos@accion")%>"/>
+	<bean:define id="detalleAccion" value="<%=request.getParameter(\"listaelementos@accion\")%>"/>
 </logic:present>
 
 
