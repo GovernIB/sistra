@@ -182,9 +182,9 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 	
 	private es.caib.bantel.ws.v2.model.DocumentosBTE documentosIntfToDocumentosWS(Set documentos) throws Exception{
 		es.caib.bantel.ws.v2.model.DocumentosBTE docs = new es.caib.bantel.ws.v2.model.DocumentosBTE();
-		boolean presencial = false;
 		if(documentos != null){
-			for (Iterator it = documentos.iterator();it.hasNext();){    		
+			for (Iterator it = documentos.iterator();it.hasNext();){
+				boolean presencial = false;
 				es.caib.bantel.modelInterfaz.DocumentoBTE doc = (es.caib.bantel.modelInterfaz.DocumentoBTE) it.next();
 				es.caib.bantel.ws.v2.model.DocumentoBTE docWS = new es.caib.bantel.ws.v2.model.DocumentoBTE();
 				docWS.setNombre(doc.getNombre());
