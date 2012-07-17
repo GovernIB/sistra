@@ -68,4 +68,6 @@ public class Constants implements Serializable {
 	public static String EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY = "es.caib.bantel.front.expedienteActual.unidadAdministrativa";
 	public static String EXPEDIENTE_ACTUAL_CLAVE_KEY = "es.caib.bantel.front.expedienteActual.claveAcceso";
 		
+	public static String GESTIONEXPEDIENTES_OBLIGATORIOAVISOS = "es.caib.bantel.front.gestionExpedientes.obligatorioAvisos";
+	
 }

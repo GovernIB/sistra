@@ -67,6 +67,19 @@ public class IndiceElementoDelegate implements StatelessDelegate
         }
 	}	
 	 
+	 public void borrarIndicesElemento(String tipoElemento,
+				Long codigoElemento) throws DelegateException
+				{
+			try
+			{
+				getFacade().borrarIndicesElemento(tipoElemento, codigoElemento);
+			}
+			catch (Exception e) 
+			{
+	            throw new DelegateException(e);
+	        }
+		}	
+	 
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

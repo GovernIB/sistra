@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.tiles.ComponentContext;
 
+import es.caib.zonaper.front.util.ZonapersFrontRequestHelper;
+
 public class MenuAutenticadoController extends BaseController
 {
 	public void execute(ComponentContext tileContext,
@@ -13,6 +15,7 @@ public class MenuAutenticadoController extends BaseController
 			ServletContext servletContext) throws Exception
 	{
 		
+		request.setAttribute("habilitarAlertas", Boolean.toString(ZonapersFrontRequestHelper.isHabilitarApartadoAlertas(request)));
 		
 	}
 	

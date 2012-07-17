@@ -8,6 +8,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import es.caib.zonaper.front.form.ActualizarAlertasForm;
+import es.caib.zonaper.front.util.ZonapersFrontRequestHelper;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 
@@ -22,6 +23,10 @@ import es.caib.zonaper.persistence.delegate.DelegateUtil;
 public class MostrarAlertasAction extends BaseAction {
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		if (!ZonapersFrontRequestHelper.isHabilitarApartadoAlertas(request)) {
+			throw new Exception("No esta habilitado el apartado de alertas");
+		}
 		
 		// Cargamos los datos actuales
 		PersonaPAD persona = DelegateUtil.getPadAplicacionDelegate().obtenerDatosPersonaPADporUsuario(this.getDatosSesion(request).getCodigoUsuario());		

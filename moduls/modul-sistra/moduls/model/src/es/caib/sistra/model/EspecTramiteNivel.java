@@ -22,7 +22,6 @@ public class EspecTramiteNivel  extends Traducible {
      private byte[] urlFin;
      // X: Sin especificar (para sobreescribir x nivel) / N: No permite /  S: Permite / O: Obligatoria
      private String habilitarNotificacionTelematica = "X";
-     private String habilitarAvisos = "X";
      private String permitirSMS = "N"; // S / N
      private byte[] avisoSMS;
      private byte[] avisoEmail;
@@ -274,17 +273,6 @@ public class EspecTramiteNivel  extends Traducible {
 	public void setAvisoSMS(byte[] avisoSMS) {
 		this.avisoSMS = avisoSMS;
 	}
-
-
-	public String getHabilitarAvisos() {
-		return habilitarAvisos;
-	}
-
-
-	public void setHabilitarAvisos(String habilitarAvisos) {
-		this.habilitarAvisos = habilitarAvisos;
-	}
-
 
 	public String getHabilitarNotificacionTelematica() {
 		return habilitarNotificacionTelematica;

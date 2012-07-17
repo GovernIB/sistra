@@ -125,6 +125,18 @@ public class PadBackOfficeDelegate implements StatelessDelegate
             throw new DelegateException(e);
         }
 	}
+	
+	public void bajaExpediente( long unidadAdministrativa, String identificadorExpediente , String claveExpediente)   throws DelegateException	
+	{
+		try
+		{
+			getFacade().bajaExpediente( unidadAdministrativa, identificadorExpediente , claveExpediente);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
 
 	/*
 	public EventoExpedientePAD obtenerEventoExpediente( long unidadAdministrativa, String idExpediente, String fechaEvento ) throws DelegateException

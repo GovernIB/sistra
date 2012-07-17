@@ -179,22 +179,17 @@ public class TramiteFront  implements Serializable{
 	/**
 	 * Indica la seleccion del ciudadano en caso de que el trámite permita notificación telemática
 	 */
-	private Boolean seleccionNotificacionTelematica;
+	private Boolean seleccionNotificacionTelematica;	
 	
 	/**
-	 * Indica el trámite permite avisos ( N No / S Si  / O Obligatoria)
+	 * Indica si son obligatorios los avisos para las notificaciones
 	 */
-	private String habilitarAvisos;
+	private boolean obligatorioAvisosNotificaciones;
 	
 	/**
 	 * Indica si permite que el ciudadano establezca un sms si activa lo avisos.
 	 */
 	private boolean permiteSMS;
-	
-	/**
-	 * Indica la seleccion del ciudadano en caso de que el trámite permita notificación telemática
-	 */
-	private Boolean seleccionAvisos;
 	
 	/**
 	 * Indica el email del ciudadano en caso de que active los avisos
@@ -550,24 +545,12 @@ public class TramiteFront  implements Serializable{
 	public void setRemitirDelegacionPresentacion(
 			boolean remitirDelegacionPresentacion) {
 		this.remitirDelegacionPresentacion = remitirDelegacionPresentacion;
-	}
-	public String getHabilitarAvisos() {
-		return habilitarAvisos;
-	}
-	public void setHabilitarAvisos(String habilitarAvisos) {
-		this.habilitarAvisos = habilitarAvisos;
-	}
+	}	
 	public boolean isPermiteSMS() {
 		return permiteSMS;
 	}
 	public void setPermiteSMS(boolean permiteSMS) {
 		this.permiteSMS = permiteSMS;
-	}
-	public Boolean getSeleccionAvisos() {
-		return seleccionAvisos;
-	}
-	public void setSeleccionAvisos(Boolean seleccionAvisos) {
-		this.seleccionAvisos = seleccionAvisos;
 	}
 	public String getSeleccionEmailAviso() {
 		return seleccionEmailAviso;
@@ -580,6 +563,13 @@ public class TramiteFront  implements Serializable{
 	}
 	public void setSeleccionSmsAviso(String seleccionSmsAviso) {
 		this.seleccionSmsAviso = seleccionSmsAviso;
+	}
+	public boolean isObligatorioAvisosNotificaciones() {
+		return obligatorioAvisosNotificaciones;
+	}
+	public void setObligatorioAvisosNotificaciones(
+			boolean obligatorioAvisosNotificaciones) {
+		this.obligatorioAvisosNotificaciones = obligatorioAvisosNotificaciones;
 	}
 	
 }

@@ -15,8 +15,12 @@
 <bean:define id="btnAltaNotif" type="java.lang.String">
 	<bean:message key='expediente.altaNotif'/>
 </bean:define>
+<bean:define id="btnBajaExp" type="java.lang.String">
+	<bean:message key='expediente.borrarExpediente'/>
+</bean:define>
 <bean:define id="expediente" name="expediente" type="es.caib.zonaper.modelInterfaz.ExpedientePAD" />
 <bean:define id="habilitarAvisos" value="<%= (expediente.getConfiguracionAvisos().getHabilitarAvisos() == null?"O":(expediente.getConfiguracionAvisos().getHabilitarAvisos().booleanValue())?\"S\":\"N\")%>" type="java.lang.String"/>
+<bean:define id="observacionesElemento" name="observacionesElemento" type="java.util.List"/>
 
 <script type="text/javascript" src="js/jquery.selectboxes.pack.js"></script>
 <script type="text/javascript" src="js/ajuda.js"></script>
@@ -31,6 +35,11 @@
 	
 	function notificacion(){
 		document.forms["0"].action='<html:rewrite page="/altaNotificacion.do"/>';
+		document.forms["0"].submit();
+	}
+
+	function borrarExpediente(){
+		document.forms["0"].action='<html:rewrite page="/borrarExpediente.do"/>';
 		document.forms["0"].submit();
 	}
 
@@ -224,9 +233,9 @@
 					</dd>					
 				</dl>				
 			</div>
-						
-			<p class="titol"><bean:message key="detalle.expediente.historial"/></p>
 			
+			<logic:notEmpty name="expediente" property="elementos">						
+			<p class="titol"><bean:message key="detalle.expediente.historial"/></p>
 			<table class="historic">
 				<thead>
 					<tr>
@@ -234,9 +243,11 @@
 						<th><bean:message key="detalle.expediente.tabla.titulo" /></th>
 						<th><bean:message key="detalle.expediente.tabla.fecha" /></th>
 						<th><bean:message key="detalle.expediente.tabla.estado" /></th>
+						<th><bean:message key="detalle.expediente.tabla.observaciones" /></th>
 					</tr>
 				</thead>
 				<tbody>
+					<% int indexElemento = 0; %>
 					<logic:iterate name="expediente" property="elementos" id="elemento" indexId="indice">
 					<tr>
 							<td>
@@ -281,7 +292,7 @@
 								<%}else if (((es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD)elemento).getDetalleAcuseRecibo().getEstado().equals(es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo.ESTADO_ENTREGADA)){%>
 									<bean:message key="detalle.notificacion.estado.entregada"/>
 								<%}else if (((es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD)elemento).getDetalleAcuseRecibo().getEstado().equals(es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo.ESTADO_RECHAZADA)){%>
-									<bean:message key="detalle.notificacion.estado.rechazada"/>	
+									<bean:message key="detalle.notificacion.estado.rechazada"/>											
 								<%} %>							
 							<%}else if (elemento instanceof es.caib.zonaper.modelInterfaz.EventoExpedientePAD) {%>
 								<% if (((es.caib.zonaper.modelInterfaz.EventoExpedientePAD)elemento).getFechaConsulta() == null){%>
@@ -293,12 +304,20 @@
 								<bean:message key="detalle.expediente.tramite.estado" />
 							<%} %>													
 						</td>
+						<td>							
+							<%=observacionesElemento.get(indexElemento)%>
+						</td>
 					</tr>
+					<% indexElemento++; %>
 					</logic:iterate>
 				</tbody>
 			</table>
+			</logic:notEmpty>
 			<html:form action="altaAviso" styleClass="remarcar opcions" >
 				<p class="botonera">
+					<logic:empty name="expediente" property="elementos">
+						<html:submit value="<%=btnBajaExp%>" onclick="borrarExpediente();"/>
+					</logic:empty>			
 					<html:submit value="<%=btnAltaAvis%>" onclick="aviso();"/>
 					<html:submit value="<%=btnAltaNotif%>" onclick="notificacion();"/>
 				</p>

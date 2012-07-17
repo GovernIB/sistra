@@ -358,45 +358,47 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 			
 			return expediente.getIdentificadorExpediente();
 		} catch (Exception e) {
-			log.debug("Excepcion al crear expediente: " + e.getMessage(),e);
+			log.error("Excepcion al crear expediente: " + e.getMessage(),e);
 			throw new ExcepcionPAD("Excepcion al crear expediente: " + e.getMessage(),e);
 		}
 	}
 	
-	
-
 	/**
-     
-     NO SE PERMITEN BAJAS
- 
-	public void bajaExpediente( long unidadAdministrativa, String identificadorExpediente)
-	{
-		bajaExpediente(unidadAdministrativa,identificadorExpediente);
-	}
-		
-	public void bajaExpediente( long unidadAdministrativa, String identificadorExpediente , String claveExpediente)
+	 * Borra expediente (siempre que no tenga elementos asociados).
+	 * @param unidadAdministrativa Unidad administrativa
+	 * @param identificadorExpediente Id expediente
+	 * @param claveExpediente Clave acceso expediente
+	 * 
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.gestor}"
+     * @ejb.permission role-name="${role.auto}" 
+	 */
+	public void bajaExpediente( long unidadAdministrativa, String identificadorExpediente , String claveExpediente) throws ExcepcionPAD
 	{
 		log.debug( "Baja expediente " + identificadorExpediente );
 		try
 		{
-			Expediente expediente = DelegateUtil.getExpedienteDelegate().obtenerExpediente( unidadAdministrativa, identificadorExpediente );
+			Expediente expediente = DelegateUtil.getExpedienteDelegate().obtenerExpediente( unidadAdministrativa, identificadorExpediente, claveExpediente );
 			
 			// En caso de que el expediente este protegido controlamos que se proporcione la clave correcta
-			if (StringUtils.isNotEmpty(expediente.getClaveExpediente())){
-				if (!expediente.getClaveExpediente().equals(claveExpediente)) 
-					throw new Exception("No se ha proporcionado la clave correcta de acceso al expediente");
+			if (expediente == null){
+				throw new Exception("No se encuentra expediente");
 			}
 			
-			
+			// Borramos expediente
 			DelegateUtil.getExpedienteDelegate().borrarExpediente( unidadAdministrativa, identificadorExpediente );
+			
+			// Borramos indices busqueda
+			DelegateUtil.getIndiceElementoDelegate().borrarIndicesElemento(IndiceElemento.TIPO_EXPEDIENTE, expediente.getCodigo());
+			
 		}
 		catch( Exception exc )
 		{
-			throw new EJBException( exc );
+			log.error("Excepcion al borrar expediente: " + exc.getMessage(), exc);
+			throw new ExcepcionPAD("Excepcion al borrar expediente: " + exc.getMessage(), exc );
 		}
 	}
-	 */
-	
 	
 	 
     /**
@@ -951,6 +953,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		} else {
 			detalleAcuse.setEstado(DetalleAcuseRecibo.ESTADO_PENDIENTE);
 		}
+		detalleAcuse.setFechaFinPlazo(notificacion.getFechaFinPlazo());
 		if (notificacion.getCodigoRdsAcuse() > 0) {
 			detalleAcuse.setCodigoRdsAcuseRecibo(new Long(notificacion.getCodigoRdsAcuse()));
 			detalleAcuse.setClaveRdsAcuseRecibo(notificacion.getClaveRdsAcuse());

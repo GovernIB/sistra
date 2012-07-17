@@ -367,10 +367,10 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 		}
 	}
 	
-	public void habilitarNotificacionAvisos(boolean habilitarNotificacion, boolean habilitarAvisos, String emailAviso, String smsAviso)  throws DelegateException {
+	public void habilitarNotificacion(boolean habilitarNotificacion, String emailAviso, String smsAviso)  throws DelegateException {
 		try
 		{
-			 getRemote().habilitarNotificacionAvisos(habilitarNotificacion, habilitarAvisos, emailAviso, smsAviso);			             
+			 getRemote().habilitarNotificacion(habilitarNotificacion, emailAviso, smsAviso);			             
 		}
 		catch( RemoteException e )
 		{
@@ -428,10 +428,10 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 	}
 	
 
-	public void resetHabilitarNotificacionAvisos() throws DelegateException {
+	public void resetHabilitarNotificacion() throws DelegateException {
 		try
 		{
-			getRemote().resetHabilitarNotificacionAvisos();
+			getRemote().resetHabilitarNotificacion();
 		}
 		catch( RemoteException e )
 		{

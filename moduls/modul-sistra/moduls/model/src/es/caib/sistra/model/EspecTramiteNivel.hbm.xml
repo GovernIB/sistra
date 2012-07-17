@@ -35,9 +35,7 @@
     <property name="urlFin" type="binary" column="ETN_URLFIN"/>
 
     <property name="habilitarNotificacionTelematica" length="1" column="ETN_NOTTEL"/>
-    
-    <property name="habilitarAvisos" column="ETN_AVISOS" length="1" not-null="true"/>
-     <property name="permitirSMS" column="ETN_PERSMS" length="1" not-null="true"/>
+    <property name="permitirSMS" column="ETN_PERSMS" length="1" not-null="true"/>
     <property name="avisoSMS" type="binary" column="ETN_AVISMS"/>
     <property name="avisoEmail" type="binary" column="ETN_AVIEMA"/>
     

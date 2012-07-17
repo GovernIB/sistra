@@ -70,12 +70,21 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
         // 	- se controla la entrega de las notificaciones
         try{
         	ConfiguracionDelegate config = DelegateUtil.getConfiguracionDelegate();
-        	getServletContext().setAttribute(Constants.MOSTRAR_EN_IFRAME,new Boolean(config.obtenerConfiguracion().getProperty("sistra.iframe")).booleanValue());
+        	
+        	String mostrarIframe = config.obtenerConfiguracion().getProperty("sistra.iframe");
+			getServletContext().setAttribute(Constants.MOSTRAR_EN_IFRAME,new Boolean(mostrarIframe).booleanValue());
+        	
         	String controlEntregaNotif = config.obtenerConfiguracion().getProperty("notificaciones.controlEntrega");
         	if (StringUtils.isBlank(controlEntregaNotif)) {
         		controlEntregaNotif = "false";
         	}
-			getServletContext().setAttribute(Constants.CONTROLAR_ENTREGA_NOTIFICACIONES,new Boolean(controlEntregaNotif).booleanValue());        	
+			getServletContext().setAttribute(Constants.CONTROLAR_ENTREGA_NOTIFICACIONES,new Boolean(controlEntregaNotif).booleanValue());
+			
+			String apartadoAlertas = config.obtenerConfiguracion().getProperty("avisos.apartadoAlertas");
+        	if (StringUtils.isBlank(apartadoAlertas)) {
+        		apartadoAlertas = "true";
+        	}
+			getServletContext().setAttribute(Constants.HABILITAR_APARTADO_ALERTAS,new Boolean(apartadoAlertas).booleanValue());
         }catch(Exception ex){
         	log.error("Error obteniendo la variable iframe",ex);
         	throw new ServletException(ex);

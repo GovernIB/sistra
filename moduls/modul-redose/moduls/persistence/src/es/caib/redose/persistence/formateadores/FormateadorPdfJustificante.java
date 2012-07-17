@@ -253,6 +253,7 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
 				seccion.addCampo(propiedad);
 	    	}
 	    	// Avisos
+	    	/*
 	    	if (datosPropios != null && datosPropios.getInstrucciones() != null && StringUtils.isNotEmpty(datosPropios.getInstrucciones().getHabilitarAvisos())){
 	    		String valueAvisos;
 	    		if ("S".equals(datosPropios.getInstrucciones().getHabilitarNotificacionTelematica())) {
@@ -266,6 +267,7 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
 	    		propiedad = new Propiedad(props.getProperty("datosRegistro.avisos"),valueAvisos);		    		    
 				seccion.addCampo(propiedad);
 	    	}
+	    	*/
     	}
     	docPDF.addSeccion(seccion);
 		

@@ -81,6 +81,11 @@ public class Constants implements Serializable
     public static final String CONTROLAR_ENTREGA_NOTIFICACIONES = "controlarEntregaNotificaciones";
     
     /**
+     * Atributo de contexto para indicar si esta habilitado el apartado de alertas.
+     */
+    public static final String HABILITAR_APARTADO_ALERTAS = "es.caib.zonaper.front.apartadoAlertas";
+    
+    /**
      * Atributo de sesión para almacenar la página de expedientes actual.
      */
     public static final String PAGE_KEY = "es.caib.zonaper.front.pagina";

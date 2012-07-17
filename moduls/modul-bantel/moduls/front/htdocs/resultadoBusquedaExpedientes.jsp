@@ -25,7 +25,9 @@
 		<th><bean:message key="resultadoBusquedaExpedientes.fecha"/></th>
 		<th><bean:message key="resultadoBusquedaExpedientes.idExpediente"/></th>	
 		<th><bean:message key="resultadoBusquedaExpedientes.nif"/></th>		
+		<!-- 
 		<th><bean:message key="resultadoBusquedaExpedientes.procedimiento"/></th>
+		 -->
 		<th><bean:message key="resultadoBusquedaExpedientes.estado"/></th>
 		<th><bean:message key="resultadoBusquedaExpedientes.numeroEntrada"/></th>
 	</tr>				
@@ -35,7 +37,9 @@
 			<td><bean:write name="pagina" property="fechaInicio" format="dd/MM/yyyy HH:mm"/></td>
 			<td><bean:write name="pagina" property="identificadorExpediente" /></td>
 			<td><bean:write name="pagina" property="nifRepresentante" /></td>
+			<!-- 
 			<td><bean:write name="pagina" property="identificadorProcedimiento" /></td>
+			 -->
 			<td>
 				<logic:equal name="pagina" property="estado" value="<%=ConstantesZPE.ESTADO_AVISO_PENDIENTE%>">
 					<bean:message key="resultadoBusquedaExpedientes.estado.avisoPendiente"/>

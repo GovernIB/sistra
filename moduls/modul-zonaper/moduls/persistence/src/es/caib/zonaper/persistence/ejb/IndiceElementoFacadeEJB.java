@@ -1,9 +1,11 @@
 package es.caib.zonaper.persistence.ejb;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
+
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
@@ -80,6 +82,39 @@ public abstract class IndiceElementoFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
+     * @ejb.permission role-name="${role.gestor}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public void borrarIndicesElemento(String tipoElemento,
+		Long codigoElemento) {        
+    	Session session = getSession();
+		try
+		{
+			Query query = session
+			.createQuery( "FROM IndiceElemento e where e.tipoElemento= :tipoElemento and e.codigoElemento = :codigoElemento" )
+			.setParameter("tipoElemento",tipoElemento)
+			.setParameter("codigoElemento",codigoElemento);
+			List indices = query.list();	
+			if (indices != null) {
+				for (Iterator it = indices.iterator(); it.hasNext();) {
+					IndiceElemento ind = (IndiceElemento) it.next();
+					session.delete(ind);
+				}
+			}
+		}
+		catch (HibernateException he) 
+		{   
+			throw new EJBException(he);
+	    } 
+		finally 
+		{
+	        close(session);
+	    }
+    }
+    
+    
+    /**
+     * @ejb.interface-method
      * @ejb.permission role-name="${role.auto}"
      */
     public void borrarIndiceElemento(Long id) {        
@@ -93,7 +128,7 @@ public abstract class IndiceElementoFacadeEJB extends HibernateEJB {
         	
             close(session);
         }
-    }
+    }    
     
     /**
      * Busca en los indices del usuario autenticado por la palabra clave.

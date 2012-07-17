@@ -15,6 +15,7 @@ import es.caib.redose.model.LogOperacion;
 import es.caib.redose.model.TipoOperacion;
 import es.caib.redose.modelInterfaz.ExcepcionRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
+import es.caib.redose.persistence.delegate.DelegateUtil;
 import es.caib.redose.persistence.plugin.PluginAlmacenamientoRDS;
 import es.caib.redose.persistence.plugin.PluginClassCache;
 
@@ -143,7 +144,7 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
     
     // ---------------------- Funciones auxiliares -------------------------------------------    
     
-    /* NO USED
+    /* 
      * Funcion que realiza el borrado de un documento en el RDS
      */
     private void eliminarDocumentoImpl(ReferenciaRDS refRds) throws ExcepcionRDS{
@@ -158,12 +159,16 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
 	    	if (!documento.getClave().equals(refRds.getClave())){
 	    		throw new ExcepcionRDS("La clave no coincide");
 	    	}	
+	    	
+	    	// Borramos versiones de custodia
+	    	DelegateUtil.getVersionCustodiaDelegate().borrarVersionesDocumento(documento.getCodigo());
+	    	
 	    	// Obtenemos plugin almacenamiento
 	    	ls_plugin = documento.getUbicacion().getPluginAlmacenamiento();
 	    	ls_ubicacion =documento.getUbicacion().getCodigoUbicacion(); 
 	    	// Eliminamos documento
 	    	session.delete(documento);
-	    } catch (HibernateException he) {
+	    } catch (Exception he) {
 	        throw new EJBException(he);
 	    } finally {
 	        close(session);
