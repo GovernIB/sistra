@@ -17,7 +17,9 @@
 				<h2><bean:message key="menuAutenticado.misDatos" /></h2>
 				<ul>
 					<li><html:link action="/protected/mostrarDatosPersonales"><bean:message key="menuAutenticado.misDatos.datosPersonales"/></html:link></li>
+					<logic:equal name="habilitarAlertas" value="true">
 					<li><html:link action="/protected/mostrarAlertas"><bean:message key="menuAutenticado.misDatos.alertas"/></html:link></li>
+					</logic:equal>
 				</ul>
 			</div>
 			<!-- /meues dades -->

@@ -1,7 +1,6 @@
 package es.caib.zonaper.modelInterfaz;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**

@@ -358,10 +358,10 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 		}
 	}
 
-	public void habilitarNotificacionAvisos(boolean habilitarNotificacion, boolean habilitarAvisos, String emailAviso, String smsAviso) throws DelegateException {
+	public void habilitarNotificacion(boolean habilitarNotificacion, String emailAviso, String smsAviso) throws DelegateException {
 		try
 		{
-			local.habilitarNotificacionAvisos(habilitarNotificacion, habilitarAvisos, emailAviso, smsAviso);
+			local.habilitarNotificacion(habilitarNotificacion, emailAviso, smsAviso);
 		}
 		catch( EJBException e )
 		{
@@ -416,10 +416,10 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 	}
 	
 
-	public void resetHabilitarNotificacionAvisos() throws DelegateException {
+	public void resetHabilitarNotificacion() throws DelegateException {
 		try
 		{
-			local.resetHabilitarNotificacionAvisos();
+			local.resetHabilitarNotificacion();
 		}
 		catch( EJBException e )
 		{

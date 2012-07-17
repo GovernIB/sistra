@@ -123,6 +123,9 @@
 	}
 
 	function cambioHabilitar() {
+
+		alert($('#habilitarAvisos').val());
+		
 		if ($('#habilitarAvisos').val() == "S") {
  			 $('#direcciones').show();		
  		} else {
@@ -265,10 +268,19 @@
 				</p>
 				<p>
 					<label for="habilitarAvisos"><bean:message key="expediente.habilitarAvisos"/><sup>*</sup></label>
-					<html:select property="habilitarAvisos" styleId="habilitarAvisos" styleClass="pc40" onchange="cambioHabilitar()">
-						<html:option value="S"><bean:message key="expediente.avisos.si"/></html:option>
-						<html:option value="N"><bean:message key="expediente.avisos.no"/></html:option>
-					</html:select>
+					
+					<logic:equal name="obligatorioAvisos" value="true">
+						<html:hidden property="habilitarAvisos" styleId="habilitarAvisos" value="S"/>
+						<bean:message key="expediente.avisos.si"/>						
+					</logic:equal>
+					
+					<logic:equal name="obligatorioAvisos" value="false">						
+						 <html:select property="habilitarAvisos" styleId="habilitarAvisos" styleClass="pc40" onchange="cambioHabilitar()" >
+							<html:option value="S"><bean:message key="expediente.avisos.si"/></html:option>
+							<html:option value="N"><bean:message key="expediente.avisos.no"/></html:option>
+						</html:select>
+					</logic:equal>
+					
 				</p>
 				
 				<div id="direcciones">

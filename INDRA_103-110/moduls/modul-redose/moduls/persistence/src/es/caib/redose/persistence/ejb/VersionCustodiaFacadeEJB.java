@@ -1,10 +1,12 @@
 package es.caib.redose.persistence.ejb;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
+
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
@@ -62,6 +64,31 @@ public abstract class VersionCustodiaFacadeEJB extends HibernateEJB {
         try {
             VersionCustodia version = obtenerVersion(id);
             session.delete(version);
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
+    /**
+     * Borra versiones de custodia de un documento.
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public void borrarVersionesDocumento(Long idDocumento) {
+    	Session session = getSession();
+    	try {
+        	Query query = session.createQuery("FROM VersionCustodia AS version WHERE version.documento.codigo = :idDocumento");            
+        	query.setParameter("idDocumento", idDocumento);
+        	List versionesCustodia = query.list();
+        	if(versionesCustodia != null){
+        		for (Iterator it = versionesCustodia.iterator(); it.hasNext();) {
+        			VersionCustodia version = (VersionCustodia) it.next();
+        			session.delete(version);
+        		}        
+        	}
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {

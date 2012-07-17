@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import es.caib.zonaper.front.form.ActualizarAlertasForm;
+import es.caib.zonaper.front.util.ZonapersFrontRequestHelper;
 import es.caib.zonaper.model.DatosSesion;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
@@ -38,6 +39,10 @@ public class ActualizarAlertasAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
+		
+		if (!ZonapersFrontRequestHelper.isHabilitarApartadoAlertas(request)) {
+			throw new Exception("No esta habilitado el apartado de alertas");
+		}
 		
 		// TODO DE MOMENTO SOLO DEJAMOS MODIFICAR AL PROPIO USUARIO, MAS ADELANTE TB AL REPR
 		DatosSesion datosSesion = this.getDatosSesion(request);

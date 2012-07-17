@@ -34,8 +34,7 @@ public class SeleccionNotificacionTelematicaAvisos extends BaseAction
 		SeleccionNotificacionAvisosForm selecForm = (SeleccionNotificacionAvisosForm) form;
 		
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request );
-		delegate.habilitarNotificacionAvisos("true".equals(selecForm.getSeleccionNotificacion()),
-				"true".equals(selecForm.getSeleccionAvisos()),
+		delegate.habilitarNotificacion("true".equals(selecForm.getSeleccionNotificacion()),				
 				selecForm.getEmailSeleccionAviso(),
 				selecForm.getSmsSeleccionAviso());
 		

@@ -1,6 +1,5 @@
 package es.caib.sistra.back.action.xml;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.betwixt.io.BeanReader;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
@@ -21,8 +19,6 @@ import es.caib.sistra.back.Constants;
 import es.caib.sistra.back.action.BaseAction;
 import es.caib.sistra.back.form.ImportarVersionTramiteForm;
 import es.caib.sistra.back.form.ImportarVersionTramiteProcessForm;
-import es.caib.sistra.model.EspecTramiteNivel;
-import es.caib.sistra.model.TramiteNivel;
 import es.caib.sistra.model.TramiteVersion;
 import es.caib.sistra.model.betwixt.Configurator;
 import es.caib.sistra.modelInterfaz.ConstantesDominio;
@@ -61,9 +57,6 @@ public class ImportarXMLPreviewAction extends BaseAction
 
             TramiteVersion tramiteVersion = (TramiteVersion) beanReader.parse(iForm.getFitxer().getInputStream());
             tramiteVersion.setVersion( iForm.getVersion() );
-            
-            // Proteccion ante cambio de habilitar avisos de script a S/N (1.1.6)
-            revisarHabilitarAvisos(tramiteVersion);
             
             // Almacenamos en sesion el objeto tramite version creado a partir del fichero de importacion
             request.getSession().setAttribute(Constants.XML_IMPORTACION_KEY,tramiteVersion);
@@ -120,31 +113,5 @@ public class ImportarXMLPreviewAction extends BaseAction
         	return mapping.findForward("fail");	
         }
         
-    }
-    
-    private void revisarHabilitarAvisos(TramiteVersion tramiteVersion) {
-		if (tramiteVersion.getEspecificaciones() != null && tramiteVersion.getEspecificaciones().getHabilitarAvisos() != null && 
-			StringUtils.isNotBlank(tramiteVersion.getEspecificaciones().getHabilitarAvisos()) &&
-			!tramiteVersion.getEspecificaciones().getHabilitarAvisos().equals("S") && 
-			!tramiteVersion.getEspecificaciones().getHabilitarAvisos().equals("N") ) {
-			tramiteVersion.getEspecificaciones().setHabilitarAvisos("S");
-		}
-		if (tramiteVersion.getEspecificaciones() != null && tramiteVersion.getEspecificaciones().getHabilitarAvisos() == null) {
-			tramiteVersion.getEspecificaciones().setHabilitarAvisos("N");
-		}
-		for (Iterator it = tramiteVersion.getNiveles().iterator();it.hasNext();)
-		{
-			TramiteNivel tn  = (TramiteNivel) it.next();
-			EspecTramiteNivel especTramiteNivel = tn.getEspecificaciones();
-			if (tn.getEspecificaciones() != null && tn.getEspecificaciones().getHabilitarAvisos() != null && 
-					StringUtils.isNotBlank(tn.getEspecificaciones().getHabilitarAvisos()) &&
-		        	!tn.getEspecificaciones().getHabilitarAvisos().equals("S") && 
-		        	!tn.getEspecificaciones().getHabilitarAvisos().equals("N") ) {
-						tn.getEspecificaciones().setHabilitarAvisos("S");
-		        }
-		        if (tn.getEspecificaciones() != null && tn.getEspecificaciones().getHabilitarAvisos() == null) {
-		        	tn.getEspecificaciones().setHabilitarAvisos("X");
-		        }
-		}
-	}
+    }        
 }

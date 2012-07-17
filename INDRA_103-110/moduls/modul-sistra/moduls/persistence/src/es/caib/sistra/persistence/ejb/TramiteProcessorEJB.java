@@ -182,10 +182,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	
 	// Indica si aceptamos notificacion telematica (en caso de que se permita)
 	private Boolean habilitarNotificacionTelematica;
-	
-	// Indica si aceptamos aviso (en caso de que se permita)
-	private Boolean habilitarAvisos;
-	
+		
 	// Indica email de aviso (en caso de que se permita)
 	private String emailAviso;
 	
@@ -197,6 +194,9 @@ public class TramiteProcessorEJB implements SessionBean {
 	
 	// Indica si es un tramite de subsanacion
 	private boolean subsanacion=false;
+	
+	// Indica si son obligatorios los avisos para las notificaciones
+	private boolean avisosObligatoriosNotif = false;
 	
 	public TramiteProcessorEJB() {
 		super();				
@@ -298,6 +298,9 @@ public class TramiteProcessorEJB implements SessionBean {
 			
 			// Indica si es entorno de desarrollo o pruebas
 			this.entornoDesarrollo = "DESARROLLO".equals(props.getProperty("entorno"));
+			
+			// Indica si son obligatorios los avisos para las notificaciones
+			this.avisosObligatoriosNotif = "true".equals(props.getProperty("sistra.avisoObligatorioNotificaciones"));
 			
 		} catch (Exception e) {            
             throw new EJBException("Excepcion al iniciar tramite: " + e.getMessage(), e);
@@ -2845,16 +2848,15 @@ public class TramiteProcessorEJB implements SessionBean {
     }
     
     /**
-     * Establece los valores de seleccion de confirmacion de notificaciones y avisos.
+     * Establece los valores de seleccion de notificacion.
      * 
      * @ejb.interface-method    
      * @ejb.permission role-name="${role.todos}"
      * 
      */
-    public void habilitarNotificacionAvisos(boolean habilitarNotificacion, boolean habilitarAvisos, String emailAviso, String smsAviso)
+    public void habilitarNotificacion(boolean habilitarNotificacion,String emailAviso, String smsAviso)
     {
     	this.habilitarNotificacionTelematica = new Boolean(habilitarNotificacion);
-    	this.habilitarAvisos = new Boolean(habilitarAvisos);
     	this.emailAviso = emailAviso;
     	this.smsAviso = smsAviso;    	
     }   
@@ -2866,11 +2868,8 @@ public class TramiteProcessorEJB implements SessionBean {
      * @ejb.permission role-name="${role.todos}"
      * 
      */
-    public void resetHabilitarNotificacionAvisos() {
-    	if (!ConstantesSTR.NOTIFICACIONTELEMATICA_OBLIGATORIA.equals(tramiteInfo.getHabilitarNotificacionTelematica())) {
-    		this.habilitarNotificacionTelematica = null;
-    	}
-    	this.habilitarAvisos = null;
+    public void resetHabilitarNotificacion() {
+    	this.habilitarNotificacionTelematica = null;
     	this.emailAviso = null;
     	this.smsAviso = null;    	
     }
@@ -3668,26 +3667,21 @@ public class TramiteProcessorEJB implements SessionBean {
     		// Establecemos info de si el tramite permite notificacion telematica
     		if ( !ConstantesSTR.NOTIFICACIONTELEMATICA_SINESPECIFICAR.equals(espNivel.getHabilitarNotificacionTelematica())){
     			tramiteInfo.setHabilitarNotificacionTelematica(espNivel.getHabilitarNotificacionTelematica());
+    			tramiteInfo.setPermiteSMS("S".equals(espNivel.getPermitirSMS()));
     		}else if ( !ConstantesSTR.NOTIFICACIONTELEMATICA_SINESPECIFICAR.equals(espTramite.getHabilitarNotificacionTelematica())){
     			tramiteInfo.setHabilitarNotificacionTelematica(espTramite.getHabilitarNotificacionTelematica());
+    			tramiteInfo.setPermiteSMS("S".equals(espTramite.getPermitirSMS()));
     		}else{
     			tramiteInfo.setHabilitarNotificacionTelematica(ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA);
     		}    		    		
-    		// En caso de que sea obligatoria la seleccion la damos por hecha
-    		if (tramiteInfo.getHabilitarNotificacionTelematica().equals(ConstantesSTR.NOTIFICACIONTELEMATICA_OBLIGATORIA)){
+    		// En caso de que sea obligatoria la seleccion y no sean obligatorios los avisos la damos por hecha
+    		if (tramiteInfo.getHabilitarNotificacionTelematica().equals(ConstantesSTR.NOTIFICACIONTELEMATICA_OBLIGATORIA) && 
+    				!this.avisosObligatoriosNotif){
     			this.habilitarNotificacionTelematica = new Boolean(true);
     		}
     		
-    		// Establecemos info de si el tramite permite avisos
-    		if ( !ConstantesSTR.AVISO_SINESPECIFICAR.equals(espNivel.getHabilitarAvisos())){
-    			tramiteInfo.setHabilitarAvisos(espNivel.getHabilitarAvisos());
-    			tramiteInfo.setPermiteSMS("S".equals(espNivel.getPermitirSMS()));
-    		}else if ( !ConstantesSTR.AVISO_SINESPECIFICAR.equals(espTramite.getHabilitarAvisos())){
-    			tramiteInfo.setHabilitarAvisos(espTramite.getHabilitarAvisos());
-    			tramiteInfo.setPermiteSMS("S".equals(espTramite.getPermitirSMS()));
-    		}else{
-    			tramiteInfo.setHabilitarAvisos(ConstantesSTR.AVISO_NOPERMITIDO);
-    		}    		    		
+    		// Indicamos si son obligatorias los avisos para las notificaciones
+    		tramiteInfo.setObligatorioAvisosNotificaciones(this.avisosObligatoriosNotif);
     		
     	}    	   
     	
@@ -3771,16 +3765,11 @@ public class TramiteProcessorEJB implements SessionBean {
     	// Establece seleccion de notificacion telematica
     	if (tramiteInfo.getHabilitarNotificacionTelematica() != ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA) {
     		tramiteInfo.setSeleccionNotificacionTelematica(this.habilitarNotificacionTelematica);
-    	}
-    	
-    	// Establece seleccion de avisos
-    	if (tramiteInfo.getHabilitarAvisos() != ConstantesSTR.AVISO_NOPERMITIDO) {
-	    	tramiteInfo.setSeleccionAvisos(this.habilitarAvisos);
-	    	tramiteInfo.setSeleccionEmailAviso(this.emailAviso);
+    		tramiteInfo.setSeleccionEmailAviso(this.emailAviso);
 	    	if (tramiteInfo.isPermiteSMS()) {
 	    		tramiteInfo.setSeleccionSmsAviso(this.smsAviso);
 	    	}
-    	}
+    	}    	
     	    	
     	// Establece en caso de flujo de tramitación si esta en estado de pasar y a quien
     	// Si esta pendiente de pasar establece el campo flujoTramitacionNif
@@ -4425,8 +4414,7 @@ public class TramiteProcessorEJB implements SessionBean {
     			boolean pendienteFlujo = paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_FLUJO);
     			boolean pendienteDelegacion = paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_DELEGACION_PRESENTACION);
     			boolean pendienteSeleccionarNotif = (!tramiteInfo.getHabilitarNotificacionTelematica().equals(ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA) && tramiteInfo.getSeleccionNotificacionTelematica() == null);
-    			boolean pendienteSeleccionarAvisos = (!tramiteInfo.getHabilitarAvisos().equals(ConstantesSTR.AVISO_NOPERMITIDO) && tramiteInfo.getSeleccionAvisos() == null);
-    			if (  !(pendienteDelegacion || pendienteFlujo || pendienteSeleccionarNotif || pendienteSeleccionarAvisos) ) {
+    			if (  !(pendienteDelegacion || pendienteFlujo || pendienteSeleccionarNotif) ) {
     						// Calculamos destinatario tramite (por si se especifica dinamicamente) 
 		    				DestinatarioTramite dt = this.calcularDestinatarioTramite();
 							// Generamos asiento (le pasamos destinatario tramite por si se especifica dinamicamente)
@@ -4438,8 +4426,8 @@ public class TramiteProcessorEJB implements SessionBean {
 		    				param.put("asiento",asiento);    				
     			}
     			
-    			// Si esta pendiente de seleccionar avisos calculamos email/sms por defecto
-    			if (pendienteSeleccionarAvisos) {
+    			// Si esta pendiente de seleccionar notificacion calculamos email/sms por defecto
+    			if (pendienteSeleccionarNotif) {
     				param.put("emailAvisoDefault", calcularEmailAvisoDefecto());
     				param.put("smsAvisoDefault", calcularSmsAvisoDefecto());
     			}
@@ -4470,9 +4458,11 @@ public class TramiteProcessorEJB implements SessionBean {
     	EspecTramiteNivel especVersion = tramiteVersion.getEspecificaciones();
     	EspecTramiteNivel especNivel = tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
     			
-    	if (ConstantesSTR.AVISO_PERMITIDO.equals(especNivel.getHabilitarAvisos()) && especNivel.getAvisoEmail() != null && especNivel.getAvisoEmail().length > 0 ){
+    	if (!ConstantesSTR.NOTIFICACIONTELEMATICA_SINESPECIFICAR.equals(especNivel.getHabilitarNotificacionTelematica()) &&
+    		!ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA.equals(especNivel.getHabilitarNotificacionTelematica()) &&
+    		especNivel.getAvisoEmail() != null && especNivel.getAvisoEmail().length > 0 ){
     		scriptEmail = especNivel.getAvisoEmail();
-    	}else if (ConstantesSTR.AVISO_PERMITIDO.equals(especVersion.getHabilitarAvisos())) {
+    	}else if (!ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA.equals(especVersion.getHabilitarNotificacionTelematica())) {
     		scriptEmail = especVersion.getAvisoEmail();
     	}
     	
@@ -4504,11 +4494,14 @@ public class TramiteProcessorEJB implements SessionBean {
     	EspecTramiteNivel especVersion = tramiteVersion.getEspecificaciones();
     	EspecTramiteNivel especNivel = tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
     			
-    	if (ConstantesSTR.AVISO_PERMITIDO.equals(especNivel.getHabilitarAvisos()) && especNivel.getAvisoSMS() != null && especNivel.getAvisoSMS().length > 0 ){
+    	
+    	if (!ConstantesSTR.NOTIFICACIONTELEMATICA_SINESPECIFICAR.equals(especNivel.getHabilitarNotificacionTelematica()) &&
+        		!ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA.equals(especNivel.getHabilitarNotificacionTelematica()) &&
+        		especNivel.getAvisoSMS() != null && especNivel.getAvisoSMS().length > 0 ){
     		scriptSms = especNivel.getAvisoSMS();
-    	}else if (ConstantesSTR.AVISO_PERMITIDO.equals(especVersion.getHabilitarAvisos())) {
-    		scriptSms = especVersion.getAvisoSMS();
-    	}
+        	}else if (!ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA.equals(especVersion.getHabilitarNotificacionTelematica())) {
+        		scriptSms = especVersion.getAvisoSMS();
+        	}    	    	
     	
     	if (scriptSms != null && scriptSms.length > 0 ){
     		smsDefecto = this.evaluarScript(scriptSms,null);    		

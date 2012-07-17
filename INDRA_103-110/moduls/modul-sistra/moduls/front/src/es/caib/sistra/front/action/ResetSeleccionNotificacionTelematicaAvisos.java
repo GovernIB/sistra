@@ -27,7 +27,7 @@ public class ResetSeleccionNotificacionTelematicaAvisos extends BaseAction
             HttpServletResponse response) throws Exception 
     {
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request );
-		delegate.resetHabilitarNotificacionAvisos();
+		delegate.resetHabilitarNotificacion();
 		return mapping.findForward("success");
     }
 	

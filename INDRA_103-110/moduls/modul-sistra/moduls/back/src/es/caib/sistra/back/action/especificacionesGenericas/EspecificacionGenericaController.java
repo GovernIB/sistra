@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.Controller;
 
+import es.caib.sistra.back.Constants;
 import es.caib.sistra.model.ConstantesSTR;
 import es.caib.sistra.model.Opcion;
 
@@ -34,13 +35,9 @@ public class EspecificacionGenericaController implements Controller{
     	listaOpcionesNotif.add(new Opcion(ConstantesSTR.NOTIFICACIONTELEMATICA_PERMITIDA, "especificacionesTramite.habilitarNotificacionTelematica.permitida"));
     	listaOpcionesNotif.add(new Opcion(ConstantesSTR.NOTIFICACIONTELEMATICA_OBLIGATORIA, "especificacionesTramite.habilitarNotificacionTelematica.obligatoria"));
     	
-    	List listaOpcionesAvisos = new ArrayList(); 
-    	listaOpcionesAvisos.add(new Opcion(ConstantesSTR.AVISO_NOPERMITIDO, "especificacionesTramite.habilitarAvisos.noPermitido"));
-    	listaOpcionesAvisos.add(new Opcion(ConstantesSTR.AVISO_PERMITIDO, "especificacionesTramite.habilitarAvisos.permitido"));
-    	listaOpcionesAvisos.add(new Opcion(ConstantesSTR.AVISO_OBLIGATORIO, "especificacionesTramite.habilitarAvisos.obligatorio"));
-    	
     	request.setAttribute( "habilitarNotificacionOptions", listaOpcionesNotif);
-    	request.setAttribute( "habilitarAvisosOptions", listaOpcionesAvisos);
+    	
+    	request.setAttribute( "habilitarAvisos", request.getSession().getServletContext().getAttribute(Constants.AVISOS_OBLIGATORIOS_NOTIFICACIONES));
     	
     }
 }

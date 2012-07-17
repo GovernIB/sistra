@@ -16,7 +16,6 @@ import es.caib.sistra.model.ConstantesSTR;
 import es.caib.sistra.model.DocumentoFront;
 import es.caib.sistra.model.PasoTramitacion;
 import es.caib.sistra.model.TramiteFront;
-import es.caib.sistra.persistence.delegate.DelegateUtil;
 import es.caib.util.ConvertUtil;
 import es.caib.util.StringUtil;
 import es.caib.xml.datospropios.factoria.impl.Instrucciones;
@@ -57,49 +56,49 @@ public class RegistroController extends FinalizacionController
 		//
 		// 	COMPROBAMOS SI TENEMOS QUE PEDIR CONFIRMACION PARA NOTIFICACION TELEMATICA
 		//
+		String avisosObligNotif = (String) request.getSession().getServletContext().getAttribute(Constants.AVISOS_OBLIGATORIOS_NOTIFICACIONES);
 		
-		boolean pendienteConfirmacionNotificacionAvisos = false;
 		if (!ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA.equals(tramite.getHabilitarNotificacionTelematica())){
+			
+			// Pendiente de confirmar notificacion
 			if (tramite.getSeleccionNotificacionTelematica() == null){
-				request.setAttribute( "confirmarSeleccionNotificacionTelematica","true");
 				request.setAttribute("seleccionNotificacionTelematica","true");
-				pendienteConfirmacionNotificacionAvisos = true;
+				request.setAttribute("confirmarSeleccionNotificacionTelematica","true");				
+
+				// Indicamos si la notificacion es obligatoria
+				request.setAttribute("notificacionObligatoria",ConstantesSTR.NOTIFICACIONTELEMATICA_OBLIGATORIA.equals(tramite.getHabilitarNotificacionTelematica())?"true":"false");
+				
+				// Si son obligatorios los avisos establecemos email/sms por defecto 				
+				if ("true".equals(avisosObligNotif)) {
+					request.setAttribute("seleccionAvisos","true");
+					request.setAttribute( "permitirAvisoSMS",Boolean.toString(tramite.isPermiteSMS()) );
+					request.setAttribute("emailAvisoDefault", params.get("emailAvisoDefault"));
+					request.setAttribute("smsAvisoDefault", params.get("smsAvisoDefault"));
+				} else {
+					request.setAttribute("seleccionAvisos","false");
+				}
+				
+				// Evitamos que continue hasta que se confirme la notificacion
+				return;
+				
 			} else {
+			// Notificacion confirmada	
 				request.setAttribute("seleccionNotificacionTelematica",tramite.getSeleccionNotificacionTelematica().toString());
+				if ("true".equals(avisosObligNotif)) {
+					request.setAttribute("seleccionAvisos","true");
+					if (StringUtils.isNotBlank(tramite.getSeleccionEmailAviso())) {
+						request.setAttribute("seleccionEmailAviso",tramite.getSeleccionEmailAviso());
+					}
+					if (StringUtils.isNotBlank(tramite.getSeleccionSmsAviso())) {
+						request.setAttribute("seleccionSmsAviso",tramite.getSeleccionSmsAviso());
+					}
+				} else {
+					request.setAttribute("seleccionAvisos","false");
+				}
 			}
 		} else {
 			request.setAttribute("seleccionNotificacionTelematica", "false");
-		}
-		
-		//
-		// 	COMPROBAMOS SI TENEMOS QUE PEDIR CONFIRMACION PARA AVISOS
-		//		
-		if (!ConstantesSTR.AVISO_NOPERMITIDO.equals(tramite.getHabilitarAvisos())){
-			if (tramite.getSeleccionAvisos() == null){
-				request.setAttribute("seleccionAvisos","true");
-				request.setAttribute( "confirmarSeleccionAvisos","true" );
-				request.setAttribute( "obligatorioSeleccionAvisos", Boolean.toString(tramite.getHabilitarAvisos().equals(ConstantesSTR.AVISO_OBLIGATORIO)) );
-				request.setAttribute( "permitirAvisoSMS",Boolean.toString(tramite.isPermiteSMS()) );
-				request.setAttribute("emailAvisoDefault", params.get("emailAvisoDefault"));
-				request.setAttribute("smsAvisoDefault", params.get("smsAvisoDefault"));
-				pendienteConfirmacionNotificacionAvisos = true;
-			}else{
-				request.setAttribute("seleccionAvisos",tramite.getSeleccionAvisos().toString());
-				if (StringUtils.isNotBlank(tramite.getSeleccionEmailAviso())) {
-					request.setAttribute("seleccionEmailAviso",tramite.getSeleccionEmailAviso());
-				}
-				if (StringUtils.isNotBlank(tramite.getSeleccionSmsAviso())) {
-					request.setAttribute("seleccionSmsAviso",tramite.getSeleccionSmsAviso());
-				}
-			}
-		} else {
-			request.setAttribute("seleccionAvisos","false");
-		}
-
-		if (pendienteConfirmacionNotificacionAvisos) {
-			request.setAttribute( "confirmarSeleccion","true");
-			return;
-		}
+		}			
 		
 		//
 		//	EXTRAEMOS ETIQUETAS SEGUN CIRCUITO

@@ -185,8 +185,8 @@ public class AvisosMovilidad {
 			textoEmail = StringUtil.replace(textoEmail,"[#EXPEDIENTE#]",StringEscapeUtils.escapeHtml(expe.getIdExpediente() + " - " + expe.getDescripcion() ));
 			textoEmail = StringUtil.replace(textoEmail,"[#UNIDAD_ADMINISTRATIVA#]", StringEscapeUtils.escapeHtml(Dominios.obtenerDescripcionUA(expe.getUnidadAdministrativa().toString())));
 			textoEmail = StringUtil.replace(textoEmail,"[#FECHA#]", StringUtil.fechaACadena(evento.getFecha(),StringUtil.FORMATO_FECHA));
-			// textoEmail = StringUtil.replace(textoEmail,"[#TITULO#]",StringEscapeUtils.escapeHtml(evento.getTitulo()));
-			// textoEmail = StringUtil.replace(textoEmail,"[#TEXTO#]",StringUtil.replace(StringEscapeUtils.escapeHtml(evento.getTexto()),"\n","</br>"));			
+			textoEmail = StringUtil.replace(textoEmail,"[#TITULO#]",StringEscapeUtils.escapeHtml(evento.getTitulo()));
+			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO#]",StringUtil.replace(StringEscapeUtils.escapeHtml(evento.getTexto()),"\n","</br>"));			
 			textoEmail = StringUtil.replace(textoEmail,"[#URL_ACCESO#]",urlEventoExpediente + evento.getCodigo() + autenticacion);
 			textoEmail = StringUtil.replace(textoEmail,"[#ORGANISMO.NOMBRE#]",oi.getNombre());
 			textoEmail = StringUtil.replace(textoEmail,"[#ORGANISMO.LOGO#]",oi.getUrlLogo());
@@ -195,8 +195,8 @@ public class AvisosMovilidad {
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ORGANO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.organo")));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.EXPEDIENTE#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.expediente")));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.FECHAAVISO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.fechaAviso")));
-			// textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ASUNTO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.asunto")));
-			// textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.DESCRIPCION#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.descripcion")));
+			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ASUNTO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.asunto")));
+			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.DESCRIPCION#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.descripcion")));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDERAVISO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.accederAviso")));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.SOPORTE#]",LiteralesAvisosMovilidad.calcularTextoSoporte(oi, expe.getIdioma()));
 			

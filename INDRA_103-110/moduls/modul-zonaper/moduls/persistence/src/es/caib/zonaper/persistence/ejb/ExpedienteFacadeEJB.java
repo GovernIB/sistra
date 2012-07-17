@@ -141,6 +141,33 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 	}
 	
 	/**
+	 * Borrar expediente
+	 * @param unidadAdministrativa
+	 * @param identificadorExpediente
+	 * 
+	 * @ejb.interface-method
+     * @ejb.permission role-name="${role.gestor}"
+     * @ejb.permission role-name="${role.auto}"
+     * 
+	 */
+	public void borrarExpediente(long unidadAdministrativa, String identificadorExpediente)
+	{
+		Expediente expe = obtenerExpedienteImpl(unidadAdministrativa,
+				identificadorExpediente);
+		if (expe == null) {
+			throw new EJBException("No existe expediente " + identificadorExpediente + " - UA: " + unidadAdministrativa);
+		}
+		
+		if (expe.getElementos() != null && expe.getElementos().size() > 0) {
+			throw new EJBException("No se puede borrar expediente con elementos (expediente " + identificadorExpediente + " - UA: " + unidadAdministrativa + ")");
+		}
+		
+		removeExpedienteImpl(unidadAdministrativa,
+				identificadorExpediente);
+		
+	}
+	
+	/**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
@@ -383,6 +410,32 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 				Hibernate.initialize( expediente.getElementos() );				
 			}
 			return expediente;
+		}	
+		catch (HibernateException he) 
+		{   
+			throw new EJBException(he);
+	    } 
+		finally 
+		{
+	        close(session);
+	    }
+	}
+	
+	
+	private void removeExpedienteImpl(long unidadAdministrativa,
+			String identificadorExpediente) {
+		Session session = getSession();
+		try
+		{
+			Query query = session.createQuery( "FROM Expediente e where e.idExpediente = :id and e.unidadAdministrativa = :ua" );
+			query.setParameter( "id", identificadorExpediente );
+			query.setParameter( "ua", new Long( unidadAdministrativa ) );
+			//query.setCacheable( true );
+			Expediente expediente = ( Expediente ) query.uniqueResult();
+			if ( expediente != null )
+			{
+				session.delete(expediente);				
+			}			
 		}	
 		catch (HibernateException he) 
 		{   

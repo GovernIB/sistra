@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.Globals;
@@ -19,6 +21,8 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.TilesRequestProcessor;
 
 import es.caib.sistra.back.Constants;
+import es.caib.sistra.persistence.delegate.ConfiguracionDelegate;
+import es.caib.sistra.persistence.delegate.DelegateUtil;
 
 /**
  * <code>RequestProcessor</code> que añade funcionalidad para
@@ -51,6 +55,12 @@ public class CustomRequestProcessor extends TilesRequestProcessor {
             supportedLangs.add( "en" );
             supportedLangs.add( "de" );
             log.info("Supported langs: " + supportedLangs);
+            
+            // Indicamos si son obligatorias los avisos para las notificaciones
+            ConfiguracionDelegate config = DelegateUtil.getConfiguracionDelegate();
+        	Properties configProps = config.obtenerConfiguracion();
+            getServletContext().setAttribute(Constants.AVISOS_OBLIGATORIOS_NOTIFICACIONES,StringUtils.defaultString(configProps.getProperty("sistra.avisoObligatorioNotificaciones"), "false"));
+            
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

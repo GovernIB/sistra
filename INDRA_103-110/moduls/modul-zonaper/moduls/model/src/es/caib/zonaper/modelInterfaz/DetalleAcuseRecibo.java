@@ -26,6 +26,10 @@ public class DetalleAcuseRecibo {
 	 */
 	private String estado;
 	/**
+	 * Fecha fin plazo.
+	 */
+	private Date fechaFinPlazo;
+	/**
 	 * Fecha generación acuse de recibo (entregada o rechazada).
 	 */
 	private Date fechaAcuseRecibo;
@@ -71,6 +75,12 @@ public class DetalleAcuseRecibo {
 	}
 	public void setClaveRdsAcuseRecibo(String claveRDSAcuseRecibo) {
 		this.claveRdsAcuseRecibo = claveRDSAcuseRecibo;
+	}
+	public Date getFechaFinPlazo() {
+		return fechaFinPlazo;
+	}
+	public void setFechaFinPlazo(Date fechaFinPlazo) {
+		this.fechaFinPlazo = fechaFinPlazo;
 	}
 
 }

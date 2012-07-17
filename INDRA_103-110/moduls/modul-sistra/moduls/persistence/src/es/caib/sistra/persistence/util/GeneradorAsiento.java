@@ -430,11 +430,7 @@ public class GeneradorAsiento {
 		instrucciones.setIdentificadorProcedimiento(dt.getProcedimiento());
 				
 		// ---- Opciones notificacion telematica
-		establecerOpcionesNotificacion(tramiteInfo, instrucciones);
-		
-		// ---- Opciones aviso movilidad: ejecutamos scripts para obtener configuracion
-		establecerOpcionesMovilidad(tramiteInfo, tramiteVersion, tramitePAD,
-				plgForms, especVersion, especNivel, instrucciones);
+		establecerOpcionesNotificacion(tramiteInfo, instrucciones);			
 				
 		// ----- Si es tramite presencial establecemos propiedades entrega
 		if ( isTramitePresencial( tipoTramitacion, tipoTramitacionDependiente ) )
@@ -517,26 +513,13 @@ public class GeneradorAsiento {
 			
 			instrucciones.setHabilitarNotificacionTelematica(tramiteInfo.getSeleccionNotificacionTelematica().booleanValue()?"S":"N");
 			
-		}
-	}
-
-	private static void establecerOpcionesMovilidad(TramiteFront tramiteInfo,
-			TramiteVersion tramiteVersion, TramitePersistentePAD tramitePAD,
-			PluginFormularios plgForms, EspecTramiteNivel especVersion,
-			EspecTramiteNivel especNivel, Instrucciones instrucciones)
-			throws ProcessorException, Exception {
-		
-		if (!ConstantesSTR.AVISO_NOPERMITIDO.equals(tramiteInfo.getHabilitarAvisos())){
-			if (tramiteInfo.getSeleccionAvisos() == null){
-				throw new Exception("No se ha establecido seleccion para avisos");
-			}
-			if (ConstantesSTR.AVISO_NOPERMITIDO.equals(tramiteInfo.getHabilitarAvisos()) && 
-					!tramiteInfo.getSeleccionAvisos().booleanValue()){
-				throw new Exception("Los avisos deben ser obligatorios");
-			}
-			instrucciones.setHabilitarAvisos(tramiteInfo.getSeleccionAvisos().booleanValue()?"S":"N");
+			// Avisos: comprobamos si estan activados los avisos obligatorios para las notificaciones
+			instrucciones.setHabilitarAvisos("N");
+			if (tramiteInfo.getSeleccionNotificacionTelematica().booleanValue() &&
+					tramiteInfo.isObligatorioAvisosNotificaciones()) {
+				
+				instrucciones.setHabilitarAvisos("S");
 			
-			if (tramiteInfo.getSeleccionAvisos().booleanValue()) {
 				if (!ValidacionesUtil.validarEmail(tramiteInfo.getSeleccionEmailAviso())) {
 					throw new Exception("El email de aviso no es valido");					
 				}
@@ -550,9 +533,10 @@ public class GeneradorAsiento {
 				}				
 			}
 			
+			
+			
 		}
-		
-	}
+	}	
 
 	private static TramiteSubsanacion generarTramiteSubsanacion(String expeId,
 			Long expeUA, FactoriaObjetosXMLDatosPropios factoria) {

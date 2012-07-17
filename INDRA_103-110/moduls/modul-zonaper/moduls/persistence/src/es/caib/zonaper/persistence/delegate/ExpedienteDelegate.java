@@ -130,6 +130,20 @@ public class ExpedienteDelegate implements StatelessDelegate
         }
 	}
 	
+	public void borrarExpediente(long unidadAdministrativa,
+			String identificadorExpediente)  throws DelegateException {
+		try
+		{
+			getFacade().borrarExpediente( unidadAdministrativa, identificadorExpediente);
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+		
+	}
+
+	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
@@ -141,5 +155,6 @@ public class ExpedienteDelegate implements StatelessDelegate
     protected ExpedienteDelegate() throws DelegateException {       
     }
 
+	
 	  
 }

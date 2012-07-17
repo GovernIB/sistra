@@ -7,17 +7,15 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import es.caib.sistra.front.Constants;
 import es.caib.sistra.front.util.InstanciaManager;
 import es.caib.sistra.front.util.TramiteRequestHelper;
-import es.caib.sistra.persistence.delegate.DelegateException;
-import es.caib.sistra.persistence.delegate.DelegateUtil;
 import es.caib.sistra.persistence.delegate.InstanciaDelegate;
 import es.caib.util.ValidacionesUtil;
 
 public class SeleccionNotificacionAvisosForm  extends SistraFrontForm
 {
 	private String seleccionNotificacion; // "true" / "false"
-	private String seleccionAvisos; // "true" / "false"
 	private String emailSeleccionAviso;
 	private String smsSeleccionAviso;
 	public String getSeleccionNotificacion() {
@@ -25,13 +23,7 @@ public class SeleccionNotificacionAvisosForm  extends SistraFrontForm
 	}
 	public void setSeleccionNotificacion(String seleccionNotificacion) {
 		this.seleccionNotificacion = seleccionNotificacion;
-	}
-	public String getSeleccionAvisos() {
-		return seleccionAvisos;
-	}
-	public void setSeleccionAvisos(String seleccionAvisos) {
-		this.seleccionAvisos = seleccionAvisos;
-	}
+	}	
 	public String getEmailSeleccionAviso() {
 		return emailSeleccionAviso;
 	}
@@ -47,7 +39,7 @@ public class SeleccionNotificacionAvisosForm  extends SistraFrontForm
 	
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
         ActionErrors errors = super.validate(mapping, request);
-       
+        
         if (errors == null) 
         {
             errors = new ActionErrors();
@@ -58,18 +50,11 @@ public class SeleccionNotificacionAvisosForm  extends SistraFrontForm
     	if(StringUtils.isNotEmpty(smsSeleccionAviso) && !ValidacionesUtil.validarMovil(smsSeleccionAviso)){
     		errors.add("smsSeleccionAviso", new ActionError("finalizacion.avisos.smsError"));    	
     	}
-    	if ("true".equals(this.seleccionAvisos) && StringUtils.isEmpty(this.emailSeleccionAviso)) {
-    		errors.add("emailSeleccionAviso", new ActionError("finalizacion.avisos.emailObligatorio"));
-    	}
     	
-    	try {
-			boolean obligAvisosNotif = Boolean.parseBoolean(StringUtils.defaultString(DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("sistra.avisoObligatorioNotificaciones"), "false"));
-			if (obligAvisosNotif && ("true".equals(seleccionNotificacion)) && !("true".equals(seleccionAvisos))) {
-				errors.add("seleccionAvisos", new ActionError("finalizacion.avisos.avisoObligatorioNotificaciones"));
-			}
-		} catch (DelegateException ex) {
-			throw new RuntimeException("No se ha podido acceder a configuracion", ex);
-		}
+    	String avisosObligNotif = (String) request.getSession().getServletContext().getAttribute(Constants.AVISOS_OBLIGATORIOS_NOTIFICACIONES);
+    	if ("true".equals(this.seleccionNotificacion) && "true".equals(avisosObligNotif) && StringUtils.isEmpty(this.emailSeleccionAviso)) {
+    		errors.add("emailSeleccionAviso", new ActionError("finalizacion.avisos.emailObligatorio"));
+    	}    	    	
     	
     	// Metemos info paso actual en la request
     	try {
