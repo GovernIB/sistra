@@ -200,7 +200,7 @@ create table ZPE_EXPEDI (
    EXP_FECINI timestamp,
    EXP_FECULT timestamp,
    EXP_ESTADO varchar(255),
-   EXP_AVISOS varchar(255),
+   EXP_AVISOS varchar(255) not null,
    EXP_AVISMS varchar(255),
    EXP_AVIEMA varchar(255),
    EXP_NIFRTE VARCHAR(12),
