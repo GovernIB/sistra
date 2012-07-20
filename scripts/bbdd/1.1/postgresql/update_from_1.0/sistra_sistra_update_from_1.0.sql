@@ -31,4 +31,8 @@ COMMIT;
 
 ALTER TABLE STR_TRAMIT  alter column  TRA_IDPROC  set not null;
 
+--
 
+alter table STR_ESPNIV add ETN_PERSMS VARCHAR(1) default 'N' not null;
+
+alter table STR_ESPNIV drop column ETN_AVISOS;

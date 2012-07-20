@@ -27,11 +27,11 @@ create table STR_ESPNIV (
    ETN_CHKENV bytea,
    ETN_URLFIN bytea,
    ETN_NOTTEL varchar(1),
-   ETN_AVISOS bytea,
    ETN_AVISMS bytea,
    ETN_AVIEMA bytea,
    ETN_DIAPRE int4,
    ETN_DSTTRA  bytea,
+   ETN_PERSMS VARCHAR(1) default 'N' not null,
    primary key (ETN_CODIGO)
 );
 

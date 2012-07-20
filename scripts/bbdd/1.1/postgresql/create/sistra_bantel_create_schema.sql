@@ -14,8 +14,16 @@ create table BTE_PROAPL (
    TAP_AVISO timestamp,
    TAP_WSVER  VARCHAR(10),
    TAP_ERRORS bytea,
+   TAP_UNIADM BIGINT,
+   TAP_SMS VARCHAR(1) default 'N' not null,
    primary key (TAP_IDEPRO)
 );
+
+comment on column BTE_PROAPL.TAP_UNIADM is
+'UNIDAD ADMINISTRATIVA';
+
+comment on column BTE_PROAPL.TAP_SMS is
+'INDICA SI SE PERMITE INDICAR EL SMS EN LOS AVISOS DE EXPEDIENTE';
 
 
 
