@@ -36,6 +36,13 @@
 						</logic:equal>
 					</dd>
 					
+					<logic:equal  name="notificacion" property="requiereAcuse" value="true">
+						<logic:notEmpty name="notificacion" property="detalleAcuseRecibo.fechaFinPlazo">
+							<dt><bean:message key="detalle.notificacion.finPlazo"/>:</dt>						
+							<dd><bean:write name="notificacion" property="detalleAcuseRecibo.fechaFinPlazo" format="dd/MM/yyyy"/></dd>
+						</logic:notEmpty>
+					</logic:equal> 
+					
 					<dt><bean:message key="detalle.notificacion.estado"/>:</dt>
 					<logic:equal name="notificacion" property="detalleAcuseRecibo.estado" value="PENDIENTE">
 						<dd><bean:message key="detalle.notificacion.estado.pendiente"/></dd>

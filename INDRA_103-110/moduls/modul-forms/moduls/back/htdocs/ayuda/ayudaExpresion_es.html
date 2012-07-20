@@ -24,6 +24,29 @@
             <li>no pueden haber m&aacute;s de un control de este tipo por pantalla </li>
           </ul>
 	    </li>
+	    <li>Operativa :
+	        <ul>
+	          <li>
+	          	Acceso a elementos seleccionados desde los scripts: <br/>
+	          	<ul>
+		          <li>
+		          	f_<i>idarbol</i> : devuelve un array con los c&oacute;digos de los elementos seleccionados. 
+		          </li>
+		          <li>
+		          	f_<i>idarbol</i>_text : devuelve un array con las descripciones de los elementos seleccionados. 
+		          </li>
+		          <li>
+		          	f_<i>idarbol</i>.length : n&uacute;mero de elementos seleccionados. 
+		          </li>		          
+		         </ul>		         
+		         Ejemplo:
+		         <br/>
+		         for (i=0;i&lt;f_testArbol.length;i++){ <br/>				 
+   					&nbsp;&nbsp;PLUGIN_LOG.debug('CODIGO: ' + f_testArbol[i] + ' - DESCRIPCION: ' +   f_testArbol_text[i]); <br/>
+				 } 						         
+	          </li>
+	         </ul>
+	    </li> 
       </ul>
 	</li>
 </ul>

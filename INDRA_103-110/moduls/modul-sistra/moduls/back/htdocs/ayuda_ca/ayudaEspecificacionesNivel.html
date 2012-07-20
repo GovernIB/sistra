@@ -152,26 +152,21 @@
   <tr>
     <td>Script validaci&oacute; de fin</td>
     <td><p>Permet realitzar una   validaci&oacute; abans de finalitzar el tr&agrave;mit (previ a l'enviament/registre). El tipus   d'aquest camp &eacute;s <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a>  i no s'espera cap resultat. En cas de no permetre   finalitzar s'ha de generar un error i indicar el missatge oport&uacute;.</p>    </td>
-  </tr>
-  
-  <tr>
-    <td>Configuraci&oacute; avisos mobilitat</td>
-    <td>Permet establir si s'han de generar els avisos autom&agrave;tics de tramitaci&oacute; (nou av&iacute;s expedient i nova   notificaci&oacute; telem&agrave;tica) per a l'expedient que crear&agrave; aquesta sol&middot;licitud. <br />
-      <br />
-      La generaci&oacute; autom&agrave;tica d'aquests avisos tindr&agrave; la seg&uuml;ent   l&ograve;gica: <br />
-      1) En el propi expedient (generat pel backoffice) es pot indicar si   s'han de generar aquests avisos <br />
-      2) Si no s'indica gens en l'expedient, es far&agrave; cas del que   s'indiqui en la   sol&middot;licitud (&eacute;s a dir, a aquests scripts) <br />
-      3) Si no s'indica   gens en l'expedient ni en   la sol&middot;licitud es far&agrave; cas   de la configuraci&oacute; general   d'alertes de la zona personal. <br />
-      <br />
-      Els   valors a establir (de tipus <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a>  ) s&oacute;n els seg&uuml;ents: <br />
-      <br />
-      - Habilitar avisos: ha de retornar &quot;S&quot; o &quot;N&quot;, en funci&oacute; de si   han de generar els avisos o no. <br />
-      - Email: email per a avisos email (si &eacute;s nul o buit no es generar&agrave; email ) <br />
-    - M&ograve;bil: tel&egrave;fon m&ograve;bil per a avisos SMS ( si &eacute;s nul o buit no es   generar&agrave; SMS ) <br /></td>
-  </tr>
+  </tr>  
   <tr>
     <td>Notificaci&oacute; telem&agrave;tica</td>
-    <td>Indica si un tr&agrave;mit pot   generar notificacions telem&agrave;tiques. En cas de permetre's es recollir&agrave; la conformitat del ciutad&agrave; per a   ser notificat telem&agrave;ticament.</td>
+    <td>    
+      	<p>
+     		Indica si un tr&agrave;mit pot   generar notificacions telem&agrave;tiques. En cas de permetre's es recollir&agrave; la conformitat del ciutad&agrave; per a   ser notificat telem&agrave;ticament.
+     	</p>
+     	<p>
+     		En cas que Sistra estigui configurat perqu&egrave; siguin obligatoris els avisos per a les notificacions es permetr&agrave;:
+     		<ul>
+     			<li>indicar si s'ha de recollir el m&ograve;bil per als avisos.</li>
+     			<li>introduir els scripts per a establir els valors per defecte del email/sms (sino s'agafaran els valors de la zona personal).</li>
+     		</ul>
+     	</p>    
+    </td>
   </tr>
   <tr> 
     <td>Dades justificant</td>

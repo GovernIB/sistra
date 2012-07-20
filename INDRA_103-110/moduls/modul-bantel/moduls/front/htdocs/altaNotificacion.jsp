@@ -446,7 +446,43 @@ function repintarParametros(datos){
 		<!-- ajuda -->
 		<div id="ajuda">
 			<h2><bean:message key="ajuda.titulo"/></h2>
-			<br/>
+			
+			<p><bean:message key="ajuda.expediente.altaNotificacion"/></p>
+			
+			<p>
+				<bean:message key="ajuda.notificacion.datosRegistro"/>
+				<ul class="ajudaUl">
+					<li><bean:message key="ajuda.notificacio.oficina"/></li>
+					<li><bean:message key="ajuda.notificacio.organo"/></li>				
+				</ul>				
+			</p>
+			
+			<p>
+				<bean:message key="ajuda.notificacion.datosDestinatario"/>
+				<ul class="ajudaUl">
+					<li><bean:message key="ajuda.notificacio.nif"/></li>
+					<li><bean:message key="ajuda.notificacio.nombre"/></li>
+					<li><bean:message key="ajuda.notificacio.infoGeo"/></li>
+				</ul>				
+			</p>
+			
+			<p>
+				<bean:message key="ajuda.notificacion.datosNotificacion"/>
+				<ul class="ajudaUl">
+					<li><bean:message key="ajuda.notificacio.acuseRecibo"/></li>
+					<li><bean:message key="ajuda.notificacio.idioma"/></li>
+					<li><bean:message key="ajuda.notificacio.tipoAsunto"/></li>
+					<li><bean:message key="ajuda.notificacio.aviso"/></li>
+					<li><bean:message key="ajuda.notificacio.oficioRem"/></li>
+					<li><bean:message key="ajuda.notificacio.subsanacion"/></li>
+				</ul>				
+			</p>
+			
+			<p>
+				<bean:message key="ajuda.CampoObligarorio"/>
+			</p>
+			
+			
 			<bean:message key="ajuda.CampoObligarorio"/>
 				<bean:message key="ajuda.notificacio.oficina"/>
 				<bean:message key="ajuda.notificacio.organo"/>

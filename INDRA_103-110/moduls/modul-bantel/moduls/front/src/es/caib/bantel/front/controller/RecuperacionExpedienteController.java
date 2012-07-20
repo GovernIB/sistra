@@ -27,6 +27,9 @@ public class RecuperacionExpedienteController extends BaseController
 			request.setAttribute("nombreUnidad",uni.getDescripcion());
 		}
 		
+		// Indica si son obligatorios los avisos en la creacion del expediente
+		request.setAttribute("obligatorioAvisos", request.getSession().getServletContext().getAttribute(Constants.GESTIONEXPEDIENTES_OBLIGATORIOAVISOS));		
+		
 	}
 
 }

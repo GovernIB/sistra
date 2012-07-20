@@ -123,9 +123,6 @@
 	}
 
 	function cambioHabilitar() {
-
-		alert($('#habilitarAvisos').val());
-		
 		if ($('#habilitarAvisos').val() == "S") {
  			 $('#direcciones').show();		
  		} else {
@@ -164,19 +161,48 @@
 		<!-- ajuda -->
 		<div id="ajuda">
 			<h2><bean:message key="ajuda.titulo"/></h2>
-			<br/>
-			<bean:message key="ajuda.CampoObligarorio"/>
-				<bean:message key="ajuda.expediente.alta.procedimiento"/>
-				<bean:message key="ajuda.expediente.unidad"/>
-				<bean:message key="ajuda.expediente.alta.identificador"/>
-				<bean:message key="ajuda.expediente.alta.nif"/>
-				<bean:message key="ajuda.expediente.alta.nombre"/>
-				<bean:message key="ajuda.expediente.alta.idioma"/>
-				<bean:message key="ajuda.expediente.alta.Descripción"/>
-				<bean:message key="ajuda.expediente.alta.habilitar"/>
-			<bean:message key="ajuda.finCampoObligarorio"/>
-				<bean:message key="ajuda.expediente.alta.email"/>
-				<bean:message key="ajuda.expediente.alta.movil"/>
+			
+			<p>
+				<bean:message key="ajuda.expediente.alta"/>
+			</p>
+			
+			<p>
+				<bean:message key="ajuda.expediente.datosExpediente"/>
+				<ul class="ajudaUl">
+					<li><bean:message key="ajuda.expediente.alta.procedimiento"/></li>
+					<li><bean:message key="ajuda.expediente.alta.identificador"/></li>
+				</ul>				
+			</p>
+			
+			<p>
+				<bean:message key="ajuda.expediente.datosDestinatario"/>
+				<ul class="ajudaUl">
+					<li><bean:message key="ajuda.expediente.alta.nif"/></li>
+					<li><bean:message key="ajuda.expediente.alta.nombre"/></li>
+				</ul>
+			</p>
+			
+			<p>
+				<bean:message key="ajuda.expediente.datosDefinicion"/>
+				<ul class="ajudaUl">
+					<li><bean:message key="ajuda.expediente.alta.idioma"/></li>
+					<li><bean:message key="ajuda.expediente.alta.Descripción"/></li>					
+				</ul>
+			</p>
+			
+			<p>
+				<bean:message key="ajuda.expediente.datosAvisos"/>
+				<ul class="ajudaUl">
+					<li><bean:message key="ajuda.expediente.alta.habilitar"/></li>
+					<li><bean:message key="ajuda.expediente.alta.email"/></li>
+					<li><bean:message key="ajuda.expediente.alta.movil"/></li>
+				</ul>
+			</p>
+			
+			<p>
+				<bean:message key="ajuda.CampoObligarorio"/>
+			</p>
+				
 		</div>
 		<!-- /ajuda -->
 		<html:errors/>

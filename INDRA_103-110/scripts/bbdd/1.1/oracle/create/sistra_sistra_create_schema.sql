@@ -382,13 +382,13 @@ create table STR_ESPNIV  (
    ETN_RDONOM           BLOB,
    ETN_DIAPRE           NUMBER(3)                      default 0,
    ETN_FLUTRA           VARCHAR2(1)                    default 'N' not null,
-   ETN_URLFIN           BLOB,
-   ETN_AVISOS           BLOB,
+   ETN_URLFIN           BLOB,   
    ETN_AVISMS           BLOB,
    ETN_AVIEMA           BLOB,
    ETN_NOTTEL           VARCHAR2(1)                    default 'N' not null,
    ETN_CHKENV           BLOB,
-   ETN_DSTTRA           BLOB
+   ETN_DSTTRA           BLOB,
+   ETN_PERSMS 			VARCHAR2(1) 					default 'N' not null
 );
 
 comment on table STR_ESPNIV is

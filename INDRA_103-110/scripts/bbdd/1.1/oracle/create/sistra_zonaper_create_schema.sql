@@ -564,7 +564,7 @@ create table ZPE_EXPEDI  (
    EXP_FECINI           DATE,
    EXP_FECULT           DATE,
    EXP_ESTADO           VARCHAR2(2),
-   EXP_AVISOS           VARCHAR2(1),   
+   EXP_AVISOS           VARCHAR2(1)  NOT NULL,   
    EXP_AVISMS           VARCHAR2(10),
    EXP_AVIEMA           VARCHAR2(500),
    EXP_NIFRTE           VARCHAR2(12),
