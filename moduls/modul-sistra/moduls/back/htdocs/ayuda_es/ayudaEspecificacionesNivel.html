@@ -145,21 +145,19 @@
        El tipo de este campo es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> y no se espera ning&uacute;n resultado. En caso de no permitir finalizar se debe generar un error e indicar el mensaje oportuno.</p>     </td>
    </tr>
    <tr>
-    <td>Configuraci&oacute;n avisos movilidad</td>
-    <td><p>Permite establecer si se deben generar los avisos autom&aacute;ticos de tramitaci&oacute;n (nuevo aviso expediente y nueva notificaci&oacute;n telem&aacute;tica) para el expediente que crear&aacute; esta solicitud. </p>
-     <p>La generaci&oacute;n autom&aacute;tica de estos avisos tendr&aacute; la siguiente l&oacute;gica:<br />
-       1) En el propio expediente (generado por el backoffice) se puede indicar si se deben o no generar estos avisos<br />
-       2) Si no se indica nada en el expediente, se har&aacute; caso de lo que se indique en la solicitud (es decir, a estos scripts)<br />
-       3) Si no se indica nada en el expediente ni en la solicitud se har&aacute; caso de la configuraci&oacute;n general de alertas de la zona personal.</p>
-     <p>Los valores a establecer (de tipo   <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a>  ) son los siguientes:</p>
-     <p>- Habilitar avisos: debe devolver &quot;S&quot; o &quot;N&quot;, en funci&oacute;n de si deben generar los avisos o no.<br />
-       - Email: email para avisos email (si es nulo o vac&iacute;o no se generar&aacute; email)<br />
-       - M&oacute;vil: tel&eacute;fono m&oacute;vil para avisos SMS (
-si es nulo o vac&iacute;o no se generar&aacute; SMS )</p></td>
-  </tr>
-   <tr>
      <td>Notificaci&oacute;n telem&aacute;tica</td>
-     <td>Indica si  un tr&aacute;mite puede generar notificaciones telem&aacute;ticas. En caso de permitirse se recoger&aacute; la conformidad del ciudadano para ser notificado telem&aacute;ticamente. </td>
+     <td>
+     	<p>
+     		Indica si  un tr&aacute;mite puede generar notificaciones telem&aacute;ticas. En caso de permitirse se recoger&aacute; la conformidad del ciudadano para ser notificado telem&aacute;ticamente.
+     	</p>
+     	<p>
+     		En caso de que Sistra est&eacute; configurado para que sean obligatorios los avisos para las notificaciones se permitir&aacute;:
+     		<ul>
+     			<li>indicar si se debe recoger el m&oacute;vil para los avisos.</li>
+     			<li>introducir los scripts para establecer los valores por defecto del email/sms (sino se coger&aacute;n los valores de la zona personal).</li>
+     		</ul>
+     	</p>     	 
+     </td>
    </tr>
   <tr> 
     <td>Datos justificante</td>

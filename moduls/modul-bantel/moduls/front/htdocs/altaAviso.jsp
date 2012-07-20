@@ -373,13 +373,22 @@ function errorFileUploaded(error){
 		<!-- ajuda -->
 		<div id="ajuda">
 			<h2><bean:message key="ajuda.titulo"/></h2>
-			<br/>
-			<bean:message key="ajuda.CampoObligarorio"/>
-				<bean:message key="ajuda.aviso.titulo"/>
-				<bean:message key="ajuda.aviso.texto"/>
-			<bean:message key="ajuda.finCampoObligarorio"/>
 			
-				<bean:message key="ajuda.aviso.textoSMS"/>
+			<p><bean:message key="ajuda.expediente.altaComunicacion"/></p>
+			
+			<p>
+				<bean:message key="ajuda.expediente.datosComunicacion"/>
+				<ul class="ajudaUl">
+					<li><bean:message key="ajuda.aviso.titulo"/></li>
+					<li><bean:message key="ajuda.aviso.texto"/></li>
+					<li><bean:message key="ajuda.aviso.textoSMS"/></li>
+					<li><bean:message key="ajuda.aviso.documentos"/></li>
+				</ul>				
+			</p>
+			
+			<p>
+				<bean:message key="ajuda.CampoObligarorio"/>
+			</p>
 		</div>
 		<!-- /ajuda -->
 		

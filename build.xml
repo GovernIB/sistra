@@ -52,6 +52,7 @@
 		    <attribute name="Specification-Version" value="${release.version} build${release.build} ${release.date}"/>
 		</manifest>
 		<metainf dir="${etc.dir}/jboss-${jboss.version}" includes="jboss-app.xml"/>
+		<metainf dir="${etc.dir}" includes="cxf/org.apache.cxf.Logger"/>
 		<fileset dir="moduls/modul-audita/output/moduls"/>
 		<fileset dir="moduls/modul-bantel/output/moduls"/>
 		<fileset dir="moduls/modul-forms/output/moduls"/>

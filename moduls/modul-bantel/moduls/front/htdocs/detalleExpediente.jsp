@@ -21,6 +21,7 @@
 <bean:define id="expediente" name="expediente" type="es.caib.zonaper.modelInterfaz.ExpedientePAD" />
 <bean:define id="habilitarAvisos" value="<%= (expediente.getConfiguracionAvisos().getHabilitarAvisos() == null?"O":(expediente.getConfiguracionAvisos().getHabilitarAvisos().booleanValue())?\"S\":\"N\")%>" type="java.lang.String"/>
 <bean:define id="observacionesElemento" name="observacionesElemento" type="java.util.List"/>
+<bean:define id="obligatorioAvisos" name="obligatorioAvisos" type="java.lang.String"/>
 
 <script type="text/javascript" src="js/jquery.selectboxes.pack.js"></script>
 <script type="text/javascript" src="js/ajuda.js"></script>
@@ -227,9 +228,11 @@
 								<bean:message key="expediente.avisos.no"/>
 							</logic:equal>
 						</span>
+						
+						<% if ("false".equals(obligatorioAvisos) || "S".equals(habilitarAvisos)) { %>
 						<img src="imgs/botons/cercar.gif" alt="<bean:message key="expediente.avisos.modificar"/>"  
 										onclick="javascript:mostrarModificarAvisos();"/>
-						
+						<% } %>
 					</dd>					
 				</dl>				
 			</div>
@@ -333,14 +336,22 @@
 			 		<input type="hidden" id="habilitar" value="<%=habilitarAvisos%>"/>
 					<input type="hidden" id="email" value="<%=habilitarAvisos.equals("S")?StringUtils.defaultString(expediente.getConfiguracionAvisos().getAvisoEmail()):""%>"/>
 					<input type="hidden" id="sms" value="<%=habilitarAvisos.equals("S")?StringUtils.defaultString(expediente.getConfiguracionAvisos().getAvisoSMS()):""%>"/>
-			 	
-			 		<p>
-						<label><bean:message key="expediente.aviso.configuracionAvisos.habilitar"/><sup>*</sup></label>
-						<select id="habilitarModif" class="pc40" onchange="cambioHabilitar()">
+			 		
+					<logic:equal name="obligatorioAvisos" value="true">
+						<input type="hidden" id="habilitarModif"  value="<%=habilitarAvisos%>"/>																			
+					</logic:equal>
+					
+					<logic:equal name="obligatorioAvisos" value="false">
+						<p>
+						 <label><bean:message key="expediente.aviso.configuracionAvisos.habilitar"/><sup>*</sup></label>						
+						 <select id="habilitarModif" class="pc40" onchange="cambioHabilitar()">
 						  <option value="S"><bean:message key="expediente.avisos.si"/></option>
 						  <option value="N"><bean:message key="expediente.avisos.no"/></option>
-						</select>	
-					</p>
+						</select>
+					   </p>
+					</logic:equal>
+																	
+					
 					<span id="direcciones">
 			 		<p>
 						<label><bean:message key="expediente.aviso.configuracionAvisos.email"/><sup>*</sup></label>

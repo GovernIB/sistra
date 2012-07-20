@@ -15,7 +15,7 @@ import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
 
 /**
  * @struts.action
- *  path="/borrarExpedienteAction"
+ *  path="/borrarExpediente"
  *  
  * @struts.action-forward
  *  name="success" path=".busquedaExpedientes"
