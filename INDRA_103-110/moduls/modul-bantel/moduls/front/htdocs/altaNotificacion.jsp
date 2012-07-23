@@ -480,25 +480,7 @@ function repintarParametros(datos){
 			
 			<p>
 				<bean:message key="ajuda.CampoObligarorio"/>
-			</p>
-			
-			
-			<bean:message key="ajuda.CampoObligarorio"/>
-				<bean:message key="ajuda.notificacio.oficina"/>
-				<bean:message key="ajuda.notificacio.organo"/>
-				<bean:message key="ajuda.notificacio.nif"/>
-				<bean:message key="ajuda.notificacio.nombre"/>
-				<bean:message key="ajuda.notificacio.idioma"/>
-				<bean:message key="ajuda.notificacio.acuseRecibo"/>
-				<bean:message key="ajuda.notificacio.titulo"/>
-				<bean:message key="ajuda.notificacio.texto"/>
-				<bean:message key="ajuda.notificacio.tituloRem"/>
-				<bean:message key="ajuda.notificacio.textoRem"/>
-			<bean:message key="ajuda.finCampoObligarorio"/>
-			
-				<bean:message key="ajuda.notificacio.pais"/>
-				<bean:message key="ajuda.notificacio.provincia"/>
-				<bean:message key="ajuda.notificacio.municipio"/>
+			</p>						
 		</div>
 		<!-- /ajuda -->
 		
@@ -627,7 +609,7 @@ function repintarParametros(datos){
 				
 				<p>
 					<label for="tituloAviso"><bean:message key="aviso.titulo"/><sup>*</sup></label>
-					<html:text property="tituloAviso" styleClass="pc40" />					
+					<html:text property="tituloAviso" styleClass="pc40" maxlength="100"/>					
 				</p>
 				
 				<p>
@@ -649,7 +631,7 @@ function repintarParametros(datos){
 				
 				<p>
 					<label for="tituloOficio"><bean:message key="aviso.titulo"/><sup>*</sup></label>
-					<html:text property="tituloOficio" styleClass="pc40" />
+					<html:text property="tituloOficio" styleClass="pc40" maxlength="100"/>
 				</p>
 				
 				<p>
@@ -687,9 +669,9 @@ function repintarParametros(datos){
 							<label><bean:message key="tramite.subsanacion.parametros"/></label>	
 							<div id="divAddParam">
 									<label class="enLinia"><bean:message key="tramite.subsanacion.parametros.codi"/></label>
-									<html:text property="codigoParametroTramiteSubsanacion" styleId="codigoParametroTramiteSubsanacion"/>
+									<html:text property="codigoParametroTramiteSubsanacion" styleId="codigoParametroTramiteSubsanacion" maxlength="50"/>
 									<label class="enLinia"><bean:message key="tramite.subsanacion.parametros.valor"/></label>
-									<html:text property="valorParametroTramiteSubsanacion" styleId="valorParametroTramiteSubsanacion"/>
+									<html:text property="valorParametroTramiteSubsanacion" styleId="valorParametroTramiteSubsanacion"  maxlength="100"/>
 									<a id="afegirEnllas" onclick="afegirParametre();" class="enllas"><bean:message key="tramite.subsanacion.parametros.afegir"/></a>
 							</div>			
 						</p>
@@ -773,7 +755,7 @@ function repintarParametros(datos){
 							</p>
 							<p>
 								<label><bean:message key="aviso.titulo"/></label>
-								<input type="text" id="tituloAnexoOficioFichero" class="pc40"/>
+								<input type="text" id="tituloAnexoOficioFichero" class="pc40" maxlength="100"/>
 							</p>
 							<p>
 								<label><bean:message key="aviso.fichero"/></label>
@@ -791,7 +773,7 @@ function repintarParametros(datos){
 							</p>
 							<p>
 								<label><bean:message key="aviso.titulo"/></label>
-								<input type="text" id="tituloAnexoOficioUrl" class="pc40"/>
+								<input type="text" id="tituloAnexoOficioUrl" class="pc40" maxlength="100"/>
 							</p>
 							<p>
 								<label><bean:message key="aviso.url"/></label>

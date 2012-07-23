@@ -506,7 +506,7 @@ function errorFileUploaded(error){
 								</p>
 								<p>
 									<label><bean:message key="aviso.titulo"/></label>
-									<input type="text" id="tituloAnexoOficioFichero" class="pc40"/>
+									<input type="text" id="tituloAnexoOficioFichero" class="pc40" maxlength="100"/>
 								</p>
 								<p>
 									<label><bean:message key="aviso.fichero"/></label>
@@ -525,7 +525,7 @@ function errorFileUploaded(error){
 								</p>
 								<p>
 									<label><bean:message key="aviso.titulo"/></label>
-									<input type="text" id="tituloAnexoOficioUrl" class="pc40"/>
+									<input type="text" id="tituloAnexoOficioUrl" class="pc40" maxlength="100"/>
 								</p>
 								<p>
 									<label><bean:message key="aviso.url"/></label>
