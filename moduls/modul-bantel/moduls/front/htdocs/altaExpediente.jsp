@@ -245,7 +245,7 @@
 				
 				<p>
 					<label for="identificadorExp"><bean:message key="confirmacion.identificadorExpediente"/><sup>*</sup></label>
-					<html:text property="identificadorExp"/>
+					<html:text property="identificadorExp" maxlength="50"/>
 				</p>
 				
 				<html:hidden property="claveExp"/>
@@ -312,12 +312,12 @@
 				<div id="direcciones">
 					<p>
 						<label for="email"><bean:message key="expediente.avisoEmail"/><sup>*</sup></label>
-						<html:text property="email" styleClass="pc30"/>
+						<html:text property="email" styleClass="pc30" maxlength="50"/>
 					</p>
 					<div id="divMovil">
 					<p>
 						<label for="movil"><bean:message key="expediente.avisoSMS"/></label>
-						<html:text property="movil" styleId="movil"/>
+						<html:text property="movil" styleId="movil" maxlength="10"/>
 					</p>
 					</div>
 				</div>
@@ -345,15 +345,15 @@
 		</p>
  		<p>
 			<label for="nombreAltaDestinatario"><bean:message key="expediente.alta.altaDestinatario.nombre"/></label>
-			<input type="text" id="nombreAltaDestinatario" name="nombreAltaDestinatario" class="pc40" />
+			<input type="text" id="nombreAltaDestinatario" name="nombreAltaDestinatario" class="pc40" maxlength="50" />
 		</p>
 		<p>
 			<label for="apellido1AltaDestinatario"><bean:message key="expediente.alta.altaDestinatario.apellido1"/></label>
-			<input type="text" id="apellido1AltaDestinatario" name="apellido1AltaDestinatario" class="pc40" />
+			<input type="text" id="apellido1AltaDestinatario" name="apellido1AltaDestinatario" class="pc40" maxlength="50"/>
 		</p>
 		<p>
 			<label for="apellido2AltaDestinatario"><bean:message key="expediente.alta.altaDestinatario.apellido2"/></label>
-			<input type="text" id="apellido2AltaDestinatario" name="apellido2AltaDestinatario" class="pc40" />
+			<input type="text" id="apellido2AltaDestinatario" name="apellido2AltaDestinatario" class="pc40" maxlength="50"/>
 		</p>
 		<p class="botonera">
 			<input type="button" onclick="realizarAltaDestinatario();" value="<bean:message key="expediente.alta.altaDestinatario.botonAlta"/>"/>			
