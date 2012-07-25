@@ -44,11 +44,11 @@ import es.caib.regtel.ws.v2.model.OficinaRegistral;
 import es.caib.regtel.ws.v2.model.ParametroTramite;
 import es.caib.regtel.ws.v2.model.ReferenciaRDSAsientoRegistral;
 import es.caib.regtel.ws.v2.model.ResultadoRegistro;
-import es.caib.regtel.ws.v2.model.detalleacuserecibo.Avisos;
-import es.caib.regtel.ws.v2.model.detalleacuserecibo.DetalleAcuseRecibo;
-import es.caib.regtel.ws.v2.model.detalleacuserecibo.TipoAviso;
-import es.caib.regtel.ws.v2.model.detalleacuserecibo.TipoConfirmacion;
-import es.caib.regtel.ws.v2.model.detalleacuserecibo.TipoEstado;
+import es.caib.regtel.ws.v2.model.DetalleAvisos;
+import es.caib.regtel.ws.v2.model.DetalleAcuseRecibo;
+import es.caib.regtel.ws.v2.model.TipoAviso;
+import es.caib.regtel.ws.v2.model.TipoConfirmacionAviso;
+import es.caib.regtel.ws.v2.model.TipoEstadoNotificacion;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.firma.FirmaIntf;
 import es.caib.sistra.plugins.firma.PluginFirmaIntf;
@@ -165,11 +165,11 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		
 		// Estado notificacion
 		if (acuse.getEstado().equals(es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo.ESTADO_ENTREGADA)) {
-			da.setEstado(TipoEstado.ENTREGADA);
+			da.setEstado(TipoEstadoNotificacion.ENTREGADA);
 		} else if (acuse.getEstado().equals(es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo.ESTADO_RECHAZADA)) {
-			da.setEstado(TipoEstado.RECHAZADA);
+			da.setEstado(TipoEstadoNotificacion.RECHAZADA);
 		} else {
-			da.setEstado(TipoEstado.PENDIENTE);
+			da.setEstado(TipoEstadoNotificacion.PENDIENTE);
 		}
 		
 		// Fecha acuse recibo
@@ -200,10 +200,10 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 
 		// Avisos
 		if (acuse.getAvisos() != null && acuse.getAvisos().size() > 0) {
-			Avisos avisos = new Avisos();
+			DetalleAvisos avisos = new DetalleAvisos();
 			for (Iterator it = acuse.getAvisos().iterator(); it.hasNext();) {
 				DetalleAviso a = (DetalleAviso) it.next();
-				es.caib.regtel.ws.v2.model.detalleacuserecibo.Aviso aviso = new es.caib.regtel.ws.v2.model.detalleacuserecibo.Aviso();
+				es.caib.regtel.ws.v2.model.DetalleAviso aviso = new es.caib.regtel.ws.v2.model.DetalleAviso();
 				if (a.getTipo().equals(DetalleAviso.TIPO_EMAIL)) {
 					aviso.setTipo(TipoAviso.EMAIL);
 				} else {
@@ -225,15 +225,15 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 				
 				aviso.setConfirmarEnvio(a.isConfirmarEnvio());
 				if (a.isConfirmarEnvio()) {
-					TipoConfirmacion confirmadoEnvio = TipoConfirmacion.DESCONOCIDO;
+					TipoConfirmacionAviso confirmadoEnvio = TipoConfirmacionAviso.DESCONOCIDO;
 					if (a.getConfirmadoEnvio() == DetalleAviso.CONFIRMADO_ENVIADO) {
-						confirmadoEnvio = TipoConfirmacion.ENVIADO;
+						confirmadoEnvio = TipoConfirmacionAviso.ENVIADO;
 					} else if (a.getConfirmadoEnvio() == DetalleAviso.CONFIRMADO_NO_ENVIADO) {
-						confirmadoEnvio = TipoConfirmacion.NO_ENVIADO;
+						confirmadoEnvio = TipoConfirmacionAviso.NO_ENVIADO;
 					}
-					JAXBElement<TipoConfirmacion> confEnvio = new JAXBElement<TipoConfirmacion>(
+					JAXBElement<TipoConfirmacionAviso> confEnvio = new JAXBElement<TipoConfirmacionAviso>(
 							new QName("confirmadoEnvio"),
-							TipoConfirmacion.class,
+							TipoConfirmacionAviso.class,
 							confirmadoEnvio
 							);					
 					aviso.setConfirmadoEnvio(confEnvio  );
@@ -241,9 +241,9 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 				avisos.getAviso().add(aviso);
 			}
 			
-			JAXBElement<Avisos> value = new JAXBElement<Avisos>(
+			JAXBElement<DetalleAvisos> value = new JAXBElement<DetalleAvisos>(
 					new QName("avisos"),
-					Avisos.class,
+					DetalleAvisos.class,
 					avisos
 					);
 			da.setAvisos(value );
