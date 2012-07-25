@@ -178,7 +178,10 @@
 	
 
 	<target name="distribute" description="Distribucion">
-		<copy file="${product.dir}/sistra-client.jar" todir="${distribucion.dir}/client"/>		
+		<copy file="${product.dir}/sistra-client.jar" todir="${distribucion.dir}/client/ejb"/>
+		<mkdir dir="${product.dir}/client/wsdl/integracion/sistra"/>
+		<copydir  src="moduls/webservicesClient/wsdl" dest="${distribucion.dir}/client/wsdl/integracion/sistra" excludes="*.xml"/>
+				
 		<copydir  src="${output.dir}/docInterfaz"  dest="${distribucion.dir}/javadoc/sistra-client"/>
 		<!-- <copy file="${product.dir}/5-${projecte}.ear" todir="${distribucion.dir}/ear"/> -->		
 	</target>

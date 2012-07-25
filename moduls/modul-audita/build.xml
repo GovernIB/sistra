@@ -125,7 +125,7 @@
     </target>	
 	
 	<target name="distribute" description="Distribucion">
-		<copy file="${product.dir}/audita-client.jar" todir="${distribucion.dir}/client"/>		
+		<copy file="${product.dir}/audita-client.jar" todir="${distribucion.dir}/client/ejb"/>		
 		<!-- <copy file="${product.dir}/1-${projecte}.ear" todir="${distribucion.dir}/ear"/> -->		
 	</target>
 </project>
