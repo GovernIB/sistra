@@ -20,7 +20,7 @@
 		<xs:sequence>
 			<xs:element name="descripcionError" type="xs:string" nillable="true" minOccurs="0"/>
 			<xs:element name="error" type="xs:boolean" default="false"/>
-			<xs:element name="filas" type="tns:filas"/>
+			<xs:element name="filas" type="tns:filas" nillable="true" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
 </xs:schema>
