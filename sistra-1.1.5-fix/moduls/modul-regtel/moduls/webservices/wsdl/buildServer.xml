@@ -105,6 +105,8 @@
 			<arg value="-p" />
 			<arg value="urn:es:caib:regtel:ws:v2:model:DatosRegistroSalida=es.caib.regtel.ws.v2.model" />
 			<arg value="-p" />
+			<arg value="urn:es:caib:regtel:ws:v2:model:DetalleAcuseRecibo=es.caib.regtel.ws.v2.model" />
+			<arg value="-p" />
 			<arg value="urn:es:caib:regtel:ws:v2:model:BackofficeFacade=es.caib.regtel.ws.v2.model" />
 														
 			<arg value="-d" />

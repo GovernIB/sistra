@@ -1,5 +1,5 @@
 
-package es.caib.regtel.ws.v2.model.detalleacuserecibo;
+package es.caib.regtel.ws.v2.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,16 +9,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for Avisos complex type.
+ * <p>Java class for DetalleAvisos complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="Avisos">
+ * &lt;complexType name="DetalleAvisos">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="aviso" type="{urn:es:caib:regtel:ws:v2:model:DetalleAcuseRecibo}Aviso" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="aviso" type="{urn:es:caib:regtel:ws:v2:model:DetalleAcuseRecibo}DetalleAviso" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,12 +28,12 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Avisos", propOrder = {
+@XmlType(name = "DetalleAvisos", namespace = "urn:es:caib:regtel:ws:v2:model:DetalleAcuseRecibo", propOrder = {
     "aviso"
 })
-public class Avisos {
+public class DetalleAvisos {
 
-    protected List<Aviso> aviso;
+    protected List<DetalleAviso> aviso;
 
     /**
      * Gets the value of the aviso property.
@@ -53,13 +53,13 @@ public class Avisos {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Aviso }
+     * {@link DetalleAviso }
      * 
      * 
      */
-    public List<Aviso> getAviso() {
+    public List<DetalleAviso> getAviso() {
         if (aviso == null) {
-            aviso = new ArrayList<Aviso>();
+            aviso = new ArrayList<DetalleAviso>();
         }
         return this.aviso;
     }

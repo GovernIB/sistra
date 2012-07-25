@@ -6,7 +6,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import es.caib.regtel.ws.v2.model.detalleacuserecibo.DetalleAcuseRecibo;
 
 
 /**
