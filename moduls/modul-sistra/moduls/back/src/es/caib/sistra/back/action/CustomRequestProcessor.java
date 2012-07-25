@@ -18,6 +18,8 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionServlet;
+import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.tiles.TilesRequestProcessor;
 
 import es.caib.sistra.back.Constants;
@@ -35,6 +37,21 @@ public class CustomRequestProcessor extends TilesRequestProcessor {
     private String defaultLang = null;
     private List supportedLangs = null;
 
+    public void init(ActionServlet actionServlet,ModuleConfig moduleConfig) throws ServletException{
+    	
+    	super.init(actionServlet,moduleConfig);
+    	
+    	try {
+	    	// Indicamos si son obligatorias los avisos para las notificaciones
+	        ConfiguracionDelegate config = DelegateUtil.getConfiguracionDelegate();
+	    	Properties configProps = config.obtenerConfiguracion();
+	        getServletContext().setAttribute(Constants.AVISOS_OBLIGATORIOS_NOTIFICACIONES,StringUtils.defaultString(configProps.getProperty("sistra.avisoObligatorioNotificaciones"), "false"));
+    	}catch (Exception ex){
+        	log.error("Error obteniendo implementacion firma",ex);
+        	throw new ServletException(ex);
+        }
+    }
+    
     /**
      * Inicializa los idiomas soportados por la aplicación
      */
@@ -54,12 +71,7 @@ public class CustomRequestProcessor extends TilesRequestProcessor {
             supportedLangs.add( "es" );
             supportedLangs.add( "en" );
             supportedLangs.add( "de" );
-            log.info("Supported langs: " + supportedLangs);
-            
-            // Indicamos si son obligatorias los avisos para las notificaciones
-            ConfiguracionDelegate config = DelegateUtil.getConfiguracionDelegate();
-        	Properties configProps = config.obtenerConfiguracion();
-            getServletContext().setAttribute(Constants.AVISOS_OBLIGATORIOS_NOTIFICACIONES,StringUtils.defaultString(configProps.getProperty("sistra.avisoObligatorioNotificaciones"), "false"));
+            log.info("Supported langs: " + supportedLangs);                        
             
         } catch (Exception e) {
             throw new RuntimeException(e);
