@@ -163,7 +163,10 @@
 
 
 	<target name="distribute" description="Distribucion">
-		<copy file="${product.dir}/zonaper-client.jar" todir="${distribucion.dir}/client"/>		
+		<copy file="${product.dir}/zonaper-client.jar" todir="${distribucion.dir}/client/ejb"/>
+		<mkdir dir="${product.dir}/client/wsdl/sistra/zonaper"/>
+		<copydir  src="moduls/webservices/wsdl/zonaper" dest="${distribucion.dir}/client/wsdl/sistra/zonaper" excludes="*.xml"/>
+				
 		<copydir  src="${output.dir}/docInterfaz"  dest="${distribucion.dir}/javadoc/zonaper-client"/>
 		<!-- <copy file="${product.dir}/3-${projecte}.ear" todir="${distribucion.dir}/ear"/> -->			
 	</target>

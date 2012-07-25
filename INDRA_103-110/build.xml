@@ -18,6 +18,10 @@
 	<mkdir dir="${output.dir}/ear"/>
 	<mkdir dir="${output.dir}/lib"/>
 	<mkdir dir="${output.dir}/client"/>	
+	<mkdir dir="${output.dir}/client/ejb"/>
+	<mkdir dir="${output.dir}/client/wsdl"/>
+	<mkdir dir="${output.dir}/client/wsdl/sistra"/>
+	<mkdir dir="${output.dir}/client/wsdl/integracion"/>	
 	<mkdir dir="${output.dir}/javadoc"/>	
 </target>
 	

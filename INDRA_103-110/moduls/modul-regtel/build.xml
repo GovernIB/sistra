@@ -153,7 +153,10 @@
 	
 
 	<target name="distribute" description="Distribucion">
-		<copy file="${product.dir}/regtel-client.jar" todir="${distribucion.dir}/client"/>		
+		<copy file="${product.dir}/regtel-client.jar" todir="${distribucion.dir}/client/ejb"/>
+			<mkdir dir="${product.dir}/client/wsdl/sistra/regtel"/>
+		<copydir  src="moduls/webservices/wsdl/regtel" dest="${distribucion.dir}/client/wsdl/sistra/regtel" excludes="*.xml"/>
+				
 		<copydir  src="${output.dir}/docInterfaz"  dest="${distribucion.dir}/javadoc/regtel-client"/>
 		<!-- <copy file="${product.dir}/8-${projecte}.ear" todir="${distribucion.dir}/ear"/> -->		
 	</target>

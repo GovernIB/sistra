@@ -164,7 +164,10 @@
 
 	
 	<target name="distribute" description="Distribucion">
-			<copy file="${product.dir}/mobtratel-client.jar" todir="${distribucion.dir}/client"/>
+		<copy file="${product.dir}/mobtratel-client.jar" todir="${distribucion.dir}/client/ejb"/>
+		<mkdir dir="${product.dir}/client/wsdl/sistra/mobtratel"/>
+		<copydir  src="moduls/webservices/wsdl/mobtratel" dest="${distribucion.dir}/client/wsdl/sistra/mobtratel"  excludes="*.xml"/>
+				
 		<copydir  src="${output.dir}/docInterfaz"  dest="${distribucion.dir}/javadoc/mobtratel-client"/>
 		<!-- <copy file="${product.dir}/7-${projecte}.ear" todir="${distribucion.dir}/ear"/> -->		
 		</target>
