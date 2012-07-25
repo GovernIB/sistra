@@ -185,13 +185,15 @@ public class ClienteWS {
 			vdInterfaz.setError(vd.isError());
 			List filas = new ArrayList();
 			if(vd.getFilas() != null){
-				for(int i=0;i<vd.getFilas().getFila().size();i++){
-					columnas = new HashMap();
-					fila = vd.getFilas().getFila().get(i);
-					for(int j=0;j<fila.getColumna().size();j++){
-						columnas.put(fila.getColumna().get(j).getCodigo(), fila.getColumna().get(j).getValor());
+				if (vd.getFilas() != null && vd.getFilas().getValue() != null) {
+					for(int i=0;i<vd.getFilas().getValue().getFila().size();i++){
+						columnas = new HashMap();
+						fila = vd.getFilas().getValue().getFila().get(i);
+						for(int j=0;j<fila.getColumna().size();j++){
+							columnas.put(fila.getColumna().get(j).getCodigo(), fila.getColumna().get(j).getValor());
+						}
+						filas.add(columnas);
 					}
-					filas.add(columnas);
 				}
 			}
 			vdInterfaz.setFilas(filas);
