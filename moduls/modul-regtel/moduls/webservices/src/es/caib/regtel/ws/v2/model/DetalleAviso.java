@@ -1,5 +1,5 @@
 
-package es.caib.regtel.ws.v2.model.detalleacuserecibo;
+package es.caib.regtel.ws.v2.model;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -11,12 +11,12 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java class for Aviso complex type.
+ * <p>Java class for DetalleAviso complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="Aviso">
+ * &lt;complexType name="DetalleAviso">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -25,7 +25,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="enviado" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="fechaEnvio" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="confirmarEnvio" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="confirmadoEnvio" type="{urn:es:caib:regtel:ws:v2:model:DetalleAcuseRecibo}TipoConfirmacion" minOccurs="0"/>
+ *         &lt;element name="confirmadoEnvio" type="{urn:es:caib:regtel:ws:v2:model:DetalleAcuseRecibo}TipoConfirmacionAviso" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -35,7 +35,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Aviso", propOrder = {
+@XmlType(name = "DetalleAviso", namespace = "urn:es:caib:regtel:ws:v2:model:DetalleAcuseRecibo", propOrder = {
     "tipo",
     "destinatario",
     "enviado",
@@ -43,7 +43,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "confirmarEnvio",
     "confirmadoEnvio"
 })
-public class Aviso {
+public class DetalleAviso {
 
     @XmlElement(required = true)
     protected TipoAviso tipo;
@@ -54,7 +54,7 @@ public class Aviso {
     protected JAXBElement<XMLGregorianCalendar> fechaEnvio;
     protected boolean confirmarEnvio;
     @XmlElementRef(name = "confirmadoEnvio", type = JAXBElement.class)
-    protected JAXBElement<TipoConfirmacion> confirmadoEnvio;
+    protected JAXBElement<TipoConfirmacionAviso> confirmadoEnvio;
 
     /**
      * Gets the value of the tipo property.
@@ -165,10 +165,10 @@ public class Aviso {
      * 
      * @return
      *     possible object is
-     *     {@link JAXBElement }{@code <}{@link TipoConfirmacion }{@code >}
+     *     {@link JAXBElement }{@code <}{@link TipoConfirmacionAviso }{@code >}
      *     
      */
-    public JAXBElement<TipoConfirmacion> getConfirmadoEnvio() {
+    public JAXBElement<TipoConfirmacionAviso> getConfirmadoEnvio() {
         return confirmadoEnvio;
     }
 
@@ -177,11 +177,11 @@ public class Aviso {
      * 
      * @param value
      *     allowed object is
-     *     {@link JAXBElement }{@code <}{@link TipoConfirmacion }{@code >}
+     *     {@link JAXBElement }{@code <}{@link TipoConfirmacionAviso }{@code >}
      *     
      */
-    public void setConfirmadoEnvio(JAXBElement<TipoConfirmacion> value) {
-        this.confirmadoEnvio = ((JAXBElement<TipoConfirmacion> ) value);
+    public void setConfirmadoEnvio(JAXBElement<TipoConfirmacionAviso> value) {
+        this.confirmadoEnvio = ((JAXBElement<TipoConfirmacionAviso> ) value);
     }
 
 }

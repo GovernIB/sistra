@@ -1,17 +1,17 @@
 
-package es.caib.regtel.ws.v2.model.detalleacuserecibo;
+package es.caib.regtel.ws.v2.model;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for TipoEstado.
+ * <p>Java class for TipoEstadoNotificacion.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="TipoEstado">
+ * &lt;simpleType name="TipoEstadoNotificacion">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="PENDIENTE"/>
  *     &lt;enumeration value="ENTREGADA"/>
@@ -21,9 +21,9 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "TipoEstado")
+@XmlType(name = "TipoEstadoNotificacion", namespace = "urn:es:caib:regtel:ws:v2:model:DetalleAcuseRecibo")
 @XmlEnum
-public enum TipoEstado {
+public enum TipoEstadoNotificacion {
 
     PENDIENTE,
     ENTREGADA,
@@ -33,7 +33,7 @@ public enum TipoEstado {
         return name();
     }
 
-    public static TipoEstado fromValue(String v) {
+    public static TipoEstadoNotificacion fromValue(String v) {
         return valueOf(v);
     }
 

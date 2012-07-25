@@ -1,5 +1,5 @@
 
-package es.caib.regtel.ws.v2.model.detalleacuserecibo;
+package es.caib.regtel.ws.v2.model;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -8,7 +8,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
-import es.caib.regtel.ws.v2.model.ReferenciaRDS;
 
 
 /**
@@ -21,10 +20,10 @@ import es.caib.regtel.ws.v2.model.ReferenciaRDS;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="estado" type="{urn:es:caib:regtel:ws:v2:model:DetalleAcuseRecibo}TipoEstado"/>
+ *         &lt;element name="estado" type="{urn:es:caib:regtel:ws:v2:model:DetalleAcuseRecibo}TipoEstadoNotificacion"/>
  *         &lt;element name="fechaAcuseRecibo" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="ficheroAcuseRecibo" type="{urn:es:caib:regtel:ws:v2:model:ReferenciaRDS}ReferenciaRDS" minOccurs="0"/>
- *         &lt;element name="avisos" type="{urn:es:caib:regtel:ws:v2:model:DetalleAcuseRecibo}Avisos" minOccurs="0"/>
+ *         &lt;element name="avisos" type="{urn:es:caib:regtel:ws:v2:model:DetalleAcuseRecibo}DetalleAvisos" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -34,7 +33,7 @@ import es.caib.regtel.ws.v2.model.ReferenciaRDS;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "DetalleAcuseRecibo", propOrder = {
+@XmlType(name = "DetalleAcuseRecibo", namespace = "urn:es:caib:regtel:ws:v2:model:DetalleAcuseRecibo", propOrder = {
     "estado",
     "fechaAcuseRecibo",
     "ficheroAcuseRecibo",
@@ -43,23 +42,23 @@ import es.caib.regtel.ws.v2.model.ReferenciaRDS;
 public class DetalleAcuseRecibo {
 
     @XmlElement(required = true)
-    protected TipoEstado estado;
+    protected TipoEstadoNotificacion estado;
     @XmlElementRef(name = "fechaAcuseRecibo", type = JAXBElement.class)
     protected JAXBElement<XMLGregorianCalendar> fechaAcuseRecibo;
     @XmlElementRef(name = "ficheroAcuseRecibo", type = JAXBElement.class)
     protected JAXBElement<ReferenciaRDS> ficheroAcuseRecibo;
     @XmlElementRef(name = "avisos", type = JAXBElement.class)
-    protected JAXBElement<Avisos> avisos;
+    protected JAXBElement<DetalleAvisos> avisos;
 
     /**
      * Gets the value of the estado property.
      * 
      * @return
      *     possible object is
-     *     {@link TipoEstado }
+     *     {@link TipoEstadoNotificacion }
      *     
      */
-    public TipoEstado getEstado() {
+    public TipoEstadoNotificacion getEstado() {
         return estado;
     }
 
@@ -68,10 +67,10 @@ public class DetalleAcuseRecibo {
      * 
      * @param value
      *     allowed object is
-     *     {@link TipoEstado }
+     *     {@link TipoEstadoNotificacion }
      *     
      */
-    public void setEstado(TipoEstado value) {
+    public void setEstado(TipoEstadoNotificacion value) {
         this.estado = value;
     }
 
@@ -128,10 +127,10 @@ public class DetalleAcuseRecibo {
      * 
      * @return
      *     possible object is
-     *     {@link JAXBElement }{@code <}{@link Avisos }{@code >}
+     *     {@link JAXBElement }{@code <}{@link DetalleAvisos }{@code >}
      *     
      */
-    public JAXBElement<Avisos> getAvisos() {
+    public JAXBElement<DetalleAvisos> getAvisos() {
         return avisos;
     }
 
@@ -140,11 +139,11 @@ public class DetalleAcuseRecibo {
      * 
      * @param value
      *     allowed object is
-     *     {@link JAXBElement }{@code <}{@link Avisos }{@code >}
+     *     {@link JAXBElement }{@code <}{@link DetalleAvisos }{@code >}
      *     
      */
-    public void setAvisos(JAXBElement<Avisos> value) {
-        this.avisos = ((JAXBElement<Avisos> ) value);
+    public void setAvisos(JAXBElement<DetalleAvisos> value) {
+        this.avisos = ((JAXBElement<DetalleAvisos> ) value);
     }
 
 }
