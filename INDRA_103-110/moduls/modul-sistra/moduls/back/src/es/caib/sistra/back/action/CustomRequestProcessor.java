@@ -41,15 +41,17 @@ public class CustomRequestProcessor extends TilesRequestProcessor {
     	
     	super.init(actionServlet,moduleConfig);
     	
+    	String obligAvisosNotif;
     	try {
 	    	// Indicamos si son obligatorias los avisos para las notificaciones
 	        ConfiguracionDelegate config = DelegateUtil.getConfiguracionDelegate();
 	    	Properties configProps = config.obtenerConfiguracion();
-	        getServletContext().setAttribute(Constants.AVISOS_OBLIGATORIOS_NOTIFICACIONES,StringUtils.defaultString(configProps.getProperty("sistra.avisoObligatorioNotificaciones"), "false"));
+	        obligAvisosNotif = StringUtils.defaultString(configProps.getProperty("sistra.avisoObligatorioNotificaciones"), "false");			
     	}catch (Exception ex){
-        	log.error("Error obteniendo implementacion firma",ex);
-        	throw new ServletException(ex);
+        	log.error("Error obteniendo obligatoriedad avisos para notificaciones (ponemos a false): " + ex.getMessage(),ex);
+        	obligAvisosNotif = "false";
         }
+    	getServletContext().setAttribute(Constants.AVISOS_OBLIGATORIOS_NOTIFICACIONES,obligAvisosNotif);
     }
     
     /**
