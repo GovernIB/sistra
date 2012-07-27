@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
@@ -47,6 +48,7 @@ import es.caib.zonaper.model.Expediente;
 import es.caib.zonaper.model.IndiceElemento;
 import es.caib.zonaper.model.NotificacionTelematica;
 import es.caib.zonaper.modelInterfaz.ConfiguracionAvisosExpedientePAD;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo;
 import es.caib.zonaper.modelInterfaz.DetalleAviso;
 import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
@@ -824,6 +826,10 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		{
 			error( ExpedientePAD.class, "identificadorExpediente" );
 		}
+		if ( !Pattern.matches(ConstantesZPE.REGEXP_IDENTIFICADOREXPEDIENTE, expPAD.getIdentificadorExpediente())  )
+		{
+			errorFormato( ExpedientePAD.class, "identificadorExpediente" );
+		}
 		if ( expPAD.getUnidadAdministrativa() == null )
 		{
 			error( ExpedientePAD.class, "unidadAdministrativa" );
@@ -1242,6 +1248,11 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 	private void error( Class clazz, String propiedad ) throws ExcepcionPAD
 	{
 		throw new ExcepcionPAD( "La propiedad [" + propiedad+ "] de la clase [" + clazz.getName() + "] no puede ser nula" ); 
+	}
+	
+	private void errorFormato( Class clazz, String propiedad ) throws ExcepcionPAD
+	{
+		throw new ExcepcionPAD( "La propiedad [" + propiedad+ "] de la clase [" + clazz.getName() + "] no cumple el formato" ); 
 	}
 	
 	private DocumentoRDS crearDocumentoRDS( DocumentoExpedientePAD documento, ExpedientePAD expe ) throws ExcepcionPAD

@@ -653,16 +653,16 @@ function repintarParametros(datos){
 					<div id="divSubsanacion">
 						<p>
 							<label for="descripcionTramiteSubsanacion"><bean:message key="tramite.subsanacion.descripcion"/><sup>*</sup></label>
-							<html:text property="descripcionTramiteSubsanacion" styleClass="pc40" />
+							<html:text property="descripcionTramiteSubsanacion" styleClass="pc40" maxlength="200"/>
 						</p>
 						
 						<p>
 							<label for="identificadorTramiteSubsanacion"><bean:message key="tramite.subsanacion.identificador"/><sup>*</sup></label>
-							<html:text property="identificadorTramiteSubsanacion" styleClass="pc40" />
+							<html:text property="identificadorTramiteSubsanacion" styleClass="pc40" maxlength="20"/>
 						</p>
 						<p>
 							<label for="versionTramiteSubsanacion"><bean:message key="tramite.subsanacion.version"/><sup>*</sup></label>
-							<html:text property="versionTramiteSubsanacion" styleClass="pc40" />
+							<html:text property="versionTramiteSubsanacion" styleClass="pc40" maxlength="2"/>
 						</p>
 					
 						<p>

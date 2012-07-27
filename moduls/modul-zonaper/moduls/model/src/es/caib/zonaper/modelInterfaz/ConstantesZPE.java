@@ -78,5 +78,9 @@ public class ConstantesZPE {
 	 * 	ESTADOS DE UN EXPEDIENTE: Notificacion rechazada.
 	 */
 	public final static String ESTADO_NOTIFICACION_RECHAZADA = "NX";
+	/**
+	 * EXPRESION REGULAR PARA IDENTIFICADOR EXPEDIENTE.
+	 */
+	public final static String REGEXP_IDENTIFICADOREXPEDIENTE = "^[A-Z|a-z|0-9|/|-]{1,50}$";
 	
 }
