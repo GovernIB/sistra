@@ -102,9 +102,9 @@ public class RecuperacionExpedienteAction extends BaseAction
 													observaciones += "<br/>";
 												}
 												if (DetalleAviso.CONFIRMADO_ENVIADO.equals(da.getConfirmadoEnvio())) {													
-													observaciones += da.getTipo() +  ": " + resources.getMessage("notificacion.envioAviso.confirmado");
+													observaciones += da.getTipo() +  ": " + resources.getMessage(this.getLocale(request), "notificacion.envioAviso.confirmado");
 												} else {
-													observaciones += da.getTipo() + ": " + resources.getMessage("notificacion.envioAviso.noConfirmado");
+													observaciones += da.getTipo() + ": " + resources.getMessage(this.getLocale(request), "notificacion.envioAviso.noConfirmado");
 												}											
 										}										
 									}
@@ -116,7 +116,7 @@ public class RecuperacionExpedienteAction extends BaseAction
 								} else {
 									observaciones += "<br/>";
 								}
-								observaciones += resources.getMessage("notificacion.finPlazo") + StringUtil.fechaACadena(notif.getDetalleAcuseRecibo().getFechaFinPlazo(), StringUtil.FORMATO_FECHA);
+								observaciones += resources.getMessage(this.getLocale(request), "notificacion.finPlazo") + StringUtil.fechaACadena(notif.getDetalleAcuseRecibo().getFechaFinPlazo(), StringUtil.FORMATO_FECHA);
 							}
 						}
 					}

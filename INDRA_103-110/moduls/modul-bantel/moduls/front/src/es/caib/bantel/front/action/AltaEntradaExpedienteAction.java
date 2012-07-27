@@ -83,7 +83,7 @@ public class AltaEntradaExpedienteAction extends BaseAction
 			expForm.setIdentificadorProcedimiento(entrada.getIdentificadorProcedimiento());
 			expForm.setUsuarioSeycon(StringUtils.defaultString(entrada.getUsuarioSeycon()));
 			expForm.setDescripcion(StringUtils.defaultString(entrada.getDescripcionTramite()));
-			expForm.setIdioma(StringUtils.defaultString(entrada.getIdioma(),"es"));
+			expForm.setIdioma(StringUtils.defaultString(entrada.getIdioma(),"ca"));
 			expForm.setNif(StringUtils.defaultString(entrada.getUsuarioNif()));
 			expForm.setNombre(StringUtils.defaultString(entrada.getUsuarioNombre()));
 			expForm.setNumeroEntrada(entrada.getNumeroEntrada());

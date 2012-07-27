@@ -3,6 +3,7 @@
 <%@ page import="es.caib.bantel.modelInterfaz.ConstantesBTE"%>
 <%@ page import="es.caib.zonaper.modelInterfaz.ConstantesZPE"%>
 <%@ page import="es.caib.xml.registro.factoria.ConstantesAsientoXML" %>
+<%@ page import="org.apache.commons.lang.StringEscapeUtils" %>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
@@ -33,7 +34,8 @@
 	</tr>				
 		<bean:define id="numeroPagina" name="page" property="numeroPagina" type="java.lang.Integer"/>
 		<logic:iterate id="pagina" name="page" property="list">
-		<tr onmouseover="selecItemTabla(this);" onclick="detalleExpediente('<bean:write name="pagina" property="identificadorExpediente"/>','<bean:write name="pagina" property="unidadAdministrativa"/>', '<bean:write name="pagina" property="claveExpediente"/>');" class="nou" title="<bean:message key="resultadoBusquedaExpedientes.verDetalleExpediente"/>">
+		<bean:define id="idExpe" name="pagina" property="identificadorExpediente" type="java.lang.String"/>
+		<tr onmouseover="selecItemTabla(this);" onclick="detalleExpediente('<%=StringEscapeUtils.escapeJavaScript(idExpe)%>','<bean:write name="pagina" property="unidadAdministrativa"/>', '<bean:write name="pagina" property="claveExpediente"/>');" class="nou" title="<bean:message key="resultadoBusquedaExpedientes.verDetalleExpediente"/>">
 			<td><bean:write name="pagina" property="fechaInicio" format="dd/MM/yyyy HH:mm"/></td>
 			<td><bean:write name="pagina" property="identificadorExpediente" /></td>
 			<td><bean:write name="pagina" property="nifRepresentante" /></td>

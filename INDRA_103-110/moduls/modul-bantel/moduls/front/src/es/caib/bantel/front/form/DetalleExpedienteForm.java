@@ -1,5 +1,7 @@
 package es.caib.bantel.front.form;
 
+import java.util.regex.Pattern;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -10,6 +12,7 @@ import org.apache.struts.validator.ValidatorForm;
 
 import es.caib.bantel.front.util.MensajesUtil;
 import es.caib.util.ValidacionesUtil;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 
 
 
@@ -170,6 +173,11 @@ public class DetalleExpedienteForm extends ValidatorForm
         	}
         	if(StringUtils.isEmpty(identificadorExp)){
         		errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("confirmacion.identificadorExpediente")));
+        		error = true;
+        	}
+        	
+        	if (StringUtils.isNotEmpty(identificadorExp) && !Pattern.matches(ConstantesZPE.REGEXP_IDENTIFICADOREXPEDIENTE, identificadorExp)) {
+        		errors.add("altaExpediente", new ActionError("errors.invalid", MensajesUtil.getValue("confirmacion.identificadorExpediente")));
         		error = true;
         	}
         	
