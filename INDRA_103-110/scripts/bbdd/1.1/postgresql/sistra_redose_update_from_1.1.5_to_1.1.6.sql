@@ -23,3 +23,5 @@ VALUES ( NEXTVAL('RDS_SEQVER'),
 
 
 COMMIT;
+
+alter table RDS_USOS alter column USO_REF type VARCHAR(100); 

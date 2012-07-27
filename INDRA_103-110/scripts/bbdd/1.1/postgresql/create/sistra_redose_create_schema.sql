@@ -67,7 +67,7 @@ create table RDS_USOS (
    USO_CODIGO int8 not null,
    USO_CODDOC int8 not null,
    USO_CODTIU varchar(3) not null,
-   USO_REF varchar(50) not null,
+   USO_REF varchar(100) not null,
    USO_FCSELL timestamp,
    USO_FECHA timestamp not null,
    primary key (USO_CODIGO)

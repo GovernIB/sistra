@@ -62,4 +62,6 @@ VALUES ( NEXTVAL('RDS_SEQVER'),
  1,
  'VERSION 1');
 
+ 
+ alter table RDS_USOS alter column USO_REF type VARCHAR(100);
 

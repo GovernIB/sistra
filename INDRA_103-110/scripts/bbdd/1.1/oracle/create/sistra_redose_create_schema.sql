@@ -403,7 +403,7 @@ create table RDS_USOS  (
    USO_CODTIU           VARCHAR2(3)                     not null,
    USO_CODDOC           NUMBER(20)                      not null,
    USO_FECHA            DATE                            not null,
-   USO_REF              VARCHAR2(50)                    not null,
+   USO_REF              VARCHAR2(100)                    not null,
    USO_FCSELL           DATE
 );
 
