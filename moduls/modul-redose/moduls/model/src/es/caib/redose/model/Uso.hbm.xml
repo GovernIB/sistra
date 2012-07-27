@@ -16,7 +16,7 @@
         <many-to-one name="documento" class="es.caib.redose.model.Documento" column="USO_CODDOC" not-null="true" />
         <many-to-one name="tipoUso" class="es.caib.redose.model.TipoUso" column="USO_CODTIU" not-null="true" />
 
-        <property name="referencia" type="string" column="USO_REF" length="50" not-null="true" />
+        <property name="referencia" type="string" column="USO_REF" length="100" not-null="true" />
         <property name="fechaSello" column="USO_FCSELL" />
         
         <property name="fecha" column="USO_FECHA" not-null="true" />
