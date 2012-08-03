@@ -107,7 +107,7 @@
                 validatexml="false"
                 mergedir="${web.merge.web}"
                 >
-                <taglib uri="delega" location="/WEB-INF/tlds/delega.tld"/>
+                <!--<taglib uri="delega" location="/WEB-INF/tlds/delega.tld"/>-->
                 <welcomefile file="/index.jsp"/>
             </deploymentdescriptor>
 
@@ -121,7 +121,7 @@
 
             <jbosswebxml
                 destdir="${web.gen.etc}"
-                version="${jboss.version}"
+        	version="3.2"
                 xmlencoding="UTF-8"
                 validatexml="true"
                 mergedir="${web.merge.jboss}"

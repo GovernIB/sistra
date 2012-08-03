@@ -93,7 +93,7 @@
                 validatexml="false"
                 mergedir="${web.merge.web}"
                 >
-                <taglib uri="admin" location="/WEB-INF/tlds/admin.tld"/>
+               <!-- <taglib uri="admin" location="/WEB-INF/tlds/admin.tld"/>-->
                 <welcomefile file="/index.jsp"/>
             </deploymentdescriptor>
 
@@ -104,10 +104,9 @@
                 validatexml="true"
                 mergedir="${web.merge.struts}"
                 />
-
             <jbosswebxml
                 destdir="${web.gen.etc}"
-                version="${jboss.version}"
+                version="3.2"
                 xmlencoding="UTF-8"
                 validatexml="true"
                 mergedir="${web.merge.jboss}"

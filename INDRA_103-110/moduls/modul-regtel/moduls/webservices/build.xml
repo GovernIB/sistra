@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="InterfazWS" basedir=".">
-	
+	 
 	<property file="${basedir}/build.properties"/>
-	
 	<property name="home.dir" location="${basedir}/../.."/>
+	<property file="${home.dir}/config.properties"/>
+	<property file="${home.dir}/../../config.properties"/>
+	
 	<property name="output.dir" location="${home.dir}/output"/>
 	<property name="cxf.home" location ="${home.dir}/../../lib/cxf"/>
 	<property name="etc.dir" location="${basedir}/etc/web"/>
@@ -49,9 +51,23 @@
 	<target name="doc" depends="web.javadoc" description="Realiza las tareas de documentación "/>
 	<target name="main" depends="war" description="Construeye el war"/>
 
-	<target name="war">
+	<target name="war" depends="checkJbossVersion,jboss5,jboss3">
 		<cxfwar filename="8-${modul.name}.war"/>
 	</target>
+	<target name="checkJbossVersion">
+		<condition property="isJboss5">
+			<equals arg1="${jboss.version}" arg2="5.0" />
+		</condition>
+		<condition property="isJboss3">
+				<equals arg1="${jboss.version}" arg2="3.2"/>
+		</condition>
+	</target> 
+	<target name="jboss5" if="isJboss5">
+		<echo message="========JBOSS 5.0=========="/>
+	</target>
+	<target name="jboss3" if="isJboss3">
+		<echo message="========JBOSS 3.2=========="/>
+	</target> 
 	
     <macrodef name="cxfwar">
         <attribute name="filename"/>
@@ -73,13 +89,18 @@
                 </webinf>
             	<webinf dir="${etc.dir}">
 	               	<include name="*cxf*.xml"/>
-            		<include name="*jboss*.xml"/>
+            		<include name="jboss-web.xml"/>
+            		<include if="isJboss5" name="jboss-classloading.xml"/>
                 </webinf>
+            	<lib dir="${lib}">
+            		<include if="isJboss5" name="stax*.jar"/>
+            	</lib>
             	<lib dir="${cxf.home}">
     				<include name="*.jar"/>
   				</lib>            	
             	<lib dir="${web.product}">
             		<include name="*.jar"/>
+            		<exclude name="8-regtel-persistence.jar"/>
       	  		</lib>            
             </war>
         </sequential>

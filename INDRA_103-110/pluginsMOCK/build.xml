@@ -5,6 +5,8 @@
 <property name="output.dir" value="product"/>
 <property name="etc" location="${basedir}/etc"/>	
 
+<property file="${basedir}/../config.properties"/>
+	
 <target name="main" depends="clean,prepare,compilePlugins,assemble,loginModule"/>
 
 <target name="clean" description="Destruye los directorios de trabajo">
@@ -41,14 +43,25 @@
 	</antcall>
 </target>
 
-<target name="assemble" description="assemble ear">
+<target name="checkJbossVersion">
+	<condition property="isJboss5">
+		<equals arg1="${jboss.version}" arg2="5.0"/>
+	</condition>
+	<condition property="isJboss3">
+		<equals arg1="${jboss.version}" arg2="3.2"/>
+	</condition>
+</target>
+	
+<target name="assemble" description="assemble ear" depends="checkJbossVersion">
 	<ear earfile="${output.dir}/ear/2-${projecte}.ear" appxml="${etc}/application.xml">
 		<manifest>
 			<attribute name="Created-By" value="${indra}"/>
 		    <attribute name="Specification-Title" value="${projecte} for ${release.env}"/>				
 		    <attribute name="Specification-Version" value="${release.cvs.tag} build${release.build} ${release.date}"/>
 		</manifest>		
-		
+		<metainf dir="${etc}">
+			<include if="isJboss5" name="jboss-classloading.xml"/>
+		</metainf>
 		<fileset dir="plugin-firmaMOCK/output/product">
 			<filename name="plugin-firmaMOCK.jar"/>
 		</fileset>

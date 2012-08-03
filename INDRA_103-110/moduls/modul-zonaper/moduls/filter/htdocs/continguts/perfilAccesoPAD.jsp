@@ -17,7 +17,7 @@
 	<p><bean:message key="perfilAcceso.descripcion" /></p>
 	
 	<html:form action="/elegirPerfilAccesoPAD" styleId="formConfirmacion">
-		<html:hidden property="urlOriginal" value="<%= ( String ) request.getAttribute( "urlOriginal") %>"/>
+		<html:hidden property="urlOriginal" value="<%= ( String ) request.getAttribute( \"urlOriginal\") %>"/>
 		<p>
 		<html:radio property="perfil" value="<%=ConstantesZPE.DELEGACION_PERFIL_ACCESO_CIUDADANO%>" title="<%=ciudadanoTitle%>"/>
 		<bean:message key="perfilAcceso.ciudadano" />

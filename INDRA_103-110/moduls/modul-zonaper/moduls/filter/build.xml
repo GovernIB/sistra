@@ -90,10 +90,11 @@
             force="false"
             verbose="true"
             >
+        	
             <fileset dir="${web.src}">
                 <include name="**/*.java"/>
             </fileset>
-
+			
             <jsptaglib
                 description="Libreria de tags utiles para el front."
                 destdir="${web.gen.etc}"
@@ -128,7 +129,7 @@
 
             <jbosswebxml
                 destdir="${web.gen.etc}"
-                version="${jboss.version}"
+                	version="3.2"
                 xmlencoding="UTF-8"
                 validatexml="true"
                 mergedir="${web.merge.jboss}"
@@ -182,7 +183,7 @@
         </javac>
     </target>
 
-    <target name="web.war" depends="web.compile">
+    <target name="web.war" depends="web.gen.all">
         <delete file="${web.product}/3-${prj.name}-${modul}.war" quiet="yes"/>
         <war warfile="${web.product}/3-${prj.name}-${modul}.war"
             basedir="${web.htdocs}"
@@ -191,21 +192,36 @@
             <manifest>
                 <attribute name="Created-By" value="Fundació IBIT"/>
             </manifest>
-
+			
             <classes dir="${web.classes}"/>
             <classes dir="${web.resources}" includes="*.properties"/>
-
+        	
+        	<lib file="${web.product}/3-zonaper-${modul}.jar"/>
+		
         	<lib dir="${lib.dir}">
 	            <include name="struts.jar" />
- 	        </lib>
+	        </lib>
 
             <webinf dir="${web.etc}" includes="*.xml"/>
             <webinf dir="${web.gen.etc}" includes="*.xml" excludes="web.xml"/>
-
             <webinf prefix="WEB-INF/tlds" dir="${web.gen.etc}" includes="*.tld"/>
         </war>
     </target>
 
+    <target name="web.jar" depends="web.compile">
+        <delete file="${web.product}/3-zonaper-${modul}.jar" quiet="yes"/>
+        <jar
+            jarfile="${web.product}/3-zonaper-${modul}.jar"
+            basedir="${web.classes}">
+        	<manifest>
+        		<attribute name="Created-By" value="${indra}"/>
+        	    <attribute name="Specification-Title" value="${modul}"/>				
+        	    <attribute name="Specification-Version" value="${release.version} build${release.build} ${release.date}"/>
+        	</manifest>   
+        	<fileset dir="${web.resources}" includes="*.properties"/>
+        </jar>
+    </target>
+	
     <target name="web.javadoc" depends="web.gen.all">
         <javadoc
             destdir="${web.doc.api}"
@@ -229,6 +245,6 @@
     </target>
 
     <target name="doc" depends="web.javadoc" description="Realiza las tareas de documentación "/>
-    <target name="main" depends="web.war" description="Construye el war"/>
+    <target name="main" depends="web.jar, web.war" description="Construye el war"/>
 
 </project>

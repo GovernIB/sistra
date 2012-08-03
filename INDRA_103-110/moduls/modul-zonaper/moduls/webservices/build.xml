@@ -73,6 +73,7 @@
   				</lib>            	
             	<lib dir="${web.product}">
             		<include name="*.jar"/>
+            		<exclude name="3-zonaper-persistence.jar"/>
       	  		</lib>
             </war>
         </sequential>

@@ -43,20 +43,33 @@
 	<ant dir="moduls/modul-regtel" target="${task}" inheritall="false"/>
 	<!-- <ant dir="moduls/modul-libs" target="${task}" inheritall="false"/>-->
 </target>	
+
+<target name="checkJbossVersion">
+	<condition property="isJboss5">
+		<equals arg1="${jboss.version}" arg2="5.0"/>
+	</condition>
+	<condition property="isJboss3">
+		<equals arg1="${jboss.version}" arg2="3.2"/>
+	</condition>
+</target>
 	
-<target name="compileModuls" description="Compila modulos">
+<target name="compileModuls" description="Compila modulos" depends="checkJbossVersion">
 	<antcall target="propagate">
 		<param name="task" value="main"/>
 	</antcall>
 	<delete file="${output.dir}/ear/1-sistra.ear" quiet="yes"/>
-	<ear earfile="${output.dir}/ear/1-sistra.ear" appxml="${etc.dir}/application.xml">
+	<ear earfile="${output.dir}/ear/1-sistra.ear" appxml="${etc.dir}/jboss-${jboss.version}/application.xml">
 		<manifest>
 			<attribute name="Created-By" value="${indra}"/>
 		    <attribute name="Specification-Title" value="${projecte}"/>				
 		    <attribute name="Specification-Version" value="${release.version} build${release.build} ${release.date}"/>
 		</manifest>
-		<metainf dir="${etc.dir}/jboss-${jboss.version}" includes="jboss-app.xml"/>
-		<metainf dir="${etc.dir}" includes="cxf/org.apache.cxf.Logger"/>
+		<metainf dir="${etc.dir}/jboss-${jboss.version}">
+			<include if="isJboss3" name="jboss-app.xml"/>
+		</metainf>
+		<metainf dir="${etc.dir}">
+			<include if="isJboss5" name="jboss-classloading.xml"/>
+		</metainf>
 		<fileset dir="moduls/modul-audita/output/moduls"/>
 		<fileset dir="moduls/modul-bantel/output/moduls"/>
 		<fileset dir="moduls/modul-forms/output/moduls"/>
@@ -65,14 +78,21 @@
 		<fileset dir="moduls/modul-redose/output/moduls"/>
 		<fileset dir="moduls/modul-regtel/output/moduls"/>
 		<fileset dir="moduls/modul-sistra/output/moduls"/>
-		<fileset dir="moduls/modul-zonaper/output/moduls"/>
+		<fileset dir="moduls/modul-zonaper/output/moduls">
+			<exclude name="3-zonaper-filter.jar" />
+		</fileset>
 		<zipfileset dir="${lib}" prefix="lib">
 			<exclude name="activation.jar"/>
 			<exclude name="struts.jar"/>
-			<exclude name="cglib-asm.jar"/>
+			
+			<exclude if="isJboss3" name="cglib-asm.jar"/>
 			<exclude name="commons-logging-1.0.4.jar"/>
 			<exclude name="ejb-2_0.jar"/>
-			<exclude name="hibernate2.jar"/>
+			<exclude if="isJboss3" name="hibernate2.jar"/>
+			<exclude if="isJboss5" name="stax-api-1.0.1.jar"/>
+			<exclude if="isJboss5" name="jaxp-api-1.3.jar"/>
+			<exclude if="isJboss5" name="jaxb-api-2.1.jar"/>
+			<exclude if="isJboss5" name="xmlbeans-qname.jar"/>
 			<exclude name="jms.jar"/>
 			<exclude name="mail.jar"/>
 			<exclude name="ojdbc14.jar"/>

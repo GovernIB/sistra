@@ -3,7 +3,7 @@
 <project name="sistra.front" default="main" basedir=".">
 
     <property file="${basedir}/build.properties"/>
-
+	
     <property name="modul" value="front"/>
     <property name="package" value="es.caib.${ant.project.name}"/>
 
@@ -13,7 +13,7 @@
 	
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
-
+	<property name="zonaper.dir" location="${home.dir}/../modul-zonaper/output/moduls"/>
     <property name="lib.dir" location="${home.dir}/../../lib"/>
     <property name="etc.dir" location="${home.dir}/etc"/>
     <property name="xdoclet.dir" location="${home.dir}/../../xdoclet"/>
@@ -142,7 +142,7 @@
 
             <jbosswebxml
                 destdir="${web.gen.etc}"
-                version="${jboss.version}"
+            	version="3.2"
                 xmlencoding="UTF-8"
                 validatexml="true"
                 mergedir="${web.merge.jboss}"
@@ -236,7 +236,11 @@
             <classes dir="${web.resources}" includes="*.properties"/>
         	<classes dir="${web.classes}" includes="*.properties" />
             <!-- <classes dir="${web.classes}/es/caib/sistra/front/formulario" includes="*.properties"/> -->
+        	<lib file="${web.product}/3-zonaper-${modul}.jar"/>
         	
+        	<lib dir="${zonaper.dir}">
+        		<include name="3-zonaper-filter.jar"/>
+        	</lib>
         	<lib dir="${lib.dir}">
 	            <include name="struts.jar" />
  	        </lib>

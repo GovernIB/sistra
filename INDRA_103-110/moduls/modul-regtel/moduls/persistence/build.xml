@@ -116,7 +116,7 @@
                 />
 
             <jboss
-                version="${jboss.version}"
+	version="3.2"
                 xmlencoding="UTF-8"
                 destdir="${ejb.gen.etc}"
                 validatexml="false"
