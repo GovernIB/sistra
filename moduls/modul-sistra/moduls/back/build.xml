@@ -120,9 +120,9 @@
                 mergedir="${web.merge.web}"
                 >
                 <taglib uri="back" location="/WEB-INF/tlds/back.tld"/>
-            	<taglib uri="/WEB-INF/tlds/struts-html.tld" location="/WEB-INF/tlds/struts-html.tld"/>
+            	<!--<taglib uri="/WEB-INF/tlds/struts-html.tld" location="/WEB-INF/tlds/struts-html.tld"/>
             	<taglib uri="/WEB-INF/tlds/struts-logic.tld" location="/WEB-INF/tlds/struts-logic.tld"/>
-            	<taglib uri="/WEB-INF/tlds/struts-bean.tld" location="/WEB-INF/tlds/struts-bean.tld"/>
+            	<taglib uri="/WEB-INF/tlds/struts-bean.tld" location="/WEB-INF/tlds/struts-bean.tld"/>--> 
                 <welcomefile file="/index.jsp"/>
             </deploymentdescriptor>
 
@@ -136,7 +136,7 @@
 
             <jbosswebxml
                 destdir="${web.gen.etc}"
-                version="${jboss.version}"
+                	version="3.2"
                 xmlencoding="UTF-8"
                 validatexml="true"
                 mergedir="${web.merge.jboss}"

@@ -11,4 +11,8 @@
 
 @web.login-config@
 
+<security-role>
+    <role-name>@role.admin@</role-name>
+</security-role>
+
 @cas.enabled.comment.end@

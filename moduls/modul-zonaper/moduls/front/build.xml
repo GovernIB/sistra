@@ -152,7 +152,7 @@
 
             <jbosswebxml
                 destdir="${web.gen.etc}"
-                version="${jboss.version}"
+                	version="3.2"
                 xmlencoding="UTF-8"
                 validatexml="true"
                 mergedir="${web.merge.jboss}"
@@ -238,7 +238,7 @@
 
             <classes dir="${web.classes}"/>
             <classes dir="${web.resources}" includes="*.properties"/>
-
+        	<lib file="${web.product}/3-zonaper-filter.jar"/>
         	<lib dir="${lib.dir}">
 	            <include name="struts.jar" />
 	        </lib>

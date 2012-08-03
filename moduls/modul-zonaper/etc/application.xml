@@ -9,6 +9,7 @@
     
     <module><java>3-zonaper-model.jar</java></module>    
     <module><ejb>3-zonaper-persistence.jar</ejb></module>
+    <module><java>3-zonaper-filter.jar</java></module>
     
 <!-- 
     <module><java>zonaper-persistence-webservice.wsr</java></module>

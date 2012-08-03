@@ -93,11 +93,11 @@
 	</target>
 	<target name="propagate">
 		<ant dir="moduls/model" target="${task}" inheritall="false"/>
-		<ant dir="moduls/persistence" target="${task}" inheritall="false"/>		
+		<ant dir="moduls/persistence" target="${task}" inheritall="false"/>	
+		<ant dir="moduls/filter" target="${task}" inheritall="false"/>
 		<ant dir="moduls/front" target="${task}" inheritall="false"/>
 		<ant dir="moduls/admin" target="${task}" inheritall="false"/>
 		<ant dir="moduls/back" target="${task}" inheritall="false"/>
-		<ant dir="moduls/filter" target="${task}" inheritall="false"/>
 		<ant dir="moduls/helpdesk" target="${task}" inheritall="false"/>
 		<ant dir="moduls/webservices" target="${task}" inheritall="false"/>
 		<ant dir="moduls/delega" target="${task}" inheritall="false"/>

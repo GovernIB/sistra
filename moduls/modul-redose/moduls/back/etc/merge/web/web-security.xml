@@ -1,4 +1,6 @@
 @cas.enabled.comment.init@
+
+
 <security-constraint>
     <web-resource-collection>
         <web-resource-name>redoseback</web-resource-name>
@@ -11,9 +13,10 @@
 </security-constraint>
 
 @web.login-config@
-
-<security-role>
+ <security-role>
     <role-name>@role.admin@</role-name>
+</security-role>
+<security-role>
     <role-name>@role.operador@</role-name>
 </security-role>
 
