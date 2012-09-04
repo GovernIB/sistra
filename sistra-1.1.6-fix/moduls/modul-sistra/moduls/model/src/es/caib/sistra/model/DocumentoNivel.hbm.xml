@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+
+<class name="es.caib.sistra.model.DocumentoNivel" table="STR_DOCNIV">
+ 	 <cache usage="read-write"/>	
+     <id name="codigo" unsaved-value="null" column="DNV_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">STR_SEQDNV</param>
+          </generator>
+      </id>
+
+    <property name="nivelAutenticacion"  column="DNV_NIVAUT"   not-null="true" length="3"/>
+    <property name="version" column="DNV_VERSIO" not-null="true" length="2"/>
+    <property name="obligatorio" column="DNV_OBLIGA" not-null="true" length="1"/>
+    <property name="obligatorioScript" type="binary" column="DNV_OBLSCR"/>
+    <property name="firmar" column="DNV_FIRMAR" not-null="true" length="1"/>
+    <property name="firmante" column="DNV_FIRMTE" length="500"/>
+    <property name="formularioGestorFormulario" column="DNV_FORGST" length="20"/>    
+    <property name="formularioFormsModelo" column="DNV_FORFOR" length="20"/>
+    <property name="formularioFormsVersion" column="DNV_FORVER" length="2"/>
+    <property name="formularioDatosInicialesScript" type="binary" column="DNV_FORINI"/>
+    <property name="formularioConfiguracionScript" type="binary" column="DNV_FORCON"/>    
+    <property name="formularioValidacionPostFormScript" type="binary" column="DNV_FORPOS"/>
+    <property name="formularioModificacionPostFormScript" type="binary" column="DNV_FORMOD"/>
+    <property name="formularioPlantillaScript" type="binary" column="DNV_FORPLA"/>
+    <property name="pagoCalcularPagoScript" type="binary" column="DNV_PAGDAT"/>
+    <property name="pagoMetodos" column="DNV_PAGTIP" length="1"/>
+    
+    <property name="flujoTramitacionScript" type="binary" column="DNV_FLUTRA"/>
+    <property name="contentType" column="DNV_FIRCTY" length="500"/>
+    
+    <many-to-one name="documento" column="DNV_CODDOC" not-null="true"/>
+    
+    <map name="traducciones" cascade="all" table="STR_TRADNV">
+          <cache usage="read-write"/>
+          <key column="TDN_CODDNV"/>
+          <index column="TDN_CODIDI" type="string" length="2"/>
+          <composite-element class="es.caib.sistra.model.TraDocumentoNivel">
+              <property name="informacion" length="1000" column="TDN_INFO"/>
+          </composite-element>
+     </map>
+    
+</class>
+</hibernate-mapping>

@@ -1,0 +1,206 @@
+<p>Aquestes propietats es poden establir de forma genèrica per a tots els nivells  
+  d'autenticació suportats i també es poden particularizar per nivells, 
+  de manera que si una propietat no aquesta farcida per a un nivell es prendrà el valor  
+  de la propietat de les especificacions genèriques. <br/>
+  Perquè un nivell d'autenticació aquest suportat pel tràmit ha d'aparèixer  
+  habilitat en una especificació per nivell. </p>
+<p><br/>
+</p>
+<table width="100%" border="1">
+  <tr> 
+    <td width="22%"><div align="center"><strong>Camp</strong></div></td>
+    <td width="78%"><div align="center"><strong>Descripci&oacute;</strong></div></td>
+  </tr>
+  <tr> 
+    <td>Actiu</td>
+    <td>Indica si el tr&agrave;mit est&agrave; actiu o no</td>
+  </tr>
+  <tr> 
+    <td>Flux de tramitaci&oacute;</td>
+    <td>Indica si el tr&agrave;mit permet flux de tramitaci&oacute;: permet que 
+      el tr&agrave;mit es vagi remetent a diferents usuaris perqu&egrave; sigui 
+      completat (nom&eacute;s amb autenticaci&oacute;) </td>
+  </tr>
+  
+  
+   <tr> 
+    <td>Dies de persist&egrave;ncia</td>
+    <td>
+    Indica el nombre de dies que se permitir&aacute; que el tr&agrave;mit es mantinga sense modificar-se en la zona de persist&egrave;ncia. 
+    Una vegada haja passat estos dies el tr&agrave;mit ser&aacute; eliminat. 
+	<br/>
+    Per a que es tinga en compte ha de agafar un valor major que 0.     </td>
+  </tr>
+  <tr> 
+    <td>Dies de preregistre</td>
+    <td>
+    Indica el nombre de dies que, una vegada enviat el tr&agrave;mit, aquest es mantindr&aacute; en la zona de preregistre
+      per a que el ciutad&aacute; vaja al punt de registre a confirmar-lo mitjançant el lliurament de la documentaci&oacute; presencial. 
+      <br/>
+      La data limit de presentaci&oacute; resultant no excedir&aacute; de la data de fin de termini 
+      (si volem que es puga confirmar durant tot el termini haurem d'establir tants dies de preregistre com dies tinga el termini).
+      <br/>
+      Per a que es tinga en compte ha de agafar un valor major que 0. </td>
+  </tr>
+  
+  <tr> 
+    <td>Script de validació d'inici</td>
+    <td>
+    	<p>
+    		Permet realitzar una validaci&oacute; abans d'iniciar (o carregar de persistencia) un tr&agrave;mit. 
+	      	El tipus d'aquest camp és <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaScript.jsp">script</a> 
+      		i no espera cap resultat. En cas de no permetre iniciar-se ha de generar 
+      		un error.      	
+      	</p>
+      	<p>
+		    En este script a m&eacute;s  es permiteix establir propietats d'un tr&agrave;mit de forma din&agrave;mica. 
+    		El plugin <em>CONFIGURACION_DINAMICA</em> permiteix establir aquestes propietats:
+    	</p> 
+      	<p>
+   			Els m&eacute;tods disponibles son:
+   			<br/>
+		   	<em>
+		   		// Establir termini presentacio dinamicament<br/>
+		   		// (format dates: YYYYMMDDHHMISS)<br/>
+		   		CONFIGURACION_DINAMICA.setPlazoDinamico(true);<br/>
+		   		CONFIGURACION_DINAMICA.setPlazoInicio('20070115080000');<br/>
+		        CONFIGURACION_DINAMICA.setPlazoFin('20070115235959');<br/>
+		      </em>    	
+		 </p>
+      </td>
+  </tr>
+  <tr> 
+    <td>Procedència geogr&agrave;fica</td>
+    <td>
+    	<p>Per a crear el seient de tràmits de <strong>tipus registre</strong> 
+        és necessari calcular la procedència geogr&agrave;fica.. Per a això cal 
+        indicar els valors dels codis de província, localitat i pais. El tipus 
+        d'aquestos camps és <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaScript.jsp">script</a> 
+        i espera com resultat el valor del codi corresponent. 
+       </p>
+      <p>Aquesta dada és <strong>obligatori</strong> especificar-la (bé en les 
+        especificacions gen&egrave;riques o per nivell) <strong>per als tràmits 
+        de tipus registre</strong>. Per la resta de tràmits s'inclourá en el 
+        seient si existeix.
+       </p>
+         <p>
+        Els codis de prov&iacute;ncia, localitat i pa&iacute;s estan basats en la codificaci&oacute; INE. Existeixen dominis gen&egrave;rics per a l'obtenci&oacute; d'aquestes llistes de valors:
+        <ul>
+        <li>Pa&iacute;s: Domini GEPAISES</li>
+        <li>Provincies (Espanya): Domini GEPROVINCI</li>
+        <li>Municipis d'una prov&iacute;nci: Dominio GEGMUNICI</li>
+        </ul>
+        </p>        
+        </td>
+  </tr>
+  <tr> 
+    <td>Referència representant</td>
+    <td><p>Per a crear el seient caldrà indicar qui és el representant. Per a 
+        això cal indicar els valors dels camps del formulari que continguin el 
+        NIF i el nom complet del representant. El tipus d'aquests camps és <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaScript.jsp">script</a> 
+        i espera en cada cas el valor del NIF i el nom complet (segons format seient registral). </p>
+        
+      <p>Aquesta dada és <strong>obligatori</strong> especificar-la en els tr&agrave;mits autenticats (en les 
+        especificacions gen&egrave;riques o per nivell). <br>
+        <br>
+        L'&uacute;nica excepci&oacute; permesa és per a l'accés An&ograve;nim. 
+        Si la destinaci&oacute; &eacute;s registre el nif podrà ser opcional però el nom ser&agrave; obligatori. 
+        Si la destinaci&oacute; no &eacute;s registre el nif i el nom podran ser opcionals. 
+        Per a no establir el nif o el nom s'haur&agrave; de deixar buit el script o b&eacute; que el script retorni la cadena "NO-VALOR".</p></td>
+  </tr>
+  <tr> 
+    <td>Refer&egrave;ncia representat</td>
+    <td><p>En cas de que existeixi representaci&oacute; &eacute;s necessari indicar qui 
+        &eacute;s el representat. Per a aix&ograve; cal indicar les <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaReferencia.jsp">referències</a> 
+        dels camps del formulari que continguin el DNI i el nom complet del representat (segons format seient registral).</p></td>
+  </tr>
+   
+   <tr> 
+    <td>Script de destinatari tr&agrave;mit</td>
+    <td>
+    	<p>
+    		Aquest script permet establir din&agrave;micament el destinatari del tr&agrave;mit: procediment, oficina registral, organ destinació 
+    		i unitat administrativa. Encara que s'estableixi din&agrave;micament per script s'haurien d'establir uns valors 
+    		inicials en la fitxa de la versi&oacute; del tr&agrave;mit. Per defecte el destinatari tindr&agrave; aquests valors.
+    	</p>
+    	<p>
+    		El tipus d'aquest camp &eacute;s <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> 
+    		i no s'espera cap resultat. En cas d'error s'ha de generar un error de script. 
+    		<br/>
+			Per a establir els valors del destinatari es disposar&agrave; del plugin <em>DESTINATARIO_TRAMITE</em>.		    
+    	</p>	 
+   		<p>
+   			Els m&egrave;todes disponibles s&oacute;n:
+   			<br/>
+		   	<em>
+		   		// Establecer destinatario dinamicamente<br/>
+		   		DESTINATARIO_TRAMITE.setProcedimiento('PROC1');<br/>
+		   		DESTINATARIO_TRAMITE.setOficinaRegistral('OF1');<br/>
+		   		DESTINATARIO_TRAMITE.setOrganoDestino('1');<br/>
+		        DESTINATARIO_TRAMITE.setUnidadAdministrativa('2');<br/>
+		      </em>    	
+		 </p>
+	  </td>
+  </tr>
+  
+   
+   
+  <tr>
+    <td>Url fi</td>
+    <td>Al finalitzar el tr&agrave;mit es redirigeix per defecte al portal del organisme. Mitjan&ccedil;ant aquest <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> es pot particularitzar aquesta redirecci&oacute;. S'ha de tornar una cadena indicant la url de finalitzaci&oacute;.  Si es retorna la cadena "[ZONAPER]" es redirigir&agrave; a la zona personal mostrant el tr&agrave;mit.</td>
+  </tr>
+  <tr>
+    <td>Script validaci&oacute; de fin</td>
+    <td><p>Permet realitzar una   validaci&oacute; abans de finalitzar el tr&agrave;mit (previ a l'enviament/registre). El tipus   d'aquest camp &eacute;s <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a>  i no s'espera cap resultat. En cas de no permetre   finalitzar s'ha de generar un error i indicar el missatge oport&uacute;.</p>    </td>
+  </tr>  
+  <tr>
+    <td>Notificaci&oacute; telem&agrave;tica</td>
+    <td>    
+      	<p>
+     		Indica si un tr&agrave;mit pot   generar notificacions telem&agrave;tiques. En cas de permetre's es recollir&agrave; la conformitat del ciutad&agrave; per a   ser notificat telem&agrave;ticament.
+     	</p>
+     	<p>
+     		En cas que Sistra estigui configurat perqu&egrave; siguin obligatoris els avisos per a les notificacions es permetr&agrave;:
+     		<ul>
+     			<li>indicar si s'ha de recollir el m&ograve;bil per als avisos.</li>
+     			<li>introduir els scripts per a establir els valors per defecte del email/sms (sino s'agafaran els valors de la zona personal).</li>
+     		</ul>
+     	</p>    
+    </td>
+  </tr>
+  <tr> 
+    <td>Dades justificant</td>
+    <td>Permet generar dades particularitzades en el Justificant de Registre segons 
+      les dades dels formularis.</td>
+  </tr>
+  <tr> 
+    <td height="71">Instruccions Inici (texte HTML)</td>
+    <td>Es poden indicar instruccions que apareixeran en el pas inicial &quot;Ha 
+      de saber&quot;.</td>
+  </tr>
+  <tr> 
+    <td>Oficina Registre</td>
+    <td>Oficina de registre. Camp Oficina. Relacionat amb taula de Registre amb 
+      BORGANI- FAXCORGA. Per a tr&agrave;mits que no passen per registre pot agafar 
+      qualsevol valor.</td>
+  </tr>
+  <tr> 
+    <td>Missatge Inactivitat</td>
+    <td>En cas de marcar un tr&agrave;mit com inactiu es permet particularitzar 
+      el missatge que li apareixer&agrave; a l'usuari.</td>
+  </tr>
+  <tr>
+    <td>Instruccions fi</td>
+    <td>Permet personalitzar el missatge de finalitzaci&oacute; del tr&agrave;mit 
+      <br>Aquest missatge apareixerà en el justificant  </td>
+  </tr>
+  <tr> 
+    <td>Instruccions presentació (texte HTML)</td>
+    <td>Quan calgui lliurar documentaci&oacute; presencial poden establir-se instruccions 
+      de lliurament especifiques.</td>
+  </tr>
+  <tr>
+    <td>Data l&iacute;mit lliurament   presencial </td>
+    <td>Quan calgui lliurar documentaci&oacute; presencial poden establir un missatge particularitzat per a la data l&iacute;mit de lliurament en   lloc del missatge est&agrave;ndard: &quot;La data l&iacute;mit de lliurament &eacute;s ...&quot;</td>
+  </tr>
+</table>

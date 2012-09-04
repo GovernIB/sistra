@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="urn:es:caib:regtel:ws:v2:model:DetalleAcuseRecibo" xmlns:ns1="urn:es:caib:regtel:ws:v2:model:ReferenciaRDS" xmlns:tns="urn:es:caib:regtel:ws:v2:model:DetalleAcuseRecibo" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0">
+	<xs:import namespace="urn:es:caib:regtel:ws:v2:model:ReferenciaRDS" schemaLocation="ReferenciaRDS.xsd"/>
+	<xs:complexType name="DetalleAcuseRecibo">
+		<xs:sequence>
+			<xs:element name="estado" type="tns:TipoEstadoNotificacion"/>
+			<xs:element name="fechaAcuseRecibo" type="xs:dateTime" nillable="true" minOccurs="0"/>
+			<xs:element name="ficheroAcuseRecibo" type="ns1:ReferenciaRDS" nillable="true" minOccurs="0"/>
+			<xs:element name="avisos" type="tns:DetalleAvisos" nillable="true" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DetalleAvisos">
+		<xs:sequence>
+			<xs:element name="aviso" type="tns:DetalleAviso" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>	
+	<xs:complexType name="DetalleAviso">
+		<xs:sequence>
+			<xs:element name="tipo" type="tns:TipoAviso"/>
+			<xs:element name="destinatario" type="xs:string"/>
+			<xs:element name="enviado" type="xs:boolean"/>
+			<xs:element name="fechaEnvio" type="xs:dateTime" nillable="true" minOccurs="0"/>
+			<xs:element name="confirmarEnvio" type="xs:boolean"/>
+			<xs:element name="confirmadoEnvio" type="tns:TipoConfirmacionAviso" nillable="true" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="TipoEstadoNotificacion">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="PENDIENTE"/>
+			<xs:enumeration value="ENTREGADA"/>
+			<xs:enumeration value="RECHAZADA"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TipoAviso">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="EMAIL"/>
+			<xs:enumeration value="SMS"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TipoConfirmacionAviso">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="DESCONOCIDO"/>
+			<xs:enumeration value="ENVIADO"/>
+			<xs:enumeration value="NO_ENVIADO"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>
+

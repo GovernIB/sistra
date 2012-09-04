@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+    <!-- Componente que muestra las pestañas de idiomas, select es la seleccionada -->
+    <definition name=".langtabs" path="/moduls/langtabs.jsp"
+        controllerClass="org.ibit.rol.form.back.action.ListaIdiomasController">
+        <put name="select" value=""/>
+    </definition>
+
+    <definition name=".editar" path="/layouts/editarLayout.jsp">
+        <put name="title" value="-- no definido --"/>
+        <put name="alta.title" value="-- no definido --"/>
+        <put name="modificacion.title" value="-- no definido --"/>
+        <put name="subtitle" value="-- no definido --"/>
+        <put name="validateMethod" value="-- no definido --"/>
+        <put name="form.action" value="-- no definido --"/>
+        <put name="form.bean" value="-- no definido --"/>
+        <put name="paginaValues" value=""/>
+        <put name="paginaTraduccion" value=""/>
+        <putList name="listaRelaciones">
+            <!-- Lista de elementos relacionados -->
+        </putList>
+        <putList name="listaRelaciones2">
+            <!-- Lista de elementos relacionados -->
+        </putList>
+    </definition>
+
+    <!-- ====================== FORMULARIO =================== -->
+    <definition name=".formulario.editar" extends=".editar"
+    	 controllerClass="org.ibit.rol.form.back.action.formulario.FormularioController">
+        <put name="title" value="formulario.title"/>
+        <put name="alta.title" value="formulario.alta"/>
+        <put name="modificacion.title" value="formulario.modificacion"/>
+        <put name="subtitle" value="formulario.subtitulo"/>
+        <put name="validateMethod" value="validateFormularioForm"/>
+        <put name="form.action" value="/back/formulario/editar"/>
+        <put name="form.bean" value="formularioForm"/>
+        <put name="paginaValues" value="/formulario/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/formulario/editarTraduccion.jsp"/>
+        <putList name="listaRelaciones">
+            <add value=".pantalla.lista" type="definition" />
+            <add value=".puntosalida.formulario.lista" type="definition"/>
+        </putList>        
+    </definition>
+
+    <definition name=".formulario.lista" path="/formulario/lista.jsp"
+        controllerClass="org.ibit.rol.form.back.action.formulario.ListaFormulariosController"/>
+
+    
+
+    <definition name=".formulario.versiones" path="/formulario/versiones.jsp"
+        controllerClass="org.ibit.rol.form.back.action.formulario.VersionesFormularioController"/>
+
+    <definition name=".formulario.importar" path="/formulario/importar.jsp"/>
+
+    <definition name=".formulario.controlDuplicados" path="/formulario/controlDuplicados.jsp"/>
+
+    <!-- ====================== FORMULARIO SEGURO=================== -->
+       <definition name=".formularioseguro.editar" extends=".editar" 
+       		controllerClass="org.ibit.rol.form.back.action.formularioseguro.FormularioSeguroController">
+           <put name="title" value="formulario.title"/>
+           <put name="alta.title" value="formulario.alta"/>
+           <put name="modificacion.title" value="formulario.modificacion"/>
+           <put name="subtitle" value="formulario.subtitulo"/>
+           <put name="validateMethod" value="validateFormularioSeguroForm"/>
+           <put name="form.action" value="/back/formularioseguro/editar"/>
+           <put name="form.bean" value="formularioSeguroForm"/>
+           <put name="paginaValues" value="/formularioseguro/editarValues.jsp"/>
+           <put name="paginaTraduccion" value="/formularioseguro/editarTraduccion.jsp"/>
+           <putList name="listaRelaciones">
+               <add value=".pantalla.lista" type="definition" />
+               <add value=".puntosalida.formulario.lista" type="definition"/>
+               <add value=".grupo.listaFormulario" type="definition" />
+               <add value=".grupo.listaUsuarios" type="definition" />
+           </putList>
+       </definition>
+
+
+    <!-- ====================== PANTALLA =================== -->
+    <definition name=".pantalla.editar" extends=".editar" 
+    	controllerClass="org.ibit.rol.form.back.action.pantalla.PantallaController">
+        <put name="title" value="pantalla.title"/>
+        <put name="alta.title" value="pantalla.alta"/>
+        <put name="modificacion.title" value="pantalla.modificacion"/>
+        <put name="subtitle" value="pantalla.subtitulo"/>
+        <put name="validateMethod" value="validatePantallaForm"/>
+        <put name="form.action" value="/back/pantalla/editar"/>
+        <put name="form.bean" value="pantallaForm"/>
+        <put name="paginaValues" value="/pantalla/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/pantalla/editarTraduccion.jsp"/>
+        <putList name="listaRelaciones">
+            <add value=".componente.lista" type="definition" />
+        </putList>
+    </definition>
+
+    <definition name=".pantalla.lista" path="/pantalla/lista.jsp" controllerClass="org.ibit.rol.form.back.action.pantalla.ListaPantallasController">
+        <put name="id" value="" />
+    </definition>
+
+
+	
+
+    <!-- ====================== PALETAS ================== -->
+    <definition name=".paleta.lista" path="/paleta/lista.jsp" controllerClass="org.ibit.rol.form.back.action.ListaPaletasController">
+    </definition>
+
+    <definition name=".paleta.listaComponentes" path="/paleta/listaComponentes.jsp" controllerClass="org.ibit.rol.form.back.action.paleta.componente.ListaComponentesController">
+        <put name="id" value=""/>
+    </definition>
+
+    <!-- ====================== COMPONENTES ================== -->
+
+    <definition name=".componente.lista" path="/componente/lista.jsp" controllerClass="org.ibit.rol.form.back.action.componente.ListaComponentesController">
+        <put name="id" value="" />
+    </definition>
+
+     <definition name=".componente.listaEleccion" path="/componente/listaEleccion.jsp"/>
+
+    <!-- ======================== LABEL ====================== -->
+    <definition name=".label.editar" extends=".editar"
+    	controllerClass="org.ibit.rol.form.back.action.componente.ComponenteController">
+        <put name="title" value="label.titulo"/>
+        <put name="alta.title" value="label.alta"/>
+        <put name="modificacion.title" value="label.modificacion"/>
+        <put name="subtitle" value="label.subtitulo"/>
+        <put name="validateMethod" value="validateLabelForm"/>
+        <put name="form.action" value="/back/label/editar"/>
+        <put name="form.bean" value="labelForm"/>
+        <put name="paginaValues" value="/label/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/label/editarTraduccion.jsp"/>
+    </definition>
+
+    <!-- ====================== TEXTBOX ====================== -->
+    <definition name=".textbox.editar" extends=".editar" 
+    	controllerClass="org.ibit.rol.form.back.action.componente.ComponenteController">
+        <put name="title" value="textbox.titulo"/>
+        <put name="alta.title" value="textbox.alta"/>
+        <put name="modificacion.title" value="textbox.modificacion"/>
+        <put name="subtitle" value="textbox.subtitulo"/>
+        <put name="validateMethod" value="validateTextboxForm"/>
+        <put name="form.action" value="/back/textbox/editar"/>
+        <put name="form.bean" value="textboxForm"/>
+        <put name="paginaValues" value="/textbox/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/textbox/editarTraduccion.jsp"/>
+    </definition>
+
+    <!-- ====================== CHECKBOX ===================== -->
+    <definition name=".checkbox.editar" extends=".editar"
+    	controllerClass="org.ibit.rol.form.back.action.componente.ComponenteController">
+        <put name="title" value="checkbox.titulo"/>
+        <put name="alta.title" value="checkbox.alta"/>
+        <put name="modificacion.title" value="checkbox.modificacion"/>
+        <put name="subtitle" value="checkbox.subtitulo"/>
+        <put name="validateMethod" value="validateCheckboxForm"/>
+        <put name="form.action" value="/back/checkbox/editar"/>
+        <put name="form.bean" value="checkboxForm"/>
+        <put name="paginaValues" value="/checkbox/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/checkbox/editarTraduccion.jsp"/>
+    </definition>
+
+    <!-- ====================== FILEBOX ===================== -->
+    <definition name=".filebox.editar" extends=".editar"
+	    controllerClass="org.ibit.rol.form.back.action.componente.ComponenteController">
+        <put name="title" value="filebox.titulo"/>
+        <put name="alta.title" value="filebox.alta"/>
+        <put name="modificacion.title" value="filebox.modificacion"/>
+        <put name="subtitle" value="filebox.subtitulo"/>
+        <put name="validateMethod" value="validateFileboxForm"/>
+        <put name="form.action" value="/back/filebox/editar"/>
+        <put name="form.bean" value="fileboxForm"/>
+        <put name="paginaValues" value="/filebox/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/filebox/editarTraduccion.jsp"/>
+    </definition>
+
+    <!-- ====================== COMBOBOX ===================== -->
+    <definition name=".combobox.editar" extends=".editar"
+    	controllerClass="org.ibit.rol.form.back.action.componente.ComponenteController">
+        <put name="title" value="combobox.titulo"/>
+        <put name="alta.title" value="combobox.alta"/>
+        <put name="modificacion.title" value="combobox.modificacion"/>
+        <put name="subtitle" value="combobox.subtitulo"/>
+        <put name="validateMethod" value="validateComboboxForm"/>
+        <put name="form.action" value="/back/combobox/editar"/>
+        <put name="form.bean" value="comboboxForm"/>
+        <put name="paginaValues" value="/combobox/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/combobox/editarTraduccion.jsp"/>
+        <putList name="listaRelaciones">
+            <add value=".valorposible.lista" type="definition" />
+        </putList>
+    </definition>
+
+    <!-- ====================== LISTBOX ====================== -->
+    <definition name=".listbox.editar" extends=".editar"
+    	controllerClass="org.ibit.rol.form.back.action.componente.ComponenteController">
+        <put name="title" value="listbox.titulo"/>
+        <put name="alta.title" value="listbox.alta"/>
+        <put name="modificacion.title" value="listbox.modificacion"/>
+        <put name="subtitle" value="listbox.subtitulo"/>
+        <put name="validateMethod" value="validateListboxForm"/>
+        <put name="form.action" value="/back/listbox/editar"/>
+        <put name="form.bean" value="listboxForm"/>
+        <put name="paginaValues" value="/listbox/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/listbox/editarTraduccion.jsp"/>        
+		<putList name="listaRelaciones">
+            <add value=".valorposible.lista" type="definition" />
+        </putList>
+    </definition>
+    
+    <!-- ====================== TREEBOX ====================== -->
+    <definition name=".treebox.editar" extends=".editar"
+    	controllerClass="org.ibit.rol.form.back.action.componente.ComponenteController">
+        <put name="title" value="treebox.titulo"/>
+        <put name="alta.title" value="treebox.alta"/>
+        <put name="modificacion.title" value="treebox.modificacion"/>
+        <put name="subtitle" value="treebox.subtitulo"/>
+        <put name="validateMethod" value="validateTreeboxForm"/>
+        <put name="form.action" value="/back/treebox/editar"/>
+        <put name="form.bean" value="treeboxForm"/>
+        <put name="paginaValues" value="/treebox/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/treebox/editarTraduccion.jsp"/>
+        <putList name="listaRelaciones">
+            <add value=".valorposible.lista" type="definition" />
+        </putList>
+    </definition>
+    
+    <!-- ====================== LISTA ELEMENTOS ====================== -->
+    <definition name=".listaelementos.editar" extends=".editar"
+    	controllerClass="org.ibit.rol.form.back.action.componente.ComponenteController">
+        <put name="title" value="listaelementos.titulo"/>
+        <put name="alta.title" value="listaelementos.alta"/>
+        <put name="modificacion.title" value="listaelementos.modificacion"/>
+        <put name="subtitle" value="listaelementos.subtitulo"/>
+        <put name="validateMethod" value="validateListaelementosForm"/>
+        <put name="form.action" value="/back/listaelementos/editar"/>
+        <put name="form.bean" value="listaelementosForm"/>
+        <put name="paginaValues" value="/listaelementos/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/listaelementos/editarTraduccion.jsp"/>        
+    </definition>
+   
+    <!-- ====================== RADIOBUTTON ================== -->
+    <definition name=".radiobutton.editar" extends=".editar"
+    	controllerClass="org.ibit.rol.form.back.action.componente.ComponenteController">
+        <put name="title" value="radiobutton.titulo"/>
+        <put name="alta.title" value="radiobutton.alta"/>
+        <put name="modificacion.title" value="radiobutton.modificacion"/>
+        <put name="subtitle" value="radiobutton.subtitulo"/>
+        <put name="validateMethod" value="validateRadiobuttonForm"/>
+        <put name="form.action" value="/back/radiobutton/editar"/>
+        <put name="form.bean" value="radiobuttonForm"/>
+        <put name="paginaValues" value="/radiobutton/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/radiobutton/editarTraduccion.jsp"/>
+        <putList name="listaRelaciones">
+            <add value=".valorposible.lista" type="definition" />
+        </putList>
+    </definition>
+
+    <!-- ==================== VALOR POSIBLE ================= -->
+    <definition name=".valorposible.editar" extends=".editar"
+    	controllerClass="org.ibit.rol.form.back.action.valorposible.ValorPosibleController">
+        <put name="title" value="valorposible.titulo"/>
+        <put name="alta.title" value="valorposible.alta"/>
+        <put name="modificacion.title" value="valorposible.modificacion"/>
+        <put name="subtitle" value="valorposible.subtitulo"/>
+        <put name="validateMethod" value="validateValorPosibleForm"/>
+        <put name="form.action" value="/back/valorposible/editar"/>
+        <put name="form.bean" value="valorPosibleForm"/>
+        <put name="paginaValues" value="/valorposible/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/valorposible/editarTraduccion.jsp"/>
+    </definition>
+
+     <definition name=".salida.editar" path="/puntosalida/editarValues.jsp"
+     	controllerClass="org.ibit.rol.form.back.action.puntosalida.SalidaController">
+        <putList name="listaRelaciones">
+            <add value=".salida.propiedades.lista" type="definition" />
+        </putList>
+    </definition>
+
+    <!-- ==================== PROPIEDAD SALIDA ================= -->
+    <definition name=".propiedadsalida.editar" extends=".editar"
+    	controllerClass="org.ibit.rol.form.back.action.propiedadsalida.PropiedadSalidaController">
+        <put name="title" value="propiedadsalida.titulo"/>
+        <put name="alta.title" value="propiedadsalida.alta"/>
+        <put name="modificacion.title" value="propiedadsalida.modificacion"/>
+        <put name="subtitle" value="propiedadsalida.subtitulo"/>
+        <put name="validateMethod" value="validatePropiedadSalidaForm"/>
+        <put name="form.action" value="/back/propiedadsalida/editar"/>
+        <put name="form.bean" value="propiedadSalidaForm"/>
+        <put name="paginaValues" value="/propiedadsalida/editarValues.jsp"/>
+        <put name="paginaTraduccion" value=""/>
+    </definition>
+
+
+    <definition name=".valorposible.lista" path="/valorposible/lista.jsp" controllerClass="org.ibit.rol.form.back.action.valorposible.ListaValoresPosiblesController"/>
+
+    <definition name=".puntosalida.formulario.lista" path="/puntosalida/lista.jsp" controllerClass="org.ibit.rol.form.back.action.ListaSalidasFormularioController" />
+
+    <definition name=".puntosalida.lista" path="/puntosalida/listacompleta.jsp"  controllerClass="org.ibit.rol.form.back.action.ListaPuntosSalidaController" />
+
+    <definition name=".salida.propiedades.lista" path="/puntosalida/propiedades.jsp" controllerClass="org.ibit.rol.form.back.action.propiedadsalida.ListaPropiedadesSalidaController"/>
+
+	<!-- ==================== ERROR ================= -->
+    
+	<definition name=".idOperacion.error" path="/errorIdOperacion/error.jsp"/>
+
+	
+</tiles-definitions>

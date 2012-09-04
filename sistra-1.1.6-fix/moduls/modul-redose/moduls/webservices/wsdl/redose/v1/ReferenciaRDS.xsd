@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:es:caib:redose:ws:v1:model:ReferenciaRDS" targetNamespace="urn:es:caib:redose:ws:v1:model:ReferenciaRDS" version="1.0">
+	<xs:complexType name="ReferenciaRDS">
+		<xs:sequence>
+			<xs:element name="codigo" type="xs:long"/>
+			<xs:element name="clave" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,10 @@
+<global-exceptions>
+        
+    <exception 
+        key="errors.delegate" 
+        type="es.caib.mobtratel.persistence.delegate.DelegateException"
+        path="/error.jsp"
+        handler="es.caib.mobtratel.action.DelegateExceptionHandler"
+    />
+        
+</global-exceptions>

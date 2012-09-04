@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="es.caib.mobtratel.model.Envio" table="MOB_ENVIOS">
+        <cache usage="read-write"/>
+    
+        <id name="codigo" unsaved-value="null" column="ENV_ID">
+          <generator class="sequence">
+              <param name="sequence">MOB_SEQENV</param>
+          </generator>
+      </id>
+
+        <property name="nombre" column="ENV_NOMBRE"/>
+        <property name="fechaProgramacionEnvio" column="ENV_FCPROG"/>
+        <property name="fechaEnvio" column="ENV_FCENV"/>
+        <property name="fechaCaducidad" column="ENV_FCCAD"/>
+        <property name="estado" not-null="true" column="ENV_ESTADO"/>
+        <property name="usuarioSeycon" column="ENV_SEYCON"/>
+        <property name="fechaRegistro" column="ENV_FCREG"/>
+        <property name="inmediato" column="ENV_INMED"/>
+        
+        <many-to-one name="cuenta" column="ENV_CODCUE" not-null="true"  foreign-key="MOB_ENVCUE_FK"/>
+        
+        <set name="emails" inverse="true" cascade="all-delete-orphan"  lazy="false" order-by="MSE_CODIGO DESC">
+            <key column="MSE_IDENV"/>
+            <one-to-many class="es.caib.mobtratel.model.MensajeEmail" />
+        </set>
+
+        <set name="smss" inverse="true" cascade="all-delete-orphan"  lazy="false" order-by="MSS_CODIGO DESC">
+            <key column="MSS_IDENV"/>
+            <one-to-many class="es.caib.mobtratel.model.MensajeSms" />
+        </set>
+        
+
+    </class>
+
+</hibernate-mapping>

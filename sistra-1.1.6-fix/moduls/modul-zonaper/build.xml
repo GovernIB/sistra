@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="modul-zonaper" default="main" basedir=".">
+
+	<property name="projecte" value="${ant.project.name}"/>
+    <property file="${basedir}/../../config.properties"/>
+    <property file="${basedir}/config.properties"/>
+
+	<property name="lib" location="${basedir}/../../lib"/>
+	<property name="etc" location="${basedir}/etc"/>
+    <property name="etc.jboss" location="${etc}/jboss-${jboss.version}"/>
+
+	<property name="output.dir" location="${basedir}/output"/>
+	<property name="product.dir" location="${output.dir}/product"/>
+	<property name="moduls.dir" location="${output.dir}/moduls"/>
+
+	<property name="doc.dir" location="${output.dir}/doc"/>
+
+	<property name="distribucion.dir" location="${basedir}/../../product"/>
+	
+	<property name="docItf.dir" location="${output.dir}/docInterfaz"/>
+		<property name="package" value="es.caib.zonaper"/>
+		<property name="persistence.dir" location="${basedir}/moduls/persistence/src/es/caib/zonaper/persistence"/>
+	    <property name="delegate.dir" location="${persistence.dir}/delegate"/>
+	    <property name="intf.dir" location="${persistence.dir}/intf"/>
+	    <property name="ouput.intf.dir" location="${output.dir}/persistence/gen-src/es/caib/zonaper/persistence/intf"/>
+	    <property name="model.modelInterfaz.dir" location="${basedir}/moduls/model/src/es/caib/zonaper/modelInterfaz"/>
+	
+
+	<target name="properties" description="Muestra las propiedades del sistema">
+		<echo>
+            -----------------------------------------------------
+            Propiedades del sistema:
+
+            basedir=${basedir}
+            ant.file=${ant.file}
+            ant.version=${ant.version}
+            ant.project.name=${ant.project.name}
+            ant.java.version=${ant.java.version}
+            -----------------------------------------------------
+        </echo>
+	</target>
+	<target name="prepare" description="Crea los directorios necesarios para la construcción de la aplicación">
+		<mkdir dir="${output.dir}"/>
+		<mkdir dir="${product.dir}"/>
+		<mkdir dir="${moduls.dir}"/>
+		<mkdir dir="${doc.dir}"/>
+		<antcall target="propagate">
+			<param name="task" value="prepare"/>
+		</antcall>
+	</target>
+	<target name="clean" description="Destruye los directorios de trabajo">
+		<delete dir="${output.dir}" quiet="yes"/>
+	</target>
+	
+	<target name="update.model" description="Actualitzar el modelo de datos">
+		<ant dir="moduls/model" target="main" inheritall="false"/>
+	</target>
+	
+	<target name="update.persistence" depends="update.model" description="Actualitzar la capa de persistencia">
+		<ant dir="moduls/persistence" target="main" inheritall="false"/>
+	</target>
+	
+	<target name="assemble" description="actualitza l'ear amb les construccions recents dels components">
+		<delete file="${product.dir}/3-${projecte}.ear" quiet="yes"/>
+		<ear earfile="${product.dir}/3-${projecte}.ear" appxml="${etc}/application.xml">
+			<manifest>
+				<attribute name="Created-By" value="${indra}"/>
+			    <attribute name="Specification-Title" value="${projecte}"/>				
+			    <attribute name="Specification-Version" value="${release.version} build${release.build} ${release.date}"/>
+			</manifest>
+			<metainf dir="${etc.jboss}" includes="jboss-app.xml"/>
+			<fileset dir="${moduls.dir}"/>
+			<!-- 
+			<archives dir="${lib}" prefix="lib">
+			</archives>
+			-->
+		</ear>
+	</target>
+
+	<target name="main" depends="clean,prepare" description="realitza tot el proces de construccio">
+		<antcall target="propagate">
+			<param name="task" value="main"/>
+		</antcall>
+		<!-- <antcall target="assemble"/> -->
+		<antcall target="interfaz"/>	
+		<antcall target="docItf"/>
+		<antcall target="distribute"/>
+	</target>	
+	<target name="doc" depends="prepare" description="Genera la documentación">
+		<antcall target="propagate">
+			<param name="task" value="doc"/>
+		</antcall>
+	</target>
+	<target name="propagate">
+		<ant dir="moduls/model" target="${task}" inheritall="false"/>
+		<ant dir="moduls/persistence" target="${task}" inheritall="false"/>		
+		<ant dir="moduls/front" target="${task}" inheritall="false"/>
+		<ant dir="moduls/admin" target="${task}" inheritall="false"/>
+		<ant dir="moduls/back" target="${task}" inheritall="false"/>
+		<ant dir="moduls/filter" target="${task}" inheritall="false"/>
+		<ant dir="moduls/helpdesk" target="${task}" inheritall="false"/>
+		<ant dir="moduls/webservices" target="${task}" inheritall="false"/>
+		<ant dir="moduls/delega" target="${task}" inheritall="false"/>
+	</target>
+	
+	<target name="interfaz" depends="prepare">
+	    <delete file="${product.dir}/zonaper-client.jar" quiet="yes"/>
+        <jar
+            jarfile="${product.dir}/zonaper-client.jar"
+            basedir="${output.dir}/persistence/classes">
+            <manifest>
+                <attribute name="Created-By" value="${indra}"/>
+			    <attribute name="Specification-Title" value="${projecte}"/>				
+			    <attribute name="Specification-Version" value="${release.version} build${release.build} ${release.date}"/>
+            </manifest>	                  
+
+            <include name="**/delegate/**/Delegate.class" />
+            <include name="**/delegate/**/DelegateException.class" />
+        	<include name="**/delegate/**/DelegateFactory.class" />
+        	<include name="**/delegate/**/DelegatePADUtil.class" />
+        	<include name="**/delegate/**/PadBackOfficeUtil.class" />        	
+        	<include name="**/delegate/**/PadDelegate.class" />
+        	<include name="**/delegate/**/PadBackOfficeDelegate.class" />
+        	<include name="**/delegate/**/StatelessDelegate.class" />
+
+        	<include name="**/intf/**/PadFacade*.class" />
+        	<include name="**/intf/**/PadBackOfficeFacade*.class" />        	
+
+            <include name="**/util/**/LogInterceptor*.class" />
+            <include name="**/util/**/PadFacade*.class" />
+        	<include name="**/util/**/PadBackOfficeFacade*.class" />
+     	
+        	<include name="**/util/**/ExpedienteHelper.class" />
+        	
+            <include name="**/Hibernate.class"/>
+            <include name="**/HibernateHome.class"/>
+        </jar>
+        <jar
+        	update="true"
+            jarfile="${product.dir}/zonaper-client.jar"
+            basedir="${output.dir}/model/classes">
+            <manifest>
+                <attribute name="Created-By" value="${indra}"/>
+            </manifest>	      
+            <include name="**/modelInterfaz/**/*.class" />        	           
+        </jar>
+
+    </target>	
+		
+	 <target name="docItf" depends="prepare">
+		        <javadoc
+		            destdir="${docItf.dir}"		            
+		            windowtitle="API del componente ${modul}"
+		            doctitle="API del componente ${modul}"
+		            bottom="${indra}"
+		        	sourcefiles="
+					${delegate.dir}/DelegateException.java,
+		        	${ouput.intf.dir}/PadBackOfficeFacade.java,
+		        	${ouput.intf.dir}/PadBackOfficeFacadeHome.java,
+		        	${model.modelInterfaz.dir}/*ExpedientePAD.java"		        	
+		        	defaultexcludes="yes"/>
+		    </target>
+
+
+	<target name="distribute" description="Distribucion">
+		<copy file="${product.dir}/zonaper-client.jar" todir="${distribucion.dir}/client/ejb"/>
+		<mkdir dir="${product.dir}/client/wsdl/sistra/zonaper"/>
+		<copydir  src="moduls/webservices/wsdl/zonaper" dest="${distribucion.dir}/client/wsdl/sistra/zonaper" excludes="*.xml"/>
+				
+		<copydir  src="${output.dir}/docInterfaz"  dest="${distribucion.dir}/javadoc/zonaper-client"/>
+		<!-- <copy file="${product.dir}/3-${projecte}.ear" todir="${distribucion.dir}/ear"/> -->			
+	</target>
+	
+</project>

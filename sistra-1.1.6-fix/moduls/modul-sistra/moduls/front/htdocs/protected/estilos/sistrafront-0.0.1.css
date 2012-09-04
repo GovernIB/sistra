@@ -1,0 +1,411 @@
+/* CSS Document */
+
+/* formateig */
+
+body, form, table, caption, tr, tr, td, ul, ol, li, img, button, p, h1, h2, h3, h4, h5, h6, dl, dt, dd, object, iframe, legend, fieldset { margin:0; padding:0; outline:0; }
+img { border:0; }
+
+/* COMUNS */
+
+body { font:normal 80% 'TrebuchetMS', 'Trebuchet MS', Arial, Helvetica, sans-serif; color:#666; background-color:#fff; }
+a { color:#000; text-decoration:none; }
+a:hover { color:#c33; }
+
+input, select, textarea, button { font:normal 1em Arial, Helvetica, sans-serif; color:#000; line-height:1.3em !important; }
+
+#contenidor { width:58em; margin:1.2em auto; }
+#continguts { background-color:#fff; }
+
+#continguts p { position:relative; }
+
+/* enllaços */
+
+a { position:relative; }
+a.importante { color:#c33; }
+
+/* titols */
+
+h1 { font-size:1.3em; margin:0 0 1em 0; }
+h2 { font-size:1.2em; margin:1em 0; position:relative; }
+h2.marca { background-color:#f4f3ed; }
+h3 { font-size:1.1em; margin:0 0 1em 0; position:relative; }
+h4 { font-size:1em; margin:0 0 1em 0; }
+h1.invisible, h2.invisible, h3.invisible, h4.invisible { display:none; }
+
+#pieTitulo { display:none; }
+
+/* llistes */
+
+ul.pdf { list-style:none; margin:1em 3em; padding:0; }
+ul.pdf li { padding:.5em 0 .5em 2em; background:url(../imgs/ico_pdf.gif) no-repeat center left #fff; }
+
+/* tables */
+
+/* pàrrafs */
+
+p { margin:1em 0; }
+p.centrado { text-align:center; }
+
+
+p#titolAplicacio { font-size:1.4em; font-weight:bold; text-align:center; margin:.8em; }
+/*
+p#titolAplicacio { font-size:1.4em; font-weight:bold; padding:.2em 0 .2em 2em; margin:0; text-align: center;}
+p#titolAplicacio a { display:block; text-decoration:none; }
+*/
+
+#tramitacion #pasoInf p.ultimo { border-bottom:1px dashed #e5e5e5; padding-bottom:10px; }
+#tramitacion p#getAdobeReader { padding:10px 10px 10px 110px; background:url(../imgs/get_adobe_reader.gif) no-repeat 10px center #f8f8f8; }
+#tramitacion p.importante { background-color:#ecf4fb; text-align:center; padding:1em;}
+#tramitacion p.alerta { padding:1em 1em 1em 3.5em; background:url(../imgs/tramitacion/iconos/ico_atencion.gif) no-repeat 1em 1em #ffffe8; border:1px solid #f3f3d2; }
+#tramitacion p.error { padding:1em 1em 1em 3.5em; background:url(../imgs/tramitacion/iconos/ico_error.gif) no-repeat 1em 1em #f9f3f2; border:1px solid #ffbbb5; }
+#tramitacion p.error strong { color:#900; }
+
+/* capes */
+
+div.sep { clear:both; height:.1em; font-size:.1em; }
+div.ultimo { border-bottom:1px dashed #f4f4f4; height:1em; font-size:.2em; }
+div.sepFinal { clear:both; height:1em; background-color:#fff; }
+#tramitacion div.alerta { margin:1em 0; padding:0 1em 1em 3.5em; background:url(../imgs/tramitacion/iconos/ico_atencion.gif) no-repeat 1em 1em #ffffe8; border:1px solid #f3f3d2; }
+
+div.contactoAdministrador { position:absolute;z-index:50; padding:0 1em 1em 3.5em;  border:1em solid #ccc; top:0;left:0;display:none;background-color:#fff;}
+
+/* pestanyes */
+
+ul#capsalpestanyes { margin:.5em 0 0 0; padding:0; list-style:none; line-height:2em; }
+ul#capsalpestanyes li { display:inline; padding:.25em 1em; margin-right:1em; background-color:#e4e4e4; border-bottom:1px solid #fff; }
+ul#capsalpestanyes li.seleccionado { color:#fff; background-color:#004595; border-bottom:1px solid #004595; }
+ul#capsalpestanyes li a { color:#000; }  /* #00548e */
+
+/* capçal */
+
+/* #capsal { padding:0.5em 1em 0.8em 1em; background:url(../imgs/capsal/fondo.gif) repeat-x #003575; color:#fff; } */
+/*#capsal { padding:0; }*/
+#capsal { text-align:center; }
+
+#capsal p#ayuda { float:right; font-size:.9em; }
+#capsal p#ayuda a { color:#c33; }
+
+ul#capsalEnllasos { position:relative; background-color:#efefef; margin:0; padding:.3em .7em; text-align:right; color:#000; }
+ul#capsalEnllasos li { display:inline; list-style:none; }
+ul#capsalEnllasos li a { color:#002e63; }
+ul#capsalEnllasos li span.sep { margin:0 .5em; }
+
+
+div#capsalUsuari { font-size:.9em; text-align:center; margin-bottom:1em; }
+/* div#capsalUsuari { position:relative; font-size:.9em; padding:.3em 0 .3em 3.2em; background-color:#fff; border-bottom:1px solid #e3e3e3;  } */
+div#capsalUsuari img { vertical-align:middle; margin:0 .3em; }
+
+#titolMS { font-size:1.2em; background-color:#85bbe4; border-bottom:1px solid #fff; color:#000; padding:.3em 0 .3em 4em; font-weight:bold; }
+#capsalfranja2 { height:1em; background-color:#003575; font-size:.5em; color:#000; }
+
+/* peu */
+
+#peu { height:3em; font-size:.9em; padding-top:0.5em; border-top:1px solid #ccc; }
+#peu img#logoAD { display:none; vertical-align:text-top; }
+#peu span.sep { margin:0 .5em; }
+#peu .esquerra { float:left; width:15.5em; margin-right:1em; }
+#peu .centre { float:left; width:32.5em; line-height:1.4em; }
+#peu .dreta { float:right; width:15.2em; line-height:1.3em; }
+
+/* molla pa */
+
+ul#mollaPa { margin:0; padding:0 1em; list-style:none; line-height:2em; border-bottom:1px solid #e3e3e3; }
+ul#mollaPa li { display:inline; padding-right:1.3em; background:url(../imgs/mollapa/flecha.gif) no-repeat right center #fff; }
+
+/* CONTINGUTS */
+
+h1.autenticacio, h1.certDig, h1.usuCont, h1.anonim, h1.document, h1.ayuda  
+{ position:relative; font-size:1.4em; font-weight:normal; padding:.5em 0 0 0; }
+h1.autenticacio { /*background:url(../imgs/titulo/01autenticacion.gif) no-repeat #fff;*/ }
+h1.certDig { /*background:url(../imgs/titulo/02_01cd.gif) no-repeat #fff;*/ }
+h1.usuCont { /*background:url(../imgs/titulo/02_02uc.gif) no-repeat #fff;*/ }
+h1.anonim { /*background:url(../imgs/titulo/02_03an.gif) no-repeat #fff;*/ }
+h1.document { /*background:url(../imgs/titulo/03document.gif) no-repeat #fff;*/ }
+h1.ayuda { /*background:url(../imgs/titulo/ayuda.gif) no-repeat #fff;*/ }
+h1#nomTramitPas { font-size:1em; font-weight:bold; font-style:italic; line-height:1.2em; padding:.8em 1em .8em 5em; margin:0; background:url(../imgs/index/nom_tramit.gif) no-repeat 1em .5em #FFFFE4; }
+
+/* tramitacio */
+
+#tramitacion { }
+
+/* index */
+
+p#nomTramit { padding:1em 1em 1em 4.2em; background:url(../imgs/index/nom_tramit.gif) no-repeat 1em .5em #FFFFCC; font-size:1.2em; font-weight:bold; font-style:italic; text-align:justify; width:89%; }
+
+#tramitacion #indexCD, #tramitacion #indexUC, #tramitacion #indexAN { float:left; width:30%; height:33em; padding:10px; margin-bottom:10px; }
+#tramitacion #indexCD, #tramitacion #indexUC { margin-right:1.2%; }
+#tramitacion #indexAN { width:29%; padding:10px; }
+#tramitacion #indexCD { background:url(../imgs/index/entrada_cd.gif) no-repeat left top #ecf4fb; }
+#tramitacion #indexUC { background:url(../imgs/index/entrada_uc.gif) no-repeat left top #ecf4fb; }
+#tramitacion #indexAN { background:url(../imgs/index/entrada_an.gif) no-repeat left top #ecf4fb; }
+
+#tramitacion #indexCD a, #tramitacion #indexUC a, #tramitacion #indexAN a { color:#00548e; }
+
+#tramitacion #indexCD h2, #tramitacion #indexUC h2, #tramitacion #indexAN h2 { font-size:1.3em; text-align:right; margin-top:3.5em; }
+#tramitacion #indexCD p, #tramitacion #indexUC p, #tramitacion #indexAN p { text-align:justify; }
+#tramitacion #indexCD p.separacio, #tramitacion #indexUC p.separacio, #tramitacion #indexAN p.separacio { border-top:1px dashed #b8d7ef; padding-top:10px; }
+#tramitacion #indexCD p.formBotonera, #tramitacion #indexUC p.formBotonera, #tramitacion #indexAN p.formBotonera { text-align:center; }
+
+#tramitacion #indexCD form label, #tramitacion #indexUC form label, #tramitacion #indexAN form label { display:block; float:left; width:40%; padding-right:5px; text-align:right; line-height:1.6em; }
+#tramitacion #indexCD form input.txt, #tramitacion #indexUC form input.txt { width:7em; }
+
+#continguts #datosUsuario { color:#00276c; padding:.4em 0; border-bottom:1px dashed #ccc; margin:0 1em 1em 1em; }
+#continguts #datosUsuario span#explicacion { font-size:.9em; }
+
+/* anonimo - nuevo/continuar */
+
+#tramitacion #nuevoTA { float:left; width:45%; border:1px solid #e5e5e5; padding:1em; }
+#tramitacion #continuarTA { margin-left:50%; border:1px solid #e5e5e5; padding:1em; }
+#tramitacion #listadoTA { margin-left:50%; border:1px solid #e5e5e5; padding:1em; min-height:1em; }
+#tramitacion #nuevoTA h2, #tramitacion #continuarTA h2, #tramitacion #listadoTA h2 { margin-top:0; }
+#tramitacion #nuevoTA .formBotonera, #tramitacion #continuarTA .formBotonera { text-align:center; }
+#tramitacion #continuarTA form input.txt { width:7em; }
+#tramitacion #listadoTA ul { list-style:none; margin:1em; padding:0; }
+#tramitacion #listadoTA ul li { padding:.4em 0 .4em 2.5em; background:url(../imgs/tramitacion/iconos/ico_form.gif) no-repeat left .5em #fff; }
+#tramitacion #listadoTA ul li a { color:#c33; }
+
+/* pasos */
+
+#tramitacion #pasos { float:left; width:68%; padding:0 0 10px 0; margin-top:10px; background:url(../imgs/tramitacion/index_info.gif) 10px 0px no-repeat #f4f4f4; margin-bottom:10px; }
+#tramitacion #pasos #pasosPre { height:17px; background:url(../imgs/tramitacion/index_info.gif) 10px 0px no-repeat #fff; }
+#tramitacion #pasos p { margin:20px 0 30px 70px; }
+#tramitacion #pasos div.paso { float:left; width:14em; text-align:right; font-weight:bold; }
+#tramitacion #pasos div.paso h2 { margin:0; padding:0; font-size:1.3em; }
+#tramitacion #pasos div.pasoTexto { margin-left:15.5em; text-align:justify; padding-right:20px; }
+#tramitacion #pasos div.pasoSep { display:block; clear:both; font-size:.1em; height:5px; border-bottom:1px dashed #ddc; margin:0 20px 5px 20px; }
+
+#tramitacion #iniciarTramitacion { float:right; width:25%; background-color:#eaf7ff; padding:0 20px 10px 20px; margin-top:27px; }
+#tramitacion #iniciarTramitacion p { text-align:justify; margin-top:-10px; padding:0; }
+#tramitacion #iniciarTramitacion p.iniciar a { display:block; font-weight:bold; font-size:1.3em; color:#0089d0; text-align:center; text-decoration:underline; padding-top:10px; }
+#tramitacion #iniciarTramitacion img { position:relative; top:-17px; left:-10px; margin:0; padding:0; }
+
+/* pestanyas */
+
+#tramitacion ul#pesPasos { font-family:Arial, Helvetica, sans-serif; margin:0; padding:0; }
+#tramitacion ul#pesPasos li { display:inline; float:left; width:8.5em; font-size:.9em; text-align:center; padding:5px 23px 5px 2px; background:url(../imgs/tramitacion/pestanyas/flecha.gif) no-repeat center right #f4f4f4; border-bottom:2px solid #fff; }
+#tramitacion ul#pesPasos li.ultimo { padding:5px; background:none; background-color:#f4f4f4; }
+#tramitacion ul#pesPasos li.seleccionado { background-color:#FFFFCC; color:#000; font-weight:bold; border-bottom:0; padding-bottom:7px; }
+#tramitacion ul#pesPasos li.deshabilitado { background-color:#f8f8f8; }
+#tramitacion ul#pesPasos li a {display:block; }
+
+#tramitacion div.barraAzul { clear:both; background-color:#FFFFE4; height:1em; font-size:.5em; }
+
+/* capa información */
+
+div#capaInfoFondo { position:absolute; display:none; top:0; left:0; width:100%; background-color:#000; z-index:11; padding-bottom:1em; }
+
+#tramitacion div#capaInfo { position:absolute; display:none; top:0; left:0; width:35em; background:url(../imgs/capainfo/info.gif) no-repeat center 1em #fff; border:1em solid #bec7ca; padding:3em 1em 0 1em; z-index:12; }
+#tramitacion div#capaInfo p.atencion { text-align:center; font-weight:bold; }
+#tramitacion div#capaInfo.error { background-image:url(../imgs/capainfo/error.gif); border-color:#e5d8d8; }
+#tramitacion div#capaInfo.ok { background-image:url(../imgs/capainfo/ok.gif); border-color:#bfcabe; }
+
+/* INFORMACIÓN */
+
+#tramitacion #pasoInf ul { position:relative; margin-left:2em; }
+#tramitacion #pasoInf ul ul { position:relative; }
+#tramitacion #pasoInf { }
+
+/* iconografia */
+
+#tramitacion #pasoInf #iconografia { float:right; position:relative; width:17em; margin: 0 0 2em 2em; background-color:#fff; border:1px solid #e5e5e5; padding:.5em 1em; z-index:1; }
+#tramitacion #pasoInf #iconografia h3 { margin-top:0; font-size:1em; }
+#tramitacion #pasoInf #iconografia h4 { margin-top:0; font-size:1em; }
+#tramitacion #pasoInf #iconografia ul { list-style-type:none; margin-left:0; padding-left:0; font-size:.9em; }
+#tramitacion #pasoInf #iconografia ul li { margin-bottom:5px; }
+#tramitacion #pasoInf #iconografia ul li img { margin-right:8px; }
+
+#tramitacion #pasoInf #iconografia ul.tipo { margin-top:.5em; border-top:1px dashed #e5e5e5; padding-top:.5em; }
+
+#tramitacion #pasoInf #iconografia a#iconografiaMasInfo { float:right; font-size:.9em; }
+#tramitacion #pasoInf #iconografia ul li span { display:none; color:#000; }
+
+/* navegación enlaces pasos */
+
+#tramitacion div#pasosNav { overflow:hidden; width:100%; height:3em; margin-bottom:1em; border-top:2px solid #fff; }
+#tramitacion div#pasosNav a#pasoAnterior, #tramitacion div#pasosNav a#pasoSiguiente { width:46.8%; display:block; line-height:3em; color:#000; background-color:#fff; }
+#tramitacion div#pasosNav a#pasoAnterior { float:left; text-align:right; padding-right:1.7em; background:url(../imgs/tramitacion/iconos/enlace_anterior.gif) no-repeat 60% center #FFFFCC; }
+#tramitacion div#pasosNav a#pasoSiguiente { float:right; padding-left:1.7em; background:url(../imgs/tramitacion/iconos/enlace_siguiente.gif) no-repeat 40% center #FFFFCC; }
+
+#tramitacion div#pasosNav div#pasoAnteriorDIV, #tramitacion div#pasosNav div#pasoSiguienteDIV { width:47%; display:block; height:3em; color:#000; text-transform:uppercase; background-color:#FFFFCC; }
+#tramitacion div#pasosNav div#pasoAnteriorDIV { float:left; text-align:right; padding-right:1.7em; }
+#tramitacion div#pasosNav div#pasoSiguienteDIV { float:right; padding-left:1.7em; }
+
+/* listado plantillas */
+
+#tramitacion #pasoInf div#listadoPlantillas div.iconos { float:left; width:4.8em; text-align:right; }
+#tramitacion #pasoInf div#listadoPlantillas div.enlaceDescargar { padding-left:5.5em; margin-bottom:1.7em; }
+#tramitacion #pasoInf div#listadoPlantillas div.enlaceDescargar a { color:#c33; }
+
+#tramitacion #pasoInf div#listadoPlantillas div div { display:none; position:absolute; top:0; left:0; width:30em; font-size:.9em; text-align:justify; padding:0 1em; background-color:#f4f4f4; border:1px solid #ccc; z-index:1; }
+#tramitacion #pasoInf div#listadoPlantillas div div ul { padding-left:2em; margin:1em; }
+
+/* listado formularios */
+
+#tramitacion #pasoInf div#listadoFormularios div.iconos { float:left; width:4.8em; text-align:right; }
+#tramitacion #pasoInf div#listadoFormularios p { padding-left:5.5em; margin-bottom:1.7em; }
+
+#tramitacion #pasoInf h3 { margin-top:.5em; }
+
+#tramitacion #pasoInf p.volver { position:relative; clear:both; border-top:1px dashed #f4f4f4; padding:1em 0 .5em 2em; background:url(../imgs/enlaces/04tornar.gif) no-repeat left 1em #fff; }
+
+/* FORMS simulado */
+
+#tramitacion #datosTramiteImprimir { background-color:#f8f8f8; padding:10px; width:90%; margin:0 auto; }
+#tramitacion #datosTramiteImprimir h3 { font-size:1em; z-index:2; }
+#tramitacion #datosTramiteImprimir h3 span { background-color:#e3e9ee; border:1px solid #cbd7e1; padding:0 10px; margin-right:8px; }
+#tramitacion #datosTramiteImprimir p { margin-left:40px; }
+#tramitacion #datosTramiteImprimir p input { background-color:#fff; border:1px solid #acacac; padding:2px; margin-right:10px; }
+
+/* anexar DOCS */
+
+#tramitacion #pasoInf div#anexarDocs { background-color:#fff; }
+#tramitacion #pasoInf div#anexarDocs h3 { font-weight:normal; padding:.5em 1em .5em 2.5em; text-transform:uppercase; }
+#tramitacion #pasoInf div#anexarDocs h3.docObl { background:url(../imgs/tramitacion/iconos/doc_obligatorio.gif) no-repeat 1em .75em #f7f7f7;border:1px solid #eae8de; }
+#tramitacion #pasoInf div#anexarDocs h3.docOpc { background:url(../imgs/tramitacion/iconos/doc_opcional.gif) no-repeat 1em .75em #f7f7f7;border:1px solid #eae8de; }
+#tramitacion #pasoInf div#anexarDocs div.iconos { float:left; width:4.8em; text-align:right; }
+#tramitacion #pasoInf div#anexarDocs p.anexarDoc { padding-left:5.5em; margin-bottom:1.7em; }
+#tramitacion #pasoInf div#anexarDocs p.anexarDocBoton { text-align:center; }
+#tramitacion #pasoInf div#anexarDocs span { display:block; }
+
+#tramitacion #pasoInf div#anexarDocs p.anexarDoc strong:hover { cursor:help; }
+#tramitacion #pasoInf div#anexarDocs div.infoDoc { display:none; position:absolute; top:1em; left:5em; width:50em; font-size:.9em; padding:0 1em; background-color:#f8f8f8; border:1px solid #ccc; z-index:100; }
+
+.anexarDocFile { text-align:center; }
+
+/* pago */
+
+#tramitacion #pasoInf #ayudaPago #pagoBE { width:90%; height:10em; padding:10px; margin:0 auto; }
+#tramitacion #pasoInf #ayudaPago #pagoFP { width:90%; height:10em; padding:10px; margin:0 auto; }
+#tramitacion #pasoInf #ayudaPago #pagoBE, #tramitacion #pasoInf #pagoFP { border:1px solid #f4f4f4; padding:1em; height:15em; }
+#tramitacion #pasoInf #ayudaPago #pagoBE h3, #tramitacion #pasoInf #pagoFP h3 { margin-top:0; }
+
+#tramitacion #pasoInf #ayudaPago #pagoBEA { float:left; width:45%; }
+#tramitacion #pasoInf #ayudaPago #pagoFPA { margin-left:50%; }
+#tramitacion #pasoInf #ayudaPago #pagoBEA, #tramitacion #pasoInf #pagoFPA { border:1px solid #f4f4f4; padding:1em; height:25em; }
+#tramitacion #pasoInf #ayudaPago #pagoBEA h3, #tramitacion #pasoInf #pagoFPA h3 { margin-top:0; }
+
+#tramitacion #pasoInf div#listadoTasas { padding-left:1.8em; }
+#tramitacion #pasoInf div#listadoTasas div.iconos { float:left; width:4em; text-align:right; }
+#tramitacion #pasoInf div#listadoTasas p { padding-left:5em; margin-bottom:1.7em; }
+#tramitacion #pasoInf div#listadoTasas p input { vertical-align:middle; }
+
+#tramitacion #pasoInf #datosPago { background-color:#f8f8f8; width:55%; padding:10px; margin:0 auto; }
+#tramitacion #pasoInf #datosPago span { display:block; font-weight:bold; padding-left:12.8em; }
+#tramitacion #pasoInf #datosPago span.label { float:left; width:12em; text-align:right; font-weight:normal; padding-left:0; }
+
+p.ayudaPagoP { border-top:1px dashed #f4f4f4; margin-bottom:2em; padding-top:1em; }
+#ayudaPago { margin-bottom:2em; }
+
+/* enviar */
+#tramitacion #pasoInf div#resumenDocumentos div.iconos { float:left; width:4.8em; text-align:right; }
+#tramitacion #pasoInf div#resumenDocumentos p { padding-left:5.5em; margin-bottom:0.7em; }
+
+#tramitacion #pasoInf ul#resumenFor, #tramitacion #pasoInf ul#resumenDoc, #tramitacion #pasoInf ul#resumenPag { position:relative;list-style:none; margin:1em; padding:0; }
+#tramitacion #pasoInf ul#resumenFor li { padding:.1em 0 .2em 2.5em; background:url(../imgs/tramitacion/iconos/ico_form.gif) no-repeat left center #fff; }
+#tramitacion #pasoInf ul#resumenDoc li { padding:.1em 0 .2em 2.5em; background:url(../imgs/tramitacion/iconos/ico_anexado.gif) no-repeat left center #fff; }
+#tramitacion #pasoInf ul#resumenPag li { padding:.1em 0 .2em 2.5em; background:url(../imgs/tramitacion/iconos/ico_pagado.gif) no-repeat left center #fff; }
+
+/* puntos de registro */
+
+#tramitacion ul#puntosRegistro { background-color:#f8f8f8; padding:10px 40px; margin:0 auto; width:30%; list-style-image:url(../imgs/tramitacion/iconos/ul_puntos_registro.gif); }
+#tramitacion ul#puntosRegistro li { margin-bottom:5px; }
+
+/* guardar justificante */
+
+#tramitacion #pasoInf #datosJustificante,#tramitacion #pasoInf #resultadoConsulta  { background-color:#f8f8f8; width:80%; padding:1em; margin:0 auto; }
+
+/* old */
+#tramitacion #pasoInf #datosJustificante h4 { margin-top:1em; }
+#tramitacion #pasoInf #datosJustificante ul { list-style:none; margin:0; padding:0; }
+#tramitacion #pasoInf #datosJustificante ul li { margin-bottom:.5em; }
+#tramitacion #pasoInf #datosJustificante ul span { display:block; margin-left:15em; font-weight:bold; text-align:left; border:1px solid #ccc; }
+#tramitacion #pasoInf #datosJustificante ul span.label { display:inline; float:left; width:14em; text-align:right; font-weight:normal; padding:0; margin-left:0; }
+#tramitacion #pasoInf #datosJustificante ul span.label2nivel { display:block; width:14em; text-align:right; margin-left:0; }
+#tramitacion #pasoInf #datosJustificante ul#docs { margin:1em 0 1em 12.5em; font-weight:bold; }
+#tramitacion #pasoInf #datosJustificante ul#docs li { padding:.3em 0 .3em 2.5em; background:url(../imgs/tramitacion/iconos/doc_generico.gif) no-repeat left center #f8f8f8; }
+
+/* new */
+#tramitacion #pasoInf #datosJustificante table { width:100%; border:0; }
+#tramitacion #pasoInf #datosJustificante table caption { font-weight:bold; text-align:left; padding:1em 0; }
+#tramitacion #pasoInf #datosJustificante table th { width:14em; padding:.3em 1em .3em 0; font-weight:normal; text-align:right; vertical-align:top; }
+#tramitacion #pasoInf #datosJustificante table th.nivel2 { font-weight:bold; }
+#tramitacion #pasoInf #datosJustificante table td { font-weight:bold; vertical-align:top; padding:.3em 0; }
+
+/* entregar - finalizar */
+
+#tramitacion #pasoInf table#tablaDocAportar { width:90%; border:1px solid #f4f4f4; margin:0 auto; }
+#tramitacion #pasoInf table#tablaDocAportar th { background-color:#f4f4f4; padding:.5em; border-right:1px solid #fff; }
+#tramitacion #pasoInf table#tablaDocAportar tr.par { background-color:#f9f9f9; }
+#tramitacion #pasoInf table#tablaDocAportar td { padding:.5em; }
+#tramitacion #pasoInf table#tablaDocAportar td.doc { font-weight:bold; text-align:center; width:25%; }
+
+/* inicio simulado tramite */
+
+p.tramiteTelematico { background:url(../imgs/ico_internet.gif) no-repeat 1em center #f4f4f4; padding:1em 3em; margin:0 2em; }
+
+/* FORM */
+
+/*
+// aplazado por razones técnicas
+#continguts #formularioFORM { padding:0 1em; }
+#continguts #formularioFORM h2 { padding:.5em 1em; background-color:#f7f7f2; }
+#formularioFORM #ayudaGeneral { float:left; width:15em; background-color:#ecf4fb; padding:0 1em; }
+#formularioFORM #capaFormulario { border-left:17em solid #ecf4fb; padding:0 1em 2em 2em; }
+#formularioFORM #capaFormulario form span { display:none; }
+ */
+
+/* capa para acceder o enviar info con mensaje de espera
+
+#accEnv { display:none; position:absolute; top:0; left:0; width:61em; padding:1em; background-color:#fff; font-weight:bold; text-align:center; z-index:5; }
+#accEnv img { vertical-align:middle; margin-right:1em; }
+*/
+ 
+div#capaInfoForms { position:absolute; display:none; top:0; left:0; width:45em; text-align:center; background:url(../imgs/enviando.gif) no-repeat center 1em #fff; border:1em solid #85bbe4; padding:5em 1em 2em 1em; z-index:12; }
+
+/* Atributos para mostrar detalles documento: quien debe firmar y/o rellenar */
+span.detalleDoc {color:brown;background-color:#f7f7f7;FONT-SIZE: 0.9em;display:block;}
+
+/* MODIFICACION PAGINA DEBE SABER PARA QUE INCLUYA PASOS Y GUARDAR CLAVE */
+#pasoInf h2 { margin-top:1em; }
+#pasoInf h2.nuestroAsistente { padding-left:1.7em; background:#fff url(../imgs/tramitacion/iconos/nuestroasistente.gif) no-repeat left center; }
+#pasoInf h2.pasos { padding-left:1.7em; margin-left:1em; background:#f7f7f7 url(../imgs/tramitacion/iconos/pasos.gif) no-repeat left center; }
+#pasoInf h2.indicaciones { padding-left:1.7em; background:#fff url(../imgs/tramitacion/iconos/caracteristicas.gif) no-repeat left center; }
+#pasoInf h2.plantillas { padding-left:1.7em; background:#fff url(../imgs/enlaces/05guardar.gif) no-repeat left center; }
+
+#pasosDL { font-size:.9em; margin-left:2em; }
+#pasosDL dt { padding-bottom:.5em; }
+#pasosDL dt strong { font-size:1.1em; }
+#pasosDL dd { margin-left:4em; padding-bottom:1em; }
+
+
+/* RAFA: HE QUITADO ESTO: #pasoInf p Y HE CREADO #pasoInf p.apartado  PQ LE METIA A TODOS LOS PARRAFOS MARGEN -> EFECTO SECUNDARIO IMPORTANTE */
+#pasoInf h3.apartado, #pasoInf p.apartado{ margin-left:2em; }
+
+#pasoInf li { margin-top:.5em; }
+#pasoInf ul li ul li { font-size:.9em; }
+#pasoInf ul { margin-bottom:2em; }
+#pasoInf ul ul { margin-bottom:1em; }
+
+#pasoInf #guardarClave,#pasoInf #mensajesPlataforma { position:absolute; display:none; top:0; left:0; width:60em; color:#000; padding:0 1em 0 2em; background:url(../imgs/tramitacion/iconos/ico_atencion.gif) no-repeat .8em .8em #ffffe8; border:1em solid #fff; z-index:3; }
+#pasoInf #guardarClave p.continuar,#pasoInf #mensajesPlataforma p.continuar { text-align:center; }
+#pasoInf #guardarClave button,#pasoInf #mensajesPlataforma button { font-size:.9em; padding:.1em .5em; overflow:visible; vertical-align:middle;}
+#pasoInf #guardarClave button img,#pasoInf #mensajesPlataforma button img { vertical-align:middle; margin-right:.3em; }
+
+#pasoInf #pasosExplicacion { display:none; margin-left:2em; padding-top:.1em; background-color:#f7f7f2; }
+
+#fondo { position:absolute; display:none; top:0; left:0; width:100%; height:200px; background-color:#000; z-index:2; }
+
+h3.titDocumentacion { padding-left:2em; background:#fff url(../imgs/tramitacion/iconos/documentacion.gif) no-repeat left center; }
+h3.titGuardar { padding-left:2em; background:#fff url(../imgs/tramitacion/iconos/guardar.gif) no-repeat left center; }
+h3.titEntrega { padding-left:2em; background:#fff url(../imgs/tramitacion/iconos/entrega.gif) no-repeat left center; }
+
+/* MODIFICACION PAGINA ANEXAR DOCUMENTO */
+#pasoInf h2.descargarPlantilla { padding-left:0.5em; margin-left:1em; background:#f7f7f2 no-repeat left center; }
+#pasoInf h2.firmarAnexo { padding-left:0.5em; margin-left:1em; background:#f7f7f2 no-repeat left center; }
+#pasoInf h2.adjuntarAnexo { padding-left:0.5em; margin-left:1em; background:#f7f7f2 no-repeat left center; }
+
+/* MODIFICACION AVISO CERTIFICADOS */
+.avisoCertificados {font-size: smaller;font-style: italic;color: #0033FF;}
+
+/* NOTA PIE TEXTO*/
+p.notaPie {font-size: smaller;font-style: italic;}
