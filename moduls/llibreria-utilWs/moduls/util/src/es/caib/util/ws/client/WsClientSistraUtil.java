@@ -37,9 +37,13 @@ public class WsClientSistraUtil {
 				.getProperty("sistra.ws.client.disableCnCheck") != null ? "true"
 				.equals(props.getProperty("sistra.ws.client.disableCnCheck"))
 				: false);
-
+		boolean disableChunked = (props
+				.getProperty("sistra.ws.client.disableChunked") != null ? "true"
+				.equals(props.getProperty("sistra.ws.client.disableChunked"))
+				: false);
+		
 		WsClientUtil.configurePort(port, url, user, pass, auth,
-				generateTimestamp, logCalls, disableCnCheck);
+				generateTimestamp, logCalls, disableCnCheck, disableChunked);
 
 	}
 

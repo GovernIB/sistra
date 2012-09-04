@@ -27,12 +27,13 @@ public class WsClientUtil {
 	private static Log log = LogFactory.getLog(WsClientUtil.class);
 	
 	public static void configurePort(BindingProvider port, String url,
-			String user, String pass,String auth,boolean generateTimestamp,boolean logCalls, boolean disableCnCheck) throws Exception {
+			String user, String pass,String auth,boolean generateTimestamp,boolean logCalls, boolean disableCnCheck, boolean disableChunked) throws Exception {
 
 		Client client = ClientProxy.getClient(port);
 		HTTPConduit conduit = (HTTPConduit) client.getConduit();
+		
 		Endpoint cxfEndpoint = client.getEndpoint();
-			
+		
 		if (logCalls) {
 			client.getInInterceptors().add(new LoggingInInterceptor());
 			client.getOutInterceptors().add(new LoggingOutInterceptor());
@@ -101,6 +102,15 @@ public class WsClientUtil {
 						System.getProperty("http.proxyPassword"));
 			}
 		}
+		
+		
+		// Vemos si deshabilitamos modo chuncked (por defecto habilitado)
+		if (disableChunked) {
+			log.debug("Deshabilitamos modo chuncked");
+			HTTPClientPolicy policy = conduit.getClient();
+			policy.setAllowChunking(false);	        
+		}
+			        
 	}
 	
 	/**
