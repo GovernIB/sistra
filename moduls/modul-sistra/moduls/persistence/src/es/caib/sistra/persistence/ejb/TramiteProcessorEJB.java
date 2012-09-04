@@ -4470,7 +4470,7 @@ public class TramiteProcessorEJB implements SessionBean {
     		emailDefecto = this.evaluarScript(scriptEmail,null);    		
     	}
     	
-    	if (StringUtils.isBlank(emailDefecto)) {
+    	if (StringUtils.isBlank(emailDefecto) && datosSesion.getNivelAutenticacion() != TramiteNivel.AUTENTICACION_ANONIMO) {
     		emailDefecto = tramiteInfo.getFlujoTramitacionDatosPersonaIniciador().getEmail();
     	}
     	
@@ -4507,7 +4507,7 @@ public class TramiteProcessorEJB implements SessionBean {
     		smsDefecto = this.evaluarScript(scriptSms,null);    		
     	}
     	
-    	if (StringUtils.isBlank(smsDefecto)) {
+    	if (StringUtils.isBlank(smsDefecto) && datosSesion.getNivelAutenticacion() != TramiteNivel.AUTENTICACION_ANONIMO) {
     		smsDefecto = tramiteInfo.getFlujoTramitacionDatosPersonaIniciador().getTelefonoMovil();
     	}
     	
