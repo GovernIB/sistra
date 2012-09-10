@@ -1,4 +1,4 @@
-create table ZPE_DOCENT (
+ï»¿create table ZPE_DOCENT (
    DEN_CODIGO int8 not null,
    DEN_CODENT int8 not null,
    DEN_DOCIDE varchar(5) not null,
@@ -298,7 +298,7 @@ create table ZPE_NOTTEL (
    NOT_SUBDES VARCHAR(500),
    NOT_SUBIDE VARCHAR(20),
    NOT_SUBVER INT4,
-   NOT_SUBPAR VARCHAR(4000)
+   NOT_SUBPAR VARCHAR(4000),
    primary key (NOT_CODIGO)
 );
 
@@ -418,7 +418,7 @@ alter table ZPE_SUBPAR
 
 
 
--- En Postgresql vistes s'han de borrar perquè sinó no permet modificar llista de camps.
+-- En Postgresql vistes s'han de borrar perquÃ¨ sinÃ³ no permet modificar llista de camps.
 DROP VIEW ZPE_ESTEXP;
 CREATE OR REPLACE VIEW ZPE_ESTEXP
 (EST_ID, EST_TIPO, EST_CODIGO, EST_DESC, EST_FECINI, 
@@ -526,7 +526,7 @@ create table ZPE_INDELE  (
 );
 
 comment on table ZPE_INDELE is
-'Indices de búsqueda asociadas a elementos de un expediente (solo para autenticados)';
+'Indices de busqueda asociadas a elementos de un expediente (solo para autenticados)';
 
 comment on column ZPE_INDELE.IND_CODIGO is
 'Codigo interno';

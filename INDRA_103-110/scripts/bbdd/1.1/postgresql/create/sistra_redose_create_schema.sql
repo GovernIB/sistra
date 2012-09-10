@@ -1,4 +1,4 @@
-create table RDS_PLANTI (
+﻿create table RDS_PLANTI (
    PLA_CODIGO int8 not null,
    PLA_CODVER int8 not null,
    PLA_FORMAT int8 not null,

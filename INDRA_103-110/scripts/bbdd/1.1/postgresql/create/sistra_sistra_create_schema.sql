@@ -1,4 +1,4 @@
-create table STR_TRADOC (
+﻿create table STR_TRADOC (
    TRD_CODDOC int8 not null,
    TRD_DESC varchar(200),
    TRD_INFO varchar(1000),
@@ -236,7 +236,7 @@ create table STR_TRAMIT (
 );
 
 comment on column STR_TRAMIT.TRA_IDPROC is
-'Identificador del procedimiento al que pertenece el tr�mite';
+'Identificador del procedimiento al que pertenece el trámite';
 
 
 create table STR_TRAMPL (
