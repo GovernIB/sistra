@@ -1,4 +1,4 @@
-create table BTE_PROAPL (
+ï»¿create table BTE_PROAPL (
    TAP_IDEPRO varchar(100) not null,
    TAP_DESC varchar(100) not null,
    TAP_INMED char(1),
@@ -124,7 +124,7 @@ comment on table BTE_ARCFEX is
 'Archivo fichero exportacion';
 
 comment on column BTE_ARCFEX.AFE_IDEFIC is
-'IDENTIFICADOR DEL TRÁMITE';
+'IDENTIFICADOR DEL TRAMITE';
 
 comment on column BTE_ARCFEX.AFE_DATOS is
 'DATOS FICHERO';

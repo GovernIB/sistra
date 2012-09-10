@@ -1,4 +1,4 @@
---
+﻿--
 -- Variables inicials sessio Postgresql
 --
 

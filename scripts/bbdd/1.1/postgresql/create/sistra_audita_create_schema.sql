@@ -1,4 +1,4 @@
-
+﻿
 create table AUD_AUDIT  (
    AUD_CODI             int8                    not null,
    AUD_FECHA            timestamp,
@@ -13,7 +13,7 @@ create table AUD_AUDIT  (
    AUD_MODTRA           varchar(20),
    AUD_VERTRA           int4,
    AUD_IDPER            varchar(50),
-   AUD_CLAVE            varchar(256),
+   AUD_CLAVE            varchar(256)
 );
 
 alter table AUD_AUDIT

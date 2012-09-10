@@ -1,4 +1,4 @@
-create table MOB_MSSMS (
+﻿create table MOB_MSSMS (
    MSS_CODIGO int8 not null,
    MSS_TELFS bytea not null,
    MSS_TELFSE bytea,

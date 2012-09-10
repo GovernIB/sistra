@@ -1,4 +1,4 @@
-create table RFR_FORMUL (
+﻿create table RFR_FORMUL (
    FOR_CODI int8 not null,
    FOR_MODELO varchar(3) not null,
    FOR_ULNUSE int8 not null,
