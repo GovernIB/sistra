@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+    <definition name=".mainLayout" path="/init.jsp"/>
+
+<!-- Componente que muestra las pestañas de idiomas, select es la seleccionada -->
+    <definition name=".langtabs" path="/moduls/langtabs.jsp"
+        controllerClass="es.caib.bantel.back.action.ListaIdiomasController">
+        <put name="select" value=""/>
+    </definition>
+
+    <definition name=".editar" path="/layouts/editarLayout.jsp">
+        <put name="title" value="-- no definido --"/>
+        <put name="alta.title" value="-- no definido --"/>
+        <put name="modificacion.title" value="-- no definido --"/>
+        <put name="subtitle" value="-- no definido --"/>
+        <put name="validateMethod" value="-- no definido --"/>
+        <put name="form.action" value="-- no definido --"/>
+        <put name="form.bean" value="-- no definido --"/>
+        
+        <put name="values.codigo" value="values.codigo" />
+        
+        <put name="paginaValues" value=""/>
+        <put name="paginaTraduccion" value=""/>
+        <putList name="listaRelaciones">
+            <!-- Lista de elementos relacionados -->
+        </putList>
+        <putList name="listaRelaciones2">
+            <!-- Lista de elementos relacionados -->
+        </putList>
+    </definition>
+    
+    <!-- ====================== procedimiento =================== -->
+    <definition name=".tramite.editar" extends=".editar"  
+    	controllerClass="es.caib.bantel.back.action.tramite.TramiteController">
+        <put name="title" value="tramite.title"/>
+        <put name="alta.title" value="tramite.alta"/>
+        <put name="modificacion.title" value="tramite.modificacion"/>
+        <put name="subtitle" value="tramite.subtitulo"/>
+        <put name="validateMethod" value="validateTramiteForm"/>
+        <put name="form.action" value="/back/tramite/editar"/>
+        <put name="form.bean" value="tramiteForm"/>
+        <put name="values.codigo" value="values.identificador" />
+        <put name="paginaValues" value="/tramite/editarValues.jsp"/>
+    </definition>
+     <definition name=".tramite.lista" path="/tramite/lista.jsp"
+        controllerClass="es.caib.bantel.back.action.tramite.ListaTramitesController"/>
+        
+        
+   <!-- ====================== gestorBandeja =================== -->
+    <definition name=".gestorBandeja.editar" extends=".editar"
+    	controllerClass="es.caib.bantel.back.action.tramite.ListaTramitesController">
+        <put name="title" value="gestorBandeja.title"/>
+        <put name="alta.title" value="gestorBandeja.alta"/>
+        <put name="modificacion.title" value="gestorBandeja.modificacion"/>
+        <put name="subtitle" value="gestorBandeja.subtitulo"/>
+        <put name="validateMethod" value="validateGestorBandejaForm"/>
+        <put name="form.action" value="/back/gestorBandeja/editar"/>
+        <put name="form.bean" value="gestorBandejaForm"/>
+        <put name="values.codigo" value="values.seyconID" />
+        <put name="paginaValues" value="/gestorBandeja/editarValues.jsp"/>
+    </definition>
+    <definition name=".gestorBandeja.lista" path="/gestorBandeja/lista.jsp"
+        controllerClass="es.caib.bantel.back.action.gestorBandeja.ListaGestoresBandejaController"/>     
+	
+ 	<!-- ====================== fichero exportacion=================== -->
+    <definition name=".ficheroExportacion.editar" extends=".editar" >
+        <put name="title" value="ficheroExportacion.title"/>
+        <put name="alta.title" value="ficheroExportacion.alta"/>
+        <put name="modificacion.title" value="ficheroExportacion.modificacion"/>
+        <put name="subtitle" value="ficheroExportacion.subtitulo"/>
+        <put name="validateMethod" value="validateFicheroExportacionForm"/>
+        <put name="form.action" value="/back/ficheroExportacion/editar"/>
+        <put name="form.bean" value="ficheroExportacionForm"/>
+        <put name="values.codigo" value="values.identificadorTramite" />
+        <put name="paginaValues" value="/ficheroExportacion/editarValues.jsp"/>
+    </definition>
+     <definition name=".ficheroExportacion.lista" path="/ficheroExportacion/lista.jsp"
+     	 controllerClass="es.caib.bantel.back.action.ficheroExportacion.ListaFicheroExportacionController"/>
+</tiles-definitions>

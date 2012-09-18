@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="org.ibit.rol.form.model.Salida" table="RFR_SALIDA">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="SAL_CODI">
+            <generator class="sequence">
+                <param name="sequence">RFR_SECSAL</param>
+            </generator>
+        </id>
+
+        <property name="orden" not-null="true" column="SAL_ORDEN"/>
+
+        <many-to-one name="punto" not-null="true" column="SAL_CODPSA" foreign-key="RFR_SALPSA_FK"/>
+
+        <many-to-one name="formulario" not-null="true" column="SAL_CODFOR" foreign-key="RFR_SALFOR_FK"/>
+
+
+        <set name="propiedades" cascade="all" inverse="true" lazy="false">
+            <cache usage="read-write"/>
+            <key column="PRS_CODSAL" foreign-key="RFR_PRSSAL_FK"/>
+            <one-to-many class="org.ibit.rol.form.model.PropiedadSalida"/>
+        </set>
+        
+    </class>
+</hibernate-mapping>

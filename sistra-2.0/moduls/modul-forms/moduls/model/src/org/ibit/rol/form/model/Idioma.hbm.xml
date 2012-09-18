@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.form.model.Idioma" table="RFR_IDIOMA" mutable="false">
+        <cache usage="read-only"/>
+        <id name="lang" unsaved-value="any" length="2" column="IDI_CODI">
+            <generator class="assigned"/>
+        </id>
+        <property name="orden" not-null="true" column="IDI_ORDEN"/>
+    </class>
+</hibernate-mapping>

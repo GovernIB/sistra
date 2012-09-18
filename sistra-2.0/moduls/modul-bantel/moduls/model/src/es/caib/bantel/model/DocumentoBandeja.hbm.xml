@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class name="es.caib.bantel.model.DocumentoBandeja" table="BTE_DOCUM">
+	 <cache usage="read-write"/>	
+     <id name="codigo" unsaved-value="null" column="DOC_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">BTE_SEQDOC</param>
+          </generator>
+      </id>
+	
+	<many-to-one name="tramite" column="DOC_CODTRA" not-null="true"/>
+	
+	<property name="presencial" column="DOC_PRESE" not-null="true" length="1"/>
+	<property name="nombre" column="DOC_DESC" not-null="true" length="500"/>
+	<property name="identificador" column="DOC_DOCIDE"  length="5"/>
+	<property name="numeroInstancia" column="DOC_DOCNUM" length="2"/>
+	<property name="rdsCodigo" column="DOC_RDSCOD" length="20"/>
+	<property name="rdsClave" column="DOC_RDSCLA" length="10"/>
+	<property name="tipoDocumento"  column="DOC_TIPDOC" length="1" />
+    <property name="compulsarDocumento"  column="DOC_COMPUL" length="1" />
+    <property name="fotocopia"  column="DOC_FOTPIA" length="1" />
+    <property name="firma"  column="DOC_FIRMA" length="1" />
+   
+</class>
+</hibernate-mapping>

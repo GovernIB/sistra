@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class  name="es.caib.zonaper.model.LogRegistro" table="ZPE_REGLOG">
+	<cache usage="read-write"/>
+  	<composite-id name="id" class="es.caib.zonaper.model.LogRegistroId" >
+	    <key-property name="tipoRegistro" type="string" length="1">
+		    <column name="RLG_TIPREG" />
+	    </key-property>
+    	<key-property name="numeroRegistro" type="string" length="50">
+   		 	<column name="RLG_NUMREG" />
+    	</key-property>
+    </composite-id>
+
+    <property name="fechaRegistro" column="RLG_FECREG"  not-null="true"/>
+    <property name="descripcionError" column="RLG_ERROR" type="string" length="2000"/>    
+	<property name="anulado" column="RLG_ANULAD" type="string" length="1"/>    
+</class>
+</hibernate-mapping>

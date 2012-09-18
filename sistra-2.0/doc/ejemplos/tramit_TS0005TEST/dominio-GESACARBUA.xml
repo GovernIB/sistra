@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <Dominio autenticacionExplicita="N" cacheable="N" descripcion="Arbol unidadades administrativas" identificador="GESACARBUA" localizacionEJB="L" secured="false" sql="select codigo as &quot;CODIGO&quot;, parent as &quot;PARENT&quot;, descripcion as &quot;DESCRIPCION&quot; from str_uniadm" tipo="S" url="es.caib.sistra.db"/>

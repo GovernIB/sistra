@@ -1,0 +1,1 @@
+alter table RFR_FORMUL modify FOR_MODELO VARCHAR2(20 char);
