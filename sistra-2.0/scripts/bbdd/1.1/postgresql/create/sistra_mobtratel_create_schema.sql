@@ -10,6 +10,9 @@
    MSS_INIENV timestamp,
    MSS_FINENV timestamp,
    MSS_IDENV int8 not null,
+   MSS_ACKENV int4 default 0 not null,
+   MSS_ACKEST VARCHAR(1),
+   MSS_ACKERR VARCHAR(4000),
    primary key (MSS_CODIGO)
 );
 create table MOB_CUENTA (
@@ -34,6 +37,9 @@ create table MOB_MSEMAI (
    MSE_NDEST int4,
    MSE_NDESTE int4,
    MSE_IDENV int8 not null,
+   MSE_ACKENV int4 default 0 not null,
+   MSE_ACKEST VARCHAR(1),
+   MSE_ACKERR VARCHAR(4000),
    primary key (MSE_CODIGO)
 );
 create table MOB_PERMIS (

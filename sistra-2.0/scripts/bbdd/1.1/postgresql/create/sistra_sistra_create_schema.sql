@@ -160,7 +160,7 @@ create table STR_DOCNIV (
    DNV_FIRMAR char(1) not null,
    DNV_FIRMTE varchar(500),
    DNV_FORGST varchar(20),
-   DNV_FORFOR varchar(3),
+   DNV_FORFOR varchar(20),
    DNV_FORVER int4,
    DNV_FORINI bytea,
    DNV_FORCON bytea,
