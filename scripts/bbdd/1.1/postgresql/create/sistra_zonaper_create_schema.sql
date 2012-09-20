@@ -230,6 +230,7 @@ create table ZPE_ELEEX (
    ELE_TIPO varchar(1) not null,
    ELE_CODELE int8 not null,
    ELE_CODEXP int8 not null,
+   ELE_CODAVI VARCHAR(50),
    primary key (ELE_CODIGO)
 );
 create table ZPE_PREREG (
@@ -299,6 +300,8 @@ create table ZPE_NOTTEL (
    NOT_SUBIDE VARCHAR(20),
    NOT_SUBVER INT4,
    NOT_SUBPAR VARCHAR(4000),
+   NOT_FECPLZ timestamp,
+   NOT_RECHAZ bool not null,
    primary key (NOT_CODIGO)
 );
 
