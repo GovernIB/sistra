@@ -1,6 +1,6 @@
 ﻿create table RFR_FORMUL (
    FOR_CODI int8 not null,
-   FOR_MODELO varchar(3) not null,
+   FOR_MODELO varchar(20) not null,
    FOR_ULNUSE int8 not null,
    FOR_URLEN1 varchar(256),
    FOR_URLEN2 varchar(256),
