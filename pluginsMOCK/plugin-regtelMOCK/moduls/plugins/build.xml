@@ -10,7 +10,8 @@
     <property name="modul" value="plugins"/>
     <property name="package" value="es.caib.sistra.plugins.regtel.impl.mock"/>
     
-	<property name="lib.dir" location="${home.dir}/../../lib"/>
+	<property name="lib.dir" location="${home.dir}/../../lib"/>	
+	
 	<property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
 
@@ -26,7 +27,7 @@
     <property name="jar.product" location="${output.dir}/moduls"/>
 
     <path id="jar.class.path">
-    	<fileset dir="${lib.dir}/client">
+    	<fileset dir="${distribucion.dir}/client/ejb">
 	    	<include name="redose-client.jar"/>    		
    		</fileset>	
     	<fileset dir="${distribucion.dir}/lib"> 

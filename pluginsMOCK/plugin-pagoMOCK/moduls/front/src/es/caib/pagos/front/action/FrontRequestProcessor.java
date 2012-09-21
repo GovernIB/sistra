@@ -16,9 +16,12 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionServlet;
+import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.tiles.TilesRequestProcessor;
 
 import es.caib.pagos.front.Constants;
+import es.caib.pagos.persistence.util.Configuracion;
 
 
 /**
@@ -32,6 +35,21 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
     private String defaultLang = null;
     private List supportedLangs = null;
 
+    public void init(ActionServlet actionServlet,ModuleConfig moduleConfig) throws ServletException{
+    	
+    	super.init(actionServlet,moduleConfig);
+    	
+    	//Indicamos si se tiene que ejecutar dentro de un iframe o no
+        try{
+        	Configuracion config = Configuracion.getInstance();
+        	getServletContext().setAttribute(Constants.MOSTRAR_EN_IFRAME,new Boolean(config.getProperty("sistra.iframe")).booleanValue());
+        }catch(Exception ex){
+        	log.error("Error obteniendo la variable iframe",ex);
+        	throw new ServletException(ex);
+        }
+        
+    }
+    
     /**
      * Inicializa los idiomas soportados por la aplicación
      */

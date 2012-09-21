@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="moduls/llibreria-plugins/moduls/plugins/src"/>
+	<classpathentry kind="src" path="pluginsMOCK/plugin-emailMOCK/moduls/plugins/src"/>
+	<classpathentry kind="src" path="moduls/modul-zonaper/moduls/delega/src"/>
+	<classpathentry kind="src" path="moduls/llibreria-utilWs/moduls/util/src"/>
+	<classpathentry kind="src" path="integracio/llibreria-casClient/moduls/casLoginModule/src"/>
 	<classpathentry kind="src" path="moduls/llibreria-dbutils/moduls/dbutils/src"/>
 	<classpathentry kind="src" path="moduls/llibreria-graficos/moduls/graficos/src"/>
 	<classpathentry kind="src" path="moduls/llibreria-pdf/moduls/pdf/src"/>
@@ -71,6 +75,8 @@
 	<classpathentry kind="src" path="pluginsMOCK/plugin-pagoMOCK/output/persistence/gen-src"/>
 	<classpathentry kind="src" path="pluginsMOCK/plugin-regtelMOCK/moduls/plugins/src"/>
 	<classpathentry kind="src" path="pluginsMOCK/plugin-smsMOCK/moduls/plugins/src"/>
+	<classpathentry kind="src" path="pluginsMOCK/plugin-custodiaMOCK/moduls/plugins/src"/>
+	<classpathentry kind="src" path="pluginsMOCK/plugin-gestorDocumentalMOCK/moduls/plugins/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/bsf.jar"/>
 	<classpathentry kind="lib" path="lib/cglib-asm.jar"/>
@@ -102,7 +108,6 @@
 	<classpathentry kind="lib" path="lib/ojdbc14.jar"/>
 	<classpathentry kind="lib" path="lib/quartz-all-1.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/resolver.jar"/>
-	<classpathentry kind="lib" path="lib/saaj-api.jar"/>
 	<classpathentry kind="lib" path="lib/servlet.jar"/>
 	<classpathentry kind="lib" path="lib/struts.jar"/>
 	<classpathentry kind="lib" path="lib/xbean_xpath.jar"/>
@@ -116,13 +121,6 @@
 	<classpathentry kind="lib" path="lib/jaxb-xjc-2.1.9.jar"/>
 	<classpathentry kind="lib" path="lib/jaxp-api-1.3.jar"/>
 	<classpathentry kind="lib" path="lib/stax-api-1.0.1.jar"/>
-	<classpathentry kind="lib" path="pluginsMOCK/lib/bcmail.jar"/>
-	<classpathentry kind="lib" path="pluginsMOCK/lib/bcprov.jar"/>
-	<classpathentry kind="lib" path="pluginsMOCK/lib/bctsp.jar"/>
-	<classpathentry kind="lib" path="pluginsMOCK/lib/jboss-common.jar"/>
-	<classpathentry kind="lib" path="pluginsMOCK/lib/jboss-j2ee.jar"/>
-	<classpathentry kind="lib" path="pluginsMOCK/lib/jbosssx.jar"/>
-	<classpathentry kind="lib" path="pluginsMOCK/lib/jboss-transaction.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/wsdl4j-1.6.2.jar"/>
@@ -143,6 +141,9 @@
 	<classpathentry kind="lib" path="lib/openoffice/unoil-3.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/jboss/jbossall-client.jar"/>
+	<classpathentry kind="lib" path="lib/saaj-api.jar"/>
+	<classpathentry kind="lib" path="integracio/llibreria-casClient/lib/cas-client-core-3.1.10.jar"/>
+	<classpathentry kind="lib" path="lib/xstream-1.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/cxf-2.2.7.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/FastInfoset-1.2.7.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/spring-beans-2.5.6.jar"/>
@@ -151,5 +152,15 @@
 	<classpathentry kind="lib" path="lib/cxf/spring-web-2.5.6.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/velocity-1.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/wstx-asl-3.2.9.jar"/>
+	<classpathentry kind="lib" path="lib/cxf/xmlsec-1.4.3.jar"/>
+	<classpathentry kind="lib" path="lib/cxf/wss4j-1.5.8.jar"/>
+	<classpathentry kind="lib" path="lib/saaj-impl.jar"/>
+	<classpathentry kind="lib" path="lib/docx4j-2.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/xmlgraphics-commons-1.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.14.jar"/>
+	<classpathentry kind="lib" path="lib/bouncy/bcmail.jar"/>
+	<classpathentry kind="lib" path="lib/bouncy/bcprov.jar"/>
+	<classpathentry kind="lib" path="lib/bouncy/bctsp.jar"/>
+	<classpathentry kind="lib" path="lib/jboss/jboss-transaction.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

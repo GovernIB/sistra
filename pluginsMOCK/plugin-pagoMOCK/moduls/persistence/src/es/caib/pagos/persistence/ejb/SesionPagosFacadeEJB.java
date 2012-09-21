@@ -40,7 +40,7 @@ public class SesionPagosFacadeEJB implements SessionBean {
 	
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name = "${role.user}"
+     * @ejb.permission role-name = "${role.todos}"
      */
 	public void ejbCreate(String token) throws CreateException {
 		try{
@@ -76,7 +76,7 @@ public class SesionPagosFacadeEJB implements SessionBean {
 	 * Realiza el pago telematico y devuelve la url de retorno a sistra
 	 * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public int realizarPago(String modoPago,String numeroTarjeta,String fechaCaducidad,String codigoVerificacion) {
 		try{
@@ -109,7 +109,7 @@ public class SesionPagosFacadeEJB implements SessionBean {
 	 * Obtiene datos del pago
 	 * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public DatosPago obtenerDatosPago() {
 		try{
@@ -124,7 +124,7 @@ public class SesionPagosFacadeEJB implements SessionBean {
 	/**
 	 * Obtiene url de retorno a sistra
 	 * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
 	 */
 	public String obtenerUrlRetornoSistra(){
 		try{

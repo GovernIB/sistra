@@ -5,7 +5,7 @@ import es.caib.sistra.plugins.login.PluginAutenticacionExplicitaIntf;
 
 public class PluginAutenticacionExplicitaMock implements PluginAutenticacionExplicitaIntf  {
 
-	public AutenticacionExplicitaInfo getAutenticacionInfo() {
+	public AutenticacionExplicitaInfo getAutenticacionInfo(char tipoElemento, String idElemento) {
 		AutenticacionExplicitaInfo inf = new AutenticacionExplicitaInfo();
 		inf.setUser("explicitUser");
 		inf.setPassword("explicitPass");

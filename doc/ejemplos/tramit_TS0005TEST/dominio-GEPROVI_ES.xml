@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <Dominio autenticacionExplicita="N" cacheable="S" descripcion="REVISAR DESCRIPCION" identificador="GEPROVI_ES" localizacionEJB="L" secured="false" sql="SELECT   pro_codigo codigo,  pro_dencas descripcion
+    FROM str_dprovi
+	WHERE pro_codigo &lt; 53
+ORDER BY codigo" tipo="S" url="es.caib.sistra.db"/>

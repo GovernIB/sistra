@@ -26,7 +26,7 @@
     <property name="jar.product" location="${output.dir}/moduls"/>
 
     <path id="jar.class.path">
-    	<fileset dir="${lib.dir}/client"> 
+    	<fileset dir="${distribucion.dir}/client/ejb"> 
             <include name="redose-client.jar"/>
    		</fileset>    	
         <fileset dir="${distribucion.dir}/lib"> 

@@ -8,9 +8,12 @@ Indice de documentación:
 					* SISTRA-PLUGINREGISTRO
 					* SISTRA-PLUGINFIRMA
 					* SISTRA-PLUGINSMS
+					* SISTRA-PLUGINEMAIL
 					* SISTRA-PLUGINPAGOS
 					* SISTRA-PLUGINAUTEX
-	
+					* SISTRA-PLUGINCUSTODIA
+					* SISTRA-PLUGINGESTDOC
+						
 	- SISTRA-VERSIONES: Documento con las releases notes de cada versión liberada
 	
 	- SISTRA-INSTALACION: Describe cómo realizar la instalación de SISTRA y su posterior configuración
@@ -26,4 +29,4 @@ Indice de documentación:
 				de trámites entre entornos (p.e. de desarrollo a producción)
 	
 	- SISTRA-GESTORFORMULARIO: Anexo que describe como se puede definir en la plataforma de tramitación un
-				nuevo gestor de formularios alternativo a FORMS
+				nuevo gestor de formularios alternativo a FORMS.

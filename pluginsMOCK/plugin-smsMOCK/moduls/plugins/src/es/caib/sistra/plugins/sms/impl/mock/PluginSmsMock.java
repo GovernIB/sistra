@@ -11,13 +11,13 @@ import es.caib.sistra.plugins.sms.PluginSmsIntf;
  */
 public class PluginSmsMock implements PluginSmsIntf{
 
-	public String enviarSMS(String cuentaSMS,String telefono,String mensaje,boolean inmediato) throws Exception{
-		return "" + System.currentTimeMillis();
+	public void enviarSMS(String idEnvio, String cuentaSMS,String telefono,String mensaje,boolean inmediato) throws Exception{
+		return;
 	}
 	
 	public EstadoEnvio consultarEstadoEnvio(String idEnvio) throws Exception{
 		EstadoEnvio e = new EstadoEnvio();
-		e.setEstado(ConstantesSMS.ESTADO_DESCONOCIDO);
+		e.setEstado(ConstantesSMS.ESTADO_NO_IMPLEMENTADO);
 		e.setDescripcionEstado("Operacion no soportada");
 		return e;
 	}

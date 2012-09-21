@@ -67,6 +67,10 @@ public class UtilFirmaMock {
 	}
 	
 	
-	
+	public static String unescapeChars64UrlSafe( String cad ){
+	  	cad = cad.replaceAll( "-", "+" );
+	   	cad = cad.replaceAll( "_", "/" );
+	   	return cad;
+    }
 	
 }

@@ -41,7 +41,7 @@ public class PluginFirmaMock implements PluginFirmaIntf{
 	public FirmaIntf parseFirmaFromHtmlForm(String signatureHtmlForm) throws Exception {
 		// Devolvemos firma
 		FirmaMock firma = new FirmaMock();
-		firma.setSignature(signatureHtmlForm);
+		firma.setSignature(UtilFirmaMock.unescapeChars64UrlSafe(signatureHtmlForm));
 		firma.setFormato("CMS");
 		return firma;
 	}
@@ -75,6 +75,14 @@ public class PluginFirmaMock implements PluginFirmaIntf{
 		fic.setContenido(data);
 		fic.setNombreFichero("firma.txt");
 		return fic;
+	}
+	
+	public FirmaIntf parseFirmaFromWS(byte[] firmaBytes, String formatoFirma) throws Exception {
+		return parseFirmaFromBytes(firmaBytes, formatoFirma);
+	}
+
+	public byte[] parseFirmaToWS(FirmaIntf firma) throws Exception {
+		return parseFirmaToBytes(firma);
 	}
 	
 }
