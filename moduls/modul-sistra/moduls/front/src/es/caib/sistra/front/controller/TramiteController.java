@@ -10,6 +10,8 @@ import org.apache.struts.tiles.ComponentContext;
 
 import es.caib.sistra.front.Constants;
 import es.caib.sistra.model.TramiteFront;
+import es.caib.sistra.persistence.delegate.ConfiguracionDelegate;
+import es.caib.sistra.persistence.delegate.DelegateUtil;
 
 /**
  * El objetivo del controller de tramite es controlar la renderización del paso del trámite,
@@ -36,6 +38,15 @@ public class TramiteController extends BaseController
 		
 		request.setAttribute( Constants.PRINCIPAL_KEY, this.getPrincipal( request ) );
 		request.setAttribute( Constants.MODO_AUTENTICACION_KEY, String.valueOf( this.getMetodoAutenticacion( request ) ));
+		
+		String urlSistra = "";
+		try{
+			ConfiguracionDelegate delegate = DelegateUtil.getConfiguracionDelegate();
+			urlSistra = delegate.obtenerConfiguracion().getProperty("sistra.url");
+		}catch (Exception e) {
+			urlSistra = "";
+		}
+		request.setAttribute( "urlSistraAFirma", urlSistra );
 		
 	}
 	

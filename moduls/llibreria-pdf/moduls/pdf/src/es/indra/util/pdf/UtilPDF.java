@@ -1,7 +1,6 @@
 package es.indra.util.pdf;
 
 import java.awt.Color;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ import com.lowagie.text.pdf.BarcodePDF417;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfCopyFields;
+import com.lowagie.text.pdf.PdfEncryptor;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 import com.lowagie.text.pdf.PdfWriter;
@@ -26,10 +26,9 @@ public class UtilPDF {
 	
 	
 	/**
-	 * Concatena dos Pdfs
+	 * Concatena varios pdfs
 	 * @param pdfOut Outputstream al pdf de salida
 	 * @param pdfIn InputStreams de los pdfs a concatenar
-	 * @param pdfIn2
 	 */
 	public static void concatenarPdf(OutputStream pdfOut,InputStream [] pdfIn) throws Exception{
 		if (pdfIn.length < 2) {
@@ -47,7 +46,9 @@ public class UtilPDF {
             // Establecemos permisos del primer documento
             if (f==0){
             	permission = reader.getPermissions();
-            	writer.setEncryption(null, null,permission, PdfWriter.STRENGTH40BITS);
+            	if (permission != 0){
+            		writer.setEncryption(null, null,permission, PdfWriter.STRENGTH40BITS);
+            	}
             }
                         
             writer.addDocument(reader);
@@ -84,7 +85,9 @@ public class UtilPDF {
       
         PdfReader reader = new PdfReader(pdfIn);
         permission = reader.getPermissions();
-	    writer.setEncryption(null, null,permission, PdfWriter.STRENGTH40BITS);
+        if (permission != 0){
+        	writer.setEncryption(null, null,permission, PdfWriter.STRENGTH40BITS);
+        }
 	    writer.addDocument(reader,pagesToKeep);
         
         writer.close();
@@ -180,7 +183,9 @@ public class UtilPDF {
         PdfStamper stamp = new PdfStamper(reader, pdfOut);
 
         // Volvemos a establecer los permisos que tuviera
-        stamp.setEncryption(null, null, permission, PdfWriter.STRENGTH40BITS);
+        if (permission != 0) {
+        	stamp.setEncryption(null, null, permission, PdfWriter.STRENGTH40BITS);
+        }
 
         PdfContentByte under;
         PdfContentByte over;
@@ -328,5 +333,15 @@ public class UtilPDF {
 		int n = reader.getNumberOfPages();
 		return n;		
 	}
+	
+	/**
+	 * Establece permisos pdf a solo impresion
+	 * @param pdfOut Outputstream al pdf de salida con los permisos aplicados
+	 * @param pdfIn InputStreams del pdf sobre el que se deben aplicar los permisos
+	 */
+	public static void establecerSoloImpresion(OutputStream pdfOut,InputStream pdfIn) throws Exception{
+		PdfReader reader = new PdfReader(pdfIn);
+		PdfEncryptor.encrypt(reader, pdfOut, null,null, PdfWriter.AllowPrinting, false);		
+    }
 	
 }

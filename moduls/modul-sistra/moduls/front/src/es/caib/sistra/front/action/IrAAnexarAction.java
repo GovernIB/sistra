@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -40,20 +41,61 @@ public class IrAAnexarAction extends BaseAction
 		RespuestaFront respuestaFront = delegate.pasoActual();
 		TramiteFront tramite = respuestaFront.getInformacionTramite();
 		ArrayList arlAnexos = tramite.getAnexos();
+		String mostrarFirmaDigital = "N";
+		String listaFirmantes = "";
+		
+		// Buscamos anexo
+		boolean enc = false;
+		DocumentoFront anexo = null;
 		for ( int i = 0; i < arlAnexos.size(); i++ )
 		{
-			DocumentoFront anexo = ( DocumentoFront ) arlAnexos.get( i );
+			anexo = ( DocumentoFront ) arlAnexos.get( i );
 			if ( formulario.getIdentificador().equals( anexo.getIdentificador() ) )
 			{
-				request.setAttribute( "anexo", anexo );
-				// Si debe firmarse digitalmente establecemos atributo para la carga de entorno de firma
-				if (anexo.isFirmar()){
-					request.setAttribute(Constants.MOSTRAR_FIRMA_DIGITAL,"S");
-				}
+				enc = true;
 				break;
 			}
 		}
+		if (!enc){
+			throw new Exception("No se encuentra anexo");
+		}
+		
+		// Comprobamos si hay que realizar la firma delegada o digital
+		if (anexo.isFirmar()){
+			if (anexo.isFirmaDelegada()){
+				mostrarFirmaDigital = "D";
+			}else{
+				mostrarFirmaDigital = "S";
+			}
+			
+			// Formateamos lista de firmantes
+			String[] nifFirmantes = anexo.getFirmante().split("#");
+			String[] nomFirmantes = anexo.getNombreFirmante().split("#");
+			
+			String partY = " y ";
+			if ("ca".equals(this.getLang(request))){
+				partY = " i ";
+			}else if ("en".equals(this.getLang(request))){
+				partY = " and ";
+			}
+			
+			for (int i=0;i<nifFirmantes.length;i++){
+				if (i>0){
+					if (i == (nifFirmantes.length - 1)){
+						listaFirmantes +=  partY;
+					}else{
+						listaFirmantes += ", ";
+					}
+				}
+				listaFirmantes += nifFirmantes[i] + (StringUtils.isNotBlank(nomFirmantes[i])?" - " + nomFirmantes[i]:"");				
+			}
+			
+		}
 
+		request.setAttribute( "anexo", anexo );
+		request.setAttribute(Constants.MOSTRAR_FIRMA_DIGITAL,mostrarFirmaDigital);
+		request.setAttribute( "listaFirmantes", listaFirmantes );
+		
 		this.setRespuestaFront( request, respuestaFront );
 		return mapping.findForward("success");
 	}

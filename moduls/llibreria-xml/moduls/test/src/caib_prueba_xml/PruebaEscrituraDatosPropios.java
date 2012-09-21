@@ -11,8 +11,10 @@ import es.caib.xml.datospropios.factoria.impl.Dato;
 import es.caib.xml.datospropios.factoria.impl.DatosPropios;
 import es.caib.xml.datospropios.factoria.impl.Documento;
 import es.caib.xml.datospropios.factoria.impl.DocumentosEntregar;
+import es.caib.xml.datospropios.factoria.impl.FormulariosJustificante;
 import es.caib.xml.datospropios.factoria.impl.Instrucciones;
 import es.caib.xml.datospropios.factoria.impl.Solicitud;
+import es.caib.xml.datospropios.factoria.impl.TramiteSubsanacion;
 
 
 public class PruebaEscrituraDatosPropios {
@@ -48,6 +50,12 @@ public class PruebaEscrituraDatosPropios {
 			dato.setDescripcion ("XXXX2");
 			dato.setValor ("YYYY2");
 			solicitud.getDato().add (dato);
+			
+			dato = factoria.crearDato();
+			dato.setTipo (new Character (ConstantesDatosPropiosXML.DATOSOLICITUD_TIPO_INDICE));
+			dato.setDescripcion ("XXXX3");
+			dato.setValor ("YYYY3");
+			solicitud.getDato().add (dato);
 						
 			datosPropios.setSolicitud (solicitud);
 			
@@ -57,6 +65,7 @@ public class PruebaEscrituraDatosPropios {
 			instrucciones.setFechaTopeEntrega(new Date());
 			instrucciones.setTextoFechaTopeEntrega("Texto de fecha de entrega particularizado");			
 			instrucciones.setIdentificadorPersistencia("ENV/2006/002222");
+			instrucciones.setIdentificadorProcedimiento("PROC1");
 			
 			instrucciones.setHabilitarNotificacionTelematica("N");
 			
@@ -95,8 +104,20 @@ public class PruebaEscrituraDatosPropios {
 			instrucciones.setDocumentosEntregar(docsE);			
 			
 			
+			TramiteSubsanacion subs = factoria.crearTramiteSubsanacion();
+			subs.setExpedienteCodigo("EXPE2");
+			subs.setExpedienteUnidadAdministrativa(new Long(12));
+			instrucciones.setTramiteSubsanacion(subs);
+						
+			FormulariosJustificante forms = factoria.crearFormulariosJustificante();
+			forms.getFormularios().add("FORM1");
+			forms.getFormularios().add("FORM2");
+			forms.getFormularios().add("FORM3");
+			instrucciones.setFormulariosJustificante(forms);
+			
+			
 			datosPropios.setInstrucciones (instrucciones);
-																	
+			
 			// Guardar documento en fichero
 			System.out.println ("Escribiendo en consola"); 
 			factoria.guardarDatosPropios (datosPropios, new File ("moduls/llibreria-xml/moduls/test/datos_propios_generado.xml"));

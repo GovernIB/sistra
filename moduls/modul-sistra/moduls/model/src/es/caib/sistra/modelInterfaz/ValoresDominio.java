@@ -44,7 +44,7 @@ public class ValoresDominio  implements Serializable{
 	 */
 	public void setValor(int numfila,String cod,String val){
 		HashMap fila = (HashMap) filas.get(numfila - 1);
-		fila.put(cod,val);			
+		fila.put(cod.toUpperCase(),val);			
 	}
 	
 	/**
@@ -56,7 +56,7 @@ public class ValoresDominio  implements Serializable{
 	 */
 	public String getValor(int numfila,String cod){
 		HashMap fila = (HashMap) filas.get(numfila - 1);
-		String valor = (String) fila.get(cod);
+		String valor = (String) fila.get(cod.toUpperCase());
 		if (valor == null) return "";
 		return valor;
 	}
@@ -79,7 +79,7 @@ public class ValoresDominio  implements Serializable{
 			String ls_fila="";
 			for (Iterator it = fila.keySet().iterator();it.hasNext();){
 				String ls_key = (String) it.next();
-				ls_fila += "[" + ls_key + "=" + fila.get(ls_key) + "]  ";				
+				ls_fila += "[" + ls_key.toUpperCase() + "=" + fila.get(ls_key.toUpperCase()) + "]  ";				
 			}
 			System.out.println(ls_fila);
 		}
@@ -97,8 +97,20 @@ public class ValoresDominio  implements Serializable{
 	 * Establece lista
 	 * @param List con las filas
 	 */
-	public void setFilas(List filas) {
-		this.filas = filas;
+	public void setFilas(List pfilas) {
+		// Aseguramos que los codigos de columnas esten en mayusculas
+		resetear();
+		if (pfilas != null) {
+			int numfila;
+			for (int i=0;i<pfilas.size();i++){
+				HashMap fila = (HashMap) pfilas.get(i);
+				numfila = addFila();
+				for (Iterator it = fila.keySet().iterator();it.hasNext();){
+					String ls_key = (String) it.next();
+					setValor(numfila, ls_key.toUpperCase(), (String) fila.get(ls_key));							
+				}				
+			}
+		}	
 	}
 
 	/**
@@ -131,6 +143,13 @@ public class ValoresDominio  implements Serializable{
 	 */
 	public void setError(boolean error) {
 		this.error = error;
+	}
+	
+	/**
+	 * Resetea valores.
+	 */
+	public void resetear() {
+		this.filas = new ArrayList();
 	}
 		
 	

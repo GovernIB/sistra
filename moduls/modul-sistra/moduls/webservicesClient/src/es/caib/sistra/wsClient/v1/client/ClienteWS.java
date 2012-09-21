@@ -1,7 +1,5 @@
 package es.caib.sistra.wsClient.v1.client;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,15 +12,12 @@ import javax.xml.ws.soap.SOAPFaultException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.cxf.endpoint.Client;
-import org.apache.cxf.frontend.ClientProxy;
-import org.apache.cxf.transport.http.HTTPConduit;
-import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 
 import es.caib.sistra.model.DatosFormulario;
 import es.caib.sistra.modelInterfaz.DocumentoConsulta;
 import es.caib.sistra.modelInterfaz.ValoresDominio;
 import es.caib.util.StringUtil;
+import es.caib.util.ws.client.WsClientSistraUtil;
 
 /**
  * Cliente de WS para interfaz version 1 de backoffices para Sistra
@@ -151,7 +146,7 @@ public class ClienteWS {
         	log.error( "Error realizando consulta: " + exc.getMessage(), exc );
 			throw exc;
         } catch(SOAPFaultException e){
-        	log.error( "Error en el interceptor usuario incorrecto: " + e.getMessage(), e );
+        	log.error( "Error realizando consulta: " + e.getMessage(), e );
 			throw e;
        }
 	}
@@ -166,54 +161,13 @@ public class ClienteWS {
 		javax.xml.ws.Service service =javax.xml.ws.Service.create(SERVICE_NAME); 
 		service.addPort(PORT_NAME,javax.xml.ws.soap.SOAPBinding.SOAP11HTTP_BINDING, url);
 		es.caib.sistra.wsClient.v1.services.SistraFacade port = service.getPort(PORT_NAME,es.caib.sistra.wsClient.v1.services.SistraFacade.class);
-        BindingProvider bp = (BindingProvider)port;
-        bp.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, user);
-        bp.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, pass);
-        
-        //si no existe el host dentro del nonProxyHost nos connectamos al proxy, si existe no nos connectamos.
-        String proxyHost = System.getProperty("http.proxyHost"); 
-        if( proxyHost != null && !"".equals(proxyHost)){
-        	if(!validateNonProxyHosts(url)){        	
-        		Client client = ClientProxy.getClient(port);
-        		HTTPConduit conduit = (HTTPConduit) client.getConduit();
-        		HTTPClientPolicy policy = conduit.getClient();  
-        		policy.setProxyServer(proxyHost);  
-        		policy.setProxyServerPort(Integer.parseInt(System.getProperty("http.proxyPort")));  
           
-        		conduit.getProxyAuthorization().setUserName(System.getProperty("http.proxyUser"));  
-        		conduit.getProxyAuthorization().setPassword(System.getProperty("http.proxyPassword"));
-        	}
-        }
+		// Configura puerto para autenticacion y paso por proxy
+		WsClientSistraUtil.configurePort((BindingProvider)port,url,user,pass);
+		
         return port;
 	}
 	
-	/**
-	 * Busca els host de la url indicada dentro de la propiedad http.nonProxyHosts de la JVM 
-	 * @param url Endpoint del ws
-	 * @return true si el host esta dentro de la propiedad, fals en caso contrario
-	 */
-	private static boolean validateNonProxyHosts(String url) throws Exception{
-		String nonProxyHosts = System.getProperty("http.nonProxyHosts");
-	    boolean existe = false;
-	    URL urlURL;
-		try {
-		    if(nonProxyHosts != null && !"".equals(nonProxyHosts)){
-    			urlURL = new URL(url);
-    			String[] nonProxyHostsArray = nonProxyHosts.split("\\|");
-    			for (int i = 0; i < nonProxyHostsArray.length; i++) {
-    				String a = nonProxyHostsArray[i].replaceAll("\\.", "\\\\.").replaceAll("\\*", ".*");;
-    				if (urlURL.getHost().matches(a)) {
-    					existe = true;
-    					break;
-    				}
-    			}
-		    }
-		} catch (MalformedURLException e) {
-			log.error("Error al validar los nonProxyHost "+e.getCause(), e);
-			throw e;
-		}
-		return existe;
-	}
 	
 	/**
 	 * Convierte modelo ws a modelo interfaz

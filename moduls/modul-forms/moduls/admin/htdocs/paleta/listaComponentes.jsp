@@ -44,6 +44,10 @@
                     <bean:define id="nombre" name="componente" property="nombreLogico" type="java.lang.String"/>
                     <bean:define id="mensajeBaja"><bean:message arg0='<%=nombre%>' key='componente.baja' /></bean:define>
                     <bean:define id="urlBaja"><html:rewrite page='<%="/admin/componente/baja.do?idPaleta=" + idPaleta%>' paramId="id" paramName="componente" paramProperty="id"/></bean:define>
+                    <%
+                    mensajeBaja = mensajeBaja.replace("\'","&#145;");
+                    mensajeBaja = mensajeBaja.replace("\"","&#34;");
+                    %>
                     <button class="button" type="button" onclick="confirmAndForward('<%=mensajeBaja%>', '<%=urlBaja%>')"><bean:message key="boton.baixa" /></button>
                 </td>
             </tr>

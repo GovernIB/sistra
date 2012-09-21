@@ -47,9 +47,9 @@
     </target>
 
     <target name="jar.jar" depends="jar.compile">
-        <delete file="${jar.product}/regtel-${modul}.jar" quiet="yes"/>
+        <delete file="${jar.product}/8-regtel-${modul}.jar" quiet="yes"/>
         <jar
-            jarfile="${jar.product}/regtel-${modul}.jar"
+            jarfile="${jar.product}/8-regtel-${modul}.jar"
             basedir="${jar.classes}">
             <manifest>
                 <attribute name="Created-By" value="${indra}"/>

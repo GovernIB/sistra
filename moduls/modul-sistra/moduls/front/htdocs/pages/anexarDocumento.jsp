@@ -6,120 +6,122 @@
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 <bean:define id="anexo" name="anexo" type="es.caib.sistra.model.DocumentoFront"/>
 <html:xhtml/>
+<bean:define id="listaFirmantes" name="listaFirmantes" type="java.lang.String"/>
 <bean:define id="urlBorrarAnexo">
         <html:rewrite page="/protected/borrarAnexo.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.2.3.pack.js"></script>
 <script type="text/javascript">
 <!--
-	
 	var mensajeEnviando = '<bean:message key="anexarDocumentos.mensajeAnexar"/>';
 	var mensajePreparando = '<bean:message key="anexar.documento.preparar"/>';
-	<logic:equal name="anexo" property="firmar" value="true">
-		<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
-					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
-		
-			<bean:define id="contentTypeFirma" name="anexo" type="java.lang.String" property="contentType" />
+	<logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="S">		
+			<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+						 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
 			
-			var contentType = '<%= contentTypeFirma %>';
-		
-			function firmarCAIB(form){			
-				var applet = whichApplet();
-				var firma = '';	
-				var pin = document.formFirma.PIN.value;
-		
-				applet.setPassword( pin );
+				<bean:define id="contentTypeFirma" name="anexo" type="java.lang.String" property="contentType" />
 				
-				var contenidoFichero = $('#documentoFirmar').val();
-				if ( contenidoFichero == '' )
-				{
-					ocultarCapaInfo();
-					alert( "<bean:message key="firmarDocumento.introducirFichero"/>" );
-					document.anexarDocumentoForm.datos.focus();
-					document.anexarDocumentoForm.datos.select();
-					return false;
+				var contentType = '<%= contentTypeFirma %>';
+			
+				function firmarCAIB(form){			
+					var applet = whichApplet();
+					var firma = '';	
+					var pin = document.formFirma.PIN.value;
+			
+					applet.setPassword( pin );
+					
+					var contenidoFichero = $('#documentoFirmar').val();
+					if ( contenidoFichero == '' )
+					{
+						ocultarCapaInfo();
+						alert( "<bean:message key="firmarDocumento.introducirFichero"/>" );
+						document.anexarDocumentoForm.datos.focus();
+						document.anexarDocumentoForm.datos.select();
+						return false;
+					}
+					
+					firma = applet.firmarFicheroB64( $('#documentoFirmar').val(), contentType );	
+					if (firma == null || firma == ''){
+						ocultarCapaInfo();
+						alert(applet.getLastError());
+						return false;
+					}
+					form.firma.value = firma;	
+					return true;
+				}
+			</logic:equal>
+			
+			<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+						 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
+					
+				function prepararEntornoFirma(){
+					cargarAppletFirma(sistra_ClienteaFirma_buildVersion);
 				}
 				
-				firma = applet.firmarFicheroB64( $('#documentoFirmar').val(), contentType );	
-				if (firma == null || firma == ''){
-					ocultarCapaInfo();
-					alert(applet.getLastError());
-					return false;
-				}
-				form.firma.value = firma;	
-				return true;
-			}
-		</logic:equal>
-		
-		<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
-					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
+				function firmarAFirma(form){
+				
+				  if (clienteFirma == undefined) { 
+			          ocultarCapaInfo();
+			          alert("No se ha podido instalar el entorno de firma");
+			          return false;
+		        	}
+				
+					var contenidoFichero = $('#documentoFirmar').val();
+					if ( contenidoFichero == '' )
+					{
+						ocultarCapaInfo();
+						alert( "<bean:message key="firmarDocumento.introducirFichero"/>" );
+						document.anexarDocumentoForm.datos.focus();
+						document.anexarDocumentoForm.datos.select();
+						return false;
+					}
+					
+					clienteFirma.initialize();
+					clienteFirma.setShowErrors(false);
+					clienteFirma.setSignatureAlgorithm(sistra_ClienteaFirma_SignatureAlgorithm);
+					clienteFirma.setSignatureMode(sistra_ClienteaFirma_SignatureMode);
+					clienteFirma.setSignatureFormat(sistra_ClienteaFirma_SignatureFormat);
+					if($('#documentoFirmar').val() == null || $('#documentoFirmar').val() == ''){
+						ocultarCapaInfo();
+						return false;
+					}
 			
-			function prepararEntornoFirma(){
-				cargarAppletFirma();
-			}
+					// Pasamos de b64 urlSafe a b64
+					var b64 = b64UrlSafeToB64($('#documentoFirmar').val());
 			
-			function firmarAFirma(form){
-			
-			  if (clienteFirma == undefined) { 
-		          ocultarCapaInfo();
-		          alert("No se ha podido instalar el entorno de firma");
-		          return false;
-	        	}
-			
-				var contenidoFichero = $('#documentoFirmar').val();
-				if ( contenidoFichero == '' )
-				{
-					ocultarCapaInfo();
-					alert( "<bean:message key="firmarDocumento.introducirFichero"/>" );
-					document.anexarDocumentoForm.datos.focus();
-					document.anexarDocumentoForm.datos.select();
-					return false;
+					clienteFirma.setData(b64);
+					clienteFirma.sign();
+					
+					if(clienteFirma.isError()){
+						error = 'Error: '+clienteFirma.getErrorMessage();
+						ocultarCapaInfo();
+						alert(error);
+						return false;
+					}else{	
+					    firma = clienteFirma.getSignatureBase64Encoded();
+					    firma = b64ToB64UrlSafe(firma);
+   						form.firma.value = firma;
+					    return true;
+					}
 				}
 				
-				clienteFirma.initialize();
-				clienteFirma.setSignatureAlgorithm("sha1WithRsaEncryption");
-				clienteFirma.setSignatureMode("EXPLICIT");
-				clienteFirma.setSignatureFormat("CMS");
-				if($('#documentoFirmar').val() == null || $('#documentoFirmar').val() == ''){
-					ocultarCapaInfo();
-					return false;
-				}
-		
-				// Pasamos de b64 urlSafe a b64
-				var b64 = b64UrlSafeToB64($('#documentoFirmar').val());
-				
-				clienteFirma.setData(b64);
-				clienteFirma.sign();
-				
-				if(clienteFirma.isError()){
-					error = 'Error: '+clienteFirma.getErrorMessage();
-					ocultarCapaInfo();
-					alert(error);
-					return false;
-				}else{	
-				     firma = clienteFirma.getSignatureBase64Encoded();
-				     form.firma.value = firma;
-				     return true;
-				}
-			}
-			
-		</logic:equal>
+				prepararEntornoFirma();
+			</logic:equal>
 	</logic:equal>	
 	
-	function anexarDocumento(form,firmar)
+	function anexarDocumento(form)
 	{
 	
 		<logic:equal name="anexo" property="anexoGenerico" value="true">			
 			if 	(form.descPersonalizada.value==''){
+				ocultarCapaInfo();
 				alert( "<bean:message key="anexarDocumento.generico.descPersonalizada.nulo" />" );
 				return;
 			}
 		</logic:equal>	
 	
-		// Comprobamos si se debe firmar
-		//alert("pendiente firmar");
-		if ( firmar )
-		{		
+
+		<logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="S">		
 			// Firmamos
 			<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 						 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
@@ -127,8 +129,8 @@
 			</logic:equal>
 			<logic:equal name="implementacionFirma" value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
 				if (!firmarCAIB(form)) return;					
-			</logic:equal>			
-		}
+			</logic:equal>					
+		</logic:equal>	
 				
 		ocultarCapaInfo();
 		accediendoEnviando(mensajeEnviando);
@@ -138,14 +140,14 @@
 	}
 	
 	function fileUploaded(idInstancia){
-		var url_json = '<html:rewrite page="/recuperarDocumento.do"/>';
+		var url_json = '<html:rewrite page="/protected/recuperarDocumento.do"/>';
 		var data ='idInstancia='+idInstancia;
 		$.postJSON(
 			url_json,data,
 			function(datos){
 				if (datos.error==""){								
 					$('#documentoFirmar').val(datos.documento);
-					anexarDocumento(document.anexarDocumentoForm,<%=anexo.isFirmar()%>);
+					anexarDocumento(document.anexarDocumentoForm);
 				}else{
 					var mensajeErrorUpload = '<bean:message key="anexar.documento.null"/>';
 					alert(mensajeErrorUpload);
@@ -205,17 +207,19 @@
 				<!-- firma documento -->
 				<logic:equal name="anexo" property="firmar" value="true">
 					<h2 class="firmarAnexo">- <bean:message key="firmarDocumento.firmar"/></h2>
+					
+					<logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="S">
 					<!-- anexar documentos -->
 					<div id="anexarDocs">														
 						<!--  Instrucciones firma -->
-						<p class="apartado">					
-							<logic:notEmpty name="anexo" property="firmante">
-								<bean:message key="firmarDocumento.instrucciones.firmarOtro" arg0="<%=anexo.getFirmante()%>"/>
-							</logic:notEmpty>
-							<logic:empty name="anexo" property="firmante">
-								<bean:message key="firmarDocumento.instrucciones"/>
-							</logic:empty>		
-						</p>
+						<p class="apartado">								
+								<logic:notEmpty name="anexo" property="firmante">
+									<bean:message key="firmarDocumento.instrucciones.firmarOtro" arg0="<%=anexo.getFirmante()%>"/>
+								</logic:notEmpty>
+								<logic:empty name="anexo" property="firmante">
+									<bean:message key="firmarDocumento.instrucciones"/>
+								</logic:empty>									
+						</p>						
 						<!--  Instrucciones firma y Applet firma (depende de implementacion firma) -->
 						<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 									 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
@@ -241,7 +245,19 @@
 							</form>	
 						</logic:equal>
 					</div>	
-					<!-- <div class="ultimo"></div> -->			
+					</logic:equal>
+					
+					<logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="D">
+						<div id="anexarDocs">														
+							<!--  Instrucciones firma -->
+							<p class="apartado">
+								<bean:message key="firmarDocumento.instrucciones.firmarOtros" arg0="<%=listaFirmantes%>" />								
+								<br/>
+								<bean:message key="firmarDocumento.instrucciones.firmaDelegada" />	
+							</p>							
+						</div>
+					</logic:equal>
+					
 				</logic:equal>
 				
 				
@@ -271,6 +287,12 @@
 								<html:hidden property="firma" />
 								<html:hidden property="extensiones" value="<%=anexo.getAnexoExtensiones()%>" />
 								<html:hidden property="tamanyoMaximo"  value="<%=Integer.toString(anexo.getAnexoTamanyo())%>" />																					
+								<logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="D">	
+									<input type="hidden" id="firmaDelegada" name="firmaDelegada" value="S" />
+								</logic:equal>	
+								<logic:notEqual name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="D">	
+									<input type="hidden" id="firmaDelegada" name="firmaDelegada" value="N" />
+								</logic:notEqual>	
 							</p>
 						</html:form>
 						<html:form method="post" action="/protected/uploadDocumento" enctype="multipart/form-data" target="iframeUpload">																			
@@ -330,7 +352,7 @@
 										<html:hidden name="irAAnexarForm" property="ID_INSTANCIA"/>
 										<html:hidden name="irAAnexarForm" property="instancia" />	
 										<html:hidden name="irAAnexarForm" property="identificador" />							
-										<input name="anexarDocsBoton" id="anexarDocsBoton" type="button" value="<bean:message key="anexarDocumentos.marcarPresentar"/>" onclick="javascript:anexarDocumento(this.form,<%=anexo.isFirmar()%>);"/>
+										<input name="anexarDocsBoton" id="anexarDocsBoton" type="button" value="<bean:message key="anexarDocumentos.marcarPresentar"/>" onclick="javascript:anexarDocumento(this.form);"/>
 									</p>
 								</html:form>	
 						<% } %>

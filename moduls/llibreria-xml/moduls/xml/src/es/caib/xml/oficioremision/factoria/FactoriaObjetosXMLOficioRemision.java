@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import es.caib.xml.EstablecerPropiedadException;
 import es.caib.xml.FactoriaObjetosXML;
 import es.caib.xml.oficioremision.factoria.impl.OficioRemision;
+import es.caib.xml.oficioremision.factoria.impl.TramiteSubsanacion;
 
 /** Objeto que crea una factoria capaz de crear objetos para manejar
  * datos del documento XML de oficio remision
@@ -64,5 +65,9 @@ public interface FactoriaObjetosXMLOficioRemision extends FactoriaObjetosXML {
 	 */
 	public String guardarOficioRemision (OficioRemision oficioRemision) 
 	throws es.caib.xml.GuardaObjetoXMLException, EstablecerPropiedadException;
+					
+	/** Crea ub objeto de tramite de subsanacion 
+	 */
+	public TramiteSubsanacion crearTramiteSubsanacion() ;
 					
 }

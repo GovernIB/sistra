@@ -20,6 +20,7 @@ import es.caib.regtel.persistence.util.RegistroEntradaHelper;
 import es.caib.regtel.persistence.util.RegistroTelematicoWsEJBUtil;
 import es.caib.sistra.plugins.firma.FirmaIntf;
 import es.caib.xml.registro.factoria.impl.Justificante;
+import es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo;
 
 /**
  * Interfaz registro telematico WS
@@ -37,9 +38,9 @@ public class RegistroTelematicoWsDelegate implements StatelessDelegate {
         }
     }
 
-	public ReferenciaRDSAsientoRegistral prepararRegistroEntrada(DatosRegistroEntrada entrada) throws DelegateException { 
+	public ReferenciaRDSAsientoRegistral prepararRegistroEntrada(DatosRegistroEntrada entrada, int diasPersistencia) throws DelegateException { 
         try {
-            return getFacade().prepararRegistroEntrada(entrada);
+            return getFacade().prepararRegistroEntrada(entrada, diasPersistencia);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
@@ -68,6 +69,14 @@ public class RegistroTelematicoWsDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+	
+	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String numeroRegistro) throws DelegateException { 
+        try {
+            return getFacade().obtenerDetalleAcuseRecibo(numeroRegistro);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
 
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
@@ -77,5 +86,7 @@ public class RegistroTelematicoWsDelegate implements StatelessDelegate {
     }
 
     protected RegistroTelematicoWsDelegate() throws DelegateException {       
-    }                  
+    }
+
+	             
 }

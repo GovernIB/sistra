@@ -24,6 +24,29 @@
             <li>no pueden haber m&aacute;s de un control de este tipo por pantalla </li>
           </ul>
 	    </li>
+	    <li>Operativa :
+	        <ul>
+	          <li>
+	          	Acceso a elementos seleccionados desde los scripts: <br/>
+	          	<ul>
+		          <li>
+		          	f_<i>idarbol</i> : devuelve un array con los c&oacute;digos de los elementos seleccionados. 
+		          </li>
+		          <li>
+		          	f_<i>idarbol</i>_text : devuelve un array con las descripciones de los elementos seleccionados. 
+		          </li>
+		          <li>
+		          	f_<i>idarbol</i>.length : n&uacute;mero de elementos seleccionados. 
+		          </li>		          
+		         </ul>		         
+		         Ejemplo:
+		         <br/>
+		         for (i=0;i&lt;f_testArbol.length;i++){ <br/>				 
+   					&nbsp;&nbsp;PLUGIN_LOG.debug('CODIGO: ' + f_testArbol[i] + ' - DESCRIPCION: ' +   f_testArbol_text[i]); <br/>
+				 } 						         
+	          </li>
+	         </ul>
+	    </li> 
       </ul>
 	</li>
 </ul>
@@ -183,11 +206,12 @@ PLUGIN_LOG.debug(nom);<br />
 	
 	   <b>Bugs conocidos</b><br/>
 <br/>
-	<ul><li><strong>CDT:Campo de Texto - Multilinea [NO SE PLANTEA SOLUCION HASTA NO SER NECESARIO]</strong><br/>FORMS genera XML con elemento con saltos de línea (mal generado ya que los saltos de línea en XML se obvian si no es CDATA) y luego no se cargan bien desde el XML inicial.</li>
-      <li><strong>Exportaci&oacute;n scripts: </strong>Los scripts se exportan como texto plano por lo que al importar no se respetan los saltos de l&iacute;nea. Este modo de funcionamiento obliga a no poder usar comentarios y terminar cada l&iacute;nea del script con &quot;;&quot;.<br />
-        <br/>
-      </li>
-</ul>    
+	<ul>
+		<li><strong>CDT:Campo de Texto - Multilinea [NO SE PLANTEA SOLUCION HASTA NO SER NECESARIO]</strong><br/>FORMS genera XML con elemento con saltos de línea (mal generado ya que los saltos de línea en XML se obvian si no es CDATA) y luego no se cargan bien desde el XML inicial.</li>
+	</ul>		      
+</ul>   
+
+<br /><br/> 
 	
 <p><strong>Scripts</strong><br/>
   <br/>

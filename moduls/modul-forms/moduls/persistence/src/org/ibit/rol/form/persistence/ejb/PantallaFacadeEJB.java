@@ -40,7 +40,7 @@ public abstract class PantallaFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long gravarPantalla(Pantalla pantalla, Long formulario_id) {
         Session session = getSession();
@@ -133,7 +133,7 @@ public abstract class PantallaFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public List listarPantallasFormulario(Long formulario_id) {
         Session session = getSession();
@@ -151,7 +151,7 @@ public abstract class PantallaFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void cambiarOrden(Long pantalla1_id, Long pantalla2_id) {
         Session session = getSession();
@@ -183,7 +183,7 @@ public abstract class PantallaFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarPantalla(Long id) {
         Session session = getSession();

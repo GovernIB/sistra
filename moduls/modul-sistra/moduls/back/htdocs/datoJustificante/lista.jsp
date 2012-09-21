@@ -101,7 +101,7 @@
        		<logic:notEmpty name="idTrNivel"><% codigo = idTrNivel; %></logic:notEmpty>
        		<logic:empty name="idTrNivel"><% codigo = idEspecTramiteNivel; %></logic:empty>
 	        <bean:define id="urlBack">
-		        <html:rewrite page="<%="/back/" + funcionalidad + "/seleccion.do?codigo=" + codigo%>" />
+		        <html:rewrite page="<%=\"/back/\" + funcionalidad + \"/seleccion.do?codigo=\" + codigo%>" />
 		    </bean:define>
             <button class="buttond" type="button" onclick="forward('<%= urlBack %>')">
                 <bean:message key="boton.cancel" />

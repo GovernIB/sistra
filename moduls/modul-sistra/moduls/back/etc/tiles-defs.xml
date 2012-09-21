@@ -120,7 +120,7 @@
     
     
 	<!--  Definicion para las especificaciones genericas  -->
-    <definition name=".especificacionesGenericas.editar" extends=".editar">
+    <definition name=".especificacionesGenericas.editar" extends=".editar"  controllerClass="es.caib.sistra.back.action.especificacionesGenericas.EspecificacionGenericaController">
         <put name="title" value="especificacionesGenericas.title"/>
         <put name="alta.title" value="especificacionesGenericas.alta"/>
         <put name="modificacion.title" value="especificacionesGenericas.modificacion"/>
@@ -161,6 +161,9 @@
      controllerClass="es.caib.sistra.back.action.tramiteVersion.FuncsNodesUnidadesController" />
   
     <definition name=".tramiteVersion.importar" path="/tramiteVersion/importar.jsp"/>
+    
+     <definition name=".tramiteVersion.importarPreview" path="/tramiteVersion/importarPreview.jsp"
+     controllerClass="es.caib.sistra.back.action.xml.ImportarXMLPreviewController" />
 	    
     <definition name=".tramiteVersion.lista" path="/tramiteVersion/lista.jsp" controllerClass="es.caib.sistra.back.action.tramiteVersion.ListaTramiteVersionesController">
         <put name="id" value="" />
@@ -168,7 +171,7 @@
     
     <!-- ====================== NIVEL TRAMITE=================== -->
     
-    <definition name=".tramiteNivel.editar" extends=".especificacionesTramite.editar">
+    <definition name=".tramiteNivel.editar" extends=".especificacionesTramite.editar" controllerClass="es.caib.sistra.back.action.tramiteNivel.EspecificacionNivelController">
         <put name="title" value="tramiteNivel.title"/>
         <put name="alta.title" value="tramiteNivel.alta"/>
         <put name="modificacion.title" value="tramiteNivel.modificacion"/>

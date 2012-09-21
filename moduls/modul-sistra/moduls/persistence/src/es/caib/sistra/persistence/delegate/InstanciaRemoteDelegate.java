@@ -5,6 +5,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.ejb.CreateException;
+import javax.ejb.EJBException;
 import javax.ejb.Handle;
 import javax.ejb.RemoveException;
 import javax.naming.NamingException;
@@ -19,12 +20,12 @@ import es.caib.sistra.plugins.firma.FirmaIntf;
 public class InstanciaRemoteDelegate implements InstanciaDelegate
 {
 
-	public void create(String tramite, int version,char nivel, Locale idioma,Map parametrosInicio)
+	public void create(String tramite, int version,char nivel, Locale idioma,Map parametrosInicio,  String perfilAcceso, String nifEntidad)
 			throws DelegateException
 	{
 		try 
 		{
-			TramiteProcessor remote = TramiteProcessorUtil.getHome().create( tramite, version,nivel, idioma, parametrosInicio );
+			TramiteProcessor remote = TramiteProcessorUtil.getHome().create( tramite, version,nivel, idioma, parametrosInicio,   perfilAcceso,  nifEntidad );
 			remoteHandle = remote.getHandle();
 		} catch (CreateException e) {
 	        throw new DelegateException(e);
@@ -190,11 +191,11 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 
 	public RespuestaFront anexarDocumento(String identificador, int instancia,
 			byte[] datosDocumento, String nomFichero, String extension,
-			String descPersonalizada,FirmaIntf firma) throws DelegateException
+			String descPersonalizada,FirmaIntf firma, boolean firmaDelegada) throws DelegateException
 	{
         try 
         {
-        	return getRemote().anexarDocumento( identificador, instancia, datosDocumento, nomFichero, extension, descPersonalizada,firma );
+        	return getRemote().anexarDocumento( identificador, instancia, datosDocumento, nomFichero, extension, descPersonalizada,firma, firmaDelegada );
         } catch (RemoteException e) 
         {
             throw new DelegateException(e);
@@ -296,11 +297,11 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
         }
 	}
 	
-	public RespuestaFront firmarFormulario(String identificador,int instancia,FirmaIntf firma) throws DelegateException 
+	public RespuestaFront firmarFormulario(String identificador,int instancia,FirmaIntf firma,boolean firmaDelegada) throws DelegateException 
 	{
 		try
 		{
-			return getRemote().firmarFormulario( identificador, instancia, firma );
+			return getRemote().firmarFormulario( identificador, instancia, firma, firmaDelegada );
 		}
 		catch( RemoteException e )
 		{
@@ -366,10 +367,10 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 		}
 	}
 	
-	public void habilitarNotificacionTelematica(boolean habilitar) throws DelegateException {
+	public void habilitarNotificacion(boolean habilitarNotificacion, String emailAviso, String smsAviso)  throws DelegateException {
 		try
 		{
-			 getRemote().habilitarNotificacionTelematica(habilitar);			             
+			 getRemote().habilitarNotificacion(habilitarNotificacion, emailAviso, smsAviso);			             
 		}
 		catch( RemoteException e )
 		{
@@ -390,7 +391,54 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 	}
 	
 	
+	public RespuestaFront mostrarFormularioDebug(String idDocumento, int instancia) throws DelegateException {
+		try
+		{
+			return getRemote().mostrarFormularioDebug(idDocumento, instancia);
+		}
+		catch( RemoteException e )
+		{
+			throw new DelegateException( e );
+		}
+		
+	}
+	
+	public RespuestaFront remitirDelegacionPresentacionTramite()  throws DelegateException {
+		try
+		{
+			return getRemote().remitirDelegacionPresentacionTramite();
+		}
+		catch( RemoteException e )
+		{
+			throw new DelegateException( e );
+		}
+		
+	}
+	
+	public RespuestaFront remitirDelegacionFirmaDocumentos()  throws DelegateException{
+		try
+		{
+			return getRemote().remitirDelegacionFirmaDocumentos();
+		}
+		catch( RemoteException e )
+		{
+			throw new DelegateException( e );
+		}
+		
+	}
+	
 
+	public void resetHabilitarNotificacion() throws DelegateException {
+		try
+		{
+			getRemote().resetHabilitarNotificacion();
+		}
+		catch( RemoteException e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
 	public void destroy() 
 	{
         try 
@@ -415,6 +463,13 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 
     protected InstanciaRemoteDelegate() {
     }
+
+
+
+
 	
+	
+
+
 
 }

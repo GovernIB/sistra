@@ -12,8 +12,8 @@ import org.apache.commons.logging.LogFactory;
 public class Util
 {
 	private static Log log = LogFactory.getLog( Util.class );
-	private static String ROLE_AUDITOR_PARAM = "role.auditor";
-	private static String ROLE_ADMIN_PARAM = "role.sistra";
+	private static String ROLE_AUDITOR_PARAM = "role.audit";
+	private static String ROLE_ADMIN_PARAM = "role.admin";
 		
 	private static HashMap _hsmParams = new HashMap();	
 	

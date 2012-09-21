@@ -23,6 +23,7 @@ import es.caib.sistra.model.InstanciaBean;
 import es.caib.sistra.persistence.delegate.DelegateException;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
 import es.caib.sistra.persistence.delegate.InstanciaDelegate;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 
 /**
  * Mantiene un registro de InstanciaDelegate.
@@ -144,7 +145,15 @@ public class InstanciaManager
                     try 
                     {
                         InstanciaDelegate delegate = DelegateUtil.getInstanciaDelegate( true );
-                        delegate.create(bean.getIdTramite(), bean.getVersion(),bean.getNivelAutenticacion(), bean.getLocale(),null );
+                        
+                        // Comprobamos si funcionamos en modo delegado
+            			String perfilAcceso = (String) event.getSession().getAttribute(ConstantesZPE.DELEGACION_PERFIL_ACCESO_KEY);
+            			String nifEntidad = null;
+            			if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(perfilAcceso) ){
+            				nifEntidad = (String) event.getSession().getAttribute(ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO_ENTIDAD_KEY);
+            			}
+                        
+                        delegate.create(bean.getIdTramite(), bean.getVersion(),bean.getNivelAutenticacion(), bean.getLocale(),null, perfilAcceso, nifEntidad );
                         // Cargar el ejb de sesion con el estado correspondiente
                         delegate.cargarTramite( bean.getIdPersistencia() );
                         String idInstancia = idInstanciaBean.substring(idInstanciaBean.indexOf("@") + 1);

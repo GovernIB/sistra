@@ -189,6 +189,12 @@ public class RegistroSalidaHelper{
 			datosRpdo = factReg.crearDatosInteresado();
 			datosRpdo.setTipoInteresado(ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTADO);
 			datosRpdo.setNumeroIdentificacion(nif);
+			if (NifCif.esNIF(nif))
+				datosRpdo.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIF));
+			else if (NifCif.esCIF(nif))
+				datosRpdo.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_CIF));
+			else if (NifCif.esNIE(nif))
+				datosRpdo.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE));
 			datosRpdo.setFormatoDatosInteresado(ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
 			datosRpdo.setIdentificacionInteresado(apellidosNombre);			
 		} catch (EstablecerPropiedadException e) {
@@ -224,6 +230,25 @@ public class RegistroSalidaHelper{
 		} catch (EstablecerPropiedadException e) {
 			throw new ExcepcionRegistroTelematico("Excepcion estableciendo propiedades",e);
 		}
+	}
+
+	/**
+	 * Indica que se debe realizar un trámite de subsanación
+	 *
+	 * @param descripcionTramite (Obligatorio)
+	 * @param identificadorTramite (Obligatorio)
+	 * @param versionTramite (Obligatorio)
+	 * @param parametrosTramite 
+	 * @throws ExcepcionRegistroTelematico
+	 */
+	public void setTramiteSubsanacion(String descripcionTramite,String identificadorTramite,int versionTramite, Map<String,String> parametrosTramite) throws ExcepcionRegistroTelematico {
+		oficio.setTramiteSubsanacion(factOfi.crearTramiteSubsanacion());
+		oficio.getTramiteSubsanacion().setDescripcionTramite(descripcionTramite);
+		oficio.getTramiteSubsanacion().setIdentificadorTramite(identificadorTramite);
+		oficio.getTramiteSubsanacion().setVersionTramite(new Integer(versionTramite));
+		if (parametrosTramite != null && parametrosTramite.size() > 0){
+			oficio.getTramiteSubsanacion().setParametrosTramite(parametrosTramite);
+		}			
 	}
 
 	/**
@@ -323,12 +348,18 @@ public class RegistroSalidaHelper{
 				docRDSAnexo.setUnidadAdministrativa(Long.parseLong(expediente.getUnidadAdministrativa(),10));
 				docRDSAnexo.setUsuarioSeycon(datosRpte.getUsuarioSeycon());			
 				docRDSAnexo.setNif(datosRpte.getNumeroIdentificacion());
+						docRDSAnexo.setIdioma(datosAsunto.getIdiomaAsunto());
 			}			
 			}			
 			
 			// Generamos xml de aviso			
 			String xmlAviso = factAvi.guardarAvisoNotificacion(aviso);
-			String nomDocAviso = datosAsunto.getIdiomaAsunto().equals("es")?"Aviso de notificación":"Avís de notificació";			
+			String nomDocAviso = "Aviso de notificación";
+			if (datosAsunto.getIdiomaAsunto().equals("ca")){
+				nomDocAviso = "Avís de notificació";				
+			}else if (datosAsunto.getIdiomaAsunto().equals("en")){
+				nomDocAviso = "Warning notification";
+			}
 			
 			DocumentoRDS docRDSAviso = new DocumentoRDS();
 			docRDSAviso.setModelo(ConstantesRDS.MODELO_AVISO_NOTIFICACION);			
@@ -340,13 +371,19 @@ public class RegistroSalidaHelper{
 			docRDSAviso.setUnidadAdministrativa(Long.parseLong(expediente.getUnidadAdministrativa(),10));
 			docRDSAviso.setUsuarioSeycon(datosRpte.getUsuarioSeycon());			
 			docRDSAviso.setNif(datosRpte.getNumeroIdentificacion());
+			docRDSAviso.setIdioma(this.datosAsunto.getIdiomaAsunto());
 			
 			DatosAnexoDocumentacion anexoAviso = crearDatosAnexoDocumentacion(docRDSAviso,ConstantesAsientoXML.IDENTIFICADOR_AVISO_NOTIFICACION+"-1",ConstantesAsientoXML.DATOSANEXO_AVISO_NOTIFICACION,true);
 			
 			
 			// Generamos xml de oficio
 			String xmlOficio = factOfi.guardarOficioRemision(oficio);
-			String nomDocOficio = datosAsunto.getIdiomaAsunto().equals("es")?"Oficio de remisión":"Ofici de remissió";
+			String nomDocOficio = "Oficio de remisión";
+			if (datosAsunto.getIdiomaAsunto().equals("ca")){
+				 nomDocOficio = "Ofici de remissió";
+			}else if (datosAsunto.getIdiomaAsunto().equals("en")){
+				nomDocOficio = "Office referral";
+			}
 			
 			DocumentoRDS docRDSOficio = new DocumentoRDS();
 			docRDSOficio.setModelo(ConstantesRDS.MODELO_OFICIO_REMISION);			
@@ -358,6 +395,7 @@ public class RegistroSalidaHelper{
 			docRDSOficio.setUnidadAdministrativa(Long.parseLong(expediente.getUnidadAdministrativa(),10));
 			docRDSOficio.setUsuarioSeycon(datosRpte.getUsuarioSeycon());			
 			docRDSOficio.setNif(datosRpte.getNumeroIdentificacion());
+			docRDSOficio.setIdioma(this.datosAsunto.getIdiomaAsunto());
 			
 			DatosAnexoDocumentacion anexoOficio = crearDatosAnexoDocumentacion(docRDSOficio,ConstantesAsientoXML.IDENTIFICADOR_OFICIO_REMISION+"-1",ConstantesAsientoXML.DATOSANEXO_OFICIO_REMISION,true);
 									
@@ -392,6 +430,7 @@ public class RegistroSalidaHelper{
 				if (anexo instanceof DocumentoRDS){
 					// Insertamos en RDS
 					docRDSAnexo = (DocumentoRDS) anexo;
+					docRDSAnexo.setIdioma(datosAsunto.getIdiomaAsunto());
 				ref = redoseEJB.insertarDocumento(docRDSAnexo);
 				docRDSAnexo.setReferenciaRDS(ref);
 				}else if (anexo instanceof ReferenciaRDS){
@@ -422,6 +461,7 @@ public class RegistroSalidaHelper{
 			docRDSAsiento.setUnidadAdministrativa(Long.parseLong(expediente.getUnidadAdministrativa(),10));
 			docRDSAsiento.setUsuarioSeycon(datosRpte.getUsuarioSeycon());			
 			docRDSAsiento.setNif(datosRpte.getNumeroIdentificacion());
+			docRDSAsiento.setIdioma(datosAsunto.getIdiomaAsunto());
 			ref = redoseEJB.insertarDocumento(docRDSAsiento);
 			
 			// Devolvemos referencia asiento registral y sus anexos

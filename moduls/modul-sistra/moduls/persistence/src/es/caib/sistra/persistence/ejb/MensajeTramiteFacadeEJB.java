@@ -29,7 +29,7 @@ public abstract class MensajeTramiteFacadeEJB extends HibernateEJB {
 
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
@@ -38,7 +38,7 @@ public abstract class MensajeTramiteFacadeEJB extends HibernateEJB {
 	  
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public MensajeTramite obtenerMensajeTramite(Long id) {
         Session session = getSession();
@@ -55,7 +55,7 @@ public abstract class MensajeTramiteFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public MensajeTramite obtenerMensajeTramite(String idTramite,int idVersion,String idMensajeTramite){
         Session session = getSession();
@@ -83,7 +83,7 @@ public abstract class MensajeTramiteFacadeEJB extends HibernateEJB {
         
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long grabarMensajeTramite(MensajeTramite obj,Long idTramiteVersion) {        
     	Session session = getSession();
@@ -107,7 +107,7 @@ public abstract class MensajeTramiteFacadeEJB extends HibernateEJB {
         
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Map listarMensajesTramite(Long idTramiteVersion) {
         Session session = getSession();
@@ -124,7 +124,7 @@ public abstract class MensajeTramiteFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarMensajeTramite(Long id) {
         Session session = getSession();

@@ -1,11 +1,11 @@
   <env-entry>
-     <env-entry-name>role.auditor</env-entry-name>
-     <env-entry-value>@role.auditor@</env-entry-value>
+     <env-entry-name>role.audit</env-entry-name>
+     <env-entry-value>@role.audit@</env-entry-value>
      <env-entry-type>java.lang.String</env-entry-type>
   </env-entry>
   <env-entry>
-     <env-entry-name>role.sistra</env-entry-name>
-     <env-entry-value>@role.sistra@</env-entry-value>
+     <env-entry-name>role.admin</env-entry-name>
+     <env-entry-value>@role.admin@</env-entry-value>
      <env-entry-type>java.lang.String</env-entry-type>
   </env-entry>  
 

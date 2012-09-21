@@ -54,7 +54,7 @@
 		<thead>
 			<tr>
 				<th scope="col" style="width:.1em;">&nbsp;</TH>
-				<logic:iterate name="<%="listaelementos@"+nombre%>" property="camposTabla" id="campoTabla">
+				<logic:iterate name="<%=\"listaelementos@\"+nombre%>" property="camposTabla" id="campoTabla">
 				<logic:notEmpty name="campoTabla" property="anchoColumna">				
 				<th scope="col" style="width:<bean:write name="campoTabla" property="anchoColumna"/>%;">				
 				</logic:notEmpty>
@@ -67,7 +67,7 @@
 		</thead>
 		<tbody>
 		 <%int i=0;%>
-	     <logic:iterate name="<%="listaelementos@"+nombre%>" property="filasTabla" id="filaTabla">
+	     <logic:iterate name="<%=\"listaelementos@\"+nombre%>" property="filasTabla" id="filaTabla">
 	     	<tr>
 		      <td><input name="<%="listaelementos@"+nombre+"-index"%>" type="radio" value="<%=i++%>"></td>
 		      <logic:iterate name="filaTabla" id="datoTabla">

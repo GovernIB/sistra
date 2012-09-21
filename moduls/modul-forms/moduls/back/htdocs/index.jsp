@@ -11,7 +11,7 @@ Página principal.
 --%>
 <html:html locale="true" xhtml="true">
 <head>
-   <title><bean:message key="main.title" /></title>
+   <title>FORMBACK</title>
    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-15" />
 </head>
 <%--
@@ -28,7 +28,7 @@ Frameborder no se puede poner en frameset, de momento está por un bug del mozill
   </bean:define>
   
   
-  <html:frame frameName="Ventana" href="<%=urlAbrirForm + "?modelo=" + request.getParameter("modelo") + "&version=" + request.getParameter("version") %>" frameborder="0" scrolling="auto" noresize="true" />
+  <html:frame frameName="Ventana" href="<%=urlAbrirForm + \"?modelo=\" + request.getParameter(\"modelo\") + \"&version=\" + request.getParameter(\"version\") %>" frameborder="0" scrolling="auto" noresize="true" />
   <%}%>
 </frameset>
 </html:html>

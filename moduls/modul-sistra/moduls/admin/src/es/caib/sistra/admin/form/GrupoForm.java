@@ -73,18 +73,18 @@ public class GrupoForm extends ValidatorForm {
         if (errors == null) {
             errors = new ActionErrors();
         }
-        if(StringUtils.isEmpty(codigo)){
+        if(StringUtils.isBlank(codigo)){
         	errors.add("grupo", new ActionError("errors.required","Código"));
         	error = true;
         }
-        if(StringUtils.isEmpty(nombre)){
+        if(StringUtils.isBlank(nombre)){
         	errors.add("grupo", new ActionError("errors.required","Nombre"));
         	error = true;
         }
         if(error){
         	GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
         	List usuarios = null;
-        	if(StringUtils.isEmpty(codigo))
+        	if(StringUtils.isBlank(codigo))
         		usuarios = (List) request.getSession().getAttribute("usuarios");
         	else{
         		try {

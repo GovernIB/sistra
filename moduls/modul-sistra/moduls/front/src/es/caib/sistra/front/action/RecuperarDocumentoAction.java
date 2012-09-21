@@ -11,7 +11,7 @@ import es.caib.sistra.front.json.JSONObject;
 
 /**
  * @struts.action
- *  path="/recuperarDocumento"
+ *  path="/protected/recuperarDocumento"
  *  validate="true"
  */
 public class RecuperarDocumentoAction extends BaseAction

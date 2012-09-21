@@ -20,9 +20,9 @@ public class EspecTramiteNivel  extends Traducible {
      private byte[] campoRdoNif;
      private byte[] campoRdoNom;
      private byte[] urlFin;
-     // X: No especificada / S: Permite / N: No permite / O: Obligatoria
-     private String habilitarNotificacionTelematica="X";
-     private byte[] habilitarAvisos;
+     // X: Sin especificar (para sobreescribir x nivel) / N: No permite /  S: Permite / O: Obligatoria
+     private String habilitarNotificacionTelematica = "X";
+     private String permitirSMS = "N"; // S / N
      private byte[] avisoSMS;
      private byte[] avisoEmail;
      private List datosJustificante = new ArrayList();     
@@ -274,17 +274,6 @@ public class EspecTramiteNivel  extends Traducible {
 		this.avisoSMS = avisoSMS;
 	}
 
-
-	public byte[] getHabilitarAvisos() {
-		return habilitarAvisos;
-	}
-
-
-	public void setHabilitarAvisos(byte[] habilitarAvisos) {
-		this.habilitarAvisos = habilitarAvisos;
-	}
-
-
 	public String getHabilitarNotificacionTelematica() {
 		return habilitarNotificacionTelematica;
 	}
@@ -313,6 +302,16 @@ public class EspecTramiteNivel  extends Traducible {
 
 	public void setDestinatarioTramite(byte[] destinatarioTramite) {
 		this.destinatarioTramite = destinatarioTramite;
+	}
+
+
+	public String getPermitirSMS() {
+		return permitirSMS;
+	}
+
+
+	public void setPermitirSMS(String permitirSMS) {
+		this.permitirSMS = permitirSMS;
 	}
     
 	

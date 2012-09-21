@@ -42,6 +42,10 @@
                         <bean:define id="nombre" name="valor" property="traduccion.etiqueta" type="java.lang.String"/>
                         <bean:define id="mensajeBaja"><bean:message arg0='<%=StringUtils.escape(nombre)%>' key='componente.baja' /></bean:define>
                         <bean:define id="urlBaja"><html:rewrite page='<%="/back/valorposible/baja.do?idComponente=" + idComponente%>' paramId="id" paramName="valor" paramProperty="id"/></bean:define>
+                        <%
+                        mensajeBaja = mensajeBaja.replace("\'","&#145;");
+                        mensajeBaja = mensajeBaja.replace("\"","&#34;");
+    	                %>
                         <button class="button" type="button" onclick="confirmAndForward('<%=mensajeBaja%>', '<%=urlBaja%>')"><bean:message key="boton.baixa" /></button>
                     </logic:present>
                     

@@ -88,23 +88,22 @@
     <td>Referencia representante</td>
     <td><p>Para crear el asiento es necesario indicar qui&eacute;n es el representante. 
         Para ello hay que indicar los valores de los campos del formulario que 
-        contengan el DNI y el nombre completo del representante. El tipo de estos 
+        contengan el NIF y el nombre completo del representante (seg&uacute;n formato asiento registral). El tipo de estos 
         campos es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> 
-        y espera en cada caso el valor del DNI y el nombre completo. </p>
-      <p>Este dato es <strong>obligatorio</strong> especificarlo (bien en las 
-        especificaciones gen&eacute;ricas o por nivel). <br>
+        y espera en cada caso el valor del NIF y el nombre completo. </p>
+        
+      <p>Este dato es <strong>obligatorio</strong> especificarlo si el trámite es autenticado (en las 
+        especificaciones gen&eacute;ricas o por nivel).  <br>
         <br>
-        La &uacute;nica excepci&oacute;n permitida es para acceso An&oacute;nimo 
-        siempre que el destino del tr&aacute;mite no sea registro. Para este caso 
-        se permitir&aacute; no establecer esta informaci&oacute;n o bien que el 
-        script devuelva vac&iacute;o. Esta funcionalidad nos permitir&aacute; 
-        tr&aacute;mites con acceso an&oacute;nimo sin identificar al solicitante.</p></td>
+        La &uacute;nica excepci&oacute;n permitida es para acceso An&oacute;nimo. Si el destino es registro el nif podr&aacute; ser opcional pero el
+        nombre ser&aacute; obligatorio. Si el destino no es registro el nif y el nombre podr&aacute;n ser opcionales.
+        Para no establecer el nif o el nombre se deber&aacute; dejar vac&iacute;o el script o bien que el script devuelva la cadena "NO-VALOR".</p></td>
   </tr>
   <tr> 
     <td>Referencia representado</td>
     <td><p>En caso de que exista representaci&oacute;n es necesario indicar qui&eacute;n 
         es el representado. Para ello hay que indicar los valores de los campos del formulario que 
-        contengan el DNI y el nombre completo del representado. El tipo de estos 
+        contengan el DNI y el nombre completo del representado (seg&uacute;n formato asiento registral). El tipo de estos 
         campos es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> y espera en cada caso el valor del DNI y el nombre completo. </p></td>
   </tr>
   
@@ -112,7 +111,7 @@
     <td>Script de destinatario tr&aacute;mite</td>
     <td>
     	<p>
-    		Este script permite establecer din&aacute;micamente el destinatario del tr&aacute;mite: oficina registral, organo destino y unidad administrativa.
+    		Este script permite establecer din&aacute;micamente el destinatario del tr&aacute;mite: procedimiento, oficina registral, organo destino y unidad administrativa.
     		Aunque se establezca din&aacute;micamente por script se deber&aacute;n establecer unos valores iniciales en la ficha de la versi&oacute;n del tr&aacute;mite.
     		Por defecto el destinatario tendr&aacute; estos valores.
     	</p>
@@ -127,6 +126,7 @@
    			<br/>
 		   	<em>
 		   		// Establecer destinatario dinamicamente<br/>
+		   		DESTINATARIO_TRAMITE.setProcedimiento('PROC1');<br/>
 		   		DESTINATARIO_TRAMITE.setOficinaRegistral('OF1');<br/>
 		   		DESTINATARIO_TRAMITE.setOrganoDestino('1');<br/>
 		        DESTINATARIO_TRAMITE.setUnidadAdministrativa('2');<br/>
@@ -145,21 +145,19 @@
        El tipo de este campo es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> y no se espera ning&uacute;n resultado. En caso de no permitir finalizar se debe generar un error e indicar el mensaje oportuno.</p>     </td>
    </tr>
    <tr>
-    <td>Configuraci&oacute;n avisos movilidad</td>
-    <td><p>Permite establecer si se deben generar los avisos autom&aacute;ticos de tramitaci&oacute;n (nuevo aviso expediente y nueva notificaci&oacute;n telem&aacute;tica) para el expediente que crear&aacute; esta solicitud. </p>
-     <p>La generaci&oacute;n autom&aacute;tica de estos avisos tendr&aacute; la siguiente l&oacute;gica:<br />
-       1) En el propio expediente (generado por el backoffice) se puede indicar si se deben o no generar estos avisos<br />
-       2) Si no se indica nada en el expediente, se har&aacute; caso de lo que se indique en la solicitud (es decir, a estos scripts)<br />
-       3) Si no se indica nada en el expediente ni en la solicitud se har&aacute; caso de la configuraci&oacute;n general de alertas de la zona personal.</p>
-     <p>Los valores a establecer (de tipo   <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a>  ) son los siguientes:</p>
-     <p>- Habilitar avisos: debe devolver &quot;S&quot; o &quot;N&quot;, en funci&oacute;n de si deben generar los avisos o no.<br />
-       - Email: email para avisos email (si es nulo o vac&iacute;o no se generar&aacute; email)<br />
-       - M&oacute;vil: tel&eacute;fono m&oacute;vil para avisos SMS (
-si es nulo o vac&iacute;o no se generar&aacute; SMS )</p></td>
-  </tr>
-   <tr>
      <td>Notificaci&oacute;n telem&aacute;tica</td>
-     <td>Indica si  un tr&aacute;mite puede generar notificaciones telem&aacute;ticas. En caso de permitirse se recoger&aacute; la conformidad del ciudadano para ser notificado telem&aacute;ticamente. </td>
+     <td>
+     	<p>
+     		Indica si  un tr&aacute;mite puede generar notificaciones telem&aacute;ticas. En caso de permitirse se recoger&aacute; la conformidad del ciudadano para ser notificado telem&aacute;ticamente.
+     	</p>
+     	<p>
+     		En caso de que Sistra est&eacute; configurado para que sean obligatorios los avisos para las notificaciones se permitir&aacute;:
+     		<ul>
+     			<li>indicar si se debe recoger el m&oacute;vil para los avisos.</li>
+     			<li>introducir los scripts para establecer los valores por defecto del email/sms (sino se coger&aacute;n los valores de la zona personal).</li>
+     		</ul>
+     	</p>     	 
+     </td>
    </tr>
   <tr> 
     <td>Datos justificante</td>

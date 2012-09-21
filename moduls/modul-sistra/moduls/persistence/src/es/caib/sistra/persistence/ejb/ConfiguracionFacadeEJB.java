@@ -1,6 +1,5 @@
 package es.caib.sistra.persistence.ejb;
 
-import java.util.Iterator;
 import java.util.Properties;
 
 import javax.ejb.CreateException;
@@ -58,27 +57,7 @@ public abstract class ConfiguracionFacadeEJB extends HibernateEJB  {
      */
     public OrganismoInfo obtenerOrganismoInfo() {
     	try{
-    		Properties props = ConfigurationUtil.getInstance().obtenerPropiedades();
-    		OrganismoInfo oi = new  OrganismoInfo();
-    		oi.setNombre(props.getProperty("organismo.nombre"));
-    		oi.setUrlLogo(props.getProperty("organismo.logo"));
-    		oi.setUrlPortal(props.getProperty("organismo.portal.url"));
-    		oi.setPieContactoHTML(props.getProperty("organismo.footer.contacto"));
-    		oi.setTelefonoIncidencias(props.getProperty("organismo.soporteTecnico.telefono"));
-    		oi.setUrlSoporteIncidencias(props.getProperty("organismo.soporteTecnico.url"));    		
-    		oi.setUrlCssCustom(props.getProperty("organismo.cssCustom"));
-    		
-    		// Obtenemos titulo y referencia a la zona personal
-    		for (Iterator it=props.keySet().iterator();it.hasNext();){
-    			String key = (String) it.next();
-    			if (key.startsWith("organismo.zonapersonal.titulo.")){
-    				oi.getTituloPortal().put(key.substring(key.lastIndexOf(".") +1),props.get(key));
-    			}
-    			if (key.startsWith("organismo.zonapersonal.referencia.")){
-    				oi.getReferenciaPortal().put(key.substring(key.lastIndexOf(".") +1),props.get(key));
-    			}
-    		}
-    		
+    		OrganismoInfo oi = ConfigurationUtil.getInstance().obtenerOrganismoInfo();
     		return oi;
     	}catch(Exception ex){
     		throw new EJBException(ex);

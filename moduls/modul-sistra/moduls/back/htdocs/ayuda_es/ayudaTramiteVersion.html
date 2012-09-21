@@ -38,7 +38,10 @@
     <td>Indica que el tr&aacute;mite debe firmarse en el paso de Enviar. Si el 
       usuario no dispone de certificado digital el tipo de tramitaci&oacute;n 
       ser&aacute; presencial. El tr&aacute;mite deber&aacute; firmarse por el 
-      representante. </td>
+      representante.
+      <br/>
+      En caso de que se acceda en forma delegada deber&aacute; firmarse 
+      por un delegado que tenga permiso para enviar tr&aacute;mites en nombre de la entidad.</td>
   </tr>
   <tr> 
     <td>Circuito reducido</td>
@@ -93,7 +96,8 @@
   </tr>
   <tr> 
     <td>Url acceso</td>
-    <td>Indica la url de acceso (necesaria en caso de ser webservice o EJB remoto)</td>
+    <td>Indica la url de acceso (necesaria en caso de ser webservice o EJB remoto)<br/>
+      Al formar la url se puede emplear la variable @backoffice.url@, que ser&aacute; sustituida por seg&uacute;n el valor indicado en los ficheros de configuraci&oacute;n</td>
   </tr>
   <tr> 
     <td>EJB de Consulta</td>

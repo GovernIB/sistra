@@ -16,10 +16,13 @@
   			<xs:element minOccurs="0" maxOccurs="1" ref="FECHA_TOPE_ENTREGA" />
   			<xs:element minOccurs="0" maxOccurs="1" ref="TEXTO_FECHA_TOPE_ENTREGA" />
   			<xs:element minOccurs="0" maxOccurs="1" ref="IDENTIFICADOR_PERSISTENCIA" />
+  			<xs:element minOccurs="0" maxOccurs="1" ref="IDENTIFICADOR_PROCEDIMIENTO" />
   			<xs:element minOccurs="0" maxOccurs="1" ref="HABILITAR_NOTIFICACION_TELEMATICA" />
   			<xs:element minOccurs="0" maxOccurs="1" ref="HABILITAR_AVISOS" />
   			<xs:element minOccurs="0" maxOccurs="1" ref="AVISO_SMS" />
   			<xs:element minOccurs="0" maxOccurs="1" ref="AVISO_EMAIL" />
+  			<xs:element minOccurs="0" maxOccurs="1" ref="TRAMITE_SUBSANACION" />
+  			<xs:element minOccurs="0" maxOccurs="1" ref="FORMULARIOS_JUSTIFICANTE" />  	  			
   		</xs:sequence>
   	</xs:complexType>
   </xs:element>
@@ -42,6 +45,7 @@
 	          <xs:restriction base="xs:token">
 	            <xs:enumeration value="J"/>
 	            <xs:enumeration value="F"/>
+	            <xs:enumeration value="G"/>
 	            <xs:enumeration value="A"/>
 	            <xs:enumeration value="P"/>
 	          </xs:restriction>
@@ -71,6 +75,7 @@
           <xs:restriction base="xs:token">
             <xs:enumeration value="C"/>
             <xs:enumeration value="B"/>
+            <xs:enumeration value="I"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
@@ -80,13 +85,39 @@
   <xs:element name="VALOR" type="xs:string"/>
   
   <xs:element name="FECHA_TOPE_ENTREGA" type="xs:string"/>
-  <xs:element name="IDENTIFICADOR_PERSISTENCIA" type="xs:string"/>  
+  <xs:element name="IDENTIFICADOR_PERSISTENCIA" type="xs:string"/>
+  <xs:element name="IDENTIFICADOR_PROCEDIMIENTO" type="xs:string"/>    
   <xs:element name="TEXTO_FECHA_TOPE_ENTREGA" type="xs:string"/>
   
   <xs:element name="HABILITAR_NOTIFICACION_TELEMATICA" type="string_si_no"/>
   <xs:element name="HABILITAR_AVISOS" type="string_si_no"/>
   <xs:element name="AVISO_SMS" type="xs:string"/>
   <xs:element name="AVISO_EMAIL" type="xs:string"/>
+  
+  <xs:element name="TRAMITE_SUBSANACION">
+	<xs:complexType>
+		<xs:sequence>
+			<xs:element name="EXPEDIENTE_CODIGO" type="xs:string"/>
+			<xs:element name="EXPEDIENTE_UNIDAD_ADMINISTRATIVA" type="xs:long"/>
+		</xs:sequence>
+	</xs:complexType>
+  </xs:element>
+  
+  <xs:element name="FORMULARIOS_JUSTIFICANTE">
+	<xs:complexType>
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" ref="FORMULARIO_JUSTIFICANTE" />
+		</xs:sequence>
+	</xs:complexType>
+  </xs:element>
+  
+  <xs:element name="FORMULARIO_JUSTIFICANTE">
+	<xs:complexType>
+		<xs:sequence>
+			<xs:element minOccurs="1" maxOccurs="1" name="IDENTIFICADOR" type="string_no_vacio" />
+		</xs:sequence>
+	</xs:complexType>
+  </xs:element>
   
   <xs:simpleType name='string_no_vacio'>
   	<xs:restriction base='xs:string'>

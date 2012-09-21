@@ -36,20 +36,20 @@ public class AsociarUsuarioTramiteAction extends BaseAction {
     			List usuarios = new ArrayList();
     			String tabla = "";
     			try{
+    				 GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
     				 request.setCharacterEncoding("UTF-8");
     				 String usuario = request.getParameter("usuario");
     				 String tramite = request.getParameter("tramite");
     				 String flag = request.getParameter("flag");
     				 //si viene de modificación
-    				 if(StringUtils.isNotEmpty(usuario) && StringUtils.isNotEmpty(tramite) && StringUtils.isEmpty(flag)){
-    					GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
-    					RolUsuarioTramite userForm = new RolUsuarioTramite(new RolUsuarioTramiteId(usuario,new Long(tramite)));
+    				 if(StringUtils.isNotBlank(usuario) && StringUtils.isNotBlank(tramite) && StringUtils.isEmpty(flag)){
+    					RolUsuarioTramite userForm = new RolUsuarioTramite(new RolUsuarioTramiteId(usuario.trim(),new Long(tramite)));
     					gruposDelegate.asociarUsuarioTramite(userForm);
-    					usuarios = gruposDelegate.listarUsuariosByTramite(new Long(tramite));
     				 }else if(StringUtils.isNotEmpty(flag)){
-   						GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
-   						RolUsuarioTramite userForm = gruposDelegate.obtenerUsuarioTramite(new RolUsuarioTramiteId(usuario, new Long(tramite)));
+   						RolUsuarioTramite userForm = gruposDelegate.obtenerUsuarioTramite(new RolUsuarioTramiteId(usuario.trim(), new Long(tramite)));
 						gruposDelegate.eliminarUsuarioTramite(userForm);
+    				 }
+    				 if(StringUtils.isNotBlank(tramite)){
    						usuarios = gruposDelegate.listarUsuariosByTramite(new Long(tramite));
     				 }
     				 //formatea los datos para la recarga del div

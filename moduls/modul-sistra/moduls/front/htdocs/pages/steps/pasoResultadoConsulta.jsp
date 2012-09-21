@@ -21,7 +21,7 @@
 					<bean:message key="pasoResultadoConsulta.resultadoConsulta.1resultados" /> 
 					<div id="resultadoConsulta">
 						<img src="imgs/tramitacion/iconos/doc_fotocopia.gif" alt="Resultado" title="Resultado" />
-						&nbsp;<html:link href="<%= urlMostrarDocumentoConsulta + "&idx=0" %>" ><bean:write name="documentoUnico" property="nombre"/></html:link>					
+						&nbsp;<html:link href="<%= urlMostrarDocumentoConsulta + \"&idx=0\" %>" ><bean:write name="documentoUnico" property="nombre"/></html:link>					
 					</div>
 					
 				</logic:equal>

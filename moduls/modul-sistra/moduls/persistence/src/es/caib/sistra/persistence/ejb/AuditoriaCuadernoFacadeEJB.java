@@ -142,8 +142,8 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 	
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
-     * @ejb.permission role-name="${role.auditor}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.audit}"
      */
 	public boolean auditoriaRequerida( Long codigoCuadernoCarga ) throws Exception
 	{
@@ -223,7 +223,7 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 	
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.auditor}"
+     * @ejb.permission role-name="${role.audit}"
      */
 	public DatosAuditoriaCuaderno auditoriaCuaderno( Long codigoCuadernoCarga ) throws Exception
 	{ 
@@ -663,7 +663,7 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 		for ( Iterator it = datosJustificante.iterator(); it.hasNext(); )
 		{
 			DatoJustificante datoJustificante = ( DatoJustificante ) it.next();
-			if ( datoJustificante.getTipo() == DatoJustificante.TIPO_CAMPO )
+			if ( datoJustificante.getTipo() == DatoJustificante.TIPO_CAMPO || datoJustificante.getTipo() == DatoJustificante.TIPO_INDICE)
 			{
 				inspectEntidad( AuditoriaUtil.getIdTraVerJust( idTramite, version, datoJustificante.getTipo(), datoJustificante.getOrden()), 
 						datoJustificante, lhmScripts, setDominios );

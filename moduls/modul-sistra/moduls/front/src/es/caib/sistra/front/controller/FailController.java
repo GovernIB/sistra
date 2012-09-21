@@ -9,6 +9,7 @@ import org.apache.struts.tiles.ComponentContext;
 import es.caib.sistra.front.util.InstanciaManager;
 import es.caib.sistra.front.util.TramiteRequestHelper;
 import es.caib.sistra.model.MensajeFront;
+import es.caib.sistra.persistence.delegate.DelegateException;
 
 public class FailController extends BaseController
 {
@@ -27,7 +28,20 @@ public class FailController extends BaseController
 		{
 			//TramiteRequestHelper.setErrorMessage( request, )
 			//TramiteRequestHelper.setErrorMessage( request, "errors.exception", new Object[]{ request.getAttribute( "exception" ) } );
-			TramiteRequestHelper.setErrorMessage( request, "errors.errorNoContinuable" );
+			//TramiteRequestHelper.setErrorMessage( request, "errors.errorNoContinuable" );
+			
+			// Mostramos info de debug de la excepcion
+			Exception ex = (Exception) request.getAttribute("exception");
+			String exceptionMessage = null;
+			if (ex != null){
+				if ( (ex instanceof DelegateException) && (ex.getCause() != null) ){
+					exceptionMessage = ex.getCause().getMessage();
+				}else{
+					exceptionMessage = ex.getMessage();
+				}				
+			}
+			
+			TramiteRequestHelper.setErrorMessage( request, "errors.errorNoContinuable", null, null, exceptionMessage );
 			messageSet = TramiteRequestHelper.getMessage( request ); 
 		}
 		// Tratamiento de errores no continuables

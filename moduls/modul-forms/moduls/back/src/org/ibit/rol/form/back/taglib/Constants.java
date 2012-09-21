@@ -15,4 +15,6 @@ public class Constants {
 
     public static final String SELECCIO_PROPERTY = Package + ".SELECCIO";
 
+    public static final String TAG_B64 = "B64#";
+
 }

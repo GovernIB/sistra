@@ -97,29 +97,29 @@
     <td>Referència representant</td>
     <td><p>Per a crear el seient caldrà indicar qui és el representant. Per a 
         això cal indicar els valors dels camps del formulari que continguin el 
-        DNI i el nom complet del representant. El tipus d'aquests camps és <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaScript.jsp">script</a> 
-        i espera en cada cas el valor del DNI i el nom complet. </p>
-      <p>Aquesta dada és <strong>obligatori</strong> especificar-la (bé en les 
+        NIF i el nom complet del representant. El tipus d'aquests camps és <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaScript.jsp">script</a> 
+        i espera en cada cas el valor del NIF i el nom complet (segons format seient registral). </p>
+        
+      <p>Aquesta dada és <strong>obligatori</strong> especificar-la en els tr&agrave;mits autenticats (en les 
         especificacions gen&egrave;riques o per nivell). <br>
         <br>
-        L'&uacute;nica excepci&oacute; permesa és per a l'accés An&ograve;nim 
-        sempre que la destinació del tr&agrave;mite no siga registre. Per a aquest 
-        cas es permetr&agrave; no establir aquesta informaci&oacute; o bé que 
-        l'script retorni buit. Aquesta funcionalitat ens permetr&agrave; tr&agrave;mits 
-        amb accés an&ograve;nim sense identificar al sol.licitant.</p></td>
+        L'&uacute;nica excepci&oacute; permesa és per a l'accés An&ograve;nim. 
+        Si la destinaci&oacute; &eacute;s registre el nif podrà ser opcional però el nom ser&agrave; obligatori. 
+        Si la destinaci&oacute; no &eacute;s registre el nif i el nom podran ser opcionals. 
+        Per a no establir el nif o el nom s'haur&agrave; de deixar buit el script o b&eacute; que el script retorni la cadena "NO-VALOR".</p></td>
   </tr>
   <tr> 
     <td>Refer&egrave;ncia representat</td>
     <td><p>En cas de que existeixi representaci&oacute; &eacute;s necessari indicar qui 
         &eacute;s el representat. Per a aix&ograve; cal indicar les <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaReferencia.jsp">referències</a> 
-        dels camps del formulari que continguin el DNI i el nom complet del representat.</p></td>
+        dels camps del formulari que continguin el DNI i el nom complet del representat (segons format seient registral).</p></td>
   </tr>
    
    <tr> 
     <td>Script de destinatari tr&agrave;mit</td>
     <td>
     	<p>
-    		Aquest script permet establir din&agrave;micament el destinatari del tr&agrave;mit: oficina registral, organ destinació 
+    		Aquest script permet establir din&agrave;micament el destinatari del tr&agrave;mit: procediment, oficina registral, organ destinació 
     		i unitat administrativa. Encara que s'estableixi din&agrave;micament per script s'haurien d'establir uns valors 
     		inicials en la fitxa de la versi&oacute; del tr&agrave;mit. Per defecte el destinatari tindr&agrave; aquests valors.
     	</p>
@@ -134,6 +134,7 @@
    			<br/>
 		   	<em>
 		   		// Establecer destinatario dinamicamente<br/>
+		   		DESTINATARIO_TRAMITE.setProcedimiento('PROC1');<br/>
 		   		DESTINATARIO_TRAMITE.setOficinaRegistral('OF1');<br/>
 		   		DESTINATARIO_TRAMITE.setOrganoDestino('1');<br/>
 		        DESTINATARIO_TRAMITE.setUnidadAdministrativa('2');<br/>
@@ -151,26 +152,21 @@
   <tr>
     <td>Script validaci&oacute; de fin</td>
     <td><p>Permet realitzar una   validaci&oacute; abans de finalitzar el tr&agrave;mit (previ a l'enviament/registre). El tipus   d'aquest camp &eacute;s <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a>  i no s'espera cap resultat. En cas de no permetre   finalitzar s'ha de generar un error i indicar el missatge oport&uacute;.</p>    </td>
-  </tr>
-  
-  <tr>
-    <td>Configuraci&oacute; avisos mobilitat</td>
-    <td>Permet establir si s'han de generar els avisos autom&agrave;tics de tramitaci&oacute; (nou av&iacute;s expedient i nova   notificaci&oacute; telem&agrave;tica) per a l'expedient que crear&agrave; aquesta sol&middot;licitud. <br />
-      <br />
-      La generaci&oacute; autom&agrave;tica d'aquests avisos tindr&agrave; la seg&uuml;ent   l&ograve;gica: <br />
-      1) En el propi expedient (generat pel backoffice) es pot indicar si   s'han de generar aquests avisos <br />
-      2) Si no s'indica gens en l'expedient, es far&agrave; cas del que   s'indiqui en la   sol&middot;licitud (&eacute;s a dir, a aquests scripts) <br />
-      3) Si no s'indica   gens en l'expedient ni en   la sol&middot;licitud es far&agrave; cas   de la configuraci&oacute; general   d'alertes de la zona personal. <br />
-      <br />
-      Els   valors a establir (de tipus <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a>  ) s&oacute;n els seg&uuml;ents: <br />
-      <br />
-      - Habilitar avisos: ha de retornar &quot;S&quot; o &quot;N&quot;, en funci&oacute; de si   han de generar els avisos o no. <br />
-      - Email: email per a avisos email (si &eacute;s nul o buit no es generar&agrave; email ) <br />
-    - M&ograve;bil: tel&egrave;fon m&ograve;bil per a avisos SMS ( si &eacute;s nul o buit no es   generar&agrave; SMS ) <br /></td>
-  </tr>
+  </tr>  
   <tr>
     <td>Notificaci&oacute; telem&agrave;tica</td>
-    <td>Indica si un tr&agrave;mit pot   generar notificacions telem&agrave;tiques. En cas de permetre's es recollir&agrave; la conformitat del ciutad&agrave; per a   ser notificat telem&agrave;ticament.</td>
+    <td>    
+      	<p>
+     		Indica si un tr&agrave;mit pot   generar notificacions telem&agrave;tiques. En cas de permetre's es recollir&agrave; la conformitat del ciutad&agrave; per a   ser notificat telem&agrave;ticament.
+     	</p>
+     	<p>
+     		En cas que Sistra estigui configurat perqu&egrave; siguin obligatoris els avisos per a les notificacions es permetr&agrave;:
+     		<ul>
+     			<li>indicar si s'ha de recollir el m&ograve;bil per als avisos.</li>
+     			<li>introduir els scripts per a establir els valors per defecte del email/sms (sino s'agafaran els valors de la zona personal).</li>
+     		</ul>
+     	</p>    
+    </td>
   </tr>
   <tr> 
     <td>Dades justificant</td>

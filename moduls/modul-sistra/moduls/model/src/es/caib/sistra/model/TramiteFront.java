@@ -71,6 +71,15 @@ public class TramiteFront  implements Serializable{
 	 */
 	private PersonaPAD flujoTramitacionDatosPersonaIniciador;
 	/**
+	 * En caso de delegacion, indica si se puede remitir el tramite a la bandeja de firma para que se firmen
+	 * los documentos pendientes
+	 */
+	private boolean remitirDelegacionFirma=false;
+	/**
+	 * En caso de delegacion, indica si hay que remitir el tramite para su presentacion
+	 */
+	private boolean remitirDelegacionPresentacion=false;
+	/**
 	 * Descargar plantillas 
 	 */
 	private boolean descargarPlantillas=false;
@@ -170,7 +179,28 @@ public class TramiteFront  implements Serializable{
 	/**
 	 * Indica la seleccion del ciudadano en caso de que el trámite permita notificación telemática
 	 */
-	private Boolean seleccionNotificacionTelematica;
+	private Boolean seleccionNotificacionTelematica;	
+	
+	/**
+	 * Indica si son obligatorios los avisos para las notificaciones
+	 */
+	private boolean obligatorioAvisosNotificaciones;
+	
+	/**
+	 * Indica si permite que el ciudadano establezca un sms si activa lo avisos.
+	 */
+	private boolean permiteSMS;
+	
+	/**
+	 * Indica el email del ciudadano en caso de que active los avisos
+	 */
+	private String seleccionEmailAviso;
+	
+	/**
+	 * Indica el sms del ciudadano en caso de que active los avisos
+	 */
+	private String seleccionSmsAviso;
+	
 	
 	public String getDescripcion() {
 		return descripcion;
@@ -502,6 +532,44 @@ public class TramiteFront  implements Serializable{
 	public void setSeleccionNotificacionTelematica(
 			Boolean seleccionNotificacionTelematica) {
 		this.seleccionNotificacionTelematica = seleccionNotificacionTelematica;
+	}
+	public boolean isRemitirDelegacionFirma() {
+		return remitirDelegacionFirma;
+	}
+	public void setRemitirDelegacionFirma(boolean remitirDelegacionFirma) {
+		this.remitirDelegacionFirma = remitirDelegacionFirma;
+	}
+	public boolean isRemitirDelegacionPresentacion() {
+		return remitirDelegacionPresentacion;
+	}
+	public void setRemitirDelegacionPresentacion(
+			boolean remitirDelegacionPresentacion) {
+		this.remitirDelegacionPresentacion = remitirDelegacionPresentacion;
+	}	
+	public boolean isPermiteSMS() {
+		return permiteSMS;
+	}
+	public void setPermiteSMS(boolean permiteSMS) {
+		this.permiteSMS = permiteSMS;
+	}
+	public String getSeleccionEmailAviso() {
+		return seleccionEmailAviso;
+	}
+	public void setSeleccionEmailAviso(String seleccionEmailAviso) {
+		this.seleccionEmailAviso = seleccionEmailAviso;
+	}
+	public String getSeleccionSmsAviso() {
+		return seleccionSmsAviso;
+	}
+	public void setSeleccionSmsAviso(String seleccionSmsAviso) {
+		this.seleccionSmsAviso = seleccionSmsAviso;
+	}
+	public boolean isObligatorioAvisosNotificaciones() {
+		return obligatorioAvisosNotificaciones;
+	}
+	public void setObligatorioAvisosNotificaciones(
+			boolean obligatorioAvisosNotificaciones) {
+		this.obligatorioAvisosNotificaciones = obligatorioAvisosNotificaciones;
 	}
 	
 }

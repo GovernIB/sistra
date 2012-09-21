@@ -53,7 +53,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		try{
 			RegistroTelematicoWsDelegate delegate = DelegateUtil.getRegistroTelematicoWsDelegate();
 			es.caib.regtel.model.ws.DatosRegistroEntrada dEnt = prepararDatosRegistroEntradaIntf(entrada);
-			es.caib.regtel.model.ReferenciaRDSAsientoRegistral ar = delegate.prepararRegistroEntrada(dEnt);
+			es.caib.regtel.model.ReferenciaRDSAsientoRegistral ar = delegate.prepararRegistroEntrada(dEnt, 0);
 			raWS = referenciaRDSAsientoRegistralIntfToReferenciaRDSAsientoRegistralWS(ar);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -187,7 +187,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			}else{
 							DocumentoRDS doc = new DocumentoRDS();
 							doc.setModelo((dne.getModelo() != null)? dne.getModelo().getValue() : "");
-							doc.setVersion((dne.getVersion() != null)? dne.getVersion().getValue() : null);		
+							doc.setVersion((dne.getVersion() != null)? dne.getVersion().getValue() : 0);		
 							String nombre = (dne.getNombre() != null)? dne.getNombre().getValue() : "";
 							String extension = (dne.getExtension() != null)? dne.getExtension().getValue() : "";
 							String nomfic = ""; 
@@ -379,7 +379,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		if(firma != null){
 			PluginFirmaIntf plgFirma = PluginFactory.getInstance().getPluginFirma();
 			if(firma.getFormato() != null){
-				firmaIntf = plgFirma.parseFirmaFromBytes(firma.getFirma(), firma.getFormato().getValue());
+				firmaIntf = plgFirma.parseFirmaFromWS(firma.getFirma(), firma.getFormato().getValue());
 			}
 		}
 		return firmaIntf;

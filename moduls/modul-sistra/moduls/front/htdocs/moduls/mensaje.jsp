@@ -51,7 +51,7 @@
 	<div id="capaInfo"<%=capaInfoClass %>>	
 		<p class="atencion"><%= encabezado  %></p>
 		<p><%=mensajeHtml%></p>
-		<bean:define id="mostrarMensajeDebug" value="<%=request.getSession().getServletContext().getInitParameter("mensaje.debug")%>" />
+		<bean:define id="mostrarMensajeDebug" value="<%=request.getSession().getServletContext().getInitParameter(\"mensaje.debug\")%>" />
 		<logic:equal name="mostrarMensajeDebug" value="true">
 			<logic:notEmpty name="mensajeFront" property="mensajeExcepcion">
 				<p><i>Mensaje Depuración:<bean:write name="mensajeFront" property="mensajeExcepcion" /></i></p>		

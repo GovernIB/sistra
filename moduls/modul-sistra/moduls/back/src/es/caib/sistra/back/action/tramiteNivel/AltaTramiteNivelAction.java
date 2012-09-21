@@ -58,7 +58,7 @@ public class AltaTramiteNivelAction extends BaseAction{
         TramiteNivelForm tramiteNivelForm = (TramiteNivelForm) obtenerActionForm(mapping,request, "/back/tramiteNivel/editar");
         tramiteNivelForm.destroy(mapping, request);
 
-        tramiteNivelForm.setIdTramiteVersion(idTramiteVersion);
+        tramiteNivelForm.setIdTramiteVersion(idTramiteVersion);        
         return mapping.findForward("success");
     }
 }

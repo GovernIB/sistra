@@ -32,7 +32,7 @@
 		
 		<p>					
 			<span style="position: relative;">					
-				<html:link href="<%= urlMostrarDocumento + "&identificador=" + formulario.getIdentificador() + "&instancia=" + formulario.getInstancia() %>">
+				<html:link href="<%= urlMostrarDocumento + \"&identificador=\" + formulario.getIdentificador() + \"&instancia=\" + formulario.getInstancia() %>">
 					<strong>
 						<bean:write name="formulario" property="descripcion" />
 					</strong>

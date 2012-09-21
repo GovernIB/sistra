@@ -17,6 +17,10 @@
 </tr>
 <tr>
     <td class="labelo"><bean:message key="tramite.identificador"/></td>
-    <td class="input"><html:text styleClass="text" tabindex="1" property="values.identificador" maxlength="10" /></td>
+    <td class="input"><html:text styleClass="text" tabindex="1" property="values.identificador" maxlength="20" /></td>    
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="tramite.procedimiento"/></td>
+    <td class="input"><html:text styleClass="text" tabindex="2" property="values.procedimiento" maxlength="100" /></td>    
 </tr>
 

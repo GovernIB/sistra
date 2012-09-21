@@ -19,7 +19,7 @@ function checkIt(string)
 
 
 var detect = navigator.userAgent.toLowerCase();
-var OS,browser,version,total,thestring;
+var OS,browser,version,total,thestring,aux,posDecimal;
 
 if (checkIt('konqueror'))
 {
@@ -31,8 +31,8 @@ else if (checkIt('omniweb')) browser = "OmniWeb";
 else if (checkIt('opera')) browser = "Opera";
 else if (checkIt('webtv')) browser = "WebTV";
 else if (checkIt('icab')) browser = "iCab";
-else if (checkIt('msie')) browser = "Internet Explorer";
-else if (checkIt('firefox')) browser = "Firefox";
+else if (checkIt('msie')) {browser = "Internet Explorer"; thestring = "msie";}
+else if (checkIt('firefox')) {browser = "Firefox"; thestring = "firefox";}
 else if (!checkIt('compatible'))
 {
 	browser = "Netscape Navigator"
@@ -42,14 +42,14 @@ else browser = "An unknown browser";
 
 
 if (!version) {
-	version = detect.charAt(place + thestring.length);
-	posDecimal = place + thestring.length + 1;
-	if (detect.charAt(posDecimal) == '.'){	
-		do{
-		  version = version + '' + detect.charAt(posDecimal);		
-		  posDecimal++;								
-		}while (!isNaN(detect.charAt(posDecimal)));		
-	}
+	aux = detect.substring(place + thestring.length);
+		
+	posDecimal = aux.indexOf('.');
+	version = aux.substring(0, posDecimal);
+	do{
+	  version = version + '' + aux.charAt(posDecimal);
+	  posDecimal++;
+	}while (!isNaN(aux.charAt(posDecimal)) && posDecimal < aux.length);		
 }
 
 
@@ -78,19 +78,27 @@ if (browser == "Firefox" && parseFloat( version, 10) < 1.5 ){
 
 <% if (niveles.indexOf("C")>=0){ %>
 <!--  FIRMA DIGITAL -->
-<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/constantes.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/time.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/appletHelper.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/deployJava.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/instalador.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/firma.js"></script>	
+<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/utils.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/constantes.js"></script>
+
 <script type="text/javascript">
 <!--			
+		<%
+			String urlSistra = "";
+			try{
+				es.caib.sistra.persistence.delegate.ConfiguracionDelegate delegate = es.caib.sistra.persistence.delegate.DelegateUtil.getConfiguracionDelegate();
+				urlSistra = delegate.obtenerConfiguracion().getProperty("sistra.url");
+			}catch(Exception e){}
+		%>
 
-		baseDownloadURL = "<%=request.getContextPath()%>/firma/aFirma";
-		base = "<%=request.getContextPath()%>/firma/aFirma";
+		base = "<%=urlSistra%><%=request.getContextPath()%>/firma/aFirma";
+		baseDownloadURL = "<%=urlSistra%><%=request.getContextPath()%>/firma/aFirma";
 
 		function prepararEntornoFirma(){
-			cargarAppletFirma();
+			cargarAppletFirma('COMPLETA');
 		}
 		
 		function loginCertificado(){
@@ -103,6 +111,7 @@ if (browser == "Firefox" && parseFloat( version, 10) < 1.5 ){
 			var cadena = document.formCD.j_username.value;
 		
 			clienteFirma.initialize();
+			clienteFirma.setShowErrors(false);
 			clienteFirma.setSignatureAlgorithm("sha1WithRsaEncryption");
 			clienteFirma.setSignatureMode("EXPLICIT");
 			clienteFirma.setSignatureFormat("CMS");
@@ -120,7 +129,7 @@ if (browser == "Firefox" && parseFloat( version, 10) < 1.5 ){
 			     return true;
 			}
 		}
-	
+		prepararEntornoFirma();
 //-->
 </script>
 <% } else { %>
@@ -135,7 +144,7 @@ if (browser == "Firefox" && parseFloat( version, 10) < 1.5 ){
 
 </head>
 
-<body onload="prepararEntornoFirma()">
+<body>
 <div id="contenedor">
 	<!-- capçal -->	
 	<div id="capsal">

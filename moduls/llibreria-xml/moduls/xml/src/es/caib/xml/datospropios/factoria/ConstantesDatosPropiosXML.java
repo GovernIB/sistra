@@ -47,4 +47,10 @@ public class ConstantesDatosPropiosXML {
 	 */
 	public final static char DATOSOLICITUD_TIPO_CAMPO = 'C';
 	
+	/** 
+	 * DATO SOLICITUD: Tipo Indice
+	 * 
+	 */
+	public final static char DATOSOLICITUD_TIPO_INDICE = 'I';
+	
 }

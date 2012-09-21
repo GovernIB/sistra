@@ -31,9 +31,12 @@ import es.caib.sistra.persistence.ejb.ProcessorException;
 import es.caib.sistra.persistence.plugins.DestinatarioTramite;
 import es.caib.sistra.persistence.plugins.PluginFormularios;
 import es.caib.sistra.persistence.plugins.PluginPagos;
+import es.caib.sistra.plugins.login.ConstantesLogin;
 import es.caib.util.NifCif;
+import es.caib.util.StringUtil;
 import es.caib.util.ValidacionesUtil;
 import es.caib.xml.ConstantesXML;
+import es.caib.xml.EstablecerPropiedadException;
 import es.caib.xml.datospropios.factoria.ConstantesDatosPropiosXML;
 import es.caib.xml.datospropios.factoria.FactoriaObjetosXMLDatosPropios;
 import es.caib.xml.datospropios.factoria.ServicioDatosPropiosXML;
@@ -41,8 +44,10 @@ import es.caib.xml.datospropios.factoria.impl.Dato;
 import es.caib.xml.datospropios.factoria.impl.DatosPropios;
 import es.caib.xml.datospropios.factoria.impl.Documento;
 import es.caib.xml.datospropios.factoria.impl.DocumentosEntregar;
+import es.caib.xml.datospropios.factoria.impl.FormulariosJustificante;
 import es.caib.xml.datospropios.factoria.impl.Instrucciones;
 import es.caib.xml.datospropios.factoria.impl.Solicitud;
+import es.caib.xml.datospropios.factoria.impl.TramiteSubsanacion;
 import es.caib.xml.registro.factoria.ConstantesAsientoXML;
 import es.caib.xml.registro.factoria.FactoriaObjetosXMLRegistro;
 import es.caib.xml.registro.factoria.ServicioRegistroXML;
@@ -52,6 +57,7 @@ import es.caib.xml.registro.factoria.impl.DatosAsunto;
 import es.caib.xml.registro.factoria.impl.DatosInteresado;
 import es.caib.xml.registro.factoria.impl.DatosOrigen;
 import es.caib.xml.registro.factoria.impl.DireccionCodificada;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.modelInterfaz.DocumentoPersistentePAD;
 import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
 
@@ -66,6 +72,9 @@ public class GeneradorAsiento {
 	/**
 	 * 
 	 * Genera asiento registral a partir de la información del trámite	
+	 * 
+	 * Si hay autenticación, comprueba que quién envia es el usuario autenticado en la sesión
+	 * 
 	 * @param dt 
 	 * @return
 	 */
@@ -107,13 +116,13 @@ public class GeneradorAsiento {
 			asiento.setDatosOrigen (dOrigen);						
 			
 			// Crear datos representante
-			DatosInteresado dInteresadoRpte,dInteresadoRpdo=null;
+			DatosInteresado dInteresadoRpte,dInteresadoRpdo=null,dInteresadoDlgdo=null;
 			dInteresadoRpte = factoria.crearDatosInteresado();
 
-			// -- Validamos nif y nombre			 
-			boolean requiereRpte = (tramiteVersion.getDestino() == ConstantesSTR.DESTINO_REGISTRO || tramitePAD.getNivelAutenticacion() != 'A');
+			// Si el trámite es autenticado se requiere nif y nombre
+			boolean requiereRpte = (tramitePAD.getNivelAutenticacion() != 'A');
 	    	if ( StringUtils.isBlank(rpteNif) && requiereRpte){
-	    		throw new Exception("El nif nombre del rpte no puede estar vacío");
+	    		throw new Exception("El nif del rpte no puede estar vacío");
 	    	}
 	    	if ( StringUtils.isBlank (rpteNom) && requiereRpte){
 				throw new Exception("El nombre del rpte no puede estar vacío");
@@ -145,12 +154,6 @@ public class GeneradorAsiento {
 			dInteresadoRpte.setFormatoDatosInteresado (ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
 			dInteresadoRpte.setIdentificacionInteresado (rpteNom);
 			
-			// Si hay autenticación, comprobamos que quien envia es el usuario de la sesión
-			if (StringUtils.isNotEmpty(dInteresadoRpte.getUsuarioSeycon()) &&
-				!tramiteInfo.getDatosSesion().getNifUsuario().equals(dInteresadoRpte.getNumeroIdentificacion())){
-				throw new Exception("El usuario que envia no es el que está indicado como representante");
-			}
-						
 			// Verificamos datos procedencia geográfica
 	    	if (StringUtils.isNotEmpty(rptePais)){
 	    		
@@ -194,6 +197,22 @@ public class GeneradorAsiento {
 			
 			asiento.getDatosInteresado().add(dInteresadoRpte);
 			
+	    	// Si hay autenticación:
+			//		- si hay delegacion comprobamos que el delegado tiene permisos de enviar
+			//		- si no hay delegacion comprobamos que quien envia es el usuario de la sesión
+			if (tramiteInfo.getDatosSesion().getNivelAutenticacion() != ConstantesLogin.LOGIN_ANONIMO){
+				if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(tramiteInfo.getDatosSesion().getPerfilAcceso())){
+					if (tramiteInfo.getDatosSesion().getPermisosDelegacion().indexOf(ConstantesZPE.DELEGACION_PERMISO_PRESENTAR_TRAMITE) == -1){
+						throw new Exception("El usuario no tiene permisos para presentar tramites en nombre de la entidad");
+					}
+				}else{
+					if (!tramiteInfo.getDatosSesion().getNifUsuario().equals(dInteresadoRpte.getNumeroIdentificacion())){
+						throw new Exception("El usuario que envia no es el que está indicado como representante");
+					}
+				}
+			}
+	    	
+			
 			// Creamos datos representado (si corresponde)
 			if (rpdoNif != null && !rpteNif.equals(rpdoNif)){
 				dInteresadoRpdo = factoria.crearDatosInteresado();
@@ -220,13 +239,51 @@ public class GeneradorAsiento {
 				asiento.getDatosInteresado().add(dInteresadoRpdo);				
 			}
 																							
+			// Creamos datos de delegado si hay delegacion
+			if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(tramiteInfo.getDatosSesion().getPerfilAcceso())){
+				String dlgdoNif = tramiteInfo.getDatosSesion().getNifDelegado();
+				String dlgdoNombre = StringUtil.formatearNombreApellidos(
+						ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM,
+						tramiteInfo.getDatosSesion().getNombreDelegado(),
+						tramiteInfo.getDatosSesion().getApellido1Delegado(),
+						tramiteInfo.getDatosSesion().getApellido2Delegado());
+				
+				dInteresadoDlgdo = factoria.crearDatosInteresado();
+				dInteresadoDlgdo.setTipoInteresado (ConstantesAsientoXML.DATOSINTERESADO_TIPO_DELEGADO);		
+				switch (NifCif.validaDocumento(dlgdoNif)){
+					case NifCif.TIPO_DOCUMENTO_NIF:
+						dInteresadoDlgdo.setTipoIdentificacion (new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIF));
+						break;
+					case NifCif.TIPO_DOCUMENTO_CIF:
+						dInteresadoDlgdo.setTipoIdentificacion (new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_CIF));
+						break;
+					case NifCif.TIPO_DOCUMENTO_NIE:
+						dInteresadoDlgdo.setTipoIdentificacion (new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE));
+						break;
+					default:
+						throw new Exception("El número de identificación del delegado ni es nif, ni cif, ni nie");
+				}					
+				dInteresadoDlgdo.setNumeroIdentificacion (dlgdoNif);
+				dInteresadoDlgdo.setFormatoDatosInteresado (ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
+				if (StringUtils.isEmpty (dlgdoNombre)){
+		    		throw new Exception("Se ha indicado el nif del delegado pero no el nombre");
+		    	}   				
+				dInteresadoDlgdo.setIdentificacionInteresado (dlgdoNombre);
+				asiento.getDatosInteresado().add(dInteresadoDlgdo);
+				
+			}
+																							
 			// Crear datos asunto
 			DatosAsunto dAsunto = factoria.crearDatosAsunto();
 			dAsunto.setFechaAsunto(new Date());
 			if (tramiteInfo.getDatosSesion().getLocale().getLanguage().equals("ca"))
 				dAsunto.setIdiomaAsunto (ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_CA);
+			else if (tramiteInfo.getDatosSesion().getLocale().getLanguage().equals("es"))
+				dAsunto.setIdiomaAsunto (ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_ES);
+			else if (tramiteInfo.getDatosSesion().getLocale().getLanguage().equals("en"))
+				dAsunto.setIdiomaAsunto (ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_EN);				
 			else
-				dAsunto.setIdiomaAsunto (ConstantesAsientoXML.DATOSASUNTO_IDIOMA_ASUNTO_ES); // El registro recoge es y ca. Si no es ca pondremos es
+				throw new Exception("Idioma no soportado: " + tramiteInfo.getDatosSesion().getLocale().getLanguage());
 			dAsunto.setTipoAsunto (tramiteVersion.getRegistroAsunto());
 			dAsunto.setExtractoAsunto ( ((TraTramite) tramiteVersion.getTramite().getTraduccion(tramiteInfo.getDatosSesion().getLocale().getLanguage())).getDescripcion());
 			dAsunto.setCodigoOrganoDestino (dt.getOrganoDestino());
@@ -288,13 +345,16 @@ public class GeneradorAsiento {
 	 * @param tramiteVersion
 	 * @param tramitePAD
 	 * @param plgForms
+	 * @param expeUA 
+	 * @param expeId 
+	 * @param dt 
 	 * @return
 	 * @throws Exception
 	 */
 	public static String generarDatosPropios(
 			TramiteFront tramiteInfo,
 			TramiteVersion tramiteVersion,TramitePersistentePAD tramitePAD,
-			PluginFormularios plgForms,PluginPagos plgPagos
+			PluginFormularios plgForms,PluginPagos plgPagos, String expeId, Long expeUA, DestinatarioTramite dt
 			) throws Exception{				
 		try{
 			EspecTramiteNivel especVersion = tramiteVersion.getEspecificaciones();
@@ -304,277 +364,17 @@ public class GeneradorAsiento {
 			factoria.setEncoding(ConstantesXML.ENCODING);							
 			DatosPropios datosPropios = factoria.crearDatosPropios();
 			
-			//--- Texto instrucciones
-			// ¿Hay que presentar documentación? 
-			//	 -SI -> tipo circuito no es telemático:
-			//		"Para que su solicitud sea completamente válida revise la documentación a aportar y
-			//		presentela en los puntos de entrega indicados"
-			
-			//	-NO -> "Su solicitud ha sido recibida correctamente y será procesada"
-			//
-			//	En caso de que existan instrucciones específicas se muestran
-			//
-			Instrucciones instrucciones = factoria.crearInstrucciones();
-			String instruccionesTextCircuitoTelematico,instruccionesTextCircuitoPresencial;
-			if (StringUtils.isNotEmpty(tramiteInfo.getInstruccionesFin())){
-				instruccionesTextCircuitoTelematico = tramiteInfo.getInstruccionesFin();
-				instruccionesTextCircuitoPresencial = tramiteInfo.getInstruccionesFin();
-			}else{
-				instruccionesTextCircuitoTelematico = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"mensaje.datospropios.telematico");
-				instruccionesTextCircuitoPresencial = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"mensaje.datospropios.presencial");
-			}
-			
-			char tipoTramitacion 			= tramiteInfo.getTipoTramitacion();
-			char tipoTramitacionDependiente = tramiteInfo.getTipoTramitacionDependiente();
-			
-			/*
-			String instruccionesText 
-				= tipoTramitacion == 'P' ?  
-						instruccionesTextCircuitoPresencial : tipoTramitacion == 'T' ? 
-								instruccionesTextCircuitoTelematico : tipoTramitacionDependiente == 'P' ? 
-										instruccionesTextCircuitoPresencial : instruccionesTextCircuitoTelematico; */
-			
-			String instruccionesText = isTramitePresencial( tipoTramitacion, tipoTramitacionDependiente ) ? 
-					instruccionesTextCircuitoPresencial : instruccionesTextCircuitoTelematico;
-			
-			instrucciones.setTextoInstrucciones( instruccionesText );
-			
-			
-			// ---- Identificador de persistencia
-			instrucciones.setIdentificadorPersistencia(tramiteInfo.getIdPersistencia());
-			
-			// ---- Opciones notificacion telematica
-			if (!ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA.equals(tramiteInfo.getHabilitarNotificacionTelematica())){
-				if (tramiteInfo.getSeleccionNotificacionTelematica() == null){
-					throw new Exception("No se ha establecido seleccion para notificacion telematica");
-				}
-				instrucciones.setHabilitarNotificacionTelematica(tramiteInfo.getSeleccionNotificacionTelematica().booleanValue()?"S":"N");
-			}
-			
-			// ---- Opciones aviso movilidad: ejecutamos scripts para obtener configuracion
-			byte script[];
-			String resScriptMov;
-			script = getScriptNivelOrGenerico(especNivel.getHabilitarAvisos(),especVersion.getHabilitarAvisos());
-			if (script != null && script.length>0){
-				resScriptMov = ScriptUtil.evaluarScriptTramitacion(script,null,tramiteVersion,(HashMap) plgForms.getDatosFormularios(),tramitePAD,tramiteInfo.getDatosSesion());
-				if (!("S".equals(resScriptMov)) && !("N".equals(resScriptMov))){
-					throw new Exception("Error evaluando script de habilitar avisos: valor devuelto '" + resScriptMov + "' no es 'S' o 'N' ");						
-				}
-				instrucciones.setHabilitarAvisos(resScriptMov);
-				if ("S".equals(resScriptMov)){
-					// Aviso email
-					script = getScriptNivelOrGenerico(especNivel.getAvisoEmail(),especVersion.getAvisoEmail());
-					if (script != null && script.length>0){
-						resScriptMov = ScriptUtil.evaluarScriptTramitacion(script,null,tramiteVersion,(HashMap) plgForms.getDatosFormularios(),tramitePAD,tramiteInfo.getDatosSesion());
-						if (StringUtils.isNotEmpty(resScriptMov)){ 
-							if (!ValidacionesUtil.validarEmail(resScriptMov)){
-								throw new Exception("Error evaluando script de aviso email: valor devuelto '" + resScriptMov + "' no es un email valido ");						
-							}
-							instrucciones.setAvisoEmail(resScriptMov);
-						}
-					}					
-					// Aviso sms
-					script = getScriptNivelOrGenerico(especNivel.getAvisoSMS(),especVersion.getAvisoSMS());
-					if (script != null && script.length>0){
-						resScriptMov = ScriptUtil.evaluarScriptTramitacion(script,null,tramiteVersion,(HashMap) plgForms.getDatosFormularios(),tramitePAD,tramiteInfo.getDatosSesion());
-						if (StringUtils.isNotEmpty(resScriptMov)){
-							if (!ValidacionesUtil.validarMovil(resScriptMov)){
-								throw new Exception("Error evaluando script de aviso sms: valor devuelto '" + resScriptMov + "' no es un telefono movil valido ");						
-							}
-							instrucciones.setAvisoSMS(resScriptMov);
-						}
-					}
-				}
-			}
-			
-			
-			//--- Documentos a presentar ( sólo para trámites presenciales )
-			//	- Justificante firmado -> siempre que tipo circuito no es telemático y no haya formulario justificante
-			//	     o
-			//  - Formulario justificante -> doc.isFormularioJustificante();
-			//
-			//	- Formularios firmados -> los marcados para firmar 
-			//					DocumentoFront doc = (DocumentoFront) tramiteInfo.getFormularios().get(1);
-			//					doc.isFirmar();
-			//	- Anexos -> Verificar que anexos deben compulsarse y/o entregar fotocopia
-			//  - Pagos -> Verificar que pagos se han realizado de forma presencial (PENDIENTE IMPL)
-			
-			DocumentosEntregar docsEntregar = factoria.crearDocumentosEntregar();			
-			if ( isTramitePresencial( tipoTramitacion, tipoTramitacionDependiente ) )
-			{
-				int dias = especVersion.getDiasPrerregistro();
-				if ( especNivel != null && especNivel.getDiasPrerregistro() != 0 )
-				{
-					dias = especNivel.getDiasPrerregistro();
-				}
-				
-										
-				Date finPlazoPresentacion = tramiteInfo.getFechaFinPlazo(); 			
-				Date dateTopeEntrega = new Date();
-				
-				log.debug( "TODAY " + dateTopeEntrega.getTime() );
-				
-				long timeTopeEntrega = dateTopeEntrega.getTime() + ( long ) dias * 24 * 3600 * 1000L;
-				
-				log.debug( "TIME TOPE PRERREGISTRO " + timeTopeEntrega );
-				log.debug( "FIN PLAZO PRESENTACION " + (finPlazoPresentacion!=null?Long.toString(finPlazoPresentacion.getTime()):"") );
-				
-				if ( finPlazoPresentacion != null )
-				{
-					timeTopeEntrega = finPlazoPresentacion.getTime() < timeTopeEntrega ? finPlazoPresentacion.getTime() : timeTopeEntrega;
-				}
-				dateTopeEntrega.setTime( timeTopeEntrega );
-				instrucciones.setFechaTopeEntrega( dateTopeEntrega );
-				if (StringUtils.isNotEmpty(tramiteInfo.getMensajeFechaLimiteEntregaPresencial())) instrucciones.setTextoFechaTopeEntrega(tramiteInfo.getMensajeFechaLimiteEntregaPresencial());
-				
-				Documento instruccionesDocumento;
-				boolean existeFormularioJustificante = false;
-				
-				for ( Iterator it = tramiteInfo.getFormularios().iterator();it.hasNext(); )
-				{
-					DocumentoFront doc = (DocumentoFront) it.next();
-					if (doc.getEstado() != DocumentoFront.ESTADO_CORRECTO) continue;
-					
-					if ( doc.isFormularioJustificante()){
-						existeFormularioJustificante = true;
-						instruccionesDocumento = factoria.crearDocumento();
-						instruccionesDocumento.setTipo( new Character(ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_FORMULARIO_JUSTIFICANTE));
-						instruccionesDocumento.setFirmar( new Boolean(true) );
-						instruccionesDocumento.setIdentificador(doc.getIdentificador() + "-" + doc.getInstancia());
-						instruccionesDocumento.setTitulo( doc.getDescripcion() );						
-						docsEntregar.getDocumento().add( 0,instruccionesDocumento );
-					}else if ( doc.isPrerregistro()  )
-					{						
-						instruccionesDocumento = factoria.crearDocumento();
-						instruccionesDocumento.setTipo( new Character(ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_FORMULARIO));
-						instruccionesDocumento.setFirmar( new Boolean(true) );
-						instruccionesDocumento.setIdentificador(doc.getIdentificador() + "-" + doc.getInstancia());
-						instruccionesDocumento.setTitulo( doc.getDescripcion() );						
-						docsEntregar.getDocumento().add( instruccionesDocumento );
-					}
-					
-				}
-				
-				// Justificante: Si no existe formulario justificante
-				if (!existeFormularioJustificante){
-					instruccionesDocumento = factoria.crearDocumento();
-					instruccionesDocumento.setTipo( new Character(ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_JUSTIFICANTE));
-					instruccionesDocumento.setFirmar( new Boolean(true) );							
-					String tituloMultiidiomaJustificanteFirmado = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"mensaje.datospropios.justificante");				
-					instruccionesDocumento.setTitulo( tituloMultiidiomaJustificanteFirmado );
-					docsEntregar.getDocumento().add(0,instruccionesDocumento );
-				}
-			
-				for (Iterator it = tramiteInfo.getAnexos().iterator();it.hasNext();)
-				{
-					DocumentoFront doc = (DocumentoFront) it.next();
-					if (doc.getEstado() != DocumentoFront.ESTADO_CORRECTO) continue;
-										
-					if ( !doc.isAnexoPresentarTelematicamente() ||  doc.isAnexoCompulsar() )
-					{
-						instruccionesDocumento = factoria.crearDocumento();						
-						instruccionesDocumento.setTipo( new Character(ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_ANEXO) );
-						instruccionesDocumento.setCompulsar( new Boolean(doc.isAnexoCompulsar()) );
-						instruccionesDocumento.setFotocopia( new Boolean(doc.isAnexoFotocopia()) );
-						
-						// ANTES SOLO SE ESTABLECIA IDENTIFICADOR SI TENIA PARTE TELEMATICA, AHORA SIEMPRE.
-						instruccionesDocumento.setIdentificador(doc.getIdentificador() + "-" + doc.getInstancia());
-						/* 
-						if (doc.isAnexoPresentarTelematicamente()){
-							// Si se ha presentado telemáticamente enlazamos con asiento
-							instruccionesDocumento.setIdentificador(doc.getIdentificador() + "-" + doc.getInstancia());
-						}
-						*/
-						
-						if (doc.isAnexoGenerico()){
-							instruccionesDocumento.setTitulo( doc.getAnexoGenericoDescripcion() );
-						}else{
-							instruccionesDocumento.setTitulo( doc.getDescripcion() );
-						}
-												
-						docsEntregar.getDocumento().add( instruccionesDocumento );
-					}
-				}
-				
-				for (Iterator it = tramiteInfo.getPagos().iterator();it.hasNext();)
-				{
-					DocumentoFront doc = (DocumentoFront) it.next();
-					if (doc.getEstado() != DocumentoFront.ESTADO_CORRECTO) continue;
-								
-					
-					if (doc.getPagoTipo() == 'P'){
-						instruccionesDocumento = factoria.crearDocumento();						
-						instruccionesDocumento.setTipo( new Character(ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_PAGO) );						
-						instruccionesDocumento.setIdentificador(doc.getIdentificador() + "-" + doc.getInstancia());
-						instruccionesDocumento.setTitulo( doc.getDescripcion() );
-						docsEntregar.getDocumento().add( instruccionesDocumento );					
-					}
-				}
-				
-				// Añadimos lista de documentos
-				instrucciones.setDocumentosEntregar( docsEntregar );
-			}
-			
+			// Generar instrucciones
+			Instrucciones instrucciones = generarInstrucciones(tramiteInfo,
+					tramiteVersion, tramitePAD, plgForms, expeId, expeUA,
+					especVersion, especNivel, dt, factoria);
 			datosPropios.setInstrucciones(instrucciones);
 			
 			// Generamos datos solicitud
-			List datosJustificante = especNivel.getDatosJustificante();
-			if (datosJustificante == null || datosJustificante.size() == 0){
-				datosJustificante = especVersion.getDatosJustificante();
-			}						
-			if (datosJustificante != null && datosJustificante.size() > 0){
-				Solicitud datosSolicitud = factoria.crearSolicitud();
-				for (Iterator it = datosJustificante.iterator();it.hasNext();){
-					DatoJustificante datJ = (DatoJustificante) it.next();
-					
-					// Validamos script de visibilidad	
-					boolean visible = true;					
-					if (datJ.getVisibleScript() != null && datJ.getVisibleScript().length > 0){
-						HashMap params = new HashMap();
-		        		params.put("PLUGIN_PAGOS",plgPagos);	
-						String res = ScriptUtil.evaluarScriptTramitacion(datJ.getVisibleScript(),params,tramiteVersion,(HashMap) plgForms.getDatosFormularios(),tramitePAD,tramiteInfo.getDatosSesion());
-						visible = res.equals("S");
-						if (!visible) continue;
-					}
-					
-					Dato datS = factoria.crearDato();
-					datS.setTipo(new Character(datJ.getTipo()));					
-					datS.setDescripcion(((TraDatoJustificante) datJ.getTraduccion(tramiteInfo.getDatosSesion().getLocale().getLanguage())).getDescripcion());
-					if (datJ.getTipo() == DatoJustificante.TIPO_CAMPO){
-						
-						// Comprobamos si se ha especificado una referencia a campo o un script
-						if (StringUtils.isNotEmpty(datJ.getReferenciaCampo())){						
-							// Comprobamos si es un dato de pagos  o de formulario
-							ReferenciaCampo ref = new ReferenciaCampo(datJ.getReferenciaCampo());
-							if (tramiteInfo.getFormulario(ref.getIdentificadorDocumento(),ref.getInstancia()) != null){						
-								datS.setValor(plgForms.getDatoFormulario(datJ.getReferenciaCampo()));
-							}else if ( tramiteInfo.getPago( ref.getIdentificadorDocumento(), ref.getInstancia() ) != null){
-								datS.setValor(plgPagos.getDatoPago(datJ.getReferenciaCampo()));							
-							}else{
-								datS.setValor(""); // Protegemos ante referencias incorrectas
-							}
-							
-							// Parche para reemplazar valores: true/false por Si/No
-							if (datS.getValor().equalsIgnoreCase("true")) datS.setValor("Si");
-							if (datS.getValor().equalsIgnoreCase("false")) datS.setValor("No");
-						}else{
-							// Ejecutamos script para calcular el valor
-							HashMap params = new HashMap();
-			        		params.put("PLUGIN_PAGOS",plgPagos);	
-							String res = ScriptUtil.evaluarScriptTramitacion(datJ.getValorCampoScript(),params,tramiteVersion,(HashMap) plgForms.getDatosFormularios(),tramitePAD,tramiteInfo.getDatosSesion());
-							datS.setValor(res);
-						}
-						
-					}					
-					datosSolicitud.getDato().add(datS);
-				
-				}
-				
-				// Si existen datos particulares los añadimos
-				if (datosSolicitud.getDato() != null && datosSolicitud.getDato().size() > 0){
-					datosPropios.setSolicitud(datosSolicitud);
-				}
-			}			
+			Solicitud datosSolicitud = generarDatosSolicitud(tramiteInfo,
+					tramiteVersion, tramitePAD, plgForms, plgPagos,
+					especVersion, especNivel, factoria);	
+			datosPropios.setSolicitud(datosSolicitud);			
 					    	
 			// Devolvemos XML
 			return factoria.guardarDatosPropios(datosPropios);
@@ -585,6 +385,367 @@ public class GeneradorAsiento {
 			throw new Exception("Excepción al generar datos propios: " + ex.toString());
 		}
 		
+	}
+
+	private static Instrucciones generarInstrucciones(TramiteFront tramiteInfo,
+			TramiteVersion tramiteVersion, TramitePersistentePAD tramitePAD,
+			PluginFormularios plgForms, String expeId, Long expeUA,
+			EspecTramiteNivel especVersion, EspecTramiteNivel especNivel,
+			DestinatarioTramite dt, FactoriaObjetosXMLDatosPropios factoria)
+			throws EstablecerPropiedadException, Exception, ProcessorException {
+		//--- Texto instrucciones
+		// ¿Hay que presentar documentación? 
+		//	 -SI -> tipo circuito no es telemático:
+		//		"Para que su solicitud sea completamente válida revise la documentación a aportar y
+		//		presentela en los puntos de entrega indicados"
+		
+		//	-NO -> "Su solicitud ha sido recibida correctamente y será procesada"
+		//
+		//	En caso de que existan instrucciones específicas se muestran
+		//
+		Instrucciones instrucciones = factoria.crearInstrucciones();
+		String instruccionesTextCircuitoTelematico,instruccionesTextCircuitoPresencial;
+		if (StringUtils.isNotEmpty(tramiteInfo.getInstruccionesFin())){
+			instruccionesTextCircuitoTelematico = tramiteInfo.getInstruccionesFin();
+			instruccionesTextCircuitoPresencial = tramiteInfo.getInstruccionesFin();
+		}else{
+			instruccionesTextCircuitoTelematico = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"mensaje.datospropios.telematico");
+			instruccionesTextCircuitoPresencial = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"mensaje.datospropios.presencial");
+		}
+		
+		char tipoTramitacion 			= tramiteInfo.getTipoTramitacion();
+		char tipoTramitacionDependiente = tramiteInfo.getTipoTramitacionDependiente();
+		
+		
+		String instruccionesText = isTramitePresencial( tipoTramitacion, tipoTramitacionDependiente ) ? 
+				instruccionesTextCircuitoPresencial : instruccionesTextCircuitoTelematico;
+		
+		instrucciones.setTextoInstrucciones( instruccionesText );
+		
+		
+		// ---- Identificador de persistencia
+		instrucciones.setIdentificadorPersistencia(tramiteInfo.getIdPersistencia());
+		
+		// ---- Identificador de procedimiento
+		instrucciones.setIdentificadorProcedimiento(dt.getProcedimiento());
+				
+		// ---- Opciones notificacion telematica
+		establecerOpcionesNotificacion(tramiteInfo, instrucciones);			
+				
+		// ----- Si es tramite presencial establecemos propiedades entrega
+		if ( isTramitePresencial( tipoTramitacion, tipoTramitacionDependiente ) )
+		{
+			// Fecha tope entrega	
+			Date dateTopeEntrega = obtenerFechaTopeEntrega(tramiteInfo,
+					especVersion, especNivel);
+			instrucciones.setFechaTopeEntrega( dateTopeEntrega );
+			
+			// Texto entrega
+			if (StringUtils.isNotEmpty(tramiteInfo.getMensajeFechaLimiteEntregaPresencial())) {
+				instrucciones.setTextoFechaTopeEntrega(tramiteInfo.getMensajeFechaLimiteEntregaPresencial());
+			}
+			
+			// Añadimos lista de documentos a entregar
+			DocumentosEntregar docsEntregar = obtenerDocumentosEntregar(tramiteInfo, factoria);
+			instrucciones.setDocumentosEntregar( docsEntregar );
+		} else {						
+		// ----  Si no es presencial comprobamos si debemos anexar formularios al justificante
+			FormulariosJustificante fj = obtenerFormulariosJustificante(
+					tramiteInfo, factoria);
+			instrucciones.setFormulariosJustificante(fj);						
+		}
+		
+		// ----- Comprobamos si es un tramite de subsanacion y hay que añadir el expediente
+		TramiteSubsanacion ts = generarTramiteSubsanacion(expeId, expeUA,
+				factoria);
+		instrucciones.setTramiteSubsanacion(ts);
+		return instrucciones;
+	}
+
+	private static FormulariosJustificante obtenerFormulariosJustificante(
+			TramiteFront tramiteInfo, FactoriaObjetosXMLDatosPropios factoria) {
+		FormulariosJustificante fj = null;
+
+		// Buscamos si se han configurado un formulario para que sea el justificante
+		for ( Iterator it = tramiteInfo.getFormularios().iterator();it.hasNext();)
+		{
+			DocumentoFront doc = (DocumentoFront) it.next();
+			if (doc.getEstado() != DocumentoFront.ESTADO_CORRECTO) continue;
+			
+			if ( doc.isFormularioJustificante()) {						
+				if (fj == null) {
+					fj = factoria.crearFormulariosJustificante();
+				}
+				fj.getFormularios().add(doc.getIdentificador() + "-" + doc.getInstancia());						
+			}					
+		}		
+		
+		// Si no se ha configurado un formulario justificante, buscamos si se han configurado formularios para anexar al justificante.
+		if (fj == null) {
+			for ( Iterator it = tramiteInfo.getFormularios().iterator();it.hasNext();)
+			{
+				DocumentoFront doc = (DocumentoFront) it.next();
+				if (doc.getEstado() != DocumentoFront.ESTADO_CORRECTO) continue;
+				
+				if ( doc.isFormularioAnexarJustificante()) {						
+					if (fj == null) {
+						fj = factoria.crearFormulariosJustificante();
+					}
+					fj.getFormularios().add(doc.getIdentificador() + "-" + doc.getInstancia());						
+				}					
+			}
+		}
+		
+		return fj;
+	}
+
+	private static void establecerOpcionesNotificacion(
+			TramiteFront tramiteInfo, Instrucciones instrucciones)
+			throws Exception {
+		if (!ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA.equals(tramiteInfo.getHabilitarNotificacionTelematica())){
+			if (tramiteInfo.getSeleccionNotificacionTelematica() == null){
+				throw new Exception("No se ha establecido seleccion para notificacion telematica");
+			}
+			if (ConstantesSTR.NOTIFICACIONTELEMATICA_OBLIGATORIA.equals(tramiteInfo.getHabilitarNotificacionTelematica()) && 
+					!tramiteInfo.getSeleccionNotificacionTelematica().booleanValue()){
+				throw new Exception("La notificacion telematica debe ser obligatoria");
+			}
+			
+			instrucciones.setHabilitarNotificacionTelematica(tramiteInfo.getSeleccionNotificacionTelematica().booleanValue()?"S":"N");
+			
+			// Avisos: comprobamos si estan activados los avisos obligatorios para las notificaciones
+			instrucciones.setHabilitarAvisos("N");
+			if (tramiteInfo.getSeleccionNotificacionTelematica().booleanValue() &&
+					tramiteInfo.isObligatorioAvisosNotificaciones()) {
+				
+				instrucciones.setHabilitarAvisos("S");
+			
+				if (!ValidacionesUtil.validarEmail(tramiteInfo.getSeleccionEmailAviso())) {
+					throw new Exception("El email de aviso no es valido");					
+				}
+				instrucciones.setAvisoEmail(tramiteInfo.getSeleccionEmailAviso());
+				
+				if (tramiteInfo.isPermiteSMS() && StringUtils.isNotBlank(tramiteInfo.getSeleccionSmsAviso())) {
+					if (!ValidacionesUtil.validarMovil(tramiteInfo.getSeleccionSmsAviso())) {
+						throw new Exception("El movil de aviso no es valido");
+					}
+					instrucciones.setAvisoSMS(tramiteInfo.getSeleccionSmsAviso());
+				}				
+			}
+			
+			
+			
+		}
+	}	
+
+	private static TramiteSubsanacion generarTramiteSubsanacion(String expeId,
+			Long expeUA, FactoriaObjetosXMLDatosPropios factoria) {
+		TramiteSubsanacion ts = null;
+		if (expeId != null){
+			ts = factoria.crearTramiteSubsanacion();
+			ts.setExpedienteCodigo(expeId);
+			ts.setExpedienteUnidadAdministrativa(expeUA);				
+		}
+		return ts;
+	}
+
+	private static Solicitud generarDatosSolicitud(TramiteFront tramiteInfo,
+			TramiteVersion tramiteVersion, TramitePersistentePAD tramitePAD,
+			PluginFormularios plgForms, PluginPagos plgPagos,
+			EspecTramiteNivel especVersion, EspecTramiteNivel especNivel,
+			FactoriaObjetosXMLDatosPropios factoria) throws ProcessorException,
+			EstablecerPropiedadException, Exception {
+		Solicitud datosSolicitud = null;
+		List datosJustificante = especNivel.getDatosJustificante();
+		if (datosJustificante == null || datosJustificante.size() == 0){
+			datosJustificante = especVersion.getDatosJustificante();
+		}						
+		if (datosJustificante != null && datosJustificante.size() > 0){
+			datosSolicitud = factoria.crearSolicitud();
+			for (Iterator it = datosJustificante.iterator();it.hasNext();){
+				DatoJustificante datJ = (DatoJustificante) it.next();
+				
+				// Validamos script de visibilidad	
+				boolean visible = true;					
+				if (datJ.getVisibleScript() != null && datJ.getVisibleScript().length > 0){
+					HashMap params = new HashMap();
+		    		params.put("PLUGIN_PAGOS",plgPagos);	
+					String res = ScriptUtil.evaluarScriptTramitacion(datJ.getVisibleScript(),params,tramiteVersion,(HashMap) plgForms.getDatosFormularios(),tramitePAD,tramiteInfo.getDatosSesion());
+					visible = res.equals("S");
+					if (!visible) continue;
+				}
+				
+				Dato datS = factoria.crearDato();
+				datS.setTipo(new Character(datJ.getTipo()));
+				TraDatoJustificante tradatjus = ((TraDatoJustificante) datJ.getTraduccion(tramiteInfo.getDatosSesion().getLocale().getLanguage()));
+				if (tradatjus == null){
+					throw new Exception("No se ha establecido la traducción de un dato de justificante para idioma " + tramiteInfo.getDatosSesion().getLocale().getLanguage());
+				}
+				datS.setDescripcion(tradatjus.getDescripcion());
+				if (datJ.getTipo() == DatoJustificante.TIPO_CAMPO || datJ.getTipo() == DatoJustificante.TIPO_INDICE){
+					
+					// Comprobamos si se ha especificado una referencia a campo o un script
+					if (StringUtils.isNotEmpty(datJ.getReferenciaCampo())){						
+						// Comprobamos si es un dato de pagos  o de formulario
+						ReferenciaCampo ref = new ReferenciaCampo(datJ.getReferenciaCampo());
+						if (tramiteInfo.getFormulario(ref.getIdentificadorDocumento(),ref.getInstancia()) != null){						
+							datS.setValor(plgForms.getDatoFormulario(datJ.getReferenciaCampo()));
+						}else if ( tramiteInfo.getPago( ref.getIdentificadorDocumento(), ref.getInstancia() ) != null){
+							datS.setValor(plgPagos.getDatoPago(datJ.getReferenciaCampo()));							
+						}else{
+							datS.setValor(""); // Protegemos ante referencias incorrectas
+						}
+						
+						// Parche para reemplazar valores: true/false por Si/No
+						if (datS.getValor().equalsIgnoreCase("true")) datS.setValor("Si");
+						if (datS.getValor().equalsIgnoreCase("false")) datS.setValor("No");
+					}else{
+						// Ejecutamos script para calcular el valor
+						HashMap params = new HashMap();
+		        		params.put("PLUGIN_PAGOS",plgPagos);	
+						String res = ScriptUtil.evaluarScriptTramitacion(datJ.getValorCampoScript(),params,tramiteVersion,(HashMap) plgForms.getDatosFormularios(),tramitePAD,tramiteInfo.getDatosSesion());
+						datS.setValor(res);
+					}
+					
+				}					
+				datosSolicitud.getDato().add(datS);			
+			}
+
+			if (datosSolicitud.getDato() == null || datosSolicitud.getDato().size() == 0){
+				datosSolicitud = null;
+			}
+		}
+		
+		
+		return datosSolicitud;
+	}
+
+	private static Date obtenerFechaTopeEntrega(TramiteFront tramiteInfo,
+			EspecTramiteNivel especVersion, EspecTramiteNivel especNivel) {
+		int dias = especVersion.getDiasPrerregistro();
+		if ( especNivel != null && especNivel.getDiasPrerregistro() != 0 )
+		{
+			dias = especNivel.getDiasPrerregistro();
+		}
+		
+								
+		Date finPlazoPresentacion = tramiteInfo.getFechaFinPlazo(); 			
+		Date dateTopeEntrega = new Date();
+		
+		log.debug( "TODAY " + dateTopeEntrega.getTime() );
+		
+		long timeTopeEntrega = dateTopeEntrega.getTime() + ( long ) dias * 24 * 3600 * 1000L;
+		
+		log.debug( "TIME TOPE PRERREGISTRO " + timeTopeEntrega );
+		log.debug( "FIN PLAZO PRESENTACION " + (finPlazoPresentacion!=null?Long.toString(finPlazoPresentacion.getTime()):"") );
+		
+		if ( finPlazoPresentacion != null )
+		{
+			timeTopeEntrega = finPlazoPresentacion.getTime() < timeTopeEntrega ? finPlazoPresentacion.getTime() : timeTopeEntrega;
+		}
+		dateTopeEntrega.setTime( timeTopeEntrega );
+		return dateTopeEntrega;
+	}
+
+	private static DocumentosEntregar obtenerDocumentosEntregar(
+			TramiteFront tramiteInfo, FactoriaObjetosXMLDatosPropios factoria)
+			throws EstablecerPropiedadException {
+		//--- Documentos a presentar ( sólo para trámites presenciales )
+		//	- Justificante firmado -> siempre que tipo circuito no es telemático y no haya formulario justificante
+		//	     o
+		//  - Formulario justificante -> doc.isFormularioJustificante();
+		//
+		//	- Formularios firmados -> los marcados para firmar 
+		//					DocumentoFront doc = (DocumentoFront) tramiteInfo.getFormularios().get(1);
+		//					doc.isFirmar();
+		//	- Anexos -> Verificar que anexos deben compulsarse y/o entregar fotocopia
+		//  - Pagos -> Verificar que pagos se han realizado de forma presencial (PENDIENTE IMPL)
+		
+		DocumentosEntregar docsEntregar = factoria.crearDocumentosEntregar();
+		Documento instruccionesDocumento;
+		boolean existeFormularioJustificante = false;
+		
+		for ( Iterator it = tramiteInfo.getFormularios().iterator();it.hasNext(); )
+		{
+			DocumentoFront doc = (DocumentoFront) it.next();
+			if (doc.getEstado() != DocumentoFront.ESTADO_CORRECTO) continue;
+			
+			if ( doc.isFormularioJustificante()){
+				existeFormularioJustificante = true;
+				instruccionesDocumento = factoria.crearDocumento();
+				instruccionesDocumento.setTipo( new Character(ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_FORMULARIO_JUSTIFICANTE));
+				instruccionesDocumento.setFirmar( new Boolean(true) );
+				instruccionesDocumento.setIdentificador(doc.getIdentificador() + "-" + doc.getInstancia());
+				instruccionesDocumento.setTitulo( doc.getDescripcion() );						
+				docsEntregar.getDocumento().add( 0,instruccionesDocumento );
+			}else if ( doc.isPrerregistro()  )
+			{						
+				instruccionesDocumento = factoria.crearDocumento();
+				instruccionesDocumento.setTipo( new Character(ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_FORMULARIO));
+				instruccionesDocumento.setFirmar( new Boolean(true) );
+				instruccionesDocumento.setIdentificador(doc.getIdentificador() + "-" + doc.getInstancia());
+				instruccionesDocumento.setTitulo( doc.getDescripcion() );						
+				docsEntregar.getDocumento().add( instruccionesDocumento );
+			}
+			
+		}
+		
+		// Justificante: Si no existe formulario justificante, hay q entregar justificante
+		if (!existeFormularioJustificante){
+			instruccionesDocumento = factoria.crearDocumento();
+			instruccionesDocumento.setTipo( new Character(ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_JUSTIFICANTE));
+			instruccionesDocumento.setFirmar( new Boolean(true) );							
+			String tituloMultiidiomaJustificanteFirmado = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"mensaje.datospropios.justificante");				
+			instruccionesDocumento.setTitulo( tituloMultiidiomaJustificanteFirmado );
+			docsEntregar.getDocumento().add(0,instruccionesDocumento );
+		}
+
+		for (Iterator it = tramiteInfo.getAnexos().iterator();it.hasNext();)
+		{
+			DocumentoFront doc = (DocumentoFront) it.next();
+			if (doc.getEstado() != DocumentoFront.ESTADO_CORRECTO) continue;
+								
+			if ( !doc.isAnexoPresentarTelematicamente() ||  doc.isAnexoCompulsar() )
+			{
+				instruccionesDocumento = factoria.crearDocumento();						
+				instruccionesDocumento.setTipo( new Character(ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_ANEXO) );
+				instruccionesDocumento.setCompulsar( new Boolean(doc.isAnexoCompulsar()) );
+				instruccionesDocumento.setFotocopia( new Boolean(doc.isAnexoFotocopia()) );
+				
+				// ANTES SOLO SE ESTABLECIA IDENTIFICADOR SI TENIA PARTE TELEMATICA, AHORA SIEMPRE.
+				instruccionesDocumento.setIdentificador(doc.getIdentificador() + "-" + doc.getInstancia());
+				/* 
+				if (doc.isAnexoPresentarTelematicamente()){
+					// Si se ha presentado telemáticamente enlazamos con asiento
+					instruccionesDocumento.setIdentificador(doc.getIdentificador() + "-" + doc.getInstancia());
+				}
+				*/
+				
+				if (doc.isAnexoGenerico()){
+					instruccionesDocumento.setTitulo( doc.getAnexoGenericoDescripcion() );
+				}else{
+					instruccionesDocumento.setTitulo( doc.getDescripcion() );
+				}
+										
+				docsEntregar.getDocumento().add( instruccionesDocumento );
+			}
+		}
+		
+		for (Iterator it = tramiteInfo.getPagos().iterator();it.hasNext();)
+		{
+			DocumentoFront doc = (DocumentoFront) it.next();
+			if (doc.getEstado() != DocumentoFront.ESTADO_CORRECTO) continue;
+						
+			
+			if (doc.getPagoTipo() == 'P'){
+				instruccionesDocumento = factoria.crearDocumento();						
+				instruccionesDocumento.setTipo( new Character(ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_PAGO) );						
+				instruccionesDocumento.setIdentificador(doc.getIdentificador() + "-" + doc.getInstancia());
+				instruccionesDocumento.setTitulo( doc.getDescripcion() );
+				docsEntregar.getDocumento().add( instruccionesDocumento );					
+			}
+		}
+		return docsEntregar;
 	}	
 	
 	/**

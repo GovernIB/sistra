@@ -10,6 +10,7 @@ img { border:0; }
 body { font:normal 80% 'TrebuchetMS', 'Trebuchet MS', Arial, Helvetica, sans-serif; color:#666; background-color:#fff; }
 a { color:#000; text-decoration:none; }
 a:hover { color:#c33; }
+a.pequenyo {color:#06f;font-size: xx-small}
 
 input, select, textarea, button { font:normal 1em Arial, Helvetica, sans-serif; color:#000; line-height:1.3em !important; }
 
@@ -417,3 +418,8 @@ p.notaPie {font-size: smaller;font-style: italic;}
 
 /* ESTILO IFRAME UPLOAD */
 #iframeUpload{position: absolute;  top:-30em; left:-30em; frameborder:0; width:0; height:0; scrolling:no; allowtransparency:true;}
+
+/* NOTA RECIBIR AVISOS */
+p.notaRecibirAvisos { font-size:.9em; font-style: italic; text-align:center;}
+
+.error {color: red; font-weight:bold;}

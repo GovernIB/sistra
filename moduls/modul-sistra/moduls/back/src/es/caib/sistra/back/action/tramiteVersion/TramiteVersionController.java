@@ -18,6 +18,7 @@ import es.caib.sistra.back.action.BaseController;
 import es.caib.sistra.modelInterfaz.ConstantesDominio;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
 import es.caib.sistra.persistence.delegate.IdiomaDelegate;
+import es.caib.sistra.persistence.delegate.VersionWSDelegate;
 
 /**
  * Guarda la lista de tramiteVersions de un tramiteVersion en el contexto.
@@ -39,6 +40,12 @@ public class TramiteVersionController extends BaseController{
             List lenguajes = delegate.listarLenguajes();
             request.setAttribute( "listaLenguajes", lenguajes);
             
+           // Obtenemos lista de versiones
+           VersionWSDelegate vWSdelegate = DelegateUtil.getVersionWSDelegate();
+           List versiones = vWSdelegate.obtenerVersiones();
+           request.setAttribute( "listaVersionesWS", versiones);
+            
+           
             // Obtenemos info registro
            RegistroTelematicoDelegate dlgRte = DelegateRegtelUtil.getRegistroTelematicoDelegate();
            List organosDestino = dlgRte.obtenerServiciosDestino();

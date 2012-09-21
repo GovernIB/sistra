@@ -22,6 +22,7 @@ import net.sf.ehcache.CacheException;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -34,6 +35,7 @@ import es.caib.sistra.persistence.intf.DominioEJBHome;
 import es.caib.sistra.persistence.util.UsernamePasswordCallbackHandler;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.login.AutenticacionExplicitaInfo;
+import es.caib.sistra.plugins.login.ConstantesLogin;
 import es.caib.util.CifradoUtil;
 import es.caib.util.EjbUtil;
 
@@ -127,7 +129,7 @@ public class PluginDominio {
 	
 	private ValoresDominio resuelveDominio(String idDominio,List parametros) throws Exception{		
 		// Obtenemos informacion dominio
-		
+		String url = "";
 		String cacheKey =  null;
 		Dominio dominio;
 		try{
@@ -137,7 +139,14 @@ public class PluginDominio {
 		}catch(Exception e){
 			throw new Exception("No se puede encontrar dominio con id " + idDominio ,e);
 		}
-		
+		try{
+			url = dominio.getUrl();
+    		if(url != null && !"".equals(url)){
+    			url = StringUtils.replace(url,"@backoffice.url@",DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("backoffice.url"));
+    		}
+		}catch(Exception e){
+			throw new Exception("No existe la propiedad backoffice.url en el global.properties.");
+		}
 		// Comprobamos si el dominio es cacheable y tiene los datos cacheados
 		if ( dominio.getCacheable() == 'S' )
 		{	
@@ -151,13 +160,13 @@ public class PluginDominio {
 		switch (dominio.getTipo())
 		{
 			case Dominio.DOMINIO_EJB:
-				valoresDominio = resuelveDominioEJB(dominio,parametros);
+				valoresDominio = resuelveDominioEJB(dominio,parametros,url);
 				break;
 			case Dominio.DOMINIO_WEBSERVICE:
-				valoresDominio = resuelveDominioWS(dominio,parametros);
+				valoresDominio = resuelveDominioWS(dominio,parametros,url);
 				break;
 			case Dominio.DOMINIO_SQL:
-				valoresDominio = resuelveDominioSQL(dominio,parametros);
+				valoresDominio = resuelveDominioSQL(dominio,parametros,url);
 				break;
 			default:
 				throw new Exception("Tipo de dominio no soportado: " + dominio.getTipo());
@@ -175,7 +184,7 @@ public class PluginDominio {
 		return valoresDominio;
 	}
 	
-	private ValoresDominio resuelveDominioEJB(Dominio dominio,List parametros) throws Exception
+	private ValoresDominio resuelveDominioEJB(Dominio dominio,List parametros, String url) throws Exception
 	{
 		log.debug("Accedemos a Dominio EJB");
 		LoginContext lc = null;
@@ -204,7 +213,7 @@ public class PluginDominio {
 						log.debug("Autenticación explicita a traves de plugin autenticacion organismo");
 						AutenticacionExplicitaInfo authInfo = null;
 						try{
-							authInfo = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo();
+							authInfo = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo(ConstantesLogin.TIPO_DOMINIO, dominio.getIdentificador());
 							log.debug("Usuario plugin autenticacion organismo: " + authInfo.getUser());
 						}catch (Exception ex){
 							throw new Exception("Excepcion obteniendo informacion autenticacion explicita a traves de plugin organismo",ex);
@@ -217,7 +226,7 @@ public class PluginDominio {
 			    lc.login();
 			}
 			
-			home = ( DominioEJBHome ) lookupHome( dominio, jndiName, DominioEJBHome.class );
+			home = ( DominioEJBHome ) lookupHome( dominio, jndiName, url, DominioEJBHome.class );
 			DominioEJB dominioEJB = home.create();
 			return dominioEJB.obtenerDominio( dominio.getIdentificador(), parametros );
 		}
@@ -236,18 +245,18 @@ public class PluginDominio {
 	}
 	
 			
-	private Object lookupHome( Dominio dominio, String jndiName, Class narrowTo) throws Exception {
+	private Object lookupHome( Dominio dominio, String jndiName,String url, Class narrowTo) throws Exception {
 		
 		if (dominio.getLocalizacionEJB() == Dominio.EJB_LOCAL){
 			log.debug("Acceso local a " + dominio.getJNDIName());
 		}else{
-			log.debug("Acceso remoto a " + dominio.getJNDIName() + " [" + dominio.getUrl() + "]");
+			log.debug("Acceso remoto a " + dominio.getJNDIName() + " [" + url + "]");
 		}
 		
-		return EjbUtil.lookupHome(dominio.getJNDIName(),(dominio.getLocalizacionEJB() == Dominio.EJB_LOCAL),dominio.getUrl(),narrowTo);  		
+		return EjbUtil.lookupHome(dominio.getJNDIName(),(dominio.getLocalizacionEJB() == Dominio.EJB_LOCAL),url,narrowTo);  		
 	}
 		
-	private ValoresDominio resuelveDominioWS(Dominio dominio,List parametros) throws Exception
+	private ValoresDominio resuelveDominioWS(Dominio dominio,List parametros, String url) throws Exception
 	{
 		log.debug("Accedemos a Dominio WS");
 		
@@ -269,7 +278,7 @@ public class PluginDominio {
 				log.debug("Autenticación explicita a traves de plugin autenticacion organismo");
 				AutenticacionExplicitaInfo authInfo = null;
 				try{
-					authInfo = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo();
+					authInfo = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo(ConstantesLogin.TIPO_DOMINIO, dominio.getIdentificador());
 					log.debug("Usuario plugin autenticacion organismo: " + authInfo.getUser());
 				}catch (Exception ex){
 					throw new Exception("Excepcion obteniendo informacion autenticacion explicita a traves de plugin organismo",ex);
@@ -279,20 +288,25 @@ public class PluginDominio {
 				break;
 		}
 		
-		// TODO GESTIONAR VERSIONADO WS EN LA INVOCACION
-		return es.caib.sistra.wsClient.v1.client.ClienteWS.obtenerDominio(dominio.getUrl(),user,pass,dominio.getIdentificador(),parametros);
+		if(dominio.getVersionWS() != null && "v1".equals(dominio.getVersionWS())){
+			return es.caib.sistra.wsClient.v1.client.ClienteWS.obtenerDominio(url,user,pass,dominio.getIdentificador(),parametros);
+		}else if(dominio.getVersionWS() != null && "v2".equals(dominio.getVersionWS())){
+			return es.caib.sistra.wsClient.v2.client.ClienteWS.obtenerDominio(url,user,pass,dominio.getIdentificador(),parametros);
+		}else{
+			throw new Exception("Excepcion obteniendo la versión "+dominio.getVersionWS()+" del WS de obtención de dominios. ");
+		}
 		       		
 	}
 	
 	
-	private ValoresDominio resuelveDominioSQL(Dominio dominio,List parametros)throws Exception{
+	private ValoresDominio resuelveDominioSQL(Dominio dominio,List parametros, String url)throws Exception{
 		log.debug("Dominio SQL");
 		// Obtenemos datasource
 		DataSource datasource;
 		Connection con = null;
 		try {
 			InitialContext ctx = new InitialContext();
-			datasource  = ( javax.sql.DataSource ) ctx.lookup("java:/" + dominio.getUrl());
+			datasource  = ( javax.sql.DataSource ) ctx.lookup("java:/" + url);
 	      } catch( Exception e ) {
 	              throw new Exception( "Error consiguiendo conexion : "+e.toString() );
 	      }	  

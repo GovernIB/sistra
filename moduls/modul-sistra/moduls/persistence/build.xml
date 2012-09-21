@@ -50,10 +50,11 @@
             <include name="sistra-util.jar"/>
             <include name="sistra-plugins.jar"/>
     		<include name="sistra-xml.jar"/>
+    		<include name="sistra-pdf.jar"/>
         </fileset>
         <fileset dir="${ejb.product}">
-            <include name="sistra-model.jar"/>
-        	<include name="sistra-wsClient.jar"/>
+            <include name="5-sistra-model.jar"/>
+        	<include name="5-sistra-wsClient.jar"/>
         </fileset> 
     	<fileset dir="${lib.dir}/jboss"> 
     		<include name="*.jar"/>
@@ -82,8 +83,8 @@
         <tstamp>
             <format property="TODAY" pattern="dd-MM-yy"/>
         </tstamp>
-        <fail unless="role.sistra" message="La propiedad role.sistra no está definida en config.properties"/>
-    	<fail unless="role.user" message="La propiedad role.user no está definida en config.properties"/>
+        <fail unless="role.operador" message="La propiedad role.operador no está definida en config.properties"/>
+    	<fail unless="role.todos" message="La propiedad role.todos no está definida en config.properties"/>
         <fail unless="persistence.auth.domain" message="La propiedad persistence.auth.domain no está definida en config.properties"/>
         <fail unless="persistence.auth.principal" message="La propiedad persistence.auth.principal no está definida en config.properties"/>
     </target>
@@ -126,14 +127,14 @@
             </utilobject>
 
             <deploymentdescriptor
-                clientjar="sistra-${modul}-client.jar"
+                clientjar="5-sistra-${modul}-client.jar"
                 xmlencoding="UTF-8"
                 destdir="${ejb.gen.etc}"
                 validatexml="true"
                 />
 
             <jboss
-                version="${jboss.version}"
+                	version="3.2"
                 xmlencoding="UTF-8"
                 destdir="${ejb.gen.etc}"
                 mergedir="${ejb.merge.jboss}"
@@ -144,10 +145,10 @@
 
         </ejbdoclet>
 
-        <copy file="${ejb.etc}/hibernate.cfg.xml" todir="${ejb.gen.etc}" overwrite="true"/>
-    	<copy file="${ejb.etc}/hibernate.properties" todir="${ejb.gen.etc}" overwrite="true"/>
+        <copy file="${ejb.etc}/sistra-hibernate.cfg.xml" todir="${ejb.gen.etc}" overwrite="true"/>
+    	<copy file="${ejb.etc}/sistra-hibernate.properties" todir="${ejb.gen.etc}" overwrite="true"/>
 
-        <replace file="${ejb.gen.etc}/hibernate.cfg.xml">
+        <replace file="${ejb.gen.etc}/sistra-hibernate.cfg.xml">
             <replacefilter token="@datasource.jndi@" value="${datasource.jndi}"/>
             <replacefilter token="@hibernate.dialect@" value="${hibernate.dialect}"/>
         	<replacefilter token="@hibernate.show_sql@" value="${hibernate.show_sql}"/>
@@ -167,28 +168,31 @@
             <src path="${ejb.src}"/>
             <src path="${ejb.gen.src}"/>
         </javac>
+    	<copydir dest="${ejb.classes}" src="${ejb.src}">
+			<include name="**/*.properties"/>
+		</copydir>
     </target>
 
     <target name="ejb.jar" depends="ejb.compile">
-        <delete file="${ejb.product}/sistra-${modul}.jar" quiet="yes"/>
+        <delete file="${ejb.product}/5-sistra-${modul}.jar" quiet="yes"/>
         <jar
-            jarfile="${ejb.product}/sistra-${modul}.jar"
+            jarfile="${ejb.product}/5-sistra-${modul}.jar"
             basedir="${ejb.classes}">
             <manifest>
                 <attribute name="Created-By" value="${indra}"/>
             </manifest>
-            <metainf dir="${ejb.gen.etc}" includes="*.xml" excludes="hibernate.cfg.xml"/>
-            <fileset dir="${ejb.gen.etc}" includes="hibernate.cfg.xml"/>
-        	<fileset dir="${ejb.gen.etc}" includes="hibernate.properties"/>
+            <metainf dir="${ejb.gen.etc}" includes="*.xml" excludes="sistra-hibernate.cfg.xml"/>
+            <fileset dir="${ejb.gen.etc}" includes="sistra-hibernate.cfg.xml"/>
+        	<fileset dir="${ejb.gen.etc}" includes="sistra-hibernate.properties"/>
             <fileset dir="${ejb.etc}" includes="ehcache.xml"/>
         	<fileset dir="${ejb.resources}" includes="*.properties"/>
         </jar>
     </target>
 
     <target name="ejb.client" depends="ejb.compile">
-        <delete file="${ejb.product}/sistra-${modul}-client.jar" quiet="yes"/>
+        <delete file="${ejb.product}/5-sistra-${modul}-client.jar" quiet="yes"/>
         <jar
-            jarfile="${ejb.product}/sistra-${modul}-client.jar"
+            jarfile="${ejb.product}/5-sistra-${modul}-client.jar"
             basedir="${ejb.classes}">
             <manifest>
                 <attribute name="Created-By" value="${indra}"/>

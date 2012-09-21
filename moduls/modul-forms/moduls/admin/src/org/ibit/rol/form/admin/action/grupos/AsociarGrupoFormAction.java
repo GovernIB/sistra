@@ -39,7 +39,7 @@ public class AsociarGrupoFormAction extends Action {
     				 String formulario = request.getParameter("idForm");
     				 String gruposNoAsoc = request.getParameter("gruposNoAsoc");
     				 
-    				 if(StringUtils.isNotEmpty(grupo) && StringUtils.isNotEmpty(formulario)){
+    				 if(StringUtils.isNotBlank(grupo) && StringUtils.isNotBlank(formulario)){
     					 GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
     					 StringTokenizer st = new StringTokenizer(grupo,",");
     					 while(st.hasMoreTokens()){
@@ -47,7 +47,7 @@ public class AsociarGrupoFormAction extends Action {
     						 gruposDelegate.desAsociarGrupo(grupoAsociar,formulario);
     					 }
     				 }
-    				 if(StringUtils.isNotEmpty(gruposNoAsoc) && StringUtils.isNotEmpty(formulario)){
+    				 if(StringUtils.isNotBlank(gruposNoAsoc) && StringUtils.isNotBlank(formulario)){
     					 GruposDelegate gruposDelegate = DelegateUtil.getGruposDelegate();
     					 StringTokenizer st = new StringTokenizer(gruposNoAsoc,",");
     					 while(st.hasMoreTokens()){

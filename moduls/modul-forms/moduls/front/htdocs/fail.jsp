@@ -19,7 +19,9 @@
 	<!--  cabecera -->
 <!-- capçal -->
 <div id="cap">
+	<logic:equal name="<%=org.ibit.rol.form.front.Constants.MOSTRAR_EN_IFRAME%>" value="false">
 	<img class="logo" src="<bean:write name="<%=org.ibit.rol.form.front.Constants.ORGANISMO_INFO_KEY%>" property="urlLogo"/>" alt="Logo <bean:write name="<%=org.ibit.rol.form.front.Constants.ORGANISMO_INFO_KEY%>" property="nombre"/>" />		    	
+	</logic:equal>	
 </div>
 <!-- titol -->
 <p id="titolAplicacio"><bean:message key="main.title"/>	
@@ -49,7 +51,9 @@
 	<!--  <div id="peuVora"></div> -->
 	<!-- peu -->
 	<div id="peu">
+	<logic:equal name="<%=org.ibit.rol.form.front.Constants.MOSTRAR_EN_IFRAME%>" value="false">
 		&copy; <bean:write name="<%=org.ibit.rol.form.front.Constants.ORGANISMO_INFO_KEY%>" property="nombre"/>				
+	</logic:equal>
 	</div>
 </div><!-- contenidor -->
 </body>

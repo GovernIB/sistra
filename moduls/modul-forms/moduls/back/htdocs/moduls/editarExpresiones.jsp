@@ -41,24 +41,24 @@
 <!-- INDRA: MODIFICACION PARA QUE MUESTRE NUEVA EXPRESION AUTORELLENABLE	-->
 <tr id="trExpAur" style="display: none;">
     <td class="label"><bean:message key="componente.autorellenable"/></td>
-    <td class="input"><html:textarea readonly="<%=!(expresionesPermitidas==null || (expresionesPermitidas!=null&&expresionesPermitidas.indexOf("1")!=-1))%>" tabindex="<%=Integer.toString(ti++)%>" property="values.expresionAutorellenable" /></td>
+    <td class="input"><html:textarea readonly="<%=!(expresionesPermitidas==null || (expresionesPermitidas!=null&&expresionesPermitidas.indexOf(\"1\")!=-1))%>" tabindex="<%=Integer.toString(ti++)%>" property="values.expresionAutorellenable" /></td>
 </tr>
 <!-- INDRA: FIN -->
 <tr id="trExpAut" style="display: none;">
     <td class="label"><bean:message key="componente.autocalculo"/></td>
-    <td class="input"><html:textarea readonly="<%=!(expresionesPermitidas==null || (expresionesPermitidas!=null&&expresionesPermitidas.indexOf("2")!=-1))%>" tabindex="<%=Integer.toString(ti++)%>" property="values.expresionAutocalculo" /></td>
+    <td class="input"><html:textarea readonly="<%=!(expresionesPermitidas==null || (expresionesPermitidas!=null&&expresionesPermitidas.indexOf(\"2\")!=-1))%>" tabindex="<%=Integer.toString(ti++)%>" property="values.expresionAutocalculo" /></td>
 </tr>
 <tr id="trExpVpo" style="display: none;">
     <td class="label"><bean:message key="componente.expvalores"/></td>
-    <td class="input"><html:textarea readonly="<%=!(expresionesPermitidas==null || (expresionesPermitidas!=null&&expresionesPermitidas.indexOf("3")!=-1))%>" tabindex="<%=Integer.toString(ti++)%>" property="values.expresionValoresPosibles" /></td>
+    <td class="input"><html:textarea readonly="<%=!(expresionesPermitidas==null || (expresionesPermitidas!=null&&expresionesPermitidas.indexOf(\"3\")!=-1))%>" tabindex="<%=Integer.toString(ti++)%>" property="values.expresionValoresPosibles" /></td>
 </tr>
 <tr id="trExpDep" style="display: none;">
     <td class="label"><bean:message key="componente.dependencia"/></td>
-    <td class="input"><html:textarea readonly="<%=!(expresionesPermitidas==null || (expresionesPermitidas!=null&&expresionesPermitidas.indexOf("4")!=-1))%>" tabindex="<%=Integer.toString(ti++)%>" property="values.expresionDependencia" /></td>
+    <td class="input"><html:textarea readonly="<%=!(expresionesPermitidas==null || (expresionesPermitidas!=null&&expresionesPermitidas.indexOf(\"4\")!=-1))%>" tabindex="<%=Integer.toString(ti++)%>" property="values.expresionDependencia" /></td>
 </tr>
 <tr id="trExpVal" style="display: none;">
     <td class="label"><bean:message key="componente.validacion"/></td>
-    <td class="input"><html:textarea readonly="<%=!(expresionesPermitidas==null || (expresionesPermitidas!=null&&expresionesPermitidas.indexOf("5")!=-1))%>" tabindex="<%=Integer.toString(ti++)%>" property="values.expresionValidacion" /></td>
+    <td class="input"><html:textarea readonly="<%=!(expresionesPermitidas==null || (expresionesPermitidas!=null&&expresionesPermitidas.indexOf(\"5\")!=-1))%>" tabindex="<%=Integer.toString(ti++)%>" property="values.expresionValidacion" /></td>
 </tr>
 <!-- INDRA: NO SENTIDO EN TELEMATICO 
 <tr id="trExpPos" style="display: none;">

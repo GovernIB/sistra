@@ -3,7 +3,7 @@
 <project name="sistra.front" default="main" basedir=".">
 
     <property file="${basedir}/build.properties"/>
-
+	
     <property name="modul" value="front"/>
     <property name="package" value="es.caib.${ant.project.name}"/>
 
@@ -13,12 +13,13 @@
 	
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
-
+	<property name="zonaper.dir" location="${home.dir}/../modul-zonaper/output/moduls"/>
     <property name="lib.dir" location="${home.dir}/../../lib"/>
     <property name="etc.dir" location="${home.dir}/etc"/>
     <property name="xdoclet.dir" location="${home.dir}/../../xdoclet"/>
 
 	<property name="distribucion.dir" location="${home.dir}/../../product"/>
+	<property name="clienteFirma.dir" location="${home.dir}/../../integracio/clienteFirma"/>
 	
     <property name="web.src" location="${basedir}/src"/>
     <property name="web.etc" location="${basedir}/etc"/>
@@ -53,8 +54,8 @@
     		<include name="sistra-xml.jar"/>
         </fileset>
         <fileset dir="${web.product}">
-            <include name="${prj.name}-model.jar" />
-            <include name="${prj.name}-persistence-client.jar" />
+            <include name="5-${prj.name}-model.jar" />
+            <include name="5-${prj.name}-persistence-client.jar" />
         </fileset>
     </path>
 
@@ -141,7 +142,7 @@
 
             <jbosswebxml
                 destdir="${web.gen.etc}"
-                version="${jboss.version}"
+            	version="3.2"
                 xmlencoding="UTF-8"
                 validatexml="true"
                 mergedir="${web.merge.jboss}"
@@ -150,10 +151,34 @@
 
         </webdoclet>
 
+    	<!-- cas: config comentarios -->
+    	<condition property="cas.enabled.comment.init" value="${comment.init}" else="">
+    	    <equals arg1="${login-config}" arg2="CAS"/>
+    	</condition>
+    	<condition property="cas.enabled.comment.end" value="${comment.end}" else="">
+    	    <equals arg1="${login-config}" arg2="CAS"/>
+    	</condition>
+    	<condition property="cas.enabled.noComment.init" value="" else="${comment.init}">
+    	    <equals arg1="${login-config}" arg2="CAS"/>
+    	</condition>
+    	<condition property="cas.enabled.noComment.end" value="" else="${comment.end}">
+    	    <equals arg1="${login-config}" arg2="CAS"/>
+    	</condition>
+    	<!-- cas: config comentarios -->
+    	
        <replace file="${web.gen.etc}/web.xml">
-          <replacefilter token="@role.user@" value="${role.user}"/>
+          <replacefilter token="@role.todos@" value="${role.todos}"/>
 	      <replacefilter token="@release.version@" value="${release.version}"/>
           <replacefilter token="@web.login-config@" value="${web.front.login-config}"/>         	
+       	
+       	<!-- cas: reemplazo comentarios -->
+       	  <replacefilter token="@cas.enabled.comment.init@" value="${cas.enabled.comment.init}"/>        	 
+       	  <replacefilter token="@cas.enabled.comment.end@" value="${cas.enabled.comment.end}"/>        	 
+       	  <replacefilter token="@cas.enabled.noComment.init@" value="${cas.enabled.noComment.init}"/>        	 
+       	  <replacefilter token="@cas.enabled.noComment.end@" value="${cas.enabled.noComment.end}"/>       
+       	  <replacefilter token="@cas.urlCas@" value="${cas.urlCas}"/>              	  
+       	  <replacefilter token="@cas.urlSistra@" value="${cas.urlSistra.front}"/>       
+       	  <!-- cas: reemplazo comentarios -->
        </replace>
 
     </target>
@@ -184,11 +209,25 @@
     </target>
 
     <target name="web.war" depends="web.compile">
-        <delete file="${web.product}/${prj.name}-${modul}.war" quiet="yes"/>
-        <war warfile="${web.product}/${prj.name}-${modul}.war"
+    	<copy todir="${web.htdocs}/protected" overwrite="true">											
+    		<fileset  dir="${clienteFirma.dir}/firma/aFirma" >
+    			<include name="version.properties"/>
+    		</fileset>		   
+	    </copy>
+    	<delete file="${web.product}/5-${prj.name}-${modul}.war" quiet="yes"/>
+        <war warfile="${web.product}/5-${prj.name}-${modul}.war"
             basedir="${web.htdocs}"
             webxml="${web.gen.etc}/web.xml"
             excludes="WEB-INF/**">
+    
+        	<fileset dir="${clienteFirma.dir}" >
+        		<exclude name="**/aFirma_old/**"/>
+        	</fileset>
+        	
+        	<fileset  dir="${clienteFirma.dir}/firma/aFirma" >
+        		<include name="version.properties"/>
+        	</fileset>
+        		
             <manifest>
                 <attribute name="Created-By" value="${indra}"/>
             </manifest>
@@ -197,7 +236,11 @@
             <classes dir="${web.resources}" includes="*.properties"/>
         	<classes dir="${web.classes}" includes="*.properties" />
             <!-- <classes dir="${web.classes}/es/caib/sistra/front/formulario" includes="*.properties"/> -->
+        	<lib file="${web.product}/3-zonaper-${modul}.jar"/>
         	
+        	<lib dir="${zonaper.dir}">
+        		<include name="3-zonaper-filter.jar"/>
+        	</lib>
         	<lib dir="${lib.dir}">
 	            <include name="struts.jar" />
  	        </lib>
@@ -207,6 +250,11 @@
 
             <webinf prefix="WEB-INF/tlds" dir="${web.gen.etc}" includes="*.tld"/>
         </war>
+		<delete>
+			<fileset dir="${web.htdocs}/protected">
+				<include name="version.properties"/>
+			</fileset>
+		</delete>
     </target>
 
     <target name="web.javadoc" depends="web.gen.all">

@@ -76,6 +76,10 @@
     <td class="input">Si<html:radio property="values.formularioJustificante" value="S"/> No<html:radio property="values.formularioJustificante" value="N"/></td>
 </tr>
 <tr>
+    <td class="label"><bean:message key="documento.formularioAnexarJustificante"/></td>
+    <td class="input">Si<html:radio property="values.formularioAnexarJustificante" value="S"/> No<html:radio property="values.formularioAnexarJustificante" value="N"/></td>
+</tr>
+<tr>
 	<td class="separador" colspan="2"><bean:message key="documento.datosAnexo"/></td>
 </tr>
 <tr>

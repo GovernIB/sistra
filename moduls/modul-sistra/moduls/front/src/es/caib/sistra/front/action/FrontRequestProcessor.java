@@ -3,6 +3,7 @@ package es.caib.sistra.front.action;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -21,6 +22,7 @@ import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.tiles.TilesRequestProcessor;
 import es.caib.sistra.front.Constants;
 import es.caib.sistra.front.util.InstanciaManager;
+import es.caib.sistra.persistence.delegate.ConfiguracionDelegate;
 import es.caib.sistra.persistence.delegate.DelegateException;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
 import es.caib.sistra.persistence.delegate.IdiomaDelegate;
@@ -63,6 +65,18 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
         	throw new ServletException(ex);
         }
     	
+        //Indicamos si se tiene que ejecutar dentro de un iframe o no y si son obligatorios los avisos
+        try{
+        	ConfiguracionDelegate config = DelegateUtil.getConfiguracionDelegate();
+        	Properties configProps = config.obtenerConfiguracion();
+			getServletContext().setAttribute(Constants.MOSTRAR_EN_IFRAME,new Boolean(configProps.getProperty("sistra.iframe")).booleanValue());
+        	
+			getServletContext().setAttribute(Constants.AVISOS_OBLIGATORIOS_NOTIFICACIONES,StringUtils.defaultString(configProps.getProperty("sistra.avisoObligatorioNotificaciones"), "false"));
+        }catch(Exception ex){
+        	log.error("Error obteniendo la variable iframe",ex);
+        	throw new ServletException(ex);
+        }
+        
     }
     
     

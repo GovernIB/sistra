@@ -10,10 +10,25 @@ import es.caib.xml.datospropios.factoria.impl.Dato;
 import es.caib.xml.datospropios.factoria.impl.DatosPropios;
 import es.caib.xml.datospropios.factoria.impl.Documento;
 import es.caib.xml.datospropios.factoria.impl.DocumentosEntregar;
+import es.caib.xml.datospropios.factoria.impl.FormulariosJustificante;
 import es.caib.xml.datospropios.factoria.impl.Instrucciones;
 import es.caib.xml.datospropios.factoria.impl.Solicitud;
+import es.caib.xml.datospropios.factoria.impl.TramiteSubsanacion;
 
 public class PruebaLecturaDatosPropios {
+	
+	private static void imprimirFormulariosJustificante (FormulariosJustificante fj){
+		System.out.println ("FORMULARIOS JUSTIFICANTE");
+		for (int i=0; i < fj.getFormularios().size(); i++) {
+			System.out.println (fj.getFormularios().get(i));
+		}				
+	}
+	
+	private static void imprimirTramiteSubsanacion (TramiteSubsanacion ts){
+		System.out.println ("TRAMITE SUBSANACION");
+		System.out.println ("Expe codigo: " + ts.getExpedienteCodigo());
+		System.out.println ("Expe UA: " + ts.getExpedienteUnidadAdministrativa());		
+	}
 	
 	private static void imprimirDato (Dato dato){
 		System.out.println ("DATO");
@@ -46,6 +61,7 @@ public class PruebaLecturaDatosPropios {
 		System.out.println ("Fecha Tope Entrega: " + inst.getFechaTopeEntrega());
 		System.out.println ("Texto Tope Entrega: " + inst.getTextoFechaTopeEntrega());
 		System.out.println ("Identificador persistencia: " + inst.getIdentificadorPersistencia());
+		System.out.println ("Identificador procedimiento: " + inst.getIdentificadorProcedimiento());
 		System.out.println ("Habilitar notificacion telematica: " + inst.getHabilitarNotificacionTelematica());
 		System.out.println ("Habilitar avisos: " + inst.getHabilitarAvisos());
 		System.out.println ("Aviso sms: " + inst.getAvisoSMS());
@@ -53,6 +69,14 @@ public class PruebaLecturaDatosPropios {
 		
 		DocumentosEntregar docs = inst.getDocumentosEntregar();
 		if (docs != null) imprimirDocumentosEntregar (docs);
+		
+		if (inst.getTramiteSubsanacion() != null){
+			imprimirTramiteSubsanacion(inst.getTramiteSubsanacion());
+		}
+		
+		if (inst.getFormulariosJustificante() != null){
+			imprimirFormulariosJustificante(inst.getFormulariosJustificante());
+		}
 	}
 	
 	private static void imprimirDocumentosEntregar (DocumentosEntregar docs){

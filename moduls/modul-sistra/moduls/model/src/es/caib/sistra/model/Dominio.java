@@ -39,7 +39,7 @@ public class Dominio  implements java.io.Serializable {
 	private String usr;
 	private String pwd;
 	private char cacheable='N';
-	
+	private String versionWS;
 	
 	
 	
@@ -86,6 +86,14 @@ public class Dominio  implements java.io.Serializable {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public String getVersionWS() {
+		return versionWS;
+	}
+
+	public void setVersionWS(String versionWS) {
+		this.versionWS = versionWS;
 	}
 
 	public char getLocalizacionEJB()

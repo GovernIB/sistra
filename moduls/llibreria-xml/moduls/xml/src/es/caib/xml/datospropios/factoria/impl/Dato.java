@@ -37,6 +37,7 @@ public class Dato extends NodoBaseDatosPropios {
 	public void setTipo(Character tipo) throws EstablecerPropiedadException {
 		Character valoresValidos[] = {
 				new Character (ConstantesDatosPropiosXML.DATOSOLICITUD_TIPO_BLOQUE),
+				new Character (ConstantesDatosPropiosXML.DATOSOLICITUD_TIPO_INDICE),
 				new Character (ConstantesDatosPropiosXML.DATOSOLICITUD_TIPO_CAMPO)
 		};
 		validaCampoConListaValores("Dato", "Tipo", tipo, valoresValidos);
@@ -81,9 +82,10 @@ public class Dato extends NodoBaseDatosPropios {
 		Character tipo = getTipo ();
 		if ( tipo == null ) throw new CampoObligatorioException ("Dato", "Tipo");
 		
-		if ( (tipo.charValue() != ConstantesDatosPropiosXML.DATOSOLICITUD_TIPO_BLOQUE) && (tipo.charValue() != ConstantesDatosPropiosXML.DATOSOLICITUD_TIPO_CAMPO) ){
+		if ( (tipo.charValue() != ConstantesDatosPropiosXML.DATOSOLICITUD_TIPO_BLOQUE) && (tipo.charValue() != ConstantesDatosPropiosXML.DATOSOLICITUD_TIPO_CAMPO) && (tipo.charValue() != ConstantesDatosPropiosXML.DATOSOLICITUD_TIPO_INDICE)){
 			String valoresPermitidos[] = {
 					"" + ConstantesDatosPropiosXML.DATOSOLICITUD_TIPO_BLOQUE,
+					"" + ConstantesDatosPropiosXML.DATOSOLICITUD_TIPO_INDICE,
 					"" + ConstantesDatosPropiosXML.DATOSOLICITUD_TIPO_CAMPO
 			};
 			throw new ValorFueraListaValoresPermitidosException ("Dato", "Tipo", "" + tipo, valoresPermitidos);

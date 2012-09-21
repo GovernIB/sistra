@@ -16,10 +16,12 @@ import org.apache.struts.action.ActionMapping;
 import es.caib.sistra.front.Constants;
 import es.caib.sistra.front.form.InitForm;
 import es.caib.sistra.front.util.InstanciaManager;
+import es.caib.sistra.model.ConstantesSTR;
 import es.caib.sistra.model.DatosSesion;
 import es.caib.sistra.model.RespuestaFront;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
 import es.caib.sistra.persistence.delegate.InstanciaDelegate;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 /**
  * @struts.action
  *  name="initForm"
@@ -114,8 +116,19 @@ public class InitAction extends BaseAction
 		InstanciaDelegate delegate = null;
 		if ( initForm.getID_INSTANCIA() == null )
 		{
-	 		delegate = DelegateUtil.getInstanciaDelegate( true );
-			delegate.create( initForm.getModelo(), initForm.getVersion(),modoAutenticacionUsuario, getLocale( request ),obtenerParametrosInicio(request) );
+	 		
+			// Comprobamos si funcionamos en modo delegado
+			String perfilAcceso = (String) request.getSession().getAttribute(ConstantesZPE.DELEGACION_PERFIL_ACCESO_KEY);
+			String nifEntidad = null;
+			if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(perfilAcceso) ){
+				nifEntidad = (String) request.getSession().getAttribute(ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO_ENTIDAD_KEY);
+			}	
+			
+			delegate = DelegateUtil.getInstanciaDelegate( true );
+			delegate.create( initForm.getModelo(), initForm.getVersion(),modoAutenticacionUsuario,
+						getLocale( request ),obtenerParametrosInicio(request),
+						perfilAcceso, nifEntidad);
+			
 			// Aun no existiria ninguna informacion referente al tramite, simplemente se ha creado el delegado.
 			// Registramos la instancia asociada al procesador del trámite
 	        InstanciaManager.registrarInstancia( request, delegate );
@@ -132,15 +145,9 @@ public class InitAction extends BaseAction
         RespuestaFront respuestaFront = null;
         respuestaFront = delegate.informacionInicial();
         
-        // Validamos que el método de autenticación del usuario está configurado para el trámite
+        // Recuperamos parametros respuesta
         HashMap hsmParametros = respuestaFront.getParametros();
-        String cadenaNivelesAutenticacion = ( String ) hsmParametros.get( Constants.NIVELES_AUTENTICACION_PARAMS_KEY );
         
-        if ( cadenaNivelesAutenticacion.indexOf( String.valueOf( modoAutenticacionUsuario ) ) < 0 ) 
-        {
-        	this.setErrorMessage( request, "errors.tramite.modoAuthNoValido" );
-        	return mapping.findForward("error");
-        }
         
         // Obtenemos de los parametros de vuelta de la llamada a infoLogin
         // la descripcion y los dias de persistencia del tramite, para mostrarlos en la cabecera.
@@ -152,6 +159,15 @@ public class InitAction extends BaseAction
         request.setAttribute( Constants.DESCRIPCION_TRAMITE_PARAMS_KEY, descripcion );
         request.setAttribute( Constants.DIAS_PERSISTENCIA_PARAMS_KEY, diaspersistencia );
         request.setAttribute( Constants.DATOS_SESION_PARAMS_KEY, datosSesion );
+        
+        // Validamos que el método de autenticación del usuario está configurado para el trámite
+        String cadenaNivelesAutenticacion = ( String ) hsmParametros.get( Constants.NIVELES_AUTENTICACION_PARAMS_KEY );
+        if ( cadenaNivelesAutenticacion.indexOf( String.valueOf( modoAutenticacionUsuario ) ) < 0 ) 
+        {
+        	this.setErrorMessage( request, "errors.tramite.modoAuthNoValido" );
+        	return mapping.findForward("error");
+        }
+        
         
         // Si se trata de un trámite reducido, siempre a la pantalla de trámite nuevo
         Boolean isCircuitoReducido = ( Boolean ) hsmParametros.get( Constants.TRAMITE_REDUCIDO_KEY );
@@ -212,13 +228,24 @@ public class InitAction extends BaseAction
     }
 	
 	
-	private Map obtenerParametrosInicio(HttpServletRequest request){
+	private Map obtenerParametrosInicio(HttpServletRequest request) throws Exception{
 		Enumeration params = request.getParameterNames();
 		String name,value;
 		HashMap paramInicio = new HashMap();
 		while (params.hasMoreElements()){
 			name = (String) params.nextElement();			
-			if (name.equals("language") || name.equals("modelo") || name.equals("version") || name.equals("autenticacion") ) continue;
+			
+			// Parametros que no se trasladaran
+			if (name.equals("language") || name.equals("modelo") || name.equals("version") ||
+				name.equals("autenticacion") || name.equals(ConstantesZPE.DELEGACION_PERFIL_ACCESO_KEY) || 
+				name.equals(ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO_ENTIDAD_KEY) ) continue;
+			
+			// Parametros prohibidos
+			if (name.equals(ConstantesSTR.SUBSANACION_PARAMETER_EXPEDIENTE_ID) || name.equals(ConstantesSTR.SUBSANACION_PARAMETER_EXPEDIENTE_UA)){
+				throw new Exception("Parametro " + name + " no permitido");
+			}
+						
+			// Alimentamos parametro
 			value = (String) request.getParameter(name);			
 			paramInicio.put(name,value);
 		}

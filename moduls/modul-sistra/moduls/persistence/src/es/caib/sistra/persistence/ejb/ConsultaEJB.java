@@ -39,7 +39,7 @@ public abstract class ConsultaEJB implements SessionBean {
      * @ejb.interface-method
      * @ejb.permission unchecked = "true"
      */
-    public DocumentoConsulta[] realizarConsulta(FormularioConsulta forms[]) {
+	public DocumentoConsulta[] realizarConsulta(String identificadorTramite, FormularioConsulta forms[]) {
     	return null;    	
     }
 

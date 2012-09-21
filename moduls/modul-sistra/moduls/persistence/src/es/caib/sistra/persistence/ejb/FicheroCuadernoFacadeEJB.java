@@ -25,7 +25,7 @@ public abstract class FicheroCuadernoFacadeEJB extends HibernateEJB
 	
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.admin}"
      */
 	public Long grabarFicheroCuaderno( FicheroCuaderno obj, Long idCuadernoCarga )
 	{
@@ -54,7 +54,7 @@ public abstract class FicheroCuadernoFacadeEJB extends HibernateEJB
 	
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
+     * @ejb.permission role-name="${role.admin}"
      */
 	public void borrarFicheroCuaderno( Long id )
 	{
@@ -73,8 +73,8 @@ public abstract class FicheroCuadernoFacadeEJB extends HibernateEJB
 	
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
-     * @ejb.permission role-name="${role.auditor}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.audit}"
      */
 	public FicheroCuaderno obtenerFicheroCuaderno( Long id )
 	{
@@ -93,8 +93,8 @@ public abstract class FicheroCuadernoFacadeEJB extends HibernateEJB
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.sistra}"
-     * @ejb.permission role-name="${role.auditor}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.audit}"
      */
 	public List listarFicherosCuaderno( Long idCuadernoCarga )
 	{

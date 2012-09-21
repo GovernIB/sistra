@@ -6,10 +6,12 @@ import java.util.List;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
+import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Query;
 import org.ibit.rol.form.model.Campo;
+import org.ibit.rol.form.model.Pantalla;
 import org.ibit.rol.form.model.Patron;
 
 /**
@@ -54,7 +56,7 @@ public abstract class PatronFacadeEJB extends HibernateEJB {
     /**
      * Lista todos los patrones.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.form},${role.admin}"
+     * @ejb.permission role-name="${role.operador},${role.admin}"
      */
     public List listarPatrones() {
         Session session = getSession();
@@ -80,6 +82,25 @@ public abstract class PatronFacadeEJB extends HibernateEJB {
         Session session = getSession();
         try {
             Patron patron = (Patron) session.load(Patron.class, id);
+            return patron;
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+
+    /**
+     * Obtiene un patrón.
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public Patron obtenerPatron(String nombre) {
+        Session session = getSession();
+        try {
+           	Query query = session.createQuery("from Patron p WHERE p.nombre =:nombre");
+           	query.setParameter("nombre",nombre);        	
+           	Patron patron = (Patron) query.uniqueResult();
             return patron;
         } catch (HibernateException he) {
             throw new EJBException(he);

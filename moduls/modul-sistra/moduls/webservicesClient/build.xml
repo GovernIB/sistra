@@ -33,10 +33,11 @@
     		<include name="*.jar"/>
         </fileset>
     	<fileset dir="${jar.product}">
-            <include name="sistra-model.jar"/>
+            <include name="5-sistra-model.jar"/>
         </fileset> 
     	<fileset dir="${distribucion.dir}/lib"> 
             <include name="sistra-util.jar"/>
+    		<include name="sistra-utilWs.jar"/>    		               
         </fileset>
     </path>
 
@@ -61,9 +62,9 @@
     </target>
 
     <target name="jar.jar" depends="jar.compile">
-        <delete file="${jar.product}/sistra-${modul}.jar" quiet="yes"/>
+        <delete file="${jar.product}/5-sistra-${modul}.jar" quiet="yes"/>
         <jar
-            jarfile="${jar.product}/sistra-${modul}.jar"
+            jarfile="${jar.product}/5-sistra-${modul}.jar"
             basedir="${jar.classes}">
             <manifest>
                 <attribute name="Created-By" value="${indra}"/>

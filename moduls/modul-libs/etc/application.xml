@@ -64,8 +64,9 @@
     <module><java>lib/sistra-dbutils.jar</java></module>	<!-- Utilidades acceso a BBDD -->
     <module><java>lib/sistra-xml.jar</java></module>		<!-- Generación XMLs Plataforma -->                
     <module><java>lib/sistra-util.jar</java></module>	 	<!-- Utilidades manejo de cadenas, comprobación nifs, etc -->     
-    <!-- <module><java>lib/sistra-ws.jar</java></module> -->	 		<!-- Utilidades webservice (autenticador Jboss) -->  
+    <module><java>lib/sistra-utilWs.jar</java></module> 	<!-- Utilidades webservice -->  
     <module><java>lib/sistra-plugins.jar</java></module> 	<!-- Interfaces plugins organismos -->                  
+    
     
     <!--  XML BEANS -->
     <module><java>lib/resolver.jar</java></module> 

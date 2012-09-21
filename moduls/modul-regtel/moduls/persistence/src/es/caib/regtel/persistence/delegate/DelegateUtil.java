@@ -1,6 +1,7 @@
 package es.caib.regtel.persistence.delegate;
 
 
+
 /**
  * Define métodos estáticos para obtener delegates.
  */
@@ -16,6 +17,10 @@ public final class DelegateUtil {
         
     public static RegistroTelematicoWsDelegate getRegistroTelematicoWsDelegate() {
         return (RegistroTelematicoWsDelegate) DelegateFactory.getDelegate(RegistroTelematicoWsDelegate.class);
+    }
+    
+    public static ConsultaPADDelegate getConsultaPADDelegate() {
+        return (ConsultaPADDelegate) DelegateFactory.getDelegate(ConsultaPADDelegate.class);
     }
     
 }

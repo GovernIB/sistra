@@ -65,14 +65,40 @@ public class DocumentoFront  implements Serializable{
 	 */
 	private boolean formularioJustificante;
 	/**
+	 * Indica si el formulario debe anexarse al justificante (no presencial).
+	 */
+	private boolean formularioAnexarJustificante;
+	/**
 	 * Indica si el documento debe firmarse digitalmente individualmente
 	 */
 	private boolean firmar;
 	/**
-	 * DNI del firmante del documento (después de evaluar campo firmante).
+	 * En caso de que se tenga que firmar indica los formularios que intervienene en el script de firma que indica el firmante
+	 */
+	private String formulariosScriptFirma;	
+	/**
+	 * Indica si el documento debe firmarse por delegados de la entidad a traves bandeja de firma
+	 */
+	private boolean firmaDelegada;
+	/**
+	 * Indica si el documento debe firmarse por delegados de la entidad a traves bandeja de firma.
+	 * (marca el estado una vez se ha incorporado el documento)
+	 */
+	private boolean pendienteFirmaDelegada;
+	/**
+	 * Indica si el documento se ha rechazado en la bandeja de firma
+	 */
+	private boolean rechazadaFirmaDelegada;
+	/**
+	 * DNI del firmante(s) del documento (después de evaluar campo firmante). En caso de existir varios estarian separados por #.
 	 * Si esta vacío deberá firmarlo quien inicia el trámite
 	 */
 	private String firmante;
+	/**
+	 * En caso de que se indiquen firmante(s) del documento se intentara buscar el nombre en el registro de personas de la zona personal.
+	 * En caso de existir varios estarian separados por # 
+	 */
+	private String nombreFirmante;
 	/**
 	 * Indica si el documento ha sido firmado
 	 */
@@ -336,6 +362,42 @@ public class DocumentoFront  implements Serializable{
 	}
 	public void setFormularioJustificante(boolean formularioJustificante) {
 		this.formularioJustificante = formularioJustificante;
+	}
+	public boolean isPendienteFirmaDelegada() {
+		return pendienteFirmaDelegada;
+	}
+	public void setPendienteFirmaDelegada(boolean pendienteFirmaDelegada) {
+		this.pendienteFirmaDelegada = pendienteFirmaDelegada;
+	}
+	public String getFormulariosScriptFirma() {
+		return formulariosScriptFirma;
+	}
+	public void setFormulariosScriptFirma(String formulariosScriptFirma) {
+		this.formulariosScriptFirma = formulariosScriptFirma;
+	}
+	public boolean isFirmaDelegada() {
+		return firmaDelegada;
+	}
+	public void setFirmaDelegada(boolean firmaDelegada) {
+		this.firmaDelegada = firmaDelegada;
+	}
+	public String getNombreFirmante() {
+		return nombreFirmante;
+	}
+	public void setNombreFirmante(String nombreFirmantes) {
+		this.nombreFirmante = nombreFirmantes;
+	}
+	public boolean isRechazadaFirmaDelegada() {
+		return rechazadaFirmaDelegada;
+	}
+	public void setRechazadaFirmaDelegada(boolean rechazadaFirmaDelegada) {
+		this.rechazadaFirmaDelegada = rechazadaFirmaDelegada;
+	}
+	public boolean isFormularioAnexarJustificante() {
+		return formularioAnexarJustificante;
+	}
+	public void setFormularioAnexarJustificante(boolean formularioAnexarJustificante) {
+		this.formularioAnexarJustificante = formularioAnexarJustificante;
 	}
 	
 	

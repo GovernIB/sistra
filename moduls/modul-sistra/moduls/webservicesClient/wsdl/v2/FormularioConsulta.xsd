@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:es:caib:sistra:ws:v2:model:FormularioConsulta" targetNamespace="urn:es:caib:sistra:ws:v2:model:FormularioConsulta" version="1.0">
+	<xs:complexType name="FormularioConsulta">
+		<xs:sequence>
+			<xs:element name="identificador" type="xs:string"/>
+			<xs:element name="numeroInstancia" type="xs:int"/>
+			<xs:element name="xml" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FormulariosConsulta">
+		<xs:sequence>
+			<xs:element name="formularios" type="tns:FormularioConsulta" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

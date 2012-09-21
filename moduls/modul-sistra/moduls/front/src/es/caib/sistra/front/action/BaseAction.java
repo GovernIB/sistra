@@ -15,7 +15,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.util.RequestUtils;
 
-import es.caib.sistra.front.Constants;
 import es.caib.sistra.front.SesionCaducadaException;
 import es.caib.sistra.front.formulario.GestorFlujoFormulario;
 import es.caib.sistra.front.util.FlujoFormularioRequestHelper;

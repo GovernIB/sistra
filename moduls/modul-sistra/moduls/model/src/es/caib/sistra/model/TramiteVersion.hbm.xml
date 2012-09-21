@@ -28,6 +28,7 @@
     <property name="consultaEJB" column="TRV_CONEJB" length="500"/>
     <property name="consultaLocalizacion" column="TRV_CONREM"  not-null="true"  length="1"/>
     <property name="consultaUrl" column="TRV_CONURL" length="500"/>
+    <property name="consultaWSVersion" column="TRV_CONWSV" length="10"/>
     <property name="consultaAuth" column="TRV_CONAUT"  not-null="true"  length="1"/>
     <property name="consultaAuthUser" column="TRV_CONUSU" length="500"/>
     <property name="consultaAuthPwd" column="TRV_CONPWD" length="500"/>

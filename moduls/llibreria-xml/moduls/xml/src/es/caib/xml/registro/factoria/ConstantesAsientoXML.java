@@ -115,6 +115,10 @@ public class ConstantesAsientoXML {
 	 */
 	public static final String DATOSINTERESADO_TIPO_REPRESENTADO = "RPD";	
 	/**
+	 * Constante de tipo de interesado delegado 
+	 */
+	public static final String DATOSINTERESADO_TIPO_DELEGADO = "DLG";
+	/**
 	 * Constante de tipo de identificación NIF
 	 */
 	public static final char DATOSINTERESADO_TIPO_IDENTIFICACION_NIF = 'N';	
@@ -152,6 +156,10 @@ public class ConstantesAsientoXML {
 	 * Constante de idioma catalan
 	 */
 	public final static String DATOSASUNTO_IDIOMA_ASUNTO_CA = "ca";
+	/**
+	 * Constante de idioma ingles
+	 */
+	public final static String DATOSASUNTO_IDIOMA_ASUNTO_EN = "en";
 	
 	// -----------------	DATOS ANEXO	----------------------------------------------	
 	/**
@@ -200,5 +208,8 @@ public class ConstantesAsientoXML {
 	public final static char DATOSANEXO_NO_FIRMADO_POR_TERCEROS = 'N';
 	
 	
+	// ------- TIPOS DE ACUSE DE RECIBO -----------------
+	public final static String ACUSERECIBO_ENTREGADA = "ENTREGADA";
+	public final static String ACUSERECIBO_RECHAZADA = "RECHAZADA";
 	
 }

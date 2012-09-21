@@ -5,6 +5,7 @@ public class OficioRemision {
 
     private String titulo;
     private String texto;
+    private TramiteSubsanacion tramiteSubsanacion;
 
     public String getTitulo() {
         return titulo;
@@ -21,5 +22,13 @@ public class OficioRemision {
     public void setTexto(String value) {
         this.texto = value;
     }
+
+	public TramiteSubsanacion getTramiteSubsanacion() {
+		return tramiteSubsanacion;
+	}
+
+	public void setTramiteSubsanacion(TramiteSubsanacion tramiteSubsanacion) {
+		this.tramiteSubsanacion = tramiteSubsanacion;
+	}
 
 }

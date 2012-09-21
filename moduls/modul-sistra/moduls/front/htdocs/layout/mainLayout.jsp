@@ -25,16 +25,16 @@
 
 <logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 			 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">					
-	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/constantes.js"></script>
-	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/time.js"></script>
-	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/appletHelper.js"></script>
+	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/deployJava.js"></script>	
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/instalador.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/firma.js"></script>	
+	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/utils.js"></script>
+	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/constantes.js"></script>
+	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/configClienteaFirmaSistra.js"></script>
 	<script type="text/javascript">		
-		baseDownloadURL = "<%=request.getContextPath()%>/firma/aFirma";
-		base = "<%=request.getContextPath()%>/firma/aFirma";
+		base = "<%=request.getAttribute("urlSistraAFirma")%><%=request.getContextPath()%>/firma/aFirma";
+		baseDownloadURL = "<%=request.getAttribute("urlSistraAFirma")%><%=request.getContextPath()%>/firma/aFirma";
 	</script>
-	
 </logic:equal>		
 
 <!-- DETECCION NAVEGADOR (Compatibles: IE >=6 , FireFox >= 1.5)-->
@@ -47,10 +47,12 @@
 	function doOnLoad(){
 		// Chequeamos version navegador
 		checkVersionNavegador(errorIE,errorFirefox);
-		// Preparamos entorno firma
-		if (typeof prepararEntornoFirma != 'undefined') { // Si existe la funcion ejecutarla.
-            prepararEntornoFirma();
+		
+		// està dins d'un iframe?
+		if(top.window.location != self.window.location) {
+			estaIframe();
         }
+		
 	}
 -->
 </script>

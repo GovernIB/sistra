@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" errorPage="/moduls/errorEnJsp.jsp"%>
 <%@ page import="org.apache.commons.lang.StringUtils"%>
+<%@ page import="es.caib.zonaper.modelInterfaz.ConstantesZPE"%>
 <%@ page import="es.caib.sistra.model.ConstantesSTR"%>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
@@ -11,29 +12,78 @@
 	<bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="referenciaPortal("+ lang +")"%>'/>
 </bean:define>
 <bean:define id="ID_INSTANCIA" name="ID_INSTANCIA" type="java.lang.String"/>
-<bean:define id="urlSeleccionNotificacionTelematica">
-        <html:rewrite page="/protected/seleccionNotificacionTelematica.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
+<bean:define id="urlResetSeleccionNotificacionTelematica">
+        <html:rewrite page="/protected/resetSeleccionNotificacionTelematicaAvisos.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
+<bean:define id="entornoDesarrollo" value="<%=Boolean.toString(es.caib.sistra.front.util.Util.esEntornoDesarrollo())%>"/>
 
 <!--  Flujo de tramite -->
 <logic:present name="pasarFlujoTramitacion">
 </logic:present>
 
-<!--  Seleccion  notificacion -->
+<!--  Pendiente presentacion delegacion -->
+<logic:present name="pendienteDelegacionPresentacion">
+</logic:present>
+
+
+<!--  Pendiente confirmar notificacion: inicio capa -->
 <logic:present name="confirmarSeleccionNotificacionTelematica">
+	
+	<bean:define id="seleccionNotificacionTelematica" name="seleccionNotificacionTelematica" type="java.lang.String"/>	
+	
 	<div class="alerta">
-		<p><bean:message key="finalizacion.notificacionTelematica.confirmacion" arg0="<%=referenciaPortal%>"/></p>
-		<p align="center">
-			<html:link href="<%=urlSeleccionNotificacionTelematica + "&seleccion=S"%>">
-				<bean:message key="finalizacion.notificacionTelematica.habilitar"/>
-			</html:link>
-			 &nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp; 
-			<html:link href="<%=urlSeleccionNotificacionTelematica + "&seleccion=N"%>">
-				<bean:message key="finalizacion.notificacionTelematica.deshabilitar"/>
-			</html:link>
-		</p>
+		<html:form action="/protected/seleccionNotificacionTelematicaAvisos">
+		<html:hidden property="ID_INSTANCIA" value="<%=ID_INSTANCIA%>"/>			
+		<html:hidden property="seleccionNotificacion"  styleId="seleccionNotificacion" value="<%=seleccionNotificacionTelematica%>"/>
+		
+		<!-- Si notif no obligatoria mostramos confirmacion -->
+		<logic:equal name="notificacionObligatoria" value="false">
+				<p><bean:message key="finalizacion.notificacionTelematica.confirmacion" arg0="<%=referenciaPortal%>"/></p>
+				<p align="center">
+					<input type="radio" name="opc" <%=("true".equals(seleccionNotificacionTelematica)? "checked=\"checked\"" : "")%>  onclick="document.getElementById('seleccionNotificacion').value='true';" />
+					<bean:message key="finalizacion.notificacionTelematica.habilitar"/>
+					<input type="radio" name="opc" <%=("false".equals(seleccionNotificacionTelematica)? "checked=\"checked\"" : "")%>  onclick="document.getElementById('seleccionNotificacion').value='false';" />
+					<bean:message key="finalizacion.notificacionTelematica.deshabilitar"/>					
+				</p>
+				<br/>
+		</logic:equal>
+		<!--  Si notif obligatoria mostramos mensaje -->
+		<logic:equal name="notificacionObligatoria" value="true">
+			<logic:equal name="seleccionNotificacionTelematica" value="true">
+				<p><bean:message key="finalizacion.notificacionTelematica.textoObligatoria"  arg0="<%=referenciaPortal%>"/></p>
+				<br/>
+			</logic:equal>			
+		</logic:equal>
+				
+		<!--  Seleccion  avisos -->
+		<logic:equal name="seleccionAvisos" value="true">
+				<bean:define id="emailAvisoDefault" name="emailAvisoDefault" type="java.lang.String"/>
+				<bean:define id="smsAvisoDefault" name="smsAvisoDefault" type="java.lang.String"/>				
+				<p><bean:message key="finalizacion.avisos.confirmacion"/></p>				
+				<p align="center">
+					Email: <html:text property="emailSeleccionAviso"  value="<%=emailAvisoDefault%>" size="30"/>
+					<logic:equal name="permitirAvisoSMS" value="true">
+						&nbsp;&nbsp;&nbsp;
+						Sms: <html:text property="smsSeleccionAviso" value="<%=smsAvisoDefault%>" size="12"/>
+					</logic:equal>					
+				</p>				
+		</logic:equal>
+
+		<!--  Boton confirmacion notificacion: fin capa-->
+		<br/>
+		<p align="center">	
+			<html:submit><bean:message key="finalizacion.notificacionAvisos.continuar"/></html:submit>
+		</p>	
+		</html:form>
+		
+		<!--  Errores validacion -->
+		<html:errors/>
+		
 	</div>
 </logic:present>
+
+
+
 
 <!--  Registro solicitud -->
 <logic:present name="permitirRegistrar">
@@ -44,6 +94,9 @@
 <bean:define id="presencial" name="presencial" type="java.lang.String"/>
 <bean:define id="urlMostrarDocumento">
         <html:rewrite page="/protected/mostrarDocumento.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
+</bean:define>
+<bean:define id="urlMostrarFormularioDebug">
+      <html:rewrite page="/protected/mostrarFormularioDebug.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
 
 <script type="text/javascript">
@@ -59,6 +112,13 @@
 		url = "<%=urlMostrarDocumento%>&identificador=" + identificador + "&instancia=" + instancia;
 		document.location = url;
 	}
+	
+	<logic:equal name="entornoDesarrollo" value="true">
+	function mostrarFormularioDebug(identificador,instancia){
+		url = "<%=urlMostrarFormularioDebug%>&identificador=" + identificador + "&instancia=" + instancia;
+		document.location = url;
+	}
+	</logic:equal>
 //-->
 </script>
 
@@ -77,7 +137,7 @@
 				</logic:notEmpty>
 				<!--  mensaje x defecto  -->				
 				<logic:empty name="tramite" property="mensajeFechaLimiteEntregaPresencial">
-					<strong><bean:message key="registro.importante.fechaLimiteEntrega" arg0="<%= ( String ) request.getAttribute( "fechaTopeEntrega" ) %>"/></strong>
+					<strong><bean:message key="registro.importante.fechaLimiteEntrega" arg0="<%= ( String ) request.getAttribute( \"fechaTopeEntrega\" ) %>"/></strong>
 				</logic:empty>								
 			</logic:equal>		
 		</p>
@@ -108,15 +168,29 @@
 								<bean:write name="formulario" property="descripcion" />
 							</html:link>
 
+							<logic:equal name="entornoDesarrollo" value="true">
+							 <% 
+						    	String urlFormDebug = "javascript:mostrarFormularioDebug('" + formulario.getIdentificador()+ "','" + formulario.getInstancia()+ "');";						    	
+						    %>	
+								<html:link styleClass="pequenyo" href="<%=urlFormDebug%>">
+									&nbsp;[XML]
+								</html:link>
+							</logic:equal>
+							
 							<!--  Información firmante -->
 							<logic:equal name="formulario" property="firmar" value="true">
 								<span class="detalleDoc"> 
 									<img src="imgs/tramitacion/iconos/doc_firmar.gif"/>		
 									<logic:empty name="formulario" property="firmante">
-										<bean:message key="finalizacion.resumen.documentos.firmadopor.noComprobarFirmante" arg0="<%=formulario.getFirmante()%>"/>							
+										<bean:message key="finalizacion.resumen.documentos.firmadopor.noComprobarFirmante"/>							
 									</logic:empty>
 									<logic:notEmpty name="formulario" property="firmante">
+										<logic:match name="formulario" property="firmante" value="#">
+											<bean:message key="finalizacion.resumen.documentos.firmadospor" arg0="<%=es.caib.util.StringUtil.replace(formulario.getFirmante(),\"#\",\" - \")%>"/>
+										</logic:match>	
+										<logic:notMatch name="formulario" property="firmante" value="#">
 										<bean:message key="finalizacion.resumen.documentos.firmadopor" arg0="<%=formulario.getFirmante()%>"/>							
+										</logic:notMatch>											
 									</logic:notEmpty>
 								</span>
 							</logic:equal>
@@ -145,7 +219,7 @@
 							<p>
 								<span style="position: relative;">
 								
-								<html:link href="<%= urlMostrarDocumento + "&identificador=" + anexo.getIdentificador() + "&instancia=" + anexo.getInstancia() %>">
+								<html:link href="<%= urlMostrarDocumento + \"&identificador=\" + anexo.getIdentificador() + \"&instancia=\" + anexo.getInstancia() %>">
 									<logic:equal name="anexo" property="anexoGenerico" value="false"> 
 										<bean:write name="anexo" property="descripcion" />
 									</logic:equal>
@@ -162,7 +236,12 @@
 											<bean:message key="finalizacion.resumen.documentos.firmadopor.noComprobarFirmante" arg0="<%=anexo.getFirmante()%>"/>							
 										</logic:empty>
 										<logic:notEmpty name="anexo" property="firmante">
+											<logic:match name="anexo" property="firmante" value="#">
+												<bean:message key="finalizacion.resumen.documentos.firmadospor" arg0="<%=es.caib.util.StringUtil.replace(anexo.getFirmante(),\"#\",\" - \")%>"/>
+											</logic:match>	
+											<logic:notMatch name="anexo" property="firmante" value="#">
 											<bean:message key="finalizacion.resumen.documentos.firmadopor" arg0="<%=anexo.getFirmante()%>"/>							
+											</logic:notMatch>											
 										</logic:notEmpty>
 									</span>
 								</logic:equal>
@@ -189,7 +268,7 @@
 							</div>
 							<p>
 								<span style="position: relative;">
-									<html:link href="<%= urlMostrarDocumento + "&identificador=" + pago.getIdentificador() + "&instancia=" + pago.getInstancia() %>"><bean:write name="pago" property="descripcion" /></html:link>	
+									<html:link href="<%= urlMostrarDocumento + \"&identificador=\" + pago.getIdentificador() + \"&instancia=\" + pago.getInstancia() %>"><bean:write name="pago" property="descripcion" /></html:link>	
 								</span>
 							</p>
 						</logic:equal>
@@ -261,31 +340,53 @@
 		<!-- END DOCUMENTACION APORTAR -->
 		
 		<!--  Opcion de notificacion telematica -->
-		<logic:present name="seleccionNotificacionTelematica">
-			<br/>
-			<h3><bean:message key="finalizacion.notificacionTelematica.titulo"/></h3>
-			<logic:equal name="seleccionNotificacionTelematica" value="true">
-				<logic:equal name="tramite" property="habilitarNotificacionTelematica" value="<%=ConstantesSTR.NOTIFICACIONTELEMATICA_OBLIGATORIA%>">
-					<p><bean:message key="finalizacion.notificacionTelematica.textoObligatoria" arg0="<%=referenciaPortal%>"/></p>
+		<logic:notEqual name="tramite" property="habilitarNotificacionTelematica" value="<%=ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA%>">
+			<logic:present name="seleccionNotificacionTelematica">
+				<br/>
+				<h3><bean:message key="finalizacion.notificacionTelematica.titulo"/></h3>
+				<logic:equal name="seleccionNotificacionTelematica" value="true">
+					<logic:equal name="tramite" property="habilitarNotificacionTelematica" value="<%=ConstantesSTR.NOTIFICACIONTELEMATICA_OBLIGATORIA%>">
+						<p><bean:message key="finalizacion.notificacionTelematica.textoObligatoria" arg0="<%=referenciaPortal%>"/></p>
+					</logic:equal>
+					<logic:equal name="tramite" property="habilitarNotificacionTelematica" value="<%=ConstantesSTR.NOTIFICACIONTELEMATICA_PERMITIDA%>">			
+						<p>
+							<bean:message key="finalizacion.notificacionTelematica.textoHabilitada" arg0="<%=referenciaPortal%>"/>
+						</p>													
+					</logic:equal>
+					<logic:equal name="seleccionAvisos" value="true">
+						<p>
+							<bean:message key="finalizacion.avisos.textoHabilitada"/> <br/>
+							<ul>
+								<logic:notEmpty name="seleccionEmailAviso"><li>Email: <bean:write name="seleccionEmailAviso"/></li></logic:notEmpty>
+								<logic:notEmpty name="seleccionSmsAviso"><li>Sms: <bean:write name="seleccionSmsAviso"/></li></logic:notEmpty>
+							</ul>
+						</p>
+					</logic:equal>
+					<!--  Cambio decision: si notificacion permitida  o notificacion obligatoria y seleccion avisos-->
+					<logic:equal name="tramite" property="habilitarNotificacionTelematica" value="<%=ConstantesSTR.NOTIFICACIONTELEMATICA_PERMITIDA%>">
+						<p class="notaPie">
+							<bean:message key="finalizacion.notificacionTelematica.cambioDecision"/> <html:link href="<%=urlResetSeleccionNotificacionTelematica%>"><bean:message key="finalizacion.notificacionTelematica.aqui"/></html:link>
+						</p>	
+					</logic:equal>
+					<logic:equal name="tramite" property="habilitarNotificacionTelematica" value="<%=ConstantesSTR.NOTIFICACIONTELEMATICA_OBLIGATORIA%>">
+						<logic:equal name="seleccionAvisos" value="true">
+							<p class="notaPie">
+								<bean:message key="finalizacion.notificacionTelematica.cambioDecision"/> <html:link href="<%=urlResetSeleccionNotificacionTelematica%>"><bean:message key="finalizacion.notificacionTelematica.aqui"/></html:link>
+							</p>	
+						</logic:equal>
+					</logic:equal>	
+					
 				</logic:equal>
-				<logic:equal name="tramite" property="habilitarNotificacionTelematica" value="<%=ConstantesSTR.NOTIFICACIONTELEMATICA_PERMITIDA%>">			
+				<logic:equal name="seleccionNotificacionTelematica" value="false">
 					<p>
-						<bean:message key="finalizacion.notificacionTelematica.textoHabilitada" arg0="<%=referenciaPortal%>"/>
+						<bean:message key="finalizacion.notificacionTelematica.textoDeshabilitada" arg0="<%=referenciaPortal%>"/>
 					</p>
 					<p class="notaPie">
-						<bean:message key="finalizacion.notificacionTelematica.cambioDecision"/> <html:link href="<%=urlSeleccionNotificacionTelematica + "&seleccion=N"%>"><bean:message key="finalizacion.notificacionTelematica.deshabilitar"/></html:link>
+						<bean:message key="finalizacion.notificacionTelematica.cambioDecision"/>&nbsp;<html:link href="<%=urlResetSeleccionNotificacionTelematica%>"><bean:message key="finalizacion.notificacionTelematica.aqui"/></html:link>
 					</p>					
-				</logic:equal>
-			</logic:equal>
-			<logic:equal name="seleccionNotificacionTelematica" value="false">
-				<p>
-					<bean:message key="finalizacion.notificacionTelematica.textoDeshabilitada" arg0="<%=referenciaPortal%>"/>
-				</p>
-				<p class="notaPie">
-					<bean:message key="finalizacion.notificacionTelematica.cambioDecision"/>&nbsp;<html:link href="<%=urlSeleccionNotificacionTelematica + "&seleccion=S"%>"><bean:message key="finalizacion.notificacionTelematica.habilitar"/></html:link>
-				</p>					
-			</logic:equal>			
-		</logic:present>
+				</logic:equal>			
+			</logic:present>			
+		</logic:notEqual>
 			
 		<!--  Firma de envio -->
 		<!--  MOSTRAMOS FIRMA: CUANDO HAYA QUE FIRMAR Y SE HAYA AUTENTICADO CON CERTIFICADO -->
@@ -295,7 +396,13 @@
 			<logic:present name="representante">		
 					<bean:define id="representante" name="representante" type="es.caib.xml.registro.factoria.impl.DatosInteresado"/>
 					<p>
+						<logic:equal name="tramite" property="datosSesion.perfilAcceso" value="<%=ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO%>">
+							<bean:message key="finalizacion.general.firmaSolicitud.delegado.instrucciones" arg0="<%=representante.getNumeroIdentificacion()%>"/>							
+						</logic:equal>
+						<logic:equal name="tramite" property="datosSesion.perfilAcceso" value="<%=ConstantesZPE.DELEGACION_PERFIL_ACCESO_CIUDADANO%>">
 						<bean:message key="finalizacion.general.firmaSolicitud.instrucciones" arg0="<%=representante.getNumeroIdentificacion()%>"/>
+						</logic:equal>
+						
 					</p>
 			</logic:present>	
 			<!--  MOSTRAMOS APPLET FIRMA SEGUN IMPLEMENTACION -->
@@ -306,7 +413,7 @@
 			<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 						 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
 				<p><bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo" /></p>
-				<p class="formBotonera"><input type="button" value="<bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo.boton" />" title="<bean:message key="login.certificado.instrucciones.iniciarDispositivo.boton" />" onclick="cargarCertificado();" /></p>
+				<p class="formBotonera"><input type="button" value="<bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo.boton" />" title="<bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo.boton" />" onclick="cargarCertificado();" /></p>
 				<p><bean:message key="finalizacion.general.firmaSolicitud.certificadosDisponibles"/></p>
 				<p>	
 					<jsp:include page="/firma/caib/applet.jsp" flush="false"/>		
@@ -363,7 +470,7 @@
 						 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">									 
 						 
 					function prepararEntornoFirma(){
-						cargarAppletFirma();
+						cargarAppletFirma(sistra_ClienteaFirma_buildVersion);
 					}
 						 
 					function firmarAFirma(formulario){
@@ -376,9 +483,10 @@
 						var asientoB64 = b64UrlSafeToB64(formulario.asiento.value);
 					
 						clienteFirma.initialize();
-						clienteFirma.setSignatureAlgorithm("sha1WithRsaEncryption");
-						clienteFirma.setSignatureMode("EXPLICIT");
-						clienteFirma.setSignatureFormat("CMS");
+						clienteFirma.setShowErrors(false);
+						clienteFirma.setSignatureAlgorithm(sistra_ClienteaFirma_SignatureAlgorithm);
+						clienteFirma.setSignatureMode(sistra_ClienteaFirma_SignatureMode);
+						clienteFirma.setSignatureFormat(sistra_ClienteaFirma_SignatureFormat);
 						clienteFirma.setData(asientoB64);
 						
 						clienteFirma.sign();
@@ -389,10 +497,13 @@
 							return false;
 						}else{	
 						     firma = clienteFirma.getSignatureBase64Encoded();
+						    firma = b64ToB64UrlSafe(firma);
 						     formulario.firma.value = firma;
 						     return true;
 						}
 					}
+					
+					prepararEntornoFirma();
 			</logic:equal>			
 		
 			function enviar(formulario)

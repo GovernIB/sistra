@@ -4,6 +4,7 @@ public class DatoJustificante  extends Traducible {
 	
 	public final static char TIPO_BLOQUE = 'B';
 	public final static char TIPO_CAMPO = 'C';	
+	public final static char TIPO_INDICE = 'I';
 	
 	
     // Fields    

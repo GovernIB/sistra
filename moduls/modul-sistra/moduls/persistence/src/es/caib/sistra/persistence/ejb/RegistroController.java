@@ -39,6 +39,7 @@ import es.caib.sistra.persistence.intf.ConsultaEJBHome;
 import es.caib.sistra.persistence.util.UsernamePasswordCallbackHandler;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.login.AutenticacionExplicitaInfo;
+import es.caib.sistra.plugins.login.ConstantesLogin;
 import es.caib.util.CifradoUtil;
 import es.caib.util.EjbUtil;
 import es.caib.util.StringUtil;
@@ -119,7 +120,7 @@ public class RegistroController
 	}	
 	
 	
-	public ResultadoRegistrar consultar(char tipoAcceso,String jndi,boolean local,String url,char autenticacion,String user,String pass,String identificadorTramite,Map datosFormulario)throws Exception {
+	public ResultadoRegistrar consultar(char tipoAcceso,String jndi,boolean local,String url,char autenticacion,String user,String pass,String identificadorTramite,Map datosFormulario, String versionWS)throws Exception {
 	// Realiza proceso de consulta (para tramites con destino consulta)		
 		log.debug("Realizamos consulta");
 		
@@ -145,7 +146,7 @@ public class RegistroController
 				log.debug("Autenticación explicita manejada por organismo");
 				AutenticacionExplicitaInfo infoAuth = null;
 				try{
-					infoAuth = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo();
+					infoAuth = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo(ConstantesLogin.TIPO_TRAMITE, identificadorTramite);
 					log.debug("Usuario plugin autenticacion organismo: " + infoAuth.getUser());
 				}catch (Exception ex){
 					throw new Exception("Excepcion obteniendo informacion autenticacion explicita a traves de plugin organismo",ex);
@@ -158,9 +159,9 @@ public class RegistroController
 		
 		// Segun tipo acceso realizamos la consulta
 		if (tipoAcceso == TramiteVersion.CONSULTA_EJB){
-			return consultarImpl_EJB(jndi,local,url,userAuth,passAuth,datosFormulario);
+			return consultarImpl_EJB(jndi,local,url,userAuth,passAuth,datosFormulario,identificadorTramite);
 		}else{
-			return consultarImpl_WS(url,userAuth,passAuth,identificadorTramite,datosFormulario);
+			return consultarImpl_WS(url,userAuth,passAuth,identificadorTramite,datosFormulario,versionWS);
 		}
 		
 	}
@@ -174,11 +175,15 @@ public class RegistroController
 	 * @return
 	 * @throws Exception
 	 */
-	private ResultadoRegistrar consultarImpl_WS(String url,String user,String pass,String identificadorTramite,Map datosFormulario)throws Exception {
-		
-			// TODO GESTIONAR VERSIONADO WS EN INVOCACION
-			List docRes = es.caib.sistra.wsClient.v1.client.ClienteWS.realizarConsulta(url,user,pass,identificadorTramite,datosFormulario);
-		
+	private ResultadoRegistrar consultarImpl_WS(String url,String user,String pass,String identificadorTramite,Map datosFormulario, String versionWS)throws Exception {
+			List docRes = null;
+			if(versionWS != null && "v1".equals(versionWS)){
+				docRes = es.caib.sistra.wsClient.v1.client.ClienteWS.realizarConsulta(url,user,pass,identificadorTramite,datosFormulario);
+			}else if(versionWS != null && "v2".equals(versionWS)){
+				docRes = es.caib.sistra.wsClient.v2.client.ClienteWS.realizarConsulta(url,user,pass,identificadorTramite,datosFormulario);
+			}else{
+				throw new Exception("Excepcion obteniendo la versión "+versionWS+" del WS de consulta. ");				
+			}
 			// Devolvemos resultado consulta
 			ResultadoRegistrar res = new ResultadoRegistrar();
     		res.setTipo(ResultadoRegistrar.CONSULTA);
@@ -200,7 +205,7 @@ public class RegistroController
 	 * @return
 	 * @throws Exception
 	 */
-	private ResultadoRegistrar consultarImpl_EJB(String jndi,boolean local,String url,String user,String pass,Map datosFormulario)throws Exception {
+	private ResultadoRegistrar consultarImpl_EJB(String jndi,boolean local,String url,String user,String pass,Map datosFormulario,String identificadorTramite)throws Exception {
 		
 		log.debug("Realizamos consulta via EJB");
 		
@@ -233,7 +238,8 @@ public class RegistroController
 			}			
 			
 			// Realizamos consulta
-			DocumentoConsulta docs[] = ejb.realizarConsulta(forms);
+			DocumentoConsulta docs[] = ejb.realizarConsulta(identificadorTramite,forms);
+			//DocumentoConsulta docs[] = ejb.realizarConsulta(forms);			
 			log.debug("Consulta realizada: " + docs.length + "docs.");
 			
 			// Devolvemos resultado
@@ -414,6 +420,7 @@ public class RegistroController
     			break;
     		}
     	}
+		docRds.setIdioma(asientoXML.getDatosAsunto().getIdiomaAsunto());
 		RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
 		ReferenciaRDS ref =rds.insertarDocumento(docRds);		
 		

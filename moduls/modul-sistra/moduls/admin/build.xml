@@ -52,9 +52,9 @@
     		<include name="sistra-xml.jar"/>
         </fileset>
         <fileset dir="${web.product}">
-            <include name="sistra-model.jar" />
-            <include name="sistra-persistence-client.jar" />
-        	<include name="sistra-persistence.jar" />
+            <include name="5-sistra-model.jar" />
+            <include name="5-sistra-persistence-client.jar" />
+        	<include name="5-sistra-persistence.jar" />
         </fileset>
     </path>
 
@@ -74,7 +74,7 @@
         <tstamp>
             <format property="TODAY" pattern="dd-MM-yy"/>
         </tstamp>
-       	<fail unless="role.auditor" message="La propiedad role.auditor no está definida en config.properties"/>    	
+       	<fail unless="role.audit" message="La propiedad role.audit no está definida en config.properties"/>    	
         <fail unless="admin.auth.domain" message="La propiedad admin.auth.domain no está definida en config.properties"/>
     	<fail unless="web.login-config" message="La propiedad web.login-config no está definida en config.properties"/>
     </target>
@@ -134,7 +134,7 @@
 
             <jbosswebxml
                 destdir="${web.gen.etc}"
-                version="${jboss.version}"
+                	version="3.2"
                 xmlencoding="UTF-8"
                 validatexml="true"
                 mergedir="${web.merge.jboss}"
@@ -143,11 +143,35 @@
 
         </webdoclet>
     
+    	<!-- cas: config comentarios -->
+    	<condition property="cas.enabled.comment.init" value="${comment.init}" else="">
+    	    <equals arg1="${login-config}" arg2="CAS"/>
+    	</condition>
+    	<condition property="cas.enabled.comment.end" value="${comment.end}" else="">
+    	    <equals arg1="${login-config}" arg2="CAS"/>
+    	</condition>
+    	<condition property="cas.enabled.noComment.init" value="" else="${comment.init}">
+    	    <equals arg1="${login-config}" arg2="CAS"/>
+    	</condition>
+    	<condition property="cas.enabled.noComment.end" value="" else="${comment.end}">
+    	    <equals arg1="${login-config}" arg2="CAS"/>
+    	</condition>
+    	<!-- cas: config comentarios -->
+    	
        <replace file="${web.gen.etc}/web.xml">
-	      	<replacefilter token="@role.sistra@" value="${role.sistra}"/>
-       		<replacefilter token="@role.auditor@" value="${role.auditor}"/>
+	      	<replacefilter token="@role.admin@" value="${role.admin}"/>
+       		<replacefilter token="@role.audit@" value="${role.audit}"/>
 	       	<replacefilter token="@release.version@" value="${release.version}"/>  
 	       	<replacefilter token="@web.login-config@" value="${web.login-config}"/>         		       	
+       	
+       	<!-- cas: reemplazo comentarios -->
+       	  <replacefilter token="@cas.enabled.comment.init@" value="${cas.enabled.comment.init}"/>        	 
+       	  <replacefilter token="@cas.enabled.comment.end@" value="${cas.enabled.comment.end}"/>        	 
+       	  <replacefilter token="@cas.enabled.noComment.init@" value="${cas.enabled.noComment.init}"/>        	 
+       	  <replacefilter token="@cas.enabled.noComment.end@" value="${cas.enabled.noComment.end}"/>       
+       	  <replacefilter token="@cas.urlCas@" value="${cas.urlCas}"/>              	  
+       	  <replacefilter token="@cas.urlSistra@" value="${cas.urlSistra.back}"/>       
+       	  <!-- cas: reemplazo comentarios -->
        </replace>
 
     </target>
@@ -166,8 +190,8 @@
     </target>
 
     <target name="web.war" depends="web.compile">
-        <delete file="${web.product}/${prj.name}-${modul}.war" quiet="yes"/>
-        <war warfile="${web.product}/${prj.name}-${modul}.war"
+        <delete file="${web.product}/5-${prj.name}-${modul}.war" quiet="yes"/>
+        <war warfile="${web.product}/5-${prj.name}-${modul}.war"
             basedir="${web.htdocs}"
             webxml="${web.gen.etc}/web.xml"
             excludes="WEB-INF/**">

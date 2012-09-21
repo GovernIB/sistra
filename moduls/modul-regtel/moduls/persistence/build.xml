@@ -44,7 +44,7 @@
     		<include name="sistra-xml.jar"/>
         </fileset>
     	<fileset dir="${ejb.product}">
-            <include name="regtel-model.jar"/>
+            <include name="8-regtel-model.jar"/>
         </fileset>
     </path>
 
@@ -64,7 +64,7 @@
         <tstamp>
             <format property="TODAY" pattern="dd-MM-yy"/>
         </tstamp>
-    	<fail unless="role.user" message="La propiedad role.user no está definida en config.properties"/>
+    	<fail unless="role.todos" message="La propiedad role.todos no está definida en config.properties"/>
     	<fail unless="role.gestor" message="La propiedad role.gestor no está definida en config.properties"/>
     	<fail unless="role.auto" message="La propiedad role.auto no está definida en config.properties"/>
         <fail unless="persistence.auth.domain" message="La propiedad persistence.auth.domain no está definida en config.properties"/>
@@ -109,14 +109,14 @@
             </utilobject>
 
             <deploymentdescriptor
-                clientjar="regtel-${modul}-client.jar"
+                clientjar="8-regtel-${modul}-client.jar"
                 xmlencoding="UTF-8"
                 destdir="${ejb.gen.etc}"
                 validatexml="true"
                 />
 
             <jboss
-                version="${jboss.version}"
+	version="3.2"
                 xmlencoding="UTF-8"
                 destdir="${ejb.gen.etc}"
                 validatexml="false"
@@ -135,8 +135,8 @@
             debug="${javac.debug}"
             deprecation="${javac.deprecation}"
             optimize="${javac.optimize}"
-        	source="1.4"
-        	target="1.4">
+        	source="1.5"
+        	target="1.5">
             <src path="${ejb.src}"/>
             <src path="${ejb.gen.src}"/>
         </javac>
@@ -146,9 +146,9 @@
     </target>
 
     <target name="ejb.jar" depends="ejb.compile">
-        <delete file="${ejb.product}/regtel-${modul}.jar" quiet="yes"/>
+        <delete file="${ejb.product}/8-regtel-${modul}.jar" quiet="yes"/>
         <jar
-            jarfile="${ejb.product}/regtel-${modul}.jar"
+            jarfile="${ejb.product}/8-regtel-${modul}.jar"
             basedir="${ejb.classes}">
             <manifest>
                 <attribute name="Created-By" value="${indra}"/>
@@ -160,9 +160,9 @@
     </target>
 
     <target name="ejb.client" depends="ejb.compile">
-        <delete file="${ejb.product}/regtel-${modul}-client.jar" quiet="yes"/>
+        <delete file="${ejb.product}/8-regtel-${modul}-client.jar" quiet="yes"/>
         <jar
-            jarfile="${ejb.product}/regtel-${modul}-client.jar"
+            jarfile="${ejb.product}/8-regtel-${modul}-client.jar"
             basedir="${ejb.classes}">
             <manifest>
                 <attribute name="Created-By" value="${indra}"/>

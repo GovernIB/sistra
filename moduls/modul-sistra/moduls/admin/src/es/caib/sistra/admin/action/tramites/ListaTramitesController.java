@@ -14,7 +14,6 @@ import org.apache.struts.tiles.Controller;
 
 import es.caib.sistra.persistence.delegate.DelegateException;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
-import es.caib.sistra.persistence.delegate.GruposDelegate;
 import es.caib.sistra.persistence.delegate.TramiteDelegate;
 
 

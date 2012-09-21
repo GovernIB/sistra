@@ -173,7 +173,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                 throw new CreateException("El formulario " + obtenerValor(MODELO) + " versión " +obtenerValor(VERSION)+ " no existe");
             }
             formulario = (Formulario) formularios.get(0);
-            log.info("Formulario " + obtenerValor(MODELO) + " version " + obtenerValor(VERSION) + " cargado");
+            log.debug("Formulario " + obtenerValor(MODELO) + " version " + obtenerValor(VERSION) + " cargado");
             /*
               Inicializo la estructura.
             */
@@ -217,8 +217,9 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
         	// Cargamos datos campos pantalla (excepto listas elementos)
             datosActual = PantallaUtils.valoresDefecto(pantallaActual, docXMLIni,variablesScript ,obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO));
             // En caso de que la pantalla tenga un campo lista de elementos lo cargamos
-            ListaElementos lel = PantallaUtils.buscarCampoListaElementos(pantallaActual);
-            if (lel != null){
+            List listaLel  = PantallaUtils.buscarCamposListaElementos(pantallaActual);
+            for (Iterator it = listaLel.iterator();it.hasNext();){
+            	ListaElementos lel = (ListaElementos) it.next();
             	List valoresLista = PantallaUtils.valoresDefectoListaElementos(lel,this.formulario,pantallaActual,docXMLIni,variablesScript, obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO));
             	this.datosListasElementos.put(CampoUtils.getReferenciaListaElementos(pantallaActual.getNombre(),lel.getNombreLogico()),valoresLista);    
             }
@@ -317,10 +318,13 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
             	// Cargamos datos campos pantalla (excepto listas elementos)
                 datosActual = PantallaUtils.valoresDefecto(pantallaActual, docXMLIni,variablesScript ,obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO));
                 // En caso de que la pantalla tenga un campo lista de elementos lo cargamos
-                ListaElementos lel = PantallaUtils.buscarCampoListaElementos(pantallaActual);
-                if (lel != null){
-                	List valoresLista = PantallaUtils.valoresDefectoListaElementos(lel,this.formulario,pantallaActual,docXMLIni,variablesScript, obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO));
-                	this.datosListasElementos.put(CampoUtils.getReferenciaListaElementos(pantallaActual.getNombre(),lel.getNombreLogico()),valoresLista);    
+                List listaLel  = PantallaUtils.buscarCamposListaElementos(pantallaActual);
+                for (Iterator it = listaLel.iterator();it.hasNext();){
+                	ListaElementos lel = (ListaElementos) it.next();
+	                if (lel != null){
+	                	List valoresLista = PantallaUtils.valoresDefectoListaElementos(lel,this.formulario,pantallaActual,docXMLIni,variablesScript, obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO));
+	                	this.datosListasElementos.put(CampoUtils.getReferenciaListaElementos(pantallaActual.getNombre(),lel.getNombreLogico()),valoresLista);    
+	                }
                 }
                 // INDRA: LISTA ELEMENTOS
             }
@@ -360,7 +364,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
      * @ejb.permission unchecked="true"
      */
     public String tramitarFormulario() {
-        log.info("voy a tramitar el formulario...");
+        log.debug("voy a tramitar el formulario...");
         String urlSisTra = obtenerValor(URL_SIS_TRA_OK);
         if (urlSisTra == null) {
             throw new EJBException("urlSisTraOK no encontrada");
@@ -383,7 +387,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
             urlRedireccion = insertarParametro(urlRedireccion,
                                                obtenerValor(NOM_PARAM_TOKEN_RETORNO),
                                                respuesta);
-            log.info("redirecciono a " + urlRedireccion);
+            log.debug("redirecciono a " + urlRedireccion);
             return urlRedireccion;
         }
     }
@@ -395,7 +399,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
      * @ejb.permission unchecked="true"
      */
     public String cancelarFormulario() {
-        log.info("voy a cancelar el formulario...");
+        log.debug("voy a cancelar el formulario...");
         String urlSisTra = obtenerValor(URL_SIS_TRA_CANCEL);
         if (urlSisTra == null) {
             throw new EJBException("urlSisTraKO no encontrada");
@@ -411,7 +415,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
             urlRedireccion = insertarParametro(urlRedireccion,
                                                obtenerValor(NOM_PARAM_TOKEN_RETORNO),
                                                respuesta);
-            log.info("redirecciono...");
+            log.debug("redirecciono...");
             return urlRedireccion;
         }
     }
@@ -567,7 +571,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
     private void generarNodosPantalla(Document docXMLFin,Pantalla pantalla,Map datosPantalla,boolean detalle,String xpathLista) throws EJBException{
     	for (Iterator j = pantalla.getCampos().iterator(); j.hasNext();) {
             Campo campo = (Campo) j.next();
-            String xPath = campo.getEtiquetaPDF();
+            String xPath = campo.getEtiquetaPDF();                      
             
             if ( (xPath != null) && (xPath.trim().length() > 0)) {
             	
@@ -630,11 +634,13 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                 		
                 		String referenciaCampo = CampoUtils.getReferenciaListaElementos(pantalla.getNombre(),campo.getNombreLogico());
                         List listaElementos = (List) this.datosListasElementos.get(referenciaCampo);
-                		for (int numElemento=0;numElemento<listaElementos.size();numElemento++){
-                			Map datosElemento = (Map) listaElementos.get(numElemento);
-                			Pantalla pantallaDetalle = encontrarPantallaDetalle(referenciaCampo);
-                			generarNodosPantalla(docXMLFin,pantallaDetalle,datosElemento,true,xPath + "/ID" + (numElemento+1));
-                		}                    		
+                        if (listaElementos != null){
+	                		for (int numElemento=0;numElemento<listaElementos.size();numElemento++){
+	                			Map datosElemento = (Map) listaElementos.get(numElemento);
+	                			Pantalla pantallaDetalle = encontrarPantallaDetalle(referenciaCampo);
+	                			generarNodosPantalla(docXMLFin,pantallaDetalle,datosElemento,true,xPath + "/ID" + (numElemento+1));
+	                		}
+                        }
                 	}else{
                 		String valorCampo = String.valueOf(datosPantalla.get(campo.getNombreLogico()));
                 		
@@ -692,7 +698,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
     private Document crearNodo(Document doc,          String xPath,          String valorCampo,
                                boolean campoIndexado, String valorTextCampo) throws EJBException {
         
-        String[] path = xPath.split("/");
+    	String[] path = xPath.split("/");
         
         // Validamos que al menos tenga 2 elementos el xpath
         if (path.length < 2){
@@ -842,6 +848,6 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
             log.debug("fin ejbRemove():" + this.getClass().getName());
         }
     }
-
+    
    
 }
