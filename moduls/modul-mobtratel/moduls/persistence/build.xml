@@ -43,7 +43,7 @@
             <include name="sistra-plugins.jar"/>
         </fileset>
         <fileset dir="${ejb.product}">
-            <include name="mobtratel-model.jar"/>
+            <include name="7-mobtratel-model.jar"/>
         </fileset>
     </path>
 
@@ -63,9 +63,9 @@
         <tstamp>
             <format property="TODAY" pattern="dd-MM-yy"/>
         </tstamp>
-        <fail unless="role.mobtratel" message="La propiedad role.mobtratel no está definida en config.properties"/>
+        <fail unless="role.admin" message="La propiedad role.admin no está definida en config.properties"/>
         <fail unless="role.gestor" message="La propiedad role.gestor no está definida en config.properties"/>
-        <fail unless="role.user" message="La propiedad role.user no está definida en config.properties"/>    	
+        <fail unless="role.todos" message="La propiedad role.todos no está definida en config.properties"/>    	
         <fail unless="persistence.auth.domain" message="La propiedad persistence.auth.domain no está definida en config.properties"/>
         <fail unless="persistence.auth.principal" message="La propiedad persistence.auth.principal no está definida en config.properties"/>
     </target>
@@ -112,14 +112,14 @@
             </utilobject>
 
             <deploymentdescriptor
-                clientjar="${prj.name}-${modul}-client.jar"
+                clientjar="7-${prj.name}-${modul}-client.jar"
                 xmlencoding="UTF-8"
                 destdir="${ejb.gen.etc}"
                 validatexml="true"
                 />
 
             <jboss
-                version="${jboss.version}"
+                	version="3.2"
                 xmlencoding="UTF-8"
                 destdir="${ejb.gen.etc}"
                 mergedir="${ejb.merge.jboss}"
@@ -130,12 +130,13 @@
 
         </ejbdoclet>
 
-        <copy file="${ejb.etc}/hibernate.cfg.xml" todir="${ejb.gen.etc}" overwrite="true"/>
+        <copy file="${ejb.etc}/mobtratel-hibernate.cfg.xml" todir="${ejb.gen.etc}" overwrite="true"/>
 
-        <replace file="${ejb.gen.etc}/hibernate.cfg.xml">
+        <replace file="${ejb.gen.etc}/mobtratel-hibernate.cfg.xml">
             <replacefilter token="@datasource.jndi@" value="${datasource.jndi}"/>
             <replacefilter token="@hibernate.dialect@" value="${hibernate.dialect}"/>
             <replacefilter token="@hibernate.show_sql@" value="${hibernate.show_sql}"/>
+        	<replacefilter token="@hibernate.query.substitutions@" value="${hibernate.query.substitutions}"/>
         </replace>
 
     </target>
@@ -155,24 +156,24 @@
     </target>
 
     <target name="ejb.jar" depends="ejb.compile">
-        <delete file="${ejb.product}/${prj.name}-${modul}.jar" quiet="yes"/>
+        <delete file="${ejb.product}/7-${prj.name}-${modul}.jar" quiet="yes"/>
         <jar
-            jarfile="${ejb.product}/${prj.name}-${modul}.jar"
+            jarfile="${ejb.product}/7-${prj.name}-${modul}.jar"
             basedir="${ejb.classes}">
             <manifest>
                 <attribute name="Created-By" value="Fundació IBIT"/>
             </manifest>
-            <metainf dir="${ejb.gen.etc}" includes="*.xml" excludes="hibernate.cfg.xml"/>
-            <fileset dir="${ejb.gen.etc}" includes="hibernate.cfg.xml"/>
+            <metainf dir="${ejb.gen.etc}" includes="*.xml" excludes="mobtratel-hibernate.cfg.xml"/>
+            <fileset dir="${ejb.gen.etc}" includes="mobtratel-hibernate.cfg.xml"/>
             <fileset dir="${ejb.etc}" includes="ehcache.xml"/>
             <fileset dir="${ejb.src}/" includes="**/*.properties"/>        	
         </jar>
     </target>
 
     <target name="ejb.client" depends="ejb.compile">
-        <delete file="${ejb.product}/${prj.name}-${modul}-client.jar" quiet="yes"/>
+        <delete file="${ejb.product}/7-${prj.name}-${modul}-client.jar" quiet="yes"/>
         <jar
-            jarfile="${ejb.product}/${prj.name}-${modul}-client.jar"
+            jarfile="${ejb.product}/7-${prj.name}-${modul}-client.jar"
             basedir="${ejb.classes}">
             <manifest>
                 <attribute name="Created-By" value="Fundació IBIT"/>

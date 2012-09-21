@@ -5,7 +5,7 @@
 <html:xhtml/>
 <tr>
     <td class="labelo"><bean:message key="modelo.modelo"/></td>
-    <td class="input"><html:text styleClass="data" tabindex="1" property="values.modelo" maxlength="15" /></td>
+    <td class="input"><html:text styleClass="data" tabindex="1" property="values.modelo" maxlength="20" /></td>
 </tr>
 
 <tr>
@@ -23,4 +23,7 @@
     <td class="input">Si<html:radio property="values.estructurado" value="S"/> No<html:radio property="values.estructurado" value="N"/></td>
 </tr>
 
-
+<tr>
+    <td class="labelo"><bean:message key="modelo.custodia"/></td>
+    <td class="input">Si<html:radio property="values.custodiar" value="S"/> No<html:radio property="values.custodiar" value="N"/></td>
+</tr>

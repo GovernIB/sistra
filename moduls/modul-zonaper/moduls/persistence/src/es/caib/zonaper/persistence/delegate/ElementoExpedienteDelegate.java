@@ -1,6 +1,8 @@
 package es.caib.zonaper.persistence.delegate;
 
 import java.rmi.RemoteException;
+import java.util.List;
+import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
@@ -104,6 +106,30 @@ public class ElementoExpedienteDelegate implements StatelessDelegate
 		try
 		{
 			return getFacade().obtenerDetalleElementoExpedienteAnonimo(tipo, codigo, idPersistencia);
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
+	public Map obtenerIdsExpedienteElementos( List codigosElementos )throws DelegateException
+	{
+		try
+		{
+			return getFacade().obtenerIdsExpedienteElementos(codigosElementos);
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
+	public void establecerAvisoElementoExpediente(Long id, String idAviso) throws DelegateException
+	{
+		try
+		{
+			getFacade().establecerAvisoElementoExpediente(id, idAviso);
 		}
 		catch (Exception e) 
 		{

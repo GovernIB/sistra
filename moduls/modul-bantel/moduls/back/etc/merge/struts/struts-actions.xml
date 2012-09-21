@@ -18,3 +18,8 @@
     path="/back/gestorBandeja/lista"
     type="org.apache.struts.actions.ForwardAction"
     parameter=".gestorBandeja.lista"/>
+    
+    <action
+    path="/back/ficheroExportacion/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".ficheroExportacion.lista"/>

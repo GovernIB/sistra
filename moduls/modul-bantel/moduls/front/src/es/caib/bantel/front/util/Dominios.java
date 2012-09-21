@@ -55,24 +55,35 @@ public class Dominios {
 		// Obtenemos valores dominio del EJB
 		List locs = new ArrayList();		
 		
-		if (StringUtils.isEmpty(codProv)){
-			Localidad l = new Localidad();
-			l.setCodigo("");
-			l.setDescripcion("");
-			locs.add(l);
-			return locs;
+//		if (StringUtils.isEmpty(codProv)){
+//			Localidad l = new Localidad();
+//			l.setCodigo("");
+//			l.setDescripcion("");
+//			locs.add(l);
+//			return locs;
+//		}
+		
+		// Añadimos la primera vacia
+		Localidad l = new Localidad();
+		l.setCodigo("");
+		l.setDescripcion("");
+		locs.add(l);
+		
+		// Recuperamos lista de localidades
+		if (!StringUtils.isEmpty(codProv)){
+			List params = new ArrayList();
+			params.add(codProv);
+			ValoresDominio dom = DelegateSISTRAUtil.getSistraDelegate().obtenerDominio( "GEGMUNICI" , params);			
+			for (int i=1;i<=dom.getNumeroFilas();i++){
+				l = new Localidad();
+				l.setCodigo(dom.getValor(i,"CODIGO"));
+				l.setDescripcion(dom.getValor(i,"DESCRIPCION"));
+				locs.add(l);			
+			}			
 		}
 		
 		
-		List params = new ArrayList();
-		params.add(codProv);
-		ValoresDominio dom = DelegateSISTRAUtil.getSistraDelegate().obtenerDominio( "GEGMUNICI" , params);			
-		for (int i=1;i<=dom.getNumeroFilas();i++){
-			Localidad l = new Localidad();
-			l.setCodigo(dom.getValor(i,"CODIGO"));
-			l.setDescripcion(dom.getValor(i,"DESCRIPCION"));
-			locs.add(l);			
-		}			
+		
 		return locs;
 	}
 	

@@ -22,6 +22,7 @@ import es.caib.zonaper.model.DatosSesion;
 import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.Entrada;
 import es.caib.zonaper.model.EntradaTelematica;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
@@ -64,11 +65,31 @@ public class InitAction extends BaseAction
 				datosSesion = new DatosSesion();
 				datosSesion.setNivelAutenticacion(  plgLogin.getMetodoAutenticacion(seyconPrincipal) );
 				datosSesion.setLocale( this.getLocale( request ));
+				
 				if ( datosSesion.getNivelAutenticacion() != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO )
 				{
 					PadDelegate delegate = DelegatePADUtil.getPadDelegate();
 					PersonaPAD personaPAD = delegate.obtenerDatosPersonaPADporUsuario( seyconPrincipal.getName() );
 					datosSesion.setPersonaPAD(personaPAD);					
+					
+					datosSesion.setPerfilAcceso((String) request.getSession().getAttribute(ConstantesZPE.DELEGACION_PERFIL_ACCESO_KEY));
+					if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(datosSesion.getPerfilAcceso()) ){
+						String nifEntidad = (String) request.getSession().getAttribute(ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO_ENTIDAD_KEY);
+						// Obtenemos datos entidad
+						datosSesion.setEntidadPAD(delegate.obtenerDatosPersonaPADporNif(nifEntidad));
+						// Obtenemos permisos
+						datosSesion.setPermisosDelegacion(delegate.obtenerPermisosDelegacion(nifEntidad));
+						// Indicamos que la entidad tiene permitida la delegacion, sino no podría accederse de forma delegada
+						datosSesion.setPermitirDelegacion("S");
+					}else{
+						// Miramos si el usuario tiene activada la delegacion
+						datosSesion.setPermitirDelegacion(delegate.habilitadaDelegacion(datosSesion.getNifUsuario())?"S":"N");
+					}
+					
+					
+				}else{
+					// Si entra como anonimo ponemos perfil a ciudadano
+					datosSesion.setPerfilAcceso(ConstantesZPE.DELEGACION_PERFIL_ACCESO_CIUDADANO);
 				}
 				
 				this.setDatosSesion( request, datosSesion );
@@ -80,7 +101,14 @@ public class InitAction extends BaseAction
 				logger.error( "Error accediendo a la zona personal", exc );
 				throw (exc);
 			}
+			
+						
+			if (datosSesion != null && ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(datosSesion.getPerfilAcceso())){
+				descripcion = "Acceso delegado " + datosSesion.getNifUsuario();
+				logEventoAccesoZonaPersonal( datosSesion.getNivelAutenticacion(), datosSesion.getCodigoEntidad(), datosSesion.getNifEntidad(), datosSesion.getNombreUsuario(), datosSesion.getLocale().getLanguage(),  result, descripcion );
+			}else{
 			logEventoAccesoZonaPersonal( datosSesion.getNivelAutenticacion(), datosSesion.getCodigoUsuario(), datosSesion.getNifUsuario(), datosSesion.getNombreUsuario(), datosSesion.getLocale().getLanguage(),  result, descripcion );
+		}
 		}
 		
 		// Comprobamos si es un acceso directo a notificacion o aviso

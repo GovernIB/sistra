@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ import org.apache.struts.tiles.TilesRequestProcessor;
 
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.model.GestorBandeja;
+import es.caib.bantel.persistence.delegate.ConfiguracionDelegate;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.delegate.GestorBandejaDelegate;
 import es.caib.sistra.plugins.PluginFactory;
@@ -43,12 +45,18 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
  public void init(ActionServlet actionServlet,ModuleConfig moduleConfig) throws ServletException{
     	
     	super.init(actionServlet,moduleConfig);
-    	
-    	// Inicializamos implementacion de firma (almacenamos en contexto)
+    	    	
         try{
+        	// Inicializamos implementacion de firma (almacenamos en contexto)
         	if (StringUtils.isEmpty((String) getServletContext().getAttribute(Constants.IMPLEMENTACION_FIRMA_KEY))){
      			getServletContext().setAttribute(Constants.IMPLEMENTACION_FIRMA_KEY,PluginFactory.getInstance().getPluginFirma().getProveedor());
      		}
+        	
+        	// Inicializamos si se obligaran los avisos a los expedientes generados desde modulo de gestion expedientes
+        	ConfiguracionDelegate config = DelegateUtil.getConfiguracionDelegate();
+        	Properties configProps = config.obtenerConfiguracion();
+			getServletContext().setAttribute(Constants.GESTIONEXPEDIENTES_OBLIGATORIOAVISOS,StringUtils.defaultString(configProps.getProperty("gestionExpedientes.avisosObligatorios"), "false"));
+			
         }catch (Exception ex){
         	log.error("Error obteniendo implementacion firma",ex);
         	throw new ServletException(ex);

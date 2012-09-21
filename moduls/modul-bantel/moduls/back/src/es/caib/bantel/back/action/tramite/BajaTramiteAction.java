@@ -13,7 +13,7 @@ import org.apache.struts.action.ActionMapping;
 
 import es.caib.bantel.back.action.BaseAction;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
-import es.caib.bantel.persistence.delegate.TramiteDelegate;
+import es.caib.bantel.persistence.delegate.ProcedimientoDelegate;
 
 /**
  * Action para preparar borrar un Tramite.
@@ -33,8 +33,8 @@ public class BajaTramiteAction extends BaseAction{
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en BajaTramite");
-        TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
+        log.debug("Entramos en BajaTramite");
+        ProcedimientoDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
 
         String idString = request.getParameter("codigo");
         if (idString == null || idString.length() == 0) {
@@ -42,7 +42,7 @@ public class BajaTramiteAction extends BaseAction{
             return mapping.findForward("fail");
         }
         
-        if (!tramiteDelegate.puedoBorrarTramite(idString)){
+        if (!tramiteDelegate.puedoBorrarProcedimiento(idString)){
         	ActionErrors messages = new ActionErrors();
         	//messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("errors.elementoNoPuedeBorrarse"));        	
         	messages.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.tramiteNoPuedeBorrarse"));
@@ -50,7 +50,7 @@ public class BajaTramiteAction extends BaseAction{
         	return mapping.findForward("success");
         }
         
-        tramiteDelegate.borrarTramite(idString);
+        tramiteDelegate.borrarProcedimiento(idString);
         //request.setAttribute("reloadMenu", "true");
 
         return mapping.findForward("success");

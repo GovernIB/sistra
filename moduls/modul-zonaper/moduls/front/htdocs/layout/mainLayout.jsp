@@ -9,13 +9,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title><bean:write name="<%=es.caib.zonaper.front.Constants.ORGANISMO_INFO_KEY%>" property="nombre" /></title>
 <link href="css/zonaperfront-0.0.2.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="css/calendar.css" rel="stylesheet" type="text/css" />
 <logic:notEmpty name="<%=es.caib.zonaper.front.Constants.ORGANISMO_INFO_KEY%>" property="urlCssCustom">
 	<link href="<bean:write name="<%=es.caib.zonaper.front.Constants.ORGANISMO_INFO_KEY%>" property="urlCssCustom" />" rel="stylesheet" type="text/css" />
 </logic:notEmpty>
 <!-- 
 <link href="css/estils_print.css" rel="stylesheet" type="text/css" media="print" />
  -->
-<script type="text/javascript" src="js/jquery-1.2.3.pack.js"></script>
+<script type="text/javascript" src="js/jquery-1.4.1.min.js"></script>
 <script type="text/javascript" src="js/jquery.selectboxes.pack.js"></script>
 <script type="text/javascript" src="js/ajuda.js"></script>
 <script type="text/javascript" src="js/globales.js"></script>
@@ -28,11 +29,17 @@
 
 <logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 			 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">					
-	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/constantes.js"></script>
-	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/time.js"></script>
-	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/appletHelper.js"></script>
+	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/deployJava.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/instalador.js"></script>
-	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/firma.js"></script>			
+	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/firma.js"></script>	
+	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/utils.js"></script>
+	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/constantes.js"></script>
+	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/configClienteaFirmaSistra.js"></script>	
+	<script type="text/javascript">		
+		base = "<%=session.getAttribute("urlSistraAFirma")%><%=request.getContextPath()%>/firma/aFirma";
+		baseDownloadURL = "<%=session.getAttribute("urlSistraAFirma")%><%=request.getContextPath()%>/firma/aFirma";
+	</script>
+	
 </logic:equal>		
 
 
@@ -44,10 +51,12 @@
 		var errorFirefox="<bean:message key="errors.firefox.versionminima" />";
 		checkVersionNavegador(errorIE,errorFirefox);
 		
-		// Preparamos entorno firma
-		if (typeof prepararEntornoFirma != 'undefined') { // Si existe la funcion ejecutarla.
-            prepararEntornoFirma();
-        }
+		// està dins d'un iframe?
+		if(top.window.location != self.window.location) {
+			contenidor_H = document.getElementById("contenidor").offsetHeight;
+			top.window.document.getElementById("frm").style.height = parseInt((contenidor_H/14.5), 10) + 2 + "em";
+		}
+		
 	}
 	
 -->
@@ -68,5 +77,6 @@
 	</div>
 	<tiles:insert name="footer"/>
 </div>
+<div id="fondo"></div>
 </body>
 </html:html>

@@ -18,6 +18,8 @@
 		<property name="fecha" column="ELE_FECHA" not-null="true" />
 		<property name="tipoElemento"  column="ELE_TIPO"  not-null="true" length="1" />
 		<property name="codigoElemento"  column="ELE_CODELE"  not-null="true" />
+		<property name="codigoAviso"  column="ELE_CODAVI" />
+		
 		
 		<many-to-one name="expediente" column="ELE_CODEXP" not-null="true"/>
 		

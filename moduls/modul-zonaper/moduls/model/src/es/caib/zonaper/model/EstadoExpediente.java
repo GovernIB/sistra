@@ -48,6 +48,10 @@ public class EstadoExpediente implements Serializable
 	 */
 	private String user;
 	/**
+	 * En caso de estar autenticado indica usuario seycon indica nif del usuario
+	 */
+	private String nifRepresentante;
+	/**
 	 * En caso de existir representación indica nif del representado
 	 */
 	private String nifRepresentado;
@@ -145,6 +149,12 @@ public class EstadoExpediente implements Serializable
 	}
 	public void setUnidadAdministrativa(Long unidadAdministrativa) {
 		this.unidadAdministrativa = unidadAdministrativa;
+	}
+	public String getNifRepresentante() {
+		return nifRepresentante;
+	}
+	public void setNifRepresentante(String nifRepresentante) {
+		this.nifRepresentante = nifRepresentante;
 	}
 	
 	

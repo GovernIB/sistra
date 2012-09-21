@@ -67,7 +67,10 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			}if(hasta != null){
 				hastaDate = hasta.toGregorianCalendar().getTime();
 			}
-			ReferenciaEntradaBTE[] entradas = bd.obtenerReferenciasEntradas(identificadorTramite,procesada,desdeDate, hastaDate);
+			
+			// NOTA: Para la v1 mantenemos como identificadorprocedimiento = identificadortramite
+			//  	Por tanto no se podrían preguntar por tramites que no cumpliesen esta condicion
+			ReferenciaEntradaBTE[] entradas = bd.obtenerReferenciasEntradas(identificadorTramite, identificadorTramite,procesada,desdeDate, hastaDate);
 			return referenciasEntradaIntfToReferenciasEntradaWS(entradas);
 		}catch(Exception ex){
 			throw new es.caib.bantel.ws.v1.services.BackofficeFacadeException(ex.getMessage(),new es.caib.bantel.ws.v1.model.BackofficeFacadeException());
@@ -213,9 +216,9 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			PluginFirmaIntf plgFirma = PluginFactory.getInstance().getPluginFirma();
 			for(int i=0;i<firmas.length;i++){
 				es.caib.bantel.ws.v1.model.FirmaWS firma = new es.caib.bantel.ws.v1.model.FirmaWS();
-				firma.setFirma(plgFirma.parseFirmaToBytes(firmas[i]));
+				firma.setFirma(plgFirma.parseFirmaToWS(firmas[i]));
 				if(firmas[i].getFormatoFirma() != null){
-					firma.setFormato(new JAXBElement<String>(new QName("formatoFirma"),String.class,firmas[i].getFormatoFirma()));
+					firma.setFormato(new JAXBElement<String>(new QName("formato"),String.class,firmas[i].getFormatoFirma()));
 				}
 				firmasWS.getFirmas().add(firma);
 			}

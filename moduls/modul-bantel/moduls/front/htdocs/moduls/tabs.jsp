@@ -18,12 +18,10 @@
 			<logic:notEqual name="<%=es.caib.bantel.front.Constants.OPCION_SELECCIONADA_KEY%>" value="1">
 				<li>
 			</logic:notEqual>
-			
 					<html:link action="init">
 						<bean:message key="tabs.titulo"/>	
 					</html:link>		
-			
-				</li>
+			</li>
 			
 			<!--  OPCION 2: CONFIRMACION REGISTROS INCORRECTOS -->
 			<logic:equal name="<%=es.caib.bantel.front.Constants.OPCION_SELECCIONADA_KEY%>" value="2">
@@ -36,9 +34,10 @@
 						<bean:message key="tabs.confirmacion"/>							
 					</html:link>	
 			</li>		
+			
+			<!--  OPCION 3: GESTION EXPEDIENTES -->
 			<logic:notEmpty name="permitirGestionExpedientes" scope="session">
 				<logic:equal name="permitirGestionExpedientes" scope="session" value="S">
-					<!--  OPCION 3: GESTION EXPEDIENTES -->
 					<logic:equal name="<%=es.caib.bantel.front.Constants.OPCION_SELECCIONADA_KEY%>" value="3">
 						<li class="selec">
 					</logic:equal>

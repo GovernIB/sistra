@@ -27,7 +27,8 @@ public abstract class ModeloFacadeEJB extends HibernateEJB {
 
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
@@ -36,7 +37,8 @@ public abstract class ModeloFacadeEJB extends HibernateEJB {
 	  
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Modelo obtenerModelo(Long id) {
         Session session = getSession();
@@ -56,7 +58,8 @@ public abstract class ModeloFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Modelo obtenerModelo(String id){
         Session session = getSession();
@@ -83,7 +86,8 @@ public abstract class ModeloFacadeEJB extends HibernateEJB {
         
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long grabarModelo(Modelo obj) {        
     	Session session = getSession();
@@ -100,7 +104,8 @@ public abstract class ModeloFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public List listarModelos() {
         Session session = getSession();
@@ -118,7 +123,8 @@ public abstract class ModeloFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarModelo(Long id) {
         Session session = getSession();

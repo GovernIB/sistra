@@ -2,13 +2,11 @@ package es.caib.redose.persistence.delegate;
 
 import java.rmi.RemoteException;
 import java.util.List;
-import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
 import es.caib.redose.model.VersionCustodia;
-import es.caib.redose.persistence.ejb.VersionCustodiaFacadeEJB;
 import es.caib.redose.persistence.intf.VersionCustodiaFacade;
 import es.caib.redose.persistence.util.VersionCustodiaFacadeUtil;
 
@@ -51,9 +49,17 @@ public class VersionCustodiaDelegate implements StatelessDelegate {
         }
     } 
     
-    public String obtenerNumeroVersionCustodia(Long id) throws DelegateException{
+    public String obtenerCodigoVersionCustodia(Long id) throws DelegateException{
     	try {
-            return getFacade().obtenerNumeroVersionCustodia(id);
+            return getFacade().obtenerCodigoVersionCustodia(id);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        } 
+    }
+    
+    public void borrarVersionesDocumento(Long idDocumento) throws DelegateException{
+    	try {
+           getFacade().borrarVersionesDocumento(idDocumento);
         } catch (Exception e) {
             throw new DelegateException(e);
         } 

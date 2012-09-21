@@ -26,7 +26,7 @@ public abstract class LoggerEventoFacadeEJB extends QueryEJB
 {
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public void ejbCreate() throws CreateException 
 	{
@@ -35,7 +35,7 @@ public abstract class LoggerEventoFacadeEJB extends QueryEJB
 	
 	/**
 	 * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
 	 */
 	public Long logEvento( Evento eventoAuditado )
 	{

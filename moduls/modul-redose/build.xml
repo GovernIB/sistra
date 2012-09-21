@@ -92,7 +92,7 @@
 			</manifest>
 			<metainf dir="${etc.jboss}" includes="jboss-app.xml"/>
 			<fileset dir="${moduls.dir}">
-                <exclude name="${projecte}-back.war"/>
+                <exclude name="2-${projecte}-back.war"/>
             </fileset>
 			<archives dir="${lib}/openoffice" prefix="lib">
 				<include name="*.jar"/>
@@ -106,7 +106,7 @@
 		</antcall>
 		<antcall target="interfaz"/>
 		<antcall target="docItf"/>
-		<antcall target="assemble"/>
+		<!-- <antcall target="assemble"/> -->
 		<antcall target="distribute"/>
 	</target>
 		
@@ -190,9 +190,12 @@
     </target>	
 	
 	<target name="distribute" description="Distribucion">
-		<copy file="${product.dir}/redose-client.jar" todir="${distribucion.dir}/client"/>	
+		<copy file="${product.dir}/redose-client.jar" todir="${distribucion.dir}/client/ejb"/>
+		<mkdir dir="${product.dir}/client/wsdl/sistra/redose"/>	
+		<copydir  src="moduls/webservices/wsdl/redose" dest="${distribucion.dir}/client/wsdl/sistra/redose" excludes="*.xml"/>
+				
 		<copydir  src="${output.dir}/docInterfaz"  dest="${distribucion.dir}/javadoc/redose-client"/>
-		<copy file="${product.dir}/2-${projecte}.ear" todir="${distribucion.dir}/ear"/>		
+		<!-- <copy file="${product.dir}/2-${projecte}.ear" todir="${distribucion.dir}/ear"/> -->		
 	</target>
 	
 </project>

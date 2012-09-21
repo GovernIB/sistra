@@ -30,9 +30,9 @@
 		<include name="redose-client.jar"/>
 	  </fileset>       	
       <fileset dir="${web.product}">
-      	<include name="zonaper-model.jar" />
-        <include name="zonaper-persistence-client.jar" />
-	 	<include name="zonaper-persistence.jar" />
+      	<include name="3-zonaper-model.jar" />
+        <include name="3-zonaper-persistence-client.jar" />
+	 	<include name="3-zonaper-persistence.jar" />
       </fileset>
     </path>
     <target name="prepare">
@@ -43,7 +43,7 @@
 	<target name="main" depends="war" description="Construeye el war"/>
 
 	<target name="war">
-		<cxfwar filename="${modul.name}.war"/>
+		<cxfwar filename="3-${modul.name}.war"/>
 	</target>
 	
     <macrodef name="cxfwar">
@@ -73,6 +73,7 @@
   				</lib>            	
             	<lib dir="${web.product}">
             		<include name="*.jar"/>
+            		<exclude name="3-zonaper-persistence.jar"/>
       	  		</lib>
             </war>
         </sequential>

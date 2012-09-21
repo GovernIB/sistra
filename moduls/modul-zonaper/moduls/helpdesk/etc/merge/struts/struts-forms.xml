@@ -20,5 +20,14 @@
 <form-bean
     name="modificarUsuarioForm"
     type="es.caib.zonaper.helpdesk.front.form.ModificarUsuarioForm" />         
+<form-bean
+    name="busquedaTramiteBackupForm"
+    type="es.caib.zonaper.helpdesk.front.form.BusquedaTramiteBackupForm" />    
+<form-bean
+    name="detalleTramiteForm"
+    type="es.caib.zonaper.helpdesk.front.form.DetalleTramiteForm" />
+<form-bean
+    name="busquedaTramitePreregistroForm"
+    type="es.caib.zonaper.helpdesk.front.form.BusquedaTramitePreregistroForm" />        
        
 

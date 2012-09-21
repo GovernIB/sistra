@@ -43,7 +43,7 @@ public class DetallePreregistroAction extends BaseAction
 		String mostrarJust = "S";
 		for (Iterator it = preregistro.getDocumentos().iterator();it.hasNext();){
 			DocumentoEntradaPreregistro doc = (DocumentoEntradaPreregistro) it.next();
-			if (doc.getTipoDocumento() == ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_FORMULARIO_JUSTIFICANTE){
+			if (doc.getTipoDocumento() != null && doc.getTipoDocumento().charValue() == ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_FORMULARIO_JUSTIFICANTE){
 				mostrarJust = "N";
 				break;
 			}

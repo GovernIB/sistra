@@ -20,6 +20,10 @@ public class TramiteBTE implements Serializable {
 	 */
 	private String numeroEntrada;
 	/**
+	 * Clave de acceso en la BTE para la entrada
+	 */
+	private String claveAcceso;
+	/**
 	 * Código interno en la BTE
 	 */
 	private Long codigoEntrada;	
@@ -42,7 +46,11 @@ public class TramiteBTE implements Serializable {
 	/**
 	 * Indica si ha sido procesada por el BackOffice (ver ConstantesBTE)
 	 */
-	private char procesada;         
+	private char procesada;     
+	/**
+	 * Identificador procedimiento.
+	 */
+	private String identificadorProcedimiento;
 	/**
 	 * Identificador del trámite
 	 */
@@ -72,6 +80,14 @@ public class TramiteBTE implements Serializable {
 	 */
 	private String claveReferenciaRDSAsiento;
 	/**
+	 * En caso de que exista el plugin de gestor documental indica la referencia en dicho gestor
+	 */
+	private String referenciaGestorDocumentalAsiento;
+	/**
+	 * En caso de que exista el plugin de custodia indica la referencia en dicho sistema
+	 */
+	private String codigoDocumentoCustodiaAsiento;
+	/**
 	 * Código de la Referencia RDS del Justificante 
 	 */
 	private long codigoReferenciaRDSJustificante;
@@ -79,6 +95,14 @@ public class TramiteBTE implements Serializable {
 	 * Clave de la Referencia RDS del Justificante 
 	 */
 	private String claveReferenciaRDSJustificante;
+	/**
+	 * En caso de que exista el plugin de gestor documental indica la referencia en dicho gestor
+	 */
+	private String referenciaGestorDocumentalJustificante;
+	/**
+	 * En caso de que exista el plugin de custodia indica la referencia en dicho sistema
+	 */
+	private String codigoDocumentoCustodiaJustificante;	
 	/**
 	 * Número de registro 
 	 */
@@ -112,6 +136,14 @@ public class TramiteBTE implements Serializable {
 	 */
 	private String representadoNombre;
 	/**
+	 * En caso de que existe delegacion indica el nif del delegado que presenta el trámite
+	 */
+	private String delegadoNif;
+	/**
+	 * En caso de que existe delegacion indica el nombre del delegado que presenta el trámite
+	 */
+    private String delegadoNombre;
+	/**
 	 * Documentos asociados a la entrada
 	 */
 	private Set documentos = new HashSet(0);
@@ -139,6 +171,14 @@ public class TramiteBTE implements Serializable {
 	 * Indica si se ha habilitado la notificacion telematica (en caso de que el tramite la permita). Si el tramite no la permite tendra valor nulo.
 	 */
 	private String habilitarNotificacionTelematica;
+	/**
+	 * En caso de que sea un tramite de subsanacion indica codigo expediente asociado
+	 */
+	private String subsanacionExpedienteCodigo;
+	/**
+	 * En caso de que sea un tramite de subsanacion indica unidad administrativa expediente asociado
+	 */
+	private Long subsanacionExpedienteUnidadAdministrativa;
 	
 	/**
 	 * Código interno en la BTE
@@ -381,6 +421,18 @@ public class TramiteBTE implements Serializable {
 		this.numeroEntrada = numeroEntrada;
 	}
 	/**
+	 * Clave de acceso en la BTE para la entrada
+	 */
+	public String getClaveAcceso() {
+		return claveAcceso;
+	}
+	/**
+	 * Clave de acceso en la BTE para la entrada
+	 */
+	public void setClaveAcceso(String claveAcceso) {
+		this.claveAcceso = claveAcceso;
+	}
+	/**
 	 * Código de unidad adminstrativa destino (Unidad Administrativa SAC)
 	 */
 	public Long getUnidadAdministrativa() {
@@ -560,6 +612,113 @@ public class TramiteBTE implements Serializable {
 	 */
 	public void setFirmadaDigitalmente(boolean firmadaDigitalmente) {
 		this.firmadaDigitalmente = firmadaDigitalmente;
+	}
+	
+	/**
+	 * En caso de que existe delegacion indica el nif del delegado que presenta el trámite
+	 */
+	public String getDelegadoNif() {
+		return delegadoNif;
+	}
+	/**
+	 * En caso de que existe delegacion indica el nif del delegado que presenta el trámite
+	 */
+	public void setDelegadoNif(String delegadoNif) {
+		this.delegadoNif = delegadoNif;
+	}
+	/**
+	 * En caso de que existe delegacion indica el nombre del delegado que presenta el trámite
+	 */
+	public String getDelegadoNombre() {
+		return delegadoNombre;
+	}
+	/**
+	 * En caso de que existe delegacion indica el nombre del delegado que presenta el trámite
+	 */
+	public void setDelegadoNombre(String delegadoNombre) {
+		this.delegadoNombre = delegadoNombre;
+	}
+	/**
+	 * En caso de que sea un tramite de subsanacion indica id expediente asociado
+	 */
+	public String getSubsanacionExpedienteCodigo() {
+		return subsanacionExpedienteCodigo;
+	}
+	/**
+	 * En caso de que sea un tramite de subsanacion indica id expediente asociado
+	 */
+	public void setSubsanacionExpedienteCodigo(String subsanacionExpedienteId) {
+		this.subsanacionExpedienteCodigo = subsanacionExpedienteId;
+	}
+	/**
+	 * En caso de que sea un tramite de subsanacion indica unidad administrativa expediente asociado
+	 */
+	public Long getSubsanacionExpedienteUnidadAdministrativa() {
+		return subsanacionExpedienteUnidadAdministrativa;
+	}
+	/**
+	 * En caso de que sea un tramite de subsanacion indica unidad administrativa expediente asociado
+	 */
+	public void setSubsanacionExpedienteUnidadAdministrativa(Long subsanacionExpedienteUA) {
+		this.subsanacionExpedienteUnidadAdministrativa = subsanacionExpedienteUA;
+	}
+	/**
+	 * En caso de que exista el plugin de custodia indica la referencia en dicho sistema
+	 */
+	public String getCodigoDocumentoCustodiaAsiento() {
+		return codigoDocumentoCustodiaAsiento;
+	}
+	/**
+	 * En caso de que exista el plugin de custodia indica la referencia en dicho sistema
+	 */
+	public void setCodigoDocumentoCustodiaAsiento(
+			String codigoDocumentoCustodiaAsiento) {
+		this.codigoDocumentoCustodiaAsiento = codigoDocumentoCustodiaAsiento;
+	}
+	/**
+	 * En caso de que exista el plugin de custodia indica la referencia en dicho sistema
+	 */
+	public String getCodigoDocumentoCustodiaJustificante() {
+		return codigoDocumentoCustodiaJustificante;
+	}
+	/**
+	 * En caso de que exista el plugin de custodia indica la referencia en dicho sistema
+	 */
+	public void setCodigoDocumentoCustodiaJustificante(
+			String codigoDocumentoCustodiaJustificante) {
+		this.codigoDocumentoCustodiaJustificante = codigoDocumentoCustodiaJustificante;
+	}
+	/**
+	 * En caso de que exista el plugin de gestor documental indica la referencia en dicho gestor
+	 */
+	public String getReferenciaGestorDocumentalAsiento() {
+		return referenciaGestorDocumentalAsiento;
+	}
+	/**
+	 * En caso de que exista el plugin de gestor documental indica la referencia en dicho gestor
+	 */
+	public void setReferenciaGestorDocumentalAsiento(
+			String referenciaGestorDocumentalAsiento) {
+		this.referenciaGestorDocumentalAsiento = referenciaGestorDocumentalAsiento;
+	}
+	/**
+	 * En caso de que exista el plugin de gestor documental indica la referencia en dicho gestor
+	 */
+	public String getReferenciaGestorDocumentalJustificante() {
+		return referenciaGestorDocumentalJustificante;
+	}
+	/**
+	 * En caso de que exista el plugin de gestor documental indica la referencia en dicho gestor
+	 */
+	public void setReferenciaGestorDocumentalJustificante(
+			String referenciaGestorDocumentalJustificante) {
+		this.referenciaGestorDocumentalJustificante = referenciaGestorDocumentalJustificante;
+	}
+	public String getIdentificadorProcedimiento() {
+		return identificadorProcedimiento;
+	}
+	public void setIdentificadorProcedimiento(String identificadorProcedimiento) {
+		this.identificadorProcedimiento = identificadorProcedimiento;
 	}
 	
 }

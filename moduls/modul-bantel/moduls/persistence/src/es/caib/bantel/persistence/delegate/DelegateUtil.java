@@ -17,8 +17,8 @@ public final class DelegateUtil {
         return (DocumentoBandejaDelegate) DelegateFactory.getDelegate(DocumentoBandejaDelegate.class);
     }
     
-    public static TramiteDelegate getTramiteDelegate() {    	
-        return (TramiteDelegate) DelegateFactory.getDelegate(TramiteDelegate.class);
+    public static ProcedimientoDelegate getTramiteDelegate() {    	
+        return (ProcedimientoDelegate) DelegateFactory.getDelegate(ProcedimientoDelegate.class);
     }
     
     public static GestorBandejaDelegate getGestorBandejaDelegate() {
@@ -35,6 +35,14 @@ public final class DelegateUtil {
     
     public static ConsultaPADDelegate getConsultaPADDelegate() {
         return (ConsultaPADDelegate) DelegateFactory.getDelegate(ConsultaPADDelegate.class);
+    }
+    
+    public static VersionWSDelegate getVersionWSDelegate() {
+        return (VersionWSDelegate) DelegateFactory.getDelegate(VersionWSDelegate.class);
+    }
+    
+    public static FicheroExportacionDelegate getFicheroExportacionDelegate() {
+        return (FicheroExportacionDelegate) DelegateFactory.getDelegate(FicheroExportacionDelegate.class);
     }
     
 }

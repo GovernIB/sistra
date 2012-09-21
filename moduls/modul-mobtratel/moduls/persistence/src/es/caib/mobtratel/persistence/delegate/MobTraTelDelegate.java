@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
+import es.caib.mobtratel.modelInterfaz.EstadoMensajeEnvio;
 import es.caib.mobtratel.modelInterfaz.MensajeEnvio;
 import es.caib.mobtratel.persistence.intf.MobTraTelFacade;
 import es.caib.mobtratel.persistence.util.MobTraTelFacadeUtil;
@@ -39,6 +40,22 @@ public class MobTraTelDelegate implements StatelessDelegate {
         	throw new DelegateException(e);
         }
     }
+	/**
+	 * Obtiene estado mensaje
+	 * @param idMensaje Id mensaje
+	 * @return Estado mensaje
+	 */
+	public EstadoMensajeEnvio estadoMensaje(String idMensaje) throws DelegateException {
+        try {
+            return getFacade().estadoMensaje(idMensaje);
+        } catch (DelegateException e) {
+        	throw e;
+        } catch (Exception e) {
+        	throw new DelegateException(e);
+        }
+    }
+		
+	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

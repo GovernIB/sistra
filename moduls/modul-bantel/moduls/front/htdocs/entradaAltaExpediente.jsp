@@ -19,6 +19,10 @@
 		document.forms["0"].action='<html:rewrite page="/altaEntradaExpediente.do"/>';
 		document.forms["0"].submit();
 	}
+
+	function volver(){
+		document.location='<html:rewrite page="/busquedaExpedientes.do"/>';
+	}
 </script>
 <script type="text/javascript">
      <!--
@@ -70,23 +74,30 @@
 				</li>
 			</ul>
 			
-			<html:form action="recuperarExpediente" styleClass="remarcar opcions">
+			<html:form action="altaExpediente" styleClass="remarcar opcions">
 				<html:hidden property="tipo"/>
-				<p>
-					<label for="numero"><bean:message key="confirmacion.numeroEntrada"/>:</label>
-					<html:text property="numeroEntrada"/>
-				</p>
-
 				
-				<p class="botonera">
-					<html:submit  value="<%=btnAlta%>" onclick="alta();"/>
+				<p class="botonera2">
 					<html:submit value="<%=btnAltaEntrada%>" onclick="recuperar();"/>
+					<html:text property="numeroEntrada" styleId="numeroEntrada"/>
 				</p>
+				
+				<p class="botonera2">
+					<html:submit  value="<%=btnAlta%>" onclick="alta();"/>
+				</p>
+				
 			
 			</html:form>
 			
 			
 		</div>
 		<!-- /continguts -->
-
+	
+		<!-- tornar enrere -->
+		<div id="enrere">
+			<a href="#" onclick="javascript:volver()">
+				<bean:message key="detalle.aviso.tornar" />				
+			</a>				
+		</div>
+		<!-- /tornar enrere -->
 

@@ -35,16 +35,39 @@ public class ProcesosAutoDelegate implements StatelessDelegate
         }
 	}
 	
-	public void avisoCreacionElementoExpediente(ElementoExpediente ele) throws DelegateException {
+	public String avisoCreacionElementoExpediente(ElementoExpediente ele) throws DelegateException {
 		try
 		{
-			getFacade().avisoCreacionElementoExpediente(ele);
+			return getFacade().avisoCreacionElementoExpediente(ele);
 		}
 		catch (Exception e) {
             throw new DelegateException(e);
         }
 	}
 
+	public void revisarRegistrosEfectuados() throws DelegateException {
+		try{
+			getFacade().revisarRegistrosEfectuados();
+		}catch (Exception e) {
+			throw new DelegateException(e);
+        }
+	}
+	
+	public void controlEntregaNotificaciones() throws DelegateException {
+		try{
+			getFacade().controlEntregaNotificaciones();
+		}catch (Exception e) {
+			throw new DelegateException(e);
+        }
+	}
+	
+	public void actualizarExpedienteTramiteSubsanacion(Long codigoEntrada, String tipoEntrada) throws DelegateException {
+		try{
+			getFacade().actualizarExpedienteTramiteSubsanacion(codigoEntrada, tipoEntrada);
+		}catch (Exception e) {
+			throw new DelegateException(e);
+        }
+	}
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

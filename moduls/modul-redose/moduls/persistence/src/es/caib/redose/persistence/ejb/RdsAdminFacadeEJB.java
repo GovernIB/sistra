@@ -1,6 +1,7 @@
 package es.caib.redose.persistence.ejb;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.CreateException;
@@ -14,6 +15,9 @@ import es.caib.redose.model.LogOperacion;
 import es.caib.redose.model.TipoOperacion;
 import es.caib.redose.modelInterfaz.ExcepcionRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
+import es.caib.redose.persistence.delegate.DelegateUtil;
+import es.caib.redose.persistence.plugin.PluginAlmacenamientoRDS;
+import es.caib.redose.persistence.plugin.PluginClassCache;
 
 /**
  * SessionBean que implementa la interfaz del RDS para la administración del RDS (uso interno)
@@ -36,7 +40,7 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
 	
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.redose},${role.auto}"
+     * @ejb.permission role-name="${role.admin},${role.auto}"
      */
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
@@ -67,7 +71,7 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
      * Eliminar documento del RDS. 
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose},${role.auto}"
+     * @ejb.permission role-name="${role.admin},${role.auto}"
      */
     public void eliminarDocumento(ReferenciaRDS refRds) throws ExcepcionRDS{    
     	
@@ -83,11 +87,66 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
     }
         
  
+    
+    /**
+     * Lista documentos borrados
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public List listarDocumentosBorrados(Date fecha) throws ExcepcionRDS{   
+    	Session session = this.getSession();
+    	try{
+    		// Obtenemos documentos borrados antes que la fecha que nos pasan.
+	    	Query query = session.createQuery("FROM Documento AS d WHERE d.borrado='S' and d.fecha < :fecha")
+	    	.setParameter("fecha", fecha );
+    		List result = query.list();
+            return result;            
+    	}catch(Exception ex){
+    		throw new EJBException("Error listando documentos borrados",ex);
+    	} finally {
+	        close(session);
+	    }     	
+    }
+    
+    /**
+     * Eliminar documento del RDS definitivamente. 
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public void eliminarDocumentoDefinitivamente(ReferenciaRDS refRds) throws ExcepcionRDS{    
+
+    	eliminarDocumentoImpl(refRds);
+    	// Realizamos log de la operacion
+        this.doLogOperacion(getUsuario(),ELIMINAR_DOCUMENTO,"eliminar documento " + refRds.getCodigo() );
+    }
+    
+    /**
+     * Lista documentos pendientes de consolidar
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public List listarDocumentosPendientesConsolidar() throws ExcepcionRDS{   
+    	Session session = this.getSession();
+    	try{
+    		// Buscamos documentos que no contengan uso de tipo persitente
+	    	Query query = session.createQuery("SELECT DISTINCT d FROM Documento AS d, Uso AS u WHERE u.documento.referenciaGestorDocumental is null and u.documento.codigo = d.codigo AND u.tipoUso.codigo IN ('ENV','RTE','EXP','RTS','BTE')");            
+            List result = query.list();
+            return result;            
+    	}catch(Exception ex){
+    		throw new EJBException("Error listando documentos pendientes de consolidar",ex);
+    	} finally {
+	        close(session);
+	    }     	
+    }
+    
     // ---------------------- Funciones auxiliares -------------------------------------------    
     
-    /* NO USED
+    /* 
      * Funcion que realiza el borrado de un documento en el RDS
-    
+     */
     private void eliminarDocumentoImpl(ReferenciaRDS refRds) throws ExcepcionRDS{
     	// Borramos documento
     	Session session = getSession();
@@ -100,12 +159,16 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
 	    	if (!documento.getClave().equals(refRds.getClave())){
 	    		throw new ExcepcionRDS("La clave no coincide");
 	    	}	
+	    	
+	    	// Borramos versiones de custodia
+	    	DelegateUtil.getVersionCustodiaDelegate().borrarVersionesDocumento(documento.getCodigo());
+	    	
 	    	// Obtenemos plugin almacenamiento
 	    	ls_plugin = documento.getUbicacion().getPluginAlmacenamiento();
 	    	ls_ubicacion =documento.getUbicacion().getCodigoUbicacion(); 
 	    	// Eliminamos documento
 	    	session.delete(documento);
-	    } catch (HibernateException he) {
+	    } catch (Exception he) {
 	        throw new EJBException(he);
 	    } finally {
 	        close(session);
@@ -116,11 +179,11 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
         	PluginAlmacenamientoRDS plugin = obtenerPluginAlmacenamiento(ls_plugin);
         	plugin.eliminarFichero(new Long(refRds.getCodigo()));
         }catch(Exception e){
-        	log.error("No se ha podido eliminar fichero en ubicación " + ls_ubicacion,e);
-        	throw new ExcepcionRDS("Error al guardar fichero",e);
+        	log.error("No se ha podido eliminar fichero "+refRds.getCodigo()+" en ubicación " + ls_ubicacion);
+        	throw new EJBException(e);
         }
     }
-     */
+     
     
     /**
      * Realiza baja lógica del documento estableciendo atributo
@@ -158,11 +221,11 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
      * Obtiene plugin almacenamiento
      * @param classNamePlugin
      * @return
-     
+     */ 
     private PluginAlmacenamientoRDS obtenerPluginAlmacenamiento(String classNamePlugin) throws Exception{
     	return PluginClassCache.getInstance().getPluginAlmacenamientoRDS(classNamePlugin);    	
     }
-    */
+    
  
     
     private void doLogOperacion(String idAplicacion,String idTipoOperacion,String mensaje)throws ExcepcionRDS  {    	

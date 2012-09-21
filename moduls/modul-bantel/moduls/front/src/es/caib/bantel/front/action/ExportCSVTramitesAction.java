@@ -5,11 +5,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.struts.Globals;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.util.MessageResources;
 
 /**
  * @struts.action
@@ -33,14 +31,7 @@ public class ExportCSVTramitesAction extends BaseAction
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception 
     {
-
-		MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));
-		
-		// Obtenemos lista de tramites
-		
-			
 		return mapping.findForward("success");
-		
     }
 	
 	

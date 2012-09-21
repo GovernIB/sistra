@@ -18,10 +18,9 @@ public interface PluginSmsIntf  extends PluginSistraIntf {
 	 * @param mensaje Mensaje SMS
 	 * @param inmediato Indica si el SMS debe enviarse inmediatamente. De esta forma se permite indicar prioridades en los mensajes
 	 * por si la pasarela de envíos tiene esta funcionalidad
-	 * @return Código de envío (interno de la pasarela de envíos)
 	 * @throws Exception En caso de error debe generar una excepcion
 	 */
-	public String enviarSMS(String cuentaSMS,String telefono,String mensaje,boolean inmediato) throws Exception;
+	public void enviarSMS(String idEnvio, String cuentaSMS,String telefono,String mensaje,boolean inmediato) throws Exception;
 	
 	/**
 	 * Consulta el estado de un envío

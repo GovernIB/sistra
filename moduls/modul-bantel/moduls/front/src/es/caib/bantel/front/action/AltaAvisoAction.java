@@ -1,17 +1,17 @@
 package es.caib.bantel.front.action;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleAvisoForm;
-import es.caib.bantel.front.util.Dominios;
 import es.caib.bantel.front.util.MensajesUtil;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
@@ -31,6 +31,8 @@ import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
  */
 public class AltaAvisoAction extends BaseAction
 {
+	protected static Log log = LogFactory.getLog(AltaAvisoAction.class);
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception 
     {
@@ -43,21 +45,30 @@ public class AltaAvisoAction extends BaseAction
 		request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,"3");
 		
 		try{
-			if(avisoForm.getClaveExpediente()!=null && !"".equals(avisoForm.getClaveExpediente())){
-				exp = ejb.consultaExpediente( new Long(avisoForm.getUnidadAdministrativa()), avisoForm.getIdentificadorExpediente(),avisoForm.getClaveExpediente());
-			}else{
-				exp = ejb.consultaExpediente( new Long(avisoForm.getUnidadAdministrativa()), avisoForm.getIdentificadorExpediente());
-			}
+			
+			// Recuperamos de sesion el expediente actual
+			String idExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY);
+			Long uniAdm = (Long) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY);
+			String claveExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY);
+			
+			// Recuperamos expediente
+			exp = ejb.consultaExpediente(uniAdm, idExpe,claveExpe);
+			
 			if(exp != null){
+				// Establecemos descripcion expediente e idioma
 				avisoForm.setDescripcionExpediente(exp.getDescripcion());
 				avisoForm.setIdioma(exp.getIdioma());
-				List unidades=Dominios.listarUnidadesAdministrativas();
-				request.setAttribute("unidades",unidades);
+				if (exp.getConfiguracionAvisos() != null && exp.getConfiguracionAvisos().getHabilitarAvisos() != null && 
+						exp.getConfiguracionAvisos().getHabilitarAvisos().booleanValue() && StringUtils.isNotBlank(exp.getConfiguracionAvisos().getAvisoSMS())) {
+					avisoForm.setPermitirSms("S");
+				}
 			}else{
-				return mapping.findForward("fail");
+				throw new Exception("No se ha encontrado expediente");
 			}
+			
 		}catch(Exception e){
-			String mensajeOk = MensajesUtil.getValue("error.aviso.Excepcion");
+			log.error("Excepcion alta aviso",e);
+			String mensajeOk = MensajesUtil.getValue("error.aviso.Excepcion") + ": " + e.getMessage();
 			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk);
 			return mapping.findForward("fail");
 		}

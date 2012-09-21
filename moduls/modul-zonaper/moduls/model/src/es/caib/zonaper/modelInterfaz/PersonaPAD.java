@@ -37,8 +37,9 @@ public class PersonaPAD implements Serializable{
 	private String telefonoMovil;
 	private String email;
 	private boolean habilitarAvisosExpediente=false;
-	
-	
+	private boolean habilitarDelegacion=false;
+	private boolean usuarioSeyconGeneradoAuto=false; // indica codigo generado automaticamente
+		
 	public String getApellido1() {
 		return apellido1;
 	}
@@ -92,6 +93,17 @@ public class PersonaPAD implements Serializable{
 			((getApellido1()!=null)?" " + getApellido1():"") + 
 			((getApellido2()!=null)?" " + getApellido2():"");
 	}
+	
+	public String getApellidosNombre() {
+		String apellidos = 
+			((getApellido1()!=null)? getApellido1():"") + 
+			((getApellido2()!=null)? " " + getApellido2():"");
+		if (apellidos.length() > 0){
+			apellidos = apellidos + ", ";
+		}
+		return apellidos + ((getNombre()!=null)?getNombre():""); 
+	}
+	
 	public String getEmail() {
 		return email;
 	}
@@ -140,4 +152,17 @@ public class PersonaPAD implements Serializable{
 	public void setTelefonoFijo(String telefonoFijo) {
 		this.telefonoFijo = telefonoFijo;
 	}
+	public boolean isHabilitarDelegacion() {
+		return habilitarDelegacion;
+	}
+	public void setHabilitarDelegacion(boolean habilitarDelegacion) {
+		this.habilitarDelegacion = habilitarDelegacion;
+	}
+	public boolean isUsuarioSeyconGeneradoAuto() {
+		return usuarioSeyconGeneradoAuto;
+	}
+	public void setUsuarioSeyconGeneradoAuto(boolean usuarioSeyconGeneradoAuto) {
+		this.usuarioSeyconGeneradoAuto = usuarioSeyconGeneradoAuto;
+	}
+	
 }

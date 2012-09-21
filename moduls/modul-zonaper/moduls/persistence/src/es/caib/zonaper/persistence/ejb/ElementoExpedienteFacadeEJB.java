@@ -1,11 +1,24 @@
 package es.caib.zonaper.persistence.ejb;
 
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
+
+import org.apache.commons.lang.StringUtils;
+
+import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.login.PluginLoginIntf;
+import es.caib.util.CredentialUtil;
+import es.caib.zonaper.model.CodigoElementoExpediente;
 import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.ElementoExpedienteItf;
 import es.caib.zonaper.model.Expediente;
@@ -27,7 +40,7 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 {
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"    
      */
 	public void ejbCreate() throws CreateException 
@@ -36,10 +49,10 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 	}
 		
 	/**
-	 * Acceso autenticado
+	 * Acceso autenticado. Solo accesible por usuario y delegados.
 	 * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public ElementoExpediente obtenerElementoExpedienteAutenticado( String tipoElemento,Long codigoElemento )
 	{	
@@ -53,10 +66,74 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 	}	
 	
 	/**
+	 * Acceso autenticado. Solo accesible por usuario y delegados.
+	 * 
+	 * Recupera lista de ids de expedientes asociadas a los elementos. 
+	 * Retorna Map con key=codigo elemento y value=id expediente asociado. Si un elemento no tiene asociado expediente no estará en la map.
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+	public Map obtenerIdsExpedienteElementos( List codigosElementos )
+	{	
+		Session session = getSession();
+        try 
+        {
+        	Map res = new HashMap();
+        	
+        	if (codigosElementos == null || codigosElementos.size() <= 0) {
+        		return res;
+        	}
+        	
+        	// Generamos where
+        	StringBuilder where = new StringBuilder(codigosElementos.size()); 
+        	for (int i=0;i<codigosElementos.size();i++) {
+        		if (i > 0) {
+        			where.append(" OR ");
+        		}
+        		where.append(" (e.tipoElemento = :tipo" + i + " AND e.codigoElemento = :codigo" + i + " ) " );        		
+        	}
+        	
+        	// Generamos query para obtener lista de ids de expediente
+			Query query = 
+        		session.createQuery("FROM ElementoExpediente e WHERE " + where.toString()  );
+			for (int i=0;i<codigosElementos.size();i++) {
+				CodigoElementoExpediente cee =  (CodigoElementoExpediente) codigosElementos.get(i);
+				query.setParameter("tipo" + i, cee.getTipo());
+				query.setParameter("codigo" + i, cee.getCodigo());
+			}
+			   
+			
+			// Ejecutamos query
+			List listaElem = query.list();
+			for (Iterator it = listaElem.iterator();it.hasNext();) {
+				ElementoExpediente ee = (ElementoExpediente) it.next();
+				res.put(new CodigoElementoExpediente(ee.getTipoElemento(), ee.getCodigoElemento()), ee.getExpediente().getCodigo());
+			}
+			
+        	// Devolvemos map
+			return res;
+        }
+        catch( HibernateException he )
+        {
+        	throw new EJBException( he );
+        }
+        catch( Exception exc )
+        {
+        	throw new EJBException( exc );
+        }
+        finally
+        {
+        	close( session );
+        }
+        
+	}	
+	
+	/**
 	 * Acceso anonimo
 	 * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public ElementoExpediente obtenerElementoExpedienteAnonimo( String tipoElemento,Long codigoElemento, String idPersistencia )
 	{
@@ -88,7 +165,7 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 	
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public ElementoExpedienteItf obtenerDetalleElementoExpedienteAutenticado(String tipo, Long codigo)
 	{
@@ -103,7 +180,7 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 	
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public ElementoExpedienteItf obtenerDetalleElementoExpedienteAnonimo(String tipo, Long codigo,String idPersistencia)
 	{
@@ -143,7 +220,7 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 	
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public ElementoExpedienteItf obtenerDetalleElementoExpedienteAutenticado(Long id)
 	{
@@ -167,7 +244,7 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 	
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public ElementoExpedienteItf obtenerDetalleElementoExpedienteAnonimo(Long id,String idPersistencia)
 	{
@@ -186,6 +263,29 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 		}catch (Exception ex){
 			throw new EJBException("Error obteniendo detalle del elemento expediente con codigo " + id,ex);
 		}
+	}
+	
+	/**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+	public void establecerAvisoElementoExpediente(Long id, String idAviso)
+	{
+		Session session = getSession();
+		try
+		{
+			ElementoExpediente elementoExpediente = ( ElementoExpediente ) session.load( ElementoExpediente.class, id );			
+			elementoExpediente.setCodigoAviso(idAviso);
+			session.update(elementoExpediente);
+		}
+		catch (HibernateException he) 
+		{   
+			throw new EJBException(he);
+	    } 
+		finally 
+		{
+	        close(session);
+	    }
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------
@@ -217,9 +317,19 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 			return null;
 		}
 		
-		// Comprobamos que el expediente pertenezca al usuario
-		if (!this.ctx.getCallerPrincipal().getName().equals(ee.getExpediente().getSeyconCiudadano())){
-			throw new Exception("El expediente no pertenece al usuario");
+		// Comprobamos que el expediente pertenezca al usuario o si es un delegado
+		Principal sp =this.ctx.getCallerPrincipal();
+		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
+		if (plgLogin.getMetodoAutenticacion(sp) == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO){
+    		throw new HibernateException("Acceso solo permitido para autenticado");
+    	}
+		if (!plgLogin.getNif(sp).equals(ee.getExpediente().getNifRepresentante())){
+			
+			// Si no es el usuario quien accede miramos si es un delegado
+        	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(ee.getExpediente().getNifRepresentante());
+        	if (StringUtils.isEmpty(permisos)){
+        		throw new Exception("El elememto de expediente " +  tipoElemento + " - " + codigoElemento + " no pertenece al usuario ni es delegado - usuario " + sp.getName());
+        	}
 		}
 		
 		return ee;

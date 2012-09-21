@@ -1,3 +1,4 @@
+@cas.enabled.comment.init@
 <security-constraint>
     <web-resource-collection>
         <web-resource-name>helpdesk</web-resource-name>
@@ -13,3 +14,4 @@
 <security-role>
     <role-name>@role.helpdesk@</role-name>
 </security-role>
+@cas.enabled.comment.end@

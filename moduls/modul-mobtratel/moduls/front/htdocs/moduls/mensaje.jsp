@@ -8,5 +8,5 @@
 <bean:define id="strAction" name="<%= Constants.MESSAGE_ACTION_KEY %>" type="java.lang.String"/>
 <bean:define id="mapActionParams" name="<%= Constants.MESSAGE_ACTION_PARAMS_KEY %>" type="java.util.Map"/>
 		<h2><bean:message key="header.titulo" /></h2>
-		<p class="centrado"><bean:write name="message" filter="false"/></p>
+		<p class="centrado"><bean:write name="<%=Constants.MENSAJE_KEY%>" filter="false"/></p>
 		<p class="tornarArrere"><strong><html:link action="<%= strAction %>" name="<%= Constants.MESSAGE_ACTION_PARAMS_KEY %>"><bean:message name="<%= Constants.MESSAGE_ACTION_LABEL_KEY %>"/></html:link></strong></p>

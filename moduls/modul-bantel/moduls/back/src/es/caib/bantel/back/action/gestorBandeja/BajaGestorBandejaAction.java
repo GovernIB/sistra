@@ -31,7 +31,7 @@ public class BajaGestorBandejaAction extends BaseAction{
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en BajaGestorBandeja");
+        log.debug("Entramos en BajaGestorBandeja");
         GestorBandejaDelegate gestorBandejaDelegate = DelegateUtil.getGestorBandejaDelegate();
 
         String idString = request.getParameter("codigo");

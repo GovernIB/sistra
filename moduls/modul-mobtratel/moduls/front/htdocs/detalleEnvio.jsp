@@ -2,6 +2,7 @@
 <%@ page import="es.caib.mobtratel.model.Envio"%>
 <%@ page import="es.caib.mobtratel.front.Constants" %>
 <%@ page import="java.util.Set"%>
+<%@ page import="es.caib.mobtratel.modelInterfaz.ConstantesMobtratel" %>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
@@ -41,27 +42,27 @@
 
 
 			<h2><bean:message key="detalleEnvio.datosEnvio"/></h2>
-		<p align="right"><html:link href="#" onclick="<%= "javascript:obrir('" + urlAyuda + "', 'Edicion', 540, 400);"%>"><img src="imgs/icones/ico_ayuda.gif" border="0"/><bean:message key="ayuda.enlace" /></html:link></p>
+		<p align="right"><html:link href="#" onclick="<%= \"javascript:obrir('\" + urlAyuda + \"', 'Edicion', 540, 400);\"%>"><img src="imgs/icones/ico_ayuda.gif" border="0"/><bean:message key="ayuda.enlace" /></html:link></p>
 			<div class="atencio">
 					<p>
 					<!--  Icono enviado / no enviado -->
-					<logic:equal name="envio" property="estado" value="<%=String.valueOf(Envio.CON_ERROR)%>">
+					<logic:equal name="envio" property="estado" value="<%=String.valueOf(ConstantesMobtratel.ESTADOENVIO_ERROR)%>">
 						<img src="imgs/icones/form_procesado_error.gif" title="<bean:message key="resultadoBusqueda.enviadoError"/>"/>
 						<strong><bean:message key="detalleEnvio.datosEnvio.estado"/>:</strong> <bean:message key="detalleEnvio.datosEnvio.enviadoError"/>
 					</logic:equal>
-					<logic:equal name="envio" property="estado" value="<%=String.valueOf(Envio.ENVIADO)%>">
+					<logic:equal name="envio" property="estado" value="<%=String.valueOf(ConstantesMobtratel.ESTADOENVIO_ENVIADO)%>">
 						<img src="imgs/icones/form_procesado_si.gif" title="<bean:message key="resultadoBusqueda.enviado"/>"/>
 						<strong><bean:message key="detalleEnvio.datosEnvio.estado"/>:</strong> <bean:message key="detalleEnvio.datosEnvio.enviado"/>
 					</logic:equal>
-					<logic:equal name="envio" property="estado" value="<%=String.valueOf(Envio.PENDIENTE_ENVIO)%>">
+					<logic:equal name="envio" property="estado" value="<%=String.valueOf(ConstantesMobtratel.ESTADOENVIO_PENDIENTE)%>">
 						<img src="imgs/icones/form_procesado_no.gif" title="<bean:message key="resultadoBusqueda.noEnviado"/>"/>
 						<strong><bean:message key="detalleEnvio.datosEnvio.estado"/>:</strong> <bean:message key="detalleEnvio.datosEnvio.noEnviado"/>
 					</logic:equal>
-					<logic:equal name="envio" property="estado" value="<%=String.valueOf(Envio.CANCELADO)%>">
+					<logic:equal name="envio" property="estado" value="<%=String.valueOf(ConstantesMobtratel.ESTADOENVIO_CANCELADO)%>">
 						<img src="imgs/icones/document_parat.gif" title="<bean:message key="resultadoBusqueda.cancelado"/>"/>
 						<strong><bean:message key="detalleEnvio.datosEnvio.estado"/>:</strong> <bean:message key="detalleEnvio.datosEnvio.cancelado"/>
 					</logic:equal>
-					<logic:equal name="envio" property="estado" value="<%=String.valueOf(Envio.PROCESANDOSE)%>">
+					<logic:equal name="envio" property="estado" value="<%=String.valueOf(ConstantesMobtratel.ESTADOENVIO_PROCESANDO)%>">
 						<img src="imgs/icones/documento_enviandose.gif" title="<bean:message key="resultadoBusqueda.enviandose"/>"/>
 						<strong><bean:message key="detalleEnvio.datosEnvio.estado"/>:</strong> <bean:message key="detalleEnvio.datosEnvio.enviandose"/>
 					</logic:equal>
@@ -70,8 +71,8 @@
 						<logic:equal name="permitirCambioEstado" value="S">
 						
 							<!--  Se prodra cancelar siempre que no este enviado o ya haya sido cancelado -->
-							<logic:notEqual name="envio" property="estado" value="<%=String.valueOf(Envio.ENVIADO)%>">							
-								<logic:notEqual name="envio" property="estado" value="<%=String.valueOf(Envio.CANCELADO)%>">							
+							<logic:notEqual name="envio" property="estado" value="<%=String.valueOf(ConstantesMobtratel.ESTADOENVIO_ENVIADO)%>">							
+								<logic:notEqual name="envio" property="estado" value="<%=String.valueOf(ConstantesMobtratel.ESTADOENVIO_CANCELADO)%>">							
 									<input type="button" value="<bean:message key="detalleEnvio.datosEnvio.cancelar"/>" onclick="<%= "javascript:document.location.href='" + urlCambioEstado + "'"  %>"/>
 								</logic:notEqual>
 							</logic:notEqual>

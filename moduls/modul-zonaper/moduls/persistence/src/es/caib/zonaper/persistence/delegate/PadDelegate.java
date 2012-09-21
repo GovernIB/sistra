@@ -10,6 +10,10 @@ import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
+import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
+import es.caib.zonaper.modelInterfaz.FiltroBusquedaExpedientePAD;
+import es.caib.zonaper.modelInterfaz.PaginaPAD;
+import es.caib.zonaper.modelInterfaz.ParametrosTramiteSubsanacionPAD;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.modelInterfaz.PreregistroPAD;
 import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
@@ -47,10 +51,26 @@ public class PadDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+		
+    public List obtenerTramitesPersistentesEntidadDelegada(String nifEntidad)throws DelegateException {
+        try {
+            return getFacade().obtenerTramitesPersistentesEntidadDelegada(nifEntidad);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
 	
 	public  String obtenerEstadoTramiteUsuario(String idPersistencia) throws DelegateException {
         try {
             return getFacade().obtenerEstadoTramiteUsuario(idPersistencia) ;
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+	
+	public String obtenerEstadoTramiteEntidadDelegada(String idPersistencia, String nifEntidad) throws DelegateException {
+        try {
+            return getFacade().obtenerEstadoTramiteEntidadDelegada(idPersistencia, nifEntidad) ;
         } catch (Exception e) {
             throw new DelegateException(e);
         }
@@ -188,12 +208,24 @@ public class PadDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
 	}
-	
+	/* NO SE USA
 	public PersonaPAD altaPersona( PersonaPAD personaPAD ) throws DelegateException
 	{
 		try
 		{
 			return getFacade().altaPersona( personaPAD );
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	*/
+	public void actualizarCodigoUsuario( String usuOld, String usuNew)  throws DelegateException
+	{
+		try
+		{
+			getFacade().actualizarCodigoUsuario(  usuOld, usuNew );
 		}
 		catch (Exception e) 
 		{
@@ -213,6 +245,155 @@ public class PadDelegate implements StatelessDelegate {
         }
 	}
 	
+	public void logRegistro(char tipo, String numeroRegistro, Date fechaRegistro, String error) throws DelegateException{
+		try{
+			getFacade().logRegistro(tipo,numeroRegistro,fechaRegistro,error);
+		}catch (Exception e){
+            throw new DelegateException(e);
+        }
+	}
+	
+	public void logRegistroExternoPreparado(ReferenciaRDS referenciaAsiento, Map referenciaAnexos, String identificadorPersistencia, int diasPersistencia) throws DelegateException{
+		try{
+			getFacade().logRegistroExternoPreparado(referenciaAsiento, referenciaAnexos, identificadorPersistencia, diasPersistencia);
+		}catch (Exception e){
+            throw new DelegateException(e);
+        }
+	}
+	
+	public boolean esDelegado() throws DelegateException	
+	{
+		try
+		{
+			return getFacade().esDelegado( );
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	public ParametrosTramiteSubsanacionPAD recuperaParametrosTramiteSubsanacion(String key) throws DelegateException	
+	{
+		try
+		{
+			return getFacade().recuperaParametrosTramiteSubsanacion(key );
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	/**
+     * Obtiene permisos de delegacion sobre la entidad del usuario autenticado
+     * 
+     * @param nif nif/cif entidad
+     * @return permisos entidad
+     * 
+     */
+	public String obtenerPermisosDelegacion(String nifEntidad)throws DelegateException	
+	{
+		try
+		{
+			return getFacade().obtenerPermisosDelegacion( nifEntidad);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	/**
+     * Obtiene permisos de delegacion sobre la entidad del nif indicado
+     * 
+     * @param nif nif/cif entidad
+     * @param nif nif usuario
+     * @return permisos entidad
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+	public String obtenerPermisosDelegacion(String nifEntidad, String nifUsuario) throws DelegateException	
+	{
+		try
+		{
+			return getFacade().obtenerPermisosDelegacion( nifEntidad, nifUsuario);			
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	/**
+     * Indica si la entidad tiene habilitada la delegacion
+     * 
+     * @param nif nif/cif entidad
+     * @return boolean
+     * 
+     */
+	public boolean habilitadaDelegacion(String nifEntidad) throws DelegateException	
+	{
+		try
+		{
+			return getFacade().habilitadaDelegacion( nifEntidad);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	/**
+     * Indica que se ha remitido el tramite para la firma de documentos
+     * 
+     * @param idPersistencia
+     * 
+     */
+	public void avisarPendienteFirmarDocumentos(String idPersistencia) throws DelegateException	
+	{
+		try
+		{
+			getFacade().avisarPendienteFirmarDocumentos( idPersistencia);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	
+	/**
+     * Indica que se ha remitido el tramite para su presentacion
+     * 
+     * @param idPersistencia
+     * 
+     */
+	public void avisarPendientePresentacionTramite(String idPersistencia) throws DelegateException	
+	{
+		try
+		{
+			getFacade().avisarPendientePresentacionTramite( idPersistencia);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	public PaginaPAD busquedaPaginadaExpedientesGestor(FiltroBusquedaExpedientePAD filtro, int numPagina, int longPagina) throws DelegateException	
+	{
+		try
+		{
+		 return	getFacade().busquedaPaginadaExpedientesGestor( filtro, numPagina, longPagina);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

@@ -50,6 +50,11 @@ public class ConstantesBTE {
 	 * registro presencial (SOLO PARA PREENVIOS)
 	 */
 	public final static String CONFIRMACIONPREREGISTRO_AUTOMATICA_REGISTRO = "X";
+	/**
+	 * Marca que hay entre un error y otro de una integración
+	 */
+	public final static String MARCA_ERROR = "\n -- Error en el aviso de entradas -- \n";
+	
 	
 			
 }

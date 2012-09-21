@@ -25,6 +25,7 @@ import es.caib.redose.model.PlantillaIdioma;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.persistence.util.UtilRDS;
 import es.caib.util.StringUtil;
+import es.indra.util.pdf.UtilPDF;
 
 /**
  * Generador de PDFs basado en Jasper Reports
@@ -38,7 +39,7 @@ public class FormateadorPdfJasper implements FormateadorDocumento{
 	public DocumentoRDS formatearDocumento(DocumentoRDS documento, PlantillaIdioma plantilla,List usos) throws Exception {
 		try{
 			// Obtenemos plantilla
-			_log.debug("Preparamos plantilla para jasper reports");			
+			_log.debug("Preparamos plantilla para jasper reports");
 			
 			// Comprobamos si tenemos un jrxml o un zip
 			List files;
@@ -91,6 +92,12 @@ public class FormateadorPdfJasper implements FormateadorDocumento{
 			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReportMain, params, xml);		
 			byte[] pdf=JasperExportManager.exportReportToPdf(jasperPrint);
 			
+			// Establecemos permisos a solo impresion
+			ByteArrayOutputStream bos = new ByteArrayOutputStream(pdf.length);
+			UtilPDF.establecerSoloImpresion(bos, new ByteArrayInputStream(pdf));			
+			pdf = bos.toByteArray();
+			bos.close();
+			
 			
 			// Retornamos documento formateado
 			_log.debug("PDF generado con jasper reports, devolvemos resultado");
@@ -102,7 +109,7 @@ public class FormateadorPdfJasper implements FormateadorDocumento{
 			throw new Exception("Excepcion generando plantilla basada en jasper reports",ex);
 		}
 	}
-
+	
 	
 	private List extractFilesFromZip(byte[] zipData) throws Exception{
 		ByteArrayInputStream bis = null;
@@ -135,12 +142,12 @@ public class FormateadorPdfJasper implements FormateadorDocumento{
 			return files;
 		}catch(Exception ex){
 			throw new Exception("Excepcion al extraer ficheros del zip de la plantilla jasper",ex);
-		} finally{			
+		}finally{
 			try{bis.close();}catch(Exception ex){}
 			try{zipinputstream.close();}catch(Exception ex){}			
-		}		
+		}
 	}
-		
+	
 	
 	private class FileJasper{
 		
@@ -158,7 +165,7 @@ public class FormateadorPdfJasper implements FormateadorDocumento{
 		}
 		public void setFileName(String fileName) {
 			this.fileName = fileName;
-}
+		}
 		
 		
 	}

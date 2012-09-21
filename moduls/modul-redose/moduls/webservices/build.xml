@@ -3,6 +3,8 @@
 	
 	<property file="${basedir}/build.properties"/>
 	<property name="home.dir" location="${basedir}/../.."/>
+	<property file="${home.dir}/config.properties"/>
+	<property file="${home.dir}/../../config.properties"/>
 	<property name="output.dir" location="${home.dir}/output"/>
 	<property name="cxf.home" location ="${home.dir}/../../lib/cxf"/>
 	<property name="etc.dir" location="${basedir}/etc/web"/>
@@ -14,6 +16,8 @@
 	<property name="plugins" value="${home.dir}/../../product/lib" />
 	<property name="wsdl.dir" location="${basedir}/wsdl"/>
 	<property name="web.product" location="${output.dir}/moduls"/>
+	<property name="distribucion.dir" location="${home.dir}/../../product"/>
+		
 	<path id="cxf.classpath">
       <fileset dir="${cxf.home}">
          <include name="*.jar"/>
@@ -29,9 +33,12 @@
 	  	 <include name="sistra-plugins.jar" />
 	  </fileset>
       <fileset dir="${web.product}">
-      	<include name="redose-model.jar" />
-        <include name="redose-persistence-client.jar" />
-	 	<include name="redose-persistence.jar" />
+      	<include name="2-redose-model.jar" />
+        <include name="2-redose-persistence-client.jar" />
+	 	<include name="2-redose-persistence.jar" />
+      </fileset>
+		<fileset dir="${distribucion.dir}/lib"> 
+		   <include name="sistra-utilWs.jar"/>
       </fileset>
     </path>
 	
@@ -42,8 +49,17 @@
 	<target name="doc" depends="web.javadoc" description="Realiza las tareas de documentación "/>
 	<target name="main" depends="war" description="Construeye el war"/>
 
-	<target name="war">
-		<cxfwar filename="${modul.name}.war"/>
+	<target name="war" depends="checkJbossVersion">
+		<cxfwar filename="2-${modul.name}.war"/>
+	</target>
+	
+	<target name="checkJbossVersion">
+		<condition property="isJboss5">
+			<equals arg1="${jboss.version}" arg2="5.0"/>
+		</condition>
+		<condition property="isJboss3">
+			<equals arg1="${jboss.version}" arg2="3.2"/>
+		</condition>
 	</target>
 	
     <macrodef name="cxfwar">
@@ -56,7 +72,7 @@
         	<delete dir="${build.classes.dir}" />
         	<mkdir dir="${build.classes.dir}"/>
         	    	
-        	<antcall target="compile"/>
+         	<antcall target="compile"/>
            
         	<delete file="@{dir}/@{filename}" />
             <war destfile="@{dir}/@{filename}" webxml="@{webxml}">
@@ -67,12 +83,17 @@
                 </webinf>
             	<webinf dir="${etc.dir}">
 	               	<include name="*cxf*.xml"/>
+            		<include if="isJboss5" name="jboss-classloading.xml"/>
                 </webinf>
+            	<lib dir="${lib}">
+            		<include if="isJboss5" name="stax*.jar"/>
+            	</lib>
             	<lib dir="${cxf.home}">
     				<include name="*.jar"/>
   				</lib>            	
             	<lib dir="${web.product}">
             		<include name="*.jar"/>
+            		<exclude name="2-redose-persistence.jar"/>
       	  		</lib>                
             </war>
         </sequential>

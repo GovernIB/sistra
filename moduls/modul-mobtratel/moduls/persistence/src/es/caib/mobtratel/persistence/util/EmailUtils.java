@@ -17,6 +17,10 @@ import org.apache.commons.logging.LogFactory;
 import es.caib.mobtratel.model.Constantes;
 import es.caib.mobtratel.model.Envio;
 import es.caib.mobtratel.model.MensajeEmail;
+import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.email.EstadoEnvio;
+import es.caib.sistra.plugins.email.PluginEmailIntf;
+import es.caib.util.StringUtil;
 import es.caib.xml.ConstantesXML;
 
 
@@ -31,17 +35,25 @@ public class EmailUtils
 	
 	private static EmailUtils instance = null;
 	
+	private static PluginEmailIntf pluginEmail = null;
+	
 	private Log log = LogFactory.getLog( EmailUtils.class  );
 	
 	protected EmailUtils(){
 		
 	}
 	
-	public static EmailUtils getInstance(){
+	public static EmailUtils getInstance()  throws Exception{
 		
 		if(instance == null)
 		{
 			instance = new EmailUtils();
+			try {
+			 pluginEmail = PluginFactory.getInstance().getPluginEnvioEmail();
+			} catch (Exception ex) {
+				// Capturamos excepcion por si no esta implementado este plugin
+				pluginEmail = null;
+			}
 		}
 		return instance;
 	}
@@ -90,7 +102,7 @@ public class EmailUtils
     	}
     }    
 */
-    public boolean enviar(MensajeEmail me, Envio envio, List destinatarios)  throws Exception{
+    public boolean enviar(String prefijoEmail, MensajeEmail me, Envio envio, List destinatarios)  throws Exception{
     	try {    		
     		InitialContext jndiContext = new InitialContext();
     		Session mailSession = (Session)jndiContext.lookup("java:/" + envio.getCuenta().getEmail());
@@ -99,7 +111,13 @@ public class EmailUtils
 
     		InternetAddress[] direcciones = getDirecciones(destinatarios);
     		msg.setRecipients(javax.mail.Message.RecipientType.BCC, direcciones);
-    		msg.setSubject(me.getTitulo());
+    		
+    		// Si se verifica envio añadimos prefijo para poder tracear el envio
+    		String prefijo = "";
+    		if (me.isVerificarEnvio()) {    			
+    			prefijo =  " - " + StringUtil.replace(prefijoEmail, "?", me.getCodigo().toString()); 
+    		}
+    		msg.setSubject(me.getTitulo() + prefijo);
     		
 	    	byte[] mensaje = me.getMensaje();
 	    	
@@ -114,7 +132,7 @@ public class EmailUtils
 	    	msg.setContent(contenido, "text/html");
     		msg.setHeader("X-Mailer", "JavaMailer");
     		msg.setSentDate(new java.util.Date());
-    		log.debug("Vamos a enviar Email: " + msg.getContent());
+    		// log.debug("Vamos a enviar Email: " + msg.getContent());
     		try {
                 Transport.send(msg);
     		} catch (Exception ex) { 
@@ -152,5 +170,22 @@ public class EmailUtils
     	}
     	return direcciones;
     }
+    
+    /**
+	 * Verifica envio de mensaje
+	 * @param ms Mensaje
+	 * @throws Exception
+	 */
+	public EstadoEnvio verificarEnvioMensaje(MensajeEmail ms) throws Exception{
+		log.debug("Verificando envio mensaje a traves del plugin");
+		
+		if (pluginEmail == null) {
+			throw new Exception("No se puede verificar envio mensajes ya que no se ha especificado un plugin de email");
+		}
+		
+		EstadoEnvio estado = pluginEmail.consultarEstadoEnvio(ms.getCodigo().toString());
+		log.debug("Mensaje verificado a traves del plugin: estado = " + estado.getEstado());
+		return estado;
+    }   
 }	
 

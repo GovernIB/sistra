@@ -26,7 +26,6 @@ import es.caib.mobtratel.persistence.delegate.LimiteDestinatariosException;
 import es.caib.mobtratel.persistence.delegate.MobTraTelDelegate;
 import es.caib.mobtratel.persistence.delegate.MobilidadException;
 import es.caib.mobtratel.persistence.delegate.PermisoException;
-import es.caib.mobtratel.persistence.delegate.ConfiguracionDelegate;
 
 /**
  * @struts.action
@@ -61,7 +60,7 @@ public class EditarEnvioEmailAction extends BaseAction
 		mee.setDestinatarios(destinatarios);
 		mee.setTitulo(formulario.getTitulo());
 		mee.setTexto(formulario.getMensaje());
-		
+		mee.setVerificarEnvio("S".equals(formulario.getConfirmarEnvio()));
 		mensaje.addEmail(mee);
 		
 		SimpleDateFormat df = new SimpleDateFormat(Constants.FORMATO_FECHAS);

@@ -1,41 +1,34 @@
 package es.caib.bantel.front.action;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.Globals;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.util.MessageResources;
+import org.jfree.util.Log;
 
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleNotificacionForm;
 import es.caib.bantel.front.util.DocumentoFirmar;
 import es.caib.bantel.front.util.DocumentosUtil;
-import es.caib.bantel.front.util.Dominios;
-import es.caib.bantel.front.util.MensajesUtil;
-import es.caib.bantel.front.util.ValorOrganismo;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
-import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
-import es.caib.regtel.persistence.delegate.RegistroTelematicoDelegate;
+import es.caib.xml.ConstantesXML;
+import es.caib.xml.documentoExternoNotificacion.factoria.FactoriaObjetosXMLDocumentoExternoNotificacion;
+import es.caib.xml.documentoExternoNotificacion.factoria.ServicioDocumentoExternoNotificacionXML;
+import es.caib.xml.documentoExternoNotificacion.factoria.impl.DocumentoExternoNotificacion;
 
 /**
  * @struts.action
- *  name="detalleNotificacionForm"
+ *  name="uploadNotificacionForm"
  *  path="/altaDocumentoNotificacion"
- *  validate="true"
- *  input = ".altaAviso"
- *  
- * @struts.action-forward
- *  name="success" path=".altaNotificacion"
- *
- * @struts.action-forward
- *  name="fail" path=".error"
+ *  validate="false"
  */
 public class AltaDocumentoNotificacionAction extends BaseAction
 {
@@ -44,95 +37,158 @@ public class AltaDocumentoNotificacionAction extends BaseAction
     {
 		DetalleNotificacionForm notificacionForm = (DetalleNotificacionForm)form;
 		request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,"3");
+		
+		
+		// Recuperamos de sesion el expediente actual
+		String idExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY);
+		Long uniAdm = (Long) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY);
+		String claveExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY);
+		
+		// Obtenemos documentos almacenados en sesion, sino existe los creamos
 		ArrayList documentos;
-		try{
- 			if (notificacionForm.getDocumentoAnexoOficio() != null && StringUtils.isNotEmpty(notificacionForm.getDocumentoAnexoOficio().getFileName()) &&  StringUtils.isNotEmpty(notificacionForm.getTituloAnexoOficio())){
- 				if(DocumentosUtil.extensionCorrecta(notificacionForm.getDocumentoAnexoOficio().getFileName())){
-	 				//if(DocumentosUtil.noExisteDocumento(notificacionForm.getTituloAnexoOficio(),request,"documentosAltaNotificacion")){
-	 					DocumentoFirmar documento = new DocumentoFirmar();
-	 					documento.setTitulo(notificacionForm.getTituloAnexoOficio());
-	 					documento.setContenidoFichero(notificacionForm.getDocumentoAnexoOficio().getFileData());
-	 					documento.setNombre(notificacionForm.getDocumentoAnexoOficio().getFileName());
-						documento.setRutaFichero(DocumentosUtil.formatearFichero(notificacionForm.getRutaFitxer()));
-	
-						//Guardo un documento con la extension que tiene y me devueve el documento con el contenido en pdf
-						DocumentoRDS documentRDS = null;
-						try{
-							documentRDS = DocumentosUtil.crearDocumentoRDS(documento,notificacionForm.getUnidadAdministrativa());
-						}catch(Exception e){
-							carregarLlistes(request, notificacionForm.getCodigoProvincia());
-							ActionErrors errors = new ActionErrors();
-		 					errors.add("altaNotificacion", new ActionError("error.aviso.guardar.fichero"));
-		 					saveErrors(request,errors);
-		 					return mapping.findForward( "success" );
-						}
-						documento.setTitulo(documentRDS.getTitulo());
-						documento.setContenidoFichero(null);
-						documento.setNombre(documentRDS.getNombreFichero());
-						documento.setClaveRDS(documentRDS.getReferenciaRDS().getClave());
-						documento.setCodigoRDS(documentRDS.getReferenciaRDS().getCodigo());
-						documento.setModeloRDS(documentRDS.getModelo());
-						documento.setVersionRDS(documentRDS.getVersion());
-						documento.setVistoPDF(true);
-						documento.setFirmar(false);
-						if(request.getSession().getAttribute("documentosAltaNotificacion") == null){
-							documentos = new ArrayList();
-						}else{
-							documentos = (ArrayList)request.getSession().getAttribute("documentosAltaNotificacion");
-						}
-						documentos.add(documento);
-						request.getSession().setAttribute("documentosAltaNotificacion", documentos);
-	 				//}
-					notificacionForm.setDocumentoAnexoOficio(null);
-					notificacionForm.setTituloAnexoOficio("");
- 				}else{
- 					ActionErrors errors = new ActionErrors();
- 					errors.add("altaNotificacion", new ActionError("error.aviso.extensiones.fichero"));
- 					saveErrors(request,errors);
- 				}
-			}
-			carregarLlistes(request, notificacionForm.getCodigoProvincia());
-		}catch(Exception e){
-			e.printStackTrace();
-			String mensajeOk = MensajesUtil.getValue("error.excepcion.general");
-			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk);
-			return mapping.findForward("fail");
+		if(request.getSession().getAttribute("documentosAltaNotificacion") == null){
+			documentos = new ArrayList();
+			request.getSession().setAttribute("documentosAltaNotificacion", documentos);
+		}else{
+			documentos = (ArrayList)request.getSession().getAttribute("documentosAltaNotificacion");
 		}
-		return mapping.findForward( "success" );
-    }
-	
-	private void carregarLlistes(HttpServletRequest request, String provincia) throws Exception{
-		List unidades=Dominios.listarUnidadesAdministrativas();
-		request.setAttribute("unidades",unidades);
-		List paises = Dominios.listarPaises();
-		request.setAttribute("paises",paises);
-		List provincias = Dominios.listarProvincias();
-		request.setAttribute("provincias",provincias);
-		List municipios = new ArrayList();
-		if(StringUtils.isNotEmpty(provincia)){
-			municipios = Dominios.listarLocalidadesProvincia(provincia);
+
+ 
+		// Si se produce un error se indicara el literal a mostrar
+		DocumentoFirmar documento = null;
+		try{			
+			if ("URL".equals(notificacionForm.getTipoDocumento())) {
+				documento = altaDocumentoUrl(notificacionForm, uniAdm);
+			} else {
+				documento = altaDocumentoFichero(notificacionForm, uniAdm);
+			}						
+		}catch(Exception ex){
+			Log.error("Error creando documento notificacion",ex);				
 		}
-		request.setAttribute("municipios",municipios);
-		RegistroTelematicoDelegate dlgRte = DelegateRegtelUtil.getRegistroTelematicoDelegate();
-        List organosDestino = dlgRte.obtenerServiciosDestino();
-        request.setAttribute( "listaorganosdestino", regtelToBantel(organosDestino));
-        List oficinasRegistro = dlgRte.obtenerOficinasRegistro();
-        request.setAttribute( "listaoficinasregistro", regtelToBantel(oficinasRegistro));
-        List tiposAsunto = dlgRte.obtenerTiposAsunto();
-        request.setAttribute("tiposAsunto", regtelToBantel(tiposAsunto));
+		
+		// Reseteamos valores
+		notificacionForm.setTipoDocumento(null);
+		notificacionForm.setDocumentoAnexoOficio(null);
+		notificacionForm.setTituloAnexoOficio("");
+		notificacionForm.setUrlAnexoOficio(null);
+			
+		
+		// Si ha ido correcto añadimos a lista documentos
+		// Si se ha producido error mostramos error
+		String funcion;
+		if (documento == null) {
+			MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));
+			String msgError = resources.getMessage( getLocale( request ), "error.excepcion.general");
+ 			funcion="parent.errorFileUploaded(\""+msgError+"\")";
+		} else {
+			documentos.add(documento);
+			funcion = "parent.fileUploaded()";
+		}
+		
+		// Devolvemos respuesta
+		response.setContentType("text/html");		    
+		PrintWriter pw = response.getWriter();
+		pw.println("<html>");
+		pw.println("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
+		pw.println("<script type=\"text/javascript\">");
+		pw.println("<!--");
+		pw.println(funcion);
+		pw.println("-->");
+		pw.println("</script>");
+		pw.println("</head>");
+		pw.println("<body>");
+		pw.println("</body>");
+		pw.println("</html>");
+		return null;
 	}
-	
-	private List regtelToBantel(List lista){
-		List listaBantel = new ArrayList();
-		if(lista != null){
-			for(int i=0;i<lista.size();i++){
-				ValorOrganismo vo = new ValorOrganismo();
-				vo.setCodigo(((es.caib.regtel.model.ValorOrganismo)lista.get(i)).getCodigo());
-				vo.setDescripcion(((es.caib.regtel.model.ValorOrganismo)lista.get(i)).getDescripcion());
-				listaBantel.add(vo);
-			}
+
+	private DocumentoFirmar altaDocumentoUrl(DetalleNotificacionForm notificacionForm,
+			Long uniAdm) throws Exception {
+		
+		if (StringUtils.isEmpty(notificacionForm.getTituloAnexoOficio()) ||
+			StringUtils.isEmpty(notificacionForm.getUrlAnexoOficio())){
+			Log.error("Faltan datos referencia");
+			return null;
 		}
-		return listaBantel;
+		
+		if (!notificacionForm.getUrlAnexoOficio().toLowerCase().startsWith("http://") && 
+				!notificacionForm.getUrlAnexoOficio().toLowerCase().startsWith("https://")) {
+			notificacionForm.setUrlAnexoOficio("http://" + notificacionForm.getUrlAnexoOficio());
+		}
+			
+		// Generamos xml		
+		FactoriaObjetosXMLDocumentoExternoNotificacion factoria = ServicioDocumentoExternoNotificacionXML.crearFactoriaObjetosXML();
+		factoria.setEncoding("UTF-8");
+		DocumentoExternoNotificacion documentoExternoNotificacion = factoria.crearDocumentoExternoNotificacion();		
+		factoria.setIndentacion(true);
+		documentoExternoNotificacion.setNombre(notificacionForm.getTituloAnexoOficio());
+		documentoExternoNotificacion.setUrl(notificacionForm.getUrlAnexoOficio());
+		String xml = factoria.guardarDocumentoExternoNotificacion(documentoExternoNotificacion);
+		
+		// Creamos documento
+		DocumentoFirmar documento = new DocumentoFirmar();
+		documento.setTipoDocumento("URL");		
+		documento.setUrl(notificacionForm.getUrlAnexoOficio());
+		documento.setTitulo(notificacionForm.getTituloAnexoOficio());
+		documento.setContenidoFichero(xml.getBytes(ConstantesXML.ENCODING));
+		documento.setNombre("enlace.xml");
+		documento.setRutaFichero(null);
+
+		// Guardo un documento con la extension que tiene y me devueve el documento con el contenido en pdf
+		DocumentoRDS documentRDS = null;
+		documentRDS = DocumentosUtil.crearDocumentoRDS(documento,uniAdm.toString());
+		
+		documento.setTitulo(documentRDS.getTitulo());
+		documento.setContenidoFichero(null);
+		documento.setNombre(documentRDS.getNombreFichero());
+		documento.setClaveRDS(documentRDS.getReferenciaRDS().getClave());
+		documento.setCodigoRDS(documentRDS.getReferenciaRDS().getCodigo());
+		documento.setModeloRDS(documentRDS.getModelo());
+		documento.setVersionRDS(documentRDS.getVersion());
+		documento.setVistoPDF(false);
+		documento.setFirmar(false);
+		
+		return documento;
+	}
+
+	private DocumentoFirmar altaDocumentoFichero(
+			DetalleNotificacionForm notificacionForm,
+			Long uniAdm) throws Exception {
+		
+		if (notificacionForm.getDocumentoAnexoOficio() == null ||
+				StringUtils.isEmpty(notificacionForm.getDocumentoAnexoOficio().getFileName()) ||
+				StringUtils.isEmpty(notificacionForm.getTituloAnexoOficio())){
+			Log.error("Faltan datos fichero");
+			return null;
+		}
+			
+		if(!DocumentosUtil.extensionCorrecta(notificacionForm.getDocumentoAnexoOficio().getFileName())){
+			Log.error("Extension no es correcta");
+			return null;
+		}	
+			
+		DocumentoFirmar documento = new DocumentoFirmar();
+		documento.setTipoDocumento("FICHERO");
+		documento.setTitulo(notificacionForm.getTituloAnexoOficio());
+		documento.setContenidoFichero(notificacionForm.getDocumentoAnexoOficio().getFileData());
+		documento.setNombre(notificacionForm.getDocumentoAnexoOficio().getFileName());
+		documento.setRutaFichero(DocumentosUtil.formatearFichero(notificacionForm.getRutaFitxer()));
+
+		//Guardo un documento con la extension que tiene y me devueve el documento con el contenido en pdf
+		DocumentoRDS documentRDS = null;
+		documentRDS = DocumentosUtil.crearDocumentoRDS(documento,uniAdm.toString());
+		
+		documento.setTitulo(documentRDS.getTitulo());
+		documento.setContenidoFichero(null);
+		documento.setNombre(documentRDS.getNombreFichero());
+		documento.setClaveRDS(documentRDS.getReferenciaRDS().getClave());
+		documento.setCodigoRDS(documentRDS.getReferenciaRDS().getCodigo());
+		documento.setModeloRDS(documentRDS.getModelo());
+		documento.setVersionRDS(documentRDS.getVersion());
+		documento.setVistoPDF(true);
+		documento.setFirmar(false);
+		
+		return documento;
 	}
 	
 }

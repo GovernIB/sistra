@@ -36,36 +36,45 @@ public final class DocumentosUtil {
 	 * @return un documento RDS que ya estara pasa a pdf
 	 * @throws ExcepcionPAD
 	 */
-	public static DocumentoRDS crearDocumentoRDS(DocumentoExpedientePAD documento, String unidadAdministrativa) throws ExcepcionPAD
+	public static DocumentoRDS crearDocumentoRDS(DocumentoFirmar documento, String unidadAdministrativa) throws ExcepcionPAD
 	{		
 		try {
 			RdsDelegate rdsDelegate = DelegateRDSUtil.getRdsDelegate();
 					
 			DocumentoRDS docRDS = new DocumentoRDS();
 			docRDS.setDatosFichero( documento.getContenidoFichero() );
-			docRDS.setEstructurado( documento.isEstructurado() );
 			docRDS.setFechaRDS( new Date() );
 			docRDS.setUnidadAdministrativa( new Long(unidadAdministrativa));
 			docRDS.setTitulo( documento.getTitulo() );
 			docRDS.setNombreFichero( documento.getNombre() );
 			docRDS.setExtensionFichero( getExtension( documento.getNombre() ) );
 		
-			// Se establece un modelo por defecto para todos aquellos documentos que no tienen modelo en la pad
-			if ( documento.getModeloRDS() == null )
+			// Segun el tipo le asignamos un modelo
+			TransformacionRDS transf = null;
+			if ( documento.getTipoDocumento().equals("FICHERO"))
 			{
-				docRDS.setModelo( ConstantesRDS.MODELO_NOTIFICACION  ); 
+				docRDS.setModelo( ConstantesRDS.MODELO_NOTIFICACION  );
+				docRDS.setEstructurado( false );
 				docRDS.setVersion( 1 );
+				
+				transf = new TransformacionRDS();
+				transf.setBarcodePDF(true);
+				transf.setConvertToPDF(true);
 			}
 			else
 			{
-				docRDS.setVersion( documento.getVersionRDS() );
-				docRDS.setModelo( documento.getModeloRDS() );
+				docRDS.setModelo( ConstantesRDS.MODELO_NOTIFICACION_EXTERNO  );
+				docRDS.setEstructurado( true );
+				docRDS.setVersion( 1 );
 			}
-			ReferenciaRDS refRDS;		
-			TransformacionRDS transf = new TransformacionRDS();
-			transf.setBarcodePDF(true);
-			transf.setConvertToPDF(true);
-			refRDS = rdsDelegate.insertarDocumento( docRDS, transf );
+			
+			// Creamos documento
+			ReferenciaRDS refRDS;
+			if (transf != null) {
+				refRDS = rdsDelegate.insertarDocumento( docRDS, transf );
+			} else {
+				refRDS = rdsDelegate.insertarDocumento( docRDS );
+			}
 			docRDS.setReferenciaRDS( refRDS );
 			docRDS = rdsDelegate.consultarDocumento(refRDS,true);
 			return docRDS;

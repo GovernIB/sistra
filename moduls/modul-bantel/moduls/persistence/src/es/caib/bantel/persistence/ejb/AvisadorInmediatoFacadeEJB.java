@@ -1,6 +1,8 @@
 package es.caib.bantel.persistence.ejb;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -17,14 +19,22 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import es.caib.bantel.model.DocumentoBandeja;
 import es.caib.bantel.model.ReferenciaTramiteBandeja;
+import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.model.TramiteBandeja;
+import es.caib.bantel.modelInterfaz.ConstantesBTE;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.delegate.TramiteBandejaDelegate;
+import es.caib.bantel.persistence.delegate.ProcedimientoDelegate;
 import es.caib.bantel.persistence.plugins.PluginBackOffice;
 import es.caib.bantel.persistence.plugins.UsernamePasswordCallbackHandler;
 import es.caib.bantel.persistence.util.CacheProcesamiento;
 import es.caib.bantel.persistence.util.StringUtil;
+import es.caib.redose.modelInterfaz.ReferenciaRDS;
+import es.caib.redose.persistence.delegate.DelegateRDSUtil;
+import es.caib.redose.persistence.delegate.RdsDelegate;
+import es.caib.xml.ConstantesXML;
 
 /**
  * 
@@ -32,6 +42,10 @@ import es.caib.bantel.persistence.util.StringUtil;
  * 
  * Esta forma de aviso intentará avisar al BackOffice una vez. En caso de error o caída de la cola el aviso se 
  * realizará mediante el proceso de background de avisos. 
+ * 
+ * 
+ * Las entradas a avisar deben ser del mismo trámite y procedimiento.
+ * 
  * 
  * @ejb.bean
  * 	name="bantel/persistence/AvisadorInmediatoFacade"
@@ -76,8 +90,7 @@ public class AvisadorInmediatoFacadeEJB implements MessageDrivenBean, MessageLis
 		// Entradas que formaran parte del aviso (subconjunto de las indicadas en el mensaje por limite de numero de entradas y cache de duplicidad)
 		List entradasParaAvisar = new ArrayList();
 		List referenciasParaAvisar = new ArrayList();
-		
-		
+		TramiteBandeja entradaBandeja=null;					
 		try{					
 			// Realizamos login JAAS con usuario para proceso automatico
 			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
@@ -94,10 +107,11 @@ public class AvisadorInmediatoFacadeEJB implements MessageDrivenBean, MessageLis
 			String numeroEntradas [] =  StringUtil.stringToNumeroEntradas(sNumeroEntradas);		
 			
 			// Comprobamos que las entradas existen (puede ser que no haya terminado transaccion para avisos inmediatos)
-			// y que son del mismo trámite
+			// y que son del mismo procedimiento
 			TramiteBandejaDelegate delegate = DelegateUtil.getTramiteBandejaDelegate();
+			RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
 			String idTramite="";
-			TramiteBandeja tramite=null;					
+			String idProcedimiento="";
 			if (numeroEntradas != null){
 					int count = 0;
 					for (int i=0;i<numeroEntradas.length;i++){
@@ -118,30 +132,34 @@ public class AvisadorInmediatoFacadeEJB implements MessageDrivenBean, MessageLis
 						entradasParaAvisar.add(numeroEntradas[i]);
 						
 						// Obtenemos tramite con información destino BackOffice					
-						tramite = delegate.obtenerTramiteBandeja(numeroEntradas[i]);
-						if (tramite == null){
+						entradaBandeja = delegate.obtenerTramiteBandeja(numeroEntradas[i]);
+						if (entradaBandeja == null){
 							log.debug("Entrada " + numeroEntradas[i] + " no existe en BBDD");						
 							return;				
 						}
 						
 						// Indicamos que la entrada se avisara en este aviso
 						ReferenciaTramiteBandeja ref = new ReferenciaTramiteBandeja();
-						ref.setNumeroEntrada(tramite.getNumeroEntrada());
-						ref.setClaveAcceso(tramite.getClaveAcceso());
+						ref.setNumeroEntrada(entradaBandeja.getNumeroEntrada());
+						ref.setClaveAcceso(entradaBandeja.getClaveAcceso());
 						referenciasParaAvisar.add(ref);
 						
 						
-						// Comprobamos que el trámite sea el mismo para todas las entradas
+						// Comprobamos que el procedimiento y trámite sea el mismo para todas las entradas
 						if (i==0) {
-							idTramite = tramite.getTramite().getIdentificador();
+							idProcedimiento = entradaBandeja.getProcedimiento().getIdentificador();
+							idTramite = entradaBandeja.getIdentificadorTramite();
 						}else{
-							if (!idTramite.equals(tramite.getTramite().getIdentificador())){
+							if (!idProcedimiento.equals(entradaBandeja.getProcedimiento().getIdentificador())){
+								throw new Exception("No se pueden realizar un aviso con entradas de distinto procedimiento");
+							}
+							if (!idTramite.equals(entradaBandeja.getIdentificadorTramite())){
 								throw new Exception("No se pueden realizar un aviso con entradas de distinto trámite");
 							}
 						}
 						
 						// Comprobamos que no este procesada
-						if (tramite.getProcesada() == 'N'){
+						if (entradaBandeja.getProcesada() == 'N'){
 							count++; // incrementamos num de entradas en este aviso							
 						}else{
 							// Si ha sido procesada no entrara dentro del proceso
@@ -149,20 +167,52 @@ public class AvisadorInmediatoFacadeEJB implements MessageDrivenBean, MessageLis
 							entradasParaAvisar.remove(numeroEntradas[i]);
 							referenciasParaAvisar.remove(ref);
 						}
-					}				
+						
+						//	Si el RDS esta integrado en un Gestor Documental para procesarse la entrada
+						//  todos sus documentos deben estar consolidados
+						try{
+							// Asiento
+							rds.consolidarDocumento(new ReferenciaRDS(entradaBandeja.getCodigoRdsAsiento().longValue(),entradaBandeja.getClaveRdsAsiento()) );
+							// Justificante
+							rds.consolidarDocumento(new ReferenciaRDS(entradaBandeja.getCodigoRdsJustificante().longValue(),entradaBandeja.getClaveRdsJustificante()) );
+							// Datos propios + docs
+							for (Iterator it=entradaBandeja.getDocumentos().iterator();it.hasNext();){
+								DocumentoBandeja db = (DocumentoBandeja) it.next();
+								if (db.getRdsCodigo() != null){
+									rds.consolidarDocumento(new ReferenciaRDS(db.getRdsCodigo().longValue(),db.getRdsClave()) ); 
+								}
+							}
+						}catch(Exception ex){
+							// Error al consolidar documentos de la entrada, no entrara dentro del proceso
+							log.debug("Aviso entradas: No se han podido consolidar los documentos para la entrada: " + entradaBandeja.getNumeroEntrada() + ". Se intentara en el proximo reintento.");
+							CacheProcesamiento.borrar(numeroEntradas[i]);
+							entradasParaAvisar.remove(numeroEntradas[i]);
+							referenciasParaAvisar.remove(ref);
+						}
+						
+					}		
+					
+					// Avisamos a BackOffice de las nuevas entradas
+					log.debug("Aviso entradas: Entradas a avisar: " +  ToStringBuilder.reflectionToString(entradasParaAvisar));					
+					if (entradasParaAvisar != null && entradasParaAvisar.size()>0){			
+						PluginBackOffice bo = new PluginBackOffice(entradaBandeja.getProcedimiento());									
+						bo.avisarEntradas(referenciasParaAvisar,userAuto,passAuto);				
+					}
 			}
 			
-			// Avisamos a BackOffice de las nuevas entradas
-			log.debug("Aviso entradas: Entradas a avisar: " +  ToStringBuilder.reflectionToString(entradasParaAvisar));					
-			if (entradasParaAvisar != null && entradasParaAvisar.size()>0){			
-				PluginBackOffice bo = new PluginBackOffice(tramite.getTramite());									
-				bo.avisarEntradas(referenciasParaAvisar,userAuto,passAuto);				
-			}
+			
+			
 			log.debug("Aviso entradas realizado");	
 			
 		}catch (Exception ex){
 			// Informamos al log			
-			log.error("No se puede enviar aviso de nuevas entradas al BackOffice: " + ex.getMessage(),ex);
+			log.debug("No se puede enviar aviso de nuevas entradas al BackOffice: " + ex.getMessage(),ex);
+			
+			// Actualizamos error último aviso
+			if(entradaBandeja != null){
+				actualizarErrorUltimoAviso(entradaBandeja, ex);
+			}
+			
 		}finally{
 			
 			// Nos aseguramos de que todas las entradas incluidas en el aviso se borren de cache
@@ -173,7 +223,41 @@ public class AvisadorInmediatoFacadeEJB implements MessageDrivenBean, MessageLis
 				try{lc.logout();}catch(Exception exl){}
 			}
 		}
+	}
+
+	private void actualizarErrorUltimoAviso(TramiteBandeja tramite, Exception ex) {
+		try {
+			ProcedimientoDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
+			Procedimiento tra = tramite.getProcedimiento();
+			String error = ConstantesBTE.MARCA_ERROR +
+							es.caib.util.StringUtil.fechaACadena(new Date(),es.caib.util.StringUtil.FORMATO_TIMESTAMP) + ": " + 
+							es.caib.util.StringUtil.stackTraceToString(ex);
+			
+			/* MODIFICACION: SOLO MOSTRAMOS ULTIMO ERROR DE CONEXION, ANTES 2 ULTIMOS
+			String errorAntiguo = reconstruirError(tra.getErrores());
+			error = error + errorAntiguo;
+			*/
+			
+			tramiteDelegate.errorConexion(tra.getIdentificador(),error.getBytes(ConstantesXML.ENCODING));
+		} catch (Exception e) {
+			log.debug("error al guardar la excepción en el tramite.",e);
+		}		
 	}	
 	
-
+	private static String  reconstruirError(byte[] erroresByteArray) throws Exception{
+		String errores = "";
+		if(erroresByteArray != null){
+			try {
+				errores = new String( erroresByteArray, ConstantesXML.ENCODING );
+				if(errores.lastIndexOf(ConstantesBTE.MARCA_ERROR) != -1 && errores.lastIndexOf(ConstantesBTE.MARCA_ERROR) != 0){
+					//quiere decir que hay mas de un error en el String, tendremos que quitar el ultimo 
+					//que es el mas antiguo.
+					errores = errores.substring(0,errores.lastIndexOf(ConstantesBTE.MARCA_ERROR));
+				}
+			} catch (Exception e) {
+				throw e;
+			} 
+		}
+		return errores;
+	}
 }

@@ -11,7 +11,7 @@ public class GestorBandeja implements Serializable
 	private String seyconID;
 	private String email;
 	private Long intervaloInforme;
-	private Set tramitesGestionados = new HashSet(0);
+	private Set procedimientosGestionados = new HashSet(0);
 	private Date ultimoAviso;
 	private char permitirCambioEstado = 'N';
 	private char permitirCambioEstadoMasivo = 'N';
@@ -33,13 +33,13 @@ public class GestorBandeja implements Serializable
 	{
 		this.seyconID = seyconID;
 	}
-	public Set getTramitesGestionados()
+	public Set getProcedimientosGestionados()
 	{
-		return tramitesGestionados;
+		return procedimientosGestionados;
 	}
-	public void setTramitesGestionados(Set tramitesGestionados)
+	public void setProcedimientosGestionados(Set tramitesGestionados)
 	{
-		this.tramitesGestionados = tramitesGestionados;
+		this.procedimientosGestionados = tramitesGestionados;
 	}
 	public Long getIntervaloInforme() {
 		return intervaloInforme;
@@ -49,28 +49,28 @@ public class GestorBandeja implements Serializable
 	}
 	
 	// FUNCIONES PARA GESTIONAR TRAMITES GESTIONADOS
-	public void addTramiteGestionado( Tramite tramite )
+	public void addTramiteGestionado( Procedimiento tramite )
 	{	
 		tramite.getGestores().add(this);		
-		this.tramitesGestionados.add( tramite );				
+		this.procedimientosGestionados.add( tramite );				
 	}
 	
-	public void removeTramiteGestionado( Tramite tramite )
+	public void removeTramiteGestionado( Procedimiento tramite )
 	{
 		tramite.getGestores().remove(this);
-		this.tramitesGestionados.remove( tramite );		
+		this.procedimientosGestionados.remove( tramite );		
 	}
 	
 	public void removeTramitesGestionados()
 	{		
 		// Eliminamos referencias en Tramite
-		for (Iterator it=this.tramitesGestionados.iterator();it.hasNext();){
-			 Tramite tramite = (Tramite) it.next();
+		for (Iterator it=this.procedimientosGestionados.iterator();it.hasNext();){
+			 Procedimiento tramite = (Procedimiento) it.next();
 			 tramite.getGestores().remove(this);
 		}
 		
 		// Eliminamos tramites gestionados		
-		this.tramitesGestionados.clear();		
+		this.procedimientosGestionados.clear();		
 	}
 	public Date getUltimoAviso() {
 		return ultimoAviso;

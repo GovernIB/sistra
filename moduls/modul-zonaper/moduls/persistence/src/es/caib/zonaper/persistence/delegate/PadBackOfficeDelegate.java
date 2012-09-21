@@ -6,7 +6,8 @@ import java.util.Hashtable;
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
-import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
+import es.caib.zonaper.modelInterfaz.ConfiguracionAvisosExpedientePAD;
+import es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo;
 import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.persistence.intf.PadBackOfficeFacade;
@@ -70,6 +71,66 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 		try
 		{
 			getFacade().altaEvento( unidadAdministrativa, identificadorExpediente, claveExpediente, evento );
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+
+	public boolean existeZonaPersonalUsuario( String nifUsuario ) throws DelegateException	
+	{
+		try
+		{
+			return getFacade().existeZonaPersonalUsuario( nifUsuario);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	public String altaZonaPersonalUsuario( String nif, String nombre, String apellido1, String apellido2)  throws DelegateException	
+	{
+		try
+		{
+			return getFacade().altaZonaPersonalUsuario( nif, nombre, apellido1, apellido2) ;
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+		
+	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String numeroRegistro) throws DelegateException	
+	{
+		try
+		{
+			return getFacade().obtenerDetalleAcuseRecibo( numeroRegistro);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	public void modificarAvisosExpediente( long unidadAdministrativa, String identificadorExpediente, String claveExpediente, ConfiguracionAvisosExpedientePAD configuracionAvisos) throws DelegateException
+	{
+		try
+		{
+			getFacade().modificarAvisosExpediente( unidadAdministrativa, identificadorExpediente, claveExpediente, configuracionAvisos );
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
+	public void bajaExpediente( long unidadAdministrativa, String identificadorExpediente , String claveExpediente)   throws DelegateException	
+	{
+		try
+		{
+			getFacade().bajaExpediente( unidadAdministrativa, identificadorExpediente , claveExpediente);
 		}
 		catch( Exception e )
 		{

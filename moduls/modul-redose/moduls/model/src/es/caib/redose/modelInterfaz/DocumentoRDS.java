@@ -71,11 +71,11 @@ public class DocumentoRDS  implements java.io.Serializable {
 	 */	
 	private Date fechaRDS; 
 	/**
-	 * Indica si el documento es estructurado (XML). Depende del modelo del documento.
+	 * Indica si el documento es estructurado (XML). Este dato es de solo lectura y depende del modelo del documento.
 	 */
 	private boolean estructurado; 
 	/**
-	 * Hash del fichero calculado por el RDS. Este dato es calculado por el RDS.
+	 * Hash del fichero calculado por el RDS. Este dato es de solo lectura y es calculado por el RDS.
 	 */
 	private String hashFichero;
 	/**
@@ -84,20 +84,31 @@ public class DocumentoRDS  implements java.io.Serializable {
 	 */
 	private String plantilla=null;
 	/**
-	 * En caso de ser un documento RDS formateado indica su url de verificación (en caso de tenerla)
+	 * En caso de ser un documento RDS formateado indica su url de verificación (en caso de tenerla). Este dato es de solo lectura y es calculado por el RDS.
 	 */	
 	private String urlVerificacion=null;
-	
+	/**
+	 * Para documentos estructurados indica el idioma para formatear el documento
+	 */
+	private String idioma;
+	/**
+	 * En caso de que el documento este consolidado en un gestor documental, se indica la referencia en el gestor documental. Este dato es de solo lectura y es establecido por el RDS.
+	 */
+	private String referenciaGestorDocumental;
+	/**
+     * En caso de que se haya guardado en custodia, indicara el codigo del documento en custodia
+     */
+	private String codigoDocumentoCustodia;
 		
 	// Getters / Setters
 	/**
-	 * Indica si el documento es estructurado (XML). Depende del modelo del documento.
+	 * Indica si el documento es estructurado (XML).Este dato es establecido por el RDS según el modelo del documento.
 	 */
 	public boolean isEstructurado() {
 		return estructurado;
 	}
 	/**
-	 * Indica si el documento es estructurado (XML). Este dato es informado según el modelo del documento.
+	 * Indica si el documento es estructurado (XML). Este dato es establecido por el RDS según el modelo del documento.
 	 * @param estructurado
 	 */
 	public void setEstructurado(boolean estructurado) {
@@ -315,16 +326,60 @@ public class DocumentoRDS  implements java.io.Serializable {
 		this.plantilla = plantilla;
 	}
 	/**
-	 * En caso de ser un documento RDS formateado indica su url de verificación (en caso de tenerla)
+	 * En caso de ser un documento RDS formateado indica su url de verificación (en caso de tenerla). Este dato es establecido por el RDS.
 	 */	
 	public String getUrlVerificacion() {
 		return urlVerificacion;
 	}
 	/**
-	 * En caso de ser un documento RDS formateado indica su url de verificación (en caso de tenerla)
+	 * En caso de ser un documento RDS formateado indica su url de verificación (en caso de tenerla).  Este dato es establecido por el RDS.
 	 */	
 	public void setUrlVerificacion(String urlVerificacion) {
 		this.urlVerificacion = urlVerificacion;
+	}	
+	/**
+	 * Para documentos estructurados indica el idioma para formatear el documento
+	 *
+	 * @return Idioma (es,ca)
+	 */
+	public String getIdioma() {
+		return idioma;
+	}
+	/**
+	 * Para documentos estructurados indica el idioma para formatear el documento
+	 *
+	 * @param idioma Idioma (es,ca)
+	 */
+	public void setIdioma(String idioma) {
+		this.idioma = idioma;
+	}
+	/**
+	 * En caso de que el documento este consolidado en un gestor documental, se indica la referencia en el gestor documental. Este dato es de solo lectura y es establecido por el RDS.
+	 * @return Referencia del documento en el gestor documental
+	 */
+	public String getReferenciaGestorDocumental() {
+		return referenciaGestorDocumental;
+	}
+	/**
+	 * En caso de que el documento este consolidado en un gestor documental, se indica la referencia en el gestor documental. Este dato es de solo lectura y es establecido por el RDS.
+	 * @param referenciaGestorDocumental Referencia del documento en el gestor documental
+	 */
+	public void setReferenciaGestorDocumental(String referenciaGestorDocumental) {
+		this.referenciaGestorDocumental = referenciaGestorDocumental;
+	}
+	/**
+     * En caso de que se haya guardado en custodia, indicara el codigo del documento en custodia
+     * @return Referencia del documento en custodia
+     */
+    public String getCodigoDocumentoCustodia() {
+		return codigoDocumentoCustodia;
+	}
+    /**
+     * En caso de que se haya guardado en custodia, indicara el codigo del documento en custodia
+     * @param codigoDocumentoCustodia Referencia del documento en custodia
+     */
+    public void setCodigoDocumentoCustodia(String codigoDocumentoCustodia) {
+		this.codigoDocumentoCustodia = codigoDocumentoCustodia;
 	}	
 	
 }

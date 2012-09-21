@@ -44,7 +44,7 @@ public class EditarGestorBandejaAction extends BaseAction{
 
         
     	request.setAttribute( "idReadOnly", new Boolean( true ) );
-    	log.info("Entramos en EditarGestorBandeja");
+    	log.debug("Entramos en EditarGestorBandeja");
 
         GestorBandejaDelegate gestorBandejaDelegate = DelegateUtil.getGestorBandejaDelegate();
         GestorBandejaForm gestorBandejaForm = (GestorBandejaForm) form;
@@ -52,15 +52,15 @@ public class EditarGestorBandejaAction extends BaseAction{
         GestorBandeja gestorBandeja = (GestorBandeja) gestorBandejaForm.getValues();
 
         if (isCancelled(request)) {
-            log.info("isCancelled");
+            log.debug("isCancelled");
             return mapping.findForward("cancel");
         }
         
         if (isAlta(request) || isModificacion(request)) {
-            log.info("isAlta || isModificacio");
+            log.debug("isAlta || isModificacio");
             gestorBandejaDelegate.grabarGestorBandeja( gestorBandeja, gestorBandejaForm.getTramites() );
                         
-            log.info("Creat/Actualitzat " + gestorBandeja.getSeyconID());
+            log.debug("Creat/Actualitzat " + gestorBandeja.getSeyconID());
             guardarGestorBandeja(mapping, request, gestorBandeja.getSeyconID());            
 
             return mapping.findForward("success");

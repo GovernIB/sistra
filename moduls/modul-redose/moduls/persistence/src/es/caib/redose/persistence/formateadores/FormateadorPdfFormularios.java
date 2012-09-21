@@ -29,6 +29,8 @@ public class FormateadorPdfFormularios implements FormateadorDocumento{
 	
 	private Map datosIniciales = new HashMap(); // Permite establecer datos en el map que se utiliza para establecer los datos en el PDF
 	
+	private boolean soloLectura = true; // Establecemos una variable para que si se hereda se pueda modificar si se deja el formulario a solo lectura. 
+	
 	/**
 	 * Genera PDF a partir Xpath
 	 */
@@ -125,7 +127,9 @@ public class FormateadorPdfFormularios implements FormateadorDocumento{
     	    	
 		// Creamos pdf a partir plantilla y establecemos valores
 		PDFDocumentTemplate pdf = new PDFDocumentTemplate(plantilla.getArchivo().getDatos());
-		pdf.establecerSoloImpresion();
+		if (isSoloLectura()) {
+			pdf.establecerSoloImpresion();
+		}
 		pdf.ponerValor(datos);
 		
 		// Devolvemos pdf generado
@@ -152,6 +156,22 @@ public class FormateadorPdfFormularios implements FormateadorDocumento{
 	 */
 	protected void addDato(String referenciaCampo,String valor){
 		datosIniciales.put(referenciaCampo,valor);
+	}
+
+	/**
+	 * Indica si se dejara el PDF como solo lectura.
+	 * @return
+	 */
+	protected boolean isSoloLectura() {
+		return soloLectura;
+	}
+
+	/**
+	 * Indica si se dejara el PDF como solo lectura.
+	 * @return
+	 */
+	protected void setSoloLectura(boolean soloLectura) {
+		this.soloLectura = soloLectura;
 	}
 
 		

@@ -2,11 +2,13 @@ package es.caib.mobtratel.persistence.ejb;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -14,14 +16,20 @@ import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
 import javax.naming.InitialContext;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import es.caib.mobtratel.model.Constantes;
 import es.caib.mobtratel.model.Cuenta;
 import es.caib.mobtratel.model.Envio;
 import es.caib.mobtratel.model.MensajeEmail;
 import es.caib.mobtratel.model.MensajeSms;
 import es.caib.mobtratel.model.Permiso;
+import es.caib.mobtratel.modelInterfaz.ConstantesMobtratel;
+import es.caib.mobtratel.modelInterfaz.EstadoMensajeEnvio;
+import es.caib.mobtratel.modelInterfaz.EstadoMensajeEnvioEmail;
+import es.caib.mobtratel.modelInterfaz.EstadoMensajeEnvioSms;
 import es.caib.mobtratel.modelInterfaz.MensajeEnvio;
 import es.caib.mobtratel.modelInterfaz.MensajeEnvioEmail;
 import es.caib.mobtratel.modelInterfaz.MensajeEnvioSms;
@@ -36,6 +44,8 @@ import es.caib.mobtratel.persistence.delegate.MobilidadException;
 import es.caib.mobtratel.persistence.delegate.PermisoDelegate;
 import es.caib.mobtratel.persistence.delegate.PermisoException;
 import es.caib.mobtratel.persistence.util.MobUtils;
+import es.caib.sistra.plugins.email.ConstantesEmail;
+import es.caib.sistra.plugins.sms.ConstantesSMS;
 import es.caib.xml.ConstantesXML;
 
 
@@ -104,7 +114,7 @@ public abstract class MobTraTelFacadeEJB implements SessionBean
 		String erroresFormato = "";
 		try {
 			Envio envio = new Envio();
-			envio.setEstado(Envio.PENDIENTE_ENVIO);
+			envio.setEstado(ConstantesMobtratel.ESTADOENVIO_PENDIENTE);
 			envio.setUsuarioSeycon(ctx.getCallerPrincipal().getName());
 			// Comprobamos la cuenta
 			Cuenta cuenta = null;
@@ -177,9 +187,15 @@ public abstract class MobTraTelFacadeEJB implements SessionBean
 				{
 					throw new LimiteDestinatariosException(new Error("Se ha superado el límite de destinatarios por mensaje Email."));
 				}
-				me.setEstado(MensajeEmail.PENDIENTE_ENVIO);
+				me.setEstado(ConstantesMobtratel.ESTADOENVIO_PENDIENTE);
 				me.setMensaje(mee.getTexto().getBytes(ConstantesXML.ENCODING));
 				me.setTitulo(mee.getTitulo());
+				
+				if (me.isVerificarEnvio() && mee.getDestinatarios().length > 0) {
+					throw new LimiteDestinatariosException(new Error("Verificar envío solo disponible para un único destinatario."));
+				}				
+				me.setVerificarEnvio(mee.isVerificarEnvio());
+				
 				envio.addEmail(me);
 			}
 
@@ -195,12 +211,18 @@ public abstract class MobTraTelFacadeEJB implements SessionBean
 				{
 					throw new LimiteDestinatariosException(new Error("Se ha superado el límite de destinatarios por mensaje SMS."));
 				}
-				ms.setEstado(MensajeEmail.PENDIENTE_ENVIO);
+				ms.setEstado(ConstantesMobtratel.ESTADOENVIO_PENDIENTE);
 				if(mes.getTexto().length() > utils.getMaxCaracteres().intValue())
 				{
 					throw new MaxCaracteresSMSException(new Error("Se ha superado el límite de caracteres por mensaje SMS."));
 				}
 				ms.setMensaje(mes.getTexto().getBytes(ConstantesXML.ENCODING));
+				
+				if (ms.isVerificarEnvio() && mes.getDestinatarios().length > 0) {
+					throw new LimiteDestinatariosException(new Error("Verificar envío solo disponible para un único destinatario."));
+				}				
+				ms.setVerificarEnvio(mes.isVerificarEnvio());
+				
 				envio.addSms(ms);
 			}
 			
@@ -227,6 +249,89 @@ public abstract class MobTraTelFacadeEJB implements SessionBean
 		return codigo.toString();
 	}
 
+	
+	/**
+	 * Comprueba el estado de un envio.
+	 * 
+	 * @throws DelegateException
+	 * @return Devuelve el codigo del Envio. 
+	 * @ejb.interface-method
+     * @ejb.permission role-name="${role.gestor},${role.auto}"
+     */
+	public EstadoMensajeEnvio estadoMensaje(String idMensaje) throws DelegateException
+	{
+		try {
+			EnvioDelegate ed = DelegateUtil.getEnvioDelegate();
+			Envio envio = ed.obtenerEnvio(Long.valueOf(idMensaje));
+			EstadoMensajeEnvio em = new EstadoMensajeEnvio();
+			em.setEstado(envio.getEstado());
+			em.setFechaEnvio(envio.getFechaEnvio());
+			em.setFechaCaducidad(envio.getFechaCaducidad());
+			em.setFechaProgramacionEnvio(envio.getFechaProgramacionEnvio());
+			em.setInmediato(envio.isInmediato());
+					
+			if (envio.getEmails() != null && envio.getEmails().size() > 0) {
+				em.setEstadoEmails(new ArrayList());
+				for (Iterator it = envio.getEmails().iterator(); it.hasNext();) {
+					MensajeEmail mensEmail = (MensajeEmail) it.next();
+					EstadoMensajeEnvioEmail estadoMensEmail = new EstadoMensajeEnvioEmail();
+					estadoMensEmail.setEstado(mensEmail.getEstado());
+					estadoMensEmail.setFechaInicioEnvio(mensEmail.getFechaInicioEnvio());
+					estadoMensEmail.setFechaFinEnvio(mensEmail.getFechaFinEnvio());
+					estadoMensEmail.setVerificacionEnvio(mensEmail.isVerificarEnvio());	
+					if (StringUtils.isNotBlank(mensEmail.getEstadoVerificarEnvio())) {
+						if ( ConstantesEmail.ESTADO_ENVIADO.equals(mensEmail.getEstadoVerificarEnvio())) {
+							estadoMensEmail.setEstadoVerificacionEnvio(ConstantesMobtratel.CONFIRMACION_OK);
+						} else if ( ConstantesEmail.ESTADO_NO_ENVIADO.equals(mensEmail.getEstadoVerificarEnvio())) {
+							estadoMensEmail.setEstadoVerificacionEnvio(ConstantesMobtratel.CONFIRMACION_KO);
+							estadoMensEmail.setErrorVerificacionEnvio(mensEmail.getErrorVerificarEnvio());
+						} else {
+							estadoMensEmail.setEstadoVerificacionEnvio(ConstantesMobtratel.CONFIRMACION_PENDIENTE);
+						}
+					}
+					estadoMensEmail.setDestinatarios(new String(mensEmail.getDestinatarios(),ConstantesXML.ENCODING).split(Constantes.SEPARADOR_DESTINATARIOS));
+					if (mensEmail.getDestinatariosEnviados() != null) {
+						estadoMensEmail.setDestinatariosEnviados(new String(mensEmail.getDestinatariosEnviados(),ConstantesXML.ENCODING).split(Constantes.SEPARADOR_DESTINATARIOS));
+					}	
+					em.getEstadoEmails().add(estadoMensEmail);
+				}
+			}
+			
+			if (envio.getSmss() != null && envio.getSmss().size() > 0) {
+				em.setEstadoSmss(new ArrayList());
+				for (Iterator it = envio.getSmss().iterator(); it.hasNext();) {
+					MensajeSms mensSms = (MensajeSms) it.next();
+					EstadoMensajeEnvioSms estadoMensSms = new EstadoMensajeEnvioSms();
+					estadoMensSms.setEstado(mensSms.getEstado());
+					estadoMensSms.setFechaInicioEnvio(mensSms.getFechaInicioEnvio());
+					estadoMensSms.setFechaFinEnvio(mensSms.getFechaFinEnvio());
+					estadoMensSms.setVerificacionEnvio(mensSms.isVerificarEnvio());		
+					if (StringUtils.isNotBlank(mensSms.getEstadoVerificarEnvio())) {
+						if ( ConstantesSMS.ESTADO_ENVIADO.equals(mensSms.getEstadoVerificarEnvio())) {
+							estadoMensSms.setEstadoVerificacionEnvio(ConstantesMobtratel.CONFIRMACION_OK);
+						} else if ( ConstantesSMS.ESTADO_NO_ENVIADO.equals(mensSms.getEstadoVerificarEnvio())) {
+							estadoMensSms.setEstadoVerificacionEnvio(ConstantesMobtratel.CONFIRMACION_KO);
+							estadoMensSms.setErrorVerificacionEnvio(mensSms.getErrorVerificarEnvio());
+						} else {
+							estadoMensSms.setEstadoVerificacionEnvio(ConstantesMobtratel.CONFIRMACION_PENDIENTE);
+						}
+					}										
+					estadoMensSms.setDestinatarios(new String(mensSms.getDestinatarios(),ConstantesXML.ENCODING).split(Constantes.SEPARADOR_DESTINATARIOS));
+					if (mensSms.getDestinatariosEnviados() != null) {
+						estadoMensSms.setDestinatariosEnviados(new String(mensSms.getDestinatariosEnviados(),ConstantesXML.ENCODING).split(Constantes.SEPARADOR_DESTINATARIOS));
+					}			
+					em.getEstadoSmss().add(estadoMensSms);
+				}
+			}
+			
+			return em;
+		} catch (Exception ex) {
+			log.error("Excepcion obteniendo estado mensaje: " + idMensaje + ". Error: " + ex.getMessage(), ex);
+			throw new DelegateException(ex);
+		}
+		
+	
+	}
 	
 	/**
 	 * Comprueba si el usuario que realiza el envío tiene permiso sobre la cuenta

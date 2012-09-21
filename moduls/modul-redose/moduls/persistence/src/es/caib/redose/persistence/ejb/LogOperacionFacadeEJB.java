@@ -31,7 +31,8 @@ public abstract class LogOperacionFacadeEJB extends HibernateEJB {
 
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
@@ -40,7 +41,8 @@ public abstract class LogOperacionFacadeEJB extends HibernateEJB {
 	  
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public LogOperacion obtenerLogOperacion(Long id) {
         Session session = getSession();
@@ -58,7 +60,8 @@ public abstract class LogOperacionFacadeEJB extends HibernateEJB {
               
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long grabarLogOperacion(LogOperacion obj) {        
     	Session session = getSession();
@@ -75,7 +78,8 @@ public abstract class LogOperacionFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public List listarLogOperaciones(Date startDate, Date endDate, String idUsuario, String idTipoOperacion) {
         Session session = getSession();
@@ -106,7 +110,8 @@ public abstract class LogOperacionFacadeEJB extends HibernateEJB {
         
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarLogOperacion(Long id) {
         Session session = getSession();
@@ -122,7 +127,8 @@ public abstract class LogOperacionFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarLogOperaciones(Date startDate, Date endDate, String idAplicacion, String idTipoOperacion) {
         
@@ -149,7 +155,8 @@ public abstract class LogOperacionFacadeEJB extends HibernateEJB {
 	 * Realiza búsqueda paginada del log
 	 * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}" 
+     * @ejb.permission role-name="${role.admin}" 
+     * @ejb.permission role-name="${role.operador}"
      */
 	public Page busquedaPaginada(int pagina, int longitudPagina )
 	{

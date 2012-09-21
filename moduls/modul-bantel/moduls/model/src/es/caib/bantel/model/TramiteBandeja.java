@@ -15,9 +15,11 @@ public class TramiteBandeja implements java.io.Serializable {
      private Timestamp fecha;
      private char tipo;
      private char procesada;
+     private Date fechaInicioProcesamiento;
      private String resultadoProcesamiento;
      private Date fechaProcesamiento;
-     private Tramite tramite;
+     private Procedimiento procedimiento;
+     private String identificadorTramite;
      private int versionTramite;
      private Long unidadAdministrativa;
      private char nivelAutenticacion;     
@@ -35,6 +37,8 @@ public class TramiteBandeja implements java.io.Serializable {
      private String usuarioNombre;
      private String representadoNif;
      private String representadoNombre;
+   	 private String delegadoNif;
+ 	 private String delegadoNombre;
      private String idioma;
      private String tipoConfirmacionPreregistro;
      // Opciones de aviso movilidad
@@ -44,6 +48,10 @@ public class TramiteBandeja implements java.io.Serializable {
   	// Opciones de notificacion telematica
      private String habilitarNotificacionTelematica;
      private char firmada;
+    // Tramite subsanacion
+ 	private String subsanacionExpedienteId;
+ 	private Long subsanacionExpedienteUA;
+ 	
      
      private Set documentos = new HashSet(0);     
      
@@ -261,15 +269,7 @@ public class TramiteBandeja implements java.io.Serializable {
 
 	public void setNumeroPreregistro(String numeroPreregistro) {
 		this.numeroPreregistro = numeroPreregistro;
-	}
-
-	public Tramite getTramite() {
-		return tramite;
-	}
-
-	public void setTramite(Tramite tramite) {
-		this.tramite = tramite;
-	}
+	}	
 
 	public Long getUnidadAdministrativa() {
 		return unidadAdministrativa;
@@ -351,6 +351,63 @@ public class TramiteBandeja implements java.io.Serializable {
 	public void setClaveAcceso(String claveAcceso) {
 		this.claveAcceso = claveAcceso;
 	}
+
+	public String getDelegadoNif() {
+		return delegadoNif;
+	}
+
+	public void setDelegadoNif(String delegadoNif) {
+		this.delegadoNif = delegadoNif;
+	}
+
+	public String getDelegadoNombre() {
+		return delegadoNombre;
+	}
+
+	public void setDelegadoNombre(String delegadoNombre) {
+		this.delegadoNombre = delegadoNombre;
+	}
+
+	public String getSubsanacionExpedienteId() {
+		return subsanacionExpedienteId;
+	}
+
+	public void setSubsanacionExpedienteId(String subsanacionExpedienteId) {
+		this.subsanacionExpedienteId = subsanacionExpedienteId;
+	}
+
+	public Long getSubsanacionExpedienteUA() {
+		return subsanacionExpedienteUA;
+	}
+
+	public void setSubsanacionExpedienteUA(Long subsanacionExpedienteUA) {
+		this.subsanacionExpedienteUA = subsanacionExpedienteUA;
+	}
+
+	public Procedimiento getProcedimiento() {
+		return procedimiento;
+	}
+
+	public void setProcedimiento(Procedimiento procedimiento) {
+		this.procedimiento = procedimiento;
+	}
+
+	public String getIdentificadorTramite() {
+		return identificadorTramite;
+	}
+
+	public void setIdentificadorTramite(String identificadorTramite) {
+		this.identificadorTramite = identificadorTramite;
+	}
+
+	public Date getFechaInicioProcesamiento() {
+		return fechaInicioProcesamiento;
+	}
+
+	public void setFechaInicioProcesamiento(Date fechaInicioProcesamiento) {
+		this.fechaInicioProcesamiento = fechaInicioProcesamiento;
+	}
+
 
 
 }

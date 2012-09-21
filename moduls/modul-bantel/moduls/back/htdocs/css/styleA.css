@@ -602,6 +602,13 @@ input.textLargo
     width: 430px; 
 }
 
+input.textCorto
+{
+    padding: 3px 3px;
+    border: 1px solid #515b67;
+    width: 30px; 
+}
+
 #multibox {
 
             width:600px;

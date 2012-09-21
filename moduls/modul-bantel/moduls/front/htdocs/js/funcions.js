@@ -48,3 +48,19 @@ function b64UrlSafeToB64(b64UrlSafe){
 	b64 = b64.replace(/_/g, "/");
 	return b64;
 }
+
+function b64ToB64UrlSafe(b64){
+	var b64UrlSafe = b64.replace(/\+/g,"-");
+	b64UrlSafe = b64UrlSafe.replace(/\//g,"_");
+	b64UrlSafe = b64UrlSafe.replace(/(\r\n|[\r\n])/g,"");
+	return b64UrlSafe;
+}
+
+function checkURL(value) {
+    var urlregex = new RegExp("^(http:\/\/|https:\/\/){1}([0-9A-Za-z]+\.)");
+    if (urlregex.test(value)) {
+        return (true);
+    }
+    return (false);
+}
+

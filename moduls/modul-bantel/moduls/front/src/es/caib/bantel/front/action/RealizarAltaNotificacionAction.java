@@ -1,26 +1,27 @@
 package es.caib.bantel.front.action;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleNotificacionForm;
-import es.caib.bantel.front.util.Dominios;
 import es.caib.bantel.front.util.MensajesUtil;
-import es.caib.bantel.front.util.ValorOrganismo;
+import es.caib.bantel.persistence.delegate.ConfiguracionDelegate;
+import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.regtel.model.ReferenciaRDSAsientoRegistral;
 import es.caib.regtel.model.ResultadoRegistroTelematico;
-import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
-import es.caib.regtel.persistence.delegate.RegistroTelematicoDelegate;
 import es.caib.regtel.persistence.util.RegistroSalidaHelper;
 import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
@@ -39,13 +40,12 @@ import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
  *  name="errorExtension" path=".altaNotificacion"
  *
  * @struts.action-forward
- *  name="successNoExp" path=".confirmacionRecuperacionExpediente"
- *
- * @struts.action-forward
  *  name="fail" path=".error"
  */
 public class RealizarAltaNotificacionAction extends BaseAction
 {
+	protected static Log log = LogFactory.getLog(RealizarAltaNotificacionAction.class);
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception 
     {
@@ -55,6 +55,11 @@ public class RealizarAltaNotificacionAction extends BaseAction
 		ArrayList documentos;
 		ExpedientePAD exp;
 		
+		// Recuperamos de sesion el expediente actual
+		String idExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY);
+		Long uniAdm = (Long) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY);
+		String claveExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY);
+		
 		try{
 			if(request.getSession().getAttribute("documentosAltaNotificacion") == null){
 				documentos = new ArrayList();
@@ -63,10 +68,16 @@ public class RealizarAltaNotificacionAction extends BaseAction
 			}
 			RegistroSalidaHelper r = new RegistroSalidaHelper();
 			r.setOficinaRegistro(notificacionForm.getOrganoDestino(),notificacionForm.getOficinaRegistro());
-			r.setExpediente(Long.parseLong(notificacionForm.getUnidadAdministrativa()),notificacionForm.getIdentificadorExpediente(),notificacionForm.getClaveExpediente());
+			r.setExpediente(uniAdm,idExpe,claveExpe);
 			r.setDatosInteresado(notificacionForm.getNif(),notificacionForm.getApellidos(), StringUtils.isEmpty(notificacionForm.getUsuarioSey())?null:notificacionForm.getUsuarioSey(),notificacionForm.getCodigoPais(),notificacionForm.getNombrePais(),notificacionForm.getCodigoProvincia(),notificacionForm.getNombreProvincia(),notificacionForm.getCodigoMunicipio(),notificacionForm.getNombreMunicipio());
 			r.setDatosNotificacion(notificacionForm.getIdioma(),notificacionForm.getTipoAsunto(),notificacionForm.getTituloAviso(),notificacionForm.getTextoAviso(),(StringUtils.isNotEmpty(notificacionForm.getTextoSmsAviso())?notificacionForm.getTextoSmsAviso():null),notificacionForm.getTituloOficio(),notificacionForm.getTextoOficio(),"S".equals(notificacionForm.getAcuse()));
-				
+			if("S".equals(notificacionForm.getTramiteSubsanacion())){
+				Map parametros = null;
+				if(request.getSession().getAttribute("parametrosAltaNotificacion") != null){
+					parametros = (HashMap)request.getSession().getAttribute("parametrosAltaNotificacion");
+				}
+				r.setTramiteSubsanacion(notificacionForm.getDescripcionTramiteSubsanacion(),notificacionForm.getIdentificadorTramiteSubsanacion(),notificacionForm.getVersionTramiteSubsanacionInteger().intValue(),parametros);
+			}
 			if(documentos != null){
 				
 				for(int i=0;i<documentos.size();i++){
@@ -76,71 +87,21 @@ public class RealizarAltaNotificacionAction extends BaseAction
 			}
 			ReferenciaRDSAsientoRegistral ar = r.generarAsientoRegistral("LOCAL");
 			ResultadoRegistroTelematico res = r.registrar("LOCAL",ar);
-			if(notificacionForm.getClaveExpediente()!=null && !"".equals(notificacionForm.getClaveExpediente())){
-				exp = ejb.consultaExpediente( new Long(notificacionForm.getUnidadAdministrativa()), notificacionForm.getIdentificadorExpediente(),notificacionForm.getClaveExpediente());
-			}else{
-				exp = ejb.consultaExpediente( new Long(notificacionForm.getUnidadAdministrativa()), notificacionForm.getIdentificadorExpediente());
-			}
-			request.getSession().setAttribute("documentosAltaNotificacion",null);
 			
+			request.getSession().setAttribute("documentosAltaNotificacion",null);
+			request.getSession().setAttribute("parametrosAltaNotificacion",null);
 			
 			// Redirigimos a la consulta del expediente
-			response.sendRedirect("recuperarExpediente.do?unidadAdm=" + exp.getUnidadAdministrativa() + "&identificadorExp=" + exp.getIdentificadorExpediente() + ( exp.getClaveExpediente() != null?"&claveExp=" + exp.getClaveExpediente():"") );
+			response.sendRedirect("recuperarExpediente.do?unidadAdm=" + uniAdm + "&identificadorExp=" + idExpe + "&claveExp=" + claveExpe );
 			return null;
-			
-			/*
-			if(exp != null){
-				request.setAttribute("expediente", exp);
-			}else{
-				return mapping.findForward("successNoExp");
-			}
-			*/
+						
 		}catch(Exception e){
+			log.error("Excepcion alta notificacion",e);
 			request.setAttribute( "enlace", "altaNotif");
 			String mensajeOk = MensajesUtil.getValue("error.notificacio.Excepcion");
-			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk);
+			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk + ": " + e.getMessage());
 			return mapping.findForward("fail");
-		}
-		
-		/*
-		ActionMessages mensajes = new ActionMessages();
-		mensajes.add("msg", new ActionMessage("altaNotificacionOk"));
-		saveMessages(request,mensajes);
-		return mapping.findForward( "success" );
-		*/
+		}		
     }
-	
-	private void carregarLlistes(HttpServletRequest request, String provincia) throws Exception{
-		List unidades=Dominios.listarUnidadesAdministrativas();
-		request.setAttribute("unidades",unidades);
-		List paises = Dominios.listarPaises();
-		request.setAttribute("paises",paises);
-		List provincias = Dominios.listarProvincias();
-		request.setAttribute("provincias",provincias);
-		List municipios = new ArrayList();
-		if(StringUtils.isNotEmpty(provincia)){
-			municipios = Dominios.listarLocalidadesProvincia(provincia);
-		}
-		request.setAttribute("municipios",municipios);
-		RegistroTelematicoDelegate dlgRte = DelegateRegtelUtil.getRegistroTelematicoDelegate();
-        List organosDestino = dlgRte.obtenerServiciosDestino();
-        request.setAttribute( "listaorganosdestino", regtelToBantel(organosDestino));
-        List oficinasRegistro = dlgRte.obtenerOficinasRegistro();
-        request.setAttribute( "listaoficinasregistro", regtelToBantel(oficinasRegistro));
-        List tiposAsunto = dlgRte.obtenerTiposAsunto();
-        request.setAttribute("tiposAsunto", regtelToBantel(tiposAsunto));
-	}
-	
-	private List regtelToBantel(List lista){
-		List listaBantel = new ArrayList();
-		if(lista != null){
-			for(int i=0;i<lista.size();i++){
-				ValorOrganismo vo = new ValorOrganismo();
-				vo.setCodigo(((es.caib.regtel.model.ValorOrganismo)lista.get(i)).getCodigo());
-				vo.setDescripcion(((es.caib.regtel.model.ValorOrganismo)lista.get(i)).getDescripcion());
-				listaBantel.add(vo);
-			}
-		}
-		return listaBantel;
-	}
+		
 }

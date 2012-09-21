@@ -33,7 +33,7 @@ public abstract class PermisoFacadeEJB extends HibernateEJB {
 	
     /**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.gestor},${role.mobtratel},${role.auto}"
+     * @ejb.permission role-name="${role.gestor},${role.admin},${role.auto}"
      */
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
@@ -42,7 +42,7 @@ public abstract class PermisoFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.gestor},${role.mobtratel},${role.auto}"
+     * @ejb.permission role-name="${role.gestor},${role.admin},${role.auto}"
      */
     public Permiso obtenerPermiso(Long codigo) {
         Session session = getSession();
@@ -62,7 +62,7 @@ public abstract class PermisoFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     *@ejb.permission role-name="${role.gestor},${role.mobtratel},${role.auto}"
+     *@ejb.permission role-name="${role.gestor},${role.admin},${role.auto}"
      */
     public Permiso obtenerPermiso(String usuario, String cuenta) {
         Session session = getSession();
@@ -85,7 +85,7 @@ public abstract class PermisoFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.gestor},${role.mobtratel},${role.auto}"
+     * @ejb.permission role-name="${role.gestor},${role.admin},${role.auto}"
      */
     public List listarPermisos(String usuario) {
         Session session = getSession();
@@ -106,7 +106,7 @@ public abstract class PermisoFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.mobtratel}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public List listarPermisos()
     {
@@ -131,7 +131,7 @@ public abstract class PermisoFacadeEJB extends HibernateEJB {
     
  	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.mobtratel}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public Long grabarPermiso(Permiso obj) { 
     	
@@ -157,7 +157,7 @@ public abstract class PermisoFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.mobtratel}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void borrarPermiso(Long codigo) {
         Session session = getSession();

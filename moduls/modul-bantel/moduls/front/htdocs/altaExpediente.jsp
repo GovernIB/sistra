@@ -7,33 +7,136 @@
 <script type="text/javascript" src="js/jquery.selectboxes.pack.js"></script>
 <script type="text/javascript" src="js/ajuda.js"></script>
 <script type="text/javascript" src="js/funcions.js"></script>
+<script type="text/javascript" src="js/mensaje.js"></script>
 <script type="text/javascript">
      <!--
+
+     // Configuracion procedimientos
+     var configProcedimientos = {}; 
+     <logic:iterate id="procedimiento" name="procedimientosGestor">
+	     configProcedimientos["<bean:write name="procedimiento" property="identificador"/>"] = "<bean:write name="procedimiento" property="permitirSms"/>";     												
+	 </logic:iterate>
+    
      function mostrarArbolUnidades(url) {
         obrir(url, "Arbol", 540, 400);
      }
      
      function fillDestinatario(){
-		nif = document.forms[0].nif.value;
+		nif = $("#nif").val();
 		$.ajaxSetup({scriptCharset: "utf-8" , contentType: "application/json; charset=utf-8"});
 		$.getJSON("fillPersona.do", {  nif: nif }, 
-			function(json){										
-				$("#nif").val(json.nif);
-				document.forms[0].nombre.value=json.nombre;
-				document.forms[0].usuarioSeycon.value=json.usuarioSeycon;
+			function(json){				
+				if (json.nif == "") {
+					alert("<bean:message key="expediente.alta.noExisteDestinatario"/>");
+				}				
+				$("#nombre").val(json.nombre);
+				$("#usuarioSeycon").val(json.usuarioSeycon);				
 			});
+	}
+
+    function fillProcedimiento(){
+        var idProcedimiento = $("#identificadorProcedimiento").val();
+		if (configProcedimientos[idProcedimiento] == "S") {
+			$("#divMovil").show();
+		} else {
+			$("#divMovil").hide();
+			$("#movil").val("");
+		} 
+    }
+
+    function mostrarAltaDestinatario(mostrar) {
+    	var capaI = document.getElementById('altaDestinatario');
+        if (mostrar) {
+
+        	Tamanyos.iniciar();
+        	Fondo.mostrar();
+        	
+        	$("#nifAltaDestinatario").val("");
+     		$("#nombreAltaDestinatario").val("");
+     		$("#apellido1AltaDestinatario").val("");
+     		$("#apellido2AltaDestinatario").val("");
+            
+    		var ventanaX = document.documentElement.clientWidth;
+    		var ventanaY = document.documentElement.clientHeight;
+    		var capaY = document.getElementById('contenedor').offsetHeight;
+    		
+    		// mostramos, miramos su tama?o y centramos la capaInfo con respecto a la ventana
+    		capaI.style.display = 'block';
+    		capaInfoX = capaI.offsetWidth;
+    		capaInfoY = capaI.offsetHeight;
+    		with (capaI) {
+    			style.left = (ventanaX-capaInfoX)/2 + 'px';
+    			style.top = (ventanaY-capaInfoY)/2 + 'px';
+    		}		
+        } else {
+        	Fondo.esconder();
+        	capaI.style.display = 'none';
+    	}
+    }
+
+     function realizarAltaDestinatario(){
+ 		var nifAlta = $("#nifAltaDestinatario").val();
+ 		var nombreAlta = $("#nombreAltaDestinatario").val();
+ 		var ape1Alta = $("#apellido1AltaDestinatario").val();
+ 		var ape2Alta = $("#apellido2AltaDestinatario").val();
+
+ 		if(confirm ( "<bean:message key='expediente.alta.altaDestinatario.confirmacion' />" )){
+
+ 			var mapVars = {};
+ 			mapVars["nif"] = nifAlta;
+ 			mapVars["nombre"] = nombreAlta;
+ 			mapVars["apellido1"] = ape1Alta;
+ 			mapVars["apellido2"] = ape2Alta;
+
+ 			$.ajax({
+				type: "POST",
+				url: "altaPersona.do",
+				data: mapVars,
+				dataType: "json",
+				error: function() {
+					alert("Error enviando datos al servidor. Intentelo de nuevo.");					
+				},
+				success: function(json) {					
+					if (json.error == "") {
+	 					alert("<bean:message key="expediente.alta.altaDestinatario.altaRealizada"/>");
+	 					mostrarAltaDestinatario(false);
+	 				} else {
+	 	 				alert(json.error);
+	 				}						
+				}
+			});
+ 	 		
+ 		}
+ 	}
+		
+	function alta(){		
+		if(confirm ( "<bean:message key='expediente.alta.confirmacion' />" )){
+			document.forms["0"].submit();
+			return true;
+		}else{
+			return false;
+		}						
+	}
+
+	function volver(){
+		document.location='<html:rewrite page="/busquedaExpedientes.do"/>';			
+	}
+
+	function cambioHabilitar() {
+		if ($('#habilitarAvisos').val() == "S") {
+ 			 $('#direcciones').show();		
+ 		} else {
+ 			 $('#direcciones').hide();			
+ 		}				
+ 	}
+	
+	//funcion que se ejecutan solo entrar en la pagina
+	$(document).ready(function(){
+		cambioHabilitar();
+		fillProcedimiento();				        
 		}
-		function alta(){		
-			if(confirm ( "<bean:message key='expediente.alta.confirmacion' />" )){
-				var index = document.forms["0"].unidadAdm.selectedIndex;
-				document.forms["0"].nombreUnidad.value=document.forms["0"].unidadAdm.options[index].text;
-				document.forms["0"].submit();
-				return true;
-			}else{
-				return false;
-			}						
-		}
-     // -->
+	);
+    // -->
 </script>
 <bean:define id="urlConfirmacion" type="java.lang.String">
 	<html:rewrite href="/zonaperback/init.do" paramId="lang" paramName="<%= Globals.LOCALE_KEY  %>" paramProperty="language" paramScope="session"/>
@@ -58,20 +161,48 @@
 		<!-- ajuda -->
 		<div id="ajuda">
 			<h2><bean:message key="ajuda.titulo"/></h2>
-			<br/>
-			<bean:message key="ajuda.CampoObligarorio"/>
-				<bean:message key="ajuda.expediente.alta.identificador"/>
-				<bean:message key="ajuda.expediente.unidad"/>
-				<bean:message key="ajuda.expediente.alta.clave"/>
-				<bean:message key="ajuda.expediente.alta.nif"/>
-				<bean:message key="ajuda.expediente.alta.nombre"/>
-				<bean:message key="ajuda.expediente.alta.idioma"/>
-				<bean:message key="ajuda.expediente.alta.Descripción"/>
-			<bean:message key="ajuda.finCampoObligarorio"/>
 			
-				<bean:message key="ajuda.expediente.alta.habilitar"/>
-				<bean:message key="ajuda.expediente.alta.email"/>
-				<bean:message key="ajuda.expediente.alta.movil"/>
+			<p>
+				<bean:message key="ajuda.expediente.alta"/>
+			</p>
+			
+			<p>
+				<bean:message key="ajuda.expediente.datosExpediente"/>
+				<ul class="ajudaUl">
+					<li><bean:message key="ajuda.expediente.alta.procedimiento"/></li>
+					<li><bean:message key="ajuda.expediente.alta.identificador"/></li>
+				</ul>				
+			</p>
+			
+			<p>
+				<bean:message key="ajuda.expediente.datosDestinatario"/>
+				<ul class="ajudaUl">
+					<li><bean:message key="ajuda.expediente.alta.nif"/></li>
+					<li><bean:message key="ajuda.expediente.alta.nombre"/></li>
+				</ul>
+			</p>
+			
+			<p>
+				<bean:message key="ajuda.expediente.datosDefinicion"/>
+				<ul class="ajudaUl">
+					<li><bean:message key="ajuda.expediente.alta.idioma"/></li>
+					<li><bean:message key="ajuda.expediente.alta.Descripción"/></li>					
+				</ul>
+			</p>
+			
+			<p>
+				<bean:message key="ajuda.expediente.datosAvisos"/>
+				<ul class="ajudaUl">
+					<li><bean:message key="ajuda.expediente.alta.habilitar"/></li>
+					<li><bean:message key="ajuda.expediente.alta.email"/></li>
+					<li><bean:message key="ajuda.expediente.alta.movil"/></li>
+				</ul>
+			</p>
+			
+			<p>
+				<bean:message key="ajuda.CampoObligarorio"/>
+			</p>
+				
 		</div>
 		<!-- /ajuda -->
 		<html:errors/>
@@ -85,44 +216,59 @@
 				<html:hidden property="tipo"/>
 				<html:hidden property="numeroEntrada"/>
 				<html:hidden property="flagValidacion" value="altaExpedient"/>
-				<html:hidden property="usuarioSeycon"/>
-				<html:hidden property="nombreUnidad"/>
+				<html:hidden property="usuarioSeycon" styleId="usuarioSeycon"/>
 				
 				<p class="titol major">
 					<bean:message key="expediente.datos"/>
 				</p>
-				<p>
-					<label for="identificadorExp"><bean:message key="confirmacion.identificadorExpediente"/></label>
-					<html:text property="identificadorExp"/>
-				</p>
 				
 				<p>
-					<label for="unidadAdm"><bean:message key="confirmacion.unidadAdministrativa"/></label>
-					<html:select property="unidadAdm" styleClass="pc40">
-						<logic:iterate id="unidad" name="unidades">	
-							<html:option value="<%=((es.caib.bantel.front.json.UnidadAdministrativa)unidad).getCodigo()%>" ><bean:write name="unidad" property="descripcion"/></html:option>
+					<label for="identificadorProcedimiento"><bean:message key="expediente.identificadorProcedimiento"/><sup>*</sup></label>
+					
+					<logic:present name="existeEntrada">
+						<html:hidden property="identificadorProcedimiento" styleId="identificadorProcedimiento"/>
+						<bean:define id="idProcEntrada" name="detalleExpedienteForm" property="identificadorProcedimiento" type="java.lang.String"/>							
+						<logic:iterate id="procedimiento" name="procedimientosGestor">
+							<logic:equal name="procedimiento" property="identificador" value="<%=idProcEntrada%>">
+								<bean:write name="procedimiento" property="identificador"/> - <bean:write name="procedimiento" property="descripcion"/>
+							</logic:equal>															
 						</logic:iterate>
-					</html:select>
-<%--					<button type="button" onclick="mostrarArbolUnidades('=urlArbol + "?id=unidadAdm" ');"><bean:message key="confirmacion.seleccionar"/></button>--%>
-				</p>
-
+					</logic:present>
+					<logic:notPresent name="existeEntrada">
+						<html:select property="identificadorProcedimiento" styleClass="pc40" styleId="identificadorProcedimiento" onchange="fillProcedimiento();">
+							<logic:iterate id="procedimiento" name="procedimientosGestor">							
+								<html:option value="<%=((es.caib.bantel.model.Procedimiento)procedimiento).getIdentificador()%>" ><bean:write name="procedimiento" property="identificador"/> - <bean:write name="procedimiento" property="descripcion"/></html:option>
+							</logic:iterate>
+						</html:select>
+					</logic:notPresent>					
+				</p>							
+				
 				<p>
-					<label for="claveExp"><bean:message key="confirmacion.claveExpediente"/></label>
-					<html:text property="claveExp"/>
+					<label for="identificadorExp"><bean:message key="confirmacion.identificadorExpediente"/><sup>*</sup></label>
+					<html:text property="identificadorExp" maxlength="50"/>
 				</p>
+				
+				<html:hidden property="claveExp"/>
+				
 				
 				<p class="titol major">
 					<bean:message key="expediente.datos.destinatario"/>
 				</p>
 					
 				<p>
-					<label for="nif"><bean:message key="expediente.nif"/></label>
-					<html:text  property="nif"/>
-					<img src="imgs/botons/cercar.gif" alt="<bean:message key='botons.cercar'/>"  onclick="javascript:fillDestinatario();"/> 
+					<label for="nif"><bean:message key="expediente.nif"/><sup>*</sup></label>
+					<logic:present name="existeEntrada">
+						<html:text property="nif" styleId="nif" readonly="true"/>					
+					</logic:present>
+					<logic:notPresent name="existeEntrada">
+						<html:text property="nif" styleId="nif" styleClass="nifBusqueda" onblur="this.value=this.value.toUpperCase()"/>					
+						<img src="imgs/botons/cercar.gif" alt="<bean:message key='botons.cercar'/>"  onclick="javascript:fillDestinatario();"/>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" onclick="mostrarAltaDestinatario(true);" value="<bean:message key='expediente.alta.altaDestinatario.botonAlta'/>"/> 
+					</logic:notPresent>
 				</p>
 				<p>
-					<label for="nombre"><bean:message key="expediente.nombre"/></label>
-					<html:text  property="nombre" styleClass="pc40" readonly="true"/>
+					<label for="nombre"><bean:message key="expediente.nombre"/><sup>*</sup></label>
+					<html:text property="nombre" styleId="nombre" styleClass="pc40" readonly="true"/>
 				</p>
 				
 				
@@ -130,14 +276,16 @@
 					<bean:message key="expedient.definicio"/>
 				</p>
 				<p>
-					<label for="idioma"><bean:message key="expediente.idioma"/></label>
+					<label for="idioma"><bean:message key="expediente.idioma"/><sup>*</sup></label>
+					
 					<html:select property="idioma" styleClass="pc15">
 						<html:option value="es"><bean:message key="expediente.castellano"/></html:option>
 						<html:option value="ca"><bean:message key="expediente.catalan"/></html:option>
+						<html:option value="en"><bean:message key="expediente.ingles"/></html:option>
 					</html:select>
 				</p>
 				<p>
-					<label for="descripcion"><bean:message key="expediente.descripcion"/></label>
+					<label for="descripcion"><bean:message key="expediente.descripcion"/><sup>*</sup></label>
 					<html:textarea property="descripcion" rows="5"  cols="40" styleClass="pc40" />
 				</p>
 				
@@ -145,23 +293,34 @@
 					<bean:message key="expedient.datos.aviso"/>
 				</p>
 				<p>
-					<label for="habilitarAvisos"><bean:message key="expediente.habilitarAvisos"/></label>
-					<html:select property="habilitarAvisos" styleClass="pc15">
-						<html:option value=""><bean:message key="expediente.noEspecificado"/></html:option>
-						<html:option value="S"><bean:message key="expediente.si"/></html:option>
-						<html:option value="N"><bean:message key="expediente.no"/></html:option>
-					</html:select>
+					<label for="habilitarAvisos"><bean:message key="expediente.habilitarAvisos"/><sup>*</sup></label>
+					
+					<logic:equal name="obligatorioAvisos" value="true">
+						<html:hidden property="habilitarAvisos" styleId="habilitarAvisos" value="S"/>
+						<bean:message key="expediente.avisos.si"/>						
+					</logic:equal>
+					
+					<logic:equal name="obligatorioAvisos" value="false">						
+						 <html:select property="habilitarAvisos" styleId="habilitarAvisos" styleClass="pc40" onchange="cambioHabilitar()" >
+							<html:option value="S"><bean:message key="expediente.avisos.si"/></html:option>
+							<html:option value="N"><bean:message key="expediente.avisos.no"/></html:option>
+						</html:select>
+					</logic:equal>
+					
 				</p>
 				
-				<p>
-					<label for="email"><bean:message key="expediente.avisoEmail"/></label>
-					<html:text property="email" styleClass="pc30"/>
-				</p>
-				
-				<p>
-					<label for="movil"><bean:message key="expediente.avisoSMS"/></label>
-					<html:text property="movil"/>
-				</p>
+				<div id="direcciones">
+					<p>
+						<label for="email"><bean:message key="expediente.avisoEmail"/><sup>*</sup></label>
+						<html:text property="email" styleClass="pc30" maxlength="50"/>
+					</p>
+					<div id="divMovil">
+					<p>
+						<label for="movil"><bean:message key="expediente.avisoSMS"/></label>
+						<html:text property="movil" styleId="movil" maxlength="10"/>
+					</p>
+					</div>
+				</div>
 				
 				<p class="botonera">
 					<input type="button" onclick="alta();" value="<%=btnAlta%>"/>
@@ -171,4 +330,44 @@
 			
 		</div>
 		<!-- /continguts -->
+
+<div id="fondo"></div>				
 				
+ <!--  capa alta destinatario -->
+ <div id="altaDestinatario" class="altaDestinatario">	
+ 	<p>
+		<bean:message key="expediente.alta.altaDestinatario.intro"/>
+	</p>	
+ 	<form  class="remarcar opcions">
+ 		<p>
+			<label for="nifAltaDestinatario"><bean:message key="expediente.alta.altaDestinatario.nif"/></label>
+			<input type="text" id="nifAltaDestinatario" name="nifAltaDestinatario" size="12"  class="nif"/>
+		</p>
+ 		<p>
+			<label for="nombreAltaDestinatario"><bean:message key="expediente.alta.altaDestinatario.nombre"/></label>
+			<input type="text" id="nombreAltaDestinatario" name="nombreAltaDestinatario" class="pc40" maxlength="50" />
+		</p>
+		<p>
+			<label for="apellido1AltaDestinatario"><bean:message key="expediente.alta.altaDestinatario.apellido1"/></label>
+			<input type="text" id="apellido1AltaDestinatario" name="apellido1AltaDestinatario" class="pc40" maxlength="50"/>
+		</p>
+		<p>
+			<label for="apellido2AltaDestinatario"><bean:message key="expediente.alta.altaDestinatario.apellido2"/></label>
+			<input type="text" id="apellido2AltaDestinatario" name="apellido2AltaDestinatario" class="pc40" maxlength="50"/>
+		</p>
+		<p class="botonera">
+			<input type="button" onclick="realizarAltaDestinatario();" value="<bean:message key="expediente.alta.altaDestinatario.botonAlta"/>"/>			
+		</p>
+		<p>
+			<a href="javascript:mostrarAltaDestinatario(false);"><bean:message key="expediente.alta.altaDestinatario.botonCancelar"/></a>
+		</p>
+ 	</form> 	
+</div>					
+
+	<!-- tornar enrere -->
+		<div id="enrere">
+			<a href="#" onclick="javascript:volver()">
+				<bean:message key="detalle.aviso.tornar" />				
+			</a>				
+		</div>
+    <!-- /tornar enrere -->

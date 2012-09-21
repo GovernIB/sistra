@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <project name="InterfazWS" basedir=".">
-	
 	<property file="${basedir}/build.properties"/>
 	<property name="home.dir" location="${basedir}/../.."/>
+	<property file="${home.dir}/config.properties"/>
+	<property file="${home.dir}/../../config.properties"/>
 	<property name="output.dir" location="${home.dir}/output"/>
 	<property name="cxf.home" location ="${home.dir}/../../lib/cxf"/>
 	<property name="etc.dir" location="${basedir}/etc/web"/>
@@ -29,9 +31,9 @@
 	  	 <include name="sistra-plugins.jar" />
 	  </fileset>
       <fileset dir="${web.product}">
-      	<include name="bantel-model.jar" />
-        <include name="bantel-persistence-client.jar" />
-	 	<include name="bantel-persistence.jar" />
+      	<include name="4-bantel-model.jar" />
+        <include name="4-bantel-persistence-client.jar" />
+	 	<include name="4-bantel-persistence.jar" />
       </fileset>
     </path>
 	
@@ -42,11 +44,21 @@
 	<target name="doc" depends="web.javadoc" description="Realiza las tareas de documentación "/>
 	<target name="main" depends="war" description="Construeye el war"/>
 
-	<target name="war">
-		<cxfwar filename="${modul.name}.war"/>
+	<target name="war" depends="checkJbossVersion">
+		<cxfwar filename="4-${modul.name}.war"/>
 	</target>
-	
+	 
+	<target name="checkJbossVersion">
+	<condition property="isJboss5">
+		<equals arg1="${jboss.version}" arg2="5.0"/>
+	</condition>
+	<condition property="isJboss3">
+			<equals arg1="${jboss.version}" arg2="3.2"/>
+	</condition>
+	</target>
+
     <macrodef name="cxfwar">
+    	
         <attribute name="filename"/>
         <attribute name="wsdl" default=""/>
         <attribute name="dir" default="${web.product}"/>
@@ -60,19 +72,24 @@
            
         	<delete file="@{dir}/@{filename}" />
             <war destfile="@{dir}/@{filename}" webxml="@{webxml}">
+            	
                 <classes dir="@{classesdir}"/>
                 <webinf dir="${wsdl.dir}/..">
                 	<include name="wsdl/@{wsdl}"/>
-
                 </webinf>
             	<webinf dir="${etc.dir}">
 	               	<include name="*cxf*.xml"/>
+           			<include if="isJboss5" name="jboss-classloading.xml"/>
                 </webinf>
+            	<lib dir="${lib}">
+            		<include if="isJboss5" name="stax*.jar"/>
+				</lib>
                 <lib dir="${cxf.home}">
     				<include name="*.jar"/>
   				</lib>            	
             	<lib dir="${web.product}">
             		<include name="*.jar"/>
+            		<exclude name="4-bantel-persistence.jar" />
       	  		</lib>
             </war>
         </sequential>

@@ -52,7 +52,7 @@ public class ExportCSVEnvioAction extends BaseAction
 			
 			// Comprobamos que no se este enviando
 			if(ed.isEnviando(f.getCodigo())) {
-				request.setAttribute( "messageKey", "error.exportar.envioBloqueado" );
+				request.setAttribute(Constants.MENSAJE_KEY, "error.exportar.envioBloqueado" );
 				return mapping.findForward( "fail" );
 			}    		
 	    	
@@ -68,7 +68,7 @@ public class ExportCSVEnvioAction extends BaseAction
 			
 		}catch(Exception ex){
 			log.error("Excepcion obteniendo fichero csv: " + ex.getMessage(),ex);
-			request.setAttribute("message",resources.getMessage( getLocale( request ), "exportCSV.excepcion"));
+			request.setAttribute(Constants.MENSAJE_KEY,resources.getMessage( getLocale( request ), "exportCSV.excepcion"));
 			return mapping.findForward( "fail" );
 		}
 		

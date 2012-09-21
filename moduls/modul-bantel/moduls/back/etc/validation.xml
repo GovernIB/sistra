@@ -22,6 +22,11 @@
    			<field property="values.email" depends="required" page="1">
                 <arg0 key="gestorBandeja.email" />
             </field>
+		</form>	
+		<form name="ficheroExportacionForm">
+			<field property="values.identificadorTramite" depends="required" page="1">
+                <arg0 key="ficheroExportacion.codigo" />
+            </field>
 		</form>		
     </formset>
 

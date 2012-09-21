@@ -8,8 +8,7 @@
 <script type="text/javascript" src="js/jquery.selectboxes.pack.js"></script>
 <script type="text/javascript">
 	function volver(identificadorExp,unidadAdm,claveExp){
-		document.forms["0"].action='<html:rewrite page="/recuperarExpediente.do?identificadorExp='+identificadorExp+'&unidadAdm='+unidadAdm+'&claveExp='+claveExp+'" />';
-		document.forms["0"].submit();
+		document.location='<html:rewrite page="/recuperarExpediente.do?identificadorExp='+identificadorExp+'&unidadAdm='+unidadAdm+'&claveExp='+claveExp+'" />';		
 	}
 </script>
 <bean:define id="aviso" name="elemento" type="es.caib.zonaper.modelInterfaz.EventoExpedientePAD" />
@@ -28,19 +27,14 @@
 			<div class="avis">
 			
 				<dl>
-					<dt><bean:message key="detalle.aviso.organo"/>:</dt>
-					<dd>
-						<logic:empty name="expediente" property="unidadAdministrativa">
-							&nbsp;
-						</logic:empty>
-						<logic:notEmpty name="expediente" property="unidadAdministrativa">
-							<bean:write name="expediente" property="unidadAdministrativa"/>
-						</logic:notEmpty>	
-					</dd>
-					<dt><bean:message key="detalle.aviso.expediente"/></dt>
-					<dd><bean:write name="expediente" property="identificadorExpediente"/></dd>
 					<dt><bean:message key="detalle.aviso.fechaEmision"/></dt>
 					<dd><bean:write name="aviso" property="fecha" format="dd/MM/yyyy '-' HH:mm"/></dd>
+					<dt><bean:message key="detalle.aviso.fechaLectura"/></dt>
+					<dd>
+						<logic:notEmpty name="aviso" property="fechaConsulta">
+							<bean:write name="aviso" property="fechaConsulta" format="dd/MM/yyyy '-' HH:mm"/>
+						</logic:notEmpty>
+					</dd>
 					<dt><bean:message key="detalle.aviso.asunto"/></dt>
 					<dd><bean:write name="aviso" property="titulo"/></dd>
 					<dt><bean:message key="expediente.descripcion"/></dt>
@@ -51,7 +45,30 @@
 							<ul class="docs">
 								<logic:iterate id="documento" name="aviso" property="documentos"  type="es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD">
 								<li>
-									<a href='<%=url%>?codigo=<%=documento.getCodigoRDS() %>&clave=<%=documento.getClaveRDS() %>&idioma=<%=expediente.getIdioma() %>'> <bean:write name="documento" property="titulo" /></a>
+									
+									<bean:define id="codigoFirma" type="java.lang.String">
+										<bean:write name="documento" property="codigoRDS" />
+									</bean:define>
+									
+									<logic:empty name="<%="URL-" + codigoFirma %>" scope="request">
+										<a href='<%=url%>?codigo=<%=documento.getCodigoRDS() %>&clave=<%=documento.getClaveRDS() %>&idioma=<%=expediente.getIdioma() %>'> 
+											<bean:write name="documento" property="titulo" />
+										</a>																
+									</logic:empty>	
+									
+									<logic:notEmpty name="<%="URL-" + codigoFirma %>" scope="request">
+										<a href="<bean:write name="<%="URL-" + codigoFirma %>" scope="request"/>" target="_blank">
+											<bean:write name="documento" property="titulo" />
+										</a>													
+									</logic:notEmpty>
+									
+									<logic:notEmpty name="<%=codigoFirma %>" scope="request">
+										<bean:message key="comprobarDocumento.firmadoPor"/>
+										<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request">							
+											&nbsp;<bean:write name="firma" property="nombreApellidos"/>
+										</logic:iterate>			
+									</logic:notEmpty>
+									
 								</li>
 								</logic:iterate>
 							</ul>
@@ -64,11 +81,9 @@
 			<!-- tornar enrere -->
 			
 			<div id="enrere">
-				<html:form style="background-color:white" action="recuperarExpediente" >
 				<a href="#" onclick="javascript:volver('<%=expediente.getIdentificadorExpediente()%>','<%=expediente.getUnidadAdministrativa()%>','<%=expediente.getClaveExpediente()%>')">
 					<bean:message key="detalle.aviso.tornar" />				
-				</a>	
-				</html:form>
+				</a>					
 			</div>
 			
 			<!-- /tornar enrere -->

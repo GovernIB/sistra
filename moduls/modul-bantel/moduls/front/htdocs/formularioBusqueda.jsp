@@ -11,10 +11,10 @@
 
 		<h2><bean:message key="formularioBusqueda.busquedaTramites"/></h2>
 		
-		<logic:empty name="tramites">
+		<logic:empty name="procedimientos">
 			<bean:message key="errors.noGestor"/>
 		</logic:empty>
-		<logic:notEmpty name="tramites">				
+		<logic:notEmpty name="procedimientos">				
 		
 
 		 
@@ -54,23 +54,28 @@
 						<html:option value="<%=ConstantesBTE.ENTRADA_NO_PROCESADA%>" ><bean:message key="formularioBusqueda.procesada.noprocesadas"/></html:option>
 						<html:option value="<%=ConstantesBTE.ENTRADA_PROCESADA%>" ><bean:message key="formularioBusqueda.procesada.correctas"/></html:option>
 						<html:option value="<%=ConstantesBTE.ENTRADA_PROCESADA_ERROR%>" ><bean:message key="formularioBusqueda.procesada.error"/></html:option>
-					</html:select>				
+					</html:select>		
+					NIF <html:text property="usuarioNif" size="9" /> 
+					<bean:message key="formularioBusqueda.nom"/> <html:text property="usuarioNombre" size="15"/>		
 			<!-- 
 					&nbsp;&nbsp;&nbsp;&nbsp;<span><a href="javascript:void(0);" onclick="obrirRecercaAv(this);">[+]</a></span>
 			 -->
 					</p>					
 					<div id="recercaAv">
-						<p><bean:message key="formularioBusqueda.tramite"/>
-							<html:select property="identificadorTramite">
+						<p>
+							<bean:message key="confirmacion.numeroEntrada"/>
+							<html:text property="numeroEntrada" size="30"/>
+							<bean:message key="formularioBusqueda.procedimiento"/>
+							<html:select property="identificadorProcedimiento">
 								<html:option value="-1" ><bean:message key="formularioBusqueda.tramite.todos"/></html:option>
-								<logic:iterate id="tramite" name="tramites" type="es.caib.bantel.model.Tramite">															
-									<html:option value="<%=tramite.getIdentificador()%>">
-										<%=tramite.getIdentificador() + "-" + (tramite.getDescripcion().length()>60?tramite.getDescripcion().substring(0,60)+"...":tramite.getDescripcion())%>
+								<logic:iterate id="procedimiento" name="procedimientos" type="es.caib.bantel.model.Procedimiento">															
+									<html:option value="<%=procedimiento.getIdentificador()%>">
+										<%=procedimiento.getIdentificador() + "-" + (procedimiento.getDescripcion().length()>60?procedimiento.getDescripcion().substring(0,60)+"...":procedimiento.getDescripcion())%>
 									</html:option>
 								</logic:iterate>
 							</html:select>
-							NIF <html:text property="usuarioNif" size="9" /> 
-							<bean:message key="formularioBusqueda.nom"/> <html:text property="usuarioNombre" size="15"/>
+							<bean:message key="formularioBusqueda.idtramite"/>
+							<html:text property="identificadorTramite" size="30" />
 						</p>
 					</div>
 				<bean:define id="botonEnviar" type="java.lang.String">
@@ -106,7 +111,7 @@
 					<html:hidden property="tipo" />	
 					<html:hidden property="procesada" />	
 					<html:hidden property="nivelAutenticacion" />	
-					<html:hidden property="identificadorTramite" />	
+					<html:hidden property="identificadorProcedimiento" />	
 					
 					<p>
 						<bean:message key="resultadoBusqueda.cambioEstadoMasivo.info"/>

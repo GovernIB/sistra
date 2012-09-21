@@ -39,7 +39,10 @@
     parameter=".historico.lista"/>
     
     
-   
+   <action
+    path="/back/erroresGestorDocumental/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".erroresGestorDocumental.lista"/>
 
 
 

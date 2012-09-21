@@ -43,7 +43,7 @@ public class FileDownloadAction extends Action {
         }
 		catch( java.io.IOException exc )
 		{
-			_log.info( "Client aborted" );
+			_log.debug( "Client aborted" );
 		}
 		catch( Exception exc )
 		{

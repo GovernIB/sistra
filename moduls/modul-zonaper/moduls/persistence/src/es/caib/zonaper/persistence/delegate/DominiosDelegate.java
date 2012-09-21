@@ -98,6 +98,17 @@ public class DominiosDelegate implements StatelessDelegate {
         }
 	}    
 	
+    public String obtenerRaizUnidadesOrganicas() throws DelegateException
+	{
+		try
+		{
+			return getFacade().obtenerRaizUnidadesOrganicas();
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

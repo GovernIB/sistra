@@ -17,7 +17,7 @@
         	<include name="commons-logging-1.0.4.jar"/>        	
         	<include name="commons-collections-3.1.jar"/>        	
         </fileset>
-        <fileset dir="${moduls.dir}" includes="mobtratel-model.jar"/>
+        <fileset dir="${moduls.dir}" includes="7-mobtratel-model.jar"/>
     </path>
 
     <target name="initdb">
@@ -28,7 +28,7 @@
             classpathref="db.classpath"/>
 
         <schemaexport
-        	config="${output.dir}/persistence/gen-etc/hibernate.cfg.xml"
+        	config="${output.dir}/persistence/gen-etc/mobtratel-hibernate.cfg.xml"
         	drop="no"
             quiet="no"
             text="yes"

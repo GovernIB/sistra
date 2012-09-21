@@ -1,5 +1,6 @@
 package es.caib.bantel.persistence.ejb;
 
+import java.io.ByteArrayInputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
@@ -14,6 +15,7 @@ import java.util.Map;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
@@ -30,7 +32,7 @@ import es.caib.bantel.model.CriteriosBusquedaTramite;
 import es.caib.bantel.model.GestorBandeja;
 import es.caib.bantel.model.Page;
 import es.caib.bantel.model.ReferenciaTramiteBandeja;
-import es.caib.bantel.model.Tramite;
+import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.model.TramiteBandeja;
 import es.caib.bantel.modelInterfaz.ConstantesBTE;
 import es.caib.bantel.modelInterfaz.DocumentoBTE;
@@ -46,9 +48,10 @@ import es.caib.xml.ConstantesXML;
 import es.caib.xml.analiza.Analizador;
 import es.caib.xml.analiza.Nodo;
 import es.caib.xml.analiza.Par;
+import es.caib.xml.analiza.formdoc.AnalizadorDoc;
 import es.caib.xml.registro.factoria.ConstantesAsientoXML;
 import es.caib.xml.util.HashMapIterable;
-;
+
 
 /**
  * SessionBean para mantener y consultar TramiteBandeja
@@ -70,22 +73,32 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 	protected static final String CODIGO_LISTAS = "[CODIGO]";
 	protected static final String INDICE_LISTAS = "indice";
 	
+	private String ROLE_AUTO;
+	
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.bantel}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
      */
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
 
+		try {
+			InitialContext ctx = new InitialContext();
+			ROLE_AUTO = (String) ctx.lookup("java:comp/env/roleAuto");
+		} catch (NamingException e) {
+			throw new CreateException("No se ha especificado role auto");
+		}
+		
+    	
 	}
 	  
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.gestor}"
      */
     public TramiteBandeja obtenerTramiteBandeja(Long id) {
@@ -105,8 +118,8 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
      */
@@ -158,8 +171,8 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-       
- 	/**
+
+    /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.gestor}"
      * */
@@ -187,8 +200,8 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     
  	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.gestor}"
      */
     public Long grabarTramiteBandeja(TramiteBandeja obj) {        
@@ -211,7 +224,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void borrarTramiteBandeja(Long id) {
         Session session = getSession();
@@ -227,7 +240,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     
     /*
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      
     public List listarTramitesOrganoDestino(Long id) {
         Session session = getSession();
@@ -250,7 +263,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void borrarDocumentosTramite(Long id) {
         Session session = getSession();
@@ -267,7 +280,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.gestor}"
      */
     public Page busquedaPaginadaTramites( CriteriosBusquedaTramite criteriosBusqueda, int pagina, int longitudPagina )
@@ -311,11 +324,12 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
      * @ejb.permission role-name="${role.gestor}"    
      */
-    public List obtenerReferenciasEntradas(String identificadorTramite,String procesada,Date desde,Date hasta)
+    public List obtenerReferenciasEntradas(String identificadorProcedimiento, String identificadorTramite,String procesada,Date desde,Date hasta)
     {
-    	return this.obtenerReferenciasEntradaImpl(identificadorTramite,procesada,desde,hasta);
+    	return this.obtenerReferenciasEntradaImpl(identificadorProcedimiento, identificadorTramite,procesada,desde,hasta);
     	
     }
    
@@ -323,12 +337,12 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.gestor}"
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.auto}"
      */
-    public String[] obtenerNumerosEntradas(String identificadorTramite,String procesada,Date desde,Date hasta)
+    public String[] obtenerNumerosEntradas(String identificadorProcedimiento, String identificadorTramite,String procesada,Date desde,Date hasta)
     {
-    	 List results = this.obtenerReferenciasEntradaImpl(identificadorTramite,procesada,desde,hasta);    	
+    	 List results = this.obtenerReferenciasEntradaImpl(identificadorProcedimiento, identificadorTramite,procesada,desde,hasta);    	
     	 String [] numeros = new String[results.size()];
 		 for (int i=0;i<results.size();i++){
 			 numeros[i] = ((ReferenciaTramiteBandeja) results.get(i)).getNumeroEntrada();
@@ -361,9 +375,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
        	    
         	// Comprobamos si gestor tiene permiso para cambiar entrada (role proceso automatico si)
         	try{        		
-        		InitialContext ctx = new InitialContext();
-    	    	String roleAuto = (String) ctx.lookup("java:comp/env/roleAuto");
-            	if (!this.ctx.isCallerInRole(roleAuto)){
+        		if (!this.ctx.isCallerInRole(ROLE_AUTO)){
             		GestorBandeja gestor = null;
         	    	GestorBandejaDelegate gd = DelegateUtil.getGestorBandejaDelegate();
         	    	gestor = gd.obtenerGestorBandeja(this.ctx.getCallerPrincipal().getName());
@@ -387,6 +399,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
         	if (procesada.equals(ConstantesBTE.ENTRADA_NO_PROCESADA)){
         		resultadoProcesamiento = null;
         		t.setFechaProcesamiento(null);
+        		t.setFechaInicioProcesamiento(new Date());
         	}else{
         		// Si marcamos como procesada o con error indicamos la fecha de procesamiento
         		t.setFechaProcesamiento(new Date());
@@ -408,8 +421,9 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.gestor}"
+     * @ejb.permission role-name="${role.auto}"
      */
-    public void procesarEntradas(CriteriosBusquedaTramite criteriosBusqueda,String procesada) throws ExcepcionBTE{
+    public void procesarEntradas(CriteriosBusquedaTramite criteriosBusqueda,String procesada,String resultadoProcesamiento) throws ExcepcionBTE{
     	Session session = getSession();
         try {
         	
@@ -419,26 +433,23 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
         		!procesada.equals(ConstantesBTE.ENTRADA_PROCESADA_ERROR) )
         			throw new HibernateException("Valor no válido para atributo Procesada: " + procesada);        	
        	    
-        	/*
-        	Query query =createQueryFromCriteriosBusquedaTramite(criteriosBusqueda,session);        			
-			List results = query.list();
-			*/
-        	
         	// Comprobamos si gestor tiene permiso de cambio de estado masivo        	
         	try{    	    
-        		GestorBandeja gestor = null;
-    	    	GestorBandejaDelegate gd = DelegateUtil.getGestorBandejaDelegate();
-    	    	gestor = gd.obtenerGestorBandeja(this.ctx.getCallerPrincipal().getName());
-    	    	if (gestor == null) throw new Exception("No se encuentra gestor para usuario seycon " + this.ctx.getCallerPrincipal().getName());
-    	    	if (gestor.getPermitirCambioEstadoMasivo() == 'N') throw new Exception("Gestor no tiene permiso de cambio de estado masivo");
+        		if (!this.ctx.isCallerInRole(ROLE_AUTO)){
+	        		GestorBandeja gestor = null;
+	    	    	GestorBandejaDelegate gd = DelegateUtil.getGestorBandejaDelegate();
+	    	    	gestor = gd.obtenerGestorBandeja(this.ctx.getCallerPrincipal().getName());
+	    	    	if (gestor == null) throw new Exception("No se encuentra gestor para usuario seycon " + this.ctx.getCallerPrincipal().getName());
+	    	    	if (gestor.getPermitirCambioEstadoMasivo() == 'N') throw new Exception("Gestor no tiene permiso de cambio de estado masivo");
+        		}
         	}catch (Exception he) 
     		{
     	        throw new EJBException(he);
     	    } 
         	
-        	// Por seguridad no dejamos hacer un cambio de estado para todos los trámites
-        	if (criteriosBusqueda.getIdentificadorTramite().equals("-1")){
-        		throw new EJBException("No se puede realizar un cambio masivo para todos los tramites del gestor");
+        	// Por seguridad no dejamos hacer un cambio de estado para todos los procedimientos
+        	if (StringUtils.isBlank(criteriosBusqueda.getIdentificadorProcedimiento())){
+        		throw new EJBException("No se puede realizar un cambio masivo para todos los procedimientos.");
         	}
         	        	
         	Criteria criteria =createCriteriaFromCriteriosBusquedaTramite(criteriosBusqueda,session);
@@ -451,8 +462,11 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 				// Si marcamos como procesada o con error indicamos la fecha de procesamiento        	
 				if (!procesada.equals(ConstantesBTE.ENTRADA_NO_PROCESADA)){
 					t.setFechaProcesamiento(new Date());
+					t.setResultadoProcesamiento(resultadoProcesamiento);
 				}else{
 					t.setFechaProcesamiento(null);
+					t.setResultadoProcesamiento(null);
+					t.setFechaInicioProcesamiento(new Date());
 				}
 				session.update(t);
 			}
@@ -473,7 +487,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
      * @return Numero de entrada
      *
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public String generarNumeroEntrada(){
     	 Session session = getSession();
@@ -503,26 +517,26 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     }
     
     /**
-     * Obtiene numero de entradas de un tramite con un determinado estado para un rango de fechas (si la fecha desde o fin es nula no la toma en cuenta)
+     * Obtiene numero de entradas de un procedimiento con un determinado estado para un rango de fechas (si la fecha desde o fin es nula no la toma en cuenta)
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.gestor}"
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.auto}"
      */
-    public long obtenerTotalEntradas(String identificadorTramite,String procesada,Date desde,Date hasta) throws ExcepcionBTE{
+    public long obtenerTotalEntradasProcedimiento(String identificadorProcedimiento,String procesada,Date desde,Date hasta) throws ExcepcionBTE{
     	Session session = getSession();
 		try 				
 		{	
 			String select = "SELECT COUNT(m) FROM TramiteBandeja AS m " + 
-							" WHERE m.tramite.identificador = :identificadorTramite " + 
+							" WHERE m.procedimiento.identificador = :identificadorProcedimiento " + 
 							" and m.procesada= :procesada "; 
 			
 			if (desde != null) select+=" and m.fecha >= :desde";
 			if (hasta != null) select+=" and m.fecha <= :hasta";
 			
 			Query query = session.createQuery(select);
-			query.setParameter("identificadorTramite",identificadorTramite);
+			query.setParameter("identificadorProcedimiento",identificadorProcedimiento);
 			query.setParameter("procesada",procesada);
 			if (desde != null) query.setParameter("desde",desde);
 			if (hasta != null) query.setParameter("hasta",hasta);
@@ -540,13 +554,60 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     }    
     
     
+    /**
+     * Obtiene ids de tramites de un procedimiento con un determinado estado para un rango de fechas (si el estado o la fecha desde o fin es nula no la toma en cuenta)
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.gestor}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public String[] obtenerIdTramitesProcedimiento(String identificadorProcedimiento,String procesada,Date desde,Date hasta) throws ExcepcionBTE{
+    	Session session = getSession();
+		try 				
+		{	
+			String select = "SELECT distinct m.identificadorTramite FROM TramiteBandeja AS m " + 
+							" WHERE m.procedimiento.identificador = :identificadorProcedimiento "; 
+			
+							 
+			if (procesada != null) select += " and m.procesada= :procesada "; 
+			if (desde != null) select+=" and m.fecha >= :desde";
+			if (hasta != null) select+=" and m.fecha <= :hasta";
+			
+			Query query = session.createQuery(select);
+			query.setParameter("identificadorProcedimiento",identificadorProcedimiento);
+			if (procesada != null) query.setParameter("procesada",procesada);
+			if (desde != null) query.setParameter("desde",desde);
+			if (hasta != null) query.setParameter("hasta",hasta);
+			
+			String [] result = null;
+			if (query.list() != null) {
+				List listaIds = query.list();
+				result = new String[listaIds.size()];
+				for (int i = 0; i < listaIds.size(); i++) {
+					result[i] = (String) listaIds.get(i);
+				}
+			}
+			
+			return result;						 
+	    } 
+		catch (HibernateException he) 
+		{
+	        throw new EJBException(he);
+	    } 
+		finally 
+	    {
+	        close(session);
+	    }
+    }    
+    
     
     /**
      * Genera linea de exportacion csv de una entrada de la bandeja
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.gestor}"
-     * @ejb.permission role-name="${role.bantel}"
+     * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.auto}"
      */
     public String[] exportarCSV(String numEntrada,PropertiesOrdered configuracionExportacion) throws ExcepcionBTE{
@@ -566,70 +627,14 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 	    		
 	    		// Verificamos si el XPath corresponde a formulario o a la informacion de la entrada
 	    		if (columnXPath.startsWith("FORMULARIO.")) {
-	    			idForm = columnXPath.substring("FORMULARIO.".length(),columnXPath.indexOf(".","FORMULARIO.".length()));	    			
-	    			idInstancia=columnXPath.substring(("FORMULARIO."+idForm+".").length(),columnXPath.indexOf(".",("FORMULARIO."+idForm+".").length()));	    				
-	    			xpath= columnXPath.substring(("FORMULARIO."+idForm+"."+idInstancia+".").length());	    			
-	    				
-	    			keyForm = idForm + "-" + idInstancia;
-	    			
-	    			// Parseamos XML Formulario
-	    			if (!forms.containsKey(keyForm)){
-	    				DocumentoBTE doc = entrada.getDocumento(idForm,Integer.parseInt(idInstancia));
-	    				if (doc.getPresentacionTelematica() != null){	    					
-	    					Analizador analiza = new Analizador ();
-	    			    	HashMapIterable hti = analiza.analizar (new String(doc.getPresentacionTelematica().getContent(),ConstantesXML.ENCODING));
-	    			    	forms.put(keyForm,hti);	    			    			
-	    				}
-	    			}
-	    			
-	    			// Obtenemos valor 
-	    			valuesForm = (HashMapIterable) forms.get(keyForm);
-	    			csv[i] = "";
-	    			if (valuesForm != null){
-	    				
-	    				Object o = valuesForm.get(referenciaXPath(xpath));
-	    				List valores;
-	    				
-	    				if (o != null){
-	    					
-	    					if (o instanceof Nodo){
-	    						Nodo n = (Nodo) o;
-	    						valores = new ArrayList();
-	    						valores.add(n);	    					    						    					
-	    					}else{
-	    						valores = (List) o;	    						
-	    					}
-	    					
-	    					for (int j=0;j<valores.size();j++){
-	    						
-	    						if (j>0) {
-	    							csv[i] += ", ";
-	    						}
-	    						
-	    						Nodo nodo = (Nodo) valores.get(j);
-		    					if (xpath.endsWith(TramiteBandejaFacadeEJB.CODIGO_LISTAS)){
-		    			    		if (nodo.getAtributos() != null && nodo.getAtributos().size() > 0){
-		    			    			for (Iterator it2 = nodo.getAtributos().iterator();it2.hasNext();){
-		    			    				Par atributo = (Par) it2.next();
-		    			    				if (atributo.getNombre().equals(INDICE_LISTAS)){
-		    			    					csv[i] += atributo.getValor();
-		    			    					break;
-		    			    				}
-		    			    			}	
-		    			    		}  	    						
-		    					}else{
-		    						csv[i] += nodo.getValor();
-		    					}
-	    					}
-	    					
-	    				}
-	    			}
-	    			
-	    		}else if (columnXPath.startsWith("TRAMITE.")) {
+	    			csv[i] = extractCSVDocumento("FORMULARIO", entrada, columnXPath, forms);
+	    		} else if (columnXPath.startsWith("DOCUMENTO.")) {
+	    			csv[i] = extractCSVDocumento("DOCUMENTO", entrada, columnXPath, forms);
+	    		} else if (columnXPath.startsWith("TRAMITE.")) {
 	    			// Valor obtenido de la entrada
 	    			xpath= columnXPath.substring(("TRAMITE.").length());	
 	    			csv[i] = getValorTramite(xpath,entrada);
-	    		}else {
+	    		} else {
 	    			throw new Exception("XPath no valido: " + columnXPath);
 	    		}
 	    			  
@@ -640,9 +645,97 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     		throw new ExcepcionBTE("Excepcion generando csv para la entrada " + numEntrada,ex);
     	}
     	
-    }    
-    
-    
+    }
+
+    /**
+     * Extrae valor csv de un xpath de documento.
+     * @param tipoDocumento
+     * @param entrada
+     * @param columnXPath
+     * @param forms
+     * @return csv
+     * @throws Exception
+     */
+	private String extractCSVDocumento(String tipoDocumento, TramiteBTE entrada, String columnXPath,
+			Map forms) throws Exception {
+		String xpath;
+		String idForm;
+		String idInstancia;
+		String keyForm;
+		HashMapIterable valuesForm;
+		
+		String prefix = tipoDocumento + ".";
+		
+		idForm = columnXPath.substring(prefix.length(),columnXPath.indexOf(".",prefix.length()));	    			
+		idInstancia=columnXPath.substring((prefix+idForm+".").length(),columnXPath.indexOf(".",(prefix+idForm+".").length()));	    				
+		xpath= columnXPath.substring((prefix+idForm+"."+idInstancia+".").length());	    			
+			
+		keyForm = idForm + "-" + idInstancia;
+		
+		// Parseamos XML Formulario / anexo
+		if (!forms.containsKey(keyForm)){
+			DocumentoBTE doc = entrada.getDocumento(idForm,Integer.parseInt(idInstancia));
+			if (doc != null && doc.getPresentacionTelematica() != null){	  
+				if (tipoDocumento.equals("FORMULARIO")) {
+					Analizador analiza = new Analizador ();
+			    	HashMapIterable hti = analiza.analizar (new String(doc.getPresentacionTelematica().getContent(),ConstantesXML.ENCODING));
+			    	forms.put(keyForm,hti);	    			    			
+				} else if (tipoDocumento.equals("DOCUMENTO")) {
+					AnalizadorDoc analizaDoc = new AnalizadorDoc();
+					HashMapIterable hti = analizaDoc.analizar (new ByteArrayInputStream(doc.getPresentacionTelematica().getContent()),doc.getPresentacionTelematica().getExtension());
+			    	forms.put(keyForm,hti);					
+				} else {
+	    			throw new Exception("XPath no valido: " + columnXPath);
+	    		}			
+			}
+		}
+		
+		// Obtenemos valor 
+		valuesForm = (HashMapIterable) forms.get(keyForm);
+		String csv = "";
+		if (valuesForm != null){
+			
+			Object o = valuesForm.get(referenciaXPath(xpath));
+			List valores;
+			
+			if (o != null){
+				
+				if (o instanceof Nodo){
+					Nodo n = (Nodo) o;
+					valores = new ArrayList();
+					valores.add(n);	    					    						    					
+				}else{
+					valores = (List) o;	    						
+				}
+				
+				for (int j=0;j<valores.size();j++){
+					
+					if (j>0) {
+						csv += ", ";
+					}
+					
+					Nodo nodo = (Nodo) valores.get(j);
+					if (xpath.endsWith(TramiteBandejaFacadeEJB.CODIGO_LISTAS)){
+			    		if (nodo.getAtributos() != null && nodo.getAtributos().size() > 0){
+			    			for (Iterator it2 = nodo.getAtributos().iterator();it2.hasNext();){
+			    				Par atributo = (Par) it2.next();
+			    				if (atributo.getNombre().equals(INDICE_LISTAS)){
+			    					csv += atributo.getValor();
+			    					break;
+			    				}
+			    			}	
+			    		}  	    						
+					}else{
+						csv += nodo.getValor();
+					}
+				}
+				
+			}
+		}		
+		return csv;
+	}    
+	
+	         
     private String getValorTramite(String xpath,TramiteBTE entrada){
     	
     	if (xpath.equals("NUMEROENTRADA"))
@@ -834,30 +927,43 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     
     private Criteria createCriteriaFromCriteriosBusquedaTramite(CriteriosBusquedaTramite criteriosBusqueda,Session session) throws Exception{
     	
-    	// Recuperamos información gestor
+    	// Recuperamos información gestor (en caso de que no sea usuario auto)
     	GestorBandeja gestor = null;
-    	try{    	    
-	    	GestorBandejaDelegate gd = DelegateUtil.getGestorBandejaDelegate();
-	    	gestor = gd.obtenerGestorBandeja(this.ctx.getCallerPrincipal().getName());
-	    	if (gestor == null) throw new Exception("No se encuentra gestor para usuario seycon " + this.ctx.getCallerPrincipal().getName());
-    	}catch (Exception he) 
-		{
-	        throw new EJBException(he);
-	    } 
+    	if (!this.ctx.isCallerInRole(ROLE_AUTO)){
+	    	try{    	    
+		    	GestorBandejaDelegate gd = DelegateUtil.getGestorBandejaDelegate();
+		    	gestor = gd.obtenerGestorBandeja(this.ctx.getCallerPrincipal().getName());
+		    	if (gestor == null) throw new Exception("No se encuentra gestor para usuario seycon " + this.ctx.getCallerPrincipal().getName());
+	    	}catch (Exception he) 
+			{
+		        throw new EJBException(he);
+		    } 
+    	}
     	
     	Criteria criteria = session.createCriteria( TramiteBandeja.class );
     	criteria.setCacheable( false );
 				 
-		 // Especificamos tramite
-		 if ( criteriosBusqueda.getIdentificadorTramite() != null && !criteriosBusqueda.getIdentificadorTramite().equals( "-1" ))
+		 // Especificamos procedimiento
+		 if ( StringUtils.isNotBlank(criteriosBusqueda.getIdentificadorProcedimiento()))
 		 {
-			 Tramite tramite = (Tramite) session.load(Tramite.class,criteriosBusqueda.getIdentificadorTramite());
-			 criteria.add( Expression.eq("tramite",tramite ) );
+			 Procedimiento procedimiento = (Procedimiento) session.load(Procedimiento.class,criteriosBusqueda.getIdentificadorProcedimiento());
+			 criteria.add( Expression.eq("procedimiento",procedimiento ) );
 		 }else{
-			 // Tramites a los que esta asociado el gestor			  			
-			 criteria.add( Expression.in( "tramite",gestor.getTramitesGestionados()) );	 
+			 // procedimientos a los que esta asociado el gestor
+			 if (gestor != null) {
+				 criteria.add( Expression.in( "procedimiento",gestor.getProcedimientosGestionados()) );
+			 }		 				
 		 }
-		 
+		 // Especificamos tramite
+		 if ( StringUtils.isNotBlank(criteriosBusqueda.getIdentificadorTramite()))
+		 {
+			 criteria.add( Expression.eq("identificadorTramite",criteriosBusqueda.getIdentificadorTramite() ) );
+		 }
+		 //	 Especificamos número de entrada
+		 if ( !StringUtils.isEmpty(criteriosBusqueda.getNumeroEntrada()) )
+		 {
+			 criteria.add( Expression.eq( "numeroEntrada", criteriosBusqueda.getNumeroEntrada()));
+		 }
 		 // Especificamos nivel autenticacion
 		 if ( criteriosBusqueda.getNivelAutenticacion() != CriteriosBusquedaTramite.TODOS )
 		 {
@@ -883,7 +989,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 		 {
 			 criteria.add( Expression.ilike( "usuarioNombre", "%" + criteriosBusqueda.getUsuarioNombre() + "%"  ));
 		 }
-		 // Especificamos fecha
+		 // Especificamos año / mes
 		 if ( criteriosBusqueda.getAnyo() != 0 )
 		 {
 			 GregorianCalendar gregorianCalendar1 = null;
@@ -902,30 +1008,42 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 			 }
 			 criteria.add( Expression.between( "fecha", new java.sql.Date(gregorianCalendar1.getTime().getTime()), new java.sql.Date( DataUtil.obtenerUltimaHora(gregorianCalendar2.getTime()).getTime() )) );			
 		 }
+		 
+		// Especificamos fecha inicio / fecha fin
+		 if ( criteriosBusqueda.getFechaEntradaMinimo() != null) {
+			 criteria.add( Expression.gt("fecha", criteriosBusqueda.getFechaEntradaMinimo()) );
+		 }
+		 if ( criteriosBusqueda.getFechaEntradaMaximo() != null) {
+			 criteria.add( Expression.lt("fecha", criteriosBusqueda.getFechaEntradaMaximo()) );
+		 }		
+		 
+		// Especificamos fecha maxima inicio procesamiento 
+		  if ( criteriosBusqueda.getFechaInicioProcesamientoMaximo() != null) {
+			 criteria.add( Expression.lt("fechaInicioProcesamiento", criteriosBusqueda.getFechaInicioProcesamientoMaximo()) );
+		 }		
 		
 		 // Ordenación
 		 criteria.addOrder( Order.desc("fecha") );
 		 return criteria;
     }    
     
-   
-    private List obtenerReferenciasEntradaImpl(String identificadorTramite,String procesada,Date desde,Date hasta){
-						 
+    private List obtenerReferenciasEntradaImpl(String identificadorProcedimiento,String identificadorTramite,String procesada, Date desde,Date hasta){
+    	
 		Session session = getSession();
 		boolean desdeBool = false;
 		boolean hastaBool = false;
 		boolean procesadaBool = false;
 		List  numeros = new  ArrayList();
         try {
-        	String sql = "Select {TB.*} FROM BTE_TRAMIT {TB} WHERE {TB}.TRA_IDETRA = :idtramite ";
-			
-			 //Especificamos estado procesamiento entrada
+        	String sql = "Select {TB.*} FROM BTE_TRAMIT {TB} WHERE {TB}.TRA_IDETRA = :idtramite AND {TB}.TRA_IDEPRO = :idProcedimiento";
+
+        	//Especificamos estado procesamiento entrada
         	if ( !StringUtils.isEmpty(procesada) ){
         		sql = sql + " and {TB}.TRA_PROCES = :procesada ";
         		procesadaBool = true;
-			 }
-			 
-			 // Especificamos fechas
+        	}
+        	
+        	//Especificamos fechas
         	if ( desde != null && hasta != null ){
         		sql = sql + " and {TB}.TRA_FECHA between :desde and :hasta ";
         		desdeBool = true;
@@ -938,14 +1056,15 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
    			if ( desde == null && hasta != null ){
    				sql = sql + " and {TB}.TRA_FECHA <= :hasta ";
    				hastaBool = true;
-			 }
-				
-			 // Ordenación
+			}
+        		
+        	//Ordenación
    			sql = sql + " order by {TB}.TRA_FECHA desc";
         	//"Select {TB.*} FROM BTE_TRAMIT {TB} WHERE {TB}.TRA_IDETRA = :idtramite and {TB}.TRA_PROCES = :procesada and {TB}.TRA_FECHA >= :desde and {TB}.TRA_FECHA <= :hasta order by {TB}.TRA_FECHA desc"
         	Query query = session.createSQLQuery(sql,"TB",TramiteBandeja.class );
+            query.setParameter("idProcedimiento", identificadorProcedimiento);
             query.setParameter("idtramite", identificadorTramite);
-            if (procesadaBool){
+            if(procesadaBool){
             	query.setParameter("procesada", procesada);
             }
             if(desdeBool){
@@ -958,8 +1077,8 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
             if (result.isEmpty()) {
                 return numeros;
             }
-			 
-			 // Devolvemos  referencias entradas
+            
+             // Devolvemos  referencias entradas			 
 			 for (int i=0;i<result.size();i++){
 				 TramiteBandeja t = (TramiteBandeja) result.get(i);
 				 ReferenciaTramiteBandeja r = new ReferenciaTramiteBandeja();
@@ -969,10 +1088,9 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 			 }			 
 			 return numeros;
         } catch (HibernateException he) {
-	        throw new EJBException(he);
+            throw new EJBException(he);
         } finally {
-	        close(session);
-	    }
+            close(session);
+        }
     }
-    
 }

@@ -62,7 +62,9 @@ form { padding:.5em 1em; background-color:#f2f2f2; font-size:1em; position:relat
 form.centrat { text-align:center; font-size:0.9em;}
 form input, form select { margin-right:1.5em; font-size:1em; }
 form p.botonera { text-align:center; border:1px solid #e1e1e1; padding:.5em; }
-
+form p.botonera2 { border:1px solid #e1e1e1; padding:.5em; }
+form p.botonera2 input { font-size:1.3em;}
+    
 /*
 form div#recercaAv { display:none; }
 */
@@ -115,6 +117,8 @@ div.atencio p img { vertical-align:middle; margin-left:1em; }
 
 p.alerta { padding:1em 1em 1em 3.5em; background:url(../imgs/icones/ico_atencio.gif) no-repeat 1em 1em #ffffe8; border:1px solid #f3f3d2; }
 
+div.altaDestinatario { position:absolute;z-index:50; border:5px solid #ccc; top:0;left:0;display:none;background-color:#f2f2f2; padding: 20px;}
+
 div.cambioEstadoMasivo { position:absolute;z-index:50; border:5px solid #003575; top:0;left:0;display:none;background-color:#f2f2f2;}
 
 table.nomarc { border-spacing: 0px;padding: 0px;width: 600px;}
@@ -125,3 +129,4 @@ textArea.detalleExt {background-color: #ffffe8;}
 
 div#capaInfoForms { position:absolute; display:none; top:0; left:0; width:45em; text-align:center; background:url(../imgs/enviando.gif) no-repeat center 1em #fff; border:1em solid #85bbe4; padding:5em 1em 2em 1em; z-index:12; }
 div#capaInfoFondo { position:absolute; display:none; top:0; left:0; width:100%; background-color:#000; z-index:11; padding-bottom:1em; }
+div#capaDownloadExport { position:absolute; display:none; top:0; left:0; width:45em; text-align:center; background:url(../imgs/iconos/exportCSV.jpg) no-repeat center 1em #fff; border:1em solid #85bbe4; padding:5em 1em 2em 1em; z-index:12; }

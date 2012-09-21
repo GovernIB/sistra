@@ -2,6 +2,7 @@
 <%@ page import="org.apache.struts.Globals"%>
 <%@ page import="es.caib.mobtratel.model.Envio"%>
 <%@ page import="es.caib.mobtratel.front.Constants" %>
+<%@ page import="es.caib.mobtratel.modelInterfaz.ConstantesMobtratel" %>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
@@ -30,7 +31,7 @@
 
 
 		<h2><bean:message key="formularioBusqueda.busquedaEnvios"/></h2>
-		<p align="right"><html:link href="#" onclick="<%= "javascript:obrir('" + urlAyuda + "', 'Edicion', 540, 400);"%>"><img src="imgs/icones/ico_ayuda.gif" border="0"/><bean:message key="ayuda.enlace" /></html:link></p>
+		<p align="right"><html:link href="#" onclick="<%= \"javascript:obrir('\" + urlAyuda + \"', 'Edicion', 540, 400);\"%>"><img src="imgs/icones/ico_ayuda.gif" border="0"/><bean:message key="ayuda.enlace" /></html:link></p>
 		 
 			<html:form action="busquedaEnvios" styleId="busquedaEnviosForm" styleClass="centrat">
 				<html:hidden property="pagina" />				
@@ -60,10 +61,10 @@
 					<bean:message key="formularioBusqueda.enviado"/>
 					<html:select property="enviado">
 						<html:option value="T" ><bean:message key="formularioBusqueda.enviado.todos"/></html:option>
-						<html:option value="<%=String.valueOf(Envio.ENVIADO)%>" ><bean:message key="formularioBusqueda.enviado.correctos"/></html:option>
-						<html:option value="<%=String.valueOf(Envio.PENDIENTE_ENVIO)%>" ><bean:message key="formularioBusqueda.enviado.noenviados"/></html:option>
-						<html:option value="<%=String.valueOf(Envio.CON_ERROR)%>" ><bean:message key="formularioBusqueda.enviado.error"/></html:option>
-						<html:option value="<%=String.valueOf(Envio.CANCELADO)%>" ><bean:message key="formularioBusqueda.enviado.cancelado"/></html:option>
+						<html:option value="<%=String.valueOf(ConstantesMobtratel.ESTADOENVIO_ENVIADO)%>" ><bean:message key="formularioBusqueda.enviado.correctos"/></html:option>
+						<html:option value="<%=String.valueOf(ConstantesMobtratel.ESTADOENVIO_PENDIENTE)%>" ><bean:message key="formularioBusqueda.enviado.noenviados"/></html:option>
+						<html:option value="<%=String.valueOf(ConstantesMobtratel.ESTADOENVIO_ERROR)%>" ><bean:message key="formularioBusqueda.enviado.error"/></html:option>
+						<html:option value="<%=String.valueOf(ConstantesMobtratel.ESTADOENVIO_CANCELADO)%>" ><bean:message key="formularioBusqueda.enviado.cancelado"/></html:option>
 					</html:select>				
 					<bean:message key="formularioBusqueda.cuenta"/>
 					<html:select property="cuenta">

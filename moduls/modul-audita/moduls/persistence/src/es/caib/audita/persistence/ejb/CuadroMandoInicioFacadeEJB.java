@@ -105,7 +105,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 		eventoAuditado.setDescripcion(ls_descripcion);
 		String ls_ayuda = ( String ) resultadoConsulta.get( (idioma.equals(ConstantesAuditoria.LANGUAGE_CATALAN)) ? "tip_ayudac" : "tip_ayuda" );
 		eventoAuditado.setAyuda(ls_ayuda);
-		BigDecimal orden = ( BigDecimal ) resultadoConsulta.get( "tip_orden" );
+		Number orden = ( Number ) resultadoConsulta.get( "tip_orden" );
 		eventoAuditado.setOrden(orden.intValue());
 		String ls_opciones = (String) resultadoConsulta.get("tip_prpcls");
 		if(ls_opciones == null)
@@ -142,7 +142,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 					lst = this.queryForMapList( ls_query, new Object[]{ ls_tipo, ls_fechaInicio, ls_fechaFinal } );
 				}
 				Map mResult = ( Map ) lst.get(0);
-				BigDecimal total = ( BigDecimal ) mResult.get( "total" );
+				Number total = ( Number ) mResult.get( "total" );
 				eventoAuditado.setTotal(total.intValue());
 			}
 			catch( Exception exc )
@@ -175,8 +175,8 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				{
 					Map mResult = ( Map ) lst.get(i);
 					String ls_idioma = ( String ) mResult.get( "idioma" );
-					BigDecimal total = ( BigDecimal ) mResult.get( "total" );
-					totalIdioma.put(ls_idioma,total);
+					Number total = ( Number ) mResult.get( "total" );
+					totalIdioma.put(ls_idioma,new BigDecimal(total.toString()));
 				}
 				eventoAuditado.setTotalesIdioma(totalIdioma);
 				
@@ -305,7 +305,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 			Map mResult = ( Map ) modulos.get(i);
 			String ls_nombre = ( String ) mResult.get( "mod_modul" );
 			modulo.setModulo(ls_nombre);
-			BigDecimal orden =   (BigDecimal) mResult.get( "mod_orden" );
+			Number orden =   (Number) mResult.get( "mod_orden" );
 			modulo.setOrden(orden.intValue());
 			String ls_descripcion = ( String ) mResult.get( (idioma.equals(ConstantesAuditoria.LANGUAGE_CATALAN)) ? "mod_descca" : "mod_desc" );
 			modulo.setDescripcion(ls_descripcion);
@@ -358,8 +358,8 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 			String clave = ( String ) mResult.get( "nivel" );
 			if(clave.equals(tipo))
 			{
-				BigDecimal total = (BigDecimal) mResult.get( "total" );
-				return total;
+				Number total = (Number) mResult.get( "total" );
+				return new BigDecimal(total.doubleValue());
 			}
 		}
 		return BigDecimal.valueOf(0);
@@ -370,7 +370,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 		String ls_sql = " ( ";
 		for(int i=0; i<tramites.size(); i++)
 		{
-			BigDecimal tramite = (BigDecimal) tramites.get(i);
+			Number tramite = (Number) tramites.get(i);
 			ls_sql += "'" + tramite.toString() + "'";
 			if(i != (tramites.size()-1))
 			{
@@ -423,7 +423,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 			*/
 			lst = this.queryForMapList(conSistra, "sql.select.servicios.catalogo.telematicos.sistra", new Object[] {} );
 			Map mResult = ( Map ) lst.get(0);
-			BigDecimal total = ( BigDecimal ) mResult.get( "total" );
+			Number total = ( Number ) mResult.get( "total" );
 			serviciosTelematicos = total.intValue();
 
 			/* Recogemos los servicios activos */
@@ -434,7 +434,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 			for(int i=0; i<lst.size(); i++)
 			{
 				mResult = ( Map ) lst.get(i);
-				tramites.add(( BigDecimal ) mResult.get( "tramite" ));
+				tramites.add(( Number ) mResult.get( "tramite" ));
 				
 			}
 			
@@ -444,7 +444,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				ls_sql += getSqlIn(tramites);
 				lst = this.queryForMapListConstructed(conSistra,ls_sql,new Object[] {});
 				mResult = ( Map ) lst.get(0);
-				total = ( BigDecimal ) mResult.get( "total" );
+				total = ( Number ) mResult.get( "total" );
 				certificados = total.intValue();
 			}
 			/* Consultamos los Servicios con Nivel de Autenticación Usuario*/
@@ -454,7 +454,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				ls_sql += getSqlIn(tramites);
 				lst = this.queryForMapListConstructed(conSistra,ls_sql,new Object[] {});
 				mResult = ( Map ) lst.get(0);
-				total = ( BigDecimal ) mResult.get( "total" );
+				total = ( Number ) mResult.get( "total" );
 				usuarios = total.intValue();
 			}
 			/* Consultamos los Servicios con Nivel de Autenticación Anonimo*/
@@ -464,7 +464,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				ls_sql += getSqlIn(tramites);
 				lst = this.queryForMapListConstructed(conSistra,ls_sql,new Object[] {});
 				mResult = ( Map ) lst.get(0);
-				total = ( BigDecimal ) mResult.get( "total" );
+				total = ( Number ) mResult.get( "total" );
 				anonimos = total.intValue();
 			}
 			/* Consultamos los Servicios con Envio a Registro*/
@@ -474,7 +474,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				ls_sql += getSqlIn(tramites);
 				lst = this.queryForMapListConstructed(conSistra,ls_sql,new Object[] {});
 				mResult = ( Map ) lst.get(0);
-				total = ( BigDecimal ) mResult.get( "total" );
+				total = ( Number ) mResult.get( "total" );
 				registro = total.intValue();
 			}
 			/* Consultamos los Servicios con Envio a Bandeja*/
@@ -484,7 +484,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				ls_sql += getSqlIn(tramites);
 				lst = this.queryForMapListConstructed(conSistra,ls_sql,new Object[] {});
 				mResult = ( Map ) lst.get(0);
-				total = ( BigDecimal ) mResult.get( "total" );
+				total = ( Number ) mResult.get( "total" );
 				bandeja = total.intValue();
 			}
 			/* Consultamos los Servicios con Envio a Consulta*/
@@ -494,7 +494,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				ls_sql += getSqlIn(tramites);
 				lst = this.queryForMapListConstructed(conSistra,ls_sql,new Object[] {});
 				mResult = ( Map ) lst.get(0);
-				total = ( BigDecimal ) mResult.get( "total" );
+				total = ( Number ) mResult.get( "total" );
 				consulta = total.intValue();
 			}
 			/* Consultamos los Servicios con Pagos*/
@@ -504,13 +504,13 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				ls_sql += getSqlIn(tramites);
 				lst = this.queryForMapListConstructed(conSistra,ls_sql,new Object[] {});
 				mResult = ( Map ) lst.get(0);
-				total = ( BigDecimal ) mResult.get( "total" );
+				total = ( Number ) mResult.get( "total" );
 				pagos = total.intValue();
 			}
 			/* Consultamos el numero maximo de Trámites realizados*/
 			lst = this.queryForMapList("sql.select.servicios.maximoConcurrentes", new Object[] {} );
 			mResult = ( Map ) lst.get(0);
-			total = ( BigDecimal ) mResult.get( "total" );
+			total = ( Number ) mResult.get( "total" );
 			String ls_dia =  (String) mResult.get("dia");
 			String ls_hora;
 			ls_hora = ls_dia.substring(11);
@@ -602,7 +602,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 			/* Consultamos el acceso a la Zona Personal*/
 			lst = this.queryForMapList(con, "sql.select.portal.accesoBuzon", new Object[] { desde, hasta} );
 			Map mResult = ( Map ) lst.get(0);
-			BigDecimal total = ( BigDecimal ) mResult.get( "total" );
+			Number total = ( Number ) mResult.get( "total" );
 			buzon = total.intValue();
 			
 			/* insertamos los datos */
@@ -689,13 +689,13 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 			/* Tramites Realizados Telemáticamente*/
 			lst = this.queryForMapList(con, "sql.select.tramitacion.telematicos", new Object[] { desde, hasta} );
 			Map mResult = ( Map ) lst.get(0);
-			BigDecimal total = ( BigDecimal ) mResult.get( "total" );
+			Number total = ( Number ) mResult.get( "total" );
 			serviciosTelematicos = total.intValue();
 
 			/* Tramites con Pre-Registro*/
 			lst = this.queryForMapList(con, "sql.select.tramitacion.preregistro", new Object[] { desde, hasta} );
 			mResult = ( Map ) lst.get(0);
-			total = ( BigDecimal ) mResult.get( "total" );
+			total = ( Number ) mResult.get( "total" );
 			serviciosPreregistro = total.intValue();
 
 			
@@ -830,7 +830,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				}
 
 				organismo = (String) mResultModelo.get("organismo");				
-				BigDecimal total = (BigDecimal) mResult.get("total");
+				Number total = (Number) mResult.get("total");
 
 				params[(max * 4)] = descripcion;
 				params[(max * 4) + 1] = descripcion_ca;
@@ -994,7 +994,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				}
 				
 				organismo = (String) mResultModelo.get("organismo");				
-				BigDecimal total = (BigDecimal) mResult.get("total");
+				Number total = (Number) mResult.get("total");
 
 				params[(max * 4)] = descripcion;
 				params[(max * 4) + 1] = descripcion_ca;
@@ -1087,7 +1087,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				Map mResult = ( Map ) listaRolsac.get(i);
 				String rs_modelo = (String)mResult.get("modelo");
 				String fecha = (String) mResult.get("fecha");
-				BigDecimal version = (BigDecimal)  mResult.get("version");
+				Number version = (Number)  mResult.get("version");
 				Map mDatosModelo = getDatosModelo(lista,rs_modelo);
 				String descripcion = "";
 				String descripcion_ca = "";
@@ -1150,7 +1150,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				int i_total = 0;
 				if(mValoresModelo != null)
 				{
-					BigDecimal total = (BigDecimal) mValoresModelo.get("total");
+					Number total = (Number) mValoresModelo.get("total");
 					i_total = total.intValue();
 				}
 

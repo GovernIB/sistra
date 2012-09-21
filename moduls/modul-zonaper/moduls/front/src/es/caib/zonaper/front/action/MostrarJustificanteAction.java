@@ -18,6 +18,7 @@ import es.caib.zonaper.front.Constants;
 import es.caib.zonaper.front.form.MostrarDocumentoForm;
 import es.caib.zonaper.model.DocumentoEntradaPreregistro;
 import es.caib.zonaper.model.Entrada;
+import es.caib.zonaper.model.EntradaTelematica;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.EntradaPreregistroDelegate;
 import es.caib.zonaper.persistence.delegate.EntradaTelematicaDelegate;
@@ -66,7 +67,7 @@ public class MostrarJustificanteAction extends BaseAction
 			//Comprobamos si la entrada tiene un formulario marcado como justificante
 			for (Iterator it= entrada.getDocumentos().iterator();it.hasNext();){
 				DocumentoEntradaPreregistro d = (DocumentoEntradaPreregistro) it.next();
-				if (d.getTipoDocumento() == 'G') {
+				if (d.getTipoDocumento() != null && d.getTipoDocumento().charValue() == 'G') {
 					codForJust = d.getCodigoRDS();
 					claForJust = d.getClaveRDS();
 					break;
@@ -82,7 +83,13 @@ public class MostrarJustificanteAction extends BaseAction
 			refRDS.setClave( claForJust );
 			
 			RdsDelegate rdsDelegate = DelegateRDSUtil.getRdsDelegate();
-			DocumentoRDS documentoRDS = rdsDelegate.consultarDocumentoFormateadoCopiasInteresadoAdmon(refRDS, entrada.getIdioma());
+			DocumentoRDS documentoRDS = null;
+			// Si es preregistro mostramos justificante con copias para admon/interesado
+			if (entrada instanceof EntradaTelematica ){
+				documentoRDS = rdsDelegate.consultarDocumentoFormateado(refRDS, entrada.getIdioma());
+			}else{
+				documentoRDS = rdsDelegate.consultarDocumentoFormateadoCopiasInteresadoAdmon(refRDS, entrada.getIdioma());
+			}
 			
 			request.setAttribute( Constants.NOMBREFICHERO_KEY, documentoRDS.getNombreFichero() );		
 			request.setAttribute( Constants.DATOSFICHERO_KEY, documentoRDS.getDatosFichero());

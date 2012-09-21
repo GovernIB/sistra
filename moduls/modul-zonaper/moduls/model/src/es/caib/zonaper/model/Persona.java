@@ -23,7 +23,8 @@ public class Persona implements Serializable
 	private String telefonoMovil;
 	private String email;
 	private boolean habilitarAvisosExpediente=false;
-	
+	private String habilitarDelegacion="N";
+	private String modificacionesUsuarioSeycon;
 	
 	private Date fechaAlta;
 	private Date fechaUltimaMod;
@@ -164,4 +165,18 @@ public class Persona implements Serializable
 	public void setTelefonoFijo(String telefonoFijo) {
 		this.telefonoFijo = telefonoFijo;
 	}
+	public String getHabilitarDelegacion() {
+		return habilitarDelegacion;
+	}
+	public void setHabilitarDelegacion(String habilitarDelegacion) {
+		this.habilitarDelegacion = habilitarDelegacion;
+	}
+	public String getModificacionesUsuarioSeycon() {
+		return modificacionesUsuarioSeycon;
+	}
+	public void setModificacionesUsuarioSeycon(String modificacionesUsuarioSeycon) {
+		this.modificacionesUsuarioSeycon = modificacionesUsuarioSeycon;
+	}
+	
+	
 }

@@ -21,7 +21,7 @@ public class EditarEnvioSmsForm extends ValidatorForm
 	private String horaCaducidad;
 	private String inmediato="N";
 	
-
+	private String confirmarEnvio="N";
 
 
 	public String getInmediato() {
@@ -188,6 +188,8 @@ public class EditarEnvioSmsForm extends ValidatorForm
             if((destinatarios == null) || (destinatarios.equals("")))
             {
             	errors.add("destinatarios", new ActionError("errors.noDestinatarios"));
+            } else if (destinatarios.indexOf(";") != -1 && "S".equals(confirmarEnvio)) {
+            	errors.add("destinatarios", new ActionError("errors.confirmarUnicoDestinatario"));
             }
             
     	}
@@ -203,6 +205,8 @@ public class EditarEnvioSmsForm extends ValidatorForm
 		this.setFechaProgramacion( null );
 		this.setMensaje( null );
 		this.setNombre( null );
+		this.setConfirmarEnvio("N");
+		this.setInmediato("N");
 	}
 	
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
@@ -228,6 +232,22 @@ public class EditarEnvioSmsForm extends ValidatorForm
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+
+
+
+
+	public String getConfirmarEnvio() {
+		return confirmarEnvio;
+	}
+
+
+
+
+
+	public void setConfirmarEnvio(String confirmarEnvio) {
+		this.confirmarEnvio = confirmarEnvio;
 	}
 
 }

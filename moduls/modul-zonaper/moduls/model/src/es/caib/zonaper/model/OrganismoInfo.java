@@ -16,6 +16,7 @@ public class OrganismoInfo {
 	private String pieContactoHTML;
 	private String telefonoIncidencias;
 	private String urlSoporteIncidencias;	
+	private String emailSoporteIncidencias;
 	private String urlCssCustom;
 	private Map tituloPortal = new HashMap(); // Titulos portal con el key como idioma
 	private Map referenciaPortal = new HashMap(); // Referencias portal con el key como idioma
@@ -73,6 +74,12 @@ public class OrganismoInfo {
 	}
 	public void setTituloPortal(Map tituloPortal) {
 		this.tituloPortal = tituloPortal;
+	}
+	public String getEmailSoporteIncidencias() {
+		return emailSoporteIncidencias;
+	}
+	public void setEmailSoporteIncidencias(String emailSoporteIncidencias) {
+		this.emailSoporteIncidencias = emailSoporteIncidencias;
 	}
 	
 }

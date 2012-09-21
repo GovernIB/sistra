@@ -34,22 +34,13 @@
 		obrir('/zonaperback/calcularDC.do?numeroPreregistro='+document.forms[0].numeroPreregistro.value, 'calcularDC', 540, 200);
 	}
 	
-	// Comprobamos si debemos imprimir el sello
-	<%	
-		if (request.getParameter("codigoSello") != null && request.getParameter("codigoSello").length() > 0){			
-	%>
-			document.location.href ='imprimirSello.do?codigo=<%=request.getParameter("codigoSello")%>';
-	<%
-		}
-	%>
-	
 			
 //-->
 </script>
 
 
 		<h2><bean:message key="busqueda.busquedaTramites" /></h2>
-		<p align="right"><html:link href="#" onclick="<%= "javascript:obrir('" + urlAyuda + "', 'Edicion', 540, 400);"%>"><img src="imgs/icones/ico_ayuda.gif" border="0"/><bean:message key="ayuda.enlace" /></html:link></p>
+		<p align="right"><html:link href="#" onclick="<%= \"javascript:obrir('\" + urlAyuda + \"', 'Edicion', 540, 400);\"%>"><img src="imgs/icones/ico_ayuda.gif" border="0"/><bean:message key="ayuda.enlace" /></html:link></p>
 			<html:form action="busquedaPreregistro" styleClass="centrat">
 					<p>
 						<bean:message key="busqueda.numeroEntrada" /> <html:text property="numeroPreregistro" size="16" maxlength="50"/> 

@@ -4,33 +4,44 @@ package es.caib.bantel.front.action;
 import java.io.ByteArrayInputStream;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.MessageResources;
 
+import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleTramiteForm;
+import es.caib.bantel.front.util.MensajesUtil;
 import es.caib.bantel.model.DocumentoBandeja;
 import es.caib.bantel.model.GestorBandeja;
-import es.caib.bantel.model.Tramite;
+import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.model.TramiteBandeja;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.delegate.GestorBandejaDelegate;
 import es.caib.bantel.persistence.delegate.TramiteBandejaDelegate;
+import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
+import es.caib.xml.ConstantesXML;
 import es.caib.xml.datospropios.factoria.FactoriaObjetosXMLDatosPropios;
 import es.caib.xml.datospropios.factoria.ServicioDatosPropiosXML;
 import es.caib.xml.datospropios.factoria.impl.DatosPropios;
+import es.caib.xml.documentoExternoNotificacion.factoria.FactoriaObjetosXMLDocumentoExternoNotificacion;
+import es.caib.xml.documentoExternoNotificacion.factoria.ServicioDocumentoExternoNotificacionXML;
+import es.caib.xml.documentoExternoNotificacion.factoria.impl.DocumentoExternoNotificacion;
 import es.caib.xml.registro.factoria.ConstantesAsientoXML;
+import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD;
@@ -56,22 +67,25 @@ import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
  */
 public class MostrarDetalleElementoAction extends BaseAction
 {
+	protected static Log log = LogFactory.getLog(MostrarDetalleElementoAction.class);
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception 
     {
 		PadBackOfficeDelegate ejb = new PadBackOfficeDelegate();
-		String clave = request.getParameter("clave");
-		String unidad = request.getParameter("unidad");
-		String identificador = request.getParameter("identificador");
+		
 		String codigo = request.getParameter("codigo");
 		String tipo = request.getParameter("tipo");
 		ExpedientePAD exp;
+		
+		// Recuperamos de sesion el expediente actual
+		String idExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY);
+		Long uniAdm = (Long) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY);
+		String claveExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY);
+		
 		try{
-			if(clave!=null && !"".equals(clave)){
-				exp = ejb.consultaExpediente( new Long(unidad), identificador,clave);
-			}else{
-				exp = ejb.consultaExpediente( new Long(unidad), identificador);
-			}
+			exp = ejb.consultaExpediente( uniAdm, idExpe, claveExpe);
+			
 			//si existe el expediente miramos si hay elementos y si existe el que nos estan pasando.
 			if(exp != null){
 				request.setAttribute("expediente", exp);
@@ -79,9 +93,13 @@ public class MostrarDetalleElementoAction extends BaseAction
 				if(exp.getElementos() != null && exp.getElementos().size() >= Integer.parseInt(codigo)){
 					if(tipo.equals("A") && exp.getElementos().get(Integer.parseInt(codigo)) instanceof EventoExpedientePAD) {
 						request.setAttribute("elemento",exp.getElementos().get(Integer.parseInt(codigo)));
+						EventoExpedientePAD evento = ((EventoExpedientePAD)exp.getElementos().get(Integer.parseInt(codigo)));
+						cargarFirmas(evento.getDocumentos(),request,tipo);
 						return mapping.findForward("succesAviso");
 					}else if(tipo.equals("N") && exp.getElementos().get(Integer.parseInt(codigo)) instanceof NotificacionExpedientePAD){
 						request.setAttribute("elemento",exp.getElementos().get(Integer.parseInt(codigo)));
+						NotificacionExpedientePAD notif = ((NotificacionExpedientePAD)exp.getElementos().get(Integer.parseInt(codigo)));
+						cargarFirmas(notif.getDocumentos(),request,tipo);
 						return mapping.findForward("succesNotificacion");
 					}else if(tipo.equals("T") && exp.getElementos().get(Integer.parseInt(codigo)) instanceof TramiteExpedientePAD){
 						String numeroRegistro = ((TramiteExpedientePAD)exp.getElementos().get(Integer.parseInt(codigo))).getNumeroRegistro();
@@ -126,6 +144,7 @@ public class MostrarDetalleElementoAction extends BaseAction
 									if (documentoRDS.isEstructurado()){
 										documentosEstructurados.add(documento.getCodigo());
 									}
+									cargarFirmas(documento,request);
 								}
 							}
 						}		
@@ -137,16 +156,16 @@ public class MostrarDetalleElementoAction extends BaseAction
 					
 						// Verificamos que el gestor tenga acceso al tramite
 						boolean acceso = false;		
-						for (Iterator it=gestor.getTramitesGestionados().iterator();it.hasNext();){
-								Tramite tram = (Tramite) it.next();
-								if (tram.getIdentificador().equals(tramite.getTramite().getIdentificador())){
+						for (Iterator it=gestor.getProcedimientosGestionados().iterator();it.hasNext();){
+								Procedimiento procedimiento = (Procedimiento) it.next();
+								if (procedimiento.getIdentificador().equals(tramite.getProcedimiento().getIdentificador())){
 									acceso = true;
 									break;
 								}
 						}
 						if (!acceso){
 							MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));
-							request.setAttribute("message",resources.getMessage( getLocale( request ), "errors.tramiteNoAcceso", new Object[] {tramite.getTramite().getIdentificador()}));			
+							request.setAttribute("message",resources.getMessage( getLocale( request ), "errors.tramiteNoAcceso", new Object[] {tramite.getProcedimiento().getIdentificador()}));			
 							return mapping.findForward( "fail" );
 						}
 						// ------------------------------------------------------------------------------------------------------------------
@@ -159,16 +178,67 @@ public class MostrarDetalleElementoAction extends BaseAction
 						request.setAttribute("detalleTramiteForm",detalleTramiteForm);
 						return mapping.findForward("succesTramite");
 					}else{
-						return mapping.findForward("fail");
+						throw new Exception("Tipo elemento expediente no soportado");
 					}
 				}else{
-					return mapping.findForward("fail");
+					throw new Exception("No existe elemento expediente");
 				}
 			}else{
-				return mapping.findForward("fail");
+				throw new Exception("Expediente no existe");
 			}
 		}catch(Exception e){
+			log.error("Excepcion mostrando detalle elemento",e);			
+			String mensajeOk = MensajesUtil.getValue("error.excepcion.general") + ": " + e.getMessage();
+			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk);
 			return mapping.findForward("fail");
 		}
     }
+	
+	private void cargarFirmas(DocumentoBandeja documento, HttpServletRequest request) throws Exception{
+		RdsDelegate rdsDeleg = DelegateRDSUtil.getRdsDelegate();
+		
+//		vamos a buscar las firmas de los documentos si existen y las meteremos en la request
+		if(documento != null && documento.getRdsCodigo() != null && documento.getRdsClave() != null){
+			ReferenciaRDS ref =  new ReferenciaRDS(documento.getRdsCodigo(),documento.getRdsClave());
+			if (ref.getCodigo() > 0){
+				String codigo = documento.getCodigo()+"";
+				DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
+				if(doc != null && doc.getFirmas() != null){
+					request.setAttribute(codigo,doc.getFirmas());
+				}
+			}
+		}
+	}
+	
+	private void cargarFirmas(List documentos, HttpServletRequest request, String tipo) throws Exception{
+		RdsDelegate rdsDeleg = DelegateRDSUtil.getRdsDelegate();
+		
+		//		vamos a buscar las firmas de los documentos si existen y las meteremos en la request
+		if(documentos != null){
+			ReferenciaRDS ref = null;
+			Long codigo = null;
+			for(int i=0;i<documentos.size();i++){
+				DocumentoExpedientePAD docTipo = (DocumentoExpedientePAD)documentos.get(i);
+				ref = new ReferenciaRDS(docTipo.getCodigoRDS(),docTipo.getClaveRDS());
+				if (ref.getCodigo() > 0){
+					codigo = docTipo.getCodigoRDS();
+					DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
+					// Cargamos firmas
+					if(doc != null && doc.getFirmas() != null){
+						request.setAttribute(codigo.toString(),doc.getFirmas());
+					}
+					// Establecemos en la request si es una referencia a un doc externo (modelo GE0013NOTIFEXT)
+					if (doc.getModelo().equals(ConstantesRDS.MODELO_NOTIFICACION_EXTERNO)) {
+						// Buscamos url
+						doc = rdsDeleg.consultarDocumento(ref, true);
+						FactoriaObjetosXMLDocumentoExternoNotificacion factoria = ServicioDocumentoExternoNotificacionXML.crearFactoriaObjetosXML();
+						factoria.setEncoding(ConstantesXML.ENCODING);
+						factoria.setIndentacion(true);
+						DocumentoExternoNotificacion documentoExternoNotificacion = factoria.crearDocumentoExternoNotificacion(new ByteArrayInputStream(doc.getDatosFichero()));
+						request.setAttribute("URL-"+docTipo.getCodigoRDS(),documentoExternoNotificacion.getUrl());
+					}
+				}
+			}
+		}
+	}
 }

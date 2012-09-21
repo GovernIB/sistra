@@ -14,7 +14,7 @@ public class EjbUtil
 	private final static String HTTP_INITIAL_CONTEXT_FACTORY = "org.jboss.naming.HttpNamingContextFactory";
 	private final static String URL_PKG_PREFIXES = "org.jboss.naming:org.jnp.interfaces";
 		
-    public static InitialContext getInitialContext( String jndi,boolean local,String url) throws Exception{
+    public static InitialContext getInitialContext(boolean local,String url) throws Exception{
     	Properties environment = null;
 		javax.naming.InitialContext initialContext = null;
 		if (local){						
@@ -32,7 +32,7 @@ public class EjbUtil
 	
     public static Object lookupHome( String jndi,boolean local,String url, Class narrowTo) throws Exception {
 	      // Obtain initial context
-	      InitialContext initialContext = getInitialContext(jndi,local,url);
+	      InitialContext initialContext = getInitialContext(local,url);
 	      try {
 	         Object objRef = initialContext.lookup(jndi);
 	         // only narrow if necessary

@@ -17,7 +17,6 @@ import org.quartz.ee.servlet.QuartzInitializerServlet;
 import org.quartz.impl.StdSchedulerFactory;
 
 import es.caib.bantel.admin.scheduler.conf.SchedulerConfiguration;
-import es.caib.bantel.admin.scheduler.listener.BantelJobListener;
 
 /**
  * @web.servlet name="bantelSchedulerServlet" load-on-startup="2"
@@ -44,7 +43,7 @@ public class BantelSchedulerServlet implements Servlet
 			SchedulerConfiguration configuration = SchedulerConfiguration.getInstance();
 			StdSchedulerFactory schedFact = this.getSchedulerFactory( config );
 			sched = schedFact.getScheduler();
-			sched.addGlobalJobListener( new BantelJobListener() );
+			//sched.addJobListener( new BantelJobListener() );
 			
 			// Programación Jobs
 			jobNumber = Integer.parseInt(configuration.get( "scheduler.jobs.number" ));

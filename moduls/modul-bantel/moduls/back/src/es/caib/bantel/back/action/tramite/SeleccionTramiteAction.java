@@ -29,7 +29,7 @@ public class SeleccionTramiteAction extends BaseAction{
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-    	log.info("Entramos en SeleccionTramite");
+    	log.debug("Entramos en SeleccionTramite");
 
         String idString = request.getParameter("codigo");
         if (idString == null || idString.length() == 0) {
@@ -37,12 +37,12 @@ public class SeleccionTramiteAction extends BaseAction{
             return mapping.findForward("fail");
         }
 
-        log.info("Seleccionar el tramite " + idString);
+        log.debug("Seleccionar el tramite " + idString);
        
         guardarTramite(mapping, request, idString);
 
         request.setAttribute( "idReadOnly", new Boolean( true ) );
-        
+        request.setAttribute( "codigoTramiteError", idString );
         return mapping.findForward("success");
     }
 }

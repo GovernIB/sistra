@@ -73,7 +73,7 @@
 		<antcall target="propagate">
 			<param name="task" value="main"/>
 		</antcall>
-		<antcall target="assemble"/>
+		<!-- <antcall target="assemble"/> -->
 		<antcall target="interfaz"/>	
 		<antcall target="distribute"/>
 	</target>
@@ -125,7 +125,7 @@
     </target>	
 	
 	<target name="distribute" description="Distribucion">
-		<copy file="${product.dir}/audita-client.jar" todir="${distribucion.dir}/client"/>		
-		<copy file="${product.dir}/1-${projecte}.ear" todir="${distribucion.dir}/ear"/>		
+		<copy file="${product.dir}/audita-client.jar" todir="${distribucion.dir}/client/ejb"/>		
+		<!-- <copy file="${product.dir}/1-${projecte}.ear" todir="${distribucion.dir}/ear"/> -->		
 	</target>
 </project>

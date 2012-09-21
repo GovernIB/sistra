@@ -19,8 +19,7 @@ public class ConstantesPago {
 	 * Tipo de pago: tipo de pago telemático y presencial
 	 */
 	public final static char TIPOPAGO_AMBOS = 'A';
-	
-	
+		
 	// SESION DE PAGOS
 	/**
 	 * No existe sesión de pagos para un determinado localizador de sesión

@@ -28,13 +28,21 @@ public class EntradaPreregistroBackup
     private String nombreRepresentante;
     private String nifRepresentado;
     private String nombreRepresentado;
+    private String nifDelegado;
+    private String nombreDelegado;
+    private String procedimiento;
     private String tramite;
-    private int version;
+    private Integer version;
     private char confirmadoAutomaticamente;
 //  Opciones de aviso movilidad
     private String habilitarAvisos;
  	private String avisoSMS;
  	private String avisoEmail;
+//  Opciones de notificacion telematica
+ 	private String habilitarNotificacionTelematica;
+//  Tramite subsanacion
+ 	private String subsanacionExpedienteCodigo;
+ 	private Long subsanacionExpedienteUA; 
        
     // Methods
 	
@@ -269,12 +277,12 @@ public class EntradaPreregistroBackup
 	}
 
 
-	public int getVersion() {
+	public Integer getVersion() {
 		return version;
 	}
 
 
-	public void setVersion(int version) {
+	public void setVersion(Integer version) {
 		this.version = version;
 	}
 
@@ -316,5 +324,64 @@ public class EntradaPreregistroBackup
 
 	public void setHabilitarAvisos(String habilitarAvisos) {
 		this.habilitarAvisos = habilitarAvisos;
+	}
+	
+	public String getHabilitarNotificacionTelematica() {
+		return habilitarNotificacionTelematica;
+	}
+
+	public void setHabilitarNotificacionTelematica(
+			String habilitarNotificacionTelematica) {
+		this.habilitarNotificacionTelematica = habilitarNotificacionTelematica;
+	}
+
+
+	public String getNifDelegado() {
+		return nifDelegado;
+	}
+
+
+	public void setNifDelegado(String nifDelegado) {
+		this.nifDelegado = nifDelegado;
+	}
+
+
+	public String getNombreDelegado() {
+		return nombreDelegado;
+	}
+
+
+	public void setNombreDelegado(String nombreDelegado) {
+		this.nombreDelegado = nombreDelegado;
+	}
+
+
+	public String getSubsanacionExpedienteCodigo() {
+		return subsanacionExpedienteCodigo;
+	}
+
+
+	public void setSubsanacionExpedienteCodigo(String subsanacionExpedienteCodigo) {
+		this.subsanacionExpedienteCodigo = subsanacionExpedienteCodigo;
+	}
+
+
+	public Long getSubsanacionExpedienteUA() {
+		return subsanacionExpedienteUA;
+	}
+
+
+	public void setSubsanacionExpedienteUA(Long subsanacionExpedienteUA) {
+		this.subsanacionExpedienteUA = subsanacionExpedienteUA;
+	}
+
+
+	public String getProcedimiento() {
+		return procedimiento;
+	}
+
+
+	public void setProcedimiento(String procedimiento) {
+		this.procedimiento = procedimiento;
 	}
 }

@@ -100,19 +100,19 @@
 								<bean:define id="marcarNoProcesado" type="java.lang.String">
 									<bean:message key="detalleTramite.datosTramite.marcarNoProcesado"/> 
 								</bean:define>
-								<html:button value="<%=marcarNoProcesado%>" property="no_procesada" onclick="<%= "javascript:document.location.href='" + urlCambioEstado + "&estado=N&estadoOld=" + estadoOld + "'" %>"/>
+								<html:button value="<%=marcarNoProcesado%>" property="no_procesada" onclick="<%= \"javascript:document.location.href='\" + urlCambioEstado + \"&estado=N&estadoOld=\" + estadoOld + \"'\" %>"/>
 							</logic:equal>
 							<logic:equal name="tramite" property="procesada" value='S'>					
 								<bean:define id="marcarNoProcesado" type="java.lang.String">
 									<bean:message key="detalleTramite.datosTramite.marcarNoProcesado"/> 
 								</bean:define>
-								<html:button value="<%=marcarNoProcesado%>" property="no_procesada" onclick="<%= "javascript:document.location.href='" + urlCambioEstado + "&estado=N&estadoOld=" + estadoOld + "'" %>"/>
+								<html:button value="<%=marcarNoProcesado%>" property="no_procesada" onclick="<%= \"javascript:document.location.href='\" + urlCambioEstado + \"&estado=N&estadoOld=\" + estadoOld + \"'\" %>"/>
 							</logic:equal>
 							<logic:equal name="tramite" property="procesada" value='N'>
 								<bean:define id="marcarProcesado" type="java.lang.String">
 									<bean:message key="detalleTramite.datosTramite.marcarProcesado"/> 
 								</bean:define>
-								<html:button value="<%=marcarProcesado%>" property="procesar" onclick="<%= "javascript:document.location.href='" + urlCambioEstado + "&estado=S&estadoOld=" + estadoOld + "'" %>"/>						
+								<html:button value="<%=marcarProcesado%>" property="procesar" onclick="<%= \"javascript:document.location.href='\" + urlCambioEstado + \"&estado=S&estadoOld=\" + estadoOld + \"'\" %>"/>						
 							</logic:equal>						
 						</p>
 					</logic:equal>
@@ -150,8 +150,9 @@
 							<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.datosEnvio.fecha"/>:</span> <span><bean:write name="tramite" property="fechaPreregistro" format="dd/MM/yyyy - HH:mm 'h.'"/></span></li>
 						</ul>													
 					</logic:notEqual>
-				</logic:notEqual>												
+				</logic:notEqual>	
 				<ul>
+					<li><span class="label"><bean:message key="detalleTramite.numeroEntrada"/>:</span> <span><bean:write name="tramite" property="numeroEntrada"/></span></li>
 					<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.asunto"/>:</span> <span><bean:write name="tramite" property="descripcionTramite"/></span></li>
 					<logic:notEmpty name="tramite" property="usuarioNif">
 						<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.asunto.nombre"/>:</span> <span><bean:write name="tramite" property="usuarioNombre"/></span></li>
@@ -161,7 +162,45 @@
 						<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.asunto.nombreRepresentado"/>:</span> <span><bean:write name="tramite" property="representadoNombre"/></span></li>
 						<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.asunto.nifRepresentado"/>:</span> <span><bean:write name="tramite" property="representadoNif"/></span></li>
 					 </logic:notEmpty>
+					<logic:notEmpty name="tramite" property="delegadoNif">
+						<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.asunto.nombreDelegado"/>:</span> <span><bean:write name="tramite" property="delegadoNombre"/></span></li>
+						<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.asunto.nifDelegado"/>:</span> <span><bean:write name="tramite" property="delegadoNif"/></span></li>
+					</logic:notEmpty>					
 				</ul>
+				
+				<!-- Notificaciones telematicas y avisos -->
+				<logic:notEmpty name="datosPropios">
+						<logic:notEmpty name="datosPropios" property="instrucciones">
+							<logic:notEmpty name="datosPropios" property="instrucciones.habilitarNotificacionTelematica">
+								<logic:equal name="datosPropios" property="instrucciones.habilitarNotificacionTelematica" value="S">
+								<ul>	
+									<li>
+										<span class="label"><bean:message key="detalleTramite.datosSolicitud.habilitarNotificaciones"/>:</span> 
+										<span>Si</span>
+									</li>
+								</ul>									
+								</logic:equal>
+							</logic:notEmpty>
+							<logic:notEmpty name="datosPropios" property="instrucciones.habilitarAvisos">
+								<logic:equal name="datosPropios" property="instrucciones.habilitarAvisos" value="S">
+								<ul>	
+									<li>
+										<span class="label"><bean:message key="detalleTramite.datosSolicitud.habilitarAvisos"/>:</span> 
+										<span>
+											<logic:notEmpty name="datosPropios" property="instrucciones.avisoEmail">
+												Email: <bean:write name="datosPropios" property="instrucciones.avisoEmail"/>
+											</logic:notEmpty>
+											&nbsp;
+											<logic:notEmpty name="datosPropios" property="instrucciones.avisoSMS">
+												SMS: <bean:write name="datosPropios" property="instrucciones.avisoSMS"/>
+											</logic:notEmpty>											
+										</span>
+									</li>
+								</ul>									
+								</logic:equal>
+							</logic:notEmpty>							
+						</logic:notEmpty>
+				</logic:notEmpty>
 				
 				<!--  accesso al justificante para entradas telematicas -->										
 				<logic:notEqual name="tramite" property="tipo" value="<%=Character.toString(ConstantesAsientoXML.TIPO_PREENVIO)%>">
@@ -244,6 +283,15 @@
 												[XML]
 											</html:link>
 										<%}%>
+										<bean:define id="codigoFirma" type="java.lang.String">
+											<bean:write name="documento" property="codigo" />
+										</bean:define>
+										<logic:notEmpty name="<%=codigoFirma %>" scope="request">
+											<bean:message key="comprobarDocumento.firmadoPor"/>
+											<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request">							
+												&nbsp;<bean:write name="firma" property="nombreApellidos"/>  										
+											</logic:iterate>			
+										</logic:notEmpty>
 									</li>
 							</logic:notEqual>					
 						</logic:notEmpty>
@@ -295,12 +343,16 @@
 					</logic:notEmpty>	
 			</div>
 			
-			<p class="tornarArrere"><strong>
-			<logic:notPresent name="enlace">
-			<a href="/bantelfront/busquedaTramites.do">
-			</logic:notPresent>
-			<logic:present name="enlace">
-			<a href="javascript:history.back(1)">
-			</logic:present>
-			<bean:message key="detalleTramite.volver"/></a>
-			</strong></p>
+			
+			<!-- tornar enrere -->
+			<div id="enrere">
+				<logic:notPresent name="enlace">
+				<a href="/bantelfront/busquedaTramites.do">
+				</logic:notPresent>
+				<logic:present name="enlace">
+				<a href="javascript:history.back(1)">
+				</logic:present>
+				<bean:message key="detalleTramite.volver"/></a>					
+			</div>
+			<!-- /tornar enrere -->
+			

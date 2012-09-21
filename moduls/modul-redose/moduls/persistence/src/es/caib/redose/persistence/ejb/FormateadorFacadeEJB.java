@@ -32,9 +32,10 @@ public abstract class FormateadorFacadeEJB extends HibernateEJB {
 
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.redose}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
+     * @ejb.permission role-name="${role.operador}"
      */
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
@@ -45,7 +46,8 @@ public abstract class FormateadorFacadeEJB extends HibernateEJB {
      * Obtiene el formateador identificado por el parametro id
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Formateador obtenerFormateador(Long id) {
         Session session = getSession();
@@ -66,7 +68,8 @@ public abstract class FormateadorFacadeEJB extends HibernateEJB {
      * Obtiene el formateador identificado por el parametro id
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Formateador obtenerFormateador(String clase) {
         Session session = getSession();
@@ -115,7 +118,8 @@ public abstract class FormateadorFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long grabarFormateadorAlta(Formateador obj) {    	
         Session session = getSession();
@@ -132,7 +136,8 @@ public abstract class FormateadorFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long grabarFormateadorUpdate(Formateador obj) {    	
         Session session = getSession();
@@ -149,7 +154,8 @@ public abstract class FormateadorFacadeEJB extends HibernateEJB {
           
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarFormateador(Long id) {
     	Session session = getSession();
@@ -168,7 +174,8 @@ public abstract class FormateadorFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public boolean puedoBorrarFormateador(Long id) {
     	

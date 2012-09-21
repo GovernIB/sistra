@@ -40,7 +40,7 @@ public class CustomRequestProcessor extends TilesRequestProcessor {
 
             // Lenguaje por defecto.
             defaultLang = Constants.DEFAULT_LANG;
-            log.info("Default lang: " + defaultLang);
+            log.debug("Default lang: " + defaultLang);
             getServletContext().setAttribute(Constants.DEFAULT_LANG_KEY, defaultLang);
 
             // Todos los lenguajes soportados (incluido el por defecto).
@@ -50,7 +50,7 @@ public class CustomRequestProcessor extends TilesRequestProcessor {
             supportedLangs.add( "es" );
             supportedLangs.add( "en" );
             supportedLangs.add( "de" );
-            log.info("Supported langs: " + supportedLangs);
+            log.debug("Supported langs: " + supportedLangs);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -75,11 +75,11 @@ public class CustomRequestProcessor extends TilesRequestProcessor {
         String paramLang = request.getParameter("lang");
         if (paramLang != null) {
             if (supportedLangs.contains(paramLang)) {
-                log.info("Setting selected locale: " + paramLang);
+                log.debug("Setting selected locale: " + paramLang);
                 session.setAttribute(Globals.LOCALE_KEY, new Locale(paramLang));
                 return;
             } else {
-                log.info("Invalid selected locale: " + paramLang);
+                log.debug("Invalid selected locale: " + paramLang);
             }
         }
 
@@ -96,14 +96,14 @@ public class CustomRequestProcessor extends TilesRequestProcessor {
             String lang = locale.getLanguage().trim();
 
             if (supportedLangs.contains(lang)) {
-                log.info("Setting browser locale: " + lang);
+                log.debug("Setting browser locale: " + lang);
                 session.setAttribute(Globals.LOCALE_KEY, new Locale(lang));
                 return;
             }
         }
 
         // Si no encontramos ninguno fijamos el por defecto.
-        log.info("Setting default locale: " + defaultLang);
+        log.debug("Setting default locale: " + defaultLang);
         session.setAttribute(Globals.LOCALE_KEY, new Locale(defaultLang));
     }
 

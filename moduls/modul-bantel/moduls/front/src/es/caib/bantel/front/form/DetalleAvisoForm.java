@@ -1,8 +1,5 @@
 package es.caib.bantel.front.form;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -13,7 +10,6 @@ import org.apache.struts.upload.FormFile;
 import org.apache.struts.validator.ValidatorForm;
 
 import es.caib.bantel.front.util.DocumentosUtil;
-import es.caib.bantel.front.util.Dominios;
 import es.caib.bantel.front.util.MensajesUtil;
 
 
@@ -21,14 +17,17 @@ import es.caib.bantel.front.util.MensajesUtil;
 public class DetalleAvisoForm extends ValidatorForm
 
 {
-	private String identificadorExpediente;
-	private String unidadAdministrativa;
-	private String claveExpediente;
 	private String titulo;
 	private String texto;
+	private String permitirSms = "N"; // S / N 
 	private String textoSMS;
+	
+	private String tipoDocumento; // URL / FICHERO
 	private String documentoAnexoTitulo;
-	private FormFile documentoAnexoFichero;
+	private FormFile documentoAnexoFichero;	
+	private String  documentoUrlAnexo;
+	
+	
 	private String descripcionExpediente;
     private String firmar;
     private String flagValidacion;
@@ -45,14 +44,6 @@ public class DetalleAvisoForm extends ValidatorForm
 
 	public void setIdioma(String idioma) {
 		this.idioma = idioma;
-	}
-
-	public String getClaveExpediente() {
-		return claveExpediente;
-	}
-
-	public void setClaveExpediente(String claveExpediente) {
-		this.claveExpediente = claveExpediente;
 	}
 
 	public String getDescripcionExpediente() {
@@ -78,15 +69,7 @@ public class DetalleAvisoForm extends ValidatorForm
 	public void setDocumentoAnexoTitulo(String documentoAnexoTitulo) {
 		this.documentoAnexoTitulo = documentoAnexoTitulo;
 	}
-
-	public String getIdentificadorExpediente() {
-		return identificadorExpediente;
-	}
-
-	public void setIdentificadorExpediente(String identificadorExpediente) {
-		this.identificadorExpediente = identificadorExpediente;
-	}
-
+	
 	public String getTexto() {
 		return texto;
 	}
@@ -109,14 +92,6 @@ public class DetalleAvisoForm extends ValidatorForm
 
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
-	}
-
-	public String getUnidadAdministrativa() {
-		return unidadAdministrativa;
-	}
-
-	public void setUnidadAdministrativa(String unidadAdministrativa) {
-		this.unidadAdministrativa = unidadAdministrativa;
 	}
 	
 	public String getFirmar() {
@@ -153,7 +128,6 @@ public class DetalleAvisoForm extends ValidatorForm
 
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
         ActionErrors errors = super.validate(mapping, request);
-        boolean error = false;
         if (errors == null) 
         {
             errors = new ActionErrors();
@@ -162,30 +136,48 @@ public class DetalleAvisoForm extends ValidatorForm
         	
         	if(!DocumentosUtil.extensionCorrecta(documentoAnexoFichero.getFileName())){
         		errors.add("altaNotificacion",new ActionError("error.aviso.extensiones.fichero"));
-        		error = true;
         	}
         }
         if(StringUtils.isNotEmpty(flagValidacion) && flagValidacion.equals("alta")){
         	if(StringUtils.isEmpty(titulo)){
         		errors.add("altaAviso", new ActionError("errors.required", MensajesUtil.getValue("aviso.titulo")));
-        		error = true;
         	}
         	if(StringUtils.isEmpty(texto)){
         		errors.add("altaAviso", new ActionError("errors.required", MensajesUtil.getValue("aviso.texto")));
-        		error = true;
+        	}   
+        	if(StringUtils.isNotEmpty(titulo) && titulo.length() > 500){
+        		errors.add("altaAviso", new ActionError("errors.maxlength", MensajesUtil.getValue("aviso.titulo"), "500"));
         	}
-        	if(error){
-        		List unidades = new ArrayList();
-				try {
-					unidades = Dominios.listarUnidadesAdministrativas();
-					
-				} catch (Exception e) {}
-				request.setAttribute("unidades",unidades);
+        	if(StringUtils.isNotEmpty(texto) && texto.length() > 4000){
+        		errors.add("altaAviso", new ActionError("errors.maxlength", MensajesUtil.getValue("aviso.texto"), "4000"));
         	}
-        		
         }
     	
         return errors;
     }
+
+	public String getTipoDocumento() {
+		return tipoDocumento;
+	}
+
+	public void setTipoDocumento(String tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
+	}
+
+	public String getDocumentoUrlAnexo() {
+		return documentoUrlAnexo;
+	}
+
+	public void setDocumentoUrlAnexo(String urlAnexo) {
+		this.documentoUrlAnexo = urlAnexo;
+	}
+
+	public String getPermitirSms() {
+		return permitirSms;
+	}
+
+	public void setPermitirSms(String permitirSms) {
+		this.permitirSms = permitirSms;
+	}
 	
 }

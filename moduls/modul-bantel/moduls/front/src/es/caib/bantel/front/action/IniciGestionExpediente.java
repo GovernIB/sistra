@@ -16,18 +16,20 @@ import es.caib.bantel.front.util.MensajesUtil;
  *  validate="false"
  *  
  * @struts.action-forward
- *  name="success" path=".inicioExpediente"
+ *  name="success" path=".busquedaExpedientes"
+ * 
  *
  * @struts.action-forward
  *  name="fail" path=".error"
  */
 public class IniciGestionExpediente extends BaseAction
 {
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception 
     {
 		request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,"3");
-		request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY2,"3");
+		//request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY2,"3");
 		MensajesUtil.setMsg(this.getResources(request));
 		return mapping.findForward( "success" );
     }

@@ -4,19 +4,13 @@ import org.apache.struts.validator.ValidatorForm;
 
 public class ExportCSVTramitesForm extends ValidatorForm
 {
-	private String identificadorTramite;
+	private String identificadorProcedimientoTramite;
 	private String procesada;
 	private String desde;
 	private String hasta;
 	
 	
 	
-	public String getIdentificadorTramite() {
-		return identificadorTramite;
-	}
-	public void setIdentificadorTramite(String identificadorTramite) {
-		this.identificadorTramite = identificadorTramite;
-	}
 	public String getProcesada() {
 		return procesada;
 	}
@@ -35,9 +29,13 @@ public class ExportCSVTramitesForm extends ValidatorForm
 	public void setHasta(String hasta) {
 		this.hasta = hasta;
 	}
-	
-	
-	
+	public String getIdentificadorProcedimientoTramite() {
+		return identificadorProcedimientoTramite;
+	}
+	public void setIdentificadorProcedimientoTramite(
+			String identificadorProcedimientoTramite) {
+		this.identificadorProcedimientoTramite = identificadorProcedimientoTramite;
+	}
 	
 	
 }

@@ -44,4 +44,16 @@ public class ZonapersFrontRequestHelper
     {
     	request.getSession().setAttribute( Constants.DATOS_SESION_KEY, sesion );
     }
+
+	public static boolean isControlarEntregaNotificaciones(
+			HttpServletRequest request) {
+		Boolean control = (Boolean) request.getSession().getServletContext().getAttribute(Constants.CONTROLAR_ENTREGA_NOTIFICACIONES);
+		return control.booleanValue();
+	}
+	
+	public static boolean isHabilitarApartadoAlertas(
+			HttpServletRequest request) {
+		Boolean control = (Boolean) request.getSession().getServletContext().getAttribute(Constants.HABILITAR_APARTADO_ALERTAS);
+		return control.booleanValue();
+	}
 }

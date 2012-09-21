@@ -21,7 +21,7 @@
     <definition
    		name=".exportarCSV"
    		extends=".mainLayout"
-   		controller="es.caib.bantel.front.controller.ExportCSVController">	
+   		controllerClass="es.caib.bantel.front.controller.ExportCSVController">	
    		<put name="main" value="/exportarCSV.jsp"/>
 	</definition>  
     
@@ -41,7 +41,7 @@
     <definition
     	name=".formularioBusqueda"
     	path="/formularioBusqueda.jsp" 
-    	controller="es.caib.bantel.front.controller.FormularioBusquedaController"/>
+    	controllerClass="es.caib.bantel.front.controller.FormularioBusquedaController"/>
     	
     <definition
     	name=".busqueda"
@@ -52,6 +52,22 @@
    	<definition
     	name=".resultadoBusqueda"
     	path="/resultadoBusqueda.jsp" />
+
+
+ <definition
+    	name=".formularioBusquedaExpedientes"
+    	path="/formularioBusquedaExpedientes.jsp" 
+    	controllerClass="es.caib.bantel.front.controller.FormularioBusquedaController"/>
+    	
+    <definition
+    	name=".busquedaExpedientes"
+    	extends=".mainLayout">	
+    	<put name="main" value=".resultadoBusquedaExpedientes"/>
+   	</definition>
+   	
+   	<definition
+    	name=".resultadoBusquedaExpedientes"
+    	path="/resultadoBusquedaExpedientes.jsp" />
 
    	<definition
    		name=".detalle"
@@ -66,43 +82,35 @@
     <definition
     	name=".mensaje"
     	extends=".mainLayout"
-    	controller="es.caib.bantel.front.controller.MessageController">	
+    	controllerClass="es.caib.bantel.front.controller.MessageController">	
     	<put name="main" value="/moduls/mensaje.jsp"/>
    	</definition>
-
-	<definition
-   		name=".confirmacionRecuperacionExpediente"
-   		extends=".mainLayout">	
-   		<put name="main" value="/confirmacionRecuperacionExpediente.jsp"/>
-	</definition>   
-	
-	<definition
-   		name=".inicioExpediente"
-   		extends=".mainLayout">	
-   		<put name="main" value="/inicioExpediente.jsp"/>
-	</definition>
 	
 	<definition
    		name=".altaExpediente"
-   		extends=".mainLayout">	
+   		extends=".mainLayout" 
+   		controllerClass="es.caib.bantel.front.controller.AltaExpedienteController">	
    		<put name="main" value="/altaExpediente.jsp"/>
 	</definition>  
 	
 	<definition
    		name=".entradaAltaExpediente"
-   		extends=".mainLayout">	
+   		extends=".mainLayout"
+   		controllerClass="es.caib.bantel.front.controller.AltaExpedienteController">	
    		<put name="main" value="/entradaAltaExpediente.jsp"/>
 	</definition>    
 	
 	<definition
    		name=".altaAviso"
-   		extends=".mainLayout">	
+   		extends=".mainLayout"
+   		controllerClass="es.caib.bantel.front.controller.AltaAvisoController">		
    		<put name="main" value="/altaAviso.jsp"/>
 	</definition>   
 
 	<definition
    		name=".altaNotificacion"
-   		extends=".mainLayout">	
+   		extends=".mainLayout"
+   		controllerClass="es.caib.bantel.front.controller.AltaNotificacionController">		
    		<put name="main" value="/altaNotificacion.jsp"/>
 	</definition>   
 	
@@ -125,14 +133,9 @@
 	</definition>   
 
 	<definition
-   		name=".confirmacionRecuperacionExpediente"
-   		extends=".mainLayout">	
-   		<put name="main" value="/confirmacionRecuperacionExpediente.jsp"/>
-	</definition>   
-	
-	<definition
    		name=".recuperarExpediente"
-   		extends=".mainLayout">	
+   		extends=".mainLayout"
+   		controllerClass="es.caib.bantel.front.controller.RecuperacionExpedienteController">	
    		<put name="main" value="/detalleExpediente.jsp"/>
 	</definition>   
 	

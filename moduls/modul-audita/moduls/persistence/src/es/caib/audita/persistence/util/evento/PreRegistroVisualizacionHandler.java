@@ -1,6 +1,6 @@
 package es.caib.audita.persistence.util.evento;
 
-import java.math.BigDecimal;
+import java.lang.Number;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -70,7 +70,7 @@ public class PreRegistroVisualizacionHandler extends
 			String clave = ( String ) mResult.get( "clave" );
 			if(clave.equals(tipo))
 			{
-				BigDecimal total = (BigDecimal) mResult.get( "total" );
+				Number total = (Number) mResult.get( "total" );
 				return total.intValue();
 			}
 		}

@@ -26,10 +26,6 @@ import javax.xml.namespace.QName;
 public class ObjectFactory {
 
     private final static QName _ReferenciaEntradaClaveAcceso_QNAME = new QName("", "claveAcceso");
-    private final static QName _Fault_QNAME = new QName("urn:es:caib:bantel:ws:v1:model:BackofficeFacade", "fault");
-    private final static QName _DocumentoBTEPresentacionTelematica_QNAME = new QName("", "presentacionTelematica");
-    private final static QName _DocumentoBTEPresentacionPresencial_QNAME = new QName("", "presentacionPresencial");
-    private final static QName _FirmaWSFormato_QNAME = new QName("", "formato");
     private final static QName _TramiteBTEHabilitarNotificacionTelematica_QNAME = new QName("", "habilitarNotificacionTelematica");
     private final static QName _TramiteBTEUsuarioSeycon_QNAME = new QName("", "usuarioSeycon");
     private final static QName _TramiteBTETipoConfirmacionPreregistro_QNAME = new QName("", "tipoConfirmacionPreregistro");
@@ -42,12 +38,24 @@ public class ObjectFactory {
     private final static QName _TramiteBTEFechaPreregistro_QNAME = new QName("", "fechaPreregistro");
     private final static QName _TramiteBTEUsuarioNif_QNAME = new QName("", "usuarioNif");
     private final static QName _TramiteBTERepresentadoNif_QNAME = new QName("", "representadoNif");
+    private final static QName _FirmaWSFormato_QNAME = new QName("", "formato");
+    private final static QName _DocumentoBTEPresentacionTelematica_QNAME = new QName("", "presentacionTelematica");
+    private final static QName _DocumentoBTEPresentacionPresencial_QNAME = new QName("", "presentacionPresencial");
+    private final static QName _Fault_QNAME = new QName("urn:es:caib:bantel:ws:v1:model:BackofficeFacade", "fault");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: es.caib.bantel.ws.v1.model
      * 
      */
     public ObjectFactory() {
+    }
+
+    /**
+     * Create an instance of {@link ReferenciaEntrada }
+     * 
+     */
+    public ReferenciaEntrada createReferenciaEntrada() {
+        return new ReferenciaEntrada();
     }
 
     /**
@@ -59,11 +67,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ObtenerEntradaResponse }
+     * Create an instance of {@link ObtenerNumerosEntradas }
      * 
      */
-    public ObtenerEntradaResponse createObtenerEntradaResponse() {
-        return new ObtenerEntradaResponse();
+    public ObtenerNumerosEntradas createObtenerNumerosEntradas() {
+        return new ObtenerNumerosEntradas();
+    }
+
+    /**
+     * Create an instance of {@link DatosDocumentoPresencial }
+     * 
+     */
+    public DatosDocumentoPresencial createDatosDocumentoPresencial() {
+        return new DatosDocumentoPresencial();
     }
 
     /**
@@ -72,6 +88,78 @@ public class ObjectFactory {
      */
     public DocumentosBTE createDocumentosBTE() {
         return new DocumentosBTE();
+    }
+
+    /**
+     * Create an instance of {@link TramiteBTE }
+     * 
+     */
+    public TramiteBTE createTramiteBTE() {
+        return new TramiteBTE();
+    }
+
+    /**
+     * Create an instance of {@link FirmaWS }
+     * 
+     */
+    public FirmaWS createFirmaWS() {
+        return new FirmaWS();
+    }
+
+    /**
+     * Create an instance of {@link FirmasWS }
+     * 
+     */
+    public FirmasWS createFirmasWS() {
+        return new FirmasWS();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerEntradaResponse }
+     * 
+     */
+    public ObtenerEntradaResponse createObtenerEntradaResponse() {
+        return new ObtenerEntradaResponse();
+    }
+
+    /**
+     * Create an instance of {@link ReferenciasEntrada }
+     * 
+     */
+    public ReferenciasEntrada createReferenciasEntrada() {
+        return new ReferenciasEntrada();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerNumerosEntradasResponse }
+     * 
+     */
+    public ObtenerNumerosEntradasResponse createObtenerNumerosEntradasResponse() {
+        return new ObtenerNumerosEntradasResponse();
+    }
+
+    /**
+     * Create an instance of {@link BackofficeFacadeException }
+     * 
+     */
+    public BackofficeFacadeException createBackofficeFacadeException() {
+        return new BackofficeFacadeException();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerEntrada }
+     * 
+     */
+    public ObtenerEntrada createObtenerEntrada() {
+        return new ObtenerEntrada();
+    }
+
+    /**
+     * Create an instance of {@link DocumentoBTE }
+     * 
+     */
+    public DocumentoBTE createDocumentoBTE() {
+        return new DocumentoBTE();
     }
 
     /**
@@ -91,136 +179,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ReferenciaEntrada }
-     * 
-     */
-    public ReferenciaEntrada createReferenciaEntrada() {
-        return new ReferenciaEntrada();
-    }
-
-    /**
-     * Create an instance of {@link FirmasWS }
-     * 
-     */
-    public FirmasWS createFirmasWS() {
-        return new FirmasWS();
-    }
-
-    /**
-     * Create an instance of {@link DocumentoBTE }
-     * 
-     */
-    public DocumentoBTE createDocumentoBTE() {
-        return new DocumentoBTE();
-    }
-
-    /**
-     * Create an instance of {@link FirmaWS }
-     * 
-     */
-    public FirmaWS createFirmaWS() {
-        return new FirmaWS();
-    }
-
-    /**
-     * Create an instance of {@link TramiteBTE }
-     * 
-     */
-    public TramiteBTE createTramiteBTE() {
-        return new TramiteBTE();
-    }
-
-    /**
-     * Create an instance of {@link DatosDocumentoPresencial }
-     * 
-     */
-    public DatosDocumentoPresencial createDatosDocumentoPresencial() {
-        return new DatosDocumentoPresencial();
-    }
-
-    /**
-     * Create an instance of {@link BackofficeFacadeException }
-     * 
-     */
-    public BackofficeFacadeException createBackofficeFacadeException() {
-        return new BackofficeFacadeException();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerNumerosEntradasResponse }
-     * 
-     */
-    public ObtenerNumerosEntradasResponse createObtenerNumerosEntradasResponse() {
-        return new ObtenerNumerosEntradasResponse();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerNumerosEntradas }
-     * 
-     */
-    public ObtenerNumerosEntradas createObtenerNumerosEntradas() {
-        return new ObtenerNumerosEntradas();
-    }
-
-    /**
-     * Create an instance of {@link ReferenciasEntrada }
-     * 
-     */
-    public ReferenciasEntrada createReferenciasEntrada() {
-        return new ReferenciasEntrada();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerEntrada }
-     * 
-     */
-    public ObtenerEntrada createObtenerEntrada() {
-        return new ObtenerEntrada();
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "", name = "claveAcceso", scope = ReferenciaEntrada.class)
     public JAXBElement<String> createReferenciaEntradaClaveAcceso(String value) {
         return new JAXBElement<String>(_ReferenciaEntradaClaveAcceso_QNAME, String.class, ReferenciaEntrada.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link BackofficeFacadeException }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "urn:es:caib:bantel:ws:v1:model:BackofficeFacade", name = "fault")
-    public JAXBElement<BackofficeFacadeException> createFault(BackofficeFacadeException value) {
-        return new JAXBElement<BackofficeFacadeException>(_Fault_QNAME, BackofficeFacadeException.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DatosDocumentoTelematico }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "presentacionTelematica", scope = DocumentoBTE.class)
-    public JAXBElement<DatosDocumentoTelematico> createDocumentoBTEPresentacionTelematica(DatosDocumentoTelematico value) {
-        return new JAXBElement<DatosDocumentoTelematico>(_DocumentoBTEPresentacionTelematica_QNAME, DatosDocumentoTelematico.class, DocumentoBTE.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DatosDocumentoPresencial }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "presentacionPresencial", scope = DocumentoBTE.class)
-    public JAXBElement<DatosDocumentoPresencial> createDocumentoBTEPresentacionPresencial(DatosDocumentoPresencial value) {
-        return new JAXBElement<DatosDocumentoPresencial>(_DocumentoBTEPresentacionPresencial_QNAME, DatosDocumentoPresencial.class, DocumentoBTE.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "", name = "formato", scope = FirmaWS.class)
-    public JAXBElement<String> createFirmaWSFormato(String value) {
-        return new JAXBElement<String>(_FirmaWSFormato_QNAME, String.class, FirmaWS.class, value);
     }
 
     /**
@@ -329,6 +293,42 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "representadoNif", scope = TramiteBTE.class)
     public JAXBElement<String> createTramiteBTERepresentadoNif(String value) {
         return new JAXBElement<String>(_TramiteBTERepresentadoNif_QNAME, String.class, TramiteBTE.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "formato", scope = FirmaWS.class)
+    public JAXBElement<String> createFirmaWSFormato(String value) {
+        return new JAXBElement<String>(_FirmaWSFormato_QNAME, String.class, FirmaWS.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link DatosDocumentoTelematico }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "presentacionTelematica", scope = DocumentoBTE.class)
+    public JAXBElement<DatosDocumentoTelematico> createDocumentoBTEPresentacionTelematica(DatosDocumentoTelematico value) {
+        return new JAXBElement<DatosDocumentoTelematico>(_DocumentoBTEPresentacionTelematica_QNAME, DatosDocumentoTelematico.class, DocumentoBTE.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link DatosDocumentoPresencial }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "presentacionPresencial", scope = DocumentoBTE.class)
+    public JAXBElement<DatosDocumentoPresencial> createDocumentoBTEPresentacionPresencial(DatosDocumentoPresencial value) {
+        return new JAXBElement<DatosDocumentoPresencial>(_DocumentoBTEPresentacionPresencial_QNAME, DatosDocumentoPresencial.class, DocumentoBTE.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link BackofficeFacadeException }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:es:caib:bantel:ws:v1:model:BackofficeFacade", name = "fault")
+    public JAXBElement<BackofficeFacadeException> createFault(BackofficeFacadeException value) {
+        return new JAXBElement<BackofficeFacadeException>(_Fault_QNAME, BackofficeFacadeException.class, null, value);
     }
 
 }

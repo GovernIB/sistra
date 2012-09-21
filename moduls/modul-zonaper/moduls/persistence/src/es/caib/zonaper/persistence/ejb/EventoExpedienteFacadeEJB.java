@@ -30,7 +30,7 @@ public abstract class EventoExpedienteFacadeEJB extends HibernateEJB
 	/**
      * @ejb.create-method
      * @ejb.permission role-name="${role.registro}"
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      * @ejb.permission role-name="${role.gestor}"
      */
@@ -41,7 +41,7 @@ public abstract class EventoExpedienteFacadeEJB extends HibernateEJB
 	
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public EventoExpediente obtenerEventoExpedienteAutenticado( Long id )
 	{
@@ -74,7 +74,7 @@ public abstract class EventoExpedienteFacadeEJB extends HibernateEJB
 	
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public EventoExpediente obtenerEventoExpedienteAnonimo( Long id , String idPersistencia)
 	{
@@ -171,7 +171,6 @@ public abstract class EventoExpedienteFacadeEJB extends HibernateEJB
 		{
 			if ( evento.getCodigo() == null )
 			{
-				evento.setFecha(new Timestamp(System.currentTimeMillis()));
 				session.save( evento );
 			}
 			else
@@ -193,7 +192,7 @@ public abstract class EventoExpedienteFacadeEJB extends HibernateEJB
 	
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public void marcarConsultadoEventoExpedienteAutenticado( Long id )
 	{
@@ -236,7 +235,7 @@ public abstract class EventoExpedienteFacadeEJB extends HibernateEJB
 	
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
 	public void marcarConsultadoEventoExpedienteAnonimo( Long id, String idPersistencia )
 	{

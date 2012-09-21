@@ -18,14 +18,7 @@
 			</html:link>
 			</logic:notPresent>
 			<logic:present name="enlace">
-				<logic:equal name="enlace" value="errorExpediente">
-					<html:link action="confirmacionRecuperacionExpediente">
-				<bean:message name="<%= Constants.MESSAGE_ACTION_LABEL_KEY %>"/>			
-					</html:link>
-				</logic:equal>
-				<logic:notEqual name="enlace" value="errorExpediente">
-					<a href="javascript:history.back(1)"><bean:message name="<%= Constants.MESSAGE_ACTION_LABEL_KEY %>"/></a>
-				</logic:notEqual>
+				<a href="javascript:history.back(1)"><bean:message name="<%= Constants.MESSAGE_ACTION_LABEL_KEY %>"/></a>
 			</logic:present>			
 			</strong>
 		</p>

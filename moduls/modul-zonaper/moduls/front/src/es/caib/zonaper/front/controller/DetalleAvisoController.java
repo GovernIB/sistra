@@ -38,6 +38,7 @@ public class DetalleAvisoController extends BaseController
 		// Info acerca codigo expediente y unidad administrativa
 		ElementoExpediente elementoExpediente = (ElementoExpediente) request.getAttribute("elementoExpediente");
 		request.setAttribute("codigoExpediente",elementoExpediente.getExpediente().getIdExpediente());
+		request.setAttribute("descExpediente",elementoExpediente.getExpediente().getDescripcion());
 		request.setAttribute( "unidadAdministrativa", DelegateUtil.getDominiosDelegate().obtenerDescripcionUA(elementoExpediente.getExpediente().getUnidadAdministrativa().toString()));
 		
 		

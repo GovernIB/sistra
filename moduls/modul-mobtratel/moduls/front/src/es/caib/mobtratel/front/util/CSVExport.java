@@ -7,12 +7,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import es.caib.mobtratel.model.Envio;
 import es.caib.mobtratel.model.MensajeEmail;
 import es.caib.mobtratel.model.MensajeSms;
+import es.caib.mobtratel.modelInterfaz.ConstantesMobtratel;
+import es.caib.sistra.plugins.email.ConstantesEmail;
+import es.caib.sistra.plugins.sms.ConstantesSMS;
 import es.caib.util.ExcelCSVPrinter;
 import es.caib.xml.ConstantesXML;
 
@@ -72,7 +76,7 @@ public class CSVExport {
 	public CSVExport(Envio envio){
 		this.setCodigo(envio.getCodigo());
 		this.setNombre(envio.getNombre());
-		String[] cabeceras = new String[7];
+		String[] cabeceras = new String[9];
 		int i = 0;
 		cabeceras[i++] ="Estado";
 		cabeceras[i++] ="Tipo";
@@ -80,7 +84,9 @@ public class CSVExport {
 		cabeceras[i++] ="Texto";
 		cabeceras[i++] ="Destinatarios";
 		cabeceras[i++] ="Destinatarios Enviados";
-		cabeceras[i++] ="Error";
+		cabeceras[i++] ="Error envio";
+		cabeceras[i++] ="Confirmacion envio";
+		cabeceras[i++] ="Error confirmacion";
 		this.getHeads().add(cabeceras);
 		Set emails = envio.getEmails();
 		String[] entradas = null;
@@ -91,7 +97,7 @@ public class CSVExport {
 			try {
 				MensajeEmail me = (MensajeEmail) it.next();
 				entradas = new String[cabeceras.length];							
-				if (me.getEstado() == Envio.ENVIADO ){
+				if (me.getEstado() == ConstantesMobtratel.ESTADOENVIO_ENVIADO ){
 					entradas[i++] = "COMPLETADO";
 				}else{
 					entradas[i++] = "PENDIENTE";
@@ -105,6 +111,8 @@ public class CSVExport {
 				texto = me.getDestinatariosEnviados();
 				entradas[i++] = texto != null ? new String( texto, ConstantesXML.ENCODING ) : "";
 				entradas[i++] = me.getError() != null ? me.getError() : "";
+				entradas[i++] = getLiteralEstadoVerificacionEnvioEmail(me.getEstadoVerificarEnvio());
+				entradas[i++] = me.getErrorVerificarEnvio() != null? me.getErrorVerificarEnvio(): "";
 				this.getEmails().add(entradas);
 			} catch (UnsupportedEncodingException e) {
 				log.error("Error recuperando informacion de MensajeEmail: " + e.getMessage());
@@ -118,7 +126,7 @@ public class CSVExport {
 			try {
 				MensajeSms me = (MensajeSms) it.next();
 				entradas = new String[cabeceras.length];
-                if (me.getEstado() == Envio.ENVIADO ){
+                if (me.getEstado() == ConstantesMobtratel.ESTADOENVIO_ENVIADO ){
   					entradas[i++] = "COMPLETADO";
   				}else{
   					entradas[i++] = "PENDIENTE";
@@ -134,6 +142,8 @@ public class CSVExport {
 				texto = me.getDestinatariosEnviados();
 				entradas[i++] = texto != null ? new String( texto, ConstantesXML.ENCODING ) : "";
 				entradas[i++] = me.getError() != null ? me.getError() : "";
+				entradas[i++] = getLiteralEstadoVerificacionEnvioSms(me.getEstadoVerificarEnvio());
+				entradas[i++] = me.getErrorVerificarEnvio() != null? me.getErrorVerificarEnvio(): "";
 				this.getSmss().add(entradas);
 			} catch (UnsupportedEncodingException e) {
 				log.error("Error recuperando informacion de MensajeSms: " + e.getMessage());
@@ -194,4 +204,40 @@ public class CSVExport {
 		this.nombre = nombre;
 	}
 
+	
+	private String getLiteralEstadoVerificacionEnvioEmail(String estado)  {
+		String res = "";
+		if (!StringUtils.isBlank(estado)) {
+			if (estado.equals(ConstantesEmail.ESTADO_DESCONOCIDO)) {
+				res = "DESCONOCIDO";
+			} else if (estado.equals(ConstantesEmail.ESTADO_ENVIADO)) {				
+					res = "ENVIADO";	
+			} else if (estado.equals(ConstantesEmail.ESTADO_NO_ENVIADO)) {
+					res = "NO ENVIADO";
+			} else if (estado.equals(ConstantesEmail.ESTADO_NO_IMPLEMENTADO)) {
+					res = "NO IMPLEMENTADO";
+			} else if (estado.equals(ConstantesEmail.ESTADO_PENDIENTE)) {
+					res = "PENDIENTE";
+			}
+		}
+		return res;
+	}
+	
+	private String getLiteralEstadoVerificacionEnvioSms(String estado)  {
+		String res = "";
+		if (!StringUtils.isBlank(estado)) {
+			if (estado.equals(ConstantesSMS.ESTADO_DESCONOCIDO)) {
+					res = "DESCONOCIDO";
+			} else if (estado.equals(ConstantesSMS.ESTADO_ENVIADO)) {
+					res = "ENVIADO";
+			} else if (estado.equals(ConstantesSMS.ESTADO_NO_ENVIADO)) {
+					res = "NO ENVIADO";
+			} else if (estado.equals(ConstantesSMS.ESTADO_NO_IMPLEMENTADO)) {
+					res = "NO IMPLEMENTADO";
+			} else if (estado.equals(ConstantesSMS.ESTADO_PENDIENTE)) {			
+					res = "PENDIENTE";
+			}
+		}
+		return res;
+	}
 }

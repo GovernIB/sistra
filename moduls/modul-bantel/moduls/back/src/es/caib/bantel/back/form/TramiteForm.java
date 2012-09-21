@@ -8,21 +8,18 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.upload.FormFile;
 
 import es.caib.bantel.back.taglib.Constants;
-import es.caib.bantel.model.Tramite;
+import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.persistence.delegate.DelegateException;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
-import es.caib.bantel.persistence.delegate.TramiteDelegate;
+import es.caib.bantel.persistence.delegate.ProcedimientoDelegate;
 
 
 public class TramiteForm extends BantelForm implements InitForm
 {
 
 	protected static Log log = LogFactory.getLog(TramiteForm.class);
-	
-	private transient FormFile ficheroExportacion;
 	
 	private String userPlain;
 	private String passPlain;
@@ -38,27 +35,33 @@ public class TramiteForm extends BantelForm implements InitForm
         }
         try 
         {
-        	Tramite tramite = ( Tramite ) this.getValues();
+        	Procedimiento tramite = ( Procedimiento ) this.getValues();
         	
         	// Comprobamos restricciones
         	if (tramite.getIntervaloInforme() != null && tramite.getIntervaloInforme().longValue() > 0){
 
         		// Url
-        		if ( (tramite.getTipoAcceso() == Tramite.ACCESO_EJB && tramite.getLocalizacionEJB() == Tramite.EJB_REMOTO) 
+        		if ( (tramite.getTipoAcceso() == Procedimiento.ACCESO_EJB && tramite.getLocalizacionEJB() == Procedimiento.EJB_REMOTO) 
         			|| 
-        			tramite.getTipoAcceso() == Tramite.ACCESO_WEBSERVICE){
+        			tramite.getTipoAcceso() == Procedimiento.ACCESO_WEBSERVICE){
 		    			if (StringUtils.isEmpty(tramite.getUrl())){
 		        			errors.add("values.url", new ActionError("errors.url.vacia"));
 		        		}        			
         		}
+        		//version WS
+        		if(tramite.getTipoAcceso() == Procedimiento.ACCESO_WEBSERVICE){
+        			if (StringUtils.isEmpty(tramite.getVersionWS())){
+	        			errors.add("values.versionWS", new ActionError("errors.versionWS.vacia"));
+	        		}
+        		}
         		
         		// Jndi
-        		if (tramite.getTipoAcceso() == Tramite.ACCESO_EJB && StringUtils.isEmpty(tramite.getJndiEJB())){
+        		if (tramite.getTipoAcceso() == Procedimiento.ACCESO_EJB && StringUtils.isEmpty(tramite.getJndiEJB())){
 		    		errors.add("values.jndiEJB", new ActionError("errors.jndi.vacia"));		        	        		
         		}
         		
         		// Usr y pswd
-        		if (tramite.getAutenticacionEJB() == Tramite.AUTENTICACION_ESTANDAR){        		
+        		if (tramite.getAutenticacionEJB() == Procedimiento.AUTENTICACION_ESTANDAR){        		
         			if (StringUtils.isEmpty(userPlain) || StringUtils.isEmpty(passPlain))
         				errors.add("userPlain", new ActionError("errors.userpasswd.vacio"));
         		}
@@ -67,8 +70,8 @@ public class TramiteForm extends BantelForm implements InitForm
         	        	
         	// Comprobamos que no exista otro trámite con ese código
         	if (  request.getParameter(Constants.ALTA_PROPERTY) != null  ) {
-		    	TramiteDelegate delegate = DelegateUtil.getTramiteDelegate();
-		    	Tramite tramiteTmp = delegate.obtenerTramitePorId( tramite.getIdentificador() );
+		    	ProcedimientoDelegate delegate = DelegateUtil.getTramiteDelegate();
+		    	Procedimiento tramiteTmp = delegate.obtenerProcedimiento( tramite.getIdentificador() );
 		    	if ( tramiteTmp != null ) 		    	{
 		    		errors.add("values.identificador", new ActionError("errors.tramite.duplicado", tramite.getIdentificador() ));
 		    	} 
@@ -83,17 +86,6 @@ public class TramiteForm extends BantelForm implements InitForm
 	    return errors;
 
 	}
-
-
-	public FormFile getFicheroExportacion() {
-		return ficheroExportacion;
-	}
-
-
-	public void setFicheroExportacion(FormFile ficheroExportacion) {
-		this.ficheroExportacion = ficheroExportacion;
-	}
-
 
 	public String getPassPlain() {
 		return passPlain;

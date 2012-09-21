@@ -8,6 +8,8 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 import javax.naming.InitialContext;
 
+import org.apache.commons.lang.StringUtils;
+
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
@@ -15,7 +17,10 @@ import net.sf.hibernate.Session;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
 import es.caib.util.CredentialUtil;
+import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.EntradaTelematica;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
+import es.caib.zonaper.persistence.delegate.DelegateUtil;
 
 /**
  * SessionBean para mantener y consultar EntradaTelematica
@@ -37,7 +42,7 @@ public abstract class EntradaTelematicaFacadeEJB extends HibernateEJB {
 	
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      */
 	public void ejbCreate() throws CreateException {
@@ -52,7 +57,7 @@ public abstract class EntradaTelematicaFacadeEJB extends HibernateEJB {
 	  
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public EntradaTelematica obtenerEntradaTelematicaAutenticada(Long id) {
         Session session = getSession();
@@ -60,11 +65,18 @@ public abstract class EntradaTelematicaFacadeEJB extends HibernateEJB {
         	// Cargamos entradaTelematica        	
         	EntradaTelematica entradaTelematica = (EntradaTelematica) session.load(EntradaTelematica.class, id);
         	
-        	// Control acceso
+        	// Comprobamos que accede el usuario o si es un delegado
         	Principal sp = this.ctx.getCallerPrincipal();
         	PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
-        	if (plgLogin.getMetodoAutenticacion(sp) == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO || !sp.getName().equals(entradaTelematica.getUsuario())){
-        		throw new HibernateException("Acceso no permitido a entrada telematica " + id + " - usuario " + sp.getName());
+    		if (plgLogin.getMetodoAutenticacion(sp) == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO){
+        		throw new HibernateException("Acceso solo permitido para autenticado");
+        	}
+    		if (!plgLogin.getNif(this.ctx.getCallerPrincipal()).equals(entradaTelematica.getNifRepresentante())){
+    			// Si no es el usuario quien accede miramos si es un delegado
+            	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(entradaTelematica.getNifRepresentante());
+            	if (StringUtils.isEmpty(permisos)){
+            		throw new Exception("Acceso no permitido a entrada telematica " + id + " - usuario " + sp.getName());
+            	}
         	}
         	
         	// Cargamos documentos
@@ -80,19 +92,30 @@ public abstract class EntradaTelematicaFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public EntradaTelematica obtenerEntradaTelematicaAnonima(Long id,String idPersistencia) {
         Session session = getSession();
         try {
+        	// Acceso solo anonimo
+        	Principal sp = this.ctx.getCallerPrincipal();
+        	PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
+        	if (plgLogin.getMetodoAutenticacion(sp) != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO){
+        		throw new HibernateException("Solo se permite acceso anonimo");
+        	}
+        	
         	// Cargamos entradaTelematica        	
         	EntradaTelematica entradaTelematica = (EntradaTelematica) session.load(EntradaTelematica.class, id);
         	
-        	// Control acceso
-        	Principal sp = this.ctx.getCallerPrincipal();
-        	PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
-        	if (plgLogin.getMetodoAutenticacion(sp) != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO ||  !entradaTelematica.getIdPersistencia().equals(idPersistencia)){
-        		throw new HibernateException("Acceso anonimo no permitido a entrada telematica " + id + " - usuario " + sp.getName());
+        	// Control acceso: 
+        	if (!entradaTelematica.getIdPersistencia().equals(idPersistencia)){
+        		// En caso de pertenecer a un expediente se debera controlar el acceso a traves del expediente
+            	// ya que se podra acceder con otros idPersistencia de tramites asociados al expediente
+            	// Buscamos si es un elemento de un expediente (en caso afirmativo se controlaria el acceso al expe)
+            	ElementoExpediente ee = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpedienteAnonimo(ElementoExpediente.TIPO_ENTRADA_TELEMATICA,id,idPersistencia);
+            	if (ee == null){
+            		throw new HibernateException("Acceso anonimo no permitido a entrada telematica " + id + "- idPersistencia " + idPersistencia);
+            	}
         	}
         	
         	// Cargamos documentos
@@ -107,7 +130,7 @@ public abstract class EntradaTelematicaFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public EntradaTelematica obtenerEntradaTelematica(String idPersistencia) {
         Session session = getSession();
@@ -128,12 +151,19 @@ public abstract class EntradaTelematicaFacadeEJB extends HibernateEJB {
             if (!this.ctx.isCallerInRole(roleHelpDesk)){
 		    	Principal sp = this.ctx.getCallerPrincipal();
 		    	PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
-		    	if (plgLogin.getMetodoAutenticacion(sp) == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO 
-		    			&& entradaTelematica.getNivelAutenticacion() != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO ){
+		    	if (plgLogin.getMetodoAutenticacion(sp) == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO){
+		    		if (entradaTelematica.getNivelAutenticacion() != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO ){
 		    		throw new HibernateException("Acceso anonimo a entrada telematica autenticada " + idPersistencia);
 		    	}
-		    	if (plgLogin.getMetodoAutenticacion(sp) != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO && !sp.getName().equals(entradaTelematica.getUsuario())){
-		    		throw new HibernateException("Acceso no permitido a entrada telematica " + idPersistencia + " - usuario " + sp.getName());
+		    	}else{
+		    		// Para autenticados comprobamos si es el usuario o es un delegado	        	
+	        		if (!plgLogin.getNif(this.ctx.getCallerPrincipal()).equals(entradaTelematica.getNifRepresentante())){
+	        			// Si no es el usuario quien accede miramos si es un delegado
+	                	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(entradaTelematica.getNifRepresentante());
+	                	if (StringUtils.isEmpty(permisos)){
+	                		throw new Exception("Acceso no permitido a entrada telematica " + idPersistencia + " no pertenece al usuario ni es delegado con permiso de presentar - usuario " + sp.getName());	                		
+	                	}
+	        		}		    		
 		    	}
             }
             
@@ -199,7 +229,7 @@ public abstract class EntradaTelematicaFacadeEJB extends HibernateEJB {
     
  	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.user}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public Long grabarEntradaTelematica(EntradaTelematica obj) {        
     	Session session = getSession();
@@ -207,13 +237,20 @@ public abstract class EntradaTelematicaFacadeEJB extends HibernateEJB {
         	// Control acceso 
         	Principal sp = this.ctx.getCallerPrincipal();
         	PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
-        	if (plgLogin.getMetodoAutenticacion(sp) == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO 
-        			&& obj.getNivelAutenticacion() != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO){
-        		throw new HibernateException("Acceso anonimo a entrada telematica autenticada " + obj.getIdPersistencia());
-        	}
-        	if (plgLogin.getMetodoAutenticacion(sp) != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO 
-        			&&  !sp.getName().equals(obj.getUsuario())){
-        		throw new HibernateException("Acceso no permitido a entrada telematica " + obj.getIdPersistencia() + " - usuario " + sp.getName());
+        	if (plgLogin.getMetodoAutenticacion(sp) != 'A'){
+        		// Para autenticados comprobamos si es el usuario o es un delegado con permiso para presentar	        	
+        		if (!plgLogin.getNif(this.ctx.getCallerPrincipal()).equals(obj.getNifRepresentante())){
+        			// Si no es el usuario quien accede miramos si es un delegado
+                	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(obj.getNifRepresentante());
+                	if (StringUtils.isEmpty(permisos) || permisos.indexOf(ConstantesZPE.DELEGACION_PERMISO_PRESENTAR_TRAMITE) == -1){
+                		throw new Exception("Acceso no permitido a entrada preregistro " + obj.getIdPersistencia()  + " no pertenece al usuario ni es delegado con permiso de presentar - usuario " + sp.getName());	                		
+                	}
+        		}	
+        	}else{	        		
+        		// Para anonimos vale con el id persistencia
+        		if (obj.getNivelAutenticacion() != 'A'){
+        			throw new HibernateException("Acceso no permitido a entrada preregistro " + obj.getIdPersistencia() + " - usuario " + sp.getName());
+        		}
         	}
         	
         	// Updateamos
@@ -272,14 +309,19 @@ public abstract class EntradaTelematicaFacadeEJB extends HibernateEJB {
         	
         	
             Query query = session
-            .createQuery("FROM EntradaTelematica AS m WHERE m.nifRepresentante = :nif " +
+            .createQuery("FROM EntradaTelematica AS m WHERE "+ 
+            			((nivelAutenticacion != null && "A".equals(nivelAutenticacion)) ? " m.nifRepresentante like :nif " : " m.nifRepresentante = :nif ")+
             		     ((modelo != null) ? " and m.tramite = :modelo " : "")+
             		     " and  m.fecha >= :fechaInicial and m.fecha <= :fechaFinal "+
             		     ((nivelAutenticacion != null) ? " and m.nivelAutenticacion = :nivel" : "" ) +
             		     " ORDER BY m.fecha DESC");
             if(modelo != null) query.setParameter("modelo",modelo);
             if(nivelAutenticacion != null) query.setParameter("nivel",nivelAutenticacion);
+            if(nivelAutenticacion != null && "A".equals(nivelAutenticacion)){
+            	query.setParameter("nif","%"+nif+"%");
+            }else{
             query.setParameter("nif",nif);
+            }
             query.setParameter("fechaInicial",fechaInicial);
             query.setParameter("fechaFinal",fechaFinal);
             

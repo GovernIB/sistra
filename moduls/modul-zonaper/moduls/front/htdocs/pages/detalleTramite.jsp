@@ -141,6 +141,28 @@
 							</logic:equal>					
 					</logic:notEmpty>	
 				</logic:notEmpty>	
+				<logic:notEmpty name="delegado">
+						<tr>
+							<th>
+								<bean:message key="detalleTramite.datosRegistro.nombreDelegado"/>:
+							</th> 
+							<td>
+								<bean:write name="delegado" property="identificacionInteresado"/>
+							</td>
+						</tr>
+						<logic:notEqual name="delegado" property="tipoIdentificacion" value="<%=Character.toString(es.caib.xml.registro.factoria.ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_CIF)%>">
+							<tr>	
+								<th scope="row"><bean:message key="detalleTramite.datosRegistro.NIFDelegado"/></th>
+								<td><bean:write name="delegado" property="numeroIdentificacion"/></td>										
+							</tr>
+						</logic:notEqual>
+						<logic:equal name="delegado" property="tipoIdentificacion" value="<%=Character.toString(es.caib.xml.registro.factoria.ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_CIF)%>">
+							<tr>
+								<th scope="row"><bean:message key="detalleTramite.datosRegistro.CIFDelegado"/></th>
+								<td><bean:write name="delegado" property="numeroIdentificacion"/></td>										
+							</tr>
+						</logic:equal>
+				</logic:notEmpty>
 		</table>
 		<!-- /dades justificant -->
 		
@@ -181,9 +203,18 @@
 						<logic:notEqual name="documento" property="codigoRDS" value="0">
 							<logic:notEqual name="documento" property="identificador" value="<%=ConstantesAsientoXML.IDENTIFICADOR_DATOS_PROPIOS%>">
 								<li>
-									<html:link href="<%= urlMostrarDocumento + "&amp;codigoEntrada=" + entrada.getCodigo() %>" paramId="codigoDocumento" paramName="documento" paramProperty="codigo">
+									<html:link href="<%= urlMostrarDocumento + \"&amp;codigoEntrada=\" + entrada.getCodigo() %>" paramId="codigoDocumento" paramName="documento" paramProperty="codigo">
 											<bean:write name="documento" property="descripcion" />
 									</html:link>									
+									<bean:define id="codigoFirma" type="java.lang.String">
+										<bean:write name="documento" property="codigo" />
+									</bean:define>
+									<logic:notEmpty name="<%=codigoFirma %>" scope="request">
+										<bean:message key="comprobarDocumento.firmadoPor"/>
+										<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request">							
+											&nbsp;<bean:write name="firma" property="nombreApellidos"/> 										
+										</logic:iterate>			
+									</logic:notEmpty>									
 								</li>
 							</logic:notEqual>
 						</logic:notEqual>	
@@ -241,7 +272,7 @@
 										</logic:equal>										
 										<logic:equal name="documento" property="tipo" value="F">
 											<td> 		
-												<html:link href="<%= urlMostrarDocumento + "&amp;codigoEntrada=" + entrada.getCodigo() + "&amp;codigoDocumento=" + codigosDocsPresenciales.get(documento.getIdentificador()).toString() %>" >								
+												<html:link href="<%= urlMostrarDocumento + \"&amp;codigoEntrada=\" + entrada.getCodigo() + \"&amp;codigoDocumento=\" + codigosDocsPresenciales.get(documento.getIdentificador()).toString() %>" >								
 													<bean:write name="documento" property="titulo" />
 												</html:link>
 											</td>

@@ -13,7 +13,6 @@ import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.zonaper.front.Constants;
-import es.caib.zonaper.front.action.BaseAction;
 import es.caib.zonaper.front.form.notificaciones.MostrarDocumentoNotificacionForm;
 import es.caib.zonaper.model.DocumentoNotificacionTelematica;
 import es.caib.zonaper.model.NotificacionTelematica;
@@ -30,7 +29,7 @@ import es.caib.zonaper.persistence.delegate.DelegateUtil;
  *  name="success" path="/protected/downloadFichero.do"
  *
  * @struts.action-forward
- *  name="fail" path=".error"
+ *  name="fail" path=".mensaje"
  */
 public class MostrarDocumentoNotificacionAction extends BaseAction
 {
@@ -40,14 +39,14 @@ public class MostrarDocumentoNotificacionAction extends BaseAction
 			throws Exception
 	{
 		MostrarDocumentoNotificacionForm formulario = ( MostrarDocumentoNotificacionForm ) form;
-		
 		NotificacionTelematica not;
 		if (this.getDatosSesion(request).getNivelAutenticacion() == 'A'){
 			not = DelegateUtil.getNotificacionTelematicaDelegate().obtenerNotificacionTelematicaAnonima(new Long(formulario.getCodigoNotificacion()),this.getIdPersistencia(request));
 		}else{
 			not = DelegateUtil.getNotificacionTelematicaDelegate().obtenerNotificacionTelematicaAutenticada(new Long(formulario.getCodigoNotificacion()));
 		}
-		
+		if(not.getFechaAcuse() != null){
+			if(formulario.getCodigo() > 0){
 		for (Iterator it=not.getDocumentos().iterator();it.hasNext();){
 			DocumentoNotificacionTelematica doc = (DocumentoNotificacionTelematica) it.next();
 			if (doc.getCodigo().longValue() == formulario.getCodigo()) {
@@ -60,7 +59,19 @@ public class MostrarDocumentoNotificacionAction extends BaseAction
 				return mapping.findForward( "success" );
 			}
 		}
+			}else{
+				ReferenciaRDS refRDS = new ReferenciaRDS();
+				refRDS.setCodigo( not.getCodigoRdsJustificante() );
+				refRDS.setClave( not.getClaveRdsJustificante() );
+				
+				DocumentoRDS documentoRDS = DelegateRDSUtil.getRdsDelegate().consultarDocumentoFormateado(refRDS, not.getIdioma());
+				
+				request.setAttribute( Constants.NOMBREFICHERO_KEY, documentoRDS.getNombreFichero() );		
+				request.setAttribute( Constants.DATOSFICHERO_KEY, documentoRDS.getDatosFichero());
 		
+				return mapping.findForward("success");	
+			}
+		}
 		return mapping.findForward( "fail" );
 		
 		

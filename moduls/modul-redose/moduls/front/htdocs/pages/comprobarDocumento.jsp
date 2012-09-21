@@ -82,6 +82,10 @@
 					<li><a href="/redosefront/init.do?lang=ca&id=<%=request.getParameter("id")%>" title="Cambiar el idioma a Catal&agrave;">catal&agrave;</a> . </li>
 					<li><strong>espa&ntilde;ol</strong> . </li>
 				</logic:equal>
+				<logic:equal name="lang" value="en">
+					<li><a href="/redosefront/init.do?lang=en&id=<%=request.getParameter("id")%>" title="Change language to English">english</a> . </li>
+					<li><strong>english</strong> . </li>
+				</logic:equal>
 			</ul>
 		</div>
 	

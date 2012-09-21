@@ -137,16 +137,19 @@ function checkVersionNavegador(errorIE,errorFirefox){
 	}
 	
 	if (browser != "") {
-		version = detect.charAt(place + thestring.length);
-		posDecimal = place + thestring.length + 1;
-		if (detect.charAt(posDecimal) == '.'){	
-			do{
-			  version = version + '' + detect.charAt(posDecimal);		
-			  posDecimal++;								
-			}while (!isNaN(detect.charAt(posDecimal) )&& posDecimal < detect.length);		
-		}
+		//obtenemos el substring donde empieza la versión
+		aux = detect.substring(place + thestring.length);
+		//buscamos donde esta el separador decimal
+		posDecimal = aux.indexOf('.');
+		//obtenemos la parte entera
+		version = aux.substring(0, posDecimal);
+		//obtenemos la parte decimal
+		do{
+		  version = version + '' + aux.charAt(posDecimal);		
+		  posDecimal++;
+		}while (!isNaN(aux.charAt(posDecimal)) && posDecimal < aux.length);		
 	}
-	
+		
 	if (browser == "Internet Explorer" && parseFloat( version, 10) < 6 ){
 		if (readCookie("avisoVersionExplorador") == null){
 			createCookie("avisoVersionExplorador","avisado",0);
@@ -166,4 +169,11 @@ function b64UrlSafeToB64(b64UrlSafe){
 	var b64 = b64UrlSafe.replace(/-/g, "+");
 	b64 = b64.replace(/_/g, "/");
 	return b64;
+}
+
+function b64ToB64UrlSafe(b64){
+	var b64UrlSafe = b64.replace(/\+/g,"-");
+	b64UrlSafe = b64UrlSafe.replace(/\//g,"_");
+	b64UrlSafe = b64UrlSafe.replace(/(\r\n|[\r\n])/g,"");
+	return b64UrlSafe;
 }

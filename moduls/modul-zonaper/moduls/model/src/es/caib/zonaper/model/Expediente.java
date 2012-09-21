@@ -6,25 +6,21 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
+
 public class Expediente implements Serializable 
 {
-	//	ESTADOS DE UN EXPEDIENTE
-	public final static String ESTADO_SOLICITUD_ENVIADA = "SE";
-	public final static String ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL = "SP";
-	public final static String ESTADO_AVISO_PENDIENTE = "AP";
-	public final static String ESTADO_AVISO_RECIBIDO = "AR";
-	public final static String ESTADO_NOTIFICACION_PENDIENTE = "NP";
-	public final static String ESTADO_NOTIFICACION_RECIBIDA = "NR";
-	
 	
 	private Long codigo;
 	private String idExpediente;
 	private String claveExpediente;
+	private String idProcedimiento;
 	private String idioma;
 	private Timestamp fecha;
 	private Timestamp fechaConsulta;
 	private String descripcion;
 	private String seyconCiudadano;
+	private String nifRepresentante;
 	private String nifRepresentado;
 	private String nombreRepresentado;
 	private String usuarioSeycon;
@@ -158,17 +154,17 @@ public class Expediente implements Serializable
 		
 		// Actualizamos expediente: estado y fecha inicio/fin
 		if (e.getTipoElemento().equals(ElementoExpediente.TIPO_ENTRADA_TELEMATICA)){
-			setEstado(ESTADO_SOLICITUD_ENVIADA);
+			setEstado(ConstantesZPE.ESTADO_SOLICITUD_ENVIADA);
 		}else if (e.getTipoElemento().equals(ElementoExpediente.TIPO_ENTRADA_PREREGISTRO)){
 			if ( ((EntradaPreregistro) obj).getFechaConfirmacion() != null){ 
-			setEstado(ESTADO_SOLICITUD_ENVIADA);
+			setEstado(ConstantesZPE.ESTADO_SOLICITUD_ENVIADA);
 			}else{
-				setEstado(ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL);
+				setEstado(ConstantesZPE.ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL);
 			}
 		}else if (e.getTipoElemento().equals(ElementoExpediente.TIPO_AVISO_EXPEDIENTE)){			
-			setEstado(ESTADO_AVISO_PENDIENTE);
+			setEstado(ConstantesZPE.ESTADO_AVISO_PENDIENTE);
 		}else if (e.getTipoElemento().equals(ElementoExpediente.TIPO_NOTIFICACION)){
-			setEstado(ESTADO_NOTIFICACION_PENDIENTE);							
+			setEstado(ConstantesZPE.ESTADO_NOTIFICACION_PENDIENTE);							
 		}
 		if (getElementos().size() == 1) this.setFechaInicio(e.getFecha());
 		setFechaFin(e.getFecha());		
@@ -202,6 +198,18 @@ public class Expediente implements Serializable
 	}
 	public void setHabilitarAvisos(String habilitarAvisos) {
 		this.habilitarAvisos = habilitarAvisos;
+	}
+	public String getNifRepresentante() {
+		return nifRepresentante;
+	}
+	public void setNifRepresentante(String nifRepresentante) {
+		this.nifRepresentante = nifRepresentante;
+	}
+	public String getIdProcedimiento() {
+		return idProcedimiento;
+	}
+	public void setIdProcedimiento(String idProcedimiento) {
+		this.idProcedimiento = idProcedimiento;
 	}
 		
 }

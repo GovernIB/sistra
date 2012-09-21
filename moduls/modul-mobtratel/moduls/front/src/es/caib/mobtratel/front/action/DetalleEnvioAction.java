@@ -16,6 +16,7 @@ import es.caib.mobtratel.front.form.DetalleEnvioForm;
 import es.caib.mobtratel.model.Envio;
 import es.caib.mobtratel.model.MensajeEmail;
 import es.caib.mobtratel.model.MensajeSms;
+import es.caib.mobtratel.modelInterfaz.ConstantesMobtratel;
 import es.caib.mobtratel.persistence.delegate.DelegateUtil;
 import es.caib.mobtratel.persistence.delegate.EnvioDelegate;
 import es.caib.mobtratel.persistence.delegate.PermisoDelegate;
@@ -64,7 +65,7 @@ public class DetalleEnvioAction extends BaseAction
 		for(Iterator it=smss.iterator(); it.hasNext();)
 		{
 			MensajeSms ms = (MensajeSms) it.next();
-			if((ms.getEstado() == Envio.CON_ERROR) && (ms.getError() != null ) &&
+			if((ms.getEstado() == ConstantesMobtratel.ESTADOENVIO_ERROR) && (ms.getError() != null ) &&
 				!ms.getError().equals(""))
 				result.add(ms);
 		}
@@ -76,7 +77,7 @@ public class DetalleEnvioAction extends BaseAction
 		for(Iterator it=emails.iterator(); it.hasNext();)
 		{
 			MensajeEmail me = (MensajeEmail) it.next();
-			if((me.getEstado() == Envio.CON_ERROR) && (me.getError() != null ) &&
+			if((me.getEstado() == ConstantesMobtratel.ESTADOENVIO_ERROR) && (me.getError() != null ) &&
 				!me.getError().equals(""))
 				result.add(me);
 		}

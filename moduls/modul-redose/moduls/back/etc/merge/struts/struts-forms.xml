@@ -41,4 +41,10 @@
     <set-property property="valuesClassName" value="es.caib.redose.model.LogOperacion" />
 </form-bean>
 
+<form-bean
+    name="erroresGestorForm"
+    className="es.caib.redose.back.action.RdsFormBeanConfig"
+    type="es.caib.redose.back.form.ErroresGestorDocumentalForm">
+    <set-property property="valuesClassName" value="es.caib.redose.model.LogGestorDocumentalError" />
+</form-bean>
     

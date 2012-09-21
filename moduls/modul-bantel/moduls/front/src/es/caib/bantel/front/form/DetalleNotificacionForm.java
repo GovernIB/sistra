@@ -1,8 +1,5 @@
 package es.caib.bantel.front.form;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -13,18 +10,12 @@ import org.apache.struts.upload.FormFile;
 import org.apache.struts.validator.ValidatorForm;
 
 import es.caib.bantel.front.util.DocumentosUtil;
-import es.caib.bantel.front.util.Dominios;
 import es.caib.bantel.front.util.MensajesUtil;
-import es.caib.bantel.front.util.ValorOrganismo;
-import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
-import es.caib.regtel.persistence.delegate.RegistroTelematicoDelegate;
 
 
 public class DetalleNotificacionForm extends ValidatorForm
 {
-	private String identificadorExpediente;
-	private String unidadAdministrativa;
-	private String claveExpediente;
+	
 	private String descripcionExpediente;
 	
 	private String usuarioSey;
@@ -45,13 +36,24 @@ public class DetalleNotificacionForm extends ValidatorForm
 	private String tipoAsunto;
 	private String tituloAviso;
 	private String textoAviso;
+	private String permitirSms = "N"; // S / N 
 	private String textoSmsAviso;
 	private String tituloOficio;
 	private String textoOficio;
+	
+	
+	private String tipoDocumento; // URL / FICHERO
 	private String tituloAnexoOficio;
-	private FormFile documentoAnexoOficio;
-	private String modeloAnexo;
-    private String versionAnexo;
+	private FormFile documentoAnexoOficio;	
+	private String  urlAnexoOficio;
+	
+	private String tramiteSubsanacion = "N"; // S / N 
+	
+    private String descripcionTramiteSubsanacion; 
+    private String identificadorTramiteSubsanacion;
+    private String versionTramiteSubsanacion;
+    private String codigoParametroTramiteSubsanacion;
+    private String valorParametroTramiteSubsanacion;
     
     private String firmar;
 	private String flagValidacion;
@@ -90,17 +92,6 @@ public class DetalleNotificacionForm extends ValidatorForm
 		this.apellidos = apellidos;
 	}
 
-
-	public String getClaveExpediente() {
-		return claveExpediente;
-	}
-
-
-	public void setClaveExpediente(String claveExpediente) {
-		this.claveExpediente = claveExpediente;
-	}
-
-
 	public String getDescripcionExpediente() {
 		return descripcionExpediente;
 	}
@@ -118,18 +109,7 @@ public class DetalleNotificacionForm extends ValidatorForm
 
 	public void setDocumentoAnexoOficio(FormFile documentoAnexoOficio) {
 		this.documentoAnexoOficio = documentoAnexoOficio;
-	}
-
-
-	public String getIdentificadorExpediente() {
-		return identificadorExpediente;
-	}
-
-
-	public void setIdentificadorExpediente(String identificadorExpediente) {
-		this.identificadorExpediente = identificadorExpediente;
-	}
-
+	}	
 
 	public String getIdioma() {
 		return idioma;
@@ -231,16 +211,6 @@ public class DetalleNotificacionForm extends ValidatorForm
 	}
 
 
-	public String getUnidadAdministrativa() {
-		return unidadAdministrativa;
-	}
-
-
-	public void setUnidadAdministrativa(String unidadAdministrativa) {
-		this.unidadAdministrativa = unidadAdministrativa;
-	}
-
-
 	public String getUsuarioSey() {
 		return usuarioSey;
 	}
@@ -248,27 +218,7 @@ public class DetalleNotificacionForm extends ValidatorForm
 
 	public void setUsuarioSey(String usuarioSey) {
 		this.usuarioSey = usuarioSey;
-	}
-
-
-	public String getModeloAnexo() {
-		return modeloAnexo;
-	}
-
-
-	public void setModeloAnexo(String modeloAnexo) {
-		this.modeloAnexo = modeloAnexo;
-	}
-
-
-	public String getVersionAnexo() {
-		return versionAnexo;
-	}
-
-
-	public void setVersionAnexo(String versionAnexo) {
-		this.versionAnexo = versionAnexo;
-	}
+	}	
 
 	public String getCodigoMunicipio() {
 		return codigoMunicipio;
@@ -374,95 +324,187 @@ public class DetalleNotificacionForm extends ValidatorForm
 		this.tipoAsunto = tipoAsunto;
 	}
 
+	public String getDescripcionTramiteSubsanacion() {
+		return descripcionTramiteSubsanacion;
+	}
+
+
+	public void setDescripcionTramiteSubsanacion(
+			String descripcionTramiteSubsanacion) {
+		this.descripcionTramiteSubsanacion = descripcionTramiteSubsanacion;
+	}
+
+
+	public String getIdentificadorTramiteSubsanacion() {
+		return identificadorTramiteSubsanacion;
+	}
+
+
+	public void setIdentificadorTramiteSubsanacion(
+			String identificadorTramiteSubsanacion) {
+		this.identificadorTramiteSubsanacion = identificadorTramiteSubsanacion;
+	}
+
+
+	public String getVersionTramiteSubsanacion() {
+		return versionTramiteSubsanacion;
+	}
+
+
+	public void setVersionTramiteSubsanacion(String versionTramiteSubsanacion) {
+		this.versionTramiteSubsanacion = versionTramiteSubsanacion;
+	}
+	
+			
+	public String getCodigoParametroTramiteSubsanacion() {
+		return codigoParametroTramiteSubsanacion;
+	}
+
+
+	public void setCodigoParametroTramiteSubsanacion(
+			String codigoParametroTramiteSubsanacion) {
+		this.codigoParametroTramiteSubsanacion = codigoParametroTramiteSubsanacion;
+	}
+
+
+	public String getValorParametroTramiteSubsanacion() {
+		return valorParametroTramiteSubsanacion;
+	}
+
+
+	public void setValorParametroTramiteSubsanacion(
+			String valorParametroTramiteSubsanacion) {
+		this.valorParametroTramiteSubsanacion = valorParametroTramiteSubsanacion;
+	}
+
+
+	public Integer getVersionTramiteSubsanacionInteger() {
+		try{
+			return new Integer(versionTramiteSubsanacion);
+		}catch(Exception e){
+			return null;			
+		}
+	}
+
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
         ActionErrors errors = super.validate(mapping, request);
         if (errors == null) 
         {
             errors = new ActionErrors();
         }
-        boolean error = false;
         if(documentoAnexoOficio != null && documentoAnexoOficio.getFileName() != null  && !"".equals(documentoAnexoOficio.getFileName())){
         	if(!DocumentosUtil.extensionCorrecta(documentoAnexoOficio.getFileName())){
         		errors.add("altaNotificacion",new ActionError("error.aviso.extensiones.fichero"));
-        		error = true;
         	}
         }
         if(StringUtils.isNotEmpty(flagValidacion) && flagValidacion.equals("altaNotificacion")){
-        	
-        	
-        	if(StringUtils.isEmpty(usuarioSey)){
-        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("expediente.usuarioSeycon")));
-        		error = true;
-        	}
+        	        	
         	if(StringUtils.isEmpty(nif)){
         		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("expediente.nif")));
-        		error = true;
         	}
         	if(StringUtils.isEmpty(apellidos)){
         		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("notificacion.nombre.apellisos")));
-        		error = true;
+        	}
+        	if(StringUtils.isEmpty(codigoPais)){
+        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("notificacion.pais")));
+        	}
+        	if( "ESP".equals(codigoPais) && (StringUtils.isEmpty(codigoProvincia))){
+        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("notificacion.provincia")));
+        	}        	
+        	if( "ESP".equals(codigoPais) && (StringUtils.isEmpty(codigoMunicipio))){
+        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("notificacion.municipio")));
         	}
         	if(StringUtils.isEmpty(tituloAviso)){
         		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.aviso.titulo") ));
-        		error = true;
         	}
         	if(StringUtils.isEmpty(textoAviso)){
         		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.aviso.texto")));
-        		error = true;
         	}
         	if(StringUtils.isEmpty( tituloOficio )){
         		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.oficio.titulo")));
-        		error = true;
         	}
         	if(StringUtils.isEmpty( textoOficio )){
         		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.oficio.texto")));
-        		error = true;
         	}
         	if(StringUtils.isEmpty(tipoAsunto)){
         		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.tipo.asunto")));
-        		error = true;
         	}
-        	if(error){
-				try {
-					carregarLlistes(request);
-				} catch (Exception e) {}
+        	if("S".equals(tramiteSubsanacion)){
+        		if(StringUtils.isBlank(descripcionTramiteSubsanacion)){
+        			errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.subsanacion.descripcion")));
+        		}
+        		if(StringUtils.isBlank(identificadorTramiteSubsanacion)){
+        			errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.subsanacion.identificador")));
+        		}
+        		if(StringUtils.isBlank(versionTramiteSubsanacion)){
+        			errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.subsanacion.version")));
+        		}else if(getVersionTramiteSubsanacionInteger() == null){
+        			errors.add("altaNotificacion", new ActionError("errors.integer", MensajesUtil.getValue("valida.notificacion.subsanacion.version")));
+            	}
         	}
-        		
+        	
+        	if(StringUtils.isNotEmpty(tituloAviso) && tituloAviso.length() > 500){
+        		errors.add("altaNotificacion", new ActionError("errors.maxlength", MensajesUtil.getValue("valida.notificacion.aviso.titulo"), "500"));
+        	}
+        	
+        	if(StringUtils.isNotEmpty(textoAviso) && textoAviso.length() > 4000){
+        		errors.add("altaNotificacion", new ActionError("errors.maxlength", MensajesUtil.getValue("valida.notificacion.aviso.texto"), "4000"));
+        	}
+        	
+        	if(StringUtils.isNotEmpty(tituloOficio) && tituloOficio.length() > 500){
+        		errors.add("altaNotificacion", new ActionError("errors.maxlength", MensajesUtil.getValue("valida.notificacion.oficio.titulo"), "500"));
+        	}
+        	
+        	if(StringUtils.isNotEmpty(textoOficio) && textoOficio.length() > 4000){
+        		errors.add("altaNotificacion", new ActionError("errors.maxlength", MensajesUtil.getValue("valida.notificacion.oficio.texto"), "4000"));
+        	}
+        	
+        	if(StringUtils.isNotEmpty(textoSmsAviso) && textoSmsAviso.length() > 150){
+        		errors.add("altaNotificacion", new ActionError("errors.maxlength", MensajesUtil.getValue("valida.notificacion.oficio.texto"), "150"));
+        	}
+        	
         }  
         return errors;
     }
 
-	private void carregarLlistes(HttpServletRequest request) throws Exception{
-		List unidades=Dominios.listarUnidadesAdministrativas();
-		request.setAttribute("unidades",unidades);
-		List paises = Dominios.listarPaises();
-		request.setAttribute("paises",paises);
-		List provincias = Dominios.listarProvincias();
-		request.setAttribute("provincias",provincias);
-		List municipios = new ArrayList();
-		if(StringUtils.isNotEmpty(codigoProvincia))
-			municipios = Dominios.listarLocalidadesProvincia(codigoProvincia);
-		request.setAttribute("municipios",municipios);
-		RegistroTelematicoDelegate dlgRte = DelegateRegtelUtil.getRegistroTelematicoDelegate();
-        List organosDestino = dlgRte.obtenerServiciosDestino();
-        request.setAttribute( "listaorganosdestino", regtelToBantel(organosDestino));
-        List oficinasRegistro = dlgRte.obtenerOficinasRegistro();
-        request.setAttribute( "listaoficinasregistro", regtelToBantel(oficinasRegistro));
-        List tiposAsunto = dlgRte.obtenerTiposAsunto();
-        request.setAttribute("tiposAsunto", regtelToBantel(tiposAsunto));
+
+	public String getTipoDocumento() {
+		return tipoDocumento;
 	}
-	
-	private List regtelToBantel(List lista){
-		List listaBantel = new ArrayList();
-		if(lista != null){
-			for(int i=0;i<lista.size();i++){
-				ValorOrganismo vo = new ValorOrganismo();
-				vo.setCodigo(((es.caib.regtel.model.ValorOrganismo)lista.get(i)).getCodigo());
-				vo.setDescripcion(((es.caib.regtel.model.ValorOrganismo)lista.get(i)).getDescripcion());
-				listaBantel.add(vo);
-			}
-		}
-		return listaBantel;
+
+
+	public void setTipoDocumento(String tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
+	}
+
+
+	public String getUrlAnexoOficio() {
+		return urlAnexoOficio;
+	}
+
+
+	public void setUrlAnexoOficio(String urlAnexoOficio) {
+		this.urlAnexoOficio = urlAnexoOficio;
+	}
+
+
+	public String getTramiteSubsanacion() {
+		return tramiteSubsanacion;
+	}
+
+
+	public void setTramiteSubsanacion(String tramiteSubsanacion) {
+		this.tramiteSubsanacion = tramiteSubsanacion;
+	}
+
+
+	public String getPermitirSms() {
+		return permitirSms;
+	}
+
+
+	public void setPermitirSms(String permitirSms) {
+		this.permitirSms = permitirSms;
 	}
 	
 }

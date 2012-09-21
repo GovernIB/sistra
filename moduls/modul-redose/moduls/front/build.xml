@@ -46,8 +46,8 @@
     	   <include name="sistra-plugins.jar"/>
     	</fileset>    	
     	<fileset dir="${web.product}">
-            <include name="${prj.name}-model.jar" />
-            <include name="${prj.name}-persistence-client.jar" />
+            <include name="2-${prj.name}-model.jar" />
+            <include name="2-${prj.name}-persistence-client.jar" />
         </fileset>
     </path>
 
@@ -139,7 +139,7 @@
         </webdoclet>
 
        <replace file="${web.gen.etc}/web.xml">
-          <replacefilter token="@role.user@" value="${role.user}"/>
+          <replacefilter token="@role.todos@" value="${role.todos}"/>
 	      <replacefilter token="@release.version@" value="${release.version}"/>
        	<replacefilter token="@web.login-config@" value="${web.login-config}"/>  
        </replace>
@@ -165,8 +165,8 @@
     </target>
 
     <target name="web.war" depends="web.compile">
-        <delete file="${web.product}/${prj.name}-${modul}.war" quiet="yes"/>
-        <war warfile="${web.product}/${prj.name}-${modul}.war"
+        <delete file="${web.product}/2-${prj.name}-${modul}.war" quiet="yes"/>
+        <war warfile="${web.product}/2-${prj.name}-${modul}.war"
             basedir="${web.htdocs}"
             webxml="${web.gen.etc}/web.xml"
             excludes="WEB-INF/**">

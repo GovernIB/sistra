@@ -55,12 +55,19 @@ public class Constants implements Serializable {
 	
 	
 	public static String OPCION_SELECCIONADA_KEY = "opcionSeleccionada";
-	public static String OPCION_SELECCIONADA_KEY2 = "opcionSeleccionada2";
+	//public static String OPCION_SELECCIONADA_KEY2 = "opcionSeleccionada2";
 	
 	
 	public static String MESSAGE_KEY = "message";
 	public static String MESSAGE_ACTION_KEY = "messageAction";
 	public static String MESSAGE_ACTION_PARAMS_KEY = "messageActionParams";
 	public static String MESSAGE_ACTION_LABEL_KEY = "messageActionLabelKey";
+	
+	
+	public static String EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY = "es.caib.bantel.front.expedienteActual.identificador";
+	public static String EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY = "es.caib.bantel.front.expedienteActual.unidadAdministrativa";
+	public static String EXPEDIENTE_ACTUAL_CLAVE_KEY = "es.caib.bantel.front.expedienteActual.claveAcceso";
 		
+	public static String GESTIONEXPEDIENTES_OBLIGATORIOAVISOS = "es.caib.bantel.front.gestionExpedientes.obligatorioAvisos";
+	
 }

@@ -27,6 +27,9 @@ public class EntradaTelematica implements java.io.Serializable, Entrada {
      private String nombreRepresentante;
      private String nifRepresentado;
      private String nombreRepresentado;
+     private String nifDelegado;
+     private String nombreDelegado;
+     private String procedimiento;
      private String tramite;
      private Integer version;
  	// Opciones de aviso movilidad
@@ -35,6 +38,9 @@ public class EntradaTelematica implements java.io.Serializable, Entrada {
  	private String avisoEmail;
  	// Opciones notificacion telematica
  	private String habilitarNotificacionTelematica;
+//  Tramite subsanacion
+ 	private String subsanacionExpedienteCodigo;
+ 	private Long subsanacionExpedienteUA;
  	
      public String getIdPersistencia() {
 		return idPersistencia;
@@ -270,6 +276,46 @@ public class EntradaTelematica implements java.io.Serializable, Entrada {
 	public void setHabilitarNotificacionTelematica(
 			String habilitarNotificacionTelematica) {
 		this.habilitarNotificacionTelematica = habilitarNotificacionTelematica;
+	}
+
+	public String getNifDelegado() {
+		return nifDelegado;
+	}
+
+	public void setNifDelegado(String nifDelegado) {
+		this.nifDelegado = nifDelegado;
+	}
+
+	public String getNombreDelegado() {
+		return nombreDelegado;
+	}
+
+	public void setNombreDelegado(String nombreDelegado) {
+		this.nombreDelegado = nombreDelegado;
+	}
+
+	public String getSubsanacionExpedienteCodigo() {
+		return subsanacionExpedienteCodigo;
+	}
+
+	public void setSubsanacionExpedienteCodigo(String subsanacionExpedienteCodigo) {
+		this.subsanacionExpedienteCodigo = subsanacionExpedienteCodigo;
+	}
+
+	public Long getSubsanacionExpedienteUA() {
+		return subsanacionExpedienteUA;
+	}
+
+	public void setSubsanacionExpedienteUA(Long subsanacionExpedienteUA) {
+		this.subsanacionExpedienteUA = subsanacionExpedienteUA;
+	}
+
+	public String getProcedimiento() {
+		return procedimiento;
+	}
+
+	public void setProcedimiento(String procedimiento) {
+		this.procedimiento = procedimiento;
 	}
 
 }

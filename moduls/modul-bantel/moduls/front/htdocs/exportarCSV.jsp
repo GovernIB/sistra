@@ -6,12 +6,24 @@
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 
 <script type="text/javascript" src="js/xmlhttp.js"></script>
-<script type="text/javascript" src="js/exportCVS.js"></script>
+<script type="text/javascript" src="js/exportCSV.js"></script>
 
 <script type="text/javascript">
 <!--
 
 var IDTRABAJO = "";
+
+function asyncPostJquery(urlString,postString, funcionCallBSuccess, funcionCallBError)
+{
+ $.ajax({
+  type: 'POST',
+  url: urlString,
+  data: postString,
+  success: funcionCallBSuccess,
+  error: funcionCallBError,
+  dataType: 'text'
+});
+}
 
 function exportCSV(){
 
@@ -20,7 +32,7 @@ function exportCSV(){
 	var form = document.getElementById("export");
 	var params;
 	
-	params = "identificadorTramite="+form.identificadorTramite.options[form.identificadorTramite.selectedIndex].value;
+	params = "identificadorProcedimientoTramite="+form.identificadorProcedimientoTramite.options[form.identificadorProcedimientoTramite.selectedIndex].value;
 	params+= "&procesada="+form.procesada.options[form.procesada.selectedIndex].value;
 	
 	if (form.desde.value != ''){
@@ -43,7 +55,7 @@ function exportCSV(){
 	
 	// 	Iniciamos proceso exportacion
 	IDTRABAJO = "INIT";
-	asyncPost("exportCSVInitAction.do",params,exportProcesed);	
+	asyncPostJquery("exportCSVInitAction.do",params,exportProcesed,errorExport);	
 	accediendoEnviando("<bean:message key="exportCSV.iniciandoProceso"/>");
 		
 }
@@ -52,7 +64,7 @@ function exportCSV(){
 function cancelExport(){
 	ocultarEnviando();
 	if (IDTRABAJO == "CANCEL" || IDTRABAJO == "")  return;
-	asyncPost("exportCSVCancelAction.do","id="+IDTRABAJO,null);	
+	asyncPostJquery("exportCSVCancelAction.do","id="+IDTRABAJO,null,errorExport);	
 }
 
 
@@ -71,7 +83,7 @@ function exportProcesed(result){
 	if (result.indexOf("INIT:") != -1){
 		IDTRABAJO =  result.substring("INIT:".length);				
 		
-		asyncPost("exportCSVProcessAction.do","id="+IDTRABAJO,exportProcesed);
+		asyncPostJquery("exportCSVProcessAction.do","id="+IDTRABAJO,exportProcesed,errorExport);
 		accediendoEnviando("<bean:message key="exportCSV.iniciadoProceso"/>");
 		return;
 	}
@@ -84,16 +96,32 @@ function exportProcesed(result){
 			// finalizado
 			accediendoEnviando("<bean:message key="exportCSV.procesandoEntradasInicio"/> " + numProcesadas + " <bean:message key="exportCSV.procesandoEntradasFin"/> " + numTotal);
 			ocultarEnviando();
-			this.document.location = "exportCSVDownloadAction.do?id="+IDTRABAJO;						
+			
+			mostrarDownloadCSV();
+			
+			//this.document.location = "exportCSVDownloadAction.do?id="+IDTRABAJO;
+      //window.open ("exportCSVDownloadAction.do?id="+IDTRABAJO,"donwloadExport");						
 		}else{
-			asyncPost("exportCSVProcessAction.do","id="+IDTRABAJO,exportProcesed);
+			asyncPostJquery("exportCSVProcessAction.do","id="+IDTRABAJO,exportProcesed,errorExport);
 			accediendoEnviando("<bean:message key="exportCSV.procesandoEntradasInicio"/> " + numProcesadas + " <bean:message key="exportCSV.procesandoEntradasFin"/> " + numTotal);
 		}		
 		return;
 	}
-	
-	
-	
+}
+
+function errorExport(result){
+ 	if (result.indexOf("ERROR:") != -1){
+		error = result.substring("ERROR:".length);	
+	} else {
+    error = '';
+  }
+	alert("<bean:message key="exportCSV.errorProceso"/>" + " \n\n<bean:message key="exportCSV.detalleErrorProceso"/>\n" + error );
+	ocultarEnviando();		
+}
+
+function downloadCSV(){
+  ocultarDownloadCSV();
+  this.document.location = "exportCSVDownloadAction.do?id="+IDTRABAJO;
 }
 
 function validDate(fecha){
@@ -111,18 +139,18 @@ function validDate(fecha){
 
 		<h2><bean:message key="exportCSV.exportarTramites"/></h2>
 		
-		<logic:empty name="tramites">
-			<bean:message key="errors.noGestor" />
+		<logic:empty name="tramitesCSV">
+			<bean:message key="errors.noGestorCSV" />
 		</logic:empty>
 		
-		<logic:notEmpty name="tramites">	
+		<logic:notEmpty name="tramitesCSV">	
 			<form name="export" id="export" class="centrat">
 			<p>
 				<bean:message key="exportCSV.tramite"/>
-				<select name="identificadorTramite">
-					<logic:iterate id="tramite" name="tramites" type="es.caib.bantel.model.Tramite">															
-						<option value="<%=tramite.getIdentificador()%>">
-							<%=tramite.getIdentificador() + "-" + (tramite.getDescripcion().length()>60?tramite.getDescripcion().substring(0,60)+"...":tramite.getDescripcion())%>
+				<select name="identificadorProcedimientoTramite">
+					<logic:iterate id="tramiteCSV" name="tramitesCSV" type="es.caib.bantel.model.TramiteExportarCSV">															
+						<option value="<%=tramiteCSV.getIdProcedimientoTramite()%>">
+							<%=tramiteCSV.getDescripcion()%>
 						</option>
 					</logic:iterate>
 				</select>
@@ -155,3 +183,4 @@ function validDate(fecha){
 		<!-- capa accediendo formularios -->
 		<div id="capaInfoFondo"></div>
 		<div id="capaInfoForms"><span id="mensajeEnviando"></span><br/><br/><input type="button" onclick="javascript:cancelExport();" value="<bean:message key="exportCSV.cancelar"/>"/></div>
+		<div id="capaDownloadExport"><bean:message key="exportCSV.exportacionFinalizada"/><br/><input type="button" onclick="javascript:downloadCSV();" value="<bean:message key="exportCSV.downloadCSV"/>"/></a></div>

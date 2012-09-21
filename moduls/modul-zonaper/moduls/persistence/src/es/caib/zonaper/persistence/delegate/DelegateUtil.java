@@ -77,5 +77,37 @@ public final class DelegateUtil {
     public static ConfiguracionDelegate getConfiguracionDelegate() {
         return (ConfiguracionDelegate) DelegateFactory.getDelegate(ConfiguracionDelegate.class);
     }
+    
+    public static RegistroExternoDelegate getRegistroExternoDelegate() {
+        return (RegistroExternoDelegate) DelegateFactory.getDelegate(RegistroExternoDelegate.class);
+    }
+    
+    public static RegistroExternoPreparadoDelegate getRegistroExternoPreparadoDelegate() {
+        return (RegistroExternoPreparadoDelegate) DelegateFactory.getDelegate(RegistroExternoPreparadoDelegate.class);
+    }
+    
+    public static LogRegistroDelegate getLogRegistroDelegate() {
+        return (LogRegistroDelegate) DelegateFactory.getDelegate(LogRegistroDelegate.class);
+    }
+    
+    public static DelegacionDelegate getDelegacionDelegate() {
+        return (DelegacionDelegate) DelegateFactory.getDelegate(DelegacionDelegate.class);
+    }
+    
+    public static BandejaFirmaDelegate getBandejaFirmaDelegate() {
+        return (BandejaFirmaDelegate) DelegateFactory.getDelegate(BandejaFirmaDelegate.class);
+    }
+    
+    public static AvisosDelegacionDelegate getAvisosDelegacionDelegate() {
+        return (AvisosDelegacionDelegate) DelegateFactory.getDelegate(AvisosDelegacionDelegate.class);
+    }
+    
+    public static IndiceElementoDelegate getIndiceElementoDelegate() {
+        return (IndiceElementoDelegate) DelegateFactory.getDelegate(IndiceElementoDelegate.class);
+    }
+    
+    public static ProcesoRechazarNotificacionDelegate getProcesoRechazarNotificacionDelegate() {
+        return (ProcesoRechazarNotificacionDelegate) DelegateFactory.getDelegate(ProcesoRechazarNotificacionDelegate.class);
+    }
 }
 

@@ -35,9 +35,13 @@ public class ConstantesRDS {
 	 */
 	public final static String TIPOUSO_ENVIO = "ENV";
 	/**
-	 * Tipo de uso para documentos asociados a un expediente
+	 * Tipo de uso para documentos asociados a un evento de expediente
 	 */
 	public final static String TIPOUSO_EXPEDIENTE = "EXP";
+	/**
+	 * Tipo de uso para documentos de autorización de delegacion
+	 */
+	public final static String TIPOUSO_DELEGACION = "DLG";
 	/**
 	 * Tipo de uso para envio de edictos al BOIB
 	 */
@@ -92,9 +96,20 @@ public class ConstantesRDS {
 	 */
 	public static final String MODELO_OFICIO_REMISION = "GE0009OFIREM";
 	/**
-	 * Modelo notificacion
+	 * Modelo documento notificacion: usado para documentos binarios anexos de notificaciones y avisos.
 	 */
 	public static final String MODELO_NOTIFICACION= "GE0011NOTIFICA";
+	/**
+	 * Modelo documento externo notificacion: usado para documentos externos de anexos de
+	 * notificaciones y avisos en los que se indica una url al documento. En el redose se 
+	 * almacenara un xml con la url de acceso.
+	 */
+	public static final String MODELO_NOTIFICACION_EXTERNO= "GE0013NOTIFEXT";
+	
+	/**
+	 * Modelo autorizacion delegacion
+	 */
+	public static final String MODELO_AUTORIZACION_DELEGACION= "GE0012DELEGA";
 
 	// VERSIONES ACTUALES DE MODELOS DE DOCUMENTOS UTILIZADOS
 	/**
@@ -132,6 +147,10 @@ public class ConstantesRDS {
 	 * Encoding utilizado 
 	 */
 	public static final String HASH_ENCODING = "UTF-8";
+	
+	// PARA SINCRONIZACION CON GESTOR DOCUMENTAL INDICA QUE DOCUMENTOS NO SE MIGRARAN (DOCUMENTOS ANTIGUOS)
+	public static final String GESDOC_DOCUMENTO_NO_CONSOLIDABLE = "#NOCONSOLIDABLE#";
+	
 	
 	
 }

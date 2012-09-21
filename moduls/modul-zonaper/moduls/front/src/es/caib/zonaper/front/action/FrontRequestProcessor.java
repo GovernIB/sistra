@@ -22,6 +22,7 @@ import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.tiles.TilesRequestProcessor;
 
 import es.caib.zonaper.model.OrganismoInfo;
+import es.caib.zonaper.persistence.delegate.ConfiguracionDelegate;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.zonaper.front.Constants;
@@ -64,6 +65,30 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
         	throw new ServletException(ex);
         }
     	
+        //Indicamos si:
+        //	- se tiene que ejecutar dentro de un iframe o no
+        // 	- se controla la entrega de las notificaciones
+        try{
+        	ConfiguracionDelegate config = DelegateUtil.getConfiguracionDelegate();
+        	
+        	String mostrarIframe = config.obtenerConfiguracion().getProperty("sistra.iframe");
+			getServletContext().setAttribute(Constants.MOSTRAR_EN_IFRAME,new Boolean(mostrarIframe).booleanValue());
+        	
+        	String controlEntregaNotif = config.obtenerConfiguracion().getProperty("notificaciones.controlEntrega");
+        	if (StringUtils.isBlank(controlEntregaNotif)) {
+        		controlEntregaNotif = "false";
+        	}
+			getServletContext().setAttribute(Constants.CONTROLAR_ENTREGA_NOTIFICACIONES,new Boolean(controlEntregaNotif).booleanValue());
+			
+			String apartadoAlertas = config.obtenerConfiguracion().getProperty("avisos.apartadoAlertas");
+        	if (StringUtils.isBlank(apartadoAlertas)) {
+        		apartadoAlertas = "true";
+        	}
+			getServletContext().setAttribute(Constants.HABILITAR_APARTADO_ALERTAS,new Boolean(apartadoAlertas).booleanValue());
+        }catch(Exception ex){
+        	log.error("Error obteniendo la variable iframe",ex);
+        	throw new ServletException(ex);
+        }
     }
     
     /**

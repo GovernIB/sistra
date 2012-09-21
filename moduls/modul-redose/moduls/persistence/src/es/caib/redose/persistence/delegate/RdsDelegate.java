@@ -121,6 +121,17 @@ public class RdsDelegate implements StatelessDelegate {
     /**
      * Consulta un documento del RDS de tipo estructurado formateado con una plantilla
      */
+    public DocumentoRDS consultarDocumentoFormateado(ReferenciaRDS refRds)  throws DelegateException{
+    	try {
+            return getFacade().consultarDocumentoFormateado(refRds);    		    		
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+   } 
+    
+    /**
+     * Consulta un documento del RDS de tipo estructurado formateado con una plantilla
+     */
     public DocumentoRDS consultarDocumentoFormateado(ReferenciaRDS refRds,String idioma)  throws DelegateException{
     	try {
             return getFacade().consultarDocumentoFormateado(refRds,idioma);    		    		
@@ -229,6 +240,19 @@ public class RdsDelegate implements StatelessDelegate {
         } 
     }        
 
+    /**
+     * Consolida documento en gestion documental
+     * @param refRDS Referencia RDS
+     * @throws ExcepcionRDS
+     */
+    public String consolidarDocumento(ReferenciaRDS refRDS)throws DelegateException{
+    	try {
+           return getFacade().consolidarDocumento(refRDS);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }         	
+    }
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

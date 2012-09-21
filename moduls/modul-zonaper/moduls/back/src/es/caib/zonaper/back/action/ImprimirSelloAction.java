@@ -5,6 +5,9 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
@@ -44,9 +47,6 @@ import es.indra.util.pdf.UtilPDF;
  *  validate="false"
  *  
  * @struts.action-forward
- *  name="success" path="/downloadFichero.do"
- *  
- * @struts.action-forward
  *  name="inicio" path="/init.do"
  *
  * @struts.action-forward
@@ -67,13 +67,6 @@ public class ImprimirSelloAction extends BaseAction
 			return mapping.findForward( "inicio" );
 		}
 		Long codigoPreregistro  = (Long) request.getSession().getAttribute(formulario.getCodigo());
-		request.getSession().removeAttribute(formulario.getCodigo());
-		// ELIMINAR TODAS LAS PETICIONES ANTIGUAS
-		Enumeration ats = request.getSession().getAttributeNames();
-		while (ats.hasMoreElements()){
-			String key = (String) ats.nextElement();
-			if (key.startsWith(Constants.IMPRESION_SELLO_KEY)) request.getSession().removeAttribute(key);
-		}
 			
 		EntradaPreregistroDelegate delegate = DelegateUtil.getEntradaPreregistroDelegate();
 		EntradaPreregistro preregistro		= delegate.obtenerEntradaPreregistroReg( codigoPreregistro );
@@ -81,7 +74,7 @@ public class ImprimirSelloAction extends BaseAction
 		String numeroRegistro 	= preregistro.getNumeroRegistro();
 		Date fechaRegistro 		= preregistro.getFechaConfirmacion();
 		
-		String strFechaRegistro = StringUtil.fechaACadena( fechaRegistro );
+		String strFechaRegistro = StringUtil.timestampACadena( fechaRegistro );
 		
 		
 		// Obtenemos codigo de oficina del número de registro: oficina/numero/año
@@ -95,10 +88,19 @@ public class ImprimirSelloAction extends BaseAction
 		arlParametrosExpansion.add( StringUtil.escapeBadCharacters( strFechaRegistro ) );
 		String nombreFichero = StringUtil.expansion( Constants.NOMBRE_FICHERO_SELLO,  arlParametrosExpansion );
 		
-		request.setAttribute( Constants.NOMBREFICHERO_KEY, 	nombreFichero  );		
-		request.setAttribute( Constants.DATOSFICHERO_KEY,  stampSelloVacio( oficina, numeroRegistro, strFechaRegistro ) );
+		// Volcamos fichero en stream response		
+		ByteArrayInputStream bis = new ByteArrayInputStream(stampSelloVacio( oficina, numeroRegistro, strFechaRegistro ));
+		try{
+			response.reset();					
+			response.setContentType("application/octet-stream");
+			response.setHeader("Content-Disposition","attachment; filename="+ nombreFichero + ";");
+            copy(bis,response.getOutputStream());
+        }finally{
+            if(bis != null)
+            	bis.close();
+        }
 		
-		return mapping.findForward( "success" );
+        return null;
     }
 	
 	public byte[] stampSelloVacio( String oficina, String numeroRegistro, String fechaRegistro ) throws Exception
@@ -192,4 +194,15 @@ public class ImprimirSelloAction extends BaseAction
 		return desc;
 	}
 	
+	private int copy(InputStream input, OutputStream output) throws IOException{
+		byte buffer[] = new byte[4096];
+	    int count = 0;
+	    for(int n = 0; -1 != (n = input.read(buffer));)
+	    {
+	        output.write(buffer, 0, n);
+	        count += n;
+	    }
+	
+	    return count;
+	}	
 }

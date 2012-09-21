@@ -29,6 +29,7 @@ import es.caib.util.ConvertUtil;
  *  path="/firmarDocumentoAnexo"
  *  validate="true"
  */
+
 public class FirmarDocumentoAnexoAction extends BaseAction
 {
 	protected static Log log = LogFactory.getLog(FirmarDocumentoAnexoAction.class);

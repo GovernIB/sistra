@@ -70,4 +70,31 @@ public class Constants implements Serializable
      */
     public static final String IMPLEMENTACION_FIRMA_KEY 			= "implementacionFirma";
 	
+    /**
+     * Atributo de contexto para indicar si se ejecuta en un iframe.
+     */
+    public static final String MOSTRAR_EN_IFRAME = "mostrarSistraEnIframe";
+    
+    /**
+     * Atributo de contexto para indicar si se controla la entrega de las notificaciones.
+     */
+    public static final String CONTROLAR_ENTREGA_NOTIFICACIONES = "controlarEntregaNotificaciones";
+    
+    /**
+     * Atributo de contexto para indicar si esta habilitado el apartado de alertas.
+     */
+    public static final String HABILITAR_APARTADO_ALERTAS = "es.caib.zonaper.front.apartadoAlertas";
+    
+    /**
+     * Atributo de sesión para almacenar la página de expedientes actual.
+     */
+    public static final String PAGE_KEY = "es.caib.zonaper.front.pagina";
+    
+    /**
+     * Atributos de sesión para guardar el filtrado de expedientes.
+     */
+    public static final String FILTRO_KEY = "es.caib.zonaper.front.filtro"; // Palabra de filtro
+    public static final String FILTRO_LISTA_KEY = "es.caib.zonaper.front.filtroLista"; // Expedientes filtrados
+    
+    
 }

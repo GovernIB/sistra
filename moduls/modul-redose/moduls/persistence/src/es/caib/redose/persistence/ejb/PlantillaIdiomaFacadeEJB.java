@@ -27,7 +27,8 @@ public abstract class PlantillaIdiomaFacadeEJB extends HibernateEJB {
 
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
@@ -36,7 +37,8 @@ public abstract class PlantillaIdiomaFacadeEJB extends HibernateEJB {
 	  
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public PlantillaIdioma obtenerPlantillaIdioma(Long id) {
         Session session = getSession();
@@ -54,7 +56,8 @@ public abstract class PlantillaIdiomaFacadeEJB extends HibernateEJB {
         
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Long grabarPlantillaIdioma(PlantillaIdioma obj,Long idPlantilla) {    	
         Session session = getSession();
@@ -76,7 +79,8 @@ public abstract class PlantillaIdiomaFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public Map listarPlantillasIdiomaPlantilla(Long id) {    	
     	Session session = getSession();
@@ -93,7 +97,8 @@ public abstract class PlantillaIdiomaFacadeEJB extends HibernateEJB {
         
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.redose}"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
      */
     public void borrarPlantillaIdioma(Long id) {
     	Session session = getSession();

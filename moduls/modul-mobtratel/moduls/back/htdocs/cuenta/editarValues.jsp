@@ -16,7 +16,7 @@
 </tr>
 <tr>
     <td class="labelo"><bean:message key="cuenta.codigo"/></td>
-    <td class="input"><html:text styleClass="data" tabindex="1" property="values.codigo" maxlength="5" readonly="<%= request.getAttribute( "idReadOnly" ) != null %>" /></td>
+    <td class="input"><html:text styleClass="data" tabindex="1" property="values.codigo" maxlength="5" readonly="<%= request.getAttribute( \"idReadOnly\" ) != null %>" /></td>
 </tr>
 <tr>
     <td class="labelo"><bean:message key="cuenta.nombre"/></td>

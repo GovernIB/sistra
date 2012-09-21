@@ -2,6 +2,7 @@
 <%@ page import="org.apache.struts.Globals"%>
 <%@ page import="es.caib.mobtratel.model.Envio"%>
 <%@ page import="es.caib.mobtratel.model.Cuenta"%>
+<%@ page import="es.caib.mobtratel.modelInterfaz.ConstantesMobtratel" %>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
@@ -33,19 +34,19 @@
 			<tr onmouseover="selecItemTabla(this);" onclick="detalleEnvio('<bean:write name="pagina" property="codigo"/>');" class="nou" title="<bean:message key="resultadoBusqueda.verDetalleEnvio"/>">
 				<td class="estado">
 					<!--  Icono enviado / no enviado -->
-					<logic:equal name="pagina" property="estado" value="<%=String.valueOf(Envio.CON_ERROR)%>">
+					<logic:equal name="pagina" property="estado" value="<%=String.valueOf(ConstantesMobtratel.ESTADOENVIO_ERROR)%>">
 						<img src="imgs/icones/form_procesado_error.gif" title="<bean:message key="resultadoBusqueda.enviadoError"/>"/>
 					</logic:equal>
-					<logic:equal name="pagina" property="estado" value="<%=String.valueOf(Envio.ENVIADO)%>">
+					<logic:equal name="pagina" property="estado" value="<%=String.valueOf(ConstantesMobtratel.ESTADOENVIO_ENVIADO)%>">
 						<img src="imgs/icones/form_procesado_si.gif" title="<bean:message key="resultadoBusqueda.enviado"/>"/>
 					</logic:equal>
-					<logic:equal name="pagina" property="estado" value="<%=String.valueOf(Envio.PENDIENTE_ENVIO)%>">
+					<logic:equal name="pagina" property="estado" value="<%=String.valueOf(ConstantesMobtratel.ESTADOENVIO_PENDIENTE)%>">
 						<img src="imgs/icones/form_procesado_no.gif" title="<bean:message key="resultadoBusqueda.noEnviado"/>"/>
 					</logic:equal>
-					<logic:equal name="pagina" property="estado" value="<%=String.valueOf(Envio.CANCELADO)%>">
+					<logic:equal name="pagina" property="estado" value="<%=String.valueOf(ConstantesMobtratel.ESTADOENVIO_CANCELADO)%>">
 						<img src="imgs/icones/document_parat.gif" title="<bean:message key="resultadoBusqueda.cancelado"/>"/>
 					</logic:equal>
-					<logic:equal name="pagina" property="estado" value="<%=String.valueOf(Envio.PROCESANDOSE)%>">
+					<logic:equal name="pagina" property="estado" value="<%=String.valueOf(ConstantesMobtratel.ESTADOENVIO_PROCESANDO)%>">
 						<img src="imgs/icones/documento_enviandose.gif" title="<bean:message key="resultadoBusqueda.enviandose"/>"/>
 					</logic:equal>
 				</td>				

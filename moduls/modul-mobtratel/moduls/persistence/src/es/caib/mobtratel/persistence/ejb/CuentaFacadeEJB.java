@@ -34,7 +34,7 @@ public abstract class CuentaFacadeEJB extends HibernateEJB {
 	
     /**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.gestor},${role.mobtratel},${role.auto}"
+     * @ejb.permission role-name="${role.gestor},${role.admin},${role.auto}"
      */
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
@@ -43,7 +43,7 @@ public abstract class CuentaFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.gestor},${role.mobtratel},${role.auto}"
+     * @ejb.permission role-name="${role.gestor},${role.admin},${role.auto}"
      */
     public Cuenta obtenerCuenta(String codigo) {
         Session session = getSession();
@@ -64,7 +64,7 @@ public abstract class CuentaFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.auto},${role.mobtratel},${role.gestor}"
+     * @ejb.permission role-name="${role.auto},${role.admin},${role.gestor}"
      */
     public Cuenta obtenerCuentaDefectoEmail() {
         Session session = getSession();
@@ -87,7 +87,7 @@ public abstract class CuentaFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.auto},${role.mobtratel},${role.gestor}"
+     * @ejb.permission role-name="${role.auto},${role.admin},${role.gestor}"
      */
     public Cuenta obtenerCuentaDefectoSMS() {
         Session session = getSession();
@@ -111,7 +111,7 @@ public abstract class CuentaFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.mobtratel}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public List listarCuentas()
     {
@@ -135,7 +135,7 @@ public abstract class CuentaFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.mobtratel}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public Cuenta findCuenta(String id) 
     {
@@ -163,7 +163,7 @@ public abstract class CuentaFacadeEJB extends HibernateEJB {
     
  	/**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.mobtratel}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public String grabarCuenta(Cuenta obj) {        
     	Session session = getSession();
@@ -204,7 +204,7 @@ public abstract class CuentaFacadeEJB extends HibernateEJB {
     /**
      * Comprueba si hay envios pendientes 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.mobtratel}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public boolean puedoBorrarCuenta(String id) {
 		Session session = getSession();    	    	    	
@@ -232,7 +232,7 @@ public abstract class CuentaFacadeEJB extends HibernateEJB {
 
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.mobtratel}"
+     * @ejb.permission role-name="${role.admin}"
      */
     public void borrarCuenta(String id) {
         Session session = getSession();

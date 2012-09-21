@@ -36,6 +36,14 @@ public class ProcEnviosDelegate implements StatelessDelegate {
         }
     }		
 
+	public void verificar() throws DelegateException {
+        try {
+            getFacade().verificar();
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }		
+	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

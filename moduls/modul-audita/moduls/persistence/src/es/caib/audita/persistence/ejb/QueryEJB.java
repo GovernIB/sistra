@@ -50,12 +50,10 @@ public abstract class QueryEJB extends DbUtilQueryExecutor implements SessionBea
     
     public void ejbCreate() throws CreateException 
     {
-        log.info("ejbCreate: " + this.getClass());
     }
 
 	public void ejbRemove() throws EJBException, RemoteException
 	{
-		log.info("ejbRemove: " + this.getClass());
 	}
 	
 	protected String getQuery( String propertyName ) throws SQLException
@@ -205,7 +203,17 @@ public abstract class QueryEJB extends DbUtilQueryExecutor implements SessionBea
 		if ( resultadoConsulta != null && resultadoConsulta.size() == 1 )
 		{
 			Map row = ( Map ) resultadoConsulta.get( 0 );
-			return new Long( ( ( BigDecimal ) row.get( "NEXTVAL" ) ).longValue() );
+			Object obj = row.get( "NEXTVAL" );
+			if (obj == null) {
+				throw new SQLException( "El valor retornado por la secuencia " + key + " es NULL.");
+			}
+			if (obj instanceof Long) {
+				return (Long)obj;
+			}
+			if (obj instanceof BigDecimal) {
+				return new Long( ( ( BigDecimal ) obj  ).longValue() );
+			}
+			throw new SQLException("Classe desconocida devuelta por la secuencia " + key +": " + obj.getClass() );
 		}
 		throw new SQLException( "No se puede obtener el valor de la secuencia " + key  );
 	}

@@ -1,7 +1,6 @@
 package es.caib.zonaper.modelInterfaz;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,10 +26,9 @@ public class NotificacionExpedientePAD extends ElementoExpedientePAD{
 	 */
 	private boolean requiereAcuse;
 	/**
-	 * Fecha de la firma del acuse de recibo
+	 * Detalle acuse recibo.
 	 */
-	private Date fechaFirmaAcuse;
-	
+	private DetalleAcuseRecibo detalleAcuseRecibo;
 	/**
 	 * Documentos notificacion
 	 */
@@ -68,23 +66,7 @@ public class NotificacionExpedientePAD extends ElementoExpedientePAD{
 	 */
 	public void setNumeroRegistro(String numeroRegistro) {
 		this.numeroRegistro = numeroRegistro;
-	}
-
-	/**
-	 * Obtiene fecha de la firma del acuse de recibo
-	 * @return Fecha firma acuse (si no se ha accedido a la notificación devuelve nulo)
-	 */
-	public Date getFechaFirmaAcuse() {
-		return fechaFirmaAcuse;
-	}
-
-	/**
-	 * Establece fecha de la firma del acuse de recibo
-	 * @param fechaFirmaAcuse Fecha firma acuse
-	 */
-	public void setFechaFirmaAcuse(Date fechaFirmaAcuse) {
-		this.fechaFirmaAcuse = fechaFirmaAcuse;
-	}
+	}	
 
 	/**
 	 * Indica si la notificación requiere firma de acuse de recibo
@@ -132,6 +114,14 @@ public class NotificacionExpedientePAD extends ElementoExpedientePAD{
 	 */
 	public void setTituloOficio(String titulo) {
 		this.tituloOficio = titulo;
+	}
+
+	public DetalleAcuseRecibo getDetalleAcuseRecibo() {
+		return detalleAcuseRecibo;
+	}
+
+	public void setDetalleAcuseRecibo(DetalleAcuseRecibo detalleAcuseRecibo) {
+		this.detalleAcuseRecibo = detalleAcuseRecibo;
 	}
 	
 }

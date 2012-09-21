@@ -13,15 +13,18 @@ import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.RequestUtils;
 
+import es.caib.bantel.back.form.FicheroExportacionForm;
 import es.caib.bantel.back.form.GestorBandejaForm;
 import es.caib.bantel.back.form.TramiteForm;
 import es.caib.bantel.back.taglib.Constants;
+import es.caib.bantel.model.FicheroExportacion;
 import es.caib.bantel.model.GestorBandeja;
-import es.caib.bantel.model.Tramite;
+import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.persistence.delegate.DelegateException;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
+import es.caib.bantel.persistence.delegate.FicheroExportacionDelegate;
 import es.caib.bantel.persistence.delegate.GestorBandejaDelegate;
-import es.caib.bantel.persistence.delegate.TramiteDelegate;
+import es.caib.bantel.persistence.delegate.ProcedimientoDelegate;
 import es.caib.util.CifradoUtil;
 
 
@@ -97,13 +100,14 @@ public abstract class BaseAction extends Action {
         request.setAttribute( "reloadMenu", "true");
     }
     
-    protected Tramite guardarTramite(ActionMapping mapping, HttpServletRequest request, String idTramite)
+    
+    protected Procedimiento guardarTramite(ActionMapping mapping, HttpServletRequest request, String idTramite)
     throws DelegateException 
     {
 		TramiteForm pForm = (TramiteForm) obtenerActionForm(mapping, request, "/back/tramite/editar");
 		
-		TramiteDelegate delegate = DelegateUtil.getTramiteDelegate();
-		Tramite tramite = delegate.obtenerTramite(idTramite);
+		ProcedimientoDelegate delegate = DelegateUtil.getTramiteDelegate();
+		Procedimiento tramite = delegate.obtenerProcedimiento(idTramite);
 		
 		try{
 			String claveCifrado = (String) DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().get("clave.cifrado");
@@ -123,6 +127,22 @@ public abstract class BaseAction extends Action {
 		return tramite;
 	}
     
+    protected FicheroExportacion guardarFicheroExportacion(ActionMapping mapping, HttpServletRequest request, String idFicheroExportacion)
+    throws DelegateException 
+    {
+    	FicheroExportacionForm pForm = (FicheroExportacionForm) obtenerActionForm(mapping, request, "/back/ficheroExportacion/editar");
+		
+    	FicheroExportacionDelegate delegate = DelegateUtil.getFicheroExportacionDelegate();
+    	FicheroExportacion ficExportacion = delegate.obtenerFicheroExportacion(idFicheroExportacion);
+				
+		
+		pForm.setValues(ficExportacion);
+		
+		request.setAttribute("idFicheroExportacion", idFicheroExportacion);
+		
+		return ficExportacion;
+	}
+    
     protected GestorBandeja guardarGestorBandeja(ActionMapping mapping, HttpServletRequest request, String idGestorBandeja)
     throws DelegateException 
     {
@@ -130,12 +150,12 @@ public abstract class BaseAction extends Action {
 		
 		GestorBandejaDelegate delegate = DelegateUtil.getGestorBandejaDelegate();
 		GestorBandeja gestorBandeja = delegate.obtenerGestorBandeja(idGestorBandeja);
-		Set tramites = gestorBandeja.getTramitesGestionados();
+		Set tramites = gestorBandeja.getProcedimientosGestionados();
 		String[] codigos = new String[tramites.size()];
 		int i = 0;
 		for ( Iterator it = tramites.iterator(); it.hasNext(); i++ )
 		{
-			codigos[ i ] = ( ( Tramite ) it.next() ).getIdentificador(); 
+			codigos[ i ] = ( ( Procedimiento ) it.next() ).getIdentificador(); 
 		}
 			
 		pForm.setTramites( codigos );

@@ -13,7 +13,7 @@
       </id>
 
     <property name="idPersistencia"  column="TPE_IDEPER"  not-null="true" unique="true"/>
-    <property name="tramite"  column="TPE_TRAMOD"  not-null="true" length="10"/>
+    <property name="tramite"  column="TPE_TRAMOD"  not-null="true" length="20"/>
     <property name="version"  column="TPE_TRAVER"  not-null="true" length="2"/>
     <property name="descripcion"  column="TPE_TRADES"  not-null="true" length="200"/>
     <property name="nivelAutenticacion"  column="TPE_NIVAUT"  not-null="true" length="1"/>
@@ -24,6 +24,8 @@
     <property name="parametrosInicio"  column="TPE_PARINI" length="4000"/>
     <property name="fechaCaducidad"  column="TPE_FECCAD" not-null="true"/>
     <property name="idioma"  column="TPE_IDIOMA" length="2" not-null="true"/>
+    <property name="delegado"  column="TPE_DELEGA"/>
+    <property name="estadoDelegacion"  column="TPE_DLGEST"/>
     
 	<set name="documentos" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="DPE_DOCIDE">
 		<cache usage="read-write"/>

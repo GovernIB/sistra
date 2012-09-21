@@ -1,9 +1,13 @@
 package es.caib.bantel.front.action;
 
+import java.util.Random;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -11,9 +15,11 @@ import org.apache.struts.action.ActionMapping;
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleExpedienteForm;
 import es.caib.bantel.front.util.MensajesUtil;
+import es.caib.bantel.model.Procedimiento;
+import es.caib.bantel.modelInterfaz.TramiteBTE;
+import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
-import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
 
 /**
@@ -31,41 +37,63 @@ import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
  */
 public class RealizarAltaExpedienteAction extends BaseAction
 {
+	protected static Log log = LogFactory.getLog(RealizarAltaExpedienteAction.class);
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception 
     {
 		DetalleExpedienteForm expedienteForm = (DetalleExpedienteForm)form;
 		request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,"3");
-				
-		PadBackOfficeDelegate ejb = new PadBackOfficeDelegate();
-		request.getSession().setAttribute("nombreUnidad",expedienteForm.getNombreUnidad());
+	
 		try{
+		
+			PadBackOfficeDelegate ejb = new PadBackOfficeDelegate();
+			
+			// Montamos expediente
 			ExpedientePAD expediente = new ExpedientePAD();
 			expediente.setDescripcion(expedienteForm.getDescripcion());
 			expediente.setIdioma(expedienteForm.getIdioma());
 			expediente.setIdentificadorExpediente(expedienteForm.getIdentificadorExp());
+			expediente.setIdentificadorProcedimiento(expedienteForm.getIdentificadorProcedimiento());			
+			
+			// Generamos clave expediente automaticamente
+			expedienteForm.setClaveExp(generarClave());
 			expediente.setClaveExpediente(expedienteForm.getClaveExp());
-			if(StringUtils.isNotEmpty(expedienteForm.getNif()) && StringUtils.isNotEmpty(expedienteForm.getNombre())){
-				PersonaPAD p = DelegateUtil.getConsultaPADDelegate().obtenerDatosPADporNif(expedienteForm.getNif());	
-				if(p!=null){//&& StringUtils.equals(expedienteForm.getNombre(),p.getNombre()) || StringUtils.equals(expedienteForm.getNombre(),p.getNombreCompleto())
-					expediente.setAutenticado(true);
-					expedienteForm.setUsuarioSeycon(p.getUsuarioSeycon());
-				}else{
-					throw new Exception("Usuario inexistente");
-				}
+			
+			// Obtenemos procedimiento para extraer unidad administrativa
+			Procedimiento proc = DelegateUtil.getTramiteDelegate().obtenerProcedimiento(expedienteForm.getIdentificadorProcedimiento());
+			if (proc.getUnidadAdministrativa() == null) {
+				throw new Exception("El procedimiento " + proc.getIdentificador() + " no tiene establecida una unidad administrativa");
+			}
+			expediente.setUnidadAdministrativa( proc.getUnidadAdministrativa() );
 
-			}else{
-				expediente.setAutenticado(StringUtils.isNotEmpty(expedienteForm.getUsuarioSeycon()));
-			}
-			if (expediente.isAutenticado()){
-				expediente.setIdentificadorUsuario(expedienteForm.getUsuarioSeycon());
-			}
-			expediente.setUnidadAdministrativa( new Long( expedienteForm.getUnidadAdm() ) );
+			
+			// Si tiene entrada asociada, dependera del nivel de autenticacion de la entrada
 			expediente.setNumeroEntradaBTE(expedienteForm.getNumeroEntrada());
+			if (StringUtils.isNotEmpty(expedienteForm.getNumeroEntrada())){ 
+				TramiteBTE entrada = DelegateBTEUtil.getBteDelegate().obtenerEntrada(expedienteForm.getNumeroEntrada());				
+				if (entrada.getNivelAutenticacion() == 'A'){
+					expediente.setAutenticado(false);
+				}else{
+					expediente.setAutenticado(true);
+					expediente.setNifRepresentante(entrada.getUsuarioNif());
+					expediente.setNifRepresentado(entrada.getRepresentadoNif());
+					expediente.setNombreRepresentado(entrada.getRepresentadoNombre());
+				}						
+			}else{
+			// Si no tiene entrada asociada, debe ser autenticado
+				expediente.setAutenticado(true);
+				expediente.setNifRepresentante(expedienteForm.getNif());				
+			}
+						
 			if(!StringUtils.isEmpty(expedienteForm.getHabilitarAvisos()) ){
 				expediente.getConfiguracionAvisos().setHabilitarAvisos(new Boolean(expedienteForm.getHabilitarAvisos().equals("S")));
-				expediente.getConfiguracionAvisos().setAvisoEmail(expedienteForm.getEmail());
-				expediente.getConfiguracionAvisos().setAvisoSMS(expedienteForm.getMovil());
+				if (expedienteForm.getHabilitarAvisos().equals("S")) {
+					expediente.getConfiguracionAvisos().setAvisoEmail(expedienteForm.getEmail());
+					expediente.getConfiguracionAvisos().setAvisoSMS(expedienteForm.getMovil());
+				}
+			}else {
+				expediente.getConfiguracionAvisos().setHabilitarAvisos(new Boolean(false));
 			}
 			ejb.altaExpediente(expediente);
 			
@@ -73,15 +101,11 @@ public class RealizarAltaExpedienteAction extends BaseAction
 			response.sendRedirect("recuperarExpediente.do?unidadAdm=" + expediente.getUnidadAdministrativa() + "&identificadorExp=" + expediente.getIdentificadorExpediente() + ( expediente.getClaveExpediente() != null?"&claveExp=" + expediente.getClaveExpediente():"") );
 			return null;
 			
-			/*
-			ActionMessages mensajes = new ActionMessages();
-			mensajes.add("msg", new ActionMessage("altaExpedienteOk"));
-			saveMessages(request,mensajes);
-			//request.setAttribute("expediente", expediente);
 			
-			return mapping.findForward( "success" );
-			*/
 		}catch(Exception e){
+			
+			log.error("Excepcion alta expediente",e);
+			
 			String mensajeOk = "";
 			
 			if(e.getMessage().equals("Usuario inexistente")){
@@ -89,13 +113,27 @@ public class RealizarAltaExpedienteAction extends BaseAction
 			}else if(e.getMessage().equals("La entrada ya tiene un expediente enlazado")){
 				mensajeOk = MensajesUtil.getValue("error.expediente.ExpedienteEnlazado");
 			}else{
-				mensajeOk = MensajesUtil.getValue("error.expediente.Excepcion");
+				mensajeOk = MensajesUtil.getValue("error.expediente.Excepcion") + ": " + e.getMessage();
 			}
 			
 			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk);
 			request.setAttribute( "enlace","errorExpediente");
 			return mapping.findForward("fail");
 		}
+    }
+	
+	/**
+     * Genera clave de acceso al expediente (Cadena de 10 carácteres)
+     * @return
+     */
+    private String generarClave(){
+    	Random r = new Random();    	
+    	String clave="";
+    	int ca = Character.getNumericValue('a');
+    	for (int i=0;i<10;i++){
+    		clave += Character.forDigit(ca + r.nextInt(26),Character.MAX_RADIX);    		
+    	}
+    	return clave;    	    	
     }
 }
 

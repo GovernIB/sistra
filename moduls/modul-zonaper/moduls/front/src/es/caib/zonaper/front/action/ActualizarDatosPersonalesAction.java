@@ -13,6 +13,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import es.caib.zonaper.front.form.ActualizarDatosPersonalesForm;
+import es.caib.zonaper.model.DatosSesion;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.PadAplicacionDelegate;
@@ -37,6 +39,14 @@ public class ActualizarDatosPersonalesAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
+		
+		// TODO DE MOMENTO SOLO DEJAMOS MODIFICAR AL PROPIO USUARIO, MAS ADELANTE TB AL REPR
+		DatosSesion datosSesion = this.getDatosSesion(request);
+		if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(datosSesion.getPerfilAcceso())){
+			throw new Exception("Solo puede modificar los datos el propio usuario");
+		}
+		
+		
 		ActualizarDatosPersonalesForm formulario = ( ActualizarDatosPersonalesForm ) form;
 		
 		// Realizamos validaciones sobre los datos
@@ -54,6 +64,7 @@ public class ActualizarDatosPersonalesAction extends BaseAction
 		String nifOriginal = personaPAD.getNif();
 		BeanUtils.copyProperties(personaPAD,formulario);
 		personaPAD.setNif(nifOriginal);
+				
 		delegate.modificarPersona(personaPAD);
 		
 		return mapping.findForward("success");

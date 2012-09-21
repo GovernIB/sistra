@@ -1,6 +1,7 @@
 package es.caib.zonaper.persistence.delegate;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
@@ -63,6 +64,18 @@ public class PadAplicacionDelegate implements StatelessDelegate {
         }
 	}
 	
+	public PersonaPAD altaPersonaCodigoUsuarioAuto(PersonaPAD personaPAD ) throws DelegateException
+	{
+		try
+		{
+			return getFacade().altaPersonaCodigoUsuarioAuto(personaPAD );
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
 	public void modificarPersona( PersonaPAD personaPAD ) throws DelegateException
 	{
 		try
@@ -87,7 +100,6 @@ public class PadAplicacionDelegate implements StatelessDelegate {
         }
 	}
 	
-	
     public PersonaPAD obtenerHelpdeskDatosPersonaPorUsuario( String codUsu) throws DelegateException{
 		try
 		{
@@ -110,10 +122,10 @@ public class PadAplicacionDelegate implements StatelessDelegate {
         }
 	}
 	
-	public void modificarHelpdeskCodigoUsuario( String usuOld, String usuNew) throws DelegateException{
+	public void actualizarCodigoUsuario( String usuOld, String usuNew) throws DelegateException{
 		try
 		{
-			getFacade().modificarHelpdeskCodigoUsuario( usuOld, usuNew);
+			getFacade().actualizarCodigoUsuario( usuOld, usuNew);
 		}
 		catch (Exception e) 
 		{
@@ -121,6 +133,27 @@ public class PadAplicacionDelegate implements StatelessDelegate {
         }
 	}
 	
+	public List buscarEntidades( String nifEntidad) throws DelegateException{
+		try
+		{
+			return getFacade().buscarEntidades( nifEntidad );
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
+	public List buscarEntidadesPorNombre( String nombreEntidad) throws DelegateException{
+		try
+		{
+			return getFacade().buscarEntidadesPorNombre( nombreEntidad );
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
 	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

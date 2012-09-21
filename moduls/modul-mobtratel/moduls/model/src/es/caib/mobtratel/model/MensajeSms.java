@@ -4,13 +4,11 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 
+import es.caib.mobtratel.modelInterfaz.ConstantesMobtratel;
 import es.caib.xml.ConstantesXML;
 
 public class MensajeSms implements Serializable 
-{
-	public static int PENDIENTE_ENVIO = 0;
-	public static int ENVIADO = 1;
-	public static int CON_ERROR = 2;
+{	
 	
 	public static int MAX_LENGTH_ERROR = 500;
 
@@ -35,7 +33,7 @@ public class MensajeSms implements Serializable
 	/**
 	 *	Estado de envio del mensaje
 	 */
-	private int estado = PENDIENTE_ENVIO;
+	private int estado = ConstantesMobtratel.ESTADOENVIO_PENDIENTE;
 
 	
 	/**
@@ -65,9 +63,7 @@ public class MensajeSms implements Serializable
 	 * Numero de Destinatarios Enviados
 	 */
 	private int numeroDestinatariosEnviados;
-	
-
-	
+		
 	/**
 	 *	Fecha Inicio del Envio
 	 */
@@ -78,6 +74,21 @@ public class MensajeSms implements Serializable
 	 */
 	private Timestamp fechaFinEnvio;
 
+	/**
+	 * Indica si se ha de verificar el envío (solo si hay un único destinatario).
+	 */
+	private boolean verificarEnvio;
+	
+	/**
+	 * En caso de verificar el envío indica el estado devuelto por el proceso de verificación (a través del plugin de envíos).
+	 */
+	private String estadoVerificarEnvio;
+	
+	/**
+	 * En caso de verificar el envío y estado error indica el error devuelto por el proceso de verificación (a través del plugin de envíos).
+	 */
+	private String errorVerificarEnvio;
+	
 	public Timestamp getFechaFinEnvio() {
 		return fechaFinEnvio;
 	}
@@ -202,6 +213,36 @@ public class MensajeSms implements Serializable
 
 	public void setNumeroDestinatariosEnviados(int numeroDestinatariosEnviados) {
 		this.numeroDestinatariosEnviados = numeroDestinatariosEnviados;
+	}
+
+
+	public boolean isVerificarEnvio() {
+		return verificarEnvio;
+	}
+
+
+	public void setVerificarEnvio(boolean verificarEnvio) {
+		this.verificarEnvio = verificarEnvio;
+	}
+
+
+	public String getEstadoVerificarEnvio() {
+		return estadoVerificarEnvio;
+	}
+
+
+	public void setEstadoVerificarEnvio(String estadoVerificarEnvio) {
+		this.estadoVerificarEnvio = estadoVerificarEnvio;
+	}
+
+
+	public String getErrorVerificarEnvio() {
+		return errorVerificarEnvio;
+	}
+
+
+	public void setErrorVerificarEnvio(String errorVerificarEnvio) {
+		this.errorVerificarEnvio = errorVerificarEnvio;
 	}
 
 	

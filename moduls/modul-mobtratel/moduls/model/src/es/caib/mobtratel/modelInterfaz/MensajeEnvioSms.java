@@ -18,6 +18,10 @@ public class MensajeEnvioSms implements Serializable{
 	 */
 	private String texto;	
 
+	/**
+	 * Indica si se ha de verificar el envío (solo si hay un único destinatario).
+	 */
+	private boolean verificarEnvio;
 	
 	/**
 	 * Devuelve el array de Destinatarios a los que se enviara el mensaje (números teléfono móvil)
@@ -46,6 +50,12 @@ public class MensajeEnvioSms implements Serializable{
 	 */
 	public void setTexto(String texto) {
 		this.texto = texto;
+	}
+	public boolean isVerificarEnvio() {
+		return verificarEnvio;
+	}
+	public void setVerificarEnvio(boolean verificarEnvio) {
+		this.verificarEnvio = verificarEnvio;
 	}
 	
 
