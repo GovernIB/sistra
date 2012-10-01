@@ -70,6 +70,7 @@
 		<metainf dir="${etc.dir}">
 			<include if="isJboss5" name="jboss-classloading.xml"/>
 		</metainf>
+		<metainf dir="${etc.dir}" includes="cxf/org.apache.cxf.Logger"/>
 		<fileset dir="moduls/modul-audita/output/moduls"/>
 		<fileset dir="moduls/modul-bantel/output/moduls"/>
 		<fileset dir="moduls/modul-forms/output/moduls"/>
