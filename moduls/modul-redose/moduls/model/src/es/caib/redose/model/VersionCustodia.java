@@ -2,8 +2,6 @@ package es.caib.redose.model;
 // Generated 07-mar-2006 18:09:27 by Hibernate Tools 3.1.0 beta3
 
 import java.util.Date;
-import java.util.Set ;
-import java.util.HashSet;
 
 public class VersionCustodia  implements java.io.Serializable {
 

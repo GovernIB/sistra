@@ -15,7 +15,8 @@
         
         <property name="codigoUbicacion" type="string" column="UBI_IDENT" length="5" not-null="true" unique="true" />
         <property name="nombre" type="string" column="UBI_NOMBRE" length="50" not-null="true" />
-        <property name="pluginAlmacenamiento" type="string" column="UBI_PLUGIN" length="100" not-null="true" />
-
+        <property name="pluginAlmacenamiento" type="string" column="UBI_PLUGIN" length="500" not-null="true" />
+		<property name="defecto" type="string" column="UBI_DEFECT" length="1" not-null="true" />
+		
     </class>
 </hibernate-mapping>

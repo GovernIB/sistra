@@ -43,6 +43,14 @@ public class UbicacionDelegate implements StatelessDelegate {
         }
     }
   
+    public Ubicacion obtenerUbicacionDefecto() throws DelegateException {
+        try {        	
+            return getFacade().obtenerUbicacionDefecto();
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     public List listarUbicaciones() throws DelegateException {
         try {
             return getFacade().listarUbicaciones();

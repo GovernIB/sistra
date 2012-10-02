@@ -38,6 +38,7 @@
 		<mapping resource="es/caib/redose/model/Formateador.hbm.xml" />
 		<mapping resource="es/caib/redose/model/VersionCustodia.hbm.xml" />
 		<mapping resource="es/caib/redose/model/LogGestorDocumentalError.hbm.xml" />
+		<mapping resource="es/caib/redose/model/FicheroExterno.hbm.xml" />
     </session-factory>
 
 </hibernate-configuration>

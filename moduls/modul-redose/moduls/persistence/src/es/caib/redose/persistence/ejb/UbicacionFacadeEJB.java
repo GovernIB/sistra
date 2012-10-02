@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
+import java.util.Iterator;
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
@@ -39,6 +40,7 @@ public abstract class UbicacionFacadeEJB extends HibernateEJB {
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.auto}"
      * @ejb.permission role-name="${role.operador}"
      */
     public Ubicacion obtenerUbicacion(Long id) {
@@ -82,6 +84,38 @@ public abstract class UbicacionFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
+    
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
+     * @ejb.permission role-name="${role.operador}"
+     */
+    public Ubicacion obtenerUbicacionDefecto(){
+        Session session = getSession();
+        try {
+            Query query = session.createQuery("FROM Ubicacion AS m WHERE m.defecto = 'S'");
+            query.setCacheable(true);
+            List result = query.list();
+
+            if (result.isEmpty()) {
+                return null;
+            }
+            
+            if (result.size() > 1) {
+            	throw new HibernateException("Existe configurada mas de una ubicacion por defecto");
+            }
+
+            Ubicacion ubicacion = (Ubicacion) result.get(0);        	
+            return ubicacion;
+
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
         
 	/**
      * @ejb.interface-method
@@ -90,8 +124,23 @@ public abstract class UbicacionFacadeEJB extends HibernateEJB {
      */
     public Long grabarUbicacion(Ubicacion obj) {        
     	Session session = getSession();
-        try {        	
-            session.saveOrUpdate(obj);                    	
+        try {
+        	// Guardamos ubicacion
+            session.saveOrUpdate(obj);
+            
+            // Metemos control para si establecemos por defecto la ubicacion, resetear el resto
+            if ("S".equals(obj.getDefecto())) {
+            	Query query = session.createQuery("FROM Ubicacion");
+                List result = query.list();
+                for (Iterator it = result.iterator(); it.hasNext();) {
+                	Ubicacion u = (Ubicacion) it.next();
+                	if (u.getCodigo().longValue() != obj.getCodigo().longValue()) {
+                		u.setDefecto("N");
+                		session.update(u);
+                	}
+                }
+            }
+            
             return obj.getCodigo();
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -99,6 +148,9 @@ public abstract class UbicacionFacadeEJB extends HibernateEJB {
         	
             close(session);
         }
+        
+       
+        
     }
     
     /**

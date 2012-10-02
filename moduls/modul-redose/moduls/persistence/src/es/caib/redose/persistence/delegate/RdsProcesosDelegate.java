@@ -5,7 +5,6 @@ import java.rmi.RemoteException;
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
-import es.caib.redose.modelInterfaz.ExcepcionRDS;
 import es.caib.redose.persistence.intf.RdsProcesos;
 import es.caib.redose.persistence.util.RdsProcesosUtil;
 
@@ -18,21 +17,13 @@ public class RdsProcesosDelegate implements StatelessDelegate {
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 	
-	 public void borradoDocumentosSinUsos() throws DelegateException{
+	 public void purgadoDocumentos() throws DelegateException{
     	try {
-           getFacade().borradoDocumentosSinUsos();
+           getFacade().purgadoDocumentos();
         } catch (Exception e) {
             throw new DelegateException(e);
         }
     }
-	
-	public void borradoDocumentosCustodia() throws DelegateException{
-		 try {
-	       getFacade().borradoDocumentosCustodia();
-	    } catch (Exception e) {
-	        throw new DelegateException(e);
-	    }
-	}
 	
 	public void consolidacionGestorDocumental() throws DelegateException{
 		 try {
@@ -42,13 +33,6 @@ public class RdsProcesosDelegate implements StatelessDelegate {
 	    }
 	}
 	
-	public void borradoDocumentosDefinitivamente() throws DelegateException{
-		 try {
-		       getFacade().borradoDocumentosDefinitivamente();
-		    } catch (Exception e) {
-		        throw new DelegateException(e);
-		    }
-		}
 	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

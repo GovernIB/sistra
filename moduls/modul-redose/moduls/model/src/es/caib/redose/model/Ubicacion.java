@@ -15,6 +15,7 @@ public class Ubicacion  implements java.io.Serializable {
      private String codigoUbicacion;
      private String nombre;
      private String pluginAlmacenamiento;
+     private String defecto;
 
 
     // Constructors
@@ -57,6 +58,16 @@ public class Ubicacion  implements java.io.Serializable {
     public void setPluginAlmacenamiento(String ubiPlugin) {
         this.pluginAlmacenamiento = ubiPlugin;
     }
+
+
+	public String getDefecto() {
+		return defecto;
+	}
+
+
+	public void setDefecto(String defecto) {
+		this.defecto = defecto;
+	}
    
 
 
