@@ -16,6 +16,16 @@ public class UbicacionForm extends RdsForm
 {
 	protected static Log log = LogFactory.getLog(UbicacionForm.class);
 	
+	 public void reset(ActionMapping mapping, HttpServletRequest request) {
+        super.reset(mapping, request);
+        Ubicacion ubicacion = (Ubicacion) getValues();
+        if ( ubicacion != null )
+        {
+        	ubicacion.setDefecto("N");        	
+        }
+    }
+	
+	
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
 	{
         ActionErrors errors = super.validate(mapping, request);

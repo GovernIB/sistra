@@ -18,7 +18,7 @@ import es.caib.redose.persistence.util.HibernateLocator;
  */
 public class PluginDefaultRDS implements PluginAlmacenamientoRDS {
 
-	public void guardarFichero(Long id, byte[] datos) throws Exception {
+	public void guardarFichero(Long id, byte[] datos, MetadaAlmacenamiento metadata) throws Exception {
 		Session session = getSession();
         try {        	
         	// Buscamos si existe el fichero

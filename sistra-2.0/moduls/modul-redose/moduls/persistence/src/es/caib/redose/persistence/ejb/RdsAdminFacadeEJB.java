@@ -2,6 +2,7 @@ package es.caib.redose.persistence.ejb;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.ejb.CreateException;
@@ -11,13 +12,23 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import es.caib.redose.model.Documento;
+import es.caib.redose.model.FicheroExterno;
 import es.caib.redose.model.LogOperacion;
 import es.caib.redose.model.TipoOperacion;
+import es.caib.redose.model.Ubicacion;
+import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.ExcepcionRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
+import es.caib.redose.modelInterfaz.UsoRDS;
 import es.caib.redose.persistence.delegate.DelegateUtil;
+import es.caib.redose.persistence.delegate.FicheroExternoDelegate;
+import es.caib.redose.persistence.delegate.RdsDelegate;
+import es.caib.redose.persistence.delegate.VersionCustodiaDelegate;
 import es.caib.redose.persistence.plugin.PluginAlmacenamientoRDS;
+import es.caib.redose.persistence.plugin.PluginAlmacenamientoRDSExterno;
 import es.caib.redose.persistence.plugin.PluginClassCache;
+import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.custodia.PluginCustodiaIntf;
 
 /**
  * SessionBean que implementa la interfaz del RDS para la administración del RDS (uso interno)
@@ -36,6 +47,9 @@ import es.caib.redose.persistence.plugin.PluginClassCache;
 public abstract class RdsAdminFacadeEJB extends HibernateEJB {
 
 	private final static String ELIMINAR_DOCUMENTO = "ELDO";
+	
+	private static final long VENTANA_TIEMPO_CONSOLIDACION = 5 * 60 * 1000;
+	
 	
 	
 	/**
@@ -142,7 +156,156 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
 	    }     	
     }
     
+    /**
+     * Lista veresiones custodia para borrar
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public List listarVersionesCustodiaParaBorrar() throws ExcepcionRDS{   
+    	try {
+    		VersionCustodiaDelegate delegate = DelegateUtil.getVersionCustodiaDelegate();
+    		List documentosParaBorrar = delegate.listarVersionesCustodiaParaBorrar();
+    		return documentosParaBorrar;    
+	    } catch (Exception ex) {
+			throw new ExcepcionRDS("Error al obtener versiones para borrar en custodia", ex);
+		}		
+	}
+    
+    /**
+     * Elimina version en custodia
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public void eliminaVersionDocumentoCustodia(String codigoVersion) throws ExcepcionRDS{   
+    	try {
+	    	VersionCustodiaDelegate delegate = DelegateUtil.getVersionCustodiaDelegate();
+	    	
+	    	// Obtenemos plugin custodia
+	    	PluginCustodiaIntf pluginCustodia = null;
+			boolean existepluginCustodia = true;
+			try{
+				pluginCustodia = PluginFactory.getInstance().getPluginCustodia();
+			}catch(Exception e){
+				existepluginCustodia  = false;
+			}
+			if(!existepluginCustodia){
+				throw new Exception("No existe plugin custodia");
+			}
+	    	
+			// Eliminamos version en custodia
+	    	pluginCustodia.eliminarDocumento(codigoVersion);
+	    	
+	    	// Borramos version en BBDD
+			delegate.borrarVersion(codigoVersion);
+		} catch (Exception ex) {
+			throw new ExcepcionRDS("Error al eliminar version " + codigoVersion + " de custodia", ex);
+		}		
+    }
+    
+    
+    /**
+     * Lista ficheros externos para borrar
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public List listarFicherosExternosParaBorrar() throws ExcepcionRDS{   
+    	try {
+    		FicheroExternoDelegate delegate = DelegateUtil.getFicheroExternoDelegate();
+    		List documentosParaBorrar = delegate.obtenerListaFicherosExternoBorrar();
+    		return documentosParaBorrar;    
+	    } catch (Exception ex) {
+			throw new ExcepcionRDS("Error al obtener ficheros externos para borrar en custodia", ex);
+		}		
+	}
+    
+    /**
+     * Elimina fichero externo
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public void eliminaFicheroExterno(String referenciaFic) throws ExcepcionRDS{   
+    	try {
+    		FicheroExternoDelegate delegate = DelegateUtil.getFicheroExternoDelegate();
+	    	
+    		// Obtenemos fichero externo
+    		FicheroExterno fe = delegate.obtenerFicheroExterno(referenciaFic);
+    		
+    		// Obtenemos plugin de almacenamiento    		
+    		Ubicacion ubicacion = delegate.obtenerUbicacionFicheroExterno(referenciaFic);
+    		PluginAlmacenamientoRDSExterno plgAlmacenamiento = obtenerPluginAlmacenamientoExterno(ubicacion);
+    		
+			// Eliminamos definitivamente fichero externo
+    		plgAlmacenamiento.purgarFichero(referenciaFic);
+	    	
+	    	// Borramos fichero en BBDD
+			delegate.eliminarFicheroExterno(referenciaFic);
+			
+		} catch (Exception ex) {
+			throw new ExcepcionRDS("Error al eliminar fichero externo " + referenciaFic, ex);
+		}		
+    }
+    
+    /**
+     * Consolida documento en custodia.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public void consolidarDocumentoCustodia(ReferenciaRDS refRDS) throws ExcepcionRDS{   
+    	try {
+    		RdsDelegate rdsDelegate = DelegateUtil.getRdsDelegate();
+    		
+    		// Si tiene un uso de tipo bandeja de entrada esperamos una ventana de tiempo por si
+			// tiene activada el aviso inmediato
+    		List usos = rdsDelegate.listarUsos(refRDS);
+			UsoRDS uso = existeUsoBTE(usos);
+			if (uso!=null && uso.getFechaUso().getTime() > (System.currentTimeMillis() - VENTANA_TIEMPO_CONSOLIDACION ) ) {
+				// Si todavia no se ha cumplido la ventana de consolidacion lo dejamos para mas adelante
+				return;
+			}
+			
+			// Consolidamos documento
+			rdsDelegate.consolidarDocumento(refRDS);
+				
+		} catch (Exception ex) {
+			throw new ExcepcionRDS("Error al consolidar documento con id " + refRDS.getCodigo(), ex);
+		}	
+    }
+    
     // ---------------------- Funciones auxiliares -------------------------------------------    
+    
+    /**
+     * Comprueba si existe un uso de tipo BTE
+     * @param usos
+     * @return
+     */
+    private UsoRDS existeUsoBTE(List usos){
+    	for (Iterator it = usos.iterator();it.hasNext();){
+    		UsoRDS uso = (UsoRDS) it.next();
+    		if (uso.getTipoUso().equals(ConstantesRDS.TIPOUSO_BANDEJA)){
+    			return uso;
+    		}    			
+    	}
+    	return null;
+    }
+    
+    
+    /**
+     * Obtiene plugin almacenamiento
+     * @param classNamePlugin
+     * @return Plugin almacenamiento externo
+     */
+    private PluginAlmacenamientoRDSExterno obtenerPluginAlmacenamientoExterno(Ubicacion ubicacion) throws Exception{
+    	PluginAlmacenamientoRDS plgAlmacenamiento = PluginClassCache.getInstance().getPluginAlmacenamientoRDS(ubicacion.getPluginAlmacenamiento());
+    	 if (!(plgAlmacenamiento instanceof PluginAlmacenamientoRDSExterno)) {
+ 			throw new Exception("El plugin de almacenamiento no es externo");
+ 		}
+    	 return (PluginAlmacenamientoRDSExterno) plgAlmacenamiento;
+    }
     
     /* 
      * Funcion que realiza el borrado de un documento en el RDS
