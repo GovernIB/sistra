@@ -301,16 +301,17 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 		Session session = getSession();
 		try 
 		{			
+			// Realizamos busqueda paginada
 			Criteria criteria =createCriteriaFromCriteriosBusquedaTramite(criteriosBusqueda,session);	
 			Page page = new Page( criteria, pagina, longitudPagina );
 			
-			/*
-			Query q =createQueryFromCriteriosBusquedaTramite(criteriosBusqueda,session);			
-			Page page = new Page( q, pagina, longitudPagina );					
-			*/
+			// Calculamos manualmente total de tramites
+			int total = countFromCriteriosBusquedaTramite(criteriosBusqueda,session);
+			page.setTotalResults(total); 
+			log.debug("TOTAL QUERY: " + total);
 			
-			return page;
 			
+			return page;			
 	    } 
 		catch (Exception he) 
 		{
@@ -1026,6 +1027,148 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 		 criteria.addOrder( Order.desc("fecha") );
 		 return criteria;
     }    
+    
+    private int countFromCriteriosBusquedaTramite(CriteriosBusquedaTramite criteriosBusqueda,Session session) throws Exception{
+    	
+    	// Recuperamos información gestor (en caso de que no sea usuario auto)
+    	GestorBandeja gestor = null;
+    	if (!this.ctx.isCallerInRole(ROLE_AUTO)){
+	    	try{    	    
+		    	GestorBandejaDelegate gd = DelegateUtil.getGestorBandejaDelegate();
+		    	gestor = gd.obtenerGestorBandeja(this.ctx.getCallerPrincipal().getName());
+		    	if (gestor == null) throw new Exception("No se encuentra gestor para usuario seycon " + this.ctx.getCallerPrincipal().getName());
+		    	if (gestor.getProcedimientosGestionados().size() == 0) {
+		    		return 0;
+		    	}
+	    	}catch (Exception he) 
+			{
+		        throw new EJBException(he);
+		    } 
+    	}
+
+    	List params = new ArrayList(); 
+    	StringBuffer sb = new StringBuffer(4000);
+    	sb.append("select count(t) from TramiteBandeja t where ") ; 
+    			 
+		 // Especificamos procedimiento
+		 if ( StringUtils.isNotBlank(criteriosBusqueda.getIdentificadorProcedimiento()))
+		 {
+			 Procedimiento procedimiento = (Procedimiento) session.load(Procedimiento.class,criteriosBusqueda.getIdentificadorProcedimiento());
+			 sb.append(" t.procedimiento = ? and ");			 
+			 params.add(procedimiento);			 
+		 }else{
+			 // procedimientos a los que esta asociado el gestor
+			 if (gestor != null) {
+				 sb.append("( ");
+				 boolean primer = true;
+				 for (Iterator it = gestor.getProcedimientosGestionados().iterator(); it.hasNext();) {
+					Procedimiento p =  (Procedimiento) it.next();
+					 if (primer) {
+						 primer = false;
+					 } else {
+						 sb.append(" or ");
+					 }
+					 sb.append("  t.procedimiento.identificador = ? ");
+					 params.add(p.getIdentificador());
+				 }
+				 sb.append(") and ");						
+			 }		 				
+		 }
+		 // Especificamos tramite
+		 if ( StringUtils.isNotBlank(criteriosBusqueda.getIdentificadorTramite()))
+		 {
+			 sb.append(" t.identificadorTramite = ? and ");
+			 params.add(criteriosBusqueda.getIdentificadorTramite());			 
+		 }
+		 //	 Especificamos número de entrada
+		 if ( !StringUtils.isEmpty(criteriosBusqueda.getNumeroEntrada()) )
+		 {
+			 sb.append(" t.numeroEntrada = ? and ");
+			 params.add(criteriosBusqueda.getNumeroEntrada());					 
+		 }
+		 // Especificamos nivel autenticacion
+		 if ( criteriosBusqueda.getNivelAutenticacion() != CriteriosBusquedaTramite.TODOS )
+		 {
+			 sb.append(" t.nivelAutenticacion = ? and ");
+			 params.add(new Character(criteriosBusqueda.getNivelAutenticacion()));			 
+		 }
+		 //Especificamos estado procesamiento entrada
+		 if ( criteriosBusqueda.getProcesada() != CriteriosBusquedaTramite.TODOS )
+		 {
+			 sb.append(" t.procesada = ? and ");
+			 params.add(new Character(criteriosBusqueda.getProcesada() ) );				 
+		 }
+		 // Especificamos tipo entrada
+		 if ( criteriosBusqueda.getTipo() != CriteriosBusquedaTramite.TODOS )
+		 {
+			 sb.append(" t.tipo = ? and ");
+			 params.add(new Character(criteriosBusqueda.getTipo()) );			
+		 }
+		 // Especificamos nif solicitante
+		 if ( !StringUtils.isEmpty( criteriosBusqueda.getUsuarioNif() ) )
+		 {
+			 sb.append(" t.usuarioNif = ? and ");
+			 params.add(criteriosBusqueda.getUsuarioNif());				 
+		 }
+		 // Especificamos nombre solicitante
+		 if ( !StringUtils.isEmpty(criteriosBusqueda.getUsuarioNombre()) )
+		 {
+			 sb.append(" t.usuarioNombre like ? and ");
+			 params.add("%" + criteriosBusqueda.getUsuarioNombre() + "%");					 
+		 }
+		 // Especificamos año / mes
+		 if ( criteriosBusqueda.getAnyo() != 0 )
+		 {
+			 GregorianCalendar gregorianCalendar1 = null;
+			 GregorianCalendar gregorianCalendar2 = null;
+			 if ( criteriosBusqueda.getMes() == -1 )
+			 {
+			 	 gregorianCalendar1 = new GregorianCalendar( criteriosBusqueda.getAnyo(), 0, 1 );
+			 	 gregorianCalendar2 = new GregorianCalendar( criteriosBusqueda.getAnyo(), 11, 31 );
+			 }
+			 else
+			 {
+				 gregorianCalendar1 = new GregorianCalendar( criteriosBusqueda.getAnyo(), criteriosBusqueda.getMes(), 1 );
+				 int year =  criteriosBusqueda.getAnyo();
+				 int month = criteriosBusqueda.getMes();
+				 gregorianCalendar2 = new GregorianCalendar( year, month, gregorianCalendar1.getMaximum( GregorianCalendar.DAY_OF_MONTH ) );				 
+			 }
+			 sb.append(" (t.fecha >= ? and t.fecha <= ? ) and ");
+			 params.add(new java.sql.Date(gregorianCalendar1.getTime().getTime()));
+			 params.add(new java.sql.Date( DataUtil.obtenerUltimaHora(gregorianCalendar2.getTime()).getTime() ));			 		
+		 }
+		 
+		// Especificamos fecha inicio / fecha fin
+		 if ( criteriosBusqueda.getFechaEntradaMinimo() != null) {
+			 sb.append(" t.fecha > ? and ");
+			 params.add(criteriosBusqueda.getFechaEntradaMinimo());			 
+		 }
+		 if ( criteriosBusqueda.getFechaEntradaMaximo() != null) {
+			 sb.append(" t.fecha < ? and ");
+			 params.add(criteriosBusqueda.getFechaEntradaMaximo());			 
+		 }		
+		 
+		 // Especificamos fecha maxima inicio procesamiento 
+		  if ( criteriosBusqueda.getFechaInicioProcesamientoMaximo() != null) {
+			 sb.append(" t.fechaInicioProcesamiento < ? and ");
+			 params.add(criteriosBusqueda.getFechaInicioProcesamientoMaximo());	
+		 }		
+		  
+		  // Cerramos sentencia
+		  sb.append(" t.codigo = t.codigo ");
+		
+		 
+		 // Ejecutamos count
+		 String sqlCount = sb.toString();
+		 Query query = session.createQuery(sqlCount);		 
+		 for (int i=0; i < params.size(); i++) {
+			 query.setParameter(i, params.get(i));			 
+		 }
+		 Integer total = (Integer) query.uniqueResult();
+		
+		 return total.intValue();
+    }    
+    
     
     private List obtenerReferenciasEntradaImpl(String identificadorProcedimiento,String identificadorTramite,String procesada, Date desde,Date hasta){
     	

@@ -20,6 +20,7 @@ public class BusquedaTramitesForm extends ValidatorForm
 	private String identificadorTramite;
 	private int pagina;
 	private String numeroEntrada = "";
+	private int longitudPagina = 10;
 	
 	public int getAnyo()
 	{
@@ -104,6 +105,12 @@ public class BusquedaTramitesForm extends ValidatorForm
 	}
 	public void setIdentificadorTramite(String identificadorTramite) {
 		this.identificadorTramite = identificadorTramite;
+	}
+	public int getLongitudPagina() {
+		return longitudPagina;
+	}
+	public void setLongitudPagina(int longitudPagina) {
+		this.longitudPagina = longitudPagina;
 	}
 
 }

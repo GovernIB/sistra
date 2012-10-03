@@ -13,6 +13,9 @@ public class Page implements java.io.Serializable
 	private int pageSize;
 	private int page;
    
+	// Calculado manualmente
+	private int totalResults;
+	
 	public Page(Query query, int page, int pageSize) throws HibernateException
 	{
        
@@ -54,5 +57,13 @@ public class Page implements java.io.Serializable
 	public int getPage()
 	{
 		return page;
+	}
+
+	public int getTotalResults() {
+		return totalResults;
+	}
+
+	public void setTotalResults(int totalResults) {
+		this.totalResults = totalResults;
 	}
 }
