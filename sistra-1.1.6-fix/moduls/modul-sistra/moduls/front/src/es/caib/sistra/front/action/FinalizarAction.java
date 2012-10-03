@@ -43,7 +43,7 @@ public class FinalizarAction extends BaseAction
 			// No valido para consulta/asistente
 			if (urlFin.equals("[ZONAPER]")){ 
 				String idPersistencia = delegate.obtenerIdPersistencia();
-				urlFin = "/zonaperfront/inicio?tramite=" + idPersistencia;				
+				urlFin = "/zonaperfront/inicio?language=" + this.getLang(request) + "&tramite=" + idPersistencia;
 			}
 			 
 			delegate.borrarTramite();			
