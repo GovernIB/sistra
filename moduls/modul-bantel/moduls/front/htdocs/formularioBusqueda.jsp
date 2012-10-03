@@ -64,7 +64,7 @@
 					<div id="recercaAv">
 						<p>
 							<bean:message key="confirmacion.numeroEntrada"/>
-							<html:text property="numeroEntrada" size="30"/>
+							<html:text property="numeroEntrada" size="20"/>
 							<bean:message key="formularioBusqueda.procedimiento"/>
 							<html:select property="identificadorProcedimiento">
 								<html:option value="-1" ><bean:message key="formularioBusqueda.tramite.todos"/></html:option>
@@ -75,7 +75,16 @@
 								</logic:iterate>
 							</html:select>
 							<bean:message key="formularioBusqueda.idtramite"/>
-							<html:text property="identificadorTramite" size="30" />
+							<html:text property="identificadorTramite" size="20" />
+							<bean:message key="formularioBusqueda.resultadosPorPagina"/>
+							<html:select property="longitudPagina">
+								<html:option value="10" >10</html:option>
+								<html:option value="20" >20</html:option>
+								<html:option value="30" >30</html:option>
+								<html:option value="40" >40</html:option>
+								<html:option value="50" >50</html:option>
+								<html:option value="100" >100</html:option>
+							</html:select>
 						</p>
 					</div>
 				<bean:define id="botonEnviar" type="java.lang.String">

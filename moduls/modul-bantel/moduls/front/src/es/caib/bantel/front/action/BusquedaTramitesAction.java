@@ -51,7 +51,7 @@ public class BusquedaTramitesAction extends BaseAction
 		criterios.setUsuarioNif( formularioBusqueda.getUsuarioNif() );
 		criterios.setUsuarioNombre( formularioBusqueda.getUsuarioNombre() );
 		criterios.setNumeroEntrada(formularioBusqueda.getNumeroEntrada());
-		Page page = delegate.busquedaPaginadaTramites( criterios, formularioBusqueda.getPagina(), LONGITUD_PAGINA );
+		Page page = delegate.busquedaPaginadaTramites( criterios, formularioBusqueda.getPagina(), formularioBusqueda.getLongitudPagina() );
 		
 		request.setAttribute( "page", page );
 		
