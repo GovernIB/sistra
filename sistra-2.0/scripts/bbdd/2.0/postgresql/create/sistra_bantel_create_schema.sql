@@ -149,6 +149,13 @@ alter table BTE_TRAMIT add constraint BTE_TRATAP_FK foreign key (TRA_IDEPRO)
 alter table BTE_GESPRO add constraint BTE_GAPTAP_FK foreign key (GAP_IDEPRO)
       references BTE_PROAPL (TAP_IDEPRO);   
 
+create index BTE_TRATRA_I on BTE_TRAMIT (
+    TRA_IDETRA ASC
+);
+
+create index BTE_TRATAP_FK_I on BTE_TRAMIT (
+    TRA_IDEPRO ASC
+);
 
 create sequence BTE_SEQTRA;
 create sequence BTE_SEQDOC;
