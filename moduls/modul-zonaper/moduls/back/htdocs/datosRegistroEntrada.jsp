@@ -130,7 +130,7 @@ function enviarFormulario( form )
                                 <!-- Despegable para oficinas autorizadas para el usuario -->
                                 &nbsp;<br><font class=""><bean:message key="datosRegistroEntrada.oficina" />:</font>
                                 <select name="oficina">
-                                    <% escribeSelect(out, "S", oficinas, oficina ); %>
+                                    <% escribeSelect(out, "N", oficinas, oficina ); %>
                                 </select>
                             </td>
                         </tr>
