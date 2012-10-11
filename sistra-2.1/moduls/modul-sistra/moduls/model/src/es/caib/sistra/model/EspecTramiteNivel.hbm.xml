@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+
+	<class name="es.caib.sistra.model.EspecTramiteNivel" table="STR_ESPNIV">
+
+	<cache usage="read-write"/>
+    <id name="codigo" unsaved-value="null" column="ETN_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">STR_SEQETN</param>
+          </generator>
+    </id>
+
+    <property name="activo" column="ETN_ACTIVO" length="1"/>
+    <property name="flujoTramitacion" column="ETN_FLUTRA" length="1"/>
+    
+    <property name="validacionInicioScript" type="binary" column="ETN_VALINI"/>
+    <property name="diasPersistencia" column="ETN_DIAPER" length="2"/>
+   
+    <property name="campoCodigoProvincia"  type="binary" column="ETN_CODPRV"/>
+    <property name="campoCodigoLocalidad" type="binary" column="ETN_CODLOC"/>
+    <property name="campoCodigoPais" type="binary" column="ETN_CODPAI"/>
+    <property name="campoRteNif" type="binary" column="ETN_RTENIF"/>
+    <property name="campoRteNom" type="binary" column="ETN_RTENOM"/>
+    <property name="campoRdoNif" type="binary" column="ETN_RDONIF"/>
+    <property name="campoRdoNom" type="binary" column="ETN_RDONOM"/>
+    
+    <property name="checkEnvio" type="binary" column="ETN_CHKENV"/>
+    
+    <property name="destinatarioTramite" type="binary" column="ETN_DSTTRA"/>
+    
+    <property name="urlFin" type="binary" column="ETN_URLFIN"/>
+
+    <property name="habilitarNotificacionTelematica" length="1" column="ETN_NOTTEL"/>
+    <property name="permitirSMS" column="ETN_PERSMS" length="1" not-null="true"/>
+    <property name="avisoSMS" type="binary" column="ETN_AVISMS"/>
+    <property name="avisoEmail" type="binary" column="ETN_AVIEMA"/>
+    
+    <property name="diasPrerregistro" column="ETN_DIAPRE" length="3"/>
+    
+    <list name="datosJustificante" cascade="all-delete-orphan" inverse="true" lazy="true">
+         <cache usage="read-write"/>
+         <key column="DJS_CODETN"/>
+         <index column="DJS_ORDEN"/>
+         <one-to-many class="es.caib.sistra.model.DatoJustificante"/>
+    </list>
+    
+     <map name="traducciones" cascade="all" table="STR_TRAETN">
+          <cache usage="read-write"/>
+          <key column="TET_CODETN"/>
+          <index column="TET_CODIDI" type="string" length="2"/>
+          <composite-element class="es.caib.sistra.model.TraEspecTramiteNivel">
+              <property name="instruccionesInicio" column="TET_INSINI" type="es.caib.sistra.model.type.BLOBType"/>
+              <property name="mensajeInactivo" column="TET_MENINA" type="es.caib.sistra.model.type.BLOBType"/>
+              <property name="instruccionesFin" column="TET_INSFIN" type="es.caib.sistra.model.type.BLOBType"/>
+              <property name="instruccionesEntrega" column="TET_INSENT" type="es.caib.sistra.model.type.BLOBType"/>
+              <property name="mensajeFechaLimiteEntregaPresencial" column="TET_FECLIM" type="es.caib.sistra.model.type.BLOBType"/>              
+          </composite-element>
+     </map>
+     
+</class>
+</hibernate-mapping>

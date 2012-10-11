@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class  name="es.caib.sistra.model.Dominio" table="STR_DOMIN">
+	<cache usage="read-write"/>
+     <id name="codigo" unsaved-value="null" column="DOM_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">STR_SEQDOM</param>
+          </generator>
+      </id>
+
+    <property name="identificador"  column="DOM_IDENTI"  not-null="true" length="20"/>
+    <property name="descripcion"  column="DOM_DESC"  not-null="true" length="100"/>
+    <property name="tipo"  column="DOM_TIPO"  not-null="true" length="1"/>
+	<property name="url"  column="DOM_URL" length="200"/>
+    <property name="versionWS"  column="DOM_WSVER" length="10"/>
+    <property name="sql"  column="DOM_SQL" length="4000"/>
+    <property name="localizacionEJB"  column="DOM_EJBREM" length="1"/>
+    <property name="autenticacionExplicita"  column="DOM_EJBSTD" length="1"/>
+    <property name="JNDIName"  column="DOM_JNDI" length="100"/>
+    <property name="usr"  column="DOM_USR" length="500" />
+    <property name="pwd"  column="DOM_PWD" length="500"/>
+     <property name="cacheable"  column="DOM_CACHE" not-null="true"  length="1"/>
+     
+    <many-to-one name="organoResponsable" column="DOM_CODORG" not-null="true"/> 
+
+</class>
+</hibernate-mapping>

@@ -1,0 +1,7 @@
+<classloading xmlns="urn:jboss:classloading:1.0"
+              name="7-mobtratel-ws.war"
+              domain="mobtratel-ws-domain"
+              export-all="NON_EMPTY" 
+              import-all="true"
+			  >
+</classloading>

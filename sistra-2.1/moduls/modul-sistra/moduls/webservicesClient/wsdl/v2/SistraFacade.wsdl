@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:impl="urn:es:caib:sistra:ws:v2:services" xmlns:intf="urn:es:caib:sistra:ws:v2:model:SistraFacade" xmlns:tns1="urn:es:caib:sistra:ws:v2:model:DocumentoConsulta" xmlns:tns2="urn:es:caib:sistra:ws:v2:model:FormularioConsulta" xmlns:tns3="urn:es:caib:sistra:ws:v2:model:ValoresDominio" targetNamespace="urn:es:caib:sistra:ws:v2:services" name="SistraFacade">
+	<wsdl:types>
+		<schema elementFormDefault="qualified" targetNamespace="urn:es:caib:sistra:ws:v2:model:SistraFacade" xmlns="http://www.w3.org/2001/XMLSchema" version="1.0">
+			<xsd:import namespace="urn:es:caib:sistra:ws:v2:model:DocumentoConsulta" schemaLocation="DocumentoConsulta.xsd"/>
+			<xsd:import namespace="urn:es:caib:sistra:ws:v2:model:FormularioConsulta" schemaLocation="FormularioConsulta.xsd"/>
+			<xsd:import namespace="urn:es:caib:sistra:ws:v2:model:ValoresDominio" schemaLocation="ValoresDominio.xsd"/>
+			<complexType name="parametrosDominio">
+				<sequence>
+					<element maxOccurs="unbounded" minOccurs="0" name="parametro" type="xsd:string"/>
+				</sequence>
+			</complexType>
+			<xsd:element name="obtenerDominio">
+				<complexType>
+					<sequence>
+						<element name="id" type="xsd:string"/>
+						<element name="parametros" type="intf:parametrosDominio"/>
+					</sequence>
+				</complexType>
+			</xsd:element>
+			<xsd:element name="obtenerDominioResponse">
+				<complexType>
+					<sequence>
+						<element name="obtenerDominioReturn" type="tns3:ValoresDominio"/>
+					</sequence>
+				</complexType>
+			</xsd:element>
+			<xsd:element name="realizarConsulta">
+				<complexType>
+					<sequence>
+						<element name="identificadorTramite" type="xsd:string"/>
+						<element name="forms" type="tns2:FormulariosConsulta"/>
+					</sequence>
+				</complexType>
+			</xsd:element>
+			<xsd:element name="realizarConsultaResponse">
+				<complexType>
+					<sequence>
+						<element name="realizarConsultaReturn" type="tns1:DocumentosConsulta"/>
+					</sequence>
+				</complexType>
+			</xsd:element>
+			<complexType name="SistraFacadeException">
+				<sequence/>
+			</complexType>
+			<xsd:element name="fault" type="intf:SistraFacadeException"/>
+		</schema>
+	</wsdl:types>
+	<wsdl:message name="obtenerDominioRequest">
+		<wsdl:part name="parameters" element="intf:obtenerDominio"/>
+	</wsdl:message>
+	<wsdl:message name="SistraFacadeException">
+		<wsdl:part name="fault" element="intf:fault"/>
+	</wsdl:message>
+	<wsdl:message name="obtenerDominioResponse">
+		<wsdl:part name="parameters" element="intf:obtenerDominioResponse"/>
+	</wsdl:message>
+	<wsdl:message name="realizarConsultaRequest">
+		<wsdl:part name="parameters" element="intf:realizarConsulta"/>
+	</wsdl:message>
+	<wsdl:message name="realizarConsultaResponse">
+		<wsdl:part name="parameters" element="intf:realizarConsultaResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="SistraFacade">
+		<wsdl:operation name="obtenerDominio">
+			<wsdl:input name="obtenerDominioRequest" message="impl:obtenerDominioRequest"/>
+			<wsdl:output name="obtenerDominioResponse" message="impl:obtenerDominioResponse"/>
+			<wsdl:fault name="SistraFacadeException" message="impl:SistraFacadeException"/>
+		</wsdl:operation>
+		<wsdl:operation name="realizarConsulta">
+			<wsdl:input name="realizarConsultaRequest" message="impl:realizarConsultaRequest"/>
+			<wsdl:output name="realizarConsultaResponse" message="impl:realizarConsultaResponse"/>
+			<wsdl:fault name="SistraFacadeException" message="impl:SistraFacadeException"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="SistraFacadeSoapBinding" type="impl:SistraFacade">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="obtenerDominio">
+			<soap:operation/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="SistraFacadeException">
+				<soap:fault name="SistraFacadeException" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="realizarConsulta">
+			<soap:operation/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="SistraFacadeException">
+				<soap:fault name="SistraFacadeException" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="SistraFacadeService">
+		<wsdl:port name="SistraFacade" binding="impl:SistraFacadeSoapBinding">
+			<soap:address location="http://intranet.caib.es/sistra-ws/services/v2/SistraFacade"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:es:caib:sistra:ws:v2:model:ValoresDominio" targetNamespace="urn:es:caib:sistra:ws:v2:model:ValoresDominio" version="1.0">
+	<xs:complexType name="columna">
+		<xs:sequence>
+			<xs:element name="codigo" type="xs:string"/>
+			<xs:element name="valor" type="xs:string" nillable="true"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="fila">
+		<xs:sequence>
+			<xs:element name="columna" type="tns:columna" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="filas">
+		<xs:sequence>
+			<xs:element name="fila" type="tns:fila" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ValoresDominio">
+		<xs:sequence>
+			<xs:element name="descripcionError" type="xs:string" nillable="true" minOccurs="0"/>
+			<xs:element name="error" type="xs:boolean" default="false"/>
+			<xs:element name="filas" type="tns:filas" nillable="true" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

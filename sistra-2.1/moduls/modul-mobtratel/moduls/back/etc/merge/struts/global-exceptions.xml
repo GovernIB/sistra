@@ -1,0 +1,11 @@
+<global-exceptions>
+    <!--    
+    <exception 
+        key="errors.delegate" 
+        type="org.ibit.rol.template.persistence.delegate.DelegateException"
+        path="/error.jsp"
+        handler="org.ibit.rol.template.back.action.DelegateExceptionHandler"
+    />
+    -->
+        
+</global-exceptions>

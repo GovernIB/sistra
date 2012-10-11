@@ -1,0 +1,10 @@
+<global-exceptions>
+        
+    <exception
+        handler="es.caib.zonaper.back.action.FrontExceptionHandler"
+        key="errors.exception"
+        type="java.lang.Throwable"
+        path="/fail.jsp"
+    />
+        
+</global-exceptions>
