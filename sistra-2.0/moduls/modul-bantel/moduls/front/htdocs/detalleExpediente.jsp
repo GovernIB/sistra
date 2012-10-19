@@ -19,7 +19,7 @@
 	<bean:message key='expediente.borrarExpediente'/>
 </bean:define>
 <bean:define id="expediente" name="expediente" type="es.caib.zonaper.modelInterfaz.ExpedientePAD" />
-<bean:define id="habilitarAvisos" value="<%= (expediente.getConfiguracionAvisos().getHabilitarAvisos() == null?"O":(expediente.getConfiguracionAvisos().getHabilitarAvisos().booleanValue())?\"S\":\"N\")%>" type="java.lang.String"/>
+<bean:define id="habilitarAvisos" value='<%= (expediente.getConfiguracionAvisos().getHabilitarAvisos() == null?"O":(expediente.getConfiguracionAvisos().getHabilitarAvisos().booleanValue())?"S":"N")%>' type="java.lang.String"/>
 <bean:define id="observacionesElemento" name="observacionesElemento" type="java.util.List"/>
 <bean:define id="obligatorioAvisos" name="obligatorioAvisos" type="java.lang.String"/>
 
@@ -274,15 +274,15 @@
 									T=tramite
 							 -->						
 							<%if (elemento instanceof es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD) {%>
-								<a href="<%="mostrarDetalleElemento.do?tipo=N&codigo=" + indice + "&identificador=" + expediente.getIdentificadorExpediente() + "&unidad=" + expediente.getUnidadAdministrativa() + "&clave=" + expediente.getClaveExpediente()%>">
+								<a href='<%="mostrarDetalleElemento.do?tipo=N&codigo=" + indice + "&identificador=" + expediente.getIdentificadorExpediente() + "&unidad=" + expediente.getUnidadAdministrativa() + "&clave=" + expediente.getClaveExpediente()%>'>
 									<bean:write name="elemento" property="tituloOficio"/>
 								</a>
 							<%}else if (elemento instanceof es.caib.zonaper.modelInterfaz.EventoExpedientePAD) {%>
-								<a href="<%="mostrarDetalleElemento.do?tipo=A&codigo=" + indice + "&identificador=" + expediente.getIdentificadorExpediente() + "&unidad=" + expediente.getUnidadAdministrativa() + "&clave=" + expediente.getClaveExpediente()%>">
+								<a href='<%="mostrarDetalleElemento.do?tipo=A&codigo=" + indice + "&identificador=" + expediente.getIdentificadorExpediente() + "&unidad=" + expediente.getUnidadAdministrativa() + "&clave=" + expediente.getClaveExpediente()%>'>
 									<bean:write name="elemento" property="titulo"/>
 								</a>
 							<%}else if (elemento instanceof es.caib.zonaper.modelInterfaz.TramiteExpedientePAD) {%>
-								<a href="<%="mostrarDetalleElemento.do?tipo=T&codigo=" + indice  + "&identificador=" + expediente.getIdentificadorExpediente() + "&unidad=" + expediente.getUnidadAdministrativa() + "&clave=" + expediente.getClaveExpediente()%>">
+								<a href='<%="mostrarDetalleElemento.do?tipo=T&codigo=" + indice  + "&identificador=" + expediente.getIdentificadorExpediente() + "&unidad=" + expediente.getUnidadAdministrativa() + "&clave=" + expediente.getClaveExpediente()%>'>
 									<bean:write name="elemento" property="descripcion"/>
 								</a>
 							<%} %>
