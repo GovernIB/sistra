@@ -68,7 +68,7 @@
 			</td>		
 							
 			<td>
-				 <a href="<%="mostrarDetalleElemento.do?tipo=" + elemento.getTipoElemento() + "&amp;codigo=" + elemento.getCodigoElemento() + "&amp;expediente=" + (elemento.getExpediente() != null) %>">
+				 <a href="<%=\"mostrarDetalleElemento.do?tipo=\" + elemento.getTipoElemento() + \"&amp;codigo=\" + elemento.getCodigoElemento() + \"&amp;expediente=\" + (elemento.getExpediente() != null) %>">
 				 	<bean:write name="descElemento"/>
 				 </a>
 			</td>
