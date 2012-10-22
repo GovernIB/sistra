@@ -59,13 +59,13 @@
 							<bean:write name="documento" property="codigo" />
 						</bean:define>
 						
-						<logic:notEmpty name="<%="URL-" + codigoFirma %>" scope="request">
-							<a href="<bean:write name="<%="URL-" + codigoFirma %>" scope="request"/>" target="_blank">
+						<logic:notEmpty name="<%=\"URL-\" + codigoFirma %>" scope="request">
+							<a href="<bean:write name="<%=\"URL-\" + codigoFirma %>" scope="request"/>" target="_blank">
 								<bean:write name="documento" property="descripcion" />
 							</a>																				
 						</logic:notEmpty>
 						
-						<logic:empty name="<%="URL-" + codigoFirma %>" scope="request">
+						<logic:empty name="<%=\"URL-\" + codigoFirma %>" scope="request">
 							<html:link href="<%=urlMostrarDocumento%>" paramId="codigo" paramName="documento" paramProperty="codigo">
 								<bean:write name="documento" property="descripcion" />
 							</html:link>
