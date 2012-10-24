@@ -50,14 +50,14 @@
 										<bean:write name="documento" property="codigoRDS" />
 									</bean:define>
 									
-									<logic:empty name="<%="URL-" + codigoFirma %>" scope="request">
+									<logic:empty name="<%=\"URL-\" + codigoFirma %>" scope="request">
 										<a href='<%=url%>?codigo=<%=documento.getCodigoRDS() %>&clave=<%=documento.getClaveRDS() %>&idioma=<%=expediente.getIdioma() %>'> 
 											<bean:write name="documento" property="titulo" />
 										</a>																
 									</logic:empty>	
 									
-									<logic:notEmpty name="<%="URL-" + codigoFirma %>" scope="request">
-										<a href="<bean:write name="<%="URL-" + codigoFirma %>" scope="request"/>" target="_blank">
+									<logic:notEmpty name="<%=\"URL-\" + codigoFirma %>" scope="request">
+										<a href="<bean:write name="<%=\"URL-\" + codigoFirma %>" scope="request"/>" target="_blank">
 											<bean:write name="documento" property="titulo" />
 										</a>													
 									</logic:notEmpty>
