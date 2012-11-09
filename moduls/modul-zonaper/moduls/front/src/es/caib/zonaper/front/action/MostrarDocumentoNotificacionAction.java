@@ -45,20 +45,20 @@ public class MostrarDocumentoNotificacionAction extends BaseAction
 		}else{
 			not = DelegateUtil.getNotificacionTelematicaDelegate().obtenerNotificacionTelematicaAutenticada(new Long(formulario.getCodigoNotificacion()));
 		}
-		if(not.getFechaAcuse() != null){
+		if(not.getFechaAcuse() != null && !not.isRechazada()){
 			if(formulario.getCodigo() > 0){
-		for (Iterator it=not.getDocumentos().iterator();it.hasNext();){
-			DocumentoNotificacionTelematica doc = (DocumentoNotificacionTelematica) it.next();
-			if (doc.getCodigo().longValue() == formulario.getCodigo()) {
-				ReferenciaRDS referenciaRDS = new ReferenciaRDS();
-				referenciaRDS.setCodigo( doc.getCodigoRDS() );
-				referenciaRDS.setClave( doc.getClaveRDS() );
-				DocumentoRDS documentoRDS = DelegateRDSUtil.getRdsDelegate().consultarDocumentoFormateado( referenciaRDS ,doc.getNotificacionTelematica().getIdioma());
-				request.setAttribute( Constants.NOMBREFICHERO_KEY, documentoRDS.getNombreFichero() );		
-				request.setAttribute( Constants.DATOSFICHERO_KEY, documentoRDS.getDatosFichero());
-				return mapping.findForward( "success" );
-			}
-		}
+				for (Iterator it=not.getDocumentos().iterator();it.hasNext();){
+					DocumentoNotificacionTelematica doc = (DocumentoNotificacionTelematica) it.next();
+					if (doc.getCodigo().longValue() == formulario.getCodigo()) {
+						ReferenciaRDS referenciaRDS = new ReferenciaRDS();
+						referenciaRDS.setCodigo( doc.getCodigoRDS() );
+						referenciaRDS.setClave( doc.getClaveRDS() );
+						DocumentoRDS documentoRDS = DelegateRDSUtil.getRdsDelegate().consultarDocumentoFormateado( referenciaRDS ,doc.getNotificacionTelematica().getIdioma());
+						request.setAttribute( Constants.NOMBREFICHERO_KEY, documentoRDS.getNombreFichero() );		
+						request.setAttribute( Constants.DATOSFICHERO_KEY, documentoRDS.getDatosFichero());
+						return mapping.findForward( "success" );
+					}
+				}
 			}else{
 				ReferenciaRDS refRDS = new ReferenciaRDS();
 				refRDS.setCodigo( not.getCodigoRdsJustificante() );

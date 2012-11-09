@@ -121,7 +121,7 @@ public class MostrarDetalleElementoAction extends BaseAction {
 					not = DelegateUtil.getNotificacionTelematicaDelegate().obtenerNotificacionTelematicaAutenticada(codigo);
 				}
 				request.setAttribute("notificacion",not);
-				if (not.getFechaAcuse() != null){
+				if (not.getFechaAcuse() != null && !not.isRechazada()){
 					cargarFirmas(not.getDocumentos(),request,tipo);
 					return mapping.findForward("notificacionRecibida"+anonimo);
 				}else{
