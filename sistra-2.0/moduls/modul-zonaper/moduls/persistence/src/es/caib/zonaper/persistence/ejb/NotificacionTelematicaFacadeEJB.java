@@ -141,7 +141,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
         
         // En caso de que no este firmado el acuse no devolvemos ficheros asociados
         try{
-	    	if (notificacionTelematica.getFechaAcuse() == null){
+	    	if (notificacionTelematica.getFechaAcuse() == null  || notificacionTelematica.isRechazada()){
 	    		return notificacionSinAbrir(notificacionTelematica);
 	    	}else{
 	    		return notificacionTelematica;
@@ -203,7 +203,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
         
         // En caso de que no este firmado el acuse no devolvemos ficheros asociados
         try{
-	    	if (notificacionTelematica.getFechaAcuse() == null){
+	    	if (notificacionTelematica.getFechaAcuse() == null  || notificacionTelematica.isRechazada()){
 	    		return notificacionSinAbrir(notificacionTelematica);
 	    	}else{
 	    		return notificacionTelematica;
@@ -310,7 +310,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
         	Date ahora = new Date();
         	
         	Query query = session
-            .createQuery("FROM NotificacionTelematica AS m WHERE m.fechaFinPlazo < :ahora and m.rechazada = false ORDER BY m.fechaRegistro ASC")
+            .createQuery("FROM NotificacionTelematica AS m WHERE m.fechaFinPlazo < :ahora and m.rechazada = false and m.fechaAcuse is not null ORDER BY m.fechaRegistro ASC")
             .setParameter("ahora",ahora);
             List tramites = query.list();
             
@@ -500,6 +500,11 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 				throw new Exception("La notificaci�n no tiene fin de plazo o todavia no ha pasado");
 			}
 			 
+			// Comprobamos que no se haya firmado el acuse
+			if (notif.getFechaAcuse() != null) {
+				throw new Exception("Se ha firmado el acuse de la notificacion");
+			}
+			
 			// Generamos acuse rechazo
 			AsientoRegistral acuseRecibo = generarAcuseReciboNotificacion(codigo, true);
 			String xmlAcuseRecibo = ServicioRegistroXML.crearFactoriaObjetosXML().guardarAsientoRegistral(acuseRecibo);
@@ -524,6 +529,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			notif.setCodigoRdsAcuse(refAcuse.getCodigo());
 			notif.setClaveRdsAcuse(refAcuse.getClave());
 			notif.setRechazada(true);
+			notif.setFechaAcuse(null);
 			grabarNotificacionTelematica(notif);
 	
 			// Actualizamos estado expediente
@@ -564,14 +570,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.todos}"
      */
     public String iniciarTramiteSubsanacionNotificacionAnonima(Long codigoNotificacion,String idPersistencia) {
-    	// Recuperamos datos notificacion
-    	NotificacionTelematica notificacionTelematica =  this.obtenerNotificacionTelematicaAnonima(codigoNotificacion,idPersistencia);
-    	if (notificacionTelematica.getFechaAcuse() == null){
-    		throw new EJBException("La notificación no ha sido abierta todavía");
-    	}
-    	// Preparamos parametros tramite de subsanacion
-    	String key = generaParametrosInicioSubsanacion(notificacionTelematica);
-    	return key;        
+    	return iniciarTramiteSubsanacionNotificacionImpl(codigoNotificacion, idPersistencia);    	     
     }
     
     /**
@@ -582,14 +581,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.todos}"
      */
     public String iniciarTramiteSubsanacionNotificacionAutenticada(Long codigoNotificacion) {
-    	// Recuperamos datos notificacion
-    	NotificacionTelematica notificacionTelematica =  this.obtenerNotificacionTelematicaAutenticada(codigoNotificacion);
-    	if (notificacionTelematica.getFechaAcuse() == null){
-    		throw new EJBException("La notificación no ha sido abierta todavía");
-    	}
-    	// Preparamos parametros tramite de subsanacion
-    	String key = generaParametrosInicioSubsanacion(notificacionTelematica);
-    	return key;        
+    	return iniciarTramiteSubsanacionNotificacionImpl(codigoNotificacion, null);      
     }
     
     
@@ -797,6 +789,9 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 		Date fechaActual = new Date();
 		
 		// Comprobamos que no se haya firmado anteriormente
+		if (notificacion.isRechazada()) {
+			throw new Exception("La notificacion esta rechazada");
+		}
 		if (notificacion.getFechaAcuse() != null){
 			throw new Exception("El acuse de recibo ya ha sido firmado anteriormente");
 		}		
@@ -807,9 +802,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 				throw new Exception("El plazo de entrega ha finalizado");
 			}
 		}
-		if (notificacion.isRechazada()) {
-			throw new Exception("La notificacion esta rechazada");
-		}
+		
 		
 		// Parseamos acuse
 		AsientoRegistral asiento = getAsientoRegistral(asientoAcuse);
@@ -1136,7 +1129,29 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 		return new Character( tipoDocumento );
 	}
 	
-	public DatosAnexoDocumentacion obtenerAnexoAsientoDeTipo( AsientoRegistral asiento, char tipoAnexo )
+
+	private String iniciarTramiteSubsanacionNotificacionImpl(
+			Long codigoNotificacion, String idPersistencia) {
+		try {
+	    	// Recuperamos datos notificacion
+	    	NotificacionTelematica notificacionTelematica;
+	    	if (idPersistencia != null) {	    	
+	    		notificacionTelematica = this.obtenerNotificacionTelematicaAnonima(codigoNotificacion,idPersistencia);
+	    	} else {
+	    		notificacionTelematica = this.obtenerNotificacionTelematicaAutenticada(codigoNotificacion);
+	    	}
+	    	if (notificacionTelematica.getFechaAcuse() == null || notificacionTelematica.isRechazada()){
+	    		throw new Exception("La notificacion no ha sido abierta todavia");
+	    	}
+	    	// Preparamos parametros tramite de subsanacion
+	    	String key = generaParametrosInicioSubsanacion(notificacionTelematica);
+	    	return key;
+    	}catch( Exception exc ){
+        	throw new EJBException( exc );
+        }
+	}
+	
+	private DatosAnexoDocumentacion obtenerAnexoAsientoDeTipo( AsientoRegistral asiento, char tipoAnexo )
 	{
 		for( Iterator it = asiento.getDatosAnexoDocumentacion().iterator(); it.hasNext(); )
 		{
@@ -1148,4 +1163,5 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 		}
 		return null;
 	}
+	
 }

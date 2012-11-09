@@ -41,7 +41,7 @@ public class DetalleNotificacionController extends BaseController
 		// Obtenemos asiento registral
 		AsientoRegistral asiento = getAsientoRegistral(notificacion);
 		
-		if (notificacion.getFechaAcuse() == null){
+		if (notificacion.getFechaAcuse() == null || notificacion.isRechazada()){
 			
 			// Genera xml de acuse de recibo
 			AsientoRegistral acuseRecibo = DelegateUtil.getNotificacionTelematicaDelegate().generarAcuseReciboNotificacion(notificacion.getCodigo(), false);
