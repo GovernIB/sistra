@@ -72,8 +72,10 @@ public class LiteralesAvisosMovilidad {
 	public static String getLiteral(String idioma,String clave,String params[]){
 		try{
 			String texto = getLiteral(idioma,clave);
-			for (int i=0;i<params.length;i++){
-				texto = StringUtil.replace(texto,"{"+i+"}",params[i]);
+			if (params != null) {
+				for (int i=0;i<params.length;i++){
+					texto = StringUtil.replace(texto,"{"+i+"}",params[i]);
+				}
 			}
 			return texto;
 		}catch (Exception e){

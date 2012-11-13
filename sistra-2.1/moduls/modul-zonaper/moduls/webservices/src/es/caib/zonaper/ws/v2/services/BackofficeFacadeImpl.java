@@ -115,7 +115,9 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			if(evWS.getTextoSMS() != null){
 				evPAD.setTextoSMS(StringUtils.defaultIfEmpty(evWS.getTextoSMS().getValue(),null));
 			}
-			
+			if(evWS.getAccesiblePorClave() != null){
+				evPAD.setAccesiblePorClave(evWS.getAccesiblePorClave().getValue());
+			}
 			// Copiamos documentos		
 			if (evWS.getDocumentos() != null && evWS.getDocumentos().getValue() != null && evWS.getDocumentos().getValue().getDocumento() != null){
 				for (int i=0;i<evWS.getDocumentos().getValue().getDocumento().size();i++){
@@ -151,8 +153,8 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			if(exWS.getNumeroEntradaBTE() != null){
 				exPAD.setNumeroEntradaBTE(StringUtils.defaultIfEmpty(exWS.getNumeroEntradaBTE().getValue(),null));
 			}
-			exPAD.setUnidadAdministrativa(exWS.getUnidadAdministrativa());			
-			
+			exPAD.setUnidadAdministrativa(exWS.getUnidadAdministrativa());		
+						
 			// Copiamos eventos	
 			if (exWS.getEventos() != null && exWS.getEventos().getValue() != null && exWS.getEventos().getValue().getEvento() != null ){
 				for (int i=0;i<exWS.getEventos().getValue().getEvento().size();i++){

@@ -69,10 +69,10 @@ function limpiarFiltro()
 				</thead>
 				
 				
-				<logic:iterate id="tramiteCompletado" name="page" property="list" type="es.caib.zonaper.model.EstadoExpediente">	
+				<logic:iterate id="tramiteCompletado" name="page" property="list" type="es.caib.zonaper.model.Expediente">	
 			
 					<bean:define id="urlMostrarEstadoExpediente" type="java.lang.String">
-						<html:rewrite page="/protected/mostrarDetalleExpediente.do" paramId="id" paramName="tramiteCompletado" paramProperty="id"/>				
+						<html:rewrite page="/protected/mostrarDetalleExpediente.do" paramId="id" paramName="tramiteCompletado" paramProperty="codigo"/>				
 					</bean:define>
 					 
 					<tr 
@@ -130,18 +130,11 @@ function limpiarFiltro()
 						</td>
 									
 						<!--  Fecha modificacion -->	
-						<td><bean:write name="tramiteCompletado" property="fechaActualizacion" format="dd/MM/yyyy HH:mm"/></td>
+						<td><bean:write name="tramiteCompletado" property="fechaFin" format="dd/MM/yyyy HH:mm"/></td>
 						
 						<!--  Fecha inicio -->
 						<td><bean:write name="tramiteCompletado" property="fechaInicio" format="dd/MM/yyyy HH:mm"/></td>
-						
-						<!--  Expediente 
-						<td>  
-							<logic:notEmpty name="tramiteCompletado" property="codigoExpediente" >
-								<bean:write name="tramiteCompletado" property="codigoExpediente" />
-							</logic:notEmpty>						
-						</td>
-						-->
+												
 					</tr>
 				</logic:iterate>
 				</table>

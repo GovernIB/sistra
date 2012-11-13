@@ -254,6 +254,25 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	
 	
 	/**
+	 * Obtiene lista de oficinas de registro   
+	 * 
+	 * @return Lista de ValorOrganismo
+	 * @throws ExcepcionRegistroTelematico
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission role-name = "${role.todos}"
+	 * @ejb.permission role-name = "${role.auto}"   	 
+	 * 
+	 */
+	public String obtenerDescripcionSelloOficina(String oficina) throws ExcepcionRegistroTelematico{
+	   try{
+			return DelegateUtil.getRegistroOrganismoDelegate().obtenerDescripcionSelloOficina(oficina);				
+		}catch (Exception ex){
+			throw new ExcepcionRegistroTelematico("Excepcion obteniendo descripcion oficina en registro organismo",ex);
+		} 
+   }
+	
+	/**
 	 * Mira si existe o no una oficina de registro  
 	 * 
 	 * @param oficinaRegistro identificador de la oficina de registro

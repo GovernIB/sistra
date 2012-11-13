@@ -7,6 +7,8 @@
         <xs:element minOccurs="1" maxOccurs="1" ref="TEXTO"/>
         <xs:element minOccurs="0" maxOccurs="1" ref="TEXTO_SMS"/>
         <xs:element minOccurs="1" maxOccurs="1" ref="ACUSE_RECIBO"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="ACCESIBLE_POR_CLAVE"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="FIRMA_POR_CLAVE"/>
         <xs:element minOccurs="1" maxOccurs="1" ref="EXPEDIENTE"/>
       </xs:sequence>
     </xs:complexType>
@@ -27,7 +29,9 @@
   <xs:element name="TEXTO_SMS" type="string_no_vacio"/>
   <xs:element name="ACUSE_RECIBO" type="string_si_no"/>
   <xs:element name="UNIDAD_ADMINISTRATIVA" type="string_no_vacio"/>
-  <xs:element name="IDENTIFICADOR_EXPEDIENTE" type="string_no_vacio"/>    
+  <xs:element name="IDENTIFICADOR_EXPEDIENTE" type="string_no_vacio"/>  
+  <xs:element name="ACCESIBLE_POR_CLAVE" type="string_si_no"/>
+  <xs:element name="FIRMA_POR_CLAVE" type="string_si_no"/>    
 
   <xs:simpleType name='string_no_vacio'>
   	<xs:restriction base='xs:string'>

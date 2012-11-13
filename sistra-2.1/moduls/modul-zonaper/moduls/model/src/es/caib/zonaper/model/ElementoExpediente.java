@@ -20,6 +20,12 @@ public class ElementoExpediente implements Serializable
 	private Long codigoElemento;
 	// En caso de que se haya generado aviso movilidad para avisar del elemento
 	private String codigoAviso;
+
+	// Id persistencia del elemento
+	private String identificadorPersistencia;
+	
+	// Indica si se tiene acceso de forma anonima al expediente a traves del id persistencia del elemento
+	private boolean accesoAnonimoExpediente;
 	
 	public Long getCodigo() {
 		return codigo;
@@ -56,6 +62,18 @@ public class ElementoExpediente implements Serializable
 	}
 	public void setCodigoAviso(String codigoAviso) {
 		this.codigoAviso = codigoAviso;
+	}
+	public String getIdentificadorPersistencia() {
+		return identificadorPersistencia;
+	}
+	public void setIdentificadorPersistencia(String idPersistencia) {
+		this.identificadorPersistencia = idPersistencia;
+	}
+	public boolean isAccesoAnonimoExpediente() {
+		return accesoAnonimoExpediente;
+	}
+	public void setAccesoAnonimoExpediente(boolean accesoAnonimoExpediente) {
+		this.accesoAnonimoExpediente = accesoAnonimoExpediente;
 	}
 	
 

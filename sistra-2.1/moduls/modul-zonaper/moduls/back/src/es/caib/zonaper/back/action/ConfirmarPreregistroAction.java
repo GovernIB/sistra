@@ -15,6 +15,7 @@ import es.caib.util.StringUtil;
 import es.caib.zonaper.back.Constants;
 import es.caib.zonaper.back.form.ConfirmarPreregistroForm;
 import es.caib.zonaper.model.EntradaPreregistro;
+import es.caib.zonaper.model.PeticionImpresionSello;
 import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.EntradaPreregistroDelegate;
@@ -57,7 +58,7 @@ public class ConfirmarPreregistroAction extends BaseAction
 		
 		// Comprobamos si es un preenvio que se ha confirmado automaticamente
 		EntradaPreregistroDelegate delegate = DelegateUtil.getEntradaPreregistroDelegate();
-    	EntradaPreregistro e = delegate.obtenerEntradaPreregistroReg(formulario.getCodigo());
+    	EntradaPreregistro e = delegate.obtenerEntradaPreregistro(formulario.getCodigo());
     	if (e.getConfirmadoAutomaticamente() == 'S'){
     		padDelegate.confirmarPreenvioAutomatico( formulario.getCodigo(), formulario.getOficina(), codProv, codMuni, descMuni );
     	}else{		
@@ -65,11 +66,14 @@ public class ConfirmarPreregistroAction extends BaseAction
     	}
 		
     	// Obtenemos de nuevo la informacion del preregistro para obtener informacion de registro		
-		EntradaPreregistro preregistroConfirmado = delegate.obtenerEntradaPreregistroReg( formulario.getCodigo() );
+		EntradaPreregistro preregistroConfirmado = delegate.obtenerEntradaPreregistro( formulario.getCodigo() );
 		
 		// Generamos peticion de impresion
 		String idPeticionImp = Constants.IMPRESION_SELLO_KEY +  Long.toString(System.currentTimeMillis());
-		request.getSession().setAttribute(idPeticionImp,formulario.getCodigo());
+		PeticionImpresionSello pi = new PeticionImpresionSello();
+		pi.setCodigoEntradaPreregistro(formulario.getCodigo());
+		pi.setCodigoOficinaRegistro(formulario.getOficina());
+		request.getSession().setAttribute(idPeticionImp,pi);
 		
 		Map hsmParams = new HashMap();
 		hsmParams.put( "codigo", idPeticionImp );

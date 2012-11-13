@@ -3322,21 +3322,11 @@ public class TramiteProcessorEJB implements SessionBean {
 	    try{		    		    
 	    	PadDelegate pad = DelegatePADUtil.getPadDelegate();
 	    	
-	    	// Comprobamos que el trámite exista en la PAD
-	    	String existe;
-	    	if (datosSesion.getNivelAutenticacion() == 'A'){
-				existe = pad.obtenerEstadoTramiteAnonimo(idPersistencia);
-			}else{
-				if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(datosSesion.getPerfilAcceso())){
-					existe = pad.obtenerEstadoTramiteEntidadDelegada(idPersistencia,datosSesion.getNifUsuario());
-				}else{
-					existe = pad.obtenerEstadoTramiteUsuario(idPersistencia);
-				}				
-			}
+	    	String existe = pad.obtenerEstadoTramite(idPersistencia);
 	    	
 	    	// ----- Tramite no existe o pertenece a otro usuario 
 	    	if (existe.equals("N")){
-	    		throw new ProcessorException("El trámite no existe o pertenece a otro usuario",
+	    		throw new ProcessorException("El trámite no existe",
 	    				MensajeFront.MENSAJE_NOEXISTETRAMITE);	  
 	    	}
 	    	// ----- Tramite ya se ha terminado 
@@ -3360,7 +3350,7 @@ public class TramiteProcessorEJB implements SessionBean {
      * Carga trámite persistente desde la Pad
      * @param idPersistencia
      */
-    private void cargarTramitePad(String idPersistencia) throws ProcessorException{    	
+    private void cargarTramitePad(String idPersistencia) throws ProcessorException {    	
     	try{    	
 	    	RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();	    	
 	    	PadDelegate pad = DelegatePADUtil.getPadDelegate();

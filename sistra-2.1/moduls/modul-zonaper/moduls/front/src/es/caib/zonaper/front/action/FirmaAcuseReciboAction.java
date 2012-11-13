@@ -44,13 +44,13 @@ public class FirmaAcuseReciboAction extends BaseAction
 		
 		// Convertimos asiento y firma
 		String asientoXML = null;
-		FirmaIntf firma = null;
+		FirmaIntf firmaDigital = null;
 		if (StringUtils.isNotEmpty(formulario.getAsiento())){
 			asientoXML 	= ConvertUtil.base64UrlSafeToCadena( formulario.getAsiento() );
 		}
-		if (StringUtils.isNotEmpty(formulario.getFirma())){
+		if ("CERTIFICADO".equals(formulario.getTipoFirma()) && StringUtils.isNotEmpty(formulario.getFirma())){
 			PluginFirmaIntf plgFirma = PluginFactory.getInstance().getPluginFirma();
-			firma =  plgFirma.parseFirmaFromHtmlForm( formulario.getFirma() );
+			firmaDigital =  plgFirma.parseFirmaFromHtmlForm( formulario.getFirma() );
 		}
 		
 		// Obtenemos notificacion y elemento expediente asociado
@@ -69,9 +69,18 @@ public class FirmaAcuseReciboAction extends BaseAction
 		try{						
 			boolean result;
 			if (this.getDatosSesion(request).getNivelAutenticacion() == 'A'){
-				result = notificacionDelegate.firmarAcuseReciboNotificacionAnonima(formulario.getCodigo(),this.getIdPersistencia(request),asientoXML,firma);					
+				if ("CERTIFICADO".equals(formulario.getTipoFirma())) {
+					result = notificacionDelegate.firmarAcuseReciboNotificacionAnonima(formulario.getCodigo(),this.getIdPersistencia(request),asientoXML,firmaDigital);
+				} else {
+					result = notificacionDelegate.firmarAcuseReciboNotificacionAnonima(formulario.getCodigo(),this.getIdPersistencia(request),asientoXML,formulario.getFirma());
+				}
 			}else{
-				result = notificacionDelegate.firmarAcuseReciboNotificacionAutenticada(formulario.getCodigo(),asientoXML,firma);			
+				if ("CERTIFICADO".equals(formulario.getTipoFirma())) {
+					result = notificacionDelegate.firmarAcuseReciboNotificacionAutenticada(formulario.getCodigo(),asientoXML,firmaDigital);
+				} else {
+					result = notificacionDelegate.firmarAcuseReciboNotificacionAutenticada(formulario.getCodigo(),asientoXML,formulario.getFirma());
+				}
+							
 			}		
 				
 			// Comprobamos si la firma es valida
@@ -79,10 +88,15 @@ public class FirmaAcuseReciboAction extends BaseAction
 				// Volvemos a mostrar la notificacion
 				request.setAttribute("notificacion",notificacion);
 				request.setAttribute("elementoExpediente",elementoExpediente);
-				if (this.getDatosSesion(request).getPerfilAcceso().equals(ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO)){
-					request.setAttribute( "messageKey", "detalleNotificacion.firmanteNoAdecuado.delegado" );
-				}else{
-				request.setAttribute( "messageKey", "detalleNotificacion.firmanteNoAdecuado" );
+				request.setAttribute("tipoFirma",formulario.getTipoFirma());
+				if ("CERTIFICADO".equals(formulario.getTipoFirma())) {
+					if (this.getDatosSesion(request).getPerfilAcceso().equals(ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO)){
+						request.setAttribute( "messageKey", "detalleNotificacion.firmanteNoAdecuado.delegado" );
+					}else{
+						request.setAttribute( "messageKey", "detalleNotificacion.firmanteNoAdecuado" );
+					}
+				} else {
+					request.setAttribute( "messageKey", "detalleNotificacion.claveFirmaNoCoincide" );
 				}
 				return mapping.findForward( "fail" );
 			}

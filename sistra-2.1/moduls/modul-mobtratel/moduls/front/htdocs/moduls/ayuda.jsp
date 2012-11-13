@@ -6,10 +6,10 @@
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 	<bean:define id="titulo" type="java.lang.String">
-		<bean:message key="<%= request.getParameter( Constants.MESSAGE_KEY ) + ".titulo" %>"/>
+		<bean:message key="<%= request.getParameter( Constants.MESSAGE_KEY ) +  \".titulo\" %>"/>
 	</bean:define>
 	<bean:define id="cuerpo" type="java.lang.String">
-		<bean:message key="<%= request.getParameter( Constants.MESSAGE_KEY ) + ".cuerpo" %>"/>
+		<bean:message key="<%= request.getParameter( Constants.MESSAGE_KEY ) + \".cuerpo\" %>"/>
 	</bean:define>
 	<bean:define id="cuerpo" type="java.lang.String">
 		<bean:write name="cuerpo"/>
@@ -19,6 +19,6 @@
 		
 
 		
-		<jsp:include  page="<%="../ayuda/"+cuerpo%>"  />
+		<jsp:include  page="<%=\"../ayuda/\"+cuerpo%>"  />
 		
 		<p class="tornarArrere"><strong><html:link href="javascript:window.close()"><bean:message key="ayuda.close" /></html:link></strong></p>

@@ -45,63 +45,24 @@ public abstract class EventoExpedienteFacadeEJB extends HibernateEJB
      */
 	public EventoExpediente obtenerEventoExpedienteAutenticado( Long id )
 	{
-		// Obtenemos elemento expediente asociado para realizar control acceso		
-		try {
-			DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpedienteAutenticado(ElementoExpediente.TIPO_AVISO_EXPEDIENTE,id);				
-		} catch (Exception e) {
-			throw new EJBException(e);
-		}
+		// Verificamos acceso expediente	
+		verificarAccesoAutenticado(id);
 		
-		Session session = getSession();
-		try
-		{
-			EventoExpediente eventoExpediente = ( EventoExpediente ) session.load( EventoExpediente.class, id );
-			
-			
-			
-			Hibernate.initialize( eventoExpediente.getDocumentos() );
-			return eventoExpediente;
-		}
-		catch (HibernateException he) 
-		{   
-			throw new EJBException(he);
-	    } 
-		finally 
-		{
-	        close(session);
-	    }
+		return recuperarEventoPorId(id);
 	}
-	
+
 	/**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
 	public EventoExpediente obtenerEventoExpedienteAnonimo( Long id , String idPersistencia)
 	{
-		// Obtenemos elemento expediente asociado para realizar control acceso		
-		try {
-			DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpedienteAnonimo(ElementoExpediente.TIPO_AVISO_EXPEDIENTE,id,idPersistencia);				
-		} catch (Exception e) {
-			throw new EJBException(e);
-		}
+		// Verificamos acceso expediente	
+		verificarAccesoAnonimo(id, idPersistencia);
 		
-		Session session = getSession();
-		try
-		{
-			EventoExpediente eventoExpediente = ( EventoExpediente ) session.load( EventoExpediente.class, id );
-			Hibernate.initialize( eventoExpediente.getDocumentos() );
-			return eventoExpediente;
-		}
-		catch (HibernateException he) 
-		{   
-			throw new EJBException(he);
-	    } 
-		finally 
-		{
-	        close(session);
-	    }
+		return recuperarEventoPorId(id);
 	}
-		
+
 	/**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.gestor}"
@@ -164,7 +125,7 @@ public abstract class EventoExpedienteFacadeEJB extends HibernateEJB
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
      */
-	public Long grabarEventoExpediente( EventoExpediente evento )
+	public Long grabarNuevoEventoExpediente( EventoExpediente evento )
 	{
 		Session session = getSession();
 		try
@@ -175,11 +136,11 @@ public abstract class EventoExpedienteFacadeEJB extends HibernateEJB
 			}
 			else
 			{
-				session.update( evento );
+				throw new Exception("No se permite actualizar evento");
 			}
 			return evento.getCodigo();
 		}
-		catch (HibernateException he) 
+		catch (Exception he) 
 		{   
 			throw new EJBException(he);
 	    } 
@@ -196,59 +157,45 @@ public abstract class EventoExpedienteFacadeEJB extends HibernateEJB
      */
 	public void marcarConsultadoEventoExpedienteAutenticado( Long id )
 	{
-		// Obtenemos elemento expediente asociado (se realiza control acceso)
-		ElementoExpediente elemento;
-		try {
-			elemento = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpedienteAutenticado(ElementoExpediente.TIPO_AVISO_EXPEDIENTE,id);				
-		} catch (Exception e) {
-			throw new EJBException(e);
-		}
-		
+		// Verificamos acceso expediente	
+		Long idExpediente = verificarAccesoAutenticado(id);
 		
 		// Marcamos como consultado
-		Session session = getSession();
-		try
-		{
-			EventoExpediente eventoExpediente = ( EventoExpediente ) session.load( EventoExpediente.class, id );
-			if (eventoExpediente.getFechaConsulta() == null){
-				eventoExpediente.setFechaConsulta(new Timestamp(System.currentTimeMillis()));
-				session.update(eventoExpediente);				
-			}
-		}
-		catch (HibernateException he) 
-		{   
-			throw new EJBException(he);
-	    } 
-		finally 
-		{
-	        close(session);
-	    }
+		marcarEventoConsultadoImpl(id);
 		
 		// Actualizamos estado expediente
 		try{
-			DelegateUtil.getProcesosAutoDelegate().actualizaEstadoExpediente(elemento.getExpediente().getCodigo());
+			DelegateUtil.getProcesosAutoDelegate().actualizaEstadoExpediente(idExpediente);
 		}catch(Exception ex){
 			throw new EJBException("Error actualizando estado expediente",ex);
 		}		
-	}			
-	
-	
+	}
+
 	/**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
 	public void marcarConsultadoEventoExpedienteAnonimo( Long id, String idPersistencia )
 	{
-		// Obtenemos elemento expediente asociado (se realiza control acceso)
-		ElementoExpediente elemento;
-		try {
-			elemento = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpedienteAnonimo(ElementoExpediente.TIPO_AVISO_EXPEDIENTE,id,idPersistencia);				
-		} catch (Exception e) {
-			throw new EJBException(e);
-		}
-		
+		// Verificamos acceso expediente	
+		Long idExpediente = verificarAccesoAnonimo(id, idPersistencia);
 		
 		// Marcamos como consultado
+		marcarEventoConsultadoImpl(id);
+		
+		// Actualizamos estado expediente
+		try{
+			DelegateUtil.getProcesosAutoDelegate().actualizaEstadoExpediente(idExpediente);
+		}catch(Exception ex){
+			throw new EJBException("Error actualizando estado expediente",ex);
+		}		
+	}			
+	
+	// ------------------------------------------------------------------------------------------------
+	//	FUNCIONES PRIVADAS
+	// ------------------------------------------------------------------------------------------------
+	
+	private void marcarEventoConsultadoImpl(Long id) {
 		Session session = getSession();
 		try
 		{
@@ -266,12 +213,51 @@ public abstract class EventoExpedienteFacadeEJB extends HibernateEJB
 		{
 	        close(session);
 	    }
-		
-		// Actualizamos estado expediente
-		try{
-			DelegateUtil.getProcesosAutoDelegate().actualizaEstadoExpediente(elemento.getExpediente().getCodigo());
-		}catch(Exception ex){
-			throw new EJBException("Error actualizando estado expediente",ex);
-		}		
 	}			
+	
+	private EventoExpediente recuperarEventoPorId(Long id) {
+		Session session = getSession();
+		try
+		{
+			EventoExpediente eventoExpediente = ( EventoExpediente ) session.load( EventoExpediente.class, id );
+			Hibernate.initialize( eventoExpediente.getDocumentos() );
+			return eventoExpediente;
+		}
+		catch (HibernateException he) 
+		{   
+			throw new EJBException(he);
+	    } 
+		finally 
+		{
+	        close(session);
+	    }
+	}
+	
+	private Long verificarAccesoAutenticado(Long idEvento) {
+		try {
+			Long idExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerCodigoExpedienteElemento(ElementoExpediente.TIPO_AVISO_EXPEDIENTE, idEvento);
+			if (!DelegateUtil.getExpedienteDelegate().verificarAccesoExpedienteAutenticado(idExpediente)) {
+				throw new Exception("No tiene acceso al expediente");
+			}
+			return idExpediente;
+		} catch (Exception e) {
+			throw new EJBException(e);
+		}
+	}
+
+	
+	private Long verificarAccesoAnonimo(Long idEvento, String idPersistencia) {
+		try {
+			Long idExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerCodigoExpedienteElemento(ElementoExpediente.TIPO_AVISO_EXPEDIENTE, idEvento);
+			if (!DelegateUtil.getExpedienteDelegate().verificarAccesoExpedienteAnonimo(idExpediente, idPersistencia)) {
+				throw new Exception("No tiene acceso al expediente");
+			}
+			return idExpediente;
+		} catch (Exception e) {
+			throw new EJBException(e);
+		}
+	}
+		
+
+	
 }

@@ -35,6 +35,10 @@ public class DetalleAvisoForm extends ValidatorForm
     private String firma;
     private String idioma;
     
+    private String accesoPorClave;
+    
+    private String existeNifExpediente;
+    
 	public String getIdioma() {
 		if(idioma == null || "".equals(idioma)){
 			return "es";
@@ -178,6 +182,22 @@ public class DetalleAvisoForm extends ValidatorForm
 
 	public void setPermitirSms(String permitirSms) {
 		this.permitirSms = permitirSms;
+	}
+
+	public String getAccesoPorClave() {
+		return accesoPorClave;
+	}
+
+	public void setAccesoPorClave(String accesiblePorClave) {
+		this.accesoPorClave = accesiblePorClave;
+	}
+
+	public String getExisteNifExpediente() {
+		return existeNifExpediente;
+	}
+
+	public void setExisteNifExpediente(String existeNifExpediente) {
+		this.existeNifExpediente = existeNifExpediente;
 	}
 	
 }

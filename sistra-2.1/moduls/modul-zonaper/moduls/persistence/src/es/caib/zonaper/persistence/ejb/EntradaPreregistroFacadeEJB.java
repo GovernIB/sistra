@@ -32,6 +32,7 @@ import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.EntradaPreregistro;
 import es.caib.zonaper.model.EntradaPreregistroBackup;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
+import es.caib.zonaper.persistence.delegate.DelegateException;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 
 /**
@@ -84,168 +85,126 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
 			log.error(ex);
 		}
 	}
-	  
+	
     /**
-     * Obtener entrada preregistro desde modulo de confirmacion
+     * Obtiene entrada preregistro de forma autenticada
      * 
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.registro}"
-     */
-    public EntradaPreregistro obtenerEntradaPreregistroReg(Long id) {
-        Session session = getSession();
-        try {
-        	// Cargamos entradaPreregistro        	
-        	EntradaPreregistro entradaPreregistro = (EntradaPreregistro) session.load(EntradaPreregistro.class, id);        	
-        	// Cargamos documentos
-        	Hibernate.initialize(entradaPreregistro.getDocumentos());        	
-            return entradaPreregistro;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-    
-    /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
     public EntradaPreregistro obtenerEntradaPreregistroAutenticada(Long id) {
-        Session session = getSession();
-        try {
-        	// Cargamos entradaPreregistro        	
-        	EntradaPreregistro entradaPreregistro = (EntradaPreregistro) session.load(EntradaPreregistro.class, id);
-        	
-        	// Comprobamos que accede el usuario o si es un delegado
-        	Principal sp =this.ctx.getCallerPrincipal();
-        	PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
-    		if (plgLogin.getMetodoAutenticacion(sp) == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO){
-        		throw new HibernateException("Acceso solo permitido para autenticado");
-        	}
-    		if (!plgLogin.getNif(this.ctx.getCallerPrincipal()).equals(entradaPreregistro.getNifRepresentante())){
-    			// Si no es el usuario quien accede miramos si es un delegado
-            	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(entradaPreregistro.getNifRepresentante());
-            	if (StringUtils.isEmpty(permisos)){
-            		throw new Exception("El preregistro " + id + " no pertenece al usuario ni es delegado - usuario " + sp.getName());
-            	}
-        	}
-        	
-        	// Cargamos documentos
-        	Hibernate.initialize(entradaPreregistro.getDocumentos());        	
-            return entradaPreregistro;
-        } catch (Exception he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
+        
+    	// Cargamos entradaPreregistro        	
+    	EntradaPreregistro entradaPreregistro = this.recuperarEntradaPorCodigo(id);
+    	
+    	// Control acceso expediente
+    	controlAccesoAutenticadoExpediente(entradaPreregistro); 
+        
+        return entradaPreregistro;
+      
+    	
     }
+
+	
     
     /**
+     *  Obtiene entrada preregistro de forma anonima
+     * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
-    public EntradaPreregistro obtenerEntradaPreregistroAnonima(Long id,String idPersistencia) {
-        Session session = getSession();
-        try {
-        	// Acceso solo anonimo
-        	Principal sp = this.ctx.getCallerPrincipal();
-        	PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
-        	if (plgLogin.getMetodoAutenticacion(sp) != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO){
-        		throw new HibernateException("Solo se permite acceso anonimo");
-        	}
-        	// Cargamos entradaPreregistro        	
-        	EntradaPreregistro entradaPreregistro = (EntradaPreregistro) session.load(EntradaPreregistro.class, id);
-        	
-        	// Control acceso
-        	if (!entradaPreregistro.getIdPersistencia().equals(idPersistencia)){
-        		// En caso de pertenecer a un expediente se debera controlar el acceso a traves del expediente
-            	// ya que se podra acceder con otros idPersistencia de tramites asociados al expediente
-            	// Buscamos si es un elemento de un expediente (en caso afirmativo se controlaria el acceso al expe)
-            	ElementoExpediente ee = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpedienteAnonimo(ElementoExpediente.TIPO_ENTRADA_PREREGISTRO,id,idPersistencia);
-            	if (ee == null){
-            		throw new HibernateException("Acceso anonimo no permitido a entrada preregistro " + id + " - idPersistencia " + idPersistencia);
-            	}
-        	}
-        	
-        	// Cargamos documentos
-        	Hibernate.initialize(entradaPreregistro.getDocumentos());        	
-            return entradaPreregistro;
-        } catch (Exception he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
+    public EntradaPreregistro obtenerEntradaPreregistroAnonima(Long id,String claveAcceso) {
+    	
+    	// Cargamos entradaPreregistro  
+    	EntradaPreregistro entradaPreregistro = this.recuperarEntradaPorCodigo(id);    	       
+        
+        // Control acceso anonimo expediente
+    	controlAccesoAnonimoExpediente(claveAcceso, entradaPreregistro);
+    	
+    	return entradaPreregistro;
     }
+
+	
     
     /**
+     * Obtiene entrada por id (registro, gestor y auto)
+     * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
+     *  @ejb.permission role-name="${role.registro}"
      */
     public EntradaPreregistro obtenerEntradaPreregistro(Long id) {
-        Session session = getSession();
-        try {
-        	// 	Cargamos entradaPreregistro        	
-        	EntradaPreregistro entradaPreregistro = (EntradaPreregistro) session.load(EntradaPreregistro.class, id);
-        	
-        	// Cargamos documentos
-        	Hibernate.initialize(entradaPreregistro.getDocumentos());        	
-            return entradaPreregistro;
-        } catch (HibernateException he) {
-        	throw new EJBException(he);
-        } finally {
-            close(session);
-        }
+        return recuperarEntradaPorCodigo(id);
+    }
+
+	
+    
+    /**
+     *  Obtiene entrada por id persistencia. Según tipo de acceso se comprobará acceso a la entrada.
+     *  Si helpdesk no hay control acceso. Si autenticado se comprueba que el nif corresponda a la entrada.
+     *  
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.helpdesk}"
+     * 
+     */
+    public EntradaPreregistro obtenerEntradaPreregistro(String idPersistencia) {
+    	try {
+	    	EntradaPreregistro entradaPreregistro = recuperarEntradaPreregistroPorIdPersistencia(idPersistencia);
+	    	// Control acceso  (role helpdesk salta comprobacion)    	
+	    	if (entradaPreregistro != null && !this.ctx.isCallerInRole(roleHelpDesk)){
+	    		// Obtenemos codigo expediente asociado
+	    		Long idExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerCodigoExpedienteElemento(ElementoExpediente.TIPO_ENTRADA_PREREGISTRO, entradaPreregistro.getCodigo());
+	        	// Obtenemos metodo de autenticacion
+	    		Principal sp = this.ctx.getCallerPrincipal();	  
+	        	PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
+	        	char metodoAutenticacion = plgLogin.getMetodoAutenticacion(sp);
+	        	// Controlamos acceso anonimo
+	        	if (metodoAutenticacion == 'A') {
+	        		if (!DelegateUtil.getExpedienteDelegate().verificarAccesoExpedienteAnonimo(idExpediente, idPersistencia)) {
+	            		throw new Exception("No tiene acceso a entrada preregistro: " + idPersistencia);
+	            	}        		
+	        	}else{
+	        	// Controlamos acceso autenticado	        	
+	        		if (!DelegateUtil.getExpedienteDelegate().verificarAccesoExpedienteAutenticado(idExpediente)) {
+	            		throw new Exception("No tiene acceso a entrada preregistro: " + idPersistencia);
+	            	}	        		
+	        	}                		
+	    	}
+	    	return entradaPreregistro;
+    	} catch (Exception ex){
+    		throw new EJBException("Excepcion accediendo a entrada preregistro: " + ex.getMessage(), ex);
+    	}
     }
     
     /**
+     * Busca entrada preregistro anonima por id persistencia. El control de acceso es el id persistencia.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
-    public EntradaPreregistro obtenerEntradaPreregistro(String idPersistencia) {
-        Session session = getSession();
-        try {
-        	// Cargamos entradaPreregistro        	
-        	Query query = session
-            .createQuery("FROM EntradaPreregistro AS m WHERE m.idPersistencia = :id")
-            .setParameter("id",idPersistencia);
-            //query.setCacheable(true);
-            if (query.list().isEmpty()){
-            	return null;
-            	//throw new HibernateException("No existe trámite con id " + id);
-            }
-            EntradaPreregistro entradaPreregistro = (EntradaPreregistro)  query.uniqueResult();             
-            
-            // Control acceso  (role helpdesk salta comprobacion)
-            if (!this.ctx.isCallerInRole(roleHelpDesk)){
-	        	Principal sp = this.ctx.getCallerPrincipal();	  
-	        	PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
-	        	// Para anonimos, vale con el id de persistencia
-	        	if (plgLogin.getMetodoAutenticacion(sp) == 'A') {
-	        		if (entradaPreregistro.getNivelAutenticacion() != 'A'){
-	        		throw new HibernateException("Acceso anonimo a entrada preregistro autenticada " + idPersistencia);
-	        	}
-	        	}else{
-	        	// Para autenticados comprobamos si es el usuario o es un delegado	        	
-	        		if (!plgLogin.getNif(this.ctx.getCallerPrincipal()).equals(entradaPreregistro.getNifRepresentante())){
-	        			// Si no es el usuario quien accede miramos si es un delegado
-	                	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(entradaPreregistro.getNifRepresentante());
-	                	if (StringUtils.isEmpty(permisos)){
-	                		throw new Exception("Acceso no permitido a entrada preregistro " + idPersistencia + " no pertenece al usuario ni es delegado - usuario " + sp.getName());	                		
-	                	}
-	        		}	        		
-	        	}
-            }
-            
-        	// Cargamos documentos
-        	Hibernate.initialize(entradaPreregistro.getDocumentos());        	
-            return entradaPreregistro;
-        } catch (Exception he) {
-        	throw new EJBException(he);
-        } finally {
-            close(session);
+    public EntradaPreregistro obtenerEntradaPreregistroAnonima(String idPersistencia) {
+    	EntradaPreregistro entradaPreregistro = recuperarEntradaPreregistroPorIdPersistencia(idPersistencia);   
+    	if (entradaPreregistro != null && entradaPreregistro.getNivelAutenticacion() != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO) {
+        	entradaPreregistro = null;
         }
+        return entradaPreregistro;           
     }
+
+    /**
+     * Busca entrada preregistro autenticada por id persistencia 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public EntradaPreregistro obtenerEntradaPreregistroAutenticada(String idPersistencia) {
+    	// Recuperamos entrada
+    	EntradaPreregistro entradaPreregistro = recuperarEntradaPreregistroPorIdPersistencia(idPersistencia);   
+    	// Control acceso expediente 
+    	controlAccesoAutenticadoExpediente(entradaPreregistro);
+    	return entradaPreregistro;    	
+    }
+	
     
     /**
      * @ejb.interface-method
@@ -277,130 +236,98 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
         }
     }
     
- 	/**
+   
+	/**
+ 	 * 
+ 	 * Confirma entrada preregistro. 
+ 	 * Si es confirmacion automatica debe poder presentar dicho tramite. Si no es automatica, debera tener role registro.
+ 	 * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.registro}"
      */
-    public Long grabarEntradaPreregistro(EntradaPreregistro obj) {        
+    public void confirmarEntradaPreregistro(Long codigo, String numeroRegistro,
+			Date fechaConfirmacion, char confirmadoAutomaticamente) {   
+    	// Recupera entrada
+    	EntradaPreregistro entrada = this.recuperarEntradaPorCodigo(codigo);
+    	
+    	Session session = getSession();
+        try {        	
+        	// Confirmacion automatica: control acceso para presentar preregistro
+        	if (confirmadoAutomaticamente == 'S') {    	    	
+    			verificarPermisosPresentacionPreregistro(entrada);
+        	} else {
+        		// Confirmacion manual: debe tener role registro
+        		if (!this.ctx.isCallerInRole(this.roleRegistro)) {
+        			throw new Exception("No tiene el role de registro");
+        		}
+        	}
+        	
+        	// Updateamos
+        	entrada.setNumeroRegistro(numeroRegistro);
+        	entrada.setFechaConfirmacion(fechaConfirmacion);
+        	entrada.setConfirmadoAutomaticamente(confirmadoAutomaticamente);
+        	session.update(entrada);
+        	                    	            
+        } catch (Exception he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }    	
+    }
+    	
+    	
+ 	/**
+ 	 * 
+ 	 * Graba nueva entrada preregistro.
+ 	 * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public Long grabarNuevaEntradaPreregistro(EntradaPreregistro entrada) {        
     	Session session = getSession();
         try {        	
         	
-        	// Control acceso: role registro salta check para actualizar la confirmación del preregistro
-        	if (!this.ctx.isCallerInRole(roleRegistro) && !this.ctx.isCallerInRole(roleGestor)){
-        		Principal sp = this.ctx.getCallerPrincipal();
-        		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
-	        	if (plgLogin.getMetodoAutenticacion(sp) != 'A'){
-	        		// Para autenticados comprobamos si es el usuario o es un delegado con permiso para presentar	        	
-	        		if (!plgLogin.getNif(this.ctx.getCallerPrincipal()).equals(obj.getNifRepresentante())){
-	        			// Si no es el usuario quien accede miramos si es un delegado
-	                	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(obj.getNifRepresentante());
-	                	if (StringUtils.isEmpty(permisos) || permisos.indexOf(ConstantesZPE.DELEGACION_PERMISO_PRESENTAR_TRAMITE) == -1){
-	                		throw new Exception("Acceso no permitido a entrada preregistro " + obj.getIdPersistencia()  + " no pertenece al usuario ni es delegado con permiso de presentar - usuario " + sp.getName());	                		
-	                	}
-	        	}
-	        	}else{	        		
-	        		// Para anonimos vale con el id persistencia
-	        		if (obj.getNivelAutenticacion() != 'A'){
-	        		throw new HibernateException("Acceso no permitido a entrada preregistro " + obj.getIdPersistencia() + " - usuario " + sp.getName());
-	        	}
-        	}
-        	}
+        	// Control acceso para presentar preregistro
+    		verificarPermisosPresentacionPreregistro(entrada);
         	
         	// updateamos
-        	if (obj.getCodigo() == null){
-        		session.save(obj);
+        	if (entrada.getCodigo() == null){
+        		session.save(entrada);
         	}else{
-        		session.update(obj);
+        		throw new Exception("No se puede modificar entrada");
         	}
         	                    	
-            return obj.getCodigo();
+            return entrada.getCodigo();
         } catch (Exception he) {
             throw new EJBException(he);
         } finally {
         	
-            close(session);
-        }
-    }    	
-    
-    /**
-     * Recupera lista de trámites de preregistro en los que el usuario los ha registrado
-     * o bien aparece como su nif como representado
-     * 
-     * ejb.interface-method
-     * ejb.permission role-name="${role.todos}"
-     
-    public List listarEntradaPreregistrosUsuario() {
-        Session session = getSession();
-        try {     
-        	String usua = this.ctx.getCallerPrincipal().getName();
-        	if (usua == null) return null;
-        	
-        	// Obtenemos datos usuario PAD
-        	PadAplicacionDelegate padAplic = DelegateUtil.getPadAplicacionDelegate();
-        	PersonaPAD pers = padAplic.obtenerDatosPersonaPADporUsuario(usua);         	
-        	
-            Query query = session
-            .createQuery("FROM EntradaPreregistro AS m WHERE m.usuario = :usuario or (m.nifRepresentado is not null and m.nifRepresentado = :nifRepresentado) ORDER BY m.fecha DESC")
-            .setParameter("usuario",usua)
-            .setParameter("nifRepresentado",pers.getNif());
-            //query.setCacheable(true);
-            List tramites = query.list();
-            
-            // Cargamos documentos
-            for (Iterator it=tramites.iterator();it.hasNext();){
-            	EntradaPreregistro entradaPreregistro = (EntradaPreregistro) it.next();
-            	Hibernate.initialize(entradaPreregistro.getDocumentos());
-            }
-            
-            return tramites;
-            
-        } catch (Exception he) {
-            throw new EJBException(he);
-        } finally {
             close(session);
         }
     }
-    */
     
-    /**
-     * ejb.interface-method
-     * ejb.permission role-name="${role.todos}"
-     
-    public List listarEntradaPreregistrosUsuarioNoConfirmados(String usua) 
-    {
-        Session session = getSession();
-        try {     
-        	
-        	if (usua == null) return null;
-        	
-        	//  Obtenemos datos usuario PAD
-        	PadAplicacionDelegate padAplic = DelegateUtil.getPadAplicacionDelegate();
-        	PersonaPAD pers = padAplic.obtenerDatosPersonaPADporUsuario(usua);         	
-        	
-        	
-            Query query = session
-            .createQuery("FROM EntradaPreregistro AS m WHERE (m.usuario = :usuario  or (m.nifRepresentado is not null and m.nifRepresentado = :nifRepresentado)) and m.fechaConfirmacion is null ORDER BY m.fecha DESC")
-            .setParameter("usuario",usua)
-            .setParameter("nifRepresentado",pers.getNif());;
-            //query.setCacheable(true);
-            List tramites = query.list();
-            
-            // Cargamos documentos
-            for (Iterator it=tramites.iterator();it.hasNext();){
-            	EntradaPreregistro entradaPreregistro = (EntradaPreregistro) it.next();
-            	Hibernate.initialize(entradaPreregistro.getDocumentos());
-            }
-            
-            return tramites;
-            
-        } catch (Exception he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
+    
+    /** Obtiene estado entrada preregistro
+     * @return N: No existe / T: Terminada / C: Pendiente confirmacion
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public String obtenerEstadoEntradaPreregistro(String idPersistencia) {
+    	EntradaPreregistro entrada = this.recuperarEntradaPreregistroPorIdPersistencia(idPersistencia);
+    	String estado = "N";
+    	if (entrada != null) {
+    		if (entrada.getFechaConfirmacion() != null) {
+    			estado = "T";
+    		} else {
+    			estado = "P";
+    		}
+    	}
+    	return estado;
     }
-    */
+
+	
+    
     
     /**
      * @ejb.interface-method
@@ -743,4 +670,96 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
 
     }
   	
+    private EntradaPreregistro recuperarEntradaPreregistroPorIdPersistencia(
+			String idPersistencia) {
+		EntradaPreregistro entradaPreregistro = null;
+        Session session = getSession();
+        try {
+        	// Cargamos entradaPreregistro        	
+        	Query query = session
+            .createQuery("FROM EntradaPreregistro AS m WHERE m.idPersistencia = :id")
+            .setParameter("id",idPersistencia);
+            //query.setCacheable(true);
+            if (!query.list().isEmpty()){
+            	entradaPreregistro = (EntradaPreregistro)  query.uniqueResult();  
+            	// Cargamos documentos
+            	Hibernate.initialize(entradaPreregistro.getDocumentos());
+            }
+        } catch (Exception he) {
+        	throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+		return entradaPreregistro;
+	}
+    
+    private EntradaPreregistro recuperarEntradaPorCodigo(Long id) {
+		Session session = getSession();
+        try {
+        	// 	Cargamos entradaPreregistro        	
+        	EntradaPreregistro entradaPreregistro = (EntradaPreregistro) session.load(EntradaPreregistro.class, id);
+        	
+        	// Cargamos documentos
+        	Hibernate.initialize(entradaPreregistro.getDocumentos());        	
+            return entradaPreregistro;
+        } catch (HibernateException he) {
+        	throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+	}
+    
+    private void verificarPermisosPresentacionPreregistro(EntradaPreregistro obj) throws Exception {
+		Principal sp = this.ctx.getCallerPrincipal();
+		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
+		if (plgLogin.getMetodoAutenticacion(sp) != 'A'){
+			// Para autenticados comprobamos si es el usuario o es un delegado con permiso para presentar	        	
+			if (!plgLogin.getNif(this.ctx.getCallerPrincipal()).equals(obj.getNifRepresentante())){
+				// Si no es el usuario quien accede miramos si es un delegado
+		    	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(obj.getNifRepresentante());
+		    	if (StringUtils.isEmpty(permisos) || permisos.indexOf(ConstantesZPE.DELEGACION_PERMISO_PRESENTAR_TRAMITE) == -1){
+		    		throw new Exception("Acceso no permitido a entrada preregistro " + obj.getIdPersistencia()  + " no pertenece al usuario ni es delegado con permiso de presentar - usuario " + sp.getName());	                		
+		    	}
+			}
+		}else{	        		
+			// Para anonimos vale con el id persistencia
+			if (obj.getNivelAutenticacion() != 'A'){
+				throw new Exception("Acceso no permitido a entrada preregistro " + obj.getIdPersistencia() + " - usuario " + sp.getName());
+			}
+		}
+    }    	
+    
+    /**
+	 * Comprueba acceso anonimo a expediente	
+	 * @param claveAcceso
+	 * @param entradaPreregistro
+	 */
+    private void controlAccesoAnonimoExpediente(String claveAcceso,
+			EntradaPreregistro entradaPreregistro) {
+		try {
+	    	if (entradaPreregistro != null) {
+	    	Long idExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerCodigoExpedienteElemento(ElementoExpediente.TIPO_ENTRADA_PREREGISTRO, entradaPreregistro.getCodigo());
+		    	if (!DelegateUtil.getExpedienteDelegate().verificarAccesoExpedienteAnonimo(idExpediente, claveAcceso)) {
+		    		throw new Exception("No tiene acceso a entrada");
+		    	}
+	    	}
+    	} catch (Exception ex) {
+    		throw new EJBException("No se puede verificar acceso a entrada");
+    	}
+	}
+    
+    private void controlAccesoAutenticadoExpediente(
+			EntradaPreregistro entradaPreregistro) {
+		try {
+    		if (entradaPreregistro != null) {
+    			Long idExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerCodigoExpedienteElemento(ElementoExpediente.TIPO_ENTRADA_PREREGISTRO, entradaPreregistro.getCodigo());
+    	    	if (!DelegateUtil.getExpedienteDelegate().verificarAccesoExpedienteAutenticado(idExpediente)) {
+    	    		throw new Exception("No tiene acceso a entrada prregistro");
+    	    	}	
+    		}
+        } catch (Exception he) {
+            throw new EJBException(he);
+        }
+	}
+    
 }

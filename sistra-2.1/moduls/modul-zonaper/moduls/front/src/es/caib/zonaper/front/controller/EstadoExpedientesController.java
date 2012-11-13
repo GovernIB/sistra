@@ -12,7 +12,7 @@ import org.apache.struts.tiles.ComponentContext;
 
 import es.caib.zonaper.front.Constants;
 import es.caib.zonaper.model.DatosSesion;
-import es.caib.zonaper.model.EstadoExpediente;
+import es.caib.zonaper.model.Expediente;
 import es.caib.zonaper.model.Page;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
@@ -47,15 +47,15 @@ public class EstadoExpedientesController extends BaseController
 		// Realizamos consulta de la pagina
 		Page page = null;
 		if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals( datosSesion.getPerfilAcceso())){
-			page = DelegateUtil.getEstadoExpedienteDelegate().busquedaPaginadaExpedientesEntidadDelegada( pagina, LONGITUD_PAGINA, datosSesion.getNifEntidad(), filtroExpe );
+			page = DelegateUtil.getExpedienteDelegate().busquedaPaginadaExpedientesEntidadDelegada( pagina, LONGITUD_PAGINA, datosSesion.getNifEntidad(), filtroExpe );
 		}else{
-			page = DelegateUtil.getEstadoExpedienteDelegate().busquedaPaginadaExpedientes( pagina, LONGITUD_PAGINA, filtroExpe );
+			page = DelegateUtil.getExpedienteDelegate().busquedaPaginadaExpedientes( pagina, LONGITUD_PAGINA, filtroExpe );
 		}
 		
 		// Comprobamos si hay que poner pie de entrega documentacion presencial
 		String pieDocPresencial = "N"; 
 		for (Iterator it=page.getList().iterator();it.hasNext();){
-			EstadoExpediente ee = (EstadoExpediente) it.next();
+			Expediente ee = (Expediente) it.next();
 			if (ConstantesZPE.ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL.equals(ee.getEstado())){
 				pieDocPresencial = "S";
 				break;

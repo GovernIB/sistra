@@ -413,6 +413,13 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 						dnIntf.setOficioRemision(or);
 						dnIntf.setTipoAsunto(dn.getTipoAsunto());
 						
+						if (dn.getAccesiblePorClave() != null) {
+							dnIntf.setAccesiblePorClave(dn.getAccesiblePorClave().getValue());
+						}
+						if (dn.getFirmaPorClave() != null && dn.getFirmaPorClave().getValue() != null) {
+							dnIntf.setFirmaPorClave(dn.getFirmaPorClave().getValue().booleanValue());
+						}
+						
 						if (notificacion.getDatosNotificacion().getOficioRemision().getTramiteSubsanacion() != null &&
 							notificacion.getDatosNotificacion().getOficioRemision().getTramiteSubsanacion().getValue() != null 	){
 								TramiteSubsanacion ts = new TramiteSubsanacion();

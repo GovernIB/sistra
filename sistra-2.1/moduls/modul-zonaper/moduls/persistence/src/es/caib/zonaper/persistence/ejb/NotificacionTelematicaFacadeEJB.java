@@ -29,7 +29,6 @@ import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.firma.FirmaIntf;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
-import es.caib.util.CredentialUtil;
 import es.caib.util.NifCif;
 import es.caib.xml.ConstantesXML;
 import es.caib.xml.oficioremision.factoria.FactoriaObjetosXMLOficioRemision;
@@ -86,132 +85,26 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.gestor}"
      */
     public NotificacionTelematica obtenerNotificacionTelematicaAuto(Long id) {
-        Session session = getSession();
-        try {
-        	
-        	// Cargamos notificacionTelematica        	
-        	NotificacionTelematica notificacionTelematica = (NotificacionTelematica) session.load(NotificacionTelematica.class, id);
-        	        
-        	// Cargamos documentos
-        	Hibernate.initialize(notificacionTelematica.getDocumentos());        	
-            return notificacionTelematica;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
+        return recuperarNotificacionPorId(id);
     }
+
 	  
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
     public NotificacionTelematica obtenerNotificacionTelematicaAutenticada(Long id) {
-        Session session = getSession();
-        
-        NotificacionTelematica notificacionTelematica = null;
-        try {
-        	
-        	// Cargamos notificacionTelematica        	
-        	notificacionTelematica = (NotificacionTelematica) session.load(NotificacionTelematica.class, id);
-        	
-        	
-        	// Comprobamos que accede el usuario o si es un delegado
-        	Principal sp =this.ctx.getCallerPrincipal();
-    		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
-    		if (plgLogin.getMetodoAutenticacion(sp) == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO){
-        		throw new HibernateException("Acceso solo permitido para autenticado");
-        	}
-    		if (!plgLogin.getNif(this.ctx.getCallerPrincipal()).equals(notificacionTelematica.getNifRepresentante())){
-    			// Si no es el usuario quien accede miramos si es un delegado
-            	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(notificacionTelematica.getNifRepresentante());
-            	if (StringUtils.isEmpty(permisos)){
-            		throw new Exception("Acceso no permitido a notificacion telematica " + id + " - usuario " + sp.getName());
-            	}
-    		}
-        	        	
-        	// Cargamos documentos
-    		Hibernate.initialize(notificacionTelematica.getDocumentos());
-        	
-        } catch (Exception he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-        
-        // En caso de que no este firmado el acuse no devolvemos ficheros asociados
-        try{
-	    	if (notificacionTelematica.getFechaAcuse() == null){
-	    		return notificacionSinAbrir(notificacionTelematica);
-	    	}else{
-	    		return notificacionTelematica;
-	    	}
-        }catch (Exception ex){
-        	throw new EJBException(ex);
-        }
-        
-        
+        return obtenerNotificacionTelematicaImpl(id, true, null);        
     }
-    
-    /**
-     * Devuelve notificacion con informaci贸n exclusiva de aviso
-     * @param notificacionTelematica
-     * @return
-     */
-    private NotificacionTelematica notificacionSinAbrir(NotificacionTelematica notificacionTelematica) throws Exception {
-		
-    	NotificacionTelematica not = new NotificacionTelematica();
-    	BeanUtils.copyProperties(not,notificacionTelematica);
-
-    	// Eliminamos referencia rds a oficio
-    	not.setCodigoRdsOficio(0);
-    	not.setClaveRdsOficio(null);
-    	
-    	// Eliminamos documentos
-    	not.getDocumentos().clear();
-    	
-    	// Eliminamos tramite de subsanacion
-    	not.setTramiteSubsanacionDescripcion(null);
-    	not.setTramiteSubsanacionIdentificador(null);
-    	not.setTramiteSubsanacionVersion(null);
-    	not.setTramiteSubsanacionParametros(null);
-    	
-		return not;
-	}
 
 
+   
 	/**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
     public NotificacionTelematica obtenerNotificacionTelematicaAnonima(Long id,String idPersistencia) {
-    	Session session = getSession();
-    	NotificacionTelematica notificacionTelematica = null;
-        try {
-        	
-        	// Cargamos notificacionTelematica        	
-        	notificacionTelematica = (NotificacionTelematica) session.load(NotificacionTelematica.class, id);
-        	
-        	// Cargamos documentos
-        	Hibernate.initialize(notificacionTelematica.getDocumentos());        	
-            
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-        
-        // En caso de que no este firmado el acuse no devolvemos ficheros asociados
-        try{
-	    	if (notificacionTelematica.getFechaAcuse() == null){
-	    		return notificacionSinAbrir(notificacionTelematica);
-	    	}else{
-	    		return notificacionTelematica;
-	    	}
-        }catch (Exception ex){
-        	throw new EJBException(ex);
-        }
-        
+    	 return obtenerNotificacionTelematicaImpl(id, false, idPersistencia);   
     }
     
     /**
@@ -228,8 +121,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
             .setParameter("numeroRegistro",numeroRegistro);
             //query.setCacheable(true);
             if (query.list().isEmpty()){
-            	return null;
-            	//throw new HibernateException("No existe tr谩mite con id " + id);
+            	return null;            	
             }
             NotificacionTelematica notificacionTelematica = (NotificacionTelematica)  query.uniqueResult();
                         
@@ -250,54 +142,26 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
      *  @ejb.permission role-name="${role.gestor}"
      *  @ejb.permission role-name="${role.auto}"
      */
-    public Long grabarNotificacionTelematica(NotificacionTelematica obj) {        
+    public Long grabarNuevaNotificacionTelematica(NotificacionTelematica obj) {        
     	Session session = getSession();
         try {        	
         	if (obj.getCodigo() == null){
         		session.save(obj);
         	}else{
-        		session.update(obj);
+        		throw new Exception("No se permite actualizar notificacion telematica");
         	}
         	                    	
             return obj.getCodigo();
-        } catch (HibernateException he) {
+        } catch (Exception he) {
             throw new EJBException(he);
         } finally {
         	
             close(session);
         }
     }
+   
     
-    /**
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.todos}"
-     */
-    public List listarNotificacionesTelematicasUsuario() {
-        Session session = getSession();
-        try {     
-        	String usua = this.ctx.getCallerPrincipal().getName();
-        	if (usua == null) return null;
-        	
-            Query query = session
-            .createQuery("FROM NotificacionTelematica AS m WHERE m.usuarioSeycon = :usuario ORDER BY m.fechaRegistro DESC")
-            .setParameter("usuario",usua);
-            //query.setCacheable(true);
-            List tramites = query.list();
-            
-            // Cargamos documentos
-            for (Iterator it=tramites.iterator();it.hasNext();){
-            	NotificacionTelematica notificacionTelematica = (NotificacionTelematica) it.next();
-            	Hibernate.initialize(notificacionTelematica.getDocumentos());
-            }
-            
-            return tramites;
-            
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
+    
     
     /**
      * @ejb.interface-method
@@ -310,7 +174,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
         	Date ahora = new Date();
         	
         	Query query = session
-            .createQuery("FROM NotificacionTelematica AS m WHERE m.fechaFinPlazo < :ahora and m.rechazada = false ORDER BY m.fechaRegistro ASC")
+            .createQuery("FROM NotificacionTelematica AS m WHERE m.fechaFinPlazo < :ahora and m.rechazada = false and m.fechaAcuse is null ORDER BY m.fechaRegistro ASC")
             .setParameter("ahora",ahora);
             List tramites = query.list();
             
@@ -328,111 +192,10 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-    
-    /**
-     *	 no se utiliza
-     * ejb.interface-method
-     * ejb.permission role-name="${role.todos}" 
-     
-    public Page busquedaPaginadaNotificacionesUsuario(int pagina, int longitudPagina )
-    {
-    	
-    	String seyconCiudadano = this.ctx.getCallerPrincipal().getName();
-    	
-		Session session = getSession();
-        try 
-        {
-        	if( StringUtils.isEmpty( seyconCiudadano ) )
-        	{
-        		throw new Exception ( "Para la consulta de notificaciones el identificador seycon del ciudadano no puede ser ni nulo ni vacio" );
-        	}
-        	Query query = 
-        		//session.createQuery( "FROM NotificacionTelematica AS n WHERE n.usuarioSeycon = :seyconCiudadano ORDER BY n.fechaAcuse DESC, n.fechaRegistro DESC" )
-        		session.createQuery( "FROM NotificacionTelematica AS n WHERE n.usuarioSeycon = :seyconCiudadano ORDER BY n.fechaRegistro DESC" )
-        		.setParameter("seyconCiudadano",seyconCiudadano);
-        	//query.setCacheable(true);
-            Page page = new Page( query, pagina, longitudPagina );
-            return page;
-        }
-        catch( HibernateException he )
-        {
-        	throw new EJBException( he );
-        }
-        catch( Exception exc )
-        {
-        	throw new EJBException( exc );
-        }
-        finally
-        {
-        	close( session );
-        }
-	}
-    */
-    
-	/**
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.todos}" 
-     */
-	public int numeroNotificacionesUsuario()
-	{
-		String seyconCiudadano = this.ctx.getCallerPrincipal().getName();
-    	
-		Session session = getSession();
-        try 
-        {
-        	Query query = session
-            .createQuery("SELECT count(*) FROM NotificacionTelematica AS e WHERE e.usuarioSeycon = :seyconCiudadano")
-            .setParameter("seyconCiudadano",seyconCiudadano);
-            return ( (Integer) query.iterate().next() ).intValue();
-        }
-        catch( HibernateException he )
-        {
-        	throw new EJBException( he );
-        }
-        catch( Exception exc )
-        {
-        	throw new EJBException( exc );
-        }
-        finally
-        {
-        	close( session );
-        }
-	}
-	
-	/**
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.todos}" 
-     */
-	public int numeroNotificacionesNuevasUsuario()
-	{
-		String seyconCiudadano = this.ctx.getCallerPrincipal().getName();
-    	
-		Session session = getSession();
-        try 
-        {
-        	Query query = session
-            .createQuery("SELECT count(*) FROM NotificacionTelematica AS e WHERE e.usuarioSeycon = :seyconCiudadano and e.fechaAcuse is null")
-            .setParameter("seyconCiudadano",seyconCiudadano);
-            return ( (Integer) query.iterate().next() ).intValue();
-        }
-        catch( HibernateException he )
-        {
-        	throw new EJBException( he );
-        }
-        catch( Exception exc )
-        {
-        	throw new EJBException( exc );
-        }
-        finally
-        {
-        	close( session );
-        }
-	}
    
-	
 
 	/**
-	 * Realiza la firma del acuse de la notificacion (en caso de que la notificacion tenga acuse) y marca la notificacion como entregada
+	 * Realiza la firma del acuse de la notificacion con certificado (en caso de que la notificacion tenga acuse) y marca la notificacion como entregada
 	 * actualizando el estado del expediente.
 	 * 
 	 * Devuelve true si ok y false si el firmante no es el adecuado
@@ -442,47 +205,25 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
      */
 	public boolean firmarAcuseReciboNotificacionAutenticada(Long codigo,String asientoAcuse,FirmaIntf firmaAcuse)
 	{
-		 try {
-			// Obtenemos notificacion (no tiene docs asociados pq no esta firmada)
-			NotificacionTelematica notificacion = obtenerNotificacionTelematicaAutenticada(codigo);
-			
-			// Comprobamos que si se accede de forma delegada, el delegado tenga permisos para recibir notificaciones
-        	Principal sp =this.ctx.getCallerPrincipal();
-    		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
-    		if (!plgLogin.getNif(this.ctx.getCallerPrincipal()).equals(notificacion.getNifRepresentante())){
-    			// Si no es el usuario quien accede miramos si es un delegado
-            	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(notificacion.getNifRepresentante());
-            	if (StringUtils.isEmpty(permisos) || permisos.indexOf(ConstantesZPE.DELEGACION_PERMISO_ABRIR_NOTIFICACION) == -1){
-            		log.debug("Acceso no permitido a abrir notificacion telematica " + codigo + " - usuario " + sp.getName());
-            		return false;
-            	}
-    		}
-			
-	    	// Realizamos acuse de recibo
-			boolean res = realizarFirmaAcuse(notificacion,asientoAcuse,firmaAcuse,null);
-			
-			// En caso correcto, generamos indices de busqueda 
-			if (res) {
-				
-				// Volvemos a cargar la notificacion para que esten los documentos asociados
-				notificacion = obtenerNotificacionTelematicaAutenticada(codigo);
-				
-				// Obtenemos documento de oficio
-				FactoriaObjetosXMLOficioRemision factoriaOR = ServicioOficioRemisionXML.crearFactoriaObjetosXML();
-				OficioRemision oficioRemision = factoriaOR.crearOficioRemision (new ByteArrayInputStream (consultarDocumentoRDS(notificacion.getCodigoRdsOficio(),notificacion.getClaveRdsOficio())));
-				
-				// Generamos indices
-				crearIndicesSalida(notificacion, oficioRemision);
-			}
-			
-			// Retornamos resultado
-			return res;			
-	    }catch( Exception exc ){
-        	throw new EJBException( exc );
-        }
-			
+		 return firmarAcuseReciboNotificacionAutenticadaImpl(codigo,
+				asientoAcuse, firmaAcuse, null);		
 	}
-	
+
+	/**
+	 * Realiza la firma del acuse de la notificacion con clave (en caso de que la notificacion tenga acuse) y marca la notificacion como entregada
+	 * actualizando el estado del expediente.
+	 * 
+	 * Devuelve true si ok y false si el firmante no es el adecuado
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}" 
+     */
+    public boolean firmarAcuseReciboNotificacionAutenticada(Long codigo,
+			String asientoXML, String firma) throws DelegateException {
+    	return firmarAcuseReciboNotificacionAutenticadaImpl(codigo,
+    			asientoXML, null, firma);
+    } 
+
 	/**
 	 * Marca la notificacion como rechazada generando el acuse.
 	 * 
@@ -493,22 +234,27 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 	{
 		 try {
 			// Recuperamos notificacion 
-			NotificacionTelematica notif = obtenerNotificacionTelematicaAuto(codigo);
+			NotificacionTelematica notif = recuperarNotificacionPorId(codigo);
 			
 			// Comprobamos fecha fin plazo por si acaso
 			if (notif.getFechaFinPlazo() == null || notif.getFechaFinPlazo().after(new Date())) {
 				throw new Exception("La notificaci髇 no tiene fin de plazo o todavia no ha pasado");
 			}
 			 
+			// Comprobamos que no se haya firmado el acuse
+			if (notif.getFechaAcuse() != null) {
+				throw new Exception("No se puede rechazar porque ya se ha firmado el acuse de la notificacion");
+			}
+			
 			// Generamos acuse rechazo
-			AsientoRegistral acuseRecibo = generarAcuseReciboNotificacion(codigo, true);
+			AsientoRegistral acuseRecibo = generarAcuseReciboNotificacionImpl(notif, true, null);
 			String xmlAcuseRecibo = ServicioRegistroXML.crearFactoriaObjetosXML().guardarAsientoRegistral(acuseRecibo);
 			
 			// Insertamos acuse en RDS
 			RdsDelegate rdsDelegate =  DelegateRDSUtil.getRdsDelegate();
 			DocumentoRDS docAcuseRDS = crearDocumentoRDS( xmlAcuseRecibo.getBytes(ConstantesXML.ENCODING ), true,
 					acuseRecibo.getDatosAsunto().getCodigoUnidadAdministrativa(),
-					this.ctx.getCallerPrincipal().getName(), "Acuse recibo notificacion rechazada", "AcuseRecibo.xml", "xml",
+					notif.getUsuarioSeycon(), notif.getNifRepresentante(), "Acuse recibo notificacion rechazada", "AcuseRecibo.xml", "xml",
 					ConstantesRDS.MODELO_ASIENTO_REGISTRAL, ConstantesRDS.VERSION_ASIENTO,
 					acuseRecibo.getDatosAsunto().getIdiomaAsunto());
 			ReferenciaRDS refAcuse = rdsDelegate.insertarDocumento( docAcuseRDS );
@@ -520,15 +266,12 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			uso.setReferencia(notif.getNumeroRegistro());
 			uso.setFechaSello(notif.getFechaRegistro());
 			
-			// Actualizamos notificacion
-			notif.setCodigoRdsAcuse(refAcuse.getCodigo());
-			notif.setClaveRdsAcuse(refAcuse.getClave());
-			notif.setRechazada(true);
-			grabarNotificacionTelematica(notif);
-	
+			// Actualizamos notificacion como rechazada
+			marcarNotificacionRechazada(codigo, refAcuse);
+			
 			// Actualizamos estado expediente
-			ElementoExpediente elemento = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpediente(ElementoExpediente.TIPO_NOTIFICACION, notif.getCodigo());
-			DelegateUtil.getProcesosAutoDelegate().actualizaEstadoExpediente(elemento.getExpediente().getCodigo());
+			Long idExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerCodigoExpedienteElemento(ElementoExpediente.TIPO_NOTIFICACION, notif.getCodigo());
+			DelegateUtil.getProcesosAutoDelegate().actualizaEstadoExpediente(idExpediente);
 			
 		 }catch( Exception exc ){
         	throw new EJBException( exc );
@@ -536,7 +279,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 		 
 	}
 	/**
-	 * Realiza la firma del acuse de la notificacion (en caso de que la notificacion tenga acuse) y marca la notificacion como entregada
+	 * Realiza la firma del acuse de la notificacion con certificado (en caso de que la notificacion tenga acuse) y marca la notificacion como entregada
 	 * actualizando el estado del expediente.
 	 * 
 	 * Devuelve true si ok y false si el firmante no es el adecuado
@@ -546,50 +289,50 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
      */
 	public boolean firmarAcuseReciboNotificacionAnonima(Long codigo,String idPersistencia,String asientoAcuse,FirmaIntf firmaAcuse)
 	{
-		 try {
-			// Obtenemos notificacion
-			NotificacionTelematica notificacion = obtenerNotificacionTelematicaAnonima(codigo,idPersistencia);
-			// Realizamos acuse de recibo
-			return realizarFirmaAcuse(notificacion,asientoAcuse,firmaAcuse,idPersistencia);	    	
-	    }catch( Exception exc ){
-        	throw new EJBException( exc );
-        }		
+		return firmarAcuseReciboNotificacionAnonimaImpl(codigo, idPersistencia,
+				asientoAcuse, firmaAcuse, null);		
 	}
+
+
+	
+	/**
+	 * Realiza la firma del acuse de la notificacion con clave (en caso de que la notificacion tenga acuse) y marca la notificacion como entregada
+	 * actualizando el estado del expediente.
+	 * 
+	 * Devuelve true si ok y false si el firmante no es el adecuado
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}" 
+     */
+	
+	  public boolean firmarAcuseReciboNotificacionAnonima(Long codigo,
+				String idPersistencia, String asientoXML, String firma)  throws DelegateException {
+		  return firmarAcuseReciboNotificacionAnonimaImpl(codigo, idPersistencia,
+				  asientoXML, null, firma);
+	   } 
 		
 	/**
-	 * Prepara parametros para iniciar tr谩mite de subsanaci贸n indicado en la notificaci贸n
-	 * Devuelve el id a pasar c贸mo par谩metro al asistente de tramitaci贸n
+	 * Prepara parametros para iniciar tramite de subsanacion indicado en la notificacion
+	 * Devuelve el id a pasar como parametro al asistente de tramitaci髇
 	 * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
     public String iniciarTramiteSubsanacionNotificacionAnonima(Long codigoNotificacion,String idPersistencia) {
-    	// Recuperamos datos notificacion
-    	NotificacionTelematica notificacionTelematica =  this.obtenerNotificacionTelematicaAnonima(codigoNotificacion,idPersistencia);
-    	if (notificacionTelematica.getFechaAcuse() == null){
-    		throw new EJBException("La notificaci贸n no ha sido abierta todav铆a");
-    	}
-    	// Preparamos parametros tramite de subsanacion
-    	String key = generaParametrosInicioSubsanacion(notificacionTelematica);
-    	return key;        
+    	return iniciarTramiteSubsanacionNotificacionImpl(codigoNotificacion,
+				idPersistencia);
     }
-    
+
     /**
-	 * Prepara parametros para iniciar tr谩mite de subsanaci贸n indicado en la notificaci贸n
-	 * Devuelve el id a pasar c贸mo par谩metro al asistente de tramitaci贸n
+	 * Prepara parametros para iniciar tr谩mite de subsanaci髇 indicado en la notificaci髇
+	 * Devuelve el id a pasar c髆o par谩metro al asistente de tramitaci髇
 	 * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
     public String iniciarTramiteSubsanacionNotificacionAutenticada(Long codigoNotificacion) {
-    	// Recuperamos datos notificacion
-    	NotificacionTelematica notificacionTelematica =  this.obtenerNotificacionTelematicaAutenticada(codigoNotificacion);
-    	if (notificacionTelematica.getFechaAcuse() == null){
-    		throw new EJBException("La notificaci贸n no ha sido abierta todav铆a");
-    	}
-    	// Preparamos parametros tramite de subsanacion
-    	String key = generaParametrosInicioSubsanacion(notificacionTelematica);
-    	return key;        
+    	return iniciarTramiteSubsanacionNotificacionImpl(codigoNotificacion,
+				null);
     }
     
     
@@ -645,45 +388,116 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      */
-	public AsientoRegistral generarAcuseReciboNotificacion( Long idNotificacion, boolean rechazada)
+	public AsientoRegistral generarAcuseReciboNotificacion( Long idNotificacion, boolean rechazada, String tipoFirma)
 	{
 		// Obtenemos notificacion
-		Session session = getSession();
-		NotificacionTelematica notificacionTelematica = null;
-        try {
-        	notificacionTelematica = (NotificacionTelematica) session.load(NotificacionTelematica.class, idNotificacion);
-        	Hibernate.initialize(notificacionTelematica.getDocumentos());        	
-        } catch (Exception he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-		
+		NotificacionTelematica notificacionTelematica = this.recuperarNotificacionPorId(idNotificacion);
+        
         // Devolvemos acuse
-		return generarAcuseReciboNotificacion(notificacionTelematica, rechazada);
+		return generarAcuseReciboNotificacionImpl(notificacionTelematica, rechazada, tipoFirma);
 	}
 	
 	
   	//--------------------------------------------------------
     //	FUNCIONES AUXILIARES
     //---------------------------------------------------------
-    private Expediente getExpediente(Session session,NotificacionTelematica notificacion) throws HibernateException{
-    	Query query = 
-			session.createQuery( "SELECT ee.expediente FROM ElementoExpediente AS ee where ee.tipoElemento = :tipoElemento and ee.codigoElemento = :codigoElemento" ).
-			setParameter("tipoElemento", ElementoExpediente.TIPO_NOTIFICACION).				
-			setParameter("codigoElemento", notificacion.getCodigo());
-		Expediente expediente = ( Expediente ) query.uniqueResult();			
-    	return expediente;    
-    }
-    
+
+	private String iniciarTramiteSubsanacionNotificacionImpl(
+			Long codigoNotificacion, String idPersistencia) {
+		try {
+	    	// Recuperamos datos notificacion
+	    	NotificacionTelematica notificacionTelematica;
+	    	if (idPersistencia != null) {	    	
+	    		notificacionTelematica = this.obtenerNotificacionTelematicaAnonima(codigoNotificacion,idPersistencia);
+	    	} else {
+	    		notificacionTelematica = this.obtenerNotificacionTelematicaAutenticada(codigoNotificacion);
+	    	}
+	    	if (notificacionTelematica.getFechaAcuse() == null || notificacionTelematica.isRechazada()){
+	    		throw new Exception("La notificacion no ha sido abierta todavia");
+	    	}
+	    	// Preparamos parametros tramite de subsanacion
+	    	String key = generaParametrosInicioSubsanacion(notificacionTelematica, false, idPersistencia);
+	    	return key;
+    	}catch( Exception exc ){
+        	throw new EJBException( exc );
+        }
+	}	
+
+	private boolean firmarAcuseReciboNotificacionAutenticadaImpl(Long codigo,
+			String asientoAcuse, FirmaIntf firmaDigital, String firmaClave) {
+		try {
+			// Obtenemos notificacion (no tiene docs asociados pq no esta firmada)
+			NotificacionTelematica notificacion = obtenerNotificacionTelematicaAutenticada(codigo);
+			
+			// Comprobamos que si se accede de forma delegada, el delegado tenga permisos para recibir notificaciones
+			Principal sp =this.ctx.getCallerPrincipal();
+    		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
+    		if (!plgLogin.getNif(this.ctx.getCallerPrincipal()).equals(notificacion.getNifRepresentante())){
+    			// Si no es el usuario quien accede miramos si es un delegado
+            	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(notificacion.getNifRepresentante());
+            	if (StringUtils.isEmpty(permisos) || permisos.indexOf(ConstantesZPE.DELEGACION_PERMISO_ABRIR_NOTIFICACION) == -1){
+            		log.debug("Acceso no permitido a abrir notificacion telematica " + codigo + " - usuario " + sp.getName());
+            		return false;
+            	}
+    		}
+			
+	    	// Realizamos acuse de recibo
+			boolean res = realizarFirmaAcuse(notificacion,asientoAcuse,firmaDigital, firmaClave);
+			
+			// Retornamos resultado
+			return res;			
+	    }catch( Exception exc ){
+        	throw new EJBException( exc );
+        }
+	}
+
+	private boolean firmarAcuseReciboNotificacionAnonimaImpl(Long codigo,
+			String idPersistencia, String asientoAcuse, FirmaIntf firmaDigital, String firmaClave) {
+		try {
+			// Obtenemos notificacion
+			NotificacionTelematica notificacion = obtenerNotificacionTelematicaAnonima(codigo,idPersistencia);
+			// Realizamos acuse de recibo
+			return realizarFirmaAcuse(notificacion,asientoAcuse,firmaDigital, firmaClave);	    	
+	    }catch( Exception exc ){
+        	throw new EJBException( exc );
+        }
+	}
+	
+	 /**
+     * Devuelve notificacion con informacion exclusiva de aviso
+     * @param notificacionTelematica
+     * @return
+     */
+    private NotificacionTelematica notificacionSinAbrir(NotificacionTelematica notificacionTelematica) throws Exception {
+		
+    	NotificacionTelematica not = new NotificacionTelematica();
+    	BeanUtils.copyProperties(not,notificacionTelematica);
+
+    	// Eliminamos referencia rds a oficio
+    	not.setCodigoRdsOficio(0);
+    	not.setClaveRdsOficio(null);
+    	
+    	// Eliminamos documentos
+    	not.getDocumentos().clear();
+    	
+    	// Eliminamos tramite de subsanacion
+    	not.setTramiteSubsanacionDescripcion(null);
+    	not.setTramiteSubsanacionIdentificador(null);
+    	not.setTramiteSubsanacionVersion(null);
+    	not.setTramiteSubsanacionParametros(null);
+    	
+		return not;
+	}
+
     
     /**
      * Marca la notificacion como recibida y actualiza estado de expediente
      * @param codigo
      * @param refAcuse 
+     * @param tipoFirmaAcuse 
      * @param idPersistenciaAnonimo 
      */
-	private void marcarRecibidaNotificacionTelematica(Long codigo, ReferenciaRDS refAcuse, String idPersistenciaAnonimo, Date fechaActual) {        
+	private void marcarRecibidaNotificacionTelematica(Long codigo, ReferenciaRDS refAcuse, Date fechaActual, String tipoFirmaAcuse) {        
     	
 		// Marcamos notificacion como recibida
     	Session session = getSession();
@@ -691,29 +505,23 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
         	NotificacionTelematica notificacionTelematica = (NotificacionTelematica) session.load(NotificacionTelematica.class, codigo);
         	notificacionTelematica.setFechaAcuse(fechaActual);
         	notificacionTelematica.setCodigoRdsAcuse(refAcuse.getCodigo());
-        	notificacionTelematica.setClaveRdsAcuse(refAcuse.getClave());        	
+        	notificacionTelematica.setClaveRdsAcuse(refAcuse.getClave()); 
+        	notificacionTelematica.setTipoFirmaAcuse(tipoFirmaAcuse);
         	session.update(notificacionTelematica);        	
-        } catch (HibernateException he) {
+        } catch (Exception he) {
             throw new EJBException(he);
         } finally {
         	close(session);
         }
         
-        // Actualizamos estado expediente
-		try{
-			// Obtenemos elemento expediente asociado
-			ElementoExpediente elemento;
-			if (idPersistenciaAnonimo != null){
-				elemento = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpedienteAnonimo(ElementoExpediente.TIPO_NOTIFICACION,codigo,idPersistenciaAnonimo);
-			}else{
-				elemento = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpedienteAutenticado(ElementoExpediente.TIPO_NOTIFICACION,codigo);
-			}
-				
-			// Actualizamos estado expediente
-			DelegateUtil.getProcesosAutoDelegate().actualizaEstadoExpediente(elemento.getExpediente().getCodigo());
-		}catch(Exception ex){
-			throw new EJBException("Error actualizando estado expediente",ex);
-		}
+        try {    
+	        // Actualizamos estado expediente
+	        Long idExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerCodigoExpedienteElemento(ElementoExpediente.TIPO_NOTIFICACION, codigo);
+			DelegateUtil.getProcesosAutoDelegate().actualizaEstadoExpediente(idExpediente);
+		} catch (Exception he) {
+	        throw new EJBException(he);
+	    } 
+        
     }
 
 	/**
@@ -745,6 +553,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 	 * @param isEstructurado
 	 * @param unidadAdministrativa
 	 * @param usuarioSeycon
+	 * @param nif
 	 * @param titulo
 	 * @param nombre
 	 * @param extensionFichero
@@ -754,7 +563,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 	 * @throws Exception
 	 */
 	private DocumentoRDS crearDocumentoRDS( byte[] contenidoFichero, boolean isEstructurado, 
-			String unidadAdministrativa, String usuarioSeycon, 
+			String unidadAdministrativa, String usuarioSeycon, String nif,
 			String titulo, String nombre, 
 			String extensionFichero, 
 			String modeloRDS, int version,
@@ -766,6 +575,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 		docRDS.setFechaRDS( new Date() );
 		docRDS.setUnidadAdministrativa( Long.parseLong( unidadAdministrativa, 10 ) );
 		docRDS.setUsuarioSeycon( usuarioSeycon );
+		docRDS.setNif(nif);
 		docRDS.setTitulo( titulo );
 		docRDS.setNombreFichero( nombre );
 		docRDS.setExtensionFichero( extensionFichero );
@@ -788,15 +598,26 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 	 * Realiza el proceso que involucra la firma del acuse de recibo: comprobacion firma, insercion acuse en rds y marcar notif como recibida
 	 * @param notificacion
 	 * @param asientoAcuse
-	 * @param firmaAcuse
+	 * @param firmaDigital
 	 * @return
 	 * @throws Exception
 	 */
-	private boolean realizarFirmaAcuse(NotificacionTelematica notificacion,String asientoAcuse,FirmaIntf firmaAcuse, String idPersistenciaAnonimo) throws Exception{		
+	private boolean realizarFirmaAcuse(NotificacionTelematica notificacion,String asientoAcuse,FirmaIntf firmaDigital, String firmaClave) throws Exception{		
 	
 		Date fechaActual = new Date();
 		
+		// Si se intenta firmar por clave validamos que este permitido y que la clave sea la correcta
+		if (firmaClave != null && !notificacion.isFirmarPorClave()) {
+			throw new Exception("El acuse de recibo no puede ser firmado por clave");
+		}
+		if (firmaClave != null && notificacion.isFirmarPorClave() && !notificacion.getIdentificadorPersistencia().equals(firmaClave)) {
+			return false;
+		}
+		
 		// Comprobamos que no se haya firmado anteriormente
+		if (notificacion.isRechazada()) {
+			throw new Exception("La notificacion esta rechazada");
+		}
 		if (notificacion.getFechaAcuse() != null){
 			throw new Exception("El acuse de recibo ya ha sido firmado anteriormente");
 		}		
@@ -807,9 +628,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 				throw new Exception("El plazo de entrega ha finalizado");
 			}
 		}
-		if (notificacion.isRechazada()) {
-			throw new Exception("La notificacion esta rechazada");
-		}
+		
 		
 		// Parseamos acuse
 		AsientoRegistral asiento = getAsientoRegistral(asientoAcuse);
@@ -823,32 +642,17 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 		
 		// En caso de que haya que firmar el acuse comprobamos que concuerde el nif de la firma
 		// En caso de notificacion autenticada comprobamos si se accede en modo delegado
-		if (notificacion.isFirmarAcuse()){		
+		if (notificacion.isFirmarAcuse() && firmaDigital != null){		
 			
 			// Obtenemos nif firmante
-			String nifFirmante = getNifFirma(firmaAcuse);
+			String nifFirmante = getNifFirma(firmaDigital);
 			
+			// Si no es el destinatario quien firma el acuse, comprobamos si es un delegado con permiso para abrir notificaciones
 			if (!nifFirmante.equals(nifRepresentanteNotificacion)){
-				// Si es autenticada, comprobamos si se esta accediendo en modo delegado
-				if  (notificacion.getUsuarioSeycon() != null){
-					// Si no es el usuario quien firma el acuse es un delegado con permiso para abrir notificaciones
-	            	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(notificacion.getNifRepresentante());
-	            	if (StringUtils.isEmpty(permisos) || permisos.indexOf(ConstantesZPE.DELEGACION_PERMISO_ABRIR_NOTIFICACION) == -1){
-	            		return false;
-	            	}
-				}else{				
-					return false;
-				}
-			}
-			
-			
-			// Si el nif firmante no concuerda con el destinatario comprobamos si se esta accediendo en modo delegado
-			if  (notificacion.getUsuarioSeycon() != null && !nifFirmante.equals(nifRepresentanteNotificacion)){
-				// Si no es el usuario quien firma el acuse es un delegado con permiso para abrir notificaciones
             	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(notificacion.getNifRepresentante());
             	if (StringUtils.isEmpty(permisos) || permisos.indexOf(ConstantesZPE.DELEGACION_PERMISO_ABRIR_NOTIFICACION) == -1){
             		return false;
-            	}								
+            	}
 			}
 			
 		}
@@ -857,7 +661,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 		RdsDelegate rdsDelegate =  DelegateRDSUtil.getRdsDelegate();
 		DocumentoRDS docAcuseRDS = crearDocumentoRDS( asientoAcuse.getBytes( ConstantesXML.ENCODING ), true,
 				asiento.getDatosAsunto().getCodigoUnidadAdministrativa(),
-				this.ctx.getCallerPrincipal().getName(), "Acuse recibo notificacion entregada", "AcuseRecibo.xml", "xml",
+				notificacion.getUsuarioSeycon(), notificacion.getNifRepresentante(), "Acuse recibo notificacion entregada", "AcuseRecibo.xml", "xml",
 				ConstantesRDS.MODELO_ASIENTO_REGISTRAL, ConstantesRDS.VERSION_ASIENTO,
 				asiento.getDatosAsunto().getIdiomaAsunto());
 		ReferenciaRDS refAcuse = rdsDelegate.insertarDocumento( docAcuseRDS );
@@ -870,19 +674,33 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 		uso.setFechaSello(notificacion.getFechaRegistro());
 			
 		// Asociar firma al documento rds de acuse
-		if (notificacion.isFirmarAcuse()){		
-			rdsDelegate.asociarFirmaDocumento(refAcuse,firmaAcuse);								
+		if (notificacion.isFirmarAcuse() && firmaDigital != null){		
+			rdsDelegate.asociarFirmaDocumento(refAcuse,firmaDigital);								
 		}    	
     	
     	// Marcamos notificacion como recibida y actualizamos estado expediente    	
-    	marcarRecibidaNotificacionTelematica(notificacion.getCodigo(),refAcuse,idPersistenciaAnonimo, fechaActual);
+    	marcarRecibidaNotificacionTelematica(notificacion.getCodigo(),refAcuse, fechaActual, (firmaDigital != null? ConstantesZPE.TIPOFIRMAACUSE_CERTIFICADO: ConstantesZPE.TIPOFIRMAACUSE_CLAVE));
     	
+    	// Generamos indices de busqueda 
+		generarIndicesBusqueda(notificacion.getCodigo());
+		    	
     	return true;
 	}
-	
-	
 
 
+	private void generarIndicesBusqueda(Long codigo)
+			throws Exception {
+		NotificacionTelematica notificacion = recuperarNotificacionPorId(codigo);
+		// Obtenemos documento de oficio
+		FactoriaObjetosXMLOficioRemision factoriaOR = ServicioOficioRemisionXML.crearFactoriaObjetosXML();
+		OficioRemision oficioRemision = factoriaOR.crearOficioRemision (new ByteArrayInputStream (consultarDocumentoRDS(notificacion.getCodigoRdsOficio(),notificacion.getClaveRdsOficio())));
+		// Generamos indices		
+    	Map indices = new HashMap();
+    	indices.put("Numero registro",  notificacion.getNumeroRegistro());
+    	indices.put("Titulo oficio", oficioRemision.getTitulo());
+    	indices.put("Texto oficio", oficioRemision.getTexto());
+    	crearIndicesBusqueda(notificacion.getNifRepresentante(), IndiceElemento.TIPO_NOTIFICACION, notificacion.getCodigo(), indices);
+	}
 	
 	/**
 	 * Obtiene nif de una firma
@@ -925,14 +743,24 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 	/**
 	 * Genera parametros inicio para tramite de subsanacion
 	 * @param not
+	 * @param accesoAutenticado 
+	 * @param idPersistencia 
 	 * @return
 	 */
-	private String generaParametrosInicioSubsanacion(NotificacionTelematica not){
+	private String generaParametrosInicioSubsanacion(NotificacionTelematica not, boolean accesoAutenticado, String idPersistencia) throws Exception {
+		
+		// Obtenemos expediente asociado
+		Long idExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerCodigoExpedienteElemento(ElementoExpediente.TIPO_NOTIFICACION, not.getCodigo());
+		Expediente exp = null;
+		if (accesoAutenticado) {
+    	 exp = DelegateUtil.getExpedienteDelegate().obtenerExpedienteAutenticado(idExpediente);
+		} else {
+		 exp = DelegateUtil.getExpedienteDelegate().obtenerExpedienteAnonimo(idExpediente, idPersistencia);	
+		}
+		
+		// Genera parametros de inicio
 		Session session = getSession();
         try {
-        	// Obtenemos expediente asociado
-        	Expediente exp = this.getExpediente(session,not);
-        	
         	// Generamos key
         	String key = GeneradorId.generarId();
         	
@@ -952,23 +780,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
             close(session);
         }
 	}
-	
-	/**
-     * Crea indices para una notificacion.
-     * @param notificacion Notificacion
-     * @param oficioRemision 
-     * @throws Exception 
-     */
-    private void crearIndicesSalida(NotificacionTelematica notificacion, OficioRemision oficioRemision) throws Exception {
 
-		// Establecemos indices a crear
-    	Map indices = new HashMap();
-    	indices.put("N煤mero registro",  notificacion.getNumeroRegistro());
-    	indices.put("T铆tulo oficio", oficioRemision.getTitulo());
-    	indices.put("Texto oficio", oficioRemision.getTexto());
-    	crearIndicesBusqueda(notificacion.getNifRepresentante(), IndiceElemento.TIPO_NOTIFICACION, notificacion.getCodigo(), indices);
-		
-	}
 
     /**
      * Da de alta los indices de busqueda.
@@ -1018,7 +830,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 	 * @param rechazada
 	 * @return
 	 */
-	private AsientoRegistral generarAcuseReciboNotificacion(NotificacionTelematica notificacion, boolean rechazada)
+	private AsientoRegistral generarAcuseReciboNotificacionImpl(NotificacionTelematica notificacion, boolean rechazada, String tipoFirma)
 	{
 		try {
 			FactoriaObjetosXMLRegistro factoria = ServicioRegistroXML.crearFactoriaObjetosXML();
@@ -1093,10 +905,15 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			dAsunto.setIdiomaAsunto (asientoNotificacion.getDatosAsunto().getIdiomaAsunto());
 			if (rechazada) {
 				dAsunto.setTipoAsunto (ConstantesAsientoXML.ACUSERECIBO_RECHAZADA);
-				dAsunto.setExtractoAsunto ("Acuse recibo notificacion - NOTIFICACION RECHAZADA");
+				dAsunto.setExtractoAsunto ("Acuse recibo notificacion - NOTIFICACION RECHAZADA");				
 			} else {
-				dAsunto.setTipoAsunto (ConstantesAsientoXML.ACUSERECIBO_ENTREGADA);
-				dAsunto.setExtractoAsunto ("Acuse recibo notificacion - NOTIFICACION ENTREGADA");
+				if ("CLAVE".equals(tipoFirma)) {
+					dAsunto.setTipoAsunto (ConstantesAsientoXML.ACUSERECIBO_ENTREGADA_CLAVE);
+					dAsunto.setExtractoAsunto ("Acuse recibo notificacion (firma por clave) - NOTIFICACION ENTREGADA");
+				} else {
+					dAsunto.setTipoAsunto (ConstantesAsientoXML.ACUSERECIBO_ENTREGADA);
+					dAsunto.setExtractoAsunto ("Acuse recibo notificacion - NOTIFICACION ENTREGADA");
+				}
 			}
 			dAsunto.setCodigoOrganoDestino ( asientoNotificacion.getDatosAsunto().getCodigoOrganoDestino()  );
 			dAsunto.setDescripcionOrganoDestino( asientoNotificacion.getDatosAsunto().getDescripcionOrganoDestino() );
@@ -1148,4 +965,160 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 		}
 		return null;
 	}
+	
+
+	private NotificacionTelematica recuperarNotificacionPorId(Long id) {
+		Session session = getSession();
+        try {
+        	// Cargamos notificacionTelematica        	
+        	NotificacionTelematica notificacionTelematica = (NotificacionTelematica) session.load(NotificacionTelematica.class, id);
+        	// Cargamos documentos
+        	Hibernate.initialize(notificacionTelematica.getDocumentos());        	
+            return notificacionTelematica;
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+	}
+	
+
+	private NotificacionTelematica obtenerNotificacionTelematicaImpl(Long id, boolean accesoAutenticado, String idPersistencia) {
+		try {
+	        // Verificamos acceso expediente
+	        Long idExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerCodigoExpedienteElemento(ElementoExpediente.TIPO_NOTIFICACION, id);
+	        if (accesoAutenticado) {
+		        if (!DelegateUtil.getExpedienteDelegate().verificarAccesoExpedienteAutenticado(idExpediente)) {
+		        	throw new Exception("No tiene acceso a expediente");
+		        }
+	        } else {
+	        	if (!DelegateUtil.getExpedienteDelegate().verificarAccesoExpedienteAnonimo(idExpediente, idPersistencia)) {
+		        	throw new Exception("No tiene acceso a expediente");
+		        }
+	        }
+	        
+	        // Devolvemos notificacion
+	        NotificacionTelematica notificacionTelematica = recuperarNotificacionPorId(id);
+	        
+	        // En caso de que no este firmado el acuse o este rechazada no devolvemos ficheros asociados
+	        if (notificacionTelematica.getFechaAcuse() == null || notificacionTelematica.isRechazada()){
+	    		return notificacionSinAbrir(notificacionTelematica);
+	    	}else{
+	    		return notificacionTelematica;
+	    	}	        
+        } catch (Exception he) {
+            throw new EJBException(he);
+        }
+	}
+	 
+   private void marcarNotificacionRechazada(Long id, ReferenciaRDS refAcuse) {
+	   Session session = getSession();
+       try {
+       	NotificacionTelematica notificacionTelematica = (NotificacionTelematica) session.load(NotificacionTelematica.class, id);
+       	notificacionTelematica.setCodigoRdsAcuse(refAcuse.getCodigo());
+       	notificacionTelematica.setClaveRdsAcuse(refAcuse.getClave());
+       	notificacionTelematica.setRechazada(true);
+       	notificacionTelematica.setFechaAcuse(null);
+       
+       	session.update(notificacionTelematica);
+       	
+       } catch (HibernateException he) {
+           throw new EJBException(he);
+       } finally {
+           close(session);
+       }	   
+   }
+	
+    /* NO USADAS ? 
+     * ejb.interface-method
+     * ejb.permission role-name="${role.todos}"
+     
+    public List listarNotificacionesTelematicasUsuario() {
+        Session session = getSession();
+        try {     
+        	String usua = this.ctx.getCallerPrincipal().getName();
+        	if (usua == null) return null;
+        	
+            Query query = session
+            .createQuery("FROM NotificacionTelematica AS m WHERE m.usuarioSeycon = :usuario ORDER BY m.fechaRegistro DESC")
+            .setParameter("usuario",usua);
+            //query.setCacheable(true);
+            List tramites = query.list();
+            
+            // Cargamos documentos
+            for (Iterator it=tramites.iterator();it.hasNext();){
+            	NotificacionTelematica notificacionTelematica = (NotificacionTelematica) it.next();
+            	Hibernate.initialize(notificacionTelematica.getDocumentos());
+            }
+            
+            return tramites;
+            
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
+     ejb.interface-method
+     ejb.permission role-name="${role.todos}" 
+     
+	public int numeroNotificacionesUsuario()
+	{
+		String seyconCiudadano = this.ctx.getCallerPrincipal().getName();
+    	
+		Session session = getSession();
+        try 
+        {
+        	Query query = session
+            .createQuery("SELECT count(*) FROM NotificacionTelematica AS e WHERE e.usuarioSeycon = :seyconCiudadano")
+            .setParameter("seyconCiudadano",seyconCiudadano);
+            return ( (Integer) query.iterate().next() ).intValue();
+        }
+        catch( HibernateException he )
+        {
+        	throw new EJBException( he );
+        }
+        catch( Exception exc )
+        {
+        	throw new EJBException( exc );
+        }
+        finally
+        {
+        	close( session );
+        }
+	}
+	
+	
+     ejb.interface-method
+     ejb.permission role-name="${role.todos}" 
+     
+	public int numeroNotificacionesNuevasUsuario()
+	{
+		String seyconCiudadano = this.ctx.getCallerPrincipal().getName();
+    	
+		Session session = getSession();
+        try 
+        {
+        	Query query = session
+            .createQuery("SELECT count(*) FROM NotificacionTelematica AS e WHERE e.usuarioSeycon = :seyconCiudadano and e.fechaAcuse is null")
+            .setParameter("seyconCiudadano",seyconCiudadano);
+            return ( (Integer) query.iterate().next() ).intValue();
+        }
+        catch( HibernateException he )
+        {
+        	throw new EJBException( he );
+        }
+        catch( Exception exc )
+        {
+        	throw new EJBException( exc );
+        }
+        finally
+        {
+        	close( session );
+        }
+	}
+   
+    */
+    
 }

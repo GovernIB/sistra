@@ -300,6 +300,15 @@ public class FactoriaObjetosXMLAvisoNotificacionImpl implements
 			avisoNotificacion.setTexto(avisoNotificacionJAXB.getTEXTO());
 			avisoNotificacion.setTextoSMS(avisoNotificacionJAXB.getTEXTOSMS());
 			avisoNotificacion.setAcuseRecibo( new Boolean(avisoNotificacionJAXB.getACUSERECIBO().equals("SI")));
+			
+			if (avisoNotificacionJAXB.getACCESIBLEPORCLAVE() != null) {
+				avisoNotificacion.setAccesiblePorClave(new Boolean(avisoNotificacionJAXB.getACCESIBLEPORCLAVE().equals("SI")));
+			}
+			
+			if (avisoNotificacionJAXB.getFIRMAPORCLAVE() != null) {
+				avisoNotificacion.setFirmaPorClave(new Boolean(avisoNotificacionJAXB.getFIRMAPORCLAVE().equals("SI")));
+			}
+			
 			avisoNotificacion.setExpediente(crearExpediente(avisoNotificacionJAXB.getEXPEDIENTE()));
 		}
 	}
@@ -312,6 +321,12 @@ public class FactoriaObjetosXMLAvisoNotificacionImpl implements
 			avisoNotificacionJAXB.setTEXTO(avisoNotificacion.getTexto());			
 			avisoNotificacionJAXB.setTEXTOSMS(avisoNotificacion.getTextoSMS());
 			avisoNotificacionJAXB.setACUSERECIBO( (avisoNotificacion.getAcuseRecibo().booleanValue()?"SI":"NO"));
+			if (avisoNotificacion.getAccesiblePorClave() != null) {
+				avisoNotificacionJAXB.setACCESIBLEPORCLAVE((avisoNotificacion.getAccesiblePorClave().booleanValue()?"SI":"NO"));
+			}
+			if (avisoNotificacion.getFirmaPorClave() != null) {
+				avisoNotificacionJAXB.setFIRMAPORCLAVE((avisoNotificacion.getFirmaPorClave().booleanValue()?"SI":"NO"));
+			}
 			avisoNotificacionJAXB.setEXPEDIENTE(crearExpediente(avisoNotificacion.getExpediente()));			
 		}
 	}

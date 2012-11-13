@@ -39,7 +39,7 @@ public class MostrarDocumentoAction extends BaseAction
     {
 		MostrarDocumentoForm formulario = ( MostrarDocumentoForm ) form;
 		
-		EntradaPreregistro entradaPreregistro = DelegateUtil.getEntradaPreregistroDelegate().obtenerEntradaPreregistroReg(formulario.getCodigoEntrada());
+		EntradaPreregistro entradaPreregistro = DelegateUtil.getEntradaPreregistroDelegate().obtenerEntradaPreregistro(formulario.getCodigoEntrada());
 		for (Iterator it=entradaPreregistro.getDocumentos().iterator();it.hasNext();){
 			DocumentoEntradaPreregistro documento = (DocumentoEntradaPreregistro) it.next();
 			if (documento.getCodigo().longValue() == formulario.getCodigo().longValue()){

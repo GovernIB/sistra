@@ -232,6 +232,14 @@ function altaDocument(form, url){
 
 //funcion que da de alta el aviso
 function alta(){
+
+	var selectAcceso = document.detalleAvisoForm.accesoPorClave;
+	if (document.detalleAvisoForm.existeNifExpediente.value == "N" && 
+			selectAcceso.options[selectAcceso.selectedIndex].value == "N") {
+		alert("<bean:message key='aviso.alta.errorAccesoClaveSinNif' />" );
+		return false;	
+	}
+	
 	if(confirm ( "<bean:message key='aviso.alta.confirmacion' />" )){
 		Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "Enviando datos..."});
 		document.detalleAvisoForm.rutaFitxer.value = document.uploadAvisoForm.documentoAnexoFichero.value;
@@ -379,6 +387,7 @@ function errorFileUploaded(error){
 			<p>
 				<bean:message key="ajuda.expediente.datosComunicacion"/>
 				<ul class="ajudaUl">
+					<li><bean:message key="ajuda.aviso.accesoPorClave"/></li>
 					<li><bean:message key="ajuda.aviso.titulo"/></li>
 					<li><bean:message key="ajuda.aviso.texto"/></li>
 					<li><bean:message key="ajuda.aviso.textoSMS"/></li>
@@ -406,6 +415,14 @@ function errorFileUploaded(error){
 			<html:hidden property="flagValidacion" value="alta"/>
 			<html:hidden property="rutaFitxer"/>
 			<html:hidden property="idioma" />
+			<html:hidden property="existeNifExpediente" />
+				<p>
+					<label for="accesoPorClave"><bean:message key="aviso.accesoPorClave"/><sup>*</sup></label>
+					<html:select  property="accesoPorClave">
+						<html:option value="S"><bean:message key="expediente.si"/></html:option>
+						<html:option value="N"><bean:message key="expediente.no"/></html:option>
+					  </html:select>
+				</p>
 				<p>
 					<label for="titulo"><bean:message key="aviso.titulo"/><sup>*</sup></label>
 					<html:text property="titulo" styleClass="pc40" maxlength="400"/>
@@ -414,7 +431,7 @@ function errorFileUploaded(error){
 				<p>
 					<label for="texto"><bean:message key="aviso.texto"/><sup>*</sup></label>
 					<html:textarea property="texto" rows="5"  styleClass="pc40"/>
-				</p>
+				</p>				
 				<logic:equal name="detalleAvisoForm" property="permitirSms" value="S">
 					<p>
 						<label for="textoSMS"><bean:message key="aviso.textoSMS"/></label>

@@ -26,6 +26,14 @@ public class NotificacionExpedientePAD extends ElementoExpedientePAD{
 	 */
 	private boolean requiereAcuse;
 	/**
+	 * Indica si se permite acceder anonimamente mediante clave
+	 */
+	private Boolean accesiblePorClave;
+	/**
+	 * Indica si se requiere firma del acuse de recibo
+	 */
+	private boolean firmarPorClave;
+	/**
 	 * Detalle acuse recibo.
 	 */
 	private DetalleAcuseRecibo detalleAcuseRecibo;
@@ -122,6 +130,22 @@ public class NotificacionExpedientePAD extends ElementoExpedientePAD{
 
 	public void setDetalleAcuseRecibo(DetalleAcuseRecibo detalleAcuseRecibo) {
 		this.detalleAcuseRecibo = detalleAcuseRecibo;
+	}
+
+	public Boolean getAccesiblePorClave() {
+		return accesiblePorClave;
+	}
+
+	public void setAccesiblePorClave(Boolean accesiblePorClave) {
+		this.accesiblePorClave = accesiblePorClave;
+	}
+
+	public boolean isFirmarPorClave() {
+		return firmarPorClave;
+	}
+
+	public void setFirmarPorClave(boolean firmarPorClave) {
+		this.firmarPorClave = firmarPorClave;
 	}
 	
 }

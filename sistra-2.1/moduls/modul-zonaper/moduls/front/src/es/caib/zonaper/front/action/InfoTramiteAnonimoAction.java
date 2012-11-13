@@ -10,9 +10,8 @@ import org.apache.struts.action.ActionMapping;
 
 import es.caib.zonaper.front.Constants;
 import es.caib.zonaper.front.form.InfoTramiteAnonimoForm;
-import es.caib.zonaper.model.EstadoExpediente;
+import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
-import es.caib.zonaper.persistence.delegate.DelegateException;
 import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.PadDelegate;
@@ -39,51 +38,40 @@ public class InfoTramiteAnonimoAction extends BaseAction
 	{
 		InfoTramiteAnonimoForm formulario = ( InfoTramiteAnonimoForm ) form;
 		
+		// Obtenemos clave de acceso
 		if ( StringUtils.isEmpty( formulario.getIdPersistencia() ) )
 		{
 			request.setAttribute(Constants.MENSAJE_TEXTO, "errors.tramiteNoExiste" );
 			return mapping.findForward( "fail" );
 		}
-		
-		formulario.setIdPersistencia( formulario.getIdPersistencia().trim() );
+		String idPersistencia = formulario.getIdPersistencia().trim();
 			
-		// Almacenamos en sesion el id persistencia con que se entra
-		this.setIdPersistencia(request,formulario.getIdPersistencia());
+		// Almacenamos en sesion la clave de acceso con que se entra
+		this.setIdPersistencia(request,idPersistencia);
 		
-		// 1º Comprobar si existe el tramite persistente
-		PadDelegate zonaPersonalDelegate = DelegatePADUtil.getPadDelegate();
-		String existe = zonaPersonalDelegate.obtenerEstadoTramiteAnonimo(formulario.getIdPersistencia());
-		
-		// Si no existe el trámite o pertenece a otro usuario
-		if ( "N".equals( existe ) )
-		{
-			request.setAttribute(Constants.MENSAJE_MENU_NAVEGACION, "menuAnonimo.mensaje" );
-			request.setAttribute(Constants.MENSAJE_TEXTO, "errors.tramiteNoExiste" );
-			return mapping.findForward( "fail" );
-		}
-				
-		// Tramite en persistencia, todavia no enviado
-		if ( "P".equals( existe ) )
-		{		
-			TramitePersistentePAD tramitePersistente = null;
-			
-			try
-			{
-				tramitePersistente = zonaPersonalDelegate.obtenerTramitePersistente( formulario.getIdPersistencia() );
-			}
-			catch( DelegateException exc )
-			{
-			}
-			if ( tramitePersistente != null && tramitePersistente.getNivelAutenticacion() == Constants.NIVEL_AUTENTICACION_ANONIMO )
+		// Comprobamos si la clave hace referencia a algun tramite que todavia esta en persistencia
+		PadDelegate padDelegate = DelegatePADUtil.getPadDelegate();
+		TramitePersistentePAD tramitePersistente = padDelegate.obtenerTramitePersistente(idPersistencia);
+		if (tramitePersistente != null) {
+			// Redirigimos a tramite anonimo pendiente enviar
+			if (tramitePersistente.getNivelAutenticacion() == Constants.NIVEL_AUTENTICACION_ANONIMO )
 			{
 				request.setAttribute( "tramitePersistente", tramitePersistente );
 				return mapping.findForward( "tramiteAnonimoSinEnviar" );
 			}
+		} else {
+			// Comprobamos si se tiene acceso a algun expediente con esa clase
+			ElementoExpediente elementoExpe = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpediente(idPersistencia);
+			if (elementoExpe.isAccesoAnonimoExpediente()) {
+				// Redirigimos a expediente
+				request.getSession().setAttribute(Constants.ULTIMO_DETALLE_EXPEDIENTE, elementoExpe.getExpediente().getCodigo());
+				return mapping.findForward("detalleExpediente");
+			}				
 		}
-		
-		// Tramite enviado (entrada telematica o preregistro)
-		EstadoExpediente exp = DelegateUtil.getEstadoExpedienteDelegate().obtenerExpedienteAnonimo(formulario.getIdPersistencia());
-		request.getSession().setAttribute(Constants.ULTIMO_DETALLE_EXPEDIENTE,exp.getTipo() + exp.getCodigo());
-		return mapping.findForward("detalleExpediente");
+
+		// Si no se ha redirigido antes es que no existe
+		request.setAttribute(Constants.MENSAJE_MENU_NAVEGACION, "menuAnonimo.mensaje" );
+		request.setAttribute(Constants.MENSAJE_TEXTO, "errors.tramiteNoExiste" );
+		return mapping.findForward( "fail" );						
 	}
 }

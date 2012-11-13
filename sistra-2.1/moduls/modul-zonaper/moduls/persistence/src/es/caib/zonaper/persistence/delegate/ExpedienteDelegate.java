@@ -1,13 +1,17 @@
 package es.caib.zonaper.persistence.delegate;
 
 import java.rmi.RemoteException;
+import java.util.Date;
+import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
+import es.caib.zonaper.model.Entrada;
 import es.caib.zonaper.model.Expediente;
 import es.caib.zonaper.model.Page;
 import es.caib.zonaper.modelInterfaz.ConfiguracionAvisosExpedientePAD;
+import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
 import es.caib.zonaper.modelInterfaz.FiltroBusquedaExpedientePAD;
 import es.caib.zonaper.persistence.intf.ExpedienteFacade;
 import es.caib.zonaper.persistence.util.ExpedienteFacadeUtil;
@@ -30,11 +34,11 @@ public class ExpedienteDelegate implements StatelessDelegate
         }
 	}
 	
-	public Expediente obtenerExpedienteAnonimo( Long id, String idPersistencia )throws DelegateException
+	public Expediente obtenerExpedienteAnonimo(Long codigoExpediente, String claveAcceso ) throws DelegateException
 	{
 		try
 		{
-			return getFacade().obtenerExpedienteAnonimo( id,idPersistencia );
+			return getFacade().obtenerExpedienteAnonimo( codigoExpediente, claveAcceso );
 		}
 		catch (Exception e) 
 		{
@@ -43,11 +47,11 @@ public class ExpedienteDelegate implements StatelessDelegate
 	}
 	
 	
-	public boolean existeExpediente( long unidadAdministrativa, String identificadorExpediente) throws DelegateException
+	public boolean existeExpedienteReal( long unidadAdministrativa, String identificadorExpediente) throws DelegateException
 	{
 		try
 		{
-			return getFacade().existeExpediente( unidadAdministrativa, identificadorExpediente);
+			return getFacade().existeExpedienteReal( unidadAdministrativa, identificadorExpediente);
 		}
 		catch (Exception e) 
 		{
@@ -68,11 +72,11 @@ public class ExpedienteDelegate implements StatelessDelegate
 	}
 	
 	
-	public Expediente obtenerExpediente( long unidadAdministrativa, String identificadorExpediente, String claveExpediente) throws DelegateException
+	public Expediente obtenerExpedienteReal( long unidadAdministrativa, String identificadorExpediente, String claveExpediente) throws DelegateException
 	{
 		try
 		{
-			return getFacade().obtenerExpediente( unidadAdministrativa, identificadorExpediente, claveExpediente );
+			return getFacade().obtenerExpedienteReal( unidadAdministrativa, identificadorExpediente, claveExpediente );
 		}
 		catch (Exception e) 
 		{
@@ -80,11 +84,23 @@ public class ExpedienteDelegate implements StatelessDelegate
         }
 	}
 	
-	public Long grabarExpediente( Expediente expediente ) throws DelegateException
+	public Long grabarExpedienteReal( Expediente expediente ) throws DelegateException
 	{
 		try
 		{
-			return getFacade().grabarExpediente( expediente );
+			return getFacade().grabarExpedienteReal( expediente );
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}	
+	
+	public Long grabarExpedienteVirtual( Expediente expediente ) throws DelegateException
+	{
+		try
+		{
+			return getFacade().grabarExpedienteVirtual( expediente );
 		}
 		catch (Exception e) 
 		{
@@ -105,12 +121,12 @@ public class ExpedienteDelegate implements StatelessDelegate
         }
 	}	
 	
-	public Page busquedaPaginadaExpedientesGestor(
+	public Page busquedaPaginadaExpedientesReales(
 			FiltroBusquedaExpedientePAD filtro, int numPagina, int longPagina) throws DelegateException
 	{
 		try
 		{
-			return getFacade().busquedaPaginadaExpedientesGestor(filtro, numPagina, longPagina);	
+			return getFacade().busquedaPaginadaExpedientesReales(filtro, numPagina, longPagina);	
 		}
 		catch (Exception e) 
 		{
@@ -118,11 +134,11 @@ public class ExpedienteDelegate implements StatelessDelegate
         }
 	}	
 	
-	public void modificarAvisosExpediente( long unidadAdministrativa, String identificadorExpediente, String claveExpediente, ConfiguracionAvisosExpedientePAD configuracionAvisos) throws DelegateException
+	public void modificarAvisosExpedienteReal( long unidadAdministrativa, String identificadorExpediente, String claveExpediente, ConfiguracionAvisosExpedientePAD configuracionAvisos) throws DelegateException
 	{
 		try
 		{
-			getFacade().modificarAvisosExpediente( unidadAdministrativa, identificadorExpediente, claveExpediente, configuracionAvisos );
+			getFacade().modificarAvisosExpedienteReal( unidadAdministrativa, identificadorExpediente, claveExpediente, configuracionAvisos );
 		}
 		catch (Exception e) 
 		{
@@ -130,17 +146,108 @@ public class ExpedienteDelegate implements StatelessDelegate
         }
 	}
 	
-	public void borrarExpediente(long unidadAdministrativa,
+	public void borrarExpedienteReal(long unidadAdministrativa,
 			String identificadorExpediente)  throws DelegateException {
 		try
 		{
-			getFacade().borrarExpediente( unidadAdministrativa, identificadorExpediente);
+			getFacade().borrarExpedienteReal( unidadAdministrativa, identificadorExpediente);
 		}
 		catch (Exception e) 
 		{
             throw new DelegateException(e);
         }
 		
+	}
+
+	public void borrarExpedienteVirtual(Long codigoExpediente)  throws DelegateException {
+		try
+		{
+			getFacade().borrarExpedienteVirtual( codigoExpediente);
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+		
+	}
+	
+	public Page busquedaPaginadaExpedientes( int pagina, int longitudPagina, List filtroExpe )  throws DelegateException
+	{
+		try
+		{
+			return getFacade().busquedaPaginadaExpedientes(pagina, longitudPagina, filtroExpe );
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
+	public Page busquedaPaginadaExpedientesEntidadDelegada(int pagina, int longitudPagina, String nifEntidad, List filtroExpe )  throws DelegateException
+	{
+		try
+		{
+			return getFacade().busquedaPaginadaExpedientesEntidadDelegada(pagina, longitudPagina, nifEntidad, filtroExpe);
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
+	public void actualizaEstadoExpedienteAuto(Long id, String estado, Date fecha) throws DelegateException
+	{
+		try
+		{
+			getFacade().actualizaEstadoExpedienteAuto(id, estado, fecha);
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
+	
+	public Expediente obtenerExpedienteAuto( Long codigoExpediente ) throws DelegateException
+	{
+		try
+		{
+			return getFacade().obtenerExpedienteAuto( codigoExpediente ) ;
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
+	public boolean verificarAccesoExpedienteAnonimo(Long id, String claveAcceso) throws DelegateException
+	{
+		try
+		{
+			return getFacade().verificarAccesoExpedienteAnonimo( id, claveAcceso ) ;
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+
+	
+	/**
+     * @throws ExcepcionPAD 
+	 * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+	public boolean verificarAccesoExpedienteAutenticado(Long id) throws DelegateException
+	{
+		try
+		{
+			return getFacade().verificarAccesoExpedienteAutenticado( id ) ;
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
 	}
 
 	
