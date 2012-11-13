@@ -39,6 +39,12 @@ public class NotificacionTelematica implements java.io.Serializable,ElementoExpe
      private Integer tramiteSubsanacionVersion;
      private String tramiteSubsanacionParametros;
      
+     private String identificadorPersistencia;
+     
+     private boolean accesiblePorClave;
+     private boolean firmarPorClave;
+     private String tipoFirmaAcuse; // CERT / CLA
+     
      private Set documentos = new HashSet(0);  
                 
 	// Constructors
@@ -296,6 +302,38 @@ public class NotificacionTelematica implements java.io.Serializable,ElementoExpe
 
 	public void setRechazada(boolean rechazada) {
 		this.rechazada = rechazada;
+	}
+
+	public String getIdentificadorPersistencia() {
+		return identificadorPersistencia;
+	}
+
+	public void setIdentificadorPersistencia(String identificadorPersistencia) {
+		this.identificadorPersistencia = identificadorPersistencia;
+	}
+
+	public boolean isFirmarPorClave() {
+		return firmarPorClave;
+	}
+
+	public void setFirmarPorClave(boolean firmarPorClave) {
+		this.firmarPorClave = firmarPorClave;
+	}
+
+	public boolean isAccesiblePorClave() {
+		return accesiblePorClave;
+	}
+
+	public void setAccesiblePorClave(boolean accesiblePorClave) {
+		this.accesiblePorClave = accesiblePorClave;
+	}
+
+	public String getTipoFirmaAcuse() {
+		return tipoFirmaAcuse;
+	}
+
+	public void setTipoFirmaAcuse(String tipoFirmaAcuse) {
+		this.tipoFirmaAcuse = tipoFirmaAcuse;
 	}	
     
 }

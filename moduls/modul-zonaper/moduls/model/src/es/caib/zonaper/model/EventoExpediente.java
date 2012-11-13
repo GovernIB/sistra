@@ -16,6 +16,8 @@ public class EventoExpediente implements Serializable,ElementoExpedienteItf
 	private String enlaceConsulta;
 	private Set documentos = new HashSet( 0 );
 	private String usuarioSeycon;
+	private String identificadorPersistencia;
+	private boolean accesiblePorClave;
 	
 	public Long getCodigo()
 	{
@@ -93,6 +95,18 @@ public class EventoExpediente implements Serializable,ElementoExpedienteItf
 	}
 	public void setTextoSMS(String textoSMS) {
 		this.textoSMS = textoSMS;
+	}
+	public String getIdentificadorPersistencia() {
+		return identificadorPersistencia;
+	}
+	public void setIdentificadorPersistencia(String identificadorPersistencia) {
+		this.identificadorPersistencia = identificadorPersistencia;
+	}
+	public boolean isAccesiblePorClave() {
+		return accesiblePorClave;
+	}
+	public void setAccesiblePorClave(boolean accesiblePorClave) {
+		this.accesiblePorClave = accesiblePorClave;
 	}
 	
 }

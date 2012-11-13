@@ -34,7 +34,6 @@
 		<mapping resource="es/caib/zonaper/model/DocumentoEntradaPreregistroBackup.hbm.xml" />
 		<mapping resource="es/caib/zonaper/model/Expediente.hbm.xml" />
 		<mapping resource="es/caib/zonaper/model/ElementoExpediente.hbm.xml" />
-		<mapping resource="es/caib/zonaper/model/EstadoExpediente.hbm.xml" />
 		<mapping resource="es/caib/zonaper/model/EventoExpediente.hbm.xml" />
 		<mapping resource="es/caib/zonaper/model/DocumentoEventoExpediente.hbm.xml" />
 		<mapping resource="es/caib/zonaper/model/NotificacionTelematica.hbm.xml" />

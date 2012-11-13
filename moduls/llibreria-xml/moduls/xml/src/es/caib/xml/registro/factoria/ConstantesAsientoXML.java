@@ -210,6 +210,7 @@ public class ConstantesAsientoXML {
 	
 	// ------- TIPOS DE ACUSE DE RECIBO -----------------
 	public final static String ACUSERECIBO_ENTREGADA = "ENTREGADA";
+	public final static String ACUSERECIBO_ENTREGADA_CLAVE = "ENTREGADA_CLAVE";
 	public final static String ACUSERECIBO_RECHAZADA = "RECHAZADA";
 	
 }

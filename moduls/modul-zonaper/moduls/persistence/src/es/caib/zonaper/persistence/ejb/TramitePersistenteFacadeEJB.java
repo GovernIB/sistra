@@ -68,11 +68,9 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
 			roleHelpdesk = (( String ) initialContext.lookup( "java:comp/env/roleHelpdesk" ));
 		}catch(Exception ex){
 			log.error(ex);
-		}
-			
+		}			
 	}
 	 
-   
 
 	/**
      * @ejb.interface-method
@@ -105,6 +103,30 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
         	// Cargamos documentos
         	Hibernate.initialize(tramitePersistente.getDocumentos());        	
             return tramitePersistente;
+        } catch (Exception he) {        	
+        	throw new EJBException("No se puede obtener tramite con idPersistencia " + id,  he);
+        } finally {
+            close(session);
+        }
+    }
+    
+    /**
+     * Comprueba si existe tramite persistente con ese id persistencia
+     * @ejb.interface-method    
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public boolean existeTramitePersistente(String id) {
+        Session session = getSession();
+        try {    	
+        	Query query = session
+            .createQuery("FROM TramitePersistente AS m WHERE m.idPersistencia = :id")
+            .setParameter("id",id);
+            //query.setCacheable(true);
+            if (query.list().isEmpty()){
+            	return false;
+            } else {
+            	return true;
+            }            
         } catch (Exception he) {        	
         	throw new EJBException("No se puede obtener tramite con idPersistencia " + id,  he);
         } finally {

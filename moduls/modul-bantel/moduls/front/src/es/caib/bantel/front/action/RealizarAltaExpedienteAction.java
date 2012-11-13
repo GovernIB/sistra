@@ -75,11 +75,11 @@ public class RealizarAltaExpedienteAction extends BaseAction
 				if (entrada.getNivelAutenticacion() == 'A'){
 					expediente.setAutenticado(false);
 				}else{
-					expediente.setAutenticado(true);
-					expediente.setNifRepresentante(entrada.getUsuarioNif());
-					expediente.setNifRepresentado(entrada.getRepresentadoNif());
-					expediente.setNombreRepresentado(entrada.getRepresentadoNombre());
+					expediente.setAutenticado(true);					
 				}						
+				expediente.setNifRepresentante(entrada.getUsuarioNif());
+				expediente.setNifRepresentado(entrada.getRepresentadoNif());
+				expediente.setNombreRepresentado(entrada.getRepresentadoNombre());
 			}else{
 			// Si no tiene entrada asociada, debe ser autenticado
 				expediente.setAutenticado(true);

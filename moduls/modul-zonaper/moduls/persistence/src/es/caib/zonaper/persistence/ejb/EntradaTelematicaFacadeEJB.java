@@ -6,14 +6,14 @@ import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
-import javax.naming.InitialContext;
-
-import org.apache.commons.lang.StringUtils;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
+
+import org.apache.commons.lang.StringUtils;
+
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
 import es.caib.util.CredentialUtil;
@@ -34,25 +34,16 @@ import es.caib.zonaper.persistence.delegate.DelegateUtil;
  *
  * @ejb.transaction type="Required"
  * 
- * @ejb.env-entry name="roleHelpDesk" type="java.lang.String" value="${role.helpdesk}"
  */
 public abstract class EntradaTelematicaFacadeEJB extends HibernateEJB {
 
-	private String roleHelpDesk;
-	
 	/**
      * @ejb.create-method
      * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      */
 	public void ejbCreate() throws CreateException {
-		super.ejbCreate();
-		try{
-			InitialContext initialContext = new InitialContext();			 
-			roleHelpDesk = (( String ) initialContext.lookup( "java:comp/env/roleHelpDesk" ));			
-		}catch(Exception ex){
-			log.error(ex);
-		}
+		super.ejbCreate();	
 	}
 	  
     /**
@@ -60,145 +51,101 @@ public abstract class EntradaTelematicaFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.todos}"
      */
     public EntradaTelematica obtenerEntradaTelematicaAutenticada(Long id) {
-        Session session = getSession();
-        try {
-        	// Cargamos entradaTelematica        	
-        	EntradaTelematica entradaTelematica = (EntradaTelematica) session.load(EntradaTelematica.class, id);
-        	
-        	// Comprobamos que accede el usuario o si es un delegado
-        	Principal sp = this.ctx.getCallerPrincipal();
-        	PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
-    		if (plgLogin.getMetodoAutenticacion(sp) == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO){
-        		throw new HibernateException("Acceso solo permitido para autenticado");
-        	}
-    		if (!plgLogin.getNif(this.ctx.getCallerPrincipal()).equals(entradaTelematica.getNifRepresentante())){
-    			// Si no es el usuario quien accede miramos si es un delegado
-            	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(entradaTelematica.getNifRepresentante());
-            	if (StringUtils.isEmpty(permisos)){
-            		throw new Exception("Acceso no permitido a entrada telematica " + id + " - usuario " + sp.getName());
-            	}
-        	}
-        	
-        	// Cargamos documentos
-        	Hibernate.initialize(entradaTelematica.getDocumentos());        	
-            return entradaTelematica;
-        } catch (Exception he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
+    	// Cargamos entradaTelematica        	
+    	EntradaTelematica entradaTelematica = this.recuperarEntradaTelematicaPorCodigo(id);
+    	
+    	// Control acceso expediente
+        controlAccesoAutenticadoExpediente(entradaTelematica); 
+        
+        return entradaTelematica;
     }
-    
     
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
-    public EntradaTelematica obtenerEntradaTelematicaAnonima(Long id,String idPersistencia) {
-        Session session = getSession();
-        try {
-        	// Acceso solo anonimo
-        	Principal sp = this.ctx.getCallerPrincipal();
-        	PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
-        	if (plgLogin.getMetodoAutenticacion(sp) != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO){
-        		throw new HibernateException("Solo se permite acceso anonimo");
-        	}
-        	
-        	// Cargamos entradaTelematica        	
-        	EntradaTelematica entradaTelematica = (EntradaTelematica) session.load(EntradaTelematica.class, id);
-        	
-        	// Control acceso: 
-        	if (!entradaTelematica.getIdPersistencia().equals(idPersistencia)){
-        		// En caso de pertenecer a un expediente se debera controlar el acceso a traves del expediente
-            	// ya que se podra acceder con otros idPersistencia de tramites asociados al expediente
-            	// Buscamos si es un elemento de un expediente (en caso afirmativo se controlaria el acceso al expe)
-            	ElementoExpediente ee = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpedienteAnonimo(ElementoExpediente.TIPO_ENTRADA_TELEMATICA,id,idPersistencia);
-            	if (ee == null){
-            		throw new HibernateException("Acceso anonimo no permitido a entrada telematica " + id + "- idPersistencia " + idPersistencia);
-            	}
-        	}
-        	
-        	// Cargamos documentos
-        	Hibernate.initialize(entradaTelematica.getDocumentos());        	
-            return entradaTelematica;
-        } catch (Exception he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
+    public EntradaTelematica obtenerEntradaTelematicaAutenticada(String idPersistencia) {
+    	// Cargamos entradaTelematica        	
+    	EntradaTelematica entradaTelematica = this.recuperarEntradaTelematicaPorIdPersistencia(idPersistencia);
+    	
+    	// Control acceso expediente
+        controlAccesoAutenticadoExpediente(entradaTelematica); 
+        
+        return entradaTelematica;
     }
-    
-    /**
+
+	/**
+     * Obtiene entrada de forma anonima
+     * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
+     */
+    public EntradaTelematica obtenerEntradaTelematicaAnonima(Long id,String claveAcceso) {
+    	
+    	// Cargamos entradaTelematica        	
+    	EntradaTelematica entradaTelematica = this.recuperarEntradaTelematicaPorCodigo(id);
+    	
+    	// Control acceso expediente 
+    	controlAccesoAnonimoExpediente(claveAcceso, entradaTelematica);
+     
+        return entradaTelematica;
+    }
+
+	
+    
+    /**
+     * Helpdesk: obtiene entrada telematica por id persistencia
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.helpdesk}"
      */
     public EntradaTelematica obtenerEntradaTelematica(String idPersistencia) {
-        Session session = getSession();
-        try {
-        	// Cargamos entradaTelematica        	
-        	Query query = session
-            .createQuery("FROM EntradaTelematica AS m WHERE m.idPersistencia = :id")
-            .setParameter("id",idPersistencia);
-            //query.setCacheable(true);
-            if (query.list().isEmpty()){
-            	return null;
-            	//throw new HibernateException("No existe trámite con id " + id);
-            }
-            EntradaTelematica entradaTelematica = (EntradaTelematica)  query.uniqueResult(); 
-                        
-            // Control acceso (role helpdesk salta comprobacion)
-            //  - En caso de estar autenticado puede acceder el usuario iniciador o el que tiene el flujo
-            if (!this.ctx.isCallerInRole(roleHelpDesk)){
-		    	Principal sp = this.ctx.getCallerPrincipal();
-		    	PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
-		    	if (plgLogin.getMetodoAutenticacion(sp) == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO){
-		    		if (entradaTelematica.getNivelAutenticacion() != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO ){
-		    		throw new HibernateException("Acceso anonimo a entrada telematica autenticada " + idPersistencia);
-		    	}
-		    	}else{
-		    		// Para autenticados comprobamos si es el usuario o es un delegado	        	
-	        		if (!plgLogin.getNif(this.ctx.getCallerPrincipal()).equals(entradaTelematica.getNifRepresentante())){
-	        			// Si no es el usuario quien accede miramos si es un delegado
-	                	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(entradaTelematica.getNifRepresentante());
-	                	if (StringUtils.isEmpty(permisos)){
-	                		throw new Exception("Acceso no permitido a entrada telematica " + idPersistencia + " no pertenece al usuario ni es delegado con permiso de presentar - usuario " + sp.getName());	                		
-	                	}
-	        		}		    		
-		    	}
-            }
-            
-        	// Cargamos documentos
-        	Hibernate.initialize(entradaTelematica.getDocumentos());        	
-            return entradaTelematica;
-        } catch (Exception he) {
-        	throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }    
+    	EntradaTelematica entradaTelematica = recuperarEntradaTelematicaPorIdPersistencia(idPersistencia);   
+    	return entradaTelematica;
+    }
     
     /**
+     * Comprueba si existe entrada con un id persistencia
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public boolean existeEntradaTelematica(String idPersistencia) {
+    	EntradaTelematica entradaTelematica = recuperarEntradaTelematicaPorIdPersistencia(idPersistencia);   
+    	return (entradaTelematica != null);
+    }
+       
+    /**
+     * Busca entrada telematica anonima por su id persistencia
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public EntradaTelematica obtenerEntradaTelematicaAnonima(String idPersistencia) {
+    	EntradaTelematica entradaTelematica = recuperarEntradaTelematicaPorIdPersistencia(idPersistencia);   
+        if (entradaTelematica != null && entradaTelematica.getNivelAutenticacion() != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO) {
+        	entradaTelematica = null;
+        }
+        return entradaTelematica;        	       
+    }
+    
+    /**
+     * Obtiene entrada telematica por id (para gestores y role auto).
+     * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
      */
     public EntradaTelematica obtenerEntradaTelematica(Long id) {
-        Session session = getSession();
-        try {
-        	// Cargamos entradaTelematica        	
-        	EntradaTelematica entradaTelematica = (EntradaTelematica) session.load(EntradaTelematica.class, id);                       
-        	// Cargamos documentos
-        	Hibernate.initialize(entradaTelematica.getDocumentos());        	
-            return entradaTelematica;
-        } catch (HibernateException he) {
-        	throw new EJBException(he);
-        } finally {
-            close(session);
-        }
+        return recuperarEntradaTelematicaPorCodigo(id);
     }
+
+	
     
     
     /**
+     * Obtiene entrada telematica por numero registro
+     * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
@@ -226,12 +173,14 @@ public abstract class EntradaTelematicaFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-    
+     
  	/**
+ 	 * Guarda nueva entrada telematica
+ 	 * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
-    public Long grabarEntradaTelematica(EntradaTelematica obj) {        
+    public Long grabarNuevaEntradaTelematica(EntradaTelematica obj) {        
     	Session session = getSession();
         try {     
         	// Control acceso 
@@ -243,21 +192,21 @@ public abstract class EntradaTelematicaFacadeEJB extends HibernateEJB {
         			// Si no es el usuario quien accede miramos si es un delegado
                 	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(obj.getNifRepresentante());
                 	if (StringUtils.isEmpty(permisos) || permisos.indexOf(ConstantesZPE.DELEGACION_PERMISO_PRESENTAR_TRAMITE) == -1){
-                		throw new Exception("Acceso no permitido a entrada preregistro " + obj.getIdPersistencia()  + " no pertenece al usuario ni es delegado con permiso de presentar - usuario " + sp.getName());	                		
+                		throw new Exception("Acceso no permitido a entrada telematica " + obj.getIdPersistencia()  + " no pertenece al usuario ni es delegado con permiso de presentar - usuario " + sp.getName());	                		
                 	}
         		}	
         	}else{	        		
         		// Para anonimos vale con el id persistencia
         		if (obj.getNivelAutenticacion() != 'A'){
-        			throw new HibernateException("Acceso no permitido a entrada preregistro " + obj.getIdPersistencia() + " - usuario " + sp.getName());
+        			throw new HibernateException("Acceso no permitido a entrada telematica " + obj.getIdPersistencia() + " - usuario " + sp.getName());
         		}
         	}
         	
-        	// Updateamos
+        	// Guardamos nueva entrada
         	if (obj.getCodigo() == null){
         		session.save(obj);
         	}else{        		
-        		session.update(obj);
+        		throw new Exception("No se permite modificar entrada existente");
         	}
         	                    	
             return obj.getCodigo();
@@ -270,36 +219,8 @@ public abstract class EntradaTelematicaFacadeEJB extends HibernateEJB {
     }
     
     /**
-   
-    public List listarEntradaTelematicasUsuario(String usua) {
-        Session session = getSession();
-        try {     
-        	
-        	if (usua == null) return null;
-        	
-            Query query = session
-            .createQuery("FROM EntradaTelematica AS m WHERE m.usuario = :usuario ORDER BY m.fecha DESC")
-            .setParameter("usuario",usua);
-            //query.setCacheable(true);
-            List tramites = query.list();
-            
-            // Cargamos documentos
-            for (Iterator it=tramites.iterator();it.hasNext();){
-            	EntradaTelematica entradaTelematica = (EntradaTelematica) it.next();
-            	Hibernate.initialize(entradaTelematica.getDocumentos());
-            }
-            
-            return tramites;
-            
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-   */
-    
-    /**
+     *  Helpdesk: lista entradas por nif y tipo tramite.
+     * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.helpdesk}"
      */
@@ -334,4 +255,75 @@ public abstract class EntradaTelematicaFacadeEJB extends HibernateEJB {
         }
     }
    
+    
+    // ---------------------------------------------------------------------------------------------
+    // 	FUNCIONES PRIVADAS
+    // ---------------------------------------------------------------------------------------------
+    
+    private EntradaTelematica recuperarEntradaTelematicaPorIdPersistencia(
+			String idPersistencia) {
+		EntradaTelematica entradaTelematica = null;
+    	Session session = getSession();
+        try {
+        	// Cargamos entradaTelematica        	
+        	Query query = session
+            .createQuery("FROM EntradaTelematica AS m WHERE m.idPersistencia = :id")
+            .setParameter("id",idPersistencia);
+            //query.setCacheable(true);
+            if (!query.list().isEmpty()){            	
+            	entradaTelematica = (EntradaTelematica)  query.uniqueResult();                        
+            	// Cargamos documentos
+            	Hibernate.initialize(entradaTelematica.getDocumentos());
+            }
+        } catch (Exception he) {
+        	throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+		return entradaTelematica;
+	}    
+    
+    private EntradaTelematica recuperarEntradaTelematicaPorCodigo(Long id) {
+		Session session = getSession();
+        try {
+        	// Cargamos entradaTelematica        	
+        	EntradaTelematica entradaTelematica = (EntradaTelematica) session.load(EntradaTelematica.class, id);                       
+        	// Cargamos documentos
+        	Hibernate.initialize(entradaTelematica.getDocumentos());        	
+            return entradaTelematica;
+        } catch (HibernateException he) {
+        	throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+	}
+    
+    private void controlAccesoAnonimoExpediente(String claveAcceso,
+			EntradaTelematica entradaTelematica) {
+		try {
+    		if (entradaTelematica != null) {
+	        	Long idExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerCodigoExpedienteElemento(ElementoExpediente.TIPO_ENTRADA_TELEMATICA, entradaTelematica.getCodigo());
+	        	if (!DelegateUtil.getExpedienteDelegate().verificarAccesoExpedienteAnonimo(idExpediente, claveAcceso)) {
+	        		throw new Exception("No tiene acceso a entrada telematica");
+	        	}
+    		}
+        } catch (Exception he) {
+            throw new EJBException(he);
+        }
+	}
+    
+    private void controlAccesoAutenticadoExpediente(
+			EntradaTelematica entradaTelematica) {
+		try {
+        	if (entradaTelematica != null) { 
+	        	Long idExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerCodigoExpedienteElemento(ElementoExpediente.TIPO_ENTRADA_TELEMATICA, entradaTelematica.getCodigo());
+	        	if (!DelegateUtil.getExpedienteDelegate().verificarAccesoExpedienteAutenticado(idExpediente)) {
+	        		throw new Exception("No tiene acceso a entrada telematica");
+	        	}       	
+        	}            
+        } catch (Exception he) {
+            throw new EJBException(he);
+        }
+	}
+    
 }

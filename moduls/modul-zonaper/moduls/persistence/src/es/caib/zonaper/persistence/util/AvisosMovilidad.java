@@ -171,14 +171,24 @@ public class AvisosMovilidad {
 			
 			EventoExpediente evento = (EventoExpediente) detalleEle;
 			
-			// Forzamos autenticacion
-			String autenticacion = "&autenticacion="+ (StringUtils.isEmpty(ele.getExpediente().getSeyconCiudadano())?"A":"CU");
-			
 			// Obtenemos textos de ficheros de messages sustituyendo variables
 			String urlEventoExpediente = LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.urlAcceso.eventoExpediente");
 			urlEventoExpediente = StringUtil.replace(urlEventoExpediente,"{0}",urlSistra);
 			tituloEmail=LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.titulo.eventoExpediente");
 			tituloEmail=StringUtil.replace(tituloEmail,"{0}",oi.getNombre().toUpperCase());
+			String literalTextoAccesoAviso;
+			String paramsLiteralTextoAccesoAviso[] = null;
+			if (ele.isAccesoAnonimoExpediente()) {
+				paramsLiteralTextoAccesoAviso  = new String[1];
+				paramsLiteralTextoAccesoAviso[0] = ele.getIdentificadorPersistencia();
+				if (expe.getNifRepresentante() != null) {
+					literalTextoAccesoAviso = "aviso.email.textoAcceso.eventoExpediente.certificadoclave";					
+				} else {
+					literalTextoAccesoAviso = "aviso.email.textoAcceso.eventoExpediente.clave";
+				}	
+			} else {
+				literalTextoAccesoAviso = "aviso.email.textoAcceso.eventoExpediente.certificado";				
+			}
 			
 			// Generamos mail a partir de plantilla
 			textoEmail = cargarPlantillaMail("mailAviso.html");
@@ -186,11 +196,9 @@ public class AvisosMovilidad {
 			textoEmail = StringUtil.replace(textoEmail,"[#UNIDAD_ADMINISTRATIVA#]", StringEscapeUtils.escapeHtml(Dominios.obtenerDescripcionUA(expe.getUnidadAdministrativa().toString())));
 			textoEmail = StringUtil.replace(textoEmail,"[#FECHA#]", StringUtil.fechaACadena(evento.getFecha(),StringUtil.FORMATO_FECHA));
 			textoEmail = StringUtil.replace(textoEmail,"[#TITULO#]",StringEscapeUtils.escapeHtml(evento.getTitulo()));
-			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO#]",StringUtil.replace(StringEscapeUtils.escapeHtml(evento.getTexto()),"\n","</br>"));			
-			textoEmail = StringUtil.replace(textoEmail,"[#URL_ACCESO#]",urlEventoExpediente + evento.getCodigo() + autenticacion);
+			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO#]",StringUtil.replace(StringEscapeUtils.escapeHtml(evento.getTexto()),"\n","</br>"));						
 			textoEmail = StringUtil.replace(textoEmail,"[#ORGANISMO.NOMBRE#]",oi.getNombre());
 			textoEmail = StringUtil.replace(textoEmail,"[#ORGANISMO.LOGO#]",oi.getUrlLogo());
-			
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AVISOTRAMITACION#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.avisoTramitacion")));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ORGANO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.organo")));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.EXPEDIENTE#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.expediente")));
@@ -198,8 +206,16 @@ public class AvisosMovilidad {
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ASUNTO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.asunto")));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.DESCRIPCION#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.descripcion")));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDERAVISO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.accederAviso")));
-			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.SOPORTE#]",LiteralesAvisosMovilidad.calcularTextoSoporte(oi, expe.getIdioma()));
-			
+			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.SOPORTE#]",LiteralesAvisosMovilidad.calcularTextoSoporte(oi, expe.getIdioma()));		
+			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDER#]", StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),literalTextoAccesoAviso, paramsLiteralTextoAccesoAviso)));
+			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDERCERTIFICADO#]", StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.accederAviso.certificado")));
+			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDERCLAVE#]", StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.accederAviso.clave")));
+			if (expe.getNifRepresentante() != null) {
+				textoEmail = StringUtil.replace(textoEmail,"[#URL_ACCESO_CERTIFICADO#]",urlEventoExpediente + evento.getIdentificadorPersistencia() + "&autenticacion=CU");
+			}
+			if (ele.isAccesoAnonimoExpediente()) {
+				textoEmail = StringUtil.replace(textoEmail,"[#URL_ACCESO_CLAVE#]",urlEventoExpediente + evento.getIdentificadorPersistencia() + "&autenticacion=A");
+			}
 			
 			// Generamos SMS
 			if (StringUtils.isNotEmpty(evento.getTextoSMS())){
@@ -208,7 +224,7 @@ public class AvisosMovilidad {
 				textoSMS = LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.sms.eventoExpediente");
 				textoSMS = StringUtil.replace(textoSMS,"{0}",oi.getNombre().toUpperCase());
 			}
-			
+					
 		}else if (ele.getTipoElemento().equals(ElementoExpediente.TIPO_NOTIFICACION)){
 			
 			verificarEnvioEmail = confirmacionEnvioNotificacionesEmail;
@@ -217,14 +233,24 @@ public class AvisosMovilidad {
 			NotificacionTelematica notif = (NotificacionTelematica) detalleEle;
 			AvisoNotificacion aviso = getAvisoNotificacion(notif);
 			
-			// Forzamos autenticacion
-			String autenticacion = "&autenticacion="+ (StringUtils.isEmpty(ele.getExpediente().getSeyconCiudadano())?"A":"CU");
-			
 			// Obtenemos textos de ficheros de messages sustituyendo variables
 			String urlNotifExpediente = LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.urlAcceso.notificacion");
 			urlNotifExpediente = StringUtil.replace(urlNotifExpediente,"{0}",urlSistra);
 			tituloEmail=LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.titulo.notificacion");
 			tituloEmail=StringUtil.replace(tituloEmail,"{0}",oi.getNombre().toUpperCase());
+			String literalTextoAccesoNotificacion;
+			String paramsLiteralTextoNotificacion[] = null;
+			if (ele.isAccesoAnonimoExpediente()) {
+				paramsLiteralTextoNotificacion  = new String[1];
+				paramsLiteralTextoNotificacion[0] = ele.getIdentificadorPersistencia();
+				if (expe.getNifRepresentante() != null) {
+					literalTextoAccesoNotificacion = "aviso.email.textoAcceso.notificacion.certificadoclave";
+				} else {
+					literalTextoAccesoNotificacion = "aviso.email.textoAcceso.notificacion.clave";
+				}	
+			} else {
+				literalTextoAccesoNotificacion = "aviso.email.textoAcceso.notificacion.certificado";				
+			}
 			
 			// Textos Email
 			textoEmail = cargarPlantillaMail("mailNotificacion.html");
@@ -234,7 +260,6 @@ public class AvisosMovilidad {
 			textoEmail = StringUtil.replace(textoEmail,"[#TITULO#]",StringEscapeUtils.escapeHtml(aviso.getTitulo()));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO#]",StringUtil.replace(StringEscapeUtils.escapeHtml(aviso.getTexto()),"\n","</br>"));			
 			textoEmail = StringUtil.replace(textoEmail,"[#NOTA_LEGAL#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.notaLegal.notificacion")));			
-			textoEmail = StringUtil.replace(textoEmail,"[#URL_ACCESO#]",urlNotifExpediente + notif.getCodigo() + autenticacion);
 			textoEmail = StringUtil.replace(textoEmail,"[#ORGANISMO.NOMBRE#]",oi.getNombre());
 			textoEmail = StringUtil.replace(textoEmail,"[#ORGANISMO.LOGO#]",oi.getUrlLogo());
 			
@@ -250,7 +275,15 @@ public class AvisosMovilidad {
 			
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.DESTINATARIO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.destinatario")));
 			textoEmail = StringUtil.replace(textoEmail,"[#DESTINATARIO#]",StringEscapeUtils.escapeHtml(notif.getNifRepresentante() + " - " + notif.getNombreRepresentante()));
-			
+			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDER#]", StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),literalTextoAccesoNotificacion, paramsLiteralTextoNotificacion)));
+			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDERCERTIFICADO#]", StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.accederAviso.certificado")));
+			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDERCLAVE#]", StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.accederAviso.clave")));
+			if (expe.getNifRepresentante() != null) {
+				textoEmail = StringUtil.replace(textoEmail,"[#URL_ACCESO_CERTIFICADO#]",urlNotifExpediente + notif.getIdentificadorPersistencia() + "&autenticacion=CU");
+			}
+			if (ele.isAccesoAnonimoExpediente()) {
+				textoEmail = StringUtil.replace(textoEmail,"[#URL_ACCESO_CLAVE#]",urlNotifExpediente + notif.getIdentificadorPersistencia() + "&autenticacion=A");
+			}
 			// Textos SMS
 			if (StringUtils.isNotEmpty(aviso.getTextoSMS())){
 				textoSMS = aviso.getTextoSMS();
@@ -260,6 +293,23 @@ public class AvisosMovilidad {
 			}
  		}else{
 			throw new Exception("Tipo de elemento " + ele.getTipoElemento() + " no debe generar aviso");
+		}
+		
+		// Quitamos parte sobrante
+		if (ele.isAccesoAnonimoExpediente()) {
+			if (expe.getNifRepresentante() != null) {
+				textoEmail = mantenerSeccion(textoEmail, "[#IF.CERTIFICADOCLAVE#]");
+				textoEmail = eliminarSeccion(textoEmail, "[#IF.CERTIFICADO#]");
+				textoEmail = eliminarSeccion(textoEmail, "[#IF.CLAVE#]");
+			} else {
+				textoEmail = mantenerSeccion(textoEmail, "[#IF.CLAVE#]");
+				textoEmail = eliminarSeccion(textoEmail, "[#IF.CERTIFICADOCLAVE#]");
+				textoEmail = eliminarSeccion(textoEmail, "[#IF.CERTIFICADO#]");;
+			}	
+		} else {
+			textoEmail = mantenerSeccion(textoEmail, "[#IF.CERTIFICADO#]");
+			textoEmail = eliminarSeccion(textoEmail, "[#IF.CLAVE#]");
+			textoEmail = eliminarSeccion(textoEmail, "[#IF.CERTIFICADOCLAVE#]");							
 		}
 		
 		//	Creamos MensajeEnvio para informar de la creacion del expediente
@@ -316,9 +366,25 @@ public class AvisosMovilidad {
 		
 	}
 	
+
 	//--------------------------------------------------------------------------
 	// FUNCIONES DE UTILIDAD
 	//--------------------------------------------------------------------------
+
+	private String eliminarSeccion(String textoEmail, String seccion) {
+		int pos = textoEmail.indexOf(seccion);
+		if (pos == -1) return textoEmail;
+		int posFin = textoEmail.indexOf(seccion, pos + seccion.length());
+		
+		textoEmail = textoEmail.substring(0, pos) + textoEmail.substring(posFin + seccion.length());
+		
+		return textoEmail;
+	}
+	
+	private String mantenerSeccion(String textoEmail, String seccion) throws Exception {
+		return StringUtil.replace(textoEmail, seccion, "");
+	}
+	
 	/**
 	 * Realizamos envio del mensaje al modulo de movilidad con usuario auto  
 	 */

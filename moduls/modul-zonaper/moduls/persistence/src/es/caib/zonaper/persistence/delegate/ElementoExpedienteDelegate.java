@@ -29,6 +29,18 @@ public class ElementoExpedienteDelegate implements StatelessDelegate
         }
 	}
 	
+	public ElementoExpediente obtenerElementoExpediente( String idPersistencia ) throws DelegateException
+	{
+		try
+		{
+			return getFacade().obtenerElementoExpediente(idPersistencia);
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
 	public ElementoExpediente obtenerElementoExpedienteAutenticado( String tipoElemento,Long codigoElemento ) throws DelegateException
 	{
 		try
@@ -113,7 +125,7 @@ public class ElementoExpedienteDelegate implements StatelessDelegate
         }
 	}
 	
-	public Map obtenerIdsExpedienteElementos( List codigosElementos )throws DelegateException
+	public List obtenerIdsExpedienteElementos( List codigosElementos )throws DelegateException
 	{
 		try
 		{
@@ -130,6 +142,18 @@ public class ElementoExpedienteDelegate implements StatelessDelegate
 		try
 		{
 			getFacade().establecerAvisoElementoExpediente(id, idAviso);
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
+	public Long obtenerCodigoExpedienteElemento(String tipo, Long codigo) throws DelegateException
+	{
+		try
+		{
+			return getFacade().obtenerCodigoExpedienteElemento(tipo, codigo);
 		}
 		catch (Exception e) 
 		{

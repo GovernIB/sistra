@@ -4,9 +4,10 @@ import es.caib.zonaper.front.form.InitForm;
 
 public class AbrirNotificacionForm extends InitForm
 {
-	Long codigo;
-	String asiento;
-	String firma;
+	private Long codigo;
+	private String asiento;
+	private String firma;
+	private String tipoFirma;
 	
 	public String getAsiento()
 	{
@@ -31,6 +32,12 @@ public class AbrirNotificacionForm extends InitForm
 	public void setCodigo(Long codigo)
 	{
 		this.codigo = codigo;
+	}
+	public String getTipoFirma() {
+		return tipoFirma;
+	}
+	public void setTipoFirma(String tipoFirma) {
+		this.tipoFirma = tipoFirma;
 	}
 	
 }

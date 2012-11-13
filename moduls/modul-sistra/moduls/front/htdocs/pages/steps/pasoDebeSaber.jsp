@@ -36,6 +36,12 @@ function posicionOffset(obj,tipo) {
 opacidad = 0;
 function fundidoMostrar(id) {
 	obj = document.getElementById(id);
+	with (obj) {
+		if(document.all) style.filter = "alpha(opacity=40)";
+		else style.opacity = 0.4;		
+	}
+	/*
+	obj = document.getElementById(id);
 	if(opacidad < 40) {
 		opacidad += 10;
 		if(typeof obj.style.filter != 'undefined') {
@@ -49,6 +55,7 @@ function fundidoMostrar(id) {
 		clearTimeout(tiempo);
 		opacidad = 0;
 	}
+	*/
 }
 
 function mostrarFondo() {
@@ -89,7 +96,10 @@ function esconderFondo() {
 
 function mostrarAviso(id) {
 	
-	mostrarFondo();fundidoMostrar('fondo');
+	mostrarFondo();
+	
+	fundidoMostrar('fondo');
+	
 	
 	capaClave = document.getElementById(id);
 	capaClave.style.display = 'block';

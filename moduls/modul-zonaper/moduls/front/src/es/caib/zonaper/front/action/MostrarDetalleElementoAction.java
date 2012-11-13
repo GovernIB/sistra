@@ -79,26 +79,20 @@ public class MostrarDetalleElementoAction extends BaseAction {
 			DetalleElementoForm def = (DetalleElementoForm) form;
 			Long codigo 	= def.getCodigo();
 			String tipo 	= def.getTipo();			
-			boolean existeExpe = def.isExpediente();
 		
-			log.debug("mostrarDetalleElemento: codigo=" + codigo.longValue() + " tipo=" +  tipo + " expediente=" + existeExpe);
+			log.debug("mostrarDetalleElemento: codigo=" + codigo.longValue() + " tipo=" +  tipo );
 			
-			if (existeExpe){
-				ElementoExpediente elementoExpediente;
-				if (this.getDatosSesion(request).getNivelAutenticacion() == 'A'){
-					elementoExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpedienteAnonimo(tipo,codigo,this.getIdPersistencia(request));
-				}else{
-					elementoExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpedienteAutenticado(tipo,codigo);
-				}
-				request.setAttribute("elementoExpediente",elementoExpediente);
-				
-				// Establecemos id en sesion del expediente para que se muestre en el detalle expediente el expediente asociado
-				request.getSession().setAttribute(Constants.ULTIMO_DETALLE_EXPEDIENTE,"E" + elementoExpediente.getExpediente().getCodigo().toString());
+			ElementoExpediente elementoExpediente;
+			if (this.getDatosSesion(request).getNivelAutenticacion() == 'A'){
+				elementoExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpedienteAnonimo(tipo,codigo,this.getIdPersistencia(request));
 			}else{
-				// Establecemos id en sesion del expediente para que se muestre en el detalle expediente el expediente asociado
-				request.getSession().setAttribute(Constants.ULTIMO_DETALLE_EXPEDIENTE,tipo + codigo.toString());
+				elementoExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpedienteAutenticado(tipo,codigo);
 			}
-					
+			request.setAttribute("elementoExpediente",elementoExpediente);
+			
+			// Establecemos id en sesion del expediente para que se muestre en el detalle expediente el expediente asociado
+			request.getSession().setAttribute(Constants.ULTIMO_DETALLE_EXPEDIENTE, elementoExpediente.getExpediente().getCodigo());
+				
 			String anonimo = (this.getDatosSesion(request).getNivelAutenticacion()=='A'?"Anonimo":"");
 			
 			// En funcion del elemento redirigimos a la vista correspondiente
@@ -121,7 +115,10 @@ public class MostrarDetalleElementoAction extends BaseAction {
 					not = DelegateUtil.getNotificacionTelematicaDelegate().obtenerNotificacionTelematicaAutenticada(codigo);
 				}
 				request.setAttribute("notificacion",not);
-				if (not.getFechaAcuse() != null){
+				if (def.getTipoFirma() != null) {
+					request.setAttribute("tipoFirma",def.getTipoFirma());
+				}
+				if (not.getFechaAcuse() != null && !not.isRechazada()){
 					cargarFirmas(not.getDocumentos(),request,tipo);
 					return mapping.findForward("notificacionRecibida"+anonimo);
 				}else{

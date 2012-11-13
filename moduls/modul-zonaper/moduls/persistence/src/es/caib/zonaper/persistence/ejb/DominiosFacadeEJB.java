@@ -148,6 +148,20 @@ public abstract class DominiosFacadeEJB implements SessionBean {
     }
    
     /**
+     * Obtiene descripcion oficina para el sello
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.registro}"
+     */
+    public String obtenerDescripcionSelloOficina(String oficina) {
+    	try{    		
+    		return DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerDescripcionSelloOficina(oficina);    		    	
+    	}catch (Exception ex){
+    		throw new EJBException(ex);    	
+    	}    		    
+    }
+    
+    /**
      * Obtiene lista de tipos asunto
      * 
      * @ejb.interface-method

@@ -470,6 +470,8 @@ function repintarParametros(datos){
 				<bean:message key="ajuda.notificacion.datosNotificacion"/>
 				<ul class="ajudaUl">
 					<li><bean:message key="ajuda.notificacio.acuseRecibo"/></li>
+					<li><bean:message key="ajuda.notificacio.accesoPorClave"/></li>
+					<li><bean:message key="ajuda.notificacio.firmaPorClave"/></li>
 					<li><bean:message key="ajuda.notificacio.idioma"/></li>
 					<li><bean:message key="ajuda.notificacio.tipoAsunto"/></li>
 					<li><bean:message key="ajuda.notificacio.aviso"/></li>
@@ -531,7 +533,7 @@ function repintarParametros(datos){
 				
 				<p>
 					<label for="nif"><bean:message key="expediente.nif"/><sup>*</sup></label>
-					<html:text property="nif" readonly="<%=Boolean.parseBoolean(autenticado)%>" onblur="this.value=this.value.toUpperCase()"/>					
+					<html:text property="nif" readonly="true" onblur="this.value=this.value.toUpperCase()"/>					
 				</p>
 				
 				<p>
@@ -578,6 +580,22 @@ function repintarParametros(datos){
 				<p>
 					<label for="acuse"><bean:message key="notificacion.acuse"/><sup>*</sup></label>
 					<html:select  property="acuse">
+						<html:option value="S"><bean:message key="expediente.si"/></html:option>
+						<html:option value="N"><bean:message key="expediente.no"/></html:option>
+					  </html:select>
+				</p>
+				
+				<p>
+					<label for="accesoPorClave"><bean:message key="notificacion.accesoPorClave"/><sup>*</sup></label>
+					<html:select  property="accesoPorClave">
+						<html:option value="S"><bean:message key="expediente.si"/></html:option>
+						<html:option value="N"><bean:message key="expediente.no"/></html:option>
+					  </html:select>
+				</p>
+				
+				<p>
+					<label for="firmaPorClave"><bean:message key="notificacion.firmaPorClave"/><sup>*</sup></label>
+					<html:select  property="firmaPorClave">
 						<html:option value="S"><bean:message key="expediente.si"/></html:option>
 						<html:option value="N"><bean:message key="expediente.no"/></html:option>
 					  </html:select>

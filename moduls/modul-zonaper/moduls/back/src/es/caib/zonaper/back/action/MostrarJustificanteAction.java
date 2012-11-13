@@ -37,7 +37,7 @@ public class MostrarJustificanteAction extends BaseAction
     {
 		MostrarDocumentoForm formulario 	= ( MostrarDocumentoForm ) form;
 		EntradaPreregistroDelegate delegate = DelegateUtil.getEntradaPreregistroDelegate();
-		EntradaPreregistro preregistro		= delegate.obtenerEntradaPreregistroReg( formulario.getCodigo() );
+		EntradaPreregistro preregistro		= delegate.obtenerEntradaPreregistro( formulario.getCodigo() );
 		
 		ReferenciaRDS refRDS = new ReferenciaRDS();
 		refRDS.setCodigo( preregistro.getCodigoRdsJustificante() );

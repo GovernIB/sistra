@@ -31,7 +31,6 @@ public class ObjectFactory {
     private final static QName _ExpedienteEventos_QNAME = new QName("", "eventos");
     private final static QName _ExpedienteNifRepresentado_QNAME = new QName("", "nifRepresentado");
     private final static QName _ExpedienteNombreRepresentado_QNAME = new QName("", "nombreRepresentado");
-    private final static QName _Fault_QNAME = new QName("urn:es:caib:zonaper:ws:v2:model:BackofficeFacade", "fault");
     private final static QName _DocumentoExpedienteNombre_QNAME = new QName("", "nombre");
     private final static QName _DocumentoExpedienteCodigoRDS_QNAME = new QName("", "codigoRDS");
     private final static QName _DocumentoExpedienteClaveRDS_QNAME = new QName("", "claveRDS");
@@ -43,32 +42,18 @@ public class ObjectFactory {
     private final static QName _EventoExpedienteDocumentos_QNAME = new QName("", "documentos");
     private final static QName _EventoExpedienteFecha_QNAME = new QName("", "fecha");
     private final static QName _EventoExpedienteEnlaceConsulta_QNAME = new QName("", "enlaceConsulta");
+    private final static QName _EventoExpedienteAccesiblePorClave_QNAME = new QName("", "accesiblePorClave");
     private final static QName _EventoExpedienteTextoSMS_QNAME = new QName("", "textoSMS");
     private final static QName _ConfiguracionAvisosExpedienteAvisoEmail_QNAME = new QName("", "avisoEmail");
     private final static QName _ConfiguracionAvisosExpedienteAvisoSMS_QNAME = new QName("", "avisoSMS");
     private final static QName _ConfiguracionAvisosExpedienteHabilitarAvisos_QNAME = new QName("", "habilitarAvisos");
+    private final static QName _Fault_QNAME = new QName("urn:es:caib:zonaper:ws:v2:model:BackofficeFacade", "fault");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: es.caib.zonaper.ws.v2.model
      * 
      */
     public ObjectFactory() {
-    }
-
-    /**
-     * Create an instance of {@link EventosExpediente }
-     * 
-     */
-    public EventosExpediente createEventosExpediente() {
-        return new EventosExpediente();
-    }
-
-    /**
-     * Create an instance of {@link Expediente }
-     * 
-     */
-    public Expediente createExpediente() {
-        return new Expediente();
     }
 
     /**
@@ -80,59 +65,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DocumentosExpediente }
+     * Create an instance of {@link ExisteZonaPersonalUsuario }
      * 
      */
-    public DocumentosExpediente createDocumentosExpediente() {
-        return new DocumentosExpediente();
-    }
-
-    /**
-     * Create an instance of {@link AltaZonaPersonalUsuarioResponse }
-     * 
-     */
-    public AltaZonaPersonalUsuarioResponse createAltaZonaPersonalUsuarioResponse() {
-        return new AltaZonaPersonalUsuarioResponse();
-    }
-
-    /**
-     * Create an instance of {@link AltaEventoExpediente }
-     * 
-     */
-    public AltaEventoExpediente createAltaEventoExpediente() {
-        return new AltaEventoExpediente();
-    }
-
-    /**
-     * Create an instance of {@link AltaExpedienteResponse }
-     * 
-     */
-    public AltaExpedienteResponse createAltaExpedienteResponse() {
-        return new AltaExpedienteResponse();
-    }
-
-    /**
-     * Create an instance of {@link AltaExpediente }
-     * 
-     */
-    public AltaExpediente createAltaExpediente() {
-        return new AltaExpediente();
-    }
-
-    /**
-     * Create an instance of {@link DocumentoExpediente }
-     * 
-     */
-    public DocumentoExpediente createDocumentoExpediente() {
-        return new DocumentoExpediente();
-    }
-
-    /**
-     * Create an instance of {@link EventoExpediente }
-     * 
-     */
-    public EventoExpediente createEventoExpediente() {
-        return new EventoExpediente();
+    public ExisteZonaPersonalUsuario createExisteZonaPersonalUsuario() {
+        return new ExisteZonaPersonalUsuario();
     }
 
     /**
@@ -144,11 +81,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AltaZonaPersonalUsuario }
+     * Create an instance of {@link Expediente }
      * 
      */
-    public AltaZonaPersonalUsuario createAltaZonaPersonalUsuario() {
-        return new AltaZonaPersonalUsuario();
+    public Expediente createExpediente() {
+        return new Expediente();
+    }
+
+    /**
+     * Create an instance of {@link AltaExpediente }
+     * 
+     */
+    public AltaExpediente createAltaExpediente() {
+        return new AltaExpediente();
+    }
+
+    /**
+     * Create an instance of {@link EventosExpediente }
+     * 
+     */
+    public EventosExpediente createEventosExpediente() {
+        return new EventosExpediente();
     }
 
     /**
@@ -160,6 +113,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link AltaZonaPersonalUsuario }
+     * 
+     */
+    public AltaZonaPersonalUsuario createAltaZonaPersonalUsuario() {
+        return new AltaZonaPersonalUsuario();
+    }
+
+    /**
+     * Create an instance of {@link AltaZonaPersonalUsuarioResponse }
+     * 
+     */
+    public AltaZonaPersonalUsuarioResponse createAltaZonaPersonalUsuarioResponse() {
+        return new AltaZonaPersonalUsuarioResponse();
+    }
+
+    /**
      * Create an instance of {@link BackofficeFacadeException }
      * 
      */
@@ -168,11 +137,43 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ExisteZonaPersonalUsuario }
+     * Create an instance of {@link DocumentoExpediente }
      * 
      */
-    public ExisteZonaPersonalUsuario createExisteZonaPersonalUsuario() {
-        return new ExisteZonaPersonalUsuario();
+    public DocumentoExpediente createDocumentoExpediente() {
+        return new DocumentoExpediente();
+    }
+
+    /**
+     * Create an instance of {@link DocumentosExpediente }
+     * 
+     */
+    public DocumentosExpediente createDocumentosExpediente() {
+        return new DocumentosExpediente();
+    }
+
+    /**
+     * Create an instance of {@link AltaEventoExpediente }
+     * 
+     */
+    public AltaEventoExpediente createAltaEventoExpediente() {
+        return new AltaEventoExpediente();
+    }
+
+    /**
+     * Create an instance of {@link EventoExpediente }
+     * 
+     */
+    public EventoExpediente createEventoExpediente() {
+        return new EventoExpediente();
+    }
+
+    /**
+     * Create an instance of {@link AltaExpedienteResponse }
+     * 
+     */
+    public AltaExpedienteResponse createAltaExpedienteResponse() {
+        return new AltaExpedienteResponse();
     }
 
     /**
@@ -236,15 +237,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "nombreRepresentado", scope = Expediente.class)
     public JAXBElement<String> createExpedienteNombreRepresentado(String value) {
         return new JAXBElement<String>(_ExpedienteNombreRepresentado_QNAME, String.class, Expediente.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link BackofficeFacadeException }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "urn:es:caib:zonaper:ws:v2:model:BackofficeFacade", name = "fault")
-    public JAXBElement<BackofficeFacadeException> createFault(BackofficeFacadeException value) {
-        return new JAXBElement<BackofficeFacadeException>(_Fault_QNAME, BackofficeFacadeException.class, null, value);
     }
 
     /**
@@ -347,6 +339,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link Boolean }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "accesiblePorClave", scope = EventoExpediente.class)
+    public JAXBElement<Boolean> createEventoExpedienteAccesiblePorClave(Boolean value) {
+        return new JAXBElement<Boolean>(_EventoExpedienteAccesiblePorClave_QNAME, Boolean.class, EventoExpediente.class, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
@@ -380,6 +381,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "habilitarAvisos", scope = ConfiguracionAvisosExpediente.class)
     public JAXBElement<Boolean> createConfiguracionAvisosExpedienteHabilitarAvisos(Boolean value) {
         return new JAXBElement<Boolean>(_ConfiguracionAvisosExpedienteHabilitarAvisos_QNAME, Boolean.class, ConfiguracionAvisosExpediente.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link BackofficeFacadeException }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:es:caib:zonaper:ws:v2:model:BackofficeFacade", name = "fault")
+    public JAXBElement<BackofficeFacadeException> createFault(BackofficeFacadeException value) {
+        return new JAXBElement<BackofficeFacadeException>(_Fault_QNAME, BackofficeFacadeException.class, null, value);
     }
 
 }

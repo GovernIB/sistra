@@ -192,11 +192,24 @@ div#notificacio dl dt { float:left; clear:left; width:20%; font-size:1.1em; font
 div#notificacio dd { float:left; width:75%; font-weight:bold; padding-bottom:.5em; }
 div#notificacio dt { margin-right:1%  }
 
-div#signatura { width:24em; padding:0 2em 1em 2em; margin:2em auto; background-color:#f2f2f2; }
-div#signatura div.pas { padding-top:1em; }
-div#signatura div.pas p { margin-top:.3em; }
-div#signatura div.pas p.botonera { text-align:center; }
-div#signatura div.pas p #btnFirmar { overflow:visible; font-size:1.1em; font-weight:bold; text-transform:uppercase; padding:.3em 1em; }
+div#signaturaAFirma { width:24em; padding:0 2em 1em 2em; margin:2em auto; background-color:#f2f2f2; }
+div#signaturaAFirma div.pas { padding-top:1em; }
+div#signaturaAFirma div.pas p { margin-top:.3em; }
+div#signaturaAFirma div.pas p.botonera { text-align:center; }
+div#signaturaAFirma div.pas p #btnFirmar { overflow:visible; font-size:1.1em; font-weight:bold; text-transform:uppercase; padding:.3em 1em; }
+
+div#signaturaCaib { width:24em; padding:0 2em 1em 2em; margin:2em auto; background-color:#f2f2f2; }
+div#signaturaCaib div.pas { padding-top:1em; }
+div#signaturaCaib div.pas p { margin-top:.3em; }
+div#signaturaCaib div.pas p.botonera { text-align:center; }
+div#signaturaCaib div.pas p #btnFirmar { overflow:visible; font-size:1.1em; font-weight:bold; text-transform:uppercase; padding:.3em 1em; }
+
+div#signaturaClave { width:24em; padding:0 2em 1em 2em; margin:2em auto; background-color:#f2f2f2; }
+div#signaturaClave div.pas { padding-top:1em; }
+div#signaturaClave div.pas p { margin-top:.3em; }
+div#signaturaClave div.pas p.botonera { text-align:center; }
+div#signaturaClave div.pas p #btnFirmar { overflow:visible; font-size:1.1em; font-weight:bold; text-transform:uppercase; padding:.3em 1em; }
+
 
 div#notaLegalPie p { font-size:.9em; margin-top:0; line-height:1.5em; }
 

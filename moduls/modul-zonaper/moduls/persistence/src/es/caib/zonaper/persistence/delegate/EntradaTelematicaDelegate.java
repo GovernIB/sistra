@@ -20,9 +20,9 @@ public class EntradaTelematicaDelegate implements StatelessDelegate {
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
-    public Long grabarEntradaTelematica(EntradaTelematica tramite) throws DelegateException {
+    public Long grabarNuevaEntradaTelematica(EntradaTelematica tramite) throws DelegateException {
         try {
-            return getFacade().grabarEntradaTelematica(tramite);
+            return getFacade().grabarNuevaEntradaTelematica(tramite);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
@@ -52,6 +52,14 @@ public class EntradaTelematicaDelegate implements StatelessDelegate {
         }
     }
     
+    public EntradaTelematica obtenerEntradaTelematicaAutenticada(String idPersistencia) throws DelegateException {
+        try {
+            return getFacade().obtenerEntradaTelematica(idPersistencia);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     public EntradaTelematica obtenerEntradaTelematica(String idPersistencia) throws DelegateException {
         try {
             return getFacade().obtenerEntradaTelematica(idPersistencia);
@@ -71,6 +79,23 @@ public class EntradaTelematicaDelegate implements StatelessDelegate {
     public List listarEntradaTelematicasNifModelo(String nif, String modelo, Date fechaInicial, Date fechaFinal, String nivelAutenticacion) throws DelegateException {
         try {
             return getFacade().listarEntradaTelematicasNifModelo(nif,modelo,fechaInicial,fechaFinal,nivelAutenticacion);
+        } catch (Exception e) {        	
+            throw new DelegateException(e);
+        }
+    }
+    
+    public EntradaTelematica obtenerEntradaTelematicaAnonima(String idPersistencia) throws DelegateException {
+        try {
+            return getFacade().obtenerEntradaTelematicaAnonima(idPersistencia);
+        } catch (Exception e) {
+        	e.printStackTrace();	
+            throw new DelegateException(e);
+        }
+    }
+    
+    public boolean existeEntradaTelematica(String idPersistencia) throws DelegateException {
+        try {
+            return getFacade().existeEntradaTelematica(idPersistencia);
         } catch (Exception e) {
         	e.printStackTrace();	
             throw new DelegateException(e);

@@ -59,7 +59,13 @@ public class AltaNotificacionAction extends BaseAction
 				codMensajeError = "error.expediente.consulta";
 				throw new Exception("No se ha encontrado expediente");
 			}
-						
+			
+			// Verificamos que el expediente tenga nif
+			if(StringUtils.isBlank(exp.getNifRepresentante())) {
+				codMensajeError = "error.notificacio.noNif";
+				throw new Exception("Expediente no tiene habilitado los avisos");
+			}
+			
 			// Verificamos que el expediente tenga activados los avisos (si la notif requiere avisos)
 			ConfiguracionDelegate delegate = DelegateUtil.getConfiguracionDelegate();
 			String strAvisosNotif = delegate.obtenerConfiguracion().getProperty("sistra.avisoObligatorioNotificaciones");
@@ -86,21 +92,21 @@ public class AltaNotificacionAction extends BaseAction
 			}
 			
 			
+			notificacionForm.setNif(exp.getNifRepresentante());
 			
-			// Si expediente es autenticado recuperamos datos persona
-			if (exp.isAutenticado()){
-				PersonaPAD p = DelegateUtil.getConsultaPADDelegate().obtenerDatosPADporNif(exp.getNifRepresentante());
-				if (p == null){
-					throw new Exception("No se encuentra usuario en la tabla de personas asociado a usuario: " + exp.getIdentificadorUsuario());
-				}
-				notificacionForm.setUsuarioSey(exp.getIdentificadorUsuario());
-				notificacionForm.setNif(p.getNif());
-				//notificacionForm.setApellidos(p.getNombreCompleto());
-				notificacionForm.setApellidos(p.getApellidosNombre());
-				notificacionForm.setAcuse(p.getApellidosNombre());
-				notificacionForm.setIdioma(exp.getIdioma());
+			// Intentamos obtener nombre de la persona si esta registrada en zonaper
+			PersonaPAD p = DelegateUtil.getConsultaPADDelegate().obtenerDatosPADporNif(exp.getNifRepresentante());
+			if (p != null){					
+				notificacionForm.setUsuarioSey(p.getUsuarioSeycon());
+				notificacionForm.setApellidos(p.getApellidosNombre());				
 			}
+			
+			// Si expediente es autenticado deshabilitamos por defecto el acceso por clave
+			notificacionForm.setAccesoPorClave(exp.isAutenticado()?"N":"S");
 						
+			// Deshabilitamos por defecto la firma por clave	
+			notificacionForm.setFirmaPorClave("N");
+			
 			return mapping.findForward( "success" );							
 			
 		}catch(Exception e){

@@ -36,7 +36,7 @@ public class DetallePreregistroAction extends BaseAction
     {
 		DetallePreregistroForm formulario = ( DetallePreregistroForm ) form;
 		EntradaPreregistroDelegate delegate = DelegateUtil.getEntradaPreregistroDelegate();
-		EntradaPreregistro preregistro = delegate.obtenerEntradaPreregistroReg( formulario.getCodigo() );
+		EntradaPreregistro preregistro = delegate.obtenerEntradaPreregistro( formulario.getCodigo() );
 		request.setAttribute ( "preregistro", preregistro );
 		
 		// Comprobamos is se debe mostrar el justificante o bien existe un formulario-justificante

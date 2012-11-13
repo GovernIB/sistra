@@ -82,5 +82,13 @@ public class ConstantesZPE {
 	 * EXPRESION REGULAR PARA IDENTIFICADOR EXPEDIENTE.
 	 */
 	public final static String REGEXP_IDENTIFICADOREXPEDIENTE = "^[A-Z|a-z|0-9|/|-]{1,50}$";
+	/**
+	 * TIPO FIRMA ACUSE: CERTIFICADO.
+	 */
+	public final static String TIPOFIRMAACUSE_CERTIFICADO = "CER";
+	/**
+	 * TIPO FIRMA ACUSE: CLAVE.
+	 */
+	public final static String TIPOFIRMAACUSE_CLAVE = "CLA";
 	
 }

@@ -22,9 +22,9 @@ public class NotificacionTelematicaDelegate implements StatelessDelegate {
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
-    public Long grabarNotificacionTelematica(NotificacionTelematica tramite) throws DelegateException {
+    public Long grabarNuevaNotificacionTelematica(NotificacionTelematica tramite) throws DelegateException {
         try {
-            return getFacade().grabarNotificacionTelematica(tramite);
+            return getFacade().grabarNuevaNotificacionTelematica(tramite);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
@@ -62,7 +62,7 @@ public class NotificacionTelematicaDelegate implements StatelessDelegate {
         }
     }
     
-        
+    /* NO USADAS ?    
     public List listarNotificacionTelematicasUsuario() throws DelegateException {
         try {
             return getFacade().listarNotificacionesTelematicasUsuario();
@@ -71,6 +71,7 @@ public class NotificacionTelematicaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+   
     
     public int numeroNotificacionesUsuario()  throws DelegateException
 	{
@@ -97,6 +98,7 @@ public class NotificacionTelematicaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
 	}
+	 */
     
     
     public boolean firmarAcuseReciboNotificacionAutenticada(Long codigo,String asientoAcuse,FirmaIntf firmaAcuse) throws DelegateException {
@@ -139,9 +141,9 @@ public class NotificacionTelematicaDelegate implements StatelessDelegate {
         }
     } 
     
-    public AsientoRegistral generarAcuseReciboNotificacion( Long idNotificacion, boolean rechazada) throws DelegateException {
+    public AsientoRegistral generarAcuseReciboNotificacion( Long idNotificacion, boolean rechazada, String tipoFirma) throws DelegateException {
         try {
-            return getFacade().generarAcuseReciboNotificacion(idNotificacion, rechazada);            
+            return getFacade().generarAcuseReciboNotificacion(idNotificacion, rechazada, tipoFirma);            
         } catch (Exception e) {
             throw new DelegateException(e);
         }
@@ -155,7 +157,7 @@ public class NotificacionTelematicaDelegate implements StatelessDelegate {
         }
     } 
     
-    public void rechazarNotificacion(Long codigo)throws DelegateException {
+    public void rechazarNotificacion(Long codigo) throws DelegateException {
         try {
             getFacade().rechazarNotificacion(codigo);            
         } catch (Exception e) {
@@ -163,6 +165,27 @@ public class NotificacionTelematicaDelegate implements StatelessDelegate {
         }
     } 
 
+    public boolean firmarAcuseReciboNotificacionAnonima(Long codigo,
+			String idPersistencia, String asientoXML, String firma)  throws DelegateException {
+        try {
+            return getFacade().firmarAcuseReciboNotificacionAnonima(codigo,
+        			idPersistencia, asientoXML, firma);            
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    } 
+    
+    public boolean firmarAcuseReciboNotificacionAutenticada(Long codigo,
+			String asientoXML, String firma) throws DelegateException {
+        try {
+            return getFacade().firmarAcuseReciboNotificacionAutenticada(codigo,
+        			asientoXML, firma);            
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    } 
+
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
@@ -171,6 +194,9 @@ public class NotificacionTelematicaDelegate implements StatelessDelegate {
     }
 
     protected NotificacionTelematicaDelegate() throws DelegateException {     
-    }                  
+    }
+
+	
+	                
 }
 

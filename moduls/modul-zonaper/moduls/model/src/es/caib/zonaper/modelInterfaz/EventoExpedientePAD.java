@@ -23,9 +23,9 @@ public class EventoExpedientePAD extends ElementoExpedientePAD
 	private String textoSMS;
 	private String enlaceConsulta;
 	private Date fechaConsulta;
+	private Boolean accesiblePorClave;
 	private List documentos = new ArrayList();	
-	
-	
+		
 	/**
 	 * Devuelve Enlace de consulta del evento. Opcionalmente se puede establecer un link a una url externa relacionada con el evento. 
 	 * 
@@ -117,6 +117,12 @@ public class EventoExpedientePAD extends ElementoExpedientePAD
 	}
 	public void setFechaConsulta(Date fechaConsulta) {
 		this.fechaConsulta = fechaConsulta;
+	}
+	public Boolean getAccesiblePorClave() {
+		return accesiblePorClave;
+	}
+	public void setAccesiblePorClave(Boolean accesiblePorClave) {
+		this.accesiblePorClave = accesiblePorClave;
 	}
 	
 }

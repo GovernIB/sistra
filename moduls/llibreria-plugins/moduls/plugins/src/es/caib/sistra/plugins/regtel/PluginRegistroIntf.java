@@ -152,5 +152,11 @@ public interface PluginRegistroIntf extends PluginSistraIntf {
 	 * @see ServicioDestinatario
 	 */
 	public List obtenerServiciosDestino();
+
+	/**
+	 * Obtiene descripción de la oficina para la estampación del sello en un preregistro.
+	 * @param oficina Código oficina
+	 */
+	public String obtenerDescripcionSelloOficina(String oficina);
 		
 }

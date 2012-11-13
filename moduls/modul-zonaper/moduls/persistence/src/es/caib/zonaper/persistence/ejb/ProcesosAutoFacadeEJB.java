@@ -8,12 +8,10 @@ import java.util.Properties;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
+import javax.ejb.SessionBean;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
-
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,6 +20,7 @@ import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.regtel.persistence.delegate.RegistroOrganismoDelegate;
+import es.caib.util.CredentialUtil;
 import es.caib.xml.registro.factoria.ConstantesAsientoXML;
 import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.ElementoExpedienteItf;
@@ -56,7 +55,7 @@ import es.caib.zonaper.persistence.util.UsernamePasswordCallbackHandler;
  *
  * @ejb.transaction type="Required"
  */
-public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
+public abstract class ProcesosAutoFacadeEJB implements SessionBean
 {
 	private static Log backupLog = LogFactory.getLog( ProcesosAutoFacadeEJB.class );
 	
@@ -65,8 +64,7 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
      * @ejb.permission unchecked = "true"
      */
 	public void ejbCreate() throws CreateException {
-		super.ejbCreate();
-
+		
 	}
 	
 	/**
@@ -307,41 +305,25 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
 	// ----------------------------------------------------------------------------------------------
 	//	FUNCIONES AUXILIARES
 	// ----------------------------------------------------------------------------------------------
-	private ElementoExpediente obtenerUltimoElementoExpediente(Long id) 
+	private ElementoExpediente obtenerUltimoElementoExpediente(Long id) throws Exception
 	{
-		Session session = getSession();
-		try
-		{
-			Expediente expediente = ( Expediente )session.load( Expediente.class, id );			
-			if (!expediente.getElementos().isEmpty()){
-				ElementoExpediente e = null;
-				for (Iterator it = expediente.getElementos().iterator();it.hasNext();){
-					e = (ElementoExpediente) it.next();
-				}
-				return e;
+		Expediente expediente =  DelegateUtil.getExpedienteDelegate().obtenerExpedienteAuto(id);
+		if (!expediente.getElementos().isEmpty()){
+			ElementoExpediente e = null;
+			for (Iterator it = expediente.getElementos().iterator();it.hasNext();){
+				e = (ElementoExpediente) it.next();
 			}
-			return null;
+			return e;
 		}
-		catch (HibernateException he) 
-		{   
-			throw new EJBException(he);
-	    } 
-		finally 
-		{
-	        close(session);
-	    }
+		return null;		
 	}
 	
 
-	private void doActualizaEstadoExpediente(Long id){
+	private void doActualizaEstadoExpediente(Long id) throws Exception{
 		// Obtenemos ultimo elemento del expediente y obtenemos su detalle
 		ElementoExpedienteItf de = null;
 		ElementoExpediente e = obtenerUltimoElementoExpediente(id);		
-		try{
-			de = DelegateUtil.getElementoExpedienteDelegate().obtenerDetalleElementoExpediente(e.getCodigo());
-		}catch(Exception dex){
-			throw new EJBException(dex);
-		}
+		de = DelegateUtil.getElementoExpedienteDelegate().obtenerDetalleElementoExpediente(e.getCodigo());
 		
 		// Calculamos estado y fecha fin
 		String estado = null;
@@ -379,22 +361,8 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
 		}
 		
 		// Actualizamos expediente
-		Session session = getSession();
-		try
-		{
-			Expediente expediente = ( Expediente )session.load( Expediente.class, id );			
-			expediente.setFechaFin(fechaFin);
-			expediente.setEstado(estado);
-			session.update(expediente);
-		}
-		catch (HibernateException he) 
-		{   
-			throw new EJBException(he);
-	    } 
-		finally 
-		{
-	        close(session);
-	    }
+		DelegateUtil.getExpedienteDelegate().actualizaEstadoExpedienteAuto(id, estado, fechaFin);
+		
 	}
     /**
      * Revisa registros efectuados para ver si se han consolidado
@@ -455,8 +423,10 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
     	el.setTipoElemento(entrada instanceof EntradaTelematica?ElementoExpediente.TIPO_ENTRADA_TELEMATICA:ElementoExpediente.TIPO_ENTRADA_PREREGISTRO);
     	el.setFecha(entrada.getFecha());
     	el.setCodigoElemento(entrada.getCodigo());
+    	el.setIdentificadorPersistencia(entrada.getIdPersistencia());
+    	el.setAccesoAnonimoExpediente(entrada.getNivelAutenticacion() == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO);
     	expe.addElementoExpediente(el,entrada);
-    	DelegateUtil.getExpedienteDelegate().grabarExpediente(expe);
+    	DelegateUtil.getExpedienteDelegate().grabarExpedienteReal(expe);
 	}
 	
 	/**

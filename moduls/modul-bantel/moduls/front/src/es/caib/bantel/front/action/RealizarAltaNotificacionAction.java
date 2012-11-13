@@ -17,8 +17,6 @@ import org.apache.struts.action.ActionMapping;
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleNotificacionForm;
 import es.caib.bantel.front.util.MensajesUtil;
-import es.caib.bantel.persistence.delegate.ConfiguracionDelegate;
-import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.regtel.model.ReferenciaRDSAsientoRegistral;
 import es.caib.regtel.model.ResultadoRegistroTelematico;
@@ -70,7 +68,10 @@ public class RealizarAltaNotificacionAction extends BaseAction
 			r.setOficinaRegistro(notificacionForm.getOrganoDestino(),notificacionForm.getOficinaRegistro());
 			r.setExpediente(uniAdm,idExpe,claveExpe);
 			r.setDatosInteresado(notificacionForm.getNif(),notificacionForm.getApellidos(), StringUtils.isEmpty(notificacionForm.getUsuarioSey())?null:notificacionForm.getUsuarioSey(),notificacionForm.getCodigoPais(),notificacionForm.getNombrePais(),notificacionForm.getCodigoProvincia(),notificacionForm.getNombreProvincia(),notificacionForm.getCodigoMunicipio(),notificacionForm.getNombreMunicipio());
-			r.setDatosNotificacion(notificacionForm.getIdioma(),notificacionForm.getTipoAsunto(),notificacionForm.getTituloAviso(),notificacionForm.getTextoAviso(),(StringUtils.isNotEmpty(notificacionForm.getTextoSmsAviso())?notificacionForm.getTextoSmsAviso():null),notificacionForm.getTituloOficio(),notificacionForm.getTextoOficio(),"S".equals(notificacionForm.getAcuse()));
+			r.setDatosNotificacion(notificacionForm.getIdioma(),notificacionForm.getTipoAsunto(),notificacionForm.getTituloAviso(),
+					notificacionForm.getTextoAviso(),(StringUtils.isNotEmpty(notificacionForm.getTextoSmsAviso())?notificacionForm.getTextoSmsAviso():null),
+					notificacionForm.getTituloOficio(),notificacionForm.getTextoOficio(),"S".equals(notificacionForm.getAcuse()),
+					new Boolean("S".equals(notificacionForm.getAccesoPorClave())), new Boolean("S".equals(notificacionForm.getFirmaPorClave())));
 			if("S".equals(notificacionForm.getTramiteSubsanacion())){
 				Map parametros = null;
 				if(request.getSession().getAttribute("parametrosAltaNotificacion") != null){
