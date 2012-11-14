@@ -101,12 +101,9 @@ public class AltaNotificacionAction extends BaseAction
 				notificacionForm.setApellidos(p.getApellidosNombre());				
 			}
 			
-			// Si expediente es autenticado deshabilitamos por defecto el acceso por clave
-			notificacionForm.setAccesoPorClave(exp.isAutenticado()?"N":"S");
+			// Deshabilitamos por defecto el acceso por clave
+			notificacionForm.setAccesoPorClave("N");
 						
-			// Deshabilitamos por defecto la firma por clave	
-			notificacionForm.setFirmaPorClave("N");
-			
 			return mapping.findForward( "success" );							
 			
 		}catch(Exception e){

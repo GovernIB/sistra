@@ -71,7 +71,7 @@ public class RealizarAltaNotificacionAction extends BaseAction
 			r.setDatosNotificacion(notificacionForm.getIdioma(),notificacionForm.getTipoAsunto(),notificacionForm.getTituloAviso(),
 					notificacionForm.getTextoAviso(),(StringUtils.isNotEmpty(notificacionForm.getTextoSmsAviso())?notificacionForm.getTextoSmsAviso():null),
 					notificacionForm.getTituloOficio(),notificacionForm.getTextoOficio(),"S".equals(notificacionForm.getAcuse()),
-					new Boolean("S".equals(notificacionForm.getAccesoPorClave())), new Boolean("S".equals(notificacionForm.getFirmaPorClave())));
+					new Boolean("S".equals(notificacionForm.getAccesoPorClave())));
 			if("S".equals(notificacionForm.getTramiteSubsanacion())){
 				Map parametros = null;
 				if(request.getSession().getAttribute("parametrosAltaNotificacion") != null){

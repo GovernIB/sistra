@@ -174,7 +174,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
         	Date ahora = new Date();
         	
         	Query query = session
-            .createQuery("FROM NotificacionTelematica AS m WHERE m.fechaFinPlazo < :ahora and m.rechazada = false and m.fechaAcuse is null ORDER BY m.fechaRegistro ASC")
+            .createQuery("FROM NotificacionTelematica AS m WHERE m.firmarAcuse and m.fechaFinPlazo < :ahora and m.rechazada = false and m.fechaAcuse is null ORDER BY m.fechaRegistro ASC")
             .setParameter("ahora",ahora);
             List tramites = query.list();
             
@@ -203,26 +203,11 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}" 
      */
-	public boolean firmarAcuseReciboNotificacionAutenticada(Long codigo,String asientoAcuse,FirmaIntf firmaAcuse)
+	public boolean firmarAcuseReciboNotificacionAutenticada(Long codigo,String asientoAcuse,FirmaIntf firmaDigital, String firmaClave)
 	{
 		 return firmarAcuseReciboNotificacionAutenticadaImpl(codigo,
-				asientoAcuse, firmaAcuse, null);		
+				asientoAcuse, firmaDigital, firmaClave);		
 	}
-
-	/**
-	 * Realiza la firma del acuse de la notificacion con clave (en caso de que la notificacion tenga acuse) y marca la notificacion como entregada
-	 * actualizando el estado del expediente.
-	 * 
-	 * Devuelve true si ok y false si el firmante no es el adecuado
-	 * 
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.todos}" 
-     */
-    public boolean firmarAcuseReciboNotificacionAutenticada(Long codigo,
-			String asientoXML, String firma) throws DelegateException {
-    	return firmarAcuseReciboNotificacionAutenticadaImpl(codigo,
-    			asientoXML, null, firma);
-    } 
 
 	/**
 	 * Marca la notificacion como rechazada generando el acuse.
@@ -235,6 +220,11 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 		 try {
 			// Recuperamos notificacion 
 			NotificacionTelematica notif = recuperarNotificacionPorId(codigo);
+			
+			// Solo se puede rechazar si hay que firmar acuse
+			if (!notif.isFirmarAcuse()) {
+				throw new Exception("La notificación no debe firmarse");	
+			}			 
 			
 			// Comprobamos fecha fin plazo por si acaso
 			if (notif.getFechaFinPlazo() == null || notif.getFechaFinPlazo().after(new Date())) {
@@ -279,7 +269,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 		 
 	}
 	/**
-	 * Realiza la firma del acuse de la notificacion con certificado (en caso de que la notificacion tenga acuse) y marca la notificacion como entregada
+	 * Realiza la firma del acuse de la notificacion (en caso de que la notificacion tenga acuse) y marca la notificacion como entregada
 	 * actualizando el estado del expediente.
 	 * 
 	 * Devuelve true si ok y false si el firmante no es el adecuado
@@ -287,30 +277,12 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}" 
      */
-	public boolean firmarAcuseReciboNotificacionAnonima(Long codigo,String idPersistencia,String asientoAcuse,FirmaIntf firmaAcuse)
+	public boolean firmarAcuseReciboNotificacionAnonima(Long codigo,String idPersistencia,String asientoAcuse,FirmaIntf firmaDigital, String firmaClave)
 	{
 		return firmarAcuseReciboNotificacionAnonimaImpl(codigo, idPersistencia,
-				asientoAcuse, firmaAcuse, null);		
+				asientoAcuse, firmaDigital, firmaClave);		
 	}
 
-
-	
-	/**
-	 * Realiza la firma del acuse de la notificacion con clave (en caso de que la notificacion tenga acuse) y marca la notificacion como entregada
-	 * actualizando el estado del expediente.
-	 * 
-	 * Devuelve true si ok y false si el firmante no es el adecuado
-	 * 
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.todos}" 
-     */
-	
-	  public boolean firmarAcuseReciboNotificacionAnonima(Long codigo,
-				String idPersistencia, String asientoXML, String firma)  throws DelegateException {
-		  return firmarAcuseReciboNotificacionAnonimaImpl(codigo, idPersistencia,
-				  asientoXML, null, firma);
-	   } 
-		
 	/**
 	 * Prepara parametros para iniciar tramite de subsanacion indicado en la notificacion
 	 * Devuelve el id a pasar como parametro al asistente de tramitación
@@ -605,30 +577,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 	private boolean realizarFirmaAcuse(NotificacionTelematica notificacion,String asientoAcuse,FirmaIntf firmaDigital, String firmaClave) throws Exception{		
 	
 		Date fechaActual = new Date();
-		
-		// Si se intenta firmar por clave validamos que este permitido y que la clave sea la correcta
-		if (firmaClave != null && !notificacion.isFirmarPorClave()) {
-			throw new Exception("El acuse de recibo no puede ser firmado por clave");
-		}
-		if (firmaClave != null && notificacion.isFirmarPorClave() && !notificacion.getIdentificadorPersistencia().equals(firmaClave)) {
-			return false;
-		}
-		
-		// Comprobamos que no se haya firmado anteriormente
-		if (notificacion.isRechazada()) {
-			throw new Exception("La notificacion esta rechazada");
-		}
-		if (notificacion.getFechaAcuse() != null){
-			throw new Exception("El acuse de recibo ya ha sido firmado anteriormente");
-		}		
-				
-		// En caso de que se controle la entrega de notificaciones comprobamos que no haya pasado el plazo		
-		if ("true".equals(ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("notificaciones.controlEntrega"))) {			
-			if (notificacion.getFechaFinPlazo() != null &&  fechaActual.after(notificacion.getFechaFinPlazo())) {
-				throw new Exception("El plazo de entrega ha finalizado");
-			}
-		}
-		
+		String tipoFirmaAcuse = null;
 		
 		// Parseamos acuse
 		AsientoRegistral asiento = getAsientoRegistral(asientoAcuse);
@@ -640,23 +589,55 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			throw new Exception("El acuse de recibo no es correcto, no concuerda el nif del acuse no el nif de la notificacion");
 		}
 		
-		// En caso de que haya que firmar el acuse comprobamos que concuerde el nif de la firma
-		// En caso de notificacion autenticada comprobamos si se accede en modo delegado
-		if (notificacion.isFirmarAcuse() && firmaDigital != null){		
-			
-			// Obtenemos nif firmante
-			String nifFirmante = getNifFirma(firmaDigital);
-			
-			// Si no es el destinatario quien firma el acuse, comprobamos si es un delegado con permiso para abrir notificaciones
-			if (!nifFirmante.equals(nifRepresentanteNotificacion)){
-            	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(notificacion.getNifRepresentante());
-            	if (StringUtils.isEmpty(permisos) || permisos.indexOf(ConstantesZPE.DELEGACION_PERMISO_ABRIR_NOTIFICACION) == -1){
-            		return false;
-            	}
+		
+		// Verificacion de firma por clave		
+		if (notificacion.isFirmarAcuse()) {
+			// Debe alimentarse una de las 2 firmas
+			if (firmaClave == null && firmaDigital == null) {
+				throw new Exception("No se ha indicado firma");
 			}
 			
+			// Verificacion firma por clave
+			if (firmaClave != null) {
+				// Si se intenta firmar por clave validamos que este permitido y que la clave sea la correcta
+				if (!notificacion.isAccesiblePorClave()) {
+					throw new Exception("El acuse de recibo no puede ser firmado por clave");
+				}
+				if (notificacion.isAccesiblePorClave() && !notificacion.getIdentificadorPersistencia().equals(firmaClave)) {
+					return false;
+				}		
+				tipoFirmaAcuse = ConstantesZPE.TIPOFIRMAACUSE_CLAVE;
+			}
+			// Verificacion firma por certificado
+			if (firmaDigital != null){		
+				// Obtenemos nif firmante
+				String nifFirmante = getNifFirma(firmaDigital);
+				// Si no es el destinatario quien firma el acuse, comprobamos si es un delegado con permiso para abrir notificaciones
+				if (!nifFirmante.equals(nifRepresentanteNotificacion)){
+	            	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(notificacion.getNifRepresentante());
+	            	if (StringUtils.isEmpty(permisos) || permisos.indexOf(ConstantesZPE.DELEGACION_PERMISO_ABRIR_NOTIFICACION) == -1){
+	            		return false;
+	            	}
+				}
+				tipoFirmaAcuse = ConstantesZPE.TIPOFIRMAACUSE_CERTIFICADO;
+			}						
 		}
-			
+		
+		// Comprobamos que no se haya firmado anteriormente
+		if (notificacion.isRechazada()) {
+			throw new Exception("La notificacion esta rechazada");
+		}
+		if (notificacion.getFechaAcuse() != null){
+			throw new Exception("El acuse de recibo ya ha sido firmado anteriormente");
+		}		
+				
+		// En caso de que se controle la entrega de notificaciones comprobamos que no haya pasado el plazo (solo con acuse)	
+		if (notificacion.isFirmarAcuse() && "true".equals(ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("notificaciones.controlEntrega"))) {			
+			if (notificacion.getFechaFinPlazo() != null &&  fechaActual.after(notificacion.getFechaFinPlazo())) {
+				throw new Exception("El plazo de entrega ha finalizado");
+			}
+		}
+		
 		// Crear en RDS el acuse de recibo
 		RdsDelegate rdsDelegate =  DelegateRDSUtil.getRdsDelegate();
 		DocumentoRDS docAcuseRDS = crearDocumentoRDS( asientoAcuse.getBytes( ConstantesXML.ENCODING ), true,
@@ -679,7 +660,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 		}    	
     	
     	// Marcamos notificacion como recibida y actualizamos estado expediente    	
-    	marcarRecibidaNotificacionTelematica(notificacion.getCodigo(),refAcuse, fechaActual, (firmaDigital != null? ConstantesZPE.TIPOFIRMAACUSE_CERTIFICADO: ConstantesZPE.TIPOFIRMAACUSE_CLAVE));
+    	marcarRecibidaNotificacionTelematica(notificacion.getCodigo(),refAcuse, fechaActual, tipoFirmaAcuse);
     	
     	// Generamos indices de busqueda 
 		generarIndicesBusqueda(notificacion.getCodigo());

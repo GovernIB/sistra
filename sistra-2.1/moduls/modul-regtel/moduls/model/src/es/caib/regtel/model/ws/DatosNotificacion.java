@@ -7,7 +7,6 @@ public class DatosNotificacion {
     private String tipoAsunto;
     private boolean acuseRecibo;
     private Boolean accesiblePorClave;
-    private boolean firmaPorClave;
     private Aviso aviso;
     private OficioRemision oficioRemision;
 
@@ -57,14 +56,6 @@ public class DatosNotificacion {
 
 	public void setAccesiblePorClave(Boolean accesiblePorClave) {
 		this.accesiblePorClave = accesiblePorClave;
-	}
-
-	public boolean isFirmaPorClave() {
-		return firmaPorClave;
-	}
-
-	public void setFirmaPorClave(boolean firmaPorClave) {
-		this.firmaPorClave = firmaPorClave;
 	}
 
 }

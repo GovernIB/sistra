@@ -34,7 +34,6 @@ public class DetalleNotificacionForm extends ValidatorForm
 	private String idioma; 
 	private String acuse;
 	private String accesoPorClave = "N"; // S / N
-	private String firmaPorClave;
 	private String tipoAsunto;
 	private String tituloAviso;
 	private String textoAviso;
@@ -517,16 +516,6 @@ public class DetalleNotificacionForm extends ValidatorForm
 
 	public void setAccesoPorClave(String accesoPorClave) {
 		this.accesoPorClave = accesoPorClave;
-	}
-
-
-	public String getFirmaPorClave() {
-		return firmaPorClave;
-	}
-
-
-	public void setFirmaPorClave(String firmaPorClave) {
-		this.firmaPorClave = firmaPorClave;
 	}
 	
 }

@@ -30,7 +30,6 @@ public class PruebaEscrituraAvisoNotificacion {
 			avisoNotificacion.setTextoSMS("Texto SMS");
 			avisoNotificacion.setAcuseRecibo(new Boolean(false));
 			avisoNotificacion.setAccesiblePorClave(new Boolean(false));
-			avisoNotificacion.setFirmaPorClave(new Boolean(true));
 			
 			avisoNotificacion.getExpediente().setIdentificadorExpediente("xxx");
 			avisoNotificacion.getExpediente().setUnidadAdministrativa("yy");

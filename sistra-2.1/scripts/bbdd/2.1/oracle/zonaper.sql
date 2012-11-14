@@ -287,9 +287,6 @@ update ZPE_ELEEX set ELE_ACCEXP = 1
 ALTER table ZPE_NOTTEL ADD NOT_ACCCLA  NUMBER(1) default 0 not null;
 comment on column ZPE_NOTTEL.NOT_ACCCLA is
 'Indica si se permite que la notificacion sea accesible mediante clave (id persistencia notificacion)';
-ALTER table ZPE_NOTTEL ADD NOT_FIRCLA           NUMBER(1)                      default 0 not null;
- comment on column ZPE_NOTTEL.NOT_FIRCLA is
-'Indica si se permite que la notificacion se firme mediante clave (id persistencia notificacion)';
 
 /* ACCESO ANONIMO EVENTO POR CLAVE */
 ALTER table ZPE_HISTEX ADD   HIE_ACCCLA        NUMBER(1)     default 0                  not null;

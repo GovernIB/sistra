@@ -213,16 +213,14 @@ public class RegistroSalidaHelper{
 	 * @param textoOficioRemision (Obligatorio)
 	 * @param acuseRecibo (Obligatorio)
 	 * @param accesiblePorClave (Opcional)
-	 * @param firmaPorClave (Opcional)
 	 */
-	public void setDatosNotificacion(String codigoIdioma,String tipoAsunto,String tituloAviso, String textoAviso,String textoSMSAviso, String tituloOficioRemision, String textoOficioRemision, boolean acuseRecibo, Boolean accesiblePorClave, Boolean firmaPorClave) throws ExcepcionRegistroTelematico {
+	public void setDatosNotificacion(String codigoIdioma,String tipoAsunto,String tituloAviso, String textoAviso,String textoSMSAviso, String tituloOficioRemision, String textoOficioRemision, boolean acuseRecibo, Boolean accesiblePorClave) throws ExcepcionRegistroTelematico {
 		try{	
 			aviso.setTitulo(tituloAviso);
 			aviso.setTexto(textoAviso);
 			aviso.setTextoSMS(textoSMSAviso);
 			aviso.setAcuseRecibo(new Boolean(acuseRecibo));
 			aviso.setAccesiblePorClave(accesiblePorClave);
-			aviso.setFirmaPorClave(firmaPorClave);
 			
 			oficio.setTitulo(tituloOficioRemision);
 			oficio.setTexto(textoOficioRemision);
@@ -248,7 +246,7 @@ public class RegistroSalidaHelper{
 	 * @param acuseRecibo (Obligatorio)
 	 */
 	public void setDatosNotificacion(String codigoIdioma,String tipoAsunto,String tituloAviso, String textoAviso,String textoSMSAviso, String tituloOficioRemision, String textoOficioRemision, boolean acuseRecibo) throws ExcepcionRegistroTelematico {
-		setDatosNotificacion(codigoIdioma, tipoAsunto, tituloAviso, textoAviso, textoSMSAviso, tituloOficioRemision, textoOficioRemision, acuseRecibo, null, null);		
+		setDatosNotificacion(codigoIdioma, tipoAsunto, tituloAviso, textoAviso, textoSMSAviso, tituloOficioRemision, textoOficioRemision, acuseRecibo, null);		
 	}
 
 	/**
