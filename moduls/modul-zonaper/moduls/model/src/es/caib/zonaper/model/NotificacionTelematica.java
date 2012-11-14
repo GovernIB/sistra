@@ -42,7 +42,7 @@ public class NotificacionTelematica implements java.io.Serializable,ElementoExpe
      private String identificadorPersistencia;
      
      private boolean accesiblePorClave;
-     private boolean firmarPorClave;
+     
      private String tipoFirmaAcuse; // CERT / CLA
      
      private Set documentos = new HashSet(0);  
@@ -310,15 +310,7 @@ public class NotificacionTelematica implements java.io.Serializable,ElementoExpe
 
 	public void setIdentificadorPersistencia(String identificadorPersistencia) {
 		this.identificadorPersistencia = identificadorPersistencia;
-	}
-
-	public boolean isFirmarPorClave() {
-		return firmarPorClave;
-	}
-
-	public void setFirmarPorClave(boolean firmarPorClave) {
-		this.firmarPorClave = firmarPorClave;
-	}
+	}	
 
 	public boolean isAccesiblePorClave() {
 		return accesiblePorClave;

@@ -44,7 +44,6 @@
     
     <property name="identificadorPersistencia" column="NOT_IDEPER" not-null="true"/>
     <property name="accesiblePorClave" column="NOT_ACCCLA" not-null="true"/>    
-    <property name="firmarPorClave" column="NOT_FIRCLA" not-null="true"/>
     
     <property name="tipoFirmaAcuse" column="NOT_TIPFIR" not-null="false"/>
     

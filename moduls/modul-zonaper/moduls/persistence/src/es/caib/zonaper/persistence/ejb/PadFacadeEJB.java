@@ -1201,10 +1201,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     				} else {
     					// Si no se especifica si es accesible por clave, por compatibilidad será accesible si expe es anónimo
     					notificacion.setAccesiblePorClave(expe.getUsuarioSeycon() == null);
-    				}
-    				if (avisoNotificacion.getFirmaPorClave() != null) {
-    					notificacion.setFirmarPorClave(avisoNotificacion.getFirmaPorClave().booleanValue());
-    				}
+    				}    				
     				break;
     				
     		    //  Datos oficio remision: establecemos datos oficio en notificacion

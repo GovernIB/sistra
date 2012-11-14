@@ -42,17 +42,11 @@ public class FirmaAcuseReciboAction extends BaseAction
 	{
 		AbrirNotificacionForm formulario = ( AbrirNotificacionForm ) form;
 		
-		// Convertimos asiento y firma
-		String asientoXML = null;
+		// Firma y tipo firma (vacio si no hay que firmar acuse)
+		String tipoFirma = null;
 		FirmaIntf firmaDigital = null;
-		if (StringUtils.isNotEmpty(formulario.getAsiento())){
-			asientoXML 	= ConvertUtil.base64UrlSafeToCadena( formulario.getAsiento() );
-		}
-		if ("CERTIFICADO".equals(formulario.getTipoFirma()) && StringUtils.isNotEmpty(formulario.getFirma())){
-			PluginFirmaIntf plgFirma = PluginFactory.getInstance().getPluginFirma();
-			firmaDigital =  plgFirma.parseFirmaFromHtmlForm( formulario.getFirma() );
-		}
-		
+		String firmaClave = null;
+			
 		// Obtenemos notificacion y elemento expediente asociado
 		NotificacionTelematicaDelegate notificacionDelegate = DelegateUtil.getNotificacionTelematicaDelegate();
 		NotificacionTelematica notificacion;
@@ -65,22 +59,39 @@ public class FirmaAcuseReciboAction extends BaseAction
 			elementoExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpedienteAutenticado(ElementoExpediente.TIPO_NOTIFICACION,notificacion.getCodigo());
 		}
 		
-		// Realizamos firma del acuse
+		// Convertimos asiento
+		String asientoXML = null;		
+		if (StringUtils.isNotEmpty(formulario.getAsiento())){
+			asientoXML 	= ConvertUtil.base64UrlSafeToCadena( formulario.getAsiento() );
+		}			
+		
+		// Si hay que firmar acuse obtenemos tipo firma y firma 
+		if (notificacion.isFirmarAcuse()) {
+			// No existe firma
+			if (StringUtils.isEmpty(formulario.getFirma())){
+				throw new Exception("No existe firma");
+			}			
+			//  Convertimos firma digital si es necesario
+			if ("CERTIFICADO".equals(formulario.getTipoFirma())) {
+				tipoFirma = "CERTIFICADO";
+				PluginFirmaIntf plgFirma = PluginFactory.getInstance().getPluginFirma();
+				firmaDigital =  plgFirma.parseFirmaFromHtmlForm( formulario.getFirma() );				
+			} else if ("CLAVE".equals(formulario.getTipoFirma())) {
+				tipoFirma = "CLAVE";
+				firmaClave = formulario.getFirma();
+			} else {
+				throw new Exception("No se indica tipo de firma");
+			}			
+		}
+				
+		
+		// Abrimos notificacion
 		try{						
 			boolean result;
 			if (this.getDatosSesion(request).getNivelAutenticacion() == 'A'){
-				if ("CERTIFICADO".equals(formulario.getTipoFirma())) {
-					result = notificacionDelegate.firmarAcuseReciboNotificacionAnonima(formulario.getCodigo(),this.getIdPersistencia(request),asientoXML,firmaDigital);
-				} else {
-					result = notificacionDelegate.firmarAcuseReciboNotificacionAnonima(formulario.getCodigo(),this.getIdPersistencia(request),asientoXML,formulario.getFirma());
-				}
+				result = notificacionDelegate.firmarAcuseReciboNotificacionAnonima(formulario.getCodigo(),this.getIdPersistencia(request),asientoXML,firmaDigital, firmaClave);
 			}else{
-				if ("CERTIFICADO".equals(formulario.getTipoFirma())) {
-					result = notificacionDelegate.firmarAcuseReciboNotificacionAutenticada(formulario.getCodigo(),asientoXML,firmaDigital);
-				} else {
-					result = notificacionDelegate.firmarAcuseReciboNotificacionAutenticada(formulario.getCodigo(),asientoXML,formulario.getFirma());
-				}
-							
+				result = notificacionDelegate.firmarAcuseReciboNotificacionAutenticada(formulario.getCodigo(),asientoXML,firmaDigital, firmaClave);									
 			}		
 				
 			// Comprobamos si la firma es valida
@@ -88,15 +99,17 @@ public class FirmaAcuseReciboAction extends BaseAction
 				// Volvemos a mostrar la notificacion
 				request.setAttribute("notificacion",notificacion);
 				request.setAttribute("elementoExpediente",elementoExpediente);
-				request.setAttribute("tipoFirma",formulario.getTipoFirma());
-				if ("CERTIFICADO".equals(formulario.getTipoFirma())) {
-					if (this.getDatosSesion(request).getPerfilAcceso().equals(ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO)){
-						request.setAttribute( "messageKey", "detalleNotificacion.firmanteNoAdecuado.delegado" );
-					}else{
-						request.setAttribute( "messageKey", "detalleNotificacion.firmanteNoAdecuado" );
+				request.setAttribute("tipoFirma", tipoFirma);
+				if (notificacion.isFirmarAcuse()) {
+					if ("CERTIFICADO".equals(tipoFirma)) {
+						if (this.getDatosSesion(request).getPerfilAcceso().equals(ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO)){
+							request.setAttribute( "messageKey", "detalleNotificacion.firmanteNoAdecuado.delegado" );
+						}else{
+							request.setAttribute( "messageKey", "detalleNotificacion.firmanteNoAdecuado" );
+						}
+					} else {
+						request.setAttribute( "messageKey", "detalleNotificacion.claveFirmaNoCoincide" );
 					}
-				} else {
-					request.setAttribute( "messageKey", "detalleNotificacion.claveFirmaNoCoincide" );
 				}
 				return mapping.findForward( "fail" );
 			}

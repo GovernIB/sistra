@@ -76,16 +76,16 @@ public class DetalleNotificacionController extends BaseController
 				// Indicamos tipo de firma a utilizar
 				tipoFirma = "CERT";
 				// - si no se especifica una en la petcion, establecemos una por defecto
-				if (tipoFirmaParam == null && notificacion.isFirmarPorClave() && datosSesion.getNivelAutenticacion() == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO) {
+				if (tipoFirmaParam == null && notificacion.isAccesiblePorClave() && datosSesion.getNivelAutenticacion() == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO) {
 					tipoFirma = "CLAVE";
 				}
 				if (tipoFirmaParam != null) {
-					if ("CLAVE".equals(tipoFirmaParam) && notificacion.isFirmarPorClave()) {
+					if ("CLAVE".equals(tipoFirmaParam) && notificacion.isAccesiblePorClave()) {
 						tipoFirma = "CLAVE";
 					}
 				}
 				// Indicamos si tiene otro tipo de firma a usar
-				if (notificacion.isFirmarPorClave()) {
+				if (notificacion.isAccesiblePorClave()) {
 					if ("CLAVE".equals(tipoFirma)) {
 						tipoFirmaAlt = "CERT";
 					} else {
