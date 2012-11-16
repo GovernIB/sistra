@@ -8,7 +8,7 @@ import java.io.Serializable;
 public interface FirmaIntf extends Serializable{
 	
 	/**
-	 * Obtiene el nif/cif del firmante
+	 * Obtiene el nif/cif del firmante. El nif debe estar normalizado a 9 carácteres y mayúsculas sin espacios en blanco ni guiones.
 	 * @return nif/cif del firmante
 	 */
 	public String getNif();

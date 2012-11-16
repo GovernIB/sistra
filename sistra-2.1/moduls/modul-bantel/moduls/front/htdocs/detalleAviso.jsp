@@ -39,6 +39,21 @@
 					<dd><bean:write name="aviso" property="titulo"/></dd>
 					<dt><bean:message key="expediente.descripcion"/></dt>
 					<dd><bean:write name="aviso" property="texto"/></dd>
+					
+					<dt><bean:message key="detalle.aviso.accesoPorClave"/></dt>
+					<dd>
+						<logic:equal name="aviso" property="accesiblePorClave" value="true">
+							<bean:message key="expediente.si"/>
+						</logic:equal>
+						<logic:equal name="aviso" property="accesiblePorClave" value="false">
+							<bean:message key="expediente.no"/>
+						</logic:equal>
+					</dd>	
+					<logic:equal name="aviso" property="accesiblePorClave" value="true">						   
+						<dt><bean:message key="detalle.aviso.claveAcceso"/></dt>						
+						<dd><bean:write name="aviso" property="claveAcceso"/></dd>
+					</logic:equal>
+					
 					<logic:notEmpty name="aviso" property="documentos">		
 						<dt><bean:message key="aviso.documentoanexo" />:</dt>
 						<dd>

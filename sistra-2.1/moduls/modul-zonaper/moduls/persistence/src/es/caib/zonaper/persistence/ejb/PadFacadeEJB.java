@@ -1199,6 +1199,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     				if (avisoNotificacion.getAccesiblePorClave() != null) {
     					notificacion.setAccesiblePorClave(avisoNotificacion.getAccesiblePorClave().booleanValue());
     				} else {
+    					// COMPATIBILIDAD CON VERSIONES ANTERIORES A 2.1: EXPE ANONIMOS GENERAN SIEMPRE NOTIFS ACCESIBLES POR CLAVE
     					// Si no se especifica si es accesible por clave, por compatibilidad será accesible si expe es anónimo
     					notificacion.setAccesiblePorClave(expe.getUsuarioSeycon() == null);
     				}    				

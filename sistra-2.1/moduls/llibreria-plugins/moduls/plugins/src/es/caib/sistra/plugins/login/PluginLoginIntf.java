@@ -21,7 +21,7 @@ public interface PluginLoginIntf  extends PluginSistraIntf {
 	public char getMetodoAutenticacion(Principal principal);
 	
 	/**
-	 * Devuelve el nif/cif del usuario autenticado (en caso de que no sea anónimo)
+	 * Devuelve el nif/cif del usuario autenticado (en caso de que no sea anónimo). El nif debe estar normalizado a 9 carácteres y mayúsculas sin espacios en blanco ni guiones.
 	 * @param principal Principal autenticado en el login
 	 * @return Nif
 	 */

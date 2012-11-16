@@ -24,6 +24,7 @@ public class EventoExpedientePAD extends ElementoExpedientePAD
 	private String enlaceConsulta;
 	private Date fechaConsulta;
 	private Boolean accesiblePorClave;
+	private String claveAcceso;
 	private List documentos = new ArrayList();	
 		
 	/**
@@ -123,6 +124,12 @@ public class EventoExpedientePAD extends ElementoExpedientePAD
 	}
 	public void setAccesiblePorClave(Boolean accesiblePorClave) {
 		this.accesiblePorClave = accesiblePorClave;
+	}
+	public String getClaveAcceso() {
+		return claveAcceso;
+	}
+	public void setClaveAcceso(String claveAcceso) {
+		this.claveAcceso = claveAcceso;
 	}
 	
 }

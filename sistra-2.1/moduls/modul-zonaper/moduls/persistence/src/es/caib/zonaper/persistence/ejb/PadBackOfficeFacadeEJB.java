@@ -33,6 +33,7 @@ import es.caib.redose.modelInterfaz.UsoRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.util.CredentialUtil;
+import es.caib.util.NifCif;
 import es.caib.util.StringUtil;
 import es.caib.xml.oficioremision.factoria.FactoriaObjetosXMLOficioRemision;
 import es.caib.xml.oficioremision.factoria.ServicioOficioRemisionXML;
@@ -399,7 +400,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
     {
     	try
     	{
-    		PersonaPAD persona = DelegateUtil.getConsultaPADDelegate().obtenerDatosPADporNif(nifUsuario);
+    		PersonaPAD persona = DelegateUtil.getConsultaPADDelegate().obtenerDatosPADporNif(NifCif.normalizarDocumento(nifUsuario));
     		return (persona != null);
     	}
     	catch( Exception ex )
@@ -429,7 +430,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
     	{	
     		// Realizamos alta
     		PersonaPAD persona = new PersonaPAD();
-    		persona.setNif(nif);
+    		persona.setNif(NifCif.normalizarDocumento(nif));
     		persona.setNombre(nombre);
     		persona.setApellido1(apellido1);
     		persona.setApellido2(apellido2);
@@ -600,9 +601,9 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		if (expPAD.isAutenticado()){
 			expediente.setSeyconCiudadano( expPAD.getIdentificadorUsuario() );			
 		}
-		expediente.setNifRepresentante(expPAD.getNifRepresentante());
+		expediente.setNifRepresentante(NifCif.normalizarDocumento(expPAD.getNifRepresentante()));
 		
-		expediente.setNifRepresentado(expPAD.getNifRepresentado());
+		expediente.setNifRepresentado(NifCif.normalizarDocumento(expPAD.getNifRepresentado()));
 		expediente.setNombreRepresentado(expPAD.getNombreRepresentado());
 	
 		// Obtener usuario seycon que crea expediente
@@ -757,6 +758,10 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		nep.setTituloOficio(oficio.getTitulo());
 		nep.setTextoOficio(oficio.getTitulo());
 		nep.setRequiereAcuse(notificacion.isFirmarAcuse());
+		nep.setAccesiblePorClave(new Boolean(notificacion.isAccesiblePorClave()));
+		if (notificacion.isAccesiblePorClave()) {
+			nep.setClaveAcceso(notificacion.getIdentificadorPersistencia());
+		}
 		
 		// Obtenemos detalle acuse
 		DetalleAcuseRecibo detalleAcuse = new DetalleAcuseRecibo();
@@ -775,6 +780,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		}
 		detalleAcuse.setAvisos(obtenerDetalleAvisosElementoExpediente(elementoExpediente.getCodigoAviso()));
 		nep.setDetalleAcuseRecibo(detalleAcuse);
+				
 		
 		// Establecemos documentos notificacion
 		DocumentoNotificacionTelematica docNotif = null;
@@ -889,6 +895,10 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		eventoPAD.setTexto( evento.getTexto() );
 		eventoPAD.setTextoSMS( evento.getTextoSMS() );
 		eventoPAD.setFechaConsulta(evento.getFechaConsulta());
+		eventoPAD.setAccesiblePorClave(new Boolean(evento.isAccesiblePorClave()));
+		if (evento.isAccesiblePorClave()) {
+			eventoPAD.setClaveAcceso(evento.getIdentificadorPersistencia());
+		}
 		
 		DocumentoEventoExpediente documento = null;
 		DocumentoExpedientePAD docPAD = null;
