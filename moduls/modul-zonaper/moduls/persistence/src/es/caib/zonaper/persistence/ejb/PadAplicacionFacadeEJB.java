@@ -608,6 +608,10 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
 	 
     private Persona obtenerDatosPersonaPorUsuarioSeycon( String usuarioSeycon )
     {
+		log.info("obtenerDatosPersonaPorUsuarioSeycon(" + usuarioSeycon + ");");
+        if (usuarioSeycon == null) {
+          return null;
+        }
     	Session session = getSession();
         try 
         {
