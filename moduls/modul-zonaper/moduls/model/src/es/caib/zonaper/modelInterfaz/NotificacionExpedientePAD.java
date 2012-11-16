@@ -30,9 +30,9 @@ public class NotificacionExpedientePAD extends ElementoExpedientePAD{
 	 */
 	private Boolean accesiblePorClave;
 	/**
-	 * Indica si se requiere firma del acuse de recibo
+	 * Clave de acceso.
 	 */
-	private boolean firmarPorClave;
+	private String claveAcceso;
 	/**
 	 * Detalle acuse recibo.
 	 */
@@ -140,12 +140,12 @@ public class NotificacionExpedientePAD extends ElementoExpedientePAD{
 		this.accesiblePorClave = accesiblePorClave;
 	}
 
-	public boolean isFirmarPorClave() {
-		return firmarPorClave;
+	public String getClaveAcceso() {
+		return claveAcceso;
 	}
 
-	public void setFirmarPorClave(boolean firmarPorClave) {
-		this.firmarPorClave = firmarPorClave;
+	public void setClaveAcceso(String claveAcceso) {
+		this.claveAcceso = claveAcceso;
 	}
 	
 }

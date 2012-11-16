@@ -174,7 +174,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
         	Date ahora = new Date();
         	
         	Query query = session
-            .createQuery("FROM NotificacionTelematica AS m WHERE m.firmarAcuse and m.fechaFinPlazo < :ahora and m.rechazada = false and m.fechaAcuse is null ORDER BY m.fechaRegistro ASC")
+            .createQuery("FROM NotificacionTelematica AS m WHERE m.firmarAcuse = true and m.fechaFinPlazo < :ahora and m.rechazada = false and m.fechaAcuse is null ORDER BY m.fechaRegistro ASC")
             .setParameter("ahora",ahora);
             List tramites = query.list();
             

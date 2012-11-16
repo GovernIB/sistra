@@ -3,6 +3,8 @@ package es.caib.util;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * 
  * @author Pablo
@@ -285,10 +287,25 @@ public class NifCif {
 	 * @param doc
 	 * @return
 	 */
-	public static String normalizarDocumento(String doc){
-		//TODO QUITAR CEROS AL PRINCIPIO??		
-		doc = doc.toUpperCase();
-		return doc.replaceAll("[\\/\\s\\-]", "" );
+	public static String normalizarDocumento(String nif){
+		String doc = null;
+        if (nif != null) {
+            // Quitamos espacios y otros caracteres
+            doc = nif.toUpperCase();
+            doc = doc.replaceAll("[\\/\\s\\-]", "");
+            // Rellenamos con 0
+            final String primerCaracter = doc.substring(0, 1);
+            if (Pattern.matches("[^A-Z]", primerCaracter)) {
+                // Es nif
+                doc = StringUtils.leftPad(doc, 9, '0');
+            } else {
+                // es cif o nie
+                final String letraInicio = doc.substring(0, 1);
+                final String resto = doc.substring(1);
+                doc = letraInicio + StringUtils.leftPad(resto, 8, '0');
+            }
+        }
+        return doc;
 	}
 	
 	/**
