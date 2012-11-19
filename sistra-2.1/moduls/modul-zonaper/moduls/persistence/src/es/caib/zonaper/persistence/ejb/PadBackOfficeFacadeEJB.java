@@ -155,10 +155,24 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		 *    
 		 */
 		establecerRepresentanteExpedienteAutenticado(expediente);
-			
+		
+		
 		// Si se indica el tramite que origina el expediente buscamos tramite y chequeamos enlace
 		Entrada entrada = recuperarEntrada(expediente.getNumeroEntradaBTE());
 		
+		/*
+		 * -------------------------------------------------------------------------------------------------
+		 * 
+		 * - EXPEDIENTES ANONIMOS:
+		 *  A partir de la version 2.1.0 solo se considera un expediente anonimo si se crea sin un nif asociado.
+		 *  Un expediente que se cree a partir de una entrada anonima en la que se identifique un nif, deberá 
+		 *  tener el mismo nif que la entrada. En versiones anteriores no se especificaba ningun nif.
+		 *  Para mantener la compatibilidad con integraciones anteriores, en el caso de que la entrada anonima 
+		 *  tenga un nif asociado, tomaremos este como el nif del expediente.
+		 *    
+		 */
+		establecerRepresentanteExpedienteAnonimo(expediente, entrada);
+			
 		// Por compatibilidad con versiones anteriores si no indicamos procedimiento asociamos el de la entrada
 		if (expediente.getIdentificadorProcedimiento() == null) {
 			expediente.setIdentificadorProcedimiento(entrada.getProcedimiento());
@@ -175,8 +189,6 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 
 	
 
-	
-	
 	/**
 	 * Borra expediente (siempre que no tenga elementos asociados).
 	 * @param unidadAdministrativa Unidad administrativa
@@ -1330,6 +1342,21 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 	
 
 	/**
+	 * Si el expediente es anonimo y se crea a partir de una entrada anonima en la que se especifica un nif,
+	 * tomamos como nif del expediente, el nif que se indica en la entrada
+	 * @param expediente
+	 * @param entrada
+	 */
+	private void establecerRepresentanteExpedienteAnonimo(
+			ExpedientePAD expediente, Entrada entrada) {
+		if (!expediente.isAutenticado() && StringUtils.isBlank(expediente.getNifRepresentante()) && 
+				entrada != null && entrada.getNivelAutenticacion() == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO && 
+				StringUtils.isNotBlank(entrada.getNifRepresentante())) {
+			expediente.setNifRepresentante(entrada.getNifRepresentante());
+		}		
+	}
+	
+	/**
 	 * Realiza alta expediente
 	 * 
 	 * @param expediente
@@ -1454,8 +1481,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 			// Verificamos que expediente y entrada tengan el mismo nif de representante
 			if (!StringUtils.equals(expediente.getNifRepresentante(), entrada.getNifRepresentante())) {
 				throw new ExcepcionPAD("No coincide el nif del expediente y el nif de la entrada");
-			}
-			
+			}			
 		}	
 		
 		// Si se indica procedimiento en el expediente debe ser el mismo que el de la entrada
