@@ -276,8 +276,8 @@ public class AvisosMovilidad {
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.DESTINATARIO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.destinatario")));
 			textoEmail = StringUtil.replace(textoEmail,"[#DESTINATARIO#]",StringEscapeUtils.escapeHtml(notif.getNifRepresentante() + " - " + notif.getNombreRepresentante()));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDER#]", StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),literalTextoAccesoNotificacion, paramsLiteralTextoNotificacion)));
-			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDERCERTIFICADO#]", StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.accederAviso.certificado")));
-			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDERCLAVE#]", StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.accederAviso.clave")));
+			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDERCERTIFICADO#]", StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.accederNotificacion.certificado")));
+			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDERCLAVE#]", StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.accederNotificacion.clave")));
 			if (expe.getNifRepresentante() != null) {
 				textoEmail = StringUtil.replace(textoEmail,"[#URL_ACCESO_CERTIFICADO#]",urlNotifExpediente + notif.getIdentificadorPersistencia() + "&autenticacion=CU");
 			}
