@@ -1459,21 +1459,21 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 			throw new ExcepcionPAD("Excepcion al comprobar si existe expediente",e1);
 		}		
 			
-		//Comprobamos que la entrada no tenga ya un expediente real enlazado
-		try{
-			ElementoExpediente elementoExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpediente(entrada instanceof EntradaTelematica?ElementoExpediente.TIPO_ENTRADA_TELEMATICA:ElementoExpediente.TIPO_ENTRADA_PREREGISTRO,entrada.getCodigo());
-			if (elementoExpediente == null) {
-				throw new ExcepcionPAD("No se encuentra expediente virtual para el elemento");
-			}
-			if (!Expediente.TIPO_EXPEDIENTE_VIRTUAL.equals(elementoExpediente.getExpediente().getTipoExpediente())){
-				throw new ExcepcionPAD("La entrada ya tiene un expediente enlazado");
-			}
-		}catch(DelegateException ex){
-			log.debug("No se ha podido comprobar si la entrada ya tiene un expediente enlazado: " + ex.getMessage(),ex);
-			throw new ExcepcionPAD("No se ha podido comprobar si la entrada ya tiene un expediente enlazado: " + ex.getMessage(),ex);
-		}
-
+		// Verificaciones si se asocia una entrada
 		if (entrada != null) {
+			//Comprobamos que la entrada no tenga ya un expediente real enlazado
+			try{
+				ElementoExpediente elementoExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpediente(entrada instanceof EntradaTelematica?ElementoExpediente.TIPO_ENTRADA_TELEMATICA:ElementoExpediente.TIPO_ENTRADA_PREREGISTRO,entrada.getCodigo());
+				if (elementoExpediente == null) {
+					throw new ExcepcionPAD("No se encuentra expediente virtual para el elemento");
+				}
+				if (!Expediente.TIPO_EXPEDIENTE_VIRTUAL.equals(elementoExpediente.getExpediente().getTipoExpediente())){
+					throw new ExcepcionPAD("La entrada ya tiene un expediente enlazado");
+				}
+			}catch(DelegateException ex){
+				log.debug("No se ha podido comprobar si la entrada ya tiene un expediente enlazado: " + ex.getMessage(),ex);
+				throw new ExcepcionPAD("No se ha podido comprobar si la entrada ya tiene un expediente enlazado: " + ex.getMessage(),ex);
+			}
 			// Si es un preregistro debe estar confirmado
 			if (entrada instanceof EntradaPreregistro && StringUtils.isEmpty(entrada.getNumeroRegistro())) {
 				throw new ExcepcionPAD("No se puede crear un expediente asociado a un preregistro/preenvio no confirmado - num prereg: " + entrada.getNumeroPreregistro());
@@ -1481,13 +1481,13 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 			// Verificamos que expediente y entrada tengan el mismo nif de representante
 			if (!StringUtils.equals(expediente.getNifRepresentante(), entrada.getNifRepresentante())) {
 				throw new ExcepcionPAD("No coincide el nif del expediente y el nif de la entrada");
-			}			
+			}
+			// Si se indica procedimiento en el expediente debe ser el mismo que el de la entrada
+			if (!expediente.getIdentificadorProcedimiento().equals(entrada.getProcedimiento())) {
+				throw new ExcepcionPAD("No concuerda el procedimiento del expediente (" + expediente.getIdentificadorProcedimiento() + ") con el de la entrada que genera el expediente (" + entrada.getProcedimiento() + ")");
+			}
 		}	
-		
-		// Si se indica procedimiento en el expediente debe ser el mismo que el de la entrada
-		if (!expediente.getIdentificadorProcedimiento().equals(entrada.getProcedimiento())) {
-			throw new ExcepcionPAD("No concuerda el procedimiento del expediente (" + expediente.getIdentificadorProcedimiento() + ") con el de la entrada que genera el expediente (" + entrada.getProcedimiento() + ")");
-		}
+				
 	}
 
 	/**
