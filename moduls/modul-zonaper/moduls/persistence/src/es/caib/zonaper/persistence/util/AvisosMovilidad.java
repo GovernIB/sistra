@@ -251,6 +251,15 @@ public class AvisosMovilidad {
 			} else {
 				literalTextoAccesoNotificacion = "aviso.email.textoAcceso.notificacion.certificado";				
 			}
+			String controlEntregaNotif = cfd.obtenerConfiguracion().getProperty("notificaciones.controlEntrega");
+        	if (StringUtils.isBlank(controlEntregaNotif)) {
+        		controlEntregaNotif = "false";
+        	}
+			boolean controlEntregaHabilitado = Boolean.parseBoolean(controlEntregaNotif);
+        	String notaLegalNotificacion = "aviso.email.notaLegal.notificacion.controlEntregaDeshabilitado";
+			if (controlEntregaHabilitado) {
+				notaLegalNotificacion = "aviso.email.notaLegal.notificacion.controlEntregaHabilitado";
+			}
 			
 			// Textos Email
 			textoEmail = cargarPlantillaMail("mailNotificacion.html");
@@ -258,8 +267,8 @@ public class AvisosMovilidad {
 			textoEmail = StringUtil.replace(textoEmail,"[#UNIDAD_ADMINISTRATIVA#]", StringEscapeUtils.escapeHtml(Dominios.obtenerDescripcionUA(expe.getUnidadAdministrativa().toString())));
 			textoEmail = StringUtil.replace(textoEmail,"[#FECHA#]", StringUtil.fechaACadena(notif.getFechaRegistro(),StringUtil.FORMATO_FECHA));
 			textoEmail = StringUtil.replace(textoEmail,"[#TITULO#]",StringEscapeUtils.escapeHtml(aviso.getTitulo()));
-			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO#]",StringUtil.replace(StringEscapeUtils.escapeHtml(aviso.getTexto()),"\n","</br>"));			
-			textoEmail = StringUtil.replace(textoEmail,"[#NOTA_LEGAL#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.notaLegal.notificacion")));			
+			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO#]",StringUtil.replace(StringEscapeUtils.escapeHtml(aviso.getTexto()),"\n","</br>"));									
+			textoEmail = StringUtil.replace(textoEmail,"[#NOTA_LEGAL#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),notaLegalNotificacion)));			
 			textoEmail = StringUtil.replace(textoEmail,"[#ORGANISMO.NOMBRE#]",oi.getNombre());
 			textoEmail = StringUtil.replace(textoEmail,"[#ORGANISMO.LOGO#]",oi.getUrlLogo());
 			
