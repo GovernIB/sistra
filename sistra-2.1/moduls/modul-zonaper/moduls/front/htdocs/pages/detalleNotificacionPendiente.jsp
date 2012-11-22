@@ -170,7 +170,14 @@
 <logic:equal name="notificacion" property="firmarAcuse" value="true">
 	<h2><bean:message key="detalleNotificacion.acuse.titulo"/></h2>
 	
-	<p><bean:message key="detalleNotificacion.notaLegal"/></p>
+	<p>
+		<logic:equal name="controlEntrega" value="S">
+			<bean:message key="detalleNotificacion.notaLegal.controlPlazoHabilitado"/>
+		</logic:equal>
+		<logic:equal name="controlEntrega" value="N">
+			<bean:message key="detalleNotificacion.notaLegal.controlPlazoDeshabilitado"/>
+		</logic:equal>
+	</p>
 	
 	
 	<logic:equal name="puedeAbrir" value="S">
