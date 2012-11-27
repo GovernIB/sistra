@@ -3,6 +3,7 @@ package es.caib.sistra.back.action.especificacionesGenericas;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
@@ -71,8 +72,8 @@ public class EditarEspecificacionesGenericasAction extends BaseAction{
             espec.setCampoRdoNif( especificacionesGenericasForm.getCampoRdoNif().getBytes(ConstantesXML.ENCODING) );
             espec.setCampoRdoNom( especificacionesGenericasForm.getCampoRdoNom().getBytes(ConstantesXML.ENCODING) );
             espec.setUrlFin( especificacionesGenericasForm.getUrlFin().getBytes(ConstantesXML.ENCODING) );
-            espec.setAvisoEmail( especificacionesGenericasForm.getAvisoEmail().getBytes(ConstantesXML.ENCODING) );
-            espec.setAvisoSMS( especificacionesGenericasForm.getAvisoSMS().getBytes(ConstantesXML.ENCODING) );
+            espec.setAvisoEmail( StringUtils.defaultString(especificacionesGenericasForm.getAvisoEmail()).getBytes(ConstantesXML.ENCODING) );
+            espec.setAvisoSMS( StringUtils.defaultString(especificacionesGenericasForm.getAvisoSMS()).getBytes(ConstantesXML.ENCODING) );
             espec.setCheckEnvio(especificacionesGenericasForm.getCheckEnvio().getBytes(ConstantesXML.ENCODING) );
             espec.setDestinatarioTramite(especificacionesGenericasForm.getDestinatarioTramite().getBytes(ConstantesXML.ENCODING) );
             
