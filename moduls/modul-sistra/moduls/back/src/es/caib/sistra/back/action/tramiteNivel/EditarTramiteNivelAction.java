@@ -3,6 +3,7 @@ package es.caib.sistra.back.action.tramiteNivel;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
@@ -81,8 +82,8 @@ public class EditarTramiteNivelAction extends BaseAction{
             tramiteNivel.getEspecificaciones().setCampoRdoNif( tramiteNivelForm.getCampoRdoNif().getBytes(ConstantesXML.ENCODING) );
             tramiteNivel.getEspecificaciones().setCampoRdoNom( tramiteNivelForm.getCampoRdoNom().getBytes(ConstantesXML.ENCODING) );
             tramiteNivel.getEspecificaciones().setUrlFin( tramiteNivelForm.getUrlFin().getBytes(ConstantesXML.ENCODING) );
-            tramiteNivel.getEspecificaciones().setAvisoEmail( tramiteNivelForm.getAvisoEmail().getBytes(ConstantesXML.ENCODING) );
-            tramiteNivel.getEspecificaciones().setAvisoSMS( tramiteNivelForm.getAvisoSMS().getBytes(ConstantesXML.ENCODING) );
+            tramiteNivel.getEspecificaciones().setAvisoEmail( StringUtils.defaultString(tramiteNivelForm.getAvisoEmail()).getBytes(ConstantesXML.ENCODING) );
+            tramiteNivel.getEspecificaciones().setAvisoSMS( StringUtils.defaultString(tramiteNivelForm.getAvisoSMS()).getBytes(ConstantesXML.ENCODING) );
             tramiteNivel.getEspecificaciones().setCheckEnvio( tramiteNivelForm.getCheckEnvio().getBytes(ConstantesXML.ENCODING) );
             tramiteNivel.getEspecificaciones().setDestinatarioTramite( tramiteNivelForm.getDestinatarioTramite().getBytes(ConstantesXML.ENCODING) );
             
