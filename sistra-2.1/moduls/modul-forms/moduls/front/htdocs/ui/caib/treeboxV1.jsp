@@ -6,8 +6,10 @@
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <html:xhtml/>
 
+<!-- NO SE USA 
 <script src="<html:rewrite page='/js/demoCheckboxNodes.js'/>"></script>   
-
+ -->
+ 
 <nested:root>
     <nested:define id="campo" type="org.ibit.rol.form.model.TreeBox"/>
     <nested:define id="nombre" property="nombreLogico" type="java.lang.String"/>

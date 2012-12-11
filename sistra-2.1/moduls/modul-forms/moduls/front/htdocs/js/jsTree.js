@@ -496,8 +496,11 @@ function renderChildren(strData, tblCls, menu){
 	var nodes = eval(strData)
 	
 
+	var numNodo = 0;
 	for(var n in nodes){
 	
+		numNodo++;
+		
 		code.push('<tr><td><img' + (strData == jst_data ? ' style="display:none" id="rootImage"' : '') + ' src="' + jst_image_folder + '/')
 
 		var n0 = nodes[n]
@@ -513,8 +516,9 @@ function renderChildren(strData, tblCls, menu){
 			code.push((n == nodes.length - 1 ? "last_leaf" : "leaf") + '.png"')
 			if (n0[1][6]){
 				check='<input type="checkbox" name="'+n0[1][6]+'" value="' +n0[1][7]+ '" id="tree_check_'+n0[1][7]+'" /><input type="hidden" id="tree_check_text_'+n0[1][7]+'" value="' +n0[0]+ '" /></td><td>';
-				linkCheckIni = '<span id="tree_link_'+n0[1][7]+'">';
-				linkCheckFin = '</span>';
+				var classPares = (jst_diferenciarHojas && (numNodo % 2 == 0))? 'style="background-color:#E0E3E4;"' : ''; 
+				linkCheckIni = '<span ' + classPares + 'id="tree_link_'+n0[1][7]+'">';
+				linkCheckFin = '</span>';				
 			}
 			
 		}
@@ -555,7 +559,11 @@ function hideMenu(){
 	jst_cm.style.visibility = "hidden"
 }
 
-function renderTree(){
+function diferenciarHojasTree(habilitar){
+	jst_diferenciarHojas = habilitar;
+}
+
+function renderTree(){	
 //	TestDate = new Date();TestStartZeit=TestDate.getTime();
 	eval(jst_container).innerHTML = '<table cellspacing="0" cellpadding="0" border="0"><tr><td colspan="2"><span id="rootFolder"></span></td></tr></table><div style="position:absolute;top:-100;left:-100" id="contextMenu"></div>'
 	renderNode(jst_data, document.getElementById("rootFolder"))

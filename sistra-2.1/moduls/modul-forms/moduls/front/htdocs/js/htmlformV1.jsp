@@ -136,13 +136,25 @@ function isHoja(nodo,nodos){
    return true;
 }
 
+// Comprueba si todos los elementos son root
+function isNivelUnico(nodos){ 	 	
+  for (var i = 0; i < nodos.length; i++) {
+  	  if (!(nodos[i].parentValor ==  undefined || nodos[i].parentValor == '')) {
+  	  	return false;
+  	  }      
+   }
+   return true;
+}
+
 
 function refillTree(name, nodos, expand) {		
 
 	var tree = "[['', ['#'],[";
 	var primer = true;
+
 	for (var i = 0; i < nodos.length; i++) {
-		if (nodos[i].parentValor ==  undefined || nodos[i].parentValor == '') {
+		if (nodos[i].parentValor ==  undefined || nodos[i].parentValor == '') {						
+			
 			val = createNodo(name,nodos[i],nodos);
 			
 			//alert(val);
@@ -154,9 +166,14 @@ function refillTree(name, nodos, expand) {
 		}
 	}
 	tree +="]]]"
+
+	var nivelUnico = isNivelUnico(nodos);
 	
 	arrNodes = eval(tree);
-	renderTree();expandAll();
+	// DESHABILITADO DE MOMENTO
+	// diferenciarHojasTree(nivelUnico);
+	renderTree();
+	expandAll();
 	if (!expand) closeAll();	
 }
 
