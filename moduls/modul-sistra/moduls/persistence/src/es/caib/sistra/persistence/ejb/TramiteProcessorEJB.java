@@ -2676,7 +2676,19 @@ public class TramiteProcessorEJB implements SessionBean {
     		
     		// Devolvemos nombre y datos del fichero
     		HashMap param = new HashMap();
+    		
+    		// Normalizamos nombre justificante
+    		// param.put("nombrefichero",nomfic);
+    		nomfic = "Justificant_";
+    		if ("es".equals(this.datosSesion.getLocale().getLanguage()))  {
+    			nomfic = "Justificante_";
+    		}
+    		nomfic = StringUtil.normalizarNombreFichero(nomfic + 
+    				StringUtil.replace(resultadoRegistro.getNumero(),"/","-") + "_" +
+    				StringUtil.fechaACadena(resultadoRegistro.getFecha(), StringUtil.FORMATO_REGISTRO) + 
+    				".pdf");
     		param.put("nombrefichero",nomfic);
+    		
     		param.put("datosfichero",content);    		
     		return this.generarRespuestaFront(null,param);
         		    	
