@@ -49,6 +49,7 @@ public class DetalleNotificacionController extends BaseController
 		// Obtenemos asiento registral
 		AsientoRegistral asiento = getAsientoRegistral(notificacion);
 		
+		// Verificamos si no esta abierta
 		if (notificacion.getFechaAcuse() == null || notificacion.isRechazada()){
 			
 			// Obtenemos aviso
@@ -60,7 +61,7 @@ public class DetalleNotificacionController extends BaseController
 			if (isControlarEntregaNotificaciones(request)) {
 				request.setAttribute( "controlEntrega", "S" );
 				Date ahora = new Date();
-				if (notificacion.getFechaFinPlazo() != null && ahora.after(notificacion.getFechaFinPlazo())) {
+				if (notificacion.isRechazada() || (notificacion.getFechaFinPlazo() != null && ahora.after(notificacion.getFechaFinPlazo()))) {
 					request.setAttribute( "rechazada", "S" );
 					rechazada = true;
 				} else {

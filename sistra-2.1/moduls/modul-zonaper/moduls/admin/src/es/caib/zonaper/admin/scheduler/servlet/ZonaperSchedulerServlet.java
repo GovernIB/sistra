@@ -149,7 +149,7 @@ public class ZonaperSchedulerServlet implements Servlet
 			cronExpression = configuration
 					.get("scheduler.entregaNotificaciones.cron.expression");
 			String controlEntregaNotificaciones = configuration
-					.get("notificaciones.controlEntrega");
+					.get("notificaciones.controlEntrega.habilitar");			
 
 			_log.info("SCHEDULE [" + schedule + "]");
 			_log.info("TIME EXPRESSION [" + cronExpression + "]");

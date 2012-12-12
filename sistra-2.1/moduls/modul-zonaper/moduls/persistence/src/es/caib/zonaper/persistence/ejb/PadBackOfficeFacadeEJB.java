@@ -647,6 +647,10 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		{
 			error( ExpedientePAD.class, "identificadorExpediente" );
 		}
+		if ( StringUtils.isEmpty( expPAD.getIdentificadorProcedimiento() ) )
+		{
+			error( ExpedientePAD.class, "identificadorProcedimiento" );
+		}
 		if ( !Pattern.matches(ConstantesZPE.REGEXP_IDENTIFICADOREXPEDIENTE, expPAD.getIdentificadorExpediente())  )
 		{
 			errorFormato( ExpedientePAD.class, "identificadorExpediente" );

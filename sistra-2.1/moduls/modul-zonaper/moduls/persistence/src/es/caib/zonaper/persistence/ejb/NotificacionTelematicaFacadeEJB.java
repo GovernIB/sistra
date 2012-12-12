@@ -1,6 +1,7 @@
 package es.caib.zonaper.persistence.ejb;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.security.Principal;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,7 +29,9 @@ import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.firma.FirmaIntf;
+import es.caib.sistra.plugins.firma.PluginFirmaIntf;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
+import es.caib.util.FirmaUtil;
 import es.caib.util.NifCif;
 import es.caib.xml.ConstantesXML;
 import es.caib.xml.oficioremision.factoria.FactoriaObjetosXMLOficioRemision;
@@ -224,7 +227,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			// Solo se puede rechazar si hay que firmar acuse
 			if (!notif.isFirmarAcuse()) {
 				throw new Exception("La notificación no debe firmarse");	
-			}			 
+			}
 			
 			// Comprobamos fecha fin plazo por si acaso
 			if (notif.getFechaFinPlazo() == null || notif.getFechaFinPlazo().after(new Date())) {
@@ -268,6 +271,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
         }
 		 
 	}
+	
 	/**
 	 * Realiza la firma del acuse de la notificacion (en caso de que la notificacion tenga acuse) y marca la notificacion como entregada
 	 * actualizando el estado del expediente.
@@ -567,7 +571,8 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 	}
 	
 	/**
-	 * Realiza el proceso que involucra la firma del acuse de recibo: comprobacion firma, insercion acuse en rds y marcar notif como recibida
+	 * Realiza el proceso que involucra la firma del acuse de recibo: comprobacion firma, insercion acuse en rds y marcar notif como recibida.
+	 * Si no hay que firmar acuse tb se llamara a esta funcion, pero sin los parametros de firma.
 	 * @param notificacion
 	 * @param asientoAcuse
 	 * @param firmaDigital
@@ -578,7 +583,26 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 	
 		Date fechaActual = new Date();
 		String tipoFirmaAcuse = null;
+		FirmaIntf selladoAcuse = null;
 		
+		// Comprobamos que no se haya firmado anteriormente
+		if (notificacion.isRechazada()) {
+			throw new Exception("La notificacion esta rechazada");
+		}
+		if (notificacion.getFechaAcuse() != null){
+			throw new Exception("El acuse de recibo ya ha generado anteriormente");
+		}		
+				
+		// En caso de que se controle la entrega de notificaciones comprobamos que no haya pasado el plazo
+		// (solo para notifs con firma de acuse)
+		boolean controlEntregaHabilitada = "true".equals(ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("notificaciones.controlEntrega.habilitar"));		
+		if (notificacion.isFirmarAcuse() && controlEntregaHabilitada) {			
+			if (notificacion.getFechaFinPlazo() != null &&  fechaActual.after(notificacion.getFechaFinPlazo())) {
+				throw new Exception("El plazo de entrega ha finalizado");
+			}
+		}
+		
+				
 		// Parseamos acuse
 		AsientoRegistral asiento = getAsientoRegistral(asientoAcuse);
 		
@@ -590,7 +614,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 		}
 		
 		
-		// Verificacion de firma por clave		
+		// Verificacion de firma si hay que firmar acuse
 		if (notificacion.isFirmarAcuse()) {
 			// Debe alimentarse una de las 2 firmas
 			if (firmaClave == null && firmaDigital == null) {
@@ -607,6 +631,13 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 					return false;
 				}		
 				tipoFirmaAcuse = ConstantesZPE.TIPOFIRMAACUSE_CLAVE;
+				
+				// Si esta configurado que se selle con una firma de sistra, generamos firma de sellado
+				if ("true".equals(ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("notificaciones.sellarAcuses.firmaClave.habilitar"))) {
+					selladoAcuse = sellarAcuseRecibo(asientoAcuse);
+				}
+				
+				
 			}
 			// Verificacion firma por certificado
 			if (firmaDigital != null){		
@@ -623,20 +654,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			}						
 		}
 		
-		// Comprobamos que no se haya firmado anteriormente
-		if (notificacion.isRechazada()) {
-			throw new Exception("La notificacion esta rechazada");
-		}
-		if (notificacion.getFechaAcuse() != null){
-			throw new Exception("El acuse de recibo ya ha sido firmado anteriormente");
-		}		
-				
-		// En caso de que se controle la entrega de notificaciones comprobamos que no haya pasado el plazo (solo con acuse)	
-		if (notificacion.isFirmarAcuse() && "true".equals(ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("notificaciones.controlEntrega"))) {			
-			if (notificacion.getFechaFinPlazo() != null &&  fechaActual.after(notificacion.getFechaFinPlazo())) {
-				throw new Exception("El plazo de entrega ha finalizado");
-			}
-		}
+		
 		
 		// Crear en RDS el acuse de recibo
 		RdsDelegate rdsDelegate =  DelegateRDSUtil.getRdsDelegate();
@@ -654,11 +672,16 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 		uso.setReferencia(notificacion.getNumeroRegistro());
 		uso.setFechaSello(notificacion.getFechaRegistro());
 			
-		// Asociar firma al documento rds de acuse
+		// Asociar firma ciudadano al documento rds de acuse
 		if (notificacion.isFirmarAcuse() && firmaDigital != null){		
 			rdsDelegate.asociarFirmaDocumento(refAcuse,firmaDigital);								
 		}    	
     	
+		// Asociar sellado acuse por parte de sistra
+		if (selladoAcuse != null) {
+			rdsDelegate.asociarFirmaDocumento(refAcuse,selladoAcuse);
+		}
+		
     	// Marcamos notificacion como recibida y actualizamos estado expediente    	
     	marcarRecibidaNotificacionTelematica(notificacion.getCodigo(),refAcuse, fechaActual, tipoFirmaAcuse);
     	
@@ -668,7 +691,37 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
     	return true;
 	}
 
+	
+	private FirmaIntf sellarAcuseRecibo(String asientoAcuse) throws Exception {
+		// Obtenemos plugin firma
+		PluginFirmaIntf plgFirma = PluginFactory.getInstance().getPluginFirma();
+		// Según implementación tendrá parámetros específicos
+		Map params = paramsPluginFirma(plgFirma);
+		// Firmamos acuse
+		String certificadoName = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("notificaciones.sellarAcuses.certificado.name");
+		InputStream is = FirmaUtil.cadenaToInputStream(asientoAcuse);
+		FirmaIntf firmaJustificante = plgFirma.firmar(is,certificadoName,params);
+		return firmaJustificante;
+	}
 
+	private Map paramsPluginFirma(PluginFirmaIntf plgFirma)
+			throws Exception {
+		Map params = new HashMap();
+		if (plgFirma.getProveedor().equals(PluginFirmaIntf.PROVEEDOR_CAIB)) {
+			// Establecemos content type correspondiente
+			params.put(	FirmaUtil.CAIB_PARAMETER_CONTENT_TYPE,
+						FirmaUtil.obtenerContentTypeCAIB(FirmaUtil.CAIB_ACUSE_NOTIFICACIO_CONTENT_TYPE));
+			// Establecemos pin certificado
+			String certificadoPin = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("notificaciones.sellarAcuses.certificado.pin");
+			params.put(FirmaUtil.CAIB_PARAMETER_PIN, certificadoPin);
+		} else if (plgFirma.getProveedor().equals(
+				PluginFirmaIntf.PROVEEDOR_AFIRMA)) {
+			params.put(FirmaUtil.AFIRMA_PARAMETER_ARCHIVO, "AcuseRecibo.xml");
+		}
+		return params;
+	}
+	
+	
 	private void generarIndicesBusqueda(Long codigo)
 			throws Exception {
 		NotificacionTelematica notificacion = recuperarNotificacionPorId(codigo);
