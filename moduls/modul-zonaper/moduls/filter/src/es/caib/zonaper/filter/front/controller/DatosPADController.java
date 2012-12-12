@@ -35,7 +35,6 @@ public class DatosPADController extends MainController
 			throw new ServletException(e);
 		}
 		String fullName = NormalizacionNombresUtil.capitalizeAllTokens( plgLogin.getNombreCompleto(principal), locale );
-		String[] componentes = fullName.split( "\\s" );
 		String nombre = "";
 		String primerApellido = "";
 		String segundoApellido = "";
@@ -45,30 +44,40 @@ public class DatosPADController extends MainController
 		
 		if ( isPersonaFisica )
 		{
+			String[] componentes = fullName.split( "\\s" );
 			if ( componentes != null )
 			{
-				//nombre = NormalizacionNombresUtil.capitalize( componentes[0], locale );
-				nombre = componentes[0];
-				
+				// Tomamos que el orden sera: apellidos nombre
+				String componente0 = "", componente1 = "", componente2 ="";
+				componente0 = componentes[0];
 				if ( componentes.length > 1 )
 				{
-					//primerApellido = NormalizacionNombresUtil.capitalize( componentes[1], locale );
-					primerApellido = componentes[1];
+					componente1 = componentes[1];
 				}
 				if ( componentes.length > 2 )
 				{
-					//segundoApellido = componentes[2];
-					StringBuffer sbSegundoApellido = new StringBuffer();
+					StringBuffer sbComponente2 = new StringBuffer();
 					for ( int i = 2; i < componentes.length; i++  )
 					{
-						//sbSegundoApellido.append( NormalizacionNombresUtil.capitalize( componentes[ i ], locale ) );
-						sbSegundoApellido.append( componentes[ i ] );
+						sbComponente2.append( componentes[ i ] );
 						if ( i != componentes.length -1 )
-							sbSegundoApellido.append( " " );
+							sbComponente2.append( " " );
 					}
-					segundoApellido = sbSegundoApellido.toString();
+					componente2 = sbComponente2.toString();
 				}
+				
+				// Si es extranjero puede no tener segundo apellido
+				if ("".equals(componente2)) {
+					nombre = componente1;
+					primerApellido = componente0;
+				} else {
+					nombre = componente2;
+					primerApellido = componente0;
+					segundoApellido = componente1;
+				}				
+				
 			}
+			
 		}
 		else
 		{

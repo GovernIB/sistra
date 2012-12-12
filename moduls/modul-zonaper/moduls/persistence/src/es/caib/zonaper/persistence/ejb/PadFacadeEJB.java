@@ -1270,9 +1270,9 @@ public abstract class PadFacadeEJB implements SessionBean{
     	notificacion.setIdioma( asiento.getDatosAsunto().getIdiomaAsunto() );
     	notificacion.setNumeroRegistro(justificante.getNumeroRegistro());
     	
-    	// En caso de que se controle la entrega de la notificacion con acuse calculamos fin de plazo
-    	if (notificacion.isFirmarAcuse() && 
-    			"true".equals(ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("notificaciones.controlEntrega"))) {
+    	// En caso de que se controle la entrega de la notificacioncalculamos fin de plazo
+    	boolean controlEntregaHabilitada = "true".equals(ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("notificaciones.controlEntrega.habilitar"));
+		if ( notificacion.isFirmarAcuse() &&  controlEntregaHabilitada) {
     		Date finPlazo = CalendarioUtil.getInstance().calcularPlazoFinNotificacion(new Date(), 10, true, false);
     		notificacion.setFechaFinPlazo(finPlazo);
     	}
@@ -1299,7 +1299,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	// Realizamos aviso de movilidad y actualizamos notificacion
     	DelegateUtil.getProcesosAutoDelegate().avisoCreacionElementoExpediente(el);
     	
-    	// Si no requiere acuse generamos indices de busqueda. Si requiere acuse se indexara en el momento de firmar el acuse (solo para autenticados)
+    	// Si no requiere acuse generamos indices de busqueda. Si requiere acuse se indexara en el momento de firmar el acuse
     	if (StringUtils.isNotEmpty(notificacion.getUsuarioSeycon()) && !notificacion.isFirmarAcuse()) {
     		 // Crea los indices para la entrada
     		crearIndicesSalida(notificacion, oficioRemision);    		 

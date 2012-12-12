@@ -74,7 +74,7 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
         	String mostrarIframe = config.obtenerConfiguracion().getProperty("sistra.iframe");
 			getServletContext().setAttribute(Constants.MOSTRAR_EN_IFRAME,new Boolean(mostrarIframe).booleanValue());
         	
-        	String controlEntregaNotif = config.obtenerConfiguracion().getProperty("notificaciones.controlEntrega");
+        	String controlEntregaNotif = config.obtenerConfiguracion().getProperty("notificaciones.controlEntrega.habilitar");
         	if (StringUtils.isBlank(controlEntregaNotif)) {
         		controlEntregaNotif = "false";
         	}
