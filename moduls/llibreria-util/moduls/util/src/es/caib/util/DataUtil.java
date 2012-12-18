@@ -156,4 +156,52 @@ public class DataUtil {
 		return calendario2.getTime();
 	}
 
+	/**
+	 * Añade a la fecha dada un numero de unidades del elemento Calendario dado (dias, meses, años, ....)
+	 * 
+	 * @param elementoCalendario Elemento a sumar (1=año, 2=meses, 3-4=semanas, 
+	 *          5=dias, 10=horas, 12=minutos, 13=segundos, 14=milisegundos  )
+	 * @param cantidad Unidades a sumar
+	 * @param fecha Fecha 
+	 * @param format Formato fecha
+	 * @return Fecha final
+	 */
+	public static String fechaSuma(int elementoCalendario, int cantidad, String fecha, String formato) 
+    {
+	  Date d = data(fecha, formato);
+      if (d == null) return fecha;
+      
+      Calendar calendar = Calendar.getInstance();
+      calendar.setTime(d);
+      calendar.add(elementoCalendario, cantidad);
+      
+      return new SimpleDateFormat(formato).format(calendar.getTime());
+   }
+	
+	/**
+	 * Añade a la fecha dada un numero de dias.
+	 * 
+	 * @param diasSumar Dias a sumar
+	 * @param data Fecha 
+	 * @param format Formato fecha
+	 * @return Fecha final
+	 */
+	public static String fechaSuma(int cantidad, String fecha, String formato) 
+    {
+		return fechaSuma(Calendar.DAY_OF_MONTH, cantidad, fecha, formato);
+	}
+
+	/**
+	 * Añade a la fecha actual un numero de unidades del elemento Calendario dado (dias, meses, años, ....)
+	 * 
+	 * @param elementoCalendario Elemento a sumar (1=año, 2=meses, 3-4=semanas, 
+	 *          5=dias, 10=horas, 12=minutos, 13=segundos, 14=milisegundos  )
+	 * @param cantidad Unidades a sumar
+	 * @param format Formato fecha
+	 * @return Fecha final
+	 */
+	public static String fechaSuma(int elementoCalendario, int cantidad, String formato) 
+    {
+		return fechaSuma(elementoCalendario, cantidad, avui(formato), formato);
+	}
 }
