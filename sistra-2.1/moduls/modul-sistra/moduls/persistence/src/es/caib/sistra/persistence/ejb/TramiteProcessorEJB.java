@@ -2686,6 +2686,7 @@ public class TramiteProcessorEJB implements SessionBean {
     				StringUtil.replace(resultadoRegistro.getNumero(),"/","-") + "_" +
     				StringUtil.fechaACadena(resultadoRegistro.getFecha(), StringUtil.FORMATO_REGISTRO) + 
     				".pdf");
+    		param.put("nombrefichero",nomfic);
     		param.put("datosfichero",content);    		
     		return this.generarRespuestaFront(null,param);
         		    	
