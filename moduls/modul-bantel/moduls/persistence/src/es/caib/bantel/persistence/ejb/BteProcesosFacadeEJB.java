@@ -122,13 +122,13 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 	    			( (procedimiento.getUltimoAviso().getTime() + (procedimiento.getIntervaloInforme().longValue() * 60 * 1000)) > ahora.getTime() ) ) continue;
 	    		
 	    		// Marcamos con error las entradas que no han sido procesadas
-	    		controlEntradasCaducadas(procedimiento);
+	    		controlEntradasCaducadas(procedimiento.getIdentificador());
 	    		
 	    		// Si se ha cumplido el intervalo avisamos al backoffice de las nuevas entradas
 	    		avisoBackOffice(procedimiento,hasta);
 	    		
 	    		// Guardamos tiempo en que se ha realizado el aviso	    		
-	    		td.avisoRealizado(procedimiento.getIdentificador(),ahora);	   
+	    		marcarAvisoRealizado(procedimiento.getIdentificador(), ahora);	   
 	    	}	    		    	
     	}catch(Exception ex){
     		log.error("Excepción en proceso de aviso a BackOffices",ex);
@@ -141,14 +141,25 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
     	}
 	    	
     }
+
+    /**
+     * Marca aviso realizado para procedimiento.
+     * @param idProcedimiento 
+     * @param ahora
+     * @throws DelegateException
+     */
+    private void marcarAvisoRealizado(String idProcedimiento,
+			Date ahora) throws DelegateException {
+		DelegateUtil.getBteOperacionesProcesosDelegate().marcarAvisoRealizado(idProcedimiento, ahora);    	
+	}
     
     /**
      * Marca las entradas como procesadas con error si no se han procesado dentro del limite de dias establecido.
-     * @param procedimiento Procedimiento
+     * @param idProcedimiento Procedimiento
      * @param hasta Fecha limite busqueda
      * @throws DelegateException 
      */
-    private void controlEntradasCaducadas(Procedimiento procedimiento) throws DelegateException {
+    private void controlEntradasCaducadas(String idProcedimiento) throws DelegateException {
 		if (maximoDiasAviso > 0) {
     		// Calculamos fecha limite: restamos a fecha actual el numero maximo de dias limite para avisar
     		Calendar calendar = Calendar.getInstance();
@@ -156,13 +167,7 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
             calendar.add(Calendar.DAY_OF_MONTH, maximoDiasAviso * -1);
     		Date fechaLimite = calendar.getTime();
     		
-    		// Marcamos como procesadas con error las que han caducado
-	    	CriteriosBusquedaTramite criterios = new CriteriosBusquedaTramite();
-	    	criterios.setIdentificadorProcedimiento(procedimiento.getIdentificador());
-	    	criterios.setProcesada(ConstantesBTE.ENTRADA_NO_PROCESADA.charAt(0));
-	    	criterios.setFechaInicioProcesamientoMaximo(fechaLimite);
-	    	TramiteBandejaDelegate delegate = DelegateUtil.getTramiteBandejaDelegate();
-			delegate.procesarEntradas(criterios,ConstantesBTE.ENTRADA_PROCESADA_ERROR, "Ha pasado el limite maximo establecido para avisarse al backoffice");
+    		DelegateUtil.getBteOperacionesProcesosDelegate().marcarEntradasCaducadas(idProcedimiento, fechaLimite);
     	}        	
 	}
 
