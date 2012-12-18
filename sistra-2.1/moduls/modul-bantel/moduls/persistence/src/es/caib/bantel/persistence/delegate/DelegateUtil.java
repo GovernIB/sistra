@@ -28,6 +28,10 @@ public final class DelegateUtil {
     public static BteProcesosDelegate getBteProcesosDelegate() {
         return (BteProcesosDelegate) DelegateFactory.getDelegate(BteProcesosDelegate.class);
     }
+    
+    public static BteOperacionesProcesosDelegate getBteOperacionesProcesosDelegate() {
+        return (BteOperacionesProcesosDelegate) DelegateFactory.getDelegate(BteOperacionesProcesosDelegate.class);
+    }
         
     public static ConfiguracionDelegate getConfiguracionDelegate() {
         return (ConfiguracionDelegate) DelegateFactory.getDelegate(ConfiguracionDelegate.class);
