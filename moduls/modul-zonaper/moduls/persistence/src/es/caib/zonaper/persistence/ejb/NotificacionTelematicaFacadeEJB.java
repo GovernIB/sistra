@@ -861,6 +861,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 		uso.setTipoUso(ConstantesRDS.TIPOUSO_REGISTROSALIDA);
 		uso.setReferencia(notificacion.getNumeroRegistro());
 		uso.setFechaSello(notificacion.getFechaRegistro());
+		rdsDelegate.crearUso(uso);
 			
 		// Asociar firma al documento rds de acuse
 		if (notificacion.isFirmarAcuse()){		
