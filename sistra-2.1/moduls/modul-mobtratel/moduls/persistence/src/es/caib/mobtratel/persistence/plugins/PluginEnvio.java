@@ -3,6 +3,7 @@ package es.caib.mobtratel.persistence.plugins;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -716,7 +717,10 @@ public class PluginEnvio {
 	
 
 	private static Date calcularFechaCaducidadVerificarEnvio(Date fechaEnvio) {
-		Date fechaCaducidad = new Date(fechaEnvio.getTime() + (getLimiteDiasVerificar() * 24 * 60 * 60 * 1000) );
+		Calendar calendar = Calendar.getInstance();
+        calendar.setTime(fechaEnvio);
+        calendar.add(Calendar.DAY_OF_MONTH, getLimiteDiasVerificar());
+		Date fechaCaducidad = calendar.getTime();		
 		return fechaCaducidad;
 	}
 

@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -713,8 +714,11 @@ public abstract class PadFacadeEJB implements SessionBean{
     		
     		// Calculamos fecha de eliminacion
     		Date fechaHoy = new Date();
-    		long delay = diasPersistencia * (24 * 3600 * 1000); 
-    		Date fechaElim = new Date(fechaHoy.getTime() +  delay);
+    		Calendar calendar = Calendar.getInstance();
+            calendar.setTime(fechaHoy);
+            calendar.add(Calendar.DAY_OF_MONTH, diasPersistencia);
+    		Date fechaElim = calendar.getTime();
+    		
     		
     		// Realizamos log
     		RegistroExternoPreparado r = new RegistroExternoPreparado();
