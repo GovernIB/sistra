@@ -51,12 +51,24 @@
 						<dd><bean:message key="detalle.notificacion.estado.entregada"/></dd>
 					</logic:equal>
 					<logic:equal name="notificacion" property="detalleAcuseRecibo.estado" value="RECHAZADA">
-						<dd><bean:message key="detalle.notificacion.estado.rechazada"/></dd>
+						<dd>
+							<bean:message key="detalle.notificacion.estado.rechazada"/>
+							- 
+							<a href='<%=url%>?codigo=<%=notificacion.getDetalleAcuseRecibo().getCodigoRdsAcuseRecibo()%>&clave=<%=notificacion.getDetalleAcuseRecibo().getClaveRdsAcuseRecibo()%>&formateado=S'> 
+								<i> <bean:message key="detalle.notificacion.descargarAcuseRechazo"/> </i>
+							</a>
+						</dd>
 					</logic:equal>
 					
 					<logic:equal name="notificacion" property="detalleAcuseRecibo.estado" value="ENTREGADA">
 						<dt><bean:message key="detalle.notificacion.fechaApertura"/>:</dt>
-						<dd><bean:write name="notificacion" property="detalleAcuseRecibo.fechaAcuseRecibo" format="dd/MM/yyyy '-' HH:mm"/><logic:equal name="notificacion" property="requiereAcuse" value="true"> </logic:equal></dd>
+						<dd>
+							<bean:write name="notificacion" property="detalleAcuseRecibo.fechaAcuseRecibo" format="dd/MM/yyyy '-' HH:mm"/>
+							- 
+							<a href='<%=url%>?codigo=<%=notificacion.getDetalleAcuseRecibo().getCodigoRdsAcuseRecibo()%>&clave=<%=notificacion.getDetalleAcuseRecibo().getClaveRdsAcuseRecibo()%>&formateado=S'> 
+								<i> <bean:message key="detalle.notificacion.descargarAcuse"/> </i>
+							</a>
+						</dd>
 					</logic:equal>
 					
 					<dt><bean:message key="detalle.notificacion.asunto"/>:</dt>

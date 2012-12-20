@@ -202,7 +202,7 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
     		// Para los gestores que tengan configurado el proceso de aviso consultamos nuevas entradas
     		// Establecemos un intervalo de seguridad (10 min) para evitar que entradas recientes nos alerten de que
     		// aun no estan procesadas
-    		int ventanaTiempo = 10;
+    		long ventanaTiempo = 10;
 	    	Date ahora = new Date();
 	    	Date desde;
 	    	Date hasta = new Date( ahora.getTime() - (ventanaTiempo * 60 * 1000) );

@@ -32,6 +32,10 @@ public class AbrirDocumentoAction extends BaseAction
     {
 		String codigo = request.getParameter("codigo");
 		String clave = request.getParameter("clave");
+		String formateado = request.getParameter("formateado");
+		if (formateado == null) {
+			formateado = "N";
+		}
 		
 		
 		ReferenciaRDS refRDS = new ReferenciaRDS();
@@ -39,7 +43,13 @@ public class AbrirDocumentoAction extends BaseAction
 		refRDS.setClave(clave);
 			
 		RdsDelegate rdsDelegate = DelegateRDSUtil.getRdsDelegate();
-		DocumentoRDS documentoRDS = rdsDelegate.consultarDocumento(refRDS);
+		DocumentoRDS documentoRDS;
+		
+		if ("S".equals(formateado)) {
+			documentoRDS = rdsDelegate.consultarDocumentoFormateado(refRDS);
+		} else {
+			documentoRDS = rdsDelegate.consultarDocumento(refRDS);
+		}
 	
 	
 		response.reset();					

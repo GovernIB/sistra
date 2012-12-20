@@ -56,6 +56,7 @@ import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.IndiceElementoDelegate;
 import es.caib.zonaper.persistence.util.ConfigurationUtil;
 import es.caib.zonaper.persistence.util.GeneradorId;
+import es.caib.zonaper.persistence.util.LiteralesAvisosMovilidad;
 
 /**
  * SessionBean para mantener y consultar NotificacionTelematica
@@ -671,6 +672,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 		uso.setTipoUso(ConstantesRDS.TIPOUSO_REGISTROSALIDA);
 		uso.setReferencia(notificacion.getNumeroRegistro());
 		uso.setFechaSello(notificacion.getFechaRegistro());
+		rdsDelegate.crearUso(uso);
 			
 		// Asociar firma ciudadano al documento rds de acuse
 		if (notificacion.isFirmarAcuse() && firmaDigital != null){		
@@ -862,6 +864,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 	 * Genera acuse de recibo para una notificacion
 	 * @param notificacion
 	 * @param rechazada
+	 * @param tipoFirma Puede ser CERT, CLAVE o vacio si no requiere firma
 	 * @return
 	 */
 	private AsientoRegistral generarAcuseReciboNotificacionImpl(NotificacionTelematica notificacion, boolean rechazada, String tipoFirma)
@@ -939,14 +942,17 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			dAsunto.setIdiomaAsunto (asientoNotificacion.getDatosAsunto().getIdiomaAsunto());
 			if (rechazada) {
 				dAsunto.setTipoAsunto (ConstantesAsientoXML.ACUSERECIBO_RECHAZADA);
-				dAsunto.setExtractoAsunto ("Acuse recibo notificacion - NOTIFICACION RECHAZADA");				
+				dAsunto.setExtractoAsunto (LiteralesAvisosMovilidad.getLiteral(asientoNotificacion.getDatosAsunto().getIdiomaAsunto(), "acuse.rechazada"));
 			} else {
 				if ("CLAVE".equals(tipoFirma)) {
 					dAsunto.setTipoAsunto (ConstantesAsientoXML.ACUSERECIBO_ENTREGADA_CLAVE);
-					dAsunto.setExtractoAsunto ("Acuse recibo notificacion (firma por clave) - NOTIFICACION ENTREGADA");
+					dAsunto.setExtractoAsunto (LiteralesAvisosMovilidad.getLiteral(asientoNotificacion.getDatosAsunto().getIdiomaAsunto(), "acuse.entregada.firmaClave"));
+				} else if ("CERT".equals(tipoFirma))  {
+					dAsunto.setTipoAsunto (ConstantesAsientoXML.ACUSERECIBO_ENTREGADA);
+					dAsunto.setExtractoAsunto (LiteralesAvisosMovilidad.getLiteral(asientoNotificacion.getDatosAsunto().getIdiomaAsunto(), "acuse.entregada.firmaCertificado"));
 				} else {
 					dAsunto.setTipoAsunto (ConstantesAsientoXML.ACUSERECIBO_ENTREGADA);
-					dAsunto.setExtractoAsunto ("Acuse recibo notificacion - NOTIFICACION ENTREGADA");
+					dAsunto.setExtractoAsunto (LiteralesAvisosMovilidad.getLiteral(asientoNotificacion.getDatosAsunto().getIdiomaAsunto(), "acuse.entregada.noFirmada"));					
 				}
 			}
 			dAsunto.setCodigoOrganoDestino ( asientoNotificacion.getDatosAsunto().getCodigoOrganoDestino()  );
