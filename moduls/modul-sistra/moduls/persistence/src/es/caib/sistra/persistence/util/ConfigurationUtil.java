@@ -43,7 +43,11 @@ public class ConfigurationUtil {
 		return propiedades;
 	}
 	
-	
+	/**
+	 * Unifica las propiedades del organismo en un objeto
+	 * @return Propiedades configuracion
+	 * @throws Exception
+	 */
 	public synchronized OrganismoInfo obtenerOrganismoInfo() throws Exception{
 		// Creamos info para el organismo
 		if (organismoInfo == null){
@@ -51,13 +55,17 @@ public class ConfigurationUtil {
 				organismoInfo = new  OrganismoInfo();
 				organismoInfo.setNombre(propiedades.getProperty("organismo.nombre"));
 				organismoInfo.setUrlLogo(propiedades.getProperty("organismo.logo"));
+				organismoInfo.setUrlLoginLogo(propiedades.getProperty("organismo.logo.login"));
 				organismoInfo.setUrlPortal(propiedades.getProperty("organismo.portal.url"));
 				organismoInfo.setPieContactoHTML(propiedades.getProperty("organismo.footer.contacto"));
 				organismoInfo.setTelefonoIncidencias(propiedades.getProperty("organismo.soporteTecnico.telefono"));
-				organismoInfo.setUrlSoporteIncidencias(propiedades.getProperty("organismo.soporteTecnico.url"));  
+				organismoInfo.setUrlSoporteIncidencias(propiedades.getProperty("organismo.soporteTecnico.url"));
 				organismoInfo.setEmailSoporteIncidencias(propiedades.getProperty("organismo.soporteTecnico.email"));
 				organismoInfo.setUrlCssCustom(propiedades.getProperty("organismo.cssCustom"));
-	    		
+				organismoInfo.setUrlLoginCssCustom(propiedades.getProperty("organismo.cssLoginCustom"));
+				
+				
+				
 	    		// Obtenemos titulo y referencia a la zona personal
 	    		for (Iterator it=propiedades.keySet().iterator();it.hasNext();){
 	    			String key = (String) it.next();
@@ -105,3 +113,4 @@ public class ConfigurationUtil {
 	}
 	
 }
+

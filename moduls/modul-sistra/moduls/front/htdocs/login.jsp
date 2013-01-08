@@ -1,11 +1,77 @@
+<%@ page contentType="text/html; charset=ISO-8859-1" import="java.util.*, org.apache.struts.Globals" %>
+<%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
+<%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
+<%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
+<%
+	es.caib.sistra.persistence.delegate.ConfiguracionDelegate delegateF = es.caib.sistra.persistence.delegate.DelegateUtil.getConfiguracionDelegate();
+	
+	java.util.Properties configProperties =  delegateF.obtenerConfiguracion();
+	
+	String urlSistra = configProperties.getProperty("sistra.url");
+	
+	es.caib.sistra.model.OrganismoInfo infoOrg = delegateF.obtenerOrganismoInfo();
+	
+	String lang = request.getParameter("language");
+	if (lang == null) {
+	   lang = "ca";
+	}
+	request.setAttribute("lang", lang);
+	
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Organismo Test</title>
-<link href="../estilos/loginMOCK.css" rel="stylesheet" type="text/css" />
-<%@ page contentType="text/html; charset=ISO-8859-1" import="java.util.*, org.apache.struts.Globals" %>
-<%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
+<title><%=infoOrg.getNombre()%></title>
+<link href="<%=infoOrg.getUrlLoginCssCustom()%>" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+<!--
+
+function ocultarAyudaAdmin() {
+	var capaI = document.getElementById('contactoAdministrador');
+	capaI.style.display = 'none';
+}
+
+// Abre pantalla de ayuda
+function mostrarAyudaAdmin() {
+	
+	
+	var capaI = document.getElementById('contactoAdministrador');
+
+
+	
+	// tama?os de la ventana y la p?gina
+	var ventanaX = document.documentElement.clientWidth;
+	var ventanaY = document.documentElement.clientHeight;
+	var capaY = document.getElementById('contenidor').offsetHeight;
+	
+/*	
+	// la capa de fondo ocupa toda la p?gina
+	with (capaIF) {
+		if(ventanaY > capaY) style.height = ventanaY + 'px';
+		else style.height = capaY + 'px';
+		if(document.all) style.filter = "alpha(opacity=30)";
+		else style.MozOpacity = 0.3;
+		if(document.all) style.width = ventanaX + 'px';
+		style.display = 'block';
+	}	
+	// OJO, descomentar si se quiere poder pulsar en cualquier parte de la pantalla
+	//capaIF.onclick = cerrarInfo;
+*/	
+	
+	// mostramos, miramos su tama?o y centramos la capaInfo con respecto a la ventana
+	capaI.style.display = 'block';
+	capaInfoX = capaI.offsetWidth;
+	capaInfoY = capaI.offsetHeight;
+	with (capaI) {
+		style.left = (ventanaX-capaInfoX)/2 + 'px';
+		style.top = (((ventanaY-capaInfoY)/2)+ document.documentElement.scrollTop) + 'px';
+	}
+	
+	
+}
+-->
+</script>
 
 <!-- DETECCION NAVEGADOR (Compatibles: IE >=6 , FireFox >= 1.5)-->
 <script type="text/javascript">
@@ -69,6 +135,7 @@ if (browser == "Internet Explorer" && parseFloat( version, 10) < 6 ){
 if (browser == "Firefox" && parseFloat( version, 10) < 1.5 ){
 	alert("<bean:message key="errors.firefox.versionminima" />");
 }
+
 -->
 </script>
 
@@ -84,16 +151,9 @@ if (browser == "Firefox" && parseFloat( version, 10) < 1.5 ){
 <script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/utils.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/constantes.js"></script>
 
-<script type="text/javascript">
-<!--			
-		<%
-			String urlSistra = "";
-			try{
-				es.caib.sistra.persistence.delegate.ConfiguracionDelegate delegate = es.caib.sistra.persistence.delegate.DelegateUtil.getConfiguracionDelegate();
-				urlSistra = delegate.obtenerConfiguracion().getProperty("sistra.url");
-			}catch(Exception e){}
-		%>
 
+<script type="text/javascript">
+<!--	
 		base = "<%=urlSistra%><%=request.getContextPath()%>/firma/aFirma";
 		baseDownloadURL = "<%=urlSistra%><%=request.getContextPath()%>/firma/aFirma";
 
@@ -145,10 +205,72 @@ if (browser == "Firefox" && parseFloat( version, 10) < 1.5 ){
 </head>
 
 <body>
-<div id="contenedor">
+
+
+<%
+    //  Contacto soporte 
+    String telefonoSoporte = infoOrg.getTelefonoIncidencias();
+    if (telefonoSoporte == null) {
+      telefonoSoporte = "&nbsp;";
+    }
+    request.setAttribute("telefonoSoporte", telefonoSoporte);
+    
+    String urlSoporte = infoOrg.getUrlSoporteIncidencias();
+    if (urlSoporte == null) {
+       urlSoporte = "&nbsp;";
+    }
+    request.setAttribute("urlSoporte", urlSoporte);
+    
+    String emailSoporte = infoOrg.getEmailSoporteIncidencias();
+    if (emailSoporte == null) {
+       emailSoporte = "&nbsp;";
+    }
+    request.setAttribute("emailSoporte",emailSoporte);
+    
+	// Construimos url de soporte reemplazando variables
+	String tituloTramite = es.caib.util.StringUtil.replace(textoAtencion,"\"","\\\"");
+    String urlSoporteFinal = es.caib.util.StringUtil.replace(urlSoporte,"@asunto@",tituloTramite);
+    urlSoporteFinal = es.caib.util.StringUtil.replace(urlSoporteFinal,"@idioma@",lang);		    
+%>
+<%-- <logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_EN_IFRAME%>" value="false"> --%>
+<div id="contactoAdministrador" class="contactoAdministrador">
+	<h1 class="ayuda"><bean:message key="administrador.ayuda"/></h1>
+	<p>
+		<!--  Soporte por url y telefono (opcional) -->
+		<logic:notEqual name="urlSoporte"  value="&nbsp;" >
+			<logic:notEqual name="telefonoSoporte" value="&nbsp;" >
+				<bean:message key="administrador.soporteUrlTelefono" arg0="<%=urlSoporteFinal%>" arg1="<%=telefonoSoporte%>"/>
+			</logic:notEqual>
+			<logic:equal name="telefonoSoporte" value="&nbsp;" >
+				<bean:message key="administrador.soporteUrl" arg0="<%=urlSoporteFinal%>"/>
+			</logic:equal>					
+		</logic:notEqual>
+		
+		<!--  Soporte por email y telefono (opcional) -->
+		<logic:equal name="urlSoporte" value="&nbsp;" >
+			<logic:notEqual name="emailSoporte" value="&nbsp;" >
+				<logic:notEqual name="telefonoSoporte" value="&nbsp;" >
+					<bean:message key="administrador.soporteEmailTelefono" arg0="<%=emailSoporte%>" arg1="<%=telefonoSoporte%>"/>
+				</logic:notEqual>
+				<logic:equal name="telefonoSoporte" value="&nbsp;" >
+					<bean:message key="administrador.soporteEmail" arg0="<%=emailSoporte%>"/>
+				</logic:equal>					
+			</logic:notEqual>
+		</logic:equal>	
+	</p>
+	<p align="center">
+		<a title="<bean:message key="message.continuar"/>" onclick="javascript:ocultarAyudaAdmin();" href="javascript:void(0);">
+		<bean:message key="message.continuar"/>
+		</a>
+	</p>	
+</div>
+<%-- </logic:equal> --%>
+
+
+<div id="contenidor">
 	<!-- capçal -->	
 	<div id="capsal">
-		<a href="http://www.google.es" accesskey="0"><img id="logoCAIB" class="logo" src="../images/logoMOCK.gif" alt="Logo Organismo Test" /></a>
+		<a href="<%=infoOrg.getUrlPortal()%>" accesskey="0"><img id="logoCAIB" class="logo" src="<%=infoOrg.getUrlLoginLogo()%>" alt="Logo <%=infoOrg.getNombre()%>" /></a>
 	</div>
 	
 	<!-- títol -->
@@ -210,8 +332,23 @@ if (browser == "Firefox" && parseFloat( version, 10) < 1.5 ){
 	</div>		
 	
 	<!-- peu -->
-	<div id="peu">
-		&copy; Organismo Test
+	<div id="peu">  
+		
+		<div class="esquerra">&copy; <%=infoOrg.getNombre()%></div>
+			
+			<!-- contacte -->
+			<div class="centre">
+				<%=infoOrg.getPieContactoHTML()%>				
+			</div>
+			
+			<!-- /contacte -->
+			<div class="dreta">
+				<bean:message key="header.mailAdministrador"/> 
+				<a href="javascript:void(0)" onclick="mostrarAyudaAdmin();">
+				<bean:message key="header.mailAdministrador.enlace"/>
+				</a>.				
+			</div>
+		
 	</div>
 </div>
 </body>
