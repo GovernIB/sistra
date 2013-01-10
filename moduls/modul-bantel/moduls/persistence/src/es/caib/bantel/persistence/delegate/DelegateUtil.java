@@ -49,4 +49,8 @@ public final class DelegateUtil {
         return (FicheroExportacionDelegate) DelegateFactory.getDelegate(FicheroExportacionDelegate.class);
     }
     
+    public static AvisosBandejaDelegate getAvisosBandejaDelegate() {
+        return (AvisosBandejaDelegate) DelegateFactory.getDelegate(AvisosBandejaDelegate.class);
+    }
+    
 }

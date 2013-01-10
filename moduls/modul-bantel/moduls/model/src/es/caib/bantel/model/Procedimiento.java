@@ -40,6 +40,7 @@ public class Procedimiento implements Serializable{
 	private Long unidadAdministrativa;
 	private String permitirSms = "S";
 	
+	private String avisarNotificaciones = "N";
 	
 	
 	public String getIdentificador() {
@@ -158,6 +159,12 @@ public class Procedimiento implements Serializable{
 	}
 	public void setPermitirSms(String permitirSms) {
 		this.permitirSms = permitirSms;
+	}
+	public String getAvisarNotificaciones() {
+		return avisarNotificaciones;
+	}
+	public void setAvisarNotificaciones(String avisarNotificaciones) {
+		this.avisarNotificaciones = avisarNotificaciones;
 	}
 	
 }

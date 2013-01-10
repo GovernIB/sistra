@@ -10,6 +10,7 @@ import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
+import es.caib.zonaper.modelInterfaz.DetalleNotificacionesProcedimiento;
 import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
 import es.caib.zonaper.modelInterfaz.FiltroBusquedaExpedientePAD;
 import es.caib.zonaper.modelInterfaz.PaginaPAD;
@@ -222,6 +223,18 @@ public class PadDelegate implements StatelessDelegate {
 		try
 		{
 			return getFacade().obtenerAcuseRecibo( numeroRegistro );
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
+	public DetalleNotificacionesProcedimiento obtenerDetalleNotificacionesProcedimiento(String idProcedimiento,Date desde, Date hasta) throws DelegateException
+	{
+		try
+		{
+			return getFacade().obtenerDetalleNotificacionesProcedimiento(idProcedimiento, desde, hasta);
 		}
 		catch (Exception e) 
 		{

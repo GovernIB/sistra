@@ -52,6 +52,7 @@ import es.caib.zonaper.model.IndiceElemento;
 import es.caib.zonaper.model.NotificacionTelematica;
 import es.caib.zonaper.model.ParametrosSubsanacion;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
+import es.caib.zonaper.modelInterfaz.DetalleNotificacionesProcedimiento;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.IndiceElementoDelegate;
 import es.caib.zonaper.persistence.util.ConfigurationUtil;
@@ -374,11 +375,103 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 		return generarAcuseReciboNotificacionImpl(notificacionTelematica, rechazada, tipoFirma);
 	}
 	
+	 /**
+     * Obtiene detalle notificaciones para un procedimiento en un intervalo.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+	public DetalleNotificacionesProcedimiento obtenerDetalleNotificacionesProcedimiento(String idProc, Date desde, Date hasta) {
+		
+		DetalleNotificacionesProcedimiento dn = new DetalleNotificacionesProcedimiento();
+		
+		// Notificaciones con acuse
+		dn.getNotificacionesConAcuse().setNuevas(buscarNotificacionesProcedimiento(idProc, "NUEVA",
+				true, desde, hasta));
+		dn.getNotificacionesConAcuse().setAceptadas(buscarNotificacionesProcedimiento(idProc, "ACEPTADA",
+				true, desde, hasta));
+		dn.getNotificacionesConAcuse().setRechazadas(buscarNotificacionesProcedimiento(idProc, "RECHAZADA",
+				true, desde, hasta));
+		
+		// Notificaciones sin acuse
+		dn.getNotificacionesSinAcuse().setNuevas(buscarNotificacionesProcedimiento(idProc, "NUEVA",
+				false, desde, hasta));
+		dn.getNotificacionesSinAcuse().setAceptadas(buscarNotificacionesProcedimiento(idProc, "ACEPTADA",
+				false, desde, hasta));
+		dn.getNotificacionesSinAcuse().setRechazadas(buscarNotificacionesProcedimiento(idProc, "RECHAZADA",
+				false, desde, hasta));
+			
+		return dn;
+			
+	}
+
+
+	
 	
   	//--------------------------------------------------------
     //	FUNCIONES AUXILIARES
     //---------------------------------------------------------
 
+	/**
+	 * Busca notificaciones procedimiento
+	 * @param idProc id proc
+	 * @param tipo NUEVA/ACEPTADA/RECHAZADA
+	 * @param conAcuse con o sin acuse
+	 * @param desde Desde 
+	 * @param hasta Hasta
+	 * @return Número
+	 */
+	private int buscarNotificacionesProcedimiento(String idProc,
+			String tipo, boolean conAcuse, Date desde, Date hasta) {
+		Session session = getSession();
+		try {
+			String hql = "select count(*) FROM ElementoExpediente AS e, NotificacionTelematica AS m WHERE " + 
+			"e.expediente.idProcedimiento = :idProcedimiento AND " +
+			"e.tipoElemento = '" + ElementoExpediente.TIPO_NOTIFICACION + "' AND " +
+			"e.codigoElemento = m.codigo AND m.firmarAcuse = " + Boolean.toString(conAcuse) + " ";
+			
+			if ("NUEVA".equals(tipo)) {
+				if (desde != null) {
+					hql = hql + "and m.fechaRegistro >= :desde ";
+				}
+				hql = hql + "and m.fechaRegistro <= :hasta ";
+			}
+			
+			if ("ACEPTADA".equals(tipo)) {
+				hql = hql + "and m.rechazada = false and m.fechaAcuse is not null and m.fechaAcuse <= :hasta ";
+				if (desde != null) {
+					hql = hql + "and m.fechaAcuse >= :desde ";
+				}				
+			}
+			
+			if ("RECHAZADA".equals(tipo)) {
+				// hql = hql + "and m.rechazada = true and m.fechaFinPlazo is not null and m.fechaFinPlazo <= :hasta ";
+				// Si ponemos flag rechazada debe estar generado el acuse
+				hql = hql + "and m.fechaFinPlazo is not null and m.fechaFinPlazo <= :hasta ";
+				if (desde != null) {
+					hql = hql + "and m.fechaFinPlazo >= :desde ";
+				}	
+			}
+			
+			Query query = session
+				        	.createQuery(hql)
+				        	.setString("idProcedimiento",idProc)				        	
+				        	.setDate("hasta",hasta);
+			if (desde != null) {
+				query.setDate("desde",desde);
+			}
+			
+			int count = Integer.parseInt(query.list().get(0).toString()); 
+			
+			return count;
+			
+		} catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }		
+	}
+	
 	private String iniciarTramiteSubsanacionNotificacionImpl(
 			Long codigoNotificacion, String idPersistencia) {
 		try {
@@ -993,7 +1086,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 		return new Character( tipoDocumento );
 	}
 	
-	public DatosAnexoDocumentacion obtenerAnexoAsientoDeTipo( AsientoRegistral asiento, char tipoAnexo )
+	private DatosAnexoDocumentacion obtenerAnexoAsientoDeTipo( AsientoRegistral asiento, char tipoAnexo )
 	{
 		for( Iterator it = asiento.getDatosAnexoDocumentacion().iterator(); it.hasNext(); )
 		{
@@ -1068,6 +1161,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
            close(session);
        }	   
    }
+      
 	
     /* NO USADAS ? 
      * ejb.interface-method

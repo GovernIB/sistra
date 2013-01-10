@@ -5,7 +5,7 @@ package es.caib.bantel.persistence.util;
  * Utilidades con cadenas
  *
  */
-public class StringUtil {
+public class BteStringUtil {
 
 	/**
 	 * Devuelve modelo de un identificador con formato: modelo-version

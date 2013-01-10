@@ -137,10 +137,12 @@ public abstract class GestorBandejaFacadeEJB extends HibernateEJB
         	if (findGestorBandeja(obj.getSeyconID()) != null){
         		gest = (GestorBandeja) session.load(GestorBandeja.class,obj.getSeyconID());
         		gest.setEmail(obj.getEmail());
-	        	gest.setIntervaloInforme(obj.getIntervaloInforme());
 	        	gest.setPermitirCambioEstado(obj.getPermitirCambioEstado());
 	        	gest.setPermitirCambioEstadoMasivo(obj.getPermitirCambioEstadoMasivo());
 	        	gest.setPermitirGestionExpedientes(obj.getPermitirGestionExpedientes());
+	        	gest.setAvisarNotificaciones(obj.getAvisarNotificaciones());
+	        	gest.setAvisarEntradas(obj.getAvisarEntradas());
+	        	gest.setAvisarMonitorizacion(obj.getAvisarMonitorizacion());
         	}else{        	
         		gest = obj;
         		nuevo = true;
@@ -176,33 +178,6 @@ public abstract class GestorBandejaFacadeEJB extends HibernateEJB
         {        	
             close(session);
         }
-    }
-    
-    /**
-     * @ejb.interface-method
-     * @ejb.permission role-name="${role.auto}"
-     */
-    public void avisoRealizado(String id,Date fecha) {        
-    	Session session = getSession();
-        try 
-        {
-        	List lstResult = session.find( "FROM GestorBandeja gb  WHERE gb.seyconID = ?", id, Hibernate.STRING );
-        	if ( lstResult.isEmpty() )
-        	{
-        		throw new HibernateException("No existe gestor con id: " + id);
-        	}
-        	GestorBandeja g = ( GestorBandeja ) lstResult.get( 0 );
-        	g.setUltimoAviso(fecha);            	
-        	session.update(g);
-	    } 
-        catch (HibernateException he) 
-	    {
-	        throw new EJBException(he);
-	    } 
-        finally 
-	    {
-	        close(session);
-	    }
     }
     
         

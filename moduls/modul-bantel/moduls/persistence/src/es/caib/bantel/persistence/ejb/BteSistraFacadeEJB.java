@@ -32,7 +32,7 @@ import es.caib.bantel.modelInterfaz.TramiteBTE;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.delegate.TramiteBandejaDelegate;
 import es.caib.bantel.persistence.delegate.ProcedimientoDelegate;
-import es.caib.bantel.persistence.util.StringUtil;
+import es.caib.bantel.persistence.util.BteStringUtil;
 import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
@@ -186,8 +186,8 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 	    			throw new Exception("El tipo asiento no es válido para crear una entrada en la bandeja: " + asiento.getDatosOrigen().getTipoRegistro());	    			
 	    	}	    	
 	    	tramiteBTE.setTipo(asiento.getDatosOrigen().getTipoRegistro().charValue());
-	    	tramiteBTE.setIdentificadorTramite(StringUtil.getModelo(asiento.getDatosAsunto().getIdentificadorTramite()));
-	    	tramiteBTE.setVersionTramite(StringUtil.getVersion(asiento.getDatosAsunto().getIdentificadorTramite()));
+	    	tramiteBTE.setIdentificadorTramite(BteStringUtil.getModelo(asiento.getDatosAsunto().getIdentificadorTramite()));
+	    	tramiteBTE.setVersionTramite(BteStringUtil.getVersion(asiento.getDatosAsunto().getIdentificadorTramite()));
 	    	tramiteBTE.setIdioma(asiento.getDatosAsunto().getIdiomaAsunto());
 	    	Iterator it = asiento.getDatosInteresado().iterator();
 	    	while (it.hasNext()){
@@ -256,8 +256,8 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 	    			    		    		
 	    		DatosDocumentoTelematico fic = new DatosDocumentoTelematico();
 	    		ReferenciaRDS ref = (ReferenciaRDS) refDocumentos.get(da.getIdentificadorDocumento());
-	    		fic.setIdentificador(StringUtil.getModelo(da.getIdentificadorDocumento()));
-	    		fic.setNumeroInstancia(StringUtil.getVersion(da.getIdentificadorDocumento()));
+	    		fic.setIdentificador(BteStringUtil.getModelo(da.getIdentificadorDocumento()));
+	    		fic.setNumeroInstancia(BteStringUtil.getVersion(da.getIdentificadorDocumento()));
 	    		fic.setCodigoReferenciaRds(ref.getCodigo());
     			fic.setClaveReferenciaRds(ref.getClave());
     			docBTE.setPresentacionTelematica(fic);
@@ -317,8 +317,8 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 		    		// Establecemos parametros presenciales
 		    		DatosDocumentoPresencial presencial = new DatosDocumentoPresencial();
 		    		if (docPres.getIdentificador() != null ) {		    			
-		    			presencial.setIdentificador(StringUtil.getModelo(docPres.getIdentificador()));
-		    			presencial.setNumeroInstancia(StringUtil.getVersion(docPres.getIdentificador()));
+		    			presencial.setIdentificador(BteStringUtil.getModelo(docPres.getIdentificador()));
+		    			presencial.setNumeroInstancia(BteStringUtil.getVersion(docPres.getIdentificador()));
 		    		}
 		    		presencial.setTipoDocumento(docPres.getTipo().charValue());    		    		    		
 		    		presencial.setCompulsarDocumento((docPres.isCompulsar().booleanValue()?'S':'N'));

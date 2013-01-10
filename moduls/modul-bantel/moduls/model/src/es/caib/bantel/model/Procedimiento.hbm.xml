@@ -27,6 +27,9 @@
   	
   	<property name="unidadAdministrativa" column="TAP_UNIADM"/>
   	<property name="permitirSms" column="TAP_SMS" not-null="true"/>
+  	
+  	<property name="avisarNotificaciones" column="TAP_AVINOT" not-null="true"/>
+  	
   		
   	
   	<set name="gestores" table="BTE_GESPRO" inverse="true">

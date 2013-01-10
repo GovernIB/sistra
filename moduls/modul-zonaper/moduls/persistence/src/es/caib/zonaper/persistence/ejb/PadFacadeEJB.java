@@ -82,6 +82,7 @@ import es.caib.zonaper.model.RegistroExterno;
 import es.caib.zonaper.model.RegistroExternoPreparado;
 import es.caib.zonaper.model.TramitePersistente;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
+import es.caib.zonaper.modelInterfaz.DetalleNotificacionesProcedimiento;
 import es.caib.zonaper.modelInterfaz.DocumentoPersistentePAD;
 import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
 import es.caib.zonaper.modelInterfaz.FiltroBusquedaExpedientePAD;
@@ -649,6 +650,23 @@ public abstract class PadFacadeEJB implements SessionBean{
     		return not.getFechaAcuse();
     	}catch (Exception ex){
     		throw new ExcepcionPAD("No se ha podido obtener notificacion con numero de registro: " + numeroRegistro,ex);
+    	}
+            	        
+    }
+    
+    /**
+     * Obtiene estado notificaciones procedimiento (avisos a gestores)
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public DetalleNotificacionesProcedimiento obtenerDetalleNotificacionesProcedimiento(String idProcedimiento, Date desde, Date hasta) throws ExcepcionPAD
+    {	
+    	try{
+    		NotificacionTelematicaDelegate td = DelegateUtil.getNotificacionTelematicaDelegate();
+    		return td.obtenerDetalleNotificacionesProcedimiento(idProcedimiento, desde, hasta);
+    	}catch (Exception ex){
+    		throw new ExcepcionPAD("No se ha podido obtener estado notificaciones procedimiento",ex);
     	}
             	        
     }

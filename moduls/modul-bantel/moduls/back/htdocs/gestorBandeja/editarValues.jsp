@@ -26,8 +26,16 @@
     <td class="input"><html:text styleClass="textLargo" tabindex="10" property="values.email" maxlength="500"/></td>
 </tr>
 <tr>
-    <td class="labelo"><bean:message key="gestorBandeja.informeAviso"/></td>
-    <td class="input"><html:text styleClass="text" tabindex="10" property="values.intervaloInforme" maxlength="2"/></td>
+    <td class="labelo"><bean:message key="gestorBandeja.permitirAvisosEntradas"/></td>
+    <td class="input">Si<html:radio property="values.avisarEntradas" value="S"/> No<html:radio property="values.avisarEntradas" value="N"/></td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="gestorBandeja.permitirAvisosNotificaciones"/></td>
+    <td class="input">Si<html:radio property="values.avisarNotificaciones" value="S"/> No<html:radio property="values.avisarNotificaciones" value="N"/></td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="gestorBandeja.permitirAvisosMonitorizacion"/></td>
+    <td class="input">Si<html:radio property="values.avisarMonitorizacion" value="S"/> No<html:radio property="values.avisarMonitorizacion" value="N"/></td>
 </tr>
 <tr>
     <td class="labelo"><bean:message key="gestorBandeja.permitirCambioEstado"/></td>
