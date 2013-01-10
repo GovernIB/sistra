@@ -1,16 +1,24 @@
 package es.caib.bantel.persistence.ejb;
 
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
 
 import es.caib.bantel.model.CriteriosBusquedaTramite;
+import es.caib.bantel.model.DetalleEntradasProcedimiento;
+import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.modelInterfaz.ConstantesBTE;
 import es.caib.bantel.modelInterfaz.ExcepcionBTE;
 import es.caib.bantel.persistence.delegate.DelegateException;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
+import es.caib.bantel.persistence.delegate.GestorBandejaDelegate;
 import es.caib.bantel.persistence.delegate.TramiteBandejaDelegate;
+import es.caib.mobtratel.modelInterfaz.MensajeEnvio;
+import es.caib.mobtratel.persistence.delegate.DelegateMobTraTelUtil;
+import es.caib.util.DataUtil;
 
 /**
  * SessionBean que implementa operaciones de la gestión de proceso de avisos que se quieren ejecutar en una transacción nueva.
@@ -71,7 +79,63 @@ public abstract class BteOperacionesProcesosFacadeEJB implements SessionBean  {
 			throw new ExcepcionBTE("Excepcion marcando entradas como caducadas para procedimiento " + idProcedimiento, e);			
 		}  
     }	
+    
+    
+    /**
+     * Obtener detalle entradas procedimiento.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public DetalleEntradasProcedimiento obtenerDetalleEntradasProcedimiento(Procedimiento procedimiento,
+			Date desde, Date hasta) throws ExcepcionBTE {
+    	try {
+    		TramiteBandejaDelegate tbd = (TramiteBandejaDelegate) DelegateUtil.getTramiteBandejaDelegate();
+	    	
+	    	DetalleEntradasProcedimiento de = new DetalleEntradasProcedimiento();
+	    	
+	    	de.setProcesadasOk(tbd.obtenerTotalEntradasProcedimiento(procedimiento.getIdentificador(),ConstantesBTE.ENTRADA_PROCESADA,desde,hasta));
+	    	de.setProcesadasError(tbd.obtenerTotalEntradasProcedimiento(procedimiento.getIdentificador(),ConstantesBTE.ENTRADA_PROCESADA_ERROR,desde,hasta));
+	    	de.setNoProcesadas(tbd.obtenerTotalEntradasProcedimiento(procedimiento.getIdentificador(),ConstantesBTE.ENTRADA_NO_PROCESADA,desde,hasta));
+	    	
+	    	if (procedimiento.getIntervaloInforme() != null && procedimiento.getIntervaloInforme().longValue() > 0){
+	    		de.setProcesadasErrorPendientes(tbd.obtenerTotalEntradasProcedimiento(procedimiento.getIdentificador(),ConstantesBTE.ENTRADA_PROCESADA_ERROR,null,hasta));
+	    		de.setNoProcesadasPendientes(tbd.obtenerTotalEntradasProcedimiento(procedimiento.getIdentificador(),ConstantesBTE.ENTRADA_NO_PROCESADA,null,desde));
+	    	}
+	    	
+	    	return de;
+    	} catch (DelegateException e) {
+			throw new ExcepcionBTE("Excepcion obteniendo detalle entradas procedimiento", e);			
+		}  
+    	 
+    }  
 
+    /**
+     * Realiza envios a gestores y los marca como avisados.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public void realizarEnviosGestores(String tipoAviso, MensajeEnvio enviosEmail,
+			 Date ahora) throws ExcepcionBTE {
+    	try {
+			// Realizamos envios a gestores
+    		if (enviosEmail.getEmails() != null && enviosEmail.getEmails().size() > 0){	    		
+				enviosEmail.setNombre("Avisos a gestores");
+				enviosEmail.setCuentaEmisora(DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisosGestores.cuentaEnvio"));
+				enviosEmail.setFechaCaducidad(DataUtil.sumarHoras(new Date(), 24)); // Damos 1 día para intentar enviar
+				enviosEmail.setInmediato(true);
+				DelegateMobTraTelUtil.getMobTraTelDelegate().envioMensaje(enviosEmail);
+    		}
+			
+			// Marcamos aviso como realizado
+			DelegateUtil.getAvisosBandejaDelegate().actualizarAviso(tipoAviso, ahora);
+			
+    	} catch (Exception e) {
+			throw new ExcepcionBTE("Excepcion realizando envios a gestores", e);			
+		} 
+	}
+    
     
     
 }

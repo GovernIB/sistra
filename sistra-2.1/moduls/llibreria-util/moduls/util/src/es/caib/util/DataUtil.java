@@ -155,6 +155,52 @@ public class DataUtil {
 		calendario2.set(Calendar.MILLISECOND,999);
 		return calendario2.getTime();
 	}
+	
+	/**
+	 * Obtiene hora actual.
+	 * Establece la hora a las <hora actual>:00:00 horas
+	 **/
+	public static Date obtenerHoraActual(){
+		GregorianCalendar calendario2 = new GregorianCalendar(new Locale("es"));		
+		calendario2.setTime(new Date());		
+		calendario2.set(Calendar.MINUTE,0);
+		calendario2.set(Calendar.SECOND,0);
+		calendario2.set(Calendar.MILLISECOND,0);
+		return calendario2.getTime();
+	}
+	
+	/**
+	 * Añade horas a la fecha actual.
+	 * Si las horas son negativas, se resta.
+	 **/
+	public static Date sumarHoras(Date fecha, int horas){
+		GregorianCalendar calendario2 = new GregorianCalendar(new Locale("es"));		
+		calendario2.setTime(fecha);		
+		calendario2.add(Calendar.HOUR, horas);
+		return calendario2.getTime();
+	}
+	
+	/**
+	 * Añade minutos a la fecha actual.
+	 * Si los minutos son negativos, se resta.
+	 **/
+	public static Date sumarMinutos(Date fecha, int minutos){
+		GregorianCalendar calendario2 = new GregorianCalendar(new Locale("es"));		
+		calendario2.setTime(fecha);		
+		calendario2.add(Calendar.MINUTE, minutos);
+		return calendario2.getTime();
+	}
+	
+	/**
+	 * Añade dias a la fecha actual.
+	 * Si los dias son negativos, se resta.
+	 **/
+	public static Date sumarDias(Date fecha, int dias){
+		GregorianCalendar calendario2 = new GregorianCalendar(new Locale("es"));		
+		calendario2.setTime(fecha);		
+		calendario2.add(Calendar.DAY_OF_MONTH, dias);
+		return calendario2.getTime();
+	}
 
 	/**
 	 * Añade a la fecha dada un numero de unidades del elemento Calendario dado (dias, meses, años, ....)

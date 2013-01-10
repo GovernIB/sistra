@@ -64,18 +64,6 @@ public class GestorBandejaDelegate implements StatelessDelegate
        }
    }
    
-   public void  avisoRealizado(String id,Date fecha) throws DelegateException 
-   {
-	   try
-	   {
-		   getFacade().avisoRealizado( id, fecha);
-	   }
-	   catch (Exception e) 
-	   {
-           throw new DelegateException(e);
-       }
-   }
-  
         
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

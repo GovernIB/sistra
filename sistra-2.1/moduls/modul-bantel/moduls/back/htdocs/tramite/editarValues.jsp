@@ -63,6 +63,10 @@
     <td class="input">Si<html:radio property="values.inmediata" value="S"/> No <html:radio property="values.inmediata" value="N"/></td>
 </tr>
 <tr>
+    <td class="label"><bean:message key="tramite.gestionExpedientes.permitirAvisosNotificaciones"/></td>
+    <td class="input">Si<html:radio property="values.avisarNotificaciones" value="S"/> No <html:radio property="values.avisarNotificaciones" value="N"/></td>
+</tr>
+<tr>
     <td class="label"><bean:message key="tramite.tipoAcceso"/></td>
     <td class="input">EJB<html:radio property="values.tipoAcceso" value="<%=Character.toString(Procedimiento.ACCESO_EJB)%>"/> Webservice<html:radio property="values.tipoAcceso" value="<%=Character.toString(Procedimiento.ACCESO_WEBSERVICE)%>"/></td>
 </tr>

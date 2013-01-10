@@ -1,6 +1,7 @@
 package es.caib.zonaper.persistence.delegate;
 
 import java.rmi.RemoteException;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.CreateException;
@@ -10,6 +11,7 @@ import es.caib.sistra.plugins.firma.FirmaIntf;
 import es.caib.xml.registro.factoria.impl.AsientoRegistral;
 import es.caib.zonaper.model.NotificacionTelematica;
 import es.caib.zonaper.model.ParametrosSubsanacion;
+import es.caib.zonaper.modelInterfaz.DetalleNotificacionesProcedimiento;
 import es.caib.zonaper.persistence.intf.NotificacionTelematicaFacade;
 import es.caib.zonaper.persistence.util.NotificacionTelematicaFacadeUtil;
 
@@ -121,6 +123,14 @@ public class NotificacionTelematicaDelegate implements StatelessDelegate {
     public boolean firmarAcuseReciboNotificacionAnonima(Long codigo,String idPersistencia,String asientoAcuse,FirmaIntf firmaAcuse, String firmaClave) throws DelegateException {
         try {
             return getFacade().firmarAcuseReciboNotificacionAnonima(codigo, idPersistencia, asientoAcuse, firmaAcuse, firmaClave);            
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }      
+    
+    public DetalleNotificacionesProcedimiento obtenerDetalleNotificacionesProcedimiento(String idProc, Date desde, Date hasta) throws DelegateException {
+        try {
+            return getFacade().obtenerDetalleNotificacionesProcedimiento(idProc, desde, hasta);            
         } catch (Exception e) {
             throw new DelegateException(e);
         }

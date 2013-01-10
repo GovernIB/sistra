@@ -25,7 +25,8 @@
         <mapping resource="es/caib/bantel/model/DocumentoBandeja.hbm.xml" />
         <mapping resource="es/caib/bantel/model/GestorBandeja.hbm.xml" />
         <mapping resource="es/caib/bantel/model/FicheroExportacion.hbm.xml" />
-        <mapping resource="es/caib/bantel/model/ArchivoFicheroExportacion.hbm.xml" />                                                  
+        <mapping resource="es/caib/bantel/model/ArchivoFicheroExportacion.hbm.xml" />
+        <mapping resource="es/caib/bantel/model/AvisosBandeja.hbm.xml" />                                                     
 
     </session-factory>
 
