@@ -322,6 +322,9 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 					// Es el primer aviso para monitorizacion, tomamos 1 horas antes
 					desde = DataUtil.sumarHoras(ahora, -1);
 				}			
+			} else {
+				// Restamos intervalo de seguridad que se descontó en aviso anterior
+				desde = DataUtil.sumarMinutos(desde, (ventanaTiempo * -1));
 			}
 			String intervalo = "des de " + StringUtil.fechaACadena(desde,StringUtil.FORMATO_TIMESTAMP) + 
 				 " fins a " + StringUtil.fechaACadena(hasta,StringUtil.FORMATO_TIMESTAMP);	
