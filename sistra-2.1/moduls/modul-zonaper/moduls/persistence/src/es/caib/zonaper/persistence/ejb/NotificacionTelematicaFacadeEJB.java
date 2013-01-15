@@ -456,9 +456,9 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			Query query = session
 				        	.createQuery(hql)
 				        	.setString("idProcedimiento",idProc)				        	
-				        	.setDate("hasta",hasta);
+				        	.setTimestamp("hasta",hasta);
 			if (desde != null) {
-				query.setDate("desde",desde);
+				query.setTimestamp("desde",desde);
 			}
 			
 			int count = Integer.parseInt(query.list().get(0).toString()); 
