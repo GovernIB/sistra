@@ -41,6 +41,9 @@
     
     <property name="diasPrerregistro" column="ETN_DIAPRE" length="3"/>
     
+    <property name="ocultarClaveTramitacionJustif" column="ETN_JNOCLA" length="1" not-null="true"/>
+    <property name="ocultarNifNombreJustif" column="ETN_JNONN" length="1" not-null="true"/>           
+    
     <list name="datosJustificante" cascade="all-delete-orphan" inverse="true" lazy="true">
          <cache usage="read-write"/>
          <key column="DJS_CODETN"/>

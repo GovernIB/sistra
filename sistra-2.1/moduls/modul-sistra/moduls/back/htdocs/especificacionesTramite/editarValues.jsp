@@ -148,7 +148,27 @@
 	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.datosJustificante"/></td>
 </tr>
 <tr>
-    <td class="label">&nbsp;</td>
+    <td class="label"><bean:message key="especificacionesTramite.separador.datosJustificante.ocultarNifNombre"/></td>
+    <td class="input">
+    	<html:select property="values.ocultarNifNombreJustif">                    
+    		<logic:iterate id="opcion" name="personalizacionJustificanteOptions" type="es.caib.sistra.model.Opcion">
+    			<html:option value="<%=opcion.getCodigo()%>"  key="<%=opcion.getDescripcion()%>"  />
+	    	</logic:iterate>
+	    </html:select>    	    	
+    </td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.separador.datosJustificante.ocultarClaveTramitacion"/></td>
+    <td class="input">
+    	<html:select property="values.ocultarClaveTramitacionJustif">                    
+    		<logic:iterate id="opcion" name="personalizacionJustificanteOptions" type="es.caib.sistra.model.Opcion">
+    			<html:option value="<%=opcion.getCodigo()%>"  key="<%=opcion.getDescripcion()%>"  />
+	    	</logic:iterate>
+	    </html:select>    	    	
+    </td>   
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.separador.datosJustificante.datosSolicitud"/></td>
     <td class="input">
     <button class="buttond" type="button" onclick="forward('<%=urlDatoJustificante + "&" + parametroBack + "=" + codigo %>')">
         <bean:message key="boton.datoJustificante" />

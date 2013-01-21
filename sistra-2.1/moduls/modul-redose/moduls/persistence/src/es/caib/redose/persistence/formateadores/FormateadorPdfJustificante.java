@@ -186,11 +186,19 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
 		}
 		seccion.addCampo(propiedad);		
     	
-    	String tipoInteresado = "";
+    	
     	String keyTipoId;
     	char nivelAutenticacion='?';
     	
-    	boolean existeRepresentado = false;
+    	
+		// Datos identificativos representante / representado / delegado 
+    	//  Vemos si se ha particularizado el justificante para que no salga los datos identificativos
+		boolean ocultarNifNombre = datosPropios.getInstrucciones().getPersonalizacionJustificante() != null &&
+		datosPropios.getInstrucciones().getPersonalizacionJustificante().getOcultarNifNombre() != null &&
+			datosPropios.getInstrucciones().getPersonalizacionJustificante().getOcultarNifNombre().booleanValue();
+		
+		boolean existeRepresentado = false;
+		String tipoInteresado = "";
     	for (Iterator it =  asiento.getDatosInteresado().iterator();it.hasNext();){    	    	
     		DatosInteresado di = (DatosInteresado) it.next();
     		if (di.getTipoInteresado().equals(ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTADO)){
@@ -198,7 +206,6 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
     			break;
     		}
     	}
-    	
     	for (Iterator it =  asiento.getDatosInteresado().iterator();it.hasNext();){    		
     		DatosInteresado di = (DatosInteresado) it.next();
     		if (di.getTipoInteresado().equals(ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTANTE)){
@@ -228,7 +235,7 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
 			}
 			
 			// Añadimos sólo si se ha informado el dni
-			if (StringUtils.isNotEmpty(di.getNumeroIdentificacion())){
+			if (StringUtils.isNotEmpty(di.getNumeroIdentificacion()) && !ocultarNifNombre){
 				// Nombre
 				propiedad = new Propiedad(props.getProperty("datosRegistro.nombre"+tipoInteresado),
 	                    di.getIdentificacionInteresado());
@@ -238,13 +245,21 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
 				seccion.addCampo(propiedad);
 			}
     	}
+	
     	
     	if(!registroSalida){
     		// Identificador de persistencia (sólo para anónimo)
 	    	if (nivelAutenticacion == 'A' && datosPropios != null && datosPropios.getInstrucciones() != null && StringUtils.isNotEmpty(datosPropios.getInstrucciones().getIdentificadorPersistencia())){
-		    	propiedad = new Propiedad(props.getProperty("datosRegistro.identificadorPersistencia"),
-		    			datosPropios.getInstrucciones().getIdentificadorPersistencia());		    		    
-				seccion.addCampo(propiedad);
+	    		
+	    		// Vemos si se ha personalizado el justificante para ocultar este dato
+	    		boolean ocultarClave = datosPropios.getInstrucciones().getPersonalizacionJustificante() != null &&
+	    								datosPropios.getInstrucciones().getPersonalizacionJustificante().getOcultarClaveTramitacion() != null &&
+	    									datosPropios.getInstrucciones().getPersonalizacionJustificante().getOcultarClaveTramitacion().booleanValue();
+	    		if (!ocultarClave) {
+			    	propiedad = new Propiedad(props.getProperty("datosRegistro.identificadorPersistencia"),
+			    			datosPropios.getInstrucciones().getIdentificadorPersistencia());	    		
+					seccion.addCampo(propiedad);
+	    		}
 	    	}
 	    	// Notificacion telematica
 	    	if (datosPropios != null && datosPropios.getInstrucciones() != null && StringUtils.isNotEmpty(datosPropios.getInstrucciones().getHabilitarNotificacionTelematica())){
@@ -388,7 +403,7 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
     	}else{
     		
     		//SECCION OFICIO REMISION
-    		seccion = new Seccion(letras[numSecciones], props.getProperty("oficioRemision.titulo"));//props.getProperty("datosSolicitud.titulo"));
+    		seccion = new Seccion(letras[numSecciones], props.getProperty("oficioRemision.titulo"));
     		numSecciones++;
     		FactoriaObjetosXMLOficioRemision factOfi = ServicioOficioRemisionXML.crearFactoriaObjetosXML();
     		factOfi.setEncoding(ConstantesXML.ENCODING);

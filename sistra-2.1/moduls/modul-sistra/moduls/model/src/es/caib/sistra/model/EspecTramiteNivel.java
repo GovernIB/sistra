@@ -28,6 +28,8 @@ public class EspecTramiteNivel  extends Traducible {
      private List datosJustificante = new ArrayList();     
      private String flujoTramitacion="N";
      private byte[] checkEnvio;
+     private String ocultarClaveTramitacionJustif = "X";
+     private String ocultarNifNombreJustif = "X";
      /***
       * Script que permite cambiar el destinatario del trámite (oficina registro,organo destino y unidad administrativa)
       */
@@ -312,6 +314,26 @@ public class EspecTramiteNivel  extends Traducible {
 
 	public void setPermitirSMS(String permitirSMS) {
 		this.permitirSMS = permitirSMS;
+	}
+
+
+	public String getOcultarClaveTramitacionJustif() {
+		return ocultarClaveTramitacionJustif;
+	}
+
+
+	public void setOcultarClaveTramitacionJustif(String ocultarClaveTramitacion) {
+		this.ocultarClaveTramitacionJustif = ocultarClaveTramitacion;
+	}
+
+
+	public String getOcultarNifNombreJustif() {
+		return ocultarNifNombreJustif;
+	}
+
+
+	public void setOcultarNifNombreJustif(String ocultarNifNombre) {
+		this.ocultarNifNombreJustif = ocultarNifNombre;
 	}
     
 	

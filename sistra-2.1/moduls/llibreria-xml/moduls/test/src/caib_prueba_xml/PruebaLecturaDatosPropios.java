@@ -12,6 +12,7 @@ import es.caib.xml.datospropios.factoria.impl.Documento;
 import es.caib.xml.datospropios.factoria.impl.DocumentosEntregar;
 import es.caib.xml.datospropios.factoria.impl.FormulariosJustificante;
 import es.caib.xml.datospropios.factoria.impl.Instrucciones;
+import es.caib.xml.datospropios.factoria.impl.PersonalizacionJustificante;
 import es.caib.xml.datospropios.factoria.impl.Solicitud;
 import es.caib.xml.datospropios.factoria.impl.TramiteSubsanacion;
 
@@ -22,6 +23,12 @@ public class PruebaLecturaDatosPropios {
 		for (int i=0; i < fj.getFormularios().size(); i++) {
 			System.out.println (fj.getFormularios().get(i));
 		}				
+	}
+	
+	private static void imprimirPersonalizacionJustificante (PersonalizacionJustificante fj){
+		System.out.println ("FORMULARIOS JUSTIFICANTE");
+		System.out.println ("Ocultar clave: " + fj.getOcultarClaveTramitacion());
+		System.out.println ("Ocultar nif nombre: " + fj.getOcultarNifNombre());
 	}
 	
 	private static void imprimirTramiteSubsanacion (TramiteSubsanacion ts){
@@ -76,6 +83,10 @@ public class PruebaLecturaDatosPropios {
 		
 		if (inst.getFormulariosJustificante() != null){
 			imprimirFormulariosJustificante(inst.getFormulariosJustificante());
+		}
+		
+		if (inst.getPersonalizacionJustificante() != null){
+			imprimirPersonalizacionJustificante(inst.getPersonalizacionJustificante());
 		}
 	}
 	

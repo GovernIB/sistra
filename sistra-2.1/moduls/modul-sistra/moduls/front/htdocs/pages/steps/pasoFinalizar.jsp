@@ -29,8 +29,10 @@
 	<!--  Instrucciones para guardar justificante -->
 	<h3 class="titGuardar"><bean:message key="pasoJustificante.guardarJustificante"/></h3>	
 	<p class="apartado">
-		<bean:message key="pasoJustificante.guardarJustificante.informacion"/>							
-		<bean:message key="pasoJustificante.guardarJustificante.recordatorioZonaPersonal.inicio" arg0="<%=referenciaPortal%>" />		
+		<bean:message key="pasoJustificante.guardarJustificante.informacion"/>			
+		<!-- 				
+			<bean:message key="pasoJustificante.guardarJustificante.recordatorioZonaPersonal.inicio" arg0="<%=referenciaPortal%>" />
+		 -->			
 	</p>
 	<p class="centrado">
 		<input name="guardarJustificanteBoton" id="guardarJustificanteBoton" type="button" value="<bean:message key="pasoJustificante.guardarJustificante.boton"/>"

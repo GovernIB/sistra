@@ -25,7 +25,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="IDENTIFICADOR" type="{}string_no_vacio"/>
+ *         &lt;element name="OCULTAR_CLAVE_TRAMITACION" type="{}string_si_no" minOccurs="0"/>
+ *         &lt;element name="OCULTAR_NIF_NOMBRE" type="{}string_si_no" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,36 +37,63 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "identificador"
+    "ocultarclavetramitacion",
+    "ocultarnifnombre"
 })
-@XmlRootElement(name = "FORMULARIO_JUSTIFICANTE")
-public class FORMULARIOJUSTIFICANTE {
+@XmlRootElement(name = "PERSONALIZACION_JUSTIFICANTE")
+public class PERSONALIZACIONJUSTIFICANTE {
 
-    @XmlElement(name = "IDENTIFICADOR", required = true)
-    protected String identificador;
+    @XmlElement(name = "OCULTAR_CLAVE_TRAMITACION")
+    protected String ocultarclavetramitacion;
+    @XmlElement(name = "OCULTAR_NIF_NOMBRE")
+    protected String ocultarnifnombre;
 
     /**
-     * Gets the value of the identificador property.
+     * Gets the value of the ocultarclavetramitacion property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getIDENTIFICADOR() {
-        return identificador;
+    public String getOCULTARCLAVETRAMITACION() {
+        return ocultarclavetramitacion;
     }
 
     /**
-     * Sets the value of the identificador property.
+     * Sets the value of the ocultarclavetramitacion property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setIDENTIFICADOR(String value) {
-        this.identificador = value;
+    public void setOCULTARCLAVETRAMITACION(String value) {
+        this.ocultarclavetramitacion = value;
+    }
+
+    /**
+     * Gets the value of the ocultarnifnombre property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getOCULTARNIFNOMBRE() {
+        return ocultarnifnombre;
+    }
+
+    /**
+     * Sets the value of the ocultarnifnombre property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setOCULTARNIFNOMBRE(String value) {
+        this.ocultarnifnombre = value;
     }
 
 }
