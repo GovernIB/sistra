@@ -11,6 +11,7 @@ import es.caib.xml.datospropios.factoria.impl.Documento;
 import es.caib.xml.datospropios.factoria.impl.DocumentosEntregar;
 import es.caib.xml.datospropios.factoria.impl.FormulariosJustificante;
 import es.caib.xml.datospropios.factoria.impl.Instrucciones;
+import es.caib.xml.datospropios.factoria.impl.PersonalizacionJustificante;
 import es.caib.xml.datospropios.factoria.impl.Solicitud;
 import es.caib.xml.datospropios.factoria.impl.TramiteSubsanacion;
 
@@ -108,5 +109,11 @@ public interface FactoriaObjetosXMLDatosPropios extends FactoriaObjetosXML {
 	 * @return FormulariosJustificante
 	 */
 	public FormulariosJustificante crearFormulariosJustificante();
+	
+	/**
+	 * Crea PersonalizacionJustificante.
+	 * @return PersonalizacionJustificante
+	 */
+	public PersonalizacionJustificante crearPersonalizacionJustificante();
 	
 }

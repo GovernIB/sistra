@@ -27,6 +27,7 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 	private String avisoEmail;
 	private TramiteSubsanacion tramiteSubsanacion;
 	private FormulariosJustificante formulariosJustificante;
+	private PersonalizacionJustificante personalizacionJustificante;
 	
 	
 	Instrucciones (){
@@ -133,6 +134,9 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 			//  Comprobar formularios justificante
 			if (!objetosIguales (getFormulariosJustificante(), inst.getFormulariosJustificante())) return false;
 			
+			//  Comprobar personalizacion justificante
+			if (!objetosIguales (getPersonalizacionJustificante(), inst.getPersonalizacionJustificante())) return false;
+			
 			// OK los objetos son equivalentes
 			return true;
 		}
@@ -212,6 +216,15 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 
 	public void setIdentificadorProcedimiento(String identificadorProcedimiento) {
 		this.identificadorProcedimiento = identificadorProcedimiento;
+	}
+
+	public PersonalizacionJustificante getPersonalizacionJustificante() {
+		return personalizacionJustificante;
+	}
+
+	public void setPersonalizacionJustificante(
+			PersonalizacionJustificante personalizacionJustificante) {
+		this.personalizacionJustificante = personalizacionJustificante;
 	}
 
 

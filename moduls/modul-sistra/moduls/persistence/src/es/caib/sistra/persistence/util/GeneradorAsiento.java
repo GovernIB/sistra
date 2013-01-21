@@ -46,6 +46,7 @@ import es.caib.xml.datospropios.factoria.impl.Documento;
 import es.caib.xml.datospropios.factoria.impl.DocumentosEntregar;
 import es.caib.xml.datospropios.factoria.impl.FormulariosJustificante;
 import es.caib.xml.datospropios.factoria.impl.Instrucciones;
+import es.caib.xml.datospropios.factoria.impl.PersonalizacionJustificante;
 import es.caib.xml.datospropios.factoria.impl.Solicitud;
 import es.caib.xml.datospropios.factoria.impl.TramiteSubsanacion;
 import es.caib.xml.registro.factoria.ConstantesAsientoXML;
@@ -403,6 +404,13 @@ public class GeneradorAsiento {
 		//
 		//	En caso de que existan instrucciones específicas se muestran
 		//
+		
+		// Personalizacion justificante estandar
+		String ocultarClave = obtenerOcultarClaveTramitacion(especVersion,
+				especNivel);
+		String ocultarNifNombre = obtenerOcultarNifNombre(especVersion,
+				especNivel);
+		
 		Instrucciones instrucciones = factoria.crearInstrucciones();
 		String instruccionesTextCircuitoTelematico,instruccionesTextCircuitoPresencial;
 		if (StringUtils.isNotEmpty(tramiteInfo.getInstruccionesFin())){
@@ -411,6 +419,20 @@ public class GeneradorAsiento {
 		}else{
 			instruccionesTextCircuitoTelematico = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"mensaje.datospropios.telematico");
 			instruccionesTextCircuitoPresencial = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"mensaje.datospropios.presencial");
+			
+			if (!"S".equals(ocultarClave)) {
+				String instruccionesSeguimiento = null;
+				if (tramiteInfo.getDatosSesion().getNivelAutenticacion() == ConstantesLogin.LOGIN_ANONIMO) {
+					instruccionesSeguimiento = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"mensaje.datospropios.seguimiento.anonimo");
+					instruccionesSeguimiento = StringUtil.replace(instruccionesSeguimiento, "#CLAVE_TRAMITACION#", tramiteInfo.getIdPersistencia());
+				} else {
+					instruccionesSeguimiento = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"mensaje.datospropios.seguimiento.autenticado");
+				}				
+				
+				instruccionesTextCircuitoTelematico = instruccionesTextCircuitoTelematico + " " + instruccionesSeguimiento;
+				instruccionesTextCircuitoPresencial = instruccionesTextCircuitoPresencial + " " + instruccionesSeguimiento;
+			}
+			
 		}
 		
 		char tipoTramitacion 			= tramiteInfo.getTipoTramitacion();
@@ -455,11 +477,39 @@ public class GeneradorAsiento {
 			instrucciones.setFormulariosJustificante(fj);						
 		}
 		
+		// ---- Personalizacion justificante estandard
+		if ("S".equals(ocultarClave) || "S".equals(ocultarNifNombre)) {
+			PersonalizacionJustificante pj = new PersonalizacionJustificante();
+			pj.setOcultarClaveTramitacion(new Boolean("S".equals(ocultarClave)));
+			pj.setOcultarNifNombre(new Boolean("S".equals(ocultarNifNombre)));
+			instrucciones.setPersonalizacionJustificante(pj);
+		}
+				
 		// ----- Comprobamos si es un tramite de subsanacion y hay que añadir el expediente
 		TramiteSubsanacion ts = generarTramiteSubsanacion(expeId, expeUA,
 				factoria);
 		instrucciones.setTramiteSubsanacion(ts);
 		return instrucciones;
+	}
+
+	private static String obtenerOcultarNifNombre(
+			EspecTramiteNivel especVersion, EspecTramiteNivel especNivel) {
+		String ocultarNifNombre = null;
+		ocultarNifNombre = especVersion.getOcultarNifNombreJustif();
+		if (!"X".equals(especNivel.getOcultarNifNombreJustif())) {
+			ocultarNifNombre = especNivel.getOcultarNifNombreJustif();
+		}
+		return ocultarNifNombre;
+	}
+
+	private static String obtenerOcultarClaveTramitacion(
+			EspecTramiteNivel especVersion, EspecTramiteNivel especNivel) {
+		String ocultarClave = null;
+		ocultarClave = especVersion.getOcultarClaveTramitacionJustif();
+		if (!"X".equals(especNivel.getOcultarClaveTramitacionJustif())) {
+			ocultarClave = especNivel.getOcultarClaveTramitacionJustif();
+		}
+		return ocultarClave;
 	}
 
 	private static FormulariosJustificante obtenerFormulariosJustificante(

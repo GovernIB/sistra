@@ -288,12 +288,15 @@ public class NifCif {
 	 * @return
 	 */
 	public static String normalizarDocumento(String nif){
-		String doc = null;
+		String doc = null;		
         if (nif != null) {
-            // Quitamos espacios y otros caracteres
+        	// Quitamos espacios y otros caracteres
             doc = nif.toUpperCase();
             doc = doc.replaceAll("[\\/\\s\\-]", "");
             // Rellenamos con 0
+            if (doc.length() == 0) {
+            	return "";
+            }
             final String primerCaracter = doc.substring(0, 1);
             if (Pattern.matches("[^A-Z]", primerCaracter)) {
                 // Es nif

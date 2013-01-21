@@ -37,6 +37,13 @@ public class EspecificacionGenericaController implements Controller{
     	
     	request.setAttribute( "habilitarNotificacionOptions", listaOpcionesNotif);
     	
+    	
+    	List listaOpcionesPersJustif = new ArrayList(); 
+    	listaOpcionesPersJustif.add(new Opcion(ConstantesSTR.PERSONALIZACIONJUSTIFICANTE_HABILITADA, "especificacionesTramite.personalizacionJustificante.habilitada"));
+    	listaOpcionesPersJustif.add(new Opcion(ConstantesSTR.PERSONALIZACIONJUSTIFICANTE_NOHABILITADA, "especificacionesTramite.personalizacionJustificante.noHabilitada"));    	    	
+    	
+    	request.setAttribute( "personalizacionJustificanteOptions", listaOpcionesPersJustif);
+    	
     	request.setAttribute( "habilitarAvisos", request.getSession().getServletContext().getAttribute(Constants.AVISOS_OBLIGATORIOS_NOTIFICACIONES));
     	
     }

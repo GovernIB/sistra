@@ -163,6 +163,8 @@ public abstract class TramiteVersionFacadeEJB extends HibernateEJB {
                 if (obj.getEspecificaciones() == null){
                 	EspecTramiteNivel esp = new EspecTramiteNivel();
                 	esp.setHabilitarNotificacionTelematica("N");
+                	esp.setOcultarClaveTramitacionJustif("N");
+                	esp.setOcultarNifNombreJustif("N");
                 	obj.setEspecificaciones(esp);
                 }
                 

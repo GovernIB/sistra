@@ -1187,3 +1187,15 @@ alter table STR_GRPTRA
 alter table STR_GRPTRA
    add constraint STR_GRTTRA_FK foreign key (GRT_CODTRA)
       references STR_TRAMIT (TRA_CODIGO);
+      
+      
+-- V2.1.0
+alter table STR_ESPNIV  add ETN_JNOCLA           VARCHAR2(1)       DEFAULT 'N'     not null ;
+
+alter table STR_ESPNIV  add ETN_JNONN            VARCHAR2(1)      DEFAULT 'N'       not null ;
+
+comment on column STR_ESPNIV.ETN_JNOCLA is
+'Indica si se oculta la clave de tramitacion en el pdf de justificante estandard';
+
+comment on column STR_ESPNIV.ETN_JNONN is
+'Indica si se oculta el nif y nombre en el pdf de justificante estandard';      
