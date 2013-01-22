@@ -28,7 +28,7 @@ public interface InstanciaDelegate extends Delegate
 	RespuestaFront anularPago(String identificador, int instancia) throws DelegateException;	
 	void finalizarSesionPago(String identificador,int instancia) throws DelegateException;
 	RespuestaFront borrarTramite() throws DelegateException;
-	RespuestaFront borrarTramite( String idPersistencia ) throws DelegateException;
+	//RespuestaFront borrarTramite( String idPersistencia ) throws DelegateException;
 	RespuestaFront registrarTramite(String asiento,FirmaIntf firma) throws DelegateException;
 	RespuestaFront mostrarDocumento(String idDocumento, int instancia) throws DelegateException;
 	RespuestaFront mostrarJustificante() throws DelegateException;

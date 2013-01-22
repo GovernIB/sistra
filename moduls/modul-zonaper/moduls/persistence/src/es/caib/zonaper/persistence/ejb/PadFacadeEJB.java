@@ -327,15 +327,25 @@ public abstract class PadFacadeEJB implements SessionBean{
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
-    public void borrarTramitePersistente(String idPersistencia) throws ExcepcionPAD{     
+    public void borrarTramitePersistente(String idPersistencia, boolean backup) throws ExcepcionPAD{     
     	try{
-    		TramitePersistenteDelegate td = DelegateUtil.getTramitePersistenteDelegate();        	        	
+    		TramitePersistenteDelegate td = DelegateUtil.getTramitePersistenteDelegate();
+    		if (backup) {
+    			log.debug("Realizando backup tramite " + idPersistencia);
+    			TramitePersistente tramitePersistente = td.obtenerTramitePersistente(idPersistencia);
+    			td.backupTramitePersistente(tramitePersistente);
+    		} else {
+    			// Eliminamos referencias en el RDS (mantenemos si hacemos backup)
+    			log.debug("Borrando usos documentos tramite " + idPersistencia);
+    			RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();	    	    		
+    			rds.eliminarUsos(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE, idPersistencia );    			
+    		}
+    		log.debug("Borrando tramite " + idPersistencia);
     		td.borrarTramitePersistente(idPersistencia);
     	}catch (Exception ex){
     		throw new ExcepcionPAD("No se ha podido borrar trámite persistente con id: " + idPersistencia,ex);
     	}        	        	       
     }
-    
       
         
     /**

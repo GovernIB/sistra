@@ -18,5 +18,10 @@
 	<property name="rdsCodigo" column="DPB_RDSCOD" length="20"/>
 	<property name="rdsClave" column="DPB_RDSCLA" length="10"/>
 	<property name="nombreFicheroAnexo" column="DPB_NOMFIC" length="255"/>
+	<property name="descripcionGenerico" column="DPB_GENDES" length="255"/>
+	<property name="delegacionEstado" column="DPB_DLGEST" length="2"/>
+	<property name="delegacionFirmantes" column="DPB_DLGFIR"/>
+	<property name="delegacionFirmantesPendientes" column="DPB_DLGFIP"/>
+		
 </class>
 </hibernate-mapping>
