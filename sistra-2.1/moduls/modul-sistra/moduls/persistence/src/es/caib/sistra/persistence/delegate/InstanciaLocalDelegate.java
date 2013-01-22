@@ -239,19 +239,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
         {
             throw new DelegateException(e);
         }
-	}
-	
-	public RespuestaFront borrarTramite( String idPersistencia ) throws DelegateException
-	{
-        try 
-        {
-        	return local.borrarTramitePersistencia( idPersistencia );
-        } 
-        catch (EJBException e) 
-        {
-            throw new DelegateException(e);
-        }
-	}
+	}	
 	
 	public RespuestaFront registrarTramite(String asiento, FirmaIntf firma)
 			throws DelegateException

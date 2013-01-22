@@ -78,9 +78,9 @@ public class PadDelegate implements StatelessDelegate {
         }
     }
         
-	public void borrarTramitePersistente(String idPersistencia) throws DelegateException {
+	public void borrarTramitePersistente(String idPersistencia, boolean backup) throws DelegateException {
         try {
-            getFacade().borrarTramitePersistente(idPersistencia);            
+            getFacade().borrarTramitePersistente(idPersistencia, backup);            
         } catch (Exception e) {
             throw new DelegateException(e);
         }

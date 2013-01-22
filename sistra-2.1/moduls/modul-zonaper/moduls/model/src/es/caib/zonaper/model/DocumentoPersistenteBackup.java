@@ -12,6 +12,10 @@ public class DocumentoPersistenteBackup
     private Long rdsCodigo;
     private String rdsClave;
     private String nombreFicheroAnexo;
+    private String descripcionGenerico;
+    private String delegacionEstado;
+    private String delegacionFirmantes;
+    private String delegacionFirmantesPendientes;     
     
     
 	public Long getCodigo() {
@@ -91,6 +95,47 @@ public class DocumentoPersistenteBackup
 	
 	public void setTramitePersistenteBackup(TramitePersistenteBackup tramitePersistenteBackup) {
 		this.tramitePersistenteBackup = tramitePersistenteBackup;
+	}
+
+
+	public String getDescripcionGenerico() {
+		return descripcionGenerico;
+	}
+
+
+	public void setDescripcionGenerico(String descripcionGenerico) {
+		this.descripcionGenerico = descripcionGenerico;
+	}
+
+
+	public String getDelegacionEstado() {
+		return delegacionEstado;
+	}
+
+
+	public void setDelegacionEstado(String delegacionEstado) {
+		this.delegacionEstado = delegacionEstado;
+	}
+
+
+	public String getDelegacionFirmantes() {
+		return delegacionFirmantes;
+	}
+
+
+	public void setDelegacionFirmantes(String delegacionFirmantes) {
+		this.delegacionFirmantes = delegacionFirmantes;
+	}
+
+
+	public String getDelegacionFirmantesPendientes() {
+		return delegacionFirmantesPendientes;
+	}
+
+
+	public void setDelegacionFirmantesPendientes(
+			String delegacionFirmantesPendientes) {
+		this.delegacionFirmantesPendientes = delegacionFirmantesPendientes;
 	}
 
 

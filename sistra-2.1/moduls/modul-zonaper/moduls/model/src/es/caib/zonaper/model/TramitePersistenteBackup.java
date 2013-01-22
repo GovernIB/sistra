@@ -27,6 +27,8 @@ public class TramitePersistenteBackup
     private String idioma;
     private Set documentosBackup = new HashSet(0);     
     private String parametrosInicio;
+    private String delegado;
+    private String estadoDelegacion;
     
 	/* (non-Javadoc)
 	 * @see es.caib.zonaper.model.ITramitePersistente#getCodigo()
@@ -278,5 +280,21 @@ public class TramitePersistenteBackup
 
 	public void setUsuarioFlujoTramitacion(String usuarioFlujoTramitacion) {
 		this.usuarioFlujoTramitacion = usuarioFlujoTramitacion;
+	}
+
+	public String getDelegado() {
+		return delegado;
+	}
+
+	public void setDelegado(String delegado) {
+		this.delegado = delegado;
+	}
+
+	public String getEstadoDelegacion() {
+		return estadoDelegacion;
+	}
+
+	public void setEstadoDelegacion(String estadoDelegacion) {
+		this.estadoDelegacion = estadoDelegacion;
 	}
 }

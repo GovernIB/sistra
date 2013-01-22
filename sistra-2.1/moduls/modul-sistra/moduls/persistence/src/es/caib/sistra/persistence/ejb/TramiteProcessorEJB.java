@@ -2237,45 +2237,7 @@ public class TramiteProcessorEJB implements SessionBean {
     		this.context.setRollbackOnly();
     		return resFront;
     	}    	
-    }
-    
-    /**
-     * Elimina trámite de la zona de persistencia
-     * @ejb.interface-method    
-     * @ejb.permission role-name="${role.todos}"
-     */
-    public RespuestaFront borrarTramitePersistencia( String idPersistencia ) 
-    {
-    	try{	    		    		    		
-    		// Quitamos trámite de la zona de persistencia
-    		borrarPersistencia( idPersistencia );
-	    	
-	    	// Establecemos respuesta front
-	    	RespuestaFront resp = new RespuestaFront();
-	    	resp.setInformacionTramite( null );
-	    	MensajeFront mens = new MensajeFront();
-	    	mens.setTipo(MensajeFront.TIPO_WARNING);
-	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_TRAMITEBORRADO));
-	    	resp.setMensaje(mens);
-	    	resp.setParametros(null);
-	    	return resp;
-    	}catch (Exception e){    	
-    		log.error(mensajeLog("Exception al borrar tramite"),e);
-    		
-    		RespuestaFront resp = new RespuestaFront();
-	    	resp.setInformacionTramite( null );
-    		MensajeFront mens = new MensajeFront();
-    		mens.setTipo(MensajeFront.TIPO_ERROR);
-    		mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ERRORDESCONOCIDO));
-    		mens.setMensajeExcepcion(e.getMessage());
-    		resp.setMensaje(mens);
-	    	resp.setParametros(null);	    	
-	    	
-    		this.context.setRollbackOnly();    		
-    		return resp;
-    	}
-    }
-    
+    }        
     
     /**
      * Elimina trámite de la zona de persistencia
@@ -2285,10 +2247,13 @@ public class TramiteProcessorEJB implements SessionBean {
     public RespuestaFront borrarTramitePersistencia() {
     	String res = "N";
     	String  mensAudit="";
+    	
     	boolean yaBorrado = this.borradoPersistencia;
     	try{
     		// Quitamos trámite de la zona de persistencia
-    		borrarPersistencia( isPagoIniciado( tramiteInfo ) );
+    		if (!yaBorrado) {
+    			borrarPersistencia( isPagoIniciado( tramiteInfo ) );
+    		}
 	    	
 	    	// Establecemos respuesta front
 	    	RespuestaFront resp = new RespuestaFront();
@@ -4978,16 +4943,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	private void borrarPersistencia( boolean backup ) throws Exception
 	{
 		borrarPersistencia( tramitePersistentePAD.getIdPersistencia(), backup );
-	}
-	
-	/**
-	 * Borra tramite de persistencia
-	 * @param idPersistencia Id persistencia del tramite a borrar
-	 * @throws Exception
-	 */
-	private void borrarPersistencia( String idPersistencia ) throws Exception{
-		borrarPersistencia( idPersistencia, false );
-	}
+	}		
 	
 	/**
 	 * Borra tramite de persistencia
@@ -5002,15 +4958,12 @@ public class TramiteProcessorEJB implements SessionBean {
 		
 		if ( log.isDebugEnabled() )
 		{
-			log.debug( "Eliminando tramite " + idPersistencia );
+			log.debug( "Eliminando tramite " + idPersistencia + " ( backup: " + backup + ")");
 		}
-		// Eliminamos referencias en el RDS    		
-		RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();	    	    		
-		rds.eliminarUsos(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE, idPersistencia );
 		
 		// Eliminamos de la zona de persistencia
 		PadDelegate pad = DelegatePADUtil.getPadDelegate();	    	
-    	pad.borrarTramitePersistente( idPersistencia ); 
+    	pad.borrarTramitePersistente( idPersistencia, backup ); 
     	
     	// Marcamos como borrado
     	this.borradoPersistencia = true;

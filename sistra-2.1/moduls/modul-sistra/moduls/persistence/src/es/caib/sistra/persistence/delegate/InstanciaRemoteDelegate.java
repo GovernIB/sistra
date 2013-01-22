@@ -248,19 +248,7 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
         {
             throw new DelegateException(e);
         }
-	}
-	
-	public RespuestaFront borrarTramite( String idPersistencia ) throws DelegateException
-	{
-        try 
-        {
-        	return getRemote().borrarTramitePersistencia( idPersistencia );
-        } 
-        catch (RemoteException e) 
-        {
-            throw new DelegateException(e);
-        }
-	}
+	}	
 
 	public RespuestaFront registrarTramite(String asiento, FirmaIntf firma)
 			throws DelegateException

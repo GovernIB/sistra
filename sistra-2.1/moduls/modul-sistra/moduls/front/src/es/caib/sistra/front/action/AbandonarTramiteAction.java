@@ -44,6 +44,17 @@ public class AbandonarTramiteAction extends BaseAction
 		this.setRespuestaFront( request, respuestaFront );
 		
 		// Eliminamos tramite
+		delegate.borrarTramite();
+		
+		// Mensaje de cancelación de trámite
+		ParametrosMensaje param = new ParametrosMensaje();
+		param.setAction("main");			
+		this.setInfoMessage( request, "cancelacionTramite.mensaje",param);		
+		InstanciaManager.desregistrarInstancia( request );
+		return mapping.findForward( "success" );
+		
+		
+		/* RAFA: DEJAMOS SOLO UN BORRAR TRAMITE
 		if ( formulario.getIdPersistencia() == null )
 		{
 			delegate.borrarTramite();
@@ -63,7 +74,8 @@ public class AbandonarTramiteAction extends BaseAction
 			InstanciaManager.desregistrarInstancia( request );
 			formulario.setIdPersistencia( null );
 			return mapping.findForward( "init" );
-		}		
+		}
+		*/		
 		
 	}
 
