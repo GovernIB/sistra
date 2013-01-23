@@ -127,15 +127,12 @@ comment on table BTE_GESPRO is
 comment on column BTE_GESPRO.GAP_CODGES is
 'USUARIO SEYCON DEL GESTOR';
 
-comment on column BTE_GESPRO.GAP_IDETRA is
-'IDENTIFICADOR DEL TRÁMITE';
+comment on column BTE_GESPRO.GAP_IDEPRO is
+'IDENTIFICADOR DEL PROCEDIMIENTO';
 
 alter table BTE_GESPRO
-   add constraint BTE_GAP_PK primary key (GAP_CODGES, GAP_IDETRA);
+   add constraint BTE_GAP_PK primary key (GAP_CODGES, GAP_IDEPRO);
    
-alter table BTE_GESPRO add constraint BTE_GAPTAP_FK foreign key (GAP_IDEPRO)
-      references BTE_PROAPL (TAP_IDEPRO);    
-
 create table BTE_PROAPL  (
    TAP_IDEPRO           VARCHAR2(100)                    not null,
    TAP_DESC             VARCHAR2(100)                   not null,
@@ -164,8 +161,8 @@ create table BTE_PROAPL  (
 comment on table BTE_PROAPL is
 'LISTA DE TRAMITES QUE SE PUEDEN REGISTRAR EN LA BANDEJA. PARA CADA TRAMITE SE INDICA QUE APLICACIÓN LO GESTIONA.';
 
-comment on column BTE_PROAPL.TAP_IDETRA is
-'IDENTIFICADOR DEL TRÁMITE';
+comment on column BTE_PROAPL.TAP_IDEPRO is
+'IDENTIFICADOR DEL PROCEDIMIENTO';
 
 comment on column BTE_PROAPL.TAP_DESC is
 'DESCRIPCION APLICACION';
@@ -222,7 +219,10 @@ comment on column BTE_PROAPL.TAP_SMS is
 
 
 alter table BTE_PROAPL
-   add constraint BTE_TAP_PK primary key (TAP_IDETRA);
+   add constraint BTE_TAP_PK primary key (TAP_IDEPRO);
+   
+alter table BTE_GESPRO add constraint BTE_GAPTAP_FK foreign key (GAP_IDEPRO)
+      references BTE_PROAPL (TAP_IDEPRO);  
 
 create table BTE_TRAMIT  (
    TRA_CODIGO           NUMBER(20)                      not null,
@@ -458,6 +458,6 @@ alter table BTE_ARCFEX
    add constraint BTE_AFEFIC_FK foreign key (AFE_IDEFIC)
       references BTE_FICEXP (FIC_IDETRA);      
 
-INSERT INTO BTE_ARCFEX 
-	SELECT BTE_FICEXP.FIC_IDETRA, BTE_FICEXP.FIC_DATOS
-		FROM BTE_FICEXP;
+--INSERT INTO BTE_ARCFEX 
+--	SELECT BTE_FICEXP.FIC_IDETRA, BTE_FICEXP.FIC_DATOS
+--		FROM BTE_FICEXP;

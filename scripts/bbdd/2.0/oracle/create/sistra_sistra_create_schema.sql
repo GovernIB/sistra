@@ -103,7 +103,7 @@ create table STR_DOCNIV  (
    DNV_FIRMTE           VARCHAR2(500),
    DNV_FORGST           VARCHAR2(20)                   default 'forms' not null,
    DNV_FORINI           BLOB,
-   DNV_FORFOR           VARCHAR2(3),
+   DNV_FORFOR           VARCHAR2(20),
    DNV_FORVER           NUMBER(2),
    DNV_FORCON           BLOB,
    DNV_FORPOS           BLOB,
@@ -388,7 +388,7 @@ create table STR_ESPNIV  (
    ETN_NOTTEL           VARCHAR2(1)                    default 'N' not null,
    ETN_CHKENV           BLOB,
    ETN_DSTTRA           BLOB,
-   ETN_PERSMS 			VARCHAR2(1) 					default 'N' not null
+   ETN_PERSMS 			VARCHAR2(1) 					default 'N' not null   
 );
 
 comment on table STR_ESPNIV is
@@ -435,9 +435,6 @@ comment on column STR_ESPNIV.ETN_FLUTRA is
 
 comment on column STR_ESPNIV.ETN_URLFIN is
 'Establece url de finalización';
-
-comment on column STR_ESPNIV.ETN_AVISOS is
-'Script para indicar si se habilitan los avisos para el expediente ';
 
 comment on column STR_ESPNIV.ETN_AVISMS is
 'En caso de que esten habilitados los avisos para el expediente indicará el telefono para avisos SMS';
@@ -1187,3 +1184,4 @@ alter table STR_GRPTRA
 alter table STR_GRPTRA
    add constraint STR_GRTTRA_FK foreign key (GRT_CODTRA)
       references STR_TRAMIT (TRA_CODIGO);
+            
