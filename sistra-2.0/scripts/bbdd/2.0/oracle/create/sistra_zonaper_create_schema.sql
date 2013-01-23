@@ -156,9 +156,8 @@ create table ZPE_DOCPER  (
    DPE_GENDES           VARCHAR2(255),
    DPE_DLGEST VARCHAR2(2),
    DPE_DLGFIR VARCHAR2(4000),
-   DPE_DLGFIP VARCHAR2(4000),  
+   DPE_DLGFIP VARCHAR2(4000)  
 );
-
 
 comment on column ZPE_DOCPER.DPE_DLGEST is
 'ESTADO DE DELEGACION: PASO A FIRMA DOCUMENTO';
@@ -389,7 +388,8 @@ create table ZPE_ELEEX  (
    ELE_CODEXP           NUMBER(20)                      not null,
    ELE_FECHA            DATE                            not null,
    ELE_TIPO             VARCHAR2(1)                     not null,
-   ELE_CODELE           NUMBER(20)                      not null
+   ELE_CODELE           NUMBER(20)                      not null,
+   ELE_CODAVI           VARCHAR2(50)
 );
 
 comment on table ZPE_ELEEX is
@@ -409,6 +409,9 @@ comment on column ZPE_ELEEX.ELE_TIPO is
 
 comment on column ZPE_ELEEX.ELE_CODELE is
 'Codigo elemento destino (según tipo evento)';
+
+comment on column ZPE_ELEEX.ELE_CODAVI is
+'Codigo aviso movilidad asociado al elemento';
 
 alter table ZPE_ELEEX
    add constraint ZPE_ELE_PK primary key (ELE_CODIGO);
@@ -715,12 +718,17 @@ create table ZPE_NOTTEL  (
    NOT_SUBDES           VARCHAR2(500),
    NOT_SUBIDE           VARCHAR2(20),
    NOT_SUBVER           NUMBER(2),
-   NOT_SUBPAR           VARCHAR2(4000)
+   NOT_SUBPAR           VARCHAR2(4000),
+   NOT_FECPLZ           DATE,
+   NOT_RECHAZ          NUMBER(1)
 );
 
 
+comment on column ZPE_NOTTEL.NOT_FECPLZ is
+'Indica fecha de plazo de fin de apertura de la notificación (en caso de que se controle fecha entrega)';
 
-
+comment on column ZPE_NOTTEL.NOT_RECHAZ is
+'Indica que la notificacion esta rechazada (en caso de que se controle fecha entrega)';
 
 comment on table ZPE_NOTTEL is
 'Log de notificaciones telemáticas';
@@ -1793,3 +1801,4 @@ alter table ZPE_INDELE
 create index ZPE_INDELE_IDX on ZPE_INDELE (
    IND_NIF ASC
 );
+
