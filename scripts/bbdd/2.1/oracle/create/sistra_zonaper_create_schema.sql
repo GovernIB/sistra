@@ -156,9 +156,8 @@ create table ZPE_DOCPER  (
    DPE_GENDES           VARCHAR2(255),
    DPE_DLGEST VARCHAR2(2),
    DPE_DLGFIR VARCHAR2(4000),
-   DPE_DLGFIP VARCHAR2(4000),  
+   DPE_DLGFIP VARCHAR2(4000)  
 );
-
 
 comment on column ZPE_DOCPER.DPE_DLGEST is
 'ESTADO DE DELEGACION: PASO A FIRMA DOCUMENTO';
@@ -389,7 +388,8 @@ create table ZPE_ELEEX  (
    ELE_CODEXP           NUMBER(20)                      not null,
    ELE_FECHA            DATE                            not null,
    ELE_TIPO             VARCHAR2(1)                     not null,
-   ELE_CODELE           NUMBER(20)                      not null
+   ELE_CODELE           NUMBER(20)                      not null,
+   ELE_CODAVI           VARCHAR2(50)
 );
 
 comment on table ZPE_ELEEX is
@@ -409,6 +409,9 @@ comment on column ZPE_ELEEX.ELE_TIPO is
 
 comment on column ZPE_ELEEX.ELE_CODELE is
 'Codigo elemento destino (según tipo evento)';
+
+comment on column ZPE_ELEEX.ELE_CODAVI is
+'Codigo aviso movilidad asociado al elemento';
 
 alter table ZPE_ELEEX
    add constraint ZPE_ELE_PK primary key (ELE_CODIGO);
@@ -715,12 +718,17 @@ create table ZPE_NOTTEL  (
    NOT_SUBDES           VARCHAR2(500),
    NOT_SUBIDE           VARCHAR2(20),
    NOT_SUBVER           NUMBER(2),
-   NOT_SUBPAR           VARCHAR2(4000)
+   NOT_SUBPAR           VARCHAR2(4000),
+   NOT_FECPLZ           DATE,
+   NOT_RECHAZ          NUMBER(1)
 );
 
 
+comment on column ZPE_NOTTEL.NOT_FECPLZ is
+'Indica fecha de plazo de fin de apertura de la notificación (en caso de que se controle fecha entrega)';
 
-
+comment on column ZPE_NOTTEL.NOT_RECHAZ is
+'Indica que la notificacion esta rechazada (en caso de que se controle fecha entrega)';
 
 comment on table ZPE_NOTTEL is
 'Log de notificaciones telemáticas';
@@ -1808,9 +1816,11 @@ alter table ZPE_EXPEDI modify EXP_UNIADM null;
 
 alter table ZPE_EXPEDI modify EXP_USER null;
 
+
 alter table ZPE_NOTTEL add NOT_IDEPER VARCHAR2(50);
 
 alter table ZPE_NOTTEL modify NOT_IDEPER not null;
+
 
 alter table ZPE_HISTEX add HIE_IDEPER VARCHAR2(50);
 
@@ -1827,10 +1837,9 @@ create unique index ZPE_ELEIDP_UNI on ZPE_ELEEX (
 /* ACCESO ANONIMO A EXPEDIENTE A TRAVES DE TRAMITES ANONIMOS */
 alter table ZPE_ELEEX add ELE_ACCEXP NUMBER(1) default 0 not null;
 
- comment on column ZPE_ELEEX.ELE_ACCEXP is
+comment on column ZPE_ELEEX.ELE_ACCEXP is
 'Indica si elemento proporciona acceso a expediente de forma anónima a traves de su id persistencia';
-
-
+ 
 /* ACCESO ANONIMO NOTIF POR CLAVE */
 ALTER table ZPE_NOTTEL ADD NOT_ACCCLA  NUMBER(1) default 0 not null;
 comment on column ZPE_NOTTEL.NOT_ACCCLA is
@@ -1849,11 +1858,17 @@ comment on column ZPE_NOTTEL.NOT_TIPFIR is
  CER: Certificado digital
  CLA: Clave de acceso';
  
-  /* ACTUALIZAR PROPS TABLA BACKUP DE TRAMITES */
+ 
+ /* ACTUALIZAR PROPS TABLA BACKUP DE TRAMITES */
  ALTER table ZPE_TPEBCK  add  TPB_DLGEST VARCHAR2(2);
 
  comment on column ZPE_TPEBCK.TPB_DLGEST is
 'ESTADO DE DELEGACION: PASO A FIRMA DOCUMENTO, PASO A PRESENTACION TRAMITE';
+
+ ALTER table ZPE_TPEBCK  add    TPB_DELEGA           VARCHAR2(1536);
+ 
+ comment on column ZPE_TPEBCK.TPB_DELEGA is
+'INDICA QUE EL TRAMITE SE ESTA EFECTUANDO DE FORMA DELEGADA PARA ESTE USUARIO (SOLO PARA NIVEL C Y U)';
 
 ALTER table ZPE_DPEBCK ADD DPB_GENDES           VARCHAR2(255);
 
@@ -1874,4 +1889,7 @@ comment on column ZPE_DPEBCK.DPB_DLGFIR is
 
 comment on column ZPE_DPEBCK.DPB_DLGFIP is
 'NIFS QUE QUEDAN POR FIRMAR EL DOCUMENTO SEPARADOS POR #';
+
  
+
+

@@ -13,18 +13,18 @@ import es.caib.zonaper.persistence.delegate.ProcesosAutoDelegate;
 
 /**
  * @struts.action
- *  path="/backupTramitesCaducados"
+ *  path="/borrarTramitesBackup"
  *  scope="request"
  *  validate="false"
  */
-public class BackupTramitesCaducadosAction extends Action
+public class BorrarTramitesBackupAction extends Action
 {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception 
     {
 		
 		ProcesosAutoDelegate delegate = DelegateUtil.getProcesosAutoDelegate();
-		delegate.procesaTramitesCaducados();
+		delegate.procesaEliminarTramitesBackup();
 		
 		response.getOutputStream().write("Proceso finalizado".getBytes());
 		return null;

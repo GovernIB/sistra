@@ -420,7 +420,10 @@ public class GeneradorAsiento {
 			instruccionesTextCircuitoTelematico = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"mensaje.datospropios.telematico");
 			instruccionesTextCircuitoPresencial = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"mensaje.datospropios.presencial");
 			
-			if (!"S".equals(ocultarClave)) {
+			// Se muestran datos de seguimiento si:
+			//	- es autenticado
+			// 	- es anomimo y no se oculta la clave
+			if (!"S".equals(ocultarClave) || tramiteInfo.getDatosSesion().getNivelAutenticacion() != ConstantesLogin.LOGIN_ANONIMO) {
 				String instruccionesSeguimiento = null;
 				if (tramiteInfo.getDatosSesion().getNivelAutenticacion() == ConstantesLogin.LOGIN_ANONIMO) {
 					instruccionesSeguimiento = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"mensaje.datospropios.seguimiento.anonimo");

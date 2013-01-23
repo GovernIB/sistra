@@ -23,7 +23,9 @@ public class ControlEntregaNotificacionesAction extends Action
             HttpServletResponse response) throws Exception 
     {
 		ProcesosAutoDelegate delegate = DelegateUtil.getProcesosAutoDelegate();
-		delegate.controlEntregaNotificaciones();		
+		delegate.controlEntregaNotificaciones();
+		
+		response.getOutputStream().write("Proceso finalizado".getBytes());
 		return null;
 	}    
 	

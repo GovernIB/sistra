@@ -6,6 +6,8 @@ import java.sql.Timestamp;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
+import org.apache.commons.lang.StringUtils;
+
 import es.caib.audita.modelInterfaz.Evento;
 
 /**
@@ -43,9 +45,12 @@ public abstract class LoggerEventoFacadeEJB extends QueryEJB
 		{
 				Long valorSecuencia = obtenerValorSecuencia( "sql.select.seq.aud" );
 			
+				String descripcion = eventoAuditado.getDescripcion();
+				descripcion = StringUtils.substring(descripcion, 0, 3000);
+				
 				Object params[] = 
 				new Object[] 
-				{ valorSecuencia, new Timestamp(System.currentTimeMillis()), eventoAuditado.getTipo(), eventoAuditado.getDescripcion(), 
+				{ valorSecuencia, new Timestamp(System.currentTimeMillis()), eventoAuditado.getTipo(), descripcion, 
 				  eventoAuditado.getNivelAutenticacion(), eventoAuditado.getUsuarioSeycon(),
 				  eventoAuditado.getNumeroDocumentoIdentificacion(), eventoAuditado.getNombre(), 
 				  eventoAuditado.getIdioma(), eventoAuditado.getResultado(),

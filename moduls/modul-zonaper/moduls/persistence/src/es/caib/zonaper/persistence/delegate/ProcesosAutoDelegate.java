@@ -1,6 +1,7 @@
 package es.caib.zonaper.persistence.delegate;
 
 import java.rmi.RemoteException;
+import java.util.Date;
 
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
@@ -68,6 +69,24 @@ public class ProcesosAutoDelegate implements StatelessDelegate
 			throw new DelegateException(e);
         }
 	}
+	
+	public void procesaTramitesCaducados() throws DelegateException {
+		try{
+			getFacade().procesaTramitesCaducados();
+		}catch (Exception e) {
+			throw new DelegateException(e);
+        }
+	}
+	
+	public void procesaEliminarTramitesBackup() throws DelegateException {
+		try{
+			getFacade().procesaEliminarTramitesBackup();
+		}catch (Exception e) {
+			throw new DelegateException(e);
+        }
+	}
+	
+	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
@@ -79,5 +98,7 @@ public class ProcesosAutoDelegate implements StatelessDelegate
     protected ProcesosAutoDelegate()throws DelegateException 
     {       
     }
+
+	
 
 }

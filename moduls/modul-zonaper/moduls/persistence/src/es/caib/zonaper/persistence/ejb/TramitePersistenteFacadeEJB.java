@@ -584,7 +584,8 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.auto}" 
+     * @ejb.permission role-name="${role.auto}"
+     * @ejb.permission role-name="${role.todos}"
      * @param tramitePersistente
      * @return
      */
