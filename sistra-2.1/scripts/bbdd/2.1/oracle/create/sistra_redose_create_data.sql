@@ -196,19 +196,35 @@ INSERT INTO RDS_TIUSO ( TIU_CODIGO, TIU_NOMBRE ) VALUES (
 
 COMMIT;
 
--- VERSION 2.1.0
-	/* FORMATEADOR ASIENTO */
+INSERT INTO RDS_MODELO (
+   MOD_CODIGO, 
+   MOD_MODELO, 
+   MOD_NOMBRE, 
+   MOD_DESC, 
+   MOD_ESTRUC, 
+   MOD_CUSTOD) 
+VALUES (
+RDS_SEQMOD.NEXTVAL, 
+'GE0013NOTIFEXT', 
+'Modelo documento externo notificacion', 
+'Usado para documentos externos de anexos de notificaciones y avisos en los que se indica una url al documento. En el redose se almacenara un xml con la url de acceso',
+'S',
+'N');
+
+INSERT INTO RDS_VERS (
+   VER_CODIGO, VER_CODMOD, VER_VERSIO, 
+   VER_DESC) 
+VALUES ( RDS_SEQVER.NEXTVAL,
+ (SELECT MOD_CODIGO FROM RDS_MODELO WHERE MOD_MODELO = 'GE0013NOTIFEXT'),
+ 1,
+ 'VERSION 1');
+
+COMMIT;
+
+
+-- V2.1.0
 INSERT INTO RDS_FORMAT ( FOR_ID, FOR_CLASS, FOR_DESC ) VALUES ( 
 	RDS_SEQFOR.NEXTVAL, 'es.caib.redose.persistence.formateadores.FormateadorPdfAsiento', 'Formateador específico para Asiento');
+	
+COMMIT;
 
-	/* PLANTILLA ASIENTO */
-INSERT INTO RDS_PLANTI ( PLA_CODIGO, PLA_CODVER, PLA_TIPO,  PLA_FORMAT, PLA_DEFECT, PLA_BARCOD,  PLA_SELLO) 
-VALUES (RDS_SEQPLA.NEXTVAL ,2 ,'PDF' , 6, 'S', 'S', 'N');
-    
-	/* PLANTILLA IDIOMA ASIENTO */	
-INSERT INTO RDS_PLAIDI (PLI_CODIGO, PLI_CODPLA, PLI_CODIDI,  PLI_NOMFIC) 
-VALUES ( RDS_SEQPLI.NEXTVAL, 3,'es' , 'cambiar.txt');
-
-	/* FICHEROS PLANTILLA IDIOMA */	
-INSERT INTO RDS_ARCPLI (ARP_CODPLI, ARP_DATOS) 
-VALUES ( 3, EMPTY_BLOB());

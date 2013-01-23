@@ -53,7 +53,6 @@ public abstract class BackupFacadeEJB extends HibernateEJB
 	
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name = "${role.admin}"
      * @ejb.permission role-name = "${role.auto}"
      * 
      */

@@ -48,7 +48,7 @@ public class FinalizarAction extends BaseAction
 			 
 			delegate.borrarTramite();			
 		}catch(Exception ex){		
-			ex.printStackTrace();
+			// No hacemos nada			
 		}
 		
 		// Desregistramos instancia y pasamos a url fin

@@ -33,12 +33,14 @@ import es.caib.zonaper.model.LogRegistro;
 import es.caib.zonaper.model.NotificacionTelematica;
 import es.caib.zonaper.model.RegistroExternoPreparado;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
+import es.caib.zonaper.persistence.delegate.BackupDelegate;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.ExpedienteDelegate;
 import es.caib.zonaper.persistence.delegate.LogRegistroDelegate;
 import es.caib.zonaper.persistence.delegate.ProcesoRechazarNotificacionDelegate;
 import es.caib.zonaper.persistence.delegate.RegistroExternoPreparadoDelegate;
 import es.caib.zonaper.persistence.util.AvisosMovilidad;
+import es.caib.zonaper.persistence.util.ConfigurationUtil;
 import es.caib.zonaper.persistence.util.UsernamePasswordCallbackHandler;
 
 /**
@@ -67,6 +69,77 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 		
 	}
 	
+
+	/**
+	 * Procesa tramites caducados
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked = "true"
+     * 
+     */
+	public void procesaTramitesCaducados() {
+
+		backupLog.debug("Procesa tramites caducados");
+		
+		LoginContext lc = null;		
+		try{					
+			// Realizamos login JAAS con usuario para proceso automatico	
+			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+			String user = props.getProperty("auto.user");
+			String pass = props.getProperty("auto.pass");
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			lc = new LoginContext("client-login", handler);
+			lc.login();
+			
+			// Actualizamos estado expediente
+			doProcesaTramitesCaducados();	
+			
+		}catch (Exception le){
+			throw new EJBException("Excepcion al ejecutar proceso",le);
+		}finally{				
+			// Hacemos el logout
+			if ( lc != null ){
+				try{lc.logout();}catch(Exception exl){}
+			}
+		}
+	}
+	
+	/**
+	 * Procesa tramites caducados
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked = "true"
+     * 
+     */
+	public void procesaEliminarTramitesBackup() {
+
+		backupLog.debug("Elimina tramites backup");
+		
+		LoginContext lc = null;		
+		try{					
+			// Realizamos login JAAS con usuario para proceso automatico	
+			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+			String user = props.getProperty("auto.user");
+			String pass = props.getProperty("auto.pass");
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			lc = new LoginContext("client-login", handler);
+			lc.login();
+			
+			// Actualizamos estado expediente
+			doProcesaEliminarTramitesBackup();	
+			
+		}catch (Exception le){
+			throw new EJBException("Excepcion al ejecutar proceso",le);
+		}finally{				
+			// Hacemos el logout
+			if ( lc != null ){
+				try{lc.logout();}catch(Exception exl){}
+			}
+		}
+	}
+	
+
+
 	/**
 	 * Actualiza estado de un expediente	
 	 * 
@@ -447,4 +520,25 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 		}		
 	}
 	
+
+	private void doProcesaTramitesCaducados() throws Exception {
+		BackupDelegate delegate = DelegateUtil.getBackupDelegate();
+		String borradoPreregistro = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("scheduler.backup.schedule.borradoPreregistro");
+		boolean scheduleBorradoPreregistro = Boolean.valueOf(borradoPreregistro).booleanValue();
+		backupLog.debug( "Job borrado tramites caducados [borrado prerregistros = " + scheduleBorradoPreregistro + "]");		
+		Date fechaEjecucion = new Date();
+		delegate.procesaTramitesCaducados( fechaEjecucion, scheduleBorradoPreregistro );		
+	}
+	
+
+	
+	private void doProcesaEliminarTramitesBackup() throws Exception {
+		BackupDelegate delegate = DelegateUtil.getBackupDelegate();
+		backupLog.debug( "Job borrado tramites backup");
+		Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        String meses = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("scheduler.borradoBackup.meses");
+        cal.add(Calendar.MONTH,  (Integer.parseInt(meses) * -1) );
+		delegate.procesaEliminarTramitesBackup( cal.getTime() );		
+	}
 }
