@@ -228,7 +228,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	  try{
 			return DelegateUtil.getRegistroOrganismoDelegate().confirmarPreregistro(oficina,codigoProvincia,codigoMunicipio,descripcionMunicipio,justificantePreregistro,refJustificante,refAsiento,refAnexos);				
 		}catch (Exception ex){
-			throw new ExcepcionRegistroTelematico("Excepcion obteniendo lista oficinas en registro organismo",ex);
+			throw new ExcepcionRegistroTelematico("Excepcion confirmando preregistro",ex);
 		} 
 	}
 		
@@ -287,7 +287,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	    try{
 			return DelegateUtil.getRegistroOrganismoDelegate().existeOficinaRegistro(oficinaRegistro);				
 		}catch (Exception ex){
-			throw new ExcepcionRegistroTelematico("Excepcion obteniendo lista oficinas en registro organismo",ex);
+			throw new ExcepcionRegistroTelematico("Excepcion obteniendo oficina organismo: " +  oficinaRegistro,ex);
 		} 
    }
 	
@@ -346,7 +346,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	    try{
 			return DelegateUtil.getRegistroOrganismoDelegate().existeTipoAsunto(tipoAsunto);				
 		}catch (Exception ex){
-			throw new ExcepcionRegistroTelematico("Excepcion obteniendo lista oficinas en registro organismo",ex);
+			throw new ExcepcionRegistroTelematico("Excepcion obteniendo tipo asunto: " + tipoAsunto,ex);
 		} 
    }
 	
@@ -384,7 +384,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	    try{
 			return DelegateUtil.getRegistroOrganismoDelegate().existeServicioDestino(servicioDestino);				
 		}catch (Exception ex){
-			throw new ExcepcionRegistroTelematico("Excepcion obteniendo lista oficinas en registro organismo",ex);
+			throw new ExcepcionRegistroTelematico("Excepcion obteniendo servicio destino: " + servicioDestino,ex);
 		} 
    }
    
