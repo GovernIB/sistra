@@ -193,7 +193,9 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
     	
 		// Datos identificativos representante / representado / delegado 
     	//  Vemos si se ha particularizado el justificante para que no salga los datos identificativos
-		boolean ocultarNifNombre = datosPropios.getInstrucciones() != null && 
+		boolean ocultarNifNombre =
+			datosPropios != null &&
+			datosPropios.getInstrucciones() != null && 
 			datosPropios.getInstrucciones().getPersonalizacionJustificante() != null &&
 			datosPropios.getInstrucciones().getPersonalizacionJustificante().getOcultarNifNombre() != null &&
 			datosPropios.getInstrucciones().getPersonalizacionJustificante().getOcultarNifNombre().booleanValue();
