@@ -5,16 +5,16 @@ INSERT INTO rfr_idioma (idi_codi, idi_orden) VALUES ('pt', 2);
 INSERT INTO rfr_idioma (idi_codi, idi_orden) VALUES ('ca', 3);
 
 
-INSERT INTO rfr_mascar (mas_codi, mas_nombre, mas_descri) VALUES (1, 'maxlength', '');  -- NEXTVAL('RFR_SECMAS')
-INSERT INTO rfr_mascar (mas_codi, mas_nombre, mas_descri) VALUES (4, 'integer', ''); -- NEXTVAL('RFR_SECMAS')
-INSERT INTO rfr_mascar (mas_codi, mas_nombre, mas_descri) VALUES (5, 'float', '');-- NEXTVAL('RFR_SECMAS')
-INSERT INTO rfr_mascar (mas_codi, mas_nombre, mas_descri) VALUES (NEXTVAL('RFR_SECMAS'), 'minlength', '');-- NEXTVAL('RFR_SECMAS')
-INSERT INTO rfr_mascar (mas_codi, mas_nombre, mas_descri) VALUES (NEXTVAL('RFR_SECMAS'), 'intRange', '');-- NEXTVAL('RFR_SECMAS')
-INSERT INTO rfr_mascar (mas_codi, mas_nombre, mas_descri) VALUES (NEXTVAL('RFR_SECMAS'), 'floatRange', '');-- NEXTVAL('RFR_SECMAS')
-INSERT INTO rfr_mascar (mas_codi, mas_nombre, mas_descri) VALUES (NEXTVAL('RFR_SECMAS'), 'date', '');-- NEXTVAL('RFR_SECMAS')
-INSERT INTO rfr_mascar (mas_codi, mas_nombre, mas_descri) VALUES (NEXTVAL('RFR_SECMAS'), 'required', '');-- NEXTVAL('RFR_SECMAS')
-INSERT INTO rfr_mascar (mas_codi, mas_nombre, mas_descri) VALUES (NEXTVAL('RFR_SECMAS'), 'email', '');-- NEXTVAL('RFR_SECMAS')
-INSERT INTO rfr_mascar (mas_codi, mas_nombre, mas_descri) VALUES (NEXTVAL('RFR_SECMAS'), 'mask', '');-- NEXTVAL('RFR_SECMAS')
+INSERT INTO rfr_mascar (mas_codi, mas_nombre, mas_descri) VALUES (NEXTVAL('RFR_SECMAS'), 'maxlength', ''); 
+INSERT INTO rfr_mascar (mas_codi, mas_nombre, mas_descri) VALUES (NEXTVAL('RFR_SECMAS'), 'integer', ''); 
+INSERT INTO rfr_mascar (mas_codi, mas_nombre, mas_descri) VALUES (NEXTVAL('RFR_SECMAS'), 'float', '');
+INSERT INTO rfr_mascar (mas_codi, mas_nombre, mas_descri) VALUES (NEXTVAL('RFR_SECMAS'), 'minlength', '');
+INSERT INTO rfr_mascar (mas_codi, mas_nombre, mas_descri) VALUES (NEXTVAL('RFR_SECMAS'), 'intRange', '');
+INSERT INTO rfr_mascar (mas_codi, mas_nombre, mas_descri) VALUES (NEXTVAL('RFR_SECMAS'), 'floatRange', '');
+INSERT INTO rfr_mascar (mas_codi, mas_nombre, mas_descri) VALUES (NEXTVAL('RFR_SECMAS'), 'date', '');
+INSERT INTO rfr_mascar (mas_codi, mas_nombre, mas_descri) VALUES (NEXTVAL('RFR_SECMAS'), 'required', '');
+INSERT INTO rfr_mascar (mas_codi, mas_nombre, mas_descri) VALUES (NEXTVAL('RFR_SECMAS'), 'email', '');
+INSERT INTO rfr_mascar (mas_codi, mas_nombre, mas_descri) VALUES (NEXTVAL('RFR_SECMAS'), 'mask', '');
 
 INSERT INTO RFR_MASVAR (MVA_CODMAS, MVA_VALOR, MVA_ORDEN) VALUES (1,'maxlength',0);
 INSERT INTO RFR_MASVAR (MVA_CODMAS, MVA_VALOR, MVA_ORDEN) VALUES (4,'minlength',0);
