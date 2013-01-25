@@ -32,7 +32,6 @@ import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.EntradaPreregistro;
 import es.caib.zonaper.model.EntradaPreregistroBackup;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
-import es.caib.zonaper.persistence.delegate.DelegateException;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 
 /**
@@ -240,33 +239,42 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
 	/**
  	 * 
  	 * Confirma entrada preregistro. 
- 	 * Si es confirmacion automatica debe poder presentar dicho tramite. Si no es automatica, debera tener role registro.
+ 	 * Si es confirmacion automatica debe poder presentar dicho tramite.
+ 	 * Si no es automatica y es confirmado incorrectamente, debera tener role gestor.
+ 	 * Si no es automatica y no es confirmado incorrectamente, debera tener role registro.
  	 * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.registro}"
+     * @ejb.permission role-name="${role.gestor}"
      */
     public void confirmarEntradaPreregistro(Long codigo, String numeroRegistro,
-			Date fechaConfirmacion, char confirmadoAutomaticamente) {   
+			Date fechaConfirmacion, boolean confirmadoAutomaticamente, boolean confirmadoIncorrecto) {   
     	// Recupera entrada
     	EntradaPreregistro entrada = this.recuperarEntradaPorCodigo(codigo);
     	
     	Session session = getSession();
         try {        	
         	// Confirmacion automatica: control acceso para presentar preregistro
-        	if (confirmadoAutomaticamente == 'S') {    	    	
+        	if (confirmadoAutomaticamente) {    	    	
     			verificarPermisosPresentacionPreregistro(entrada);
         	} else {
         		// Confirmacion manual: debe tener role registro
-        		if (!this.ctx.isCallerInRole(this.roleRegistro)) {
-        			throw new Exception("No tiene el role de registro");
+        		if (confirmadoIncorrecto) {
+        			if (!this.ctx.isCallerInRole(this.roleGestor)) {
+            			throw new Exception("No tiene el role de gestor");
+            		}
+        		} else {
+	        		if (!this.ctx.isCallerInRole(this.roleRegistro)) {
+	        			throw new Exception("No tiene el role de registro");
+	        		}
         		}
         	}
         	
         	// Updateamos
         	entrada.setNumeroRegistro(numeroRegistro);
         	entrada.setFechaConfirmacion(fechaConfirmacion);
-        	entrada.setConfirmadoAutomaticamente(confirmadoAutomaticamente);
+        	entrada.setConfirmadoAutomaticamente(confirmadoAutomaticamente?'S':'N');        	
         	session.update(entrada);
         	                    	            
         } catch (Exception he) {
