@@ -67,7 +67,7 @@ public class InformacionPreregistroAction extends BaseAction
 		GestorBandeja gestor = DelegateUtil.getGestorBandejaDelegate().obtenerGestorBandeja(request.getUserPrincipal().getName());
 		for (Iterator it=gestor.getProcedimientosGestionados().iterator();it.hasNext();){
 				Procedimiento procedimiento = (Procedimiento) it.next();
-				if (procedimiento.getIdentificador().equals(StringUtil.getModelo(preregistro.getIdentificadorProcedimiento()))){
+				if (procedimiento.getIdentificador().equals(preregistro.getIdentificadorProcedimiento())){
 					acceso = true;
 					break;
 				}
