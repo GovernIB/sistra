@@ -215,6 +215,7 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 	 * 
 	 * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
      * 
 	 */
 	public void borrarExpedienteVirtual(Long codigoExpediente)
@@ -382,6 +383,7 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 	/**
 	 * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
      */
 	public Long grabarExpedienteVirtual( Expediente expediente ) 
 	{
