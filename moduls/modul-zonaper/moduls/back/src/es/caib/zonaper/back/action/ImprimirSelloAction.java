@@ -11,11 +11,11 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
@@ -75,6 +75,11 @@ public class ImprimirSelloAction extends BaseAction
 		String strFechaRegistro = StringUtil.timestampACadena( fechaRegistro );
 		
 		String descOficina = DelegateUtil.getDominiosDelegate().obtenerDescripcionSelloOficina(pi.getCodigoOficinaRegistro());
+		if ( descOficina == null )
+		{
+			this.setMessage( request, "errors.descSelloOficinaVacio" );
+			return mapping.findForward( "fail" );
+		}
 		
 		List arlParametrosExpansion = new ArrayList();
 		arlParametrosExpansion.add( StringUtil.escapeBadCharacters( descOficina ) );
