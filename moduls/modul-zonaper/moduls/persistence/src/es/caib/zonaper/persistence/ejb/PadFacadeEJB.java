@@ -1853,7 +1853,7 @@ public abstract class PadFacadeEJB implements SessionBean{
 						numeroRegistro= numeroRegistroPI;
 						fechaRegistro = fechaRegistroPI;
 					}else{
-						numeroRegistro=entrada.getNumeroPreregistro();
+						numeroRegistro= entrada.getNumeroPreregistro();
 						fechaRegistro = new Date();
 					}
 			}
@@ -1887,7 +1887,9 @@ public abstract class PadFacadeEJB implements SessionBean{
 			
 			EntradaPreregistroDelegate delegate = DelegateUtil.getEntradaPreregistroDelegate();
 			delegate.confirmarEntradaPreregistro(entrada.getCodigo(), entrada.getNumeroRegistro(), 
-					entrada.getFechaConfirmacion(), entrada.getConfirmadoAutomaticamente());
+					entrada.getFechaConfirmacion(),
+					entrada.getConfirmadoAutomaticamente() == 'S',
+					tipoConfirmacionPreregistro.equals(ConstantesBTE.CONFIRMACIONPREREGISTRO_GESTOR));
 			
 			// Generamos usos en RDS en caso de que se genere registro de entrada
 			if (tipoConfirmacionPreregistro.equals(ConstantesBTE.CONFIRMACIONPREREGISTRO_REGISTRO) ||
