@@ -483,6 +483,7 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    	p.setAsunto(e.getDescripcionTramite());
 	    	p.setFechaConfirmacion(e.getFechaConfirmacion());
 	    	p.setNumeroRegistro(e.getNumeroRegistro());
+	    	p.setIdentificadorProcedimiento(e.getProcedimiento());
 	    		    	
 	    	return p;	    	
     	}
