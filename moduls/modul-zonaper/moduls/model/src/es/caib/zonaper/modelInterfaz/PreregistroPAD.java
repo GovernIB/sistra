@@ -19,6 +19,7 @@ public class PreregistroPAD implements Serializable{
 	private String asunto;
 	private String numeroRegistro;
 	private Date fechaConfirmacion;
+	private String identificadorProcedimiento;
 	
 	public String getAsunto() {
 		return asunto;
@@ -79,6 +80,12 @@ public class PreregistroPAD implements Serializable{
 	}
 	public void setIdentificadorTramite(String codigoTramite) {
 		this.identificadorTramite = codigoTramite;
+	}
+	public String getIdentificadorProcedimiento() {
+		return identificadorProcedimiento;
+	}
+	public void setIdentificadorProcedimiento(String identificadorProcedimiento) {
+		this.identificadorProcedimiento = identificadorProcedimiento;
 	}
 	
 		
