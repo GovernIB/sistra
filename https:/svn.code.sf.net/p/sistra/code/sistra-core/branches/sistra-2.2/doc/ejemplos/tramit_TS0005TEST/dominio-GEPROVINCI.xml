@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-  <Dominio autenticacionExplicita="N" cacheable="S" descripcion="REVISAR DESCRIPCION" identificador="GEPROVINCI" localizacionEJB="L" secured="false" sql="SELECT PRO_CODIGO CODIGO, PRO_DENCAT DESCRIPCION 
-FROM STR_DPROVI 
-WHERE pro_codigo &lt; 53 
-ORDER BY CODIGO" tipo="S" url="es.caib.sistra.db"/>

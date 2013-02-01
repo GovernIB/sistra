@@ -1,8 +1,0 @@
-<form-bean
-	name="actualizarDatosPADForm"
-	type="es.caib.zonaper.filter.front.form.ActualizarDatosPADForm" />
-
-<form-bean
-	name="elegirPerfilAccesoPADForm"
-	type="es.caib.zonaper.filter.front.form.ElegirPerfilAccesoPADForm" />	
-	

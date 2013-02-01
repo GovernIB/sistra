@@ -1,4 +1,0 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<P class=centrado>En aquesta pàgina podeu   consultar el detall d'un enviament, cancel·lar-lo i exportar la seva informació a   una fulla Excel.</P>
-<P class=centrado>Per a consultar els   diferents missatges, el seu contingut, els destinataris i els errors   produïts en l'últim intent d'enviament feu clic en &quot;Exportar   a CSV&quot; .</P>
-<P class=centrado>En cas que l'enviament no s'hagi processat completament té l'opció de cancel·lar-lo. Tingueu   en compte que si es cancel·la a mitjan processar-se els missatges enviats fins a aquest moment no es cancel·laran. No es permetrà cancel·lar   un enviament mentre el   procés d'enviaments ho   tingui bloquejat. Per a   cancel·lar un enviament feu click sobre "Cancel·lar enviament". </P>
