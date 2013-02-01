@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+
+<class name="es.caib.sistra.model.Documento" table="STR_DOCUM">
+	<cache usage="read-write"/>
+     <id name="codigo" unsaved-value="null" column="DOC_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">STR_SEQDOC</param>
+          </generator>
+      </id>
+
+    <property  name="identificador" column="DOC_IDENTI" not-null="true" length="5"/>
+    <property  name="idPad"  column="DOC_PAD" length="20"/>
+    <property  name="modelo" column="DOC_MODELO" not-null="true" length="20"/>
+    <property  name="generico" column="DOC_ANEGCO" not-null="true" length="1"/>    
+    <property  name="maxGenericos" column="DOC_ANEGMA" length="2"/>
+    <property name="tipo" column="DOC_TIPO" not-null="true" length="1"/>
+    <property name="orden" column="DOC_ORDEN" not-null="true"/>
+    <property name="formularioPreregistro" column="DOC_FORPRG" length="1"/>
+    <property name="formularioJustificante" column="DOC_FORJUS" length="1"/>    
+    <property name="formularioAnexarJustificante" column="DOC_FORAJU" length="1"/>
+    <property name="anexoPresentarTelematicamente" column="DOC_ANETEL" length="1"/>
+    <property name="anexoExtensiones" column="DOC_ANEEXT" length="50"/>
+    <property name="anexoTamanyoMax" column="DOC_ANETAM" length="5"/>
+    <property name="anexoUrlPlantilla" column="DOC_ANEPLA" length="500"/>
+    <property name="anexoDescargarPlantilla" column="DOC_ANEDPL" length="1"/>
+    <property name="anexoCompulsarPreregistro" column="DOC_ANECOM" length="1"/>
+    <property name="anexoFotocopia" column="DOC_ANEFOT" length="1"/>
+    <property name="anexoConversionPDF" column="DOC_ANEPDF" length="1"/>
+    
+    <many-to-one name="tramiteVersion" column="DOC_CODTRV" not-null="true"/>
+ 
+
+    <set name="niveles" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="DNV_NIVAUT">
+		<cache usage="read-write"/>
+	    <key column="DNV_CODDOC"/>
+        <one-to-many class="es.caib.sistra.model.DocumentoNivel"/>
+	</set>
+
+<!-- 
+	<map name="niveles" cascade="all-delete-orphan"  inverse="true" lazy="true" order-by="DNV_NIVAUT" >
+          <cache usage="read-write"/>
+          <key column="DNV_CODDOC"/>          
+          <index column="DNV_NIVAUT" type="string" length="1"/>
+          <one-to-many class="es.caib.sistra.model.DocumentoNivel"/>
+     </map>     
+ -->
+  
+	<map name="traducciones" cascade="all" table="STR_TRADOC">
+          <cache usage="read-write"/>
+          <key column="TRD_CODDOC"/>
+          <index column="TRD_CODIDI" type="string" length="2"/>
+          <composite-element class="es.caib.sistra.model.TraDocumento">
+              <property name="descripcion" length="200" column="TRD_DESC"/>
+              <property name="informacion" length="1000" column="TRD_INFO"/>              
+          </composite-element>
+     </map>
+     
+</class>
+</hibernate-mapping>

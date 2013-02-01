@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="modul-forms" default="main" basedir=".">
+
+	<property name="projecte" value="${ant.project.name}"/>
+    <property file="${basedir}/../../config.properties"/>
+    <property file="${basedir}/config.properties"/>
+
+	<property name="lib" location="${basedir}/../../lib"/>
+	<property name="etc" location="${basedir}/etc"/>
+    <property name="etc.jboss" location="${etc}/jboss-${jboss.version}"/>
+
+	<property name="output.dir" location="${basedir}/output"/>
+	<property name="product.dir" location="${output.dir}/product"/>
+	<property name="moduls.dir" location="${output.dir}/moduls"/>
+
+	<property name="distribucion.dir" location="${basedir}/../../product"/>
+
+	<property name="doc.dir" location="${output.dir}/doc"/>
+
+	<target name="properties" description="Muestra las propiedades del sistema">
+		<echo>
+            -----------------------------------------------------
+            Propiedades del sistema:
+
+            basedir=${basedir}
+            ant.file=${ant.file}
+            ant.version=${ant.version}
+            ant.project.name=${ant.project.name}
+            ant.java.version=${ant.java.version}
+            -----------------------------------------------------
+        </echo>
+	</target>
+	<target name="prepare" description="Crea los directorios necesarios para la construcción de la aplicación">
+		<mkdir dir="${output.dir}"/>
+		<mkdir dir="${product.dir}"/>
+		<mkdir dir="${moduls.dir}"/>
+		<mkdir dir="${doc.dir}"/>
+		<antcall target="propagate">
+			<param name="task" value="prepare"/>
+		</antcall>
+	</target>
+	<target name="clean" description="Destruye los directorios de trabajo">
+		<delete dir="${output.dir}" quiet="yes"/>
+	</target>
+	<target name="update.model" description="Actualitzar el modelo de datos">
+		<ant dir="moduls/model" target="main" inheritall="false"/>
+	</target>
+	<target name="update.persistence" depends="update.model" description="Actualitzar la capa de persistencia">
+		<ant dir="moduls/persistence" target="main" inheritall="false"/>
+	</target>
+	<target name="update.admin" description="Actualitzar el módulo web de administración">
+		<ant dir="moduls/admin" target="main" inheritall="false"/>
+	</target>
+	<target name="update.front" description="Actualitzar el módulo web de frontoffice">
+		<ant dir="moduls/front" target="main" inheritall="false"/>
+	</target>
+	<target name="update.back" description="Actualitzar el módulo web de backoffice">
+		<ant dir="moduls/back" target="main" inheritall="false"/>
+	</target>
+
+	<target name="assemble" description="actualitza l'ear amb les construccions recents dels components">
+		<delete file="${product.dir}/6-${projecte}.ear" quiet="yes"/>
+		<ear earfile="${product.dir}/6-${projecte}.ear" appxml="${etc}/application.xml">
+			<manifest>
+				<attribute name="Created-By" value="Indra"/>
+			    <attribute name="Specification-Title" value="${projecte}"/>				
+			    <attribute name="Specification-Version" value="${release.version} build${release.build} ${release.date}"/>
+			</manifest>
+			<metainf dir="${etc.jboss}" includes="jboss-app.xml"/>
+			<fileset dir="${moduls.dir}"/>
+		</ear>
+	</target>
+
+	<target name="assemble-front" description="actualitza l'ear amb les construccions recents dels components">
+		<delete file="${product.dir}/6-${projecte}.ear" quiet="yes"/>
+		<ear earfile="${product.dir}/6-${projecte}.ear" appxml="${etc}/application-front.xml">
+			<manifest>
+				<attribute name="Created-By" value="Indra"/>
+			    <attribute name="Specification-Title" value="${projecte}"/>				
+			    <attribute name="Specification-Version" value="${release.version} build${release.build} ${release.date}"/>
+			</manifest>
+			<metainf dir="${etc.jboss}" includes="jboss-app.xml"/>
+			<fileset dir="${moduls.dir}">
+                <exclude name="6-form-back.war"/>
+                <exclude name="6-form-admin.war"/>
+            </fileset>			
+        </ear>
+	</target>
+
+	<target name="main" depends="clean,prepare" description="realitza tot el proces de construccio">
+		<antcall target="propagate">
+			<param name="task" value="main"/>
+		</antcall>
+		<!-- <antcall target="assemble"/> -->
+		<antcall target="interfaz"/>
+		<antcall target="distribute"/>		
+	</target>
+	<target name="initsql" depends="prepare,update.model" description="Crea los scripts de la base de datos">
+		<ant dir="bdd" target="initsql" inheritall="false"/>
+	</target>
+	<target name="doc" depends="prepare" description="Genera la documentación">
+		<antcall target="propagate">
+			<param name="task" value="doc"/>
+		</antcall>
+	</target>
+	
+	<target name="propagate">
+		<ant dir="moduls/model" target="${task}" inheritall="false"/>
+		<ant dir="moduls/persistence" target="${task}" inheritall="false"/>
+        <ant dir="moduls/admin" target="${task}" inheritall="false"/>
+		<ant dir="moduls/front" target="${task}" inheritall="false"/>
+		<ant dir="moduls/back" target="${task}" inheritall="false"/>
+	</target>
+
+	<target name="interfaz" depends="prepare">
+	    <delete file="${product.dir}/forms-client.jar" quiet="yes"/>
+        <jar
+            jarfile="${product.dir}/forms-client.jar"
+            basedir="${output.dir}/persistence/classes">
+            <manifest>
+                <attribute name="Created-By" value="${indra}"/>
+			    <attribute name="Specification-Title" value="${projecte}"/>				
+			    <attribute name="Specification-Version" value="${release.version} build${release.build} ${release.date}"/>
+            </manifest>	                  
+        	<include name="**/delegate/*.class" />
+        	<include name="**/intf/**/*.class" />
+            <include name="**/util/**/*.class" />
+        </jar>
+        <jar
+        	update="true"
+            jarfile="${product.dir}/forms-client.jar"
+            basedir="${output.dir}/model/classes">
+            <manifest>
+                <attribute name="Created-By" value="${indra}"/>
+            </manifest>	      
+            <include name="**/model/**/*.class" />  
+        </jar>
+    </target>
+	
+    <target name="distribute" description="Distribucion">
+    	<copy file="${product.dir}/forms-client.jar" todir="${distribucion.dir}/client/ejb"/>
+		<!-- <copy file="${product.dir}/6-${projecte}.ear" todir="${distribucion.dir}/ear"/> -->		
+	</target>
+	
+</project>

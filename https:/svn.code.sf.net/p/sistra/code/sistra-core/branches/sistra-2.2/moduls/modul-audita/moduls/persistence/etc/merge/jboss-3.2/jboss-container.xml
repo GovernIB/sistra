@@ -1,0 +1,23 @@
+
+<container-configurations>
+
+    <container-configuration extends="Standard Stateful SessionBean">
+        <container-name>InstanciaProcessor Stateful SessionBean</container-name>
+        <container-cache-conf>
+            <cache-policy>org.jboss.ejb.plugins.LRUStatefulContextCachePolicy</cache-policy>
+            <cache-policy-conf>
+                <min-capacity>50</min-capacity>
+                <max-capacity>250</max-capacity><!-- Quants de bytes ocupa un ejb stateful? -->
+                <remover-period>900</remover-period><!-- Cada 15 minuts mira si n'ha d'eliminar cap. -->
+                <max-bean-life>1800</max-bean-life><!-- Màxim 30 minuts passivat antes de eliminar-lo. -->
+                <overager-period>300</overager-period><!-- Cada 5 minuts mira si n'ha de passivar cap. -->
+                <max-bean-age>600</max-bean-age><!-- Maxim 10 minuts en memòria sense utilitzar. -->
+                <resizer-period>400</resizer-period>
+                <max-cache-miss-period>60</max-cache-miss-period>
+                <min-cache-miss-period>1</min-cache-miss-period>
+                <cache-load-factor>0.75</cache-load-factor>
+            </cache-policy-conf>
+        </container-cache-conf>
+    </container-configuration>
+
+</container-configurations>

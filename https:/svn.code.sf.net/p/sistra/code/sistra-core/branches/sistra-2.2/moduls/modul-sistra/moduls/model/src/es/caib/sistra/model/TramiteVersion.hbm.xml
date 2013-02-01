@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+
+<class name="es.caib.sistra.model.TramiteVersion" table="STR_TRAVER">
+	<cache usage="read-write"/>
+     <id name="codigo" unsaved-value="null" column="TRV_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">STR_SEQTRV</param>
+          </generator>
+      </id>
+    
+    <property name="version"  column="TRV_VERSIO"  not-null="true" length="2"/>
+    <property name="motivo"   column="TRV_DESVER" length="500"/>
+    <property name="organoDestino" column="TRV_ORGDES"  not-null="true" length="25"/>
+    <property name="unidadAdministrativa" column="TRV_UNIADM"  not-null="true" length="19"/>
+    <property name="inicioPlazo" column="TRV_INIPLA"/>
+    <property name="finPlazo" column="TRV_FINPLA"/>
+    <property name="destino" column="TRV_DESTIN"  not-null="true"  length="1"/>
+    <property name="preenvioConfirmacionAutomatica" column="TRV_PRENVA"  not-null="true"  length="1"/>
+    <property name="firmar" column="TRV_FIRMA" not-null="true" length="1"/>
+    <property name="registroOficina" column="TRV_REGOFI" length="25"/>
+    <property name="registroAsunto"  column="TRV_REGAST" length="25"/>
+    <property name="consultaTipoAcceso" column="TRV_CONTIP" length="1" not-null="true"/>
+    <property name="consultaEJB" column="TRV_CONEJB" length="500"/>
+    <property name="consultaLocalizacion" column="TRV_CONREM"  not-null="true"  length="1"/>
+    <property name="consultaUrl" column="TRV_CONURL" length="500"/>
+    <property name="consultaWSVersion" column="TRV_CONWSV" length="10"/>
+    <property name="consultaAuth" column="TRV_CONAUT"  not-null="true"  length="1"/>
+    <property name="consultaAuthUser" column="TRV_CONUSU" length="500"/>
+    <property name="consultaAuthPwd" column="TRV_CONPWD" length="500"/>
+    <property name="bloqueadoModificacion" column="TRV_BLOQUE" length="1"  not-null="true"/>
+    <property name="bloqueadoModificacionPor" column="TRV_BLOUSU"/>
+    <property name="idiomasSoportados" column="TRV_IDISOP" length="100" not-null="true"/>
+    <property name="reducido" column="TRV_REDUCI" not-null="true" length="1"/>
+    <property name="redireccionFin" column="TRV_REDFIN" not-null="true" length="1"/>    
+    
+    <property name="cuadernoCargaTag" column="TRV_TAGCAR"/>
+    <property name="fechaExportacion" column="TRV_FECCAR"/>    
+    
+    <property name="anonimoDefecto"  column="TRV_ANODEF"  not-null="true" length="1"/>
+    
+    <many-to-one name="especificaciones" cascade="all" column="TRV_CODETN" not-null="true"/>
+    <many-to-one name="tramite" column="TRV_CODTRA" not-null="true"/>
+
+    <set name="niveles" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="TNV_NIVAUT">
+		<cache usage="read-write"/>
+	    <key column="TNV_CODTRV"/>
+        <one-to-many class="es.caib.sistra.model.TramiteNivel"/>
+	</set>
+<!-- 
+	<map name="niveles" cascade="all-delete-orphan"  inverse="true" lazy="true" order-by="TNV_NIVAUT" >
+          <cache usage="read-write"/>
+          <key column="TNV_CODTRV"/>          
+          <index column="TNV_NIVAUT" type="string" length="1"/>
+          <one-to-many class="es.caib.sistra.model.TramiteNivel"/>
+     </map>
+ -->
+ 	
+	<set name="documentos" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="DOC_TIPO, DOC_ORDEN">
+		<cache usage="read-write"/>
+	    <key column="DOC_CODTRV"/>
+        <one-to-many class="es.caib.sistra.model.Documento"/>
+	</set>
+	    
+    <map name="mensajes" cascade="all-delete-orphan" inverse="true" lazy="true">
+		<cache usage="read-write"/>
+	    <key column="MTR_CODTRV"/>
+	    <index column="MTR_IDENTI" type="string" length="5"/>
+        <one-to-many class="es.caib.sistra.model.MensajeTramite"/>
+	</map>
+	
+</class>
+</hibernate-mapping>

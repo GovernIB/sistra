@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified">
+	
+  <xs:element name="JUSTIFICANTE">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ASIENTO_REGISTRAL"/>
+        <xs:element ref="NUMERO_REGISTRO"/>
+        <xs:element ref="FECHA_REGISTRO"/>
+      </xs:sequence>
+      <xs:attribute name="version" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ASIENTO_REGISTRAL">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="DATOS_ORIGEN"/>
+        <xs:element minOccurs="0" ref="DATOS_DESTINO"/>
+        <xs:element maxOccurs="unbounded" ref="DATOS_INTERESADO"/>
+        <xs:element ref="DATOS_ASUNTO"/>
+        <xs:element maxOccurs="unbounded" ref="DATOS_ANEXO_DOCUMENTACION"/>
+      </xs:sequence>
+      <xs:attribute name="version" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DATOS_ORIGEN">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="CODIGO_ENTIDAD_REGISTRAL_ORIGEN"/>
+        <xs:element ref="NUMERO_REGISTRO"/>
+        <xs:element ref="FECHA_ENTRADA_REGISTRO"/>
+        <xs:element ref="TIPO_REGISTRO"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CODIGO_ENTIDAD_REGISTRAL_ORIGEN" type="xs:string"/>
+  <xs:element name="NUMERO_REGISTRO" type="xs:string"/>
+  <xs:element name="FECHA_ENTRADA_REGISTRO" type="xs:string"/>
+  <xs:element name="TIPO_REGISTRO" type="xs:string"/>
+  <xs:element name="DATOS_DESTINO">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="CODIGO_ENTIDAD_REGISTRAL_DESTINO"/>
+        <xs:element minOccurs="0" ref="DECODIFICACION_ENTIDAD_REGISTRAL_DESTINO"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CODIGO_ENTIDAD_REGISTRAL_DESTINO" type="xs:string"/>
+  <xs:element name="DECODIFICACION_ENTIDAD_REGISTRAL_DESTINO" type="xs:string"/>
+  <xs:element name="DATOS_INTERESADO">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="NIVEL_AUTENTICACION"/>
+        <xs:element minOccurs="0" ref="USUARIO_SEYCON"/>
+        <xs:element ref="TIPO_INTERESADO"/>
+        <xs:element minOccurs="0" ref="TIPO_IDENTIFICACION"/>
+        <xs:element minOccurs="0" ref="NUMERO_IDENTIFICACION"/>
+        <xs:element ref="FORMATO_DATOS_INTERESADO"/>
+        <xs:element ref="IDENTIFICACION_INTERESADO"/>
+        <xs:element minOccurs="0" ref="DIRECCION_CODIFICADA"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NIVEL_AUTENTICACION" type="xs:string"/>
+  <xs:element name="USUARIO_SEYCON" type="xs:string"/>
+  <xs:element name="TIPO_INTERESADO" type="xs:string"/>
+  <xs:element name="TIPO_IDENTIFICACION" type="xs:string"/>
+  <xs:element name="NUMERO_IDENTIFICACION" type="xs:string"/>
+  <xs:element name="FORMATO_DATOS_INTERESADO" type="xs:string"/>
+  <xs:element name="IDENTIFICACION_INTERESADO" type="xs:string"/>
+  <xs:element name="DIRECCION_CODIFICADA">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="CODIGO_PROVINCIA"/>
+        <xs:element minOccurs="0" ref="NOMBRE_PROVINCIA"/>
+        <xs:element minOccurs="0" ref="CODIGO_MUNICIPIO"/>
+        <xs:element minOccurs="0" ref="NOMBRE_MUNICIPIO"/>
+        <xs:element minOccurs="0" ref="CODIGO_POBLACION"/>
+        <xs:element minOccurs="0" ref="NOMBRE_POBLACION"/>
+        <xs:element minOccurs="0" ref="DOMICILIO"/>
+        <xs:element minOccurs="0" ref="CODIGO_POSTAL"/>
+        <xs:element minOccurs="0" ref="TELEFONO"/>
+        <xs:element minOccurs="0" ref="FAX"/>
+        <xs:element minOccurs="0" ref="PAIS_ORIGEN"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CODIGO_PROVINCIA" type="xs:string"/>
+  <xs:element name="NOMBRE_PROVINCIA" type="xs:string"/>
+  <xs:element name="CODIGO_MUNICIPIO" type="xs:string"/>
+  <xs:element name="NOMBRE_MUNICIPIO" type="xs:string"/>
+  <xs:element name="CODIGO_POBLACION" type="xs:string"/>
+  <xs:element name="NOMBRE_POBLACION" type="xs:string"/>
+  <xs:element name="DOMICILIO" type="xs:string"/>
+  <xs:element name="CODIGO_POSTAL" type="xs:string"/>
+  <xs:element name="TELEFONO" type="xs:string"/>
+  <xs:element name="FAX" type="xs:string"/>
+  <xs:element name="PAIS_ORIGEN" type="xs:string"/>
+  <xs:element name="DATOS_ASUNTO">
+    <xs:complexType>
+      <xs:sequence>
+      	<xs:element ref="FECHA_ASUNTO" minOccurs="0"/>       
+        <xs:element ref="IDIOMA_ASUNTO"/>
+        <xs:element ref="TIPO_ASUNTO"/>
+        <xs:element ref="EXTRACTO_ASUNTO"/>
+        <xs:element ref="CODIGO_ORGANO_DESTINO"/>
+        <xs:element ref="DESCRIPCION_ORGANO_DESTINO" minOccurs="0"/>
+        <xs:element ref="CODIGO_UNIDAD_ADMINISTRATIVA"/>
+        <xs:element ref="IDENTIFICADOR_TRAMITE" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FECHA_ASUNTO" type="xs:string"/>  
+  <xs:element name="IDIOMA_ASUNTO" type="xs:string"/>
+  <xs:element name="TIPO_ASUNTO" type="xs:string"/>
+  <xs:element name="EXTRACTO_ASUNTO" type="xs:string"/>
+  <xs:element name="CODIGO_ORGANO_DESTINO" type="xs:string"/>
+  <xs:element name="DESCRIPCION_ORGANO_DESTINO" type="xs:string"/>
+  <xs:element name="CODIGO_UNIDAD_ADMINISTRATIVA" type="xs:string"/>
+  <xs:element name="IDENTIFICADOR_TRAMITE" type="xs:string"/>  
+  <xs:element name="DATOS_ANEXO_DOCUMENTACION">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ESTRUCTURADO"/>
+        <xs:element ref="TIPO_DE_DOCUMENTO"/>
+        <xs:element ref="IDENTIFICADOR_DOCUMENTO"/>
+        <xs:element ref="CODIGO_RDS"/>
+        <xs:element ref="NOMBRE_DOCUMENTO"/>
+        <xs:element minOccurs="0" ref="EXTRACTO_DOCUMENTO"/>
+        <xs:element ref="HASH_DOCUMENTO"/>
+        <xs:element minOccurs="0" ref="CODIGO_NORMALIZADO"/>
+        <xs:element minOccurs="0" ref="FIRMA_TERCEROS"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ESTRUCTURADO" type="xs:string"/>
+  <xs:element name="TIPO_DE_DOCUMENTO" type="xs:string"/>
+  <xs:element name="IDENTIFICADOR_DOCUMENTO" type="xs:string"/>
+  <xs:element name="CODIGO_RDS" type="xs:string"/>
+  <xs:element name="NOMBRE_DOCUMENTO" type="xs:string"/>
+  <xs:element name="DESCRIPCION_DOCUMENTO" type="xs:string"/>
+  <xs:element name="EXTRACTO_DOCUMENTO" type="xs:string"/>
+  <xs:element name="HASH_DOCUMENTO" type="xs:string"/>
+  <xs:element name="CODIGO_NORMALIZADO" type="xs:string"/>
+  <xs:element name="FIRMA_TERCEROS" type="xs:string"/>
+  <xs:element name="FECHA_REGISTRO" type="xs:string"/>  
+</xs:schema>

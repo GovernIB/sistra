@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class  name="es.caib.zonaper.model.EntradaPreregistroBackup" table="ZPE_PREBCK">
+	<cache usage="read-write"/>
+     <id name="codigo" unsaved-value="any" column="PRB_CODIGO">
+          <generator class="assigned"/>
+      </id>
+
+	<property name="numeroPreregistro"  column="PRB_NUMPRE"  not-null="true" unique="true"/>
+	<property name="fecha"  column="PRB_FECHA" not-null="true" />    
+	<property name="fechaCaducidad"  column="PRB_FECCAD" not-null="true" />    
+	
+    <property name="idPersistencia"  column="PRB_IDEPER"  not-null="true" unique="true"/>
+    <property name="tipo"  column="PRB_TIPO"  not-null="true" length="1"/>
+    <property name="nivelAutenticacion"  column="PRB_NIVAUT"  not-null="true" length="1"/>    
+    <property name="usuario"  column="PRB_USER"/>
+    <property name="descripcionTramite"  column="PRB_DESC"/>
+  	
+    <property name="codigoRdsAsiento"  column="PRB_CODASI"  not-null="true" length="20"/>
+    <property name="claveRdsAsiento"   column="PRB_CLAASI"  not-null="true" length="10"/>    
+    <property name="codigoRdsJustificante"  column="PRB_CODJUS"  not-null="true" length="20"/>
+    <property name="claveRdsJustificante"   column="PRB_CLAJUS"  not-null="true" length="10"/>
+
+    <property name="numeroRegistro"  column="PRB_NUMREG" length="50"/>
+  	<property name="fechaConfirmacion"  column="PRB_FECREG" />    
+  	
+  	<property name="idioma"  column="PRB_IDIOMA" not-null="true" length="2"/>
+  	
+  	<property name="nifRepresentante"  column="PRB_NIFRTE"/>
+    <property name="nombreRepresentante"  column="PRB_NOMRTE"/>
+    <property name="nifRepresentado"  column="PRB_NIFRDO"/>
+    <property name="nombreRepresentado"  column="PRB_NOMRDO"/>
+    <property name="nifDelegado"  column="PRB_NIFDLG"/>
+    <property name="nombreDelegado"  column="PRB_NOMDLG"/>
+  	
+  	<property name="procedimiento"  column="PRB_IDEPRO" not-null="true" />
+  	<property name="tramite"  column="PRB_TRAMOD"  length="20"/>
+    <property name="version"  column="PRB_TRAVER"  length="2"/>
+  	
+	<property name="confirmadoAutomaticamente"  column="PRB_CONAUT"  not-null="true" length="1"/>    
+
+	<property name="subsanacionExpedienteCodigo"  column="PRB_SBEXID" />
+    <property name="subsanacionExpedienteUA"  column="PRB_SBEXUA" />
+ 	   
+
+	<set name="documentosBackup" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="DRB_DOCIDE">
+		<cache usage="read-write"/>
+	    <key column="DRB_CODPRE"/>
+        <one-to-many class="es.caib.zonaper.model.DocumentoEntradaPreregistroBackup"/>
+	</set>
+	
+		<!--  Opciones aviso movilidad -->
+	<property name="habilitarAvisos" column="PRB_AVISOS" />
+	<property name="avisoSMS" column="PRB_AVISMS" />
+	<property name="avisoEmail" column="PRB_AVIEMA" />
+	
+	<!--  Opciones notificacion telematica -->
+	<property name="habilitarNotificacionTelematica" column="PRB_NOTTEL" />
+</class>
+</hibernate-mapping>

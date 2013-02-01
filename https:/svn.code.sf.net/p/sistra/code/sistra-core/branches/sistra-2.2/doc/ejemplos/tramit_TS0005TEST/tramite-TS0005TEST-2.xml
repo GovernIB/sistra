@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <TramiteVersion anonimoDefecto="N" bloqueadoModificacion="N" consultaAuth="N" consultaLocalizacion="L" consultaTipoAcceso="E" destino="R" fechaExportacion="Fri Jan 13 13:25:43 CET 2012" firmar="S" idiomasSoportados="es,ca,en" motivo="Primera versión de dicho trámite" organoDestino="1419" preenvioConfirmacionAutomatica="N" redireccionFin="N" reducido="N" registroAsunto="ST" registroOficina="14.1499" unidadAdministrativa="16" version="2">
+    <documentos>
+      <documento anexoCompulsarPreregistro="N" anexoConversionPDF="N" anexoDescargarPlantilla="N" anexoExtensiones="pdf,doc,zip,slc" anexoFotocopia="N" anexoPresentarTelematicamente="S" anexoTamanyoMax="2048" formularioJustificante="N" formularioPreregistro="N" generico="N" identificador="ANE01" maxGenericos="0" modelo="GE0005ANEXGEN" orden="3" tipo="A">
+        <niveles>
+          <nivele firmar="S" formularioGestorFormulario="forms" nivelAutenticacion="C" obligatorio="D" obligatorioScript="cmVzdWx0ID0gJ0QnOw0KZGF0byA9IFBMVUdJTl9GT1JNVUxBUklPUy5nZXREYXRvRm9ybXVsYXJpbygnRk9STTEnLDEsJ0RBVE9TLkFORVhPW0NPRElHT10nKTsNCmlmKGRhdG8gPT0gJ1MnKQ0Kew0KICAgIHJlc3VsdCA9ICdTJzsNCn1lbHNlew0KcmVzdWx0ID0gJ04nOw0KfQ0KcmVzdWx0Ow==" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+          <nivele firmar="N" formularioGestorFormulario="forms" nivelAutenticacion="UA" obligatorio="D" obligatorioScript="cmVzdWx0ID0gJ0QnOw0KZGF0byA9IFBMVUdJTl9GT1JNVUxBUklPUy5nZXREYXRvRm9ybXVsYXJpbygnRk9STTEnLDEsJ0RBVE9TLkFORVhPW0NPRElHT10nKTsNCmlmKGRhdG8gPT0gJ1MnKQ0Kew0KICAgIHJlc3VsdCA9ICdTJzsNCn1lbHNlew0KcmVzdWx0ID0gJ04nOw0KfQ0KcmVzdWx0Ow==" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Document de prova" informacion="Aquest document només podrà ser anexat si s&apos;ha triat l&apos;opció d&apos;anexar documentació. A més, se ha configurat perquè hagi de ser signat digitalment en cas d&apos;haver accedit al tràmit amb certificat digital."/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Documento de prueba" informacion="Este documento sólo podrá ser anexado si se ha escogido la opción de anexar documentación. Además, se ha configurado para que tenga que ser firmado digitalmente en caso de haber accedido al trámite con certificado digital."/>
+          </entry>
+          <entry>
+            <key>en</key>
+            <value descripcion="Text document" informacion="This document may only be attached if you chose the option to attach documentation"/>
+          </entry>
+        </traducciones>
+      </documento>
+      <documento anexoCompulsarPreregistro="N" anexoConversionPDF="N" anexoDescargarPlantilla="N" anexoExtensiones="pdf,doc,zip,slc" anexoFotocopia="N" anexoPresentarTelematicamente="S" anexoTamanyoMax="1024" formularioJustificante="N" formularioPreregistro="N" generico="N" identificador="ANE02" maxGenericos="0" modelo="GE0005ANEXGEN" orden="3" tipo="A">
+        <niveles>
+          <nivele firmar="N" formularioGestorFormulario="forms" nivelAutenticacion="C" obligatorio="D" obligatorioScript="cmVzdWx0PSdEJzsNCmZpcm1hPVBMVUdJTl9GT1JNVUxBUklPUy5nZXREYXRvRm9ybXVsYXJpbygnRk9STTEnLDEsJ0RBVE9TLkVOVklPJyk7DQppZihmaXJtYSA9PSdTJykNCntyZXN1bHQ9J1MnO30NCnJlc3VsdDs=" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Annexar altres" informacion="Aquest document només podrà ser annexat si hi ha enviament a firma"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Anexar Otros" informacion="Este documento sólo podrá ser anexado si hay envío a firma"/>
+          </entry>
+          <entry>
+            <key>en</key>
+            <value descripcion="Append others" informacion="This document may only be attached if there are sending firm"/>
+          </entry>
+        </traducciones>
+      </documento>
+      <documento anexoCompulsarPreregistro="N" anexoConversionPDF="N" anexoDescargarPlantilla="N" anexoExtensiones="pdf,doc,zip,slc" anexoFotocopia="N" anexoPresentarTelematicamente="S" anexoTamanyoMax="2048" formularioJustificante="N" formularioPreregistro="N" generico="S" identificador="ANE05" maxGenericos="5" modelo="GE0005ANEXGEN" orden="6" tipo="A">
+        <niveles>
+          <nivele firmar="N" formularioGestorFormulario="forms" nivelAutenticacion="CUA" obligatorio="N" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Document múltiple"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Documento múltiple"/>
+          </entry>
+          <entry>
+            <key>en</key>
+            <value descripcion="Multiple document"/>
+          </entry>
+        </traducciones>
+      </documento>
+      <documento anexoCompulsarPreregistro="N" anexoConversionPDF="N" anexoDescargarPlantilla="N" anexoFotocopia="N" anexoPresentarTelematicamente="S" formularioJustificante="N" formularioPreregistro="S" generico="N" identificador="FORM1" maxGenericos="0" modelo="TS0005TESTF3" orden="1" tipo="F">
+        <niveles>
+          <nivele firmar="N" formularioConfiguracionScript="Q09ORklHVVJBQ0lPTkZPUk1VTEFSSU8uc2V0RGF0b1NvbG9MZWN0dXJhKCdTT0xPTEVDVFVSQS5JTkZPUk1BQ0lPTicpOw0KQ09ORklHVVJBQ0lPTkZPUk1VTEFSSU8uc2V0RGF0b1NvbG9MZWN0dXJhKCdQQVJBTUVUUk9TLlVSTCcpOw0KQ09ORklHVVJBQ0lPTkZPUk1VTEFSSU8uc2V0RGF0b1NvbG9MZWN0dXJhKCdSRU1PVE8uSU5GT1JNQUNJT04nKTs=" formularioDatosInicialesScript="cGFyYW1VUkwgPSBQTFVHSU5fUEFSQU1FVFJPU0lOSUNJTy5nZXRQYXJhbWV0cm8oJ3BhcmFtVVJMJyk7DQpEQVRPU0lOSUNJQUxFUy5zZXREYXRvSW5pY2lhbCgnTUVOVS5QQVJBTVVSTCcscGFyYW1VUkwpOw0Kbml2ZWwgPSBQTFVHSU5fREFUT1NTRVNJT04uZ2V0Tml2ZWxBdXRlbnRpY2FjaW9uKCk7DQpEQVRPU0lOSUNJQUxFUy5zZXREYXRvSW5pY2lhbCgnREFUT1MuQVVURU5USUNBQ0lPTicsbml2ZWwpOw==" formularioFormsModelo="553" formularioFormsVersion="1" formularioGestorFormulario="forms" formularioPlantillaScript="cmVzdWx0PScnOw0KbW9kPVBMVUdJTl9GT1JNVUxBUklPUy5nZXREYXRvRm9ybXVsYXJpbygnRk9STTEnLDEsJ0RBVE9TLk1PREVMT1BERltDT0RJR09dJyk7DQppZihtb2QgPT0gJzEnKXtyZXN1bHQ9J0FOMSc7fQ0KaWYobW9kID09ICcyJyl7cmVzdWx0PSdBTjInO30NCnJlc3VsdDs=" nivelAutenticacion="A" obligatorio="S" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+          <nivele firmante="valor = PLUGIN_FORMULARIOS.getDatoFormulario(&apos;FORM1&apos;,1, &apos;DATOS.NUMERO&apos;); valor;" firmar="S" formularioConfiguracionScript="Q09ORklHVVJBQ0lPTkZPUk1VTEFSSU8uc2V0RGF0b1NvbG9MZWN0dXJhKCdTT0xPTEVDVFVSQS5JTkZPUk1BQ0lPTicpOw0KQ09ORklHVVJBQ0lPTkZPUk1VTEFSSU8uc2V0RGF0b1NvbG9MZWN0dXJhKCdQQVJBTUVUUk9TLlVSTCcpOw0KQ09ORklHVVJBQ0lPTkZPUk1VTEFSSU8uc2V0RGF0b1NvbG9MZWN0dXJhKCdSRU1PVE8uSU5GT1JNQUNJT04nKTsNCkNPTkZJR1VSQUNJT05GT1JNVUxBUklPLnNldERhdG9Tb2xvTGVjdHVyYSgnREFUT1MuTlVNRVJPJyk7DQpDT05GSUdVUkFDSU9ORk9STVVMQVJJTy5zZXREYXRvU29sb0xlY3R1cmEoJ0RBVE9TLk5PTUJSRScpOw0KQ09ORklHVVJBQ0lPTkZPUk1VTEFSSU8uc2V0RGF0b1NvbG9MZWN0dXJhKCdEQVRPUy5BUEVMTElETzEnKTsNCkNPTkZJR1VSQUNJT05GT1JNVUxBUklPLnNldERhdG9Tb2xvTGVjdHVyYSgnREFUT1MuQVBFTExJRE8yJyk7" formularioDatosInicialesScript="bmlmU2VzaW9uID0gUExVR0lOX0RBVE9TU0VTSU9OLmdldE5pZlVzdWFyaW8oKTsNCm5vbWJyZSA9IFBMVUdJTl9EQVRPU1NFU0lPTi5nZXROb21icmVVc3VhcmlvKCk7DQphcGVsbGlkbzEgPSBQTFVHSU5fREFUT1NTRVNJT04uZ2V0QXBlbGxpZG8xVXN1YXJpbygpOw0KYXBlbGxpZG8yID0gUExVR0lOX0RBVE9TU0VTSU9OLmdldEFwZWxsaWRvMlVzdWFyaW8oKTsNCm5vbWJyZVNlc2lvbiA9IFBMVUdJTl9EQVRPU1NFU0lPTi5nZXROb21icmVDb21wbGV0b1VzdWFyaW8oKTsNCkRBVE9TSU5JQ0lBTEVTLnNldERhdG9JbmljaWFsKCdEQVRPUy5OSUZPQ1VMVE8nLG5pZlNlc2lvbik7DQpEQVRPU0lOSUNJQUxFUy5zZXREYXRvSW5pY2lhbCgnREFUT1MuTlVNRVJPJyxuaWZTZXNpb24pOw0KREFUT1NJTklDSUFMRVMuc2V0RGF0b0luaWNpYWwoJ0RBVE9TLk5PTUJSRScsbm9tYnJlKTsNCkRBVE9TSU5JQ0lBTEVTLnNldERhdG9JbmljaWFsKCdEQVRPUy5BUEVMTElETzEnLGFwZWxsaWRvMSk7DQpEQVRPU0lOSUNJQUxFUy5zZXREYXRvSW5pY2lhbCgnREFUT1MuQVBFTExJRE8yJyxhcGVsbGlkbzIpOw0KREFUT1NJTklDSUFMRVMuc2V0RGF0b0luaWNpYWwoJ0RBVE9TLk5PTUJSRU9DVUxUTycsbm9tYnJlU2VzaW9uKTsNCnBhcmFtVVJMID0gUExVR0lOX1BBUkFNRVRST1NJTklDSU8uZ2V0UGFyYW1ldHJvKCdwYXJhbVVSTCcpOw0KREFUT1NJTklDSUFMRVMuc2V0RGF0b0luaWNpYWwoJ01FTlUuUEFSQU1VUkwnLHBhcmFtVVJMKTsNCm5pdmVsID0gUExVR0lOX0RBVE9TU0VTSU9OLmdldE5pdmVsQXV0ZW50aWNhY2lvbigpOw0KREFUT1NJTklDSUFMRVMuc2V0RGF0b0luaWNpYWwoJ0RBVE9TLkFVVEVOVElDQUNJT04nLG5pdmVsKTs=" formularioFormsModelo="553" formularioFormsVersion="1" formularioGestorFormulario="forms" formularioModificacionPostFormScript="ZW52aW8gPSBQTFVHSU5fRk9STVVMQVJJT1MuZ2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0xJywxLCdEQVRPUy5FTlZJT1tDT0RJR09dJyk7DQppZihlbnZpbyA9PSdTJykNCnsNCiAgIG5pZlNlc2lvbiA9IFBMVUdJTl9EQVRPU1NFU0lPTi5nZXROaWZVc3VhcmlvKCk7DQogICBQTFVHSU5fRk9STVVMQVJJT1Muc2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0yJywxLCdWQUxJREFDSU9OLk5JRk9DVUxUTycsbmlmU2VzaW9uKTsNCiAgIFBMVUdJTl9GT1JNVUxBUklPUy5zZXREYXRvRm9ybXVsYXJpbygnRk9STTInLDEsJ1ZBTElEQUNJT04uTklGJyxuaWZTZXNpb24pOw0KICAgbm9tYnJlU2VzaW9uID0gUExVR0lOX0RBVE9TU0VTSU9OLmdldE5vbWJyZUNvbXBsZXRvVXN1YXJpbygpOw0KICAgUExVR0lOX0ZPUk1VTEFSSU9TLnNldERhdG9Gb3JtdWxhcmlvKCdGT1JNMicsMSwnVkFMSURBQ0lPTi5OT01CUkUnLG5vbWJyZVNlc2lvbik7DQp9" formularioPlantillaScript="cmVzdWx0PScnOw0KbW9kPVBMVUdJTl9GT1JNVUxBUklPUy5nZXREYXRvRm9ybXVsYXJpbygnRk9STTEnLDEsJ0RBVE9TLk1PREVMT1BERltDT0RJR09dJyk7DQppZihtb2QgPT0gJzEnKSByZXN1bHQ9J0FOMSc7DQppZihtb2QgPT0gJzInKSByZXN1bHQ9J0FOMic7DQpyZXN1bHQ7" nivelAutenticacion="C" obligatorio="S" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+          <nivele firmar="N" formularioConfiguracionScript="Q09ORklHVVJBQ0lPTkZPUk1VTEFSSU8uc2V0RGF0b1NvbG9MZWN0dXJhKCdTT0xPTEVDVFVSQS5JTkZPUk1BQ0lPTicpOw0KQ09ORklHVVJBQ0lPTkZPUk1VTEFSSU8uc2V0RGF0b1NvbG9MZWN0dXJhKCdQQVJBTUVUUk9TLlVSTCcpOw0KQ09ORklHVVJBQ0lPTkZPUk1VTEFSSU8uc2V0RGF0b1NvbG9MZWN0dXJhKCdSRU1PVE8uSU5GT1JNQUNJT04nKTsNCkNPTkZJR1VSQUNJT05GT1JNVUxBUklPLnNldERhdG9Tb2xvTGVjdHVyYSgnREFUT1MuTlVNRVJPJyk7DQpDT05GSUdVUkFDSU9ORk9STVVMQVJJTy5zZXREYXRvU29sb0xlY3R1cmEoJ0RBVE9TLk5PTUJSRScpOw0KQ09ORklHVVJBQ0lPTkZPUk1VTEFSSU8uc2V0RGF0b1NvbG9MZWN0dXJhKCdEQVRPUy5BUEVMTElETzEnKTsNCkNPTkZJR1VSQUNJT05GT1JNVUxBUklPLnNldERhdG9Tb2xvTGVjdHVyYSgnREFUT1MuQVBFTExJRE8yJyk7" formularioDatosInicialesScript="bmlmU2VzaW9uID0gUExVR0lOX0RBVE9TU0VTSU9OLmdldE5pZlVzdWFyaW8oKTsNCm5vbWJyZSA9IFBMVUdJTl9EQVRPU1NFU0lPTi5nZXROb21icmVVc3VhcmlvKCk7DQphcGVsbGlkbzEgPSBQTFVHSU5fREFUT1NTRVNJT04uZ2V0QXBlbGxpZG8xVXN1YXJpbygpOw0KYXBlbGxpZG8yID0gUExVR0lOX0RBVE9TU0VTSU9OLmdldEFwZWxsaWRvMlVzdWFyaW8oKTsNCm5vbWJyZVNlc2lvbiA9IFBMVUdJTl9EQVRPU1NFU0lPTi5nZXROb21icmVDb21wbGV0b1VzdWFyaW8oKTsNCkRBVE9TSU5JQ0lBTEVTLnNldERhdG9JbmljaWFsKCdEQVRPUy5OSUZPQ1VMVE8nLG5pZlNlc2lvbik7DQpEQVRPU0lOSUNJQUxFUy5zZXREYXRvSW5pY2lhbCgnREFUT1MuTlVNRVJPJyxuaWZTZXNpb24pOw0KREFUT1NJTklDSUFMRVMuc2V0RGF0b0luaWNpYWwoJ0RBVE9TLk5PTUJSRScsbm9tYnJlKTsNCkRBVE9TSU5JQ0lBTEVTLnNldERhdG9JbmljaWFsKCdEQVRPUy5BUEVMTElETzEnLGFwZWxsaWRvMSk7DQpEQVRPU0lOSUNJQUxFUy5zZXREYXRvSW5pY2lhbCgnREFUT1MuQVBFTExJRE8yJyxhcGVsbGlkbzIpOw0KREFUT1NJTklDSUFMRVMuc2V0RGF0b0luaWNpYWwoJ0RBVE9TLk5PTUJSRU9DVUxUTycsbm9tYnJlU2VzaW9uKTsNCnBhcmFtVVJMID0gUExVR0lOX1BBUkFNRVRST1NJTklDSU8uZ2V0UGFyYW1ldHJvKCdwYXJhbVVSTCcpOw0KREFUT1NJTklDSUFMRVMuc2V0RGF0b0luaWNpYWwoJ01FTlUuUEFSQU1VUkwnLHBhcmFtVVJMKTsNCm5pdmVsID0gUExVR0lOX0RBVE9TU0VTSU9OLmdldE5pdmVsQXV0ZW50aWNhY2lvbigpOw0KREFUT1NJTklDSUFMRVMuc2V0RGF0b0luaWNpYWwoJ0RBVE9TLkFVVEVOVElDQUNJT04nLG5pdmVsKTs=" formularioFormsModelo="553" formularioFormsVersion="1" formularioGestorFormulario="forms" formularioModificacionPostFormScript="ZW52aW8gPSBQTFVHSU5fRk9STVVMQVJJT1MuZ2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0xJywxLCdEQVRPUy5FTlZJT1tDT0RJR09dJyk7DQppZihlbnZpbyA9PSdTJykNCnsNCiAgIG5pZlNlc2lvbiA9IFBMVUdJTl9EQVRPU1NFU0lPTi5nZXROaWZVc3VhcmlvKCk7DQogICBQTFVHSU5fRk9STVVMQVJJT1Muc2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0yJywxLCdWQUxJREFDSU9OLk5JRk9DVUxUTycsbmlmU2VzaW9uKTsNCiAgIFBMVUdJTl9GT1JNVUxBUklPUy5zZXREYXRvRm9ybXVsYXJpbygnRk9STTInLDEsJ1ZBTElEQUNJT04uTklGJyxuaWZTZXNpb24pOw0KICAgbm9tYnJlU2VzaW9uID0gUExVR0lOX0RBVE9TU0VTSU9OLmdldE5vbWJyZUNvbXBsZXRvVXN1YXJpbygpOw0KICAgUExVR0lOX0ZPUk1VTEFSSU9TLnNldERhdG9Gb3JtdWxhcmlvKCdGT1JNMicsMSwnVkFMSURBQ0lPTi5OT01CUkUnLG5vbWJyZVNlc2lvbik7DQp9" formularioPlantillaScript="cmVzdWx0PScnOw0KbW9kPVBMVUdJTl9GT1JNVUxBUklPUy5nZXREYXRvRm9ybXVsYXJpbygnRk9STTEnLDEsJ0RBVE9TLk1PREVMT1BERltDT0RJR09dJyk7DQppZihtb2QgPT0gJzEnKSB7cmVzdWx0PSdBTjEnO30NCmlmKG1vZCA9PSAnMicpIHtyZXN1bHQ9J0FOMic7fQ0KcmVzdWx0Ow==" nivelAutenticacion="U" obligatorio="S" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Test de Plataforma de Tramitació i Notificació Telemàtica"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Test de Plataforma de Tramitación y Notificación Telemática"/>
+          </entry>
+          <entry>
+            <key>en</key>
+            <value descripcion="Test Platform and Reporting Platform and Telematics notifications"/>
+          </entry>
+        </traducciones>
+      </documento>
+      <documento anexoCompulsarPreregistro="N" anexoConversionPDF="N" anexoDescargarPlantilla="N" anexoFotocopia="N" anexoPresentarTelematicamente="S" formularioJustificante="N" formularioPreregistro="S" generico="N" identificador="FORM2" maxGenericos="0" modelo="TS0005TESTF4" orden="2" tipo="F">
+        <niveles>
+          <nivele firmante="valor = PLUGIN_FORMULARIOS.getDatoFormulario(&apos;FORM1&apos;,1,&apos;DATOS.DOCUMENTOENVIO&apos;);
+valor;" firmar="S" flujoTramitacionScript="ZmlybWEgPSBQTFVHSU5fRk9STVVMQVJJT1MuZ2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0xJywxLCdEQVRPUy5ET0NVTUVOVE9FTlZJTycpOyANCmZpcm1hOw==" formularioConfiguracionScript="Q09ORklHVVJBQ0lPTkZPUk1VTEFSSU8uc2V0RGF0b1NvbG9MZWN0dXJhKCdWQUxJREFDSU9OLk5JRicpOw0KQ09ORklHVVJBQ0lPTkZPUk1VTEFSSU8uc2V0RGF0b1NvbG9MZWN0dXJhKCdWQUxJREFDSU9OLk5PTUJSRScpOw==" formularioDatosInicialesScript="bmlmU2VzaW9uID0gUExVR0lOX0RBVE9TU0VTSU9OLmdldE5pZlVzdWFyaW8oKTsNCkRBVE9TSU5JQ0lBTEVTLnNldERhdG9JbmljaWFsKCdWQUxJREFDSU9OLk5JRlNFU0lPTicsbmlmU2VzaW9uKTs=" formularioFormsModelo="554" formularioFormsVersion="1" formularioGestorFormulario="forms" formularioPlantillaScript="cmVzdWx0PScnOw0KbW9kPVBMVUdJTl9GT1JNVUxBUklPUy5nZXREYXRvRm9ybXVsYXJpbygnRk9STTEnLDEsJ0RBVE9TLk1PREVMT1BERltDT0RJR09dJyk7DQppZihtb2QgPT0gJzEnKSByZXN1bHQ9J0FOMSc7DQppZihtb2QgPT0gJzInKSByZXN1bHQ9J0FOMic7DQpyZXN1bHQ7" nivelAutenticacion="C" obligatorio="D" obligatorioScript="cmVzdWx0ID0gJ0QnOw0KZGVjaXNpb24gPSBQTFVHSU5fRk9STVVMQVJJT1MuZ2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0xJywxLCdEQVRPUy5FTlZJT1tDT0RJR09dJyk7DQppZiAoZGVjaXNpb24gPT0gJ1MnKQ0Kew0KcmVzdWx0ID0gJ1MnOw0KfQ0KcmVzdWx0Ow==" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+          <nivele firmar="N" flujoTramitacionScript="ZmlybWEgPSBQTFVHSU5fRk9STVVMQVJJT1MuZ2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0xJywxLCdEQVRPUy5ET0NVTUVOVE9FTlZJTycpOyANCmZpcm1hOw==" formularioConfiguracionScript="Q09ORklHVVJBQ0lPTkZPUk1VTEFSSU8uc2V0RGF0b1NvbG9MZWN0dXJhKCdWQUxJREFDSU9OLk5JRicpOw0KQ09ORklHVVJBQ0lPTkZPUk1VTEFSSU8uc2V0RGF0b1NvbG9MZWN0dXJhKCdWQUxJREFDSU9OLk5PTUJSRScpOw==" formularioDatosInicialesScript="c2VzaW9uID0gUExVR0lOX0ZPUk1VTEFSSU9TLmdldERhdG9Gb3JtdWxhcmlvKCdGT1JNMScsMSwnREFUT1MuTklGT0NVTFRPJyk7DQpEQVRPU0lOSUNJQUxFUy5zZXREYXRvSW5pY2lhbCgnVkFMSURBQ0lPTi5OSUZTRVNJT04nLHNlc2lvbik7" formularioFormsModelo="554" formularioFormsVersion="1" formularioGestorFormulario="forms" formularioPlantillaScript="cmVzdWx0PScnOw0KbW9kPVBMVUdJTl9GT1JNVUxBUklPUy5nZXREYXRvRm9ybXVsYXJpbygnRk9STTEnLDEsJ0RBVE9TLk1PREVMT1BERltDT0RJR09dJyk7DQppZihtb2QgPT0gJzEnKSB7cmVzdWx0PSdBTjEnO30NCmlmKG1vZCA9PSAnMicpIHtyZXN1bHQ9J0FOMic7fQ0KcmVzdWx0Ow==" nivelAutenticacion="U" obligatorio="D" obligatorioScript="cmVzdWx0ID0gJ0QnOw0KZGVjaXNpb24gPSBQTFVHSU5fRk9STVVMQVJJT1MuZ2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0xJywxLCdEQVRPUy5FTlZJT1tDT0RJR09dJyk7DQppZiAoZGVjaXNpb24gPT0gJ1MnKQ0Kew0KcmVzdWx0ID0gJ1MnOw0KfQ0KcmVzdWx0Ow==" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Formulari amb autenticació d&apos;usuari" informacion="Formulari a emplenar per la persona/entitat a la que es remet la finalització del tràmit."/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Formulario con autenticación de usuario" informacion="Formulario a rellenar por la persona/entidad a la que se remite la finalización del trámite"/>
+          </entry>
+          <entry>
+            <key>en</key>
+            <value descripcion="Form with user authentication" informacion="Form to be completed by the person / entity to which refers the end of the process"/>
+          </entry>
+        </traducciones>
+      </documento>
+      <documento anexoCompulsarPreregistro="N" anexoConversionPDF="N" anexoDescargarPlantilla="N" anexoFotocopia="N" anexoPresentarTelematicamente="S" formularioJustificante="N" formularioPreregistro="N" generico="N" identificador="PAGO1" maxGenericos="0" modelo="GE0006PAGO" orden="3" tipo="P">
+        <niveles>
+          <nivele firmar="N" flujoTramitacionScript="dmFsb3IgPSBQTFVHSU5fRk9STVVMQVJJT1MuZ2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0xJywxLCAnREFUT1MuTlVNRVJPJyk7IHZhbG9yOw==" formularioGestorFormulario="forms" nivelAutenticacion="CUA" obligatorio="D" obligatorioScript="cmVzdWx0ID0gJ0QnOw0KZGF0byA9IFBMVUdJTl9GT1JNVUxBUklPUy5nZXREYXRvRm9ybXVsYXJpbygnRk9STTEnLDEsJ0RBVE9TLlBBR09bQ09ESUdPXScpOw0KaWYoZGF0byA9PSAnUycpDQp7DQogICAgcmVzdWx0ID0gJ1MnOw0KfWVsc2V7DQogICAgcmVzdWx0ID0gJ0QnOw0KfQ0KcmVzdWx0Ow==" pagoCalcularPagoScript="cmVzdWx0ID0gJ1MnOw0KDQpuaWYgPSBQTFVHSU5fRk9STVVMQVJJT1MuZ2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0xJywxLCdEQVRPUy5OVU1FUk8nKTsNCk5vbWJyZUNvbXAgPSBQTFVHSU5fRk9STVVMQVJJT1MuZ2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0xJywxLCdEQVRPUy5OT01CUkVDT01QTEVUTycpOw0KDQpEQVRPU1BBR08uc2V0TmlmKG5pZik7DQpEQVRPU1BBR08uc2V0Tm9tYnJlKE5vbWJyZUNvbXApOw0KDQogICAgDQpEQVRPU1BBR08uc2V0Q29kaWdvUG9zdGFsKCcwNzYxMCcpOw0KREFUT1NQQUdPLnNldERvbWljaWxpb1ZpYSgnU29uIERhbWV0bycpOyANCg0KREFUT1NQQUdPLnNldExvY2FsaWRhZCgnUGFsbWEnKTsNCkRBVE9TUEFHTy5zZXRQcm92aW5jaWEoJ0JhbGVhcmVzJyk7IA0KDQp0YXNhPSBQTFVHSU5fRk9STVVMQVJJT1MuZ2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0xJywxLCdEQVRPUy5UQVNBW0NPRElHT10nKTsNCi8vaW5pY2lhbGl6YW1vcyBsYSB2YXJpYWJsZSBxdWUgY29udGllbmUgZWwgaW1wb3J0ZSBkZSBsYSB0YXNhDQoNCnJlcz0wOw0KDQovKnN3aXRjaCAodGFzYSkNCnsNCmNhc2UgJzEnIDogDQogICAgICAgICAgICBEQVRPU1BBR08uc2V0SWRUYXNhKCc5OScpOw0KICAgICAgICAgICAgcmVzID0gREFUT1NQQUdPLmNvbnN1bHRhckltcG9ydGVUYXNhKCc5OScpO2JyZWFrOw0KY2FzZSAnMicgOg0KICAgICAgICAgICAgREFUT1NQQUdPLnNldElkVGFzYSgnOTk5Jyk7DQogICAgICAgICAgICByZXMgPSBEQVRPU1BBR08uY29uc3VsdGFySW1wb3J0ZVRhc2EoJzk5OScpO2JyZWFrOw0KfSovDQoNCg0KaWYodGFzYT09JzEnKQ0Kew0KCURBVE9TUEFHTy5zZXRJZFRhc2EoJzk5Jyk7DQoJcmVzID0gREFUT1NQQUdPLmNvbnN1bHRhckltcG9ydGVUYXNhKCc5OScpOw0KfQ0KZWxzZQ0Kew0KCURBVE9TUEFHTy5zZXRJZFRhc2EoJzk5OScpOw0KCXJlcyA9IERBVE9TUEFHTy5jb25zdWx0YXJJbXBvcnRlVGFzYSgnOTk5Jyk7DQp9DQoNCkRBVE9TUEFHTy5zZXRJbXBvcnRlKHJlcyk7DQoNCnJlc3VsdDs=" pagoMetodos="A" version="1">
+            <traducciones/>
+          </nivele>
+        </niveles>
+        <traducciones>
+          <entry>
+            <key>ca</key>
+            <value descripcion="Pagament"/>
+          </entry>
+          <entry>
+            <key>es</key>
+            <value descripcion="Pago"/>
+          </entry>
+          <entry>
+            <key>en</key>
+            <value descripcion="Payment"/>
+          </entry>
+        </traducciones>
+      </documento>
+    </documentos>
+    <especificaciones activo="S" campoCodigoLocalidad="c2VzaW9ubG9jYWwgPSBQTFVHSU5fRk9STVVMQVJJT1MuZ2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0xJywxLCdEQVRPUy5NVU5JQ0lQSU9bQ09ESUdPXScpOw0Kc2VzaW9ubG9jYWw7" campoCodigoPais="cmVzdWx0ID0gImVzIjsNCnJlc3VsdDs=" campoCodigoProvincia="c2VzaW9ucHJvdmkgPSBQTFVHSU5fRk9STVVMQVJJT1MuZ2V0RGF0b0Zvcm11bGFyaW8oJ0ZPUk0xJywxLCdEQVRPUy5QUk9WSU5DSUFbQ09ESUdPXScpOw0Kc2VzaW9ucHJvdmk7" diasPersistencia="10" diasPrerregistro="10" flujoTramitacion="S" habilitarNotificacionTelematica="X">
+      <datosJustificante>
+        <datosJustificante orden="0" tipo="B">
+          <traducciones>
+            <entry>
+              <key>ca</key>
+              <value descripcion="Dades del formulari"/>
+            </entry>
+            <entry>
+              <key>es</key>
+              <value descripcion="Datos del formulario"/>
+            </entry>
+            <entry>
+              <key>en</key>
+              <value descripcion="Form data"/>
+            </entry>
+          </traducciones>
+        </datosJustificante>
+        <datosJustificante orden="1" referenciaCampo="FORM1.1.DATOS.ENVIO" tipo="C">
+          <traducciones>
+            <entry>
+              <key>ca</key>
+              <value descripcion="Envío a firma"/>
+            </entry>
+            <entry>
+              <key>es</key>
+              <value descripcion="Envío a firma"/>
+            </entry>
+            <entry>
+              <key>en</key>
+              <value descripcion="Send for signature"/>
+            </entry>
+          </traducciones>
+        </datosJustificante>
+        <datosJustificante orden="2" referenciaCampo="FORM1.1.DATOS.ANEXO" tipo="C">
+          <traducciones>
+            <entry>
+              <key>ca</key>
+              <value descripcion="Document anexe"/>
+            </entry>
+            <entry>
+              <key>es</key>
+              <value descripcion="Documento anexo"/>
+            </entry>
+            <entry>
+              <key>en</key>
+              <value descripcion="document attached"/>
+            </entry>
+          </traducciones>
+        </datosJustificante>
+        <datosJustificante orden="3" referenciaCampo="FORM1.1.DATOS.PAGO" tipo="C">
+          <traducciones>
+            <entry>
+              <key>ca</key>
+              <value descripcion="Realitza pagament"/>
+            </entry>
+            <entry>
+              <key>es</key>
+              <value descripcion="Realiza pago"/>
+            </entry>
+            <entry>
+              <key>en</key>
+              <value descripcion="Make payment"/>
+            </entry>
+          </traducciones>
+        </datosJustificante>
+        <datosJustificante orden="4" referenciaCampo="FORM1.1.DATOS.TIPODOCUMENTO" tipo="C">
+          <traducciones>
+            <entry>
+              <key>ca</key>
+              <value descripcion="Tipus de document"/>
+            </entry>
+            <entry>
+              <key>es</key>
+              <value descripcion="Tipo de documento"/>
+            </entry>
+            <entry>
+              <key>en</key>
+              <value descripcion="Document Type"/>
+            </entry>
+          </traducciones>
+        </datosJustificante>
+        <datosJustificante orden="5" referenciaCampo="FORM1.1.DATOS.NUMERODOCUMENTO" tipo="C">
+          <traducciones>
+            <entry>
+              <key>ca</key>
+              <value descripcion="Número de document"/>
+            </entry>
+            <entry>
+              <key>es</key>
+              <value descripcion="Número de documento"/>
+            </entry>
+            <entry>
+              <key>en</key>
+              <value descripcion="Document Number"/>
+            </entry>
+          </traducciones>
+        </datosJustificante>
+        <datosJustificante orden="6" referenciaCampo="FORM1.1.DATOS.PROVINCIA" tipo="C">
+          <traducciones>
+            <entry>
+              <key>ca</key>
+              <value descripcion="Província"/>
+            </entry>
+            <entry>
+              <key>es</key>
+              <value descripcion="Provincia"/>
+            </entry>
+            <entry>
+              <key>en</key>
+              <value descripcion="Province"/>
+            </entry>
+          </traducciones>
+        </datosJustificante>
+        <datosJustificante orden="7" referenciaCampo="FORM1.1.DATOS.MUNICIPIO" tipo="C">
+          <traducciones>
+            <entry>
+              <key>ca</key>
+              <value descripcion="Municipi"/>
+            </entry>
+            <entry>
+              <key>es</key>
+              <value descripcion="Municipio"/>
+            </entry>
+            <entry>
+              <key>en</key>
+              <value descripcion="Municipality"/>
+            </entry>
+          </traducciones>
+        </datosJustificante>
+        <datosJustificante orden="8" referenciaCampo="FORM1.1.DATOS.BUSQUEDA2" tipo="I">
+          <traducciones>
+            <entry>
+              <key>ca</key>
+              <value descripcion="Camp de cerca 2"/>
+            </entry>
+            <entry>
+              <key>es</key>
+              <value descripcion="Campo de busqueda 2"/>
+            </entry>
+            <entry>
+              <key>en</key>
+              <value descripcion="Campo de busqueda 2"/>
+            </entry>
+          </traducciones>
+        </datosJustificante>
+        <datosJustificante orden="9" referenciaCampo="FORM1.1.DATOS.BUSQUEDA1" tipo="C">
+          <traducciones>
+            <entry>
+              <key>ca</key>
+              <value descripcion="Camp de cerca 1"/>
+            </entry>
+            <entry>
+              <key>es</key>
+              <value descripcion="Campo de búsqueda 1"/>
+            </entry>
+            <entry>
+              <key>en</key>
+              <value descripcion="Campo de búsqueda 1"/>
+            </entry>
+          </traducciones>
+        </datosJustificante>
+      </datosJustificante>
+      <traducciones>
+        <entry>
+          <key>ca</key>
+          <value instruccionesEntrega="En aquest lloc va el texte de les instruccions d&apos;entrega" instruccionesFin="En aquest lloc va el texte de les instruccions de Fi" instruccionesInicio="&lt;p class=&quot;alerta&quot;&gt; El tràmit que acaba d&apos;iniciar té un doble objectiu, per un costat el de poder provar, per part de qualsevol persona (tècnica o no), bona part de les &lt;strong&gt;funcionalitats&lt;/strong&gt; proporcionades per la Plataforma de Tramitació i Notificació Telemàtica de la CAIB (&lt;strong&gt;SISTRA&lt;/strong&gt;); i per altre costat, presentar-se com una eina àgil i ràpida d&apos;aprenentatge de programació de tràmits telemàtics per SISTRA, destinada a personal tècnic.&lt;br&gt;Com la resta de tràmits telemàtics per SISTRA, aquest consta d&apos;una sèrie de passes comunes que s&apos;aniran adaptant de forma automàtica als criteris establerts en els formularis existents del Pas 2. S&apos;ha de destacar que el caràcter de &lt;strong&gt;test&lt;/strong&gt; d&apos;aquest &lt;strong&gt;tràmit&lt;/strong&gt; fa que les dades que el componen no tinguin una estructura lògica en els seus diferents formularis, pantalles, annexos, pagaments, etc.&lt;br&gt;Aquest tràmit d&apos;exemple ha estat configurat des de les eines de Backoffices de SISTRA perquè les sol·licituds hagin de ser &lt;strong&gt;signades&lt;/strong&gt; prèviament al registre. D&apos;aquesta forma, si disposa d&apos;un certificat digital per a poder autenticar-se i signar digitalment la sol·licitud, el tràmit es convertirà en 100% telemàtic; pel contrari, si no en disposa d&apos;un, s&apos;haurà d&apos;autenticar amb usuari/contrasenya o anònimament i s&apos;indicarà a la finalització del tràmit que haurà de presentar el justificant signat &quot;a mà&quot; de la sol·licitud, el que farà que el tràmit quedi en un estat de &lt;strong&gt;preregistre&lt;/strong&gt;, a expenses de la seva confirmació des del mòdul ZONAPERABCK (destinat a funcionaris del registre) o des del mòdul BANTELFRONT (destinat a gestors de la CAIB).&lt;/p&gt;"/>
+        </entry>
+        <entry>
+          <key>es</key>
+          <value instruccionesEntrega="Aquí va el texto de las instrucciones de entrega" instruccionesFin="Aquí va el texto de las instrucciones de Fin" instruccionesInicio="&lt;p class=&quot;alerta&quot;&gt; El trámite que acaba de iniciar tiene un doble objetivo, por un lado el de poder probar, por parte de cualquiera persona (técnica o no), buena parte de las &lt;strong&gt;funcionalidades&lt;/strong&gt; proporcionadas por la Plataforma de Tramitación y Notificación Telemática de la CAIB (&lt;strong&gt;SISTRA&lt;/strong&gt;); y por otro lado, presentarse como una herramienta ágil y rápida de aprendizaje de programación de trámites telemáticos sobre SISTRA, destinada a personal técnico.&lt;br&gt;Como el resto de trámites telemáticos sobre SISTRA, éste consta de una serie de pasos comunes que se irán adaptando de forma automática a los criterios establecidos en los formularios existentes en el Paso 2. Hay que destacar que el carácter de &lt;strong&gt;test&lt;/strong&gt; de este &lt;strong&gt;trámite&lt;/strong&gt; hace que los datos que lo componen no sigan una estructura lógica en sus diferentes formularios, pantallas, anexos, pagos, etc.&lt;br&gt;Este trámite de ejemplo ha sido configurado desde las herramientas de Backoffices de SISTRA para que las solicitudes tengan que ser &lt;strong&gt;firmadas&lt;/strong&gt; previo al envío. De esta manera, si dispone de un certificado digital para poder autenticarse y  firmar digitalmente la solicitud, el trámite se convertirá en 100% telemático; por el contrario, si no dispone de certificado digital, habrá de autenticarse con usuario/password y se indicará al final del trámite que deberá presentar el justificante firmado &amp;#8220;a mano&amp;#8221; de la solicitud, lo que hará que el trámite quede en un estado de &lt;strong&gt;preregistro&lt;/strong&gt;, a expensas de su confirmación desde el módulo ZONAPERBACK (destinado a funcionarios del registro) o desde el módulo BANTELFRONT (destinado a gestor de la CAIB).&lt;/p&gt;"/>
+        </entry>
+        <entry>
+          <key>en</key>
+          <value instruccionesEntrega="Here is the text of the delivery instructions" instruccionesFin="Here is the text of the end instructions" instruccionesInicio="&lt;p class=&quot;alerta&quot;&gt; This procedure has been made to reflect all the &lt;strong&gt;features&lt;/strong&gt; platform have been implemented in all &lt;strong&gt;online services&lt;/strong&gt;.&lt;/p&gt;"/>
+        </entry>
+      </traducciones>
+    </especificaciones>
+    <mensajes/>
+    <niveles>
+      <nivele nivelAutenticacion="A">
+        <especificaciones activo="S" campoRteNif="c2VzaW9uID0gUExVR0lOX0ZPUk1VTEFSSU9TLmdldERhdG9Gb3JtdWxhcmlvKCdGT1JNMScsMSwnREFUT1MuTlVNRVJPJyk7DQpzZXNpb247" campoRteNom="bm9tYnJlUmVwcmVzZW50YW50ZSA9IFBMVUdJTl9GT1JNVUxBUklPUy5nZXREYXRvRm9ybXVsYXJpbygnRk9STTEnLDEsJ0RBVE9TLk5PTUJSRUNPTVBMRVRPJyk7DQpub21icmVSZXByZXNlbnRhbnRlOw==" diasPersistencia="10" diasPrerregistro="10" flujoTramitacion="N" habilitarNotificacionTelematica="X">
+          <datosJustificante/>
+          <traducciones/>
+        </especificaciones>
+      </nivele>
+      <nivele nivelAutenticacion="C">
+        <especificaciones activo="S" campoRdoNif="c2VzaW9uID0gUExVR0lOX0ZPUk1VTEFSSU9TLmdldERhdG9Gb3JtdWxhcmlvKCdGT1JNMScsMSwnREFUT1MuTlVNRVJPJyk7DQpzZXNpb247" campoRdoNom="bm9tYnJlUmVwcmVzZW50YW50ZSA9IFBMVUdJTl9GT1JNVUxBUklPUy5nZXREYXRvRm9ybXVsYXJpbygnRk9STTEnLDEsJ0RBVE9TLk5PTUJSRUNPTVBMRVRPJyk7DQpub21icmVSZXByZXNlbnRhbnRlOw0K" campoRteNif="c2VzaW9uID0gUExVR0lOX0ZPUk1VTEFSSU9TLmdldERhdG9Gb3JtdWxhcmlvKCdGT1JNMScsMSwnREFUT1MuTlVNRVJPJyk7DQpzZXNpb247" campoRteNom="bm9tYnJlUmVwcmVzZW50YW50ZSA9IFBMVUdJTl9GT1JNVUxBUklPUy5nZXREYXRvRm9ybXVsYXJpbygnRk9STTEnLDEsJ0RBVE9TLk5PTUJSRUNPTVBMRVRPJyk7DQpub21icmVSZXByZXNlbnRhbnRlOw==" diasPersistencia="10" diasPrerregistro="10" flujoTramitacion="S" habilitarNotificacionTelematica="X">
+          <datosJustificante/>
+          <traducciones/>
+        </especificaciones>
+      </nivele>
+      <nivele nivelAutenticacion="U">
+        <especificaciones activo="S" campoCodigoPais="cmVzdWx0ID0gImVzIjsNCnJlc3VsdDs=" campoRdoNif="c2VzaW9uID0gUExVR0lOX0ZPUk1VTEFSSU9TLmdldERhdG9Gb3JtdWxhcmlvKCdGT1JNMScsMSwnREFUT1MuTlVNRVJPJyk7DQpzZXNpb247" campoRdoNom="bm9tYnJlUmVwcmVzZW50YW50ZSA9IFBMVUdJTl9GT1JNVUxBUklPUy5nZXREYXRvRm9ybXVsYXJpbygnRk9STTEnLDEsJ0RBVE9TLk5PTUJSRUNPTVBMRVRPJyk7DQpub21icmVSZXByZXNlbnRhbnRlOw==" campoRteNif="c2VzaW9uID0gUExVR0lOX0ZPUk1VTEFSSU9TLmdldERhdG9Gb3JtdWxhcmlvKCdGT1JNMScsMSwnREFUT1MuTlVNRVJPJyk7DQpzZXNpb247" campoRteNom="bm9tYnJlUmVwcmVzZW50YW50ZSA9IFBMVUdJTl9GT1JNVUxBUklPUy5nZXREYXRvRm9ybXVsYXJpbygnRk9STTEnLDEsJ0RBVE9TLk5PTUJSRUNPTVBMRVRPJyk7DQpub21icmVSZXByZXNlbnRhbnRlOw==" diasPersistencia="10" diasPrerregistro="10" flujoTramitacion="S" habilitarNotificacionTelematica="X">
+          <datosJustificante/>
+          <traducciones/>
+        </especificaciones>
+      </nivele>
+    </niveles>
+  </TramiteVersion>
