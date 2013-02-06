@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="es.caib.mobtratel.model.MensajeSms" table="MOB_MSSMS">
+        <cache usage="read-write"/>
+        <id name="codigo" unsaved-value="null" column="MSS_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">MOB_SEQMSS</param>
+          </generator>
+      	</id>
+
+        <property name="destinatarios" not-null="true" type="binary" column="MSS_TELFS"/>
+        <property name="destinatariosEnviados" type="binary" column="MSS_TELFSE"/>
+        <property name="mensaje" not-null="true" type="binary" column="MSS_MENSAJ"/>
+        <property name="estado" not-null="true" column="MSS_ESTADO"/>
+        <property name="error" length="500" column="MSS_ERROR"/>
+        <property name="numeroDestinatarios" type="integer" column="MSS_NDEST"/>
+        <property name="numeroDestinatariosEnviados" type="integer" column="MSS_NDESTE"/>
+        <property name="fechaInicioEnvio" column="MSS_INIENV"/>
+        <property name="fechaFinEnvio" column="MSS_FINENV"/>
+        
+        <property name="verificarEnvio" column="MSS_ACKENV"/>
+        <property name="estadoVerificarEnvio" column="MSS_ACKEST"/>
+        <property name="errorVerificarEnvio" column="MSS_ACKERR"/>
+        
+        <many-to-one name="envio" column="MSS_IDENV" not-null="true" foreign-key="MOB_MSSENV_FK"/>
+        
+
+    </class>
+
+</hibernate-mapping>

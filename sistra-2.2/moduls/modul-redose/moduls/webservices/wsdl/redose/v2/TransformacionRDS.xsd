@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:es:caib:redose:ws:v2:model:TransformacionRDS" targetNamespace="urn:es:caib:redose:ws:v2:model:TransformacionRDS" version="1.0">
+	<xs:complexType name="TransformacionRDS">
+		<xs:sequence>
+			<xs:element name="convertToPDF" type="xs:boolean"/>
+			<xs:element name="barcodePDF" type="xs:boolean"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>	

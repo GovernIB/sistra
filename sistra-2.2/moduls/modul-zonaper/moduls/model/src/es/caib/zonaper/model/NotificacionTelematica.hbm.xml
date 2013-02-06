@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class  name="es.caib.zonaper.model.NotificacionTelematica" table="ZPE_NOTTEL">
+	 <cache usage="read-write"/>
+     <id name="codigo" unsaved-value="null" column="NOT_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">ZPE_SEQNOT</param>
+          </generator>
+      </id>
+                                     
+    <property name="usuarioSeycon"  column="NOT_USER"/>
+    <property name="numeroRegistro"  column="NOT_NUMREG" length="50" not-null="true"/>
+    <property name="fechaRegistro"  column="NOT_FECHA" not-null="true" />    
+    <property name="codigoRdsAsiento"  column="NOT_CODASI"  not-null="true" length="20"/>
+    <property name="claveRdsAsiento"   column="NOT_CLAASI"  not-null="true" length="10"/>    
+    <property name="codigoRdsJustificante"  column="NOT_CODJUS"  not-null="true" length="20"/>
+    <property name="claveRdsJustificante"   column="NOT_CLAJUS"  not-null="true" length="10"/>
+    <property name="codigoRdsAviso"  column="NOT_CODAVI"  not-null="true" length="20"/>
+    <property name="claveRdsAviso"   column="NOT_CLAAVI"  not-null="true" length="10"/>
+    <property name="tituloAviso"   column="NOT_TITAVI"  not-null="true" length="10"/>
+    <property name="codigoRdsOficio"  column="NOT_CODOFR"  not-null="true" length="20"/>
+    <property name="claveRdsOficio"   column="NOT_CLAOFR"  not-null="true" length="10"/>
+    <property name="idioma"  column="NOT_IDIOMA" not-null="true" length="2"/>
+    <property name="nifRepresentante"  column="NOT_NIFRTE" not-null="true"/>
+    <property name="nombreRepresentante"  column="NOT_NOMRTE" not-null="true"/>
+    <property name="nifRepresentado"  column="NOT_NIFRDO"/>
+    <property name="nombreRepresentado"  column="NOT_NOMRDO"/>
+	<property name="codigoRdsAcuse"  column="NOT_CODACU"  length="20"/>
+    <property name="claveRdsAcuse"   column="NOT_CLAACU"  length="10"/>
+    <property name="fechaAcuse"  column="NOT_FECACU"/>
+    <property name="firmarAcuse"  column="NOT_FIRACU" not-null="true"/>
+    <property name="gestorSeycon"  column="NOT_SEYGES" not-null="true"/>
+    <property name="fechaFinPlazo"  column="NOT_FECPLZ"/>
+    <property name="rechazada"  column="NOT_RECHAZ" not-null="true"/>
+   
+    <property name="tramiteSubsanacionDescripcion"  column="NOT_SUBDES"/>
+    <property name="tramiteSubsanacionIdentificador"  column="NOT_SUBIDE"/>
+    <property name="tramiteSubsanacionVersion"  column="NOT_SUBVER"/>
+    <property name="tramiteSubsanacionParametros"  column="NOT_SUBPAR"/>
+    
+    <property name="identificadorPersistencia" column="NOT_IDEPER" not-null="true"/>
+    <property name="accesiblePorClave" column="NOT_ACCCLA" not-null="true"/>    
+    
+    <property name="tipoFirmaAcuse" column="NOT_TIPFIR" not-null="false"/>
+    
+	<set name="documentos" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="DNO_ORDEN">
+		<cache usage="read-write"/>
+	    <key column="DNO_CODNOT"/>
+        <one-to-many class="es.caib.zonaper.model.DocumentoNotificacionTelematica"/>
+	</set>
+	
+</class>
+</hibernate-mapping>

@@ -1,0 +1,3 @@
+<form-bean
+    name="initForm"
+    type="es.caib.redose.front.form.InitForm"/>

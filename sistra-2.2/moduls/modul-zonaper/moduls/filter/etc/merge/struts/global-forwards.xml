@@ -1,0 +1,6 @@
+<global-forwards>
+
+    <forward name="fail" path="/index.jsp" />
+    <forward name="main" path="/index.jsp" />
+
+</global-forwards>

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="org.ibit.rol.form.model.Grupos" table="RFR_GRUPOS">
+        <cache usage="read-write"/>
+        <id name="codigo" length="50" column="GRP_CODIGO" >
+            <generator class="assigned"/>
+        </id>
+        <property name="nombre" not-null="true" column="GRP_NOMBRE"/>
+        <property name="descripcion" not-null="true" column="GRP_DESCP"/>
+
+    </class>
+
+</hibernate-mapping>
+
