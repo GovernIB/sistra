@@ -53,6 +53,8 @@ var jst_reloading = false
 var jst_reload_frame = "reLoader"
 var jst_reload_script = "tree_jsTree_reload.php"
 var jst_reloading_status = "loading tree nodes ..."
+	
+var jst_diferenciarHojas = false;
 
 function absTop(nd){
 	return nd.offsetParent ? nd.offsetTop + absTop(nd.offsetParent) : nd.offsetTop
