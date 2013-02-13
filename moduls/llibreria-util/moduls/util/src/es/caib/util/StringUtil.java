@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
@@ -26,6 +27,7 @@ public class StringUtil {
 	public final static String FORMATO_TIMESTAMP = "dd/MM/yyyy HH:mm:ss";
 	public final static String FORMATO_REGISTRO = "yyyyMMddHHmmss";
 	public final static String LANG_CA = "ca";
+	public final static String PATRON_IDENTIFICADOR = "[A-Z0-9\\-_]{1,20}";
 	
 	
 	// --- FUNCIONES PARA OBTENER MODELO/VERSION PARA IDENTIFICADOR CON FORMATO "MODELO-VERSION"
@@ -601,6 +603,15 @@ public class StringUtil {
 	    	}else{
 	    		throw new Exception("Formato " + formato + " no soportado");
 	    	}
+	    }
+	    
+	    /**
+	     * Valida formato identificador usado en la aplicacion: carácteres alfanumericos y con los caracteres especiales: - _
+	     * @param identificador
+	     * @return true si cumple formato
+	     */
+	    public static boolean validarFormatoIdentificador(String identificador){
+	    	return  StringUtils.isNotBlank(identificador) && Pattern.matches(PATRON_IDENTIFICADOR, identificador);
 	    }
 	    
 }
