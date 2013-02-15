@@ -123,5 +123,3 @@
 		</tr>
 	</logic:present>
 </logic:notEmpty>
-
-	
