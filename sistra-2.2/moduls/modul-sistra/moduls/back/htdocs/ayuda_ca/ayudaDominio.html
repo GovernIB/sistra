@@ -9,7 +9,12 @@
   </tr>
   <tr> 
     <td height="30">Tipus</td>
-    <td>Indica com es resol el domini: EJB, Web Service o consulta directe a BBDD. Si és local no fa falta indicar la url, només és necesari en cas de ser remot.</td>
+    <td>
+    Indica com es resol el domini: EJB, Webservice, consulta directa a BBDD o consulta a font de dades.<br/> 
+	Un domini de tipus EJB o Webservice accedir&agrave; a una aplicació que compleixi amb el api d'integraci&oacute;. <br/>
+	Un domini de tipus SQL consistir&agrave; a executar una consulta SQL sobre un datasource especificat.<br/> 
+	Un domini de tipus font de dades consistir&agrave; a accedir a un conjunt de dades mantingudes pel gestor a trav&eacute;s de Bantelfront.<br/> 
+    </td>
   </tr>
    <tr> 
     <td height="30">Cacheable</td>
@@ -18,16 +23,25 @@
   <tr> 
     <td height="30">URL</td>
     <td>Seg&uacute;n el tipus de domini indicar&agrave;:<br>
-      - url del servidor on esta ubicat el EJB (en cas de ser remot)<br>
-      - url del Web Service<br>
-      - path JNDI de Datasource<br/>
+      -  Domini EJB: url del servidor on esta ubicat el EJB (en cas de ser remot)<br>
+      - Dominio Webservice: url del Web Service<br>
+      - Dominio SQL: path JNDI de Datasource<br/>
+      - Dominio Font de dades: no aplica<br/>
       Al formar la url es pot emprar la variable @backoffice.url@, que ser&agrave; reemplaçada segons el valor indicat en els fitxers de configuraci&oacute;.
       </td>      
   </tr>
   <tr> 
     <td height="30">SQL</td>
-    <td>Per a tipus SQL s'indicar&agrave; la sentència SQL que resol el domini. 
-      Els par&agrave;metres de la consulta ser&agrave;n especificats amb &quot;?&quot;.</td>
+    <td>Per a tipus SQL s'indicar&agrave; la sentència SQL que resol el domini. Els par&agrave;metres de la consulta ser&agrave;n especificats amb &quot;?&quot;.<br/>
+    Per a tipus Font de dades s'indicar&aacute; una sentencia pseudoSQL per consultar una font de dades. El format d'aquesta consulta ha de ser: <br/>
+    <i> 
+SELECT campo (, campo)* <br/>
+FROM fuenteDatos <br/>
+WHERE expresion ( [AND | OR] expresion ] )*<br/> 
+ORDER BY campo<br/>
+</i> 
+on expresion: <i>campo [= | LIKE] ?</i><br/> 
+    </td>
   </tr>
   <tr> 
     <td height="30">Nombre JNDI EJB</td>
@@ -39,7 +53,7 @@
   </tr>
   <tr> 
     <td>Autenticaci&oacute; expl&iacute;cita </td>
-    <td>Indica si per a accedir al EJB/Webservice s'ha de realitzar una autenticaci&oacute; 
+    <td>Per a tipus EJB/Webservice indica si s'ha de realitzar una autenticaci&oacute; 
       expl&iacute;cita (acc&eacute;s amb usuari diferent al que ha iniciat la 
       sessi&oacute; de tramitaci&oacute;): 
       <ul>
@@ -51,7 +65,7 @@
   </tr>
   <tr> 
     <td>Usuari/Password <br></td>
-    <td>En cas de requerir una autenticaci&oacute; expl&iacute;cita s'indica l'usuari/password 
+    <td>Per a tipus EJB/Webservice en cas de requerir una autenticaci&oacute; expl&iacute;cita s'indica l'usuari/password 
       amb la qual es realitza </td>
   </tr>
 </table>
