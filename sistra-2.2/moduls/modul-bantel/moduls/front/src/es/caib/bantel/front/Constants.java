@@ -70,4 +70,7 @@ public class Constants implements Serializable {
 		
 	public static String GESTIONEXPEDIENTES_OBLIGATORIOAVISOS = "es.caib.bantel.front.gestionExpedientes.obligatorioAvisos";
 	
+	
+	public static String FUENTE_DATOS_PAGINA_ACTUAL = "es.caib.bantel.front.fuenteDatos.paginaActual";
+	public static int FUENTE_DATOS_PAGINA_TAMANYO = 10;
 }

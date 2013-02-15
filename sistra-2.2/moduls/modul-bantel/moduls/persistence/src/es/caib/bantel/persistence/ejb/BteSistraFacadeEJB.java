@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -20,6 +21,7 @@ import javax.naming.InitialContext;
 
 import org.apache.commons.lang.StringUtils;
 
+import es.caib.bantel.model.ConsultaFuenteDatos;
 import es.caib.bantel.model.DocumentoBandeja;
 import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.model.TramiteBandeja;
@@ -29,10 +31,12 @@ import es.caib.bantel.modelInterfaz.DatosDocumentoTelematico;
 import es.caib.bantel.modelInterfaz.DocumentoBTE;
 import es.caib.bantel.modelInterfaz.ExcepcionBTE;
 import es.caib.bantel.modelInterfaz.TramiteBTE;
+import es.caib.bantel.modelInterfaz.ValoresFuenteDatosBTE;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
-import es.caib.bantel.persistence.delegate.TramiteBandejaDelegate;
 import es.caib.bantel.persistence.delegate.ProcedimientoDelegate;
+import es.caib.bantel.persistence.delegate.TramiteBandejaDelegate;
 import es.caib.bantel.persistence.util.BteStringUtil;
+import es.caib.bantel.persistence.util.FuenteDatosUtil;
 import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
@@ -149,8 +153,37 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
     	}
     }
     
+    /**
+     * Consulta de fuente de datos para dominios.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public ValoresFuenteDatosBTE consultaFuenteDatos(String consultaFuenteDatos, List parametros)  throws ExcepcionBTE{
+    	try{
+	    	// Verificamos estructura fuente de datos
+    		ConsultaFuenteDatos cfd = FuenteDatosUtil.decodificarConsulta(consultaFuenteDatos);
+	    	
+    		// Recuperamos filas
+    		List filas = DelegateUtil.getFuenteDatosDelegate().realizarConsulta(cfd.getIdFuenteDatos(), cfd.getFiltros(), parametros);
+	    	
+    		// Ordenamos filas
+    		FuenteDatosUtil.ordenarFilas(filas, cfd.getCampoOrden());
+    		
+    		// Creamos valores fuente de datos
+    		ValoresFuenteDatosBTE vfd = FuenteDatosUtil.generarValores(filas, cfd.getCampos());
+    		
+	    	return vfd;
+	    	
+    	}catch (Exception ex){
+    		throw new ExcepcionBTE("No se ha podido consultar fuente de datos: " + ex.getMessage(),ex);
+    	}
+    }
     
-    // ------------------------ Funciones utilidad ----------------------------------------------------------------
+    
+   
+
+	// ------------------------ Funciones utilidad ----------------------------------------------------------------
     /**
      * Crea entrada en Bandeja
      */

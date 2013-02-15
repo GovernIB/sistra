@@ -53,4 +53,8 @@ public final class DelegateUtil {
         return (AvisosBandejaDelegate) DelegateFactory.getDelegate(AvisosBandejaDelegate.class);
     }
     
+    public static FuenteDatosDelegate getFuenteDatosDelegate() {
+        return (FuenteDatosDelegate) DelegateFactory.getDelegate(FuenteDatosDelegate.class);
+    }
+    
 }

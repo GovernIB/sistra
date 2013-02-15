@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class  name="es.caib.bantel.model.FuenteDatos" table="BTE_FUEDAT">
+	<cache usage="read-write"/>
+    
+    <id name="codigo" unsaved-value="null" column="FUE_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">BTE_SEQFUE</param>
+          </generator>
+      </id>	
+	
+	<property name="identificador" column="FUE_IDENT" not-null="true" length="20"/>
+	<property name="descripcion"  column="FUE_DESC" not-null="true" length="500"/>
+   
+    <many-to-one name="procedimiento" column="FUE_IDEPRO" not-null="true"/>       
+  	
+  	<set name="campos" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="CFU_CODIGO">
+	    <key column="CFU_CODFUE"/>
+        <one-to-many class="es.caib.bantel.model.CampoFuenteDatos"/>
+	</set> 
+	
+	<set name="filas" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="FIF_CODIGO">
+	    <key column="FIF_CODFUE"/>
+        <one-to-many class="es.caib.bantel.model.FilaFuenteDatos"/>
+	</set>  
+  	
+</class>
+</hibernate-mapping>
