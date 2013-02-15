@@ -211,29 +211,23 @@ public class CuadroMandoDetalleHandler extends
 					descripcion = (String) mResultModelo.get("descripcion");
 					organismo = (String) mResultModelo.get("organismo");
 				}
-				
-				// Tramites sin organismo asociado, creamos uno ficticio
-				if (organismo.equals("")) {
-					descripcion = "OTROS";
-					organismo = "SIN ORGANISMO";
+				if(!organismo.equals(""))
+				{	
+					DetalleOrganismo do_organismo = result.getOrganismo(organismo);
+					if(do_organismo == null)
+					{
+						do_organismo = new DetalleOrganismo();
+						do_organismo.setTitulo(organismo);
+						result.add(do_organismo);
+					}
+					Number total = (Number) mResult.get("total");
+					LineaDetalle ld = new LineaDetalle();
+					ld.setTitulo(descripcion);
+					ld.setTotal(String.valueOf(total.intValue()));
+					do_organismo.addLineaDetalle(ld);
+					do_organismo.increment(total.intValue());
+					result.increment(total.intValue());
 				}
-				
-					
-				DetalleOrganismo do_organismo = result.getOrganismo(organismo);
-				if(do_organismo == null)
-				{
-					do_organismo = new DetalleOrganismo();
-					do_organismo.setTitulo(organismo);
-					result.add(do_organismo);
-				}
-				Number total = (Number) mResult.get("total");
-				LineaDetalle ld = new LineaDetalle();
-				ld.setTitulo(descripcion);
-				ld.setTotal(String.valueOf(total.intValue()));
-				do_organismo.addLineaDetalle(ld);
-				do_organismo.increment(total.intValue());
-				result.increment(total.intValue());
-			
 			}
 
 			return result;
@@ -652,50 +646,44 @@ public class CuadroMandoDetalleHandler extends
 					descripcion = (String) mResultModelo.get("descripcion");
 					organismo = (String) mResultModelo.get("organismo");
 				}
-				
-				// Tramites sin organismo asociado, creamos uno ficticio
-				if (organismo.equals("")) {
-					descripcion = "OTROS";
-					organismo = "SIN ORGANISMO";
-				}
-				
+				if(!organismo.equals(""))
+				{	
+					TablaCruzadaOrganismo tco = result.getOrganismo(organismo);
+					if(tco == null)
+					{
+						totales = initTotales(modo);
+						tco = new TablaCruzadaOrganismo();
+						tco.setDescripcion(organismo);
+						tco.setTotales(totales);
+						result.addOrganismo(tco);
+					}
+					TablaCruzadaModelo tcm = tco.getModelo(descripcion);
+					if(tcm == null)
+					{
+						totales = initTotales(modo);
+						tcm = new TablaCruzadaModelo();
+						tcm.setDescripcion(descripcion);
+						tcm.setTotales(totales);
+						tco.addModelo(tcm);
+						
+					}
+					String key = (String) mResult.get("key");
+					if(AuditConstants.ANUAL.equals(modo))
+					{
+						key = Util.getDescripcionMes(getIdioma(), key);
+					}
+					Number total = (Number) mResult.get("total");
 					
-				TablaCruzadaOrganismo tco = result.getOrganismo(organismo);
-				if(tco == null)
-				{
-					totales = initTotales(modo);
-					tco = new TablaCruzadaOrganismo();
-					tco.setDescripcion(organismo);
-					tco.setTotales(totales);
-					result.addOrganismo(tco);
+					{
+						int i_total = total.intValue();
+						tcm.increment(key,i_total);
+						tcm.increment(i_total);
+						tco.increment(key,i_total);
+						tco.increment(i_total);
+						result.increment(i_total);
+						result.increment(key,i_total);
+					}
 				}
-				TablaCruzadaModelo tcm = tco.getModelo(descripcion);
-				if(tcm == null)
-				{
-					totales = initTotales(modo);
-					tcm = new TablaCruzadaModelo();
-					tcm.setDescripcion(descripcion);
-					tcm.setTotales(totales);
-					tco.addModelo(tcm);
-					
-				}
-				String key = (String) mResult.get("key");
-				if(AuditConstants.ANUAL.equals(modo))
-				{
-					key = Util.getDescripcionMes(getIdioma(), key);
-				}
-				Number total = (Number) mResult.get("total");
-				
-				{
-					int i_total = total.intValue();
-					tcm.increment(key,i_total);
-					tcm.increment(i_total);
-					tco.increment(key,i_total);
-					tco.increment(i_total);
-					result.increment(i_total);
-					result.increment(key,i_total);
-				}
-			
 			}
 
 			return result;
