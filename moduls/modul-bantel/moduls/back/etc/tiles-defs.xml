@@ -82,4 +82,40 @@
     </definition>
      <definition name=".ficheroExportacion.lista" path="/ficheroExportacion/lista.jsp"
      	 controllerClass="es.caib.bantel.back.action.ficheroExportacion.ListaFicheroExportacionController"/>
+     	 
+     <!-- ====================== fuente datos =================== --> 	 
+     <definition name=".fuenteDatos.editar" extends=".editar"
+     	controllerClass="es.caib.bantel.back.action.fuenteDatos.FuenteDatosController" >
+        <put name="title" value="fuenteDatos.title"/>
+        <put name="alta.title" value="fuenteDatos.alta"/>
+        <put name="modificacion.title" value="fuenteDatos.modificacion"/>
+        <put name="subtitle" value="fuenteDatos.subtitulo"/>
+        <put name="validateMethod" value="validateFuenteDatosForm"/>
+        <put name="form.action" value="/back/fuenteDatos/editar"/>
+        <put name="form.bean" value="fuenteDatosForm"/>
+        <put name="values.codigo" value="values.codigo" />
+        <put name="paginaValues" value="/fuenteDatos/editarValues.jsp"/>
+        <putList name="listaRelaciones">
+            <add value=".campoFuenteDatos.lista" type="definition" />
+        </putList>
+    </definition>
+     <definition name=".fuenteDatos.lista" path="/fuenteDatos/lista.jsp"
+     	 controllerClass="es.caib.bantel.back.action.fuenteDatos.ListaFuenteDatosController"/>	 
+     	 
+     <!-- ====================== campos fuente datos =================== -->
+    <definition name=".campoFuenteDatos.editar" extends=".editar">
+        <put name="title" value="campoFuenteDatos.title"/>
+        <put name="alta.title" value="campoFuenteDatos.alta"/>
+        <put name="modificacion.title" value="campoFuenteDatos.modificacion"/>
+        <put name="subtitle" value="campoFuenteDatos.subtitulo"/>
+        <put name="validateMethod" value="validateCampoFuenteDatosForm"/>
+        <put name="form.action" value="/back/campoFuenteDatos/editar"/>
+        <put name="form.bean" value="campoFuenteDatosForm"/>
+        <put name="paginaValues" value="/campoFuenteDatos/editarValues.jsp"/>       
+    </definition>
+    
+    <definition name=".campoFuenteDatos.lista" path="/campoFuenteDatos/lista.jsp" controllerClass="es.caib.bantel.back.action.campoFuenteDatos.ListaCamposFuenteDatosController">
+        <put name="id" value="" />
+    </definition> 	 
+     	 
 </tiles-definitions>

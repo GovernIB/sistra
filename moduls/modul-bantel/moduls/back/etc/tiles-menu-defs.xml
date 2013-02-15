@@ -11,6 +11,7 @@
             <add type="definition" value=".menu.tramite.listar" />
             <add type="definition" value=".menu.gestorBandeja.listar" />
             <add type="definition" value=".menu.ficheroExportacion.listar" />
+            <add type="definition" value=".menu.fuenteDatos.listar" />
         </putList>
     </definition>
 
@@ -48,4 +49,9 @@
         <put name="titulo" value="menu.ficheroExportacion.lista"/>
         <put name="link" value="/back/ficheroExportacion/lista"/>
     </definition>
+    <definition name=".menu.fuenteDatos.listar" extends=".menu.individual">
+        <put name="titulo" value="menu.fuenteDatos.lista"/>
+        <put name="link" value="/back/fuenteDatos/lista"/>
+    </definition>
+
 </tiles-definitions>

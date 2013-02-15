@@ -23,3 +23,8 @@
     path="/back/ficheroExportacion/lista"
     type="org.apache.struts.actions.ForwardAction"
     parameter=".ficheroExportacion.lista"/>
+    
+       <action
+    path="/back/fuenteDatos/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".fuenteDatos.lista"/>

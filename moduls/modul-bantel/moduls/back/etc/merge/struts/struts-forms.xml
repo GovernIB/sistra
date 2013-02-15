@@ -16,4 +16,15 @@
     className="es.caib.bantel.back.action.TraFormBeanConfig">
     <set-property property="valuesClassName" value="es.caib.bantel.model.FicheroExportacion" />
 </form-bean>
-
+<form-bean
+    name="fuenteDatosForm"
+    type="es.caib.bantel.back.form.FuenteDatosForm"
+    className="es.caib.bantel.back.action.TraFormBeanConfig">
+    <set-property property="valuesClassName" value="es.caib.bantel.model.FuenteDatos" />
+</form-bean>
+<form-bean
+    name="campoFuenteDatosForm"
+    type="es.caib.bantel.back.form.CampoFuenteDatosForm"
+    className="es.caib.bantel.back.action.TraFormBeanConfig">
+    <set-property property="valuesClassName" value="es.caib.bantel.model.CampoFuenteDatos" />
+</form-bean>
