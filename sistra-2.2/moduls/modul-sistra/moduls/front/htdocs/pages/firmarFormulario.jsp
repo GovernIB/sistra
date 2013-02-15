@@ -143,7 +143,7 @@
 			
 			<p><bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo" /></p>
 				
-			<p class="formBotonera"><input type="button" value="<bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo.boton" />" title="<bean:message key="login.certificado.instrucciones.iniciarDispositivo.boton" />" onclick="cargarCertificado();" /></p>
+			<p class="formBotonera"><input type="button" value="<bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo.boton" />" title="<bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo.boton" />" onclick="cargarCertificado();" /></p>
 			<p><bean:message key="firmarDocumento.certificadosDisponibles" /></p>
 			<p>	
 				<jsp:include page="/firma/caib/applet.jsp" flush="false"/>	

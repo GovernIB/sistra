@@ -51,7 +51,16 @@
 </tr>
 <tr>
     <td class="labelo"><bean:message key="dominio.tipo"/></td>
-    <td class="input"><table><tr><td>EJB <html:radio property="values.tipo" value="E"/></td><td>Web Service <html:radio property="values.tipo" value="W"/></td><td>SQL <html:radio property="values.tipo" value="S"/></td></tr></table></td>
+    <td class="input">
+	    <table>
+	    	<tr>
+	    		<td>EJB <html:radio property="values.tipo" value="E"/></td>
+	    		<td>Web Service <html:radio property="values.tipo" value="W"/></td>
+	    		<td>SQL <html:radio property="values.tipo" value="S"/></td>
+	    		<td><bean:message key="dominio.tipo.fuenteDatos"/> <html:radio property="values.tipo" value="F"/></td>
+	    	</tr>
+	    </table>
+	</td>
 </tr>
 <tr>
     <td class="labelo">Cacheable:</td>

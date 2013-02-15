@@ -163,6 +163,21 @@
 							</tr>
 						</logic:equal>
 				</logic:notEmpty>
+				<logic:notEmpty name="entrada" property="habilitarNotificacionTelematica">
+					<tr>
+						<th>
+							<bean:message key="detalleTramite.datosRegistro.notificacionTelematica"/>
+						</th> 
+						<td>
+							<logic:equal name="entrada" property="habilitarNotificacionTelematica" value="S">
+								<bean:message key="si"/>
+							</logic:equal>
+							<logic:equal name="entrada" property="habilitarNotificacionTelematica" value="N">
+								<bean:message key="no"/>
+							</logic:equal>												
+						</td>
+					</tr>
+				</logic:notEmpty>
 				<tr>
 					<th>
 						<bean:message key="detalleTramite.datosRegistro.presentacion"/>
