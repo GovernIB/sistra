@@ -160,7 +160,7 @@ public class AuditoriaCuadernoAction extends BaseAction
 			campos.add(cp);
 			
 			// Propiedades de un dominio tipo SQL
-			if ( Dominio.DOMINIO_SQL == dominio.getTipo() )
+			if ( Dominio.DOMINIO_SQL == dominio.getTipo() || Dominio.DOMINIO_FUENTE_DATOS == dominio.getTipo())
 			{
 				cp = new Vector();
 				cp.add(messageResources.getMessage( locale, "pdf.dominio.sql" ));
