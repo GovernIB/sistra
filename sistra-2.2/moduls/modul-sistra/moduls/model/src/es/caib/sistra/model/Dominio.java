@@ -16,6 +16,7 @@ public class Dominio  implements java.io.Serializable {
 	public final static char DOMINIO_EJB='E';
 	public final static char DOMINIO_WEBSERVICE='W';
 	public final static char DOMINIO_SQL='S';
+	public final static char DOMINIO_FUENTE_DATOS='F';
 	
 	// localizacionEJB
 	public final static char EJB_REMOTO = 'R';
