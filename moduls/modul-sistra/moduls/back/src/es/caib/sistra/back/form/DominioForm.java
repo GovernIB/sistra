@@ -48,7 +48,8 @@ public class DominioForm extends TraForm implements InitForm
         	// Debe indicarse la url en el caso de ser de tipo SQL, de tipo EJB y además remoto o de tipo webservice
         	if ( (dominio.getTipo() == Dominio.DOMINIO_EJB && dominio.getLocalizacionEJB() == Dominio.EJB_REMOTO)  ||        		
         		  dominio.getTipo() == Dominio.DOMINIO_WEBSERVICE ||
-        		  dominio.getTipo() == Dominio.DOMINIO_SQL
+        		  dominio.getTipo() == Dominio.DOMINIO_SQL ||
+        		  dominio.getTipo() == Dominio.DOMINIO_FUENTE_DATOS
         		  ){
         		if (Util.esCadenaVacia(dominio.getUrl())){
         			errors.add("values.url", new ActionError("errors.dominio.urlVacia"));
