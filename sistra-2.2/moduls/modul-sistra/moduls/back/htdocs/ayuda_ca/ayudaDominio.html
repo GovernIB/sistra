@@ -32,15 +32,17 @@
   </tr>
   <tr> 
     <td height="30">SQL</td>
-    <td>Per a tipus SQL s'indicar&agrave; la sentència SQL que resol el domini. Els par&agrave;metres de la consulta ser&agrave;n especificats amb &quot;?&quot;.<br/>
-    Per a tipus Font de dades s'indicar&aacute; una sentencia pseudoSQL per consultar una font de dades. El format d'aquesta consulta ha de ser: <br/>
+    <td>Per a tipus SQL s'indicar&agrave; la sentència SQL que resol el domini. Els par&agrave;metres de la consulta ser&agrave;n especificats amb &quot;?&quot;.<br/><br/>
+    Per a tipus Font de dades s'indicar&aacute; una sentencia pseudoSQL per consultar una font de dades. El format d'aquesta consulta ha de ser: <br/><br/>
     <i> 
 SELECT campo (, campo)* <br/>
 FROM fuenteDatos <br/>
 WHERE expresion ( [AND | OR] expresion ] )*<br/> 
 ORDER BY campo<br/>
-</i> 
-on expresion: <i>campo [= | LIKE] ?</i><br/> 
+</i>
+<br/> 
+on expresion: <i>campo [= | LIKE] ?</i><br/><br/> 
+Respecte al ORDER BY nom&eacute;s es pot indicar un camp. A m&eacute;s com tots els camps s&oacute;n de tipus cadena l'ordenaci&oacute; &eacute;s literal pel que si es vol crear un camp en la font de dades que permeti ordenar seqüencialment, millor usar lletres que nombres. 
     </td>
   </tr>
   <tr> 
