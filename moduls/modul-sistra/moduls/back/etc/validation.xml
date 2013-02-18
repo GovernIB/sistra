@@ -45,10 +45,7 @@
    			<field property="values.tipo" depends="required" page="1">
                 <arg0 key="dominio.tipo" />
             </field>
-  			<field property="values.url" depends="required" page="1">
-                <arg0 key="dominio.url" />
-            </field>
-            <field property="values.sql" depends="maxlength" page="1">
+  			<field property="values.sql" depends="maxlength" page="1">
                 <arg0 key="dominio.sql" />
                 <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
                 <var>

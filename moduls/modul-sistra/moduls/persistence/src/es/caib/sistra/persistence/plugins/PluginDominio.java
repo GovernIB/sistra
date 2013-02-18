@@ -192,7 +192,7 @@ public class PluginDominio {
 	
 	private ValoresDominio resuelveDominioFuenteDatos(Dominio dominio,
 			List parametros, String url) throws Exception {
-		ValoresFuenteDatosBTE vfd = DelegateBTEUtil.getBteSistraDelegate().consultaFuenteDatos(url, parametros);
+		ValoresFuenteDatosBTE vfd = DelegateBTEUtil.getBteSistraDelegate().consultaFuenteDatos(dominio.getSql(), parametros);
 		ValoresDominio vd = new ValoresDominio();
 		BeanUtils.copyProperties(vd, vfd);
 		return vd;		

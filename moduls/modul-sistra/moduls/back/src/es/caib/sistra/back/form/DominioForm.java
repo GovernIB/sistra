@@ -40,16 +40,16 @@ public class DominioForm extends TraForm implements InitForm
         		errors.add("values.identificador", new ActionError("errors.dominio.duplicado", dominio.getIdentificador() ));
         	}        	
         	
-        	// Si el dominio es de tipo SQL se debe especificar la SQL
-        	if (dominio.getTipo() == Dominio.DOMINIO_SQL && Util.esCadenaVacia(dominio.getSql())){
+        	// Si el dominio es de tipo SQL / Fuente datos se debe especificar la SQL
+        	if ( (dominio.getTipo() == Dominio.DOMINIO_SQL || dominio.getTipo() == Dominio.DOMINIO_FUENTE_DATOS) 
+        			&& Util.esCadenaVacia(dominio.getSql())){
         		errors.add("values.sql", new ActionError("errors.dominio.sqlVacia"));
         	}
         	
         	// Debe indicarse la url en el caso de ser de tipo SQL, de tipo EJB y además remoto o de tipo webservice
         	if ( (dominio.getTipo() == Dominio.DOMINIO_EJB && dominio.getLocalizacionEJB() == Dominio.EJB_REMOTO)  ||        		
         		  dominio.getTipo() == Dominio.DOMINIO_WEBSERVICE ||
-        		  dominio.getTipo() == Dominio.DOMINIO_SQL ||
-        		  dominio.getTipo() == Dominio.DOMINIO_FUENTE_DATOS
+        		  dominio.getTipo() == Dominio.DOMINIO_SQL
         		  ){
         		if (Util.esCadenaVacia(dominio.getUrl())){
         			errors.add("values.url", new ActionError("errors.dominio.urlVacia"));
