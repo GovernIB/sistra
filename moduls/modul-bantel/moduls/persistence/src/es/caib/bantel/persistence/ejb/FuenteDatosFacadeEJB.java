@@ -471,7 +471,7 @@ public abstract class FuenteDatosFacadeEJB extends HibernateEJB {
     	 Session session = getSession();
          try {       	
         	 
-        	 String select = "SELECT v.filaFuenteDatos FROM ValorFuenteDatos v "; 
+        	 String select = "SELECT distinct v.filaFuenteDatos FROM ValorFuenteDatos v "; 
         	 
         	 String where = "WHERE v.filaFuenteDatos.fuenteDatos.identificador = :idFuenteDatos ";
         	 if (filtros != null && filtros.size() > 0) {
