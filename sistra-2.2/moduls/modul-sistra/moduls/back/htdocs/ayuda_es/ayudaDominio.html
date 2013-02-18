@@ -33,20 +33,30 @@
   <tr> 
     <td height="30">SQL</td>
     <td>
-    	Para tipo SQL se indicar&aacute; la sentencia SQL que resuelve el dominio. Los par&aacute;metros de la consulta ser&aacute;n especificados con &quot;?&quot;. <br/>
-    	<br/>
-    	Para tipo Fuente de datos se indicar&aacute; una sentencia pseudoSQL para consultar una fuente de datos. El formato de esta consulta debe ser el siguiente: <br/><br/>
-    	<i>
-    		SELECT campo (, campo)* <br/>
-			FROM fuenteDatos <br/>
-			WHERE expresion  ( [AND | OR] expresion ] )*  <br/>       
-			ORDER BY campo <br/>
-		</i>
-		<br/>		
-		donde expresion:  <i>campo [= | LIKE] ?</i>	 <br/>
-		<br/>
-		Respecto al ORDER BY s&oacute;lo se puede indicar un campo. Adem&aacute;s como todos los campos son de tipo cadena la ordenaci&oacute;n es literal por lo que si se quiere 
-crear un campo en la fuente de datos que permita ordenar secuencialmente, mejor usar letras que n&uacute;meros.   	
+    	<ul>
+    		<li>
+    			Para tipo SQL se indicar&aacute; la sentencia SQL que resuelve el dominio. Los par&aacute;metros de la consulta ser&aacute;n especificados con &quot;?&quot;. <br/>
+    		</li>
+    		<br/>
+    		<li>
+    			Para tipo Fuente de datos se indicar&aacute; una sentencia pseudoSQL para consultar una fuente de datos. El formato de esta consulta debe ser el siguiente: <br/><br/>
+    			<i>
+    				SELECT campo (, campo)* <br/>
+					FROM fuenteDatos <br/>
+					WHERE expresion  ( [AND | OR] expresion ] )*  <br/>       
+					ORDER BY campo <br/>
+				</i>
+				<br/>		
+				donde expresion:  <i>campo [= | LIKE] ?</i>, siendo &quot;?&quot; un par&aacute;metro. <br/>
+				<br/>
+				Respecto a las comparaciones en el WHERE ser&aacute;n ignorecase ( = y LIKE ). 
+				<br/>
+				Respecto al LIKE se realizar&aacute; autom&aacute;ticamente la comparaci&oacute;n: %parametro% .
+				<br/>
+				Respecto al ORDER BY s&oacute;lo se puede indicar un campo. Adem&aacute;s como todos los campos son de tipo cadena la ordenaci&oacute;n es literal por lo que si se quiere 
+				crear un campo en la fuente de datos que permita ordenar secuencialmente, mejor usar letras que n&uacute;meros.
+			</li>
+		</ul>   	
     </td>
   </tr>
   <tr> 

@@ -480,7 +480,14 @@ public abstract class FuenteDatosFacadeEJB extends HibernateEJB {
         			 FiltroConsultaFuenteDatos ffd = (FiltroConsultaFuenteDatos) filtros.get(numFiltro);
         			 where += (numFiltro == 0?"":ffd.getConector());
         			 where += " (upper(v.campoFuenteDatos.identificador) = :campoFiltro" + numFiltro;
-        			 where += " AND v.valor " + ffd.getOperador() + " :valorFiltro" + numFiltro + ") ";
+        			 
+        			 if (FiltroConsultaFuenteDatos.LIKE.equals(ffd.getOperador())) {
+        				 where += " AND upper(v.valor) LIKE '%' || upper(:valorFiltro" + numFiltro + ") || '%' ) ";
+        			 } else {
+        				 where += " AND upper(v.valor) = upper(:valorFiltro" + numFiltro + ") ) ";
+        			 }
+        			 
+        			 
         		 }
         		 where += " ) ";
         	 }
