@@ -17,6 +17,10 @@ public class Util
 	private static String[] meses_ca = {"Gen", "Feb", "Mar", "Abr", "Mag", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"};
 	private static String[] mesesEntero_es = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
 	private static String[] mesesEntero_ca = {"Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"};
+	
+	private static String tramitesNoExisteSistra_es = "No definidos en Sistra";
+	private static String tramitesNoExisteSistra_ca = "No definits en Sistra";
+	
 	public static String[] splitString( String str )
     {
     	int iSize = str.length();
@@ -285,5 +289,13 @@ public class Util
 			}
 
 		}
+		
+		public static String getDescripcionTramitesNoExistentesSistra(String idioma){
+			if ("ca".equals(idioma)) 
+			  return tramitesNoExisteSistra_ca;
+			else 	  
+			  return tramitesNoExisteSistra_es;
+			  						
+		 }
 
 }

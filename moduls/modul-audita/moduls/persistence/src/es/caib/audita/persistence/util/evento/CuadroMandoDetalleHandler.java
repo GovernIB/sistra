@@ -214,8 +214,8 @@ public class CuadroMandoDetalleHandler extends
 				
 				// Tramites sin organismo asociado, creamos uno ficticio
 				if (organismo.equals("")) {
-					descripcion = "OTROS";
-					organismo = "SIN ORGANISMO";
+					descripcion = Util.getDescripcionTramitesNoExistentesSistra(idioma);
+					organismo = Util.getDescripcionTramitesNoExistentesSistra(idioma);
 				}
 				
 					
@@ -655,8 +655,8 @@ public class CuadroMandoDetalleHandler extends
 				
 				// Tramites sin organismo asociado, creamos uno ficticio
 				if (organismo.equals("")) {
-					descripcion = "OTROS";
-					organismo = "SIN ORGANISMO";
+					descripcion = Util.getDescripcionTramitesNoExistentesSistra(idioma);
+					organismo = Util.getDescripcionTramitesNoExistentesSistra(idioma);
 				}
 				
 					
