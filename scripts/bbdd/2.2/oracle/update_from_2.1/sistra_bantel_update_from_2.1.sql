@@ -106,7 +106,7 @@ comment on table BTE_VALCFU is
 comment on column BTE_VALCFU.VCF_CODIGO is
 'Codigo interno';
 
-comment on column BTE_VALCFU.VCF_CODFIFU is
+comment on column BTE_VALCFU.VCF_CODFIF is
 'Codigo interno fila fuente datos';
 
 comment on column BTE_VALCFU.VCF_CODCFU is
@@ -123,7 +123,7 @@ create index BTE_VCFCFU_I on BTE_VALCFU (
 );
 
 create index BTE_VCFFIF_I on BTE_VALCFU (
-   VCF_CODFIFU ASC
+   VCF_CODFIF ASC
 );
 
 alter table BTE_CAMFUE
@@ -131,7 +131,7 @@ alter table BTE_CAMFUE
       references BTE_FUEDAT (FUE_CODIGO);
 
 alter table BTE_FILFUE
-   add constraint BTE_FIFUFUE_FK foreign key (FIF_CODFUE)
+   add constraint BTE_FIFFUE_FK foreign key (FIF_CODFUE)
       references BTE_FUEDAT (FUE_CODIGO);
 
 alter table BTE_FUEDAT
@@ -143,6 +143,6 @@ alter table BTE_VALCFU
       references BTE_CAMFUE (CFU_CODIGO);
 
 alter table BTE_VALCFU
-   add constraint BTE_VCFFIFU_FK foreign key (VCF_CODFIFU)
+   add constraint BTE_VCFFIF_FK foreign key (VCF_CODFIF)
       references BTE_FILFUE (FIF_CODIGO);
 
