@@ -113,8 +113,9 @@ public class FuenteDatosUtil {
 				}
 				
 				// Campo
-				int indiceIgual = exp.indexOf(" =");
+				int indiceIgual = exp.indexOf("=");
 				int indiceLike = exp.indexOf(" LIKE");
+								
 				exp = exp.substring(0, Math.max(indiceIgual,indiceLike)).trim();
 				ffd.setCampo(exp);
 				
