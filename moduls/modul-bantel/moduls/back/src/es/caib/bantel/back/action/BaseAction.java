@@ -182,6 +182,7 @@ public abstract class BaseAction extends Action {
 				
 		pForm.setValues(fuenteDatos);
 		pForm.setIdentificadorOld(fuenteDatos.getIdentificador());
+		pForm.setIdProcedimiento(fuenteDatos.getProcedimiento().getIdentificador());
 		
 		request.setAttribute("idFuenteDatos", idFuenteDatos);
 		
