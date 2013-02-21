@@ -1224,7 +1224,7 @@ create table ZPE_RPAGOS  (
    PAG_IDIOMA           VARCHAR2(2),
    PAG_FINAL            VARCHAR2(1),
    PAG_IDETRA           VARCHAR2(50),
-   PAG_MODTRA           VARCHAR2(10),
+   PAG_MODTRA           VARCHAR2(20),
    PAG_VERTRA           NUMBER(2)
 );
 
