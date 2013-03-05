@@ -15,12 +15,14 @@ import org.apache.struts.util.MessageResources;
 import es.caib.sistra.front.Constants;
 import es.caib.sistra.front.form.AnexarDocumentoForm;
 import es.caib.sistra.front.util.InstanciaManager;
+import es.caib.sistra.model.MensajeFront;
+import es.caib.sistra.model.RespuestaFront;
 import es.caib.sistra.persistence.delegate.InstanciaDelegate;
 
 /**
  * @struts.action
  *  name="uploadDocumentoForm"
- *  path="/protected/uploadDocumento"
+ *  path="/protected/uploadAnexo"
  *  scope="request"
  *  validate="false"
  *
@@ -30,7 +32,7 @@ import es.caib.sistra.persistence.delegate.InstanciaDelegate;
  * @struts.action-forward
  *  name="fail" path="/fail.do"
  */
-public class UploadDocumentoAction extends BaseAction
+public class UploadAnexoAction extends BaseAction
 {
 	
 	public ActionForward executeTask(ActionMapping mapping, ActionForm form, HttpServletRequest request,
@@ -39,38 +41,44 @@ public class UploadDocumentoAction extends BaseAction
 		String funcion;
 		try{
 			AnexarDocumentoForm formulario = ( AnexarDocumentoForm ) form;
+			
+			funcion = "parent.fileUploaded('"+formulario.getID_INSTANCIA()+"', '" + formulario.getIdentificador() + "', " + formulario.getInstancia() + ")";
+			
+			// Recuperamos instancia tramitacion
 			InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( formulario.getID_INSTANCIA(), request );
-			funcion = "parent.fileUploaded('"+formulario.getID_INSTANCIA()+"')";
+
 			FormFile file = formulario.getDatos();
-			if ( file != null )
-			{
-				// Obtenemos extensión fichero
-				String fileName = file.getFileName();
-				String fileExtension = "";
-				int firstIndex = fileName.lastIndexOf( Constants.POINT_EXTENSION );
-				if ( firstIndex != -1 )
-				{
-					fileExtension = fileName.substring( firstIndex + 1 );
-				}
-				
-				// Validamos tamaño máximo			
-				if (formulario.getTamanyoMaximo() < (file.getFileSize() / 1024) ) {
-					throw new Exception("anexarDocumentos.anexar.tamanyoNoValido");
-				}
-				
-				// Validamos extensiones					
-				if ((formulario.getExtensiones().toLowerCase() + ",").indexOf(fileExtension.toLowerCase() + ",") == -1){
-					throw new Exception("anexarDocumentos.anexar.extensionNoValida");
-				}
-	
-				request.getSession().setAttribute(formulario.getID_INSTANCIA(),file.getFileData());
-				request.getSession().setAttribute(formulario.getID_INSTANCIA()+"Nombre",fileName);
-				request.getSession().setAttribute(formulario.getID_INSTANCIA()+"Extension",fileExtension);
-				
-			}else{
-	//			// PARA DOCUMENTOS PRESENCIALES NO HACE FALTA FICHERO
-				request.getSession().setAttribute(formulario.getID_INSTANCIA(),null);
+			if ( file == null) {
+				throw new Exception("anexarDocumentos.anexar.errorUpdate");
 			}
+			
+			// Obtenemos extensión fichero
+			String fileName = file.getFileName();
+			String fileExtension = "";
+			int firstIndex = fileName.lastIndexOf( Constants.POINT_EXTENSION );
+			if ( firstIndex != -1 )
+			{
+				fileExtension = fileName.substring( firstIndex + 1 );
+			}
+			
+			// Validamos tamaño máximo			
+			if (formulario.getTamanyoMaximo() < (file.getFileSize() / 1024) ) {
+				throw new Exception("anexarDocumentos.anexar.tamanyoNoValido");
+			}
+			
+			// Validamos extensiones					
+			if ((formulario.getExtensiones().toLowerCase() + ",").indexOf(fileExtension.toLowerCase() + ",") == -1){
+				throw new Exception("anexarDocumentos.anexar.extensionNoValida");
+			}
+
+			// Uploadeamos documento
+			RespuestaFront resp = delegate.uploadAnexo(formulario.getIdentificador(), formulario.getInstancia(), file.getFileData(),
+					fileName, fileExtension, formulario.getDescPersonalizada());
+			if (resp.getMensaje() != null && resp.getMensaje().getTipo() == MensajeFront.TIPO_ERROR) {
+				throw new Exception("anexarDocumentos.anexar.errorUpdate");
+			}
+			
+			
 		}catch(Exception ex){
 			MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));
 			if(ex.getMessage() != null && ex.getMessage().startsWith("anexarDocumentos.anexar.")){
@@ -93,20 +101,7 @@ public class UploadDocumentoAction extends BaseAction
 		pw.println("</body>");
 		pw.println("</html>");
 		return null;
-		
-		/*
-		 * PARA FOTOCOPIAS NO HACE FALTA FICHERO
-		else
-		{
-//		 	TODO : ¿Qué pasa con el multiidioma?
-			this.setErrorMessage( request, "Anexe un fichero" );
-		}
-		*/
-		
-		/*
-		this.setRespuestaFront( request, delegate.pasoActual() );
-		return success;
-		*/ 
+				
     }
 
 }

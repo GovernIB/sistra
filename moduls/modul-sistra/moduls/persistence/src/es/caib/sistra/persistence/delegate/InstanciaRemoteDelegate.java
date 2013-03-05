@@ -189,18 +189,39 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
         }
 	}
 
-	public RespuestaFront anexarDocumento(String identificador, int instancia,
-			byte[] datosDocumento, String nomFichero, String extension,
-			String descPersonalizada,FirmaIntf firma, boolean firmaDelegada) throws DelegateException
+	public RespuestaFront anexarDocumento(String identificador,int instancia,String descPersonalizada, FirmaIntf firma, boolean firmaDelegada) throws DelegateException
 	{
         try 
         {
-        	return getRemote().anexarDocumento( identificador, instancia, datosDocumento, nomFichero, extension, descPersonalizada,firma, firmaDelegada );
+        	return getRemote().anexarDocumento( identificador, instancia, descPersonalizada, firma, firmaDelegada );
         } catch (RemoteException e) 
         {
             throw new DelegateException(e);
         }
 	}
+	
+	public RespuestaFront uploadAnexo(String identificador,int instancia,byte[] datosDocumento,String nomFichero,String extension,String descPersonalizada) throws DelegateException
+	{
+        try 
+        {
+        	return getRemote().uploadAnexo(identificador, instancia, datosDocumento, nomFichero, extension, descPersonalizada);
+        } catch (RemoteException e) 
+        {
+            throw new DelegateException(e);
+        }
+	}
+	
+	public RespuestaFront downloadAnexo(String identificador,int instancia) throws DelegateException
+	{
+        try 
+        {
+        	return getRemote().downloadAnexo( identificador, instancia);
+        } catch (RemoteException e) 
+        {
+            throw new DelegateException(e);
+        }
+	}
+	
 	
 	
 	public RespuestaFront irAPago(String identificador, int instancia, String urlRetorno, String urlMantenimientoSesion) throws DelegateException
