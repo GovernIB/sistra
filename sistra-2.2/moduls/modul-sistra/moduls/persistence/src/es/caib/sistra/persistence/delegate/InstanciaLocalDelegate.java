@@ -178,21 +178,39 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
         }
 	}
 
-	public RespuestaFront anexarDocumento(String identificador, int instancia,
-			byte[] datosDocumento, String nomFichero, String extension,
-			String descPersonalizada,FirmaIntf firma, boolean firmaDelegada) throws DelegateException
+	public RespuestaFront anexarDocumento(String identificador,int instancia, String descPersonalizada, FirmaIntf firma, boolean firmaDelegada) throws DelegateException
 	{
         try 
         {
-        	return local.anexarDocumento( identificador, instancia, datosDocumento, nomFichero, extension, descPersonalizada, firma, firmaDelegada );
+        	return local.anexarDocumento( identificador, instancia, descPersonalizada, firma, firmaDelegada );
         } catch (EJBException e) 
         {
             throw new DelegateException(e);
         }
 	}
 	
+	public RespuestaFront uploadAnexo(String identificador,int instancia,byte[] datosDocumento,String nomFichero,String extension,String descPersonalizada) throws DelegateException
+	{
+        try 
+        {
+        	return local.uploadAnexo(identificador, instancia, datosDocumento, nomFichero, extension, descPersonalizada);
+        } catch (EJBException e) 
+        {
+            throw new DelegateException(e);
+        }
+	}
 	
-
+	public RespuestaFront downloadAnexo(String identificador,int instancia) throws DelegateException
+	{
+        try 
+        {
+        	return local.downloadAnexo( identificador, instancia);
+        } catch (EJBException e) 
+        {
+            throw new DelegateException(e);
+        }
+	}
+	
 	public RespuestaFront irAPago(String identificador, int instancia, String urlRetorno, String urlMantenimientoSesion) throws DelegateException
 	{
 		try 

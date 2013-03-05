@@ -47,7 +47,8 @@ WHERE expresion ( [AND | OR] expresion ] )*<br/>
 ORDER BY campo<br/>
 </i>
 <br/> 
-on expresion: <i>campo [= | LIKE] ?</i>, on &quot;?&quot; &eacute;s un parametre. <br/><br/> 
+on expresion: <i>campo [= | LIKE] ?</i>, on &quot;?&quot; &eacute;s un parametre. <br/><br/>
+Les part&iacute;cules de la sent&egrave;ncia pseudoSQL (SELECT, FROM, WHERE, LIKE, AND, OR, ORDER BY) han d'estar en maj&uacute;scules.<br/>  
 Respecte a las comparancions  en el WHERE seran ignorecase ( = y LIKE ). <br/>
 Respecte al LIKE es realitzar&agrave; autom&agrave;ticament la comparació: %parametre% . <br/>
 Respecte al ORDER BY nom&eacute;s es pot indicar un camp. A m&eacute;s com tots els camps s&oacute;n de tipus cadena l'ordenaci&oacute; &eacute;s literal pel que si es vol crear un camp en la font de dades que permeti ordenar seqüencialment, millor usar lletres que nombres.

@@ -35,6 +35,7 @@ import es.caib.audita.persistence.delegate.DelegateAUDUtil;
 import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
+import es.caib.redose.modelInterfaz.TransformacionRDS;
 import es.caib.redose.modelInterfaz.UsoRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
@@ -197,6 +198,9 @@ public class TramiteProcessorEJB implements SessionBean {
 	
 	// Indica si son obligatorios los avisos para las notificaciones
 	private boolean avisosObligatoriosNotif = false;
+	
+	// Upload temporal de documentos en paso anexar
+	private Map uploadAnexos = new HashMap();
 	
 	public TramiteProcessorEJB() {
 		super();				
@@ -1973,7 +1977,9 @@ public class TramiteProcessorEJB implements SessionBean {
     		return resFront;
     	}    	
     }
-            
+    
+    
+    
     /**
      * 
      * Anexar documento
@@ -1986,17 +1992,16 @@ public class TramiteProcessorEJB implements SessionBean {
      * @param nomFichero Nombre del fichero
      * @param extension Extension del fichero 
      * @param descPersonalizada	Descripción personalizada (para documentos genéricos)  
-     * @param descPersonalizada	Descripción personalizada (para documentos genéricos)
-     * @param FirmaIntf firma del documento
-     * @param boolean Firma delegada, indica que el documento debera firmarse por delegado de la entidad a traves de la bandeja de firma
      * @return
      */
-    public RespuestaFront anexarDocumento(String identificador,int instancia,byte[] datosDocumento,String nomFichero,String extension,String descPersonalizada,FirmaIntf firma, boolean firmaDelegada) {
-    	
-    	boolean conversion = false;
-    	boolean nuevoGenerico = false;
-    	
+    public RespuestaFront uploadAnexo(String identificador,int instancia,byte[] datosDocumento,String nomFichero,String extension,String descPersonalizada) {
+		
     	try{	    	
+    		
+    		// Obtenemos estado persistencia documento
+	    	String idAnexo = identificador + "-" + instancia;
+	    	
+    
     		// Comprobamos que estamos en el paso de anexar
     		PasoTramitacion pasoRellenar = (PasoTramitacion) pasosTramitacion.get(pasoActual);
     		if (pasoRellenar.getTipoPaso() != PasoTramitacion.PASO_ANEXAR){
@@ -2006,103 +2011,214 @@ public class TramiteProcessorEJB implements SessionBean {
     		// Actualizamos tramite info
     		this.actualizarTramiteInfo();
     		
-    		// Delegate del RDS
-    		RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
-    		
-	    	// Obtenemos configuracion anexo
+    		// Obtenemos configuracion anexo
 	    	Documento doc = obtenerDocumentoAnexo(identificador);
 	    	DocumentoNivel docNivel = doc.getDocumentoNivel(datosSesion.getNivelAutenticacion());
 	    		    	
-	    	// En caso de que haya que presentarlo telemáticamente comprobamos que exista documento y  
-	    	// que cumpla las restricciones de extensión, tamaño y firma
-	    	if ( doc.getAnexoPresentarTelematicamente() == 'S' ){
-	    		// Documento con datos
-	    		 if ((datosDocumento == null || datosDocumento.length <= 0 || StringUtils.isEmpty(nomFichero))){	    		
-	    			MensajeFront mens = new MensajeFront();
-	    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
-	    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ANEXODATOSNULOS));
-	    	    	mens.setMensajeExcepcion("El fichero anexado no contiene datos");
-	    	    	return generarRespuestaFront(mens,null); 	    			 
-	    		 }
-	    		// Extensión	    		 
-	    		if ((doc.getAnexoExtensiones().toLowerCase() + ",").indexOf(extension.toLowerCase() + ",") == -1){
-	    			MensajeFront mens = new MensajeFront();
-	    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
-	    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ANEXOEXTENSIONNOPERMITIDA));
-	    	    	mens.setMensajeExcepcion("El fichero anexado no tiene extensión válida: " + extension + " (Permitidas: " + doc.getAnexoExtensiones() + ")");
-	    	    	return generarRespuestaFront(mens,null); 	    			 
-	    		}	
-	    		
-	    		// Tamaño
-	    		if (doc.getAnexoTamanyoMax().intValue() < (datosDocumento.length / 1024) ) {
-	    			MensajeFront mens = new MensajeFront();
-	    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
-	    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ANEXOTAMANYONOPERMITIDO));
-	    	    	mens.setMensajeExcepcion("El fichero anexado excede el tamaño permitido (" + doc.getAnexoTamanyoMax().intValue() + "): " + (datosDocumento.length / 1024));
-	    	    	return generarRespuestaFront(mens,null); 	    			 
-	    		}	
-	    		
-	    		// Firma	    		
-	    		if (docNivel.getFirmar() == 'S')
-	    		{
-	    			// Comprobamos si hay que realizar la firma delegada a través del buzon de firma
-	    			if (firmaDelegada){
-	    				// Solo se podra realizar firma delegada si la entidad tiene habilitada la delegacion
-	    				if (this.datosSesion.getNivelAutenticacion() == ConstantesLogin.LOGIN_ANONIMO
-	    						|| !this.datosSesion.getPersonaPAD().isHabilitarDelegacion()){
-	    					throw new ProcessorException("No puede indicarse firma delegada si la entidad no admite delegacion",MensajeFront.MENSAJE_ERRORDESCONOCIDO);
-	    				}	    					    				
-	    			}else{
-		    			// Verificamos que se haya firmado
-		    			if ( firma == null )
-		    			{
-		    				MensajeFront mens = new MensajeFront();
-			    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
-			    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ERROR_DOCUMENTO_NO_FIRMADO ));
-			    	    	mens.setMensajeExcepcion("No se ha firmado el documento" );
-			    	    	return generarRespuestaFront(mens,null);	    			
-			    	    }
-		    			// Verificamos quien lo firma
-		    			//   (cogemos info del firmante de la primera instancia, asi nos aseguramos para los genericos ya que las nueva instancias a anexar todavia no esta en tramiteInfo)
-		    			//if ( !verificaFirmanteAdecuado( tramiteInfo.getAnexo( identificador, instancia ).getFirmante(), firma ) )
-		    			if ( !verificaFirmanteAdecuado( tramiteInfo.getAnexo( identificador, 1 ).getFirmante(), firma ) )
-			    		{
-			    			MensajeFront mens = new MensajeFront();
-			    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
-			    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ERROR_FIRMANTE_INCORRECTO ));
-			    	    	mens.setMensajeExcepcion( "Firmante incorrecto" );
-			    	    	return generarRespuestaFront(mens,null);
-			    		}
-	    			}
-	    		}else{
-	    			// Comprobamos si hay que convertir documento a PDF
-	    			// SOLO EXTENSIONES: DOC,DOCX y ODT
-	    			if (doc.getAnexoConversionPDF() == 'S' &&	    				
-	    				(("doc,docx,odt,").indexOf(extension.toLowerCase() + ",") != -1)){
-	    				try{
-	    					conversion = true;
-	    					datosDocumento = rds.convertirFicheroAPDF(datosDocumento,extension);
-	    					nomFichero = nomFichero.substring(0,nomFichero.length() - extension.length()) + "pdf";
-	    					extension="pdf";
-	    				}catch(Exception ex){
-	    					MensajeFront mens = new MensajeFront();
-	    	    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
-	    	    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ANEXOERRORCONVERSION));
-	    	    	    	mens.setMensajeExcepcion("Error al convertir a PDF fichero con extension: " + extension + ": " +  ex.getMessage());
-	    	    	    	return generarRespuestaFront(mens,null); 
-	    				}
-	    			}	    			
-	    		}
+	    	// Comprobamos que se deba anexar telematicamente
+	    	if ( doc.getAnexoPresentarTelematicamente() != 'S' ){
+	    		throw new Exception("El documento " + identificador + " no debe anexarse telematicamente");
 	    	}
 	    	
-	    	// Obtenemos estado persistencia documento
-	    	String ls_id = identificador + "-" + instancia;
-	    	DocumentoPersistentePAD docPad = (DocumentoPersistentePAD) tramitePersistentePAD.getDocumentos().get(ls_id);
+	    	// Comprobamos que exista documento y que cumpla las restricciones de extensión y tamaño
+	    	// 		- Documento con datos
+    		 if ((datosDocumento == null || datosDocumento.length <= 0 || StringUtils.isEmpty(nomFichero))){	    		
+    			MensajeFront mens = new MensajeFront();
+    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
+    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ANEXODATOSNULOS));
+    	    	mens.setMensajeExcepcion("El fichero anexado no contiene datos");
+    	    	return generarRespuestaFront(mens,null); 	    			 
+    		 }
+    		// 		- Extensión	    		 
+    		if ((doc.getAnexoExtensiones().toLowerCase() + ",").indexOf(extension.toLowerCase() + ",") == -1){
+    			MensajeFront mens = new MensajeFront();
+    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
+    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ANEXOEXTENSIONNOPERMITIDA));
+    	    	mens.setMensajeExcepcion("El fichero anexado no tiene extensión válida: " + extension + " (Permitidas: " + doc.getAnexoExtensiones() + ")");
+    	    	return generarRespuestaFront(mens,null); 	    			 
+    		}	
+    		
+    		// 		- Tamaño
+    		if (doc.getAnexoTamanyoMax().intValue() < (datosDocumento.length / 1024) ) {
+    			MensajeFront mens = new MensajeFront();
+    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
+    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ANEXOTAMANYONOPERMITIDO));
+    	    	mens.setMensajeExcepcion("El fichero anexado excede el tamaño permitido (" + doc.getAnexoTamanyoMax().intValue() + "): " + (datosDocumento.length / 1024));
+    	    	return generarRespuestaFront(mens,null); 	    			 
+    		}	
+	    		
 	    	
-	    	// En caso de no existir en la zona de persistencia comprobamos si es genérico
-	    	// y si es correcto creamos documento persistente	    	    
+	    	
+	    	// Insertamos en el RDS
+    		RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
+	    	ReferenciaRDS refRds;	    
+	    	DocumentoRDS docRds = new DocumentoRDS();
+    		docRds.setModelo(doc.getModelo());
+    		docRds.setVersion(docNivel.getVersion());  		
+    		docRds.setDatosFichero(datosDocumento);
+    		if (doc.getGenerico() == 'S'){
+    			docRds.setTitulo(descPersonalizada);	    			
+    		}else{
+    			docRds.setTitulo(((TraDocumento) doc.getTraduccion()).getDescripcion());
+    		}
+    		docRds.setNombreFichero(nomFichero);	    		
+    		docRds.setExtensionFichero(extension);
+    		docRds.setUnidadAdministrativa(tramiteVersion.getUnidadAdministrativa().longValue());
+    		if (datosSesion.getNivelAutenticacion() != 'A'){
+    			docRds.setNif(datosSesion.getNifUsuario());
+    			docRds.setUsuarioSeycon(datosSesion.getCodigoUsuario());
+    		}
+    		docRds.setIdioma(this.datosSesion.getLocale().getLanguage());
+    		
+    		// Verificamos si se debe transformar a PDF
+    		TransformacionRDS transf = null;
+    		if (doc.getAnexoConversionPDF() == 'S' &&	    				
+    				esConvertibleAPdf(extension)){
+    			transf = new TransformacionRDS();
+    			transf.setConvertToPDF(true);
+    			transf.setBarcodePDF(true);
+    		}
+    		
+    		// Insertamos en RDS
+    		if (transf == null) {
+    			refRds = rds.insertarDocumento(docRds);
+    		} else {
+    			refRds = rds.insertarDocumento(docRds, transf);
+    		}
+    		
+    		// Cacheamos referencia en map de upload
+    		this.uploadAnexos.put(idAnexo, refRds);
+    			    	    	
+	    	// Devolvemos respuesta front
+	    	return this.generarRespuestaFront(null,null);
+	    	
+    	}catch (ProcessorException pe){
+    		logProcessorException("ProcessorException al upload anexo: " + pe.getMessage(),pe);
+    		
+    		MensajeFront mens = new MensajeFront();
+    		mens.setTipo(MensajeFront.TIPO_ERROR);
+    		mens.setMensaje(traducirMensaje(pe));
+    		mens.setMensajeExcepcion(pe.getMessage());
+    		
+    		RespuestaFront resFront = generarRespuestaFront(mens,null);
+    		this.context.setRollbackOnly();
+    		return resFront;
+    	}catch (Exception e){    	
+    		log.error(mensajeLog("Exception al upload anexo: " + e.getMessage()),e);
+    		
+    		MensajeFront mens = new MensajeFront();
+    		mens.setTipo(MensajeFront.TIPO_ERROR);
+    		mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ERRORDESCONOCIDO));
+    		mens.setMensajeExcepcion(e.getMessage());
+    		
+    		RespuestaFront resFront = generarRespuestaFront(mens,null);
+    		this.context.setRollbackOnly();
+    		return resFront;
+    	}    	
+    }
+
+	private boolean esConvertibleAPdf(String extension) {
+		return (("doc,docx,odt,").indexOf(extension.toLowerCase() + ",") != -1);
+	}
+    
+    /**
+     * 
+     * Descarga documento para poder firmarlo
+     * @ejb.interface-method    
+     * @ejb.permission role-name="${role.todos}"    
+     * 
+     * @param identificador Identificador documento
+     * @param instancia	Número de instancia
+     * @return
+     */
+    public RespuestaFront downloadAnexo(String identificador,int instancia) {
+    	try{
+    		// Obtenemos estado persistencia documento
+	    	String idAnexo = identificador + "-" + instancia;
+	    	
+    		// Comprobamos que estamos en el paso de anexar
+    		PasoTramitacion pasoRellenar = (PasoTramitacion) pasosTramitacion.get(pasoActual);
+    		if (pasoRellenar.getTipoPaso() != PasoTramitacion.PASO_ANEXAR){
+    			throw new Exception("Se ha invocado a anexar documento desde un paso distinto a anexar");
+    		}
+    		
+    		// Buscamos anexo en el map temporal
+    		ReferenciaRDS refRds = (ReferenciaRDS) this.uploadAnexos.get(idAnexo);
+    		if (refRds == null) {
+    			throw new Exception("No se ha uploadeado anexo " + idAnexo);
+    		}
+    	
+    		// Obtenemos anexo del RDS
+    		RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
+    		DocumentoRDS docRds = rds.consultarDocumento(refRds);
+    		
+	    	// Devolvemos nombre y datos del fichero
+			HashMap param = new HashMap();
+			param.put("nombrefichero",docRds.getNombreFichero());
+			param.put("datosfichero",docRds.getDatosFichero());    		
+			return this.generarRespuestaFront(null,param);
+			
+	    }catch (Exception e){    	
+			log.error(mensajeLog("Exception al download anexo"),e);
+			
+			MensajeFront mens = new MensajeFront();
+			mens.setTipo(MensajeFront.TIPO_ERROR);
+			mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ERRORDESCONOCIDO));
+			mens.setMensajeExcepcion(e.getMessage());
+			
+			RespuestaFront resFront = generarRespuestaFront(mens,null);
+			this.context.setRollbackOnly();
+			return resFront;
+		}
+    }
+    
+    /**
+     * 
+     * Anexar documento
+     * @ejb.interface-method    
+     * @ejb.permission role-name="${role.todos}"    
+     * 
+     * @param identificador Identificador documento
+     * @param instancia	Número de instancia
+     * @param descPersonalizada	Descripcion personalizada para genéricos
+     * @param FirmaIntf firma del documento
+     * @param boolean Firma delegada, indica que el documento debera firmarse por delegado de la entidad a traves de la bandeja de firma
+     * @return
+     */
+    public RespuestaFront anexarDocumento(String identificador,int instancia, String descPersonalizada, FirmaIntf firma, boolean firmaDelegada) {
+    	
+    	// byte[] datosDocumento,String nomFichero,String extension,String descPersonalizada,
+    	
+    	boolean conversionPDF = false;
+    	boolean nuevoGenerico = false;
+    	
+    	try{	    
+    		// En caso de documento telematico, sera el documento insertado
+    		DocumentoRDS docRdsNuevo = null;
+    		
+    		// Delegate del RDS
+    		RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
+    		
+    		String ls_id = identificador + "-" + instancia;
+	    	    		
+    		// Comprobamos que estamos en el paso de anexar
+    		PasoTramitacion pasoRellenar = (PasoTramitacion) pasosTramitacion.get(pasoActual);
+    		if (pasoRellenar.getTipoPaso() != PasoTramitacion.PASO_ANEXAR){
+    			throw new Exception("Se ha invocado a anexar documento desde un paso distinto a anexar");
+    		}
+    		
+    		// Actualizamos tramite info
+    		this.actualizarTramiteInfo();
+    		
+    		// Obtenemos configuracion anexo
+	    	Documento doc = obtenerDocumentoAnexo(identificador);
+	    	DocumentoNivel docNivel = doc.getDocumentoNivel(datosSesion.getNivelAutenticacion());
+	    		    	
+	    	// Obtenemos estado persistencia documento
+	    	DocumentoPersistentePAD docPad = (DocumentoPersistentePAD) tramitePersistentePAD.getDocumentos().get(ls_id);
 	    	if (docPad == null){
-	    		// Debe ser genérico
+		    	// En caso de no existir en la zona de persistencia comprobamos si es genérico
+		    	// y si es correcto creamos documento persistente	    	    
 	    		if (doc.getGenerico() != 'S'){
 	    			throw new Exception("El anexo" + doc.getIdentificador() + " no existe en la zona de persistencia y no es genérico");
 	    		}
@@ -2126,28 +2242,34 @@ public class TramiteProcessorEJB implements SessionBean {
 	    	
 	    	// Insertamos / actualizamos los documentos en el RDS
 	    	// (si no hay que presentarlo telemáticamente no es necesario)
-	    	if (doc.getAnexoPresentarTelematicamente() == 'S'){		    	
-		    	ReferenciaRDS refRds;	    
-		    	DocumentoRDS docRds = new DocumentoRDS();
-	    		docRds.setModelo(doc.getModelo());
-	    		docRds.setVersion(docNivel.getVersion());  		
-	    		docRds.setDatosFichero(datosDocumento);
-	    		if (doc.getGenerico() == 'S'){
-	    			docRds.setTitulo(descPersonalizada);	    			
-	    		}else{
-	    			docRds.setTitulo(((TraDocumento) doc.getTraduccion()).getDescripcion());
-	    		}
-	    		docRds.setNombreFichero(nomFichero);	    		
-	    		docRds.setExtensionFichero(extension);
-	    		docRds.setUnidadAdministrativa(tramiteVersion.getUnidadAdministrativa().longValue());
-	    		if (datosSesion.getNivelAutenticacion() != 'A'){
-	    			docRds.setNif(datosSesion.getNifUsuario());
-	    			docRds.setUsuarioSeycon(datosSesion.getCodigoUsuario());
-	    		}
+	    	if (doc.getAnexoPresentarTelematicamente() == 'S'){
 	    		
+	    		// Obtenemos anexo uploadeado anteriormente y lo quitamos de la cache
+	    		ReferenciaRDS refRds =  (ReferenciaRDS) this.uploadAnexos.get(ls_id);
+	    		this.uploadAnexos.remove(ls_id);
+	    		if (refRds == null) {
+	    			throw new Exception("No se ha uploadeado anexo " + ls_id);
+	    		}
+	    		docRdsNuevo = rds.consultarDocumento(refRds);
 	    		
+	    		// Actualizamos el RDS: 
+	    		// ---- Si no es la primera vez que se anexa, eliminamos anterior
+		    	if (docPad.getEstado() != DocumentoPersistentePAD.ESTADO_NORELLENADO){
+		    		UsoRDS usoOld = new UsoRDS();
+		    		usoOld.setReferenciaRDS(docPad.getRefRDS());
+		    		usoOld.setTipoUso(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE);
+		    		usoOld.setReferencia(tramitePersistentePAD.getIdPersistencia());
+		    		rds.eliminarUso(usoOld);
+		    	}
+		    	// ---- Comprobamos si hay que firmar
 	    		if (docNivel.getFirmar() == 'S'){
+	    			// Si la firma es delegada actualizamos estado documento y firmantes
 		    		if (firmaDelegada){
+		    			// Solo se podra realizar firma delegada si la entidad tiene habilitada la delegacion
+	    				if (this.datosSesion.getNivelAutenticacion() == ConstantesLogin.LOGIN_ANONIMO
+	    						|| !this.datosSesion.getPersonaPAD().isHabilitarDelegacion()){
+	    					throw new ProcessorException("No puede indicarse firma delegada si la entidad no admite delegacion",MensajeFront.MENSAJE_ERRORDESCONOCIDO);
+	    				}
 		    			// Indicamos que el documento se debe firmar mediante la bandeja de firma
 		    			docPad.setDelegacionEstado(DocumentoPersistentePAD.ESTADO_PENDIENTE_DELEGACION_FIRMA);
 		    			// Controlamos en caso de que sea una nueva instancia de generico coger los firmantes de la anterior instancia
@@ -2159,46 +2281,55 @@ public class TramiteProcessorEJB implements SessionBean {
 		    			}
 		    			docPad.setDelegacionFirmantesPendientes(docPad.getDelegacionFirmantes());
 		    		}else{
-		    			// Si se ha firmado, establecemos firma	    			
-		    			FirmaIntf [] firmas = {firma};
-		    			docRds.setFirmas(firmas);
+		    		// Si la firma no es delegada, asociamos firma al nuevo documento
+		    			// Verificamos que se haya firmado
+		    			if ( firma == null )
+		    			{
+		    				MensajeFront mens = new MensajeFront();
+			    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
+			    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ERROR_DOCUMENTO_NO_FIRMADO ));
+			    	    	mens.setMensajeExcepcion("No se ha firmado el documento" );
+			    	    	return generarRespuestaFront(mens,null);	    			
+			    	    }
+		    			// Verificamos quien lo firma
+		    			//   (cogemos info del firmante de la primera instancia, asi nos aseguramos para los genericos ya que las nueva instancias a anexar todavia no esta en tramiteInfo)
+		    			if ( !verificaFirmanteAdecuado( tramiteInfo.getAnexo( identificador, 1 ).getFirmante(), firma ) )
+			    		{
+			    			MensajeFront mens = new MensajeFront();
+			    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
+			    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ERROR_FIRMANTE_INCORRECTO ));
+			    	    	mens.setMensajeExcepcion( "Firmante incorrecto" );
+			    	    	return generarRespuestaFront(mens,null);
+			    		}
+		    			// Asociamos firma a nuevo documento
+		    			rds.asociarFirmaDocumento(docRdsNuevo.getReferenciaRDS(), firma);
+		    			// Cacheamos firma
+		    			List firmas = new ArrayList();
+				    	firmas.add(firma);
+			    		this.firmaDocumentos.put(docRdsNuevo.getReferenciaRDS().toString(),firmas);
 		    		}
 	    		}
+	    		// ----- Creamos uso de persistencia		    		
+	    		UsoRDS uso = new UsoRDS();
+	    		uso.setReferenciaRDS(docRdsNuevo.getReferenciaRDS());
+	    		uso.setTipoUso(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE);
+	    		uso.setReferencia(tramitePersistentePAD.getIdPersistencia());
+	    		rds.crearUso(uso);	
 	    		
-	    		// Establecemos idioma
-	    		docRds.setIdioma(this.datosSesion.getLocale().getLanguage());
-    		
-		    	// Actualizamos el RDS 
-	    		// ---- Si es la primera vez que se anexa creamos documento y uso en el RDS
-		    	if (docPad.getEstado() == DocumentoPersistentePAD.ESTADO_NORELLENADO){
-		    		// Creamos documento
-		    		refRds = rds.insertarDocumento(docRds);
-		    		docPad.setReferenciaRDS(refRds);
-		    		
-		    		// Creamos uso
-		    		UsoRDS uso = new UsoRDS();
-		    		uso.setReferenciaRDS(refRds);
-		    		uso.setTipoUso(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE);
-		    		uso.setReferencia(tramitePersistentePAD.getIdPersistencia());
-		    		rds.crearUso(uso);	    		    		
-		    	}else{
-		    	// ---- Si ya se ha subido con anterioridad actualizamos documento
-		    		docRds.setReferenciaRDS(docPad.getRefRDS());
-		    		rds.actualizarDocumento(docRds);
-		    	}
+	    		// Establecemos referencia en doc persistencia
+	    		docPad.setReferenciaRDS(docRdsNuevo.getReferenciaRDS());
+	    		docPad.setNombreFicheroAnexo(docRdsNuevo.getNombreFichero());	
+	    		
+	    		// Verificamos si se ha convertido a PDF
+	    		if (doc.getAnexoConversionPDF() == 'S' && docRdsNuevo.getExtensionFichero().toUpperCase().equals("PDF")) {
+	    			conversionPDF = true;
+	    		}
+	    		
 	    	}
 	    	
-	    	// Actualizamos PAD	    	
+	    	// Actualizamos PAD dando por correcto el documento	    	
 	    	docPad.setEstado(DocumentoPersistentePAD.ESTADO_CORRECTO);
-	    	docPad.setNombreFicheroAnexo(nomFichero);
 	    	actualizarPAD();    	
-	    	
-	    	// Cacheamos firma
-	    	if (docNivel.getFirmar() == 'S' && firma != null){
-	    		List firmas = new ArrayList();
-		    	firmas.add(firma);
-	    		this.firmaDocumentos.put(docPad.getRefRDS().toString(),firmas);
-	    	}
 	    	
 	    	// Actualizamos estado paso anexar documentos	    	
 	    	pasoRellenar.setCompletado(evaluarEstadoPaso(pasoActual));
@@ -2206,7 +2337,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	    	// Establecemos respuesta front
 	    	//  (Si se ha convertido el doc a PDF mostramos mensaje al usuario para que lo verifique)
 	    	MensajeFront mensFinal = null;
-	    	if (conversion){
+	    	if (conversionPDF){
 	    		mensFinal = new MensajeFront();	    		
 	    		mensFinal.setTipo(MensajeFront.TIPO_INFO);
 	    		mensFinal.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ANEXOVERIFICARCONVERSION));    	    	
