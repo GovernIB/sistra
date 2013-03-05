@@ -38,4 +38,12 @@ public interface PluginCustodiaIntf extends PluginSistraIntf{
 	 */
 	public void eliminarDocumento(String codigoDocumentoCustodia) throws Exception;
 	
+	/**
+	 * Obtiene url consulta de documento en custodia. 
+	 * @param codigoDocumentoCustodia Codigo documento custodia
+	 * @return Url de consulta (nulo si no permite)
+	 * @throws Exception
+	 */
+	public String obtenerUrlDocumento(String codigoDocumentoCustodia) throws Exception;
+	
 }
