@@ -525,7 +525,8 @@ create sequence BTE_SEQVCF;
 create table BTE_CAMFUE  (
    CFU_CODIGO           NUMBER(20)                      not null,
    CFU_CODFUE           NUMBER(20)                      not null,
-   CFU_IDENT            VARCHAR2(20)                    not null
+   CFU_IDENT            VARCHAR2(20)                    not null,
+   CFU_ESPK             VARCHAR2(1)                    default 'N' not null
 );
 
 comment on table BTE_CAMFUE is
@@ -540,6 +541,8 @@ comment on column BTE_CAMFUE.CFU_CODFUE is
 comment on column BTE_CAMFUE.CFU_IDENT is
 'Id campo';
 
+comment on column BTE_CAMFUE.CFU_ESPK is
+'Indica si el campo forma parte de la clave primaria';
 
 alter table BTE_CAMFUE
    add constraint BTE_CFU_PK primary key (CFU_CODIGO);
