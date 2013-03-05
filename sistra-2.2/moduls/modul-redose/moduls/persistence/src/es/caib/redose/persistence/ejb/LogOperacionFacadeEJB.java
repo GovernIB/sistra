@@ -165,7 +165,9 @@ public abstract class LogOperacionFacadeEJB extends HibernateEJB {
         {
         	Query query = 
         		session.createQuery( "FROM LogOperacion o ORDER BY o.fecha DESC, o.codigo DESC" );
-            Page page = new Page( query, pagina, longitudPagina );
+        	Query queryCount = 
+        		session.createQuery( "SELECT COUNT(*) FROM LogOperacion" );
+            Page page = new Page( query, pagina, longitudPagina, queryCount );
             return page;
         }
         catch( HibernateException he )

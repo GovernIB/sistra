@@ -1,12 +1,10 @@
 package es.caib.redose.model;
 
 import java.io.Serializable;
-
-import java.util.List; 
+import java.util.List;
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
-import net.sf.hibernate.ScrollableResults; 
 
 public class Page implements Serializable
 {
@@ -25,12 +23,13 @@ public class Page implements Serializable
 	 * the page number (zero-based)
 	 * @param pageSize
 	 * the number of results to display on the page
+	 * @param queryCount Query para hacer el count.
 	 */
-	 public Page(Query query, int page, int pageSize) throws HibernateException
+	 public Page(Query query, int page, int pageSize, Query queryCount) throws HibernateException
 	 {
 		 this.page = page;
 		 this.pageSize = pageSize;
-		 ScrollableResults scrollableResults = query.scroll();
+		 
 		 /*
 		 * We set the max results to one more than the specfied pageSize to
 		 * determine if any more results exist (i.e. if there is a next page
@@ -43,8 +42,8 @@ public class Page implements Serializable
 		 /*
 		  * We set the total number of results 
 		  */
-		 scrollableResults.last();
-		 totalResults = scrollableResults.getRowNumber() + 1;
+		 totalResults =  Integer.parseInt(queryCount.uniqueResult().toString());
+		 
 	 }
 
 	 public boolean isFirstPage()
