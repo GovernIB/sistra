@@ -16,6 +16,7 @@ import org.apache.struts.util.MessageResources;
 
 import es.caib.bantel.front.form.DetalleEntradaForm;
 import es.caib.bantel.front.form.DetalleTramiteForm;
+import es.caib.bantel.front.util.DocumentosUtil;
 import es.caib.bantel.model.DocumentoBandeja;
 import es.caib.bantel.model.GestorBandeja;
 import es.caib.bantel.model.Procedimiento;
@@ -65,9 +66,15 @@ public class DetalleEntradaAction extends BaseAction
 			return mapping.findForward( "fail" );		
 		}
 		Set documentosTramite = tramite.getDocumentos();
+		
+		// Recorremos documentos:
+		//	- Identificamos documento de datos propios
+		//	- Identificamos que documentos son estrucutrados para dar opción de poder descargar el xml
+		//  - Cargamos las firmas para poder mostrarlas
 		for ( Iterator it = documentosTramite.iterator(); it.hasNext(); )
 		{
 			DocumentoBandeja documento = ( DocumentoBandeja ) it.next();
+			
 			if ( documento.getIdentificador().startsWith( ConstantesAsientoXML.IDENTIFICADOR_DATOS_PROPIOS ) )
 			{
 				// Acceder al documento rds con su referencia y parsear el xml para construir la informacion
@@ -87,7 +94,7 @@ public class DetalleEntradaAction extends BaseAction
 						);
 				
 				request.setAttribute( "datosPropios", datosPropios );
-				break;
+				
 			}else{
 				// Detectamos que docs telematicos son de tipo estructurado (xml) para dar opcion a descargar el xml
 				if (documento.getRdsCodigo() != null) {
@@ -97,6 +104,10 @@ public class DetalleEntradaAction extends BaseAction
 					}
 				}
 			}
+			
+			// Cargamos firmas
+			DocumentosUtil.cargarFirmasDocumentoBandeja(documento, request);
+			
 		}
 		
 		request.setAttribute("documentosEstructurados",documentosEstructurados);

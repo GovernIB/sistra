@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.Globals;
@@ -42,7 +43,15 @@ public class ModificarValorCampoFuenteDatosAction extends Action
 			
 		}catch(Exception ex){
 			_log.error("Exception estableciendo valor campo: " + ex.getMessage(), ex);
-			error = getMessage(request, "fuenteDatos.errorDesconocido");
+			
+			String keyError = "fuenteDatos.errorDesconocido";
+			
+			// Controlamos si es una excepcion de PK
+			if (ExceptionUtils.getRootCauseMessage(ex).indexOf("PK-Exception") != -1) {
+				keyError = "fuenteDatos.errorPK";
+			}
+			
+			error = getMessage(request, keyError);
 		}
 		
 		// Convertimos a json

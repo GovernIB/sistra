@@ -91,6 +91,9 @@
 	    <module><java>lib/docx4j-2.7.1.jar</java></module>
 	    <module><java>lib/xmlgraphics-commons-1.4.jar</java></module>
 	    
+	     <!--  Exportacion CSV -->
+	    <module><java>lib/javacsv.jar</java></module>	
+	    
 	<!-- Mòdul audita -->
 		<module><java>1-audit-model.jar</java></module>    
 	    <module><ejb>1-audit-persistence.jar</ejb></module>

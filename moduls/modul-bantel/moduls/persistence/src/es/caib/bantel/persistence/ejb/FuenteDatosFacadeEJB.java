@@ -1,12 +1,19 @@
 package es.caib.bantel.persistence.ejb;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+
+import org.apache.commons.lang.StringUtils;
 
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
@@ -25,6 +32,7 @@ import es.caib.bantel.model.ValorFuenteDatos;
 import es.caib.bantel.persistence.delegate.DelegateException;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.delegate.GestorBandejaDelegate;
+import es.caib.util.CsvDocumento;
 
 /**
  * SessionBean para mantener y consultar FuenteDatosFacade
@@ -218,7 +226,7 @@ public abstract class FuenteDatosFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.admin}"
      */
-    public void altaCampoFuenteDatos(String identificadorFuenteDatos, String identificadorCampo) {
+    public void altaCampoFuenteDatos(String identificadorFuenteDatos, String identificadorCampo, String esPK) {
        
     	// Obtenemos fuente de datos y verificamos que no existe id campo
     	FuenteDatos fd = this.obtenerFuenteDatos(identificadorFuenteDatos);
@@ -262,6 +270,10 @@ public abstract class FuenteDatosFacadeEJB extends HibernateEJB {
         } finally {
             close(session);
         }
+        
+        // Verificamos constraints
+        fd = this.obtenerFuenteDatos(identificadorFuenteDatos);
+        contraintPK(fd);
 
     }
     
@@ -309,6 +321,10 @@ public abstract class FuenteDatosFacadeEJB extends HibernateEJB {
             close(session);
         }
         
+        // Verificamos constraints
+        fd = this.obtenerFuenteDatos(identificadorFuenteDatos);
+        contraintPK(fd);
+        	
     }
     
     
@@ -316,7 +332,7 @@ public abstract class FuenteDatosFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.admin}"
      */
-    public void modificarCampoFuenteDatos(String identificadorFuenteDatos, String identificadorCampoOld, String identificadorCampoNew) {
+    public void modificarCampoFuenteDatos(String identificadorFuenteDatos, String esPK, String identificadorCampoOld, String identificadorCampoNew) {
        
     	// Obtenemos fuente de datos
     	FuenteDatos fd = this.obtenerFuenteDatos(identificadorFuenteDatos);
@@ -331,20 +347,29 @@ public abstract class FuenteDatosFacadeEJB extends HibernateEJB {
      	}
     	 
     	 // Verificamos que no exista otro campo con ese codigo
-    	 if (fd.getCampoFuenteDatos(identificadorCampoNew) != null) {
+    	 if (!StringUtils.equals(identificadorCampoOld, identificadorCampoNew) && fd.getCampoFuenteDatos(identificadorCampoNew) != null) {
     		 throw new EJBException("Ya existe campo " + identificadorCampoNew);
+    	 }
+    	 
+    	 if (!"S".equals(esPK) && !"N".equals(esPK)) {
+    		 throw new EJBException("Es PK debe ser S/N");
     	 }
     	
     	// Actualizamos BBDD
     	Session session = getSession();
         try {
         	cd.setIdentificador(identificadorCampoNew);
+        	cd.setEsPK(esPK);
             session.update(cd);                    	       
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
             close(session);
         }
+        
+        // Verificamos constraints
+        fd = this.obtenerFuenteDatos(identificadorFuenteDatos);
+        contraintPK(fd);
         
     }
     
@@ -376,7 +401,11 @@ public abstract class FuenteDatosFacadeEJB extends HibernateEJB {
         } finally {
             close(session);
         }
-    	
+        
+        // Verificamos constraints
+        fd = this.obtenerFuenteDatos(identificadorFuenteDatos);
+        contraintPK(fd);
+        	
     }
     
     /**
@@ -459,6 +488,10 @@ public abstract class FuenteDatosFacadeEJB extends HibernateEJB {
             close(session);
         }
         
+        // Verificamos constraints
+        fd = this.obtenerFuenteDatos(identificadorFuenteDatos);
+        contraintPK(fd);
+        	
     }
     
 	  
@@ -552,6 +585,50 @@ public abstract class FuenteDatosFacadeEJB extends HibernateEJB {
 	    }
     }
     
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.gestor}"
+     */
+    public void importarCsv(String identificadorFuenteDatos, CsvDocumento csv) {
+    	
+    	// Obtenemos fuente de datos y verificamos que no existe id campo
+    	FuenteDatos fd = this.obtenerFuenteDatos(identificadorFuenteDatos);
+    	if (fd == null) {
+    		throw new EJBException("No existe fuente de datos " + identificadorFuenteDatos);
+    	}
+    
+    	Session session = getSession();
+			
+	    try {
+	    	// Borramos filas anteriores
+	    	fd.removeFilasFuenteDatos();
+	    	
+	    	// Insertamos nuevas filas
+	    	for (int fila = 0; fila < csv.getNumeroFilas(); fila++) {
+	    		FilaFuenteDatos ffd = fd.addFilaFuenteDatos();	    		
+				for (int columna = 0; columna < csv.getColumnas().length; columna++) {
+					String col = csv.getColumnas()[columna];
+					String valor = csv.getValor(fila, col);
+					ffd.addValorFuenteDatos(fd.getCampoFuenteDatos(col), valor);								
+				}
+			}    
+	    	
+	    	// Guardamos en BBDD
+	    	session.update(fd);
+	    	
+    	}catch (Exception he) 
+		{
+	        throw new EJBException(he);
+	    } 
+		finally 
+	    {
+	        close(session);
+	    }
+		
+		// Verificamos constraints
+        fd = this.obtenerFuenteDatos(identificadorFuenteDatos);
+        contraintPK(fd);
+    }
     
     private Procedimiento consultarProcedimiento(String procedimiento) {
 		Procedimiento proc;
@@ -565,5 +642,41 @@ public abstract class FuenteDatosFacadeEJB extends HibernateEJB {
     	}
 		return proc;
 	}
+    
+    /**
+     * Comprueba si se cumple la PK.
+     * @param fd     
+     */
+    private void contraintPK(FuenteDatos fd) {
+    	boolean res = true;
+    	Set pks = new HashSet();
+    	if (fd != null) {
+    		if (fd.getCampos() != null) {
+	    		List keys = new ArrayList();
+	    		for (Iterator it = fd.getCampos().iterator(); it.hasNext();) {
+	    			CampoFuenteDatos cd = (CampoFuenteDatos) it.next();
+	    			if ("S".equals(cd.getEsPK())) {
+	    				keys.add(cd);
+	    			}
+	    		}
+	    		if (keys.size() > 0) {
+		    		String separador = "@#-#@";
+		    		for (int i=0;i<fd.getFilas().size();i++) {
+		    			FilaFuenteDatos fila = fd.getFilaFuenteDatos(i+1);
+		    			String pk = "";
+		    			for (Iterator it = keys.iterator();it.hasNext();) {
+		    				String idCampoPK = ((CampoFuenteDatos) it.next()).getIdentificador();
+		    				pk = pk + separador + StringUtils.defaultString(fila.getValorFuenteDatos(idCampoPK));
+		    			}		    	
+		    			if (pks.contains(pk)) {
+		    				throw new EJBException("PK-Exception");		    			
+		    			} else {
+		    				pks.add(pk);
+		    			}
+		    		}
+	    		}
+    		}
+    	}    
+    }
 }
 

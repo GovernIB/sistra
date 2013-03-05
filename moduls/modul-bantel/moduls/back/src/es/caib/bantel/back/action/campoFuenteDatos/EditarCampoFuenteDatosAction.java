@@ -57,9 +57,9 @@ public class EditarCampoFuenteDatosAction extends BaseAction{
 
         if (isAlta(request) || isModificacion(request)) {
         	if (isAlta(request)) {
-        		delegate.altaCampoFuenteDatos(campoFuenteDatosForm.getIdFuenteDatos(), campoFuenteDatos.getIdentificador());
+        		delegate.altaCampoFuenteDatos(campoFuenteDatosForm.getIdFuenteDatos(), campoFuenteDatos.getIdentificador(), campoFuenteDatos.getEsPK());
         	} else {
-        		delegate.modificarCampoFuenteDatos(campoFuenteDatosForm.getIdFuenteDatos(),campoFuenteDatosForm.getIdentificadorOld(), campoFuenteDatos.getIdentificador());
+        		delegate.modificarCampoFuenteDatos(campoFuenteDatosForm.getIdFuenteDatos(), campoFuenteDatos.getEsPK(), campoFuenteDatosForm.getIdentificadorOld(), campoFuenteDatos.getIdentificador());
         	}
         	guardarCampoFuenteDatos(mapping, request, campoFuenteDatosForm.getIdFuenteDatos(), campoFuenteDatos.getIdentificador());
             request.setAttribute("reloadMenu", "true");

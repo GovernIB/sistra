@@ -275,7 +275,7 @@
 						<logic:notEmpty name="documento" property="rdsCodigo">
 							<logic:notEqual name="documento" property="identificador" value="<%=ConstantesAsientoXML.IDENTIFICADOR_DATOS_PROPIOS%>">
 									<li>
-										<html:link action="mostrarDocumento" paramId="codigo" paramName="documento" paramProperty="codigo">
+										<html:link action="mostrarDocumento" paramId="codigo" paramName="documento" paramProperty="codigo" >
 											<bean:write name="documento" property="nombre" />
 										</html:link>
 										<% if (documentosEstructurados.contains(documento.getCodigo())){ %>
@@ -283,15 +283,33 @@
 												[XML]
 											</html:link>
 										<%}%>
+										
+										<span class="pequenyo">
 										<bean:define id="codigoFirma" type="java.lang.String">
-											<bean:write name="documento" property="codigo" />
+											<bean:write name="documento" property="rdsCodigo" />
 										</bean:define>
 										<logic:notEmpty name="<%=codigoFirma %>" scope="request">
+											<br/>
+											<span class="pequenyo">
 											<bean:message key="comprobarDocumento.firmadoPor"/>
-											<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request">							
-												&nbsp;<bean:write name="firma" property="nombreApellidos"/>  										
-											</logic:iterate>			
+											<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request" type="es.caib.sistra.plugins.firma.FirmaIntf">							
+												&nbsp;
+												<a href="/bantelfront/mostrarFirmaDocumento.do?codigo=<%=documento.getRdsCodigo()%>&clave=<%=documento.getRdsClave()%>&nif=<%=firma.getNif()%>" >
+													<bean:write name="firma" property="nombreApellidos"/>  									
+												</a>	
+											</logic:iterate>
+											</span>			
 										</logic:notEmpty>
+										
+										<logic:notEmpty name="<%=\"CUST-\" + codigoFirma %>" scope="request">
+											<br/>
+											<bean:message key="comprobarDocumento.urlCustodia"/>
+											<a href="/bantelfront/mostrarDocumentoCustodia.do?codigo=<%=documento.getRdsCodigo()%>&clave=<%=documento.getRdsClave()%>" target="_blank">
+												<bean:write name="<%=\"CUST-\" + codigoFirma %>" />
+											</a>																										
+										</logic:notEmpty>
+										</span>
+										
 									</li>
 							</logic:notEqual>					
 						</logic:notEmpty>
@@ -355,4 +373,5 @@
 				<bean:message key="detalleTramite.volver"/></a>					
 			</div>
 			<!-- /tornar enrere -->
+			
 			

@@ -28,7 +28,10 @@
         <logic:iterate  id="campo" name="camposOptions" type="es.caib.bantel.model.CampoFuenteDatos">
             <tr>
                 <td class="outputd" width="70%" >
-                    <bean:write name="campo" property="identificador" />                        
+                    <bean:write name="campo" property="identificador" />  
+                    <logic:equal name="campo" property="esPK" value="S">
+                    	[PK]
+                    </logic:equal>                      
                 </td>
                 <td align="right">
                 	<bean:define id="idCampo" value="<%=campo.getFuenteDatos().getIdentificador() + "#" + campo.getIdentificador()%>" />

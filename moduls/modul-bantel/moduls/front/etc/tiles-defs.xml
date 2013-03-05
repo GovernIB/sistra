@@ -188,6 +188,13 @@
     	extends=".mainLayout">	
     	<put name="main" value="/detalleFuenteDatos.jsp"/>
    	</definition>
+   	
+   	<definition
+    	name=".importCSVFuenteDatos"
+    	extends=".mainLayout">	
+    	<put name="main" value="/importCSVFuenteDatos.jsp"/>
+   	</definition>
+   	
 	
 </tiles-definitions>
 

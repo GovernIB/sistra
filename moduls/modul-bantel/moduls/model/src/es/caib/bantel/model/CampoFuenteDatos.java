@@ -8,6 +8,7 @@ public class CampoFuenteDatos implements Serializable{
 	private Long codigo;
 	private String identificador;
 	private FuenteDatos fuenteDatos;
+	private String esPK;
 	
 	public Long getCodigo() {
 		return codigo;
@@ -26,5 +27,11 @@ public class CampoFuenteDatos implements Serializable{
 	}
 	public void setFuenteDatos(FuenteDatos fuenteDatos) {
 		this.fuenteDatos = fuenteDatos;
+	}
+	public String getEsPK() {
+		return esPK;
+	}
+	public void setEsPK(String esPK) {
+		this.esPK = esPK;
 	}	
 }

@@ -55,6 +55,7 @@ h4 { font-size:1em; }
 p { margin:1em 0; }
 p.tornarArrere { padding-top:1em; border-top:1px dashed #ffbd77; }
 p.tornarArrere a { padding-left:2em; background:url(../imgs/enllasos/tornararrere.gif) no-repeat center left #fff; }
+span.pequenyo {font-size: xx-small}
 
 /* forms */
 

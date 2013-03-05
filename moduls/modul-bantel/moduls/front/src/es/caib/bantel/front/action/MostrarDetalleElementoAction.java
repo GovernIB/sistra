@@ -4,7 +4,6 @@ package es.caib.bantel.front.action;
 import java.io.ByteArrayInputStream;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +19,7 @@ import org.apache.struts.util.MessageResources;
 
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleTramiteForm;
+import es.caib.bantel.front.util.DocumentosUtil;
 import es.caib.bantel.front.util.MensajesUtil;
 import es.caib.bantel.model.DocumentoBandeja;
 import es.caib.bantel.model.GestorBandeja;
@@ -28,20 +28,14 @@ import es.caib.bantel.model.TramiteBandeja;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.delegate.GestorBandejaDelegate;
 import es.caib.bantel.persistence.delegate.TramiteBandejaDelegate;
-import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
-import es.caib.xml.ConstantesXML;
 import es.caib.xml.datospropios.factoria.FactoriaObjetosXMLDatosPropios;
 import es.caib.xml.datospropios.factoria.ServicioDatosPropiosXML;
 import es.caib.xml.datospropios.factoria.impl.DatosPropios;
-import es.caib.xml.documentoExternoNotificacion.factoria.FactoriaObjetosXMLDocumentoExternoNotificacion;
-import es.caib.xml.documentoExternoNotificacion.factoria.ServicioDocumentoExternoNotificacionXML;
-import es.caib.xml.documentoExternoNotificacion.factoria.impl.DocumentoExternoNotificacion;
 import es.caib.xml.registro.factoria.ConstantesAsientoXML;
-import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD;
@@ -94,19 +88,19 @@ public class MostrarDetalleElementoAction extends BaseAction
 					if(tipo.equals("A") && exp.getElementos().get(Integer.parseInt(codigo)) instanceof EventoExpedientePAD) {
 						request.setAttribute("elemento",exp.getElementos().get(Integer.parseInt(codigo)));
 						EventoExpedientePAD evento = ((EventoExpedientePAD)exp.getElementos().get(Integer.parseInt(codigo)));
-						cargarFirmas(evento.getDocumentos(),request,tipo);
+						DocumentosUtil.cargarFirmasDocumentosExpedientePad(evento.getDocumentos(),request,tipo);
 						return mapping.findForward("succesAviso");
 					}else if(tipo.equals("N") && exp.getElementos().get(Integer.parseInt(codigo)) instanceof NotificacionExpedientePAD){
 						request.setAttribute("elemento",exp.getElementos().get(Integer.parseInt(codigo)));
 						NotificacionExpedientePAD notif = ((NotificacionExpedientePAD)exp.getElementos().get(Integer.parseInt(codigo)));
-						cargarFirmas(notif.getDocumentos(),request,tipo);
+						DocumentosUtil.cargarFirmasDocumentosExpedientePad(notif.getDocumentos(),request,tipo);
 						return mapping.findForward("succesNotificacion");
 					}else if(tipo.equals("T") && exp.getElementos().get(Integer.parseInt(codigo)) instanceof TramiteExpedientePAD){
 						String numeroRegistro = ((TramiteExpedientePAD)exp.getElementos().get(Integer.parseInt(codigo))).getNumeroRegistro();
-						String tipoTramite = ((TramiteExpedientePAD)exp.getElementos().get(Integer.parseInt(codigo))).getTipo()+"";
+						char tipoTramite = ((TramiteExpedientePAD)exp.getElementos().get(Integer.parseInt(codigo))).getTipo();
 						TramiteBandejaDelegate tramiteDelegate = DelegateUtil.getTramiteBandejaDelegate();
 						TramiteBandeja tramite;
-						if(tipoTramite.equals(ConstantesAsientoXML.TIPO_PREENVIO) || tipoTramite.equals(ConstantesAsientoXML.TIPO_PREREGISTRO)){
+						if(tipoTramite == ConstantesAsientoXML.TIPO_PREENVIO || tipoTramite == ConstantesAsientoXML.TIPO_PREREGISTRO){
 							tramite = tramiteDelegate.obtenerTramiteBandejaPorNumeroPreregistro( numeroRegistro );
 						}else{
 							tramite = tramiteDelegate.obtenerTramiteBandejaPorNumeroRegistro( numeroRegistro );						
@@ -144,7 +138,7 @@ public class MostrarDetalleElementoAction extends BaseAction
 									if (documentoRDS.isEstructurado()){
 										documentosEstructurados.add(documento.getCodigo());
 									}
-									cargarFirmas(documento,request);
+									DocumentosUtil.cargarFirmasDocumentoBandeja(documento,request);
 								}
 							}
 						}		
@@ -194,51 +188,5 @@ public class MostrarDetalleElementoAction extends BaseAction
 		}
     }
 	
-	private void cargarFirmas(DocumentoBandeja documento, HttpServletRequest request) throws Exception{
-		RdsDelegate rdsDeleg = DelegateRDSUtil.getRdsDelegate();
-		
-//		vamos a buscar las firmas de los documentos si existen y las meteremos en la request
-		if(documento != null && documento.getRdsCodigo() != null && documento.getRdsClave() != null){
-			ReferenciaRDS ref =  new ReferenciaRDS(documento.getRdsCodigo(),documento.getRdsClave());
-			if (ref.getCodigo() > 0){
-				String codigo = documento.getCodigo()+"";
-				DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
-				if(doc != null && doc.getFirmas() != null){
-					request.setAttribute(codigo,doc.getFirmas());
-				}
-			}
-		}
-	}
 	
-	private void cargarFirmas(List documentos, HttpServletRequest request, String tipo) throws Exception{
-		RdsDelegate rdsDeleg = DelegateRDSUtil.getRdsDelegate();
-		
-		//		vamos a buscar las firmas de los documentos si existen y las meteremos en la request
-		if(documentos != null){
-			ReferenciaRDS ref = null;
-			Long codigo = null;
-			for(int i=0;i<documentos.size();i++){
-				DocumentoExpedientePAD docTipo = (DocumentoExpedientePAD)documentos.get(i);
-				ref = new ReferenciaRDS(docTipo.getCodigoRDS(),docTipo.getClaveRDS());
-				if (ref.getCodigo() > 0){
-					codigo = docTipo.getCodigoRDS();
-					DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
-					// Cargamos firmas
-					if(doc != null && doc.getFirmas() != null){
-						request.setAttribute(codigo.toString(),doc.getFirmas());
-					}
-					// Establecemos en la request si es una referencia a un doc externo (modelo GE0013NOTIFEXT)
-					if (doc.getModelo().equals(ConstantesRDS.MODELO_NOTIFICACION_EXTERNO)) {
-						// Buscamos url
-						doc = rdsDeleg.consultarDocumento(ref, true);
-						FactoriaObjetosXMLDocumentoExternoNotificacion factoria = ServicioDocumentoExternoNotificacionXML.crearFactoriaObjetosXML();
-						factoria.setEncoding(ConstantesXML.ENCODING);
-						factoria.setIndentacion(true);
-						DocumentoExternoNotificacion documentoExternoNotificacion = factoria.crearDocumentoExternoNotificacion(new ByteArrayInputStream(doc.getDatosFichero()));
-						request.setAttribute("URL-"+docTipo.getCodigoRDS(),documentoExternoNotificacion.getUrl());
-					}
-				}
-			}
-		}
-	}
 }

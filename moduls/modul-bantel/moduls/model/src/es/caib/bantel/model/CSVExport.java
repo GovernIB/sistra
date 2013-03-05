@@ -1,13 +1,13 @@
 package es.caib.bantel.model;
 
-import java.io.ByteArrayOutputStream;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import es.caib.util.ExcelCSVPrinter;
+import es.caib.util.CsvDocumento;
+import es.caib.util.CsvUtil;
 import es.caib.util.PropertiesOrdered;
 
 /**
@@ -136,6 +136,7 @@ public class CSVExport {
 		this.propiedadesExport = propiedadesExport;
 	}
 	
+	/*
 	public byte[] toCSV() throws Exception{
 		// Generamos cabeceras con el nombre de las columnas		
 		String [] csv = new String[this.getPropiedadesExport().size()];
@@ -157,6 +158,35 @@ public class CSVExport {
 		bos.close();
 		
 		return bos.toByteArray();
+	}
+	*/
+	
+	public byte[] toCSV() throws Exception{
+		
+		CsvDocumento csvDoc = new CsvDocumento();
+		
+		// Generamos cabeceras con el nombre de las columnas		
+		String [] cabeceras = new String[this.getPropiedadesExport().size()];
+		int i=0;
+		for (Iterator it = this.getPropiedadesExport().keySet().iterator();it.hasNext();){
+			cabeceras[i] = this.getPropiedadesExport().getProperty((String) it.next());
+			i++;
+		}
+		csvDoc.setColumnas(cabeceras);
+			
+		
+		// Construimos csv
+		for (int numFila = 0; numFila < this.getData().size(); numFila ++) { 
+			String [] datosFila = (String []) this.getData().get(numFila);
+			for (int numCol = 0; numCol < cabeceras.length; numCol++) {
+				csvDoc.setValor(numFila, cabeceras[numCol], datosFila[numCol]);
+			}					
+		}
+		
+		byte[] result = CsvUtil.exportar(csvDoc);
+		
+		
+		return result;
 	}
 	
 	

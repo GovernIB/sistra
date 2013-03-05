@@ -76,6 +76,12 @@ public class FuenteDatos implements Serializable{
 		}		
 	}
 	
+	public void removeFilasFuenteDatos() {
+		if (filas != null) {
+			filas.clear();
+		}
+	}
+	
 	public CampoFuenteDatos getCampoFuenteDatos(String idCampo) {
 		CampoFuenteDatos res = null;
 		if (campos != null) {
