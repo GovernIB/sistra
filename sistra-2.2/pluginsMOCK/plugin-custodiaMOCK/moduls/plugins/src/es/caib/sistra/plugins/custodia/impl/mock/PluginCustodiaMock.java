@@ -18,4 +18,9 @@ public class PluginCustodiaMock implements PluginCustodiaIntf{
 		System.out.println("eliminado " + codigoDocumentoCustodia);
 	}
 
+	public String obtenerUrlDocumento(String codigoDocumentoCustodia)
+			throws Exception {
+		return "http://www.google.es";
+	}
+
 }

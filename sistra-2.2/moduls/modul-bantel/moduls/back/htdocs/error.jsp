@@ -6,6 +6,7 @@
 <head>
    <title>Error</title>
    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-15" />
+   <link rel="stylesheet" href='<html:rewrite page="/css/styleA.css"/>' type="text/css" />
 </head>
 <body>
     <html:errors />

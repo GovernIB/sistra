@@ -2,6 +2,14 @@ function insertarFilaFuenteDatos(id){
 	document.location = "insertarFilaFuenteDatos.do?identificador=" + id;	
 }
 
+function exportarFuenteDatos(id){
+	document.location = "exportCSVFuenteDatosAction.do?identificador=" + id;	
+}
+
+function importarFuenteDatos(id){
+	document.location = "mostrarImportCSVFuenteDatos.do?identificador=" + id;	
+}
+
 function borrarFilaFuenteDatos(id, numfila){
 	document.location = "borrarFilaFuenteDatos.do?identificador=" + id + "&numfila=" + numfila;	
 }

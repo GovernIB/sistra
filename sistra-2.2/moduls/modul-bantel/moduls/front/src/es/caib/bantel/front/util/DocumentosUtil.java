@@ -1,19 +1,26 @@
 package es.caib.bantel.front.util;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
-import es.caib.bantel.front.Constants;
-import es.caib.bantel.front.form.DetalleAvisoForm;
+import org.apache.commons.lang.StringUtils;
+
+import es.caib.bantel.model.DocumentoBandeja;
 import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.redose.modelInterfaz.TransformacionRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
+import es.caib.xml.ConstantesXML;
+import es.caib.xml.documentoExternoNotificacion.factoria.FactoriaObjetosXMLDocumentoExternoNotificacion;
+import es.caib.xml.documentoExternoNotificacion.factoria.ServicioDocumentoExternoNotificacionXML;
+import es.caib.xml.documentoExternoNotificacion.factoria.impl.DocumentoExternoNotificacion;
 import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
 
@@ -138,6 +145,66 @@ public final class DocumentosUtil {
 			}
 		}
 		return correcta;
+	}
+	
+	// Carga firmas y codigo de custodia en la request
+	public static void cargarFirmasDocumentoBandeja(DocumentoBandeja documento, HttpServletRequest request) throws Exception{
+		RdsDelegate rdsDeleg = DelegateRDSUtil.getRdsDelegate();
+		
+		//	 vamos a buscar las firmas de los documentos si existen y las meteremos en la request
+		if(documento != null && documento.getRdsCodigo() != null && documento.getRdsClave() != null){
+			ReferenciaRDS ref =  new ReferenciaRDS(documento.getRdsCodigo(),documento.getRdsClave());
+			if (ref.getCodigo() > 0){
+				String codigo = ref.getCodigo()+"";
+				DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
+				// Cargamos firma
+				if(doc != null && doc.getFirmas() != null){
+					request.setAttribute(codigo + "",doc.getFirmas());
+				}
+				// Cargamos codigo custodia
+				if (doc != null && StringUtils.isNotBlank(doc.getCodigoDocumentoCustodia()) ) {
+					request.setAttribute("CUST-" + codigo, doc.getCodigoDocumentoCustodia());
+				}
+				
+			}
+		}
+	}
+	
+	// Carga firmas, codigo de custodia y url doc externo notificacion en la request
+	public static void cargarFirmasDocumentosExpedientePad(List documentos, HttpServletRequest request, String tipo) throws Exception{
+		RdsDelegate rdsDeleg = DelegateRDSUtil.getRdsDelegate();
+		
+		//		vamos a buscar las firmas de los documentos si existen y las meteremos en la request
+		if(documentos != null){
+			ReferenciaRDS ref = null;
+			Long codigo = null;
+			for(int i=0;i<documentos.size();i++){
+				DocumentoExpedientePAD docTipo = (DocumentoExpedientePAD)documentos.get(i);
+				ref = new ReferenciaRDS(docTipo.getCodigoRDS(),docTipo.getClaveRDS());
+				if (ref.getCodigo() > 0){
+					codigo = docTipo.getCodigoRDS();
+					DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
+					// Cargamos firmas
+					if(doc != null && doc.getFirmas() != null){
+						request.setAttribute(codigo.toString(),doc.getFirmas());
+					}
+					// Cargamos codigo custodia
+					if (doc != null && StringUtils.isNotBlank(doc.getCodigoDocumentoCustodia()) ) {
+						request.setAttribute("CUST-" + codigo, doc.getCodigoDocumentoCustodia());
+					}
+					// Establecemos en la request si es una referencia a un doc externo (modelo GE0013NOTIFEXT)
+					if (doc.getModelo().equals(ConstantesRDS.MODELO_NOTIFICACION_EXTERNO)) {
+						// Buscamos url
+						doc = rdsDeleg.consultarDocumento(ref, true);
+						FactoriaObjetosXMLDocumentoExternoNotificacion factoria = ServicioDocumentoExternoNotificacionXML.crearFactoriaObjetosXML();
+						factoria.setEncoding(ConstantesXML.ENCODING);
+						factoria.setIndentacion(true);
+						DocumentoExternoNotificacion documentoExternoNotificacion = factoria.crearDocumentoExternoNotificacion(new ByteArrayInputStream(doc.getDatosFichero()));
+						request.setAttribute("URL-"+docTipo.getCodigoRDS(),documentoExternoNotificacion.getUrl());
+					}
+				}
+			}
+		}
 	}
 	
 }

@@ -27,7 +27,12 @@
 		<table cellpadding="8" cellspacing="10" id="tablaResultats">
 		<tr>
 			<logic:iterate id="campo" name="fuenteDatos" property="campos">
-				<th><bean:write name="campo" property="identificador"/></th>								
+				<th>
+					<bean:write name="campo" property="identificador"/>
+					<logic:equal name="campo" property="esPK" value="S">
+						<sup>[PK]</sup>
+					</logic:equal>
+				</th>								
 			</logic:iterate>
 			<th width="5%">&nbsp;</th>
 		</tr>				
@@ -66,7 +71,11 @@
 		</table> 
 		<p id="barraNav">
 			<input type="button" onclick='insertarFilaFuenteDatos("<%=fuenteDatos.getIdentificador()%>")'
-				value="<bean:message key="fuenteDatos.nuevaFila"/>"/>				
+				value="<bean:message key="fuenteDatos.nuevaFila"/>"/>	
+			<input type="button" onclick='exportarFuenteDatos("<%=fuenteDatos.getIdentificador()%>")'
+				value="<bean:message key="fuenteDatos.exportar"/>"/>	
+			<input type="button" onclick='importarFuenteDatos("<%=fuenteDatos.getIdentificador()%>")'
+				value="<bean:message key="fuenteDatos.importar"/>"/>								
 		</p>
 	</logic:notEmpty>
 </div>

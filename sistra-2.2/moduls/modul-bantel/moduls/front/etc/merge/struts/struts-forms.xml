@@ -53,4 +53,13 @@
 <form-bean
     name="borrarFilaFuenteDatosForm"
     type="es.caib.bantel.front.form.BorrarFilaFuenteDatosForm" />   
+<form-bean
+    name="mostrarFirmaDocumentoForm"
+    type="es.caib.bantel.front.form.MostrarFirmaDocumentoForm" />    
+<form-bean
+    name="mostrarDocumentoCustodiaForm"
+    type="es.caib.bantel.front.form.MostrarDocumentoCustodiaForm" />   
+<form-bean
+    name="importarCSVFuenteDatosForm"
+    type="es.caib.bantel.front.form.ImportarCSVFuenteDatosForm" />     
     

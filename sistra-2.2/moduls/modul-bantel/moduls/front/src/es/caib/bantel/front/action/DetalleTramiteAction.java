@@ -16,6 +16,7 @@ import org.apache.struts.util.MessageResources;
 
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleTramiteForm;
+import es.caib.bantel.front.util.DocumentosUtil;
 import es.caib.bantel.model.DocumentoBandeja;
 import es.caib.bantel.model.GestorBandeja;
 import es.caib.bantel.model.Procedimiento;
@@ -88,7 +89,7 @@ public class DetalleTramiteAction extends BaseAction
 					if (documentoRDS.isEstructurado()){
 						documentosEstructurados.add(documento.getCodigo());
 					}
-					cargarFirmas(documento,request);
+					DocumentosUtil.cargarFirmasDocumentoBandeja(documento, request);
 				}
 			}
 		}		
@@ -125,19 +126,4 @@ public class DetalleTramiteAction extends BaseAction
 		return mapping.findForward( "success" );
     }
 	
-	private void cargarFirmas(DocumentoBandeja documento, HttpServletRequest request) throws Exception{
-		RdsDelegate rdsDeleg = DelegateRDSUtil.getRdsDelegate();
-		
-//		vamos a buscar las firmas de los documentos si existen y las meteremos en la request
-		if(documento != null && documento.getRdsCodigo() != null && documento.getRdsClave() != null){
-			ReferenciaRDS ref =  new ReferenciaRDS(documento.getRdsCodigo(),documento.getRdsClave());
-			if (ref.getCodigo() > 0){
-				String codigo = documento.getCodigo()+"";
-				DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
-				if(doc != null && doc.getFirmas() != null){
-					request.setAttribute(codigo,doc.getFirmas());
-				}
-			}
-		}
-	}
 }

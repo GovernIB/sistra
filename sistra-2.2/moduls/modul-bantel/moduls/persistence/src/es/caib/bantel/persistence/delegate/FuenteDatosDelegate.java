@@ -11,6 +11,7 @@ import es.caib.bantel.model.FuenteDatos;
 import es.caib.bantel.model.Page;
 import es.caib.bantel.persistence.intf.FuenteDatosFacade;
 import es.caib.bantel.persistence.util.FuenteDatosFacadeUtil;
+import es.caib.util.CsvDocumento;
 
 /**
  * Business delegate para operar con FuenteDatos.
@@ -70,9 +71,9 @@ public class FuenteDatosDelegate implements StatelessDelegate {
 	        }
 		 }
 	 
-	 public void altaCampoFuenteDatos(String identificadorFuenteDatos, String identificadorCampo) throws DelegateException {
+	 public void altaCampoFuenteDatos(String identificadorFuenteDatos, String identificadorCampo, String esPK) throws DelegateException {
 		 try {
-	            getFacade().altaCampoFuenteDatos(identificadorFuenteDatos, identificadorCampo);
+	            getFacade().altaCampoFuenteDatos(identificadorFuenteDatos, identificadorCampo, esPK);
 	        } catch (Exception e) {
 	            throw new DelegateException(e);
 	        }
@@ -113,9 +114,9 @@ public class FuenteDatosDelegate implements StatelessDelegate {
 	        }
 		 }  
 	 
-	 public void modificarCampoFuenteDatos(String identificadorFuenteDatos, String identificadorCampoOld, String identificadorCampoNew)  throws DelegateException {
+	 public void modificarCampoFuenteDatos(String identificadorFuenteDatos, String esPK, String identificadorCampoOld, String identificadorCampoNew)  throws DelegateException {
 		 try {
-	            getFacade().modificarCampoFuenteDatos(identificadorFuenteDatos, identificadorCampoOld, identificadorCampoNew);
+	            getFacade().modificarCampoFuenteDatos(identificadorFuenteDatos, esPK, identificadorCampoOld, identificadorCampoNew);
 	        } catch (Exception e) {
 	            throw new DelegateException(e);
 	        }
@@ -129,6 +130,14 @@ public class FuenteDatosDelegate implements StatelessDelegate {
 	        }
 		 }  
 	
+	 public void importarCsv(String identificadorFuenteDatos, CsvDocumento csv) throws DelegateException {
+		 try {
+	           getFacade().importarCsv(identificadorFuenteDatos, csv);
+	        } catch (Exception e) {
+	            throw new DelegateException(e);
+	        }
+		 }  
+	 
 	 
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
