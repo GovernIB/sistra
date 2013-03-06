@@ -175,12 +175,5 @@
     <td class="labelo"><bean:message key="documentoNivel.tipoPago"/></td>
     <td class="input"><bean:message key="documentoNivel.tipoPago.telematico"/><html:radio property="values.pagoMetodos" value="T"/> <bean:message key="documentoNivel.tipoPago.presencial"/><html:radio property="values.pagoMetodos" value="P"/><bean:message key="documentoNivel.tipoPago.ambos"/><html:radio property="values.pagoMetodos" value="A"/></td>
 </tr>
-<tr>
-    <td class="labelo"><bean:message key="documentoNivel.pagoPlugin"/></td>
-    <td class="input">
-    	<html:select property="values.pagoPlugin">
-   			<html:options collection="listaPluginsPago" property="CODIGO" labelProperty="DESCRIPCION" />
-    	</html:select>
-    </td>
-</tr>
+
 <script>cambioGestorFormulario();</script>

@@ -48,7 +48,6 @@
     	<fileset dir="${distribucion.dir}/lib"> 
             <include name="sistra-util.jar"/>
     		<include name="sistra-xml.jar"/>
-    		<include name="sistra-plugins.jar"/>
         </fileset>        	
         <fileset dir="${web.product}">
             <include name="5-sistra-model.jar" />

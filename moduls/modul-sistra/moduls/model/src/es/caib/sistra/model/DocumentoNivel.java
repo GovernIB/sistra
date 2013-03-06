@@ -29,11 +29,8 @@ public class DocumentoNivel extends Traducible {
      private byte[] formularioPlantillaScript;
      private byte[] pagoCalcularPagoScript;
      private char pagoMetodos='A';
-     private String pagoPlugin = ".";
      private byte[] flujoTramitacionScript;
      private String contentType;
-     
-     
      
           
     // Constructors
@@ -209,14 +206,6 @@ public class DocumentoNivel extends Traducible {
 
 	public void setFormularioGestorFormulario(String formularioGestorFormulario) {
 		this.formularioGestorFormulario = formularioGestorFormulario;
-	}
-
-	public String getPagoPlugin() {
-		return pagoPlugin;
-	}
-
-	public void setPagoPlugin(String pagoPlugin) {
-		this.pagoPlugin = pagoPlugin;
 	}
 
 	

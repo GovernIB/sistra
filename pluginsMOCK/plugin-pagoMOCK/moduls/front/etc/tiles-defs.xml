@@ -18,7 +18,7 @@
     <definition
     	name=".pago"	
     	extends=".mainLayout"
-    	controller="es.caib.pagosMOCK.front.controller.DatosPagoController">
+    	controller="es.caib.pagos.front.controller.DatosPagoController">
 		      	    
     	<put name="main" value="/pages/pago.jsp" />
     </definition>	
@@ -27,7 +27,7 @@
     <definition
     	name=".pagoTelematico"	
     	extends=".mainLayout"
-    	controller="es.caib.pagosMOCK.front.controller.DatosPagoController">
+    	controller="es.caib.pagos.front.controller.DatosPagoController">
 		      	    
     	<put name="main" value="/pages/pagoTelematico.jsp" />
     </definition>	
@@ -36,7 +36,7 @@
     <definition
     	name=".pagoPresencial"	
     	extends=".mainLayout"
-    	controller="es.caib.pagosMOCK.front.controller.DatosPagoController">
+    	controller="es.caib.pagos.front.controller.DatosPagoController">
 		      	    
     	<put name="main" value="/pages/pagoPresencial.jsp" />
     </definition>	
@@ -45,7 +45,7 @@
    	 <definition
     	name=".mensaje"
     	extends=".mainLayout" 
-    	controller="es.caib.pagosMOCK.front.controller.MensajeController">
+    	controller="es.caib.pagos.front.controller.MensajeController">
     	<put name="main" value="/pages/mensaje.jsp" />
     	<put name="subtitulo" value="" />
     	<put name="texto" value="" />

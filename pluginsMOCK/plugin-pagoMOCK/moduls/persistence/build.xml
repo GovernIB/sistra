@@ -5,7 +5,7 @@
     <property file="${basedir}/build.properties"/>
 
     <property name="modul" value="persistence"/>
-    <property name="package" value="es.caib.pagosMOCK.persistence"/>
+    <property name="package" value="es.caib.pagos.persistence"/>
 
     <property name="home.dir" location="${basedir}/../.."/>
     <property file="${home.dir}/config.properties"/>

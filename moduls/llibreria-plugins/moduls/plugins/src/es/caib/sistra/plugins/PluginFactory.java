@@ -1,10 +1,7 @@
 package es.caib.sistra.plugins;
 
 import java.io.FileInputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -22,8 +19,6 @@ import es.caib.sistra.plugins.sms.PluginSmsIntf;
  * Factoria para crear plugins
  */
 public class PluginFactory {
-	
-	public static final String ID_PLUGIN_DEFECTO = ".";
 	
 	private static Map clasesPlugins = new HashMap();
 	private static Properties props = null;
@@ -123,53 +118,8 @@ public class PluginFactory {
 	 * @return Plugin de pagos
 	 * @throws Exception
 	 */
-	private PluginPagosIntf getPluginPagos() throws Exception{
+	public PluginPagosIntf getPluginPagos() throws Exception{
 		return  (PluginPagosIntf) getPlugin("plugin.pagos"); 
-	}
-	
-	/**
-	 * Obtiene plugin de pagos adicional
-	 * @return Plugin de pagos
-	 * @throws Exception
-	 */
-	public PluginPagosIntf getPluginPagos(String idPluginAdicional) throws Exception{
-		if (ID_PLUGIN_DEFECTO.equals(idPluginAdicional)) {
-			return getPluginPagos();
-		} else {		
-			return  (PluginPagosIntf) getPlugin("plugin.pagos." + idPluginAdicional);
-		}
-	}
-	
-	/**
-	 * Obtiene ids plugins adicionales pago
-	 * @return Ids plugins adicionales pago
-	 * @throws Exception
-	 */
-	public String[] getIdsPluginsAdicionalesPago() throws Exception{
-		return getIdsPluginsAdicionales("plugin.pagos");
-	}
-	
-	
-	/**
-	 * Obtiene ids plugins adicionales
-	 * @return Ids plugins adicionales
-	 * @throws Exception
-	 */
-	public String[] getIdsPluginsAdicionales(String pluginName) throws Exception{
-		List plugins = new ArrayList();
-		for (Iterator it = props.keySet().iterator(); it.hasNext();) {
-			String key = (String) it.next();
-			if (key.startsWith(pluginName + ".")) {
-				plugins.add(key.substring((pluginName + ".").length()));
-			}
-		}
-		String[] ids = new String[plugins.size()];
-		int i = 0;
-		for (Iterator it = plugins.iterator(); it.hasNext();) {
-			ids[i] = (String) it.next();
-			i++;
-		}
-		return  ids; 
 	}
 	
 	/**

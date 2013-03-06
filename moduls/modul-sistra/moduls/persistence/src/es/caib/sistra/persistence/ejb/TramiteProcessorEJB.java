@@ -1132,7 +1132,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	    			if (datosPagos == null) throw new Exception("El pago se ha iniciado y los datos del pago son nulos");
 	    			
 	    			// Comprobamos estado sesion de pago
-	    			EstadoSesionPago estado = PluginFactory.getInstance().getPluginPagos(docNivel.getPagoPlugin()).comprobarEstadoSesionPago(datosPago.getLocalizador());
+	    			EstadoSesionPago estado = PluginFactory.getInstance().getPluginPagos().comprobarEstadoSesionPago(datosPago.getLocalizador());
 					switch (estado.getEstado()){
 	    				// Pago confirmado: redirigimos al paso de confirmacion
 	    				case ConstantesPago.SESIONPAGO_PAGO_CONFIRMADO:	    					
@@ -1156,7 +1156,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	    					SesionSistra ss = new SesionSistra();
 	    	        		ss.setUrlMantenimientoSesionSistra(urlMantenimientoSesion);
 	    	        		ss.setUrlRetornoSistra(urlRetorno);
-	    	        		SesionPago sesionPago = PluginFactory.getInstance().getPluginPagos(docNivel.getPagoPlugin()).reanudarSesionPago(datosPago.getLocalizador(),ss);
+	    	        		SesionPago sesionPago = PluginFactory.getInstance().getPluginPagos().reanudarSesionPago(datosPago.getLocalizador(),ss);
 	    	        		// Devolvemos indicando la url de redireccion
 	    	        		param.put("urlsesionpago",sesionPago.getUrlSesionPago());	    		    	
 	    	    	    	return this.generarRespuestaFront(null,param);	 
@@ -1171,7 +1171,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	    	    //  - Calculamos datos pago e iniciamos sesion de pago 
 	    		case DocumentoPersistentePAD.ESTADO_NORELLENADO: 
 	    			// Calculamos datos pago (precargamos modelo,concepto,fecha,nif y nombre)
-	    			CalculoPago calc = new CalculoPago(docNivel.getPagoPlugin());
+	    			CalculoPago calc = new CalculoPago();
 	    			calc.setModelo("046");
 	    			calc.setConcepto( ((TraDocumento) doc.getTraduccion(datosSesion.getLocale().getLanguage())).getDescripcion());
 	    			calc.setFechaDevengo( StringUtil.fechaACadena(new Date(),CalculoPago.FORMATO_FECHA_DEVENGO));
@@ -1200,7 +1200,6 @@ public class TramiteProcessorEJB implements SessionBean {
 	        		
 	        		// Creamos los datos del pago
 	        		datosPago = new DatosPago();
-	        		datosPago.setPluginId(PluginFactory.ID_PLUGIN_DEFECTO.equals(docNivel.getPagoPlugin())?null:docNivel.getPagoPlugin());
 	        		datosPago.setTipoPago(docNivel.getPagoMetodos());
 	        		datosPago.setEstado(DocumentoPersistentePAD.ESTADO_INCORRECTO);
 	        		datosPago.setModelo(calc.getModelo());
@@ -1244,8 +1243,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	        		ss.setUrlMantenimientoSesionSistra(urlMantenimientoSesion);
 	        		ss.setUrlRetornoSistra(urlRetorno);
 	        		
-	        		
-	        		SesionPago sesionPago = PluginFactory.getInstance().getPluginPagos(docNivel.getPagoPlugin()).iniciarSesionPago(dp,ss);
+	        		SesionPago sesionPago = PluginFactory.getInstance().getPluginPagos().iniciarSesionPago(dp,ss);
 	        		
 	        		// Metemos datos pago en la lista de datos del pago
 	        		datosPago.setLocalizador(sesionPago.getLocalizador());
@@ -1329,18 +1327,12 @@ public class TramiteProcessorEJB implements SessionBean {
     		if (pasoPagar.getTipoPaso() != PasoTramitacion.PASO_PAGAR){
     			throw new Exception("Se ha invocado a pagar desde un paso distinto a pagar");
     		}
-    		
-    		// Obtenemos configuracion pago
-    		Documento doc = obtenerDocumentoPago(identificador);	
-    		
-    		// Obtensmos configuracion nivel
-	    	DocumentoNivel docNivel = doc.getDocumentoNivel(datosSesion.getNivelAutenticacion());
     		    	
     		// Obtenemos datos pago    		
     		datosPago = (DatosPago) this.datosPagos.get(id);
     		
     		// Verificamos estado pago contra el plugin de pago
-    		EstadoSesionPago estadoSesionPago = PluginFactory.getInstance().getPluginPagos(docNivel.getPagoPlugin()).comprobarEstadoSesionPago(datosPago.getLocalizador());
+    		EstadoSesionPago estadoSesionPago = PluginFactory.getInstance().getPluginPagos().comprobarEstadoSesionPago(datosPago.getLocalizador());
     		
     		// Si se ha confirmado actualizamos documento y estado tramite
     		if (estadoSesionPago.getEstado() == ConstantesPago.SESIONPAGO_PAGO_CONFIRMADO){
@@ -1490,14 +1482,6 @@ public class TramiteProcessorEJB implements SessionBean {
     	
     	try{
     		
-
-    		// Obtenemos configuracion pago
-    		Documento doc = obtenerDocumentoPago(identificador);	
-    		
-    		// Obtensmos configuracion nivel
-	    	DocumentoNivel docNivel = doc.getDocumentoNivel(datosSesion.getNivelAutenticacion());
-    	
-    		
     		// Obtenemos datos actuales del pago	   	    	
 	    	String ls_id = identificador + "-" + instancia;
 	    	DocumentoPersistentePAD docPAD = (DocumentoPersistentePAD) this.tramitePersistentePAD.getDocumentos().get(ls_id);
@@ -1513,7 +1497,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	    	}
 	    	
 	    	// Obtenemos plugin de pagos
-	    	PluginPagosIntf pluginPago = PluginFactory.getInstance().getPluginPagos(docNivel.getPagoPlugin());
+	    	PluginPagosIntf pluginPago = PluginFactory.getInstance().getPluginPagos();
 	    	pluginPago.finalizarSesionPago(datosPago.getLocalizador());	    		
 	    	    
 	    	log.debug("Sesion pago finalizada");

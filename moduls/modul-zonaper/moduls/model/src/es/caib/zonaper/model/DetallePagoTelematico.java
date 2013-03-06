@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 
 public class DetallePagoTelematico implements Serializable{
 	
-	private String idPlugin;
+
 	private String idPersistencia;
     private Timestamp fecha;
     private String idioma;
@@ -25,7 +25,7 @@ public class DetallePagoTelematico implements Serializable{
     private String codigoPostal;
     private String nif;
     private char tipo;
-    
+
 	public String getEstadoPlataforma() {
 		return estadoPlataforma;
 	}
@@ -109,12 +109,6 @@ public class DetallePagoTelematico implements Serializable{
 	}
 	public void setDui(String dui) {
 		this.dui = dui;
-	}
-	public String getIdPlugin() {
-		return idPlugin;
-	}
-	public void setIdPlugin(String idPlugin) {
-		this.idPlugin = idPlugin;
 	}
 	
 

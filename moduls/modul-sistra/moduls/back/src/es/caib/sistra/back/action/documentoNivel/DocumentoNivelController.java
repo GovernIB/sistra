@@ -18,10 +18,8 @@ import es.caib.sistra.back.form.DocumentoNivelForm;
 import es.caib.sistra.model.Documento;
 import es.caib.sistra.model.GestorFormulario;
 import es.caib.sistra.modelInterfaz.ConstantesDominio;
-import es.caib.sistra.modelInterfaz.ValoresDominio;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
 import es.caib.sistra.persistence.delegate.DocumentoDelegate;
-import es.caib.sistra.plugins.PluginFactory;
 
 public class DocumentoNivelController extends BaseController
 {
@@ -50,20 +48,6 @@ public class DocumentoNivelController extends BaseController
        	 		props.put(gestor.getIdentificador(),gestor.getDescripcion());
        	 	}
        	 	request.setAttribute("gestoresFormularios", props);  
-       	 	
-       	 	// Obtener la lista de plugins de pago
-       	 	String [] plgsPago = PluginFactory.getInstance().getIdsPluginsAdicionalesPago();
-       	 	ValoresDominio valoresDominio = new ValoresDominio();
-       	 	int fila = valoresDominio.addFila();
-       	 	valoresDominio.setValor(fila, "CODIGO", PluginFactory.ID_PLUGIN_DEFECTO);
-       	 	valoresDominio.setValor(fila, "DESCRIPCION", "DEFECTO");
-       	 	for (int i = 0; i < plgsPago.length; i++) {
-	       	 	fila = valoresDominio.addFila();
-	       	 	valoresDominio.setValor(fila, "CODIGO", plgsPago[i]);
-	       	 	valoresDominio.setValor(fila, "DESCRIPCION", plgsPago[i]);
-       	 	}
-			request.setAttribute( "listaPluginsPago", ajustarTamListaDesplegable( valoresDominio.getFilas(), MAX_COMBO_DESC, "DESCRIPCION" , false) );
-       	 	
        	 	
         }
         catch (Exception e) 

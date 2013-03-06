@@ -35,7 +35,6 @@
        	</fileset>
     	<fileset dir="${distribucion.dir}/lib"> 
     		<include name="sistra-xml.jar"/>
-    		<include name="sistra-plugins.jar"/>
         </fileset>
     </path>
 

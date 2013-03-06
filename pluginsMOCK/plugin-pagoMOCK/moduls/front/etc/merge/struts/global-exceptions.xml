@@ -1,7 +1,7 @@
 <global-exceptions>
         
     <exception
-        handler="es.caib.pagosMOCK.front.action.FrontExceptionHandler"
+        handler="es.caib.pagos.front.action.FrontExceptionHandler"
         key="errors.exception"
         type="java.lang.Throwable"
         path="/fail.jsp"
