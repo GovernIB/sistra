@@ -1,1 +1,1 @@
-<controller processorClass="es.caib.pagos.front.action.FrontRequestProcessor" />
+<controller processorClass="es.caib.pagosMOCK.front.action.FrontRequestProcessor" />

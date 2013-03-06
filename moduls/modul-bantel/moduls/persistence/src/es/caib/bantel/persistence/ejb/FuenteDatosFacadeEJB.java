@@ -244,6 +244,7 @@ public abstract class FuenteDatosFacadeEJB extends HibernateEJB {
         try {
         	CampoFuenteDatos cfd = new CampoFuenteDatos();
         	cfd.setIdentificador(identificadorCampo);
+        	cfd.setEsPK(esPK);
         	fd.addCampoFuenteDatos(cfd);        	
         	session.update(fd);        	
         } catch (HibernateException he) {

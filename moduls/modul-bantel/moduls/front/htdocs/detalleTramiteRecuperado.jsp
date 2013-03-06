@@ -142,6 +142,42 @@
 						<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.asunto.nombreDelegado"/>:</span> <span><bean:write name="tramite" property="delegadoNombre"/></span></li>
 						<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.asunto.nifDelegado"/>:</span> <span><bean:write name="tramite" property="delegadoNif"/></span></li>
 					</logic:notEmpty>
+					
+					<!-- Firma asiento -->
+					<bean:define id="codigoFirmaAsiento" type="java.lang.String">
+						<bean:write name="tramite" property="codigoRdsAsiento" />
+					</bean:define>
+					<logic:notEmpty name="<%=codigoFirmaAsiento %>" scope="request">
+						<bean:define id="claveFirmaAsiento" type="java.lang.String">
+							<bean:write name="tramite" property="claveRdsAsiento" />
+						</bean:define>
+					
+					   <li>
+					   	   <span class="label"><bean:message key="detalleTramite.datosSolicitud.firma"/>:</span>	
+						   <span class="pequenyo">
+							
+								<logic:notEmpty name="<%=codigoFirmaAsiento %>" scope="request">
+									<logic:iterate name="<%=codigoFirmaAsiento %>" id="firma" scope="request" type="es.caib.sistra.plugins.firma.FirmaIntf">							
+										&nbsp;
+										<a href="/bantelfront/mostrarFirmaDocumento.do?codigo=<%=codigoFirmaAsiento%>&clave=<%=claveFirmaAsiento%>&nif=<%=firma.getNif()%>" >
+											<bean:write name="firma" property="nombreApellidos"/>  									
+										</a>	
+									</logic:iterate>												
+								</logic:notEmpty>
+								
+								<logic:notEmpty name="<%=\"CUST-\" + codigoFirmaAsiento %>" scope="request">
+									<br/>
+									<bean:message key="comprobarDocumento.urlCustodia"/>
+									<a href="/bantelfront/mostrarDocumentoCustodia.do?codigo=<%=codigoFirmaAsiento%>&clave=<%=claveFirmaAsiento%>" target="_blank">
+										<bean:write name="<%=\"CUST-\" + codigoFirmaAsiento %>" />
+									</a>																										
+								</logic:notEmpty>
+								
+							</span>
+						</li>
+					</logic:notEmpty>
+					
+					
 				</ul>
 				
 				<!-- Notificaciones telematicas y avisos -->

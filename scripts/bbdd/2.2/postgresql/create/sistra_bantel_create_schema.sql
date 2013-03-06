@@ -524,7 +524,8 @@ create sequence BTE_SEQVCF;
 create table BTE_CAMFUE  (
    CFU_CODIGO           BIGINT                      not null,
    CFU_CODFUE           BIGINT                      not null,
-   CFU_IDENT            VARCHAR(20)                    not null
+   CFU_IDENT            VARCHAR(20)                    not null,   
+   CFU_ESPK             VARCHAR(1)                    default 'N' not null
 );
 
 comment on table BTE_CAMFUE is

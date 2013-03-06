@@ -9,6 +9,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 
 import es.caib.redose.modelInterfaz.ConstantesRDS;
+import es.caib.sistra.plugins.PluginFactory;
 import es.caib.xml.ConstantesXML;
 import es.caib.xml.analiza.Analizador;
 import es.caib.xml.analiza.Generador;
@@ -22,6 +23,9 @@ import es.caib.xml.util.HashMapIterable;
 public class DatosPago implements Serializable{
 
 	private char tipoPago; // Tipo de pago: Presencial (P) / Telemático (T)
+	
+	// Plugin usado (si nulo, el por defecto)
+	private String pluginId;
 	
 	// Datos del pago establecidos por el script
 	private String modelo; // Modelo
@@ -55,7 +59,8 @@ public class DatosPago implements Serializable{
 	private final static String FORMATO_FECHAS = "yyyyMMddHHmmss";	
 	
 	// Constantes para la generación del xml
-	public final static String XML_ROOT = "/PAGO";	
+	public final static String XML_ROOT = "/PAGO";
+	private final static String XML_PLUGIN_ID = XML_ROOT + "/DATOS_PAGO/PLUGIN_ID";
 	private final static String XML_TIPO = XML_ROOT + "/DATOS_PAGO/TIPO";
 	private final static String XML_ESTADO = XML_ROOT + "/DATOS_PAGO/ESTADO";
 	private final static String XML_MODELO = XML_ROOT + "/DATOS_PAGO/MODELO";
@@ -152,7 +157,16 @@ public class DatosPago implements Serializable{
 		HashMapIterable map = new HashMapIterable();	
 		SimpleDateFormat sdf = new SimpleDateFormat( DatosPago.FORMATO_FECHAS );
 		
-		Nodo nodo = new Nodo(XML_TIPO, Character.toString(this.getTipoPago()));		
+		Nodo nodo;
+		
+		if (this.getPluginId() != null && PluginFactory.ID_PLUGIN_DEFECTO.equals(this.getPluginId()) ) {
+			nodo = new Nodo(XML_PLUGIN_ID, this.getPluginId());		
+			nodo.setXpath(XML_PLUGIN_ID);
+			map.put(nodo.getXpath(),nodo);
+		}
+		
+		
+		nodo = new Nodo(XML_TIPO, Character.toString(this.getTipoPago()));		
 		nodo.setXpath(XML_TIPO);
 		map.put(nodo.getXpath(),nodo);
 				
@@ -276,6 +290,7 @@ public class DatosPago implements Serializable{
 	private void fromHashMapIterable(HashMapIterable map) throws Exception{		
 		SimpleDateFormat sdf = new SimpleDateFormat( DatosPago.FORMATO_FECHAS );
 		Nodo nodo;
+		this.setPluginId(  map.get(XML_PLUGIN_ID) != null? ((Nodo) map.get(XML_PLUGIN_ID)).getValor():null);
 		this.setTipoPago( ((Nodo) map.get(XML_TIPO)).getValor().charAt(0));
 		this.setEstado( ((Nodo) map.get(XML_ESTADO)).getValor().charAt(0));		
 		this.setModelo(  map.get(XML_MODELO) != null? ((Nodo) map.get(XML_MODELO)).getValor():null);
@@ -519,6 +534,14 @@ public class DatosPago implements Serializable{
 
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
+	}
+
+	public String getPluginId() {
+		return pluginId;
+	}
+
+	public void setPluginId(String pluginId) {
+		this.pluginId = pluginId;
 	}
 	
 }

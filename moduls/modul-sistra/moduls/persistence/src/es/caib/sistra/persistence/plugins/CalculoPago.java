@@ -13,11 +13,17 @@ import es.caib.sistra.plugins.PluginFactory;
  */
 public class CalculoPago {
 
+	public CalculoPago(String pIdPluginPago) {
+		super();
+		idPluginPago = pIdPluginPago;
+	}
 	private static Log log = LogFactory.getLog(CalculoPago.class);
 	
 	private Map parametrosCalculoTasa = new HashMap();
 	
 	public static final String FORMATO_FECHA_DEVENGO = "yyyyMMdd";
+	
+	private String idPluginPago;
 	
 	private String modelo;
 	private String idTasa;
@@ -87,7 +93,7 @@ public class CalculoPago {
 	 */
 	public long consultarImporteTasa(String idTasa){
 		try{					
-			long res = PluginFactory.getInstance().getPluginPagos().consultarImporteTasa(idTasa,parametrosCalculoTasa);						
+			long res = PluginFactory.getInstance().getPluginPagos(idPluginPago).consultarImporteTasa(idTasa,parametrosCalculoTasa);						
 			return res;			
 		}catch(Exception ex){
 			log.error("Excepción consultando tasa: " + ex.getMessage(),ex);
