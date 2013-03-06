@@ -65,6 +65,13 @@ public class DetalleEntradaAction extends BaseAction
 			request.setAttribute("message",resources.getMessage( getLocale( request ), "errors.tramiteNoExiste"));			
 			return mapping.findForward( "fail" );		
 		}
+		
+		
+		// Cargamos firma asiento
+		DocumentoRDS documentoRDSAsiento = rdsDelegate.consultarDocumento( new ReferenciaRDS(tramite.getCodigoRdsAsiento(), tramite.getClaveRdsAsiento()), false );
+		DocumentosUtil.cargarFirmasDocumentoRDS(documentoRDSAsiento, request);
+		
+		
 		Set documentosTramite = tramite.getDocumentos();
 		
 		// Recorremos documentos:
@@ -102,11 +109,11 @@ public class DetalleEntradaAction extends BaseAction
 					if (documentoRDS.isEstructurado()){
 						documentosEstructurados.add(documento.getCodigo());
 					}
+					// Cargamos firmas
+					DocumentosUtil.cargarFirmasDocumentoRDS(documentoRDS, request);
 				}
+				
 			}
-			
-			// Cargamos firmas
-			DocumentosUtil.cargarFirmasDocumentoBandeja(documento, request);
 			
 		}
 		
