@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 
-import es.caib.bantel.model.DocumentoBandeja;
 import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
@@ -146,62 +145,46 @@ public final class DocumentosUtil {
 		}
 		return correcta;
 	}
-	
-	// Carga firmas y codigo de custodia en la request
-	public static void cargarFirmasDocumentoBandeja(DocumentoBandeja documento, HttpServletRequest request) throws Exception{
-		RdsDelegate rdsDeleg = DelegateRDSUtil.getRdsDelegate();
-		
-		//	 vamos a buscar las firmas de los documentos si existen y las meteremos en la request
-		if(documento != null && documento.getRdsCodigo() != null && documento.getRdsClave() != null){
-			ReferenciaRDS ref =  new ReferenciaRDS(documento.getRdsCodigo(),documento.getRdsClave());
-			if (ref.getCodigo() > 0){
-				String codigo = ref.getCodigo()+"";
-				DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
-				// Cargamos firma
-				if(doc != null && doc.getFirmas() != null){
-					request.setAttribute(codigo + "",doc.getFirmas());
-				}
-				// Cargamos codigo custodia
-				if (doc != null && StringUtils.isNotBlank(doc.getCodigoDocumentoCustodia()) ) {
-					request.setAttribute("CUST-" + codigo, doc.getCodigoDocumentoCustodia());
-				}
-				
-			}
+
+	// Carga firmas documento RDS
+	public static void cargarFirmasDocumentoRDS(DocumentoRDS doc,
+			HttpServletRequest request) throws Exception {
+		String codigo = doc.getReferenciaRDS().getCodigo()+"";
+		// Cargamos firma
+		if(doc != null && doc.getFirmas() != null){
+			request.setAttribute(codigo + "",doc.getFirmas());
+		}
+		// Cargamos codigo custodia
+		if (doc != null && StringUtils.isNotBlank(doc.getCodigoDocumentoCustodia()) ) {
+			request.setAttribute("CUST-" + codigo, doc.getCodigoDocumentoCustodia());
+		}
+		// Establecemos en la request si es una referencia a un doc externo (modelo GE0013NOTIFEXT)
+		if (doc.getModelo().equals(ConstantesRDS.MODELO_NOTIFICACION_EXTERNO)) {
+			// Buscamos url (recuperamos de nuevo por si no se ha cargado el contenido)
+			RdsDelegate rdsDeleg = DelegateRDSUtil.getRdsDelegate();
+			doc = rdsDeleg.consultarDocumento(doc.getReferenciaRDS(), true);
+			FactoriaObjetosXMLDocumentoExternoNotificacion factoria = ServicioDocumentoExternoNotificacionXML.crearFactoriaObjetosXML();
+			factoria.setEncoding(ConstantesXML.ENCODING);
+			factoria.setIndentacion(true);
+			DocumentoExternoNotificacion documentoExternoNotificacion = factoria.crearDocumentoExternoNotificacion(new ByteArrayInputStream(doc.getDatosFichero()));
+			request.setAttribute("URL-"+doc.getReferenciaRDS().getCodigo(),documentoExternoNotificacion.getUrl());
 		}
 	}
 	
 	// Carga firmas, codigo de custodia y url doc externo notificacion en la request
 	public static void cargarFirmasDocumentosExpedientePad(List documentos, HttpServletRequest request, String tipo) throws Exception{
+		// Vamos a buscar las firmas de los documentos si existen y las meteremos en la request
 		RdsDelegate rdsDeleg = DelegateRDSUtil.getRdsDelegate();
-		
-		//		vamos a buscar las firmas de los documentos si existen y las meteremos en la request
 		if(documentos != null){
 			ReferenciaRDS ref = null;
-			Long codigo = null;
 			for(int i=0;i<documentos.size();i++){
 				DocumentoExpedientePAD docTipo = (DocumentoExpedientePAD)documentos.get(i);
 				ref = new ReferenciaRDS(docTipo.getCodigoRDS(),docTipo.getClaveRDS());
 				if (ref.getCodigo() > 0){
-					codigo = docTipo.getCodigoRDS();
+					// Recuperamos docs
 					DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
-					// Cargamos firmas
-					if(doc != null && doc.getFirmas() != null){
-						request.setAttribute(codigo.toString(),doc.getFirmas());
-					}
-					// Cargamos codigo custodia
-					if (doc != null && StringUtils.isNotBlank(doc.getCodigoDocumentoCustodia()) ) {
-						request.setAttribute("CUST-" + codigo, doc.getCodigoDocumentoCustodia());
-					}
-					// Establecemos en la request si es una referencia a un doc externo (modelo GE0013NOTIFEXT)
-					if (doc.getModelo().equals(ConstantesRDS.MODELO_NOTIFICACION_EXTERNO)) {
-						// Buscamos url
-						doc = rdsDeleg.consultarDocumento(ref, true);
-						FactoriaObjetosXMLDocumentoExternoNotificacion factoria = ServicioDocumentoExternoNotificacionXML.crearFactoriaObjetosXML();
-						factoria.setEncoding(ConstantesXML.ENCODING);
-						factoria.setIndentacion(true);
-						DocumentoExternoNotificacion documentoExternoNotificacion = factoria.crearDocumentoExternoNotificacion(new ByteArrayInputStream(doc.getDatosFichero()));
-						request.setAttribute("URL-"+docTipo.getCodigoRDS(),documentoExternoNotificacion.getUrl());
-					}
+					// Cargamos firmas en request
+					cargarFirmasDocumentoRDS(doc, request);
 				}
 			}
 		}

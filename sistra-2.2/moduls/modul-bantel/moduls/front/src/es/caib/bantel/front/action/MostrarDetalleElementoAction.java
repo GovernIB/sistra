@@ -106,6 +106,12 @@ public class MostrarDetalleElementoAction extends BaseAction
 							tramite = tramiteDelegate.obtenerTramiteBandejaPorNumeroRegistro( numeroRegistro );						
 						}
 						RdsDelegate rdsDelegate = DelegateRDSUtil.getRdsDelegate();
+						
+						// Cargamos firma asiento
+						DocumentoRDS documentoRDSAsiento = rdsDelegate.consultarDocumento( new ReferenciaRDS(tramite.getCodigoRdsAsiento(), tramite.getClaveRdsAsiento()), false );
+						DocumentosUtil.cargarFirmasDocumentoRDS(documentoRDSAsiento, request);
+						
+						
 						Set documentosEstructurados = new HashSet();
 						Set documentosTramite = tramite.getDocumentos();
 						for ( Iterator it = documentosTramite.iterator(); it.hasNext(); )
@@ -138,7 +144,7 @@ public class MostrarDetalleElementoAction extends BaseAction
 									if (documentoRDS.isEstructurado()){
 										documentosEstructurados.add(documento.getCodigo());
 									}
-									DocumentosUtil.cargarFirmasDocumentoBandeja(documento,request);
+									DocumentosUtil.cargarFirmasDocumentoRDS(documentoRDS, request);
 								}
 							}
 						}		

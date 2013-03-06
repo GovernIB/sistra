@@ -58,6 +58,11 @@ public class DetalleTramiteAction extends BaseAction
 		request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,"1");
 		TramiteBandejaDelegate tramiteDelegate = DelegateUtil.getTramiteBandejaDelegate();
 		TramiteBandeja tramite = tramiteDelegate.obtenerTramiteBandeja( detalleTramiteFormulario.getCodigo() );
+		
+		// Cargamos firma asiento
+		DocumentoRDS documentoRDSAsiento = rdsDelegate.consultarDocumento( new ReferenciaRDS(tramite.getCodigoRdsAsiento(), tramite.getClaveRdsAsiento()), false );
+		DocumentosUtil.cargarFirmasDocumentoRDS(documentoRDSAsiento, request);
+		
 		Set documentosTramite = tramite.getDocumentos();
 		for ( Iterator it = documentosTramite.iterator(); it.hasNext(); )
 		{
@@ -89,7 +94,7 @@ public class DetalleTramiteAction extends BaseAction
 					if (documentoRDS.isEstructurado()){
 						documentosEstructurados.add(documento.getCodigo());
 					}
-					DocumentosUtil.cargarFirmasDocumentoBandeja(documento, request);
+					DocumentosUtil.cargarFirmasDocumentoRDS(documentoRDS, request);
 				}
 			}
 		}		
