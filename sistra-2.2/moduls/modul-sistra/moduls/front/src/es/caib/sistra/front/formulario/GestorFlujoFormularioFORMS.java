@@ -2,14 +2,19 @@ package es.caib.sistra.front.formulario;
 
 
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.lang.StringUtils;
@@ -180,9 +185,26 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 		paramsHttp.setConnectionManagerTimeout(30 * 1000); // Esperamos 30 seg a conectar con Forms
 		paramsHttp.setSoTimeout(30 * 1000);
         HttpClient client = new HttpClient(paramsHttp);
+        
         PostMethod method = new PostMethod(URL_TRAMITACION_FORMULARIO);
+        
         try 
         {
+        	
+        	// Vemos si hay que pasar por proxy
+    		String proxyHost = System.getProperty("http.proxyHost");
+    		if (proxyHost != null && !"".equals(proxyHost)) {
+    			if (!validateNonProxyHosts(URL_TRAMITACION_FORMULARIO)) {
+    				log.debug("Estableciendo autenticacion para proxy");
+    				int port = Integer.parseInt(System
+    						.getProperty("http.proxyPort"));
+    				client.getHostConfiguration().setProxy(proxyHost, port);
+    		        Credentials credentials = new UsernamePasswordCredentials(System.getProperty("http.proxyUser"), System.getProperty("http.proxyPassword"));
+    		        AuthScope authScope = new AuthScope(proxyHost, port);
+    		        client.getState().setProxyCredentials(authScope, credentials);				
+    			}
+    		}
+        	
 	        method.addRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
 	        method.getParams().setContentCharset("UTF-8");
 	        method.addParameter("xmlData", confGestorForm.getDatosActualesFormulario());
@@ -350,6 +372,35 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 			throw new Exception( "La propiedad <" + key + "> no está definida en el fichero de propiedades GestorFlujoFormularioFORMS.properties" );
 		}
 		return value;	
+	}
+	
+
+	/**
+	 * Busca els host de la url indicada dentro de la propiedad http.nonProxyHosts de la JVM 
+	 * @param url Endpoint del ws
+	 * @return true si el host esta dentro de la propiedad, fals en caso contrario
+	 */
+	private boolean validateNonProxyHosts(String url) throws Exception{
+		String nonProxyHosts = System.getProperty("http.nonProxyHosts");
+	    boolean existe = false;
+	    URL urlURL;
+		try {
+		    if(nonProxyHosts != null && !"".equals(nonProxyHosts)){
+    			urlURL = new URL(url);
+    			String[] nonProxyHostsArray = nonProxyHosts.split("\\|");
+    			for (int i = 0; i < nonProxyHostsArray.length; i++) {
+    				String a = nonProxyHostsArray[i].replaceAll("\\.", "\\\\.").replaceAll("\\*", ".*");;
+    				if (urlURL.getHost().matches(a)) {
+    					existe = true;
+    					break;
+    				}
+    			}
+		    }
+		} catch (MalformedURLException e) {
+			log.error("Error al validar los nonProxyHost "+e.getCause(), e);
+			throw e;
+		}
+		return existe;
 	}
 	
 }
