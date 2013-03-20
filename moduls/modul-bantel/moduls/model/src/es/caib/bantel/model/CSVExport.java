@@ -177,9 +177,10 @@ public class CSVExport {
 		
 		// Construimos csv
 		for (int numFila = 0; numFila < this.getData().size(); numFila ++) { 
+			int numFilaCsv = csvDoc.addFila();
 			String [] datosFila = (String []) this.getData().get(numFila);
 			for (int numCol = 0; numCol < cabeceras.length; numCol++) {
-				csvDoc.setValor(numFila, cabeceras[numCol], datosFila[numCol]);
+				csvDoc.setValor(numFilaCsv, cabeceras[numCol], datosFila[numCol]);
 			}					
 		}
 		
