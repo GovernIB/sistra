@@ -185,12 +185,9 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 		paramsHttp.setConnectionManagerTimeout(30 * 1000); // Esperamos 30 seg a conectar con Forms
 		paramsHttp.setSoTimeout(30 * 1000);
         HttpClient client = new HttpClient(paramsHttp);
-        
         PostMethod method = new PostMethod(URL_TRAMITACION_FORMULARIO);
-        
         try 
         {
-        	
         	// Vemos si hay que pasar por proxy
     		String proxyHost = System.getProperty("http.proxyHost");
     		if (proxyHost != null && !"".equals(proxyHost)) {
@@ -374,7 +371,6 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 		return value;	
 	}
 	
-
 	/**
 	 * Busca els host de la url indicada dentro de la propiedad http.nonProxyHosts de la JVM 
 	 * @param url Endpoint del ws

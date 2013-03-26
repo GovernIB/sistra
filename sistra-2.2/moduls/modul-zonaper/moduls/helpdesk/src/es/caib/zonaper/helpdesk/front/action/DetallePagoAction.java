@@ -47,7 +47,8 @@ public class DetallePagoAction extends BaseAction
 	private final static String FORMATO_FECHAS = "yyyyMMddHHmmss";	
 
 	// Constantes para la generación del xml
-	public final static String XML_ROOT = "/PAGO";	
+	public final static String XML_ROOT = "/PAGO";
+	private final static String XML_ID_PLUGIN = XML_ROOT + "/DATOS_PAGO/PLUGIN_ID";
 	private final static String XML_TIPO = XML_ROOT + "/DATOS_PAGO/TIPO";
 	private final static String XML_ESTADO = XML_ROOT + "/DATOS_PAGO/ESTADO";
 	private final static String XML_NUMERO_DUI = XML_ROOT + "/DATOS_PASARELA/NUMERO_DUI";
@@ -84,6 +85,7 @@ public class DetallePagoAction extends BaseAction
 		Analizador analizador = new Analizador ();			
 		HashMapIterable map = analizador.analizar ( new ByteArrayInputStream(byteArraySolicitud), ConstantesXML.ENCODING );
 		DetallePagoTelematico dpt = new DetallePagoTelematico();
+		dpt.setIdPlugin((map.get(XML_ID_PLUGIN) != null) ? ((Nodo) map.get(XML_ID_PLUGIN)).getValor() : PluginFactory.ID_PLUGIN_DEFECTO);
 		dpt.setEstadoPlataforma(Constants.XMLPAGO_NO_INICIADO);
 		dpt.setEstadoPortal(Constants.PAGO_NO_COMPROBADO);
 		String estadoPago = (map.get(XML_ESTADO) != null) ? ((Nodo) map.get(XML_ESTADO)).getValor() : null;
@@ -114,7 +116,7 @@ public class DetallePagoAction extends BaseAction
 		try{
 			if(estadoPago.equals(Constants.XMLPAGO_PENDIENTE_CONFIRMAR)){
 				if(dpt.getLocalizador() != null){
-					esp = PluginFactory.getInstance().getPluginPagos().comprobarEstadoSesionPago(dpt.getLocalizador());					
+					esp = PluginFactory.getInstance().getPluginPagos(dpt.getIdPlugin()).comprobarEstadoSesionPago(dpt.getLocalizador());					
 				}
 			}
 		}catch(Exception ex){

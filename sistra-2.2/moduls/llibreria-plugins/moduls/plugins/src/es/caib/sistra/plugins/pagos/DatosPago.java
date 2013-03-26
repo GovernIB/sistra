@@ -35,7 +35,11 @@ public class DatosPago implements Serializable{
 	/**
 	 * Idioma en el que se realiza el pago (es,ca)
 	 */
-	private String idioma;	
+	private String idioma;
+	/**
+	 * Identificador organismo que emite la tasa.
+	 */
+	private String identificadorOrganismo;
 	/**
 	 * Modelo
 	 */
@@ -264,5 +268,11 @@ public class DatosPago implements Serializable{
 	 */
 	public void setVersionTramite(int versionTramite) {
 		this.versionTramite = versionTramite;
+	}
+	public String getIdentificadorOrganismo() {
+		return identificadorOrganismo;
+	}
+	public void setIdentificadorOrganismo(String identificadorOrganismo) {
+		this.identificadorOrganismo = identificadorOrganismo;
 	}	
 }
