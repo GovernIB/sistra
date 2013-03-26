@@ -35,4 +35,16 @@ public class CustomRequestProcessor extends TilesRequestProcessor {
         super.process(request, response);
     }
 
+    @Override
+    protected void processNoCache(HttpServletRequest request, HttpServletResponse response)
+    {
+    	// PATCH PARA MEJORAR CONTROL CACHE
+        if(moduleConfig.getControllerConfig().getNocache())
+        {
+        	 response.setHeader("Pragma", "No-cache");
+        	 response.setHeader("Cache-Control", "no-cache,no-store,max-age=0");
+        	 response.setDateHeader("Expires", 1);
+
+        }
+    }
 }

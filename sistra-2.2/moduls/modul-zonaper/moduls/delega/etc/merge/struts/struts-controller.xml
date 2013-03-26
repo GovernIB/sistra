@@ -1,1 +1,1 @@
-<controller processorClass="es.caib.zonaper.delega.action.DelegaRequestProcessor" />
+<controller processorClass="es.caib.zonaper.delega.action.DelegaRequestProcessor" nocache="true"/>

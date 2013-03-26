@@ -1,1 +1,1 @@
-<controller processorClass="es.caib.zonaper.admin.action.AdminRequestProcessor" />
+<controller processorClass="es.caib.zonaper.admin.action.AdminRequestProcessor" nocache="true"/>
