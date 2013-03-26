@@ -1,4 +1,4 @@
-package es.caib.pagos.persistence.delegate;
+package es.caib.pagosMOCK.persistence.delegate;
 
 import java.io.Serializable;
 

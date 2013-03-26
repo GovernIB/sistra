@@ -1,4 +1,4 @@
-package es.caib.pagos.model;
+package es.caib.pagosMOCK.model;
 
 import java.io.Serializable;
 

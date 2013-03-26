@@ -1,12 +1,12 @@
-package es.caib.pagos.persistence.delegate;
+package es.caib.pagosMOCK.persistence.delegate;
 
 import java.rmi.RemoteException;
 
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
-import es.caib.pagos.persistence.intf.PagosFacade;
-import es.caib.pagos.persistence.util.PagosFacadeUtil;
+import es.caib.pagosMOCK.persistence.intf.PagosMOCKFacade;
+import es.caib.pagosMOCK.persistence.util.PagosMOCKFacadeUtil;
 import es.caib.sistra.plugins.pagos.DatosPago;
 import es.caib.sistra.plugins.pagos.EstadoSesionPago;
 import es.caib.sistra.plugins.pagos.SesionPago;
@@ -64,8 +64,8 @@ public class PagosDelegate implements StatelessDelegate {
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-    private PagosFacade getFacade() throws NamingException,CreateException,RemoteException {      	    	
-    	return PagosFacadeUtil.getHome().create();
+    private PagosMOCKFacade getFacade() throws NamingException,CreateException,RemoteException {      	    	
+    	return PagosMOCKFacadeUtil.getHome().create();
     }
 
     protected PagosDelegate() throws DelegateException {       
