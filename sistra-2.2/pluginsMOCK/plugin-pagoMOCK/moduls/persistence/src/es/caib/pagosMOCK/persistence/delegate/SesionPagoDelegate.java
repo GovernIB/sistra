@@ -1,12 +1,12 @@
-package es.caib.pagos.persistence.delegate;
+package es.caib.pagosMOCK.persistence.delegate;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 import javax.ejb.RemoveException;
 import javax.naming.NamingException;
 
-import es.caib.pagos.persistence.intf.SesionPagosFacadeLocal;
-import es.caib.pagos.persistence.util.SesionPagosFacadeUtil;
+import es.caib.pagosMOCK.persistence.intf.SesionPagosMOCKFacadeLocal;
+import es.caib.pagosMOCK.persistence.util.SesionPagosMOCKFacadeUtil;
 import es.caib.sistra.plugins.pagos.DatosPago;
 
 public class SesionPagoDelegate implements Delegate 
@@ -17,7 +17,7 @@ public class SesionPagoDelegate implements Delegate
 	{
 		try
 		{
-			local = SesionPagosFacadeUtil.getLocalHome().create(token);
+			local = SesionPagosMOCKFacadeUtil.getLocalHome().create(token);
 		} catch (CreateException e) {
 	        throw new DelegateException(e);
 	    } catch (EJBException e) {
@@ -82,7 +82,7 @@ public class SesionPagoDelegate implements Delegate
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
 
-    private SesionPagosFacadeLocal local;
+    private SesionPagosMOCKFacadeLocal local;
 
     protected SesionPagoDelegate() 
     {

@@ -1,4 +1,4 @@
-package es.caib.pagos.persistence.ejb;
+package es.caib.pagosMOCK.persistence.ejb;
 
 import java.rmi.RemoteException;
 import java.util.Date;
@@ -11,10 +11,10 @@ import javax.ejb.SessionContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import es.caib.pagos.model.SesionPagoMOCK;
-import es.caib.pagos.model.TokenAccesoMOCK;
-import es.caib.pagos.persistence.util.DatabaseMOCK;
-import es.caib.pagos.persistence.util.GeneradorId;
+import es.caib.pagosMOCK.model.SesionPagoMOCK;
+import es.caib.pagosMOCK.model.TokenAccesoMOCK;
+import es.caib.pagosMOCK.persistence.util.DatabaseMOCK;
+import es.caib.pagosMOCK.persistence.util.GeneradorId;
 import es.caib.sistra.plugins.pagos.ConstantesPago;
 import es.caib.sistra.plugins.pagos.DatosPago;
 import es.caib.sistra.plugins.pagos.EstadoSesionPago;
@@ -26,8 +26,8 @@ import es.caib.sistra.plugins.pagos.SesionSistra;
  * de pagos
  *
  * @ejb.bean
- *  name="pagos/persistence/PagosFacade"
- *  jndi-name="es.caib.pagos.persistence.PagosFacade"
+ *  name="pagos/persistence/PagosMOCKFacade"
+ *  jndi-name="es.caib.pagosMOCK.persistence.PagosMOCKFacade"
  *  type="Stateless"
  *  view-type="remote" 
  *  transaction-type="Container"

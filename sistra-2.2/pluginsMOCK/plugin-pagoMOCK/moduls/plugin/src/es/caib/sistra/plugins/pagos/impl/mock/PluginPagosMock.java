@@ -2,7 +2,7 @@ package es.caib.sistra.plugins.pagos.impl.mock;
 
 import java.util.Map;
 
-import es.caib.pagos.persistence.delegate.DelegatePagosUtil;
+import es.caib.pagosMOCK.persistence.delegate.DelegatePagosUtil;
 import es.caib.sistra.plugins.pagos.DatosPago;
 import es.caib.sistra.plugins.pagos.EstadoSesionPago;
 import es.caib.sistra.plugins.pagos.PluginPagosIntf;

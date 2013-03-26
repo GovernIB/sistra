@@ -1,4 +1,4 @@
-package es.caib.pagos.persistence.ejb;
+package es.caib.pagosMOCK.persistence.ejb;
 
 import java.rmi.RemoteException;
 import java.util.Date;
@@ -11,9 +11,9 @@ import javax.ejb.SessionContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import es.caib.pagos.model.SesionPagoMOCK;
-import es.caib.pagos.model.TokenAccesoMOCK;
-import es.caib.pagos.persistence.util.DatabaseMOCK;
+import es.caib.pagosMOCK.model.SesionPagoMOCK;
+import es.caib.pagosMOCK.model.TokenAccesoMOCK;
+import es.caib.pagosMOCK.persistence.util.DatabaseMOCK;
 import es.caib.sistra.plugins.pagos.ConstantesPago;
 import es.caib.sistra.plugins.pagos.DatosPago;
 
@@ -21,8 +21,8 @@ import es.caib.sistra.plugins.pagos.DatosPago;
  * SessionBean que implementa la logica de una sesion de pagos
  *
  * @ejb.bean
- *  name="pagos/persistence/SesionPagosFacade"
- *  jndi-name="es.caib.pagos.persistence.PagosFacade"
+ *  name="pagos/persistence/SesionPagosMOCKFacade"
+ *  jndi-name="es.caib.pagosMOCK.persistence.PagosMOCKFacade"
  *  type="Stateful"
  *  view-type="local" 
  *  transaction-type="Container"

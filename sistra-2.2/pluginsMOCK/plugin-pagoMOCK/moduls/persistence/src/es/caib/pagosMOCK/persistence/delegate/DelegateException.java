@@ -1,4 +1,4 @@
-package es.caib.pagos.persistence.delegate;
+package es.caib.pagosMOCK.persistence.delegate;
 
 /**
  * Excepción producida en la capa delegate.

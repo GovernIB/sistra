@@ -1,10 +1,10 @@
-package es.caib.pagos.persistence.util;
+package es.caib.pagosMOCK.persistence.util;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import es.caib.pagos.model.SesionPagoMOCK;
-import es.caib.pagos.model.TokenAccesoMOCK;
+import es.caib.pagosMOCK.model.SesionPagoMOCK;
+import es.caib.pagosMOCK.model.TokenAccesoMOCK;
 
 /**
  * Simula acceso a BBDD

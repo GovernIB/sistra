@@ -1,4 +1,4 @@
-package es.caib.pagos.persistence.util;
+package es.caib.pagosMOCK.persistence.util;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;

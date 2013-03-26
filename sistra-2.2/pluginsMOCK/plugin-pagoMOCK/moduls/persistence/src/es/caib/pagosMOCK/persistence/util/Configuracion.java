@@ -1,4 +1,4 @@
-package es.caib.pagos.persistence.util;
+package es.caib.pagosMOCK.persistence.util;
 
 import java.io.FileInputStream;
 import java.util.Properties;
