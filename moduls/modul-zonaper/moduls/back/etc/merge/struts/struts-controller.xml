@@ -1,1 +1,1 @@
-<controller processorClass="es.caib.zonaper.back.action.FrontRequestProcessor" />
+<controller processorClass="es.caib.zonaper.back.action.FrontRequestProcessor" nocache="true"/>

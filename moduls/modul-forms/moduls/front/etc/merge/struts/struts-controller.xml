@@ -1,2 +1,2 @@
-<controller processorClass="org.ibit.rol.form.front.action.FrontRequestProcessor" />
+<controller processorClass="org.ibit.rol.form.front.action.FrontRequestProcessor" nocache="true"/>
 
