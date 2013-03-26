@@ -1,4 +1,4 @@
-package es.caib.pagos.front.action;
+package es.caib.pagosMOCK.front.action;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

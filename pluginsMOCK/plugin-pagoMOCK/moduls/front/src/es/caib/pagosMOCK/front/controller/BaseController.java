@@ -1,4 +1,4 @@
-package es.caib.pagos.front.controller;
+package es.caib.pagosMOCK.front.controller;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -13,8 +13,8 @@ import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.Controller;
 import org.apache.struts.util.MessageResources;
 
-import es.caib.pagos.front.util.PagosFrontRequestHelper;
-import es.caib.pagos.persistence.delegate.SesionPagoDelegate;
+import es.caib.pagosMOCK.front.util.PagosFrontRequestHelper;
+import es.caib.pagosMOCK.persistence.delegate.SesionPagoDelegate;
 
 /**
  * Controller con métodos de utilidad.

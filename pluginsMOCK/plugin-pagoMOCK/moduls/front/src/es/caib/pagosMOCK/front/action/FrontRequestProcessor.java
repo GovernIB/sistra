@@ -1,4 +1,4 @@
-package es.caib.pagos.front.action;
+package es.caib.pagosMOCK.front.action;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,8 +20,8 @@ import org.apache.struts.action.ActionServlet;
 import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.tiles.TilesRequestProcessor;
 
-import es.caib.pagos.front.Constants;
-import es.caib.pagos.persistence.util.Configuracion;
+import es.caib.pagosMOCK.front.Constants;
+import es.caib.pagosMOCK.persistence.util.Configuracion;
 
 
 /**
@@ -142,4 +142,16 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
         super.processPopulate(request, response, form, mapping);
     }
 
+    @Override
+    protected void processNoCache(HttpServletRequest request, HttpServletResponse response)
+    {
+    	// PATCH PARA MEJORAR CONTROL CACHE
+        if(moduleConfig.getControllerConfig().getNocache())
+        {
+        	 response.setHeader("Pragma", "No-cache");
+        	 response.setHeader("Cache-Control", "no-cache,no-store,max-age=0");
+        	 response.setDateHeader("Expires", 1);
+
+        }
+    }
 }

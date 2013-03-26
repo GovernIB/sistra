@@ -1,4 +1,4 @@
-package es.caib.pagos.front.controller;
+package es.caib.pagosMOCK.front.controller;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;

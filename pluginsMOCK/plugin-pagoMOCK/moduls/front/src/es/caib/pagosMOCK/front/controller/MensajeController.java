@@ -1,4 +1,4 @@
-package es.caib.pagos.front.controller;
+package es.caib.pagosMOCK.front.controller;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.tiles.ComponentContext;
 
-import es.caib.pagos.front.Constants;
+import es.caib.pagosMOCK.front.Constants;
 
 public class MensajeController extends BaseController
 {
