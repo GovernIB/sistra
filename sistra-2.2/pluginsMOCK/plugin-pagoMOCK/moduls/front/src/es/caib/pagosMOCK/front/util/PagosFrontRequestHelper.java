@@ -1,4 +1,4 @@
-package es.caib.pagos.front.util;
+package es.caib.pagosMOCK.front.util;
 
 import java.util.Locale;
 
@@ -7,8 +7,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.struts.Globals;
 
-import es.caib.pagos.front.Constants;
-import es.caib.pagos.persistence.delegate.SesionPagoDelegate;
+import es.caib.pagosMOCK.front.Constants;
+import es.caib.pagosMOCK.persistence.delegate.SesionPagoDelegate;
 
 public class PagosFrontRequestHelper
 {

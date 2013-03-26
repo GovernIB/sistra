@@ -1,4 +1,4 @@
-package es.caib.pagos.front.action;
+package es.caib.pagosMOCK.front.action;
 
 import java.util.Locale;
 
@@ -12,8 +12,8 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.util.RequestUtils;
 
-import es.caib.pagos.front.util.PagosFrontRequestHelper;
-import es.caib.pagos.persistence.delegate.SesionPagoDelegate;
+import es.caib.pagosMOCK.front.util.PagosFrontRequestHelper;
+import es.caib.pagosMOCK.persistence.delegate.SesionPagoDelegate;
 
 /**
  * Action Base.

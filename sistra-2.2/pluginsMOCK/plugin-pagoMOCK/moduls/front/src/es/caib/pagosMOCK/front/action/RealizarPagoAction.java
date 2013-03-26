@@ -1,4 +1,4 @@
-package es.caib.pagos.front.action;
+package es.caib.pagosMOCK.front.action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,9 +9,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import es.caib.pagos.front.Constants;
-import es.caib.pagos.front.form.PagoForm;
-import es.caib.pagos.persistence.delegate.SesionPagoDelegate;
+import es.caib.pagosMOCK.front.Constants;
+import es.caib.pagosMOCK.front.form.PagoForm;
+import es.caib.pagosMOCK.persistence.delegate.SesionPagoDelegate;
 
 /**
  * @struts.action 

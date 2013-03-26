@@ -1,4 +1,4 @@
-package es.caib.pagos.front.action;
+package es.caib.pagosMOCK.front.action;
 
 import org.apache.struts.action.ExceptionHandler;
 import org.apache.struts.action.ActionForward;

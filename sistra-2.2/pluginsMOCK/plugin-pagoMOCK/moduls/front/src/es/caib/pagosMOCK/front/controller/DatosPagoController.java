@@ -1,4 +1,4 @@
-package es.caib.pagos.front.controller;
+package es.caib.pagosMOCK.front.controller;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.tiles.ComponentContext;
 
-import es.caib.pagos.persistence.delegate.SesionPagoDelegate;
+import es.caib.pagosMOCK.persistence.delegate.SesionPagoDelegate;
 import es.caib.sistra.plugins.pagos.DatosPago;
 
 
