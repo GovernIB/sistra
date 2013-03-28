@@ -68,6 +68,10 @@ public class DatosPago implements Serializable{
 	 * Nombre y apellidos del declarante
 	 */
 	private String nombreDeclarante;
+	/**
+	 * Telefono del declarante
+	 */
+	private String telefonoDeclarante;
 	
 	/**
 	 * Concepto de la tasa
@@ -274,5 +278,11 @@ public class DatosPago implements Serializable{
 	}
 	public void setIdentificadorOrganismo(String identificadorOrganismo) {
 		this.identificadorOrganismo = identificadorOrganismo;
+	}
+	public String getTelefonoDeclarante() {
+		return telefonoDeclarante;
+	}
+	public void setTelefonoDeclarante(String telefonoDeclarante) {
+		this.telefonoDeclarante = telefonoDeclarante;
 	}	
 }

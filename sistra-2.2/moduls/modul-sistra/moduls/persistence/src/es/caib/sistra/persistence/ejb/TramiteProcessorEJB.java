@@ -1235,6 +1235,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	        		dp.setModelo(datosPago.getModelo());
 	        		dp.setNifDeclarante(datosPago.getNif());
 	        		dp.setNombreDeclarante(datosPago.getNombre());
+	        		dp.setTelefonoDeclarante(datosPago.getTelefono());
 	        		dp.setModeloTramite(this.tramiteInfo.getModelo());
 	        		dp.setVersionTramite(this.tramiteInfo.getVersion());
 	        		dp.setIdentificadorTramite(this.tramiteInfo.getIdPersistencia());
