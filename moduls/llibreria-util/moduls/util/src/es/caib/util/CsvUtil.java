@@ -64,7 +64,7 @@ public class CsvUtil {
 	public static byte[] exportar(CsvDocumento csv) throws Exception{
 		
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(8192);
-		Writer writer = new OutputStreamWriter(bos);
+		Writer writer = new OutputStreamWriter(bos, "ISO-8859-1");
 		CsvWriter csvOutput = new CsvWriter(writer,CHAR_DELIMITIER);
 
 		// Headers
