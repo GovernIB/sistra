@@ -28,27 +28,39 @@ public class CancelarFormServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-    	logger.debug("Cancel·lació formulari");
-        
-        String tokenGestionFormulario = request.getParameter( Constants.GESTOR_FORM_PARAM_ALMACENAMIENTO_GESTOR_FORMULARIO );
+    	String tokenGestionFormulario = request.getParameter( Constants.GESTOR_FORM_PARAM_ALMACENAMIENTO_GESTOR_FORMULARIO );
+    	
+    	logger.debug( "DEBUGFORM: CancelarFormServlet - Id gestor form: " + tokenGestionFormulario + " - Charset: " + request.getCharacterEncoding());
+    	
     	String token = null;
+    	String msgError = null;
     	try
     	{
-    		GestorFlujoFormulario gestorFormularios = FlujoFormularioRequestHelper.obtenerGestorFormulario( request, tokenGestionFormulario, false );
+    		GestorFlujoFormulario gestorFormularios = FlujoFormularioRequestHelper.obtenerGestorFormulario( request, tokenGestionFormulario);
+    		if (gestorFormularios == null) {
+    			throw new Exception("No se encuentra gestor de formularios en contexto");
+    		}
     		token = gestorFormularios.cancelarFormulario();
+    		if (token == null) {
+    			msgError = "Error cancelando datos formulario en gestor formulario";
+    		}
     	}
     	catch( Exception exc )
     	{
     		logger.error( "Error intentando cancelar proceso formulario", exc );
-    		token = exc.getMessage();
+    		msgError = "Excepcion: " + exc.getMessage();
     	}
-    	logger.debug("Tornant token: " + token);
+    	
         
-    	byte[] encBytes = token.getBytes( "UTF-8" );
-        response.reset();
-        response.setContentLength(encBytes.length);
-        response.setContentType("text/plain; charset=UTF-8");
-        response.getOutputStream().write(encBytes);
-        response.flushBuffer();
+    	if (token == null) {
+    		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, msgError);    	    
+    	} else {
+	    	byte[] encBytes = token.getBytes( "UTF-8" );
+	        response.reset();
+	        response.setContentLength(encBytes.length);
+	        response.setContentType("text/plain; charset=UTF-8");
+	        response.getOutputStream().write(encBytes);
+	        response.flushBuffer();
+    	}
     }
 }

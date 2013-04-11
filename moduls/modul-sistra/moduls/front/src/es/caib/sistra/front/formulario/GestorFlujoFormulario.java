@@ -10,6 +10,20 @@ import es.caib.sistra.model.TramiteFront;
 
 public interface GestorFlujoFormulario extends Storable
 {
+	
+	/**
+	 * Idenficador gestor formularios.
+	 * @param idGestor
+	 */
+	public void setId(String idGestor);
+	
+	/**
+	 * Idenficador gestor formularios.
+	 * @return idGestor
+	 */
+	public String getId();
+	
+	
 	/**
 	 * Inicializacion de la clase
 	 * @param initParams

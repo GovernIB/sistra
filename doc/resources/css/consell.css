@@ -30,7 +30,7 @@ input, select, textarea, button { font:normal 1em Verdana, Arial, Helvetica, san
 /* estils aplicats a l'atribut "id" de qualsevol etiqueta, o etiqueta específica (p). Són costants a tota l'aplicació */
 
 /* capa que conté a totes les demés */
-#contenidor { width:100%; margin:0 auto 1.2em auto; }
+#contenidor { width:58em; margin:0 auto 1.2em auto; }
 
 /* capa que conté el logotip de l'aplicació */
 #cap { text-align:left; padding-bottom:.8em; padding-left:1em; }

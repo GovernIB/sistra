@@ -3,6 +3,8 @@ package es.caib.sistra.front.action.formulario;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -29,40 +31,46 @@ import es.caib.sistra.persistence.delegate.InstanciaDelegate;
  */
 public class ContinuarCancelacionAction extends BaseAction
 {
+	
+	private static Log log = LogFactory.getLog(ContinuarCancelacionAction.class);
+			
 	public ActionForward executeTask(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		String accionRedireccion = "/protected/irAPaso.do";
+		
 		ContinuarTramitacionForm formulario = (ContinuarTramitacionForm) form;
-		GestorFlujoFormulario gestorFormularios = this.obtenerGestorFormulario( request, formulario.getGstfrm(), false );
-		if ( gestorFormularios != null )
+		
+		log.debug("DEBUGFORM: ContinuarCancelacionAction [GF:" + formulario.getGstfrm() + " - TF:" + formulario.getTOKEN() + "]" );
+		
+		// Obtiene gestor formulario del contexto
+		GestorFlujoFormulario gestorFormularios = this.obtenerGestorFormulario( request, formulario.getGstfrm());
+		if ( gestorFormularios == null )
 		{
-			boolean resultadoProcesoFormulario = gestorFormularios.continuarCancelacion( formulario.getTOKEN() );
-			if ( !resultadoProcesoFormulario )
-			{
-				this.setErrorMessage( request, "errors.errorCancelacionForm" );
-			}
-			this.resetGestorFormulario( request, formulario.getGstfrm() );
+			throw new Exception("No se encuentra gestor formulario en contexto");
 		}
-		// Obtenemos la informacion del trámite
+		
+		// Recupera informacion del gestor de formularios y borra gestor del contexto
+		boolean resultadoProcesoFormulario = gestorFormularios.continuarCancelacion( formulario.getTOKEN() );
+		if ( !resultadoProcesoFormulario )
+		{
+			this.setErrorMessage( request, "errors.errorCancelacionForm" );
+		}
+		this.resetGestorFormulario( request, formulario.getGstfrm() );
+		
+		
+		// Recupera instancia tramitacion y va a paso actual
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request );
 		RespuestaFront respuestaFront = delegate.pasoActual();
-        // Si se ha abandonado el formulario y se trata de un trámite con circuito reducido
+        // Si es trámite con circuito reducido abandonamos tramite
+		// Si no, vamos a paso actual
+		String accionRedireccion = "/protected/irAPaso.do";
 		if ( respuestaFront != null 
         		&& respuestaFront.getInformacionTramite() != null && 
         			respuestaFront.getInformacionTramite().isCircuitoReducido() )
         {
 			// Simplemente abandonamos el trámite 
-			accionRedireccion = "/protected/abandonarTramite.do";
-			
-			// vamos a la página inicial OLD
-			/*
-			String modelo = respuestaFront.getInformacionTramite().getModelo();
-			int version = respuestaFront.getInformacionTramite().getVersion();
-        	accionRedireccion = "/protected/init.do?ID_INSTANCIA=" + InstanciaManager.getIdInstancia( request ) + "&modelo=" + modelo + "&version=" + version;
-        	*/
+			accionRedireccion = "/protected/abandonarTramite.do";			
         }
-       	request.setAttribute( "accionRedireccion", accionRedireccion );
-        	
-		return mapping.findForward( "success" );
+		request.setAttribute( "accionRedireccion", accionRedireccion );
+        return mapping.findForward( "success" );
 	}
 }
