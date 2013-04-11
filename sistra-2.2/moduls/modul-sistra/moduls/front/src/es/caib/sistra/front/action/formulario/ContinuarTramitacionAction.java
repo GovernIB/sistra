@@ -3,6 +3,8 @@ package es.caib.sistra.front.action.formulario;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -36,23 +38,33 @@ import es.caib.sistra.persistence.delegate.InstanciaDelegate;
  */
 public class ContinuarTramitacionAction extends BaseAction
 {
+	private static Log log = LogFactory.getLog(ContinuarTramitacionAction.class);
+	
 	public ActionForward executeTask(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
 		ContinuarTramitacionForm formulario = (ContinuarTramitacionForm) form;
-		GestorFlujoFormulario gestorFormularios = this.obtenerGestorFormulario( request, formulario.getGstfrm(), false );
-		RespuestaFront respuestaFront = null;
-		if ( gestorFormularios != null )
-		{
-			ResultadoProcesoFormulario resultadoProcesoFormulario = gestorFormularios.continuarTramitacion( formulario.getTOKEN() );
-			this.resetGestorFormulario( request, formulario.getGstfrm() );
-			InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request );
-			respuestaFront = delegate.guardarFormulario( resultadoProcesoFormulario.getFormulario().getIdentificador(), resultadoProcesoFormulario.getFormulario().getInstancia(), resultadoProcesoFormulario.getXmlInicial(), resultadoProcesoFormulario.getXmlActual() );
-			this.setRespuestaFront( request, respuestaFront );
+		
+		log.debug("DEBUGFORM: ContinuarTramitacionAction [GF:" + formulario.getGstfrm() + " - TF:" + formulario.getTOKEN() + "]" );
+		
+		// Obtiene gestor formulario de contexto
+		GestorFlujoFormulario gestorFormularios = this.obtenerGestorFormulario( request, formulario.getGstfrm());
+		if ( gestorFormularios == null ) {
+			throw new Exception("No se encuentra gestor formulario en contexto");
 		}
 		
-        // Si es tramite reducido, vamos directamente a registrar el tramite
+		// Recuperamos resultado formulario del gestor de formularios y lo eliminamos del contexto
+		ResultadoProcesoFormulario resultadoProcesoFormulario = gestorFormularios.continuarTramitacion( formulario.getTOKEN() );
+		this.resetGestorFormulario( request, formulario.getGstfrm() );
+		
+		// Recupera instancia tramitacion e invoca a guardar formulario
+		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request );
+		RespuestaFront respuestaFront = delegate.guardarFormulario( resultadoProcesoFormulario.getFormulario().getIdentificador(), resultadoProcesoFormulario.getFormulario().getInstancia(), resultadoProcesoFormulario.getXmlInicial(), resultadoProcesoFormulario.getXmlActual() );
+		this.setRespuestaFront( request, respuestaFront );
+		
+		// Si es tramite reducido, vamos directamente a registrar el tramite
+		// Si no es reducido vamos a paso actual
         if ( respuestaFront != null 
         		&& respuestaFront.getInformacionTramite() != null && 
         			respuestaFront.getInformacionTramite().isCircuitoReducido() )
@@ -63,10 +75,10 @@ public class ContinuarTramitacionAction extends BaseAction
         	}else{
         		return mapping.findForward( "registroTramiteReducido" );
         	}
+        } else {
+        	request.setAttribute( "accionRedireccion", "/protected/irAPaso.do" );
+        	return mapping.findForward( "success" );
         }
-		
-		request.setAttribute( "accionRedireccion", "/protected/irAPaso.do" );
-		return mapping.findForward( "success" );
 	}
 
 }

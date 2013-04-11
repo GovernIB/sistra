@@ -39,6 +39,7 @@ import es.caib.xml.formsconf.factoria.impl.Propiedad;
 
 public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serializable
 {
+	
 	// Propiedades estáticas del manejador
 	private static boolean initialized = false; // Solo las inicializará la primera instancia que se cree
 	private static Log log = LogFactory.getLog( GestorFlujoFormularioFORMS.class );
@@ -62,6 +63,8 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 	private static String DEFAULT_LAYOUT = "caib";
 		
 	// Propiedades de instancia
+	// - Id gestor
+	private String id; 
 	// - Configuracion formulario
 	private Map initParams;
 	// - Almacenamiento datos del formulario
@@ -93,7 +96,7 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 			}
 			catch ( Exception exc )
 			{
-				log.error( exc );
+				log.error("Excepcion inicializando gestor", exc );
 			}
 			initialized = true;
 		}
@@ -103,31 +106,41 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 	
 	public boolean continuarCancelacion(String token)
 	{
-		log.debug( "Continuando tramitación con cancelación" );
+		log.debug( "DEBUGFORM: GestorFormularios.continuarCancelacion" );
 		Boolean cancelacio = ( Boolean ) storingArea.get( CANCEL_PARAM + token );
 		cancelacio = cancelacio == null ? Boolean.FALSE : cancelacio;
 		storingArea.remove( CANCEL_PARAM + token );
 		storingArea.clear();
 		storingArea = null;
+		
+		log.debug("DEBUGFORM: GestorFormularios.continuarCancelacion [GF:" + this.getId() + " - TF:" + token + "]" );
+		
 		return cancelacio.booleanValue();
 	}
 
 	
 	public String cancelarFormulario()
 	{
-		log.debug( "Cancelando formulario" );
+		log.debug( "DEBUGFORM: GestorFormularios.cancelarFormulario" );
 		String token = Util.generateToken();
 		storingArea.remove( RESULT_PARAM );
 		storingArea.put( CANCEL_PARAM + token, Boolean.TRUE );
+		
+		log.debug("DEBUGFORM: GestorFormularios.cancelarFormulario [GF:" + this.getId() + " - TF:" + token + "]" );
+		
 		return token;
 	}
 
 	public ResultadoProcesoFormulario continuarTramitacion(String token)
 	{
+		log.debug( "DEBUGFORM: GestorFormularios.continuarTramitacion" );
 		ResultadoProcesoFormulario resultado = 
-		 ( ResultadoProcesoFormulario ) storingArea.get( RESULT_PARAM  + token );
+			( ResultadoProcesoFormulario ) storingArea.get( RESULT_PARAM  + token );
 		storingArea.clear();
 		storingArea = null;
+		
+		log.debug("DEBUGFORM: GestorFormularios.continuarTramitacion [GF:" + this.getId() + " - TF:" + token + "]" );
+		
 		return resultado;
 	}
 
@@ -135,18 +148,25 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 	{
 		try
 		{
-	        String token = Util.generateToken();
+			log.debug( "DEBUGFORM: GestorFormularios.guardarDatosFormulario" );
+			
+			// Recupera resultado formulario y actualiza datos 
 	        ResultadoProcesoFormulario resultado = ( ResultadoProcesoFormulario ) storingArea.get( RESULT_PARAM );
-	        storingArea.remove( RESULT_PARAM );
 	        resultado.setXmlActual( xmlActual );
 	        resultado.setXmlInicial( xmlInicial );
 	        
+	        // Almacena resultado añadiendole un token
+	        String token = Util.generateToken();
+	        storingArea.remove( RESULT_PARAM );
 	        storingArea.put( RESULT_PARAM  + token, resultado );
+	        
+	        log.debug("DEBUGFORM: GestorFormularios.guardarDatosFormulario [GF:" + this.getId() + " - TF:" + token + "]" );
+	        
 	        return token;
 		}
 		catch ( Exception exc )
 		{
-			log.error( exc );
+			log.error("Excepcion guardando datos formulario", exc );
 			return null;
 		}
 	}
@@ -156,6 +176,8 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 								 TramiteFront informacionTramite, 								 
 								 Map parametrosRetorno  )
 	{
+		
+		log.debug( "DEBUGFORM: GestorFormularios.irAFormulario" );
 		
 		// Inicializamos urls gestor formulario
 		String urlGestor = null;
@@ -188,6 +210,16 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
         PostMethod method = new PostMethod(URL_TRAMITACION_FORMULARIO);
         try 
         {
+        	// Genera xml de configuracion
+        	String xmlConfiguracion = obtenerXMLConfiguracion(confGestorForm.getPropiedad("tituloAplicacion"),
+    				formulario,
+    				confGestorForm.getPropiedad("modelo"),
+    				Integer.parseInt(confGestorForm.getPropiedad("version")),
+    				locale,
+    				informacionTramite,
+    				confGestorForm.getConfiguracionFormulario(),
+    				parametrosRetorno );
+        	
         	// Vemos si hay que pasar por proxy
     		String proxyHost = System.getProperty("http.proxyHost");
     		if (proxyHost != null && !"".equals(proxyHost)) {
@@ -202,44 +234,35 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
     			}
     		}
         	
+    		// Realiza peticion y obtiene token de redireccion
 	        method.addRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
 	        method.getParams().setContentCharset("UTF-8");
 	        method.addParameter("xmlData", confGestorForm.getDatosActualesFormulario());
-	        //obtener la representacion xml del objeto de configuracion del formulario
 	        method.addParameter("xmlConfig", 
-	        			obtenerXMLConfiguracion(confGestorForm.getPropiedad("tituloAplicacion"),
-	        									formulario,
-	        									confGestorForm.getPropiedad("modelo"),
-	        									Integer.parseInt(confGestorForm.getPropiedad("version")),
-	        									locale,
-	        									informacionTramite,
-	        									confGestorForm.getConfiguracionFormulario(),
-	        									parametrosRetorno ) );
-	        	      
+	        			xmlConfiguracion );
             int status = client.executeMethod(method);
-
             if (status != HttpStatus.SC_OK) {
                 log.error("Error iniciando tramite: " + status);
                 return null;
             }
-                      
-            String token= method.getResponseBodyAsString();            
+            String token= method.getResponseBodyAsString();
+            
+            // Almacena en el gestor de formularios el formulario inicial
+            ResultadoProcesoFormulario resultado = new ResultadoProcesoFormulario();
+            resultado.setFormulario( formulario );
+            storingArea.put( RESULT_PARAM, resultado );
+           
+            // Generamos url de redireccion y la retornamos
             Map params = new HashMap();
             params.put(TOKEN_NAME, token);                                  
             String url = this.appendParametersToURL( URL_REDIRECCION_FORMULARIO, params);
             
-            
-            ResultadoProcesoFormulario resultado = new ResultadoProcesoFormulario();
-            resultado.setFormulario( formulario );
-            //resultado.setXmlInicial( xmlInicial );
-            
-            storingArea.put( RESULT_PARAM, resultado );
-            
+            log.debug("DEBUGFORM: GestorFormularios.irAFormulario [GF:" + this.getId() + "]" );
 
             return url;
 
         } catch (Exception e) {
-        	log.error( "Error conectando con Forms: " + e.getMessage(),e );
+        	log.error( "Error conectando con gestor formularios: " + e.getMessage(),e );
             return null;
         } finally {
             method.releaseConnection();
@@ -397,6 +420,18 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 			throw e;
 		}
 		return existe;
+	}
+
+
+
+	public String getId() {
+		return id;
+	}
+
+
+
+	public void setId(String idGestor) {
+		this.id = idGestor;
 	}
 	
 }

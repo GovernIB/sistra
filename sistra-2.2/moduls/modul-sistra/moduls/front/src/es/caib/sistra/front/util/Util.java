@@ -1,4 +1,6 @@
 package es.caib.sistra.front.util;
+import java.security.SecureRandom;
+
 import javax.naming.InitialContext;
 
 import org.apache.commons.codec.binary.Base64;
@@ -42,9 +44,20 @@ public class Util
     	String token = null;
     	try
     	{
-	    	 byte[] bytes = String.valueOf(System.currentTimeMillis()).getBytes();
-	    	 byte[] encBytes = Base64.encodeBase64(bytes);
-		     token = new String(encBytes, "UTF-8");
+    		// Generamos token: time + random
+    		SecureRandom sr = new SecureRandom();
+	 		String rn = "" + sr.nextInt(99999999);
+	 		if (rn.length() < 8) {
+	 			for (int i=rn.length();i<8;i++){
+	 				rn += "0";
+	 			}			
+	 		}
+    		String tokenStr = String.valueOf(System.currentTimeMillis())  + rn;
+    		
+    		// Pasamos a B64 
+			byte[] bytes = tokenStr.getBytes("UTF-8");
+	    	byte[] encBytes = Base64.encodeBase64(bytes);
+		    token = new String(encBytes, "UTF-8");
     	}
     	catch ( Exception exc )
     	{

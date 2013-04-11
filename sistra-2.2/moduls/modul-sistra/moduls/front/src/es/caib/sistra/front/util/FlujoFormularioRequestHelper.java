@@ -16,30 +16,32 @@ public class FlujoFormularioRequestHelper
 {
 	private static Log log = LogFactory.getLog( FlujoFormularioRequestHelper.class );
 	
-	public static GestorFlujoFormulario obtenerGestorFormulario( HttpServletRequest request, String token, boolean create ) throws Exception
+	public static GestorFlujoFormulario crearGestorFormulario( HttpServletRequest request, String token) throws Exception
 	{
 		GestorFlujoFormulario gestorFormulario = ( GestorFlujoFormulario ) recoverObject( request, Constants.GESTOR_FORM_SESSION_KEY + token );
-		
-		if ( gestorFormulario == null )
-		{
-			if ( !create )
-			{
-				log.error( "En este punto no se puede reiniciar el proceso del formulario" );
-				return null;
-			}
-			
-			gestorFormulario = FactoriaGestorFlujoFormulario.getInstance().obtenerGestorFlujoFormulario( Constants.GESTOR_FORM_CLASS );			
-			gestorFormulario.setExpirationTime( ( new java.util.Date() ).getTime() + request.getSession().getMaxInactiveInterval() * 1000 ) ;
-			
-
-			// Introducimos en sesion el token con el que se almacena el gestor de formularios en el servlet context,
-			// para que si no se completa el formulario, el evento de expiración de sesión lo borre de este mismo contexto
-			request.getSession().setAttribute( Constants.GESTOR_FORM_PARAM_ALMACENAMIENTO_GESTOR_FORMULARIO, token );
-			
-			
-			storeObject( request, Constants.GESTOR_FORM_SESSION_KEY + token, gestorFormulario );
+		if ( gestorFormulario != null ) {
+			throw new Exception("Ya existe un gestor de formularios con ese id en el contexto");
 		}
+			
+		gestorFormulario = FactoriaGestorFlujoFormulario.getInstance().obtenerGestorFlujoFormulario( Constants.GESTOR_FORM_CLASS );	
+		gestorFormulario.setId(token);
+		gestorFormulario.setExpirationTime( ( new java.util.Date() ).getTime() + request.getSession().getMaxInactiveInterval() * 1000 ) ;
+		
+		// Introducimos en sesion el token con el que se almacena el gestor de formularios en el servlet context,
+		// para que si no se completa el formulario, el evento de expiración de sesión lo borre de este mismo contexto
+		request.getSession().setAttribute( Constants.GESTOR_FORM_PARAM_ALMACENAMIENTO_GESTOR_FORMULARIO, token );
+		
+		
+		storeObject( request, Constants.GESTOR_FORM_SESSION_KEY + token, gestorFormulario );
+		
 		return gestorFormulario;
+			
+	}
+	
+	public static GestorFlujoFormulario obtenerGestorFormulario( HttpServletRequest request, String token) throws Exception
+	{
+		GestorFlujoFormulario gestorFormulario = ( GestorFlujoFormulario ) recoverObject( request, Constants.GESTOR_FORM_SESSION_KEY + token );
+		return gestorFormulario;		
 	}
 
 	public static void resetGestorFormulario( HttpServletRequest request, String token ) throws Exception

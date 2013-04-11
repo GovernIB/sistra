@@ -87,7 +87,7 @@ public class IrAFormularioAction extends BaseAction
 		// NO confundir con el que se se genera en un paso posterior para que forms redirija la pagina.
 		String tokenGestionFormulario = Util.generateToken(); 
 		
-		GestorFlujoFormulario gestorFormularios = this.obtenerGestorFormulario( request,tokenGestionFormulario, true );		
+		GestorFlujoFormulario gestorFormularios = this.crearGestorFormulario( request,tokenGestionFormulario);		
 		
 		Map parametrosRetorno = new LinkedHashMap();
 		//parametrosRetorno.put( "jsessionid", request.getSession().getId() );
@@ -103,7 +103,9 @@ public class IrAFormularioAction extends BaseAction
 			return mapping.findForward( "error" );
 		}
 		
-		log.debug("Redireccionant a: " + urlRedireccion );
+		// log.debug("Redireccionant a: " + urlRedireccion );
+		
+		log.debug("DEBUGFORM: IrAFormularioAction [GF:" + tokenGestionFormulario + "]" );
 		
         response.sendRedirect( urlRedireccion );
         
