@@ -1,4 +1,4 @@
-﻿--ALTER SESSION SET NLS_LENGTH_SEMANTICS = 'CHAR';
+--ALTER SESSION SET NLS_LENGTH_SEMANTICS = 'CHAR';
 
 create sequence MOB_SEQENV;
 
@@ -148,7 +148,7 @@ alter table MOB_MSEMAI
    add constraint MOB_MSE_PK primary key (MSE_CODIGO);
 
 create index MOB_MSEENV_FK_I on MOB_MSEMAI (
-   MSE_IDENV ASC
+   MSE_IDENV
 );
 
 create table MOB_MSSMS  (
@@ -206,7 +206,7 @@ alter table MOB_MSSMS
    add constraint MOB_MSS_PK primary key (MSS_CODIGO);
 
 create index MOB_MSSENV_FK_I on MOB_MSSMS (
-   MSS_IDENV ASC
+   MSS_IDENV
 );
 
 create table MOB_PERMIS  (

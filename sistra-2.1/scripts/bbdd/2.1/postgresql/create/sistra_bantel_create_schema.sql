@@ -1,4 +1,4 @@
-﻿--ALTER SESSION SET NLS_LENGTH_SEMANTICS = 'CHAR';
+--ALTER SESSION SET NLS_LENGTH_SEMANTICS = 'CHAR';
 
 create sequence BTE_SEQDOC;
 
@@ -66,7 +66,7 @@ alter table BTE_DOCUM
    add constraint BTE_DOC_PK primary key (DOC_CODIGO);
 
 create index BTE_DOCTRA_FK_I on BTE_DOCUM (
-   DOC_CODTRA ASC
+   DOC_CODTRA
 );
 
 create table BTE_FICEXP  (
@@ -400,11 +400,11 @@ alter table BTE_TRAMIT
    add constraint BTE_NUMPRE_UNI unique (TRA_NUMPRE);
 
 create index BTE_TRATRA_I on BTE_TRAMIT (
-   TRA_IDETRA ASC
+   TRA_IDETRA
 );
 
 create index BTE_TRATAP_FK_I on BTE_TRAMIT (
-   TRA_IDEPRO ASC
+   TRA_IDEPRO
 );
 
 alter table BTE_TRAMIT add constraint BTE_TRATAP_FK foreign key (TRA_IDEPRO)

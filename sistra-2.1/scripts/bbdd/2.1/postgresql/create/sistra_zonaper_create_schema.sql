@@ -1,4 +1,4 @@
-﻿-- ALTER SESSION SET NLS_LENGTH_SEMANTICS = 'CHAR';
+-- ALTER SESSION SET NLS_LENGTH_SEMANTICS = 'CHAR';
 
 create sequence ZPE_SEQDEN;
 
@@ -61,7 +61,7 @@ alter table ZPE_DOCENT
    add constraint ZPE_DEN_PK primary key (DEN_CODIGO);
 
 create index ZPE_DENENT_FK_I on ZPE_DOCENT (
-   DEN_CODENT ASC
+   DEN_CODENT
 );
 
 create table ZPE_DOCHIE  (
@@ -98,7 +98,7 @@ alter table ZPE_DOCHIE
    add constraint ZPE_DHE_PK primary key (DHE_CODIGO);
 
 create index ZPE_DHEHIE_FK_I on ZPE_DOCHIE (
-   DHE_CODHIE ASC
+   DHE_CODHIE
 );
 
 create table ZPE_DOCNOT  (
@@ -141,7 +141,7 @@ alter table ZPE_DOCNOT
    add constraint ZPE_DNO_PK primary key (DNO_CODIGO);
 
 create index ZPE_DNONOT_FK_I on ZPE_DOCNOT (
-   DNO_CODNOT ASC
+   DNO_CODNOT
 );
 
 create table ZPE_DOCPER  (
@@ -205,7 +205,7 @@ alter table ZPE_DOCPER
    add constraint ZPE_DPE_PK primary key (DPE_CODIGO);
 
 create index ZPE_DPETPE_FK_I on ZPE_DOCPER (
-   DPE_CODTPE ASC
+   DPE_CODTPE
 );
 
 create table ZPE_DOCPRE  (
@@ -270,7 +270,7 @@ alter table ZPE_DOCPRE
    add constraint ZPE_DPR_PK primary key (DPR_CODIGO);
 
 create index ZPE_DPRPRE_FK_I on ZPE_DOCPRE (
-   DPR_CODPRE ASC
+   DPR_CODPRE
 );
 
 create table ZPE_DPEBCK  (
@@ -315,7 +315,7 @@ alter table ZPE_DPEBCK
    add constraint ZPE_DPB_PK primary key (DPB_CODIGO);
 
 create index ZPE_DPBTPB_FK_I on ZPE_DPEBCK (
-   DPB_CODTPB ASC
+   DPB_CODTPB
 );
 
 create table ZPE_DPRBCK  (
@@ -380,7 +380,7 @@ alter table ZPE_DPRBCK
    add constraint ZPE_DRB_PK primary key (DRB_CODIGO);
 
 create index ZPE_DRBPRB_FK_I on ZPE_DPRBCK (
-   DRB_CODPRE ASC
+   DRB_CODPRE
 );
 
 create table ZPE_ELEEX  (
@@ -417,12 +417,12 @@ alter table ZPE_ELEEX
    add constraint ZPE_ELE_PK primary key (ELE_CODIGO);
 
 create unique index ZPE_ELEELE_UNI on ZPE_ELEEX (
-   ELE_TIPO ASC,
-   ELE_CODELE ASC
+   ELE_TIPO,
+   ELE_CODELE
 );
 
 create index ZPE_EXPELE_FK_I on ZPE_ELEEX (
-   ELE_CODEXP ASC
+   ELE_CODEXP
 );
 
 create table ZPE_ENTTEL  (
@@ -547,7 +547,7 @@ alter table ZPE_ENTTEL
    add constraint ZPE_ENT_PK primary key (ENT_CODIGO);
 
 create unique index ZPE_ENTIDP_UNI on ZPE_ENTTEL (
-   ENT_IDEPER ASC
+   ENT_IDEPER
 );
 
 create table ZPE_EXPEDI  (
@@ -818,7 +818,7 @@ alter table ZPE_NOTTEL
    add constraint ZPE_NOT_PK primary key (NOT_CODIGO);
 
 create unique index ZPE_NOTNRG_UNI on ZPE_NOTTEL (
-   NOT_NUMREG ASC
+   NOT_NUMREG
 );
 
 create table ZPE_PERSON  (
@@ -915,7 +915,7 @@ alter table ZPE_PERSON
    add constraint ZPE_PERSEY_UNI unique (PER_SEYCON);
 
 create index ZPE_PERIDE_IDX on ZPE_PERSON (
-   PER_IDENTI ASC
+   PER_IDENTI
 );
 
 create table ZPE_PREBCK  (
@@ -1193,11 +1193,11 @@ alter table ZPE_PREREG
    add constraint ZPE_PRE_PK primary key (PRE_CODIGO);
 
 create unique index ZPE_PREIDP_UNI on ZPE_PREREG (
-   PRE_IDEPER ASC
+   PRE_IDEPER
 );
 
 create unique index ZPE_PRENPR_UNI on ZPE_PREREG (
-   PRE_NUMPRE ASC
+   PRE_NUMPRE
 );
 
 create table ZPE_RPAGOS  (
@@ -1560,7 +1560,7 @@ comment on column ZPE_DOCREG.DRE_RDSCLA is
 alter table ZPE_DOCREG
    add constraint ZPE_DRE_PK primary key (DRE_CODIGO);
 create index ZPE_DRERET_FK_I on ZPE_DOCREG (
-   DRE_CODREG ASC
+   DRE_CODREG
 );
 alter table ZPE_DOCREG
    add constraint ZPE_REREG_FK foreign key (DRE_CODREG)
@@ -1749,7 +1749,7 @@ alter table ZPE_INDELE
    add constraint ZPE_INDELE_PK primary key (IND_CODIGO);
    
 create index ZPE_INDELE_IDX on ZPE_INDELE (
-   IND_NIF ASC
+   IND_NIF
 );
 
 -- V2.1.0
@@ -1781,7 +1781,7 @@ alter table ZPE_ELEEX add column ELE_IDPELE VARCHAR(50);
 alter table ZPE_ELEEX alter column ELE_IDPELE set not null;
 
 create unique index ZPE_ELEIDP_UNI on ZPE_ELEEX (
-   ELE_IDPELE ASC
+   ELE_IDPELE
 );
 
 /* ACCESO ANONIMO A EXPEDIENTE A TRAVES DE TRAMITES ANONIMOS */
