@@ -1,4 +1,4 @@
-﻿--ALTER SESSION SET NLS_LENGTH_SEMANTICS = 'CHAR';
+--ALTER SESSION SET NLS_LENGTH_SEMANTICS = 'CHAR';
 
 create sequence RDS_SEQAPL;
 
@@ -153,7 +153,7 @@ alter table RDS_FIRMAS
    add constraint RDS_FIR_PK primary key (FIR_CODIGO);
 
 create index RDS_FIRDOC_FK_I on RDS_FIRMAS (
-   FIR_CODDOC ASC
+   FIR_CODDOC
 );
 
 create table RDS_FORMAT  (
@@ -436,7 +436,7 @@ alter table RDS_USOS
    add constraint RDS_USO_PK primary key (USO_CODIGO);
 
 create index RDS_USODOC_IND on RDS_USOS (
-   USO_CODDOC ASC
+   USO_CODDOC
 );
 
 create table RDS_VERS  (
@@ -601,5 +601,9 @@ alter table RDS_FICEXT
    add constraint RDS_FIE_PK primary key (FIE_REFDOC);
 
 create index RDS_FIEDOC_FK_I on RDS_FICEXT (
-   FIE_CODDOC ASC
+   FIE_CODDOC
 );
+
+CREATE FUNCTION EMPTY_BLOB() RETURNS bytea
+   AS $$ SELECT ''::bytea $$
+   LANGUAGE SQL;

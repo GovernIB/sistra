@@ -1,4 +1,4 @@
-﻿-- ALTER SESSION SET NLS_LENGTH_SEMANTICS = 'CHAR';
+-- ALTER SESSION SET NLS_LENGTH_SEMANTICS = 'CHAR';
 
 create sequence STR_SEQDJS;
 
@@ -89,7 +89,7 @@ alter table STR_DMUNIC
    add constraint STR_MUN_PK primary key (MUN_CODIGO, MUN_PROVIN);
 
 create index STR_MUNPRO_IDX on STR_DMUNIC (
-   MUN_PROVIN ASC
+   MUN_PROVIN
 );
 
 create table STR_DOCNIV  (

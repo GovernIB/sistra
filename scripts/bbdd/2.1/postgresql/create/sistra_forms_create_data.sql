@@ -1,4 +1,4 @@
-﻿
+BEGIN;
 INSERT INTO rfr_idioma (idi_codi, idi_orden) VALUES ('es', 0);
 INSERT INTO rfr_idioma (idi_codi, idi_orden) VALUES ('it', 1);
 INSERT INTO rfr_idioma (idi_codi, idi_orden) VALUES ('pt', 2);

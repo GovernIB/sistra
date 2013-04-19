@@ -1,4 +1,5 @@
-﻿INSERT INTO AUD_MODUL ( MOD_MODUL, MOD_DESC, MOD_ORDEN, MOD_DESCCA ) VALUES ( 
+BEGIN;
+INSERT INTO AUD_MODUL ( MOD_MODUL, MOD_DESC, MOD_ORDEN, MOD_DESCCA ) VALUES ( 
 'CATALG', 'Tramitación', 2, 'Tramitació'); 
 
 INSERT INTO AUD_TIPOEV ( TIP_TIPO, TIP_MODUL, TIP_AUDIT, TIP_DESC, TIP_ORDEN, TIP_PRPCLS,
@@ -74,7 +75,5 @@ null,
 'Pago telemático con tarjeta',
 'Pagament telemàtic amb targeta',
 'Pagament telemàtic amb targeta');
-
-COMMIT;
 
 COMMIT;
