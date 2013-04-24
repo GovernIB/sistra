@@ -27,4 +27,10 @@ public class Constants implements Serializable
      * Atributo de contexto donde se indica si son obligatorias las notificaciones para los avisos
      */
     public static final String AVISOS_OBLIGATORIOS_NOTIFICACIONES = "es.caib.sistra.back.avisosObligatoriosNotificaciones";
+
+    /**
+     * Download fichero.
+     */
+	public static final String NOMBREFICHERO_KEY = "nombrefichero";
+	public static final String DATOSFICHERO_KEY = "datosfichero";
 }

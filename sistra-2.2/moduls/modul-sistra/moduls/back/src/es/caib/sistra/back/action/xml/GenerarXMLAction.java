@@ -1,5 +1,6 @@
 package es.caib.sistra.back.action.xml;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import es.caib.sistra.back.Constants;
 import es.caib.sistra.back.action.BaseAction;
 import es.caib.sistra.model.TramiteVersion;
 import es.caib.sistra.model.betwixt.Configurator;
@@ -24,6 +26,9 @@ import es.caib.xml.ConstantesXML;
  * path="/generar/xml"
  * scope="request"
  * validate="false"
+ * 
+ * @struts.action-forward
+ *  name="success" path="/downloadFichero.do"
  */
 public class GenerarXMLAction extends BaseAction {
 
@@ -31,7 +36,9 @@ public class GenerarXMLAction extends BaseAction {
 
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
-        TramiteVersionDelegate delegate = DelegateUtil.getTramiteVersionDelegate();
+        
+    	// Recuperamos version tramite
+    	TramiteVersionDelegate delegate = DelegateUtil.getTramiteVersionDelegate();
         Long idTramiteVersion = new Long(request.getParameter("codigo"));
         TramiteVersion tramiteVersion = delegate.obtenerTramiteVersion( idTramiteVersion ); 
         tramiteVersion = delegate.obtenerTramiteVersionCompleto( tramiteVersion.getTramite().getIdentificador(), tramiteVersion.getVersion() );
@@ -41,17 +48,22 @@ public class GenerarXMLAction extends BaseAction {
         tramiteVersion.setBloqueadoModificacion("N");
         tramiteVersion.setBloqueadoModificacionPor(null);
         
-        response.setContentType("application/octet-stream");
-        //String contentDispositionHeader = "attachment; filename=\"tramite-" + tramiteVersion.getTramite().getIdentificador()+ "-version-" + tramiteVersion.getVersion() + ".xml\"";
-        String contentDispositionHeader = "attachment; filename=\"tramite-" + tramiteVersion.getTramite().getIdentificador()+ "-" + tramiteVersion.getVersion() + ".xml\"";
-        response.setHeader( "Content-Disposition", contentDispositionHeader );
-        BeanWriter beanWriter = new BeanWriter(response.getOutputStream(), ConstantesXML.ENCODING );
+        // Generamos xml de exportacion
+        ByteArrayOutputStream bos = new ByteArrayOutputStream(8192);
+        BeanWriter beanWriter = new BeanWriter(bos, ConstantesXML.ENCODING );
         beanWriter.writeXmlDeclaration("<?xml version=\"1.0\" encoding=\"" + ConstantesXML.ENCODING + "\" ?>");
         //beanWriter.writeXmlDeclaration("<?xml version=\"1.0\" encoding=\"ISO-8859-15\" ?>");
         Configurator.configure(beanWriter);
         beanWriter.write(tramiteVersion);
         beanWriter.close();
-
-        return null;
+        
+        byte[] contentFic = bos.toByteArray();
+        String nombreFic = "tramite-" + tramiteVersion.getTramite().getIdentificador()+ "-" + tramiteVersion.getVersion() + ".xml";
+        bos.close();
+        
+        // Devolvemos XML
+		request.setAttribute( Constants.NOMBREFICHERO_KEY, nombreFic );		
+		request.setAttribute( Constants.DATOSFICHERO_KEY, contentFic );
+		return mapping.findForward( "success" );        
     }
 }
