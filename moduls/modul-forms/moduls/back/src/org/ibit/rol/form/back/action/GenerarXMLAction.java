@@ -1,5 +1,6 @@
 package org.ibit.rol.form.back.action;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -22,13 +23,11 @@ import org.ibit.rol.form.model.Campo;
 import org.ibit.rol.form.model.Componente;
 import org.ibit.rol.form.model.Formulario;
 import org.ibit.rol.form.model.Pantalla;
-import org.ibit.rol.form.model.Patron;
 import org.ibit.rol.form.model.Validacion;
 import org.ibit.rol.form.model.betwixt.Configurator;
 import org.ibit.rol.form.persistence.delegate.DelegateUtil;
 import org.ibit.rol.form.persistence.delegate.FormularioDelegate;
 import org.ibit.rol.form.persistence.delegate.GruposDelegate;
-import org.ibit.rol.form.persistence.delegate.PatronDelegate;
 
 import es.caib.util.ConvertUtil;
 
@@ -44,6 +43,9 @@ import es.caib.util.ConvertUtil;
  * 
  * @struts.action-forward
  *  name="fail" path=".formulario.lista"
+ *  
+ *  @struts.action-forward
+ *  name="success" path="/downloadFichero.do"
  */
 public class GenerarXMLAction extends BaseAction {
 
@@ -112,16 +114,21 @@ public class GenerarXMLAction extends BaseAction {
             }
         }
         /* INDRA: BUG EXPORTACION - NOS ASEGURAMOS QUE LAS VALIDACIONES TENGAN PROPIEDADES NO NULAS */
-
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment; filename=\"form-" + formulario.getModelo() + ".xml\"");
-        BeanWriter beanWriter = new BeanWriter(response.getOutputStream(), "UTF-8");
+        ByteArrayOutputStream bos = new ByteArrayOutputStream(8192);
+        BeanWriter beanWriter = new BeanWriter(bos, "UTF-8");
         beanWriter.writeXmlDeclaration("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
         Configurator.configure(beanWriter);
         beanWriter.write(formulario);
         beanWriter.close();
 
-        return null;
+        String nombreFic = "form-" + formulario.getModelo() + ".xml";
+        byte[] contentFic = bos.toByteArray();
+        bos.close();
+        
+        // Devolvemos XML
+		request.setAttribute( org.ibit.rol.form.back.Constants.NOMBREFICHERO_KEY, nombreFic );		
+		request.setAttribute( org.ibit.rol.form.back.Constants.DATOSFICHERO_KEY, contentFic );
+		return mapping.findForward( "success" ); 
     }
     
     private void modificarScriptsB64(Formulario form) throws Exception{
