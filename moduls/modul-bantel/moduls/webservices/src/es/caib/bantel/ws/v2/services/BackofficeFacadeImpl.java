@@ -84,8 +84,9 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 	
 	
 	private es.caib.bantel.ws.v2.model.TramiteBTE tramiteBTEIntfToTramiteBTEWS(es.caib.bantel.modelInterfaz.TramiteBTE tramBte) throws Exception{
-		es.caib.bantel.ws.v2.model.TramiteBTE tramWS = new es.caib.bantel.ws.v2.model.TramiteBTE();
+		es.caib.bantel.ws.v2.model.TramiteBTE tramWS = null;
 		if(tramBte != null){
+			tramWS = new es.caib.bantel.ws.v2.model.TramiteBTE();
 			if(tramBte.getAvisoEmail()!=null){
 				tramWS.setAvisoEmail(new JAXBElement<String>(new QName("avisoEmail"),String.class,tramBte.getAvisoEmail()));
 			}
