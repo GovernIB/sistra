@@ -179,9 +179,9 @@ public class PluginFormularios {
 		}		
 		
 		// Marcamos el formulario como modificado
-		formulariosDatosModificados.add(idDocumento + "-" + instancia);
+		addFormularioModificado(idDocumento, instancia);
 	}
-		
+
 	/**
 	 * Establece el valor de un campo del formulario 
 	 * 
@@ -278,4 +278,14 @@ public class PluginFormularios {
 		this.formulariosDatosModificados = formulariosDatosModificados;
 	}
 	
+	/**
+	 * Añade a lista de formularios modificados.
+	 * @param idDocumento Id documento
+	 * @param instancia Instancia
+	 */
+	private void addFormularioModificado(String idDocumento, int instancia) {
+		if (!formulariosDatosModificados.contains(idDocumento + "-" + instancia)){
+			formulariosDatosModificados.add(idDocumento + "-" + instancia);
+		}
+	}
 }
