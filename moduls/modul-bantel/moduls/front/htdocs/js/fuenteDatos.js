@@ -69,6 +69,7 @@ function realizarCambioCampo(){
 	$.ajax({
 		type: "POST",
 		url: "modificarValorCampoFuenteDatos.do",
+		contentType: "application/x-www-form-urlencoded;charset=UTF-8",
 		data: mapVars,
 		dataType: "json",
 		error: function() {
