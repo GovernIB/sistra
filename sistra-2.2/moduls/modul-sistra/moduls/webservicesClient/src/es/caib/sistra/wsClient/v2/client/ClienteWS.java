@@ -106,10 +106,10 @@ public class ClienteWS {
    				if(docs.getDocumento().get(i).getClaveRDS() != null){
    					doc.setClaveRDS(docs.getDocumento().get(i).getClaveRDS().getValue());
    				}
-   				if(docs.getDocumento().get(i).getCodigoRDS() != null){
+   				if(docs.getDocumento().get(i).getCodigoRDS() != null && docs.getDocumento().get(i).getCodigoRDS().getValue() !=  null){
    					doc.setCodigoRDS(docs.getDocumento().get(i).getCodigoRDS().getValue());
    				}
-   				if(docs.getDocumento().get(i).getContenidoFichero() != null){
+   				if(docs.getDocumento().get(i).getContenidoFichero() != null ){
    					doc.setContenidoFichero(docs.getDocumento().get(i).getContenidoFichero().getValue());
    				}
    				if(docs.getDocumento().get(i).getModelo() != null){
@@ -128,10 +128,10 @@ public class ClienteWS {
    				if(docs.getDocumento().get(i).getUrlAcceso() != null){
    					doc.setUrlAcceso(docs.getDocumento().get(i).getUrlAcceso().getValue());
    				}
-   				if(docs.getDocumento().get(i).getUrlNuevaVentana() != null){
+   				if(docs.getDocumento().get(i).getUrlNuevaVentana() != null && docs.getDocumento().get(i).getUrlNuevaVentana().getValue() != null){
    					doc.setUrlNuevaVentana(docs.getDocumento().get(i).getUrlNuevaVentana().getValue());
    				}
-   				if(docs.getDocumento().get(i).getVersion() != null){
+   				if(docs.getDocumento().get(i).getVersion() != null && docs.getDocumento().get(i).getVersion().getValue() != null){
    					doc.setVersion(docs.getDocumento().get(i).getVersion().getValue());
    				}
    				if(docs.getDocumento().get(i).getXml() != null){

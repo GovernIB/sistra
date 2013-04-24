@@ -5,11 +5,12 @@ import java.util.Properties;
 import javax.xml.ws.BindingProvider;
 
 import es.caib.util.ws.ConfigurationUtil;
+import es.caib.util.ws.Constantes;
 
 public class WsClientSistraUtil {
 
 	/**
-	 * Configura puerto segun la configuracion de sistra
+	 * Configura puerto segun la configuracion de sistra (por global.properties)
 	 * 
 	 * @param port
 	 * @param url
@@ -19,9 +20,28 @@ public class WsClientSistraUtil {
 	 */
 	public static void configurePort(BindingProvider port, String url,
 			String user, String pass) throws Exception {
+		configurePort(port, url, user, pass, Constantes.TIPO_CONFIGURACION_PROPERTIES);
+	}
+	
+	/**
+	 * Configura puerto segun la configuracion de sistra seleccionando desde donde coge la configuracion (properties o system)
+	 * 
+	 * @param port
+	 * @param url
+	 * @param user
+	 * @param pass
+	 * @throws Exception
+	 */
+	public static void configurePort(BindingProvider port, String url,
+			String user, String pass, String tipoConfiguracion) throws Exception {
 
-		Properties props = ConfigurationUtil.getInstance().obtenerPropiedades();
-
+		Properties props;
+		if (Constantes.TIPO_CONFIGURACION_PROPERTIES.equals(tipoConfiguracion)) {
+			props = ConfigurationUtil.getInstance().obtenerPropiedades();
+		} else {	
+			props = System.getProperties();
+		}
+		
 		String auth = props.getProperty("sistra.ws.authenticacion");
 
 		boolean generateTimestamp = "USERNAMETOKEN".equals(auth)

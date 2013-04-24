@@ -7,6 +7,7 @@ import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -29,6 +30,7 @@ import org.jboss.security.SubjectSecurityManager;
 import org.springframework.beans.factory.annotation.Required;
 
 import es.caib.util.ws.ConfigurationUtil;
+import es.caib.util.ws.Constantes;
 
 /**
  * CXF Interceptor that provides HTTP Basic Authentication validation.
@@ -55,11 +57,21 @@ public class BasicAuthAuthorizationInterceptor extends SoapHeaderInterceptor {
     protected SubjectSecurityManager authMgr;
     protected String unauthenticatedCalls;
     protected String securityDomain;
-	/** 
+    protected String tipoConfiguracion = "properties"; // Configuracion por properties o system 
+	
+    /**
+     * Indica si la configucion es por fichero de properties o por propiedades sistema.
+     * Si es por propiedades sistema debe ser el fichero de global.properties de sistra. 
+     * @param activar
+     */
+    public void setTipoConfiguracion(String conf) {
+        this.tipoConfiguracion = conf;
+    }
+    
+    /** 
      * initialize this authenticationhandler lazy, after the options have been
      * set.
      */
-    
     @Required
     public void setUnauthenticatedCalls(String unauthenticatedCalls) {
         this.unauthenticatedCalls = unauthenticatedCalls;
@@ -138,8 +150,14 @@ public class BasicAuthAuthorizationInterceptor extends SoapHeaderInterceptor {
     @Override public void handleMessage(Message message) throws Fault {
     	
     	String auth = null;
-		 try{			 
-			 auth = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.ws.authenticacion");			 
+		 try{		
+			 Properties propiedades;
+			 if (Constantes.TIPO_CONFIGURACION_PROPERTIES.equals(this.tipoConfiguracion)) {
+				propiedades = ConfigurationUtil.getInstance().obtenerPropiedades();							
+			 } else {
+				 propiedades = System.getProperties();
+			 }
+			 auth = propiedades.getProperty("sistra.ws.authenticacion");
 		 }catch (Exception ex){
 			 throw new Fault(ex);
 		 }

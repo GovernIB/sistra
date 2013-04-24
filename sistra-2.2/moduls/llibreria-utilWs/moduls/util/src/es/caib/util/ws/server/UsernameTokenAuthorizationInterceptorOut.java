@@ -9,6 +9,7 @@ import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.apache.ws.security.handler.WSHandlerConstants;
 
 import es.caib.util.ws.ConfigurationUtil;
+import es.caib.util.ws.Constantes;
 
 public class UsernameTokenAuthorizationInterceptorOut extends WSS4JOutInterceptor{
 	
@@ -17,7 +18,19 @@ public class UsernameTokenAuthorizationInterceptorOut extends WSS4JOutIntercepto
 		super(properties);
 		
 		try{		
-			 Properties props = ConfigurationUtil.getInstance().obtenerPropiedades();
+			String tipoConfiguracion = (String) properties.get("tipoConfiguracion");
+			if (tipoConfiguracion == null) {
+				tipoConfiguracion = Constantes.TIPO_CONFIGURACION_PROPERTIES;
+			}
+			
+			Properties props;
+			if (Constantes.TIPO_CONFIGURACION_PROPERTIES.equals(tipoConfiguracion)) {
+				props = ConfigurationUtil.getInstance().obtenerPropiedades();							
+			 } else {
+				 props = System.getProperties();
+			 }
+			 
+			 
 			 String auth = props.getProperty("sistra.ws.authenticacion");
 			 String timestamp = props.getProperty("sistra.ws.authenticacion.usernameToken.generateTimestamp");
 			 if ("USERNAMETOKEN".equals(auth) && "true".equals(timestamp)){
@@ -33,8 +46,19 @@ public class UsernameTokenAuthorizationInterceptorOut extends WSS4JOutIntercepto
 		
 	public void handleMessage(SoapMessage msg) throws Fault {
 		String auth = null;
-		 try{		
-			 Properties props = ConfigurationUtil.getInstance().obtenerPropiedades();
+		 try{	
+			String tipoConfiguracion = (String) this.getProperties().get("tipoConfiguracion");
+			if (tipoConfiguracion == null) {
+					tipoConfiguracion = Constantes.TIPO_CONFIGURACION_PROPERTIES;
+			}
+				
+			Properties props;
+			if (Constantes.TIPO_CONFIGURACION_PROPERTIES.equals(tipoConfiguracion)) {
+				props = ConfigurationUtil.getInstance().obtenerPropiedades();							
+			 } else {
+				 props = System.getProperties();
+			}
+			 
 			 auth = props.getProperty("sistra.ws.authenticacion");			 
 		 }catch (Exception ex){
 			 throw new Fault(ex);
