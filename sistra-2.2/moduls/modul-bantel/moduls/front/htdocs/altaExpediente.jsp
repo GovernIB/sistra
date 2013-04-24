@@ -91,6 +91,7 @@
  			$.ajax({
 				type: "POST",
 				url: "altaPersona.do",
+				contentType: "application/x-www-form-urlencoded;charset=UTF-8",
 				data: mapVars,
 				dataType: "json",
 				error: function() {
