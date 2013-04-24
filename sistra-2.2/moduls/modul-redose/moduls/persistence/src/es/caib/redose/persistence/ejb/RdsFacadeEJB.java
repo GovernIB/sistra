@@ -230,7 +230,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     public void actualizarDocumento(DocumentoRDS documento) throws ExcepcionRDS {
     	
     	// Solo permitimos actualizar fichero si tiene uso de persistencia
-    	List usos = this.listarUsos(documento.getReferenciaRDS());
+    	List usos = this.listarUsosDocumento(documento.getReferenciaRDS());
     	for (Iterator it=usos.iterator();it.hasNext();){
     		UsoRDS uso = (UsoRDS) it.next();
     		if (!uso.getTipoUso().equals(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE)){
@@ -251,7 +251,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     public void actualizarFichero(ReferenciaRDS ref, byte[] datos) throws ExcepcionRDS {
     	
     	// Solo permitimos actualizar fichero si tiene uso de persistencia
-    	List usos = this.listarUsos(ref);
+    	List usos = this.listarUsosDocumento(ref);
     	for (Iterator it=usos.iterator();it.hasNext();){
     		UsoRDS uso = (UsoRDS) it.next();
     		if (!uso.getTipoUso().equals(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE)){
@@ -260,7 +260,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	}
     	
     	// Obtenemos documento y realizamos cambios
-    	DocumentoRDS doc = this.consultarDocumento(ref,false);    	
+    	DocumentoRDS doc = this.consultarDocumentoImpl(ref,false);    	
     	doc.setDatosFichero(datos);
     	FirmaIntf[] firmas={};
     	doc.setFirmas(firmas);
@@ -292,7 +292,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
         	
         	// Guardamos firma
     		// verificar firma
-        	DocumentoRDS documento = this.consultarDocumento(refRds,true);
+        	DocumentoRDS documento = this.consultarDocumentoImpl(refRds,true);
         	
     		if ( !this.verificarFirma( documento.getDatosFichero(), firma ) )
     		{
@@ -423,7 +423,8 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.auto}"
      */
     public DocumentoRDS consultarDocumento(ReferenciaRDS refRds)  throws ExcepcionRDS{
-    	DocumentoRDS doc = consultarDocumento(refRds,true);    	
+    	DocumentoRDS doc = consultarDocumentoImpl(refRds,true);    	
+    	this.doLogOperacion(getUsuario(),CONSULTAR_DOCUMENTO,"consulta documento " + refRds.getCodigo() );
     	return doc;
     }
     
@@ -435,55 +436,13 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.auto}"
      */
     public DocumentoRDS consultarDocumento(ReferenciaRDS refRds,boolean recuperarFichero) throws ExcepcionRDS {    	
-       	// Obtenemos documento
-    	Session session = getSession();
-    	Documento documento;
-    	DocumentoRDS documentoRDS;
-	    try {	    	
-	    	// Obtenemos documento
-	    	documento = (Documento) session.load(Documento.class, new Long(refRds.getCodigo()));		    	
-	    	
-	    	// Control de documento borrado
-	    	if ("S".equals(documento.getBorrado())) throw new ExcepcionRDS("El documento " + documento.getCodigo() + " ha sido borrado por no tener usos" );
-	    	
-	    	// Comprobamos que la clave coincida
-	    	if (!documento.getClave().equals(refRds.getClave())){
-	    		throw new ExcepcionRDS("La clave no coincide");
-	    	}	    		    	
-	    	
-	    	
-	    	Hibernate.initialize(documento.getFirmas());
-	    	
-	    	
-	    	// Mapeamos a documentoRDS
-	    	documentoRDS = establecerCamposDocumentoRDS(documento);	    		    	
-	    } catch (HibernateException he) {
-	    	log.error("Error consultando documento",he);
-	        throw new ExcepcionRDS("Error consultando documento",he);
-	    } finally {
-	        close(session);
-	    }            	
-	    	    
-	    // Consultamos fichero asociado	    
-        try{        	
-        	if (recuperarFichero){
-        		// Obtenemos documento
-	        	PluginAlmacenamientoRDS plugin = obtenerPluginAlmacenamiento(documento.getUbicacion().getPluginAlmacenamiento());
-	        	documentoRDS.setDatosFichero(plugin.obtenerFichero(documento.getCodigo()));
-	        	// Verificamos hash
-	        	if (!documentoRDS.getHashFichero().equals(generaHash(documentoRDS.getDatosFichero()))) {
-	        		throw new Exception("No coincide el hash del documento almacenado. El fichero ha sido modificado.");
-	        	}	        	
-        	}
-        }catch(Exception e){
-        	log.error("No se ha podido obtener fichero en ubicación " + documento.getUbicacion().getCodigoUbicacion(),e);
-        	throw new ExcepcionRDS("Error al consultar documento: " + e.getMessage(),e);
-        }
-        
+       	DocumentoRDS documentoRDS = consultarDocumentoImpl(refRds,
+				recuperarFichero);
         this.doLogOperacion(getUsuario(),CONSULTAR_DOCUMENTO,"consulta documento " + refRds.getCodigo() );
-        
         return documentoRDS;
     }
+
+	
         
     /**
      * Consulta un documento del RDS de tipo estructurado formateado con una plantilla
@@ -543,7 +502,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	DocumentoRDS documentoRDS;
 	    try {	    	
 	    	// Realizamos consulta doc RDS
-	    	documentoRDS = consultarDocumento(refRds);
+	    	documentoRDS = consultarDocumentoImpl(refRds, true);
 	    	
 	    	// Si no es estructurado devolvemos documento sin formatear
 	    	if (!documentoRDS.isEstructurado()) return documentoRDS;
@@ -812,66 +771,12 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.auto}"
      */
     public List listarUsos(ReferenciaRDS refRDS) throws ExcepcionRDS {
-    	// Borramos uso
-    	Session session = getSession();   
-    	List listaUsosRDS;
-	    try {	    	
-	    	
-	    	// Comprobamos documento
-        	Documento documento;
-        	try{
-        		documento = (Documento) session.load(Documento.class,new Long(refRDS.getCodigo()));        		
-        	}catch(Exception e){
-        		//si no existe el documento devolvemos un arraylist vacio.
-        		return new ArrayList();
-        	}
-        	
-        	// Control de documento borrado
-	    	if ("S".equals(documento.getBorrado())) throw new ExcepcionRDS("El documento " + documento.getCodigo() + " ha sido borrado por no tener usos" );
-        	
-        	// Comprobamos clave
-    		if (!documento.getClave().equals(refRDS.getClave())){
-    			log.error("Clave de la referencia RDS no concuerda");
-        		throw new ExcepcionRDS("Clave de la referencia RDS no concuerda"); 
-    		}
-	    	
-	    	// Obtenemos usos
-	    	Query query = session.createQuery("FROM Uso AS u WHERE u.documento = :documento");
-            query.setParameter("documento", documento);
-            //query.setCacheable(true);
-            List result = query.list();
-            
-            
-            // Devolvemos usos
-            listaUsosRDS = new ArrayList();            
-            if (result.isEmpty()) {
-                return listaUsosRDS;
-            }
-
-            // Devolvemos usos
-            for (int i=0;i<result.size();i++){
-            	Uso uso = (Uso) result.get(i);
-            	UsoRDS usoRDS = new UsoRDS();
-            	usoRDS.setTipoUso(uso.getTipoUso().getCodigo());
-            	usoRDS.setReferencia(uso.getReferencia());            	
-            	usoRDS.setReferenciaRDS(refRDS);     
-            	usoRDS.setFechaSello(uso.getFechaSello());
-            	usoRDS.setFechaUso(uso.getFecha());
-            	listaUsosRDS.add(usoRDS);
-            }	    	
-            
-	    } catch (HibernateException he) {
-	    	log.error("Error al listar usos",he);
-	        throw new ExcepcionRDS("Error al listar usos" ,he);
-	    } finally {
-	        close(session);
-	    }            
-	    
+    	List listaUsosRDS = listarUsosDocumento(refRDS);            
 	    this.doLogOperacion(getUsuario(),LISTAR_USOS,"listar usos documento " + refRDS.getCodigo());
 	    return listaUsosRDS;
     }
-    
-    
+
+ 
     /**
      * Verifica documento formateado generado por la plataforma
      * @ejb.interface-method
@@ -887,7 +792,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    	    	
 	       	// Obtenemos documento
 	    	DocumentoRDS docRDS = null;	    	
-	    	docRDS = consultarDocumento(referenciaRDS,true);
+	    	docRDS = consultarDocumentoImpl(referenciaRDS,true);
 	    	
 	    	// Formateamos documento
 	    	DocumentoRDS docRDSFormat = consultarDocumentoFormateado(referenciaRDS,key.getPlantillaDocumento(),key.getIdiomaDocumento());
@@ -996,12 +901,12 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    		return null;
 	    	}
 	    	// Consultamos doc y usos asociados
-    		DocumentoRDS doc = this.consultarDocumento(refRDS);
+    		DocumentoRDS doc = this.consultarDocumentoImpl(refRDS, true);
     		// Si esta consolidado devolvemos referencia
     		if (doc.getReferenciaGestorDocumental() != null){
     			return doc.getReferenciaGestorDocumental();
     		}
-    		List usos = this.listarUsos(refRDS);
+    		List usos = this.listarUsosDocumento(refRDS);
     		
     		// Si no tiene uso, no se tiene que consolidar
     		if (usos.size() == 0){
@@ -1793,7 +1698,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	List usos = null;
     	if (documentoRDS.getReferenciaRDS() != null){
     		// Documento existente en RDS, obtenemos sus usos
-    		usos = listarUsos(documentoRDS.getReferenciaRDS());
+    		usos = listarUsosDocumento(documentoRDS.getReferenciaRDS());
     	}else{
     		// Documento no existente en el RDS. Usado para formatear docs que no existen en el RDS.
     		usos = new ArrayList();
@@ -1845,4 +1750,122 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	}
     }
     
+    /**
+     * Consulta usos documento.
+     * @param refRDS
+     * @return usos documento.
+     * @throws ExcepcionRDS
+     */
+	private List listarUsosDocumento(ReferenciaRDS refRDS) throws ExcepcionRDS {
+		List listaUsosRDS = null;
+		Session session = getSession();   
+    	try {	    	
+	    	
+	    	// Comprobamos documento
+        	Documento documento;
+        	try{
+        		documento = (Documento) session.load(Documento.class,new Long(refRDS.getCodigo()));        		
+        	}catch(Exception e){
+        		//si no existe el documento devolvemos un arraylist vacio.
+        		return new ArrayList();
+        	}
+        	
+        	// Control de documento borrado
+	    	if ("S".equals(documento.getBorrado())) throw new ExcepcionRDS("El documento " + documento.getCodigo() + " ha sido borrado por no tener usos" );
+        	
+        	// Comprobamos clave
+    		if (!documento.getClave().equals(refRDS.getClave())){
+    			log.error("Clave de la referencia RDS no concuerda");
+        		throw new ExcepcionRDS("Clave de la referencia RDS no concuerda"); 
+    		}
+	    	
+	    	// Obtenemos usos
+	    	Query query = session.createQuery("FROM Uso AS u WHERE u.documento = :documento");
+            query.setParameter("documento", documento);
+            //query.setCacheable(true);
+            List result = query.list();
+            
+            
+            // Devolvemos usos
+            listaUsosRDS = new ArrayList();            
+            if (result.isEmpty()) {
+                return listaUsosRDS;
+            }
+
+            // Devolvemos usos
+            for (int i=0;i<result.size();i++){
+            	Uso uso = (Uso) result.get(i);
+            	UsoRDS usoRDS = new UsoRDS();
+            	usoRDS.setTipoUso(uso.getTipoUso().getCodigo());
+            	usoRDS.setReferencia(uso.getReferencia());            	
+            	usoRDS.setReferenciaRDS(refRDS);     
+            	usoRDS.setFechaSello(uso.getFechaSello());
+            	usoRDS.setFechaUso(uso.getFecha());
+            	listaUsosRDS.add(usoRDS);
+            }	    	
+            
+	    } catch (HibernateException he) {
+	    	log.error("Error al listar usos",he);
+	        throw new ExcepcionRDS("Error al listar usos" ,he);
+	    } finally {
+	        close(session);
+	    }
+		return listaUsosRDS;
+	}
+	
+	/**
+	 * Consulta documento
+	 * @param refRds
+	 * @param recuperarFichero
+	 * @return
+	 * @throws ExcepcionRDS
+	 */
+	private DocumentoRDS consultarDocumentoImpl(ReferenciaRDS refRds,
+			boolean recuperarFichero) throws ExcepcionRDS {
+		// Obtenemos documento
+    	Session session = getSession();
+    	Documento documento;
+    	DocumentoRDS documentoRDS;
+	    try {	    	
+	    	// Obtenemos documento
+	    	documento = (Documento) session.load(Documento.class, new Long(refRds.getCodigo()));		    	
+	    	
+	    	// Control de documento borrado
+	    	if ("S".equals(documento.getBorrado())) throw new ExcepcionRDS("El documento " + documento.getCodigo() + " ha sido borrado por no tener usos" );
+	    	
+	    	// Comprobamos que la clave coincida
+	    	if (!documento.getClave().equals(refRds.getClave())){
+	    		throw new ExcepcionRDS("La clave no coincide");
+	    	}	    		    	
+	    	
+	    	
+	    	Hibernate.initialize(documento.getFirmas());
+	    	
+	    	
+	    	// Mapeamos a documentoRDS
+	    	documentoRDS = establecerCamposDocumentoRDS(documento);	    		    	
+	    } catch (HibernateException he) {
+	    	log.error("Error consultando documento",he);
+	        throw new ExcepcionRDS("Error consultando documento",he);
+	    } finally {
+	        close(session);
+	    }            	
+	    	    
+	    // Consultamos fichero asociado	    
+        try{        	
+        	if (recuperarFichero){
+        		// Obtenemos documento
+	        	PluginAlmacenamientoRDS plugin = obtenerPluginAlmacenamiento(documento.getUbicacion().getPluginAlmacenamiento());
+	        	documentoRDS.setDatosFichero(plugin.obtenerFichero(documento.getCodigo()));
+	        	// Verificamos hash
+	        	if (!documentoRDS.getHashFichero().equals(generaHash(documentoRDS.getDatosFichero()))) {
+	        		throw new Exception("No coincide el hash del documento almacenado. El fichero ha sido modificado.");
+	        	}	        	
+        	}
+        }catch(Exception e){
+        	log.error("No se ha podido obtener fichero en ubicación " + documento.getUbicacion().getCodigoUbicacion(),e);
+        	throw new ExcepcionRDS("Error al consultar documento: " + e.getMessage(),e);
+        }
+		return documentoRDS;
+	}
 }
