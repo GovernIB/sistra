@@ -120,7 +120,8 @@ public class RegistroController
 	}	
 	
 	
-	public ResultadoRegistrar consultar(char tipoAcceso,String jndi,boolean local,String url,char autenticacion,String user,String pass,String identificadorTramite,Map datosFormulario, String versionWS)throws Exception {
+	public ResultadoRegistrar consultar(char tipoAcceso,String jndi,boolean local,String url,char autenticacion,String user,String pass,
+			String identificadorProcedimiento, String identificadorTramite,Map datosFormulario, String versionWS) throws Exception {
 	// Realiza proceso de consulta (para tramites con destino consulta)		
 		log.debug("Realizamos consulta");
 		
@@ -146,7 +147,7 @@ public class RegistroController
 				log.debug("Autenticación explicita manejada por organismo");
 				AutenticacionExplicitaInfo infoAuth = null;
 				try{
-					infoAuth = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo(ConstantesLogin.TIPO_TRAMITE, identificadorTramite);
+					infoAuth = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo(ConstantesLogin.TIPO_PROCEDIMIENTO, identificadorProcedimiento);
 					log.debug("Usuario plugin autenticacion organismo: " + infoAuth.getUser());
 				}catch (Exception ex){
 					throw new Exception("Excepcion obteniendo informacion autenticacion explicita a traves de plugin organismo",ex);
