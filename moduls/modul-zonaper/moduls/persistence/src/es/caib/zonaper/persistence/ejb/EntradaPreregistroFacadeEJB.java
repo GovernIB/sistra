@@ -328,7 +328,7 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
     		if (entrada.getFechaConfirmacion() != null) {
     			estado = "T";
     		} else {
-    			estado = "P";
+    			estado = "C";
     		}
     	}
     	return estado;
