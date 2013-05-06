@@ -4927,7 +4927,7 @@ public class TramiteProcessorEJB implements SessionBean {
     			urlConsulta = StringUtil.replace(urlConsulta,"@backoffice.url@",URL_CONSULTA);
     		}
     		res = dest.consultar(tramiteVersion.getConsultaTipoAcceso(),tramiteVersion.getConsultaEJB(),tramiteVersion.getConsultaLocalizacion() == TramiteVersion.EJB_LOCAL ,urlConsulta,
-    				tramiteVersion.getConsultaAuth(),tramiteVersion.getConsultaAuthUser(),tramiteVersion.getConsultaAuthPwd(),this.tramiteVersion.getTramite().getIdentificador(),this.datosFormularios,this.tramiteVersion.getConsultaWSVersion());
+    				tramiteVersion.getConsultaAuth(),tramiteVersion.getConsultaAuthUser(),tramiteVersion.getConsultaAuthPwd(), this.tramiteVersion.getTramite().getProcedimiento(), this.tramiteVersion.getTramite().getIdentificador(),this.datosFormularios,this.tramiteVersion.getConsultaWSVersion());
     	}else {
     		res = dest.registrar(tramiteVersion.getDestino(),tramitePersistentePAD.getIdPersistencia(),asientoCompleto,referenciasRDS);
     		
@@ -5786,7 +5786,7 @@ public class TramiteProcessorEJB implements SessionBean {
 		 TramitePersistentePAD t = null;
 		 try {
 			 PadDelegate pad = DelegatePADUtil.getPadDelegate();
-			 t = pad.obtenerTramitePersistente(idPersistencia);
+			 t = pad.obtenerTramitePersistente(idPersistencia);			 
 		 }catch(DelegateException dex){
 			 throw new ProcessorException("Error cargando de persistencia el tramite con id " + idPersistencia + ": " + dex.getMessage(), MensajeFront.MENSAJE_ERRORDESCONOCIDO, dex);
 		 }

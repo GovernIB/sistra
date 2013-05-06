@@ -31,17 +31,19 @@ public class PluginBackOffice {
 	/**
 	 * Configuración del trámite con información del acceso al BackOffice
 	 */
-	private Procedimiento tramite;
+	private Procedimiento procedimiento;
+	private String identificadorTramite;
 	private String url;
 	
 	/**
 	 * Crea plugin a partir configuración trámite
-	 * @param tramite
+	 * @param procedimiento
 	 */
-	public PluginBackOffice(Procedimiento tramite) throws Exception{
-		this.tramite = tramite;
+	public PluginBackOffice(Procedimiento procedimiento, String idTramite) throws Exception{
+		this.procedimiento = procedimiento;
+		identificadorTramite = idTramite;
 		try{
-			url = tramite.getUrl();
+			url = procedimiento.getUrl();
     		if(url != null && !"".equals(url)){
     			url = StringUtils.replace(url,"@backoffice.url@",DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("backoffice.url"));
     		}
@@ -57,8 +59,8 @@ public class PluginBackOffice {
 	 */
 	public void avisarEntradas(List entradas, String usuAuto,String passAuto) throws Exception{				
 		// Accedemos a BackOffice según metodo de acceso
-		log.debug("[" + tramite.getIdentificador() + "] - Aviso entradas a BackOffice para tramite " + tramite.getIdentificador());
-		switch (tramite.getTipoAcceso())
+		log.debug("[" + procedimiento.getIdentificador() + " - " + identificadorTramite + " ] - Aviso entradas a BackOffice para procedimiento " + procedimiento.getIdentificador());
+		switch (procedimiento.getTipoAcceso())
 		{
 			case Procedimiento.ACCESO_EJB:
 				avisarEntradasEJB(entradas);	
@@ -67,7 +69,7 @@ public class PluginBackOffice {
 				avisarEntradasWS(entradas,usuAuto,passAuto);	
 				break;
 			default:
-				throw new Exception("Tipo de acceso a BackOffice no soportado: " + tramite.getTipoAcceso());			
+				throw new Exception("Tipo de acceso a BackOffice no soportado: " + procedimiento.getTipoAcceso());			
 		}				
 	}
 	
@@ -83,7 +85,7 @@ public class PluginBackOffice {
 		{						 			
 			// Realizamos autenticacion explicita si procede
 			CallbackHandler handler = null; 
-			switch (tramite.getAutenticacionEJB()){
+			switch (procedimiento.getAutenticacionEJB()){
 				// No requiere autenticacion explicita (utilizara usuario/pass auto)
 				case Procedimiento.AUTENTICACION_SIN:
 					break;
@@ -91,8 +93,8 @@ public class PluginBackOffice {
 				case Procedimiento.AUTENTICACION_ESTANDAR:
 					log.debug("Autenticacion explicita con usuario/password");
 					String claveCifrada = (String)DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().get("clave.cifrado");
-					String user = CifradoUtil.descifrar(claveCifrada,tramite.getUsr());
-					String pass = CifradoUtil.descifrar(claveCifrada,tramite.getPwd());
+					String user = CifradoUtil.descifrar(claveCifrada,procedimiento.getUsr());
+					String pass = CifradoUtil.descifrar(claveCifrada,procedimiento.getPwd());
 					handler = new UsernamePasswordCallbackHandler( user, pass ); 
 					break;
                 // Requiere autenticacion explicita basada en plugin autenticacion explicita organismo
@@ -100,7 +102,7 @@ public class PluginBackOffice {
 					log.debug("Autenticacion explicita con plugin organismo");
 					AutenticacionExplicitaInfo authInfo = null;
 					try{
-						authInfo = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo(ConstantesLogin.TIPO_TRAMITE, tramite.getIdentificador());
+						authInfo = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo(ConstantesLogin.TIPO_PROCEDIMIENTO, procedimiento.getIdentificador());
 						log.debug("Usuario plugin autenticacion organismo: " + authInfo.getUser());
 					}catch (Exception ex){
 						throw new Exception("Excepcion obteniendo informacion autenticacion explicita a traves de plugin organismo",ex);
@@ -116,7 +118,7 @@ public class PluginBackOffice {
 			
 			
 			// Realiza el aviso			
-			log.debug("[" + tramite.getIdentificador() + "] -Aviso a backoffice a través de EJB - Version original");
+			log.debug("[" + procedimiento.getIdentificador() + " - " + identificadorTramite  + "] -Aviso a backoffice a través de EJB - Version original");
 			
 			// Pasamos a lista de string
 			String ents[] = new String[entradas.size()];
@@ -126,15 +128,15 @@ public class PluginBackOffice {
 			}			
 			
 			// Procesamiento original: realizamos avisos de n numeros de entradas
-			BteConectorFacadeHome homeCF = (BteConectorFacadeHome) EjbBackOfficeFactory.getInstance().getHome(tramite.getJndiEJB(),(tramite.getLocalizacionEJB() == Procedimiento.EJB_LOCAL?"LOCAL":url));
+			BteConectorFacadeHome homeCF = (BteConectorFacadeHome) EjbBackOfficeFactory.getInstance().getHome(procedimiento.getJndiEJB(),(procedimiento.getLocalizacionEJB() == Procedimiento.EJB_LOCAL?"LOCAL":url));
 			BteConectorFacade ejbCF= homeCF.create();
 			ejbCF.avisoEntradas(ents);					
 			
-			log.debug("[" + tramite.getIdentificador() + "] - Aviso entradas completado"); 
+			log.debug("[" + procedimiento.getIdentificador() + " - " + identificadorTramite + "] - Aviso entradas completado"); 
 		}
 		catch( Exception exc )
 		{
-			log.debug("[" + tramite.getIdentificador() + "] - " + exc );
+			log.debug("[" + procedimiento.getIdentificador() + " - " + identificadorTramite  + "] - " + exc );
 			throw exc;
 		}
 		finally
@@ -152,13 +154,13 @@ public class PluginBackOffice {
 	 * @throws Exception
 	 */
 	private void avisarEntradasWS(List entradas,String usuAuto,String passAuto)  throws Exception {
-		log.debug("[" + tramite.getIdentificador() + "] -Aviso a backoffice a través de WS");
+		log.debug("[" + procedimiento.getIdentificador() + " - " + identificadorTramite + "] -Aviso a backoffice a través de WS");
 				
 		Properties config = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
 		
 		//	 Comprobamos si requiere autenticacion explicita
 		String user = null,pass=null; 
-		switch (tramite.getAutenticacionEJB()){
+		switch (procedimiento.getAutenticacionEJB()){
 			// No requiere autenticacion explicita 
 			case Procedimiento.AUTENTICACION_SIN:
 				log.debug("Autenticacion sin autenticacion");
@@ -169,15 +171,15 @@ public class PluginBackOffice {
 			case Procedimiento.AUTENTICACION_ESTANDAR:
 				log.debug("Autenticacion explicita con usuario/password");
 				String claveCifrada = (String)config.get("clave.cifrado");
-				user = CifradoUtil.descifrar(claveCifrada,tramite.getUsr());
-				pass = CifradoUtil.descifrar(claveCifrada,tramite.getPwd());
+				user = CifradoUtil.descifrar(claveCifrada,procedimiento.getUsr());
+				pass = CifradoUtil.descifrar(claveCifrada,procedimiento.getPwd());
 				break;
             // Requiere autenticacion explicita basada en plugin autenticacion explicita organismo
 			case Procedimiento.AUTENTICACION_ORGANISMO:
 				log.debug("Autenticacion explicita con plugin organismo");
 				AutenticacionExplicitaInfo authInfo = null;
 				try{
-					authInfo = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo(ConstantesLogin.TIPO_TRAMITE, tramite.getIdentificador());
+					authInfo = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo(ConstantesLogin.TIPO_PROCEDIMIENTO, procedimiento.getIdentificador());
 					log.debug("Usuario plugin autenticacion organismo: " + authInfo.getUser());
 				}catch (Exception ex){
 					throw new Exception("Excepcion obteniendo informacion autenticacion explicita a traves de plugin organismo",ex);
@@ -191,12 +193,12 @@ public class PluginBackOffice {
 		String prop =config.getProperty("webService.cliente.asincrono");
 		if (prop == null) prop = "true";
 		
-		if(tramite.getVersionWS() != null && "v1".equals(tramite.getVersionWS())){
+		if(procedimiento.getVersionWS() != null && "v1".equals(procedimiento.getVersionWS())){
 			es.caib.bantel.wsClient.v1.client.ClienteWS.avisarEntradasWS(entradas,url,user,pass,Boolean.valueOf(prop).booleanValue());
-		}else if(tramite.getVersionWS() != null && "v2".equals(tramite.getVersionWS())){
+		}else if(procedimiento.getVersionWS() != null && "v2".equals(procedimiento.getVersionWS())){
 			es.caib.bantel.wsClient.v2.client.ClienteWS.avisarEntradasWS(entradas,url,user,pass,Boolean.valueOf(prop).booleanValue());
 		}else{
-			throw new Exception("Excepcion obteniendo la versión "+tramite.getVersionWS()+" del WS de aviso de entradas. ");
+			throw new Exception("Excepcion obteniendo la versión "+procedimiento.getVersionWS()+" del WS de aviso de entradas. ");
 		}
 			
 	}

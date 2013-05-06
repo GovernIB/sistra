@@ -195,7 +195,7 @@ public class AvisadorInmediatoFacadeEJB implements MessageDrivenBean, MessageLis
 					// Avisamos a BackOffice de las nuevas entradas
 					log.debug("Aviso entradas: Entradas a avisar: " +  ToStringBuilder.reflectionToString(entradasParaAvisar));					
 					if (entradasParaAvisar != null && entradasParaAvisar.size()>0){			
-						PluginBackOffice bo = new PluginBackOffice(entradaBandeja.getProcedimiento());									
+						PluginBackOffice bo = new PluginBackOffice(entradaBandeja.getProcedimiento(), entradaBandeja.getIdentificadorTramite());									
 						bo.avisarEntradas(referenciasParaAvisar,userAuto,passAuto);				
 					}
 			}
