@@ -47,7 +47,7 @@ public class AltaPersonaAction extends Action
 				error = getMessage(request, "expediente.alta.altaDestinatario.errorNifNoValido");
 			}  else {
 				tipoNif = NifCif.validaDocumento(nif);
-				if (tipoNif != NifCif.TIPO_DOCUMENTO_CIF && tipoNif != NifCif.TIPO_DOCUMENTO_NIF) {
+				if (tipoNif != NifCif.TIPO_DOCUMENTO_CIF && tipoNif != NifCif.TIPO_DOCUMENTO_NIF && tipoNif != NifCif.TIPO_DOCUMENTO_NIE) {
 					error = getMessage(request, "expediente.alta.altaDestinatario.errorNifNoValido");
 				}
 			}
@@ -59,7 +59,7 @@ public class AltaPersonaAction extends Action
 			
 			// Validar apellidos
 			if (StringUtils.isEmpty(error)) {
-				if (tipoNif == NifCif.TIPO_DOCUMENTO_NIF && StringUtils.isEmpty(apellido1)) {
+				if ( (tipoNif == NifCif.TIPO_DOCUMENTO_NIF || tipoNif == NifCif.TIPO_DOCUMENTO_NIE)&& StringUtils.isEmpty(apellido1)) {
 					error = getMessage(request, "expediente.alta.altaDestinatario.errorApellido1Vacio");
 				} else if (tipoNif == NifCif.TIPO_DOCUMENTO_CIF && (StringUtils.isNotEmpty(apellido1) || StringUtils.isNotEmpty(apellido2) ) ){
 					error = getMessage(request, "expediente.alta.altaDestinatario.errorApellidosCif");

@@ -25,6 +25,8 @@
 	<bean:message key="detalleNotificacion.titulo" />
 </h1>
 
+<p><bean:message key="detalleNotificacion.accedaContenido"/></p>
+
 <!-- notificacio -->
 <div id="notificacio">
 	<dl>
@@ -94,22 +96,27 @@
 		</logic:notEmpty>		
 	</dl>		
 </div>
-<!-- /notificacio -->
-<!-- justificant -->
-<h2><bean:message key="detalleNotificacion.datosJustificante" /></h2>
-<p><bean:message key="detalleNotificacion.datosJustificante.texto" /></p>
-<p style="text-align:center; margin:2em 0;">
-	<input name="XX" type="button" value="<bean:message key="detalleNotificacion.imprimirJustificante" />" onclick="javascript:document.location.href='<html:rewrite href="<%= urlMostrarDocumento %>"/>'"/>
-</p>
-<p id="getAdobeReader">
-	<bean:message key="detalleNotificacion.getAdobeReader"/>
-	<br />
-	<a href="http://www.adobe.es/products/acrobat/readstep2.html"><bean:message key="detalleNotificacion.irWebAdobe"/></a>
-</p>
-<!-- /justificant -->	
 <logic:equal name="notificacion" property="firmarAcuse" value="true">
 	<div id="notaLegalPie">
 		<p class="data"><sup>*</sup><bean:message key="detalleNotificacion.notaLegalAbierta"/></p>
 	</div>
 </logic:equal>
+<!-- /notificacio -->
+
+<!-- reader -->
+<p id="getAdobeReader">
+	<bean:message key="detalleNotificacion.getAdobeReader"/>
+	<br />
+	<a href="http://www.adobe.es/products/acrobat/readstep2.html"><bean:message key="detalleNotificacion.irWebAdobe"/></a>
+</p>
+
+<!-- justificant -->
+<p>
+	<i>
+		<bean:message key="detalleNotificacion.datosJustificante.texto" /> <a href='<html:rewrite href="<%= urlMostrarDocumento %>"/>'><bean:message key="detalleNotificacion.datosJustificante.enlace" /></a>
+	</i>
+</p>
+
+	
+
 
