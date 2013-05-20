@@ -5,6 +5,9 @@ package es.caib.redose.persistence.plugin;
  * 
  */
 public interface PluginAlmacenamientoRDS {
+	
+	public void setCodigoUbicacion(Long codigoUbicacion);
+	
 	public void guardarFichero(Long id, byte[] datos,
 			MetadaAlmacenamiento metadata) throws Exception;
 

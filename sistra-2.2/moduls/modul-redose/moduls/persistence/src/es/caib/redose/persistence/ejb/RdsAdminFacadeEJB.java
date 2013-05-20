@@ -235,7 +235,7 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
     		FicheroExterno fe = delegate.obtenerFicheroExterno(referenciaFic);
     		
     		// Obtenemos plugin de almacenamiento    		
-    		Ubicacion ubicacion = delegate.obtenerUbicacionFicheroExterno(referenciaFic);
+    		Ubicacion ubicacion = DelegateUtil.getUbicacionDelegate().obtenerUbicacion(fe.getIdUbicacion());
     		PluginAlmacenamientoRDSExterno plgAlmacenamiento = obtenerPluginAlmacenamientoExterno(ubicacion);
     		
 			// Eliminamos definitivamente fichero externo
@@ -300,7 +300,7 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
      * @return Plugin almacenamiento externo
      */
     private PluginAlmacenamientoRDSExterno obtenerPluginAlmacenamientoExterno(Ubicacion ubicacion) throws Exception{
-    	PluginAlmacenamientoRDS plgAlmacenamiento = PluginClassCache.getInstance().getPluginAlmacenamientoRDS(ubicacion.getPluginAlmacenamiento());
+    	PluginAlmacenamientoRDS plgAlmacenamiento = PluginClassCache.getInstance().getPluginAlmacenamientoRDS(ubicacion);
     	 if (!(plgAlmacenamiento instanceof PluginAlmacenamientoRDSExterno)) {
  			throw new Exception("El plugin de almacenamiento no es externo");
  		}
@@ -314,7 +314,7 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
     	// Borramos documento
     	Session session = getSession();
     	Documento documento;
-    	String ls_plugin,ls_ubicacion;
+    	Ubicacion ubicacion;
 	    try {	    	
 	    	// Obtenemos documento
 	    	documento = (Documento) session.load(Documento.class, new Long(refRds.getCodigo()));	        
@@ -326,9 +326,9 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
 	    	// Borramos versiones de custodia
 	    	DelegateUtil.getVersionCustodiaDelegate().borrarVersionesDocumento(documento.getCodigo());
 	    	
-	    	// Obtenemos plugin almacenamiento
-	    	ls_plugin = documento.getUbicacion().getPluginAlmacenamiento();
-	    	ls_ubicacion =documento.getUbicacion().getCodigoUbicacion(); 
+	    	// Obtenemos ubicacion documento
+	    	ubicacion = documento.getUbicacion();
+	    	 
 	    	// Eliminamos documento
 	    	session.delete(documento);
 	    } catch (Exception he) {
@@ -339,10 +339,10 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
 	    
 	    // Borramos fichero asociado                     
         try{        	
-        	PluginAlmacenamientoRDS plugin = obtenerPluginAlmacenamiento(ls_plugin);
+        	PluginAlmacenamientoRDS plugin = obtenerPluginAlmacenamiento(ubicacion);
         	plugin.eliminarFichero(new Long(refRds.getCodigo()));
         }catch(Exception e){
-        	log.error("No se ha podido eliminar fichero "+refRds.getCodigo()+" en ubicación " + ls_ubicacion);
+        	log.error("No se ha podido eliminar fichero "+refRds.getCodigo()+" en ubicación " + ubicacion.getCodigoUbicacion());
         	throw new EJBException(e);
         }
     }
@@ -380,13 +380,13 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
     }
     
     
-    /* NO USED
+    /* 
      * Obtiene plugin almacenamiento
      * @param classNamePlugin
      * @return
      */ 
-    private PluginAlmacenamientoRDS obtenerPluginAlmacenamiento(String classNamePlugin) throws Exception{
-    	return PluginClassCache.getInstance().getPluginAlmacenamientoRDS(classNamePlugin);    	
+    private PluginAlmacenamientoRDS obtenerPluginAlmacenamiento(Ubicacion ubicacion) throws Exception{
+    	return PluginClassCache.getInstance().getPluginAlmacenamientoRDS(ubicacion);    	
     }
     
  

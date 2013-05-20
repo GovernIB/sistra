@@ -2,6 +2,8 @@ package es.caib.redose.persistence.plugin;
 
 import java.util.HashMap;
 
+import es.caib.redose.model.Ubicacion;
+
 
 /**
  * Clase que me permite cachear las clases de plugins
@@ -28,17 +30,20 @@ public class PluginClassCache {
 		 * @param as_clase
 		 * @return
 		 */
-		public PluginAlmacenamientoRDS getPluginAlmacenamientoRDS(String as_clase) throws Exception{		
-			try{										
+		public PluginAlmacenamientoRDS getPluginAlmacenamientoRDS(Ubicacion ubicacion) throws Exception{		
+			try{
+				String as_clase = ubicacion.getPluginAlmacenamiento();
 				Class classDispatcher = ( Class )  classCache.get( as_clase );
 				if ( classDispatcher == null )
 				{
 					classDispatcher = Class.forName(as_clase);
 					classCache.put( as_clase, classDispatcher );
 				}
-				return ( PluginAlmacenamientoRDS ) classDispatcher.newInstance();
+				PluginAlmacenamientoRDS plg = ( PluginAlmacenamientoRDS ) classDispatcher.newInstance();
+				plg.setCodigoUbicacion(ubicacion.getCodigo());
+				return plg;
 			}catch(Throwable t){
-				throw new Exception("Error creando clase para " + as_clase,t);
+				throw new Exception("Error creando clase para " + ubicacion.getPluginAlmacenamiento(),t);
 			} 
 		}
 
