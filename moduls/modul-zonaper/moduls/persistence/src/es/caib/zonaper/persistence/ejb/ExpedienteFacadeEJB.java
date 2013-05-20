@@ -483,6 +483,14 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 	   			 }
 	   			criteria.add( Expression.between( "fecha", new java.sql.Date(gregorianCalendar1.getTime().getTime()), new java.sql.Date( DataUtil.obtenerUltimaHora(gregorianCalendar2.getTime()).getTime() )) );	   			
 	   		 }
+	   		// Filtro fecha desde / hasta
+	   		 if ( filtro.getFechaDesde() != null) {
+				 criteria.add( Expression.gt("fecha", filtro.getFechaDesde()) );
+			 }
+			 if ( filtro.getFechaHasta() != null) {
+				 criteria.add( Expression.lt("fecha", filtro.getFechaHasta()) );
+			 }	
+	   		
 	   		// Filtro nif
 	   		if (StringUtils.isNotBlank(filtro.getNifRepresentante())) {
 	   			criteria.add(Expression.like("nifRepresentante", filtro.getNifRepresentante()));

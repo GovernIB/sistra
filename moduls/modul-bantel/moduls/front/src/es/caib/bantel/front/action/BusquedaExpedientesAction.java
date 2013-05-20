@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -16,6 +17,7 @@ import es.caib.bantel.model.GestorBandeja;
 import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.delegate.GestorBandejaDelegate;
+import es.caib.util.StringUtil;
 import es.caib.zonaper.modelInterfaz.FiltroBusquedaExpedientePAD;
 import es.caib.zonaper.modelInterfaz.PaginaPAD;
 
@@ -58,12 +60,12 @@ public class BusquedaExpedientesAction extends BaseAction
 			}
 		}
 		filtro.setIdentificadorProcedimientos(idsProc);
-		if (formularioBusqueda.getAnyo() > 0) {
-			filtro.setAnyo(formularioBusqueda.getAnyo());
-			if (formularioBusqueda.getMes() > 0) {
-				filtro.setMes(formularioBusqueda.getMes());
-			}
+		
+		filtro.setFechaDesde(StringUtil.cadenaAFecha(formularioBusqueda.getFechaDesde(), StringUtil.FORMATO_FECHA));
+		if (StringUtils.isNotBlank(formularioBusqueda.getFechaHasta())) {
+			filtro.setFechaHasta(StringUtil.cadenaAFecha(formularioBusqueda.getFechaHasta(), StringUtil.FORMATO_FECHA));
 		}
+		
 		filtro.setNifRepresentante(formularioBusqueda.getUsuarioNif());
 		filtro.setNumeroEntradaBTE(formularioBusqueda.getNumeroEntrada());
 		

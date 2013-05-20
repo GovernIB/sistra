@@ -6,13 +6,23 @@
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
+
+<bean:define id="idioma" name="<%=Globals.LOCALE_KEY%>" property="language" scope="session" type="java.lang.String" />
+
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>BANTELFRONT</title>
 <link href="estilos/estilos.css" rel="stylesheet" type="text/css" />
 <link href="estilos/gestion-expedientes.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="js/jquery-1.4.1.min.js"></script>
+<link href="estilos/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/utilidades.js"></script>
+<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/jquery.selectboxes.pack.js"></script>
+<script src="js/jquery.ui.core.min.js"></script>	
+<script src="js/jquery.ui.datepicker.min.js"></script>
+<script src="js/jquery.ui.datepicker-<%=idioma%>.js"></script>
+
 <script type="text/javascript">
 <!--
 	// texts
