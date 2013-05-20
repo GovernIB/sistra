@@ -1,33 +1,26 @@
 package es.caib.bantel.front.form;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import org.apache.struts.validator.ValidatorForm;
+
+import es.caib.util.DataUtil;
 
 public class BusquedaExpedientesForm extends ValidatorForm
 {
 	private static final char TODOS = 'T';
-		
-	private int anyo = new GregorianCalendar().get( Calendar.YEAR );
-	private int mes = -1;
+	
+	private String fechaDesde;
+	private String fechaHasta;	
 	private String usuarioNif;
 	private String identificadorProcedimiento = "-1";
 	private String numeroEntrada = "";
 	private int pagina;
 	
-	public int getAnyo() {
-		return anyo;
+	public BusquedaExpedientesForm() {
+		super();
+		// Establecemos por defecto fecha desde a 3 meses antes
+		fechaDesde = DataUtil.fechaSuma(2, -3, DataUtil.avui(), DataUtil.DEFAULT_FORMAT);		
 	}
-	public void setAnyo(int anyo) {
-		this.anyo = anyo;
-	}
-	public int getMes() {
-		return mes;
-	}
-	public void setMes(int mes) {
-		this.mes = mes;
-	}
+	
 	public String getUsuarioNif() {
 		return usuarioNif;
 	}
@@ -52,5 +45,18 @@ public class BusquedaExpedientesForm extends ValidatorForm
 	public void setPagina(int pagina) {
 		this.pagina = pagina;
 	}
+	public String getFechaDesde() {
+		return fechaDesde;
+	}
+	public void setFechaDesde(String fechaDesde) {
+		this.fechaDesde = fechaDesde;
+	}
+	public String getFechaHasta() {
+		return fechaHasta;
+	}
+	public void setFechaHasta(String fechaHasta) {
+		this.fechaHasta = fechaHasta;
+	}
+	
 	
 }

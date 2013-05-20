@@ -3,7 +3,6 @@ package es.caib.bantel.front.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -11,6 +10,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.MessageResources;
 
 import es.caib.bantel.front.form.CambioEstadoMasivoForm;
+import es.caib.bantel.front.util.UtilBantelFront;
 import es.caib.bantel.model.CriteriosBusquedaTramite;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.delegate.TramiteBandejaDelegate;
@@ -37,21 +37,8 @@ public class CambioEstadoMasivoAction extends BaseAction
 		
 		// Construimos criterios de busqueda
 		CambioEstadoMasivoForm formularioBusqueda = ( CambioEstadoMasivoForm ) form;
-		CriteriosBusquedaTramite criterios = new CriteriosBusquedaTramite();
-		criterios.setAnyo( formularioBusqueda.getAnyo() );	
-		if (!("-1".equals(formularioBusqueda.getIdentificadorProcedimiento()))) {
-			criterios.setIdentificadorProcedimiento( formularioBusqueda.getIdentificadorProcedimiento() );
-		}
-		if (StringUtils.isNotBlank(formularioBusqueda.getIdentificadorTramite())) {
-			criterios.setIdentificadorTramite(formularioBusqueda.getIdentificadorTramite());
-		}
-		criterios.setMes( formularioBusqueda.getMes() );
-		criterios.setNivelAutenticacion( formularioBusqueda.getNivelAutenticacion() );
-		criterios.setProcesada( formularioBusqueda.getProcesada() );
-		criterios.setTipo( formularioBusqueda.getTipo() );
-		criterios.setUsuarioNif( formularioBusqueda.getUsuarioNif() );
-		criterios.setUsuarioNombre( formularioBusqueda.getUsuarioNombre() );
 		
+		CriteriosBusquedaTramite criterios = UtilBantelFront.crearCriteriosBusquedaTramite(formularioBusqueda);
 		
 		// Marcamos entradas con nuevo estado
 		TramiteBandejaDelegate delegate = DelegateUtil.getTramiteBandejaDelegate();

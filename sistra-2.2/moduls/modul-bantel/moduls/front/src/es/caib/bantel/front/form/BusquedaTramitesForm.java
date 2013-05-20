@@ -1,16 +1,16 @@
 package es.caib.bantel.front.form;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import org.apache.struts.validator.ValidatorForm;
+
+import es.caib.util.DataUtil;
 
 public class BusquedaTramitesForm extends ValidatorForm
 {
 	private static final char TODOS = 'T';
 		
-	private int anyo = new GregorianCalendar().get( Calendar.YEAR );
-	private int mes = -1;
+	
+	private String fechaDesde;
+	private String fechaHasta;
 	private String usuarioNif;
 	private String usuarioNombre;
 	private char tipo = TODOS;
@@ -22,14 +22,12 @@ public class BusquedaTramitesForm extends ValidatorForm
 	private String numeroEntrada = "";
 	private int longitudPagina = 10;
 	
-	public int getAnyo()
-	{
-		return anyo;
+	public BusquedaTramitesForm() {
+		super();
+		// Establecemos por defecto fecha desde a 3 meses antes
+		fechaDesde = DataUtil.fechaSuma(2, -3, DataUtil.avui(), DataUtil.DEFAULT_FORMAT);		
 	}
-	public void setAnyo(int anyo)
-	{
-		this.anyo = anyo;
-	}	
+	
 	public String getIdentificadorProcedimiento()
 	{
 		return identificadorProcedimiento;
@@ -38,14 +36,7 @@ public class BusquedaTramitesForm extends ValidatorForm
 	{
 		this.identificadorProcedimiento = idProc;
 	}
-	public int getMes()
-	{
-		return mes;
-	}
-	public void setMes(int mes)
-	{
-		this.mes = mes;
-	}
+	
 	public char getNivelAutenticacion()
 	{
 		return nivelAutenticacion;
@@ -112,5 +103,17 @@ public class BusquedaTramitesForm extends ValidatorForm
 	public void setLongitudPagina(int longitudPagina) {
 		this.longitudPagina = longitudPagina;
 	}
-
+	public String getFechaDesde() {
+		return fechaDesde;
+	}
+	public void setFechaDesde(String fechaDesde) {
+		this.fechaDesde = fechaDesde;
+	}
+	public String getFechaHasta() {
+		return fechaHasta;
+	}
+	public void setFechaHasta(String fechaHasta) {
+		this.fechaHasta = fechaHasta;
+	}
+	
 }

@@ -13,7 +13,7 @@ import java.util.Locale;
  */
 public class DataUtil {
 
-    private static final String DEFAULT_FORMAT = "dd/MM/yyyy";
+    public static final String DEFAULT_FORMAT = "dd/MM/yyyy";
 
     public static String avui() {
         return avui(DEFAULT_FORMAT);

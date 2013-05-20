@@ -7,7 +7,7 @@
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 
-<script type="text/javascript" src="js/formularioBusquedaExpedientes.js"></script>
+<script type="text/javascript" src="js/formularioBusquedaExpedientes.jsp"></script>
 
 <h2><bean:message key="formularioBusquedaExpedientes.busquedaExpedientes"/></h2>
 
@@ -20,18 +20,10 @@
 	<html:form action="busquedaExpedientes" styleId="busquedaExpedientesForm" styleClass="centrat">
 		<html:hidden property="pagina" />				
 		<p>
-			<bean:message key="formularioBusquedaExpedientes.año"/> 
-			<html:select property="anyo">
-				<logic:iterate id="tmpAnyo" name="anyos">
-							<html:option value="<%= tmpAnyo.toString() %>" />
-				</logic:iterate>			
-			</html:select> 
-			<bean:message key="formularioBusquedaExpedientes.mes"/>
-			<html:select property="mes">
-				<logic:iterate id="tmpMes" name="meses">
-							<html:option value="<%= tmpMes.toString() %>"><bean:message key='<%= "mes." + tmpMes %>' /></html:option>
-				</logic:iterate>			
-			</html:select> 					
+			<bean:message key="formularioBusqueda.fechaDesde"/>
+			<html:text property="fechaDesde" styleId="fechaDesde" size="10"/>  
+			<bean:message key="formularioBusqueda.fechaHasta"/>
+			<html:text property="fechaHasta" styleId="fechaHasta" size="10"/>  				
 			<bean:message key="formularioBusquedaExpedientes.nif"/>  <html:text property="usuarioNif" size="9" /> 
 			<bean:message key="formularioBusquedaExpedientes.numeroEntrada"/>
 			<html:text property="numeroEntrada" size="30"/>
