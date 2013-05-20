@@ -10,7 +10,8 @@ public class FicheroExterno  implements java.io.Serializable {
      private Long idDocumento;
      private Date fechaReferencia;
      private String borrar;
-
+     private Long idUbicacion;
+     
 
     // Constructors
 
@@ -56,6 +57,16 @@ public class FicheroExterno  implements java.io.Serializable {
 
 	public void setFechaReferencia(Date fecha) {
 		this.fechaReferencia = fecha;
+	}
+
+
+	public Long getIdUbicacion() {
+		return idUbicacion;
+	}
+
+
+	public void setIdUbicacion(Long idUbicacion) {
+		this.idUbicacion = idUbicacion;
 	}
     
 }

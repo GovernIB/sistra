@@ -20,6 +20,11 @@ import es.caib.redose.persistence.delegate.FicheroExternoDelegate;
  */
 public abstract class PluginAlmacenamientoRDSExterno implements PluginAlmacenamientoRDS{
 
+	/**
+	 * Codigo ubicacion.
+	 */
+	private Long codigoUbicacion;
+	
 	public final byte[] obtenerFichero(Long id) throws Exception {
 		// Recupera lista de ficheros del documento
 		List listaFics = DelegateUtil.getFicheroExternoDelegate().obtenerListaFicherosExterno(id);
@@ -52,6 +57,7 @@ public abstract class PluginAlmacenamientoRDSExterno implements PluginAlmacenami
 		ficheroExterno.setFechaReferencia(new Date());
 		ficheroExterno.setIdDocumento(id);
 		ficheroExterno.setBorrar("N");
+		ficheroExterno.setIdUbicacion(codigoUbicacion);
 		DelegateUtil.getFicheroExternoDelegate().grabarFicheroExterno(ficheroExterno);
 	}
 
@@ -98,5 +104,13 @@ public abstract class PluginAlmacenamientoRDSExterno implements PluginAlmacenami
 				}
 			}
 		}
+	}
+
+	public Long getCodigoUbicacion() {
+		return codigoUbicacion;
+	}
+
+	public void setCodigoUbicacion(Long idPlugin) {
+		this.codigoUbicacion = idPlugin;
 	}
 }

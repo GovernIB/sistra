@@ -4,15 +4,9 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 import javax.ejb.CreateException;
-import javax.ejb.EJBException;
 import javax.naming.NamingException;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-
 import es.caib.redose.model.FicheroExterno;
-import es.caib.redose.model.Ubicacion;
 import es.caib.redose.persistence.intf.FicheroExternoFacade;
 import es.caib.redose.persistence.util.FicheroExternoFacadeUtil;
 
@@ -70,14 +64,7 @@ public class FicheroExternoDelegate implements StatelessDelegate {
 	            throw new DelegateException(e);
 	        }
 	    }
-	    
-	    public Ubicacion obtenerUbicacionFicheroExterno(String referencia) throws DelegateException {
-	        try {
-	            return getFacade().obtenerUbicacionFicheroExterno(referencia);
-	        } catch (Exception e) {
-	            throw new DelegateException(e);
-	        }
-	    }
+	   
 	    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

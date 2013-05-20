@@ -31,7 +31,6 @@ public class PluginAlmacenamientoFileSystem extends PluginAlmacenamientoRDSExter
 	 */
 	private static String ROOT_PATH = "";
 	
-	
 	protected boolean eliminarFicheroExterno(String referenciaExterna)
 			throws Exception {
 		File file = new File(getFilePath(referenciaExterna));
@@ -137,5 +136,6 @@ public class PluginAlmacenamientoFileSystem extends PluginAlmacenamientoRDSExter
 			throw new Exception("No se ha establecido la propiedad plugin.filesystem.rootPath");
 		}
 		return ROOT_PATH;
-	}	
+	}
+
 }

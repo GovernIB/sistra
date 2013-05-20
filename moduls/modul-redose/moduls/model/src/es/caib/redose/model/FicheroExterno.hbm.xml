@@ -11,7 +11,8 @@
         </id>
         <property name="idDocumento" column="FIE_CODDOC" not-null="true" />
         <property name="fechaReferencia" column="FIE_REFFEC" not-null="true" />
-        <property name="borrar" column="FIE_BORRAR" length="1" not-null="true" />            
+        <property name="borrar" column="FIE_BORRAR" length="1" not-null="true" />
+        <property name="idUbicacion" column="FIE_CODUBI" not-null="true" />            
     </class>
 </hibernate-mapping>
 
