@@ -2041,29 +2041,17 @@ public class TramiteProcessorEJB implements SessionBean {
 	    	
 	    	// Comprobamos que exista documento y que cumpla las restricciones de extensión y tamaño
 	    	// 		- Documento con datos
-    		 if ((datosDocumento == null || datosDocumento.length <= 0 || StringUtils.isEmpty(nomFichero))){	    		
-    			MensajeFront mens = new MensajeFront();
-    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
-    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ANEXODATOSNULOS));
-    	    	mens.setMensajeExcepcion("El fichero anexado no contiene datos");
-    	    	return generarRespuestaFront(mens,null); 	    			 
+    		 if ((datosDocumento == null || datosDocumento.length <= 0 || StringUtils.isEmpty(nomFichero))){
+    			throw new Exception("El fichero anexado no contiene datos");    			 	    			
     		 }
     		// 		- Extensión	    		 
     		if ((doc.getAnexoExtensiones().toLowerCase() + ",").indexOf(extension.toLowerCase() + ",") == -1){
-    			MensajeFront mens = new MensajeFront();
-    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
-    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ANEXOEXTENSIONNOPERMITIDA));
-    	    	mens.setMensajeExcepcion("El fichero anexado no tiene extensión válida: " + extension + " (Permitidas: " + doc.getAnexoExtensiones() + ")");
-    	    	return generarRespuestaFront(mens,null); 	    			 
+    			throw new Exception("El fichero anexado no tiene extensión válida: " + extension + " (Permitidas: " + doc.getAnexoExtensiones() + ")");    			 	    			
     		}	
     		
     		// 		- Tamaño
     		if (doc.getAnexoTamanyoMax().intValue() < (datosDocumento.length / 1024) ) {
-    			MensajeFront mens = new MensajeFront();
-    	    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
-    	    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ANEXOTAMANYONOPERMITIDO));
-    	    	mens.setMensajeExcepcion("El fichero anexado excede el tamaño permitido (" + doc.getAnexoTamanyoMax().intValue() + "): " + (datosDocumento.length / 1024));
-    	    	return generarRespuestaFront(mens,null); 	    			 
+    			throw new Exception("El fichero anexado excede el tamaño permitido (" + doc.getAnexoTamanyoMax().intValue() + "): " + (datosDocumento.length / 1024));    			 	    			
     		}	
 	    		
 	    	

@@ -61,7 +61,10 @@ public class UploadAnexoAction extends BaseAction
 				fileExtension = fileName.substring( firstIndex + 1 );
 			}
 			
-			// Validamos tamaño máximo			
+			// Validamos tamaño
+			if (file.getFileSize() <= 0) {
+				throw new Exception("anexarDocumentos.anexar.ficheroVacio");
+			}
 			if (formulario.getTamanyoMaximo() < (file.getFileSize() / 1024) ) {
 				throw new Exception("anexarDocumentos.anexar.tamanyoNoValido");
 			}
@@ -74,7 +77,8 @@ public class UploadAnexoAction extends BaseAction
 			// Uploadeamos documento
 			RespuestaFront resp = delegate.uploadAnexo(formulario.getIdentificador(), formulario.getInstancia(), file.getFileData(),
 					fileName, fileExtension, formulario.getDescPersonalizada());
-			if (resp.getMensaje() != null && resp.getMensaje().getTipo() == MensajeFront.TIPO_ERROR) {
+			if (resp.getMensaje() != null && 
+					(resp.getMensaje().getTipo() == MensajeFront.TIPO_ERROR || resp.getMensaje().getTipo() == MensajeFront.TIPO_ERROR_CONTINUABLE )) {
 				throw new Exception("anexarDocumentos.anexar.errorUpdate");
 			}
 			
