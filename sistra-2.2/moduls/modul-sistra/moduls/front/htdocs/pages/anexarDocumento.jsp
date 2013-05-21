@@ -118,6 +118,14 @@
 			}			
 		</logic:equal>
 
+
+		// Verificamos que haya seleccionado fichero
+		if 	(form.datos.value == ''){
+			ocultarCapaInfo();
+			alert( "<bean:message key="anexarDocumentos.anexar.noFichero" />" );
+			return;
+		}		
+		
 		// Enviar formulario
 		accediendoEnviando(mensajeUploadeando);
 		form.submit();
