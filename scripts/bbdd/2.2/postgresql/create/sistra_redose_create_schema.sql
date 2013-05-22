@@ -601,3 +601,14 @@ alter table RDS_FICEXT
 create index RDS_FIEDOC_FK_I on RDS_FICEXT (
    FIE_CODDOC ASC
 );
+
+-- From 2.2.4 to 2.2.5
+
+alter table RDS_FICEXT  add FIE_CODUBI  BIGINT;
+
+comment on column RDS_FICEXT.FIE_CODUBI is 'INDICA CODIGO DE UBICACION';
+
+COMMIT;
+
+alter table RDS_FICEXT alter column FIE_CODUBI set not null;
+
