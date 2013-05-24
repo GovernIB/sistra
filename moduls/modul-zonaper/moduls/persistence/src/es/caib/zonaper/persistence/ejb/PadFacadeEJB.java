@@ -934,6 +934,7 @@ public abstract class PadFacadeEJB implements SessionBean{
 			paginaPAD.setList(results);
 			paginaPAD.setNextPage(page.isNextPage());
 			paginaPAD.setPreviousPage(page.isPreviousPage());
+			paginaPAD.setTotalResults(page.getTotalResults());
 			return paginaPAD;
 			
 		}catch (Exception ex){

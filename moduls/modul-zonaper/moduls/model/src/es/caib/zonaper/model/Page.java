@@ -48,16 +48,6 @@ public class Page implements Serializable
 		 totalResults = scrollableResults.getRowNumber() + 1;
 	 }
 	 
-	 public Page( Criteria criteria, int page, int pageSize ) throws HibernateException
-		{
-			this.page = page;
-			this.pageSize = pageSize;
-					
-			 results = criteria.setFirstResult(page * pageSize)
-			.setMaxResults(pageSize+1)
-	        .list();        	
-		}
-
 	 public boolean isFirstPage()
 	 {
 		 return page == 0;

@@ -4,8 +4,10 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -458,12 +460,10 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 		Session session = getSession();
         try 
         {
-        	Criteria criteria = session.createCriteria( Expediente.class );
-        	criteria.setCacheable( false ); 
-        	// Filtro expediente no virtual
-	   		criteria.add(Expression.eq("tipoExpediente", "E"));	   		
-        	// Filtro procedimientos
-        	criteria.add(Expression.in( "idProcedimiento", filtro.getIdentificadorProcedimientos()) );
+        	Map parameters = new HashMap();
+        	
+        	String sqlFiltro = "";
+        	
         	// Filtro año / mes
 	   		if ( filtro.getAnyo() > 0 )
 	   		 {
@@ -481,30 +481,50 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 	   				 int month = filtro.getMes();
 	   				 gregorianCalendar2 = new GregorianCalendar( year, month, gregorianCalendar1.getMaximum( GregorianCalendar.DAY_OF_MONTH ) );				 
 	   			 }
-	   			criteria.add( Expression.between( "fecha", new java.sql.Date(gregorianCalendar1.getTime().getTime()), new java.sql.Date( DataUtil.obtenerUltimaHora(gregorianCalendar2.getTime()).getTime() )) );	   			
+	   			 
+	   			sqlFiltro += " and (e.fecha between :fechaInicio and :fechaFin)"; 
+	   			parameters.put("fechaInicio", new java.sql.Date(gregorianCalendar1.getTime().getTime()));
+	   			parameters.put("fechaFin", new java.sql.Date(gregorianCalendar2.getTime().getTime()));	   				   		
 	   		 }
+        	
 	   		// Filtro fecha desde / hasta
 	   		 if ( filtro.getFechaDesde() != null) {
-				 criteria.add( Expression.gt("fecha", filtro.getFechaDesde()) );
+	   			sqlFiltro += " and e.fecha >= :fechaDesde";
+	   			parameters.put("fechaDesde", filtro.getFechaDesde());	   			
 			 }
 			 if ( filtro.getFechaHasta() != null) {
-				 criteria.add( Expression.lt("fecha", filtro.getFechaHasta()) );
+				sqlFiltro += " and e.fecha <= :fechaHasta";
+		   		parameters.put("fechaHasta", filtro.getFechaHasta());	
 			 }	
-	   		
-	   		// Filtro nif
+        	
+			// Filtro nif
 	   		if (StringUtils.isNotBlank(filtro.getNifRepresentante())) {
-	   			criteria.add(Expression.like("nifRepresentante", filtro.getNifRepresentante()));
+	   			sqlFiltro += " and e.nifRepresentante like :nifRepresentante";
+	   			parameters.put("nifRepresentante", filtro.getNifRepresentante());	   			
 	   		}
 	   		// Filtro numero entrada
 	   		if (StringUtils.isNotBlank(filtro.getNumeroEntradaBTE())) {
-	   			criteria.add(Expression.eq("numeroEntradaBTE", filtro.getNumeroEntradaBTE()));
+	   			sqlFiltro += " and e.numeroEntradaBTE like :numeroEntradaBTE";
+	   			parameters.put("numeroEntradaBTE", filtro.getNumeroEntradaBTE());
 	   		}
 	   		
-	   		// Ordenación
-			criteria.addOrder( Order.desc("fecha") );
-	   		
-	   		// Realizamos busqueda paginada
-			Page page = new Page( criteria, numPagina, longPagina );
+			// Crea query 
+        	Query query = session.createQuery("FROM Expediente AS e WHERE e.tipoExpediente = 'E' and e.idProcedimiento in (:procedimientos) " +
+        				sqlFiltro + 
+        				" ORDER BY e.fecha DESC" );
+        	query.setCacheable(false);	
+        	
+        	// Establece parametros fijos
+        	query.setParameterList("procedimientos",filtro.getIdentificadorProcedimientos());
+        	// Establece parametros filtro
+        	for (Iterator it = parameters.keySet().iterator(); it.hasNext();) {
+        		String paramName = (String) it.next();
+        		Object paramValue = parameters.get(paramName);
+        		query.setParameter(paramName,paramValue);
+        	}
+        	
+        	// Realizamos busqueda paginada
+			Page page = new Page( query, numPagina, longPagina );
 						
             return page;
         }

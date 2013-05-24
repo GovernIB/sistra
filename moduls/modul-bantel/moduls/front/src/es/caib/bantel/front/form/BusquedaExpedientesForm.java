@@ -14,6 +14,7 @@ public class BusquedaExpedientesForm extends ValidatorForm
 	private String identificadorProcedimiento = "-1";
 	private String numeroEntrada = "";
 	private int pagina;
+	private int longitudPagina = 10;
 	
 	public BusquedaExpedientesForm() {
 		super();
@@ -56,6 +57,14 @@ public class BusquedaExpedientesForm extends ValidatorForm
 	}
 	public void setFechaHasta(String fechaHasta) {
 		this.fechaHasta = fechaHasta;
+	}
+
+	public int getLongitudPagina() {
+		return longitudPagina;
+	}
+
+	public void setLongitudPagina(int longitudPagina) {
+		this.longitudPagina = longitudPagina;
 	}
 	
 	
