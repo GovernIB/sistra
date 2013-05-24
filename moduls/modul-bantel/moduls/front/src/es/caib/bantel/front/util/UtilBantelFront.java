@@ -12,9 +12,9 @@ public class UtilBantelFront {
 			BusquedaTramitesForm formularioBusqueda) {
 		CriteriosBusquedaTramite criterios = new CriteriosBusquedaTramite();
 		
-		criterios.setFechaEntradaMinimo(StringUtil.cadenaAFecha(formularioBusqueda.getFechaDesde(), StringUtil.FORMATO_FECHA));
+		criterios.setFechaEntradaMinimo(StringUtil.cadenaAFecha(formularioBusqueda.getFechaDesde() + " 00:00:00", StringUtil.FORMATO_TIMESTAMP));
 		if (StringUtils.isNotBlank(formularioBusqueda.getFechaHasta())) {
-			criterios.setFechaEntradaMaximo(StringUtil.cadenaAFecha(formularioBusqueda.getFechaHasta(), StringUtil.FORMATO_FECHA));
+			criterios.setFechaEntradaMaximo(StringUtil.cadenaAFecha(formularioBusqueda.getFechaHasta() + " 23:59:59", StringUtil.FORMATO_TIMESTAMP));
 		}
 		
 		if (!("-1".equals(formularioBusqueda.getIdentificadorProcedimiento()))) {
