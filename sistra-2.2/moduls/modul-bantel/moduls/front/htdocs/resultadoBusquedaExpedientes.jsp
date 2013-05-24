@@ -85,6 +85,7 @@
 		 <bean:message key="resultadoBusquedaExpedientes.proxima"/> &nbsp; 
 		</logic:equal>
 		&gt;
+		&nbsp;(<bean:message key="resultadoBusqueda.total"/>: <bean:write name="page" property="totalResults"/> )
 	</p>
 	</logic:notEmpty>
 </div>
