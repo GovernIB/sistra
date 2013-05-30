@@ -1,6 +1,10 @@
-#Thu Jul 15 13:37:13 CEST 2010
+#Wed May 29 12:14:02 CEST 2013
 eclipse.preferences.version=1
 encoding//doc/resources/bbdd/scripts/postgresql/version1.0.2=UTF-8
 encoding//doc/resources/bbdd/scripts/postgresql/version1.0.3=UTF-8
 encoding//doc/resources/bbdd/scripts/postgresql/version1.1.0=UTF-8
+encoding//scripts/bbdd/2.1/postgresql/update_from_2.0/sistra_bantel_update_from_2.0.sql=UTF-8
+encoding//scripts/bbdd/2.1/postgresql/update_from_2.0/sistra_redose_update_from_2.0.sql=UTF-8
+encoding//scripts/bbdd/2.1/postgresql/update_from_2.0/sistra_sistra_update_from_2.0.sql=UTF-8
+encoding//scripts/bbdd/2.1/postgresql/update_from_2.0/sistra_zonaper_update_from_2.0.sql=UTF-8
 encoding/<project>=ISO-8859-1
