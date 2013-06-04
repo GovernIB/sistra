@@ -44,6 +44,7 @@ public interface InstanciaDelegate extends Delegate
 	public RespuestaFront mostrarFormularioDebug( String idDocumento, int instancia ) throws DelegateException;
 	public RespuestaFront remitirDelegacionPresentacionTramite()  throws DelegateException;
 	public RespuestaFront remitirDelegacionFirmaDocumentos()  throws DelegateException;
+	public RespuestaFront finalizarTramite() throws DelegateException;
 	
 	void destroy();
 }
