@@ -2378,19 +2378,57 @@ public class TramiteProcessorEJB implements SessionBean {
     }        
     
     /**
+     * Finalizar tramite. Borra tramite si no se ha borrado todavía.
+     * @ejb.interface-method    
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public RespuestaFront finalizarTramite() {
+    	return borrarTramitePersistenciaImpl(true);
+    }
+    
+    
+    /**
      * Elimina trámite de la zona de persistencia
      * @ejb.interface-method    
      * @ejb.permission role-name="${role.todos}"
      */
     public RespuestaFront borrarTramitePersistencia() {
-    	String res = "N";
+    	return borrarTramitePersistenciaImpl(false);
+    }
+
+    
+    /**
+     * Elimina tramite de persistencia.
+     * @param finalizado Indica si el tramite esta finalizado
+     * @return 
+     */
+	private RespuestaFront borrarTramitePersistenciaImpl(boolean finalizado) {
+		String res = "N";
     	String  mensAudit="";
     	
     	boolean yaBorrado = this.borradoPersistencia;
     	try{
+    		
     		// Quitamos trámite de la zona de persistencia
     		if (!yaBorrado) {
-    			borrarPersistencia( isPagoIniciado( tramiteInfo ) );
+    			boolean pagoIniciado = isPagoIniciado( tramiteInfo );
+    			boolean pagoTelematicoFinalizado = isPagoTelematicoFinalizado( tramiteInfo );
+    			
+    			// Si no esta finalizado, no permitimos borrar si tiene pagos telematicos finalizados
+    			if (!finalizado && pagoTelematicoFinalizado) {
+    				RespuestaFront resp = new RespuestaFront();
+    		    	resp.setInformacionTramite(this.tramiteInfo);
+    		    	MensajeFront mens = new MensajeFront();
+    		    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
+    		    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_NO_BORRAR_SI_PAGOS));
+    		    	resp.setMensaje(mens);
+    		    	resp.setParametros(null);
+    		    	return resp;
+    			}
+    			
+    			// Borramos de persistencia (hacemos backup si tiene pagos iniciados/finalizados)
+    			borrarPersistencia( pagoIniciado );
+    			
     		}
 	    	
 	    	// Establecemos respuesta front
@@ -2417,10 +2455,10 @@ public class TramiteProcessorEJB implements SessionBean {
     		this.context.setRollbackOnly();
     		return resFront;
     	} finally{
-    		if (!yaBorrado)
+    		if (!yaBorrado && "S".equals(res))
     			logAuditoria(ConstantesAuditoria.EVENTO_BORRADO_TRAMITE,res,mensAudit,null);	
     	}
-    }
+	}
     
     
     /**
@@ -5523,6 +5561,25 @@ public class TramiteProcessorEJB implements SessionBean {
 		{
 			DocumentoFront documento = ( DocumentoFront ) lstPagos.get( i );
 			if ( documento.getEstado() != DocumentoFront.ESTADO_NORELLENADO )
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Comprueba si existen pagos finalizados
+	 * @param tramiteInfo
+	 * @return true/false
+	 */
+	private boolean isPagoTelematicoFinalizado( TramiteFront tramiteInfo )
+	{
+		List lstPagos = ( List ) tramiteInfo.getPagos();
+		for ( int i = 0; i < lstPagos.size(); i++ )
+		{
+			DocumentoFront documento = ( DocumentoFront ) lstPagos.get( i );
+			if ( documento.getEstado() == DocumentoFront.ESTADO_CORRECTO && documento.getPagoTipo() == ConstantesPago.TIPOPAGO_TELEMATICO )
 			{
 				return true;
 			}
