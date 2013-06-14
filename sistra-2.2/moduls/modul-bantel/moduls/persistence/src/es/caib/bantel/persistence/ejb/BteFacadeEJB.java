@@ -44,6 +44,8 @@ import es.caib.redose.persistence.delegate.RdsDelegate;
  * @ejb.env-entry name="role.auto" type="java.lang.String" value="${role.auto}"
  * 
  * @ejb.transaction type="Required"
+ * 
+ * @ejb.security-role-ref role-name="${role.auto}" role-link="${role.auto}"
  */
 public abstract class BteFacadeEJB implements SessionBean  {
 

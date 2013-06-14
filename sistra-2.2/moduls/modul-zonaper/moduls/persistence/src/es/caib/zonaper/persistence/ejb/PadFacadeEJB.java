@@ -124,6 +124,9 @@ import es.caib.zonaper.persistence.util.LoggerRegistro;
  * @ejb.env-entry name="roleAuto" type="java.lang.String" value="${role.auto}"
  * @ejb.env-entry name="roleGestor" type="java.lang.String" value="${role.gestor}"
  * 
+ * @ejb.security-role-ref role-name="${role.gestor}" role-link="${role.gestor}"
+ * @ejb.security-role-ref role-name="${role.auto}" role-link="${role.auto}"
+ * 
  */
 public abstract class PadFacadeEJB implements SessionBean{
 	

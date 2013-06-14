@@ -49,6 +49,9 @@ import es.caib.zonaper.persistence.util.GeneradorId;
  * 
  * @ejb.env-entry name="roleAuto" type="java.lang.String" value="${role.auto}"
  * @ejb.env-entry name="roleHelpdesk" type="java.lang.String" value="${role.helpdesk}"
+ * 
+ * @ejb.security-role-ref role-name="${role.helpdesk}" role-link="${role.helpdesk}"
+ * @ejb.security-role-ref role-name="${role.auto}" role-link="${role.auto}"
  */
 public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
 

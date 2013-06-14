@@ -62,6 +62,8 @@ import es.caib.xml.ConstantesXML;
  * @ejb.transaction type="Required"
  * 
  * @ejb.env-entry name="roleAuto" type="java.lang.String" value="${role.auto}"
+ * 
+ * @ejb.security-role-ref role-name="${role.auto}" role-link="${role.auto}"
  */
 public abstract class MobTraTelFacadeEJB implements SessionBean
 {
