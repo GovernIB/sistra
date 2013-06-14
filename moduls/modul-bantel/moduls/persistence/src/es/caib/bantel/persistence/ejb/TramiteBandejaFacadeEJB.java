@@ -67,6 +67,8 @@ import es.caib.xml.util.HashMapIterable;
  * 
  * @ejb.env-entry name="roleAuto" value="${role.auto}"
  * 
+ * @ejb.security-role-ref role-name="${role.auto}" role-link="${role.auto}"
+ * 
  */
 public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 
