@@ -59,7 +59,8 @@ public class MensajeFront implements Serializable{
 	public static final String MENSAJE_DELEGADO_TRAMITE_NO_MODIFICAR_PENDIENTE_FIRMA="mensaje.delegado.no_modificar_pendiente_firma";
 	public static final String MENSAJE_ERROR_MODIFICACION_FORM_POR_PENDIENTE_FIRMA = "mensaje.delegado.no_modif_form_por_pendiente_firma";
 	public static final String MENSAJE_ERROR_IDIOMA_NO_SOPORTADO = "mensaje.error_idioma_no_soportado";
-		
+	public static final String MENSAJE_NO_BORRAR_SI_PAGOS = "mensaje.tramite_borrar_pagos";
+	
 	private String mensaje;	
 	private int tipo=TIPO_ERROR;
 	private String mensajeExcepcion;

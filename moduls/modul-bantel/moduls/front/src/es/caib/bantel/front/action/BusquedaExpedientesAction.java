@@ -36,8 +36,6 @@ import es.caib.zonaper.modelInterfaz.PaginaPAD;
  */
 public class BusquedaExpedientesAction extends BaseAction
 {
-	private static final int LONGITUD_PAGINA = 10;
-	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception 
     {
@@ -61,16 +59,16 @@ public class BusquedaExpedientesAction extends BaseAction
 		}
 		filtro.setIdentificadorProcedimientos(idsProc);
 		
-		filtro.setFechaDesde(StringUtil.cadenaAFecha(formularioBusqueda.getFechaDesde(), StringUtil.FORMATO_FECHA));
+		filtro.setFechaDesde(StringUtil.cadenaAFecha(formularioBusqueda.getFechaDesde() + " 00:00:00", StringUtil.FORMATO_TIMESTAMP));
 		if (StringUtils.isNotBlank(formularioBusqueda.getFechaHasta())) {
-			filtro.setFechaHasta(StringUtil.cadenaAFecha(formularioBusqueda.getFechaHasta(), StringUtil.FORMATO_FECHA));
+			filtro.setFechaHasta(StringUtil.cadenaAFecha(formularioBusqueda.getFechaHasta() + " 23:59:59", StringUtil.FORMATO_TIMESTAMP));
 		}
 		
 		filtro.setNifRepresentante(formularioBusqueda.getUsuarioNif());
 		filtro.setNumeroEntradaBTE(formularioBusqueda.getNumeroEntrada());
 		
 		
-		PaginaPAD page = es.caib.zonaper.persistence.delegate.DelegatePADUtil.getPadDelegate().busquedaPaginadaExpedientesGestor(filtro, formularioBusqueda.getPagina(), LONGITUD_PAGINA );
+		PaginaPAD page = es.caib.zonaper.persistence.delegate.DelegatePADUtil.getPadDelegate().busquedaPaginadaExpedientesGestor(filtro, formularioBusqueda.getPagina(), formularioBusqueda.getLongitudPagina() );
 		
 		request.setAttribute( "page", page );
 		

@@ -433,6 +433,17 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 		}
 	}
 	
+	public RespuestaFront finalizarTramite() throws DelegateException {
+		try
+		{
+			return local.finalizarTramite();
+		}
+		catch( EJBException e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
 	public void destroy()
 	{
 		try {

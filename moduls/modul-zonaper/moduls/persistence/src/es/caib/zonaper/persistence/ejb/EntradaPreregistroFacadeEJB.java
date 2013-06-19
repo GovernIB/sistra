@@ -50,6 +50,10 @@ import es.caib.zonaper.persistence.delegate.DelegateUtil;
  * @ejb.env-entry name="roleRegistro" type="java.lang.String" value="${role.registro}"
  * @ejb.env-entry name="roleGestor" type="java.lang.String" value="${role.gestor}"
  * 
+ * @ejb.security-role-ref role-name="${role.helpdesk}" role-link="${role.helpdesk}"
+ * @ejb.security-role-ref role-name="${role.registro}" role-link="${role.registro}"
+ * @ejb.security-role-ref role-name="${role.gestor}" role-link="${role.gestor}" 
+ * 
  */
 public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
 

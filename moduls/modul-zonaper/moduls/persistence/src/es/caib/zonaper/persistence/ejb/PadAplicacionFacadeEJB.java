@@ -47,6 +47,11 @@ import es.caib.zonaper.persistence.util.ConfigurationUtil;
  * @ejb.env-entry name="roleDelegacion" type="java.lang.String" value="${role.delegacion}"
  * @ejb.env-entry name="roleHelpdesk" type="java.lang.String" value="${role.helpdesk}"
  * @ejb.env-entry name="roleGestor" type="java.lang.String" value="${role.gestor}"
+ * 
+ * @ejb.security-role-ref role-name="${role.gestor}" role-link="${role.gestor}"  
+ * @ejb.security-role-ref role-name="${role.auto}" role-link="${role.auto}"
+ * @ejb.security-role-ref role-name="${role.helpdesk}" role-link="${role.helpdesk}"
+ * @ejb.security-role-ref role-name="${role.delegacion}" role-link="${role.delegacion}"
  */
 public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
 

@@ -46,10 +46,11 @@ public class AbandonarTramiteAction extends BaseAction
 		// Eliminamos tramite
 		RespuestaFront res = delegate.borrarTramite();
 		if (res.getMensaje() != null && 
-				res.getMensaje().getTipo() == MensajeFront.TIPO_ERROR) {
+				( res.getMensaje().getTipo() == MensajeFront.TIPO_ERROR || 
+				  res.getMensaje().getTipo() == MensajeFront.TIPO_ERROR_CONTINUABLE) ) {
 			// Mostramos error
 			this.setRespuestaFront( request, res );			
-			return mapping.findForward( "fail" );
+			return null;
 		}
 		
 		// Mensaje de cancelación de trámite

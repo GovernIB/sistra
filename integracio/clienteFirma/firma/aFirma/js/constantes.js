@@ -1,48 +1,50 @@
-/*
- * Este fichero forma parte del Cliente @firma. 
- * El Cliente @firma es un applet de libre distribución cuyo código fuente puede ser consultado
- * y descargado desde www.ctt.map.es.
- * Copyright 2009,2010 Ministerio de la Presidencia, Gobierno de España (opcional: correo de contacto)
- * Este fichero se distribuye bajo las licencias EUPL versión 1.1  y GPL versión 3  según las
- * condiciones que figuran en el fichero 'licence' que se acompaña.  Si se   distribuyera este 
- * fichero individualmente, deben incluirse aquí las condiciones expresadas allí.
+/* Copyright (C) 2012 [Gobierno de Espana]
+ * This file is part of "Cliente @Firma".
+ * "Cliente @Firma" is free software; you can redistribute it and/or modify it under the terms of:
+ *   - the GNU General Public License as published by the Free Software Foundation; 
+ *     either version 2 of the License, or (at your option) any later version.
+ *   - or The European Software License; either version 1.1 or (at your option) any later version.
+ * Date: 11/01/11
+ * You may contact the copyright holder at: soporte.afirma5@seap.minhap.es
  */
 
 /*******************************************************************************
- * Ruta al directorio de los instalables.                           	  	 *
- * Si no se establece, supone que estan en el mismo directorio que el HTML	 *
- * desde el que se carga el cliente.							 *
- * Las rutas absolutas deben comenzar por "file:///", "http://" o "https://"	 *
- * (por ejemplo, "file:///C:/ficheros", "http://www.mpr.es/ficheros",...)	 *
- * y las rutas relativas no pueden empezar por "/" (por ejemplo,			 *
- * "afirma/ficheros"). Se debe usar siempre el separador "/", nunca "\". 	 *
- * El fichero "version.properties" se toma de esta ruta.				 *
- ******************************************************************************/
+ * Ruta al directorio de los instalables.									   *
+ * Si no se establece, supone que estan en el mismo directorio que el HTML	   *
+ * desde el que se carga el cliente.										   *
+ * Las rutas absolutas deben comenzar por "file:///", "http://" o "https://"   *
+ * (por ejemplo, "file:///C:/ficheros", "http://www.mpr.es/ficheros",...).	   *
+ * Se debe usar siempre el separador "/", nunca "\". 	 					   *
+ * El fichero "version.properties" se toma de esta ruta.					   *
+ *******************************************************************************/
 var baseDownloadURL;
 
 /*******************************************************************************
- * Ruta al directorio del instalador.							 *
- * Si no se establece, supone que esta en el mismo directorio que el HTML	 *
- * desde el que se carga el cliente.							 *
- * Si es una ruta absoluta debe comenzar por "file:///", "http://" o "https://"*
- * (por ejemplo, "file:///C:/Instalador", "http://www.mpr.es/instalador",...)	 *
- * y si es una ruta relativa no puede empezar por "/" (por ejemplo,		 *
- * "afirma/Instalador"). Se debe usar siempre el separador "/", nunca "\".	 *
- ******************************************************************************/
+ * Ruta al directorio del instalador (Bootloader), los ficheros de			   *
+ * configuración de JNLP y los núcleos del Cliente.							   *
+ * Si no se establece, supone que esta en el mismo directorio que el HTML	   *
+ * desde el que se carga el cliente.										   *
+ * Las rutas absolutas deben comenzar por "file:///", "http://" o "https://"   *
+ * por ejemplo, "file:///C:/Instalador", "http://www.mpr.es/instalador",...).  *
+ * Se debe usar siempre el separador "/", nunca "\".						   *
+ *******************************************************************************/
 var base;
 
-/*******************************************************************************
- * Algoritmo de firma. Puede ser 'SHA1withRSA', 'MD5withRSA' o, salvo que sea  *
- * firma XML, MD2withRSA. Se estable al llamar a configuraFirma en firma.js    *
- ******************************************************************************/
+/********************************************************************************
+ * Algoritmo de firma. Puede ser 'SHA1withRSA', 'MD5withRSA' o, salvo que sea	*
+ * firma XML, MD2withRSA. También se puede utilizar un algoritmo SHA-2			*
+ * ('SHA512withRSA', 'SHA384withRSA' o 'SHA256withRSA'), teniendo en cuenta que	*
+ * el usuario sólo podrá ejecutar esta firma si cuenta con Java 6u30 o superior *
+ * o Java 7u2 o superior. Se estable al llamar a configuraFirma() en firma.js	*
+ *******************************************************************************/
 var signatureAlgorithm = 'SHA1withRSA'; // Valor por defecto
 
 /*******************************************************************************
  * Formato de firma. Puede ser 'CMS', 'XADES', 'XMLDSIGN' o 'NONE'.            *
  * Se estable al llamar a configuraFirma en firma.js      				 *
- * Por defecto: CMS.										 *
+ * Por defecto: CADES.										 *
  ******************************************************************************/
-var signatureFormat = 'CMS'; // Valor por defecto
+var signatureFormat = 'CADES'; // Valor por defecto
 
 /*******************************************************************************
  * Mostrar los errores al usuario. Puede ser 'true' o 'false'.                 *
@@ -82,7 +84,7 @@ var certFilter; // Valor por defecto
  * siguientes:											 *
  * 	- true: Mostrar advertencia.								 *
  *	- false: No mostrar advertencia.							 *
- * Por defecto: true (Mostrar advertencia).						 *
+ * Por defecto: false (No mostrar advertencia).						 *
  ******************************************************************************/
 var showMozillaSmartCardWarning = 'false';
 
@@ -102,4 +104,12 @@ var showExpiratedCertificates = 'true';
  *   - 'COMPLETA': Incluye los formatos de firma de la MEDIA + PDF.		 *
  * Por defecto: 'LITE'.										 *
  ******************************************************************************/
-var defaultBuild = 'MEDIA';
+var defaultBuild;
+
+/********************************************************************************
+ * Localizaci&oacute;n para la aplicaci&oacute;n. En base a esta				*
+ * localizaci&oacute;n se selecciona el idioma de los textos de la				*
+ * aplicaci&oacute;n.					 					 					*
+ * Por ejemplo: 'en_UK'.										 				*
+ ********************************************************************************/
+var locale;

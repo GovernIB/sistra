@@ -36,6 +36,15 @@
 					</html:option>
 				</logic:iterate>
 			</html:select>
+			<bean:message key="formularioBusqueda.resultadosPorPagina"/>
+			<html:select property="longitudPagina">
+				<html:option value="10" >10</html:option>
+				<html:option value="20" >20</html:option>
+				<html:option value="30" >30</html:option>
+				<html:option value="40" >40</html:option>
+				<html:option value="50" >50</html:option>
+				<html:option value="100" >100</html:option>
+			</html:select>
 		</p>
 		<p class="centrado">
 			<bean:define id="botonEnviar" type="java.lang.String">

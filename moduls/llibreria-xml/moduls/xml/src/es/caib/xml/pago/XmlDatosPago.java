@@ -65,6 +65,20 @@ public class XmlDatosPago implements Serializable{
 	private String instruccionesPresencialEntidad2Cuenta;
 	private String instruccionesPresencialEntidad3Nombre;
 	private String instruccionesPresencialEntidad3Cuenta;
+	private String instruccionesPresencialEntidad4Nombre;
+	private String instruccionesPresencialEntidad4Cuenta;
+	private String instruccionesPresencialEntidad5Nombre;
+	private String instruccionesPresencialEntidad5Cuenta;
+	private String instruccionesPresencialEntidad6Nombre;
+	private String instruccionesPresencialEntidad6Cuenta;
+	private String instruccionesPresencialEntidad7Nombre;
+	private String instruccionesPresencialEntidad7Cuenta;
+	private String instruccionesPresencialEntidad8Nombre;
+	private String instruccionesPresencialEntidad8Cuenta;
+	private String instruccionesPresencialEntidad9Nombre;
+	private String instruccionesPresencialEntidad9Cuenta;
+	private String instruccionesPresencialEntidad10Nombre;
+	private String instruccionesPresencialEntidad10Cuenta;
 	
 	
 	// Formato en la que se guarda la fecha del pago en el xml
@@ -106,6 +120,20 @@ public class XmlDatosPago implements Serializable{
 	public final static String XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD2_CUENTA = XML_ROOT + "/INSTRUCCIONES_PRESENCIAL/ENTIDAD2/CUENTA";
 	public final static String XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD3_NOMBRE = XML_ROOT + "/INSTRUCCIONES_PRESENCIAL/ENTIDAD3/NOMBRE";
 	public final static String XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD3_CUENTA = XML_ROOT + "/INSTRUCCIONES_PRESENCIAL/ENTIDAD3/CUENTA";
+	public final static String XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD4_NOMBRE = XML_ROOT + "/INSTRUCCIONES_PRESENCIAL/ENTIDAD4/NOMBRE";
+	public final static String XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD4_CUENTA = XML_ROOT + "/INSTRUCCIONES_PRESENCIAL/ENTIDAD4/CUENTA";
+	public final static String XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD5_NOMBRE = XML_ROOT + "/INSTRUCCIONES_PRESENCIAL/ENTIDAD5/NOMBRE";
+	public final static String XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD5_CUENTA = XML_ROOT + "/INSTRUCCIONES_PRESENCIAL/ENTIDAD5/CUENTA";
+	public final static String XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD6_NOMBRE = XML_ROOT + "/INSTRUCCIONES_PRESENCIAL/ENTIDAD6/NOMBRE";
+	public final static String XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD6_CUENTA = XML_ROOT + "/INSTRUCCIONES_PRESENCIAL/ENTIDAD6/CUENTA";
+	public final static String XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD7_NOMBRE = XML_ROOT + "/INSTRUCCIONES_PRESENCIAL/ENTIDAD7/NOMBRE";
+	public final static String XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD7_CUENTA = XML_ROOT + "/INSTRUCCIONES_PRESENCIAL/ENTIDAD7/CUENTA";
+	public final static String XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD8_NOMBRE = XML_ROOT + "/INSTRUCCIONES_PRESENCIAL/ENTIDAD8/NOMBRE";
+	public final static String XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD8_CUENTA = XML_ROOT + "/INSTRUCCIONES_PRESENCIAL/ENTIDAD8/CUENTA";
+	public final static String XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD9_NOMBRE = XML_ROOT + "/INSTRUCCIONES_PRESENCIAL/ENTIDAD9/NOMBRE";
+	public final static String XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD9_CUENTA = XML_ROOT + "/INSTRUCCIONES_PRESENCIAL/ENTIDAD9/CUENTA";
+	public final static String XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD10_NOMBRE = XML_ROOT + "/INSTRUCCIONES_PRESENCIAL/ENTIDAD10/NOMBRE";
+	public final static String XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD10_CUENTA = XML_ROOT + "/INSTRUCCIONES_PRESENCIAL/ENTIDAD10/CUENTA";
 	
 	/**
 	 * Obtiene los datos en bytes
@@ -350,6 +378,90 @@ public class XmlDatosPago implements Serializable{
 			map.put(nodo.getXpath(),nodo);
 		}
 		
+		if (StringUtils.isNotEmpty(this.getInstruccionesPresencialEntidad4Nombre())) {
+			nodo = new Nodo(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD4_NOMBRE, this.getInstruccionesPresencialEntidad4Nombre());		
+			nodo.setXpath(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD4_NOMBRE);
+			map.put(nodo.getXpath(),nodo);
+		}
+		
+		if (StringUtils.isNotEmpty(this.getInstruccionesPresencialEntidad4Cuenta())) {
+			nodo = new Nodo(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD4_CUENTA, this.getInstruccionesPresencialEntidad4Cuenta());		
+			nodo.setXpath(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD4_CUENTA);
+			map.put(nodo.getXpath(),nodo);
+		}
+		
+		if (StringUtils.isNotEmpty(this.getInstruccionesPresencialEntidad5Nombre())) {
+			nodo = new Nodo(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD5_NOMBRE, this.getInstruccionesPresencialEntidad5Nombre());		
+			nodo.setXpath(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD5_NOMBRE);
+			map.put(nodo.getXpath(),nodo);
+		}
+		
+		if (StringUtils.isNotEmpty(this.getInstruccionesPresencialEntidad5Cuenta())) {
+			nodo = new Nodo(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD5_CUENTA, this.getInstruccionesPresencialEntidad5Cuenta());		
+			nodo.setXpath(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD5_CUENTA);
+			map.put(nodo.getXpath(),nodo);
+		}
+		
+		if (StringUtils.isNotEmpty(this.getInstruccionesPresencialEntidad6Nombre())) {
+			nodo = new Nodo(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD6_NOMBRE, this.getInstruccionesPresencialEntidad6Nombre());		
+			nodo.setXpath(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD6_NOMBRE);
+			map.put(nodo.getXpath(),nodo);
+		}
+		
+		if (StringUtils.isNotEmpty(this.getInstruccionesPresencialEntidad6Cuenta())) {
+			nodo = new Nodo(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD6_CUENTA, this.getInstruccionesPresencialEntidad6Cuenta());		
+			nodo.setXpath(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD6_CUENTA);
+			map.put(nodo.getXpath(),nodo);
+		}
+		
+		if (StringUtils.isNotEmpty(this.getInstruccionesPresencialEntidad7Nombre())) {
+			nodo = new Nodo(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD7_NOMBRE, this.getInstruccionesPresencialEntidad7Nombre());		
+			nodo.setXpath(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD7_NOMBRE);
+			map.put(nodo.getXpath(),nodo);
+		}
+		
+		if (StringUtils.isNotEmpty(this.getInstruccionesPresencialEntidad7Cuenta())) {
+			nodo = new Nodo(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD7_CUENTA, this.getInstruccionesPresencialEntidad7Cuenta());		
+			nodo.setXpath(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD7_CUENTA);
+			map.put(nodo.getXpath(),nodo);
+		}
+		
+		if (StringUtils.isNotEmpty(this.getInstruccionesPresencialEntidad8Nombre())) {
+			nodo = new Nodo(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD8_NOMBRE, this.getInstruccionesPresencialEntidad8Nombre());		
+			nodo.setXpath(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD8_NOMBRE);
+			map.put(nodo.getXpath(),nodo);
+		}
+		
+		if (StringUtils.isNotEmpty(this.getInstruccionesPresencialEntidad8Cuenta())) {
+			nodo = new Nodo(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD8_CUENTA, this.getInstruccionesPresencialEntidad8Cuenta());		
+			nodo.setXpath(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD8_CUENTA);
+			map.put(nodo.getXpath(),nodo);
+		}
+		
+		if (StringUtils.isNotEmpty(this.getInstruccionesPresencialEntidad9Nombre())) {
+			nodo = new Nodo(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD9_NOMBRE, this.getInstruccionesPresencialEntidad9Nombre());		
+			nodo.setXpath(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD9_NOMBRE);
+			map.put(nodo.getXpath(),nodo);
+		}
+		
+		if (StringUtils.isNotEmpty(this.getInstruccionesPresencialEntidad9Cuenta())) {
+			nodo = new Nodo(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD9_CUENTA, this.getInstruccionesPresencialEntidad9Cuenta());		
+			nodo.setXpath(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD9_CUENTA);
+			map.put(nodo.getXpath(),nodo);
+		}
+		
+		if (StringUtils.isNotEmpty(this.getInstruccionesPresencialEntidad10Nombre())) {
+			nodo = new Nodo(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD10_NOMBRE, this.getInstruccionesPresencialEntidad10Nombre());		
+			nodo.setXpath(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD10_NOMBRE);
+			map.put(nodo.getXpath(),nodo);
+		}
+		
+		if (StringUtils.isNotEmpty(this.getInstruccionesPresencialEntidad10Cuenta())) {
+			nodo = new Nodo(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD10_CUENTA, this.getInstruccionesPresencialEntidad10Cuenta());		
+			nodo.setXpath(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD10_CUENTA);
+			map.put(nodo.getXpath(),nodo);
+		}
+		
 		    	
 		return map;		
 	}
@@ -409,7 +521,21 @@ public class XmlDatosPago implements Serializable{
 		this.setInstruccionesPresencialEntidad2Nombre(map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD2_NOMBRE) != null? ((Nodo) map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD2_NOMBRE)).getValor():null);
 		this.setInstruccionesPresencialEntidad2Cuenta(map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD2_CUENTA) != null? ((Nodo) map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD2_CUENTA)).getValor():null);
 		this.setInstruccionesPresencialEntidad3Nombre(map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD3_NOMBRE) != null? ((Nodo) map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD3_NOMBRE)).getValor():null);
-		this.setInstruccionesPresencialEntidad3Cuenta(map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD3_CUENTA) != null? ((Nodo) map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD3_CUENTA)).getValor():null);
+		this.setInstruccionesPresencialEntidad3Cuenta(map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD3_CUENTA) != null? ((Nodo) map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD3_CUENTA)).getValor():null);		
+		this.setInstruccionesPresencialEntidad4Nombre(map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD4_NOMBRE) != null? ((Nodo) map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD4_NOMBRE)).getValor():null);
+		this.setInstruccionesPresencialEntidad4Cuenta(map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD4_CUENTA) != null? ((Nodo) map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD4_CUENTA)).getValor():null);
+		this.setInstruccionesPresencialEntidad5Nombre(map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD5_NOMBRE) != null? ((Nodo) map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD5_NOMBRE)).getValor():null);
+		this.setInstruccionesPresencialEntidad5Cuenta(map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD5_CUENTA) != null? ((Nodo) map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD5_CUENTA)).getValor():null);
+		this.setInstruccionesPresencialEntidad6Nombre(map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD6_NOMBRE) != null? ((Nodo) map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD6_NOMBRE)).getValor():null);
+		this.setInstruccionesPresencialEntidad6Cuenta(map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD6_CUENTA) != null? ((Nodo) map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD6_CUENTA)).getValor():null);
+		this.setInstruccionesPresencialEntidad7Nombre(map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD7_NOMBRE) != null? ((Nodo) map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD7_NOMBRE)).getValor():null);
+		this.setInstruccionesPresencialEntidad7Cuenta(map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD7_CUENTA) != null? ((Nodo) map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD7_CUENTA)).getValor():null);
+		this.setInstruccionesPresencialEntidad8Nombre(map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD8_NOMBRE) != null? ((Nodo) map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD8_NOMBRE)).getValor():null);
+		this.setInstruccionesPresencialEntidad8Cuenta(map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD8_CUENTA) != null? ((Nodo) map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD8_CUENTA)).getValor():null);
+		this.setInstruccionesPresencialEntidad9Nombre(map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD9_NOMBRE) != null? ((Nodo) map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD9_NOMBRE)).getValor():null);
+		this.setInstruccionesPresencialEntidad9Cuenta(map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD9_CUENTA) != null? ((Nodo) map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD9_CUENTA)).getValor():null);
+		this.setInstruccionesPresencialEntidad10Nombre(map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD10_NOMBRE) != null? ((Nodo) map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD10_NOMBRE)).getValor():null);
+		this.setInstruccionesPresencialEntidad10Cuenta(map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD10_CUENTA) != null? ((Nodo) map.get(XML_INSTRUCCIONES_PRESENCIAL_ENTIDAD10_CUENTA)).getValor():null);
 		
 						
 	}
@@ -713,6 +839,132 @@ public class XmlDatosPago implements Serializable{
 
 	public void setInstruccionesPresencialEntidad3Cuenta(String instruccionesEntidad3Cuenta) {
 		this.instruccionesPresencialEntidad3Cuenta = instruccionesEntidad3Cuenta;
+	}
+
+	public String getInstruccionesPresencialEntidad4Nombre() {
+		return instruccionesPresencialEntidad4Nombre;
+	}
+
+	public void setInstruccionesPresencialEntidad4Nombre(
+			String instruccionesPresencialEntidad4Nombre) {
+		this.instruccionesPresencialEntidad4Nombre = instruccionesPresencialEntidad4Nombre;
+	}
+
+	public String getInstruccionesPresencialEntidad4Cuenta() {
+		return instruccionesPresencialEntidad4Cuenta;
+	}
+
+	public void setInstruccionesPresencialEntidad4Cuenta(
+			String instruccionesPresencialEntidad4Cuenta) {
+		this.instruccionesPresencialEntidad4Cuenta = instruccionesPresencialEntidad4Cuenta;
+	}
+
+	public String getInstruccionesPresencialEntidad5Nombre() {
+		return instruccionesPresencialEntidad5Nombre;
+	}
+
+	public void setInstruccionesPresencialEntidad5Nombre(
+			String instruccionesPresencialEntidad5Nombre) {
+		this.instruccionesPresencialEntidad5Nombre = instruccionesPresencialEntidad5Nombre;
+	}
+
+	public String getInstruccionesPresencialEntidad5Cuenta() {
+		return instruccionesPresencialEntidad5Cuenta;
+	}
+
+	public void setInstruccionesPresencialEntidad5Cuenta(
+			String instruccionesPresencialEntidad5Cuenta) {
+		this.instruccionesPresencialEntidad5Cuenta = instruccionesPresencialEntidad5Cuenta;
+	}
+
+	public String getInstruccionesPresencialEntidad6Nombre() {
+		return instruccionesPresencialEntidad6Nombre;
+	}
+
+	public void setInstruccionesPresencialEntidad6Nombre(
+			String instruccionesPresencialEntidad6Nombre) {
+		this.instruccionesPresencialEntidad6Nombre = instruccionesPresencialEntidad6Nombre;
+	}
+
+	public String getInstruccionesPresencialEntidad6Cuenta() {
+		return instruccionesPresencialEntidad6Cuenta;
+	}
+
+	public void setInstruccionesPresencialEntidad6Cuenta(
+			String instruccionesPresencialEntidad6Cuenta) {
+		this.instruccionesPresencialEntidad6Cuenta = instruccionesPresencialEntidad6Cuenta;
+	}
+
+	public String getInstruccionesPresencialEntidad7Nombre() {
+		return instruccionesPresencialEntidad7Nombre;
+	}
+
+	public void setInstruccionesPresencialEntidad7Nombre(
+			String instruccionesPresencialEntidad7Nombre) {
+		this.instruccionesPresencialEntidad7Nombre = instruccionesPresencialEntidad7Nombre;
+	}
+
+	public String getInstruccionesPresencialEntidad7Cuenta() {
+		return instruccionesPresencialEntidad7Cuenta;
+	}
+
+	public void setInstruccionesPresencialEntidad7Cuenta(
+			String instruccionesPresencialEntidad7Cuenta) {
+		this.instruccionesPresencialEntidad7Cuenta = instruccionesPresencialEntidad7Cuenta;
+	}
+
+	public String getInstruccionesPresencialEntidad8Nombre() {
+		return instruccionesPresencialEntidad8Nombre;
+	}
+
+	public void setInstruccionesPresencialEntidad8Nombre(
+			String instruccionesPresencialEntidad8Nombre) {
+		this.instruccionesPresencialEntidad8Nombre = instruccionesPresencialEntidad8Nombre;
+	}
+
+	public String getInstruccionesPresencialEntidad8Cuenta() {
+		return instruccionesPresencialEntidad8Cuenta;
+	}
+
+	public void setInstruccionesPresencialEntidad8Cuenta(
+			String instruccionesPresencialEntidad8Cuenta) {
+		this.instruccionesPresencialEntidad8Cuenta = instruccionesPresencialEntidad8Cuenta;
+	}
+
+	public String getInstruccionesPresencialEntidad9Nombre() {
+		return instruccionesPresencialEntidad9Nombre;
+	}
+
+	public void setInstruccionesPresencialEntidad9Nombre(
+			String instruccionesPresencialEntidad9Nombre) {
+		this.instruccionesPresencialEntidad9Nombre = instruccionesPresencialEntidad9Nombre;
+	}
+
+	public String getInstruccionesPresencialEntidad9Cuenta() {
+		return instruccionesPresencialEntidad9Cuenta;
+	}
+
+	public void setInstruccionesPresencialEntidad9Cuenta(
+			String instruccionesPresencialEntidad9Cuenta) {
+		this.instruccionesPresencialEntidad9Cuenta = instruccionesPresencialEntidad9Cuenta;
+	}
+
+	public String getInstruccionesPresencialEntidad10Nombre() {
+		return instruccionesPresencialEntidad10Nombre;
+	}
+
+	public void setInstruccionesPresencialEntidad10Nombre(
+			String instruccionesPresencialEntidad10Nombre) {
+		this.instruccionesPresencialEntidad10Nombre = instruccionesPresencialEntidad10Nombre;
+	}
+
+	public String getInstruccionesPresencialEntidad10Cuenta() {
+		return instruccionesPresencialEntidad10Cuenta;
+	}
+
+	public void setInstruccionesPresencialEntidad10Cuenta(
+			String instruccionesPresencialEntidad10Cuenta) {
+		this.instruccionesPresencialEntidad10Cuenta = instruccionesPresencialEntidad10Cuenta;
 	}
 	
 }

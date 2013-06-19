@@ -27,6 +27,11 @@ public class PaginaPAD implements Serializable
 	private boolean nextPage;
 	
 	/**
+	 * Numero resultados.
+	 */
+	private int totalResults;
+	
+	/**
 	 * Lista de resumenes expediente.	
 	 */
 	private List list = new ArrayList();
@@ -62,7 +67,13 @@ public class PaginaPAD implements Serializable
 	public void setList(List list) {
 		this.list = list;
 	}
-	
-	
+
+	public int getTotalResults() {
+		return totalResults;
+	}
+
+	public void setTotalResults(int totalResults) {
+		this.totalResults = totalResults;
+	}
 			
 }

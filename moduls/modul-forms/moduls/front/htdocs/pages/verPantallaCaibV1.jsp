@@ -31,8 +31,11 @@
 <script type="text/javascript">
 <!--
 
-// URL para mantenimiento sesion de sistra
-URL_SISTRA_MANTENIMIENTO_SESION="<%=request.getAttribute("urlSisTraMantenimientoSesion")%>"; 
+	function mantenimientoSesionSistra() {
+		// URL para mantenimiento sesion de sistra
+		URL_SISTRA_MANTENIMIENTO_SESION="<%=request.getAttribute("urlSisTraMantenimientoSesion")%>";
+		asyncPost(URL_SISTRA_MANTENIMIENTO_SESION,new Array());		
+	} 
 
 // Definición de los valores de pantallas anteriores
 <bean:define id="datosAnteriores" name="datosAnteriores" type="java.util.Map"/>
@@ -776,9 +779,10 @@ function unsetAyuda() {
 <!--
 	// Desactivamos autocompletar
 	document.getElementById("pantallaForm").setAttribute("autocomplete","off");	
-	
-	// Mantenemos url sesion sistra
- 	syncPost(URL_SISTRA_MANTENIMIENTO_SESION,new Array());
+
+	// Mantenemos url sesion sistra (realizamos peticion y programamos que se repita cada 5 min)
+	mantenimientoSesionSistra();
+ 	window.setInterval(mantenimientoSesionSistra, 5 * 60 * 1000);
 	
 	// Añadimos a los componentes text un tag para saber si tienen el foco
 	for(var i=0, df=document.forms, len=df.length; i<len; i++)
