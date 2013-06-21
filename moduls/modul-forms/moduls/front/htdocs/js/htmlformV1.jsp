@@ -259,6 +259,9 @@ function disableListaElementos(nombre,dis){
 		alert(mensajeValidacion);
 		return;
 	}
+	if (indice == -1) {
+		indice = radio.length;
+	}
 	
 	// Vamos al detalle
 	f = document.getElementById("pantallaForm");
