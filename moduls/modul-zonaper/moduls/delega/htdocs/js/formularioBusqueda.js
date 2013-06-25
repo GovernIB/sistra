@@ -181,8 +181,8 @@
              alert("El cif debe de tener nueve dígitos");
              return false;
         }
-
-        letrasComienzo1 = "ABCDEFGHN";
+       
+        letrasComienzo1 = "ABCDEFGHNU";
         letrasComienzo2 = "PQS";
         letrasFin = "JABCDEFGHI";
         numeros = "0123456789";
@@ -214,7 +214,8 @@
             else{
                  alert("CIF erróneo");
                  return false;
-                }
+          
+            }
         }
 
         for(i=1; i<=7; i++){
