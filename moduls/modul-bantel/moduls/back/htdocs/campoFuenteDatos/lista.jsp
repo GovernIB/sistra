@@ -34,7 +34,7 @@
                     </logic:equal>                      
                 </td>
                 <td align="right">
-                	<bean:define id="idCampo" value="<%=campo.getFuenteDatos().getIdentificador() + "#" + campo.getIdentificador()%>" />
+                	<bean:define id="idCampo" value="<%=campo.getFuenteDatos().getIdentificador() + \"#\" + campo.getIdentificador()%>" />
                     <bean:define id="urlEditar"><html:rewrite page="/back/campoFuenteDatos/seleccion.do" paramId="identificador" paramName="idCampo"/></bean:define>
                     <button class="button" type="button" onclick="forward('<%=urlEditar%>')"><bean:message key="boton.selec" /></button>
                     <bean:define id="nombre" name="campo" property="identificador" type="java.lang.String"/>

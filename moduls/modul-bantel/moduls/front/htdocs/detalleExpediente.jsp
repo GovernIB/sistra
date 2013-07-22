@@ -19,7 +19,7 @@
 	<bean:message key='expediente.borrarExpediente'/>
 </bean:define>
 <bean:define id="expediente" name="expediente" type="es.caib.zonaper.modelInterfaz.ExpedientePAD" />
-<bean:define id="habilitarAvisos" value="<%= (expediente.getConfiguracionAvisos().getHabilitarAvisos() == null?"O":(expediente.getConfiguracionAvisos().getHabilitarAvisos().booleanValue())?\"S\":\"N\")%>" type="java.lang.String"/>
+<bean:define id="habilitarAvisos" value="<%= (expediente.getConfiguracionAvisos().getHabilitarAvisos() == null?\"O\":(expediente.getConfiguracionAvisos().getHabilitarAvisos().booleanValue())?\"S\":\"N\")%>" type="java.lang.String"/>
 <bean:define id="observacionesElemento" name="observacionesElemento" type="java.util.List"/>
 <bean:define id="obligatorioAvisos" name="obligatorioAvisos" type="java.lang.String"/>
 
