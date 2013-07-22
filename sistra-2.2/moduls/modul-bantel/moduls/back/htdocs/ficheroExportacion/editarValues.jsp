@@ -16,7 +16,7 @@
 </tr>
 <tr>
     <td class="labelo"><bean:message key="ficheroExportacion.codigo"/></td>
-    <td class="input"><html:text styleClass="data" tabindex="1" property="values.identificadorTramite" maxlength="20" readonly="<%= request.getAttribute( "idReadOnly" ) != null %>" /></td>
+    <td class="input"><html:text styleClass="data" tabindex="1" property="values.identificadorTramite" maxlength="20" readonly="<%= request.getAttribute( \"idReadOnly\" ) != null %>" /></td>
 </tr>
 
 <tr>
