@@ -25,8 +25,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{}INSTRUCCIONES"/>
- *         &lt;element ref="{}SOLICITUD" minOccurs="0"/>
+ *         &lt;element name="EMAIL" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="SMS" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -37,63 +37,63 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "instrucciones",
-    "solicitud"
+    "email",
+    "sms"
 })
-@XmlRootElement(name = "DATOS_PROPIOS")
-public class DATOSPROPIOS {
+@XmlRootElement(name = "ALERTAS_TRAMITACION")
+public class ALERTASTRAMITACION {
 
-    @XmlElement(name = "INSTRUCCIONES", required = true)
-    protected INSTRUCCIONES instrucciones;
-    @XmlElement(name = "SOLICITUD")
-    protected SOLICITUD solicitud;
+    @XmlElement(name = "EMAIL", required = true)
+    protected String email;
+    @XmlElement(name = "SMS")
+    protected String sms;
 
     /**
-     * Gets the value of the instrucciones property.
+     * Gets the value of the email property.
      * 
      * @return
      *     possible object is
-     *     {@link INSTRUCCIONES }
+     *     {@link String }
      *     
      */
-    public INSTRUCCIONES getINSTRUCCIONES() {
-        return instrucciones;
+    public String getEMAIL() {
+        return email;
     }
 
     /**
-     * Sets the value of the instrucciones property.
+     * Sets the value of the email property.
      * 
      * @param value
      *     allowed object is
-     *     {@link INSTRUCCIONES }
+     *     {@link String }
      *     
      */
-    public void setINSTRUCCIONES(INSTRUCCIONES value) {
-        this.instrucciones = value;
+    public void setEMAIL(String value) {
+        this.email = value;
     }
 
     /**
-     * Gets the value of the solicitud property.
+     * Gets the value of the sms property.
      * 
      * @return
      *     possible object is
-     *     {@link SOLICITUD }
+     *     {@link String }
      *     
      */
-    public SOLICITUD getSOLICITUD() {
-        return solicitud;
+    public String getSMS() {
+        return sms;
     }
 
     /**
-     * Sets the value of the solicitud property.
+     * Sets the value of the sms property.
      * 
      * @param value
      *     allowed object is
-     *     {@link SOLICITUD }
+     *     {@link String }
      *     
      */
-    public void setSOLICITUD(SOLICITUD value) {
-        this.solicitud = value;
+    public void setSMS(String value) {
+        this.sms = value;
     }
 
 }

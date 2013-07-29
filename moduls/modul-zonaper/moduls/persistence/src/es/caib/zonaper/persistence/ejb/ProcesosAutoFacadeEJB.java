@@ -13,9 +13,12 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import es.caib.mobtratel.persistence.delegate.DelegateMobTraTelUtil;
+import es.caib.mobtratel.persistence.delegate.MobTraTelDelegate;
 import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
@@ -32,13 +35,17 @@ import es.caib.zonaper.model.Expediente;
 import es.caib.zonaper.model.LogRegistro;
 import es.caib.zonaper.model.NotificacionTelematica;
 import es.caib.zonaper.model.RegistroExternoPreparado;
+import es.caib.zonaper.model.TramitePersistente;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.persistence.delegate.BackupDelegate;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
+import es.caib.zonaper.persistence.delegate.EntradaPreregistroDelegate;
 import es.caib.zonaper.persistence.delegate.ExpedienteDelegate;
 import es.caib.zonaper.persistence.delegate.LogRegistroDelegate;
 import es.caib.zonaper.persistence.delegate.ProcesoRechazarNotificacionDelegate;
 import es.caib.zonaper.persistence.delegate.RegistroExternoPreparadoDelegate;
+import es.caib.zonaper.persistence.delegate.TramitePersistenteDelegate;
+import es.caib.zonaper.persistence.util.AvisoAlertasTramitacion;
 import es.caib.zonaper.persistence.util.AvisosMovilidad;
 import es.caib.zonaper.persistence.util.ConfigurationUtil;
 import es.caib.zonaper.persistence.util.UsernamePasswordCallbackHandler;
@@ -374,6 +381,43 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 	}
 	}
     
+    
+    /**
+	 * Alertas tramitacion
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked = "true"
+     * 
+     */
+	public void alertasTramitacion()  
+	{
+		backupLog.debug("Alertas tramitacion");
+		
+		LoginContext lc = null;		
+		try{					
+			// Realizamos login JAAS con usuario para proceso automatico	
+			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+			String user = props.getProperty("auto.user");
+			String pass = props.getProperty("auto.pass");
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			lc = new LoginContext("client-login", handler);
+			lc.login();
+			
+			// Realizamos alertas tramitacion pago telematico finalizado sin finalizar tramite
+			realizarAlertasTramitacionPagoFinalizado();
+			
+			// Realizamos alertas tramitacion preregistro sin confirmar
+			realizarAlertasTramitacionPreregistroSinConfirmar();
+			
+		}catch (Exception le){
+			throw new EJBException("Excepcion al ejecutar proceso",le);
+		}finally{				
+			// Hacemos el logout
+			if ( lc != null ){
+				try{lc.logout();}catch(Exception exl){}
+			}
+		}
+	}
 	
 	// ----------------------------------------------------------------------------------------------
 	//	FUNCIONES AUXILIARES
@@ -541,4 +585,60 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
         cal.add(Calendar.MONTH,  (Integer.parseInt(meses) * -1) );
 		delegate.procesaEliminarTramitesBackup( cal.getTime() );		
 	}
+	
+
+	private void realizarAlertasTramitacionPreregistroSinConfirmar() throws Exception{
+		// Recuperamos preregistros pendientes de avisar
+		EntradaPreregistroDelegate delegate = DelegateUtil.getEntradaPreregistroDelegate();
+		List preregistros = delegate.obtenerTramitesPendienteAvisoPreregistroSinConfirmar();
+		MobTraTelDelegate mob = DelegateMobTraTelUtil.getMobTraTelDelegate();
+		
+		// Generamos aviso para los tramites
+		for (Iterator it = preregistros.iterator(); it.hasNext();) {
+			EntradaPreregistro preregistro = (EntradaPreregistro) it.next();
+			if (StringUtils.isBlank(preregistro.getAlertasTramitacionEmail()) && 
+					StringUtils.isBlank(preregistro.getAlertasTramitacionSms())) {
+				continue;
+			}
+			
+			try {
+				// Generamos aviso a traves de mobtratel
+				AvisoAlertasTramitacion.getInstance().avisarPreregistroPendiente(preregistro);	
+				// Marcamos como avisado
+				delegate.avisoPreregistroSinConfirmar(preregistro.getIdPersistencia());
+			} catch (Exception exc) {
+				// Mostramos error en log y continuamos con siguiente tramite
+				backupLog.error("Error realizando alerta de tramitacion", exc);				
+			}
+		}
+	}
+
+
+	private void realizarAlertasTramitacionPagoFinalizado() throws Exception {
+		// Recuperamos tramites pendientes de avisar
+		TramitePersistenteDelegate delegate = DelegateUtil.getTramitePersistenteDelegate();
+		List tramites = delegate.obtenerTramitesPendienteAvisoPagoTelematicoFinalizado();
+		
+		// Generamos aviso para los tramites
+		for (Iterator it = tramites.iterator(); it.hasNext();) {
+			TramitePersistente tramite = (TramitePersistente) it.next();
+			if (StringUtils.isBlank(tramite.getAlertasTramitacionEmail()) && 
+					StringUtils.isBlank(tramite.getAlertasTramitacionSms())) {
+				continue;
+			}
+			
+			try {
+				// Generamos aviso a traves de mobtratel
+				AvisoAlertasTramitacion.getInstance().avisarPagoRealizadoTramitePendiente(tramite);	
+				// Marcamos como avisado
+				delegate.avisoPagoTelematicoFinalizado(tramite.getIdPersistencia());
+			} catch (Exception exc) {
+				// Mostramos error en log y continuamos con siguiente tramite
+				backupLog.error("Error realizando alerta de tramitacion", exc);				
+			}
+		}		
+		
+	}
+
+
 }

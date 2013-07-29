@@ -17,6 +17,8 @@ public class DocumentoPersistenteBackup
     private String delegacionFirmantes;
     private String delegacionFirmantesPendientes;     
     
+    private String tipoDocumento;
+    private String esPagoTelematico;
     
 	public Long getCodigo() {
 		return codigo;
@@ -136,6 +138,26 @@ public class DocumentoPersistenteBackup
 	public void setDelegacionFirmantesPendientes(
 			String delegacionFirmantesPendientes) {
 		this.delegacionFirmantesPendientes = delegacionFirmantesPendientes;
+	}
+
+
+	public String getTipoDocumento() {
+		return tipoDocumento;
+	}
+
+
+	public void setTipoDocumento(String tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
+	}
+
+
+	public String getEsPagoTelematico() {
+		return esPagoTelematico;
+	}
+
+
+	public void setEsPagoTelematico(String esPagoTelematico) {
+		this.esPagoTelematico = esPagoTelematico;
 	}
 
 

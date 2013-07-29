@@ -37,6 +37,12 @@ public class EspecificacionGenericaController implements Controller{
     	
     	request.setAttribute( "habilitarNotificacionOptions", listaOpcionesNotif);
     	
+    	List listaOpcionesAlertas = new ArrayList(); 
+    	listaOpcionesAlertas.add(new Opcion(ConstantesSTR.ALERTASTRAMITACION_NOPERMITIDA, "especificacionesTramite.habilitarAlertasTramitacion.noPermitida"));
+    	listaOpcionesAlertas.add(new Opcion(ConstantesSTR.ALERTASTRAMITACION_PERMITIDA, "especificacionesTramite.habilitarAlertasTramitacion.permitida"));
+    	
+    	request.setAttribute( "habilitarAlertasTramitacionOptions", listaOpcionesAlertas);
+    	
     	
     	List listaOpcionesPersJustif = new ArrayList(); 
     	listaOpcionesPersJustif.add(new Opcion(ConstantesSTR.PERSONALIZACIONJUSTIFICANTE_HABILITADA, "especificacionesTramite.personalizacionJustificante.habilitada"));
