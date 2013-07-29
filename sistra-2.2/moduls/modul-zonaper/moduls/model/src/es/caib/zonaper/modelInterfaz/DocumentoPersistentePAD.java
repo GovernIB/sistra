@@ -10,6 +10,10 @@ public class DocumentoPersistentePAD  implements Serializable {
 	public final static char ESTADO_INCORRECTO = 'N';
 	public final static char ESTADO_NORELLENADO = 'V';
 	
+	public final static String TIPO_FORMULARIO = "F";
+	public final static String TIPO_ANEXO = "A";
+	public final static String TIPO_PAGO = "P";
+	
 	/**
 	 * Para trámites que se ejecutan de forma delegada indica que el usuario que tiene actualmente el trámite 
 	 * ha realizado todas sus acciones sobre el paso pero queda que otro delegado firme el documento
@@ -33,6 +37,9 @@ public class DocumentoPersistentePAD  implements Serializable {
      private String delegacionFirmantes;
      private String delegacionFirmantesPendientes;  
 
+     private String tipoDocumento;
+     private String esPagoTelematico = "N";
+     
     // Constructors
     /** default constructor */
     public DocumentoPersistentePAD() {
@@ -109,6 +116,22 @@ public class DocumentoPersistentePAD  implements Serializable {
 	public void setDelegacionFirmantesPendientes(
 			String delegacionFirmantesPendientes) {
 		this.delegacionFirmantesPendientes = delegacionFirmantesPendientes;
+	}
+
+	public String getTipoDocumento() {
+		return tipoDocumento;
+	}
+
+	public void setTipoDocumento(String tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
+	}
+
+	public String getEsPagoTelematico() {
+		return esPagoTelematico;
+	}
+
+	public void setEsPagoTelematico(String esPagoTelematico) {
+		this.esPagoTelematico = esPagoTelematico;
 	}
 
 }

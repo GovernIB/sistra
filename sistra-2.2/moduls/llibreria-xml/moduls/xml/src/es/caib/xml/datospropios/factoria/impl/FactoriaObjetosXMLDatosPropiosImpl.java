@@ -29,6 +29,7 @@ import es.caib.xml.GuardaObjetoXMLException;
 import es.caib.xml.InicializacionFactoriaException;
 import es.caib.xml.datospropios.factoria.ConstantesDatosPropiosXML;
 import es.caib.xml.datospropios.factoria.FactoriaObjetosXMLDatosPropios;
+import es.caib.xml.datospropios.modelo.ALERTASTRAMITACION;
 import es.caib.xml.datospropios.modelo.DATOSPROPIOS;
 import es.caib.xml.datospropios.modelo.DATO;
 import es.caib.xml.datospropios.modelo.DOCUMENTO;
@@ -444,6 +445,10 @@ public class FactoriaObjetosXMLDatosPropiosImpl implements
 			if (instJAXB.getPERSONALIZACIONJUSTIFICANTE() != null){
 				instrucciones.setPersonalizacionJustificante(this.crearPersonalizacionJustificante(instJAXB.getPERSONALIZACIONJUSTIFICANTE()));
 			}
+			
+			if (instJAXB.getALERTASTRAMITACION() != null){
+				instrucciones.setAlertasTramitacion(this.crearAlertasTramitacion(instJAXB.getALERTASTRAMITACION()));
+			}
 		}
 		
 		return instrucciones;
@@ -605,6 +610,10 @@ public class FactoriaObjetosXMLDatosPropiosImpl implements
 			if (instrucciones.getPersonalizacionJustificante() != null){
 				instruccionesJAXB.setPERSONALIZACIONJUSTIFICANTE(this.crearPersonalizacionJustificanteJAXB(instrucciones.getPersonalizacionJustificante()) );
 			}
+			
+			if (instrucciones.getAlertasTramitacion() != null){
+				instruccionesJAXB.setALERTASTRAMITACION(this.crearAlertasTramitacionJAXB(instrucciones.getAlertasTramitacion()) );
+			}
 		}
 		
 		return instruccionesJAXB;
@@ -754,4 +763,36 @@ public class FactoriaObjetosXMLDatosPropiosImpl implements
 		}
 		return personalizacionJustificante;
 	}
+
+
+	public AlertasTramitacion crearAlertasTramitacion() {
+		return new AlertasTramitacion();
+	}
+	
+	
+	private ALERTASTRAMITACION crearAlertasTramitacionJAXB (AlertasTramitacion alertasTramitacion) throws EstablecerPropiedadException{
+		ALERTASTRAMITACION alertasTramitacionJAXB = null;
+		
+		if (alertasTramitacion != null){
+			alertasTramitacionJAXB = new ALERTASTRAMITACION ();
+			alertasTramitacionJAXB.setEMAIL(alertasTramitacion.getEmail());
+			alertasTramitacionJAXB.setSMS(alertasTramitacion.getSms());			
+		}
+		
+		return alertasTramitacionJAXB;
+	}
+	
+	
+	private AlertasTramitacion crearAlertasTramitacion (ALERTASTRAMITACION alertasTramitacionJAXB) throws EstablecerPropiedadException{
+		AlertasTramitacion alertasTramitacion = null;
+		
+		if (alertasTramitacionJAXB != null){
+			alertasTramitacion = new AlertasTramitacion ();
+			alertasTramitacion.setEmail(alertasTramitacionJAXB.getEMAIL());
+			alertasTramitacion.setSms(alertasTramitacionJAXB.getSMS());			
+		}
+		
+		return alertasTramitacion;
+	}
+	
 }
