@@ -21,7 +21,6 @@ import es.caib.util.StringUtil;
 import es.caib.zonaper.model.EntradaPreregistro;
 import es.caib.zonaper.model.OrganismoInfo;
 import es.caib.zonaper.model.TramitePersistente;
-import es.caib.zonaper.persistence.delegate.ConfiguracionDelegate;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 
 /**
