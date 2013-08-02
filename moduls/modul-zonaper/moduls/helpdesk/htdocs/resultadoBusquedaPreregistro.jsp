@@ -44,6 +44,7 @@ function mostrarDatosTramite(clave){
 				<th><bean:message key="resultadoBusqueda.nivelAutenticacion"/></th>
 				<th><bean:message key="resultadoBusqueda.confirmado"/></th>
 				<th><bean:message key="resultadoBusqueda.fechaCaducidad"/></th>
+				<th><bean:message key="resultadoBusqueda.nif"/></th>
 			</tr>	
 			</thead>
 			<tbody>	
@@ -82,6 +83,7 @@ function mostrarDatosTramite(clave){
 					</td>
 					
 					<td><bean:write name="tramite" property="fechaCaducidad" format="dd/MM/yyyy HH:mm"/></td>
+					<td><bean:write name="tramite" property="nifRepresentante"/></td>
 				</tr>
 				</logic:iterate>														
 			</tbody>
