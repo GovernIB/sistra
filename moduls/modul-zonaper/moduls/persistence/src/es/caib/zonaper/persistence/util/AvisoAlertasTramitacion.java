@@ -122,6 +122,11 @@ public class AvisoAlertasTramitacion {
 		textoEmail = StringUtil.replace(textoEmail,"[#ALERTA.MENSAJE#]",StringUtil.replace(StringEscapeUtils.escapeHtml(mensaje),"\n","<br/>"));
 		textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.SOPORTE#]",LiteralesAvisosMovilidad.calcularTextoSoporte(oi, idioma));
 		
+		// Reemplazamos texto "Mi portal" por enlace
+		String textoMiPortal = (String) oi.getReferenciaPortal().get(idioma);
+		String urlMiPortal = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.url") + "/zonaperfront";
+		textoEmail = StringUtil.replace(textoEmail, textoMiPortal, "<a href=\"" + urlMiPortal + "\">" + textoMiPortal + "</a>");
+		
 		// Creamos MensajeEnvio
 		MensajeEnvioEmail mensEmail = new MensajeEnvioEmail();
 		String dest [] = {email};

@@ -4661,11 +4661,9 @@ public class TramiteProcessorEJB implements SessionBean {
     	EspecTramiteNivel especVersion = tramiteVersion.getEspecificaciones();
     	EspecTramiteNivel especNivel = tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
     			
-    	if (!ConstantesSTR.NOTIFICACIONTELEMATICA_SINESPECIFICAR.equals(especNivel.getHabilitarNotificacionTelematica()) &&
-    		!ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA.equals(especNivel.getHabilitarNotificacionTelematica()) &&
-    		especNivel.getAvisoEmail() != null && especNivel.getAvisoEmail().length > 0 ){
+    	if (especNivel.getAvisoEmail() != null && especNivel.getAvisoEmail().length > 0){
     		scriptEmail = especNivel.getAvisoEmail();
-    	}else if (!ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA.equals(especVersion.getHabilitarNotificacionTelematica())) {
+    	}else {
     		scriptEmail = especVersion.getAvisoEmail();
     	}
     	
@@ -4698,13 +4696,11 @@ public class TramiteProcessorEJB implements SessionBean {
     	EspecTramiteNivel especNivel = tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
     			
     	
-    	if (!ConstantesSTR.NOTIFICACIONTELEMATICA_SINESPECIFICAR.equals(especNivel.getHabilitarNotificacionTelematica()) &&
-        		!ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA.equals(especNivel.getHabilitarNotificacionTelematica()) &&
-        		especNivel.getAvisoSMS() != null && especNivel.getAvisoSMS().length > 0 ){
+    	if (especNivel.getAvisoSMS() != null && especNivel.getAvisoSMS().length > 0 ){
     		scriptSms = especNivel.getAvisoSMS();
-        	}else if (!ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA.equals(especVersion.getHabilitarNotificacionTelematica())) {
-        		scriptSms = especVersion.getAvisoSMS();
-        	}    	    	
+        }else {
+        	scriptSms = especVersion.getAvisoSMS();
+        }    	    	
     	
     	if (scriptSms != null && scriptSms.length > 0 ){
     		smsDefecto = this.evaluarScript(scriptSms,null);    		
