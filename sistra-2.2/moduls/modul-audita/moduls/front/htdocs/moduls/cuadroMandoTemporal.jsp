@@ -44,7 +44,11 @@
 			<logic:present name="evento" property="opcionesVisualizacion">
 			<logic:match name="evento" property="opcionesVisualizacion" value="I">
 			   <logic:iterate name="evento" property="totalesIdioma" id="element">
-			      <logic:match name="element" property="key" value="es">
+			    <logic:empty name="element" property="key">
+			    	<img src="./images/cuadromando/bandera_null.gif" title="<bean:message key="icono.idioma.null"/>" style="vertical-align:middle; ">
+			    </logic:empty>
+			   	<logic:notEmpty name="element" property="key">
+			   	  <logic:match name="element" property="key" value="es">
 			         <img src="./images/cuadromando/bandera_es.gif" title="<bean:message key="icono.idioma.castellano"/>" style="vertical-align:middle; ">
 			      </logic:match>
 			      <logic:match name="element" property="key" value="ca">
@@ -56,7 +60,8 @@
 			      <logic:match name="element" property="key" value="de">
 			         <img src="./images/cuadromando/bandera_de.gif" title="<bean:message key="icono.idioma.aleman"/>" style="vertical-align:middle; ">
 			      </logic:match>
-			      <bean:write name="element" property="value"/>
+			     </logic:notEmpty>
+			     <bean:write name="element" property="value"/>
 			   </logic:iterate>
 			</logic:match>
 			<logic:notMatch name="evento" property="opcionesVisualizacion" value="I">&nbsp;</logic:notMatch>&nbsp;
