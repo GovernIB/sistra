@@ -5553,7 +5553,14 @@ public class TramiteProcessorEJB implements SessionBean {
     	EspecTramiteNivel espTramite = (EspecTramiteNivel) tramiteVersion.getEspecificaciones();
     	EspecTramiteNivel espNivel = (EspecTramiteNivel) tn.getEspecificaciones();	    		    	
 		int diasPersistencia = espNivel.getDiasPersistencia();
-		if (diasPersistencia <= 0) diasPersistencia = espTramite.getDiasPersistencia();
+		if (diasPersistencia <= 0) {
+			diasPersistencia = espTramite.getDiasPersistencia();
+		}
+		
+		// Si no se indica persistencia le damos un año
+		if (diasPersistencia <= 0) {
+			diasPersistencia = 365;
+		}
 		
 		Date fechaCaducidad = (new Timestamp(System.currentTimeMillis() + (diasPersistencia * 24 * 60 * 60 * 1000L)));
 		Date fechaFinPlazo = tramiteVersion.getFinPlazo(); 
