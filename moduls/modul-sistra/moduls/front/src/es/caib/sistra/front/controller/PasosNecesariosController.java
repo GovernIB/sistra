@@ -2,6 +2,7 @@ package es.caib.sistra.front.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -16,8 +17,10 @@ import org.apache.struts.config.ActionConfig;
 import org.apache.struts.tiles.ComponentContext;
 
 import es.caib.sistra.front.Constants;
+import es.caib.sistra.model.DocumentoFront;
 import es.caib.sistra.model.PasoTramitacion;
 import es.caib.sistra.model.TramiteFront;
+import es.caib.sistra.plugins.pagos.ConstantesPago;
 
 public class PasosNecesariosController extends TramiteController
 {
@@ -267,7 +270,36 @@ public class PasosNecesariosController extends TramiteController
 			}
 			case PasoTramitacion.PASO_PAGAR :
 			{
-				paso.setClaveCuerpo( textKey );
+				// Verificamos tipos de pagos
+				char tipoPago = 'X';
+				for (Iterator it = tramite.getPagos().iterator(); it.hasNext();) {
+					DocumentoFront pago = (DocumentoFront) it.next();
+					switch (pago.getPagoMetodos()) {
+						case ConstantesPago.TIPOPAGO_AMBOS:
+							tipoPago = ConstantesPago.TIPOPAGO_AMBOS;
+							break;
+						case ConstantesPago.TIPOPAGO_PRESENCIAL:
+							if (tipoPago == ConstantesPago.TIPOPAGO_TELEMATICO) {
+								tipoPago = ConstantesPago.TIPOPAGO_AMBOS;
+							} else {
+								tipoPago = ConstantesPago.TIPOPAGO_PRESENCIAL;
+							}
+							break;
+						case ConstantesPago.TIPOPAGO_TELEMATICO:
+							if (tipoPago == ConstantesPago.TIPOPAGO_PRESENCIAL) {
+								tipoPago = ConstantesPago.TIPOPAGO_AMBOS;
+							} else {
+								tipoPago = ConstantesPago.TIPOPAGO_TELEMATICO;
+							}
+							break;
+					}
+					
+					if (tipoPago == ConstantesPago.TIPOPAGO_AMBOS) {
+						break;
+					}
+				}
+				
+				paso.setClaveCuerpo( textKey + "." + tipoPago );
 				return;
 			}
 			case PasoTramitacion.PASO_REGISTRAR :
