@@ -147,6 +147,11 @@ public class TramiteFront  implements Serializable{
 	private boolean redireccionFin = false;
 	
 	/**
+	 * Indica si se realiza el registro automaticamente al entrar al paso de registro.
+	 */
+	private boolean registroAutomatico = false;
+	
+	/**
 	 * Plazo inicio presentacion tramite
 	 */
 	private Date fechaInicioPlazo=null;
@@ -570,6 +575,12 @@ public class TramiteFront  implements Serializable{
 	public void setObligatorioAvisosNotificaciones(
 			boolean obligatorioAvisosNotificaciones) {
 		this.obligatorioAvisosNotificaciones = obligatorioAvisosNotificaciones;
+	}
+	public boolean isRegistroAutomatico() {
+		return registroAutomatico;
+	}
+	public void setRegistroAutomatico(boolean registroAutomatico) {
+		this.registroAutomatico = registroAutomatico;
 	}
 	
 }

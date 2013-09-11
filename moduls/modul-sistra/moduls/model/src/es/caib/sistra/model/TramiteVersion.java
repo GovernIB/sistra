@@ -59,6 +59,7 @@ public class TramiteVersion  implements TramiteEspecificado, Serializable {
      private String idiomasSoportados="es,ca";
      private char reducido='N';
      private char redireccionFin='N';
+     private char registroAutomatico='N';
      
      private String cuadernoCargaTag;
      private Date fechaExportacion;
@@ -519,6 +520,14 @@ public class TramiteVersion  implements TramiteEspecificado, Serializable {
 
 	public void setConsultaTipoAcceso(char consultaTipoAcceso) {
 		this.consultaTipoAcceso = consultaTipoAcceso;
+	}
+
+	public char getRegistroAutomatico() {
+		return registroAutomatico;
+	}
+
+	public void setRegistroAutomatico(char registroAutomatico) {
+		this.registroAutomatico = registroAutomatico;
 	}
 
 	
