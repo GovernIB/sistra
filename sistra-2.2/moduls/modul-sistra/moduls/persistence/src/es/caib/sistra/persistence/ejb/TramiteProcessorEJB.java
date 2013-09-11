@@ -1393,6 +1393,13 @@ public class TramiteProcessorEJB implements SessionBean {
 		        	confirmado = true;
     		}
     		
+    		// Si el paso pagar esta completado y no hay pagos opcionales, pasamos al siguiente paso
+    		boolean pagosOpcionalesNoRellenados = existenPagosOpcionalesNoRellenados();
+	    	if (pasoPagar.getCompletado().equals(PasoTramitacion.ESTADO_COMPLETADO)  && 
+	    			!pagosOpcionalesNoRellenados){
+	    		return this.siguientePaso();
+	    	}
+    		
     		// Devolvemos estado actual tramite
     		return this.generarRespuestaFront(null,null);
     		
@@ -1425,9 +1432,9 @@ public class TramiteProcessorEJB implements SessionBean {
     			logAuditoria(ConstantesAuditoria.EVENTO_PAGO,"S","Pago confirmado",Character.toString(datosPago.getTipoPago()));    			
     		}
     	}
-    }
-    
-    /**
+    }       
+
+	/**
      * Anular pago: 
      * 	Desde el asistente de tramitación sólo se permite anular pagos presenciales finalizados.
      *  En realidad no se anula, sino que se deshecha el pago anterior y se crea otro nuevo.
@@ -3965,6 +3972,9 @@ public class TramiteProcessorEJB implements SessionBean {
     	// Establecemos si se debe saltar a la url de fin tras enviar un trámite
     	tramiteInfo.setRedireccionFin(tramiteVersion.getRedireccionFin()== 'S');
     	
+    	// Establecesmos si se registra automaticamente
+    	tramiteInfo.setRegistroAutomatico(tramiteVersion.getRegistroAutomatico() == 'S');
+    	
     	// Establece seleccion de notificacion telematica
     	if (tramiteInfo.getHabilitarNotificacionTelematica() != ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA) {
     		tramiteInfo.setSeleccionNotificacionTelematica(this.habilitarNotificacionTelematica);
@@ -6238,4 +6248,21 @@ public class TramiteProcessorEJB implements SessionBean {
 		 return true;
 	 }
 	 
+	 /**
+     * Comprueba si existen pagos opcionales no rellenados.
+     * @return true si existen
+     */
+    private boolean existenPagosOpcionalesNoRellenados() {
+    	boolean res = false;
+    	for (Iterator it=this.tramiteInfo.getPagos().iterator();it.hasNext();){
+			DocumentoFront doc = (DocumentoFront) it.next();
+			// Obligatorios deben estar completados
+			if (doc.getObligatorio() == DocumentoFront.OPCIONAL &&
+				doc.getEstado() == DocumentoFront.ESTADO_NORELLENADO ){
+				res = true;
+				break;
+			}			
+    	}    	
+    	return res;
+	}
 }
