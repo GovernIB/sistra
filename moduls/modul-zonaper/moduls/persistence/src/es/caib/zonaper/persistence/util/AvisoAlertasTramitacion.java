@@ -150,15 +150,21 @@ public class AvisoAlertasTramitacion {
 	 * Realizamos envio del mensaje al modulo de movilidad con usuario auto  
 	 */
 	private void enviarMensaje(String idPersistencia, MensajeEnvioEmail mensajeEmail, MensajeEnvioSms mensajeSms) throws Exception{
-		log.debug("Creamos mensajeEnvio");
-		MensajeEnvio mens = new MensajeEnvio();
-		mens.setNombre("Aviso automático de alertas de tramitacion: " + idPersistencia);
-		mens.setCuentaEmisora(cuentaSistra);
-		mens.setInmediato(true);
-		mens.addEmail(mensajeEmail);
-		mens.addSMS(mensajeSms);
-		MobTraTelDelegate mob = DelegateMobTraTelUtil.getMobTraTelDelegate();
-		mob.envioMensaje(mens);			
+		if (mensajeEmail != null || mensajeSms != null) {
+			log.debug("Creamos mensajeEnvio");
+			MensajeEnvio mens = new MensajeEnvio();
+			mens.setNombre("Aviso automático de alertas de tramitacion: " + idPersistencia);
+			mens.setCuentaEmisora(cuentaSistra);
+			mens.setInmediato(true);
+			if (mensajeEmail != null) {
+				mens.addEmail(mensajeEmail);
+			}			
+			if (mensajeSms != null) {
+				mens.addSMS(mensajeSms);
+			}
+			MobTraTelDelegate mob = DelegateMobTraTelUtil.getMobTraTelDelegate();
+			mob.envioMensaje(mens);
+		}
 	}
 	
 	/**
