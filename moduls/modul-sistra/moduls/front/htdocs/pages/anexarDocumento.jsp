@@ -38,8 +38,8 @@
 						return false;
 					}					
 
-					// Si el tamaño pasa de 6Mb, hacemos split del fichero
-					var splitSize = (6 * 1024 * 1024);
+					// Si el tamaño pasa de 3Mb, hacemos split del fichero
+					var splitSize = (3 * 1024 * 1024);
 					var fileSize = $('#documentoFirmar').val().length;
 					var splits = Math.floor(fileSize / splitSize);
 					if (fileSize % splitSize > 0) {
@@ -133,8 +133,14 @@
 	function showApplet(mostrar) {
 		<logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="S">
 		<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
-			 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">			 		
-			document.getElementById('formFirma').style.display = (mostrar?"":"none");
+			 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">			 	
+			 /*	 NO OCULTAMOS PQ EN FFOX SE CUAJA
+			 if (mostrar) {
+					$("#formFima").show();
+				} else {
+					$("#formFima").hide();
+				}
+			*/	
 		</logic:equal>
 	</logic:equal>
 	}
@@ -319,6 +325,7 @@
 							<p class="apartado">
 								<bean:message key="firmarDocumento.certificadosDisponibles"/>
 							</p>
+							<div id="formFirmaDiv">
 							<form name="formFirma" id="formFima">		
 								<p class="apartado"> 									
 									<jsp:include page="/firma/caib/applet.jsp" flush="false"/>	
@@ -333,6 +340,7 @@
 								</p>
 								</div>							
 							</form>	
+							</div>
 						</logic:equal>
 					</div>	
 					</logic:equal>
