@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -62,6 +61,8 @@ import es.caib.xml.ConstantesXML;
  * @ejb.transaction type="Required"
  * 
  * @ejb.env-entry name="roleAuto" type="java.lang.String" value="${role.auto}"
+ * 
+ * @ejb.security-role-ref role-name="${role.auto}" role-link="${role.auto}"
  */
 public abstract class MobTraTelFacadeEJB implements SessionBean
 {

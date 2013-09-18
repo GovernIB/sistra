@@ -872,10 +872,7 @@ public class TramiteProcessorEJB implements SessionBean {
     	try{
 	    	// Comprobamos que el tramite este inicializado
 	    	if (this.tramitePersistentePAD == null){
-	    		MensajeFront mensaje = new MensajeFront();
-	    		mensaje.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ERRORDESCONOCIDO));
-	    		mensaje.setMensajeExcepcion("Mensaje no inicializado");
-	    		return this.generarRespuestaFront(mensaje,null);
+	    		throw new Exception("Tramite no esta inicializado");
 	    	}
 	    	
 	    	// Evaluamos que no se salga de los límites
@@ -1247,9 +1244,36 @@ public class TramiteProcessorEJB implements SessionBean {
 	        		ss.setUrlMantenimientoSesionSistra(urlMantenimientoSesion);
 	        		ss.setUrlRetornoSistra(urlRetorno);
 	        		
-	        		
 	        		SesionPago sesionPago = PluginFactory.getInstance().getPluginPagos(docNivel.getPagoPlugin()).iniciarSesionPago(dp,ss);
 	        		
+	        		/*		
+				    // ---------------------------------------------------------------------------------------------------------------------------
+	        		
+	        		// TEST: PARA METER PAGO AGRUPADO A PIÑON
+	        		es.caib.sistra.plugins.pagos.DatosPago[] listaDatosPagos = new es.caib.sistra.plugins.pagos.DatosPago[2];
+	        		listaDatosPagos[0] = dp;
+	        		es.caib.sistra.plugins.pagos.DatosPago dp2 = new es.caib.sistra.plugins.pagos.DatosPago();
+	        		dp2.setConcepto(datosPago.getConcepto() + "-2");
+	        		dp2.setFechaDevengo(datosPago.getFechaDevengo());
+	        		dp2.setIdioma(datosSesion.getLocale().getLanguage());
+	        		dp2.setIdTasa(datosPago.getIdTasa());
+	        		dp2.setImporte(datosPago.getImporte());
+	        		dp2.setIdentificadorOrganismo(datosPago.getOrganoEmisor());
+	        		dp2.setModelo(datosPago.getModelo());
+	        		dp2.setNifDeclarante(datosPago.getNif());
+	        		dp2.setNombreDeclarante(datosPago.getNombre());
+	        		dp2.setTelefonoDeclarante(datosPago.getTelefono());
+	        		dp2.setModeloTramite(this.tramiteInfo.getModelo());
+	        		dp2.setVersionTramite(this.tramiteInfo.getVersion());
+	        		dp2.setIdentificadorTramite(this.tramiteInfo.getIdPersistencia());
+	        		dp2.setNombreTramite(this.tramiteInfo.getDescripcion());
+	        		dp2.setNombreUsuario(this.datosSesion.getNombreCompletoUsuario());	        		
+	        		dp2.setTipoPago(datosPago.getTipoPago());
+	        		listaDatosPagos[1] = dp2;
+	        		SesionPago sesionPago = PluginFactory.getInstance().getPluginPagos(docNivel.getPagoPlugin()).iniciarSesionPagoDiferido(listaDatosPagos ,ss);
+	        			        		
+				    // ---------------------------------------------------------------------------------------------------------------------------
+	        	*/	
 	        		// Metemos datos pago en la lista de datos del pago
 	        		datosPago.setLocalizador(sesionPago.getLocalizador());
 	        		this.datosPagos.put(ls_id,datosPago);
@@ -1359,6 +1383,7 @@ public class TramiteProcessorEJB implements SessionBean {
     		    	RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();	    		    		    	
     		    	rds.actualizarFichero(docPAD.getRefRDS(),datosPago.getBytes());
     		    	docPAD.setEstado(DocumentoPersistentePAD.ESTADO_CORRECTO);	    	
+    		    	docPAD.setEsPagoTelematico(estadoSesionPago.getTipo() == ConstantesPago.TIPOPAGO_TELEMATICO?"S":"N");
     		    	actualizarPAD();
     		    	
     		    	// Actualizamos estado paso Pagar    		
@@ -1367,6 +1392,13 @@ public class TramiteProcessorEJB implements SessionBean {
 		        	// Indicamos que el pago se ha confirmado para indicarlo en la auditoria
 		        	confirmado = true;
     		}
+    		
+    		// Si el paso pagar esta completado y no hay pagos opcionales, pasamos al siguiente paso
+    		boolean pagosOpcionalesNoRellenados = existenPagosOpcionalesNoRellenados();
+	    	if (pasoPagar.getCompletado().equals(PasoTramitacion.ESTADO_COMPLETADO)  && 
+	    			!pagosOpcionalesNoRellenados){
+	    		return this.siguientePaso();
+	    	}
     		
     		// Devolvemos estado actual tramite
     		return this.generarRespuestaFront(null,null);
@@ -1400,9 +1432,9 @@ public class TramiteProcessorEJB implements SessionBean {
     			logAuditoria(ConstantesAuditoria.EVENTO_PAGO,"S","Pago confirmado",Character.toString(datosPago.getTipoPago()));    			
     		}
     	}
-    }
-    
-    /**
+    }       
+
+	/**
      * Anular pago: 
      * 	Desde el asistente de tramitación sólo se permite anular pagos presenciales finalizados.
      *  En realidad no se anula, sino que se deshecha el pago anterior y se crea otro nuevo.
@@ -1756,6 +1788,12 @@ public class TramiteProcessorEJB implements SessionBean {
 	    	// Actualizamos estado paso rellenar formularios 	    		    
 	    	pasoRellenar.setCompletado(evaluarEstadoPaso(pasoActual));
 	    	
+	    	// Si estan rellenados los formularios calculamos email/sms de alertas
+	    	if (pasoRellenar.getCompletado().equals(PasoTramitacion.ESTADO_COMPLETADO) ||
+	    			pasoRellenar.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_DELEGACION_FIRMA)) {
+	    		actualizarInfoAlertasTramitacion();
+	    	}
+	    	
 	    	// Si el paso rellenar esta completado, no hay documentos opcionales por rellenar ni mensajes a mostrar
 	    	// vamos directamente a siguiente paso
 	    	if (pasoRellenar.getCompletado().equals(PasoTramitacion.ESTADO_COMPLETADO)  && 
@@ -1794,6 +1832,34 @@ public class TramiteProcessorEJB implements SessionBean {
     		return resFront;
     	}    	
     }
+
+    /**
+     * Establece datos de alertas de tramitacion tras que se complete el paso de formularios.
+     * @throws Exception
+     */
+	private void actualizarInfoAlertasTramitacion() throws Exception {
+		EspecTramiteNivel espTramite = (EspecTramiteNivel) tramiteVersion.getEspecificaciones();
+		EspecTramiteNivel espNivel = (EspecTramiteNivel) tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
+		String alertasTramitacionGenerar = espTramite.getHabilitarAlertasTramitacion();
+		boolean permitirSms = "S".equals(espTramite.getPermitirSMSAlertasTramitacion());		
+		if ( !ConstantesSTR.ALERTASTRAMITACION_SINESPECIFICAR.equals(espNivel.getHabilitarAlertasTramitacion())){
+			alertasTramitacionGenerar = espNivel.getHabilitarAlertasTramitacion();
+			permitirSms = "S".equals(espNivel.getPermitirSMSAlertasTramitacion());
+		}
+		String emailAlertas = null;
+		String smsAlertas = null;
+		if (ConstantesSTR.ALERTASTRAMITACION_PERMITIDA.equals(alertasTramitacionGenerar)) {
+			emailAlertas = calcularEmailAvisoDefecto();
+			if (permitirSms) {
+				smsAlertas = calcularSmsAvisoDefecto();
+			}
+		}
+		
+		tramitePersistentePAD.setAlertasTramitacionGenerar(alertasTramitacionGenerar);
+		tramitePersistentePAD.setAlertasTramitacionEmail(emailAlertas);
+		tramitePersistentePAD.setAlertasTramitacionSms(smsAlertas);
+		actualizarPAD();
+	}
         
     /**
      * Obtiene los datos del formulario para ir a firmar
@@ -2378,19 +2444,57 @@ public class TramiteProcessorEJB implements SessionBean {
     }        
     
     /**
+     * Finalizar tramite. Borra tramite si no se ha borrado todavía.
+     * @ejb.interface-method    
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public RespuestaFront finalizarTramite() {
+    	return borrarTramitePersistenciaImpl(true);
+    }
+    
+    
+    /**
      * Elimina trámite de la zona de persistencia
      * @ejb.interface-method    
      * @ejb.permission role-name="${role.todos}"
      */
     public RespuestaFront borrarTramitePersistencia() {
-    	String res = "N";
+    	return borrarTramitePersistenciaImpl(false);
+    }
+
+    
+    /**
+     * Elimina tramite de persistencia.
+     * @param finalizado Indica si el tramite esta finalizado
+     * @return 
+     */
+	private RespuestaFront borrarTramitePersistenciaImpl(boolean finalizado) {
+		String res = "N";
     	String  mensAudit="";
     	
     	boolean yaBorrado = this.borradoPersistencia;
     	try{
+    		
     		// Quitamos trámite de la zona de persistencia
     		if (!yaBorrado) {
-    			borrarPersistencia( isPagoIniciado( tramiteInfo ) );
+    			boolean pagoIniciado = isPagoIniciado( tramiteInfo );
+    			boolean pagoTelematicoFinalizado = isPagoTelematicoFinalizado( tramiteInfo );
+    			
+    			// Si no esta finalizado, no permitimos borrar si tiene pagos telematicos finalizados
+    			if (!finalizado && pagoTelematicoFinalizado) {
+    				RespuestaFront resp = new RespuestaFront();
+    		    	resp.setInformacionTramite(this.tramiteInfo);
+    		    	MensajeFront mens = new MensajeFront();
+    		    	mens.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
+    		    	mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_NO_BORRAR_SI_PAGOS));
+    		    	resp.setMensaje(mens);
+    		    	resp.setParametros(null);
+    		    	return resp;
+    			}
+    			
+    			// Borramos de persistencia (hacemos backup si tiene pagos iniciados/finalizados)
+    			borrarPersistencia( pagoIniciado );
+    			
     		}
 	    	
 	    	// Establecemos respuesta front
@@ -2417,10 +2521,10 @@ public class TramiteProcessorEJB implements SessionBean {
     		this.context.setRollbackOnly();
     		return resFront;
     	} finally{
-    		if (!yaBorrado)
+    		if (!yaBorrado && "S".equals(res))
     			logAuditoria(ConstantesAuditoria.EVENTO_BORRADO_TRAMITE,res,mensAudit,null);	
     	}
-    }
+	}
     
     
     /**
@@ -3335,7 +3439,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	    	// Almacenamos los parametros de inicio del trámite
 	    	tramitePersistentePAD.setParametrosInicio(this.parametrosInicio);
 	    	// Fecha de caducidad
-	    	tramitePersistentePAD.setFechaCaducidad(this.getFechaCaducidad());
+	    	tramitePersistentePAD.setFechaCaducidad(this.getFechaCaducidad());	    		    	
 	    	
 	    	// Guardamos documentos
 	    	HashMap docs = new HashMap();
@@ -3372,6 +3476,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	    		docPad.setNumeroInstancia(1);
 	    		docPad.setEstado(DocumentoPersistentePAD.ESTADO_NORELLENADO);
 	    		docPad.setReferenciaRDS(refRds);
+	    		docPad.setTipoDocumento(DocumentoPersistentePAD.TIPO_FORMULARIO);
 	    		tramitePersistentePAD.getDocumentos().put(docPad.getIdentificador() + "-" + docPad.getNumeroInstancia(),docPad);    	
 	   		
 	    		// Cacheamos datos de formulario para evitar acceder al RDS
@@ -3385,7 +3490,8 @@ public class TramiteProcessorEJB implements SessionBean {
 	    		// Guardamos en PAD    		    		
 	    		docPad.setIdentificador(doc.getIdentificador());
 	    		docPad.setNumeroInstancia(1);
-	    		docPad.setEstado(DocumentoPersistentePAD.ESTADO_NORELLENADO);        		
+	    		docPad.setEstado(DocumentoPersistentePAD.ESTADO_NORELLENADO);     
+	    		docPad.setTipoDocumento(DocumentoPersistentePAD.TIPO_PAGO);
 	    		tramitePersistentePAD.getDocumentos().put(docPad.getIdentificador() + "-" + docPad.getNumeroInstancia(),docPad);
 	    		
 	    	}
@@ -3398,7 +3504,8 @@ public class TramiteProcessorEJB implements SessionBean {
 	    		// Guardamos en PAD    		    		
 	    		docPad.setIdentificador(doc.getIdentificador());
 	    		docPad.setNumeroInstancia(1);
-	    		docPad.setEstado(DocumentoPersistentePAD.ESTADO_NORELLENADO);        		
+	    		docPad.setEstado(DocumentoPersistentePAD.ESTADO_NORELLENADO);     
+	    		docPad.setTipoDocumento(DocumentoPersistentePAD.TIPO_ANEXO);
 	    		tramitePersistentePAD.getDocumentos().put(docPad.getIdentificador() + "-" + docPad.getNumeroInstancia(),docPad);    		
 	    	}
 	    	
@@ -3864,6 +3971,9 @@ public class TramiteProcessorEJB implements SessionBean {
     	
     	// Establecemos si se debe saltar a la url de fin tras enviar un trámite
     	tramiteInfo.setRedireccionFin(tramiteVersion.getRedireccionFin()== 'S');
+    	
+    	// Establecesmos si se registra automaticamente
+    	tramiteInfo.setRegistroAutomatico(tramiteVersion.getRegistroAutomatico() == 'S');
     	
     	// Establece seleccion de notificacion telematica
     	if (tramiteInfo.getHabilitarNotificacionTelematica() != ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA) {
@@ -4561,11 +4671,9 @@ public class TramiteProcessorEJB implements SessionBean {
     	EspecTramiteNivel especVersion = tramiteVersion.getEspecificaciones();
     	EspecTramiteNivel especNivel = tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
     			
-    	if (!ConstantesSTR.NOTIFICACIONTELEMATICA_SINESPECIFICAR.equals(especNivel.getHabilitarNotificacionTelematica()) &&
-    		!ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA.equals(especNivel.getHabilitarNotificacionTelematica()) &&
-    		especNivel.getAvisoEmail() != null && especNivel.getAvisoEmail().length > 0 ){
+    	if (especNivel.getAvisoEmail() != null && especNivel.getAvisoEmail().length > 0){
     		scriptEmail = especNivel.getAvisoEmail();
-    	}else if (!ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA.equals(especVersion.getHabilitarNotificacionTelematica())) {
+    	}else {
     		scriptEmail = especVersion.getAvisoEmail();
     	}
     	
@@ -4598,13 +4706,11 @@ public class TramiteProcessorEJB implements SessionBean {
     	EspecTramiteNivel especNivel = tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
     			
     	
-    	if (!ConstantesSTR.NOTIFICACIONTELEMATICA_SINESPECIFICAR.equals(especNivel.getHabilitarNotificacionTelematica()) &&
-        		!ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA.equals(especNivel.getHabilitarNotificacionTelematica()) &&
-        		especNivel.getAvisoSMS() != null && especNivel.getAvisoSMS().length > 0 ){
+    	if (especNivel.getAvisoSMS() != null && especNivel.getAvisoSMS().length > 0 ){
     		scriptSms = especNivel.getAvisoSMS();
-        	}else if (!ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA.equals(especVersion.getHabilitarNotificacionTelematica())) {
-        		scriptSms = especVersion.getAvisoSMS();
-        	}    	    	
+        }else {
+        	scriptSms = especVersion.getAvisoSMS();
+        }    	    	
     	
     	if (scriptSms != null && scriptSms.length > 0 ){
     		smsDefecto = this.evaluarScript(scriptSms,null);    		
@@ -5457,7 +5563,14 @@ public class TramiteProcessorEJB implements SessionBean {
     	EspecTramiteNivel espTramite = (EspecTramiteNivel) tramiteVersion.getEspecificaciones();
     	EspecTramiteNivel espNivel = (EspecTramiteNivel) tn.getEspecificaciones();	    		    	
 		int diasPersistencia = espNivel.getDiasPersistencia();
-		if (diasPersistencia <= 0) diasPersistencia = espTramite.getDiasPersistencia();
+		if (diasPersistencia <= 0) {
+			diasPersistencia = espTramite.getDiasPersistencia();
+		}
+		
+		// Si no se indica persistencia le damos un año
+		if (diasPersistencia <= 0) {
+			diasPersistencia = 365;
+		}
 		
 		Date fechaCaducidad = (new Timestamp(System.currentTimeMillis() + (diasPersistencia * 24 * 60 * 60 * 1000L)));
 		Date fechaFinPlazo = tramiteVersion.getFinPlazo(); 
@@ -5523,6 +5636,25 @@ public class TramiteProcessorEJB implements SessionBean {
 		{
 			DocumentoFront documento = ( DocumentoFront ) lstPagos.get( i );
 			if ( documento.getEstado() != DocumentoFront.ESTADO_NORELLENADO )
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Comprueba si existen pagos finalizados
+	 * @param tramiteInfo
+	 * @return true/false
+	 */
+	private boolean isPagoTelematicoFinalizado( TramiteFront tramiteInfo )
+	{
+		List lstPagos = ( List ) tramiteInfo.getPagos();
+		for ( int i = 0; i < lstPagos.size(); i++ )
+		{
+			DocumentoFront documento = ( DocumentoFront ) lstPagos.get( i );
+			if ( documento.getEstado() == DocumentoFront.ESTADO_CORRECTO && documento.getPagoTipo() == ConstantesPago.TIPOPAGO_TELEMATICO )
 			{
 				return true;
 			}
@@ -6116,4 +6248,21 @@ public class TramiteProcessorEJB implements SessionBean {
 		 return true;
 	 }
 	 
+	 /**
+     * Comprueba si existen pagos opcionales no rellenados.
+     * @return true si existen
+     */
+    private boolean existenPagosOpcionalesNoRellenados() {
+    	boolean res = false;
+    	for (Iterator it=this.tramiteInfo.getPagos().iterator();it.hasNext();){
+			DocumentoFront doc = (DocumentoFront) it.next();
+			// Obligatorios deben estar completados
+			if (doc.getObligatorio() == DocumentoFront.OPCIONAL &&
+				doc.getEstado() == DocumentoFront.ESTADO_NORELLENADO ){
+				res = true;
+				break;
+			}			
+    	}    	
+    	return res;
+	}
 }

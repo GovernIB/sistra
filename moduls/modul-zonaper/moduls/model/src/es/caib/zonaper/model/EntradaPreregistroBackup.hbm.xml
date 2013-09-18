@@ -56,9 +56,16 @@
 		<!--  Opciones aviso movilidad -->
 	<property name="habilitarAvisos" column="PRB_AVISOS" />
 	<property name="avisoSMS" column="PRB_AVISMS" />
-	<property name="avisoEmail" column="PRB_AVIEMA" />
+	<property name="avisoEmail" column="PRB_AVIEMA" />	
 	
 	<!--  Opciones notificacion telematica -->
 	<property name="habilitarNotificacionTelematica" column="PRB_NOTTEL" />
+	
+	<!-- Opciones alertas tramitacion -->
+	<property name="alertasTramitacionGenerar"  column="PRB_ALTGEN"/>
+    <property name="alertasTramitacionEmail"  column="PRB_ALTEMA"/>
+    <property name="alertasTramitacionSms"  column="PRB_ALTSMS"/>
+	<property name="alertasTramitacionFechaUltima"  column="PRB_ALTFEC"/>
+	
 </class>
 </hibernate-mapping>

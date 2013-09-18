@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionMapping;
 import es.caib.sistra.front.form.ConfirmarPagoForm;
 import es.caib.sistra.front.util.InstanciaManager;
 import es.caib.sistra.model.DocumentoFront;
+import es.caib.sistra.model.PasoTramitacion;
 import es.caib.sistra.model.RespuestaFront;
 import es.caib.sistra.persistence.delegate.InstanciaDelegate;
 
@@ -27,6 +28,9 @@ import es.caib.sistra.persistence.delegate.InstanciaDelegate;
  *
  * @struts.action-forward
  *  name="fail" path="/fail.do"
+ *  
+ * @struts.action-forward
+ *  name="redireccion" path=".redireccion"
  */
 public class ConfirmarPagoAction extends BaseAction
 {
@@ -52,6 +56,12 @@ public class ConfirmarPagoAction extends BaseAction
 			}
 		}
 		
-		return mapping.findForward("success");
+		// Si se ha pasado a paso registrar, redirigimo a irAPAso
+		if (respuesta.getInformacionTramite().getPasoTramitacion().getTipoPaso() == PasoTramitacion.PASO_REGISTRAR) {
+			request.setAttribute( "accionRedireccion", "/protected/irAPaso.do" );
+			return mapping.findForward( "redireccion" );
+		} else {
+			return mapping.findForward("success");
+		}
     }
 }

@@ -63,8 +63,7 @@ return xmlhttp;
    return ajaxHttp;
 }
 
-function syncPost(uri, parametersPost)
-{
+function postAjax(uri, parametersPost, async) {
 	var ajaxHttp;
 	
 	ajaxHttp = obtenerAjaxRequest();
@@ -79,7 +78,7 @@ function syncPost(uri, parametersPost)
 	//alert("CADENA PARAM:" + parametros);
          
 	// Enviamos la peticion
-	ajaxHttp.open( "POST", uri, false );
+	ajaxHttp.open( "POST", uri, async );
 	
 	ajaxHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded;charset=UTF-8");
 	//ajaxHttp.setRequestHeader("Content-length", parametros.length);
@@ -87,8 +86,23 @@ function syncPost(uri, parametersPost)
 	
 	ajaxHttp.send( parametros );
 	
-	var resultPost = ajaxHttp.responseText;
-	
-	return resultPost;
-		
+	if (!async) {
+		var resultPost = ajaxHttp.responseText;	
+		return resultPost;
+	} else {
+		return "";
+	}	
 }
+
+function syncPost(uri, parametersPost)
+{
+	return postAjax(uri, parametersPost, false);		
+}
+
+
+//Hace un post asincrono
+function asyncPost(uri, parametersPost)
+{
+	return postAjax(uri, parametersPost, true);
+}
+

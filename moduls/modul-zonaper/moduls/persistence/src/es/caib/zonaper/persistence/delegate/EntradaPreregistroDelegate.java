@@ -201,6 +201,25 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
         }
     }
     
+    public List obtenerTramitesPendienteAvisoPreregistroSinConfirmar() throws DelegateException {
+    	try
+    	{
+    		return getFacade().obtenerTramitesPendienteAvisoPreregistroSinConfirmar();
+    	}
+    	catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+        
+    public void avisoPreregistroSinConfirmar(String idPersistencia) throws DelegateException {
+    	try
+    	{
+    		getFacade().avisoPreregistroSinConfirmar(idPersistencia);
+    	}
+    	catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

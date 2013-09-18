@@ -1,10 +1,14 @@
 package es.caib.zonaper.persistence.ejb;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.ejb.CreateException;
@@ -26,6 +30,7 @@ import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
 import es.caib.util.CredentialUtil;
+import es.caib.util.DataUtil;
 import es.caib.zonaper.model.DocumentoEntradaPreregistro;
 import es.caib.zonaper.model.DocumentoEntradaPreregistroBackup;
 import es.caib.zonaper.model.ElementoExpediente;
@@ -33,6 +38,7 @@ import es.caib.zonaper.model.EntradaPreregistro;
 import es.caib.zonaper.model.EntradaPreregistroBackup;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
+import es.caib.zonaper.persistence.util.ConfigurationUtil;
 
 /**
  * SessionBean para mantener y consultar EntradaPreregistro
@@ -49,6 +55,10 @@ import es.caib.zonaper.persistence.delegate.DelegateUtil;
  * @ejb.env-entry name="roleHelpDesk" type="java.lang.String" value="${role.helpdesk}"
  * @ejb.env-entry name="roleRegistro" type="java.lang.String" value="${role.registro}"
  * @ejb.env-entry name="roleGestor" type="java.lang.String" value="${role.gestor}"
+ * 
+ * @ejb.security-role-ref role-name="${role.helpdesk}" role-link="${role.helpdesk}"
+ * @ejb.security-role-ref role-name="${role.registro}" role-link="${role.registro}"
+ * @ejb.security-role-ref role-name="${role.gestor}" role-link="${role.gestor}" 
  * 
  */
 public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
@@ -554,6 +564,92 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
     	condiciones.put(KEY_WHERE, "WHERE ");
     	return getListaEntradaPreregistro(condiciones, filtro);
     }
+    
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public List obtenerTramitesPendienteAvisoPreregistroSinConfirmar() {
+    	 Session session = getSession();
+         try {     
+        	 
+        	Properties props = ConfigurationUtil.getInstance().obtenerPropiedades();
+         	String avisoInicial = props.getProperty("scheduler.alertasTramitacion.preregistroPendiente.avisoInicial");
+         	String repeticion = props.getProperty("scheduler.alertasTramitacion.preregistroPendiente.repeticion");
+         	
+         	if (StringUtils.isBlank(avisoInicial) || StringUtils.isBlank(repeticion)) {
+         		throw new Exception("No se han configurado las propiedades para alertas de tramitacion en el zonaper.properties");
+         	}
+         	
+         	Date ahora = new Date();
+         	        	 
+         	Query query = session
+            .createQuery("FROM EntradaPreregistro AS m WHERE m.fechaConfirmacion is null and m.alertasTramitacionGenerar = 'S'");
+            List preregistros = query.list();
+             
+
+        	Map resultMap = new HashMap();
+        	for (Iterator it = preregistros.iterator(); it.hasNext();) {
+        		EntradaPreregistro prereg = (EntradaPreregistro) it.next();
+        		// Comprobamos si es primer aviso
+        		if (prereg.getAlertasTramitacionFechaUltima() == null) {
+        			// Si es primer aviso, generamos alerta si pasa el limite desde la fecha de envio
+        			if ( DataUtil.sumarHoras(prereg.getFecha(), Integer.parseInt(avisoInicial)).compareTo(ahora) <= 0 ) {
+        				resultMap.put(prereg.getIdPersistencia(), prereg);
+        			}
+        		} else {
+        			// Si no es primer aviso, generamos alerta si el tiempo de la ultima alerta pasa el limite de repeticion
+        			if ( DataUtil.sumarHoras(prereg.getAlertasTramitacionFechaUltima(), Integer.parseInt(repeticion)).compareTo(ahora) <= 0 ) {
+        				resultMap.put(prereg.getIdPersistencia(), prereg);
+        			}
+        		}
+        	}
+        	
+        	// Devolvemos lista de preregistros
+        	List resultList = new ArrayList();
+        	for (Iterator it = resultMap.keySet().iterator(); it.hasNext();) {
+        		resultList.add(resultMap.get(it.next()));
+        	}
+        	return resultList;
+                        
+         } catch (Exception he) {
+             throw new EJBException(he);
+         } finally {
+             close(session);
+         }
+    }
+    
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public void avisoPreregistroSinConfirmar(String idPersistencia) {
+    	EntradaPreregistro entradaPreregistro = null;
+        Session session = getSession();
+        try {
+        	// Cargamos entradaPreregistro        	
+        	Query query = session
+            .createQuery("FROM EntradaPreregistro AS m WHERE m.idPersistencia = :id")
+            .setParameter("id",idPersistencia);            
+            if (query.list().isEmpty()){
+            	throw new Exception("No existe entrada preregistro");
+            }
+            
+            EntradaPreregistro entrada = (EntradaPreregistro) query.uniqueResult();
+            entrada.setAlertasTramitacionFechaUltima(new Date());
+            session.update(entrada);
+            
+        } catch (Exception he) {
+        	throw new EJBException(he);
+        } finally {
+            close(session);
+        }		
+    	
+    }
+    
+    // ---------------------------------------------------------------------------
+    //	FUNCIONES PRIVADAS
+    // ---------------------------------------------------------------------------
 
     /**
      * Genera un Hashtable a partir de los filtros 

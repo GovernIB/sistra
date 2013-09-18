@@ -27,7 +27,7 @@
     Indica el n&uacute;mero de d&iacute;as que se permitir&aacute; que el tr&aacute;mite se mantenga sin modificarse en la zona de persistencia. 
     Una vez pasados estos d&iacute;as el tr&aacute;mite ser&aacute; eliminado. 
     <br/>
-    Para que se tenga en cuenta debe tomar un valor mayor que 0.     </td>
+    Para que se tenga en cuenta debe tomar un valor mayor que 0. Si tiene un valor menor o igual a 0 se da 365 d&iacute;as.</td>
   </tr>
   <tr> 
     <td>D&iacute;as de preregistro</td>
@@ -154,9 +154,34 @@
      		En caso de que Sistra est&eacute; configurado para que sean obligatorios los avisos para las notificaciones se permitir&aacute;:
      		<ul>
      			<li>indicar si se debe recoger el m&oacute;vil para los avisos.</li>
-     			<li>introducir los scripts para establecer los valores por defecto del email/sms (sino se coger&aacute;n los valores de la zona personal).</li>
+     			<li>establecer en los scripts de Datos de contacto (email/sms) los valores por defecto para los avisos de notificaci&oacute;n (sino se coger&aacute;n los valores de la zona personal). 
+     			En la pantalla de conformidad se le dar&aacute; opci&oacute;n al ciudadano a verificar estos valores por defecto.</li>
      		</ul>
      	</p>     	 
+     </td>
+   </tr>
+   <tr>
+     <td>Alertas tramitaci&oacute;n</td>
+     <td>
+     	<p>
+     		Indica si se generan alertas (email/sms) avisando de posibles incidencias durante la fase de completar la solicitud (antes de registrar), como por ejemplo:
+     		<ul> 
+	     		<li>si se realizan pagos y no se finaliza el tr&aacute;mite</li>
+	     		<li>se finaliza un preregistro pero no se confirma</li>
+     		</ul>    
+     		En caso de habilitar las alertas de tramitaci&oacute;n se deber&aacute; informar los Datos de contacto para establecer email/sms.
+     		<br/><br/>
+     		Se realizar&aacute; un aviso inicial y posteriormente una aviso peri&oacute;dico hasta que se subsane la incidencia. 
+     		El tiempo establecido para cada caso se establece en el fichero de propiedades de configuraci&oacute;n. 		  
+     	</p>     	   	 
+     </td>
+   </tr>
+   <tr>
+     <td>Datos contacto</td>
+     <td>
+     	<p>
+     		Se establece mediante scripts cual es el email y sms de contacto con el ciudadano para poder ser usado en notificaciones y alertas de tramitaci&oacute;n. 		  
+     	</p>     	   	 
      </td>
    </tr>
   <tr> 

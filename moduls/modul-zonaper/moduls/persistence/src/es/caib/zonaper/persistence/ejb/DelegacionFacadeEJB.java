@@ -52,6 +52,8 @@ import es.caib.zonaper.persistence.util.ConfigurationUtil;
  * @ejb.transaction type="Required"
  * 
  * @ejb.env-entry name="roleDelegacion" type="java.lang.String" value="${role.delegacion}"
+ * 
+ * @ejb.security-role-ref role-name="${role.delegacion}" role-link="${role.delegacion}"
  */
 public abstract class DelegacionFacadeEJB extends HibernateEJB
 {

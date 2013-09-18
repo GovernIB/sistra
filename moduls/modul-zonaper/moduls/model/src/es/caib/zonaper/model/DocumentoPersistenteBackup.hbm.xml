@@ -22,6 +22,9 @@
 	<property name="delegacionEstado" column="DPB_DLGEST" length="2"/>
 	<property name="delegacionFirmantes" column="DPB_DLGFIR"/>
 	<property name="delegacionFirmantesPendientes" column="DPB_DLGFIP"/>
+	
+	<property name="tipoDocumento" column="DPB_TIPO" length="1"/>
+	<property name="esPagoTelematico" column="DPB_PAGTEL" length="1"/>
 		
 </class>
 </hibernate-mapping>

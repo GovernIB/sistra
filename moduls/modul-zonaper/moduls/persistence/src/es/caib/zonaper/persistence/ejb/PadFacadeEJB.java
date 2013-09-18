@@ -47,6 +47,7 @@ import es.caib.xml.avisonotificacion.factoria.impl.AvisoNotificacion;
 import es.caib.xml.datospropios.factoria.ConstantesDatosPropiosXML;
 import es.caib.xml.datospropios.factoria.FactoriaObjetosXMLDatosPropios;
 import es.caib.xml.datospropios.factoria.ServicioDatosPropiosXML;
+import es.caib.xml.datospropios.factoria.impl.AlertasTramitacion;
 import es.caib.xml.datospropios.factoria.impl.Dato;
 import es.caib.xml.datospropios.factoria.impl.DatosPropios;
 import es.caib.xml.datospropios.factoria.impl.Documento;
@@ -123,6 +124,9 @@ import es.caib.zonaper.persistence.util.LoggerRegistro;
  * 
  * @ejb.env-entry name="roleAuto" type="java.lang.String" value="${role.auto}"
  * @ejb.env-entry name="roleGestor" type="java.lang.String" value="${role.gestor}"
+ * 
+ * @ejb.security-role-ref role-name="${role.gestor}" role-link="${role.gestor}"
+ * @ejb.security-role-ref role-name="${role.auto}" role-link="${role.auto}"
  * 
  */
 public abstract class PadFacadeEJB implements SessionBean{
@@ -934,6 +938,7 @@ public abstract class PadFacadeEJB implements SessionBean{
 			paginaPAD.setList(results);
 			paginaPAD.setNextPage(page.isNextPage());
 			paginaPAD.setPreviousPage(page.isPreviousPage());
+			paginaPAD.setTotalResults(page.getTotalResults());
 			return paginaPAD;
 			
 		}catch (Exception ex){
@@ -1486,6 +1491,15 @@ public abstract class PadFacadeEJB implements SessionBean{
     		entrada.setSubsanacionExpedienteCodigo(tramiteSubsanacion.getExpedienteCodigo());
     		entrada.setSubsanacionExpedienteUA(tramiteSubsanacion.getExpedienteUnidadAdministrativa());
     	}
+    	
+    	// Alertas de tramitacion
+    	if( datosPropios.getInstrucciones().getAlertasTramitacion() != null){
+    		AlertasTramitacion alertas = datosPropios.getInstrucciones().getAlertasTramitacion();
+    		entrada.setAlertasTramitacionGenerar("S");
+    		entrada.setAlertasTramitacionEmail(alertas.getEmail());
+    		entrada.setAlertasTramitacionSms(alertas.getSms());
+    	}
+    	
     	// Guardamos en log de entrada preregistro    	
     	EntradaPreregistroDelegate td = DelegateUtil.getEntradaPreregistroDelegate();
     	Long codEntrada = td.grabarNuevaEntradaPreregistro(entrada);
@@ -1567,6 +1581,10 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    	tpad.setDelegado(t.getDelegado());
 	    	tpad.setEstadoDelegacion(t.getEstadoDelegacion());
 	    	
+	    	tpad.setAlertasTramitacionGenerar(t.getAlertasTramitacionGenerar());
+	    	tpad.setAlertasTramitacionEmail(t.getAlertasTramitacionEmail());
+	    	tpad.setAlertasTramitacionSms(t.getAlertasTramitacionSms());
+	    	
 	    	for (Iterator it = t.getDocumentos().iterator();it.hasNext();){    		
 	    		DocumentoPersistente d = (DocumentoPersistente) it.next();
 	    		DocumentoPersistentePAD dpad = new DocumentoPersistentePAD();
@@ -1587,6 +1605,9 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    		dpad.setDelegacionEstado(d.getDelegacionEstado());
 	    		dpad.setDelegacionFirmantes(d.getDelegacionFirmantes());
 	    		dpad.setDelegacionFirmantesPendientes(d.getDelegacionFirmantesPendientes());
+	    		
+	    		dpad.setTipoDocumento(d.getTipoDocumento());
+	    		dpad.setEsPagoTelematico(d.getEsPagoTelematico());
 	    		
 	    		tpad.getDocumentos().put(dpad.getIdentificador() + "-"+d.getNumeroInstancia(),dpad);
 	    	}    	
@@ -1652,6 +1673,11 @@ public abstract class PadFacadeEJB implements SessionBean{
     		t.setFechaModificacion(ahora);
     		t.setFechaCaducidad(tpad.getFechaCaducidad());
     		
+    		// Establecemos alertas
+    		t.setAlertasTramitacionGenerar(tpad.getAlertasTramitacionGenerar());
+    		t.setAlertasTramitacionEmail(tpad.getAlertasTramitacionEmail());
+    		t.setAlertasTramitacionSms(tpad.getAlertasTramitacionSms());
+    		
     		// Establecemos documentos	    	
 	    	for (Iterator it = tpad.getDocumentos().keySet().iterator();it.hasNext();){
 	    		String ls_key = (String) it.next();
@@ -1672,6 +1698,9 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    		d.setDelegacionEstado(dpad.getDelegacionEstado());
 	    		d.setDelegacionFirmantes(dpad.getDelegacionFirmantes());
 	    		d.setDelegacionFirmantesPendientes(dpad.getDelegacionFirmantesPendientes());
+	    		
+	    		d.setTipoDocumento(dpad.getTipoDocumento());
+	    		d.setEsPagoTelematico(dpad.getEsPagoTelematico());
 	    		
 	    		t.addDocumento(d);
 	    	}    	

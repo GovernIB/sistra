@@ -86,6 +86,13 @@ public class ProcesosAutoDelegate implements StatelessDelegate
         }
 	}
 	
+	public void alertasTramitacion() throws DelegateException {
+		try{
+			getFacade().alertasTramitacion();
+		}catch (Exception e) {
+			throw new DelegateException(e);
+        }
+	}
 	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

@@ -1,11 +1,9 @@
 package es.caib.bantel.persistence.ejb;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.CreateException;
@@ -13,14 +11,15 @@ import javax.ejb.EJBException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.apache.commons.lang.StringUtils;
-
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
+
+import org.apache.commons.lang.StringUtils;
+
 import es.caib.bantel.model.CampoFuenteDatos;
 import es.caib.bantel.model.FilaFuenteDatos;
 import es.caib.bantel.model.FiltroConsultaFuenteDatos;
@@ -47,6 +46,8 @@ import es.caib.util.CsvDocumento;
  * @ejb.env-entry name="roleAdmin" value="${role.admin}"
  *
  * @ejb.transaction type="Required"
+ * 
+ * @ejb.security-role-ref role-name="${role.admin}" role-link="${role.admin}"
  */
 public abstract class FuenteDatosFacadeEJB extends HibernateEJB {
 

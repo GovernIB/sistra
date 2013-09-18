@@ -62,7 +62,7 @@ public class InfoTramiteAnonimoAction extends BaseAction
 		} else {
 			// Comprobamos si se tiene acceso a algun expediente con esa clase
 			ElementoExpediente elementoExpe = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpediente(idPersistencia);
-			if (elementoExpe.isAccesoAnonimoExpediente()) {
+			if (elementoExpe != null && elementoExpe.isAccesoAnonimoExpediente()) {
 				// Redirigimos a expediente
 				request.getSession().setAttribute(Constants.ULTIMO_DETALLE_EXPEDIENTE, elementoExpe.getExpediente().getCodigo());
 				return mapping.findForward("detalleExpediente");

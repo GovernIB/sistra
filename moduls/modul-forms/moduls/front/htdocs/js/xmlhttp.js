@@ -17,10 +17,23 @@ if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
     xmlhttp = new XMLHttpRequest();
 }
 
-// Hace un post sincrono, devolviendo el resultado.
-function syncPost(urlString, postString) {
-    xmlhttp.open("POST", urlString, false);
+function postAjax(urlString, postString, async) {
+    xmlhttp.open("POST", urlString, async);
     xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xmlhttp.send(postString);
-    return xmlhttp.responseText;
+    if (!async) {
+    	return xmlhttp.responseText;
+	} else {
+		return "";
+	}	    
+}
+
+// Hace un post sincrono, devolviendo el resultado.
+function syncPost(urlString, postString) {
+    return postAjax(urlString, postString, false);
+}
+
+//Hace un post sincrono, devolviendo el resultado.
+function asyncPost(urlString, postString) {
+	return postAjax(urlString, postString, true);    
 }
