@@ -32,6 +32,38 @@
     </html:select>
 </tr>
 <tr>
+    <td class="label"><bean:message key="componente.colSpan"/></td>
+    <td class="input">
+    <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.colSpan">
+        <html:option value="1"><bean:message key="componente.colSpan.1" /></html:option>
+        <html:option value="2"><bean:message key="componente.colSpan.2" /></html:option>
+        <html:option value="3"><bean:message key="componente.colSpan.3" /></html:option>
+        <html:option value="4"><bean:message key="componente.colSpan.4" /></html:option>
+        <html:option value="5"><bean:message key="componente.colSpan.5" /></html:option>
+        <html:option value="6"><bean:message key="componente.colSpan.6" /></html:option>
+    </html:select>
+    </td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="componente.sinEtiqueta"/></td>
+    <td class="input">
+    <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.sinEtiqueta">
+        <html:option value="0"><bean:message key="componente.sinEtiqueta.si" /></html:option>
+        <html:option value="1"><bean:message key="componente.sinEtiqueta.no" /></html:option>        
+    </html:select>
+    </td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="componente.alineacion"/></td>
+    <td class="input">
+    <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.alineacion">
+        <html:option value="I"><bean:message key="componente.alineacion.izquierda" /></html:option>
+        <html:option value="C"><bean:message key="componente.alineacion.centro" /></html:option>       
+        <html:option value="D"><bean:message key="componente.alineacion.derecha" /></html:option>         
+    </html:select>
+    </td>
+</tr>
+<tr>
     <td class="labela" colspan="2"><bean:message key="ayuda.posicion"/></td>
 </tr>
 <tr>
