@@ -783,6 +783,20 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
         		throw new Exception("No se han configurado las propiedades para alertas de tramitacion en el zonaper.properties");
         	}
         	
+        	int repeticionInt;
+         	try {
+         		repeticionInt = Integer.parseInt(repeticion);
+         	} catch (NumberFormatException nfe) {
+         		throw new Exception("scheduler.alertasTramitacion.pagoFinalizado.repeticion no tiene un valor valido (zonaper.properties)");
+         	}
+         	
+         	int avisoInicialInt;
+         	try {
+         		avisoInicialInt = Integer.parseInt(avisoInicial);
+         	} catch (NumberFormatException nfe) {
+         		throw new Exception("scheduler.alertasTramitacion.pagoFinalizado.avisoInicial no tiene un valor valido (zonaper.properties)");
+         	}
+        	
         	Date ahora = new Date();
         	
         	Query query = session.createQuery("select distinct d.tramitePersistente FROM DocumentoPersistente AS d " +
@@ -795,12 +809,12 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
         		// Comprobamos si es primer aviso
         		if (tram.getAlertasTramitacionFechaUltima() == null) {
         			// Si es primer aviso, generamos alerta si pasa el limite desde la ultima hora de modificacion
-        			if ( DataUtil.sumarHoras(tram.getFechaModificacion(), Integer.parseInt(avisoInicial)).compareTo(ahora) <= 0 ) {
+        			if ( DataUtil.sumarHoras(tram.getFechaModificacion(), avisoInicialInt).compareTo(ahora) <= 0 ) {
         				resultMap.put(tram.getIdPersistencia(), tram);
         			}
         		} else {
         			// Si no es primer aviso, generamos alerta si el tiempo de la ultima alerta pasa el limite de repeticion
-        			if ( DataUtil.sumarHoras(tram.getAlertasTramitacionFechaUltima(), Integer.parseInt(repeticion)).compareTo(ahora) <= 0 ) {
+        			if ( repeticionInt > 0 && DataUtil.sumarHoras(tram.getAlertasTramitacionFechaUltima(), repeticionInt).compareTo(ahora) <= 0 ) {
         				resultMap.put(tram.getIdPersistencia(), tram);
         			}
         		}
