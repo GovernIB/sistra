@@ -59,7 +59,7 @@ public class AvisoAlertasTramitacion {
 		if (StringUtils.isNotEmpty(tramite.getAlertasTramitacionEmail())) {
 			String mensaje=LiteralesAvisosMovilidad.getLiteral(tramite.getIdioma(),"aviso.alertasTramitacion.pagoRealizadoTramitePendiente");
 			mensaje=StringUtil.replace(mensaje,"{0}",tramite.getDescripcion());
-			mensaje=StringUtil.replace(mensaje,"{1}",StringUtil.fechaACadena(tramite.getFechaCreacion(), StringUtil.FORMATO_FECHA));
+			mensaje=StringUtil.replace(mensaje,"{1}",StringUtil.fechaACadena(tramite.getFechaCreacion(), "dd/MM/yyyy HH:mm"));
 			if (tramite.getNivelAutenticacion() == ConstantesLogin.LOGIN_ANONIMO) {
 				String  mensajeAnonimo = LiteralesAvisosMovilidad.getLiteral(tramite.getIdioma(),"aviso.alertasTramitacion.idPersistenciaAnonimo");
 				mensajeAnonimo = StringUtil.replace(mensajeAnonimo,"{0}",tramite.getIdPersistencia());
@@ -67,7 +67,7 @@ public class AvisoAlertasTramitacion {
 			}
 			if (tramite.getFechaCaducidad() != null) {
 				String mensajeFcCaducidad=LiteralesAvisosMovilidad.getLiteral(tramite.getIdioma(),"aviso.alertasTramitacion.fechaCaducidad");
-				mensajeFcCaducidad=StringUtil.replace(mensajeFcCaducidad,"{0}",StringUtil.fechaACadena(tramite.getFechaCaducidad(), StringUtil.FORMATO_FECHA));
+				mensajeFcCaducidad=StringUtil.replace(mensajeFcCaducidad,"{0}",StringUtil.fechaACadena(tramite.getFechaCaducidad(), "dd/MM/yyyy HH:mm"));
 				mensaje = mensaje + "\n\n" + mensajeFcCaducidad;
 			}
 			mensEmail = crearMensajeEmail(tramite.getAlertasTramitacionEmail(), tramite.getIdioma(), mensaje);			
@@ -92,7 +92,7 @@ public class AvisoAlertasTramitacion {
 		if (StringUtils.isNotEmpty(preregistro.getAlertasTramitacionEmail())) {
 			String mensaje=LiteralesAvisosMovilidad.getLiteral(preregistro.getIdioma(),"aviso.alertasTramitacion.preregistroPendienteConfirmar");
 			mensaje=StringUtil.replace(mensaje,"{0}",preregistro.getDescripcionTramite());
-			mensaje=StringUtil.replace(mensaje,"{1}",StringUtil.fechaACadena(preregistro.getFecha(), StringUtil.FORMATO_FECHA));
+			mensaje=StringUtil.replace(mensaje,"{1}",StringUtil.fechaACadena(preregistro.getFecha(), "dd/MM/yyyy HH:mm"));
 			String mensajeAnonimo = "";
 			if (preregistro.getNivelAutenticacion() == ConstantesLogin.LOGIN_ANONIMO) {
 				mensajeAnonimo = LiteralesAvisosMovilidad.getLiteral(preregistro.getIdioma(),"aviso.alertasTramitacion.idPersistenciaAnonimo");
@@ -101,7 +101,7 @@ public class AvisoAlertasTramitacion {
 			}
 			if (preregistro.getFechaCaducidad() != null) {
 				String mensajeFcCaducidad=LiteralesAvisosMovilidad.getLiteral(preregistro.getIdioma(),"aviso.alertasTramitacion.fechaCaducidad");
-				mensajeFcCaducidad=StringUtil.replace(mensajeFcCaducidad,"{0}",StringUtil.fechaACadena(preregistro.getFechaCaducidad(), StringUtil.FORMATO_FECHA));
+				mensajeFcCaducidad=StringUtil.replace(mensajeFcCaducidad,"{0}",StringUtil.fechaACadena(preregistro.getFechaCaducidad(), "dd/MM/yyyy HH:mm"));
 				mensaje = mensaje + "\n\n" + mensajeFcCaducidad;			
 			}
 			mensEmail = crearMensajeEmail(preregistro.getAlertasTramitacionEmail(), preregistro.getIdioma(), mensaje);			

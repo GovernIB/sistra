@@ -806,6 +806,10 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
         	Map resultMap = new HashMap();
         	for (Iterator it = tramites.iterator(); it.hasNext();) {
         		TramitePersistente tram = (TramitePersistente) it.next();
+        		// Si ha pasado la fecha de caducidad no avisamos
+        		if (tram.getFechaCaducidad() != null && tram.getFechaCaducidad().before(ahora)) {
+        			continue;
+        		}
         		// Comprobamos si es primer aviso
         		if (tram.getAlertasTramitacionFechaUltima() == null) {
         			// Si es primer aviso, generamos alerta si pasa el limite desde la ultima hora de modificacion

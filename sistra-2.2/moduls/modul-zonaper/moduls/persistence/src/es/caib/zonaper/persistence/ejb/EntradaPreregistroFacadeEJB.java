@@ -605,6 +605,10 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
         	Map resultMap = new HashMap();
         	for (Iterator it = preregistros.iterator(); it.hasNext();) {
         		EntradaPreregistro prereg = (EntradaPreregistro) it.next();
+        		// Si ha pasado la fecha de caducidad no avisamos
+        		if (prereg.getFechaCaducidad() != null && prereg.getFechaCaducidad().before(ahora)) {
+        			continue;
+        		}
         		// Comprobamos si es primer aviso
         		if (prereg.getAlertasTramitacionFechaUltima() == null) {
         			// Si es primer aviso, generamos alerta si pasa el limite desde la fecha de envio
