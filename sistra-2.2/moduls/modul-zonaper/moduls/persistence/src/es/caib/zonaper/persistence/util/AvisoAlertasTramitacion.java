@@ -18,6 +18,7 @@ import es.caib.mobtratel.persistence.delegate.MobTraTelDelegate;
 import es.caib.sistra.plugins.login.ConstantesLogin;
 import es.caib.util.ConvertUtil;
 import es.caib.util.StringUtil;
+import es.caib.zonaper.model.Entrada;
 import es.caib.zonaper.model.EntradaPreregistro;
 import es.caib.zonaper.model.OrganismoInfo;
 import es.caib.zonaper.model.TramitePersistente;
@@ -49,6 +50,37 @@ public class AvisoAlertasTramitacion {
 		}
 		return avisos;
 	}			
+	
+	/**
+    * Realiza aviso de que ha registrado un trámite (solo se genera mail, sms no). 
+    */
+	public void avisarTramiteRealizado(Entrada entrada, String email) throws Exception
+	{
+		MensajeEnvioEmail mensEmail = null;
+		if (StringUtils.isNotEmpty(email)) {
+			String msgFinRegistro = "aviso.alertasTramitacion.registroFinalizado";
+			boolean preregistro = entrada instanceof EntradaPreregistro;
+			if (preregistro) {
+				msgFinRegistro = "aviso.alertasTramitacion.preregistroFinalizado";
+			}
+			String mensaje=LiteralesAvisosMovilidad.getLiteral(entrada.getIdioma(),msgFinRegistro);
+			mensaje=StringUtil.replace(mensaje,"{0}",entrada.getTramite());			
+			if (entrada.getNivelAutenticacion() == ConstantesLogin.LOGIN_ANONIMO) {
+				String  mensajeAnonimo = LiteralesAvisosMovilidad.getLiteral(entrada.getIdioma(),"aviso.alertasTramitacion.idPersistenciaAnonimo");
+				mensajeAnonimo = StringUtil.replace(mensajeAnonimo,"{0}",entrada.getIdPersistencia());
+				mensaje = mensaje + "\n\n" + mensajeAnonimo;
+			}
+			if (preregistro && ((EntradaPreregistro) entrada).getFechaCaducidad() != null) {
+				String mensajeFcCaducidad=LiteralesAvisosMovilidad.getLiteral(entrada.getIdioma(),"aviso.alertasTramitacion.fechaCaducidad");
+				mensajeFcCaducidad=StringUtil.replace(mensajeFcCaducidad,"{0}",StringUtil.fechaACadena(((EntradaPreregistro) entrada).getFechaCaducidad(), "dd/MM/yyyy HH:mm"));
+				mensaje = mensaje + "\n\n" + mensajeFcCaducidad;
+			}
+			mensEmail = crearMensajeEmail(email, entrada.getIdioma(), mensaje);			
+		}		
+		enviarMensaje(entrada.getIdPersistencia(), mensEmail, null);
+	
+	}
+
 	
 	/**
     * Realiza aviso de que un tramite tiene un pago telematico realizado y no se ha finalizado 
