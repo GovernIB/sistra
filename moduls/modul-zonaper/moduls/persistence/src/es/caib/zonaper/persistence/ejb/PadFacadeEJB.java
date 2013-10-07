@@ -104,6 +104,7 @@ import es.caib.zonaper.persistence.delegate.PadAplicacionDelegate;
 import es.caib.zonaper.persistence.delegate.RegistroExternoDelegate;
 import es.caib.zonaper.persistence.delegate.RegistroExternoPreparadoDelegate;
 import es.caib.zonaper.persistence.delegate.TramitePersistenteDelegate;
+import es.caib.zonaper.persistence.util.AvisoAlertasTramitacion;
 import es.caib.zonaper.persistence.util.CalendarioUtil;
 import es.caib.zonaper.persistence.util.ConfigurationUtil;
 import es.caib.zonaper.persistence.util.GeneradorId;
@@ -1089,7 +1090,16 @@ public abstract class PadFacadeEJB implements SessionBean{
     		 // Crea los indices para la entrada
     		crearIndicesEntrada(entrada, datosPropios);    		 
     	}
-    	    	    	
+    	    	
+    	// Generamos email de tramite finalizado
+    	if (datosPropios.getInstrucciones().getAlertasTramitacion() != null && StringUtils.isNotBlank(datosPropios.getInstrucciones().getAlertasTramitacion().getEmail())) {
+    		// Capturamos posible excepcion xa q no interfiera en proceso registro
+    		try {
+    			DelegateUtil.getProcesosAutoDelegate().alertaTramitacionTramiteRealizado(entrada, datosPropios.getInstrucciones().getAlertasTramitacion().getEmail());
+    		} catch (Exception ex) {
+    			log.error("No se ha podido realizar el aviso de tramite finalizado. Se continua con proceso registro.", ex);
+    		}
+    	}
     }
     
     /**
@@ -1551,6 +1561,16 @@ public abstract class PadFacadeEJB implements SessionBean{
     	if (entrada.getNivelAutenticacion() != 'A') {
     		 // Crea los indices para la entrada
     		crearIndicesEntrada(entrada, datosPropios);    		 
+    	}
+    	
+    	// Generamos email de tramite finalizado
+    	if (datosPropios.getInstrucciones().getAlertasTramitacion() != null && StringUtils.isNotBlank(datosPropios.getInstrucciones().getAlertasTramitacion().getEmail())) {
+    		// Capturamos posible excepcion xa q no interfiera en proceso registro
+    		try {
+    			DelegateUtil.getProcesosAutoDelegate().alertaTramitacionTramiteRealizado(entrada, datosPropios.getInstrucciones().getAlertasTramitacion().getEmail());
+    		} catch (Exception ex) {
+    			log.error("No se ha podido realizar el aviso de tramite finalizado. Se continua con proceso registro.", ex);
+    		}
     	}
     }   
     

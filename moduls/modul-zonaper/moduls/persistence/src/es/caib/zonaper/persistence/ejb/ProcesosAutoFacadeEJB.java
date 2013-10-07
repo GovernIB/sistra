@@ -419,6 +419,38 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 		}
 	}
 	
+		/**
+	    * Realiza aviso de que ha registrado un trámite (solo se genera mail, sms no). 
+	    *  @ejb.interface-method
+	    *  @ejb.permission unchecked = "true"
+	    */
+		public void alertaTramitacionTramiteRealizado(Entrada entrada, String email) 
+		{
+			backupLog.debug("Alerta tramitacion tramite realizado");
+			
+			LoginContext lc = null;		
+			try{					
+				// Realizamos login JAAS con usuario para proceso automatico	
+				Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+				String user = props.getProperty("auto.user");
+				String pass = props.getProperty("auto.pass");
+				CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+				lc = new LoginContext("client-login", handler);
+				lc.login();
+				
+				// Capturamos posible excepcion xa q no interfiera en proceso registro
+	    		AvisoAlertasTramitacion.getInstance().avisarTramiteRealizado(entrada, email);
+	    		
+			}catch (Exception le){
+				throw new EJBException("Excepcion al ejecutar proceso",le);
+			}finally{				
+				// Hacemos el logout
+				if ( lc != null ){
+					try{lc.logout();}catch(Exception exl){}
+				}
+			}
+		}
+	
 	// ----------------------------------------------------------------------------------------------
 	//	FUNCIONES AUXILIARES
 	// ----------------------------------------------------------------------------------------------
