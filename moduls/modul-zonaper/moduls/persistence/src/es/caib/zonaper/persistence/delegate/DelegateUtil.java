@@ -104,5 +104,9 @@ public final class DelegateUtil {
     public static ProcesoRechazarNotificacionDelegate getProcesoRechazarNotificacionDelegate() {
         return (ProcesoRechazarNotificacionDelegate) DelegateFactory.getDelegate(ProcesoRechazarNotificacionDelegate.class);
     }
+    
+    public static ProcesoRevisarRegistrosDelegate getProcesoRevisarRegistrosDelegate() {
+        return (ProcesoRevisarRegistrosDelegate) DelegateFactory.getDelegate(ProcesoRevisarRegistrosDelegate.class);
+    }
 }
 
