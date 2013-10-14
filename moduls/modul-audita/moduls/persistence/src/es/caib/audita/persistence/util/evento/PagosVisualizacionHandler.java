@@ -45,7 +45,7 @@ public class PagosVisualizacionHandler extends
 			for(int i=0; i<lst.size(); i++)
 			{
 				Map mResult = ( Map ) lst.get(i);
-				String modelo = (String)mResult.get("aud_modtra");
+				String modelo = (String)mResult.get("modelo");
 				String tipo = (String)mResult.get("tipo");
 				Map mResultModelo = getDatosModelo(lista,modelo);
 				String descripcion = "";

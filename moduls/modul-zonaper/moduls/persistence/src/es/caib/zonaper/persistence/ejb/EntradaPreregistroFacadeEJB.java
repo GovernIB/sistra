@@ -581,6 +581,20 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
          		throw new Exception("No se han configurado las propiedades para alertas de tramitacion en el zonaper.properties");
          	}
          	
+         	int repeticionInt;
+         	try {
+         		repeticionInt = Integer.parseInt(repeticion);
+         	} catch (NumberFormatException nfe) {
+         		throw new Exception("scheduler.alertasTramitacion.preregistroPendiente.repeticion no tiene un valor valido (zonaper.properties)");
+         	}
+         	
+         	int avisoInicialInt;
+         	try {
+         		avisoInicialInt = Integer.parseInt(avisoInicial);
+         	} catch (NumberFormatException nfe) {
+         		throw new Exception("scheduler.alertasTramitacion.preregistroPendiente.avisoInicial no tiene un valor valido (zonaper.properties)");
+         	}
+         	
          	Date ahora = new Date();
          	        	 
          	Query query = session
@@ -591,15 +605,20 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
         	Map resultMap = new HashMap();
         	for (Iterator it = preregistros.iterator(); it.hasNext();) {
         		EntradaPreregistro prereg = (EntradaPreregistro) it.next();
+        		// Si ha pasado la fecha de caducidad no avisamos
+        		if (prereg.getFechaCaducidad() != null && prereg.getFechaCaducidad().before(ahora)) {
+        			continue;
+        		}
         		// Comprobamos si es primer aviso
         		if (prereg.getAlertasTramitacionFechaUltima() == null) {
         			// Si es primer aviso, generamos alerta si pasa el limite desde la fecha de envio
-        			if ( DataUtil.sumarHoras(prereg.getFecha(), Integer.parseInt(avisoInicial)).compareTo(ahora) <= 0 ) {
+        			if ( DataUtil.sumarHoras(prereg.getFecha(), avisoInicialInt).compareTo(ahora) <= 0 ) {
         				resultMap.put(prereg.getIdPersistencia(), prereg);
         			}
         		} else {
         			// Si no es primer aviso, generamos alerta si el tiempo de la ultima alerta pasa el limite de repeticion
-        			if ( DataUtil.sumarHoras(prereg.getAlertasTramitacionFechaUltima(), Integer.parseInt(repeticion)).compareTo(ahora) <= 0 ) {
+        			// Si intervalo repeticion es menor o igual a 0, no generamos alertas repeticion
+        			if (repeticionInt > 0 && DataUtil.sumarHoras(prereg.getAlertasTramitacionFechaUltima(),repeticionInt).compareTo(ahora) <= 0 ) {
         				resultMap.put(prereg.getIdPersistencia(), prereg);
         			}
         		}

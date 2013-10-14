@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.xml.ws.BindingProvider;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor;
@@ -110,6 +111,15 @@ public class WsClientUtil {
 			HTTPClientPolicy policy = conduit.getClient();
 			policy.setAllowChunking(false);	        
 		}
+		
+		/*
+		// Soap-Action
+		if (StringUtils.isNotBlank(soapAction)) {
+			port.getRequestContext().put( 
+				    BindingProvider.SOAPACTION_URI_PROPERTY, 
+				    soapAction) ;
+		}
+		*/
 			        
 	}
 	

@@ -13,6 +13,8 @@ public class ConstantesAuditoria {
 	public static final String EVENTO_PAGO_TELEMATICO_ANULADO = "PATEAN";
 	public static final String EVENTO_PAGO_TELEMATICO_CONFIRMADO = "PATECO";	
 	public static final String EVENTO_PAGO_TELEMATICO_TARJETA = "PATETA";
+	public static final String EVENTO_NOTIFICACION = "NOTIFI";
+	public static final String EVENTO_COMUNICACION = "COMUNI";
 	
 	public static final String LANGUAGE_CATALAN = "ca";
 	public static final String LANGUAGE_CASTELLANO = "es";

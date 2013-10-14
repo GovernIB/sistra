@@ -31,7 +31,7 @@ public class CsvUtil {
 
 		CsvDocumento csvDoc = new CsvDocumento();
 		
-		Reader r = new InputStreamReader(is);
+		Reader r = new InputStreamReader(is, "ISO-8859-1");
         CsvReader products = new CsvReader(r, CHAR_DELIMITIER);
 
         products.readHeaders();

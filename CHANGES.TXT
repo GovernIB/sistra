@@ -1,6 +1,0 @@
-listbox -> readonly
-
-dias persistencia
-alertas tramitacion
-encadenar paso registrar tras paso pagar
-applet firma caib: trocear fichero

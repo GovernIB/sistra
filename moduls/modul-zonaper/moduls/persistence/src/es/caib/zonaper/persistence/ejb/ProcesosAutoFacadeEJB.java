@@ -19,12 +19,7 @@ import org.apache.commons.logging.LogFactory;
 
 import es.caib.mobtratel.persistence.delegate.DelegateMobTraTelUtil;
 import es.caib.mobtratel.persistence.delegate.MobTraTelDelegate;
-import es.caib.redose.modelInterfaz.ConstantesRDS;
-import es.caib.redose.persistence.delegate.DelegateRDSUtil;
-import es.caib.redose.persistence.delegate.RdsDelegate;
-import es.caib.regtel.persistence.delegate.RegistroOrganismoDelegate;
 import es.caib.util.CredentialUtil;
-import es.caib.xml.registro.factoria.ConstantesAsientoXML;
 import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.ElementoExpedienteItf;
 import es.caib.zonaper.model.Entrada;
@@ -43,6 +38,7 @@ import es.caib.zonaper.persistence.delegate.EntradaPreregistroDelegate;
 import es.caib.zonaper.persistence.delegate.ExpedienteDelegate;
 import es.caib.zonaper.persistence.delegate.LogRegistroDelegate;
 import es.caib.zonaper.persistence.delegate.ProcesoRechazarNotificacionDelegate;
+import es.caib.zonaper.persistence.delegate.ProcesoRevisarRegistrosDelegate;
 import es.caib.zonaper.persistence.delegate.RegistroExternoPreparadoDelegate;
 import es.caib.zonaper.persistence.delegate.TramitePersistenteDelegate;
 import es.caib.zonaper.persistence.util.AvisoAlertasTramitacion;
@@ -419,6 +415,38 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 		}
 	}
 	
+		/**
+	    * Realiza aviso de que ha registrado un trámite (solo se genera mail, sms no). 
+	    *  @ejb.interface-method
+	    *  @ejb.permission unchecked = "true"
+	    */
+		public void alertaTramitacionTramiteRealizado(Entrada entrada, String email) 
+		{
+			backupLog.debug("Alerta tramitacion tramite realizado");
+			
+			LoginContext lc = null;		
+			try{					
+				// Realizamos login JAAS con usuario para proceso automatico	
+				Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+				String user = props.getProperty("auto.user");
+				String pass = props.getProperty("auto.pass");
+				CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+				lc = new LoginContext("client-login", handler);
+				lc.login();
+				
+				// Capturamos posible excepcion xa q no interfiera en proceso registro
+	    		AvisoAlertasTramitacion.getInstance().avisarTramiteRealizado(entrada, email);
+	    		
+			}catch (Exception le){
+				throw new EJBException("Excepcion al ejecutar proceso",le);
+			}finally{				
+				// Hacemos el logout
+				if ( lc != null ){
+					try{lc.logout();}catch(Exception exl){}
+				}
+			}
+		}
+	
 	// ----------------------------------------------------------------------------------------------
 	//	FUNCIONES AUXILIARES
 	// ----------------------------------------------------------------------------------------------
@@ -486,34 +514,18 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
      *
      */
 	private void doRevisarRegistrosEfectuados() throws Exception{
+		ProcesoRevisarRegistrosDelegate procRevDlg = DelegateUtil.getProcesoRevisarRegistrosDelegate();
 		LogRegistroDelegate dlg = DelegateUtil.getLogRegistroDelegate();
-		RegistroOrganismoDelegate dlgOrg = es.caib.regtel.persistence.delegate.DelegateUtil.getRegistroOrganismoDelegate();
 		List logRegs = dlg.listarLogRegistro();
 		if(logRegs != null){
 			for(int i=0;i<logRegs.size();i++){
 				LogRegistro logReg = (LogRegistro)logRegs.get(i);
-				//Añadimos 15 minutos a la fecha de registro.
-				Date dateAux = new Date();
-	            int minutesToAdd = 15;  // 15 minutos
-                Calendar cal = Calendar.getInstance();
-	            cal.setTime(logReg.getFechaRegistro());
-	            cal.add(Calendar.MINUTE, minutesToAdd);
-	            /*  miramos si se ha registrado por lo menos 15 minutos antes de la ejecución del proceso, para dar tiempo
-	             *	a que termine la TX global
-	             */
-				if(cal.getTime().before(dateAux)){
-					if(dlg.tieneUsos(logReg)){
-						dlg.borrarLogRegistro(logReg.getId());
-					}else{
-						if(logReg.getId().getTipoRegistro().equals(ConstantesAsientoXML.TIPO_REGISTRO_SALIDA+"")){
-							dlgOrg.anularRegistroSalida(logReg.getId().getNumeroRegistro(), logReg.getFechaRegistro());
-						}else{
-							dlgOrg.anularRegistroEntrada(logReg.getId().getNumeroRegistro(), logReg.getFechaRegistro());
-						}
-						logReg.setAnulado("S");
-						dlg.grabarLogRegistro(logReg);
-					}
-				}			
+				try {
+					procRevDlg.revisarRegistro(logReg);
+				} catch (Exception ex) {
+					// Pasamos a siguiente registro
+					backupLog.debug("Excepcion al revisar registro " + logReg.getId().getNumeroRegistro() + ": " + ex.getMessage());
+				}				
 			}
 		}
 	}
@@ -550,18 +562,20 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 	 * Comprueba si hay registros externos preparados caducados y los elimina.
 	 */
 	private void doRevisarRegistrosExternosPreparados() throws Exception{
+		ProcesoRevisarRegistrosDelegate procRevDlg = DelegateUtil.getProcesoRevisarRegistrosDelegate();
 		RegistroExternoPreparadoDelegate dlg = DelegateUtil.getRegistroExternoPreparadoDelegate();
-		RdsDelegate rdsDlg = DelegateRDSUtil.getRdsDelegate();
 		List regs = dlg.listarCaducados();
 		if (regs != null) {
 			for (Iterator it = regs.iterator();it.hasNext();){
 				RegistroExternoPreparado r = (RegistroExternoPreparado) it.next();				
-				// Borramos usos de persistencia
-				rdsDlg.eliminarUsos(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE, r.getIdPersistencia());
-				// Borramos log registro
-				dlg.borrarRegistroExternoPreparado(r.getCodigoRdsAsiento());
+				try {
+					procRevDlg.revisarRegistroExternoPreparado(r);
+				} catch (Exception ex) {
+					// Pasamos a siguiente registro
+					backupLog.debug("Excepcion al revisar registro externo preparado " + r.getIdPersistencia() + ": " + ex.getMessage());
+				}
 			}			
-		}		
+		}				
 	}
 	
 

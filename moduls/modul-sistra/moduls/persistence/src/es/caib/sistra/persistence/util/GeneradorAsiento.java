@@ -498,9 +498,8 @@ public class GeneradorAsiento {
 				factoria);
 		instrucciones.setTramiteSubsanacion(ts);
 		
-		// ----- Alertas tramitacion (para preregistros)
-		if ("S".equals(tramitePAD.getAlertasTramitacionGenerar()) && 
-				isTramitePresencial( tramiteInfo.getTipoTramitacion(), tramiteInfo.getTipoTramitacionDependiente() )) {
+		// ----- Alertas tramitacion
+		if ("S".equals(tramitePAD.getAlertasTramitacionGenerar())) {
 			AlertasTramitacion alertas = factoria.crearAlertasTramitacion();
 			alertas.setEmail(tramitePAD.getAlertasTramitacionEmail());
 			alertas.setSms(tramitePAD.getAlertasTramitacionSms());

@@ -82,7 +82,6 @@ import es.caib.sistra.persistence.plugins.PluginFormularios;
 import es.caib.sistra.persistence.plugins.PluginPagos;
 import es.caib.sistra.persistence.util.GeneradorAsiento;
 import es.caib.sistra.persistence.util.Literales;
-import es.caib.sistra.persistence.util.LoggerRegistro;
 import es.caib.sistra.persistence.util.ScriptUtil;
 import es.caib.sistra.persistence.util.UtilDominios;
 import es.caib.sistra.plugins.PluginFactory;
@@ -518,7 +517,7 @@ public class TramiteProcessorEJB implements SessionBean {
     		this.context.setRollbackOnly();
     		return resFront;
     	}finally{
-    		logAuditoria(ConstantesAuditoria.EVENTO_INICIO_TRAMITE,res,mensAudit,null);
+    		logAuditoria(ConstantesAuditoria.EVENTO_INICIO_TRAMITE,res,mensAudit,null, null, true);
     	}
     }
     
@@ -634,7 +633,7 @@ public class TramiteProcessorEJB implements SessionBean {
     		this.context.setRollbackOnly();
     		return resFront;
     	}finally{   		
-    		logAuditoria(ConstantesAuditoria.EVENTO_CARGA_TRAMITE,res,mensAudit,null);
+    		logAuditoria(ConstantesAuditoria.EVENTO_CARGA_TRAMITE,res,mensAudit,null,null, true);
     	}    	
     }
    
@@ -962,7 +961,7 @@ public class TramiteProcessorEJB implements SessionBean {
     	}finally{
     		if (auditarAsistente) {
     			auditadoAsistente = true;
-    			logAuditoria(ConstantesAuditoria.EVENTO_ENVIO_TRAMITE,"S","",Character.toString(ConstantesSTR.DESTINO_ASISTENTE));
+    			logAuditoria(ConstantesAuditoria.EVENTO_ENVIO_TRAMITE,"S","",Character.toString(ConstantesSTR.DESTINO_ASISTENTE), this.tramiteVersion.getTramite().getProcedimiento(), false);
     		}
     	}
     }
@@ -1429,7 +1428,7 @@ public class TramiteProcessorEJB implements SessionBean {
     	}finally{
     		// Apuntamos en auditoria	
     		if (confirmado){
-    			logAuditoria(ConstantesAuditoria.EVENTO_PAGO,"S","Pago confirmado",Character.toString(datosPago.getTipoPago()));    			
+    			logAuditoria(ConstantesAuditoria.EVENTO_PAGO,"S","Pago confirmado",Character.toString(datosPago.getTipoPago()), null, false);    			
     		}
     	}
     }       
@@ -2522,7 +2521,7 @@ public class TramiteProcessorEJB implements SessionBean {
     		return resFront;
     	} finally{
     		if (!yaBorrado && "S".equals(res))
-    			logAuditoria(ConstantesAuditoria.EVENTO_BORRADO_TRAMITE,res,mensAudit,null);	
+    			logAuditoria(ConstantesAuditoria.EVENTO_BORRADO_TRAMITE,res,mensAudit,null,null,false);	
     	}
 	}
     
@@ -2579,7 +2578,7 @@ public class TramiteProcessorEJB implements SessionBean {
     	    	return generarRespuestaFront(mens,null);
 				//throw new ProcessorException ( "Firmante incorrecto. Debe firmar el representante ", MensajeFront.MENSAJE_ERROR_FIRMANTE_INCORRECTO );
     		}
-    		
+			
 			
 			// Ejecutamos script para chequeo de envio
 			try
@@ -2636,13 +2635,6 @@ public class TramiteProcessorEJB implements SessionBean {
     	{
     		log.error(mensajeLog("Excepción en el proceso de registro telemático"),re);
     		
-    		// En caso de haberse llegado a invocar al RTE apuntamos en logs de registros telemáticos
-    		if (re.isRegistroTelematicoEfectuado()){    		
-    			logRegistro( re.getResultadoRegistroTelematico().getResultadoRegistro().getNumeroRegistro(),
-    					 	 re.getResultadoRegistroTelematico().getResultadoRegistro().getFechaRegistro(),
-    					 	 false);
-    		}
-    		
     		MensajeFront mens = new MensajeFront();
     		mens.setTipo(MensajeFront.TIPO_ERROR);
     		mens.setMensaje(traducirMensaje(re.getCodigoError()));
@@ -2681,25 +2673,10 @@ public class TramiteProcessorEJB implements SessionBean {
     	}
     	finally
     	{   
-    		// Realizamos log auditoria   
-    		// TODO ¿Auditar cuando no se realice registro?
-    		if (this.resultadoRegistro != null){
-	    		String tipoEvento;    	
-	    		if (this.resultadoRegistro.getTipo() == ResultadoRegistrar.PREREGISTRO){
-	    			tipoEvento =ConstantesAuditoria.EVENTO_PREREGISTRO_TRAMITE;
-	    		}else{
-	    			tipoEvento =ConstantesAuditoria.EVENTO_ENVIO_TRAMITE;
-	    		}    		    		    	    
-	    		if (!result.equals("")) logAuditoria(tipoEvento,result,mensAudit,Character.toString(tramiteVersion.getDestino()));
-	    		
-	    		// En caso de que sea un registro telematico realizamos log en fichero de registros telemáticos
-	    		if ( result.equals("S") && this.resultadoRegistro.getTipo() == ResultadoRegistrar.REGISTRO_TELEMATICO )
-	    		{
-	    			logRegistro( this.resultadoRegistro.getNumero(),
-	    						StringUtil.fechaACadena(this.resultadoRegistro.getFecha(),StringUtil.FORMATO_REGISTRO),
-	    						 true);
-	    		}
-    		}
+    		// Realizamos log auditoria solo para tramites de tipo consulta (para el resto se auditan en la zona personal)   
+    		if (result.equals("S") && this.resultadoRegistro != null && this.resultadoRegistro.getTipo() == ResultadoRegistrar.CONSULTA){
+	    		logAuditoria(ConstantesAuditoria.EVENTO_ENVIO_TRAMITE,result,mensAudit,Character.toString(tramiteVersion.getDestino()), this.resultadoRegistro.getProcedimiento(), false);	    		
+    		}    		  		
     	}     	
     }
     
@@ -5039,6 +5016,7 @@ public class TramiteProcessorEJB implements SessionBean {
     	}
     	   	
 		// Devolvemos resultado
+    	
 		return res;    	
 	}
 		
@@ -5273,8 +5251,9 @@ public class TramiteProcessorEJB implements SessionBean {
 	 * @param resultado Resultado evento
 	 * @param descripcion Descripcion evento
 	 * @param clave Clave evento
+	 * @param procedimiento 
 	 */
-	private void logAuditoria(String tipoEvento,String resultado,String descripcion,String clave){
+	private void logAuditoria(String tipoEvento,String resultado,String descripcion,String clave, String procedimiento, boolean txNew){
 		try{
 			// Creamos evento
 			Evento evento = new Evento();
@@ -5285,6 +5264,7 @@ public class TramiteProcessorEJB implements SessionBean {
 			evento.setVersionTramite(this.tramiteVersion.getVersion());
 			evento.setIdioma(this.datosSesion.getLocale().getLanguage());
 			evento.setClave(clave);
+			evento.setProcedimiento(procedimiento);
 			if (this.tramitePersistentePAD != null) evento.setIdPersistencia(this.tramitePersistentePAD.getIdPersistencia());
 			evento.setNivelAutenticacion(Character.toString(this.datosSesion.getNivelAutenticacion()));
 			if (this.datosSesion.getNivelAutenticacion() != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO){
@@ -5293,7 +5273,7 @@ public class TramiteProcessorEJB implements SessionBean {
 				evento.setNombre(this.datosSesion.getNombreCompletoUsuario());
 			}						
 			// Auditamos evento			
-			DelegateAUDUtil.getAuditaDelegate().logEvento(evento);			
+			DelegateAUDUtil.getAuditaDelegate().logEvento(evento, txNew);			
 		}catch(Exception ex){
 			log.error("Excepción auditoria en TramiteProcessor: " + ex.getMessage(),ex);
 		}
@@ -5660,24 +5640,6 @@ public class TramiteProcessorEJB implements SessionBean {
 			}
 		}
 		return false;
-	}
-	
-	/**
-	 * Realiza el log de registro de entradas telematicas
-	 * @param numeroRegistro Numero registro
-	 * @param fechaRegistro Fecha registro
-	 * @param procesoOK Resultado proceso
-	 */
-	private void logRegistro( String numeroRegistro, String fechaRegistro, boolean procesoOK )
-	{
-		try
-		{
-			LoggerRegistro.logResultadoRegistro( numeroRegistro, fechaRegistro, procesoOK );
-		}
-		catch( Exception exc )
-		{
-			log.error( exc );
-		}
 	}
 	
 	/**

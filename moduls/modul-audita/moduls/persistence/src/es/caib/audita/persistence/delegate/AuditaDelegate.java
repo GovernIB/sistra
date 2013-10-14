@@ -40,11 +40,11 @@ public class AuditaDelegate implements StatelessDelegate
 	    }
 	}
 	 
-	 public Long logEvento( Evento eventoAuditado )throws DelegateException
+	 public Long logEvento( Evento eventoAuditado, boolean txNew )throws DelegateException
 		{
 			try 
 			{
-				return getFacade().logEvento( eventoAuditado );
+				return getFacade().logEvento( eventoAuditado, txNew );
 			}
 			catch (Exception e) {
 		        throw new DelegateException(e);

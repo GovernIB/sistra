@@ -139,6 +139,7 @@ public class AvisosDelegacion {
 		textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AVISOTRAMITACION#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.email.cuerpo.avisoTramitacion")));
 		textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AVISODELEGACION#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.email.cuerpo.avisoDelegacion")));
 		textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.SOPORTE#]",LiteralesAvisosMovilidad.calcularTextoSoporte(oi, idioma));
+		textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AUTO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(idioma,"email.correoAutomatico")));
 		
 		// Creamos MensajeEnvio
 		log.debug("Creamos mensajeEnvio");
