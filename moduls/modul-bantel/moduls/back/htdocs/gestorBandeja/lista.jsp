@@ -48,13 +48,17 @@
                     (<bean:write name="gestorBandeja" property="email" />)
                 </td>
                 <td align="right">
+                	<!-- 
                     <bean:define id="urlEditar"><html:rewrite page="/back/gestorBandeja/seleccion.do" paramId="codigo" paramName="gestorBandeja" paramProperty="seyconID"/></bean:define>
-                    <button class="button" type="button" onclick="forward('<%=urlEditar%>')"><bean:message key="boton.selec" /></button>
+                     -->
+                    <button class="button" type="button" onclick="forward('seleccion.do?codigo=<%=identificadorGestor%>')"><bean:message key="boton.selec" /></button>
 
                     <bean:define id="descripcion" name="gestorBandeja" property="email" type="java.lang.String"/>
                     <bean:define id="mensajeBaja"><bean:message arg0='<%=identificadorGestor%>' arg1='<%=StringUtils.escape(descripcion)%>' key='gestorBandeja.baja' /></bean:define>
+                    <!-- 
                     <bean:define id="urlBaja"><html:rewrite page="/back/gestorBandeja/baja.do" paramId="codigo" paramName="gestorBandeja" paramProperty="seyconID"/></bean:define>
-                    <button class="button" type="button" onclick="confirmAndForward('<%=mensajeBaja%>', '<%=urlBaja%>')"><bean:message key="boton.baixa" /></button>
+                     -->
+                    <button class="button" type="button" onclick="confirmAndForward('<%=mensajeBaja%>', 'baja.do?codigo=<%=identificadorGestor%>')"><bean:message key="boton.baixa" /></button>
                 </td>
             </tr>
         </logic:iterate>

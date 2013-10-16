@@ -28,6 +28,7 @@ public class StringUtil {
 	public final static String FORMATO_REGISTRO = "yyyyMMddHHmmss";
 	public final static String LANG_CA = "ca";
 	public final static String PATRON_IDENTIFICADOR = "[A-Z0-9\\-_]{1,20}";
+	public final static String PATRON_USUARIO = "[a-zA-Z0-9\\-_]{1,20}";
 	
 	
 	// --- FUNCIONES PARA OBTENER MODELO/VERSION PARA IDENTIFICADOR CON FORMATO "MODELO-VERSION"
@@ -613,5 +614,16 @@ public class StringUtil {
 	    public static boolean validarFormatoIdentificador(String identificador){
 	    	return  StringUtils.isNotBlank(identificador) && Pattern.matches(PATRON_IDENTIFICADOR, identificador);
 	    }
+	    
+	    /**
+	     * Valida formato usuario usado en la aplicacion: carácteres alfanumericos y con los caracteres especiales: - _
+	     * @param identificador
+	     * @return true si cumple formato
+	     */
+	    public static boolean validarFormatoUsuario(String usuario){
+	    	return  StringUtils.isNotBlank(usuario) && Pattern.matches(PATRON_USUARIO, usuario);
+	    }
+	    
+	    
 	    
 }
