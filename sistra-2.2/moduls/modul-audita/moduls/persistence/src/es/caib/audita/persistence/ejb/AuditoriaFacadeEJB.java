@@ -1,8 +1,6 @@
 package es.caib.audita.persistence.ejb;
 
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.lang.Number;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;

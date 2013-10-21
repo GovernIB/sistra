@@ -18,6 +18,7 @@ import es.caib.mobtratel.persistence.delegate.MobTraTelDelegate;
 import es.caib.sistra.plugins.login.ConstantesLogin;
 import es.caib.util.ConvertUtil;
 import es.caib.util.StringUtil;
+import es.caib.util.ValidacionesUtil;
 import es.caib.zonaper.model.Entrada;
 import es.caib.zonaper.model.EntradaPreregistro;
 import es.caib.zonaper.model.OrganismoInfo;
@@ -105,11 +106,11 @@ public class AvisoAlertasTramitacion {
 			mensEmail = crearMensajeEmail(tramite.getAlertasTramitacionEmail(), tramite.getIdioma(), mensaje);			
 		}
 		MensajeEnvioSms mensSms = null;
-		if (StringUtils.isNotEmpty(tramite.getAlertasTramitacionSms())) {
+		if (StringUtils.isNotEmpty(tramite.getAlertasTramitacionSms()) && ValidacionesUtil.validarMovil(tramite.getAlertasTramitacionSms().trim())) {
 			String mensaje = LiteralesAvisosMovilidad.getLiteral(tramite.getIdioma(),"aviso.sms.alertaTramitacion.pagoFinalizadoTramitePendiente");
 			OrganismoInfo oi = ConfigurationUtil.getInstance().obtenerOrganismoInfo();
 			mensaje=StringUtil.replace(mensaje,"{0}",oi.getNombre().toUpperCase());
-			mensSms = crearMensajeSms(tramite.getAlertasTramitacionSms(), mensaje);			
+			mensSms = crearMensajeSms(tramite.getAlertasTramitacionSms().trim(), mensaje);			
 		}
 		enviarMensaje(tramite.getIdPersistencia(), mensEmail, mensSms);
 	
@@ -139,11 +140,11 @@ public class AvisoAlertasTramitacion {
 			mensEmail = crearMensajeEmail(preregistro.getAlertasTramitacionEmail(), preregistro.getIdioma(), mensaje);			
 		}
 		MensajeEnvioSms mensSms = null;
-		if (StringUtils.isNotEmpty(preregistro.getAlertasTramitacionSms())) {
+		if (StringUtils.isNotEmpty(preregistro.getAlertasTramitacionSms()) && ValidacionesUtil.validarMovil(preregistro.getAlertasTramitacionSms().trim())) {
 			String mensaje = LiteralesAvisosMovilidad.getLiteral(preregistro.getIdioma(),"aviso.sms.alertaTramitacion.preregistroPendienteConfirmar");
 			OrganismoInfo oi = ConfigurationUtil.getInstance().obtenerOrganismoInfo();
 			mensaje=StringUtil.replace(mensaje,"{0}",oi.getNombre().toUpperCase());
-			mensSms = crearMensajeSms(preregistro.getAlertasTramitacionSms(), mensaje);			
+			mensSms = crearMensajeSms(preregistro.getAlertasTramitacionSms().trim(), mensaje);			
 		}
 		enviarMensaje(preregistro.getIdPersistencia(), mensEmail, mensSms);
 	

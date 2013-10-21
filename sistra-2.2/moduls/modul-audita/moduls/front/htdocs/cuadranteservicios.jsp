@@ -270,7 +270,7 @@ function redirige(url,obj) {
 
 function mostrarMes(ai_mes){
 
-	var mes;
+	var mes = "";
 	if(ai_mes < 10)
 	{
 	   mes = "0";
