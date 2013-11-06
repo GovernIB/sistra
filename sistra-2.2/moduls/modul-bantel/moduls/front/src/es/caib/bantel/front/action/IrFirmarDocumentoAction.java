@@ -89,7 +89,7 @@ public class IrFirmarDocumentoAction extends BaseAction
 					jsonObject.put("error","");
 				}else{
 					jsonObject.put("base64",jsonFirma);
-					jsonObject.put("error",MensajesUtil.getValue("aviso.error.no.documento"));
+					jsonObject.put("error",MensajesUtil.getValue("aviso.error.no.documento", request));
 				}
 				populateWithJSON(response,jsonObject.toString());
 				return null;

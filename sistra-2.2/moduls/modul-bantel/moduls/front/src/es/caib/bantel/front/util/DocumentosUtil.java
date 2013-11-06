@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -133,9 +134,9 @@ public final class DocumentosUtil {
 	public static boolean extensionCorrecta(String nombre){
 		boolean correcta = false;
 		nombre = getExtension(nombre);
-		String mensajeOk = MensajesUtil.getValue("aviso.extensiones.fichero.formato");
-		if(mensajeOk != null && !"".equals(mensajeOk) && nombre != null && !"".equals(nombre) ){
-			StringTokenizer st = new StringTokenizer(mensajeOk,",");
+		String listaExtensionesPermitidas = MensajesUtil.getValue("aviso.extensiones.fichero.formato", new Locale("es"));
+		if(listaExtensionesPermitidas != null && !"".equals(listaExtensionesPermitidas) && nombre != null && !"".equals(nombre) ){
+			StringTokenizer st = new StringTokenizer(listaExtensionesPermitidas,",");
 			while(st.hasMoreTokens() && !correcta){
 				String aux = st.nextToken();
 				if(aux != null && aux.trim().equals(nombre.trim())){

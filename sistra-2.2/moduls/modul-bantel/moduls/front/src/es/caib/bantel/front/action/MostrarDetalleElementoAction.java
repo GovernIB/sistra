@@ -188,7 +188,7 @@ public class MostrarDetalleElementoAction extends BaseAction
 			}
 		}catch(Exception e){
 			log.error("Excepcion mostrando detalle elemento",e);			
-			String mensajeOk = MensajesUtil.getValue("error.excepcion.general") + ": " + e.getMessage();
+			String mensajeOk = MensajesUtil.getValue("error.excepcion.general", request) + ": " + e.getMessage();
 			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk);
 			return mapping.findForward("fail");
 		}

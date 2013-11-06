@@ -111,7 +111,7 @@ public class FirmarDocumentoAnexoAction extends BaseAction
 				JSONObject jsonObject = new JSONObject();		        				
 				jsonObject.put("base64","");
 				if (error){
-					jsonObject.put("error",MensajesUtil.getValue("aviso.error.no.firmar"));
+					jsonObject.put("error",MensajesUtil.getValue("aviso.error.no.firmar", request));
 				}else{
 					jsonObject.put("error","");
 				}

@@ -168,16 +168,16 @@ public class DetalleExpedienteForm extends ValidatorForm
         }
         if(StringUtils.isNotEmpty(flagValidacion) && flagValidacion.equals("altaExpedient")){
         	if(StringUtils.isEmpty(identificadorProcedimiento)){
-        		errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("expediente.identificadorProcedimiento")));
+        		errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("expediente.identificadorProcedimiento", request)));
         		error = true;
         	}
         	if(StringUtils.isEmpty(identificadorExp)){
-        		errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("confirmacion.identificadorExpediente")));
+        		errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("confirmacion.identificadorExpediente", request)));
         		error = true;
         	}
         	
         	if (StringUtils.isNotEmpty(identificadorExp) && !Pattern.matches(ConstantesZPE.REGEXP_IDENTIFICADOREXPEDIENTE, identificadorExp)) {
-        		errors.add("altaExpediente", new ActionError("errors.invalid", MensajesUtil.getValue("confirmacion.identificadorExpediente")));
+        		errors.add("altaExpediente", new ActionError("errors.invalid", MensajesUtil.getValue("confirmacion.identificadorExpediente", request)));
         		error = true;
         	}
         	
@@ -189,15 +189,15 @@ public class DetalleExpedienteForm extends ValidatorForm
         	}
         	*/
         	if(StringUtils.isEmpty(nif)){
-    			errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("expediente.nif")));
+    			errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("expediente.nif", request)));
         		error = true;
     		}
     		if(StringUtils.isEmpty(nombre)){
-    			errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("expediente.nombre")));
+    			errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("expediente.nombre", request)));
         		error = true;
     		}
     		if(StringUtils.isEmpty(descripcion)){
-        		errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("expediente.descripcion")));
+        		errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("expediente.descripcion", request)));
         		error = true;
         	}
         	if(StringUtils.isNotEmpty(email) && !ValidacionesUtil.validarEmail(email)){
@@ -214,14 +214,14 @@ public class DetalleExpedienteForm extends ValidatorForm
         	}
         	
         	if(StringUtils.isNotEmpty(descripcion) && descripcion.length() > 500){
-        		errors.add("altaExpediente", new ActionError("errors.maxlength", MensajesUtil.getValue("expediente.descripcion"), "500"));
+        		errors.add("altaExpediente", new ActionError("errors.maxlength", MensajesUtil.getValue("expediente.descripcion", request), "500"));
         	}
         	
         }
         
         if(StringUtils.isNotEmpty(flagValidacion) && flagValidacion.equals("consulta")){
         	if(StringUtils.isEmpty(identificadorExp)){
-        		errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("confirmacion.identificadorExpediente")));
+        		errors.add("altaExpediente", new ActionError("errors.required", MensajesUtil.getValue("confirmacion.identificadorExpediente", request)));
         		error = true;
         	}        	
         }

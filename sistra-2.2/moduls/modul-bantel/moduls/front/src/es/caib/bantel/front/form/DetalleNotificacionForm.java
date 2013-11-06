@@ -401,67 +401,67 @@ public class DetalleNotificacionForm extends ValidatorForm
         if(StringUtils.isNotEmpty(flagValidacion) && flagValidacion.equals("altaNotificacion")){
         	        	
         	if(StringUtils.isEmpty(nif)){
-        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("expediente.nif")));
+        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("expediente.nif", request)));
         	}
         	if(StringUtils.isEmpty(apellidos)){
-        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("notificacion.nombre.apellisos")));
+        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("notificacion.nombre.apellisos", request)));
         	}
         	if(StringUtils.isEmpty(codigoPais)){
-        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("notificacion.pais")));
+        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("notificacion.pais", request)));
         	}
         	if( "ESP".equals(codigoPais) && (StringUtils.isEmpty(codigoProvincia))){
-        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("notificacion.provincia")));
+        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("notificacion.provincia", request)));
         	}        	
         	if( "ESP".equals(codigoPais) && (StringUtils.isEmpty(codigoMunicipio))){
-        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("notificacion.municipio")));
+        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("notificacion.municipio", request)));
         	}
         	if(StringUtils.isEmpty(tituloAviso)){
-        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.aviso.titulo") ));
+        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.aviso.titulo", request) ));
         	}
         	if(StringUtils.isEmpty(textoAviso)){
-        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.aviso.texto")));
+        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.aviso.texto", request)));
         	}
         	if(StringUtils.isEmpty( tituloOficio )){
-        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.oficio.titulo")));
+        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.oficio.titulo", request)));
         	}
         	if(StringUtils.isEmpty( textoOficio )){
-        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.oficio.texto")));
+        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.oficio.texto", request)));
         	}
         	if(StringUtils.isEmpty(tipoAsunto)){
-        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.tipo.asunto")));
+        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.tipo.asunto", request)));
         	}
         	if("S".equals(tramiteSubsanacion)){
         		if(StringUtils.isBlank(descripcionTramiteSubsanacion)){
-        			errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.subsanacion.descripcion")));
+        			errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.subsanacion.descripcion", request)));
         		}
         		if(StringUtils.isBlank(identificadorTramiteSubsanacion)){
-        			errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.subsanacion.identificador")));
+        			errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.subsanacion.identificador", request)));
         		}
         		if(StringUtils.isBlank(versionTramiteSubsanacion)){
-        			errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.subsanacion.version")));
+        			errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("valida.notificacion.subsanacion.version", request)));
         		}else if(getVersionTramiteSubsanacionInteger() == null){
-        			errors.add("altaNotificacion", new ActionError("errors.integer", MensajesUtil.getValue("valida.notificacion.subsanacion.version")));
+        			errors.add("altaNotificacion", new ActionError("errors.integer", MensajesUtil.getValue("valida.notificacion.subsanacion.version", request)));
             	}
         	}
         	
         	if(StringUtils.isNotEmpty(tituloAviso) && tituloAviso.length() > 500){
-        		errors.add("altaNotificacion", new ActionError("errors.maxlength", MensajesUtil.getValue("valida.notificacion.aviso.titulo"), "500"));
+        		errors.add("altaNotificacion", new ActionError("errors.maxlength", MensajesUtil.getValue("valida.notificacion.aviso.titulo", request), "500"));
         	}
         	
         	if(StringUtils.isNotEmpty(textoAviso) && textoAviso.length() > 4000){
-        		errors.add("altaNotificacion", new ActionError("errors.maxlength", MensajesUtil.getValue("valida.notificacion.aviso.texto"), "4000"));
+        		errors.add("altaNotificacion", new ActionError("errors.maxlength", MensajesUtil.getValue("valida.notificacion.aviso.texto", request), "4000"));
         	}
         	
         	if(StringUtils.isNotEmpty(tituloOficio) && tituloOficio.length() > 500){
-        		errors.add("altaNotificacion", new ActionError("errors.maxlength", MensajesUtil.getValue("valida.notificacion.oficio.titulo"), "500"));
+        		errors.add("altaNotificacion", new ActionError("errors.maxlength", MensajesUtil.getValue("valida.notificacion.oficio.titulo", request), "500"));
         	}
         	
         	if(StringUtils.isNotEmpty(textoOficio) && textoOficio.length() > 4000){
-        		errors.add("altaNotificacion", new ActionError("errors.maxlength", MensajesUtil.getValue("valida.notificacion.oficio.texto"), "4000"));
+        		errors.add("altaNotificacion", new ActionError("errors.maxlength", MensajesUtil.getValue("valida.notificacion.oficio.texto", request), "4000"));
         	}
         	
         	if(StringUtils.isNotEmpty(textoSmsAviso) && textoSmsAviso.length() > 150){
-        		errors.add("altaNotificacion", new ActionError("errors.maxlength", MensajesUtil.getValue("valida.notificacion.oficio.texto"), "150"));
+        		errors.add("altaNotificacion", new ActionError("errors.maxlength", MensajesUtil.getValue("valida.notificacion.oficio.texto", request), "150"));
         	}
         	
         }  
