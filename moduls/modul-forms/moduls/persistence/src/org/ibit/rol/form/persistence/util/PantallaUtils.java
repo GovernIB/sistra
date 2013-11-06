@@ -290,7 +290,8 @@ public final class PantallaUtils {
                         for (Iterator i = valoresPosibles.iterator(); i.hasNext();) {
                             ValorPosible vp = (ValorPosible) i.next();
                             if (vp.getValor().equals(valIni)) {
-                                vp.setDefecto(true);
+                            	// BUG: MARCA COMO VALOR DEFECTO PARA SIGUIENTES ITERACIONES
+                                // vp.setDefecto(true);
                                 //Almaceno el valor asociado al indice seleccionado por defecto en el campo.
                                 valorEtiqueta = ((TraValorPosible) vp.getTraduccion()).getEtiqueta();
                                 hasText = true;
@@ -304,7 +305,8 @@ public final class PantallaUtils {
                         for (Iterator i = valoresPosibles.iterator(); i.hasNext();) {
                             ValorPosible vp = (ValorPosible) i.next();
                             if (vp.getValor().equals(valIni)) {
-                                vp.setDefecto(true);
+                            	// BUG: MARCA COMO VALOR DEFECTO PARA SIGUIENTES ITERACIONES
+                                // vp.setDefecto(true);
                                 //Almaceno el valor asociado al indice seleccionado por defecto en el campo.
                                 valorEtiqueta = ((TraValorPosible) vp.getTraduccion()).getEtiqueta();
                                 hasText = true;
@@ -313,16 +315,22 @@ public final class PantallaUtils {
                         }                   	
                     } else {
                         //valor por defecto definido en el mismo campo
-                        for (int j = 0; j < valoresPosibles.size(); j++) {
-                            ValorPosible vp = (ValorPosible) valoresPosibles.get(j);
-                            if (vp.isDefecto()) {
-                                valIni = vp.getValor();
-                                //Almaceno el valor asociado al indice seleccionado por defecto en el campo.
-                                valorEtiqueta = ((TraValorPosible) vp.getTraduccion()).getEtiqueta();
-                                hasText = true;
-                                break;
-                            }
-                        }
+                    	
+                    	// INDRA 2013: SI COMBO NO ES OBLIGATORIO NO HACEMOS CASO DE LOS VALORES POSIBLES
+                    	boolean obligatorio = (campo instanceof ComboBox) && ((ComboBox) campo).isObligatorio(); 
+                    	if (obligatorio) {
+	                        for (int j = 0; j < valoresPosibles.size(); j++) {
+	                            ValorPosible vp = (ValorPosible) valoresPosibles.get(j);
+	                            
+	                            if (vp.isDefecto()) {
+	                                valIni = vp.getValor();
+	                                //Almaceno el valor asociado al indice seleccionado por defecto en el campo.
+	                                valorEtiqueta = ((TraValorPosible) vp.getTraduccion()).getEtiqueta();
+	                                hasText = true;
+	                                break;
+	                            }
+	                        }
+                    	}
                     }
                 }
                 
@@ -566,7 +574,8 @@ public final class PantallaUtils {
                         for (Iterator i = valoresPosibles.iterator(); i.hasNext();) {
                             ValorPosible vp = (ValorPosible) i.next();
                             if (vp.getValor().equals(valIni)) {
-                                vp.setDefecto(true);
+                                // BUG:	MARCA COMO DEFECTO PARA SIGUIENTES ITERACIONES
+                            	// vp.setDefecto(true);
                                 //Almaceno el valor asociado al indice seleccionado por defecto en el campo.
                                 valorEtiqueta = ((TraValorPosible) vp.getTraduccion()).getEtiqueta();
                                 hasText = true;
@@ -575,17 +584,21 @@ public final class PantallaUtils {
                         }
 
                     }else {
-                        //valor por defecto definido en el mismo campo
-                        for (int j = 0; j < valoresPosibles.size(); j++) {
-                            ValorPosible vp = (ValorPosible) valoresPosibles.get(j);
-                            if (vp.isDefecto()) {
-                                valIni = vp.getValor();
-                                //Almaceno el valor asociado al indice seleccionado por defecto en el campo.
-                                valorEtiqueta = ((TraValorPosible) vp.getTraduccion()).getEtiqueta();
-                                hasText = true;
-                                break;
-                            }
-                        }
+                    	// INDRA 2013: SI COMBO NO ES OBLIGATORIO NO HACEMOS CASO DE LOS VALORES POSIBLES
+                    	boolean obligatorio = (campo instanceof ComboBox) && ((ComboBox) campo).isObligatorio(); 
+                    	if (obligatorio) {
+	                        //valor por defecto definido en el mismo campo
+	                        for (int j = 0; j < valoresPosibles.size(); j++) {
+	                            ValorPosible vp = (ValorPosible) valoresPosibles.get(j);
+	                            if (vp.isDefecto()) {
+	                                valIni = vp.getValor();
+	                                //Almaceno el valor asociado al indice seleccionado por defecto en el campo.
+	                                valorEtiqueta = ((TraValorPosible) vp.getTraduccion()).getEtiqueta();
+	                                hasText = true;
+	                                break;
+	                            }
+	                        }
+                    	}
                     }
                 }
                 
@@ -746,7 +759,8 @@ public final class PantallaUtils {
                         for (Iterator i = valoresPosibles.iterator(); i.hasNext();) {
                             ValorPosible vp = (ValorPosible) i.next();
                             if (vp.getValor().equals(valIni)) {
-                                vp.setDefecto(true);
+                            	// BUG: MARCA COMO VALOR DEFECTO PARA SIGUIENTES ITERACIONES
+                                // vp.setDefecto(true);
                                 //Almaceno el valor asociado al indice seleccionado por defecto en el campo.
                                 valorEtiqueta = ((TraValorPosible) vp.getTraduccion()).getEtiqueta();
                                 hasText = true;
