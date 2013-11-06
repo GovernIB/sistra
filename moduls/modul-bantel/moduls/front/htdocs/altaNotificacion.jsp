@@ -5,6 +5,8 @@
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 
+<bean:define id="idiomaExpediente" name="detalleNotificacionForm" property="idiomaExp" type="java.lang.String"/>
+
 <script type="text/javascript" src="js/ajuda.js"></script>
 <script type="text/javascript" src="js/funcions.js"></script>
 <script type="text/javascript" src="js/mensaje.js"></script>	
@@ -170,6 +172,7 @@ function llenarMunicipios(){
 		function(datos){
 			$("#codigoMunicipio").removeOption(/./);
 			$("#codigoMunicipio").removeOption(""); 
+			$("#codigoMunicipio").addOption("", "", false); 			
 			$("#codigoMunicipio").addOption(datos, false); 						
 	});
 }	
@@ -181,6 +184,7 @@ function llenarProvincias(){
 		function(datos){
 			$("#codigoProvincia").removeOption(/./);
 			$("#codigoProvincia").removeOption(""); 
+			$("#codigoProvincia").addOption("", "", false); 		
 			$("#codigoProvincia").addOption(datos, false); 	
 		}
 	);
@@ -197,11 +201,16 @@ function vaciarProvincias(){
 
 
 function recargaProvincias(){
-	if(document.detalleNotificacionForm.codigoPais.value=="ESP"){
+    var esEspaña = (document.detalleNotificacionForm.codigoPais.value=="ESP");
+	
+	if(esEspaña){
 		llenarProvincias();
 	}else{
-		vaciarProvincias();
+		vaciarProvincias();		
 	}
+
+	$("#codigoProvincia").prop('disabled', !esEspaña);
+	$("#codigoMunicipio").prop('disabled', !esEspaña);
 }
 
 function altaDocument(form, url){
@@ -508,7 +517,7 @@ function repintarParametros(datos){
 					<label for="oficinaRegistro"><bean:message key="notificacion.oficina"/><sup>*</sup></label>
 					<html:select property="oficinaRegistro" styleClass="pc40" >
 			   			<logic:present name="listaoficinasregistro">
-							<logic:iterate id="oficina" name="listaoficinasregistro">	
+			   				<logic:iterate id="oficina" name="listaoficinasregistro">	
 								<html:option value="<%=((es.caib.bantel.front.util.ValorOrganismo)oficina).getCodigo().toString()%>"><bean:write name="oficina" property="descripcion"/></html:option>
 							</logic:iterate>
 						</logic:present>
@@ -553,6 +562,7 @@ function repintarParametros(datos){
 				<p>
 					<label for="codigoProvincia"><bean:message key="notificacion.provincia"/></label>
 					<html:select property="codigoProvincia" styleId="codigoProvincia" onchange="javascript:llenarMunicipios();" styleClass="pc20">
+						<html:option value="" ></html:option>
 						<logic:iterate id="provincia" name="provincias">	
 							<html:option value="<%=((es.caib.bantel.front.json.Provincia)provincia).getCodigo()%>" ><bean:write name="provincia" property="descripcion"/></html:option>
 						</logic:iterate>
@@ -564,6 +574,7 @@ function repintarParametros(datos){
 					<label for="codigoMunicipio"><bean:message key="notificacion.municipio"/></label>
 					<html:select property="codigoMunicipio" styleId="codigoMunicipio" styleClass="pc20">
 						<logic:present name="municipios">
+							<html:option value="" ></html:option>
 							<logic:iterate id="municipio" name="municipios">	
 								<html:option value="<%=((es.caib.bantel.front.json.Localidad)municipio).getCodigo().toString()%>"><bean:write name="municipio" property="descripcion"/></html:option>
 							</logic:iterate>
@@ -593,15 +604,6 @@ function repintarParametros(datos){
 				</p>
 				
 				<p>
-					<label for="idioma"><bean:message key="expediente.idioma"/><sup>*</sup></label>
-					<html:select  property="idioma">
-						<html:option value="es"><bean:message key="expediente.castellano"/></html:option>
-						<html:option value="ca"><bean:message key="expediente.catalan"/></html:option>
-						<html:option value="en"><bean:message key="expediente.ingles"/></html:option>
-					  </html:select>
-				</p>
-				
-				<p>
 					<label for=tiposAsunto><bean:message key="notificacion.tipoAsunto"/><sup>*</sup></label>
 					<html:select property="tipoAsunto">
 			   			<logic:present name="tiposAsunto">
@@ -611,6 +613,13 @@ function repintarParametros(datos){
 						</logic:present>
 			    	</html:select>
 				</p>
+			
+				<p>
+					<label for="idioma"><bean:message key="expediente.idiomaExpediente"/><sup>*</sup></label>
+					<html:hidden property="idioma"/>
+					<bean:message key="<%=\"expediente.idioma.\" + idiomaExpediente%>"/>
+				</p>
+				
 				
 				<p class="titol">
 					<bean:message key="notificacion.datos.aviso"/>

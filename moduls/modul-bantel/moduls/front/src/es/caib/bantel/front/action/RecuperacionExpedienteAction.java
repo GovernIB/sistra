@@ -147,7 +147,7 @@ public class RecuperacionExpedienteAction extends BaseAction
 		
 		}catch(Exception e){
 			log.error("Excepcion recuperando expediente",e);
-			String mensajeOk = MensajesUtil.getValue("error.expediente.consulta");
+			String mensajeOk = MensajesUtil.getValue("error.expediente.consulta", request);
 			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk + ": " + e.getMessage());
 			return mapping.findForward("fail");
 		}		

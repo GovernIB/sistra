@@ -30,11 +30,6 @@ public class Dominios {
 		List provs = new ArrayList();			
 		ValoresDominio dom = DelegateSISTRAUtil.getSistraDelegate().obtenerDominio( "GEPROVINCI" , null);
 		
-		Provincia pVacia = new Provincia();
-		pVacia.setCodigo("");
-		pVacia.setDescripcion("");
-		provs.add(pVacia);
-		
 		for (int i=1;i<=dom.getNumeroFilas();i++){
 			Provincia p = new Provincia();
 			p.setCodigo(dom.getValor(i,"CODIGO"));
@@ -54,20 +49,7 @@ public class Dominios {
 	public static  List listarLocalidadesProvincia(String codProv) throws Exception{
 		// Obtenemos valores dominio del EJB
 		List locs = new ArrayList();		
-		
-//		if (StringUtils.isEmpty(codProv)){
-//			Localidad l = new Localidad();
-//			l.setCodigo("");
-//			l.setDescripcion("");
-//			locs.add(l);
-//			return locs;
-//		}
-		
-		// Añadimos la primera vacia
-		Localidad l = new Localidad();
-		l.setCodigo("");
-		l.setDescripcion("");
-		locs.add(l);
+		Localidad l;
 		
 		// Recuperamos lista de localidades
 		if (!StringUtils.isEmpty(codProv)){
@@ -97,11 +79,6 @@ public class Dominios {
 		// Obtenemos valores dominio del EJB
 		List provs = new ArrayList();			
 		ValoresDominio dom = DelegateSISTRAUtil.getSistraDelegate().obtenerDominio( "GEPAISES" , null);
-		
-		Pais pVacia = new Pais();
-		pVacia.setCodigo("");
-		pVacia.setDescripcion("");
-		provs.add(pVacia);
 		
 		for (int i=1;i<=dom.getNumeroFilas();i++){
 			Pais p = new Pais();

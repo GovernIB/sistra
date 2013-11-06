@@ -109,11 +109,11 @@ public class RealizarAltaExpedienteAction extends BaseAction
 			String mensajeOk = "";
 			
 			if(e.getMessage().equals("Usuario inexistente")){
-				mensajeOk = MensajesUtil.getValue("error.expediente.UsuarioInexistente");
+				mensajeOk = MensajesUtil.getValue("error.expediente.UsuarioInexistente", request);
 			}else if(e.getMessage().equals("La entrada ya tiene un expediente enlazado")){
-				mensajeOk = MensajesUtil.getValue("error.expediente.ExpedienteEnlazado");
+				mensajeOk = MensajesUtil.getValue("error.expediente.ExpedienteEnlazado", request);
 			}else{
-				mensajeOk = MensajesUtil.getValue("error.expediente.Excepcion") + ": " + e.getMessage();
+				mensajeOk = MensajesUtil.getValue("error.expediente.Excepcion", request) + ": " + e.getMessage();
 			}
 			
 			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk);
