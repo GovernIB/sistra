@@ -248,3 +248,5 @@ alter table AUD_TIPOEV
    add constraint AUD_TIPMOD_FK foreign key (TIP_MODUL)
       references AUD_MODUL (MOD_MODUL);
 
+-- From 2.2.7 to 2.2.8
+alter table AUD_AUDIT  add   AUD_PROCED           VARCHAR(100);

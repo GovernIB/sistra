@@ -75,4 +75,15 @@ null,
 'Pagament telemàtic amb targeta',
 'Pagament telemàtic amb targeta');
 
-
+-- From 2.2.7 to 2.2.8
+Insert into AUD_TIPOEV
+   (TIP_TIPO, TIP_MODUL, TIP_AUDIT, TIP_DESC, TIP_ORDEN, TIP_PRPCLS, TIP_HANDLR, TIP_AYUDA, TIP_DESCCA, TIP_AYUDAC)
+ Values
+   ('COMUNI', 'CATALG', 'S', 'Comunicación', 12, 
+    'TIDG', 'es.caib.audita.persistence.util.evento.CuadroMandoDetalleNotifComunHandler', 'Comunicación', 'Comunicació', 'Comunicació');
+Insert into AUD_TIPOEV
+   (TIP_TIPO, TIP_MODUL, TIP_AUDIT, TIP_DESC, TIP_ORDEN, TIP_PRPCLS, TIP_HANDLR, TIP_AYUDA, TIP_DESCCA, TIP_AYUDAC)
+ Values
+   ('NOTIFI', 'CATALG', 'S', 'Notificación', 13, 
+    'TIDG', 'es.caib.audita.persistence.util.evento.CuadroMandoDetalleNotifComunHandler', 'Notificación', 'Notificació', 'Notificació');
+COMMIT;
