@@ -25,6 +25,11 @@
     <property name="delegado"  column="TPB_DELEGA"/>
     <property name="estadoDelegacion"  column="TPB_DLGEST"/>        
     
+     <property name="alertasTramitacionGenerar"  column="TPB_ALTGEN"/>
+    <property name="alertasTramitacionEmail"  column="TPB_ALTEMA"/>
+    <property name="alertasTramitacionSms"  column="TPB_ALTSMS"/>
+    <property name="alertasTramitacionFechaUltima"  column="TPB_ALTFEC"/>
+    
 	<set name="documentosBackup" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="DPB_DOCIDE">
 		<cache usage="read-write"/>
 	    <key column="DPB_CODTPB"/>

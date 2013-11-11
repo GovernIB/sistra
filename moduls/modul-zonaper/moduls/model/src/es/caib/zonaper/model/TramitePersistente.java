@@ -1,6 +1,7 @@
 package es.caib.zonaper.model;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -8,11 +9,7 @@ import java.util.Set;
 import es.caib.util.StringUtil;
 
 public class TramitePersistente implements java.io.Serializable {
-    
-	public final static char AUTENTICACION_CERTIFICADO = 'C';
-	public final static char AUTENTICACION_USUARIOPASSWORD = 'U';
-	public final static char AUTENTICACION_ANONIMO = 'A';
-	
+  	
 	// Fields    	
      private Long codigo;
      private String idPersistencia;
@@ -30,6 +27,11 @@ public class TramitePersistente implements java.io.Serializable {
      private String parametrosInicio;
      private String delegado;
      private String estadoDelegacion;
+     
+     private String alertasTramitacionGenerar;
+     private String alertasTramitacionEmail; 
+     private String alertasTramitacionSms;
+     private Date alertasTramitacionFechaUltima;
      
     // Constructors
     /** default constructor */
@@ -181,5 +183,37 @@ public class TramitePersistente implements java.io.Serializable {
 
 	public void setEstadoDelegacion(String estadoDelegacion) {
 		this.estadoDelegacion = estadoDelegacion;
+	}
+
+	public String getAlertasTramitacionGenerar() {
+		return alertasTramitacionGenerar;
+	}
+
+	public void setAlertasTramitacionGenerar(String alertasTramitacionGenerar) {
+		this.alertasTramitacionGenerar = alertasTramitacionGenerar;
+	}
+
+	public String getAlertasTramitacionEmail() {
+		return alertasTramitacionEmail;
+	}
+
+	public void setAlertasTramitacionEmail(String alertasTramitacionEmail) {
+		this.alertasTramitacionEmail = alertasTramitacionEmail;
+	}
+
+	public String getAlertasTramitacionSms() {
+		return alertasTramitacionSms;
+	}
+
+	public void setAlertasTramitacionSms(String alertasTramitacionSms) {
+		this.alertasTramitacionSms = alertasTramitacionSms;
+	}
+
+	public Date getAlertasTramitacionFechaUltima() {
+		return alertasTramitacionFechaUltima;
+	}
+
+	public void setAlertasTramitacionFechaUltima(Date alertasTramitacionFechaUltima) {
+		this.alertasTramitacionFechaUltima = alertasTramitacionFechaUltima;
 	}
 }

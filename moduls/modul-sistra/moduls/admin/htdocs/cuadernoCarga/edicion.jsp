@@ -228,7 +228,7 @@
 			<tr>
 			    <td class="label"><bean:message key="cuadernoCarga.comentarioAuditoria"/></td>
 			    <td class="input">
-			    	<html:textarea styleClass="text" tabindex="10" property="comentarioAuditoria" readonly="<%=   ( ( Boolean ) request.getAttribute( "isAdmin" ) ).booleanValue() %>"/>
+			    	<html:textarea styleClass="text" tabindex="10" property="comentarioAuditoria" readonly="<%=   ( ( Boolean ) request.getAttribute( \"isAdmin\" ) ).booleanValue() %>"/>
 			    	<logic:equal name="isAudit" value="true">
 			    		<input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=comentarioAuditoria&titulo=cuadernoCarga.comentarioAuditoria" %>');" />
 			    	</logic:equal>	

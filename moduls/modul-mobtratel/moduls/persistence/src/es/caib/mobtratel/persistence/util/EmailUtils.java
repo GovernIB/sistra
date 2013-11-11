@@ -131,7 +131,10 @@ public class EmailUtils
 
 	    	msg.setContent(contenido, "text/html");
     		msg.setHeader("X-Mailer", "JavaMailer");
-    		msg.setSentDate(new java.util.Date());
+    		String mailFrom = mailSession.getProperty("mail.from");
+			msg.setFrom(new InternetAddress(mailFrom));
+			
+    		//msg.setSentDate(new java.util.Date());
     		// log.debug("Vamos a enviar Email: " + msg.getContent());
     		try {
                 Transport.send(msg);

@@ -45,7 +45,7 @@ public class BorrarExpedienteAction extends BaseAction
 			
 		}catch(Exception e){
 			log.error("Excepcion alta aviso",e);
-			String mensajeOk = MensajesUtil.getValue("error.aviso.Excepcion") + ": " + e.getMessage();
+			String mensajeOk = MensajesUtil.getValue("error.aviso.Excepcion", request) + ": " + e.getMessage();
 			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk);
 			return mapping.findForward("fail");
 		}

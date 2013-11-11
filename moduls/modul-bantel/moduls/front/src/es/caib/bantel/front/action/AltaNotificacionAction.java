@@ -83,6 +83,7 @@ public class AltaNotificacionAction extends BaseAction
 			// Precargamos datos expediente
 			notificacionForm.setDescripcionExpediente(exp.getDescripcion());
 			notificacionForm.setIdiomaExp(exp.getIdioma());
+			notificacionForm.setIdioma(exp.getIdioma());
 			notificacionForm.setCodigoPais("ESP");
 			notificacionForm.setCodigoProvincia("7");
 			notificacionForm.setCodigoMunicipio("");
@@ -108,7 +109,7 @@ public class AltaNotificacionAction extends BaseAction
 			
 		}catch(Exception e){
 			log.error("Excepcion mostrando alta notificacion",e);
-			String mensajeError = MensajesUtil.getValue(codMensajeError);
+			String mensajeError = MensajesUtil.getValue(codMensajeError, request);
 			request.setAttribute( Constants.MESSAGE_KEY,mensajeError);
 			return mapping.findForward("fail");
 		}		

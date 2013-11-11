@@ -95,6 +95,11 @@
 		// Enviamos documento
 		document.firmarFormularioForm.submit ();
 	}
+
+
+	function mostrarPin() {
+		$('#PinDiv').show();				
+	}
 	
 //-->
 </script>
@@ -150,9 +155,15 @@
 			</p>	
 			
 			<!--  PIN  -->
-			<span style="position: relative;">
-				<bean:message key="firmarDocumento.PINCertificado" /><input type="password" name="PIN" id="PIN" class="txt"/>
-			</span>
+			<p class="notaPie">	
+				<bean:message key="firmarDocumento.requierePINCertificado.inicio"/>	<a href="javascript:mostrarPin()"><bean:message key="firmarDocumento.requierePINCertificado.fin"/></a>								
+			</p>			
+			<div id="PinDiv">
+				<p>			
+					<bean:message key="firmarDocumento.PINCertificado" />
+					<input type="password" name="PIN" id="PIN" class="txt"/>
+				</p>
+			</div>
 			
 			<!--  BOTON FIRMAR -->
 			<p class="formBotonera">

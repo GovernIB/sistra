@@ -17,6 +17,7 @@ import org.quartz.ee.servlet.QuartzInitializerServlet;
 import org.quartz.impl.StdSchedulerFactory;
 
 import es.caib.zonaper.admin.scheduler.conf.SchedulerConfiguration;
+import es.caib.zonaper.admin.scheduler.jobs.AlertasTramitacionJob;
 import es.caib.zonaper.admin.scheduler.jobs.BorrarTramitesBackupJob;
 import es.caib.zonaper.admin.scheduler.jobs.ControlEntregaNotificacionesJob;
 import es.caib.zonaper.admin.scheduler.jobs.RevisarRegistrosEfectuadosJob;
@@ -34,6 +35,7 @@ public class ZonaperSchedulerServlet implements Servlet
 	private static String NAME2 = "Revisar Registros Efectuados";
 	private static String NAME3 = "Borrar Tramites Backup";
 	private static String NAME4 = "Control entrega notificaciones";
+	private static String NAME5 = "Alertas tramitacion";
 	private static String GROUP = "Zonaper";
 	private static int SCHEDULER_DELAY_MINUTES = 10;
 	
@@ -166,6 +168,38 @@ public class ZonaperSchedulerServlet implements Servlet
 					startTime.setTime(startTime.getTime()
 							+ (SCHEDULER_DELAY_MINUTES * 60 * 1000));
 					_log.debug("Job " + NAME4 + ": Fecha de inicio[ "
+							+ startTime + "]");
+
+					scheduler.scheduleJob(jobDetail, trigger);
+				} catch (Exception e) {
+					_log.error("Exception scheduling : ", e);
+					// e.printStackTrace();
+				}
+			}
+			
+			
+			// inicializamos el Job de alertas de tramitacion
+			schedule = Boolean.valueOf(
+					configuration.get("scheduler.alertasTramitacion.schedule"))
+					.booleanValue();
+			cronExpression = configuration
+					.get("scheduler.alertasTramitacion.cron.expression");
+			
+			_log.info("SCHEDULE [" + schedule + "]");
+			_log.info("TIME EXPRESSION [" + cronExpression + "]");
+
+			if (schedule) {
+				CronTrigger trigger = new CronTrigger(NAME5, GROUP);
+				try {
+					JobDetail jobDetail = new JobDetail(NAME5, GROUP,
+							AlertasTramitacionJob.class);
+					trigger.setCronExpression(cronExpression);
+
+					// Retrasamos 2 minutos
+					java.util.Date startTime = new java.util.Date();
+					startTime.setTime(startTime.getTime()
+							+ (SCHEDULER_DELAY_MINUTES * 60 * 1000));
+					_log.debug("Job " + NAME5 + ": Fecha de inicio[ "
 							+ startTime + "]");
 
 					scheduler.scheduleJob(jobDetail, trigger);

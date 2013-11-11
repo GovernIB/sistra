@@ -39,7 +39,7 @@ public class BuscarDocumentos extends BaseAction
 			}
 			JSONObject jsonObject = new JSONObject();		        				
 			if (error){
-				jsonObject.put("error",MensajesUtil.getValue("aviso.error.no.documentos"));
+				jsonObject.put("error",MensajesUtil.getValue("aviso.error.no.documentos", request));
 			}else{
 				jsonObject.put("error","");
 				jsonObject.put("divDocuments", div);
@@ -47,7 +47,7 @@ public class BuscarDocumentos extends BaseAction
 			populateWithJSON(response,jsonObject.toString());
 		}catch(Exception ex){
 			JSONObject jsonObject = new JSONObject();		        				
-			jsonObject.put("error",MensajesUtil.getValue("error.excepcion.general"));
+			jsonObject.put("error",MensajesUtil.getValue("error.excepcion.general", request));
 			populateWithJSON(response,jsonObject.toString());
 		}
 		return null;

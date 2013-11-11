@@ -20,7 +20,7 @@ import es.caib.sistra.model.admin.CuadernoCarga;
  *  
  *  @ejb.env-entry name="role.audit" type="java.lang.String" value="${role.audit}"
  *  
- * @author clmora
+ * @ejb.security-role-ref role-name="${role.audit}" role-link="${role.audit}"
  *
  */
 public abstract class CuadernoCargaFacadeEJB extends HibernateEJB

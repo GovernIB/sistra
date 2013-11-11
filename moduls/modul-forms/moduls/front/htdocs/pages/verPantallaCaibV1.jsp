@@ -24,15 +24,18 @@
 <div style="display: none;">MODO FUNCIONAMIENTO: verPantallaCaib<bean:write name="sufijoModoFuncionamiento"/></div>
 
 
-<script src="<html:rewrite page='/js/htmlform'/><bean:write name="sufijoModoFuncionamiento"/>.jsp" type="text/javascript"></script>
-<script src="<html:rewrite page='/js/xmlhttp'/><bean:write name="sufijoModoFuncionamiento"/>.js" type="text/javascript"></script>
+<script src="<html:rewrite page='/js/v1/htmlform.jsp'/>" type="text/javascript"></script>
+<script src="<html:rewrite page='/js/v1/xmlhttp.js'/>" type="text/javascript"></script>
 
 
 <script type="text/javascript">
 <!--
 
-// URL para mantenimiento sesion de sistra
-URL_SISTRA_MANTENIMIENTO_SESION="<%=request.getAttribute("urlSisTraMantenimientoSesion")%>"; 
+	function mantenimientoSesionSistra() {
+		// URL para mantenimiento sesion de sistra
+		URL_SISTRA_MANTENIMIENTO_SESION="<%=request.getAttribute("urlSisTraMantenimientoSesion")%>";
+		asyncPost(URL_SISTRA_MANTENIMIENTO_SESION,new Array());		
+	} 
 
 // Definición de los valores de pantallas anteriores
 <bean:define id="datosAnteriores" name="datosAnteriores" type="java.util.Map"/>
@@ -339,6 +342,7 @@ function onFieldChange_imp() {
         radioReadOnly(form.<%=nombre%>, true);
         <% } else if (campo instanceof ListBox) { %>
         selectOptions(form.<%=nombre%>, f_<%=nombre%>);
+        listboxReadOnly(form.<%=nombre%>, f_<%=nombre%>);
         <% } else if (campo instanceof TreeBox) { %>
         selectOptionsTree("<%=nombre%>", f_<%=nombre%>);
         readOnlyTree("<%=nombre%>",true);
@@ -431,6 +435,10 @@ function onFieldChange_imp() {
 	       		// Simulamos readonly con campo de texto
 	       		comboReadOnly(form.<%=nombre%>,false);
 	       	<%}%>
+	        <%if (campo instanceof ListBox){ %>
+	       		// Simulamos readonly con campo de texto
+	       		listboxReadOnly(form.<%=nombre%>,false);
+	       	<%}%>
 	       	<% if (campo instanceof TextBox) { 
            	     if (((TextBox) campo).isMultilinea()) { %>	        	 	
             	form.<%=nombre%>_feed.className = 'frmr';
@@ -491,6 +499,11 @@ function onFieldChange_imp() {
 				<%if (campo instanceof ComboBox){ %>
 	        		// Simulamos readonly con campo de texto
 	        		comboReadOnly(form.<%=nombre%>,true);        		
+	        	<%}%>
+
+	        	<%if (campo instanceof ListBox){ %>
+	        		// Simulamos readonly con campo de texto
+	        		listboxReadOnly(form.<%=nombre%>,true);        		
 	        	<%}%>
 	        	
 	        	<% if (campo instanceof TextBox) { 
@@ -683,8 +696,6 @@ function unsetAyuda() {
 // -->
 </script>
 
-<html:errors />
-
 <%String action = "procesar";%>
 <logic:present name="pantallaDetalle">
 	<logic:equal name="pantallaDetalle" value="true">
@@ -776,9 +787,10 @@ function unsetAyuda() {
 <!--
 	// Desactivamos autocompletar
 	document.getElementById("pantallaForm").setAttribute("autocomplete","off");	
-	
-	// Mantenemos url sesion sistra
- 	syncPost(URL_SISTRA_MANTENIMIENTO_SESION,new Array());
+
+	// Mantenemos url sesion sistra (realizamos peticion y programamos que se repita cada 5 min)
+	mantenimientoSesionSistra();
+ 	window.setInterval(mantenimientoSesionSistra, 5 * 60 * 1000);
 	
 	// Añadimos a los componentes text un tag para saber si tienen el foco
 	for(var i=0, df=document.forms, len=df.length; i<len; i++)

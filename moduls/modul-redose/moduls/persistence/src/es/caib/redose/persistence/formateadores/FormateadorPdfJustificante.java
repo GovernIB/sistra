@@ -266,9 +266,21 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
 	    	}
 	    	// Notificacion telematica
 	    	if (datosPropios != null && datosPropios.getInstrucciones() != null && StringUtils.isNotEmpty(datosPropios.getInstrucciones().getHabilitarNotificacionTelematica())){
-		    	propiedad = new Propiedad(props.getProperty("datosRegistro.notificacionTelematica"),
-			    			("S".equals(datosPropios.getInstrucciones().getHabilitarNotificacionTelematica()))?props.getProperty("datosRegistro.notificacionTelematica.si"):props.getProperty("datosRegistro.notificacionTelematica.no"));		    		    
+		    	boolean habilitarNotif = "S".equals(datosPropios.getInstrucciones().getHabilitarNotificacionTelematica());
+				propiedad = new Propiedad(props.getProperty("datosRegistro.notificacionTelematica"),
+			    			habilitarNotif?props.getProperty("datosRegistro.notificacionTelematica.si"):props.getProperty("datosRegistro.notificacionTelematica.no"));
 				seccion.addCampo(propiedad);
+		    	if (habilitarNotif) {
+		    		if (StringUtils.isNotBlank(datosPropios.getInstrucciones().getAvisoEmail())) {
+			    		propiedad = new Propiedad(props.getProperty("datosRegistro.notificacionTelematica.email"),datosPropios.getInstrucciones().getAvisoEmail());
+			    		seccion.addCampo(propiedad);
+		    		}
+		    		if (StringUtils.isNotBlank(datosPropios.getInstrucciones().getAvisoSMS())) {
+			    		propiedad = new Propiedad(props.getProperty("datosRegistro.notificacionTelematica.sms"),datosPropios.getInstrucciones().getAvisoSMS());
+			    		seccion.addCampo(propiedad);
+		    		}
+		    		
+		    	}		    					
 	    	}
 	    	// Avisos
 	    	/*

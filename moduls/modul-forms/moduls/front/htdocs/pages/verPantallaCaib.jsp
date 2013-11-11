@@ -17,13 +17,19 @@
 <%@ taglib prefix="nested" uri="http://jakarta.apache.org/struts/tags-nested"%>
 <bean:define id="securePath" name="securePath" scope="request"/>
 <html:xhtml/>
-<script src="<html:rewrite page='/js/htmlform.jsp'/>" type="text/javascript"></script>
-<script src="<html:rewrite page='/js/xmlhttp.js'/>" type="text/javascript"></script>
+<script src="<html:rewrite page='/js/v0/htmlform.jsp'/>" type="text/javascript"></script>
+<script src="<html:rewrite page='/js/v0/xmlhttp.js'/>" type="text/javascript"></script>
 <script type="text/javascript">
 <!--
 
-// URL para mantenimiento sesion de sistra
-URL_SISTRA_MANTENIMIENTO_SESION="<%=request.getAttribute("urlSisTraMantenimientoSesion")%>"; 
+	// URL para mantenimiento sesion de sistra
+	function mantenimientoSesionSistra() {
+		// URL para mantenimiento sesion de sistra
+		URL_SISTRA_MANTENIMIENTO_SESION="<%=request.getAttribute("urlSisTraMantenimientoSesion")%>";
+		asyncPost(URL_SISTRA_MANTENIMIENTO_SESION,"");		
+	}
+ 
+
 
 // Funcion para llamar autocalculo de un campo en el servidor.
 function autocalculo(fieldName, urlParams) {
@@ -431,8 +437,10 @@ function unsetAyuda() {
 <!--
 	// Deshabilitamos autorellenar
 	document.getElementById("pantallaForm").setAttribute("autocomplete","off");	
- 	// Mantenemos sesion sistra
- 	syncPost(URL_SISTRA_MANTENIMIENTO_SESION,"");
+	//Mantenemos url sesion sistra (realizamos peticion y programamos que se repita cada 5 min)
+	mantenimientoSesionSistra();
+	window.setInterval(mantenimientoSesionSistra, 5 * 60 * 1000);
+ 	
 // -->
 </script>
 

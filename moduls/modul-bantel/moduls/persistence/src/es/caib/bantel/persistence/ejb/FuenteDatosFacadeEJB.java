@@ -1,11 +1,9 @@
 package es.caib.bantel.persistence.ejb;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.CreateException;
@@ -13,14 +11,15 @@ import javax.ejb.EJBException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.apache.commons.lang.StringUtils;
-
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
+
+import org.apache.commons.lang.StringUtils;
+
 import es.caib.bantel.model.CampoFuenteDatos;
 import es.caib.bantel.model.FilaFuenteDatos;
 import es.caib.bantel.model.FiltroConsultaFuenteDatos;
@@ -47,6 +46,8 @@ import es.caib.util.CsvDocumento;
  * @ejb.env-entry name="roleAdmin" value="${role.admin}"
  *
  * @ejb.transaction type="Required"
+ * 
+ * @ejb.security-role-ref role-name="${role.admin}" role-link="${role.admin}"
  */
 public abstract class FuenteDatosFacadeEJB extends HibernateEJB {
 
@@ -504,30 +505,18 @@ public abstract class FuenteDatosFacadeEJB extends HibernateEJB {
     public List realizarConsulta(String idFuenteDatos, List filtros, List parametros) {
     	 Session session = getSession();
          try {       	
-        	 
-        	 String select = "SELECT distinct v.filaFuenteDatos FROM ValorFuenteDatos v "; 
-        	 
-        	 String where = "WHERE v.filaFuenteDatos.fuenteDatos.identificador = :idFuenteDatos ";
-        	 if (filtros != null && filtros.size() > 0) {
-        		 where += " AND ( ";
-        		 for (int numFiltro = 0; numFiltro < filtros.size(); numFiltro++) {
-        			 FiltroConsultaFuenteDatos ffd = (FiltroConsultaFuenteDatos) filtros.get(numFiltro);
-        			 where += (numFiltro == 0?"":ffd.getConector());
-        			 where += " (upper(v.campoFuenteDatos.identificador) = :campoFiltro" + numFiltro;
-        			 
-        			 if (FiltroConsultaFuenteDatos.LIKE.equals(ffd.getOperador())) {
-        				 where += " AND upper(v.valor) LIKE '%' || upper(:valorFiltro" + numFiltro + ") || '%' ) ";
-        			 } else {
-        				 where += " AND upper(v.valor) = upper(:valorFiltro" + numFiltro + ") ) ";
-        			 }
-        			 
-        			 
-        		 }
-        		 where += " ) ";
+        	
+        	 // Verificamos que coincidan numero de filtros y parametros
+        	 int numFiltros = filtros != null?filtros.size():0;
+        	 int numParametros = parametros != null?parametros.size():0;
+        	 if (numFiltros != numParametros) {
+        		 throw new HibernateException("No coinciden numero de parametros con el de filtros"); 
         	 }
         	 
-        	 Query query = session
-             	.createQuery(select + where);
+        	 String sql = generarSql(filtros);
+        	
+			Query query = session
+             	.createQuery(sql);
         	 
         	 query.setString("idFuenteDatos", idFuenteDatos);
         	 if (filtros != null && filtros.size() > 0) {
@@ -547,7 +536,65 @@ public abstract class FuenteDatosFacadeEJB extends HibernateEJB {
          } finally {
              close(session);
          }
-    }    
+    }
+
+
+    /**
+     * Genera SQL.
+     * @param filtros Filtros
+     * @return SQL
+     */
+	private String generarSql(List filtros) {
+		 String select = "SELECT distinct f \nFROM  FilaFuenteDatos f";
+		 
+		 if (filtros != null && filtros.size() > 0) {
+			 select += ", ";
+			 for (int i=0; i < filtros.size(); i++) {
+				 if (i > 0) {
+					 select += ", ";
+				 }
+				 select += "ValorFuenteDatos v" + i;
+			 }
+		 }
+		 
+		 String where = "\nWHERE \n";
+		 
+		 where += "   f.fuenteDatos.identificador = :idFuenteDatos";
+		 
+		 if (filtros != null && filtros.size() > 0) {
+			 where += " AND \n   ";
+			 for (int i=0; i < filtros.size(); i++) {			
+				 if (i > 0) {
+					 where += " AND ";
+				 }
+				 where += "v" + i + ".filaFuenteDatos = f";
+			 }
+		 }
+		 
+		 where += "\n"; 
+		 
+		 if (filtros != null && filtros.size() > 0) {
+			 where += " AND ( ";			 
+			 for (int numFiltro = 0; numFiltro < filtros.size(); numFiltro++) {				 				 
+				 FiltroConsultaFuenteDatos ffd = (FiltroConsultaFuenteDatos) filtros.get(numFiltro);
+				 where += (numFiltro == 0?"":ffd.getConector());
+				 where += "\n     ( ";
+				 where += " (upper(v" + numFiltro + ".campoFuenteDatos.identificador) = :campoFiltro" + numFiltro;
+				 
+				 if (FiltroConsultaFuenteDatos.LIKE.equals(ffd.getOperador())) {
+					 where += " AND upper(v" + numFiltro + ".valor) LIKE '%' || upper(:valorFiltro" + numFiltro + ") || '%' ) ";
+				 } else {
+					 where += " AND upper(v" + numFiltro + ".valor) = upper(:valorFiltro" + numFiltro + ") ) ";
+				 }
+				 
+				 where += ") ";
+			 }
+			 where += "\n ) ";
+		 }
+		 
+		String sql = select + where;
+		return sql;
+	}    
     
     /**
      * @ejb.interface-method

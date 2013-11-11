@@ -448,6 +448,17 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 		}
 	}
 	
+	public RespuestaFront finalizarTramite() throws DelegateException {
+		try
+		{
+			return getRemote().finalizarTramite();
+		}
+		catch( RemoteException e )
+		{
+			throw new DelegateException( e );
+		}	
+	}
+	
 	public void destroy() 
 	{
         try 
