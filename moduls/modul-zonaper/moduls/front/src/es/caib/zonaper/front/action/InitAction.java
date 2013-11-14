@@ -213,7 +213,7 @@ public class InitAction extends BaseAction
 			eventoAuditado.setDescripcion( descripcion );
 			eventoAuditado.setIdioma( lang );
 			eventoAuditado.setResultado( result );
-			DelegateAUDUtil.getAuditaDelegate().logEvento(eventoAuditado, true);			
+			DelegateAUDUtil.getAuditaDelegate().logEvento(eventoAuditado);			
 		}catch(Exception ex){
 			logger.error("Excepción auditoria en InitAction Zona Personal: " + ex.getMessage(),ex);
 		}

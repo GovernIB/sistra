@@ -17,6 +17,8 @@ import es.caib.audita.persistence.delegate.DelegateUtil;
 
 /**
  * SessionBean para operaciones de otros módulos con Audita.
+ * 
+ * No interfiere en las tx de las aplicaciones invocantes
  *
  * @ejb.bean
  *  name="audita/persistence/AuditaFacade"
@@ -25,7 +27,7 @@ import es.caib.audita.persistence.delegate.DelegateUtil;
  *  view-type="remote"
  *  transaction-type="Container"
  *
- * @ejb.transaction type="Required"
+ * @ejb.transaction type="NotSupported"
  */
 public abstract class AuditaFacadeEJB implements SessionBean
 {
@@ -122,14 +124,9 @@ public abstract class AuditaFacadeEJB implements SessionBean
 	 * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
 	 */
-	public Long logEvento( Evento eventoAuditado, boolean txNew ){
+	public Long logEvento( Evento eventoAuditado ){
 		try{
-			if (txNew) {
-				return DelegateUtil.getLoggerEventoDelegate().logEventoTxNew(eventoAuditado);
-			} else {
-				return DelegateUtil.getLoggerEventoDelegate().logEvento(eventoAuditado);
-			}
-			
+			return DelegateUtil.getLoggerEventoDelegate().logEvento(eventoAuditado);
 		}catch(Exception exc){
 			log.error("Excepción al insertar evento: " + exc.getMessage(),exc);
 			return null;

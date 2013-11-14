@@ -33,7 +33,7 @@ public class CuadroMandoDetalleHandler extends
 	
 	protected static String JNDI_SISTRA = "";
 	
-	protected String FICHERO_PROPIEDADES = "CuadroMandoDetalleHandler.properties";
+	private static final String FICHERO_PROPIEDADES = "CuadroMandoDetalleHandler.properties";
 	
 	
 	public CuadroMandoDetalle obtenerCuadroMandoDetalle() {
@@ -194,15 +194,15 @@ public class CuadroMandoDetalleHandler extends
 	
 	protected CuadroMandoDetalle createCuadroMandoDetalle(String idioma, List lst)
 	{
-		CuadroMandoDetalle result = new CuadroMandoDetalle();		
+		CuadroMandoDetalle result = new CuadroMandoDetalle();
+		Connection con = null;
 		try{
-						
-			List lista = obtenerModelos(idioma);
-			
+			con = this.getConnection(getJndiSistra());
+			List lista = this.queryForMapList(con, CuadroMandoDetalleHandler.class,"sql.select.detalle.modelo",new Object[]{ idioma});
 			for(int i=0; i<lst.size(); i++)
 			{
 				Map mResult = ( Map ) lst.get(i);
-				String modelo = (String)mResult.get("modelo");
+				String modelo = (String)mResult.get("aud_modtra");
 				Map mResultModelo = getDatosModelo(lista,modelo);
 				String descripcion = "";
 				String organismo = "";
@@ -242,6 +242,18 @@ public class CuadroMandoDetalleHandler extends
 		{
 			exc.printStackTrace();
 			return result;
+		}
+		finally
+		{
+			if(con != null)
+			{
+				try {
+					con.close();
+				} catch (SQLException e) {
+					
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	
@@ -599,7 +611,21 @@ public class CuadroMandoDetalleHandler extends
 			
 			e.printStackTrace();
 			return cuadroMando;
-		}		
+		}
+		/*
+		finally
+		{
+			if(con != null)
+			{
+				try {
+					con.close();
+				} catch (SQLException e) {
+					
+					e.printStackTrace();
+				}
+			}
+		}
+		*/
 	}
 	
 	private CuadroMandoTablaCruzada construyeCuadroMandoTablaCruzada(String idioma, List lst, String modo)
@@ -610,10 +636,10 @@ public class CuadroMandoDetalleHandler extends
 
 		result.setTotales(totales);
 		
-		
+		Connection con = null;
 		try{
-			List lista = obtenerModelos(idioma);
-			
+			con = this.getConnection(getJndiSistra());
+			List lista = this.queryForMapList(con, CuadroMandoDetalleHandler.class,"sql.select.detalle.modelo",new Object[]{ idioma});
 			for(int i=0; i<lst.size(); i++)
 			{
 				Map mResult = ( Map ) lst.get(i);
@@ -679,22 +705,7 @@ public class CuadroMandoDetalleHandler extends
 			exc.printStackTrace();
 			return result;
 		}
-		
-	}
-
-	/**
-	 * Obtiene lista de modelos
-	 * @param idioma
-	 * @return
-	 * @throws SQLException
-	 */
-	protected List obtenerModelos(String idioma) throws SQLException {
-		Connection con = null;
-		List lista = null;
-		try {				
-			con = this.getConnection(getJndiSistra());
-			lista = this.queryForMapList(con, CuadroMandoDetalleHandler.class,"sql.select.detalle.modelo",new Object[]{ idioma});
-		} finally
+		finally
 		{
 			if(con != null)
 			{
@@ -706,7 +717,6 @@ public class CuadroMandoDetalleHandler extends
 				}
 			}
 		}
-		return lista;
 	}
 	
 	

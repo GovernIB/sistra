@@ -18,9 +18,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import es.caib.audita.modelInterfaz.ConstantesAuditoria;
-import es.caib.audita.modelInterfaz.Evento;
-import es.caib.audita.persistence.delegate.DelegateAUDUtil;
 import es.caib.bantel.modelInterfaz.TramiteBTE;
 import es.caib.bantel.persistence.delegate.BteDelegate;
 import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
@@ -379,10 +376,6 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 			} catch (Exception e) {
 				throw new ExcepcionPAD("Excepcion creando indices evento expediente: " + e.getMessage(),e);
 			}
-			
-			// Generamos log de auditoria
-	    	this.logEvento(ConstantesAuditoria.EVENTO_COMUNICACION, null, expediente.getUsuarioSeycon(), expediente.getNifRepresentante(),
-	    			null, expediente.getIdioma(), "S", null, null, null, expediente.getIdProcedimiento());
 		
 	}	
 	
@@ -1417,11 +1410,6 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 				// Permitimos acceso anonimo si expediente no es autenticado
 				el.setAccesoAnonimoExpediente(evento.isAccesiblePorClave());
 				exped.addElementoExpediente(ela,evento);
-				
-				// Generamos log de auditoria
-		    	this.logEvento(ConstantesAuditoria.EVENTO_COMUNICACION, null, exped.getUsuarioSeycon(), exped.getNifRepresentante(),
-		    			null, expediente.getIdioma(), "S", null, null, null, exped.getIdProcedimiento());
-				
 			}
 			
 			// Si el expediente no tiene ningun elemento lo inicializamos con fecha inicio y fecha fin
@@ -1549,45 +1537,6 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 			
 		}
 		return entrada;
-	}
-	
-	 /**
-	  * Realiza log
-	  * @param nivelAutenticacion
-	  * @param seyconUser
-	  * @param idDocumentoIdPersonal
-	  * @param nombre
-	  * @param lang
-	  * @param result
-	  * @param descripcion
-	  * @throws Exception
-	  */
-	 private void logEvento(
-			 String evento,String nivelAutenticacion, String seyconUser, String idDocumentoIdPersonal,
-			 String nombre, String lang, String result, String descripcion,String modeloTramite,Integer versionTramite,
-			 String procedimiento ) 
-	{
-		try{
-			Evento eventoAuditado = new Evento();
-			eventoAuditado.setTipo( evento );
-			if (nivelAutenticacion != null) {
-				eventoAuditado.setNivelAutenticacion(nivelAutenticacion);
-			}
-			eventoAuditado.setUsuarioSeycon( seyconUser );
-			eventoAuditado.setNumeroDocumentoIdentificacion( idDocumentoIdPersonal );
-			eventoAuditado.setNombre( nombre );
-			eventoAuditado.setDescripcion( descripcion );
-			eventoAuditado.setIdioma( lang );
-			eventoAuditado.setResultado( result );
-			eventoAuditado.setModeloTramite(modeloTramite);
-			if (versionTramite != null) {
-				eventoAuditado.setVersionTramite(versionTramite.intValue());
-			}
-			eventoAuditado.setProcedimiento(procedimiento);
-			DelegateAUDUtil.getAuditaDelegate().logEvento( eventoAuditado, false );
-		}catch(Exception ex){
-			log.error("Excepción auditando evento: " + ex.getMessage(),ex);
-		}
 	}
 	
 }

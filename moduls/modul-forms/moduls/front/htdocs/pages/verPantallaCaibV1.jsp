@@ -342,7 +342,6 @@ function onFieldChange_imp() {
         radioReadOnly(form.<%=nombre%>, true);
         <% } else if (campo instanceof ListBox) { %>
         selectOptions(form.<%=nombre%>, f_<%=nombre%>);
-        listboxReadOnly(form.<%=nombre%>, f_<%=nombre%>);
         <% } else if (campo instanceof TreeBox) { %>
         selectOptionsTree("<%=nombre%>", f_<%=nombre%>);
         readOnlyTree("<%=nombre%>",true);
@@ -435,10 +434,6 @@ function onFieldChange_imp() {
 	       		// Simulamos readonly con campo de texto
 	       		comboReadOnly(form.<%=nombre%>,false);
 	       	<%}%>
-	        <%if (campo instanceof ListBox){ %>
-	       		// Simulamos readonly con campo de texto
-	       		listboxReadOnly(form.<%=nombre%>,false);
-	       	<%}%>
 	       	<% if (campo instanceof TextBox) { 
            	     if (((TextBox) campo).isMultilinea()) { %>	        	 	
             	form.<%=nombre%>_feed.className = 'frmr';
@@ -499,11 +494,6 @@ function onFieldChange_imp() {
 				<%if (campo instanceof ComboBox){ %>
 	        		// Simulamos readonly con campo de texto
 	        		comboReadOnly(form.<%=nombre%>,true);        		
-	        	<%}%>
-
-	        	<%if (campo instanceof ListBox){ %>
-	        		// Simulamos readonly con campo de texto
-	        		listboxReadOnly(form.<%=nombre%>,true);        		
 	        	<%}%>
 	        	
 	        	<% if (campo instanceof TextBox) { 

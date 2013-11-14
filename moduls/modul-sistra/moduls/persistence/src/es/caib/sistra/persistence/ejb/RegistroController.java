@@ -107,19 +107,16 @@ public class RegistroController
 			// Si el destino es registro realizamos registro telemático				
 			if (tipoDestino == ConstantesSTR.DESTINO_REGISTRO)
 			{
-				return registrarImpl_Registro(tipoDestino,idPersistencia,asientoCompleto,referenciasRDS,refAsiento,asientoXML, datosPropiosXML);					
+				return registrarImpl_Registro(tipoDestino,idPersistencia,asientoCompleto,referenciasRDS,refAsiento,asientoXML);					
 			}else{
 			// Si el destino es la bandeja realizamos envío
-				return registrarImpl_Envio(tipoDestino,idPersistencia,asientoCompleto,referenciasRDS,refAsiento,asientoXML, datosPropiosXML);
+				return registrarImpl_Envio(tipoDestino,idPersistencia,asientoCompleto,referenciasRDS,refAsiento,asientoXML);
 			}
 																
 		}else{	
 			// Si hay que aportar documentación iniciamos proceso preregistro
-			return registrarImpl_Preregistro(tipoDestino,idPersistencia,asientoCompleto,referenciasRDS,refAsiento,asientoXML, datosPropiosXML);				
-		}	
-		
-		
-		
+			return registrarImpl_Preregistro(tipoDestino,idPersistencia,asientoCompleto,referenciasRDS,refAsiento,asientoXML);				
+		}											
 	}	
 	
 	
@@ -163,9 +160,9 @@ public class RegistroController
 		
 		// Segun tipo acceso realizamos la consulta
 		if (tipoAcceso == TramiteVersion.CONSULTA_EJB){
-			return consultarImpl_EJB(jndi,local,url,userAuth,passAuth,datosFormulario,identificadorTramite, identificadorProcedimiento);
+			return consultarImpl_EJB(jndi,local,url,userAuth,passAuth,datosFormulario,identificadorTramite);
 		}else{
-			return consultarImpl_WS(url,userAuth,passAuth,identificadorTramite, identificadorProcedimiento,datosFormulario,versionWS);
+			return consultarImpl_WS(url,userAuth,passAuth,identificadorTramite,datosFormulario,versionWS);
 		}
 		
 	}
@@ -179,7 +176,7 @@ public class RegistroController
 	 * @return
 	 * @throws Exception
 	 */
-	private ResultadoRegistrar consultarImpl_WS(String url,String user,String pass,String identificadorTramite, String identificadorProcedimiento, Map datosFormulario, String versionWS)throws Exception {
+	private ResultadoRegistrar consultarImpl_WS(String url,String user,String pass,String identificadorTramite,Map datosFormulario, String versionWS)throws Exception {
 			List docRes = null;
 			if(versionWS != null && "v1".equals(versionWS)){
 				docRes = es.caib.sistra.wsClient.v1.client.ClienteWS.realizarConsulta(url,user,pass,identificadorTramite,datosFormulario);
@@ -191,7 +188,6 @@ public class RegistroController
 			// Devolvemos resultado consulta
 			ResultadoRegistrar res = new ResultadoRegistrar();
     		res.setTipo(ResultadoRegistrar.CONSULTA);
-    		res.setProcedimiento(identificadorProcedimiento);
     		res.setDocumentos(docRes);
     		return res;				
 	}
@@ -210,7 +206,7 @@ public class RegistroController
 	 * @return
 	 * @throws Exception
 	 */
-	private ResultadoRegistrar consultarImpl_EJB(String jndi,boolean local,String url,String user,String pass,Map datosFormulario,String identificadorTramite, String identificadorProcedimiento)throws Exception {
+	private ResultadoRegistrar consultarImpl_EJB(String jndi,boolean local,String url,String user,String pass,Map datosFormulario,String identificadorTramite)throws Exception {
 		
 		log.debug("Realizamos consulta via EJB");
 		
@@ -253,7 +249,6 @@ public class RegistroController
 				docRes.add(docs[i]);
 			}
 			ResultadoRegistrar res = new ResultadoRegistrar();
-			res.setProcedimiento(identificadorProcedimiento);
 			res.setTipo(ResultadoRegistrar.CONSULTA);
 			res.setDocumentos(docRes);
 			return res;				
@@ -275,7 +270,7 @@ public class RegistroController
 	
 	// Realiza proceso de registro telemático.
 	// En caso de error se genera una excepción de registro telemático que contiene en caso de haberse invocado el RTE el resultado temporal del registro 
-	private ResultadoRegistrar registrarImpl_Registro(char tipoDestino,String idPersistencia,AsientoCompleto asientoCompleto,Map referenciasRDS,ReferenciaRDS refAsiento,AsientoRegistral asientoXML, DatosPropios datosPropiosXML)throws RegistroTelematicoException{
+	private ResultadoRegistrar registrarImpl_Registro(char tipoDestino,String idPersistencia,AsientoCompleto asientoCompleto,Map referenciasRDS,ReferenciaRDS refAsiento,AsientoRegistral asientoXML)throws RegistroTelematicoException{
 				
 		ResultadoRegistroTelematico resultadoTemporal = null;
 		
@@ -295,7 +290,6 @@ public class RegistroController
 			Timestamp fechaRegistro = new Timestamp( StringUtil.cadenaAFecha( resultadoTemporal.getResultadoRegistro().getFechaRegistro(), "yyyyMMddHHmmss" ).getTime());						
 			ResultadoRegistrar resultadoRegistrar = new ResultadoRegistrar();
 			resultadoRegistrar.setTipo(ResultadoRegistrar.REGISTRO_TELEMATICO);
-			resultadoRegistrar.setProcedimiento(datosPropiosXML.getInstrucciones().getIdentificadorProcedimiento());
 			resultadoRegistrar.setNumero(numeroRegistro);
 			resultadoRegistrar.setFecha(fechaRegistro);			
 			resultadoRegistrar.setRdsJustificante(refJustificante);
@@ -314,7 +308,7 @@ public class RegistroController
 	
 	
 	// Realiza proceso de envio
-	private ResultadoRegistrar registrarImpl_Envio(char tipoDestino,String idPersistencia,AsientoCompleto asientoCompleto,Map referenciasRDS,ReferenciaRDS refAsiento,AsientoRegistral asientoXML, DatosPropios datosPropiosXML)throws Exception{
+	private ResultadoRegistrar registrarImpl_Envio(char tipoDestino,String idPersistencia,AsientoCompleto asientoCompleto,Map referenciasRDS,ReferenciaRDS refAsiento,AsientoRegistral asientoXML)throws Exception{
 				
 		log.debug("Iniciamos proceso de envío telemático...");
 		
@@ -333,7 +327,6 @@ public class RegistroController
 		// Generamos resultado
 		ResultadoRegistrar resultadoRegistrar = new ResultadoRegistrar();
 		resultadoRegistrar.setTipo(ResultadoRegistrar.ENVIO);
-		resultadoRegistrar.setProcedimiento(datosPropiosXML.getInstrucciones().getIdentificadorProcedimiento());
 		resultadoRegistrar.setNumero(numeroEnvio);
 		resultadoRegistrar.setFecha(fechaEnvio);			
 		resultadoRegistrar.setRdsJustificante(refJustificante);
@@ -352,7 +345,7 @@ public class RegistroController
 	
 	
 	// Realiza proceso de preregistro
-	private ResultadoRegistrar registrarImpl_Preregistro(char tipoDestino,String idPersistencia,AsientoCompleto asientoCompleto,Map referenciasRDS,ReferenciaRDS refAsiento,AsientoRegistral asientoXML, DatosPropios datosPropiosXML)throws Exception{
+	private ResultadoRegistrar registrarImpl_Preregistro(char tipoDestino,String idPersistencia,AsientoCompleto asientoCompleto,Map referenciasRDS,ReferenciaRDS refAsiento,AsientoRegistral asientoXML)throws Exception{
 		
 		log.debug("Iniciamos proceso de preregistro...");		
 				
@@ -369,7 +362,6 @@ public class RegistroController
 		// Generamos resultado
 		ResultadoRegistrar resultadoRegistrar = new ResultadoRegistrar();
 		resultadoRegistrar.setTipo(ResultadoRegistrar.PREREGISTRO);
-		resultadoRegistrar.setProcedimiento(datosPropiosXML.getInstrucciones().getIdentificadorProcedimiento());
 		resultadoRegistrar.setNumero(numeroPreregistro);
 		resultadoRegistrar.setFecha(fechaPreregistro);			
 		resultadoRegistrar.setRdsJustificante(refJustificante);

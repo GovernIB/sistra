@@ -26,24 +26,6 @@ public interface Componente {
 
     public int getPosicion();
 
-    public void setPosicion(int posicion);   
+    public void setPosicion(int posicion);           
     
- // -- INDRA: AÑADIR PROPS MEJORA VISUAL FORMS V3    
-    public int getColSpan ();
-    
-    public void setColSpan (int colSpan);
-    
-    public boolean isSinEtiqueta();
-    
-    public void setSinEtiqueta (boolean sinEtiqueta);
-    
-    public  boolean isEncuadrar();
-    
-    public void setEncuadrar (boolean encuadrar);
-        
-    public String getAlineacion ();
-    
-    public void setAlineacion ( String alineacion);
- // -- INDRA: AÑADIR PROPS MEJORA VISUAL FORMS V3    
-       
 }

@@ -104,6 +104,7 @@ import es.caib.zonaper.persistence.delegate.PadAplicacionDelegate;
 import es.caib.zonaper.persistence.delegate.RegistroExternoDelegate;
 import es.caib.zonaper.persistence.delegate.RegistroExternoPreparadoDelegate;
 import es.caib.zonaper.persistence.delegate.TramitePersistenteDelegate;
+import es.caib.zonaper.persistence.util.AvisoAlertasTramitacion;
 import es.caib.zonaper.persistence.util.CalendarioUtil;
 import es.caib.zonaper.persistence.util.ConfigurationUtil;
 import es.caib.zonaper.persistence.util.GeneradorId;
@@ -1099,11 +1100,6 @@ public abstract class PadFacadeEJB implements SessionBean{
     			log.error("No se ha podido realizar el aviso de tramite finalizado. Se continua con proceso registro.", ex);
     		}
     	}
-    	
-    	// Generamos log de auditoria
-    	this.logEvento(ConstantesAuditoria.EVENTO_ENVIO_TRAMITE,String.valueOf(entrada.getNivelAutenticacion()), entrada.getUsuario(), entrada.getNifRepresentante(),
-    			entrada.getNombreRepresentante(), entrada.getIdioma(), "S", entrada.getDescripcionTramite(), entrada.getTramite(), entrada.getVersion(), entrada.getProcedimiento(),
-    			entrada.getIdPersistencia(), entrada.getTipo() == ConstantesAsientoXML.TIPO_ENVIO?"B":"R");    	
     }
     
     /**
@@ -1357,10 +1353,6 @@ public abstract class PadFacadeEJB implements SessionBean{
     		crearIndicesSalida(notificacion, oficioRemision);    		 
     	}
     	
-    	// Generamos log de auditoria
-    	this.logEvento(ConstantesAuditoria.EVENTO_NOTIFICACION, null, expe.getUsuarioSeycon(), expe.getNifRepresentante(),
-    			null, notificacion.getIdioma(), "S", null, null, null, expe.getIdProcedimiento(),null, null);
-    	
     }
     
 
@@ -1580,12 +1572,6 @@ public abstract class PadFacadeEJB implements SessionBean{
     			log.error("No se ha podido realizar el aviso de tramite finalizado. Se continua con proceso registro.", ex);
     		}
     	}
-    	
-    	// Generamos log de auditoria
-    	this.logEvento(ConstantesAuditoria.EVENTO_PREREGISTRO_TRAMITE, String.valueOf(entrada.getNivelAutenticacion()), entrada.getUsuario(), entrada.getNifRepresentante(),
-    			entrada.getNombreRepresentante(), entrada.getIdioma(), "S", entrada.getDescripcionTramite(), entrada.getTramite(), entrada.getVersion(), entrada.getProcedimiento(),
-    			entrada.getIdPersistencia(), entrada.getTipo() == ConstantesAsientoXML.TIPO_PREENVIO?"B":"R");
-    	
     }   
     
     /**
@@ -1812,32 +1798,29 @@ public abstract class PadFacadeEJB implements SessionBean{
 	  * @throws Exception
 	  */
 	 private void logEvento(
-			 String evento,String nivelAutenticacion, String seyconUser, String idDocumentoIdPersonal,
-			 String nombre, String lang, String result, String descripcion,String modeloTramite,Integer versionTramite,
-			 String procedimiento, String idPersistencia, String clave ) throws Exception
+			 String evento,char nivelAutenticacion, String seyconUser, String idDocumentoIdPersonal,
+			 String nombre, String lang, String result, String descripcion,String modeloTramite,int versionTramite ) throws Exception
 	{
 		try{
 			Evento eventoAuditado = new Evento();
 			eventoAuditado.setTipo( evento );
-			if (nivelAutenticacion != null) {
-				eventoAuditado.setNivelAutenticacion(nivelAutenticacion);
+			if (nivelAutenticacion == 'A' || nivelAutenticacion == 'U' || nivelAutenticacion == 'C' ) {
+				eventoAuditado.setNivelAutenticacion( String.valueOf( nivelAutenticacion ) );
+				if ( nivelAutenticacion != 'A' )
+				{
+					eventoAuditado.setUsuarioSeycon( seyconUser );
+					eventoAuditado.setNumeroDocumentoIdentificacion( idDocumentoIdPersonal );
+					eventoAuditado.setNombre( nombre );
+				}
 			}
-			eventoAuditado.setUsuarioSeycon( seyconUser );
-			eventoAuditado.setNumeroDocumentoIdentificacion( idDocumentoIdPersonal );
-			eventoAuditado.setNombre( nombre );
 			eventoAuditado.setDescripcion( descripcion );
 			eventoAuditado.setIdioma( lang );
 			eventoAuditado.setResultado( result );
 			eventoAuditado.setModeloTramite(modeloTramite);
-			if (versionTramite != null) {
-				eventoAuditado.setVersionTramite(versionTramite.intValue());
-			}
-			eventoAuditado.setProcedimiento(procedimiento);
-			eventoAuditado.setIdPersistencia(idPersistencia);
-			eventoAuditado.setClave(clave);
-			DelegateAUDUtil.getAuditaDelegate().logEvento( eventoAuditado, false );
+			eventoAuditado.setVersionTramite(versionTramite);
+			DelegateAUDUtil.getAuditaDelegate().logEvento( eventoAuditado );
 		}catch(Exception ex){
-			log.error("Excepción auditando evento: " + ex.getMessage(),ex);
+			// logger.error("Excepción auditoria en Zona Personal: " + ex.getMessage(),ex);
 		}
 	}
 	
@@ -1993,10 +1976,9 @@ public abstract class PadFacadeEJB implements SessionBean{
 				String nif = plgLogin.getNif(sp);
 				char metodoAut = plgLogin.getMetodoAutenticacion( sp );
 				String nombre = plgLogin.getNombreCompleto(sp);
-				logEvento(ConstantesAuditoria.EVENTO_CONFIRMACION_PREREGISTRO, String.valueOf(metodoAut),sp.getName(),
+				logEvento(ConstantesAuditoria.EVENTO_CONFIRMACION_PREREGISTRO,metodoAut,sp.getName(),
 						(StringUtils.isNotEmpty(nif)?nif.toUpperCase():null),nombre,entrada.getIdioma(), "S","Preregistro confirmado: " + entrada.getNumeroPreregistro(),
-						StringUtil.getModelo(asiento.getDatosAsunto().getIdentificadorTramite()),new Integer(StringUtil.getVersion(asiento.getDatosAsunto().getIdentificadorTramite())),
-						entrada.getProcedimiento(), null, null);
+						StringUtil.getModelo(asiento.getDatosAsunto().getIdentificadorTramite()),StringUtil.getVersion(asiento.getDatosAsunto().getIdentificadorTramite()) );
 			}
 	    	
     	}catch (Exception ex){

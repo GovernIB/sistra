@@ -25,16 +25,6 @@ public class LoggerEventoDelegate implements StatelessDelegate
         }
 	}
 	
-	public Long logEventoTxNew( Evento eventoAuditado ) throws DelegateException
-	{
-		try
-		{
-			return getFacade().logEventoTxNew( eventoAuditado );
-		}
-		catch (Exception e) {
-            throw new DelegateException(e);
-        }
-	}
 	
 	
     /* ========================================================= */

@@ -52,10 +52,6 @@ public class ResultadoRegistrar implements Serializable{
 	 */
 	private List documentos;
 	
-	/**
-	 * Procedimiento.
-	 */
-	private String procedimiento;
 	
 	public List getDocumentos() {
 		return documentos;
@@ -121,14 +117,6 @@ public class ResultadoRegistrar implements Serializable{
 	}
 	public void setJustificanteRegistro(AsientoCompleto justificanteRegistro) {
 		this.justificanteRegistro = justificanteRegistro;
-	}
-
-	public String getProcedimiento() {
-		return procedimiento;
-	}
-
-	public void setProcedimiento(String procedimiento) {
-		this.procedimiento = procedimiento;
 	}
 	
 	

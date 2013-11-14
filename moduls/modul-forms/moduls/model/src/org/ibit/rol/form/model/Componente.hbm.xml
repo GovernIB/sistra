@@ -20,13 +20,8 @@
 
         <property name="nombreLogico" length="128" not-null="true" column="COM_NOMLOG"/>
         <property name="orden" not-null="true" column="COM_ORDEN"/>
-      
         <property name="posicion" not-null="true" column="COM_POSICI"/>
-        <property name="colSpan" not-null="true" column="COM_COLSPN"/>
-        <property name="sinEtiqueta" not-null="true" column="COM_SINETQ"/>
-        <property name="encuadrar" not-null="true" column="COM_CUADRO"/>
-        <property name="alineacion" not-null="true" column="COM_ALINEACION"/>
-        
+
         <subclass name="org.ibit.rol.form.model.Label" discriminator-value="label">
             <property name="estilo" length="128" column="COM_ESTILO"/>
             <map name="traducciones" cascade="all" table="RFR_TRALAB">
