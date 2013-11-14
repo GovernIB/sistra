@@ -7,7 +7,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -23,15 +22,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import es.caib.sistra.front.Constants;
-import es.caib.sistra.front.util.LiteralesUtil;
 import es.caib.sistra.front.util.Util;
 import es.caib.sistra.model.ConfiguracionFormulario;
 import es.caib.sistra.model.ConfiguracionGestorFlujoFormulario;
 import es.caib.sistra.model.DocumentoFront;
-import es.caib.sistra.model.PasoTramitacion;
 import es.caib.sistra.model.TramiteFront;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
-import es.caib.sistra.plugins.login.ConstantesLogin;
 import es.caib.util.StringUtil;
 import es.caib.xml.ConstantesXML;
 import es.caib.xml.formsconf.factoria.FactoriaObjetosXMLConfForms;
@@ -301,57 +297,20 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 		objXmlConfiguracion.setDatos( datos );
 		
 		
-		// Propiedades: Pasos tramite, Título Aplicación, Nombre usuario, Nombre Formulario y Nombre Trámite
-		
-		// - Circuito reducido
-		Propiedad propiedadReducido = factory.crearPropiedad();
-		propiedadReducido.setNombre( "circuitoReducido" );
-		propiedadReducido.setValor( Boolean.toString(informacionTramite.isCircuitoReducido())); 
-		objXmlConfiguracion.getPropiedades().put(propiedadReducido.getNombre(),propiedadReducido);
-		
-		// - Pasos tramite (no pasamos paso Pasos)
-		List pasosStr = new ArrayList();
-		List lstPasos = informacionTramite.getPasos();
-		for ( int i = 0; i < lstPasos.size(); i++ )
-		{
-			PasoTramitacion paso = ( PasoTramitacion ) lstPasos.get( i );
-			if (paso.getTipoPaso() != PasoTramitacion.PASO_PASOS) {
-				Util.establecerTituloYCuerpo( informacionTramite, paso );
-				pasosStr.add(LiteralesUtil.getLiteral(locale.getLanguage(), paso.getClaveTab()));
-			}
-		}
-		Propiedad propiedadPasosTramite = factory.crearPropiedad();
-		propiedadPasosTramite.setNombre( "pasosTramite" );
-		propiedadPasosTramite.setValor(StringUtil.serializarList(pasosStr)); 
-		objXmlConfiguracion.getPropiedades().put(propiedadPasosTramite.getNombre(),propiedadPasosTramite);
-
-		// - Paso actual (descontamos paso Pasos)
-		Propiedad propiedadPasoActual = factory.crearPropiedad();
-		propiedadPasoActual.setNombre( "pasoActual" );
-		propiedadPasoActual.setValor( (informacionTramite.getPasoActual() - 1)+ ""); 
-		objXmlConfiguracion.getPropiedades().put(propiedadPasoActual.getNombre(),propiedadPasoActual);
-		
+		// Propiedades: Título Aplicación, Nombre usuario, Nombre Formulario y Nombre Trámite
 		Propiedad propiedadTituloAplicacion = factory.crearPropiedad();
 		propiedadTituloAplicacion.setNombre( "aplicacion" );
 		propiedadTituloAplicacion.setValor(tituloAplicacion); 
 		objXmlConfiguracion.getPropiedades().put(propiedadTituloAplicacion.getNombre(),propiedadTituloAplicacion);
-		
-		if (informacionTramite.getDatosSesion().getNivelAutenticacion() == ConstantesLogin.LOGIN_ANONIMO) {
+				
+		String nombreUsuario = informacionTramite.getDatosSesion().getNombreCompletoUsuario();
+		if ( !StringUtils.isEmpty( nombreUsuario ) )
+		{
 			Propiedad propiedadNombreUsuario = factory.crearPropiedad();
 			propiedadNombreUsuario.setNombre( "usuario" );
-			propiedadNombreUsuario.setValor( LiteralesUtil.getLiteral(locale.getLanguage(), "datosUsuario.anonimo") );
-			objXmlConfiguracion.getPropiedades().put(propiedadNombreUsuario.getNombre(),propiedadNombreUsuario);	
-			
-			Propiedad propiedadClaveTramitacion = factory.crearPropiedad();
-			propiedadClaveTramitacion.setNombre( "claveTramitacion" );
-			propiedadClaveTramitacion.setValor( informacionTramite.getIdPersistencia() );
-			objXmlConfiguracion.getPropiedades().put(propiedadClaveTramitacion.getNombre(),propiedadClaveTramitacion);							
-		} else {
-			Propiedad propiedadNombreUsuario = factory.crearPropiedad();
-			propiedadNombreUsuario.setNombre( "usuario" );
-			propiedadNombreUsuario.setValor( informacionTramite.getDatosSesion().getNombreCompletoUsuario() );
-			objXmlConfiguracion.getPropiedades().put(propiedadNombreUsuario.getNombre(),propiedadNombreUsuario);				
-		}
+			propiedadNombreUsuario.setValor( nombreUsuario );
+			objXmlConfiguracion.getPropiedades().put(propiedadNombreUsuario.getNombre(),propiedadNombreUsuario);
+		}		
 		
 		Propiedad propiedadNombreTramite = factory.crearPropiedad();
 		propiedadNombreTramite.setNombre( "tramite" );

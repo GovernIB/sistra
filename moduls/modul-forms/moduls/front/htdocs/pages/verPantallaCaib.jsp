@@ -17,8 +17,8 @@
 <%@ taglib prefix="nested" uri="http://jakarta.apache.org/struts/tags-nested"%>
 <bean:define id="securePath" name="securePath" scope="request"/>
 <html:xhtml/>
-<script src="<html:rewrite page='/js/v0/htmlform.jsp'/>" type="text/javascript"></script>
-<script src="<html:rewrite page='/js/v0/xmlhttp.js'/>" type="text/javascript"></script>
+<script src="<html:rewrite page='/js/htmlform.jsp'/>" type="text/javascript"></script>
+<script src="<html:rewrite page='/js/xmlhttp.js'/>" type="text/javascript"></script>
 <script type="text/javascript">
 <!--
 

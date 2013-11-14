@@ -24,8 +24,8 @@
 <div style="display: none;">MODO FUNCIONAMIENTO: verPantallaCaib<bean:write name="sufijoModoFuncionamiento"/></div>
 
 
-<script src="<html:rewrite page='/js/v1/htmlform.jsp'/>" type="text/javascript"></script>
-<script src="<html:rewrite page='/js/v1/xmlhttp.js'/>" type="text/javascript"></script>
+<script src="<html:rewrite page='/js/htmlform'/><bean:write name="sufijoModoFuncionamiento"/>.jsp" type="text/javascript"></script>
+<script src="<html:rewrite page='/js/xmlhttp'/><bean:write name="sufijoModoFuncionamiento"/>.js" type="text/javascript"></script>
 
 
 <script type="text/javascript">
@@ -342,7 +342,6 @@ function onFieldChange_imp() {
         radioReadOnly(form.<%=nombre%>, true);
         <% } else if (campo instanceof ListBox) { %>
         selectOptions(form.<%=nombre%>, f_<%=nombre%>);
-        listboxReadOnly(form.<%=nombre%>, f_<%=nombre%>);
         <% } else if (campo instanceof TreeBox) { %>
         selectOptionsTree("<%=nombre%>", f_<%=nombre%>);
         readOnlyTree("<%=nombre%>",true);
@@ -435,10 +434,6 @@ function onFieldChange_imp() {
 	       		// Simulamos readonly con campo de texto
 	       		comboReadOnly(form.<%=nombre%>,false);
 	       	<%}%>
-	        <%if (campo instanceof ListBox){ %>
-	       		// Simulamos readonly con campo de texto
-	       		listboxReadOnly(form.<%=nombre%>,false);
-	       	<%}%>
 	       	<% if (campo instanceof TextBox) { 
            	     if (((TextBox) campo).isMultilinea()) { %>	        	 	
             	form.<%=nombre%>_feed.className = 'frmr';
@@ -499,11 +494,6 @@ function onFieldChange_imp() {
 				<%if (campo instanceof ComboBox){ %>
 	        		// Simulamos readonly con campo de texto
 	        		comboReadOnly(form.<%=nombre%>,true);        		
-	        	<%}%>
-
-	        	<%if (campo instanceof ListBox){ %>
-	        		// Simulamos readonly con campo de texto
-	        		listboxReadOnly(form.<%=nombre%>,true);        		
 	        	<%}%>
 	        	
 	        	<% if (campo instanceof TextBox) { 
@@ -695,6 +685,8 @@ function unsetAyuda() {
 
 // -->
 </script>
+
+<html:errors />
 
 <%String action = "procesar";%>
 <logic:present name="pantallaDetalle">

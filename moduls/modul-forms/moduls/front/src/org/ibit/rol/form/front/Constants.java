@@ -19,11 +19,4 @@ public class Constants implements Serializable {
 
     
     public static final String MOSTRAR_EN_IFRAME = "mostrarSistraEnIframe";
-    
-    
-    /**
-    * Atributo de sesion donde se guarda si la ayuda esta activada
-    */
-   public static final String AYUDA_ACTIVADA_KEY = "org.ibit.rol.form.front.ayudaActivada";
-    
 }

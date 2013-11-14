@@ -23,7 +23,6 @@ import org.ibit.rol.form.persistence.delegate.DelegateUtil;
 import org.ibit.rol.form.persistence.delegate.InstanciaDelegate;
 import org.ibit.rol.form.persistence.delegate.FormularioDelegate;
 import org.ibit.rol.form.persistence.delegate.DelegateException;
-import org.ibit.rol.form.front.Constants;
 
 /**
  * @struts.action
@@ -92,9 +91,6 @@ public class IniciAction extends BaseAction {
 
         String securePath = getSecurePath(delegate.obtenerFormulario());
 
-        // Inicializamos ayuda
-        request.getSession().setAttribute(Constants.AYUDA_ACTIVADA_KEY, "true");
-        
         //return mapping.findForward("success");
         response.sendRedirect(prepareRedirectInstanciaURL(request, response, securePath + "/ver.do"));
         response.flushBuffer();

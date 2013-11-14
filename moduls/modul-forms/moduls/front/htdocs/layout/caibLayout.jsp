@@ -12,12 +12,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title><bean:message  bundle="caibMessages" key="main.title"/></title>
-        <link rel="stylesheet" href="<html:rewrite page='<%="/estilo_caib/css/forms-0.0.2.css" %>'/>" type="text/css" />
+        <link rel="stylesheet" href="<html:rewrite page='<%=pathIconografia + "/css/forms-0.0.2.css" %>'/>" type="text/css" />
         <logic:notEmpty name="<%=org.ibit.rol.form.front.Constants.ORGANISMO_INFO_KEY%>" property="urlCssCustom">
 			<link href="<bean:write name="<%=org.ibit.rol.form.front.Constants.ORGANISMO_INFO_KEY%>" property="urlCssCustom" />" rel="stylesheet" type="text/css" />
 		</logic:notEmpty>
-        <script type="text/javascript" src="<html:rewrite page='/js/v0/MM_functions.js' />"></script>
-        <script type="text/javascript" src="<html:rewrite page='/js/v0/iframe_functions.js' />"></script>
+        <script type="text/javascript" src="<html:rewrite page='/js/MM_functions.js' />"></script>
+        <script type="text/javascript" src="<html:rewrite page='/js/iframe_functions.js' />"></script>
         <script type="text/javascript">
         <!--
             // Variable global que servirá para saber si la pagina se ha terminado de cargar.

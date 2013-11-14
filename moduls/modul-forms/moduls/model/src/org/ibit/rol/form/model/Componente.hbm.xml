@@ -20,16 +20,10 @@
 
         <property name="nombreLogico" length="128" not-null="true" column="COM_NOMLOG"/>
         <property name="orden" not-null="true" column="COM_ORDEN"/>
-      
         <property name="posicion" not-null="true" column="COM_POSICI"/>
-        <property name="colSpan" not-null="true" column="COM_COLSPN"/>
-        <property name="sinEtiqueta" not-null="true" column="COM_SINETQ"/>
-        <property name="encuadrar" not-null="true" column="COM_CUADRO"/>
-        <property name="alineacion" not-null="true" column="COM_ALINEACION"/>
-        
+
         <subclass name="org.ibit.rol.form.model.Label" discriminator-value="label">
             <property name="estilo" length="128" column="COM_ESTILO"/>
-            <property name="encuadrarCabecera" column="COM_CUACAB"/>
             <map name="traducciones" cascade="all" table="RFR_TRALAB">
                 <cache usage="read-write"/>
                 <key column="TRL_CODLAB" foreign-key="RFR_LABTRA_FK"/>
@@ -39,26 +33,6 @@
                 </composite-element>
             </map>
         </subclass>
-        
-        
-        
-        
-        <!-- RAFA: REVISAR LAS TRADUCCIONES -->
-        
-        <subclass name="org.ibit.rol.form.model.Label" discriminator-value="seccion">
-            <property name="letraSeccion" length="2" column="COM_SECLET"/>
-            <map name="traducciones" cascade="all" table="RFR_TRALAB">
-                <cache usage="read-write"/>
-                <key column="TRL_CODLAB" foreign-key="RFR_LABTRA_FK"/>
-                <index column="TRL_CODIDI" type="string" length="2"/>
-                <composite-element class="org.ibit.rol.form.model.TraLabel">
-                    <property name="etiqueta" length="4000" not-null="true" column="TRL_ETIQUE"/>
-                </composite-element>
-            </map>
-        </subclass>
-
-
-
 
         <subclass name="org.ibit.rol.form.model.Campo" discriminator-value="campo">
             <property name="etiquetaPDF" length="128"  column="COM_ETIPDF"/>

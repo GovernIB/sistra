@@ -10,7 +10,6 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.ibit.rol.form.front.Constants;
 import org.ibit.rol.form.front.action.BaseAction;
 import org.ibit.rol.form.front.registro.RegistroManager;
 import org.ibit.rol.form.persistence.delegate.InstanciaDelegate;
@@ -45,9 +44,6 @@ public class ContinuacioTelematicAction extends BaseAction {
         InstanciaDelegate delegate = RegistroManager.recuperarInstancia(request);
         setLocale(request, delegate.obtenerIdioma());
       
-        // Inicializamos ayuda
-        request.getSession().setAttribute(Constants.AYUDA_ACTIVADA_KEY, "true");	
-        
         response.sendRedirect(prepareRedirectInstanciaURL(request, response, request.getAttribute("securePath") + "/ver.do"));
         response.flushBuffer();
         return null;

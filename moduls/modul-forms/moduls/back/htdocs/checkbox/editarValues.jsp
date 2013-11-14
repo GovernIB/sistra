@@ -3,11 +3,9 @@
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
-<%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <html:xhtml/>
 <% int ti = 1; %>
 <html:hidden property="idPantalla" />
-<html:hidden property="pantallaDetalle" />
 <input type="hidden" name="idOperacion" value="<%=Util.getIdOperacion(request)%>"/>	
 
 <tr>
@@ -26,16 +24,6 @@
     </html:select>
 </tr>
 <tr>
-    <td class="label"><bean:message key="componente.colSpan"/></td>
-    <td class="input">   
-    <bean:message key="componente.colSpan.checkBox"/>
-    <html:hidden property="values.colSpan"/>        
-    </td>
-</tr>
-<tr>
-    <td class="labela" colspan="2"><bean:message key="ayuda.posicion"/></td>
-</tr>
-<tr>
     <td class="label"><bean:message key="componente.pdf"/></td>
     <td class="input"><html:text styleClass="data" tabindex="<%=Integer.toString(ti++)%>" property="values.etiquetaPDF" maxlength="128" /></td>
 </tr>
@@ -51,7 +39,8 @@
 </tr>
 
 <!--  INDRA: PROPIEDADES PARA CAMPOS DE PANTALLAS DE DETALLE DE LISTA DE ELEMENTOS -->
-<logic:equal name="checkboxForm" property="pantallaDetalle" value="true">
+<logic:present name="detalle">
+<logic:equal name="detalle" value="true">
 <tr>
     <td class="label"><bean:message key="componente.mostrarEnTabla"/></td>
     <td class="input"><html:checkbox styleClass="check" tabindex="<%=Integer.toString(ti++)%>" property="values.mostrarEnTabla" /></td>
@@ -64,9 +53,8 @@
     <td class="labela" colspan="2"><bean:message key="ayuda.mostrarListaElementos"/></td>
 </tr>
 </logic:equal>
+</logic:present>
 <!--  INDRA: PROPIEDADES PARA CAMPOS DE PANTALLAS DE DETALLE DE LISTA DE ELEMENTOS -->
-
-
 <tiles:insert page="/moduls/editarExpresiones.jsp">
     <tiles:put name="tabindex" value="<%=new Integer(ti)%>" />
 </tiles:insert>

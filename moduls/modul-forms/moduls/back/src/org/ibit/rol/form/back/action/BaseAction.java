@@ -8,7 +8,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.Action;
@@ -263,9 +262,6 @@ public abstract class BaseAction extends Action {
         ComponenteForm componenteForm = (ComponenteForm) obtenerActionForm(mapping, request, path);
         componenteForm.setValues((Traducible) componente);
         componenteForm.setIdPantalla(componente.getPantalla().getId());
-        if (componente.getPantalla()!=null && StringUtils.isNotEmpty(componente.getPantalla().getComponenteListaElementos())){
-        	componenteForm.setPantallaDetalle(true);
-        }
 
         resetearNiveles(request);
         HttpSession sesion = request.getSession(true);
