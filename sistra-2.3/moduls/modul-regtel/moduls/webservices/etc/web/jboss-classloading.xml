@@ -1,7 +1,0 @@
-<classloading xmlns="urn:jboss:classloading:1.0"
-              name="8-regtel-ws.war"
-              domain="regtel-ws-domain"
-			  export-all="NON_EMPTY" 
-              import-all="true"
-			  >
-</classloading>

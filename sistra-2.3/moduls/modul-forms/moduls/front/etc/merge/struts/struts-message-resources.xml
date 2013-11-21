@@ -1,3 +1,0 @@
-<message-resources parameter="form-front-messages-common" null="false"/>
-<message-resources key="mainMessages" parameter="form-front-messages" null="false"/>
-<message-resources key="caibMessages" parameter="form-front-messages-caib" null="false"/>

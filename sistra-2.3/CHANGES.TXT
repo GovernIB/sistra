@@ -1,3 +1,0 @@
-listbox -> readonly
-
-audita: notif/comuni
