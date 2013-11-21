@@ -51,11 +51,13 @@ public class VerPantallaController extends BaseController {
         request.setAttribute("sufijoModoFuncionamiento", sufijo );        
         // -- INDRA: FIN MODIFICACION
 
-        // -- INDRA: ESTABLECEMOS URL PARA MANTENIMIENTO DE SESION SISTRA
-        if (telematic)
-        	request.setAttribute("urlSisTraMantenimientoSesion",((InstanciaTelematicaDelegate)delegate).obtenerUrlSistraMantenimientoSesion());
-        // -- INDRA: ESTABLECEMOS URL PARA MANTENIMIENTO DE SESION SISTRA
-       
+        // -- INDRA: ESTABLECEMOS URL PARA MANTENIMIENTO DE SESION SISTRA Y VER PANTALLA FIN
+        if (telematic) {
+        	request.setAttribute("urlSisTraMantenimientoSesion",((InstanciaTelematicaDelegate)delegate).obtenerUrlSistraMantenimientoSesion());        	
+        }
+        // -- INDRA: ESTABLECEMOS URL PARA MANTENIMIENTO DE SESION SISTRA Y VER PANTALLA FIN
+        
+    	
         
         Pantalla pantalla = delegate.obtenerPantalla();
         request.setAttribute("pantalla", pantalla);
@@ -76,10 +78,18 @@ public class VerPantallaController extends BaseController {
         tileContext.putAttribute("title", traduccio.getTitulo());
 
         // Propiedades del formulario en el caso de que sea telemático
+        boolean mostrarPantallaFin = true;
         if (telematic) {
             InstanciaTelematicaDelegate itd = (InstanciaTelematicaDelegate) delegate;
             Map propiedadesForm = itd.obtenerPropiedadesFormulario();
             request.setAttribute("propiedadesForm", propiedadesForm);
+            
+            try{
+        		mostrarPantallaFin = (propiedadesForm.get("pantallaFin.mostrar")!=null?Boolean.parseBoolean((String)propiedadesForm.get("pantallaFin.mostrar")):false);
+        	}catch (Exception ex){
+        		log.error("La propiedad pantallaFin.mostrar no tiene un valor válido (true/false): " + propiedadesForm.get("pantallaFin.mostrar"));
+        		mostrarPantallaFin = false;
+        	}
         }
 
         // Botones que van a salir: distinguimos pantalla normal y pantalla detalle de lista
@@ -88,9 +98,8 @@ public class VerPantallaController extends BaseController {
 	        request.setAttribute("saveButton", Boolean.valueOf(!telematic));
 	        request.setAttribute("discardButton", Boolean.TRUE);
 	        request.setAttribute("backButton", Boolean.valueOf(!pantalla.isInicial()));
-	
-	        request.setAttribute("nextButton", Boolean.TRUE);
-	        request.setAttribute("endButton", Boolean.FALSE);
+	        request.setAttribute("nextButton", new Boolean(!pantalla.isUltima() || mostrarPantallaFin));
+	        request.setAttribute("endButton", new Boolean(pantalla.isUltima() && !mostrarPantallaFin));
         }else{
         	// Pantalla detalle
         	// - Deshabilitamos todos los botones

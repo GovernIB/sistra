@@ -2,7 +2,6 @@ package es.caib.sistra.front.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -17,10 +16,9 @@ import org.apache.struts.config.ActionConfig;
 import org.apache.struts.tiles.ComponentContext;
 
 import es.caib.sistra.front.Constants;
-import es.caib.sistra.model.DocumentoFront;
+import es.caib.sistra.front.util.Util;
 import es.caib.sistra.model.PasoTramitacion;
 import es.caib.sistra.model.TramiteFront;
-import es.caib.sistra.plugins.pagos.ConstantesPago;
 
 public class PasosNecesariosController extends TramiteController
 {
@@ -35,7 +33,7 @@ public class PasosNecesariosController extends TramiteController
 		for ( int i = 0; i < lstPasos.size(); i++ )
 		{
 			PasoTramitacion paso = ( PasoTramitacion ) lstPasos.get( i );
-			establecerTituloYCuerpo( tramite, paso );
+			Util.establecerTituloYCuerpo( tramite, paso );
 		}
 		request.setAttribute( "pasos", lstPasos );
 		
@@ -231,151 +229,5 @@ public class PasosNecesariosController extends TramiteController
 	}
 	
 	
-	private void establecerTituloYCuerpo( TramiteFront tramite, PasoTramitacion paso )
-	{
-		int tipoPaso = paso.getTipoPaso();
-		String keyPreffix = "paso." + tipoPaso;
-		String titleKey = keyPreffix + ".titulo";
-		String tabKey = keyPreffix + ".tab";
-		String textKey = keyPreffix + ".texto";
-		paso.setClaveTitulo(  titleKey );
-		paso.setClaveTab( tabKey );
-		char tipoTramitacion = tramite.getTipoTramitacion();
-		char nivelAutenticacion = tramite.getDatosSesion().getNivelAutenticacion();
-		switch( tipoPaso )
-		{
-			case PasoTramitacion.PASO_DEBESABER : 
-			{
-				String informacionInicio = tramite.getInformacionInicio();
-				if ( !StringUtils.isEmpty( informacionInicio ) )
-				{
-					textKey += ".informacionInicio";
-				}
-				if ( tramite.isDescargarPlantillas() )
-				{
-					textKey += ".descargarPlantillas";
-				}
-				paso.setClaveCuerpo( textKey );
-				return;
-			}
-			case PasoTramitacion.PASO_RELLENAR :
-			{
-				paso.setClaveCuerpo( textKey );
-				return;
-			}
-			case PasoTramitacion.PASO_ANEXAR :
-			{
-				paso.setClaveCuerpo( textKey );
-				return;
-			}
-			case PasoTramitacion.PASO_PAGAR :
-			{
-				// Verificamos tipos de pagos
-				char tipoPago = 'X';
-				for (Iterator it = tramite.getPagos().iterator(); it.hasNext();) {
-					DocumentoFront pago = (DocumentoFront) it.next();
-					switch (pago.getPagoMetodos()) {
-						case ConstantesPago.TIPOPAGO_AMBOS:
-							tipoPago = ConstantesPago.TIPOPAGO_AMBOS;
-							break;
-						case ConstantesPago.TIPOPAGO_PRESENCIAL:
-							if (tipoPago == ConstantesPago.TIPOPAGO_TELEMATICO) {
-								tipoPago = ConstantesPago.TIPOPAGO_AMBOS;
-							} else {
-								tipoPago = ConstantesPago.TIPOPAGO_PRESENCIAL;
-							}
-							break;
-						case ConstantesPago.TIPOPAGO_TELEMATICO:
-							if (tipoPago == ConstantesPago.TIPOPAGO_PRESENCIAL) {
-								tipoPago = ConstantesPago.TIPOPAGO_AMBOS;
-							} else {
-								tipoPago = ConstantesPago.TIPOPAGO_TELEMATICO;
-							}
-							break;
-					}
-					
-					if (tipoPago == ConstantesPago.TIPOPAGO_AMBOS) {
-						break;
-					}
-				}
-				
-				paso.setClaveCuerpo( textKey + "." + tipoPago );
-				return;
-			}
-			case PasoTramitacion.PASO_REGISTRAR :
-			{
-				if ( tramite.getRegistrar() )
-				{
-					textKey += ".registro";
-					titleKey += ".registro";
-					tabKey += ".registro";
-				}
-				else
-				{
-					textKey += ".envio";
-					titleKey += ".envio";
-					tabKey += ".envio";
-				}
-				if ( Constants.TIPO_CIRCUITO_TRAMITACION_TELEMATICO == tipoTramitacion )
-				{
-					textKey += ".telematico";
-				}
-				else if ( Constants.TIPO_CIRCUITO_TRAMITACION_PRESENCIAL == tipoTramitacion )
-				{
-					textKey += ".presencial";
-				}
-				else if ( Constants.TIPO_CIRCUITO_TRAMITACION_DEPENDE == tipoTramitacion )
-				{
-					textKey += ".depende";
-				}
-				paso.setClaveTab( tabKey );
-				paso.setClaveTitulo( titleKey );
-				paso.setClaveCuerpo( textKey );
-				return;
-			}
-			case PasoTramitacion.PASO_FINALIZAR :
-			{
-				if ( tramite.getRegistrar() )
-				{
-					textKey += ".registro";
-					titleKey += ".registro";
-					tabKey += ".registro";
-				}
-				else if ( tramite.isConsultar())
-				{
-					textKey += ".consulta";
-					titleKey += ".consulta";
-					tabKey += ".consulta";
-				}
-				else
-				{
-					textKey += ".envio";
-					titleKey += ".envio";
-					tabKey += ".envio";
-				}
-				
-				if ( Constants.TIPO_CIRCUITO_TRAMITACION_TELEMATICO == tipoTramitacion   )
-				{
-					textKey += ".telematico";
-				}
-				else if ( Constants.TIPO_CIRCUITO_TRAMITACION_PRESENCIAL == tipoTramitacion )
-				{
-					textKey += ".presencial";
-				}
-				else if ( Constants.TIPO_CIRCUITO_TRAMITACION_DEPENDE == tipoTramitacion )
-				{
-					textKey += ".depende";
-				}
-				paso.setClaveTab( tabKey );
-				paso.setClaveTitulo( titleKey );
-				paso.setClaveCuerpo( textKey );
-				
-				return;
-			}				
-			default :
-			{
-				paso.setClaveCuerpo( keyPreffix + ".texto" );
-			}
-		}
-	}
+	
 }

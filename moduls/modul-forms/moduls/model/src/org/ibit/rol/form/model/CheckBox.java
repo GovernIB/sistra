@@ -4,6 +4,7 @@ public class CheckBox extends Campo {
 
     public CheckBox() {
         tipoValor = "java.lang.Boolean";
+        this.setColSpan(6); // Maximo colspan
     }
 
     public boolean isIndexed() {

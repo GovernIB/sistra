@@ -1,0 +1,16 @@
+- jquery-imc-comuns.js: llamada ajax ayuda:
+
+	// ajuda
+	$.fn.ajuda = function(opcions) {
+	...
+		onClick = function() {
+	
+				$.ajax({
+					  type: "POST",
+					  url: "activarAyuda.do",
+					  data: { activar: ("on" == ajuda_data)}
+					});
+		}
+		
+		
+- jquery-imc-inicia.js: particularizado 

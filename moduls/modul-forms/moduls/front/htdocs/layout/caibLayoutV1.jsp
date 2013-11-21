@@ -18,19 +18,19 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title><bean:message  bundle="caibMessages" key="main.title"/></title>
-        <link rel="stylesheet" href="<html:rewrite page='<%=pathIconografia + "/css/forms-0.0.2.css"%>'/>" type="text/css" />
+        <link rel="stylesheet" href="<html:rewrite page='<%="/estilo_caib/css/forms-0.0.2.css" %>'/>" type="text/css" />
         <logic:notEmpty name="<%=org.ibit.rol.form.front.Constants.ORGANISMO_INFO_KEY%>" property="urlCssCustom">
 			<link href="<bean:write name="<%=org.ibit.rol.form.front.Constants.ORGANISMO_INFO_KEY%>" property="urlCssCustom" />" rel="stylesheet" type="text/css" />
 		</logic:notEmpty>
-        <script type="text/javascript" src="<html:rewrite page='<%="/js/MM_functions" + sufijoFuncionamiento + ".js"%>'/>"></script>
-        <script type="text/javascript" src="<html:rewrite page='<%="/js/iframe_functions" + sufijoFuncionamiento + ".js"%>'/>"></script>
+        <script type="text/javascript" src="<html:rewrite page='<%="/js/v1/MM_functions.js"%>'/>"></script>
+        <script type="text/javascript" src="<html:rewrite page='<%="/js/v1/iframe_functions.js"%>'/>"></script>
 
 <bean:define id="urlLog" type="java.lang.String">
         <html:rewrite page="/logScript.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
 
         <!--  Uso treeview -->	
-		<script src="<html:rewrite page='/js/jsTree.js'/>"></script>	
+		<script src="<html:rewrite page='/js/v1/jsTree.js'/>"></script>	
 
         <script type="text/javascript">
         <!--
