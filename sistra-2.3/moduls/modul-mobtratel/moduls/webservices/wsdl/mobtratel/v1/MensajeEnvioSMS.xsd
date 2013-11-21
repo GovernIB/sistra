@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:es:caib:mobtratel:ws:v1:model:MensajeEnvioSMS" targetNamespace="urn:es:caib:mobtratel:ws:v1:model:MensajeEnvioSMS" version="1.0">
+	<xs:complexType name="MensajeEnvioSMS">
+		<xs:sequence>
+			<xs:element name="destinatarios" type="xs:string" maxOccurs="unbounded"/>
+			<xs:element name="texto" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MensajesEnvioSMS">
+		<xs:sequence>
+			<xs:element name="mensajes" type="tns:MensajeEnvioSMS" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

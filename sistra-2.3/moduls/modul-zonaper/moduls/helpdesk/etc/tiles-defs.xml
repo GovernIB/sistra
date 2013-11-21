@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+
+    <definition
+        name=".mainLayout"
+        path="/layout/mainLayout.jsp">
+        <put name="header" value="/moduls/header.jsp"/>
+        <put name="tabs" value="/moduls/tabs.jsp"/>
+        <put name="main" value=".formularioBusquedaClave"/>
+        <put name="footer" value="/moduls/footer.jsp"/>
+    </definition>
+
+  	<definition
+   		name=".auditoriaTramitacion"
+   		extends=".mainLayout">	
+   		<put name="main" value=".formularioBusqueda"/>
+	</definition>    
+        
+
+    <definition
+    	name=".formularioBusqueda"
+    	path="/formularioBusqueda.jsp" 
+    	controller="es.caib.zonaper.helpdesk.front.controller.FormularioBusquedaController"/>
+    	
+    <definition
+    	name=".busqueda"
+    	extends=".mainLayout">	
+    	<put name="main" value=".resultadoBusqueda"/>
+   	</definition>
+   	
+   	<definition
+    	name=".resultadoBusqueda"
+    	path="/resultadoBusqueda.jsp" />
+
+    
+  	<definition
+   		name=".claveTramitacion"
+   		extends=".mainLayout">	
+   		<put name="main" value=".formularioBusquedaClave"/>
+	</definition>    
+        
+    <definition
+    	name=".formularioBusquedaClave"
+    	path="/formularioBusquedaClave.jsp" 
+    	controller="es.caib.zonaper.helpdesk.front.controller.FormularioBusquedaController"/>
+    	
+    <definition
+    	name=".busquedaClave"
+    	extends=".mainLayout">	
+    	<put name="main" value=".resultadoBusquedaClave"/>
+   	</definition>
+   	
+   	<definition
+    	name=".resultadoBusquedaClave"
+    	path="/resultadoBusquedaClave.jsp" />
+
+  	<definition
+   		name=".estadoTramite"
+   		extends=".mainLayout">	
+   		<put name="main" value=".formularioEstadoTramite"/>
+	</definition>    
+        
+    <definition
+    	name=".formularioEstadoTramite"
+    	path="/formularioBusquedaEstadoTramite.jsp" 
+    	controller="es.caib.zonaper.helpdesk.front.controller.FormularioBusquedaController"/>
+    	
+    <definition
+    	name=".busquedaEstadoTramite"
+    	extends=".mainLayout">	
+    	<put name="main" value=".resultadoBusquedaEstadoTramite"/>
+   	</definition>
+   	
+   	<definition
+    	name=".resultadoBusquedaEstadoTramite"
+    	path="/resultadoBusquedaEstadoTramite.jsp" />
+
+    <definition
+    	name=".mensaje"
+    	extends=".mainLayout"
+    	controller="es.caib.zonaper.helpdesk.front.controller.MessageController">	
+    	<put name="main" value="/moduls/mensaje.jsp"/>
+   	</definition>
+
+  	<definition
+   		name=".pagosTelematicos"
+   		extends=".mainLayout">	
+   		<put name="main" value=".formularioPagosTelematicos"/>
+	</definition>    
+        
+    <definition
+    	name=".formularioPagosTelematicos"
+    	path="/formularioBusquedaPagosTelematicos.jsp" 
+    	controller="es.caib.zonaper.helpdesk.front.controller.FormularioBusquedaController"/>
+    	
+    <definition
+    	name=".busquedaPagosTelematicos"
+    	extends=".mainLayout">	
+    	<put name="main" value=".resultadoBusquedaPagosTelematicos"/>
+   	</definition>
+   	
+   	<definition
+    	name=".resultadoBusquedaPagosTelematicos"
+    	path="/resultadoBusquedaPagosTelematicos.jsp" />
+    	
+    <definition
+   		name=".detalle"
+   		extends=".mainLayout">	
+   		<put name="main" value=".detallePago"/>
+	</definition>	
+    
+    <definition
+    	name=".detallePago"
+    	path="/detallePago.jsp" />
+    	
+
+    
+    <definition
+   		name=".usuarios"
+   		extends=".mainLayout">	
+   		<put name="main" value=".formularioBusquedaUsuario"/>
+	</definition>    
+        
+    <definition
+    	name=".formularioBusquedaUsuario"
+    	path="/formularioBusquedaUsuario.jsp" />
+    	
+    <definition
+    	name=".busquedaUsuario"
+    	extends=".mainLayout">	
+    	<put name="main" value=".resultadoBusquedaUsuario"/>
+   	</definition>
+   	
+   	<definition
+    	name=".resultadoBusquedaUsuario"
+    	path="/resultadoBusquedaUsuario.jsp" />
+    	
+
+	<definition
+   		name=".backup"
+   		extends=".mainLayout">	
+   		<put name="main" value=".formularioBusquedaBackup"/>
+	</definition>    
+
+    <definition
+    	name=".formularioBusquedaBackup"
+    	path="/formularioBusquedaBackup.jsp" />
+    	
+    <definition
+    	name=".busquedaTramitesBackup"
+    	extends=".mainLayout">	
+    	<put name="main" value=".resultadoBusquedaBackup"/>
+   	</definition>
+   	
+   	<definition
+    	name=".resultadoBusquedaBackup"
+    	path="/resultadoBusquedaBackup.jsp" />
+
+	<definition
+    	name=".detalleTramitesBackup" extends=".mainLayout">
+   		<put name="main" value="/detalleTramite.jsp"/>
+	</definition>	
+	
+	<definition
+   		name=".preregistro"
+   		extends=".mainLayout">	
+   		<put name="main" value=".formularioBusquedaPreregistro"/>
+	</definition>    
+
+    <definition
+    	name=".formularioBusquedaPreregistro"
+    	path="/formularioBusquedaPreregistro.jsp"
+    	controller="es.caib.zonaper.helpdesk.front.controller.FormularioBusquedaController" />
+    	
+    <definition
+    	name=".busquedaTramitesPreregistro"
+    	extends=".mainLayout">	
+    	<put name="main" value=".resultadoBusquedaPreregistro"/>
+   	</definition>
+   	
+   	<definition
+    	name=".resultadoBusquedaPreregistro"
+    	path="/resultadoBusquedaPreregistro.jsp" />
+
+	<definition
+    	name=".detalleTramitesPreregistro" extends=".mainLayout">
+   		<put name="main" value="/detalleTramitePreregistro.jsp"/>
+	</definition>
+	
+	<definition name=".error" extends=".mensaje"/>
+     
+</tiles-definitions>
+

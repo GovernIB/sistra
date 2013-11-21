@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ca" lang="ca">
+
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>[#TEXTO.AVISOTRAMITACION#] - [#ORGANISMO.NOMBRE#]</title>
+	
+	<!-- css -->
+	<style type="text/css">
+	<!--
+		#contenidor { width:90%; font:normal 80% 'TrebuchetMS', 'Trebuchet MS', Arial, Helvetica, sans-serif; color:#000; margin:1em auto; background-color:#fff; }
+		#cap { font-size:1.2em; font-weight:bold; text-align:center; margin-bottom:1em; }
+		#continguts { padding:1em 2em; border:1em solid #f2f2f2; }
+		#continguts h1 { font-size:1.4em; margin-top:0; margin-bottom:1em; }
+		#continguts table { margin-bottom:1.5em; border:0; empty-cells:hide; border-collapse:collapse; }
+		#continguts table th { float:left; width:10em; font-size:1.1em; font-variant:small-caps; font-weight:normal; text-align:right; padding-right:.8em; }
+		#continguts table td { font-weight:bold; padding-bottom:.5em; }
+		#continguts h2 { font-size:1.1em; margin:.8em 0; }
+		#continguts p { margin:.8em 0; }
+		#contenidor p.peu { margin:1.5em 0; padding:1em; border:1px solid #ccc; }
+		#contenidor div.accedir { padding:1em; background-color:#f7f7f7; }
+		#contenidor a.accedirCertificado { display:block; font-size:1.5em; text-align:center; padding:1em; background-color:#f7f7f7; }
+		#contenidor a.accedirClave { display:block; font-size:1.5em; text-align:center; padding:1em; background-color:#f7f7f7; }	
+		#contenidor p.auto { margin:1.5em 0; padding:1em;  font-size:0.9em; font-style: italic;}
+	-->
+	</style>
+	<!-- /css -->
+	
+</head>
+
+<body>
+
+	<!-- contenidor -->
+	<div id="contenidor">
+	
+		<!-- logo illes balears -->
+		<div id="cap">
+			<img src="[#ORGANISMO.LOGO#]" alt="[#ORGANISMO.NOMBRE#]" />
+		</div>
+		<!-- /logo illes balears -->
+		
+		<!-- continguts -->
+	  <div id="continguts">
+		
+			<!-- titol -->
+			<h1>
+				[#TEXTO.AVISONOTIFICACION#]
+			</h1>
+			<!-- /titol -->
+			
+			<table>
+				<tbody>
+					<tr>
+						<th>[#TEXTO.DESTINATARIO#]:</th>
+						<td>[#DESTINATARIO#]</td>
+					</tr>
+					<tr>
+						<th>[#TEXTO.ORGANO#]:</th>
+						<td>[#UNIDAD_ADMINISTRATIVA#]</td>
+					</tr>
+					<tr>
+						<th>[#TEXTO.EXPEDIENTE#]:</th>
+						<td>[#EXPEDIENTE#]</td>
+					</tr>
+					<tr>
+						<th>[#TEXTO.FECHAAVISO#]:</th>
+						<td>[#FECHA#]</td>
+					</tr>
+					<tr>
+						<th>[#TEXTO.ASUNTO#]:</th>
+						<td>[#TITULO#]</td>
+					</tr>
+					<tr>
+						<th>[#TEXTO.DESCRIPCION#]:</th>
+						<td>[#TEXTO#]</td>
+					</tr>
+				</tbody>			
+			</table>
+			
+			
+			[#IF.CERTIFICADO#]
+			<div class="accedir">
+				[#TEXTO.ACCEDER#]
+				<br/>
+				<div>
+					<a href="[#URL_ACCESO_CERTIFICADO#]" class="accedirCertificado">[#TEXTO.ACCEDERCERTIFICADO#]</a>
+				</div>												
+			</div>
+			[#IF.CERTIFICADO#]
+			
+			[#IF.CLAVE#]
+			<div class="accedir">
+				[#TEXTO.ACCEDER#]
+				<br/>
+				<div>
+					<a href="[#URL_ACCESO_CLAVE#]" class="accedirClave">[#TEXTO.ACCEDERCLAVE#]</a>
+				</div>									
+			</div>
+			[#IF.CLAVE#]
+			
+			[#IF.CERTIFICADOCLAVE#]
+			<div class="accedir">
+				[#TEXTO.ACCEDER#]
+				<br/>
+				<div>
+					<a href="[#URL_ACCESO_CERTIFICADO#]" class="accedirCertificado">[#TEXTO.ACCEDERCERTIFICADO#]</a>
+				</div>
+				<div>
+					<a href="[#URL_ACCESO_CLAVE#]" class="accedirClave">[#TEXTO.ACCEDERCLAVE#]</a>
+				</div>									
+			</div>
+			[#IF.CERTIFICADOCLAVE#]
+			
+		    <p>[#NOTA_LEGAL#]</p>
+			
+	  </div>
+		<!-- /continguts -->
+		
+		<!--  URL SOPORTE  -->
+		<p class="peu">
+			[#TEXTO.SOPORTE#]
+		</p>
+		
+		<p class="auto">[#TEXTO.AUTO#]</p>
+		
+	</div>
+	<!-- /contenidor -->
+
+</body>
+</html>

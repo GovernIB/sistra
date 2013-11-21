@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:es:caib:regtel:ws:v1:model:ReferenciaRDS" targetNamespace="urn:es:caib:regtel:ws:v1:model:ReferenciaRDS" version="1.0">
+	<xs:complexType name="ReferenciaRDS">
+		<xs:sequence>
+			<xs:element name="codigo" type="xs:long"/>
+			<xs:element name="clave" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ReferenciasRDS">
+		<xs:sequence>
+			<xs:element name="referenciasRDS" type="tns:ReferenciaRDS" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AnexoItem">
+		<xs:sequence>
+			<xs:element name="identificador_documento" type="xs:string"/>
+			<xs:element name="referenciaRDS" type="tns:ReferenciaRDS"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AnexosMap">
+		<xs:sequence>
+			<xs:element name="anexos" type="tns:AnexoItem" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ReferenciaRDSAsientoRegistral">
+		<xs:sequence>
+			<xs:element name="asientoRegistral" type="tns:ReferenciaRDS"/>
+			<xs:element name="anexos" type="tns:AnexosMap"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
