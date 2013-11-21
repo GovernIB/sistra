@@ -31,15 +31,4 @@ public class PluginPagosMock implements PluginPagosIntf{
 		return DelegatePagosUtil.getPagosDelegate().consultarImporteTasa(idTasa);
 	}
 
-	public SesionPago iniciarSesionPagoDiferido(DatosPago[] datosPago,
-			SesionSistra sesionSistra) throws Exception {
-		throw new Exception("Metodo no soportado");
-	}
-
-	public EstadoSesionPago[] comprobarEstadoSesionPagoDiferido(
-			String localizador) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

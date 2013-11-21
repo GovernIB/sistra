@@ -42,7 +42,7 @@
         	<include name="*.jar" />
         </fileset>
         <fileset dir="${web.product}">
-            <include name="6-form-model.jar" />
+            <include name="6-model.jar" />
             <include name="6-form-persistence.jar" />
         </fileset>
     </path>

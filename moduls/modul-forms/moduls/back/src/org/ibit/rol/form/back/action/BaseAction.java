@@ -8,7 +8,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.Action;
@@ -27,12 +26,9 @@ import org.ibit.rol.form.back.taglib.Constants;
 import org.ibit.rol.form.back.util.ComponenteConfig;
 import org.ibit.rol.form.back.util.FormularioConfig;
 import org.ibit.rol.form.model.Archivo;
-import org.ibit.rol.form.model.Campo;
-import org.ibit.rol.form.model.CheckBox;
 import org.ibit.rol.form.model.Componente;
 import org.ibit.rol.form.model.Formulario;
 import org.ibit.rol.form.model.FormularioSeguro;
-import org.ibit.rol.form.model.ListaElementos;
 import org.ibit.rol.form.model.Pantalla;
 import org.ibit.rol.form.model.PropiedadSalida;
 import org.ibit.rol.form.model.Salida;
@@ -266,10 +262,7 @@ public abstract class BaseAction extends Action {
         ComponenteForm componenteForm = (ComponenteForm) obtenerActionForm(mapping, request, path);
         componenteForm.setValues((Traducible) componente);
         componenteForm.setIdPantalla(componente.getPantalla().getId());
-        if (componente.getPantalla()!=null && StringUtils.isNotEmpty(componente.getPantalla().getComponenteListaElementos())){
-        	componenteForm.setPantallaDetalle(true);
-        }
-        
+
         resetearNiveles(request);
         HttpSession sesion = request.getSession(true);
         sesion.setAttribute("idComponente", componente.getId());

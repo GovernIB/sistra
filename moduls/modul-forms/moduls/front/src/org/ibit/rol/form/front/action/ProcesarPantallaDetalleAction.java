@@ -12,7 +12,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.ibit.rol.form.front.registro.RegistroManager;
-import org.ibit.rol.form.model.Formulario;
 import org.ibit.rol.form.persistence.delegate.InstanciaDelegate;
 import org.ibit.rol.form.persistence.delegate.InstanciaTelematicaDelegate;
 
@@ -24,8 +23,6 @@ import org.ibit.rol.form.persistence.delegate.InstanciaTelematicaDelegate;
  *  scope="request"
  *  validate="true"
  *  input=".verPantalla"
- *  
- *  @struts.action-forward name="success" path=".verPantalla"
  *  
  */
 public class ProcesarPantallaDetalleAction extends BaseAction {
@@ -90,20 +87,10 @@ public class ProcesarPantallaDetalleAction extends BaseAction {
         }
         
         //return mapping.findForward("success");
-        
-        // Si es version 2 la pantalla de elementos se ejecuta en un iframe. La redireccion la hara el iframe.
-        Formulario formulario = delegate.obtenerFormulario();
-        if (formulario.getModoFuncionamiento().getCodigo() >= 2) {
-        	// Version >2: Marcamos atributo para que el iframe redirija
-        	request.setAttribute("listaelementos@retorno", "true");
-            return mapping.findForward("success");
-        } else {
-        	// Version 1: Hacemos redireccion
-        	String urlRetornoPantalla = prepareRedirectInstanciaURL(request, response, request.getAttribute("securePath") + "/ver.do");
-            response.sendRedirect(urlRetornoPantalla);
-            return null;
-        }
-        
+        response.sendRedirect(prepareRedirectInstanciaURL(request, response, request.getAttribute("securePath") + "/ver.do"));
+        // INDRA: PROBLEMA CON FIREFOX??
+        // response.flushBuffer();
+        return null;
     }
 
 }

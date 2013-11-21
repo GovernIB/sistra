@@ -276,61 +276,6 @@ function disableRadio(radio,disabled){
     }    	
 }
 
-// Funcion para simular el readonly en un listbox
-function listboxReadOnly(obj,readonly) { 
- 	
- 	//alert("listboxReadOnly:" + obj.name);
- 	
- 	 // Valores del listbox a mostrar
- 	 var texto = '';
- 	 for (i = 0; i < obj.length; i++) {
-        if (obj.options[i].selected) {
-        	if (i > 0) {
-        		texto += "\n";
-        	}
-        	texto += obj.options[i].text;        	                       
-        }
-     }  
-     
-     // Tamanyo (igual al size del listbox)
-     var altura = obj.size;
-     if (altura <= 0) altura = 1;
-    
-     // Mostramos combo
-     obj.style.display = 'inline'; 	
-     
-     // Id del input a crear
-     idInput =obj.name + "@simulaReadOnly" ;
-     
-     // Eliminamos input creados anteriormente
-     input = document.getElementById(idInput); 
-     if (input != null){    
-		 obj.parentNode.removeChild(input);
-	 }else{
-	 	// alert("input no existe");
-	 }
-     
-     // Creamos input si es readonly
-     if(readonly){		
-        input = document.createElement('textarea');
-        //input.type = "text";
-        input.readOnly = true;
-        input.value = texto;
-        input.rows = altura;
-        input.id = idInput;
-        input.name = idInput;
-        input.style.width = obj.offsetWidth + "px";
-        input.className = 'frmro';
-        
-        // Insertamos input
-        obj.parentNode.insertBefore(input,obj);
-        
-        // Ocultamos combo
-        obj.style.display = 'none';
-      }
- }
-
-
 // Funcion para simular el readonly en un combo
 function comboReadOnly(obj,readonly) { 
  	

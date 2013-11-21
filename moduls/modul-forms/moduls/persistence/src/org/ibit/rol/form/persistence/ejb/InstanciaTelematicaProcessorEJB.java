@@ -579,7 +579,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
             	
                 if (campo.isIndexed()) {
                     /*
-                      Campos indexados   : TreeBox, ListBox, ComboBox, RadioButton.
+                      Campos indexados   : ListBox, ComboBox, RadioButton.
                       Para estos campos hay que tener el cuenta el valor del índice y el valor asociado a ese índice.
                     */
                     if (campo instanceof ListBox || campo instanceof TreeBox) {
@@ -588,7 +588,6 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                         Object[] valoresText  = (Object[]) datosPantalla.get(campo.getNombreLogico() + "_text");
                         
                         // INDRA: COMPROBACION OBLIGATORIO
-                        // INDRA 2013:  NO TIENE EFECTO, YA QUE NO PUEDE ESTABLECERSE SI ES OBLIGATORIO 
                         if (campo.findValidacion("required") != null) {
                         	if (valoresIndex.length == 0) {
                         		log.error("Error generando XML: campo con XPATH " + xPath + " debe contener valor");
@@ -603,8 +602,6 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                             }
                         }                       
                     } else {
-                    	
-                    	// ComboBox, RadioButton
                     	
                     	// INDRA: COMPROBACION OBLIGATORIO
                         if ( 

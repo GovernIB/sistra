@@ -22,10 +22,6 @@
 <html:form action="/back/componente/eleccion" >
 <html:hidden property="idPantalla" />
 <table class="marc">
-	<tr>
-        <td class="label"><bean:message key="componente.seccion" /></td>
-        <td><html:radio styleClass="check" property="tipo" value="seccion" /></td>
-    </tr>
     <tr>
         <td class="label"><bean:message key="componente.label" /></td>
         <td><html:radio styleClass="check" property="tipo" value="label" /></td>

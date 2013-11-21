@@ -53,14 +53,6 @@
 </form-bean>
 
 <form-bean
-    name="seccionForm"
-    type="org.ibit.rol.form.back.form.ComponenteForm"
-    className="org.ibit.rol.form.back.action.TraduccionFormBeanConfig">
-    <set-property property="valuesClassName" value="org.ibit.rol.form.model.Seccion" />
-    <set-property property="traduccionClassName" value="org.ibit.rol.form.model.TraSeccion" />
-</form-bean>
-
-<form-bean
     name="labelForm"
     type="org.ibit.rol.form.back.form.ComponenteForm"
     className="org.ibit.rol.form.back.action.TraduccionFormBeanConfig">

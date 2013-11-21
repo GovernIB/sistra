@@ -6,7 +6,6 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -519,63 +518,6 @@ public class StringUtil {
 	    }
 	    	 
 	    /**
-	     * Serializa list de strings en un string 
-	     * @param list
-	     * @param separador
-	     * @return
-	     * @throws Exception
-	     */
-	    public static String serializarList(List list) throws Exception{
-	    	
-	    	String separador = "#-@";
-	    	
-			if (list == null) return null;		
-			String str="";		
-			boolean primer = true;
-			String value;
-			
-			StringBuffer sb = new StringBuffer(list.size() * 100);
-			
-			for (Iterator it = list.iterator();it.hasNext();){
-				value = (String) it.next();				
-				if (!primer) {
-					//str = str + separador;
-					sb.append(separador);
-				}else{
-					primer = false;
-				}
-				
-				if (value == null) 
-					value ="";	
-				
-				sb.append(str).append(value);
-			}
-			return sb.toString();
-			//return str;
-		}
-	    
-	    /**
-	     * Deserializa list de strings 
-	     * @param listStr
-	     * @return
-	     * @throws Exception
-	     */
-	    public static List deserializarList(String listStr) throws Exception{
-	    	String separador = "#-@";
-	    	if (listStr == null || listStr.length() <= 0) return null;
-	    	List list = new ArrayList();
-			StringTokenizer st = new StringTokenizer(listStr,separador);		
-			String value;
-			while (st.hasMoreElements()){
-				value = (String) st.nextElement();			
-				list.add(value);
-			}
-			return list;
-		}
-	    
-	    
-	    
-	    /**
 	     * Serializa map en un string 
 	     * @param map
 	     * @param separador
@@ -591,7 +533,7 @@ public class StringUtil {
 			boolean primer = true;
 			String name,value;
 			
-			StringBuffer sb = new StringBuffer(map.size() * 100);
+			StringBuffer sb = new StringBuffer(map.size() * 50);
 			
 			for (Iterator it = map.keySet().iterator();it.hasNext();){
 				name = it.next().toString();				
@@ -634,7 +576,6 @@ public class StringUtil {
 			}
 			return map;
 		}
-	    
 	    
 	    /**
 	     * Formatea nombre y apellidos según formato indicado:

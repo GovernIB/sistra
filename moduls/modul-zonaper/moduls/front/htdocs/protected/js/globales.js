@@ -150,14 +150,14 @@ function checkVersionNavegador(errorIE,errorFirefox){
 		}while (!isNaN(aux.charAt(posDecimal)) && posDecimal < aux.length);		
 	}
 		
-	if (browser == "Internet Explorer" && parseFloat( version, 10) < 7 ){
+	if (browser == "Internet Explorer" && parseFloat( version, 10) < 6 ){
 		if (readCookie("avisoVersionExplorador") == null){
 			createCookie("avisoVersionExplorador","avisado",0);
 			alert(errorIE);
 		}
 	}
 	
-	if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
+	if (browser == "Firefox" && parseFloat( version, 10) < 1.5 ){
 		if (readCookie("avisoVersionExplorador") == null){
 			createCookie("avisoVersionExplorador","avisado",0);
 			alert(errorFirefox);

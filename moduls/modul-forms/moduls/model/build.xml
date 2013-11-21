@@ -52,7 +52,7 @@
     <target name="jar.jar" depends="jar.compile">
         <delete file="${jar.product}/6-${modul}.jar" quiet="yes"/>
         <jar
-            jarfile="${jar.product}/6-form-${modul}.jar"
+            jarfile="${jar.product}/6-${modul}.jar"
             basedir="${jar.classes}">
             <manifest>
                 <attribute name="Created-By" value="Fundació IBIT"/>

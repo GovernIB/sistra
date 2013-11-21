@@ -38,7 +38,7 @@
 	</script>
 </logic:equal>		
 
-<!-- DETECCION NAVEGADOR (Compatibles: IE >= 7 , FireFox >= 4)-->
+<!-- DETECCION NAVEGADOR (Compatibles: IE >=6 , FireFox >= 1.5)-->
 <script type="text/javascript">
 <!--
 	var errorIE="<bean:message key="errors.ie.versionminima" />";

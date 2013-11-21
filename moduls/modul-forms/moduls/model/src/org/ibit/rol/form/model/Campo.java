@@ -319,46 +319,4 @@ public abstract class Campo extends Traducible implements Componente {
 	}
     // --- INDRA: PROPS LISTA ELEMENTOS
     
-	
-	// -- INDRA: AÑADIR PROPS MEJORA VISUAL FORMS V3
-	private int colSpan = 1;
-	
-	public int getColSpan () {
-		return colSpan;
-	}
-    
-    public void setColSpan (int pColSpan) {
-    	colSpan = pColSpan;
-    }
-    
-    private boolean sinEtiqueta = false;
-    
-    public boolean isSinEtiqueta() {
-    	return sinEtiqueta;
-    }
-    
-    public void setSinEtiqueta (boolean pSinEtiqueta) {
-    	sinEtiqueta = pSinEtiqueta;
-    }
-    
-    private boolean encuadrar = false;
-    
-    public  boolean isEncuadrar(){
-    	return encuadrar;
-    }
-    
-    public void setEncuadrar (boolean pEncuadrar){
-    	encuadrar = pEncuadrar;
-    }
-        
-    private String alineacion = "I";
-    
-    public String getAlineacion(){
-    	return alineacion;
-    }
-    
-    public void setAlineacion ( String pAlineacion){
-    	alineacion = pAlineacion;
-    }
-	// -- INDRA: AÑADIR PROPS MEJORA VISUAL FORMS V3
 }

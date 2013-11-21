@@ -17,8 +17,8 @@
 <%@ taglib prefix="nested" uri="http://jakarta.apache.org/struts/tags-nested"%>
 <bean:define id="securePath" name="securePath" scope="request"/>
 <html:xhtml/>
-<script src="<html:rewrite page='/js/v0/htmlform.jsp'/>" type="text/javascript"></script>
-<script src="<html:rewrite page='/js/v0/xmlhttp.js'/>" type="text/javascript"></script>
+<script src="<html:rewrite page='/js/htmlform.jsp'/>" type="text/javascript"></script>
+<script src="<html:rewrite page='/js/xmlhttp.js'/>" type="text/javascript"></script>
 <script type="text/javascript">
 <!--
 
@@ -401,7 +401,7 @@ function unsetAyuda() {
     <nested:iterate id="comp" name="pantalla" property="componentes" indexId="ind" >
         <logic:greaterThan name="ind" value="0">
             <logic:equal name="comp" property="posicion" value="0"></p><p></logic:equal>
-            <logic:notEqual name="comp" property="posicion" value="0">&nbsp;</logic:notEqual>
+            <logic:equal name="comp" property="posicion" value="1">&nbsp;</logic:equal>
         </logic:greaterThan>
         <% if (comp instanceof Campo) { %>
         <span onmouseover="setAyuda(<%=ind%>)" style="<%=((Campo)comp).isOculto()?"display: none;":""%>">
