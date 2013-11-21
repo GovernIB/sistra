@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class name="es.caib.zonaper.model.EventoExpediente" table="ZPE_HISTEX">
+	 <cache usage="read-write"/>	
+     <id name="codigo" unsaved-value="null" column="HIE_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">ZPE_SEQHIE</param>
+          </generator>
+      </id>
+			
+	<property name="fecha" column="HIE_FECEVE" not-null="true"/>
+	<property name="fechaConsulta" column="HIE_FECCON" not-null="false"/>
+	<property name="titulo" column="HIE_TITULO" not-null="true" length="500"/>
+	<property name="texto" column="HIE_TEXTO" not-null="true" length="4000"/>
+	<property name="textoSMS" column="HIE_TXTSMS" length="255"/>	
+	<property name="enlaceConsulta" column="HIE_ENLCON" not-null="false" length="512"/>
+    <property name="usuarioSeycon"  column="HIE_USER"  not-null="true" length="1536"/>
+    <property name="identificadorPersistencia" column="HIE_IDEPER" not-null="false"/>
+	<property name="accesiblePorClave" column="HIE_ACCCLA" not-null="false"/>
+	   
+	<set name="documentos" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="DHE_ORDEN">
+		<cache usage="read-write"/>
+	    <key column="DHE_CODHIE"/>
+        <one-to-many class="es.caib.zonaper.model.DocumentoEventoExpediente"/>
+	</set>
+	
+</class>
+</hibernate-mapping>

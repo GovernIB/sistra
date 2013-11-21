@@ -1,0 +1,132 @@
+<p align="center"><strong><em>Para poder modificar una versi&oacute;n de un tr&aacute;mite 
+  previamente hay que Bloquear la versi&oacute;n.</em></strong></p>
+ 
+<table width="100%" border="1">
+  <tr> 
+    <td width="22%"><div align="center"><strong>Campo</strong></div></td>
+    <td width="78%"><div align="center"><strong>Descripci&oacute;n</strong></div></td>
+  </tr>
+  <tr> 
+    <td>Versi&oacute;n</td>
+    <td>Versi&oacute;n del tr&aacute;mite</td>
+  </tr>
+  <tr> 
+    <td>Motivo</td>
+    <td>Motivo que genera el cambio de versi&oacute;n para control interno.</td>
+  </tr>
+  <tr> 
+    <td>Tag cuaderno de carga</td>
+    <td>Tag que permite verificar al desarrollador la versión puesta en producción.</td>
+  </tr>
+  <tr> 
+    <td>Fecha exportación trámite</td>
+    <td>Fecha en la que se exportó el xml del trámite con el cual ha sido importado. Sirve para identificar que xml ha sido utilizado para importar un trámite.</td>
+  </tr>
+  <tr> 
+    <td>Plazo presentaci&oacute;n</td>
+    <td>En caso de que el tr&aacute;mite disponga de plazo de presentaci&oacute;n 
+      se puede especificar dicho plazo</td>
+  </tr>  
+  <tr> 
+    <td>Idiomas</td>
+    <td>Se indica la lista de idiomas soportados para el tr&aacute;mite. Al modificar 
+      cualquier elemento de la versi&oacute;n que requiera traducci&oacute;n se 
+      solicitar&aacute; que se introduzca la traducci&oacute;n para estos idiomas.</td>
+  </tr>
+  <tr> 
+    <td>Debe firmarse</td>
+    <td>Indica que el tr&aacute;mite debe firmarse en el paso de Enviar. Si el 
+      usuario no dispone de certificado digital el tipo de tramitaci&oacute;n 
+      ser&aacute; presencial. El tr&aacute;mite deber&aacute; firmarse por el 
+      representante.
+      <br/>
+      En caso de que se acceda en forma delegada deber&aacute; firmarse 
+      por un delegado que tenga permiso para enviar tr&aacute;mites en nombre de la entidad.</td>
+  </tr>
+  <tr> 
+    <td>Circuito reducido</td>
+    <td>Para tr&aacute;mites que s&oacute;lo tengan un formulario y no requieran 
+      firma puede habilitarse el esquema reducido que reduce el n&uacute;mero 
+      de pantallas.</td>
+  </tr>
+  <tr>
+    <td>Ir directo a url fin</td>
+    <td>Para tr&aacute;mites con circuito reducido pasa a la url de finalizaci&oacute;n sin pasar por el paso de justificante </td>
+  </tr>
+  <tr>
+    <td>Autenticaci&oacute;n an&oacute;nima por defecto</td>
+    <td>Si el tr&aacute;mite tiene activado el nivel an&oacute;nimo y otros niveles se puede indicar que si se accede al tr&aacute;mite y no se esta autenticado, se autentique autom&aacute;ticamente por defecto de forma an&oacute;nima</td>
+  </tr>
+   <tr>
+    <td>Registro automn&aacute;tico</td>
+    <td>Al acceder al paso de registrar se realizar&aacute; autom&aacute;ticamente el env&iacute;o.</td>
+  </tr>
+  <tr> 
+    <td>Destino del tr&aacute;mite</td>
+    <td>Indica destino del tr&aacute;mite:<br>
+      - Registro: pasa por registro de entrada (y posteriormente a la bandeja)<br>
+      - Bandeja: va directo a la bandeja (sin pasar por registro de entrada). Para destino Bandeja se puede habilitar la confirmaci&oacute;n autom&aacute;tica: los preenvios se confirman autom&aacute;ticamente tras su env&iacute;o (es decir, no necesitan ser confirmados en el punto de registro) y pasan a la Bandeja.<br>
+      - Consulta: tr&aacute;mites que realizan una consulta y obtengan como resultado 
+      uno o m&aacute;s documentos. (estos tr&aacute;mites no realizan entrada 
+      en bandeja y s&oacute;lo permiten tener formularios)<br>
+      - Asistent: tr&agrave;mits que utilitzen la plataforma per a rellenar els formularis per després presentarlos presencialment. (aquests tr&agrave;mits no realitzen entrada en 
+      safata i nom&eacute;s permeten tenir formularis)</td>
+  </tr>
+  <tr> 
+    <td>Organo destino</td>
+    <td>Organo al que va dirigido el tr&aacute;mite. La lista de servicios destino es proporcionada por el registro del organismo.
+    </td>
+  </tr>
+  <tr> 
+    <td>Unidad administrativa</td>
+    <td>Unidad Administrativa responsable tr&aacute;mite. La lista de unidades administrativas se establece mediante
+    los dominios que establecen la estructura orgánica del organismo (GESACUNADM y GESACARBUA)</td>
+  </tr>
+  <tr> 
+    <td>Oficina Registro</td>
+    <td>Oficina de registro d&oacute;nde se realizar&aacute; el apunte registral. 
+    	La lista de oficinas de registro es proporcionada por el registro del organismo. 
+    	Para tr&aacute;mites que no pasan por registro puede tomar cualquier valor.</td>
+  </tr>
+  <tr> 
+    <td>Tipo Asunto</td>
+    <td>Tipo de asunto del apunte registral. 
+    	La lista de oficinas de registro es proporcionada por el registro del organismo. 
+    	Para tr&aacute;mites que no pasan por registro puede tomar cualquier valor.</td>
+  </tr>
+  <tr> 
+    <td>Tipo de acceso</td>
+    <td>Para un tr&aacute;mite de tipo consulta indica si se accede al Backoffice mediante EJB o Webservice</td>
+  </tr>
+  <tr> 
+    <td>Url acceso</td>
+    <td>Indica la url de acceso (necesaria en caso de ser webservice o EJB remoto)<br/>
+      Al formar la url se puede emplear la variable @backoffice.url@, que ser&aacute; sustituida por seg&uacute;n el valor indicado en los ficheros de configuraci&oacute;n</td>
+  </tr>
+  <tr> 
+    <td>EJB de Consulta</td>
+    <td>Cuando el tipo de acceso es EJB indica el JNDI de un EJB que implemente el interfaz de destino 
+      de consulta que devuelva los documentos de respuesta.</td>
+  </tr>
+  <tr> 
+    <td height="42">Localitzaci&oacute;n EJB</td>
+    <td>Indica si el EJB es local o remoto (ubicado en diferente servidor de aplicaciones)</td>
+  </tr>
+  <tr> 
+    <td height="42">Autenticaci&oacute;n expl&iacute;cita</td>
+    <td>Indica si para acceder al EJB/Webservice se debe realizar una autenticaci&oacute;n 
+      expl&iacute;cita (acceso con usuario diferente al que ha iniciado la sesi&oacute;n 
+      de tramitaci&oacute;n):
+      	<ul>
+      		<li>No: el contenedor de EJB ser&aacute; el encargado de trasladar la autenticaci&oacute;n (no v&aacute;lido para webservices)</li>
+      		<li>Con usuario/password: se utiliza el usuario/password indicado para autenticar la llamada</li>
+	      	<li>Autenticaci&oacute;n organismo : se utiliza el usuario/password suministrado por el plugin de autenticaci&oacute;n expl&iacute;ta del organismo para autenticar la llamada</li>
+      	</ul>      
+      </td>
+  </tr>
+  <tr>
+    <td height="42">Usuario/Password</td>
+    <td>En caso de requerir una autenticaci&oacute;n expl&iacute;cita se indica 
+      el usuario/password con la que se realiza</td>
+  </tr>
+</table>

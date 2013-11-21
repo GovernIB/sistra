@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:es:caib:regtel:ws:v2:model:DatosRepresentado" targetNamespace="urn:es:caib:regtel:ws:v2:model:DatosRepresentado" version="1.0">
+	<xs:complexType name="DatosRepresentado">
+		<xs:sequence>
+			<xs:element name="nif" type="xs:string"/>
+			<xs:element name="nombreApellidos" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

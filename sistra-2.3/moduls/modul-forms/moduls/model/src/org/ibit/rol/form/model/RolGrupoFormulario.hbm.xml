@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="org.ibit.rol.form.model.RolGrupoFormulario" table="RFR_GRPFOR">
+        <cache usage="read-write"/>
+       	<composite-id name="id" class="org.ibit.rol.form.model.RolGrupoFormularioId" >
+            <key-property name="codiGrup" type="string">
+                <column name="GRF_CODGRP" />
+            </key-property>
+            <key-property name="codiForm" type="java.lang.Long">
+                <column name="GRF_CODFOR" />
+            </key-property>
+        </composite-id>
+    </class>
+
+</hibernate-mapping>
+

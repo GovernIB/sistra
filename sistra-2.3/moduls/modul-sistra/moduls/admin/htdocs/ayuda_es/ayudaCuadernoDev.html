@@ -1,0 +1,51 @@
+<!-- p align="center"><strong><em></em></strong></p -->
+<p align="left">Desde esta pantalla podrá dar de alta cuadernos de carga. Además se podrán adjuntar nuevos ficheros al cuaderno, así consultar y descargar cada uno de los ficheros que componen el cuaderno.</p> 
+<p align="left">
+Se podrá modificar el cuaderno y dar de alta nuevos ficheros cuando el cuaderno se encuentre en estado <b>Pendiente de envio</b>.
+</p>
+<p align="left">
+Cuando se adjuntes ficheros de importación de trámites, dominios o formularios, el nombre de dichos ficheros deberán cumplir el siguiente formato:
+<li>dominio-[ID_DOMINIO].xml Para ficheros de importación de dominios</li>
+<li>tramite-[ID_TRAMITE]-[VERSION_TRAMITE].xml Para ficheros de importación de trámites</li>
+<li>form-[MODELO_FORM].xml Para ficheros de importación de formularios</li>
+</p>
+<p align="left">
+Cuando un cuaderno ha sido dado de alta, se puede enviar a auditar desde el listado, tras lo cual pasará al estado <b>Pendiente auditar</b> si requiere auditoría o <b>No requiere auditoría</b> si los ficheros que conforman el cuaderno de carga no contienen ningún script o dominio que deban ser auditados.
+</p>
+<p align="left">
+Cuando un cuaderno haya sido auditado, y por tanto se encuentre en estado <b>Auditoría aceptada</b>, se podrá marcar como importado con lo cual el cuaderno pasará a la lista de cuadernos finalizados.
+</p>
+<table width="100%" border="1">
+  <tr> 
+    <td width="22%"><div align="center"><strong>Campo</strong></div></td>
+    <td width="78%"><div align="center"><strong>Descripci&oacute;n</strong></div></td>
+  </tr>
+  <tr> 
+    <td>Descripción</td>
+    <td>Descripción del cuaderno de carga.</td>
+  </tr>
+  <tr> 
+    <td>Fecha de alta</td>
+    <td>Fecha en la que se ha dado de alta el cuaderno.</td>
+  </tr>  
+  <tr> 
+    <td>Fecha de carga</td>
+    <td>Fecha en la que se ha previsto realizar la carga de los elementos del cuaderno.</td>
+  </tr>
+  <tr> 
+    <td>Estado auditoría</td>
+    <td>Estado de la auditoría. Puede tener los siguientes valores : Pendiente envío,Pendiente auditar,No requiere auditoría,Auditoría aceptada,Auditoría rechazada</td>
+  </tr>    
+  <tr> 
+    <td>Fecha auditoría</td>
+    <td>Fecha en que se ha auditado el cuaderno.</td>
+  </tr>
+  <tr> 
+    <td>Comentario auditoría</td>
+    <td>Comentario de auditoría por parte del auditor.</td>
+  </tr>
+  <tr> 
+    <td>Importado</td>
+    <td>Indica si se ha importado el trámite o no.</td>
+  </tr>      
+</table>

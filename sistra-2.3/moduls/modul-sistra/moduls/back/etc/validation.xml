@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE form-validation PUBLIC
+          "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.0//EN"
+          "http://jakarta.apache.org/commons/dtds/validator_1_0.dtd">
+
+<form-validation>
+
+    <formset>
+		<form name="organoForm">
+			<field property="values.descripcion" depends="required" page="1">
+                <arg0 key="organo.descripcion" />
+            </field>
+		</form>
+		<form name="gestorFormulariosForm">
+			<field property="values.identificador" depends="required" page="1">
+                <arg0 key="gestorFormularios.identificador" />
+            </field>
+            <field property="values.descripcion" depends="required" page="1">
+                <arg0 key="gestorFormularios.descripcion" />
+            </field>
+            <field property="values.urlGestor" depends="required" page="1">
+                <arg0 key="gestorFormularios.urlGestor" />
+            </field>
+            <field property="values.urlTramitacionFormulario" depends="required" page="1">
+                <arg0 key="gestorFormularios.urlTramitacion" />
+            </field>
+            <field property="values.urlRedireccionFormulario" depends="required" page="1">
+                <arg0 key="gestorFormularios.urlRedireccion" />
+            </field>
+		</form>
+		
+		<form name="dominioForm">
+			<field property="values.identificador" depends="required" page="1">
+                <arg0 key="dominio.identificador" />
+            </field>
+			<field property="values.descripcion" depends="required" page="1">
+                <arg0 key="dominio.descripcion" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>100</var-value>
+                </var>                
+            </field>            
+   			<field property="values.tipo" depends="required" page="1">
+                <arg0 key="dominio.tipo" />
+            </field>
+  			<field property="values.sql" depends="maxlength" page="1">
+                <arg0 key="dominio.sql" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>4000</var-value>
+                </var>
+            </field>
+		</form>
+		
+		<form name="mensajePlataformaForm">
+			<field property="values.activo" depends="required" page="1">
+                <arg0 key="mensajePlataforma.activo" />
+            </field>           
+		</form>
+		
+		<form name="tramiteForm">
+			<field property="values.identificador" depends="required" page="1">
+                <arg0 key="tramite.identificador" />
+            </field>
+            <field property="traduccion.descripcion" depends="required" page="1">
+                <arg0 key="tramite.descripcion" />
+            </field>
+		</form>
+		
+		<form name="tramiteVersionForm">
+	    	<field property="values.version" depends="required,mask" page="1">
+                <arg0 key="tramiteVersion.version" />
+                <var>
+                    <var-name>mask</var-name>
+                    <var-value>^\d{1,2}$</var-value>
+                </var>
+            </field>
+            <field property="values.organoDestino" depends="required" page="1">
+                <arg0 key="tramiteVersion.organoDestino" />
+            </field>
+            <field property="values.unidadAdministrativa" depends="required,mask" page="1">
+                <arg0 key="tramiteVersion.unidadAdministrativa" />
+                <var>
+                    <var-name>mask</var-name>
+                    <var-value>^\d{1,19}$</var-value>
+                </var>
+            </field>
+            <field property="idiomas" depends="required" page="1">
+                <arg0 key="tramiteVersion.idiomas" />
+            </field>
+            <field property="values.registroOficina" depends="required" page="1">
+                <arg0 key="tramiteVersion.registroOficina" />
+            </field>
+            <field property="values.registroAsunto" depends="required" page="1">
+                <arg0 key="tramiteVersion.registroAsunto" />
+            </field>            
+            <field property="values.destino" depends="required" page="1">
+                <arg0 key="tramiteVersion.destino" />
+            </field>
+            <field property="values.firmar" depends="required" page="1">
+                <arg0 key="tramiteVersion.firmar" />
+            </field>
+            <field property="values.motivo" depends="maxlength" page="1">
+                <arg0 key="tramiteVersion.motivo" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>500</var-value>
+                </var>
+            </field>
+            
+            <field property="inicioPlazo" depends="mask" page="1">
+                <arg0 key="tramiteVersion.inicioPlazo" />
+                <var>
+                    <var-name>mask</var-name>
+                    <var-value>^\d{1,2}\/\d{1,2}\/\d{4}\s\d{1,2}\:\d{1,2}\:\d{1,2}$</var-value>
+                </var>
+            </field>
+            <field property="finPlazo" depends="mask" page="1">
+                <arg0 key="tramiteVersion.finPlazo" />
+                <var>
+                    <var-name>mask</var-name>
+                    <var-value>^\d{1,2}\/\d{1,2}\/\d{4}\s\d{1,2}\:\d{1,2}\:\d{1,2}$</var-value>
+                </var>
+            </field>
+            <field property="values.consultaEJB" depends="maxlength" page="1">
+                <arg0 key="tramiteVersion.consultaEJB" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>500</var-value>
+                </var>
+            </field>
+            <field property="values.consultaUrl" depends="maxlength" page="1">
+                <arg0 key="tramiteVersion.consultaUrl" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>500</var-value>
+                </var>
+            </field>
+            
+	    </form>
+	    
+	    <form name="especificacionesGenericasForm">
+	     	<field property="values.activo" depends="required" page="1">
+                <arg0 key="especificacionesTramite.activo" />
+            </field>
+            <field property="values.diasPersistencia" depends="mask" page="1">
+                <arg0 key="especificacionesTramite.diasPersistencia" />
+                <var>
+                    <var-name>mask</var-name>
+                    <var-value>^\d{1,2}$</var-value>
+                </var>
+            </field>
+            <field property="values.diasPrerregistro" depends="mask" page="1">
+                <arg0 key="especificacionesTramite.diasPrerregistro" />
+                <var>
+                    <var-name>mask</var-name>
+                    <var-value>^\d{1,3}$</var-value>
+                </var>
+            </field>
+            <!-- 
+            <field property="values.campoCodigoProvincia" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.campoCodigoProvincia" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>500</var-value>
+                </var>
+            </field>
+            <field property="values.campoCodigoLocalidad" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.campoCodigoLocalidad" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>500</var-value>
+                </var>
+            </field>
+            <field property="values.campoRteNif" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.campoRteNif" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>500</var-value>
+                </var>
+            </field>
+            <field property="values.campoRteNom" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.campoRteNom" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>500</var-value>
+                </var>
+            </field>
+            <field property="values.campoRdoNif" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.campoRdoNif" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>500</var-value>
+                </var>
+            </field>
+            <field property="values.campoRdoNom" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.campoRdoNom" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>500</var-value>
+                </var>
+            </field>
+             -->
+             
+             <!--  SE HAN PASADO A BLOB: QUITAMOS RESTRICCION TAMAÑO
+			<field property="traduccion.instruccionesInicio" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.instruccionesInicio" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>4000</var-value>
+                </var>
+            </field>
+   			<field property="traduccion.instruccionesInicio2" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.instruccionesInicio2" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>4000</var-value>
+                </var>
+            </field>
+            <field property="traduccion.mensajeInactivo" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.mensajeInactivo" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>4000</var-value>
+                </var>
+            </field>
+            <field property="traduccion.instruccionesFin" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.instruccionesFin" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>4000</var-value>
+                </var>
+            </field>
+            <field property="traduccion.instruccionesEntrega" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.instruccionesEntrega" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>4000</var-value>
+                </var>
+            </field>            
+             -->
+             
+             
+	    </form>
+	    
+	    
+	    <form name="tramiteNivelForm">
+	    	<field property="nivelesAutenticacionSelected" depends="required" page="1">
+                <arg0 key="tramiteNivel.nivelAutenticacion" />
+            </field>
+	     	<field property="values.activo" depends="required" page="1">
+                <arg0 key="especificacionesTramite.activo" />
+            </field>
+            <field property="values.diasPersistencia" depends="mask" page="1">
+                <arg0 key="especificacionesTramite.diasPersistencia" />
+                <var>
+                    <var-name>mask</var-name>
+                    <var-value>^\d{1,2}$</var-value>
+                </var>
+            </field>
+            <field property="values.diasPrerregistro" depends="mask" page="1">
+                <arg0 key="especificacionesTramite.diasPrerregistro" />
+                <var>
+                    <var-name>mask</var-name>
+                    <var-value>^\d{1,3}$</var-value>
+                </var>
+            </field>
+            <!-- 
+            <field property="values.campoCodigoProvincia" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.campoCodigoProvincia" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>500</var-value>
+                </var>
+            </field>
+            <field property="values.campoCodigoLocalidad" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.campoCodigoLocalidad" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>500</var-value>
+                </var>
+            </field>
+            <field property="values.campoRteNif" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.campoRteNif" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>500</var-value>
+                </var>
+            </field>
+            <field property="values.campoRteNom" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.campoRteNom" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>500</var-value>
+                </var>
+            </field>
+            <field property="values.campoRdoNif" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.campoRdoNif" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>500</var-value>
+                </var>
+            </field>
+            <field property="values.campoRdoNom" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.campoRdoNom" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>500</var-value>
+                </var>
+            </field>
+             -->
+             
+             <!--  SE HA PASADO A BLOB: QUITAMOS RESTRICCION TAMAÑO
+			<field property="traduccion.instruccionesInicio" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.instruccionesInicio" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>4000</var-value>
+                </var>
+            </field>
+   			<field property="traduccion.instruccionesInicio2" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.instruccionesInicio2" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>4000</var-value>
+                </var>
+            </field>
+            <field property="traduccion.mensajeInactivo" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.mensajeInactivo" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>4000</var-value>
+                </var>
+            </field>
+            <field property="traduccion.instruccionesFin" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.instruccionesFin" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>4000</var-value>
+                </var>
+            </field>
+            <field property="traduccion.instruccionesEntrega" depends="maxlength" page="1">
+                <arg0 key="especificacionesTramite.instruccionesEntrega" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>4000</var-value>
+                </var>
+            </field>
+             -->
+	    </form>
+	    
+	    <form name="documentoForm">
+	    	<field property="values.identificador" depends="required" page="1">
+                <arg0 key="documento.identificador" />
+            </field>
+            <field property="values.tipo" depends="required" page="1">
+                <arg0 key="documento.tipo" />
+            </field>
+            <field property="values.orden" depends="required,mask" page="1">
+                <arg0 key="documento.orden" />
+                <var>
+                    <var-name>mask</var-name>
+                    <var-value>^\d{1,2}$</var-value>
+                </var>
+            </field>
+            <field property="values.modelo" depends="required" page="1">
+                <arg0 key="documento.modelo" />
+            </field>
+            <field property="values.anexoFotocopia" depends="required" page="1">
+                <arg0 key="documento.anexoFotocopia" />
+            </field>
+            <field property="values.generico" depends="required" page="1">
+                <arg0 key="documento.generico" />
+            </field>
+            <field property="values.idPad" depends="mask" page="1">
+                <arg0 key="documento.idPad" />
+                <var>
+                    <var-name>mask</var-name>
+                    <var-value>^\d{1,20}$</var-value>
+                </var>
+            </field>
+            <field property="values.anexoTamanyoMax" depends="mask" page="1">
+                <arg0 key="documento.anexoTamanyoMax" />
+                <var>
+                    <var-name>mask</var-name>
+                    <var-value>^\d{1,5}$</var-value>
+                </var>
+            </field>
+            <field property="values.anexoUrlPlantilla" depends="maxlength" page="1">
+                <arg0 key="documento.anexoUrlPlantilla" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>500</var-value>
+                </var>
+            </field>
+            <field property="values.maxGenericos" depends="mask" page="1">
+                <arg0 key="documento.maxGenericos" />
+                <var>
+                    <var-name>mask</var-name>
+                    <var-value>^\d{1,2}$</var-value>
+                </var>
+            </field>
+            <field property="traduccion.descripcion" depends="required" page="1">
+                <arg0 key="tramite.descripcion" />
+            </field>
+            <field property="traduccion.informacion" depends="maxlength" page="1">
+                <arg0 key="tramite.informacion" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>1000</var-value>
+                </var>
+            </field>
+	    </form>
+	    
+	    <form name="documentoNivelForm">
+	    	<field property="nivelesAutenticacionSelected" depends="required" page="1">
+                <arg0 key="tramiteNivel.nivelAutenticacion" />
+            </field>
+            <field property="values.obligatorio" depends="required" page="1">
+                <arg0 key="documentoNivel.obligatorio" />
+            </field>
+            <field property="values.version" depends="required,mask" page="1">
+                <arg0 key="documentoNivel.version" />
+                <var>
+                    <var-name>mask</var-name>
+                    <var-value>^\d{1,2}$</var-value>
+                </var>
+            </field>
+            <field property="values.firmar" depends="required" page="1">
+                <arg0 key="documentoNivel.firmar" />
+            </field>
+            <field property="values.firmante" depends="maxlength" page="1">
+                <arg0 key="documentoNivel.firmante" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>500</var-value>
+                </var>
+            </field>
+            <field property="values.contentType" depends="maxlength" page="1">
+                <arg0 key="documentoNivel.contentType" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>500</var-value>
+                </var>
+            </field>
+            <field property="traduccion.informacion" depends="maxlength" page="1">
+                <arg0 key="tramite.informacion" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>1000</var-value>
+                </var>
+            </field>
+	    </form>
+	    
+	    <form name="mensajeTramiteForm">
+		    <field property="values.identificador" depends="required" page="1">
+                <arg0 key="mensajeTramite.identificador" />
+            </field>
+            <field property="traduccion.mensaje" depends="maxlength" page="1">
+                <arg0 key="mensajeTramite.mensaje" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>1000</var-value>
+                </var>
+            </field>
+	    </form>
+	    
+	    <form name="datoJustificanteForm">
+	    	<field property="values.tipo" depends="required" page="1">
+                <arg0 key="datoJustificante.tipo" />
+            </field>
+            <!-- 
+            <field property="values.orden" depends="required,mask" page="1">
+                <arg0 key="datoJustificante.orden" />
+                <var>
+                    <var-name>mask</var-name>
+                    <var-value>^\d{1,2}$</var-value>
+                </var>
+            </field>
+             -->
+            <field property="values.referenciaCampo" depends="maxlength" page="1">
+                <arg0 key="datoJustificante.referenciaCampo" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>500</var-value>
+                </var>
+            </field>
+            <field property="traduccion.descripcion" depends="required,maxlength" page="1">
+                <arg0 key="datoJustificante.informacion" />
+                <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>200</var-value>
+                </var>
+            </field>
+	    </form>
+		<form name="importarVersionTramiteForm">
+            <field property="version" depends="mask">
+                <arg0 key="tramiteVersion.importar.version" />
+                <var>
+                    <var-name>mask</var-name>
+                    <var-value>^\d{1,3}$</var-value>
+                </var>
+            </field>
+            <field property="fitxer" depends="required">
+                <arg0 key="tramiteVersion.importar.fitxer" />
+            </field>
+        </form>
+        <form name="importarDominioForm">
+            <field property="fitxer" depends="required">
+                <arg0 key="tramiteVersion.importar.fitxer" />
+            </field>
+        </form>
+    </formset>
+
+</form-validation>

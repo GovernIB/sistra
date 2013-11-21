@@ -1,0 +1,89 @@
+ <table width="100%" border="1">
+  <tr> 
+    <td width="22%"><div align="center"><strong>Campo</strong></div></td>
+    <td width="78%"><div align="center"><strong>Descripci&oacute;n</strong></div></td>
+  </tr>
+  <tr> 
+    <td>Identificador</td>
+    <td>Identificador del dominio</td>
+  </tr>
+  <tr> 
+    <td height="30">Cacheable</td>
+    <td>Indica si la consulta al dominio debe cachearse entre diferentes llamadas. Se deberá marcar como cacheables los dominios que se tomen como constantes (provincias, municipios, tablas de tipos, etc). Se forzará su refresco una vez al día.</td>
+  </tr>
+  <tr> 
+    <td height="30">Tipo</td>
+    <td>
+    Indica como se resuelve el dominio: EJB, Web Service, consulta directa a BBDD &oacute; consulta a fuente de datos. 
+    <br/>Un dominio de tipo EJB ó Webservice acceder&aacute; a una aplicaci&oacute;n que cumpla con el api de integraci&oacute;n.
+    <br/>Un dominio de tipo SQL consistirá en ejecutar una consulta SQL sobre un datasource especificado. 
+    <br/>Un dominio de tipo fuente de datos consistir&aacute; en acceder a un conjunto de datos mantenidos por el gestor a trav&eacute;s de Bantelfront.
+    </td>
+  </tr>
+  <tr> 
+    <td height="30">URL</td>
+    <td>Seg&uacute;n el tipo de dominio indicar&aacute;:<br>
+      - Dominio EJB: url del servidor d&oacute;nde esta ubicado EJB. Si es local no hace falta indicar la url, sólo es necesario en caso de ser remoto.<br/>
+      - Dominio Webservice: url del Web Service<br/>
+      - Dominio SQL: path JNDI de Datasource<br/>
+      - Dominio Fuente datos: no se usa<br/>
+      Al formar la url se puede emplear la variable @backoffice.url@, que ser&aacute; sustituida por seg&uacute;n el valor indicado en los ficheros de configuraci&oacute;n
+     </td>
+  </tr>
+  <tr> 
+    <td height="30">SQL</td>
+    <td>
+    	<ul>
+    		<li>
+    			Para tipo SQL se indicar&aacute; la sentencia SQL que resuelve el dominio. Los par&aacute;metros de la consulta ser&aacute;n especificados con &quot;?&quot;. <br/>
+    		</li>
+    		<br/>
+    		<li>
+    			Para tipo Fuente de datos se indicar&aacute; una sentencia pseudoSQL para consultar una fuente de datos. El formato de esta consulta debe ser el siguiente: <br/><br/>
+    			<i>
+    				SELECT campo (, campo)* <br/>
+					FROM fuenteDatos <br/>
+					WHERE expresion  ( [AND | OR] expresion ] )*  <br/>       
+					ORDER BY campo <br/>
+				</i>
+				<br/>		
+				donde expresion:  <i>campo [= | LIKE] ?</i>, siendo &quot;?&quot; un par&aacute;metro. <br/>
+				<br/>
+				Las part&iacute;culas de la sentencia pseudoSQL (SELECT, FROM, WHERE, AND, OR, LIKE, ORDER BY) deben estar en may&uacute;sculas. 
+				<br/>
+				Respecto a las comparaciones en el WHERE ser&aacute;n ignorecase ( = y LIKE ). 
+				<br/>
+				Respecto al LIKE se realizar&aacute; autom&aacute;ticamente la comparaci&oacute;n: %parametro% .
+				<br/>
+				Respecto al ORDER BY s&oacute;lo se puede indicar un campo. Adem&aacute;s como todos los campos son de tipo cadena la ordenaci&oacute;n es literal por lo que si se quiere 
+				crear un campo en la fuente de datos que permita ordenar secuencialmente, mejor usar letras que n&uacute;meros.
+			</li>
+		</ul>   	
+    </td>
+  </tr>
+  <tr> 
+    <td height="30">Nombre JNDI EJB</td>
+    <td>Para tipo EJB indicar&aacute; el JNDI de acceso</td>
+  </tr>
+  <tr> 
+    <td height="30">Localización EJB</td>
+    <td>Para tipo EJB indicar&aacute; si el EJB se encuentra en un servidor remoto a la plataforma de tramitación. En caso de ser remoto deberá indicarse la url del servidor remoto.</td>
+  </tr>
+  <tr> 
+    <td height="30">Autenticaci&oacute;n explicita</td>
+    <td>Para tipo EJB/Webservice indica si se debe realizar una autenticaci&oacute;n 
+      expl&iacute;cita (acceso con usuario diferente al que ha iniciado la sesi&oacute;n 
+      de tramitaci&oacute;n): 
+      		<ul>
+	      		<li>No: el contenedor de EJB ser&aacute; el encargado de trasladar la autenticaci&oacute;n (no v&aacute;lido para webservices)</li>
+	      		<li>Con usuario/password: se utiliza el usuario/password indicado para autenticar la llamada</li>
+		      	<li>Autenticaci&oacute;n organismo : se utiliza el usuario/password suministrado por el plugin de autenticaci&oacute;n expl&iacute;ta del organismo para autenticar la llamada</li>
+	      	</ul>      	
+      </td>
+  </tr>
+  <tr>
+    <td height="30">Usuario / Password</td>
+    <td>Para tipo EJB/Webservice en caso de requerir una autenticaci&oacute;n expl&iacute;cita se indica 
+      el usuario/password con la que se realiza</td>
+  </tr>
+</table>

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class  name="es.caib.zonaper.model.DocumentoEntradaPreregistro" table="ZPE_DOCPRE">
+	<cache usage="read-write"/>
+     <id name="codigo" unsaved-value="null" column="DPR_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">ZPE_SEQDPR</param>
+          </generator>
+      </id>
+
+	<many-to-one name="entradaPreregistro" column="DPR_CODPRE" not-null="true"/>
+
+    <property name="presencial"  column="DPR_PRESE" length="1" />
+
+    <property name="identificador"  column="DPR_DOCIDE" length="5" />
+    <property name="numeroInstancia"  column="DPR_DOCNUM" length="2" />
+    <property name="descripcion"  column="DPR_DESC" length="500"/>
+    <property name="codigoRDS"  column="DPR_RDSCOD" length="20"/>
+    <property name="claveRDS"   column="DPR_RDSCLA" length="10"/>
+    
+    <property name="tipoDocumento"  column="DPR_TIPDOC" length="1" />
+    <property name="compulsarDocumento"  column="DPR_COMPUL" length="1" />
+    <property name="fotocopia"  column="DPR_FOTPIA" length="1" />
+    <property name="firma"  column="DPR_FIRMA" length="1" />
+
+</class>
+</hibernate-mapping>

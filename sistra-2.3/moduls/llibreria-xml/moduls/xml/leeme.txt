@@ -1,0 +1,16 @@
+Para regenerar las clases JAXB existe un build en la carpeta de xsd
+
+* JAXB2.0 y validacion contra XSD
+Para habilitar la validación contra los XSD se puede utilizar jaxp
+	unmarshall: XML -> JAVA  (se puede meter validacion contra XSD)
+	marshall:    JAVA -> XML  (se puede meter validacion contra XSD)
+Se podrían pasar todas la validaciones al XSD y quitar validaciones del codigo.
+Supondría incluir los xsd en el jar (p.e. en META-INF: InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("META-INF/schema.xsd");)
+
+// Habilitamos validacion en el unmarshaller y marshaller
+SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
+Schema schema = sf.newSchema( new File("xsd/MOVILIDAD.xsd"));  						
+unmsh.setSchema(schema);
+msh.setSchema(schema);
+
+(En xml movilidad esta comentado)

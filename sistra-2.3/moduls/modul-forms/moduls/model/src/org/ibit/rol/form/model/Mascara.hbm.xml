@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.form.model.Mascara" table="RFR_MASCAR">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="MAS_CODI">
+            <generator class="sequence">
+                <param name="sequence">RFR_SECMAS</param>
+            </generator>
+        </id>
+
+        <property name="nombre" length="128" column="MAS_NOMBRE"/>
+        <property name="descripcion" length="4000" column="MAS_DESCRI"/>
+
+        <property name="variablesOld" type="serializable" column="MAS_VARIAB"/>
+        
+        <array name="variables" cascade="all" table="RFR_MASVAR">
+            <key column="MVA_CODMAS" foreign-key="RFR_MASMVA_FK"/>
+            <index column="MVA_ORDEN" />
+            <element type="string" column="MVA_VALOR" />
+        </array>
+
+        <set name="validaciones" inverse="true" cascade="none" lazy="true">
+            <cache usage="read-write"/>
+            <key column="VAL_CODMAS" foreign-key="RFR_MASVAL_FK"/>
+            <one-to-many class="org.ibit.rol.form.model.Validacion"/>
+        </set>
+
+    </class>
+</hibernate-mapping>
