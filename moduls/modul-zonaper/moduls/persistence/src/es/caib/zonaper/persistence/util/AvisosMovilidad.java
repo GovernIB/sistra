@@ -216,6 +216,7 @@ public class AvisosMovilidad {
 			if (ele.isAccesoAnonimoExpediente()) {
 				textoEmail = StringUtil.replace(textoEmail,"[#URL_ACCESO_CLAVE#]",urlEventoExpediente + evento.getIdentificadorPersistencia() + "&autenticacion=A");
 			}
+			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AUTO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"email.correoAutomatico")));
 			
 			// Generamos SMS
 			if (StringUtils.isNotEmpty(evento.getTextoSMS())){
@@ -298,6 +299,7 @@ public class AvisosMovilidad {
 			if (ele.isAccesoAnonimoExpediente()) {
 				textoEmail = StringUtil.replace(textoEmail,"[#URL_ACCESO_CLAVE#]",urlNotifExpediente + notif.getIdentificadorPersistencia() + "&autenticacion=A");
 			}
+			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AUTO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"email.correoAutomatico")));
 			// Textos SMS
 			if (StringUtils.isNotEmpty(aviso.getTextoSMS())){
 				textoSMS = aviso.getTextoSMS();

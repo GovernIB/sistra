@@ -6,6 +6,8 @@
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 
+<bean:define id="idiomaExpediente" name="detalleAvisoForm" property="idioma" type="java.lang.String"/>
+
 <script type="text/javascript" src="js/ajuda.js"></script>
 <script type="text/javascript" src="js/funcions.js"></script>
 <script type="text/javascript" src="js/mensaje.js"></script>	
@@ -413,9 +415,13 @@ function errorFileUploaded(error){
 			<html:form action="realizarAltaAviso" enctype="multipart/form-data" styleClass="remarcar opcions">
 			<html:hidden property="descripcionExpediente"/>
 			<html:hidden property="flagValidacion" value="alta"/>
-			<html:hidden property="rutaFitxer"/>
-			<html:hidden property="idioma" />
+			<html:hidden property="rutaFitxer"/>			
 			<html:hidden property="existeNifExpediente" />
+				<p>
+					<label for="idioma"><bean:message key="expediente.idiomaExpediente"/><sup>*</sup></label>
+					<html:hidden property="idioma"/>
+					<bean:message key="<%=\"expediente.idioma.\" + idiomaExpediente%>"/>
+				</p>
 				<p>
 					<label for="accesoPorClave"><bean:message key="aviso.accesoPorClave"/><sup>*</sup></label>
 					<html:select  property="accesoPorClave">

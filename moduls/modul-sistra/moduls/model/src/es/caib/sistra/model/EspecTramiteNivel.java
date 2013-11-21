@@ -23,6 +23,10 @@ public class EspecTramiteNivel  extends Traducible {
      // X: Sin especificar (para sobreescribir x nivel) / N: No permite /  S: Permite / O: Obligatoria
      private String habilitarNotificacionTelematica = "X";
      private String permitirSMS = "N"; // S / N
+     // X: Sin especificar (para sobreescribir x nivel) / N: No permite /  S: Permite
+     private String habilitarAlertasTramitacion = "X";
+     private String permitirSMSAlertasTramitacion = "N"; // S / N
+     
      private byte[] avisoSMS;
      private byte[] avisoEmail;
      private List datosJustificante = new ArrayList();     
@@ -334,6 +338,27 @@ public class EspecTramiteNivel  extends Traducible {
 
 	public void setOcultarNifNombreJustif(String ocultarNifNombre) {
 		this.ocultarNifNombreJustif = ocultarNifNombre;
+	}
+
+
+	public String getHabilitarAlertasTramitacion() {
+		return habilitarAlertasTramitacion;
+	}
+
+
+	public void setHabilitarAlertasTramitacion(String habilitarAlertasTramitacion) {
+		this.habilitarAlertasTramitacion = habilitarAlertasTramitacion;
+	}
+
+
+	public String getPermitirSMSAlertasTramitacion() {
+		return permitirSMSAlertasTramitacion;
+	}
+
+
+	public void setPermitirSMSAlertasTramitacion(
+			String permitirSMSAlertasTramitacion) {
+		this.permitirSMSAlertasTramitacion = permitirSMSAlertasTramitacion;
 	}
     
 	

@@ -12,6 +12,7 @@ public class BusquedaTramitePreregistroForm extends ValidatorForm
 	private char estadoConfirmacion;
 	private String tipo;
 	private String nivel;
+	private String nif;
 	
 	public String getFechaInicial() {
 		return fechaInicial;
@@ -54,6 +55,12 @@ public class BusquedaTramitePreregistroForm extends ValidatorForm
 	}
 	public void setNivel(String nivel) {
 		this.nivel = nivel;
+	}
+	public String getNif() {
+		return nif;
+	}
+	public void setNif(String nif) {
+		this.nif = nif;
 	}
 
 	

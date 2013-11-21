@@ -99,7 +99,7 @@ public class RealizarAltaNotificacionAction extends BaseAction
 		}catch(Exception e){
 			log.error("Excepcion alta notificacion",e);
 			request.setAttribute( "enlace", "altaNotif");
-			String mensajeOk = MensajesUtil.getValue("error.notificacio.Excepcion");
+			String mensajeOk = MensajesUtil.getValue("error.notificacio.Excepcion", request);
 			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk + ": " + e.getMessage());
 			return mapping.findForward("fail");
 		}		

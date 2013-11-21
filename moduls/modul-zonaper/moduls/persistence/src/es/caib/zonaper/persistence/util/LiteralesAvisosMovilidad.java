@@ -102,27 +102,27 @@ public class LiteralesAvisosMovilidad {
 		if (StringUtils.isNotEmpty(oi.getUrlSoporteIncidencias())){
 			if (StringUtils.isNotEmpty(oi.getTelefonoIncidencias())){
 				sb.append(StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.email.cuerpo.soporteUrlTelefono.1")));
-				sb.append("<strong><a href=\"").append(urlSoporteFinal).append("\">");
+				sb.append(" <strong><a href=\"").append(urlSoporteFinal).append("\"> ");
 				sb.append(StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.email.cuerpo.soporteUrlTelefono.2")));
-				sb.append("</a></strong>");
+				sb.append("</a></strong> ");
 				sb.append(StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.email.cuerpo.soporteUrlTelefono.3")));
-				sb.append("<strong>").append(oi.getTelefonoIncidencias()).append("</strong>");
+				sb.append(" <strong>").append(oi.getTelefonoIncidencias()).append("</strong> ");
 			}else{
 				sb.append(StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.email.cuerpo.soporteUrl.1")));
-				sb.append("<strong><a href=\"").append(urlSoporteFinal).append("\">");
+				sb.append(" <strong><a href=\"").append(urlSoporteFinal).append("\"> ");
 				sb.append(StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.email.cuerpo.soporteUrl.2")));
-				sb.append("</a></strong>");				
+				sb.append("</a></strong> ");				
 			}				
 		}else{
 			if (StringUtils.isNotEmpty(oi.getEmailSoporteIncidencias())){
 				if (StringUtils.isNotEmpty(oi.getTelefonoIncidencias())){
 					sb.append(StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.email.cuerpo.soporteEmailTelefono.1")));
-					sb.append("<strong>").append(oi.getEmailSoporteIncidencias()).append("</strong>");
+					sb.append(" <strong>").append(oi.getEmailSoporteIncidencias()).append("</strong> ");
 					sb.append(StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.email.cuerpo.soporteEmailTelefono.2")));
-					sb.append("<strong>").append(oi.getTelefonoIncidencias()).append("</strong>");					
+					sb.append(" <strong>").append(oi.getTelefonoIncidencias()).append("</strong> ");					
 				}else{
 					sb.append(StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.email.cuerpo.soporteEmail.1")));
-					sb.append("<strong>").append(oi.getEmailSoporteIncidencias()).append("</strong>");					
+					sb.append(" <strong>").append(oi.getEmailSoporteIncidencias()).append("</strong> ");					
 				}
 			}
 		}			

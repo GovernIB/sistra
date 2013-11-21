@@ -28,9 +28,7 @@ import es.caib.bantel.persistence.delegate.TramiteBandejaDelegate;
  *  name="fail" path=".error"
  */
 public class BusquedaTramitesAction extends BaseAction
-{
-	private static final int LONGITUD_PAGINA = 10;
-	
+{	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception 
     {

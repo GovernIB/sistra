@@ -47,6 +47,7 @@ import es.caib.xml.avisonotificacion.factoria.impl.AvisoNotificacion;
 import es.caib.xml.datospropios.factoria.ConstantesDatosPropiosXML;
 import es.caib.xml.datospropios.factoria.FactoriaObjetosXMLDatosPropios;
 import es.caib.xml.datospropios.factoria.ServicioDatosPropiosXML;
+import es.caib.xml.datospropios.factoria.impl.AlertasTramitacion;
 import es.caib.xml.datospropios.factoria.impl.Dato;
 import es.caib.xml.datospropios.factoria.impl.DatosPropios;
 import es.caib.xml.datospropios.factoria.impl.Documento;
@@ -123,6 +124,9 @@ import es.caib.zonaper.persistence.util.LoggerRegistro;
  * 
  * @ejb.env-entry name="roleAuto" type="java.lang.String" value="${role.auto}"
  * @ejb.env-entry name="roleGestor" type="java.lang.String" value="${role.gestor}"
+ * 
+ * @ejb.security-role-ref role-name="${role.gestor}" role-link="${role.gestor}"
+ * @ejb.security-role-ref role-name="${role.auto}" role-link="${role.auto}"
  * 
  */
 public abstract class PadFacadeEJB implements SessionBean{
@@ -934,6 +938,7 @@ public abstract class PadFacadeEJB implements SessionBean{
 			paginaPAD.setList(results);
 			paginaPAD.setNextPage(page.isNextPage());
 			paginaPAD.setPreviousPage(page.isPreviousPage());
+			paginaPAD.setTotalResults(page.getTotalResults());
 			return paginaPAD;
 			
 		}catch (Exception ex){
@@ -1084,7 +1089,21 @@ public abstract class PadFacadeEJB implements SessionBean{
     		 // Crea los indices para la entrada
     		crearIndicesEntrada(entrada, datosPropios);    		 
     	}
-    	    	    	
+    	    	
+    	// Generamos email de tramite finalizado
+    	if (datosPropios.getInstrucciones().getAlertasTramitacion() != null && StringUtils.isNotBlank(datosPropios.getInstrucciones().getAlertasTramitacion().getEmail())) {
+    		// Capturamos posible excepcion xa q no interfiera en proceso registro
+    		try {
+    			DelegateUtil.getProcesosAutoDelegate().alertaTramitacionTramiteRealizado(entrada, datosPropios.getInstrucciones().getAlertasTramitacion().getEmail());
+    		} catch (Exception ex) {
+    			log.error("No se ha podido realizar el aviso de tramite finalizado. Se continua con proceso registro.", ex);
+    		}
+    	}
+    	
+    	// Generamos log de auditoria
+    	this.logEvento(ConstantesAuditoria.EVENTO_ENVIO_TRAMITE,String.valueOf(entrada.getNivelAutenticacion()), entrada.getUsuario(), entrada.getNifRepresentante(),
+    			entrada.getNombreRepresentante(), entrada.getIdioma(), "S", entrada.getDescripcionTramite(), entrada.getTramite(), entrada.getVersion(), entrada.getProcedimiento(),
+    			entrada.getIdPersistencia(), entrada.getTipo() == ConstantesAsientoXML.TIPO_ENVIO?"B":"R");    	
     }
     
     /**
@@ -1338,6 +1357,10 @@ public abstract class PadFacadeEJB implements SessionBean{
     		crearIndicesSalida(notificacion, oficioRemision);    		 
     	}
     	
+    	// Generamos log de auditoria
+    	this.logEvento(ConstantesAuditoria.EVENTO_NOTIFICACION, null, expe.getUsuarioSeycon(), expe.getNifRepresentante(),
+    			null, notificacion.getIdioma(), "S", null, null, null, expe.getIdProcedimiento(),null, null);
+    	
     }
     
 
@@ -1486,6 +1509,15 @@ public abstract class PadFacadeEJB implements SessionBean{
     		entrada.setSubsanacionExpedienteCodigo(tramiteSubsanacion.getExpedienteCodigo());
     		entrada.setSubsanacionExpedienteUA(tramiteSubsanacion.getExpedienteUnidadAdministrativa());
     	}
+    	
+    	// Alertas de tramitacion
+    	if( datosPropios.getInstrucciones().getAlertasTramitacion() != null){
+    		AlertasTramitacion alertas = datosPropios.getInstrucciones().getAlertasTramitacion();
+    		entrada.setAlertasTramitacionGenerar("S");
+    		entrada.setAlertasTramitacionEmail(alertas.getEmail());
+    		entrada.setAlertasTramitacionSms(alertas.getSms());
+    	}
+    	
     	// Guardamos en log de entrada preregistro    	
     	EntradaPreregistroDelegate td = DelegateUtil.getEntradaPreregistroDelegate();
     	Long codEntrada = td.grabarNuevaEntradaPreregistro(entrada);
@@ -1538,6 +1570,22 @@ public abstract class PadFacadeEJB implements SessionBean{
     		 // Crea los indices para la entrada
     		crearIndicesEntrada(entrada, datosPropios);    		 
     	}
+    	
+    	// Generamos email de tramite finalizado
+    	if (datosPropios.getInstrucciones().getAlertasTramitacion() != null && StringUtils.isNotBlank(datosPropios.getInstrucciones().getAlertasTramitacion().getEmail())) {
+    		// Capturamos posible excepcion xa q no interfiera en proceso registro
+    		try {
+    			DelegateUtil.getProcesosAutoDelegate().alertaTramitacionTramiteRealizado(entrada, datosPropios.getInstrucciones().getAlertasTramitacion().getEmail());
+    		} catch (Exception ex) {
+    			log.error("No se ha podido realizar el aviso de tramite finalizado. Se continua con proceso registro.", ex);
+    		}
+    	}
+    	
+    	// Generamos log de auditoria
+    	this.logEvento(ConstantesAuditoria.EVENTO_PREREGISTRO_TRAMITE, String.valueOf(entrada.getNivelAutenticacion()), entrada.getUsuario(), entrada.getNifRepresentante(),
+    			entrada.getNombreRepresentante(), entrada.getIdioma(), "S", entrada.getDescripcionTramite(), entrada.getTramite(), entrada.getVersion(), entrada.getProcedimiento(),
+    			entrada.getIdPersistencia(), entrada.getTipo() == ConstantesAsientoXML.TIPO_PREENVIO?"B":"R");
+    	
     }   
     
     /**
@@ -1567,6 +1615,10 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    	tpad.setDelegado(t.getDelegado());
 	    	tpad.setEstadoDelegacion(t.getEstadoDelegacion());
 	    	
+	    	tpad.setAlertasTramitacionGenerar(t.getAlertasTramitacionGenerar());
+	    	tpad.setAlertasTramitacionEmail(t.getAlertasTramitacionEmail());
+	    	tpad.setAlertasTramitacionSms(t.getAlertasTramitacionSms());
+	    	
 	    	for (Iterator it = t.getDocumentos().iterator();it.hasNext();){    		
 	    		DocumentoPersistente d = (DocumentoPersistente) it.next();
 	    		DocumentoPersistentePAD dpad = new DocumentoPersistentePAD();
@@ -1587,6 +1639,9 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    		dpad.setDelegacionEstado(d.getDelegacionEstado());
 	    		dpad.setDelegacionFirmantes(d.getDelegacionFirmantes());
 	    		dpad.setDelegacionFirmantesPendientes(d.getDelegacionFirmantesPendientes());
+	    		
+	    		dpad.setTipoDocumento(d.getTipoDocumento());
+	    		dpad.setEsPagoTelematico(d.getEsPagoTelematico());
 	    		
 	    		tpad.getDocumentos().put(dpad.getIdentificador() + "-"+d.getNumeroInstancia(),dpad);
 	    	}    	
@@ -1652,6 +1707,11 @@ public abstract class PadFacadeEJB implements SessionBean{
     		t.setFechaModificacion(ahora);
     		t.setFechaCaducidad(tpad.getFechaCaducidad());
     		
+    		// Establecemos alertas
+    		t.setAlertasTramitacionGenerar(tpad.getAlertasTramitacionGenerar());
+    		t.setAlertasTramitacionEmail(tpad.getAlertasTramitacionEmail());
+    		t.setAlertasTramitacionSms(tpad.getAlertasTramitacionSms());
+    		
     		// Establecemos documentos	    	
 	    	for (Iterator it = tpad.getDocumentos().keySet().iterator();it.hasNext();){
 	    		String ls_key = (String) it.next();
@@ -1672,6 +1732,9 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    		d.setDelegacionEstado(dpad.getDelegacionEstado());
 	    		d.setDelegacionFirmantes(dpad.getDelegacionFirmantes());
 	    		d.setDelegacionFirmantesPendientes(dpad.getDelegacionFirmantesPendientes());
+	    		
+	    		d.setTipoDocumento(dpad.getTipoDocumento());
+	    		d.setEsPagoTelematico(dpad.getEsPagoTelematico());
 	    		
 	    		t.addDocumento(d);
 	    	}    	
@@ -1749,29 +1812,32 @@ public abstract class PadFacadeEJB implements SessionBean{
 	  * @throws Exception
 	  */
 	 private void logEvento(
-			 String evento,char nivelAutenticacion, String seyconUser, String idDocumentoIdPersonal,
-			 String nombre, String lang, String result, String descripcion,String modeloTramite,int versionTramite ) throws Exception
+			 String evento,String nivelAutenticacion, String seyconUser, String idDocumentoIdPersonal,
+			 String nombre, String lang, String result, String descripcion,String modeloTramite,Integer versionTramite,
+			 String procedimiento, String idPersistencia, String clave ) throws Exception
 	{
 		try{
 			Evento eventoAuditado = new Evento();
 			eventoAuditado.setTipo( evento );
-			if (nivelAutenticacion == 'A' || nivelAutenticacion == 'U' || nivelAutenticacion == 'C' ) {
-				eventoAuditado.setNivelAutenticacion( String.valueOf( nivelAutenticacion ) );
-				if ( nivelAutenticacion != 'A' )
-				{
-					eventoAuditado.setUsuarioSeycon( seyconUser );
-					eventoAuditado.setNumeroDocumentoIdentificacion( idDocumentoIdPersonal );
-					eventoAuditado.setNombre( nombre );
-				}
+			if (nivelAutenticacion != null) {
+				eventoAuditado.setNivelAutenticacion(nivelAutenticacion);
 			}
+			eventoAuditado.setUsuarioSeycon( seyconUser );
+			eventoAuditado.setNumeroDocumentoIdentificacion( idDocumentoIdPersonal );
+			eventoAuditado.setNombre( nombre );
 			eventoAuditado.setDescripcion( descripcion );
 			eventoAuditado.setIdioma( lang );
 			eventoAuditado.setResultado( result );
 			eventoAuditado.setModeloTramite(modeloTramite);
-			eventoAuditado.setVersionTramite(versionTramite);
-			DelegateAUDUtil.getAuditaDelegate().logEvento( eventoAuditado );
+			if (versionTramite != null) {
+				eventoAuditado.setVersionTramite(versionTramite.intValue());
+			}
+			eventoAuditado.setProcedimiento(procedimiento);
+			eventoAuditado.setIdPersistencia(idPersistencia);
+			eventoAuditado.setClave(clave);
+			DelegateAUDUtil.getAuditaDelegate().logEvento( eventoAuditado, false );
 		}catch(Exception ex){
-			// logger.error("Excepción auditoria en Zona Personal: " + ex.getMessage(),ex);
+			log.error("Excepción auditando evento: " + ex.getMessage(),ex);
 		}
 	}
 	
@@ -1927,9 +1993,10 @@ public abstract class PadFacadeEJB implements SessionBean{
 				String nif = plgLogin.getNif(sp);
 				char metodoAut = plgLogin.getMetodoAutenticacion( sp );
 				String nombre = plgLogin.getNombreCompleto(sp);
-				logEvento(ConstantesAuditoria.EVENTO_CONFIRMACION_PREREGISTRO,metodoAut,sp.getName(),
+				logEvento(ConstantesAuditoria.EVENTO_CONFIRMACION_PREREGISTRO, String.valueOf(metodoAut),sp.getName(),
 						(StringUtils.isNotEmpty(nif)?nif.toUpperCase():null),nombre,entrada.getIdioma(), "S","Preregistro confirmado: " + entrada.getNumeroPreregistro(),
-						StringUtil.getModelo(asiento.getDatosAsunto().getIdentificadorTramite()),StringUtil.getVersion(asiento.getDatosAsunto().getIdentificadorTramite()) );
+						StringUtil.getModelo(asiento.getDatosAsunto().getIdentificadorTramite()),new Integer(StringUtil.getVersion(asiento.getDatosAsunto().getIdentificadorTramite())),
+						entrada.getProcedimiento(), null, null);
 			}
 	    	
     	}catch (Exception ex){

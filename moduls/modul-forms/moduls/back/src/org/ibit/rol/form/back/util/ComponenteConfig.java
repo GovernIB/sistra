@@ -22,6 +22,7 @@ public class ComponenteConfig {
         tipoMap.put(TreeBox.class, "treebox");
         tipoMap.put(ListaElementos.class, "listaelementos");
         tipoMap.put(RadioButton.class, "radiobutton");
+        tipoMap.put(Seccion.class, "seccion");
     }
 
     public static void addTipo(Class clazz, String tipo) {
@@ -49,6 +50,7 @@ public class ComponenteConfig {
         mappingMap.put(TreeBox.class, "/back/treebox/editar");
         mappingMap.put(ListaElementos.class, "/back/listaelementos/editar");
         mappingMap.put(RadioButton.class, "/back/radiobutton/editar");
+        mappingMap.put(Seccion.class, "/back/seccion/editar");
     }
 
     public static void addMapping(Class clazz, String path) {

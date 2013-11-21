@@ -43,6 +43,11 @@ public class EntradaPreregistroBackup
 //  Tramite subsanacion
  	private String subsanacionExpedienteCodigo;
  	private Long subsanacionExpedienteUA; 
+ 	// Alertar tramitacion
+ 	private String alertasTramitacionGenerar;
+    private String alertasTramitacionEmail; 
+    private String alertasTramitacionSms;
+    private Date alertasTramitacionFechaUltima;
        
     // Methods
 	
@@ -383,5 +388,45 @@ public class EntradaPreregistroBackup
 
 	public void setProcedimiento(String procedimiento) {
 		this.procedimiento = procedimiento;
+	}
+
+
+	public String getAlertasTramitacionGenerar() {
+		return alertasTramitacionGenerar;
+	}
+
+
+	public void setAlertasTramitacionGenerar(String alertasTramitacionGenerar) {
+		this.alertasTramitacionGenerar = alertasTramitacionGenerar;
+	}
+
+
+	public String getAlertasTramitacionEmail() {
+		return alertasTramitacionEmail;
+	}
+
+
+	public void setAlertasTramitacionEmail(String alertasTramitacionEmail) {
+		this.alertasTramitacionEmail = alertasTramitacionEmail;
+	}
+
+
+	public String getAlertasTramitacionSms() {
+		return alertasTramitacionSms;
+	}
+
+
+	public void setAlertasTramitacionSms(String alertasTramitacionSms) {
+		this.alertasTramitacionSms = alertasTramitacionSms;
+	}
+
+
+	public Date getAlertasTramitacionFechaUltima() {
+		return alertasTramitacionFechaUltima;
+	}
+
+
+	public void setAlertasTramitacionFechaUltima(Date alertasTramitacionFechaUltima) {
+		this.alertasTramitacionFechaUltima = alertasTramitacionFechaUltima;
 	}
 }

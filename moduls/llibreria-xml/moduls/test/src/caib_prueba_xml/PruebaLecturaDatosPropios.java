@@ -6,6 +6,7 @@ import java.util.List;
 
 import es.caib.xml.datospropios.factoria.FactoriaObjetosXMLDatosPropios;
 import es.caib.xml.datospropios.factoria.ServicioDatosPropiosXML;
+import es.caib.xml.datospropios.factoria.impl.AlertasTramitacion;
 import es.caib.xml.datospropios.factoria.impl.Dato;
 import es.caib.xml.datospropios.factoria.impl.DatosPropios;
 import es.caib.xml.datospropios.factoria.impl.Documento;
@@ -17,6 +18,12 @@ import es.caib.xml.datospropios.factoria.impl.Solicitud;
 import es.caib.xml.datospropios.factoria.impl.TramiteSubsanacion;
 
 public class PruebaLecturaDatosPropios {
+	
+	private static void imprimirAlertasTramitacion (AlertasTramitacion fj){
+		System.out.println ("ALERTAS TRAMITACION");
+		System.out.println ("email: " + fj.getEmail());
+		System.out.println ("sms: " + fj.getSms());
+	}
 	
 	private static void imprimirFormulariosJustificante (FormulariosJustificante fj){
 		System.out.println ("FORMULARIOS JUSTIFICANTE");
@@ -87,6 +94,10 @@ public class PruebaLecturaDatosPropios {
 		
 		if (inst.getPersonalizacionJustificante() != null){
 			imprimirPersonalizacionJustificante(inst.getPersonalizacionJustificante());
+		}
+		
+		if (inst.getAlertasTramitacion() != null){
+			imprimirAlertasTramitacion(inst.getAlertasTramitacion());
 		}
 	}
 	

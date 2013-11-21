@@ -46,7 +46,7 @@ public class FinalizarAction extends BaseAction
 				urlFin = "/zonaperfront/inicio?language=" + this.getLang(request) + "&tramite=" + idPersistencia;				
 			}
 			 
-			delegate.borrarTramite();			
+			delegate.finalizarTramite();			
 		}catch(Exception ex){		
 			// No hacemos nada			
 		}

@@ -24,6 +24,8 @@ public class ComponenteForm extends TraduccionValidatorForm {
     private Long idPatron;
     private boolean checked;
     private ValidacionBean[] validacion;
+    // Si componente pertenece a una pantalla de detalle 
+    private boolean pantallaDetalle;
 
     public Long getId() {
         return id;
@@ -135,7 +137,7 @@ public class ComponenteForm extends TraduccionValidatorForm {
         super.reset(mapping, request);
         
         // -- INDRA: LISTA ELEMENTOS
-        if (!(getValues() instanceof Label)) {
+        if ((getValues() instanceof Campo)) {
         	((Campo) getValues()).setMostrarEnTabla(false);
         }
         // -- INDRA:LISTA ELEMENTOS
@@ -185,5 +187,13 @@ public class ComponenteForm extends TraduccionValidatorForm {
             log.error(e.getMessage());
         }
     }
+
+	public boolean isPantallaDetalle() {
+		return pantallaDetalle;
+	}
+
+	public void setPantallaDetalle(boolean pantallaDetalle) {
+		this.pantallaDetalle = pantallaDetalle;
+	}
 
 }

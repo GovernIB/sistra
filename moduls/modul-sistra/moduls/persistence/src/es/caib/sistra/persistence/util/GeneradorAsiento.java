@@ -40,6 +40,7 @@ import es.caib.xml.EstablecerPropiedadException;
 import es.caib.xml.datospropios.factoria.ConstantesDatosPropiosXML;
 import es.caib.xml.datospropios.factoria.FactoriaObjetosXMLDatosPropios;
 import es.caib.xml.datospropios.factoria.ServicioDatosPropiosXML;
+import es.caib.xml.datospropios.factoria.impl.AlertasTramitacion;
 import es.caib.xml.datospropios.factoria.impl.Dato;
 import es.caib.xml.datospropios.factoria.impl.DatosPropios;
 import es.caib.xml.datospropios.factoria.impl.Documento;
@@ -190,8 +191,12 @@ public class GeneradorAsiento {
 				direccion.setCodigoMunicipio(rpteLoca);
 				direccion.setPaisOrigen(rptePais);
 				if (rptePais.equals(ConstantesSTR.CODIGO_PAIS_ESPANYA)){
-					direccion.setNombreMunicipio( obtenerNombreMunicipio ( rpteProv, rpteLoca ) );
-					direccion.setNombreProvincia( obtenerNombreProvincia ( rpteProv ) );					
+					if (!StringUtils.isEmpty(rpteLoca)){
+						direccion.setNombreMunicipio( obtenerNombreMunicipio ( rpteProv, rpteLoca ) );
+					}
+					if (!StringUtils.isEmpty(rpteProv)) {
+						direccion.setNombreProvincia( obtenerNombreProvincia ( rpteProv ) );
+					}
 				}
 				dInteresadoRpte.setDireccionCodificada(direccion);
 			}
@@ -370,7 +375,7 @@ public class GeneradorAsiento {
 					tramiteVersion, tramitePAD, plgForms, expeId, expeUA,
 					especVersion, especNivel, dt, factoria);
 			datosPropios.setInstrucciones(instrucciones);
-			
+									
 			// Generamos datos solicitud
 			Solicitud datosSolicitud = generarDatosSolicitud(tramiteInfo,
 					tramiteVersion, tramitePAD, plgForms, plgPagos,
@@ -492,6 +497,15 @@ public class GeneradorAsiento {
 		TramiteSubsanacion ts = generarTramiteSubsanacion(expeId, expeUA,
 				factoria);
 		instrucciones.setTramiteSubsanacion(ts);
+		
+		// ----- Alertas tramitacion
+		if ("S".equals(tramitePAD.getAlertasTramitacionGenerar())) {
+			AlertasTramitacion alertas = factoria.crearAlertasTramitacion();
+			alertas.setEmail(tramitePAD.getAlertasTramitacionEmail());
+			alertas.setSms(tramitePAD.getAlertasTramitacionSms());
+			instrucciones.setAlertasTramitacion(alertas);
+		}
+		
 		return instrucciones;
 	}
 

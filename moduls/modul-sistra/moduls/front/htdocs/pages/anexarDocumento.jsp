@@ -10,7 +10,6 @@
 <bean:define id="urlBorrarAnexo">
         <html:rewrite page="/protected/borrarAnexo.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
-<script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.2.3.pack.js"></script>
 <script type="text/javascript">
 <!--
 	var mensajeUploadeando = '<bean:message key="anexarDocumentos.mensajeUpload"/>';
@@ -37,9 +36,33 @@
 						ocultarCapaInfo();
 						alert( "<bean:message key="firmarDocumento.introducirFichero"/>" );
 						return false;
-					}
+					}					
+
+					// Si el tamaño pasa de 3Mb, hacemos split del fichero
+					var splitSize = (3 * 1024 * 1024);
+					var fileSize = $('#documentoFirmar').val().length;
+					var splits = Math.floor(fileSize / splitSize);
+					if (fileSize % splitSize > 0) {
+						splits = splits + 1;
+					}		
 					
-					firma = applet.firmarFicheroB64( $('#documentoFirmar').val(), contentType );	
+					
+					if (splits == 1) {						
+						firma = applet.firmarFicheroB64( $('#documentoFirmar').val(), contentType );											
+					} else {
+						applet.splitFicheroB64(fileSize);
+						for (i = 1; i <= splits; i++) {
+							var inicio = (i - 1) * splitSize;
+							if (i < splits) {		
+								applet.addSplitFicheroB64($('#documentoFirmar').val().substring(inicio, (inicio + splitSize)));
+							} else {								
+								applet.addSplitFicheroB64($('#documentoFirmar').val().substring(inicio));
+							}
+						}						
+						firma = applet.firmarFicheroB64Split(contentType );							
+					}	   
+					
+						
 					if (firma == null || firma == ''){
 						ocultarCapaInfo();
 						alert(applet.getLastError());
@@ -107,12 +130,30 @@
 	</logic:equal>	
 
 
+	function showApplet(mostrar) {
+		<logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="S">
+		<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+			 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">			 	
+			 /*	 NO OCULTAMOS PQ EN FFOX SE CUAJA
+			 if (mostrar) {
+					$("#formFima").show();
+				} else {
+					$("#formFima").hide();
+				}
+			*/	
+		</logic:equal>
+	</logic:equal>
+	}
+	
 	function uploadAnexo(form) {
+
+		showApplet(false);	
 
 		<logic:equal name="anexo" property="anexoGenerico" value="true">	
 			form.descPersonalizada.value = document.anexarDocumentoForm.descPersonalizada.value;
 			if 	(form.descPersonalizada.value == ''){
 				ocultarCapaInfo();
+				showApplet(true);
 				alert( "<bean:message key="anexarDocumento.generico.descPersonalizada.nulo" />" );
 				return;
 			}			
@@ -122,6 +163,7 @@
 		// Verificamos que haya seleccionado fichero
 		if 	(form.datos.value == ''){
 			ocultarCapaInfo();
+			showApplet(true);
 			alert( "<bean:message key="anexarDocumentos.anexar.noFichero" />" );
 			return;
 		}		
@@ -138,6 +180,7 @@
 		<logic:equal name="anexo" property="anexoGenerico" value="true">			
 			if 	(form.descPersonalizada.value==''){
 				ocultarCapaInfo();
+				showApplet(true);
 				alert( "<bean:message key="anexarDocumento.generico.descPersonalizada.nulo" />" );
 				return;
 			}
@@ -145,13 +188,22 @@
 	
 
 		<logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="S">		
+
 			// Firmamos
 			<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 						 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
-				if (!firmarAFirma(form)) return;
+				if (!firmarAFirma(form)) {
+					ocultarCapaInfo();
+					showApplet(true);
+					return;
+				}
 			</logic:equal>
-			<logic:equal name="implementacionFirma" value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
-				if (!firmarCAIB(form)) return;					
+			<logic:equal name="implementacionFirma" value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">												
+				if (!firmarCAIB(form)) {
+					ocultarCapaInfo();
+					showApplet(true);
+					return;
+				}					
 			</logic:equal>					
 		</logic:equal>	
 				
@@ -195,6 +247,10 @@
 	function errorFileUploaded(error){
 		alert(error);
 		ocultarCapaInfo();		
+	}
+
+	function mostrarPin() {		
+		$('#PinDiv').show();
 	}
 	
 	$(document).ready(function(){
@@ -269,15 +325,22 @@
 							<p class="apartado">
 								<bean:message key="firmarDocumento.certificadosDisponibles"/>
 							</p>
-							<form name="formFirma">		
+							<div id="formFirmaDiv">
+							<form name="formFirma" id="formFima">		
 								<p class="apartado"> 									
 									<jsp:include page="/firma/caib/applet.jsp" flush="false"/>	
 								</p>												
-								<!--  PIN  -->							
+								<!--  PIN  -->
+								<p class="notaPie">	
+									<bean:message key="firmarDocumento.requierePINCertificado.inicio"/>	<a href="javascript:mostrarPin()"><bean:message key="firmarDocumento.requierePINCertificado.fin"/></a>								
+								</p>
+								<div id="PinDiv">					
 								<p class="apartado">
 									<bean:message key="firmarDocumento.PINCertificado" /><input type="password" name="PIN" id="PIN" class="txt"/>										
-								</p>							
+								</p>
+								</div>							
 							</form>	
+							</div>
 						</logic:equal>
 					</div>	
 					</logic:equal>

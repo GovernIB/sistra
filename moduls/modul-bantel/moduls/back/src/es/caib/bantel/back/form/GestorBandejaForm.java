@@ -13,6 +13,8 @@ import es.caib.bantel.model.GestorBandeja;
 import es.caib.bantel.persistence.delegate.DelegateException;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.delegate.GestorBandejaDelegate;
+import es.caib.util.StringUtil;
+import es.caib.util.ValidacionesUtil;
 
 public class GestorBandejaForm extends BantelForm implements InitForm
 {
@@ -39,6 +41,15 @@ public class GestorBandejaForm extends BantelForm implements InitForm
         		if ( gestorBandejaTmp != null )
         		{
         			errors.add("values.identificador", new ActionError("errors.gestorBandeja.duplicado", gestorBandeja.getSeyconID() ));
+        		}
+        		if (!StringUtil.validarFormatoUsuario(gestorBandeja.getSeyconID())) {
+        			errors.add("values.identificador", new ActionError("errors.gestorBandeja.identificadorNoValido"));
+        		}        		
+        	}
+        	
+        	if (  request.getParameter(Constants.ALTA_PROPERTY) != null  || request.getParameter(Constants.MODIFICACIO_PROPERTY) != null ) {
+        		if (!ValidacionesUtil.validarEmail(gestorBandeja.getEmail())) {
+        			errors.add("values.identificador", new ActionError("errors.email", gestorBandeja.getEmail()));
         		}
         	}
         }

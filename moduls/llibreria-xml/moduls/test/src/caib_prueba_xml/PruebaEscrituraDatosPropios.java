@@ -7,6 +7,7 @@ import es.caib.xml.ConstantesXML;
 import es.caib.xml.datospropios.factoria.ConstantesDatosPropiosXML;
 import es.caib.xml.datospropios.factoria.FactoriaObjetosXMLDatosPropios;
 import es.caib.xml.datospropios.factoria.ServicioDatosPropiosXML;
+import es.caib.xml.datospropios.factoria.impl.AlertasTramitacion;
 import es.caib.xml.datospropios.factoria.impl.Dato;
 import es.caib.xml.datospropios.factoria.impl.DatosPropios;
 import es.caib.xml.datospropios.factoria.impl.Documento;
@@ -121,6 +122,10 @@ public class PruebaEscrituraDatosPropios {
 			persJust.setOcultarNifNombre(new Boolean(true));
 			instrucciones.setPersonalizacionJustificante(persJust);
 			
+			AlertasTramitacion alertas = factoria.crearAlertasTramitacion();
+			alertas.setEmail("xxx@email.es");
+			alertas.setSms("123456789");
+			instrucciones.setAlertasTramitacion(alertas);
 			
 			datosPropios.setInstrucciones (instrucciones);
 			

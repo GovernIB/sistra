@@ -1,6 +1,5 @@
 package es.caib.audita.persistence.util.evento;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.List;

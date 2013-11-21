@@ -19,6 +19,7 @@ public class Evento implements Serializable
 	private int versionTramite;
 	private String idPersistencia;
 	private String clave;
+	private String procedimiento;
 	
 	public String getClave()
 	{
@@ -132,6 +133,12 @@ public class Evento implements Serializable
 	public void setVersionTramite(int versionTramite)
 	{
 		this.versionTramite = versionTramite;
+	}
+	public String getProcedimiento() {
+		return procedimiento;
+	}
+	public void setProcedimiento(String procedimiento) {
+		this.procedimiento = procedimiento;
 	}
 	
 }

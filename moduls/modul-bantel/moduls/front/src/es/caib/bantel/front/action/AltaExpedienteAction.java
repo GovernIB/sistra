@@ -59,6 +59,9 @@ public class AltaExpedienteAction extends BaseAction
 			// Activamos por defecto los avisos
 			expForm.setHabilitarAvisos("S");
 			
+			// Ponemos por defecto el idioma
+			expForm.setIdioma("ca");
+			
 			// Comprobamos si es gestor de procedimientos
 			GestorBandeja gestor = DelegateUtil.getGestorBandejaDelegate().obtenerGestorBandeja(this.getPrincipal(request).getName());
 			if (gestor == null || gestor.getProcedimientosGestionados() == null || gestor.getProcedimientosGestionados().size() == 0) {

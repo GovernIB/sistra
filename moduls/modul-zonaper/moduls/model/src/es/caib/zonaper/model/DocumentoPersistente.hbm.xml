@@ -25,5 +25,8 @@
 	<property name="delegacionFirmantes" column="DPE_DLGFIR"/>
 	<property name="delegacionFirmantesPendientes" column="DPE_DLGFIP"/>
 	
+	<property name="tipoDocumento" column="DPE_TIPO" length="1"/>
+	<property name="esPagoTelematico" column="DPE_PAGTEL" length="1"/>
+		
 </class>
 </hibernate-mapping>

@@ -34,6 +34,10 @@ public class FileDownloadAction extends Action {
 		try{
 			response.reset();					
 			response.setContentType("application/octet-stream");
+			
+			// Normalizamos fichero quitando los blancos (problema firefox)
+			nombreFichero = nombreFichero.replaceAll(" ","_");
+			
 			response.setHeader("Content-Disposition","attachment; filename="+ nombreFichero + ";");
             copy(bis,response.getOutputStream());
         }finally{

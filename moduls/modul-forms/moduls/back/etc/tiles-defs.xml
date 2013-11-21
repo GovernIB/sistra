@@ -121,6 +121,20 @@
 
      <definition name=".componente.listaEleccion" path="/componente/listaEleccion.jsp"/>
 
+    <!-- ======================== SECCION ====================== -->
+    <definition name=".seccion.editar" extends=".editar"
+    	controllerClass="org.ibit.rol.form.back.action.componente.ComponenteController">
+        <put name="title" value="seccion.titulo"/>
+        <put name="alta.title" value="seccion.alta"/>
+        <put name="modificacion.title" value="seccion.modificacion"/>
+        <put name="subtitle" value="seccion.subtitulo"/>
+        <put name="validateMethod" value="validateSeccionForm"/>
+        <put name="form.action" value="/back/seccion/editar"/>
+        <put name="form.bean" value="seccionForm"/>
+        <put name="paginaValues" value="/seccion/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/seccion/editarTraduccion.jsp"/>
+    </definition>
+    
     <!-- ======================== LABEL ====================== -->
     <definition name=".label.editar" extends=".editar"
     	controllerClass="org.ibit.rol.form.back.action.componente.ComponenteController">

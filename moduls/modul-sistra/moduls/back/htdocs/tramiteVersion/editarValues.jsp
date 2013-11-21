@@ -128,6 +128,18 @@
     </td>
 </tr>
 <tr>
+	    <td class="labelo"><bean:message key="tramiteVersion.registroAutomatico"/></td>
+        <td class="input">
+    	<table>
+    		<tr>
+    			<td nowrap="nowrap" width="1%">Si<html:radio property="values.registroAutomatico" value="S"/></td>
+    			<td nowrap="nowrap" width="1%">No<html:radio property="values.registroAutomatico" value="N"/></td>
+    			<td>&nbsp;</td>
+    		</tr>
+    	</table>
+    </td>
+</tr>
+<tr>
 	<td class="separador" colspan="2"><bean:message key="tramiteVersion.datosDestino"/></td>
 </tr>
 <tr>

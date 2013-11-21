@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jnlp spec="1.0+" codebase="https://jvjuan02-port.indra.es/accv_repr/firma">
+<jnlp spec="1.0+" href="MEDIA_afirma.jnlp">
  <information>
    <title>Cliente @firma</title>
-   <vendor>Ministerio de politica Territorial y Administracion Publica</vendor>
-   <homepage href="http://www.mpt.es" />
+   <vendor>Ministerio de Hacienda y Administraciones Publicas</vendor>
+   <homepage href="http://www.minhap.es" />
    <description>Cliente de firma @firma</description>
  </information>
  <offline-allowed/>
@@ -12,13 +12,12 @@
  </security>
  <resources>
    <property name="jnlp.packEnabled" value="true"/>
-   <property name="jnlp.versionEnabled" value="true"/>
-   <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se" />
-   <jar href="MEDIA_j6_afirma5_core.jar" main="true" version="3.2"/>
+   <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se" initial-heap-size="512m" max-heap-size="512m" />
+   <jar href="MEDIA_j6_afirma5_core.jar" main="true" />
  </resources>
  <applet-desc
    name="Cliente @firma"
-   main-class="es.gob.afirma.cliente.SignApplet"
+   main-class="es.gob.afirma.applet.SignApplet"
    width="1"
    height="1" />
  <update check="background"/>

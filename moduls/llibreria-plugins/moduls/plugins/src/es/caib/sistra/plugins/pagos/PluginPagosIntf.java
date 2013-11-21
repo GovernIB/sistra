@@ -21,6 +21,17 @@ public interface PluginPagosIntf  extends PluginSistraIntf {
 	 * @throws Exception
 	 */
 	public SesionPago iniciarSesionPago(DatosPago datosPago, SesionSistra sesionSistra) throws Exception; 	
+		
+	/**
+	 * Inicia sesión de pagos contra la pasarela de pagos desde la zona personal una vez enviado el trámite permitiendo agrupar varios pagos.
+	 * 
+	 * @param datosPago Datos de los pago
+	 * @param sesionSistra Datos para el retorno a SISTRA. Al retornar de la pasarela de pagos
+	 * se invocará a la función comprobarEstadoSesionPago para actualizar el asistente de tramitación.
+	 * @return Datos para redirigir la sesión a la pasarela de pagos
+	 * @throws Exception
+	 */
+	public SesionPago iniciarSesionPagoDiferido(DatosPago[] datosPago, SesionSistra sesionSistra) throws Exception;
 	
 	/**
 	 * Retoma sesión de pagos existente en la pasarela de pagos
@@ -41,6 +52,16 @@ public interface PluginPagosIntf  extends PluginSistraIntf {
 	 * @throws Exception
 	 */
 	public EstadoSesionPago comprobarEstadoSesionPago(String localizador) throws Exception;
+	
+	/**
+	 * Comprueba estado de una sesión de pagos diferido.
+	 * Las sesiones de pago tendrán el mismo estado, pero puede que se genere distinto identificador de pago para cada pago.
+	 * 
+	 * @param localizador Localizador de la sesión de pagos
+	 * @return Estados sesiones de pago
+	 * @throws Exception
+	 */
+	public EstadoSesionPago[] comprobarEstadoSesionPagoDiferido(String localizador) throws Exception;
 	
 	/**
 	 * Indica al plugin de pagos que puede eliminar la información referente a la sesión de pagos
