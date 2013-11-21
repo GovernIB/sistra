@@ -1,0 +1,31 @@
+@charset "utf-8";
+
+/* IE.7 */
+
+.imc-form .imc-element { margin-right:.95em; }
+
+.imc-form .imc-el-taula .imc-tbody-scroll { overflow-x:hidden; }
+
+.imc-form .imc-el-table.imc-el-files-2 .imc-el-etiqueta { height:5.45em; }
+.imc-form .imc-el-table.imc-el-files-3 .imc-el-etiqueta { height:9.45em; }
+.imc-form .imc-el-table.imc-el-files-4 .imc-el-etiqueta { height:13.45em; }
+
+.imc-form .imc-element textarea	{ height:5.2em; }
+.imc-form .imc-el-files-3 textarea { height:9.3em; }
+.imc-form .imc-el-files-4 textarea { height:13.2em; }
+
+.imc-form .imc-el-taula-botonera-lateral .imc-el-ta-bo-posicio { padding-top:3.8em; }
+
+.imc-form .imc-el-table { margin-right:0 !important; }
+
+nav ul { padding-left:.5em; }
+nav li { float:left; margin-right:.3em; }
+
+aside { clear:both; width:100%; }
+
+div.imc-select a.imc-select { background-position:6em 50%; }
+.imc-form .imc-el-2 div.imc-select a.imc-select { background-position:15.3em 50%; }
+.imc-form .imc-el-3 div.imc-select a.imc-select { background-position:24.7em 50%; }
+.imc-form .imc-el-4 div.imc-select a.imc-select { background-position:34.1em 50%; }
+.imc-form .imc-el-5 div.imc-select a.imc-select { background-position:43.4em 50%; }
+.imc-form .imc-el-6 div.imc-select a.imc-select { background-position:52.8em 50%; }
