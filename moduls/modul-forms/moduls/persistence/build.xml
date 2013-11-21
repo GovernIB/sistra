@@ -46,7 +46,7 @@
         	<include name="sistra-util.jar"/>
         </fileset>
         <fileset dir="${ejb.product}">
-            <include name="6-model.jar"/>
+            <include name="6-form-model.jar"/>
         </fileset>
     </path>
 

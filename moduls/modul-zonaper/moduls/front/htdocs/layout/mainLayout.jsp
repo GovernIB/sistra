@@ -46,7 +46,7 @@
 <script type="text/javascript">
 <!--
 	function doOnLoad(){
-		// Check version navegador (Compatibles: IE >=6 , FireFox >= 1.5)
+		// Check version navegador (Compatibles: IE >=7 , FireFox >= 4)
 		var errorIE="<bean:message key="errors.ie.versionminima" />";
 		var errorFirefox="<bean:message key="errors.firefox.versionminima" />";
 		checkVersionNavegador(errorIE,errorFirefox);

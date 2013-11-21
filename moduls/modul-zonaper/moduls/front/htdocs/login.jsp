@@ -128,11 +128,11 @@ if (!OS)
 	else OS = "an unknown operating system";
 }
 
-if (browser == "Internet Explorer" && parseFloat( version, 10) < 6 ){
+if (browser == "Internet Explorer" && parseFloat( version, 10) < 7 ){
 	alert("<bean:message key="errors.ie.versionminima" />");
 }
 
-if (browser == "Firefox" && parseFloat( version, 10) < 1.5 ){
+if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 	alert("<bean:message key="errors.firefox.versionminima" />");
 }
 
