@@ -19,13 +19,14 @@
 <%@ taglib prefix="nested" uri="http://jakarta.apache.org/struts/tags-nested"%>
 <bean:define id="securePath" name="securePath" scope="request"/>
 <html:xhtml/>
+
 <% String sufijoModoFuncionamiento = (String) request.getAttribute("sufijoModoFuncionamiento"); %>
 
 <div style="display: none;">MODO FUNCIONAMIENTO: verPantallaCaib<bean:write name="sufijoModoFuncionamiento"/></div>
 
 
-<script src="<html:rewrite page='/js/htmlform'/><bean:write name="sufijoModoFuncionamiento"/>.jsp" type="text/javascript"></script>
-<script src="<html:rewrite page='/js/xmlhttp'/><bean:write name="sufijoModoFuncionamiento"/>.js" type="text/javascript"></script>
+<script src="<html:rewrite page='/js/v1/htmlform.jsp'/>" type="text/javascript"></script>
+<script src="<html:rewrite page='/js/v1/xmlhttp.js'/>" type="text/javascript"></script>
 
 
 <script type="text/javascript">
@@ -342,6 +343,7 @@ function onFieldChange_imp() {
         radioReadOnly(form.<%=nombre%>, true);
         <% } else if (campo instanceof ListBox) { %>
         selectOptions(form.<%=nombre%>, f_<%=nombre%>);
+        listboxReadOnly(form.<%=nombre%>, f_<%=nombre%>);
         <% } else if (campo instanceof TreeBox) { %>
         selectOptionsTree("<%=nombre%>", f_<%=nombre%>);
         readOnlyTree("<%=nombre%>",true);
@@ -434,6 +436,10 @@ function onFieldChange_imp() {
 	       		// Simulamos readonly con campo de texto
 	       		comboReadOnly(form.<%=nombre%>,false);
 	       	<%}%>
+	        <%if (campo instanceof ListBox){ %>
+	       		// Simulamos readonly con campo de texto
+	       		listboxReadOnly(form.<%=nombre%>,false);
+	       	<%}%>
 	       	<% if (campo instanceof TextBox) { 
            	     if (((TextBox) campo).isMultilinea()) { %>	        	 	
             	form.<%=nombre%>_feed.className = 'frmr';
@@ -494,6 +500,11 @@ function onFieldChange_imp() {
 				<%if (campo instanceof ComboBox){ %>
 	        		// Simulamos readonly con campo de texto
 	        		comboReadOnly(form.<%=nombre%>,true);        		
+	        	<%}%>
+
+	        	<%if (campo instanceof ListBox){ %>
+	        		// Simulamos readonly con campo de texto
+	        		listboxReadOnly(form.<%=nombre%>,true);        		
 	        	<%}%>
 	        	
 	        	<% if (campo instanceof TextBox) { 
@@ -719,7 +730,7 @@ function unsetAyuda() {
     <nested:iterate id="comp" name="pantalla" property="componentes" indexId="ind" >
         <logic:greaterThan name="ind" value="0">
             <logic:equal name="comp" property="posicion" value="0"></p><p></logic:equal>
-            <logic:equal name="comp" property="posicion" value="1">&nbsp;</logic:equal>
+            <logic:notEqual name="comp" property="posicion" value="0">&nbsp;</logic:notEqual>
         </logic:greaterThan>
         <% if (comp instanceof Campo) { %>
         <span onmouseover="setAyuda(<%=ind%>)" style="<%=((Campo)comp).isOculto()?"display: none;":""%>">

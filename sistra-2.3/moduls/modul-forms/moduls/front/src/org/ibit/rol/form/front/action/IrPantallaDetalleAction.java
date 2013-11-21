@@ -44,12 +44,12 @@ public class IrPantallaDetalleAction extends BaseAction {
             return mapping.findForward("fail");
         }        
         
-        // Si la accion es insertar o modificar guardamos los datos actuales de la pantalla        
-        if (detalleAccion.equals("insertar") || detalleAccion.equals("modificar")){
+        // Guardamos datos actuales de la pantalla (en todos los casos)        
+        //if (detalleAccion.equals("insertar") || detalleAccion.equals("modificar")){
         	// Introducimos datos en pantalla actual
             PantallaForm pantallaForm = (PantallaForm) form;
             delegate.introducirDatosPantalla(pantallaForm.getMap());                       
-        }
+        //}
                 
         return mapping.findForward("success");        
     }

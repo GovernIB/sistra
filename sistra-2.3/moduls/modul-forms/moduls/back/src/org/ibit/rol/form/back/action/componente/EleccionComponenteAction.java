@@ -43,6 +43,8 @@ import org.ibit.rol.form.persistence.delegate.PantallaDelegate;
  *  name="filebox" path=".filebox.editar"
  * @struts.action-forward
  *  name="radiobutton" path=".radiobutton.editar"
+  * @struts.action-forward
+ *  name="seccion" path=".seccion.editar"
  *
  * @struts.action-forward
  *  name="cancel" path=".pantalla.editar"
@@ -65,7 +67,8 @@ public class EleccionComponenteAction extends BaseAction{
 
         // --- INDRA: CONTROL DE QUE UNA PAGINA DETALLE NO SE PUEDE ESTABLECER UNA LISTA DE ELEMENTOS
         PantallaDelegate pd = DelegateUtil.getPantallaDelegate();
-        if (StringUtils.isNotEmpty(pd.obtenerPantalla(ecForm.getIdPantalla()).getComponenteListaElementos()) && 
+        boolean pantallaDetalleLEL = StringUtils.isNotEmpty(pd.obtenerPantalla(ecForm.getIdPantalla()).getComponenteListaElementos());
+		if (pantallaDetalleLEL && 
         		ecForm.getTipo().equals("listaelementos") ){
         	// TODO RAFA CONTROLAR MENSAJE
         	throw new Exception("No se puede elegir un componente de lista de elementos en una pantalla detalle de lista de elementos");        
@@ -75,6 +78,7 @@ public class EleccionComponenteAction extends BaseAction{
         ComponenteForm cForm = (ComponenteForm) obtenerActionForm(mapping, request, "/back/" + ecForm.getTipo() + "/editar") ;
         cForm.destroy(mapping, request);
         cForm.setIdPantalla(ecForm.getIdPantalla());
+        cForm.setPantallaDetalle(pantallaDetalleLEL);
 
         return mapping.findForward(ecForm.getTipo());
     }

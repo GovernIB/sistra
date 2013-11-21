@@ -248,7 +248,7 @@
 
 
 	 <!-- Mòdul forms -->
-	    <module><java>6-model.jar</java></module>
+	    <module><java>6-form-model.jar</java></module>
 	    <module><ejb>6-form-persistence.jar</ejb></module>
 	    <module>
 	        <web>

@@ -1,17 +1,16 @@
 package org.ibit.rol.form.back.action.componente;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.ibit.rol.form.back.action.BaseAction;
 import org.ibit.rol.form.back.util.ComponenteConfig;
 import org.ibit.rol.form.model.Componente;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionForm;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @struts.action
@@ -35,7 +34,8 @@ import javax.servlet.http.HttpServletResponse;
  *  name="listaelementos" path=".listaelementos.editar"
  * @struts.action-forward
  *  name="radiobutton" path=".radiobutton.editar"
- *
+ * @struts.action-forward
+ *  name="seccion" path=".seccion.editar"
  * @struts.action-forward
  *  name="fail" path=".pantalla.lista"
  *
@@ -61,14 +61,7 @@ public class SeleccionComponenteAction extends BaseAction{
         Long id = new Long(idString);
         Componente componente = guardarComponente(mapping, request, id);
         String tipo = ComponenteConfig.getTipo(componente);
-
         
-        // --- INDRA: CHECK SI CAMPO PERTENECE A PANTALLA DE DETALLE DE LISTA DE ELEMENTOS
-        if (componente.getPantalla()!=null && StringUtils.isNotEmpty(componente.getPantalla().getComponenteListaElementos())){
-        	request.setAttribute("detalle","true");
-        }
-        // --- INDRA: CHECK SI CAMPO PERTENECE A PANTALLA DE DETALLE DE LISTA DE ELEMENTOS        
-
         log.debug("mapping findForward " + tipo);
         return mapping.findForward(tipo);
     }

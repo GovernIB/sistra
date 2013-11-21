@@ -11,10 +11,48 @@
             var url = '<html:rewrite page="/textbox/ayudaMascara.jsp" />';
             obrir(url, "Edicion", 540, 400);
          }
+
+    	function ajustarColspan() {
+        	var filasSelect = document.getElementById("filas");
+        	var colspanSelect = document.getElementById("colSpan");
+        	var filas = filasSelect.options[filasSelect.selectedIndex].value;
+        	var colspan = colspanSelect.options[colspanSelect.selectedIndex].value;
+        	
+        	if (isNaN(filas)) {
+            	filas = 1;
+        	}
+
+			var minColSpan = 1;
+        	
+        	if (filas > 1) {
+            	minColSpan = 3;
+        	}
+       
+        	while (colspanSelect.length > 0) {
+       	    	colspanSelect.remove(0);
+       	    }
+
+        	for (var i = minColSpan; i <= 6; i++) {
+       	        var opcio = new Option(i, i);
+       	     	colspanSelect.add(opcio);       	        
+       	    }	 
+
+			if (colspan >= minColSpan){
+				colspanSelect.value = colspan;
+			}
+	           	
+    	}
    //-->
 </script>
-<% int ti = 1; %>
+<% int ti = 1; int minColSpan = 1;%>
+<logic:notEmpty name="textboxForm" property="values.colSpan">
+	<logic:greaterThan name="textboxForm" property="values.filas" value="1">
+		<% minColSpan = 3; %>
+	</logic:greaterThan> 
+</logic:notEmpty>
+
 <html:hidden property="idPantalla" />
+<html:hidden property="pantallaDetalle" />
 <input type="hidden" name="idOperacion" value="<%=Util.getIdOperacion(request)%>"/>	
 <tr>
     <td class="labelo"><bean:message key="componente.nombreLogico"/></td>
@@ -27,9 +65,41 @@
     <td class="label"><bean:message key="componente.posicion"/></td>
     <td class="input">
     <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.posicion">
-        <html:option value="0"><bean:message key="componente.posicion.0" /></html:option>
         <html:option value="1"><bean:message key="componente.posicion.1" /></html:option>
+        <html:option value="0"><bean:message key="componente.posicion.0" /></html:option>
+        <html:option value="2"><bean:message key="componente.posicion.2" /></html:option>
+        <html:option value="3"><bean:message key="componente.posicion.3" /></html:option>
     </html:select>
+</tr>
+<tr>
+    <td class="label"><bean:message key="componente.colSpan"/></td>
+    <td class="input">
+	    <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.colSpan" styleId="colSpan">
+	    	<% for (int i = minColSpan ; i <= 6; i++) { %>															
+				<html:option value="<%=Integer.toString(i)%>"><bean:message key="<%=\"componente.colSpan.\" + i%>"/></html:option>
+			<% } %>       
+	    </html:select>
+	     - <bean:message key="textbox.colspan.restriccion"/>
+    </td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="componente.sinEtiqueta"/></td>
+    <td class="input">
+    <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.sinEtiqueta">
+        <html:option value="false"><bean:message key="componente.sinEtiqueta.conEtiqueta" /></html:option>
+        <html:option value="true"><bean:message key="componente.sinEtiqueta.sinEtiqueta" /></html:option>          
+    </html:select>
+    </td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="componente.alineacion"/></td>
+    <td class="input">
+    <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.alineacion">
+        <html:option value="I"><bean:message key="componente.alineacion.izquierda" /></html:option>
+        <html:option value="C"><bean:message key="componente.alineacion.centro" /></html:option>       
+        <html:option value="D"><bean:message key="componente.alineacion.derecha" /></html:option>         
+    </html:select>
+    </td>
 </tr>
 <tr>
     <td class="labela" colspan="2"><bean:message key="ayuda.posicion"/></td>
@@ -43,11 +113,23 @@
 </tr>
 <tr>
     <td class="labelo"><bean:message key="textbox.filas"/></td>
-    <td class="input"><html:text styleClass="t30" tabindex="<%=Integer.toString(ti++)%>" property="values.filas" maxlength="3" /></td>
+    <td class="input">
+    	 <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.filas" styleId="filas" onchange="ajustarColspan()">
+			<% for (int i = 1 ; i <= 999; i++) { %>															
+				<html:option value="<%=Integer.toString(i)%>"><%=i%></html:option>
+			<% } %>
+		</html:select>    			
+    </td>
 </tr>
 <tr>
     <td class="labelo"><bean:message key="textbox.columnas"/></td>
-    <td class="input"><html:text styleClass="t30" tabindex="<%=Integer.toString(ti++)%>" property="values.columnas" maxlength="3" /></td>
+    <td class="input">
+    	 <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.columnas">
+			<% for (int i = 1 ; i <= 999; i++) { %>															
+				<html:option value="<%=Integer.toString(i)%>"><%=i%></html:option>
+			<% } %>
+		</html:select>     	
+    </td>
 </tr>
 <tr>
     <td class="label"><bean:message key="componente.multilinea"/></td>
@@ -89,9 +171,21 @@
     <td class="labela" colspan="2"><bean:message key="ayuda.tipoValor"/></td>
 </tr>
 
+<tr>
+    <td class="label"><bean:message key="componente.encuadrar.marcar"/></td>
+    <td class="input">
+    	 <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.encuadrar">
+	        <html:option value="true"><bean:message key="componente.encuadrar.si" /></html:option>
+	        <html:option value="false"><bean:message key="componente.encuadrar.no" /></html:option>                
+	    </html:select>
+    </td>
+</tr>
+<tr>
+    <td class="labela" colspan="2"><bean:message key="ayuda.encuadrar"/></td>
+</tr>
+
 <!--  INDRA: PROPIEDADES PARA CAMPOS DE PANTALLAS DE DETALLE DE LISTA DE ELEMENTOS -->
-<logic:present name="detalle">
-<logic:equal name="detalle" value="true">
+<logic:equal name="textboxForm" property="pantallaDetalle" value="true">
 <tr>
     <td class="label"><bean:message key="componente.mostrarEnTabla"/></td>
     <td class="input"><html:checkbox styleClass="check" tabindex="<%=Integer.toString(ti++)%>" property="values.mostrarEnTabla" /></td>
@@ -104,7 +198,6 @@
     <td class="labela" colspan="2"><bean:message key="ayuda.mostrarListaElementos"/></td>
 </tr>
 </logic:equal>
-</logic:present>
 <!--  INDRA: PROPIEDADES PARA CAMPOS DE PANTALLAS DE DETALLE DE LISTA DE ELEMENTOS -->
 
 <tiles:insert page="/moduls/editarExpresiones.jsp">
