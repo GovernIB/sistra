@@ -98,7 +98,7 @@ nav { margin-top:1em; }
 		background-position:82% 50%, 86% -2em;
 	}
 	
-	nav a.imc-nav-finalitza { color:#fff; background-color:#88c684;
+	nav a.imc-nav-finalitza { color:#fff; padding:.5em 1em; background-color:#88c684;
 		background-image:url(../imgs/nav/bt-finalitza-icon.png), url(../imgs/nav/bt-abandona-cercle.png);
 		background-repeat:no-repeat, no-repeat;
 		background-position:83% 50%, 86% -2em;
