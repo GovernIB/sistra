@@ -339,6 +339,17 @@
     <arg0 key="label.etiqueta"/>
    </field>
   </form>
+  <form name="seccionForm">
+   <field depends="required" page="0" property="values.nombreLogico">
+    <arg0 key="componente.nombreLogico"/>
+   </field>
+   <field depends="required" page="1" property="values.nombreLogico">
+    <arg0 key="componente.nombreLogico"/>
+   </field>
+   <field depends="required" page="1" property="traduccion.etiqueta">
+    <arg0 key="label.etiqueta"/>
+   </field>
+  </form>
   <form name="listboxForm">
    <field depends="required" page="0" property="values.nombreLogico">
     <arg0 key="componente.nombreLogico"/>

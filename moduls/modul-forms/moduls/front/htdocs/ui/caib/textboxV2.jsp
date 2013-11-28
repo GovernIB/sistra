@@ -12,8 +12,14 @@
 	<% Validacion vmaxlength = campo.findValidacion("maxlength"); %>
 	<% boolean autocalculo = StringUtils.isNotEmpty(StringUtils.strip(campo.getExpresionAutocalculo()));%>
 	<% boolean disabled = StringUtils.isNotEmpty(StringUtils.strip(campo.getExpresionDependencia())); %>    
-    <% boolean bloqueado = campo.isBloqueado();%>    
-	
+    <% boolean bloqueado = campo.isBloqueado();%>  
+    
+    <nested:equal property="oculto" value="true">
+    	<html:hidden property="<%=nombre%>"/>
+    </nested:equal>
+    
+    
+    <nested:equal property="oculto" value="false">  
 	<div class="<%=org.ibit.rol.form.front.util.UtilFrontV2.generateStyleClass(campo)%>" data-type="text">
 		<div class="imc-el-etiqueta">
 			<nested:equal property="sinEtiqueta" value="false">
@@ -45,5 +51,6 @@
 		</div>		
 		</nested:notEmpty>
 	</div>
+	</nested:equal>
 	
 </nested:root>

@@ -317,8 +317,8 @@ public final class PantallaUtils {
                         //valor por defecto definido en el mismo campo
                     	
                     	// INDRA 2013: SI COMBO NO ES OBLIGATORIO NO HACEMOS CASO DE LOS VALORES POSIBLES
-                    	boolean obligatorio = (campo instanceof ComboBox) && ((ComboBox) campo).isObligatorio(); 
-                    	if (obligatorio) {
+                    	boolean comboObligatorio = (campo instanceof ComboBox) && ((ComboBox) campo).isObligatorio(); 
+                    	if (comboObligatorio || campo instanceof RadioButton) {
 	                        for (int j = 0; j < valoresPosibles.size(); j++) {
 	                            ValorPosible vp = (ValorPosible) valoresPosibles.get(j);
 	                            
@@ -585,8 +585,8 @@ public final class PantallaUtils {
 
                     }else {
                     	// INDRA 2013: SI COMBO NO ES OBLIGATORIO NO HACEMOS CASO DE LOS VALORES POSIBLES
-                    	boolean obligatorio = (campo instanceof ComboBox) && ((ComboBox) campo).isObligatorio(); 
-                    	if (obligatorio) {
+                    	boolean obligatorioCombo = (campo instanceof ComboBox) && ((ComboBox) campo).isObligatorio(); 
+                    	if (campo instanceof RadioButton || obligatorioCombo) {
 	                        //valor por defecto definido en el mismo campo
 	                        for (int j = 0; j < valoresPosibles.size(); j++) {
 	                            ValorPosible vp = (ValorPosible) valoresPosibles.get(j);
