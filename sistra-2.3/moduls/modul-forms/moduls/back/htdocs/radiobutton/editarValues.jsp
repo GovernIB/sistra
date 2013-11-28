@@ -43,8 +43,8 @@
     <td class="label"><bean:message key="componente.sinEtiqueta"/></td>
     <td class="input">
     <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.sinEtiqueta">
-        <html:option value="false"><bean:message key="omponente.sinEtiqueta.conEtiqueta" /></html:option>
-        <html:option value="true"><bean:message key="omponente.sinEtiqueta.sinEtiqueta" /></html:option>        
+        <html:option value="false"><bean:message key="componente.sinEtiqueta.conEtiqueta" /></html:option>
+        <html:option value="true"><bean:message key="componente.sinEtiqueta.sinEtiqueta" /></html:option>        
     </html:select>
     </td>
 </tr>
