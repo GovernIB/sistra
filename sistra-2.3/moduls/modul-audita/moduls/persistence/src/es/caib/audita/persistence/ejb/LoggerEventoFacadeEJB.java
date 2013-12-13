@@ -27,7 +27,7 @@ public abstract class LoggerEventoFacadeEJB extends QueryEJB
 {
 	/**
      * @ejb.create-method
-     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission unchecked = "true"
      */
 	public void ejbCreate() throws CreateException 
 	{
@@ -36,9 +36,8 @@ public abstract class LoggerEventoFacadeEJB extends QueryEJB
 	
 	/**
 	 * @ejb.interface-method
-     * @ejb.permission role-name="${role.todos}"
-     
-	 */
+     * @ejb.permission unchecked = "true"
+     */
 	public Long logEvento( Evento eventoAuditado )
 	{
 		return logEventoImpl(eventoAuditado);
@@ -46,7 +45,7 @@ public abstract class LoggerEventoFacadeEJB extends QueryEJB
 
 	/**
 	 * @ejb.interface-method
-     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission unchecked = "true"
      * @ejb.transaction type="RequiresNew"
 	 */
 	public Long logEventoTxNew( Evento eventoAuditado )
