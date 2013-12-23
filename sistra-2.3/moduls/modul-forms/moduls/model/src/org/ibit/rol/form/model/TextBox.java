@@ -2,6 +2,18 @@ package org.ibit.rol.form.model;
 
 public class TextBox extends Campo {
 
+	// Tipo texto: NO(Normal) / FE (Fecha) / HO (Hora) / NU (Numero) / IM (Importe)
+	private String tipoTexto;
+	
+
+	public String getTipoTexto() {
+		return tipoTexto;
+	}
+
+	public void setTipoTexto(String tipoTexto) {
+		this.tipoTexto = tipoTexto;
+	}
+		
     private int filas;
 
     public int getFilas() {
@@ -52,4 +64,5 @@ public class TextBox extends Campo {
             getValorPosible().setTraduccion(idioma, null);
         }
     }
+
 }

@@ -123,13 +123,18 @@
 		// Prevenimos doble click
 		if (bDobleClick) return;
 		bDobleClick=true;
-		
-	    document.pantallaForm.elements['<%=Constants.CANCEL_PROPERTY%>'].disabled = false;
-	    document.pantallaForm.elements['SAVE'].disabled = true;
-	    document.pantallaForm.elements['DISCARD'].disabled = false;
-	    document.pantallaForm.elements['PANTALLA_ANTERIOR'].disabled = true;
-	    mostrarCapaEnviando(TXT_MSG_ENVIANDO);
-	    document.pantallaForm.submit();
+
+		if ( confirm ( '<bean:message bundle="caibMessages" key="aviso.cancelarFormulario" />' ) )
+		{
+			document.pantallaForm.elements['<%=Constants.CANCEL_PROPERTY%>'].disabled = false;
+	    	document.pantallaForm.elements['SAVE'].disabled = true;
+	    	document.pantallaForm.elements['DISCARD'].disabled = false;
+	    	document.pantallaForm.elements['PANTALLA_ANTERIOR'].disabled = true;
+	    	mostrarCapaEnviando(TXT_MSG_ENVIANDO);
+	    	document.pantallaForm.submit();
+		} else {
+			bDobleClick=false;
+		}
 	}
 
 	

@@ -97,6 +97,7 @@
             </list>
 
             <subclass name="org.ibit.rol.form.model.TextBox" discriminator-value="textbox">
+                <property name="tipoTexto" column="COM_TXTIPO"/>
                 <property name="filas" column="COM_FILAS"/>
                 <property name="columnas" column="COM_COLUMN"/>
                 <property name="multilinea" column="COM_MULTIL"/>

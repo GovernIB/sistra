@@ -12,28 +12,65 @@
 	<% Validacion vmaxlength = campo.findValidacion("maxlength"); %>
 	<% boolean autocalculo = StringUtils.isNotEmpty(StringUtils.strip(campo.getExpresionAutocalculo()));%>
 	<% boolean disabled = StringUtils.isNotEmpty(StringUtils.strip(campo.getExpresionDependencia())); %>    
-    <% boolean bloqueado = campo.isBloqueado();%>  
+    <% boolean bloqueado = campo.isBloqueado();%> 
+    <% String dataType = "text";
+       String styleClassInput = "";
+       String inputType = "text";
+       if (campo.getFilas() <= 1) {
+	       if ("FE".equals(campo.getTipoTexto())) {
+	    		dataType  ="date";
+	    		inputType = "date";
+	    		styleClassInput = "imc-data";
+	       }
+	       if ("HO".equals(campo.getTipoTexto())) {
+	    		dataType  = "time";
+	    		inputType = "time";
+	    		styleClassInput = "imc-hora";
+	       } 
+	       if ("NU".equals(campo.getTipoTexto())) {
+	    		dataType  = "text";
+	    		inputType = "number";
+	    		styleClassInput = "imc-numero";
+	       } 
+       }
+    %>  
     
     <nested:equal property="oculto" value="true">
     	<html:hidden property="<%=nombre%>"/>
     </nested:equal>
     
     
-    <nested:equal property="oculto" value="false">  
-	<div class="<%=org.ibit.rol.form.front.util.UtilFrontV2.generateStyleClass(campo)%>" data-type="text">
-		<div class="imc-el-etiqueta">
+    <nested:equal property="oculto" value="false">
+    
+    <div class="<%=org.ibit.rol.form.front.util.UtilFrontV2.generateStyleClass(campo)%>" data-type="<%=dataType%>">
+   		<div class="imc-el-etiqueta">
 			<nested:equal property="sinEtiqueta" value="false">
 				<label for="<%=nombre%>"><nested:write property="traduccion.nombre"/></label>
 			</nested:equal>			
 		</div>
 		<div class="imc-el-control">
 			 <nested:lessEqual property="filas" value="1">
-			 	<html:text property="<%=nombre%>" 
-			 		styleId="<%=nombre%>"
-			 		readonly="<%=(autocalculo) || (bloqueado)%>"
-        			disabled="<%=disabled%>"
-			 		onchange='<%=(!autocalculo && !bloqueado) ? "onFieldChange(this.form, this.name)" : ""%>'
-			 		maxlength='<%=(vmaxlength != null ? vmaxlength.getValores()[0] : "")%>'/>
+			 	
+			 	<% if (!"text".equals(inputType)) { %>
+			 		<input type="<%=inputType%>" 
+			 			id="<%=nombre%>"
+			 			name="<%=nombre%>" 
+			 			class="<%=styleClassInput%>" 
+			 			onchange='<%=(!autocalculo && !bloqueado) ? "onFieldChange(this.form, this.name)" : ""%>' 
+			 			value='<nested:write name="pantallaForm" property="<%=nombre%>"/>' 
+			 			maxlength='<%=(vmaxlength != null ? vmaxlength.getValores()[0] : "")%>'	>
+			 	<% } else { %>
+			 		<html:text property="<%=nombre%>" 
+				 		styleId="<%=nombre%>"
+				 		readonly="<%=(autocalculo) || (bloqueado)%>"
+	        			disabled="<%=disabled%>"
+				 		onchange='<%=(!autocalculo && !bloqueado) ? "onFieldChange(this.form, this.name)" : ""%>'
+				 		maxlength='<%=(vmaxlength != null ? vmaxlength.getValores()[0] : "")%>'
+				 		styleClass='<%=styleClassInput%>'/>
+			 	<% } %> 
+			 		
+			 		
+			 		
 			 </nested:lessEqual>
 			 <nested:greaterThan property="filas" value="1">
 				 <html:textarea property="<%=nombre%>" 
