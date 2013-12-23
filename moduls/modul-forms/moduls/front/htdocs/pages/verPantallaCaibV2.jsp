@@ -113,14 +113,8 @@
 			</li>
 			
 			<li>
-			<logic:equal name="nextButton" value="true">
-				<a href="javascript:next()" class="imc-nav-seguent" title="<bean:message bundle="caibMessages" key="boton.next" />" onfocus="this.blur()">
-					<bean:message bundle="caibMessages" key="boton.nextTextV2"/>
-				</a>
-			</logic:equal>			
-			<logic:equal name="nextButton" value="false">							
-				<span>&nbsp;</span>		
-			</logic:equal>
+				<!-- Reservado guardar formulario -->
+				<span>&nbsp;</span>
 			</li>
 		
 			<li>	
@@ -128,7 +122,14 @@
 				<a href="javascript:next()" class="imc-nav-finalitza" title="<bean:message bundle="caibMessages" key="boton.terminar"/>" onfocus="this.blur()"><bean:message bundle="caibMessages" key="boton.terminar"/></a>			
 			</logic:equal>
 			<logic:equal name="endButton" value="false">							
-				<span>&nbsp;</span>		
+				<logic:equal name="nextButton" value="true">
+					<a href="javascript:next()" class="imc-nav-seguent" title="<bean:message bundle="caibMessages" key="boton.next" />" onfocus="this.blur()">
+						<bean:message bundle="caibMessages" key="boton.nextTextV2"/>
+					</a>
+				</logic:equal>			
+				<logic:equal name="nextButton" value="false">							
+					<span>&nbsp;</span>		
+				</logic:equal>	
 			</logic:equal>
 			</li>
 	</ul>			

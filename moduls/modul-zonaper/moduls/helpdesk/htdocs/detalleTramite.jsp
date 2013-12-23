@@ -85,7 +85,7 @@
 						<caption><bean:message key="detalleTramite.documentos"/></caption>
 						<tbody>
 							<logic:iterate id="documento" name="tramiteBackup" property="documentos" type="es.caib.zonaper.model.DocumentoPersistente">
-								<logic:equal name="documento" property="estado" value="<%=es.caib.zonaper.model.DocumentoPersistente.ESTADO_CORRECTO+"" %>">
+								<logic:equal name="documento" property="estado" value="S">
 								<tr>
 									<th class="tramits"></th>
 									<td>
@@ -98,7 +98,7 @@
 									</td>
 								</tr>
 								</logic:equal>
-								<logic:notEqual name="documento" property="estado" value="<%=es.caib.zonaper.model.DocumentoPersistente.ESTADO_CORRECTO+"" %>">
+								<logic:notEqual name="documento" property="estado" value="S" %>">
 								<tr>
 									<th class="tramits"></th>
 									<td>

@@ -69,6 +69,7 @@
 <tr>
     <td class="labela" colspan="2"><bean:message key="ayuda.etiquetaPDF"/></td>
 </tr>
+<!-- 
 <tr>
     <td class="label"><bean:message key="componente.tipovalor"/></td>
     <td class="input">
@@ -83,6 +84,7 @@
 <tr>
     <td class="labela" colspan="2"><bean:message key="ayuda.tipoValor"/></td>
 </tr>
+ -->
 <tr>
     <td class="label"><bean:message key="componente.obligatorio"/></td>
     <td class="input"><html:checkbox styleClass="check" tabindex="<%=Integer.toString(ti++)%>" property="values.obligatorio" /></td>

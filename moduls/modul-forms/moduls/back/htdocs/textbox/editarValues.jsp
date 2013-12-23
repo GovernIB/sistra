@@ -168,6 +168,18 @@
     </td>
 </tr>
 <tr>
+    <td class="label"><bean:message key="textbox.tipo"/></td>
+    <td class="input">
+        <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.tipoTexto" >
+        	<html:option value="NO"><bean:message key="textbox.tipo.normal" /></html:option>
+            <html:option value="FE"><bean:message key="textbox.tipo.fecha" /></html:option>
+            <html:option value="HO"><bean:message key="textbox.tipo.hora" /></html:option>
+            <html:option value="NU"><bean:message key="textbox.tipo.numero" /></html:option>
+            <html:option value="IM"><bean:message key="textbox.tipo.importe" /></html:option>
+        </html:select>
+    </td>
+</tr>
+<tr>
     <td class="labela" colspan="2"><bean:message key="ayuda.tipoValor"/></td>
 </tr>
 
