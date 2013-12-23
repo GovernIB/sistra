@@ -41,6 +41,8 @@ public class Dominio  implements java.io.Serializable {
 	private String pwd;
 	private char cacheable='N';
 	private String versionWS;
+	private String soapActionWS;
+	
 	
 	
 	
@@ -230,6 +232,14 @@ public class Dominio  implements java.io.Serializable {
 			saxe.printStackTrace();
 		}
 		return d;
+	}
+
+	public String getSoapActionWS() {
+		return soapActionWS;
+	}
+
+	public void setSoapActionWS(String soapActionWS) {
+		this.soapActionWS = soapActionWS;
 	}
 
 }

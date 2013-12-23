@@ -27,6 +27,7 @@ public class Procedimiento implements Serializable{
 	private char tipoAcceso=ACCESO_EJB;
 	private String url;
 	private String versionWS;
+	private String soapActionWS;
 	private char localizacionEJB = EJB_LOCAL;
 	private char autenticacionEJB = AUTENTICACION_SIN;
 	private String jndiEJB;
@@ -165,6 +166,12 @@ public class Procedimiento implements Serializable{
 	}
 	public void setAvisarNotificaciones(String avisarNotificaciones) {
 		this.avisarNotificaciones = avisarNotificaciones;
+	}
+	public String getSoapActionWS() {
+		return soapActionWS;
+	}
+	public void setSoapActionWS(String soapActionWS) {
+		this.soapActionWS = soapActionWS;
 	}
 	
 }

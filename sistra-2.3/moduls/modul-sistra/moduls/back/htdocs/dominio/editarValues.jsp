@@ -79,6 +79,12 @@
     </td>
 </tr>
 <tr>
+    <td class="label">Soap Action</td>
+    <td class="input">
+    	<html:text styleClass="textLargo" tabindex="10" property="values.soapActionWS" maxlength="100"/>    	
+    </td>
+</tr>
+<tr>
     <td class="label"><bean:message key="dominio.sql"/></td>
     <td class="input"><html:textarea tabindex="10" property="values.sql" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=values.sql&titulo=dominio.sql" %>');"/></td>
 </tr>

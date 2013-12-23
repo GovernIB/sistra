@@ -24,6 +24,8 @@
     <property name="usr"  column="DOM_USR" length="500" />
     <property name="pwd"  column="DOM_PWD" length="500"/>
      <property name="cacheable"  column="DOM_CACHE" not-null="true"  length="1"/>
+     <property name="soapActionWS"  column="DOM_WSSOA"/>
+     
      
     <many-to-one name="organoResponsable" column="DOM_CODORG" not-null="true"/> 
 

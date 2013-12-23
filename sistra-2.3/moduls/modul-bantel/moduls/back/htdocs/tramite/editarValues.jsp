@@ -83,6 +83,12 @@
     </td>
 </tr>
 <tr>
+    <td class="label">Soap Action</td>
+    <td class="input">
+    	<html:text styleClass="textLargo" tabindex="10" property="values.soapActionWS" maxlength="100"/>    	
+    </td>
+</tr>
+<tr>
     <td class="label"><bean:message key="tramite.jndiEJB"/></td>
     <td class="input"><html:text styleClass="textLargo" tabindex="10" property="values.jndiEJB" maxlength="100"/></td>
 </tr>

@@ -40,12 +40,12 @@ public class ClienteWS {
 	 * @return Valores del dominio 
 	 * @throws Exception
 	 */
-	public static ValoresDominio obtenerDominio(String url, String user, String pass, String idDominio,List parametros) throws Exception{
+	public static ValoresDominio obtenerDominio(String url,String soapAction, String user, String pass, String idDominio,List parametros) throws Exception{
 		
 	   log.debug("Obteniendo dominio por webservice v1: url=" + url + " idDominio=" + idDominio);
 		
 	   // Generamos port para acceder al ws
-	   es.caib.sistra.wsClient.v1.services.SistraFacade port = generarPort(url,user,pass);
+	   es.caib.sistra.wsClient.v1.services.SistraFacade port = generarPort(url,soapAction,user,pass);
 
 	   // Accedemos al ws y realizamos traduccion de parametros/resultado
        try {
@@ -74,12 +74,12 @@ public class ClienteWS {
 	 * @return Lista de documentos retornados
 	 * @throws Exception
 	 */
-	public static List realizarConsulta(String url,String user,String pass,String identificadorTramite, Map datosFormulario) throws Exception {
+	public static List realizarConsulta(String url,String soapAction,String user,String pass,String identificadorTramite, Map datosFormulario) throws Exception {
 		
 		 log.debug("Realizando tramite consulta por webservice v1: url=" + url);
 			
 		 // Generamos port para acceder al ws
-		 es.caib.sistra.wsClient.v1.services.SistraFacade port = generarPort(url,user,pass);
+		 es.caib.sistra.wsClient.v1.services.SistraFacade port = generarPort(url,soapAction,user,pass);
 
 		 // Accedemos al ws y realizamos traduccion de parametros/resultado
 		 try {
@@ -157,13 +157,13 @@ public class ClienteWS {
 	//	 FUNCIONES PRIVADAS	
 	//----------------------------------------------------------------------------------------------------
 	
-	private static es.caib.sistra.wsClient.v1.services.SistraFacade generarPort(String url,String user,String pass) throws Exception{
+	private static es.caib.sistra.wsClient.v1.services.SistraFacade generarPort(String url,String soapAction,String user,String pass) throws Exception{
 		javax.xml.ws.Service service =javax.xml.ws.Service.create(SERVICE_NAME); 
 		service.addPort(PORT_NAME,javax.xml.ws.soap.SOAPBinding.SOAP11HTTP_BINDING, url);
 		es.caib.sistra.wsClient.v1.services.SistraFacade port = service.getPort(PORT_NAME,es.caib.sistra.wsClient.v1.services.SistraFacade.class);
           
 		// Configura puerto para autenticacion y paso por proxy
-		WsClientSistraUtil.configurePort((BindingProvider)port,url,user,pass);
+		WsClientSistraUtil.configurePort((BindingProvider)port,url,soapAction,user,pass);
 		
         return port;
 	}

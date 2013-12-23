@@ -303,9 +303,9 @@ public class PluginDominio {
 		}
 		
 		if(dominio.getVersionWS() != null && "v1".equals(dominio.getVersionWS())){
-			return es.caib.sistra.wsClient.v1.client.ClienteWS.obtenerDominio(url,user,pass,dominio.getIdentificador(),parametros);
+			return es.caib.sistra.wsClient.v1.client.ClienteWS.obtenerDominio(url,dominio.getSoapActionWS(),user,pass,dominio.getIdentificador(),parametros);
 		}else if(dominio.getVersionWS() != null && "v2".equals(dominio.getVersionWS())){
-			return es.caib.sistra.wsClient.v2.client.ClienteWS.obtenerDominio(url,user,pass,dominio.getIdentificador(),parametros);
+			return es.caib.sistra.wsClient.v2.client.ClienteWS.obtenerDominio(url,dominio.getSoapActionWS(),user,pass,dominio.getIdentificador(),parametros);
 		}else{
 			throw new Exception("Excepcion obteniendo la versión "+dominio.getVersionWS()+" del WS de obtención de dominios. ");
 		}
