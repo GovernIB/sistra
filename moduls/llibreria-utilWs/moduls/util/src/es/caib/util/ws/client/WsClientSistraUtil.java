@@ -18,9 +18,9 @@ public class WsClientSistraUtil {
 	 * @param pass
 	 * @throws Exception
 	 */
-	public static void configurePort(BindingProvider port, String url,
+	public static void configurePort(BindingProvider port, String url, String soapAction,
 			String user, String pass) throws Exception {
-		configurePort(port, url, user, pass, Constantes.TIPO_CONFIGURACION_PROPERTIES);
+		configurePort(port, url, soapAction, user, pass, Constantes.TIPO_CONFIGURACION_PROPERTIES);
 	}
 	
 	/**
@@ -32,7 +32,7 @@ public class WsClientSistraUtil {
 	 * @param pass
 	 * @throws Exception
 	 */
-	public static void configurePort(BindingProvider port, String url,
+	public static void configurePort(BindingProvider port, String url, String soapAction,
 			String user, String pass, String tipoConfiguracion) throws Exception {
 
 		Properties props;
@@ -61,8 +61,8 @@ public class WsClientSistraUtil {
 				.getProperty("sistra.ws.client.disableChunked") != null ? "true"
 				.equals(props.getProperty("sistra.ws.client.disableChunked"))
 				: false);
-		
-		WsClientUtil.configurePort(port, url, user, pass, auth,
+				
+		WsClientUtil.configurePort(port, url, soapAction, user, pass, auth,
 				generateTimestamp, logCalls, disableCnCheck, disableChunked);
 
 	}

@@ -182,9 +182,9 @@ public class RegistroController
 	private ResultadoRegistrar consultarImpl_WS(String url,String user,String pass,String identificadorTramite, String identificadorProcedimiento, Map datosFormulario, String versionWS)throws Exception {
 			List docRes = null;
 			if(versionWS != null && "v1".equals(versionWS)){
-				docRes = es.caib.sistra.wsClient.v1.client.ClienteWS.realizarConsulta(url,user,pass,identificadorTramite,datosFormulario);
+				docRes = es.caib.sistra.wsClient.v1.client.ClienteWS.realizarConsulta(url,null,user,pass,identificadorTramite,datosFormulario);
 			}else if(versionWS != null && "v2".equals(versionWS)){
-				docRes = es.caib.sistra.wsClient.v2.client.ClienteWS.realizarConsulta(url,user,pass,identificadorTramite,datosFormulario);
+				docRes = es.caib.sistra.wsClient.v2.client.ClienteWS.realizarConsulta(url,null,user,pass,identificadorTramite,datosFormulario);
 			}else{
 				throw new Exception("Excepcion obteniendo la versión "+versionWS+" del WS de consulta. ");				
 			}

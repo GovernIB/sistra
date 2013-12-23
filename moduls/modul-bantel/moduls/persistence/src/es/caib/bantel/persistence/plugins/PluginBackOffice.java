@@ -194,9 +194,9 @@ public class PluginBackOffice {
 		if (prop == null) prop = "true";
 		
 		if(procedimiento.getVersionWS() != null && "v1".equals(procedimiento.getVersionWS())){
-			es.caib.bantel.wsClient.v1.client.ClienteWS.avisarEntradasWS(entradas,url,user,pass,Boolean.valueOf(prop).booleanValue());
+			es.caib.bantel.wsClient.v1.client.ClienteWS.avisarEntradasWS(entradas,url, procedimiento.getSoapActionWS(), user,pass,Boolean.valueOf(prop).booleanValue());
 		}else if(procedimiento.getVersionWS() != null && "v2".equals(procedimiento.getVersionWS())){
-			es.caib.bantel.wsClient.v2.client.ClienteWS.avisarEntradasWS(entradas,url,user,pass,Boolean.valueOf(prop).booleanValue());
+			es.caib.bantel.wsClient.v2.client.ClienteWS.avisarEntradasWS(entradas,url, procedimiento.getSoapActionWS(),user,pass,Boolean.valueOf(prop).booleanValue());
 		}else{
 			throw new Exception("Excepcion obteniendo la versión "+procedimiento.getVersionWS()+" del WS de aviso de entradas. ");
 		}

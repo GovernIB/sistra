@@ -30,6 +30,9 @@
   	
   	<property name="avisarNotificaciones" column="TAP_AVINOT" not-null="true"/>
   	
+  	<property name="soapActionWS" column="TAP_WSSOA"/>
+  	
+  	
   		
   	
   	<set name="gestores" table="BTE_GESPRO" inverse="true">
