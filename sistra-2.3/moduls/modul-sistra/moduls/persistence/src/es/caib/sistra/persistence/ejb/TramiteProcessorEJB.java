@@ -1133,6 +1133,17 @@ public class TramiteProcessorEJB implements SessionBean {
 	    				// Pago confirmado: redirigimos al paso de confirmacion
 	    				case ConstantesPago.SESIONPAGO_PAGO_CONFIRMADO:	    					
 	    					return confirmarPago(identificador,instancia);
+	    				
+	    				// Excedido tiempo pago: anulamos pago
+	    				case ConstantesPago.SESIONPAGO_PAGO_EXCEDIDO_TIEMPO_PAGO:
+	    					// Borramos pago
+	    					borrarPago(identificador,instancia);
+	    					// Devolvemos mensaje error
+	    					MensajeFront mensTiempoExcedido = new MensajeFront();
+	    					mensTiempoExcedido.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
+	    					mensTiempoExcedido.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ERRORSESIONPAGOTIEMPOEXCEDIDO));
+	    					mensTiempoExcedido.setMensajeExcepcion("Se ha excedido tiempo de pago.");
+	    	    	    	return generarRespuestaFront(mensTiempoExcedido,null);
 	    					
 	    				// Pago no existe: borramos datos pago y mostramos mensaje de error
 	    				case ConstantesPago.SESIONPAGO_NO_EXISTE_SESION:
@@ -1194,6 +1205,17 @@ public class TramiteProcessorEJB implements SessionBean {
 	        			throw new Exception("Error al calcular el importe de la tasa");
 	        		}
 	        		
+	        		// Verificamos si se ha excedido el tiempo para realizar el pago
+	        		Date fechaLimitePago = StringUtil.cadenaAFecha(calc.getFechaLimitePago(), StringUtil.FORMATO_TIMESTAMP);
+	        		if (fechaLimitePago != null && fechaLimitePago.before(new Date())) {	        			
+						// Devolvemos mensaje error
+						MensajeFront mensTiempoExcedido = new MensajeFront();
+						mensTiempoExcedido.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
+						mensTiempoExcedido.setMensaje(StringUtils.isNotEmpty(calc.getMensajeFechaLimitePago())? calc.getMensajeFechaLimitePago() : traducirMensaje(MensajeFront.MENSAJE_ERRORSESIONPAGOTIEMPOEXCEDIDO));
+						mensTiempoExcedido.setMensajeExcepcion("Se ha excedido tiempo de pago.");
+		    	    	return generarRespuestaFront(mensTiempoExcedido,null);
+	        		}
+	        		
 	        		// Creamos los datos del pago
 	        		datosPago = new DatosPago();
 	        		datosPago.setPluginId(PluginFactory.ID_PLUGIN_DEFECTO.equals(docNivel.getPagoPlugin())?null:docNivel.getPagoPlugin());
@@ -1218,7 +1240,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	        		datosPago.setNif( NifCif.normalizarDocumento(calc.getNif())); 
 	        		datosPago.setNombre(calc.getNombre()); 
 	        		datosPago.setProvincia(calc.getProvincia()); 
-	        		datosPago.setTelefono(calc.getTelefono()); 	        		
+	        		datosPago.setTelefono(calc.getTelefono()); 	 
 	        		
 	    	    	// Iniciamos sesion de pago contra el plugin de pagos
 	        		es.caib.sistra.plugins.pagos.DatosPago dp = new es.caib.sistra.plugins.pagos.DatosPago();
@@ -1237,7 +1259,9 @@ public class TramiteProcessorEJB implements SessionBean {
 	        		dp.setIdentificadorTramite(this.tramiteInfo.getIdPersistencia());
 	        		dp.setNombreTramite(this.tramiteInfo.getDescripcion());
 	        		dp.setNombreUsuario(this.datosSesion.getNombreCompletoUsuario());	        		
-	        		dp.setTipoPago(datosPago.getTipoPago());
+	        		dp.setTipoPago(datosPago.getTipoPago());				
+					dp.setFechaMaximaPago(fechaLimitePago);
+					dp.setMensajeTiempoMaximoPago(calc.getMensajeFechaLimitePago());
 	        		
 	        		SesionSistra ss = new SesionSistra();
 	        		ss.setUrlMantenimientoSesionSistra(urlMantenimientoSesion);
@@ -1368,6 +1392,18 @@ public class TramiteProcessorEJB implements SessionBean {
     		// Verificamos estado pago contra el plugin de pago
     		EstadoSesionPago estadoSesionPago = PluginFactory.getInstance().getPluginPagos(docNivel.getPagoPlugin()).comprobarEstadoSesionPago(datosPago.getLocalizador());
     		
+    		// Si no se ha podido pagar porque se ha excedido tiempo, anulamos pago
+    		if (estadoSesionPago.getEstado() == ConstantesPago.SESIONPAGO_PAGO_EXCEDIDO_TIEMPO_PAGO){
+    			// Borramos pago
+				borrarPago(identificador,instancia);
+				// Devolvemos mensaje error
+				MensajeFront mensTiempoExcedido = new MensajeFront();
+				mensTiempoExcedido.setTipo(MensajeFront.TIPO_ERROR_CONTINUABLE);
+				mensTiempoExcedido.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ERRORSESIONPAGOTIEMPOEXCEDIDO));
+				mensTiempoExcedido.setMensajeExcepcion("Se ha excedido tiempo de pago.");
+    	    	return generarRespuestaFront(mensTiempoExcedido,null);
+    		}	
+    		
     		// Si se ha confirmado actualizamos documento y estado tramite
     		if (estadoSesionPago.getEstado() == ConstantesPago.SESIONPAGO_PAGO_CONFIRMADO){
     				// Actualizamos datos pago
@@ -1389,7 +1425,7 @@ public class TramiteProcessorEJB implements SessionBean {
 		        	pasoPagar.setCompletado(evaluarEstadoPaso(pasoActual));	     	
 		        	
 		        	// Indicamos que el pago se ha confirmado para indicarlo en la auditoria
-		        	confirmado = true;
+		        	confirmado = true;		        
     		}
     		
     		// Si el paso pagar esta completado y no hay pagos opcionales, pasamos al siguiente paso
@@ -1442,7 +1478,6 @@ public class TramiteProcessorEJB implements SessionBean {
      * @ejb.permission role-name="${role.todos}"
      */
     public RespuestaFront anularPago(String identificador,int instancia) {    	
-    	
     	DatosPago datosPago = null; // Datos del pago
     	
     	try{
@@ -1501,8 +1536,9 @@ public class TramiteProcessorEJB implements SessionBean {
     		RespuestaFront resFront = generarRespuestaFront(mens,null);
     		this.context.setRollbackOnly();
     		return resFront;
-    	} 
+    	}
     }
+
     
     
     /**
@@ -4381,7 +4417,7 @@ public class TramiteProcessorEJB implements SessionBean {
 				// --- Establecemos propiedades específicas anexos: tipo de pago
 				if (docPad.getEstado() != DocumentoPersistentePAD.ESTADO_NORELLENADO) {
 					DatosPago datosPago = (DatosPago) this.datosPagos.get(doc.getIdentificador() + "-" + instancia);
-	    			docInfo.setPagoTipo(datosPago.getTipoPago());					
+	    			docInfo.setPagoTipo(datosPago.getTipoPago());		    			
 				}
 				docInfo.setPagoMetodos(docNivel.getPagoMetodos());
 		}

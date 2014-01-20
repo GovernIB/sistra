@@ -273,4 +273,12 @@ public class DatosPago implements Serializable{
 		xmlPago.setOrganoEmisor(organoEmisor);
 	}
 	
+	public Date getFechaLimitePago() {
+		return xmlPago.getFechaLimitePago();
+	}
+
+	public void setFechaLimitePago(Date fecha) {
+		xmlPago.setFechaLimitePago(fecha);
+	}
+	
 }

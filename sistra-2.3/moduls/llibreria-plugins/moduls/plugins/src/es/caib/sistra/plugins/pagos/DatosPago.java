@@ -72,6 +72,17 @@ public class DatosPago implements Serializable{
 	 * Telefono del declarante
 	 */
 	private String telefonoDeclarante;
+	/**
+	 * Fecha limite para realizar el pago. 
+	 * Después de este tiempo no se permitirá iniciar el proceso de pago, 
+	 * pero sí debe permitir confirmar procesos de pago pendientes.
+	 */
+	private Date fechaMaximaPago;
+	
+	/**
+	 * Mensaje a mostrar en caso de que se exceda el tiempo de pago.
+	 */
+	private String mensajeTiempoMaximoPago;
 	
 	/**
 	 * Concepto de la tasa
@@ -284,5 +295,17 @@ public class DatosPago implements Serializable{
 	}
 	public void setTelefonoDeclarante(String telefonoDeclarante) {
 		this.telefonoDeclarante = telefonoDeclarante;
+	}
+	public Date getFechaMaximaPago() {
+		return fechaMaximaPago;
+	}
+	public void setFechaMaximaPago(Date tiempoMaximoRealizarPago) {
+		this.fechaMaximaPago = tiempoMaximoRealizarPago;
+	}
+	public String getMensajeTiempoMaximoPago() {
+		return mensajeTiempoMaximoPago;
+	}
+	public void setMensajeTiempoMaximoPago(String mensajeTiempoMaximoPago) {
+		this.mensajeTiempoMaximoPago = mensajeTiempoMaximoPago;
 	}	
 }

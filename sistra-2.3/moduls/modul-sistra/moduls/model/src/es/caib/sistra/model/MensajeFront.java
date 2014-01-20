@@ -43,6 +43,7 @@ public class MensajeFront implements Serializable{
 	public static final String MENSAJE_ERRORNOPAGADO = "mensaje.error_pagos.no_pagado";
 	public static final String MENSAJE_ERRORJUSTIFICANTEPAGO = "mensaje.error_pagos.justificante";
 	public static final String MENSAJE_ERRORSESIONPAGONOEXISTE = "mensaje.error_pagos.sesion_no_existe";
+	public static final String MENSAJE_ERRORSESIONPAGOTIEMPOEXCEDIDO = "mensaje.error_pagos.excedido_tiempo";
 	public static final String MENSAJE_ERRORMODIFICACIONFORMPORPAGO = "mensaje.error_pagos.no_modif_form_por_pago";
 	public static final String MENSAJE_ERRORMODIFICACIONPORFLUJO = "mensaje.error.no_modif_por_flujo";
 	public static final String MENSAJE_PAGADO = "mensaje.pagos.pago_confirmado";

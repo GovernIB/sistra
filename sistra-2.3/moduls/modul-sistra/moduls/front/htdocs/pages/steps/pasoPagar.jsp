@@ -81,10 +81,12 @@
 								<strong><bean:message key="pasoPagar.continuarPago" /></strong>
 							</html:link>	
 							<logic:equal name="pago" property="obligatorio" value="<%=Character.toString(DocumentoFront.OPCIONAL)%>">
-								- 
-								<html:link href="<%=urlAnularPago%>" onclick="accediendoEnviando(mensajeEnviando);">
-									<strong><bean:message key="pagoPagar.cancelarPago" /></strong>
-								</html:link>					
+								<logic:equal name="pago" property="pagoTipo" value="P">
+									- 
+									<html:link href="<%=urlAnularPago%>" onclick="accediendoEnviando(mensajeEnviando);">
+										<strong><bean:message key="pagoPagar.cancelarPago" /></strong>
+									</html:link>
+								</logic:equal>					
 							</logic:equal>
 						</logic:equal>						
 
