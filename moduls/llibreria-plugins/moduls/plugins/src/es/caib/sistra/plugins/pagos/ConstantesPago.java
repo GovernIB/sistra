@@ -37,5 +37,9 @@ public class ConstantesPago {
 	 * Sesión de pagos pendiente de confirmación (en espera de que la pasarela de pagos indique si se ha realizado el pago)
 	 */
 	public final static int SESIONPAGO_PAGO_PENDIENTE_CONFIRMAR = 3;
+	/**
+	 * Sesión de pagos ha excedido el tiempo maximo para pagar. 
+	 */
+	public final static int SESIONPAGO_PAGO_EXCEDIDO_TIEMPO_PAGO= 4;
 	
 }

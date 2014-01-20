@@ -35,6 +35,7 @@ public class XmlDatosPago implements Serializable{
 	private String idTasa;	// Identificador tasa
 	private String concepto; // Concepto	
 	private Date fechaDevengo; // Fecha en la que se calcula el pago
+	private Date fechaLimitePago; // Fecha limite en la que se puede iniciar el pago
 	private String importe; // Importe del pago
 	private String nif; //  Datos declarante
 	private String nombre; 
@@ -94,6 +95,7 @@ public class XmlDatosPago implements Serializable{
 	public final static String XML_ID_TASA = XML_ROOT + "/DATOS_PAGO/ID_TASA";
 	public final static String XML_IMPORTE = XML_ROOT + "/DATOS_PAGO/IMPORTE";
 	public final static String XML_FECHA_DEVENGO = XML_ROOT + "/DATOS_PAGO/FECHA_DEVENGO";
+	public final static String XML_FECHA_LIMITE_PAGO = XML_ROOT + "/DATOS_PAGO/FECHA_LIMITE_PAGO";
 	public final static String XML_CONCEPTO = XML_ROOT + "/DATOS_PAGO/CONCEPTO";	
 	public final static String XML_NIF = XML_ROOT + "/DATOS_PAGO/DECLARANTE/NIF";
 	public final static String XML_NOMBRE = XML_ROOT + "/DATOS_PAGO/DECLARANTE/NOMBRE";	
@@ -243,6 +245,12 @@ public class XmlDatosPago implements Serializable{
 		nodo = new Nodo(XML_FECHA_DEVENGO,this.getFechaDevengo()!=null?sdf.format(this.getFechaDevengo()):null);		
 		nodo.setXpath(XML_FECHA_DEVENGO);
 		map.put(nodo.getXpath(),nodo);
+		
+		if (this.getFechaLimitePago() != null) {
+			nodo = new Nodo(XML_FECHA_LIMITE_PAGO,  sdf.format(this.getFechaLimitePago()));		
+			nodo.setXpath(XML_FECHA_LIMITE_PAGO);
+			map.put(nodo.getXpath(),nodo);
+		}
 		
 		nodo = new Nodo(XML_CONCEPTO, this.getConcepto());		
 		nodo.setXpath(XML_CONCEPTO);
@@ -483,7 +491,11 @@ public class XmlDatosPago implements Serializable{
 		nodo = (Nodo) map.get(XML_FECHA_DEVENGO);
 		if ( nodo != null){
 			this.setFechaDevengo( StringUtils.isNotEmpty(nodo.getValor())?sdf.parse(nodo.getValor()):null);
-		}				
+		}
+		nodo = (Nodo) map.get(XML_FECHA_LIMITE_PAGO);
+		if ( nodo != null){
+			this.setFechaLimitePago(StringUtils.isNotEmpty(nodo.getValor())?sdf.parse(nodo.getValor()):null);
+		}
 		this.setConcepto( map.get(XML_CONCEPTO) != null? ((Nodo) map.get(XML_CONCEPTO)).getValor():null);		
 		this.setNif( map.get(XML_NIF) != null? ((Nodo) map.get(XML_NIF)).getValor():null);
 		this.setNombre( map.get(XML_NOMBRE) != null? ((Nodo) map.get(XML_NOMBRE)).getValor():null);
@@ -965,6 +977,14 @@ public class XmlDatosPago implements Serializable{
 	public void setInstruccionesPresencialEntidad10Cuenta(
 			String instruccionesPresencialEntidad10Cuenta) {
 		this.instruccionesPresencialEntidad10Cuenta = instruccionesPresencialEntidad10Cuenta;
+	}
+
+	public Date getFechaLimitePago() {
+		return fechaLimitePago;
+	}
+
+	public void setFechaLimitePago(Date fechaLimitePago) {
+		this.fechaLimitePago = fechaLimitePago;
 	}
 	
 }

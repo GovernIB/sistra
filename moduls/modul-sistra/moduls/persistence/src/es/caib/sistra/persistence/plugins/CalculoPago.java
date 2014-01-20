@@ -46,6 +46,10 @@ public class CalculoPago {
 	private String provincia;
 	private String codigoPostal;
 	
+	private String fechaLimitePago; // formato: dd/MM/yyyy HH:mm:ss
+	private String mensajeFechaLimitePago;
+	
+	
 	public String getConcepto() {
 		return concepto;
 	}
@@ -196,6 +200,18 @@ public class CalculoPago {
 	}
 	public void setOrganoEmisor(String organoEmisor) {
 		this.organoEmisor = organoEmisor;
+	}
+	public String getFechaLimitePago() {
+		return fechaLimitePago;
+	}
+	public void setFechaLimitePago(String fechaLimitePago) {
+		this.fechaLimitePago = fechaLimitePago;
+	}
+	public String getMensajeFechaLimitePago() {
+		return mensajeFechaLimitePago;
+	}
+	public void setMensajeFechaLimitePago(String mensajeFechaLimitePago) {
+		this.mensajeFechaLimitePago = mensajeFechaLimitePago;
 	}
 	
 		 
