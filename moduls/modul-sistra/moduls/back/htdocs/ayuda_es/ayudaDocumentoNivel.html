@@ -146,6 +146,10 @@
         DATOSPAGO.setNif('Nif');<br>
         DATOSPAGO.setNombre('Nombre');<br>
 	  </p>
+	   <p> Adicionalmente se puede especificar una fecha l&iacute;mite para iniciar el pago: <br/>
+	   		DATOSPAGO.setFechaLimitePago('YYYYMMMDD');<br>
+        	DATOSPAGO.setMensajeFechaLimitePago('Mensaje a mostrar si se excede la fecha limite');
+	   </p> 
       <p> Adem&aacute;s se dispone de una funci&oacute;n para consultar el importe 
         de una tasa (en cents):<br/><br/>
         res = DATOSPAGO.consultarImporteTasa('idTasa')<em>;</em> // En caso de 
