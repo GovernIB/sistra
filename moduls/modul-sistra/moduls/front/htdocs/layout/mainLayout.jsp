@@ -11,7 +11,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title><bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property="nombre"/></title>
-<link href="estilos/sistrafront-0.0.2.css" rel="stylesheet" type="text/css" />
+<link href="estilos/sistrafront-0.0.3.css" rel="stylesheet" type="text/css" />
 <logic:notEmpty name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property="urlCssCustom">
 	<link href="<bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property="urlCssCustom" />" rel="stylesheet" type="text/css" />
 </logic:notEmpty>

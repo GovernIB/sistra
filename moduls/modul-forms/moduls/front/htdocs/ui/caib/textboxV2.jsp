@@ -32,6 +32,11 @@
 	    		inputType = "number";
 	    		styleClassInput = "imc-numero";
 	       } 
+	       if ("IM".equals(campo.getTipoTexto())) {
+	    		dataType  = "text";
+	    		inputType = "text";
+	    		styleClassInput = "";
+	       } 
        }
     %>  
     
@@ -51,14 +56,25 @@
 		<div class="imc-el-control">
 			 <nested:lessEqual property="filas" value="1">
 			 	
-			 	<% if (!"text".equals(inputType)) { %>
-			 		<input type="<%=inputType%>" 
+			 	<% if (!"NO".equals(campo.getTipoTexto())) { %>
+			 		<input
+			 			type="<%=inputType%>" 
+			 			name="<%=nombre%>" 			 			
 			 			id="<%=nombre%>"
-			 			name="<%=nombre%>" 
-			 			class="<%=styleClassInput%>" 
-			 			onchange='<%=(!autocalculo && !bloqueado) ? "onFieldChange(this.form, this.name)" : ""%>' 
-			 			value='<nested:write name="pantallaForm" property="<%=nombre%>"/>' 
-			 			maxlength='<%=(vmaxlength != null ? vmaxlength.getValores()[0] : "")%>'	>
+			 			<% if (autocalculo || bloqueado) { %> 
+			 			readonly
+			 			<%} %>
+			 			<% if (disabled) { %> 
+			 			disabled
+			 			<%} %>			 			
+			 			onchange='<%=(!autocalculo && !bloqueado) ? "onFieldChange(this.form, this.name)" : ""%>'
+			 			<% if (vmaxlength != null) { %> 
+			 			maxlength='<%=vmaxlength.getValores()[0]%>'
+			 			<%} %>
+			 			<% if (!"".equals(styleClassInput)) { %> 
+			 			class="<%=styleClassInput%>"
+			 			<%} %>  
+			 			value='<nested:write name="pantallaForm" property="<%=nombre%>"/>'>			 					 	
 			 	<% } else { %>
 			 		<html:text property="<%=nombre%>" 
 				 		styleId="<%=nombre%>"
@@ -66,11 +82,9 @@
 	        			disabled="<%=disabled%>"
 				 		onchange='<%=(!autocalculo && !bloqueado) ? "onFieldChange(this.form, this.name)" : ""%>'
 				 		maxlength='<%=(vmaxlength != null ? vmaxlength.getValores()[0] : "")%>'
-				 		styleClass='<%=styleClassInput%>'/>
+				 	/>
 			 	<% } %> 
-			 		
-			 		
-			 		
+			 	
 			 </nested:lessEqual>
 			 <nested:greaterThan property="filas" value="1">
 				 <html:textarea property="<%=nombre%>" 

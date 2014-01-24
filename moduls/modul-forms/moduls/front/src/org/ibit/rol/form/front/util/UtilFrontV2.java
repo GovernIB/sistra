@@ -87,9 +87,14 @@ public class UtilFrontV2 {
 			}
 		}
 		if (componente instanceof TextBox) {
-			if ( ((TextBox) componente).getFilas() > 1) {
+			TextBox textBox = (TextBox) componente;
+			if ( textBox.getFilas() > 1) {
 				res += " imc-el-files-" + ((TextBox) componente).getFilas();
 			}
+			if ("IM".equals(textBox.getTipoTexto())) {
+				res += " imc-el-import";
+			}
+			
 		}
 		
 		return res;

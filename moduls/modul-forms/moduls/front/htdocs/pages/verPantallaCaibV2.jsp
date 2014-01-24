@@ -97,8 +97,14 @@
 <%-- Botonera pagina normal --%>
 <nav id="imc-navegacio" class="imc-navegacio imc-nav">
 	<ul>
+	
 			<li>
 				<a href="javascript:discard()" class="imc-nav-abandona" title="<bean:message bundle="caibMessages" key="boton.cancelar"/>" onfocus="this.blur()"><bean:message bundle="caibMessages" key="boton.cancelar"/></a>
+			</li>
+			
+			<li>
+				<!-- Reservado guardar formulario -->
+				<span>&nbsp;</span>
 			</li>
 			
 			<li>
@@ -110,11 +116,6 @@
 			<logic:equal name="backButton" value="false">
 				<span>&nbsp;</span>					
 			</logic:equal>
-			</li>
-			
-			<li>
-				<!-- Reservado guardar formulario -->
-				<span>&nbsp;</span>
 			</li>
 		
 			<li>	
