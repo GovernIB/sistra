@@ -52,11 +52,18 @@ a:hover { color: #c33; }
 		.imc-cap .imc-usuari a.imc-usuari-guarda { background:transparent url(../imgs/guarda-clau.gif) no-repeat left center; }
 		.imc-cap .imc-usuari a.imc-usuari-elimina { font-weight:normal; color:#c33; background:transparent url(../imgs/elimina-tramit.gif) no-repeat left center; }
 	
-h2 { min-height:1.8em; font-size:1em; font-style:italic; font-weight:bold; line-height:1.2em; padding:.8em 1em .8em 5em; margin-bottom:.8em; background:#FFFFE4 url(../imgs/nom_tramit.gif) no-repeat 1em .5em; }
+h2 { min-height:1.8em; font-size:1.2em; font-style:italic; font-weight:bold; line-height:1.2em; padding:.5em 1em .5em 4.5em; margin-bottom:.8em; background:#FFFFE4 url(../imgs/nom_tramit.gif) no-repeat 1em .5em; }
 
 nav { margin-top:1em; }
 	nav ul { list-style:none; text-align:center; }
 	nav li { display:inline-block; width:24%; vertical-align:middle; border:1px solid #ededed; }
+	nav li.imc-nav-abandona { width:22%; margin-right:4%; }
+	nav li.imc-nav-desa { width:22%; margin-right:4%; }
+	nav li.imc-nav-anterior,
+	nav li.imc-nav-seguent,
+	nav li.imc-nav-finalitza { width:22%; }
+	
+	
 	nav a,
 	nav span { display:block; text-align:left; font-size:1.4em; font-variant:small-caps; line-height:1em; padding:1em;
 		-moz-transition: all .2s linear;
@@ -76,13 +83,20 @@ nav { margin-top:1em; }
 		transition: all .2s linear;
 	}
 	
-	nav a.imc-nav-abandona { color:#fff; text-align:right; padding:.5em 1em; background-color:#C68484;
-		background-image:url(../imgs/nav/bt-abandona-icon.png), url(../imgs/nav/bt-abandona-cercle.png);
+	nav a.imc-nav-abandona { color:#000; text-align:right; padding:.5em 1em; background-color:#FFEACC;
+		background-image:url(../imgs/nav/bt-abandona-icon.png), url(../imgs/nav/bt-anterior-cercle.png);
+		background-repeat:no-repeat, no-repeat;
+		background-position:1.5em 50%, 1.05em -2em;
+	}
+	
+	nav a.imc-nav-desa { color:#fff; padding:.5em 1em; background-color:#88c684;
+		background-image:url(../imgs/nav/bt-desa-icon.png), url(../imgs/nav/bt-abandona-cercle.png);
 		background-repeat:no-repeat, no-repeat;
 		background-position:1.5em 50%, 1.05em -2em;
 	}
 	
 	nav a.imc-nav-abandona,
+	nav a.imc-nav-desa,
 	nav a.imc-nav-anterior { text-align:right; }
 	
 	nav a.imc-nav-anterior {
@@ -98,14 +112,18 @@ nav { margin-top:1em; }
 		background-position:82% 50%, 86% -2em;
 	}
 	
-	nav a.imc-nav-finalitza { color:#fff; padding:.5em 1em; background-color:#88c684;
+	nav a.imc-nav-finalitza {
+		color:#fff; padding:.5em 1em; background-color:#88c684;
 		background-image:url(../imgs/nav/bt-finalitza-icon.png), url(../imgs/nav/bt-abandona-cercle.png);
 		background-repeat:no-repeat, no-repeat;
 		background-position:83% 50%, 86% -2em;
 	}
 	
 	nav a.imc-nav-abandona:hover,
-	nav a.imc-nav-abandona:focus { background-color:#ae4646; background-position:1.5em 50%, 1.05em 50%; }
+	nav a.imc-nav-abandona:focus { background-color:#e3bd86; background-position:1.5em 50%, 1.05em 50%; }
+	
+	nav a.imc-nav-desa:hover,
+	nav a.imc-nav-desa:focus { background-color:#5cb057; background-position:1.5em 50%, 1.05em 50%; }
 	
 	nav a.imc-nav-anterior:hover,
 	nav a.imc-nav-anterior:focus { background-color:#e3bd86; background-position:1.55em 50%, 1.1em 50%; }
@@ -510,9 +528,18 @@ form { clear:both; }
 			
 			.imc-form .imc-el-taula .imc-tbody-scroll { overflow:auto; height:10.4em; }
 			.imc-form .imc-el-taula .imc-tbody { width:52.5em; }
-			.imc-form .imc-el-taula .imc-tbody .imc-tr { overflow:hidden; width:100%; }
+			.imc-form .imc-el-taula .imc-tbody .imc-tr { overflow:hidden; width:100%; background-color:#fff; }
+			.imc-form .imc-el-taula .imc-tbody .imc-tr:hover {
+				background-color:#ffeacc;
+				-moz-transition: all .3s linear;
+				-webkit-transition: all .1s linear;
+				-ms-transition: all .1s linear;
+				-o-transition: all .1s linear;
+				-kthtml-transition: all .1s linear;
+				transition: all .1s linear;
+			}
 			.imc-form .imc-el-taula .imc-td { float:left; }
-			.imc-form .imc-el-taula .imc-td.imc-check { width:9%; text-align:center; padding-left:0; }
+			.imc-form .imc-el-taula .imc-td.imc-check { width:9%; text-align:center; padding-top:.2em; padding-left:0; }
 				.imc-form .imc-el-taula .imc-td span { display:block; padding:.3em .8em; }
 
 			.imc-form .imc-el-taula .imc-thead,
@@ -648,6 +675,12 @@ form { clear:both; }
 	}
 	
 	.imc-el-taula-iframe-centrat { position:fixed; top:50%; left:50%; height:36em; margin-top:-18em; }
+	
+	/* import */
+	
+	.imc-form .imc-el-import .imc-el-control input[type="text"] { width:6em; text-align:right; padding:.1em .2em 0 0; }
+	.imc-form .imc-el-2.imc-el-import .imc-el-control input[type="text"] { width:15em; }
+	.imc-form .imc-el-3.imc-el-import .imc-el-control input[type="text"] { width:24em; min-width:24em; max-width:24em; }
 	
 	/* per esborrar 
 	

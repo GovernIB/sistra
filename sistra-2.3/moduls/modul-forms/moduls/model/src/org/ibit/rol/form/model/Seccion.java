@@ -66,6 +66,10 @@ public class Seccion extends Traducible implements Componente {
         this.posicion = posicion;
     }
     
+    public void addTraduccion(String lang, TraSeccion traduccion) {
+        setTraduccion(lang, traduccion);
+    }
+    
 	// -- INDRA: AÑADIR PROPS MEJORA VISUAL FORMS V3
 	private int colSpan = 6;
 	

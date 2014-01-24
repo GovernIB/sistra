@@ -14,6 +14,7 @@ import org.ibit.rol.form.model.Pantalla;
 import org.ibit.rol.form.model.Patron;
 import org.ibit.rol.form.model.PerfilUsuario;
 import org.ibit.rol.form.model.RadioButton;
+import org.ibit.rol.form.model.Seccion;
 import org.ibit.rol.form.model.TextBox;
 import org.ibit.rol.form.model.Traducible;
 import org.ibit.rol.form.model.TreeBox;
@@ -50,6 +51,7 @@ public class ModelSuppressionStrategy extends PropertySuppressionStrategy {
         addSupressionList(Pantalla.class, new String[]{"id", "formulario", "campos"});
 
         String[] propsComponente = new String[]{"id", "paleta", "pantalla", "natural", "real", "imagen", "valorPosible", "allValoresPosibles"};
+        addSupressionList(Seccion.class, propsComponente);
         addSupressionList(Label.class, propsComponente);
         addSupressionList(CheckBox.class, propsComponente);
         addSupressionList(FileBox.class, propsComponente);

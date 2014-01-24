@@ -18,10 +18,3 @@ $.datepicker.regional['ca'] = {
 		yearSuffix: ''
 };
 $.datepicker.setDefaults($.datepicker.regional['ca']);
-
-
-
-
-
-
-

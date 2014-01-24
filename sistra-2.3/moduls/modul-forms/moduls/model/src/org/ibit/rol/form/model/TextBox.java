@@ -3,7 +3,7 @@ package org.ibit.rol.form.model;
 public class TextBox extends Campo {
 
 	// Tipo texto: NO(Normal) / FE (Fecha) / HO (Hora) / NU (Numero) / IM (Importe)
-	private String tipoTexto;
+	private String tipoTexto = "NO";
 	
 
 	public String getTipoTexto() {

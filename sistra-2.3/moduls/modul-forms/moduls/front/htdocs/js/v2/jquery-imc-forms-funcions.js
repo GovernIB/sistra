@@ -42,7 +42,8 @@ function dadesFormateig(options) {
 				elm_marca.css("height", elm_titol_H);
 			}
 		}).end()
-		.find("a:not([href])").attr("tabindex", "0").attr("href", "javascript:;");
+		.find("a:not([href])").attr("tabindex", "0").attr("href", "javascript:;").end()
+		.find(".imc-el-import").immport();
 	
 }
 // /dadesFormateig
@@ -115,6 +116,25 @@ $.fn.taula = function(options) {
 }
 // /taula
 
+
+// immport
+$.fn.immport = function(options) {
+	var settings = $.extend({
+		element: ""
+	}, options);
+	this.each(function(){
+		var element = $(this),
+			el_immport_elm = element.find("input:first"),
+			onBlur = function() {
+				el_immport_elm.parseNumber({locale:"es"});
+   			el_immport_elm.formatNumber({locale:"es"});	
+			};
+		// sense elements
+		el_immport_elm.off(".immport").on("blur.immport", onBlur);
+	});
+	return this;
+}
+// /immport
 
 
 // funcions comuns
@@ -640,7 +660,7 @@ function control_tableDetall(name, url) {
 	
 	var iframe_ID = "iframe" + name,
 		iframe_fons = $("<div>").attr("id", "imc-iframe-fons").addClass("imc-iframe-fons"),
-		form_elm = $imc_contenidor.find("form:first");	
+		form_elm = $imc_contenidor.find("form:first");
 	
 	if (el_element.hasClass("imc-el-taula-detall-centrat")) {
 		

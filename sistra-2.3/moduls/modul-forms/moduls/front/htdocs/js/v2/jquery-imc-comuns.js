@@ -1103,6 +1103,7 @@ $.fn.ajuda = function(opcions) {
 					  url: "activarAyuda.do",
 					  data: { activar: ("on" == ajuda_data)}
 					});
+				
 			},
 			canvia = function() {
 				

@@ -43,7 +43,9 @@
 	<link rel="stylesheet" media="screen" href="<html:rewrite page='/estilo_caibV2/css/ui-lightness/jquery-ui-1.10.3.custom.css'/>">
 	<link rel="stylesheet" media="screen" href="<html:rewrite page='/estilo_caibV2/css/imc-forms.css'/>"> 
 	<link rel="stylesheet" media="screen" href="<html:rewrite page='/estilo_caibV2/css/imc-select.css'/>">
-	<link rel="stylesheet" media="screen" href="<html:rewrite page='/estilo_caibV2/css/imc-animate.css'/>">
+	<link rel="stylesheet" media="screen" href="<html:rewrite page='/estilo_caibV2/css/imc-animate.css'/>">	
+	
+	
 	<logic:present name="pantallaDetalle">
 		<logic:equal name="pantallaDetalle" value="true">
 			<link rel="stylesheet" media="screen" href="<html:rewrite page='/estilo_caibV2/css/imc-forms-taula-detall.css'/>">			
@@ -63,10 +65,12 @@
 	<script src="<html:rewrite page='/js/v2/utils/jquery-1.8.3.min.js'/>"></script>
 	<script src="<html:rewrite page='/js/v2/utils/jquery-ui-1.10.3.custom.min.js'/>"></script>
 	<script src="<html:rewrite page='/js/v2/utils/jquery-maskedinput.min.js'/>"></script>
+	<script src="<html:rewrite page='/js/v2/utils/jshashtable-3.0.js'/>"></script>
+	<script src="<html:rewrite page='/js/v2/utils/jquery-numberformatter-1.2.4.min.js'/>"></script>
 	<script src="<html:rewrite page='<%="/js/v2/literals/jquery-imc-literals-calendari-" + locale.getLanguage() + "_" + locale.getLanguage().toUpperCase() + ".js"%>'/>"></script>
 	<script src="<html:rewrite page='<%="/js/v2/literals/vars-imc-literals-" + locale.getLanguage() + "_" + locale.getLanguage().toUpperCase() + ".js"%>'/>"></script>	
 	<script src="<html:rewrite page='/js/v2/jquery-imc-comuns.js'/>"></script>
-	<script src="<html:rewrite page='/js/v2/jquery-imc-forms-funcions.js'/>"></script>
+	<script src="<html:rewrite page='/js/v2/jquery-imc-forms-funcions.js'/>"></script>	
 		
 	<logic:present name="pantalla">
 		<script src="<html:rewrite page='/js/v2/xmlhttp.js'/>"></script>		

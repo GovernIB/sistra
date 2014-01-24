@@ -4,12 +4,12 @@
 	$.fn.ajuda = function(opcions) {
 	...
 		onClick = function() {
-	
+				...
 				$.ajax({
 					  type: "POST",
 					  url: "activarAyuda.do",
 					  data: { activar: ("on" == ajuda_data)}
-					});
+					});								
 		}
 		
 		

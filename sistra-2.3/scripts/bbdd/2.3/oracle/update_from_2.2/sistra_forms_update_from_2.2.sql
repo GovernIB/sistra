@@ -10,7 +10,7 @@ ALTER table RFR_COMPON ADD  COM_CUADRO           NUMBER(1)                      
 ALTER table RFR_COMPON ADD  COM_CUACAB           NUMBER(1)                      default 0 not null;
 ALTER table RFR_COMPON ADD  COM_ALINEACION       VARCHAR2(1)                    default 'I' not null;
 ALTER table RFR_COMPON ADD  COM_SECLET           VARCHAR2(2);
-ALTER table RFR_COMPON ADD  COM_TXTIPO           VARCHAR2(2)  default 'NO' not null;
+ALTER table RFR_COMPON ADD  COM_TXTIPO           VARCHAR2(2);
    
 create table RFR_TRASEC  (
    TRS_CODSEC           NUMBER(19)                      not null,
