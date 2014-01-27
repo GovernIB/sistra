@@ -1,4 +1,4 @@
-alter table AUD_AUDIT  add   AUD_PROCED           VARCHAR2(100);
+alter table AUD_AUDIT  add   AUD_PROCED           VARCHAR(100);
 comment on column AUD_AUDIT.AUD_PROCED is 'PROCEDIMIENTO';
 
 Insert into AUD_TIPOEV

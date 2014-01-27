@@ -1,4 +1,4 @@
-﻿
+
 create sequence BTE_SEQDOC;
 
 create sequence BTE_SEQE09;
