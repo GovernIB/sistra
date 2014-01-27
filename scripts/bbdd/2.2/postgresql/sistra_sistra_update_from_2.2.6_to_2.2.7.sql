@@ -2,7 +2,7 @@ alter table STR_ESPNIV  add ETN_ALETRA VARCHAR(1) default 'N' not null;
 alter table STR_ESPNIV  add ETN_ALESMS VARCHAR(1) default 'N' not null;   
 
 comment on column STR_ESPNIV.ETN_ALETRA is
-'Indica si se generan alertas de tramitacion (previas envio tramite): N: No permite /  S Si permite, el ciudadano elige / O: Obligatoria notificaciÛn telem·tica / X: No especificada';
+'Indica si se generan alertas de tramitacion (previas envio tramite): N: No permite /  S Si permite, el ciudadano elige / O: Obligatoria notificaci√≥n telem√°tica / X: No especificada';
 comment on column STR_ESPNIV.ETN_ALESMS is
 'Indica si se permiten sms en los avisos de notificacion telematica (S/N)';
 
