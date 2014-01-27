@@ -12,43 +12,90 @@
             obrir(url, "Edicion", 540, 400);
          }
 
-    	function ajustarColspan() {
-        	var filasSelect = document.getElementById("filas");
-        	var colspanSelect = document.getElementById("colSpan");
-        	var filas = filasSelect.options[filasSelect.selectedIndex].value;
-        	var colspan = colspanSelect.options[colspanSelect.selectedIndex].value;
-        	
-        	if (isNaN(filas)) {
-            	filas = 1;
-        	}
+    // Ajusta valores minimos colspan y maximos filas
+    function ajustarColspan() {
+       	var filasSelect = document.getElementById("filas");
+    	var columnasSelect = document.getElementById("columnas");
+       	var tipoTextoSelect = document.getElementById("tipoTexto");
+       	var colspanSelect = document.getElementById("colSpan");
+       	var multilinea = document.getElementById("multilinea");
+       	var filas = filasSelect.options[filasSelect.selectedIndex].value;
+       	var columnas = columnasSelect.options[columnasSelect.selectedIndex].value;
+       	var colspan = colspanSelect.options[colspanSelect.selectedIndex].value;
+       	var tipoTexto = tipoTextoSelect.options[tipoTextoSelect.selectedIndex].value;
+       	
+       	if (isNaN(filas)) {
+           	filas = 1;
+       	}
 
-			var minColSpan = 1;
-        	
+		var minColSpan = 1;
+		var maxfilas = 1; 		
+
+		// Texto normal
+		if (tipoTexto == "NO") { 
+			maxfilas = 999;	       		
         	if (filas > 1) {
             	minColSpan = 3;
-        	}
-       
-        	while (colspanSelect.length > 0) {
-       	    	colspanSelect.remove(0);
-       	    }
+        	}	       	        	
+		} 
 
-        	for (var i = minColSpan; i <= 6; i++) {
-       	        var opcio = new Option(i, i);
-       	     	colspanSelect.add(opcio);       	        
-       	    }	 
+		// Texto fecha
+		if (tipoTexto == "FE") {
+			minColSpan = 2;   
+		}	
 
-			if (colspan >= minColSpan){
-				colspanSelect.value = colspan;
-			}
-	           	
+        // Reseteamos select colspan
+		while (colspanSelect.length > 0) {
+    	   	colspanSelect.remove(0);
     	}
-   //-->
+       	for (var i = minColSpan; i <= 6; i++) {
+      	    var opcio = new Option(i, i);
+      	  	colspanSelect.add(opcio);       	        
+      	}	 
+		if (colspan >= minColSpan){
+			colspanSelect.value = colspan;
+		}
+
+		// Reseteamos valores select filas/columnas
+		// - filas
+		while (filasSelect.length > 0) {
+			filasSelect.remove(0);
+   	    }
+    	for (var i = 1; i <= maxfilas; i++) {
+   	        var opcio = new Option(i, i);
+   	     	filasSelect.add(opcio);       	        
+   	    }	 
+		if (filas <= maxfilas){
+			filasSelect.value = filas;
+		}  
+		// - columnas
+		while (columnasSelect.length > 0) {
+			columnasSelect.remove(0);
+   	    }
+    	for (var i = 1; i <= maxfilas; i++) {
+   	        var opcio = new Option(i, i);
+   	     	columnasSelect.add(opcio);       	        
+   	    }	 
+		if (columnas <= maxfilas){
+			columnasSelect.value = columnas;
+		}  
+
+		// Check multilinea
+		multilinea.disabled = (maxfilas == 1);
+		multilinea.checked  = (maxfilas > 1) && multilinea.checked;
+		
+          	
+   	}
+//-->
 </script>
-<% int ti = 1; int minColSpan = 1;%>
+<% int ti = 1; int minColSpan = 1; int maxFilas = 1; boolean disabledMultilinea = true;%>
 <logic:notEmpty name="textboxForm" property="values.colSpan">
 	<logic:greaterThan name="textboxForm" property="values.filas" value="1">
 		<% minColSpan = 3; %>
 	</logic:greaterThan> 
+	<logic:equal name="textboxForm" property="values.tipoTexto" value="NO">
+		<% maxFilas = 999; disabledMultilinea = false;%>
+	</logic:equal> 
 </logic:notEmpty>
 
 <html:hidden property="idPantalla" />
@@ -115,7 +162,7 @@
     <td class="labelo"><bean:message key="textbox.filas"/></td>
     <td class="input">
     	 <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.filas" styleId="filas" onchange="ajustarColspan()">
-			<% for (int i = 1 ; i <= 999; i++) { %>															
+			<% for (int i = 1 ; i <= maxFilas; i++) { %>															
 				<html:option value="<%=Integer.toString(i)%>"><%=i%></html:option>
 			<% } %>
 		</html:select>    			
@@ -124,8 +171,8 @@
 <tr>
     <td class="labelo"><bean:message key="textbox.columnas"/></td>
     <td class="input">
-    	 <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.columnas">
-			<% for (int i = 1 ; i <= 999; i++) { %>															
+    	 <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.columnas" styleId="columnas">
+			<% for (int i = 1 ; i <= maxFilas; i++) { %>															
 				<html:option value="<%=Integer.toString(i)%>"><%=i%></html:option>
 			<% } %>
 		</html:select>     	
@@ -133,7 +180,7 @@
 </tr>
 <tr>
     <td class="label"><bean:message key="componente.multilinea"/></td>
-    <td class="input"><html:checkbox styleClass="check" tabindex="<%=Integer.toString(ti++)%>" property="values.multilinea" /></td>
+    <td class="input"><html:checkbox styleClass="check" tabindex="<%=Integer.toString(ti++)%>" property="values.multilinea" styleId="multilinea" disabled="<%=disabledMultilinea%>"/></td>
 </tr>
 <tr>
     <td class="labela" colspan="2"><bean:message key="ayuda.multilinea"/></td>
@@ -170,7 +217,7 @@
 <tr>
     <td class="label"><bean:message key="textbox.tipo"/></td>
     <td class="input">
-        <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.tipoTexto" >
+        <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.tipoTexto" onchange="ajustarColspan()" styleId="tipoTexto">
         	<html:option value="NO"><bean:message key="textbox.tipo.normal" /></html:option>
             <html:option value="FE"><bean:message key="textbox.tipo.fecha" /></html:option>
             <html:option value="HO"><bean:message key="textbox.tipo.hora" /></html:option>

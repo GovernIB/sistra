@@ -126,8 +126,8 @@ $.fn.immport = function(options) {
 		var element = $(this),
 			el_immport_elm = element.find("input:first"),
 			onBlur = function() {
-				el_immport_elm.parseNumber({locale:"es"});
-   			el_immport_elm.formatNumber({locale:"es"});	
+				el_immport_elm.parseNumber({format: "#,##0.00", locale:"es"});
+   			el_immport_elm.formatNumber({format: "#,##0.00", locale:"es"});	
 			};
 		// sense elements
 		el_immport_elm.off(".immport").on("blur.immport", onBlur);

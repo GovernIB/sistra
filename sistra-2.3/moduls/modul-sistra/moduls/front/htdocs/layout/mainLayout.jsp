@@ -15,6 +15,7 @@
 <logic:notEmpty name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property="urlCssCustom">
 	<link href="<bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property="urlCssCustom" />" rel="stylesheet" type="text/css" />
 </logic:notEmpty>
+<script type="text/javascript" src="js/modernizr-imc-0.3.js"></script>
 <script type="text/javascript" src="js/globales.js"></script>
 <script type="text/javascript" src="js/jquery-1.4.1.min.js"></script>
 
