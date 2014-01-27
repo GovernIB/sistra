@@ -433,12 +433,13 @@ div#PinDiv  { display:none; }
 
 div.imc-navegacio { margin-top:1em; }
 	div.imc-nav ul { list-style:none; text-align:center; }
-	div.imc-nav li { display:inline-block; width:24%; vertical-align:middle; border:1px solid #ededed; }
+	div.imc-nav li { float:left;  width:24%; vertical-align:middle; border:1px solid #ededed; }
 	div.imc-nav li.imc-nav-elimina { width:22%; margin-right:4%; }
 	div.imc-nav li.imc-nav-desa { width:22%; margin-right:4%; border:none; }
 	div.imc-nav li.imc-nav-anterior,
 	div.imc-nav li.imc-nav-seguent,
 	div.imc-nav li.imc-nav-finalitza { width:22%; }
+	div.imc-nav li.imc-nav-anterior { margin-right:1%; }
 	
 	div.imc-nav a { cursor:pointer; }
 	div.imc-nav a,

@@ -194,12 +194,12 @@ input[readonly],
 textarea[readonly] { background-color:#e0e0e0; }
 
 input[type=date],
-input.imc-data { width:10em !important; }
+input.imc-data { width:9.5em !important; }
 
 input.imc-no-type-date { width:8em !important; background:#fff url(../imgs/ico-data.gif) no-repeat right center; }
 input.imc-no-type-date:focus { background-image:url(../imgs/ico-data-on.gif); }
 
-input.imc-hora { width:4.5em !important; }
+input.imc-hora { width:5em !important; }
 input.imc-no-type-time { width:4em !important; }
 
 input:focus, textarea:focus {
@@ -285,9 +285,9 @@ header.imc-form-titol { clear:both; overflow:hidden; width:100%; margin-bottom:.
 		header.imc-pasos li.imc-pasos-seleccionat { height:2.65em; color:#000; font-weight:bold; background-color:#FFEACC; }
 
 	header.imc-formulari-titol { overflow:hidden; padding:.5em 0; }
-		header.imc-fo-ti .imc-fo-ti-text { overflow:hidden; float:left; max-width:27em; height:2.5em; padding:.3em 0 0 2em; margin-left:1.5em; background:transparent url(../imgs/ico_form.gif) no-repeat 0 1em; }
+		header.imc-fo-ti .imc-fo-ti-text { overflow:hidden; float:left; width:43em; padding:.3em 0 0 2em; margin-left:1.5em; background:transparent url(../imgs/ico_form.gif) no-repeat 0 1em; }
 		header.imc-fo-ti .imc-fo-ti-text p { font-size:.8em; text-transform:uppercase; }
-		header.imc-fo-ti .imc-fo-ti-text h3 { font-size:1.2em; font-weight:bold; line-height:.9em; white-space:nowrap; }
+		header.imc-fo-ti .imc-fo-ti-text h3 { font-size:1.2em; font-weight:bold; line-height:1em; }
 		header.imc-fo-ti p.imc-fo-ti-paginacio { float:left; height:2.5em; padding-left:1em; margin-left:1em; border-left:1px solid #ccc; }
 			header.imc-fo-ti p.imc-fo-ti-paginacio span { display:block; font-size:.9em; padding-top:1.5em; }
 	
