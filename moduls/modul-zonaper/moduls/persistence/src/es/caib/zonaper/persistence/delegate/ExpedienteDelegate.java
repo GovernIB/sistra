@@ -84,6 +84,18 @@ public class ExpedienteDelegate implements StatelessDelegate
         }
 	}
 	
+	public Expediente obtenerExpedienteVirtual( Long codigoExpedienteVirtual ) throws DelegateException
+	{
+		try
+		{
+			return getFacade().obtenerExpedienteVirtual( codigoExpedienteVirtual );
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
 	public Long grabarExpedienteReal( Expediente expediente ) throws DelegateException
 	{
 		try
@@ -163,6 +175,19 @@ public class ExpedienteDelegate implements StatelessDelegate
 		try
 		{
 			getFacade().borrarExpedienteVirtual( codigoExpediente);
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+		
+	}
+	
+	public void convertirExpedienteVirtualAReal(Expediente expeVirtual,
+			Expediente expeReal)  throws DelegateException {
+		try
+		{
+			getFacade().convertirExpedienteVirtualAReal( expeVirtual, expeReal);
 		}
 		catch (Exception e) 
 		{
@@ -261,7 +286,5 @@ public class ExpedienteDelegate implements StatelessDelegate
     
     protected ExpedienteDelegate() throws DelegateException {       
     }
-
-	
 	  
 }
