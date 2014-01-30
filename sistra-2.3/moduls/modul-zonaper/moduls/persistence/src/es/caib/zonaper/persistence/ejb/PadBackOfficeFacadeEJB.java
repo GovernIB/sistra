@@ -1378,16 +1378,19 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 	private String altaExpedienteImpl(ExpedientePAD expediente, Entrada entrada)
 			throws ExcepcionPAD {
 		ExpedienteDelegate delegate = DelegateUtil.getExpedienteDelegate();
+		Expediente expeVirtual = null;
 		try{
 			// Damos de alta el expediente y en caso necesario el enlace entre expediente y tramite
 			Expediente exped = this.expedientePADToExpediente( expediente );
 			ElementoExpediente el = new ElementoExpediente();
+			
+			// Si tiene entrada asociada, obtenemos expediente virtual para convertirlo posteriormente a real
 			if (entrada != null) {
-				// Borramos expediente virtual asociado a la entrada
+				// Obtenemos expediente virtual asociado a la entrada
 				Long codigoExpedienteVirtual = DelegateUtil.getElementoExpedienteDelegate().obtenerCodigoExpedienteElemento(entrada instanceof EntradaTelematica?ElementoExpediente.TIPO_ENTRADA_TELEMATICA:ElementoExpediente.TIPO_ENTRADA_PREREGISTRO,entrada.getCodigo());
-				delegate.borrarExpedienteVirtual(codigoExpedienteVirtual);
+				expeVirtual = delegate.obtenerExpedienteVirtual(codigoExpedienteVirtual);
 				
-				// Borramos indices busqueda asociado a expediente				
+				// Borramos indices busqueda asociado a expediente virtual				
 				DelegateUtil.getIndiceElementoDelegate().borrarIndicesElemento(IndiceElemento.TIPO_EXPEDIENTE, codigoExpedienteVirtual);
 				
 				// Creamos elemento expediente asociado a la entrada
@@ -1433,7 +1436,13 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 			}
 			
 			// Guardamos expediente
-			delegate.grabarExpedienteReal(exped );
+			// Si existe un expediente virtual lo convertimos a real
+			if (expeVirtual != null) {
+				delegate.convertirExpedienteVirtualAReal(expeVirtual, exped);				
+			} else {
+				delegate.grabarExpedienteReal(exped);
+			}
+	
 						
 			// Realizamos aviso de movilidad si en el alta se han generado eventos
 			exped = delegate.obtenerExpedienteReal(exped.getUnidadAdministrativa().longValue(),exped.getIdExpediente(), exped.getClaveExpediente());

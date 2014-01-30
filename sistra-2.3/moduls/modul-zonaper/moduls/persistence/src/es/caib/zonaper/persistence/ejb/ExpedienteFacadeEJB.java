@@ -12,20 +12,16 @@ import java.util.Map;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
-import net.sf.hibernate.expression.Expression;
-import net.sf.hibernate.expression.Order;
 
 import org.apache.commons.lang.StringUtils;
 
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
 import es.caib.util.CredentialUtil;
-import es.caib.util.DataUtil;
 import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.Expediente;
 import es.caib.zonaper.model.Page;
@@ -33,6 +29,7 @@ import es.caib.zonaper.modelInterfaz.ConfiguracionAvisosExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
 import es.caib.zonaper.modelInterfaz.FiltroBusquedaExpedientePAD;
+import es.caib.zonaper.persistence.delegate.DelegateException;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.ElementoExpedienteDelegate;
 
@@ -67,36 +64,35 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
      */
 	public Expediente obtenerExpedienteAutenticado(Long codigoExpediente)
 	{
-		Session session = getSession();
-		try
-		{			
-			Expediente expediente = ( Expediente )session.load( Expediente.class, codigoExpediente );
-			Hibernate.initialize( expediente.getElementos() );			
-			
-			// Comprobamos que accede el usuario o si es un delegado
-			Principal sp =this.ctx.getCallerPrincipal();
-			PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
-			if (plgLogin.getMetodoAutenticacion(sp) == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO){
-	    		throw new HibernateException("Acceso solo permitido para autenticado");
-	    	}
-			if (!plgLogin.getNif(this.ctx.getCallerPrincipal()).equals(expediente.getNifRepresentante())){
-				// Si no es el usuario quien accede miramos si es un delegado
-	        	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(expediente.getNifRepresentante());
-	        	if (StringUtils.isEmpty(permisos)){
-	        		throw new Exception("Acceso no autorizado al expediente " + expediente.getCodigo() + " - usuario " + sp.getName());
-	        	}
+		// Recupera expediente
+		Expediente expediente = obtenerExpedienteImpl(codigoExpediente);
+		
+		// Comprobamos que accede el usuario o si es un delegado
+		Principal sp =this.ctx.getCallerPrincipal();
+		PluginLoginIntf plgLogin = null;
+		try {
+			plgLogin = PluginFactory.getInstance().getPluginLogin();
+		} catch (Exception e) {
+			throw new EJBException(e);
+		}
+		if (plgLogin.getMetodoAutenticacion(sp) == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO){
+    		throw new EJBException("Acceso solo permitido para autenticado");
+    	}
+		// Si no es el usuario quien accede miramos si es un delegado
+		if (!plgLogin.getNif(this.ctx.getCallerPrincipal()).equals(expediente.getNifRepresentante())){			
+        	String permisos = null;
+			try {
+				permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(expediente.getNifRepresentante());
+			} catch (DelegateException e) {
+				throw new EJBException(e);
 			}
-			
-			return expediente;		
-		} 
-		catch (Exception he) 
-		{	        
-			throw new EJBException(he);
-	    } 
-		finally 
-		{
-	        close(session);
-	    }
+        	if (StringUtils.isEmpty(permisos)){
+        		throw new EJBException("Acceso no autorizado al expediente " + expediente.getCodigo() + " - usuario " + sp.getName());
+        	}
+		}
+		
+		return expediente;		
+		
 	}
 	
 	/**
@@ -262,21 +258,8 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
      */
 	public Expediente obtenerExpedienteAuto( Long codigoExpediente )
 	{
-		Session session = getSession();
-		try
-		{			
-			Expediente expediente = ( Expediente )session.load( Expediente.class, codigoExpediente );
-			Hibernate.initialize( expediente.getElementos() );			
-			return expediente;		
-		} 
-		catch (Exception he) 
-		{	        
-			throw new EJBException(he);
-	    } 
-		finally 
-		{
-	        close(session);
-	    }
+		Expediente expe = obtenerExpedienteImpl(codigoExpediente);
+		return expe;
 	}
 	
 	
@@ -296,6 +279,24 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 		
 		if (!Expediente.TIPO_EXPEDIENTE_REAL.equals(expe.getTipoExpediente())) {
 			throw new EJBException("El expediente " + identificadorExpediente + " - UA: " + unidadAdministrativa + " es virtual");
+		}
+				
+		return expe;
+		
+	}
+	
+	/**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.gestor}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+	public Expediente obtenerExpedienteVirtual( Long codigoExpedienteVirtual )
+	{
+		Expediente expe = obtenerExpedienteImpl(codigoExpedienteVirtual);
+		if (expe != null) {
+			if (!Expediente.TIPO_EXPEDIENTE_VIRTUAL.equals(expe.getTipoExpediente())) {
+				throw new EJBException("El expediente " + expe.getIdExpediente() + " - UA: " + expe.getUnidadAdministrativa() + " no es virtual");
+			}
 		}
 				
 		return expe;
@@ -416,6 +417,52 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 	        close(session);
 	    }
 	}			
+	
+	/**
+	 * Convierte expediente virtual en expediente real para no generar nuevo id de expediente.
+	 * 
+	 * @param expeVirtual
+	 * @param expeReal
+	 * 
+	 * 
+	 * @ejb.interface-method
+     * @ejb.permission role-name="${role.gestor}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+	public void convertirExpedienteVirtualAReal(Expediente expeVirtual,
+			Expediente expeReal) {
+		
+		if (!Expediente.TIPO_EXPEDIENTE_VIRTUAL.equals(expeVirtual.getTipoExpediente())) {
+			throw new EJBException("El expediente debe ser virtual");
+		}
+		
+		if (!Expediente.TIPO_EXPEDIENTE_REAL.equals(expeReal.getTipoExpediente())) {
+			throw new EJBException("El expediente debe ser real");
+		}
+		
+		Session session = getSession();
+		try
+		{
+			// Guardamos expediente real en el virtual, manteniendo codigo elementos
+			for (Iterator it = expeVirtual.getElementos().iterator(); it.hasNext();) {
+				ElementoExpediente ev = (ElementoExpediente) it.next();
+				ElementoExpediente er = expeReal.obtenerElementoExpediente(ev.getTipoElemento(), ev.getCodigoElemento());
+				er.setCodigo(ev.getCodigo());				
+			}
+			expeReal.setCodigo(expeVirtual.getCodigo());
+			session.update( expeReal );				
+		}
+		catch (Exception he) 
+		{   
+			throw new EJBException(he);
+	    } 
+		finally 
+		{
+	        close(session);
+	    }
+		
+		
+	}
 	
 	/**
 	 * Obtiene numero de expedientes pendientes de revisar para el usuario autenticado (con avisos pendientes, con notificaciones pendientes o preregistro pendiente confirmar)
