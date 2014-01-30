@@ -105,6 +105,58 @@ public class ValidacionesUtil
 	    return NifCif.esNumeroSeguridadSocial (cadena); 
 	  }
 	
+	  
+	 
+	  /**
+	   * Valida numero IBAN
+	   * @param code codigo IBAN (no debe empezar por IBAN). Admite espacios y guiones.
+	   * @return true/false
+	   */
+	public static boolean esNumeroIBANValido(String code) {
+		
+		if (code == null) {
+			return false;
+		}
+		
+		try {
+			code = StringUtil.replace(code, " ", "");
+			code = StringUtil.replace(code, "-", "");
+		}catch (Exception ex) {
+			return false;
+		}
+		
+		long MODULUS = 97;
+		long MAX = 999999999;
+
+		if (code.length() < 5) {
+			return false;
+		}
+
+		String reformattedCode = code.substring(4) + code.substring(0, 4);
+		long total = 0;
+		for (int i = 0; i < reformattedCode.length(); i++) {
+			int charValue = Character
+					.getNumericValue(reformattedCode.charAt(i));
+			if (charValue < 0 || charValue > 35) {
+				return false;
+			}
+			total = (charValue > 9 ? total * 100 : total * 10) + charValue;
+			if (total > MAX) {
+				total = (total % MODULUS);
+			}
+		}
+
+		boolean ok = ((total % MODULUS) == 1);
+		
+		// Para cuentas de España seguimos validando numero de cuenta
+		if (ok && code.startsWith("ES")) {
+			ok = esNumeroCuentaValido(code.substring(4));
+		}
+		
+		return ok;
+	}
+
+	  
 	/**
 	 * Valida un número de cuenta que viene todo junto en formato [entidad][sucursal][dc][cuenta]
 	 * No admite ningún tipo de separador, tan sólo las cifras del número de cuenta
