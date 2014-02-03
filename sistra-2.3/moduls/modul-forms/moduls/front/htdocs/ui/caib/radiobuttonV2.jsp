@@ -16,7 +16,11 @@
     <% boolean bloqueado = campo.isBloqueado();%>
 
 	<fieldset class="<%=org.ibit.rol.form.front.util.UtilFrontV2.generateStyleClass(campo)%>" data-type="radio-list">
-		<legend class="imc-label"><nested:write property="traduccion.nombre"/></legend>
+		<legend class="imc-label">
+			<nested:equal property="sinEtiqueta" value="false">
+				<nested:write property="traduccion.nombre"/>
+			</nested:equal>
+		</legend>
 		<ul>
 			<% int i = 0; %>
 			<logic:iterate name="campo" property="allValoresPosibles" id="opcion" type="org.ibit.rol.form.model.ValorPosible">
