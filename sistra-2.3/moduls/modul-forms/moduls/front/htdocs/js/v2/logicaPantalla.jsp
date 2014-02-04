@@ -424,12 +424,19 @@
 						// Actualizamos valores posibles
 						control_refill('<%=nombre%>',vps); 
 						
-			        	// Volvemos a intentar seleccionar valor actual (TIENE SENTIDO?? EN COMBO NO)
-			        	//control_select("<%=nombre%>", f_<%=nombre%>, true);
-				<% if (campo instanceof ComboBox && !((ComboBox) campo).isObligatorio()) { %>
+			    <% if (campo instanceof ComboBox && !((ComboBox) campo).isObligatorio()) { %>
 						// Añadimos opcion vacia en combo si no es obligatorio
 						control_select("<%=nombre%>", "", true);
-				<% } %>	
+				<% } %>
+				
+				<% if (campo instanceof ComboBox && ((ComboBox) campo).isObligatorio()) { %>
+						// Seleccionamos primer elemento si es combo obligatorio
+						if (vps.length > 0) {
+							control_select("<%=nombre%>", vps[0].valor, true);
+						}
+				<% } %>
+				
+					
 		        }    
 	  	 <% } %>                   
 	    </logic:notEmpty>

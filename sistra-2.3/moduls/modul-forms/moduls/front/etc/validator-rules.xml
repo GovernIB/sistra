@@ -93,7 +93,13 @@
                 }
                 if (fields.length > 0) {
                    focusField.focus();
-                   alert(fields.join('\n'));
+                   
+                   //alert(fields.join('\n'));
+                   
+                   var decoded = $("<div/>").html(fields.join('\n')).text();
+                   alert(decoded);
+                   
+                   
                 }
                 return isValid;
             }

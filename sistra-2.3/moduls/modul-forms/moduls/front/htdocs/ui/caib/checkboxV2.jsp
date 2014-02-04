@@ -8,6 +8,7 @@
 <nested:root>
     <nested:define id="campo" type="org.ibit.rol.form.model.CheckBox"/>
     <nested:define id="nombre" property="nombreLogico" type="java.lang.String"/>
+    <nested:define id="etiquetaTxt" type="java.lang.String" property="traduccion.nombre"/>
 
 	<% boolean autocalculo = StringUtils.isNotEmpty(StringUtils.strip(campo.getExpresionAutocalculo())); %> 
 	<% boolean disabled = StringUtils.isNotEmpty(StringUtils.strip(campo.getExpresionDependencia())); %>   
@@ -24,7 +25,7 @@
 			        disabled="<%=(disabled || bloqueado)%>"                    
 			        onclick='<%=(!autocalculo && !bloqueado) ? "onFieldChange(this.form, this.name)" : ""%>'			        
 			    ></html:checkbox>
-				<span><nested:write property="traduccion.nombre"/></span>
+				<span><%=org.ibit.rol.form.front.util.UtilFrontV2.generaHtmlEtiqueta(etiquetaTxt)%></span>
 			</label>
 		</div>
 		<nested:notEmpty property="traduccion.ayuda">

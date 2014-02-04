@@ -8,15 +8,17 @@
 <nested:root>
     <nested:define id="campo" type="org.ibit.rol.form.model.ComboBox"/>
     <nested:define id="nombre" property="nombreLogico" type="java.lang.String"/>
+    <nested:define id="etiquetaTxt" type="java.lang.String" property="traduccion.nombre"/>
     
     <% boolean autocalculo = StringUtils.isNotEmpty(StringUtils.strip(campo.getExpresionAutocalculo())); %>
     <% boolean disabled = StringUtils.isNotEmpty(StringUtils.strip(campo.getExpresionDependencia())); %>
     <% boolean bloqueado = campo.isBloqueado();%>
+    <% String valueFirstElement = ""; boolean firstElement = true;%>    
     
 	<div class="<%=org.ibit.rol.form.front.util.UtilFrontV2.generateStyleClass(campo)%>" data-type="select">
 		<div class="imc-el-etiqueta">
 			<nested:equal property="sinEtiqueta" value="false">
-				<label for="<%=nombre%>"><nested:write property="traduccion.nombre"/></label>
+				<label for="<%=nombre%>"><%=org.ibit.rol.form.front.util.UtilFrontV2.generaHtmlEtiqueta(etiquetaTxt)%>	</label>
 			</nested:equal>				
 		</div>
 		<div class="imc-el-control">
@@ -30,6 +32,7 @@
 					</li>
     			<% } %>				
 				<logic:iterate name="campo" property="allValoresPosibles" id="opcion" type="ValorPosible">
+					<% if (firstElement) { valueFirstElement = opcion.getValor(); firstElement = false; } %>
 					<li>
 						<a data-value="<%=opcion.getValor()%>" tabindex="0" href="javascript:;"><%=((TraValorPosible) opcion.getTraduccion()).getEtiqueta()%></a>
 					</li>				
@@ -49,7 +52,7 @@
 		<!--
 			$(function(){
 				// Seleccionamos elemento
-				control_select("<%=nombre%>", "<nested:write name="pantallaForm" property="<%=nombre%>"/>");
+			control_select("<%=nombre%>", "<nested:write name="pantallaForm" property="<%=nombre%>"/>");					
 			<% if (autocalculo || bloqueado) { %>
 				// Ponemos a solo lectura
 				control_readOnly("<%=nombre%>", true);	
@@ -59,15 +62,13 @@
 				//el_element.find("div.imc-opcions:first").addClass("imc-opcions-no-events").inputSelect({			
 				el_element.find("div.imc-opcions:first").inputSelect({
 					alAcabar: function() {
-						setTimeout("onFieldChange(document.getElementById(\"pantallaForm\"), \"<%=nombre%>\")",200);	
-						// onFieldChange(document.getElementById("pantallaForm"), "<%=nombre%>");				
+						setTimeout("onFieldChange(document.getElementById(\"pantallaForm\"), \"<%=nombre%>\")",200);				
 					}
 				});						
 			<% } %>
 
 			});
-
-	-->
+		-->
 	</script>
 	
 </nested:root>

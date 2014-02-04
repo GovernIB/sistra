@@ -1,5 +1,6 @@
 package org.ibit.rol.form.front.util;
 
+import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.form.model.CheckBox;
 import org.ibit.rol.form.model.ComboBox;
 import org.ibit.rol.form.model.Componente;
@@ -99,5 +100,16 @@ public class UtilFrontV2 {
 		
 		return res;
 	}	
+	
+	/**
+	 * Genera html etiqueta. Permite HTML entities pero no deja meter html embebido (< >). 
+	 * @param etiqueta etiqueta
+	 * @return etiqueta
+	 */
+	public static String generaHtmlEtiqueta(String etiqueta) {
+		String etiquetaTxt = StringUtils.replace(etiqueta, ">", "&gt;");
+	    etiquetaTxt = StringUtils.replace(etiquetaTxt, "<", "&lt;");
+	    return etiquetaTxt;
+	}
 }
  

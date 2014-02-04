@@ -8,11 +8,12 @@
 <nested:root>
     <nested:define id="campo" type="org.ibit.rol.form.model.Label"/>
     <nested:define id="nombre" property="nombreLogico" type="java.lang.String"/>
+    <nested:define id="etiquetaTxt" type="java.lang.String" property="traduccion.etiqueta"/>
 
 	<div class="<%=org.ibit.rol.form.front.util.UtilFrontV2.generateStyleClass(campo)%>">
 		<div class="imc-el-etiqueta">
 			<nested:equal property="sinEtiqueta" value="false">
-				<nested:write property="traduccion.etiqueta"/>
+				<%=org.ibit.rol.form.front.util.UtilFrontV2.generaHtmlEtiqueta(etiquetaTxt)%>	
 			</nested:equal>			
 		</div>		
 	</div>
