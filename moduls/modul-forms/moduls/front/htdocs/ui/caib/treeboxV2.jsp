@@ -8,6 +8,7 @@
 <nested:root>
     <nested:define id="campo" type="org.ibit.rol.form.model.TreeBox"/>
     <nested:define id="nombre" property="nombreLogico" type="java.lang.String"/>
+    <nested:define id="etiquetaTxt" type="java.lang.String" property="traduccion.nombre"/>
 
 	<% boolean autocalculo = StringUtils.isNotEmpty(StringUtils.strip(campo.getExpresionAutocalculo())); %>    
     <% boolean bloqueado = campo.isBloqueado();%>
@@ -16,7 +17,7 @@
 	<fieldset class="<%=org.ibit.rol.form.front.util.UtilFrontV2.generateStyleClass(campo)%>" data-type="tree">
 		<legend class="imc-label">
 			<nested:equal property="sinEtiqueta" value="false">
-				<nested:write property="traduccion.nombre"/>
+				<%=org.ibit.rol.form.front.util.UtilFrontV2.generaHtmlEtiqueta(etiquetaTxt)%>				
 			</nested:equal>			
 		</legend>
 		<ul>	

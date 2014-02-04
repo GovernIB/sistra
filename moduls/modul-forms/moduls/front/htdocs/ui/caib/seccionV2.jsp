@@ -8,8 +8,9 @@
 <nested:root>
     <nested:define id="campo" type="org.ibit.rol.form.model.Seccion"/>
     <nested:define id="nombre" property="nombreLogico" type="java.lang.String"/>
+    <nested:define id="etiquetaTxt" type="java.lang.String" property="traduccion.etiqueta"/>
 	<h4 class="imc-seccio">
 		<span class="imc-se-marca"><nested:write property="letraSeccion"/></span>
-		<span class="imc-se-titol"><nested:write property="traduccion.etiqueta"/></span>
+		<span class="imc-se-titol"><%=org.ibit.rol.form.front.util.UtilFrontV2.generaHtmlEtiqueta(etiquetaTxt)%></span>
 	</h4>
 </nested:root>

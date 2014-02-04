@@ -177,7 +177,7 @@
 			<p><bean:message bundle="caibMessages" key="errores.titulo"/></p>
 			<ul>
 				<html:messages id="error">
-					<li><bean:write name="error"/></li> 
+					<li><%=org.ibit.rol.form.front.util.UtilFrontV2.generaHtmlEtiqueta(error)%></li> 
 				</html:messages>		
 			</ul>
 		</div>

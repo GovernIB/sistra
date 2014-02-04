@@ -8,12 +8,15 @@
 <nested:root>
     <nested:define id="campo" type="org.ibit.rol.form.model.TextBox"/>
     <nested:define id="nombre" property="nombreLogico" type="java.lang.String"/>
+    <nested:define id="etiquetaTxt" type="java.lang.String" property="traduccion.nombre"/>
 
-	<% Validacion vmaxlength = campo.findValidacion("maxlength"); %>
-	<% boolean autocalculo = StringUtils.isNotEmpty(StringUtils.strip(campo.getExpresionAutocalculo()));%>
-	<% boolean disabled = StringUtils.isNotEmpty(StringUtils.strip(campo.getExpresionDependencia())); %>    
-    <% boolean bloqueado = campo.isBloqueado();%> 
-    <% String dataType = "text";
+	<% 
+	   Validacion vmaxlength = campo.findValidacion("maxlength"); 
+	   boolean autocalculo = StringUtils.isNotEmpty(StringUtils.strip(campo.getExpresionAutocalculo()));
+	   boolean disabled = StringUtils.isNotEmpty(StringUtils.strip(campo.getExpresionDependencia()));     
+       boolean bloqueado = campo.isBloqueado(); 
+       
+       String dataType = "text";
        String styleClassInput = "";
        String inputType = "text";
        if (campo.getFilas() <= 1) {
@@ -50,7 +53,7 @@
     <div class="<%=org.ibit.rol.form.front.util.UtilFrontV2.generateStyleClass(campo)%>" data-type="<%=dataType%>">
    		<div class="imc-el-etiqueta">
 			<nested:equal property="sinEtiqueta" value="false">
-				<label for="<%=nombre%>"><nested:write property="traduccion.nombre"/></label>
+				<label for="<%=nombre%>"><%=org.ibit.rol.form.front.util.UtilFrontV2.generaHtmlEtiqueta(etiquetaTxt)%></label>
 			</nested:equal>			
 		</div>
 		<div class="imc-el-control">

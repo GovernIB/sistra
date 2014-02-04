@@ -103,7 +103,7 @@ public final class PantallaUtils {
 
                     // campo.isIndexed
                     tipoValor = "java.lang.String";
-
+                    
                     for (int j = 0; j < valoresPosibles.size(); j++) {
                         ValorPosible vp = (ValorPosible) valoresPosibles.get(j);
                         if (vp.isDefecto()) {
@@ -111,6 +111,7 @@ public final class PantallaUtils {
                             break;
                         }
                     }
+                    
                 }
 
                 Class clazz = getClass(tipoValor);
@@ -314,7 +315,8 @@ public final class PantallaUtils {
                             }
                         }                   	
                     } else {
-                        //valor por defecto definido en el mismo campo
+                        // Valor por defecto definido en el mismo campo
+                    	// Si no tiene valor por defecto, cogemos el primero
                     	
                     	// INDRA 2013: SI COMBO NO ES OBLIGATORIO NO HACEMOS CASO DE LOS VALORES POSIBLES
                     	boolean comboObligatorio = (campo instanceof ComboBox) && ((ComboBox) campo).isObligatorio(); 
@@ -322,7 +324,8 @@ public final class PantallaUtils {
 	                        for (int j = 0; j < valoresPosibles.size(); j++) {
 	                            ValorPosible vp = (ValorPosible) valoresPosibles.get(j);
 	                            
-	                            if (vp.isDefecto()) {
+	                            // Cogemos el primero o bien el por defecto
+	                            if (vp.isDefecto() || j == 0 ) {
 	                                valIni = vp.getValor();
 	                                //Almaceno el valor asociado al indice seleccionado por defecto en el campo.
 	                                valorEtiqueta = ((TraValorPosible) vp.getTraduccion()).getEtiqueta();
@@ -330,6 +333,7 @@ public final class PantallaUtils {
 	                                break;
 	                            }
 	                        }
+	                        
                     	}
                     }
                 }
