@@ -2,12 +2,14 @@ package es.caib.zonaper.persistence.delegate;
 
 import java.rmi.RemoteException;
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
 import es.caib.zonaper.modelInterfaz.ConfiguracionAvisosExpedientePAD;
 import es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo;
+import es.caib.zonaper.modelInterfaz.EstadoPagosTramite;
 import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.persistence.intf.PadBackOfficeFacade;
@@ -138,6 +140,21 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 		}
 	}
 
+
+	public EstadoPagosTramite obtenerEstadoPagosTramite(String identificadorPersistenciaTramite)  throws DelegateException	
+	{
+		try
+		{
+			return getFacade().obtenerEstadoPagosTramite(identificadorPersistenciaTramite);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+
+
+	
 	/*
 	public EventoExpedientePAD obtenerEventoExpediente( long unidadAdministrativa, String idExpediente, String fechaEvento ) throws DelegateException
 	{

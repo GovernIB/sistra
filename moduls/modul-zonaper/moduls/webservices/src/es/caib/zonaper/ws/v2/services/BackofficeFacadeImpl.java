@@ -1,16 +1,25 @@
 package es.caib.zonaper.ws.v2.services;
 
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 
+
 import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
+import es.caib.zonaper.modelInterfaz.EstadoPago;
+import es.caib.zonaper.modelInterfaz.EstadoPagosTramite;
 import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeUtil;
 import es.caib.zonaper.ws.v2.model.DocumentoExpediente;
+import es.caib.zonaper.ws.v2.model.EstadoPagos;
 import es.caib.zonaper.ws.v2.model.EventoExpediente;
 import es.caib.zonaper.ws.v2.model.Expediente;
+import es.caib.zonaper.ws.v2.model.TipoEstadoPago;
+import es.caib.zonaper.ws.v2.model.TipoEstadoTramite;
 
 
 @javax.jws.WebService(portName = "BackofficeFacade", serviceName = "BackofficeFacadeService", 
@@ -64,8 +73,32 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
+		}		
+	}
+	
+	public EstadoPagos obtenerEstadoPagosTramite(String identificadorPersistenciaTramite) throws BackofficeFacadeException {
+		try {
+			
+			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
+			EstadoPagosTramite estados = pad.obtenerEstadoPagosTramite(identificadorPersistenciaTramite);		
+			
+			EstadoPagos res = new EstadoPagos();
+			res.setEstadoTramite(TipoEstadoTramite.valueOf(estados.getEstadoTramite()));
+			if (estados.getEstadoPagos() != null) {
+				for (Iterator it = estados.getEstadoPagos().iterator(); it.hasNext();) {
+					EstadoPago ep = (EstadoPago) it.next();
+					es.caib.zonaper.ws.v2.model.EstadoPago rep = new es.caib.zonaper.ws.v2.model.EstadoPago();
+					rep.setIdDocumento(ep.getIdDocumento());
+					rep.setEstado(TipoEstadoPago.fromValue(ep.getEstado()));
+					res.getEstadoPago().add(rep );
+				}
+			}
+			return res;
+			
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
-		
 	}
 	
 	// --------------------------------------------------------------
@@ -178,5 +211,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		}
 		return exPAD;		
 	}
+
+	
 
 }

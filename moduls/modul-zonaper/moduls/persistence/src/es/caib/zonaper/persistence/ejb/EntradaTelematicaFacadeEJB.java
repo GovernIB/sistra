@@ -98,6 +98,7 @@ public abstract class EntradaTelematicaFacadeEJB extends HibernateEJB {
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.helpdesk}"
+     * @ejb.permission role-name="${role.auto}"
      */
     public EntradaTelematica obtenerEntradaTelematica(String idPersistencia) {
     	EntradaTelematica entradaTelematica = recuperarEntradaTelematicaPorIdPersistencia(idPersistencia);   

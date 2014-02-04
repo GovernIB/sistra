@@ -44,6 +44,7 @@ public class PagosFacadeEJB implements SessionBean {
 	/**
      * @ejb.create-method
      * @ejb.permission role-name = "${role.todos}"
+     * @ejb.permission role-name = "${role.auto}"
      */
 	public void ejbCreate() throws CreateException {		
 	}
@@ -52,7 +53,7 @@ public class PagosFacadeEJB implements SessionBean {
 	 * Inicia sesion de pago
 	 * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.todos}" 
      */
 	public SesionPago iniciarSesionPago(DatosPago datosPago, SesionSistra sesionSistra) {
 		
@@ -145,6 +146,7 @@ public class PagosFacadeEJB implements SessionBean {
 	 * 
 	 * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name = "${role.auto}"
 	 */
 	public EstadoSesionPago comprobarEstadoSesionPago(String localizador) {
 		try{

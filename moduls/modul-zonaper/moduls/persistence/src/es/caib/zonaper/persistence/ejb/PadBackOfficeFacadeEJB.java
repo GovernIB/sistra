@@ -35,15 +35,24 @@ import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.redose.modelInterfaz.UsoRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
+import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.pagos.ConstantesPago;
+import es.caib.sistra.plugins.pagos.EstadoSesionPago;
+import es.caib.sistra.plugins.pagos.PluginPagosIntf;
 import es.caib.util.CredentialUtil;
 import es.caib.util.NifCif;
 import es.caib.util.StringUtil;
+import es.caib.xml.justificantepago.factoria.impl.DatosPago;
 import es.caib.xml.oficioremision.factoria.FactoriaObjetosXMLOficioRemision;
 import es.caib.xml.oficioremision.factoria.ServicioOficioRemisionXML;
 import es.caib.xml.oficioremision.factoria.impl.OficioRemision;
+import es.caib.xml.pago.XmlDatosPago;
 import es.caib.xml.registro.factoria.ConstantesAsientoXML;
+import es.caib.zonaper.model.DocumentoEntrada;
+import es.caib.zonaper.model.DocumentoEntradaTelematica;
 import es.caib.zonaper.model.DocumentoEventoExpediente;
 import es.caib.zonaper.model.DocumentoNotificacionTelematica;
+import es.caib.zonaper.model.DocumentoPersistente;
 import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.ElementoExpedienteItf;
 import es.caib.zonaper.model.Entrada;
@@ -53,12 +62,16 @@ import es.caib.zonaper.model.EventoExpediente;
 import es.caib.zonaper.model.Expediente;
 import es.caib.zonaper.model.IndiceElemento;
 import es.caib.zonaper.model.NotificacionTelematica;
+import es.caib.zonaper.model.TramitePersistente;
 import es.caib.zonaper.modelInterfaz.ConfiguracionAvisosExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo;
 import es.caib.zonaper.modelInterfaz.DetalleAviso;
 import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
+import es.caib.zonaper.modelInterfaz.DocumentoPersistentePAD;
 import es.caib.zonaper.modelInterfaz.ElementoExpedientePAD;
+import es.caib.zonaper.modelInterfaz.EstadoPago;
+import es.caib.zonaper.modelInterfaz.EstadoPagosTramite;
 import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
@@ -496,6 +509,79 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
     }	
 	
 	/**
+	 * 
+	 * Obtiene estado pagos tramtite
+     * 
+	 * @param identificadorPersistenciaTramite identificador Persistencia Tramite
+	 * @throws ExcepcionPAD
+	 *  
+	 * @ejb.interface-method
+     * 
+     * @ejb.permission role-name="${role.auto}"
+     */
+	public EstadoPagosTramite obtenerEstadoPagosTramite(String identificadorPersistenciaTramite)throws ExcepcionPAD
+    {
+    	try
+    	{
+    		boolean enc = false;
+    		
+    		EstadoPagosTramite res2 = new EstadoPagosTramite();
+    		List estadoPagos;
+    		
+    		// Buscamos tramite de persistencia
+    		TramitePersistente tp = DelegateUtil.getTramitePersistenteDelegate().obtenerTramitePersistente(identificadorPersistenciaTramite);
+    		if (tp != null) {
+    			enc = true;
+    			// Busca los pagos de tramite persistente
+        		List res = obtenerEstadoPagosTramitePersistente(tp);
+    			// Devuelve estado pagos
+    			res2.setEstadoTramite(ConstantesZPE.CONSULTAESTADOPAGOS_TRAMITE_PENDIENTE_ENVIAR);
+    			res2.setEstadoPagos(res);
+    		} 
+    		
+    		// Buscamos tramite en entradas telematicas
+    		if (!enc) {
+    			EntradaTelematica et = DelegateUtil.getEntradaTelematicaDelegate().obtenerEntradaTelematica(identificadorPersistenciaTramite); 
+    			if (et != null) {
+    				enc = true;
+    				// Busca los pagos de entrada telematica
+            		List res = obtenerEstadoPagosEntrada(et);
+        			// Devuelve estado pagos
+        			res2.setEstadoTramite(ConstantesZPE.CONSULTAESTADOPAGOS_TRAMITE_ENVIADO);
+        			res2.setEstadoPagos(res);
+    			}    			
+    		}
+    		
+    		// Buscamos tramite en entradas preregistro
+    		if (!enc) {
+    			EntradaPreregistro ep = DelegateUtil.getEntradaPreregistroDelegate().obtenerEntradaPreregistro(identificadorPersistenciaTramite); 
+    			if (ep != null) {
+    				enc = true;
+    				// Busca los pagos de entrada preregistro
+    				List res = obtenerEstadoPagosEntrada(ep);
+        			// Devuelve estado pagos
+        			res2.setEstadoTramite(ConstantesZPE.CONSULTAESTADOPAGOS_TRAMITE_ENVIADO);
+        			res2.setEstadoPagos(res);
+    			}   
+    		}
+    		
+    		// Si no esta en las anteriores, no existe tramite
+    		if (!enc) {
+    			res2.setEstadoTramite(ConstantesZPE.CONSULTAESTADOPAGOS_TRAMITE_NO_EXISTE);
+    		}
+    		
+    		
+    		return res2;
+    	}
+    	catch( Exception ex )
+    	{
+    		throw new ExcepcionPAD("Error obteniendo estado pagos tramite",ex);
+    	}
+    }
+
+	
+	
+	/**
     
     NO SE PERMITEN BAJAS
 	public void bajaEvento( long unidadAdministrativa, String identificadorExpediente, String fechaEvento )	
@@ -546,6 +632,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		return obtenerEventoExpediente( unidadAdministrativa, idExpediente, null, fechaEvento );
 	}
 	*/
+	
 	
 	/**
 	 * 
@@ -1598,5 +1685,104 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 			log.error("Excepción auditando evento: " + ex.getMessage(),ex);
 		}
 	}
+	 
+	 /**
+	  * Obtiene estado pagos tramite persistente.
+	  * @param tp tramite persistente.
+	  * @return List estado pagos	
+	  * @throws Exception
+	  */
+	 private List obtenerEstadoPagosTramitePersistente(TramitePersistente tp) throws Exception {
+			List res = new ArrayList();
+			RdsDelegate rdsDlg = DelegateRDSUtil.getRdsDelegate();
+			for (Iterator it = tp.getDocumentos().iterator(); it.hasNext();) {
+				DocumentoPersistente dp = (DocumentoPersistente) it.next();
+				if ( DocumentoPersistentePAD.TIPO_PAGO.equals(dp.getTipoDocumento())) {
+					EstadoPago ep = new EstadoPago();
+					ep.setIdDocumento(dp.getIdentificador() + "-" + dp.getNumeroInstancia());
+					ep.setEstado(ConstantesZPE.CONSULTAESTADOPAGOS_PAGO_NO_REALIZADO);
+					// Pago realizado y confirmado en el tramite
+					if (dp.getEstado() == DocumentoPersistentePAD.ESTADO_CORRECTO) {
+						ep.setEstado(ConstantesZPE.CONSULTAESTADOPAGOS_PAGO_REALIZADO);
+					} else if (dp.getEstado() == DocumentoPersistentePAD.ESTADO_INCORRECTO) {
+						// Obtenemos datos pago para obtener el localizador
+						DocumentoRDS pagoRds = rdsDlg.consultarDocumento(new ReferenciaRDS(dp.getRdsCodigo().longValue(), dp.getRdsClave()));
+						XmlDatosPago xmlPago = new XmlDatosPago();
+						xmlPago.setBytes(pagoRds.getDatosFichero());
+						// Invocamos al plugin de pago para verificar estado sesion pago
+						if (StringUtils.isNotBlank(xmlPago.getLocalizador())) {
+							PluginPagosIntf pluginPagos = PluginFactory.getInstance().getPluginPagos(xmlPago.getPluginId());
+							EstadoSesionPago estadoSesionPago = pluginPagos.comprobarEstadoSesionPago(xmlPago.getLocalizador());
+							ep.setEstado(estadoPluginPagoToEstadoPago(estadoSesionPago.getEstado()));
+						}
+					}
+					
+					// Añadimos a estados pago
+					res.add(ep);
+				}
+			}
+			return res;
+		}
+
+    /**
+     * Convierte estado plugin pago a estado pago.
+     * @param estadoPluginPago estado plugin pago
+     * @return estado pago
+     * @throws Exception
+     */
+	private String estadoPluginPagoToEstadoPago(
+			int estadoPluginPago) throws Exception {
+		String estado = ConstantesZPE.CONSULTAESTADOPAGOS_PAGO_NO_REALIZADO;
+		switch (estadoPluginPago) {
+			case ConstantesPago.SESIONPAGO_EN_CURSO:
+				estado = ConstantesZPE.CONSULTAESTADOPAGOS_PAGO_NO_REALIZADO;
+				break;
+			case ConstantesPago.SESIONPAGO_NO_EXISTE_SESION:
+				estado = ConstantesZPE.CONSULTAESTADOPAGOS_PAGO_NO_REALIZADO;
+				break;
+			case ConstantesPago.SESIONPAGO_PAGO_CONFIRMADO:
+				estado = ConstantesZPE.CONSULTAESTADOPAGOS_PAGO_REALIZADO;
+				break;
+			case ConstantesPago.SESIONPAGO_PAGO_EXCEDIDO_TIEMPO_PAGO:
+				estado = ConstantesZPE.CONSULTAESTADOPAGOS_PAGO_EXCEDIDO_TIEMPO_PAGO;
+				break;
+			case ConstantesPago.SESIONPAGO_PAGO_PENDIENTE_CONFIRMAR:
+				estado = ConstantesZPE.CONSULTAESTADOPAGOS_PAGO_PENDIENTE_CONFIRMAR;
+				break;
+			default:
+				throw new Exception("Tipo estado pago no soportado");
+		}
+		return estado;
+	}
 	
+	 	/**
+	 	 * Busca estado pagos entrada (telematica y preregistro)
+	 	 * @param et entrada
+	 	 * @return estado pagos
+	 	 */
+		private List obtenerEstadoPagosEntrada(Entrada et) throws Exception {
+			RdsDelegate rdsDlg = DelegateRDSUtil.getRdsDelegate();
+			List res = new ArrayList();
+			if (et.getDocumentos() != null && et.getDocumentos().size() > 0) {
+				for (Iterator it = et.getDocumentos().iterator(); it.hasNext();) {
+					DocumentoEntrada de = (DocumentoEntrada) it.next();
+					DocumentoRDS docRds = rdsDlg.consultarDocumento(new ReferenciaRDS(de.getCodigoRDS(), de.getClaveRDS()), false);
+					if (ConstantesRDS.MODELO_PAGO.equals(docRds.getModelo())) {
+						DocumentoRDS pagoRds = rdsDlg.consultarDocumento(new ReferenciaRDS(de.getCodigoRDS(), de.getClaveRDS()), true);
+						XmlDatosPago xmlPago = new XmlDatosPago();
+						xmlPago.setBytes(pagoRds.getDatosFichero());
+						EstadoPago ep = new EstadoPago();
+						ep.setIdDocumento(de.getIdentificador() + "-" + de.getNumeroInstancia());
+						if (xmlPago.getEstado() == DocumentoPersistentePAD.ESTADO_CORRECTO) {
+							ep.setEstado(ConstantesZPE.CONSULTAESTADOPAGOS_PAGO_REALIZADO);
+						} else {
+							ep.setEstado(ConstantesZPE.CONSULTAESTADOPAGOS_PAGO_NO_REALIZADO);
+						}
+						res.add(ep);
+					}					
+				}
+			}			
+			return res;
+		}
+			
 }

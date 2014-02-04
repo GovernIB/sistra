@@ -157,6 +157,7 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.helpdesk}"
+     * @ejb.permission role-name="${role.auto}"
      * 
      */
     public EntradaPreregistro obtenerEntradaPreregistro(String idPersistencia) {
