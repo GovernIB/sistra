@@ -1713,7 +1713,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 						// Invocamos al plugin de pago para verificar estado sesion pago
 						if (StringUtils.isNotBlank(xmlPago.getLocalizador())) {
 							String pluginId = xmlPago.getPluginId();
-							if (pluginId != null) {
+							if (StringUtils.isBlank(pluginId)) {
 								pluginId = PluginFactory.ID_PLUGIN_DEFECTO;
 							}
 							PluginPagosIntf pluginPagos = PluginFactory.getInstance().getPluginPagos(pluginId);
