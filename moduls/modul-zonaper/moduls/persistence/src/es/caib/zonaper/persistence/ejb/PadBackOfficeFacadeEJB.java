@@ -35,6 +35,7 @@ import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.redose.modelInterfaz.UsoRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
+import es.caib.sistra.persistence.plugins.PluginPagos;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.pagos.ConstantesPago;
 import es.caib.sistra.plugins.pagos.EstadoSesionPago;
@@ -1711,7 +1712,11 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 						xmlPago.setBytes(pagoRds.getDatosFichero());
 						// Invocamos al plugin de pago para verificar estado sesion pago
 						if (StringUtils.isNotBlank(xmlPago.getLocalizador())) {
-							PluginPagosIntf pluginPagos = PluginFactory.getInstance().getPluginPagos(xmlPago.getPluginId());
+							String pluginId = xmlPago.getPluginId();
+							if (pluginId != null) {
+								pluginId = PluginFactory.ID_PLUGIN_DEFECTO;
+							}
+							PluginPagosIntf pluginPagos = PluginFactory.getInstance().getPluginPagos(pluginId);
 							EstadoSesionPago estadoSesionPago = pluginPagos.comprobarEstadoSesionPago(xmlPago.getLocalizador());
 							ep.setEstado(estadoPluginPagoToEstadoPago(estadoSesionPago.getEstado()));
 						}
