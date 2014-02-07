@@ -62,8 +62,9 @@
                 oRequired = new required();
                 for (x in oRequired) {
                 	var field = form[oRequired[x][0]];
-                	
-                    if (field.type == 'text' ||
+                
+                	if (field.type == 'hidden' ||
+                		field.type == 'text' ||
                         field.type == 'textarea' ||
                         field.type == 'file' ||
                         field.type == 'select-one' ||
@@ -91,6 +92,7 @@
                         }
                     }
                 }
+                                
                 if (fields.length > 0) {
                    focusField.focus();
                    

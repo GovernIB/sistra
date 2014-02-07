@@ -18,6 +18,7 @@ import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.ibit.rol.form.model.*;
+import org.ibit.rol.form.persistence.delegate.DelegateUtil;
 import org.ibit.rol.form.persistence.util.CampoUtils;
 import org.ibit.rol.form.persistence.util.PantallaUtils;
 import org.ibit.rol.form.persistence.util.ScriptUtil;
@@ -185,6 +186,15 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                 for (Iterator iterCamp = pantalla.getCampos().iterator(); iterCamp.hasNext();) {
                     Campo campo = (Campo) iterCamp.next();
                     Hibernate.initialize(campo.getValidaciones());
+                    
+                    // Para ComboBox añadimos validacion obligatorio
+                    if (campo instanceof ComboBox && ((ComboBox) campo).isObligatorio()) {
+                    	Validacion validacion = new Validacion();
+                    	Mascara mascara = DelegateUtil.getMascaraDelegate().obtenerMascara("required");
+						validacion.setMascara(mascara);					
+						campo.addValidacion(validacion);
+                    }
+                    
                     Hibernate.initialize(campo.getValoresPosibles());
                     boolean bloquear = CampoUtils.bloquearCampo(campo, docXMLConfig, XPATH_BLOQ_TODOS, XPATH_BLOQ_CAMPO);
                     if (bloquear) {
@@ -228,7 +238,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
             log.debug("Generados valores por defecto");
 
             session.disconnect();
-        } catch (HibernateException e) {
+        } catch (Exception e) {
             closeReadOnly(session);
             throw new EJBException(e);
         }
