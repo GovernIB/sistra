@@ -24,6 +24,7 @@
 		</logic:notEmpty>
         <script type="text/javascript" src="<html:rewrite page='<%="/js/v1/MM_functions.js"%>'/>"></script>
         <script type="text/javascript" src="<html:rewrite page='<%="/js/v1/iframe_functions.js"%>'/>"></script>
+        <script src="<html:rewrite page='/js/v1/jquery-1.8.3.min.js'/>"></script>
 
 <bean:define id="urlLog" type="java.lang.String">
         <html:rewrite page="/logScript.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
