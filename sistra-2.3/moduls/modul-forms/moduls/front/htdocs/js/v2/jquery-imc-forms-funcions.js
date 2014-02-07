@@ -190,17 +190,19 @@ function control_select(name, valor, neteja) {
 		if (neteja) {
 			el_camps.attr("checked", false);
 		}
+		
 		valor_es_string = (typeof valor === "string") ? true : false;
 		if (valor_es_string) {
-			el_camps.filter("[value=" + valor + "]").attr("checked", true);
+			el_camps.filter("[value=\"" + valor + "\"]").attr("checked", true);
 		} else {
 			var valor_size = valor.length;
 			for (var i=0; i<valor_size; i++) {
-				el_camps.filter("[value=" + valor[i] + "]").attr("checked", true);
+				el_camps.filter("[value=\"" + valor[i] + "\"]").attr("checked", true);
 			}
 		}
+		
 	} else if (el_tipus === "radio-list" || el_tipus === "radio-list-scroll") {
-		el_camps.filter("[value=" + valor + "]").attr("checked", true);
+		el_camps.filter("[value=\"" + valor + "\"]").attr("checked", true);
 	} else if (el_tipus === "check") {
 		if (valor) {
 			el_camps_primer.attr("checked", true);
