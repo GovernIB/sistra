@@ -2,10 +2,8 @@ package es.caib.zonaper.ws.v2.services;
 
 
 import java.util.Iterator;
-import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-
 
 import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.EstadoPago;

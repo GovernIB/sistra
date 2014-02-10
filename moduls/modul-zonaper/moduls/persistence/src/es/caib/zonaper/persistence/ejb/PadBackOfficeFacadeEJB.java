@@ -1746,7 +1746,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 				estado = ConstantesZPE.CONSULTAESTADOPAGOS_PAGO_REALIZADO;
 				break;
 			case ConstantesPago.SESIONPAGO_PAGO_EXCEDIDO_TIEMPO_PAGO:
-				estado = ConstantesZPE.CONSULTAESTADOPAGOS_PAGO_EXCEDIDO_TIEMPO_PAGO;
+				estado = ConstantesZPE.CONSULTAESTADOPAGOS_PAGO_NO_REALIZADO;
 				break;
 			case ConstantesPago.SESIONPAGO_PAGO_PENDIENTE_CONFIRMAR:
 				estado = ConstantesZPE.CONSULTAESTADOPAGOS_PAGO_PENDIENTE_CONFIRMAR;

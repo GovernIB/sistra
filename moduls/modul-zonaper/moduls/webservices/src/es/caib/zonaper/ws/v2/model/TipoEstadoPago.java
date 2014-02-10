@@ -16,7 +16,6 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="PAGADO"/>
  *     &lt;enumeration value="PENDIENTE_CONFIRMAR"/>
  *     &lt;enumeration value="NO_PAGADO"/>
- *     &lt;enumeration value="EXCEDIDO_TIEMPO_PAGO"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -28,8 +27,7 @@ public enum TipoEstadoPago {
 
     PAGADO,
     PENDIENTE_CONFIRMAR,
-    NO_PAGADO,
-    EXCEDIDO_TIEMPO_PAGO;
+    NO_PAGADO;
 
     public String value() {
         return name();
