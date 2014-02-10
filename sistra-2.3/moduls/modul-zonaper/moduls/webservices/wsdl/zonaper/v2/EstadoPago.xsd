@@ -11,7 +11,6 @@
 	    <xs:enumeration value="PAGADO"/>
 	    <xs:enumeration value="PENDIENTE_CONFIRMAR"/>
 	    <xs:enumeration value="NO_PAGADO"/>
-	    <xs:enumeration value="EXCEDIDO_TIEMPO_PAGO"/>
 	  </xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="TipoEstadoTramite">
