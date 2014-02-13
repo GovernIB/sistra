@@ -317,23 +317,18 @@ public final class PantallaUtils {
                         }                   	
                     } else {
                         // Valor por defecto definido en el mismo campo
-                    	// INDRA 2013: SI COMBO NO ES OBLIGATORIO NO HACEMOS CASO DE LOS VALORES POSIBLES
-                    	boolean comboObligatorio = (campo instanceof ComboBox) && ((ComboBox) campo).isObligatorio(); 
-                    	if (comboObligatorio || campo instanceof RadioButton) {
-	                        for (int j = 0; j < valoresPosibles.size(); j++) {
-	                            ValorPosible vp = (ValorPosible) valoresPosibles.get(j);
-	                            
-	                            // Cogemos el por defecto
-	                            if (vp.isDefecto()) {
-	                                valIni = vp.getValor();
-	                                //Almaceno el valor asociado al indice seleccionado por defecto en el campo.
-	                                valorEtiqueta = ((TraValorPosible) vp.getTraduccion()).getEtiqueta();
-	                                hasText = true;
-	                                break;
-	                            }
-	                        }
-	                        
-                    	}
+                    	for (int j = 0; j < valoresPosibles.size(); j++) {
+                            ValorPosible vp = (ValorPosible) valoresPosibles.get(j);
+                            
+                            // Cogemos el por defecto
+                            if (vp.isDefecto()) {
+                                valIni = vp.getValor();
+                                //Almaceno el valor asociado al indice seleccionado por defecto en el campo.
+                                valorEtiqueta = ((TraValorPosible) vp.getTraduccion()).getEtiqueta();
+                                hasText = true;
+                                break;
+                            }
+                        }	                                            	
                     }
                 } else if (campo instanceof Captcha) {
                 	valIni = CaptchaUtils.generateCaptcha();
@@ -589,21 +584,17 @@ public final class PantallaUtils {
                         }
 
                     }else {
-                    	// INDRA 2013: SI COMBO NO ES OBLIGATORIO NO HACEMOS CASO DEL VALOR POR DEFECTO
-                    	boolean obligatorioCombo = (campo instanceof ComboBox) && ((ComboBox) campo).isObligatorio(); 
-                    	if (campo instanceof RadioButton || obligatorioCombo) {
-	                        //valor por defecto definido en el mismo campo
-	                        for (int j = 0; j < valoresPosibles.size(); j++) {
-	                            ValorPosible vp = (ValorPosible) valoresPosibles.get(j);
-	                            if (vp.isDefecto()) {
-	                                valIni = vp.getValor();
-	                                //Almaceno el valor asociado al indice seleccionado por defecto en el campo.
-	                                valorEtiqueta = ((TraValorPosible) vp.getTraduccion()).getEtiqueta();
-	                                hasText = true;
-	                                break;
-	                            }
-	                        }
-                    	}
+                    	//valor por defecto definido en el mismo campo
+                        for (int j = 0; j < valoresPosibles.size(); j++) {
+                            ValorPosible vp = (ValorPosible) valoresPosibles.get(j);
+                            if (vp.isDefecto()) {
+                                valIni = vp.getValor();
+                                //Almaceno el valor asociado al indice seleccionado por defecto en el campo.
+                                valorEtiqueta = ((TraValorPosible) vp.getTraduccion()).getEtiqueta();
+                                hasText = true;
+                                break;
+                            }
+                        }                    	
                     }
                 } else if (campo instanceof Captcha) {
                 	valIni = CaptchaUtils.generateCaptcha();
