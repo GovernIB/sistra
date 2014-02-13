@@ -44,7 +44,9 @@
     %>  
     
     <nested:equal property="oculto" value="true">
-    	<html:hidden property="<%=nombre%>"/>
+    	<div class="<%=org.ibit.rol.form.front.util.UtilFrontV2.generateStyleClass(campo)%>" data-type="hidden">
+             <html:hidden property="<%=nombre%>" styleId="<%=nombre%>"/>
+        </div>    	
     </nested:equal>
     
     

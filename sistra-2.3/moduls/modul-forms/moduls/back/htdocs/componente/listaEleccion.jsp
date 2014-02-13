@@ -54,13 +54,19 @@
         <td class="label"><bean:message key="componente.checkbox" /></td>
         <td><html:radio styleClass="check" property="tipo" value="checkbox" /></td>
     </tr>
-        <tr>
+    <!-- 
+    <tr>
         <td class="label"><bean:message key="componente.filebox" /></td>
         <td><html:radio styleClass="check" property="tipo" value="filebox" /></td>
     </tr>
+     -->
     <tr>
         <td class="label"><bean:message key="componente.radiobutton" /></td>
         <td><html:radio styleClass="check" property="tipo" value="radiobutton" /></td>
+    </tr>
+    <tr>
+        <td class="label"><bean:message key="componente.captcha" /></td>
+        <td><html:radio styleClass="check" property="tipo" value="captcha" /></td>
     </tr>
 </table>
 <br />

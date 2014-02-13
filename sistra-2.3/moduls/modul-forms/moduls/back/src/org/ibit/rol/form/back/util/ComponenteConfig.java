@@ -14,6 +14,7 @@ public class ComponenteConfig {
     static {
         tipoMap = new HashMap(7);
         tipoMap.put(TextBox.class, "textbox");
+        tipoMap.put(Captcha.class, "captcha");
         tipoMap.put(Label.class, "label");
         tipoMap.put(CheckBox.class, "checkbox");
         tipoMap.put(FileBox.class, "filebox");
@@ -40,8 +41,9 @@ public class ComponenteConfig {
     private final static Map mappingMap;
 
     static {
-        mappingMap = new HashMap(7);
+        mappingMap = new HashMap(11);
         mappingMap.put(TextBox.class, "/back/textbox/editar");
+        mappingMap.put(Captcha.class, "/back/captcha/editar");
         mappingMap.put(Label.class, "/back/label/editar");
         mappingMap.put(CheckBox.class, "/back/checkbox/editar");
         mappingMap.put(FileBox.class, "/back/filebox/editar");
@@ -50,7 +52,7 @@ public class ComponenteConfig {
         mappingMap.put(TreeBox.class, "/back/treebox/editar");
         mappingMap.put(ListaElementos.class, "/back/listaelementos/editar");
         mappingMap.put(RadioButton.class, "/back/radiobutton/editar");
-        mappingMap.put(Seccion.class, "/back/seccion/editar");
+        mappingMap.put(Seccion.class, "/back/seccion/editar");       
     }
 
     public static void addMapping(Class clazz, String path) {

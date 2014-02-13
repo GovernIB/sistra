@@ -3,6 +3,7 @@ package org.ibit.rol.form.model.betwixt;
 import org.apache.commons.betwixt.strategy.PropertySuppressionStrategy;
 import org.ibit.rol.form.model.Archivo;
 import org.ibit.rol.form.model.AyudaPantalla;
+import org.ibit.rol.form.model.Captcha;
 import org.ibit.rol.form.model.CheckBox;
 import org.ibit.rol.form.model.FileBox;
 import org.ibit.rol.form.model.ComboBox;
@@ -51,7 +52,7 @@ public class ModelSuppressionStrategy extends PropertySuppressionStrategy {
         addSupressionList(Pantalla.class, new String[]{"id", "formulario", "campos"});
 
         String[] propsComponente = new String[]{"id", "paleta", "pantalla", "natural", "real", "imagen", "valorPosible", "allValoresPosibles"};
-        addSupressionList(Seccion.class, propsComponente);
+        addSupressionList(Seccion.class, propsComponente);        
         addSupressionList(Label.class, propsComponente);
         addSupressionList(CheckBox.class, propsComponente);
         addSupressionList(FileBox.class, propsComponente);
@@ -59,6 +60,7 @@ public class ModelSuppressionStrategy extends PropertySuppressionStrategy {
         addSupressionList(ListBox.class, propsComponente);
         addSupressionList(RadioButton.class, propsComponente);
         addSupressionList(TextBox.class, propsComponente);
+        addSupressionList(Captcha.class, propsComponente);
         addSupressionList(TreeBox.class, propsComponente);
         addSupressionList(ListaElementos.class, propsComponente);
 

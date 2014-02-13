@@ -416,8 +416,8 @@
 
 						var vps = valoresPosibles('<%=nombre%>', parametersPost);
 												
-				<% if (campo instanceof ComboBox && !((ComboBox) campo).isObligatorio()) { %>
-						// Añadimos opcion vacia en combo si no es obligatorio
+				<% if (campo instanceof ComboBox) { %>
+						// Añadimos opcion vacia para combos
 						vps.unshift({"defecto":false,"valor":"","etiqueta":"..."});
 				<% } %>		
 
@@ -454,41 +454,45 @@
 	    if (!fieldName || depends("<%=deps%>", modificados)) {
 	        <%-- form.<%=nombre%>.disabled = !(dependencia('<%=nombre%>', urlParams)); --%>
 
+			valueReadOnly = false;
+			valueDisabled = false;
+			
 			<logic:equal name="campo" property="bloqueado" value="true">
-			// Bloqueado por configuracion
-			control_disabled("<%=nombre%>", false);
+			// Bloqueado por configuracion (ponemos a readonly)
+			valueReadOnly = true;
 			</logic:equal>
 
 			<logic:equal name="campo" property="bloqueado" value="false">
 	     	// INDRA: MODIFICACION PARA PERMITIR ESTABLECER DISABLED O READONLY   
 	        expDep = (<%=JSUtil.escapeAndJoinJsExpression(campo.getExpresionDependencia())%>);
+	        expDep = expDep + ''; 
+	        if (expDep != 'true' && expDep != 'false' && expDep != 'readOnly') expDep = 'true';
 	        
-	        // CONTROL DE FOCO EN READONLY: SI LO MARCAMOS COMO READONLY Y TIENE EL FOCO, SE LO QUITAMOS
-	       	<% if (campo instanceof TextBox) {%>           	 
-	          	if (form.<%=nombre%>.hasFocus && expDep == 'readOnly') window.focus();
+	        
+	       	<% if (campo instanceof TextBox) {%>     
+	     	// CONTROL DE FOCO EN READONLY: SI LO MARCAMOS COMO READONLY Y TIENE EL FOCO, SE LO QUITAMOS      	 
+	        if (form.<%=nombre%>.hasFocus && expDep == 'readOnly') window.focus();
 	        <% } %>
-	        
-	        // -- INICIALIZAMOS CAMPOS A READONLY=FALSE
-	        // Si el campo tiene expresión de autocalculo no debemos cambiar el atributo readonly
-	        <logic:empty name="campo" property="expresionAutocalculo">  				
-				control_readOnly("<%=nombre%>", false);				
-	        </logic:empty>
-	        
-	        // -- INICIALIZAMOS CAMPOS A DISABLED=TRUE
-	        // REMOZADO FORMS -- PROBAR XA TODOS CONTROLES (TEXTBOX, RADIO,...)
-	        control_disabled("<%=nombre%>", true);
-	        	        
-	        // -- ESTABLECEMOS ACCESO CAMPO EN FUNCION EXPRESION DEPENDENCIA
-	        if (expDep+'' == 'true'){
-	        	control_disabled("<%=nombre%>", false);         	        			    	        
+
+			// -- ESTABLECEMOS ACCESO CAMPO EN FUNCION EXPRESION DEPENDENCIA
+	        if (expDep == 'false'){
+	        	valueDisabled = true;	        		        		        	         	        			    	     
 			} else if (expDep == 'readOnly'){ 
-				// Si tiene autocalculo no lo tocamos
-				<logic:empty name="campo" property="expresionAutocalculo">    
-					control_disabled("<%=nombre%>", false);
-					control_readOnly("<%=nombre%>", true);
-		        </logic:empty>
+				valueReadOnly = true;    							        
 			}		
+
+	        <logic:notEmpty name="campo" property="expresionAutocalculo">
+			// SI ES AUTOCALCULO FORZAMOS READONLY SI NO ESTA DISABLED
+			if (!valueDisabled) valueReadOnly = true;    					
+        	</logic:notEmpty>
+			
 	        </logic:equal>    
+
+	        // Establecemos valores readonly/disabled
+	        control_disabled("<%=nombre%>", valueDisabled);
+	        control_readOnly("<%=nombre%>", valueReadOnly);
+	        
+	        
 	    }
 	    </logic:notEmpty>
 	</logic:iterate>
@@ -497,8 +501,7 @@
 
 	}
 
-// -----------------  Funciones Lista elementos ---------------------------------------------
-
+	// -----------------  Funciones Lista elementos ---------------------------------------------
 	function detalleElemento(campo,accion){
 		
 		// Obtenemos indice seleccionado
@@ -532,10 +535,31 @@
 			f.action = url_action;
 			mostrarCapaEnviando(TXT_MSG_ENVIANDO);
 			f.submit();
-		}
-		
+		}		
 	}
 
+	// -- Captcha
+	function recaptcha(fieldname) {
+		 // Pedimos cambio captcha
+		 var res = regeneraCaptcha(fieldname);
+		
+		 // Recargamos imagen
+		 if (res == "OK") {
+			 var urlImage = 'captchaDownload.do?fieldName=' + fieldname + '&ID_INSTANCIA=<%=request.getAttribute("ID_INSTANCIA")%>&ts=' + (new Date()).getMilliseconds();
+			 var idImage = '#' + fieldname + '_imgCaptcha'; 			 
+		 	$(idImage).attr('src', urlImage);
+		 }
+	}
+
+	// Funcion para llamar por ajax a regenerar captcha
+	function regeneraCaptcha(fieldName) {
+		var parameters = new Array();
+	    url = "<html:rewrite page='<%=securePath + "/expresion/recaptcha" + sufijoModoFuncionamiento + ".do"%>' />";
+	    parameters[parameters.length] = new ParametroPost("ID_INSTANCIA","<%=request.getAttribute("ID_INSTANCIA")%>");
+	    parameters[parameters.length] = new ParametroPost("fieldName",fieldName);
+	    return new Function("return '" + syncPost(url, parameters) + "'")();
+	}
+	
 	// -- Funciones validacion
 	<html:javascript dynamicJavascript="false" staticJavascript="true" />
 

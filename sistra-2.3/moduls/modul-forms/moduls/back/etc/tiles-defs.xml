@@ -163,6 +163,20 @@
         <put name="paginaTraduccion" value="/textbox/editarTraduccion.jsp"/>
     </definition>
 
+ 	<!-- ====================== CAPTCHA ====================== -->
+    <definition name=".captcha.editar" extends=".editar" 
+    	controllerClass="org.ibit.rol.form.back.action.componente.ComponenteController">
+        <put name="title" value="captcha.titulo"/>
+        <put name="alta.title" value="captcha.alta"/>
+        <put name="modificacion.title" value="captcha.modificacion"/>
+        <put name="subtitle" value="captcha.subtitulo"/>
+        <put name="validateMethod" value="validateCaptchaForm"/>
+        <put name="form.action" value="/back/captcha/editar"/>
+        <put name="form.bean" value="captchaForm"/>
+        <put name="paginaValues" value="/captcha/editarValues.jsp"/>
+        <put name="paginaTraduccion" value="/captcha/editarTraduccion.jsp"/>
+    </definition>
+
     <!-- ====================== CHECKBOX ===================== -->
     <definition name=".checkbox.editar" extends=".editar"
     	controllerClass="org.ibit.rol.form.back.action.componente.ComponenteController">

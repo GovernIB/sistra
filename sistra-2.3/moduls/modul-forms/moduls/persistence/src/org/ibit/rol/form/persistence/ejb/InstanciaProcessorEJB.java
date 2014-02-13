@@ -30,6 +30,7 @@ import org.ibit.rol.form.model.Anexo;
 import org.ibit.rol.form.model.Archivo;
 import org.ibit.rol.form.model.AyudaPantalla;
 import org.ibit.rol.form.model.Campo;
+import org.ibit.rol.form.model.Captcha;
 import org.ibit.rol.form.model.CheckBox;
 import org.ibit.rol.form.model.FileBox;
 import org.ibit.rol.form.model.Formulario;
@@ -53,6 +54,7 @@ import org.ibit.rol.form.persistence.conector.MessageResult;
 import org.ibit.rol.form.persistence.conector.Result;
 import org.ibit.rol.form.persistence.delegate.DelegateUtil;
 import org.ibit.rol.form.persistence.util.CampoUtils;
+import org.ibit.rol.form.persistence.util.CaptchaUtils;
 import org.ibit.rol.form.persistence.util.GeneradorNumSeq;
 import org.ibit.rol.form.persistence.util.PantallaUtils;
 import org.ibit.rol.form.persistence.util.ScriptUtil;
@@ -387,8 +389,12 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
           Si un campo está en situación de bloqueo, entonces no debe ser posible modificar su valor,
           por lo que no se actualizará su valor.
         */
-        datos = eliminaDatosCamposBloqueados(datos);
+        eliminaDatosCamposBloqueados(datos);
+        
+        // Elimina campos de captcha
+        eliminaDatosCamposCaptcha(datos);
 
+        // Establece datos en pantalla
         datosActual.putAll(datos);
         Map variables = variablesScriptActuals();        
         for (int j = 0; j < pantallaActual.getCampos().size(); j++) {
@@ -1084,7 +1090,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
      * Elimina del mapa que contiene los valores de los campos de una pantalla,
      * los valores asociados a los campos que están en estado de bloqueo.
      */
-    private Map eliminaDatosCamposBloqueados(Map datos) {
+    private void eliminaDatosCamposBloqueados(Map datos) {
         for (Iterator i = pantallaActual.getCampos().iterator(); i.hasNext();) {
             Campo campo = (Campo) i.next();
             if (campo.isBloqueado()) {
@@ -1094,7 +1100,18 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
                 }
             }
         }
-        return datos;
+    }
+    
+    /**
+     * Elimina del mapa que contiene los valores de los campos de captcha (no se deben actualizar).
+     */
+    private void eliminaDatosCamposCaptcha(Map datos) {
+        for (Iterator i = pantallaActual.getCampos().iterator(); i.hasNext();) {
+            Campo campo = (Campo) i.next();
+            if (campo instanceof Captcha) {
+                datos.remove(campo.getNombreLogico());                
+            }
+        }
     }
     
     
@@ -1439,6 +1456,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
     	if (logScript == null) return null;
     	return logScript.getLogs();    	
     }
+    
     /**
      * Resetea el log de los scripts
      * @ejb.interface-method
@@ -1464,7 +1482,44 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
     	
     	return scriptDebug.booleanValue();
     }
-    // -- INDRA: LOG SCRIPTS
+    // -- INDRA: LOG SCRIPTS    
+    
+    /**
+     * Obtener captcha.
+     * @param fieldName nombre campo
+     * @return captcha
+     * 
+     * @ejb.interface-method
+     */
+    public String obtenerCaptcha(String fieldName) {
+    	if (this.pantallaActual == null || this.datosActual == null) {
+    		return "";
+    	}
+    	Campo captcha = pantallaActual.findCampo(fieldName);
+    	if (captcha == null || !(captcha instanceof Captcha)) {
+    		return "";
+    	}    	
+    	return (String) this.datosActual.get(fieldName);    	
+    }
+    
+    
+    /**
+     * Regenera captcha.
+     * @param fieldName nombre campo
+     * 
+     * @ejb.interface-method
+     */
+    public void regenerarCaptcha(String fieldName) {
+    	if (this.pantallaActual == null || this.datosActual == null) {
+    		return;
+    	}
+    	Campo captcha = pantallaActual.findCampo(fieldName);
+    	if (captcha == null || !(captcha instanceof Captcha)) {
+    		return;
+    	}    	
+    	String newValue = CaptchaUtils.generateCaptcha();
+		this.datosActual.put(fieldName, newValue );    	
+    }
     
     
 }

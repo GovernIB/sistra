@@ -77,6 +77,14 @@
 </form-bean>
 
 <form-bean
+    name="captchaForm"
+    type="org.ibit.rol.form.back.form.ComponenteForm"
+    className="org.ibit.rol.form.back.action.TraduccionFormBeanConfig">
+    <set-property property="valuesClassName" value="org.ibit.rol.form.model.Captcha" />
+    <set-property property="traduccionClassName" value="org.ibit.rol.form.model.TraCampo" />
+</form-bean>
+
+<form-bean
     name="comboboxForm"
     type="org.ibit.rol.form.back.form.ComponenteForm"
     className="org.ibit.rol.form.back.action.TraduccionFormBeanConfig">

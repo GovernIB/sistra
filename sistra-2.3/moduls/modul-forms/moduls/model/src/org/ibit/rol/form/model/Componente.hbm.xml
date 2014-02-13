@@ -102,6 +102,8 @@
                 <property name="columnas" column="COM_COLUMN"/>
                 <property name="multilinea" column="COM_MULTIL"/>
             </subclass>
+            
+            <subclass name="org.ibit.rol.form.model.Captcha" discriminator-value="captcha"/>                
 
             <subclass name="org.ibit.rol.form.model.ComboBox" discriminator-value="combobox">
                 <property name="obligatorio" column="COM_OBLIGA"/>

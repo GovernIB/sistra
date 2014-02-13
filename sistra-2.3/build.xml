@@ -85,6 +85,7 @@
 		<zipfileset dir="${lib}" prefix="lib">
 			<exclude name="activation.jar"/>
 			<exclude name="struts.jar"/>
+			<exclude name="simplecaptcha-1.2.1.jar"/>
 			
 			<exclude if="isJboss3" name="cglib-asm.jar"/>
 			<exclude name="commons-logging-1.0.4.jar"/>

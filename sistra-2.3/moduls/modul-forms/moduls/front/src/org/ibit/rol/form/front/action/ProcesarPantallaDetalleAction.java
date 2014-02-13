@@ -1,5 +1,8 @@
 package org.ibit.rol.form.front.action;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -70,7 +73,11 @@ public class ProcesarPantallaDetalleAction extends BaseAction {
         }else{
         	// Introducimos datos en elemento detalle
             PantallaForm pantallaForm = (PantallaForm) form;
-            delegate.introducirDatosPantalla(pantallaForm.getMap());
+            // - Creamos copia para que no se modifique el map origen
+            Map datosFormOrigen = pantallaForm.getMap();
+            Map datosForm = new HashMap();
+            datosForm.putAll(datosFormOrigen);
+            delegate.introducirDatosPantalla(datosForm);
             
             // Controlamos si tras salvar insertamos automaticamente un nuevo registro
             String insertPostSave = request.getParameter("INSERT_POST_SAVE");

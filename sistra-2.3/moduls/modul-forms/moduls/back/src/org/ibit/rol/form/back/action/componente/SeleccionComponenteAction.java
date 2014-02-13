@@ -19,6 +19,8 @@ import org.ibit.rol.form.model.Componente;
  * @struts.action-forward
  *  name="textbox" path=".textbox.editar"
  * @struts.action-forward
+ *  name="captcha" path=".captcha.editar"
+ * @struts.action-forward
  *  name="label" path=".label.editar"
  * @struts.action-forward
  *  name="checkbox" path=".checkbox.editar"
