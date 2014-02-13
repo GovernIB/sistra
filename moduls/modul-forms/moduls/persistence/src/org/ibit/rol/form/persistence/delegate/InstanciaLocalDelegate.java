@@ -267,6 +267,22 @@ public class InstanciaLocalDelegate implements InstanciaDelegate {
         }
     }
 
+    public synchronized String obtenerCaptcha(String fieldName) throws DelegateException {
+        try {
+            return local.obtenerCaptcha(fieldName);
+        } catch (EJBException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public synchronized void regenerarCaptcha(String fieldName) throws DelegateException {
+        try {
+            local.regenerarCaptcha(fieldName);
+        } catch (EJBException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     public Result[] ejecutarSalidas() throws DelegateException {
         try {
             return local.ejecutarSalidas();
@@ -374,8 +390,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate {
             throw new DelegateException(e);
         }	
     }
-    // -- INDRA: LOG SCRIPTS
-    
+    // -- INDRA: LOG SCRIPTS   
     
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
@@ -385,6 +400,8 @@ public class InstanciaLocalDelegate implements InstanciaDelegate {
 
     protected InstanciaLocalDelegate() {
     }
+
+	
 
 	
 

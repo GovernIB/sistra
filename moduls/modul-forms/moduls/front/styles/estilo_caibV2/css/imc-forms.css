@@ -320,6 +320,7 @@ form { clear:both; }
 		.imc-form p.imc-info { clear:both; width:100%; margin:0 0 1.2em 0; }
 		
 		.imc-form .imc-element { float:left; width:8.4em; padding:0 0 .7em 0; margin-right:1em; }
+			.imc-form .imc-el-hidden { display:none; }
 			.imc-form .imc-el-etiqueta { padding:0 .2em .2em .2em; }
 			.imc-form .imc-el-control {min-height:2em; padding:0 .2em; }
 				.imc-form .imc-el-control input[type=text],
@@ -682,12 +683,21 @@ form { clear:both; }
 	.imc-form .imc-el-2.imc-el-import .imc-el-control input[type="text"] { width:15em; }
 	.imc-form .imc-el-3.imc-el-import .imc-el-control input[type="text"] { width:24em; min-width:24em; max-width:24em; }
 	
-	/* per esborrar 
+	/* captcha */
 	
-	.imc-element { background-color:#ccc; }*/
+	.imc-form .imc-el-captcha { width:17.8em; }
+		.imc-form .imc-el-captcha img { float:left; margin-right:.5em; }
+		.imc-form .imc-el-captcha .imc-el-control input[type="text"] { width:5em; }
+		.imc-form .imc-el-captcha p { margin-top:.2em; }
+		.imc-form .imc-el-captcha .imc-bt-refrescar { display:inline-block; width:2em; height:1.6em; background:#88C684 url(../imgs/imc-bt-refrescar.png) no-repeat center center;; border:1px solid #EDEDED; }
 	
+	/* missatge en linia */
 	
-	
-	
-	
+	.imc-form .imc-missatge-en-linia { width:40.3em; font-size:1.2em; padding:.8em 1em .3em 4.5em; margin-bottom:.7em; border:1px solid #ccc; }
+	.imc-form .imc-missatge-en-linia-info { background:transparent url(../imgs/missatges_en_linia/miss_eL_info.png) no-repeat .8em 50%; }
+	.imc-form .imc-missatge-en-linia-alerta { color:#000; background:transparent url(../imgs/missatges_en_linia/miss_eL_alerta.png) no-repeat .8em 50%; }
+	.imc-form .imc-missatge-en-linia-error { color:#c00; background:transparent url(../imgs/missatges_en_linia/miss_eL_error.png) no-repeat .8em 50%; }
+	.imc-form .imc-missatge-en-linia-icona-sup { background-position:.8em .6em; }
+		.imc-form .imc-missatge-en-linia p { padding-bottom:.5em; }
+		.imc-form .imc-missatge-en-linia ul { padding-bottom:.5em; margin:.5em 0 0 2em; }
 	

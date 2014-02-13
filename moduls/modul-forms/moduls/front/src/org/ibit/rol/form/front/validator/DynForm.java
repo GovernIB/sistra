@@ -27,7 +27,7 @@ public class DynForm extends Form {
         setName("pantallaForm");
         for (int i = 0; i < pantalla.getCampos().size(); i++) {
             Campo campo = (Campo) pantalla.getCampos().get(i);
-           
+            
             Field field = new Field();
             field.setProperty(campo.getNombreLogico());
 

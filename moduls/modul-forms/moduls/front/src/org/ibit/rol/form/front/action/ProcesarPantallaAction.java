@@ -12,6 +12,7 @@ import org.ibit.rol.form.persistence.delegate.InstanciaTelematicaDelegate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -60,9 +61,14 @@ public class ProcesarPantallaAction extends BaseAction {
             return mapping.findForward("fail");
         }
         boolean telematic = (delegate instanceof InstanciaTelematicaDelegate);
-
+        
         PantallaForm pantallaForm = (PantallaForm) form;
-        delegate.introducirDatosPantalla(pantallaForm.getMap());
+        Map datosFormOrigen = pantallaForm.getMap();
+        
+        // Creamos copia para que no se modifique el map
+        Map datosForm = new HashMap();
+        datosForm.putAll(datosFormOrigen);
+        delegate.introducirDatosPantalla(datosForm);
 
         if (isCancelled(request)) {
             if (request.getParameter("SAVE") != null) { // Es guardar
@@ -111,6 +117,7 @@ public class ProcesarPantallaAction extends BaseAction {
                 }
             }
         } else {
+        	// Avanza pantalla
             delegate.avanzarPantalla();
         }
 

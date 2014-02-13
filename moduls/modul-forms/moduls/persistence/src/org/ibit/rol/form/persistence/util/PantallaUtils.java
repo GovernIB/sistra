@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.ibit.rol.form.model.Campo;
+import org.ibit.rol.form.model.Captcha;
 import org.ibit.rol.form.model.CheckBox;
 import org.ibit.rol.form.model.ComboBox;
 import org.ibit.rol.form.model.Formulario;
@@ -316,16 +317,14 @@ public final class PantallaUtils {
                         }                   	
                     } else {
                         // Valor por defecto definido en el mismo campo
-                    	// Si no tiene valor por defecto, cogemos el primero
-                    	
                     	// INDRA 2013: SI COMBO NO ES OBLIGATORIO NO HACEMOS CASO DE LOS VALORES POSIBLES
                     	boolean comboObligatorio = (campo instanceof ComboBox) && ((ComboBox) campo).isObligatorio(); 
                     	if (comboObligatorio || campo instanceof RadioButton) {
 	                        for (int j = 0; j < valoresPosibles.size(); j++) {
 	                            ValorPosible vp = (ValorPosible) valoresPosibles.get(j);
 	                            
-	                            // Cogemos el primero o bien el por defecto
-	                            if (vp.isDefecto() || j == 0 ) {
+	                            // Cogemos el por defecto
+	                            if (vp.isDefecto()) {
 	                                valIni = vp.getValor();
 	                                //Almaceno el valor asociado al indice seleccionado por defecto en el campo.
 	                                valorEtiqueta = ((TraValorPosible) vp.getTraduccion()).getEtiqueta();
@@ -336,6 +335,8 @@ public final class PantallaUtils {
 	                        
                     	}
                     }
+                } else if (campo instanceof Captcha) {
+                	valIni = CaptchaUtils.generateCaptcha();
                 }
                 
                 //
@@ -588,7 +589,7 @@ public final class PantallaUtils {
                         }
 
                     }else {
-                    	// INDRA 2013: SI COMBO NO ES OBLIGATORIO NO HACEMOS CASO DE LOS VALORES POSIBLES
+                    	// INDRA 2013: SI COMBO NO ES OBLIGATORIO NO HACEMOS CASO DEL VALOR POR DEFECTO
                     	boolean obligatorioCombo = (campo instanceof ComboBox) && ((ComboBox) campo).isObligatorio(); 
                     	if (campo instanceof RadioButton || obligatorioCombo) {
 	                        //valor por defecto definido en el mismo campo
@@ -604,6 +605,8 @@ public final class PantallaUtils {
 	                        }
                     	}
                     }
+                } else if (campo instanceof Captcha) {
+                	valIni = CaptchaUtils.generateCaptcha();
                 }
                 
                 //
@@ -785,6 +788,8 @@ public final class PantallaUtils {
                             }
                         }
                     }
+                } else if (campo instanceof Captcha) {
+                	valIni = CaptchaUtils.generateCaptcha();
                 }
                 
                 //

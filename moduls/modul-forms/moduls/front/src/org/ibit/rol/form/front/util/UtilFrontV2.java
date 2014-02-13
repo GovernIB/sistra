@@ -1,6 +1,7 @@
 package org.ibit.rol.form.front.util;
 
 import org.apache.commons.lang.StringUtils;
+import org.ibit.rol.form.model.Captcha;
 import org.ibit.rol.form.model.CheckBox;
 import org.ibit.rol.form.model.ComboBox;
 import org.ibit.rol.form.model.Componente;
@@ -31,6 +32,12 @@ public class UtilFrontV2 {
 		
 		// Nombre
 		res += " imc-el-name-" + componente.getNombreLogico();
+		
+		// Si es un textbox hidden lo marca como hidden y no requiere nada mas
+		if (componente instanceof TextBox && ((TextBox) componente).isOculto()) {
+			res += " imc-el-hidden";
+			return res;
+		}
 		
 		// Colspan (para CheckBox y Lista elementos se muestra en linea completa)
 		if (componente instanceof CheckBox || componente instanceof ListaElementos) {
@@ -94,9 +101,12 @@ public class UtilFrontV2 {
 			}
 			if ("IM".equals(textBox.getTipoTexto())) {
 				res += " imc-el-import";
-			}
-			
+			}			
 		}
+		if (componente instanceof Captcha) {
+			res += " imc-el-captcha";
+		}
+	
 		
 		return res;
 	}	

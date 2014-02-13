@@ -377,13 +377,22 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate {
     }
     // -- INDRA: LOG SCRIPTS
 	
-	
-	
-	
-	
-	
-	
-
+    public synchronized String obtenerCaptcha(String fieldName) throws DelegateException {
+    	try {
+    		return getRemote().obtenerCaptcha(fieldName);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }	
+    }
+    
+    public synchronized void regenerarCaptcha(String fieldName) throws DelegateException{
+    	try {
+    		getRemote().regenerarCaptcha(fieldName);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }	
+    }
+    
     public synchronized void destroy() {
         try {
             getRemote().remove();
@@ -406,6 +415,8 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate {
 
     protected InstanciaRemoteDelegate() {
     }
+
+	
 
 	
 

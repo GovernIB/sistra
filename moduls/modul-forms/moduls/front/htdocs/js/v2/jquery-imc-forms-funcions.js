@@ -126,8 +126,8 @@ $.fn.immport = function(options) {
 		var element = $(this),
 			el_immport_elm = element.find("input:first"),
 			onBlur = function() {
-				el_immport_elm.parseNumber({format: "#,##0.00", locale:"es"});
-   			el_immport_elm.formatNumber({format: "#,##0.00", locale:"es"});	
+				el_immport_elm.parseNumber({format:"#,##0.00", locale:"es"});
+   			el_immport_elm.formatNumber({format:"#,##0.00", locale:"es"});	
 			};
 		// sense elements
 		el_immport_elm.off(".immport").on("blur.immport", onBlur);
@@ -160,7 +160,7 @@ function control_select(name, valor, neteja) {
 		return false;
 	}
 		
-	if ((el_tipus === "text" || el_tipus === "textarea" || el_tipus === "time" || el_tipus === "date" || el_tipus === "date-time")) {
+	if ((el_tipus === "hidden" || el_tipus === "text" || el_tipus === "textarea" || el_tipus === "time" || el_tipus === "date" || el_tipus === "date-time")) {
 		el_camps_primer.val(valor);
 	} else if (el_tipus === "select") {
 		var elm_seleccionat = el_element.find(".imc-select-seleccionat:first"),
@@ -190,7 +190,6 @@ function control_select(name, valor, neteja) {
 		if (neteja) {
 			el_camps.attr("checked", false);
 		}
-		
 		valor_es_string = (typeof valor === "string") ? true : false;
 		if (valor_es_string) {
 			el_camps.filter("[value=\"" + valor + "\"]").attr("checked", true);
@@ -200,7 +199,6 @@ function control_select(name, valor, neteja) {
 				el_camps.filter("[value=\"" + valor[i] + "\"]").attr("checked", true);
 			}
 		}
-		
 	} else if (el_tipus === "radio-list" || el_tipus === "radio-list-scroll") {
 		el_camps.filter("[value=\"" + valor + "\"]").attr("checked", true);
 	} else if (el_tipus === "check") {

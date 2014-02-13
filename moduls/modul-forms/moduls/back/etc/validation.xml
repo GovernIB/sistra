@@ -733,6 +733,35 @@
     </var>
    </field>
   </form>
+  
+  <form name="captchaForm">
+   <field depends="required" page="0" property="values.nombreLogico">
+    <arg0 key="componente.nombreLogico"/>
+   </field>
+   <field depends="required" page="1" property="values.nombreLogico">
+    <arg0 key="componente.nombreLogico"/>
+   </field>
+   <field depends="required" page="1" property="traduccion.nombre">
+    <arg0 key="componente.nombre"/>
+   </field>
+   <field depends="maxlength" page="0" property="traduccion.ayuda">
+    <arg0 key="componente.ayuda"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+   <field depends="maxlength" page="1" property="traduccion.ayuda">
+    <arg0 key="componente.ayuda"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>   
+  </form>
+  
   <form name="valorPosibleForm">
    <field depends="required" page="1" property="values.valor">
     <arg0 key="valorposible.valor"/>

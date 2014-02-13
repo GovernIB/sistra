@@ -13,8 +13,7 @@
     <% boolean autocalculo = StringUtils.isNotEmpty(StringUtils.strip(campo.getExpresionAutocalculo())); %>
     <% boolean disabled = StringUtils.isNotEmpty(StringUtils.strip(campo.getExpresionDependencia())); %>
     <% boolean bloqueado = campo.isBloqueado();%>
-    <% String valueFirstElement = ""; boolean firstElement = true;%>    
-    
+   
 	<div class="<%=org.ibit.rol.form.front.util.UtilFrontV2.generateStyleClass(campo)%>" data-type="select">
 		<div class="imc-el-etiqueta">
 			<nested:equal property="sinEtiqueta" value="false">
@@ -26,17 +25,14 @@
 			 	<a class="imc-select"><span></span></a>
 			 	<html:hidden property="<%=nombre%>" styleId="<%=nombre%>"/>	
 				<ul>	
-				<% if (!campo.isObligatorio()) { %>
 					<li<nested:empty name="pantallaForm" property="<%=nombre%>"> class="imc-select-seleccionat"</nested:empty>>
 						<a data-value="" tabindex="0" href="javascript:;">...</a>
-					</li>
-    			<% } %>				
-				<logic:iterate name="campo" property="allValoresPosibles" id="opcion" type="ValorPosible">
-					<% if (firstElement) { valueFirstElement = opcion.getValor(); firstElement = false; } %>
-					<li>
-						<a data-value="<%=opcion.getValor()%>" tabindex="0" href="javascript:;"><%=((TraValorPosible) opcion.getTraduccion()).getEtiqueta()%></a>
-					</li>				
-				</logic:iterate>
+					</li>    							
+					<logic:iterate name="campo" property="allValoresPosibles" id="opcion" type="ValorPosible">
+						<li>
+							<a data-value="<%=opcion.getValor()%>" tabindex="0" href="javascript:;"><%=((TraValorPosible) opcion.getTraduccion()).getEtiqueta()%></a>
+						</li>				
+					</logic:iterate>
  				</ul>				
 			</div>		
 		</div>		

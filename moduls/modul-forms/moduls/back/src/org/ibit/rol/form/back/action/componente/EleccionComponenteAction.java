@@ -30,6 +30,8 @@ import org.ibit.rol.form.persistence.delegate.PantallaDelegate;
  * @struts.action-forward
  *  name="textbox" path=".textbox.editar"
  * @struts.action-forward
+ *  name="captcha" path=".captcha.editar" 
+ * @struts.action-forward
  *  name="combobox" path=".combobox.editar"
  * @struts.action-forward
  *  name="listbox" path=".listbox.editar"
