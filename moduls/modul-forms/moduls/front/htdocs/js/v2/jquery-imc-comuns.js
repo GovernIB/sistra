@@ -1,6 +1,5 @@
 ﻿// COMUNS
 
-
 // title
 $.fn.title = function(options) {
 	var settings = $.extend({

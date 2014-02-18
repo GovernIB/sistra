@@ -133,14 +133,13 @@ public class PantallaForm extends DynaValidatorForm {
     					errors.add(campo.getNombreLogico(), error);
     				}    				
                 }
-             
+            
             }
         } catch (DelegateException e) {
             log.error("Excepción en validate", e);
         } catch (Throwable t) {
             log.error("Error en validate", t);
         }
-
         return errors;
     }
 }

@@ -1,7 +1,11 @@
 package org.ibit.rol.form.front.action;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -9,7 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import nl.captcha.Captcha;
 import nl.captcha.Captcha.Builder;
+import nl.captcha.gimpy.DropShadowGimpyRenderer;
 import nl.captcha.text.producer.TextProducer;
+import nl.captcha.text.renderer.ColoredEdgesWordRenderer;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -46,10 +52,15 @@ public class CaptchaDownloadAction extends Action {
 		String valorCampoCaptcha = delegate.obtenerCaptcha(nomCampoCaptcha);
 		
 		// Generamos imagen captcha
+		final List textColors = Arrays.asList(Color.GRAY);
+		final List textFonts = Arrays.asList(new Font("Arial",
+		        Font.BOLD, 30));
 		final TextProducer tp = new CaptchaTextProducer(valorCampoCaptcha);
 		final Builder builder = new nl.captcha.Captcha.Builder(_width, _height);
-		final Captcha captcha = builder.addText(tp).gimp().addBorder()
-				.addNoise().addBackground().build();
+		final Captcha captcha = builder
+	         .addText(tp, new ColoredEdgesWordRenderer(textColors, textFonts))
+	         .gimp(new DropShadowGimpyRenderer()).addBorder()
+	         .addBackground().build();
 		final ByteArrayOutputStream bos = new ByteArrayOutputStream(8192);
 		ImageIO.write(captcha.getImage(), "png", bos);		
 		String nombreFichero = "captcha.png";
