@@ -10,6 +10,7 @@
                  org.ibit.rol.form.model.Label,
                  org.ibit.rol.form.model.Campo,
                  org.ibit.rol.form.model.Seccion,
+                 org.ibit.rol.form.model.Captcha,
                  org.apache.struts.taglib.html.Constants,
                  org.apache.struts.Globals,
                  org.ibit.rol.form.front.util.JSUtil,
@@ -86,6 +87,8 @@
             	%><jsp:include page='<%="/ui/caib/labelV2.jsp"%>'/><%
             } else if (comp instanceof Seccion) {
             	%><jsp:include page='<%="/ui/caib/seccionV2.jsp"%>'/><%
+            } else if (comp instanceof Captcha) {
+            	%><jsp:include page='<%="/ui/caib/captchaV2.jsp"%>'/><%
             }
         %>
         
