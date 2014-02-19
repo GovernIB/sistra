@@ -52,15 +52,9 @@ public class CaptchaDownloadAction extends Action {
 		String valorCampoCaptcha = delegate.obtenerCaptcha(nomCampoCaptcha);
 		
 		// Generamos imagen captcha
-		final List textColors = Arrays.asList(Color.GRAY);
-		final List textFonts = Arrays.asList(new Font("Arial",
-		        Font.BOLD, 30));
 		final TextProducer tp = new CaptchaTextProducer(valorCampoCaptcha);
 		final Builder builder = new nl.captcha.Captcha.Builder(_width, _height);
-		final Captcha captcha = builder
-	         .addText(tp, new ColoredEdgesWordRenderer(textColors, textFonts))
-	         .gimp(new DropShadowGimpyRenderer()).addBorder()
-	         .addBackground().build();
+		final Captcha captcha = builder.addText(tp).gimp().addBorder().addNoise().addBackground().build();		
 		final ByteArrayOutputStream bos = new ByteArrayOutputStream(8192);
 		ImageIO.write(captcha.getImage(), "png", bos);		
 		String nombreFichero = "captcha.png";
