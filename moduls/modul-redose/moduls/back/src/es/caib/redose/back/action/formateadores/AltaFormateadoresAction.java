@@ -1,15 +1,14 @@
 package es.caib.redose.back.action.formateadores;
 
-import es.caib.redose.back.action.BaseAction;
-import es.caib.redose.back.form.FormateadoresForm;
-import es.caib.redose.back.form.UbicacionForm;
-
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionForm;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
+import es.caib.redose.back.action.BaseAction;
+import es.caib.redose.back.form.FormateadoresForm;
 
 /**
  * Action para preparar el alta de un formateador

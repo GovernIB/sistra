@@ -10,6 +10,7 @@
         <putList name="independientes">
             <add type="definition" value=".menu.modelo.listar" />
             <add type="definition" value=".menu.ubicacion.listar" />
+            <add type="definition" value=".menu.migracion" />
             <add type="definition" value=".menu.historico.listar" />
             <add type="definition" value=".menu.formateadores.listar" />
             <add type="definition" value=".menu.erroresGestorDocumental.listar" />
@@ -44,8 +45,13 @@
     </definition>
     
     <definition name=".menu.ubicacion.listar" extends=".menu.individual">
-        <put name="titulo" value="menu.ubicacion.lista"/>
-        <put name="link" value="/back/ubicacion/lista"/>
+     	<put name="titulo" value="menu.ubicacion.lista"/>
+        <put name="link" value="/back/ubicacion/lista"/>        
+    </definition>
+    
+    <definition name=".menu.migracion" extends=".menu.individual">
+       <put name="titulo" value="menu.migracion"/>
+        <put name="link" value="/back/migracion/migracion"/>
     </definition>
     
     <definition name=".menu.historico.listar" extends=".menu.individual">
