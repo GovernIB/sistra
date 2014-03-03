@@ -18,6 +18,8 @@
     <property name="etc.dir" location="${home.dir}/etc"/>
     <property name="xdoclet.dir" location="${home.dir}/../../xdoclet"/>
 
+	<property name="distribucion.dir" location="${home.dir}/../../product"/>
+	
     <property name="web.src" location="${basedir}/src"/>
     <property name="web.etc" location="${basedir}/etc"/>
     <property name="web.doc" location="${basedir}/doc"/>
@@ -44,6 +46,9 @@
             <include name="2-redose-model.jar" />
             <include name="2-redose-persistence-client.jar" />
         </fileset>
+    	<fileset dir="${distribucion.dir}/lib"> 
+	        <include name="sistra-util.jar"/>
+	    </fileset>
     </path>
 
     <path id="doclet.class.path">
