@@ -24,6 +24,7 @@ import es.caib.redose.persistence.delegate.DelegateUtil;
 import es.caib.redose.persistence.delegate.FicheroExternoDelegate;
 import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.redose.persistence.delegate.VersionCustodiaDelegate;
+import es.caib.redose.persistence.plugin.MetadaAlmacenamiento;
 import es.caib.redose.persistence.plugin.PluginAlmacenamientoRDS;
 import es.caib.redose.persistence.plugin.PluginAlmacenamientoRDSExterno;
 import es.caib.redose.persistence.plugin.PluginClassCache;
@@ -276,6 +277,80 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
 		}	
     }
     
+    
+    /**
+     * Cuenta documentos pendientes de migrar.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.admin}"
+     */
+    public long contarDocumentosMigracion(Long ubicacionOrigen, Date fechaDesde, Date fechaHasta) {	    	
+    	try{  
+    		Long res = (Long) recuperaDocumentosMigracion(ubicacionOrigen, fechaDesde, fechaHasta, true, null);
+    		return res.longValue();            
+    	}catch(Exception ex){
+    		throw new EJBException("Error contando documentos pendientes de migrar",ex);
+    	}  
+    }
+
+    /**
+     * Lista documentos a migrar.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.admin}"
+     */
+   public List listarDocumentosMigracion(Long ubicacionOrigen, Date fechaDesde, Date fechaHasta, int limiteDocsMigrar) {
+	   try{  
+   		List res = (List) recuperaDocumentosMigracion(ubicacionOrigen, fechaDesde, fechaHasta, false, new Integer(limiteDocsMigrar));
+   		return res;            
+   	}catch(Exception ex){
+   		throw new EJBException("Error contando documentos pendientes de migrar",ex);
+   	}      	 
+  }
+   
+   /**
+    * Migra documento a nueva ubicacion.
+    * 
+    * @ejb.interface-method
+    * @ejb.permission role-name="${role.admin}"
+    */
+   public void migrarDocumento(Long codigoDocumento, Long codigoUbicacionDestino, boolean borrarUbicacionOrigen){	
+	   try{  
+		   
+		   // Obtenemos documento origen
+		   Documento documentoRDS = recuperaDocumento(codigoDocumento);
+		   
+		   // Obtenemos ubicacion destino
+		   Ubicacion ubicacionDestino = DelegateUtil.getUbicacionDelegate().obtenerUbicacion(codigoUbicacionDestino);
+		   
+		   // Obtenemos plugin de almacenamiento origen y destino
+		   PluginAlmacenamientoRDS plgAlmacenamientoOrigen  = PluginClassCache.getInstance().getPluginAlmacenamientoRDS(documentoRDS.getUbicacion());
+		   PluginAlmacenamientoRDS plgAlmacenamientoDestino = PluginClassCache.getInstance().getPluginAlmacenamientoRDS(ubicacionDestino);
+		   
+		   // Obtenemos documento ubicacion origen
+		   byte[] datosFichero = plgAlmacenamientoOrigen.obtenerFichero(codigoDocumento);
+		   
+		   // Almacenamos documento en nueva ubicacion
+		   MetadaAlmacenamiento metadataFichero = new MetadaAlmacenamiento();
+	       metadataFichero.setModelo(documentoRDS.getVersion().getModelo().getModelo());
+	       metadataFichero.setVersion(documentoRDS.getVersion().getVersion());
+	       metadataFichero.setDescripcion(documentoRDS.getTitulo());
+	       metadataFichero.setExtension(documentoRDS.getExtensionFichero());
+	       plgAlmacenamientoDestino.guardarFichero(codigoDocumento,datosFichero, metadataFichero);
+
+	       // Borramos documento en antigua ubicacion
+	       if (borrarUbicacionOrigen) {
+	    	   plgAlmacenamientoOrigen.eliminarFichero(codigoDocumento);
+	       }
+	       
+	       // Modificamos documento para establecer nueva ubicacion
+	       cambiarUbicacionDocumento(codigoDocumento, ubicacionDestino);
+	       
+		}catch(Exception ex){
+	   		throw new EJBException("Error migrando documento " + codigoDocumento,ex);
+	   	} 
+   }
+    
     // ---------------------- Funciones auxiliares -------------------------------------------    
     
     /**
@@ -425,6 +500,93 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
     		return "";
     }
     
-   
+    /**
+     * Consultar codigos docs de una ubicacion o los cuenta.
+     * 
+     * @param ubicacion ubicacion 
+     * @param fechaDesde fecha desde
+     * @param fechaHasta fecha hasta
+     * @param fechaHasta fecha hasta  
+     * @param count si true cuenta los docs, si false devuelve lista de codigos
+     * @param numMaxDocs si count=false establece num max de docs
+     * @return lista codigos o numero de documentos
+     */
+	private Object recuperaDocumentosMigracion(Long ubicacion, Date fechaDesde, Date fechaHasta, boolean count, Integer numMaxDocs) {		
+		Session session = this.getSession();
+    	try{  
+    		String sqlSelectCount = "select count(d.codigo) ";
+    		String sqlSelectList = "select d.codigo ";
+			String sqlWhere = " FROM Documento AS d WHERE d.ubicacion.codigo = :ubicacion";
+			String sqlOrderBy = " order by d.fecha asc";
+			    	    		
+			if (fechaDesde != null) {
+				sqlWhere += " and d.fecha >= :fechaDesde";    			
+			}
+			if (fechaHasta != null) {
+				sqlWhere += " and d.fecha <= :fechaHasta";
+			}
+			
+			String sqlSelect = count?sqlSelectCount:sqlSelectList;
+			Query query = session.createQuery(sqlSelect + sqlWhere + sqlOrderBy);  
+			
+			query.setLong("ubicacion", ubicacion.longValue());
+			if (fechaDesde != null) {
+				query.setDate("fechaDesde", fechaDesde);    			
+			}
+			if (fechaHasta != null) {
+				query.setDate("fechaHasta", fechaHasta);
+			}
+			
+			if (count) {
+				Object res = query.uniqueResult();
+				return new Long(Long.parseLong(res != null? res.toString() : "0"));
+			} else {
+				return query.setMaxResults(numMaxDocs.intValue()).list();
+			}
+    	}catch(Exception ex){
+    		throw new EJBException("Error recuperando documentos pendientes de migrar",ex);
+    	} finally {
+	        close(session);
+	    }  
+	}
+	
+	 /**
+     * Recupera documento y contenido.
+     * 
+     * @param codigoDocumento codigoDocumento 
+     * @return documento
+     */
+	private Documento recuperaDocumento(Long codigoDocumento) {		
+		Session session = this.getSession();
+    	try{  
+    		Documento doc = (Documento) session.get(Documento.class, codigoDocumento);
+    		return doc;    		
+    	}catch(Exception ex){
+    		throw new EJBException("Error recuperando documento " + codigoDocumento,ex);
+    	} finally {
+	        close(session);
+	    }  
+	}
+	
+	/**
+     * Recupera documento y contenido.
+     * 
+     * @param codigoDocumento codigoDocumento 
+     * @return documento
+     */
+	private void cambiarUbicacionDocumento(Long codigoDocumento, Ubicacion ubicacion) {		
+		Session session = this.getSession();
+    	try{  
+    		Documento doc = (Documento) session.get(Documento.class, codigoDocumento);
+    		doc.setUbicacion(ubicacion);
+    		session.update(doc);
+    	}catch(Exception ex){
+    		throw new EJBException("Error modificacion ubicacion documento " + codigoDocumento,ex);
+    	} finally {
+	        close(session);
+	    }  
+	}
+
+
   
 }

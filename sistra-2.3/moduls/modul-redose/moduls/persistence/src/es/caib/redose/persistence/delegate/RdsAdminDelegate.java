@@ -103,6 +103,30 @@ public class RdsAdminDelegate implements StatelessDelegate {
         }
     } 
     
+    public long contarDocumentosMigracion(Long ubicacionOrigen, Date fechaDesde, Date fechaHasta)  throws DelegateException{	
+      	 try {
+              return getFacade().contarDocumentosMigracion(ubicacionOrigen, fechaDesde, fechaHasta);
+           } catch (Exception e) {
+               throw new DelegateException(e);
+           }
+    }
+    
+    public List listarDocumentosMigracion(Long ubicacionOrigen, Date fechaDesde, Date fechaHasta, int limiteDocsMigrar)  throws DelegateException{	
+     	 try {
+             return getFacade().listarDocumentosMigracion(ubicacionOrigen, fechaDesde, fechaHasta, limiteDocsMigrar);
+          } catch (Exception e) {
+              throw new DelegateException(e);
+          }
+   }
+    
+    public void migrarDocumento(Long codigoDocumento, Long ubicacionDestino, boolean borrarUbicacionOrigen)  throws DelegateException{	
+   	 try {
+            getFacade().migrarDocumento(codigoDocumento, ubicacionDestino, borrarUbicacionOrigen);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
