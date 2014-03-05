@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="buildServer" basedir="." default="main">
+<project name="buildServer" basedir="." default="serverV2">
 
 	<property name="home.dir" location="${basedir}/../../../"/>
 	<property name="output.dir" location="${home.dir}/output"/>

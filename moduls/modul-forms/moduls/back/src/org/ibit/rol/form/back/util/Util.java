@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.InitialContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -17,6 +18,9 @@ import org.ibit.rol.form.model.Pantalla;
 
 public class Util {
 
+	
+	private static String version = null;	
+	
 	/**
 	 * Detecta si hay campos con el mismo xpath y devuelve una lista de strings con el formato xpath = nombres de campos con ese xpath 
 	 * @param formulario
@@ -95,5 +99,20 @@ public class Util {
 			idOperacion = dateString;	
 		}
 		return idOperacion;
+	}
+	
+	/**
+	 * Obtiene version (en web.xml)
+	 */
+	public static String getVersion(){
+		if (version == null) {
+			try{
+				InitialContext ic = new InitialContext();
+				version = (String) ic.lookup("java:comp/env/release.cvs.tag");
+			}catch(Exception ex){
+				version = null;
+			}		
+		}
+		return version;
 	}
 }

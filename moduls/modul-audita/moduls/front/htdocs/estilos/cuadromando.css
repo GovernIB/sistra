@@ -113,3 +113,7 @@ h2 { margin:0; padding:0 10px; font-size:1.2em; }
 #capsal a { float:right; margin-right:1em; display:block; padding:1em 2em 1em 0; background:url(../images/enllasos/tornar.gif) no-repeat right 1em; color:#fff; font-weight:bold; }
 #capsal img { float:left; }
 #capsal h1 { background:url(../images/titol_ico.gif) no-repeat; margin:0 0 0 140px; padding:.5em 0 .6em 75px; font-size:1.5em; }
+
+/* peu */
+
+#peu { padding-top:1em; border-top: 1px solid #72AAE2; }
