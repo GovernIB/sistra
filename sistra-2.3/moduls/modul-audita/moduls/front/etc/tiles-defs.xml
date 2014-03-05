@@ -10,6 +10,7 @@
         path="/layout/mainLayout.jsp" controller="es.caib.audita.front.controller.InicioController">
         <put name="header" value=".header"/>
         <put name="main" value="/inicio.jsp"/>
+        <put name="footer" value="/moduls/footer.jsp"/>
     </definition>
     
     <definition

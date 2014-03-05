@@ -25,5 +25,6 @@
     </td></tr>
     <tr><td>&nbsp;</td></tr>   
 </table>
+<div style="position: absolute; bottom: 0; left: 0; text-align:center; width:100%;"><small><i>SISTRA V<%=es.caib.mobtratel.back.util.Util.getVersion()%></i></small></div>
 </body>
 </html:html>
