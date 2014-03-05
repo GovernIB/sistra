@@ -116,7 +116,7 @@ public abstract class FuenteDatosFacadeEJB extends HibernateEJB {
             	 	GestorBandejaDelegate gestorBandejaDelegate = DelegateUtil.getGestorBandejaDelegate();
 	          		GestorBandeja gestor = gestorBandejaDelegate.obtenerGestorBandeja(this.ctx.getCallerPrincipal().getName());
 	          		boolean acceso = false;		
-	          		if (gestor != null) {
+	          		if (gestor != null && gestor.getProcedimientosGestionados() != null) {
 		          		for (Iterator it=gestor.getProcedimientosGestionados().iterator();it.hasNext();){
 		          				Procedimiento procedimiento = (Procedimiento) it.next();
 		          				if (procedimiento.getIdentificador().equals(fd.getProcedimiento().getIdentificador())){

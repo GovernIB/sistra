@@ -34,7 +34,7 @@ public class ExportCSVController extends BaseController
 		TramiteBandejaDelegate tramiteBandejaDelegate = DelegateUtil.getTramiteBandejaDelegate();
 		FicheroExportacionDelegate ficheroExportacionDelegate = DelegateUtil.getFicheroExportacionDelegate();
 		List lstTramitesCSV = new ArrayList();
-		if (gestor != null){			
+		if (gestor != null && gestor.getProcedimientosGestionados() != null ){			
 			for (Iterator it = gestor.getProcedimientosGestionados().iterator(); it.hasNext();){
 				Procedimiento procedimiento = (Procedimiento) it.next();
 				// Buscamos tramites del procedimiento

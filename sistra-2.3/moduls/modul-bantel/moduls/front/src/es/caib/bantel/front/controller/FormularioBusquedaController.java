@@ -44,7 +44,7 @@ public class FormularioBusquedaController extends BaseController
 		List procedimientos = new ArrayList();
 		// Si no existe devolvemos lista de tramites gestionados vacía
 		String permitirCambioEstadoMasivo = "N";
-		if (gestor != null){			
+		if (gestor != null && gestor.getProcedimientosGestionados() != null){			
 			for (Iterator it = gestor.getProcedimientosGestionados().iterator(); it.hasNext();){
 				Procedimiento proc = (Procedimiento) it.next();
 				procedimientos.add(proc);

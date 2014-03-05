@@ -1039,7 +1039,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 		    	GestorBandejaDelegate gd = DelegateUtil.getGestorBandejaDelegate();
 		    	gestor = gd.obtenerGestorBandeja(this.ctx.getCallerPrincipal().getName());
 		    	if (gestor == null) throw new Exception("No se encuentra gestor para usuario seycon " + this.ctx.getCallerPrincipal().getName());
-		    	if (gestor.getProcedimientosGestionados().size() == 0) {
+		    	if (gestor.getProcedimientosGestionados() == null || gestor.getProcedimientosGestionados().size() == 0) {
 		    		return 0;
 		    	}
 	    	}catch (Exception he) 
@@ -1063,15 +1063,17 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 			 if (gestor != null) {
 				 sb.append("( ");
 				 boolean primer = true;
-				 for (Iterator it = gestor.getProcedimientosGestionados().iterator(); it.hasNext();) {
-					Procedimiento p =  (Procedimiento) it.next();
-					 if (primer) {
-						 primer = false;
-					 } else {
-						 sb.append(" or ");
+				 if (gestor.getProcedimientosGestionados() != null) {
+					 for (Iterator it = gestor.getProcedimientosGestionados().iterator(); it.hasNext();) {
+						Procedimiento p =  (Procedimiento) it.next();
+						 if (primer) {
+							 primer = false;
+						 } else {
+							 sb.append(" or ");
+						 }
+						 sb.append("  t.procedimiento.identificador = ? ");
+						 params.add(p.getIdentificador());
 					 }
-					 sb.append("  t.procedimiento.identificador = ? ");
-					 params.add(p.getIdentificador());
 				 }
 				 sb.append(") and ");						
 			 }		 				

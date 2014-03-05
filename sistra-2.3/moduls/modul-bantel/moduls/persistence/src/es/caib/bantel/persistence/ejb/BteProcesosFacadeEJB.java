@@ -362,41 +362,43 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 	    		enviar=false;
 	    		
 	    		// Obtenemos entradas nuevas para los tramites asociados al gestor
-	    		for (Iterator it2 = g.getProcedimientosGestionados().iterator();it2.hasNext();){	    				    			
-	    			
-	    			// Obtenemos siguiente tramite gestionado por el gestor
-	    			Procedimiento procedimiento = (Procedimiento) it2.next();	   	    			
-	    			
-	    			DetalleEntradasProcedimiento de = null;
-	    			DetalleNotificacionesProcedimiento dn = null;
-	    			
-	    			// Buscamos entradas en el intervalo verificando si se han buscado antes
-	    			if ( (AvisosBandeja.AVISO_GESTOR.equals(tipoAviso) && "S".equals(g.getAvisarEntradas())) || 
-	    				 (AvisosBandeja.AVISO_MONITORIZACION.equals(tipoAviso) && "S".equals(g.getAvisarMonitorizacion()))	) {
-						de = (DetalleEntradasProcedimiento) entradasProcedimiento.get(procedimiento.getIdentificador());
-		    			if (de == null) {
-		    				de = opd.obtenerDetalleEntradasProcedimiento(procedimiento, desde, hasta);
-		    				entradasProcedimiento.put(procedimiento.getIdentificador(), de);
+	    		if (g.getProcedimientosGestionados() != null) {
+		    		for (Iterator it2 = g.getProcedimientosGestionados().iterator();it2.hasNext();){	    				    			
+		    			
+		    			// Obtenemos siguiente tramite gestionado por el gestor
+		    			Procedimiento procedimiento = (Procedimiento) it2.next();	   	    			
+		    			
+		    			DetalleEntradasProcedimiento de = null;
+		    			DetalleNotificacionesProcedimiento dn = null;
+		    			
+		    			// Buscamos entradas en el intervalo verificando si se han buscado antes
+		    			if ( (AvisosBandeja.AVISO_GESTOR.equals(tipoAviso) && "S".equals(g.getAvisarEntradas())) || 
+		    				 (AvisosBandeja.AVISO_MONITORIZACION.equals(tipoAviso) && "S".equals(g.getAvisarMonitorizacion()))	) {
+							de = (DetalleEntradasProcedimiento) entradasProcedimiento.get(procedimiento.getIdentificador());
+			    			if (de == null) {
+			    				de = opd.obtenerDetalleEntradasProcedimiento(procedimiento, desde, hasta);
+			    				entradasProcedimiento.put(procedimiento.getIdentificador(), de);
+			    			}
 		    			}
-	    			}
-	    			// Buscamos notificaciones en el intervalo verificando si se han buscado antes	    	
-	    			if (AvisosBandeja.AVISO_GESTOR.equals(tipoAviso) && 
-	    					"S".equals(procedimiento.getAvisarNotificaciones()) && "S".equals(g.getAvisarNotificaciones())) {
-						dn = (DetalleNotificacionesProcedimiento) notificacionesProcedimiento.get(procedimiento.getIdentificador());
-		    			if (dn == null) {
-		    				dn = pad.obtenerDetalleNotificacionesProcedimiento(procedimiento.getIdentificador(), desde, hasta);
-		    				notificacionesProcedimiento.put(procedimiento.getIdentificador(), dn);
-		    			} 
-	    			}
-	    			
-	    			
-	    			// Construimos mensaje de aviso (null si no hay que avisar)
-	    			String msgAviso = construirMensajeAvisoGestor(procedimiento, intervalo, de, dn);
-	    			if (msgAviso != null){
-	    				enviar=true;
-	    				mensaje.append(msgAviso + "<br/>");	    	    				
-	    			}
-	    			
+		    			// Buscamos notificaciones en el intervalo verificando si se han buscado antes	    	
+		    			if (AvisosBandeja.AVISO_GESTOR.equals(tipoAviso) && 
+		    					"S".equals(procedimiento.getAvisarNotificaciones()) && "S".equals(g.getAvisarNotificaciones())) {
+							dn = (DetalleNotificacionesProcedimiento) notificacionesProcedimiento.get(procedimiento.getIdentificador());
+			    			if (dn == null) {
+			    				dn = pad.obtenerDetalleNotificacionesProcedimiento(procedimiento.getIdentificador(), desde, hasta);
+			    				notificacionesProcedimiento.put(procedimiento.getIdentificador(), dn);
+			    			} 
+		    			}
+		    			
+		    			
+		    			// Construimos mensaje de aviso (null si no hay que avisar)
+		    			String msgAviso = construirMensajeAvisoGestor(procedimiento, intervalo, de, dn);
+		    			if (msgAviso != null){
+		    				enviar=true;
+		    				mensaje.append(msgAviso + "<br/>");	    	    				
+		    			}
+		    			
+		    		}
 	    		}
 	    		
 	    		// Enviamos correo a gestor con nuevas entradas

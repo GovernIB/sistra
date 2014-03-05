@@ -108,13 +108,15 @@ public class DetalleTramiteAction extends BaseAction
 		//	------------------------------------------------------------------------------------------------------------------
 		// TODO RAFA HABRIA QUE IMPLEMENTARLO EN CAPA DE NEGOCIO
 		// Verificamos que el gestor tenga acceso al tramite
-		boolean acceso = false;		
-		for (Iterator it=gestor.getProcedimientosGestionados().iterator();it.hasNext();){
-				Procedimiento procedimiento = (Procedimiento) it.next();
-				if (procedimiento.getIdentificador().equals(tramite.getProcedimiento().getIdentificador())){
-					acceso = true;
-					break;
-				}
+		boolean acceso = false;	
+		if (gestor.getProcedimientosGestionados() != null) {
+			for (Iterator it=gestor.getProcedimientosGestionados().iterator();it.hasNext();){
+					Procedimiento procedimiento = (Procedimiento) it.next();
+					if (procedimiento.getIdentificador().equals(tramite.getProcedimiento().getIdentificador())){
+						acceso = true;
+						break;
+					}
+			}
 		}
 		if (!acceso){
 			MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));

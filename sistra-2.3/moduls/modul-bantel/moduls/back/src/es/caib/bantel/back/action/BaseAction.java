@@ -158,9 +158,11 @@ public abstract class BaseAction extends Action {
 		Set tramites = gestorBandeja.getProcedimientosGestionados();
 		String[] codigos = new String[tramites.size()];
 		int i = 0;
-		for ( Iterator it = tramites.iterator(); it.hasNext(); i++ )
-		{
-			codigos[ i ] = ( ( Procedimiento ) it.next() ).getIdentificador(); 
+		if (tramites != null) {
+			for ( Iterator it = tramites.iterator(); it.hasNext(); i++ )
+			{
+				codigos[ i ] = ( ( Procedimiento ) it.next() ).getIdentificador(); 
+			}
 		}
 			
 		pForm.setTramites( codigos );
