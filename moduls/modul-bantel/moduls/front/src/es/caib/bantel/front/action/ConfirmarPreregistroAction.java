@@ -78,12 +78,14 @@ public class ConfirmarPreregistroAction extends BaseAction
 		// Verificamos que el gestor tenga acceso al tramite
 		boolean acceso = false;
 		GestorBandeja gestor = DelegateUtil.getGestorBandejaDelegate().obtenerGestorBandeja(request.getUserPrincipal().getName());
-		for (Iterator it=gestor.getProcedimientosGestionados().iterator();it.hasNext();){
-				Procedimiento procedimiento = (Procedimiento) it.next();
-				if (procedimiento.getIdentificador().equals(preregistro.getIdentificadorProcedimiento())){
-					acceso = true;
-					break;
-				}
+		if (gestor.getProcedimientosGestionados() != null) {
+			for (Iterator it=gestor.getProcedimientosGestionados().iterator();it.hasNext();){
+					Procedimiento procedimiento = (Procedimiento) it.next();
+					if (procedimiento.getIdentificador().equals(preregistro.getIdentificadorProcedimiento())){
+						acceso = true;
+						break;
+					}
+			}
 		}
 		if (!acceso){
 			request.setAttribute("message",resources.getMessage( getLocale( request ), "errors.preregistroNoAcceso", new Object[] {preregistro.getIdentificadorProcedimiento()}));			

@@ -420,11 +420,13 @@ public abstract class BteFacadeEJB implements SessionBean  {
 	    			throw new ExcepcionBTE("Gestor " + this.context.getCallerPrincipal().getName() + " no esta registrado");
 	    		}
 				boolean pertenece=false;
-				for (Iterator it=gestor.getProcedimientosGestionados().iterator();it.hasNext();){
-					Procedimiento procedimiento = (Procedimiento) it.next();
-					if (procedimiento.getIdentificador().equals(tramite.getProcedimiento().getIdentificador())){
-						pertenece = true;
-						break;
+				if (gestor.getProcedimientosGestionados() != null) {
+					for (Iterator it=gestor.getProcedimientosGestionados().iterator();it.hasNext();){
+						Procedimiento procedimiento = (Procedimiento) it.next();
+						if (procedimiento.getIdentificador().equals(tramite.getProcedimiento().getIdentificador())){
+							pertenece = true;
+							break;
+						}
 					}
 				}
 				if (!pertenece) throw new ExcepcionBTE("Gestor " + this.context.getCallerPrincipal().getName() + " no tiene acceso al procedimiento " + tramite.getProcedimiento().getIdentificador() );	    		    	

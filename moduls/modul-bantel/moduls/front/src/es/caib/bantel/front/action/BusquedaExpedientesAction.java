@@ -50,7 +50,7 @@ public class BusquedaExpedientesAction extends BaseAction
 			// Obtenemos tramites accesibles al gestor
 			GestorBandejaDelegate gestorBandejaDelegate = DelegateUtil.getGestorBandejaDelegate();
 			GestorBandeja gestor = gestorBandejaDelegate.obtenerGestorBandeja(this.getPrincipal(request).getName());
-			if (gestor != null){			
+			if (gestor != null && gestor.getProcedimientosGestionados() != null){			
 				for (Iterator it = gestor.getProcedimientosGestionados().iterator(); it.hasNext();){
 					Procedimiento proc = (Procedimiento) it.next();
 					idsProc.add(proc.getIdentificador());
