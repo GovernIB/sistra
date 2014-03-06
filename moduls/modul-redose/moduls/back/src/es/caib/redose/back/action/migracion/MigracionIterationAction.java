@@ -88,8 +88,11 @@ public class MigracionIterationAction extends BaseAction
 				// ERROR:DESC_ERROR
 				res = "ERROR: Faltan parametros";
 			}
+			
+			log.debug("[MIGRACION REDOSE] " + res);
+			
 		}catch(Exception ex){
-			log.error("Excepcion procesando csv: " + ex.getMessage(),ex);
+			log.error("[MIGRACION REDOSE] " + ex.getMessage(),ex);
 			// ERROR:DESC_ERROR
 			res = "ERROR:" + ExceptionUtils.getFullStackTrace(ex);
 		}
