@@ -1783,18 +1783,18 @@ create unique index ZPE_ELEIDP_UNI on ZPE_ELEEX (
 );
 
 /* ACCESO ANONIMO A EXPEDIENTE A TRAVES DE TRAMITES ANONIMOS */
-alter table ZPE_ELEEX add ELE_ACCEXP BIGINT default 0 not null;
+alter table ZPE_ELEEX add ELE_ACCEXP BOOLEAN default 0 not null;
 
 comment on column ZPE_ELEEX.ELE_ACCEXP is
 'Indica si elemento proporciona acceso a expediente de forma anónima a traves de su id persistencia';
  
 /* ACCESO ANONIMO NOTIF POR CLAVE */
-ALTER table ZPE_NOTTEL ADD NOT_ACCCLA  BIGINT default 0 not null;
+ALTER table ZPE_NOTTEL ADD NOT_ACCCLA  BOOLEAN default 0 not null;
 comment on column ZPE_NOTTEL.NOT_ACCCLA is
 'Indica si se permite que la notificacion sea accesible mediante clave (id persistencia notificacion)';
 
 /* ACCESO ANONIMO EVENTO POR CLAVE */
-ALTER table ZPE_HISTEX ADD   HIE_ACCCLA        BIGINT     default 0                  not null;
+ALTER table ZPE_HISTEX ADD   HIE_ACCCLA        BOOLEAN     default false                  not null;
 comment on column ZPE_HISTEX.HIE_ACCCLA is
 'Indica si se permite que el evento sea accesible mediante clave (id persistencia evento)';
 
