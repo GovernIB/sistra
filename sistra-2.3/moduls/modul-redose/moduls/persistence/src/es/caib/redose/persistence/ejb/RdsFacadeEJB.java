@@ -1006,6 +1006,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
         	metadataFichero.setVersion(documentoRDS.getVersion());
         	metadataFichero.setDescripcion(documentoRDS.getTitulo());
         	metadataFichero.setExtension(documentoRDS.getExtensionFichero());
+        	metadataFichero.setFecha(documentoRDS.getFechaRDS());
         	PluginAlmacenamientoRDS plugin = obtenerPluginAlmacenamiento(documentoH.getUbicacion());
         	plugin.guardarFichero(documentoH.getCodigo(),documentoRDS.getDatosFichero(), metadataFichero);
         }catch(Exception e){
