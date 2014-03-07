@@ -1,5 +1,7 @@
 package es.caib.redose.persistence.plugin;
 
+import java.util.Date;
+
 /**
  * Metadatos del documento que se pasan al plugin de almacenamiento.
  * Util para almacenamiento externo.
@@ -27,6 +29,11 @@ public class MetadaAlmacenamiento {
 	 * Extension fichero.
 	 */
 	private String extension;
+	
+	/**
+	 * Fecha de introducción en el RDS.
+	 */	
+	private Date fecha; 
 	
 	public String getModelo() {
 		return modelo;
@@ -58,6 +65,14 @@ public class MetadaAlmacenamiento {
 
 	public void setExtension(String extension) {
 		this.extension = extension;
+	}
+
+	public Date getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
 	}
 	
 }
