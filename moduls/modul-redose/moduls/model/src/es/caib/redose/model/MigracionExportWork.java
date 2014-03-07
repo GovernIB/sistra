@@ -48,6 +48,10 @@ public class MigracionExportWork {
 	 */
 	private List errores;
 	
+	/**
+	 * Indica si se ha iniciado proceso.
+	 */
+	private boolean iniciado;
 	
 	/**
 	 * Crea trabajo.
@@ -151,6 +155,14 @@ public class MigracionExportWork {
 	private String generateId(){
 		SecureRandom sr = new SecureRandom();
 		return (new Date()).getTime() + "" + sr.nextInt(99999999); 
+	}
+
+	public boolean isIniciado() {
+		return iniciado;
+	}
+
+	public void setIniciado(boolean iniciado) {
+		this.iniciado = iniciado;
 	}
 
 }
