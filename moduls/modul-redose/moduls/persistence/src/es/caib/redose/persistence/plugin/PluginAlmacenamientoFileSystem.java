@@ -49,7 +49,7 @@ public class PluginAlmacenamientoFileSystem extends PluginAlmacenamientoRDSExter
 		
 		// Generamos path directorio
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(new Date());
+		calendar.setTime(metadata.getFecha() != null? metadata.getFecha() : new Date());
 		int year = calendar.get(Calendar.YEAR);
 		int month = calendar.get(Calendar.MONTH) + 1;
 		String pathDir = "/" + metadata.getModelo() + "/" + metadata.getVersion() + "/" + year + "/" + month;

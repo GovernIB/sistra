@@ -46,6 +46,8 @@ public abstract class RdsProcesosEJB implements SessionBean {
 	
 	private static boolean existepluginCustodia;
 	
+	private int limitePurgado = 1000;
+	
 	/**
      * @ejb.create-method
      * @ejb.permission unchecked = "true"
@@ -54,10 +56,18 @@ public abstract class RdsProcesosEJB implements SessionBean {
 		existepluginCustodia = true;
 		PluginCustodiaIntf pluginCustodia = null;
 		try{
-			pluginCustodia = PluginFactory.getInstance().getPluginCustodia();
+			pluginCustodia = PluginFactory.getInstance().getPluginCustodia();				
 		}catch(Exception e){
 			existepluginCustodia = false;
 		}		
+		try{
+			String limiteStr = es.caib.redose.persistence.util.ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("scheduler.jobPurgadoDocumentos.limite");
+			if (limiteStr != null) {
+				limitePurgado = Integer.parseInt(limiteStr);
+			}
+		}catch(Exception e){
+			limitePurgado = 1000;
+		}	
 	}
 	
 	/**
@@ -147,6 +157,11 @@ public abstract class RdsProcesosEJB implements SessionBean {
     	long periodo = (24 * 60 * 60 * 1000);
     	int i=0;
     	for (Iterator it=docs.iterator();it.hasNext();){
+    		if ( i > limitePurgado) {
+    			log.debug("Limite de docs a purgar alcanzado. Se continuará en siguiente purga.");
+    			i = limitePurgado;
+    			break;
+    		}
     		Documento d = (Documento) it.next();
     		try {
     			// Si se ha cumplido plazo de seguridad eliminamos documento
@@ -176,6 +191,11 @@ public abstract class RdsProcesosEJB implements SessionBean {
 				List documentosParaBorrar = rd.listarVersionesCustodiaParaBorrar();
 				if(documentosParaBorrar != null){					
 					for(int i=0;i<documentosParaBorrar.size();i++){
+						if ( num > limitePurgado) {
+			    			log.debug("Limite de docs a purgar alcanzado. Se continuará en siguiente purga.");
+			    			num = limitePurgado;
+			    			break;
+			    		}
 						VersionCustodia vc = (VersionCustodia)documentosParaBorrar.get(i);
 						try{
 							rd.eliminaVersionDocumentoCustodia(vc.getCodigo());
@@ -219,6 +239,11 @@ public abstract class RdsProcesosEJB implements SessionBean {
     	// Borramos los docs que tengan la marca de borrados.  
     	int num = 0;
     	for (Iterator it=docs.iterator();it.hasNext();){
+    		if ( num > limitePurgado) {
+    			log.debug("Limite de docs a purgar alcanzado. Se continuará en siguiente purga.");
+    			num = limitePurgado;
+    			break;
+    		}
     		Documento d = (Documento) it.next();
     		try {
    				log.debug("Documento " + d.getCodigo() + " ha superado el periodo de "+meses+" meses marcados para borrar. Se procedera a eliminarse.");
@@ -245,6 +270,11 @@ public abstract class RdsProcesosEJB implements SessionBean {
 			if(documentosParaBorrar != null){
 				log.debug("Se recuperan " + documentosParaBorrar.size() + " ficheros externos marcados para borrar");
 				for(int i=0;i<documentosParaBorrar.size();i++){
+					if ( num > limitePurgado) {
+		    			log.debug("Limite de docs a purgar alcanzado. Se continuará en siguiente purga.");
+		    			num = limitePurgado;
+		    			break;
+		    		}
 					FicheroExterno fe = (FicheroExterno)documentosParaBorrar.get(i);
 					log.debug("El fichero externo " + fe.getReferenciaExterna() + " se procede a borrarse");
 					try{
