@@ -336,6 +336,7 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
 	       metadataFichero.setVersion(documentoRDS.getVersion().getVersion());
 	       metadataFichero.setDescripcion(documentoRDS.getTitulo());
 	       metadataFichero.setExtension(documentoRDS.getExtensionFichero());
+	       metadataFichero.setFecha(documentoRDS.getFecha());
 	       plgAlmacenamientoDestino.guardarFichero(codigoDocumento,datosFichero, metadataFichero);
 
 	       // Borramos documento en antigua ubicacion
