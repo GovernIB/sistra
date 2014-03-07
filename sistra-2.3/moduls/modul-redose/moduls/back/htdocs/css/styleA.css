@@ -370,6 +370,17 @@ body.ventana td.input
     width: 450px;
     padding: 0px 0px;
 }
+
+body.ventana td.separador
+{
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 8pt;
+    font-weight:bold;
+    color: #d8dfe7 !important;
+    background-color: #515b67;
+    height: 23px;
+}
+
 body.ventana td.output
 {
     background-color: #ffffff;

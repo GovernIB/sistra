@@ -222,12 +222,6 @@
 			$("#procesoMigracion").hide();		
 		}
 
-		function cancelExport(){
-			ocultarEnviando();
-			if (IDTRABAJO == "CANCEL" || IDTRABAJO == "")  return;
-			asyncPostJquery("exportCSVCancelAction.do","id="+IDTRABAJO,null,errorExport);	
-		}
-
 		function htmlForTextWithEmbeddedNewlines(text) {
 		    var htmls = [];
 		    var lines = text.split(/\n/);
@@ -268,6 +262,19 @@
 	
 	<!-- OPCIONES -->
 	<table class="marc">
+		<tr>
+			<td class="separador" colspan="2"><bean:message key="migracion.aviso.titulo"/></td>
+		</tr>
+		<tr>
+	    	<td class="alert" colspan="2">
+	    		<p><bean:message key="migracion.aviso.parrafo1"/></p>
+	    		<p><bean:message key="migracion.aviso.parrafo2"/></p>
+	    		<p><bean:message key="migracion.aviso.parrafo3"/></p>
+	    	</td>	    	
+		</tr>
+		<tr>
+			<td class="separador" colspan="2"><bean:message key="migracion.parametros"/></td>
+		</tr>
 		<tr>
 	    	<td class="labelo"><bean:message key="migracion.ubicacionOrigen"/></td>
 	    	<td class="input">
