@@ -58,27 +58,31 @@ public class MigracionInitAction extends BaseAction
 			
 			MigracionForm f  = ( MigracionForm ) form;
 			
-			// Verificamos parametros de entrada
-			MigracionParametros params = verificarParametrosMigracion(f,
-					resources, locale);
-		
-			// Buscamos documentos a exportar
-			long totalDocs = dlg.contarDocumentosMigracion(params.getUbicacionOrigen(), params.getFechaDesde(), params.getFechaHasta());
+			// Trabajos de migracion
+			MigracionExportWorks works = MigracionExportWorks.getInstance(request);
 			
-			if (totalDocs == 0) {
-				// No hay docs a migrar
-				result="ERROR:" + resources.getMessage( locale, "migracion.errorNoHayDocs");
+			// Buscamos si existe algun trabajo anterior sin finalizar
+			if (works.existeTrabajoIniciado()) {
+				// Existen trabajos pendientes (esperar 15 minutos)
+				result="ERROR:" + resources.getMessage( locale, "migracion.errorExisteProcesoAnterior");
 			} else {
-				// Creamos trabajo y lo guardamos en la sesion
-				List codigos = dlg.listarDocumentosMigracion(params.getUbicacionOrigen(), params.getFechaDesde(), params.getFechaHasta(), params.getNumMaxDocs());			
-				MigracionExportWork trabajo = new MigracionExportWork(params, totalDocs, codigos);
-				MigracionExportWorks works = (MigracionExportWorks) request.getSession().getAttribute(MigracionExportWorks.KEY_MIGRACION_WORKS);
-				if (works == null) {
-					works = new MigracionExportWorks();
-					request.getSession().setAttribute(MigracionExportWorks.KEY_MIGRACION_WORKS,works);
+				// Verificamos parametros de entrada
+				MigracionParametros params = verificarParametrosMigracion(f,
+						resources, locale);
+			
+				// Buscamos documentos a exportar
+				long totalDocs = dlg.contarDocumentosMigracion(params.getUbicacionOrigen(), params.getFechaDesde(), params.getFechaHasta());
+				
+				if (totalDocs == 0) {
+					// No hay docs a migrar
+					result="ERROR:" + resources.getMessage( locale, "migracion.errorNoHayDocs");
+				} else {
+					// Creamos trabajo y lo guardamos en la sesion
+					List codigos = dlg.listarDocumentosMigracion(params.getUbicacionOrigen(), params.getFechaDesde(), params.getFechaHasta(), params.getNumMaxDocs());			
+					MigracionExportWork trabajo = new MigracionExportWork(params, totalDocs, codigos);				
+					works.addWork(trabajo);					
+					result = "INIT:"+trabajo.getId()+"-"+codigos.size()+"-"+totalDocs;
 				}
-				works.addWork(trabajo);					
-				result = "INIT:"+trabajo.getId()+"-"+codigos.size()+"-"+totalDocs;
 			}
 					
 		}catch(Exception ex){			 

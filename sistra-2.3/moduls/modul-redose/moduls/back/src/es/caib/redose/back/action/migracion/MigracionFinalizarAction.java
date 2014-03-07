@@ -39,7 +39,7 @@ public class MigracionFinalizarAction extends BaseAction
 		String id = request.getParameter("id");
 		String descErrores = "NO_ERROR";
 		if (id!=null){
-			MigracionExportWorks works = (MigracionExportWorks) request.getSession().getAttribute(MigracionExportWorks.KEY_MIGRACION_WORKS);
+			MigracionExportWorks works = MigracionExportWorks.getInstance(request);
 			if (works != null) {
 				MigracionExportWork work = works.getMigracionExportWork(id);
 				if (work != null) {
