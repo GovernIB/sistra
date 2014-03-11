@@ -1794,7 +1794,7 @@ comment on column ZPE_NOTTEL.NOT_ACCCLA is
 'Indica si se permite que la notificacion sea accesible mediante clave (id persistencia notificacion)';
 
 /* ACCESO ANONIMO EVENTO POR CLAVE */
-ALTER table ZPE_HISTEX ADD   HIE_ACCCLA        BOOLEAN     default false                  not null;
+ALTER table ZPE_HISTEX ADD   HIE_ACCCLA BOOLEAN default false not null;
 comment on column ZPE_HISTEX.HIE_ACCCLA is
 'Indica si se permite que el evento sea accesible mediante clave (id persistencia evento)';
 
