@@ -145,7 +145,6 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 
 <% if (niveles.indexOf("C")>=0){ %>
 <!--  FIRMA DIGITAL -->
-<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/deployJava.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/instalador.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/firma.js"></script>	
 <script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/utils.js"></script>
@@ -189,7 +188,7 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 			     return true;
 			}
 		}
-		prepararEntornoFirma();
+
 //-->
 </script>
 <% } else { %>
@@ -205,6 +204,13 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 </head>
 
 <body>
+
+	<script type="text/javascript">
+	<!--			
+	prepararEntornoFirma();
+	//-->
+	</script>
+
 
 
 <%
