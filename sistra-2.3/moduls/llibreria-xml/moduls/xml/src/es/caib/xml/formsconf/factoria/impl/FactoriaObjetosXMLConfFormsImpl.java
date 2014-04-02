@@ -322,7 +322,7 @@ public class FactoriaObjetosXMLConfFormsImpl implements
 			datos.setCodigoPerfil (datosJAXB.getCodigoPerfil());
 			datos.setIdioma (datosJAXB.getIdioma());
 			datos.setLayout (datosJAXB.getLayout());
-			datos.setModelo (datosJAXB.getModelo());
+			datos.setModelo (datosJAXB.getModelo());			
 			datos.setNomParamTokenRetorno (datosJAXB.getNomParamTokenRetorno());
 			datos.setNomParamXMLDatosFin (datosJAXB.getNomParamXMLDatosFin());
 			datos.setNomParamXMLDatosIni (datosJAXB.getNomParamXMLDatosIni());
@@ -332,6 +332,8 @@ public class FactoriaObjetosXMLConfFormsImpl implements
 			datos.setUrlSisTraOK (datosJAXB.getUrlSisTraOK());
 			datos.setUrlSisTraMantenimientoSesion(datosJAXB.getUrlSisTraMantenimientoSesion());
 			datos.setVersion (new Integer (datosJAXB.getVersion()));
+			datos.setGuardarSinTerminar("S".equals(datosJAXB.getGuardarSinTerminar()));
+			datos.setNomParamXMLSinTerminar(datosJAXB.getNomParamXMLSinTerminar());
 		}
 		
 		return datos;
@@ -414,7 +416,15 @@ public class FactoriaObjetosXMLConfFormsImpl implements
 			if (datos.getNomParamXMLDatosFin() != null) datosRaw.setNomParamXMLDatosFin (datos.getNomParamXMLDatosFin());
 			
 			// NomParamTokenRetorno
-			if (datos.getNomParamTokenRetorno() != null) datosRaw.setNomParamTokenRetorno (datos.getNomParamTokenRetorno());			
+			if (datos.getNomParamTokenRetorno() != null) datosRaw.setNomParamTokenRetorno (datos.getNomParamTokenRetorno());		
+			
+			// NomParamXMLSinTerminar
+			if (datos.getNomParamXMLSinTerminar() != null) datosRaw.setNomParamXMLSinTerminar( datos.getNomParamXMLSinTerminar());
+			
+			// Guardar sin terminar
+			datosRaw.setGuardarSinTerminar(datos.isGuardarSinTerminar()?"S":"N");
+			
+			
 		}
 		
 		return datosRaw;

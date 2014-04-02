@@ -168,6 +168,10 @@ public class DocumentoFront  implements Serializable{
 	 * Si especificado, indica el content type del documento en caso de firma
 	 */
 	private String contentType;
+	/**
+	 * Para formulario indica si se permite guardar sin terminar.
+	 */
+	private boolean formularioGuardarSinTerminar;
 	
 	
 	public char getEstado() {
@@ -399,6 +403,13 @@ public class DocumentoFront  implements Serializable{
 	public void setFormularioAnexarJustificante(boolean formularioAnexarJustificante) {
 		this.formularioAnexarJustificante = formularioAnexarJustificante;
 	}
+	public boolean isFormularioGuardarSinTerminar() {
+		return formularioGuardarSinTerminar;
+	}
+	public void setFormularioGuardarSinTerminar(boolean formularioGuardarSinTerminar) {
+		this.formularioGuardarSinTerminar = formularioGuardarSinTerminar;
+	}
+	
 	
 	
 	

@@ -18,6 +18,13 @@
     <td class="labela" colspan="2"><bean:message key="ayuda.nombrelogico"/></td>
 </tr>
 <tr>
+    <td class="label"><bean:message key="componente.pdf"/></td>
+    <td class="input"><html:text styleClass="text" tabindex="<%=Integer.toString(ti++)%>" property="values.etiquetaPDF" maxlength="128" /></td>
+</tr>
+<tr>
+    <td class="labela" colspan="2"><bean:message key="ayuda.etiquetaPDF"/></td>
+</tr>
+<tr>
     <td class="label"><bean:message key="componente.posicion"/></td>
     <td class="input">
     <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.posicion">
@@ -60,10 +67,7 @@
     </td>
 </tr>
 <tr>
-    <td class="labela" colspan="2"><bean:message key="ayuda.posicion"/></td>
-</tr>
-<tr>
-    <td class="labelo"><bean:message key="listbox.altura"/></td>
+    <td class="label"><bean:message key="listbox.altura"/></td>
     <td class="input">
     	<html:select tabindex="<%=Integer.toString(ti++)%>" property="values.altura">
     		<html:option value="2">2</html:option>
@@ -73,11 +77,19 @@
     </td>
 </tr>
 <tr>
-    <td class="label"><bean:message key="componente.pdf"/></td>
-    <td class="input"><html:text styleClass="text" tabindex="<%=Integer.toString(ti++)%>" property="values.etiquetaPDF" maxlength="128" /></td>
+    <td class="labela" colspan="2"><bean:message key="ayuda.posicion"/></td>
 </tr>
 <tr>
-    <td class="labela" colspan="2"><bean:message key="ayuda.etiquetaPDF"/></td>
+    <td class="label"><bean:message key="listbox.seleccionMultiple"/></td>
+    <td class="input">
+    	<html:select tabindex="<%=Integer.toString(ti++)%>" property="values.seleccionMultiple">
+    		<html:option value="true"><bean:message key="listbox.seleccionMultiple.true"/></html:option>
+        	<html:option value="false"><bean:message key="listbox.seleccionMultiple.false"/></html:option>        	
+    	</html:select>        	
+    </td>
+</tr>
+<tr>
+    <td class="labela" colspan="2"><bean:message key="ayuda.seleccionMultiple"/></td>
 </tr>
 
 
@@ -96,6 +108,8 @@
 </tr>
 </logic:equal>
 <!--  INDRA: PROPIEDADES PARA CAMPOS DE PANTALLAS DE DETALLE DE LISTA DE ELEMENTOS -->
+
+
 <tiles:insert page="/moduls/editarExpresiones.jsp">
     <tiles:put name="tabindex" value="<%=new Integer(ti)%>" />
 </tiles:insert>

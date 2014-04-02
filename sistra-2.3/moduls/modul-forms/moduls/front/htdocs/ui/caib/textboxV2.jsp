@@ -1,5 +1,6 @@
 <%@ page language="java"%>
 <%@ page import="org.apache.commons.lang.StringUtils"%>
+<%@ page import="org.apache.commons.lang.StringEscapeUtils"%>
 <%@ page import="org.ibit.rol.form.model.Validacion"%>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="nested" uri="http://jakarta.apache.org/struts/tags-nested"%>
@@ -8,13 +9,19 @@
 <nested:root>
     <nested:define id="campo" type="org.ibit.rol.form.model.TextBox"/>
     <nested:define id="nombre" property="nombreLogico" type="java.lang.String"/>
-    <nested:define id="etiquetaTxt" type="java.lang.String" property="traduccion.nombre"/>
+    <nested:define id="etiquetaTxt" property="traduccion.nombre" type="java.lang.String" />
+    <nested:define id="valorTxt" name="pantallaForm" property="<%=nombre%>" type="java.lang.String"/>
+    <nested:define id="traduccion" property="traduccion" type="org.ibit.rol.form.model.TraCampo"/>
 
 	<% 
 	   Validacion vmaxlength = campo.findValidacion("maxlength"); 
 	   boolean autocalculo = StringUtils.isNotEmpty(StringUtils.strip(campo.getExpresionAutocalculo()));
 	   boolean disabled = StringUtils.isNotEmpty(StringUtils.strip(campo.getExpresionDependencia()));     
        boolean bloqueado = campo.isBloqueado(); 
+       String  placeholderTxt = traduccion.getPlaceholder();
+       if (placeholderTxt == null)  {
+    	   placeholderTxt = "";
+       }
        
        String dataType = "text";
        String styleClassInput = "";
@@ -22,7 +29,7 @@
        if (campo.getFilas() <= 1) {
 	       if ("FE".equals(campo.getTipoTexto())) {
 	    		dataType  ="date";
-	    		inputType = "date";
+	    		inputType = "text";
 	    		styleClassInput = "imc-data";
 	       }
 	       if ("HO".equals(campo.getTipoTexto())) {
@@ -60,8 +67,6 @@
 		</div>
 		<div class="imc-el-control">
 			 <nested:lessEqual property="filas" value="1">
-			 	
-			 	<% if (!"NO".equals(campo.getTipoTexto())) { %>
 			 		<input
 			 			type="<%=inputType%>" 
 			 			name="<%=nombre%>" 			 			
@@ -79,17 +84,11 @@
 			 			<% if (!"".equals(styleClassInput)) { %> 
 			 			class="<%=styleClassInput%>"
 			 			<%} %>  
-			 			value='<nested:write name="pantallaForm" property="<%=nombre%>"/>'>			 					 	
-			 	<% } else { %>
-			 		<html:text property="<%=nombre%>" 
-				 		styleId="<%=nombre%>"
-				 		readonly="<%=(autocalculo) || (bloqueado)%>"
-	        			disabled="<%=disabled%>"
-				 		onchange='<%=(!autocalculo && !bloqueado) ? "onFieldChange(this.form, this.name)" : ""%>'
-				 		maxlength='<%=(vmaxlength != null ? vmaxlength.getValores()[0] : "")%>'
-				 	/>
-			 	<% } %> 
-			 	
+			 			value="<%=org.apache.struts.util.ResponseUtils.filter(valorTxt)%>"
+			 			<% if (StringUtils.isNotBlank(placeholderTxt)) { %>
+			 			placeholder="<%=org.apache.struts.util.ResponseUtils.filter(placeholderTxt)%>"
+			 			<%} %>  
+			 			>			 					 				 				 
 			 </nested:lessEqual>
 			 <nested:greaterThan property="filas" value="1">
 				 <html:textarea property="<%=nombre%>" 

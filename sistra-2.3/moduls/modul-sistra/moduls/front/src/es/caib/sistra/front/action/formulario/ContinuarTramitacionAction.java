@@ -60,7 +60,8 @@ public class ContinuarTramitacionAction extends BaseAction
 		
 		// Recupera instancia tramitacion e invoca a guardar formulario
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request );
-		RespuestaFront respuestaFront = delegate.guardarFormulario( resultadoProcesoFormulario.getFormulario().getIdentificador(), resultadoProcesoFormulario.getFormulario().getInstancia(), resultadoProcesoFormulario.getXmlInicial(), resultadoProcesoFormulario.getXmlActual() );
+		RespuestaFront respuestaFront = delegate.guardarFormulario( resultadoProcesoFormulario.getFormulario().getIdentificador(), resultadoProcesoFormulario.getFormulario().getInstancia(), 
+															resultadoProcesoFormulario.getXmlInicial(), resultadoProcesoFormulario.getXmlActual(), resultadoProcesoFormulario.isGuardadoSinFinalizar() );
 		this.setRespuestaFront( request, respuestaFront );
 		
 		// Si es tramite reducido, vamos directamente a registrar el tramite

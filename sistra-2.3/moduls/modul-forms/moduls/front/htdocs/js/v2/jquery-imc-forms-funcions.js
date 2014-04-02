@@ -8,9 +8,9 @@ function dadesFormateig(options) {
 		element = settings.element;
 	
 	// data
-	if (!Modernizr.inputtypes.date) {
-		element.find("input[type=date]").addClass("imc-no-type-date").dataCompletar().datepicker({ dateFormat: "dd/mm/yy", changeMonth: true, changeYear: true });
-	}
+	//if (!Modernizr.inputtypes.date) {
+		element.find(".imc-data").addClass("imc-no-type-date").dataCompletar().datepicker({ dateFormat: "dd/mm/yy", changeMonth: true, changeYear: true });
+	//}
 	
 	// hora
 	if (!Modernizr.inputtypes.time) {
@@ -18,9 +18,11 @@ function dadesFormateig(options) {
 	}
 	
 	// placeHolder
+	/* DESHABILITAMOS PLACEHOLDER SIMULADO. PROBLEMA CON VALUE DEL CAMPO.
 	if (!Modernizr.input.placeholder) {
-		element.find("input.imc-placeholder").placeHolder();
+		element.find("input[placeholder]").placeHolder();
 	}
+	*/
 	
 	// generatedcontent
 	if (!Modernizr.generatedcontent) {
@@ -43,10 +45,92 @@ function dadesFormateig(options) {
 			}
 		}).end()
 		.find("a:not([href])").attr("tabindex", "0").attr("href", "javascript:;").end()
-		.find(".imc-el-import").immport();
+		.find(".imc-el-import").immport().end()
+		.find(".imc-el-index").index();
+		
+	if (element.hasClass("imc-el-index")) {
+		element.index();
+	}
 	
 }
 // /dadesFormateig
+
+
+// index
+$.fn.index = function(options) {
+	var settings = $.extend({
+		element: ""
+	}, options);
+	this.each(function(){
+		var element = $(this),
+			el_opcions_llista = element.find(".imc-select-submenu ul:first"),
+			el_opcions = el_opcions_llista.find("li"),
+			crear = function() {
+				
+				var elm_inicial = "";
+				
+				if (el_opcions.length) {
+					element.find(".imc-select-submenu ol:first").remove();
+					$("<ol>").addClass("imc-index-alfabet").insertBefore(el_opcions_llista);
+					var el_alfabet = element.find("ol:first");
+					el_opcions.each(function() {
+						var elm = $(this);
+							elm_text = elm.text(),
+							elm_inicial_actual = normalize( $.trim(elm_text).charAt(0) );
+						if (elm_inicial_actual !== "." && elm_inicial !== elm_inicial_actual) {
+							elm_inicial = elm_inicial_actual;
+							$("<li>").html( $("<a>").attr("href", "javascript:;").text( elm_inicial.toUpperCase() ) ).appendTo(el_alfabet);
+						}
+					});
+					el_alfabet.find("a").on("click", situa);
+				}
+				
+			},
+			situa = function(e) {
+				var elm = $(e.target),
+					elm_text = $(this).text(),
+					opcio_llista_trobat = false,
+					opcio_llista_posicio = 0,
+					elm_trobat = false;
+				
+				el_opcions.each(function() {
+					var opcio = $(this).find("a"),
+						opcio_text = opcio.text().toUpperCase(),
+						opcio_inicial = normalize( opcio_text.charAt(0) );
+					if (!opcio_llista_trobat && elm_text === opcio_inicial) {
+						opcio_llista_trobat = true;
+						elm_trobat = opcio;
+					}
+					if (!opcio_llista_trobat) {
+						opcio_llista_posicio += opcio.outerHeight() + 2;
+					}
+				});
+				
+				if (elm_trobat) {	
+					el_opcions_llista
+						.animate(
+							{
+								scrollTop: opcio_llista_posicio+"px"
+							}
+							,200
+							, function() {
+								elm_trobat.addClass("imc-alfabet-marca");
+								setTimeout(
+									function() {
+										elm_trobat.removeClass("imc-alfabet-marca");
+									},400
+								);
+							}
+						);
+				}
+				
+			};
+		// crear
+		crear();
+	});
+	return this;
+}
+// /index
 
 
 // arbre
@@ -501,7 +585,7 @@ function control_refill(name, valors) {
 					elm_select
 						.append( $("<a>").html( $("<span>") ).attr({ tabindex: "0" }).addClass("imc-select") )
 						.append( $("<input>").attr({ type: "hidden", name: name }) )
-						.append( $("<ul>") );
+						.append( $("<div>").addClass("imc-select-submenu").append( $("<ul>") ) );
 				} else {
 					el_element.find("ul:first").addClass("imc-select-per-esborrar").before( $("<ul>") );
 				}

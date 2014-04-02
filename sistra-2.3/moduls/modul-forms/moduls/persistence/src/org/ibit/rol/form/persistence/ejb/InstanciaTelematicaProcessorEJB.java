@@ -88,9 +88,11 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
     public static final String VERSION                        = "version";
     public static final String IDIOMA                         = "idioma";
     public static final String LAYOUT                         = "layout";
+    public static final String GUARDAR_SIN_TERMINAR           = "guardarSinTerminar";
     public static final String NOM_PARAM_TOKEN_RETORNO        = "nomParamTokenRetorno";
     public static final String NOM_PARAM_XML_DATOS_INI        = "nomParamXMLDatosIni";
     public static final String NOM_PARAM_XML_DATOS_FIN        = "nomParamXMLDatosFin";
+    public static final String NOM_PARAM_XML_GUARDAR_SIN_TERMINAR     = "nomParamXMLSinTerminar";
     public static final String NOM_ATRIB_INDEX_CAMPO_INDEXADO = "nomAtribIndexCampoIndex";
 
     //Expresiones xPath para obtener información del documento xml de configuración
@@ -101,6 +103,9 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
 
     //Valor devuelto por el sistema de tramitación al mandarle un get/post.
     private String respuesta;
+    
+    // Indica si se permite guardar sin terminar
+	private boolean guardarSinTerminar;
 
     /**
      * @ejb.create-method
@@ -256,7 +261,12 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
             // INDRA: LISTA ELEMENTOS 
             log.debug("Generados valores por defecto");
 
+            
+            // Check permitir guardar sin terminar
+            guardarSinTerminar = "S".equals(obtenerValor(GUARDAR_SIN_TERMINAR));
+            
             session.disconnect();
+            
         } catch (Exception e) {
             closeReadOnly(session);
             throw new EJBException(e);
@@ -392,20 +402,36 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public String tramitarFormulario() {
+    public String tramitarFormulario(boolean guardarSinTerminar) {
         log.debug("voy a tramitar el formulario...");
         String urlSisTra = obtenerValor(URL_SIS_TRA_OK);
         if (urlSisTra == null) {
             throw new EJBException("urlSisTraOK no encontrada");
         }
+        
+        // Si se guarda sin terminar, vuelco datos de la pantalla actual y posteriores
+        if (guardarSinTerminar) {
+          // Almaceno en pila la pantalla actual 
+          pilaPantallasAnteriores.push(pantallaActual);
+          pilaDatosAnteriores.push(datosActual);
+          // Almaceno en pila las pantallas posteriores
+          for (Iterator it = pantallasDatosPosteriores.keySet().iterator(); it.hasNext();){
+        	String nomPantalla = (String) it.next();
+        	pilaPantallasAnteriores.push(formulario.findPantalla(nomPantalla));
+            pilaDatosAnteriores.push(pantallasDatosPosteriores.get(nomPantalla));        	
+          }          
+        }
+        
         String xmlIni = obtenerXMLValoresOriginales();
         
-        String xmlFin = obtenerXMLValoresFinales();
+        String xmlFin = obtenerXMLValoresFinales(guardarSinTerminar);
         boolean exito = enviarDocumentosXMLSisTra(urlSisTra,
                                                   xmlIni,
                                                   xmlFin,
+                                                  (guardarSinTerminar?"S":"N"),
                                                   obtenerValor(NOM_PARAM_XML_DATOS_INI),
-                                                  obtenerValor(NOM_PARAM_XML_DATOS_FIN));
+                                                  obtenerValor(NOM_PARAM_XML_DATOS_FIN),
+                                                  obtenerValor(NOM_PARAM_XML_GUARDAR_SIN_TERMINAR));
         if (!exito) {
             throw new EJBException("Error al enviar los documentos xml al sistema de tramitacion");
         } else {
@@ -463,6 +489,32 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
         return urlSisTra;
     }
 
+    /**
+     * Obtiene si se permite guardar sin terminar
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public boolean permitirGuardarSinTerminar() {        
+        return guardarSinTerminar;
+    }
+    
+    
+   /*
+    CallBack method ejbRemove() para liberar los recursos, entre ellos la sesión.
+   */
+   public void ejbRemove() {
+      try {
+          super.ejbRemove();
+          datosTramite.clear();
+          propiedadesForm.clear();
+          docXMLConfig = null;
+          docXMLIni = null;
+      } finally {
+          log.debug("fin ejbRemove():" + this.getClass().getName());
+      }
+   }
+  
+    
     /******************************************************************************************
      *                    FIN LÓGICA DE NEGOCIO. INICIO METODOS AUXILIARES.                   *
      ******************************************************************************************/
@@ -582,22 +634,23 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
 
     /**
      * Genera el documento XML con los valores finales de los campos.
+     * @param guardarSinTerminar Indica si se guarda sin terminar, para que no tenga en cuenta restricciones de valores obligatorios
      * @return Devuelve el documento XML con los valores finales de los campos del formulario.
      * @throws Exception 
      */
-    private String obtenerXMLValoresFinales() throws EJBException {
+    private String obtenerXMLValoresFinales(boolean guardarSinTerminar) throws EJBException {
         Map datosPantalla;
         Document docXMLFin = DocumentHelper.createDocument();
         for (int i = 0; i < pilaPantallasAnteriores.size(); i++) {
             Pantalla pantalla = (Pantalla) pilaPantallasAnteriores.elementAt(i);
             datosPantalla = (Map) pilaDatosAnteriores.elementAt(i);
-            generarNodosPantalla(docXMLFin,pantalla,datosPantalla,false,null);
+            generarNodosPantalla(docXMLFin,pantalla,datosPantalla,false,null, guardarSinTerminar);
         }
         return documentToString(docXMLFin);
     }
 
     
-    private void generarNodosPantalla(Document docXMLFin,Pantalla pantalla,Map datosPantalla,boolean detalle,String xpathLista) throws EJBException{
+    private void generarNodosPantalla(Document docXMLFin,Pantalla pantalla,Map datosPantalla,boolean detalle,String xpathLista, boolean guardarSinTerminar) throws EJBException{
     	for (Iterator j = pantalla.getCampos().iterator(); j.hasNext();) {
             Campo campo = (Campo) j.next();
             String xPath = campo.getEtiquetaPDF();                      
@@ -618,28 +671,34 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                         
                         // INDRA: COMPROBACION OBLIGATORIO
                         // INDRA 2013:  NO TIENE EFECTO, YA QUE NO PUEDE ESTABLECERSE SI ES OBLIGATORIO 
-                        if (campo.findValidacion("required") != null) {
+                        if (!guardarSinTerminar && campo.findValidacion("required") != null) {
                         	if (valoresIndex.length == 0) {
                         		log.error("Error generando XML: campo con XPATH " + xPath + " debe contener valor");
                         		throw new EJBException("Error generando XML: campo con XPATH " + xPath + " debe contener valor");
                         	}
                         }
                         // INDRA: COMPROBACION OBLIGATORIO
-                        
                         for (int k = 0; k < valoresIndex.length; k++) {
                             if ( (valoresIndex[k] != null) && (valoresText[k] != null) ) {
                                 docXMLFin = crearNodo(docXMLFin, xPath, valoresIndex[k], true, String.valueOf(valoresText[k]));
                             }
                         }                       
+                        
+                        // Nodo vacio sin valores
+                        if (valoresIndex.length == 0) {
+                        	 docXMLFin = crearNodo(docXMLFin, xPath, null, true, null);
+                        }
+                        
                     } else {
                     	
                     	// ComboBox, RadioButton
                     	
                     	// INDRA: COMPROBACION OBLIGATORIO
                         if ( 
-                        	 (campo.findValidacion("required") != null) || 
+                        	 (!guardarSinTerminar && campo.findValidacion("required") != null) || 
                          	 ( 
-                         		(campo instanceof ComboBox) && 
+                         		!guardarSinTerminar &&
+                         	    (campo instanceof ComboBox) && 
                          		(((ComboBox) campo).isObligatorio())) 
                          	){
                         	   	if ( (datosPantalla.get(campo.getNombreLogico()) == null) ||
@@ -650,12 +709,14 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                         }
                         // INDRA: COMPROBACION OBLIGATORIO
                     	
-                    	
                         if ( (datosPantalla.get(campo.getNombreLogico()) != null) &&
                              (datosPantalla.get(campo.getNombreLogico() + "_text") != null) ){
                             String valorIndex = String.valueOf(datosPantalla.get(campo.getNombreLogico()));
                             String valorText  = String.valueOf(datosPantalla.get(campo.getNombreLogico() + "_text"));
                             docXMLFin = crearNodo(docXMLFin, xPath, valorIndex, true, valorText);
+                        } else {
+                        	 // Nodo vacio sin valores
+                            docXMLFin = crearNodo(docXMLFin, xPath, null, true, null);                            
                         }
                     }
                 } else {
@@ -670,14 +731,14 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
 	                		for (int numElemento=0;numElemento<listaElementos.size();numElemento++){
 	                			Map datosElemento = (Map) listaElementos.get(numElemento);
 	                			Pantalla pantallaDetalle = encontrarPantallaDetalle(referenciaCampo);
-	                			generarNodosPantalla(docXMLFin,pantallaDetalle,datosElemento,true,xPath + "/ID" + (numElemento+1));
+	                			generarNodosPantalla(docXMLFin,pantallaDetalle,datosElemento,true,xPath + "/ID" + (numElemento+1), guardarSinTerminar);
 	                		}
                         }
                 	}else{
                 		String valorCampo = String.valueOf(datosPantalla.get(campo.getNombreLogico()));
                 		
                 		// INDRA: COMPROBACION OBLIGATORIO
-                        if (campo.findValidacion("required") != null) {
+                        if (!guardarSinTerminar && campo.findValidacion("required") != null) {
                         	if (StringUtils.isBlank(valorCampo)) {
                         		log.error("Error generando XML: campo con XPATH " + xPath + " debe contener valor");
                         		throw new EJBException("Error generando XML: campo con XPATH " + xPath + " debe contener valor");
@@ -687,6 +748,9 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                 		
                         if (valorCampo != null) {
                             docXMLFin = crearNodo(docXMLFin, xPath, valorCampo, false, null);
+                        } else {
+                        	 // Nodo vacio sin valores
+                            docXMLFin = crearNodo(docXMLFin, xPath, null, true, null);                            
                         }
                 	}
                 }
@@ -748,23 +812,27 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
             if (doc.selectSingleNode(nodo) == null) {
                 nodoElement = nodoElement.addElement(path[i]);
                 if (i == path.length - 1) {
-                    if (campoIndexado){
-                        nodoElement = nodoElement.addAttribute(obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO), valorCampo);
-                        nodoElement = addText(nodoElement,valorTextCampo);                        
-                    } else {                    	
-                        nodoElement = addText(nodoElement,valorCampo);
-                    }
+                	if (valorCampo != null) {
+	                    if (campoIndexado){
+	                        nodoElement = nodoElement.addAttribute(obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO), valorCampo);
+	                        nodoElement = addText(nodoElement,valorTextCampo);                        
+	                    } else {                    	
+	                        nodoElement = addText(nodoElement,valorCampo);
+	                    }
+                	}
                 }
             } else {
                 nodoElement = (Element) doc.selectSingleNode(nodo);
                 if (i == path.length -1) {
                     Element padre = nodoElement.getParent();
                     nodoElement = padre.addElement(path[i]);
-                    if (campoIndexado) {
-                        nodoElement = nodoElement.addAttribute(obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO), valorCampo);
-                        nodoElement = addText(nodoElement,valorTextCampo);                        
-                    } else {
-                        nodoElement = addText(nodoElement,valorCampo);
+                    if (valorCampo != null) {
+	                    if (campoIndexado) {
+	                        nodoElement = nodoElement.addAttribute(obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO), valorCampo);
+	                        nodoElement = addText(nodoElement,valorTextCampo);                        
+	                    } else {
+	                        nodoElement = addText(nodoElement,valorCampo);
+	                    }
                     }
                 }
             }
@@ -787,7 +855,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
     /*
       Postea los documentos "xmlIni" y "xmlFin" a través de la "url"
     */
-    private boolean enviarDocumentosXMLSisTra(String url, String xmlIni, String xmlFin, String nomParam1, String nomParam2) {
+    private boolean enviarDocumentosXMLSisTra(String url, String xmlIni, String xmlFin, String guardarSinTerminar, String nomParam1, String nomParam2, String nomParam3) {
         log.debug("http post a " + url);
         HttpClient cliente = new HttpClient();
         PostMethod post = new PostMethod(url);
@@ -795,6 +863,8 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
         post.getParams().setContentCharset("UTF-8");
         post.addParameter(nomParam1, xmlIni);
         post.addParameter(nomParam2, xmlFin);
+        post.addParameter(nomParam3, guardarSinTerminar);
+        
         try {
             int estado = cliente.executeMethod(post);
             if (estado != HttpStatus.SC_OK) {
@@ -866,20 +936,6 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
         return sb.toString();
     }
 
-    /*
-      CallBack method ejbRemove() para liberar los recursos, entre ellos la sesión.
-    */
-    public void ejbRemove() {
-        try {
-            super.ejbRemove();
-            datosTramite.clear();
-            propiedadesForm.clear();
-            docXMLConfig = null;
-            docXMLIni = null;
-        } finally {
-            log.debug("fin ejbRemove():" + this.getClass().getName());
-        }
-    }
-    
+   
    
 }

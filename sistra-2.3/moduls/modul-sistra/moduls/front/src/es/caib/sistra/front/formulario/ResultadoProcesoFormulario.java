@@ -9,6 +9,8 @@ public class ResultadoProcesoFormulario implements Serializable
 	private DocumentoFront formulario;
 	private String xmlInicial;
 	private String xmlActual;
+	private boolean guardadoSinFinalizar;
+	
 	public String getXmlActual()
 	{
 		return xmlActual;
@@ -32,6 +34,12 @@ public class ResultadoProcesoFormulario implements Serializable
 	public void setFormulario(DocumentoFront formulario)
 	{
 		this.formulario = formulario;
+	}
+	public boolean isGuardadoSinFinalizar() {
+		return guardadoSinFinalizar;
+	}
+	public void setGuardadoSinFinalizar(boolean guardadoSinFinalizar) {
+		this.guardadoSinFinalizar = guardadoSinFinalizar;
 	}
 	
 }

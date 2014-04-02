@@ -50,9 +50,9 @@ public class InstanciaTelematicaLocalDelegate extends InstanciaLocalDelegate imp
         }
     }
 
-    public String tramitarFormulario() throws DelegateException {
+    public String tramitarFormulario(boolean guardarSinTerminar) throws DelegateException {
         try {
-           return ((InstanciaTelematicaProcessorLocal) local).tramitarFormulario();
+           return ((InstanciaTelematicaProcessorLocal) local).tramitarFormulario(guardarSinTerminar);
         } catch (EJBException e) {
             throw new DelegateException(e);
         }
@@ -74,6 +74,13 @@ public class InstanciaTelematicaLocalDelegate extends InstanciaLocalDelegate imp
         }
     }
     
+    public  boolean permitirGuardarSinTerminar() throws DelegateException{
+        try {
+           return ((InstanciaTelematicaProcessorLocal) local).permitirGuardarSinTerminar();
+        } catch (EJBException e) {
+            throw new DelegateException(e);
+        }
+    }
 
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

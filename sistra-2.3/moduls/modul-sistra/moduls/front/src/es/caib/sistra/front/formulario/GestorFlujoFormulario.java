@@ -50,9 +50,10 @@ public interface GestorFlujoFormulario extends Storable
 	 * 
 	 * @param xmlInicial XML con los datos originales
 	 * @param xmlActual XML con los nuevos datos
+	 * @param guardadoSinFinalizar Indica si se ha guardado el formulario sin finalizar
 	 * @return Devuelve el token al sistema de rellenado de formularios para que pueda redirigir el navegador al sistema de tramitación
 	 */
-	public String guardarDatosFormulario( String xmlInicial, String xmlActual );
+	public String guardarDatosFormulario( String xmlInicial, String xmlActual, boolean guardadoSinFinalizar );
 	
 	/**
 	 * Una vez guardado el formulario desde el sistema de rellenado de formularios se redirige el navegador al sistema de tramitación 

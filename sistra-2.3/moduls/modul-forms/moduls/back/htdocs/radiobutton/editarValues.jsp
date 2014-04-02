@@ -17,6 +17,13 @@
     <td class="labela" colspan="2"><bean:message key="ayuda.nombrelogico"/></td>
 </tr>
 <tr>
+    <td class="label"><bean:message key="componente.pdf"/></td>
+    <td class="input"><html:text styleClass="text" tabindex="<%=Integer.toString(ti++)%>" property="values.etiquetaPDF" maxlength="128" /></td>
+</tr>
+<tr>
+    <td class="labela" colspan="2"><bean:message key="ayuda.etiquetaPDF"/></td>
+</tr>
+<tr>
     <td class="label"><bean:message key="componente.posicion"/></td>
     <td class="input">
     <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.posicion">
@@ -59,16 +66,16 @@
     </td>
 </tr>
 <tr>
+    <td class="label"><bean:message key="componente.orientacion"/></td>
+    <td class="input">
+    <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.orientacion">
+        <html:option value="H"><bean:message key="componente.orientacion.horizontal" /></html:option>
+        <html:option value="V"><bean:message key="componente.orientacion.vertical" /></html:option>        
+    </html:select>
+</tr>
+<tr>
     <td class="labela" colspan="2"><bean:message key="ayuda.posicion"/></td>
 </tr>
-<tr>
-    <td class="label"><bean:message key="componente.pdf"/></td>
-    <td class="input"><html:text styleClass="text" tabindex="<%=Integer.toString(ti++)%>" property="values.etiquetaPDF" maxlength="128" /></td>
-</tr>
-<tr>
-    <td class="labela" colspan="2"><bean:message key="ayuda.etiquetaPDF"/></td>
-</tr>
-
 
 <!--  INDRA: PROPIEDADES PARA CAMPOS DE PANTALLAS DE DETALLE DE LISTA DE ELEMENTOS -->
 <logic:equal name="radiobuttonForm" property="pantallaDetalle" value="true">

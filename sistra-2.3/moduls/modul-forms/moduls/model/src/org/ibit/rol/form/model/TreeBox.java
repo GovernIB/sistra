@@ -25,17 +25,7 @@ public class TreeBox extends Campo {
     public boolean isIndexed() {
         return true;
     }
-    
-    private boolean seleccionMultiple;
-    
-	public boolean isSeleccionMultiple() {
-		return seleccionMultiple;
-	}
-
-	public void setSeleccionMultiple(boolean seleccionMultiple) {
-		this.seleccionMultiple = seleccionMultiple;
-	}
-	
+       
 	private boolean expandirTree;
 
 	public boolean isExpandirTree() {

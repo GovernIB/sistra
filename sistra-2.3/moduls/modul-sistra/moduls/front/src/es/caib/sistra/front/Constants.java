@@ -48,6 +48,7 @@ public class Constants implements Serializable {
     public static final String GESTOR_FORM_PARAM_TOKEN_LLAMADA = "ID_INSTANCIA";
     public static final String GESTOR_FORM_PARAM_XML_DATOS_INI="xmlInicial";
     public static final String GESTOR_FORM_PARAM_XML_DATOS_FIN="xmlFinal";
+    public static final String GESTOR_FORM_PARAM_XML_SIN_TERMINAR="sinTerminar";
     public static final String GESTOR_FORM_PARAM_TOKEN_RETORNO="TOKEN";
             
     

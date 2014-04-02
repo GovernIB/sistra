@@ -101,16 +101,22 @@
 <nav id="imc-navegacio" class="imc-navegacio imc-nav">
 	<ul>
 	
-			<li>
+			<li class="imc-nav-abandona">
 				<a href="javascript:discard()" class="imc-nav-abandona" title="<bean:message bundle="caibMessages" key="boton.cancelar"/>" onfocus="this.blur()"><bean:message bundle="caibMessages" key="boton.cancelar"/></a>
 			</li>
 			
-			<li>
-				<!-- Reservado guardar formulario -->
-				<span>&nbsp;</span>
+			<li class="imc-nav-desa">
+				<logic:equal name="saveButton" value="true">
+					<a href="javascript:save()" class="imc-nav-desa" title="<bean:message bundle="caibMessages" key="boton.save"/>" onfocus="this.blur()">
+						<bean:message bundle="caibMessages" key="boton.saveTextV2"/>
+					</a>					
+				</logic:equal>
+				<logic:equal name="saveButton" value="false">
+					<span>&nbsp;</span>					
+				</logic:equal>
 			</li>
 			
-			<li>
+			<li class="imc-nav-anterior">
 			<logic:equal name="backButton" value="true">
 				<a href="javascript:back()" class="imc-nav-anterior" title="<bean:message bundle="caibMessages" key="boton.back"/>" onfocus="this.blur()">
 					<bean:message bundle="caibMessages" key="boton.backTextV2"/>
@@ -121,11 +127,14 @@
 			</logic:equal>
 			</li>
 		
-			<li>	
+			
 			<logic:equal name="endButton" value="true">
-				<a href="javascript:next()" class="imc-nav-finalitza" title="<bean:message bundle="caibMessages" key="boton.terminar"/>" onfocus="this.blur()"><bean:message bundle="caibMessages" key="boton.terminar"/></a>			
+			<li class="imc-nav-finalitza">	
+				<a href="javascript:next()" class="imc-nav-finalitza" title="<bean:message bundle="caibMessages" key="boton.terminar"/>" onfocus="this.blur()"><bean:message bundle="caibMessages" key="boton.terminar"/></a>
+			</li>			
 			</logic:equal>
-			<logic:equal name="endButton" value="false">							
+			<logic:equal name="endButton" value="false">
+			<li class="imc-nav-seguent">								
 				<logic:equal name="nextButton" value="true">
 					<a href="javascript:next()" class="imc-nav-seguent" title="<bean:message bundle="caibMessages" key="boton.next" />" onfocus="this.blur()">
 						<bean:message bundle="caibMessages" key="boton.nextTextV2"/>
@@ -134,8 +143,9 @@
 				<logic:equal name="nextButton" value="false">							
 					<span>&nbsp;</span>		
 				</logic:equal>	
-			</logic:equal>
 			</li>
+			</logic:equal>
+			
 	</ul>			
 </nav>
 <%-- Botonera pagina detalle --%>

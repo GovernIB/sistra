@@ -20,7 +20,7 @@ public interface InstanciaDelegate extends Delegate
 	RespuestaFront anteriorPaso() throws DelegateException;
 	RespuestaFront irAPaso(int paso) throws DelegateException;
 	RespuestaFront irAFormulario(String identificador,int instancia) throws DelegateException;
-	RespuestaFront guardarFormulario(String identificador,int instancia,String datosAnteriores,String datosNuevos) throws DelegateException;
+	RespuestaFront guardarFormulario(String identificador,int instancia,String datosAnteriores,String datosNuevos, boolean guardadoSinFinalizar) throws DelegateException;
 	RespuestaFront borrarAnexo(String identificador,int instancia) throws DelegateException;
 	RespuestaFront uploadAnexo(String identificador,int instancia,byte[] datosDocumento,String nomFichero,String extension, String descPersonalizada) throws DelegateException;
 	RespuestaFront downloadAnexo(String identificador,int instancia) throws DelegateException;

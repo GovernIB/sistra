@@ -27,6 +27,7 @@ public class DocumentoNivel extends Traducible {
      private byte[] formularioValidacionPostFormScript;
      private byte[] formularioModificacionPostFormScript;
      private byte[] formularioPlantillaScript;
+     private char formularioGuardarSinTerminar='N';
      private byte[] pagoCalcularPagoScript;
      private char pagoMetodos='A';
      private String pagoPlugin = ".";
@@ -217,6 +218,14 @@ public class DocumentoNivel extends Traducible {
 
 	public void setPagoPlugin(String pagoPlugin) {
 		this.pagoPlugin = pagoPlugin;
+	}
+
+	public char getFormularioGuardarSinTerminar() {
+		return formularioGuardarSinTerminar;
+	}
+
+	public void setFormularioGuardarSinTerminar(char formularioGuardarSinTerminar) {
+		this.formularioGuardarSinTerminar = formularioGuardarSinTerminar;
 	}
 
 	

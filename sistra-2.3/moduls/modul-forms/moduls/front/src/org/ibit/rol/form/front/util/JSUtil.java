@@ -1,10 +1,12 @@
 package org.ibit.rol.form.front.util;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 //import org.apache.struts.util.ResponseUtils;
 import org.ibit.rol.form.front.json.JSONArray;
@@ -68,6 +70,7 @@ public final class JSUtil {
         if (strValue != null) {
           //  INDRA: BUG HAY QUE HACER EL ESCAPE DE COMILLAS SIMPLE 		
           //  strValue = ResponseUtils.filter(strValue);  El filter cambia ' por la entidad html (#--;)
+        	strValue = StringUtils.replace(strValue, "\\", "\\\\");
         	strValue = StringUtils.replace(strValue, "'", "\\'");
         }
 
@@ -104,6 +107,7 @@ public final class JSUtil {
 
             // INDRA: BUG HAY QUE HACER EL ESCAPE DE COMILLAS SIMPLE
             if (strValue != null) {
+              strValue = StringUtils.replace(strValue, "\\", "\\\\");
 	          strValue = StringUtils.replace(strValue, "'", "\\'");
 	        }
             
@@ -195,11 +199,28 @@ public final class JSUtil {
      * @return
      */
     public static String escapeStringToJS(String expression){
-	    
+	    /*
+    	expression = StringUtils.replace(expression, "\\", "\\\\'");
     	expression = StringUtils.replace(expression, "'", "\\'");
     	expression = StringUtils.replace(expression, "\n", "\\n");
     	expression = StringUtils.replace(expression, "\r", "\\r");
+    	*/
     	
-    	return "'"+expression+"'";
+    	return "'" + StringEscapeUtils.escapeJavaScript(expression) + "'";
     }
+    
+    /**
+     * Dado una lista de strings devuelve el string normalizado (saltos línea, etc.) en formato 'eval('array') 
+     * @param results
+     * @return
+     */
+    public static String escapeStringArrayToJS(List results){
+    	JSONArray array = new JSONArray();
+        for (int i = 0; i < results.size(); i++) {
+            array.put((String) results.get(i));
+        }	
+        String resultStr = "eval('" + StringEscapeUtils.escapeJavaScript(array.toString()) + "')";
+        return resultStr;
+    }
+    
 }

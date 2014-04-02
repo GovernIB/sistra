@@ -79,23 +79,24 @@ public class VerPantallaController extends BaseController {
 
         // Propiedades del formulario en el caso de que sea telemático
         boolean mostrarPantallaFin = true;
+        boolean mostrarBotonGuardar = Boolean.valueOf(!telematic);
         if (telematic) {
             InstanciaTelematicaDelegate itd = (InstanciaTelematicaDelegate) delegate;
             Map propiedadesForm = itd.obtenerPropiedadesFormulario();
             request.setAttribute("propiedadesForm", propiedadesForm);
-            
             try{
         		mostrarPantallaFin = (propiedadesForm.get("pantallaFin.mostrar")!=null?Boolean.parseBoolean((String)propiedadesForm.get("pantallaFin.mostrar")):false);
         	}catch (Exception ex){
         		log.error("La propiedad pantallaFin.mostrar no tiene un valor válido (true/false): " + propiedadesForm.get("pantallaFin.mostrar"));
         		mostrarPantallaFin = false;
         	}
+        	mostrarBotonGuardar = itd.permitirGuardarSinTerminar();
         }
 
         // Botones que van a salir: distinguimos pantalla normal y pantalla detalle de lista
         if (StringUtils.isEmpty(pantalla.getComponenteListaElementos())){
         	// Pantalla normal
-	        request.setAttribute("saveButton", Boolean.valueOf(!telematic));
+	        request.setAttribute("saveButton", mostrarBotonGuardar);
 	        request.setAttribute("discardButton", Boolean.TRUE);
 	        request.setAttribute("backButton", Boolean.valueOf(!pantalla.isInicial()));
 	        request.setAttribute("nextButton", new Boolean(!pantalla.isUltima() || mostrarPantallaFin));

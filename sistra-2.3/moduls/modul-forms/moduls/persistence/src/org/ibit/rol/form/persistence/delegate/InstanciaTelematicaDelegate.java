@@ -12,10 +12,12 @@ public interface InstanciaTelematicaDelegate extends InstanciaDelegate {
 
     String obtenerLayOut() throws DelegateException;
 
-    String tramitarFormulario() throws DelegateException;
+    String tramitarFormulario(boolean guardarSinTerminar) throws DelegateException;
 
     String cancelarFormulario() throws DelegateException;
     
     String obtenerUrlSistraMantenimientoSesion()  throws DelegateException;
+    
+    boolean permitirGuardarSinTerminar() throws DelegateException;
     
 }

@@ -30,6 +30,7 @@
         <subclass name="org.ibit.rol.form.model.Label" discriminator-value="label">
             <property name="estilo" length="128" column="COM_ESTILO"/>
             <property name="encuadrarCabecera" column="COM_CUACAB"/>
+            <property name="tipoEtiqueta" column="COM_LBLTIPO"/>
             <map name="traducciones" cascade="all" table="RFR_TRALAB">
                 <cache usage="read-write"/>
                 <key column="TRL_CODLAB" foreign-key="RFR_LABTRA_FK"/>
@@ -86,6 +87,7 @@
                     <property name="nombre" length="256" not-null="true" column="TRC_NOMBRE"/>
                     <property name="ayuda" length="4000" column="TRC_AYUDA"/>
                     <property name="mensajeValidacion" length="256" column="TRC_MENVAL"/>
+                    <property name="placeholder" column="TRC_PLACEH"/>
                 </composite-element>
             </map>
 
@@ -100,23 +102,23 @@
                 <property name="tipoTexto" column="COM_TXTIPO"/>
                 <property name="filas" column="COM_FILAS"/>
                 <property name="columnas" column="COM_COLUMN"/>
-                <property name="multilinea" column="COM_MULTIL"/>
+                <property name="multilinea" column="COM_MULTIL"/>               
             </subclass>
             
             <subclass name="org.ibit.rol.form.model.Captcha" discriminator-value="captcha"/>                
 
             <subclass name="org.ibit.rol.form.model.ComboBox" discriminator-value="combobox">
                 <property name="obligatorio" column="COM_OBLIGA"/>
+                <property name="indiceAlfabetico" column="COM_LDEIND"/>
             </subclass>
 
             <subclass name="org.ibit.rol.form.model.ListBox" discriminator-value="listbox">
                 <property name="altura" column="COM_ALTURA"/>
-                <property name="seleccionMultiple" column="COM_SELMUL"/>
+                <property name="seleccionMultiple" column="COM_SELMUL"/>                 
             </subclass>
 
             <subclass name="org.ibit.rol.form.model.TreeBox" discriminator-value="treebox">
                 <property name="altura" column="COM_ALTURA"/>
-                <property name="seleccionMultiple" column="COM_SELMUL"/>
                 <property name="expandirTree" column="COM_EXTREE"/>
             </subclass>
 
@@ -125,6 +127,7 @@
             </subclass>
 
             <subclass name="org.ibit.rol.form.model.RadioButton" discriminator-value="radiobutton">
+            	 <property name="orientacion" column="COM_ORIENT"/>            	
             </subclass>
 
             <subclass name="org.ibit.rol.form.model.FileBox" discriminator-value="filebox">

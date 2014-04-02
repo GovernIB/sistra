@@ -1599,7 +1599,7 @@ public class TramiteProcessorEJB implements SessionBean {
      * @ejb.interface-method    
      * @ejb.permission role-name="${role.todos}"
      */
-    public RespuestaFront guardarFormulario(String identificador,int instancia,String datosAnteriores,String datosNuevos) {
+    public RespuestaFront guardarFormulario(String identificador,int instancia,String datosAnteriores,String datosNuevos, boolean guardadoSinFinalizar) {
     	try{	
     		
     		// Comprobamos que estamos en el paso de rellenar
@@ -1653,10 +1653,11 @@ public class TramiteProcessorEJB implements SessionBean {
 	    		if (StringUtils.isEmpty(plantilla)) plantilla = null;
 	    	}
 	    	datosFormNuevos.setPlantilla(plantilla);
-	    	    	
+	    	
 	    	// Realizamos validacion post (blindamos para que en caso de fallo no impida proceso salvado)
+	    	// No se debe realizar si se guarda sin finalizar
 	    	ProcessorException errorValidacion = null;  	    	
-    		if (docNivel.getFormularioValidacionPostFormScript() != null && docNivel.getFormularioValidacionPostFormScript().length > 0){	    				    		
+    		if (!guardadoSinFinalizar && docNivel.getFormularioValidacionPostFormScript() != null && docNivel.getFormularioValidacionPostFormScript().length > 0){	    				    		
 	    		try{
 	    			this.evaluarScript(docNivel.getFormularioValidacionPostFormScript(),null);
 	    		}catch(ProcessorException pe){		    
@@ -1666,12 +1667,12 @@ public class TramiteProcessorEJB implements SessionBean {
     		}	    	
 	    	
 	    	// Establecemos estado formulario
-	    	docPad.setEstado(errorValidacion != null?DocumentoPersistentePAD.ESTADO_INCORRECTO:DocumentoPersistentePAD.ESTADO_CORRECTO);
+	    	docPad.setEstado((errorValidacion != null || guardadoSinFinalizar)?DocumentoPersistentePAD.ESTADO_INCORRECTO:DocumentoPersistentePAD.ESTADO_CORRECTO);
 	    		    	
-	    	// Una vez establecidos datos documento actual y si no hay error de validación ejecutamos script
+	    	// Una vez establecidos datos documento actual, si se finalizado el formulario y si no hay error de validación ejecutamos script
 	    	// de modificación de otros formularios
     		List formulariosModificados = new ArrayList();
-    		if (errorValidacion == null && 
+    		if (!guardadoSinFinalizar && errorValidacion == null && 
     			docNivel.getFormularioModificacionPostFormScript() != null && docNivel.getFormularioModificacionPostFormScript().length > 0){	    				    			    		
     			this.evaluarScript(docNivel.getFormularioModificacionPostFormScript(),null,formulariosModificados);	    		
     		}    	
@@ -1716,7 +1717,6 @@ public class TramiteProcessorEJB implements SessionBean {
 		    		}
 	    		}
 	    		// Documentos firmados o en caso de que se haya modificado el firmante
-	    		
 	    		if (docInfo.isFirmar() && (docInfo.isFirmado() || docInfo.isPendienteFirmaDelegada())){
 	    			if (!verificarFirmantesDocumento(docInfo)){
 	    				anexosParaBorrar.add(docInfo.getIdentificador() + "-" + docInfo.getInstancia());
@@ -4238,6 +4238,7 @@ public class TramiteProcessorEJB implements SessionBean {
 		docInfo.setPrerregistro( doc.getFormularioPreregistro() == 'S' );
 		docInfo.setFormularioJustificante( doc.getFormularioJustificante() == 'S' );
 		docInfo.setFormularioAnexarJustificante( doc.getFormularioAnexarJustificante() == 'S' );
+		docInfo.setFormularioGuardarSinTerminar(docNivel.getFormularioGuardarSinTerminar() == 'S' );
 		
 		// Evaluamos quien debe completar el documento
 		String nifFlujo="",formulariosFlujo="";

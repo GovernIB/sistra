@@ -27,6 +27,9 @@
     <property name="formularioValidacionPostFormScript" type="binary" column="DNV_FORPOS"/>
     <property name="formularioModificacionPostFormScript" type="binary" column="DNV_FORMOD"/>
     <property name="formularioPlantillaScript" type="binary" column="DNV_FORPLA"/>
+    <!-- 
+    <property name="formularioGuardarSinTerminar" column="DNV_FORGUA" length="1"/>
+     -->
     <property name="pagoCalcularPagoScript" type="binary" column="DNV_PAGDAT"/>
     <property name="pagoMetodos" column="DNV_PAGTIP" length="1"/>
     <property name="pagoPlugin" column="DNV_PAGPLG" length="50"/>

@@ -144,6 +144,15 @@
 		
     </td>
 </tr>
+<!-- 
+<tr>
+    <td class="label"><bean:message key="documentoNivel.formularioGuardarSinTerminar"/></td>
+    <td class="input">
+    	<bean:message key="afirmacion"/><html:radio property="values.formularioGuardarSinTerminar" value="S"/> 
+    	<bean:message key="negacion"/><html:radio property="values.formularioGuardarSinTerminar" value="N"/>     
+    </td>
+</tr>
+ -->
 <tr>
     <td class="label"><bean:message key="documentoNivel.formularioDatosInicialesScript"/></td>
     <td class="input"><html:textarea styleClass="text" tabindex="10" property="formularioDatosInicialesScript"/><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=formularioDatosInicialesScript&titulo=documentoNivel.formularioDatosInicialesScript" %>');"/></td>

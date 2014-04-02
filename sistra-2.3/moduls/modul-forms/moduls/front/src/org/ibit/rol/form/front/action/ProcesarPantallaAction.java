@@ -72,21 +72,17 @@ public class ProcesarPantallaAction extends BaseAction {
 
         if (isCancelled(request)) {
             if (request.getParameter("SAVE") != null) { // Es guardar
-
-                if (telematic) {
-                    log.warn("El formulari telemàtic no soporta guardar");
+            	
+            	// Guardamos datos actuales del formulario para continuar en otro momento
+            	try {
+                    String redirectUrl = ((InstanciaTelematicaDelegate) delegate).tramitarFormulario(true);
+                    response.reset();
+                    response.sendRedirect(redirectUrl);
+                    response.flushBuffer();
                     return null;
+                } finally {
+                    RegistroManager.desregistrarInstancia(request);
                 }
-
-                InstanciaBean bean = delegate.obtenerInstanciaBean();
-
-                // Metemos el bean en un array de bytes.
-                ByteArrayOutputStream result = new ByteArrayOutputStream();
-                InstanciaZipCodec.encodeInstancia(bean, result);
-
-                // Enviamos el resultado.
-                sendFile(response, "saveform.zip", "application/octet-stream", result.toByteArray());
-                return null;
 
             } else if (request.getParameter("DISCARD") != null) {
 
