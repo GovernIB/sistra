@@ -20,8 +20,10 @@ public class DominioForm extends TraForm implements InitForm
 
 	protected static Log log = LogFactory.getLog(DominioForm.class);
 	private Long idOrgano = null;
-	
+		
 	private String userPlain,passPlain;
+	
+	private String sqlHex;
 	
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
 	{
@@ -42,7 +44,7 @@ public class DominioForm extends TraForm implements InitForm
         	
         	// Si el dominio es de tipo SQL / Fuente datos se debe especificar la SQL
         	if ( (dominio.getTipo() == Dominio.DOMINIO_SQL || dominio.getTipo() == Dominio.DOMINIO_FUENTE_DATOS) 
-        			&& Util.esCadenaVacia(dominio.getSql())){
+        			&& Util.esCadenaVacia(sqlHex)){
         		errors.add("values.sql", new ActionError("errors.dominio.sqlVacia"));
         	}
         	
@@ -105,6 +107,14 @@ public class DominioForm extends TraForm implements InitForm
 
 	public void setUserPlain(String userPlain) {
 		this.userPlain = userPlain;
+	}
+
+	public String getSqlHex() {
+		return sqlHex;
+	}
+
+	public void setSqlHex(String sqlHex) {
+		this.sqlHex = sqlHex;
 	}
 	
 }

@@ -47,6 +47,8 @@ request.setAttribute( "form.beanName", bean );
    <link rel="stylesheet" href='<html:rewrite page="/css/styleA.css"/>' type="text/css" />
    <script src="<html:rewrite page='/moduls/staticJs.jsp'/>" type="text/javascript"></script>
    <script src="<html:rewrite page='/moduls/funcions.js'/>" type="text/javascript"></script>
+   <script src="<html:rewrite page='/js/encode.js'/>" type="text/javascript"></script>
+   <script src="<html:rewrite page='/js/jquery-1.9.1.min.js'/>" type="text/javascript"></script>
    <script type="text/javascript">
    <!--
         function reload(lang) {
