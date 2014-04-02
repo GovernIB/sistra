@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
@@ -250,6 +251,11 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
                 return null;
             }
             String token= method.getResponseBodyAsString();
+            
+            // Verificamos que el token sea valido (q no se devuelva pagina error, etc.)
+            if (StringUtils.isBlank(token) || !Pattern.matches("[a-zA-Z0-9\\-_]{1,100}", token)) {
+            	throw new Exception("Token no valido: " + token);
+            }
             
             // Almacena en el gestor de formularios el formulario inicial
             ResultadoProcesoFormulario resultado = new ResultadoProcesoFormulario();
