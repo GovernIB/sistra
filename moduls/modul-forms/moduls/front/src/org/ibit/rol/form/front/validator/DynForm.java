@@ -1,12 +1,15 @@
 package org.ibit.rol.form.front.validator;
 
 import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.validator.Arg;
 import org.apache.commons.validator.Field;
 import org.apache.commons.validator.Form;
+import org.ibit.rol.form.front.util.UtilFrontV2;
 import org.ibit.rol.form.model.Campo;
 import org.ibit.rol.form.model.Mascara;
 import org.ibit.rol.form.model.Pantalla;
@@ -32,7 +35,17 @@ public class DynForm extends Form {
             field.setProperty(campo.getNombreLogico());
 
             Arg arg0 = new Arg();
-            arg0.setKey(((TraCampo) campo.getTraduccion()).getNombre());
+            
+            // INDRA: QUITAMOS HTML DEL TEXTO Y COMILLAS DOBLES
+            // TODO SE PODRIA DAR NUEVO CAMPO EN TRADUCCION LABEL PARA CAMPOS CON HTML
+            //arg0.setKey(((TraCampo) campo.getTraduccion()).getNombre());
+            String etiquetaCampo = ((TraCampo) campo.getTraduccion()).getNombre();
+            String htmlEtiqueta = UtilFrontV2.generaHtmlEtiqueta(etiquetaCampo);
+            String key = removeTags(htmlEtiqueta);
+            key = key.replaceAll("\"", "");
+            arg0.setKey(key);
+            
+            
             arg0.setResource(false);
             field.addArg0(arg0);
 
@@ -85,6 +98,16 @@ public class DynForm extends Form {
             field.setDepends(depends);
             addField(field);
         }
+    }
+    
+    private static final Pattern REMOVE_TAGS = Pattern.compile("<.+?>");
+
+    private String removeTags(String string) {
+        if (string == null || string.length() == 0) {
+            return string;
+        }
+        Matcher m = REMOVE_TAGS.matcher(string);
+        return m.replaceAll("");
     }
 
 }

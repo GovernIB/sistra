@@ -164,12 +164,12 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 	}
 
 	public RespuestaFront guardarFormulario(String identificador,
-			int instancia, String datosAnteriores, String datosNuevos)
+			int instancia, String datosAnteriores, String datosNuevos, boolean guardadoSinFinalizar)
 			throws DelegateException
 	{
         try 
         {
-        	return getRemote().guardarFormulario( identificador, instancia, datosAnteriores, datosNuevos );
+        	return getRemote().guardarFormulario( identificador, instancia, datosAnteriores, datosNuevos, guardadoSinFinalizar );
         } 
         catch (RemoteException e) 
         {

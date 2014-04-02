@@ -131,6 +131,19 @@ public class Label extends Traducible implements Componente {
 		this.encuadrarCabecera = encuadrarCabecera;
 	}
 
+	/**
+	 * Tipo etiqueta: NORMAL (NO) / INFORMACION (IN) / ALERTA (AL) / ERROR (ER).
+	 */
+	private String tipoEtiqueta = "NO";
+
+	public String getTipoEtiqueta() {
+		return tipoEtiqueta;
+	}
+
+	public void setTipoEtiqueta(String tipoEtiqueta) {
+		this.tipoEtiqueta = tipoEtiqueta;
+	}
+		
    // -- INDRA: AÑADIR PROPS MEJORA VISUAL FORMS V3
 
 }

@@ -39,6 +39,7 @@ public class RecepcioFormServlet extends HttpServlet
         String tokenGestionFormulario = "";
         String xmlInicial = "";
         String xmlFinal = "";
+        String sinFinalizar = "";
         if (FileUpload.isMultipartContent(request)) {
             try {
                 DiskFileUpload fileUpload = new DiskFileUpload();
@@ -74,14 +75,16 @@ public class RecepcioFormServlet extends HttpServlet
         } else {
             xmlInicial 	= request.getParameter("xmlInicial");
             xmlFinal 	= request.getParameter("xmlFinal");
+            sinFinalizar= request.getParameter("sinTerminar");
             tokenGestionFormulario = request.getParameter( Constants.GESTOR_FORM_PARAM_ALMACENAMIENTO_GESTOR_FORMULARIO );
         }
 
         logger.debug( "DEBUGFORM: RecepcioFormServlet - id gestor formulario: " + tokenGestionFormulario);
         logger.debug( "DEBUGFORM: RecepcioFormServlet - XML Inicial: " + xmlInicial);
         logger.debug( "DEBUGFORM: RecepcioFormServlet - XML Final: " + xmlFinal);
+        logger.debug( "DEBUGFORM: RecepcioFormServlet - Sin Finalizar: " + sinFinalizar);
         
-    	String token = null;
+        String token = null;
     	String msgError = null;
     	try
     	{
@@ -89,7 +92,7 @@ public class RecepcioFormServlet extends HttpServlet
     		if (gestorFormularios == null) {
     			throw new Exception("No se encuentra gestor de formularios en contexto");
     		}
-    		token = gestorFormularios.guardarDatosFormulario( xmlInicial, xmlFinal );       	
+    		token = gestorFormularios.guardarDatosFormulario( xmlInicial, xmlFinal, "S".equals(sinFinalizar) );       	
     		if (token == null) {
     			msgError = "Error al guadar datos formulario en gestor formulario";
     		}

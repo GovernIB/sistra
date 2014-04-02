@@ -23,7 +23,8 @@
 		<div class="imc-el-control">
 			 <div class="imc-select imc-opcions">			 	
 			 	<a class="imc-select"><span></span></a>
-			 	<html:hidden property="<%=nombre%>" styleId="<%=nombre%>"/>	
+			 	<html:hidden property="<%=nombre%>" styleId="<%=nombre%>"/>
+			 	<div class="imc-select-submenu"> 	
 				<ul>	
 					<li<nested:empty name="pantallaForm" property="<%=nombre%>"> class="imc-select-seleccionat"</nested:empty>>
 						<a data-value="" tabindex="0" href="javascript:;">...</a>
@@ -33,7 +34,8 @@
 							<a data-value="<%=opcion.getValor()%>" tabindex="0" href="javascript:;"><%=((TraValorPosible) opcion.getTraduccion()).getEtiqueta()%></a>
 						</li>				
 					</logic:iterate>
- 				</ul>				
+ 				</ul>	
+ 				</div>			
 			</div>		
 		</div>		
 		<nested:notEmpty property="traduccion.ayuda">
@@ -54,8 +56,7 @@
 				control_readOnly("<%=nombre%>", true);	
 			<% } else { %>
 				// Evento onchange		
-				var el_element = $imc_formulari.find(".imc-el-name-<%=nombre%>:first");			
-				//el_element.find("div.imc-opcions:first").addClass("imc-opcions-no-events").inputSelect({			
+				var el_element = $imc_formulari.find(".imc-el-name-<%=nombre%>:first");										
 				el_element.find("div.imc-opcions:first").inputSelect({
 					alAcabar: function() {
 						setTimeout("onFieldChange(document.getElementById(\"pantallaForm\"), \"<%=nombre%>\")",200);				

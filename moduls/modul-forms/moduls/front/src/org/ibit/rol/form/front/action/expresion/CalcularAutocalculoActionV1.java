@@ -102,12 +102,7 @@ public class CalcularAutocalculoActionV1 extends BaseAction {
         String resultStr;
         if (result instanceof List){
         	// Campos multivaluados: devolvemos array de String
-        	JSONArray array = new JSONArray();
-        	List results = (List) result;
-            for (int i = 0; i < results.size(); i++) {
-                array.put((String) results.get(i));
-            }	
-            resultStr = "eval('" + StringUtils.replace(array.toString(), "'", "\\'") + "')";
+        	resultStr=JSUtil.escapeStringArrayToJS((List) result);
         }else{
         	// Campos monovaluados: devolvemos String normalizando saltos de línea
         	resultStr=JSUtil.escapeStringToJS((String) result);        		

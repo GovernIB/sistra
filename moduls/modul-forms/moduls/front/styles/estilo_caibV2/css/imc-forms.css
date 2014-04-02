@@ -218,6 +218,12 @@ input:focus, textarea:focus {
 	transition: all .3s linear;
 }
 
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+	-webkit-appearance: none; 
+	margin: 0; 
+}
+
 button { overflow:visible; font:normal .8em Arial, Helvetica, sans-serif; color:#000; cursor:pointer; padding:0 .5em; }
 button[disabled] { cursor:default; }
 	button[disabled] span {

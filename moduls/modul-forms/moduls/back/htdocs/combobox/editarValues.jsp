@@ -18,6 +18,13 @@
     <td class="labela" colspan="2"><bean:message key="ayuda.nombrelogico"/></td>
 </tr>
 <tr>
+    <td class="label"><bean:message key="componente.pdf"/></td>
+    <td class="input"><html:text styleClass="text" tabindex="<%=Integer.toString(ti++)%>" property="values.etiquetaPDF" maxlength="128" /></td>
+</tr>
+<tr>
+    <td class="labela" colspan="2"><bean:message key="ayuda.etiquetaPDF"/></td>
+</tr>
+<tr>
     <td class="label"><bean:message key="componente.posicion"/></td>
     <td class="input">
     <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.posicion">
@@ -63,28 +70,17 @@
     <td class="labela" colspan="2"><bean:message key="ayuda.posicion"/></td>
 </tr>
 <tr>
-    <td class="label"><bean:message key="componente.pdf"/></td>
-    <td class="input"><html:text styleClass="text" tabindex="<%=Integer.toString(ti++)%>" property="values.etiquetaPDF" maxlength="128" /></td>
-</tr>
-<tr>
-    <td class="labela" colspan="2"><bean:message key="ayuda.etiquetaPDF"/></td>
-</tr>
-<!-- 
-<tr>
-    <td class="label"><bean:message key="componente.tipovalor"/></td>
+    <td class="label"><bean:message key="combobox.indiceAlfabetico"/></td>
     <td class="input">
-        <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.tipoValor" >
-            <html:option value="java.lang.String"><bean:message key="componente.java.lang.String" /></html:option>
-            <html:option value="java.lang.Integer"><bean:message key="componente.java.lang.Integer" /></html:option>
-            <html:option value="java.lang.Float"><bean:message key="componente.java.lang.Float" /></html:option>
-            <html:option value="org.ibit.rol.form.model.Archivo"><bean:message key="componente.Archivo" /></html:option>
-        </html:select>
+    <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.indiceAlfabetico">
+        <html:option value="true"><bean:message key="afirmacion" /></html:option>
+        <html:option value="false"><bean:message key="negacion" /></html:option>                
+    </html:select>
     </td>
 </tr>
 <tr>
-    <td class="labela" colspan="2"><bean:message key="ayuda.tipoValor"/></td>
+    <td class="labela" colspan="2"><bean:message key="ayuda.indiceAlfabetico"/></td>
 </tr>
- -->
 <tr>
     <td class="label"><bean:message key="componente.obligatorio"/></td>
     <td class="input"><html:checkbox styleClass="check" tabindex="<%=Integer.toString(ti++)%>" property="values.obligatorio" /></td>

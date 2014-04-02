@@ -4,7 +4,41 @@
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <html:xhtml/>
-<% int ti = 1; %>
+<script type="text/javascript">
+    <!--      
+    // Ajusta valores minimos colspan
+    function ajustarColspan() {
+       	var tipoTextoSelect = document.getElementById("tipoEtiqueta");
+       	var tipoTexto = tipoTextoSelect.options[tipoTextoSelect.selectedIndex].value;
+       	var colspanSelect = document.getElementById("colSpan");
+       	var colspan = colspanSelect.options[colspanSelect.selectedIndex].value;
+       	
+		var minColSpan = 1;
+		
+		// Si no es texto normal, debe ocupar toda la linea
+		if (tipoTexto != "NO") { 
+			minColSpan = 6;	       	        	
+		} 
+
+        // Reseteamos select colspan
+		while (colspanSelect.length > 0) {
+    	   	colspanSelect.remove(0);
+    	}
+       	for (var i = minColSpan; i <= 6; i++) {
+      	    var opcio = new Option(i, i);
+      	  	colspanSelect.add(opcio);       	        
+      	}	 
+		if (colspan >= minColSpan){
+			colspanSelect.value = colspan;
+		}		          
+   	}
+//-->
+</script>
+<% int ti = 1; int minColSpan = 1; %>
+<logic:notEqual name="labelForm" property="values.tipoEtiqueta" value="NO">
+	<% minColSpan = 6; %>
+</logic:notEqual> 
+
 <html:hidden property="idPantalla" />
 <input type="hidden" name="idOperacion" value="<%=Util.getIdOperacion(request)%>"/>	
 <tr>
@@ -13,6 +47,19 @@
 </tr>
 <tr>
     <td class="labela" colspan="2"><bean:message key="ayuda.nombrelogico"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="label.tipo"/></td>
+    <td class="input">
+    <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.tipoEtiqueta"  styleId="tipoEtiqueta" onchange="ajustarColspan()">
+       <html:option value="NO"><bean:message key="label.tipo.normal" /></html:option>
+        <html:option value="IN"><bean:message key="label.tipo.info" /></html:option>
+        <html:option value="AL"><bean:message key="label.tipo.alerta" /></html:option>
+        <html:option value="ER"><bean:message key="label.tipo.error" /></html:option>
+    </html:select>
+</tr>
+<tr>
+    <td class="labela" colspan="2"><bean:message key="ayuda.tipoEtiqueta"/></td>
 </tr>
 <tr>
     <td class="label"><bean:message key="componente.posicion"/></td>
@@ -27,14 +74,12 @@
 <tr>
     <td class="label"><bean:message key="componente.colSpan"/></td>
     <td class="input">
-    <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.colSpan">
-        <html:option value="1"><bean:message key="componente.colSpan.1" /></html:option>
-        <html:option value="2"><bean:message key="componente.colSpan.2" /></html:option>
-        <html:option value="3"><bean:message key="componente.colSpan.3" /></html:option>
-        <html:option value="4"><bean:message key="componente.colSpan.4" /></html:option>
-        <html:option value="5"><bean:message key="componente.colSpan.5" /></html:option>
-        <html:option value="6"><bean:message key="componente.colSpan.6" /></html:option>
+    <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.colSpan" styleId="colSpan">
+        <% for (int i = minColSpan ; i <= 6; i++) { %>															
+			<html:option value="<%=Integer.toString(i)%>"><bean:message key="<%=\"componente.colSpan.\" + i%>"/></html:option>
+		<% } %>     
     </html:select>
+     - <bean:message key="label.colspan.restriccion"/>
     </td>
 </tr>
 <tr>
@@ -58,9 +103,6 @@
 </tr>
 <tr>
     <td class="labela" colspan="2"><bean:message key="ayuda.posicion"/></td>
-</tr>
-<tr>
-    <td class="labela" colspan="2"><bean:message key="ayuda.estilo"/></td>
 </tr>
 <tr>
     <td class="label"><bean:message key="componente.encuadrar.marcar"/></td>

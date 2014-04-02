@@ -21,6 +21,7 @@
 				<xs:element ref="version"/>
 				<xs:element ref="codigoPerfil" minOccurs="0"/>
 				<xs:element ref="layout" minOccurs="0"/>
+				<xs:element ref="guardarSinTerminar" minOccurs="0"/>				
 				<xs:element ref="urlSisTraOK"/>
 				<xs:element ref="urlRedireccionOK"/>
 				<xs:element ref="urlSisTraCancel"/>
@@ -28,6 +29,7 @@
 				<xs:element ref="urlSisTraMantenimientoSesion"/>				
 				<xs:element ref="nomParamXMLDatosIni"/>
 				<xs:element ref="nomParamXMLDatosFin"/>
+				<xs:element ref="nomParamXMLSinTerminar"/>
 				<xs:element ref="nomParamTokenRetorno"/>
 			</xs:sequence>
 		</xs:complexType>
@@ -35,9 +37,11 @@
 	<xs:element name="idioma" type="xs:string"/>
 	<xs:element name="modelo" type="xs:string"/>
 	<xs:element name="layout" type="xs:string"/>
+	<xs:element name="guardarSinTerminar" type="xs:string"/>
 	<xs:element name="nomParamTokenRetorno" type="xs:string"/>
 	<xs:element name="nomParamXMLDatosFin" type="xs:string"/>
 	<xs:element name="nomParamXMLDatosIni" type="xs:string"/>
+	<xs:element name="nomParamXMLSinTerminar" type="xs:string"/>
 	<xs:element name="urlRedireccionCancel" type="xs:string"/>
 	<xs:element name="urlRedireccionOK" type="xs:string"/>
 	<xs:element name="urlSisTraCancel" type="xs:string"/>

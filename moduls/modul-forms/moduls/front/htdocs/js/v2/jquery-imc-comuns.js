@@ -1,5 +1,6 @@
 ﻿// COMUNS
 
+
 // title
 $.fn.title = function(options) {
 	var settings = $.extend({
@@ -112,6 +113,11 @@ $.fn.submenu = function(options) {
 			if (!tancarAlClicarDins) {
 				var elm = (typeof e === "undefined") ? element : $(e.target);
 				tanca = (elm.closest(".imc-submenu-on").length === 1) ? false : true;
+			} else {
+				var elm = (typeof e === "undefined") ? element : $(e.target);
+				if (elm.closest(".imc-index-alfabet").length) {
+					tanca = false;
+				}
 			}
 			if (tanca) {
 				element.removeClass("imc-select-on");
@@ -701,13 +707,13 @@ $.fn.inputSelect = function(options) {
 				$(this).removeClass("hover");
 			},
 			seleccionat = function() {
-				//alert(seleccionat_input.val());
-				opcions_elm.find("a[data-value=" +seleccionat_input.val()+ "]").parent().addClass("imc-select-seleccionat");
+				//alert(seleccionat_input.val());				
+				opcions_elm.find("a[data-value=\"" +seleccionat_input.val()+ "\"]").parent().addClass("imc-select-seleccionat");
 			};
 			
 		seleccionat();
 		
-		element_a.submenu({ submenu: element_a.closest("div").find("ul:first"), posicio: "position", amplariaIgual: true, tancarAlClicarDins: true });
+		element_a.submenu({ submenu: element_a.closest("div").find(".imc-select-submenu:first"), posicio: "position", amplariaIgual: true, tancarAlClicarDins: true });
 		
 		opcions_elm.off('.inputSelect').on('click.inputSelect', onClick);
 		if(typeof Modernizr !== "undefined" && !Modernizr.cssanimations) {
@@ -937,24 +943,35 @@ $.fn.placeHolder = function(options) {
 	this.each(function(){
 		var element = $(this),
 			placeholder_text = element.attr("placeholder"),
-			onFocus = function() {
-				if (element.hasClass("imc-placeholder-blur")){
-					element.val("").removeClass("imc-placeholder-blur");
+			el_control = element.parent(),
+			el_placeholder_simulat = false,
+			crea = function() {
+				$("<input>")
+					.attr("type", "text")
+					.val(placeholder_text)
+					.addClass("imc-placeholder-simulat")
+					.on('click.placeHolder', onClick)
+					.appendTo( el_control );
+				el_placeholder_simulat = el_control.find(".imc-placeholder-simulat:first")
+			},
+			onClick = function() {
+				el_placeholder_simulat.addClass("imc-placeholder-simulat-off");
+				if (element.hasClass("imc-placeholder-off")){
+					element.val("").removeClass("imc-placeholder-off").focus();
 				}
 			},
 			onBlur = function() {
 				if (element.val() === ""){
-					element.val(element.data("placeHolder")).addClass("imc-placeholder-blur");
-				} else {
-					element.removeClass("imc-placeholder-blur");
+					el_placeholder_simulat.removeClass("imc-placeholder-simulat-off");
+					element.addClass("imc-placeholder-off");
 				}
 			};
+		//
+		crea();
+		//
 		element
-			.val(placeholder_text)
-			.addClass("imc-placeholder-blur")
+			.addClass("imc-placeholder-off")
 			.data("placeHolder", placeholder_text)
-			.off('.placeHolder')
-			.on('focus.placeHolder', onFocus)
 			.on('blur.placeHolder', onBlur);
 	});
 	return this;
@@ -1101,7 +1118,7 @@ $.fn.ajuda = function(opcions) {
 					  type: "POST",
 					  url: "activarAyuda.do",
 					  data: { activar: ("on" == ajuda_data)}
-					});
+					});		
 				
 			},
 			canvia = function() {
@@ -1255,3 +1272,28 @@ function ocultarCapaEnviando() {
 }
 // /ocultarCapaEnviando
 
+
+// normalize
+var normalize = (function() {
+	
+  var from = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç",
+      to   = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc",
+      mapping = {};
+ 
+  for(var i = 0, j = from.length; i < j; i++ )
+      mapping[ from.charAt( i ) ] = to.charAt( i );
+ 
+  return function( str ) {
+      var ret = [];
+      for( var i = 0, j = str.length; i < j; i++ ) {
+          var c = str.charAt( i );
+          if( mapping.hasOwnProperty( str.charAt( i ) ) )
+              ret.push( mapping[ c ] );
+          else
+              ret.push( c );
+      }
+      return ret.join( '' );
+  }
+ 
+})();
+// /normalize

@@ -18,6 +18,13 @@
     <td class="labela" colspan="2"><bean:message key="ayuda.nombrelogico"/></td>
 </tr>
 <tr>
+    <td class="label"><bean:message key="componente.pdf"/></td>
+    <td class="input"><html:text styleClass="data" tabindex="<%=Integer.toString(ti++)%>" property="values.etiquetaPDF" maxlength="128" /></td>
+</tr>
+<tr>
+    <td class="labela" colspan="2"><bean:message key="ayuda.etiquetaPDF"/></td>
+</tr>
+<tr>
     <td class="label"><bean:message key="componente.posicion"/></td>
     <td class="input">
     <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.posicion">
@@ -53,13 +60,6 @@
 </tr>
 <tr>
     <td class="labela" colspan="2"><bean:message key="ayuda.posicion"/></td>
-</tr>
-<tr>
-    <td class="label"><bean:message key="componente.pdf"/></td>
-    <td class="input"><html:text styleClass="data" tabindex="<%=Integer.toString(ti++)%>" property="values.etiquetaPDF" maxlength="128" /></td>
-</tr>
-<tr>
-    <td class="labela" colspan="2"><bean:message key="ayuda.etiquetaPDF"/></td>
 </tr>
 <tr>
     <td class="label"><bean:message key="checkbox.defecto"/></td>

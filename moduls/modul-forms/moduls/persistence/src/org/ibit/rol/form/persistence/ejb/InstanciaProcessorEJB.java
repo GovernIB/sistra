@@ -8,6 +8,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -102,7 +103,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
     protected Stack pilaPantallasAnteriores = new Stack();
     protected Stack pilaDatosAnteriores = new Stack();
 
-    protected Map pantallasDatosPosteriores = new HashMap();
+    protected Map pantallasDatosPosteriores = new LinkedHashMap();
     
     //------------ INDRA ------------------------------------------------------------------------
     // Map de datos de componentes lista (key: referencia componentes / value: List de maps de datos) 

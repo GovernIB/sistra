@@ -153,12 +153,12 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 	}
 
 	public RespuestaFront guardarFormulario(String identificador,
-			int instancia, String datosAnteriores, String datosNuevos)
+			int instancia, String datosAnteriores, String datosNuevos, boolean guardadoSinFinalizar)
 			throws DelegateException
 	{
         try 
         {
-        	return local.guardarFormulario( identificador, instancia, datosAnteriores, datosNuevos );
+        	return local.guardarFormulario( identificador, instancia, datosAnteriores, datosNuevos , guardadoSinFinalizar);
         } 
         catch (EJBException e) 
         {

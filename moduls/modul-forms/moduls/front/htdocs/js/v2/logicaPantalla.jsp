@@ -106,13 +106,16 @@
 		// Prevenimos doble click
 		if (bDobleClick) return;
 		bDobleClick=true;
-		
-	    document.pantallaForm.elements['<%=Constants.CANCEL_PROPERTY%>'].disabled = false;
-	    document.pantallaForm.elements['SAVE'].disabled = false;
-	    document.pantallaForm.elements['DISCARD'].disabled = true;
-	    document.pantallaForm.elements['PANTALLA_ANTERIOR'].disabled = true;
-	    mostrarCapaEnviando(TXT_MSG_ENVIANDO);
-	    document.pantallaForm.submit();
+
+		if ( confirm ( '<bean:message bundle="caibMessages" key="aviso.guardarFormulario" />' ) )
+		{
+		    document.pantallaForm.elements['<%=Constants.CANCEL_PROPERTY%>'].disabled = false;
+		    document.pantallaForm.elements['SAVE'].disabled = false;
+		    document.pantallaForm.elements['DISCARD'].disabled = true;
+		    document.pantallaForm.elements['PANTALLA_ANTERIOR'].disabled = true;
+		    mostrarCapaEnviando(TXT_MSG_ENVIANDO);
+		    document.pantallaForm.submit();
+		}
 	}
 	
 	function discard() {
@@ -243,7 +246,6 @@
 	    parameters[parameters.length] = new ParametroPost("fieldName",fieldName);
 	    
 	    return new Function("return " + syncPost(url, parameters))();
-
 	}
 	 
 	// Funcion para llamar autocalculo de un campo en el servidor.
@@ -362,7 +364,7 @@
 	    <logic:notEmpty name="campo" property="expresionAutocalculo">
 	    <logic:empty name="campo" property="expresionAutorellenable"> 
 	    <% String deps = ScriptUtil.dependencias(campo.getExpresionAutocalculo()); %>
-	    if (  <%=campo.getExpresionAutocalculo().trim().length()>0%> && (!fieldName || depends("<%=deps%>", modificados)) ) {
+	    if (  <%=(campo.getExpresionAutocalculo().trim().length()>0)%> && (!fieldName || depends("<%=deps%>", modificados)) ) {
 		    
 		    // Obtener valores actuales formulario	    
 		    parametersPost = getUrlParams(form, false);
@@ -422,20 +424,18 @@
 				<% } %>		
 
 						// Actualizamos valores posibles
-						control_refill('<%=nombre%>',vps); 
-						
-			    <% if (campo instanceof ComboBox && !((ComboBox) campo).isObligatorio()) { %>
-						// Añadimos opcion vacia en combo si no es obligatorio
+						control_refill('<%=nombre%>',vps); 						
+
+				<% if ( (campo.getExpresionAutocalculo() != null && campo.getExpresionAutocalculo().trim().length()>0) 	
+						||
+						(campo.getExpresionAutorellenable() != null && campo.getExpresionAutorellenable().trim().length()>0)
+					  ) { %>
+						// Si tiene expresion autocalculo o autorellenable mantenemos valor
+						control_select("<%=nombre%>", f_<%=nombre%>, true);
+				<% } else {   %>
+						// Reseteamos valor
 						control_select("<%=nombre%>", "", true);
 				<% } %>
-				
-				<% if (campo instanceof ComboBox && ((ComboBox) campo).isObligatorio()) { %>
-						// Seleccionamos primer elemento si es combo obligatorio
-						if (vps.length > 0) {
-							control_select("<%=nombre%>", vps[0].valor, true);
-						}
-				<% } %>
-				
 					
 		        }    
 	  	 <% } %>                   

@@ -61,6 +61,7 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 	private static String TOKEN_NAME_RETORNO = Constants.GESTOR_FORM_PARAM_TOKEN_RETORNO;
 	private static String PARAM_XML_DATOS_FIN_NAME = Constants.GESTOR_FORM_PARAM_XML_DATOS_FIN;
 	private static String PARAM_XML_DATOS_INICIO_NAME = Constants.GESTOR_FORM_PARAM_XML_DATOS_INI;
+	private static String PARAM_XML_DATOS_SINTERMINAR_NAME = Constants.GESTOR_FORM_PARAM_XML_SIN_TERMINAR;
 	
 	// TODO rafa: XA REVISAR !!!
 	// Propiedades forms
@@ -149,7 +150,7 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 		return resultado;
 	}
 
-	public String guardarDatosFormulario(String xmlInicial, String xmlActual)
+	public String guardarDatosFormulario(String xmlInicial, String xmlActual, boolean guardadoSinFinalizar)
 	{
 		try
 		{
@@ -159,6 +160,7 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 	        ResultadoProcesoFormulario resultado = ( ResultadoProcesoFormulario ) storingArea.get( RESULT_PARAM );
 	        resultado.setXmlActual( xmlActual );
 	        resultado.setXmlInicial( xmlInicial );
+	        resultado.setGuardadoSinFinalizar(guardadoSinFinalizar);
 	        
 	        // Almacena resultado añadiendole un token
 	        String token = Util.generateToken();
@@ -295,6 +297,7 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 		datos.setVersion( new Integer(version) );
 		datos.setCodigoPerfil( DEFAULT_PERFIL );
 		datos.setLayout( DEFAULT_LAYOUT );
+		datos.setGuardarSinTerminar(formulario.isFormularioGuardarSinTerminar());
 		datos.setUrlSisTraOK( this.appendParametersToURL( URL_OK, parametrosRetorno )  );
 		datos.setUrlRedireccionOK( this.appendParametersToURL( URL_REDIRECCION_OK, parametrosRetorno )  );
 		datos.setUrlSisTraCancel( this.appendParametersToURL( URL_CANCEL, parametrosRetorno )  );
@@ -304,6 +307,7 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 		datos.setNomParamTokenRetorno( TOKEN_NAME_RETORNO );
 		datos.setNomParamXMLDatosFin( PARAM_XML_DATOS_FIN_NAME );
 		datos.setNomParamXMLDatosIni( PARAM_XML_DATOS_INICIO_NAME );
+		datos.setNomParamXMLSinTerminar(PARAM_XML_DATOS_SINTERMINAR_NAME);
 		objXmlConfiguracion.setDatos( datos );
 		
 		

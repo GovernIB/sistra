@@ -75,6 +75,9 @@ public class UtilFrontV2 {
 		if (componente instanceof CheckBox) {
 			res += " imc-el-check";
 		}
+		if (componente instanceof Captcha) {
+			res += " imc-el-captcha";
+		}
 		if (componente instanceof ListaElementos) {
 			res += " imc-el-taula imc-el-taula-detall-centrat imc-el-taula-botonera-lateral";
 		}
@@ -83,10 +86,11 @@ public class UtilFrontV2 {
 			if ( ((ListBox) componente).getAltura() > 1) {
 				res += " imc-el-files-" + ((ListBox) componente).getAltura();
 			}
-		}
+		}		
 		if (componente instanceof RadioButton) {
-			// TODO OPCION RADIOS VERTICAL
-			res += " imc-el-horizontal";
+			if ( "H".equals(((RadioButton) componente).getOrientacion())) {
+				res += " imc-el-horizontal";
+			}
 		}
 		if (componente instanceof TreeBox) {
 			res += " imc-el-arbre";
@@ -102,24 +106,78 @@ public class UtilFrontV2 {
 			if ("IM".equals(textBox.getTipoTexto())) {
 				res += " imc-el-import";
 			}			
+		}		
+		if (componente instanceof ComboBox) {
+			ComboBox comboBox = (ComboBox) componente;
+			if (comboBox.isIndiceAlfabetico()) {
+				res += " imc-el-index";
+			}
 		}
-		if (componente instanceof Captcha) {
-			res += " imc-el-captcha";
+		if (componente instanceof Label) {
+			// Label y mensaje: reseteamos info
+			Label label = (Label) componente;
+			if (!"NO".equals(label.getTipoEtiqueta())) {
+				res = "imc-missatge-en-linia imc-missatge-en-linia-icona-sup ";
+				if ("IN".equals(label.getTipoEtiqueta())) {
+					res += "imc-missatge-en-linia-info"; 
+				}
+				if ("AL".equals(label.getTipoEtiqueta())) {
+					res += "imc-missatge-en-linia-alerta"; 
+				}
+				if ("ER".equals(label.getTipoEtiqueta())) {
+					res += "imc-missatge-en-linia-error"; 
+				}
+			}			
 		}
-	
-		
+		 
 		return res;
 	}	
 	
 	/**
-	 * Genera html etiqueta. Permite HTML entities pero no deja meter html embebido (< >). 
+	 * Genera html etiqueta. 
+	 * Permite estos tags HTML pero con este formato estricto (sin espacios, minusculas, etc.): 
+	 *   - HTML entities (&euro;) 
+	 *   - <p> </p>
+	 *   - <br/>
+	 *   - <strong></strong> <b></b>
+	 *   - <em> </em> <i> </i>
+	 *   - <u> </u>
+	 *   - <ul> </ul>
+	 *   - <li> </li>
+	 *   - <small></small>
+	 *   - <big></big>
+	 *   - <sup></sup>
+	 *   - <a href="url" target="_blank"> </a> 
 	 * @param etiqueta etiqueta
 	 * @return etiqueta
 	 */
 	public static String generaHtmlEtiqueta(String etiqueta) {
-		String etiquetaTxt = StringUtils.replace(etiqueta, ">", "&gt;");
-	    etiquetaTxt = StringUtils.replace(etiquetaTxt, "<", "&lt;");
+		
+		String[] permitidos = {"<p>","</p>","<br/>","<strong>","</strong>","<b>","</b>","<u>","</u>","<i>","</i>","<em>","</em>","<ul>","</ul>","<li>","</li>","<small>","</small>","<big>","</big>","<sup>","</sup>"};
+		
+		// 1. Quitamos todos los < y >
+		String etiquetaTxt = quitaComparadores(etiqueta);
+	    // 2. Dejamos solo los tags permitidos
+	    for (int i = 0; i < permitidos.length; i++) {
+	    	String permitidoTraducido = quitaComparadores(permitidos[i]); 
+	    	etiquetaTxt = StringUtils.replace(etiquetaTxt, permitidoTraducido, permitidos[i]);
+	    }
+	    // 3. Dejamos enlaces
+	    etiquetaTxt = etiquetaTxt.replaceAll("&lt;a href=\"([^<]*)\" target=\"_blank\"&gt;", "<a href=\"$1\" target=\"_blank\">");
+	    etiquetaTxt = StringUtils.replace(etiquetaTxt, quitaComparadores("</a>"), "</a>");
+	   
 	    return etiquetaTxt;
+	}
+
+	/**
+	 * Quita < y >.
+	 * @param texto texto
+	 * @return
+	 */
+	private static String quitaComparadores(String texto) {
+		String etiquetaTxt = StringUtils.replace(texto, ">", "&gt;");
+	    etiquetaTxt = StringUtils.replace(etiquetaTxt, "<", "&lt;");
+		return etiquetaTxt;
 	}
 }
  
