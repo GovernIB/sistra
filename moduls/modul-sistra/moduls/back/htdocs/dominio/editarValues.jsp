@@ -18,13 +18,19 @@
         var url = '<html:rewrite page="/dominio/ayudaPantalla.jsp" />';
         obrir(url, "Edicion", 540, 400);
      }
-     // -->
-</script>
-<script type="text/javascript">
-     <!--
+     
      function edit(url) {
        obrir(url, "Edicion", 940, 600);
      }
+
+     $(function(){
+    	 $("#sqlHex").hide(); 	
+     	$( "#dominioForm" ).submit(function( event ) {
+         	$("#sqlHex").val(encodeHex($("#sqlText").val()));     
+     		$("#sqlText").attr('disabled', true) 	  
+    	});
+     });
+     
      // -->
 </script>
 <tr>
@@ -86,7 +92,11 @@
 </tr>
 <tr>
     <td class="label"><bean:message key="dominio.sql"/></td>
-    <td class="input"><html:textarea tabindex="10" property="values.sql" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=values.sql&titulo=dominio.sql" %>');"/></td>
+    <td class="input">
+    		<html:textarea tabindex="10" property="values.sql" styleId="sqlText"/>
+    		<textarea tabindex="10" name="sqlHex" id="sqlHex"></textarea>
+    		<input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=values.sql&titulo=dominio.sql" %>');"/>
+    </td>
 </tr>
 <tr>
     <td class="label"><bean:message key="dominio.JNDIName"/></td>

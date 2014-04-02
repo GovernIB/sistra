@@ -10,6 +10,7 @@ import es.caib.util.CifradoUtil;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
 
@@ -78,6 +79,13 @@ public class EditarDominioAction extends BaseAction{
             String claveCifrado = (String) DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().get("clave.cifrado");
             dominio.setUsr(CifradoUtil.cifrar(claveCifrado,dominioForm.getUserPlain()));
             dominio.setPwd(CifradoUtil.cifrar(claveCifrado,dominioForm.getPassPlain()));            
+            
+            if (dominioForm.getSqlHex() != null) {
+            	dominio.setSql(new String(Hex.decodeHex(dominioForm.getSqlHex().toCharArray()), "ISO-8859-15"));
+            } else {
+            	dominio.setSql(null);
+            }
+            
             
             dominioDelegate.grabarDominio( dominio, idOrgano );
             //request.setAttribute("reloadMenu", "true");
