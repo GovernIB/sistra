@@ -224,6 +224,10 @@ input[type=number]::-webkit-outer-spin-button {
 	margin: 0; 
 }
 
+input.imc-placeholder { }
+input.imc-placeholder-off,
+input.imc-placeholder-simulat-off { display:none; }
+
 button { overflow:visible; font:normal .8em Arial, Helvetica, sans-serif; color:#000; cursor:pointer; padding:0 .5em; }
 button[disabled] { cursor:default; }
 	button[disabled] span {
@@ -700,10 +704,10 @@ form { clear:both; }
 	/* missatge en linia */
 	
 	.imc-form .imc-missatge-en-linia { width:40.3em; font-size:1.2em; padding:.8em 1em .3em 4.5em; margin-bottom:.7em; border:1px solid #ccc; }
-	.imc-form .imc-missatge-en-linia-info { background:transparent url(../imgs/missatges_en_linia/miss_eL_info.png) no-repeat .8em 50%; }
-	.imc-form .imc-missatge-en-linia-alerta { color:#000; background:transparent url(../imgs/missatges_en_linia/miss_eL_alerta.png) no-repeat .8em 50%; }
-	.imc-form .imc-missatge-en-linia-error { color:#c00; background:transparent url(../imgs/missatges_en_linia/miss_eL_error.png) no-repeat .8em 50%; }
-	.imc-form .imc-missatge-en-linia-icona-sup { background-position:.8em .6em; }
+	.imc-form .imc-missatge-en-linia-info { background:transparent url(../imgs/missatges_en_linia/miss_eL_info.png) no-repeat .8em .3em; }
+	.imc-form .imc-missatge-en-linia-alerta { color:#000; background:transparent url(../imgs/missatges_en_linia/miss_eL_alerta.png) no-repeat .8em .3em; }
+	.imc-form .imc-missatge-en-linia-error { color:#c00; background:transparent url(../imgs/missatges_en_linia/miss_eL_error.png) no-repeat .8em .3em; }
+	/*.imc-form .imc-missatge-en-linia-icona-sup { background-position:.8em .6em; }*/
 		.imc-form .imc-missatge-en-linia p { padding-bottom:.5em; }
 		.imc-form .imc-missatge-en-linia ul { padding-bottom:.5em; margin:.5em 0 0 2em; }
 	
