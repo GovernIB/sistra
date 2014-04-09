@@ -11,3 +11,5 @@ ALTER table RFR_TRACAM  ADD  TRC_PLACEH VARCHAR2(100);
 comment on column RFR_TRACAM.TRC_PLACEH is 'PLACEHOLDER PARA TEXTBOX';
 
 
+UPDATE rfr_compon SET com_selmul = 1 WHERE com_type = 'listbox';
+COMMIT;
