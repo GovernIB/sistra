@@ -20,11 +20,7 @@ public class ListBox extends Campo {
         return true;
     }
 
-    /**
-     * Si TRUE: permite seleccionar un unico elemento
-     * Si FALSE: permite seleccionar varios elementos
-     */
-    private boolean seleccionMultiple;
+    private boolean seleccionMultiple = true;
     
 	public boolean isSeleccionMultiple() {
 		return seleccionMultiple;

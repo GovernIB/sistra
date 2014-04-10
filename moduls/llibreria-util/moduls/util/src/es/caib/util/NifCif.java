@@ -21,8 +21,11 @@ public class NifCif {
 	public static final int TIPO_DOCUMENTO_NIE = 3;
 	public static final int TIPO_DOCUMENTO_NSS = 4;
 	
-	public static String LETRAS = "TRWAGMYFPDXBNJZSQVHLCKE";
-	public static String SIN_NIF = "[0-9]{0,8}[" + LETRAS + "]{1}";
+	//public static String LETRAS_ESPECIAL = "ABCDEFGHIJ";
+	//public static String SIN_NIF_ESPECIAL = "[K|L][0-9]{7}[" + LETRAS_ESPECIAL + "]{1}";
+	
+	public static String LETRAS = "TRWAGMYFPDXBNJZSQVHLCKE";	
+	public static String SIN_NIF = "[K|L|M]?[0-9]{0,8}[" + LETRAS + "]{1}";	
 	public static String SIN_CIAS = "[0-9]{0,13}[" + LETRAS + "]{1}";
 	public static String SIN_CIF = "[ABCDEFGHJKLMNPQRSUVW]{1}[0-9]{7}([0-9]||[ABCDEFGHIJ]){1}";	                                 
 	//public static String SIN_NIE = "^\\s*[X|Y][\\/|\\s\\-]?[0-9]{1,8}[\\/|\\s\\-]?[A-Z]{1}\\s*$";
@@ -103,14 +106,16 @@ public class NifCif {
 		try {
 			if ( !Pattern.matches(SIN_NIF, valor)) return false;
 			
+			if (valor.startsWith("K") || valor.startsWith("L") || valor.startsWith("M")) {
+				valor = "0" + valor.substring(1);
+			}
+			
 			String letra = getLetras(valor);
-
 			String letraNIF = getLetraNIF(  getDigitos(valor) );
 			if ( letraNIF == null )
 				return false;
 
 			return letraNIF.equals(letra);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

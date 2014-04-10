@@ -79,7 +79,11 @@ CREATE TABLE rfr_compon (
     com_cuacab bigint DEFAULT 0 NOT NULL,
     com_alineacion character varying(1) DEFAULT 'I'::character varying NOT NULL,
     com_seclet character varying(2),
-    com_txtipo character varying(2)
+    com_txtipo character varying(2),
+    COM_LBLTIPO VARCHAR(2) default 'NO' not null,
+    COM_ORIENT  VARCHAR(1) default 'H' not null,
+    COM_LDEIND bigint default 0 not null,
+    TRC_PLACEH VARCHAR(100)    
 );
 
 
