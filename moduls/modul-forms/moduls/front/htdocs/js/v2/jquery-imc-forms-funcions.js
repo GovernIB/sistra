@@ -65,6 +65,8 @@ $.fn.index = function(options) {
 		var element = $(this),
 			el_opcions_llista = element.find(".imc-select-submenu ul:first"),
 			el_opcions = el_opcions_llista.find("li"),
+			el_selector = element.find("a:first"),
+			ultima_opcio = false,
 			crear = function() {
 				
 				var elm_inicial = "";
@@ -82,21 +84,62 @@ $.fn.index = function(options) {
 							$("<li>").html( $("<a>").attr("href", "javascript:;").text( elm_inicial.toUpperCase() ) ).appendTo(el_alfabet);
 						}
 					});
-					el_alfabet.find("a").on("click", situa);
+					el_alfabet.find("a").on("click", onClick);
+				}
+				
+				// selector
+				el_selector.off(".index").on("click.index", onSelecciona);
+				
+			},
+			onSelecciona = function() {
+				
+				if (!element.hasClass("imc-select-on")) {
+					$(document).off(".index").on("keyup.index", onKeyUp);
+				} else {
+					$(document).off(".index");
 				}
 				
 			},
-			situa = function(e) {
-				var elm = $(e.target),
-					elm_text = $(this).text(),
-					opcio_llista_trobat = false,
+			onClick = function(e) {
+				
+				if (!element.hasClass("imc-el-index-marcant")) {
+					
+					element.addClass("imc-el-index-marcant");
+					
+					var elm = $(e.target),
+						elm_text = $(this).text();
+					
+					situa(elm_text);
+				
+				}
+				
+			},
+			onKeyUp = function(e) {
+				
+				if (element.find(".imc-select-submenu:first").hasClass("imc-submenu-on")) {
+					if (!element.hasClass("imc-el-index-marcant")) {
+						element.addClass("imc-el-index-marcant");
+						situa(String.fromCharCode(e.keyCode));
+					}
+				}
+				
+			},
+			situa = function(elm_text) {
+			
+				var opcio_llista_trobat = false,
 					opcio_llista_posicio = 0,
-					elm_trobat = false;
+					elm_trobat = false,
+					elm_trobat_mateixa_lletra = 0,
+					elm_trobats = [];
 				
 				el_opcions.each(function() {
 					var opcio = $(this).find("a"),
 						opcio_text = opcio.text().toUpperCase(),
 						opcio_inicial = normalize( opcio_text.charAt(0) );
+					if (elm_text === opcio_inicial) {
+						elm_trobat_mateixa_lletra++;
+						elm_trobats.push( opcio );
+					}
 					if (!opcio_llista_trobat && elm_text === opcio_inicial) {
 						opcio_llista_trobat = true;
 						elm_trobat = opcio;
@@ -105,8 +148,45 @@ $.fn.index = function(options) {
 						opcio_llista_posicio += opcio.outerHeight() + 2;
 					}
 				});
-				
-				if (elm_trobat) {	
+
+				if (elm_trobat) {
+					
+					if (elm_trobats.length > 1) {
+						
+						if (elm_text != ultima_opcio) {
+							el_opcions_llista.find(".imc-alfabet-focus:first").removeClass("imc-alfabet-focus");
+						}
+						
+						var elm_trobats_size = elm_trobats.length,
+							elm_tro_posicio = 0,
+							elm_tro_trobat = false,
+							opcio_llista_posicio_suma = 0;
+						
+						for (var i=0; i<elm_trobats_size; i++) {
+							if (!elm_tro_trobat) {
+								opcio_llista_posicio_suma += $(elm_trobats[i]).outerHeight() + 2;
+							}
+							if ($(elm_trobats[i]).hasClass("imc-alfabet-focus")) {
+								elm_tro_posicio = i+1;
+								$(elm_trobats[i]).removeClass("imc-alfabet-focus");
+								elm_tro_trobat = true;
+								elm_tro_trobat_enCap = true;
+							}
+						}
+						
+						if (elm_tro_posicio >= elm_trobats_size) {
+							elm_tro_posicio = 0;
+						}
+						
+						if (elm_tro_trobat && elm_tro_posicio !== 0) {
+							opcio_llista_posicio += opcio_llista_posicio_suma;
+						}
+						
+						elm_trobat = $(elm_trobats[elm_tro_posicio]);
+												
+					}
+					
+					
 					el_opcions_llista
 						.animate(
 							{
@@ -117,7 +197,9 @@ $.fn.index = function(options) {
 								elm_trobat.addClass("imc-alfabet-marca");
 								setTimeout(
 									function() {
-										elm_trobat.removeClass("imc-alfabet-marca");
+										elm_trobat.removeClass("imc-alfabet-marca").addClass("imc-alfabet-focus").focus();
+										ultima_opcio = elm_text;
+										element.removeClass("imc-el-index-marcant");
 									},400
 								);
 							}

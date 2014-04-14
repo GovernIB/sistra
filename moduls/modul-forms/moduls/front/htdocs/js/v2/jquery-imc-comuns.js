@@ -707,7 +707,7 @@ $.fn.inputSelect = function(options) {
 				$(this).removeClass("hover");
 			},
 			seleccionat = function() {
-				//alert(seleccionat_input.val());				
+				//alert(seleccionat_input.val());
 				opcions_elm.find("a[data-value=\"" +seleccionat_input.val()+ "\"]").parent().addClass("imc-select-seleccionat");
 			};
 			
@@ -1114,12 +1114,6 @@ $.fn.ajuda = function(opcions) {
 					canvia();
 				}
 				
-				$.ajax({
-					  type: "POST",
-					  url: "activarAyuda.do",
-					  data: { activar: ("on" == ajuda_data)}
-					});		
-				
 			},
 			canvia = function() {
 				
@@ -1212,7 +1206,9 @@ $.fn.ajudaCamp = function(options) {
 					ajuda_elm
 						.css({ top: ajuda_T_inici+"px", left: ajuda_L+"px", opacity: 0 })
 						.addClass("imc-el-ajuda-on")
-						.animate({ top: ajuda_T+"px", opacity:1 }, 200);
+						.animate({ top: ajuda_T+"px", opacity:1 }, 200)
+						.off(".ajudaCamp")
+						.on("mouseenter.ajudaCamp", onMouseLeave);
 					
 				}
 			},
