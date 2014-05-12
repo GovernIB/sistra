@@ -148,6 +148,7 @@ public abstract class MobTraTelFacadeEJB implements SessionBean
 			}
 			envio.setCuenta(cuenta);
 			envio.setNombre(mensaje.getNombre());
+			envio.setIdProcedimiento(mensaje.getIdProcedimiento());
 			Date now = new Date();
 			envio.setFechaRegistro(new Timestamp(now.getTime()));
 			if(mensaje.getFechaCaducidad() != null) {

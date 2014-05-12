@@ -32,6 +32,8 @@
     <property name="alertasTramitacionSms"  column="TPE_ALTSMS"/>
     <property name="alertasTramitacionFechaUltima"  column="TPE_ALTFEC"/>
     
+    <property name="idProcedimiento"  column="TPE_IDEPRO"/>
+    
 	<set name="documentos" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="DPE_DOCIDE">
 		<cache usage="read-write"/>
 	    <key column="DPE_CODTPE"/>

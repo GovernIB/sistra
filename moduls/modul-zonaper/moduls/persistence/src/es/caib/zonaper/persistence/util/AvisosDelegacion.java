@@ -51,8 +51,8 @@ public class AvisosDelegacion {
 	public static AvisosDelegacion getInstance() throws Exception{		
 		if (avisos == null){
 			avisos = new AvisosDelegacion();
-			cuentaSistra = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisos.cuentaEnvio");
-			if (StringUtils.isEmpty(cuentaSistra)) throw new Exception("No se ha especificado cuenta envío");
+			cuentaSistra = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisos.cuentaEnvio.delegacion");
+			if (StringUtils.isEmpty(cuentaSistra)) throw new Exception("No se ha especificado cuenta envío para avisos de delegacion");
 			
 		}
 		return avisos;

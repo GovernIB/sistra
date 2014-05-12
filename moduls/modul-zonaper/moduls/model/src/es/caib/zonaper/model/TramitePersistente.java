@@ -33,6 +33,8 @@ public class TramitePersistente implements java.io.Serializable {
      private String alertasTramitacionSms;
      private Date alertasTramitacionFechaUltima;
      
+     private String idProcedimiento;
+     
     // Constructors
     /** default constructor */
     public TramitePersistente() {
@@ -215,5 +217,13 @@ public class TramitePersistente implements java.io.Serializable {
 
 	public void setAlertasTramitacionFechaUltima(Date alertasTramitacionFechaUltima) {
 		this.alertasTramitacionFechaUltima = alertasTramitacionFechaUltima;
+	}
+
+	public String getIdProcedimiento() {
+		return idProcedimiento;
+	}
+
+	public void setIdProcedimiento(String idProcedimiento) {
+		this.idProcedimiento = idProcedimiento;
 	}
 }

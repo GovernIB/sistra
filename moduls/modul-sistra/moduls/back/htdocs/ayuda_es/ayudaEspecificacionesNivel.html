@@ -45,12 +45,12 @@
     	<p>
     		Permite realizar una validaci&oacute;n antes de iniciar (o cargar de persistencia) un tr&aacute;mite. 
 	      	El tipo de este campo es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> 
-		    y no se espera ning&uacute;n resultado. En caso de no permitir iniciar se debe generar un error.		</p>		
+		    y no se espera ning&uacute;n resultado. En caso de no permitir iniciar se debe generar un error.		</p>
+		<p>
+		    Este script se ejecuta al inicio del tr&aacute;mite y no puede depender de datos de los formularios.</p>		
 		<p>
 		    En este script adem&aacute;s se permiten establecer propiedades de un tr&aacute;mite de forma din&aacute;mica. 
-    		La forma de indicar estas propiedades es mediante el plugin <em>CONFIGURACION_DINAMICA</em>:    	</p> 
-   		<p>
-   			Los m&eacute;todos disponibles son:
+    		La forma de indicar estas propiedades es mediante el plugin <em>CONFIGURACION_DINAMICA</em>. Los m&eacute;todos disponibles son:
    			<br/>
 		   	<em>
 		   		// Establecer plazo presentacion dinamicamente<br/>
@@ -117,12 +117,13 @@
     	</p>
     	<p>
 	      	El tipo de este campo es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> 
-		    y no se espera ning&uacute;n resultado. En caso de error se debe generar un error de script.
-		    <br/>		
-		    Para establecer los valores del destinatario se dispondr&aacute; del plugin <em>DESTINATARIO_TRAMITE</em>.		    
-    	</p>	 
-   		<p>
-   			Los m&eacute;todos disponibles son:
+		    y no se espera ning&uacute;n resultado. En caso de error se debe generar un error de script. 
+		<p/>
+		<p>
+		    Este script se ejecuta al inicio del tr&aacute;mite y no puede depender de datos de los formularios.
+		</p>
+		<p>			
+		    Para establecer los valores del destinatario se dispondr&aacute; del plugin <em>DESTINATARIO_TRAMITE</em>. Los m&eacute;todos disponibles son:
    			<br/>
 		   	<em>
 		   		// Establecer destinatario dinamicamente<br/>

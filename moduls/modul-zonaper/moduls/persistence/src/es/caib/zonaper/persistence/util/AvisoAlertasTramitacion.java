@@ -46,8 +46,8 @@ public class AvisoAlertasTramitacion {
 	public static AvisoAlertasTramitacion getInstance() throws Exception{		
 		if (avisos == null){
 			avisos = new AvisoAlertasTramitacion();
-			cuentaSistra = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisos.cuentaEnvio");
-			if (StringUtils.isEmpty(cuentaSistra)) throw new Exception("No se ha especificado cuenta envío");			
+			cuentaSistra = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisos.cuentaEnvio.avisosExpediente");
+			if (StringUtils.isEmpty(cuentaSistra)) throw new Exception("No se ha especificado cuenta envío para avisos de expediente");			
 		}
 		return avisos;
 	}			

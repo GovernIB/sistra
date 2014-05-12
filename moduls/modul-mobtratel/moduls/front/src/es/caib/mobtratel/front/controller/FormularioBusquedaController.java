@@ -1,6 +1,7 @@
 package es.caib.mobtratel.front.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -53,21 +54,10 @@ public class FormularioBusquedaController extends BaseController
 	private List getYears()
 	{
 		ArrayList result = new ArrayList();
-		result.add( "2001" );
-		result.add( "2002" );
-		result.add( "2003" );
-		result.add( "2004" );
-		result.add( "2005" );
-		result.add( "2006" );
-		result.add( "2007" );
-		result.add( "2008" );
-		result.add( "2009" );
-		result.add( "2010" );
-		result.add( "2011" );
-		result.add( "2012" );
-		result.add( "2013" );
-		result.add( "2014" );
-		result.add( "2015" );
+		int year = Calendar.getInstance().get(Calendar.YEAR);
+		for (int i = 2000; i <= year;i++) {
+			result.add( Integer.toString(i));
+		}
 		return result;
 	}
 	

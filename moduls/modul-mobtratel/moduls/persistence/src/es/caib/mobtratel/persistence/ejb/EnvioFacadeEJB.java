@@ -16,12 +16,14 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import es.caib.mobtratel.model.CriteriosBusquedaEnvio;
 import es.caib.mobtratel.model.Cuenta;
 import es.caib.mobtratel.model.Envio;
+import es.caib.mobtratel.model.EstadisticaSMS;
 import es.caib.mobtratel.model.MensajeEmail;
 import es.caib.mobtratel.model.MensajeSms;
 import es.caib.mobtratel.model.Page;
@@ -339,6 +341,56 @@ public abstract class EnvioFacadeEJB extends HibernateEJB {
 	        close(session);
 	    }
     }     
+    
+    
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.gestor}"
+     */
+    public List obtenerEstadisticasSMS(int anyo, String cuentaId) {
+    	Session session = getSession();
+        try {
+        	
+        	boolean filtroCuenta = StringUtils.isNotBlank(cuentaId) && !"T".equals(cuentaId);
+        	
+        	String sqlSelect = "SELECT to_char(s.envio.fechaRegistro,'MM'), s.envio.cuenta.codigo, s.envio.idProcedimiento, sum(s.numeroDestinatariosEnviados) ";
+        	String sqlFrom = " FROM MensajeSms s ";
+        	String sqlWhere = " WHERE s.envio.fechaRegistro is not null and to_char(s.envio.fechaRegistro,'YYYY') = :anyo ";	        	
+        	String sqlGroupBy = " GROUP BY to_char(s.envio.fechaRegistro,'MM'), s.envio.cuenta.codigo, s.envio.idProcedimiento ";
+        	String sqlOrderBy = " ORDER BY 1";
+        	
+        	if (filtroCuenta) {
+        		sqlWhere += " and s.envio.cuenta.codigo = :cuenta";
+        	}
+        	
+        	Query query = session.createQuery(sqlSelect + sqlFrom + sqlWhere + sqlGroupBy + sqlOrderBy) ;
+            query.setParameter("anyo", ""+ anyo);
+            
+            if (filtroCuenta) {
+            	query.setParameter("cuenta", cuentaId);
+        	}
+            
+            List result = query.list();
+            List estadisticas = new ArrayList();
+            for (Iterator it = result.iterator(); it.hasNext();) {
+            	Object[] row = (Object[]) it.next();
+            	EstadisticaSMS e = new EstadisticaSMS();
+            	e.setAnyo(anyo);
+            	e.setMes(Integer.parseInt( (String) row[0]));
+            	e.setCuenta((String) row[1]);
+            	e.setIdProcedimiento((String) row[2]);
+            	e.setSms(Integer.parseInt(row[3].toString()));
+            	estadisticas.add(e);
+            }            
+            return estadisticas;
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } 
+        finally 
+        {
+            close(session);
+        }
+    }
 
 	
     private Criteria createCriteriaFromCriteriosBusquedaEnvio(CriteriosBusquedaEnvio criteriosBusqueda,Session session) throws Exception{

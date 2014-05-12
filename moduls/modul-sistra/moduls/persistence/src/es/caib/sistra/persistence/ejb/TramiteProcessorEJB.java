@@ -3454,6 +3454,10 @@ public class TramiteProcessorEJB implements SessionBean {
 	    	// Fecha de caducidad
 	    	tramitePersistentePAD.setFechaCaducidad(this.getFechaCaducidad());	    		    	
 	    	
+	    	// Calculamos destinatario tramite por si se especifica procedimiento dinamicamente
+	    	DestinatarioTramite dt = calcularDestinatarioTramite();
+	    	tramitePersistentePAD.setIdProcedimiento(dt.getProcedimiento());
+	    	
 	    	// Guardamos documentos
 	    	HashMap docs = new HashMap();
 	    	tramitePersistentePAD.setDocumentos(docs);    

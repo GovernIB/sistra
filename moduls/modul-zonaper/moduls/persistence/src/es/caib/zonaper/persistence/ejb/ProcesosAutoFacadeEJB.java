@@ -42,7 +42,7 @@ import es.caib.zonaper.persistence.delegate.ProcesoRevisarRegistrosDelegate;
 import es.caib.zonaper.persistence.delegate.RegistroExternoPreparadoDelegate;
 import es.caib.zonaper.persistence.delegate.TramitePersistenteDelegate;
 import es.caib.zonaper.persistence.util.AvisoAlertasTramitacion;
-import es.caib.zonaper.persistence.util.AvisosMovilidad;
+import es.caib.zonaper.persistence.util.AvisosExpediente;
 import es.caib.zonaper.persistence.util.ConfigurationUtil;
 import es.caib.zonaper.persistence.util.UsernamePasswordCallbackHandler;
 
@@ -240,7 +240,7 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 			lc.login();
 			
 			// Realizamos aviso
-			String idEnvio = AvisosMovilidad.getInstance().avisoCreacionElementoExpediente(ele);
+			String idEnvio = AvisosExpediente.getInstance().avisoCreacionElementoExpediente(ele);
 			
 			// Asociamos aviso al elemento del expediente
 			DelegateUtil.getElementoExpedienteDelegate().establecerAvisoElementoExpediente(ele.getCodigo(), idEnvio);

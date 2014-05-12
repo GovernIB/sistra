@@ -43,27 +43,27 @@ import es.caib.zonaper.persistence.delegate.PadAplicacionDelegate;
  * ejecutaran con el usuario auto
  *
  */
-public class AvisosMovilidad {
+public class AvisosExpediente {
 
-	private static AvisosMovilidad avisos;
+	private static AvisosExpediente avisos;
 	private static String cuentaSistra;
 	private static boolean confirmacionEnvioNotificacionesEmail;
 	private static boolean confirmacionEnvioNotificacionesSms;
 	private static boolean confirmacionEnvioEventosEmail;
 	private static boolean confirmacionEnvioEventosSms;
 	private static boolean alertasSmsZonaPersonal;
-	private static Log log = LogFactory.getLog(AvisosMovilidad.class);
+	private static Log log = LogFactory.getLog(AvisosExpediente.class);
 	private static Map plantillas = new HashMap();
 	
-	private AvisosMovilidad(){
+	private AvisosExpediente(){
 		
 	}
 	
-	public static AvisosMovilidad getInstance() throws Exception{		
+	public static AvisosExpediente getInstance() throws Exception{		
 		if (avisos == null){
-			avisos = new AvisosMovilidad();
-			cuentaSistra = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisos.cuentaEnvio");
-			if (StringUtils.isEmpty(cuentaSistra)) throw new Exception("No se ha especificado cuenta envío");
+			avisos = new AvisosExpediente();
+			cuentaSistra = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisos.cuentaEnvio.avisosExpediente");
+			if (StringUtils.isEmpty(cuentaSistra)) throw new Exception("No se ha especificado cuenta envio para avisos de expediente");
 			String confNotifEmail = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisos.confirmacionEnvio.notificaciones.email");
 			if (StringUtils.isNotBlank(confNotifEmail) && "true".equals(confNotifEmail)) {
 				confirmacionEnvioNotificacionesEmail = true;
@@ -334,6 +334,7 @@ public class AvisosMovilidad {
 		mens.setNombre("Aviso automático de creacion elemento expediente " + expe.getUnidadAdministrativa() + " - " + expe.getIdExpediente());
 		mens.setCuentaEmisora(cuentaSistra);
 		mens.setInmediato(true);
+		mens.setIdProcedimiento(expe.getIdProcedimiento());
 		
 		// Generamos en mensajes distintos para poder verificar envio
 		if (StringUtils.isNotEmpty(emailZP)){
@@ -453,7 +454,7 @@ public class AvisosMovilidad {
 	 */
 	private static String cargarPlantillaMail(String idPlantilla) throws Exception{
 		if (!plantillas.containsKey(idPlantilla)){
-			InputStream is = AvisosMovilidad.class.getResourceAsStream(idPlantilla);
+			InputStream is = AvisosExpediente.class.getResourceAsStream(idPlantilla);
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();			
 			ConvertUtil.copy(is,bos);
 			String plantilla = new String(bos.toByteArray());
