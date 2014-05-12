@@ -1604,6 +1604,7 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    	tpad.setTramite(t.getTramite());
 	    	tpad.setVersion(t.getVersion());
 	    	tpad.setDescripcion( t.getDescripcion() );
+	    	tpad.setIdProcedimiento(t.getIdProcedimiento());
 	    	tpad.setNivelAutenticacion(t.getNivelAutenticacion());
 	    	tpad.setUsuario(t.getUsuario());
 	    	tpad.setUsuarioFlujoTramitacion(t.getUsuarioFlujoTramitacion());
@@ -1694,6 +1695,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	    	t.setFechaCreacion(ahora);    	    	
     	    	t.setIdioma(tpad.getIdioma());
     	    	t.setParametrosInicioMap(tpad.getParametrosInicio());
+    	    	t.setIdProcedimiento(tpad.getIdProcedimiento());
     		}
     		
     		// Establecemos usuario que tiene actualmente el trámite

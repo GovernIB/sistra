@@ -47,6 +47,10 @@ public class MensajeEnvio implements Serializable{
 	 * Sólo debe utilizarse para demo.
 	 */
 	private boolean inmediato;
+	/**
+	 * Indica el id procedimiento asociado (opcional).
+	 */
+	private String idProcedimiento;
 
 	/**
 	 * Lista de mensajes de tipo Email. Contiene elementos del tipo MensajeEnvioEmail
@@ -188,6 +192,20 @@ public class MensajeEnvio implements Serializable{
 	 */
 	public void setInmediato(boolean inmediato) {
 		this.inmediato = inmediato;
+	}
+	/**
+	 * Id procedimiento (opcional).
+	 * @return Id procedimiento
+	 */
+	public String getIdProcedimiento() {
+		return idProcedimiento;
+	}
+	/**
+	 * Id procedimiento (opcional).
+	 * @param idProcedimiento Id procedimiento
+	 */
+	public void setIdProcedimiento(String idProcedimiento) {
+		this.idProcedimiento = idProcedimiento;
 	}
 
 	

@@ -23,6 +23,7 @@
 			<th class="estado"><bean:message key="resultadoBusqueda.estado"/></th>	
 			<th><bean:message key="resultadoBusqueda.cuenta"/></th>
 			<th><bean:message key="resultadoBusqueda.nombre"/></th>
+			<th><bean:message key="resultadoBusqueda.procedimiento"/></th>
 			<th><bean:message key="resultadoBusqueda.fechaRegistro"/></th>
 			<th><bean:message key="resultadoBusqueda.tipo"/></th>
 			<th><bean:message key="resultadoBusqueda.fechaProgramacion"/></th>
@@ -52,6 +53,7 @@
 				</td>				
 				<td><bean:write name="pagina" property="cuenta.nombre" /></td>
 				<td><bean:write name="pagina" property="nombre" /></td>
+				<td><bean:write name="pagina" property="idProcedimiento" /></td>
 				<td><bean:write name="pagina" property="fechaRegistro" format="dd/MM/yyyy HH:mm" /></td>
 				<td>
 					<logic:equal name="pagina" property="inmediato" value="true">

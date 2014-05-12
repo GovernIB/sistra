@@ -53,6 +53,8 @@ public class TramitePersistentePAD implements Serializable {
 	 private String alertasTramitacionGenerar = "N";
      private String alertasTramitacionEmail; 
      private String alertasTramitacionSms;
+     
+     private String idProcedimiento;
 	
     public String getDelegado() {
 		return delegado;
@@ -230,6 +232,12 @@ public class TramitePersistentePAD implements Serializable {
 	}
 	public void setAlertasTramitacionSms(String alertasTramitacionSms) {
 		this.alertasTramitacionSms = alertasTramitacionSms;
+	}
+	public String getIdProcedimiento() {
+		return idProcedimiento;
+	}
+	public void setIdProcedimiento(String idProcedimiento) {
+		this.idProcedimiento = idProcedimiento;
 	}
         
     
