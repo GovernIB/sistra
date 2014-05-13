@@ -1,4 +1,5 @@
-<html>
+
+<%@page import="es.caib.util.ValidacionesUtil"%><html>
 <head>
 <script type="text/javascript">
 <!--
@@ -9,6 +10,11 @@
 		String top = "";
 		if (url.indexOf("/zonaperfront/inicio") == -1){
 			top	= "top.";
+		}
+		
+		// Validamos si es una URL. Si no lo es redirigimos a portal.
+		if (!ValidacionesUtil.esURL(url)) {
+			url = "irAPortal.do";	
 		}
 	%>
 	
