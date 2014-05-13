@@ -8,9 +8,10 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+
+import es.caib.redose.back.Constants;
 import es.caib.redose.back.action.BaseAction;
 import es.caib.redose.back.form.PlantillaForm;
-import es.caib.redose.front.Constants;
 import es.caib.redose.model.Formateador;
 import es.caib.redose.model.Plantilla;
 import es.caib.redose.persistence.delegate.DelegateUtil;

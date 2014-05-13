@@ -13,4 +13,6 @@ public class Constants implements Serializable
     public static final String DEFAULT_LANG_KEY = "es.caib.redose.back.DEFAULT_LANG";
 
     public static final String DEFAULT_LANG 		= "ca";	
+    
+    public static String DEFAULT_FORMATEADOR = "es.caib.redose.persistence.formateadores.FormateadorPdfFormularios";
 }
