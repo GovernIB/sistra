@@ -78,7 +78,7 @@ public class AvisoAlertasTramitacion {
 			}
 			mensEmail = crearMensajeEmail(email, entrada.getIdioma(), mensaje);			
 		}		
-		enviarMensaje(entrada.getIdPersistencia(), mensEmail, null);
+		enviarMensaje(entrada.getIdPersistencia(), entrada.getProcedimiento(), mensEmail, null);
 	
 	}
 
@@ -112,7 +112,7 @@ public class AvisoAlertasTramitacion {
 			mensaje=StringUtil.replace(mensaje,"{0}",oi.getNombre().toUpperCase());
 			mensSms = crearMensajeSms(tramite.getAlertasTramitacionSms().trim(), mensaje);			
 		}
-		enviarMensaje(tramite.getIdPersistencia(), mensEmail, mensSms);
+		enviarMensaje(tramite.getIdPersistencia(), tramite.getIdProcedimiento(), mensEmail, mensSms);
 	
 	}
 	
@@ -146,7 +146,7 @@ public class AvisoAlertasTramitacion {
 			mensaje=StringUtil.replace(mensaje,"{0}",oi.getNombre().toUpperCase());
 			mensSms = crearMensajeSms(preregistro.getAlertasTramitacionSms().trim(), mensaje);			
 		}
-		enviarMensaje(preregistro.getIdPersistencia(), mensEmail, mensSms);
+		enviarMensaje(preregistro.getIdPersistencia(), preregistro.getProcedimiento(), mensEmail, mensSms);
 	
 	}
 	
@@ -193,14 +193,16 @@ public class AvisoAlertasTramitacion {
 	
 	/**
 	 * Realizamos envio del mensaje al modulo de movilidad con usuario auto  
+	 * @param idProcedimiento 
 	 */
-	private void enviarMensaje(String idPersistencia, MensajeEnvioEmail mensajeEmail, MensajeEnvioSms mensajeSms) throws Exception{
+	private void enviarMensaje(String idPersistencia, String idProcedimiento, MensajeEnvioEmail mensajeEmail, MensajeEnvioSms mensajeSms) throws Exception{
 		if (mensajeEmail != null || mensajeSms != null) {
 			log.debug("Creamos mensajeEnvio");
 			MensajeEnvio mens = new MensajeEnvio();
 			mens.setNombre("Aviso automático de alertas de tramitacion: " + idPersistencia);
 			mens.setCuentaEmisora(cuentaSistra);
 			mens.setInmediato(true);
+			mens.setIdProcedimiento(idProcedimiento);
 			if (mensajeEmail != null) {
 				mens.addEmail(mensajeEmail);
 			}			
