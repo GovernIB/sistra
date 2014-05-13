@@ -1,5 +1,8 @@
 package es.caib.util;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -982,8 +985,25 @@ public class ValidacionesUtil
 
 	}
 
-
-		
+	/**
+	 * Valida si la cadena es una URL.
+	 * @param pUrl URL
+	 * @return true si es una URL
+	 */
+	public static boolean esURL(final String pUrl) {
+		URL u = null;
+        try {
+            u = new URL(pUrl);
+        } catch (MalformedURLException e) {
+            return false;
+        }
+        try {
+            u.toURI();
+        } catch (URISyntaxException e) {
+            return false;
+        }
+        return true;
+    }
 
 
 }
