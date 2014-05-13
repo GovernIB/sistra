@@ -33,5 +33,5 @@ public class Constants implements Serializable
 	
 	public static String MESSAGE_KEY = "mensaje";
 	
-	public static String DEFAULT_FORMATEADOR = "es.caib.redose.persistence.formateadores.FormateadorPdfFormularios";	
+		
 }
