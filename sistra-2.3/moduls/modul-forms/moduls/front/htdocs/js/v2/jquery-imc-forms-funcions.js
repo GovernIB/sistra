@@ -30,8 +30,13 @@ function dadesFormateig(options) {
 	}
 	
 	// per a tothom
+	
+	if (element.hasClass("imc-el-selector") && !element.hasClass("imc-el-selector-events-enlinia")) {
+		element.selectorIMC();
+	}
+	
 	element
-		.find("div.imc-opcions:not(.imc-opcions-no-events)").inputSelect().end()
+		.find(".imc-el-selector:not(.imc-el-selector-events-enlinia)").selectorIMC().end()
 		.find("*[title]").title().end()
 		.find("input[type=number]").inputNumero().end()
 		.find("h4.imc-seccio").each(function() { // select.a amb opcions

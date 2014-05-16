@@ -39,8 +39,8 @@ public class UtilFrontV2 {
 			return res;
 		}
 		
-		// Colspan (para CheckBox y Lista elementos se muestra en linea completa)
-		if (componente instanceof CheckBox || componente instanceof ListaElementos) {
+		// Colspan (Lista elementos se muestra en linea completa)
+		if (componente instanceof ListaElementos) {
 			res += " imc-el-6";
 		} else if (componente.getColSpan() > 1){
 			res += " imc-el-" + componente.getColSpan();
@@ -109,6 +109,9 @@ public class UtilFrontV2 {
 		}		
 		if (componente instanceof ComboBox) {
 			ComboBox comboBox = (ComboBox) componente;
+			// Eventos gestionados por html
+			res += " imc-el-selector-events-enlinia";
+			// Indice alfabetico
 			if (comboBox.isIndiceAlfabetico()) {
 				res += " imc-el-index";
 			}

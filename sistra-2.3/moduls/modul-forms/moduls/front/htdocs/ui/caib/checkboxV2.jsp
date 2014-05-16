@@ -25,7 +25,8 @@
 			        disabled="<%=(disabled || bloqueado)%>"                    
 			        onclick='<%=(!autocalculo && !bloqueado) ? "onFieldChange(this.form, this.name)" : ""%>'			        
 			    ></html:checkbox>
-				<span><%=org.ibit.rol.form.front.util.UtilFrontV2.generaHtmlEtiqueta(etiquetaTxt)%></span>
+			    <span><nested:equal property="sinEtiqueta" value="false"><%=org.ibit.rol.form.front.util.UtilFrontV2.generaHtmlEtiqueta(etiquetaTxt)%></nested:equal></span>
+				
 			</label>
 		</div>
 		<nested:notEmpty property="traduccion.ayuda">
