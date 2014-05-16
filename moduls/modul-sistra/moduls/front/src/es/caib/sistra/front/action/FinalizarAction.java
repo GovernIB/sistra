@@ -9,6 +9,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import es.caib.sistra.front.Constants;
 import es.caib.sistra.front.util.InstanciaManager;
 import es.caib.sistra.persistence.delegate.InstanciaDelegate;
 
@@ -56,7 +57,9 @@ public class FinalizarAction extends BaseAction
 		if (urlFin == null){
 			return mapping.findForward( "success" );
 		}else{
-			response.sendRedirect("/sistrafront/redireccion.jsp?url=" + URLEncoder.encode(urlFin));
+			request.getSession().setAttribute(Constants.URL_REDIRECCION_SESSION_KEY, urlFin);
+			response.sendRedirect("/sistrafront/redireccion.jsp");
+			//response.sendRedirect("/sistrafront/redireccion.jsp?url=" + URLEncoder.encode(urlFin));
 			return null;
 		}
 	}
