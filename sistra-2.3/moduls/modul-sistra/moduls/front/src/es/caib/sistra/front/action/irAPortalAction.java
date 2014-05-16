@@ -24,7 +24,10 @@ public class irAPortalAction extends Action
             HttpServletResponse response) throws Exception 
     {				 	 	
 		OrganismoInfo oi = (OrganismoInfo) request.getSession().getServletContext().getAttribute(Constants.ORGANISMO_INFO_KEY);
-		response.sendRedirect("/sistrafront/redireccion.jsp?url=" + StringEscapeUtils.escapeHtml(oi.getUrlPortal()));
+		
+		request.getSession().setAttribute(Constants.URL_REDIRECCION_SESSION_KEY, oi.getUrlPortal());
+		response.sendRedirect("/sistrafront/redireccion.jsp");
+		//response.sendRedirect("/sistrafront/redireccion.jsp?url=" + StringEscapeUtils.escapeHtml(oi.getUrlPortal()));
  		return null;
 	}
 

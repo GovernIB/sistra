@@ -113,4 +113,7 @@ public class Constants implements Serializable {
 	public static final String MOSTRAR_EN_IFRAME = "mostrarSistraEnIframe";
 	
 	public static final String AVISOS_OBLIGATORIOS_NOTIFICACIONES = "avisosObligatoriosNotificaciones";
+	
+	/** Atributo de sesion donde se establecera la url a la que ir. */
+	public static final String URL_REDIRECCION_SESSION_KEY ="es.caib.sistra.front.URL_REDIRECCION_SESSION_KEY";
 }
