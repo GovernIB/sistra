@@ -56,8 +56,9 @@
 				control_readOnly("<%=nombre%>", true);	
 			<% } else { %>
 				// Evento onchange		
-				var el_element = $imc_formulari.find(".imc-el-name-<%=nombre%>:first");										
-				el_element.find("div.imc-opcions:first").inputSelect({
+				var el_element = $imc_formulari.find(".imc-el-name-<%=nombre%>:first");		
+
+				el_element.selectorIMC({
 					alAcabar: function() {
 						setTimeout("onFieldChange(document.getElementById(\"pantallaForm\"), \"<%=nombre%>\")",200);				
 					}

@@ -38,7 +38,9 @@
     <td class="label"><bean:message key="componente.colSpan"/></td>
     <td class="input">
     <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.colSpan">
-        <html:option value="6"><bean:message key="componente.colSpan.6" /></html:option>
+     	<% for (int i = 1 ; i <= 6; i++) { %>															
+			<html:option value="<%=Integer.toString(i)%>"><bean:message key="<%=\"componente.colSpan.\" + i%>"/></html:option>
+		<% } %>         
     </html:select>
     </td>
 </tr>
@@ -46,7 +48,8 @@
     <td class="label"><bean:message key="componente.sinEtiqueta"/></td>
     <td class="input">
     <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.sinEtiqueta">
-        <html:option value="false"><bean:message key="componente.sinEtiqueta.conEtiqueta" /></html:option>              
+        <html:option value="false"><bean:message key="componente.sinEtiqueta.conEtiqueta" /></html:option>
+        <html:option value="true"><bean:message key="componente.sinEtiqueta.sinEtiqueta" /></html:option>               
     </html:select>
     </td>
 </tr>
@@ -67,6 +70,19 @@
 </tr>
 <tr>
     <td class="labela" colspan="2"><bean:message key="ayuda.checkbox.defecto"/></td>
+</tr>
+
+<tr>
+    <td class="label"><bean:message key="componente.encuadrar.marcar"/></td>
+    <td class="input">
+    	 <html:select tabindex="<%=Integer.toString(ti++)%>" property="values.encuadrar">
+	        <html:option value="true"><bean:message key="componente.encuadrar.si" /></html:option>
+	        <html:option value="false"><bean:message key="componente.encuadrar.no" /></html:option>                
+	    </html:select>
+    </td>
+</tr>
+<tr>
+    <td class="labela" colspan="2"><bean:message key="ayuda.encuadrar"/></td>
 </tr>
 
 <!--  INDRA: PROPIEDADES PARA CAMPOS DE PANTALLAS DE DETALLE DE LISTA DE ELEMENTOS -->

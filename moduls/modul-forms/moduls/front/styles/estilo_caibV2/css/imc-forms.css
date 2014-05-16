@@ -652,9 +652,19 @@ form { clear:both; }
 	.imc-form .imc-el-files-3	> div.imc-el-multiple-lectura { height:8.9em !important; }
 	.imc-form .imc-el-files-4	> div.imc-el-multiple-lectura { height:12.9em !important; }
 	
-	.imc-form .imc-el-check { width:55.5em !important; }
+	.imc-form .imc-el-check { width:8.4em; }
+	.imc-form .imc-el-check.imc-el-2 { width:17.8em !important; }
+	.imc-form .imc-el-check.imc-el-3 { width:27.2em !important; }
+	.imc-form .imc-el-check.imc-el-4 { width:36.5em !important; }
+	.imc-form .imc-el-check.imc-el-5 { width:46em !important; }
+	.imc-form .imc-el-check.imc-el-6 { width:55.5em !important; }
+	
 		.imc-form .imc-el-check input { vertical-align:top; }
 		.imc-form .imc-el-check span { margin-left:.4em; }
+		
+	.imc-form .imc-el-table.imc-el-check .imc-el-control { text-align:center; }
+		.imc-form .imc-el-table.imc-el-check .imc-el-control label { display:block; }
+		.imc-form .imc-el-table.imc-el-check .imc-el-control label span { position:absolute; top:-999em; left:-999em; }
 	
 	.imc-form label.imc-check-lectura input { display:none; }
 	.imc-form label.imc-check-lectura span { padding-left:1.6em; background:transparent url(../imgs/arbre-lectura-seleccionat.gif) no-repeat left center; }
