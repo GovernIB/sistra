@@ -573,7 +573,7 @@ $.fn.submenu = function(options) {
 		submenu_elm,
 		tancarAlClicarDins = settings.tancarAlClicarDins,
 		onClick = function() {
-			if (!element.hasClass("imc-select-on") && !element.parent().hasClass("imc-select-deshabilitat") && !element.parent().hasClass("imc-select-lectura")) {
+			if (!element.hasClass("imc-select-on") && !element.find(".imc-select:first").is(".imc-select-deshabilitat, .imc-select-lectura")) {
 				submenu_a = element.find("a.imc-select:first");
 				submenu_elm = element.find(".imc-select-submenu:first");
 				element.addClass("imc-select-on imc-select-obrint");
