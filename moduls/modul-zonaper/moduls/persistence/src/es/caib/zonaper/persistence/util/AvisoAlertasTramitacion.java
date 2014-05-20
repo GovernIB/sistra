@@ -65,7 +65,7 @@ public class AvisoAlertasTramitacion {
 				msgFinRegistro = "aviso.alertasTramitacion.preregistroFinalizado";
 			}
 			String mensaje=LiteralesAvisosMovilidad.getLiteral(entrada.getIdioma(),msgFinRegistro);
-			mensaje=StringUtil.replace(mensaje,"{0}",entrada.getTramite());			
+			mensaje=StringUtil.replace(mensaje,"{0}",entrada.getDescripcionTramite());			
 			if (entrada.getNivelAutenticacion() == ConstantesLogin.LOGIN_ANONIMO) {
 				String  mensajeAnonimo = LiteralesAvisosMovilidad.getLiteral(entrada.getIdioma(),"aviso.alertasTramitacion.idPersistenciaAnonimo");
 				mensajeAnonimo = StringUtil.replace(mensajeAnonimo,"{0}",entrada.getIdPersistencia());
