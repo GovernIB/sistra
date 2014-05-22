@@ -1578,18 +1578,22 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	textos = new ObjectStamp[numText];
     		// Texto xa num registro
     	textos[0] = new TextoStamp();
-		((TextoStamp) textos[0]).setTexto(txtNumRegistro + "  " + txtDC);				
+		((TextoStamp) textos[0]).setTexto(txtNumRegistro);				
 		textos[0].setPage(0);
-		textos[0].setX(340);
+		textos[0].setX(330);
 		textos[0].setY(815);				
 		textos[0].setOverContent(true);
-			// Texto xa fecha registro
-		if (usoSello.getFechaSello() != null) {
+			// Texto xa fecha registro y DC
+		if (usoSello.getFechaSello() != null || txtDC.length()>0) {
+			String textoFecha = "";
+			if (usoSello.getFechaSello() != null) {
+				textoFecha = txtData + StringUtil.fechaACadena(usoSello.getFechaSello(),"dd/MM/yyyy HH:mm") + " ";
+			}
 			numText--;
 			textos[numText] = new TextoStamp();
-			((TextoStamp) textos[numText]).setTexto(txtData + StringUtil.fechaACadena(usoSello.getFechaSello(),"dd/MM/yyyy HH:mm"));
+			((TextoStamp) textos[numText]).setTexto(textoFecha + txtDC);
 			textos[numText].setPage(0);
-			textos[numText].setX(340);
+			textos[numText].setX(330);
 			textos[numText].setY(805);			
 			textos[numText].setOverContent(true);
 		}
