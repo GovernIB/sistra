@@ -1560,15 +1560,26 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	    	
     	String txtNumRegistro,txtDC,txtData;
     	int numText = 1;
+    	int x = 330;
     	if (usoSello.getReferencia().startsWith("PRE")){
     		txtNumRegistro = "Num. Preregistre: "+usoSello.getReferencia();
-    		txtDC="Dígit Control: " + StringUtil.calculaDC(usoSello.getReferencia());    
+    		txtDC="DC:" + StringUtil.calculaDC(usoSello.getReferencia());    
     		txtData="Data Preregistre: ";
+
+    		// Calculo posicion inicio
+    		int longPre = 35;
+    		int iniPre = 385;
+    		int inc = ((txtNumRegistro + " " + txtDC).length() - longPre) / 2;
+    		x = iniPre;
+    		if (inc > 0) {
+    			x = iniPre - (inc * 10);
+    		}
+			
     		numText++;
     	}else{
     		txtNumRegistro = "Num. Registre: "+usoSello.getReferencia();
     		txtData="Data Registre: ";
-    		txtDC="";    		
+    		txtDC="";        		
     	}	    	    	
     	if (usoSello.getFechaSello() != null) {
     		numText++;
@@ -1576,25 +1587,23 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	
     	// Creamos textos a stampar
     	textos = new ObjectStamp[numText];
+    	
     		// Texto xa num registro
     	textos[0] = new TextoStamp();
-		((TextoStamp) textos[0]).setTexto(txtNumRegistro);				
+		((TextoStamp) textos[0]).setTexto(txtNumRegistro + (txtDC.length() > 0? " " + txtDC : ""));				
 		textos[0].setPage(0);
-		textos[0].setX(330);
-		textos[0].setY(815);				
+		textos[0].setX(x);
+		textos[0].setY(805);				
 		textos[0].setOverContent(true);
-			// Texto xa fecha registro y DC
-		if (usoSello.getFechaSello() != null || txtDC.length()>0) {
-			String textoFecha = "";
-			if (usoSello.getFechaSello() != null) {
-				textoFecha = txtData + StringUtil.fechaACadena(usoSello.getFechaSello(),"dd/MM/yyyy HH:mm") + " ";
-			}
+		
+			// Texto xa fecha registro
+		if (usoSello.getFechaSello() != null) {
 			numText--;
 			textos[numText] = new TextoStamp();
-			((TextoStamp) textos[numText]).setTexto(textoFecha + txtDC);
+			((TextoStamp) textos[numText]).setTexto(txtData + StringUtil.fechaACadena(usoSello.getFechaSello(),"dd/MM/yyyy HH:mm"));
 			textos[numText].setPage(0);
-			textos[numText].setX(330);
-			textos[numText].setY(805);			
+			textos[numText].setX(x);
+			textos[numText].setY(815);			
 			textos[numText].setOverContent(true);
 		}
 			// Cuadro xa registro presencial
