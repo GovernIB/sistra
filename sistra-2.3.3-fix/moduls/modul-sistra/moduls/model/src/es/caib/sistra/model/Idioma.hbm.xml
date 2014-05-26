@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class name="es.caib.sistra.model.Idioma" table="STR_IDIOMA">
+
+    <id name="lang" column="IDI_CODIGO">
+        <generator class="assigned" />
+    </id>
+
+    <property name="orden"  column="IDI_ORDEN"  not-null="true" length="2"/>
+
+</class>
+</hibernate-mapping>

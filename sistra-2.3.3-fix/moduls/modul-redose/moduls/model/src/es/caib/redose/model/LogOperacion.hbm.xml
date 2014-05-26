@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="es.caib.redose.model.LogOperacion" table="RDS_LOGOPE">
+    	<cache usage="read-write"/>
+        <id name="codigo" unsaved-value="null" column="LOG_CODIGO">
+            <generator class="sequence">
+                <param name="sequence">RDS_SEQLOG</param>
+            </generator>
+        </id>
+        
+        <many-to-one name="tipoOperacion" class="es.caib.redose.model.TipoOperacion" column="LOG_CODTOP" not-null="true" />
+        
+        <property name="descripcionOperacion" type="string" column="LOG_DESOPE" length="1000" not-null="true" />
+        <property name="fecha" type="timestamp" column="LOG_FECHA" length="7" not-null="true" />
+        <property name="usuarioSeycon" type="string" column="LOG_SEYCON" not-null="true" />
+
+    </class>
+</hibernate-mapping>

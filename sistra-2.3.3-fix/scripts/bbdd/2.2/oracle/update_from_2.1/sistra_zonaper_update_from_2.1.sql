@@ -1,0 +1,1 @@
+alter table ZPE_RPAGOS  modify  PAG_MODTRA VARCHAR2(20);

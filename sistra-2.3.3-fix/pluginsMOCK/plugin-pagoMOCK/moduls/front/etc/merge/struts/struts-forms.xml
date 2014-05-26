@@ -1,0 +1,8 @@
+<form-bean
+    name="initForm"
+    type="es.caib.pagosMOCK.front.form.InitForm"/>
+    
+<form-bean
+    name="pagoForm"
+    type="es.caib.pagosMOCK.front.form.PagoForm"/>    
+  

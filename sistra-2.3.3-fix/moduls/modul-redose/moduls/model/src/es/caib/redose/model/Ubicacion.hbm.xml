@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="es.caib.redose.model.Ubicacion" table="RDS_UBICA">
+    	<cache usage="read-write"/>
+    	
+        <id name="codigo" unsaved-value="null" column="UBI_CODIGO">
+            <generator class="sequence">
+                <param name="sequence">RDS_SEQUBI</param>
+            </generator>
+        </id>
+        
+        <property name="codigoUbicacion" type="string" column="UBI_IDENT" length="5" not-null="true" unique="true" />
+        <property name="nombre" type="string" column="UBI_NOMBRE" length="50" not-null="true" />
+        <property name="pluginAlmacenamiento" type="string" column="UBI_PLUGIN" length="500" not-null="true" />
+		<property name="defecto" type="string" column="UBI_DEFECT" length="1" not-null="true" />
+		
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class  name="es.caib.bantel.model.CampoFuenteDatos" table="BTE_CAMFUE">
+	<cache usage="read-write"/>
+    
+    <id name="codigo" unsaved-value="null" column="CFU_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">BTE_SEQCFU</param>
+          </generator>
+      </id>	
+	
+	<property name="identificador" column="CFU_IDENT" not-null="true" length="20"/>
+	
+	<property name="esPK" column="CFU_ESPK" not-null="true" length="1"/>
+	
+    <many-to-one name="fuenteDatos" column="CFU_CODFUE" not-null="true"/>       
+  	
+</class>
+</hibernate-mapping>
