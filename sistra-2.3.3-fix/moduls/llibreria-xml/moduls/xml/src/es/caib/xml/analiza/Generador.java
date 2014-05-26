@@ -90,7 +90,10 @@ public class Generador {
 		Iterator itHojas = nodosHojas.iterator();
 		while (itHojas.hasNext()){
 			
-			Object o = itHojas.next();
+			// Object o = itHojas.next();
+			String xpath = (String) itHojas.next();
+			Object o = nodosHojas.get(xpath);
+			
 			
 			if (o instanceof List){
 				List lista = (List) o;
