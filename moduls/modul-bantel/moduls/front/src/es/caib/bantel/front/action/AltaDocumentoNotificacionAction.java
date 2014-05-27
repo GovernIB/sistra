@@ -1,5 +1,6 @@
 package es.caib.bantel.front.action;
 
+import java.io.ByteArrayInputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -23,6 +24,7 @@ import es.caib.xml.ConstantesXML;
 import es.caib.xml.documentoExternoNotificacion.factoria.FactoriaObjetosXMLDocumentoExternoNotificacion;
 import es.caib.xml.documentoExternoNotificacion.factoria.ServicioDocumentoExternoNotificacionXML;
 import es.caib.xml.documentoExternoNotificacion.factoria.impl.DocumentoExternoNotificacion;
+import es.indra.util.pdf.UtilPDF;
 
 /**
  * @struts.action
@@ -136,7 +138,7 @@ public class AltaDocumentoNotificacionAction extends BaseAction
 
 		// Guardo un documento con la extension que tiene y me devueve el documento con el contenido en pdf
 		DocumentoRDS documentRDS = null;
-		documentRDS = DocumentosUtil.crearDocumentoRDS(documento,uniAdm.toString());
+		documentRDS = DocumentosUtil.crearDocumentoRDS(documento,uniAdm.toString(), false);
 		
 		documento.setTitulo(documentRDS.getTitulo());
 		documento.setContenidoFichero(null);
@@ -154,18 +156,28 @@ public class AltaDocumentoNotificacionAction extends BaseAction
 	private DocumentoFirmar altaDocumentoFichero(
 			DetalleNotificacionForm notificacionForm,
 			Long uniAdm) throws Exception {
-		
+		boolean convertirPDF = true;
 		if (notificacionForm.getDocumentoAnexoOficio() == null ||
 				StringUtils.isEmpty(notificacionForm.getDocumentoAnexoOficio().getFileName()) ||
 				StringUtils.isEmpty(notificacionForm.getTituloAnexoOficio())){
 			Log.error("Faltan datos fichero");
 			return null;
 		}
-			
-		if(!DocumentosUtil.extensionCorrecta(notificacionForm.getDocumentoAnexoOficio().getFileName())){
-			Log.error("Extension no es correcta");
-			return null;
-		}	
+		
+		// Si es un PDF comprobamos que sea PDF/A		
+		if  ("PDF".equalsIgnoreCase(DocumentosUtil.getExtension(notificacionForm.getDocumentoAnexoOficio().getFileName()))) {
+			if (!UtilPDF.isPdfA( new ByteArrayInputStream(notificacionForm.getDocumentoAnexoOficio().getFileData()))) {
+				Log.error("No es PDF/A");
+				return null;
+			}
+			convertirPDF = false;
+		} else {
+			// Si no es PDF, miramos si se puede convertir
+			if(!DocumentosUtil.extensionCorrecta(notificacionForm.getDocumentoAnexoOficio().getFileName())){
+				Log.error("Extension no es correcta");
+				return null;
+			}	
+		}
 			
 		DocumentoFirmar documento = new DocumentoFirmar();
 		documento.setTipoDocumento("FICHERO");
@@ -176,7 +188,7 @@ public class AltaDocumentoNotificacionAction extends BaseAction
 
 		//Guardo un documento con la extension que tiene y me devueve el documento con el contenido en pdf
 		DocumentoRDS documentRDS = null;
-		documentRDS = DocumentosUtil.crearDocumentoRDS(documento,uniAdm.toString());
+		documentRDS = DocumentosUtil.crearDocumentoRDS(documento,uniAdm.toString(), convertirPDF);
 		
 		documento.setTitulo(documentRDS.getTitulo());
 		documento.setContenidoFichero(null);

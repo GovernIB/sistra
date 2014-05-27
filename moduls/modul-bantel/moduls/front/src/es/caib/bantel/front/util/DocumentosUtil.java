@@ -38,12 +38,13 @@ public final class DocumentosUtil {
 	/**
 	 * Crea un documento RDS a partir del documento pasado por el aviso, los datos del formulario
 	 * @param documento documentoRDS
+	 * @param convertirPDF Si convierte a PDF
 	 * @param form formulario con los datos del aviso
 	 * @param fir la firma del documento
 	 * @return un documento RDS que ya estara pasa a pdf
 	 * @throws ExcepcionPAD
 	 */
-	public static DocumentoRDS crearDocumentoRDS(DocumentoFirmar documento, String unidadAdministrativa) throws ExcepcionPAD
+	public static DocumentoRDS crearDocumentoRDS(DocumentoFirmar documento, String unidadAdministrativa, boolean convertirPDF) throws ExcepcionPAD
 	{		
 		try {
 			RdsDelegate rdsDelegate = DelegateRDSUtil.getRdsDelegate();
@@ -63,10 +64,11 @@ public final class DocumentosUtil {
 				docRDS.setModelo( ConstantesRDS.MODELO_NOTIFICACION  );
 				docRDS.setEstructurado( false );
 				docRDS.setVersion( 1 );
-				
-				transf = new TransformacionRDS();
-				transf.setBarcodePDF(true);
-				transf.setConvertToPDF(true);
+				if (convertirPDF) {
+					transf = new TransformacionRDS();
+					transf.setBarcodePDF(true);
+					transf.setConvertToPDF(true);
+				}	
 			}
 			else
 			{

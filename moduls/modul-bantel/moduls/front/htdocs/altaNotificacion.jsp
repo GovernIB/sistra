@@ -230,7 +230,7 @@ function altaDocument(form, url){
 		if(archivo != null && archivo != ''){
 			var extension = (archivo.substring(archivo.lastIndexOf("."))).toLowerCase();
 			if(extension != null && extension != ''){
-				var extensiones_permitidas = new Array(".docx", ".doc", ".odt"); 
+				var extensiones_permitidas = new Array(".docx", ".doc", ".odt", ".pdf"); 
 				for (var i = 0; i < extensiones_permitidas.length; i++) {
 					if (extensiones_permitidas[i] == extension) {
 						permitida = true;
