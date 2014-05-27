@@ -394,7 +394,7 @@ public class DetalleNotificacionForm extends ValidatorForm
             errors = new ActionErrors();
         }
         if(documentoAnexoOficio != null && documentoAnexoOficio.getFileName() != null  && !"".equals(documentoAnexoOficio.getFileName())){
-        	if(!DocumentosUtil.extensionCorrecta(documentoAnexoOficio.getFileName())){
+        	if(!"PDF".equalsIgnoreCase(DocumentosUtil.getExtension(documentoAnexoOficio.getFileName())) &&  !DocumentosUtil.extensionCorrecta(documentoAnexoOficio.getFileName())){
         		errors.add("altaNotificacion",new ActionError("error.aviso.extensiones.fichero"));
         	}
         }

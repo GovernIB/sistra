@@ -1,18 +1,9 @@
 package es.caib.bantel.front.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 
-import es.caib.sistra.modelInterfaz.ValoresDominio;
-import es.caib.sistra.persistence.delegate.DelegateSISTRAUtil;
 import es.caib.util.ConvertUtil;
 import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
-import es.caib.bantel.front.json.Localidad;
-import es.caib.bantel.front.json.Pais;
-import es.caib.bantel.front.json.Provincia;
-import es.caib.bantel.front.json.UnidadAdministrativa;
 
 
 /**
