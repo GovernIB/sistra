@@ -1,6 +1,5 @@
 package es.caib.bantel.front.action;
 
-import java.io.ByteArrayInputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -24,7 +23,6 @@ import es.caib.xml.ConstantesXML;
 import es.caib.xml.documentoExternoNotificacion.factoria.FactoriaObjetosXMLDocumentoExternoNotificacion;
 import es.caib.xml.documentoExternoNotificacion.factoria.ServicioDocumentoExternoNotificacionXML;
 import es.caib.xml.documentoExternoNotificacion.factoria.impl.DocumentoExternoNotificacion;
-import es.indra.util.pdf.UtilPDF;
 
 /**
  * @struts.action
@@ -162,10 +160,12 @@ public class AltaDocumentoAvisoAction extends BaseAction
 		
 		// Si es un PDF comprobamos que sea PDF/A		
 		if  ("PDF".equalsIgnoreCase(DocumentosUtil.getExtension(avisoForm.getDocumentoAnexoFichero().getFileName()))) {
+			/*
 			if (!UtilPDF.isPdfA( new ByteArrayInputStream(avisoForm.getDocumentoAnexoFichero().getFileData()))) {
 				Log.error("No es PDF/A");
 				return null;
 			}
+			*/
 			convertirPDF = false;
 		} else {
 			// Si no es PDF, miramos si se puede convertir
