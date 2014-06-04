@@ -1030,7 +1030,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			}
 			
 			// Crear datos asunto
-			DatosAsunto dAsunto = asientoNotificacion.getDatosAsunto();		
+			DatosAsunto dAsunto = factoria.crearDatosAsunto(); // asientoNotificacion.getDatosAsunto();		
 			dAsunto.setFechaAsunto(new Date());
 			dAsunto.setIdiomaAsunto (asientoNotificacion.getDatosAsunto().getIdiomaAsunto());
 			if (rechazada) {
@@ -1053,9 +1053,13 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			dAsunto.setCodigoUnidadAdministrativa( asientoNotificacion.getDatosAsunto().getCodigoUnidadAdministrativa() );		
 			asiento.setDatosAsunto (dAsunto);
 			
-			// Crear Anexo con el aviso		
-			DatosAnexoDocumentacion anexoAvisoNotificacion = obtenerAnexoAsientoDeTipo( asientoNotificacion, ConstantesAsientoXML.DATOSANEXO_AVISO_NOTIFICACION );
-			asiento.getDatosAnexoDocumentacion().add( anexoAvisoNotificacion );
+			// Adjuntamos los anexos de la notificacion, incluidos el aviso y la comunicacion
+			for( Iterator it = asientoNotificacion.getDatosAnexoDocumentacion().iterator(); it.hasNext(); )
+			{
+				DatosAnexoDocumentacion anexoDoc = ( DatosAnexoDocumentacion ) it.next();
+				asiento.getDatosAnexoDocumentacion().add( anexoDoc );
+			}
+			
 			
 			return asiento;
 		}catch (Exception ex) {
