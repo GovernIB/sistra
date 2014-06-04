@@ -103,7 +103,7 @@ public class PluginBackOffice {
 					AutenticacionExplicitaInfo authInfo = null;
 					try{
 						authInfo = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo(ConstantesLogin.TIPO_PROCEDIMIENTO, procedimiento.getIdentificador());
-						log.debug("Usuario plugin autenticacion organismo: " + authInfo.getUser());
+						log.debug("Usuario plugin autenticacion organismo: " + authInfo.getUser() + " para procedimiento " + procedimiento.getIdentificador());
 					}catch (Exception ex){
 						throw new Exception("Excepcion obteniendo informacion autenticacion explicita a traves de plugin organismo",ex);
 					}	
@@ -180,7 +180,7 @@ public class PluginBackOffice {
 				AutenticacionExplicitaInfo authInfo = null;
 				try{
 					authInfo = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo(ConstantesLogin.TIPO_PROCEDIMIENTO, procedimiento.getIdentificador());
-					log.debug("Usuario plugin autenticacion organismo: " + authInfo.getUser());
+					log.debug("Usuario plugin autenticacion organismo: " + authInfo.getUser() + " para procedimiento " + procedimiento.getIdentificador());
 				}catch (Exception ex){
 					throw new Exception("Excepcion obteniendo informacion autenticacion explicita a traves de plugin organismo",ex);
 				}

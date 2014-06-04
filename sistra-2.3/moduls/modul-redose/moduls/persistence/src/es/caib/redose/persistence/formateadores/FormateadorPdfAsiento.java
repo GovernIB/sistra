@@ -19,6 +19,9 @@ import es.caib.redose.persistence.ejb.ResolveRDS;
 import es.caib.redose.persistence.util.UtilRDS;
 import es.caib.util.StringUtil;
 import es.caib.xml.ConstantesXML;
+import es.caib.xml.avisonotificacion.factoria.FactoriaObjetosXMLAvisoNotificacion;
+import es.caib.xml.avisonotificacion.factoria.ServicioAvisoNotificacionXML;
+import es.caib.xml.avisonotificacion.factoria.impl.AvisoNotificacion;
 import es.caib.xml.datospropios.factoria.ConstantesDatosPropiosXML;
 import es.caib.xml.datospropios.factoria.FactoriaObjetosXMLDatosPropios;
 import es.caib.xml.datospropios.factoria.ServicioDatosPropiosXML;
@@ -90,7 +93,7 @@ public class FormateadorPdfAsiento implements FormateadorDocumento{
     			refOficioRemision = 
     				ResolveRDS.getInstance().resuelveRDS(Long.parseLong(da.getCodigoRDS()));
     		}
-    		else if (registroSalida && da.getTipoDocumento().charValue() == ConstantesAsientoXML.DATOSANEXO_AVISO_NOTIFICACION){
+    		else if (da.getTipoDocumento().charValue() == ConstantesAsientoXML.DATOSANEXO_AVISO_NOTIFICACION){
     			refAvisoNotificacion = 
     				ResolveRDS.getInstance().resuelveRDS(Long.parseLong(da.getCodigoRDS()));
     		}
@@ -155,9 +158,24 @@ public class FormateadorPdfAsiento implements FormateadorDocumento{
     		}
     	}
     	if(registroSalida){
-    		if (refOficioRemision == null) throw new Exception("No se encuentra documento de oficio de rimisión");
+    		if (refOficioRemision == null) throw new Exception("No se encuentra documento de oficio de remisión");
     		if (refAvisoNotificacion == null) throw new Exception("No se encuentra documento de aviso de notificación");
     	}
+    	
+    	// Recuperamos aviso y oficio si existen
+    	AvisoNotificacion avisoNotificacion = null;
+    	if (refAvisoNotificacion != null) {
+			DocumentoRDS docRDS = rds.consultarDocumento(refAvisoNotificacion);
+			FactoriaObjetosXMLAvisoNotificacion factoriaAvisoNotificacion = ServicioAvisoNotificacionXML.crearFactoriaObjetosXML();
+			avisoNotificacion = factoriaAvisoNotificacion.crearAvisoNotificacion(new ByteArrayInputStream (docRDS.getDatosFichero()));
+    	}
+    	OficioRemision oficioRemision = null;
+    	if (refAvisoNotificacion != null) {
+			DocumentoRDS docRDS = rds.consultarDocumento(refOficioRemision);
+			FactoriaObjetosXMLOficioRemision factoriaOficioRemision = ServicioOficioRemisionXML.crearFactoriaObjetosXML();
+			oficioRemision = factoriaOficioRemision.crearOficioRemision(new ByteArrayInputStream (docRDS.getDatosFichero()));
+    	}
+    	
 		    	
     	// CABECERA: TITULO Y LOGO
     	// Creamos documento con la imagen y el título
@@ -184,6 +202,16 @@ public class FormateadorPdfAsiento implements FormateadorDocumento{
 	    	propiedad = new Propiedad(props.getProperty("datosRegistro." + tipoRegistro + ".fechaRegistro"),
 	    			fechaReg);
 			seccion.addCampo(propiedad);
+						
+			// Expediente
+			if (avisoNotificacion != null) {
+				if (avisoNotificacion.getExpediente() != null && avisoNotificacion.getExpediente().getIdentificadorExpediente() != null) {
+					propiedad = new Propiedad(props.getProperty("datosRegistro." + tipoRegistro + ".expediente"),
+							avisoNotificacion.getExpediente().getIdentificadorExpediente());
+					seccion.addCampo(propiedad);
+				}
+			}			
+			
     	}
 		
 		propiedad = new Propiedad(props.getProperty("datosRegistro." + tipoRegistro + ".fechaSolicitud"),
@@ -405,15 +433,12 @@ public class FormateadorPdfAsiento implements FormateadorDocumento{
     	}
     	
     	
-    	if (registroSalida) {
+    	// Oficio remisión y documentos aportados
+    	if ( (registroSalida || acuseRecibo) &&  oficioRemision != null) {
     		
     		//SECCION OFICIO REMISION
     		seccion = new Seccion(letras[numSecciones], props.getProperty("oficioRemision.titulo"));//props.getProperty("datosSolicitud.titulo"));
-    		numSecciones++;
-    		FactoriaObjetosXMLOficioRemision factOfi = ServicioOficioRemisionXML.crearFactoriaObjetosXML();
-    		factOfi.setEncoding(ConstantesXML.ENCODING);
-    		DocumentoRDS docRDSOficio = rds.consultarDocumento(refOficioRemision);
-    		OficioRemision oficioRemision =factOfi.crearOficioRemision(new ByteArrayInputStream(docRDSOficio.getDatosFichero()));
+    		numSecciones++;    		
     		propiedad = new Propiedad(props.getProperty("oficioRemision.tituloOficio"),  oficioRemision.getTitulo());		
     		seccion.addCampo(propiedad);
     		propiedad = new Propiedad(props.getProperty("oficioRemision.textoOficio"),  oficioRemision.getTexto());		
