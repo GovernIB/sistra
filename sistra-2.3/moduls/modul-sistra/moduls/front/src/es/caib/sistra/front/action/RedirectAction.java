@@ -8,8 +8,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import es.caib.util.ValidacionesUtil;
-
 /**
  * @struts.action
  *  path="/redirect"
@@ -22,13 +20,6 @@ public class RedirectAction extends Action
              HttpServletResponse response) throws Exception 
      {
 		 String url = request.getParameter("url");
-		 
-		 
-		 // Verificamos url. Si no es valida, redirigimos a portal
-		 if (!ValidacionesUtil.esURL(url)) {
-			 url = "irAPortal.do";
-		 }
-		 
 		 response.sendRedirect(url);		 
 		 return null;
      }
