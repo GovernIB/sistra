@@ -20,11 +20,6 @@
 			top	= "top.";
 		}
 		
-		// Validamos si es una URL. Si no lo es redirigimos a portal.
-		if (!ValidacionesUtil.esURL(url)) {
-			url = "irAPortal.do";	
-		}
-		
 	%>
 	
 	<%=top%>document.location="<%=url%>";

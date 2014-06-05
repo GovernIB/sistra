@@ -3027,6 +3027,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	        	urlFin = this.evaluarScript(scriptUrlFin,null);
 	        	if (!StringUtils.isEmpty ( urlFin )){
 	        		// Validamos construccion url
+	        		urlFin = urlFin.trim();
 	            	try{
 	            		if (!("[ZONAPER]".equals(urlFin))){
 	            			new URL(urlFin);
