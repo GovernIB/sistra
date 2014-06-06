@@ -11,6 +11,7 @@
 			<xs:element name="inmediato" type="xs:boolean"/>
 			<xs:element name="emails" type="ns1:MensajesEnvioEmail" nillable="true" minOccurs="0"/>
 			<xs:element name="smss" type="ns2:MensajesEnvioSMS" nillable="true" minOccurs="0"/>
+			<xs:element name="idProcedimiento" type="xs:string" nillable="true" minOccurs="0"/>			
 		</xs:sequence>
 	</xs:complexType>
 </xs:schema>
