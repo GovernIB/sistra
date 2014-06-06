@@ -50,6 +50,9 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			if(mensaje.getSmss()!= null){
 				msEnv.setSmss(smssWSToSmssIntf(mensaje.getSmss().getValue()));
 			}
+			if (mensaje.getIdProcedimiento() != null) {
+				msEnv.setIdProcedimiento(mensaje.getIdProcedimiento().getValue());
+			}
 		}
 		return msEnv;
 	}
