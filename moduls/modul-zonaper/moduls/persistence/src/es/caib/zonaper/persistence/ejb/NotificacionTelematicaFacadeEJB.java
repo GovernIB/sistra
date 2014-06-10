@@ -475,9 +475,11 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 	private String iniciarTramiteSubsanacionNotificacionImpl(
 			Long codigoNotificacion, String idPersistencia) {
 		try {
+			// Autenticado
+			boolean autenticado = (idPersistencia == null);
 	    	// Recuperamos datos notificacion
 	    	NotificacionTelematica notificacionTelematica;
-	    	if (idPersistencia != null) {	    	
+	    	if (!autenticado) {	    	
 	    		notificacionTelematica = this.obtenerNotificacionTelematicaAnonima(codigoNotificacion,idPersistencia);
 	    	} else {
 	    		notificacionTelematica = this.obtenerNotificacionTelematicaAutenticada(codigoNotificacion);
@@ -486,7 +488,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 	    		throw new Exception("La notificacion no ha sido abierta todavia");
 	    	}
 	    	// Preparamos parametros tramite de subsanacion
-	    	String key = generaParametrosInicioSubsanacion(notificacionTelematica, false, idPersistencia);
+	    	String key = generaParametrosInicioSubsanacion(notificacionTelematica, autenticado, idPersistencia);
 	    	return key;
     	}catch( Exception exc ){
         	throw new EJBException( exc );
