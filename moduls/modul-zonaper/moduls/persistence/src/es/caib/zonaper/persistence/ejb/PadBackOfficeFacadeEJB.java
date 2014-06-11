@@ -188,10 +188,10 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		establecerRepresentanteExpedienteAnonimo(expediente, entrada);
 			
 		// Por compatibilidad con versiones anteriores si no indicamos procedimiento asociamos el de la entrada
-		if (expediente.getIdentificadorProcedimiento() == null) {
+		if (expediente.getIdentificadorProcedimiento() == null && entrada != null) {
 			expediente.setIdentificadorProcedimiento(entrada.getProcedimiento());
 		} 
-		
+						
 		// Verifica alta expediente
 		verificarAltaExpediente(expediente, entrada);
 		
@@ -1559,6 +1559,12 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 	private void verificarAltaExpediente(ExpedientePAD expediente,
 			Entrada entrada) throws ExcepcionPAD {
 		ExpedienteDelegate delegateExpe = DelegateUtil.getExpedienteDelegate();
+		
+		// Verifica si tiene asociado procedimiento
+		if (expediente.getIdentificadorProcedimiento() == null) {
+			throw new ExcepcionPAD("No se ha especificado id procedmiento");
+		}
+		
 		// Comprobamos si ya existe el expediente				
 		try {
 			if (delegateExpe.existeExpedienteReal(expediente.getUnidadAdministrativa().longValue(), expediente.getIdentificadorExpediente())){

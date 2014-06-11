@@ -27,6 +27,10 @@ public class FiltroBusquedaExpedientePAD implements Serializable {
 	 */
 	private int mes;
 	/**
+	 * Id expediente.
+	 */
+	private String idExpediente = "";
+	/**
 	 * Numero entrada que crea el expediente.
 	 */
 	private String numeroEntradaBTE;
@@ -80,6 +84,12 @@ public class FiltroBusquedaExpedientePAD implements Serializable {
 	}
 	public void setFechaHasta(Date fechaHasta) {
 		this.fechaHasta = fechaHasta;
+	}
+	public String getIdExpediente() {
+		return idExpediente;
+	}
+	public void setIdExpediente(String numeroExpediente) {
+		this.idExpediente = numeroExpediente;
 	}
 	
 }
