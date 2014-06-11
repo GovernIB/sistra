@@ -66,6 +66,7 @@ public class BusquedaExpedientesAction extends BaseAction
 		
 		filtro.setNifRepresentante(formularioBusqueda.getUsuarioNif());
 		filtro.setNumeroEntradaBTE(formularioBusqueda.getNumeroEntrada());
+		filtro.setIdExpediente(formularioBusqueda.getIdExpediente());
 		
 		
 		PaginaPAD page = es.caib.zonaper.persistence.delegate.DelegatePADUtil.getPadDelegate().busquedaPaginadaExpedientesGestor(filtro, formularioBusqueda.getPagina(), formularioBusqueda.getLongitudPagina() );
