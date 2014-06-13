@@ -104,6 +104,9 @@ public class AltaNotificacionAction extends BaseAction
 			
 			// Deshabilitamos por defecto el acceso por clave
 			notificacionForm.setAccesoPorClave("N");
+			
+			// Plazo x defecto
+			notificacionForm.setDiasPlazo("0");
 						
 			return mapping.findForward( "success" );							
 			

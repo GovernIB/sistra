@@ -1248,13 +1248,14 @@ public abstract class PadFacadeEJB implements SessionBean{
     				notificacion.setClaveRdsAviso(ref.getClave());
     				notificacion.setTituloAviso(avisoNotificacion.getTitulo().length()<500?avisoNotificacion.getTitulo():avisoNotificacion.getTitulo().substring(0,500));    				
     				notificacion.setFirmarAcuse(avisoNotificacion.getAcuseRecibo().booleanValue());
+    				notificacion.setDiasPlazo(avisoNotificacion.getPlazo());
     				if (avisoNotificacion.getAccesiblePorClave() != null) {
     					notificacion.setAccesiblePorClave(avisoNotificacion.getAccesiblePorClave().booleanValue());
     				} else {
     					// COMPATIBILIDAD CON VERSIONES ANTERIORES A 2.1: EXPE ANONIMOS GENERAN SIEMPRE NOTIFS ACCESIBLES POR CLAVE
     					// Si no se especifica si es accesible por clave, por compatibilidad será accesible si expe es anónimo
     					notificacion.setAccesiblePorClave(expe.getUsuarioSeycon() == null);
-    				}    				
+    				}    			    				
     				break;
     				
     		    //  Datos oficio remision: establecemos datos oficio en notificacion
@@ -1325,7 +1326,11 @@ public abstract class PadFacadeEJB implements SessionBean{
     	// En caso de que se controle la entrega de la notificacioncalculamos fin de plazo
     	boolean controlEntregaHabilitada = "true".equals(ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("notificaciones.controlEntrega.habilitar"));
 		if ( notificacion.isFirmarAcuse() &&  controlEntregaHabilitada) {
-    		Date finPlazo = CalendarioUtil.getInstance().calcularPlazoFinNotificacion(new Date(), 10, true, false);
+			int plazo = 10; // Plazo por defecto
+			if (notificacion.getDiasPlazo() != null) {
+				plazo = notificacion.getDiasPlazo().intValue();				
+			}
+			Date finPlazo = CalendarioUtil.getInstance().calcularPlazoFinNotificacion(new Date(), plazo, true, false);
     		notificacion.setFechaFinPlazo(finPlazo);
     	}
     	

@@ -101,43 +101,45 @@ public class ClienteWS {
             //los añadimos todos dentro de un ResultadoRegistrar. 
     		ArrayList docRes = new ArrayList();
     		
-    		for (int i=0;i<docs.getDocumento().size();i++){
-   				doc = new DocumentoConsulta();
-   				if(docs.getDocumento().get(i).getClaveRDS() != null){
-   					doc.setClaveRDS(docs.getDocumento().get(i).getClaveRDS().getValue());
-   				}
-   				if(docs.getDocumento().get(i).getCodigoRDS() != null && docs.getDocumento().get(i).getCodigoRDS().getValue() !=  null){
-   					doc.setCodigoRDS(docs.getDocumento().get(i).getCodigoRDS().getValue());
-   				}
-   				if(docs.getDocumento().get(i).getContenidoFichero() != null ){
-   					doc.setContenidoFichero(docs.getDocumento().get(i).getContenidoFichero().getValue());
-   				}
-   				if(docs.getDocumento().get(i).getModelo() != null){
-   					doc.setModelo(docs.getDocumento().get(i).getModelo().getValue());
-   				}
- 				doc.setNombreDocumento(docs.getDocumento().get(i).getNombreDocumento());
-   				if(docs.getDocumento().get(i).getNombreFichero() != null){
-   					doc.setNombreFichero(docs.getDocumento().get(i).getNombreFichero().getValue());
-   				}
-   				if(docs.getDocumento().get(i).getPlantilla() != null){
-   					doc.setPlantilla(docs.getDocumento().get(i).getPlantilla().getValue());
-   				}
-   				if(docs.getDocumento().get(i).getTipoDocumento() != null){
-   					doc.setTipoDocumento(docs.getDocumento().get(i).getTipoDocumento().charAt(0));
-   				}
-   				if(docs.getDocumento().get(i).getUrlAcceso() != null){
-   					doc.setUrlAcceso(docs.getDocumento().get(i).getUrlAcceso().getValue());
-   				}
-   				if(docs.getDocumento().get(i).getUrlNuevaVentana() != null && docs.getDocumento().get(i).getUrlNuevaVentana().getValue() != null){
-   					doc.setUrlNuevaVentana(docs.getDocumento().get(i).getUrlNuevaVentana().getValue());
-   				}
-   				if(docs.getDocumento().get(i).getVersion() != null && docs.getDocumento().get(i).getVersion().getValue() != null){
-   					doc.setVersion(docs.getDocumento().get(i).getVersion().getValue());
-   				}
-   				if(docs.getDocumento().get(i).getXml() != null){
-   					doc.setXml(docs.getDocumento().get(i).getXml().getValue());
-   				}
-   				docRes.add(doc);
+    		if (docs != null && docs.getDocumento() != null) {
+	    		for (int i=0;i<docs.getDocumento().size();i++){
+	   				doc = new DocumentoConsulta();
+	   				if(docs.getDocumento().get(i).getClaveRDS() != null){
+	   					doc.setClaveRDS(docs.getDocumento().get(i).getClaveRDS().getValue());
+	   				}
+	   				if(docs.getDocumento().get(i).getCodigoRDS() != null && docs.getDocumento().get(i).getCodigoRDS().getValue() !=  null){
+	   					doc.setCodigoRDS(docs.getDocumento().get(i).getCodigoRDS().getValue());
+	   				}
+	   				if(docs.getDocumento().get(i).getContenidoFichero() != null ){
+	   					doc.setContenidoFichero(docs.getDocumento().get(i).getContenidoFichero().getValue());
+	   				}
+	   				if(docs.getDocumento().get(i).getModelo() != null){
+	   					doc.setModelo(docs.getDocumento().get(i).getModelo().getValue());
+	   				}
+	 				doc.setNombreDocumento(docs.getDocumento().get(i).getNombreDocumento());
+	   				if(docs.getDocumento().get(i).getNombreFichero() != null){
+	   					doc.setNombreFichero(docs.getDocumento().get(i).getNombreFichero().getValue());
+	   				}
+	   				if(docs.getDocumento().get(i).getPlantilla() != null){
+	   					doc.setPlantilla(docs.getDocumento().get(i).getPlantilla().getValue());
+	   				}
+	   				if(docs.getDocumento().get(i).getTipoDocumento() != null){
+	   					doc.setTipoDocumento(docs.getDocumento().get(i).getTipoDocumento().charAt(0));
+	   				}
+	   				if(docs.getDocumento().get(i).getUrlAcceso() != null){
+	   					doc.setUrlAcceso(docs.getDocumento().get(i).getUrlAcceso().getValue());
+	   				}
+	   				if(docs.getDocumento().get(i).getUrlNuevaVentana() != null && docs.getDocumento().get(i).getUrlNuevaVentana().getValue() != null){
+	   					doc.setUrlNuevaVentana(docs.getDocumento().get(i).getUrlNuevaVentana().getValue());
+	   				}
+	   				if(docs.getDocumento().get(i).getVersion() != null && docs.getDocumento().get(i).getVersion().getValue() != null){
+	   					doc.setVersion(docs.getDocumento().get(i).getVersion().getValue());
+	   				}
+	   				if(docs.getDocumento().get(i).getXml() != null){
+	   					doc.setXml(docs.getDocumento().get(i).getXml().getValue());
+	   				}
+	   				docRes.add(doc);
+	    		}
     		}
     		
     		return docRes;

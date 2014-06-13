@@ -260,12 +260,16 @@ public class AvisosExpediente {
         	boolean controlEntregaHabilitado = Boolean.parseBoolean(controlEntregaNotif);        	
         	
         	String notaLegalNotificacion = "";
+        	String paramsNotaLegal[] = null;
         	if (notif.isFirmarAcuse()) {
         		if (controlEntregaHabilitado) {
     				notaLegalNotificacion = "aviso.email.notaLegal.notificacion.controlEntregaHabilitado";			
     			} else {
     				notaLegalNotificacion = "aviso.email.notaLegal.notificacion.controlEntregaDeshabilitado";
     			}
+        		paramsNotaLegal = new String[1];
+        		paramsNotaLegal[0] = (notif.getDiasPlazo() != null? notif.getDiasPlazo().toString() : "10");
+        		
         	} 
         				
 			// Textos Email
@@ -275,7 +279,7 @@ public class AvisosExpediente {
 			textoEmail = StringUtil.replace(textoEmail,"[#FECHA#]", StringUtil.fechaACadena(notif.getFechaRegistro(),StringUtil.FORMATO_FECHA));
 			textoEmail = StringUtil.replace(textoEmail,"[#TITULO#]",StringEscapeUtils.escapeHtml(aviso.getTitulo()));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO#]",StringUtil.replace(StringEscapeUtils.escapeHtml(aviso.getTexto()),"\n","</br>"));									
-			textoEmail = StringUtil.replace(textoEmail,"[#NOTA_LEGAL#]",notaLegalNotificacion.equals("")?"":StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),notaLegalNotificacion)));			
+			textoEmail = StringUtil.replace(textoEmail,"[#NOTA_LEGAL#]",notaLegalNotificacion.equals("")?"":StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),notaLegalNotificacion, paramsNotaLegal)));			
 			textoEmail = StringUtil.replace(textoEmail,"[#ORGANISMO.NOMBRE#]",oi.getNombre());
 			textoEmail = StringUtil.replace(textoEmail,"[#ORGANISMO.LOGO#]",oi.getUrlLogo());
 			

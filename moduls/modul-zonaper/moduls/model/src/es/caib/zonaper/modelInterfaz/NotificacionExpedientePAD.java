@@ -34,6 +34,11 @@ public class NotificacionExpedientePAD extends ElementoExpedientePAD{
 	 */
 	private String claveAcceso;
 	/**
+	 * Días plazo (si nulo, por defecto).
+	 */
+	private Integer diasPlazo;
+	
+	/**
 	 * Detalle acuse recibo.
 	 */
 	private DetalleAcuseRecibo detalleAcuseRecibo;
@@ -146,6 +151,14 @@ public class NotificacionExpedientePAD extends ElementoExpedientePAD{
 
 	public void setClaveAcceso(String claveAcceso) {
 		this.claveAcceso = claveAcceso;
+	}
+
+	public Integer getDiasPlazo() {
+		return diasPlazo;
+	}
+
+	public void setDiasPlazo(Integer diasPlazo) {
+		this.diasPlazo = diasPlazo;
 	}
 	
 }

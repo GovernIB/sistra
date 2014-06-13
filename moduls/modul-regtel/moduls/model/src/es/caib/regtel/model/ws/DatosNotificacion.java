@@ -7,6 +7,7 @@ public class DatosNotificacion {
     private String tipoAsunto;
     private boolean acuseRecibo;
     private Boolean accesiblePorClave;
+    private Integer plazo; // Si nulo, plazo de 10 dias por defecto. 
     private Aviso aviso;
     private OficioRemision oficioRemision;
 
@@ -56,6 +57,14 @@ public class DatosNotificacion {
 
 	public void setAccesiblePorClave(Boolean accesiblePorClave) {
 		this.accesiblePorClave = accesiblePorClave;
+	}
+
+	public Integer getPlazo() {
+		return plazo;
+	}
+
+	public void setPlazo(Integer plazo) {
+		this.plazo = plazo;
 	}
 
 }

@@ -217,7 +217,7 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 					r.setDatosNotificacion(dn.getIdioma(), dn.getTipoAsunto(), dn.getAviso().getTitulo(), 
 							dn.getAviso().getTexto(), dn.getAviso().getTextoSMS(), dn.getOficioRemision().getTitulo(),
 							dn.getOficioRemision().getTexto(), dn.isAcuseRecibo(),
-							dn.getAccesiblePorClave());
+							dn.getAccesiblePorClave(), dn.getPlazo());
 				}
 				if (dn.getOficioRemision().getTramiteSubsanacion() != null){
 					r.setTramiteSubsanacion(dn.getOficioRemision().getTramiteSubsanacion().getDescripcionTramite(),dn.getOficioRemision().getTramiteSubsanacion().getIdentificadorTramite(),dn.getOficioRemision().getTramiteSubsanacion().getVersionTramite().intValue(),dn.getOficioRemision().getTramiteSubsanacion().getParametrosTramite());

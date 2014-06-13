@@ -303,7 +303,11 @@ public class FactoriaObjetosXMLAvisoNotificacionImpl implements
 			
 			if (avisoNotificacionJAXB.getACCESIBLEPORCLAVE() != null) {
 				avisoNotificacion.setAccesiblePorClave(new Boolean(avisoNotificacionJAXB.getACCESIBLEPORCLAVE().equals("SI")));
-			}			
+			}	
+			
+			if (avisoNotificacionJAXB.getPLAZO() != null && avisoNotificacionJAXB.getPLAZO().length() > 0) {
+				avisoNotificacion.setPlazo(new Integer(avisoNotificacionJAXB.getPLAZO()));
+			}	
 			
 			avisoNotificacion.setExpediente(crearExpediente(avisoNotificacionJAXB.getEXPEDIENTE()));
 		}
@@ -319,7 +323,10 @@ public class FactoriaObjetosXMLAvisoNotificacionImpl implements
 			avisoNotificacionJAXB.setACUSERECIBO( (avisoNotificacion.getAcuseRecibo().booleanValue()?"SI":"NO"));
 			if (avisoNotificacion.getAccesiblePorClave() != null) {
 				avisoNotificacionJAXB.setACCESIBLEPORCLAVE((avisoNotificacion.getAccesiblePorClave().booleanValue()?"SI":"NO"));
-			}			
+			}	
+			if (avisoNotificacion.getPlazo() != null) {
+				avisoNotificacionJAXB.setPLAZO(avisoNotificacion.getPlazo().toString());
+			}	
 			avisoNotificacionJAXB.setEXPEDIENTE(crearExpediente(avisoNotificacion.getExpediente()));			
 		}
 	}

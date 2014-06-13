@@ -870,7 +870,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		if (notificacion.isAccesiblePorClave()) {
 			nep.setClaveAcceso(notificacion.getIdentificadorPersistencia());
 		}
-		
+		nep.setDiasPlazo(notificacion.getDiasPlazo());
 		// Obtenemos detalle acuse
 		DetalleAcuseRecibo detalleAcuse = new DetalleAcuseRecibo();
 		detalleAcuse.setFechaAcuseRecibo(notificacion.getFechaAcuse());

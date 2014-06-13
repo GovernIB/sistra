@@ -32,6 +32,7 @@ public class NotificacionTelematica implements java.io.Serializable,ElementoExpe
      private boolean firmarAcuse;
      private String gestorSeycon;
      private Date fechaFinPlazo;
+     private Integer diasPlazo;
      private boolean rechazada;
      
      private String tramiteSubsanacionDescripcion;
@@ -326,6 +327,14 @@ public class NotificacionTelematica implements java.io.Serializable,ElementoExpe
 
 	public void setTipoFirmaAcuse(String tipoFirmaAcuse) {
 		this.tipoFirmaAcuse = tipoFirmaAcuse;
+	}
+
+	public Integer getDiasPlazo() {
+		return diasPlazo;
+	}
+
+	public void setDiasPlazo(Integer diasPlazo) {
+		this.diasPlazo = diasPlazo;
 	}	
     
 }

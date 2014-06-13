@@ -15,11 +15,12 @@ public class PruebaLecturaAvisoNotificacion {
 		System.out.println ("Texto: " + avisoNotificacion.getTexto());
 		System.out.println ("Texto SMS: " + avisoNotificacion.getTextoSMS());
 		System.out.println ("Acuse: " + avisoNotificacion.getAcuseRecibo());
+		System.out.println ("Plazo: " + avisoNotificacion.getPlazo());
 		System.out.println ("Accesible clave: " + avisoNotificacion.getAccesiblePorClave());
 		System.out.println ("Expediente: ");
 		System.out.println ("	- Unidad admin: " + avisoNotificacion.getExpediente().getUnidadAdministrativa());
 		System.out.println ("	- Id expedient: " + avisoNotificacion.getExpediente().getIdentificadorExpediente());
-		System.out.println ("	- Clave expedi: " + avisoNotificacion.getExpediente().getClaveExpediente());
+		System.out.println ("	- Clave expedi: " + avisoNotificacion.getExpediente().getClaveExpediente());		
 	}
 	
 	
