@@ -7,7 +7,8 @@
 			<xs:element name="idioma" type="xs:string"/>
 			<xs:element name="tipoAsunto" type="xs:string"/>
 			<xs:element name="acuseRecibo" type="xs:boolean"/>
-			<xs:element name="accesiblePorClave" type="xs:boolean" nillable="true" minOccurs="0"/>			
+			<xs:element name="accesiblePorClave" type="xs:boolean" nillable="true" minOccurs="0"/>
+			<xs:element name="plazo" type="xs:int" nillable="true" minOccurs="0"/>			
 			<xs:element name="aviso" type="ns1:Aviso"/>
 			<xs:element name="oficioRemision" type="ns2:OficioRemision"/>
 		</xs:sequence>

@@ -11,6 +11,8 @@
 <bean:define id="xmlAsientoAcuseRecibo" name="xmlAsientoAcuseRecibo" type="java.lang.String"/>
 <bean:define id="claveFirma" name="claveFirma" type="java.lang.String"/>
 <bean:define id="tipoFirmaAlt" name="tipoFirmaAlt" type="java.lang.String"/>
+<bean:define id="plazoDias" name="plazoDias" type="java.lang.String"/>
+
 
 <bean:define id="mensaje" type="java.lang.String">
 	<bean:write name="avisoNotificacion" property="texto" />
@@ -172,10 +174,10 @@
 	
 	<p>
 		<logic:equal name="controlEntrega" value="S">
-			<bean:message key="detalleNotificacion.notaLegal.controlPlazoHabilitado"/>
+			<bean:message key="detalleNotificacion.notaLegal.controlPlazoHabilitado" arg0="<%=plazoDias%>"/>
 		</logic:equal>
 		<logic:equal name="controlEntrega" value="N">
-			<bean:message key="detalleNotificacion.notaLegal.controlPlazoDeshabilitado"/>
+			<bean:message key="detalleNotificacion.notaLegal.controlPlazoDeshabilitado" arg0="<%=plazoDias%>"/>
 		</logic:equal>
 	</p>
 	

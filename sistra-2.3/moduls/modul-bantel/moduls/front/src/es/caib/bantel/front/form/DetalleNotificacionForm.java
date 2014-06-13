@@ -34,6 +34,7 @@ public class DetalleNotificacionForm extends ValidatorForm
 	private String idioma; 
 	private String acuse;
 	private String accesoPorClave = "N"; // S / N
+	private String diasPlazo = "0"; // 0 -> Plazo x defecto
 	private String tipoAsunto;
 	private String tituloAviso;
 	private String textoAviso;
@@ -516,6 +517,16 @@ public class DetalleNotificacionForm extends ValidatorForm
 
 	public void setAccesoPorClave(String accesoPorClave) {
 		this.accesoPorClave = accesoPorClave;
+	}
+
+
+	public String getDiasPlazo() {
+		return diasPlazo;
+	}
+
+
+	public void setDiasPlazo(String diasPlazo) {
+		this.diasPlazo = diasPlazo;
 	}
 	
 }

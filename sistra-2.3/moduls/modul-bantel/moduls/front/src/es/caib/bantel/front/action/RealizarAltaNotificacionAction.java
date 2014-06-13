@@ -64,6 +64,13 @@ public class RealizarAltaNotificacionAction extends BaseAction
 			}else{
 				documentos = (ArrayList)request.getSession().getAttribute("documentosAltaNotificacion");
 			}
+			
+			// Plazo: solo si acuse de recibo
+			Integer plazo = null;
+			if ("S".equals(notificacionForm.getAcuse()) && !("0".equals(notificacionForm.getDiasPlazo()))) {
+				plazo = new Integer(notificacionForm.getDiasPlazo());
+			}
+			
 			RegistroSalidaHelper r = new RegistroSalidaHelper();
 			r.setOficinaRegistro(notificacionForm.getOrganoDestino(),notificacionForm.getOficinaRegistro());
 			r.setExpediente(uniAdm,idExpe,claveExpe);
@@ -71,7 +78,7 @@ public class RealizarAltaNotificacionAction extends BaseAction
 			r.setDatosNotificacion(notificacionForm.getIdioma(),notificacionForm.getTipoAsunto(),notificacionForm.getTituloAviso(),
 					notificacionForm.getTextoAviso(),(StringUtils.isNotEmpty(notificacionForm.getTextoSmsAviso())?notificacionForm.getTextoSmsAviso():null),
 					notificacionForm.getTituloOficio(),notificacionForm.getTextoOficio(),"S".equals(notificacionForm.getAcuse()),
-					new Boolean("S".equals(notificacionForm.getAccesoPorClave())));
+					new Boolean("S".equals(notificacionForm.getAccesoPorClave())), plazo);
 			if("S".equals(notificacionForm.getTramiteSubsanacion())){
 				Map parametros = null;
 				if(request.getSession().getAttribute("parametrosAltaNotificacion") != null){

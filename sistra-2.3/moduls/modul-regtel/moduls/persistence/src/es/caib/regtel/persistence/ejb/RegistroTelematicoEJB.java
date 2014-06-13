@@ -885,6 +885,14 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 			FactoriaObjetosXMLAvisoNotificacion factoriaAvisoNotificacion = ServicioAvisoNotificacionXML.crearFactoriaObjetosXML();
 			AvisoNotificacion avisoNotificacion = factoriaAvisoNotificacion.crearAvisoNotificacion( new ByteArrayInputStream( docRDSAvisoNotificacion.getDatosFichero() ) );
 			if (avisoNotificacion == null) throw new Exception("Aviso de notificacion generado es nulo");
+			
+			// Solo se puede establecer plazo para notificaciones con acuse
+			boolean acuseRecibo = avisoNotificacion.getAcuseRecibo() != null && avisoNotificacion.getAcuseRecibo().booleanValue();
+			boolean plazo = avisoNotificacion.getPlazo() != null;
+			if  (!acuseRecibo && plazo) {
+				throw new Exception("Solo se puede establecer plazo para notificaciones con acuse");
+			}
+			
 			return avisoNotificacion;
 		}
 		catch( Exception exc )

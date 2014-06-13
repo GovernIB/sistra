@@ -152,13 +152,22 @@
 	
 	function botonCancelarFirmar() {
 		$('#firmarDocumentosApplet').hide('slow');
-	}
+	}	
 	
 //-->
 </script>
 
 <script type="text/javascript">
 var htmlInfoFirmado = "- <strong><bean:message key="detalleTramite.datosTramite.envio.firmado"/></strong>";
+
+function ajustePlazo() {
+	if ($("#acuse").val() == "S") {
+		$("#diasPlazo").removeAttr("disabled");
+	} else {
+		$("#diasPlazo").prop('disabled', 'disabled');
+	}
+		 
+}
 
 function llenarMunicipios(){
 	$("#codigoMunicipio").val("");
@@ -586,9 +595,19 @@ function repintarParametros(datos){
 				
 				<p>
 					<label for="acuse"><bean:message key="notificacion.acuse"/><sup>*</sup></label>
-					<html:select property="acuse">
+					<html:select property="acuse" onchange="ajustePlazo();" styleId="acuse">
 						<html:option value="S"><bean:message key="expediente.si"/></html:option>
 						<html:option value="N"><bean:message key="expediente.no"/></html:option>
+					  </html:select>
+				</p>
+				
+				<p>
+					<label for="diasPlazo"><bean:message key="notificacion.diasPlazo"/><sup>*</sup></label>
+					<html:select property="diasPlazo" styleId="diasPlazo">
+						<html:option value="0"><bean:message key="notificacion.diasPlazo.defecto"/></html:option>
+						<% for (int i = 5; i <= 100; i=i+5) { %>
+						<html:option value="<%=i + ""%>"><%=i%> <bean:message key="notificacion.diasPlazo.dias"/></html:option>
+						<% } %>
 					  </html:select>
 				</p>
 				

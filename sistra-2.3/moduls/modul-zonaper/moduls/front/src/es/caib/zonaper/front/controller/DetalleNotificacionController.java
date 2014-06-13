@@ -122,7 +122,6 @@ public class DetalleNotificacionController extends BaseController
 			}
 		}
 		
-		
 		request.setAttribute("codigoExpediente",elementoExpediente.getExpediente().getIdExpediente());
 		request.setAttribute("descExpediente",elementoExpediente.getExpediente().getDescripcion());
 		request.setAttribute("unidadAdministrativa", DelegateUtil.getDominiosDelegate().obtenerDescripcionUA(asiento.getDatosAsunto().getCodigoUnidadAdministrativa()));
@@ -132,7 +131,7 @@ public class DetalleNotificacionController extends BaseController
 		request.setAttribute("tipoFirma",tipoFirma);
 		request.setAttribute("tipoFirmaAlt",tipoFirmaAlt);
 		request.setAttribute("claveFirma",claveFirma);
-		
+		request.setAttribute("plazoDias", notificacion.getDiasPlazo() != null? notificacion.getDiasPlazo().toString(): "10");
 	}
 	
 	/**

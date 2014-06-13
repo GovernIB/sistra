@@ -40,6 +40,13 @@
 							<dt><bean:message key="detalle.notificacion.finPlazo"/>:</dt>						
 							<dd><bean:write name="notificacion" property="detalleAcuseRecibo.fechaFinPlazo" format="dd/MM/yyyy"/></dd>
 						</logic:notEmpty>
+						<dt><bean:message key="detalle.notificacion.diasPlazo"/></dt>
+						<logic:notEmpty name="notificacion" property="diasPlazo">
+							<dd><bean:write name="notificacion" property="diasPlazo"/> <bean:message key="detalle.notificacion.diasPlazo.dias"/></dd>
+						</logic:notEmpty>
+						<logic:empty name="notificacion" property="diasPlazo">
+							<dd><bean:message key="detalle.notificacion.diasPlazo.defecto"/></dd>
+						</logic:empty>
 					</logic:equal> 
 					
 					<dt><bean:message key="detalle.notificacion.estado"/>:</dt>
@@ -89,7 +96,7 @@
 						<dt><bean:message key="detalle.notificacion.claveAcceso"/></dt>						
 						<dd><bean:write name="notificacion" property="claveAcceso"/></dd>
 					</logic:equal>
-					
+										
 					<logic:notEmpty name="notificacion" property="detalleAcuseRecibo.avisos">		
 						<dt><bean:message key="detalle.notificacion.avisos" />:</dt>
 						<dd>

@@ -16,6 +16,7 @@
 <bean:define id="urlTramiteSubsanacion" type="java.lang.String">
 	<html:rewrite page="/protected/tramiteSubsanacion.do" paramId="codigoNotificacion" paramName="notificacion" paramProperty="codigo"/>
 </bean:define>
+<bean:define id="plazoDias" name="plazoDias" type="java.lang.String"/>
 <%
 	// Reemplazamos saltos de linea por <br/>
  	String mensajeHtml = mensaje;
@@ -98,7 +99,7 @@
 </div>
 <logic:equal name="notificacion" property="firmarAcuse" value="true">
 	<div id="notaLegalPie">
-		<p class="data"><sup>*</sup><bean:message key="detalleNotificacion.notaLegalAbierta"/></p>
+		<p class="data"><sup>*</sup><bean:message key="detalleNotificacion.notaLegalAbierta" arg0="<%=plazoDias%>"/></p>
 	</div>
 </logic:equal>
 <!-- /notificacio -->
