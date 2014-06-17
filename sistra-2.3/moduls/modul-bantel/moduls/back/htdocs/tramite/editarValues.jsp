@@ -47,7 +47,10 @@
     <td class="label"><bean:message key="tramite.gestionExpedientes.permitirSmsAvisos"/></td>
     <td class="input">Si<html:radio property="values.permitirSms" value="S"/> No <html:radio property="values.permitirSms" value="N"/></td>
 </tr>
-
+<tr>
+    <td class="label"><bean:message key="tramite.gestionExpedientes.permitirPlazoNotificacionesVariable"/></td>
+    <td class="input">Si<html:radio property="values.permitirPlazoNotificacionesVariable" value="S"/> No (<bean:message key="tramite.gestionExpedientes.permitirPlazoNotificacionesVariable.plazoDefecto"/>)<html:radio property="values.permitirPlazoNotificacionesVariable" value="N"/></td>
+</tr>
 <tr>
 	<td class="separador" colspan="2"><bean:message key="tramite.avisoBackOffice"/></td>
 </tr>

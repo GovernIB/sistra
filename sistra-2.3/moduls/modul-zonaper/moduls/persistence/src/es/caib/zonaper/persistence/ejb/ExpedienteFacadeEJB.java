@@ -556,8 +556,8 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 	   		}
 	   		// Filtro numero expediente
 	   		if (StringUtils.isNotBlank(filtro.getIdExpediente())) {
-	   			sqlFiltro += " and e.idExpediente = :idExpediente";
-	   			parameters.put("idExpediente", filtro.getIdExpediente());
+	   			sqlFiltro += " and upper(e.idExpediente) like :idExpediente";
+	   			parameters.put("idExpediente", "%" + filtro.getIdExpediente().toUpperCase() + "%");
 	   		}	   	   	
 	   		
 			// Crea query 

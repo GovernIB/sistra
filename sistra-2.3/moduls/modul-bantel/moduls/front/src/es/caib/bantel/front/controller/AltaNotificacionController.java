@@ -10,9 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.tiles.ComponentContext;
 
+import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleNotificacionForm;
 import es.caib.bantel.front.util.Dominios;
 import es.caib.bantel.front.util.ValorOrganismo;
+import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.persistence.delegate.ConfiguracionDelegate;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
@@ -20,7 +22,6 @@ import es.caib.regtel.persistence.delegate.RegistroTelematicoDelegate;
 
 public class AltaNotificacionController extends BaseController
 {
-
 		
 	public void execute(ComponentContext tileContext,
 			HttpServletRequest request, HttpServletResponse response,
@@ -44,6 +45,10 @@ public class AltaNotificacionController extends BaseController
 		}
 		request.setAttribute( "urlSistraAFirma", urlSistra );
 		
+		// Comprobamos si puede cambiar el plazo de notificaciones
+		String idProcedimiento = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_PROCEDIMIENTO_KEY);
+		Procedimiento p = DelegateUtil.getTramiteDelegate().obtenerProcedimiento(idProcedimiento);
+		request.setAttribute("permitirPlazoNotificacionesVariable", p != null ? p.getPermitirPlazoNotificacionesVariable() : "N");		
 	}
 
 	

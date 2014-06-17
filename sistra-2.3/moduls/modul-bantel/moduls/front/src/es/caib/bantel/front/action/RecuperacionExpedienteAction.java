@@ -65,19 +65,17 @@ public class RecuperacionExpedienteAction extends BaseAction
 			if(exp == null){
 				throw new Exception("No existe expediente");
 			}
-			
-			// Establecemos parametros expediente actual
-			request.getSession().setAttribute(Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY, identificadorExp);
-			request.getSession().setAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY, new Long(unidadAdm));
-			request.getSession().setAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY, claveExp);
+			String identificadorProc = exp.getIdentificadorProcedimiento();
 			
 			// Buscamos descripcion procedimiento y si permite sms
 			String descProc = exp.getIdentificadorProcedimiento();
 			String permitirSms = "N";
+			String permitirPlazoNotifVble = "N";			
 			Procedimiento procedimiento = DelegateUtil.getTramiteDelegate().obtenerProcedimiento(exp.getIdentificadorProcedimiento());
 			if (procedimiento != null) {
 				descProc += " - " + procedimiento.getDescripcion();
 				permitirSms = procedimiento.getPermitirSms();
+				permitirPlazoNotifVble = procedimiento.getPermitirPlazoNotificacionesVariable();
 			}
 			
 			// Establecemos observaciones particulares para los elementos del expediente
@@ -138,10 +136,17 @@ public class RecuperacionExpedienteAction extends BaseAction
 				}				
 			}
 			
+			// Establecemos parametros expediente actual
+			request.getSession().setAttribute(Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY, identificadorExp);
+			request.getSession().setAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY, new Long(unidadAdm));
+			request.getSession().setAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY, claveExp);
+			request.getSession().setAttribute(Constants.EXPEDIENTE_ACTUAL_PROCEDIMIENTO_KEY, identificadorProc);
+			
 			// Establecemos expediente en la request 
 			request.setAttribute("expediente", exp);
 			request.setAttribute("descripcionProcedimiento", descProc);
 			request.setAttribute("permitirSms", permitirSms);
+			request.setAttribute("permitirPlazoNotifVble", permitirPlazoNotifVble);			
 			request.setAttribute("observacionesElemento", observacionesElemento);
 			return mapping.findForward( "success" );
 		

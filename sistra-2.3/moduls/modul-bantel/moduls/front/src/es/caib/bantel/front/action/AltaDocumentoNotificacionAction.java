@@ -1,7 +1,9 @@
 package es.caib.bantel.front.action;
 
+import java.io.ByteArrayInputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,11 +20,13 @@ import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleNotificacionForm;
 import es.caib.bantel.front.util.DocumentoFirmar;
 import es.caib.bantel.front.util.DocumentosUtil;
+import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.xml.ConstantesXML;
 import es.caib.xml.documentoExternoNotificacion.factoria.FactoriaObjetosXMLDocumentoExternoNotificacion;
 import es.caib.xml.documentoExternoNotificacion.factoria.ServicioDocumentoExternoNotificacionXML;
 import es.caib.xml.documentoExternoNotificacion.factoria.impl.DocumentoExternoNotificacion;
+import es.indra.util.pdf.UtilPDF;
 
 /**
  * @struts.action
@@ -155,6 +159,8 @@ public class AltaDocumentoNotificacionAction extends BaseAction
 			DetalleNotificacionForm notificacionForm,
 			Long uniAdm) throws Exception {
 		boolean convertirPDF = true;
+		boolean firmable = true;
+		
 		if (notificacionForm.getDocumentoAnexoOficio() == null ||
 				StringUtils.isEmpty(notificacionForm.getDocumentoAnexoOficio().getFileName()) ||
 				StringUtils.isEmpty(notificacionForm.getTituloAnexoOficio())){
@@ -162,15 +168,13 @@ public class AltaDocumentoNotificacionAction extends BaseAction
 			return null;
 		}
 		
-		// Si es un PDF comprobamos que sea PDF/A		
+		// Verificamos si se debe convertir a PDF-A	
 		if  ("PDF".equalsIgnoreCase(DocumentosUtil.getExtension(notificacionForm.getDocumentoAnexoOficio().getFileName()))) {
-			/*
-			if (!UtilPDF.isPdfA( new ByteArrayInputStream(notificacionForm.getDocumentoAnexoOficio().getFileData()))) {
-				Log.error("No es PDF/A");
-				return null;
-			}
-			*/
 			convertirPDF = false;
+			// En caso de ser PDF, solo sera firmable si es PDF-A
+			if (!UtilPDF.isPdfA( new ByteArrayInputStream(notificacionForm.getDocumentoAnexoOficio().getFileData()))) {
+				firmable = false;
+			}			
 		} else {
 			// Si no es PDF, miramos si se puede convertir
 			if(!DocumentosUtil.extensionCorrecta(notificacionForm.getDocumentoAnexoOficio().getFileName())){
@@ -185,6 +189,7 @@ public class AltaDocumentoNotificacionAction extends BaseAction
 		documento.setContenidoFichero(notificacionForm.getDocumentoAnexoOficio().getFileData());
 		documento.setNombre(notificacionForm.getDocumentoAnexoOficio().getFileName());
 		documento.setRutaFichero(DocumentosUtil.formatearFichero(notificacionForm.getRutaFitxer()));
+		documento.setFirmable(firmable);
 
 		//Guardo un documento con la extension que tiene y me devueve el documento con el contenido en pdf
 		DocumentoRDS documentRDS = null;

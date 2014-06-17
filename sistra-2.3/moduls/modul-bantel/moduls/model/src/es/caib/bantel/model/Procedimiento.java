@@ -37,11 +37,10 @@ public class Procedimiento implements Serializable{
 	private Date ultimoAviso;	
 	private byte[] errores;
 	private Set gestores = new HashSet(0);
-		
 	private Long unidadAdministrativa;
 	private String permitirSms = "S";
-	
 	private String avisarNotificaciones = "N";
+	private String permitirPlazoNotificacionesVariable = "N";
 	
 	
 	public String getIdentificador() {
@@ -173,5 +172,13 @@ public class Procedimiento implements Serializable{
 	public void setSoapActionWS(String soapActionWS) {
 		this.soapActionWS = soapActionWS;
 	}
+	public String getPermitirPlazoNotificacionesVariable() {
+		return permitirPlazoNotificacionesVariable;
+	}
+	public void setPermitirPlazoNotificacionesVariable(
+			String permitirPlazoNotificacionesVariable) {
+		this.permitirPlazoNotificacionesVariable = permitirPlazoNotificacionesVariable;
+	}
+	
 	
 }

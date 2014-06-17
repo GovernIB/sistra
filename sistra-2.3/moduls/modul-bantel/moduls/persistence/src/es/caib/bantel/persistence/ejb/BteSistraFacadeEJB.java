@@ -30,6 +30,7 @@ import es.caib.bantel.modelInterfaz.DatosDocumentoPresencial;
 import es.caib.bantel.modelInterfaz.DatosDocumentoTelematico;
 import es.caib.bantel.modelInterfaz.DocumentoBTE;
 import es.caib.bantel.modelInterfaz.ExcepcionBTE;
+import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
 import es.caib.bantel.modelInterfaz.TramiteBTE;
 import es.caib.bantel.modelInterfaz.ValoresFuenteDatosBTE;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
@@ -181,9 +182,42 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
     }
     
     
-   
+    /**
+     * Consulta informacion de un procedimento.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public ProcedimientoBTE obtenerProcedimiento(String idProcedimiento)  throws ExcepcionBTE{
+    	try{
+	    	Procedimiento p = DelegateUtil.getTramiteDelegate().obtenerProcedimiento(idProcedimiento);
+	    	ProcedimientoBTE res = convertProcedimientoToProcedimientoBTE(p);
+	    	return res;
+    	}catch (Exception ex){
+    		throw new ExcepcionBTE("No se ha podido consultar procedimiento  " + idProcedimiento + " : " + ex.getMessage(),ex);
+    	}
+    }
+    
 
 	// ------------------------ Funciones utilidad ----------------------------------------------------------------
+
+    /**
+     * Convierte Procedimiento a ProcedimientoBTE.
+     * @param p Procedimiento
+     * @return ProcedimientoBTE
+     */
+	private ProcedimientoBTE convertProcedimientoToProcedimientoBTE(
+			Procedimiento p) {
+		ProcedimientoBTE pb = new ProcedimientoBTE();
+		pb.setIdentificador(p.getIdentificador());
+		pb.setDescripcion(p.getDescripcion());
+		pb.setUnidadAdministrativa(p.getUnidadAdministrativa());
+		pb.setPermitirSMS("S".equals(p.getPermitirSms()));
+		pb.setPermitirPlazoNotificacionesVariable("S".equals(p.getPermitirPlazoNotificacionesVariable()));
+		return pb;
+	}
+	
     /**
      * Crea entrada en Bandeja
      */

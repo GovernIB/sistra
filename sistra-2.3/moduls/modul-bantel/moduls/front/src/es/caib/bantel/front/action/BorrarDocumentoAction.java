@@ -9,11 +9,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-
 import es.caib.bantel.front.json.JSONObject;
 import es.caib.bantel.front.util.DocumentoFirmar;
 import es.caib.util.ConvertUtil;
-import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
 
 /**
  * @struts.action
