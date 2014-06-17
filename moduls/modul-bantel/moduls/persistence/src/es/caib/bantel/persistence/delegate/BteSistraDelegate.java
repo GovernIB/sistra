@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
+import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
 import es.caib.bantel.modelInterfaz.ValoresFuenteDatosBTE;
 import es.caib.bantel.persistence.intf.BteSistraFacade;
 import es.caib.bantel.persistence.util.BteSistraFacadeUtil;
@@ -73,6 +74,13 @@ public class BteSistraDelegate implements StatelessDelegate {
         }
     }
   
+    public ProcedimientoBTE obtenerProcedimiento(String idProcedimiento) throws DelegateException {
+        try {
+            return getFacade().obtenerProcedimiento(idProcedimiento);
+        } catch (Exception e) {
+        	throw new DelegateException(e);
+        }
+    }
     
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

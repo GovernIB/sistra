@@ -32,7 +32,7 @@
   	
   	<property name="soapActionWS" column="TAP_WSSOA"/>
   	
-  	
+  	<property name="permitirPlazoNotificacionesVariable" column="TAP_PLNOTV"/>
   		
   	
   	<set name="gestores" table="BTE_GESPRO" inverse="true">

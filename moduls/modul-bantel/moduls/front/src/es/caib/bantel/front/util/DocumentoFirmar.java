@@ -19,6 +19,7 @@ public class DocumentoFirmar extends DocumentoExpedientePAD{
 	private boolean vistoPDF;
 	private String tipoDocumento; // FICHERO / URL
 	private String url;
+	private boolean firmable; // Marca si es firmable
 	
 	public boolean isVistoPDF() {
 		return vistoPDF;
@@ -71,6 +72,12 @@ public class DocumentoFirmar extends DocumentoExpedientePAD{
 	}
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	public boolean isFirmable() {
+		return firmable;
+	}
+	public void setFirmable(boolean firmable) {
+		this.firmable = firmable;
 	}	
 	
 }
