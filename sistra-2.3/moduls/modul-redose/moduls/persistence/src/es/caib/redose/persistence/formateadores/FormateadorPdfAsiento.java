@@ -18,7 +18,6 @@ import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.redose.persistence.ejb.ResolveRDS;
 import es.caib.redose.persistence.util.UtilRDS;
 import es.caib.util.StringUtil;
-import es.caib.xml.ConstantesXML;
 import es.caib.xml.avisonotificacion.factoria.FactoriaObjetosXMLAvisoNotificacion;
 import es.caib.xml.avisonotificacion.factoria.ServicioAvisoNotificacionXML;
 import es.caib.xml.avisonotificacion.factoria.impl.AvisoNotificacion;
@@ -206,8 +205,12 @@ public class FormateadorPdfAsiento implements FormateadorDocumento{
 			// Expediente
 			if (avisoNotificacion != null) {
 				if (avisoNotificacion.getExpediente() != null && avisoNotificacion.getExpediente().getIdentificadorExpediente() != null) {
+					String txtExpediente = avisoNotificacion.getExpediente().getIdentificadorExpediente();
+					if (avisoNotificacion.getExpediente().getTituloExpediente() != null) {
+						txtExpediente += " - " + avisoNotificacion.getExpediente().getTituloExpediente();
+					}
 					propiedad = new Propiedad(props.getProperty("datosRegistro." + tipoRegistro + ".expediente"),
-							avisoNotificacion.getExpediente().getIdentificadorExpediente());
+							txtExpediente);
 					seccion.addCampo(propiedad);
 				}
 			}			

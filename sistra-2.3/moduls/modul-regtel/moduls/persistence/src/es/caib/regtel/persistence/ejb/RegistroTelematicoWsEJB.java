@@ -38,7 +38,9 @@ import es.caib.regtel.persistence.util.RegistroEntradaHelper;
 import es.caib.regtel.persistence.util.RegistroSalidaHelper;
 import es.caib.sistra.plugins.firma.FirmaIntf;
 import es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo;
+import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
+import es.caib.zonaper.persistence.delegate.DelegateException;
 import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
 import es.caib.zonaper.persistence.delegate.PadDelegate;
@@ -192,12 +194,11 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 		 establecerUsuarioSeycon(notificacion);
 		 /* ------------------------------------------------------------------------------------- */		
 		
-		
 		RegistroSalidaHelper r = new RegistroSalidaHelper();
 		if(notificacion != null){
 			if(notificacion.getDatosExpediente() != null){
 				DatosExpediente de = notificacion.getDatosExpediente();
-				r.setExpediente(de.getUnidadAdministrativa(), de.getIdentificadorExpediente(), de.getClaveExpediente());
+				r.setExpediente(de.getUnidadAdministrativa(), de.getIdentificadorExpediente(), de.getClaveExpediente(), obtenerTituloExpediente(de));
 			}
 			if(notificacion.getDatosInteresado() != null){
 				DatosInteresado di = notificacion.getDatosInteresado();
@@ -240,6 +241,23 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 		return res;
 	}
 	
+	/**
+	 * Consulta la PAD y obtiene titulo expediente
+	 * @param Datos expediente
+	 * @return Titulo expediente
+	 * @throws Exception
+	 */
+	private String obtenerTituloExpediente(DatosExpediente de) throws Exception {
+		PadBackOfficeDelegate ejb = new PadBackOfficeDelegate();
+		ExpedientePAD expe = ejb.consultaExpediente(de.getUnidadAdministrativa(), de.getIdentificadorExpediente(), de.getClaveExpediente());
+		String tituloExpe = null;
+		if (expe != null) {
+			expe.getDescripcion();
+		}
+		return tituloExpe;
+	}
+
+
 	/**
 	 * @param numeroRegistro numero de registro para obtener el acuse de recibo
 	 * @return AcuseRecibo

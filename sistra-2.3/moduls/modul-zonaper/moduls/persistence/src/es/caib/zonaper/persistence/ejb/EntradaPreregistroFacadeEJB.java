@@ -596,6 +596,11 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
          		throw new Exception("scheduler.alertasTramitacion.preregistroPendiente.avisoInicial no tiene un valor valido (zonaper.properties)");
          	}
          	
+         	// Si aviso inicial = 0, no se generan alertas
+         	if (avisoInicialInt <= 0) {
+         		return new ArrayList();
+         	}
+         	
          	Date ahora = new Date();
          	        	 
          	Query query = session
