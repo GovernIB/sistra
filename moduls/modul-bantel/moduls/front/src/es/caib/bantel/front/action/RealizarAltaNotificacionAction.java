@@ -49,9 +49,7 @@ public class RealizarAltaNotificacionAction extends BaseAction
     {
 		DetalleNotificacionForm notificacionForm = (DetalleNotificacionForm)form;
 		request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,"3");
-		PadBackOfficeDelegate ejb = new PadBackOfficeDelegate();
 		ArrayList documentos;
-		ExpedientePAD exp;
 		
 		// Recuperamos de sesion el expediente actual
 		String idExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY);
@@ -59,6 +57,11 @@ public class RealizarAltaNotificacionAction extends BaseAction
 		String claveExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY);
 		
 		try{
+			
+			// Recupera expediente
+			PadBackOfficeDelegate ejb = new PadBackOfficeDelegate();
+			ExpedientePAD expediente = ejb.consultaExpediente(uniAdm.longValue(), idExpe, claveExpe);
+			
 			if(request.getSession().getAttribute("documentosAltaNotificacion") == null){
 				documentos = new ArrayList();
 			}else{
@@ -73,7 +76,7 @@ public class RealizarAltaNotificacionAction extends BaseAction
 			
 			RegistroSalidaHelper r = new RegistroSalidaHelper();
 			r.setOficinaRegistro(notificacionForm.getOrganoDestino(),notificacionForm.getOficinaRegistro());
-			r.setExpediente(uniAdm,idExpe,claveExpe);
+			r.setExpediente(uniAdm,idExpe,claveExpe, expediente.getDescripcion());
 			r.setDatosInteresado(notificacionForm.getNif(),notificacionForm.getApellidos(), StringUtils.isEmpty(notificacionForm.getUsuarioSey())?null:notificacionForm.getUsuarioSey(),notificacionForm.getCodigoPais(),notificacionForm.getNombrePais(),notificacionForm.getCodigoProvincia(),notificacionForm.getNombreProvincia(),notificacionForm.getCodigoMunicipio(),notificacionForm.getNombreMunicipio());
 			r.setDatosNotificacion(notificacionForm.getIdioma(),notificacionForm.getTipoAsunto(),notificacionForm.getTituloAviso(),
 					notificacionForm.getTextoAviso(),(StringUtils.isNotEmpty(notificacionForm.getTextoSmsAviso())?notificacionForm.getTextoSmsAviso():null),

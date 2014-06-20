@@ -165,17 +165,17 @@
      <td>Alertas tramitaci&oacute;n</td>
      <td>
      	<p>
-     		Indica si se generan alertas (email/sms) avisando de posibles incidencias durante la fase de completar la solicitud (antes de registrar), como por ejemplo:
-     		<ul> 
-	     		<li>si se realizan pagos y no se finaliza el tr&aacute;mite</li>
-	     		<li>se finaliza un preregistro pero no se confirma</li>
+     		Indica si se generan alertas avisando al ciudadano durante la fase de cumplimentaci&oacute;n y registro de una solicitud. Actualmente existen 3 posibles tipos de alertas:
+     		<ul>
+     			<li>si se finaliza el tr&aacute;mite (email). Una &uacute;nica alerta tras finalizaci&oacute;n de solicitud.</li> 
+	     		<li>si se realizan pagos y no se finaliza el tr&aacute;mite (email/SMS). Posibilidad de repetici&oacute;n peri&oacute;dica</li>
+	     		<li>se finaliza un preregistro pero no se confirma (email/SMS). Posibilidad de repetici&oacute;n peri&oacute;dica</li>	     		
      		</ul>   
-     		Además de notificar las incidencias se enviar&aacute; un mail al finalizar el tr&aacute;mite.
-     		<br/><br/>     		 
      		En caso de habilitar las alertas de tramitaci&oacute;n se deber&aacute; informar los Datos de contacto para establecer email/sms.
      		<br/><br/>
-     		Se realizar&aacute; un aviso inicial y posteriormente una aviso peri&oacute;dico hasta que se subsane la incidencia. 
-     		El tiempo establecido para cada caso se establece en el fichero de propiedades de configuraci&oacute;n. 		  
+     		En las alertas con repetición peri&oacute;dica se realizar&aacute; un aviso inicial y posteriormente una aviso peri&oacute;dico hasta que se supere la situaci&oacute;n que provoca la alerta. 
+     		A nivel de configuraci&oacute;n de la plataforma se establece si se debe generar la alerta, el tiempo de retardo para el aviso inicial, si se generan avisos peri&oacute;dicos y el intervalo de repetici&oacute;n. 
+     		Si tiene alguna duda sobre c&oacute;mo están configuradas las alertas, consulte con el administrador. 		  
      	</p>     	   	 
      </td>
    </tr>

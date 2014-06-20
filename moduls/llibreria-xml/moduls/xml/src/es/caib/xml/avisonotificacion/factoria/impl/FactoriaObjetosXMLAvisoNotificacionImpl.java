@@ -339,7 +339,8 @@ public class FactoriaObjetosXMLAvisoNotificacionImpl implements
 			exp = new Expediente ();			
 			exp.setClaveExpediente(expJAXB.getCLAVEEXPEDIENTE());
 			exp.setIdentificadorExpediente(expJAXB.getIDENTIFICADOREXPEDIENTE());
-			exp.setUnidadAdministrativa(expJAXB.getUNIDADADMINISTRATIVA());						
+			exp.setUnidadAdministrativa(expJAXB.getUNIDADADMINISTRATIVA());			
+			exp.setTituloExpediente(expJAXB.getTITULOEXPEDIENTE());
 		}		
 		return exp;
 	}
@@ -350,7 +351,8 @@ public class FactoriaObjetosXMLAvisoNotificacionImpl implements
 			expJAXB = new EXPEDIENTE ();			
 			expJAXB.setCLAVEEXPEDIENTE(exp.getClaveExpediente());
 			expJAXB.setIDENTIFICADOREXPEDIENTE(exp.getIdentificadorExpediente());
-			expJAXB.setUNIDADADMINISTRATIVA(exp.getUnidadAdministrativa());						
+			expJAXB.setUNIDADADMINISTRATIVA(exp.getUnidadAdministrativa());		
+			expJAXB.setTITULOEXPEDIENTE(exp.getTituloExpediente());
 		}		
 		return expJAXB;
 	}

@@ -12,6 +12,7 @@ public class Expediente extends NodoBaseAvisoNotificacion  {
 	private String unidadAdministrativa;
 	private String identificadorExpediente;
 	private	String claveExpediente;
+	private	String tituloExpediente;
 	
 	
 	Expediente (){
@@ -40,6 +41,7 @@ public class Expediente extends NodoBaseAvisoNotificacion  {
 			if (!objetosIguales (getIdentificadorExpediente(), inst.getIdentificadorExpediente())) return false;
 			if (!objetosIguales (getUnidadAdministrativa(), inst.getUnidadAdministrativa())) return false;
 			if (!objetosIguales (getClaveExpediente(), inst.getClaveExpediente())) return false;
+			if (!objetosIguales (getTituloExpediente(), inst.getTituloExpediente())) return false;
 			
 			// OK los objetos son equivalentes
 			return true;
@@ -76,6 +78,16 @@ public class Expediente extends NodoBaseAvisoNotificacion  {
 
 	public void setUnidadAdministrativa(String unidadAdministrativa) {
 		this.unidadAdministrativa = unidadAdministrativa;
+	}
+
+
+	public String getTituloExpediente() {
+		return tituloExpediente;
+	}
+
+
+	public void setTituloExpediente(String tituloExpediente) {
+		this.tituloExpediente = tituloExpediente;
 	}
 
 }

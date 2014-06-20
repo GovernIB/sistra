@@ -797,6 +797,11 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
          		throw new Exception("scheduler.alertasTramitacion.pagoFinalizado.avisoInicial no tiene un valor valido (zonaper.properties)");
          	}
         	
+         	// Si aviso inicial = 0, no se generan alertas
+         	if (avisoInicialInt <= 0) {
+         		return new ArrayList();
+         	}
+         	
         	Date ahora = new Date();
         	
         	Query query = session.createQuery("select distinct d.tramitePersistente FROM DocumentoPersistente AS d " +

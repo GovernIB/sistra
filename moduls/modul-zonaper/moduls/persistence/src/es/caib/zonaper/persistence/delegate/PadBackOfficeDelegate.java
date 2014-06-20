@@ -2,7 +2,6 @@ package es.caib.zonaper.persistence.delegate;
 
 import java.rmi.RemoteException;
 import java.util.Hashtable;
-import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
