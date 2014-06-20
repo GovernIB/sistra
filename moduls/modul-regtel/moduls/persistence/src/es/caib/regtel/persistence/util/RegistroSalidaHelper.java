@@ -103,12 +103,14 @@ public class RegistroSalidaHelper{
 	 * @param unidadAdministrativa Unidad admistrativa(Obligatorio)
 	 * @param identificadorExpediente Identificador expediente(Obligatorio)
 	 * @param claveExpediente Clave de acceso (Opcional: depende si el expediente esta protegido)
+	 * @param tituloExpediente Titulo expediente (Opcional)
 	 */
-	public void setExpediente(long unidadAdministrativa,String identificadorExpediente,String claveExpediente)  throws ExcepcionRegistroTelematico{
+	public void setExpediente(long unidadAdministrativa,String identificadorExpediente,String claveExpediente, String tituloExpediente)  throws ExcepcionRegistroTelematico{
 		try {	
 			expediente.setUnidadAdministrativa(Long.toString(unidadAdministrativa));
 			expediente.setIdentificadorExpediente(identificadorExpediente);
 			expediente.setClaveExpediente(claveExpediente);
+			expediente.setTituloExpediente(tituloExpediente);
 		
 			// la unidad administrativa se especifica tb en datos asunto
 			datosAsunto.setCodigoUnidadAdministrativa(expediente.getUnidadAdministrativa());

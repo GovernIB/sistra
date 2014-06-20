@@ -260,6 +260,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			uso.setTipoUso(ConstantesRDS.TIPOUSO_REGISTROSALIDA);
 			uso.setReferencia(notif.getNumeroRegistro());
 			uso.setFechaSello(notif.getFechaRegistro());
+			rdsDelegate.crearUso(uso);
 			
 			// Actualizamos notificacion como rechazada
 			marcarNotificacionRechazada(codigo, refAcuse);

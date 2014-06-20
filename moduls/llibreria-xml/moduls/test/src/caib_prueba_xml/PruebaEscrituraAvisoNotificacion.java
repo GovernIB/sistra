@@ -35,6 +35,7 @@ public class PruebaEscrituraAvisoNotificacion {
 			avisoNotificacion.getExpediente().setIdentificadorExpediente("xxx");
 			avisoNotificacion.getExpediente().setUnidadAdministrativa("yy");
 			avisoNotificacion.getExpediente().setClaveExpediente("zzz");
+			avisoNotificacion.getExpediente().setTituloExpediente("www");
 			
 																				
 			// Guardar documento en fichero
