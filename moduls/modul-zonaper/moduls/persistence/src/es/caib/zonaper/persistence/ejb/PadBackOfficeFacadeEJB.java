@@ -864,7 +864,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		nep.setFecha( StringUtil.fechaACadena(notificacion.getFechaRegistro(),ElementoExpedientePAD.FORMATO_FECHA) );
 		nep.setNumeroRegistro(notificacion.getNumeroRegistro());
 		nep.setTituloOficio(oficio.getTitulo());
-		nep.setTextoOficio(oficio.getTitulo());
+		nep.setTextoOficio(oficio.getTexto());
 		nep.setRequiereAcuse(notificacion.isFirmarAcuse());
 		nep.setAccesiblePorClave(new Boolean(notificacion.isAccesiblePorClave()));
 		if (notificacion.isAccesiblePorClave()) {
