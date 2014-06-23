@@ -15,7 +15,7 @@
     <property name="identificador"  column="DOM_IDENTI"  not-null="true" length="20"/>
     <property name="descripcion"  column="DOM_DESC"  not-null="true" length="100"/>
     <property name="tipo"  column="DOM_TIPO"  not-null="true" length="1"/>
-	<property name="url"  column="DOM_URL" length="200"/>
+	<property name="url"  column="DOM_URL" length="500"/>
     <property name="versionWS"  column="DOM_WSVER" length="10"/>
     <property name="sql"  column="DOM_SQL" length="4000"/>
     <property name="localizacionEJB"  column="DOM_EJBREM" length="1"/>
