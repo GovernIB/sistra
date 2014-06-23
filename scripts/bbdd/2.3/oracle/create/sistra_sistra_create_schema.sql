@@ -1209,4 +1209,6 @@ comment on column STR_DOCNIV.DNV_PAGPLG is
 alter table STR_DOMIN  add  DOM_WSSOA            VARCHAR2(100);
 comment on column STR_DOMIN.DOM_WSSOA is
 'WS: Soap action';
-            
+
+-- V2.3.4
+ALTER table STR_DOMIN MODIFY DOM_URL VARCHAR2(500);
