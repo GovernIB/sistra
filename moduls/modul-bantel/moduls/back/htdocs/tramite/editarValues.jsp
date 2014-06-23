@@ -75,7 +75,7 @@
 </tr>
 <tr>
     <td class="label"><bean:message key="tramite.url"/></td>
-    <td class="input"><html:text styleClass="textLargo" tabindex="10" property="values.url" maxlength="200"/></td>
+    <td class="input"><html:text styleClass="textLargo" tabindex="10" property="values.url" maxlength="500"/></td>
 </tr>
 <tr>
     <td class="label"><bean:message key="tramite.versionWS"/></td>
