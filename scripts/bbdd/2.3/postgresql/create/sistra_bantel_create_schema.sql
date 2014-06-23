@@ -1,4 +1,4 @@
---
+﻿--
 -- PostgreSQL database dump
 --
 
@@ -1714,3 +1714,9 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 -- PostgreSQL database dump complete
 --
 
+-- UPDATE 2.3.3 TO 2.3.4
+
+ALTER table BTE_PROAPL ADD  TAP_PLNOTV  VARCHAR(1) default 'N' not null;
+comment on column BTE_PROAPL.TAP_PLNOTV is 'INDICA SI PERMITE PLAZO NOTIFICACIONES VARIABLE (S/N)';
+
+ALTER table BTE_PROAPL ALTER COLUMN TAP_URL TYPE VARCHAR(500);
