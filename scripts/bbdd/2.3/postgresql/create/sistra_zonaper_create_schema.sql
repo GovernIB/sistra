@@ -1783,18 +1783,18 @@ create unique index ZPE_ELEIDP_UNI on ZPE_ELEEX (
 );
 
 /* ACCESO ANONIMO A EXPEDIENTE A TRAVES DE TRAMITES ANONIMOS */
-alter table ZPE_ELEEX add ELE_ACCEXP BOOLEAN default 0 not null;
+alter table ZPE_ELEEX add ELE_ACCEXP BOOLEAN default false not null;
 
 comment on column ZPE_ELEEX.ELE_ACCEXP is
 'Indica si elemento proporciona acceso a expediente de forma anónima a traves de su id persistencia';
  
 /* ACCESO ANONIMO NOTIF POR CLAVE */
-ALTER table ZPE_NOTTEL ADD NOT_ACCCLA  BOOLEAN default 0 not null;
+ALTER table ZPE_NOTTEL ADD NOT_ACCCLA  BOOLEAN default false not null;
 comment on column ZPE_NOTTEL.NOT_ACCCLA is
 'Indica si se permite que la notificacion sea accesible mediante clave (id persistencia notificacion)';
 
 /* ACCESO ANONIMO EVENTO POR CLAVE */
-ALTER table ZPE_HISTEX ADD   HIE_ACCCLA BOOLEAN default false not null;
+ALTER table ZPE_HISTEX ADD   HIE_ACCCLA boolean default false not null;
 comment on column ZPE_HISTEX.HIE_ACCCLA is
 'Indica si se permite que el evento sea accesible mediante clave (id persistencia evento)';
 
@@ -1895,4 +1895,12 @@ comment on column ZPE_PREBCK.PRB_ALTEMA is 'EMAIL PARA GENERAR ALERTAS';
 comment on column ZPE_PREBCK.PRB_ALTSMS is 'SMS PARA GENERAR ALERTAS';
 comment on column ZPE_PREBCK.PRB_ALTFEC is 'FECHA ULTIMA ALERTA';
 
+-- UPDATE FROM 2.3.3 TO 2.3.4
 
+-- CONTROL SMS
+ALTER table ZPE_TRAPER  ADD TPE_IDEPRO VARCHAR(100);
+comment on column ZPE_TRAPER.TPE_IDEPRO is 'ID PROCEDIMIENTO';
+
+-- PLAZO VBLE NOTIF
+alter table ZPE_NOTTEL add NOT_DIAPLZ           BIGINT;
+comment on column ZPE_NOTTEL.NOT_DIAPLZ is 'En caso de que se establezca un plazo distinto a 10 dias';
