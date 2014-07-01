@@ -60,7 +60,7 @@ public class TestHelpersRegistro {
 	
 	public static void testRegistroSalida() throws Exception{
 		RegistroSalidaHelper rsh = new RegistroSalidaHelper();
-		rsh.setExpediente(1,"EXP/TEST/2010/1","xxx", "Expe 1");
+		rsh.setExpediente(1,"EXP/TEST/2010/1","xxx");
 		rsh.setOficinaRegistro("1100","13");
 		rsh.setDatosInteresado("33456299Q","Sanz Villanueva Rafael","rsanz","es","España","46","Valencia","130","Massamagrell");
 		rsh.setDatosNotificacion("es","OT","Titulo aviso","Texto aviso","Texto SMS Aviso","Titulo oficio","Texto oficio",true);
