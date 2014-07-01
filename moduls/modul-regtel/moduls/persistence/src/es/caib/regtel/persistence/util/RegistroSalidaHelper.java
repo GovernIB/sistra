@@ -700,7 +700,7 @@ public class RegistroSalidaHelper{
 		try{
 			Properties configuracion = getConfiguracion(providerUrl);						
 			InitialContext initialContext = new InitialContext(configuracion);
-			Object objRef = initialContext.lookup(RegistroTelematicoEJBHome.JNDI_NAME);
+			Object objRef = initialContext.lookup(PadBackOfficeFacadeHome.JNDI_NAME);
 			PadBackOfficeFacadeHome homeRegistro = ( PadBackOfficeFacadeHome ) javax.rmi.PortableRemoteObject.narrow(objRef, PadBackOfficeFacadeHome.class);
 			PadBackOfficeFacade registroTelematicoEJB = homeRegistro.create();
 			return registroTelematicoEJB;
