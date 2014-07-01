@@ -198,7 +198,7 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 		if(notificacion != null){
 			if(notificacion.getDatosExpediente() != null){
 				DatosExpediente de = notificacion.getDatosExpediente();
-				r.setExpediente(de.getUnidadAdministrativa(), de.getIdentificadorExpediente(), de.getClaveExpediente(), obtenerTituloExpediente(de));
+				r.setExpediente(de.getUnidadAdministrativa(), de.getIdentificadorExpediente(), de.getClaveExpediente());
 			}
 			if(notificacion.getDatosInteresado() != null){
 				DatosInteresado di = notificacion.getDatosInteresado();
