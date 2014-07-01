@@ -48,6 +48,9 @@ import es.caib.xml.registro.factoria.impl.DatosAsunto;
 import es.caib.xml.registro.factoria.impl.DatosInteresado;
 import es.caib.xml.registro.factoria.impl.DatosOrigen;
 import es.caib.xml.registro.factoria.impl.DireccionCodificada;
+import es.caib.zonaper.modelInterfaz.ExpedientePAD;
+import es.caib.zonaper.persistence.intf.PadBackOfficeFacade;
+import es.caib.zonaper.persistence.intf.PadBackOfficeFacadeHome;
 
 /**
  * Helper que permite realizar el proceso de registro de salida
@@ -103,14 +106,12 @@ public class RegistroSalidaHelper{
 	 * @param unidadAdministrativa Unidad admistrativa(Obligatorio)
 	 * @param identificadorExpediente Identificador expediente(Obligatorio)
 	 * @param claveExpediente Clave de acceso (Opcional: depende si el expediente esta protegido)
-	 * @param tituloExpediente Titulo expediente (Opcional)
 	 */
-	public void setExpediente(long unidadAdministrativa,String identificadorExpediente,String claveExpediente, String tituloExpediente)  throws ExcepcionRegistroTelematico{
+	public void setExpediente(long unidadAdministrativa,String identificadorExpediente,String claveExpediente)  throws ExcepcionRegistroTelematico{
 		try {	
 			expediente.setUnidadAdministrativa(Long.toString(unidadAdministrativa));
 			expediente.setIdentificadorExpediente(identificadorExpediente);
-			expediente.setClaveExpediente(claveExpediente);
-			expediente.setTituloExpediente(tituloExpediente);
+			expediente.setClaveExpediente(claveExpediente);			
 		
 			// la unidad administrativa se especifica tb en datos asunto
 			datosAsunto.setCodigoUnidadAdministrativa(expediente.getUnidadAdministrativa());
@@ -333,9 +334,20 @@ public class RegistroSalidaHelper{
 			// Obtenemos referencias EJBs
 			RegistroTelematicoEJB regtelEJB = getRegistroTelematicoEJB(providerUrl);
 			RdsFacade redoseEJB = getRdsEJB(providerUrl);
+			PadBackOfficeFacade zonaperEJB = getZonaperEJB(providerUrl);
 			
 			// Establecemos fecha asunto
 			datosAsunto.setFechaAsunto(new Date());
+			
+			// Verificamos expediente y establecemos titulo del mismo
+			ExpedientePAD expe = null;
+			try {
+				expe = zonaperEJB.consultaExpediente( Long.parseLong(this.expediente.getUnidadAdministrativa()), this.expediente.getIdentificadorExpediente(), this.expediente.getClaveExpediente());
+			} catch (Exception ex) {
+				throw new ExcepcionRegistroTelematico("Error al consultar expediente " + this.expediente.getUnidadAdministrativa() + " - " + this.expediente.getIdentificadorExpediente(),ex);
+			}
+			expediente.setTituloExpediente(expe.getDescripcion());
+			
 			
 			// Comprobamos organo destino
 			boolean enc=false;
@@ -658,7 +670,6 @@ public class RegistroSalidaHelper{
 	}
 	
 	
-	
 	private RegistroTelematicoEJB getRegistroTelematicoEJB(String providerUrl) throws ExcepcionRegistroTelematico{
 		try{
 			Properties configuracion = getConfiguracion(providerUrl);						
@@ -682,6 +693,19 @@ public class RegistroSalidaHelper{
 			return rdsEJB;
 		}catch (Exception ex){
 			throw new ExcepcionRegistroTelematico("Excepcion obteniendo referencia EJB del REDOSE",ex);
+		}
+	}
+	
+	private PadBackOfficeFacade getZonaperEJB(String providerUrl) throws ExcepcionRegistroTelematico{
+		try{
+			Properties configuracion = getConfiguracion(providerUrl);						
+			InitialContext initialContext = new InitialContext(configuracion);
+			Object objRef = initialContext.lookup(RegistroTelematicoEJBHome.JNDI_NAME);
+			PadBackOfficeFacadeHome homeRegistro = ( PadBackOfficeFacadeHome ) javax.rmi.PortableRemoteObject.narrow(objRef, PadBackOfficeFacadeHome.class);
+			PadBackOfficeFacade registroTelematicoEJB = homeRegistro.create();
+			return registroTelematicoEJB;
+		}catch (Exception ex){
+			throw new ExcepcionRegistroTelematico("Excepcion obteniendo referencia EJB de la Zona Personal",ex);
 		}
 	}
 	
