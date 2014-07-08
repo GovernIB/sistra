@@ -1,5 +1,6 @@
 package es.caib.zonaper.modelInterfaz;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * Detalle acuse de recibo.
  *
  */
-public class DetalleAcuseRecibo {
+public class DetalleAcuseRecibo implements Serializable {
 	/**
 	 * Notificacion pendiente de entregar.
 	 */

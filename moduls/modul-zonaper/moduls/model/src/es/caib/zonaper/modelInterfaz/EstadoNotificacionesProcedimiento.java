@@ -1,10 +1,12 @@
 package es.caib.zonaper.modelInterfaz;
 
+import java.io.Serializable;
+
 /**
  * Estado notificaciones procedimiento en un intervalo de tiempo.
  * @author rsanz
 */
-public class EstadoNotificacionesProcedimiento {
+public class EstadoNotificacionesProcedimiento implements Serializable {
 	
 	/**
 	 * Nuevas notificaciones.

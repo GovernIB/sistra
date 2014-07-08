@@ -1,12 +1,13 @@
 package es.caib.zonaper.modelInterfaz;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Detalle aviso de un elemento de expediente (notificacion / evento)
  *
  */
-public class DetalleAviso {
+public class DetalleAviso implements Serializable {
 	
 	/**
 	 * Tipo aviso email.
