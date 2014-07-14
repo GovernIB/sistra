@@ -46,27 +46,13 @@ import es.caib.xml.ConstantesXML;
 public class PluginEnvio {
 	
 	private static Log log = LogFactory.getLog(PluginEnvio.class);
-	private static Boolean simularEnvio;
+	private static Boolean simularEnvioEmail;
+	private static Boolean simularEnvioSms;
 	private static int simularEnvioDuracion;
 	private static int limiteDiasVerificar;
 	private static String prefijoEnvioEmail;
 	
-	/**
-	 * Obtiene si se debe simular los envios
-	 * @return
-	 */
-	public static Boolean getSimularEnvio() {
-		return simularEnvio;
-	}
-
-	/**
-	 * Establece si se deben simular los envios
-	 * @param fakeImpl
-	 */
-	public static void setSimularEnvio(Boolean fakeImpl) {
-		PluginEnvio.simularEnvio = fakeImpl;
-	}
-
+	
 	public static int getSimularEnvioDuracion() {
 		return simularEnvioDuracion;
 	}
@@ -159,7 +145,7 @@ public class PluginEnvio {
 	    	 
 	    	 // Verificamos estado envio
 	    	 EstadoEnvio estado = null;
-	    	 if (simularEnvio.booleanValue()){
+	    	 if (simularEnvioEmail.booleanValue()){
 		    	 // Fronton: lo damos por enviado
 	    		 estado = new EstadoEnvio();
 	    		 estado.setEstado(ConstantesEmail.ESTADO_ENVIADO);
@@ -198,7 +184,7 @@ public class PluginEnvio {
 	    	 	    	 
 	    	 // Verificamos estado envio
 	    	 es.caib.sistra.plugins.sms.EstadoEnvio estado = null;
-	    	 if (simularEnvio.booleanValue()){
+	    	 if (simularEnvioSms.booleanValue()){
 		    	 // Fronton: lo damos por enviado
 	    		 estado = new es.caib.sistra.plugins.sms.EstadoEnvio();
 	    		 estado.setEstado(ConstantesSMS.ESTADO_ENVIADO);
@@ -524,7 +510,7 @@ public class PluginEnvio {
     			return false;
     		}
 
-    		if (simularEnvio.booleanValue()){
+    		if (simularEnvioEmail.booleanValue()){
 				log.debug("Email simulando envio");
 				Date inicioSimulacion = new Date();
 				while ( (inicioSimulacion.getTime() + (simularEnvioDuracion * 1000)) > System.currentTimeMillis() ){
@@ -656,7 +642,7 @@ public class PluginEnvio {
     		// Realizamos envio
     		try{
     			// Comprobamos si hay que establecer el fronton
-    			if (simularEnvio.booleanValue()){
+    			if (simularEnvioSms.booleanValue()){
     				log.debug("Sms simulando envio");
     				Date inicioSimulacion = new Date();
     				while ( (inicioSimulacion.getTime() + (simularEnvioDuracion * 1000)) > System.currentTimeMillis() ){
@@ -730,6 +716,22 @@ public class PluginEnvio {
 
 	public static void setPrefijoEnvioEmail(String prefijoEnvioEmail) {
 		PluginEnvio.prefijoEnvioEmail = prefijoEnvioEmail;
+	}
+
+	public static Boolean getSimularEnvioEmail() {
+		return simularEnvioEmail;
+	}
+
+	public static void setSimularEnvioEmail(Boolean simularEnvioEmail) {
+		PluginEnvio.simularEnvioEmail = simularEnvioEmail;
+	}
+
+	public static Boolean getSimularEnvioSms() {
+		return simularEnvioSms;
+	}
+
+	public static void setSimularEnvioSms(Boolean simularEnvioSms) {
+		PluginEnvio.simularEnvioSms = simularEnvioSms;
 	}
 	
 }
