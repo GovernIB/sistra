@@ -208,7 +208,8 @@ public abstract class MobTraTelFacadeEJB implements SessionBean
 				Set tlfSet = new LinkedHashSet(Arrays.asList(mes.getDestinatarios()));
 				ms.setDestinatarios(MobUtils.compoundDestinatarios(tlfSet));
 				ms.setNumeroDestinatarios(tlfSet.size());
-				erroresFormato += MobUtils.validarTelefonos(tlfSet);
+				// No cancelamos envio si algun sms no valido para permitir tambien extensiones
+				// erroresFormato += MobUtils.validarTelefonos(tlfSet);
 				if((utils.getMaxDestinatariosSms().intValue() != 0) && (tlfSet.size() > utils.getMaxDestinatariosSms().intValue()))
 				{
 					throw new LimiteDestinatariosException(new Error("Se ha superado el límite de destinatarios por mensaje SMS."));
