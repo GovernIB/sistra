@@ -42,11 +42,12 @@ public abstract class ProcEnviosFacadeEJB extends HibernateEJB {
         super.ejbCreate();
         
         // Comprobamos si hay que establecer fronton para envios
-        if (PluginEnvio.getSimularEnvio() == null){
+        if (PluginEnvio.getSimularEnvioEmail() == null || PluginEnvio.getSimularEnvioSms() == null){
         	try
     		{
         		Properties config = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
-    			PluginEnvio.setSimularEnvio( new Boolean (config.getProperty("envio.simularEnvio")));
+    			PluginEnvio.setSimularEnvioEmail(new Boolean (config.getProperty("envio.simularEnvioEmail")));
+    			PluginEnvio.setSimularEnvioSms(new Boolean (config.getProperty("envio.simularEnvioSms")));
     			PluginEnvio.setSimularEnvioDuracion( Integer.parseInt(config.getProperty("envio.simularEnvio.duracion")));
     			PluginEnvio.setPrefijoEnvioEmail(config.getProperty("envio.verificarEnvio.sufijoEmail"));
     			if (StringUtils.isNotBlank(config.getProperty("envio.verificarEnvio.limite"))) {
@@ -54,12 +55,13 @@ public abstract class ProcEnviosFacadeEJB extends HibernateEJB {
     			} else {
     				PluginEnvio.setLimiteDiasVerificar(5);
     			}
-    			log.debug ( "simularEnvio : [" + PluginEnvio.getSimularEnvio() + "]");    			
+    			log.debug ( "simularEnvio : [ Email: " + PluginEnvio.getSimularEnvioEmail() + " / Sms: " + PluginEnvio.getSimularEnvioSms() +"]");    			
     		}
     		catch( Exception exc )
     		{    			
     			log.error( "Error estableciendo propiedad simularEnvio. Establecemos a false.",exc );
-    			PluginEnvio.setSimularEnvio(new Boolean(false));
+    			PluginEnvio.setSimularEnvioEmail(new Boolean(false));
+    			PluginEnvio.setSimularEnvioSms(new Boolean(false));
     			PluginEnvio.setLimiteDiasVerificar(5);
     		}
         }
