@@ -127,7 +127,7 @@ public class MobUtils {
 		StringBuffer sb = new StringBuffer(destinatarios.size() * 25);
 		for(Iterator it=destinatarios.iterator(); it.hasNext();)
 		{
-			sb.append((String)it.next());
+			sb.append(((String)it.next()).trim());
 			sb.append(Constantes.SEPARADOR_DESTINATARIOS);			
 		}
 		
