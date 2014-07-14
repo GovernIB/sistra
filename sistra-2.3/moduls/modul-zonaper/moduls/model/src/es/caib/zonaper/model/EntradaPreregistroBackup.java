@@ -22,6 +22,7 @@ public class EntradaPreregistroBackup
     private String claveRdsJustificante;
     private String numeroRegistro;
     private Date fechaConfirmacion;
+    private String oficinaRegistro;
     private Set documentosBackup = new HashSet(0);    
     private String idioma;
     private String nifRepresentante;
@@ -428,5 +429,15 @@ public class EntradaPreregistroBackup
 
 	public void setAlertasTramitacionFechaUltima(Date alertasTramitacionFechaUltima) {
 		this.alertasTramitacionFechaUltima = alertasTramitacionFechaUltima;
+	}
+
+
+	public String getOficinaRegistro() {
+		return oficinaRegistro;
+	}
+
+
+	public void setOficinaRegistro(String oficinaRegistro) {
+		this.oficinaRegistro = oficinaRegistro;
 	}
 }

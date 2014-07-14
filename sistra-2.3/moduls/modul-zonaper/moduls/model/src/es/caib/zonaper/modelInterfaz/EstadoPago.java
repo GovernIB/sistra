@@ -1,12 +1,14 @@
 package es.caib.zonaper.modelInterfaz;
 
+import java.io.Serializable;
+
 /**
  * Estado pago.
  * 
  * @author Indra
  *
  */
-public class EstadoPago {
+public class EstadoPago implements Serializable {
 
 	/**
 	 * Id documento (codigo documento - instancia).

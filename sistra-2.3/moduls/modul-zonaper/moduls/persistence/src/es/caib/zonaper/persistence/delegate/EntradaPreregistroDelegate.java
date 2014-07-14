@@ -180,11 +180,11 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
     }
     
     public void confirmarEntradaPreregistro(Long codigo, String numeroRegistro,
-			Date fechaConfirmacion, boolean confirmadoAutomaticamente, boolean confirmadoIncorrecto)  throws DelegateException  {
+			Date fechaConfirmacion, String oficinaRegistroPresencial, boolean confirmadoAutomaticamente, boolean confirmadoIncorrecto)  throws DelegateException  {
     	try
     	{
     		getFacade().confirmarEntradaPreregistro( codigo, numeroRegistro,
-    				fechaConfirmacion, confirmadoAutomaticamente, confirmadoIncorrecto );
+    				fechaConfirmacion, oficinaRegistroPresencial, confirmadoAutomaticamente, confirmadoIncorrecto );
     	}
     	catch (Exception e) {
             throw new DelegateException(e);

@@ -1907,6 +1907,7 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    	// En caso de ser una confirmación de un preregistro normal generamos registro de entrada
 			String numeroRegistro;
 			Date fechaRegistro;
+			String oficinaRegistroPresencial = null;
 			
 			/**
 			 * Confirmacion en registro presencial: 
@@ -1918,6 +1919,7 @@ public abstract class PadFacadeEJB implements SessionBean{
 			    	resultadoRegistro = DelegateRegtelUtil.getRegistroTelematicoDelegate().confirmarPreregistro(oficina, codProvincia,codMunicipio,descMunicipio,justificante,refRDSJustificante,refRDSAsiento,mapRefRDSDocumentos);
 					numeroRegistro = resultadoRegistro.getNumeroRegistro();
 					fechaRegistro = StringUtil.cadenaAFecha( resultadoRegistro.getFechaRegistro(), StringUtil.FORMATO_REGISTRO ); 
+					oficinaRegistroPresencial = oficina;
 			}else{
 					// En caso de ser una confirmación de un preregistro incorrecto no generamos registro de entrada
 					// En este caso si se pasa el numero/fecha registro la alimentamos si no establecemos el num. preregistro y 
@@ -1952,6 +1954,7 @@ public abstract class PadFacadeEJB implements SessionBean{
 				entrada.setFechaConfirmacion( fechaRegistro );
 			}
 			entrada.setNumeroRegistro( numeroRegistro );
+			entrada.setOficinaRegistro(oficinaRegistroPresencial);
 						
 			// Si la confirmacion es automatica la marcamos
 			if (tipoConfirmacionPreregistro.equals(ConstantesBTE.CONFIRMACIONPREREGISTRO_AUTOMATICA)){
@@ -1960,7 +1963,7 @@ public abstract class PadFacadeEJB implements SessionBean{
 			
 			EntradaPreregistroDelegate delegate = DelegateUtil.getEntradaPreregistroDelegate();
 			delegate.confirmarEntradaPreregistro(entrada.getCodigo(), entrada.getNumeroRegistro(), 
-					entrada.getFechaConfirmacion(),
+					entrada.getFechaConfirmacion(), oficinaRegistroPresencial,
 					entrada.getConfirmadoAutomaticamente() == 'S',
 					tipoConfirmacionPreregistro.equals(ConstantesBTE.CONFIRMACIONPREREGISTRO_GESTOR));
 			
