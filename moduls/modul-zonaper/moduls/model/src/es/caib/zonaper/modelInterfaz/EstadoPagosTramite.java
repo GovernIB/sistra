@@ -1,5 +1,6 @@
 package es.caib.zonaper.modelInterfaz;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,7 +9,7 @@ import java.util.List;
  * @author Indra
  *
  */
-public class EstadoPagosTramite {
+public class EstadoPagosTramite implements Serializable{
 
 	/**
 	 * Estado tramite (ConstantesZPE).

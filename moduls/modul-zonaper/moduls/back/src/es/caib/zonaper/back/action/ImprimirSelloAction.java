@@ -74,13 +74,15 @@ public class ImprimirSelloAction extends BaseAction
 		
 		String strFechaRegistro = StringUtil.timestampACadena( fechaRegistro );
 		
-		String descOficina = DelegateUtil.getDominiosDelegate().obtenerDescripcionSelloOficina(pi.getCodigoOficinaRegistro());
-		if ( descOficina == null )
-		{
-			this.setMessage( request, "errors.descSelloOficinaVacio" );
-			return mapping.findForward( "fail" );
+		String descOficina = "";
+		if (StringUtils.isNotBlank(pi.getCodigoOficinaRegistro())) {
+			descOficina = DelegateUtil.getDominiosDelegate().obtenerDescripcionSelloOficina(pi.getCodigoOficinaRegistro());
+			if ( descOficina == null )
+			{
+				this.setMessage( request, "errors.descSelloOficinaVacio" );
+				return mapping.findForward( "fail" );
+			}
 		}
-		
 		List arlParametrosExpansion = new ArrayList();
 		arlParametrosExpansion.add( StringUtil.escapeBadCharacters( descOficina ) );
 		arlParametrosExpansion.add( StringUtil.escapeBadCharacters( numeroRegistro ));

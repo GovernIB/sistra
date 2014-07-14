@@ -28,7 +28,9 @@
     <property name="claveRdsJustificante"   column="PRE_CLAJUS"  not-null="true" length="10"/>
 
     <property name="numeroRegistro"  column="PRE_NUMREG" length="50"/>
-  	<property name="fechaConfirmacion"  column="PRE_FECREG" />    
+  	<property name="fechaConfirmacion"  column="PRE_FECREG" />
+  	<property name="oficinaRegistro"  column="PRE_OFIREG" />
+  	    
   	
   	<property name="idioma"  column="PRE_IDIOMA" not-null="true" length="2"/>
   	

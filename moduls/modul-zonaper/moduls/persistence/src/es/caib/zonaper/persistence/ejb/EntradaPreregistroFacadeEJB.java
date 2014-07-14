@@ -260,7 +260,7 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.gestor}"
      */
     public void confirmarEntradaPreregistro(Long codigo, String numeroRegistro,
-			Date fechaConfirmacion, boolean confirmadoAutomaticamente, boolean confirmadoIncorrecto) {   
+			Date fechaConfirmacion, String oficinaRegistroPresencial, boolean confirmadoAutomaticamente, boolean confirmadoIncorrecto) {   
     	// Recupera entrada
     	EntradaPreregistro entrada = this.recuperarEntradaPorCodigo(codigo);
     	
@@ -285,6 +285,7 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
         	// Updateamos
         	entrada.setNumeroRegistro(numeroRegistro);
         	entrada.setFechaConfirmacion(fechaConfirmacion);
+        	entrada.setOficinaRegistro(oficinaRegistroPresencial);
         	entrada.setConfirmadoAutomaticamente(confirmadoAutomaticamente?'S':'N');        	
         	session.update(entrada);
         	                    	            
