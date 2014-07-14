@@ -81,10 +81,6 @@
 
     <target name="ejb.gen.all" depends="prepare,init">
 
-    	<condition property="envio.simularEnvio" value="${envio.simularEnvio}" else="${envio.simularEnvio.default}">
-            <isset property="envio.simularEnvio"/>
-        </condition>    	    	
-    	
         <ejbdoclet
             destdir="${ejb.gen.src}"
             excludedtags="@version,@author"
