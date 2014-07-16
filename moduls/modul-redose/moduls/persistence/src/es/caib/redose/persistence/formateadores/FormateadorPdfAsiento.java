@@ -169,7 +169,7 @@ public class FormateadorPdfAsiento implements FormateadorDocumento{
 			avisoNotificacion = factoriaAvisoNotificacion.crearAvisoNotificacion(new ByteArrayInputStream (docRDS.getDatosFichero()));
     	}
     	OficioRemision oficioRemision = null;
-    	if (refAvisoNotificacion != null) {
+    	if (refOficioRemision != null) {
 			DocumentoRDS docRDS = rds.consultarDocumento(refOficioRemision);
 			FactoriaObjetosXMLOficioRemision factoriaOficioRemision = ServicioOficioRemisionXML.crearFactoriaObjetosXML();
 			oficioRemision = factoriaOficioRemision.crearOficioRemision(new ByteArrayInputStream (docRDS.getDatosFichero()));
