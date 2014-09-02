@@ -11,6 +11,7 @@ import es.caib.sistra.front.Constants;
 import es.caib.sistra.front.form.IrAPagoForm;
 import es.caib.sistra.front.util.InstanciaManager;
 import es.caib.sistra.front.util.Util;
+import es.caib.sistra.model.PasoTramitacion;
 import es.caib.sistra.model.RespuestaFront;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
 import es.caib.sistra.persistence.delegate.InstanciaDelegate;
@@ -27,6 +28,9 @@ import es.caib.sistra.persistence.delegate.InstanciaDelegate;
  *
  * @struts.action-forward
  *  name="fail" path="/fail.do"
+ *  
+ * @struts.action-forward
+ *  name="redireccion" path=".redireccion"
  */
 public class IrAPagoAction extends BaseAction
 {
@@ -55,7 +59,13 @@ public class IrAPagoAction extends BaseAction
 		
 		// Si se ha generado mensaje (error, warning, info, etc), mostramos mensaje
 		if (this.isSetMessage(request)) return mapping.findForward("success");		
-			
+		
+		// Si tras ir a pago, el paso actual pasa a ser registro  
+		if (respuestaFront.getInformacionTramite().getPasoTramitacion().getTipoPaso() == PasoTramitacion.PASO_REGISTRAR) {
+			request.setAttribute( "accionRedireccion", "/protected/irAPaso.do" );
+			return mapping.findForward( "redireccion" );
+		} 
+		
 		// Si no ha sucedido ninguna incidencia redirigimos al asistente de pagos
 		String urlSesionPago = (String) respuestaFront.getParametros().get(Constants.URL_SESIONPAGO_KEY);
 		response.sendRedirect(urlSesionPago);
