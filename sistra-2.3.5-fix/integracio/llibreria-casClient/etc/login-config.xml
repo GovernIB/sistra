@@ -1,0 +1,9 @@
+<!--  Añadir al login-config.xml -->
+<application-policy name = "seycon">
+       <authentication>
+          <login-module code = "es.caib.sistra.casClient.loginModule.CasInternalLoginModule"
+             flag = "sufficient">
+				 <module-option name="unauthenticatedIdentity">nobody</module-option>
+   	 	     </login-module>  	  	   
+       </authentication>       
+</application-policy>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:es:caib:regtel:ws:v1:model:DatosNotificacion" xmlns:ns1="urn:es:caib:regtel:ws:v1:model:Aviso" xmlns:ns2="urn:es:caib:regtel:ws:v1:model:OficioRemision" targetNamespace="urn:es:caib:regtel:ws:v1:model:DatosNotificacion" version="1.0">
+	<xs:import namespace="urn:es:caib:regtel:ws:v1:model:Aviso" schemaLocation="Aviso.xsd"/>
+	<xs:import namespace="urn:es:caib:regtel:ws:v1:model:OficioRemision" schemaLocation="OficioRemision.xsd"/>
+	<xs:complexType name="DatosNotificacion">
+		<xs:sequence>
+			<xs:element name="idioma" type="xs:string"/>
+			<xs:element name="tipoAsunto" type="xs:string"/>
+			<xs:element name="acuseRecibo" type="xs:boolean"/>
+			<xs:element name="aviso" type="ns1:Aviso"/>
+			<xs:element name="oficioRemision" type="ns2:OficioRemision"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

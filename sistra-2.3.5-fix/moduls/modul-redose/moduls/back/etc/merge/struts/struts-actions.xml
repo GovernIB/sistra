@@ -1,0 +1,53 @@
+   <action
+    path="/init"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".mainLayout"/>
+ 
+   <action
+    path="/menu"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".menu"/>
+    
+    <action
+    path="/back/modelo/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".modelo.lista"/>
+    
+    <action
+    path="/back/version/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".version.lista"/>
+    
+   <action
+    path="/back/plantilla/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".plantilla.lista"/>
+    
+   <action
+    path="/back/ubicacion/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".ubicacion.lista"/>
+    
+    <action
+    path="/back/migracion/migracion"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".migracion"/>
+  
+   <action
+    path="/back/formateadores/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".formateadores.lista"/>
+    
+   <action
+    path="/back/historico/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".historico.lista"/>
+    
+    
+   <action
+    path="/back/erroresGestorDocumental/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".erroresGestorDocumental.lista"/>
+
+
+

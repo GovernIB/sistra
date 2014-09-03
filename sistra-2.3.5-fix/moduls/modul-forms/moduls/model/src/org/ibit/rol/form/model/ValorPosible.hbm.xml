@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.form.model.ValorPosible" table="RFR_VALPOS">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="VAP_CODI">
+            <generator class="sequence">
+                <param name="sequence">RFR_SECVAP</param>
+            </generator>
+        </id>
+
+        <many-to-one name="campo" column="VAP_CODCAM" foreign-key="RFR_VAPCAM_FK"/>
+        <property name="orden" not-null="true" column="VAP_ORDEN"/>
+        <property name="valor" length="128" column="VAP_VALOR"/>
+        <property name="defecto" column="VAP_DEFECT"/>
+
+        <map name="traducciones" cascade="all" table="RFR_TRVAPO">
+            <cache usage="read-write"/>
+            <key column="TRV_CODVAP" foreign-key="RFR_VAPTRV_FK"/>
+            <index column="TRV_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.form.model.TraValorPosible">
+                <property name="etiqueta" length="4000"  column="TRV_ETIQUE"/>
+                <many-to-one name="archivo" cascade="all" column="TRV_ARCHIV" foreign-key="RFR_TRVARC_FK"/>
+            </composite-element>
+        </map>
+    </class>
+</hibernate-mapping>

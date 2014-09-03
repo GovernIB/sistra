@@ -1,0 +1,26 @@
+
+<form-bean
+    name="busquedaEnviosForm"
+    type="es.caib.mobtratel.front.form.BusquedaEnviosForm" />
+<form-bean
+    name="busquedaEstadisticasSMSForm"
+    type="es.caib.mobtratel.front.form.BusquedaEstadisticasSMSForm" />
+<form-bean
+    name="detalleEnvioForm"
+    type="es.caib.mobtratel.front.form.DetalleEnvioForm" />    
+<form-bean
+    name="cambiarEstadoEnvioForm"
+    type="es.caib.mobtratel.front.form.CambiarEstadoEnvioForm" />    
+<form-bean
+    name="editarEnvioEmailForm"
+    type="es.caib.mobtratel.front.form.EditarEnvioEmailForm" />    
+<form-bean
+    name="editarEnvioSmsForm"
+    type="es.caib.mobtratel.front.form.EditarEnvioSmsForm" />    
+<form-bean
+    name="editarEnvioFicheroForm"
+    type="es.caib.mobtratel.front.form.EditarEnvioFicheroForm" />    
+<form-bean
+    name="exportCSVEnvioForm"
+    type="es.caib.mobtratel.front.form.ExportCSVEnvioForm" />
+    

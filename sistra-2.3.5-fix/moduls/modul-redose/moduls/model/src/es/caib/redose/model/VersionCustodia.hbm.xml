@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping 
+	PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+	  "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="es.caib.redose.model.VersionCustodia" table="RDS_VERCUS">
+    	<cache usage="read-write"/>
+        <id name="codigo" unsaved-value="null" column="CUS_CODIGO" length="100">
+           <generator class="assigned"/>
+        </id>
+        <many-to-one name="documento" class="es.caib.redose.model.Documento" column="CUS_CODDOC" not-null="true" />
+        <property name="fecha" column="CUS_FECHA" not-null="true" />
+        <property name="borrar" type="char" column="CUS_BORRAR" length="1" not-null="true" />
+    </class>
+</hibernate-mapping>
+

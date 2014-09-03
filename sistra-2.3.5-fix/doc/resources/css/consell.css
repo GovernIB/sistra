@@ -1,0 +1,169 @@
+@charset "utf-8";
+
+/* CONSELL DE MALLORCA */
+
+/* ETIQUETES comuns */
+
+/* estils aplicats a etiquetes XHTML i que són costants a tota l'aplicació */
+
+body { font:normal 75% Verdana, Arial, Helvetica, sans-serif; color:#666; background-color:#fff; }
+
+/* capçaleres*/
+h1 { font-size:1.2em; margin-bottom:.8em; }
+h2 { font-size:1.1em; margin-top:2em; }
+h3 { font-size:1em; }
+
+/* paràgrafs */
+p { line-height:1.2em; margin:.6em 0; }
+
+/* enllaços */
+a { font-weight:bold; color:#06348C; text-decoration:none; cursor:pointer; }
+a:hover { color:#06348C; text-decoration:underline; } /* el cursor està per damnt */
+a.destacat { color:#c33; } /* enllaç destacat */
+a.destacat:hover { color:#000; } /* enllaç destacat amb el cursor per damunt */
+
+/* elements de formularis */
+input, select, textarea, button { font:normal 1em Verdana, Arial, Helvetica, sans-serif; color:#666; line-height:1.3em !important; }
+
+/* IDS comuns */
+
+/* estils aplicats a l'atribut "id" de qualsevol etiqueta, o etiqueta específica (p). Són costants a tota l'aplicació */
+
+/* capa que conté a totes les demés */
+#contenidor { width:58em; margin:0 auto 1.2em auto; }
+
+/* capa que conté el logotip de l'aplicació */
+#cap { text-align:left; padding-bottom:.8em; padding-left:1em; }
+
+/* llistat amb la molla de pa indicant el camí de com s'ha arribat a la pàgina en questió */
+#mollaPa { list-style:none; text-align:left; color:#fff; padding:.3em 0 .3em 3.3em; margin-top:0; background-color:#699cc9; }
+#mollaPa li { display:inline; font-size:.9em; padding-left:1em; } /* ítem del llistat */
+#mollaPa li a { color:#fff; text-decoration:none; } /* enllaços del llistat */
+
+/* títol de l'aplicació, que obligatòriament ha d'anar dins d'un paràgraf */
+p#titolAplicacio { color:#fff; text-align:left; padding-left:3em; background-color:#06348c; border-bottom:0; }
+p#titolAplicacio a { text-decoration:none; } /* pot dur un enllaç */
+p#titolAplicacio span { font-size:.75em; font-weight:normal; margin-left:.6em; } /* informació adicional al títol, com per exemple l'usuari que usa l'aplicació */
+
+/* capa que conté la informació de la pàgina */
+#continguts { padding:0 1em; margin-top:1em; }
+
+/* peu de l'aplicació */
+#peu { height:4.5em; font-size:.9em; padding-top:1em; margin-top:.5em; border-top:1px solid #000; }
+#peu .esquerra { float:left; width:25%; padding-left:1em; margin-right:1em; } /* que conté el copyright */
+#peu .centre { float:left; width:40%; line-height:1.4em; } /* que sol contindre la informació de contacte i l'adreça de l'organisme gestor de l'aplicació */
+#peu .dreta { float:right; width:25%; line-height:1.3em; } /* on hi ha la informació d'ajuda, mapa web, etc */
+
+/* CLASS comuns */
+
+/* estils que s'apliquen a qualsevol etiqueta XHTML amb l'atribut "class" */
+
+.invisible { display:none; } /* invisible */
+.important { font-weight:bold; } /* important amb text en negreta */
+
+/* PÀGINES */
+
+/* FORMS */
+
+/* capa que conté totes les dades del formulari */
+#formularioFORM { overflow:hidden; width:58em; padding:0 0 2em 0; margin:0 auto; }
+#formularioFORM h2 { padding:.5em 0 .5em 2em; background:url(../images/ico_form.gif) no-repeat left center #fff; margin:0; } /* títol del formulari */
+
+#centrar { border:1px solid #e7eef8; } /* tabla que conté tots els elements del formulari */
+#canal { background-color:#f4f7fa; } /* columna amb el formulari */
+#menu { background-color:#e7eef8; } /* columna amb l'ajuda de cada element */
+
+/* tabla amb la botonera de navegació */
+table#botoneraForms { border:0; width:100%; background-color:#fff; margin-top:1em; }
+table#botoneraForms td { width:25%; text-align:center; padding:.5em 0; }
+table#botoneraForms td#abandonar { border:1px solid #fadfdf; } /* abandonar el formulari */
+table#botoneraForms td#pantallaAnterior { background-color:#ecebd7; } /* pantalla anterior */
+table#botoneraForms td#pantallaSiguiente { background-color:#ecebd7; } /* pantalla següent */
+table#botoneraForms td#terminarTramite { border:1px solid #ceecce; } /* finalitzar el tràmit */
+table#botoneraForms td#abandonar a { color:#c00; padding:1em 0; line-height:2.3em; }
+table#botoneraForms td#pantallaAnterior a { color:#000; padding:1em 0; line-height:2.3em; }
+table#botoneraForms td#pantallaSiguiente a { color:#000; padding:1em 0; line-height:2.3em; }
+table#botoneraForms td#terminarTramite a { color:#038000; padding: 1em 0; line-height:2.3em; text-decoration:underline; } 
+table#botoneraForms td img { vertical-align:middle; margin:0 .5em; }
+table#botoneraForms td a { font-family:Arial, Helvetica, sans-serif; }
+
+/* REDOSEFRONT */
+
+/* capa amb la informació del tràmit */
+#vdDetalles { padding:.5em 3em; margin:.5em auto 1.5em auto; background-color:#e7eef8; border:1px solid #bccce3; }
+
+/* "iframe" on es mostra el tràmit en format PDF */
+#vdDocumento { width:100%; height:40em; margin-bottom:1.5em; border-top:1px solid #b4af89; border-bottom:1px solid #b4af89; }
+
+/* ZONAPERFRONT FILTRO */
+
+/* Usa estils que estan a "zonaperfront" */
+
+/* ZONAPERFRONT */
+
+/* tabla amb qualsevol llistat d'elements */
+table.llistatElements { width:97%; border-color:#e7eef8; }
+table.llistatElements th { background-color:#e7eef8; }
+table.llistatElements td { border-color:#e7eef8; }
+
+/* barra de navegació del llistat d'elements */
+div#barraNav { width:97%; padding:1em 0; background-color:#f4f7fa; }
+
+/* dades de la sol·licitud telemàtica */
+div#tramit .dades { padding:2em; margin:1em 0; background-color:#f4f7fa; border:1px solid #e7eef8; }
+
+/* tabla amb les dades de l'enviament i la sol·licitud */
+div#tramit table.dadesJustificant, table.dadesPropies { width:98%; }
+div#tramit table.dadesJustificant caption, table.dadesPropies caption { padding-right:54%; padding-bottom:.5em; } /* títol */
+div#tramit table.dadesJustificant th, table.dadesPropies th { width:45%; } /* capçalera de la dada */
+div#tramit table.dadesJustificant td, table.dadesPropies td { font-weight:bold; } /* dada */
+
+div#tramit h3 { padding-right:56%; padding-bottom:.5em; } /* títol del tràmit */
+div#tramit ul { list-style:circle; margin:0 1em 0 45%; } /* llistat de documents del tràmit */
+div#tramit ul li { padding-bottom:.3em; }
+
+/* botó per a imprimir el justificant */
+#btnImprimirJustificante { font-size:1.2em; font-weight:bold; padding:.3em .5em; }
+
+/* estils per al nom del l'expedient */
+div#nomTramit { width:97%; padding:0; background-color:#f3f3e5; }
+div#nomTramit p { }
+
+/* dades de l'expedient */
+div#nomTramit dl { width:95%; margin-right:10%; } /* llista */
+div#nomTramit dt { width:20%; } /* capçalera */
+div#nomTramit dd { width:70%; } /* dada */
+
+/* SISTRAFRONT */
+
+/* dades de l'usuari */
+div#capsalUsuari { color:#fff; text-align:left; padding:.5em 0 .5em 4.5em; background-color:#699cc9; border-bottom:0;  }
+div#capsalUsuari a { color:#f5ec90; padding-top:.2em; padding-bottom:.2em; }
+
+/* nom del tràmit */
+#nomTramitPas { font:bold 1.6em Arial,Helvetica,sans-serif; color:#06348C; }
+
+/* llistat de passos */
+#tramitacion ul#pesPasos { }
+#tramitacion ul#pesPasos li { background-color:#f4f4f4; } /* tots els ítems */
+#tramitacion ul#pesPasos li.ultimo { } /* últim */
+#tramitacion ul#pesPasos li.seleccionado { background-color:#f4f2e3; } /* ítem seleccionat */
+#tramitacion ul#pesPasos li.deshabilitado { } /* ítem deshabilitat */
+#tramitacion ul#pesPasos li a { color:#cc6600; } /* enllaços de les pestanyes */
+
+/* barra que delimita les pestanyes de la resta de continguts */
+#tramitacion div.barraAzul { background-color:#f4f2e3; }
+
+/* capa amb els enllaços d'endavant i enrere */
+#tramitacion div#pasosNav { }
+#tramitacion div#pasosNav a#pasoAnterior, #tramitacion div#pasosNav a#pasoSiguiente { color:#cc6600; }
+#tramitacion div#pasosNav a#pasoAnterior { background-color:#f4f2e3; }
+#tramitacion div#pasosNav a#pasoSiguiente { background-color:#f4f2e3; }
+#tramitacion div#pasosNav div#pasoAnteriorDIV, #tramitacion div#pasosNav div#pasoSiguienteDIV { background-color:#f4f2e3; }
+
+/* capa que conté la iconografia dels enllaços o documents */
+#tramitacion #pasoInf #iconografia { background-color:#f4f7fa; border:1px solid #e7eef8; }
+
+/* enllaços dels llistats */
+#tramitacion #pasoInf div#listadoPlantillas div.enlaceDescargar a { color:#cc6600; }
+

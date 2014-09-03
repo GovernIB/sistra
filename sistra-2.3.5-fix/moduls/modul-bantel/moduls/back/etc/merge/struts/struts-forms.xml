@@ -1,0 +1,30 @@
+<form-bean
+    name="tramiteForm"
+    type="es.caib.bantel.back.form.TramiteForm"
+    className="es.caib.bantel.back.action.TraFormBeanConfig">
+    <set-property property="valuesClassName" value="es.caib.bantel.model.Procedimiento" />
+</form-bean>
+<form-bean
+    name="gestorBandejaForm"
+    type="es.caib.bantel.back.form.GestorBandejaForm"
+    className="es.caib.bantel.back.action.TraFormBeanConfig">
+    <set-property property="valuesClassName" value="es.caib.bantel.model.GestorBandeja" />
+</form-bean>
+<form-bean
+    name="ficheroExportacionForm"
+    type="es.caib.bantel.back.form.FicheroExportacionForm"
+    className="es.caib.bantel.back.action.TraFormBeanConfig">
+    <set-property property="valuesClassName" value="es.caib.bantel.model.FicheroExportacion" />
+</form-bean>
+<form-bean
+    name="fuenteDatosForm"
+    type="es.caib.bantel.back.form.FuenteDatosForm"
+    className="es.caib.bantel.back.action.TraFormBeanConfig">
+    <set-property property="valuesClassName" value="es.caib.bantel.model.FuenteDatos" />
+</form-bean>
+<form-bean
+    name="campoFuenteDatosForm"
+    type="es.caib.bantel.back.form.CampoFuenteDatosForm"
+    className="es.caib.bantel.back.action.TraFormBeanConfig">
+    <set-property property="valuesClassName" value="es.caib.bantel.model.CampoFuenteDatos" />
+</form-bean>
