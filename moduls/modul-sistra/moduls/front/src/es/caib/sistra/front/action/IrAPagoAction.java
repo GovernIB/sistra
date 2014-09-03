@@ -28,6 +28,9 @@ import es.caib.sistra.persistence.delegate.InstanciaDelegate;
  *
  * @struts.action-forward
  *  name="fail" path="/fail.do"
+ *  
+ * @struts.action-forward
+ *  name="redireccion" path=".redireccion"
  */
 public class IrAPagoAction extends BaseAction
 {
