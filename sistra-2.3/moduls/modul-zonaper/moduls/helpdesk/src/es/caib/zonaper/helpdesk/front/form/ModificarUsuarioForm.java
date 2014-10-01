@@ -3,10 +3,10 @@ package es.caib.zonaper.helpdesk.front.form;
 import org.apache.struts.validator.ValidatorForm;
 
 public class ModificarUsuarioForm extends ValidatorForm
-{
-		
+{	
 	private String usuarioCodiOld;
 	private String usuarioCodiNew;
+	private String usuarioNifNew;
 	
 	public String getUsuarioCodiNew() {
 		return usuarioCodiNew;
@@ -19,6 +19,12 @@ public class ModificarUsuarioForm extends ValidatorForm
 	}
 	public void setUsuarioCodiOld(String usuarioCodiOld) {
 		this.usuarioCodiOld = usuarioCodiOld;
+	}
+	public String getUsuarioNifNew() {
+		return usuarioNifNew;
+	}
+	public void setUsuarioNifNew(String usuarioNifNew) {
+		this.usuarioNifNew = usuarioNifNew;
 	}
 	
 
