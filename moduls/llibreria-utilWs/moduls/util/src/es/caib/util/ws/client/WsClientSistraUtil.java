@@ -8,9 +8,24 @@ import es.caib.util.ws.ConfigurationUtil;
 import es.caib.util.ws.Constantes;
 
 public class WsClientSistraUtil {
-
+	
+	
 	/**
 	 * Configura puerto segun la configuracion de sistra (por global.properties)
+	 * 
+	 * @param port
+	 * @param url
+	 * @param user
+	 * @param pass
+	 * @throws Exception
+	 */
+	public static void configurePort(BindingProvider port, String url,
+			String user, String pass) throws Exception {
+		configurePort(port, url, null, user, pass, Constantes.TIPO_CONFIGURACION_PROPERTIES);
+	}
+
+	/**
+	 * Configura puerto segun la configuracion de sistra (por global.properties) y especificando soapaction
 	 * 
 	 * @param port
 	 * @param url

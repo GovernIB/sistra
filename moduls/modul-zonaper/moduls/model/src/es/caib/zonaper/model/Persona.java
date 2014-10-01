@@ -25,6 +25,7 @@ public class Persona implements Serializable
 	private boolean habilitarAvisosExpediente=false;
 	private String habilitarDelegacion="N";
 	private String modificacionesUsuarioSeycon;
+	private String modificacionesDocumentoIdLegal;
 	
 	private Date fechaAlta;
 	private Date fechaUltimaMod;
@@ -176,6 +177,13 @@ public class Persona implements Serializable
 	}
 	public void setModificacionesUsuarioSeycon(String modificacionesUsuarioSeycon) {
 		this.modificacionesUsuarioSeycon = modificacionesUsuarioSeycon;
+	}
+	public String getModificacionesDocumentoIdLegal() {
+		return modificacionesDocumentoIdLegal;
+	}
+	public void setModificacionesDocumentoIdLegal(
+			String modificacionesDocumentoIdLegal) {
+		this.modificacionesDocumentoIdLegal = modificacionesDocumentoIdLegal;
 	}
 	
 	

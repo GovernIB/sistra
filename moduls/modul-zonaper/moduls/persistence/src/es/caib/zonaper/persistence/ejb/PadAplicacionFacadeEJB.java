@@ -524,6 +524,54 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
     
     /**
      * 
+     * Cambia de nif al usuario.
+     * 
+     *  Permite realizar el cambio al role helpdesk.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.helpdesk}"
+     * 
+     */
+    public void actualizarNifUsuario( String usu, String nif) throws ExcepcionPAD
+    {
+    	log.debug("Modificando nif usuario " + usu + " a " + nif);
+    	    	
+    	// Normalizamos nif
+    	String nifNormalizado = NifCif.normalizarDocumento(nif);
+    	
+    	// Validamos nif
+    	if (!NifCif.esNIF(nifNormalizado) && !NifCif.esCIF(nifNormalizado) && !NifCif.esNIE(nifNormalizado) ) {
+    		throw new ExcepcionPAD("No es un nif/cif/nie valido");
+    	}
+    	
+    	// Verificamos que no exista ese nif
+    	if ( this.obtenerDatosPersonaPorDocumentoIdentificacionLegal(nifNormalizado) != null) {
+    		throw new ExcepcionPAD("Ya existe un usuario con ese nif/cif/nie");
+    	}
+    	
+    	// Obtenemos datos usuario a partir codigo antiguo
+    	Persona p = this.obtenerDatosPersonaPorUsuarioSeycon(usu);
+    	if (p == null) {
+    		throw new ExcepcionPAD("No existe usuario con codigo " + usu);
+    	}    	    	
+    	
+    	// Actualizamos codigo usuario y apuntamos usuario anterior
+    	String nifAnterior = p.getDocumentoIdLegal();
+    	p.setDocumentoIdLegal(nifNormalizado);
+    	
+    	if (StringUtils.isEmpty(p.getModificacionesDocumentoIdLegal()) ){
+    		p.setModificacionesDocumentoIdLegal(nifAnterior);
+    	}else{
+    		p.setModificacionesDocumentoIdLegal(p.getModificacionesDocumentoIdLegal() + ";" + nifAnterior);
+    	}    	
+    		
+    	this.grabarPersona(p);    	
+    }
+    
+    
+    /**
+     * 
      * Realiza la busqueda de entidades segun el nif
      * 
      * @ejb.interface-method

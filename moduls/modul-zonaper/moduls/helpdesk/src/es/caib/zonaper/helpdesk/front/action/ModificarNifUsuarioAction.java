@@ -3,37 +3,35 @@ package es.caib.zonaper.helpdesk.front.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import es.caib.util.NifCif;
 import es.caib.zonaper.helpdesk.front.Constants;
-import es.caib.zonaper.helpdesk.front.form.BusquedaUsuarioForm;
 import es.caib.zonaper.helpdesk.front.form.ModificarUsuarioForm;
-import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.PadAplicacionDelegate;
 
 /**
  * @struts.action
- *  name="busquedaUsuarioForm"
- *  path="/busquedaUsuario"
+ *  name="modificarUsuarioForm"
+ *  path="/modificarNifUsuario"
  *  scope="request"
  *  validate="true"
  *  
  * @struts.action-forward
- *  name="success" path=".busquedaUsuario"
+ *  name="success" path=".mensaje"
  *
  * @struts.action-forward
  *  name="fail" path=".error"
  */
-public class BusquedaUsuarioAction extends BaseAction
+public class ModificarNifUsuarioAction extends BaseAction
 {
 	
-	protected static Log log = LogFactory.getLog(BusquedaUsuarioAction.class);
+	protected static Log log = LogFactory.getLog(ModificarNifUsuarioAction.class);
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception 
@@ -41,27 +39,24 @@ public class BusquedaUsuarioAction extends BaseAction
 		
 		request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,Constants.USUARIOS_TAB);
 		
-		// Buscamos usuario segun filtro de busqueda
-		BusquedaUsuarioForm busquedaForm = ( BusquedaUsuarioForm ) form;
-		
+		ModificarUsuarioForm modificarForm = ( ModificarUsuarioForm ) form;
+				
+		// Normalizamos nif
+    	String nifNormalizado = NifCif.normalizarDocumento(modificarForm.getUsuarioNifNew());
+    	
+    	// Validamos nif
+    	if (!NifCif.esNIF(nifNormalizado) && !NifCif.esCIF(nifNormalizado) && !NifCif.esNIE(nifNormalizado) ) {
+    		request.setAttribute(Constants.MENSAJE_KEY,getResources(request).getMessage("usuarios.nifNoValido"));
+    		return mapping.findForward( "success" );
+    	}		
+    	
+		// Actualizamos nif usuario
 		PadAplicacionDelegate pd = DelegateUtil.getPadAplicacionDelegate();
-		PersonaPAD pers = null;
-		if (StringUtils.isNotBlank(busquedaForm.getUsuarioNif())){
-			pers = pd.obtenerHelpdeskDatosPersonaPorNif(busquedaForm.getUsuarioNif());
-		}else{
-			pers = pd.obtenerHelpdeskDatosPersonaPorUsuario(busquedaForm.getUsuarioCodi());
-		}
-		
-		ModificarUsuarioForm formStruts = ( ModificarUsuarioForm ) obtenerActionForm( mapping, request, "/modificarUsuario" );
-		if (pers != null){
-			formStruts.setUsuarioCodiOld(pers.getUsuarioSeycon());
-			formStruts.setUsuarioCodiNew(pers.getUsuarioSeycon());
-			formStruts.setUsuarioNifNew(pers.getNif());
-		}
-		
-		request.setAttribute("persona",pers);		
-		
-		
+		pd.actualizarNifUsuario(modificarForm.getUsuarioCodiOld(),
+				nifNormalizado);
+				
+		// Mostramos mensaje de usuario modificado
+		request.setAttribute(Constants.MENSAJE_KEY,getResources(request).getMessage("usuarios.modificado"));
 		return mapping.findForward( "success" );
     }
 	

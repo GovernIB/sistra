@@ -6,7 +6,6 @@ import java.util.List;
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
-import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.persistence.intf.PadAplicacionFacade;
 import es.caib.zonaper.persistence.util.PadAplicacionFacadeUtil;
@@ -126,6 +125,17 @@ public class PadAplicacionDelegate implements StatelessDelegate {
 		try
 		{
 			getFacade().actualizarCodigoUsuario( usuOld, usuNew);
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
+	public void actualizarNifUsuario( String usu, String nif) throws DelegateException{
+		try
+		{
+			getFacade().actualizarNifUsuario( usu, nif);
 		}
 		catch (Exception e) 
 		{
