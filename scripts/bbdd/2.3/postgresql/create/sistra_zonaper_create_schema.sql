@@ -1911,3 +1911,7 @@ ALTER table ZPE_PREREG ADD PRE_OFIREG VARCHAR(100);
 comment on column ZPE_PREREG.PRE_OFIREG is 'Oficina registro en la que se ha confirmado';
 ALTER table ZPE_PREBCK ADD PRB_OFIREG VARCHAR2(100);
 comment on column ZPE_PREBCK.PRB_OFIREG is 'Oficina registro en la que se ha confirmado';
+
+-- UPDATE FROM 2.3.5 TO 2.3.6
+ALTER table ZPE_PERSON ADD PER_IDEMOD VARCHAR(4000);
+comment on column ZPE_PERSON.PER_IDEMOD is 'Ante cambios de NIF se almacenan los NIF anteriores a modo de log';
