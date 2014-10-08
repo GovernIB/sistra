@@ -149,7 +149,7 @@ alter table STR_GRPTRA
    add constraint STR_GRTTRA_FK foreign key (GRT_CODTRA)
       references STR_TRAMIT (TRA_CODIGO);
 
--- From 1.1.0
+-- To 1.1.0
 
 ALTER TABLE STR_TRAVER ADD (TRV_CONWSV  VARCHAR2(10 BYTE));
 update str_traver set trv_conwsv = 'v1' where trv_contip = 'W';
@@ -162,32 +162,6 @@ ALTER TABLE STR_TRAMIT MODIFY TRA_IDENTI VARCHAR2(20);
 ALTER TABLE STR_DOMIN MODIFY DOM_IDENTI VARCHAR2(20);
 ALTER TABLE STR_DOCUM MODIFY DOC_MODELO VARCHAR2(20);
 
--- From 1.1.0 (ingles)
+-- To 1.1.0 (ingles)
 
 INSERT INTO STR_IDIOMA ( IDI_CODIGO, IDI_ORDEN ) VALUES ('en', 3); 
-
--- from 1.1.5
-
-alter table STR_DOCUM  add DOC_FORAJU VARCHAR2(1) default 'N';
-comment on column STR_DOCUM.DOC_FORAJU is
-'Para Formulario: se indica si el formulario debe anexarse al justificante';
-
--- From 1.1.6
-
-ALTER TABLE STR_TRAMIT ADD TRA_IDPROC VARCHAR2(100);
-
-comment on column STR_TRAMIT.TRA_IDPROC is
-'Identificador del procedimiento al que pertenece el trámite';
-
-UPDATE STR_TRAMIT SET TRA_IDPROC = TRA_IDENTI;
-COMMIT;
-
---
-
-ALTER TABLE STR_TRAMIT  MODIFY  TRA_IDPROC  not null;
-
-alter table STR_ESPNIV add ETN_PERSMS VARCHAR2(1) default 'N' not null;
-
-alter table STR_ESPNIV drop column ETN_AVISOS;
-
-commit;
