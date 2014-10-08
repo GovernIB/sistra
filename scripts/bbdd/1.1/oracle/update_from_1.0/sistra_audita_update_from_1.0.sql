@@ -11,25 +11,7 @@ TIP_HANDLR, TIP_AYUDA, TIP_DESCCA, TIP_AYUDAC ) VALUES (
 'PATEIN', 'CATALG', 'S', 'Iniciar pago telemático', 7, NULL, NULL, NULL, 'Inicio pago telemático'
 , 'Inici pagament telemàtic');
 
--- From version 1.1.0
+-- To version 1.1.0
 
 ALTER TABLE AUD_AUDIT MODIFY AUD_MODTRA VARCHAR2(20);
 
-
-INSERT INTO AUD_TIPOEV (
-   TIP_TIPO, TIP_MODUL, TIP_AUDIT, 
-   TIP_DESC, TIP_ORDEN, TIP_PRPCLS, 
-   TIP_HANDLR, TIP_AYUDA, TIP_DESCCA, 
-   TIP_AYUDAC) 
-VALUES ( 'PATETA',
-'CATALG',
-'S',
-'Pago telemático con tarjeta',
-11,
-null,
-null,
-'Pago telemático con tarjeta',
-'Pagament telemàtic amb targeta',
-'Pagament telemàtic amb targeta');
-
-COMMIT;

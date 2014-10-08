@@ -93,7 +93,7 @@ alter table RFR_GRPFOR
 
 alter table RFR_PATRON add constraint RFR_PAT_NOMBRE_FK unique (PAT_NOMBRE);   
 
--- From version 1.1.0 (ingles)
+-- To version 1.1.0 (ingles)
 
 -- Dejamos solo castellano, catalan e ingles 
 DELETE FROM rfr_idioma WHERE idi_codi = 'it';

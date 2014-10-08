@@ -1,4 +1,4 @@
--- From version 1.1.0
+-- To version 1.1.0
 
 DELETE FROM SC_WL_USUGRU;
 
