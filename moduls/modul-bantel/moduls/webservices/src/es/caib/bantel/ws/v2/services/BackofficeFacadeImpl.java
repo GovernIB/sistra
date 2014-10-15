@@ -11,6 +11,9 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import es.caib.bantel.modelInterfaz.ReferenciaEntradaBTE;
 import es.caib.bantel.persistence.delegate.BteDelegate;
 import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
@@ -28,6 +31,8 @@ import es.caib.sistra.plugins.firma.PluginFirmaIntf;
         endpointInterface = "es.caib.bantel.ws.v2.services.BackofficeFacade")
 public class BackofficeFacadeImpl implements BackofficeFacade {
 		
+	private static Log log = LogFactory.getLog(BackofficeFacadeImpl.class);
+	
 	public void establecerResultadoProceso(es.caib.bantel.ws.v2.model.ReferenciaEntrada numeroEntrada, String procesada, String resultadoProcesamiento) throws es.caib.bantel.ws.v2.services.BackofficeFacadeException {
 		try{
 			BteDelegate bd = DelegateBTEUtil.getBteDelegate();
@@ -39,6 +44,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			bd.procesarEntrada(r,procesada,resultadoProcesamiento);
 			
 		}catch(Exception ex){
+			log.error(ex);
 			throw new es.caib.bantel.ws.v2.services.BackofficeFacadeException(ex.getMessage(),new es.caib.bantel.ws.v2.model.BackofficeFacadeException());
 		}
 	}
@@ -54,6 +60,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			es.caib.bantel.modelInterfaz.TramiteBTE tramBte = bd.obtenerEntrada(r);
 			return tramiteBTEIntfToTramiteBTEWS(tramBte);
 		}catch(Exception ex){
+			log.error(ex);
 			throw new es.caib.bantel.ws.v2.services.BackofficeFacadeException(ex.getMessage(),new es.caib.bantel.ws.v2.model.BackofficeFacadeException());
 		}
 	}
@@ -71,6 +78,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			ReferenciaEntradaBTE[] entradas = bd.obtenerReferenciasEntradas(identificadorProcesamiento, identificadorTramite,procesada,desdeDate, hastaDate);
 			return referenciasEntradaIntfToReferenciasEntradaWS(entradas);
 		}catch(Exception ex){
+			log.error(ex);
 			throw new es.caib.bantel.ws.v2.services.BackofficeFacadeException(ex.getMessage(),new es.caib.bantel.ws.v2.model.BackofficeFacadeException());
 		}
 	}

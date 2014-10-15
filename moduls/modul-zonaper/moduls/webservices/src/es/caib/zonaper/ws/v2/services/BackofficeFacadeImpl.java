@@ -4,6 +4,8 @@ package es.caib.zonaper.ws.v2.services;
 import java.util.Iterator;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.EstadoPago;
@@ -25,6 +27,8 @@ import es.caib.zonaper.ws.v2.model.TipoEstadoTramite;
         endpointInterface = "es.caib.zonaper.ws.v2.services.BackofficeFacade")
 public class BackofficeFacadeImpl implements BackofficeFacade {
 
+	private static Log log = LogFactory.getLog(BackofficeFacadeImpl.class);
+	
 	public void altaEventoExpediente(long unidadAdministrativa, String identificadorExpediente, String claveExpediente, EventoExpediente evento) throws es.caib.zonaper.ws.v2.services.BackofficeFacadeException{		
 		try{					
 			EventoExpedientePAD evPAD = eventoWSToEventoPAD(evento);
@@ -32,7 +36,8 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
 			pad.altaEvento(unidadAdministrativa, identificadorExpediente, claveExpediente, evPAD);
 		}catch( Exception exc ){
-			exc.printStackTrace();
+			log.error(exc);
+			// exc.printStackTrace();
 		     throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
 		 
@@ -46,7 +51,8 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			String id = pad.altaExpediente(expPAD);
 			return id;		
 		} catch (Exception exc) {
-			exc.printStackTrace();
+			log.error(exc);
+			// exc.printStackTrace();
 		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
 	}
@@ -57,7 +63,8 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
 			return pad.existeZonaPersonalUsuario(nifUsuario);		
 		} catch (Exception exc) {
-			exc.printStackTrace();
+			log.error(exc);
+			// exc.printStackTrace();
 		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
 	}
@@ -69,7 +76,8 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
 			return pad.altaZonaPersonalUsuario(nif, nombre, apellido1, apellido2);		
 		} catch (Exception exc) {
-			exc.printStackTrace();
+			log.error(exc);
+			// exc.printStackTrace();
 		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}		
 	}
@@ -94,7 +102,8 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			return res;
 			
 		} catch (Exception exc) {
-			exc.printStackTrace();
+			log.error(exc);
+			// exc.printStackTrace();
 		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
 	}
