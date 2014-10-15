@@ -8,6 +8,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
@@ -27,6 +29,8 @@ import es.caib.sistra.plugins.firma.PluginFirmaIntf;
         endpointInterface = "es.caib.redose.ws.v2.services.BackofficeFacade")
 public class BackofficeFacadeImpl implements BackofficeFacade {
 
+	private static Log log = LogFactory.getLog(BackofficeFacadeImpl.class);
+	
 	
 	public DocumentoRDS consultarDocumento(ReferenciaRDS referencia) throws es.caib.redose.ws.v2.services.BackofficeFacadeException {		
 		try{
@@ -36,7 +40,8 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			DocumentoRDS docWS = documentoIntToDocumentoWS(doc);
 			return docWS;
 		}catch( Exception exc ){
-			exc.printStackTrace();
+			log.error(exc);
+			// exc.printStackTrace();
 		     throw new es.caib.redose.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
 	}
@@ -49,7 +54,8 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			DocumentoRDS docWS = documentoIntToDocumentoWS(doc);
 			return docWS;
 		}catch( Exception exc ){
-			exc.printStackTrace();
+			log.error(exc);
+			// exc.printStackTrace();
 		     throw new es.caib.redose.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
 	}
@@ -62,7 +68,8 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			ReferenciaRDS refWS = referenciaIntfToReferenciaWS(refInt);
 			return refWS;
 		}catch( Exception exc ){
-			exc.printStackTrace();
+			log.error(exc);
+			// exc.printStackTrace();
 		     throw new es.caib.redose.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
 	}
@@ -76,7 +83,8 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			ReferenciaRDS refWS = referenciaIntfToReferenciaWS(refInt);
 			return refWS;
 		}catch( Exception exc ){
-			exc.printStackTrace();
+			log.error(exc);
+			// exc.printStackTrace();
 		     throw new es.caib.redose.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
 	}
