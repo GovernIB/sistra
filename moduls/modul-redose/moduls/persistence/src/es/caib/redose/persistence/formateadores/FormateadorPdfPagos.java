@@ -89,7 +89,7 @@ public class FormateadorPdfPagos extends FormateadorPdfFormularios
 		
 		// Devolvemos pdf generado
 		DocumentoRDS documentoF = UtilRDS.cloneDocumentoRDS(documento);
-		documentoF.setDatosFichero(pdf.guardarEnMemoria());		
+		documentoF.setDatosFichero(pdf.guardarEnMemoria(true));		
 		documentoF.setNombreFichero(StringUtil.normalizarNombreFichero(documento.getTitulo()) + ".pdf");		
 		
 		return documentoF;
