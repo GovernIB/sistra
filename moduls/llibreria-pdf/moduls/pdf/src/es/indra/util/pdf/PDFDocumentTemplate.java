@@ -162,6 +162,9 @@ public class PDFDocumentTemplate {
 		try{
 			if (!docCerrado)
 			{			
+				if (formFlattening) {
+					pdfs.setFormFlattening(true);
+				}
 				pdfs.close();
 				docCerrado = true;
 			}
