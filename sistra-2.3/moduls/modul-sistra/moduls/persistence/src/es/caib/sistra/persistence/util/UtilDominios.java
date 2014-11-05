@@ -16,7 +16,7 @@ public class UtilDominios
     {
 		PluginDominio plgDom = new PluginDominio();
 		String idDom = plgDom.crearDominio(nombredominio);
-		//
+		
 		if ( params != null )
 		{
 			for ( int i = 0; i < params.size(); i++ )
@@ -31,4 +31,29 @@ public class UtilDominios
 		plgDom.removeDominio( idDom );
 		return lstFilas;
 	}
+    
+    public static ValoresDominio recuperarValoresDominio(String nombredominio ) throws Exception
+    {
+    	return recuperarValoresDominio( nombredominio, null );
+    }
+    
+    public static ValoresDominio recuperarValoresDominio(String nombredominio, List params ) throws Exception
+    {
+		PluginDominio plgDom = new PluginDominio();
+		String idDom = plgDom.crearDominio(nombredominio);
+		
+		if ( params != null )
+		{
+			for ( int i = 0; i < params.size(); i++ )
+			{
+				plgDom.establecerParametro( idDom, ( String ) params.get( i ) ); 
+			}
+		}
+		plgDom.recuperaDominio(idDom);
+				
+		ValoresDominio valoresDominio = plgDom.getValoresDominio( idDom );
+		plgDom.removeDominio( idDom );
+		return valoresDominio;
+	}
+    
 }

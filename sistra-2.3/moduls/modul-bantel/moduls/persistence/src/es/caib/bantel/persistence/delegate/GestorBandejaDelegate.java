@@ -64,6 +64,19 @@ public class GestorBandejaDelegate implements StatelessDelegate
        }
    }
    
+   
+   public List listarGestoresBandeja(String filtro) throws DelegateException 
+   {
+	   try
+	   {
+		   return getFacade().listarGestoresBandeja(filtro);
+	   }
+	   catch (Exception e) 
+	   {
+           throw new DelegateException(e);
+       }
+   }
+   
         
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
