@@ -43,6 +43,15 @@ public class OrganoResponsableDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
+    public List listarOrganoResponsables(String filtro) throws DelegateException {
+        try {
+            return getFacade().listarOrganoResponsables(filtro);
+        } catch (Exception e) {
+        	e.printStackTrace();	
+            throw new DelegateException(e);
+        }
+    }
         
     public void borrarOrganoResponsable(Long id) throws DelegateException {
         try {

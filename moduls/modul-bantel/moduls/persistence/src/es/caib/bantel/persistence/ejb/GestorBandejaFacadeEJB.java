@@ -1,6 +1,5 @@
 package es.caib.bantel.persistence.ejb;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.ejb.CreateException;
@@ -11,9 +10,11 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.ObjectNotFoundException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
+
+import org.apache.commons.lang.StringUtils;
+
 import es.caib.bantel.model.GestorBandeja;
 import es.caib.bantel.model.Procedimiento;
-;
 
 /**
  * SessionBean para mantener y consultar GestorBandeja
@@ -208,6 +209,32 @@ public abstract class GestorBandejaFacadeEJB extends HibernateEJB
     	try
     	{
     		Query query = session.createQuery( "FROM GestorBandeja g order by g.seyconID");
+    		query.setCacheable( true );
+    		return query.list();
+    	}
+	    catch (HibernateException he) 
+	    {
+	        throw new EJBException(he);
+	    } 
+	    finally 
+	    {
+	        close(session);
+	    }
+    	
+    }
+    
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public List listarGestoresBandeja(String filtro)
+    {
+    	Session session = getSession();
+    	try
+    	{
+    		Query query = session.createQuery( "FROM GestorBandeja g  WHERE upper(g.seyconID) like :filtroDesc order by g.seyconID");
+    		query.setParameter("filtroDesc", "%" + StringUtils.defaultString(filtro).toUpperCase() + "%");
     		query.setCacheable( true );
     		return query.list();
     	}

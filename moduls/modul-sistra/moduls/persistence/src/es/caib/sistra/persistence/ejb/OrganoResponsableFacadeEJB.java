@@ -3,6 +3,9 @@ package es.caib.sistra.persistence.ejb;
 import java.util.List;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
+
+import org.apache.commons.lang.StringUtils;
+
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
@@ -77,6 +80,24 @@ public abstract class OrganoResponsableFacadeEJB extends HibernateEJB {
         Session session = getSession();
         try {       	
             Query query = session.createQuery("FROM OrganoResponsable AS m ORDER BY m.descripcion ASC");
+            query.setCacheable(true);
+            return query.list();
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.operador}"
+     */
+    public List listarOrganoResponsables(String filtro) {
+        Session session = getSession();
+        try {       	
+            Query query = session.createQuery("FROM OrganoResponsable AS m WHERE upper(m.descripcion) like :filtroDesc ORDER BY m.descripcion ASC");
+            query.setParameter("filtroDesc", "%" + StringUtils.defaultString(filtro).toUpperCase() + "%");
             query.setCacheable(true);
             return query.list();
         } catch (HibernateException he) {

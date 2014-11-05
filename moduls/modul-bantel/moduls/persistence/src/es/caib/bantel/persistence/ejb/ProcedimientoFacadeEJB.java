@@ -6,6 +6,8 @@ import java.util.List;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
+import org.apache.commons.lang.StringUtils;
+
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
@@ -118,6 +120,31 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB {
     	try
     	{
     		Query query = session.createQuery( "FROM Procedimiento o order by o.descripcion");
+    		query.setCacheable( true );
+    		return query.list();
+    	}
+	    catch (HibernateException he) 
+	    {
+	        throw new EJBException(he);
+	    } 
+	    finally 
+	    {
+	        close(session);
+	    }    	
+    }
+    
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public List listarProcedimientos(String filtro)
+    {
+    	Session session = getSession();
+    	try
+    	{
+    		Query query = session.createQuery( "FROM Procedimiento o WHERE upper(o.descripcion) like :filtroDesc order by o.descripcion");
+            query.setParameter("filtroDesc", "%" + StringUtils.defaultString(filtro).toUpperCase() + "%");
     		query.setCacheable( true );
     		return query.list();
     	}
