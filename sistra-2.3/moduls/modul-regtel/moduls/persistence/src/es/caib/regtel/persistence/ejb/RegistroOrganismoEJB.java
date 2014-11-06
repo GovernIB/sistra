@@ -362,7 +362,7 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 			log.debug("Invocamos el plugin con la funcion de anular registro entrada");
 			plgRegistro.anularRegistroEntrada(numeroRegistro, fechaRegistro);			
 		}catch (Exception ex){
-			throw new ExcepcionRegistroOrganismo("Excepcion accediendo al plugin de registro",ex);
+			throw new ExcepcionRegistroOrganismo("Excepcion anulando registro entrada: " + numeroRegistro,ex);
 		}  
    }
    
@@ -378,7 +378,7 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 			log.debug("Invocamos el plugin con la funcion de anular registro salida");
 			plgRegistro.anularRegistroSalida(numeroRegistro, fechaRegistro);			
 		}catch (Exception ex){
-			throw new ExcepcionRegistroOrganismo("Excepcion accediendo al plugin de registro",ex);
+			throw new ExcepcionRegistroOrganismo("Excepcion anulando registro salida: " + numeroRegistro,ex);
 		}  
   }
   
