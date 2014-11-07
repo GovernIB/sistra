@@ -1212,3 +1212,7 @@ comment on column STR_DOMIN.DOM_WSSOA is
 
 -- V2.3.4
 ALTER table STR_DOMIN MODIFY DOM_URL VARCHAR2(500);
+
+-- V2.3.7
+ALTER table STR_DOCNIV  ADD DNV_FORGUA VARCHAR2(1) default 'N' not null;
+comment on column STR_DOCNIV.DNV_FORGUA is 'Para Formulario: indica si se permite guardar sin terminar';

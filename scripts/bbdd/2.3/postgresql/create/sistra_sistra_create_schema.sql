@@ -164,7 +164,8 @@ CREATE TABLE str_docniv (
     dnv_pagtip character varying(1) DEFAULT 'A'::character varying NOT NULL,
     dnv_flutra bytea,
     dnv_fircty character varying(500),
-    dnv_pagplg character varying(50) DEFAULT '.'::character varying NOT NULL
+    dnv_pagplg character varying(50) DEFAULT '.'::character varying NOT NULL,
+    dnv_forgua character varying(1) DEFAULT 'N'::character varying NOT NULL
 );
 
 
