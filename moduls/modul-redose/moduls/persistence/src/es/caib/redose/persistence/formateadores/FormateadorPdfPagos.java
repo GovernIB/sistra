@@ -28,6 +28,8 @@ public class FormateadorPdfPagos extends FormateadorPdfFormularios
 	private static String DATOSPAGO_IMPORTE = "DATOS_PAGO.IMPORTE";
 	private static String DATOSPAGO_FECHA_DEVENGO = "DATOS_PAGO.FECHA_DEVENGO";
 	private static String DATOS_PASARELA_FECHA_PAGO = "DATOS_PASARELA.FECHA_PAGO";
+	private static String DATOS_PASARELA_NUMERO_DUI = "DATOS_PASARELA.NUMERO_DUI";
+	private static String DATOS_PAGO_TIPO = "DATOS_PAGO.TIPO";
 	
 	public DocumentoRDS formatearDocumento(DocumentoRDS documento,
 			PlantillaIdioma plantilla, List usos) throws Exception
@@ -74,6 +76,11 @@ public class FormateadorPdfPagos extends FormateadorPdfFormularios
     		datos.put( DATOS_PASARELA_FECHA_PAGO, fechaPagoFormat );
     	}
     	
+    	// Para pagos presenciales no mostramos datos pasarela
+    	if ( "P".equals( (String) datos.get(DATOS_PAGO_TIPO)) ) {
+    		datos.remove(DATOS_PASARELA_NUMERO_DUI);
+    		datos.remove(DATOS_PASARELA_FECHA_PAGO);
+    	}
     	    	
 		// Creamos pdf a partir plantilla y establecemos valores
 		PDFDocumentTemplate pdf = new PDFDocumentTemplate(plantilla.getArchivo().getDatos());
@@ -82,7 +89,7 @@ public class FormateadorPdfPagos extends FormateadorPdfFormularios
 		
 		// Devolvemos pdf generado
 		DocumentoRDS documentoF = UtilRDS.cloneDocumentoRDS(documento);
-		documentoF.setDatosFichero(pdf.guardarEnMemoria());		
+		documentoF.setDatosFichero(pdf.guardarEnMemoria(true));		
 		documentoF.setNombreFichero(StringUtil.normalizarNombreFichero(documento.getTitulo()) + ".pdf");		
 		
 		return documentoF;

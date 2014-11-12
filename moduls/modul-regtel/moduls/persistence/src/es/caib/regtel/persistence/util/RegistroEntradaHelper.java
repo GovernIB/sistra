@@ -117,7 +117,7 @@ public class RegistroEntradaHelper{
 			else if (NifCif.esNIE(nif))
 				datosRpte.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE));				
 			
-			datosRpte.setNumeroIdentificacion(nif);
+			datosRpte.setNumeroIdentificacion(NifCif.normalizarDocumento(nif));
 			datosRpte.setFormatoDatosInteresado(ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);			
 			datosRpte.setIdentificacionInteresado(apellidosNombre);
 			datosRpte.setUsuarioSeycon(userSeycon);

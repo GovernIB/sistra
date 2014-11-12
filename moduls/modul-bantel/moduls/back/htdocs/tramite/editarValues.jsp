@@ -47,7 +47,10 @@
     <td class="label"><bean:message key="tramite.gestionExpedientes.permitirSmsAvisos"/></td>
     <td class="input">Si<html:radio property="values.permitirSms" value="S"/> No <html:radio property="values.permitirSms" value="N"/></td>
 </tr>
-
+<tr>
+    <td class="label"><bean:message key="tramite.gestionExpedientes.permitirPlazoNotificacionesVariable"/></td>
+    <td class="input">Si<html:radio property="values.permitirPlazoNotificacionesVariable" value="S"/> No (<bean:message key="tramite.gestionExpedientes.permitirPlazoNotificacionesVariable.plazoDefecto"/>)<html:radio property="values.permitirPlazoNotificacionesVariable" value="N"/></td>
+</tr>
 <tr>
 	<td class="separador" colspan="2"><bean:message key="tramite.avisoBackOffice"/></td>
 </tr>
@@ -63,12 +66,16 @@
     <td class="input">Si<html:radio property="values.inmediata" value="S"/> No <html:radio property="values.inmediata" value="N"/></td>
 </tr>
 <tr>
+    <td class="label"><bean:message key="tramite.gestionExpedientes.permitirAvisosNotificaciones"/></td>
+    <td class="input">Si<html:radio property="values.avisarNotificaciones" value="S"/> No <html:radio property="values.avisarNotificaciones" value="N"/></td>
+</tr>
+<tr>
     <td class="label"><bean:message key="tramite.tipoAcceso"/></td>
     <td class="input">EJB<html:radio property="values.tipoAcceso" value="<%=Character.toString(Procedimiento.ACCESO_EJB)%>"/> Webservice<html:radio property="values.tipoAcceso" value="<%=Character.toString(Procedimiento.ACCESO_WEBSERVICE)%>"/></td>
 </tr>
 <tr>
     <td class="label"><bean:message key="tramite.url"/></td>
-    <td class="input"><html:text styleClass="textLargo" tabindex="10" property="values.url" maxlength="200"/></td>
+    <td class="input"><html:text styleClass="textLargo" tabindex="10" property="values.url" maxlength="500"/></td>
 </tr>
 <tr>
     <td class="label"><bean:message key="tramite.versionWS"/></td>
@@ -76,6 +83,12 @@
     	<html:select property="values.versionWS">
    			<html:options collection="listaVersionesWS" property="CODIGO" labelProperty="DESCRIPCION" />
     	</html:select>
+    </td>
+</tr>
+<tr>
+    <td class="label">Soap Action</td>
+    <td class="input">
+    	<html:text styleClass="textLargo" tabindex="10" property="values.soapActionWS" maxlength="100"/>    	
     </td>
 </tr>
 <tr>
@@ -119,5 +132,3 @@
 		</tr>
 	</logic:present>
 </logic:notEmpty>
-
-	

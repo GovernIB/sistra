@@ -6,6 +6,7 @@ import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
 import es.caib.zonaper.model.ElementoExpediente;
+import es.caib.zonaper.model.Entrada;
 import es.caib.zonaper.persistence.intf.ProcesosAutoFacade;
 import es.caib.zonaper.persistence.util.ProcesosAutoFacadeUtil;
 
@@ -68,6 +69,39 @@ public class ProcesosAutoDelegate implements StatelessDelegate
 			throw new DelegateException(e);
         }
 	}
+	
+	public void procesaTramitesCaducados() throws DelegateException {
+		try{
+			getFacade().procesaTramitesCaducados();
+		}catch (Exception e) {
+			throw new DelegateException(e);
+        }
+	}
+	
+	public void procesaEliminarTramitesBackup() throws DelegateException {
+		try{
+			getFacade().procesaEliminarTramitesBackup();
+		}catch (Exception e) {
+			throw new DelegateException(e);
+        }
+	}
+	
+	public void alertasTramitacion() throws DelegateException {
+		try{
+			getFacade().alertasTramitacion();
+		}catch (Exception e) {
+			throw new DelegateException(e);
+        }
+	}
+	
+	public void alertaTramitacionTramiteRealizado(Entrada entrada, String email) throws DelegateException {
+		try{
+			getFacade().alertaTramitacionTramiteRealizado(entrada, email);
+		}catch (Exception e) {
+			throw new DelegateException(e);
+        }
+	}
+	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
@@ -79,5 +113,7 @@ public class ProcesosAutoDelegate implements StatelessDelegate
     protected ProcesosAutoDelegate()throws DelegateException 
     {       
     }
+
+	
 
 }

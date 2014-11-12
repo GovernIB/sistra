@@ -145,6 +145,13 @@
     </td>
 </tr>
 <tr>
+    <td class="label"><bean:message key="documentoNivel.formularioGuardarSinTerminar"/></td>
+    <td class="input">
+    	<bean:message key="afirmacion"/><html:radio property="values.formularioGuardarSinTerminar" value="S"/> 
+    	<bean:message key="negacion"/><html:radio property="values.formularioGuardarSinTerminar" value="N"/>     
+    </td>
+</tr>
+<tr>
     <td class="label"><bean:message key="documentoNivel.formularioDatosInicialesScript"/></td>
     <td class="input"><html:textarea styleClass="text" tabindex="10" property="formularioDatosInicialesScript"/><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=formularioDatosInicialesScript&titulo=documentoNivel.formularioDatosInicialesScript" %>');"/></td>
 </tr>
@@ -175,5 +182,12 @@
     <td class="labelo"><bean:message key="documentoNivel.tipoPago"/></td>
     <td class="input"><bean:message key="documentoNivel.tipoPago.telematico"/><html:radio property="values.pagoMetodos" value="T"/> <bean:message key="documentoNivel.tipoPago.presencial"/><html:radio property="values.pagoMetodos" value="P"/><bean:message key="documentoNivel.tipoPago.ambos"/><html:radio property="values.pagoMetodos" value="A"/></td>
 </tr>
-
+<tr>
+    <td class="labelo"><bean:message key="documentoNivel.pagoPlugin"/></td>
+    <td class="input">
+    	<html:select property="values.pagoPlugin">
+   			<html:options collection="listaPluginsPago" property="CODIGO" labelProperty="DESCRIPCION" />
+    	</html:select>
+    </td>
+</tr>
 <script>cambioGestorFormulario();</script>

@@ -56,9 +56,7 @@ public class RealizarAltaAvisoAction extends BaseAction
 		Long uniAdm = (Long) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY);
 		String claveExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY);
 		
-		
 		try{
-			
 			if(request.getSession().getAttribute("documentosAltaAviso") == null){
 				documentos = new ArrayList();
 			}else{
@@ -73,6 +71,7 @@ public class RealizarAltaAvisoAction extends BaseAction
 			eventoExpediente.setTitulo(avisoForm.getTitulo());
 			eventoExpediente.setTexto(avisoForm.getTexto());
 			eventoExpediente.setTextoSMS(avisoForm.getTextoSMS());
+			eventoExpediente.setAccesiblePorClave(new Boolean("S".equals(avisoForm.getAccesoPorClave())));
 
 			// Alta del aviso
 			ejb.altaEvento(uniAdm, idExpe, claveExpe, eventoExpediente );
@@ -84,7 +83,7 @@ public class RealizarAltaAvisoAction extends BaseAction
 		}catch(Exception e){
 			log.error("Excepcion realizando alta aviso",e);
 			request.setAttribute( "enlace", "altaAviso");
-			String mensajeOk = MensajesUtil.getValue("error.aviso.Excepcion") + ": " + e.getMessage();
+			String mensajeOk = MensajesUtil.getValue("error.aviso.Excepcion", request) + ": " + e.getMessage();
 			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk);
 			return mapping.findForward("fail");
 		}

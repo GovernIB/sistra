@@ -30,7 +30,7 @@ import es.caib.bantel.persistence.delegate.ProcedimientoDelegate;
 import es.caib.bantel.persistence.plugins.PluginBackOffice;
 import es.caib.bantel.persistence.plugins.UsernamePasswordCallbackHandler;
 import es.caib.bantel.persistence.util.CacheProcesamiento;
-import es.caib.bantel.persistence.util.StringUtil;
+import es.caib.bantel.persistence.util.BteStringUtil;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
@@ -104,7 +104,7 @@ public class AvisadorInmediatoFacadeEJB implements MessageDrivenBean, MessageLis
 			String sNumeroEntradas = ((TextMessage) message).getText();			
 			log.debug("Aviso entradas: Mensaje recibido: " + sNumeroEntradas);
 			
-			String numeroEntradas [] =  StringUtil.stringToNumeroEntradas(sNumeroEntradas);		
+			String numeroEntradas [] =  BteStringUtil.stringToNumeroEntradas(sNumeroEntradas);		
 			
 			// Comprobamos que las entradas existen (puede ser que no haya terminado transaccion para avisos inmediatos)
 			// y que son del mismo procedimiento
@@ -195,7 +195,7 @@ public class AvisadorInmediatoFacadeEJB implements MessageDrivenBean, MessageLis
 					// Avisamos a BackOffice de las nuevas entradas
 					log.debug("Aviso entradas: Entradas a avisar: " +  ToStringBuilder.reflectionToString(entradasParaAvisar));					
 					if (entradasParaAvisar != null && entradasParaAvisar.size()>0){			
-						PluginBackOffice bo = new PluginBackOffice(entradaBandeja.getProcedimiento());									
+						PluginBackOffice bo = new PluginBackOffice(entradaBandeja.getProcedimiento(), entradaBandeja.getIdentificadorTramite());									
 						bo.avisarEntradas(referenciasParaAvisar,userAuto,passAuto);				
 					}
 			}

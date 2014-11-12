@@ -34,12 +34,12 @@ public class RecepcioFormServlet extends HttpServlet
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-    	logger.debug("Recepció formulari");        
-    	logger.debug("Charset: " + request.getCharacterEncoding());
+    	logger.debug( "DEBUGFORM: RecepcioFormServlet - Charset: " + request.getCharacterEncoding());
         
         String tokenGestionFormulario = "";
         String xmlInicial = "";
         String xmlFinal = "";
+        String sinFinalizar = "";
         if (FileUpload.isMultipartContent(request)) {
             try {
                 DiskFileUpload fileUpload = new DiskFileUpload();
@@ -75,29 +75,46 @@ public class RecepcioFormServlet extends HttpServlet
         } else {
             xmlInicial 	= request.getParameter("xmlInicial");
             xmlFinal 	= request.getParameter("xmlFinal");
+            sinFinalizar= request.getParameter("sinTerminar");
             tokenGestionFormulario = request.getParameter( Constants.GESTOR_FORM_PARAM_ALMACENAMIENTO_GESTOR_FORMULARIO );
         }
 
-        logger.debug("XML Inicial: " + xmlInicial);
-        logger.debug("XML Final: " + xmlFinal);
+        logger.debug( "DEBUGFORM: RecepcioFormServlet - id gestor formulario: " + tokenGestionFormulario);
+        logger.debug( "DEBUGFORM: RecepcioFormServlet - XML Inicial: " + xmlInicial);
+        logger.debug( "DEBUGFORM: RecepcioFormServlet - XML Final: " + xmlFinal);
+        logger.debug( "DEBUGFORM: RecepcioFormServlet - Sin Finalizar: " + sinFinalizar);
         
-    	String token = null;
+        String token = null;
+    	String msgError = null;
     	try
     	{
-    		GestorFlujoFormulario gestorFormularios = FlujoFormularioRequestHelper.obtenerGestorFormulario( request,tokenGestionFormulario, false );
-    		token = gestorFormularios.guardarDatosFormulario( xmlInicial, xmlFinal );
+    		GestorFlujoFormulario gestorFormularios = FlujoFormularioRequestHelper.obtenerGestorFormulario( request,tokenGestionFormulario);
+    		if (gestorFormularios == null) {
+    			throw new Exception("No se encuentra gestor de formularios en contexto");
+    		}
+    		token = gestorFormularios.guardarDatosFormulario( xmlInicial, xmlFinal, "S".equals(sinFinalizar) );       	
+    		if (token == null) {
+    			msgError = "Error al guadar datos formulario en gestor formulario";
+    		}
     	}
     	catch( Exception exc )
     	{
-    		this.log( "Error intentando almacenar xml formulario", exc );
-    		token = exc.getMessage();
+    		logger.error("Error intentando almacenar xml formulario", exc );
+    		msgError = "Excepcion: " + exc.getMessage();
     	}
 		
-        byte[] encBytes = token.getBytes( "UTF-8" );
-		response.reset();
-        response.setContentLength(encBytes.length);
-        response.setContentType("text/plain; charset=UTF-8");
-        response.getOutputStream().write(encBytes);
-        response.flushBuffer();
+    	
+    	// Devolvemos token
+    	if (token == null) {
+    		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, msgError);    	    
+    	} else {
+	    	byte[] encBytes = token.getBytes("UTF-8");
+			response.reset();
+	        response.setContentLength(encBytes.length);
+	        response.setContentType("text/plain; charset=UTF-8");
+	        response.getOutputStream().write(encBytes);
+	        response.flushBuffer();
+    	}    
+        
 	}
 }

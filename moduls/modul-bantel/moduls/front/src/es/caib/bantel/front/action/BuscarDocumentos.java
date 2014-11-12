@@ -39,7 +39,7 @@ public class BuscarDocumentos extends BaseAction
 			}
 			JSONObject jsonObject = new JSONObject();		        				
 			if (error){
-				jsonObject.put("error",MensajesUtil.getValue("aviso.error.no.documentos"));
+				jsonObject.put("error",MensajesUtil.getValue("aviso.error.no.documentos", request));
 			}else{
 				jsonObject.put("error","");
 				jsonObject.put("divDocuments", div);
@@ -47,7 +47,7 @@ public class BuscarDocumentos extends BaseAction
 			populateWithJSON(response,jsonObject.toString());
 		}catch(Exception ex){
 			JSONObject jsonObject = new JSONObject();		        				
-			jsonObject.put("error",MensajesUtil.getValue("error.excepcion.general"));
+			jsonObject.put("error",MensajesUtil.getValue("error.excepcion.general", request));
 			populateWithJSON(response,jsonObject.toString());
 		}
 		return null;
@@ -71,9 +71,13 @@ public class BuscarDocumentos extends BaseAction
 			contenido = contenido+"<a href=\"/bantelfront/abrirDocumento.do?codigo="+documento.getCodigoRDS()+"&clave="+documento.getClaveRDS()+"\" >"+StringEscapeUtils.escapeHtml(documento.getTitulo())+"</a>";
 			contenido = contenido+"<div id=\"infoFirmado-"+documento.getCodigoRDS()+"\" style=\"display:inline;\">";
 			if(!documento.isFirmar()){
-				contenido = contenido+" - <a class=\"firmar\" onclick=\"mostrarFirmar('"+documento.getTituloB64()+"','"+documento.getCodigoRDS()+"','"+documento.getClaveRDS()+"')\">Firmar</a>";
+				if (documento.isFirmable()) {
+					contenido = contenido+" - <a class=\"firmar\" onclick=\"mostrarFirmar('"+documento.getTituloB64()+"','"+documento.getCodigoRDS()+"','"+documento.getClaveRDS()+"')\">Firmar</a>";
+				} else {
+					contenido = contenido+" - <strong>"+resources.getMessage( getLocale( request ), "firmarDocumento.documentoNoFirmable")+"</strong>";
+				}
 			}else{
-				contenido = contenido+" - <strong>"+resources.getMessage( getLocale( request ), "detalleTramite.datosTramite.envio.firmado")+"</strong>";
+				contenido = contenido+" - <strong>"+resources.getMessage( getLocale( request ), "firmarDocumento.documentoFirmado")+"</strong>";
 			}
 			contenido = contenido+"</div>";
 			} else {

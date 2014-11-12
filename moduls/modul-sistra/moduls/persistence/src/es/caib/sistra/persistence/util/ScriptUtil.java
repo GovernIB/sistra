@@ -217,7 +217,7 @@ public final class ScriptUtil {
 			
 			// Preparamos plugin para acceso a datos sesion
 			PluginDatosSesion plgSes = new PluginDatosSesion();
-			plgSes.setDatosSesion(infoSesion);
+			plgSes.setDatosSesion( (infoPersistencia != null? infoPersistencia.getIdPersistencia() : null), infoSesion);
 			params.put("PLUGIN_DATOSSESION",plgSes);
 			
 			// Preparamos plugin para acceso a datos tramite

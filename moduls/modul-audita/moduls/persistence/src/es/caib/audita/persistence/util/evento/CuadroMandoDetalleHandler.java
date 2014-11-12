@@ -31,9 +31,10 @@ public class CuadroMandoDetalleHandler extends
 {
 	protected static Log log = LogFactory.getLog(CuadroMandoDetalleHandler.class);
 	
-	protected static String JNDI_SISTRA = "";
+	private String JNDI_SISTRA = "";
 	
-	private static final String FICHERO_PROPIEDADES = "CuadroMandoDetalleHandler.properties";
+	// Indica si se cambia el class a la hora de coger el fichero de propiedades por la clasea actualmente instanciada
+	protected boolean changeDaoClass = false;
 	
 	
 	public CuadroMandoDetalle obtenerCuadroMandoDetalle() {
@@ -87,7 +88,7 @@ public class CuadroMandoDetalleHandler extends
 			result = createCuadroMandoDetalle(getIdioma(), lstResultConsulta);
 			
 
-			lstResultConsulta = this.queryForMapList( con, CuadroMandoDetalleHandler.class, "sql.select.tipoEvento" , new Object[]{ ls_tipo });
+			lstResultConsulta = this.queryForMapList( con, getDaoClass(), "sql.select.tipoEvento" , new Object[]{ ls_tipo });
 			Map mResult = ( Map ) lstResultConsulta.get(0);
 
 			result.setTitulo((String) mResult.get( (getIdioma().equals(ConstantesAuditoria.LANGUAGE_CATALAN)) ? "descripcion_ca" : "descripcion" ));
@@ -101,6 +102,20 @@ public class CuadroMandoDetalleHandler extends
 		}
 		return null;
 	}
+
+	/**
+	 * Obtiene clase dao para obtener en base a ella el fichero sql.
+	 * @return
+	 */
+	private Class getDaoClass() {
+		if (this.changeDaoClass) {
+			// Coge la clase actualmente instanciada
+			return this.getClass();
+		} else {
+			// Coge la clase CuadroMandoDetalleHandler
+			return CuadroMandoDetalleHandler.class;
+		}
+	}
 	
 	protected List getListDetalleAudit(String tipo, String fechaInicio, String fechaFinal)
 	{
@@ -113,11 +128,11 @@ public class CuadroMandoDetalleHandler extends
 			if(fechaFinal == null)
 			{
 				ls_query += ".desde";
-				lstResultConsulta = this.queryForMapList( con, CuadroMandoDetalleHandler.class, ls_query , new Object[]{ tipo, fechaInicio });
+				lstResultConsulta = this.queryForMapList( con, getDaoClass(), ls_query , new Object[]{ tipo, fechaInicio });
 			}
 			else
 			{
-				lstResultConsulta = this.queryForMapList( con, CuadroMandoDetalleHandler.class, ls_query , new Object[]{ tipo, fechaInicio, fechaFinal });
+				lstResultConsulta = this.queryForMapList( con, getDaoClass(), ls_query , new Object[]{ tipo, fechaInicio, fechaFinal });
 			}
 			return lstResultConsulta;
 		}
@@ -194,15 +209,15 @@ public class CuadroMandoDetalleHandler extends
 	
 	protected CuadroMandoDetalle createCuadroMandoDetalle(String idioma, List lst)
 	{
-		CuadroMandoDetalle result = new CuadroMandoDetalle();
-		Connection con = null;
+		CuadroMandoDetalle result = new CuadroMandoDetalle();		
 		try{
-			con = this.getConnection(getJndiSistra());
-			List lista = this.queryForMapList(con, CuadroMandoDetalleHandler.class,"sql.select.detalle.modelo",new Object[]{ idioma});
+						
+			List lista = obtenerModelos(idioma);
+			
 			for(int i=0; i<lst.size(); i++)
 			{
 				Map mResult = ( Map ) lst.get(i);
-				String modelo = (String)mResult.get("aud_modtra");
+				String modelo = (String)mResult.get("modelo");
 				Map mResultModelo = getDatosModelo(lista,modelo);
 				String descripcion = "";
 				String organismo = "";
@@ -211,23 +226,29 @@ public class CuadroMandoDetalleHandler extends
 					descripcion = (String) mResultModelo.get("descripcion");
 					organismo = (String) mResultModelo.get("organismo");
 				}
-				if(!organismo.equals(""))
-				{	
-					DetalleOrganismo do_organismo = result.getOrganismo(organismo);
-					if(do_organismo == null)
-					{
-						do_organismo = new DetalleOrganismo();
-						do_organismo.setTitulo(organismo);
-						result.add(do_organismo);
-					}
-					Number total = (Number) mResult.get("total");
-					LineaDetalle ld = new LineaDetalle();
-					ld.setTitulo(descripcion);
-					ld.setTotal(String.valueOf(total.intValue()));
-					do_organismo.addLineaDetalle(ld);
-					do_organismo.increment(total.intValue());
-					result.increment(total.intValue());
+				
+				// Tramites sin organismo asociado, creamos uno ficticio
+				if (organismo.equals("")) {
+					descripcion = Util.getDescripcionTramitesNoExistentesSistra(idioma);
+					organismo = Util.getDescripcionTramitesNoExistentesSistra(idioma);
 				}
+				
+					
+				DetalleOrganismo do_organismo = result.getOrganismo(organismo);
+				if(do_organismo == null)
+				{
+					do_organismo = new DetalleOrganismo();
+					do_organismo.setTitulo(organismo);
+					result.add(do_organismo);
+				}
+				Number total = (Number) mResult.get("total");
+				LineaDetalle ld = new LineaDetalle();
+				ld.setTitulo(descripcion);
+				ld.setTotal(String.valueOf(total.intValue()));
+				do_organismo.addLineaDetalle(ld);
+				do_organismo.increment(total.intValue());
+				result.increment(total.intValue());
+			
 			}
 
 			return result;
@@ -236,18 +257,6 @@ public class CuadroMandoDetalleHandler extends
 		{
 			exc.printStackTrace();
 			return result;
-		}
-		finally
-		{
-			if(con != null)
-			{
-				try {
-					con.close();
-				} catch (SQLException e) {
-					
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 	
@@ -561,7 +570,7 @@ public class CuadroMandoDetalleHandler extends
 		{
 			Properties props = new Properties();
 			try {
-				props.load(this.getClass().getResourceAsStream(FICHERO_PROPIEDADES));
+				props.load(this.getClass().getResourceAsStream(getDaoClass().getSimpleName() + ".properties"));
 				JNDI_SISTRA = "java:/" + props.getProperty("datasource.sistra");
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -596,7 +605,7 @@ public class CuadroMandoDetalleHandler extends
 		try {
 			
 			con = this.getConnection();
-			lstResultConsulta = this.queryForMapList( con, CuadroMandoDetalleHandler.class, ls_query , new Object[]{ tipoEvento, ls_desde, ls_hasta });
+			lstResultConsulta = this.queryForMapList( con, getDaoClass(), ls_query , new Object[]{ tipoEvento, ls_desde, ls_hasta });
 			cuadroMando = construyeCuadroMandoTablaCruzada(idioma, lstResultConsulta, modo);
 			cuadroMando.setTitulo(ls_tituloCuadroMando);
 			return cuadroMando;
@@ -605,21 +614,7 @@ public class CuadroMandoDetalleHandler extends
 			
 			e.printStackTrace();
 			return cuadroMando;
-		}
-		/*
-		finally
-		{
-			if(con != null)
-			{
-				try {
-					con.close();
-				} catch (SQLException e) {
-					
-					e.printStackTrace();
-				}
-			}
-		}
-		*/
+		}		
 	}
 	
 	private CuadroMandoTablaCruzada construyeCuadroMandoTablaCruzada(String idioma, List lst, String modo)
@@ -630,10 +625,10 @@ public class CuadroMandoDetalleHandler extends
 
 		result.setTotales(totales);
 		
-		Connection con = null;
+		
 		try{
-			con = this.getConnection(getJndiSistra());
-			List lista = this.queryForMapList(con, CuadroMandoDetalleHandler.class,"sql.select.detalle.modelo",new Object[]{ idioma});
+			List lista = obtenerModelos(idioma);
+			
 			for(int i=0; i<lst.size(); i++)
 			{
 				Map mResult = ( Map ) lst.get(i);
@@ -646,44 +641,50 @@ public class CuadroMandoDetalleHandler extends
 					descripcion = (String) mResultModelo.get("descripcion");
 					organismo = (String) mResultModelo.get("organismo");
 				}
-				if(!organismo.equals(""))
-				{	
-					TablaCruzadaOrganismo tco = result.getOrganismo(organismo);
-					if(tco == null)
-					{
-						totales = initTotales(modo);
-						tco = new TablaCruzadaOrganismo();
-						tco.setDescripcion(organismo);
-						tco.setTotales(totales);
-						result.addOrganismo(tco);
-					}
-					TablaCruzadaModelo tcm = tco.getModelo(descripcion);
-					if(tcm == null)
-					{
-						totales = initTotales(modo);
-						tcm = new TablaCruzadaModelo();
-						tcm.setDescripcion(descripcion);
-						tcm.setTotales(totales);
-						tco.addModelo(tcm);
-						
-					}
-					String key = (String) mResult.get("key");
-					if(AuditConstants.ANUAL.equals(modo))
-					{
-						key = Util.getDescripcionMes(getIdioma(), key);
-					}
-					Number total = (Number) mResult.get("total");
-					
-					{
-						int i_total = total.intValue();
-						tcm.increment(key,i_total);
-						tcm.increment(i_total);
-						tco.increment(key,i_total);
-						tco.increment(i_total);
-						result.increment(i_total);
-						result.increment(key,i_total);
-					}
+				
+				// Tramites sin organismo asociado, creamos uno ficticio
+				if (organismo.equals("")) {
+					descripcion = Util.getDescripcionTramitesNoExistentesSistra(idioma);
+					organismo = Util.getDescripcionTramitesNoExistentesSistra(idioma);
 				}
+				
+					
+				TablaCruzadaOrganismo tco = result.getOrganismo(organismo);
+				if(tco == null)
+				{
+					totales = initTotales(modo);
+					tco = new TablaCruzadaOrganismo();
+					tco.setDescripcion(organismo);
+					tco.setTotales(totales);
+					result.addOrganismo(tco);
+				}
+				TablaCruzadaModelo tcm = tco.getModelo(descripcion);
+				if(tcm == null)
+				{
+					totales = initTotales(modo);
+					tcm = new TablaCruzadaModelo();
+					tcm.setDescripcion(descripcion);
+					tcm.setTotales(totales);
+					tco.addModelo(tcm);
+					
+				}
+				String key = (String) mResult.get("key");
+				if(AuditConstants.ANUAL.equals(modo))
+				{
+					key = Util.getDescripcionMes(getIdioma(), key);
+				}
+				Number total = (Number) mResult.get("total");
+				
+				{
+					int i_total = total.intValue();
+					tcm.increment(key,i_total);
+					tcm.increment(i_total);
+					tco.increment(key,i_total);
+					tco.increment(i_total);
+					result.increment(i_total);
+					result.increment(key,i_total);
+				}
+			
 			}
 
 			return result;
@@ -693,7 +694,22 @@ public class CuadroMandoDetalleHandler extends
 			exc.printStackTrace();
 			return result;
 		}
-		finally
+		
+	}
+
+	/**
+	 * Obtiene lista de modelos
+	 * @param idioma
+	 * @return
+	 * @throws SQLException
+	 */
+	protected List obtenerModelos(String idioma) throws SQLException {
+		Connection con = null;
+		List lista = null;
+		try {				
+			con = this.getConnection(getJndiSistra());
+			lista = this.queryForMapList(con, getDaoClass(),"sql.select.detalle.modelo",new Object[]{ idioma});
+		} finally
 		{
 			if(con != null)
 			{
@@ -705,6 +721,7 @@ public class CuadroMandoDetalleHandler extends
 				}
 			}
 		}
+		return lista;
 	}
 	
 	

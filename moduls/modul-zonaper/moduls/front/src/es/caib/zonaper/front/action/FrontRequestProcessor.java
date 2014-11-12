@@ -74,7 +74,7 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
         	String mostrarIframe = config.obtenerConfiguracion().getProperty("sistra.iframe");
 			getServletContext().setAttribute(Constants.MOSTRAR_EN_IFRAME,new Boolean(mostrarIframe).booleanValue());
         	
-        	String controlEntregaNotif = config.obtenerConfiguracion().getProperty("notificaciones.controlEntrega");
+        	String controlEntregaNotif = config.obtenerConfiguracion().getProperty("notificaciones.controlEntrega.habilitar");
         	if (StringUtils.isBlank(controlEntregaNotif)) {
         		controlEntregaNotif = "false";
         	}
@@ -197,4 +197,16 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
         super.processPopulate(request, response, form, mapping);
     }
 
+    @Override
+    protected void processNoCache(HttpServletRequest request, HttpServletResponse response)
+    {
+    	// PATCH PARA MEJORAR CONTROL CACHE
+        if(moduleConfig.getControllerConfig().getNocache())
+        {
+        	 response.setHeader("Pragma", "No-cache");
+        	 response.setHeader("Cache-Control", "no-cache,no-store,max-age=0");
+        	 response.setDateHeader("Expires", 1);
+
+        }
+    }
 }

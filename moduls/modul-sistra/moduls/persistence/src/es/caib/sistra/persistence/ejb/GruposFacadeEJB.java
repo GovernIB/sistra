@@ -31,6 +31,8 @@ import es.caib.sistra.persistence.util.ConfigurationUtil;
  *  @ejb.env-entry name="role.operador" type="java.lang.String" value="${role.operador}"
  *
  * @ejb.transaction type="Required"
+ * 
+ * @ejb.security-role-ref role-name="${role.operador}" role-link="${role.operador}"
  */
 public abstract class GruposFacadeEJB extends HibernateEJB {
 

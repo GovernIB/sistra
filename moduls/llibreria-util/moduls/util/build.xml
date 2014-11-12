@@ -28,6 +28,7 @@
     	<fileset dir="${lib.dir}">
 	    	<include name="commons-codec-1.3.jar"/>
     		<include name="commons-lang-2.4.jar"/>
+    		<include name="javacsv.jar"/>
     	</fileset>
     	<fileset dir="${distribucion.dir}/lib"> 
             <include name="sistra-plugins.jar"/>

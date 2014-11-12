@@ -5,12 +5,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import es.caib.xml.EstablecerPropiedadException;
 import es.caib.xml.FactoriaObjetosXML;
+import es.caib.xml.datospropios.factoria.impl.AlertasTramitacion;
 import es.caib.xml.datospropios.factoria.impl.Dato;
 import es.caib.xml.datospropios.factoria.impl.DatosPropios;
 import es.caib.xml.datospropios.factoria.impl.Documento;
 import es.caib.xml.datospropios.factoria.impl.DocumentosEntregar;
 import es.caib.xml.datospropios.factoria.impl.FormulariosJustificante;
 import es.caib.xml.datospropios.factoria.impl.Instrucciones;
+import es.caib.xml.datospropios.factoria.impl.PersonalizacionJustificante;
 import es.caib.xml.datospropios.factoria.impl.Solicitud;
 import es.caib.xml.datospropios.factoria.impl.TramiteSubsanacion;
 
@@ -108,5 +110,17 @@ public interface FactoriaObjetosXMLDatosPropios extends FactoriaObjetosXML {
 	 * @return FormulariosJustificante
 	 */
 	public FormulariosJustificante crearFormulariosJustificante();
+	
+	/**
+	 * Crea PersonalizacionJustificante.
+	 * @return PersonalizacionJustificante
+	 */
+	public PersonalizacionJustificante crearPersonalizacionJustificante();
+	
+	/**
+	 * Crea AlertasTramitacion
+	 * @return AlertasTramitacion
+	 */
+	public AlertasTramitacion crearAlertasTramitacion();
 	
 }

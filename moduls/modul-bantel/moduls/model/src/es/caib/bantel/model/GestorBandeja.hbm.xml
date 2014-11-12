@@ -11,12 +11,13 @@
       </id>
 	
 	<property name="email"  column="GES_EMAIL"  not-null="true" length="500"/>
-	<property name="intervaloInforme" column="GES_INFORM"/>
-  	<property name="ultimoAviso" column="GES_AVISO"/>    
+	<property name="avisarEntradas" column="GES_AVIENT" not-null="true"/>
+  	<property name="avisarNotificaciones" column="GES_AVINOT" not-null="true"/>
+  	<property name="avisarMonitorizacion" column="GES_AVIMON" not-null="true"/>
   	<property name="permitirCambioEstado" column="GES_UPDEST"/>  
   	<property name="permitirCambioEstadoMasivo" column="GES_UPDESM"/>  
   	<property name="permitirGestionExpedientes" column="GES_GESEXP"/>  
-		
+  			
 	<set name="procedimientosGestionados" table="BTE_GESPRO"  order-by="GAP_IDEPRO">
          <key column="GAP_CODGES"/>
          <many-to-many column="GAP_IDEPRO" class="es.caib.bantel.model.Procedimiento"/>

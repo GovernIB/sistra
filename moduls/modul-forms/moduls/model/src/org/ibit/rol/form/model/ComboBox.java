@@ -15,4 +15,16 @@ public class ComboBox extends Campo {
     public boolean isIndexed() {
         return true;
     }
+    
+    private boolean indiceAlfabetico;
+
+	public boolean isIndiceAlfabetico() {
+		return indiceAlfabetico;
+	}
+
+	public void setIndiceAlfabetico(boolean indiceAlfabetico) {
+		this.indiceAlfabetico = indiceAlfabetico;
+	}
+   
+    
 }

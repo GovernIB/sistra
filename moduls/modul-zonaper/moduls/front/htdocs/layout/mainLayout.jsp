@@ -29,7 +29,6 @@
 
 <logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 			 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">					
-	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/deployJava.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/instalador.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/firma.js"></script>	
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/utils.js"></script>
@@ -46,7 +45,7 @@
 <script type="text/javascript">
 <!--
 	function doOnLoad(){
-		// Check version navegador (Compatibles: IE >=6 , FireFox >= 1.5)
+		// Check version navegador (Compatibles: IE >=7 , FireFox >= 4)
 		var errorIE="<bean:message key="errors.ie.versionminima" />";
 		var errorFirefox="<bean:message key="errors.firefox.versionminima" />";
 		checkVersionNavegador(errorIE,errorFirefox);

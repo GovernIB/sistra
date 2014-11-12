@@ -8,6 +8,7 @@
 			<xs:element name="textoSMS" type="xs:string" nillable="true" minOccurs="0"/>
 			<xs:element name="enlaceConsulta" type="xs:string" nillable="true" minOccurs="0"/>
 			<xs:element name="fecha" type="xs:string" nillable="true" minOccurs="0"/>
+			<xs:element name="accesiblePorClave" type="xs:boolean" nillable="true" minOccurs="0"/>
 			<xs:element name="documentos" type="ns1:DocumentosExpediente" nillable="true" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>

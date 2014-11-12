@@ -28,6 +28,10 @@ public final class DelegateUtil {
     public static BteProcesosDelegate getBteProcesosDelegate() {
         return (BteProcesosDelegate) DelegateFactory.getDelegate(BteProcesosDelegate.class);
     }
+    
+    public static BteOperacionesProcesosDelegate getBteOperacionesProcesosDelegate() {
+        return (BteOperacionesProcesosDelegate) DelegateFactory.getDelegate(BteOperacionesProcesosDelegate.class);
+    }
         
     public static ConfiguracionDelegate getConfiguracionDelegate() {
         return (ConfiguracionDelegate) DelegateFactory.getDelegate(ConfiguracionDelegate.class);
@@ -43,6 +47,14 @@ public final class DelegateUtil {
     
     public static FicheroExportacionDelegate getFicheroExportacionDelegate() {
         return (FicheroExportacionDelegate) DelegateFactory.getDelegate(FicheroExportacionDelegate.class);
+    }
+    
+    public static AvisosBandejaDelegate getAvisosBandejaDelegate() {
+        return (AvisosBandejaDelegate) DelegateFactory.getDelegate(AvisosBandejaDelegate.class);
+    }
+    
+    public static FuenteDatosDelegate getFuenteDatosDelegate() {
+        return (FuenteDatosDelegate) DelegateFactory.getDelegate(FuenteDatosDelegate.class);
     }
     
 }

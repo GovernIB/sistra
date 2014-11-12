@@ -19,8 +19,11 @@
 		#continguts h2 { font-size:1.1em; margin:.8em 0; }
 		#continguts p { margin:.8em 0; }
 		#contenidor p.peu { margin:1.5em 0; padding:1em; border:1px solid #ccc; }
-		#contenidor a.accedir { display:block; font-size:1.5em; text-align:center; padding:1em; background-color:#f7f7f7; }
-
+		#contenidor div.accedir { padding:1em; background-color:#f7f7f7; }
+		#contenidor a.accedirCertificado { display:block; font-size:1.5em; text-align:center; padding:1em; background-color:#f7f7f7; }
+		#contenidor a.accedirClave { display:block; font-size:1.5em; text-align:center; padding:1em; background-color:#f7f7f7; }
+		#contenidor p.auto { margin:1.5em 0; padding:1em;  font-size:0.9em; font-style: italic;}
+		
 	-->
 	</style>
 	<!-- /css -->
@@ -72,7 +75,41 @@
 				</tbody>			
 			</table>
 			
-	  <a href="[#URL_ACCESO#]" class="accedir">[#TEXTO.ACCEDERAVISO#]</a></div>
+	  		[#IF.CERTIFICADO#]
+			<div class="accedir">
+				[#TEXTO.ACCEDER#]
+				<br/>
+				<div>
+					<a href="[#URL_ACCESO_CERTIFICADO#]" class="accedirCertificado">[#TEXTO.ACCEDERCERTIFICADO#]</a>
+				</div>												
+			</div>
+			[#IF.CERTIFICADO#]
+			
+			[#IF.CLAVE#]
+			<div class="accedir">
+				[#TEXTO.ACCEDER#]
+				<br/>
+				<div>
+					<a href="[#URL_ACCESO_CLAVE#]" class="accedirClave">[#TEXTO.ACCEDERCLAVE#]</a>
+				</div>									
+			</div>
+			[#IF.CLAVE#]
+			
+			[#IF.CERTIFICADOCLAVE#]
+			<div class="accedir">
+				[#TEXTO.ACCEDER#]
+				<br/>
+				<div>
+					<a href="[#URL_ACCESO_CERTIFICADO#]" class="accedirCertificado">[#TEXTO.ACCEDERCERTIFICADO#]</a>
+				</div>
+				<div>
+					<a href="[#URL_ACCESO_CLAVE#]" class="accedirClave">[#TEXTO.ACCEDERCLAVE#]</a>
+				</div>									
+			</div>
+			[#IF.CERTIFICADOCLAVE#]
+	  	
+	  	
+	  </div>
 		<!-- /continguts -->
 		
 		<!--  URL SOPORTE  -->
@@ -81,6 +118,8 @@
 		</p>
 		
 	
+		<p class="auto">[#TEXTO.AUTO#]</p>
+		
 	</div>
 	<!-- /contenidor -->
 

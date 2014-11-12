@@ -67,9 +67,10 @@
 		<metainf dir="${etc.dir}/jboss-${jboss.version}">
 			<include if="isJboss3" name="jboss-app.xml"/>
 		</metainf>
-		<metainf dir="${etc.dir}">
+		<metainf dir="${etc.dir}/jboss-${jboss.version}">
 			<include if="isJboss5" name="jboss-classloading.xml"/>
 		</metainf>
+		<metainf dir="${etc.dir}" includes="cxf/org.apache.cxf.Logger"/>
 		<fileset dir="moduls/modul-audita/output/moduls"/>
 		<fileset dir="moduls/modul-bantel/output/moduls"/>
 		<fileset dir="moduls/modul-forms/output/moduls"/>
@@ -84,6 +85,7 @@
 		<zipfileset dir="${lib}" prefix="lib">
 			<exclude name="activation.jar"/>
 			<exclude name="struts.jar"/>
+			<exclude name="simplecaptcha-1.2.1.jar"/>
 			
 			<exclude if="isJboss3" name="cglib-asm.jar"/>
 			<exclude name="commons-logging-1.0.4.jar"/>
@@ -93,6 +95,7 @@
 			<exclude if="isJboss5" name="jaxp-api-1.3.jar"/>
 			<exclude if="isJboss5" name="jaxb-api-2.1.jar"/>
 			<exclude if="isJboss5" name="xmlbeans-qname.jar"/>
+			<exclude name="bouncy/**"/>
 			<exclude name="jms.jar"/>
 			<exclude name="mail.jar"/>
 			<exclude name="ojdbc14.jar"/>

@@ -23,7 +23,17 @@ public class TramitePersistentePAD implements Serializable {
 	 * ha realizado todas sus acciones sobre el paso pero queda que otro delegado firme algun formulario o anexo
 	 */
 	public static final String ESTADO_PENDIENTE_DELEGACION_FIRMA = "DF";	
-		
+	
+	/**
+	 * Indica que no se generan alertas tramitacion.
+	 */
+	public static final String ALERTASTRAMITACION_GENERAR_NO = "N";
+	
+	/**
+	 * Indica que se generan alertas tramitacion (se generara por email/sms segun exista email/sms).
+	 */
+	public static final String ALERTASTRAMITACION_GENERAR_SI = "S";	
+	
 	private String idPersistencia;
 	private String tramite;  
     private int version;
@@ -39,6 +49,12 @@ public class TramitePersistentePAD implements Serializable {
     private Map parametrosInicio;
     private String delegado;
 	private String estadoDelegacion;
+	
+	 private String alertasTramitacionGenerar = "N";
+     private String alertasTramitacionEmail; 
+     private String alertasTramitacionSms;
+     
+     private String idProcedimiento;
 	
     public String getDelegado() {
 		return delegado;
@@ -198,6 +214,30 @@ public class TramitePersistentePAD implements Serializable {
 	}
 	public void setEstadoDelegacion(String estadoDelegacion) {
 		this.estadoDelegacion = estadoDelegacion;
+	}
+	public String getAlertasTramitacionGenerar() {
+		return alertasTramitacionGenerar;
+	}
+	public void setAlertasTramitacionGenerar(String alertasTramitacionGenerar) {
+		this.alertasTramitacionGenerar = alertasTramitacionGenerar;
+	}
+	public String getAlertasTramitacionEmail() {
+		return alertasTramitacionEmail;
+	}
+	public void setAlertasTramitacionEmail(String alertasTramitacionEmail) {
+		this.alertasTramitacionEmail = alertasTramitacionEmail;
+	}
+	public String getAlertasTramitacionSms() {
+		return alertasTramitacionSms;
+	}
+	public void setAlertasTramitacionSms(String alertasTramitacionSms) {
+		this.alertasTramitacionSms = alertasTramitacionSms;
+	}
+	public String getIdProcedimiento() {
+		return idProcedimiento;
+	}
+	public void setIdProcedimiento(String idProcedimiento) {
+		this.idProcedimiento = idProcedimiento;
 	}
         
     

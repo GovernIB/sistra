@@ -7,7 +7,9 @@
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 
-<script type="text/javascript" src="js/formularioBusqueda.js"></script>
+<script type="text/javascript" src="js/mensaje.js"></script>	
+<script type="text/javascript" src="js/formularioBusqueda.jsp"></script>
+
 
 		<h2><bean:message key="formularioBusqueda.busquedaTramites"/></h2>
 		
@@ -21,18 +23,10 @@
 			<html:form action="busquedaTramites" styleId="busquedaTramitesForm" styleClass="centrat">
 				<html:hidden property="pagina" />				
 					<p>
-					<bean:message key="formularioBusqueda.año"/> 
-					<html:select property="anyo">
-						<logic:iterate id="tmpAnyo" name="anyos">
-									<html:option value="<%= tmpAnyo.toString() %>" />
-						</logic:iterate>			
-					</html:select> 
-					<bean:message key="formularioBusqueda.mes"/>
-					<html:select property="mes">
-						<logic:iterate id="tmpMes" name="meses">
-									<html:option value="<%= tmpMes.toString() %>"><bean:message key='<%= "mes." + tmpMes %>' /></html:option>
-						</logic:iterate>			
-					</html:select> 					
+					<bean:message key="formularioBusqueda.fechaDesde"/>
+					<html:text property="fechaDesde" styleId="fechaDesde" size="10"/>  
+					<bean:message key="formularioBusqueda.fechaHasta"/>
+					<html:text property="fechaHasta" styleId="fechaHasta" size="10"/>  			
 					<bean:message key="formularioBusqueda.tipo"/>
 					<html:select property="tipo">
 						<html:option value="T" ><bean:message key="formularioBusqueda.tipo.todos"/></html:option>
@@ -64,7 +58,7 @@
 					<div id="recercaAv">
 						<p>
 							<bean:message key="confirmacion.numeroEntrada"/>
-							<html:text property="numeroEntrada" size="30"/>
+							<html:text property="numeroEntrada" size="20"/>
 							<bean:message key="formularioBusqueda.procedimiento"/>
 							<html:select property="identificadorProcedimiento">
 								<html:option value="-1" ><bean:message key="formularioBusqueda.tramite.todos"/></html:option>
@@ -75,7 +69,16 @@
 								</logic:iterate>
 							</html:select>
 							<bean:message key="formularioBusqueda.idtramite"/>
-							<html:text property="identificadorTramite" size="30" />
+							<html:text property="identificadorTramite" size="20" />
+							<bean:message key="formularioBusqueda.resultadosPorPagina"/>
+							<html:select property="longitudPagina">
+								<html:option value="10" >10</html:option>
+								<html:option value="20" >20</html:option>
+								<html:option value="30" >30</html:option>
+								<html:option value="40" >40</html:option>
+								<html:option value="50" >50</html:option>
+								<html:option value="100" >100</html:option>
+							</html:select>
 						</p>
 					</div>
 				<bean:define id="botonEnviar" type="java.lang.String">
@@ -95,6 +98,9 @@
 		</logic:notEmpty>				
 		
 		
+		<!--  capa fondo -->
+		<div id="fondo"></div>	
+		
 		<!--  div para cambio de estado -->
 		<logic:equal name="permitirCambioEstadoMasivo" value="S">
 		<script>
@@ -104,8 +110,8 @@
 		<div id="cambioEstadoMasivo" class="cambioEstadoMasivo">						
 				<html:form styleId="cambioEstadoMasivoForm" action="cambioEstadoMasivo">
 					<!--  Propiedades a copiar del formulario de busqueda -->
-					<html:hidden property="anyo" />	
-					<html:hidden property="mes" />	
+					<html:hidden property="fechaDesde" />	
+					<html:hidden property="fechaHasta" />
 					<html:hidden property="usuarioNif" />	
 					<html:hidden property="usuarioNombre" />	
 					<html:hidden property="tipo" />	
@@ -122,7 +128,8 @@
 							<html:option value="<%=ConstantesBTE.ENTRADA_NO_PROCESADA%>" ><bean:message key="detalleTramite.marcarNoProcesado"/></html:option>
 							<html:option value="<%=ConstantesBTE.ENTRADA_PROCESADA%>" ><bean:message key="detalleTramite.marcarProcesado"/></html:option>
 						</html:select>	
-					
+					</p>
+					<p class="botonera">
 						<html:button property="cancelar" onclick="cambioEstadoMasivo(mensajeConfirmacion,mensajeErrorTodosTramites)"  >
 							<bean:message key="resultadoBusqueda.cambioEstadoMasivo.botonCambiar"/>
 						</html:button>

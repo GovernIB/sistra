@@ -52,6 +52,14 @@ public class ProcedimientoDelegate implements StatelessDelegate {
         }
     }
     
+    public List listarProcedimientos(String filtro) throws DelegateException {
+        try {
+            return getFacade().listarProcedimientos(filtro);            
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     public void  avisoRealizado(String id,Date fecha) throws DelegateException 
     {
  	   try

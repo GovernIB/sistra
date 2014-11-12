@@ -10,14 +10,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
@@ -32,7 +30,7 @@ import es.caib.util.StringUtil;
 import es.caib.zonaper.back.Constants;
 import es.caib.zonaper.back.form.ImprimirSelloForm;
 import es.caib.zonaper.model.EntradaPreregistro;
-import es.caib.zonaper.model.ValorDominio;
+import es.caib.zonaper.model.PeticionImpresionSello;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.EntradaPreregistroDelegate;
 import es.indra.util.pdf.ImageStamp;
@@ -66,30 +64,33 @@ public class ImprimirSelloAction extends BaseAction
 		if (request.getSession().getAttribute(formulario.getCodigo()) == null){
 			return mapping.findForward( "inicio" );
 		}
-		Long codigoPreregistro  = (Long) request.getSession().getAttribute(formulario.getCodigo());
+		PeticionImpresionSello pi = (PeticionImpresionSello) request.getSession().getAttribute(formulario.getCodigo());
 			
 		EntradaPreregistroDelegate delegate = DelegateUtil.getEntradaPreregistroDelegate();
-		EntradaPreregistro preregistro		= delegate.obtenerEntradaPreregistroReg( codigoPreregistro );
+		EntradaPreregistro preregistro	= delegate.obtenerEntradaPreregistro( pi.getCodigoEntradaPreregistro() );
 		
 		String numeroRegistro 	= preregistro.getNumeroRegistro();
 		Date fechaRegistro 		= preregistro.getFechaConfirmacion();
 		
 		String strFechaRegistro = StringUtil.timestampACadena( fechaRegistro );
 		
-		
-		// Obtenemos codigo de oficina del número de registro: oficina/numero/año
-		StringTokenizer stk = new StringTokenizer(preregistro.getNumeroRegistro(),"/"); 
-		String codOficina = stk.nextToken();				
-		String oficina = obtenerDescripcionOficina(codOficina,request.getUserPrincipal().getName());
-		
+		String descOficina = "";
+		if (StringUtils.isNotBlank(pi.getCodigoOficinaRegistro())) {
+			descOficina = DelegateUtil.getDominiosDelegate().obtenerDescripcionSelloOficina(pi.getCodigoOficinaRegistro());
+			if ( descOficina == null )
+			{
+				this.setMessage( request, "errors.descSelloOficinaVacio" );
+				return mapping.findForward( "fail" );
+			}
+		}
 		List arlParametrosExpansion = new ArrayList();
-		arlParametrosExpansion.add( StringUtil.escapeBadCharacters( oficina ) );
+		arlParametrosExpansion.add( StringUtil.escapeBadCharacters( descOficina ) );
 		arlParametrosExpansion.add( StringUtil.escapeBadCharacters( numeroRegistro ));
 		arlParametrosExpansion.add( StringUtil.escapeBadCharacters( strFechaRegistro ) );
 		String nombreFichero = StringUtil.expansion( Constants.NOMBRE_FICHERO_SELLO,  arlParametrosExpansion );
 		
 		// Volcamos fichero en stream response		
-		ByteArrayInputStream bis = new ByteArrayInputStream(stampSelloVacio( oficina, numeroRegistro, strFechaRegistro ));
+		ByteArrayInputStream bis = new ByteArrayInputStream(stampSelloVacio( descOficina, numeroRegistro, strFechaRegistro ));
 		try{
 			response.reset();					
 			response.setContentType("application/octet-stream");
@@ -179,19 +180,6 @@ public class ImprimirSelloAction extends BaseAction
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		UtilPDF.generateBlankPdf( baos );
 		return baos;
-	}
-	
-	private String obtenerDescripcionOficina(String codOficina,String codUsuario) throws Exception{
-		List ofs =  DelegateUtil.getDominiosDelegate().obtenerOficinas(codUsuario);
-		String desc="";
-		for (Iterator it = ofs.iterator();it.hasNext();){
-			ValorDominio of = (ValorDominio) it.next();
-			if (codOficina.equals(of.getCodigo())){
-				desc=of.getDescripcion();
-				break;
-			}
-		}
-		return desc;
 	}
 	
 	private int copy(InputStream input, OutputStream output) throws IOException{

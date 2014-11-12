@@ -64,18 +64,19 @@ public class GestorBandejaDelegate implements StatelessDelegate
        }
    }
    
-   public void  avisoRealizado(String id,Date fecha) throws DelegateException 
+   
+   public List listarGestoresBandeja(String filtro) throws DelegateException 
    {
 	   try
 	   {
-		   getFacade().avisoRealizado( id, fecha);
+		   return getFacade().listarGestoresBandeja(filtro);
 	   }
 	   catch (Exception e) 
 	   {
            throw new DelegateException(e);
        }
    }
-  
+   
         
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

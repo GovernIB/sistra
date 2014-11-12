@@ -2,7 +2,7 @@ package es.caib.sistra.plugins.pagos.impl.mock;
 
 import java.util.Map;
 
-import es.caib.pagos.persistence.delegate.DelegatePagosUtil;
+import es.caib.pagosMOCK.persistence.delegate.DelegatePagosUtil;
 import es.caib.sistra.plugins.pagos.DatosPago;
 import es.caib.sistra.plugins.pagos.EstadoSesionPago;
 import es.caib.sistra.plugins.pagos.PluginPagosIntf;
@@ -29,6 +29,17 @@ public class PluginPagosMock implements PluginPagosIntf{
 
 	public long consultarImporteTasa(String idTasa, Map parametrosTasa) throws Exception {
 		return DelegatePagosUtil.getPagosDelegate().consultarImporteTasa(idTasa);
+	}
+
+	public SesionPago iniciarSesionPagoDiferido(DatosPago[] datosPago,
+			SesionSistra sesionSistra) throws Exception {
+		throw new Exception("Metodo no soportado");
+	}
+
+	public EstadoSesionPago[] comprobarEstadoSesionPagoDiferido(
+			String localizador) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -138,6 +138,15 @@ public class EnvioDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
+    public List obtenerEstadisticasSMS(int anyo, String cuentaId) throws DelegateException {
+        try {
+            return getFacade().obtenerEstadisticasSMS(anyo, cuentaId);
+        } catch (RemoteException e) {
+        	e.printStackTrace();	
+            throw new DelegateException(e);
+        }
+    }
 
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

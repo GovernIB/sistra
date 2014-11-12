@@ -19,6 +19,9 @@
 <bean:define id="urlEnvioFichero" >
 	<html:rewrite page="/altaEnvioFichero.do" />
 </bean:define>
+<bean:define id="urlEstadisticasSMS" >
+	<html:rewrite page="/estadisticasSMS.do" />
+</bean:define>
 
 <bean:define id="messageAyuda" value="ayuda.busqueda" />
 
@@ -78,7 +81,7 @@
 			 -->
 					</p>					
 				<bean:define id="botonEnviar" type="java.lang.String">
-	                  <bean:message key="boton.enviarBusqueda" />
+	                  <bean:message key="formularioBusqueda.enviarBusqueda" />
                  </bean:define>
 				<bean:define id="botonAltaEmail" type="java.lang.String">
 	                  <bean:message key="boton.altaEmail" />
@@ -89,11 +92,15 @@
 				<bean:define id="botonAltaEnvioFichero" type="java.lang.String">
 	                  <bean:message key="boton.altaEnvioFichero" />
                  </bean:define>
+                 <bean:define id="botonEstadisticasSMS" type="java.lang.String">
+	                  <bean:message key="boton.estadisticasSMS" />
+                 </bean:define>
 				<p class="centrado">
 					<input name="imprimirSolicitudBoton" id="imprimirSolicitudBoton" type="button" value="<%=botonEnviar%>" onClick="javascript:validaFormulario( this.form );"/>
 					<input name="altaEmailBoton" id="altaEmailBoton" type="button" value="<%=botonAltaEmail%>" onclick="<%= "javascript:document.location.href='" + urlAltaEmail + "'"  %>"/>
 					<input name="altaSMSBoton" id="altaSMSBoton" type="button" value="<%=botonAltaSMS%>" onclick="<%= "javascript:document.location.href='" + urlAltaSMS + "'"  %>"/>
 					<input name="altaEnvioFicheroBoton" id="altaEnvioFicheroBoton" type="button" value="<%=botonAltaEnvioFichero%>" onclick="<%= "javascript:document.location.href='" + urlEnvioFichero + "'"  %>"/>
+					<input name="estadisticasSMSBoton" id="estadisticasSMSBoton" type="button" value="<%=botonEstadisticasSMS%>" onclick="<%= "javascript:document.location.href='" + urlEstadisticasSMS + "'"  %>"/>
 				</p>
 				<div class="separacio"></div>			
 			</html:form>	

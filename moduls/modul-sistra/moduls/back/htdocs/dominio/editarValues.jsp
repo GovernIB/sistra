@@ -18,13 +18,19 @@
         var url = '<html:rewrite page="/dominio/ayudaPantalla.jsp" />';
         obrir(url, "Edicion", 540, 400);
      }
-     // -->
-</script>
-<script type="text/javascript">
-     <!--
+     
      function edit(url) {
        obrir(url, "Edicion", 940, 600);
      }
+
+     $(function(){
+    	 $("#sqlHex").hide(); 	
+     	$( "#dominioForm" ).submit(function( event ) {
+         	$("#sqlHex").val(encodeHex($("#sqlText").val()));     
+     		$("#sqlText").attr('disabled', true) 	  
+    	});
+     });
+     
      // -->
 </script>
 <tr>
@@ -51,7 +57,16 @@
 </tr>
 <tr>
     <td class="labelo"><bean:message key="dominio.tipo"/></td>
-    <td class="input"><table><tr><td>EJB <html:radio property="values.tipo" value="E"/></td><td>Web Service <html:radio property="values.tipo" value="W"/></td><td>SQL <html:radio property="values.tipo" value="S"/></td></tr></table></td>
+    <td class="input">
+	    <table>
+	    	<tr>
+	    		<td>EJB <html:radio property="values.tipo" value="E"/></td>
+	    		<td>Web Service <html:radio property="values.tipo" value="W"/></td>
+	    		<td>SQL <html:radio property="values.tipo" value="S"/></td>
+	    		<td><bean:message key="dominio.tipo.fuenteDatos"/> <html:radio property="values.tipo" value="F"/></td>
+	    	</tr>
+	    </table>
+	</td>
 </tr>
 <tr>
     <td class="labelo">Cacheable:</td>
@@ -59,7 +74,7 @@
 </tr>
 <tr>
     <td class="label"><bean:message key="dominio.url"/></td>
-    <td class="input"><html:text styleClass="textLargo" tabindex="10" property="values.url" maxlength="200"/></td>
+    <td class="input"><html:text styleClass="textLargo" tabindex="10" property="values.url" maxlength="500"/></td>
 </tr>
 <tr>
     <td class="label"><bean:message key="dominio.versionWS"/></td>
@@ -70,8 +85,18 @@
     </td>
 </tr>
 <tr>
+    <td class="label">Soap Action</td>
+    <td class="input">
+    	<html:text styleClass="textLargo" tabindex="10" property="values.soapActionWS" maxlength="100"/>    	
+    </td>
+</tr>
+<tr>
     <td class="label"><bean:message key="dominio.sql"/></td>
-    <td class="input"><html:textarea tabindex="10" property="values.sql" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=values.sql&titulo=dominio.sql" %>');"/></td>
+    <td class="input">
+    		<html:textarea tabindex="10" property="values.sql" styleId="sqlText"/>
+    		<textarea tabindex="10" name="sqlHex" id="sqlHex"></textarea>
+    		<input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=values.sql&titulo=dominio.sql" %>');"/>
+    </td>
 </tr>
 <tr>
     <td class="label"><bean:message key="dominio.JNDIName"/></td>

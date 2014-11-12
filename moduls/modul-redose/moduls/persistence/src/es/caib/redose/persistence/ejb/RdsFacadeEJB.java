@@ -51,6 +51,7 @@ import es.caib.redose.persistence.delegate.VersionCustodiaDelegate;
 import es.caib.redose.persistence.delegate.VersionDelegate;
 import es.caib.redose.persistence.formateadores.FormateadorDocumento;
 import es.caib.redose.persistence.formateadores.FormateadorDocumentoFactory;
+import es.caib.redose.persistence.plugin.MetadaAlmacenamiento;
 import es.caib.redose.persistence.plugin.PluginAlmacenamientoRDS;
 import es.caib.redose.persistence.plugin.PluginClassCache;
 import es.caib.redose.persistence.util.CacheSincronizacionGestorDocumental;
@@ -229,7 +230,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     public void actualizarDocumento(DocumentoRDS documento) throws ExcepcionRDS {
     	
     	// Solo permitimos actualizar fichero si tiene uso de persistencia
-    	List usos = this.listarUsos(documento.getReferenciaRDS());
+    	List usos = this.listarUsosDocumento(documento.getReferenciaRDS());
     	for (Iterator it=usos.iterator();it.hasNext();){
     		UsoRDS uso = (UsoRDS) it.next();
     		if (!uso.getTipoUso().equals(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE)){
@@ -250,7 +251,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     public void actualizarFichero(ReferenciaRDS ref, byte[] datos) throws ExcepcionRDS {
     	
     	// Solo permitimos actualizar fichero si tiene uso de persistencia
-    	List usos = this.listarUsos(ref);
+    	List usos = this.listarUsosDocumento(ref);
     	for (Iterator it=usos.iterator();it.hasNext();){
     		UsoRDS uso = (UsoRDS) it.next();
     		if (!uso.getTipoUso().equals(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE)){
@@ -259,7 +260,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	}
     	
     	// Obtenemos documento y realizamos cambios
-    	DocumentoRDS doc = this.consultarDocumento(ref,false);    	
+    	DocumentoRDS doc = this.consultarDocumentoImpl(ref,false);    	
     	doc.setDatosFichero(datos);
     	FirmaIntf[] firmas={};
     	doc.setFirmas(firmas);
@@ -291,7 +292,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
         	
         	// Guardamos firma
     		// verificar firma
-        	DocumentoRDS documento = this.consultarDocumento(refRds,true);
+        	DocumentoRDS documento = this.consultarDocumentoImpl(refRds,true);
         	
     		if ( !this.verificarFirma( documento.getDatosFichero(), firma ) )
     		{
@@ -422,7 +423,8 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.auto}"
      */
     public DocumentoRDS consultarDocumento(ReferenciaRDS refRds)  throws ExcepcionRDS{
-    	DocumentoRDS doc = consultarDocumento(refRds,true);    	
+    	DocumentoRDS doc = consultarDocumentoImpl(refRds,true);    	
+    	this.doLogOperacion(getUsuario(),CONSULTAR_DOCUMENTO,"consulta documento " + refRds.getCodigo() );
     	return doc;
     }
     
@@ -434,50 +436,13 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.auto}"
      */
     public DocumentoRDS consultarDocumento(ReferenciaRDS refRds,boolean recuperarFichero) throws ExcepcionRDS {    	
-       	// Obtenemos documento
-    	Session session = getSession();
-    	Documento documento;
-    	DocumentoRDS documentoRDS;
-	    try {	    	
-	    	// Obtenemos documento
-	    	documento = (Documento) session.load(Documento.class, new Long(refRds.getCodigo()));		    	
-	    	
-	    	// Control de documento borrado
-	    	if ("S".equals(documento.getBorrado())) throw new ExcepcionRDS("El documento " + documento.getCodigo() + " ha sido borrado por no tener usos" );
-	    	
-	    	// Comprobamos que la clave coincida
-	    	if (!documento.getClave().equals(refRds.getClave())){
-	    		throw new ExcepcionRDS("La clave no coincide");
-	    	}	    		    	
-	    	
-	    	
-	    	Hibernate.initialize(documento.getFirmas());
-	    	
-	    	
-	    	// Mapeamos a documentoRDS
-	    	documentoRDS = establecerCamposDocumentoRDS(documento);	    		    	
-	    } catch (HibernateException he) {
-	    	log.error("Error consultando documento",he);
-	        throw new ExcepcionRDS("Error consultando documento",he);
-	    } finally {
-	        close(session);
-	    }            	
-	    	    
-	    // Consultamos fichero asociado	    
-        try{        	
-        	if (recuperarFichero){
-	        	PluginAlmacenamientoRDS plugin = obtenerPluginAlmacenamiento(documento.getUbicacion().getPluginAlmacenamiento());
-	        	documentoRDS.setDatosFichero(plugin.obtenerFichero(documento.getCodigo()));
-        	}
-        }catch(Exception e){
-        	log.error("No se ha podido obtener fichero en ubicación " + documento.getUbicacion().getCodigoUbicacion(),e);
-        	throw new ExcepcionRDS("Error al guardar fichero",e);
-        }
-        
+       	DocumentoRDS documentoRDS = consultarDocumentoImpl(refRds,
+				recuperarFichero);
         this.doLogOperacion(getUsuario(),CONSULTAR_DOCUMENTO,"consulta documento " + refRds.getCodigo() );
-        
         return documentoRDS;
     }
+
+	
         
     /**
      * Consulta un documento del RDS de tipo estructurado formateado con una plantilla
@@ -537,7 +502,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	DocumentoRDS documentoRDS;
 	    try {	    	
 	    	// Realizamos consulta doc RDS
-	    	documentoRDS = consultarDocumento(refRds);
+	    	documentoRDS = consultarDocumentoImpl(refRds, true);
 	    	
 	    	// Si no es estructurado devolvemos documento sin formatear
 	    	if (!documentoRDS.isEstructurado()) return documentoRDS;
@@ -806,66 +771,12 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.auto}"
      */
     public List listarUsos(ReferenciaRDS refRDS) throws ExcepcionRDS {
-    	// Borramos uso
-    	Session session = getSession();   
-    	List listaUsosRDS;
-	    try {	    	
-	    	
-	    	// Comprobamos documento
-        	Documento documento;
-        	try{
-        		documento = (Documento) session.load(Documento.class,new Long(refRDS.getCodigo()));        		
-        	}catch(Exception e){
-        		//si no existe el documento devolvemos un arraylist vacio.
-        		return new ArrayList();
-        	}
-        	
-        	// Control de documento borrado
-	    	if ("S".equals(documento.getBorrado())) throw new ExcepcionRDS("El documento " + documento.getCodigo() + " ha sido borrado por no tener usos" );
-        	
-        	// Comprobamos clave
-    		if (!documento.getClave().equals(refRDS.getClave())){
-    			log.error("Clave de la referencia RDS no concuerda");
-        		throw new ExcepcionRDS("Clave de la referencia RDS no concuerda"); 
-    		}
-	    	
-	    	// Obtenemos usos
-	    	Query query = session.createQuery("FROM Uso AS u WHERE u.documento = :documento");
-            query.setParameter("documento", documento);
-            //query.setCacheable(true);
-            List result = query.list();
-            
-            
-            // Devolvemos usos
-            listaUsosRDS = new ArrayList();            
-            if (result.isEmpty()) {
-                return listaUsosRDS;
-            }
-
-            // Devolvemos usos
-            for (int i=0;i<result.size();i++){
-            	Uso uso = (Uso) result.get(i);
-            	UsoRDS usoRDS = new UsoRDS();
-            	usoRDS.setTipoUso(uso.getTipoUso().getCodigo());
-            	usoRDS.setReferencia(uso.getReferencia());            	
-            	usoRDS.setReferenciaRDS(refRDS);     
-            	usoRDS.setFechaSello(uso.getFechaSello());
-            	usoRDS.setFechaUso(uso.getFecha());
-            	listaUsosRDS.add(usoRDS);
-            }	    	
-            
-	    } catch (HibernateException he) {
-	    	log.error("Error al listar usos",he);
-	        throw new ExcepcionRDS("Error al listar usos" ,he);
-	    } finally {
-	        close(session);
-	    }            
-	    
+    	List listaUsosRDS = listarUsosDocumento(refRDS);            
 	    this.doLogOperacion(getUsuario(),LISTAR_USOS,"listar usos documento " + refRDS.getCodigo());
 	    return listaUsosRDS;
     }
-    
-    
+
+ 
     /**
      * Verifica documento formateado generado por la plataforma
      * @ejb.interface-method
@@ -881,7 +792,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    	    	
 	       	// Obtenemos documento
 	    	DocumentoRDS docRDS = null;	    	
-	    	docRDS = consultarDocumento(referenciaRDS,true);
+	    	docRDS = consultarDocumentoImpl(referenciaRDS,true);
 	    	
 	    	// Formateamos documento
 	    	DocumentoRDS docRDSFormat = consultarDocumentoFormateado(referenciaRDS,key.getPlantillaDocumento(),key.getIdiomaDocumento());
@@ -990,12 +901,12 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    		return null;
 	    	}
 	    	// Consultamos doc y usos asociados
-    		DocumentoRDS doc = this.consultarDocumento(refRDS);
+    		DocumentoRDS doc = this.consultarDocumentoImpl(refRDS, true);
     		// Si esta consolidado devolvemos referencia
     		if (doc.getReferenciaGestorDocumental() != null){
     			return doc.getReferenciaGestorDocumental();
     		}
-    		List usos = this.listarUsos(refRDS);
+    		List usos = this.listarUsosDocumento(refRDS);
     		
     		// Si no tiene uso, no se tiene que consolidar
     		if (usos.size() == 0){
@@ -1052,35 +963,31 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     /**
      *  Guarda documento en el RDS
      */
-    private ReferenciaRDS grabarDocumento(DocumentoRDS documento,boolean nuevo) throws ExcepcionRDS{
+    private ReferenciaRDS grabarDocumento(DocumentoRDS documentoRDS,boolean nuevo) throws ExcepcionRDS{
     	Session session = getSession(); 
-    	Documento doc;
+    	Documento documentoH;
         try {        	          	        	
         	// Si no es nuevo recuperamos documentos
         	if (nuevo){
-        		doc = new Documento();
+        		documentoH = new Documento();
         	}else{
-		    	doc = (Documento) session.load(Documento.class, new Long(documento.getReferenciaRDS().getCodigo()));	
-		    	if ("S".equals(doc.getBorrado())) throw new ExcepcionRDS("El documento " + documento.getReferenciaRDS().getCodigo() + " ha sido borrado por no tener usos" );
+		    	documentoH = (Documento) session.load(Documento.class, new Long(documentoRDS.getReferenciaRDS().getCodigo()));	
+		    	if ("S".equals(documentoH.getBorrado())) throw new ExcepcionRDS("El documento " + documentoRDS.getReferenciaRDS().getCodigo() + " ha sido borrado por no tener usos" );
         	}        	
         	
         	// Establecemos campos documento
-        	establecerCamposDocumento(doc,documento,nuevo);
+        	establecerCamposDocumento(documentoH,documentoRDS,nuevo);
         	        	        	        	
         	// Realizamos salvado
         	if (nuevo) {
-        		session.save(doc);
+        		session.save(documentoH);
         	}else{
-        		session.update(doc);
+        		session.update(documentoH);
         	}        	     
-        	
-        	
         	
         	//Una vez se ha modificado el documento tambien lo modidifcamos en custodia,
         	//si hace falta
-        	
-        	custodiarDocumento(documento,doc,session);
-        	
+        	custodiarDocumento(documentoRDS,documentoH,session);
         	
         } catch (HibernateException he) {
         	log.error("Error insertando documento",he);
@@ -1094,17 +1001,23 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
                         
         // Guardamos fichero                    
         try{        	
-        	PluginAlmacenamientoRDS plugin = obtenerPluginAlmacenamiento(doc.getUbicacion().getPluginAlmacenamiento());
-        	plugin.guardarFichero(doc.getCodigo(),documento.getDatosFichero());
+        	MetadaAlmacenamiento metadataFichero = new MetadaAlmacenamiento();
+        	metadataFichero.setModelo(documentoRDS.getModelo());
+        	metadataFichero.setVersion(documentoRDS.getVersion());
+        	metadataFichero.setDescripcion(documentoRDS.getTitulo());
+        	metadataFichero.setExtension(documentoRDS.getExtensionFichero());
+        	metadataFichero.setFecha(documentoRDS.getFechaRDS());
+        	PluginAlmacenamientoRDS plugin = obtenerPluginAlmacenamiento(documentoH.getUbicacion());
+        	plugin.guardarFichero(documentoH.getCodigo(),documentoRDS.getDatosFichero(), metadataFichero);
         }catch(Exception e){
-        	log.error("No se ha podido guardar fichero en ubicación " + documento.getCodigoUbicacion(),e);
+        	log.error("No se ha podido guardar fichero en ubicación " + documentoRDS.getCodigoUbicacion(),e);
         	throw new ExcepcionRDS("Error al guardar fichero",e);
         }
                         	
 	    // Devolvemos referencia
 	    ReferenciaRDS ref = new ReferenciaRDS();
-	    ref.setCodigo(doc.getCodigo().longValue());
-	    ref.setClave(doc.getClave());            
+	    ref.setCodigo(documentoH.getCodigo().longValue());
+	    ref.setClave(documentoH.getClave());            
 	    return ref;
     }
 	       
@@ -1183,30 +1096,29 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     /**
      * Verifica que están los campos obligatorios
      */
-    private void establecerCamposDocumento(Documento doc,DocumentoRDS documento,boolean nuevo) throws ExcepcionRDS{
+    private void establecerCamposDocumento(Documento documentoH,DocumentoRDS documentoRDS,boolean nuevo) throws ExcepcionRDS{
     	// 1- VERIFICAMOS CAMPOS OBLIGATORIOS
-    	if (documento.getCodigoUbicacion() == null) throw new ExcepcionRDS("No se ha indicado código de ubicación");
-    	if (documento.getDatosFichero() == null || documento.getDatosFichero().length <= 0) throw new ExcepcionRDS("No se han establecido los datos del fichero");
-    	if (documento.getExtensionFichero() == null) throw new ExcepcionRDS("No se ha indicado la extensión del fichero");
-    	if (documento.getModelo() == null) throw new ExcepcionRDS("No se ha indicado el modelo del documento");
+    	if (documentoRDS.getDatosFichero() == null || documentoRDS.getDatosFichero().length <= 0) throw new ExcepcionRDS("No se han establecido los datos del fichero");
+    	if (documentoRDS.getExtensionFichero() == null) throw new ExcepcionRDS("No se ha indicado la extensión del fichero");
+    	if (documentoRDS.getModelo() == null) throw new ExcepcionRDS("No se ha indicado el modelo del documento");
     	//if (documento.getNif() == null) throw new ExcepcionRDS("No se ha indicado el NIF del usuario que incorpora el documento");
-    	if (documento.getNombreFichero() == null) throw new ExcepcionRDS("No se ha indicado el nombre del fichero");
-    	if (documento.getTitulo() == null) throw new ExcepcionRDS("No se ha indicado el título del documento");    	
-    	if (documento.getUnidadAdministrativa() == -1) throw new ExcepcionRDS("No se ha indicado la Unidad Administrativa responsable del documento");
-    	if (documento.getVersion() == -1) throw new ExcepcionRDS("No se ha indicado la versión del documento");
+    	if (documentoRDS.getNombreFichero() == null) throw new ExcepcionRDS("No se ha indicado el nombre del fichero");
+    	if (documentoRDS.getTitulo() == null) throw new ExcepcionRDS("No se ha indicado el título del documento");    	
+    	if (documentoRDS.getUnidadAdministrativa() == -1) throw new ExcepcionRDS("No se ha indicado la Unidad Administrativa responsable del documento");
+    	if (documentoRDS.getVersion() == -1) throw new ExcepcionRDS("No se ha indicado la versión del documento");
     	
     	// 2- OBTENEMOS VERSION Y UBICACION
     	// -------- Obtenemos version        	
     	Version version;
     	try{
     		VersionDelegate vd = DelegateUtil.getVersionDelegate();
-    		version = vd.obtenerVersion(documento.getModelo(),documento.getVersion());
+    		version = vd.obtenerVersion(documentoRDS.getModelo(),documentoRDS.getVersion());
     		if (version == null) {
-    			log.error("No existe versión " + documento.getModelo() + " - " + documento.getVersion());
-    			throw new ExcepcionRDS("No existe modelo/version en RDS: " + documento.getModelo() + " / " + documento.getVersion());
+    			log.error("No existe versión " + documentoRDS.getModelo() + " - " + documentoRDS.getVersion());
+    			throw new ExcepcionRDS("No existe modelo/version en RDS: " + documentoRDS.getModelo() + " / " + documentoRDS.getVersion());
     		}
     	}catch (Exception e){
-    		log.error("No se ha podido obtener versión " + documento.getModelo() + " - " + documento.getVersion(),e);
+    		log.error("No se ha podido obtener versión " + documentoRDS.getModelo() + " - " + documentoRDS.getVersion(),e);
     		throw new ExcepcionRDS("No se ha podido obtener modelo / version en RDS",e);
     	}    	        	
     	    	
@@ -1214,76 +1126,83 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	Ubicacion ubicacion;
     	try{
     		UbicacionDelegate ud = DelegateUtil.getUbicacionDelegate();
-    		ubicacion = ud.obtenerUbicacion(documento.getCodigoUbicacion());
-    		if (ubicacion == null) {
-    			log.error("No existe ubicación " + documento.getCodigoUbicacion());
-    			throw new ExcepcionRDS("No existe ubicación en RDS");        			
-    		}
+    		if (nuevo) {
+    			ubicacion = ud.obtenerUbicacionDefecto();
+    			if (ubicacion == null) {
+        			throw new ExcepcionRDS("No existe una ubicación por defecto configurada en el RDS");        			
+        		}
+        	} else {
+	    		ubicacion = ud.obtenerUbicacion(documentoH.getUbicacion().getCodigoUbicacion());
+	    		if (ubicacion == null) {
+	    			throw new ExcepcionRDS("No existe ubicación en RDS: " + documentoRDS.getCodigoUbicacion());        			
+	    		}
+        	}
+    		documentoRDS.setCodigoUbicacion(ubicacion.getCodigoUbicacion());
     	}catch (Exception e){
-    		log.error("No se ha podido obtener ubicación " + documento.getCodigoUbicacion(),e);
-    		throw new ExcepcionRDS("No se ha podido obtener ubicación en RDS",e);
+    		log.error("No se ha podido establecer ubicación", e);
+    		throw new ExcepcionRDS("No se ha podido establecer ubicación en RDS",e);
     	}        
     	    
     	// 3- ESTABLECEMOS PLANTILLA ESPECIFICA
-    	if (StringUtils.isNotEmpty(documento.getPlantilla())){
+    	if (StringUtils.isNotEmpty(documentoRDS.getPlantilla())){
 	    	try{
 	    		Plantilla plantilla;
 	    		PlantillaDelegate pl = DelegateUtil.getPlantillaDelegate();
-	    		plantilla = pl.obtenerPlantilla(version,documento.getPlantilla());
+	    		plantilla = pl.obtenerPlantilla(version,documentoRDS.getPlantilla());
 	    		if (plantilla == null) {
-	    			log.error("No existe plantilla " + documento.getPlantilla() + " para modelo " + version.getModelo() + " - version " + version.getVersion());
-	    			throw new ExcepcionRDS("No existe plantilla " + documento.getPlantilla() + " para modelo " + version.getModelo() + " - version " + version.getVersion()) ;      			
+	    			log.error("No existe plantilla " + documentoRDS.getPlantilla() + " para modelo " + version.getModelo() + " - version " + version.getVersion());
+	    			throw new ExcepcionRDS("No existe plantilla " + documentoRDS.getPlantilla() + " para modelo " + version.getModelo() + " - version " + version.getVersion()) ;      			
 	    		}	    		
-	    		doc.setPlantilla(plantilla);
+	    		documentoH.setPlantilla(plantilla);
 	    	}catch (Exception e){
-	    		log.error("No se ha podido obtener plantilla específica " + documento.getPlantilla(),e);
-	    		throw new ExcepcionRDS("No se ha podido obtener plantilla específica ",e);
+	    		log.error("No se ha podido obtener plantilla especifica " + documentoRDS.getPlantilla(),e);
+	    		throw new ExcepcionRDS("No se ha podido obtener plantilla especifica ",e);
 	    	}
     	}else{
-    		doc.setPlantilla(null);
+    		documentoH.setPlantilla(null);
     	}
     	
     	// 4- ESTABLECEMOS CAMPOS EN DOCUMENTO    	
-    	doc.setVersion(version);    	
+    	documentoH.setVersion(version);    	
     	// ---- Si el documento no es nuevo no dejamos cambiar de ubicación
     	if (!nuevo){
-	    	if (ubicacion.getCodigo().longValue() != doc.getUbicacion().getCodigo().longValue()){
+	    	if (ubicacion.getCodigo().longValue() != documentoH.getUbicacion().getCodigo().longValue()){
 	    		throw new ExcepcionRDS("No se permite cambiar de ubicación al actualizar documento");
 	    	}    	
     	}else{
-    		doc.setUbicacion(ubicacion);
+    		documentoH.setUbicacion(ubicacion);
     	}
     	// 	---- Si no es nuevo comprobamos que la clave coincida
     	if (!nuevo){
-    		if (documento.getReferenciaRDS() == null) throw new ExcepcionRDS("No se ha indicado la referencia RDS");
+    		if (documentoRDS.getReferenciaRDS() == null) throw new ExcepcionRDS("No se ha indicado la referencia RDS");
     		// Comprobamos que la clave coincida
-	    	if (!doc.getClave().equals(documento.getReferenciaRDS().getClave())){
+	    	if (!documentoH.getClave().equals(documentoRDS.getReferenciaRDS().getClave())){
 	    		throw new ExcepcionRDS("La clave no coincide");
 	    	}	    	
     	}    	
-    	doc.setTitulo(documento.getTitulo());
+    	documentoH.setTitulo(documentoRDS.getTitulo());
     	
     	// Normalizamos NIEs
-    	if (documento.getNif() != null){
-    		doc.setNif(documento.getNif().replaceAll("-",""));
+    	if (documentoRDS.getNif() != null){
+    		documentoH.setNif(documentoRDS.getNif().replaceAll("-",""));
     	}
     	
-    	doc.setUsuarioSeycon(documento.getUsuarioSeycon());
-    	doc.setUnidadAdministrativa(new Long(documento.getUnidadAdministrativa()));
-    	doc.setNombreFichero(documento.getNombreFichero());
-    	doc.setExtensionFichero(documento.getExtensionFichero());
+    	documentoH.setUsuarioSeycon(documentoRDS.getUsuarioSeycon());
+    	documentoH.setUnidadAdministrativa(new Long(documentoRDS.getUnidadAdministrativa()));
+    	documentoH.setNombreFichero(documentoRDS.getNombreFichero());
+    	documentoH.setExtensionFichero(documentoRDS.getExtensionFichero());
     	// --- Firmas documento
     	// ----------- Si no es nuevo eliminamos firmas anteriores
     	if (!nuevo){    	    	
-    		doc.getFirmas().removeAll(doc.getFirmas());
+    		documentoH.getFirmas().removeAll(documentoH.getFirmas());
     	}
     	// ------------ Establecemos nuevas firmas (verificandolas)    
-    	if (documento.getFirmas() != null){
-	    	for (int i=0;i<documento.getFirmas().length;i++){
+    	if (documentoRDS.getFirmas() != null){
+	    	for (int i=0;i<documentoRDS.getFirmas().length;i++){
 	    		// Verificamos firma
 	    		// Añadimos firma
 	    		Firma firma = new Firma();
-	    		FirmaIntf signature = documento.getFirmas()[i];
+	    		FirmaIntf signature = documentoRDS.getFirmas()[i];
 	    		try
 	    		{
 	    			firma.setFirma( getBytesFirma( signature ) );
@@ -1294,39 +1213,39 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    			throw new ExcepcionRDS( "Error obteniendo bytes de la firma ", exc );
 	    		}
 	    		// Falta verificar firma
-	    		if ( !this.verificarFirma( documento.getDatosFichero(), signature ) )
+	    		if ( !this.verificarFirma( documentoRDS.getDatosFichero(), signature ) )
 	    		{
 	    			throw new ExcepcionRDS( "Error al verificar la firma del documento" );
 	    		}
-	    		doc.addFirma(firma);
+	    		documentoH.addFirma(firma);
 	    	}
     	}
     	
     	// Idioma visualizacion: solo para docs estructurados
     	if (version.getModelo().getEstructurado() == 'S'){
     		//Si el modelo es estructurado, debemos indicar el idioma
-        	if (documento.getIdioma() == null){
+        	if (documentoRDS.getIdioma() == null){
         		// Por motivos de compatibilidad con integraciones ejb anteriores, ponemos idioma por defecto
-        		doc.setIdioma("ca");
+        		documentoH.setIdioma("ca");
         		// throw new ExcepcionRDS("Si el documento es estructurado debe indicarse el idioma de visualizacion del documento");
         	}else{
-        		doc.setIdioma(documento.getIdioma());
+        		documentoH.setIdioma(documentoRDS.getIdioma());
         	}
     	}
    
     	
     	// --- Establecemos campos calculados por RDS ---
     	// ------- Establecemos fecha    	
-    	doc.setFecha(new Timestamp(System.currentTimeMillis()));
+    	documentoH.setFecha(new Timestamp(System.currentTimeMillis()));
     	// ------- Calculamos hash    	
     	try{
-    		doc.setHashFichero(generaHash(documento.getDatosFichero()));
+    		documentoH.setHashFichero(generaHash(documentoRDS.getDatosFichero()));
     	}catch (Exception e){
     		log.error("No se ha podido calcular el hash",e);
     		throw new ExcepcionRDS("No se ha podido calcular el hash",e);
     	}  
     	// ------- Generamos clave
-    	if (nuevo) doc.setClave(generarClave());   
+    	if (nuevo) documentoH.setClave(generarClave());   
     }
     
     
@@ -1335,8 +1254,8 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * @param classNamePlugin
      * @return
      */
-    private PluginAlmacenamientoRDS obtenerPluginAlmacenamiento(String classNamePlugin) throws Exception{
-    	return PluginClassCache.getInstance().getPluginAlmacenamientoRDS(classNamePlugin);    	
+    private PluginAlmacenamientoRDS obtenerPluginAlmacenamiento(Ubicacion ubicacion) throws Exception{
+    	return PluginClassCache.getInstance().getPluginAlmacenamientoRDS(ubicacion);    	
     }
     
     /**
@@ -1434,7 +1353,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     
     //  Si el documento no tiene más usos eliminamos documento
     private void documentoSinUsos(Session session,Documento documento) throws Exception{
-    	String ls_plugin,ls_ubicacion;
+    	Ubicacion ubicacion;
 	    Query query = session.createQuery("FROM Uso AS u WHERE u.documento = :documento");
 	    query.setParameter("documento", documento);            	    
 	    //query.setCacheable(true);
@@ -1442,18 +1361,17 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    if (result.isEmpty() && !documentoEnCustodia(session, documento)) {
 	    	
 	    	// Obtenemos plugin almacenamiento
-	    	ls_plugin = documento.getUbicacion().getPluginAlmacenamiento();
-	    	ls_ubicacion =documento.getUbicacion().getCodigoUbicacion();
+	    	ubicacion = documento.getUbicacion();
 	    	
 	    	// Borramos documento
 	        session.delete(documento);
 	       	    	
 	        // Borramos fichero asociado	        
 	        try{        	
-	        	PluginAlmacenamientoRDS plugin = obtenerPluginAlmacenamiento(ls_plugin);
+	        	PluginAlmacenamientoRDS plugin = obtenerPluginAlmacenamiento(ubicacion);
 	        	plugin.eliminarFichero(documento.getCodigo());
 	        }catch(Exception e){
-	        	log.error("No se ha podido eliminar fichero en ubicación " + ls_ubicacion,e);
+	        	log.error("No se ha podido eliminar fichero en ubicación " + ubicacion.getCodigoUbicacion(),e);
 	        	throw new ExcepcionRDS("Error al eliminar fichero",e);
 	        }
 	        
@@ -1642,15 +1560,26 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	    	
     	String txtNumRegistro,txtDC,txtData;
     	int numText = 1;
+    	int x = 330;
     	if (usoSello.getReferencia().startsWith("PRE")){
     		txtNumRegistro = "Num. Preregistre: "+usoSello.getReferencia();
-    		txtDC="Dígit Control: " + StringUtil.calculaDC(usoSello.getReferencia());    
+    		txtDC="DC:" + StringUtil.calculaDC(usoSello.getReferencia());    
     		txtData="Data Preregistre: ";
+
+    		// Calculo posicion inicio
+    		int longPre = 35;
+    		int iniPre = 385;
+    		int inc = ((txtNumRegistro + " " + txtDC).length() - longPre) / 2;
+    		x = iniPre;
+    		if (inc > 0) {
+    			x = iniPre - (inc * 10);
+    		}
+			
     		numText++;
     	}else{
     		txtNumRegistro = "Num. Registre: "+usoSello.getReferencia();
     		txtData="Data Registre: ";
-    		txtDC="";    		
+    		txtDC="";        		
     	}	    	    	
     	if (usoSello.getFechaSello() != null) {
     		numText++;
@@ -1658,21 +1587,23 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	
     	// Creamos textos a stampar
     	textos = new ObjectStamp[numText];
+    	
     		// Texto xa num registro
     	textos[0] = new TextoStamp();
-		((TextoStamp) textos[0]).setTexto(txtNumRegistro + "  " + txtDC);				
+		((TextoStamp) textos[0]).setTexto(txtNumRegistro + (txtDC.length() > 0? " " + txtDC : ""));				
 		textos[0].setPage(0);
-		textos[0].setX(340);
-		textos[0].setY(815);				
+		textos[0].setX(x);
+		textos[0].setY(805);				
 		textos[0].setOverContent(true);
+		
 			// Texto xa fecha registro
 		if (usoSello.getFechaSello() != null) {
 			numText--;
 			textos[numText] = new TextoStamp();
 			((TextoStamp) textos[numText]).setTexto(txtData + StringUtil.fechaACadena(usoSello.getFechaSello(),"dd/MM/yyyy HH:mm"));
 			textos[numText].setPage(0);
-			textos[numText].setX(340);
-			textos[numText].setY(805);			
+			textos[numText].setX(x);
+			textos[numText].setY(815);			
 			textos[numText].setOverContent(true);
 		}
 			// Cuadro xa registro presencial
@@ -1780,7 +1711,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	List usos = null;
     	if (documentoRDS.getReferenciaRDS() != null){
     		// Documento existente en RDS, obtenemos sus usos
-    		usos = listarUsos(documentoRDS.getReferenciaRDS());
+    		usos = listarUsosDocumento(documentoRDS.getReferenciaRDS());
     	}else{
     		// Documento no existente en el RDS. Usado para formatear docs que no existen en el RDS.
     		usos = new ArrayList();
@@ -1832,4 +1763,122 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	}
     }
     
+    /**
+     * Consulta usos documento.
+     * @param refRDS
+     * @return usos documento.
+     * @throws ExcepcionRDS
+     */
+	private List listarUsosDocumento(ReferenciaRDS refRDS) throws ExcepcionRDS {
+		List listaUsosRDS = null;
+		Session session = getSession();   
+    	try {	    	
+	    	
+	    	// Comprobamos documento
+        	Documento documento;
+        	try{
+        		documento = (Documento) session.load(Documento.class,new Long(refRDS.getCodigo()));        		
+        	}catch(Exception e){
+        		//si no existe el documento devolvemos un arraylist vacio.
+        		return new ArrayList();
+        	}
+        	
+        	// Control de documento borrado
+	    	if ("S".equals(documento.getBorrado())) throw new ExcepcionRDS("El documento " + documento.getCodigo() + " ha sido borrado por no tener usos" );
+        	
+        	// Comprobamos clave
+    		if (!documento.getClave().equals(refRDS.getClave())){
+    			log.error("Clave de la referencia RDS no concuerda");
+        		throw new ExcepcionRDS("Clave de la referencia RDS no concuerda"); 
+    		}
+	    	
+	    	// Obtenemos usos
+	    	Query query = session.createQuery("FROM Uso AS u WHERE u.documento = :documento");
+            query.setParameter("documento", documento);
+            //query.setCacheable(true);
+            List result = query.list();
+            
+            
+            // Devolvemos usos
+            listaUsosRDS = new ArrayList();            
+            if (result.isEmpty()) {
+                return listaUsosRDS;
+            }
+
+            // Devolvemos usos
+            for (int i=0;i<result.size();i++){
+            	Uso uso = (Uso) result.get(i);
+            	UsoRDS usoRDS = new UsoRDS();
+            	usoRDS.setTipoUso(uso.getTipoUso().getCodigo());
+            	usoRDS.setReferencia(uso.getReferencia());            	
+            	usoRDS.setReferenciaRDS(refRDS);     
+            	usoRDS.setFechaSello(uso.getFechaSello());
+            	usoRDS.setFechaUso(uso.getFecha());
+            	listaUsosRDS.add(usoRDS);
+            }	    	
+            
+	    } catch (HibernateException he) {
+	    	log.error("Error al listar usos",he);
+	        throw new ExcepcionRDS("Error al listar usos" ,he);
+	    } finally {
+	        close(session);
+	    }
+		return listaUsosRDS;
+	}
+	
+	/**
+	 * Consulta documento
+	 * @param refRds
+	 * @param recuperarFichero
+	 * @return
+	 * @throws ExcepcionRDS
+	 */
+	private DocumentoRDS consultarDocumentoImpl(ReferenciaRDS refRds,
+			boolean recuperarFichero) throws ExcepcionRDS {
+		// Obtenemos documento
+    	Session session = getSession();
+    	Documento documento;
+    	DocumentoRDS documentoRDS;
+	    try {	    	
+	    	// Obtenemos documento
+	    	documento = (Documento) session.load(Documento.class, new Long(refRds.getCodigo()));		    	
+	    	
+	    	// Control de documento borrado
+	    	if ("S".equals(documento.getBorrado())) throw new ExcepcionRDS("El documento " + documento.getCodigo() + " ha sido borrado por no tener usos" );
+	    	
+	    	// Comprobamos que la clave coincida
+	    	if (!documento.getClave().equals(refRds.getClave())){
+	    		throw new ExcepcionRDS("La clave no coincide");
+	    	}	    		    	
+	    	
+	    	
+	    	Hibernate.initialize(documento.getFirmas());
+	    	
+	    	
+	    	// Mapeamos a documentoRDS
+	    	documentoRDS = establecerCamposDocumentoRDS(documento);	    		    	
+	    } catch (HibernateException he) {
+	    	log.error("Error consultando documento",he);
+	        throw new ExcepcionRDS("Error consultando documento",he);
+	    } finally {
+	        close(session);
+	    }            	
+	    	    
+	    // Consultamos fichero asociado	    
+        try{        	
+        	if (recuperarFichero){
+        		// Obtenemos documento
+	        	PluginAlmacenamientoRDS plugin = obtenerPluginAlmacenamiento(documento.getUbicacion());
+	        	documentoRDS.setDatosFichero(plugin.obtenerFichero(documento.getCodigo()));
+	        	// Verificamos hash
+	        	if (!documentoRDS.getHashFichero().equals(generaHash(documentoRDS.getDatosFichero()))) {
+	        		throw new Exception("No coincide el hash del documento almacenado. El fichero ha sido modificado.");
+	        	}	        	
+        	}
+        }catch(Exception e){
+        	log.error("No se ha podido obtener fichero en ubicación " + documento.getUbicacion().getCodigoUbicacion(),e);
+        	throw new ExcepcionRDS("Error al consultar documento: " + e.getMessage(),e);
+        }
+		return documentoRDS;
+	}
 }

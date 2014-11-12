@@ -11,11 +11,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title><bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property="nombre"/></title>
-<link href="estilos/sistrafront-0.0.2.css" rel="stylesheet" type="text/css" />
+<link href="estilos/sistrafront-0.0.3.css" rel="stylesheet" type="text/css" />
 <logic:notEmpty name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property="urlCssCustom">
 	<link href="<bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property="urlCssCustom" />" rel="stylesheet" type="text/css" />
 </logic:notEmpty>
+<script type="text/javascript" src="js/modernizr-imc-0.3.js"></script>
 <script type="text/javascript" src="js/globales.js"></script>
+<script type="text/javascript" src="js/jquery-1.4.1.min.js"></script>
 
 <!--  Scripts para firma (depende implementacion) -->
 <logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
@@ -25,7 +27,6 @@
 
 <logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 			 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">					
-	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/deployJava.js"></script>	
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/instalador.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/firma.js"></script>	
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/utils.js"></script>
@@ -37,7 +38,7 @@
 	</script>
 </logic:equal>		
 
-<!-- DETECCION NAVEGADOR (Compatibles: IE >=6 , FireFox >= 1.5)-->
+<!-- DETECCION NAVEGADOR (Compatibles: IE >= 7 , FireFox >= 4)-->
 <script type="text/javascript">
 <!--
 	var errorIE="<bean:message key="errors.ie.versionminima" />";

@@ -35,13 +35,19 @@
     <property name="firmarAcuse"  column="NOT_FIRACU" not-null="true"/>
     <property name="gestorSeycon"  column="NOT_SEYGES" not-null="true"/>
     <property name="fechaFinPlazo"  column="NOT_FECPLZ"/>
+    <property name="diasPlazo"  column="NOT_DIAPLZ"/>
     <property name="rechazada"  column="NOT_RECHAZ" not-null="true"/>
    
     <property name="tramiteSubsanacionDescripcion"  column="NOT_SUBDES"/>
     <property name="tramiteSubsanacionIdentificador"  column="NOT_SUBIDE"/>
     <property name="tramiteSubsanacionVersion"  column="NOT_SUBVER"/>
     <property name="tramiteSubsanacionParametros"  column="NOT_SUBPAR"/>
-        	   
+    
+    <property name="identificadorPersistencia" column="NOT_IDEPER" not-null="true"/>
+    <property name="accesiblePorClave" column="NOT_ACCCLA" not-null="true"/>    
+    
+    <property name="tipoFirmaAcuse" column="NOT_TIPFIR" not-null="false"/>
+    
 	<set name="documentos" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="DNO_ORDEN">
 		<cache usage="read-write"/>
 	    <key column="DNO_CODNOT"/>

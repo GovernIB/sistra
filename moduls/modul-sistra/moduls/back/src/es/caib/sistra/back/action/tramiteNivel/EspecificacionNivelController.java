@@ -38,6 +38,20 @@ public class EspecificacionNivelController implements Controller{
     	
     	request.setAttribute( "habilitarNotificacionOptions", listaOpcionesNotif);
     	
+    	List listaOpcionesAlertas = new ArrayList(); 
+    	listaOpcionesAlertas.add(new Opcion(ConstantesSTR.ALERTASTRAMITACION_SINESPECIFICAR, "especificacionesTramite.habilitarAlertasTramitacion.sinEspecificar"));
+    	listaOpcionesAlertas.add(new Opcion(ConstantesSTR.ALERTASTRAMITACION_NOPERMITIDA, "especificacionesTramite.habilitarAlertasTramitacion.noPermitida"));
+    	listaOpcionesAlertas.add(new Opcion(ConstantesSTR.ALERTASTRAMITACION_PERMITIDA, "especificacionesTramite.habilitarAlertasTramitacion.permitida"));    	
+    	request.setAttribute( "habilitarAlertasTramitacionOptions", listaOpcionesAlertas );
+    	
+    	List listaOpcionesPersJustif = new ArrayList(); 
+    	listaOpcionesPersJustif.add(new Opcion(ConstantesSTR.PERSONALIZACIONJUSTIFICANTE_SINESPECIFICAR, "especificacionesTramite.personalizacionJustificante.sinEspecificar"));
+    	listaOpcionesPersJustif.add(new Opcion(ConstantesSTR.PERSONALIZACIONJUSTIFICANTE_HABILITADA, "especificacionesTramite.personalizacionJustificante.habilitada"));
+    	listaOpcionesPersJustif.add(new Opcion(ConstantesSTR.PERSONALIZACIONJUSTIFICANTE_NOHABILITADA, "especificacionesTramite.personalizacionJustificante.noHabilitada"));    	    	
+    	
+    	request.setAttribute( "personalizacionJustificanteOptions", listaOpcionesPersJustif);
+    	
+    	
     	request.setAttribute( "habilitarAvisos", request.getSession().getServletContext().getAttribute(Constants.AVISOS_OBLIGATORIOS_NOTIFICACIONES));
     }
 }

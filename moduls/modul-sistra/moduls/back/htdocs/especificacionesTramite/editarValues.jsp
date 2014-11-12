@@ -127,15 +127,41 @@
 	    	<bean:message key="negacion"/><html:radio property="values.permitirSMS" value="N"/> 
 	   	</td>
 	</tr>
-	<tr>
-	    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAvisos.avisoEmail"/></td>
-	    <td class="input"><html:textarea tabindex="10" property="avisoEmail" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=avisoEmail&titulo=especificacionesTramite.avisoEmail" %>');"/></td>
-	</tr>
-	<tr>
-	    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAvisos.avisoSMS"/></td>
-	    <td class="input"><html:textarea tabindex="10" property="avisoSMS" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=avisoSMS&titulo=especificacionesTramite.avisoSMS" %>');"/></td>
-	</tr>
 </logic:equal>
+
+<tr>
+	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.alertasTramitacion"/></td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAlertasTramitacion"/></td>
+    <td class="input">
+    	<html:select property="values.habilitarAlertasTramitacion">                    
+    		<logic:iterate id="opcion" name="habilitarAlertasTramitacionOptions" type="es.caib.sistra.model.Opcion">
+    			<html:option value="<%=opcion.getCodigo()%>"  key="<%=opcion.getDescripcion()%>"  />
+	    	</logic:iterate>
+	    </html:select>    	    	
+    </td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAlertasTramitacion.permitirSMS"/></td>    
+    <td class="input">
+    	<bean:message key="afirmacion"/><html:radio property="values.permitirSMSAlertasTramitacion" value="S"/> 
+    	<bean:message key="negacion"/><html:radio property="values.permitirSMSAlertasTramitacion" value="N"/> 
+   	</td>
+</tr>
+
+<tr>
+	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.datosContacto"/></td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAvisos.avisoEmail"/></td>
+    <td class="input"><html:textarea tabindex="10" property="avisoEmail" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=avisoEmail&titulo=especificacionesTramite.avisoEmail" %>');"/></td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAvisos.avisoSMS"/></td>
+    <td class="input"><html:textarea tabindex="10" property="avisoSMS" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=avisoSMS&titulo=especificacionesTramite.avisoSMS" %>');"/></td>
+</tr>
+
 
 <logic:present name="<%=bean%>" property="values.codigo">
 	<bean:define id="codigo" name="<%= bean %>" property="values.codigo"/>
@@ -148,7 +174,27 @@
 	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.datosJustificante"/></td>
 </tr>
 <tr>
-    <td class="label">&nbsp;</td>
+    <td class="label"><bean:message key="especificacionesTramite.separador.datosJustificante.ocultarNifNombre"/></td>
+    <td class="input">
+    	<html:select property="values.ocultarNifNombreJustif">                    
+    		<logic:iterate id="opcion" name="personalizacionJustificanteOptions" type="es.caib.sistra.model.Opcion">
+    			<html:option value="<%=opcion.getCodigo()%>"  key="<%=opcion.getDescripcion()%>"  />
+	    	</logic:iterate>
+	    </html:select>    	    	
+    </td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.separador.datosJustificante.ocultarClaveTramitacion"/></td>
+    <td class="input">
+    	<html:select property="values.ocultarClaveTramitacionJustif">                    
+    		<logic:iterate id="opcion" name="personalizacionJustificanteOptions" type="es.caib.sistra.model.Opcion">
+    			<html:option value="<%=opcion.getCodigo()%>"  key="<%=opcion.getDescripcion()%>"  />
+	    	</logic:iterate>
+	    </html:select>    	    	
+    </td>   
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.separador.datosJustificante.datosSolicitud"/></td>
     <td class="input">
     <button class="buttond" type="button" onclick="forward('<%=urlDatoJustificante + "&" + parametroBack + "=" + codigo %>')">
         <bean:message key="boton.datoJustificante" />

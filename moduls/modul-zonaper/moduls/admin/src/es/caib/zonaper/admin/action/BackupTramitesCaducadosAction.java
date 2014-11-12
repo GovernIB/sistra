@@ -1,7 +1,5 @@
 package es.caib.zonaper.admin.action;
 
-import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,8 +8,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import es.caib.zonaper.persistence.delegate.BackupDelegate;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
+import es.caib.zonaper.persistence.delegate.ProcesosAutoDelegate;
 
 /**
  * @struts.action
@@ -24,10 +22,11 @@ public class BackupTramitesCaducadosAction extends Action
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception 
     {
-		BackupDelegate delegate = DelegateUtil.getBackupDelegate();
-		Date fechaEjecucion = new Date();
-		delegate.procesaTramitesCaducados( fechaEjecucion, false );
-		response.sendRedirect("http://www.google.es");
+		
+		ProcesosAutoDelegate delegate = DelegateUtil.getProcesosAutoDelegate();
+		delegate.procesaTramitesCaducados();
+		
+		response.getOutputStream().write("Proceso finalizado".getBytes());
 		return null;
 	}    
 	

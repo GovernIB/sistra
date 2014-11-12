@@ -27,6 +27,7 @@ public class Procedimiento implements Serializable{
 	private char tipoAcceso=ACCESO_EJB;
 	private String url;
 	private String versionWS;
+	private String soapActionWS;
 	private char localizacionEJB = EJB_LOCAL;
 	private char autenticacionEJB = AUTENTICACION_SIN;
 	private String jndiEJB;
@@ -36,10 +37,10 @@ public class Procedimiento implements Serializable{
 	private Date ultimoAviso;	
 	private byte[] errores;
 	private Set gestores = new HashSet(0);
-		
 	private Long unidadAdministrativa;
 	private String permitirSms = "S";
-	
+	private String avisarNotificaciones = "N";
+	private String permitirPlazoNotificacionesVariable = "N";
 	
 	
 	public String getIdentificador() {
@@ -159,5 +160,25 @@ public class Procedimiento implements Serializable{
 	public void setPermitirSms(String permitirSms) {
 		this.permitirSms = permitirSms;
 	}
+	public String getAvisarNotificaciones() {
+		return avisarNotificaciones;
+	}
+	public void setAvisarNotificaciones(String avisarNotificaciones) {
+		this.avisarNotificaciones = avisarNotificaciones;
+	}
+	public String getSoapActionWS() {
+		return soapActionWS;
+	}
+	public void setSoapActionWS(String soapActionWS) {
+		this.soapActionWS = soapActionWS;
+	}
+	public String getPermitirPlazoNotificacionesVariable() {
+		return permitirPlazoNotificacionesVariable;
+	}
+	public void setPermitirPlazoNotificacionesVariable(
+			String permitirPlazoNotificacionesVariable) {
+		this.permitirPlazoNotificacionesVariable = permitirPlazoNotificacionesVariable;
+	}
+	
 	
 }

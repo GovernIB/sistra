@@ -17,8 +17,6 @@ import org.apache.struts.action.ActionMapping;
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleNotificacionForm;
 import es.caib.bantel.front.util.MensajesUtil;
-import es.caib.bantel.persistence.delegate.ConfiguracionDelegate;
-import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.regtel.model.ReferenciaRDSAsientoRegistral;
 import es.caib.regtel.model.ResultadoRegistroTelematico;
@@ -51,9 +49,7 @@ public class RealizarAltaNotificacionAction extends BaseAction
     {
 		DetalleNotificacionForm notificacionForm = (DetalleNotificacionForm)form;
 		request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,"3");
-		PadBackOfficeDelegate ejb = new PadBackOfficeDelegate();
 		ArrayList documentos;
-		ExpedientePAD exp;
 		
 		// Recuperamos de sesion el expediente actual
 		String idExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY);
@@ -61,16 +57,31 @@ public class RealizarAltaNotificacionAction extends BaseAction
 		String claveExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY);
 		
 		try{
+			
+			// Recupera expediente
+			PadBackOfficeDelegate ejb = new PadBackOfficeDelegate();
+			ExpedientePAD expediente = ejb.consultaExpediente(uniAdm.longValue(), idExpe, claveExpe);
+			
 			if(request.getSession().getAttribute("documentosAltaNotificacion") == null){
 				documentos = new ArrayList();
 			}else{
 				documentos = (ArrayList)request.getSession().getAttribute("documentosAltaNotificacion");
 			}
+			
+			// Plazo: solo si acuse de recibo
+			Integer plazo = null;
+			if ("S".equals(notificacionForm.getAcuse()) && !("0".equals(notificacionForm.getDiasPlazo()))) {
+				plazo = new Integer(notificacionForm.getDiasPlazo());
+			}
+			
 			RegistroSalidaHelper r = new RegistroSalidaHelper();
 			r.setOficinaRegistro(notificacionForm.getOrganoDestino(),notificacionForm.getOficinaRegistro());
 			r.setExpediente(uniAdm,idExpe,claveExpe);
 			r.setDatosInteresado(notificacionForm.getNif(),notificacionForm.getApellidos(), StringUtils.isEmpty(notificacionForm.getUsuarioSey())?null:notificacionForm.getUsuarioSey(),notificacionForm.getCodigoPais(),notificacionForm.getNombrePais(),notificacionForm.getCodigoProvincia(),notificacionForm.getNombreProvincia(),notificacionForm.getCodigoMunicipio(),notificacionForm.getNombreMunicipio());
-			r.setDatosNotificacion(notificacionForm.getIdioma(),notificacionForm.getTipoAsunto(),notificacionForm.getTituloAviso(),notificacionForm.getTextoAviso(),(StringUtils.isNotEmpty(notificacionForm.getTextoSmsAviso())?notificacionForm.getTextoSmsAviso():null),notificacionForm.getTituloOficio(),notificacionForm.getTextoOficio(),"S".equals(notificacionForm.getAcuse()));
+			r.setDatosNotificacion(notificacionForm.getIdioma(),notificacionForm.getTipoAsunto(),notificacionForm.getTituloAviso(),
+					notificacionForm.getTextoAviso(),(StringUtils.isNotEmpty(notificacionForm.getTextoSmsAviso())?notificacionForm.getTextoSmsAviso():null),
+					notificacionForm.getTituloOficio(),notificacionForm.getTextoOficio(),"S".equals(notificacionForm.getAcuse()),
+					new Boolean("S".equals(notificacionForm.getAccesoPorClave())), plazo);
 			if("S".equals(notificacionForm.getTramiteSubsanacion())){
 				Map parametros = null;
 				if(request.getSession().getAttribute("parametrosAltaNotificacion") != null){
@@ -98,7 +109,7 @@ public class RealizarAltaNotificacionAction extends BaseAction
 		}catch(Exception e){
 			log.error("Excepcion alta notificacion",e);
 			request.setAttribute( "enlace", "altaNotif");
-			String mensajeOk = MensajesUtil.getValue("error.notificacio.Excepcion");
+			String mensajeOk = MensajesUtil.getValue("error.notificacio.Excepcion", request);
 			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk + ": " + e.getMessage());
 			return mapping.findForward("fail");
 		}		

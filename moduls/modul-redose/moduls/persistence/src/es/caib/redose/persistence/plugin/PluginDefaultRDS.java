@@ -18,7 +18,12 @@ import es.caib.redose.persistence.util.HibernateLocator;
  */
 public class PluginDefaultRDS implements PluginAlmacenamientoRDS {
 
-	public void guardarFichero(Long id, byte[] datos) throws Exception {
+	/**
+	 * Codigo ubicacion.
+	 */
+	private Long codigoUbicacion;
+	
+	public void guardarFichero(Long id, byte[] datos, MetadaAlmacenamiento metadata) throws Exception {
 		Session session = getSession();
         try {        	
         	// Buscamos si existe el fichero
@@ -100,5 +105,13 @@ public class PluginDefaultRDS implements PluginAlmacenamientoRDS {
             }
         }
     }
+
+	public Long getCodigoUbicacion() {
+		return codigoUbicacion;
+	}
+
+	public void setCodigoUbicacion(Long idPlugin) {
+		this.codigoUbicacion = idPlugin;
+	}
 
 }

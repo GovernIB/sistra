@@ -1,7 +1,6 @@
 package es.caib.bantel.model;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -10,12 +9,14 @@ public class GestorBandeja implements Serializable
 {
 	private String seyconID;
 	private String email;
-	private Long intervaloInforme;
-	private Set procedimientosGestionados = new HashSet(0);
-	private Date ultimoAviso;
+	private String avisarEntradas = "N";
+	private String avisarNotificaciones = "N";
+	private String avisarMonitorizacion = "N";
 	private char permitirCambioEstado = 'N';
 	private char permitirCambioEstadoMasivo = 'N';
 	private char permitirGestionExpedientes = 'N';
+	private Set procedimientosGestionados = new HashSet(0);
+	
 	
 	public String getEmail()
 	{
@@ -40,12 +41,6 @@ public class GestorBandeja implements Serializable
 	public void setProcedimientosGestionados(Set tramitesGestionados)
 	{
 		this.procedimientosGestionados = tramitesGestionados;
-	}
-	public Long getIntervaloInforme() {
-		return intervaloInforme;
-	}
-	public void setIntervaloInforme(Long intervaloInforme) {
-		this.intervaloInforme = intervaloInforme;
 	}
 	
 	// FUNCIONES PARA GESTIONAR TRAMITES GESTIONADOS
@@ -72,12 +67,7 @@ public class GestorBandeja implements Serializable
 		// Eliminamos tramites gestionados		
 		this.procedimientosGestionados.clear();		
 	}
-	public Date getUltimoAviso() {
-		return ultimoAviso;
-	}
-	public void setUltimoAviso(Date ultimoAviso) {
-		this.ultimoAviso = ultimoAviso;
-	}
+	
 	public char getPermitirCambioEstado() {
 		return permitirCambioEstado;
 	}
@@ -95,5 +85,23 @@ public class GestorBandeja implements Serializable
 	}
 	public void setPermitirGestionExpedientes(char permitirGestionExpedientes) {
 		this.permitirGestionExpedientes = permitirGestionExpedientes;
+	}
+	public String getAvisarNotificaciones() {
+		return avisarNotificaciones;
+	}
+	public void setAvisarNotificaciones(String avisarNotificaciones) {
+		this.avisarNotificaciones = avisarNotificaciones;
+	}
+	public String getAvisarEntradas() {
+		return avisarEntradas;
+	}
+	public void setAvisarEntradas(String avisarEntradas) {
+		this.avisarEntradas = avisarEntradas;
+	}
+	public String getAvisarMonitorizacion() {
+		return avisarMonitorizacion;
+	}
+	public void setAvisarMonitorizacion(String avisarMonitorizacion) {
+		this.avisarMonitorizacion = avisarMonitorizacion;
 	}
 }

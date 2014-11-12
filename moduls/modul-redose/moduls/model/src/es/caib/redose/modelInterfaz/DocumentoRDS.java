@@ -63,7 +63,7 @@ public class DocumentoRDS  implements java.io.Serializable {
 	 * Código de ubicación dónde se almacenará el documento.
 	 * Por defecto se utiliza la por defecto del RDS.
 	 */
-	private String codigoUbicacion = "RDS";		
+	private String codigoUbicacion;		
 	
 	// Datos establecidos por el RDS
 	/**

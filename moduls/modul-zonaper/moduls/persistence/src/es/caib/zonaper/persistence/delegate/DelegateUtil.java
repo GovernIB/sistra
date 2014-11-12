@@ -49,12 +49,7 @@ public final class DelegateUtil {
     {
     	return ( ElementoExpedienteDelegate ) DelegateFactory.getDelegate( ElementoExpedienteDelegate.class );
     }
-    
-    public static EstadoExpedienteDelegate getEstadoExpedienteDelegate()
-    {
-    	return ( EstadoExpedienteDelegate ) DelegateFactory.getDelegate( EstadoExpedienteDelegate.class );
-    }
-    
+        
     
     public static ProcesoBackupDelegate getProcesoBackupDelegate()
     {
@@ -108,6 +103,10 @@ public final class DelegateUtil {
     
     public static ProcesoRechazarNotificacionDelegate getProcesoRechazarNotificacionDelegate() {
         return (ProcesoRechazarNotificacionDelegate) DelegateFactory.getDelegate(ProcesoRechazarNotificacionDelegate.class);
+    }
+    
+    public static ProcesoRevisarRegistrosDelegate getProcesoRevisarRegistrosDelegate() {
+        return (ProcesoRevisarRegistrosDelegate) DelegateFactory.getDelegate(ProcesoRevisarRegistrosDelegate.class);
     }
 }
 

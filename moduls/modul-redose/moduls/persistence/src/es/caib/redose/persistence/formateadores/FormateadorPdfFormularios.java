@@ -124,7 +124,11 @@ public class FormateadorPdfFormularios implements FormateadorDocumento{
 	    		datos.put(XPATH_FECHAREGISTRO,StringUtil.fechaACadena(uso.getFechaSello(),"dd/MM/yyyy HH:mm"));
 	    	}
     	}
-    	    	
+    	 
+    	// Establecemos funcion para poder tratar los datos en formateadores que extiendan de esta clase
+    	tratarDatos(datos);
+    	
+    	
 		// Creamos pdf a partir plantilla y establecemos valores
 		PDFDocumentTemplate pdf = new PDFDocumentTemplate(plantilla.getArchivo().getDatos());
 		if (isSoloLectura()) {
@@ -134,10 +138,20 @@ public class FormateadorPdfFormularios implements FormateadorDocumento{
 		
 		// Devolvemos pdf generado
 		DocumentoRDS documentoF = UtilRDS.cloneDocumentoRDS(documento);
-		documentoF.setDatosFichero(pdf.guardarEnMemoria());		
+		documentoF.setDatosFichero(pdf.guardarEnMemoria(true));		
 		documentoF.setNombreFichero(StringUtil.normalizarNombreFichero(documento.getTitulo()) + ".pdf");		
 		
 		return documentoF;
+	}
+
+	
+	/**
+	 * Funcion para poder tratar los datos en formateadores que extiendan de esta clase
+	 * @param datos Datos
+	 * @throws Exception 
+	 */
+	protected void tratarDatos(HashMap datos) throws Exception {
+		// Por defecto no se trata nada		
 	}
 
 	/**

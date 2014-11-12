@@ -62,8 +62,9 @@
                 oRequired = new required();
                 for (x in oRequired) {
                 	var field = form[oRequired[x][0]];
-                	
-                    if (field.type == 'text' ||
+                
+                	if (field.type == 'hidden' ||
+                		field.type == 'text' ||
                         field.type == 'textarea' ||
                         field.type == 'file' ||
                         field.type == 'select-one' ||
@@ -91,9 +92,16 @@
                         }
                     }
                 }
+                                
                 if (fields.length > 0) {
                    focusField.focus();
-                   alert(fields.join('\n'));
+                   
+                   //alert(fields.join('\n'));
+                   
+                   var decoded = $("<div/>").html(fields.join('\n')).text();
+                   alert(decoded);
+                   
+                   
                 }
                 return isValid;
             }

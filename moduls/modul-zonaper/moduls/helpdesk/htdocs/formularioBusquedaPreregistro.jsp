@@ -63,6 +63,15 @@
 				alert("<bean:message key='errors.required' arg0='Dia final'/>");
 				return false;
 			}
+
+			/* Nif: si no esta vacio validamos nif */
+			if(!isEmptyObject(form.nif))
+			{ 
+				if (!validaNIF(form.nif.value) && !validaCIF(form.nif.value) && !validaNIE(form.nif.value)) {
+					alert("<bean:message key='error.nifValido'/>");
+					return false;
+				}
+			}
     		
     		return true;
     		
@@ -162,6 +171,10 @@
 					});
 				-->
 				</script>
+				<label for="nif">
+					<bean:message key="formularioBusqueda.nif"/>: 
+			    	<html:text property="nif"/>
+				</label>
 			</p>
 			</div>
 			<p>

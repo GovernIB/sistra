@@ -17,6 +17,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
@@ -61,6 +63,8 @@ import es.caib.zonaper.modelInterfaz.DetalleAviso;
         endpointInterface = "es.caib.regtel.ws.v2.services.BackofficeFacade")
 public class BackofficeFacadeImpl implements BackofficeFacade {
 	
+	private static Log log = LogFactory.getLog(BackofficeFacadeImpl.class);
+	
 	public ReferenciaRDSAsientoRegistral prepararRegistroEntrada(DatosRegistroEntrada entrada, String diasPersistencia) throws BackofficeFacadeException {
 		ReferenciaRDSAsientoRegistral raWS = null;
 		try{
@@ -79,7 +83,8 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			es.caib.regtel.model.ReferenciaRDSAsientoRegistral ar = delegate.prepararRegistroEntrada(dEnt, dp);
 			raWS = referenciaRDSAsientoRegistralIntfToReferenciaRDSAsientoRegistralWS(ar);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			log.error(ex);
+			// ex.printStackTrace();
 			throw new es.caib.regtel.ws.v2.services.BackofficeFacadeException(ex.getMessage(), new es.caib.regtel.ws.v2.model.BackofficeFacadeException());
 		}
 		return raWS;
@@ -94,7 +99,8 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			ResultadoRegistroTelematico res = delegate.registroEntradaConFirma(ar,firmaWSToFirmaIntf(firma));
 			rr = resultadoRegistroTelematicoToResultadoRegistroNotificacion(res);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			log.error(ex);
+			// ex.printStackTrace();
 			throw new es.caib.regtel.ws.v2.services.BackofficeFacadeException(ex.getMessage(), new es.caib.regtel.ws.v2.model.BackofficeFacadeException());
 		}
 		return rr;
@@ -108,7 +114,8 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			ResultadoRegistroTelematico res = delegate.registroEntrada(rEnt);
 			rr = resultadoRegistroTelematicoToResultadoRegistroNotificacion(res);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			log.error(ex);
+			// ex.printStackTrace();
 			throw new es.caib.regtel.ws.v2.services.BackofficeFacadeException(ex.getMessage(), new es.caib.regtel.ws.v2.model.BackofficeFacadeException());
 		}
 		return rr;
@@ -123,7 +130,8 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			ResultadoRegistroTelematico res = delegate.registroSalida(rSal);
 			rr = resultadoRegistroTelematicoToResultadoRegistroNotificacion(res);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			log.error(ex);
+			// ex.printStackTrace();
 			throw new es.caib.regtel.ws.v2.services.BackofficeFacadeException(ex.getMessage(), new es.caib.regtel.ws.v2.model.BackofficeFacadeException());
 		}
 		return rr;
@@ -137,7 +145,8 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			acuse = acuseIntfToAcuseWS(acuseIntf);
 			return acuse;
 		}catch(Exception ex){
-			ex.printStackTrace();
+			log.error(ex);
+			// ex.printStackTrace();
 			throw new es.caib.regtel.ws.v2.services.BackofficeFacadeException(ex.getMessage(), new es.caib.regtel.ws.v2.model.BackofficeFacadeException());
 		}
 	}
@@ -153,10 +162,15 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			acuse = detalleAcuseIntfToDetalleAcuseWS(acuseIntf);
 			return acuse;
 		}catch(Exception ex){
-			ex.printStackTrace();
+			log.error(ex);
+			// ex.printStackTrace();
 			throw new es.caib.regtel.ws.v2.services.BackofficeFacadeException(ex.getMessage(), new es.caib.regtel.ws.v2.model.BackofficeFacadeException());
 		}
 	}
+
+	//	 --------------------------------------------------------------
+	//		FUNCIONES AUXILIARES
+	// --------------------------------------------------------------
 
 
 	private DetalleAcuseRecibo detalleAcuseIntfToDetalleAcuseWS(
@@ -254,10 +268,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 
 	
 
-	//	 --------------------------------------------------------------
-	//		FUNCIONES AUXILIARES
-	// --------------------------------------------------------------
-
+	
 
 	private AcuseRecibo  acuseIntfToAcuseWS(es.caib.regtel.model.ws.AcuseRecibo acuseIntf) throws Exception{
 		AcuseRecibo acuse = null;
@@ -412,6 +423,14 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 						or.setTitulo(dn.getOficioRemision().getTitulo());
 						dnIntf.setOficioRemision(or);
 						dnIntf.setTipoAsunto(dn.getTipoAsunto());
+						
+						if (dn.getAccesiblePorClave() != null) {
+							dnIntf.setAccesiblePorClave(dn.getAccesiblePorClave().getValue());
+						}
+						
+						if (dn.getPlazo() != null) {
+							dnIntf.setPlazo(dn.getPlazo().getValue());
+						}
 						
 						if (notificacion.getDatosNotificacion().getOficioRemision().getTramiteSubsanacion() != null &&
 							notificacion.getDatosNotificacion().getOficioRemision().getTramiteSubsanacion().getValue() != null 	){

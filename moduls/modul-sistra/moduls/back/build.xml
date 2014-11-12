@@ -48,6 +48,7 @@
     	<fileset dir="${distribucion.dir}/lib"> 
             <include name="sistra-util.jar"/>
     		<include name="sistra-xml.jar"/>
+    		<include name="sistra-plugins.jar"/>
         </fileset>        	
         <fileset dir="${web.product}">
             <include name="5-sistra-model.jar" />
@@ -161,6 +162,7 @@
         	<!-- cas: config comentarios -->
     	
        <replace file="${web.gen.etc}/web.xml">
+       	  <replacefilter token="@release.version@" value="${release.version}"/>
           <replacefilter token="@role.operador@" value="${role.operador}"/>
 	      <replacefilter token="@web.login-config@" value="${web.login-config}"/>         	
        	

@@ -300,6 +300,15 @@ public class FactoriaObjetosXMLAvisoNotificacionImpl implements
 			avisoNotificacion.setTexto(avisoNotificacionJAXB.getTEXTO());
 			avisoNotificacion.setTextoSMS(avisoNotificacionJAXB.getTEXTOSMS());
 			avisoNotificacion.setAcuseRecibo( new Boolean(avisoNotificacionJAXB.getACUSERECIBO().equals("SI")));
+			
+			if (avisoNotificacionJAXB.getACCESIBLEPORCLAVE() != null) {
+				avisoNotificacion.setAccesiblePorClave(new Boolean(avisoNotificacionJAXB.getACCESIBLEPORCLAVE().equals("SI")));
+			}	
+			
+			if (avisoNotificacionJAXB.getPLAZO() != null && avisoNotificacionJAXB.getPLAZO().length() > 0) {
+				avisoNotificacion.setPlazo(new Integer(avisoNotificacionJAXB.getPLAZO()));
+			}	
+			
 			avisoNotificacion.setExpediente(crearExpediente(avisoNotificacionJAXB.getEXPEDIENTE()));
 		}
 	}
@@ -312,6 +321,12 @@ public class FactoriaObjetosXMLAvisoNotificacionImpl implements
 			avisoNotificacionJAXB.setTEXTO(avisoNotificacion.getTexto());			
 			avisoNotificacionJAXB.setTEXTOSMS(avisoNotificacion.getTextoSMS());
 			avisoNotificacionJAXB.setACUSERECIBO( (avisoNotificacion.getAcuseRecibo().booleanValue()?"SI":"NO"));
+			if (avisoNotificacion.getAccesiblePorClave() != null) {
+				avisoNotificacionJAXB.setACCESIBLEPORCLAVE((avisoNotificacion.getAccesiblePorClave().booleanValue()?"SI":"NO"));
+			}	
+			if (avisoNotificacion.getPlazo() != null) {
+				avisoNotificacionJAXB.setPLAZO(avisoNotificacion.getPlazo().toString());
+			}	
 			avisoNotificacionJAXB.setEXPEDIENTE(crearExpediente(avisoNotificacion.getExpediente()));			
 		}
 	}
@@ -324,7 +339,8 @@ public class FactoriaObjetosXMLAvisoNotificacionImpl implements
 			exp = new Expediente ();			
 			exp.setClaveExpediente(expJAXB.getCLAVEEXPEDIENTE());
 			exp.setIdentificadorExpediente(expJAXB.getIDENTIFICADOREXPEDIENTE());
-			exp.setUnidadAdministrativa(expJAXB.getUNIDADADMINISTRATIVA());						
+			exp.setUnidadAdministrativa(expJAXB.getUNIDADADMINISTRATIVA());			
+			exp.setTituloExpediente(expJAXB.getTITULOEXPEDIENTE());
 		}		
 		return exp;
 	}
@@ -335,7 +351,8 @@ public class FactoriaObjetosXMLAvisoNotificacionImpl implements
 			expJAXB = new EXPEDIENTE ();			
 			expJAXB.setCLAVEEXPEDIENTE(exp.getClaveExpediente());
 			expJAXB.setIDENTIFICADOREXPEDIENTE(exp.getIdentificadorExpediente());
-			expJAXB.setUNIDADADMINISTRATIVA(exp.getUnidadAdministrativa());						
+			expJAXB.setUNIDADADMINISTRATIVA(exp.getUnidadAdministrativa());		
+			expJAXB.setTITULOEXPEDIENTE(exp.getTituloExpediente());
 		}		
 		return expJAXB;
 	}

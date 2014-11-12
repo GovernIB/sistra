@@ -2,7 +2,6 @@ package es.caib.zonaper.persistence.delegate;
 
 import java.rmi.RemoteException;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.List;
 
 import javax.ejb.CreateException;
@@ -22,17 +21,9 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
-    public Long grabarEntradaPreregistro(EntradaPreregistro tramite) throws DelegateException {
+    public Long grabarNuevaEntradaPreregistro(EntradaPreregistro tramite) throws DelegateException {
         try {
-            return getFacade().grabarEntradaPreregistro(tramite);
-        } catch (Exception e) {
-            throw new DelegateException(e);
-        }
-    }
-
-    public EntradaPreregistro obtenerEntradaPreregistroReg(Long idEntradaPreregistro) throws DelegateException {
-        try {
-            return getFacade().obtenerEntradaPreregistroReg(idEntradaPreregistro);
+            return getFacade().grabarNuevaEntradaPreregistro(tramite);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
@@ -41,6 +32,14 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
     public EntradaPreregistro obtenerEntradaPreregistroAutenticada(Long idEntradaPreregistro) throws DelegateException {
         try {
             return getFacade().obtenerEntradaPreregistroAutenticada(idEntradaPreregistro);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public EntradaPreregistro obtenerEntradaPreregistroAutenticada(String idPersistencia) throws DelegateException {
+        try {
+            return getFacade().obtenerEntradaPreregistroAutenticada(idPersistencia);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
@@ -78,32 +77,6 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
         }
         
     }
-   
-    /*
-    public List listarEntradaPreregistrosUsuario() throws DelegateException {
-        try {
-            return getFacade().listarEntradaPreregistrosUsuario();
-        } catch (Exception e) {
-        	e.printStackTrace();	
-            throw new DelegateException(e);
-        }
-    }
-    */
-    
-    /*
-    public List listarEntradaPreregistrosUsuarioNoConfirmados(String usua) throws DelegateException
-    {
-    	try 
-    	{
-    		return getFacade().listarEntradaPreregistrosUsuarioNoConfirmados( usua );
-    	}
-    	catch (Exception e) 
-    	{
-    		e.printStackTrace();	
-            throw new DelegateException(e);
-        }
-    }
-    */
     
 
     public List listarEntradaPreregistrosNifModelo(String nif, String modelo, Date fechaInicial, Date fechaFinal, String nivelAutenticacion) throws DelegateException
@@ -195,6 +168,58 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
         }
     }
     
+    public EntradaPreregistro obtenerEntradaPreregistroAnonima(String idPersistencia)  throws DelegateException 
+    {
+    	try
+    	{
+    		return getFacade().obtenerEntradaPreregistroAnonima( idPersistencia );
+    	}
+    	catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public void confirmarEntradaPreregistro(Long codigo, String numeroRegistro,
+			Date fechaConfirmacion, String oficinaRegistroPresencial, boolean confirmadoAutomaticamente, boolean confirmadoIncorrecto)  throws DelegateException  {
+    	try
+    	{
+    		getFacade().confirmarEntradaPreregistro( codigo, numeroRegistro,
+    				fechaConfirmacion, oficinaRegistroPresencial, confirmadoAutomaticamente, confirmadoIncorrecto );
+    	}
+    	catch (Exception e) {
+            throw new DelegateException(e);
+        }
+	}                  
+    
+    public String obtenerEstadoEntradaPreregistro(String idPersistencia)  throws DelegateException {
+    	try
+    	{
+    		return getFacade().obtenerEstadoEntradaPreregistro(idPersistencia );
+    	}
+    	catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public List obtenerTramitesPendienteAvisoPreregistroSinConfirmar() throws DelegateException {
+    	try
+    	{
+    		return getFacade().obtenerTramitesPendienteAvisoPreregistroSinConfirmar();
+    	}
+    	catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+        
+    public void avisoPreregistroSinConfirmar(String idPersistencia) throws DelegateException {
+    	try
+    	{
+    		getFacade().avisoPreregistroSinConfirmar(idPersistencia);
+    	}
+    	catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
@@ -203,6 +228,8 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
     }
 
     protected EntradaPreregistroDelegate() throws DelegateException {       
-    }                  
+    }
+
+	
 }
 

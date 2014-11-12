@@ -65,15 +65,17 @@ public class InformacionPreregistroAction extends BaseAction
 		// Verificamos que el gestor tenga acceso al tramite
 		boolean acceso = false;
 		GestorBandeja gestor = DelegateUtil.getGestorBandejaDelegate().obtenerGestorBandeja(request.getUserPrincipal().getName());
-		for (Iterator it=gestor.getProcedimientosGestionados().iterator();it.hasNext();){
-				Procedimiento tramite = (Procedimiento) it.next();
-				if (tramite.getIdentificador().equals(StringUtil.getModelo(preregistro.getIdentificadorTramite()))){
-					acceso = true;
-					break;
-				}
+		if (gestor.getProcedimientosGestionados() != null)  {
+			for (Iterator it=gestor.getProcedimientosGestionados().iterator();it.hasNext();){
+					Procedimiento procedimiento = (Procedimiento) it.next();
+					if (procedimiento.getIdentificador().equals(preregistro.getIdentificadorProcedimiento())){
+						acceso = true;
+						break;
+					}
+			}
 		}
 		if (!acceso){
-			request.setAttribute("message",resources.getMessage( getLocale( request ), "errors.preregistroNoAcceso", new Object[] {preregistro.getIdentificadorTramite()}));			
+			request.setAttribute("message",resources.getMessage( getLocale( request ), "errors.preregistroNoAcceso", new Object[] {preregistro.getIdentificadorProcedimiento()}));			
 			return mapping.findForward( "fail" );
 		}
 		// ------------------------------------------------------------------------------------------------------------------

@@ -228,7 +228,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	  try{
 			return DelegateUtil.getRegistroOrganismoDelegate().confirmarPreregistro(oficina,codigoProvincia,codigoMunicipio,descripcionMunicipio,justificantePreregistro,refJustificante,refAsiento,refAnexos);				
 		}catch (Exception ex){
-			throw new ExcepcionRegistroTelematico("Excepcion obteniendo lista oficinas en registro organismo",ex);
+			throw new ExcepcionRegistroTelematico("Excepcion confirmando preregistro",ex);
 		} 
 	}
 		
@@ -254,6 +254,25 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	
 	
 	/**
+	 * Obtiene lista de oficinas de registro   
+	 * 
+	 * @return Lista de ValorOrganismo
+	 * @throws ExcepcionRegistroTelematico
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission role-name = "${role.todos}"
+	 * @ejb.permission role-name = "${role.auto}"   	 
+	 * 
+	 */
+	public String obtenerDescripcionSelloOficina(String oficina) throws ExcepcionRegistroTelematico{
+	   try{
+			return DelegateUtil.getRegistroOrganismoDelegate().obtenerDescripcionSelloOficina(oficina);				
+		}catch (Exception ex){
+			throw new ExcepcionRegistroTelematico("Excepcion obteniendo descripcion oficina en registro organismo",ex);
+		} 
+   }
+	
+	/**
 	 * Mira si existe o no una oficina de registro  
 	 * 
 	 * @param oficinaRegistro identificador de la oficina de registro
@@ -268,7 +287,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	    try{
 			return DelegateUtil.getRegistroOrganismoDelegate().existeOficinaRegistro(oficinaRegistro);				
 		}catch (Exception ex){
-			throw new ExcepcionRegistroTelematico("Excepcion obteniendo lista oficinas en registro organismo",ex);
+			throw new ExcepcionRegistroTelematico("Excepcion obteniendo oficina organismo: " +  oficinaRegistro,ex);
 		} 
    }
 	
@@ -327,7 +346,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	    try{
 			return DelegateUtil.getRegistroOrganismoDelegate().existeTipoAsunto(tipoAsunto);				
 		}catch (Exception ex){
-			throw new ExcepcionRegistroTelematico("Excepcion obteniendo lista oficinas en registro organismo",ex);
+			throw new ExcepcionRegistroTelematico("Excepcion obteniendo tipo asunto: " + tipoAsunto,ex);
 		} 
    }
 	
@@ -365,7 +384,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	    try{
 			return DelegateUtil.getRegistroOrganismoDelegate().existeServicioDestino(servicioDestino);				
 		}catch (Exception ex){
-			throw new ExcepcionRegistroTelematico("Excepcion obteniendo lista oficinas en registro organismo",ex);
+			throw new ExcepcionRegistroTelematico("Excepcion obteniendo servicio destino: " + servicioDestino,ex);
 		} 
    }
    
@@ -866,6 +885,14 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 			FactoriaObjetosXMLAvisoNotificacion factoriaAvisoNotificacion = ServicioAvisoNotificacionXML.crearFactoriaObjetosXML();
 			AvisoNotificacion avisoNotificacion = factoriaAvisoNotificacion.crearAvisoNotificacion( new ByteArrayInputStream( docRDSAvisoNotificacion.getDatosFichero() ) );
 			if (avisoNotificacion == null) throw new Exception("Aviso de notificacion generado es nulo");
+			
+			// Solo se puede establecer plazo para notificaciones con acuse
+			boolean acuseRecibo = avisoNotificacion.getAcuseRecibo() != null && avisoNotificacion.getAcuseRecibo().booleanValue();
+			boolean plazo = avisoNotificacion.getPlazo() != null;
+			if  (!acuseRecibo && plazo) {
+				throw new Exception("Solo se puede establecer plazo para notificaciones con acuse");
+			}
+			
 			return avisoNotificacion;
 		}
 		catch( Exception exc )

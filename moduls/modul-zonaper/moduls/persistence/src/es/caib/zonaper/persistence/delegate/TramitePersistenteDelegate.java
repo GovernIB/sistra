@@ -210,6 +210,39 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
 			}
 	 }
 
+	 public boolean existeTramitePersistente(String id) throws DelegateException	{
+		 try
+			{
+			 	return getFacade().existeTramitePersistente(id);
+			}
+			catch( Exception e )
+			{
+				throw new DelegateException( e );
+			}
+	 }
+	 
+	 public void avisoPagoTelematicoFinalizado(String idPersistencia) throws DelegateException	{
+		 try
+			{
+			 	getFacade().avisoPagoTelematicoFinalizado(idPersistencia);
+			}
+			catch( Exception e )
+			{
+				throw new DelegateException( e );
+			}
+	 }
+	 
+	 public List obtenerTramitesPendienteAvisoPagoTelematicoFinalizado() throws DelegateException	{
+		 try
+			{
+			 	return getFacade().obtenerTramitesPendienteAvisoPagoTelematicoFinalizado();
+			}
+			catch( Exception e )
+			{
+				throw new DelegateException( e );
+			}
+	 }
+	 
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

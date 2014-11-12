@@ -22,6 +22,8 @@
         <property name="usuarioSeycon" column="ENV_SEYCON"/>
         <property name="fechaRegistro" column="ENV_FCREG"/>
         <property name="inmediato" column="ENV_INMED"/>
+        <property name="idProcedimiento" column="ENV_IDPROC"/>
+        
         
         <many-to-one name="cuenta" column="ENV_CODCUE" not-null="true"  foreign-key="MOB_ENVCUE_FK"/>
         

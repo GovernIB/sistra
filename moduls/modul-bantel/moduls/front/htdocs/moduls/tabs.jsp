@@ -50,6 +50,21 @@
 					</li>
 				</logic:equal>		
 			</logic:notEmpty>
+			
+			
+			<!--  OPCION 4: GESTION EXPEDIENTES -->
+			<logic:equal name="<%=es.caib.bantel.front.Constants.OPCION_SELECCIONADA_KEY%>" value="4">
+				<li class="selec">
+			</logic:equal>
+			<logic:notEqual name="<%=es.caib.bantel.front.Constants.OPCION_SELECCIONADA_KEY%>" value="4">
+				<li>
+			</logic:notEqual>				
+					<html:link action="inicioGestionFuenteDatos">
+						<bean:message key="tabs.fuenteDatos"/>							
+					</html:link>	
+			</li>
+					
+			
 		</ul>
 	</logic:notPresent>		
 </div>

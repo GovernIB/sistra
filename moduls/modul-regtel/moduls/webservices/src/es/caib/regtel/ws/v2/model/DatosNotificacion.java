@@ -1,9 +1,11 @@
 
 package es.caib.regtel.ws.v2.model;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -20,6 +22,8 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="idioma" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="tipoAsunto" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="acuseRecibo" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
+ *         &lt;element name="accesiblePorClave" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *         &lt;element name="plazo" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="aviso" type="{urn:es:caib:regtel:ws:v2:model:Aviso}Aviso"/>
  *         &lt;element name="oficioRemision" type="{urn:es:caib:regtel:ws:v2:model:OficioRemision}OficioRemision"/>
  *       &lt;/sequence>
@@ -35,6 +39,8 @@ import javax.xml.bind.annotation.XmlType;
     "idioma",
     "tipoAsunto",
     "acuseRecibo",
+    "accesiblePorClave",
+    "plazo",
     "aviso",
     "oficioRemision"
 })
@@ -45,6 +51,10 @@ public class DatosNotificacion {
     @XmlElement(required = true)
     protected String tipoAsunto;
     protected boolean acuseRecibo;
+    @XmlElementRef(name = "accesiblePorClave", type = JAXBElement.class)
+    protected JAXBElement<Boolean> accesiblePorClave;
+    @XmlElementRef(name = "plazo", type = JAXBElement.class)
+    protected JAXBElement<Integer> plazo;
     @XmlElement(required = true)
     protected Aviso aviso;
     @XmlElement(required = true)
@@ -112,6 +122,54 @@ public class DatosNotificacion {
      */
     public void setAcuseRecibo(boolean value) {
         this.acuseRecibo = value;
+    }
+
+    /**
+     * Gets the value of the accesiblePorClave property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link JAXBElement }{@code <}{@link Boolean }{@code >}
+     *     
+     */
+    public JAXBElement<Boolean> getAccesiblePorClave() {
+        return accesiblePorClave;
+    }
+
+    /**
+     * Sets the value of the accesiblePorClave property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link JAXBElement }{@code <}{@link Boolean }{@code >}
+     *     
+     */
+    public void setAccesiblePorClave(JAXBElement<Boolean> value) {
+        this.accesiblePorClave = ((JAXBElement<Boolean> ) value);
+    }
+
+    /**
+     * Gets the value of the plazo property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link JAXBElement }{@code <}{@link Integer }{@code >}
+     *     
+     */
+    public JAXBElement<Integer> getPlazo() {
+        return plazo;
+    }
+
+    /**
+     * Sets the value of the plazo property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link JAXBElement }{@code <}{@link Integer }{@code >}
+     *     
+     */
+    public void setPlazo(JAXBElement<Integer> value) {
+        this.plazo = ((JAXBElement<Integer> ) value);
     }
 
     /**

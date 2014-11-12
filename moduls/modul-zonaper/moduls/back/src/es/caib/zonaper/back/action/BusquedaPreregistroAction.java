@@ -15,6 +15,7 @@ import es.caib.util.StringUtil;
 import es.caib.zonaper.back.Constants;
 import es.caib.zonaper.back.form.BusquedaPreregistroForm;
 import es.caib.zonaper.model.EntradaPreregistro;
+import es.caib.zonaper.model.PeticionImpresionSello;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.EntradaPreregistroDelegate;
 
@@ -91,7 +92,11 @@ public class BusquedaPreregistroAction extends BaseAction
 			
 			// Generamos peticion de impresion
 			String idPeticionImp = Constants.IMPRESION_SELLO_KEY +  Long.toString(System.currentTimeMillis());
-			request.getSession().setAttribute(idPeticionImp,preregistro.getCodigo());
+			PeticionImpresionSello pi = new PeticionImpresionSello();
+			pi.setCodigoEntradaPreregistro(preregistro.getCodigo());
+			pi.setCodigoOficinaRegistro(preregistro.getOficinaRegistro());
+			request.getSession().setAttribute(idPeticionImp,pi);
+			
 				
 			Map hsmParams = new HashMap();
 			hsmParams.put( "codigo", idPeticionImp );

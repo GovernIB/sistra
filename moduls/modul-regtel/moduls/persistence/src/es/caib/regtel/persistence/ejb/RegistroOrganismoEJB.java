@@ -362,7 +362,7 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 			log.debug("Invocamos el plugin con la funcion de anular registro entrada");
 			plgRegistro.anularRegistroEntrada(numeroRegistro, fechaRegistro);			
 		}catch (Exception ex){
-			throw new ExcepcionRegistroOrganismo("Excepcion accediendo al plugin de registro",ex);
+			throw new ExcepcionRegistroOrganismo("Excepcion anulando registro entrada: " + numeroRegistro,ex);
 		}  
    }
    
@@ -378,7 +378,25 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 			log.debug("Invocamos el plugin con la funcion de anular registro salida");
 			plgRegistro.anularRegistroSalida(numeroRegistro, fechaRegistro);			
 		}catch (Exception ex){
+			throw new ExcepcionRegistroOrganismo("Excepcion anulando registro salida: " + numeroRegistro,ex);
+		}  
+  }
+  
+  /**
+	 * Obtiene descripcion de oficina para sello
+	 * @ejb.interface-method
+	 * @ejb.permission role-name = "${role.todos}"
+	 *  @ejb.permission role-name = "${role.auto}"
+	 */
+  public String obtenerDescripcionSelloOficina(String oficina) throws ExcepcionRegistroOrganismo{
+	  try{
+			log.debug("Obtenemos plugin de registro");
+			PluginRegistroIntf	plgRegistro = PluginFactory.getInstance().getPluginRegistro();			
+			log.debug("Invocamos el plugin con la funcion de anular registro salida");
+			return plgRegistro.obtenerDescripcionSelloOficina(oficina);			
+		}catch (Exception ex){
 			throw new ExcepcionRegistroOrganismo("Excepcion accediendo al plugin de registro",ex);
 		}  
   }
+  
 }

@@ -52,7 +52,7 @@
 	    	<include name="zonaper-client.jar"/>
 	   	 </fileset>
         <fileset dir="${web.product}">
-            <include name="6-model.jar" />
+            <include name="6-form-model.jar" />
             <include name="6-form-persistence-client.jar" />
         </fileset>
     </path>
@@ -165,6 +165,7 @@
         	<!-- cas: config comentarios -->
     	
        <replace file="${web.gen.etc}/web.xml">
+       	<replacefilter token="@release.version@" value="${release.version}"/>
           <replacefilter token="@role.admin@" value="${role.admin}"/>
           <replacefilter token="@role.operador@" value="${role.operador}"/>
         	<replacefilter token="@web.login-config@" value="${web.login-config}"/>  

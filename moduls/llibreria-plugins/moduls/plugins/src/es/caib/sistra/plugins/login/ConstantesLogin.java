@@ -26,8 +26,8 @@ public class ConstantesLogin {
 	public final static char TIPO_DOMINIO = 'D';
 	
 	/**
-	 * Tipo de elemento Tramite.
+	 * Tipo de elemento Procedimiento.
 	 */
-	public final static char TIPO_TRAMITE = 'T';
+	public final static char TIPO_PROCEDIMIENTO = 'P';
 	
 }

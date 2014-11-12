@@ -16,6 +16,7 @@
 <bean:define id="urlTramiteSubsanacion" type="java.lang.String">
 	<html:rewrite page="/protected/tramiteSubsanacion.do" paramId="codigoNotificacion" paramName="notificacion" paramProperty="codigo"/>
 </bean:define>
+<bean:define id="plazoDias" name="plazoDias" type="java.lang.String"/>
 <%
 	// Reemplazamos saltos de linea por <br/>
  	String mensajeHtml = mensaje;
@@ -24,6 +25,8 @@
 <h1>
 	<bean:message key="detalleNotificacion.titulo" />
 </h1>
+
+<p><bean:message key="detalleNotificacion.accedaContenido"/></p>
 
 <!-- notificacio -->
 <div id="notificacio">
@@ -59,13 +62,13 @@
 							<bean:write name="documento" property="codigo" />
 						</bean:define>
 						
-						<logic:notEmpty name="<%="URL-" + codigoFirma %>" scope="request">
-							<a href="<bean:write name="<%="URL-" + codigoFirma %>" scope="request"/>" target="_blank">
+						<logic:notEmpty name="<%=\"URL-\" + codigoFirma %>" scope="request">
+							<a href="<bean:write name="<%=\"URL-\" + codigoFirma %>" scope="request"/>" target="_blank">
 								<bean:write name="documento" property="descripcion" />
 							</a>																				
 						</logic:notEmpty>
 						
-						<logic:empty name="<%="URL-" + codigoFirma %>" scope="request">
+						<logic:empty name="<%=\"URL-\" + codigoFirma %>" scope="request">
 							<html:link href="<%=urlMostrarDocumento%>" paramId="codigo" paramName="documento" paramProperty="codigo">
 								<bean:write name="documento" property="descripcion" />
 							</html:link>
@@ -94,22 +97,27 @@
 		</logic:notEmpty>		
 	</dl>		
 </div>
+<logic:equal name="notificacion" property="firmarAcuse" value="true">
+	<div id="notaLegalPie">
+		<p class="data"><sup>*</sup><bean:message key="detalleNotificacion.notaLegalAbierta" arg0="<%=plazoDias%>"/></p>
+	</div>
+</logic:equal>
 <!-- /notificacio -->
-<!-- justificant -->
-<h2><bean:message key="detalleNotificacion.datosJustificante" /></h2>
-<p><bean:message key="detalleNotificacion.datosJustificante.texto" /></p>
-<p style="text-align:center; margin:2em 0;">
-	<input name="XX" type="button" value="<bean:message key="detalleNotificacion.imprimirJustificante" />" onclick="javascript:document.location.href='<html:rewrite href="<%= urlMostrarDocumento %>"/>'"/>
-</p>
+
+<!-- reader -->
 <p id="getAdobeReader">
 	<bean:message key="detalleNotificacion.getAdobeReader"/>
 	<br />
 	<a href="http://www.adobe.es/products/acrobat/readstep2.html"><bean:message key="detalleNotificacion.irWebAdobe"/></a>
 </p>
-<!-- /justificant -->	
-<logic:equal name="notificacion" property="firmarAcuse" value="true">
-	<div id="notaLegalPie">
-		<p class="data"><sup>*</sup><bean:message key="detalleNotificacion.notaLegalAbierta"/></p>
-	</div>
-</logic:equal>
+
+<!-- justificant -->
+<p>
+	<i>
+		<bean:message key="detalleNotificacion.datosJustificante.texto" /> <a href='<html:rewrite href="<%= urlMostrarDocumento %>"/>'><bean:message key="detalleNotificacion.datosJustificante.enlace" /></a>
+	</i>
+</p>
+
+	
+
 

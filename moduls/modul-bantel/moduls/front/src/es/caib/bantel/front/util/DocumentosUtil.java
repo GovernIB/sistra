@@ -1,19 +1,26 @@
 package es.caib.bantel.front.util;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
-import es.caib.bantel.front.Constants;
-import es.caib.bantel.front.form.DetalleAvisoForm;
+import org.apache.commons.lang.StringUtils;
+
 import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.redose.modelInterfaz.TransformacionRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
+import es.caib.xml.ConstantesXML;
+import es.caib.xml.documentoExternoNotificacion.factoria.FactoriaObjetosXMLDocumentoExternoNotificacion;
+import es.caib.xml.documentoExternoNotificacion.factoria.ServicioDocumentoExternoNotificacionXML;
+import es.caib.xml.documentoExternoNotificacion.factoria.impl.DocumentoExternoNotificacion;
 import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
 
@@ -31,12 +38,13 @@ public final class DocumentosUtil {
 	/**
 	 * Crea un documento RDS a partir del documento pasado por el aviso, los datos del formulario
 	 * @param documento documentoRDS
+	 * @param convertirPDF Si convierte a PDF
 	 * @param form formulario con los datos del aviso
 	 * @param fir la firma del documento
 	 * @return un documento RDS que ya estara pasa a pdf
 	 * @throws ExcepcionPAD
 	 */
-	public static DocumentoRDS crearDocumentoRDS(DocumentoFirmar documento, String unidadAdministrativa) throws ExcepcionPAD
+	public static DocumentoRDS crearDocumentoRDS(DocumentoFirmar documento, String unidadAdministrativa, boolean convertirPDF) throws ExcepcionPAD
 	{		
 		try {
 			RdsDelegate rdsDelegate = DelegateRDSUtil.getRdsDelegate();
@@ -56,10 +64,11 @@ public final class DocumentosUtil {
 				docRDS.setModelo( ConstantesRDS.MODELO_NOTIFICACION  );
 				docRDS.setEstructurado( false );
 				docRDS.setVersion( 1 );
-				
-				transf = new TransformacionRDS();
-				transf.setBarcodePDF(true);
-				transf.setConvertToPDF(true);
+				if (convertirPDF) {
+					transf = new TransformacionRDS();
+					transf.setBarcodePDF(true);
+					transf.setConvertToPDF(true);
+				}	
 			}
 			else
 			{
@@ -127,9 +136,9 @@ public final class DocumentosUtil {
 	public static boolean extensionCorrecta(String nombre){
 		boolean correcta = false;
 		nombre = getExtension(nombre);
-		String mensajeOk = MensajesUtil.getValue("aviso.extensiones.fichero.formato");
-		if(mensajeOk != null && !"".equals(mensajeOk) && nombre != null && !"".equals(nombre) ){
-			StringTokenizer st = new StringTokenizer(mensajeOk,",");
+		String listaExtensionesPermitidas = MensajesUtil.getValue("aviso.extensiones.fichero.formato", new Locale("es"));
+		if(listaExtensionesPermitidas != null && !"".equals(listaExtensionesPermitidas) && nombre != null && !"".equals(nombre) ){
+			StringTokenizer st = new StringTokenizer(listaExtensionesPermitidas,",");
 			while(st.hasMoreTokens() && !correcta){
 				String aux = st.nextToken();
 				if(aux != null && aux.trim().equals(nombre.trim())){
@@ -138,6 +147,50 @@ public final class DocumentosUtil {
 			}
 		}
 		return correcta;
+	}
+
+	// Carga firmas documento RDS
+	public static void cargarFirmasDocumentoRDS(DocumentoRDS doc,
+			HttpServletRequest request) throws Exception {
+		String codigo = doc.getReferenciaRDS().getCodigo()+"";
+		// Cargamos firma
+		if(doc != null && doc.getFirmas() != null){
+			request.setAttribute(codigo + "",doc.getFirmas());
+		}
+		// Cargamos codigo custodia
+		if (doc != null && StringUtils.isNotBlank(doc.getCodigoDocumentoCustodia()) ) {
+			request.setAttribute("CUST-" + codigo, doc.getCodigoDocumentoCustodia());
+		}
+		// Establecemos en la request si es una referencia a un doc externo (modelo GE0013NOTIFEXT)
+		if (doc.getModelo().equals(ConstantesRDS.MODELO_NOTIFICACION_EXTERNO)) {
+			// Buscamos url (recuperamos de nuevo por si no se ha cargado el contenido)
+			RdsDelegate rdsDeleg = DelegateRDSUtil.getRdsDelegate();
+			doc = rdsDeleg.consultarDocumento(doc.getReferenciaRDS(), true);
+			FactoriaObjetosXMLDocumentoExternoNotificacion factoria = ServicioDocumentoExternoNotificacionXML.crearFactoriaObjetosXML();
+			factoria.setEncoding(ConstantesXML.ENCODING);
+			factoria.setIndentacion(true);
+			DocumentoExternoNotificacion documentoExternoNotificacion = factoria.crearDocumentoExternoNotificacion(new ByteArrayInputStream(doc.getDatosFichero()));
+			request.setAttribute("URL-"+doc.getReferenciaRDS().getCodigo(),documentoExternoNotificacion.getUrl());
+		}
+	}
+	
+	// Carga firmas, codigo de custodia y url doc externo notificacion en la request
+	public static void cargarFirmasDocumentosExpedientePad(List documentos, HttpServletRequest request, String tipo) throws Exception{
+		// Vamos a buscar las firmas de los documentos si existen y las meteremos en la request
+		RdsDelegate rdsDeleg = DelegateRDSUtil.getRdsDelegate();
+		if(documentos != null){
+			ReferenciaRDS ref = null;
+			for(int i=0;i<documentos.size();i++){
+				DocumentoExpedientePAD docTipo = (DocumentoExpedientePAD)documentos.get(i);
+				ref = new ReferenciaRDS(docTipo.getCodigoRDS(),docTipo.getClaveRDS());
+				if (ref.getCodigo() > 0){
+					// Recuperamos docs
+					DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
+					// Cargamos firmas en request
+					cargarFirmasDocumentoRDS(doc, request);
+				}
+			}
+		}
 	}
 	
 }

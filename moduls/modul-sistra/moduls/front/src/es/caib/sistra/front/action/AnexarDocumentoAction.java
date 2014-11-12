@@ -39,12 +39,6 @@ public class AnexarDocumentoAction extends BaseAction
 		
 		ActionForward success = mapping.findForward("success"); 
 		try{
-			byte[] file = (byte[])request.getSession().getAttribute(formulario.getID_INSTANCIA());
-			String fileName = (String)request.getSession().getAttribute(formulario.getID_INSTANCIA()+"Nombre");
-			String fileExtension = (String)request.getSession().getAttribute(formulario.getID_INSTANCIA()+"Extension");
-		// TODO : file extension instead content type
-		if ( file != null )
-		{
 			
 			FirmaIntf firma = null;
 			if ( StringUtils.isNotEmpty(formulario.getFirma()) )
@@ -54,37 +48,14 @@ public class AnexarDocumentoAction extends BaseAction
 			}
 					
 			// Anexamos documento
-				this.setRespuestaFront( request, delegate.anexarDocumento( formulario.getIdentificador(), formulario.getInstancia(), file, fileName, fileExtension, formulario.getDescPersonalizada(), firma, "S".equals(formulario.getFirmaDelegada()) ) );
-				request.removeAttribute(formulario.getID_INSTANCIA());
-				request.removeAttribute(formulario.getID_INSTANCIA()+"Nombre");
-				request.removeAttribute(formulario.getID_INSTANCIA()+"Extension");
+			this.setRespuestaFront( request, delegate.anexarDocumento( formulario.getIdentificador(), formulario.getInstancia(),
+						formulario.getDescPersonalizada(), firma, "S".equals(formulario.getFirmaDelegada()) ) );
 			return success;
 			
-		}else{
-			// PARA DOCUMENTOS PRESENCIALES NO HACE FALTA FICHERO
-				this.setRespuestaFront( request, delegate.anexarDocumento( formulario.getIdentificador(), formulario.getInstancia(), null, null,null,formulario.getDescPersonalizada(),null,false) );
-				request.removeAttribute(formulario.getID_INSTANCIA());
-				request.removeAttribute(formulario.getID_INSTANCIA()+"Nombre");
-				request.removeAttribute(formulario.getID_INSTANCIA()+"Extension");
-			return success;
-		}	
 		}catch(Exception e){
 			return mapping.findForward( "fail" );
 		}
 		
-		/*
-		 * PARA FOTOCOPIAS NO HACE FALTA FICHERO
-		else
-		{
-//		 	TODO : ¿Qué pasa con el multiidioma?
-			this.setErrorMessage( request, "Anexe un fichero" );
-		}
-		*/
-		
-		/*
-		this.setRespuestaFront( request, delegate.pasoActual() );
-		return success;
-		*/ 
     }
 
 }

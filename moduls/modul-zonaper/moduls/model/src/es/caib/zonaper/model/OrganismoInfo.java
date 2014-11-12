@@ -12,14 +12,17 @@ public class OrganismoInfo {
 
 	private String nombre;
 	private String urlLogo;
+	private String urlLoginLogo;
 	private String urlPortal;
 	private String pieContactoHTML;
 	private String telefonoIncidencias;
-	private String urlSoporteIncidencias;	
+	private String urlSoporteIncidencias;
 	private String emailSoporteIncidencias;
 	private String urlCssCustom;
+	private String urlLoginCssCustom;
 	private Map tituloPortal = new HashMap(); // Titulos portal con el key como idioma
 	private Map referenciaPortal = new HashMap(); // Referencias portal con el key como idioma
+	
 	
 	public String getUrlCssCustom() {
 		return urlCssCustom;
@@ -66,8 +69,8 @@ public class OrganismoInfo {
 	public Map getReferenciaPortal() {
 		return referenciaPortal;
 	}
-	public void setReferenciaPortal(Map referenciaPortal) {
-		this.referenciaPortal = referenciaPortal;
+	public void setReferenciaPortal(Map referenciasPortal) {
+		this.referenciaPortal = referenciasPortal;
 	}
 	public Map getTituloPortal() {
 		return tituloPortal;
@@ -80,6 +83,18 @@ public class OrganismoInfo {
 	}
 	public void setEmailSoporteIncidencias(String emailSoporteIncidencias) {
 		this.emailSoporteIncidencias = emailSoporteIncidencias;
+	}
+	public String getUrlLoginLogo() {
+		return urlLoginLogo;
+	}
+	public void setUrlLoginLogo(String urlLoginLogo) {
+		this.urlLoginLogo = urlLoginLogo;
+	}
+	public String getUrlLoginCssCustom() {
+		return urlLoginCssCustom;
+	}
+	public void setUrlLoginCssCustom(String urlLoginCssCustom) {
+		this.urlLoginCssCustom = urlLoginCssCustom;
 	}
 	
 }

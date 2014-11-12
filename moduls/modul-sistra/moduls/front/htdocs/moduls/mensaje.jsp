@@ -54,7 +54,10 @@
 		<bean:define id="mostrarMensajeDebug" value="<%=request.getSession().getServletContext().getInitParameter(\"mensaje.debug\")%>" />
 		<logic:equal name="mostrarMensajeDebug" value="true">
 			<logic:notEmpty name="mensajeFront" property="mensajeExcepcion">
-				<p><i>Mensaje Depuración:<bean:write name="mensajeFront" property="mensajeExcepcion" /></i></p>		
+				<a style="color:#808080;" onclick="$('#mensajeDepuracionDiv').show();"><bean:message key="mensajeDepuracion.enlace"/></a>
+				<div id="mensajeDepuracionDiv" style="display:none;">
+					<p style="color:#808080;"><i><bean:write name="mensajeFront" property="mensajeExcepcion" /></i></p>
+				</div>		
 			</logic:notEmpty>
 		</logic:equal>		
 		

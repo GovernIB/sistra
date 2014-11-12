@@ -8,21 +8,18 @@ import java.util.Properties;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
+import javax.ejb.SessionBean;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import es.caib.redose.modelInterfaz.ConstantesRDS;
-import es.caib.redose.persistence.delegate.DelegateRDSUtil;
-import es.caib.redose.persistence.delegate.RdsDelegate;
-import es.caib.regtel.persistence.delegate.RegistroOrganismoDelegate;
-import es.caib.xml.registro.factoria.ConstantesAsientoXML;
+import es.caib.mobtratel.persistence.delegate.DelegateMobTraTelUtil;
+import es.caib.mobtratel.persistence.delegate.MobTraTelDelegate;
+import es.caib.util.CredentialUtil;
 import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.ElementoExpedienteItf;
 import es.caib.zonaper.model.Entrada;
@@ -33,13 +30,20 @@ import es.caib.zonaper.model.Expediente;
 import es.caib.zonaper.model.LogRegistro;
 import es.caib.zonaper.model.NotificacionTelematica;
 import es.caib.zonaper.model.RegistroExternoPreparado;
+import es.caib.zonaper.model.TramitePersistente;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
+import es.caib.zonaper.persistence.delegate.BackupDelegate;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
+import es.caib.zonaper.persistence.delegate.EntradaPreregistroDelegate;
 import es.caib.zonaper.persistence.delegate.ExpedienteDelegate;
 import es.caib.zonaper.persistence.delegate.LogRegistroDelegate;
 import es.caib.zonaper.persistence.delegate.ProcesoRechazarNotificacionDelegate;
+import es.caib.zonaper.persistence.delegate.ProcesoRevisarRegistrosDelegate;
 import es.caib.zonaper.persistence.delegate.RegistroExternoPreparadoDelegate;
-import es.caib.zonaper.persistence.util.AvisosMovilidad;
+import es.caib.zonaper.persistence.delegate.TramitePersistenteDelegate;
+import es.caib.zonaper.persistence.util.AvisoAlertasTramitacion;
+import es.caib.zonaper.persistence.util.AvisosExpediente;
+import es.caib.zonaper.persistence.util.ConfigurationUtil;
 import es.caib.zonaper.persistence.util.UsernamePasswordCallbackHandler;
 
 /**
@@ -56,7 +60,7 @@ import es.caib.zonaper.persistence.util.UsernamePasswordCallbackHandler;
  *
  * @ejb.transaction type="Required"
  */
-public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
+public abstract class ProcesosAutoFacadeEJB implements SessionBean
 {
 	private static Log backupLog = LogFactory.getLog( ProcesosAutoFacadeEJB.class );
 	
@@ -65,10 +69,80 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
      * @ejb.permission unchecked = "true"
      */
 	public void ejbCreate() throws CreateException {
-		super.ejbCreate();
-
+		
 	}
 	
+
+	/**
+	 * Procesa tramites caducados
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked = "true"
+     * 
+     */
+	public void procesaTramitesCaducados() {
+
+		backupLog.debug("Procesa tramites caducados");
+		
+		LoginContext lc = null;		
+		try{					
+			// Realizamos login JAAS con usuario para proceso automatico	
+			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+			String user = props.getProperty("auto.user");
+			String pass = props.getProperty("auto.pass");
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			lc = new LoginContext("client-login", handler);
+			lc.login();
+			
+			// Actualizamos estado expediente
+			doProcesaTramitesCaducados();	
+			
+		}catch (Exception le){
+			throw new EJBException("Excepcion al ejecutar proceso",le);
+		}finally{				
+			// Hacemos el logout
+			if ( lc != null ){
+				try{lc.logout();}catch(Exception exl){}
+			}
+		}
+	}
+	
+	/**
+	 * Procesa tramites caducados
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked = "true"
+     * 
+     */
+	public void procesaEliminarTramitesBackup() {
+
+		backupLog.debug("Elimina tramites backup");
+		
+		LoginContext lc = null;		
+		try{					
+			// Realizamos login JAAS con usuario para proceso automatico	
+			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+			String user = props.getProperty("auto.user");
+			String pass = props.getProperty("auto.pass");
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			lc = new LoginContext("client-login", handler);
+			lc.login();
+			
+			// Actualizamos estado expediente
+			doProcesaEliminarTramitesBackup();	
+			
+		}catch (Exception le){
+			throw new EJBException("Excepcion al ejecutar proceso",le);
+		}finally{				
+			// Hacemos el logout
+			if ( lc != null ){
+				try{lc.logout();}catch(Exception exl){}
+			}
+		}
+	}
+	
+
+
 	/**
 	 * Actualiza estado de un expediente	
 	 * 
@@ -166,7 +240,7 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
 			lc.login();
 			
 			// Realizamos aviso
-			String idEnvio = AvisosMovilidad.getInstance().avisoCreacionElementoExpediente(ele);
+			String idEnvio = AvisosExpediente.getInstance().avisoCreacionElementoExpediente(ele);
 			
 			// Asociamos aviso al elemento del expediente
 			DelegateUtil.getElementoExpedienteDelegate().establecerAvisoElementoExpediente(ele.getCodigo(), idEnvio);
@@ -303,45 +377,98 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
 	}
 	}
     
+    
+    /**
+	 * Alertas tramitacion
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked = "true"
+     * 
+     */
+	public void alertasTramitacion()  
+	{
+		backupLog.debug("Alertas tramitacion");
+		
+		LoginContext lc = null;		
+		try{					
+			// Realizamos login JAAS con usuario para proceso automatico	
+			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+			String user = props.getProperty("auto.user");
+			String pass = props.getProperty("auto.pass");
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			lc = new LoginContext("client-login", handler);
+			lc.login();
+			
+			// Realizamos alertas tramitacion pago telematico finalizado sin finalizar tramite
+			realizarAlertasTramitacionPagoFinalizado();
+			
+			// Realizamos alertas tramitacion preregistro sin confirmar
+			realizarAlertasTramitacionPreregistroSinConfirmar();
+			
+		}catch (Exception le){
+			throw new EJBException("Excepcion al ejecutar proceso",le);
+		}finally{				
+			// Hacemos el logout
+			if ( lc != null ){
+				try{lc.logout();}catch(Exception exl){}
+			}
+		}
+	}
+	
+		/**
+	    * Realiza aviso de que ha registrado un trámite (solo se genera mail, sms no). 
+	    *  @ejb.interface-method
+	    *  @ejb.permission unchecked = "true"
+	    */
+		public void alertaTramitacionTramiteRealizado(Entrada entrada, String email) 
+		{
+			backupLog.debug("Alerta tramitacion tramite realizado");
+			
+			LoginContext lc = null;		
+			try{					
+				// Realizamos login JAAS con usuario para proceso automatico	
+				Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+				String user = props.getProperty("auto.user");
+				String pass = props.getProperty("auto.pass");
+				CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+				lc = new LoginContext("client-login", handler);
+				lc.login();
+				
+				// Capturamos posible excepcion xa q no interfiera en proceso registro
+	    		AvisoAlertasTramitacion.getInstance().avisarTramiteRealizado(entrada, email);
+	    		
+			}catch (Exception le){
+				throw new EJBException("Excepcion al ejecutar proceso",le);
+			}finally{				
+				// Hacemos el logout
+				if ( lc != null ){
+					try{lc.logout();}catch(Exception exl){}
+				}
+			}
+		}
 	
 	// ----------------------------------------------------------------------------------------------
 	//	FUNCIONES AUXILIARES
 	// ----------------------------------------------------------------------------------------------
-	private ElementoExpediente obtenerUltimoElementoExpediente(Long id) 
+	private ElementoExpediente obtenerUltimoElementoExpediente(Long id) throws Exception
 	{
-		Session session = getSession();
-		try
-		{
-			Expediente expediente = ( Expediente )session.load( Expediente.class, id );			
-			if (!expediente.getElementos().isEmpty()){
-				ElementoExpediente e = null;
-				for (Iterator it = expediente.getElementos().iterator();it.hasNext();){
-					e = (ElementoExpediente) it.next();
-				}
-				return e;
+		Expediente expediente =  DelegateUtil.getExpedienteDelegate().obtenerExpedienteAuto(id);
+		if (!expediente.getElementos().isEmpty()){
+			ElementoExpediente e = null;
+			for (Iterator it = expediente.getElementos().iterator();it.hasNext();){
+				e = (ElementoExpediente) it.next();
 			}
-			return null;
+			return e;
 		}
-		catch (HibernateException he) 
-		{   
-			throw new EJBException(he);
-	    } 
-		finally 
-		{
-	        close(session);
-	    }
+		return null;		
 	}
 	
 
-	private void doActualizaEstadoExpediente(Long id){
+	private void doActualizaEstadoExpediente(Long id) throws Exception{
 		// Obtenemos ultimo elemento del expediente y obtenemos su detalle
 		ElementoExpedienteItf de = null;
 		ElementoExpediente e = obtenerUltimoElementoExpediente(id);		
-		try{
-			de = DelegateUtil.getElementoExpedienteDelegate().obtenerDetalleElementoExpediente(e.getCodigo());
-		}catch(Exception dex){
-			throw new EJBException(dex);
-		}
+		de = DelegateUtil.getElementoExpedienteDelegate().obtenerDetalleElementoExpediente(e.getCodigo());
 		
 		// Calculamos estado y fecha fin
 		String estado = null;
@@ -379,56 +506,26 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
 		}
 		
 		// Actualizamos expediente
-		Session session = getSession();
-		try
-		{
-			Expediente expediente = ( Expediente )session.load( Expediente.class, id );			
-			expediente.setFechaFin(fechaFin);
-			expediente.setEstado(estado);
-			session.update(expediente);
-		}
-		catch (HibernateException he) 
-		{   
-			throw new EJBException(he);
-	    } 
-		finally 
-		{
-	        close(session);
-	    }
+		DelegateUtil.getExpedienteDelegate().actualizaEstadoExpedienteAuto(id, estado, fechaFin);
+		
 	}
     /**
      * Revisa registros efectuados para ver si se han consolidado
      *
      */
 	private void doRevisarRegistrosEfectuados() throws Exception{
+		ProcesoRevisarRegistrosDelegate procRevDlg = DelegateUtil.getProcesoRevisarRegistrosDelegate();
 		LogRegistroDelegate dlg = DelegateUtil.getLogRegistroDelegate();
-		RegistroOrganismoDelegate dlgOrg = es.caib.regtel.persistence.delegate.DelegateUtil.getRegistroOrganismoDelegate();
 		List logRegs = dlg.listarLogRegistro();
 		if(logRegs != null){
 			for(int i=0;i<logRegs.size();i++){
 				LogRegistro logReg = (LogRegistro)logRegs.get(i);
-				//Añadimos 15 minutos a la fecha de registro.
-				Date dateAux = new Date();
-	            int minutesToAdd = 15;  // 15 minutos
-                Calendar cal = Calendar.getInstance();
-	            cal.setTime(logReg.getFechaRegistro());
-	            cal.add(Calendar.MINUTE, minutesToAdd);
-	            /*  miramos si se ha registrado por lo menos 15 minutos antes de la ejecución del proceso, para dar tiempo
-	             *	a que termine la TX global
-	             */
-				if(cal.getTime().before(dateAux)){
-					if(dlg.tieneUsos(logReg)){
-						dlg.borrarLogRegistro(logReg.getId());
-					}else{
-						if(logReg.getId().getTipoRegistro().equals(ConstantesAsientoXML.TIPO_REGISTRO_SALIDA+"")){
-							dlgOrg.anularRegistroSalida(logReg.getId().getNumeroRegistro(), logReg.getFechaRegistro());
-						}else{
-							dlgOrg.anularRegistroEntrada(logReg.getId().getNumeroRegistro(), logReg.getFechaRegistro());
-						}
-						logReg.setAnulado("S");
-						dlg.grabarLogRegistro(logReg);
-					}
-				}			
+				try {
+					procRevDlg.revisarRegistro(logReg);
+				} catch (Exception ex) {
+					// Pasamos a siguiente registro
+					backupLog.debug("Excepcion al revisar registro " + logReg.getId().getNumeroRegistro() + ": " + ex.getMessage());
+				}				
 			}
 		}
 	}
@@ -455,26 +552,107 @@ public abstract class ProcesosAutoFacadeEJB extends HibernateEJB
     	el.setTipoElemento(entrada instanceof EntradaTelematica?ElementoExpediente.TIPO_ENTRADA_TELEMATICA:ElementoExpediente.TIPO_ENTRADA_PREREGISTRO);
     	el.setFecha(entrada.getFecha());
     	el.setCodigoElemento(entrada.getCodigo());
+    	el.setIdentificadorPersistencia(entrada.getIdPersistencia());
+    	el.setAccesoAnonimoExpediente(entrada.getNivelAutenticacion() == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO);
     	expe.addElementoExpediente(el,entrada);
-    	DelegateUtil.getExpedienteDelegate().grabarExpediente(expe);
+    	DelegateUtil.getExpedienteDelegate().grabarExpedienteReal(expe);
 	}
 	
 	/**
 	 * Comprueba si hay registros externos preparados caducados y los elimina.
 	 */
 	private void doRevisarRegistrosExternosPreparados() throws Exception{
+		ProcesoRevisarRegistrosDelegate procRevDlg = DelegateUtil.getProcesoRevisarRegistrosDelegate();
 		RegistroExternoPreparadoDelegate dlg = DelegateUtil.getRegistroExternoPreparadoDelegate();
-		RdsDelegate rdsDlg = DelegateRDSUtil.getRdsDelegate();
 		List regs = dlg.listarCaducados();
 		if (regs != null) {
 			for (Iterator it = regs.iterator();it.hasNext();){
 				RegistroExternoPreparado r = (RegistroExternoPreparado) it.next();				
-				// Borramos usos de persistencia
-				rdsDlg.eliminarUsos(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE, r.getIdPersistencia());
-				// Borramos log registro
-				dlg.borrarRegistroExternoPreparado(r.getCodigoRdsAsiento());
+				try {
+					procRevDlg.revisarRegistroExternoPreparado(r);
+				} catch (Exception ex) {
+					// Pasamos a siguiente registro
+					backupLog.debug("Excepcion al revisar registro externo preparado " + r.getIdPersistencia() + ": " + ex.getMessage());
+				}
 			}			
-		}		
+		}				
 	}
 	
+
+	private void doProcesaTramitesCaducados() throws Exception {
+		BackupDelegate delegate = DelegateUtil.getBackupDelegate();
+		String borradoPreregistro = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("scheduler.backup.schedule.borradoPreregistro");
+		boolean scheduleBorradoPreregistro = Boolean.valueOf(borradoPreregistro).booleanValue();
+		backupLog.debug( "Job borrado tramites caducados [borrado prerregistros = " + scheduleBorradoPreregistro + "]");		
+		Date fechaEjecucion = new Date();
+		delegate.procesaTramitesCaducados( fechaEjecucion, scheduleBorradoPreregistro );		
+	}
+	
+
+	
+	private void doProcesaEliminarTramitesBackup() throws Exception {
+		BackupDelegate delegate = DelegateUtil.getBackupDelegate();
+		backupLog.debug( "Job borrado tramites backup");
+		Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        String meses = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("scheduler.borradoBackup.meses");
+        cal.add(Calendar.MONTH,  (Integer.parseInt(meses) * -1) );
+		delegate.procesaEliminarTramitesBackup( cal.getTime() );		
+	}
+	
+
+	private void realizarAlertasTramitacionPreregistroSinConfirmar() throws Exception{
+		// Recuperamos preregistros pendientes de avisar
+		EntradaPreregistroDelegate delegate = DelegateUtil.getEntradaPreregistroDelegate();
+		List preregistros = delegate.obtenerTramitesPendienteAvisoPreregistroSinConfirmar();
+		MobTraTelDelegate mob = DelegateMobTraTelUtil.getMobTraTelDelegate();
+		
+		// Generamos aviso para los tramites
+		for (Iterator it = preregistros.iterator(); it.hasNext();) {
+			EntradaPreregistro preregistro = (EntradaPreregistro) it.next();
+			if (StringUtils.isBlank(preregistro.getAlertasTramitacionEmail()) && 
+					StringUtils.isBlank(preregistro.getAlertasTramitacionSms())) {
+				continue;
+			}
+			
+			try {
+				// Generamos aviso a traves de mobtratel
+				AvisoAlertasTramitacion.getInstance().avisarPreregistroPendiente(preregistro);	
+				// Marcamos como avisado
+				delegate.avisoPreregistroSinConfirmar(preregistro.getIdPersistencia());
+			} catch (Exception exc) {
+				// Mostramos error en log y continuamos con siguiente tramite
+				backupLog.error("Error realizando alerta de tramitacion", exc);				
+			}
+		}
+	}
+
+
+	private void realizarAlertasTramitacionPagoFinalizado() throws Exception {
+		// Recuperamos tramites pendientes de avisar
+		TramitePersistenteDelegate delegate = DelegateUtil.getTramitePersistenteDelegate();
+		List tramites = delegate.obtenerTramitesPendienteAvisoPagoTelematicoFinalizado();
+		
+		// Generamos aviso para los tramites
+		for (Iterator it = tramites.iterator(); it.hasNext();) {
+			TramitePersistente tramite = (TramitePersistente) it.next();
+			if (StringUtils.isBlank(tramite.getAlertasTramitacionEmail()) && 
+					StringUtils.isBlank(tramite.getAlertasTramitacionSms())) {
+				continue;
+			}
+			
+			try {
+				// Generamos aviso a traves de mobtratel
+				AvisoAlertasTramitacion.getInstance().avisarPagoRealizadoTramitePendiente(tramite);	
+				// Marcamos como avisado
+				delegate.avisoPagoTelematicoFinalizado(tramite.getIdPersistencia());
+			} catch (Exception exc) {
+				// Mostramos error en log y continuamos con siguiente tramite
+				backupLog.error("Error realizando alerta de tramitacion", exc);				
+			}
+		}		
+		
+	}
+
+
 }

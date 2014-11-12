@@ -1,18 +1,9 @@
 package es.caib.bantel.front.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 
-import es.caib.sistra.modelInterfaz.ValoresDominio;
-import es.caib.sistra.persistence.delegate.DelegateSISTRAUtil;
 import es.caib.util.ConvertUtil;
 import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
-import es.caib.bantel.front.json.Localidad;
-import es.caib.bantel.front.json.Pais;
-import es.caib.bantel.front.json.Provincia;
-import es.caib.bantel.front.json.UnidadAdministrativa;
 
 
 /**
@@ -28,6 +19,7 @@ public class DocumentoFirmar extends DocumentoExpedientePAD{
 	private boolean vistoPDF;
 	private String tipoDocumento; // FICHERO / URL
 	private String url;
+	private boolean firmable; // Marca si es firmable
 	
 	public boolean isVistoPDF() {
 		return vistoPDF;
@@ -80,6 +72,12 @@ public class DocumentoFirmar extends DocumentoExpedientePAD{
 	}
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	public boolean isFirmable() {
+		return firmable;
+	}
+	public void setFirmable(boolean firmable) {
+		this.firmable = firmable;
 	}	
 	
 }

@@ -82,6 +82,7 @@ function getAyuda(a_indice){
 
 <tiles:insert name="header" />
 <tiles:insert name="main" />
+<tiles:insert name="footer"/>
 
 </body>
 </html>

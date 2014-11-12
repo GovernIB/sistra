@@ -16,6 +16,7 @@ import org.apache.struts.util.MessageResources;
 
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleTramiteForm;
+import es.caib.bantel.front.util.DocumentosUtil;
 import es.caib.bantel.model.DocumentoBandeja;
 import es.caib.bantel.model.GestorBandeja;
 import es.caib.bantel.model.Procedimiento;
@@ -57,6 +58,11 @@ public class DetalleTramiteAction extends BaseAction
 		request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,"1");
 		TramiteBandejaDelegate tramiteDelegate = DelegateUtil.getTramiteBandejaDelegate();
 		TramiteBandeja tramite = tramiteDelegate.obtenerTramiteBandeja( detalleTramiteFormulario.getCodigo() );
+		
+		// Cargamos firma asiento
+		DocumentoRDS documentoRDSAsiento = rdsDelegate.consultarDocumento( new ReferenciaRDS(tramite.getCodigoRdsAsiento(), tramite.getClaveRdsAsiento()), false );
+		DocumentosUtil.cargarFirmasDocumentoRDS(documentoRDSAsiento, request);
+		
 		Set documentosTramite = tramite.getDocumentos();
 		for ( Iterator it = documentosTramite.iterator(); it.hasNext(); )
 		{
@@ -88,7 +94,7 @@ public class DetalleTramiteAction extends BaseAction
 					if (documentoRDS.isEstructurado()){
 						documentosEstructurados.add(documento.getCodigo());
 					}
-					cargarFirmas(documento,request);
+					DocumentosUtil.cargarFirmasDocumentoRDS(documentoRDS, request);
 				}
 			}
 		}		
@@ -102,13 +108,15 @@ public class DetalleTramiteAction extends BaseAction
 		//	------------------------------------------------------------------------------------------------------------------
 		// TODO RAFA HABRIA QUE IMPLEMENTARLO EN CAPA DE NEGOCIO
 		// Verificamos que el gestor tenga acceso al tramite
-		boolean acceso = false;		
-		for (Iterator it=gestor.getProcedimientosGestionados().iterator();it.hasNext();){
-				Procedimiento procedimiento = (Procedimiento) it.next();
-				if (procedimiento.getIdentificador().equals(tramite.getProcedimiento().getIdentificador())){
-					acceso = true;
-					break;
-				}
+		boolean acceso = false;	
+		if (gestor.getProcedimientosGestionados() != null) {
+			for (Iterator it=gestor.getProcedimientosGestionados().iterator();it.hasNext();){
+					Procedimiento procedimiento = (Procedimiento) it.next();
+					if (procedimiento.getIdentificador().equals(tramite.getProcedimiento().getIdentificador())){
+						acceso = true;
+						break;
+					}
+			}
 		}
 		if (!acceso){
 			MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));
@@ -125,19 +133,4 @@ public class DetalleTramiteAction extends BaseAction
 		return mapping.findForward( "success" );
     }
 	
-	private void cargarFirmas(DocumentoBandeja documento, HttpServletRequest request) throws Exception{
-		RdsDelegate rdsDeleg = DelegateRDSUtil.getRdsDelegate();
-		
-//		vamos a buscar las firmas de los documentos si existen y las meteremos en la request
-		if(documento != null && documento.getRdsCodigo() != null && documento.getRdsClave() != null){
-			ReferenciaRDS ref =  new ReferenciaRDS(documento.getRdsCodigo(),documento.getRdsClave());
-			if (ref.getCodigo() > 0){
-				String codigo = documento.getCodigo()+"";
-				DocumentoRDS doc = rdsDeleg.consultarDocumento(ref,false);
-				if(doc != null && doc.getFirmas() != null){
-					request.setAttribute(codigo,doc.getFirmas());
-				}
-			}
-		}
-	}
 }

@@ -23,7 +23,7 @@ public class MantenimientoRDSAction extends Action
             HttpServletResponse response) throws Exception 
     {
 		RdsProcesosDelegate delegate = DelegateUtil.getRdsProcesosDelegate();
-		delegate.borradoDocumentosSinUsos();
+		delegate.purgadoDocumentos();
 		
 		response.getOutputStream().write("Proceso finalizado".getBytes());
 		return null;

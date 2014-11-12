@@ -5,7 +5,6 @@
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
-<script type="text/javascript" src="js/jquery.selectboxes.pack.js"></script>
 <script type="text/javascript">
 	function volver(identificadorExp,unidadAdm,claveExp){
 		document.location='<html:rewrite page="/recuperarExpediente.do?identificadorExp='+identificadorExp+'&unidadAdm='+unidadAdm+'&claveExp='+claveExp+'" />';		
@@ -41,6 +40,13 @@
 							<dt><bean:message key="detalle.notificacion.finPlazo"/>:</dt>						
 							<dd><bean:write name="notificacion" property="detalleAcuseRecibo.fechaFinPlazo" format="dd/MM/yyyy"/></dd>
 						</logic:notEmpty>
+						<dt><bean:message key="detalle.notificacion.diasPlazo"/></dt>
+						<logic:notEmpty name="notificacion" property="diasPlazo">
+							<dd><bean:write name="notificacion" property="diasPlazo"/> <bean:message key="detalle.notificacion.diasPlazo.dias"/></dd>
+						</logic:notEmpty>
+						<logic:empty name="notificacion" property="diasPlazo">
+							<dd><bean:message key="detalle.notificacion.diasPlazo.defecto"/></dd>
+						</logic:empty>
 					</logic:equal> 
 					
 					<dt><bean:message key="detalle.notificacion.estado"/>:</dt>
@@ -51,12 +57,24 @@
 						<dd><bean:message key="detalle.notificacion.estado.entregada"/></dd>
 					</logic:equal>
 					<logic:equal name="notificacion" property="detalleAcuseRecibo.estado" value="RECHAZADA">
-						<dd><bean:message key="detalle.notificacion.estado.rechazada"/></dd>
+						<dd>
+							<bean:message key="detalle.notificacion.estado.rechazada"/>
+							- 
+							<a href='<%=url%>?codigo=<%=notificacion.getDetalleAcuseRecibo().getCodigoRdsAcuseRecibo()%>&clave=<%=notificacion.getDetalleAcuseRecibo().getClaveRdsAcuseRecibo()%>&formateado=S'> 
+								<i> <bean:message key="detalle.notificacion.descargarAcuseRechazo"/> </i>
+							</a>
+						</dd>
 					</logic:equal>
 					
 					<logic:equal name="notificacion" property="detalleAcuseRecibo.estado" value="ENTREGADA">
 						<dt><bean:message key="detalle.notificacion.fechaApertura"/>:</dt>
-						<dd><bean:write name="notificacion" property="detalleAcuseRecibo.fechaAcuseRecibo" format="dd/MM/yyyy '-' HH:mm"/><logic:equal name="notificacion" property="requiereAcuse" value="true"> </logic:equal></dd>
+						<dd>
+							<bean:write name="notificacion" property="detalleAcuseRecibo.fechaAcuseRecibo" format="dd/MM/yyyy '-' HH:mm"/>
+							- 
+							<a href='<%=url%>?codigo=<%=notificacion.getDetalleAcuseRecibo().getCodigoRdsAcuseRecibo()%>&clave=<%=notificacion.getDetalleAcuseRecibo().getClaveRdsAcuseRecibo()%>&formateado=S'> 
+								<i> <bean:message key="detalle.notificacion.descargarAcuse"/> </i>
+							</a>
+						</dd>
 					</logic:equal>
 					
 					<dt><bean:message key="detalle.notificacion.asunto"/>:</dt>
@@ -65,6 +83,20 @@
 					<dt><bean:message key="detalle.notificacion.descripcion"/>:</dt>
 					<dd><bean:write name="notificacion" property="textoOficio"/></dd>
 					
+					<dt><bean:message key="detalle.notificacion.accesoPorClave"/></dt>
+					<dd>
+						<logic:equal name="notificacion" property="accesiblePorClave" value="true">
+							<bean:message key="expediente.si"/>
+						</logic:equal>
+						<logic:equal name="notificacion" property="accesiblePorClave" value="false">
+							<bean:message key="expediente.no"/>
+						</logic:equal>
+					</dd>	
+					<logic:equal name="notificacion" property="accesiblePorClave" value="true">						   
+						<dt><bean:message key="detalle.notificacion.claveAcceso"/></dt>						
+						<dd><bean:write name="notificacion" property="claveAcceso"/></dd>
+					</logic:equal>
+										
 					<logic:notEmpty name="notificacion" property="detalleAcuseRecibo.avisos">		
 						<dt><bean:message key="detalle.notificacion.avisos" />:</dt>
 						<dd>
@@ -102,24 +134,39 @@
 										<bean:write name="documento" property="codigoRDS" />
 									</bean:define>
 								
-									<logic:notEmpty name="<%="URL-" + codigoFirma %>" scope="request">
-										<a href="<bean:write name="<%="URL-" + codigoFirma %>" scope="request"/>" target="_blank">
+									<logic:notEmpty name="<%=\"URL-\" + codigoFirma %>" scope="request">
+										<a href="<bean:write name="<%=\"URL-\" + codigoFirma %>" scope="request"/>" target="_blank">
 											<bean:write name="documento" property="titulo" />
 										</a>														
 									</logic:notEmpty>
 									
-									<logic:empty name="<%="URL-" + codigoFirma %>" scope="request">
+									<logic:empty name="<%=\"URL-\" + codigoFirma %>" scope="request">
 										<a href='<%=url%>?codigo=<%=documento.getCodigoRDS() %>&clave=<%=documento.getClaveRDS() %>&idioma=<%=expediente.getIdioma() %>'> 
 											<bean:write name="documento" property="titulo" />
 										</a>
 									</logic:empty>
 									
+									<span class="pequenyo">
 									<logic:notEmpty name="<%=codigoFirma %>" scope="request">
+										<br/>
 										<bean:message key="comprobarDocumento.firmadoPor"/>
-										<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request">							
-											&nbsp;<bean:write name="firma" property="nombreApellidos"/>  										
+										<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request" type="es.caib.sistra.plugins.firma.FirmaIntf">							
+											&nbsp;
+											<a href="/bantelfront/mostrarFirmaDocumento.do?codigo=<%=documento.getCodigoRDS()%>&clave=<%=documento.getClaveRDS()%>&nif=<%=firma.getNif()%>" >
+												<bean:write name="firma" property="nombreApellidos"/>  									
+											</a>	
 										</logic:iterate>			
-									</logic:notEmpty>	
+									</logic:notEmpty>
+									
+									<logic:notEmpty name="<%=\"CUST-\" + codigoFirma %>" scope="request">
+										<br/>
+										<bean:message key="comprobarDocumento.urlCustodia"/>
+										<a href="/bantelfront/mostrarDocumentoCustodia.do?codigo=<%=documento.getCodigoRDS()%>&clave=<%=documento.getClaveRDS()%>" target="_blank">
+											<bean:write name="<%=\"CUST-\" + codigoFirma %>" />
+										</a>														
+									</logic:notEmpty>
+									</span>
+									
 								</li>
 								</logic:iterate>
 							</ul>

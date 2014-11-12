@@ -119,6 +119,16 @@ public class RegistroTelematicoDelegate implements StatelessDelegate {
         }
     }	
 	
+	public String obtenerDescripcionSelloOficina(String oficina)  throws DelegateException
+	{
+		try
+		{			
+			return getFacade().obtenerDescripcionSelloOficina(oficina);				
+		} catch (Exception e) {
+	        throw new DelegateException(e);
+	    }	 	 
+	 }
+	
 	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

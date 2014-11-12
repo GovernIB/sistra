@@ -7,12 +7,14 @@ import es.caib.xml.ConstantesXML;
 import es.caib.xml.datospropios.factoria.ConstantesDatosPropiosXML;
 import es.caib.xml.datospropios.factoria.FactoriaObjetosXMLDatosPropios;
 import es.caib.xml.datospropios.factoria.ServicioDatosPropiosXML;
+import es.caib.xml.datospropios.factoria.impl.AlertasTramitacion;
 import es.caib.xml.datospropios.factoria.impl.Dato;
 import es.caib.xml.datospropios.factoria.impl.DatosPropios;
 import es.caib.xml.datospropios.factoria.impl.Documento;
 import es.caib.xml.datospropios.factoria.impl.DocumentosEntregar;
 import es.caib.xml.datospropios.factoria.impl.FormulariosJustificante;
 import es.caib.xml.datospropios.factoria.impl.Instrucciones;
+import es.caib.xml.datospropios.factoria.impl.PersonalizacionJustificante;
 import es.caib.xml.datospropios.factoria.impl.Solicitud;
 import es.caib.xml.datospropios.factoria.impl.TramiteSubsanacion;
 
@@ -115,6 +117,15 @@ public class PruebaEscrituraDatosPropios {
 			forms.getFormularios().add("FORM3");
 			instrucciones.setFormulariosJustificante(forms);
 			
+			PersonalizacionJustificante persJust = factoria.crearPersonalizacionJustificante();
+			persJust.setOcultarClaveTramitacion(new Boolean(true));
+			persJust.setOcultarNifNombre(new Boolean(true));
+			instrucciones.setPersonalizacionJustificante(persJust);
+			
+			AlertasTramitacion alertas = factoria.crearAlertasTramitacion();
+			alertas.setEmail("xxx@email.es");
+			alertas.setSms("123456789");
+			instrucciones.setAlertasTramitacion(alertas);
 			
 			datosPropios.setInstrucciones (instrucciones);
 			

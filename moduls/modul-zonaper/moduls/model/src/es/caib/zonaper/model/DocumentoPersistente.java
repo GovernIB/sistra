@@ -2,10 +2,7 @@ package es.caib.zonaper.model;
 //TODO: Cambiar PK para que no tire de secuencia (o bien generar PK que sea AÑO + secuencia ciclica) 
 public class DocumentoPersistente implements java.io.Serializable {
 
-	public final static char ESTADO_CORRECTO = 'S';
-	public final static char ESTADO_INCORRECTO = 'N';
-	
-    // Fields    	
+	// Fields    	
      private Long codigo;
      private TramitePersistente tramitePersistente;
      private String identificador;
@@ -17,7 +14,10 @@ public class DocumentoPersistente implements java.io.Serializable {
      private String descripcionGenerico;
      private String delegacionEstado;
      private String delegacionFirmantes;
-     private String delegacionFirmantesPendientes;     
+     private String delegacionFirmantesPendientes; 
+     
+     private String tipoDocumento;
+     private String esPagoTelematico;
 
     // Constructors
     /** default constructor */
@@ -119,6 +119,22 @@ public class DocumentoPersistente implements java.io.Serializable {
 	public void setDelegacionFirmantesPendientes(
 			String delegacionFirmantesPendientes) {
 		this.delegacionFirmantesPendientes = delegacionFirmantesPendientes;
+	}
+
+	public String getTipoDocumento() {
+		return tipoDocumento;
+	}
+
+	public void setTipoDocumento(String tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
+	}
+
+	public String getEsPagoTelematico() {
+		return esPagoTelematico;
+	}
+
+	public void setEsPagoTelematico(String esPagoTelematico) {
+		this.esPagoTelematico = esPagoTelematico;
 	}
 
 

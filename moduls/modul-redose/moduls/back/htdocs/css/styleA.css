@@ -370,6 +370,17 @@ body.ventana td.input
     width: 450px;
     padding: 0px 0px;
 }
+
+body.ventana td.separador
+{
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 8pt;
+    font-weight:bold;
+    color: #d8dfe7 !important;
+    background-color: #515b67;
+    height: 23px;
+}
+
 body.ventana td.output
 {
     background-color: #ffffff;
@@ -532,6 +543,13 @@ body.ventana input.t50
     width: 50px;
 }
 
+body.ventana input.t70
+{
+    padding: 3px 3px;
+    border: 1px solid #515b67;
+    width: 70px;
+}
+
 body.ventana input.check
 {
     color: #000000;
@@ -571,3 +589,11 @@ body.calendario table.dia
     border: 1px solid #515b67;
     background-image: url(../img/boton.jpg);
 }
+
+/* MIGRACION DOCS */
+div#procesoMigracion { position:absolute; display:none; top:0; left:0; height: 60em; width:100em; text-align:center; background: #fff; padding:5em 1em 2em 1em; z-index:12; }
+span#inicioProceso { display:none; font-size: 18px; }
+span#detalleProceso { display:none; font-size: 18px; }
+span#cancelandoProceso { display:none; font-size: 18px; }
+div#errorProceso { display:none; font-size: 18px; color:#FF0000;}
+div#erroresProceso { display: block;text-align: left; margin-left: auto; margin-right: auto; width: 600px; height: 200px; overflow-y: auto; overflow-x: none; font-size: 10px; border: 1px solid #515b67;}

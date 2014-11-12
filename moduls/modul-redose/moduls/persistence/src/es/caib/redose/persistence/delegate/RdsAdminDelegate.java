@@ -7,7 +7,6 @@ import java.util.List;
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
-import es.caib.redose.modelInterfaz.ExcepcionRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.redose.persistence.intf.RdsAdminFacade;
 import es.caib.redose.persistence.util.RdsAdminFacadeUtil;
@@ -29,8 +28,6 @@ public class RdsAdminDelegate implements StatelessDelegate {
         }
     }
 	    
-   
-        
     /**
      * Eliminar documento del RDS
      */
@@ -65,6 +62,71 @@ public class RdsAdminDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
+    public List listarVersionesCustodiaParaBorrar() throws DelegateException{    
+    	try {
+            return getFacade().listarVersionesCustodiaParaBorrar();
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public void eliminaVersionDocumentoCustodia(String codigoVersion)  throws DelegateException{    
+    	try {
+            getFacade().eliminaVersionDocumentoCustodia(codigoVersion);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public List listarFicherosExternosParaBorrar() throws DelegateException{    
+    	try {
+            return getFacade().listarFicherosExternosParaBorrar();
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public void eliminaFicheroExterno(String referenciaFic) throws DelegateException{    
+    	try {
+            getFacade().eliminaFicheroExterno(referenciaFic);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public void consolidarDocumentoCustodia(ReferenciaRDS refRDS) throws DelegateException{    
+    	try {
+            getFacade().consolidarDocumentoCustodia(refRDS);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    } 
+    
+    public long contarDocumentosMigracion(Long ubicacionOrigen, Date fechaDesde, Date fechaHasta)  throws DelegateException{	
+      	 try {
+              return getFacade().contarDocumentosMigracion(ubicacionOrigen, fechaDesde, fechaHasta);
+           } catch (Exception e) {
+               throw new DelegateException(e);
+           }
+    }
+    
+    public List listarDocumentosMigracion(Long ubicacionOrigen, Date fechaDesde, Date fechaHasta, int limiteDocsMigrar)  throws DelegateException{	
+     	 try {
+             return getFacade().listarDocumentosMigracion(ubicacionOrigen, fechaDesde, fechaHasta, limiteDocsMigrar);
+          } catch (Exception e) {
+              throw new DelegateException(e);
+          }
+   }
+    
+    public void migrarDocumento(Long codigoDocumento, Long ubicacionDestino, boolean borrarUbicacionOrigen)  throws DelegateException{	
+   	 try {
+            getFacade().migrarDocumento(codigoDocumento, ubicacionDestino, borrarUbicacionOrigen);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

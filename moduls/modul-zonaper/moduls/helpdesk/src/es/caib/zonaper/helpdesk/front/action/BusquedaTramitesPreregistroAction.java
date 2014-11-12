@@ -1,14 +1,15 @@
 package es.caib.zonaper.helpdesk.front.action;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
@@ -17,6 +18,7 @@ import org.apache.struts.action.ActionMapping;
 
 import es.caib.zonaper.helpdesk.front.Constants;
 import es.caib.zonaper.helpdesk.front.form.BusquedaTramitePreregistroForm;
+import es.caib.zonaper.model.EntradaPreregistro;
 import es.caib.zonaper.persistence.delegate.DelegateException;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.EntradaPreregistroDelegate;
@@ -69,8 +71,21 @@ public class BusquedaTramitesPreregistroAction extends BaseAction
 					result = epd.listarEntradaPreregistros(fechaInicial, fechaFinal, modelo, caducidad, tipo, nivel);
 					break;
 			}
+			
+			List resultado;
+			if (StringUtils.isNotBlank(preregistroForm.getNif())) {
+				resultado = new ArrayList();
+				for (Iterator it = result.iterator(); it.hasNext();){
+					EntradaPreregistro ep = (EntradaPreregistro) it.next();
+					if (preregistroForm.getNif().equalsIgnoreCase(ep.getNifRepresentante())) {
+						resultado.add(ep);
+					}
+				}
+			} else {
+				resultado = result;
+			}
 				
-			request.setAttribute( "lstTramites", result);
+			request.setAttribute( "lstTramites", resultado);
 			return mapping.findForward( "success" );
 		} catch (DelegateException e) {
 			request.setAttribute("estado", "X");

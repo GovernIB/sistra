@@ -5,7 +5,9 @@
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
-<script type="text/javascript" src="js/jquery.selectboxes.pack.js"></script>
+
+<bean:define id="idiomaExpediente" name="detalleAvisoForm" property="idioma" type="java.lang.String"/>
+
 <script type="text/javascript" src="js/ajuda.js"></script>
 <script type="text/javascript" src="js/funcions.js"></script>
 <script type="text/javascript" src="js/mensaje.js"></script>	
@@ -20,7 +22,6 @@
 	<logic:equal name="<%=es.caib.bantel.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/constantes.js"></script>
-	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/deployJava.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/instalador.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/firma.js"></script>	
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/utils.js"></script>
@@ -203,7 +204,7 @@ function altaDocument(form, url){
 		} else {
 			var extension = (archivo.substring(archivo.lastIndexOf("."))).toLowerCase();
 			if(extension != null && extension != ''){
-				var extensiones_permitidas = new Array(".docx", ".doc", ".odt"); 
+				var extensiones_permitidas = new Array(".docx", ".doc", ".odt", ".pdf"); 
 				for (var i = 0; i < extensiones_permitidas.length; i++) {
 					if (extensiones_permitidas[i] == extension) {
 						permitida = true;
@@ -232,6 +233,14 @@ function altaDocument(form, url){
 
 //funcion que da de alta el aviso
 function alta(){
+
+	var selectAcceso = document.detalleAvisoForm.accesoPorClave;
+	if (document.detalleAvisoForm.existeNifExpediente.value == "N" && 
+			selectAcceso.options[selectAcceso.selectedIndex].value == "N") {
+		alert("<bean:message key='aviso.alta.errorAccesoClaveSinNif' />" );
+		return false;	
+	}
+	
 	if(confirm ( "<bean:message key='aviso.alta.confirmacion' />" )){
 		Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "Enviando datos..."});
 		document.detalleAvisoForm.rutaFitxer.value = document.uploadAvisoForm.documentoAnexoFichero.value;
@@ -379,6 +388,7 @@ function errorFileUploaded(error){
 			<p>
 				<bean:message key="ajuda.expediente.datosComunicacion"/>
 				<ul class="ajudaUl">
+					<li><bean:message key="ajuda.aviso.accesoPorClave"/></li>
 					<li><bean:message key="ajuda.aviso.titulo"/></li>
 					<li><bean:message key="ajuda.aviso.texto"/></li>
 					<li><bean:message key="ajuda.aviso.textoSMS"/></li>
@@ -404,8 +414,20 @@ function errorFileUploaded(error){
 			<html:form action="realizarAltaAviso" enctype="multipart/form-data" styleClass="remarcar opcions">
 			<html:hidden property="descripcionExpediente"/>
 			<html:hidden property="flagValidacion" value="alta"/>
-			<html:hidden property="rutaFitxer"/>
-			<html:hidden property="idioma" />
+			<html:hidden property="rutaFitxer"/>			
+			<html:hidden property="existeNifExpediente" />
+				<p>
+					<label for="idioma"><bean:message key="expediente.idiomaExpediente"/><sup>*</sup></label>
+					<html:hidden property="idioma"/>
+					<bean:message key="<%=\"expediente.idioma.\" + idiomaExpediente%>"/>
+				</p>
+				<p>
+					<label for="accesoPorClave"><bean:message key="aviso.accesoPorClave"/><sup>*</sup></label>
+					<html:select  property="accesoPorClave">
+						<html:option value="S"><bean:message key="expediente.si"/></html:option>
+						<html:option value="N"><bean:message key="expediente.no"/></html:option>
+					  </html:select>
+				</p>
 				<p>
 					<label for="titulo"><bean:message key="aviso.titulo"/><sup>*</sup></label>
 					<html:text property="titulo" styleClass="pc40" maxlength="400"/>
@@ -414,7 +436,7 @@ function errorFileUploaded(error){
 				<p>
 					<label for="texto"><bean:message key="aviso.texto"/><sup>*</sup></label>
 					<html:textarea property="texto" rows="5"  styleClass="pc40"/>
-				</p>
+				</p>				
 				<logic:equal name="detalleAvisoForm" property="permitirSms" value="S">
 					<p>
 						<label for="textoSMS"><bean:message key="aviso.textoSMS"/></label>

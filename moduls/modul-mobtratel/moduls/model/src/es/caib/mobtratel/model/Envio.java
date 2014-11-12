@@ -60,6 +60,10 @@ public class Envio implements Serializable
 	 */
 	private int numeroDestinatarios;
 	/**
+	 * Id procedimiento (opcional).
+	 */
+	private String idProcedimiento;
+	/**
 	 * Set de emails a enviar
 	 */
 	private Set emails = new HashSet();
@@ -274,6 +278,18 @@ public class Envio implements Serializable
 			if (ms.getEstado() == ConstantesMobtratel.ESTADOENVIO_ERROR) return true;
 		}
 		return false;
+	}
+
+
+
+	public String getIdProcedimiento() {
+		return idProcedimiento;
+	}
+
+
+
+	public void setIdProcedimiento(String idProcedimiento) {
+		this.idProcedimiento = idProcedimiento;
 	}
 	
 }

@@ -199,6 +199,11 @@ public class RegistroController extends FinalizacionController
 		// Indicamos que permitimos registrar (no hay que flujo ni hay que confirmar la notificacion)
 		request.setAttribute( "permitirRegistrar", "true" );
 	
+		// Registro automatico
+		if (tramite.isRegistroAutomatico()) {
+			request.setAttribute( "registroAutomatico", "true" );
+		}
+		
 	}
 	
 	

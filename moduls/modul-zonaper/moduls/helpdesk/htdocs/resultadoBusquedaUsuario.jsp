@@ -39,10 +39,10 @@
 							</tbody>
 						</table>
 			
-				<br/>
+				<br/>								
 				
-				<html:form action="modificarUsuario" styleClass="formulari">
-					<!--  Modificar usuario -->
+				<!--  Modificar usuario -->
+				<html:form action="modificarUsuario" styleClass="formulari">					
 					<p>					
 						<html:hidden property="usuarioCodiOld"/>					
 						<label for="usuarioCodiNew" >
@@ -51,6 +51,20 @@
 						</label>
 						<html:submit>						
 							<bean:message key="usuarios.modificar"/>
+						</html:submit>
+					</p>
+				</html:form>
+				
+				<!--  Modificar NIF usuario -->
+				<html:form action="modificarNifUsuario" styleClass="formulari">					
+					<p>					
+						<html:hidden property="usuarioCodiOld"/>					
+						<label for="usuarioCodiNew" >
+							<bean:message key="usuarios.nif"/>: 
+							<html:text property="usuarioNifNew" styleId="usuarioCodiNew" size="20"  />
+						</label>
+						<html:submit>						
+							<bean:message key="usuarios.modificarNif"/>
 						</html:submit>
 					</p>
 				</html:form>

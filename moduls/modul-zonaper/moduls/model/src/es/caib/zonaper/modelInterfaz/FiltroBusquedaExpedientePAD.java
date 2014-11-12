@@ -1,6 +1,7 @@
 package es.caib.zonaper.modelInterfaz;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,9 +27,21 @@ public class FiltroBusquedaExpedientePAD implements Serializable {
 	 */
 	private int mes;
 	/**
+	 * Id expediente.
+	 */
+	private String idExpediente = "";
+	/**
 	 * Numero entrada que crea el expediente.
 	 */
 	private String numeroEntradaBTE;
+	/**
+	 * Fecha desde (dd/mm/yyyy).
+	 */
+	private Date fechaDesde;
+	/**
+	 * Fecha hasta (dd/mm/yyyy).
+	 */
+	private Date fechaHasta;
 	
 	public List getIdentificadorProcedimientos() {
 		return identificadorProcedimientos;
@@ -60,4 +73,23 @@ public class FiltroBusquedaExpedientePAD implements Serializable {
 	public void setNumeroEntradaBTE(String numeroEntrada) {
 		this.numeroEntradaBTE = numeroEntrada;
 	}
+	public Date getFechaDesde() {
+		return fechaDesde;
+	}
+	public void setFechaDesde(Date fechaDesde) {
+		this.fechaDesde = fechaDesde;
+	}
+	public Date getFechaHasta() {
+		return fechaHasta;
+	}
+	public void setFechaHasta(Date fechaHasta) {
+		this.fechaHasta = fechaHasta;
+	}
+	public String getIdExpediente() {
+		return idExpediente;
+	}
+	public void setIdExpediente(String numeroExpediente) {
+		this.idExpediente = numeroExpediente;
+	}
+	
 }

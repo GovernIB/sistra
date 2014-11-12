@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.ibit.rol.form.model.Campo;
+import org.ibit.rol.form.model.Captcha;
 import org.ibit.rol.form.model.CheckBox;
 import org.ibit.rol.form.model.ComboBox;
 import org.ibit.rol.form.model.Formulario;
@@ -103,7 +104,7 @@ public final class PantallaUtils {
 
                     // campo.isIndexed
                     tipoValor = "java.lang.String";
-
+                    
                     for (int j = 0; j < valoresPosibles.size(); j++) {
                         ValorPosible vp = (ValorPosible) valoresPosibles.get(j);
                         if (vp.isDefecto()) {
@@ -111,6 +112,7 @@ public final class PantallaUtils {
                             break;
                         }
                     }
+                    
                 }
 
                 Class clazz = getClass(tipoValor);
@@ -290,7 +292,8 @@ public final class PantallaUtils {
                         for (Iterator i = valoresPosibles.iterator(); i.hasNext();) {
                             ValorPosible vp = (ValorPosible) i.next();
                             if (vp.getValor().equals(valIni)) {
-                                vp.setDefecto(true);
+                            	// BUG: MARCA COMO VALOR DEFECTO PARA SIGUIENTES ITERACIONES
+                                // vp.setDefecto(true);
                                 //Almaceno el valor asociado al indice seleccionado por defecto en el campo.
                                 valorEtiqueta = ((TraValorPosible) vp.getTraduccion()).getEtiqueta();
                                 hasText = true;
@@ -304,7 +307,8 @@ public final class PantallaUtils {
                         for (Iterator i = valoresPosibles.iterator(); i.hasNext();) {
                             ValorPosible vp = (ValorPosible) i.next();
                             if (vp.getValor().equals(valIni)) {
-                                vp.setDefecto(true);
+                            	// BUG: MARCA COMO VALOR DEFECTO PARA SIGUIENTES ITERACIONES
+                                // vp.setDefecto(true);
                                 //Almaceno el valor asociado al indice seleccionado por defecto en el campo.
                                 valorEtiqueta = ((TraValorPosible) vp.getTraduccion()).getEtiqueta();
                                 hasText = true;
@@ -312,9 +316,11 @@ public final class PantallaUtils {
                             }
                         }                   	
                     } else {
-                        //valor por defecto definido en el mismo campo
-                        for (int j = 0; j < valoresPosibles.size(); j++) {
+                        // Valor por defecto definido en el mismo campo
+                    	for (int j = 0; j < valoresPosibles.size(); j++) {
                             ValorPosible vp = (ValorPosible) valoresPosibles.get(j);
+                            
+                            // Cogemos el por defecto
                             if (vp.isDefecto()) {
                                 valIni = vp.getValor();
                                 //Almaceno el valor asociado al indice seleccionado por defecto en el campo.
@@ -322,8 +328,10 @@ public final class PantallaUtils {
                                 hasText = true;
                                 break;
                             }
-                        }
+                        }	                                            	
                     }
+                } else if (campo instanceof Captcha) {
+                	valIni = CaptchaUtils.generateCaptcha();
                 }
                 
                 //
@@ -566,7 +574,8 @@ public final class PantallaUtils {
                         for (Iterator i = valoresPosibles.iterator(); i.hasNext();) {
                             ValorPosible vp = (ValorPosible) i.next();
                             if (vp.getValor().equals(valIni)) {
-                                vp.setDefecto(true);
+                                // BUG:	MARCA COMO DEFECTO PARA SIGUIENTES ITERACIONES
+                            	// vp.setDefecto(true);
                                 //Almaceno el valor asociado al indice seleccionado por defecto en el campo.
                                 valorEtiqueta = ((TraValorPosible) vp.getTraduccion()).getEtiqueta();
                                 hasText = true;
@@ -575,7 +584,7 @@ public final class PantallaUtils {
                         }
 
                     }else {
-                        //valor por defecto definido en el mismo campo
+                    	//valor por defecto definido en el mismo campo
                         for (int j = 0; j < valoresPosibles.size(); j++) {
                             ValorPosible vp = (ValorPosible) valoresPosibles.get(j);
                             if (vp.isDefecto()) {
@@ -585,8 +594,10 @@ public final class PantallaUtils {
                                 hasText = true;
                                 break;
                             }
-                        }
+                        }                    	
                     }
+                } else if (campo instanceof Captcha) {
+                	valIni = CaptchaUtils.generateCaptcha();
                 }
                 
                 //
@@ -746,7 +757,8 @@ public final class PantallaUtils {
                         for (Iterator i = valoresPosibles.iterator(); i.hasNext();) {
                             ValorPosible vp = (ValorPosible) i.next();
                             if (vp.getValor().equals(valIni)) {
-                                vp.setDefecto(true);
+                            	// BUG: MARCA COMO VALOR DEFECTO PARA SIGUIENTES ITERACIONES
+                                // vp.setDefecto(true);
                                 //Almaceno el valor asociado al indice seleccionado por defecto en el campo.
                                 valorEtiqueta = ((TraValorPosible) vp.getTraduccion()).getEtiqueta();
                                 hasText = true;
@@ -767,6 +779,8 @@ public final class PantallaUtils {
                             }
                         }
                     }
+                } else if (campo instanceof Captcha) {
+                	valIni = CaptchaUtils.generateCaptcha();
                 }
                 
                 //

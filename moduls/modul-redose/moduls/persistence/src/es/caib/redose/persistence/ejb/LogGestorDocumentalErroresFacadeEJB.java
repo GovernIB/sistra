@@ -162,7 +162,9 @@ public abstract class LogGestorDocumentalErroresFacadeEJB extends HibernateEJB {
         {
         	Query query = 
         		session.createQuery( "FROM LogGestorDocumentalError o ORDER BY o.fecha DESC, o.codigo DESC" );
-            Page page = new Page( query, pagina, longitudPagina );
+        	Query queryCount = 
+        		session.createQuery( "SELECT COUNT(*) FROM LogGestorDocumentalError" );
+            Page page = new Page( query, pagina, longitudPagina, queryCount );
             return page;
         }
         catch( HibernateException he )

@@ -1,10 +1,7 @@
 package es.caib.bantel.front.action;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +24,7 @@ import es.caib.xml.ConstantesXML;
 import es.caib.xml.documentoExternoNotificacion.factoria.FactoriaObjetosXMLDocumentoExternoNotificacion;
 import es.caib.xml.documentoExternoNotificacion.factoria.ServicioDocumentoExternoNotificacionXML;
 import es.caib.xml.documentoExternoNotificacion.factoria.impl.DocumentoExternoNotificacion;
-import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
+import es.indra.util.pdf.UtilPDF;
 
 /**
  * @struts.action
@@ -139,7 +136,7 @@ public class AltaDocumentoAvisoAction extends BaseAction
 
 		//Guardo un documento con la extension que tiene y me devueve el documento con el contenido en pdf
 		DocumentoRDS documentRDS = null;
-		documentRDS = DocumentosUtil.crearDocumentoRDS(documento, uniAdm.toString());
+		documentRDS = DocumentosUtil.crearDocumentoRDS(documento, uniAdm.toString(), false);
 		
 		documento.setTitulo(documentRDS.getTitulo());
 		documento.setContenidoFichero(null);
@@ -154,16 +151,28 @@ public class AltaDocumentoAvisoAction extends BaseAction
 	}
 
 	private DocumentoFirmar altaDocumentoFichero(DetalleAvisoForm avisoForm,
-			Long uniAdm) throws FileNotFoundException, IOException,
-			ExcepcionPAD {
+			Long uniAdm) throws Exception {
 		DocumentoFirmar documento;
+		boolean convertirPDF = true;
+		boolean firmable = true;
 		if (avisoForm.getDocumentoAnexoFichero() == null ||
 				StringUtils.isEmpty(avisoForm.getDocumentoAnexoFichero().getFileName()) ||
 				StringUtils.isEmpty(avisoForm.getDocumentoAnexoTitulo()) ){
 				return null;
 		}
-		if(!DocumentosUtil.extensionCorrecta(avisoForm.getDocumentoAnexoFichero().getFileName())){
-			return null;
+		
+		// Si es un PDF comprobamos que sea PDF/A		
+		if  ("PDF".equalsIgnoreCase(DocumentosUtil.getExtension(avisoForm.getDocumentoAnexoFichero().getFileName()))) {
+			// En caso de ser PDF, solo sera firmable si es PDF-A
+			if (!UtilPDF.isPdfA( new ByteArrayInputStream(avisoForm.getDocumentoAnexoFichero().getFileData()))) {
+				firmable = false;
+			}	
+			convertirPDF = false;
+		} else {
+			// Si no es PDF, miramos si se puede convertir
+			if(!DocumentosUtil.extensionCorrecta(avisoForm.getDocumentoAnexoFichero().getFileName())){
+				return null;
+			}
 		}
 		
 		documento = new DocumentoFirmar();
@@ -172,10 +181,11 @@ public class AltaDocumentoAvisoAction extends BaseAction
 		documento.setContenidoFichero(avisoForm.getDocumentoAnexoFichero().getFileData());
 		documento.setNombre(avisoForm.getDocumentoAnexoFichero().getFileName());
 		documento.setRutaFichero(DocumentosUtil.formatearFichero(avisoForm.getRutaFitxer()));
-
+		documento.setFirmable(firmable);
+		
 		//Guardo un documento con la extension que tiene y me devueve el documento con el contenido en pdf
 		DocumentoRDS documentRDS = null;
-		documentRDS = DocumentosUtil.crearDocumentoRDS(documento, uniAdm.toString());
+		documentRDS = DocumentosUtil.crearDocumentoRDS(documento, uniAdm.toString(), convertirPDF);
 		
 		documento.setTitulo(documentRDS.getTitulo());
 		documento.setContenidoFichero(null);

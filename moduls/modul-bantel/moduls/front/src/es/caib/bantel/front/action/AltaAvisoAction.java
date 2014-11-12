@@ -53,22 +53,26 @@ public class AltaAvisoAction extends BaseAction
 			
 			// Recuperamos expediente
 			exp = ejb.consultaExpediente(uniAdm, idExpe,claveExpe);
-			
-			if(exp != null){
-				// Establecemos descripcion expediente e idioma
-				avisoForm.setDescripcionExpediente(exp.getDescripcion());
-				avisoForm.setIdioma(exp.getIdioma());
-				if (exp.getConfiguracionAvisos() != null && exp.getConfiguracionAvisos().getHabilitarAvisos() != null && 
-						exp.getConfiguracionAvisos().getHabilitarAvisos().booleanValue() && StringUtils.isNotBlank(exp.getConfiguracionAvisos().getAvisoSMS())) {
-					avisoForm.setPermitirSms("S");
-				}
-			}else{
+			if(exp == null){
 				throw new Exception("No se ha encontrado expediente");
 			}
 			
+			// Precargamos datos aviso
+			avisoForm.setDescripcionExpediente(exp.getDescripcion());
+			avisoForm.setIdioma(exp.getIdioma());
+			if (exp.getConfiguracionAvisos() != null && exp.getConfiguracionAvisos().getHabilitarAvisos() != null && 
+					exp.getConfiguracionAvisos().getHabilitarAvisos().booleanValue() && StringUtils.isNotBlank(exp.getConfiguracionAvisos().getAvisoSMS())) {
+				avisoForm.setPermitirSms("S");
+			}
+			avisoForm.setAccesoPorClave(exp.isAutenticado()?"N":"S");
+			
+			
+			// Indicamos si el expediente tiene asociado un nif
+			avisoForm.setExisteNifExpediente(StringUtils.isBlank(exp.getNifRepresentante())?"N":"S");
+			
 		}catch(Exception e){
 			log.error("Excepcion alta aviso",e);
-			String mensajeOk = MensajesUtil.getValue("error.aviso.Excepcion") + ": " + e.getMessage();
+			String mensajeOk = MensajesUtil.getValue("error.aviso.Excepcion", request) + ": " + e.getMessage();
 			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk);
 			return mapping.findForward("fail");
 		}

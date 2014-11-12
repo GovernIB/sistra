@@ -1,17 +1,15 @@
 package es.caib.zonaper.model;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
+
+import es.caib.util.StringUtil;
 
 public class TramitePersistenteBackup
 {
-	private final static String SEPARADOR_PARAMETROS_INICIO = "#-@";
-	
 	// Fields    	
     private Long codigo;
     private String idPersistencia;
@@ -27,6 +25,13 @@ public class TramitePersistenteBackup
     private String idioma;
     private Set documentosBackup = new HashSet(0);     
     private String parametrosInicio;
+    private String delegado;
+    private String estadoDelegacion;
+    
+    private String alertasTramitacionGenerar;
+    private String alertasTramitacionEmail; 
+    private String alertasTramitacionSms;
+    private Date alertasTramitacionFechaUltima;
     
 	/* (non-Javadoc)
 	 * @see es.caib.zonaper.model.ITramitePersistente#getCodigo()
@@ -193,56 +198,14 @@ public class TramitePersistenteBackup
 		this.parametrosInicio = parametrosInicio;
 	}	    
     
-	/* (non-Javadoc)
-	 * @see es.caib.zonaper.model.ITramitePersistente#setParametrosInicioMap(java.util.Map)
-	 */
 	public void setParametrosInicioMap(Map parametrosInicio) throws Exception{
-		this.setParametrosInicio(this.serializarMap(parametrosInicio));		
+		this.setParametrosInicio(StringUtil.serializarMap(parametrosInicio));		
 	}
 		
-	/* (non-Javadoc)
-	 * @see es.caib.zonaper.model.ITramitePersistente#getParametrosInicioMap()
-	 */
 	public Map getParametrosInicioMap() throws Exception {
-		return (this.getParametrosInicio()!=null?this.deserializarMap(this.getParametrosInicio()):null);
+		return (this.getParametrosInicio()!=null?StringUtil.deserializarMap(this.getParametrosInicio()):null);
 	}
-	
-	private String serializarMap(Map map) throws Exception{		
-		if (map == null) return null;		
-		String str="";		
-		boolean primer = true;
-		String name,value;
-		for (Iterator it = map.keySet().iterator();it.hasNext();){
-			name = (String) it.next();				
-			if (!primer) {
-				str = str + SEPARADOR_PARAMETROS_INICIO;
-			}else{
-				primer = false;
-			}
-			
-			if (map.get(name) != null) 
-				value = (String) map.get(name);
-			else
-				value ="";	
-			
-			str = str +  name + SEPARADOR_PARAMETROS_INICIO + value;
-		}
-		return str;
-	}
-	
-	private Map deserializarMap(String mapStr) throws Exception{
-		if (mapStr == null || mapStr.length() <= 0) return null;
-		HashMap map = new HashMap();
-		StringTokenizer st = new StringTokenizer(mapStr,SEPARADOR_PARAMETROS_INICIO);		
-		String key,value;
-		while (st.hasMoreElements()){
-			key = (String) st.nextElement();			
-			if (st.hasMoreElements()) value = (String) st.nextElement();
-				else value=null;
-			map.put(key,value);
-		}
-		return map;
-	}
+		
 
 	/* (non-Javadoc)
 	 * @see es.caib.zonaper.model.ITramitePersistente#getFechaCaducidad()
@@ -278,5 +241,53 @@ public class TramitePersistenteBackup
 
 	public void setUsuarioFlujoTramitacion(String usuarioFlujoTramitacion) {
 		this.usuarioFlujoTramitacion = usuarioFlujoTramitacion;
+	}
+
+	public String getDelegado() {
+		return delegado;
+	}
+
+	public void setDelegado(String delegado) {
+		this.delegado = delegado;
+	}
+
+	public String getEstadoDelegacion() {
+		return estadoDelegacion;
+	}
+
+	public void setEstadoDelegacion(String estadoDelegacion) {
+		this.estadoDelegacion = estadoDelegacion;
+	}
+
+	public String getAlertasTramitacionGenerar() {
+		return alertasTramitacionGenerar;
+	}
+
+	public void setAlertasTramitacionGenerar(String alertasTramitacionGenerar) {
+		this.alertasTramitacionGenerar = alertasTramitacionGenerar;
+	}
+
+	public String getAlertasTramitacionEmail() {
+		return alertasTramitacionEmail;
+	}
+
+	public void setAlertasTramitacionEmail(String alertasTramitacionEmail) {
+		this.alertasTramitacionEmail = alertasTramitacionEmail;
+	}
+
+	public String getAlertasTramitacionSms() {
+		return alertasTramitacionSms;
+	}
+
+	public void setAlertasTramitacionSms(String alertasTramitacionSms) {
+		this.alertasTramitacionSms = alertasTramitacionSms;
+	}
+
+	public Date getAlertasTramitacionFechaUltima() {
+		return alertasTramitacionFechaUltima;
+	}
+
+	public void setAlertasTramitacionFechaUltima(Date alertasTramitacionFechaUltima) {
+		this.alertasTramitacionFechaUltima = alertasTramitacionFechaUltima;
 	}
 }

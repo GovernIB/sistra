@@ -3,6 +3,9 @@
     name="busquedaEnviosForm"
     type="es.caib.mobtratel.front.form.BusquedaEnviosForm" />
 <form-bean
+    name="busquedaEstadisticasSMSForm"
+    type="es.caib.mobtratel.front.form.BusquedaEstadisticasSMSForm" />
+<form-bean
     name="detalleEnvioForm"
     type="es.caib.mobtratel.front.form.DetalleEnvioForm" />    
 <form-bean

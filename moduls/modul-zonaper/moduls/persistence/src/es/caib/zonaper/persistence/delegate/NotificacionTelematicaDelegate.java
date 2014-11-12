@@ -1,6 +1,7 @@
 package es.caib.zonaper.persistence.delegate;
 
 import java.rmi.RemoteException;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.CreateException;
@@ -10,6 +11,7 @@ import es.caib.sistra.plugins.firma.FirmaIntf;
 import es.caib.xml.registro.factoria.impl.AsientoRegistral;
 import es.caib.zonaper.model.NotificacionTelematica;
 import es.caib.zonaper.model.ParametrosSubsanacion;
+import es.caib.zonaper.modelInterfaz.DetalleNotificacionesProcedimiento;
 import es.caib.zonaper.persistence.intf.NotificacionTelematicaFacade;
 import es.caib.zonaper.persistence.util.NotificacionTelematicaFacadeUtil;
 
@@ -22,9 +24,9 @@ public class NotificacionTelematicaDelegate implements StatelessDelegate {
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
-    public Long grabarNotificacionTelematica(NotificacionTelematica tramite) throws DelegateException {
+    public Long grabarNuevaNotificacionTelematica(NotificacionTelematica tramite) throws DelegateException {
         try {
-            return getFacade().grabarNotificacionTelematica(tramite);
+            return getFacade().grabarNuevaNotificacionTelematica(tramite);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
@@ -62,59 +64,6 @@ public class NotificacionTelematicaDelegate implements StatelessDelegate {
         }
     }
     
-        
-    public List listarNotificacionTelematicasUsuario() throws DelegateException {
-        try {
-            return getFacade().listarNotificacionesTelematicasUsuario();
-        } catch (Exception e) {
-        	e.printStackTrace();	
-            throw new DelegateException(e);
-        }
-    }
-    
-    public int numeroNotificacionesUsuario()  throws DelegateException
-	{
-    	try 
-        {
-    		return getFacade().numeroNotificacionesUsuario();
-        }
-    	catch (Exception e) 
-        {
-        	e.printStackTrace();	
-            throw new DelegateException(e);
-        }
-	}
-    
-    public int numeroNotificacionesNuevasUsuario()  throws DelegateException
-	{
-    	try 
-        {
-    		return getFacade().numeroNotificacionesNuevasUsuario();
-        }
-    	catch (Exception e) 
-        {
-        	e.printStackTrace();	
-            throw new DelegateException(e);
-        }
-	}
-    
-    
-    public boolean firmarAcuseReciboNotificacionAutenticada(Long codigo,String asientoAcuse,FirmaIntf firmaAcuse) throws DelegateException {
-        try {
-            return getFacade().firmarAcuseReciboNotificacionAutenticada(codigo, asientoAcuse, firmaAcuse);            
-        } catch (Exception e) {
-            throw new DelegateException(e);
-        }
-    }    
-    
-    public boolean firmarAcuseReciboNotificacionAnonima(Long codigo,String idPersistencia,String asientoAcuse,FirmaIntf firmaAcuse) throws DelegateException {
-        try {
-            return getFacade().firmarAcuseReciboNotificacionAnonima(codigo, idPersistencia, asientoAcuse, firmaAcuse);            
-        } catch (Exception e) {
-            throw new DelegateException(e);
-        }
-    }                  
-
     public String iniciarTramiteSubsanacionNotificacionAnonima(Long codigoNotificacion,String idPersistencia) throws DelegateException {
         try {
             return getFacade().iniciarTramiteSubsanacionNotificacionAnonima(codigoNotificacion,idPersistencia);            
@@ -139,9 +88,9 @@ public class NotificacionTelematicaDelegate implements StatelessDelegate {
         }
     } 
     
-    public AsientoRegistral generarAcuseReciboNotificacion( Long idNotificacion, boolean rechazada) throws DelegateException {
+    public AsientoRegistral generarAcuseReciboNotificacion( Long idNotificacion, boolean rechazada, String tipoFirma) throws DelegateException {
         try {
-            return getFacade().generarAcuseReciboNotificacion(idNotificacion, rechazada);            
+            return getFacade().generarAcuseReciboNotificacion(idNotificacion, rechazada, tipoFirma);            
         } catch (Exception e) {
             throw new DelegateException(e);
         }
@@ -155,14 +104,39 @@ public class NotificacionTelematicaDelegate implements StatelessDelegate {
         }
     } 
     
-    public void rechazarNotificacion(Long codigo)throws DelegateException {
+    public void rechazarNotificacion(Long codigo) throws DelegateException {
         try {
             getFacade().rechazarNotificacion(codigo);            
         } catch (Exception e) {
             throw new DelegateException(e);
         }
     } 
+    
+    public boolean firmarAcuseReciboNotificacionAutenticada(Long codigo,String asientoAcuse,FirmaIntf firmaAcuse, String firmaClave) throws DelegateException {
+        try {
+            return getFacade().firmarAcuseReciboNotificacionAutenticada(codigo, asientoAcuse, firmaAcuse, firmaClave);            
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }    
+    
+    public boolean firmarAcuseReciboNotificacionAnonima(Long codigo,String idPersistencia,String asientoAcuse,FirmaIntf firmaAcuse, String firmaClave) throws DelegateException {
+        try {
+            return getFacade().firmarAcuseReciboNotificacionAnonima(codigo, idPersistencia, asientoAcuse, firmaAcuse, firmaClave);            
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }      
+    
+    public DetalleNotificacionesProcedimiento obtenerDetalleNotificacionesProcedimiento(String idProc, Date desde, Date hasta) throws DelegateException {
+        try {
+            return getFacade().obtenerDetalleNotificacionesProcedimiento(idProc, desde, hasta);            
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }      
 
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
@@ -171,6 +145,9 @@ public class NotificacionTelematicaDelegate implements StatelessDelegate {
     }
 
     protected NotificacionTelematicaDelegate() throws DelegateException {     
-    }                  
+    }
+
+	
+	                
 }
 

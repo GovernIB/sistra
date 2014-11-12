@@ -137,11 +137,11 @@ public class PDFDocumentTemplate {
 	 * ya que si no no se generará el PDF de salida. Como parámetro recibo el
 	 * nombre del fichero de salida.
 	 */
-	public void guardar (String Salida) throws Exception
+	public void guardar (String Salida, boolean formFlattening) throws Exception
 	{		
 		NombreSalida = Salida;
 		FileOutputStream fout = new FileOutputStream(NombreSalida);
-		fout.write(guardarEnMemoria());
+		fout.write(guardarEnMemoria(formFlattening));
 		fout.close();				
 	}
 
@@ -152,12 +152,19 @@ public class PDFDocumentTemplate {
 	 * al anterior que guarda en fichero o se llama a este que devuelve un array de bytes. En caso de que
 	 * sea necesario obtener el array de bytes y luego guardar en un fichero, se realizará furea de esta clase
 	 * volcando el array de bytes a un FileOutputStream.
+	 * 
+	 * @param formFlattening Indica si hace el flatenning, que implica que deja los campos del formulario no editables
+	 *  en un futuro (para proteger completamente de la edicion).
+	 * 
 	 */
-	public byte[] guardarEnMemoria () throws Exception
+	public byte[] guardarEnMemoria (boolean formFlattening) throws Exception
 	{
 		try{
 			if (!docCerrado)
 			{			
+				if (formFlattening) {
+					pdfs.setFormFlattening(true);
+				}
 				pdfs.close();
 				docCerrado = true;
 			}

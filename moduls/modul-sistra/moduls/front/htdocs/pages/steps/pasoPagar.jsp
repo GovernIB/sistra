@@ -36,6 +36,11 @@
 <%-- Existen tasas a pagar --%>
 <logic:equal name="puedePagar" value="S">
 			
+				<%-- Aviso de finalizar tramite tras pagar --%>
+				<p class="alerta">
+					<bean:message key="pasoPagar.instrucciones.finalizarTramite"/>
+				</p>
+			
 				<%-- Info del pagos de pagos --%>
 				<p class="ultimo">
 					<logic:equal name="pagosMetodos" value="A">
@@ -47,7 +52,7 @@
 					<logic:equal name="pagosMetodos" value="T">
 						<bean:message key="pasoPagar.instrucciones.metodoTelematico"/>	
 					</logic:equal>
-				</p>
+				</p>								
 				
 				<div id="listadoTasas">	
 				<%-- Listado de las tasas  --%>
@@ -81,10 +86,12 @@
 								<strong><bean:message key="pasoPagar.continuarPago" /></strong>
 							</html:link>	
 							<logic:equal name="pago" property="obligatorio" value="<%=Character.toString(DocumentoFront.OPCIONAL)%>">
-								- 
-								<html:link href="<%=urlAnularPago%>" onclick="accediendoEnviando(mensajeEnviando);">
-									<strong><bean:message key="pagoPagar.cancelarPago" /></strong>
-								</html:link>					
+								<logic:equal name="pago" property="pagoTipo" value="P">
+									- 
+									<html:link href="<%=urlAnularPago%>" onclick="accediendoEnviando(mensajeEnviando);">
+										<strong><bean:message key="pagoPagar.cancelarPago" /></strong>
+									</html:link>
+								</logic:equal>					
 							</logic:equal>
 						</logic:equal>						
 

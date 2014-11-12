@@ -28,6 +28,10 @@
 </form-bean>
 
 <form-bean
+    name="migracionForm"
+    type="es.caib.redose.back.form.MigracionForm" /> 
+
+<form-bean
     name="formateadoresForm"
     className="es.caib.redose.back.action.RdsFormBeanConfig"
     type="es.caib.redose.back.form.FormateadoresForm">

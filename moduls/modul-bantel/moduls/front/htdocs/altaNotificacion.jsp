@@ -4,7 +4,9 @@
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
-<script type="text/javascript" src="js/jquery.selectboxes.pack.js"></script>
+
+<bean:define id="idiomaExpediente" name="detalleNotificacionForm" property="idiomaExp" type="java.lang.String"/>
+
 <script type="text/javascript" src="js/ajuda.js"></script>
 <script type="text/javascript" src="js/funcions.js"></script>
 <script type="text/javascript" src="js/mensaje.js"></script>	
@@ -12,9 +14,6 @@
 <!--  Scripts para firma (depende implementacion) -->
 	<logic:equal name="<%=es.caib.bantel.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
-	
-	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/deployJava.js"></script>
-	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/instalador.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/firma.js"></script>	
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/utils.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/constantes.js"></script>
@@ -153,13 +152,22 @@
 	
 	function botonCancelarFirmar() {
 		$('#firmarDocumentosApplet').hide('slow');
-	}
+	}	
 	
 //-->
 </script>
 
 <script type="text/javascript">
 var htmlInfoFirmado = "- <strong><bean:message key="detalleTramite.datosTramite.envio.firmado"/></strong>";
+
+function ajustePlazo() {
+	if ($("#acuse").val() == "S") {
+		$("#diasPlazo").removeAttr("disabled");
+	} else {
+		$("#diasPlazo").prop('disabled', 'disabled');
+	}
+		 
+}
 
 function llenarMunicipios(){
 	$("#codigoMunicipio").val("");
@@ -170,6 +178,7 @@ function llenarMunicipios(){
 		function(datos){
 			$("#codigoMunicipio").removeOption(/./);
 			$("#codigoMunicipio").removeOption(""); 
+			$("#codigoMunicipio").addOption("", "", false); 			
 			$("#codigoMunicipio").addOption(datos, false); 						
 	});
 }	
@@ -181,6 +190,7 @@ function llenarProvincias(){
 		function(datos){
 			$("#codigoProvincia").removeOption(/./);
 			$("#codigoProvincia").removeOption(""); 
+			$("#codigoProvincia").addOption("", "", false); 		
 			$("#codigoProvincia").addOption(datos, false); 	
 		}
 	);
@@ -197,11 +207,16 @@ function vaciarProvincias(){
 
 
 function recargaProvincias(){
-	if(document.detalleNotificacionForm.codigoPais.value=="ESP"){
+    var esEspaña = (document.detalleNotificacionForm.codigoPais.value=="ESP");
+	
+	if(esEspaña){
 		llenarProvincias();
 	}else{
-		vaciarProvincias();
+		vaciarProvincias();		
 	}
+
+	$("#codigoProvincia").prop('disabled', !esEspaña);
+	$("#codigoMunicipio").prop('disabled', !esEspaña);
 }
 
 function altaDocument(form, url){
@@ -224,7 +239,7 @@ function altaDocument(form, url){
 		if(archivo != null && archivo != ''){
 			var extension = (archivo.substring(archivo.lastIndexOf("."))).toLowerCase();
 			if(extension != null && extension != ''){
-				var extensiones_permitidas = new Array(".docx", ".doc", ".odt"); 
+				var extensiones_permitidas = new Array(".docx", ".doc", ".odt", ".pdf"); 
 				for (var i = 0; i < extensiones_permitidas.length; i++) {
 					if (extensiones_permitidas[i] == extension) {
 						permitida = true;
@@ -470,6 +485,8 @@ function repintarParametros(datos){
 				<bean:message key="ajuda.notificacion.datosNotificacion"/>
 				<ul class="ajudaUl">
 					<li><bean:message key="ajuda.notificacio.acuseRecibo"/></li>
+					<li><bean:message key="ajuda.notificacio.plazo"/></li>
+					<li><bean:message key="ajuda.notificacio.accesoPorClave"/></li>
 					<li><bean:message key="ajuda.notificacio.idioma"/></li>
 					<li><bean:message key="ajuda.notificacio.tipoAsunto"/></li>
 					<li><bean:message key="ajuda.notificacio.aviso"/></li>
@@ -507,7 +524,7 @@ function repintarParametros(datos){
 					<label for="oficinaRegistro"><bean:message key="notificacion.oficina"/><sup>*</sup></label>
 					<html:select property="oficinaRegistro" styleClass="pc40" >
 			   			<logic:present name="listaoficinasregistro">
-							<logic:iterate id="oficina" name="listaoficinasregistro">	
+			   				<logic:iterate id="oficina" name="listaoficinasregistro">	
 								<html:option value="<%=((es.caib.bantel.front.util.ValorOrganismo)oficina).getCodigo().toString()%>"><bean:write name="oficina" property="descripcion"/></html:option>
 							</logic:iterate>
 						</logic:present>
@@ -531,7 +548,7 @@ function repintarParametros(datos){
 				
 				<p>
 					<label for="nif"><bean:message key="expediente.nif"/><sup>*</sup></label>
-					<html:text property="nif" readonly="<%=Boolean.parseBoolean(autenticado)%>" onblur="this.value=this.value.toUpperCase()"/>					
+					<html:text property="nif" readonly="true" onblur="this.value=this.value.toUpperCase()"/>					
 				</p>
 				
 				<p>
@@ -552,6 +569,7 @@ function repintarParametros(datos){
 				<p>
 					<label for="codigoProvincia"><bean:message key="notificacion.provincia"/></label>
 					<html:select property="codigoProvincia" styleId="codigoProvincia" onchange="javascript:llenarMunicipios();" styleClass="pc20">
+						<html:option value="" ></html:option>
 						<logic:iterate id="provincia" name="provincias">	
 							<html:option value="<%=((es.caib.bantel.front.json.Provincia)provincia).getCodigo()%>" ><bean:write name="provincia" property="descripcion"/></html:option>
 						</logic:iterate>
@@ -563,6 +581,7 @@ function repintarParametros(datos){
 					<label for="codigoMunicipio"><bean:message key="notificacion.municipio"/></label>
 					<html:select property="codigoMunicipio" styleId="codigoMunicipio" styleClass="pc20">
 						<logic:present name="municipios">
+							<html:option value="" ></html:option>
 							<logic:iterate id="municipio" name="municipios">	
 								<html:option value="<%=((es.caib.bantel.front.json.Localidad)municipio).getCodigo().toString()%>"><bean:write name="municipio" property="descripcion"/></html:option>
 							</logic:iterate>
@@ -577,18 +596,29 @@ function repintarParametros(datos){
 				
 				<p>
 					<label for="acuse"><bean:message key="notificacion.acuse"/><sup>*</sup></label>
-					<html:select  property="acuse">
+					<html:select property="acuse" onchange="ajustePlazo();" styleId="acuse">
 						<html:option value="S"><bean:message key="expediente.si"/></html:option>
 						<html:option value="N"><bean:message key="expediente.no"/></html:option>
 					  </html:select>
 				</p>
 				
 				<p>
-					<label for="idioma"><bean:message key="expediente.idioma"/><sup>*</sup></label>
-					<html:select  property="idioma">
-						<html:option value="es"><bean:message key="expediente.castellano"/></html:option>
-						<html:option value="ca"><bean:message key="expediente.catalan"/></html:option>
-						<html:option value="en"><bean:message key="expediente.ingles"/></html:option>
+					<label for="diasPlazo"><bean:message key="notificacion.diasPlazo"/><sup>*</sup></label>
+					<html:select property="diasPlazo" styleId="diasPlazo">
+						<html:option value="0"><bean:message key="notificacion.diasPlazo.defecto"/></html:option>
+						<logic:equal name="permitirPlazoNotificacionesVariable" value="S">
+						<% for (int i = 1; i <= 60; i=i+1) { %>
+						<html:option value="<%=i + ""%>"><%=i%> <bean:message key="notificacion.diasPlazo.dias"/></html:option>
+						<% } %>
+						</logic:equal>
+					  </html:select>
+				</p>
+				
+				<p>
+					<label for="accesoPorClave"><bean:message key="notificacion.accesoPorClave"/><sup>*</sup></label>
+					<html:select  property="accesoPorClave">
+						<html:option value="S"><bean:message key="expediente.si"/></html:option>
+						<html:option value="N"><bean:message key="expediente.no"/></html:option>
 					  </html:select>
 				</p>
 				
@@ -602,6 +632,13 @@ function repintarParametros(datos){
 						</logic:present>
 			    	</html:select>
 				</p>
+			
+				<p>
+					<label for="idioma"><bean:message key="expediente.idiomaExpediente"/><sup>*</sup></label>
+					<html:hidden property="idioma"/>
+					<bean:message key="<%=\"expediente.idioma.\" + idiomaExpediente%>"/>
+				</p>
+				
 				
 				<p class="titol">
 					<bean:message key="notificacion.datos.aviso"/>

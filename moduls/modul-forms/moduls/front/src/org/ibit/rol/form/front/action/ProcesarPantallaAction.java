@@ -12,6 +12,7 @@ import org.ibit.rol.form.persistence.delegate.InstanciaTelematicaDelegate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -60,27 +61,28 @@ public class ProcesarPantallaAction extends BaseAction {
             return mapping.findForward("fail");
         }
         boolean telematic = (delegate instanceof InstanciaTelematicaDelegate);
-
+        
         PantallaForm pantallaForm = (PantallaForm) form;
-        delegate.introducirDatosPantalla(pantallaForm.getMap());
+        Map datosFormOrigen = pantallaForm.getMap();
+        
+        // Creamos copia para que no se modifique el map
+        Map datosForm = new HashMap();
+        datosForm.putAll(datosFormOrigen);
+        delegate.introducirDatosPantalla(datosForm);
 
         if (isCancelled(request)) {
             if (request.getParameter("SAVE") != null) { // Es guardar
-
-                if (telematic) {
-                    log.warn("El formulari telemàtic no soporta guardar");
+            	
+            	// Guardamos datos actuales del formulario para continuar en otro momento
+            	try {
+                    String redirectUrl = ((InstanciaTelematicaDelegate) delegate).tramitarFormulario(true);
+                    response.reset();
+                    response.sendRedirect(redirectUrl);
+                    response.flushBuffer();
                     return null;
+                } finally {
+                    RegistroManager.desregistrarInstancia(request);
                 }
-
-                InstanciaBean bean = delegate.obtenerInstanciaBean();
-
-                // Metemos el bean en un array de bytes.
-                ByteArrayOutputStream result = new ByteArrayOutputStream();
-                InstanciaZipCodec.encodeInstancia(bean, result);
-
-                // Enviamos el resultado.
-                sendFile(response, "saveform.zip", "application/octet-stream", result.toByteArray());
-                return null;
 
             } else if (request.getParameter("DISCARD") != null) {
 
@@ -111,6 +113,7 @@ public class ProcesarPantallaAction extends BaseAction {
                 }
             }
         } else {
+        	// Avanza pantalla
             delegate.avanzarPantalla();
         }
 

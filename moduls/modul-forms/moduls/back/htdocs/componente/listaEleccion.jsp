@@ -22,6 +22,10 @@
 <html:form action="/back/componente/eleccion" >
 <html:hidden property="idPantalla" />
 <table class="marc">
+	<tr>
+        <td class="label"><bean:message key="componente.seccion" /></td>
+        <td><html:radio styleClass="check" property="tipo" value="seccion" /></td>
+    </tr>
     <tr>
         <td class="label"><bean:message key="componente.label" /></td>
         <td><html:radio styleClass="check" property="tipo" value="label" /></td>
@@ -50,13 +54,19 @@
         <td class="label"><bean:message key="componente.checkbox" /></td>
         <td><html:radio styleClass="check" property="tipo" value="checkbox" /></td>
     </tr>
-        <tr>
+    <!-- 
+    <tr>
         <td class="label"><bean:message key="componente.filebox" /></td>
         <td><html:radio styleClass="check" property="tipo" value="filebox" /></td>
     </tr>
+     -->
     <tr>
         <td class="label"><bean:message key="componente.radiobutton" /></td>
         <td><html:radio styleClass="check" property="tipo" value="radiobutton" /></td>
+    </tr>
+    <tr>
+        <td class="label"><bean:message key="componente.captcha" /></td>
+        <td><html:radio styleClass="check" property="tipo" value="captcha" /></td>
     </tr>
 </table>
 <br />

@@ -100,6 +100,10 @@ public class Propiedad implements PDFObject {
 		}
 		PdfPTable innerTable = new PdfPTable(widths);
 		String texto = this.campo;
+		if(value == null)
+		{
+			value = "";
+		}
 		if(!value.equals(""))
 		{
 			texto += ":";

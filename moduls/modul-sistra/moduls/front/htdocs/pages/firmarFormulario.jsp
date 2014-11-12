@@ -95,6 +95,11 @@
 		// Enviamos documento
 		document.firmarFormularioForm.submit ();
 	}
+
+
+	function mostrarPin() {
+		$('#PinDiv').show();				
+	}
 	
 //-->
 </script>
@@ -143,16 +148,22 @@
 			
 			<p><bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo" /></p>
 				
-			<p class="formBotonera"><input type="button" value="<bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo.boton" />" title="<bean:message key="login.certificado.instrucciones.iniciarDispositivo.boton" />" onclick="cargarCertificado();" /></p>
+			<p class="formBotonera"><input type="button" value="<bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo.boton" />" title="<bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo.boton" />" onclick="cargarCertificado();" /></p>
 			<p><bean:message key="firmarDocumento.certificadosDisponibles" /></p>
 			<p>	
 				<jsp:include page="/firma/caib/applet.jsp" flush="false"/>	
 			</p>	
 			
 			<!--  PIN  -->
-			<span style="position: relative;">
-				<bean:message key="firmarDocumento.PINCertificado" /><input type="password" name="PIN" id="PIN" class="txt"/>
-			</span>
+			<p class="notaPie">	
+				<bean:message key="firmarDocumento.requierePINCertificado.inicio"/>	<a href="javascript:mostrarPin()"><bean:message key="firmarDocumento.requierePINCertificado.fin"/></a>								
+			</p>			
+			<div id="PinDiv">
+				<p>			
+					<bean:message key="firmarDocumento.PINCertificado" />
+					<input type="password" name="PIN" id="PIN" class="txt"/>
+				</p>
+			</div>
 			
 			<!--  BOTON FIRMAR -->
 			<p class="formBotonera">

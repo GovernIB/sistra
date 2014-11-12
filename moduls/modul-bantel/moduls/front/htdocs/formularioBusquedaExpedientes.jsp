@@ -7,7 +7,7 @@
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 
-<script type="text/javascript" src="js/formularioBusquedaExpedientes.js"></script>
+<script type="text/javascript" src="js/formularioBusquedaExpedientes.jsp"></script>
 
 <h2><bean:message key="formularioBusquedaExpedientes.busquedaExpedientes"/></h2>
 
@@ -20,21 +20,17 @@
 	<html:form action="busquedaExpedientes" styleId="busquedaExpedientesForm" styleClass="centrat">
 		<html:hidden property="pagina" />				
 		<p>
-			<bean:message key="formularioBusquedaExpedientes.año"/> 
-			<html:select property="anyo">
-				<logic:iterate id="tmpAnyo" name="anyos">
-							<html:option value="<%= tmpAnyo.toString() %>" />
-				</logic:iterate>			
-			</html:select> 
-			<bean:message key="formularioBusquedaExpedientes.mes"/>
-			<html:select property="mes">
-				<logic:iterate id="tmpMes" name="meses">
-							<html:option value="<%= tmpMes.toString() %>"><bean:message key='<%= "mes." + tmpMes %>' /></html:option>
-				</logic:iterate>			
-			</html:select> 					
-			<bean:message key="formularioBusquedaExpedientes.nif"/>  <html:text property="usuarioNif" size="9" /> 
+			<bean:message key="formularioBusqueda.fechaDesde"/>
+			<html:text property="fechaDesde" styleId="fechaDesde" size="10"/>  
+			<bean:message key="formularioBusqueda.fechaHasta"/>
+			<html:text property="fechaHasta" styleId="fechaHasta" size="10"/>  				
+			<bean:message key="formularioBusquedaExpedientes.nif"/>  <html:text property="usuarioNif" size="9" />
+			<bean:message key="formularioBusquedaExpedientes.idExpediente"/>
+			<html:text property="idExpediente" size="30"/> 
 			<bean:message key="formularioBusquedaExpedientes.numeroEntrada"/>
-			<html:text property="numeroEntrada" size="30"/>
+			<html:text property="numeroEntrada" size="30"/>			
+		</p>
+		<p>
 			<bean:message key="formularioBusqueda.procedimiento"/>
 			<html:select property="identificadorProcedimiento">
 				<html:option value="-1" ><bean:message key="formularioBusqueda.tramite.todos"/></html:option>
@@ -43,6 +39,15 @@
 						<%=procedimiento.getIdentificador() + "-" + (procedimiento.getDescripcion().length()>60?procedimiento.getDescripcion().substring(0,60)+"...":procedimiento.getDescripcion())%>
 					</html:option>
 				</logic:iterate>
+			</html:select>
+			<bean:message key="formularioBusqueda.resultadosPorPagina"/>
+			<html:select property="longitudPagina">
+				<html:option value="10" >10</html:option>
+				<html:option value="20" >20</html:option>
+				<html:option value="30" >30</html:option>
+				<html:option value="40" >40</html:option>
+				<html:option value="50" >50</html:option>
+				<html:option value="100" >100</html:option>
 			</html:select>
 		</p>
 		<p class="centrado">

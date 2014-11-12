@@ -7,9 +7,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import es.caib.sistra.front.Constants;
 import es.caib.sistra.front.form.AbandonarTramiteForm;
 import es.caib.sistra.front.util.InstanciaManager;
+import es.caib.sistra.model.MensajeFront;
 import es.caib.sistra.model.ParametrosMensaje;
 import es.caib.sistra.model.RespuestaFront;
 import es.caib.sistra.persistence.delegate.InstanciaDelegate;
@@ -44,6 +44,24 @@ public class AbandonarTramiteAction extends BaseAction
 		this.setRespuestaFront( request, respuestaFront );
 		
 		// Eliminamos tramite
+		RespuestaFront res = delegate.borrarTramite();
+		if (res.getMensaje() != null && 
+				( res.getMensaje().getTipo() == MensajeFront.TIPO_ERROR || 
+				  res.getMensaje().getTipo() == MensajeFront.TIPO_ERROR_CONTINUABLE) ) {
+			// Mostramos error
+			this.setRespuestaFront( request, res );			
+			return null;
+		}
+		
+		// Mensaje de cancelación de trámite
+		ParametrosMensaje param = new ParametrosMensaje();
+		param.setAction("main");			
+		this.setInfoMessage( request, "cancelacionTramite.mensaje",param);		
+		InstanciaManager.desregistrarInstancia( request );
+		return mapping.findForward( "success" );
+		
+		
+		/* RAFA: DEJAMOS SOLO UN BORRAR TRAMITE
 		if ( formulario.getIdPersistencia() == null )
 		{
 			delegate.borrarTramite();
@@ -63,7 +81,8 @@ public class AbandonarTramiteAction extends BaseAction
 			InstanciaManager.desregistrarInstancia( request );
 			formulario.setIdPersistencia( null );
 			return mapping.findForward( "init" );
-		}		
+		}
+		*/		
 		
 	}
 

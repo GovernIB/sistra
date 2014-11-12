@@ -150,9 +150,9 @@ function volver( formulario )
 							<logic:equal name="documento" property="tipoDocumento" value="<%= Character.toString( ConstantesDatosPropiosXML.DOCUMENTOSENTREGAR_TIPO_ANEXO ) %>">
 								<%  
 								String keyMessage = "detalle.chequeo.anexo" ;
-								keyMessage+= (documento.getFotocopia()=='S') ? ".fotocopia" : "";
-								keyMessage+= (documento.getCompulsarDocumento()=='S') ? ".compulsar" : "";												
-								keyMessage+= (documento.getFotocopia()=='N' && documento.getCompulsarDocumento()=='N') ? ".presencial" : "";											
+								keyMessage+= (documento.getFotocopia().charValue()=='S') ? ".fotocopia" : "";
+								keyMessage+= (documento.getCompulsarDocumento().charValue()=='S') ? ".compulsar" : "";												
+								keyMessage+= (documento.getFotocopia().charValue()=='N' && documento.getCompulsarDocumento().charValue()=='N') ? ".presencial" : "";											
 								%>
 								<bean:message key="<%=keyMessage%>"/>
 							</logic:equal>

@@ -12,7 +12,13 @@ public class DocumentoPersistenteBackup
     private Long rdsCodigo;
     private String rdsClave;
     private String nombreFicheroAnexo;
+    private String descripcionGenerico;
+    private String delegacionEstado;
+    private String delegacionFirmantes;
+    private String delegacionFirmantesPendientes;     
     
+    private String tipoDocumento;
+    private String esPagoTelematico;
     
 	public Long getCodigo() {
 		return codigo;
@@ -91,6 +97,67 @@ public class DocumentoPersistenteBackup
 	
 	public void setTramitePersistenteBackup(TramitePersistenteBackup tramitePersistenteBackup) {
 		this.tramitePersistenteBackup = tramitePersistenteBackup;
+	}
+
+
+	public String getDescripcionGenerico() {
+		return descripcionGenerico;
+	}
+
+
+	public void setDescripcionGenerico(String descripcionGenerico) {
+		this.descripcionGenerico = descripcionGenerico;
+	}
+
+
+	public String getDelegacionEstado() {
+		return delegacionEstado;
+	}
+
+
+	public void setDelegacionEstado(String delegacionEstado) {
+		this.delegacionEstado = delegacionEstado;
+	}
+
+
+	public String getDelegacionFirmantes() {
+		return delegacionFirmantes;
+	}
+
+
+	public void setDelegacionFirmantes(String delegacionFirmantes) {
+		this.delegacionFirmantes = delegacionFirmantes;
+	}
+
+
+	public String getDelegacionFirmantesPendientes() {
+		return delegacionFirmantesPendientes;
+	}
+
+
+	public void setDelegacionFirmantesPendientes(
+			String delegacionFirmantesPendientes) {
+		this.delegacionFirmantesPendientes = delegacionFirmantesPendientes;
+	}
+
+
+	public String getTipoDocumento() {
+		return tipoDocumento;
+	}
+
+
+	public void setTipoDocumento(String tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
+	}
+
+
+	public String getEsPagoTelematico() {
+		return esPagoTelematico;
+	}
+
+
+	public void setEsPagoTelematico(String esPagoTelematico) {
+		this.esPagoTelematico = esPagoTelematico;
 	}
 
 

@@ -6,10 +6,12 @@ public class Datos extends NodoBaseConfForms {
 	private String codigoPerfil;
 	private String idioma;
 	private String layout;
+	private boolean guardarSinTerminar;
 	private String modelo;
 	private String nomParamTokenRetorno;
 	private String nomParamXMLDatosFin;
 	private String nomParamXMLDatosIni;
+	private String nomParamXMLSinTerminar;
 	private String urlRedireccionCancel;
 	private String urlRedireccionOK;
 	private String urlSisTraCancel;
@@ -188,6 +190,12 @@ public class Datos extends NodoBaseConfForms {
 			
 			if (!objetosIguales (layout, layoutExt)) return false;
 			
+			// guardar sin terminar
+			boolean guardar 					= isGuardarSinTerminar();
+			boolean guardarExt					= datos.isGuardarSinTerminar();
+			
+			if (guardar != guardarExt) return false;
+			
 			// Modelo
 			String modelo					= getModelo ();
 			String modeloExt				= datos.getModelo ();
@@ -211,6 +219,12 @@ public class Datos extends NodoBaseConfForms {
 			String paramXMLDatosIniExt		= datos.getNomParamXMLDatosIni ();
 			
 			if (!objetosIguales (paramXMLDatosIni, paramXMLDatosIniExt)) return false;
+			
+			// paramXMLSinTerminar
+			String paramXMLSinTerminar			= getNomParamXMLSinTerminar();
+			String paramXMLSinTerminarExt		= datos.getNomParamXMLSinTerminar();
+			
+			if (!objetosIguales (paramXMLSinTerminar, paramXMLSinTerminarExt)) return false;
 			
 			// UrlRedireccionCancel
 			String urlRedireccionCancel		= getUrlRedireccionCancel ();
@@ -263,6 +277,22 @@ public class Datos extends NodoBaseConfForms {
 	
 	public String getUrlSisTraMantenimientoSesion() {		
 		return urlSisTraMantenimientoSesion;
+	}
+
+	public boolean isGuardarSinTerminar() {
+		return guardarSinTerminar;
+	}
+
+	public void setGuardarSinTerminar(boolean guardarSinTerminar) {
+		this.guardarSinTerminar = guardarSinTerminar;
+	}
+
+	public String getNomParamXMLSinTerminar() {
+		return nomParamXMLSinTerminar;
+	}
+
+	public void setNomParamXMLSinTerminar(String nomParamSinTerminar) {
+		this.nomParamXMLSinTerminar = nomParamSinTerminar;
 	}
 
 }

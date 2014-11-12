@@ -239,9 +239,14 @@ public abstract class BaseAction extends Action
             HttpServletResponse response) throws Exception;
     
     
-    protected GestorFlujoFormulario obtenerGestorFormulario( HttpServletRequest request,String token, boolean create ) throws Exception
+    protected GestorFlujoFormulario obtenerGestorFormulario( HttpServletRequest request,String token) throws Exception
     {
-    	return FlujoFormularioRequestHelper.obtenerGestorFormulario( request, token, create );
+    	return FlujoFormularioRequestHelper.obtenerGestorFormulario( request, token);
+    }
+    
+    protected GestorFlujoFormulario crearGestorFormulario( HttpServletRequest request,String token) throws Exception
+    {
+    	return FlujoFormularioRequestHelper.crearGestorFormulario( request, token );
     }
     
     protected void resetGestorFormulario( HttpServletRequest request, String token ) throws Exception

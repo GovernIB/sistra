@@ -43,5 +43,23 @@
     type="es.caib.bantel.front.form.DetalleNotificacionForm" />          
 <form-bean
     name="uploadNotificacionForm"
-    type="es.caib.bantel.front.form.DetalleNotificacionForm" />                
+    type="es.caib.bantel.front.form.DetalleNotificacionForm" />     
+<form-bean
+    name="listaFuenteDatosForm"
+    type="es.caib.bantel.front.form.ListaFuenteDatosForm" />      
+<form-bean
+    name="detalleFuenteDatosForm"
+    type="es.caib.bantel.front.form.DetalleFuenteDatosForm" />
+<form-bean
+    name="borrarFilaFuenteDatosForm"
+    type="es.caib.bantel.front.form.BorrarFilaFuenteDatosForm" />   
+<form-bean
+    name="mostrarFirmaDocumentoForm"
+    type="es.caib.bantel.front.form.MostrarFirmaDocumentoForm" />    
+<form-bean
+    name="mostrarDocumentoCustodiaForm"
+    type="es.caib.bantel.front.form.MostrarDocumentoCustodiaForm" />   
+<form-bean
+    name="importarCSVFuenteDatosForm"
+    type="es.caib.bantel.front.form.ImportarCSVFuenteDatosForm" />     
     

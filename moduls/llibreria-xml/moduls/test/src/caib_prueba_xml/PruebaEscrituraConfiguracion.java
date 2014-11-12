@@ -71,6 +71,7 @@ public class PruebaEscrituraConfiguracion {
 			datos.setVersion (new Integer (1));
 			datos.setCodigoPerfil ("JUVENIL");
 			datos.setLayout ("main");
+			datos.setGuardarSinTerminar(true);
 			datos.setUrlSisTraOK ("http://localhost:8080/form-testst/recepcioForm");
 			datos.setUrlRedireccionOK ("http://localhost:8080/form-testst/continuarTramitacio");
 			datos.setUrlSisTraCancel ("http://localhost:8080/form-testst/cancelarForm");
@@ -78,6 +79,7 @@ public class PruebaEscrituraConfiguracion {
 			datos.setUrlSisTraMantenimientoSesion ("http://localhost:8080/form-testst/recepcioForm");
 			datos.setNomParamXMLDatosIni ("xmlInicial");
 			datos.setNomParamXMLDatosFin ("xmlFinal");
+			datos.setNomParamXMLSinTerminar("sinTerminar");
 			datos.setNomParamTokenRetorno ("TOKEN");
 			configuracion.setDatos (datos);
 			

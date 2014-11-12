@@ -36,10 +36,17 @@
 
     <property name="habilitarNotificacionTelematica" length="1" column="ETN_NOTTEL"/>
     <property name="permitirSMS" column="ETN_PERSMS" length="1" not-null="true"/>
+    
+    <property name="habilitarAlertasTramitacion" length="1" column="ETN_ALETRA"/>
+    <property name="permitirSMSAlertasTramitacion" column="ETN_ALESMS" length="1" not-null="true"/>        
+    
     <property name="avisoSMS" type="binary" column="ETN_AVISMS"/>
     <property name="avisoEmail" type="binary" column="ETN_AVIEMA"/>
     
     <property name="diasPrerregistro" column="ETN_DIAPRE" length="3"/>
+    
+    <property name="ocultarClaveTramitacionJustif" column="ETN_JNOCLA" length="1" not-null="true"/>
+    <property name="ocultarNifNombreJustif" column="ETN_JNONN" length="1" not-null="true"/>           
     
     <list name="datosJustificante" cascade="all-delete-orphan" inverse="true" lazy="true">
          <cache usage="read-write"/>

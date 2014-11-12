@@ -13,7 +13,9 @@ public class AvisoNotificacion extends NodoBaseAvisoNotificacion  {
 	private String texto;
 	private String textoSMS;
 	private	Boolean acuseRecibo;
+	private	Boolean accesiblePorClave;
 	private Expediente expediente;
+	private Integer plazo;
 	
 	
 	AvisoNotificacion (){
@@ -45,7 +47,9 @@ public class AvisoNotificacion extends NodoBaseAvisoNotificacion  {
 			if (!objetosIguales (getTexto(), inst.getTexto())) return false;
 			if (!objetosIguales (getTextoSMS(), inst.getTextoSMS())) return false;
 			if (!objetosIguales (getAcuseRecibo(), inst.getAcuseRecibo())) return false;
+			if (!objetosIguales (getAccesiblePorClave(), inst.getAccesiblePorClave())) return false;
 			if (!objetosIguales (getExpediente(), inst.getExpediente())) return false;
+			if (!objetosIguales (getPlazo(), inst.getPlazo())) return false;
 			
 			// OK los objetos son equivalentes
 			return true;
@@ -99,6 +103,26 @@ public class AvisoNotificacion extends NodoBaseAvisoNotificacion  {
 
 	public void setTextoSMS(String textoSMS) {
 		this.textoSMS = textoSMS;
+	}
+
+
+	public Boolean getAccesiblePorClave() {
+		return accesiblePorClave;
+	}
+
+
+	public void setAccesiblePorClave(Boolean accesiblePorClave) {
+		this.accesiblePorClave = accesiblePorClave;
+	}
+
+
+	public Integer getPlazo() {
+		return plazo;
+	}
+
+
+	public void setPlazo(Integer plazo) {
+		this.plazo = plazo;
 	}
 
 }

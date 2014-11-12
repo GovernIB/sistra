@@ -19,7 +19,6 @@ public class RedirectAction extends Action
 	 public ActionForward executeTask(ActionMapping mapping, ActionForm form, HttpServletRequest request,
              HttpServletResponse response) throws Exception 
      {
-		 
 		 String url = request.getParameter("url");
 		 response.sendRedirect(url);		 
 		 return null;

@@ -61,11 +61,11 @@ public class EventoExpedienteDelegate implements StatelessDelegate
         }
 	}
 	
-	public Long grabarEventoExpediente( EventoExpediente evento ) throws DelegateException
+	public Long grabarNuevoEventoExpediente( EventoExpediente evento ) throws DelegateException
 	{
 		try
 		{
-			return getFacade().grabarEventoExpediente( evento );
+			return getFacade().grabarNuevoEventoExpediente( evento );
 		}
 		catch (Exception e) 
 		{

@@ -27,6 +27,9 @@ public class PruebaLecturaConfiguracion {
 			System.out.println("Version: " + datos.getVersion());
 			System.out.println("UrlSistraOK: " + datos.getUrlSisTraOK());
 			
+			System.out.println("GuardarSinTerminar: " + datos.isGuardarSinTerminar());
+			System.out.println("NomParamXMLSinTerminar: " + datos.getNomParamXMLSinTerminar());
+			
 			System.out.println ("Propiedades");
 			Iterator props = (conf.getPropiedades() != null) ? conf.getPropiedades().iterator() : null;
 			

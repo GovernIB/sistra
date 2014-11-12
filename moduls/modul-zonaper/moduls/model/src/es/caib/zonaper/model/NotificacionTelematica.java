@@ -32,12 +32,19 @@ public class NotificacionTelematica implements java.io.Serializable,ElementoExpe
      private boolean firmarAcuse;
      private String gestorSeycon;
      private Date fechaFinPlazo;
+     private Integer diasPlazo;
      private boolean rechazada;
      
      private String tramiteSubsanacionDescripcion;
      private String tramiteSubsanacionIdentificador;
      private Integer tramiteSubsanacionVersion;
      private String tramiteSubsanacionParametros;
+     
+     private String identificadorPersistencia;
+     
+     private boolean accesiblePorClave;
+     
+     private String tipoFirmaAcuse; // CERT / CLA
      
      private Set documentos = new HashSet(0);  
                 
@@ -296,6 +303,38 @@ public class NotificacionTelematica implements java.io.Serializable,ElementoExpe
 
 	public void setRechazada(boolean rechazada) {
 		this.rechazada = rechazada;
+	}
+
+	public String getIdentificadorPersistencia() {
+		return identificadorPersistencia;
+	}
+
+	public void setIdentificadorPersistencia(String identificadorPersistencia) {
+		this.identificadorPersistencia = identificadorPersistencia;
+	}	
+
+	public boolean isAccesiblePorClave() {
+		return accesiblePorClave;
+	}
+
+	public void setAccesiblePorClave(boolean accesiblePorClave) {
+		this.accesiblePorClave = accesiblePorClave;
+	}
+
+	public String getTipoFirmaAcuse() {
+		return tipoFirmaAcuse;
+	}
+
+	public void setTipoFirmaAcuse(String tipoFirmaAcuse) {
+		this.tipoFirmaAcuse = tipoFirmaAcuse;
+	}
+
+	public Integer getDiasPlazo() {
+		return diasPlazo;
+	}
+
+	public void setDiasPlazo(Integer diasPlazo) {
+		this.diasPlazo = diasPlazo;
 	}	
     
 }

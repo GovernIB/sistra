@@ -98,5 +98,8 @@ public interface InstanciaDelegate extends Delegate {
     public List obtenerLogScripts() throws DelegateException;
     public void limpiarLogScripts() throws DelegateException; 
     // -- INDRA: LOG SCRIPT
-    
+
+    public String obtenerCaptcha(String fieldName) throws DelegateException;
+	public void regenerarCaptcha(String fieldName) throws DelegateException;
+ 
 }

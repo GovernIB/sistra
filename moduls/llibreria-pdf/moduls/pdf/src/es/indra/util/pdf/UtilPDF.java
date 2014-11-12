@@ -344,4 +344,21 @@ public class UtilPDF {
 		PdfEncryptor.encrypt(reader, pdfOut, null,null, PdfWriter.AllowPrinting, false);		
     }
 	
+	/**
+	 * Detecta si un pdf es PDF/A
+	 * @param pdfIn
+	 * @return
+	 * @throws Exception
+	 */
+	public static boolean isPdfA(InputStream pdfIn) throws Exception{
+		PdfReader reader = new PdfReader(pdfIn);
+		byte metaBytes[] = reader.getMetadata();
+		if (metaBytes == null) {
+			return false;
+		}
+		String xml = new String(metaBytes, "UTF-8");
+		// Detectamos si existe la cadena "<pdfaid:conformance>A</pdfaid:conformance>"
+		return (xml.indexOf("<pdfaid:conformance>A</pdfaid:conformance>") != -1 || xml.indexOf("<pdfaid:conformance>B</pdfaid:conformance>") != -1);			
+	}
+
 }

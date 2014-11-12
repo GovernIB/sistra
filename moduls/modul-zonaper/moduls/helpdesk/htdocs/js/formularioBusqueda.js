@@ -189,7 +189,7 @@
              return false;
         }
 
-        letrasComienzo1 = "ABCDEFGHN";
+        letrasComienzo1 = "ABCDEFGHNU";
         letrasComienzo2 = "PQS";
         letrasFin = "JABCDEFGHI";
         numeros = "0123456789";

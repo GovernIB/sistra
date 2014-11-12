@@ -20,7 +20,7 @@ public class ListBox extends Campo {
         return true;
     }
 
-    private boolean seleccionMultiple;
+    private boolean seleccionMultiple = true;
     
 	public boolean isSeleccionMultiple() {
 		return seleccionMultiple;
@@ -29,4 +29,5 @@ public class ListBox extends Campo {
 	public void setSeleccionMultiple(boolean seleccionMultiple) {
 		this.seleccionMultiple = seleccionMultiple;
 	}
+	
 }

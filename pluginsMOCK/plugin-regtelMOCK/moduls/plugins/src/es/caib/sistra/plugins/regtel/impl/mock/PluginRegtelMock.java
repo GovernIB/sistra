@@ -91,4 +91,8 @@ public class PluginRegtelMock implements PluginRegistroIntf{
 		
 	}
 
+	public String obtenerDescripcionSelloOficina(String oficina) {		
+		return "OFICINA " + oficina;
+	}
+
 }

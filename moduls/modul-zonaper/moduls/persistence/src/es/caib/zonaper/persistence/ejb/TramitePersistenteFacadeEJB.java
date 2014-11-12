@@ -4,8 +4,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.ejb.CreateException;
@@ -28,11 +31,13 @@ import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
 import es.caib.util.CredentialUtil;
+import es.caib.util.DataUtil;
 import es.caib.zonaper.model.DocumentoPersistente;
 import es.caib.zonaper.model.DocumentoPersistenteBackup;
 import es.caib.zonaper.model.TramitePersistente;
 import es.caib.zonaper.model.TramitePersistenteBackup;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
+import es.caib.zonaper.persistence.util.ConfigurationUtil;
 import es.caib.zonaper.persistence.util.GeneradorId;
 
 /**
@@ -49,6 +54,9 @@ import es.caib.zonaper.persistence.util.GeneradorId;
  * 
  * @ejb.env-entry name="roleAuto" type="java.lang.String" value="${role.auto}"
  * @ejb.env-entry name="roleHelpdesk" type="java.lang.String" value="${role.helpdesk}"
+ * 
+ * @ejb.security-role-ref role-name="${role.helpdesk}" role-link="${role.helpdesk}"
+ * @ejb.security-role-ref role-name="${role.auto}" role-link="${role.auto}"
  */
 public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
 
@@ -68,11 +76,9 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
 			roleHelpdesk = (( String ) initialContext.lookup( "java:comp/env/roleHelpdesk" ));
 		}catch(Exception ex){
 			log.error(ex);
-		}
-			
+		}			
 	}
 	 
-   
 
 	/**
      * @ejb.interface-method
@@ -105,6 +111,30 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
         	// Cargamos documentos
         	Hibernate.initialize(tramitePersistente.getDocumentos());        	
             return tramitePersistente;
+        } catch (Exception he) {        	
+        	throw new EJBException("No se puede obtener tramite con idPersistencia " + id,  he);
+        } finally {
+            close(session);
+        }
+    }
+    
+    /**
+     * Comprueba si existe tramite persistente con ese id persistencia
+     * @ejb.interface-method    
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public boolean existeTramitePersistente(String id) {
+        Session session = getSession();
+        try {    	
+        	Query query = session
+            .createQuery("FROM TramitePersistente AS m WHERE m.idPersistencia = :id")
+            .setParameter("id",id);
+            //query.setCacheable(true);
+            if (query.list().isEmpty()){
+            	return false;
+            } else {
+            	return true;
+            }            
         } catch (Exception he) {        	
         	throw new EJBException("No se puede obtener tramite con idPersistencia " + id,  he);
         } finally {
@@ -562,7 +592,8 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
     
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.auto}" 
+     * @ejb.permission role-name="${role.auto}"
+     * @ejb.permission role-name="${role.todos}"
      * @param tramitePersistente
      * @return
      */
@@ -734,6 +765,111 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
+    
+    
+    /**
+     * Obtiene lista de tramites pendientes avisar por pago finalizado sin 
+     * @ejb.interface-method    
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public List obtenerTramitesPendienteAvisoPagoTelematicoFinalizado() {
+        Session session = getSession();
+        try {    	
+        	Properties props = ConfigurationUtil.getInstance().obtenerPropiedades();
+        	String avisoInicial = props.getProperty("scheduler.alertasTramitacion.pagoFinalizado.avisoInicial");
+        	String repeticion = props.getProperty("scheduler.alertasTramitacion.pagoFinalizado.repeticion");
+        	
+        	if (StringUtils.isBlank(avisoInicial) || StringUtils.isBlank(repeticion)) {
+        		throw new Exception("No se han configurado las propiedades para alertas de tramitacion en el zonaper.properties");
+        	}
+        	
+        	int repeticionInt;
+         	try {
+         		repeticionInt = Integer.parseInt(repeticion);
+         	} catch (NumberFormatException nfe) {
+         		throw new Exception("scheduler.alertasTramitacion.pagoFinalizado.repeticion no tiene un valor valido (zonaper.properties)");
+         	}
+         	
+         	int avisoInicialInt;
+         	try {
+         		avisoInicialInt = Integer.parseInt(avisoInicial);
+         	} catch (NumberFormatException nfe) {
+         		throw new Exception("scheduler.alertasTramitacion.pagoFinalizado.avisoInicial no tiene un valor valido (zonaper.properties)");
+         	}
+        	
+         	// Si aviso inicial = 0, no se generan alertas
+         	if (avisoInicialInt <= 0) {
+         		return new ArrayList();
+         	}
+         	
+        	Date ahora = new Date();
+        	
+        	Query query = session.createQuery("select distinct d.tramitePersistente FROM DocumentoPersistente AS d " +
+        			"WHERE d.tramitePersistente.alertasTramitacionGenerar = 'S' and d.esPagoTelematico = 'S' and d.estado = 'S' ");
+        	List tramites = query.list();
+           
+        	Map resultMap = new HashMap();
+        	for (Iterator it = tramites.iterator(); it.hasNext();) {
+        		TramitePersistente tram = (TramitePersistente) it.next();
+        		// Si ha pasado la fecha de caducidad no avisamos
+        		if (tram.getFechaCaducidad() != null && tram.getFechaCaducidad().before(ahora)) {
+        			continue;
+        		}
+        		// Comprobamos si es primer aviso
+        		if (tram.getAlertasTramitacionFechaUltima() == null) {
+        			// Si es primer aviso, generamos alerta si pasa el limite desde la ultima hora de modificacion
+        			if ( DataUtil.sumarHoras(tram.getFechaModificacion(), avisoInicialInt).compareTo(ahora) <= 0 ) {
+        				resultMap.put(tram.getIdPersistencia(), tram);
+        			}
+        		} else {
+        			// Si no es primer aviso, generamos alerta si el tiempo de la ultima alerta pasa el limite de repeticion
+        			if ( repeticionInt > 0 && DataUtil.sumarHoras(tram.getAlertasTramitacionFechaUltima(), repeticionInt).compareTo(ahora) <= 0 ) {
+        				resultMap.put(tram.getIdPersistencia(), tram);
+        			}
+        		}
+        	}
+        	
+        	// Devolvemos lista de tramites
+        	List resultList = new ArrayList();
+        	for (Iterator it = resultMap.keySet().iterator(); it.hasNext();) {
+        		resultList.add(resultMap.get(it.next()));
+        	}
+        	return resultList;
+        	
+        } catch (Exception he) {        	
+        	throw new EJBException("No se puede lista de tramites pendientes de avisos de pago",  he);
+        } finally {
+            close(session);
+        }
+    }
+    
+    
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public void avisoPagoTelematicoFinalizado(String idPersistencia) {
+        
+    	// Recuperamos tramite (se valida control de acceso al recuperar el tramite)
+    	TramitePersistente tramite = this.obtenerTramitePersistente(idPersistencia);
+    	if (tramite == null){
+    		throw new EJBException("No existe tramite");
+    	}
+    	
+    	// Actualizamos fecha aviso
+    	tramite.setAlertasTramitacionFechaUltima(new Date());
+    	
+    	// Actualizamos tramite
+    	Session session = getSession();
+        try {
+        	session.update(tramite);
+        } catch (Exception he) {        	
+        	throw new EJBException("No se puede actualizar tramite con idPersistencia " + idPersistencia,  he);
+        } finally {
+            close(session);
+        }
+    }
+    
     
     // ------------------------------------------------------------------------------------------------------
     // 			FUNCIONES AUXILIARES

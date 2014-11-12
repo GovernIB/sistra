@@ -23,11 +23,17 @@ public class EspecTramiteNivel  extends Traducible {
      // X: Sin especificar (para sobreescribir x nivel) / N: No permite /  S: Permite / O: Obligatoria
      private String habilitarNotificacionTelematica = "X";
      private String permitirSMS = "N"; // S / N
+     // X: Sin especificar (para sobreescribir x nivel) / N: No permite /  S: Permite
+     private String habilitarAlertasTramitacion = "X";
+     private String permitirSMSAlertasTramitacion = "N"; // S / N
+     
      private byte[] avisoSMS;
      private byte[] avisoEmail;
      private List datosJustificante = new ArrayList();     
      private String flujoTramitacion="N";
      private byte[] checkEnvio;
+     private String ocultarClaveTramitacionJustif = "X";
+     private String ocultarNifNombreJustif = "X";
      /***
       * Script que permite cambiar el destinatario del trámite (oficina registro,organo destino y unidad administrativa)
       */
@@ -312,6 +318,47 @@ public class EspecTramiteNivel  extends Traducible {
 
 	public void setPermitirSMS(String permitirSMS) {
 		this.permitirSMS = permitirSMS;
+	}
+
+
+	public String getOcultarClaveTramitacionJustif() {
+		return ocultarClaveTramitacionJustif;
+	}
+
+
+	public void setOcultarClaveTramitacionJustif(String ocultarClaveTramitacion) {
+		this.ocultarClaveTramitacionJustif = ocultarClaveTramitacion;
+	}
+
+
+	public String getOcultarNifNombreJustif() {
+		return ocultarNifNombreJustif;
+	}
+
+
+	public void setOcultarNifNombreJustif(String ocultarNifNombre) {
+		this.ocultarNifNombreJustif = ocultarNifNombre;
+	}
+
+
+	public String getHabilitarAlertasTramitacion() {
+		return habilitarAlertasTramitacion;
+	}
+
+
+	public void setHabilitarAlertasTramitacion(String habilitarAlertasTramitacion) {
+		this.habilitarAlertasTramitacion = habilitarAlertasTramitacion;
+	}
+
+
+	public String getPermitirSMSAlertasTramitacion() {
+		return permitirSMSAlertasTramitacion;
+	}
+
+
+	public void setPermitirSMSAlertasTramitacion(
+			String permitirSMSAlertasTramitacion) {
+		this.permitirSMSAlertasTramitacion = permitirSMSAlertasTramitacion;
 	}
     
 	

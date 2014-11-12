@@ -155,4 +155,10 @@
         <put name="id" value="" />
     </definition>        
     
+     <!-- ================= MIGRACION DOCS ============= -->
+    <definition name=".migracion" path="/migracion/migracion.jsp"  
+    	controllerClass="es.caib.redose.back.action.migracion.MigracionController">
+   		
+	</definition>  
+    
 </tiles-definitions>

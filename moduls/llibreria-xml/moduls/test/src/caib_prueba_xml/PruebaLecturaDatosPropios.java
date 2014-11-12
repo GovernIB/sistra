@@ -6,22 +6,36 @@ import java.util.List;
 
 import es.caib.xml.datospropios.factoria.FactoriaObjetosXMLDatosPropios;
 import es.caib.xml.datospropios.factoria.ServicioDatosPropiosXML;
+import es.caib.xml.datospropios.factoria.impl.AlertasTramitacion;
 import es.caib.xml.datospropios.factoria.impl.Dato;
 import es.caib.xml.datospropios.factoria.impl.DatosPropios;
 import es.caib.xml.datospropios.factoria.impl.Documento;
 import es.caib.xml.datospropios.factoria.impl.DocumentosEntregar;
 import es.caib.xml.datospropios.factoria.impl.FormulariosJustificante;
 import es.caib.xml.datospropios.factoria.impl.Instrucciones;
+import es.caib.xml.datospropios.factoria.impl.PersonalizacionJustificante;
 import es.caib.xml.datospropios.factoria.impl.Solicitud;
 import es.caib.xml.datospropios.factoria.impl.TramiteSubsanacion;
 
 public class PruebaLecturaDatosPropios {
+	
+	private static void imprimirAlertasTramitacion (AlertasTramitacion fj){
+		System.out.println ("ALERTAS TRAMITACION");
+		System.out.println ("email: " + fj.getEmail());
+		System.out.println ("sms: " + fj.getSms());
+	}
 	
 	private static void imprimirFormulariosJustificante (FormulariosJustificante fj){
 		System.out.println ("FORMULARIOS JUSTIFICANTE");
 		for (int i=0; i < fj.getFormularios().size(); i++) {
 			System.out.println (fj.getFormularios().get(i));
 		}				
+	}
+	
+	private static void imprimirPersonalizacionJustificante (PersonalizacionJustificante fj){
+		System.out.println ("FORMULARIOS JUSTIFICANTE");
+		System.out.println ("Ocultar clave: " + fj.getOcultarClaveTramitacion());
+		System.out.println ("Ocultar nif nombre: " + fj.getOcultarNifNombre());
 	}
 	
 	private static void imprimirTramiteSubsanacion (TramiteSubsanacion ts){
@@ -76,6 +90,14 @@ public class PruebaLecturaDatosPropios {
 		
 		if (inst.getFormulariosJustificante() != null){
 			imprimirFormulariosJustificante(inst.getFormulariosJustificante());
+		}
+		
+		if (inst.getPersonalizacionJustificante() != null){
+			imprimirPersonalizacionJustificante(inst.getPersonalizacionJustificante());
+		}
+		
+		if (inst.getAlertasTramitacion() != null){
+			imprimirAlertasTramitacion(inst.getAlertasTramitacion());
 		}
 	}
 	

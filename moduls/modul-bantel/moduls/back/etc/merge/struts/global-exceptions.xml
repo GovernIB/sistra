@@ -1,11 +1,8 @@
 <global-exceptions>
-    <!--    
     <exception 
         key="errors.delegate" 
-        type="es.caib.form.persistence.delegate.DelegateException"
+        type="es.caib.bantel.persistence.delegate.DelegateException"
         path="/error.jsp"
         handler="es.caib.bantel.back.action.DelegateExceptionHandler"
-    />
-    -->
-        
+    />       
 </global-exceptions>

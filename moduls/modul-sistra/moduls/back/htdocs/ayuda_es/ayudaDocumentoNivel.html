@@ -65,6 +65,10 @@
     <td><p>Identifica en el gestor de formularios el modelo/versión del formulario. Para FORMS hay un botón de selección.</p></td>
   </tr>
   <tr> 
+    <td>Permitir guardar sin terminar</td>
+    <td><p>Indica si se permite que el formulario se guarde sin terminar.</p></td>
+  </tr>
+  <tr> 
     <td>Script carga de datos iniciales</td>
     <td><p>Para formularios permite precargar datos en el formulario (p.ej. nif 
         y nombre del usuario). El tipo de este campo es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> 
@@ -146,6 +150,10 @@
         DATOSPAGO.setNif('Nif');<br>
         DATOSPAGO.setNombre('Nombre');<br>
 	  </p>
+	   <p> Adicionalmente se puede especificar una fecha l&iacute;mite para iniciar el pago: <br/>
+	   		DATOSPAGO.setFechaLimitePago('dd/MM/yyyy HH:mm:ss');<br>
+        	DATOSPAGO.setMensajeFechaLimitePago('Mensaje a mostrar si se excede la fecha limite');
+	   </p> 
       <p> Adem&aacute;s se dispone de una funci&oacute;n para consultar el importe 
         de una tasa (en cents):<br/><br/>
         res = DATOSPAGO.consultarImporteTasa('idTasa')<em>;</em> // En caso de 

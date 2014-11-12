@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -20,6 +21,7 @@ import javax.naming.InitialContext;
 
 import org.apache.commons.lang.StringUtils;
 
+import es.caib.bantel.model.ConsultaFuenteDatos;
 import es.caib.bantel.model.DocumentoBandeja;
 import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.model.TramiteBandeja;
@@ -28,11 +30,14 @@ import es.caib.bantel.modelInterfaz.DatosDocumentoPresencial;
 import es.caib.bantel.modelInterfaz.DatosDocumentoTelematico;
 import es.caib.bantel.modelInterfaz.DocumentoBTE;
 import es.caib.bantel.modelInterfaz.ExcepcionBTE;
+import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
 import es.caib.bantel.modelInterfaz.TramiteBTE;
+import es.caib.bantel.modelInterfaz.ValoresFuenteDatosBTE;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
-import es.caib.bantel.persistence.delegate.TramiteBandejaDelegate;
 import es.caib.bantel.persistence.delegate.ProcedimientoDelegate;
-import es.caib.bantel.persistence.util.StringUtil;
+import es.caib.bantel.persistence.delegate.TramiteBandejaDelegate;
+import es.caib.bantel.persistence.util.BteStringUtil;
+import es.caib.bantel.persistence.util.FuenteDatosUtil;
 import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
@@ -149,8 +154,70 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
     	}
     }
     
+    /**
+     * Consulta de fuente de datos para dominios.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public ValoresFuenteDatosBTE consultaFuenteDatos(String consultaFuenteDatos, List parametros)  throws ExcepcionBTE{
+    	try{
+	    	// Verificamos estructura fuente de datos
+    		ConsultaFuenteDatos cfd = FuenteDatosUtil.decodificarConsulta(consultaFuenteDatos);
+	    	
+    		// Recuperamos filas
+    		List filas = DelegateUtil.getFuenteDatosDelegate().realizarConsulta(cfd.getIdFuenteDatos(), cfd.getFiltros(), parametros);
+	    	
+    		// Ordenamos filas
+    		FuenteDatosUtil.ordenarFilas(filas, cfd.getCampoOrden());
+    		
+    		// Creamos valores fuente de datos
+    		ValoresFuenteDatosBTE vfd = FuenteDatosUtil.generarValores(filas, cfd.getCampos());
+    		
+	    	return vfd;
+	    	
+    	}catch (Exception ex){
+    		throw new ExcepcionBTE("No se ha podido consultar fuente de datos: " + ex.getMessage(),ex);
+    	}
+    }
     
-    // ------------------------ Funciones utilidad ----------------------------------------------------------------
+    
+    /**
+     * Consulta informacion de un procedimento.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public ProcedimientoBTE obtenerProcedimiento(String idProcedimiento)  throws ExcepcionBTE{
+    	try{
+	    	Procedimiento p = DelegateUtil.getTramiteDelegate().obtenerProcedimiento(idProcedimiento);
+	    	ProcedimientoBTE res = convertProcedimientoToProcedimientoBTE(p);
+	    	return res;
+    	}catch (Exception ex){
+    		throw new ExcepcionBTE("No se ha podido consultar procedimiento  " + idProcedimiento + " : " + ex.getMessage(),ex);
+    	}
+    }
+    
+
+	// ------------------------ Funciones utilidad ----------------------------------------------------------------
+
+    /**
+     * Convierte Procedimiento a ProcedimientoBTE.
+     * @param p Procedimiento
+     * @return ProcedimientoBTE
+     */
+	private ProcedimientoBTE convertProcedimientoToProcedimientoBTE(
+			Procedimiento p) {
+		ProcedimientoBTE pb = new ProcedimientoBTE();
+		pb.setIdentificador(p.getIdentificador());
+		pb.setDescripcion(p.getDescripcion());
+		pb.setUnidadAdministrativa(p.getUnidadAdministrativa());
+		pb.setPermitirSMS("S".equals(p.getPermitirSms()));
+		pb.setPermitirPlazoNotificacionesVariable("S".equals(p.getPermitirPlazoNotificacionesVariable()));
+		return pb;
+	}
+	
     /**
      * Crea entrada en Bandeja
      */
@@ -186,8 +253,8 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 	    			throw new Exception("El tipo asiento no es válido para crear una entrada en la bandeja: " + asiento.getDatosOrigen().getTipoRegistro());	    			
 	    	}	    	
 	    	tramiteBTE.setTipo(asiento.getDatosOrigen().getTipoRegistro().charValue());
-	    	tramiteBTE.setIdentificadorTramite(StringUtil.getModelo(asiento.getDatosAsunto().getIdentificadorTramite()));
-	    	tramiteBTE.setVersionTramite(StringUtil.getVersion(asiento.getDatosAsunto().getIdentificadorTramite()));
+	    	tramiteBTE.setIdentificadorTramite(BteStringUtil.getModelo(asiento.getDatosAsunto().getIdentificadorTramite()));
+	    	tramiteBTE.setVersionTramite(BteStringUtil.getVersion(asiento.getDatosAsunto().getIdentificadorTramite()));
 	    	tramiteBTE.setIdioma(asiento.getDatosAsunto().getIdiomaAsunto());
 	    	Iterator it = asiento.getDatosInteresado().iterator();
 	    	while (it.hasNext()){
@@ -256,8 +323,8 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 	    			    		    		
 	    		DatosDocumentoTelematico fic = new DatosDocumentoTelematico();
 	    		ReferenciaRDS ref = (ReferenciaRDS) refDocumentos.get(da.getIdentificadorDocumento());
-	    		fic.setIdentificador(StringUtil.getModelo(da.getIdentificadorDocumento()));
-	    		fic.setNumeroInstancia(StringUtil.getVersion(da.getIdentificadorDocumento()));
+	    		fic.setIdentificador(BteStringUtil.getModelo(da.getIdentificadorDocumento()));
+	    		fic.setNumeroInstancia(BteStringUtil.getVersion(da.getIdentificadorDocumento()));
 	    		fic.setCodigoReferenciaRds(ref.getCodigo());
     			fic.setClaveReferenciaRds(ref.getClave());
     			docBTE.setPresentacionTelematica(fic);
@@ -317,8 +384,8 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 		    		// Establecemos parametros presenciales
 		    		DatosDocumentoPresencial presencial = new DatosDocumentoPresencial();
 		    		if (docPres.getIdentificador() != null ) {		    			
-		    			presencial.setIdentificador(StringUtil.getModelo(docPres.getIdentificador()));
-		    			presencial.setNumeroInstancia(StringUtil.getVersion(docPres.getIdentificador()));
+		    			presencial.setIdentificador(BteStringUtil.getModelo(docPres.getIdentificador()));
+		    			presencial.setNumeroInstancia(BteStringUtil.getVersion(docPres.getIdentificador()));
 		    		}
 		    		presencial.setTipoDocumento(docPres.getTipo().charValue());    		    		    		
 		    		presencial.setCompulsarDocumento((docPres.isCompulsar().booleanValue()?'S':'N'));

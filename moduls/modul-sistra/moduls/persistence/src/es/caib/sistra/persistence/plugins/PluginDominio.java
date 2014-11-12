@@ -22,10 +22,13 @@ import net.sf.ehcache.CacheException;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import es.caib.bantel.modelInterfaz.ValoresFuenteDatosBTE;
+import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
 import es.caib.sistra.model.ConstantesSTR;
 import es.caib.sistra.model.Dominio;
 import es.caib.sistra.modelInterfaz.ValoresDominio;
@@ -168,6 +171,9 @@ public class PluginDominio {
 			case Dominio.DOMINIO_SQL:
 				valoresDominio = resuelveDominioSQL(dominio,parametros,url);
 				break;
+			case Dominio.DOMINIO_FUENTE_DATOS:
+				valoresDominio = resuelveDominioFuenteDatos(dominio,parametros,url);
+				break;
 			default:
 				throw new Exception("Tipo de dominio no soportado: " + dominio.getTipo());
 		}
@@ -184,6 +190,14 @@ public class PluginDominio {
 		return valoresDominio;
 	}
 	
+	private ValoresDominio resuelveDominioFuenteDatos(Dominio dominio,
+			List parametros, String url) throws Exception {
+		ValoresFuenteDatosBTE vfd = DelegateBTEUtil.getBteSistraDelegate().consultaFuenteDatos(dominio.getSql(), parametros);
+		ValoresDominio vd = new ValoresDominio();
+		BeanUtils.copyProperties(vd, vfd);
+		return vd;		
+	}
+
 	private ValoresDominio resuelveDominioEJB(Dominio dominio,List parametros, String url) throws Exception
 	{
 		log.debug("Accedemos a Dominio EJB");
@@ -289,9 +303,9 @@ public class PluginDominio {
 		}
 		
 		if(dominio.getVersionWS() != null && "v1".equals(dominio.getVersionWS())){
-			return es.caib.sistra.wsClient.v1.client.ClienteWS.obtenerDominio(url,user,pass,dominio.getIdentificador(),parametros);
+			return es.caib.sistra.wsClient.v1.client.ClienteWS.obtenerDominio(url,dominio.getSoapActionWS(),user,pass,dominio.getIdentificador(),parametros);
 		}else if(dominio.getVersionWS() != null && "v2".equals(dominio.getVersionWS())){
-			return es.caib.sistra.wsClient.v2.client.ClienteWS.obtenerDominio(url,user,pass,dominio.getIdentificador(),parametros);
+			return es.caib.sistra.wsClient.v2.client.ClienteWS.obtenerDominio(url,dominio.getSoapActionWS(),user,pass,dominio.getIdentificador(),parametros);
 		}else{
 			throw new Exception("Excepcion obteniendo la versión "+dominio.getVersionWS()+" del WS de obtención de dominios. ");
 		}

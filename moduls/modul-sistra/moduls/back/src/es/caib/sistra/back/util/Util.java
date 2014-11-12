@@ -4,9 +4,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.naming.InitialContext;
+
 
 public class Util
 {
+	private static String version = null;	
 	public final static String FORMATO_TIMESTAMP = "dd/MM/yyyy HH:mm:ss";
 	public final static String FORMATO_FECHA = "dd/MM/yyyy";
 	
@@ -143,4 +146,18 @@ public class Util
     	return sb.toString();
     }
 	
+    /**
+	 * Obtiene version (en web.xml)
+	 */
+	public static String getVersion(){
+		if (version == null) {
+			try{
+				InitialContext ic = new InitialContext();
+				version = (String) ic.lookup("java:comp/env/release.cvs.tag");
+			}catch(Exception ex){
+				version = null;
+			}		
+		}
+		return version;
+	}
 }

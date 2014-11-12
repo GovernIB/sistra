@@ -27,6 +27,8 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 	private String avisoEmail;
 	private TramiteSubsanacion tramiteSubsanacion;
 	private FormulariosJustificante formulariosJustificante;
+	private PersonalizacionJustificante personalizacionJustificante;
+	private AlertasTramitacion alertasTramitacion;
 	
 	
 	Instrucciones (){
@@ -35,6 +37,7 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 		fechaTopeEntrega = null;
 		identificadorPersistencia = null;	
 		identificadorProcedimiento = null;
+		alertasTramitacion = null;
 	}
 			
 	/* (non-Javadoc)
@@ -133,6 +136,12 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 			//  Comprobar formularios justificante
 			if (!objetosIguales (getFormulariosJustificante(), inst.getFormulariosJustificante())) return false;
 			
+			//  Comprobar personalizacion justificante
+			if (!objetosIguales (getPersonalizacionJustificante(), inst.getPersonalizacionJustificante())) return false;
+			
+			//  Comprobar alertas tramitacion
+			if (!objetosIguales (getAlertasTramitacion(), inst.getAlertasTramitacion())) return false;
+			
 			// OK los objetos son equivalentes
 			return true;
 		}
@@ -212,6 +221,23 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 
 	public void setIdentificadorProcedimiento(String identificadorProcedimiento) {
 		this.identificadorProcedimiento = identificadorProcedimiento;
+	}
+
+	public PersonalizacionJustificante getPersonalizacionJustificante() {
+		return personalizacionJustificante;
+	}
+
+	public void setPersonalizacionJustificante(
+			PersonalizacionJustificante personalizacionJustificante) {
+		this.personalizacionJustificante = personalizacionJustificante;
+	}
+
+	public AlertasTramitacion getAlertasTramitacion() {
+		return alertasTramitacion;
+	}
+
+	public void setAlertasTramitacion(AlertasTramitacion alertasTramitacion) {
+		this.alertasTramitacion = alertasTramitacion;
 	}
 
 

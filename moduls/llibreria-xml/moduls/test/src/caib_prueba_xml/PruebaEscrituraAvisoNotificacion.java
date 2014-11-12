@@ -29,10 +29,13 @@ public class PruebaEscrituraAvisoNotificacion {
 			avisoNotificacion.setTexto("Texto");
 			avisoNotificacion.setTextoSMS("Texto SMS");
 			avisoNotificacion.setAcuseRecibo(new Boolean(false));
+			avisoNotificacion.setAccesiblePorClave(new Boolean(false));
+			avisoNotificacion.setPlazo(new Integer(20));
 			
 			avisoNotificacion.getExpediente().setIdentificadorExpediente("xxx");
 			avisoNotificacion.getExpediente().setUnidadAdministrativa("yy");
 			avisoNotificacion.getExpediente().setClaveExpediente("zzz");
+			avisoNotificacion.getExpediente().setTituloExpediente("www");
 			
 																				
 			// Guardar documento en fichero

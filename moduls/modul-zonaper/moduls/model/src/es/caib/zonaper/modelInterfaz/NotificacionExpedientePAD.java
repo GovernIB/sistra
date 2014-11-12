@@ -26,6 +26,19 @@ public class NotificacionExpedientePAD extends ElementoExpedientePAD{
 	 */
 	private boolean requiereAcuse;
 	/**
+	 * Indica si se permite acceder anonimamente mediante clave
+	 */
+	private Boolean accesiblePorClave;
+	/**
+	 * Clave de acceso.
+	 */
+	private String claveAcceso;
+	/**
+	 * Días plazo (si nulo, por defecto).
+	 */
+	private Integer diasPlazo;
+	
+	/**
 	 * Detalle acuse recibo.
 	 */
 	private DetalleAcuseRecibo detalleAcuseRecibo;
@@ -122,6 +135,30 @@ public class NotificacionExpedientePAD extends ElementoExpedientePAD{
 
 	public void setDetalleAcuseRecibo(DetalleAcuseRecibo detalleAcuseRecibo) {
 		this.detalleAcuseRecibo = detalleAcuseRecibo;
+	}
+
+	public Boolean getAccesiblePorClave() {
+		return accesiblePorClave;
+	}
+
+	public void setAccesiblePorClave(Boolean accesiblePorClave) {
+		this.accesiblePorClave = accesiblePorClave;
+	}
+
+	public String getClaveAcceso() {
+		return claveAcceso;
+	}
+
+	public void setClaveAcceso(String claveAcceso) {
+		this.claveAcceso = claveAcceso;
+	}
+
+	public Integer getDiasPlazo() {
+		return diasPlazo;
+	}
+
+	public void setDiasPlazo(Integer diasPlazo) {
+		this.diasPlazo = diasPlazo;
 	}
 	
 }

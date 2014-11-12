@@ -103,7 +103,7 @@ public class FinalitzarTelematicAction extends BaseAction {
         }
 
         try {
-            String redirectUrl = tDelegate.tramitarFormulario();
+            String redirectUrl = tDelegate.tramitarFormulario(false);
             response.reset();
             response.sendRedirect(redirectUrl);
             response.flushBuffer();

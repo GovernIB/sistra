@@ -24,6 +24,7 @@ public class EntradaPreregistro implements java.io.Serializable, Entrada {
      private String claveRdsJustificante;
      private String numeroRegistro = null;
      private Date fechaConfirmacion = null;
+     private String oficinaRegistro;
      private Set documentos = new HashSet(0);    
      private String idioma;
      private String nifRepresentante;
@@ -45,7 +46,12 @@ public class EntradaPreregistro implements java.io.Serializable, Entrada {
  	// Tramite subsanacion
  	private String subsanacionExpedienteCodigo;
  	private Long subsanacionExpedienteUA;
- 	
+ 	// Alertar tramitacion
+ 	private String alertasTramitacionGenerar="N";
+    private String alertasTramitacionEmail; 
+    private String alertasTramitacionSms;
+    private Date alertasTramitacionFechaUltima;
+    
      // Constructors
     /** default constructor */
     public EntradaPreregistro() {
@@ -324,6 +330,46 @@ public class EntradaPreregistro implements java.io.Serializable, Entrada {
 
 	public void setProcedimiento(String procedimiento) {
 		this.procedimiento = procedimiento;
+	}
+
+	public String getAlertasTramitacionGenerar() {
+		return alertasTramitacionGenerar;
+	}
+
+	public void setAlertasTramitacionGenerar(String alertasTramitacionGenerar) {
+		this.alertasTramitacionGenerar = alertasTramitacionGenerar;
+	}
+
+	public String getAlertasTramitacionEmail() {
+		return alertasTramitacionEmail;
+	}
+
+	public void setAlertasTramitacionEmail(String alertasTramitacionEmail) {
+		this.alertasTramitacionEmail = alertasTramitacionEmail;
+	}
+
+	public String getAlertasTramitacionSms() {
+		return alertasTramitacionSms;
+	}
+
+	public void setAlertasTramitacionSms(String alertasTramitacionSms) {
+		this.alertasTramitacionSms = alertasTramitacionSms;
+	}
+
+	public Date getAlertasTramitacionFechaUltima() {
+		return alertasTramitacionFechaUltima;
+	}
+
+	public void setAlertasTramitacionFechaUltima(Date alertasTramitacionFechaUltima) {
+		this.alertasTramitacionFechaUltima = alertasTramitacionFechaUltima;
+	}
+
+	public String getOficinaRegistro() {
+		return oficinaRegistro;
+	}
+
+	public void setOficinaRegistro(String oficinaRegistro) {
+		this.oficinaRegistro = oficinaRegistro;
 	}
 
     

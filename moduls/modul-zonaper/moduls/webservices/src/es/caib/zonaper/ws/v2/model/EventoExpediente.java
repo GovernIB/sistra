@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="textoSMS" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="enlaceConsulta" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="fecha" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="accesiblePorClave" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="documentos" type="{urn:es:caib:zonaper:ws:v2:model:DocumentoExpediente}DocumentosExpediente" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -40,6 +41,7 @@ import javax.xml.bind.annotation.XmlType;
     "textoSMS",
     "enlaceConsulta",
     "fecha",
+    "accesiblePorClave",
     "documentos"
 })
 public class EventoExpediente {
@@ -54,6 +56,8 @@ public class EventoExpediente {
     protected JAXBElement<String> enlaceConsulta;
     @XmlElementRef(name = "fecha", type = JAXBElement.class)
     protected JAXBElement<String> fecha;
+    @XmlElementRef(name = "accesiblePorClave", type = JAXBElement.class)
+    protected JAXBElement<Boolean> accesiblePorClave;
     @XmlElementRef(name = "documentos", type = JAXBElement.class)
     protected JAXBElement<DocumentosExpediente> documentos;
 
@@ -175,6 +179,30 @@ public class EventoExpediente {
      */
     public void setFecha(JAXBElement<String> value) {
         this.fecha = ((JAXBElement<String> ) value);
+    }
+
+    /**
+     * Gets the value of the accesiblePorClave property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link JAXBElement }{@code <}{@link Boolean }{@code >}
+     *     
+     */
+    public JAXBElement<Boolean> getAccesiblePorClave() {
+        return accesiblePorClave;
+    }
+
+    /**
+     * Sets the value of the accesiblePorClave property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link JAXBElement }{@code <}{@link Boolean }{@code >}
+     *     
+     */
+    public void setAccesiblePorClave(JAXBElement<Boolean> value) {
+        this.accesiblePorClave = ((JAXBElement<Boolean> ) value);
     }
 
     /**

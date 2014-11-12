@@ -5,7 +5,6 @@
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
-<script type="text/javascript" src="js/jquery.selectboxes.pack.js"></script>
 <script type="text/javascript">
 	function volver(identificadorExp,unidadAdm,claveExp){
 		document.location='<html:rewrite page="/recuperarExpediente.do?identificadorExp='+identificadorExp+'&unidadAdm='+unidadAdm+'&claveExp='+claveExp+'" />';		
@@ -39,6 +38,21 @@
 					<dd><bean:write name="aviso" property="titulo"/></dd>
 					<dt><bean:message key="expediente.descripcion"/></dt>
 					<dd><bean:write name="aviso" property="texto"/></dd>
+					
+					<dt><bean:message key="detalle.aviso.accesoPorClave"/></dt>
+					<dd>
+						<logic:equal name="aviso" property="accesiblePorClave" value="true">
+							<bean:message key="expediente.si"/>
+						</logic:equal>
+						<logic:equal name="aviso" property="accesiblePorClave" value="false">
+							<bean:message key="expediente.no"/>
+						</logic:equal>
+					</dd>	
+					<logic:equal name="aviso" property="accesiblePorClave" value="true">						   
+						<dt><bean:message key="detalle.aviso.claveAcceso"/></dt>						
+						<dd><bean:write name="aviso" property="claveAcceso"/></dd>
+					</logic:equal>
+					
 					<logic:notEmpty name="aviso" property="documentos">		
 						<dt><bean:message key="aviso.documentoanexo" />:</dt>
 						<dd>
@@ -50,24 +64,38 @@
 										<bean:write name="documento" property="codigoRDS" />
 									</bean:define>
 									
-									<logic:empty name="<%="URL-" + codigoFirma %>" scope="request">
+									<logic:empty name="<%=\"URL-\" + codigoFirma %>" scope="request">
 										<a href='<%=url%>?codigo=<%=documento.getCodigoRDS() %>&clave=<%=documento.getClaveRDS() %>&idioma=<%=expediente.getIdioma() %>'> 
 											<bean:write name="documento" property="titulo" />
 										</a>																
 									</logic:empty>	
 									
-									<logic:notEmpty name="<%="URL-" + codigoFirma %>" scope="request">
-										<a href="<bean:write name="<%="URL-" + codigoFirma %>" scope="request"/>" target="_blank">
+									<logic:notEmpty name="<%=\"URL-\" + codigoFirma %>" scope="request">
+										<a href="<bean:write name="<%=\"URL-\" + codigoFirma %>" scope="request"/>" target="_blank">
 											<bean:write name="documento" property="titulo" />
 										</a>													
 									</logic:notEmpty>
 									
+									<span class="pequenyo">
 									<logic:notEmpty name="<%=codigoFirma %>" scope="request">
+										<br/>
 										<bean:message key="comprobarDocumento.firmadoPor"/>
-										<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request">							
-											&nbsp;<bean:write name="firma" property="nombreApellidos"/>
+										<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request" type="es.caib.sistra.plugins.firma.FirmaIntf">							
+											&nbsp;
+											<a href="/bantelfront/mostrarFirmaDocumento.do?codigo=<%=documento.getCodigoRDS()%>&clave=<%=documento.getClaveRDS()%>&nif=<%=firma.getNif()%>" >
+												<bean:write name="firma" property="nombreApellidos"/>  									
+											</a>	
 										</logic:iterate>			
 									</logic:notEmpty>
+									
+									<logic:notEmpty name="<%=\"CUST-\" + codigoFirma %>" scope="request">
+										<br/>
+										<bean:message key="comprobarDocumento.urlCustodia"/>
+										<a href="/bantelfront/mostrarDocumentoCustodia.do?codigo=<%=documento.getCodigoRDS()%>&clave=<%=documento.getClaveRDS()%>" target="_blank">
+											<bean:write name="<%=\"CUST-\" + codigoFirma %>" />
+										</a>														
+									</logic:notEmpty>
+									</span>
 									
 								</li>
 								</logic:iterate>

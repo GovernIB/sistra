@@ -27,6 +27,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="inmediato" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="emails" type="{urn:es:caib:mobtratel:ws:v2:model:MensajeEnvioEmail}MensajesEnvioEmail" minOccurs="0"/>
  *         &lt;element name="smss" type="{urn:es:caib:mobtratel:ws:v2:model:MensajeEnvioSMS}MensajesEnvioSMS" minOccurs="0"/>
+ *         &lt;element name="idProcedimiento" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -43,7 +44,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "fechaCaducidad",
     "inmediato",
     "emails",
-    "smss"
+    "smss",
+    "idProcedimiento"
 })
 public class MensajeEnvio {
 
@@ -60,6 +62,8 @@ public class MensajeEnvio {
     protected JAXBElement<MensajesEnvioEmail> emails;
     @XmlElementRef(name = "smss", type = JAXBElement.class)
     protected JAXBElement<MensajesEnvioSMS> smss;
+    @XmlElementRef(name = "idProcedimiento", type = JAXBElement.class)
+    protected JAXBElement<String> idProcedimiento;
 
     /**
      * Gets the value of the nombre property.
@@ -219,6 +223,30 @@ public class MensajeEnvio {
      */
     public void setSmss(JAXBElement<MensajesEnvioSMS> value) {
         this.smss = ((JAXBElement<MensajesEnvioSMS> ) value);
+    }
+
+    /**
+     * Gets the value of the idProcedimiento property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     
+     */
+    public JAXBElement<String> getIdProcedimiento() {
+        return idProcedimiento;
+    }
+
+    /**
+     * Sets the value of the idProcedimiento property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     
+     */
+    public void setIdProcedimiento(JAXBElement<String> value) {
+        this.idProcedimiento = ((JAXBElement<String> ) value);
     }
 
 }

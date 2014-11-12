@@ -29,6 +29,7 @@ import es.caib.xml.GuardaObjetoXMLException;
 import es.caib.xml.InicializacionFactoriaException;
 import es.caib.xml.datospropios.factoria.ConstantesDatosPropiosXML;
 import es.caib.xml.datospropios.factoria.FactoriaObjetosXMLDatosPropios;
+import es.caib.xml.datospropios.modelo.ALERTASTRAMITACION;
 import es.caib.xml.datospropios.modelo.DATOSPROPIOS;
 import es.caib.xml.datospropios.modelo.DATO;
 import es.caib.xml.datospropios.modelo.DOCUMENTO;
@@ -37,6 +38,7 @@ import es.caib.xml.datospropios.modelo.FORMULARIOJUSTIFICANTE;
 import es.caib.xml.datospropios.modelo.FORMULARIOSJUSTIFICANTE;
 import es.caib.xml.datospropios.modelo.INSTRUCCIONES;
 import es.caib.xml.datospropios.modelo.ObjectFactory;
+import es.caib.xml.datospropios.modelo.PERSONALIZACIONJUSTIFICANTE;
 import es.caib.xml.datospropios.modelo.SOLICITUD;
 import es.caib.xml.datospropios.modelo.TRAMITESUBSANACION;
 
@@ -439,6 +441,14 @@ public class FactoriaObjetosXMLDatosPropiosImpl implements
 			if (instJAXB.getFORMULARIOSJUSTIFICANTE() != null){
 				instrucciones.setFormulariosJustificante(this.crearFormulariosJustificante(instJAXB.getFORMULARIOSJUSTIFICANTE()));
 			}
+			
+			if (instJAXB.getPERSONALIZACIONJUSTIFICANTE() != null){
+				instrucciones.setPersonalizacionJustificante(this.crearPersonalizacionJustificante(instJAXB.getPERSONALIZACIONJUSTIFICANTE()));
+			}
+			
+			if (instJAXB.getALERTASTRAMITACION() != null){
+				instrucciones.setAlertasTramitacion(this.crearAlertasTramitacion(instJAXB.getALERTASTRAMITACION()));
+			}
 		}
 		
 		return instrucciones;
@@ -596,6 +606,14 @@ public class FactoriaObjetosXMLDatosPropiosImpl implements
 			if (instrucciones.getFormulariosJustificante() != null){
 				instruccionesJAXB.setFORMULARIOSJUSTIFICANTE(this.crearFormulariosJustificanteJAXB(instrucciones.getFormulariosJustificante()) );
 			}
+			
+			if (instrucciones.getPersonalizacionJustificante() != null){
+				instruccionesJAXB.setPERSONALIZACIONJUSTIFICANTE(this.crearPersonalizacionJustificanteJAXB(instrucciones.getPersonalizacionJustificante()) );
+			}
+			
+			if (instrucciones.getAlertasTramitacion() != null){
+				instruccionesJAXB.setALERTASTRAMITACION(this.crearAlertasTramitacionJAXB(instrucciones.getAlertasTramitacion()) );
+			}
 		}
 		
 		return instruccionesJAXB;
@@ -673,7 +691,6 @@ public class FactoriaObjetosXMLDatosPropiosImpl implements
 		return new FormulariosJustificante();
 	}
 	
-	
 	private FORMULARIOSJUSTIFICANTE crearFormulariosJustificanteJAXB (FormulariosJustificante formularioJustificante) throws EstablecerPropiedadException{
 		FORMULARIOSJUSTIFICANTE formularioJustificanteJAXB = null;		
 		if (formularioJustificante != null){
@@ -703,4 +720,79 @@ public class FactoriaObjetosXMLDatosPropiosImpl implements
 		}
 		return formularioJustificante;
 	}
+
+
+	public PersonalizacionJustificante crearPersonalizacionJustificante() {
+		return new PersonalizacionJustificante();
+	}
+	
+	private PERSONALIZACIONJUSTIFICANTE crearPersonalizacionJustificanteJAXB (PersonalizacionJustificante personalizacionJustificante) throws EstablecerPropiedadException{
+		PERSONALIZACIONJUSTIFICANTE personalizacionJustificanteJAXB = null;		
+		if (personalizacionJustificante != null){
+			personalizacionJustificanteJAXB = new PERSONALIZACIONJUSTIFICANTE ();			
+			if (personalizacionJustificante.getOcultarClaveTramitacion() != null) {
+				if (personalizacionJustificante.getOcultarClaveTramitacion().booleanValue()) {
+					personalizacionJustificanteJAXB.setOCULTARCLAVETRAMITACION("S");
+				} else {
+					personalizacionJustificanteJAXB.setOCULTARCLAVETRAMITACION("N");
+				}				
+			}
+			if (personalizacionJustificante.getOcultarNifNombre() != null) {
+				if (personalizacionJustificante.getOcultarNifNombre().booleanValue()) {
+					personalizacionJustificanteJAXB.setOCULTARNIFNOMBRE("S");
+				} else {
+					personalizacionJustificanteJAXB.setOCULTARNIFNOMBRE("N");
+				}
+				
+			}											
+		}		
+		return personalizacionJustificanteJAXB;
+	}
+	
+	
+	private PersonalizacionJustificante crearPersonalizacionJustificante (PERSONALIZACIONJUSTIFICANTE personalizacionJustificanteJAXB) throws EstablecerPropiedadException{
+		PersonalizacionJustificante personalizacionJustificante = null;
+		if (personalizacionJustificanteJAXB != null){
+			personalizacionJustificante = new PersonalizacionJustificante();
+			if (personalizacionJustificanteJAXB.getOCULTARCLAVETRAMITACION() != null) {				
+				personalizacionJustificante.setOcultarClaveTramitacion(new Boolean( personalizacionJustificanteJAXB.getOCULTARCLAVETRAMITACION().equals("S")));
+			}
+			if (personalizacionJustificanteJAXB.getOCULTARNIFNOMBRE() != null) {
+				personalizacionJustificante.setOcultarNifNombre(new Boolean(personalizacionJustificanteJAXB.getOCULTARNIFNOMBRE().equals("S")));
+			}				
+		}
+		return personalizacionJustificante;
+	}
+
+
+	public AlertasTramitacion crearAlertasTramitacion() {
+		return new AlertasTramitacion();
+	}
+	
+	
+	private ALERTASTRAMITACION crearAlertasTramitacionJAXB (AlertasTramitacion alertasTramitacion) throws EstablecerPropiedadException{
+		ALERTASTRAMITACION alertasTramitacionJAXB = null;
+		
+		if (alertasTramitacion != null){
+			alertasTramitacionJAXB = new ALERTASTRAMITACION ();
+			alertasTramitacionJAXB.setEMAIL(alertasTramitacion.getEmail());
+			alertasTramitacionJAXB.setSMS(alertasTramitacion.getSms());			
+		}
+		
+		return alertasTramitacionJAXB;
+	}
+	
+	
+	private AlertasTramitacion crearAlertasTramitacion (ALERTASTRAMITACION alertasTramitacionJAXB) throws EstablecerPropiedadException{
+		AlertasTramitacion alertasTramitacion = null;
+		
+		if (alertasTramitacionJAXB != null){
+			alertasTramitacion = new AlertasTramitacion ();
+			alertasTramitacion.setEmail(alertasTramitacionJAXB.getEMAIL());
+			alertasTramitacion.setSms(alertasTramitacionJAXB.getSMS());			
+		}
+		
+		return alertasTramitacion;
+	}
+	
 }

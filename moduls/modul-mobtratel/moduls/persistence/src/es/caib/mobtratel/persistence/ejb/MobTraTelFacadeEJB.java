@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -62,6 +61,8 @@ import es.caib.xml.ConstantesXML;
  * @ejb.transaction type="Required"
  * 
  * @ejb.env-entry name="roleAuto" type="java.lang.String" value="${role.auto}"
+ * 
+ * @ejb.security-role-ref role-name="${role.auto}" role-link="${role.auto}"
  */
 public abstract class MobTraTelFacadeEJB implements SessionBean
 {
@@ -147,6 +148,7 @@ public abstract class MobTraTelFacadeEJB implements SessionBean
 			}
 			envio.setCuenta(cuenta);
 			envio.setNombre(mensaje.getNombre());
+			envio.setIdProcedimiento(mensaje.getIdProcedimiento());
 			Date now = new Date();
 			envio.setFechaRegistro(new Timestamp(now.getTime()));
 			if(mensaje.getFechaCaducidad() != null) {
@@ -206,7 +208,8 @@ public abstract class MobTraTelFacadeEJB implements SessionBean
 				Set tlfSet = new LinkedHashSet(Arrays.asList(mes.getDestinatarios()));
 				ms.setDestinatarios(MobUtils.compoundDestinatarios(tlfSet));
 				ms.setNumeroDestinatarios(tlfSet.size());
-				erroresFormato += MobUtils.validarTelefonos(tlfSet);
+				// No cancelamos envio si algun sms no valido para permitir tambien extensiones
+				// erroresFormato += MobUtils.validarTelefonos(tlfSet);
 				if((utils.getMaxDestinatariosSms().intValue() != 0) && (tlfSet.size() > utils.getMaxDestinatariosSms().intValue()))
 				{
 					throw new LimiteDestinatariosException(new Error("Se ha superado el límite de destinatarios por mensaje SMS."));

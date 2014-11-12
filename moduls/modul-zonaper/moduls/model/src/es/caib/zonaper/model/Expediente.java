@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
@@ -11,7 +12,12 @@ import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 public class Expediente implements Serializable 
 {
 	
+	// TIPO EXPEDIENTE
+	public final static String TIPO_EXPEDIENTE_VIRTUAL = "V";
+	public final static String TIPO_EXPEDIENTE_REAL = "E";
+	
 	private Long codigo;
+	private String tipoExpediente;
 	private String idExpediente;
 	private String claveExpediente;
 	private String idProcedimiento;
@@ -211,5 +217,28 @@ public class Expediente implements Serializable
 	public void setIdProcedimiento(String idProcedimiento) {
 		this.idProcedimiento = idProcedimiento;
 	}
+	public String getTipoExpediente() {
+		return tipoExpediente;
+	}
+	public void setTipoExpediente(String tipoExpediente) {
+		this.tipoExpediente = tipoExpediente;
+	}
 		
+	/**
+	 * Obtiene elemento expediente.
+	 * @param tipo Tipo
+	 * @param codigo Codigo
+	 * @return elemento
+	 */
+	public ElementoExpediente obtenerElementoExpediente(String tipo, Long codigo) {
+		ElementoExpediente res = null;
+		for (Iterator it = getElementos().iterator(); it.hasNext();) {
+			ElementoExpediente e = (ElementoExpediente) it.next();
+			if (e.getTipoElemento().equals(tipo) && e.getCodigoElemento().longValue() == codigo.longValue()) {
+				res = e;
+				break;
+			}
+		}
+		return res;
+	}
 }

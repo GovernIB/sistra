@@ -35,6 +35,10 @@ public class DetalleAvisoForm extends ValidatorForm
     private String firma;
     private String idioma;
     
+    private String accesoPorClave;
+    
+    private String existeNifExpediente;
+    
 	public String getIdioma() {
 		if(idioma == null || "".equals(idioma)){
 			return "es";
@@ -134,22 +138,22 @@ public class DetalleAvisoForm extends ValidatorForm
         }
         if(documentoAnexoFichero != null && documentoAnexoFichero.getFileName() != null && !"".equals(documentoAnexoFichero.getFileName())){
         	
-        	if(!DocumentosUtil.extensionCorrecta(documentoAnexoFichero.getFileName())){
+        	if(!"PDF".equalsIgnoreCase(DocumentosUtil.getExtension(documentoAnexoFichero.getFileName())) && !DocumentosUtil.extensionCorrecta(documentoAnexoFichero.getFileName())){
         		errors.add("altaNotificacion",new ActionError("error.aviso.extensiones.fichero"));
         	}
         }
         if(StringUtils.isNotEmpty(flagValidacion) && flagValidacion.equals("alta")){
         	if(StringUtils.isEmpty(titulo)){
-        		errors.add("altaAviso", new ActionError("errors.required", MensajesUtil.getValue("aviso.titulo")));
+        		errors.add("altaAviso", new ActionError("errors.required", MensajesUtil.getValue("aviso.titulo", request)));
         	}
         	if(StringUtils.isEmpty(texto)){
-        		errors.add("altaAviso", new ActionError("errors.required", MensajesUtil.getValue("aviso.texto")));
+        		errors.add("altaAviso", new ActionError("errors.required", MensajesUtil.getValue("aviso.texto", request)));
         	}   
         	if(StringUtils.isNotEmpty(titulo) && titulo.length() > 500){
-        		errors.add("altaAviso", new ActionError("errors.maxlength", MensajesUtil.getValue("aviso.titulo"), "500"));
+        		errors.add("altaAviso", new ActionError("errors.maxlength", MensajesUtil.getValue("aviso.titulo", request), "500"));
         	}
         	if(StringUtils.isNotEmpty(texto) && texto.length() > 4000){
-        		errors.add("altaAviso", new ActionError("errors.maxlength", MensajesUtil.getValue("aviso.texto"), "4000"));
+        		errors.add("altaAviso", new ActionError("errors.maxlength", MensajesUtil.getValue("aviso.texto", request), "4000"));
         	}
         }
     	
@@ -178,6 +182,22 @@ public class DetalleAvisoForm extends ValidatorForm
 
 	public void setPermitirSms(String permitirSms) {
 		this.permitirSms = permitirSms;
+	}
+
+	public String getAccesoPorClave() {
+		return accesoPorClave;
+	}
+
+	public void setAccesoPorClave(String accesiblePorClave) {
+		this.accesoPorClave = accesiblePorClave;
+	}
+
+	public String getExisteNifExpediente() {
+		return existeNifExpediente;
+	}
+
+	public void setExisteNifExpediente(String existeNifExpediente) {
+		this.existeNifExpediente = existeNifExpediente;
 	}
 	
 }

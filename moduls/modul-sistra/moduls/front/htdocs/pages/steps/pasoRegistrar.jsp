@@ -102,6 +102,16 @@
 <script type="text/javascript">
 <!--
 	var mensajeEnviando = '<bean:message key="registro.mensajeRegistrar"/>';
+
+	<!--  Registro automatico -->
+	<logic:present name="registroAutomatico">
+	// Registro automatico
+	function doOnLoadRegistro() {
+		doOnLoad();
+		enviar(document.registrarTramiteForm);
+	}	
+	window.onload= doOnLoadRegistro;
+	</logic:present>
 	
 	function mostrarFormulario(identificador,instancia,presencial,presentar){
 	
@@ -119,10 +129,23 @@
 		document.location = url;
 	}
 	</logic:equal>
+
+	function mostrarPin() {
+		$('#PinDiv').show();
+	}
 //-->
 </script>
 
 	<h2><bean:message name="tituloKey"/></h2>
+	
+	<!--  Registro automatico -->
+	<logic:present name="registroAutomatico">
+		<p><bean:message key="registro.registroAutomatico"/></p>		
+	</logic:present>
+	<!--  Registro automatico (fin) -->
+	
+	<!--  Registro no automatico -->
+	<logic:notPresent name="registroAutomatico">
 	<p><bean:message name="instruccionesKey"/></p>
 	
 	<!--  Mensaje de alerta (si no es de tipo consulta)-->
@@ -415,24 +438,38 @@
 				<p><bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo" /></p>
 				<p class="formBotonera"><input type="button" value="<bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo.boton" />" title="<bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo.boton" />" onclick="cargarCertificado();" /></p>
 				<p><bean:message key="finalizacion.general.firmaSolicitud.certificadosDisponibles"/></p>
-				<p>	
-					<jsp:include page="/firma/caib/applet.jsp" flush="false"/>		
+				<div id="appletDiv">
+				<p>										
+					<jsp:include page="/firma/caib/applet.jsp" flush="false"/>
+				</p>		
+				</div>			
+				<p class="notaPie">	
+					<bean:message key="firmarDocumento.requierePINCertificado.inicio"/>	<a href="javascript:mostrarPin()"><bean:message key="firmarDocumento.requierePINCertificado.fin"/></a>								
+				</p>			
+				<div id="PinDiv">		
 					<form name="formFirma" action="">
-						<label for="PIN"><bean:message key="finalizacion.general.firmaSolicitud.PINCertificado"/></label> <input name="PIN" id="PIN" type="password" class="txt" />				
+					<label for="PIN"><bean:message key="finalizacion.general.firmaSolicitud.PINCertificado"/></label> <input name="PIN" id="PIN" type="password" class="txt" />				
 					</form>
-				</p>	
+				</div>				
 			</logic:equal>			
 		</logic:equal>
 		
+		</logic:notPresent>
+		<!--  Registro no automatico (fin) -->
 		
 		<!--  Envio del tramite -->	
 		<html:form action="/protected/registrarTramite">
+		<logic:notPresent name="registroAutomatico">
 		<p class="importante"><input name="registrarTramitacionBoton" id="registrarTramitacionBoton" type="button" value="<bean:message name='botonKey' />" onclick="javascript:enviar(this.form);"/></p>
+		</logic:notPresent>
 		<html:hidden property="ID_INSTANCIA" value="<%= ID_INSTANCIA %>"/>
 		<html:hidden property="asiento" value="<%= asiento %>"/>
 		<html:hidden property="firma" value=""/>
 		</html:form>
+		
 		<div class="sep"></div>
+				
+		
 		<!-- capa accediendo formularios -->
 		<div id="capaInfoFondo"></div>
 		<div id="capaInfoForms"></div>
@@ -514,14 +551,17 @@
 						if (!firmarAFirma(formulario)) return;
 				</logic:equal>
 				<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
-							 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
-						if (!firmarCAIB(formulario)) return;					
+							 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">	
+					    if (!firmarCAIB(formulario)) {
+							 return;
+						}					
 				</logic:equal>
 								
 				// Enviamos
 				formulario.submit();				
 				
 				// Mostramos capa de envio
+				$('#appletDiv').hide();	
 				accediendoEnviando(mensajeEnviando);
 			}
 		</logic:equal>		

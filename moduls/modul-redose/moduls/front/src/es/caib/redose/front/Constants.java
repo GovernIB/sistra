@@ -33,5 +33,5 @@ public class Constants implements Serializable
 	
 	public static String MESSAGE_KEY = "mensaje";
 	
-	
+		
 }

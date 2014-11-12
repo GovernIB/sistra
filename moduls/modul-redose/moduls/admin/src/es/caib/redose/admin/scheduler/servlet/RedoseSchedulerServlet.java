@@ -17,10 +17,8 @@ import org.quartz.ee.servlet.QuartzInitializerServlet;
 import org.quartz.impl.StdSchedulerFactory;
 
 import es.caib.redose.admin.scheduler.conf.SchedulerConfiguration;
-import es.caib.redose.admin.scheduler.jobs.BorrarDocumentosDefinitivamenteJob;
 import es.caib.redose.admin.scheduler.jobs.ConsolidacionGestorDocumentalJob;
-import es.caib.redose.admin.scheduler.jobs.DocumentosSinUsosJob;
-import es.caib.redose.admin.scheduler.jobs.EliminarDocumentosCustodiaJob;
+import es.caib.redose.admin.scheduler.jobs.PurgadoDocumentosJob;
 
 /**
  * @web.servlet name="redoseSchedulerServlet" load-on-startup="2"
@@ -30,10 +28,8 @@ public class RedoseSchedulerServlet implements Servlet
 {
 	Log _log = LogFactory.getLog( RedoseSchedulerServlet.class );
 	
-	private static String NAMEBORRADOSINUSOS = "Borrado docs sin usos";
-	public static String NAMEBORRADOCUSTODIA = "Borrado docs custodia";
+	private static String NAMEPURGADOCUMENTOS = "Purgado documentos";
 	public static String NAMEBORRADOGESTIONDOCUMENTAL = "Consolidacion gestor documental";
-	public static String NAMEBORRADODEFINITIVO = "Borrado docs definitivo";
 	public static String GROUP = "Redose";
 	private static int SCHEDULER_DELAY_MINUTES = 5;
 	
@@ -48,25 +44,25 @@ public class RedoseSchedulerServlet implements Servlet
 			scheduler = schedFact.getScheduler();
 			//scheduler.addJobListener( new RedoseJobListener() );
 			
-			//inicializamos el Job de borrado de documentos sin uso
-			 boolean schedule = Boolean.valueOf( configuration.get( "scheduler.jobBorradoDocsSinUsos.schedule" ) ).booleanValue();
-			 String cronExpression = configuration.get( "scheduler.jobBorradoDocsSinUsos.cron.expression" );
+			//inicializamos el Job de purgado de documentos
+			 boolean schedule = Boolean.valueOf( configuration.get( "scheduler.jobPurgadoDocumentos.schedule" ) ).booleanValue();
+			 String cronExpression = configuration.get( "scheduler.jobPurgadoDocumentos.cron.expression" );
 			 
-			 _log.info( "SCHEDULE [" + schedule + "]" );
-			 _log.info( "TIME EXPRESSION [" + cronExpression + "]" );
+			 _log.info( NAMEPURGADOCUMENTOS + " - SCHEDULE [" + schedule + "]" );
+			 _log.info( NAMEPURGADOCUMENTOS + " - TIME EXPRESSION [" + cronExpression + "]" );
 			 
 			 if ( schedule )
 			 {
-				 CronTrigger triggerSinUsos = new CronTrigger(NAMEBORRADOSINUSOS, GROUP);
+				 CronTrigger triggerSinUsos = new CronTrigger(NAMEPURGADOCUMENTOS, GROUP);
 				 try 
 				 {
-					 JobDetail jobDetailSinUsos = new JobDetail( NAMEBORRADOSINUSOS, GROUP, DocumentosSinUsosJob.class );
+					 JobDetail jobDetailSinUsos = new JobDetail( NAMEPURGADOCUMENTOS, GROUP, PurgadoDocumentosJob.class );
 					 triggerSinUsos.setCronExpression( cronExpression );
 					 
 					 // Retrasamos 5 minutos
 					java.util.Date startTime = new java.util.Date();					
 					startTime.setTime( startTime.getTime() + ( SCHEDULER_DELAY_MINUTES * 60 * 1000 ) );
-					_log.debug( "Job " + NAMEBORRADOSINUSOS + ": Fecha de inicio[ " + startTime + "]");
+					_log.debug( "Job " + NAMEPURGADOCUMENTOS + ": Fecha de inicio[ " + startTime + "]");
 					triggerSinUsos.setStartTime(startTime);
 					
 					scheduler.scheduleJob( jobDetailSinUsos, triggerSinUsos );
@@ -77,41 +73,13 @@ public class RedoseSchedulerServlet implements Servlet
 					 //e.printStackTrace();
 				 }
 			 }
-			
-			 //inicializamos el Job de borrado de documetnos en custodia			 
-			 schedule = Boolean.valueOf( configuration.get( "scheduler.jobBorradoDocsCustodia.schedule" ) ).booleanValue();;
-			 cronExpression = configuration.get( "scheduler.jobBorradoDocsCustodia.cron.expression" );
-			 
-			 _log.info( "SCHEDULE [" + schedule + "]" );
-			 _log.info( "TIME EXPRESSION [" + cronExpression + "]" );
-			
-			 if(schedule){
-				 CronTrigger triggerCustodia = new CronTrigger(NAMEBORRADOCUSTODIA, GROUP);
-				 try 
-				 {
-					 JobDetail jobDetailCustodia = new JobDetail( NAMEBORRADOCUSTODIA, GROUP, EliminarDocumentosCustodiaJob.class );
-					 triggerCustodia.setCronExpression( cronExpression );
-					 
-					 // Retrasamos 5 minutos
-					java.util.Date startTime2 = new java.util.Date();					
-					startTime2.setTime( startTime2.getTime() + ( SCHEDULER_DELAY_MINUTES * 60 * 1000 ) );
-					_log.debug( "Job " + NAMEBORRADOCUSTODIA + ": Fecha de inicio[ " + startTime2 + "]");
-					triggerCustodia.setStartTime(startTime2);
-					
-					scheduler.scheduleJob( jobDetailCustodia, triggerCustodia );
-				 }
-				 catch (Exception e) 
-				 {
-				  	_log.error( "Exception scheduling : ", e );
-				 }
-			 }
 			 
 			 //inicializamos el Job de consolidacion gestor documental	 
 			 schedule = Boolean.valueOf( configuration.get( "scheduler.jobConsolidacionGestorDocumental.schedule" ) ).booleanValue();;
 			 cronExpression = configuration.get( "scheduler.jobConsolidacionGestorDocumental.cron.expression" );
 			 
-			 _log.info( "SCHEDULE [" + schedule + "]" );
-			 _log.info( "TIME EXPRESSION [" + cronExpression + "]" );
+			 _log.info(NAMEBORRADOGESTIONDOCUMENTAL + " - SCHEDULE [" + schedule + "]" );
+			 _log.info(NAMEBORRADOGESTIONDOCUMENTAL + " - TIME EXPRESSION [" + cronExpression + "]" );
 			
 			 
 			 if(schedule){
@@ -134,45 +102,7 @@ public class RedoseSchedulerServlet implements Servlet
 				  	_log.error( "Exception scheduling : ", e );
 				 }
 			 }
-			 
-//			 # Habilitar proceso automatico de borrado definitivo de documentos
-//			 scheduler.jobBorrarDocumentosDefinitivamente.schedule=false
-//			 # Cron que indica cuando se ejecuta proceso automatico
-//			 scheduler.jobBorrarDocumentosDefinitivamente.cron.expression=0 0 5 * * ?
-//			 #Indica los meses que estara un documento marcado para borrar
-//			 scheduler.jobBorrarDocumentosDefinitivamente.meses=12
-
-			 
-			 
-			 
-			 //inicializamos el Job de borrado definitivo de documentos
-			 schedule = Boolean.valueOf( configuration.get( "scheduler.jobBorrarDocumentosDefinitivamente.schedule" ) ).booleanValue();;
-			 cronExpression = configuration.get( "scheduler.jobBorrarDocumentosDefinitivamente.cron.expression" );
-			 
-			 _log.info( "SCHEDULE [" + schedule + "]" );
-			 _log.info( "TIME EXPRESSION [" + cronExpression + "]" );
-			
-			 
-			 if(schedule){
-				 CronTrigger triggerBorradoDefinitivo = new CronTrigger(NAMEBORRADODEFINITIVO, GROUP);
-				 try 
-				 {
-					 JobDetail jobDetailBorradoDefinitivo = new JobDetail( NAMEBORRADODEFINITIVO, GROUP, BorrarDocumentosDefinitivamenteJob.class );
-					 triggerBorradoDefinitivo.setCronExpression( cronExpression );
-					 
-					 // Retrasamos 5 minutos
-					java.util.Date startTime2 = new java.util.Date();					
-					startTime2.setTime( startTime2.getTime() + ( SCHEDULER_DELAY_MINUTES * 60 * 1000 ) );
-					_log.debug( "Job " + NAMEBORRADODEFINITIVO + ": Fecha de inicio[ " + startTime2 + "]");
-					triggerBorradoDefinitivo.setStartTime(startTime2);
-					
-					scheduler.scheduleJob( jobDetailBorradoDefinitivo, triggerBorradoDefinitivo );
-				 }
-				 catch (Exception e) 
-				 {
-				  	_log.error( "Exception scheduling : ", e );
-				 }
-			 }
+	
 		}catch (Exception e){
 		  	_log.error( "Exception scheduling : ", e );
 		}	 

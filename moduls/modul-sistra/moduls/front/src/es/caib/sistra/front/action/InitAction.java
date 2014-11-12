@@ -97,11 +97,19 @@ public class InitAction extends BaseAction
  		InitForm initForm = ( InitForm ) form;
  		Locale localeLogin = (Locale) request.getSession().getAttribute(Constants.KEY_LANGUAGE_LOGIN);
  		if (localeLogin != null){
- 			setLocale(request, localeLogin );
+ 			if (!"es".equals(localeLogin.getLanguage()) && !"ca".equals(localeLogin.getLanguage()) && !"en".equals(localeLogin.getLanguage())  ) {
+				setLocale(request, new Locale( "es" ) );
+			} else {
+				setLocale(request, localeLogin );
+			} 			
  		}
  		if ( localeLogin == null && initForm != null && initForm.getLanguage() != null )
  		{
- 			setLocale(request, new Locale( initForm.getLanguage() ) );
+ 			if (!"es".equals(initForm.getLanguage()) && !"ca".equals(initForm.getLanguage()) && !"en".equals(initForm.getLanguage())  ) {
+ 				setLocale(request, new Locale( "es" ) );
+ 			} else {
+ 				setLocale(request, new Locale( initForm.getLanguage() ) );
+ 			}
  		}
  		
  		if ( request.getAttribute( Constants.NO_REINIT ) != null && ( ( Boolean )request.getAttribute( Constants.NO_REINIT ) ).booleanValue() )

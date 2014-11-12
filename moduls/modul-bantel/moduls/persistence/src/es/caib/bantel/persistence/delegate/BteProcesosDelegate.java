@@ -29,6 +29,14 @@ public class BteProcesosDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+	public void avisoMonitorizacion() throws DelegateException {
+        try {
+            getFacade().avisoMonitorizacion();
+        } catch (Exception e) {
+        	e.printStackTrace();	
+            throw new DelegateException(e);
+        }
+    }
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

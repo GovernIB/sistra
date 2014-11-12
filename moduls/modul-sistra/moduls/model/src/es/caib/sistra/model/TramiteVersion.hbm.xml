@@ -37,6 +37,7 @@
     <property name="idiomasSoportados" column="TRV_IDISOP" length="100" not-null="true"/>
     <property name="reducido" column="TRV_REDUCI" not-null="true" length="1"/>
     <property name="redireccionFin" column="TRV_REDFIN" not-null="true" length="1"/>    
+    <property name="registroAutomatico" column="TRV_REGAUT" not-null="true" length="1"/>
     
     <property name="cuadernoCargaTag" column="TRV_TAGCAR"/>
     <property name="fechaExportacion" column="TRV_FECCAR"/>    

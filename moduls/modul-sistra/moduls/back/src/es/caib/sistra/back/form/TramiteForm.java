@@ -14,6 +14,7 @@ import es.caib.sistra.model.Tramite;
 import es.caib.sistra.persistence.delegate.DelegateException;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
 import es.caib.sistra.persistence.delegate.TramiteDelegate;
+import es.caib.util.StringUtil;
 
 
 public class TramiteForm extends TraduccionValidatorForm  
@@ -52,6 +53,10 @@ public class TramiteForm extends TraduccionValidatorForm
         	}
             
             if(isAlta(request) || isModificacion(request)){
+            	
+            	if (!StringUtil.validarFormatoIdentificador(tramite.getIdentificador())) {
+            		errors.add("values.identificador", new ActionError("errors.identificador.novalido"));
+            	}
             	
             	if(StringUtils.isEmpty(tramite.getProcedimiento())){
         			errors.add("values.procedimiento", new ActionError("errors.procedimiento.vacio"));

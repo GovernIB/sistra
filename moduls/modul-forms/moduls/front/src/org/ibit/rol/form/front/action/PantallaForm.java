@@ -18,6 +18,7 @@ import org.apache.struts.validator.Resources;
 import org.ibit.rol.form.front.validator.DynValidatorResources;
 import org.ibit.rol.form.front.registro.RegistroManager;
 import org.ibit.rol.form.model.Campo;
+import org.ibit.rol.form.model.Captcha;
 import org.ibit.rol.form.model.Pantalla;
 import org.ibit.rol.form.model.TraCampo;
 import org.ibit.rol.form.model.ListBox;
@@ -103,7 +104,6 @@ public class PantallaForm extends DynaValidatorForm {
             dades.putAll(delegate.obtenerDatosListasElementos());
             dades.putAll(delegate.obtenerDatosAnteriores());
 
-
             for (int i = 0; i < pantalla.getCampos().size(); i++) {
                 Campo campo = (Campo) pantalla.getCampos().get(i);
                 String expresion = campo.getExpresionValidacion();
@@ -121,13 +121,25 @@ public class PantallaForm extends DynaValidatorForm {
                         errors.add(campo.getNombreLogico(), error);
                     }
                 }
+                
+                // Validacion captcha
+                if (campo instanceof Captcha) {
+                	String valorCaptcha = delegate.obtenerCaptcha(campo.getNombreLogico());
+    				String valorFormulario = (String) dades.get("f_" + campo.getNombreLogico());
+    				boolean captchaOk = (valorCaptcha != null && valorCaptcha.equalsIgnoreCase(valorFormulario));
+    				if (!captchaOk) {
+    					TraCampo traCampo = (TraCampo) campo.getTraduccion();
+    					ActionError error = new ActionError("errors.captcha", traCampo.getNombre());
+    					errors.add(campo.getNombreLogico(), error);
+    				}    				
+                }
+            
             }
         } catch (DelegateException e) {
             log.error("Excepción en validate", e);
         } catch (Throwable t) {
             log.error("Error en validate", t);
         }
-
         return errors;
     }
 }

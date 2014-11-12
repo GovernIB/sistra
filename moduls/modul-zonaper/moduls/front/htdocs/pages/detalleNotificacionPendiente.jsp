@@ -9,6 +9,10 @@
 <bean:define id="codigoNotificacion" name="notificacion" property="codigo"/>
 <bean:define id="nifRepresentante" name="notificacion" property="nifRepresentante" type="java.lang.String"/>
 <bean:define id="xmlAsientoAcuseRecibo" name="xmlAsientoAcuseRecibo" type="java.lang.String"/>
+<bean:define id="claveFirma" name="claveFirma" type="java.lang.String"/>
+<bean:define id="tipoFirmaAlt" name="tipoFirmaAlt" type="java.lang.String"/>
+<bean:define id="plazoDias" name="plazoDias" type="java.lang.String"/>
+
 
 <bean:define id="mensaje" type="java.lang.String">
 	<bean:write name="avisoNotificacion" property="texto" />
@@ -21,8 +25,21 @@
 
 <logic:equal name="puedeAbrir" value="S">
 <script type="text/javascript">
-	<!-- 
-	<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+    <!-- 
+	function enviar(firmarAcuse)
+	{
+	   	// Realizamos firma
+		if (firmarAcuse){
+			realizarFirmaAcuse();					
+		}
+						
+		// Enviamos
+		var formulario = document.getElementById("formularioEnvio");
+		formulario.submit();
+	}
+<logic:notEmpty name="tipoFirma">
+<logic:equal name="tipoFirma" value="CERT">
+ 	<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 				 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
 		var contentType = '<%= es.caib.util.FirmaUtil.obtenerContentTypeCAIB(es.caib.util.FirmaUtil.CAIB_ACUSE_NOTIFICACIO_CONTENT_TYPE) %>';
 		function firmarCAIB(){
@@ -88,25 +105,27 @@
 	</logic:equal>	
 
 
-	function enviar(firmarAcuse)
+	function realizarFirmaAcuse()
 	{
-	
-		if (firmarAcuse){
-			// Realizamos firma
-			<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
-						 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
-					if (!firmarAFirma()) return;
-			</logic:equal>
-			<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
-						 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
-					if (!firmarCAIB()) return;					
-			</logic:equal>
-		}
-						
-		// Enviamos
-		var formulario = document.getElementById("formularioEnvio");
-		formulario.submit();
+		// Realizamos firma
+		<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
+				if (!firmarAFirma()) return;
+		</logic:equal>
+		<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
+				if (!firmarCAIB()) return;					
+		</logic:equal>	
 	}
+	
+</logic:equal>
+<logic:equal name="tipoFirma" value="CLAVE">
+	function realizarFirmaAcuse()
+	{
+		// No hay que hacer nada
+	}
+</logic:equal>
+</logic:notEmpty>
 	 -->	
 </script>
 </logic:equal>
@@ -145,40 +164,49 @@
 
 
 <!-- firma -->
+<logic:equal name="rechazada" value="S">
+	<p class="alerta"><bean:message key="detalleNotificacion.rechazada"/></p>
+</logic:equal>
+
+<logic:equal name="rechazada" value="N">
 <logic:equal name="notificacion" property="firmarAcuse" value="true">
 	<h2><bean:message key="detalleNotificacion.acuse.titulo"/></h2>
 	
-	<p><bean:message key="detalleNotificacion.notaLegal"/></p>
+	<p>
+		<logic:equal name="controlEntrega" value="S">
+			<bean:message key="detalleNotificacion.notaLegal.controlPlazoHabilitado" arg0="<%=plazoDias%>"/>
+		</logic:equal>
+		<logic:equal name="controlEntrega" value="N">
+			<bean:message key="detalleNotificacion.notaLegal.controlPlazoDeshabilitado" arg0="<%=plazoDias%>"/>
+		</logic:equal>
+	</p>
 	
 	
 	<logic:equal name="puedeAbrir" value="S">
 	
-		<logic:present name="messageKey">
-			<p class="alerta"><bean:message name="messageKey" arg0="<%= nifRepresentante %>"/></p>
-		</logic:present>
-		
-		
-		<logic:equal name="es.caib.zonaper.front.DATOS_SESION" property="perfilAcceso" scope="session" value="<%=ConstantesZPE.DELEGACION_PERFIL_ACCESO_CIUDADANO%>">		
-			<p><bean:message key="detalleNotificacion.acuse.texto" arg0="<%= nifRepresentante %>"/></p>
-		</logic:equal>
-		<logic:equal name="es.caib.zonaper.front.DATOS_SESION" property="perfilAcceso" scope="session" value="<%=ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO%>">		
-			<p><bean:message key="detalleNotificacion.acuse.accesoDelegado.texto" arg0="<%= nifRepresentante %>"/></p>
-		</logic:equal>	
+	
+		<logic:equal name="tipoFirma" value="CERT">
+			<logic:present name="messageKey">
+				<p class="alerta"><bean:message name="messageKey" arg0="<%= nifRepresentante %>"/></p>
+			</logic:present>
 			
-		<logic:equal name="rechazada" value="S">
-			<p class="alerta"><bean:message key="detalleNotificacion.rechazada"/></p>
-		</logic:equal>
-
-		<logic:equal name="rechazada" value="N">
+			<logic:equal name="es.caib.zonaper.front.DATOS_SESION" property="perfilAcceso" scope="session" value="<%=ConstantesZPE.DELEGACION_PERFIL_ACCESO_CIUDADANO%>">		
+				<p><bean:message key="detalleNotificacion.acuse.texto" arg0="<%= nifRepresentante %>"/></p>
+			</logic:equal>
+			<logic:equal name="es.caib.zonaper.front.DATOS_SESION" property="perfilAcceso" scope="session" value="<%=ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO%>">		
+				<p><bean:message key="detalleNotificacion.acuse.accesoDelegado.texto" arg0="<%= nifRepresentante %>"/></p>
+			</logic:equal>	
+			
 			<!--  Form para envio de datos -->
 			<html:form action="/protected/abrirNotificacion" styleId="formularioEnvio">
 				<html:hidden property="codigo" value="<%= String.valueOf( codigoNotificacion ) %>" />
 				<html:hidden property="asiento" value="<%= xmlAsientoAcuseRecibo %>"/>
 				<html:hidden property="firma" value=""/>
+				<html:hidden property="tipoFirma" value="CERTIFICADO"/>
 			</html:form>
 				
 			<!--  Mostramos applet e instrucciones segun implementacion -->
-			<logic:equal name="implementacionFirma" value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
+			<logic:equal name="implementacionFirma" value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">				
 				<div id="signaturaAFirma">
 					<!--  No necesaria ayuda -->
 			</logic:equal>
@@ -195,7 +223,7 @@
 						<jsp:include page="/firma/caib/applet.jsp" flush="false"/>	
 					</div>
 					<div class="pas">
-						<form name="formFirma" action="" id="formularioFirma">
+						<form name="formFirma" action="" id="formularioFirma">						
 							<label for="PIN"><bean:message key="detalleNotificacion.acuse.pin"/>
 							  <input name="PIN" id="PIN" type="password"  value="" />			
 							</label>			 				
@@ -215,12 +243,58 @@
 			</div>
 		</logic:equal>
 		
+		<logic:equal name="tipoFirma" value="CLAVE">
+			<logic:present name="messageKey">
+				<p class="alerta"><bean:message name="messageKey"/></p>
+			</logic:present>
+		
+			<html:form action="/protected/abrirNotificacion" styleId="formularioEnvio">
+				<html:hidden property="codigo" value="<%= String.valueOf( codigoNotificacion ) %>" />
+				<html:hidden property="asiento" value="<%= xmlAsientoAcuseRecibo %>"/>
+				<html:hidden property="tipoFirma" value="CLAVE"/>
+				
+						
+				<!--  Boton abrir notificacion -->
+				<div id="signaturaClave">
+				<p><bean:message key="detalleNotificacion.abrirClave"/></p>
+				<p><html:text size="35" property="firma" value="<%=claveFirma%>"/></p>
+				<div class="pas final">
+					<p class="botonera">
+						<input id="btnFirmar" name="btnFirmar" type="button"
+							 value="<bean:message key="detalleNotificacion.abrir"/>" 
+							 onclick="javascript:enviar(<bean:write name="notificacion" property="firmarAcuse"/>)"
+						/>
+					</p>
+				</div>
+				</div>
+			</html:form>				
+		</logic:equal>
+		
+		
+		<!-- Cambio de tipo de firma -->
+		<logic:notEmpty name="tipoFirmaAlt">
+			<p>
+				<i>
+				<logic:equal name="tipoFirmaAlt" value="CLAVE">
+					<bean:message key="detalleNotificacion.cambioTipoFirma.clave"/>
+				</logic:equal>
+				<logic:equal name="tipoFirmaAlt" value="CERT">
+					<bean:message key="detalleNotificacion.cambioTipoFirma.certificado"/>
+				</logic:equal>
+				<a href="<%="mostrarDetalleElemento.do?tipo=N&codigo=" + codigoNotificacion + "&tipoFirma=" + tipoFirmaAlt%>">
+					<bean:message key="detalleNotificacion.cambioTipoFirma.aqui"/>
+				</a>
+				</i>
+			</p>
+		</logic:notEmpty>		
 	</logic:equal>
 		
 	<logic:equal name="puedeAbrir" value="N">	
 		<p class="alerta"><bean:message key="detalleNotificacion.acuse.accesoDelegado.texto"/></p>
 	</logic:equal>	
 	
+	
+</logic:equal>
 </logic:equal>
 
 <!-- /firma -->
@@ -234,7 +308,7 @@
 				<html:hidden property="codigo" value="<%= String.valueOf( codigoNotificacion ) %>" />
 				<html:hidden property="asiento" value="<%= xmlAsientoAcuseRecibo %>"/>
 				<html:hidden property="firma" value=""/>
-						
+				<html:hidden property="tipoFirma" value=""/>		
 				<!--  Boton abrir notificacion -->
 				<div class="pas final">
 					<p class="botonera">

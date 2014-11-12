@@ -53,8 +53,11 @@ public interface Entrada extends ElementoExpedienteItf
 	
 	public Long getSubsanacionExpedienteUA();
 	
+	public String getNifRepresentante();
+	
 	public String getNifRepresentado();
 	
 	public String getNombreRepresentado();
+	
 	
 }

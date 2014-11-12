@@ -4,7 +4,7 @@
 body { font:normal 75% Arial, Helvetica, sans-serif; color:#494949; background:url(../images/bkg_site.png) repeat-x top #9ec9e3; margin:0; padding:1em 0 0 0; }
 */
 body { font:normal 80% 'TrebuchetMS', 'Trebuchet MS', Arial, Helvetica, sans-serif; color:#666; background-color:#fff; }
-#contenedor { margin:0 auto; width:65em; }
+#contenidor { margin:0 auto; width:65em; }
 #continguts { margin:0; padding:.5em 0 0 0; background-color:#fff; /*border-bottom:.3em solid #85bbe4;*/ }
 
 #continguts p { position:relative; }
@@ -70,8 +70,8 @@ div#capsalUsuari img { vertical-align:middle; margin:0 .3em; }
 #peu { height:3em; font-size:.9em; padding-top:0.5em; border-top:1px solid #ccc; }
 #peu img#logoAD { display:none; vertical-align:text-top; }
 #peu span.sep { margin:0 .5em; }
-#peu .esquerra { float:left; width:15.5em; margin-right:1em; }
-#peu .centre { float:left; width:32.5em; line-height:1.4em; }
+#peu .esquerra { float:left; width:15.5em; margin-right:8em; }
+#peu .centre { float:left; width:28em; line-height:1.4em; }
 #peu .dreta { float:right; width:15.2em; line-height:1.3em; }
 
 /* CONTINGUTS */
@@ -94,7 +94,7 @@ h1.ayuda { background:url(../images/ayuda.gif) no-repeat #fff; }
 p#nomTramit { padding:1em 1em 1em 4.2em; background:url(../images/nom_tramit.gif) no-repeat 1em .5em #ffffe4; font-size:1.2em; font-weight:bold; font-style:italic; text-align:justify; width:89%; }
 
 #tramitacion #indexCD, #tramitacion #indexUC { float:left; width:30%; height:17em; padding:5px; margin-bottom:1px; }
-#tramitacion #indexAN { float:left; width:29%; height:17em; padding:5px; margin-bottom:1px; }
+#tramitacion #indexAN { float:left; width:29%; height:auto; padding:5px; margin-bottom:1px; }
 #tramitacion #indexCD, #tramitacion #indexUC { margin-right:1.2%; }
 /*
 #tramitacion #indexCD { background:url(../images/entrada_cd.gif) no-repeat left top #ecf4fb; }
@@ -135,3 +135,7 @@ p#nomTramit { padding:1em 1em 1em 4.2em; background:url(../images/nom_tramit.gif
 #capsal p#ayuda { float:right; font-size:.9em; margin:0; }
 #capsal p#ayuda a { color:#fff; }
  */
+
+div.contactoAdministrador { position:absolute;z-index:50; padding:0 1em 1em 3.5em; border:10px solid #003575; top:0;left:0;display:none;background-color:#fff;}
+
+

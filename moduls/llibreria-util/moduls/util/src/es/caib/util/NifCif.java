@@ -3,6 +3,8 @@ package es.caib.util;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * 
  * @author Pablo
@@ -19,8 +21,11 @@ public class NifCif {
 	public static final int TIPO_DOCUMENTO_NIE = 3;
 	public static final int TIPO_DOCUMENTO_NSS = 4;
 	
-	public static String LETRAS = "TRWAGMYFPDXBNJZSQVHLCKE";
-	public static String SIN_NIF = "[0-9]{0,8}[" + LETRAS + "]{1}";
+	//public static String LETRAS_ESPECIAL = "ABCDEFGHIJ";
+	//public static String SIN_NIF_ESPECIAL = "[K|L][0-9]{7}[" + LETRAS_ESPECIAL + "]{1}";
+	
+	public static String LETRAS = "TRWAGMYFPDXBNJZSQVHLCKE";	
+	public static String SIN_NIF = "[K|L|M]?[0-9]{0,8}[" + LETRAS + "]{1}";	
 	public static String SIN_CIAS = "[0-9]{0,13}[" + LETRAS + "]{1}";
 	public static String SIN_CIF = "[ABCDEFGHJKLMNPQRSUVW]{1}[0-9]{7}([0-9]||[ABCDEFGHIJ]){1}";	                                 
 	//public static String SIN_NIE = "^\\s*[X|Y][\\/|\\s\\-]?[0-9]{1,8}[\\/|\\s\\-]?[A-Z]{1}\\s*$";
@@ -101,14 +106,16 @@ public class NifCif {
 		try {
 			if ( !Pattern.matches(SIN_NIF, valor)) return false;
 			
+			if (valor.startsWith("K") || valor.startsWith("L") || valor.startsWith("M")) {
+				valor = "0" + valor.substring(1);
+			}
+			
 			String letra = getLetras(valor);
-
 			String letraNIF = getLetraNIF(  getDigitos(valor) );
 			if ( letraNIF == null )
 				return false;
 
 			return letraNIF.equals(letra);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -285,10 +292,28 @@ public class NifCif {
 	 * @param doc
 	 * @return
 	 */
-	public static String normalizarDocumento(String doc){
-		//TODO QUITAR CEROS AL PRINCIPIO??		
-		doc = doc.toUpperCase();
-		return doc.replaceAll("[\\/\\s\\-]", "" );
+	public static String normalizarDocumento(String nif){
+		String doc = null;		
+        if (nif != null) {
+        	// Quitamos espacios y otros caracteres
+            doc = nif.toUpperCase();
+            doc = doc.replaceAll("[\\/\\s\\-]", "");
+            // Rellenamos con 0
+            if (doc.length() == 0) {
+            	return "";
+            }
+            final String primerCaracter = doc.substring(0, 1);
+            if (Pattern.matches("[^A-Z]", primerCaracter)) {
+                // Es nif
+                doc = StringUtils.leftPad(doc, 9, '0');
+            } else {
+                // es cif o nie
+                final String letraInicio = doc.substring(0, 1);
+                final String resto = doc.substring(1);
+                doc = letraInicio + StringUtils.leftPad(resto, 8, '0');
+            }
+        }
+        return doc;
 	}
 	
 	/**

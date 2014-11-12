@@ -6,12 +6,14 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
@@ -26,6 +28,8 @@ public class StringUtil {
 	public final static String FORMATO_TIMESTAMP = "dd/MM/yyyy HH:mm:ss";
 	public final static String FORMATO_REGISTRO = "yyyyMMddHHmmss";
 	public final static String LANG_CA = "ca";
+	public final static String PATRON_IDENTIFICADOR = "[A-Z0-9\\-_]{1,20}";
+	public final static String PATRON_USUARIO = "[a-zA-Z0-9\\-_]{1,20}";
 	
 	
 	// --- FUNCIONES PARA OBTENER MODELO/VERSION PARA IDENTIFICADOR CON FORMATO "MODELO-VERSION"
@@ -515,6 +519,63 @@ public class StringUtil {
 	    }
 	    	 
 	    /**
+	     * Serializa list de strings en un string 
+	     * @param list
+	     * @param separador
+	     * @return
+	     * @throws Exception
+	     */
+	    public static String serializarList(List list) throws Exception{
+	    	
+	    	String separador = "#-@";
+	    	
+			if (list == null) return null;		
+			String str="";		
+			boolean primer = true;
+			String value;
+			
+			StringBuffer sb = new StringBuffer(list.size() * 100);
+			
+			for (Iterator it = list.iterator();it.hasNext();){
+				value = (String) it.next();				
+				if (!primer) {
+					//str = str + separador;
+					sb.append(separador);
+				}else{
+					primer = false;
+				}
+				
+				if (value == null) 
+					value ="";	
+				
+				sb.append(str).append(value);
+			}
+			return sb.toString();
+			//return str;
+		}
+	    
+	    /**
+	     * Deserializa list de strings 
+	     * @param listStr
+	     * @return
+	     * @throws Exception
+	     */
+	    public static List deserializarList(String listStr) throws Exception{
+	    	String separador = "#-@";
+	    	if (listStr == null || listStr.length() <= 0) return null;
+	    	List list = new ArrayList();
+			StringTokenizer st = new StringTokenizer(listStr,separador);		
+			String value;
+			while (st.hasMoreElements()){
+				value = (String) st.nextElement();			
+				list.add(value);
+			}
+			return list;
+		}
+	    
+	    
+	    
+	    /**
 	     * Serializa map en un string 
 	     * @param map
 	     * @param separador
@@ -530,7 +591,7 @@ public class StringUtil {
 			boolean primer = true;
 			String name,value;
 			
-			StringBuffer sb = new StringBuffer(map.size() * 50);
+			StringBuffer sb = new StringBuffer(map.size() * 100);
 			
 			for (Iterator it = map.keySet().iterator();it.hasNext();){
 				name = it.next().toString();				
@@ -574,6 +635,7 @@ public class StringUtil {
 			return map;
 		}
 	    
+	    
 	    /**
 	     * Formatea nombre y apellidos según formato indicado:
 	     * 	AN: Apellidos, Nombre
@@ -602,5 +664,25 @@ public class StringUtil {
 	    		throw new Exception("Formato " + formato + " no soportado");
 	    	}
 	    }
+	    
+	    /**
+	     * Valida formato identificador usado en la aplicacion: carácteres alfanumericos y con los caracteres especiales: - _
+	     * @param identificador
+	     * @return true si cumple formato
+	     */
+	    public static boolean validarFormatoIdentificador(String identificador){
+	    	return  StringUtils.isNotBlank(identificador) && Pattern.matches(PATRON_IDENTIFICADOR, identificador);
+	    }
+	    
+	    /**
+	     * Valida formato usuario usado en la aplicacion: carácteres alfanumericos y con los caracteres especiales: - _
+	     * @param identificador
+	     * @return true si cumple formato
+	     */
+	    public static boolean validarFormatoUsuario(String usuario){
+	    	return  StringUtils.isNotBlank(usuario) && Pattern.matches(PATRON_USUARIO, usuario);
+	    }
+	    
+	    
 	    
 }

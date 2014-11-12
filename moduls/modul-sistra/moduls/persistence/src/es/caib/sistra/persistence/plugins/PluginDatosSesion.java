@@ -17,10 +17,12 @@ import es.caib.zonaper.modelInterfaz.PersonaPAD;
  */
 public class PluginDatosSesion implements Serializable{
 
-	DatosSesion datosSesion;
-	PersonaPAD persona;
+	private String idTramitacion;
+	private DatosSesion datosSesion;
+	private PersonaPAD persona;
 	
-	public void setDatosSesion(DatosSesion datosSesion) {
+	public void setDatosSesion(String pIdTramitacion, DatosSesion datosSesion) {
+		this.idTramitacion = pIdTramitacion;
 		this.datosSesion = datosSesion;
 		if (datosSesion.getNivelAutenticacion() != ConstantesLogin.LOGIN_ANONIMO){		
 			this.persona = datosSesion.getPersonaPAD();			
@@ -114,6 +116,10 @@ public class PluginDatosSesion implements Serializable{
 	
 	public String getPerfilAcceso(){
 		return this.datosSesion.getPerfilAcceso();
+	}
+
+	public String getIdTramitacion() {
+		return idTramitacion;
 	}
 	
 }

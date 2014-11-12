@@ -3,16 +3,19 @@ package es.caib.mobtratel.ws.v2.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import es.caib.mobtratel.persistence.delegate.DelegateMobTraTelUtil;
 import es.caib.mobtratel.persistence.delegate.MobTraTelDelegate;
-
-
 
 @javax.jws.WebService(portName = "BackofficeFacade", serviceName = "BackofficeFacadeService", 
         targetNamespace = "urn:es:caib:mobtratel:ws:v2:services", 
         endpointInterface = "es.caib.mobtratel.ws.v2.services.BackofficeFacade")
 public class BackofficeFacadeImpl implements BackofficeFacade {
 
+	private static Log log = LogFactory.getLog(BackofficeFacadeImpl.class);
+	
 	public String enviarMensaje(es.caib.mobtratel.ws.v2.model.MensajeEnvio mensaje) throws es.caib.mobtratel.ws.v2.services.BackofficeFacadeException {
 		try{
 			MobTraTelDelegate mttd = DelegateMobTraTelUtil.getMobTraTelDelegate();
@@ -20,6 +23,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			String codigo = mttd.envioMensaje(msEnv);
 			return codigo;
 		}catch(Exception e){
+			log.error(e);
 			throw new es.caib.mobtratel.ws.v2.services.BackofficeFacadeException(e.getMessage(),new es.caib.mobtratel.ws.v2.model.BackofficeFacadeException());
 		}
 	}
@@ -49,6 +53,9 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			}
 			if(mensaje.getSmss()!= null){
 				msEnv.setSmss(smssWSToSmssIntf(mensaje.getSmss().getValue()));
+			}
+			if (mensaje.getIdProcedimiento() != null) {
+				msEnv.setIdProcedimiento(mensaje.getIdProcedimiento().getValue());
 			}
 		}
 		return msEnv;

@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.naming.InitialContext;
+
 import es.caib.audita.modelInterfaz.ConstantesAuditoria;
 import es.caib.zonaper.helpdesk.front.Constants;
 
@@ -343,6 +345,21 @@ public class Util
 			return result;
 		} 
 
-
+		private static String version = null;	
+		
+		/**
+		 * Obtiene version (en web.xml)
+		 */
+		public static String getVersion(){
+			if (version == null) {
+				try{
+					InitialContext ic = new InitialContext();
+					version = (String) ic.lookup("java:comp/env/release.cvs.tag");
+				}catch(Exception ex){
+					version = null;
+				}		
+			}
+			return version;
+		}
 
 }

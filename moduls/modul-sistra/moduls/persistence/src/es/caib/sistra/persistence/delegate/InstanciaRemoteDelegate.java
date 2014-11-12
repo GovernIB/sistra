@@ -164,12 +164,12 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 	}
 
 	public RespuestaFront guardarFormulario(String identificador,
-			int instancia, String datosAnteriores, String datosNuevos)
+			int instancia, String datosAnteriores, String datosNuevos, boolean guardadoSinFinalizar)
 			throws DelegateException
 	{
         try 
         {
-        	return getRemote().guardarFormulario( identificador, instancia, datosAnteriores, datosNuevos );
+        	return getRemote().guardarFormulario( identificador, instancia, datosAnteriores, datosNuevos, guardadoSinFinalizar );
         } 
         catch (RemoteException e) 
         {
@@ -189,18 +189,39 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
         }
 	}
 
-	public RespuestaFront anexarDocumento(String identificador, int instancia,
-			byte[] datosDocumento, String nomFichero, String extension,
-			String descPersonalizada,FirmaIntf firma, boolean firmaDelegada) throws DelegateException
+	public RespuestaFront anexarDocumento(String identificador,int instancia,String descPersonalizada, FirmaIntf firma, boolean firmaDelegada) throws DelegateException
 	{
         try 
         {
-        	return getRemote().anexarDocumento( identificador, instancia, datosDocumento, nomFichero, extension, descPersonalizada,firma, firmaDelegada );
+        	return getRemote().anexarDocumento( identificador, instancia, descPersonalizada, firma, firmaDelegada );
         } catch (RemoteException e) 
         {
             throw new DelegateException(e);
         }
 	}
+	
+	public RespuestaFront uploadAnexo(String identificador,int instancia,byte[] datosDocumento,String nomFichero,String extension,String descPersonalizada) throws DelegateException
+	{
+        try 
+        {
+        	return getRemote().uploadAnexo(identificador, instancia, datosDocumento, nomFichero, extension, descPersonalizada);
+        } catch (RemoteException e) 
+        {
+            throw new DelegateException(e);
+        }
+	}
+	
+	public RespuestaFront downloadAnexo(String identificador,int instancia) throws DelegateException
+	{
+        try 
+        {
+        	return getRemote().downloadAnexo( identificador, instancia);
+        } catch (RemoteException e) 
+        {
+            throw new DelegateException(e);
+        }
+	}
+	
 	
 	
 	public RespuestaFront irAPago(String identificador, int instancia, String urlRetorno, String urlMantenimientoSesion) throws DelegateException
@@ -248,19 +269,7 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
         {
             throw new DelegateException(e);
         }
-	}
-	
-	public RespuestaFront borrarTramite( String idPersistencia ) throws DelegateException
-	{
-        try 
-        {
-        	return getRemote().borrarTramitePersistencia( idPersistencia );
-        } 
-        catch (RemoteException e) 
-        {
-            throw new DelegateException(e);
-        }
-	}
+	}	
 
 	public RespuestaFront registrarTramite(String asiento, FirmaIntf firma)
 			throws DelegateException
@@ -437,6 +446,17 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 		{
 			throw new DelegateException( e );
 		}
+	}
+	
+	public RespuestaFront finalizarTramite() throws DelegateException {
+		try
+		{
+			return getRemote().finalizarTramite();
+		}
+		catch( RemoteException e )
+		{
+			throw new DelegateException( e );
+		}	
 	}
 	
 	public void destroy() 

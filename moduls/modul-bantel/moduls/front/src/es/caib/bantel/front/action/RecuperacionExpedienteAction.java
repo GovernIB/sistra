@@ -65,19 +65,17 @@ public class RecuperacionExpedienteAction extends BaseAction
 			if(exp == null){
 				throw new Exception("No existe expediente");
 			}
-			
-			// Establecemos parametros expediente actual
-			request.getSession().setAttribute(Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY, identificadorExp);
-			request.getSession().setAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY, new Long(unidadAdm));
-			request.getSession().setAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY, claveExp);
+			String identificadorProc = exp.getIdentificadorProcedimiento();
 			
 			// Buscamos descripcion procedimiento y si permite sms
 			String descProc = exp.getIdentificadorProcedimiento();
 			String permitirSms = "N";
+			String permitirPlazoNotifVble = "N";			
 			Procedimiento procedimiento = DelegateUtil.getTramiteDelegate().obtenerProcedimiento(exp.getIdentificadorProcedimiento());
 			if (procedimiento != null) {
 				descProc += " - " + procedimiento.getDescripcion();
 				permitirSms = procedimiento.getPermitirSms();
+				permitirPlazoNotifVble = procedimiento.getPermitirPlazoNotificacionesVariable();
 			}
 			
 			// Establecemos observaciones particulares para los elementos del expediente
@@ -89,27 +87,41 @@ public class RecuperacionExpedienteAction extends BaseAction
 					boolean primerConfir = true;
 					if (elemento instanceof NotificacionExpedientePAD) {
 						NotificacionExpedientePAD notif = (NotificacionExpedientePAD) elemento;
-						if (notif.isRequiereAcuse()) {
-							if (DetalleAcuseRecibo.ESTADO_RECHAZADA.equals(notif.getDetalleAcuseRecibo().getEstado())) {
-								// Rechazada: mostramos avisos confirmados
-								if (notif.getDetalleAcuseRecibo().getAvisos() != null) {									
-									for (Iterator it2 = notif.getDetalleAcuseRecibo().getAvisos().iterator(); it2.hasNext();){
-										DetalleAviso da = (DetalleAviso) it2.next();
-										if (da.isConfirmarEnvio()) { 
-												if (primerConfir) {
-													primerConfir = false;
-												} else {
-													observaciones += "<br/>";
-												}
-												if (DetalleAviso.CONFIRMADO_ENVIADO.equals(da.getConfirmadoEnvio())) {													
-													observaciones += da.getTipo() +  ": " + resources.getMessage(this.getLocale(request), "notificacion.envioAviso.confirmado");
-												} else {
-													observaciones += da.getTipo() + ": " + resources.getMessage(this.getLocale(request), "notificacion.envioAviso.noConfirmado");
-												}											
-										}										
-									}
+						
+						// Mostramos avisos
+						if (notif.getDetalleAcuseRecibo().getAvisos() != null) {									
+							for (Iterator it2 = notif.getDetalleAcuseRecibo().getAvisos().iterator(); it2.hasNext();){
+								DetalleAviso da = (DetalleAviso) it2.next();
+								
+								if (primerConfir) {
+									primerConfir = false;
+								} else {
+									observaciones += "<br/>";
 								}
-							} else if (DetalleAcuseRecibo.ESTADO_PENDIENTE.equals(notif.getDetalleAcuseRecibo().getEstado()) && 
+								
+								observaciones += da.getTipo() + ":";
+								
+								if (da.isEnviado()) {
+									observaciones += resources.getMessage(this.getLocale(request), "notificacion.avisoEnviado");
+								} else {
+									observaciones += resources.getMessage(this.getLocale(request), "notificacion.avisoNoEnviado");										
+								}
+								
+								if ( DetalleAviso.CONFIRMADO_ENVIADO.equals(da.getConfirmadoEnvio())) {
+									observaciones += " [" + resources.getMessage(this.getLocale(request), "notificacion.avisoConfirmado.OK") + "]";
+								}
+								
+								if ( DetalleAviso.CONFIRMADO_NO_ENVIADO.equals(da.getConfirmadoEnvio())) {
+									observaciones += " [" + resources.getMessage(this.getLocale(request), "notificacion.avisoConfirmado.KO") + "]";
+								}
+																										
+							}
+						}
+						
+						// Si requiere acuse y esta pendiente mostramos fin de plazo
+						if (notif.isRequiereAcuse()) {
+							// Fin de plazo
+							if (DetalleAcuseRecibo.ESTADO_PENDIENTE.equals(notif.getDetalleAcuseRecibo().getEstado()) && 
 									notif.getDetalleAcuseRecibo().getFechaFinPlazo() != null) {
 								if (primerConfir) {
 									primerConfir = false;
@@ -117,23 +129,30 @@ public class RecuperacionExpedienteAction extends BaseAction
 									observaciones += "<br/>";
 								}
 								observaciones += resources.getMessage(this.getLocale(request), "notificacion.finPlazo") + StringUtil.fechaACadena(notif.getDetalleAcuseRecibo().getFechaFinPlazo(), StringUtil.FORMATO_FECHA);
-							}
+							}														
 						}
 					}
 					observacionesElemento.add(observaciones);					
 				}				
 			}
 			
+			// Establecemos parametros expediente actual
+			request.getSession().setAttribute(Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY, identificadorExp);
+			request.getSession().setAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY, new Long(unidadAdm));
+			request.getSession().setAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY, claveExp);
+			request.getSession().setAttribute(Constants.EXPEDIENTE_ACTUAL_PROCEDIMIENTO_KEY, identificadorProc);
+			
 			// Establecemos expediente en la request 
 			request.setAttribute("expediente", exp);
 			request.setAttribute("descripcionProcedimiento", descProc);
 			request.setAttribute("permitirSms", permitirSms);
+			request.setAttribute("permitirPlazoNotifVble", permitirPlazoNotifVble);			
 			request.setAttribute("observacionesElemento", observacionesElemento);
 			return mapping.findForward( "success" );
 		
 		}catch(Exception e){
 			log.error("Excepcion recuperando expediente",e);
-			String mensajeOk = MensajesUtil.getValue("error.expediente.consulta");
+			String mensajeOk = MensajesUtil.getValue("error.expediente.consulta", request);
 			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk + ": " + e.getMessage());
 			return mapping.findForward("fail");
 		}		

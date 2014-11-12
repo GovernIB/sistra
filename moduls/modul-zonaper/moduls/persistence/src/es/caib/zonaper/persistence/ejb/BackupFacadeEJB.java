@@ -10,6 +10,9 @@ import javax.ejb.EJBException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import es.caib.redose.modelInterfaz.ConstantesRDS;
+import es.caib.redose.persistence.delegate.DelegateRDSUtil;
+import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.zonaper.model.EntradaPreregistro;
 import es.caib.zonaper.model.EntradaPreregistroBackup;
 import es.caib.zonaper.model.TramitePersistente;
@@ -50,7 +53,6 @@ public abstract class BackupFacadeEJB extends HibernateEJB
 	
 	/**
      * @ejb.interface-method
-     * @ejb.permission role-name = "${role.admin}"
      * @ejb.permission role-name = "${role.auto}"
      * 
      */
@@ -158,9 +160,13 @@ public abstract class BackupFacadeEJB extends HibernateEJB
 			TramitePersistenteBackup tramitePersistenteBackup = ( TramitePersistenteBackup ) lstTramitesPersistentesBackup.get( i );
 			
 			try{
+				// Eliminamos referencias en el RDS
+    			RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();	    	    		
+    			rds.eliminarUsos(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE, tramitePersistenteBackup.getIdPersistencia() );
+				// Eliminamos tramite backup
 				tramitePersistenteDelegate.borrarTramitePersistenteBackup(tramitePersistenteBackup);
 			}catch (Exception ex){
-				log.error( "Excepcion realizando la eliminació de los tramites de la tabla de backup " + tramitePersistenteBackup.getCodigo(),ex);	
+				log.error( "Excepcion realizando la eliminación del tramite de la tabla de backup con codigo: " + tramitePersistenteBackup.getCodigo(),ex);	
 			}
 			
 		}

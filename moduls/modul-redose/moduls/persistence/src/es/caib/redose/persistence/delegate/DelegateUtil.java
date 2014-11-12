@@ -66,4 +66,8 @@ public final class DelegateUtil {
     public static LogGestorDocumentalErroresDelegate getLogErrorGestorDocumentalDelegate() {
         return (LogGestorDocumentalErroresDelegate) DelegateFactory.getDelegate(LogGestorDocumentalErroresDelegate.class);
     }
+    
+    public static FicheroExternoDelegate getFicheroExternoDelegate() {
+        return (FicheroExternoDelegate) DelegateFactory.getDelegate(FicheroExternoDelegate.class);
+    }
 }

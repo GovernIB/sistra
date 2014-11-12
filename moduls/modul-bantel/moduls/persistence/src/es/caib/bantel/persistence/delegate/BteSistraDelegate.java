@@ -2,11 +2,14 @@ package es.caib.bantel.persistence.delegate;
 
 import java.rmi.RemoteException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
+import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
+import es.caib.bantel.modelInterfaz.ValoresFuenteDatosBTE;
 import es.caib.bantel.persistence.intf.BteSistraFacade;
 import es.caib.bantel.persistence.util.BteSistraFacadeUtil;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
@@ -23,7 +26,7 @@ public class BteSistraDelegate implements StatelessDelegate {
         try {
             return getFacade().crearEntradaTelematica(refAsiento,refJustificante,refDocumentos);
         } catch (Exception e) {
-        	e.printStackTrace();	
+        		
             throw new DelegateException(e);
         }
     }
@@ -32,7 +35,7 @@ public class BteSistraDelegate implements StatelessDelegate {
         try {
             return getFacade().crearEntradaPreregistro(refAsiento,refJustificante,refDocumentos,numeroRegistro,fechaRegistro);
         } catch (Exception e) {
-        	e.printStackTrace();	
+        		
             throw new DelegateException(e);
         }
     }
@@ -41,7 +44,7 @@ public class BteSistraDelegate implements StatelessDelegate {
         try {
             return getFacade().crearEntradaPreenvioAutomatico(refAsiento,refJustificante,refDocumentos,numeroRegistro,fechaRegistro);
         } catch (Exception e) {
-        	e.printStackTrace();	
+        		
             throw new DelegateException(e);
         }
     }
@@ -50,7 +53,7 @@ public class BteSistraDelegate implements StatelessDelegate {
         try {
             return getFacade().crearEntradaPreregistroIncorrecto(refAsiento,refJustificante,refDocumentos,numeroRegistro,fechaRegistro);
         } catch (Exception e) {
-        	e.printStackTrace();	
+        		
             throw new DelegateException(e);
         }
     }
@@ -59,13 +62,25 @@ public class BteSistraDelegate implements StatelessDelegate {
         try {
             return getFacade().confirmacionEntradaPreenvioAutomatico(numPreregistro,numregistro,fechaRegistro);
         } catch (Exception e) {
-        	e.printStackTrace();	
             throw new DelegateException(e);
         }
     }
     
-    
+    public ValoresFuenteDatosBTE consultaFuenteDatos(String idFuenteDatos, List parametros) throws DelegateException {
+        try {
+            return getFacade().consultaFuenteDatos(idFuenteDatos, parametros);
+        } catch (Exception e) {
+        	throw new DelegateException(e);
+        }
+    }
   
+    public ProcedimientoBTE obtenerProcedimiento(String idProcedimiento) throws DelegateException {
+        try {
+            return getFacade().obtenerProcedimiento(idProcedimiento);
+        } catch (Exception e) {
+        	throw new DelegateException(e);
+        }
+    }
     
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

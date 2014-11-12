@@ -10,6 +10,7 @@ import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
+import es.caib.zonaper.modelInterfaz.DetalleNotificacionesProcedimiento;
 import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
 import es.caib.zonaper.modelInterfaz.FiltroBusquedaExpedientePAD;
 import es.caib.zonaper.modelInterfaz.PaginaPAD;
@@ -60,25 +61,9 @@ public class PadDelegate implements StatelessDelegate {
         }
     }
 	
-	public  String obtenerEstadoTramiteUsuario(String idPersistencia) throws DelegateException {
+	public String obtenerEstadoTramite(String idPersistencia) throws DelegateException {
         try {
-            return getFacade().obtenerEstadoTramiteUsuario(idPersistencia) ;
-        } catch (Exception e) {
-            throw new DelegateException(e);
-        }
-    }
-	
-	public String obtenerEstadoTramiteEntidadDelegada(String idPersistencia, String nifEntidad) throws DelegateException {
-        try {
-            return getFacade().obtenerEstadoTramiteEntidadDelegada(idPersistencia, nifEntidad) ;
-        } catch (Exception e) {
-            throw new DelegateException(e);
-        }
-    }
-	
-	public String obtenerEstadoTramiteAnonimo(String idPersistencia) throws DelegateException {
-        try {
-            return getFacade().obtenerEstadoTramiteAnonimo(idPersistencia);
+            return getFacade().obtenerEstadoTramite(idPersistencia) ;
         } catch (Exception e) {
             throw new DelegateException(e);
         }
@@ -93,9 +78,9 @@ public class PadDelegate implements StatelessDelegate {
         }
     }
         
-	public void borrarTramitePersistente(String idPersistencia) throws DelegateException {
+	public void borrarTramitePersistente(String idPersistencia, boolean backup) throws DelegateException {
         try {
-            getFacade().borrarTramitePersistente(idPersistencia);            
+            getFacade().borrarTramitePersistente(idPersistencia, backup);            
         } catch (Exception e) {
             throw new DelegateException(e);
         }
@@ -238,6 +223,18 @@ public class PadDelegate implements StatelessDelegate {
 		try
 		{
 			return getFacade().obtenerAcuseRecibo( numeroRegistro );
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
+	public DetalleNotificacionesProcedimiento obtenerDetalleNotificacionesProcedimiento(String idProcedimiento,Date desde, Date hasta) throws DelegateException
+	{
+		try
+		{
+			return getFacade().obtenerDetalleNotificacionesProcedimiento(idProcedimiento, desde, hasta);
 		}
 		catch (Exception e) 
 		{

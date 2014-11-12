@@ -13,16 +13,21 @@ import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.RequestUtils;
 
+import es.caib.bantel.back.form.CampoFuenteDatosForm;
 import es.caib.bantel.back.form.FicheroExportacionForm;
+import es.caib.bantel.back.form.FuenteDatosForm;
 import es.caib.bantel.back.form.GestorBandejaForm;
 import es.caib.bantel.back.form.TramiteForm;
 import es.caib.bantel.back.taglib.Constants;
+import es.caib.bantel.model.CampoFuenteDatos;
 import es.caib.bantel.model.FicheroExportacion;
+import es.caib.bantel.model.FuenteDatos;
 import es.caib.bantel.model.GestorBandeja;
 import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.persistence.delegate.DelegateException;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.delegate.FicheroExportacionDelegate;
+import es.caib.bantel.persistence.delegate.FuenteDatosDelegate;
 import es.caib.bantel.persistence.delegate.GestorBandejaDelegate;
 import es.caib.bantel.persistence.delegate.ProcedimientoDelegate;
 import es.caib.util.CifradoUtil;
@@ -153,9 +158,11 @@ public abstract class BaseAction extends Action {
 		Set tramites = gestorBandeja.getProcedimientosGestionados();
 		String[] codigos = new String[tramites.size()];
 		int i = 0;
-		for ( Iterator it = tramites.iterator(); it.hasNext(); i++ )
-		{
-			codigos[ i ] = ( ( Procedimiento ) it.next() ).getIdentificador(); 
+		if (tramites != null) {
+			for ( Iterator it = tramites.iterator(); it.hasNext(); i++ )
+			{
+				codigos[ i ] = ( ( Procedimiento ) it.next() ).getIdentificador(); 
+			}
 		}
 			
 		pForm.setTramites( codigos );
@@ -166,4 +173,39 @@ public abstract class BaseAction extends Action {
 		return gestorBandeja;
 	}
     
+    
+    protected FuenteDatos guardarFuenteDatos(ActionMapping mapping, HttpServletRequest request, String idFuenteDatos)
+    throws DelegateException 
+    {
+    	FuenteDatosForm pForm = (FuenteDatosForm) obtenerActionForm(mapping, request, "/back/fuenteDatos/editar");
+		
+    	FuenteDatosDelegate delegate = DelegateUtil.getFuenteDatosDelegate();
+    	FuenteDatos fuenteDatos = delegate.obtenerFuenteDatos(idFuenteDatos);
+				
+		pForm.setValues(fuenteDatos);
+		pForm.setIdentificadorOld(fuenteDatos.getIdentificador());
+		pForm.setIdProcedimiento(fuenteDatos.getProcedimiento().getIdentificador());
+		
+		request.setAttribute("idFuenteDatos", idFuenteDatos);
+		
+		return fuenteDatos;
+	}
+    
+    protected CampoFuenteDatos guardarCampoFuenteDatos(ActionMapping mapping, HttpServletRequest request, String idFuenteDatos, String idCampoFuenteDatos)
+    throws DelegateException 
+    {
+    	CampoFuenteDatosForm pForm = (CampoFuenteDatosForm) obtenerActionForm(mapping, request, "/back/campoFuenteDatos/editar");
+		
+    	FuenteDatosDelegate delegate = DelegateUtil.getFuenteDatosDelegate();
+    	FuenteDatos fuenteDatos = delegate.obtenerFuenteDatos(idFuenteDatos);
+    			
+		CampoFuenteDatos campoFuenteDatos = fuenteDatos.getCampoFuenteDatos(idCampoFuenteDatos);
+		pForm.setValues(campoFuenteDatos);
+		pForm.setIdFuenteDatos(idFuenteDatos);
+		pForm.setIdentificadorOld(idCampoFuenteDatos);
+		
+		request.setAttribute("idCampoFuenteDatos", idFuenteDatos + "#" + idCampoFuenteDatos);
+		
+		return campoFuenteDatos;
+	}
 }

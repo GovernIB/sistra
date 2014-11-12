@@ -63,6 +63,10 @@
     <td><p>Identifica en el gestor de formularis el model/versió del formulari. Per FORMS hi ha un botó de selecció.</p></td>
   </tr>  
   <tr> 
+    <td>Permetre guardar sense terminar</td>
+    <td><p>Indica si es permiteix que el formulari es guarde sense terminar.</p></td>
+  </tr>
+  <tr> 
     <td>Script càrrega de dades inicials</td>
     <td><p>Per a formularis permet precarregar dades en el formulari (p.ex. nif 
         i nom de l'usuari). El tipus d'aquest camp és <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaScript.jsp">script</a> 
@@ -149,6 +153,11 @@
         DATOSPAGO.setNombre('Nombre');<br>
 	  </p>
         
+        
+        <p> Adicionalment es pot indicar una data llimit per iniciar el pagament: <br/>
+	   		DATOSPAGO.setFechaLimitePago('dd/MM/yyyy HH:mm:ss');<br>
+        	DATOSPAGO.setMensajeFechaLimitePago('Mensaje a mostrar si se excede la fecha limite');
+	   </p> 
                 
       <p> A m&eacute;s es dispondrà d'una funci&oacute; per a consultar l'importe 
         d'una taxa (en cents):<br>

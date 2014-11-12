@@ -163,6 +163,37 @@
 							</tr>
 						</logic:equal>
 				</logic:notEmpty>
+				<logic:notEmpty name="entrada" property="habilitarNotificacionTelematica">
+					<tr>
+						<th>
+							<bean:message key="detalleTramite.datosRegistro.notificacionTelematica"/>
+						</th> 
+						<td>
+							<logic:equal name="entrada" property="habilitarNotificacionTelematica" value="S">
+								<bean:message key="si"/>
+							</logic:equal>
+							<logic:equal name="entrada" property="habilitarNotificacionTelematica" value="N">
+								<bean:message key="no"/>
+							</logic:equal>												
+						</td>
+					</tr>
+				</logic:notEmpty>
+				<tr>
+					<th>
+						<bean:message key="detalleTramite.datosRegistro.presentacion"/>
+					</th> 
+					<td>
+						<logic:equal name="entrada" property="nivelAutenticacion" value="C">
+							<bean:message key="detalleTramite.datosRegistro.presentacion.certificado"/>
+						</logic:equal>
+						<logic:equal name="entrada" property="nivelAutenticacion" value="U">
+							<bean:message key="detalleTramite.datosRegistro.presentacion.usuario"/>
+						</logic:equal>
+						<logic:equal name="entrada" property="nivelAutenticacion" value="A">
+							<bean:message key="detalleTramite.datosRegistro.presentacion.anonimo"/>
+						</logic:equal>						
+					</td>
+				</tr>
 		</table>
 		<!-- /dades justificant -->
 		

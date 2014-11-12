@@ -42,7 +42,7 @@
         	<include name="*.jar" />
         </fileset>
         <fileset dir="${web.product}">
-            <include name="6-model.jar" />
+            <include name="6-form-model.jar" />
             <include name="6-form-persistence.jar" />
         </fileset>
     </path>
@@ -175,6 +175,8 @@
             debug="${javac.debug}"
             deprecation="${javac.deprecation}"
             optimize="${javac.optimize}"
+        	source="1.5"
+        	target="1.5"
             >
             <src path="${web.src}"/>
             <src path="${web.gen.src}"/>
@@ -197,7 +199,8 @@
             <classes dir="${web.resources}" includes="*.properties"/>
 
          	 <lib dir="${lib.dir}">
-             <include name="struts.jar" />
+             	<include name="struts.jar" />
+         	 	<include name="simplecaptcha-1.1.1.jar" />
   	        </lib>
     	
             <webinf dir="${web.etc}" includes="*.xml"/>

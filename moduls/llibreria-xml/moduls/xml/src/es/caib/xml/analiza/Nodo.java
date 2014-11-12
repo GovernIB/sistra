@@ -54,6 +54,9 @@ public class Nodo extends Par implements Serializable{
 		if (obj instanceof Nodo){
 			Nodo nodoExt = (Nodo) obj;
 			
+			// Comprobar Xpath
+			if (!nodoExt.getXpath().equals(this.getXpath())) return false;
+			
 			// Comprobar que el nombre y el valor son iguales
 			boolean igualesSinAttb = super.equals (obj);			
 			if (!igualesSinAttb) return false;
@@ -62,7 +65,8 @@ public class Nodo extends Par implements Serializable{
 			List attbSelf = getAtributos ();
 			List attbExt = nodoExt.getAtributos();
 			
-			return attbSelf.equals (attbExt);			
+			return attbSelf.equals (attbExt);		
+			
 		}
 		
 		return super.equals (obj);

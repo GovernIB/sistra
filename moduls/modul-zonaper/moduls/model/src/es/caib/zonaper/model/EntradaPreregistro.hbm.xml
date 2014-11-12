@@ -28,7 +28,9 @@
     <property name="claveRdsJustificante"   column="PRE_CLAJUS"  not-null="true" length="10"/>
 
     <property name="numeroRegistro"  column="PRE_NUMREG" length="50"/>
-  	<property name="fechaConfirmacion"  column="PRE_FECREG" />    
+  	<property name="fechaConfirmacion"  column="PRE_FECREG" />
+  	<property name="oficinaRegistro"  column="PRE_OFIREG" />
+  	    
   	
   	<property name="idioma"  column="PRE_IDIOMA" not-null="true" length="2"/>
   	
@@ -47,8 +49,7 @@
 
 	<property name="subsanacionExpedienteCodigo"  column="PRE_SBEXID" />
     <property name="subsanacionExpedienteUA"  column="PRE_SBEXUA" />
-
-
+ 	
 	<set name="documentos" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="DPR_DOCIDE">
 		<cache usage="read-write"/>
 	    <key column="DPR_CODPRE"/>
@@ -62,6 +63,12 @@
 	
 	<!--  Opciones notificacion telematica -->
 	<property name="habilitarNotificacionTelematica" column="PRE_NOTTEL" />
-	
+
+	<!-- Opciones alertas tramitacion -->
+	<property name="alertasTramitacionGenerar"  column="PRE_ALTGEN"/>
+    <property name="alertasTramitacionEmail"  column="PRE_ALTEMA"/>
+    <property name="alertasTramitacionSms"  column="PRE_ALTSMS"/>
+    <property name="alertasTramitacionFechaUltima"  column="PRE_ALTFEC"/>
+    	
 </class>
 </hibernate-mapping>

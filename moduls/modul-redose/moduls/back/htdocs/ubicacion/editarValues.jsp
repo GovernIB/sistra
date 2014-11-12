@@ -10,12 +10,17 @@
 
 <tr>
     <td class="labelo"><bean:message key="ubicacion.nombre"/></td>
-    <td class="input"><html:text styleClass="data" tabindex="1" property="values.nombre" maxlength="50" /></td>
+    <td class="input"><html:text styleClass="text" tabindex="1" property="values.nombre" maxlength="50" /></td>
 </tr>
 
 <tr>
     <td class="labelo"><bean:message key="ubicacion.plugin"/></td>
-    <td class="input"><html:text styleClass="data" tabindex="1" property="values.pluginAlmacenamiento" maxlength="100" /></td>
+    <td class="input"><html:text styleClass="text" tabindex="1" property="values.pluginAlmacenamiento" maxlength="500" /></td>
+</tr>
+
+<tr>
+    <td class="labelo"><bean:message key="ubicacion.defecto"/></td>
+    <td class="input"><html:checkbox property="values.defecto" value="S" tabindex="1" /></td>
 </tr>
 
 
