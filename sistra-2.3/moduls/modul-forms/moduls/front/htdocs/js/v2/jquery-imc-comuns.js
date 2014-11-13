@@ -123,28 +123,24 @@ $.fn.dataCompletar = function(options) {
 // horaCompletar
 $.fn.horaCompletar = function(options) {
 	var settings = $.extend({
-		contenidor: $("body"),
-		separador: ":"
+			contenidor: $("body"),
+			separador: ":"
 	}, options);
 	this.each(function(){
 		var element = $(this),
-			separador = settings.separador,
-			onBlur = function() {
-				var hora_val = element.val(),
-					hora = hora_val.split(separador),
-					horaHora = parseInt(hora[0], 10),
-					horaMinuts = parseInt(hora[1], 10);
-				// completar
-				if (hora_val.indexOf(separador+"__") != -1 && horaMinuts === "__") {
-					horaMinuts = "00";
-				}
-				// verificar
-				horaHora = (horaHora > 23) ? "23" : (horaHora === 0) ? "00" : horaHora;
-				horaMinuts = (horaMinuts > 59) ? "59" : (horaMinuts === 0) ? "00" :  horaMinuts;
-				// pintar
-				element.val(horaHora + separador + horaMinuts);
-			
-			};
+				separador = settings.separador,
+				onBlur = function() {
+					var hora_val = element.val(),
+							hora = hora_val.split(separador),
+							horaHora = parseInt(hora[0], 10),
+							horaMinuts = parseInt(hora[1], 10);
+					// verificar
+					horaHora = (horaHora > 23) ? "23" : (isNaN(horaHora) || horaHora === 0) ? "00" : (horaHora <= 9) ? "0"+horaHora : horaHora;
+					horaMinuts = (horaMinuts > 59) ? "59" : (isNaN(horaMinuts) || horaMinuts === 0) ? "00" : (horaMinuts <= 9) ? "0"+horaMinuts : horaMinuts;
+					// pintar
+					element.val(horaHora + separador + horaMinuts);
+				};
+		// events
 		element.off('.horaCompletar').on('blur.horaCompletar', onBlur).mask("99"+separador+"99");
 	});
 	return this;
@@ -599,11 +595,23 @@ $.fn.submenu = function(options) {
 					submenu_elm.removeClass("imc-opcions-superior");
 				}
 				
-				submenu_elm.css({ top: submenu_T+"px", left: submenu_L+"px" }).attr("tabindex", "-1").slideDown(200, function() {
-					$(document).on("click.submenu", onWindow).on("keydown.submenu", onKeyDown);
-					submenu_elm.focus();
-					element.removeClass("imc-select-obrint");
-				});
+				if (!Modernizr.boxshadow) {
+					
+					submenu_elm.css({ top: submenu_T+"px", left: submenu_L+"px" }).attr("tabindex", "-1").show(50, function() {
+						$(document).on("click.submenu", onWindow).on("keydown.submenu", onKeyDown);
+						submenu_elm.focus();
+						element.removeClass("imc-select-obrint");
+					});
+					
+				} else {
+				
+					submenu_elm.css({ top: submenu_T+"px", left: submenu_L+"px" }).attr("tabindex", "-1").slideDown(200, function() {
+						$(document).on("click.submenu", onWindow).on("keydown.submenu", onKeyDown);
+						submenu_elm.focus();
+						element.removeClass("imc-select-obrint");
+					});
+				
+				}
 			} else {
 				if (!element.hasClass("imc-select-obrint")) {
 					onWindow();
@@ -625,9 +633,14 @@ $.fn.submenu = function(options) {
 				element.removeClass("imc-select-on");
 				submenu_elm.removeClass("imc-submenu-on");
 				$(document).off("click.submenu").off("keydown.submenu");
-				submenu_elm
-					.find("a").removeClass("hover").end()
-					.slideUp(100);
+				
+				submenu_elm.find("a").removeClass("hover");
+				
+				if (!Modernizr.boxshadow) {
+					submenu_elm.hide();
+				} else {
+					submenu_elm.slideUp(100);
+				}
 			}
 		},
 		onKeyDown = function(e) {
