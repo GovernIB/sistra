@@ -14,7 +14,7 @@
                                    
     <property name="usuarioSeycon"  column="PER_SEYCON" not-null="true"/>
     <property name="documentoIdLegal"  column="PER_IDENTI"  not-null="true" length="12"/>
-    <property name="nombre"  column="PER_NOMBRE"  not-null="true" length="50"/>
+    <property name="nombre"  column="PER_NOMBRE"  not-null="true" length="100"/>
     <property name="apellido1"  column="PER_APELL1"  not-null="false" length="50"/>
     <property name="apellido2"  column="PER_APELL2"  not-null="false" length="50"/>
     <property name="tipoPersona"  column="PER_TIPPER"  not-null="true" length="1"/>
