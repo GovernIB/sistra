@@ -442,9 +442,9 @@ form { clear:both; }
 					background:transparent url(../imgs/cueta_dalt.gif) no-repeat center top;
 				}
 		
-		.imc-form .imc-element textarea	{ min-height:4.9em; max-height:13.1em; }
-		.imc-form .imc-el-files-3 textarea { min-height:8.9em; max-height:13.1em; }
-		.imc-form .imc-el-files-4 textarea { min-height:13.1em; max-height:13.1em; }
+		.imc-form .imc-element textarea	{ min-height:4.9em; max-height:30em; }
+		.imc-form .imc-el-files-3 textarea { min-height:8.9em; max-height: 30em; }
+		.imc-form .imc-el-files-4 textarea { min-height:13.1em; max-height: 30em; }
 		
 		.imc-form .imc-element fielset { border:none; }
 		.imc-form .imc-element legend { display:block; padding:0 0 .2em .2em; }
