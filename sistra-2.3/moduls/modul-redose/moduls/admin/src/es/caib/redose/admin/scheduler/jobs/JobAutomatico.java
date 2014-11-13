@@ -9,8 +9,8 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import es.caib.mobtratel.admin.scheduler.conf.SchedulerConfiguration;
-import es.caib.mobtratel.admin.util.UsernamePasswordCallbackHandler;
+import es.caib.redose.admin.scheduler.conf.SchedulerConfiguration;
+import es.caib.util.UsernamePasswordCallbackHandler;
 
 /**
  * Job que realiza el proceso diario de importacion

@@ -43,6 +43,7 @@
         </fileset>
     	<fileset dir="${distribucion.dir}/lib"> 
     	    <include name="sistra-plugins.jar"/>
+    		<include name="sistra-util.jar"/>
     	</fileset>
         <fileset dir="${web.product}">
             <include name="2-redose-model.jar" />
