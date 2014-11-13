@@ -16,14 +16,14 @@ import es.caib.sistra.plugins.PluginFactory;
  * Job que realiza la consolidacion en el gestor documental
  *
  */
-public class ConsolidacionGestorDocumentalJob implements Job
+public class ConsolidacionGestorDocumentalJob extends JobAutomatico
 {
 	private Log log = LogFactory.getLog( ConsolidacionGestorDocumentalJob.class  );
 	
 	/**
 	 * Job que realiza consolidacion en el gestor documental
 	 */
-	public void execute(JobExecutionContext context) throws JobExecutionException {
+	public void doProceso(JobExecutionContext context) throws JobExecutionException {
 		RdsProcesosDelegate delegate = DelegateUtil.getRdsProcesosDelegate();
 		log.debug( "Job consolidacion gestor documental");
 		try

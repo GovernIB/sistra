@@ -34,9 +34,7 @@ import es.caib.sistra.plugins.custodia.PluginCustodiaIntf;
  *  view-type="remote" 
  *  transaction-type="Container"
  *
- * @ejb.security-identity run-as = "${role.auto}"
- *
- * @ejb.transaction type="NotSupported"
+ *  @ejb.transaction type="NotSupported"
  * 
  * 
  */
@@ -50,7 +48,8 @@ public abstract class RdsProcesosEJB implements SessionBean {
 	
 	/**
      * @ejb.create-method
-     * @ejb.permission unchecked = "true"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.auto}"
      */
 	public void ejbCreate() throws CreateException {		
 		existepluginCustodia = true;
@@ -74,7 +73,8 @@ public abstract class RdsProcesosEJB implements SessionBean {
 	 * Proceso de borrado de documentos sin usos.
 	 * 
      * @ejb.interface-method
-     * @ejb.permission unchecked = "true"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.auto}"
      */
     public void purgadoDocumentos() throws ExcepcionRDS{
     	// Marcamos para borrar documentos sin usos
@@ -92,7 +92,8 @@ public abstract class RdsProcesosEJB implements SessionBean {
 	 * Proceso de consolidacion de documentos en gestor documental
 	 * 
      * @ejb.interface-method
-     * @ejb.permission unchecked = "true"
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.auto}"
      */
     public void consolidacionGestorDocumental() throws ExcepcionRDS{
     	log.debug( "Proceso consolidacion Gestor Documental");
