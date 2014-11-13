@@ -2,7 +2,6 @@ package es.caib.redose.admin.scheduler.jobs;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
@@ -17,15 +16,13 @@ import es.caib.redose.persistence.delegate.RdsProcesosDelegate;
  *  - purgar documentos externos
  *
  */
-public class PurgadoDocumentosJob implements Job
-{
+public class PurgadoDocumentosJob extends JobAutomatico {
 	private Log log = LogFactory.getLog( PurgadoDocumentosJob.class  );
 	
 	/**
 	 * Job que realiza el purgado de los documentos en el RDS
 	 */
-	public void execute(JobExecutionContext context) throws JobExecutionException
-	{
+	public void doProceso(JobExecutionContext context) throws JobExecutionException {	
 		RdsProcesosDelegate delegate = DelegateUtil.getRdsProcesosDelegate();
 		log.debug( "Job purgado de los documentos en el RDS");
 		try
