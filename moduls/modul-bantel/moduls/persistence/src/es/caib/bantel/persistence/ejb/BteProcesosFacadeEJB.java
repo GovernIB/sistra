@@ -251,8 +251,7 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
      * En caso de error lanza mensaje al log y permite continuar.
      * @param procedimiento
      */
-    private void avisoBackOffice(Procedimiento procedimiento,Date hasta){    	
-    	try{    		
+    private void avisoBackOffice(Procedimiento procedimiento,Date hasta) throws Exception{    	
     		
     		log.debug("Aviso a backoffice procedimiento  " + procedimiento.getIdentificador() + " (hasta " + StringUtil.fechaACadena(hasta,StringUtil.FORMATO_TIMESTAMP) + ")");
     		
@@ -281,10 +280,7 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 						sender.send(msg,DeliveryMode.NON_PERSISTENT,4,0);				
 		    		}
     			}
-    		}
-    	}catch(Exception ex){
-    		log.error("Excepción en proceso de aviso a BackOffice para procedimiento " + procedimiento.getIdentificador(),ex);    		
-    	}    		
+    		}    	   	
     }    	    
     
     private void avisoGestorImpl(String tipoAviso) throws ExcepcionBTE {

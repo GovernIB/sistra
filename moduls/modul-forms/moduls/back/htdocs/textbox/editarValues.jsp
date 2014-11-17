@@ -33,7 +33,7 @@
 
 		// Texto normal
 		if (tipoTexto == "NO") { 
-			maxfilas = 999;	       		
+			maxfilas = 40;	       		
         	if (filas > 1) {
             	minColSpan = 3;
         	}	       	        	
@@ -94,7 +94,7 @@
 		<% minColSpan = 3; %>
 	</logic:greaterThan> 
 	<logic:equal name="textboxForm" property="values.tipoTexto" value="NO">
-		<% maxFilas = 999; disabledMultilinea = false;%>
+		<% maxFilas = 40; disabledMultilinea = false;%>
 	</logic:equal> 
 </logic:notEmpty>
 
