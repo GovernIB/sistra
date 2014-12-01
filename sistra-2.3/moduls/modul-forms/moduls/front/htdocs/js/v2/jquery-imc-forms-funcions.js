@@ -51,18 +51,18 @@ function dadesFormateig(options) {
 		}).end()
 		.find("a:not([href])").attr("tabindex", "0").attr("href", "javascript:;").end()
 		.find(".imc-el-import").immport().end()
-		.find(".imc-el-index").index();
+		.find(".imc-el-index").indexa();
 		
 	if (element.hasClass("imc-el-index")) {
-		element.index();
+		element.indexa();
 	}
 	
 }
 // /dadesFormateig
 
 
-// index
-$.fn.index = function(options) {
+// indexa
+$.fn.indexa = function(options) {
 	var settings = $.extend({
 		element: ""
 	}, options);
@@ -93,7 +93,29 @@ $.fn.index = function(options) {
 				}
 				
 				// selector
-				el_selector.off(".index").on("click.index", onSelecciona);
+				el_selector.off(".indexa").on("click.indexa", onSelecciona).on('focus.submenu', onFocus);
+				
+			},
+			onFocus = function() {
+				
+				$(document).off(".onSelectFletxaIndexa").on("keyup.onSelectFletxaIndexa", onSelectFletxaIndexa);
+		
+			},
+			onSelectFletxaIndexa = function(e) {
+				
+				if (e.keyCode === 40) { // amunt
+					consola(element.attr("class"));
+					onSeleccionaFletxa();
+				}
+				
+			},
+			onSeleccionaFletxa = function() {
+				
+				if (element.hasClass("imc-select-on")) {
+					$(document).off(".index").on("keyup.index", onKeyUp);
+				} else {
+					$(document).off(".index");
+				}
 				
 			},
 			onSelecciona = function() {
@@ -124,7 +146,7 @@ $.fn.index = function(options) {
 				if (element.find(".imc-select-submenu:first").hasClass("imc-submenu-on")) {
 					if (!element.hasClass("imc-el-index-marcant")) {
 						element.addClass("imc-el-index-marcant");
-						situa(String.fromCharCode(e.keyCode));
+						situa( String.fromCharCode(e.keyCode) );
 					}
 				}
 				
@@ -209,6 +231,10 @@ $.fn.index = function(options) {
 								);
 							}
 						);
+				} else {
+					
+					element.removeClass("imc-el-index-marcant");
+					
 				}
 				
 			};
@@ -217,7 +243,7 @@ $.fn.index = function(options) {
 	});
 	return this;
 }
-// /index
+// /indexa
 
 
 // arbre
