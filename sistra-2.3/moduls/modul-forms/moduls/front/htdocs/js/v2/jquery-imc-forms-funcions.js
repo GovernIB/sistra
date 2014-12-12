@@ -417,6 +417,11 @@ function control_disabled(name, disabled) {
 	
 	if (disabled) {
 		el_camps.attr("disabled", "disabled");
+		
+		if (el_tipus === "radio-list-scroll" || el_tipus === "check-list-scroll") {
+			el_element.addClass("imc-el-multiple-desabilitat");
+		}
+		
 		if (el_tipus === "select") {
 			el_element.find(".imc-select:first").addClass("imc-select-deshabilitat");
 		} else if (el_tipus === "date-time") {
@@ -426,7 +431,11 @@ function control_disabled(name, disabled) {
 		}
 	} else {
 		el_camps.removeAttr("disabled");
-		if (el_tipus === "select") {
+		
+		if (el_tipus === "radio-list-scroll" || el_tipus === "check-list-scroll") {
+			el_element.removeClass("imc-el-multiple-desabilitat");
+		}
+				if (el_tipus === "select") {
 			el_element.find(".imc-select:first").removeClass("imc-select-deshabilitat");
 		} else if (el_tipus === "date-time") {
 			el_element.find("input:last").removeAttr("disabled");

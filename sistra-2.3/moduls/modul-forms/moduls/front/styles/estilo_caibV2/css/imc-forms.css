@@ -479,6 +479,8 @@ form { clear:both; }
 			.imc-form .imc-el-multiple.imc-el-5 legend { width:42.5em; }
 			.imc-form .imc-el-multiple.imc-el-6 ul,
 			.imc-form .imc-el-multiple.imc-el-6 legend { width:53.8em; }
+			
+			.imc-form .imc-el-multiple.imc-el-multiple-desabilitat ul { color:#999; background-color:#f2f2f2; }
 		
 		.imc-form .imc-el-files-3	> ul { height:8.9em !important; }
 		.imc-form .imc-el-files-4	> ul { height:12.9em !important; }
