@@ -115,6 +115,8 @@
 		    document.pantallaForm.elements['PANTALLA_ANTERIOR'].disabled = true;
 		    mostrarCapaEnviando(TXT_MSG_ENVIANDO);
 		    document.pantallaForm.submit();
+		} else {
+			bDobleClick = false;
 		}
 	}
 	
