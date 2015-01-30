@@ -89,6 +89,24 @@ public abstract class FuenteDatosFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
+    
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.admin}"     
+     */
+    public List listarFuentesDatos(String idProcedimiento) {
+        Session session = getSession();
+        try {
+        	 Query query = session.createQuery("FROM FuenteDatos AS f WHERE f.procedimiento.identificador = :idProcedimiento");       
+        	 query.setString("idProcedimiento", idProcedimiento);
+             List result = query.list();
+             return result;
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
 	
 	
 	 /**

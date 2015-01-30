@@ -54,6 +54,14 @@ public class CuentaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
+    public List listarCuentas(String filtro) throws DelegateException {
+        try {
+            return getFacade().listarCuentas(filtro);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
 
     public boolean puedoBorrarCuenta(String id) throws DelegateException {
         try {

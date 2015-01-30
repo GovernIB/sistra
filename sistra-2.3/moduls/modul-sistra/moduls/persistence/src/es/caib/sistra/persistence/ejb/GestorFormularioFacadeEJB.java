@@ -11,6 +11,7 @@ import net.sf.hibernate.ObjectNotFoundException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -52,6 +53,29 @@ public abstract class GestorFormularioFacadeEJB extends HibernateEJB  {
          try {
          	List gestores = session.createQuery("from GestorFormulario").list();
         	return gestores;
+         } catch (HibernateException he) {
+             throw new EJBException(he);
+         } finally {
+             close(session);
+         }
+         
+    }
+    
+    
+    /**
+	 * 
+	 * Obtiene lista de gestores de formularios
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked = "true"
+     */
+    public List listar(String filtro) {
+    	 Session session = getSession();    	 
+         try {
+         	Query query = session.createQuery( "FROM GestorFormulario c WHERE upper(c.descripcion) like :filtroDesc order by c.descripcion");
+    		query.setParameter("filtroDesc", "%" + StringUtils.defaultString(filtro).toUpperCase() + "%");
+    		query.setCacheable( true );
+    		return query.list();         	
          } catch (HibernateException he) {
              throw new EJBException(he);
          } finally {

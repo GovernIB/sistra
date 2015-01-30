@@ -5,6 +5,8 @@ import java.util.List;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
+import org.apache.commons.lang.StringUtils;
+
 import net.sf.ehcache.CacheException;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
@@ -133,9 +135,29 @@ public abstract class DominioFacadeEJB extends HibernateEJB {
     {
     	Session session = getSession();
         try {       	
-            Query query = session.createQuery("FROM Dominio AS m WHERE m.organoResponsable.codigo=:codigo ORDER BY m.identificador ASC");
+            Query query = session.createQuery("FROM Dominio AS m WHERE m.organoResponsable.codigo=:codigo ORDER BY m.descripcion ASC");
             query.setParameter( "codigo", idOrganoOrigen );
             query.setCacheable(true);
+            return query.list();
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.operador}"
+     */    
+    public List listarDominios( Long codOrganoOrigen, String filtro )
+    {
+    	Session session = getSession();
+        try {       	
+        	Query query = session.createQuery( "FROM Dominio c WHERE c.organoResponsable.codigo=:codigo and upper(c.descripcion) like :filtroDesc order by c.descripcion");
+        	query.setParameter( "codigo", codOrganoOrigen );
+    		query.setParameter("filtroDesc", "%" + StringUtils.defaultString(filtro).toUpperCase() + "%");
+    		query.setCacheable( true );
             return query.list();
         } catch (HibernateException he) {
             throw new EJBException(he);

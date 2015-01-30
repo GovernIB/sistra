@@ -60,6 +60,15 @@ public class DominioDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
+    public List listarDominios( Long codOrganoOrigen, String filtro ) throws DelegateException {
+        try {
+            return getFacade().listarDominios( codOrganoOrigen, filtro );
+        } catch (Exception e) {
+        	e.printStackTrace();	
+            throw new DelegateException(e);
+        }
+    }
         
     public void borrarDominio(Long id) throws DelegateException {
         try {

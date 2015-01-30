@@ -24,6 +24,16 @@ public class GestorFormularioDelegate implements StatelessDelegate {
 	        throw new DelegateException(e);
 	    }	 	 
 	 }
+	 
+	 public List listar(String filtro) throws DelegateException
+		{
+			try
+			{			
+				return getFacade().listar(filtro);				
+			} catch (Exception e) {
+		        throw new DelegateException(e);
+		    }	 	 
+		 }
 
 	 public GestorFormulario obtener(String id) throws DelegateException
 		{
