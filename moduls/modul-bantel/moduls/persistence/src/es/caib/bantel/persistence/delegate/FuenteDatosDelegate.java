@@ -30,6 +30,14 @@ public class FuenteDatosDelegate implements StatelessDelegate {
         }
     }       
 	
+	public List listarFuentesDatos(String idProcedimiento) throws DelegateException {
+        try {
+            return getFacade().listarFuentesDatos(idProcedimiento);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    } 
+	
 	public List listarFuentesDatos() throws DelegateException {
         try {
             return getFacade().listarFuentesDatos();

@@ -11,6 +11,7 @@ import net.sf.hibernate.ObjectNotFoundException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -119,6 +120,31 @@ public abstract class CuentaFacadeEJB extends HibernateEJB {
     	try
     	{
     		Query query = session.createQuery( "FROM Cuenta c");
+    		query.setCacheable( true );
+    		return query.list();
+    	}
+	    catch (HibernateException he) 
+	    {
+	        throw new EJBException(he);
+	    } 
+	    finally 
+	    {
+	        close(session);
+	    }
+    	
+    }
+    
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.admin}"
+     */
+    public List listarCuentas(String filtro)
+    {
+    	Session session = getSession();
+    	try
+    	{
+    		Query query = session.createQuery( "FROM Cuenta c WHERE upper(c.nombre) like :filtroDesc order by c.nombre");
+    		query.setParameter("filtroDesc", "%" + StringUtils.defaultString(filtro).toUpperCase() + "%");
     		query.setCacheable( true );
     		return query.list();
     	}
