@@ -320,6 +320,8 @@ body { font:normal 80% 'TrebuchetMS', 'Trebuchet MS', Arial, Helvetica, sans-ser
 
 a { color:#000; text-decoration:none; }
 a.importante { color:#c33; }
+a:hover { color:#c33; }
+
 
 /* imatges */
 
