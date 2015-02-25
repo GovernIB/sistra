@@ -533,3 +533,10 @@ div.imc-navegacio { margin-top:1em; }
 		background-repeat:no-repeat;
 		background-position:83% 50%;
 	}
+	
+/* boton imprimir */	
+a.button-print {
+    padding: 10px 15px;
+    background: #f4f4f4;
+    color: #000;
+}
