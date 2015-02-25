@@ -60,7 +60,7 @@
 			<strong><bean:write name="instrucciones" property="textoFechaTopeEntrega"/></strong>.
 		</logic:notEmpty>
 	</p>	
-	<!-- Listado de docs a presentar  -->		
+	<!-- Listado de docs a presentar  -->	
 	<bean:define id="documentosEntregar" name="instrucciones" property="documentosEntregar"/>	
 	<logic:notEmpty name="documentosEntregar" property="documento">
 
@@ -70,26 +70,19 @@
 			<tr>
 				<th><bean:message key="finalizacion.documentacionAAportar.documento"/></th>
 				<th><bean:message key="finalizacion.documentacionAAportar.accion"/></th>
+				<th></th>
 			</tr>			
 		<logic:iterate id="documento" name="documentosEntregar" property="documento" type="es.caib.xml.datospropios.factoria.impl.Documento">
 			<tr>
 				<td class="doc"><bean:write name="documento" property="titulo" /></td>
-			<logic:equal name="documento" property="tipo" value="J">					
-				<td><html:link href="<%= urlMostrarDocumento + \"&identificador=JUSTIFICANTE\"%>" title="Justificante"><bean:message key="finalizacion.instrucciones.justificante.firmar"/></html:link></td>
+			<logic:equal name="documento" property="tipo" value="J">
+				<td><bean:message key="finalizacion.instrucciones.justificante.firmar"/></td>
 			</logic:equal>
-			<logic:equal name="documento" property="tipo" value="G">
-				<td> 
-					<html:link href="<%= urlMostrarDocumento + \"&identificador=JUSTIFICANTE\"%>" title="Justificante">
-						<bean:message key="finalizacion.instrucciones.formularioJustificante.firmar"/>					
-					</html:link>
-				</td>
+			<logic:equal name="documento" property="tipo" value="G">			
+				<td><bean:message key="finalizacion.instrucciones.formularioJustificante.firmar"/></td>
 			</logic:equal>
-			<logic:equal name="documento" property="tipo" value="F">
-				<td> 
-					<html:link href="<%= urlMostrarDocumento + \"&identificador=\" + StringUtil.getModelo(documento.getIdentificador()) + \"&instancia=\" + StringUtil.getVersion(documento.getIdentificador()) %>" title="Firmar formulario">
-						<bean:message key="finalizacion.instrucciones.formulario.firmar"/>					
-					</html:link>
-				</td>
+			<logic:equal name="documento" property="tipo" value="F">				
+				<td><bean:message key="finalizacion.instrucciones.formulario.firmar"/></td>
 			</logic:equal>
 				<logic:equal name="documento" property="tipo" value="A">
 				<%  
@@ -105,6 +98,24 @@
 			<logic:equal name="documento" property="tipo" value="P">
 				<td><bean:message key="finalizacion.instrucciones.pago"/></td>
 			</logic:equal>
+			
+			<td>
+				<logic:equal name="documento" property="tipo" value="J">
+					<html:link styleClass="button-print" href="<%= urlMostrarDocumento + \"&identificador=JUSTIFICANTE\"%>" title="Justificante">
+						<bean:message key="finalizacion.imprimir"/>
+					</html:link>														
+				</logic:equal>
+				<logic:equal name="documento" property="tipo" value="G">
+					<html:link styleClass="button-print" href="<%= urlMostrarDocumento + \"&identificador=JUSTIFICANTE\"%>" title="Justificante">
+						<bean:message key="finalizacion.imprimir"/>
+					</html:link>						
+				</logic:equal>
+				<logic:equal name="documento" property="tipo" value="F">
+					<html:link styleClass="button-print" href="<%= urlMostrarDocumento + \"&identificador=\" + StringUtil.getModelo(documento.getIdentificador()) + \"&instancia=\" + StringUtil.getVersion(documento.getIdentificador()) %>" title="Firmar formulario">
+						<bean:message key="finalizacion.imprimir"/>					
+					</html:link>	
+				</logic:equal>
+			</td>
 			</tr>
 		</logic:iterate>
 		</table>									
