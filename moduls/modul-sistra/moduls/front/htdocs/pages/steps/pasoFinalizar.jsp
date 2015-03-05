@@ -68,13 +68,13 @@
 			<h3 class="titDocumentacion"><bean:message key="finalizacion.documentacionAAportar"/></h3>	
 			<table cellpadding="0" cellspacing="0" id="tablaDocAportar">
 			<tr>
-				<th><bean:message key="finalizacion.documentacionAAportar.documento"/></th>
-				<th><bean:message key="finalizacion.documentacionAAportar.accion"/></th>
-				<th></th>
+				<th width="20%"><bean:message key="finalizacion.documentacionAAportar.documento"/></th>
+				<th width="60%"><bean:message key="finalizacion.documentacionAAportar.accion"/></th>
+				<th width="20%"></th>
 			</tr>			
 		<logic:iterate id="documento" name="documentosEntregar" property="documento" type="es.caib.xml.datospropios.factoria.impl.Documento">
 			<tr>
-				<td class="doc"><bean:write name="documento" property="titulo" /></td>
+				<td class="doc2"><bean:write name="documento" property="titulo" /></td>
 			<logic:equal name="documento" property="tipo" value="J">
 				<td><bean:message key="finalizacion.instrucciones.justificante.firmar"/></td>
 			</logic:equal>
