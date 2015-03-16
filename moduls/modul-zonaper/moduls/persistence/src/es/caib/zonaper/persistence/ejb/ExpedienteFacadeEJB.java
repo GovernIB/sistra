@@ -563,7 +563,7 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 			// Crea query 
         	Query query = session.createQuery("FROM Expediente AS e WHERE e.tipoExpediente = 'E' and e.idProcedimiento in (:procedimientos) " +
         				sqlFiltro + 
-        				" ORDER BY e.fecha DESC" );
+        				" ORDER BY e.fechaFin DESC" );
         	query.setCacheable(false);	
         	
         	// Establece parametros fijos
