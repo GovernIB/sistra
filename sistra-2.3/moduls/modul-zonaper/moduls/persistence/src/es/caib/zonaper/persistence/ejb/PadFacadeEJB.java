@@ -1350,7 +1350,8 @@ public abstract class PadFacadeEJB implements SessionBean{
     	el.setCodigoElemento(notificacion.getCodigo());
     	el.setIdentificadorPersistencia(notificacion.getIdentificadorPersistencia());
     	el.setAccesoAnonimoExpediente(notificacion.isAccesiblePorClave());
-    	expe.addElementoExpediente(el,notificacion);
+    	expe.addElementoExpediente(el,notificacion);    	
+    	expe.setFechaConsulta(null);
     	DelegateUtil.getExpedienteDelegate().grabarExpedienteReal(expe);    	    	
     	
     	// Realizamos aviso de movilidad y actualizamos notificacion

@@ -350,9 +350,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 			ExpedientePAD expedientePAD = expedienteToExpedientePAD( expediente );
 			expedientePAD.addEvento( eventoPAD );
 			
-			// Actualizamos fecha del expediente
-			expediente.setFecha( new Timestamp( new Date().getTime()));
-			// Y lo establecemos como no consultado.
+			// Establecemos como no consultado.
 			expediente.setFechaConsulta( null );
 			
 			// Añadimos como elemento del expediente y lo guardamos
