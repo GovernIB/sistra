@@ -173,8 +173,12 @@ public class Expediente implements Serializable
 			setEstado(ConstantesZPE.ESTADO_NOTIFICACION_PENDIENTE);							
 		}
 		if (getElementos().size() == 1) this.setFechaInicio(e.getFecha());
-		setFechaFin(e.getFecha());		
+		setFechaFin(e.getFecha());
+		
+		// Ponemos fecha expediente a fecha fin
+		setFecha(new Timestamp(getFechaFin().getTime()));
 	}
+	
 	public String getNifRepresentado() {
 		return nifRepresentado;
 	}
