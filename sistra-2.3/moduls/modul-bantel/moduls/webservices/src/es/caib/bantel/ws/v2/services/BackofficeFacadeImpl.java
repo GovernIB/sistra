@@ -44,7 +44,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			bd.procesarEntrada(r,procesada,resultadoProcesamiento);
 			
 		}catch(Exception ex){
-			log.error(ex);
+			log.error("Excepcion en webservice: " + ex.getMessage(), ex);
 			throw new es.caib.bantel.ws.v2.services.BackofficeFacadeException(ex.getMessage(),new es.caib.bantel.ws.v2.model.BackofficeFacadeException());
 		}
 	}
@@ -60,7 +60,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			es.caib.bantel.modelInterfaz.TramiteBTE tramBte = bd.obtenerEntrada(r);
 			return tramiteBTEIntfToTramiteBTEWS(tramBte);
 		}catch(Exception ex){
-			log.error(ex);
+			log.error("Excepcion en webservice: " + ex.getMessage(), ex);
 			throw new es.caib.bantel.ws.v2.services.BackofficeFacadeException(ex.getMessage(),new es.caib.bantel.ws.v2.model.BackofficeFacadeException());
 		}
 	}
@@ -78,7 +78,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			ReferenciaEntradaBTE[] entradas = bd.obtenerReferenciasEntradas(identificadorProcesamiento, identificadorTramite,procesada,desdeDate, hastaDate);
 			return referenciasEntradaIntfToReferenciasEntradaWS(entradas);
 		}catch(Exception ex){
-			log.error(ex);
+			log.error("Excepcion en webservice: " + ex.getMessage(), ex);
 			throw new es.caib.bantel.ws.v2.services.BackofficeFacadeException(ex.getMessage(),new es.caib.bantel.ws.v2.model.BackofficeFacadeException());
 		}
 	}

@@ -40,7 +40,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			DocumentoRDS docWS = documentoIntToDocumentoWS(doc);
 			return docWS;
 		}catch( Exception exc ){
-			log.error(exc);
+			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
 			// exc.printStackTrace();
 		     throw new es.caib.redose.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
@@ -54,7 +54,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			DocumentoRDS docWS = documentoIntToDocumentoWS(doc);
 			return docWS;
 		}catch( Exception exc ){
-			log.error(exc);
+			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
 			// exc.printStackTrace();
 		     throw new es.caib.redose.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
@@ -68,7 +68,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			ReferenciaRDS refWS = referenciaIntfToReferenciaWS(refInt);
 			return refWS;
 		}catch( Exception exc ){
-			log.error(exc);
+			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
 			// exc.printStackTrace();
 		     throw new es.caib.redose.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
@@ -83,7 +83,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			ReferenciaRDS refWS = referenciaIntfToReferenciaWS(refInt);
 			return refWS;
 		}catch( Exception exc ){
-			log.error(exc);
+			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
 			// exc.printStackTrace();
 		     throw new es.caib.redose.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}

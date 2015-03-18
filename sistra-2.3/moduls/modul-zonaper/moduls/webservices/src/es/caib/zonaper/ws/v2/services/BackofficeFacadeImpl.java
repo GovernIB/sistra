@@ -36,7 +36,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
 			pad.altaEvento(unidadAdministrativa, identificadorExpediente, claveExpediente, evPAD);
 		}catch( Exception exc ){
-			log.error(exc);
+			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
 			// exc.printStackTrace();
 		     throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
@@ -51,7 +51,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			String id = pad.altaExpediente(expPAD);
 			return id;		
 		} catch (Exception exc) {
-			log.error(exc);
+			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
 			// exc.printStackTrace();
 		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
@@ -63,7 +63,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
 			return pad.existeZonaPersonalUsuario(nifUsuario);		
 		} catch (Exception exc) {
-			log.error(exc);
+			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
 			// exc.printStackTrace();
 		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
@@ -76,7 +76,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
 			return pad.altaZonaPersonalUsuario(nif, nombre, apellido1, apellido2);		
 		} catch (Exception exc) {
-			log.error(exc);
+			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
 			// exc.printStackTrace();
 		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}		
@@ -102,7 +102,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			return res;
 			
 		} catch (Exception exc) {
-			log.error(exc);
+			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
 			// exc.printStackTrace();
 		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
