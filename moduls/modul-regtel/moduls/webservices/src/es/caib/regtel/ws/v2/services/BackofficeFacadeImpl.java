@@ -83,7 +83,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			es.caib.regtel.model.ReferenciaRDSAsientoRegistral ar = delegate.prepararRegistroEntrada(dEnt, dp);
 			raWS = referenciaRDSAsientoRegistralIntfToReferenciaRDSAsientoRegistralWS(ar);
 		} catch (Exception ex) {
-			log.error(ex);
+			log.error("Excepcion en webservice: " + ex.getMessage(), ex);
 			// ex.printStackTrace();
 			throw new es.caib.regtel.ws.v2.services.BackofficeFacadeException(ex.getMessage(), new es.caib.regtel.ws.v2.model.BackofficeFacadeException());
 		}
@@ -99,7 +99,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			ResultadoRegistroTelematico res = delegate.registroEntradaConFirma(ar,firmaWSToFirmaIntf(firma));
 			rr = resultadoRegistroTelematicoToResultadoRegistroNotificacion(res);
 		} catch (Exception ex) {
-			log.error(ex);
+			log.error("Excepcion en webservice: " + ex.getMessage(), ex);
 			// ex.printStackTrace();
 			throw new es.caib.regtel.ws.v2.services.BackofficeFacadeException(ex.getMessage(), new es.caib.regtel.ws.v2.model.BackofficeFacadeException());
 		}
@@ -114,7 +114,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			ResultadoRegistroTelematico res = delegate.registroEntrada(rEnt);
 			rr = resultadoRegistroTelematicoToResultadoRegistroNotificacion(res);
 		} catch (Exception ex) {
-			log.error(ex);
+			log.error("Excepcion en webservice: " + ex.getMessage(), ex);
 			// ex.printStackTrace();
 			throw new es.caib.regtel.ws.v2.services.BackofficeFacadeException(ex.getMessage(), new es.caib.regtel.ws.v2.model.BackofficeFacadeException());
 		}
@@ -130,7 +130,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			ResultadoRegistroTelematico res = delegate.registroSalida(rSal);
 			rr = resultadoRegistroTelematicoToResultadoRegistroNotificacion(res);
 		} catch (Exception ex) {
-			log.error(ex);
+			log.error("Excepcion en webservice: " + ex.getMessage(), ex);
 			// ex.printStackTrace();
 			throw new es.caib.regtel.ws.v2.services.BackofficeFacadeException(ex.getMessage(), new es.caib.regtel.ws.v2.model.BackofficeFacadeException());
 		}
@@ -145,7 +145,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			acuse = acuseIntfToAcuseWS(acuseIntf);
 			return acuse;
 		}catch(Exception ex){
-			log.error(ex);
+			log.error("Excepcion en webservice: " + ex.getMessage(), ex);
 			// ex.printStackTrace();
 			throw new es.caib.regtel.ws.v2.services.BackofficeFacadeException(ex.getMessage(), new es.caib.regtel.ws.v2.model.BackofficeFacadeException());
 		}
@@ -162,7 +162,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			acuse = detalleAcuseIntfToDetalleAcuseWS(acuseIntf);
 			return acuse;
 		}catch(Exception ex){
-			log.error(ex);
+			log.error("Excepcion en webservice: " + ex.getMessage(), ex);
 			// ex.printStackTrace();
 			throw new es.caib.regtel.ws.v2.services.BackofficeFacadeException(ex.getMessage(), new es.caib.regtel.ws.v2.model.BackofficeFacadeException());
 		}
@@ -281,219 +281,212 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		return acuse;
 	}
 	
-	private es.caib.regtel.model.ws.DatosRegistroEntrada prepararDatosRegistroEntradaIntf(DatosRegistroEntrada entrada) throws BackofficeFacadeException{
+	private es.caib.regtel.model.ws.DatosRegistroEntrada prepararDatosRegistroEntradaIntf(DatosRegistroEntrada entrada) throws Exception{
 		es.caib.regtel.model.ws.DatosRegistroEntrada rEnt = null;
-		try {
-			if(entrada != null){
-				rEnt = new es.caib.regtel.model.ws.DatosRegistroEntrada();
-				if(entrada.getOficinaRegistral() != null){
-					OficinaRegistral or = entrada.getOficinaRegistral();
-					es.caib.regtel.model.ws.OficinaRegistral orIntf = new es.caib.regtel.model.ws.OficinaRegistral();
-					orIntf.setCodigoOficina(or.getCodigoOficina());
-					orIntf.setCodigoOrgano(or.getCodigoOrgano());
-					rEnt.setOficinaRegistral(orIntf);
-				}
-				if(entrada.getDatosInteresado() != null){
-					DatosInteresado di = entrada.getDatosInteresado();
-					es.caib.regtel.model.ws.DatosInteresado diIntf = new es.caib.regtel.model.ws.DatosInteresado();
-					diIntf.setCodigoLocalidad((di.getCodigoLocalidad() != null)? di.getCodigoLocalidad().getValue() : "");
-					diIntf.setCodigoPais((di.getCodigoPais() != null)? di.getCodigoPais().getValue() : "");
-					diIntf.setCodigoProvincia((di.getCodigoProvincia() != null)? di.getCodigoProvincia().getValue() : "");
-					diIntf.setAutenticado((di.getAutenticado() != null)?di.getAutenticado().getValue() : false);
-					diIntf.setNif(di.getNif());
-					diIntf.setNombreApellidos(di.getNombreApellidos());
-					diIntf.setNombreLocalidad((di.getNombreLocalidad() != null)? di.getNombreLocalidad().getValue() : "");
-					diIntf.setNombrePais((di.getNombrePais() != null)? di.getNombrePais().getValue() : "");
-					diIntf.setNombreProvincia((di.getNombreProvincia() != null)? di.getNombreProvincia().getValue() : "");
-					rEnt.setDatosInteresado(diIntf);
-				}
-				if(entrada.getDatosRepresentado() != null){
-					DatosRepresentado dr = entrada.getDatosRepresentado();
-					es.caib.regtel.model.ws.DatosRepresentado drIntf = new es.caib.regtel.model.ws.DatosRepresentado();
-					drIntf.setNif(dr.getNif());
-					drIntf.setNombreApellidos(dr.getNombreApellidos());
-					rEnt.setDatosRepresentado(drIntf);
-				}
-				if(entrada.getDatosAsunto() != null){
-					DatosAsunto da = entrada.getDatosAsunto();
-					es.caib.regtel.model.ws.DatosAsunto daIntf = new es.caib.regtel.model.ws.DatosAsunto();
-					daIntf.setAsunto(da.getAsunto());
-					daIntf.setCodigoUnidadAdministrativa(da.getCodigoUnidadAdministrativa());
-					daIntf.setIdioma(da.getIdioma());
-					daIntf.setTipoAsunto(da.getTipoAsunto());
-					rEnt.setDatosAsunto(daIntf);
-				}
-				if(entrada.getDocumentos() != null && entrada.getDocumentos().getValue() != null){
-					Documentos docsNot =  entrada.getDocumentos().getValue();
-					ArrayList docs = new ArrayList();
-					for(int i=0;i<docsNot.getDocumentos().size();i++){
-						Documento dne = docsNot.getDocumentos().get(i);
-						if(dne.getReferenciaRDS() != null && dne.getReferenciaRDS().getValue() != null && dne.getReferenciaRDS().getValue().getClave() != null && !"".equals(dne.getReferenciaRDS().getValue().getClave()) && dne.getReferenciaRDS().getValue().getCodigo() > 0){
-							ReferenciaRDS ref = referenciaWSToReferenciaIntf(dne.getReferenciaRDS().getValue());
-							docs.add(ref);
-						}else{
-							DocumentoRDS doc = new DocumentoRDS();
-							doc.setModelo((dne.getModelo() != null)? dne.getModelo().getValue() : "");
-							doc.setVersion((dne.getVersion() != null)? dne.getVersion().getValue() : 0);		
-							String nombre = (dne.getNombre() != null)? dne.getNombre().getValue() : "";
-							String extension = (dne.getExtension() != null)? dne.getExtension().getValue() : "";
-							String nomfic = ""; 
-							try{
-								nomfic = StringUtil.normalizarNombreFichero(nombre)+"."+extension;
-							}catch (Exception ex){
-								nomfic = nombre+"."+extension;
-							}		
-							doc.setNombreFichero(nomfic);
-							doc.setExtensionFichero(extension);
-							doc.setDatosFichero((dne.getDatosFichero() != null)? dne.getDatosFichero().getValue() : null);
-							FirmaIntf[] firmas = null;
-							if(dne.getFirmas() != null){
-								firmas = firmasWSToFirmasIntf(dne.getFirmas().getValue());
-							}
-							doc.setFirmas(firmas);
-							doc.setPlantilla((dne.getPlantilla() != null)? dne.getPlantilla().getValue() : "");
-							doc.setTitulo(nombre);
-							docs.add(doc);	
-						}
-					}
-					rEnt.setDocumentos(docs);
-				}
+	
+		if(entrada != null){
+			rEnt = new es.caib.regtel.model.ws.DatosRegistroEntrada();
+			if(entrada.getOficinaRegistral() != null){
+				OficinaRegistral or = entrada.getOficinaRegistral();
+				es.caib.regtel.model.ws.OficinaRegistral orIntf = new es.caib.regtel.model.ws.OficinaRegistral();
+				orIntf.setCodigoOficina(or.getCodigoOficina());
+				orIntf.setCodigoOrgano(or.getCodigoOrgano());
+				rEnt.setOficinaRegistral(orIntf);
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			throw new es.caib.regtel.ws.v2.services.BackofficeFacadeException(ex.getMessage(), new es.caib.regtel.ws.v2.model.BackofficeFacadeException());
+			if(entrada.getDatosInteresado() != null){
+				DatosInteresado di = entrada.getDatosInteresado();
+				es.caib.regtel.model.ws.DatosInteresado diIntf = new es.caib.regtel.model.ws.DatosInteresado();
+				diIntf.setCodigoLocalidad((di.getCodigoLocalidad() != null)? di.getCodigoLocalidad().getValue() : "");
+				diIntf.setCodigoPais((di.getCodigoPais() != null)? di.getCodigoPais().getValue() : "");
+				diIntf.setCodigoProvincia((di.getCodigoProvincia() != null)? di.getCodigoProvincia().getValue() : "");
+				diIntf.setAutenticado((di.getAutenticado() != null)?di.getAutenticado().getValue() : false);
+				diIntf.setNif(di.getNif());
+				diIntf.setNombreApellidos(di.getNombreApellidos());
+				diIntf.setNombreLocalidad((di.getNombreLocalidad() != null)? di.getNombreLocalidad().getValue() : "");
+				diIntf.setNombrePais((di.getNombrePais() != null)? di.getNombrePais().getValue() : "");
+				diIntf.setNombreProvincia((di.getNombreProvincia() != null)? di.getNombreProvincia().getValue() : "");
+				rEnt.setDatosInteresado(diIntf);
+			}
+			if(entrada.getDatosRepresentado() != null){
+				DatosRepresentado dr = entrada.getDatosRepresentado();
+				es.caib.regtel.model.ws.DatosRepresentado drIntf = new es.caib.regtel.model.ws.DatosRepresentado();
+				drIntf.setNif(dr.getNif());
+				drIntf.setNombreApellidos(dr.getNombreApellidos());
+				rEnt.setDatosRepresentado(drIntf);
+			}
+			if(entrada.getDatosAsunto() != null){
+				DatosAsunto da = entrada.getDatosAsunto();
+				es.caib.regtel.model.ws.DatosAsunto daIntf = new es.caib.regtel.model.ws.DatosAsunto();
+				daIntf.setAsunto(da.getAsunto());
+				daIntf.setCodigoUnidadAdministrativa(da.getCodigoUnidadAdministrativa());
+				daIntf.setIdioma(da.getIdioma());
+				daIntf.setTipoAsunto(da.getTipoAsunto());
+				rEnt.setDatosAsunto(daIntf);
+			}
+			if(entrada.getDocumentos() != null && entrada.getDocumentos().getValue() != null){
+				Documentos docsNot =  entrada.getDocumentos().getValue();
+				ArrayList docs = new ArrayList();
+				for(int i=0;i<docsNot.getDocumentos().size();i++){
+					Documento dne = docsNot.getDocumentos().get(i);
+					if(dne.getReferenciaRDS() != null && dne.getReferenciaRDS().getValue() != null && dne.getReferenciaRDS().getValue().getClave() != null && !"".equals(dne.getReferenciaRDS().getValue().getClave()) && dne.getReferenciaRDS().getValue().getCodigo() > 0){
+						ReferenciaRDS ref = referenciaWSToReferenciaIntf(dne.getReferenciaRDS().getValue());
+						docs.add(ref);
+					}else{
+						DocumentoRDS doc = new DocumentoRDS();
+						doc.setModelo((dne.getModelo() != null)? dne.getModelo().getValue() : "");
+						doc.setVersion((dne.getVersion() != null)? dne.getVersion().getValue() : 0);		
+						String nombre = (dne.getNombre() != null)? dne.getNombre().getValue() : "";
+						String extension = (dne.getExtension() != null)? dne.getExtension().getValue() : "";
+						String nomfic = ""; 
+						try{
+							nomfic = StringUtil.normalizarNombreFichero(nombre)+"."+extension;
+						}catch (Exception ex){
+							nomfic = nombre+"."+extension;
+						}		
+						doc.setNombreFichero(nomfic);
+						doc.setExtensionFichero(extension);
+						doc.setDatosFichero((dne.getDatosFichero() != null)? dne.getDatosFichero().getValue() : null);
+						FirmaIntf[] firmas = null;
+						if(dne.getFirmas() != null){
+							firmas = firmasWSToFirmasIntf(dne.getFirmas().getValue());
+						}
+						doc.setFirmas(firmas);
+						doc.setPlantilla((dne.getPlantilla() != null)? dne.getPlantilla().getValue() : "");
+						doc.setTitulo(nombre);
+						docs.add(doc);	
+					}
+				}
+				rEnt.setDocumentos(docs);
+			}
 		}
+	
 		return rEnt;
 	}
 	
-	private es.caib.regtel.model.ws.DatosRegistroSalida prepararDatosRegistroSalidaIntf(DatosRegistroSalida notificacion) throws BackofficeFacadeException {
+	private es.caib.regtel.model.ws.DatosRegistroSalida prepararDatosRegistroSalidaIntf(DatosRegistroSalida notificacion) throws Exception {
 		es.caib.regtel.model.ws.DatosRegistroSalida rSal = null;
-		try {
-			if(notificacion != null){
-				rSal = new es.caib.regtel.model.ws.DatosRegistroSalida();
-				if(notificacion.getDatosExpediente() != null){
-					DatosExpediente de = notificacion.getDatosExpediente();
-					es.caib.regtel.model.ws.DatosExpediente deIntf = new es.caib.regtel.model.ws.DatosExpediente();
-					deIntf.setClaveExpediente(de.getClaveExpediente());
-					deIntf.setIdentificadorExpediente(de.getIdentificadorExpediente());
-					deIntf.setUnidadAdministrativa(de.getUnidadAdministrativa());
-					rSal.setDatosExpediente(deIntf);
-				}
-				if(notificacion.getOficinaRegistral() != null){
-					OficinaRegistral or = notificacion.getOficinaRegistral();
-					es.caib.regtel.model.ws.OficinaRegistral orIntf = new es.caib.regtel.model.ws.OficinaRegistral();
-					orIntf.setCodigoOficina(or.getCodigoOficina());
-					orIntf.setCodigoOrgano(or.getCodigoOrgano());
-					rSal.setOficinaRegistral(orIntf);
-				}
-				if(notificacion.getDatosInteresado() != null){
-					DatosInteresado di = notificacion.getDatosInteresado();
-					es.caib.regtel.model.ws.DatosInteresado diIntf = new es.caib.regtel.model.ws.DatosInteresado();
-					diIntf.setCodigoLocalidad((di.getCodigoLocalidad() != null)? di.getCodigoLocalidad().getValue() : "");
-					diIntf.setCodigoPais((di.getCodigoPais() != null)? di.getCodigoPais().getValue() : "");
-					diIntf.setCodigoProvincia((di.getCodigoProvincia() != null)? di.getCodigoProvincia().getValue() : "");
-					diIntf.setAutenticado((di.getAutenticado()!= null)? di.getAutenticado().getValue() : false);
-					diIntf.setNif(di.getNif());
-					diIntf.setNombreApellidos(di.getNombreApellidos());
-					diIntf.setNombreLocalidad((di.getNombreLocalidad() != null)? di.getNombreLocalidad().getValue() : "");
-					diIntf.setNombrePais((di.getNombrePais() != null)? di.getNombrePais().getValue() : "");
-					diIntf.setNombreProvincia((di.getNombreProvincia() != null)? di.getNombreProvincia().getValue() : "");
-					rSal.setDatosInteresado(diIntf);
-				}
-				if(notificacion.getDatosRepresentado() != null){
-					DatosRepresentado dr = notificacion.getDatosRepresentado();
-					es.caib.regtel.model.ws.DatosRepresentado drIntf = new es.caib.regtel.model.ws.DatosRepresentado();
-					drIntf.setNif(dr.getNif());
-					drIntf.setNombreApellidos(dr.getNombreApellidos());
-					rSal.setDatosRepresentado(drIntf);
-				}
-				if(notificacion.getDatosNotificacion() != null){
-					DatosNotificacion dn = notificacion.getDatosNotificacion();
-					if(dn.getAviso() != null && dn.getOficioRemision() != null){
-						es.caib.regtel.model.ws.DatosNotificacion dnIntf = new es.caib.regtel.model.ws.DatosNotificacion();
-						dnIntf.setAcuseRecibo(dn.isAcuseRecibo());
-						Aviso av = new Aviso();
-						av.setTexto(dn.getAviso().getTexto());
-						av.setTextoSMS((dn.getAviso().getTextoSMS() != null)? dn.getAviso().getTextoSMS().getValue() : "");
-						av.setTitulo(dn.getAviso().getTitulo());
-						dnIntf.setAviso(av);
-						dnIntf.setIdioma(dn.getIdioma());
-						OficioRemision or = new OficioRemision();
-						or.setTexto(dn.getOficioRemision().getTexto());
-						or.setTitulo(dn.getOficioRemision().getTitulo());
-						dnIntf.setOficioRemision(or);
-						dnIntf.setTipoAsunto(dn.getTipoAsunto());
-						
-						if (dn.getAccesiblePorClave() != null) {
-							dnIntf.setAccesiblePorClave(dn.getAccesiblePorClave().getValue());
-						}
-						
-						if (dn.getPlazo() != null) {
-							dnIntf.setPlazo(dn.getPlazo().getValue());
-						}
-						
-						if (notificacion.getDatosNotificacion().getOficioRemision().getTramiteSubsanacion() != null &&
-							notificacion.getDatosNotificacion().getOficioRemision().getTramiteSubsanacion().getValue() != null 	){
-								TramiteSubsanacion ts = new TramiteSubsanacion();
-								ts.setDescripcionTramite(notificacion.getDatosNotificacion().getOficioRemision().getTramiteSubsanacion().getValue().getDescripcionTramite());
-								ts.setIdentificadorTramite(notificacion.getDatosNotificacion().getOficioRemision().getTramiteSubsanacion().getValue().getIdentificadorTramite());
-								ts.setVersionTramite(new Integer(notificacion.getDatosNotificacion().getOficioRemision().getTramiteSubsanacion().getValue().getVersionTramite()));
-								if ( notificacion.getDatosNotificacion().getOficioRemision().getTramiteSubsanacion().getValue().getParametrosTramite() != null &&
-									 notificacion.getDatosNotificacion().getOficioRemision().getTramiteSubsanacion().getValue().getParametrosTramite().getValue() != null ){
-										List params = notificacion.getDatosNotificacion().getOficioRemision().getTramiteSubsanacion().getValue().getParametrosTramite().getValue().getParametroTramite();
-										Map<String,String> parametros = new LinkedHashMap<String,String>();
-										for (Iterator it = params.iterator();it.hasNext();){
-											ParametroTramite pt = (ParametroTramite) it.next();
-											parametros.put(pt.getParametro(),pt.getValor());
-										}
-										ts.setParametrosTramite(parametros);	
-								}
-								
-								dnIntf.getOficioRemision().setTramiteSubsanacion(ts );
-						}
-						rSal.setDatosNotificacion(dnIntf);
+		
+		if(notificacion != null){
+			rSal = new es.caib.regtel.model.ws.DatosRegistroSalida();
+			if(notificacion.getDatosExpediente() != null){
+				DatosExpediente de = notificacion.getDatosExpediente();
+				es.caib.regtel.model.ws.DatosExpediente deIntf = new es.caib.regtel.model.ws.DatosExpediente();
+				deIntf.setClaveExpediente(de.getClaveExpediente());
+				deIntf.setIdentificadorExpediente(de.getIdentificadorExpediente());
+				deIntf.setUnidadAdministrativa(de.getUnidadAdministrativa());
+				rSal.setDatosExpediente(deIntf);
+			}
+			if(notificacion.getOficinaRegistral() != null){
+				OficinaRegistral or = notificacion.getOficinaRegistral();
+				es.caib.regtel.model.ws.OficinaRegistral orIntf = new es.caib.regtel.model.ws.OficinaRegistral();
+				orIntf.setCodigoOficina(or.getCodigoOficina());
+				orIntf.setCodigoOrgano(or.getCodigoOrgano());
+				rSal.setOficinaRegistral(orIntf);
+			}
+			if(notificacion.getDatosInteresado() != null){
+				DatosInteresado di = notificacion.getDatosInteresado();
+				es.caib.regtel.model.ws.DatosInteresado diIntf = new es.caib.regtel.model.ws.DatosInteresado();
+				diIntf.setCodigoLocalidad((di.getCodigoLocalidad() != null)? di.getCodigoLocalidad().getValue() : "");
+				diIntf.setCodigoPais((di.getCodigoPais() != null)? di.getCodigoPais().getValue() : "");
+				diIntf.setCodigoProvincia((di.getCodigoProvincia() != null)? di.getCodigoProvincia().getValue() : "");
+				diIntf.setAutenticado((di.getAutenticado()!= null)? di.getAutenticado().getValue() : false);
+				diIntf.setNif(di.getNif());
+				diIntf.setNombreApellidos(di.getNombreApellidos());
+				diIntf.setNombreLocalidad((di.getNombreLocalidad() != null)? di.getNombreLocalidad().getValue() : "");
+				diIntf.setNombrePais((di.getNombrePais() != null)? di.getNombrePais().getValue() : "");
+				diIntf.setNombreProvincia((di.getNombreProvincia() != null)? di.getNombreProvincia().getValue() : "");
+				rSal.setDatosInteresado(diIntf);
+			}
+			if(notificacion.getDatosRepresentado() != null){
+				DatosRepresentado dr = notificacion.getDatosRepresentado();
+				es.caib.regtel.model.ws.DatosRepresentado drIntf = new es.caib.regtel.model.ws.DatosRepresentado();
+				drIntf.setNif(dr.getNif());
+				drIntf.setNombreApellidos(dr.getNombreApellidos());
+				rSal.setDatosRepresentado(drIntf);
+			}
+			if(notificacion.getDatosNotificacion() != null){
+				DatosNotificacion dn = notificacion.getDatosNotificacion();
+				if(dn.getAviso() != null && dn.getOficioRemision() != null){
+					es.caib.regtel.model.ws.DatosNotificacion dnIntf = new es.caib.regtel.model.ws.DatosNotificacion();
+					dnIntf.setAcuseRecibo(dn.isAcuseRecibo());
+					Aviso av = new Aviso();
+					av.setTexto(dn.getAviso().getTexto());
+					av.setTextoSMS((dn.getAviso().getTextoSMS() != null)? dn.getAviso().getTextoSMS().getValue() : "");
+					av.setTitulo(dn.getAviso().getTitulo());
+					dnIntf.setAviso(av);
+					dnIntf.setIdioma(dn.getIdioma());
+					OficioRemision or = new OficioRemision();
+					or.setTexto(dn.getOficioRemision().getTexto());
+					or.setTitulo(dn.getOficioRemision().getTitulo());
+					dnIntf.setOficioRemision(or);
+					dnIntf.setTipoAsunto(dn.getTipoAsunto());
+					
+					if (dn.getAccesiblePorClave() != null) {
+						dnIntf.setAccesiblePorClave(dn.getAccesiblePorClave().getValue());
 					}
-				}
-				
-				if(notificacion.getDocumentos() != null && notificacion.getDocumentos().getValue() != null){
-					Documentos docsNot =  notificacion.getDocumentos().getValue();
-					ArrayList docs = new ArrayList();
-					for(int i=0;i<docsNot.getDocumentos().size();i++){
-						Documento dne = docsNot.getDocumentos().get(i);
-						if(dne.getReferenciaRDS() != null && dne.getReferenciaRDS().getValue() != null && dne.getReferenciaRDS().getValue().getClave() != null && !"".equals(dne.getReferenciaRDS().getValue().getClave()) && dne.getReferenciaRDS().getValue().getCodigo() > 0){
-							ReferenciaRDS ref = referenciaWSToReferenciaIntf(dne.getReferenciaRDS().getValue());
-							docs.add(ref);
-						}else{
-							DocumentoRDS doc = new DocumentoRDS();
-							doc.setModelo((dne.getModelo() != null)? dne.getModelo().getValue() : "");
-							doc.setVersion((dne.getVersion() != null)? dne.getVersion().getValue() : null);		
-							String nombre = (dne.getNombre() != null)? dne.getNombre().getValue() : "";
-							String extension = (dne.getExtension() != null)? dne.getExtension().getValue() : "";
-							String nomfic = ""; 
-							try{
-								nomfic = StringUtil.normalizarNombreFichero(nombre)+"."+extension;
-							}catch (Exception ex){
-								nomfic = nombre+"."+extension;
-							}		
-							doc.setNombreFichero(nomfic);
-							doc.setExtensionFichero(extension);
-							doc.setDatosFichero((dne.getDatosFichero() != null)? dne.getDatosFichero().getValue() : null);
-							FirmaIntf[] firmas = null;
-							if(dne.getFirmas() != null){
-								firmas = firmasWSToFirmasIntf(dne.getFirmas().getValue());
+					
+					if (dn.getPlazo() != null) {
+						dnIntf.setPlazo(dn.getPlazo().getValue());
+					}
+					
+					if (notificacion.getDatosNotificacion().getOficioRemision().getTramiteSubsanacion() != null &&
+						notificacion.getDatosNotificacion().getOficioRemision().getTramiteSubsanacion().getValue() != null 	){
+							TramiteSubsanacion ts = new TramiteSubsanacion();
+							ts.setDescripcionTramite(notificacion.getDatosNotificacion().getOficioRemision().getTramiteSubsanacion().getValue().getDescripcionTramite());
+							ts.setIdentificadorTramite(notificacion.getDatosNotificacion().getOficioRemision().getTramiteSubsanacion().getValue().getIdentificadorTramite());
+							ts.setVersionTramite(new Integer(notificacion.getDatosNotificacion().getOficioRemision().getTramiteSubsanacion().getValue().getVersionTramite()));
+							if ( notificacion.getDatosNotificacion().getOficioRemision().getTramiteSubsanacion().getValue().getParametrosTramite() != null &&
+								 notificacion.getDatosNotificacion().getOficioRemision().getTramiteSubsanacion().getValue().getParametrosTramite().getValue() != null ){
+									List params = notificacion.getDatosNotificacion().getOficioRemision().getTramiteSubsanacion().getValue().getParametrosTramite().getValue().getParametroTramite();
+									Map<String,String> parametros = new LinkedHashMap<String,String>();
+									for (Iterator it = params.iterator();it.hasNext();){
+										ParametroTramite pt = (ParametroTramite) it.next();
+										parametros.put(pt.getParametro(),pt.getValor());
+									}
+									ts.setParametrosTramite(parametros);	
 							}
-							doc.setFirmas(firmas);
-							doc.setPlantilla((dne.getPlantilla() != null)? dne.getPlantilla().getValue() : "");
-							doc.setTitulo(nombre);
-							docs.add(doc);	
-						}
+							
+							dnIntf.getOficioRemision().setTramiteSubsanacion(ts );
 					}
-					rSal.setDocumentos(docs);
+					rSal.setDatosNotificacion(dnIntf);
 				}
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			throw new es.caib.regtel.ws.v2.services.BackofficeFacadeException(ex.getMessage(), new es.caib.regtel.ws.v2.model.BackofficeFacadeException());
+			
+			if(notificacion.getDocumentos() != null && notificacion.getDocumentos().getValue() != null){
+				Documentos docsNot =  notificacion.getDocumentos().getValue();
+				ArrayList docs = new ArrayList();
+				for(int i=0;i<docsNot.getDocumentos().size();i++){
+					Documento dne = docsNot.getDocumentos().get(i);
+					if(dne.getReferenciaRDS() != null && dne.getReferenciaRDS().getValue() != null && dne.getReferenciaRDS().getValue().getClave() != null && !"".equals(dne.getReferenciaRDS().getValue().getClave()) && dne.getReferenciaRDS().getValue().getCodigo() > 0){
+						ReferenciaRDS ref = referenciaWSToReferenciaIntf(dne.getReferenciaRDS().getValue());
+						docs.add(ref);
+					}else{
+						DocumentoRDS doc = new DocumentoRDS();
+						doc.setModelo((dne.getModelo() != null)? dne.getModelo().getValue() : "");
+						doc.setVersion((dne.getVersion() != null)? dne.getVersion().getValue() : null);		
+						String nombre = (dne.getNombre() != null)? dne.getNombre().getValue() : "";
+						String extension = (dne.getExtension() != null)? dne.getExtension().getValue() : "";
+						String nomfic = ""; 
+						try{
+							nomfic = StringUtil.normalizarNombreFichero(nombre)+"."+extension;
+						}catch (Exception ex){
+							nomfic = nombre+"."+extension;
+						}		
+						doc.setNombreFichero(nomfic);
+						doc.setExtensionFichero(extension);
+						doc.setDatosFichero((dne.getDatosFichero() != null)? dne.getDatosFichero().getValue() : null);
+						FirmaIntf[] firmas = null;
+						if(dne.getFirmas() != null){
+							firmas = firmasWSToFirmasIntf(dne.getFirmas().getValue());
+						}
+						doc.setFirmas(firmas);
+						doc.setPlantilla((dne.getPlantilla() != null)? dne.getPlantilla().getValue() : "");
+						doc.setTitulo(nombre);
+						docs.add(doc);	
+					}
+				}
+				rSal.setDocumentos(docs);
+			}
 		}
 		return rSal;
 	}
@@ -511,6 +504,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		}
 		return rrn;
 	}
+
 	private es.caib.regtel.model.ReferenciaRDSAsientoRegistral referenciaRDSAsientoRegistralWSToReferenciaRDSAsientoRegistralIntf(ReferenciaRDSAsientoRegistral referenciaRDS){
 		es.caib.regtel.model.ReferenciaRDSAsientoRegistral ra = null;
 		if(referenciaRDS != null){
@@ -524,6 +518,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		}
 		return ra;
 	}
+	
 	private ReferenciaRDSAsientoRegistral referenciaRDSAsientoRegistralIntfToReferenciaRDSAsientoRegistralWS(es.caib.regtel.model.ReferenciaRDSAsientoRegistral raIntf) throws Exception{
 		ReferenciaRDSAsientoRegistral ra= null; 
 		if(raIntf != null) {

@@ -23,7 +23,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			String codigo = mttd.envioMensaje(msEnv);
 			return codigo;
 		}catch(Exception e){
-			log.error(e);
+			log.error("Excepcion en webservice: " + e.getMessage(), e);
 			throw new es.caib.mobtratel.ws.v2.services.BackofficeFacadeException(e.getMessage(),new es.caib.mobtratel.ws.v2.model.BackofficeFacadeException());
 		}
 	}
