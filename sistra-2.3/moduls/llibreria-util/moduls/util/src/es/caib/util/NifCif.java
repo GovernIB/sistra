@@ -151,7 +151,7 @@ public class NifCif {
 			String codigoControl = valor.substring(valor.length() - 1, valor.length());
 
 			int[] v1 = { 0, 2, 4, 6, 8, 1, 3, 5, 7, 9 };
-			String[] v2 = { "J", "A", "B", "C", "D", "E", "F", "G", "H", "I" };
+			String[] v2 = { "J", "A", "B", "C", "D", "E", "F", "G", "H", "I"};
 			int suma = 0;
 
 			for (int i = 2; i <= 6; i += 2) {
