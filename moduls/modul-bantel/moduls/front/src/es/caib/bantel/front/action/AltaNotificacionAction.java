@@ -47,12 +47,13 @@ public class AltaNotificacionAction extends BaseAction
 		MensajesUtil.setMsg(this.getResources(request));
 		ExpedientePAD exp;
 		String codMensajeError = "error.notificacio.Excepcion";
+		
+		// Recuperamos de sesion el expediente actual
+		String idExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY);
+		Long uniAdm = (Long) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY);
+		String claveExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY);
+		
 		try{
-			
-			// Recuperamos de sesion el expediente actual
-			String idExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY);
-			Long uniAdm = (Long) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY);
-			String claveExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY);
 			
 			// Recuperamos expediente
 			exp = ejb.consultaExpediente(uniAdm, idExpe,claveExpe);
@@ -115,6 +116,8 @@ public class AltaNotificacionAction extends BaseAction
 			log.error("Excepcion mostrando alta notificacion",e);
 			String mensajeError = MensajesUtil.getValue(codMensajeError, request);
 			request.setAttribute( Constants.MESSAGE_KEY,mensajeError);
+			request.setAttribute("enlace","true");
+			request.setAttribute("enlaceUrl","recuperarExpediente.do?identificadorExp=" + idExpe + "&unidadAdm=" + uniAdm + "&claveExp=" + claveExpe);			
 			return mapping.findForward("fail");
 		}		
     }
