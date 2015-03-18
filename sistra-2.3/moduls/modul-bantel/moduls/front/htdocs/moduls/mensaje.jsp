@@ -18,7 +18,12 @@
 			</html:link>
 			</logic:notPresent>
 			<logic:present name="enlace">
-				<a href="javascript:history.back(1)"><bean:message name="<%= Constants.MESSAGE_ACTION_LABEL_KEY %>"/></a>
+				<logic:present name="enlaceUrl">
+					<a href="<bean:write name="enlaceUrl"/>"><bean:message name="<%= Constants.MESSAGE_ACTION_LABEL_KEY %>"/></a>
+				</logic:present>
+				<logic:notPresent  name="enlaceUrl">
+					<a href="javascript:history.back(1)"><bean:message name="<%= Constants.MESSAGE_ACTION_LABEL_KEY %>"/></a>
+				</logic:notPresent>
 			</logic:present>			
 			</strong>
 		</p>
