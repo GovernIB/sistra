@@ -5,6 +5,8 @@ import java.util.List;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
+import org.apache.commons.lang.StringUtils;
+
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
@@ -111,6 +113,25 @@ public abstract class ModeloFacadeEJB extends HibernateEJB {
         Session session = getSession();
         try {       	
             Query query = session.createQuery("FROM Modelo AS m ORDER BY m.modelo ASC");
+            query.setCacheable(true);
+            return query.list();
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.admin}"
+     * @ejb.permission role-name="${role.operador}"
+     */
+    public List listarModelos(String filtro) {
+        Session session = getSession();
+        try {       	
+        	Query query = session.createQuery("FROM Modelo AS m WHERE upper(m.nombre) like :filtroDesc ORDER BY m.modelo ASC");
+            query.setParameter("filtroDesc", "%" + StringUtils.defaultString(filtro).toUpperCase() + "%");
             query.setCacheable(true);
             return query.list();
         } catch (HibernateException he) {

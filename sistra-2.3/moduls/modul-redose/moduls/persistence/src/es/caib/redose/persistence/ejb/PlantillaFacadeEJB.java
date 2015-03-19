@@ -1,5 +1,6 @@
 package es.caib.redose.persistence.ejb;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -119,6 +120,12 @@ public abstract class PlantillaFacadeEJB extends HibernateEJB {
         try {
         	Version version = (Version) session.load(Version.class, id);
         	Hibernate.initialize(version.getPlantillas());
+        	
+        	for (Iterator it = version.getPlantillas().iterator(); it.hasNext();) {
+        		Plantilla p = (Plantilla) it.next();
+        		Hibernate.initialize(p.getTraducciones());
+        	}
+        	
             return version.getPlantillas();            
         } catch (HibernateException he) {
             throw new EJBException(he);

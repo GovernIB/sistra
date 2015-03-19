@@ -51,6 +51,15 @@ public class ModeloDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
+    public List listarModelos(String filtro) throws DelegateException {
+        try {
+            return getFacade().listarModelos(filtro);
+        } catch (Exception e) {
+        	e.printStackTrace();	
+            throw new DelegateException(e);
+        }
+    }
 
     public void borrarModelo(Long id) throws DelegateException {
         try {
