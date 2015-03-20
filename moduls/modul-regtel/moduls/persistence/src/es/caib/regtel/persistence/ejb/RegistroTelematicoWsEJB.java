@@ -37,6 +37,7 @@ import es.caib.regtel.persistence.util.Constantes;
 import es.caib.regtel.persistence.util.RegistroEntradaHelper;
 import es.caib.regtel.persistence.util.RegistroSalidaHelper;
 import es.caib.sistra.plugins.firma.FirmaIntf;
+import es.caib.util.NifCif;
 import es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
@@ -340,6 +341,7 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 	 * @throws Exception 
 	 */
 	private void establecerUsuarioSeycon(DatosRegistroEntrada dEnt) throws Exception{
+		
 		// Comprobamos version usada dependiendo de si tiene establecido parametro autenticado
 		if (dEnt.getDatosInteresado().getAutenticado() == null){
 			// Version anterior a 1.1.0: se rellena identificador usuario y nif. Establecemos parametro autenticado.
@@ -347,9 +349,10 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 		}else{
 			// Version posterior a 1.1.0: se rellena autenticado y nif. Establecemos usuario seycon.
 			if (dEnt.getDatosInteresado().getAutenticado().booleanValue()){
-				PersonaPAD p = DelegateUtil.getConsultaPADDelegate().obtenerDatosPADporNif(dEnt.getDatosInteresado().getNif());
+				String nif = NifCif.normalizarDocumento(dEnt.getDatosInteresado().getNif());
+				PersonaPAD p = DelegateUtil.getConsultaPADDelegate().obtenerDatosPADporNif(nif);
 				if (p == null){
-					throw new Exception("No existe un usuario con el nif " + dEnt.getDatosInteresado().getNif());
+					throw new Exception("No existe un usuario con el nif " + nif);
 				}
 				dEnt.getDatosInteresado().setIdentificadorUsuario(p.getUsuarioSeycon());
 			}
