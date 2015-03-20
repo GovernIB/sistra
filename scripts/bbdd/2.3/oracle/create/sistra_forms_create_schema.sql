@@ -640,7 +640,10 @@ alter table RFR_GRPFOR
 alter table RFR_GRPFOR
    add constraint RFR_GRFGRP_FK foreign key (GRF_CODGRP)
       references RFR_GRUPOS (GRP_CODIGO);
-      
+
+-- V1.1.4 to V1.1.5
+alter table RFR_FORMUL modify FOR_MODELO VARCHAR2(20 char);
+
 -- V 2.3.0
 ALTER table RFR_COMPON ADD  COM_COLSPN           NUMBER(1)                      default 1 not null;
 ALTER table RFR_COMPON ADD  COM_SINETQ           NUMBER(1)                      default 0 not null;

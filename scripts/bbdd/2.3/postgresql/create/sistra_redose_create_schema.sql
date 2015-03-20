@@ -1874,3 +1874,8 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 -- PostgreSQL database dump complete
 --
 
+-- V2.3.9
+create index RDS_USODOC_IDX on RDS_USOS (
+   USO_CODTIU ASC,
+   USO_REF ASC
+);

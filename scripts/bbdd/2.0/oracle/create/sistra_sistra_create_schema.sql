@@ -436,12 +436,6 @@ comment on column STR_ESPNIV.ETN_FLUTRA is
 comment on column STR_ESPNIV.ETN_URLFIN is
 'Establece url de finalización';
 
-comment on column STR_ESPNIV.ETN_AVISOS is
-'Script para indicar si se habilitan los avisos para el expediente ';
-
-comment on column STR_ESPNIV.ETN_AVISMS is
-'En caso de que esten habilitados los avisos para el expediente indicará el telefono para avisos SMS';
-
 comment on column STR_ESPNIV.ETN_AVIEMA is
 'En caso de que esten habilitados los avisos para el expediente indicará el email para avisos Email';
 
