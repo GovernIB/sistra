@@ -568,7 +568,7 @@ CREATE TABLE bte_proapl (
     tap_wsver character varying(10),
     tap_errors bytea,
     tap_uniadm bigint,
-    tap_sms character varying(1),
+    tap_sms character varying(1) default 'N' not null,
     tap_avinot character varying(1) DEFAULT 'N'::character varying NOT NULL,
     tap_wssoa character varying(100)
 );

@@ -152,7 +152,7 @@ create table BTE_PROAPL  (
    TAP_WSVER            VARCHAR2(10 BYTE),
    TAP_ERRORS           BLOB,
    TAP_UNIADM 			NUMBER(20),
-   TAP_SMS              VARCHAR2(1)
+   TAP_SMS              VARCHAR2(1) default 'N' not null
 );
 
 

@@ -606,3 +606,9 @@ create index RDS_FIEDOC_FK_I on RDS_FICEXT (
 -- v2.2.5
 alter table RDS_FICEXT  add FIE_CODUBI  NUMBER(20) not null;
 comment on column RDS_FICEXT.FIE_CODUBI is 'INDICA CODIGO DE UBICACION';
+
+-- V2.3.9
+create index RDS_USODOC_IDX on RDS_USOS (
+   USO_CODTIU ASC,
+   USO_REF ASC
+);

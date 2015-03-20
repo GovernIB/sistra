@@ -1915,3 +1915,9 @@ comment on column ZPE_PREBCK.PRB_OFIREG is 'Oficina registro en la que se ha con
 -- UPDATE FROM 2.3.5 TO 2.3.6
 ALTER table ZPE_PERSON ADD PER_IDEMOD VARCHAR(4000);
 comment on column ZPE_PERSON.PER_IDEMOD is 'Ante cambios de NIF se almacenan los NIF anteriores a modo de log';
+
+-- V2.3.9
+create index ZPE_INDELE_IDX2 on ZPE_INDELE (
+   IND_TIPEL ASC,
+   IND_CODEL ASC
+);
