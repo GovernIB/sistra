@@ -110,14 +110,16 @@ public class RegistroEntradaHelper{
 			datosRpte = factReg.crearDatosInteresado();			
 			datosRpte.setTipoInteresado(ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTANTE);
 			
-			if (NifCif.esNIF(nif))
-				datosRpte.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIF));
-			else if (NifCif.esCIF(nif))
-				datosRpte.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_CIF));
-			else if (NifCif.esNIE(nif))
-				datosRpte.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE));				
+			String nifNormalizado = NifCif.normalizarDocumento(nif);
 			
-			datosRpte.setNumeroIdentificacion(NifCif.normalizarDocumento(nif));
+			if (NifCif.esNIF(nifNormalizado))
+				datosRpte.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIF));
+			else if (NifCif.esCIF(nifNormalizado))
+				datosRpte.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_CIF));
+			else if (NifCif.esNIE(nifNormalizado))
+				datosRpte.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE));					
+			
+			datosRpte.setNumeroIdentificacion(nifNormalizado);
 			datosRpte.setFormatoDatosInteresado(ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);			
 			datosRpte.setIdentificacionInteresado(apellidosNombre);
 			datosRpte.setUsuarioSeycon(userSeycon);
@@ -144,14 +146,17 @@ public class RegistroEntradaHelper{
 	 */
 	public void setDatosRepresentado(String nif, String apellidosNombre) throws ExcepcionRegistroTelematico {
 		try{	
+			
+			String nifNormalizado = NifCif.normalizarDocumento(nif);
+			
 			datosRpdo = factReg.crearDatosInteresado();
 			datosRpdo.setTipoInteresado(ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTADO);
-			datosRpdo.setNumeroIdentificacion(nif);
-			if (NifCif.esNIF(nif))
+			datosRpdo.setNumeroIdentificacion(nifNormalizado);
+			if (NifCif.esNIF(nifNormalizado))
 				datosRpdo.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIF));
-			else if (NifCif.esCIF(nif))
+			else if (NifCif.esCIF(nifNormalizado))
 				datosRpdo.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_CIF));
-			else if (NifCif.esNIE(nif))
+			else if (NifCif.esNIE(nifNormalizado))
 				datosRpdo.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE));
 			datosRpdo.setFormatoDatosInteresado(ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
 			datosRpdo.setIdentificacionInteresado(apellidosNombre);			
