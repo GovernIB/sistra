@@ -32,6 +32,7 @@
 
     <property name="web.gen.src" location="${modul.output.dir}/gen-src"/>
     <property name="web.gen.etc" location="${modul.output.dir}/gen-etc"/>
+	<property name="web.gen.resources" location="${modul.output.dir}/gen-resources"/>
     <property name="web.classes" location="${modul.output.dir}/classes"/>
 
     <property name="doc" location="${output.dir}/doc"/>
@@ -73,6 +74,7 @@
     <target name="prepare">
         <mkdir dir="${web.gen.src}"/>
         <mkdir dir="${web.gen.etc}"/>
+    	<mkdir dir="${web.gen.resources}"/>
         <mkdir dir="${web.classes}"/>
         <mkdir dir="${web.doc.api}"/>
         <mkdir dir="${web.product}"/>
@@ -162,6 +164,7 @@
 		    	<include name="**/*.properties"/>
 		    </fileset> 
         </copy>
+    	<copyfile dest="${web.gen.resources}/redose-front-messages_es.properties" src="${web.resources}/redose-front-messages.properties" forceoverwrite="true"/>
     </target>
 
     <target name="web.war" depends="web.compile">
@@ -176,6 +179,7 @@
 
             <classes dir="${web.classes}"/>
             <classes dir="${web.resources}" includes="*.properties"/>
+        	<classes dir="${web.gen.resources}" includes="*.properties"/>
 
 	     	 <lib dir="${lib.dir}">
    	            <include name="struts.jar" />

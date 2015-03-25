@@ -34,6 +34,7 @@
     <property name="web.gen.src" location="${modul.output.dir}/gen-src"/>
     <property name="web.gen.etc" location="${modul.output.dir}/gen-etc"/>
     <property name="web.classes" location="${modul.output.dir}/classes"/>
+	<property name="web.gen.resources" location="${modul.output.dir}/gen-resources"/>
 
     <property name="doc" location="${output.dir}/doc"/>
     <property name="web.doc.api" location="${doc}/api/${modul}"/>
@@ -83,9 +84,10 @@
     <target name="prepare">
         <mkdir dir="${web.gen.src}"/>
         <mkdir dir="${web.gen.etc}"/>
+    	<mkdir dir="${web.gen.resources}"/>
         <mkdir dir="${web.classes}"/>
         <mkdir dir="${web.doc.api}"/>
-        <mkdir dir="${web.product}"/>
+        <mkdir dir="${web.product}"/>    	
     </target>
 
     <target name="web.gen.all" depends="prepare,init">
@@ -206,6 +208,9 @@
 		    </fileset> 		   
 	    </copy>
     	<!-- indra -->    	
+    	
+    	<copyfile dest="${web.gen.resources}/sistra-front-messages_es.properties" src="${web.resources}/sistra-front-messages.properties" forceoverwrite="true"/>
+    	
     </target>
 
     <target name="web.war" depends="web.compile">
@@ -235,6 +240,8 @@
             <classes dir="${web.classes}"/>
             <classes dir="${web.resources}" includes="*.properties"/>
         	<classes dir="${web.classes}" includes="*.properties" />
+        	<classes dir="${web.gen.resources}" includes="*.properties"/>
+        	
             <!-- <classes dir="${web.classes}/es/caib/sistra/front/formulario" includes="*.properties"/> -->
         	<lib file="${web.product}/3-zonaper-${modul}.jar"/>
         	
