@@ -49,7 +49,8 @@
         </fileset>
     	<fileset dir="${distribucion.dir}/lib">    	
     	 	<include name="sistra-xml.jar"/>
-        	<include name="sistra-util.jar"/>	        	        	
+        	<include name="sistra-util.jar"/>	
+    		<include name="sistra-plugins.jar"/>
         </fileset>
         <fileset dir="${web.product}">
             <include name="4-bantel-model.jar" />
