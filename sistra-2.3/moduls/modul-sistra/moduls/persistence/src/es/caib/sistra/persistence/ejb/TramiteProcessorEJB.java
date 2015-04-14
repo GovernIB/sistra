@@ -1191,8 +1191,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	        		// Validamos resultado script
 	        		if (StringUtils.isEmpty(calc.getModelo()) || StringUtils.isEmpty(calc.getIdTasa()) || 
 	        			StringUtils.isEmpty(calc.getConcepto()) || StringUtils.isEmpty(calc.getFechaDevengo()) ||
-	        			StringUtils.isEmpty(calc.getImporte()) || StringUtils.isEmpty(calc.getNif()) || 
-	        			StringUtils.isEmpty(calc.getNombre())){
+	        			StringUtils.isEmpty(calc.getImporte())){
 	        				throw new Exception("No se han establecido mediante script todos los datos del pago: " + identificador);
 	        		}
 	        		

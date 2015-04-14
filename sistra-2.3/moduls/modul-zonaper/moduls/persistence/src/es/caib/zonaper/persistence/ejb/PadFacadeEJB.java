@@ -1254,7 +1254,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     				} else {
     					// COMPATIBILIDAD CON VERSIONES ANTERIORES A 2.1: EXPE ANONIMOS GENERAN SIEMPRE NOTIFS ACCESIBLES POR CLAVE
     					// Si no se especifica si es accesible por clave, por compatibilidad será accesible si expe es anónimo
-    					notificacion.setAccesiblePorClave(expe.getUsuarioSeycon() == null);
+    					notificacion.setAccesiblePorClave(expe.getSeyconCiudadano() == null);
     				}    			    				
     				break;
     				
@@ -2171,6 +2171,8 @@ public abstract class PadFacadeEJB implements SessionBean{
 		expPAD.setNombreRepresentado(expediente.getNombreRepresentado());
 		
 		expPAD.setNumeroEntradaBTE(expediente.getNumeroEntradaBTE());
+		
+		expPAD.setIdentificadorGestor(expediente.getUsuarioSeycon());
 		
 		if (StringUtils.isNotEmpty(expediente.getHabilitarAvisos())){
 			expPAD.getConfiguracionAvisos().setHabilitarAvisos(new Boolean("S".equals(expediente.getHabilitarAvisos())));

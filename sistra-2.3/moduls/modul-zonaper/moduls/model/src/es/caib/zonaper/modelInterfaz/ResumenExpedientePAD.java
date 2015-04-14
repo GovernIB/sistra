@@ -74,6 +74,10 @@ public class ResumenExpedientePAD implements Serializable {
 	 */
 	private String numeroEntradaBTE;
 	/**
+	 * Id gestor.
+	 */
+	private String identificadorGestor;
+	/**
 	 * Avisos movilidad. 
 	 */
 	private ConfiguracionAvisosExpedientePAD configuracionAvisos = new ConfiguracionAvisosExpedientePAD();
@@ -213,6 +217,14 @@ public class ResumenExpedientePAD implements Serializable {
 
 	public void setFechaUltimaActualizacion(Date fechaUltimaActualizacion) {
 		this.fechaUltimaActualizacion = fechaUltimaActualizacion;
+	}
+
+	public String getIdentificadorGestor() {
+		return identificadorGestor;
+	}
+
+	public void setIdentificadorGestor(String identificadorGestor) {
+		this.identificadorGestor = identificadorGestor;
 	}
 	
 }

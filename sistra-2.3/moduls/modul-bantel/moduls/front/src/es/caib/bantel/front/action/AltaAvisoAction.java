@@ -13,6 +13,8 @@ import org.apache.struts.action.ActionMapping;
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleAvisoForm;
 import es.caib.bantel.front.util.MensajesUtil;
+import es.caib.bantel.model.Procedimiento;
+import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
 
@@ -66,9 +68,12 @@ public class AltaAvisoAction extends BaseAction
 			}
 			avisoForm.setAccesoPorClave(exp.isAutenticado()?"N":"S");
 			
-			
 			// Indicamos si el expediente tiene asociado un nif
 			avisoForm.setExisteNifExpediente(StringUtils.isBlank(exp.getNifRepresentante())?"N":"S");
+			
+			// Acceso por defecto por clave
+			Procedimiento procedimiento = DelegateUtil.getTramiteDelegate().obtenerProcedimiento(exp.getIdentificadorProcedimiento());
+			avisoForm.setAccesoPorClave(procedimiento.getAccesoClaveDefecto());
 			
 		}catch(Exception e){
 			log.error("Excepcion alta aviso",e);

@@ -560,6 +560,12 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 	   			parameters.put("idExpediente", "%" + filtro.getIdExpediente().toUpperCase() + "%");
 	   		}	   	   	
 	   		
+	   		// Estado
+	   		if (StringUtils.isNotBlank(filtro.getEstado())) {
+	   			sqlFiltro += " and e.estado = :estado";
+	   			parameters.put("estado", filtro.getEstado());
+	   		}
+	   		
 			// Crea query 
         	Query query = session.createQuery("FROM Expediente AS e WHERE e.tipoExpediente = 'E' and e.idProcedimiento in (:procedimientos) " +
         				sqlFiltro + 

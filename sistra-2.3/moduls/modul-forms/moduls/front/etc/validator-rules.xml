@@ -69,7 +69,8 @@
                         field.type == 'file' ||
                         field.type == 'select-one' ||
                         field.type == 'radio' ||
-                        field.type == 'password') {
+                        field.type == 'password' || 
+                        field.type == 'number') {
                         
                         var value = '';
 						// get field's value

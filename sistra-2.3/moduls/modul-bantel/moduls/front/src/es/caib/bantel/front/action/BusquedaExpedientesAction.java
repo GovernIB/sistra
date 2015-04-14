@@ -41,7 +41,6 @@ public class BusquedaExpedientesAction extends BaseAction
     {
 		BusquedaExpedientesForm formularioBusqueda = ( BusquedaExpedientesForm ) form;
 		
-		
 		FiltroBusquedaExpedientePAD filtro = new FiltroBusquedaExpedientePAD();
 		List idsProc = new ArrayList();
 		if (!("-1".equals(formularioBusqueda.getIdentificadorProcedimiento()))) {
@@ -68,7 +67,10 @@ public class BusquedaExpedientesAction extends BaseAction
 		filtro.setNumeroEntradaBTE(formularioBusqueda.getNumeroEntrada());
 		filtro.setIdExpediente(formularioBusqueda.getIdExpediente());
 		
-		
+		if (formularioBusqueda.getEstado() != null && !("*".equals(formularioBusqueda.getEstado()))) {
+			filtro.setEstado(formularioBusqueda.getEstado());
+		}
+				
 		PaginaPAD page = es.caib.zonaper.persistence.delegate.DelegatePADUtil.getPadDelegate().busquedaPaginadaExpedientesGestor(filtro, formularioBusqueda.getPagina(), formularioBusqueda.getLongitudPagina() );
 		
 		request.setAttribute( "page", page );

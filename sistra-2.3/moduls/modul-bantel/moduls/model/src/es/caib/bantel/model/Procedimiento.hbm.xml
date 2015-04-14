@@ -27,6 +27,10 @@
   	
   	<property name="unidadAdministrativa" column="TAP_UNIADM"/>
   	<property name="permitirSms" column="TAP_SMS" not-null="true"/>
+  	<property name="oficinaRegistro" column="TAP_REGOFI"/>
+  	<property name="organoRegistro" column="TAP_REGORG"/>
+  	
+  	<property name="accesoClaveDefecto" column="TAP_CLAVE"/>
   	
   	<property name="avisarNotificaciones" column="TAP_AVINOT" not-null="true"/>
   	

@@ -16,6 +16,7 @@ public class BusquedaExpedientesForm extends ValidatorForm
 	private String numeroEntrada = "";
 	private int pagina;
 	private int longitudPagina = 10;
+	private String estado = "*";
 	
 	public BusquedaExpedientesForm() {
 		super();
@@ -74,6 +75,14 @@ public class BusquedaExpedientesForm extends ValidatorForm
 
 	public void setIdExpediente(String numeroExpediente) {
 		this.idExpediente = numeroExpediente;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 	
 	

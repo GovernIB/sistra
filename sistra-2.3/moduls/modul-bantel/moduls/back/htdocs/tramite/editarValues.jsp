@@ -44,12 +44,32 @@
     </td>
 </tr>
 <tr>
+    <td class="label"><bean:message key="tramite.gestionExpedientes.oficinaRegistro"/></td>
+    <td class="input">
+    	<html:select property="values.oficinaRegistro">
+   			<html:options collection="listaOficinas" property="codigo" labelProperty="descripcion" />
+    	</html:select>
+    </td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="tramite.gestionExpedientes.servicioRegistro"/></td>
+    <td class="input">
+    	<html:select property="values.organoRegistro">
+   			<html:options collection="listaOrganos" property="codigo" labelProperty="descripcion" />
+    	</html:select>
+    </td>
+</tr>
+<tr>
     <td class="label"><bean:message key="tramite.gestionExpedientes.permitirSmsAvisos"/></td>
     <td class="input">Si<html:radio property="values.permitirSms" value="S"/> No <html:radio property="values.permitirSms" value="N"/></td>
 </tr>
 <tr>
     <td class="label"><bean:message key="tramite.gestionExpedientes.permitirPlazoNotificacionesVariable"/></td>
     <td class="input">Si<html:radio property="values.permitirPlazoNotificacionesVariable" value="S"/> No (<bean:message key="tramite.gestionExpedientes.permitirPlazoNotificacionesVariable.plazoDefecto"/>)<html:radio property="values.permitirPlazoNotificacionesVariable" value="N"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="tramite.gestionExpedientes.claveAccesoDefecto"/></td>
+    <td class="input">Si<html:radio property="values.accesoClaveDefecto" value="S"/> No <html:radio property="values.accesoClaveDefecto" value="N"/></td>
 </tr>
 <tr>
 	<td class="separador" colspan="2"><bean:message key="tramite.avisoBackOffice"/></td>

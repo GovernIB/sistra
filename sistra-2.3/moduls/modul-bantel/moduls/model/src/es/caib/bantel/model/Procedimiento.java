@@ -42,6 +42,10 @@ public class Procedimiento implements Serializable{
 	private String avisarNotificaciones = "N";
 	private String permitirPlazoNotificacionesVariable = "N";
 	
+	private String oficinaRegistro;
+	private String organoRegistro;
+	private String accesoClaveDefecto;
+	
 	
 	public String getIdentificador() {
 		return identificador;
@@ -178,6 +182,24 @@ public class Procedimiento implements Serializable{
 	public void setPermitirPlazoNotificacionesVariable(
 			String permitirPlazoNotificacionesVariable) {
 		this.permitirPlazoNotificacionesVariable = permitirPlazoNotificacionesVariable;
+	}
+	public String getOficinaRegistro() {
+		return oficinaRegistro;
+	}
+	public void setOficinaRegistro(String oficinaRegistro) {
+		this.oficinaRegistro = oficinaRegistro;
+	}
+	public String getOrganoRegistro() {
+		return organoRegistro;
+	}
+	public void setOrganoRegistro(String organoRegistro) {
+		this.organoRegistro = organoRegistro;
+	}
+	public String getAccesoClaveDefecto() {
+		return accesoClaveDefecto;
+	}
+	public void setAccesoClaveDefecto(String accesoClaveDefecto) {
+		this.accesoClaveDefecto = accesoClaveDefecto;
 	}
 	
 	

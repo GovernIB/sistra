@@ -24,24 +24,21 @@
 	<table cellpadding="8" cellspacing="10" id="tablaResultats">
 	<tr>
 		<th><bean:message key="resultadoBusquedaExpedientes.fecha"/></th>
+		<th><bean:message key="resultadoBusquedaExpedientes.procedimiento"/></th>
 		<th><bean:message key="resultadoBusquedaExpedientes.idExpediente"/></th>	
 		<th><bean:message key="resultadoBusquedaExpedientes.nif"/></th>		
-		<!-- 
-		<th><bean:message key="resultadoBusquedaExpedientes.procedimiento"/></th>
-		 -->
 		<th><bean:message key="resultadoBusquedaExpedientes.estado"/></th>
 		<th><bean:message key="resultadoBusquedaExpedientes.numeroEntrada"/></th>
+		<th><bean:message key="resultadoBusquedaExpedientes.gestor"/></th>
 	</tr>				
 		<bean:define id="numeroPagina" name="page" property="numeroPagina" type="java.lang.Integer"/>
 		<logic:iterate id="pagina" name="page" property="list">
 		<bean:define id="idExpe" name="pagina" property="identificadorExpediente" type="java.lang.String"/>
 		<tr onmouseover="selecItemTabla(this);" onclick="detalleExpediente('<%=StringEscapeUtils.escapeJavaScript(idExpe)%>','<bean:write name="pagina" property="unidadAdministrativa"/>', '<bean:write name="pagina" property="claveExpediente"/>');" class="nou" title="<bean:message key="resultadoBusquedaExpedientes.verDetalleExpediente"/>">
 			<td><bean:write name="pagina" property="fechaInicio" format="dd/MM/yyyy HH:mm"/></td>
+			<td><bean:write name="pagina" property="identificadorProcedimiento" /></td>
 			<td><bean:write name="pagina" property="identificadorExpediente" /></td>
 			<td><bean:write name="pagina" property="nifRepresentante" /></td>
-			<!-- 
-			<td><bean:write name="pagina" property="identificadorProcedimiento" /></td>
-			 -->
 			<td>
 				<logic:equal name="pagina" property="estado" value="<%=ConstantesZPE.ESTADO_AVISO_PENDIENTE%>">
 					<bean:message key="resultadoBusquedaExpedientes.estado.avisoPendiente"/>
@@ -65,7 +62,8 @@
 					<bean:message key="resultadoBusquedaExpedientes.estado.solicitudPendienteDocumentacion"/>
 				</logic:equal>
 			</td>		
-			<td><bean:write name="pagina" property="numeroEntradaBTE" /></td>				
+			<td><bean:write name="pagina" property="numeroEntradaBTE" /></td>
+			<td><bean:write name="pagina" property="identificadorGestor" /></td>					
 		</tr>
 		</logic:iterate>														
 	</table> 
