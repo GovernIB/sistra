@@ -1,9 +1,11 @@
 package es.caib.zonaper.modelInterfaz;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Estado notificaciones procedimiento en un intervalo de tiempo.
+ * Devuelve id expediente de las notificaciones.
  * @author rsanz
 */
 public class EstadoNotificacionesProcedimiento implements Serializable{
@@ -11,40 +13,42 @@ public class EstadoNotificacionesProcedimiento implements Serializable{
 	/**
 	 * Nuevas notificaciones.
 	 */
-	private int nuevas;
+	private List nuevas;
 	
 	/**
 	 * Notificaciones rechazadas.
 	 */
-	private int rechazadas;
+	private List rechazadas;
 	
 	/**
 	 * Notificaciones aceptadas.
 	 */
-	private int aceptadas;
+	private List aceptadas;
 
-	public int getNuevas() {
+	public List getNuevas() {
 		return nuevas;
 	}
 
-	public void setNuevas(int nuevas) {
+	public void setNuevas(List nuevas) {
 		this.nuevas = nuevas;
 	}
 
-	public int getRechazadas() {
+	public List getRechazadas() {
 		return rechazadas;
 	}
 
-	public void setRechazadas(int rechazadas) {
+	public void setRechazadas(List rechazadas) {
 		this.rechazadas = rechazadas;
 	}
 
-	public int getAceptadas() {
+	public List getAceptadas() {
 		return aceptadas;
 	}
 
-	public void setAceptadas(int aceptadas) {
+	public void setAceptadas(List aceptadas) {
 		this.aceptadas = aceptadas;
 	}
+
+	
 	
 }

@@ -390,7 +390,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 			}
 			
 			// Generamos log de auditoria
-	    	this.logEvento(ConstantesAuditoria.EVENTO_COMUNICACION, null, expediente.getUsuarioSeycon(), expediente.getNifRepresentante(),
+	    	this.logEvento(ConstantesAuditoria.EVENTO_COMUNICACION, null, expediente.getSeyconCiudadano(), expediente.getNifRepresentante(),
 	    			null, expediente.getIdioma(), "S", null, null, null, expediente.getIdProcedimiento());
 		
 	}	
@@ -812,6 +812,8 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		expPAD.setNombreRepresentado(expediente.getNombreRepresentado());
 		
 		expPAD.setNumeroEntradaBTE(expediente.getNumeroEntradaBTE());
+		
+		expPAD.setIdentificadorGestor(expediente.getUsuarioSeycon());
 		
 		if (StringUtils.isNotEmpty(expediente.getHabilitarAvisos())){
 			expPAD.getConfiguracionAvisos().setHabilitarAvisos(new Boolean("S".equals(expediente.getHabilitarAvisos())));
@@ -1505,7 +1507,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 				exped.addElementoExpediente(ela,evento);
 				
 				// Generamos log de auditoria
-		    	this.logEvento(ConstantesAuditoria.EVENTO_COMUNICACION, null, exped.getUsuarioSeycon(), exped.getNifRepresentante(),
+		    	this.logEvento(ConstantesAuditoria.EVENTO_COMUNICACION, null, exped.getSeyconCiudadano(), exped.getNifRepresentante(),
 		    			null, expediente.getIdioma(), "S", null, null, null, exped.getIdProcedimiento());
 				
 			}

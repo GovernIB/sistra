@@ -18,6 +18,8 @@ import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.delegate.VersionWSDelegate;
 import es.caib.sistra.modelInterfaz.ValoresDominio;
 import es.caib.sistra.persistence.delegate.DelegateSISTRAUtil;
+import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.regtel.PluginRegistroIntf;
 
 
 public class TramiteController implements Controller
@@ -41,6 +43,12 @@ public class TramiteController implements Controller
             // Obtenemos lista de u.a.
             List unidades=listarUnidadesAdministrativas();
     		request.setAttribute("listaUnidadesAdministrativa",unidades);
+    		
+    		 // Obtenemos oficinas y organos
+            List oficinas=listarOficinas();
+    		request.setAttribute("listaOficinas",oficinas);
+    		List organos=listarOrganos();
+    		request.setAttribute("listaOrganos",organos);
 
         } catch (Exception e) {
             throw new ServletException(e);
@@ -49,7 +57,27 @@ public class TramiteController implements Controller
 
 	}
 
-	
+	/**
+	 * Listar organos.
+	 * @return organos
+	 */
+	private List listarOrganos()  throws Exception {
+		PluginRegistroIntf plgRegistro = PluginFactory.getInstance().getPluginRegistro();
+		List servicios = plgRegistro.obtenerServiciosDestino();
+		return servicios;
+	}
+
+	/**
+	 * Lista oficinas registro.
+	 * @return oficinas
+	 */
+	private List listarOficinas() throws Exception {
+		PluginRegistroIntf plgRegistro = PluginFactory.getInstance().getPluginRegistro();
+		List oficinas = plgRegistro.obtenerOficinasRegistro();
+		return oficinas;
+	}
+
+
 	/**
 	 * Lista unidades administrativas
 	 * 
@@ -77,4 +105,6 @@ public class TramiteController implements Controller
 		}					
 		return unidades;
 	}
+	
+	
 }

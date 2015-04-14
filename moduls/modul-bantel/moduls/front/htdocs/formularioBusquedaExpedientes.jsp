@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-15" %>
 <%@ page import="org.apache.struts.Globals"%>
 <%@ page import="es.caib.bantel.modelInterfaz.ConstantesBTE"%>
+<%@ page import="es.caib.zonaper.modelInterfaz.ConstantesZPE"%>
 <%@ page import="es.caib.xml.registro.factoria.ConstantesAsientoXML" %>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
@@ -39,6 +40,17 @@
 						<%=procedimiento.getIdentificador() + "-" + (procedimiento.getDescripcion().length()>60?procedimiento.getDescripcion().substring(0,60)+"...":procedimiento.getDescripcion())%>
 					</html:option>
 				</logic:iterate>
+			</html:select>
+			<bean:message key="formularioBusqueda.estado"/>
+			<html:select property="estado">
+				<html:option value="*" ><bean:message key="resultadoBusquedaExpedientes.estado.todos"/></html:option>
+				<html:option value="<%=ConstantesZPE.ESTADO_AVISO_PENDIENTE%>" ><bean:message key="resultadoBusquedaExpedientes.estado.avisoPendiente"/></html:option>
+				<html:option value="<%=ConstantesZPE.ESTADO_AVISO_RECIBIDO%>" ><bean:message key="resultadoBusquedaExpedientes.estado.avisoRecibido"/></html:option>
+				<html:option value="<%=ConstantesZPE.ESTADO_NOTIFICACION_PENDIENTE%>" ><bean:message key="resultadoBusquedaExpedientes.estado.notificacionPendiente"/></html:option>
+				<html:option value="<%=ConstantesZPE.ESTADO_NOTIFICACION_RECIBIDA%>" ><bean:message key="resultadoBusquedaExpedientes.estado.notificacionRecibida"/></html:option>
+				<html:option value="<%=ConstantesZPE.ESTADO_NOTIFICACION_RECHAZADA%>" ><bean:message key="resultadoBusquedaExpedientes.estado.notificacionRechazada"/></html:option>
+				<html:option value="<%=ConstantesZPE.ESTADO_SOLICITUD_ENVIADA%>" ><bean:message key="resultadoBusquedaExpedientes.estado.solicitudEnviada"/></html:option>
+				<html:option value="<%=ConstantesZPE.ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL%>" ><bean:message key="resultadoBusquedaExpedientes.estado.solicitudPendienteDocumentacion"/></html:option>				
 			</html:select>
 			<bean:message key="formularioBusqueda.resultadosPorPagina"/>
 			<html:select property="longitudPagina">

@@ -3,6 +3,7 @@ package es.caib.zonaper.persistence.ejb;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -420,13 +421,14 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 	 * @param conAcuse con o sin acuse
 	 * @param desde Desde 
 	 * @param hasta Hasta
-	 * @return Número
+	 * @return Devuelve lista con id expediente de las notificaciones
 	 */
-	private int buscarNotificacionesProcedimiento(String idProc,
+	private List buscarNotificacionesProcedimiento(String idProc,
 			String tipo, boolean conAcuse, Date desde, Date hasta) {
+		List notifs = new ArrayList();
 		Session session = getSession();
 		try {
-			String hql = "select count(*) FROM ElementoExpediente AS e, NotificacionTelematica AS m WHERE " + 
+			String hql = "select e FROM ElementoExpediente AS e, NotificacionTelematica AS m WHERE " + 
 			"e.expediente.idProcedimiento = :idProcedimiento AND " +
 			"e.tipoElemento = '" + ElementoExpediente.TIPO_NOTIFICACION + "' AND " +
 			"e.codigoElemento = m.codigo AND m.firmarAcuse = " + Boolean.toString(conAcuse) + " ";
@@ -462,9 +464,16 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 				query.setTimestamp("desde",desde);
 			}
 			
-			int count = Integer.parseInt(query.list().get(0).toString()); 
 			
-			return count;
+			List result = query.list();
+			if (result != null) {
+				for (Iterator it = result.iterator(); it.hasNext();) {
+					ElementoExpediente ee =  (ElementoExpediente) it.next();
+					notifs.add(ee.getExpediente().getIdExpediente());
+				}
+			}
+			
+			return notifs;
 			
 		} catch (HibernateException he) {
             throw new EJBException(he);

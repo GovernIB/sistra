@@ -201,12 +201,12 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
     	}
     	
     	if (dn != null) {
-	    	int notifsConAcuse = dn.getNotificacionesConAcuse().getAceptadas() +
-									dn.getNotificacionesConAcuse().getNuevas() +
-									dn.getNotificacionesConAcuse().getRechazadas();
-			int notifsSinAcuse = dn.getNotificacionesSinAcuse().getAceptadas() +
-									dn.getNotificacionesSinAcuse().getNuevas() +
-									dn.getNotificacionesSinAcuse().getRechazadas();
+	    	int notifsConAcuse = dn.getNotificacionesConAcuse().getAceptadas().size() +
+									dn.getNotificacionesConAcuse().getNuevas().size() +
+									dn.getNotificacionesConAcuse().getRechazadas().size();
+			int notifsSinAcuse = dn.getNotificacionesSinAcuse().getAceptadas().size() +
+									dn.getNotificacionesSinAcuse().getNuevas().size() +
+									dn.getNotificacionesSinAcuse().getRechazadas().size();
 			if ((notifsConAcuse + notifsSinAcuse) > 0) {
 	    		existen = true;
 	    		mensaje.append("<li>");
@@ -216,9 +216,9 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 		    		mensaje.append("<li>");
 		    		mensaje.append(StringEscapeUtils.escapeHtml("Amb acusament de rebut signat:"));
 		    		mensaje.append("<ul>");
-			    		mensaje.append("<li>" + StringEscapeUtils.escapeHtml("Noves notificacions: ") + dn.getNotificacionesConAcuse().getNuevas() + "</li>");
-			    		mensaje.append("<li>" + StringEscapeUtils.escapeHtml("Notificacions acceptades: ") + dn.getNotificacionesConAcuse().getAceptadas() + "</li>");
-			    		mensaje.append("<li>" + StringEscapeUtils.escapeHtml("Notificacions rebutjades: ") + dn.getNotificacionesConAcuse().getRechazadas() + "</li>");
+			    		mensaje.append("<li>" + StringEscapeUtils.escapeHtml("Noves notificacions: ") + generarHtmlDetalleNotificaciones(dn.getNotificacionesConAcuse().getNuevas()) + "</li>");			    		
+			    		mensaje.append("<li>" + StringEscapeUtils.escapeHtml("Notificacions acceptades: ") + generarHtmlDetalleNotificaciones(dn.getNotificacionesConAcuse().getAceptadas()) + "</li>");
+			    		mensaje.append("<li>" + StringEscapeUtils.escapeHtml("Notificacions rebutjades: ") + generarHtmlDetalleNotificaciones(dn.getNotificacionesConAcuse().getRechazadas()) + "</li>");
 		    		mensaje.append("</ul>");
 		    		mensaje.append("</li>");  	    		
 	    		}
@@ -226,9 +226,9 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 	    			mensaje.append("<li>");    		
 		    		mensaje.append(StringEscapeUtils.escapeHtml("Sense acusament de rebut signat:"));
 		    		mensaje.append("<ul>");
-			    		mensaje.append("<li>" + StringEscapeUtils.escapeHtml("Noves notificacions: ") + dn.getNotificacionesSinAcuse().getNuevas() + "</li>");
-			    		mensaje.append("<li>" + StringEscapeUtils.escapeHtml("Notificacions acceptades: ") + dn.getNotificacionesSinAcuse().getAceptadas() + "</li>");
-			    		mensaje.append("<li>" + StringEscapeUtils.escapeHtml("Notificacions rebutjades: ") + dn.getNotificacionesSinAcuse().getRechazadas() + "</li>");
+			    		mensaje.append("<li>" + StringEscapeUtils.escapeHtml("Noves notificacions: ") + generarHtmlDetalleNotificaciones(dn.getNotificacionesSinAcuse().getNuevas()) + "</li>");
+			    		mensaje.append("<li>" + StringEscapeUtils.escapeHtml("Notificacions acceptades: ") + generarHtmlDetalleNotificaciones(dn.getNotificacionesSinAcuse().getAceptadas()) + "</li>");
+			    		mensaje.append("<li>" + StringEscapeUtils.escapeHtml("Notificacions rebutjades: ") + generarHtmlDetalleNotificaciones(dn.getNotificacionesSinAcuse().getRechazadas()) + "</li>");
 		    		mensaje.append("</ul>");
 		    		mensaje.append("</li>");
 	    		}
@@ -245,6 +245,21 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
     	return result;    	
 	}
 
+    
+	private String generarHtmlDetalleNotificaciones(List notifs) {
+		String html;
+		
+		html = notifs.size() + "<ul>";
+		
+		for (Iterator it = notifs.iterator(); it.hasNext();) {
+			String idExpe = (String) it.next();
+			html += "<li>Expedient " + idExpe + "</li>";
+		}
+		
+		html += "</ul>";
+		
+		return html;
+	}
 
 	/**
      * Realiza proceso de aviso a BackOffice para un trámite. Metemos en cola asíncrona.

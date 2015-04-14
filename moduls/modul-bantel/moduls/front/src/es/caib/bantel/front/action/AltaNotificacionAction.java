@@ -53,7 +53,7 @@ public class AltaNotificacionAction extends BaseAction
 		Long uniAdm = (Long) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY);
 		String claveExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY);
 		
-		try{
+		try{		 
 			
 			// Recuperamos expediente
 			exp = ejb.consultaExpediente(uniAdm, idExpe,claveExpe);
@@ -61,6 +61,9 @@ public class AltaNotificacionAction extends BaseAction
 				codMensajeError = "error.expediente.consulta";
 				throw new Exception("No se ha encontrado expediente");
 			}
+			
+			// Recuperamos procedimiento
+			Procedimiento procedimiento = DelegateUtil.getTramiteDelegate().obtenerProcedimiento(exp.getIdentificadorProcedimiento());
 			
 			// Verificamos que el expediente tenga nif
 			if(StringUtils.isBlank(exp.getNifRepresentante())) {
@@ -104,8 +107,12 @@ public class AltaNotificacionAction extends BaseAction
 				notificacionForm.setApellidos(p.getApellidosNombre());				
 			}
 			
-			// Deshabilitamos por defecto el acceso por clave
-			notificacionForm.setAccesoPorClave("N");
+			// Acceso por defecto por clave			
+			notificacionForm.setAccesoPorClave(procedimiento.getAccesoClaveDefecto());
+					
+			// Oficina y organo registro
+			notificacionForm.setOficinaRegistro(procedimiento.getOficinaRegistro());
+			notificacionForm.setOrganoDestino(procedimiento.getOrganoRegistro());
 			
 			// Plazo x defecto
 			notificacionForm.setDiasPlazo("0");

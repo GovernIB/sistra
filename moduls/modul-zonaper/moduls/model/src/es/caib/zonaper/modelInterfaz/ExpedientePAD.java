@@ -27,6 +27,7 @@ public class ExpedientePAD implements Serializable
 	private String nifRepresentado;
 	private String nombreRepresentado;
 	private String numeroEntradaBTE;
+	private String identificadorGestor;
 	private List elementos = new java.util.ArrayList();
 	
 	//	Opciones de aviso movilidad 
@@ -248,6 +249,12 @@ public class ExpedientePAD implements Serializable
 	}
 	public void setIdentificadorProcedimiento(String identificadorProcedimiento) {
 		this.identificadorProcedimiento = identificadorProcedimiento;
+	}
+	public String getIdentificadorGestor() {
+		return identificadorGestor;
+	}
+	public void setIdentificadorGestor(String identificadorGestor) {
+		this.identificadorGestor = identificadorGestor;
 	}
 		
 }

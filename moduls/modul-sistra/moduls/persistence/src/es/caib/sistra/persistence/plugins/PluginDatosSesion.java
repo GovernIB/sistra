@@ -41,8 +41,8 @@ public class PluginDatosSesion implements Serializable{
 		return this.persona.getNif();
 	}
 	
-	public char getNivelAutenticacion() {
-		return datosSesion.getNivelAutenticacion();
+	public String getNivelAutenticacion() {
+		return Character.toString(datosSesion.getNivelAutenticacion());
 	}
 	
 	public String getNombreCompletoUsuario() {

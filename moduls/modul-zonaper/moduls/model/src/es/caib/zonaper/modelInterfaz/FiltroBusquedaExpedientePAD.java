@@ -42,6 +42,10 @@ public class FiltroBusquedaExpedientePAD implements Serializable {
 	 * Fecha hasta (dd/mm/yyyy).
 	 */
 	private Date fechaHasta;
+	/**
+	 * Estado.
+	 */
+	private String estado = "";
 	
 	public List getIdentificadorProcedimientos() {
 		return identificadorProcedimientos;
@@ -90,6 +94,12 @@ public class FiltroBusquedaExpedientePAD implements Serializable {
 	}
 	public void setIdExpediente(String numeroExpediente) {
 		this.idExpediente = numeroExpediente;
+	}
+	public String getEstado() {
+		return estado;
+	}
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 	
 }
