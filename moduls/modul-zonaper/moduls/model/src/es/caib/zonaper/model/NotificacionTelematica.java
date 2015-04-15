@@ -34,6 +34,7 @@ public class NotificacionTelematica implements java.io.Serializable,ElementoExpe
      private Date fechaFinPlazo;
      private Integer diasPlazo;
      private boolean rechazada;
+     private Date fechaRechazada;
      
      private String tramiteSubsanacionDescripcion;
      private String tramiteSubsanacionIdentificador;
@@ -335,6 +336,14 @@ public class NotificacionTelematica implements java.io.Serializable,ElementoExpe
 
 	public void setDiasPlazo(Integer diasPlazo) {
 		this.diasPlazo = diasPlazo;
+	}
+
+	public Date getFechaRechazada() {
+		return fechaRechazada;
+	}
+
+	public void setFechaRechazada(Date fechaRechazada) {
+		this.fechaRechazada = fechaRechazada;
 	}	
     
 }

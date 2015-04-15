@@ -37,6 +37,7 @@
     <property name="fechaFinPlazo"  column="NOT_FECPLZ"/>
     <property name="diasPlazo"  column="NOT_DIAPLZ"/>
     <property name="rechazada"  column="NOT_RECHAZ" not-null="true"/>
+    <property name="fechaRechazada"  column="NOT_FECREC"/>
    
     <property name="tramiteSubsanacionDescripcion"  column="NOT_SUBDES"/>
     <property name="tramiteSubsanacionIdentificador"  column="NOT_SUBIDE"/>
