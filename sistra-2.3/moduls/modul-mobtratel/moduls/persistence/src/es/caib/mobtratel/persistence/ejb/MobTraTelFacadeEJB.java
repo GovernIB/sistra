@@ -45,6 +45,7 @@ import es.caib.mobtratel.persistence.delegate.PermisoException;
 import es.caib.mobtratel.persistence.util.MobUtils;
 import es.caib.sistra.plugins.email.ConstantesEmail;
 import es.caib.sistra.plugins.sms.ConstantesSMS;
+import es.caib.util.ValidacionesUtil;
 import es.caib.xml.ConstantesXML;
 
 
@@ -197,6 +198,16 @@ public abstract class MobTraTelFacadeEJB implements SessionBean
 					throw new LimiteDestinatariosException(new Error("Verificar envío solo disponible para un único destinatario."));
 				}				
 				me.setVerificarEnvio(mee.isVerificarEnvio());
+				
+				if (StringUtils.isNotBlank(mee.getEmailRespuesta())) {
+					if(!ValidacionesUtil.validarEmail(mee.getEmailRespuesta())) {
+						erroresFormato += " Email respuesta erroneo: " + mee.getEmailRespuesta();
+					} else {
+						me.setEmailRespuesta(mee.getEmailRespuesta());
+					}
+				}
+				
+				me.setRemitente(mee.getRemitente());
 				
 				envio.addEmail(me);
 			}

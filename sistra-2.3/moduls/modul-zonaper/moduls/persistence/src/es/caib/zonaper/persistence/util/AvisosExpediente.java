@@ -11,6 +11,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
+import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
 import es.caib.mobtratel.modelInterfaz.MensajeEnvio;
 import es.caib.mobtratel.modelInterfaz.MensajeEnvioEmail;
 import es.caib.mobtratel.modelInterfaz.MensajeEnvioSms;
@@ -122,6 +124,10 @@ public class AvisosExpediente {
 
 		log.debug("Aviso creacion elemento expediente: " + expe.getUnidadAdministrativa() + " - " + expe.getIdExpediente());
 		
+		
+		// Obtenemos configuracion procedimiento
+		ProcedimientoBTE procedimiento = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(expe.getIdProcedimiento());
+		
 		// Obtenemos configuracion avisos zona personal
 		
 		// Config a nivel de zona personal (si expe autenticado)
@@ -216,7 +222,10 @@ public class AvisosExpediente {
 			if (ele.isAccesoAnonimoExpediente()) {
 				textoEmail = StringUtil.replace(textoEmail,"[#URL_ACCESO_CLAVE#]",urlEventoExpediente + evento.getIdentificadorPersistencia() + "&autenticacion=A");
 			}
-			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AUTO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"email.correoAutomatico")));
+			
+			if (StringUtils.isBlank(procedimiento.getEmailRespuestaAvisosProcedimiento())) {
+				textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AUTO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"email.correoAutomatico")));
+			}
 			
 			// Generamos SMS
 			if (StringUtils.isNotEmpty(evento.getTextoSMS())){

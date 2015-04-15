@@ -72,6 +72,17 @@
     <td class="input">Si<html:radio property="values.accesoClaveDefecto" value="S"/> No <html:radio property="values.accesoClaveDefecto" value="N"/></td>
 </tr>
 <tr>
+	<td class="separador" colspan="2"><bean:message key="tramite.avisosProcedimiento"/></td>	
+</tr>
+<tr>
+    <td class="label"><bean:message key="tramite.avisosProcedmiento.remitente"/></td>
+    <td class="input"><html:text styleClass="textLargo" tabindex="10" property="values.remitenteAvisosProcedimiento" maxlength="255"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="tramite.avisosProcedmiento.responderA"/></td>
+    <td class="input"><html:text styleClass="textLargo" tabindex="10" property="values.emailRespuestaAvisosProcedimiento" maxlength="255"/></td>
+</tr>
+<tr>
 	<td class="separador" colspan="2"><bean:message key="tramite.avisoBackOffice"/></td>
 </tr>
 <tr>

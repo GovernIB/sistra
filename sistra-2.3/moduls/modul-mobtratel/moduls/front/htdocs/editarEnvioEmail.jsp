@@ -91,19 +91,27 @@
 	<div class="element">
 		<div class="etiqueta"><label for="mensaje"><bean:message key="editarEnvio.email.mensaje.mensaje"/></label></div>
 		<div class="control"><html:textarea property="mensaje" tabindex="3" cols="50" rows="3"/></div>
-	</div>			
+	</div>		
+	<div class="element">
+		<div class="etiqueta"><label for="remitente"><bean:message key="editarEnvio.email.mensaje.remitente"/></label></div>
+		<div class="control"><html:text styleClass="data" tabindex="4" property="remitente" size="100" maxlength="255"/></div>
+	</div>
+	<div class="element">
+		<div class="etiqueta"><label for="emailRespuesta"><bean:message key="editarEnvio.email.mensaje.emailRespuesta"/></label></div>		
+		<div class="control"><html:text styleClass="data" tabindex="5" property="emailRespuesta" size="100" maxlength="255"/></div>
+	</div>	
 	<div class="element">
 		<div class="etiqueta"><label for="destinatarios"><bean:message key="editarEnvio.email.mensaje.destinatarios"/></label></div>
 		<div class="control">
 			<p><bean:message key="editarEnvio.email.mensaje.destinatarios.ayuda"/></p>
-			<html:textarea property="destinatarios" tabindex="4" cols="50" rows="3"/>
+			<html:textarea property="destinatarios" tabindex="6" cols="50" rows="3"/>
 		</div>
 	</div>			
 	<div class="element">
 		<div class="etiqueta"><label for="cuenta"><bean:message key="editarEnvio.email.mensaje.cuenta"/></label></div>
 		<div class="control">
 		    	<logic:present name="cuentas">
-			    	<html:select property="cuenta" tabindex="5">
+			    	<html:select property="cuenta" tabindex="7">
 		   			<html:options collection="cuentas" property="codigo" labelProperty="nombre" />
 	   		    	</html:select>
 			</logic:present>
@@ -120,10 +128,10 @@
 				<html:radio property="inmediato" value="N"><bean:message key="editarEnvio.email.mensaje.tipoProgramacion.programado"/></html:radio>
 				<!--  Envio programado -->		
 				<bean:message key="editarEnvio.email.mensaje.programacion"/>
-				<html:text property="fechaProgramacion"  tabindex="6" styleId="fechaProgramacion" readonly="true" size="10" />				
-        		<button id="dia_calendario" type="button" tabindex="7" title="Mostrar calendari"><img src="imgs/botons/calendari.gif" alt="" /></button> <button type="button" tabindex="8" title="Esborrar dia" onclick="borrarFechaProgramacion();"><img src="imgs/botons/calendari_borrar.gif" alt="" /></button>
+				<html:text property="fechaProgramacion"  tabindex="8" styleId="fechaProgramacion" readonly="true" size="10" />				
+        		<button id="dia_calendario" type="button" tabindex="9" title="Mostrar calendari"><img src="imgs/botons/calendari.gif" alt="" /></button> <button type="button" tabindex="8" title="Esborrar dia" onclick="borrarFechaProgramacion();"><img src="imgs/botons/calendari_borrar.gif" alt="" /></button>
         		&nbsp;<label for="horaProgramacion"><bean:message key="editarEnvio.email.mensaje.horaProgramacion"/></label>
-				<html:select property="horaProgramacion" tabindex="8" >
+				<html:select property="horaProgramacion" tabindex="10" >
 					<logic:iterate id="tmpHora" name="horas">
 						<html:option value="<%= tmpHora.toString() %>"><%= tmpHora.toString() %></html:option>						
 					</logic:iterate>			
@@ -133,10 +141,10 @@
 	<div class="element">
 		<div class="etiqueta"><label for="fechaCaducidad"><bean:message key="editarEnvio.email.mensaje.caducidad"/></label></div>
 		<div class="control">
-			<html:text property="fechaCaducidad" tabindex="10" styleId="fechaCaducidad" readonly="true" size="10" />
+			<html:text property="fechaCaducidad" tabindex="11" styleId="fechaCaducidad" readonly="true" size="10" />
         		<button id="dia_calendario_caducidad" type="button" tabindex="11" title="Mostrar calendari"><img src="imgs/botons/calendari.gif" alt="" /></button> <button type="button" tabindex="12" title="Esborrar dia" onclick="borrarFechaCaducidad();"><img src="imgs/botons/calendari_borrar.gif" alt="" /></button>
         		&nbsp;&nbsp;<label for="horaCaducidad"><bean:message key="editarEnvio.email.mensaje.horaCaducidad"/></label>
-				<html:select property="horaCaducidad" tabindex="13" >
+				<html:select property="horaCaducidad" tabindex="12" >
 					<logic:iterate id="tmpHora" name="horas">
 						<html:option value="<%= tmpHora.toString() %>"><%= tmpHora.toString() %></html:option>
 					</logic:iterate>			

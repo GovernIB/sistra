@@ -21,6 +21,8 @@ public class EditarEnvioEmailForm extends ValidatorForm
 	private String horaProgramacion;
 	private String horaCaducidad;
 	private String inmediato="N";
+	private String remitente;
+	private String emailRespuesta;
 	
 	private String confirmarEnvio="N";
 	
@@ -267,6 +269,38 @@ public class EditarEnvioEmailForm extends ValidatorForm
 
 	public void setConfirmarEnvio(String confirmarEnvio) {
 		this.confirmarEnvio = confirmarEnvio;
+	}
+
+
+
+
+
+	public String getRemitente() {
+		return remitente;
+	}
+
+
+
+
+
+	public void setRemitente(String remitente) {
+		this.remitente = remitente;
+	}
+
+
+
+
+
+	public String getEmailRespuesta() {
+		return emailRespuesta;
+	}
+
+
+
+
+
+	public void setEmailRespuesta(String emailRespuesta) {
+		this.emailRespuesta = emailRespuesta;
 	}
 
 

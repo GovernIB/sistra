@@ -29,6 +29,9 @@
         <property name="estadoVerificarEnvio" column="MSE_ACKEST"/>
         <property name="errorVerificarEnvio" column="MSE_ACKERR"/>
         
+        <property name="remitente" column="MSE_REMITE"/>
+        <property name="emailRespuesta" column="MSE_REPLTO"/>
+        
         <many-to-one name="envio" column="MSE_IDENV" not-null="true"  foreign-key="MOB_MSEENV_FK"/>
         
     </class>

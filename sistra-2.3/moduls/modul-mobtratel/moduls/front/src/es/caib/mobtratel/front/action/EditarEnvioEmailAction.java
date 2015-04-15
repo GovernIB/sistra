@@ -61,6 +61,8 @@ public class EditarEnvioEmailAction extends BaseAction
 		mee.setTitulo(formulario.getTitulo());
 		mee.setTexto(formulario.getMensaje());
 		mee.setVerificarEnvio("S".equals(formulario.getConfirmarEnvio()));
+		mee.setEmailRespuesta(formulario.getEmailRespuesta());
+		mee.setRemitente(formulario.getRemitente());
 		mensaje.addEmail(mee);
 		
 		SimpleDateFormat df = new SimpleDateFormat(Constants.FORMATO_FECHAS);

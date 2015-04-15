@@ -11,6 +11,7 @@ import javax.mail.internet.MimeMessage;
 import javax.naming.InitialContext;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -132,7 +133,16 @@ public class EmailUtils
 	    	msg.setContent(contenido, "text/html");
     		msg.setHeader("X-Mailer", "JavaMailer");
     		String mailFrom = mailSession.getProperty("mail.from");
-			msg.setFrom(new InternetAddress(mailFrom));
+    		if (StringUtils.isNotBlank(me.getRemitente())) {
+    			msg.setFrom(new InternetAddress(mailFrom, me.getRemitente()));
+    		} else {
+    			msg.setFrom(new InternetAddress(mailFrom));
+    		}
+			if (StringUtils.isNotBlank(me.getEmailRespuesta())) {
+				msg.setReplyTo(new javax.mail.Address[] {
+                      new javax.mail.internet.InternetAddress(me.getEmailRespuesta())
+                  });
+			}
 			
     		//msg.setSentDate(new java.util.Date());
     		// log.debug("Vamos a enviar Email: " + msg.getContent());

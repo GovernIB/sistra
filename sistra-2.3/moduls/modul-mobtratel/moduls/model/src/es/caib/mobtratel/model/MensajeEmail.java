@@ -104,6 +104,16 @@ public class MensajeEmail implements Serializable
 	 */
 	private String errorVerificarEnvio;
 	
+	/**
+	 * Indica texto remitente.
+	 */
+	private String remitente;
+	
+	/**
+	 * Indica email respuesta.
+	 */
+	private String emailRespuesta;
+	
 	
 	public byte[] getDestinatariosEnviados() {
 		return destinatariosEnviados;
@@ -286,6 +296,26 @@ public class MensajeEmail implements Serializable
 
 	public void setErrorVerificarEnvio(String errorVerificarEnvio) {
 		this.errorVerificarEnvio = errorVerificarEnvio;
+	}
+
+
+	public String getRemitente() {
+		return remitente;
+	}
+
+
+	public void setRemitente(String remitente) {
+		this.remitente = remitente;
+	}
+
+
+	public String getEmailRespuesta() {
+		return emailRespuesta;
+	}
+
+
+	public void setEmailRespuesta(String emailRespuesta) {
+		this.emailRespuesta = emailRespuesta;
 	}
 
 	
