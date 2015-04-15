@@ -57,6 +57,9 @@ public class BusquedaUsuarioAction extends BaseAction
 			formStruts.setUsuarioCodiOld(pers.getUsuarioSeycon());
 			formStruts.setUsuarioCodiNew(pers.getUsuarioSeycon());
 			formStruts.setUsuarioNifNew(pers.getNif());
+			formStruts.setUsuarioNombreNew(pers.getNombre());
+			formStruts.setUsuarioApellido1New(pers.getApellido1());
+			formStruts.setUsuarioApellido2New(pers.getApellido2());
 		}
 		
 		request.setAttribute("persona",pers);		

@@ -143,6 +143,17 @@ public class PadAplicacionDelegate implements StatelessDelegate {
         }
 	}
 	
+	public void actualizarNombreUsuario( String usu, String nombre, String apellido1, String apellido2) throws DelegateException{
+		try
+		{
+			getFacade().actualizarNombreUsuario( usu, nombre, apellido1, apellido2);
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
 	public List buscarEntidades( String nifEntidad) throws DelegateException{
 		try
 		{
