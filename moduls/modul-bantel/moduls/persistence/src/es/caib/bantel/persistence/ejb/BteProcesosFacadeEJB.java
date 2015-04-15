@@ -347,9 +347,9 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 			log.debug("Aviso gestor (" + tipoAviso + ") - intervalo: " + intervalo);
 	    	
 	    	// Recorremos los gestores y construimos mensaje de aviso
-	    	String titulo = "Safata Telemàtica  - " + intervalo;
+	    	String titulo = "Safata Telematica  - " + intervalo;
 	    	if (AvisosBandeja.AVISO_MONITORIZACION.equals(tipoAviso)){
-	    		titulo = "Safata Telemàtica (monitorizacion) - " + intervalo;
+	    		titulo = "Safata Telematica (monitorizacion) - " + intervalo;
 	    	}
     		StringBuffer mensaje;
     		Hashtable entradasProcedimiento = new Hashtable();
