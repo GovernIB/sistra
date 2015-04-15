@@ -243,7 +243,8 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			}
 			
 			// Generamos acuse rechazo
-			AsientoRegistral acuseRecibo = generarAcuseReciboNotificacionImpl(notif, true, null);
+			Date fechaRechazo = new Date();
+			AsientoRegistral acuseRecibo = generarAcuseReciboNotificacionImpl(notif, true, null, fechaRechazo);
 			String xmlAcuseRecibo = ServicioRegistroXML.crearFactoriaObjetosXML().guardarAsientoRegistral(acuseRecibo);
 			
 			// Insertamos acuse en RDS
@@ -264,7 +265,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			rdsDelegate.crearUso(uso);
 			
 			// Actualizamos notificacion como rechazada
-			marcarNotificacionRechazada(codigo, refAcuse);
+			marcarNotificacionRechazada(codigo, refAcuse, fechaRechazo);
 			
 			// Actualizamos estado expediente
 			Long idExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerCodigoExpedienteElemento(ElementoExpediente.TIPO_NOTIFICACION, notif.getCodigo());
@@ -374,7 +375,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 		NotificacionTelematica notificacionTelematica = this.recuperarNotificacionPorId(idNotificacion);
         
         // Devolvemos acuse
-		return generarAcuseReciboNotificacionImpl(notificacionTelematica, rechazada, tipoFirma);
+		return generarAcuseReciboNotificacionImpl(notificacionTelematica, rechazada, tipoFirma, new Date());
 	}
 	
 	 /**
@@ -448,11 +449,9 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			}
 			
 			if ("RECHAZADA".equals(tipo)) {
-				hql = hql + "and m.rechazada = true and m.fechaFinPlazo is not null and m.fechaFinPlazo <= :hasta ";
-				// Si ponemos flag rechazada debe estar generado el acuse
-				//hql = hql + "and m.fechaFinPlazo is not null and m.fechaFinPlazo <= :hasta ";
+				hql = hql + "and m.rechazada = true and m.fechaRechazada is not null and m.fechaRechazada <= :hasta ";
 				if (desde != null) {
-					hql = hql + "and m.fechaFinPlazo >= :desde ";
+					hql = hql + "and m.fechaRechazada >= :desde ";
 				}	
 			}
 			
@@ -972,7 +971,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 	 * @param tipoFirma Puede ser CERT, CLAVE o vacio si no requiere firma
 	 * @return
 	 */
-	private AsientoRegistral generarAcuseReciboNotificacionImpl(NotificacionTelematica notificacion, boolean rechazada, String tipoFirma)
+	private AsientoRegistral generarAcuseReciboNotificacionImpl(NotificacionTelematica notificacion, boolean rechazada, String tipoFirma, Date fechaAcuse)
 	{
 		try {
 			FactoriaObjetosXMLRegistro factoria = ServicioRegistroXML.crearFactoriaObjetosXML();
@@ -1043,7 +1042,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			
 			// Crear datos asunto
 			DatosAsunto dAsunto = factoria.crearDatosAsunto(); // asientoNotificacion.getDatosAsunto();		
-			dAsunto.setFechaAsunto(new Date());
+			dAsunto.setFechaAsunto(fechaAcuse);
 			dAsunto.setIdiomaAsunto (asientoNotificacion.getDatosAsunto().getIdiomaAsunto());
 			if (rechazada) {
 				dAsunto.setTipoAsunto (ConstantesAsientoXML.ACUSERECIBO_RECHAZADA);
@@ -1160,13 +1159,14 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
         }
 	}
 	 
-   private void marcarNotificacionRechazada(Long id, ReferenciaRDS refAcuse) {
+   private void marcarNotificacionRechazada(Long id, ReferenciaRDS refAcuse, Date fechaRechazo) {
 	   Session session = getSession();
        try {
        	NotificacionTelematica notificacionTelematica = (NotificacionTelematica) session.load(NotificacionTelematica.class, id);
        	notificacionTelematica.setCodigoRdsAcuse(refAcuse.getCodigo());
        	notificacionTelematica.setClaveRdsAcuse(refAcuse.getClave());
        	notificacionTelematica.setRechazada(true);
+       	notificacionTelematica.setFechaRechazada(fechaRechazo);
        	notificacionTelematica.setFechaAcuse(null);
        
        	session.update(notificacionTelematica);
