@@ -448,9 +448,9 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			}
 			
 			if ("RECHAZADA".equals(tipo)) {
-				// hql = hql + "and m.rechazada = true and m.fechaFinPlazo is not null and m.fechaFinPlazo <= :hasta ";
+				hql = hql + "and m.rechazada = true and m.fechaFinPlazo is not null and m.fechaFinPlazo <= :hasta ";
 				// Si ponemos flag rechazada debe estar generado el acuse
-				hql = hql + "and m.fechaFinPlazo is not null and m.fechaFinPlazo <= :hasta ";
+				//hql = hql + "and m.fechaFinPlazo is not null and m.fechaFinPlazo <= :hasta ";
 				if (desde != null) {
 					hql = hql + "and m.fechaFinPlazo >= :desde ";
 				}	
