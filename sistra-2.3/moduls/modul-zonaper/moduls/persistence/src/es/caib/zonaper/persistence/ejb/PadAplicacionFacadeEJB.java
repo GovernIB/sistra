@@ -569,6 +569,35 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
     	this.grabarPersona(p);    	
     }
     
+    /**
+     * 
+     * Cambia de nombre al usuario.
+     * 
+     *  Permite realizar el cambio al role helpdesk.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.helpdesk}"
+     * 
+     */
+    public void actualizarNombreUsuario( String usu, String nombre, String apellido1, String apellido2)  throws ExcepcionPAD
+    {
+    	log.debug("Modificando nombre usuario " + usu + " a " + nombre + " " + apellido1 + " " + apellido2);
+    	    	
+    	// Obtenemos datos usuario a partir codigo antiguo
+    	Persona p = this.obtenerDatosPersonaPorUsuarioSeycon(usu);
+    	if (p == null) {
+    		throw new ExcepcionPAD("No existe usuario con codigo " + usu);
+    	}    	    	
+    	
+    	// Actualizamos nombre usuario    	
+    	p.setNombre(nombre);
+    	p.setApellido1(apellido1);
+    	p.setApellido2(apellido2);
+    	    	
+    	this.grabarPersona(p);    	
+    }
+    
+    
     
     /**
      * 

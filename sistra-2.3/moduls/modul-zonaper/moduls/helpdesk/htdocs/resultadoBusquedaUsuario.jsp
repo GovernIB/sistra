@@ -68,6 +68,28 @@
 						</html:submit>
 					</p>
 				</html:form>
+								
+				<!--  Modificar Nombre usuario -->
+				<html:form action="modificarNombreUsuario" styleClass="formulari">					
+					<p>					
+						<html:hidden property="usuarioCodiOld"/>					
+						<label for="usuarioNombreNew" >
+							<bean:message key="usuarios.nombre"/>: 
+							<html:text property="usuarioNombreNew" styleId="usuarioCodiNew" size="20"  />
+						</label><br/>
+						<label for="usuarioApellido1New" >	
+							<bean:message key="usuarios.apellido1"/>: 
+							<html:text property="usuarioApellido1New" styleId="usuarioCodiNew" size="20"  />
+						</label><br/>
+						<label for="usuarioApellido2New" >	
+							<bean:message key="usuarios.apellido2"/>: 
+							<html:text property="usuarioApellido2New" styleId="usuarioCodiNew" size="20"  />
+						</label><br/>
+						<html:submit>						
+							<bean:message key="usuarios.modificarNombre"/>
+						</html:submit>
+					</p>
+				</html:form>
 				
 				
 			</logic:notEmpty>
