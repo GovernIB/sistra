@@ -32,6 +32,17 @@ public class MensajeEnvioEmail implements Serializable{
 	private boolean verificarEnvio;
 	
 	/**
+	 * Indica texto remitente.
+	 */
+	private String remitente;
+	
+	/**
+	 * Indica email respuesta.
+	 */
+	private String emailRespuesta;
+	
+	
+	/**
 	 * Devuelve el titulo del Email
 	 * @return
 	 */
@@ -101,6 +112,18 @@ public class MensajeEnvioEmail implements Serializable{
 	 */
 	public void setVerificarEnvio(boolean verificarEnvio) {
 		this.verificarEnvio = verificarEnvio;
+	}
+	public String getRemitente() {
+		return remitente;
+	}
+	public void setRemitente(String remitente) {
+		this.remitente = remitente;
+	}
+	public String getEmailRespuesta() {
+		return emailRespuesta;
+	}
+	public void setEmailRespuesta(String emailRespuesta) {
+		this.emailRespuesta = emailRespuesta;
 	}
 	
 

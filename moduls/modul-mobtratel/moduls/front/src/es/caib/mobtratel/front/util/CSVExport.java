@@ -76,12 +76,14 @@ public class CSVExport {
 	public CSVExport(Envio envio){
 		this.setCodigo(envio.getCodigo());
 		this.setNombre(envio.getNombre());
-		String[] cabeceras = new String[9];
+		String[] cabeceras = new String[11];
 		int i = 0;
 		cabeceras[i++] ="Estado";
 		cabeceras[i++] ="Tipo";
 		cabeceras[i++] ="Titulo";
 		cabeceras[i++] ="Texto";
+		cabeceras[i++] ="Remitente";
+		cabeceras[i++] ="Email respuesta";
 		cabeceras[i++] ="Destinatarios";
 		cabeceras[i++] ="Destinatarios Enviados";
 		cabeceras[i++] ="Error envio";
@@ -106,6 +108,8 @@ public class CSVExport {
 				entradas[i++] = me.getTitulo();
 				byte[] texto = me.getMensaje();
 				entradas[i++] = texto != null ? new String( texto, ConstantesXML.ENCODING ) : "";
+				entradas[i++] = StringUtils.defaultString(me.getRemitente());
+				entradas[i++] = StringUtils.defaultString(me.getEmailRespuesta());
 				texto = me.getDestinatarios();
 				entradas[i++] = texto != null ? new String( texto, ConstantesXML.ENCODING ) : "";
 				texto = me.getDestinatariosEnviados();

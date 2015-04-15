@@ -37,7 +37,9 @@
   	<property name="soapActionWS" column="TAP_WSSOA"/>
   	
   	<property name="permitirPlazoNotificacionesVariable" column="TAP_PLNOTV"/>
-  		
+  	
+  	<property name="remitenteAvisosProcedimiento" column="TAP_AVIREM"/>
+  	<property name="emailRespuestaAvisosProcedimiento" column="TAP_AVIREP"/>
   	
   	<set name="gestores" table="BTE_GESPRO" inverse="true">
         <key column="GAP_IDEPRO"/>

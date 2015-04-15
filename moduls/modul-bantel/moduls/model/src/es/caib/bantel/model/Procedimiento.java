@@ -46,6 +46,15 @@ public class Procedimiento implements Serializable{
 	private String organoRegistro;
 	private String accesoClaveDefecto;
 	
+	/**
+	 * Indica remitente para avisos procedimiento.
+	 */
+	private String remitenteAvisosProcedimiento;
+	/**
+	 * Indica email respuesta para avisos procedimiento.
+	 */
+	private String emailRespuestaAvisosProcedimiento;
+	
 	
 	public String getIdentificador() {
 		return identificador;
@@ -200,6 +209,19 @@ public class Procedimiento implements Serializable{
 	}
 	public void setAccesoClaveDefecto(String accesoClaveDefecto) {
 		this.accesoClaveDefecto = accesoClaveDefecto;
+	}
+	public String getRemitenteAvisosProcedimiento() {
+		return remitenteAvisosProcedimiento;
+	}
+	public void setRemitenteAvisosProcedimiento(String remitenteAvisosProcedimiento) {
+		this.remitenteAvisosProcedimiento = remitenteAvisosProcedimiento;
+	}
+	public String getEmailRespuestaAvisosProcedimiento() {
+		return emailRespuestaAvisosProcedimiento;
+	}
+	public void setEmailRespuestaAvisosProcedimiento(
+			String emailRespuestaAvisosProcedimiento) {
+		this.emailRespuestaAvisosProcedimiento = emailRespuestaAvisosProcedimiento;
 	}
 	
 	

@@ -25,7 +25,31 @@ public class ProcedimientoBTE implements Serializable {
 	/**
 	 * Indica si permite plazo de notificaciones variable.
 	 */
-	private boolean permitirPlazoNotificacionesVariable; ;
+	private boolean permitirPlazoNotificacionesVariable;
+	/**
+	 * Indica remitente para avisos procedimiento.
+	 */
+	private String remitenteAvisosProcedimiento;
+	/**
+	 * Indica email respuesta para avisos procedimiento.
+	 */
+	private String emailRespuestaAvisosProcedimiento;
+	
+	
+	public String getRemitenteAvisosProcedimiento() {
+		return remitenteAvisosProcedimiento;
+	}
+	public void setRemitenteAvisosProcedimiento(String remitenteAvisosProcedimiento) {
+		this.remitenteAvisosProcedimiento = remitenteAvisosProcedimiento;
+	}
+	public String getEmailRespuestaAvisosProcedimiento() {
+		return emailRespuestaAvisosProcedimiento;
+	}
+	public void setEmailRespuestaAvisosProcedimiento(
+			String emailRespuestaAvisosProcedimiento) {
+		this.emailRespuestaAvisosProcedimiento = emailRespuestaAvisosProcedimiento;
+	}
+	
 	
 	public String getIdentificador() {
 		return identificador;

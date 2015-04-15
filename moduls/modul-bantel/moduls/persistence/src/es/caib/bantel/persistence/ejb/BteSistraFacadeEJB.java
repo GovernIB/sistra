@@ -215,6 +215,8 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 		pb.setUnidadAdministrativa(p.getUnidadAdministrativa());
 		pb.setPermitirSMS("S".equals(p.getPermitirSms()));
 		pb.setPermitirPlazoNotificacionesVariable("S".equals(p.getPermitirPlazoNotificacionesVariable()));
+		pb.setEmailRespuestaAvisosProcedimiento(p.getEmailRespuestaAvisosProcedimiento());
+		pb.setRemitenteAvisosProcedimiento(p.getRemitenteAvisosProcedimiento());
 		return pb;
 	}
 	
