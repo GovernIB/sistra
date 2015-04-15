@@ -84,6 +84,9 @@ public class BasicAuthAuthorizationInterceptor extends SoapHeaderInterceptor {
     
     
     protected void initialise(){
+    	
+    	log.debug("BasicAuthAuthorizationInterceptor - initialise init");
+    	
          isInitialised = true;
          authMgr=null;
          shouldValidateUnauthenticatedCalls=false;
@@ -104,6 +107,9 @@ public class BasicAuthAuthorizationInterceptor extends SoapHeaderInterceptor {
             	log.error("Error en el interceptor funcion initialise " + e.getMessage(),e);
             }
          }
+         
+         log.debug("BasicAuthAuthorizationInterceptor - initialise end");
+         
       }
    
       /** 
@@ -120,6 +126,7 @@ public class BasicAuthAuthorizationInterceptor extends SoapHeaderInterceptor {
    
       /** validates the given principal with the given password */
       protected void validate(Principal userPrincipal, String passwd) throws Exception {
+    	  log.debug("BasicAuthAuthorizationInterceptor - validate userPrincipal: " + (userPrincipal != null?userPrincipal.getName():null) + " passwd: " + passwd);
          // build passchars
          char[] passChars = passwd != null ? passwd.toCharArray() : null;
          // do the validation only if authenticated or validation enforced
@@ -129,26 +136,33 @@ public class BasicAuthAuthorizationInterceptor extends SoapHeaderInterceptor {
             	log.error("Autentificación de usuario incorrecta.");
                 throw new Exception( "Autentificació de l'usuari incorrecta."); 
             }
+            log.debug("BasicAuthAuthorizationInterceptor - validate userPrincipal is valid");
          }
+         log.debug("BasicAuthAuthorizationInterceptor - validate end");
       }
    
       /** associates the call context with the given info */
       protected Subject associate(Principal userPrincipal, String passwd) {
+    	 log.debug("BasicAuthAuthorizationInterceptor - associate init");
          // pointer comparison, again	      
          if (shouldValidateUnauthenticatedCalls || userPrincipal != NobodyPrincipal.NOBODY_PRINCIPAL) {
             SecurityAssociation.setPrincipal(userPrincipal);
             SecurityAssociation.setCredential(passwd!=null ? passwd.toCharArray() : null);
+            log.debug("BasicAuthAuthorizationInterceptor - associate " + userPrincipal.getName() );
          } else {
             // Jboss security normally does not like nobody:null
             SecurityAssociation.setPrincipal(null);
             SecurityAssociation.setCredential(null);
+            log.debug("BasicAuthAuthorizationInterceptor - associate null" );
          }
+         log.debug("BasicAuthAuthorizationInterceptor - associate end");         
          return authMgr.getActiveSubject();
       }
    
      
-    @Override public void handleMessage(Message message) throws Fault {
-    	
+    @Override 
+    public void handleMessage(Message message) throws Fault {
+    	log.debug("BasicAuthAuthorizationInterceptor - handleMessage init");
     	String auth = null;
 		 try{		
 			 Properties propiedades;
@@ -159,9 +173,11 @@ public class BasicAuthAuthorizationInterceptor extends SoapHeaderInterceptor {
 			 }
 			 auth = propiedades.getProperty("sistra.ws.authenticacion");
 		 }catch (Exception ex){
+			 log.debug("BasicAuthAuthorizationInterceptor - exception: " + ex.getMessage(), ex);
 			 throw new Fault(ex);
 		 }
 		 if (!"BASIC".equals(auth)) {
+			 log.debug("BasicAuthAuthorizationInterceptor - handleMessage end (no basic auth: " + auth + ")");
 			 return;
 		 }
     	
@@ -173,11 +189,11 @@ public class BasicAuthAuthorizationInterceptor extends SoapHeaderInterceptor {
 	        // If the policy is not set, the user did not specify credentials
 	        // A 401 is sent to the client to indicate that authentication is required
 	        if (policy == null) {
-	        	log.error("Usuario intentando acceder sin las credenciales");
+	        	log.error("BasicAuthAuthorizationInterceptor - handleMessage: suario intentando acceder sin las credenciales");
 	            sendErrorResponse(message, HttpURLConnection.HTTP_UNAUTHORIZED);
 	            return;
 	        }
-	        log.debug("Accede el Usuario: " + policy.getUserName());
+	        log.debug("BasicAuthAuthorizationInterceptor - handleMessage: accede el usuario " + policy.getUserName());
 	               
 	        // double check does not work on multiple processors, unfortunately
 	        if (!isInitialised) {
@@ -189,7 +205,7 @@ public class BasicAuthAuthorizationInterceptor extends SoapHeaderInterceptor {
 	        }
 	        
 	        if (authMgr == null) {
-	        	log.debug("No hay ningún dominio de seguridad asociado.");
+	        	log.debug("BasicAuthAuthorizationInterceptor - handleMessage: no hay ningún dominio de seguridad asociado.");
 	        	sendErrorResponse(message, HttpURLConnection.HTTP_UNAUTHORIZED);
 	            return;
 	         }
@@ -206,6 +222,9 @@ public class BasicAuthAuthorizationInterceptor extends SoapHeaderInterceptor {
 	        // associate the context 
 	        Subject subject = associate(userPrincipal, passwd);
 	        // with the security subject
+	        
+	        log.debug("BasicAuthAuthorizationInterceptor - handleMessage end");
+	        
 		} catch (Exception e) {
 			log.error(e.getMessage()+"  "+ e.getCause());
 			sendErrorResponse(message, HttpURLConnection.HTTP_UNAUTHORIZED);

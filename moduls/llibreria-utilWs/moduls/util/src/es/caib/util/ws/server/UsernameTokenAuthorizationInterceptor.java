@@ -3,6 +3,8 @@ package es.caib.util.ws.server;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor;
@@ -12,6 +14,8 @@ import es.caib.util.ws.ConfigurationUtil;
 import es.caib.util.ws.Constantes;
 
 public class UsernameTokenAuthorizationInterceptor extends WSS4JInInterceptor{
+	
+	private static Log log = LogFactory.getLog(UsernameTokenAuthorizationInterceptor.class);
 	
 	public UsernameTokenAuthorizationInterceptor(Map<String, Object> properties) {
 		
@@ -47,6 +51,8 @@ public class UsernameTokenAuthorizationInterceptor extends WSS4JInInterceptor{
 		
 	public void handleMessage(SoapMessage msg) throws Fault {
 		
+		log.debug("UsernameTokenAuthorizationInterceptor - handleMessage init");
+		
 		 String auth = null;
 		 try{
 			 String tipoConfiguracion = (String) this.getProperties().get("tipoConfiguracion");
@@ -67,9 +73,11 @@ public class UsernameTokenAuthorizationInterceptor extends WSS4JInInterceptor{
 		 }
 		 
 		 if (!"USERNAMETOKEN".equals(auth)) {
+			 log.debug("UsernameTokenAuthorizationInterceptor - handleMessage end (no USERNAMETOKEN auth: " + auth + ")");
 			 return;
 		 }else{
-			 super.handleMessage(msg);
+			 log.debug("UsernameTokenAuthorizationInterceptor - handleMessage end");
+			 super.handleMessage(msg);			 
 		 }
 	}
 
