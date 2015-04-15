@@ -312,7 +312,11 @@ public class AvisosExpediente {
 			if (ele.isAccesoAnonimoExpediente()) {
 				textoEmail = StringUtil.replace(textoEmail,"[#URL_ACCESO_CLAVE#]",urlNotifExpediente + notif.getIdentificadorPersistencia() + "&autenticacion=A");
 			}
-			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AUTO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"email.correoAutomatico")));
+			
+			if (StringUtils.isBlank(procedimiento.getEmailRespuestaAvisosProcedimiento())) {
+				textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AUTO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"email.correoAutomatico")));
+			}
+			
 			// Textos SMS
 			if (StringUtils.isNotEmpty(aviso.getTextoSMS())){
 				textoSMS = aviso.getTextoSMS();
@@ -359,6 +363,7 @@ public class AvisosExpediente {
 			mensEmail.setTexto(textoEmail);
 			mensEmail.setHtml(true);
 			mensEmail.setVerificarEnvio(verificarEnvioEmail);
+			mensEmail.setRemitente(procedimiento.getRemitenteAvisosProcedimiento());
 			mens.addEmail(mensEmail);			
 		}
 		if (StringUtils.isNotEmpty(emailExpe) && !emailExpe.equals(emailZP)){
@@ -370,6 +375,7 @@ public class AvisosExpediente {
 			mensEmail.setTexto(textoEmail);
 			mensEmail.setHtml(true);
 			mensEmail.setVerificarEnvio(verificarEnvioEmail);
+			mensEmail.setRemitente(procedimiento.getRemitenteAvisosProcedimiento());
 			mens.addEmail(mensEmail);			
 		}
 		if (StringUtils.isNotEmpty(smsZP)){
