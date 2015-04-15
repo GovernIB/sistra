@@ -180,7 +180,7 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
     	StringBuffer mensaje = new StringBuffer(1024);
     	mensaje.append("<strong> * " + StringEscapeUtils.escapeHtml(procedimiento.getIdentificador() + " - " + procedimiento.getDescripcion()) + "</strong>");
     	mensaje.append("<ul>");
-    	if (de != null) {
+    	if (de != null) {    		
 	    	if (de.existenEntradas()) {
 	    		existen = true;
 	    		mensaje.append("<li>");
@@ -302,6 +302,9 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 		LoginContext lc = null;
     	
     	try {
+    		
+    		log.debug("Aviso gestor (" + tipoAviso + ") - inicio");
+    		
     		// Realizamos login JAAS con usuario para proceso automatico
 			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
 			String user = props.getProperty("auto.user");
@@ -340,6 +343,8 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 			String intervalo = "des de " + StringUtil.fechaACadena(desde,StringUtil.FORMATO_TIMESTAMP) + 
 				 " fins a " + StringUtil.fechaACadena(hasta,StringUtil.FORMATO_TIMESTAMP);	
 			
+			
+			log.debug("Aviso gestor (" + tipoAviso + ") - intervalo: " + intervalo);
 	    	
 	    	// Recorremos los gestores y construimos mensaje de aviso
 	    	String titulo = "Safata Telemàtica  - " + intervalo;
@@ -356,11 +361,17 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 	    		// Obtenemos siguiente gestor
 	    		GestorBandeja g =  (GestorBandeja) it.next();
 	    		
-	    		// Si en aviso gestor no esta habilitado el proceso de aviso pasamos a siguiente gestor 
-	    		if (AvisosBandeja.AVISO_GESTOR.equals(tipoAviso) && "N".equals(g.getAvisarEntradas()) && "N".equals(g.getAvisarNotificaciones())) continue;
+	    		// Si en aviso gestor no esta habilitado el proceso de aviso pasamos a siguiente gestor
+	    		// Si en aviso monitorizacion no esta habilitado el proceso de aviso monitorizacion pasamos a siguiente gestor
+	    		if ( (AvisosBandeja.AVISO_GESTOR.equals(tipoAviso) && "N".equals(g.getAvisarEntradas()) && "N".equals(g.getAvisarNotificaciones()))
+	    				||
+	    				(AvisosBandeja.AVISO_MONITORIZACION.equals(tipoAviso) && "N".equals(g.getAvisarMonitorizacion()))
+	    			) 
+	    		{
+	    				continue;
+	    		}
 	    		
-	    		// Si en aviso monitorizacion no esta habilitado el proceso de aviso monitorizacion pasamos a siguiente gestor 
-	    		if (AvisosBandeja.AVISO_MONITORIZACION.equals(tipoAviso) && "N".equals(g.getAvisarMonitorizacion())) continue;
+	    		log.debug("Aviso gestor (" + tipoAviso + ") - Gestor " + g.getSeyconID() + ": verificar si existen elementos para avisar");
 	    		
 	    		// Creamos string buffer para el mensaje
 	    		mensaje = new StringBuffer(8192); 	
@@ -415,6 +426,8 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 	    		// Enviamos correo a gestor con nuevas entradas
 	    		if (enviar) {
 	    			
+	    			log.debug("Aviso gestor (" + tipoAviso + ") - Gestor " + g.getSeyconID() + ": se genera mail de aviso");
+	    			
 	    			mensaje.append("</body></html>");
 	    			
 	    			MensajeEnvioEmail me = new MensajeEnvioEmail();
@@ -424,11 +437,14 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 	    			me.setTitulo(titulo);
 	    			me.setTexto(mensaje.toString());
 	    			enviosEmail.addEmail(me);	    		    				    			
+	    		} else {
+	    			log.debug("Aviso gestor (" + tipoAviso + ") - Gestor " + g.getSeyconID() + ": no se genera mail de aviso");
 	    		}
 	    			    		    	
 	    	}	    		
 	    	
 	    	// Enviamos al modulo de movilidad los emails
+	    	log.debug("Aviso gestor (" + tipoAviso + ") - envio de mensajes a mobtratel");
 	    	opd.realizarEnviosGestores(tipoAviso, enviosEmail, ahora);
 	    	
 	    	
@@ -440,6 +456,7 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 			if ( lc != null ){
 				try{lc.logout();}catch(Exception exl){}
 			}
+			log.debug("Aviso gestor (" + tipoAviso + ") - fin");
     	}
 	}
     
