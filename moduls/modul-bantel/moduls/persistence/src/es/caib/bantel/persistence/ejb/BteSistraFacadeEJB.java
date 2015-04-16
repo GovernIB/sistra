@@ -79,6 +79,7 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 	/**
      * @ejb.create-method
      * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
      */
 	public void ejbCreate() throws CreateException {		
 	}
