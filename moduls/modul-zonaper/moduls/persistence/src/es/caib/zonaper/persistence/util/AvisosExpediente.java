@@ -364,6 +364,7 @@ public class AvisosExpediente {
 			mensEmail.setHtml(true);
 			mensEmail.setVerificarEnvio(verificarEnvioEmail);
 			mensEmail.setRemitente(procedimiento.getRemitenteAvisosProcedimiento());
+			mensEmail.setEmailRespuesta(procedimiento.getEmailRespuestaAvisosProcedimiento());
 			mens.addEmail(mensEmail);			
 		}
 		if (StringUtils.isNotEmpty(emailExpe) && !emailExpe.equals(emailZP)){
@@ -376,6 +377,7 @@ public class AvisosExpediente {
 			mensEmail.setHtml(true);
 			mensEmail.setVerificarEnvio(verificarEnvioEmail);
 			mensEmail.setRemitente(procedimiento.getRemitenteAvisosProcedimiento());
+			mensEmail.setEmailRespuesta(procedimiento.getEmailRespuestaAvisosProcedimiento());
 			mens.addEmail(mensEmail);			
 		}
 		if (StringUtils.isNotEmpty(smsZP)){
