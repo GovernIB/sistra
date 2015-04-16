@@ -195,7 +195,7 @@
             classpathref="web.class.path"
             debug="${javac.debug}"
             deprecation="${javac.deprecation}"
-            optimize="${javac.optimize}"
+            optimize="${javac.optimize}" encoding="iso-8859-1"
             >
             <src path="${web.src}"/>
             <src path="${web.gen.src}"/>

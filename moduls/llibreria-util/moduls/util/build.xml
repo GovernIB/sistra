@@ -47,7 +47,7 @@
             classpathref="jar.class.path"
             debug="${javac.debug}"
             deprecation="${javac.deprecation}"
-            optimize="${javac.optimize}"
+            optimize="${javac.optimize}" encoding="iso-8859-1"
         	source="1.4"
         	target="1.4"
             >

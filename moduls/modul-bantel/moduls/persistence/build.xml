@@ -155,7 +155,7 @@
             deprecation="${javac.deprecation}"
         	source="1.5"
         	target="1.5"
-            optimize="${javac.optimize}">
+            optimize="${javac.optimize}" encoding="iso-8859-1">
             <src path="${ejb.src}"/>
             <src path="${ejb.gen.src}"/>
         </javac>
