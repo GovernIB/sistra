@@ -1577,8 +1577,13 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 			
     		numText++;
     	}else{
-    		txtNumRegistro = "Num. Registre: "+usoSello.getReferencia();
+    		String txtPrefixNumRegistro = "Num. Registre: ";
     		txtData="Data Registre: ";
+    		if (ConstantesRDS.TIPOUSO_ENVIO.equals(usoSello.getTipoUso())) {
+    			txtPrefixNumRegistro = "Num. Enviament: ";
+    			txtData="Data Enviament: ";
+    		}
+    		txtNumRegistro = txtPrefixNumRegistro + usoSello.getReferencia();
     		txtDC="";        		
     	}	    	    	
     	if (usoSello.getFechaSello() != null) {
