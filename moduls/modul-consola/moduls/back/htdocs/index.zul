@@ -1,0 +1,70 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<?page title="${c:l('pagina.titulo')}"?>
+<zk>
+	<window id="priWindow"
+		apply="es.caib.consola.controller.PaginaPrincipalController"
+		width="100%" height="100%">
+		<style src="css/estilos.css" />
+		<borderlayout height="100%" width="97%">
+			<north border="0" height="90px">
+				<div sclass="imc-cap">
+					<div id="idiomas" sclass="idiomes">
+						<a id="catalan" sclass="a_idiomes" href="#" >
+							<label sclass="label_idiomes" value="${c:l('idioma.catalan')}" tooltiptext="Canviar a la versió en català"/>
+						</a>
+						<span><label sclass="label_idiomes" value="${c:l('idioma.castellano')}" /></span>
+					</div>
+					<div id="idiomas2" sclass="idiomes" visible="false">
+						<span><label sclass="label_idiomes" value="${c:l('idioma.catalan')}" /></span>
+						<a id="castellano" sclass="a_idiomes" href="#" >
+							<label sclass="label_idiomes" value="${c:l('idioma.castellano')}" tooltiptext="Cambiar a la versión en español"/>
+						</a>
+					</div>
+					<div sclass="marc">
+						<!-- entorn-de, entorn-pp, entorn-pr -->
+						<div id="entorno" sclass="entorn entorn-de"/>
+						<div sclass="logo"/> 
+						<div sclass="aplicacio">
+							<div sclass="imc-p">
+								<label sclass="entradeta" value="${c:l('pagina.titulo0')}"/>
+								<label id="labelEntorno" sclass="entorn entorn-de" value="DESA"/><!-- entorn-de, entorn-pp, entorn-pr -->
+							</div>
+							<div sclass="imc-p">
+								<label sclass="titol" value="${c:l('pagina.titulo')}"/>
+							</div>
+						</div>
+						<div sclass="usuari">
+							<div sclass="nom">
+								<label sclass="nom" id="username" />
+								<label sclass="perfil" id="perfil" />
+							</div>
+							<hbox>
+								<menubar id="menubar">
+									<menuitem id="itemConfiguracion"
+										label="${c:l('menu.configuracion')}"
+										image="/images/configuracion.png" />
+									<menuitem id="itemMensajes"
+										label="${c:l('menu.mensajes')}"
+										image="/images/warning.png" />
+									<menuitem id="itemSoporte"
+										label="${c:l('menu.soporte')}"
+										image="/images/ico_soporte.gif" />
+									<menuseparator />
+									<menuitem id="itemTancar" label=" "
+										image="/images/tanca_aplicacio.gif" />
+								</menubar>
+							</hbox>
+						</div>
+					</div>
+				</div>
+			</north>
+			<center border="0">
+				<div sclass="gtt-content-layout">
+					<include id="contenedorPrincipal" src="/gestor/ges-organismo.zul" />
+				</div>
+			</center>
+			<south height="20px" border="0"/>
+		</borderlayout>
+	</window>
+</zk>

@@ -1,0 +1,19 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" root="./wSelectorUnidadAdministrativa"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<window id="wSelectorUnidadAdministrativa" title="${c:l('selectorUA.titulo')}"
+		border="normal" closable="false" width="600px"
+		apply="es.caib.consola.controller.selectores.SelectorUnidadAdministrativaWModal">
+		<vlayout height="300px">
+			<tree id="treeUA" hflex="1" vflex="1"/>		
+			<separator />
+			<div align="center">
+				<button id="btnAceptar" label="${c:l('boton.aceptar')}"
+					image="/images/ok.png" autodisable="self, btnCancelar" />
+				<button id="btnCancelar" 
+					label="${c:l('boton.cancelar')}" image="/images/borrar.png"
+					autodisable="self, btnAceptar" />
+			</div>
+		</vlayout>
+	</window>
+</zk>

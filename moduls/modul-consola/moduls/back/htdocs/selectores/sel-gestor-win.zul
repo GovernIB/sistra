@@ -1,0 +1,46 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" root="./wSelectorGestor"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<window id="wSelectorGestor" title="${c:l('selectorGestor.titulo')}"
+		border="normal" closable="false" width="600px"
+		apply="es.caib.consola.controller.selectores.SelectorGestorWModal">
+		<vlayout>
+			<grid fixedLayout="true">
+				<columns>					
+					<column />
+				</columns>
+				<rows>
+					<row>						
+						<vlayout>
+							<hlayout>
+								<div align="left" hflex="1">
+									<label value="${c:l('configuracion.filtrar')}"></label>
+									<textbox id="filtroBusqueda"
+										value="" width="150px" />
+									<button id="btnBuscar"
+										label="${c:l('boton.buscar')}" image="/images/search.gif"
+										autodisable="self, btnAceptar, btnCancelar" />
+								</div>
+							</hlayout>
+							<listbox id="listboxResultados" multiple="false"
+								mold="paging" pageSize="${ConstantesWEB_PAGE_SIZE}"
+								emptyMessage="${c:l('error.noResultados')}">
+								<listhead>
+									<listheader width="100%" align="left"/>
+								</listhead>
+							</listbox>
+						</vlayout>
+					</row>
+				</rows>
+			</grid>
+			<separator />
+			<div align="center">
+				<button id="btnAceptar" label="${c:l('boton.aceptar')}"
+					image="/images/ok.png" autodisable="self, btnCancelar, btnBuscar" />
+				<button id="btnCancelar" 
+					label="${c:l('boton.cancelar')}" image="/images/borrar.png"
+					autodisable="self, btnAceptar, btnBuscar" />
+			</div>
+		</vlayout>
+	</window>
+</zk>

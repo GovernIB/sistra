@@ -1,0 +1,36 @@
+<?page title="${c:l('soporte.titulo')}" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?> 
+<zk>
+	<window id="wSoporteTramite" title="${c:l('soporte.titulo')}" 
+		border="normal"	closable="false" width="400px"
+		apply="es.caib.consola.controller.soporte.SoporteController">
+		<vlayout>
+			<grid fixedLayout="true">
+				<columns>
+					<column width="140px" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<label value="${c:l('soporte.correo')}" />
+						<label id="correo" width="250px" />
+					</row>
+					<row>
+						<label value="${c:l('soporte.ayuda')}" />
+						<a label="${c:l('soporte.enlace')}"
+							image="/images/descarga.png"
+							href="http://www.google.es"/>
+					</row>					
+				</rows>
+			</grid>
+			<div align="center">
+	    		<button id="btnCerrar" label="${c:l('boton.cerrar')}"
+	    			image="/images/salir.gif"
+	    			autodisable="self, btnDescargarManual, btnDescargarXDP, btnAyuda" />
+	    		<button id="btnAyuda" label="${c:l('boton.ayuda')}"
+	    			image="/images/ayuda.png"
+	    			autodisable="self, btnCerrar, btnDescargarManual, btnDescargarXDP" />
+			</div>
+		</vlayout>
+	</window>
+</zk>
