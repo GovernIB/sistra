@@ -42,6 +42,10 @@
 	<ant dir="moduls/modul-forms" target="${task}" inheritall="false"/>	
 	<ant dir="moduls/modul-regtel" target="${task}" inheritall="false"/>
 	<!-- <ant dir="moduls/modul-libs" target="${task}" inheritall="false"/>-->
+	
+	<ant dir="moduls/llibreria-zk" target="${task}" inheritall="false"/>	
+	<ant dir="moduls/modul-consola" target="${task}" inheritall="false"/>
+		
 </target>	
 
 <target name="checkJbossVersion">
@@ -54,10 +58,13 @@
 </target>
 	
 <target name="compileModuls" description="Compila modulos" depends="checkJbossVersion">
+	
 	<antcall target="propagate">
 		<param name="task" value="main"/>
 	</antcall>
+	
 	<delete file="${output.dir}/ear/1-sistra.ear" quiet="yes"/>
+	
 	<ear earfile="${output.dir}/ear/1-sistra.ear" appxml="${etc.dir}/jboss-${jboss.version}/application.xml">
 		<manifest>
 			<attribute name="Created-By" value="${indra}"/>
@@ -113,7 +120,36 @@
 			<exclude name="jboss/*"/>
 		</zipfileset>
 		<zipfileset dir="${output.dir}/lib" prefix="lib"/>					
-	</ear>
+	</ear>	
+	
+	<ear earfile="${output.dir}/ear/2-sistra-consola.ear" appxml="${etc.dir}/consola/jboss-${jboss.version}/application.xml">
+			<manifest>
+				<attribute name="Created-By" value="${indra}"/>
+			    <attribute name="Specification-Title" value="${projecte}"/>				
+			    <attribute name="Specification-Version" value="${release.version} build${release.build} ${release.date}"/>
+			</manifest>
+			<metainf dir="${etc.dir}/consola/jboss-${jboss.version}">
+				<include if="isJboss3" name="jboss-app.xml"/>
+			</metainf>
+			<metainf dir="${etc.dir}/consola">
+				<include if="isJboss5" name="jboss-classloading.xml"/>
+			</metainf>
+			<metainf dir="${etc.dir}/consola" includes="cxf/org.apache.cxf.Logger"/>
+			<fileset dir="moduls/modul-consola/output/moduls"/>
+			
+			<!--
+			<zipfileset dir="${lib}/client" prefix="lib"/>
+			-->
+			
+			<zipfileset dir="${lib}" prefix="lib">
+				<include name="commons-collections-*.jar"/>
+				<include name="commons-fileupload-*.jar"/>
+				<include name="commons-io-*.jar"/>
+				<include name="commons-lang-*.jar"/>
+			</zipfileset>
+			<zipfileset dir="${output.dir}/lib" prefix="lib"/>					
+		</ear>
+	
 </target>	
 	
 <target name="cleanModuls" description="Destruye los directorios de trabajo de todos los modulos">
