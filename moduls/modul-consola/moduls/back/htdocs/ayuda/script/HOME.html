@@ -1,0 +1,30 @@
+<html style="overflow:hidden">
+<head>
+<link rel="stylesheet" type="text/css" href="../../css/ayudas.css"/>
+</head>
+<script type="text/javascript" src="miga.js"></script>
+<script type="text/javascript">
+function init() {
+document.getElementById('met').src = "fondo.html";
+var fichero = gup('archivo');
+if (fichero != "") { 	
+	document.getElementById('met').src = fichero;	
+}
+}
+function gup(name) {
+name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]"); 
+var regexS = "[\\?&]"+name+"=([^&#]*)"; 
+var regex = new RegExp(regexS); 
+var results = regex.exec(window.location.href); 
+if (results == null) {
+	return "";
+} else {
+	return results[1];
+}
+}
+</script>
+<body class="ayudaBody" onLoad="init()" scroll="no">
+<iframe class="cabeceraIframe" name="cabecera" id="cap" frameborder="0" allowtransparency="allowtransparency" src="cabecera.html"></iframe>
+<iframe class="ayudaIframe" name="metodos" id="met" frameborder="0" allowtransparency="allowtransparency" src="fondo.html"></iframe>
+</body>
+</html>

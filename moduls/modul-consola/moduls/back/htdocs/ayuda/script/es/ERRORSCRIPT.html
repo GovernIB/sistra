@@ -1,0 +1,31 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../../../css/ayudas.css "/>
+</head>
+<script type="text/javascript" src="../miga.js"></script>
+
+<body class="ayudaBody" onLoad="actualizaMiga('es', 'ERRORSCRIPT', 'ERRORSCRIPT');">
+<h1 class="ayudaH1">ERRORSCRIPT</h1>
+<h2 class="ayudaH2">DESCRIPCI&Oacute;N</h2>
+<ul>
+<li class="ayudaLi">La gesti&oacute;n de errores se realiza a trav&eacute;s del plugin ERRORSCRIPT. A trav&eacute;s de este plugin indicaremos si se ha producido un error en el script. Adem&aacute;s podemos establecer el mensaje de error de dos formas distintas: 
+<ul>
+	<li class="ayudaLi">mediante un c&oacute;digo de mensaje definido en los mensajes de validaci&oacute;n del tr&aacute;mite.</li>
+	<li class="ayudaLi">mediante un texto din&aacute;mico directamente desde el script.</li>	
+</ul>
+Si no establecemos un mensaje se utilizar&aacute; uno gen&eacute;rico que indicar&aacute; que no se ha pasado la validaci&oacute;n.
+</li>
+</ul> 
+<h2 class="ayudaH2">M&Eacute;TODOS</h2>
+<ul>
+<li><A HREF="ERRORSCRIPT_setExisteError.html"><span class="nombreCampo">setExisteError</span></A></li>
+<li><A HREF="ERRORSCRIPT_setMensajeError.html"><span class="nombreCampo">setMensajeError</span></A></li>
+<li><A HREF="ERRORSCRIPT_setMensajeDinamicoError.html"><span class="nombreCampo">setMensajeDinamicoError</span></A></li>
+</ul>
+<h2 class="ayudaH2">EJEMPLOS</h2>
+<pre class="codigo">
+&nbsp;&nbsp;ERRORSCRIPT.setExisteError(<span class="codigoRojo">true</span>);
+&nbsp;&nbsp;ERRORSCRIPT.setMensajeError(<span class="codigoRojo">&#39;ERR1&#39;</span>);
+</pre>
+</body>
+</html>

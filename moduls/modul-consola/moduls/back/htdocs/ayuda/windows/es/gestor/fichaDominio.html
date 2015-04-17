@@ -1,0 +1,43 @@
+<html>
+<head>
+</head>
+<body>
+<h1 class="gttH1">CONFIGURACI&Oacute;N DE DOMINIO</h1>
+Esta ventana contiene las opciones de configuraci&oacute;n del nuevo dominio o del dominio seleccionado para edici&oacute;n.<br>
+
+<h2 class="gttH2">DESCRIPCI&Oacute;N DE CAMPOS</h2>
+Los campos que aparecen en la ventana son los siguientes:
+<ul>
+<li><span class="nombreCampo">Identificador:</span> C&oacute;digo que identifica un&iacute;vocamente el dominio. Este c&oacute;digo debe ser un alfanum&eacute;rico de 10 posiciones y es recomendable que sea un c&oacute;digo nemot&eacute;cnico</li>
+<li><span class="nombreCampo">Descripci&oacute;n:</span> Texto descriptivo del dominio. Este texto debe estar formado por un m&aacute;ximo de 100 car&aacute;cteres alfanum&eacute;ricos que describan el dominio en cuesti&oacute;n</li>
+<li><span class="nombreCampo">Configuraci&oacute;n de cacheo:</span> </li>
+<li><span class="nombreCampo">Tipo:</span> Este apartado permite establecer el tipo del dominio y las configuraciones asociadas. El detalle de cada campo es el siguiente:</li>
+<ul class="codigoPurpura">
+<li><span class="codigoPurpura">SQL:</span> Esta casilla indica que el dominio es de tipo SQL. Este tipo de dominio consiste en la ejecuci&oacute;n de una consulta SQL sobre un datasource especificado. Si se marca esta casilla, tendr&aacute; que rellenar los datos siguientes:</li>
+<ul class="codigoRojo">
+<li><span class="codigoRojo">Datasource: </span>Ruta JNDI del Datasource de conexi&oacute;n con la BBDD en la que se ejecutar&aacute; la consulta</li>
+<li><span class="codigoRojo">Query: </span>Sentencia SQL que resuelve el dominio. Los par&aacute;metros del dominio se deber&aacute;n especificar con un interrogante ("?")</li>
+</ul>
+<li><span class="codigoPurpura">EJB:</span> Esta casilla indica que el dominio es de tipo EJB. Este tipo de dominio acceder&aacute; a una aplicación que cumpla con el API de integración</li>
+<ul class="codigoRojo">
+<li><span class="codigoRojo">Localizaci&oacute;n: </span>Indica la localizaci&oacute;n del EJB respecto al servidor en el que est&aacute; desplegada la plataforma de tramitaci&oacute;n. La localizaci&oacute;n puede ser local, si se encuentra en el mismo servidor, o remoto si se encuentra en un servidor diferente.</li>
+<li><span class="codigoRojo">JNDI: </span>Indica el JNDI de acceso al EJB</li>
+<li><span class="codigoRojo">Url: </span>En caso de localizaci&oacute;n remota, indica la url del servidor en el que est&aacute; ubicado el EJB. Este campo no es necesario en caso de localizaci&oacute;n local</li>
+</ul>
+<li><span class="codigoPurpura">Webservice:</span> Esta casilla indica que el dominio es de tipo WS. Este tipo de dominio acceder&aacute; a una aplicaci&oacute;n que cumpla con el API de integraci&oacute;n</li>
+<ul class="codigoRojo">
+<li><span class="codigoRojo">Url: </span>Url del Webservice.</li>
+<li><span class="codigoRojo">Versi&oacute;n: </span>Indica la versi&oacute;n del Webservice a utilizar. Las versiones de los WS y sus funcionalidades est&aacute;n especificadas en la documentaci&oacute;n de integraci&oacute;n de la Forja</li>
+<li><span class="codigoRojo">Soap Action: </span>Permite indicar un Soap Action espec&iacute;fico a utilizar en la llamada al dominio</li>
+</ul>
+<li><span class="codigoPurpura">Fuente de datos:</span> Esta casilla indica que el dominio es de tipo fuente de datos. Este tipo de dominios acceden a un conjunto de datos mantenidos por el gestor a trav&eacute;s de la opci&oacute;n fuente de datos de Bantelfront</li>
+<ul class="codigoRojo">
+<li><span class="codigoRojo">Pseudo-Query: </span>En este campo se indica la sentencia pseudoSQL para la consulta de la fuente de datos. El formato de la consulta debe cumplir lo siguiente</li>
+<p><i>SELECT campo (,campo)<br>FROM fuenteDatos<br>WHERE expresion ( [AND | OR] expresion ] )*<br>ORDER BY campo</i></p>
+<p>donde expresion: <i>campo [= | LIKE] ?</i>, siendo "?" un par&aacute;metro.</p>
+<p>Las part&iacute;culas de la sentencia pseudoSQL(SELECT, FROM, WHERE, AND, OR, LIKE, ORDER BY) deben estar en may&uacute;sculas.<br>Respecto a las comparaciones en el WHERE ser&aacute;n ignorecase (= y LIKE).<br>Respecto al LIKE se realizar&aacute; autom&aacute;ticamente la comparaci&oacute;n: %parametro%.<br>Respecto al ORDER BY s&oacute;lo se puede indicar un campo. Adem&aacute;s como todos los campos son de tipo cadena, la ordenaci&oacute;n es literal por lo que si se quiere crear un campo en la fuente de datos que permita ordenar secuencialmente, es conveniente usar letras en lugar de n&uacute;meros.</p>
+</ul>
+</ul>
+<li><span class="nombreCampo">Probar dominio:</span> Si clica el bot&oacute;n asociado a este campo, se le abrir&aacute; una ventana en la que podr&aacute; realizar una prueba de invocaci&oacute;n del dominio, indicando previamente el valor de los par&aacute;metros correspondientes. </li>
+</body>
+</html>
