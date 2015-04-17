@@ -1,0 +1,142 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" root="./tramWindow" ?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk xmlns:w="client">
+	<window id="tramWindow"
+		apply="es.caib.consola.controller.gestor.TramiteController"
+		width="100%" height="100%">
+		<include height="23px" id="tram" src="headerUsuarioEntorno.zul" />
+		<vlayout>
+			<div hflex="1" style="padding: 10px;">
+				<tabbox id="versionTabbox" height="400px">
+					<tabs id="tabs">
+						<tab id="tabVersiones" label="${c:l('tramites.tab.versiones')}" />
+						<tab id="tabPropiedad" label="${c:l('tramites.tab.propiedades')}" />	
+						<tab id="tabFicherosExportacion" label="${c:l('tramites.tab.ficherosExportacion')}" />						
+					</tabs>
+					<tabpanels>
+						<!--  VERSIONES -->
+							<tabpanel>
+								<vlayout height="100%" >
+									<hlayout width="100%">
+										<div align="right" hflex="1">
+											<hbox sclass="z-valign-top">
+												<button
+													id="btnNuevaVersion" height="40px" orient="vertical"
+													label="${c:l('boton.nuevo')}" image="/images/alta.png"
+													autodisable="self, btnEditaVersion, btnQuitaVersion, btnBloquear, btnDesbloquear, btnAyudaVersionesTramite" />
+												<button
+													id="btnEditaVersion" height="40px" width="81px"
+													orient="vertical" label="${c:l('boton.editar')}"
+													image="/images/modifica.png"
+													autodisable="self, btnNuevaVersion, btnQuitaVersion, btnBloquear, btnDesbloquear, btnAyudaVersionesTramite" />
+												<button
+													id="btnQuitaVersion" height="40px" orient="vertical"
+													label="${c:l('boton.eliminar')}" image="/images/borrar.png"
+													autodisable="self, btnEditaVersion, btnNuevaVersion, btnBloquear, btnDesbloquear, btnAyudaVersionesTramite" />
+												<button id="btnBloquear"
+													height="40px" orient="vertical"
+													label="${c:l('boton.bloquear')}" image="/images/lock.gif"
+													autodisable="self, btnEditaVersion, btnQuitaVersion, btnNuevaVersion, btnDesbloquear, btnAyudaVersionesTramite" />
+												<button
+													id="btnDesbloquear" height="40px" orient="vertical"
+													label="${c:l('boton.desbloquear')}"
+													image="/images/unlock.gif"
+													autodisable="self, btnEditaVersion, btnQuitaVersion, btnBloquear, btnNuevaVersion, btnAyudaVersionesTramite" />
+												<button
+													id="btnHistorial" height="40px" orient="vertical"
+													label="${c:l('boton.historial')}"
+													image="/images/historial.gif"
+													autodisable="self, btnEditaVersion, btnQuitaVersion, btnBloquear, btnDesbloquear, btnNuevaVersion, btnAyudaVersionesTramite" />	
+												<button
+													id="btnExportar" height="40px" orient="vertical"
+													label="${c:l('boton.exportar')}"
+													image="/images/export.gif"
+													autodisable="self, btnEditaVersion, btnQuitaVersion, btnBloquear, btnNuevaVersion, btnAyudaVersionesTramite" />
+												<button
+													id="btnImportar" height="40px" orient="vertical"
+													label="${c:l('boton.importar')}"
+													image="/images/import.gif"
+													autodisable="self, btnEditaVersion, btnQuitaVersion, btnBloquear, btnNuevaVersion, btnAyudaVersionesTramite" />		
+												<button
+													id="btnAyudaVersionesTramite" height="40px"
+													orient="vertical" label="${c:l('boton.ayuda')}"
+													image="/images/ayuda.png"
+													autodisable="self, btnEditaVersion, btnQuitaVersion, btnBloquear, btnDesbloquear, btnNuevaVersion" />
+											</hbox>
+										</div>
+									</hlayout>
+									<listbox id="listVersiones" mold="paging" pageSize="10" vflex="1" 
+										multiple="false" context="popupVersion">
+<!-- ******************************************************************************************************************** -->									
+<!-- ATRIBUTO NECESARIO PARA QUE EL LISTBOX NO SE SELECCIONE AL HACER DOBLE CLICK EN IEXPLORER****************************** -->
+										<attribute w:name="onBind">
+											var chd = jq(this.$n()).find('.z-listcell-cnt').each(function (index, node) {
+												jq(node).attr('unselectable', 'on'); 
+											});
+										</attribute>
+<!-- ******************************************************************************************************************** -->
+									<listhead>
+										<listheader label="${c:l('versiones.cabecera.version')}"
+											width="50%" align="left" sort="auto(numero)"/>										
+										<listheader id="blockedBy" label="${c:l('versiones.cabecera.bloqueado')}" 
+											width="50%" align="left" sort="auto(descUsuarioBloqueo)"/>
+									</listhead>
+								</listbox>
+							</vlayout>
+						</tabpanel>
+						
+						<!-- PROPIEDADES -->
+						<tabpanel>
+							<vlayout height="100%" >
+								<div align="right">
+									<hbox sclass="z-valign-top">
+										<button id="btnEditaTramite" label="${c:l('boton.editar')}" image="/images/modifica.png" 
+										autodisable="self, btnAyudaPropiedadesTramite" />
+										<button id="btnAyudaPropiedadesTramite" image="/images/ayuda.png" 
+										autodisable="self, bbtnEditaTramite" />
+									</hbox>
+								</div>
+								<grid fixedLayout="true">
+									<columns>
+										<column width="150px" />
+										<column />
+									</columns>
+									<rows>
+										<row>
+											<label value="${c:l('tramite.propiedad.identificador')}" />
+											<textbox id="id" width="250px" readonly="true"/>
+										</row>
+										<row>
+											<label value="${c:l('tramite.propiedad.descripcion')}" />
+											<textbox id="descripcion" hflex="1" readonly="true"/>
+										</row>
+										<row>
+											<label value="Procedimiento" />
+											<textbox id="procedimiento" hflex="1" readonly="true"/>
+										</row>						
+									</rows>
+								</grid>
+							</vlayout>
+						</tabpanel>
+						<!--  FICHEROS EXPORTACION -->
+						<tabpanel>
+						
+						</tabpanel>	
+					</tabpanels>
+				</tabbox>
+			</div>
+		</vlayout>
+		<menupopup id="popupVersion">
+			<menuitem id="popupNuevaVersion" image="/images/alta.png" label="${c:l('boton.nuevo')}" />
+			<menuitem id="popupEditaVersion" image="/images/modifica.png" label="${c:l('boton.editar')}" />
+			<menuitem id="popupQuitaVersion" image="/images/borrar.png" label="${c:l('boton.eliminar')}"/>
+			<menuitem id="popupDuplicar" label="${c:l('boton.duplicar')}" image="/images/duplicar.png" visible="false"/>
+			<menuitem id="popupBloquear" label="${c:l('boton.bloquear')}" image="/images/lock.gif" />
+			<menuitem id="popupDesbloquear" label="${c:l('boton.desbloquear')}" image="/images/unlock.gif" />
+			<menuitem id="popupHistorial" label="${c:l('boton.historial')}" image="/images/historial.gif"  />
+			<menuitem id="popupPromocionar" label="${c:l('boton.promocionar')}" image="/images/promocion.png" />
+			<menuitem id="popupCompilar" label="${c:l('boton.compilar')}" image="/images/compilar.png" />
+			<menuitem id="popupPrevisualizar" label="${c:l('boton.previsualizar')}" image="/images/previsualizar.png" />
+		</menupopup> 
+	</window>
+</zk>

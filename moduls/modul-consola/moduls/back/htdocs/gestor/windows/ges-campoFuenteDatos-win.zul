@@ -1,0 +1,43 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" root="./wCampoFuenteDatos" ?>
+<?page title="${c:l('campoFuenteDatos.titulo')}" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<window id="wCampoFuenteDatos" title="${c:l('campoFuenteDatos.titulo')}"
+		border="normal" closable="false" width="600px"
+		apply="es.caib.consola.controller.gestor.wmodal.CampoFuenteDatosWModal">
+		<vlayout>
+			<grid fixedLayout="true">
+				<columns>
+					<column width="100px" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<hlayout>
+							<label value="${c:l('campoFuenteDatos.id')}" />							
+						</hlayout>
+						<hlayout>
+							<textbox style="text-transform:uppercase;" id="codigo" hflex="1"/>
+						</hlayout>
+					</row>					
+					<row>
+						<label value="${c:l('campoFuenteDatos.esPK')}" />
+						<checkbox id="esPK" />
+					</row>																						   
+				</rows>
+			</grid>
+				
+			<div align="center">
+				<button id="btnGuardar" label="${c:l('boton.guardar')}"
+					image="/images/graba.png"
+					autodisable="self, btnPing, btnCancelar, btnAyuda" />
+				<button id="btnCancelar"
+					label="${c:l('boton.cancelar')}" image="/images/salir.gif"
+					autodisable="self, btnPing, btnGuardar, btnAyuda" />
+				<button id="btnAyuda" label="${c:l('boton.ayuda')}"
+					image="/images/ayuda.png"
+					autodisable="self, btnPing, btnGuardar, btnCancelar" />
+			</div>
+		</vlayout>		
+	</window>
+</zk>

@@ -1,0 +1,61 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" root="./wDesbloquearVersionTramite" ?>
+<?page title="${c:l('desbloquearVersionTramite.titulo')}" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<window id="wDesbloquearVersionTramite" title="${c:l('desbloquearVersionTramite.titulo')}"
+		border="normal" closable="false" width="600px"
+		apply="es.caib.consola.controller.gestor.wmodal.DesbloquearVersionTramiteWModal">
+		<vlayout>
+			<grid fixedLayout="true">
+				<columns>
+					<column width="100px" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<hlayout>
+							<label value="${c:l('desbloquearVersionTramite.idTramite')}" />							
+						</hlayout>
+						<hlayout>
+							<textbox id="idTramite" hflex="1" readonly="true"/>
+						</hlayout>
+					</row>
+					<row>
+						<hlayout>
+							<label value="${c:l('desbloquearVersionTramite.versionTramite')}" />							
+						</hlayout>
+						<hlayout>
+							<textbox id="versionTramite" hflex="1" readonly="true"/>
+						</hlayout>
+					</row>
+					<row>
+						<label value="${c:l('desbloquearVersionTramite.motivo')}" />
+						<vlayout>							
+							<textbox id="comentario" width="450px" rows="5" multiline="true" 
+								maxlength="${ConstantesMaxlength_MAX_LENGTH_COMMENT_DESBLOQUEAR}"/>						
+						</vlayout>
+					</row>
+					<row>
+						<label value="${c:l('desbloquearVersionTramite.crearRelease')}" />
+						<vlayout>							
+							<checkbox id="generarRelease"/>							
+						</vlayout>
+					</row>					
+				</rows>
+			</grid>
+
+			<div align="center">
+				<button id="btnGuardar" label="${c:l('boton.guardar')}"
+					image="/images/graba.png"
+					autodisable="self, btnPing, btnCancelar, btnAyuda" />
+				<button id="btnCancelar"
+					label="${c:l('boton.cancelar')}" image="/images/salir.gif"
+					autodisable="self, btnPing, btnGuardar, btnAyuda" />
+				<button id="btnAyuda" label="${c:l('boton.ayuda')}"
+					image="/images/ayuda.png"
+					autodisable="self, btnPing, btnGuardar, btnCancelar" />
+			</div>
+		</vlayout>
+				
+	</window>
+</zk>

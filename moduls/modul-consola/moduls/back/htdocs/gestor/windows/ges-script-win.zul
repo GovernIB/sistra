@@ -1,0 +1,197 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<?page title="${c:l('pagoScript.titulo')}" contentType="text/html;charset=UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" root="./wScript"?>
+<zk xmlns:w="client">
+	<window id="wScript" title="${c:l('script.titulo')}"
+		border="normal" closable="false" width="92%" height="95%"
+		apply="es.caib.consola.controller.gestor.wmodal.ScriptWModal">
+		 <!--<script src="js/jquery-1.8.3.min.js" type="text/javascript" />-->
+         <!--<script type="text/javascript" src="js/ZeroClipboard.js"/>-->
+		<style src="css/ayudas.css" />
+		<borderlayout>
+			<north id="datos" title="${c:l('script.datos.titulo')}"
+				size="15%" border="none" flex="true" collapsible="true">
+				<grid fixedLayout="true">
+					<columns>
+						<column width="150px" />
+						<column />
+					</columns>
+					<rows>
+						<row>
+							<label sclass="gtt-cell-script-titulo"
+								value="${c:l('script.datos.sirve')}" />
+							<label id="sirve" sclass="gtt-cell-script" />
+						</row>						
+						<row>
+							<label sclass="gtt-cell-script-titulo"
+								value="${c:l('script.datos.devuelve')}" />
+							<label id="devuelve"
+								sclass="gtt-cell-script" />
+						</row>
+					</rows>
+				</grid>
+			</north>
+			<center sclass="con_borde" border="none" >
+				<div style="padding:2px;" height="100%">
+					<div align="center" sclass="gtt-header-script">
+						<label sclass="gtt-label-script"
+							value="${c:l('script.script')}" />
+					</div>
+					<codemirror syntax="js" id="script" sclass="gtt-cell-script-font" config="'lineNumbers': 'true'"/>
+<!-- 					<simaccodemirror syntax="javascript" id="script" sclass="gtt-cell-script-font" height="100%"/> -->
+<!-- 					<simaccodemirror syntax="javascript" id="script" sclass="gtt-cell-script-font" height="100%" config="'Ctrl-Space': 'autocomplete'"/> -->
+<!-- 					<script src="/script/script-hint.js"/> -->
+<!-- 					<script type="text/javascript" defer="true"> -->
+<!-- 					<![CDATA[ -->
+<!-- 					debugger; -->
+<!-- 					var zkscript = zk.Widget.$("$script"); -->
+<!-- 					zkscript._init(); -->
+<!-- 					CodeMirror = zkscript.getEditor(); -->
+<!-- 					CodeMirror.commands.autocomplete = function(cm) {CodeMirror.simpleHint(cm, CodeMirror.javascriptHint);} -->
+<!-- 					]]></script> -->
+					<label id="msg" visible="false"/>
+				</div>
+			</center>
+			<east title="${c:l('script.tabs')}" id="s2" size="40%"
+				border="none" collapsible="true">
+				<div hflex="1" vflex="1" style="padding:2px;">
+						<tabbox id="tabs" mold="accordion" vflex="1" >
+							<tabs>
+								<tab id="tabPlugin"
+									label="${c:l('script.tab.plugins')}" />
+								<tab id="tabMensajes"
+									label="${c:l('script.tab.mensajes')}" />
+								<tab id="tabFormularios"
+									label="${c:l('script.tab.formularios')}" />
+								<tab id="tabDominios"
+									label="${c:l('script.tab.dominios')}" />								
+							</tabs>
+							<tabpanels>
+								<tabpanel>
+									<listbox id="listPlugins" vflex="1" >
+<!-- ******************************************************************************************************************** -->									
+<!-- ATRIBUTO NECESARIO PARA QUE EL LISTBOX NO SE SELECCIONE AL HACER DOBLE CLICK EN IEXPLORER****************************** -->
+										<attribute w:name="onBind">
+											var chd = jq(this.$n()).find('.z-listcell-cnt').each(function (index, node) {
+												jq(node).attr('unselectable', 'on'); 
+											});
+										</attribute>
+<!-- ******************************************************************************************************************** -->
+										<listhead>
+											<listheader />
+											<listheader width="25px" />
+										</listhead>
+									</listbox>
+								</tabpanel>
+								<tabpanel>
+									<div align="right">
+										<button id="btnNuevoMensaje"
+											label="${c:l('boton.nuevo')}" image="/images/alta.png"
+											autodisable="self, btnEditaAccion, btnEliminaAccion, btnAceptar, btnCancelar, btnAyuda" />
+										<button id="btnEditaMensaje"
+											label="${c:l('boton.editar')}" image="/images/modifica.png"
+											autodisable="self, btnNuevaAccion, btnEliminaAccion, btnAceptar, btnCancelar, btnAyuda" />
+										<button id="btnEliminaMensaje"
+											label="${c:l('boton.eliminar')}" image="/images/borrar.png"
+											autodisable="self, btnEditaAccion, btnNuevaAccion, btnAceptar, btnCancelar, btnAyuda" />
+									</div>
+
+									<listbox id="listMensajes" vflex="1" height="100%">
+<!-- ******************************************************************************************************************** -->									
+<!-- ATRIBUTO NECESARIO PARA QUE EL LISTBOX NO SE SELECCIONE AL HACER DOBLE CLICK EN IEXPLORER****************************** -->
+										<attribute w:name="onBind">
+											var chd = jq(this.$n()).find('.z-listcell-cnt').each(function (index, node) {
+												jq(node).attr('unselectable', 'on'); 
+											});
+										</attribute>
+<!-- ******************************************************************************************************************** -->
+									<listhead sizable="true">
+										<listheader
+											label="${c:l('scriptMensajes.codigo')}" width="30%"
+											align="left" sort="auto(idLiteral)" />
+										<listheader
+											label="${c:l('scriptMensajes.descripcion') }" width="100%"
+											align="left" sort="auto(idLiteral)" />
+									</listhead>
+
+								</listbox>
+
+							</tabpanel>
+							<tabpanel>
+								<tree id="treeForms" hflex="1" vflex="1"/>
+							</tabpanel>
+							<tabpanel>
+								<listbox id="listDominios" vflex="1">
+<!-- ******************************************************************************************************************** -->									
+<!-- ATRIBUTO NECESARIO PARA QUE EL LISTBOX NO SE SELECCIONE AL HACER DOBLE CLICK EN IEXPLORER****************************** -->
+										<attribute w:name="onBind">
+											var chd = jq(this.$n()).find('.z-listcell-cnt').each(function (index, node) {
+												jq(node).attr('unselectable', 'on'); 
+											});
+										</attribute>
+<!-- ******************************************************************************************************************** -->
+									<listhead sizable="true">
+										<listheader label="${c:l('dominios.cabecera.codigo')}" 
+											width="25%" align="left" sort="auto(idDominio)"/>
+										<listheader label="${c:l('dominios.cabecera.descripcion')}"
+											width="60%" align="left" sort="auto(descripcion)"/>
+										<listheader label="${c:l('boton.consultar')}"
+											width="100%" align="center"/>
+									</listhead>
+								</listbox>
+							</tabpanel>							
+						</tabpanels>
+					</tabbox>
+				</div>
+			</east>
+			<south border="none" flex="true">
+				<div align="center">
+					<button id="btnAceptar"
+						label="${c:l('boton.aceptar')}" image="/images/ok.png"
+						autodisable="self, btnMensaje, btnEliminar, btnCancelar, btnAyuda" />
+					<button id="btnEliminar"
+						label="${c:l('boton.quitar')}" image="/images/borrar.png"
+						autodisable="self, btnMensaje, btnAceptar, btnCancelar, btnAyuda" />
+					<button id="btnCancelar"
+						label="${c:l('boton.cancelar')}" image="/images/salir.gif"						
+						autodisable="self, btnMensaje, btnAceptar, btnEliminar, btnAyuda" />
+					<button id="btnAyuda" label="${c:l('boton.ayuda')}"
+						image="/images/ayuda.png"
+						autodisable="self, btnMensaje, btnAceptar, btnCancelar, btnEliminar" />
+				</div>
+			</south>
+		</borderlayout>
+		<menupopup id="editPopup3">
+				<menuitem id="copiar" image="/images/copy.jpg" label="${c:l('menu.copiar')}" />
+		</menupopup> 
+		
+		<textbox visible="false" id="textoCopiarClipboard"/>
+		
+		
+		<popup id="ayudaPopUp">
+			<iframe id="ayudahtml" src="script/ayuda/fondo.html" style="overflow:auto" />
+		</popup>
+		
+		 <script>
+	        var clip = null;
+	 
+	        function $(id) { return document.getElementById(id); }
+	 
+	                function init(divId,clipText) {
+	                    ZeroClipboard.setMoviePath("js/ZeroClipboard.swf");
+	                    var clip = new ZeroClipboard.Client();
+	 					clip.setText(clipText)
+	                    clip.addEventListener('mouseOver', function (client) {
+	                        clip.setText(zk.Widget.$(jq("$textoCopiarClipboard")).getValue() );
+	                    });
+	 
+	                    clip.addEventListener('complete', function (client, text) {
+	                        alert("Copied text to clipboard: \n\n" + text );
+	                    });
+	 
+	                    clip.glue(divId);
+	        }
+	        </script>
+		
+	</window>
+</zk>

@@ -1,0 +1,54 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" root="./wFormularioReusable" ?>
+<?page title="${c:l('exportarVersionTramite.titulo')}" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<window id="wFormularioReusable" title="${c:l('formularioReusable.titulo')}"
+		border="normal" closable="false" width="600px"
+		apply="es.caib.consola.controller.gestor.wmodal.FormularioReusableWModal">
+		<vlayout>
+			<grid fixedLayout="true">
+				<columns>
+					<column width="100px" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<hlayout>
+							<label value="${c:l('formularioReusable.identificador')}" />							
+						</hlayout>
+						<hlayout>
+							<textbox id="identificador" hflex="1"/>
+						</hlayout>
+					</row>
+					<row>
+						<hlayout>
+							<label value="${c:l('formularioReusable.descripcion')}" />							
+						</hlayout>
+						<hlayout>
+							<textbox id="descripcion" hflex="1"/>
+						</hlayout>
+					</row>
+					<row>
+						<label value="${c:l('formularioReusable.disenyar')}" />
+						<hlayout>		
+							<button id="btnDisenyo" label="${c:l('boton.editarDisenyo')}"	/>
+				   		 </hlayout>	
+					</row>					
+				</rows>
+			</grid>
+
+			<div align="center">
+				<button id="btnGuardar" label="${c:l('boton.guardar')}"
+					image="/images/graba.png"
+					autodisable="self,  btnCancelar, btnAyuda" />
+				<button id="btnCancelar"
+					label="${c:l('boton.cancelar')}" image="/images/salir.gif"
+					autodisable="self,  btnGuardar, btnAyuda" />
+				<button id="btnAyuda" label="${c:l('boton.ayuda')}"
+					image="/images/ayuda.png"
+					autodisable="self,  btnGuardar, btnCancelar" />
+			</div>
+		</vlayout>
+				
+	</window>
+</zk>

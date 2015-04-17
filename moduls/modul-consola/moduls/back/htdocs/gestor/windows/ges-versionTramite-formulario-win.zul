@@ -1,0 +1,223 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="Formulario" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="wFormulario" border="0" closable="false"
+		title="Formulario"
+		apply="es.caib.consola.controller.gestor.wmodal.FormularioVersionTramiteWModal">
+		<vlayout>
+			<grid fixedLayout="true">
+				<columns>
+					<column width="200px" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<hlayout>
+							<label value="Identificador" />																												
+						</hlayout>
+						<hlayout spacing="20px">
+							<textbox id="identificador" width="100px"/>								
+						</hlayout>
+					</row>
+					<row>
+						<hlayout>
+							<label value="Descripción" />													
+						</hlayout>
+						<vlayout spacing="10px">
+							 <hlayout>			
+							 	<textbox id="descripcion" readonly="true" width="400px"/>
+								<button id="btnDescripcionMulti" 
+										image="images/multiidioma.png"  
+										autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />
+							</hlayout>				 
+						 </vlayout> 							 													
+					</row>
+					<row>
+						<hlayout>
+							<label value="Niveles de autenticación" />							
+						</hlayout>
+						<hlayout>
+							<grid width="450px">
+							<columns>
+								<column width="150px" />
+								<column width="150px" />
+								<column width="150px" />
+							</columns>
+								 <rows>
+								    <row>								    	
+								    	<label value="Certificado/Usuario" />								    	  
+								    	<label value="Anónimo" />
+								    	<label value="" />
+									</row>									
+								</rows>
+							</grid>
+							<button id="btnEditarNiveles" label="Editar niveles" />																					 				
+						 </hlayout> 						
+					</row>						
+					<row>
+						<hlayout>
+							<label value="Modelo RDS" />
+							<button id="btnRDSNivel"
+							 	image="images/nivel_custom-empty.png" 
+								autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />												
+						</hlayout>
+						<hlayout spacing="20px">									 	
+							 <hlayout>			
+							 	<label value="Modelo"/>							 	
+							 	<textbox id="modeloRDS" readonly="true" width="400px"/>
+							 	<button id="btnModeloRDS" 
+									label="..."  
+										autodisable="self, btnScript, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />	
+								<label value="Versión RDS" />																												
+								<combobox id="versionRDS" width="50px"/>							
+							</hlayout>																  							 											
+						</hlayout>
+					</row>					
+					<row>
+						<hlayout>
+							<label value="Obligatoriedad" />
+							<button id="btnObligatoriedadNivel"
+							 	image="images/nivel_custom-empty.png" 
+								autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />																												
+						</hlayout>
+						<hlayout>
+							<radiogroup id="obligatoriedad"/>
+							<radio id="obligatorio" label="Obligatorio" radiogroup="obligatoriedad" />
+							<radio id="opcional" label="Opcional" radiogroup="obligatoriedad" />
+							<radio id="dependiente" label="Dependiente" radiogroup="obligatoriedad" />
+							<button id="btnObligatoriedadScript"
+							 	image="images/script-empty.png" 
+								autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />	
+						</hlayout>													
+					</row>	
+					<row>
+						<hlayout>
+							<label value="Firma" />
+							<button id="btnFirmaNivel"
+							 	image="images/nivel_custom-empty.png" 
+								autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />																												
+						</hlayout>
+						<hlayout spacing="20px">
+							<checkbox id="firmaDigital" label="Firmar digitalmente" />
+							<hlayout id="firmanteLayout">
+								<label value="Firmante" /> 
+								<button id="btnFirmanteScript"
+								 	image="images/script-empty.png" 
+									autodisable="self, btnScript, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />
+							</hlayout>
+							<hlayout id="contentTypeLayout">
+								<label value="Content-type" /> 
+								<button id="btnContentTypeScript"
+								 	image="images/script-empty.png" 
+									autodisable="self, btnScript, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />
+							</hlayout>	
+						</hlayout>													
+					</row>				
+					<row>
+						<hlayout>
+							<label value="Gestor formulario" />
+							<button id="btnGestorNivel"
+							 	image="images/nivel_custom-empty.png" 
+								autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />																											
+						</hlayout>
+						<vlayout>
+							<hlayout>
+								<label value="Gestor" />																																										
+								<combobox id="gestor" width="200px"/>
+								<label value="Modelo"/>
+								<textbox id="modelo" width="100px"/>
+								<label value="Versión"/>
+								<textbox id="version" width="40px"/>
+							</hlayout>
+						</vlayout>
+					</row>
+					<row>
+						<hlayout>
+							<label value="Scripts formulario" />
+							<button id="btnScriptsNivel"
+							 	image="images/nivel_custom-empty.png" 
+								autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />																												
+						</hlayout>
+						<hlayout spacing="10px">
+							<hlayout>
+								<label value="Datos iniciales" />																																										
+								<button id="btnDatosInicialesScript"
+								 	image="images/script-empty.png" 
+									autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />
+							</hlayout>
+							<hlayout>
+								<label value="Configuración" />																																										
+								<button id="btnConfiguracionScript"
+								 	image="images/script-empty.png" 
+									autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />
+							</hlayout>
+							<hlayout>
+								<label value="Retorno" />																																										
+								<button id="btnRetornoScript"
+								 	image="images/script-empty.png" 
+									autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />
+							</hlayout>
+							<hlayout>
+								<label value="Plantilla" />																												
+								<button id="btnPlantillaScript"
+								 	image="images/script-empty.png" 
+									autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />
+							</hlayout>	
+							<hlayout>
+								<label value="Flujo tramitación" />																												
+								<button id="btnFlujoScript"
+								 	image="images/script-empty.png" 
+									autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />
+							</hlayout>														
+						</hlayout>
+					</row>
+					<row>
+						<hlayout>
+							<label value="Info adicional (HTML)" />
+							<button id="btnInformacionNivel"
+							 	image="images/nivel_custom-empty.png" 
+								autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />							
+						</hlayout>
+						<vlayout spacing="10px">
+							 <hlayout>			
+							 	<textbox id="informacion" readonly="true" width="400px"/>
+								<button id="btnInformacionMulti" 
+										image="images/multiidioma-empty.png"  
+										autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />
+							</hlayout>				 
+						 </vlayout> 							 													
+					</row>
+					<row>
+						<hlayout>
+							<label value="Presentación" />																																	
+						</hlayout>
+						<hlayout spacing="30px">
+							<checkbox id="presentarPreregistro" label="Presentar en Preregistro" />
+							<checkbox id="mostrarJustificante" label="Mostrar como justificante" />
+							<checkbox id="anexarJustificante" label="Anexar al justificante" />	
+						</hlayout>													
+					</row>																							
+				</rows>				
+			</grid>
+			<separator />
+			<div align="center">
+				<button id="btnModificar" label="${c:l('boton.editar')}"
+					image="/images/modifica.png" visible="false"
+					autodisable="self, btnDescripcion, btnScript, btnScriptParametro, btnAyuda, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />
+				<button id="btnGuardar" label="${c:l('boton.guardar')}"
+					image="/images/graba.png" 
+					autodisable="self, btnDescripcion, btnScript, btnScriptParametro, btnModificar, btnGuardarContinuar, btnAyuda, btnCancelar" />
+				<button id="btnGuardarContinuar"
+					label="${c:l('boton.guardarContinuar')}"
+					image="/images/grabaContinua.png"
+					autodisable="self, btnDescripcion, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnAyuda, btnCancelar" />
+				<button id="btnCancelar"
+					label="${c:l('boton.cancelar')}" image="/images/salir.gif"
+					autodisable="self, btnDescripcion, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnAyuda" />
+				<button id="btnAyuda" label="${c:l('boton.ayuda')}"
+					image="/images/ayuda.png" 
+					autodisable="self, btnDescripcion, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar" />
+			</div>
+		</vlayout>
+	</window>
+</zk>

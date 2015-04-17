@@ -1,0 +1,651 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<?page title="${c:l('propiedades.titulo')}" contentType="text/html;charset=UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" root="./wPropiedadesElementoFormulario"?>
+<zk>
+	<div style="overflow:auto" height="100%">
+		<window id="wPropiedadesElementoFormulario" border="0"
+			closable="false"
+			apply="es.caib.consola.controller.gestor.wmodal.PropiedadesElementoFormularioWModal"
+			style="overflow:auto; overflow-y:auto">
+			<vlayout>
+				<div align="center"
+					sclass="gtt-headerPropiedades-disenyoFormulario">
+					<label id="cabecera"
+						value="${c:l('propiedades.cabecera')}" />
+				</div>
+				<tabbox mold="accordion">
+					<tabs>
+						<tab id="tabPropiedades"
+							label="${c:l('propiedades.tab.propiedades')}" />
+						<tab id="tabScripts"
+							label="${c:l('propiedades.tab.scripts')}" visible="false" />
+						<tab id="tabCss"
+							label="${c:l('propiedades.tab.css')}" />
+					</tabs>
+					<tabpanels>
+						<tabpanel>
+							<grid fixedLayout="true">
+								<columns>
+									<column width="40%" align="left" />
+									<column width="60%" align="left" />
+								</columns>
+								<rows>
+									<row id="rowIdentificador">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.identificador')}" />
+										<textbox id="identificador"
+											readonly="true" sclass="gtt-propiedad-disenyoFormulario"
+											width="131px" />
+									</row>
+									<row id="rowSeccion"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.seccion')}" />
+										<textbox id="seccion"
+											readonly="true" sclass="gtt-propiedad-disenyoFormulario"
+											width="131px" />
+									</row>
+									<row id="rowObligatorio"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.obligatorio')}" />
+										<checkbox id="obligatorio" />
+									</row>
+									<row id="rowLectura"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.lectura')}" />
+										<checkbox id="lectura" />
+									</row>
+									<row id="rowNoModificable"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.noModificable')}" />
+										<checkbox id="noModificable" />
+									</row>
+									<row id="rowAyuda"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.ayudaOnline')}" />
+										<hlayout>
+											<textbox id="ayudaOnline"
+												sclass="gtt-propiedad-disenyoFormulario" width="131px"
+												readonly="true" />
+											<button id="btnAyudaOnline"
+												sclass="gtt-propiedad-disenyoFormulario" label="..."
+												autodisable="self, btnModificarImagen, btnDescargarImagen, btnDescargarFicheroHtml, btnDescargarFicheroCss, btnListaValores, btnListaIndexado, btnVerDominio, btnListaParametros, btnModificarPropiedades, btnTexto, btnConvSelector, btnConvCampoTexto" />
+										</hlayout>
+									</row>
+									<row id="rowChecked"
+										visible="false">
+										<hlayout>
+											<label
+												sclass="gtt-propiedad-disenyoFormulario"
+												value="${c:l('propiedades.valorChecked')}" />
+											<label sclass="mandatory"
+												value="*" />
+										</hlayout>
+										<textbox id="valorChecked"
+											sclass="gtt-propiedad-disenyoFormulario" width="131px"
+											maxlength="${ConstantesMaxlength_CAMPO_FORM_VALOR_CHECK}" />
+									</row>
+									<row id="rowNochecked"
+										visible="false">
+										<hlayout>
+											<label
+												sclass="gtt-propiedad-disenyoFormulario"
+												value="${c:l('propiedades.valorNoChecked')}" />
+											<label sclass="mandatory"
+												value="*" />
+										</hlayout>
+										<textbox id="valorNoChecked"
+											sclass="gtt-propiedad-disenyoFormulario"
+											maxlength="${ConstantesMaxlength_CAMPO_FORM_VALOR_CHECK}"
+											width="131px" />
+									</row>
+									<row id="rowText" visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.texto')}" />
+										<hlayout>
+											<textbox id="texto"
+												sclass="gtt-propiedad-disenyoFormulario" width="131px"
+												readonly="true" />
+											<button id="btnTexto"
+												sclass="gtt-propiedad-disenyoFormulario" label="..."
+												autodisable="self, btnAyudaOnline, btnDescargarImagen, btnDescargarFicheroHtml, btnDescargarFicheroCss, btnListaValores, btnListaIndexado, btnVerDominio, btnListaParametros, btnModificarPropiedades" />
+										</hlayout>
+									</row>
+									<row id="rowImagen"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.imagen')}" />
+										<vlayout>
+											<label id="ficheroImagen"
+												sclass="gtt-propiedad-disenyoFormulario" />
+											<hlayout>
+												<button
+													id="btnModificarImagen" image="/images/upload.png"
+													upload="true" sclass="gtt-propiedad-disenyoFormulario"
+													label="${c:l('boton.modificar')}"
+													autodisable="btnAyudaOnline, btnDescargarImagen, btnDescargarFicheroHtml, btnDescargarFicheroCss, btnListaValores, btnListaIndexado, btnVerDominio, btnListaParametros, btnModificarPropiedades, btnTexto" />
+												<button
+													id="btnDescargarImagen" visible="false"
+													sclass="gtt-propiedad-disenyoFormulario"
+													image="/images/descarga.png"
+													label="${c:l('boton.descargar')}"
+													autodisable="self, btnAyudaOnline, btnModificarImagen, btnDescargarFicheroHtml, btnDescargarFicheroCss, btnListaValores, btnListaIndexado, btnVerDominio, btnListaParametros, btnModificarPropiedades, btnTexto" />
+											</hlayout>
+										</vlayout>
+									</row>
+									<row id="rowCaptcha"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.captcha')}" />
+										<checkbox id="captcha" />
+									</row>
+									<row id="rowFicheroHtml"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.html')}" />
+										<vlayout>
+											<hlayout>
+												<label id="ficheroHtml"
+													sclass="gtt-propiedad-disenyoFormulario" />
+												<button
+													id="btnDescargarFicheroHtml"
+													sclass="gtt-propiedad-disenyoFormulario"
+													image="/images/descarga.png"
+													label="${c:l('boton.descargar')}"
+													autodisable="self, btnAyudaOnline, btnModificarImagen, btnDescargarImagen, btnDescargarFicheroCss, btnListaValores, btnListaIndexado, btnVerDominio, btnListaParametros, btnModificarPropiedades, btnTexto" />
+											</hlayout>
+										</vlayout>
+									</row>
+									<row id="rowFicheroCss"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.css')}" />
+										<vlayout>
+											<hlayout>
+												<label id="ficheroCss"
+													sclass="gtt-propiedad-disenyoFormulario" />
+												<button
+													id="btnDescargarFicheroCss"
+													sclass="gtt-propiedad-disenyoFormulario"
+													image="/images/descarga.png"
+													label="${c:l('boton.descargar')}"
+													autodisable="self, btnAyudaOnline, btnModificarImagen, btnDescargarImagen, btnDescargarFicheroHtml, btnListaValores, btnListaIndexado, btnVerDominio, btnListaParametros, btnModificarPropiedades, btnTexto" />
+											</hlayout>
+										</vlayout>
+									</row>
+									<row id="rowListaValores"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.listaValores')}" />
+										<button id="btnListaValores"
+											sclass="gtt-propiedad-disenyoFormulario" label="..."
+											autodisable="self, btnAyudaOnline, btnModificarImagen, btnDescargarImagen, btnDescargarFicheroHtml, btnDescargarFicheroCss, btnListaIndexado, btnVerDominio, btnListaParametros, btnModificarPropiedades, btnTexto, btnConvSelector, btnConvCampoTexto" />
+									</row>
+									<row id="rowTipoSel"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.tipoSel')}" />
+										<combobox id="tipoSel"
+											readonly="true" sclass="gtt-propiedad-disenyoFormulario"
+											width="135px">
+											<comboitem id="selector"
+												label="${c:l('propiedades.tipoSel.selector')}"
+												value="${ConstantesNegocio_TIPO_CAMPO_INDEXADO_VENTANA_SELECTOR}" />
+											<comboitem id="listbox"
+												label="${c:l('propiedades.tipoSel.listbox')}"
+												value="${ConstantesNegocio_TIPO_CAMPO_INDEXADO_DESPLEGABLE}" />
+											<comboitem id="selmul"
+												label="${c:l('propiedades.tipoSel.selmul')}"
+												value="${ConstantesNegocio_TIPO_CAMPO_INDEXADO_MULTIPLE}" />
+											<comboitem id="unico"
+												label="${c:l('propiedades.tipoSel.unico')}"
+												value="${ConstantesNegocio_TIPO_CAMPO_INDEXADO_UNICO}" />
+										</combobox>
+									</row>
+									<row id="rowIndice"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.indice')}" />
+										<checkbox id="indice" />
+									</row>
+									<row id="rowTipoLista"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.tipoLista')}" />
+										<combobox id="tipoLista"
+											readonly="true" sclass="gtt-propiedad-disenyoFormulario"
+											width="135px">
+											<comboitem id="fija"
+												label="${c:l('propiedades.tipoLista.fija')}"
+												value="${ConstantesNegocio_TIPO_LISTA_FIJA}" />
+											<comboitem id="dinamica"
+												label="${c:l('propiedades.tipoLista.dinamica')}"
+												value="${ConstantesNegocio_TIPO_LISTA_DINAMICA}" />
+											<comboitem id="script"
+												label="${c:l('propiedades.tipoLista.script')}"
+												value="${ConstantesNegocio_TIPO_LISTA_SCRIPT}" />
+										</combobox>
+									</row>
+									<row id="rowListaIndexado"
+										visible="false">
+										<hlayout>
+											<label
+												sclass="gtt-propiedad-disenyoFormulario"
+												value="${c:l('propiedades.listaValores')}" />
+											<label sclass="mandatory"
+												value="*" />
+										</hlayout>
+										<button id="btnListaIndexado"
+											sclass="gtt-propiedad-disenyoFormulario" label="..."
+											autodisable="self, btnAyudaOnline, btnModificarImagen, btnDescargarImagen, btnDescargarFicheroHtml, btnDescargarFicheroCss, btnListaValores, btnListaParametros, btnModificarPropiedades, btnTexto, btnConvSelector, btnConvCampoTexto" />
+									</row>
+									<row id="rowDominio"
+										visible="false">
+										<hlayout>
+											<label
+												sclass="gtt-propiedad-disenyoFormulario"
+												value="${c:l('propiedades.dominio.nombre')}" />
+											<label sclass="mandatory"
+												value="*" />
+										</hlayout>
+
+										<hlayout>
+											<label id="idDominio" />
+											<button
+												id="btnSeleccionDominio" label="..."
+												autodisable="self, btnAyudaOnline, btnModificarImagen, btnDescargarImagen, btnDescargarFicheroHtml, btnDescargarFicheroCss, btnListaValores, btnListaIndexado, btnVerDominio,  btnModificarPropiedades, btnTexto, btnConvSelector, btnConvCampoTexto" />
+											<button visible="false"
+												id="btnVerDominio" image="/images/window.png"
+												autodisable="self, btnAyudaOnline, btnModificarImagen, btnDescargarImagen, btnDescargarFicheroHtml, btnDescargarFicheroCss, btnListaValores, btnListaIndexado, btnSeleccionDominio, btnModificarPropiedades, btnTexto, btnConvSelector, btnConvCampoTexto" />
+										</hlayout>
+									</row>
+									<row id="rowCampoDominio"
+										visible="false">
+										<hlayout>
+											<label
+												sclass="gtt-propiedad-disenyoFormulario"
+												value="${c:l('propiedades.dominio.campo.codigo')}" />
+											<label sclass="mandatory"
+												value="*" />
+										</hlayout>
+										<textbox id="codigoDominio"
+											maxlength="${ConstantesMaxlength_CAMPO_FORM_DOMINIO_CODIGO}" />
+									</row>
+									<row id="rowDescripcionDominio"
+										visible="false">
+										<div>
+											<label
+												sclass="gtt-propiedad-disenyoFormulario"
+												value="${c:l('propiedades.dominio.campo.descripcion')}" />
+											<label sclass="mandatory"
+												value="*" />
+										</div>
+
+										<textbox id="descripcionDominio"
+											maxlength="${ConstantesMaxlength_CAMPO_FORM_DOMINIO_DESCRIPCION}" />
+									</row>
+									<row id="rowParametrosDominio"
+										visible="false">
+										<hlayout>
+											<label
+												sclass="gtt-propiedad-disenyoFormulario"
+												value="${c:l('propiedades.dominio.parametros')}" />
+											<label sclass="mandatory"
+												value="*" />
+										</hlayout>
+										<button id="btnListaParametros"
+											sclass="gtt-propiedad-disenyoFormulario" label="..."
+											autodisable="self, btnSeleccionDominio, btnAyudaOnline, btnModificarImagen, btnDescargarImagen, btnDescargarFicheroHtml, btnDescargarFicheroCss, btnListaValores, btnListaIndexado, btnVerDominio, btnModificarPropiedades, btnTexto, btnConvSelector, btnConvCampoTexto" />
+									</row>
+									<row id="rowCampoOculto"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.tipoTexto')}" />
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.tipoTexto.hidden')}" />
+									</row>
+									<row id="rowTipoTexto"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.tipoTexto')}" />
+										<combobox id="tipoTexto"
+											readonly="true" sclass="gtt-propiedad-disenyoFormulario"
+											width="135px">
+											<comboitem
+												label="${c:l('propiedades.tipoTexto.texto')}"
+												value="${ConstantesEditorFormularios_TIPO_CAMPO_TEXTO_NORMAL}" />
+											<comboitem
+												label="${c:l('propiedades.tipoTexto.password')}"
+												value="${ConstantesEditorFormularios_TIPO_CAMPO_TEXTO_PASSWORD}" />
+											<comboitem
+												label="${c:l('propiedades.tipoTexto.numero')}"
+												value="${ConstantesEditorFormularios_TIPO_CAMPO_TEXTO_NUMERO}" />
+											<comboitem
+												label="${c:l('propiedades.tipoTexto.fecha')}"
+												value="${ConstantesEditorFormularios_TIPO_CAMPO_TEXTO_FECHA}" />
+											<comboitem
+												label="${c:l('propiedades.tipoTexto.email')}"
+												value="${ConstantesEditorFormularios_TIPO_CAMPO_TEXTO_EMAIL}" />
+											<comboitem
+												label="${c:l('propiedades.tipoTexto.id')}"
+												value="${ConstantesEditorFormularios_TIPO_CAMPO_TEXTO_ID}" />
+											<comboitem
+												label="${c:l('propiedades.tipoTexto.cp')}"
+												value="${ConstantesEditorFormularios_TIPO_CAMPO_TEXTO_CP}" />
+											<comboitem
+												label="${c:l('propiedades.tipoTexto.telefono')}"
+												value="${ConstantesEditorFormularios_TIPO_CAMPO_TEXTO_TELEFONO}" />
+											<comboitem
+												label="${c:l('propiedades.tipoTexto.expresion')}"
+												value="${ConstantesEditorFormularios_TIPO_CAMPO_TEXTO_EXPR_REGULAR}" />
+										</combobox>
+									</row>
+									<row id="rowTamanyo"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.tamanyo')}" />
+										<spinner id="tamanyo"
+											sclass="gtt-propiedad-disenyoFormulario" width="131px" value="1"
+											constraint="no negative, max ${ConstantesMaxlength_CAMPO_FORM_TEXTO_TAMANYO}"
+											maxlength="${ConstantesMaxlength_CAMPO_FORM_TEXTO_TAMANYO_DIGITOS}" />
+									</row>
+									<row id="rowMultilinea"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.multilinea')}" />
+										<hlayout>
+											<checkbox id="multilinea" />
+											<label style="padding-left:10px;"
+												sclass="gtt-propiedad-disenyoFormulario"
+												value="${c:l('propiedades.numeroLineas')}" />
+											<spinner id="lineas"
+												sclass="gtt-propiedad-disenyoFormulario"
+												constraint="no negative,no zero, max ${ConstantesMaxlength_CAMPO_FORM_TEXTO_LINEAS}"
+												width="50px" value="1" disabled="true" />
+										</hlayout>
+									</row>
+									<row id="rowExpresion"
+										visible="false">
+										<hlayout>
+											<label
+												sclass="gtt-propiedad-disenyoFormulario"
+												value="${c:l('propiedades.tipoTexto.expresion')}" />
+											<label sclass="mandatory"
+												value="*" />
+										</hlayout>
+										<hlayout>
+											<textbox id="expresion"
+												sclass="gtt-propiedad-disenyoFormulario" width="131px"
+												maxlength="${ConstantesMaxlength_CAMPO_FORM_TEXTO_EXPRESREG}" />
+										</hlayout>
+									</row>
+									<row id="rowPrecision"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.precision')}" />
+										<hlayout>
+											<label
+												sclass="gtt-propiedad-disenyoFormulario"
+												value="${c:l('propiedades.precision.entera')}" />
+											<spinner id="entera"
+												sclass="gtt-propiedad-disenyoFormulario"
+												constraint="no negative,no zero, max ${ConstantesMaxlength_CAMPO_FORM_TEXTO_DIG_ENTEROS}"
+												width="50px" />
+											<label
+												sclass="gtt-propiedad-disenyoFormulario"
+												value="${c:l('propiedades.precision.decimal')}" />
+											<spinner id="decimal"
+												sclass="gtt-propiedad-disenyoFormulario"
+												constraint="no negative, max ${ConstantesMaxlength_CAMPO_FORM_TEXTO_DIG_DECIMAL}"
+												width="50px" />
+										</hlayout>
+									</row>
+									<row id="rowSeparador"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.separador')}" />
+										<radiogroup id="notacion">
+											<radio id="notacionES"
+												label="1.234,123" value="PC" />
+											<radio id="notacionEN"
+												label="1,234.123" value="CP" />
+											<radio id="notacionSF"
+												label="1234123" value="SF" />
+										</radiogroup>
+									</row>
+									<row id="rowNegativo"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.negativo')}" />
+										<checkbox id="negativo" />
+									</row>
+									<row id="rowRango"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.rango')}" />
+										<hlayout>
+											<checkbox id="rango" />
+											<label
+												sclass="gtt-propiedad-disenyoFormulario"
+												value="${c:l('propiedades.rango.desde')}" />
+											<spinner id="desde"
+												constraint="no negative, max ${ConstantesMaxlength_CAMPO_FORM_TEXTO_RANGO_MAX}"
+												width="50px" disabled="true" />
+											<label
+												sclass="gtt-propiedad-disenyoFormulario"
+												value="${c:l('propiedades.rango.hasta')}" />
+											<spinner id="hasta"
+												constraint="no negative, max ${ConstantesMaxlength_CAMPO_FORM_TEXTO_RANGO_MIN}"
+												width="50px" disabled="true" />
+										</hlayout>
+									</row>
+									<row id="rowIdentificacion"
+										visible="false">
+										<hlayout>
+											<label
+												sclass="gtt-propiedad-disenyoFormulario"
+												value="${c:l('propiedades.identificacion')}" />
+											<label sclass="mandatory"
+												value="*" />
+										</hlayout>
+										<hlayout
+											id="identificaciones">
+											<checkbox id="nif"
+												sclass="gtt-propiedad-disenyoFormulario" label="NIF" />
+											<checkbox id="cif"
+												sclass="gtt-propiedad-disenyoFormulario" label="CIF" />
+											<checkbox id="nie"
+												sclass="gtt-propiedad-disenyoFormulario" label="NIE" />
+											<checkbox id="nss"
+												sclass="gtt-propiedad-disenyoFormulario" label="NSS" />
+										</hlayout>
+									</row>
+									<row id="rowTelefono"
+										visible="false">
+										<hlayout>
+											<label
+												sclass="gtt-propiedad-disenyoFormulario"
+												value="${c:l('propiedades.telefono')}" />
+											<label sclass="mandatory"
+												value="*" />
+										</hlayout>
+										<hlayout id="telefonos">
+											<checkbox id="fijo"
+												sclass="gtt-propiedad-disenyoFormulario"
+												label="${c:l('propiedades.telefono.fijo')}" />
+											<checkbox id="movil"
+												sclass="gtt-propiedad-disenyoFormulario"
+												label="${c:l('propiedades.telefono.movil')}" />
+										</hlayout>
+									</row>
+								</rows>
+							</grid>
+						</tabpanel>
+						<tabpanel>
+							<grid fixedLayout="true">
+								<columns>
+									<column width="30%" />
+									<column width="70%" />
+								</columns>
+								<rows>
+									<row id="rowScriptAutorellenable">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.script.autorrellenable')}" />
+										<button id="btnScriptAutorellenable"
+											image="images/script-empty.png"
+											autodisable="self, btnDependencia, btnValidacion, btnValidacionPagina, btnScrValoresPosibles, btnModificarPropiedades, btnConvSelector, btnConvCampoTexto" />
+									</row>
+									<row id="rowScriptAutocalculo">										
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.script.autocalculo')}" />
+										<button id="btnScriptValidacion"
+											image="images/script-empty.png"
+											autodisable="self, btnAutorellenable, btnDependencia, btnValidacionPagina, btnScrValoresPosibles, btnModificarPropiedades, btnConvSelector, btnConvCampoTexto" />
+									</row>
+									<row id="rowScriptValoresPosibles">
+										<hlayout>
+											<label
+												sclass="gtt-propiedad-disenyoFormulario"
+												value="${c:l('propiedades.script.valoresPosibles')}" />											
+										</hlayout>
+										<button
+											id="btnScrValoresPosibles" image="images/script-empty.png"
+											autodisable="self, btnAutorellenable, btnDependencia, btnValidacion, btnValidacionPagina, btnModificarPropiedades, btnConvSelector, btnConvCampoTexto" />
+									</row>
+									<row id="rowScriptDependencia">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.script.dependencia')}" />
+										<button id="btnScriptDependencia"
+											image="images/script-empty.png"
+											autodisable="self, btnAutorellenable, btnValidacion, btnValidacionPagina, btnScrValoresPosibles, btnModificarPropiedades, btnConvSelector, btnConvCampoTexto" />
+									</row>
+									
+									<row id="rowScriptValidacionCampo">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.script.validacion')}" />
+										<button id="btnScriptValidacionCampo"
+											image="images/script-empty.png"
+											autodisable="self, btnAutorellenable, btnDependencia, btnValidacion, btnScrValoresPosibles, btnModificarPropiedades, btnConvSelector, btnConvCampoTexto" />
+									</row>
+									
+								</rows>
+							</grid>
+						</tabpanel>
+						<tabpanel>
+							<grid fixedLayout="true">
+								<columns>
+									<column width="30%" align="left" />
+									<column width="70%" align="left" />
+								</columns>
+								<rows>
+									<row id="row_css_width">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.css.ancho')}" />
+										<textbox id="cssWidth"
+											sclass="gtt-propiedad-disenyoFormulario" width="131px" />
+
+									</row>
+									<row id="row_css_height">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.css.alto')}" />
+										<textbox id="cssHeight"
+											sclass="gtt-propiedad-disenyoFormulario" width="131px" />
+									</row>
+									<row id="rowCssFontSize">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.css.tamanyoFuente')}" />
+										<textbox id="fontSize"
+											sclass="gtt-propiedad-disenyoFormulario" width="131px" />
+									</row>
+									<row id="rowCssTextAlign">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.css.alineacionTexto')}" />
+										<combobox id="textAlign"
+											readonly="true" sclass="gtt-propiedad-disenyoFormulario"
+											width="135px">
+											<comboitem
+												label="${c:l('propiedades.css.textAlign.todos')}" value="" />
+											<comboitem
+												id="text_align_left" label="left" value="left" />
+											<comboitem
+												id="text_align_right" label="right" value="right" />
+											<comboitem
+												id="text_align_center" label="center" value="center" />
+											<comboitem
+												id="text_align_justify" label="justify" value="justify" />
+											<comboitem
+												id="text_align_inherit" label="inherit" value="inherit" />
+										</combobox>
+									</row>
+									<row id="rowInline"
+										visible="false">
+										<label
+											sclass="gtt-propiedad-disenyoFormulario"
+											value="${c:l('propiedades.inline')}" />
+										<checkbox id="inLine" />
+									</row>
+									<!-- Texto desarrollo -->
+									<row id="row_css" spans="2">
+										<textbox id="css"
+											multiline="true" rows="5" width="120%" readonly="true"
+											visible="false" />
+									</row>
+								</rows>
+							</grid>
+						</tabpanel>
+					</tabpanels>
+				</tabbox>
+				<div align="center">
+					<button id="btnModificarPropiedades"
+						label="${c:l('boton.aplicarCambios')}"
+						image="/images/modifica.png"
+						autodisable="self, btnAyudaOnline, btnModificarImagen, btnDescargarImagen, btnDescargarFicheroHtml, btnDescargarFicheroCss, btnListaValores, btnListaIndexado, btnVerDominio, btnListaParametros, btnValidacion, btnSeleccionDominio, btnConvSelector, btnConvCampoTexto" />
+					<button id="btnConvSelector"
+						label="${c:l('propiedades.boton.convertir.selector')}"
+						image="/images/combobox.png" visible="false"
+						autodisable="self, btnAyudaOnline, btnModificarImagen, btnDescargarImagen, btnDescargarFicheroHtml, btnDescargarFicheroCss, btnListaValores, btnListaIndexado, btnVerDominio, btnListaParametros, btnValidacion, btnSeleccionDominio, btnModificarPropiedades, btnConvCampoTexto" />
+					<button id="btnConvCampoTexto"
+						label="${c:l('propiedades.boton.convertir.texto')}"
+						image="/images/textbox.png" visible="false"
+						autodisable="self, btnAyudaOnline, btnModificarImagen, btnDescargarImagen, btnDescargarFicheroHtml, btnDescargarFicheroCss, btnListaValores, btnListaIndexado, btnVerDominio, btnListaParametros, btnValidacion, btnSeleccionDominio, btnModificarPropiedades, btnConvSelector" />
+				</div>
+			</vlayout>
+		</window>
+	</div>
+</zk>

@@ -1,0 +1,53 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="${c:l(propiedad.titulo')}" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="wPasoDebeSaber" border="0" closable="false"
+		title="Paso Debe saber"
+		apply="es.caib.consola.controller.gestor.wmodal.PasoDebeSaberVersionTramiteWModal">
+		<vlayout>
+			<grid fixedLayout="true">
+				<columns>
+					<column width="200px" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<hlayout>
+							<label value="Instrucciones inicio (HTML)" />
+							<button id="btnInstruccionesInicioNivel"
+							 	image="images/nivel_custom.png" 
+								autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />							
+						</hlayout>
+						<vlayout spacing="10px">
+							 <hlayout>			
+							 	<textbox id="instruccionesEntrega" readonly="true" width="400px"/>
+								<button id="btnInstruccionesEntregaMulti" 
+										image="images/multiidioma.png"  
+										autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />
+							</hlayout>				 
+						 </vlayout> 							 													
+					</row>										
+				</rows>				
+			</grid>
+			<separator />
+			<div align="center">
+				<button id="btnModificar" label="${c:l('boton.editar')}"
+					image="/images/modifica.png" visible="false"
+					autodisable="self, btnDescripcion, btnScript, btnScriptParametro, btnAyuda, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />
+				<button id="btnGuardar" label="${c:l('boton.guardar')}"
+					image="/images/graba.png" 
+					autodisable="self, btnDescripcion, btnScript, btnScriptParametro, btnModificar, btnGuardarContinuar, btnAyuda, btnCancelar" />
+				<button id="btnGuardarContinuar"
+					label="${c:l('boton.guardarContinuar')}"
+					image="/images/grabaContinua.png"
+					autodisable="self, btnDescripcion, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnAyuda, btnCancelar" />
+				<button id="btnCancelar"
+					label="${c:l('boton.cancelar')}" image="/images/salir.gif"					
+					autodisable="self, btnDescripcion, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnAyuda" />
+				<button id="btnAyuda" label="${c:l('boton.ayuda')}"
+					image="/images/ayuda.png" 
+					autodisable="self, btnDescripcion, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar" />
+			</div>
+		</vlayout>
+	</window>
+</zk>

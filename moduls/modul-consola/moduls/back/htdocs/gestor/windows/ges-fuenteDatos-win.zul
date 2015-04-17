@@ -1,0 +1,67 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" root="./wFuenteDatos" ?>
+<?page title="${c:l('fuenteDatos.titulo')}" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<window id="wFuenteDatos" title="${c:l('fuenteDatos.titulo')}"
+		border="normal" closable="false" width="600px"
+		apply="es.caib.consola.controller.gestor.wmodal.FuenteDatosWModal">
+		<vlayout>
+			<grid fixedLayout="true">
+				<columns>
+					<column width="100px" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<hlayout>
+							<label value="${c:l('fuenteDatos.id')}" />							
+						</hlayout>
+						<hlayout>
+							<textbox style="text-transform:uppercase;" id="codigo" hflex="1"/>
+						</hlayout>
+					</row>
+					<row>
+						<label value="${c:l('fuenteDatos.descripcion')}" />
+						<textbox hflex="1" id="descripcion" />
+					</row>				
+					<row id="rowCampos">
+						<label value="${c:l('fuenteDatos.campos')}" />
+						<hlayout>		
+							 <listbox id="listboxCamposFuenteDatos" hflex="1" vflex="true" multiple="true" rows="8">
+							 	<listhead>
+									<listheader	width="70%" label="${c:l('fuenteDatos.campoId')}"/>
+									<listheader	width="30%" label="${c:l('fuenteDatos.campoPK')}"/>									
+								</listhead>												       		       
+						    </listbox>		
+						    <vlayout>
+						    	<button id="btnAddCampo" label="${c:l('fuenteDatos.procedimientosAdd')}"	/>
+						    	<button id="btnDelCampo" label="${c:l('fuenteDatos.procedimientosDel')}"	/>
+						    	<button id="btnEditCampo" label="${c:l('fuenteDatos.procedimientosEdit')}"	/>
+						    </vlayout>
+				   		 </hlayout>	
+				   	</row>															   	
+				</rows>
+			</grid>
+				
+			<div align="center">
+				<button id="btnGuardar" label="${c:l('boton.guardar')}"
+					image="/images/graba.png"
+					autodisable="self, btnPing, btnCancelar, btnAyuda" />
+				<button id="btnCancelar"
+					label="${c:l('boton.cancelar')}" image="/images/salir.gif"
+					autodisable="self, btnPing, btnGuardar, btnAyuda" />
+				<button id="btnAyuda" label="${c:l('boton.ayuda')}"
+					image="/images/ayuda.png"
+					autodisable="self, btnPing, btnGuardar, btnCancelar" />
+			</div>
+		</vlayout>
+		<menupopup id="popupCampo">
+			<menuitem id="PopupNuevoCampo" image="/images/alta.png"
+				label="${c:l('boton.nuevo')}" />
+			<menuitem id="PopupEditaCampo"
+				image="/images/modifica.png" label="${c:l('boton.editar')}" />
+			<menuitem id="PopupQuitaCampo"
+				image="/images/borrar.png" label="${c:l('boton.eliminar')}" />		
+		</menupopup>		
+	</window>
+</zk>

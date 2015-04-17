@@ -1,0 +1,72 @@
+<?page title="${c:l('plantillaVersion.titulo')}" contentType="text/html;charset=UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" root="./wPlantillaVersion" ?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+
+<zk>
+	<window id="wPlantillaVersion" title="${c:l('plantillaVersion.titulo')}"
+		border="normal" closable="false" width="600px"
+		apply="es.caib.consola.controller.gestor.wmodal.PlantillaVersionWModal">
+		<vlayout>
+			<grid fixedLayout="true">
+				<columns>
+					<column width="100px" />
+					<column />
+				</columns>
+				<rows>	
+					<row>
+						<label value="${c:l('plantillaVersion.codigo')}" />
+						<textbox style="text-transform:uppercase;" id="codigo" maxlength="3" width="30px" />
+					</row>
+					<row>
+						<label value="${c:l('plantillaVersion.formateador')}" />
+						<combobox id="formateador" hflex="1" readonly="true"/>						
+					</row>
+					<row>
+						<label value="${c:l('plantillaVersion.defecto')}" />
+						<checkbox id="defecto" />
+					</row>
+					<row>
+						<label value="${c:l('plantillaVersion.barcode')}" />
+						<checkbox id="barcode" />
+					</row>
+					<row>
+						<label value="${c:l('plantillaVersion.sello')}" />
+						<checkbox id="sello" />
+					</row>
+					<row id="plantillasIdiomaRow">
+						<label value="${c:l('plantillaVersion.plantillasIdioma')}" />
+						<hlayout>		
+							<listbox id="listPlantillasIdioma" hflex="1" vflex="true" multiple="true" rows="10" context="popupPlantillaIdioma" />															 																		
+							<vlayout>						    	
+						    	<button id="btnNuevaPlantillaIdioma" label="${c:l('plantillaVersion.plantillaIdiomaAdd')}"	/>
+						    	<button id="btnBorraPlantillaIdioma" label="${c:l('plantillaVersion.plantillaIdiomaDel')}"	/>
+						    	<button id="btnEditaPlantillaIdioma" label="${c:l('plantillaVersion.plantillaIdiomaEdit')}" />
+						    </vlayout>
+				   		 </hlayout>	
+					</row>										
+				</rows>
+			</grid>
+			<div align="center">
+				<button id="btnGuardar" label="${c:l('boton.guardar')}"
+					image="/images/graba.png"
+					autodisable="self, btnPing, btnCancelar, btnAyuda" />
+				<button id="btnCancelar"
+					label="${c:l('boton.cancelar')}" image="/images/salir.gif"
+					autodisable="self, btnPing, btnGuardar, btnAyuda" />
+				<button id="btnAyuda" label="${c:l('boton.ayuda')}"
+					image="/images/ayuda.png"
+					autodisable="self, btnPing, btnGuardar, btnCancelar" />
+			</div>
+		</vlayout>
+				
+		<menupopup id="popupPlantillasIdioma">
+			<menuitem id="PopupNuevaPlantillaIdioma" 
+				image="/images/alta.png" label="${c:l('plantillaVersion.plantillaIdiomaAdd')}" />
+			<menuitem id="PopupEditaPlantillaIdioma"
+				image="/images/modifica.png" label="${c:l('plantillaVersion.plantillaIdiomaEdit')}" />
+			<menuitem id="PopupBorraPlantillaIdioma"
+				image="/images/borrar.png" label="${c:l('plantillaVersion.plantillaIdiomaDel')}" />		
+		</menupopup>
+		
+	</window>
+</zk>

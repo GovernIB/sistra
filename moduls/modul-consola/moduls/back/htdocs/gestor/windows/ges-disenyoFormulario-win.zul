@@ -1,0 +1,143 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" root="./wDisenyoFormulario" ?>
+<?page title="${c:l('disenyoFormulario.titulo')}" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<window id="wDisenyoFormulario"
+		title="${c:l('disenyoFormulario.titulo')}"
+		apply="es.caib.consola.controller.gestor.wmodal.DisenyoFormularioWModal"
+		border="normal" closable="false" width="98%" height="96%">
+		<style src="css/estilos.css" />
+		<div width="98%" height="90%"
+			style="padding: 5px; border:1px solid #DDDDDD;">
+			<div style="padding:5px;">
+				<div id="formulario" style="padding:5px;">
+					<tabbox>
+						<tabs id="tabs">
+							<tab id="tabDisenyo"
+								label="${c:l('disenyoFormulario.tab.disenyo')}" />
+							<tab id="tabEstructura"
+								label="${c:l('disenyoFormulario.tab.estructura')}" />							
+						</tabs>
+						<tabpanels height="100%">
+							<!--  DISEÑO -->
+							<tabpanel height="100%">
+								<borderlayout id="blDisenyo"
+									width="100%" height="370px">
+									<north sclass="con_borde">
+										<hlayout>
+											<toolbar id="tb" sclass="vista" height="35px" align="end">
+												<toolbarbutton image="/images/CF-PAG.jpg" tooltiptext="Nueva página" />
+												<toolbarbutton image="/images/CF-SEC.jpg" tooltiptext="Nueva sección" />
+									            <toolbarbutton image="/images/CF-ETQ.jpg" tooltiptext="Etiqueta"/>
+									            <toolbarbutton image="/images/CF-CDT.jpg" tooltiptext="Campo de texto"/>
+									            <toolbarbutton image="/images/CF-LDA.jpg" tooltiptext="Lista desplegada"/>
+									            <toolbarbutton image="/images/CF-LDE.jpg" tooltiptext="Lista desplegable"/>
+									            <toolbarbutton image="/images/CF-LEL.jpg" tooltiptext="Lista elementos"/>									            
+									            <toolbarbutton image="/images/CF-CSU.jpg" tooltiptext="Casilla única de selección"/>
+									            <toolbarbutton image="/images/CF-CSV.jpg" tooltiptext="Casilla verificacion"/>
+									            <toolbarbutton image="/images/CF-CAP.jpg" tooltiptext="Captcha"/>
+									        </toolbar>											
+										</hlayout>
+									</north>
+									<!--height="400px" Este es el punto donde si no le especifico altura no sale nada -->
+									<center sclass="con_borde">
+										<div width="100%" height="100%"
+											style="overflow: false">
+											<iframe
+												id="iframeContenedorHTML" name="iframeContenedorHTML"												
+												style="position:inherit;" width="100%" height="100%" />
+
+											<script
+												type="text/javascript">
+
+												
+												<![CDATA[ function
+												lanzarEventoIframe(args)
+												{ zAu.send(new
+												zk.Event(zk.Widget.$("$iframeContenedorHTML"),'onSelect',args
+												)); } ]]>
+												
+												
+											</script>
+										</div>
+									</center>
+									<east id="barraPropiedadesDisenyo"
+										title="${c:l('disenyoFormulario.barra.propiedades')}" size="40%"
+										flex="true" collapsible="true" autoscroll="true" open="false">
+									</east>
+								</borderlayout>
+								<div align="center"
+									style="padding:5px;">
+									<button id="btnAnterior"
+										sclass="gtt-propiedad-disenyoFormulario"
+										label="${c:l('disenyoFormulario.boton.anterior')}"
+										image="/images/anterior.png"
+										autodisable="+self, btnSiguiente, btnGuardar, btnCancelar, btnAyuda, btnGuardarContinuar" />
+									<label id="labelNumeroPagina"
+										sclass="gtt-propiedad-disenyoFormulario">
+									</label>
+									<button id="btnSiguiente"
+										sclass="gtt-propiedad-disenyoFormulario"
+										label="${c:l('disenyoFormulario.boton.siguiente')}"
+										image="/images/siguiente.png"
+										autodisable="+self, btnAnterior, btnGuardar, btnCancelar, btnAyuda, btnGuardarContinuar" />
+								</div>
+							</tabpanel>
+
+							<!--  ESTRUCTURA -->
+							<tabpanel>
+								<borderlayout id="blEstructura"
+									width="100%" height="370px">
+									<west flex="true" size="40%">
+										<tree id="treeEstructura"
+											zclass="z-dottree" height="100%" width="100%" />
+									</west>
+									<east
+										id="barraPropiedadesEstructura" size="60%" flex="true"
+										collapsible="false" open="true" autoscroll="true">
+									</east>
+								</borderlayout>
+								<div align="center"
+									style="padding:5px;">
+									<button id="btnBuscar"
+										sclass="gtt-propiedad-disenyoFormulario"
+										label="${c:l('boton.buscar')}" image="/images/search.gif"
+										autodisable="self, btnGuardar, btnCancelar, btnAyuda, btnGuardarContinuar" />
+								</div>
+							</tabpanel>
+						</tabpanels>
+					</tabbox>
+				</div>
+			</div>
+		</div>
+		<div width="97%" align="center">
+			<button id="btnGuardar" label="${c:l('boton.guardar')}"
+				image="/images/graba.png"
+				autodisable="self, btnSiguiente, btnAnterior, btnBuscar, btnCancelar, btnAyuda, btnGuardarContinuar" />
+			<button id="btnGuardarContinuar"
+				label="${c:l('boton.guardarContinuar')}"
+				image="/images/grabaContinua.png"
+				autodisable="self, btnGuardar, btnSiguiente, btnAnterior, btnBuscar, btnCancelar, btnAyuda" />
+			<button id="btnCancelar" label="${c:l('boton.cancelar')}"
+				image="/images/salir.gif"
+				autodisable="self, btnSiguiente, btnAnterior, btnBuscar, btnGuardar, btnAyuda, btnGuardarContinuar" />
+			<button id="btnAyuda" label="${c:l('boton.ayuda')}"
+				image="/images/ayuda.png"
+				autodisable="self, btnSiguiente, btnAnterior, btnBuscar, btnGuardar, btnCancelar, btnGuardarContinuar" />
+		</div>
+		<script>
+			function cambia(id,men){
+				var frame = document.getElementsByName("iframeContenedorHTML");
+				var ife = frame[0].contentWindow.document.getElementById(id);
+				if (!ife){
+					var campos = frame[0].contentWindow.document.getElementsByName(id);
+					if (campos!=null){
+						ife=campos[0];
+					}
+				}
+				var padre = ife.parentElement;
+				padre.innerHTML = men;
+			}
+		</script>
+	</window>
+</zk>

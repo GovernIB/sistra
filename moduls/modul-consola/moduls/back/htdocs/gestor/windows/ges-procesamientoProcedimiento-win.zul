@@ -1,0 +1,192 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" root="./wProcesamientoProcedimiento" ?>
+<?page title="${c:l('dominio.titulo')}" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<window id="wProcesamientoProcedimiento" title="${c:l('procesamientoProcedimiento.titulo')}"
+		border="normal" closable="false" width="600px"
+		apply="es.caib.consola.controller.gestor.wmodal.ProcesamientoProcedimientoWModal">
+		<vlayout>
+			<tabbox id="tabBoxOrganismo">
+				<tabs id="tabs">
+					<tab id="tabProcesamiento" label="${c:l('procesamientoProcedimiento.procesamiento')}" />					
+					<tab id="tabFuentesDatos" label="${c:l('procesamientoProcedimiento.fuenteDatos')}"/>																			
+				</tabs>
+				<tabpanels>
+					<!--  PROCESAMIENTO -->
+					<tabpanel>
+					<grid fixedLayout="true">
+						<columns>
+							<column width="100px" />
+							<column />
+						</columns>
+						<rows>
+							<row>
+								<hlayout>
+									<label value="${c:l('procesamientoProcedimiento.id')}" />							
+								</hlayout>
+								<hlayout>
+									<textbox id="codigo" hflex="1" readonly="true"/>
+								</hlayout>
+							</row>
+							<row>
+								<label value="${c:l('procesamientoProcedimiento.descripcion')}" />
+								<textbox hflex="1" id="descripcion" rows="4" readonly="true" />
+							</row>
+							<row>
+								<label value="${c:l('procesamientoProcedimiento.activo')}" />
+								<vlayout>							
+									<checkbox id="activo"/>							
+								</vlayout>
+							</row>
+							<row id="avisosRow">
+								<label value="${c:l('procesamientoProcedimiento.avisos')}" />
+								<hlayout spacing="20px">
+									<hlayout>
+										<label value="${c:l('procesamientoProcedimiento.intervalo')}" />
+										<spinner id="intervalo" constraint="no negative" cols="1" />
+									</hlayout>
+									<hlayout>
+										<label value="${c:l('procesamientoProcedimiento.inmediato')}" />
+										<checkbox id="inmediato"/>		
+									</hlayout>							
+								</hlayout>
+							</row>								
+							<row id="tipoRow">
+								<hlayout>
+									<label value="${c:l('procesamientoProcedimiento.tipo')}" />
+								</hlayout>
+								<vlayout>
+									<radiogroup id="tipo">
+										<hlayout sclass="z-valign-top" spacing="50px">
+											<radio id="ejb"
+												label="${c:l('procesamientoProcedimiento.tipo.ejb')}" value="E" />
+											<vlayout id="ejbFields"
+												visible="false">
+												<hlayout>
+													<label
+														value="${c:l('procesamientoProcedimiento.ejb.localizacion')}" />
+													<radiogroup id="ejbLocalizacion">
+														<radio id="ejbLocalizacionLocal"
+															label="${c:l('procesamientoProcedimiento.ejb.localizacion.local')}" value="L" />
+														<radio id="ejbLocalizacionRemoto"
+															label="${c:l('procesamientoProcedimiento.ejb.localizacion.remoto')}" value="R" />	
+													</radiogroup>												
+												</hlayout>
+												<hlayout>
+													<label
+														value="${c:l('procesamientoProcedimiento.ejb.jndi')}" />
+														<textbox id="ejbJndi"
+														width="280px"
+														maxlength="${ConstantesMaxlength_MAX_LENGTH_JNDI}" />
+												</hlayout>
+												<hlayout>
+													<label id="lblEjbUrl"
+														value="${c:l('procesamientoProcedimiento.ejb.url')}" />
+														<textbox id="ejbUrl"
+														width="280px"
+														maxlength="${ConstantesMaxlength_MAX_URL}" />
+												</hlayout>
+											</vlayout>
+										</hlayout>
+										<hlayout spacing="50px">
+											<radio id="webservice"
+												label="${c:l('procesamientoProcedimiento.tipo.ws')}" value="W" />
+											<vlayout id="wsFields"
+												visible="false">
+												<hlayout>
+													<label
+														value="${c:l('procesamientoProcedimiento.ws.url')}" />
+														<textbox id="wsUrl"
+														width="280px"
+														maxlength="${ConstantesMaxlength_MAX_URL}" />
+												</hlayout>
+												<hlayout>
+													<label
+														value="${c:l('procesamientoProcedimiento.ws.version')}" />
+													<combobox id="wsVersion" width="50px">
+														<comboitem id="wsVersionV1"
+															label="v1"
+															value="v1" />
+														<comboitem id="wsVersionV2"
+															label="v2"
+															value="v2"  />												
+													</combobox>												
+												</hlayout>										
+											</vlayout>	
+										</hlayout>								
+									</radiogroup>
+								</vlayout>
+							</row>	
+							
+							<row id="autenticacionRow">
+								<label value="${c:l('autenticacion.autenticacionExplicita')}" />
+								<vlayout>
+									<hlayout spacing="40px">								
+										<radiogroup id="autenticacionExplicita">
+											<radio id="autenticacionExplicitaNo"
+												label="${c:l('autenticacion.autenticacionExplicitaNo')}" value="N" />
+											<radio id="autenticacionExplicitaUsuPass"
+												label="${c:l('autenticacion.autenticacionExplicitaUsuPass')}" value="S" />	
+											<radio id="autenticacionExplicitaOrganismo"
+												label="${c:l('autenticacion.autenticacionExplicitaOrganismo')}" value="C" />
+										</radiogroup>	
+									</hlayout>
+									<hlayout>
+										<hlayout id="usuPassLayout">
+											<label value="${c:l('autenticacion.autenticacionExplicitaUsuario')}" />
+											<textbox id="autenticacionExplicitaUsuario"/>		
+											<label value="${c:l('autenticacion.autenticacionExplicitaPassword')}" />
+											<textbox id="autenticacionExplicitaPassword"/>
+										</hlayout>
+									</hlayout>							
+								</vlayout>
+							</row>															   	
+						</rows>
+					</grid>
+				</tabpanel>				
+				<!--  FUENTES DATOS -->
+				<tabpanel>
+					<hlayout>		
+						 <listbox id="listFuenteDatos" hflex="1" vflex="true" multiple="true" rows="15" context="popupFuenteDatos">	
+						 	<listhead>
+								<listheader	width="10%"/>
+								<listheader	width="90%"/>									
+							</listhead>	
+							 <listitem id="itemFuenteDatos" self="@{each=FuenteDatos}" value="@{FuenteDatos}">
+								<listcell style="white-space: nowrap;"
+									label="@{FuenteDatos.identificador}" />
+								<listcell style="white-space: nowrap;"
+									label="@{FuenteDatos.descripcion}" />										
+							</listitem>				        				       
+					    </listbox>		
+					    <vlayout>						    	
+					    	<button id="btnNuevoFuenteDatos" label="${c:l('procesamientoProcedimiento.fuenteDatosAdd')}"	/>
+					    	<button id="btnQuitaFuenteDatos" label="${c:l('procesamientoProcedimiento.fuenteDatosDel')}"	/>
+					    	<button id="btnEditaFuenteDatos" label="${c:l('procesamientoProcedimiento.fuenteDatosEdit')}"	/>					    	
+					    </vlayout>
+			   		 </hlayout>	
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+			<div align="center">
+				<button id="btnGuardar" label="${c:l('boton.guardar')}"
+					image="/images/graba.png"
+					autodisable="self, btnPing, btnCancelar, btnAyuda" />
+				<button id="btnCancelar"
+					label="${c:l('boton.cancelar')}" image="/images/salir.gif"
+					autodisable="self, btnPing, btnGuardar, btnAyuda" />
+				<button id="btnAyuda" label="${c:l('boton.ayuda')}"
+					image="/images/ayuda.png"
+					autodisable="self, btnPing, btnGuardar, btnCancelar" />
+			</div>
+		</vlayout>		
+		<menupopup id="popupFuenteDatos">
+			<menuitem id="PopupNuevoFuenteDatos" image="/images/alta.png"
+				label="${c:l('boton.nuevo')}" />
+			<menuitem id="PopupEditaFuenteDatos"
+				image="/images/modifica.png" label="${c:l('boton.editar')}" />
+			<menuitem id="PopupQuitaFuenteDatos"
+				image="/images/borrar.png" label="${c:l('boton.eliminar')}" />		
+		</menupopup>
+	</window>
+</zk>

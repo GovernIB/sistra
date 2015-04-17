@@ -1,0 +1,265 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="${c:l(propiedad.titulo')}" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="wPasoRegistrarVersion" border="0" closable="false"
+		title="Registrar trámite"
+		apply="es.caib.consola.controller.gestor.wmodal.PasoRegistrarVersionTramiteWModal">
+		<vlayout>
+			<grid fixedLayout="true">
+				<columns>
+					<column width="200px" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<hlayout>
+							<label value="Destino" />																												
+						</hlayout>
+						<hlayout spacing="10px">
+							 <radiogroup id="destino"/>
+							 <radio id="registro" label="Registro" radiogroup="destino" />
+							 <radio id="bandeja" label="Bandeja" radiogroup="destino" />
+							 <radio id="consulta" label="Consulta" radiogroup="destino" />
+							 <radio id="asistente" label="Asistente" radiogroup="destino" />
+						</hlayout>
+					</row>
+					<row id="opcionesRegistroRow">
+						<hlayout>
+							<label value="Opciones registro" />							
+						</hlayout>
+						<hlayout spacing="20px">
+							 <checkbox id="firmar" label="Debe firmarse" />
+							 <checkbox id="confirmacionAutomatica" label="Confirmar automáticamente preregistros" />							 							 							 							 				
+						</hlayout>
+					</row>						
+					<row id="destinoRegistroRow">
+						<hlayout>
+							<label value="Destino registro" />							
+						</hlayout>
+						<vlayout>
+							<hlayout>
+								<div width="120px">
+							 		<label value="Organo destino"/>
+							 	</div>
+							 	<textbox id="organoDestino" readonly="true" width="200px"/>
+							 	<button id="btnOrganoDestino" 
+									label="..."  
+										autodisable="self, btnScript, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />	
+								<div width="120px">
+							 		<label value="Unidad administrativa"/>
+							 	</div>
+							 	<textbox id="unidadAdministrativa" readonly="true" width="200px"/>
+							 	<button id="btnUnidadAdministrativa" 
+									label="..."  
+										autodisable="self, btnScript, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />	
+							</hlayout>
+							<hlayout>
+								<div width="120px">
+							 		<label value="Oficina registro"/>
+							 	</div>
+							 	<textbox id="oficinaRegistro" readonly="true" width="200px"/>
+							 	<button id="btnOficinaRegistro" 
+									label="..."  
+										autodisable="self, btnScript, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />								
+								<div width="120px">
+							 		<label value="Tipo asunto"/>
+							 	</div>
+							 	<textbox id="tipoAsunto" readonly="true" width="200px"/>
+							 	<button id="btnTipoAsunto" 
+									label="..."  
+										autodisable="self, btnScript, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />	
+							</hlayout>							
+						</vlayout>
+					</row>
+					<row id="destinoRegistroScriptRow">
+						<hlayout>
+							<label value="Destino registro (script)" />
+							<button id="btnDestinoScriptNivel" 
+										image="images/nivel_custom-empty.png"  
+										autodisable="self, btnScript, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />							
+						</hlayout>
+						<vlayout>							 	
+							<button id="btnDestinoScript" 
+								image="images/script-empty.png"  
+							     	autodisable="self, btnScript, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />							
+						</vlayout>
+					</row>
+					<row id="finalizacionRow">
+						<hlayout>
+							<label value="Opciones finalización" />		
+							<button id="btnFinalizacionScriptNivel" 
+										image="images/nivel_custom-empty.png"  
+										autodisable="self, btnScript, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />					
+						</hlayout>
+						<vlayout>
+							<hlayout>
+								<div width="120px">
+									<label value="Instrucciones"/>
+								</div>
+								<hlayout spacing="20px">
+									<hlayout>
+										<label value="Finalización"/>
+										<button id="btnInstruccionesFinEdit" 
+											image="images/multiidioma.png"  
+											autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />
+									</hlayout>
+									<hlayout>
+										<label value="Entrega (HTML)"/>
+										<button id="btnInstruccionesEntregaEdit" 
+											image="images/multiidioma-empty.png"  
+											autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />
+									</hlayout>
+									<hlayout>
+										<label value="Fecha límite"/>
+										<button id="btnInstruccionesFechaLimiteEdit" 
+											image="images/multiidioma-empty.png"  
+											autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />
+									</hlayout>
+								</hlayout>
+							 </hlayout>								 							 
+							 <hlayout>
+								<div width="180px">
+									<label value="Scripts"/>
+								</div>
+								<hlayout spacing="30px">
+									<hlayout>
+										<label value="Validación fin"/>
+										<button id="btnValidacionFinScript" 
+												image="images/script-empty.png"  
+												autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />
+									 </hlayout>
+									 <hlayout>
+										<label value="URL tras finalizar"/>										
+										<button id="btnUrlFinScript" 
+												image="images/script-empty.png"  
+												autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />
+									 </hlayout>
+								</hlayout>
+							 </hlayout>							 							 													 
+						</vlayout>
+					</row>
+					<row id="justificanteRegistroRow">
+						<hlayout>
+							<label value="Justificante registro" />
+							<button id="btnJustificanteRegistroNivel" 
+										image="images/nivel_custom-empty.png"  
+										autodisable="self, btnScript, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />							
+						</hlayout>
+						<vlayout>							 	
+							<hlayout>
+								<div width="180px">
+									<label value="Personalización"/>
+								</div>
+								<hlayout spacing="30px">
+									<checkbox id="ocultarNifNombre" label="Ocultar nif/nombre" />
+							 		<checkbox id="ocultarClave" label="Ocultar clave tramitación" />									
+								</hlayout>
+							</hlayout>	
+							<hlayout>
+								<div width="180px">
+									<label value="Datos solicitud"/>
+								</div>
+								<button id="btnDatosJustificanteEdit" 
+											image="images/multiidioma.png"  
+											autodisable="self, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />								
+							</hlayout>						
+						</vlayout>
+					</row>
+					<row id="datosConsultaRow">
+						<hlayout>
+							<label value="Datos consulta" />							
+						</hlayout>
+						<vlayout>
+							<hlayout>
+								<div width="120px">
+							 		<label value="Tipo acceso"/>
+							 	</div>
+								<radiogroup id="tipoAccesoConsulta">
+									<hlayout sclass="z-valign-top" spacing="50px">
+										<radio id="consultaEJB"
+											label="EJB" value="EJB" />
+										<vlayout id="ejbFields"
+											visible="true">
+											<hlayout>
+												<label
+													value="${c:l('dominio.ejb.localizacion')}" />
+												<radiogroup id="ejbLocalizacion">
+													<radio id="ejbLocalizacionLocal"
+														label="${c:l('dominio.ejb.localizacion.local')}" value="L" />
+													<radio id="ejbLocalizacionRemoto"
+														label="${c:l('dominio.ejb.localizacion.remoto')}" value="R" />	
+												</radiogroup>												
+											</hlayout>
+											<hlayout>
+												<label
+													value="${c:l('dominio.ejb.jndi')}" />
+													<textbox id="ejbJndi"
+													width="280px"
+													maxlength="${ConstantesMaxlength_MAX_LENGTH_JNDI}" />
+											</hlayout>
+											<hlayout id="ejbUrlFields">
+												<label id="lblEjbUrl"
+													value="${c:l('dominio.ejb.url')}" />
+													<textbox id="ejbUrl"
+													width="280px"
+													maxlength="${ConstantesMaxlength_MAX_URL}" />
+											</hlayout>
+										</vlayout>
+									</hlayout>
+									<hlayout spacing="50px">
+										<radio id="consultaWS"
+											label="WEBSERVICE" value="WEBSERVICE" />
+										<vlayout id="wsFields"
+											visible="true">
+											<hlayout>
+												<label
+													value="${c:l('dominio.ws.url')}" />
+													<textbox id="wsUrl"
+													width="280px"
+													maxlength="${ConstantesMaxlength_MAX_URL}" />
+											</hlayout>
+											<hlayout>
+												<label
+													value="${c:l('dominio.ws.version')}" />
+												<combobox id="wsVersion" width="50px">
+													<comboitem id="wsVersionV1"
+														label="v1"
+														value="v1" />
+													<comboitem id="wsVersionV2"
+														label="v2"
+														value="v2"  />												
+												</combobox>												
+											</hlayout>										
+										</vlayout>	
+									</hlayout>								
+							</radiogroup>
+								
+								
+									
+							</hlayout>							 							 													
+						</vlayout>
+					</row>								
+				</rows>				
+			</grid>
+			<separator />
+			<div align="center">
+				<button id="btnModificar" label="${c:l('boton.editar')}"
+					image="/images/modifica.png" visible="false"
+					autodisable="self, btnDescripcion, btnScript, btnScriptParametro, btnAyuda, btnGuardar, btnGuardarContinuar, btnCancelar, btnAyuda" />
+				<button id="btnGuardar" label="${c:l('boton.guardar')}"
+					image="/images/graba.png" 
+					autodisable="self, btnDescripcion, btnScript, btnScriptParametro, btnModificar, btnGuardarContinuar, btnAyuda, btnCancelar" />
+				<button id="btnGuardarContinuar"
+					label="${c:l('boton.guardarContinuar')}"
+					image="/images/grabaContinua.png"
+					autodisable="self, btnDescripcion, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnAyuda, btnCancelar" />
+				<button id="btnCancelar"
+					label="${c:l('boton.cancelar')}" image="/images/salir.gif"
+					autodisable="self, btnDescripcion, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnAyuda" />
+				<button id="btnAyuda" label="${c:l('boton.ayuda')}"
+					image="/images/ayuda.png" 
+					autodisable="self, btnDescripcion, btnScript, btnScriptParametro, btnModificar, btnGuardar, btnGuardarContinuar, btnCancelar" />
+			</div>
+		</vlayout>
+	</window>
+</zk>
