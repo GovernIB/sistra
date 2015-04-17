@@ -1,0 +1,73 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" root="./wCuentaEnvio" ?>
+<?page title="${c:l('dominio.titulo')}" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<window id="wCuentaEnvio" title="${c:l('cuentaEnvio.titulo')}"
+		border="normal" closable="false" width="600px"
+		apply="es.caib.consola.controller.configuracion.wmodal.CuentaEnvioWModal">
+		<vlayout>
+			<grid fixedLayout="true">
+				<columns>
+					<column width="100px" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<hlayout>
+							<label value="${c:l('cuentaEnvio.identificador')}" />							
+						</hlayout>
+						<hlayout>
+							<textbox id="identificador" hflex="1"/>
+						</hlayout>
+					</row>
+					<row>
+						<label value="${c:l('cuentaEnvio.nombre')}" />
+						<textbox hflex="1" id="nombre" />
+					</row>
+					<row>
+						<label value="${c:l('cuentaEnvio.email')}" />
+						<textbox hflex="1" id="email"  />
+					</row>
+					<row>
+						<label value="${c:l('cuentaEnvio.sms')}" />
+						<textbox hflex="1" id="sms"  />
+					</row>
+					<row>
+						<label value="${c:l('cuentaEnvio.defecto')}" />
+						<checkbox id="defecto" />
+					</row>
+					<!--  NO IMPLEMENTADO TODAVIA -->
+					<row visible="false"> 
+						<label value="${c:l('cuentaEnvio.envioManual')}" />
+						<hlayout>
+							<button id="btnEnviarEmail" label="${c:l('cuentaEnvio.enviarEmail')}"/>
+							<button id="btnEnviarSms" label="${c:l('cuentaEnvio.enviarSms')}"/>
+						</hlayout>
+					</row>
+					<!--  NO IMPLEMENTADO TODAVIA -->
+					<row visible="false">
+						<label value="${c:l('cuentaEnvio.logEnvios')}" />
+						<hlayout>
+							<button id="btnLogEnvios" label="${c:l('cuentaEnvio.verLogsEnvio')}"/>
+							<button id="btnResumenEnvios" label="${c:l('cuentaEnvio.verResumenEnvios')}"/>
+						</hlayout>
+					</row>
+					 
+				</rows>
+			</grid>
+
+			<div align="center">
+				<button id="btnGuardar" label="${c:l('boton.guardar')}"
+					image="/images/graba.png"
+					autodisable="self, btnPing, btnCancelar, btnAyuda" />
+				<button id="btnCancelar"
+					label="${c:l('boton.cancelar')}" image="/images/salir.gif"
+					autodisable="self, btnPing, btnGuardar, btnAyuda" />
+				<button id="btnAyuda" label="${c:l('boton.ayuda')}"
+					image="/images/ayuda.png"
+					autodisable="self, btnPing, btnGuardar, btnCancelar" />
+			</div>
+		</vlayout>
+				
+	</window>
+</zk>

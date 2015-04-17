@@ -1,0 +1,67 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" root="./wAlertaPlataforma" ?>
+<?page title="${c:l('dominio.titulo')}" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<window id="wAlertaPlataforma" title="${c:l('alertaPlataforma.titulo')}"
+		border="normal" closable="false" width="600px"
+		apply="es.caib.consola.controller.configuracion.wmodal.AlertaPlataformaWModal">
+		<vlayout>
+			<grid fixedLayout="true">
+				<columns>
+					<column width="100px" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<hlayout>
+							<label value="${c:l('alertaPlataforma.descripcion')}" />							
+						</hlayout>
+						<hlayout>
+							<textbox id="descripcion" hflex="1"/>
+						</hlayout>
+					</row>
+					<row>
+						<hlayout>
+							<label value="${c:l('alertaPlataforma.niveles')}" />							
+						</hlayout>
+						<vlayout>
+							<checkbox id="C" label="${c:l('alertaPlataforma.nivelCritico')}" /> 
+							<checkbox id="A" label="${c:l('alertaPlataforma.nivelAlto')}" /> 
+							<checkbox id="M" label="${c:l('alertaPlataforma.nivelMedio')}"/> 
+							<checkbox id="B" label="${c:l('alertaPlataforma.nivelBajo')}"/>							
+						</vlayout>
+					</row>					
+					<row>
+						<label value="${c:l('alertaPlataforma.listaMails')}" />
+						<hlayout>		
+							 <listbox id="mails" hflex="1" vflex="true" multiple="true" rows="8">
+						        					      				        
+						    </listbox>		
+						    <vlayout>
+						    	<button id="btnAddMail" label="${c:l('alertaPlataforma.mailAdd')}"	/>
+						    	<button id="btnDelMail" label="${c:l('alertaPlataforma.mailDel')}"	/>
+						    </vlayout>
+				   		 </hlayout>	
+					</row>	
+					<row>
+						<label value="${c:l('alertaPlataforma.intervalo')}" />
+						<spinner id="intervalo" constraint="no negative,no zero" cols="1" step="15" value="15"/>
+					</row>								
+				</rows>
+			</grid>
+
+			<div align="center">
+				<button id="btnGuardar" label="${c:l('boton.guardar')}"
+					image="/images/graba.png"
+					autodisable="self, btnPing, btnCancelar, btnAyuda" />
+				<button id="btnCancelar"
+					label="${c:l('boton.cancelar')}" image="/images/salir.gif"
+					autodisable="self, btnPing, btnGuardar, btnAyuda" />
+				<button id="btnAyuda" label="${c:l('boton.ayuda')}"
+					image="/images/ayuda.png"
+					autodisable="self, btnPing, btnGuardar, btnCancelar" />
+			</div>
+		</vlayout>
+				
+	</window>
+</zk>

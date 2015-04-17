@@ -1,0 +1,90 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" root="./wProcedimiento" ?>
+<?page title="${c:l('procedimiento.titulo')}" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<window id="wProcedimiento" title="${c:l('procedimiento.titulo')}"
+		border="normal" closable="false" width="600px"
+		apply="es.caib.consola.controller.configuracion.wmodal.ProcedimientoWModal">
+		<vlayout>
+			<grid fixedLayout="true">
+				<columns>
+					<column width="100px" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<hlayout>
+							<label value="${c:l('procedimiento.identificador')}" />							
+						</hlayout>
+						<hlayout>
+							<textbox style="text-transform:uppercase;" id="codigo" hflex="1"/>
+						</hlayout>
+					</row>
+					<row>
+						<label value="${c:l('procedimiento.descripcion')}" />
+						<textbox hflex="1" id="descripcion" rows="4" />
+					</row>
+					<row>
+						<hlayout>
+							<label value="${c:l('procedimiento.organismo')}" />							
+						</hlayout>
+						<hlayout>
+							<textbox id="organismoDesc" hflex="1" readonly="true"/>
+							<button id="btnOrganismo"
+									label="..."	/>
+						</hlayout>
+					</row>
+					<row>
+						<label value="${c:l('procedimiento.gestionExpedientes')}" />
+						<vlayout>			
+							<hlayout>				
+								<label value="${c:l('procedimiento.unidadAdministrativa')}" />								
+								<textbox id="unidadAdministrativaDesc" width="250px" readonly="true" />
+								<button id="btnUnidadAdministrativa"
+									label="..."	/>
+							</hlayout>							
+							<hlayout>				
+								<label value="${c:l('procedimiento.avisoNotificaciones')}" />
+								<checkbox id="checkAvisoNotificaciones"/>
+							</hlayout>
+							<hlayout>				
+								<label value="${c:l('procedimiento.permitirSms')}" />
+								<checkbox id="checkPermitirSMS"/>
+							</hlayout>
+						</vlayout>
+					</row>
+					<row id="rowGestores">
+						<label value="${c:l('procedimiento.gestores')}" />
+						<hlayout>		
+							 <listbox id="listaGestores" hflex="1" vflex="true" multiple="true" rows="8">
+						        <!-- 
+						        <listhead>
+						            <listheader label="Gestor"></listheader>						            
+						        </listhead>
+						         -->				        
+						    </listbox>		
+						    <vlayout>
+						    	<!-- Ponemos a false, no esta preparado ejb xa actualizar en ese sentido -->
+						    	<button id="btnAddGestor" label="${c:l('procedimiento.gestoresAdd')}" visible="false"/>
+						    	<button id="btnDelGestor" label="${c:l('procedimiento.gestoresDel')}" visible="false"/>
+						    </vlayout>
+				   		 </hlayout>	
+				   	</row>					  
+				</rows>
+			</grid>
+
+			<div align="center">
+				<button id="btnGuardar" label="${c:l('boton.guardar')}"
+					image="/images/graba.png"
+					autodisable="self, btnPing, btnCancelar, btnAyuda" />
+				<button id="btnCancelar"
+					label="${c:l('boton.cancelar')}" image="/images/salir.gif"
+					autodisable="self, btnPing, btnGuardar, btnAyuda" />
+				<button id="btnAyuda" label="${c:l('boton.ayuda')}"
+					image="/images/ayuda.png"
+					autodisable="self, btnPing, btnGuardar, btnCancelar" />
+			</div>
+		</vlayout>
+				
+	</window>
+</zk>

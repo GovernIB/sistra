@@ -1,0 +1,39 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" root="./wFormateadorRedose" ?>
+<?page title="${c:l('dominio.titulo')}" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<window id="wFormateadorRedose" title="${c:l('formateadorRedose.titulo')}"
+		border="normal" closable="false" width="600px"
+		apply="es.caib.consola.controller.configuracion.wmodal.FormateadorRedoseWModal">
+		<vlayout>
+			<grid fixedLayout="true">
+				<columns>
+					<column width="100px" />
+					<column />
+				</columns>
+				<rows>	
+					<row>
+						<label value="${c:l('formateadorRedose.clase')}" />
+						<textbox hflex="1" id="clase" />
+					</row>				
+					<row>
+						<label value="${c:l('formateadorRedose.descripcion')}" />
+						<textbox hflex="1" id="descripcion" />
+					</row>
+				</rows>
+			</grid>
+			<div align="center">
+				<button id="btnGuardar" label="${c:l('boton.guardar')}"
+					image="/images/graba.png"
+					autodisable="self, btnPing, btnCancelar, btnAyuda" />
+				<button id="btnCancelar"
+					label="${c:l('boton.cancelar')}" image="/images/salir.gif"
+					autodisable="self, btnPing, btnGuardar, btnAyuda" />
+				<button id="btnAyuda" label="${c:l('boton.ayuda')}"
+					image="/images/ayuda.png"
+					autodisable="self, btnPing, btnGuardar, btnCancelar" />
+			</div>
+		</vlayout>
+				
+	</window>
+</zk>
