@@ -1,0 +1,35 @@
+<html>
+<head>
+</head>
+<body>
+<h1 class="gttH1">CONFIGURACI&Oacute; DE PROCESSAMENT</h1>
+Aquesta finestra cont&eacute; les opcions de configuraci&oacute; pel processament de les sol·licituds del procediment contra el Backoffice corresponent.<br>
+
+<h2 class="gttH2">DESCRIPCI&Oacute; DE CAMPS</h2>
+Els camps que apareixen a la finestra s&oacute;n els seg&uuml;ents:
+<ul>
+<li><span class="nombreCampo">Identificador:</span> Codi que identifica un&iacute;vocament al procediment. Aquest camp &eacute;s no editable.</li>
+<li><span class="nombreCampo">Descripci&oacute;:</span> Text descriptiu del procediment. Aquest camp &eacute;s no editable.</li>
+<li><span class="nombreCampo">Activar processament:</span> Aquesta casella permet habilitar l'av&iacute;s d'entrades al Backoffice. Si es marca aquesta casella apareixeran la resta de camps que es descriuen a continuaci&oacute;</li>
+<li><span class="nombreCampo">Avisos:</span> Apartat que permet configurar les opcions d'av&iacute;s a Backoffice.</li>
+<ul class="codigoPurpura">
+<li><span class="codigoPurpura">Interval d'avisos (minuts):</span> Aquest camp permet indicar cada quants minuts s'avisar&agrave; al Backoffice que t&eacute; entrades pendents de processar.</li>
+<li><span class="codigoPurpura">Av&iacute;s immediat:</span> Aquesta casella permet habilitar/deshabilitar l'av&iacute;s immediat de les entrades al Backoffice una vegada que arriben a la Safata Telem&agrave;tica.</li>
+</ul>
+<li><span class="nombreCampo">Tipus av&iacute;s:</span> Aquest apartat permet configurar les opcions relatives a la tecnologia a emprar per avisar al Backoffice de les entrades a processar. A continuaci&oacute; s'exposen les diferents opcions:</li>
+<ul class="codigoPurpura">
+<li><span class="codigoPurpura">EJB:</span> Indica que la comunicaci&oacute; es far&agrave; emprant EJBs. Si es selecciona aquesta opci&oacute; s'hauran d'emplenar les configuracions seg&uuml;ents:</li>
+<ul class="codigoRojo">
+<li><span class="codigoRojo">Localitzaci&oacute;: </span>Casella de selecci&oacute; &uacute;nica que permet establir la localitzaci&oacute; de l'EJB que rebr&agrave; l'av&iacute;s de noves entrades. Si aquest EJB es troba al mateix servidor que la plataforma s'haur&agrave; de seleccionar Local, en cas contrari Remot.</li>
+<li><span class="codigoRojo">JNDI: </span>Camp en el que s'ha d'especificar el JNDI d'acc&eacute;s a l'EJB.</li>
+<li><span class="codigoRojo">Url: </span>En cas que l'EJB estigui remot a SISTRA, aquest camp ha de contenir la URL d'acc&eacute;s al servidor al que es troba l'EJB.</li>
+</ul>
+<li><span class="codigoPurpura">Webservice:</span> Indica que la comunicaci&oacute; es far&agrave; emprant Webservices</li>
+<ul class="codigoRojo">
+<li><span class="codigoRojo">Url: </span>Aquest camp ha de contenir la URL de l'endpoint del Webservice.</li>
+<li><span class="codigoRojo">Versi&oacute;: </span>En aquest camp s'ha de seleccionar la versió del Webservice a emprar per l'av&iacute;s de les entrades.</li>
+</ul>
+</ul>
+<li><span class="nombreCampo">Autenticaci&oacute; expl&iacute;cita:</span> Casella de selecci&oacute; &uacute;nica que permet indicar el tipus d'autenticació a emprar en l'av&iacute;s de les entrades. Si es selecciona No, no s'emprar&agrave; autenticaci&oacute;, si es selecciona Usuari/Contrasenya s'emprar&agrave; l'usuari i contrasenya indicats, i si es selecciona Autenticació organisme s'emprar&agrave; l'usuari i contrasenya indicats pel procediment al fitxer de propietats del plugin de login de SISTRA.</li>
+</body>
+</html>
