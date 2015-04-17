@@ -1,0 +1,111 @@
+@charset "utf-8";
+
+/* formulari */
+
+#section_container {
+	font-size:1.1em;
+}
+
+/* infoInteres */
+
+#section_container #infoInteres {
+	overflow:hidden; padding: 0 1em .5em 1em; margin:1em .5em;	 border: 1px solid #cdcdcd; 
+}
+
+/* titol */
+
+#section_container #titulo_form {
+	overflow:hidden; width:44.5em; font-size:1.2em; padding: 0 1em .5em 1em; margin:1em .5em;	 border: 1px solid #cdcdcd;
+}
+
+#section_container #titulo_form .column { padding-right:1.5em !important; }
+
+#section_container #titulo_form img { max-width: 12em; }
+
+/* tituloCabecera no se esta generando dsd el xdp, se esta generando Titulo */
+#tituloCabecera { display:block; float:left; }
+#Titulo { display:block; float:left; }
+
+/* fieldset */
+
+#section_container fieldset {
+	padding: 0 1em .5em 1em; margin:1em .5em; border: 1px solid #cdcdcd;
+}
+
+/* legend */
+
+#section_container legend .id {
+	font-weight: normal; color:#fff; padding:0 .4em; margin: 0 .4em; background-color:#ff8700;
+}
+
+#section_container legend .title {
+	color:#ff8700;
+}
+
+/* column, row */
+
+#section_container .column {	
+	overflow:hidden; float: left;
+}
+
+#section_container .row {
+	overflow:hidden; width:100%; padding:.2em 0;		
+}
+
+#section_container span {
+	/*font-size:.9em;*/
+}
+
+#section_container label {
+	font:normal 0.7em Verdana, Arial, Helvetica, sans-serif; margin-right: 0.1em;
+}
+
+#section_container select {
+	font-size:.85em;
+}
+
+#section_container input {
+	 vertical-align:middle; border:0;
+}
+
+#section_container input.caja, #section_container textarea {
+	width: 95%; font-size:.9em; padding:.2em 0 .3em 0; background-color:#fff; border:1px solid #ffdab2;
+}
+
+#section_container input[readonly] {
+	background-color:#eee; border:1px solid #eee;
+}
+
+#section_container textarea {
+
+}
+
+ul.input-list { list-style:none; }
+ul.inline li { display:inline; padding-right:1.5em; }
+
+div.selectorFinestra { display:none; width:80%; font-size:.9em; margin:.1em 0 .5em 0; background-color:#fff2e4; }
+div.selectorFinestra ul, div.selectorFinestra p { padding:.5em 1em; margin:0; }
+div.selectorFinestra ul { display:none; overflow:auto; max-height:10em; list-style:none; padding:.3em 0; }
+div.selectorFinestra li { padding:.3em 1em; }
+div.selectorFinestra p, div.selectorFinestra li a { font-size:.9em !important; }
+div.selectorFinestra p.carregant { padding-left:2.5em; background:transparent url(../../imgs/executant.gif) no-repeat .5em .5em; }
+
+div.selectorFinestra-index { font-size:.9em; padding:.5em 1em; background-color:#f2f2f2; border-bottom:1px solid #ccc; }
+
+#section_container a.bt { font-size:.8em !important; }
+
+span.obligatori { font:bold .7em Verdana, Arial, Helvetica, sans-serif; color:#c00; padding:0 0 0 .3em; }
+span.caractersMax { font:normal .7em Verdana, Arial, Helvetica, sans-serif; color:#c00; }
+
+div.form_ajuda { display:none; position:absolute; z-index:10; max-width:20em; padding:.3em .5em; background-color:#ffc; }
+
+a.bt-hidden { visibility:hidden; }
+
+/* ajuda */
+
+div.ajuda { padding-top:1em; }
+
+.a-slider { padding-left:1.6em; background:transparent url(../../imgs/enllasos/slider_show.gif) no-repeat left center; }
+.a-slider-hide { background-image:url(../../imgs/enllasos/slider_hide.gif); }
+
+
