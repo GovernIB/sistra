@@ -225,6 +225,8 @@ public class AvisosExpediente {
 			
 			if (StringUtils.isBlank(procedimiento.getEmailRespuestaAvisosProcedimiento())) {
 				textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AUTO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"email.correoAutomatico")));
+			} else {
+				textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AUTO#]","");
 			}
 			
 			// Generamos SMS
@@ -315,6 +317,8 @@ public class AvisosExpediente {
 			
 			if (StringUtils.isBlank(procedimiento.getEmailRespuestaAvisosProcedimiento())) {
 				textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AUTO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"email.correoAutomatico")));
+			} else {
+				textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AUTO#]","");
 			}
 			
 			// Textos SMS
