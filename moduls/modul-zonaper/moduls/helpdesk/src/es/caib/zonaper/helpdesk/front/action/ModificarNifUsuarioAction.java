@@ -57,6 +57,7 @@ public class ModificarNifUsuarioAction extends BaseAction
 				
 		// Mostramos mensaje de usuario modificado
 		request.setAttribute(Constants.MENSAJE_KEY,getResources(request).getMessage("usuarios.modificado"));
+		request.setAttribute( Constants.MESSAGE_ACTION_KEY, "/usuarios" );
 		return mapping.findForward( "success" );
     }
 	
