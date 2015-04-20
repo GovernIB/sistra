@@ -44,7 +44,7 @@ public class Procedimiento implements Serializable{
 	
 	private String oficinaRegistro;
 	private String organoRegistro;
-	private String accesoClaveDefecto;
+	private String accesoClaveDefecto = "N";
 	
 	/**
 	 * Indica remitente para avisos procedimiento.
