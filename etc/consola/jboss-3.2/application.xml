@@ -20,7 +20,7 @@
 		<module>
 	        <web>
 	            <web-uri>10-consola.war</web-uri>
-	            <context-root>sistraconsole</context-root>
+	            <context-root>sistra/console</context-root>
 	        </web>
 	    </module>
             
