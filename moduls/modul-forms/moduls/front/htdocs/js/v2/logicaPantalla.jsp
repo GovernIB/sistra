@@ -492,7 +492,10 @@
 
 	        // Establecemos valores readonly/disabled
 	        control_disabled("<%=nombre%>", valueDisabled);
-	        control_readOnly("<%=nombre%>", valueReadOnly);
+	        if (!valueDisabled) {
+		        // Solo ponemos readonly si no esta disabled
+	        	control_readOnly("<%=nombre%>", valueReadOnly);
+	        }
 	        
 	        
 	    }

@@ -22,29 +22,29 @@
 			<ul>
 				<li>
 					<button class="imc-bt-afegix" type="button" title="<bean:message bundle="caibMessages" key="boton.insertarElemento"/>" onclick='detalleElemento("<%=nombre%>","insertar");'>
-						<span><bean:message bundle="caibMessages" key="boton.insertarElemento"/></span><span class="imc-bt-icona">&nbsp;</span>
+						<span><bean:message bundle="caibMessages" key="boton.insertarElemento"/></span>
 					</button>
 				</li>
 				<li>
 					<button class="imc-bt-elimina" type="button" title="<bean:message bundle="caibMessages" key="boton.eliminarElemento"/>" onclick='detalleElemento("<%=nombre%>","eliminar");'>
-						<span><bean:message bundle="caibMessages" key="boton.eliminarElemento"/></span><span class="imc-bt-icona">&nbsp;</span>
+						<span><bean:message bundle="caibMessages" key="boton.eliminarElemento"/></span>
 					</button>
 				</li>
 				<li>
 					<button class="imc-bt-modifica" type="button" title="<bean:message bundle="caibMessages" key="boton.modificarElemento"/>" onclick='detalleElemento("<%=nombre%>","modificar");'>
-						<span><bean:message bundle="caibMessages" key="boton.modificarElemento"/></span><span class="imc-bt-icona">&nbsp;</span>
+						<span><bean:message bundle="caibMessages" key="boton.modificarElemento"/></span>
 					</button>
 				</li>
 			</ul>
 			<ul class="imc-el-ta-bo-posicio">
 				<li>
 					<button class="imc-bt-puja" type="button" title="<bean:message bundle="caibMessages" key="boton.subirElemento"/>" onclick='detalleElemento("<%=nombre%>","subir");'>
-						<span><bean:message bundle="caibMessages" key="boton.subirElemento"/></span><span class="imc-bt-icona">&nbsp;</span>
+						<span><bean:message bundle="caibMessages" key="boton.subirElemento"/></span>
 					</button>
 				</li>
 				<li>
 					<button class="imc-bt-baixa" type="button" title="<bean:message bundle="caibMessages" key="boton.bajarElemento"/>" onclick='detalleElemento("<%=nombre%>","bajar");'>
-						<span><bean:message bundle="caibMessages" key="boton.bajarElemento"/></span><span class="imc-bt-icona">&nbsp;</span>
+						<span><bean:message bundle="caibMessages" key="boton.bajarElemento"/></span>
 					</button>
 				</li>
 			</ul>

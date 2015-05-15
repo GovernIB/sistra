@@ -353,7 +353,7 @@ function control_select(name, valor, neteja) {
 	
 	control_verifica(name);
 		
-	if (!el_camps.length) {
+	if (!el_element.length) {
 		return false;
 	}
 		
@@ -411,7 +411,7 @@ function control_disabled(name, disabled) {
 	
 	control_verifica(name);
 		
-	if (!el_camps.length) {
+	if (!el_element.length) {
 		return false;
 	}
 	
@@ -448,8 +448,8 @@ function control_disabled(name, disabled) {
 function control_readOnly(name, esLectura) {
 	
 	control_verifica(name);
-		
-	if (!el_camps.length) {
+	
+	if (!el_element.length) {
 		return false;
 	}
 	
@@ -552,6 +552,7 @@ function control_readOnly(name, esLectura) {
 				if (el_tipus === "radio-list-scroll") {
 					html_lectura = $("<div>").html( html_lectura ).addClass("imc-el-multiple-lectura");
 				}
+				elm_UL.parent().find(".imc-el-multiple-lectura").remove();
 				elm_UL.addClass("imc-sols-lectura").before(html_lectura);
 				
 			} else if (!esLectura) {
@@ -565,6 +566,7 @@ function control_readOnly(name, esLectura) {
 				if (el_tipus === "radio-list-scroll") {
 					html_lectura = $("<div>").addClass("imc-el-multiple-lectura");
 				}
+				elm_UL.parent().find(".imc-el-multiple-lectura").remove();
 				elm_UL.addClass("imc-sols-lectura").before(html_lectura);
 			
 			} else {
@@ -581,6 +583,7 @@ function control_readOnly(name, esLectura) {
 			elm_UL.addClass("imc-sols-lectura");
 			
 			if (el_tipus === "check-list-scroll") {
+				elm_UL.parent().find(".imc-el-multiple-lectura").remove();
 				elm_UL.before($("<div>").html( html_lectura ).addClass("imc-el-multiple-lectura"));
 				var multiple_DIV = elm_UL.parent().find(".imc-el-multiple-lectura:first");
 			}
@@ -779,7 +782,7 @@ function control_values(name) {
 	
 	control_verifica(name);
 		
-	if (!el_camps.length) {
+	if (!el_element.length) {
 		return false;
 	}
 	
@@ -839,7 +842,7 @@ function control_expandAll(name, valor) {
 	
 	control_verifica(name);
 		
-	if (!el_camps.length) {
+	if (!el_element.length) {
 		return false;
 	}
 	
