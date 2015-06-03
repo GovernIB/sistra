@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import es.caib.regtel.model.ConstantesRegtel;
 import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
 import es.caib.regtel.persistence.delegate.RegistroTelematicoDelegate;
 import es.caib.sistra.back.action.BaseAction;
@@ -78,7 +79,7 @@ public class ImportarXMLAction extends BaseAction
             }
 			
 			if(tramiteVersion.getRegistroOficina() != null){
-				if(!dlgRte.existeOficinaRegistro(tramiteVersion.getRegistroOficina())){
+				if(!dlgRte.existeOficinaRegistro(ConstantesRegtel.REGISTRO_ENTRADA, tramiteVersion.getRegistroOficina())){
 					messages.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.oficina.registro.no.existe"));
             		error = true;
             	}

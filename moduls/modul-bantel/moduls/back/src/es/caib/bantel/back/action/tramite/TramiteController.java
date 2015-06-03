@@ -19,6 +19,7 @@ import es.caib.bantel.persistence.delegate.VersionWSDelegate;
 import es.caib.sistra.modelInterfaz.ValoresDominio;
 import es.caib.sistra.persistence.delegate.DelegateSISTRAUtil;
 import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.regtel.ConstantesPluginRegistro;
 import es.caib.sistra.plugins.regtel.PluginRegistroIntf;
 
 
@@ -73,7 +74,7 @@ public class TramiteController implements Controller
 	 */
 	private List listarOficinas() throws Exception {
 		PluginRegistroIntf plgRegistro = PluginFactory.getInstance().getPluginRegistro();
-		List oficinas = plgRegistro.obtenerOficinasRegistro();
+		List oficinas = plgRegistro.obtenerOficinasRegistro(ConstantesPluginRegistro.REGISTRO_ENTRADA);
 		return oficinas;
 	}
 

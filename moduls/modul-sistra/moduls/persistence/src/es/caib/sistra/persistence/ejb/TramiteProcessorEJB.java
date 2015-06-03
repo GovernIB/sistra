@@ -39,6 +39,7 @@ import es.caib.redose.modelInterfaz.TransformacionRDS;
 import es.caib.redose.modelInterfaz.UsoRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
+import es.caib.regtel.model.ConstantesRegtel;
 import es.caib.regtel.model.ValorOrganismo;
 import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
 import es.caib.sistra.model.AsientoCompleto;
@@ -57,6 +58,7 @@ import es.caib.sistra.model.InstanciaBean;
 import es.caib.sistra.model.MensajeFront;
 import es.caib.sistra.model.MensajePlataforma;
 import es.caib.sistra.model.MensajeTramite;
+import es.caib.sistra.model.NombreInteresado;
 import es.caib.sistra.model.PasoTramitacion;
 import es.caib.sistra.model.RespuestaFront;
 import es.caib.sistra.model.ResultadoRegistrar;
@@ -77,6 +79,7 @@ import es.caib.sistra.persistence.plugins.CalculoPago;
 import es.caib.sistra.persistence.plugins.ConfiguracionDinamica;
 import es.caib.sistra.persistence.plugins.ConfiguracionDinamicaTramitePlugin;
 import es.caib.sistra.persistence.plugins.DatosIniciales;
+import es.caib.sistra.persistence.plugins.NombreInteresadoDesglosado;
 import es.caib.sistra.persistence.plugins.DestinatarioTramite;
 import es.caib.sistra.persistence.plugins.PluginFormularios;
 import es.caib.sistra.persistence.plugins.PluginPagos;
@@ -1183,7 +1186,8 @@ public class TramiteProcessorEJB implements SessionBean {
 	    			calc.setConcepto( ((TraDocumento) doc.getTraduccion(datosSesion.getLocale().getLanguage())).getDescripcion());
 	    			calc.setFechaDevengo( StringUtil.fechaACadena(new Date(),CalculoPago.FORMATO_FECHA_DEVENGO));
 	    			calc.setNif(this.calcularNifRepresentante());
-	    			calc.setNombre(this.calcularNombreRepresentante());
+					NombreInteresado nomRpte = this.calcularNombreRepresentante();
+					calc.setNombre(nomRpte!=null?nomRpte.getNombreCompleto():"");
 	    			HashMap params = new HashMap();
 	        		params.put("DATOSPAGO",calc);	        		
 	        		evaluarScript(docNivel.getPagoCalcularPagoScript(),params);
@@ -4229,7 +4233,7 @@ public class TramiteProcessorEJB implements SessionBean {
 		DocumentoFront docInfo = new DocumentoFront();
 		DocumentoNivel docNivel = doc.getDocumentoNivel(datosSesion.getNivelAutenticacion());
 		DocumentoPersistentePAD docPad = (DocumentoPersistentePAD) tramitePersistentePAD.getDocumentos().get(ls_id);
-				
+		
 		docInfo.setEstado(docPad.getEstado());
 		docInfo.setIdentificador(doc.getIdentificador());  
 		docInfo.setInstancia(instancia);
@@ -4819,7 +4823,8 @@ public class TramiteProcessorEJB implements SessionBean {
     private String generarAsiento(DestinatarioTramite dt) throws Exception{
     	
     	// Calculamos datos representante y representado
-    	String rpteNif="",rpteNom="",rpteProv=null,rpteLoca=null,rptePais=null,rpdoNif=null,rpdoNom=null;    	
+    	NombreInteresado rpteNom=null,rpdoNom=null;
+    	String rpteProv=null,rpteLoca=null,rptePais=null,rpdoNif=null,rpteNif=null;    	
     	
     	//Datos representante
 		// -- Nif y nombre (puede estar vacío si es anónimo y no va a registro)
@@ -5373,8 +5378,9 @@ public class TramiteProcessorEJB implements SessionBean {
 	 * Calcula el nombre de representante según el script
 	 * @return
 	 */
-	private String calcularNombreRepresentante() throws Exception{
+	private NombreInteresado calcularNombreRepresentante() throws Exception{
 		
+		NombreInteresado nombreInteresado = null;
 		String rpteNom="";    	
     	byte[] scriptRpteNom;
     	
@@ -5386,18 +5392,36 @@ public class TramiteProcessorEJB implements SessionBean {
     	}else{
     		scriptRpteNom = especVersion.getCampoRteNom();
     	}
+    	
     	if (scriptRpteNom != null && scriptRpteNom.length > 0 ){
-    		rpteNom = this.evaluarScript(scriptRpteNom,null);
-    		// El script puede devolver un nif/cif valido o la cadena "NO-VALOR" para especificar que no se especificará nombre.
-    		if ("NO-VALOR".equals(rpteNom)) {
-    			rpteNom = "";
-    		} else {
-    			if (StringUtils.isBlank(rpteNom)) {
+    		
+    		HashMap params = new HashMap();
+    		NombreInteresadoDesglosado nomInt = new NombreInteresadoDesglosado();
+    		params.put("NOMBRE_DESGLOSADO",nomInt);
+    		rpteNom = this.evaluarScript(scriptRpteNom,params);
+    		
+    		// El script puede devolver un nombre valido (cadena completa o desglosado) o la cadena "NO-VALOR" para especificar que no se especificará nombre.
+    		
+    		if (!"NO-VALOR".equals(rpteNom)) {
+    			 nombreInteresado = new NombreInteresado();
+    			// Verificamos si se ha establecido el nombre de forma desglosada
+    			if (StringUtils.isNotBlank(nomInt.getNombre())) {
+    				nombreInteresado.setNombre(nomInt.getNombre());
+    				nombreInteresado.setApellido1(nomInt.getApellido1());
+    				nombreInteresado.setApellido2(nomInt.getApellido2());    	    				
+    				nombreInteresado.setNombreCompleto(StringUtil.formatearNombreApellidos(
+    						ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM,
+    						nomInt.getNombre(),
+    						nomInt.getApellido1(),
+    						nomInt.getApellido2()));
+    			} else if (!StringUtils.isBlank(rpteNom)) {
+    				nombreInteresado.setNombreCompleto(rpteNom);    				
+    			} else {
     				throw new Exception("El script de nombre de representante no devuelve un nombre");
     			}
     		}
     	}
-    	return rpteNom;
+    	return nombreInteresado;
 	}
 	
 	/**
@@ -5485,7 +5509,9 @@ public class TramiteProcessorEJB implements SessionBean {
 	 * @return
 	 * @throws Exception
 	 */
-	private String calcularNombreRepresentado() throws Exception{		
+	private NombreInteresado calcularNombreRepresentado() throws Exception{		
+		
+		NombreInteresado nombreInteresado = null;
 	   	String rpdoNom=null;    	
 		byte[] scriptRpdoNom;
 		
@@ -5497,10 +5523,29 @@ public class TramiteProcessorEJB implements SessionBean {
     	}else{
     		scriptRpdoNom = especVersion.getCampoRdoNom();
     	}        	
-    	if (scriptRpdoNom != null && scriptRpdoNom.length > 0 ){    		     
+    	if (scriptRpdoNom != null && scriptRpdoNom.length > 0 ){   
+    		HashMap params = new HashMap();
+    		NombreInteresadoDesglosado nomInt = new NombreInteresadoDesglosado();
+    		params.put("NOMBRE_DESGLOSADO",nomInt);
     		rpdoNom = this.evaluarScript(scriptRpdoNom,null);
+    		
+    		nombreInteresado.setNombreCompleto(rpdoNom);
+    		
+    		// Verificamos si se ha establecido el nombre de forma desglosada
+			if (StringUtils.isNotBlank(nomInt.getNombre())) {
+				nombreInteresado.setNombre(nomInt.getNombre());
+				nombreInteresado.setApellido1(nomInt.getApellido1());
+				nombreInteresado.setApellido2(nomInt.getApellido2());    	
+				nombreInteresado.setNombreCompleto(StringUtil.formatearNombreApellidos(
+						ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM,
+						nomInt.getNombre(),
+						nomInt.getApellido1(),
+						nomInt.getApellido2()));
+			}
+    		
+    		
     	}    	
-    	return rpdoNom;
+    	return nombreInteresado;
 	}
 	
 	/**
@@ -6038,7 +6083,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	  * @throws Exception
 	  */
 	 private boolean validarCodigoOficina(String codOficina) throws Exception{
-		List oficinas = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerOficinasRegistro();
+		List oficinas = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerOficinasRegistro(ConstantesRegtel.REGISTRO_ENTRADA);
 		for (Iterator it = oficinas.iterator();it.hasNext();){
 			ValorOrganismo vo = (ValorOrganismo) it.next();
 			if (vo.getCodigo().equals(codOficina)){

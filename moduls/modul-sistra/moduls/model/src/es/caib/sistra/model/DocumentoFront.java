@@ -410,7 +410,4 @@ public class DocumentoFront  implements Serializable{
 		this.formularioGuardarSinTerminar = formularioGuardarSinTerminar;
 	}
 	
-	
-	
-	
 }

@@ -21,6 +21,7 @@ import es.caib.sistra.model.ConstantesSTR;
 import es.caib.sistra.model.DatoJustificante;
 import es.caib.sistra.model.DocumentoFront;
 import es.caib.sistra.model.EspecTramiteNivel;
+import es.caib.sistra.model.NombreInteresado;
 import es.caib.sistra.model.ReferenciaCampo;
 import es.caib.sistra.model.TraDatoJustificante;
 import es.caib.sistra.model.TraTramite;
@@ -59,6 +60,7 @@ import es.caib.xml.registro.factoria.impl.DatosAsunto;
 import es.caib.xml.registro.factoria.impl.DatosInteresado;
 import es.caib.xml.registro.factoria.impl.DatosOrigen;
 import es.caib.xml.registro.factoria.impl.DireccionCodificada;
+import es.caib.xml.registro.factoria.impl.IdentificacionInteresadoDesglosada;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.modelInterfaz.DocumentoPersistentePAD;
 import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
@@ -83,8 +85,8 @@ public class GeneradorAsiento {
 	public static String generarAsientoRegistral(
 			TramiteFront tramiteInfo,
 			TramiteVersion tramiteVersion,TramitePersistentePAD tramitePAD,			
-			String rpteNif,String rpteNom,String rpteProv,String rpteLoca,String rptePais,
-			String rpdoNif,String rpdoNombre, DestinatarioTramite dt) throws Exception{		
+			String rpteNif,NombreInteresado rpteNom,String rpteProv,String rpteLoca,String rptePais,
+			String rpdoNif,NombreInteresado rpdoNombre, DestinatarioTramite dt) throws Exception{		
 		
 		try{
 			RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
@@ -126,7 +128,7 @@ public class GeneradorAsiento {
 	    	if ( StringUtils.isBlank(rpteNif) && requiereRpte){
 	    		throw new Exception("El nif del rpte no puede estar vacío");
 	    	}
-	    	if ( StringUtils.isBlank (rpteNom) && requiereRpte){
+	    	if ( (rpteNom == null || StringUtils.isBlank (rpteNom.getNombreCompleto())) && requiereRpte){
 				throw new Exception("El nombre del rpte no puede estar vacío");
 			}
 	    	
@@ -154,7 +156,20 @@ public class GeneradorAsiento {
 			}
 			dInteresadoRpte.setNumeroIdentificacion (rpteNif);
 			dInteresadoRpte.setFormatoDatosInteresado (ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
-			dInteresadoRpte.setIdentificacionInteresado (rpteNom);
+			
+			if (rpteNom != null) {
+				dInteresadoRpte.setIdentificacionInteresado (rpteNom.getNombreCompleto());
+				
+				if (StringUtils.isNotBlank(rpteNom.getNombre())) {
+					IdentificacionInteresadoDesglosada identificacionInteresadoDesglosada = factoria.crearIdentificacionInteresadoDesglosada();
+					identificacionInteresadoDesglosada.setNombre(rpteNom.getNombre());
+					identificacionInteresadoDesglosada.setApellido1(rpteNom.getApellido1());
+					identificacionInteresadoDesglosada.setApellido2(rpteNom.getApellido2());
+					dInteresadoRpte.setIdentificacionInteresadoDesglosada(identificacionInteresadoDesglosada);
+				}
+			} else {
+				dInteresadoRpte.setIdentificacionInteresado ("");
+			}
 			
 			// Verificamos datos procedencia geográfica
 	    	if (StringUtils.isNotEmpty(rptePais)){
@@ -238,10 +253,20 @@ public class GeneradorAsiento {
 				}					
 				dInteresadoRpdo.setNumeroIdentificacion (rpdoNif);
 				dInteresadoRpdo.setFormatoDatosInteresado (ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
-				if (StringUtils.isEmpty (rpdoNombre)){
+				if (rpdoNombre == null || StringUtils.isEmpty (rpdoNombre.getNombreCompleto())){
 		    		throw new Exception("Se ha indicado el nif del representado pero no el nombre");
 		    	}   				
-				dInteresadoRpdo.setIdentificacionInteresado (rpdoNombre);
+				
+				dInteresadoRpdo.setIdentificacionInteresado (rpdoNombre.getNombreCompleto());
+				
+				if (StringUtils.isNotBlank(rpdoNombre.getNombre())) {
+					IdentificacionInteresadoDesglosada identificacionInteresadoDesglosada = factoria.crearIdentificacionInteresadoDesglosada();
+					identificacionInteresadoDesglosada.setNombre(rpdoNombre.getNombre());
+					identificacionInteresadoDesglosada.setApellido1(rpdoNombre.getApellido1());
+					identificacionInteresadoDesglosada.setApellido2(rpdoNombre.getApellido2());
+					dInteresadoRpdo.setIdentificacionInteresadoDesglosada(identificacionInteresadoDesglosada);
+				}
+				
 				asiento.getDatosInteresado().add(dInteresadoRpdo);				
 			}
 																							
@@ -844,7 +869,7 @@ public class GeneradorAsiento {
 		{
 			//--- Si el estado no es correcto generamos excepción
 			if (docInfo.getEstado() != DocumentoFront.ESTADO_CORRECTO){
-				throw new Exception("El documento " + docInfo.getIdentificador() + " no tiene un estado correcto");
+				throw new Exception("El documento " + docInfo.getIdentificador() + " no tiene unestado correcto");
 			}			
 			//--- Obtenemos documento del RDS para obtener el Hash
 			id = docInfo.getIdentificador() + "-" + docInfo.getInstancia();
@@ -853,7 +878,11 @@ public class GeneradorAsiento {
 			
 			dAnexo = factoria.crearDatosAnexoDocumentacion();
 			dAnexo.setEstucturado (new Boolean(tipo != 'A'));
-			dAnexo.setTipoDocumento (new Character(ConstantesAsientoXML.DATOSANEXO_OTROS));
+			if (tipo == 'F') {
+				dAnexo.setTipoDocumento (new Character(ConstantesAsientoXML.DATOSANEXO_FORMULARIO));
+			} else {
+				dAnexo.setTipoDocumento (new Character(ConstantesAsientoXML.DATOSANEXO_OTROS));
+			}
 			dAnexo.setIdentificadorDocumento (id);
 			dAnexo.setCodigoRDS(Long.toString(docPAD.getRefRDS().getCodigo()));
 			dAnexo.setCodigoNormalizado(docInfo.getModelo() + "-" + docInfo.getVersion());

@@ -12,6 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.tiles.ComponentContext;
 
+import es.caib.regtel.model.ConstantesRegtel;
 import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
 import es.caib.regtel.persistence.delegate.RegistroTelematicoDelegate;
 import es.caib.sistra.back.action.BaseController;
@@ -49,7 +50,7 @@ public class TramiteVersionController extends BaseController{
             // Obtenemos info registro
            RegistroTelematicoDelegate dlgRte = DelegateRegtelUtil.getRegistroTelematicoDelegate();
            List organosDestino = dlgRte.obtenerServiciosDestino();
-           List oficinasRegistro = dlgRte.obtenerOficinasRegistro();
+           List oficinasRegistro = dlgRte.obtenerOficinasRegistro(ConstantesRegtel.REGISTRO_ENTRADA);
            List tiposAsunto = dlgRte.obtenerTiposAsunto();
                       
            // Establecemos listas de valores
