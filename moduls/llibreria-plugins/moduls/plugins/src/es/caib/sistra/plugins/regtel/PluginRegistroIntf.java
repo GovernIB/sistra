@@ -53,6 +53,7 @@ public interface PluginRegistroIntf extends PluginSistraIntf {
 	 * para realizar el apunte registral, no obstante, se ofrecen las referencias en el
 	 * RDS tanto del asiento registral como de los anexos. 
 	 * 
+	 * @param usuario Usuario conectado
 	 * @param oficina Oficina registral en la que se ha confirmado el preregistro
 	 * @param codigoProvincia Código municipio del ciudadano (código INE)
 	 * @param codigoMunicipio Código provincia del ciudadano (código INE)
@@ -68,7 +69,7 @@ public interface PluginRegistroIntf extends PluginSistraIntf {
 	 * @return ResultadoRegistro Devuelve número y fecha de registro
 	 * @throws Exception
 	 */	
-	public ResultadoRegistro confirmarPreregistro(String oficina,String codigoProvincia,String codigoMunicipio,String descripcionMunicipio,Justificante justificantePreregistro,ReferenciaRDS refJustificante,ReferenciaRDS refAsiento,Map refAnexos) throws Exception;												  
+	public ResultadoRegistro confirmarPreregistro(String usuario, String oficina,String codigoProvincia,String codigoMunicipio,String descripcionMunicipio,Justificante justificantePreregistro,ReferenciaRDS refJustificante,ReferenciaRDS refAsiento,Map refAnexos) throws Exception;												  
 	
 	/**
 	 * Anular registro de entrada 
@@ -126,18 +127,20 @@ public interface PluginRegistroIntf extends PluginSistraIntf {
 	
 	/**
 	 * Obtiene lista de oficinas registrales
+	 * @param tipo Entrada / Salida (E/S) 
 	 * @return List Lista de oficinas registro
 	 * @see OficinaRegistro
 	 */
-	public List obtenerOficinasRegistro();
+	public List obtenerOficinasRegistro(char tipo);
 	
 	/**
 	 * Obtiene lista de oficinas registrales para los que el usuario de registro tiene permiso
+	 * @param tipo Entrada / Salida (E/S)
 	 * @param usuario Identificador usuario
 	 * @return List Lista de oficinas registro
 	 * @see OficinaRegistro
 	 */
-	public List obtenerOficinasRegistroUsuario(String usuario);
+	public List obtenerOficinasRegistroUsuario(char tipo, String usuario);
 	
 	/**
 	 * Obtiene tipos de asunto
@@ -155,8 +158,9 @@ public interface PluginRegistroIntf extends PluginSistraIntf {
 
 	/**
 	 * Obtiene descripción de la oficina para la estampación del sello en un preregistro.
+	 * @param tipo Entrada / Salida (E/S) 
 	 * @param oficina Código oficina
 	 */
-	public String obtenerDescripcionSelloOficina(String oficina);
+	public String obtenerDescripcionSelloOficina(char tipo, String oficina);
 		
 }

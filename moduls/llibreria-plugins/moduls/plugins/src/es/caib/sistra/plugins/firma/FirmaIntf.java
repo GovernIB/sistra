@@ -20,9 +20,21 @@ public interface FirmaIntf extends Serializable{
 	public String getNombreApellidos();
 	
 	/**
-	 * Obtiene el formato de la firma (dependerá del proveedor de firma)
+	 * Obtiene el formato de la firma (dependerá del proveedor de firma. Se definen formatos estandar en el interfaz)
 	 * @return formato de la firma
 	 */
 	public String getFormatoFirma();
+	
+	/**
+	 * Obtiene el contenido de la firma (dependerá del proveedor de firma)
+	 * @return contenido de la firma
+	 */
+	public byte[] getContenidoFirma();
+	
+	/**
+	 * Obtiene clave publica certificado en B64.
+	 * @return contenido de la firma
+	 */
+	public String getCertificadoB64();
 	
 }

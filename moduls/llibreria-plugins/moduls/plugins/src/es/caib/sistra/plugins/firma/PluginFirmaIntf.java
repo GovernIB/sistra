@@ -20,6 +20,31 @@ public interface PluginFirmaIntf extends PluginSistraIntf{
 	public static String PROVEEDOR_CAIB = "CAIB";
 	
 	/**
+	 * Formatos de firma estandar : CADES-ATTACHED.
+	 */
+	public static String FORMATO_FIRMA_CADES_ATTACHED = "CADES-ATTACHED";
+	/**
+	 * Formatos de firma estandar : CADES-DETACHED.
+	 */
+	public static String FORMATO_FIRMA_CADES_DETACHED = "CADES-DETACHED";
+	/**
+	 * Formatos de firma estandar : XADES-ENVELOPED.
+	 */
+	public static String FORMATO_FIRMA_XADES_ENVELOPED = "XADES-ENVELOPED";
+	/**
+	 * Formatos de firma estandar : XADES-DETACHED.
+	 */
+	public static String FORMATO_FIRMA_XADES_DETACHED = "XADES-DETACHED";
+	/**
+	 * Formatos de firma estandar : PADES.
+	 */
+	public static String FORMATO_FIRMA_PADES = "PADES";
+	/**
+	 * Formatos de firma estandar : PKCS7.
+	 */
+	public static String FORMATO_FIRMA_PKCS7 = "PKCS7";
+	
+	/**
 	 * Obtiene proveedor de firma (ver constantes PROVEEDOR)
 	 * @return Devuelve el proveedor de firma
 	 */	
