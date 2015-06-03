@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,6 +43,8 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 {
 	
 	private static Log log = LogFactory.getLog(RegistroOrganismoEJB.class);
+	
+	private SessionContext context;
 		
 	/**
      * @ejb.create-method
@@ -53,10 +56,11 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 	public void ejbCreate() throws CreateException 
 	{		
 	}
+
 	
-	public void setSessionContext(javax.ejb.SessionContext ctx) 
-	{
-	}
+	public void setSessionContext(SessionContext ctx) {
+        this.context = ctx;
+    }
    
 	/**
 	 * Realiza apunte registral de entrada
@@ -122,7 +126,7 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 			PluginRegistroIntf plgRegistro = PluginFactory.getInstance().getPluginRegistro();
 			log.debug( "Comenzamos confirmacion preregistro contra registro organismo" );
 			es.caib.sistra.plugins.regtel.ResultadoRegistro datosRegistro;
-			datosRegistro = plgRegistro.confirmarPreregistro(oficina,codigoProvincia,codigoMunicipio,descripcionMunicipio,justificantePreregistro,refJustificante,refAsiento,refAnexos);
+			datosRegistro = plgRegistro.confirmarPreregistro(context.getCallerPrincipal().getName(),oficina,codigoProvincia,codigoMunicipio,descripcionMunicipio,justificantePreregistro,refJustificante,refAsiento,refAnexos);
 			ResultadoRegistro res = new ResultadoRegistro();
 			res.setFechaRegistro(StringUtil.fechaACadena(datosRegistro.getFechaRegistro(),StringUtil.FORMATO_REGISTRO));
 			res.setNumeroRegistro(datosRegistro.getNumeroRegistro());
@@ -143,12 +147,12 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 	 * @ejb.permission role-name = "${role.auto}"
 	 * 
 	 */
-	public List obtenerOficinasRegistro() throws ExcepcionRegistroOrganismo{
+	public List obtenerOficinasRegistro(char tipoRegistro) throws ExcepcionRegistroOrganismo{
 		try{
 			log.debug("Obtenemos plugin de registro");
 			PluginRegistroIntf	plgRegistro = PluginFactory.getInstance().getPluginRegistro();
 			log.debug("Invocamos el plugin con la funcion de obtener oficinas registro ");
-			List resReg = plgRegistro.obtenerOficinasRegistro();
+			List resReg = plgRegistro.obtenerOficinasRegistro(tipoRegistro);
 
 			List result = new ArrayList();
  			if (resReg != null){
@@ -174,13 +178,13 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 	 * @ejb.permission role-name = "${role.auto}"
 	 * 
 	 */
-	public List obtenerOficinasRegistroUsuario(String usuario) throws ExcepcionRegistroOrganismo{
+	public List obtenerOficinasRegistroUsuario(char tipoRegistro, String usuario) throws ExcepcionRegistroOrganismo{
 		try{
 			log.debug("Obtenemos plugin de registro");
 			PluginRegistroIntf	plgRegistro = PluginFactory.getInstance().getPluginRegistro();
 			log.debug("Invocamos el plugin con la funcion de obtener oficinas registro usuario");
 			
-			List resReg = plgRegistro.obtenerOficinasRegistroUsuario(usuario);			
+			List resReg = plgRegistro.obtenerOficinasRegistroUsuario(tipoRegistro, usuario);			
 			
  			List result = new ArrayList();
  			if (resReg != null){
@@ -267,7 +271,7 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 	 * @ejb.permission role-name = "${role.todos}"
 	 * 
 	 */
-	public boolean existeOficinaRegistro(String oficinaRegistro) throws ExcepcionRegistroOrganismo 
+	public boolean existeOficinaRegistro(char tipoRegistro, String oficinaRegistro) throws ExcepcionRegistroOrganismo 
 	{ 	
 		try
 		{	
@@ -275,7 +279,7 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 			PluginRegistroIntf	plgRegistro = PluginFactory.getInstance().getPluginRegistro();
 			log.debug("Invocamos el plugin con la funcion de obtener oficinas registro usuario");
 			
-			List resReg = plgRegistro.obtenerOficinasRegistro();			
+			List resReg = plgRegistro.obtenerOficinasRegistro(tipoRegistro);			
  			if (resReg != null){
 				for (Iterator it = resReg.iterator();it.hasNext();){
 					OficinaRegistro s = (OficinaRegistro) it.next();
@@ -388,12 +392,12 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 	 * @ejb.permission role-name = "${role.todos}"
 	 *  @ejb.permission role-name = "${role.auto}"
 	 */
-  public String obtenerDescripcionSelloOficina(String oficina) throws ExcepcionRegistroOrganismo{
+  public String obtenerDescripcionSelloOficina(char tipoRegistro, String oficina) throws ExcepcionRegistroOrganismo{
 	  try{
 			log.debug("Obtenemos plugin de registro");
 			PluginRegistroIntf	plgRegistro = PluginFactory.getInstance().getPluginRegistro();			
 			log.debug("Invocamos el plugin con la funcion de anular registro salida");
-			return plgRegistro.obtenerDescripcionSelloOficina(oficina);			
+			return plgRegistro.obtenerDescripcionSelloOficina(tipoRegistro, oficina);			
 		}catch (Exception ex){
 			throw new ExcepcionRegistroOrganismo("Excepcion accediendo al plugin de registro",ex);
 		}  

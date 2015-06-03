@@ -59,6 +59,7 @@
         <xs:element minOccurs="0" ref="NUMERO_IDENTIFICACION"/>
         <xs:element ref="FORMATO_DATOS_INTERESADO"/>
         <xs:element ref="IDENTIFICACION_INTERESADO"/>
+        <xs:element minOccurs="0" ref="IDENTIFICACION_INTERESADO_DESGLOSADA"/>
         <xs:element minOccurs="0" ref="DIRECCION_CODIFICADA"/>
       </xs:sequence>
     </xs:complexType>
@@ -70,6 +71,18 @@
   <xs:element name="NUMERO_IDENTIFICACION" type="xs:string"/>
   <xs:element name="FORMATO_DATOS_INTERESADO" type="xs:string"/>
   <xs:element name="IDENTIFICACION_INTERESADO" type="xs:string"/>
+  <xs:element name="IDENTIFICACION_INTERESADO_DESGLOSADA">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="NOMBRE_INTERESADO"/>
+        <xs:element minOccurs="0" ref="APELLIDO1_INTERESADO"/>
+        <xs:element minOccurs="0" ref="APELLIDO2_INTERESADO"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NOMBRE_INTERESADO" type="xs:string"/>
+  <xs:element name="APELLIDO1_INTERESADO" type="xs:string"/>
+  <xs:element name="APELLIDO2_INTERESADO" type="xs:string"/>
   <xs:element name="DIRECCION_CODIFICADA">
     <xs:complexType>
       <xs:sequence>

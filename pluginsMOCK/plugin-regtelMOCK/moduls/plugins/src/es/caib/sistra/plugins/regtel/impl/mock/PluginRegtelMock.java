@@ -38,7 +38,7 @@ public class PluginRegtelMock implements PluginRegistroIntf{
 		return res;
 	}
 
-	public ResultadoRegistro confirmarPreregistro(String arg0, String arg1, String arg2, String arg3, Justificante arg4, ReferenciaRDS arg5, ReferenciaRDS arg6, Map arg7) throws Exception {
+	public ResultadoRegistro confirmarPreregistro(String usuario, String arg0, String arg1, String arg2, String arg3, Justificante arg4, ReferenciaRDS arg5, ReferenciaRDS arg6, Map arg7) throws Exception {
 		ResultadoRegistro res = new ResultadoRegistro();
 		Date fc = new Date();
 		res.setFechaRegistro(fc);
@@ -46,7 +46,7 @@ public class PluginRegtelMock implements PluginRegistroIntf{
 		return res;
 	}
 
-	public List obtenerOficinasRegistro() {
+	public List obtenerOficinasRegistro(char tipoRegistro) {
 		List lista = new ArrayList();
 		for (int i=1;i<=10;i++){
 			OficinaRegistro of = new OficinaRegistro();
@@ -57,8 +57,8 @@ public class PluginRegtelMock implements PluginRegistroIntf{
 		return lista;
 	}
 
-	public List obtenerOficinasRegistroUsuario(String arg0) {
-		return obtenerOficinasRegistro();
+	public List obtenerOficinasRegistroUsuario(char tipoRegistro, String arg0) {
+		return obtenerOficinasRegistro(tipoRegistro);
 	}
 
 	public List obtenerTiposAsunto() {
@@ -91,7 +91,7 @@ public class PluginRegtelMock implements PluginRegistroIntf{
 		
 	}
 
-	public String obtenerDescripcionSelloOficina(String oficina) {		
+	public String obtenerDescripcionSelloOficina(char tipoRegistro, String oficina) {		
 		return "OFICINA " + oficina;
 	}
 

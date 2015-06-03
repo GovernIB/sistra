@@ -244,9 +244,9 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	 * @ejb.permission role-name = "${role.auto}"   	 
 	 * 
 	 */
-	public List obtenerOficinasRegistro()  throws ExcepcionRegistroTelematico{
+	public List obtenerOficinasRegistro(char tipoRegistro)  throws ExcepcionRegistroTelematico{
 	   try{
-			return DelegateUtil.getRegistroOrganismoDelegate().obtenerOficinasRegistro();				
+			return DelegateUtil.getRegistroOrganismoDelegate().obtenerOficinasRegistro(tipoRegistro);				
 		}catch (Exception ex){
 			throw new ExcepcionRegistroTelematico("Excepcion obteniendo lista oficinas en registro organismo",ex);
 		} 
@@ -264,9 +264,9 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	 * @ejb.permission role-name = "${role.auto}"   	 
 	 * 
 	 */
-	public String obtenerDescripcionSelloOficina(String oficina) throws ExcepcionRegistroTelematico{
+	public String obtenerDescripcionSelloOficina(char tipoRegistro, String oficina) throws ExcepcionRegistroTelematico{
 	   try{
-			return DelegateUtil.getRegistroOrganismoDelegate().obtenerDescripcionSelloOficina(oficina);				
+			return DelegateUtil.getRegistroOrganismoDelegate().obtenerDescripcionSelloOficina(tipoRegistro, oficina);				
 		}catch (Exception ex){
 			throw new ExcepcionRegistroTelematico("Excepcion obteniendo descripcion oficina en registro organismo",ex);
 		} 
@@ -283,9 +283,9 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	 * @ejb.permission role-name = "${role.todos}"   	 
 	 * 
 	 */
-	public boolean existeOficinaRegistro(String oficinaRegistro) throws ExcepcionRegistroTelematico { 
+	public boolean existeOficinaRegistro(char tipoRegistro, String oficinaRegistro) throws ExcepcionRegistroTelematico { 
 	    try{
-			return DelegateUtil.getRegistroOrganismoDelegate().existeOficinaRegistro(oficinaRegistro);				
+			return DelegateUtil.getRegistroOrganismoDelegate().existeOficinaRegistro(tipoRegistro, oficinaRegistro);				
 		}catch (Exception ex){
 			throw new ExcepcionRegistroTelematico("Excepcion obteniendo oficina organismo: " +  oficinaRegistro,ex);
 		} 
@@ -303,9 +303,9 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	 * @ejb.permission role-name = "${role.todos}"   	 
 	 * 
 	 */
-	public List obtenerOficinasRegistroUsuario(String usuario)  throws ExcepcionRegistroTelematico{
+	public List obtenerOficinasRegistroUsuario(char tipoRegistro, String usuario)  throws ExcepcionRegistroTelematico{
 	   try{
-			return DelegateUtil.getRegistroOrganismoDelegate().obtenerOficinasRegistroUsuario(usuario);				
+			return DelegateUtil.getRegistroOrganismoDelegate().obtenerOficinasRegistroUsuario(tipoRegistro, usuario);				
 		}catch (Exception ex){
 			throw new ExcepcionRegistroTelematico("Excepcion obteniendo lista oficinas usuario en registro organismo",ex);
 		} 

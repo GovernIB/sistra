@@ -70,21 +70,21 @@ public class RegistroOrganismoDelegate implements StatelessDelegate {
 		    }	 	 
 		 }
 	
-	public List obtenerOficinasRegistro() throws DelegateException
+	public List obtenerOficinasRegistro(char tipoRegistro) throws DelegateException
 	{
 		try
 		{			
-			return getFacade().obtenerOficinasRegistro();				
+			return getFacade().obtenerOficinasRegistro(tipoRegistro);				
 		} catch (Exception e) {
 	        throw new DelegateException(e);
 	    }	 	 
 	 }
 	
-	public List obtenerOficinasRegistroUsuario(String usuario) throws DelegateException
+	public List obtenerOficinasRegistroUsuario(char tipoRegistro, String usuario) throws DelegateException
 	{
 		try
 		{			
-			return getFacade().obtenerOficinasRegistroUsuario(usuario);				
+			return getFacade().obtenerOficinasRegistroUsuario(tipoRegistro, usuario);				
 		} catch (Exception e) {
 	        throw new DelegateException(e);
 	    }	 	 
@@ -110,11 +110,11 @@ public class RegistroOrganismoDelegate implements StatelessDelegate {
 	    }	 	 
 	 }
 	
-	public boolean existeOficinaRegistro(String oficinaRegistro) throws DelegateException 
+	public boolean existeOficinaRegistro(char tipoRegistro, String oficinaRegistro) throws DelegateException 
 	{ 
 		try
 		{			
-			return getFacade().existeOficinaRegistro(oficinaRegistro);				
+			return getFacade().existeOficinaRegistro(tipoRegistro, oficinaRegistro);				
 		} catch (Exception e) {
 	        throw new DelegateException(e);
 	    }	 	 
@@ -140,11 +140,11 @@ public class RegistroOrganismoDelegate implements StatelessDelegate {
 	    }	 	 
 	 }
 	
-	public String obtenerDescripcionSelloOficina(String oficina)  throws DelegateException
+	public String obtenerDescripcionSelloOficina(char tipoRegistro, String oficina)  throws DelegateException
 	{
 		try
 		{			
-			return getFacade().obtenerDescripcionSelloOficina(oficina);				
+			return getFacade().obtenerDescripcionSelloOficina(tipoRegistro, oficina);				
 		} catch (Exception e) {
 	        throw new DelegateException(e);
 	    }	 	 
