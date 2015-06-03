@@ -19,6 +19,7 @@ import es.caib.bantel.persistence.delegate.ConfiguracionDelegate;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
 import es.caib.regtel.persistence.delegate.RegistroTelematicoDelegate;
+import es.caib.sistra.plugins.regtel.ConstantesPluginRegistro;
 
 public class AltaNotificacionController extends BaseController
 {
@@ -67,7 +68,7 @@ public class AltaNotificacionController extends BaseController
 		RegistroTelematicoDelegate dlgRte = DelegateRegtelUtil.getRegistroTelematicoDelegate();
         List organosDestino = dlgRte.obtenerServiciosDestino();
         request.setAttribute( "listaorganosdestino", regtelToBantel(organosDestino));
-        List oficinasRegistro = dlgRte.obtenerOficinasRegistro();
+        List oficinasRegistro = dlgRte.obtenerOficinasRegistro(ConstantesPluginRegistro.REGISTRO_ENTRADA);
         request.setAttribute( "listaoficinasregistro", regtelToBantel(oficinasRegistro));
         List tiposAsunto = dlgRte.obtenerTiposAsunto();
         request.setAttribute("tiposAsunto", regtelToBantel(tiposAsunto));

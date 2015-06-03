@@ -138,9 +138,9 @@ public abstract class DominiosFacadeEJB implements SessionBean {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.registro}"
      */
-    public List obtenerOficinas(String usuario) {
+    public List obtenerOficinas(char tipoRegistro, String usuario) {
     	try{    		
-    		List oficinas = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerOficinasRegistroUsuario(usuario);
+    		List oficinas = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerOficinasRegistroUsuario(tipoRegistro, usuario);
     		return listValorOrganismoToListValorDominio(oficinas);    		
     	}catch (Exception ex){
     		throw new EJBException(ex);    	
@@ -153,9 +153,9 @@ public abstract class DominiosFacadeEJB implements SessionBean {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.registro}"
      */
-    public String obtenerDescripcionSelloOficina(String oficina) {
+    public String obtenerDescripcionSelloOficina(char tipoRegistro, String oficina) {
     	try{    		
-    		return DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerDescripcionSelloOficina(oficina);    		    	
+    		return DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerDescripcionSelloOficina(tipoRegistro, oficina);    		    	
     	}catch (Exception ex){
     		throw new EJBException(ex);    	
     	}    		    

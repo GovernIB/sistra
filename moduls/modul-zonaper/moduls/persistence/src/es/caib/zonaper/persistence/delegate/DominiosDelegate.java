@@ -74,11 +74,11 @@ public class DominiosDelegate implements StatelessDelegate {
         }
 	}    
     
-    public List obtenerOficinas(String usuario) throws DelegateException
+    public List obtenerOficinas(char tipoRegistro, String usuario) throws DelegateException
 	{
 		try
 		{
-			return getFacade().obtenerOficinas(usuario );
+			return getFacade().obtenerOficinas(tipoRegistro, usuario );
 		}
 		catch (Exception e) 
 		{
@@ -110,11 +110,11 @@ public class DominiosDelegate implements StatelessDelegate {
         }
 	}
     
-    public String obtenerDescripcionSelloOficina(String oficina)  throws DelegateException
+    public String obtenerDescripcionSelloOficina(char tipoRegistro, String oficina)  throws DelegateException
 	{
 		try
 		{			
-			return getFacade().obtenerDescripcionSelloOficina(oficina);				
+			return getFacade().obtenerDescripcionSelloOficina(tipoRegistro, oficina);				
 		} catch (Exception e) {
 	        throw new DelegateException(e);
 	    }	 	 

@@ -26,6 +26,7 @@ import com.lowagie.text.Font;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
+import es.caib.regtel.model.ConstantesRegtel;
 import es.caib.util.StringUtil;
 import es.caib.zonaper.back.Constants;
 import es.caib.zonaper.back.form.ImprimirSelloForm;
@@ -76,7 +77,7 @@ public class ImprimirSelloAction extends BaseAction
 		
 		String descOficina = "";
 		if (StringUtils.isNotBlank(pi.getCodigoOficinaRegistro())) {
-			descOficina = DelegateUtil.getDominiosDelegate().obtenerDescripcionSelloOficina(pi.getCodigoOficinaRegistro());
+			descOficina = DelegateUtil.getDominiosDelegate().obtenerDescripcionSelloOficina(ConstantesRegtel.REGISTRO_ENTRADA, pi.getCodigoOficinaRegistro());
 			if ( descOficina == null )
 			{
 				this.setMessage( request, "errors.descSelloOficinaVacio" );

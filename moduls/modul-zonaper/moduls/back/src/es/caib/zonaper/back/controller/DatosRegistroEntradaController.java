@@ -14,6 +14,7 @@ import org.apache.struts.Globals;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.util.MessageResources;
 
+import es.caib.regtel.model.ConstantesRegtel;
 import es.caib.util.StringUtil;
 import es.caib.xml.registro.factoria.FactoriaObjetosXMLRegistro;
 import es.caib.xml.registro.factoria.ServicioRegistroXML;
@@ -82,7 +83,7 @@ public class DatosRegistroEntradaController extends BaseController
 						
         // Obtenemos listas de valores (Lista de ValorDominio]
 		// 	- Obtenemos oficinas usuario
-		List lstOficinas =  dominios.obtenerOficinas(request.getUserPrincipal().getName());
+		List lstOficinas =  dominios.obtenerOficinas(ConstantesRegtel.REGISTRO_ENTRADA, request.getUserPrincipal().getName());
 		//	- Obtener tipos de asunto
 		List lstTiposAsunto = dominios.obtenerTiposAsunto();
 		//  - Obtener municipios baleares
