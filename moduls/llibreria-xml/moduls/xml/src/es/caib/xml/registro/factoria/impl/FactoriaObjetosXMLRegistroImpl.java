@@ -33,6 +33,7 @@ import es.caib.xml.registro.modelo.DATOSDESTINO;
 import es.caib.xml.registro.modelo.DATOSINTERESADO;
 import es.caib.xml.registro.modelo.DATOSORIGEN;
 import es.caib.xml.registro.modelo.DIRECCIONCODIFICADA;
+import es.caib.xml.registro.modelo.IDENTIFICACIONINTERESADODESGLOSADA;
 import es.caib.xml.registro.modelo.JUSTIFICANTE;
 import es.caib.xml.registro.modelo.ObjectFactory;
 
@@ -273,6 +274,10 @@ public class FactoriaObjetosXMLRegistroImpl
 
 	public DireccionCodificada crearDireccionCodificada() {		
 		return new DireccionCodificada ();
+	}
+	
+	public IdentificacionInteresadoDesglosada crearIdentificacionInteresadoDesglosada() {		
+		return new IdentificacionInteresadoDesglosada ();
 	}
 
 	public String guardarJustificanteRegistro(Justificante justificante) 
@@ -531,6 +536,19 @@ public class FactoriaObjetosXMLRegistroImpl
 		return direccion;
 	}
 	
+	private IdentificacionInteresadoDesglosada crearIdentificacionInteresadoDesglosada (IDENTIFICACIONINTERESADODESGLOSADA identJAXB) throws EstablecerPropiedadException{
+		IdentificacionInteresadoDesglosada ident = null;
+		
+		if (identJAXB != null){
+			ident = crearIdentificacionInteresadoDesglosada();
+			ident.setNombre(identJAXB.getNOMBREINTERESADO());
+			ident.setApellido1(identJAXB.getAPELLIDO1INTERESADO());
+			ident.setApellido2(identJAXB.getAPELLIDO2INTERESADO());						
+		}
+		
+		return ident;
+	}
+	
 	private DatosInteresado crearDatosInteresado (DATOSINTERESADO datosInteresadoJAXB) throws EstablecerPropiedadException{
 		DatosInteresado datosInteresado = null;
 		
@@ -551,7 +569,10 @@ public class FactoriaObjetosXMLRegistroImpl
 			
 			datosInteresado.setNumeroIdentificacion (datosInteresadoJAXB.getNUMEROIDENTIFICACION());
 			datosInteresado.setFormatoDatosInteresado (datosInteresadoJAXB.getFORMATODATOSINTERESADO());
-			datosInteresado.setIdentificacionInteresado (datosInteresadoJAXB.getIDENTIFICACIONINTERESADO());			
+			datosInteresado.setIdentificacionInteresado (datosInteresadoJAXB.getIDENTIFICACIONINTERESADO());
+			datosInteresado.setIdentificacionInteresadoDesglosada(
+					crearIdentificacionInteresadoDesglosada(datosInteresadoJAXB.getIDENTIFICACIONINTERESADODESGLOSADA())	
+				);
 			datosInteresado.setDireccionCodificada (
 				crearDireccionCodificada (datosInteresadoJAXB.getDIRECCIONCODIFICADA())	
 			);
@@ -741,6 +762,23 @@ public class FactoriaObjetosXMLRegistroImpl
 		return direccionCodificadaRaw;
 	}
 	
+	/** Crea un objeto JAXB de IdentificacionInteresadoDesglosada (implementación específica) a partir de interfaz DireccionCodificada genérica)
+	 * @param identDesglosada Objeto que cumple la interfaz DirecionCodificada genérica
+	 * @return Objeto específico de implementación basado en JAXB
+	 */
+	protected IDENTIFICACIONINTERESADODESGLOSADA crearIdentificacionInteresadoDesglosadaJAXB (IdentificacionInteresadoDesglosada identDesglosada){
+		IDENTIFICACIONINTERESADODESGLOSADA identDesglosadaRaw = null;
+		
+		if (identDesglosada != null){
+			identDesglosadaRaw = new IDENTIFICACIONINTERESADODESGLOSADA ();
+			identDesglosadaRaw.setNOMBREINTERESADO( identDesglosada.getNombre());
+			identDesglosadaRaw.setAPELLIDO1INTERESADO(identDesglosada.getApellido1());
+			identDesglosadaRaw.setAPELLIDO2INTERESADO(identDesglosada.getApellido2());
+		}
+		
+		return identDesglosadaRaw;
+	}
+	
 	/** Crea un objeto JAXB de DatosInteresado (implementación específica) a partir de interfaz DatosInteresado genérica)
 	 * @param datosInteresado Objetos que cumple la interfaz DatosInteresado genérica
 	 * @return Objeto específico de implemantción basado en JAXB
@@ -753,14 +791,19 @@ public class FactoriaObjetosXMLRegistroImpl
 			dInteresadoRaw = new DATOSINTERESADO ();		
 			
 			// Crear objeto de dirección codificada
-			DIRECCIONCODIFICADA rawDir = crearDireccionCodificadaJAXB (datosInteresado.getDireccionCodificada());		
-			
-			// Crear objeto de datos de interesado
+			DIRECCIONCODIFICADA rawDir = crearDireccionCodificadaJAXB (datosInteresado.getDireccionCodificada());
 			dInteresadoRaw.setDIRECCIONCODIFICADA (rawDir);
+			
+			// Crear objeto de datos de interesado			
 			if (datosInteresado.getFormatoDatosInteresado() != null) {
 				dInteresadoRaw.setFORMATODATOSINTERESADO (datosInteresado.getFormatoDatosInteresado());
 			}
 			dInteresadoRaw.setIDENTIFICACIONINTERESADO (datosInteresado.getIdentificacionInteresado());
+
+			// Crear objeto de identificacion desglosada
+			IDENTIFICACIONINTERESADODESGLOSADA rawId = crearIdentificacionInteresadoDesglosadaJAXB (datosInteresado.getIdentificacionInteresadoDesglosada());
+			dInteresadoRaw.setIDENTIFICACIONINTERESADODESGLOSADA(rawId);					
+			
 			dInteresadoRaw.setNUMEROIDENTIFICACION (datosInteresado.getNumeroIdentificacion());		
 			if (datosInteresado.getTipoIdentificacion() != null) {
 				dInteresadoRaw.setTIPOIDENTIFICACION ("" + datosInteresado.getTipoIdentificacion());

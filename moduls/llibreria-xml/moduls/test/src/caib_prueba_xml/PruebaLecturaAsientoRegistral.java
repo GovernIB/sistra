@@ -47,7 +47,6 @@ public class PruebaLecturaAsientoRegistral {
 	
 	private static void imprimirDireccionCodificada (DireccionCodificada d){
 		System.out.println ("DIRECCION CODIFICADA");
-		
 		System.out.println ("Codigo Municipio: " + d.getCodigoMunicipio());
 		System.out.println ("Codigo Poblacion: " + d.getCodigoPoblacion());
 		System.out.println ("Codigo Postal: " + d.getCodigoPostal());
@@ -65,7 +64,9 @@ public class PruebaLecturaAsientoRegistral {
 		System.out.println ("DATOS INTERESADO");
 		
 		//direccion codificada
-		imprimirDireccionCodificada (i.getDireccionCodificada());
+		if (i.getDireccionCodificada() != null) {
+			imprimirDireccionCodificada (i.getDireccionCodificada());
+		}
 		
 		//formato datos interesado
 		System.out.println ("Formato datos interesado: " + i.getFormatoDatosInteresado());		
@@ -75,6 +76,12 @@ public class PruebaLecturaAsientoRegistral {
 		
 		//identificacion interesado
 		System.out.println ("Identificación interesado: " + i.getIdentificacionInteresado());
+		
+		//identificacion interesado
+		if (i.getIdentificacionInteresadoDesglosada() != null) {
+			System.out.println ("Identificación interesado desglosada: " + i.getIdentificacionInteresadoDesglosada().toString());
+		}
+		
 		
 		//numero identificacion
 		System.out.println ("Número identificación: " + i.getNumeroIdentificacion ());

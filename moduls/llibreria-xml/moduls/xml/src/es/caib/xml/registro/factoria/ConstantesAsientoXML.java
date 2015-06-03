@@ -195,6 +195,10 @@ public class ConstantesAsientoXML {
 	 */
 	public final static char DATOSANEXO_OTROS = 'O';
 	/**
+	 * Constante de tipo de documento formulario
+	 */
+	public final static char DATOSANEXO_FORMULARIO = 'F';
+	/**
 	 * Constante de tipo de documento extensión asiento
 	 */
 	public final static char DATOSANEXO_EXTENSION_ASIENTO = 'X';

@@ -21,6 +21,16 @@ public class DatosInteresado extends NodoRegistroBase {
 	private String 				numeroIdentificacion;
 	private String 				formatoDatosInteresado;
 	private String 				identificacionInteresado;
+	private IdentificacionInteresadoDesglosada identificacionInteresadoDesglosada;
+	public IdentificacionInteresadoDesglosada getIdentificacionInteresadoDesglosada() {
+		return identificacionInteresadoDesglosada;
+	}
+
+	public void setIdentificacionInteresadoDesglosada(
+			IdentificacionInteresadoDesglosada identificacionInteresadoDesglosada) {
+		this.identificacionInteresadoDesglosada = identificacionInteresadoDesglosada;
+	}
+
 	private DireccionCodificada direccionCodificada;
 	
 	
@@ -185,6 +195,9 @@ public class DatosInteresado extends NodoRegistroBase {
 		identificacionInteresado = getIdentificacionInteresado ();
 		if ( (identificacionInteresado == null) || (identificacionInteresado.trim().equals ("")) )
 			throw new CampoObligatorioException ("DatosInteresado", "IdentificacionInteresado");
+		
+		identificacionInteresadoDesglosada = getIdentificacionInteresadoDesglosada();
+		identificacionInteresadoDesglosada.comprobarDatosRequeridos();
 							
 	}
 			
@@ -197,7 +210,18 @@ public class DatosInteresado extends NodoRegistroBase {
 			
 			if (obj == null) return false;
 			
-			DatosInteresado dInteresado = (DatosInteresado) obj;						
+			DatosInteresado dInteresado = (DatosInteresado) obj;	
+			
+			// Comprobar id desglosada
+			IdentificacionInteresadoDesglosada idDesglosada = getIdentificacionInteresadoDesglosada();
+			IdentificacionInteresadoDesglosada idDesglosadaExt = dInteresado.getIdentificacionInteresadoDesglosada();
+				
+			if ((idDesglosada != null) || (idDesglosadaExt != null))
+				if ( (idDesglosadaExt != null) && (idDesglosada != null) ){
+					if (!idDesglosada.equals (idDesglosadaExt)) return false;
+				}
+				else
+					if ((idDesglosada != null) || (idDesglosadaExt != null)) return false;
 			
 			// Comprobar dirección codificada
 			DireccionCodificada dirCodificada = getDireccionCodificada ();
@@ -208,8 +232,7 @@ public class DatosInteresado extends NodoRegistroBase {
 					if (!dirCodificada.equals (dirCodificadaExt)) return false;
 				}
 				else
-					if ((dirCodificada != null) || (dirCodificadaExt != null)) return false;
-			
+					if ((dirCodificada != null) || (dirCodificadaExt != null)) return false;			
 			
 			// Comprobar formato datos interesado
 			String fmtDatosInt = getFormatoDatosInteresado ();
@@ -308,7 +331,11 @@ public class DatosInteresado extends NodoRegistroBase {
 		
 		// Identificación inetersado
 		str.append ("IdentificacionInteresado-" + getIdentificacionInteresado() + ";");
-						
+
+		// Identificacion interesado desglosada
+		IdentificacionInteresadoDesglosada identDesglosada = getIdentificacionInteresadoDesglosada ();
+		str.append ("IdentificacionInteresadoDesglosada-" + ( (identDesglosada != null) ? identDesglosada.toString() : "") +  ";");
+								
 		// Dirección codificada
 		DireccionCodificada direccion = getDireccionCodificada ();
 		str.append ("DireccionCodificada-" + ( (direccion != null) ? direccion.toString() : "") +  ";");

@@ -14,6 +14,7 @@ import es.caib.xml.registro.factoria.impl.DatosAsunto;
 import es.caib.xml.registro.factoria.impl.DatosInteresado;
 import es.caib.xml.registro.factoria.impl.DatosOrigen;
 import es.caib.xml.registro.factoria.impl.DireccionCodificada;
+import es.caib.xml.registro.factoria.impl.IdentificacionInteresadoDesglosada;
 
 public class PruebaEscrituraAsientoRegistral {
 
@@ -58,7 +59,13 @@ public class PruebaEscrituraAsientoRegistral {
 			dInteresado.setNumeroIdentificacion ("");
 			dInteresado.setFormatoDatosInteresado (ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
 			//dInteresado.setIdentificacionInteresado ("Nombre Apellido");											
-			dInteresado.setIdentificacionInteresado ("");
+			dInteresado.setIdentificacionInteresado ("Apellido1 Apellido2, Nombre");
+			IdentificacionInteresadoDesglosada identificacionInteresadoDesglosada = factoria.crearIdentificacionInteresadoDesglosada();
+			identificacionInteresadoDesglosada.setNombre("nombre");
+			identificacionInteresadoDesglosada.setApellido1("apellido 1");
+			identificacionInteresadoDesglosada.setApellido2("apellido 2");
+			
+			dInteresado.setIdentificacionInteresadoDesglosada(identificacionInteresadoDesglosada );
 			
 			DireccionCodificada direccion = factoria.crearDireccionCodificada();
 			direccion.setCodigoProvincia("01");
@@ -79,7 +86,7 @@ public class PruebaEscrituraAsientoRegistral {
 			dDelegado.setNumeroIdentificacion ("");
 			dDelegado.setFormatoDatosInteresado (ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
 			//dInteresado.setIdentificacionInteresado ("Nombre Apellido");											
-			dDelegado.setIdentificacionInteresado ("");
+			dDelegado.setIdentificacionInteresado ("Apellido1 Apellido2, Nombre");
 			
 			asiento.getDatosInteresado().add (dDelegado);
 			

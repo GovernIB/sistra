@@ -12,6 +12,7 @@ import es.caib.xml.registro.factoria.impl.DatosDestino;
 import es.caib.xml.registro.factoria.impl.DatosInteresado;
 import es.caib.xml.registro.factoria.impl.DatosOrigen;
 import es.caib.xml.registro.factoria.impl.DireccionCodificada;
+import es.caib.xml.registro.factoria.impl.IdentificacionInteresadoDesglosada;
 import es.caib.xml.registro.factoria.impl.Justificante;
 
 
@@ -118,6 +119,11 @@ public interface FactoriaObjetosXMLRegistro extends FactoriaObjetosXML {
 	 * @return Objeto DireccionCodificada
 	 */
 	public DireccionCodificada crearDireccionCodificada ();
+	
+	/** Crea un objeto IdentificacionInteresadoDesglosada vacío (sin datos)
+	 * @return Objeto IdentificacionInteresadoDesglosada
+	 */
+	public IdentificacionInteresadoDesglosada crearIdentificacionInteresadoDesglosada ();
 	
 	
 	/** Crea un objeto de asiento registral que contenga los datos (XML) definidos en el
