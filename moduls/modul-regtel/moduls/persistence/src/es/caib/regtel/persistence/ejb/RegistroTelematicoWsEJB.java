@@ -202,13 +202,22 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 				r.setExpediente(de.getUnidadAdministrativa(), de.getIdentificadorExpediente(), de.getClaveExpediente());
 			}
 			if(notificacion.getDatosInteresado() != null){
-				DatosInteresado di = notificacion.getDatosInteresado();
-				r.setDatosInteresado(di.getNif(),di.getNombreApellidos(), di.getIdentificadorUsuario(), di.getCodigoPais(),di.getNombrePais(), di.getCodigoProvincia(), di.getNombreProvincia(), di.getCodigoLocalidad(), di.getNombreLocalidad());
+				DatosInteresado di = notificacion.getDatosInteresado();				
+				if (di.getIdentificacionUsuarioDesglosada() != null) {
+					r.setDatosInteresadoDesglosado(di.getNif(),di.getIdentificacionUsuarioDesglosada().getNombre(), di.getIdentificacionUsuarioDesglosada().getApellido1(), di.getIdentificacionUsuarioDesglosada().getApellido2(),di.getIdentificadorUsuario(), di.getCodigoPais(),di.getNombrePais(), di.getCodigoProvincia(), di.getNombreProvincia(), di.getCodigoLocalidad(), di.getNombreLocalidad());
+				} else {					
+					r.setDatosInteresado(di.getNif(),di.getNombreApellidos(), di.getIdentificadorUsuario(), di.getCodigoPais(),di.getNombrePais(), di.getCodigoProvincia(), di.getNombreProvincia(), di.getCodigoLocalidad(), di.getNombreLocalidad());
+				}
 			}
 			if(notificacion.getDatosRepresentado() != null){
-				DatosRepresentado dr = notificacion.getDatosRepresentado();
-				r.setDatosRepresentado(dr.getNif(), dr.getNombreApellidos());
+				DatosRepresentado dr = notificacion.getDatosRepresentado();				
+				if (dr.getIdentificacionUsuarioDesglosada() != null) {
+					r.setDatosRepresentadoDesglosado(dr.getNif(), dr.getIdentificacionUsuarioDesglosada().getNombre(), dr.getIdentificacionUsuarioDesglosada().getApellido1(), dr.getIdentificacionUsuarioDesglosada().getApellido2());
+				} else {
+					r.setDatosRepresentado(dr.getNif(), dr.getNombreApellidos());					
+				}
 			}
+			
 			if(notificacion.getOficinaRegistral() != null){
 				OficinaRegistral of = notificacion.getOficinaRegistral();
 				r.setOficinaRegistro(of.getCodigoOrgano(),of.getCodigoOficina());
@@ -298,11 +307,19 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 		if(dEnt != null){
 			if(dEnt.getDatosInteresado() != null){
 				DatosInteresado di = dEnt.getDatosInteresado();
-				r.setDatosInteresado(di.getNif(),di.getNombreApellidos(), di.getIdentificadorUsuario(), di.getCodigoPais(),di.getNombrePais(), di.getCodigoProvincia(), di.getNombreProvincia(), di.getCodigoLocalidad(), di.getNombreLocalidad());
+				if (di.getIdentificacionUsuarioDesglosada() != null) {
+					r.setDatosInteresadoDesglosado(di.getNif(),di.getIdentificacionUsuarioDesglosada().getNombre(), di.getIdentificacionUsuarioDesglosada().getApellido1(), di.getIdentificacionUsuarioDesglosada().getApellido2(),di.getIdentificadorUsuario(), di.getCodigoPais(),di.getNombrePais(), di.getCodigoProvincia(), di.getNombreProvincia(), di.getCodigoLocalidad(), di.getNombreLocalidad());
+				} else {
+					r.setDatosInteresado(di.getNif(),di.getNombreApellidos(), di.getIdentificadorUsuario(), di.getCodigoPais(),di.getNombrePais(), di.getCodigoProvincia(), di.getNombreProvincia(), di.getCodigoLocalidad(), di.getNombreLocalidad());
+				}
 			}
 			if(dEnt.getDatosRepresentado() != null){
 				DatosRepresentado dr = dEnt.getDatosRepresentado();
-				r.setDatosRepresentado(dr.getNif(), dr.getNombreApellidos());
+				if (dr.getIdentificacionUsuarioDesglosada() != null) {
+					r.setDatosRepresentadoDesglosado(dr.getNif(), dr.getIdentificacionUsuarioDesglosada().getNombre(), dr.getIdentificacionUsuarioDesglosada().getApellido1(), dr.getIdentificacionUsuarioDesglosada().getApellido2());
+				} else {
+					r.setDatosRepresentado(dr.getNif(), dr.getNombreApellidos());
+				}
 			}
 			if(dEnt.getOficinaRegistral() != null){
 				OficinaRegistral of = dEnt.getOficinaRegistral();
@@ -317,7 +334,7 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 				for(int i=0;i<docs.size();i++){
 					if (docs.get(i) instanceof DocumentoRDS){
 						DocumentoRDS doc = (DocumentoRDS)docs.get(i);
-						r.addDocumento(doc.getModelo(),doc.getVersion(),doc.getDatosFichero(),doc.getNombreFichero(),doc.getExtensionFichero(),doc.getPlantilla(),doc.getFirmas());
+						r.addDocumento(doc.getModelo(),doc.getVersion(),doc.getDatosFichero(),doc.getTitulo(),doc.getExtensionFichero(),doc.getPlantilla(),doc.getFirmas());
 					}else if (docs.get(i) instanceof ReferenciaRDS){
 						r.addDocumento((ReferenciaRDS)docs.get(i));
 					}

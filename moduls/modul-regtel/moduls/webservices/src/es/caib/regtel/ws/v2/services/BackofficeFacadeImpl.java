@@ -24,6 +24,7 @@ import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.regtel.model.ResultadoRegistroTelematico;
 import es.caib.regtel.model.ws.Aviso;
+import es.caib.regtel.model.ws.IdentificacionInteresadoDesglosada;
 import es.caib.regtel.model.ws.OficioRemision;
 import es.caib.regtel.model.ws.TramiteSubsanacion;
 import es.caib.regtel.persistence.delegate.DelegateUtil;
@@ -55,6 +56,7 @@ import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.firma.FirmaIntf;
 import es.caib.sistra.plugins.firma.PluginFirmaIntf;
 import es.caib.util.StringUtil;
+import es.caib.xml.registro.factoria.ConstantesAsientoXML;
 import es.caib.zonaper.modelInterfaz.DetalleAviso;
 
 
@@ -301,7 +303,23 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 				diIntf.setCodigoProvincia((di.getCodigoProvincia() != null)? di.getCodigoProvincia().getValue() : "");
 				diIntf.setAutenticado((di.getAutenticado() != null)?di.getAutenticado().getValue() : false);
 				diIntf.setNif(di.getNif());
-				diIntf.setNombreApellidos(di.getNombreApellidos());
+				
+				
+				if (di.getNombreApellidosDesglosado() != null) {
+					IdentificacionInteresadoDesglosada identificacionInteresadoDesglosada = new IdentificacionInteresadoDesglosada();
+					identificacionInteresadoDesglosada.setNombre(di.getNombreApellidosDesglosado().getNombre());
+					identificacionInteresadoDesglosada.setApellido1(di.getNombreApellidosDesglosado().getApellido1());
+					identificacionInteresadoDesglosada.setApellido2(di.getNombreApellidosDesglosado().getApellido2());
+					diIntf.setIdentificacionUsuarioDesglosada(identificacionInteresadoDesglosada);
+					diIntf.setNombreApellidos(StringUtil.formatearNombreApellidos(
+							ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM,
+							di.getNombreApellidosDesglosado().getNombre(),
+							di.getNombreApellidosDesglosado().getApellido1(),
+							di.getNombreApellidosDesglosado().getApellido2()));
+				} else {
+					diIntf.setNombreApellidos(di.getNombreApellidos());
+				}
+				
 				diIntf.setNombreLocalidad((di.getNombreLocalidad() != null)? di.getNombreLocalidad().getValue() : "");
 				diIntf.setNombrePais((di.getNombrePais() != null)? di.getNombrePais().getValue() : "");
 				diIntf.setNombreProvincia((di.getNombreProvincia() != null)? di.getNombreProvincia().getValue() : "");
@@ -311,7 +329,23 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 				DatosRepresentado dr = entrada.getDatosRepresentado();
 				es.caib.regtel.model.ws.DatosRepresentado drIntf = new es.caib.regtel.model.ws.DatosRepresentado();
 				drIntf.setNif(dr.getNif());
-				drIntf.setNombreApellidos(dr.getNombreApellidos());
+				
+				if (dr.getNombreApellidosDesglosado() != null) {
+					IdentificacionInteresadoDesglosada identificacionInteresadoDesglosada = new IdentificacionInteresadoDesglosada();
+					identificacionInteresadoDesglosada.setNombre(dr.getNombreApellidosDesglosado().getNombre());
+					identificacionInteresadoDesglosada.setApellido1(dr.getNombreApellidosDesglosado().getApellido1());
+					identificacionInteresadoDesglosada.setApellido2(dr.getNombreApellidosDesglosado().getApellido2());
+					drIntf.setIdentificacionUsuarioDesglosada(identificacionInteresadoDesglosada);
+					drIntf.setNombreApellidos(StringUtil.formatearNombreApellidos(
+							ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM,
+							dr.getNombreApellidosDesglosado().getNombre(),
+							dr.getNombreApellidosDesglosado().getApellido1(),
+							dr.getNombreApellidosDesglosado().getApellido2()));
+				} else {
+					drIntf.setNombreApellidos(dr.getNombreApellidos());
+				}
+				
+				
 				rEnt.setDatosRepresentado(drIntf);
 			}
 			if(entrada.getDatosAsunto() != null){
@@ -401,7 +435,23 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 				DatosRepresentado dr = notificacion.getDatosRepresentado();
 				es.caib.regtel.model.ws.DatosRepresentado drIntf = new es.caib.regtel.model.ws.DatosRepresentado();
 				drIntf.setNif(dr.getNif());
-				drIntf.setNombreApellidos(dr.getNombreApellidos());
+				
+				if (dr.getNombreApellidosDesglosado() != null) {
+					IdentificacionInteresadoDesglosada identificacionInteresadoDesglosada = new IdentificacionInteresadoDesglosada();
+					identificacionInteresadoDesglosada.setNombre(dr.getNombreApellidosDesglosado().getNombre());
+					identificacionInteresadoDesglosada.setApellido1(dr.getNombreApellidosDesglosado().getApellido1());
+					identificacionInteresadoDesglosada.setApellido2(dr.getNombreApellidosDesglosado().getApellido2());
+					drIntf.setIdentificacionUsuarioDesglosada(identificacionInteresadoDesglosada);
+					drIntf.setNombreApellidos(StringUtil.formatearNombreApellidos(
+							ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM,
+							dr.getNombreApellidosDesglosado().getNombre(),
+							dr.getNombreApellidosDesglosado().getApellido1(),
+							dr.getNombreApellidosDesglosado().getApellido2()));
+				} else {
+					drIntf.setNombreApellidos(dr.getNombreApellidos());
+				}
+				
+				
 				rSal.setDatosRepresentado(drIntf);
 			}
 			if(notificacion.getDatosNotificacion() != null){

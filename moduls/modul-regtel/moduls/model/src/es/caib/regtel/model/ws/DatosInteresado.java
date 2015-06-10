@@ -5,6 +5,7 @@ public class DatosInteresado {
 
     private Boolean autenticado; // A partir v1.1.0 sustituye en la llamada a identificador usuario
     private String identificadorUsuario;
+    private IdentificacionInteresadoDesglosada identificacionUsuarioDesglosada;
     private String nif;
     private String nombreApellidos;
     private String codigoPais;
@@ -92,6 +93,15 @@ public class DatosInteresado {
 
 	public void setAutenticado(Boolean autenticado) {
 		this.autenticado = autenticado;
+	}
+
+	public IdentificacionInteresadoDesglosada getIdentificacionUsuarioDesglosada() {
+		return identificacionUsuarioDesglosada;
+	}
+
+	public void setIdentificacionUsuarioDesglosada(
+			IdentificacionInteresadoDesglosada identificadorUsuarioDesglosada) {
+		this.identificacionUsuarioDesglosada = identificadorUsuarioDesglosada;
 	}
 
 }

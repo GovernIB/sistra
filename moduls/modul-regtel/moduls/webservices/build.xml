@@ -39,6 +39,7 @@
 	 	<include name="8-regtel-persistence.jar" />
       </fileset>
 	  <fileset dir="${distribucion.dir}/lib"> 
+	  	<include name="sistra-xml.jar"/>
 	    <include name="sistra-util.jar"/>
 	    <include name="sistra-plugins.jar"/>
 	  </fileset>

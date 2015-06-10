@@ -5,6 +5,7 @@ public class DatosRepresentado {
 
     private String nif;
     private String nombreApellidos;
+    private IdentificacionInteresadoDesglosada identificacionUsuarioDesglosada;
 
     public String getNif() {
         return nif;
@@ -21,5 +22,14 @@ public class DatosRepresentado {
     public void setNombreApellidos(String value) {
         this.nombreApellidos = value;
     }
+
+	public IdentificacionInteresadoDesglosada getIdentificacionUsuarioDesglosada() {
+		return identificacionUsuarioDesglosada;
+	}
+
+	public void setIdentificacionUsuarioDesglosada(
+			IdentificacionInteresadoDesglosada identificacionUsuarioDesglosada) {
+		this.identificacionUsuarioDesglosada = identificacionUsuarioDesglosada;
+	}
 
 }

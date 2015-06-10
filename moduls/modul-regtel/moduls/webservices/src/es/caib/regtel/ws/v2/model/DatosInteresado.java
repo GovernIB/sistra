@@ -21,7 +21,8 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="autenticado" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="nif" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="nombreApellidos" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="nombreApellidos" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="nombreApellidosDesglosado" type="{urn:es:caib:regtel:ws:v2:model:DatosInteresado}IdentificacionInteresadoDesglosada" minOccurs="0"/>
  *         &lt;element name="codigoPais" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="nombrePais" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="codigoProvincia" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -41,6 +42,7 @@ import javax.xml.bind.annotation.XmlType;
     "autenticado",
     "nif",
     "nombreApellidos",
+    "nombreApellidosDesglosado",
     "codigoPais",
     "nombrePais",
     "codigoProvincia",
@@ -54,8 +56,8 @@ public class DatosInteresado {
     protected JAXBElement<Boolean> autenticado;
     @XmlElement(required = true)
     protected String nif;
-    @XmlElement(required = true)
     protected String nombreApellidos;
+    protected IdentificacionInteresadoDesglosada nombreApellidosDesglosado;
     @XmlElementRef(name = "codigoPais", type = JAXBElement.class)
     protected JAXBElement<String> codigoPais;
     @XmlElementRef(name = "nombrePais", type = JAXBElement.class)
@@ -139,6 +141,30 @@ public class DatosInteresado {
      */
     public void setNombreApellidos(String value) {
         this.nombreApellidos = value;
+    }
+
+    /**
+     * Gets the value of the nombreApellidosDesglosado property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link IdentificacionInteresadoDesglosada }
+     *     
+     */
+    public IdentificacionInteresadoDesglosada getNombreApellidosDesglosado() {
+        return nombreApellidosDesglosado;
+    }
+
+    /**
+     * Sets the value of the nombreApellidosDesglosado property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link IdentificacionInteresadoDesglosada }
+     *     
+     */
+    public void setNombreApellidosDesglosado(IdentificacionInteresadoDesglosada value) {
+        this.nombreApellidosDesglosado = value;
     }
 
     /**
