@@ -20,7 +20,7 @@ public class DetalleNotificacionForm extends ValidatorForm
 	
 	private String usuarioSey;
 	private String nif;
-	private String apellidos;
+	private String apellidos; // Nombre y apellidos	
 	private String nombrePais; 
 	private String nombreProvincia;
 	private String nombreMunicipio;
@@ -82,17 +82,7 @@ public class DetalleNotificacionForm extends ValidatorForm
 
 	public void setAcuse(String acuse) {
 		this.acuse = acuse;
-	}
-
-
-	public String getApellidos() {
-		return apellidos;
-	}
-
-
-	public void setApellidos(String apellidos) {
-		this.apellidos = apellidos;
-	}
+	}	
 
 	public String getDescripcionExpediente() {
 		return descripcionExpediente;
@@ -527,6 +517,15 @@ public class DetalleNotificacionForm extends ValidatorForm
 
 	public void setDiasPlazo(String diasPlazo) {
 		this.diasPlazo = diasPlazo;
+	}
+	
+	public String getApellidos() {
+		return apellidos;
+	}
+
+
+	public void setApellidos(String apellidos) {
+		this.apellidos = apellidos;
 	}
 	
 }

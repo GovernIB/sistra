@@ -48,6 +48,7 @@ import es.caib.xml.registro.factoria.impl.DatosAsunto;
 import es.caib.xml.registro.factoria.impl.DatosInteresado;
 import es.caib.xml.registro.factoria.impl.DatosOrigen;
 import es.caib.xml.registro.factoria.impl.DireccionCodificada;
+import es.caib.xml.registro.factoria.impl.IdentificacionInteresadoDesglosada;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.persistence.intf.PadBackOfficeFacade;
 import es.caib.zonaper.persistence.intf.PadBackOfficeFacadeHome;
@@ -139,6 +140,26 @@ public class RegistroSalidaHelper{
 	}
 	
 	/**
+	 * Establece datos receptor notificacion de forma desglosada(Obligatorio)
+	 * @param nif Nif/Cif (Obligatorio)
+	 * @param nombre Nombre (Obligatorio)
+	 * @param nombre Apellido1 (Opcional)
+	 * @param nombre Apellido2 (Opcional)
+	 * @param userSeycon Usuario seycon (Si se refiere a un expediente autenticado)
+	 * @param codPais Codigo pais de la direccion del interesado (Obligatorio)
+	 * @param nomPais nombre pais  de la direccion del interesado  (Obligatorio)
+	 * @param codProvincia Codigo provincia de la direccion del interesado (Obligatorio)
+	 * @param nomProvincia Nombre provincia de la direccion del interesado (Obligatorio)
+	 * @param codLocalidad Codigo localidad de la direccion del interesado (Obligatorio)
+	 * @param nomLocalidad Nombre localidad de la direccion del interesado (Obligatorio)
+	 */
+	public void setDatosInteresadoDesglosado(String nif,String nombre, String apellido1, String apellido2,String userSeycon,String codPais,String nomPais,String codProvincia,String nomProvincia,String codLocalidad,String nomLocalidad)  throws ExcepcionRegistroTelematico	{
+		setDatosInteresadoImpl(nif, nombre, apellido1, apellido2, null, userSeycon, codPais,
+				codProvincia, nomProvincia, codLocalidad, nomLocalidad);	
+	}
+	
+	
+	/**
 	 * Establece datos receptor notificacion (Obligatorio)
 	 * @param nif Nif/Cif (Obligatorio)
 	 * @param apellidosNombre Apellidos y nombre (Obligatorio)
@@ -150,7 +171,15 @@ public class RegistroSalidaHelper{
 	 * @param codLocalidad Codigo localidad de la direccion del interesado (Obligatorio)
 	 * @param nomLocalidad Nombre localidad de la direccion del interesado (Obligatorio)
 	 */
-	public void setDatosInteresado(String nif,String apellidosNombre,String userSeycon,String codPais,String nomPais,String codProvincia,String nomProvincia,String codLocalidad,String nomLocalidad)  throws ExcepcionRegistroTelematico	{
+	public void setDatosInteresado(String nif,String apellidosNombre, String userSeycon,String codPais,String nomPais,String codProvincia,String nomProvincia,String codLocalidad,String nomLocalidad)  throws ExcepcionRegistroTelematico	{
+		setDatosInteresadoImpl(nif, null, null, null, apellidosNombre, userSeycon, codPais,
+				codProvincia, nomProvincia, codLocalidad, nomLocalidad);	
+	}
+
+	private void setDatosInteresadoImpl(String nif, String nombre, String apellido1, String apellido2, String apellidosNombre,
+			String userSeycon, String codPais, String codProvincia,
+			String nomProvincia, String codLocalidad, String nomLocalidad)
+			throws ExcepcionRegistroTelematico {
 		try{	
 			datosRpte = factReg.crearDatosInteresado();			
 			datosRpte.setTipoInteresado(ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTANTE);
@@ -165,8 +194,19 @@ public class RegistroSalidaHelper{
 				datosRpte.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE));				
 			
 			datosRpte.setNumeroIdentificacion(nifNormalizado);
-			datosRpte.setFormatoDatosInteresado(ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);			
-			datosRpte.setIdentificacionInteresado(apellidosNombre);
+			datosRpte.setFormatoDatosInteresado(ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
+			if (nombre == null) {
+				datosRpte.setIdentificacionInteresado(apellidosNombre);
+			} else {
+				datosRpte.setIdentificacionInteresado(StringUtil.formatearNombreApellidos(
+						ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM,
+						nombre,	apellido1, 	apellido2));
+				IdentificacionInteresadoDesglosada identificacionInteresadoDesglosada = factReg.crearIdentificacionInteresadoDesglosada();
+				identificacionInteresadoDesglosada.setNombre(nombre);
+				identificacionInteresadoDesglosada.setApellido1(apellido1);
+				identificacionInteresadoDesglosada.setApellido2(apellido2);
+				datosRpte.setIdentificacionInteresadoDesglosada(identificacionInteresadoDesglosada);
+			}
 			datosRpte.setUsuarioSeycon(userSeycon);
 			
 			DireccionCodificada dir = factReg.crearDireccionCodificada();
@@ -178,11 +218,19 @@ public class RegistroSalidaHelper{
 			dir.setNombreMunicipio(nomLocalidad);
 			
 			setInteresado=true;
-		} catch (EstablecerPropiedadException e) {
+		} catch (Exception e) {
 			throw new ExcepcionRegistroTelematico("Excepcion estableciendo propiedades",e);
-		}	
+		}
 	}
 	
+	/**
+	 * En caso de que el interesado sea el representante establece los datos del representado de forma desglosada (Opcional: depende si hay representacion)
+	 * @param nif Nif/Cif representado (Obligatorio)
+	 * @param apellidosNombre Apellidos y nombre  (Obligatorio)
+	 */
+	public void setDatosRepresentadoDesglosado(String nif, String nombre, String apellido1, String apellido2) throws ExcepcionRegistroTelematico {
+		setDatosRepresentadoImpl(nif, nombre, apellido1, apellido2 ,null);		
+	}
 
 	/**
 	 * En caso de que el interesado sea el representante establece los datos del representado (Opcional: depende si hay representacion)
@@ -190,6 +238,11 @@ public class RegistroSalidaHelper{
 	 * @param apellidosNombre Apellidos y nombre  (Obligatorio)
 	 */
 	public void setDatosRepresentado(String nif, String apellidosNombre) throws ExcepcionRegistroTelematico {
+		setDatosRepresentadoImpl(nif, null, null, null,apellidosNombre);		
+	}
+
+	private void setDatosRepresentadoImpl(String nif, String nombre, String apellido1, String apellido2, String apellidosNombre)
+			throws ExcepcionRegistroTelematico {
 		try{	
 			
 			String nifNormalizado = NifCif.normalizarDocumento(nif);
@@ -204,10 +257,23 @@ public class RegistroSalidaHelper{
 			else if (NifCif.esNIE(nifNormalizado))
 				datosRpdo.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE));
 			datosRpdo.setFormatoDatosInteresado(ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
-			datosRpdo.setIdentificacionInteresado(apellidosNombre);			
-		} catch (EstablecerPropiedadException e) {
+			
+			if (nombre == null) {
+				datosRpdo.setIdentificacionInteresado(apellidosNombre);
+			} else {
+				datosRpdo.setIdentificacionInteresado(StringUtil.formatearNombreApellidos(
+						ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM,
+						nombre,	apellido1, 	apellido2));
+				IdentificacionInteresadoDesglosada identificacionInteresadoDesglosada = factReg.crearIdentificacionInteresadoDesglosada();
+				identificacionInteresadoDesglosada.setNombre(nombre);
+				identificacionInteresadoDesglosada.setApellido1(apellido1);
+				identificacionInteresadoDesglosada.setApellido2(apellido2);
+				datosRpdo.setIdentificacionInteresadoDesglosada(identificacionInteresadoDesglosada);
+			}
+						
+		} catch (Exception e) {
 			throw new ExcepcionRegistroTelematico("Excepcion estableciendo propiedades",e);
-		}		
+		}
 	}
 
 	/**

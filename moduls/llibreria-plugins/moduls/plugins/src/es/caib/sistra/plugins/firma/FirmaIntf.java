@@ -29,12 +29,6 @@ public interface FirmaIntf extends Serializable{
 	 * Obtiene el contenido de la firma (dependerá del proveedor de firma)
 	 * @return contenido de la firma
 	 */
-	public byte[] getContenidoFirma();
-	
-	/**
-	 * Obtiene clave publica certificado en B64.
-	 * @return contenido de la firma
-	 */
-	public String getCertificadoB64();
+	public byte[] getContenidoFirma();	
 	
 }

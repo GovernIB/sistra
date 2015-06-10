@@ -68,7 +68,7 @@ public class AltaNotificacionController extends BaseController
 		RegistroTelematicoDelegate dlgRte = DelegateRegtelUtil.getRegistroTelematicoDelegate();
         List organosDestino = dlgRte.obtenerServiciosDestino();
         request.setAttribute( "listaorganosdestino", regtelToBantel(organosDestino));
-        List oficinasRegistro = dlgRte.obtenerOficinasRegistro(ConstantesPluginRegistro.REGISTRO_ENTRADA);
+        List oficinasRegistro = dlgRte.obtenerOficinasRegistro(ConstantesPluginRegistro.REGISTRO_SALIDA);
         request.setAttribute( "listaoficinasregistro", regtelToBantel(oficinasRegistro));
         List tiposAsunto = dlgRte.obtenerTiposAsunto();
         request.setAttribute("tiposAsunto", regtelToBantel(tiposAsunto));

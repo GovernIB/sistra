@@ -217,12 +217,12 @@ function enviarFormulario( form )
                     <td style="border:0;">
                     	<!-- Organismo destinatario -->
 	                    &nbsp;<br><font class="errorcampo">*</font><font class=""><bean:message key="datosRegistroEntrada.organismeDestinatari" />:</font>
-	                    <input id="desti" type="text" name="destinatari" size="4" value='<bean:write name="codigoOrganoDestino" />' disabled="true">
+	                    <input id="desti" type="text" name="destinatari" size="15" value='<bean:write name="codigoOrganoDestino" />' disabled="true">
                         <!--  <img src="imgs/registro/buscar.gif" align=middle alt="<bean:message key="datosRegistroEntrada.cercar" />" border="0">  -->
-                    </TD>
+                    </td>
                     <td>
                     <div id="destinatario_desc" style="font-size:10px; font: bold;"><bean:write name="descripcionOrganoDestino" /></div>
-                    </TD>
+                    </td>
                 </tr>
             </table>
                 </td>

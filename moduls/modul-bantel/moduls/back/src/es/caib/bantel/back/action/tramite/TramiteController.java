@@ -46,7 +46,7 @@ public class TramiteController implements Controller
     		request.setAttribute("listaUnidadesAdministrativa",unidades);
     		
     		 // Obtenemos oficinas y organos
-            List oficinas=listarOficinas();
+            List oficinas=listarOficinasSalida();
     		request.setAttribute("listaOficinas",oficinas);
     		List organos=listarOrganos();
     		request.setAttribute("listaOrganos",organos);
@@ -69,12 +69,12 @@ public class TramiteController implements Controller
 	}
 
 	/**
-	 * Lista oficinas registro.
+	 * Lista oficinas registro salida.
 	 * @return oficinas
 	 */
-	private List listarOficinas() throws Exception {
+	private List listarOficinasSalida() throws Exception {
 		PluginRegistroIntf plgRegistro = PluginFactory.getInstance().getPluginRegistro();
-		List oficinas = plgRegistro.obtenerOficinasRegistro(ConstantesPluginRegistro.REGISTRO_ENTRADA);
+		List oficinas = plgRegistro.obtenerOficinasRegistro(ConstantesPluginRegistro.REGISTRO_SALIDA);
 		return oficinas;
 	}
 
