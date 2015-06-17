@@ -1,5 +1,7 @@
 package es.caib.sistra.plugins.firma.impl.mock;
 
+import java.io.UnsupportedEncodingException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -72,6 +74,14 @@ public class FirmaMock implements FirmaIntf{
 
 	protected void setFormato(String formato) {
 		this.formato = formato;
+	}
+
+	public byte[] getContenidoFirma() {
+		try {
+			return signature.getBytes("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return null;
+		}	
 	}
 
 }
