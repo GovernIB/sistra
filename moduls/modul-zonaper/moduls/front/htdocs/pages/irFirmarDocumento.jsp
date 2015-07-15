@@ -46,16 +46,51 @@
 				 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
 					
 		function prepararEntornoFirma(){
-			cargarAppletFirma(sistra_ClienteaFirma_buildVersion);
+			MiniApplet.cargarMiniApplet(base);
 		}
 		
+		function saveSignatureCallback(signatureB64) {
+			firma = b64ToB64UrlSafe(signatureB64);
+			formAfirma.firma.value = firma;
+			formAfirma.submit();
+		}
+		
+		function showLogCallback(errorType, errorMessage) {
+			error = 'Error: '+errorMessage;
+			alert(error);
+			console.log("Type: " + errorType + "\nMessage: " + errorMessage);
+			Mensaje.cancelar();
+			return;
+		}
+		
+		var formAfirma;
 		function firmarAFirma(form){
 		
-		  	if (clienteFirma == undefined) { 
-	          alert("No se ha podido instalar el entorno de firma");
-	          return false;
-	      	}
-					
+			if (MiniApplet == undefined) { 
+		          alert("No se ha podido instalar el entorno de firma");
+		          return false;
+			}
+			
+			var contenidoFichero = $('#documentoB64').val();
+			if ( contenidoFichero == '' )
+			{
+				alert( "<bean:message key="firmarDocumento.introducirFichero"/>" );
+				return false;
+			}
+				
+			formAfirma = form;
+			
+			// Pasamos de b64 urlSafe a b64
+			var b64 = b64UrlSafeToB64($('#documentoB64').val());
+		
+			MiniApplet.sign(
+						b64,
+						sistra_ClienteaFirma_SignatureAlgorithm,
+						sistra_ClienteaFirma_SignatureFormat,
+						"",
+						saveSignatureCallback,
+						showLogCallback);
+					/**	
 			var contenidoFichero = $('#documentoB64').val();
 			if ( contenidoFichero == '' )
 			{
@@ -87,7 +122,7 @@
 			    firma = b64ToB64UrlSafe(firma);
    				form.firma.value = firma;
 			    return true;
-			}
+			}**/
 		}
 			
 		prepararEntornoFirma();
@@ -98,10 +133,8 @@
 		mostrarMensaje();
 		<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
-			if (!firmarAFirma(form)) {
-				Mensaje.cancelar();
-				return;
-			}
+			firmarAFirma(form);
+			return;
 		</logic:equal>
 		<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>" value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
 			if (!firmarCAIB(form)){

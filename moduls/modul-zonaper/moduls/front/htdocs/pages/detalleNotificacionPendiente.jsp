@@ -65,41 +65,41 @@
 	
 	<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 				 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
-				 
-			function prepararEntornoFirma(){			
-				cargarAppletFirma(sistra_ClienteaFirma_buildVersion);
+			
+			
+			function prepararEntornoFirma(){
+				MiniApplet.cargarMiniApplet(base);
 			}
-				 
-			function firmarAFirma(){
 			
+			function saveSignatureCallback(signatureB64) {
+				firma = b64ToB64UrlSafe(signatureB64);
 				var formulario = document.getElementById("formularioEnvio");
+				formulario.firma.value = firma;
+			}
 			
-				if (clienteFirma == undefined) { 
+			function showLogCallback(errorType, errorMessage) {
+					error = 'Error: '+errorMessage;
+					alert(error);
+					Mensaje.cancelar();	
+					console.log("Type: " + errorType + "\nMessage: " + errorMessage);
+			}
+			
+			function firmarAFirma(form){
+				var formulario = document.getElementById("formularioEnvio");
+				if (MiniApplet == undefined) { 
 		          alert("No se ha podido instalar el entorno de firma");
 		          return false;
-	        	}
-			
+		       	}
+		      	
 				var asientoB64 = b64UrlSafeToB64(formulario.asiento.value);
-			
-				clienteFirma.initialize();
-				clienteFirma.setShowErrors(false);
-				clienteFirma.setSignatureAlgorithm(sistra_ClienteaFirma_SignatureAlgorithm);
-				clienteFirma.setSignatureMode(sistra_ClienteaFirma_SignatureMode);
-				clienteFirma.setSignatureFormat(sistra_ClienteaFirma_SignatureFormat);
-				clienteFirma.setData(asientoB64);
 				
-				clienteFirma.sign();
-				
-				if(clienteFirma.isError()){
-					error = 'Error: '+clienteFirma.getErrorMessage();
-					alert(error);
-					return false;
-				}else{	
-				     firma = clienteFirma.getSignatureBase64Encoded();
-				    firma = b64ToB64UrlSafe(firma);
-				     formulario.firma.value = firma;
-				     return true;
-				}
+				MiniApplet.sign(
+					asientoB64,
+					sistra_ClienteaFirma_SignatureAlgorithm,//"SHA1withRSA",
+					sistra_ClienteaFirma_SignatureFormat,//"CAdES",
+					"",
+					saveSignatureCallback,
+					showLogCallback);
 			}
 			prepararEntornoFirma();
 	</logic:equal>	
@@ -110,7 +110,7 @@
 		// Realizamos firma
 		<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
-				if (!firmarAFirma()) return;
+				firmarAFirma(); return;
 		</logic:equal>
 		<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									

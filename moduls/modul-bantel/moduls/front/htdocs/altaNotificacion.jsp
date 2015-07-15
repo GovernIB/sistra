@@ -14,11 +14,8 @@
 <!--  Scripts para firma (depende implementacion) -->
 	<logic:equal name="<%=es.caib.bantel.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
-	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/instalador.js"></script>
-	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/firma.js"></script>	
-	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/utils.js"></script>
-	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/constantes.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/configClienteaFirmaSistra.js"></script>
+	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/miniapplet.js"></script>	
 	
 	<script type="text/javascript">		
 		base = "<%=request.getAttribute("urlSistraAFirma")%><%=request.getContextPath()%>/firma/aFirma";
@@ -61,42 +58,41 @@
 	<logic:equal name="<%=es.caib.bantel.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
 	
-		function prepararEntornoFirma(){
-			cargarAppletFirma(sistra_ClienteaFirma_buildVersion);
+	 	function prepararEntornoFirma(){
+			MiniApplet.cargarMiniApplet(base);
 		}
-				
+		
+		function saveSignatureCallback(signatureB64) {
+		    firma = b64ToB64UrlSafe(signatureB64);
+		    document.getElementById("firma").value=firma;
+		    anexarDocumentoContinuacion();
+		}
+		
+		function showLogCallback(errorType, errorMessage) {
+				error = 'Error: '+errorMessage;
+				alert(error);
+				Mensaje.cancelar();	
+				console.log("Type: " + errorType + "\nMessage: " + errorMessage);
+		}
+		
 		function firmarAFirma(form){
-	      var firma = '';
-	      var i = 0;
-		  if (clienteFirma == undefined) { 
+	      	if (MiniApplet == undefined) { 
 	          alert("No se ha podido instalar el entorno de firma");
 	          return false;
 	       	}
-	       	clienteFirma.initialize();
-			clienteFirma.setShowErrors(false);
-			clienteFirma.setSignatureAlgorithm(sistra_ClienteaFirma_SignatureAlgorithm);
-			clienteFirma.setSignatureMode(sistra_ClienteaFirma_SignatureMode);
-			clienteFirma.setSignatureFormat(sistra_ClienteaFirma_SignatureFormat);
-			if($('#documentoB64').val() == null || $('#documentoB64').val() == ''){
-				return false;
-			}
-			// Pasamos de b64 urlSafe a b64
-			var b64 = b64UrlSafeToB64($('#documentoB64').val());
+	      	
+	      	var formB64 = b64UrlSafeToB64($('#documentoB64').val());
 			
-			clienteFirma.setData(b64);
-			clienteFirma.sign();
-			
-			if(clienteFirma.isError()){
-				error = 'Error: '+clienteFirma.getErrorMessage();
-				alert(error);
-				return false;
-			}else{	
-			     firma = clienteFirma.getSignatureBase64Encoded();
-			     firma = b64ToB64UrlSafe(firma);
-			}
-			document.getElementById("firma").value=firma;
-			return true;
+			MiniApplet.sign(
+				formB64,
+				sistra_ClienteaFirma_SignatureAlgorithm,//"SHA1withRSA",
+				sistra_ClienteaFirma_SignatureFormat,//"CAdES",
+				"",
+				saveSignatureCallback,
+				showLogCallback);
 		}
+				
+		
 	</logic:equal>
 	
 	function anexarDocumento(form){
@@ -104,10 +100,8 @@
 	
 		<logic:equal name="<%=es.caib.bantel.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
-			if (!firmarAFirma(form)){
-				Mensaje.cancelar();	 
-				return;
-			}
+			firmarAFirma(form);
+			return;
 		</logic:equal>
 		<logic:equal name="<%=es.caib.bantel.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">	
@@ -115,8 +109,12 @@
 				Mensaje.cancelar();	
 				return;
 			}
+			anexarDocumentoContinuacion(form);
 		</logic:equal>
-				
+		
+	}
+	
+	function anexarDocumentoContinuacion(form) {
 		// Enviar formulario
 		var url_json = '<html:rewrite page="/firmarDocumentoAnexo.do"/>';
 		var data = "atributo=documentosAltaNotificacion&nombre="+$('#nombreFirmar').val()+"&codigoRDS="+$('#codigoRDSFirmar').val()+"&claveRDS="+$('#claveRDSFirmar').val()+"&firma="+$('#firma').val();		

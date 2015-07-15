@@ -50,39 +50,53 @@
 				 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
 		
 	function prepararEntornoFirma(){
-		cargarAppletFirma(sistra_ClienteaFirma_buildVersion);
+		MiniApplet.cargarMiniApplet(base);
 	}
 		
-	function firmarAFirma(form){
-	    var firma = '';
-	    var i = 0;
-		if (clienteFirma == undefined) { 
-	       alert("No se ha podido instalar el entorno de firma");
-	       return false;
-	   	}
-	   	clienteFirma.initialize();
-	   	clienteFirma.setShowErrors(false);
-		clienteFirma.setSignatureAlgorithm(sistra_ClienteaFirma_SignatureAlgorithm);
-		clienteFirma.setSignatureMode(sistra_ClienteaFirma_SignatureMode);
-		clienteFirma.setSignatureFormat(sistra_ClienteaFirma_SignatureFormat);
-		if($('#documentoB64').val() == null || $('#documentoB64').val() == ''){
-			return false;
-		}
+	function saveSignatureCallback(signatureB64) {
+		firma = b64ToB64UrlSafe(signatureB64);
 		
-		// Pasamos de b64 urlSafe a b64
-		var b64 = b64UrlSafeToB64($('#documentoB64').val());
-		clienteFirma.setData(b64);
-		clienteFirma.sign();
-		if(clienteFirma.isError()){
-			error = 'Error: '+clienteFirma.getErrorMessage();
-			alert(error);
-			return false;
-		}else{	
-		     firma = clienteFirma.getSignatureBase64Encoded();
-		     firma = b64ToB64UrlSafe(firma);
-		}
 		document.getElementById("firma").value=firma;
-		return true;
+		dataAFIRMA += '&firmaJSP='+firma;
+		
+		$.postJSON(url_jsonAFIRMA, dataAFIRMA, function(datos2) {
+			if (datos2.error==""){								
+				alert("<bean:message key="delegaciones.alta.correcta"/>");							
+				document.detalleDelegacionForm.action='<html:rewrite page="/protected/mostrarDelegaciones.do" />';
+				document.detalleDelegacionForm.submit();
+				Mensaje.cancelar();	
+			}else{
+				Mensaje.cancelar();	
+				alert(datos2.error);
+			}
+		});
+		
+	}
+	
+	function showLogCallback(errorType, errorMessage) {
+		error = 'Error: '+errorMessage;
+		alert(error);
+		Mensaje.cancelar();	
+		console.log("Type: " + errorType + "\nMessage: " + errorMessage);
+	}
+  
+    var url_jsonAFIRMA, dataAFIRMA;
+	//var formularioFirma, mensajeFirma;
+	function firmarAFirma(formulario){
+		if (MiniApplet == undefined) { 
+			  alert("No se ha podido instalar el entorno de firma");
+			  return false;
+		}
+	
+		var asientoB64 = b64UrlSafeToB64($('#documentoB64').val());
+		
+		MiniApplet.sign(
+				asientoB64,
+				sistra_ClienteaFirma_SignatureAlgorithm,
+				sistra_ClienteaFirma_SignatureFormat,
+				"",
+				saveSignatureCallback,
+				showLogCallback);
 	}
 </logic:equal>	
 
@@ -142,10 +156,9 @@ function crearDelegacion(form){
 				$('#documentoB64').val(datos.datos);
 				<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 						 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
-					if (!firmarAFirma(form)){
-						Mensaje.cancelar();	
-						return;
-					}
+					url_jsonAFIRMA = '<html:rewrite page="/protected/crearDelegacion.do"/>';
+					dataAFIRMA ='codigoRDS='+datos.codigo+'&claveRDS='+datos.clave;//+'&firmaJSP='+$('#firma').val();
+					firmarAFirma(form); return;					
 				</logic:equal>
 				<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 							 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">	

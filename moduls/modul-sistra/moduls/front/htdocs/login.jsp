@@ -145,11 +145,9 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 
 <% if (niveles.indexOf("C")>=0){ %>
 <!--  FIRMA DIGITAL -->
-<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/instalador.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/firma.js"></script>	
-<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/utils.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/constantes.js"></script>
-
+<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/configClienteaFirmaSistra.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/miniapplet.js"></script>	
+		
 
 <script type="text/javascript">
 <!--	
@@ -157,38 +155,37 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 		baseDownloadURL = "<%=urlSistra%><%=request.getContextPath()%>/firma/aFirma";
 
 		function prepararEntornoFirma(){
-			cargarAppletFirma('COMPLETA');
+			MiniApplet.cargarMiniApplet(base);
 		}
 		
-		function loginCertificado(){
-				
-			if (clienteFirma == undefined) { 
+		function saveSignatureCallback(signatureB64) {
+				document.formCD.j_password.value = "{FIRMA:"+signatureB64+"}";	
+				return true;
+		}
+		
+		function showLogCallback(errorType, errorMessage) {
+				error = 'Error: '+errorMessage;
+				alert(error);
+				console.log("Type: " + errorType + "\nMessage: " + errorMessage);
+				return false;
+		}
+		
+		function loginCertificado(form){
+	      	if (MiniApplet == undefined) { 
 	          alert("No se ha podido instalar el entorno de firma");
 	          return false;
-        	}
-				
-			var cadena = document.formCD.j_username.value;
-		
-			clienteFirma.initialize();
-			clienteFirma.setShowErrors(false);
-			clienteFirma.setSignatureAlgorithm("sha1WithRsaEncryption");
-			clienteFirma.setSignatureMode("EXPLICIT");
-			clienteFirma.setSignatureFormat("CMS");
-			clienteFirma.setData(cadena);
-		
-			clienteFirma.sign();
-			
-			if(clienteFirma.isError()){
-				error = 'Error: '+clienteFirma.getErrorMessage();
-				alert(error);
-				return false;
-			}else{	
-			     firma = clienteFirma.getSignatureBase64Encoded();
-			     document.formCD.j_password.value = "{FIRMA:"+firma+"}";
-			     return true;
-			}
+	       	}
+	      	
+	      	var cadena = document.formCD.j_username.value;
+			MiniApplet.sign(
+				cadena,
+				sistra_ClienteaFirma_SignatureAlgorithm,//"SHA1withRSA",
+				sistra_ClienteaFirma_SignatureFormat,//"CAdES",
+				"",
+				saveSignatureCallback,
+				showLogCallback);
 		}
-
+		
 //-->
 </script>
 <% } else { %>
@@ -210,7 +207,6 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 	prepararEntornoFirma();
 	//-->
 	</script>
-
 
 
 <%

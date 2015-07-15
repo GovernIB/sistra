@@ -507,37 +507,45 @@
 						 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">									 
 						 
 					function prepararEntornoFirma(){
-						cargarAppletFirma(sistra_ClienteaFirma_buildVersion);
+						MiniApplet.cargarMiniApplet(base);
 					}
 						 
+
+					function saveSignatureCallback(signatureB64) {
+						firma = b64ToB64UrlSafe(signatureB64);
+						formularioFirma.firma.value = firma;
+						
+						// Enviamos
+						formularioFirma.submit();				
+						
+						// Mostramos capa de envio
+						$('#appletDiv').hide();	
+						accediendoEnviando(mensajeEnviando);
+					}
+					
+					function showLogCallback(errorType, errorMessage) {
+						error = 'Error: '+errorMessage;
+						alert(error);
+						console.log("Type: " + errorType + "\nMessage: " + errorMessage);
+					}
+					
+					var formularioFirma, mensajeFirma;
 					function firmarAFirma(formulario){
 					
-						if (clienteFirma == undefined) { 
-				          alert("No se ha podido instalar el entorno de firma");
-				          return false;
-			        	}
+						if (MiniApplet == undefined) { 
+					          alert("No se ha podido instalar el entorno de firma");
+					          return false;
+					    }
 					
 						var asientoB64 = b64UrlSafeToB64(formulario.asiento.value);
-					
-						clienteFirma.initialize();
-						clienteFirma.setShowErrors(false);
-						clienteFirma.setSignatureAlgorithm(sistra_ClienteaFirma_SignatureAlgorithm);
-						clienteFirma.setSignatureMode(sistra_ClienteaFirma_SignatureMode);
-						clienteFirma.setSignatureFormat(sistra_ClienteaFirma_SignatureFormat);
-						clienteFirma.setData(asientoB64);
-						
-						clienteFirma.sign();
-						
-						if(clienteFirma.isError()){
-							error = 'Error: '+clienteFirma.getErrorMessage();
-							alert(error);
-							return false;
-						}else{	
-						     firma = clienteFirma.getSignatureBase64Encoded();
-						    firma = b64ToB64UrlSafe(firma);
-						     formulario.firma.value = firma;
-						     return true;
-						}
+						formularioFirma = formulario;
+						MiniApplet.sign(
+								asientoB64,
+								sistra_ClienteaFirma_SignatureAlgorithm,
+								sistra_ClienteaFirma_SignatureFormat,
+								"",
+								saveSignatureCallback,
+								showLogCallback);
 					}
 					
 					prepararEntornoFirma();
@@ -548,7 +556,8 @@
 				// Firmamos
 				<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 							 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
-						if (!firmarAFirma(formulario)) return;
+						mensajeFirma = mensajeEnviando;
+						firmarAFirma(formulario); return;
 				</logic:equal>
 				<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 							 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">	

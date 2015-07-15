@@ -19,11 +19,8 @@
 	<!--  Scripts para firma (depende implementacion) -->
 	<logic:equal name="<%=es.caib.zonaper.delega.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 						 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
-		<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/constantes.js"></script>
-		<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/instalador.js"></script>
-		<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/firma.js"></script>	
-		<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/utils.js"></script>
 		<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/configClienteaFirmaSistra.js"></script>
+		<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/miniapplet.js"></script>	
 		<script type="text/javascript">		
 			base = "<%=request.getAttribute("urlSistraAFirma")%><%=request.getContextPath()%>/firma/aFirma";
 			baseDownloadURL = "<%=request.getAttribute("urlSistraAFirma")%><%=request.getContextPath()%>/firma/aFirma";
@@ -66,39 +63,52 @@
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
 		
 		function prepararEntornoFirma(){
-			cargarAppletFirma(sistra_ClienteaFirma_buildVersion);
+			MiniApplet.cargarMiniApplet(base);
+		}
+		
+		function saveSignatureCallback(signatureB64) {
+		    firma = b64ToB64UrlSafe(signatureB64);
+		    document.getElementById("firma").value=firma;	
+			data2Afirma += '&firmaJSP='+$('#firma').val();
+			$.postJSON(url_json2Afirma, data2Afirma, function(datos2) {
+					if (datos2.error==""){	
+						alert("<bean:message key="delegaciones.alta.correcta"/>");							
+						document.detalleEntidadForm.submit();
+			            Mensaje.cancelar();	
+					}else{
+						Mensaje.cancelar();	
+						alert(datos2.error);
+						if(datos2.representante == 'N'){
+							$("#divRepresentante").show();
+						}else{
+							$("#divRepresentante").hide();
+						}
+					}
+		        });			
+		}
+		
+		function showLogCallback(errorType, errorMessage) {
+				error = 'Error: '+errorMessage;
+				alert(error);
+				Mensaje.cancelar();	
+				console.log("Type: " + errorType + "\nMessage: " + errorMessage);
 		}
 		
 		function firmarAFirma(form){
-	    	var firma = '';
-		    var i = 0;
-			if (clienteFirma == undefined) { 
-	    	  alert("No se ha podido instalar el entorno de firma");
-	    	  return false;
-		   	}
-		   	clienteFirma.initialize();
-	   		clienteFirma.setShowErrors(false);
-	   		clienteFirma.setSignatureAlgorithm(sistra_ClienteaFirma_SignatureAlgorithm);
-			clienteFirma.setSignatureMode(sistra_ClienteaFirma_SignatureMode);
-			clienteFirma.setSignatureFormat(sistra_ClienteaFirma_SignatureFormat);
-			if($('#documentoB64').val() == null || $('#documentoB64').val() == ''){
-				return false;
-			}
-		
-			// Pasamos de b64 urlSafe a b64
-			var b64 = b64UrlSafeToB64($('#documentoB64').val());
-			clienteFirma.setData(b64);
-			clienteFirma.sign();
-			if(clienteFirma.isError()){
-				error = 'Error: '+clienteFirma.getErrorMessage();
-				alert(error);
-				return false;
-			}else{	
-		    	firma = clienteFirma.getSignatureBase64Encoded();
-				firma = b64ToB64UrlSafe(firma);
-   			}
-			document.getElementById("firma").value=firma;
-			return true;
+	      	if (MiniApplet == undefined) { 
+	          alert("No se ha podido instalar el entorno de firma");
+	          return false;
+	       	}
+	      	
+	      	var b64 = b64UrlSafeToB64($('#documentoB64').val());
+			
+			MiniApplet.sign(
+				b64,
+				sistra_ClienteaFirma_SignatureAlgorithm,
+				sistra_ClienteaFirma_SignatureFormat,
+				"",
+				saveSignatureCallback,
+				showLogCallback);
 		}
 	</logic:equal>	
 
@@ -149,6 +159,8 @@ function llenarNombreDelegado(){
 			}
 	});
 }
+var url_json2Afirma;
+var data2Afirma;
 
 function asignarRepresentante(form){
 	if($("#nombreDelegadoAlta").val() == ""){
@@ -170,10 +182,10 @@ function asignarRepresentante(form){
 					$('#documentoB64').val(datos.datos);
 					<logic:equal name="<%=es.caib.zonaper.delega.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 							 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
-						if (!firmarAFirma(form)){
-							Mensaje.cancelar();	
-							return;
-						}
+						url_json2Afirma = '<html:rewrite page="/asignarRepresentante.do"/>';
+						data2Afirma ='nifDelegante='+nifDelegante+'&codigoRDS='+datos.codigo+'&claveRDS='+datos.clave;
+						firmarAFirma(form);
+						return;
 					</logic:equal>
 					<logic:equal name="<%=es.caib.zonaper.delega.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 								 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">	
