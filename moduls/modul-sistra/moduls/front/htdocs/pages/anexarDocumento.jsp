@@ -225,7 +225,7 @@
 		var url_json = '<html:rewrite page="/protected/downloadAnexo.do"/>';
 
 		
-		<logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="S">
+		<logic:notEqual name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="N">
 		// Documento a firmar: tras upload, descargamos de nuevo el documento para firmarlo
 		accediendoEnviando(mensajePreparando);
 		var data = { ID_INSTANCIA: idInstancia, identificador: identificador, instancia: instancia };
@@ -243,7 +243,7 @@
 				}
 			}
 		);
-		</logic:equal>
+		</logic:notEqual>
 
 		<logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="N">
 		// Documento sin firmar: tras upload, proseguimos con el anexado
