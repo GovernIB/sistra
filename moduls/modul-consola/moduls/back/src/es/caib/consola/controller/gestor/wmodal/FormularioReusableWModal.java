@@ -12,6 +12,7 @@ import es.caib.consola.model.FormularioReusable;
 import es.caib.consola.model.Usuario;
 import es.caib.consola.util.ConsolaUtil;
 import es.caib.zkutils.zk.composer.BaseComposer;
+import es.caib.consola.model.types.TypeModoAcceso;
 
 /**
  * Ventana de formulario reusable.
@@ -24,7 +25,7 @@ public class FormularioReusableWModal extends BaseComposer {
     /** Usuario logeado.*/
 	private Usuario usuarioLogado;
     /** Modo edicion. */
-    private String modo;
+    private TypeModoAcceso modo;
     /** Formulario reusable.*/
     FormularioReusable formulario;
    
@@ -44,7 +45,7 @@ public class FormularioReusableWModal extends BaseComposer {
      	super.doAfterCompose(compDominio);
     	
      	// Parametros apertura
-     	modo = (String) arg.get(ConstantesWEB.PARAM_MODO_ACCESO);
+     	modo = (TypeModoAcceso) arg.get(ConstantesWEB.PARAM_MODO_ACCESO);
      	formulario = (FormularioReusable) arg.get(ConstantesWEB.PARAMETER_FORMULARIO_REUSABLE);     	 
 
      	// Usuario autenticado

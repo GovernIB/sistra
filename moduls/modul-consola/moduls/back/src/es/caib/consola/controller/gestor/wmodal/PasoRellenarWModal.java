@@ -148,6 +148,7 @@ public class PasoRellenarWModal extends BaseComposer {
         map.put(ConstantesWEB.FORMULARIOTRAMITE, formulario.getCodigo());
         
         // RAFA: Esto xq es asi?? REvisar modos... 
+        modo = TypeModoAcceso.EDICION;
         if (modo.equals(TypeModoAcceso.ALTA)) {
             map.put(ConstantesWEB.PARAM_MODO_ACCESO, TypeModoAcceso.EDICION);
         } else {

@@ -224,10 +224,7 @@ public class TramiteController extends BaseComposer {
     /**
      * Click editar version.
      */
-    public final void onClick$btnEditaVersion() {
-    	
-    	this.mostrarInfo("No implementado", "Atención");
-    	if (true) return;
+    public final void onClick$btnEditaVersion() {    	    	
     	
         if (versionSeleccionada()) {
             final Listitem item = (Listitem) listVersiones.getSelectedItemApi()
@@ -357,10 +354,7 @@ public class TramiteController extends BaseComposer {
     /**
      * Click desbloquear.
      */
-    public final void onClick$btnExportar() {
-    	
-    	this.mostrarInfo("No implementado", "Atención");
-    	if (true) return;
+    public final void onClick$btnExportar() {    	    	
     	
     	// TODO CONTROLAR CUANDO SE PUEDE EXPORTAR
     	if (versionSeleccionada()) {

@@ -13,7 +13,7 @@
 						<tab id="tabProcedimiento" label="${c:l('organismos.procesamiento')}"/>	
 						<tab id="tabDominio" label="${c:l('organismos.dominio')}"/>	
 						<tab id="tabDocumento" label="${c:l('organismos.documento')}"/>	
-						<tab id="tabFormulario" label="${c:l('organismos.formulario')}" visible="false"/>																				
+						<tab id="tabFormulario" label="${c:l('organismos.formulario')}" />																				
 					</tabs>
 					<tabpanels>
 						<!--  TRAMITES -->

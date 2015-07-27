@@ -30,7 +30,7 @@ public class FormularioVersionTramiteWModal extends BaseComposer {
     /** Ventana version tramite. */
     private VersionTramiteController versionTramiteController;
     /** Modo de apertura. */
-    private String modo;
+    private TypeModoAcceso modo;
     /** Usuario autenticado. */
     private Usuario usuarioLogado;
     /** Alto. */
@@ -75,7 +75,7 @@ public class FormularioVersionTramiteWModal extends BaseComposer {
         versionTramiteController = (VersionTramiteController) arg.get(ConstantesWEB.VERSIONTRAMITE_CONTROLLER); 
         
         // Modo de acceso
-        modo = (String) arg.get(ConstantesWEB.PARAM_MODO_ACCESO);
+        modo = (TypeModoAcceso) arg.get(ConstantesWEB.PARAM_MODO_ACCESO);
         
         // Usuario autenticado
         usuarioLogado = ConsolaUtil.recuperarUsuarioLogado();
@@ -106,13 +106,17 @@ public class FormularioVersionTramiteWModal extends BaseComposer {
     	boolean edicion = false;
     	boolean consulta = false;
     	
-    	if (ConstantesWEB.MODOFICHA.equals(modo)) {
+    	// TODO REVISAR. MODO FICHA???
+    	edicion = true;
+    	/*
+    	if (modo == TypeModoAcceso.  ConstantesWEB.MODOFICHA.equals(modo)) {
     		 ficha = true;       	        	   
     	} else if (ConstantesWEB.MODOCONSULTA.equals(modo)) {
     		consulta = true;
     	} else {
     		edicion = true;
-    	}
+    	}*/
+    	
     	
     	btnModificar.setVisible(ficha);
 	    btnGuardar.setVisible(edicion);
