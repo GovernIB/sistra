@@ -135,6 +135,8 @@
             deprecation="${javac.deprecation}"
             optimize="${javac.optimize}"
         	encoding="ISO-8859-1"
+            	source="1.5"
+            	        	target="1.5"
             >
             <src path="${web.src}"/>
             <src path="${web.gen.src}"/>
