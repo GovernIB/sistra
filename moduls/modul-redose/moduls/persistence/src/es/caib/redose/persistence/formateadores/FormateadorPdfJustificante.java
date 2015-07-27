@@ -88,6 +88,8 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
     	ReferenciaRDS refOficioRemision=null;
     	ReferenciaRDS refAvisoNotificacion=null;
     	Iterator itd = asiento.getDatosAnexoDocumentacion().iterator();
+    	boolean establecerHuella = "true".equals(props.getProperty("documentosAportados.huella.establecer"));     									
+    	String txtHuella = props.getProperty("documentosAportados.huella.texto");
     	while (itd.hasNext()){
     		DatosAnexoDocumentacion da = (DatosAnexoDocumentacion) itd.next();    	    		
     		if (da.getTipoDocumento().charValue() == ConstantesAsientoXML.DATOSANEXO_DATOS_PROPIOS){
@@ -103,8 +105,12 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
     				ResolveRDS.getInstance().resuelveRDS(Long.parseLong(da.getCodigoRDS()));
     		}
     		else
-    		{
-    			lista.addCampo(da.getExtractoDocumento());
+    		{   
+    			if (establecerHuella) {
+    				lista.addCampo(da.getExtractoDocumento() + "\n " + txtHuella + ": " + da.getHashDocumento().substring(0,60) + "\n   " + da.getHashDocumento().substring(60));
+    			} else {
+    				lista.addCampo(da.getExtractoDocumento());
+    			}
     		}
     	}
     	

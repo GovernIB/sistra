@@ -15,8 +15,8 @@ public class UtilRDS {
 	 * @return
 	 */
 	public final static DocumentoRDS cloneDocumentoRDS(DocumentoRDS doc){
-		
-		DocumentoRDS docNew = new DocumentoRDS();
+		DocumentoRDS docNew = new DocumentoRDS();	
+		docNew.setTitulo(doc.getTitulo());
 		docNew.setCodigoUbicacion(doc.getCodigoUbicacion());
 		docNew.setEstructurado(doc.isEstructurado());		
 		docNew.setExtensionFichero(doc.getExtensionFichero());
@@ -29,9 +29,7 @@ public class UtilRDS {
 		docNew.setReferenciaRDS(doc.getReferenciaRDS());
 		docNew.setUnidadAdministrativa(doc.getUnidadAdministrativa());
 		docNew.setUsuarioSeycon(doc.getUsuarioSeycon());
-		
 		return docNew;
-		
 	}
 	
 	/**

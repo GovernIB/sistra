@@ -81,6 +81,8 @@ public class FormateadorPdfAsiento implements FormateadorDocumento{
     	ReferenciaRDS refDatosPropios=null;
     	ReferenciaRDS refOficioRemision=null;
     	ReferenciaRDS refAvisoNotificacion=null;
+    	boolean establecerHuella = "true".equals(props.getProperty("documentosAportados.huella.establecer"));     									
+    	String txtHuella = props.getProperty("documentosAportados.huella.texto");
     	Iterator itd = asiento.getDatosAnexoDocumentacion().iterator();
     	while (itd.hasNext()){
     		DatosAnexoDocumentacion da = (DatosAnexoDocumentacion) itd.next();    	    		
@@ -98,7 +100,11 @@ public class FormateadorPdfAsiento implements FormateadorDocumento{
     		}
     		else
     		{
-    			lista.addCampo(da.getExtractoDocumento());
+    			if (establecerHuella) {
+    				lista.addCampo(da.getExtractoDocumento() + "\n " + txtHuella + ": " + da.getHashDocumento().substring(0,60) + "\n   " + da.getHashDocumento().substring(60));
+    			} else {
+    				lista.addCampo(da.getExtractoDocumento());
+    			}
     		}
     	}
     	
