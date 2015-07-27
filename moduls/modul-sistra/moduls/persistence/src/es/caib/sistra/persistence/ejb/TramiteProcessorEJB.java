@@ -5527,8 +5527,9 @@ public class TramiteProcessorEJB implements SessionBean {
     		HashMap params = new HashMap();
     		NombreInteresadoDesglosado nomInt = new NombreInteresadoDesglosado();
     		params.put("NOMBRE_DESGLOSADO",nomInt);
-    		rpdoNom = this.evaluarScript(scriptRpdoNom,null);
+    		rpdoNom = this.evaluarScript(scriptRpdoNom,params);
     		
+    		nombreInteresado = new NombreInteresado();
     		nombreInteresado.setNombreCompleto(rpdoNom);
     		
     		// Verificamos si se ha establecido el nombre de forma desglosada

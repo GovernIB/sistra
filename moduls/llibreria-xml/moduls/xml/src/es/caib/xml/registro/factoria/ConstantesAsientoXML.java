@@ -179,7 +179,7 @@ public class ConstantesAsientoXML {
 	 */
 	public final static char DATOSANEXO_NO_ESTRUCTURADO = 'N';	
 	/**
-	 * Constante de tipo de documento con datos propios 
+	 * Constante de tipo de documento de datos propios 
 	 */
 	public final static char DATOSANEXO_DATOS_PROPIOS = 'D';	
 	/**
@@ -191,9 +191,13 @@ public class ConstantesAsientoXML {
 	 */
 	public final static char DATOSANEXO_OFICIO_REMISION = 'R';	
 	/**
-	 * Constante de tipo de documento otros
+	 * Constante de tipo de documento otros (anexos)
 	 */
 	public final static char DATOSANEXO_OTROS = 'O';
+	/**
+	 * Constante de tipo de documento pago
+	 */
+	public final static char DATOSANEXO_PAGO = 'P';
 	/**
 	 * Constante de tipo de documento formulario
 	 */

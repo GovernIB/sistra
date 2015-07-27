@@ -880,6 +880,8 @@ public class GeneradorAsiento {
 			dAnexo.setEstucturado (new Boolean(tipo != 'A'));
 			if (tipo == 'F') {
 				dAnexo.setTipoDocumento (new Character(ConstantesAsientoXML.DATOSANEXO_FORMULARIO));
+			} else if (tipo == 'P') {
+				dAnexo.setTipoDocumento (new Character(ConstantesAsientoXML.DATOSANEXO_PAGO));
 			} else {
 				dAnexo.setTipoDocumento (new Character(ConstantesAsientoXML.DATOSANEXO_OTROS));
 			}

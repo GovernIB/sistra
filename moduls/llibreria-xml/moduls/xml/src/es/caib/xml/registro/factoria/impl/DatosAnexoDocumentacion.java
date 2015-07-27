@@ -59,6 +59,7 @@ public class DatosAnexoDocumentacion extends NodoRegistroBase {
 		// Validar longitud de campo, campo requerido, campo en lista de valores
 		Character valoresPermitidos[] = {
 			new Character (ConstantesAsientoXML.DATOSANEXO_FORMULARIO),
+			new Character (ConstantesAsientoXML.DATOSANEXO_PAGO),
 			new Character (ConstantesAsientoXML.DATOSANEXO_OTROS),
 			new Character (ConstantesAsientoXML.DATOSANEXO_DATOS_PROPIOS),
 			new Character (ConstantesAsientoXML.DATOSANEXO_AVISO_NOTIFICACION),
