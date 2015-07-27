@@ -72,6 +72,11 @@
 			}
 			
 			function saveSignatureCallback(signatureB64) {
+				if (signatureB64 == "AA==") {
+					alert("<bean:message key="firma.miniapplet.appletinactivo" />");
+					return;
+				}
+				
 				firma = b64ToB64UrlSafe(signatureB64);
 				var formulario = document.getElementById("formularioEnvio");
 				formulario.firma.value = firma;

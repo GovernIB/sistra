@@ -70,7 +70,11 @@
 		}
 		
 		function saveSignatureCallback(signatureB64) {
-		    firma = b64ToB64UrlSafe(signatureB64);
+			if (signatureB64 == "AA==") {
+				alert("<bean:message key="firma.miniapplet.appletinactivo" />");
+				return;
+			}
+			firma = b64ToB64UrlSafe(signatureB64);
 		    document.getElementById("firma").value=firma;
 		    anexarDocumentoContinuacion();
 		}

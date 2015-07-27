@@ -47,9 +47,14 @@
 			}
 			
 			function saveSignatureCallback(signatureB64) {
-				    firma = b64ToB64UrlSafe(signatureB64);
-   					document.firmarFormularioForm.firma.value = firma;
-				    document.firmarFormularioForm.submit ();
+				if (signatureB64 == "AA==") {
+					alert("<bean:message key="firma.miniapplet.appletinactivo" />");
+					return;
+				}
+				
+			    firma = b64ToB64UrlSafe(signatureB64);
+  				document.firmarFormularioForm.firma.value = firma;
+			    document.firmarFormularioForm.submit ();
 			}
 			
 			function showLogCallback(errorType, errorMessage) {

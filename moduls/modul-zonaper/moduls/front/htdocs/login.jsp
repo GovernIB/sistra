@@ -159,8 +159,12 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 		}
 		
 		function saveSignatureCallback(signatureB64) {
+				if (signatureB64 == "AA==") {
+					alert("<bean:message key="firma.miniapplet.appletinactivo" />");
+					return false;
+				}
 				document.formCD.j_password.value = "{FIRMA:"+signatureB64+"}";	
-				return true;
+				document.formCD.submit();
 		}
 		
 		function showLogCallback(errorType, errorMessage) {
@@ -294,11 +298,11 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 			<div id="indexCD">
 				<h2><bean:message key="login.certificado.titulo" /></h2>
 				<p><bean:message key="login.certificado.instrucciones.parrafo" /></p>
-				<form name="formCD" method="post" action="j_security_check" onSubmit="loginCertificado();">
+				<form name="formCD" method="post" action="j_security_check">
 					<input name="j_username" id="j_username" type="hidden" value="<%=request.getSession().getId()%>"/>
 					<input name="j_password" id="j_password" type="hidden" />				
 					<p class="formBotonera">
-						<input type="submit" value="<bean:message key="login.boton.iniciar" />" title="<bean:message key="login.certificado.boton.title" />" />
+						<input type="button" onClick="loginCertificado();" value="<bean:message key="login.boton.iniciar" />" title="<bean:message key="login.certificado.boton.title" />" />
 					</p>	
 				</form>
 			</div>
