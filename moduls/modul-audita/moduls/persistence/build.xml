@@ -171,7 +171,9 @@
             classpathref="ejb.class.path"
             debug="${javac.debug}"
             deprecation="${javac.deprecation}"
-            optimize="${javac.optimize}" encoding="iso-8859-1">
+            optimize="${javac.optimize}" encoding="iso-8859-1"
+        	source="1.5"
+        	target="1.5">
             <src path="${ejb.src}"/>
             <src path="${ejb.gen.src}"/>
         </javac>
