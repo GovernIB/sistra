@@ -97,12 +97,12 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	private final static String ACTUALIZAR_FICHERO = "ACFI";
 	private final static String BORRADO_AUTOMATICO_DOCUMENTO_SIN_USOS = "BODO"; // Al eliminar ultimo uso del documento
 	
-	
 	private String URL_VERIFIER = null;
 	private String TEXT_VERIFIER = null;
 	private String ENTORNO = null;
 	private String OPENOFFICE_HOST = null;
 	private String OPENOFFICE_PUERTO = null;
+	private boolean BARCODE_VERIFIER_MOSTRAR = false;
 	
 	private boolean existeCustodia = false;
 	private boolean existeGestionDocumental = false;
@@ -121,8 +121,9 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 			TEXT_VERIFIER=props.getProperty("verifier.text");
 			ENTORNO =props.getProperty("entorno");	
 			OPENOFFICE_HOST=props.getProperty("openoffice.host");
-			OPENOFFICE_PUERTO=props.getProperty("openoffice.port");						
-			
+			OPENOFFICE_PUERTO=props.getProperty("openoffice.port");		
+			BARCODE_VERIFIER_MOSTRAR= "true".equals(props.getProperty("urlVerificacion.barcode.mostrar"));
+					
 			// Comprobamos si hay que integrarse con sistema de custodia y gestion documental			
 	    	try{
 	    		PluginFactory.getInstance().getPluginCustodia();
@@ -1472,36 +1473,46 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	String urlVerificacion = url + key.getKeyEncoded();
     	doc.setUrlVerificacion(urlVerificacion);
     	
+    	int numStamps = 3;  
+    	float posTitulo = 44;
+    	if (!BARCODE_VERIFIER_MOSTRAR) {
+    		numStamps = 2;
+    		posTitulo = 23;
+    	}
+    	
     	// Realizamos stamp
-		ObjectStamp stamps [] = new ObjectStamp[3];
+		ObjectStamp stamps [] = new ObjectStamp[numStamps];
 				
-		BarcodeStamp bc = new BarcodeStamp();		
-		bc.setTexto(urlVerificacion);
-		//bc.setTexto("12345");
-		bc.setTipo(BarcodeStamp.BARCODE_PDF417);
-		bc.setPage(0);
-		bc.setX(350);
-		bc.setY(19);		
-		bc.setRotation(0);
-		bc.setOverContent(true);	
-		bc.setXScale(new Float(100));
-		bc.setYScale(new Float(100));		
-		stamps[0] = bc;
+		if (BARCODE_VERIFIER_MOSTRAR) {
+			BarcodeStamp bc = new BarcodeStamp();		
+			bc.setTexto(urlVerificacion);
+			//bc.setTexto("12345");
+			bc.setTipo(BarcodeStamp.BARCODE_PDF417);
+			bc.setPage(0);
+			bc.setX(340);
+			bc.setY(19);		
+			bc.setRotation(0);
+			bc.setOverContent(true);	
+			bc.setXScale(new Float(100));
+			bc.setYScale(new Float(100));		
+			stamps[0] = bc;
+		}	
 		
 		TextoStamp tx = new TextoStamp();		
-		tx.setTexto(bc.getTexto());
+		tx.setTexto(urlVerificacion);
 		tx.setFontName("Helvetica-Bold");
 		tx.setFontSize(7);
-		tx.setX(290);
+		tx.setX(280);
 		tx.setY(13);
-		stamps[1] = tx;
+		stamps[numStamps - 2] = tx;						
+		
 		
 		TextoStamp tx2 = new TextoStamp();		
 		tx2.setTexto(text);
 		tx2.setFontSize(6);
-		tx2.setX(330);
-		tx2.setY(44);
-		stamps[2] = tx2;
+		tx2.setX(320);
+		tx2.setY(posTitulo);
+		stamps[numStamps - 1] = tx2;
 		
 		
     	ByteArrayOutputStream bos = new ByteArrayOutputStream();    	
