@@ -83,6 +83,8 @@
 				function saveSignatureCallback(signatureB64) {
 					if (signatureB64 == "AA==") {
 						alert("<bean:message key="firma.miniapplet.appletinactivo" />");
+						ocultarCapaInfo();
+						showApplet(true);
 						return;
 					}
 					
@@ -98,7 +100,6 @@
 				
 				function showLogCallback(errorType, errorMessage) {
 					error = 'Error: '+errorMessage;
-					ocultarCapaInfo();
 					alert(error);
 					console.log("Type: " + errorType + "\nMessage: " + errorMessage);
 					ocultarCapaInfo();

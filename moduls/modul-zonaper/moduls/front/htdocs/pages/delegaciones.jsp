@@ -56,6 +56,7 @@
 	function saveSignatureCallback(signatureB64) {
 		if (signatureB64 == "AA==") {
 			alert("<bean:message key="firma.miniapplet.appletinactivo" />");
+			Mensaje.cancelar();	
 			return;
 		}
 		
