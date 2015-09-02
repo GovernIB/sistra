@@ -1961,7 +1961,8 @@ public class TramiteProcessorEJB implements SessionBean {
     	try{
     		
     		// Comprobamos que estamos en el paso de rellenar
-    		PasoTramitacion pasoRellenar = (PasoTramitacion) pasosTramitacion.get(pasoActual);
+    		int pasoRellenarIndice = pasoActual;
+    		PasoTramitacion pasoRellenar = (PasoTramitacion) pasosTramitacion.get(pasoRellenarIndice);
     		if (pasoRellenar.getTipoPaso() != PasoTramitacion.PASO_RELLENAR){
     			throw new Exception("Se ha invocado a guardar formulario desde un paso distinto a rellenar");
     		}
@@ -2021,11 +2022,19 @@ public class TramiteProcessorEJB implements SessionBean {
 		    	this.firmaDocumentos.put(docPad.getRefRDS().toString(),firmas);
 			}
 
-	    	// Actualizamos tramite info
-	    	this.actualizarTramiteInfo();
-	    		    	
+	    	// Actualizamos estado paso rellenar formularios 	    		    
+	    	pasoRellenar.setCompletado(evaluarEstadoPaso(pasoActual));
+	    	
+	    	// Si estan rellenados los formularios calculamos email/sms de alertas
+	    	if (pasoRellenar.getCompletado().equals(PasoTramitacion.ESTADO_COMPLETADO) ||
+	    			pasoRellenar.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_DELEGACION_FIRMA)) {
+	    		actualizarInfoAlertasTramitacion();
+	    	}
+	    	
 	    	// Vamos a paso actual
 	    	return irAPaso(pasoActual);
+	    	
+	    	
 	    	
     	}catch (ProcessorException pe){
     		logProcessorException("ProcessorException al guardar formulario",pe);
