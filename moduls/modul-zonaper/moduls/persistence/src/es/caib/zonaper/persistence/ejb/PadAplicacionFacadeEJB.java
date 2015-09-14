@@ -293,7 +293,14 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
     		// TODO DE MOMENTO LA VALIDACION SOLO PERMITE Q SEA EL PROPIO USUARIO
     		int[] errores = validarModificacionDatosPersonaPAD(personaPAD);
     		if (errores.length > 0){
-    			throw new Exception("Cambios no permitidos: error validacion de datos");
+    			String codErrores = "";
+    			for (int i = 0; i < errores.length; i++) {
+    				if (i > 0) {
+    					codErrores += "-";    					
+    				}
+    				codErrores += errores[i];
+    			}
+    			throw new Exception("Cambios no permitidos: error validacion de datos (codigos error: " + codErrores + ")");
     		}
     		
     		
