@@ -1,9 +1,9 @@
 package es.caib.sistra.persistence.plugins;
 
 /**
- * Nombre interesado desglosado  
+ * Datos interesado desglosado  
  */
-public class NombreInteresadoDesglosado {
+public class DatosInteresadoDesglosado {
 	
 	private String nombre;
 	

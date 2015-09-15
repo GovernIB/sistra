@@ -79,7 +79,7 @@ import es.caib.sistra.persistence.plugins.CalculoPago;
 import es.caib.sistra.persistence.plugins.ConfiguracionDinamica;
 import es.caib.sistra.persistence.plugins.ConfiguracionDinamicaTramitePlugin;
 import es.caib.sistra.persistence.plugins.DatosIniciales;
-import es.caib.sistra.persistence.plugins.NombreInteresadoDesglosado;
+import es.caib.sistra.persistence.plugins.DatosInteresadoDesglosado;
 import es.caib.sistra.persistence.plugins.DestinatarioTramite;
 import es.caib.sistra.persistence.plugins.PluginFormularios;
 import es.caib.sistra.persistence.plugins.PluginPagos;
@@ -5405,8 +5405,8 @@ public class TramiteProcessorEJB implements SessionBean {
     	if (scriptRpteNom != null && scriptRpteNom.length > 0 ){
     		
     		HashMap params = new HashMap();
-    		NombreInteresadoDesglosado nomInt = new NombreInteresadoDesglosado();
-    		params.put("NOMBRE_DESGLOSADO",nomInt);
+    		DatosInteresadoDesglosado nomInt = new DatosInteresadoDesglosado();
+    		params.put("DATOS_DESGLOSADOS",nomInt);
     		rpteNom = this.evaluarScript(scriptRpteNom,params);
     		
     		// El script puede devolver un nombre valido (cadena completa o desglosado) o la cadena "NO-VALOR" para especificar que no se especificará nombre.
@@ -5534,8 +5534,8 @@ public class TramiteProcessorEJB implements SessionBean {
     	}        	
     	if (scriptRpdoNom != null && scriptRpdoNom.length > 0 ){   
     		HashMap params = new HashMap();
-    		NombreInteresadoDesglosado nomInt = new NombreInteresadoDesglosado();
-    		params.put("NOMBRE_DESGLOSADO",nomInt);
+    		DatosInteresadoDesglosado nomInt = new DatosInteresadoDesglosado();
+    		params.put("DATOS_DESGLOSADOS",nomInt);
     		rpdoNom = this.evaluarScript(scriptRpdoNom,params);
     		
     		nombreInteresado = new NombreInteresado();

@@ -90,7 +90,19 @@
         Para ello hay que indicar los valores de los campos del formulario que 
         contengan el NIF y el nombre completo del representante (seg&uacute;n formato asiento registral). El tipo de estos 
         campos es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> 
-        y espera en cada caso el valor del NIF y el nombre completo. </p>
+        y espera en cada caso el valor del NIF y el nombre completo.</p>
+        
+        <p> 
+        En el script del nombre, en lugar de establecer una cadena con el nombre completo, se pueden devolver los datos del interesado de  
+        forma desglosada (nombre, apellidos, etc.):
+        <br/>
+        	<em>
+		   		// Establecer datos de forma desglosada<br/>
+		   		DATOS_DESGLOSADOS.setNombre('Nombre');<br/>
+		   		DATOS_DESGLOSADOS.setApellido1('Apellido1');<br/>
+		   		DATOS_DESGLOSADOS.setApellido2('Apellido2');<br/>		        
+		      </em>    
+        </p>
         
       <p>Este dato es <strong>obligatorio</strong> especificarlo si el trámite es autenticado (en las 
         especificaciones gen&eacute;ricas o por nivel).  <br>
@@ -101,10 +113,17 @@
   </tr>
   <tr> 
     <td>Referencia representado</td>
-    <td><p>En caso de que exista representaci&oacute;n es necesario indicar qui&eacute;n 
+    <td><p>
+    	En caso de que exista representaci&oacute;n es necesario indicar qui&eacute;n 
         es el representado. Para ello hay que indicar los valores de los campos del formulario que 
         contengan el DNI y el nombre completo del representado (seg&uacute;n formato asiento registral). El tipo de estos 
-        campos es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> y espera en cada caso el valor del DNI y el nombre completo. </p></td>
+        campos es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> y espera en cada caso el valor del DNI y el nombre completo. 
+        </p>
+        <p>
+        Al igual que en la referencia de representante, se pueden establecer los datos desglosados en el script del nombre.
+        </p>
+     </td>
+        
   </tr>
   
     <tr> 

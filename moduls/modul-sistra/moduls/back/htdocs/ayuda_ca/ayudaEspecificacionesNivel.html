@@ -99,6 +99,19 @@
         NIF i el nom complet del representant. El tipus d'aquests camps és <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaScript.jsp">script</a> 
         i espera en cada cas el valor del NIF i el nom complet (segons format seient registral). </p>
         
+        <p> 
+        En el script del nom, en lloc d'establir una cadena amb el nom complet, es poden retornar les dades de l'interessat de 
+		forma desglossada (nom, cognoms, etc.):
+        <br/>
+        	<em>
+		   		// Establecer datos de forma desglosada<br/>
+		   		DATOS_DESGLOSADOS.setNombre('Nombre');<br/>
+		   		DATOS_DESGLOSADOS.setApellido1('Apellido1');<br/>
+		   		DATOS_DESGLOSADOS.setApellido2('Apellido2');<br/>		        
+		      </em>    
+        </p>
+        
+        
       <p>Aquesta dada és <strong>obligatori</strong> especificar-la en els tr&agrave;mits autenticats (en les 
         especificacions gen&egrave;riques o per nivell). <br>
         <br>
@@ -111,7 +124,11 @@
     <td>Refer&egrave;ncia representat</td>
     <td><p>En cas de que existeixi representaci&oacute; &eacute;s necessari indicar qui 
         &eacute;s el representat. Per a aix&ograve; cal indicar les <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaReferencia.jsp">referències</a> 
-        dels camps del formulari que continguin el DNI i el nom complet del representat (segons format seient registral).</p></td>
+        dels camps del formulari que continguin el DNI i el nom complet del representat (segons format seient registral).</p>
+        <p>
+        Igual que en la referència de representant, es poden establir les dades desglossades en el script del nom.
+        </p>
+        </td>
   </tr>
    
    <tr> 
