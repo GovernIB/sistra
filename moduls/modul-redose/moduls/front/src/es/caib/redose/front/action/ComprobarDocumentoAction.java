@@ -6,6 +6,8 @@ import java.util.Arrays;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -30,6 +32,9 @@ import es.caib.redose.persistence.delegate.RdsDelegate;
  */
 public class ComprobarDocumentoAction extends BaseAction
 {	
+	
+	private static Log _log = LogFactory.getLog( ComprobarDocumentoAction.class );
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception 
     {
@@ -58,6 +63,7 @@ public class ComprobarDocumentoAction extends BaseAction
 			return mapping.findForward("success");
 		}catch(Exception ex){		
 			// Redirigimos a error indicando que el documento no existe
+			_log.error("Excepcion comprobando documento: " + ex.getMessage(), ex);
 			request.setAttribute(Constants.MESSAGE_KEY,"comprobarDocumento.noExiste");
 			return mapping.findForward("fail");
 		}							
