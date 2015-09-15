@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="moduls/llibreria-plugins/moduls/plugins/src"/>
+	<classpathentry kind="src" path="moduls/modul-consola/moduls/back/src"/>
+	<classpathentry kind="src" path="moduls/llibreria-zk/moduls/zkutils/src"/>
 	<classpathentry kind="src" path="pluginsMOCK/plugin-emailMOCK/moduls/plugins/src"/>
 	<classpathentry kind="src" path="moduls/modul-zonaper/moduls/delega/src"/>
 	<classpathentry kind="src" path="moduls/llibreria-utilWs/moduls/util/src"/>
@@ -164,5 +166,14 @@
 	<classpathentry kind="lib" path="lib/commons-fileupload-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-2.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.5.jar"/>
+	<classpathentry kind="lib" path="lib/zk/breeze-5.0.7.jar"/>
+	<classpathentry kind="lib" path="lib/zk/codemirror-5.0.jar"/>
+	<classpathentry kind="lib" path="lib/zk/zcommon-5.0.7.jar"/>
+	<classpathentry kind="lib" path="lib/zk/zcommons-el-1.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/zk/zhtml-5.0.7.jar"/>
+	<classpathentry kind="lib" path="lib/zk/zk-5.0.7.jar"/>
+	<classpathentry kind="lib" path="lib/zk/zkplus-5.0.7.jar"/>
+	<classpathentry kind="lib" path="lib/zk/zul-5.0.7.jar"/>
+	<classpathentry kind="lib" path="lib/zk/zweb-5.0.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
