@@ -29,7 +29,7 @@ public class GeneracionEstadisticasJob implements Job
 		try {
 			delegate.generaCuadroMandoInicio();
 		} catch (DelegateException e) {
-			e.printStackTrace();
+			log.error("Excepcion lanzando Job: " + e.getMessage(), e);
 		}
 		
 		
