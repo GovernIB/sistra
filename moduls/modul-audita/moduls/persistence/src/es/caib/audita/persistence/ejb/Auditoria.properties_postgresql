@@ -46,7 +46,7 @@ sql.select.servicios.maximoConcurrentes= select to_char(aud_audit.aud_fecha,'DD/
                                                        group by to_char(aud_audit.aud_fecha,'DD/MM/YYYY HH24')  order by 2 desc
 sql.delete=delete aud_inici                                                       
 sql.insert.servicios=insert into aud_inici (ini_fecha,ini_ressrv, ini_ressrt,ini_rescrt, ini_resusu, ini_resan, ini_resreg, ini_resbd, ini_rescs, ini_respag, ini_restmx, ini_resfmx) \
-                                            values (sysdate,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)                                                       
+                                            values (current_timestamp,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)                                                       
                                                                                              
 sql.select.portal.servicios.telematicos=select count(*) as total from aud_audit where aud_audit.aud_tipo = 'SERPAE' and \
 	   				 						aud_audit.aud_fecha >= to_date(?,'dd/mm/yyyy') and \

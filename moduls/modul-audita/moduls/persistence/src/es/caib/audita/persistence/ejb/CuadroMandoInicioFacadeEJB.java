@@ -16,6 +16,9 @@ import java.util.Properties;
 
 import javax.ejb.CreateException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import es.caib.audita.model.AuditConstants;
 import es.caib.audita.model.EventoAuditado;
 import es.caib.audita.model.Modulo;
@@ -27,7 +30,6 @@ import es.caib.audita.persistence.util.evento.ParticularidadesVisualizacionHandl
 import es.indra.util.graficos.generadorGraficos.ConfiguracionGrafico;
 import es.indra.util.graficos.generadorGraficos.DatosGrafico;
 import es.indra.util.graficos.generadorGraficos.GeneradorGraficos;
-import es.indra.util.graficos.generadorGraficos.Linea;
 
 /**
  * Operaciones para generar pagina de inicio 
@@ -50,6 +52,8 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 //    protected static String JNDI_ROLSAC = "";
 
     private static final String FICHERO_PROPIEDADES = "Auditoria.properties";
+    
+    private Log log = LogFactory.getLog( CuadroMandoInicioFacadeEJB.class );
 	
     
     /**
@@ -60,12 +64,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 	{
 		super.ejbCreate();
 	}
-	
-	
-
-	
-	
-	
+		
 	private List obtenerListaTiposEvento(String modulo)
 	{
 		List lst = null;
@@ -75,7 +74,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion : " + exc.getMessage(), exc);
 		}
 		return lst;
 	}
@@ -89,7 +88,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion : " + exc.getMessage(), exc);
 		}
 		return lst;
 	}
@@ -147,7 +146,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 			}
 			catch( Exception exc )
 			{
-				exc.printStackTrace();
+				log.error("Excepcion : " + exc.getMessage(), exc);
 			}
 		}
 		
@@ -183,7 +182,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 			}
 			catch( Exception exc )
 			{
-				exc.printStackTrace();
+				log.error("Excepcion : " + exc.getMessage(), exc);
 			}
 		}
 		
@@ -231,7 +230,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 			}
 			catch( Exception exc )
 			{
-				exc.printStackTrace();
+				log.error("Excepcion : " + exc.getMessage(), exc);
 			}
 		}
 		
@@ -256,7 +255,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				}
 				catch( Exception exc )
 				{
-					exc.printStackTrace();
+					log.error("Excepcion : " + exc.getMessage(), exc);
 				}
 				finally
 				{
@@ -406,6 +405,8 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 		
 		try
 		{
+			log.debug("generaEstadisticasServicios - inicio");
+			
 			con = this.getConnection();
 
 //			conRsc = this.getConnection(getJndiRolsac());
@@ -421,6 +422,8 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 			/* Cuando este en ROLSAC hay que descomentarlo
 			lst = this.queryForMapList(conRsc, "sql.select.servicios.catalogo.telematicos", new Object[] {} );
 			*/
+			
+			log.debug("generaEstadisticasServicios - servicios catalogo");
 			lst = this.queryForMapList(conSistra, "sql.select.servicios.catalogo.telematicos.sistra", new Object[] {} );
 			Map mResult = ( Map ) lst.get(0);
 			Number total = ( Number ) mResult.get( "total" );
@@ -430,6 +433,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 			/* Cuando este en ROLSAC hay que descomentarlo
 			lst = this.queryForMapList(conRsc, "sql.select.servicios.catalogo.activos", new Object[] {} );
 			*/
+			log.debug("generaEstadisticasServicios - servicios activos");
 			lst = this.queryForMapList(conSistra, "sql.select.servicios.catalogo.activos.sistra", new Object[] {} );
 			for(int i=0; i<lst.size(); i++)
 			{
@@ -438,6 +442,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				
 			}
 			
+			log.debug("generaEstadisticasServicios - servicios certificado");
 			String ls_sql = getSql("sql.select.servicios.autenticacion.certificado");
 			if(tramites.size() != 0)
 			{
@@ -448,6 +453,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				certificados = total.intValue();
 			}
 			/* Consultamos los Servicios con Nivel de Autenticación Usuario*/
+			log.debug("generaEstadisticasServicios - servicios usuario-password");
 			ls_sql = getSql("sql.select.servicios.autenticacion.usuario");
 			if(tramites.size() != 0)
 			{
@@ -458,6 +464,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				usuarios = total.intValue();
 			}
 			/* Consultamos los Servicios con Nivel de Autenticación Anonimo*/
+			log.debug("generaEstadisticasServicios - servicios anonimo");
 			ls_sql = getSql("sql.select.servicios.autenticacion.anonimo");
 			if(tramites.size() != 0)
 			{
@@ -468,6 +475,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				anonimos = total.intValue();
 			}
 			/* Consultamos los Servicios con Envio a Registro*/
+			log.debug("generaEstadisticasServicios - servicios registro");
 			ls_sql = getSql("sql.select.servicios.envio.registro");
 			if(tramites.size() != 0)
 			{
@@ -478,6 +486,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				registro = total.intValue();
 			}
 			/* Consultamos los Servicios con Envio a Bandeja*/
+			log.debug("generaEstadisticasServicios - servicios bandeja");
 			ls_sql = getSql("sql.select.servicios.envio.bandeja");
 			if(tramites.size() != 0)
 			{
@@ -488,6 +497,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				bandeja = total.intValue();
 			}
 			/* Consultamos los Servicios con Envio a Consulta*/
+			log.debug("generaEstadisticasServicios - servicios consulta");
 			ls_sql = getSql("sql.select.servicios.envio.consulta");
 			if(tramites.size() != 0)
 			{
@@ -498,6 +508,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				consulta = total.intValue();
 			}
 			/* Consultamos los Servicios con Pagos*/
+			log.debug("generaEstadisticasServicios - servicios pagos");
 			ls_sql = getSql("sql.select.servicios.pagos");
 			if(tramites.size() != 0)
 			{
@@ -508,6 +519,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				pagos = total.intValue();
 			}
 			/* Consultamos el numero maximo de Trámites realizados*/
+			log.debug("generaEstadisticasServicios - servicios maximo");
 			lst = this.queryForMapList("sql.select.servicios.maximoConcurrentes", new Object[] {} );
 			mResult = ( Map ) lst.get(0);
 			total = ( Number ) mResult.get( "total" );
@@ -525,9 +537,11 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 			maxTramites = total.intValue();
 
 			/* borramos los datos que hubiera */
+			log.debug("generaEstadisticasServicios - borra datos anteriores");
 			this.update(con, "sql.delete", null);
 			
 			/* insertamos los datos */
+			log.debug("generaEstadisticasServicios - establece datos actuales");
 			Object params[] = 
 				new Object[] 
 				{ new Integer(servicios), new Integer(serviciosTelematicos), new Integer(certificados), new Integer(usuarios), 
@@ -535,10 +549,11 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				  new Integer(consulta), new Integer(pagos), new Integer(maxTramites), ls_dia};
 			this.update( con, "sql.insert.servicios", params );
 
+			log.debug("generaEstadisticasServicios - fin");
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion : " + exc.getMessage(), exc);
 		}
 		finally
 		{
@@ -654,7 +669,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion : " + exc.getMessage(), exc);
 		}	
 		finally
 		{
@@ -734,7 +749,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion : " + exc.getMessage(), exc);
 		}	
 		finally
 		{
@@ -859,7 +874,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion : " + exc.getMessage(), exc);
 		}	
 		finally
 		{
@@ -1024,7 +1039,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion : " + exc.getMessage(), exc);
 		}	
 		finally
 		{
@@ -1184,7 +1199,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion : " + exc.getMessage(), exc);
 		}	
 		finally
 		{
@@ -1284,7 +1299,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion : " + exc.getMessage(), exc);
 		}
 		finally
 		{
@@ -1293,8 +1308,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				try {
 					con.close();
 				} catch (SQLException e) {
-					
-					e.printStackTrace();
+					log.error("Excepcion : " + e.getMessage(), e);
 				}
 			}
 		}
