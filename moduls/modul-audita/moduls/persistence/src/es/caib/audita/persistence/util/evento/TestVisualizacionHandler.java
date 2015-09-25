@@ -21,7 +21,7 @@ public class TestVisualizacionHandler extends
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion: " + exc.getMessage(), exc);
 		}
 		return null;
 	}

@@ -7,10 +7,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import es.caib.audita.modelInterfaz.ConstantesAuditoria;
 
 public class Util
 {
+	protected static Log log = LogFactory.getLog(Util.class);
+	
 	public final static long DIA = 60 * 60 * 24 * 1000 ; // en milisegundos
 
 	private static String[] meses_es = {"Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"};
@@ -284,7 +289,7 @@ public class Util
 				fecha.setTime(ll_fecha);
 				return sdf.format(fecha);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				log.error("Excepcion: " + e.getMessage(), e);
 				return null;
 			}
 

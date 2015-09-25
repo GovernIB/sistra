@@ -98,7 +98,7 @@ public class CuadroMandoDetalleHandler extends
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion: " + exc.getMessage(), exc);
 		}
 		return null;
 	}
@@ -138,7 +138,7 @@ public class CuadroMandoDetalleHandler extends
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion: " + exc.getMessage(), exc);
 		}
 		return null;
 	}
@@ -255,7 +255,7 @@ public class CuadroMandoDetalleHandler extends
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion: " + exc.getMessage(), exc);
 			return result;
 		}
 	}
@@ -416,7 +416,7 @@ public class CuadroMandoDetalleHandler extends
 				l_datosGrafico.setTituloGrafico("");
 			} catch (Exception e) {
 				
-				e.printStackTrace();
+				log.error("Excepcion: " + e.getMessage(), e);
 				return null;
 			}	
 			
@@ -426,7 +426,7 @@ public class CuadroMandoDetalleHandler extends
 			return l_datosGrafico;	
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			log.error("Excepcion: " + e.getMessage(), e);
 			return null;
 		}
 		/*
@@ -438,7 +438,7 @@ public class CuadroMandoDetalleHandler extends
 					con.close();
 				} catch (SQLException e) {
 					
-					e.printStackTrace();
+					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 		}
@@ -573,7 +573,7 @@ public class CuadroMandoDetalleHandler extends
 				props.load(this.getClass().getResourceAsStream(getDaoClass().getSimpleName() + ".properties"));
 				JNDI_SISTRA = "java:/" + props.getProperty("datasource.sistra");
 			} catch (IOException e) {
-				e.printStackTrace();
+				log.error("Excepcion: " + e.getMessage(), e);
 			}
 
 		}
@@ -612,7 +612,7 @@ public class CuadroMandoDetalleHandler extends
 			
 		} catch (SQLException e) {
 			
-			e.printStackTrace();
+			log.error("Excepcion: " + e.getMessage(), e);
 			return cuadroMando;
 		}		
 	}
@@ -691,7 +691,7 @@ public class CuadroMandoDetalleHandler extends
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion: " + exc.getMessage(), exc);
 			return result;
 		}
 		
@@ -717,7 +717,7 @@ public class CuadroMandoDetalleHandler extends
 					con.close();
 				} catch (SQLException e) {
 					
-					e.printStackTrace();
+					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 		}

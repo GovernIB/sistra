@@ -74,8 +74,7 @@ public class DiarioAction extends BaseAction
 			   //System.out.println("fechaFinal: " + fechaFinal.toLocaleString());
 			}
 		} catch (ParseException e) {
-			_log.error( "Error al parsear las fechas " );
-			e.printStackTrace();
+			_log.error( "Error al parsear las fechas: " + e.getMessage(), e );			
 		}
 
 		
@@ -112,8 +111,8 @@ public class DiarioAction extends BaseAction
 			ll_fecha += DIA;
 			fecha.setTime(ll_fecha);
 			return sdf.format(fecha);
-		} catch (ParseException e) {
-			e.printStackTrace();
+		} catch (ParseException e) {			
+			_log.error("Excepcion " + e.getMessage(), e);
 			return null;
 		}
 

@@ -30,7 +30,7 @@ public class PagosVisualizacionHandler extends
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion: " + exc.getMessage(), exc);
 		}
 		return null;
 	}
@@ -99,7 +99,7 @@ public class PagosVisualizacionHandler extends
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion: " + exc.getMessage(), exc);
 			return result;
 		}
 		finally
@@ -109,7 +109,7 @@ public class PagosVisualizacionHandler extends
 				try {
 					con.close();
 				} catch (SQLException e) {
-					e.printStackTrace();
+					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 		}
@@ -198,7 +198,7 @@ public class PagosVisualizacionHandler extends
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion: " + exc.getMessage(), exc);
 		}
 		/*
 		finally
@@ -208,7 +208,7 @@ public class PagosVisualizacionHandler extends
 				try {
 					con.close();
 				} catch (SQLException e) {					
-					e.printStackTrace();
+					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 		}

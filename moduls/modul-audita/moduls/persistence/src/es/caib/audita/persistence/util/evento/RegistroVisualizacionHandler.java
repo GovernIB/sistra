@@ -66,7 +66,7 @@ public class RegistroVisualizacionHandler extends
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion: " + exc.getMessage(), exc);
 		}
 		/*
 		finally
@@ -76,7 +76,7 @@ public class RegistroVisualizacionHandler extends
 				try {
 					con.close();
 				} catch (SQLException e) {
-					e.printStackTrace();
+					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 		}

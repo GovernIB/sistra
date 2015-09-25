@@ -265,7 +265,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 							con.close();
 						} catch (SQLException e) {
 							
-							e.printStackTrace();
+							log.error("Excepcion: " + e.getMessage(), e);
 						}
 					}
 				}
@@ -563,7 +563,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 					con.close();
 				} catch (SQLException e) {
 					
-					e.printStackTrace();
+					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 //			if(conRsc != null)
@@ -572,7 +572,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 //					conRsc.close();
 //				} catch (SQLException e) {
 //					
-//					e.printStackTrace();
+//					log.error("Excepcion: " + e.getMessage(), e);
 //				}
 //			}
 			if(conSistra != null)
@@ -581,7 +581,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 					conSistra.close();
 				} catch (SQLException e) {
 					
-					e.printStackTrace();
+					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 		}
@@ -679,7 +679,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 					con.close();
 				} catch (SQLException e) {
 					
-					e.printStackTrace();
+					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 		}
@@ -759,7 +759,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 					con.close();
 				} catch (SQLException e) {
 					
-					e.printStackTrace();
+					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 		}
@@ -884,7 +884,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 					con.close();
 				} catch (SQLException e) {
 					
-					e.printStackTrace();
+					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 			if(conSistra != null)
@@ -893,7 +893,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 					conSistra.close();
 				} catch (SQLException e) {
 					
-					e.printStackTrace();
+					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 		}
@@ -1049,7 +1049,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 					con.close();
 				} catch (SQLException e) {
 					
-					e.printStackTrace();
+					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 			if(conSistra != null)
@@ -1058,7 +1058,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 					conSistra.close();
 				} catch (SQLException e) {
 					
-					e.printStackTrace();
+					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 		}
@@ -1209,7 +1209,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 					con.close();
 				} catch (SQLException e) {
 					
-					e.printStackTrace();
+					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 			if(conSistra != null)
@@ -1218,7 +1218,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 					conSistra.close();
 				} catch (SQLException e) {
 					
-					e.printStackTrace();
+					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 //			if(conRolsac != null)
@@ -1227,7 +1227,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 //					conRolsac.close();
 //				} catch (SQLException e) {
 //					
-//					e.printStackTrace();
+//					log.error("Excepcion: " + e.getMessage(), e);
 //				}
 //			}
 		}
@@ -1260,7 +1260,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 				props.load(this.getClass().getResourceAsStream(FICHERO_PROPIEDADES));
 				CuadroMandoInicioFacadeEJB.JNDI_SISTRA = "java:/" + props.getProperty("datasource.sistra");
 			} catch (IOException e) {
-				e.printStackTrace();
+				log.error("Excepcion: " + e.getMessage(), e);
 			}
 
 		}
@@ -1277,7 +1277,7 @@ public abstract class CuadroMandoInicioFacadeEJB extends QueryEJB
 //				props.load(this.getClass().getResourceAsStream(FICHERO_PROPIEDADES));
 //				CuadroMandoInicioFacadeEJB.JNDI_ROLSAC = "java:/" + props.getProperty("datasource.rolsac");
 //			} catch (IOException e) {
-//				e.printStackTrace();
+//				log.error("Excepcion: " + e.getMessage(), e);
 //			}
 //
 //		}

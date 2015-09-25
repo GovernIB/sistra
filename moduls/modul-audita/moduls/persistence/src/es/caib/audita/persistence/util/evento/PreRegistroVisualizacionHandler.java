@@ -1,6 +1,5 @@
 package es.caib.audita.persistence.util.evento;
 
-import java.lang.Number;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -57,7 +56,7 @@ public class PreRegistroVisualizacionHandler extends
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion: " + exc.getMessage(), exc);
 		}
 		return result;
 	}

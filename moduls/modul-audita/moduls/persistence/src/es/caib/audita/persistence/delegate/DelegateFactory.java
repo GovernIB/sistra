@@ -4,11 +4,16 @@ package es.caib.audita.persistence.delegate;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Factoria de objetos delegate.
  */
 public class DelegateFactory {
 
+	private static Log log = LogFactory.getLog( DelegateFactory.class);
+	
     private static Map delegates = new HashMap();
 
     protected static synchronized Delegate getDelegate(Class clazz ) 
@@ -39,7 +44,8 @@ public class DelegateFactory {
             return constructor.newInstance( new Object[] { environment });
             */
         } catch (Throwable t) {
-        	t.printStackTrace();
+        	
+        	log.error("Excepcion :" + t.getMessage(), t );
             return null;
         }
         // Descomentar si es volen Logs.

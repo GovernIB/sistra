@@ -20,6 +20,9 @@ import java.util.Properties;
 
 import javax.ejb.CreateException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import es.caib.audita.model.AuditConstants;
 import es.caib.audita.model.CuadroMandoDetalle;
 import es.caib.audita.model.CuadroMandoInicio;
@@ -64,6 +67,8 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 
 //    private static final String FICHERO_PROPIEDADES = "Auditoria.properties";
 	
+	private Log log = LogFactory.getLog( AuditoriaFacadeEJB.class);
+	
 	/**
      * @ejb.create-method
      * @ejb.permission unchecked = "true" 
@@ -81,8 +86,8 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 			lst = this.queryForMapList( "sql.select.eventos", new Object[]{ modulo } );
 		}
 		catch( Exception exc )
-		{
-			exc.printStackTrace();
+		{			
+			log.error("Excepcion: " + exc.getMessage(), exc);
 		}
 		return lst;
 	}
@@ -96,7 +101,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion: " + exc.getMessage(), exc);
 		}
 		return lst;
 	}
@@ -154,7 +159,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 			}
 			catch( Exception exc )
 			{
-				exc.printStackTrace();
+				log.error("Excepcion: " + exc.getMessage(), exc);
 			}
 		}
 		
@@ -190,7 +195,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 			}
 			catch( Exception exc )
 			{
-				exc.printStackTrace();
+				log.error("Excepcion: " + exc.getMessage(), exc);
 			}
 		}
 		
@@ -238,7 +243,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 			}
 			catch( Exception exc )
 			{
-				exc.printStackTrace();
+				log.error("Excepcion: " + exc.getMessage(), exc);
 			}
 		}
 		
@@ -263,7 +268,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 				}
 				catch( Exception exc )
 				{
-					exc.printStackTrace();
+					log.error("Excepcion: " + exc.getMessage(), exc);
 				}
 				finally
 				{
@@ -272,8 +277,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 						try {
 							con.close();
 						} catch (SQLException e) {
-							
-							e.printStackTrace();
+							log.error("Excepcion: " + e.getMessage(), e);
 						}
 					}
 				}
@@ -384,7 +388,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 //				props.load(this.getClass().getResourceAsStream(FICHERO_PROPIEDADES));
 //				AuditoriaFacadeEJB.JNDI_SISTRA = "java:/" + props.getProperty("datasource.sistra");
 //			} catch (IOException e) {
-//				e.printStackTrace();
+//				log.error("Excepcion: " + e.getMessage(), e);
 //			}
 //
 //		}
@@ -401,7 +405,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 //				props.load(this.getClass().getResourceAsStream(FICHERO_PROPIEDADES));
 //				AuditoriaFacadeEJB.JNDI_ROLSAC = "java:/" + props.getProperty("datasource.rolsac");
 //			} catch (IOException e) {
-//				e.printStackTrace();
+//				log.error("Excepcion: " + e.getMessage(), e);
 //			}
 //
 //		}
@@ -436,7 +440,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion: " + exc.getMessage(), exc);
 		}
 		return eventos;
 	}
@@ -460,7 +464,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion: " + exc.getMessage(), exc);
 		}
 		finally
 		{
@@ -470,7 +474,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 					con.close();
 				} catch (SQLException e) {
 					
-					e.printStackTrace();
+					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 		}
@@ -500,7 +504,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 				fechaFinal = dateFormat.parse(Integer.toString(anyoFinal));
 			}
 		} catch (ParseException e) {
-			e.printStackTrace();
+			log.error("Excepcion: " + e.getMessage(), e);
 		}
 		return getCuadroMandoIntervaloTemporal(idioma, AuditConstants.ANUAL, fechaInicio,fechaFinal);
 
@@ -531,7 +535,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 			   fechaFinal = dateFormat.parse(mesFinal + "/" + anyoFinal);
 			}
 		} catch (ParseException e) {
-			e.printStackTrace();
+			log.error("Excepcion: " + e.getMessage(), e);
 		}
 		return getCuadroMandoIntervaloTemporal(idioma, AuditConstants.MENSUAL, fechaInicio,fechaFinal);
 	}
@@ -564,7 +568,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion: " + exc.getMessage(), exc);
 			return null;
 		}
 		/*
@@ -576,7 +580,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 					con.close();
 				} catch (SQLException e) {
 					
-					e.printStackTrace();
+					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 		}
@@ -604,7 +608,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion: " + exc.getMessage(), exc);
 		}
 		finally
 		{
@@ -614,7 +618,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 					con.close();
 				} catch (SQLException e) {
 					
-					e.printStackTrace();
+					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 		}
@@ -642,7 +646,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion: " + exc.getMessage(), exc);
 		}
 		finally
 		{
@@ -652,7 +656,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 					con.close();
 				} catch (SQLException e) {
 					
-					e.printStackTrace();
+					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 		}
@@ -683,7 +687,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion: " + exc.getMessage(), exc);
 		}
 		return eventos;
 	}
@@ -711,7 +715,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion: " + exc.getMessage(), exc);
 		}
 		return eventos;
 	}
@@ -730,7 +734,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 			ls_fcDesde = ls_fcHasta.substring(0,6) + (Integer.parseInt(ls_fcHasta.substring(6).trim()) - 1);			
 		} catch (Throwable e) {
 			log.error("Error obteniendo intervalo de fechas",e);
-			e.printStackTrace();
+			log.error("Excepcion: " + e.getMessage(), e);
 		}			
 
 		log.info("Comienza generar cuadro mando inicio...");
@@ -750,7 +754,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 			cmd.generaEstadisticasUltimosAlta();
 		} catch (DelegateException e) {
 			log.error("Error generando datos para pagina inicio",e);
-			e.printStackTrace();
+			log.error("Excepcion: " + e.getMessage(), e);
 		}finally{
 			log.info("Fin generacion cuadro mando inicio");
 		}
@@ -886,7 +890,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion: " + exc.getMessage(), exc);
 			return null;
 		}	
 		finally
@@ -897,7 +901,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 					con.close();
 				} catch (SQLException e) {
 					
-					e.printStackTrace();
+					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 		}
@@ -996,7 +1000,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error("Excepcion: " + exc.getMessage(), exc);
 			return null;
 		}
 		

@@ -62,8 +62,7 @@ public class AuditaSchedulerServlet implements Servlet
 			 }
 			 catch (Exception e) 
 			 {
-			  	_log.error( "Exception scheduling : ", e );
-				 //e.printStackTrace();
+			  	_log.error( "Exception scheduling : ", e );			
 			 }
 		 }
 	}
