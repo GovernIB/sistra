@@ -65,7 +65,7 @@ sql.select.servicios.maximoConcurrentes= select to_char(aud_audit.aud_fecha,'DD/
                                             where (aud_tipo = 'ENVTRA') or  (aud_tipo = 'PRETRA') \
                                                        group by to_char(aud_audit.aud_fecha,'DD/MM/YYYY HH24')  order by 2 desc
 
-sql.delete=delete aud_inici                                                       
+sql.delete=delete from aud_inici                                                       
 sql.insert.servicios=insert into aud_inici (ini_fecha,ini_ressrv, ini_ressrt,ini_rescrt, ini_resusu, ini_resan, ini_resreg, ini_resbd, ini_rescs, ini_respag, ini_restmx, ini_resfmx) \
                                             values (current_timestamp,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)                                                       
                                                                                              
