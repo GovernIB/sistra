@@ -17,6 +17,7 @@ import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfCopyFields;
 import com.lowagie.text.pdf.PdfEncryptor;
+import com.lowagie.text.pdf.PdfGState;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 import com.lowagie.text.pdf.PdfWriter;
@@ -197,10 +198,19 @@ public class UtilPDF {
             for (int j = 0;j<objects.length;j++){
             	if (objects[j].getPage() == 0 || objects[j].getPage() == i){            		
 	            	if (objects[j].isOverContent()){
-	            		content = over;
+	            		content = over;	            		
 	            	}else{
 	            		content = under;
 	            	}
+	            	
+	            	if (objects[j].getOpacity() > 0f) {
+		            	PdfGState gstate = new PdfGState(); 
+	            		gstate.setFillOpacity(objects[j].getOpacity()); 
+	            		gstate.setStrokeOpacity(objects[j].getOpacity()); 
+	            		content.saveState(); 
+	            		content.setGState(gstate);
+	            	}
+
 	            	
 	            	if (objects[j]  instanceof ImageStamp){
 	            		ImageStamp imgStamp = (ImageStamp) objects[j];
@@ -261,9 +271,8 @@ public class UtilPDF {
 		            	content.setFontAndSize(bf,((TextoStamp)objects[j]).getFontSize());
 		            	content.setTextMatrix(30, 30);  				        	
 		            	content.showTextAligned(Element.ALIGN_LEFT, ((TextoStamp)objects[j]).getTexto(),
-		            			objects[j].getX(), objects[j].getY(), objects[j].getRotation());
-		            	content.endText();
-		            	
+		            			objects[j].getX(), objects[j].getY(), objects[j].getRotation());		            			            	
+		            	content.endText();		            	
 	            	}
 	            	
 	            	if (objects[j] instanceof NumeroPaginaStamp){
@@ -300,9 +309,15 @@ public class UtilPDF {
 		                content.showTextAligned(Element.ALIGN_LEFT, textoReservado ,posX - (width / 2) - (textoReservado.length() * 2), posY - 8 ,0);
 		                content.endText();
 	            	}
-            	}
-            }	             	     	           
+	            	
+	            	if (objects[j].getOpacity() > 0f) {
+	            		content.restoreState();
+	            	}
+	            	
+            	}            	
+            }	            
         }    
+        
         stamp.close();		
 	}
 

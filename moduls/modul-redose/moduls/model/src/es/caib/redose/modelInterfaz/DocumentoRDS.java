@@ -99,6 +99,10 @@ public class DocumentoRDS  implements java.io.Serializable {
      * En caso de que se haya guardado en custodia, indicara el codigo del documento en custodia
      */
 	private String codigoDocumentoCustodia;
+	/**
+	 * Indica CSV del documento (campo calculado por el REDOSE en caso de que tenga CSV).
+	 */
+	private String csv;
 		
 	// Getters / Setters
 	/**
@@ -380,6 +384,12 @@ public class DocumentoRDS  implements java.io.Serializable {
      */
     public void setCodigoDocumentoCustodia(String codigoDocumentoCustodia) {
 		this.codigoDocumentoCustodia = codigoDocumentoCustodia;
+	}
+	public String getCsv() {
+		return csv;
+	}
+	public void setCsv(String csv) {
+		this.csv = csv;
 	}	
 	
 }

@@ -10,7 +10,7 @@ import es.caib.redose.modelInterfaz.UsoRDS;
 public class UtilRDS {
 
 	/**
-	 * Clona objeto documento RDS excepto propiedades de datos y nombre fichero
+	 * Clona objeto documento RDS excepto propiedades de datos y nombre fichero para usarlo en los formateadoers.
 	 * @param doc
 	 * @return
 	 */
@@ -28,7 +28,8 @@ public class UtilRDS {
 		docNew.setPlantilla(doc.getPlantilla());
 		docNew.setReferenciaRDS(doc.getReferenciaRDS());
 		docNew.setUnidadAdministrativa(doc.getUnidadAdministrativa());
-		docNew.setUsuarioSeycon(doc.getUsuarioSeycon());
+		docNew.setUsuarioSeycon(doc.getUsuarioSeycon());		
+		docNew.setCsv(doc.getCsv());
 		return docNew;
 	}
 	

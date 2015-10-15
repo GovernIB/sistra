@@ -214,6 +214,17 @@ public class RdsDelegate implements StatelessDelegate {
     }
     
     /**
+     * Verifica documento
+     */
+    public DocumentoVerifier verificarDocumento(String csv) throws DelegateException {
+    	try {
+            return getFacade().verificarDocumento(csv);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        } 
+    }
+    
+    /**
      * Cambia de UA un documento
      */
     public void cambiarUnidadAdministrativa(ReferenciaRDS refRDS, Long codUA) throws DelegateException{

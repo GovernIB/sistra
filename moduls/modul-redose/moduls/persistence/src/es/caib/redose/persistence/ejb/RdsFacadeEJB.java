@@ -29,6 +29,7 @@ import es.caib.redose.model.LogGestorDocumentalError;
 import es.caib.redose.model.LogOperacion;
 import es.caib.redose.model.Plantilla;
 import es.caib.redose.model.PlantillaIdioma;
+import es.caib.redose.model.TablaTransformacionCsv;
 import es.caib.redose.model.TipoOperacion;
 import es.caib.redose.model.TipoUso;
 import es.caib.redose.model.Ubicacion;
@@ -56,11 +57,13 @@ import es.caib.redose.persistence.plugin.PluginAlmacenamientoRDS;
 import es.caib.redose.persistence.plugin.PluginClassCache;
 import es.caib.redose.persistence.util.CacheSincronizacionGestorDocumental;
 import es.caib.redose.persistence.util.ConversorOpenOffice;
+import es.caib.redose.persistence.util.GeneradorCsv;
 import es.caib.redose.persistence.util.UtilRDS;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.custodia.PluginCustodiaIntf;
 import es.caib.sistra.plugins.firma.FirmaIntf;
 import es.caib.sistra.plugins.firma.PluginFirmaIntf;
+import es.caib.util.CifradoUtil;
 import es.caib.util.StringUtil;
 import es.caib.xml.ConstantesXML;
 import es.indra.util.pdf.BarcodeStamp;
@@ -103,6 +106,9 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	private String OPENOFFICE_HOST = null;
 	private String OPENOFFICE_PUERTO = null;
 	private boolean BARCODE_VERIFIER_MOSTRAR = false;
+	private boolean USAR_CSV = false;
+	private String URL_CSV = null;
+	private String CLAVE_CIFRADO = null;
 	
 	private boolean existeCustodia = false;
 	private boolean existeGestionDocumental = false;
@@ -123,6 +129,9 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 			OPENOFFICE_HOST=props.getProperty("openoffice.host");
 			OPENOFFICE_PUERTO=props.getProperty("openoffice.port");		
 			BARCODE_VERIFIER_MOSTRAR= "true".equals(props.getProperty("urlVerificacion.barcode.mostrar"));
+			USAR_CSV= "true".equals(props.getProperty("urlVerificacion.csv"));
+			URL_CSV = props.getProperty("sistra.url") + "/redosefront/init.do?csv=";
+			CLAVE_CIFRADO = props.getProperty("clave.cifrado");
 					
 			// Comprobamos si hay que integrarse con sistema de custodia y gestion documental			
 	    	try{
@@ -140,8 +149,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    	}catch(Exception nep){
 	    		// En caso de que no este configurado el plugin no hay que hacer nada
 	    		existeGestionDocumental = false;
-	    	}
-			
+	    	}	    	
 		}catch(Exception ex){
 			log.error("No se pueden acceder propiedades modulo",ex);
 			throw new CreateException("No se pueden obtener propiedades modulo");
@@ -779,7 +787,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 
  
     /**
-     * Verifica documento formateado generado por la plataforma
+     * Verifica documento formateado generado por la plataforma (con localizador).
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"     
      */
@@ -790,25 +798,35 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    	
 	    	// Comprobamos si la clave codificada coincide
 	    	if (!key.verifyClaveRDS(referenciaRDS.getClave())) throw new ExcepcionRDS("Clave de acceso incorrecta");
-	    	    	
-	       	// Obtenemos documento
-	    	DocumentoRDS docRDS = null;	    	
-	    	docRDS = consultarDocumentoImpl(referenciaRDS,true);
 	    	
-	    	// Formateamos documento
-	    	DocumentoRDS docRDSFormat = consultarDocumentoFormateado(referenciaRDS,key.getPlantillaDocumento(),key.getIdiomaDocumento());
+	    	// Generamos documento verificado
+	       	DocumentoVerifier docVer = verificarDocumentoImpl(referenciaRDS,
+	       			key.getPlantillaDocumento(), key.getIdiomaDocumento());
 	    	
-	    	// Devolvemos documento
-	    	DocumentoVerifier docVer = new DocumentoVerifier();
-	    	docVer.setTitulo(docRDS.getTitulo());
-	    	docVer.setEstructurado(docRDS.isEstructurado());
-	    	docVer.setNombreFichero(docRDS.getNombreFichero());
-	    	docVer.setDatosFichero(docRDS.getDatosFichero());;
-	    	docVer.setNombreFicheroFormateado(docRDSFormat.getNombreFichero());
-	    	docVer.setDatosFicheroFormateado(docRDSFormat.getDatosFichero());
-	    	docVer.setExtensionFichero(docRDS.getExtensionFichero());
-	    	docVer.setFechaRDS(docRDS.getFechaRDS());
-	    	docVer.setFirmas(docRDS.getFirmas());
+	        return docVer;
+    	}catch(Exception ex){
+    		throw new ExcepcionRDS("Error al verificar documento",ex);
+    	}
+    }
+
+	
+    /**
+     * Verifica documento formateado generado por la plataforma (con CSV).
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"     
+     */
+    public DocumentoVerifier verificarDocumento(String csv) throws ExcepcionRDS {       	
+    	try{
+	    	
+    		// Obtenemos documento a partir CSV
+	    	ReferenciaRDS referenciaRDS = consultarCsvDocumento(csv);
+	    	if (referenciaRDS == null) {
+	    		throw new ExcepcionRDS("No existe documento con csv: " + csv);
+	    	}
+	
+	    	// Generamos documento verificado
+	       	DocumentoVerifier docVer = verificarDocumentoImpl(referenciaRDS,
+	       			null, null);
 	    	
 	        return docVer;
     	}catch(Exception ex){
@@ -1246,7 +1264,14 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     		throw new ExcepcionRDS("No se ha podido calcular el hash",e);
     	}  
     	// ------- Generamos clave
-    	if (nuevo) documentoH.setClave(generarClave());   
+    	if (nuevo) {
+    		documentoH.setClave(generarClave());
+    	}
+    	// ------- Generamos CSV en caso de ser nuevo    	
+    	if (nuevo && USAR_CSV) {
+    		documentoH.setCsv(generarCSV());
+    	}
+    	
     }
     
     
@@ -1285,6 +1310,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	documentoRDS.setUnidadAdministrativa(doc.getUnidadAdministrativa().longValue());
     	documentoRDS.setIdioma(doc.getIdioma());
     	documentoRDS.setReferenciaGestorDocumental(doc.getReferenciaGestorDocumental());
+    	documentoRDS.setCsv(doc.getCsv());
     	
     	VersionCustodiaDelegate vcDelg = DelegateUtil.getVersionCustodiaDelegate();
     	try {
@@ -1466,12 +1492,15 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	
     	// Generamos key
     	KeyVerifier key = new KeyVerifier(doc.getReferenciaRDS(),plantilla,idioma);
-    	
-    	// Obtenemos url y textos verifier    	
-		String url = URL_VERIFIER;
+    	// Vemos si el doc tiene que usar csv o localizador
+    	boolean tieneCSV = USAR_CSV &&  StringUtils.isNotBlank(doc.getCsv());
+    	// Obtenemos url verificacion   	
+		String url = (tieneCSV ? URL_CSV : URL_VERIFIER);
+		String urlVerificacion = (tieneCSV ? url + doc.getCsv() : url + key.getKeyEncoded());
+		
+		
 		String text = TEXT_VERIFIER;
-    	String urlVerificacion = url + key.getKeyEncoded();
-    	doc.setUrlVerificacion(urlVerificacion);
+		doc.setUrlVerificacion(urlVerificacion);
     	
     	int numStamps = 3;  
     	float posTitulo = 44;
@@ -1843,6 +1872,34 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	}
 	
 	/**
+	 * Consulta referencia documento a partir csv.
+	 * @param CSV
+	 * @return referencia rds o nulo si no lo encuentra
+	 * @throws ExcepcionRDS
+	 */
+	private ReferenciaRDS consultarCsvDocumento(String csv) throws ExcepcionRDS {
+		// Obtenemos documento
+    	Session session = getSession();
+	    try {	    	
+	    	// Obtenemos documento
+	    	Query query = session.createQuery("FROM Documento AS d WHERE d.csv = :csv");
+            query.setParameter("csv", csv);
+            Documento doc =  (Documento) query.uniqueResult();
+            ReferenciaRDS refRds = null;
+            if (doc != null){
+            	refRds = new ReferenciaRDS(doc.getCodigo().longValue(), doc.getClave());
+            }
+            return refRds;	    	
+	    } catch (HibernateException he) {
+	    	log.error("Error consultando documento a partir CSV",he);
+	        throw new ExcepcionRDS("Error consultando documento a partir CSV",he);
+	    } finally {
+	        close(session);
+	    } 
+		
+	}
+	
+	/**
 	 * Consulta documento
 	 * @param refRds
 	 * @param recuperarFichero
@@ -1897,4 +1954,68 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
         }
 		return documentoRDS;
 	}
+	
+	private DocumentoVerifier verificarDocumentoImpl(
+			ReferenciaRDS referenciaRDS, String plantillaDocumento,
+			String idiomaDocumento) throws ExcepcionRDS {
+		// Obtenemos documento
+		DocumentoRDS docRDS = null;	    	
+		docRDS = consultarDocumentoImpl(referenciaRDS,true);
+		
+		// Formateamos documento
+		DocumentoRDS docRDSFormat = consultarDocumentoFormateado(referenciaRDS,plantillaDocumento,idiomaDocumento);
+		
+		// Devolvemos documento
+		DocumentoVerifier docVer = new DocumentoVerifier();
+		docVer.setTitulo(docRDS.getTitulo());
+		docVer.setEstructurado(docRDS.isEstructurado());
+		docVer.setNombreFichero(docRDS.getNombreFichero());
+		docVer.setDatosFichero(docRDS.getDatosFichero());;
+		docVer.setNombreFicheroFormateado(docRDSFormat.getNombreFichero());
+		docVer.setDatosFicheroFormateado(docRDSFormat.getDatosFichero());
+		docVer.setExtensionFichero(docRDS.getExtensionFichero());
+		docVer.setFechaRDS(docRDS.getFechaRDS());
+		docVer.setFirmas(docRDS.getFirmas());
+		return docVer;
+	}
+	
+	/**
+	 * Genera CSV.
+	 * @return 
+	 * @throws ExcepcionRDS 
+	 */
+	private String generarCSV() throws ExcepcionRDS {
+		// Caga tabla de trasnformacion y la crea si no existe
+		if (!GeneradorCsv.existeTablaTransformacion()) {			
+			String idTabla = "1";
+			Session session = getSession();
+		    try {	    		    	
+		    		String claves = null;
+		    		TablaTransformacionCsv tablaTransformacion = null;
+		    		tablaTransformacion = (TablaTransformacionCsv) session.get(TablaTransformacionCsv.class, idTabla);	
+		    		if (tablaTransformacion != null) {
+		    			log.info("Existe tabla transformacion - cargamos claves");
+		    			String clavesCifradas = new String(tablaTransformacion.getClaves(), "UTF-8");
+		    			claves = CifradoUtil.descifrar(CLAVE_CIFRADO,clavesCifradas);		    			
+		    		} else {
+		    			log.info("No existe tabla transformacion - generamos claves");
+		    			claves = GeneradorCsv.generarTablaTransformacion();
+		    			String clavesCifradas =  CifradoUtil.cifrar(CLAVE_CIFRADO, claves);
+		    			tablaTransformacion = new TablaTransformacionCsv();
+		    			tablaTransformacion.setCodigo(idTabla);
+		    			tablaTransformacion.setClaves(clavesCifradas.getBytes("UTF-8"));
+		    			session.save(tablaTransformacion);
+		    		}        	            
+		    		GeneradorCsv.establecerTablaTransformacion(claves);
+		    } catch (Exception he) {
+		    	log.error("Error inicializando tabla transformacion CSV",he);
+		        throw new ExcepcionRDS("Error inicializando tabla transformacion CSV",he);
+		    } finally {
+		        close(session);
+		    } 
+		}		
+	    // Genera CSV
+		return GeneradorCsv.generarId();
+	}	
+	
 }

@@ -33,6 +33,7 @@ public class Documento  implements java.io.Serializable {
      private String borrado;
      private String idioma;
      private String referenciaGestorDocumental;
+     private String csv;
 
     // Constructors
 
@@ -213,6 +214,18 @@ public class Documento  implements java.io.Serializable {
 
 	public void setReferenciaGestorDocumental(String referenciaGestorDocumental) {
 		this.referenciaGestorDocumental = referenciaGestorDocumental;
+	}
+
+
+
+	public String getCsv() {
+		return csv;
+	}
+
+
+
+	public void setCsv(String csv) {
+		this.csv = csv;
 	}
 
 

@@ -43,12 +43,25 @@ public class ComprobarDocumentoAction extends BaseAction
 			// Obtenemos el documento a partir del id y lo almacenamos en la sesión para
 			// optimizar el siguiente acceso para mostrar el pdf		
 			String id = request.getParameter("id");		
-			if (id == null) return mapping.findForward("fail");
+			String csv = request.getParameter("csv");
 			
-			KeyVerifier key = new KeyVerifier(id);
+			if (id == null && csv == null) return mapping.findForward("fail");
 			
 			RdsDelegate rdsDelegate = DelegateRDSUtil.getRdsDelegate();
-			DocumentoVerifier documento=rdsDelegate.verificarDocumento(key);
+			DocumentoVerifier documento=null;
+			
+			String idDocumento = null;
+			String queryString = null;
+			if (id != null) {
+				KeyVerifier key = new KeyVerifier(id);			
+				documento=rdsDelegate.verificarDocumento(key);
+				idDocumento = id;
+				queryString = "id="+id;
+			} else {
+				documento=rdsDelegate.verificarDocumento(csv);
+				idDocumento = csv;
+				queryString = "csv="+csv;
+			}
 			
 			request.setAttribute("documento",documento);
 			
@@ -58,8 +71,11 @@ public class ComprobarDocumentoAction extends BaseAction
 				request.setAttribute("firmas",new ArrayList());
 			}
 				
+			request.setAttribute("queryString", queryString);
+			
 			// Lo almacenamos en la sesión para mostrar el pdf en el iframe (optimizamos acceso)
-			request.getSession().setAttribute(id,documento);
+			request.setAttribute("id", idDocumento);			
+			request.getSession().setAttribute(idDocumento, documento);
 			return mapping.findForward("success");
 		}catch(Exception ex){		
 			// Redirigimos a error indicando que el documento no existe

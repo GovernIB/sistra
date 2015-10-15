@@ -15,6 +15,11 @@ public class ObjectStamp {
 	 */
 	private boolean overContent=true;
 	/**
+	 * En caso de que se muestre encima del contenido podemos indicar opacidad
+	 */
+	private float opacity;
+	
+	/**
 	 * Coordenada X
 	 */
 	private float x;
@@ -26,6 +31,8 @@ public class ObjectStamp {
 	 * Rotacion
 	 */
 	private float rotation;
+	
+	
 	public boolean isOverContent() {
 		return overContent;
 	}
@@ -55,6 +62,12 @@ public class ObjectStamp {
 	}
 	public void setY(float y) {
 		this.y = y;
+	}
+	public float getOpacity() {
+		return opacity;
+	}
+	public void setOpacity(float opacity) {
+		this.opacity = opacity;
 	}
 	
 }

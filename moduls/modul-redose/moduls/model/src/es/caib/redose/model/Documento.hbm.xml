@@ -30,7 +30,8 @@
         <property name="idioma" type="string" column="DOC_IDIOMA" length="2" />
         <property name="referenciaGestorDocumental" type="string" column="DOC_REFGD"/>
         
-
+		<property name="csv" type="string" column="DOC_CSV" length="50" />
+		
 		<many-to-one name="plantilla" class="es.caib.redose.model.Plantilla" column="DOC_CODPLA" />
 
         <set name="usos" inverse="true" lazy="true" cascade="all-delete-orphan">
