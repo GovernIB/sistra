@@ -1231,3 +1231,13 @@ ALTER table STR_DOMIN MODIFY DOM_URL VARCHAR2(500);
 -- V2.3.7
 ALTER table STR_DOCNIV  ADD DNV_FORGUA VARCHAR2(1) default 'N' not null;
 comment on column STR_DOCNIV.DNV_FORGUA is 'Para Formulario: indica si se permite guardar sin terminar';
+
+-- V3.0.2
+-- SISTRA: DIRECCION INTERESADOS
+alter table STR_ESPNIV add ETN_RTEDAT BLOB;
+alter table STR_ESPNIV add ETN_RDODAT BLOB;
+
+comment on column STR_ESPNIV.ETN_RTEDAT is
+'Datos desglosados representante (nif, nombre, direccion, email,...)';
+comment on column STR_ESPNIV.ETN_RDODAT is
+'Datos desglosados representado (nif, nombre, direccion, email,...)';
