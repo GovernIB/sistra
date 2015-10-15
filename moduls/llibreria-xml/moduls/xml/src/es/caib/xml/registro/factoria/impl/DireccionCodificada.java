@@ -1,5 +1,6 @@
 package es.caib.xml.registro.factoria.impl;
 
+import es.caib.xml.DesbordamientoCampoException;
 import es.caib.xml.EstablecerPropiedadException;
 
 /** Objeto de DireccionCodificada que encapsula el nodo XML DIRECCION_CODIFICADA de los documentos
@@ -22,6 +23,7 @@ public class DireccionCodificada extends NodoRegistroBase {
 	private static final int MAX_LON_TELEFONO = 15;
 	private static final int MAX_LON_FAX = 15;
 	private static final int MAX_LON_PAIS_ORIGEN = 30;
+	private static final int MAX_LON_EMAIL = 160;
 		
 	private String codigoProvincia;
 	private String nombreProvincia;
@@ -34,6 +36,7 @@ public class DireccionCodificada extends NodoRegistroBase {
 	private String telefono;
 	private String fax;
 	private String paisOrigen;
+	private String email;
 	
 	DireccionCodificada(){}	
 	
@@ -225,6 +228,17 @@ public class DireccionCodificada extends NodoRegistroBase {
 
 		this.paisOrigen = paisOrigen;
 	}
+	
+
+	public String getEmail() {
+		return email;
+	}
+
+
+	public void setEmail(String email) throws EstablecerPropiedadException {
+		validaLongitudCampo ("DireccionCodificada", "email", email, MAX_LON_EMAIL);
+		this.email = email;
+	}
 
 	/* (non-Javadoc)
 	 * @see es.caib.xml.NodoXMLObj#comprobarDatosRequeridos()
@@ -311,6 +325,18 @@ public class DireccionCodificada extends NodoRegistroBase {
 				else
 					if ((fax != null) || (faxExt != null)) return false;
 			
+			
+			// Comprobar email
+			String email = getEmail();
+			String emailExt = direccion.getEmail();
+			
+			if ((email != null) || (emailExt != null))
+				if ( (emailExt != null) && (email != null) ){
+					if (!email.equals (emailExt)) return false;
+				}
+				else
+					if ((email != null) || (emailExt != null)) return false;
+			
 			// OK los objetos son equivalentes
 			return true;
 		}
@@ -357,6 +383,8 @@ public class DireccionCodificada extends NodoRegistroBase {
 		// País Origen
 		str.append ("PaisOrigen-" + getPaisOrigen () + ";");
 		 				
+		// Email
+		str.append ("Email-" + getEmail() + ";");
 		
 		return str.toString();
 	}
@@ -367,5 +395,7 @@ public class DireccionCodificada extends NodoRegistroBase {
 	public int hashCode (){
 		return toString ().hashCode();
 	}
+
+
 
 }

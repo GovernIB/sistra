@@ -27,6 +27,8 @@ public class TramiteNivelForm extends TramiteValidatorForm
 	private String campoRteNom;
 	private String campoRdoNif;
 	private String campoRdoNom;
+	private String datosRpte;
+	private String datosRpdo;
 	private String urlFin;	
     private String avisoSMS;
     private String avisoEmail;
@@ -62,6 +64,8 @@ public class TramiteNivelForm extends TramiteValidatorForm
         this.setCampoRdoNif( null );
         this.setCampoRteNom( null );
         this.setCampoRdoNom( null );
+        this.setDatosRpte( null );
+        this.setDatosRpdo( null );
         this.setUrlFin( null );
         this.setAvisoEmail(null);
         this.setAvisoSMS(null);
@@ -236,6 +240,22 @@ public class TramiteNivelForm extends TramiteValidatorForm
 
 	public void setDestinatarioTramite(String destinatarioTramite) {
 		this.destinatarioTramite = destinatarioTramite;
+	}
+
+	public String getDatosRpte() {
+		return datosRpte;
+	}
+
+	public void setDatosRpte(String datosRpte) {
+		this.datosRpte = datosRpte;
+	}
+
+	public String getDatosRpdo() {
+		return datosRpdo;
+	}
+
+	public void setDatosRpdo(String datosRpdo) {
+		this.datosRpdo = datosRpdo;
 	}
 
 }

@@ -19,6 +19,8 @@ public class EspecTramiteNivel  extends Traducible {
      private byte[] campoRteNom;
      private byte[] campoRdoNif;
      private byte[] campoRdoNom;
+     private byte[] datosRpteScript;
+     private byte[] datosRpdoScript;
      private byte[] urlFin;
      // X: Sin especificar (para sobreescribir x nivel) / N: No permite /  S: Permite / O: Obligatoria
      private String habilitarNotificacionTelematica = "X";
@@ -359,6 +361,26 @@ public class EspecTramiteNivel  extends Traducible {
 	public void setPermitirSMSAlertasTramitacion(
 			String permitirSMSAlertasTramitacion) {
 		this.permitirSMSAlertasTramitacion = permitirSMSAlertasTramitacion;
+	}
+
+
+	public byte[] getDatosRpteScript() {
+		return datosRpteScript;
+	}
+
+
+	public void setDatosRpteScript(byte[] datosRpteScript) {
+		this.datosRpteScript = datosRpteScript;
+	}
+
+
+	public byte[] getDatosRpdoScript() {
+		return datosRpdoScript;
+	}
+
+
+	public void setDatosRpdoScript(byte[] datosRpdoScript) {
+		this.datosRpdoScript = datosRpdoScript;
 	}
     
 	

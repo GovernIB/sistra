@@ -202,6 +202,12 @@ public abstract class BaseAction extends Action {
     		
 	    	byte[] campoRdoNom = espec.getCampoRdoNom();
     		pForm.setCampoRdoNom( campoRdoNom != null ? new String( campoRdoNom, ConstantesXML.ENCODING ) : null);
+    		
+    		byte[] datosRpte = espec.getDatosRpteScript();
+    		pForm.setDatosRpte(datosRpte != null ? new String( datosRpte, ConstantesXML.ENCODING ) : null );
+    		
+    		byte[] datosRpdo = espec.getDatosRpdoScript();
+    		pForm.setDatosRpdo(datosRpdo != null ? new String( datosRpdo, ConstantesXML.ENCODING ) : null );
     	
     		byte[] urlFin = espec.getUrlFin();
     		pForm.setUrlFin( urlFin != null ? new String( urlFin, ConstantesXML.ENCODING ) : null);
@@ -312,6 +318,12 @@ public abstract class BaseAction extends Action {
     		
 	    	byte[] campoRdoNom = espec.getCampoRdoNom();
     		pForm.setCampoRdoNom( campoRdoNom != null ? new String( campoRdoNom, ConstantesXML.ENCODING ) : null);
+    		
+    		byte[] datosRpte = espec.getDatosRpteScript();
+    		pForm.setDatosRpte(datosRpte != null ? new String( datosRpte, ConstantesXML.ENCODING ) : null );
+    		
+    		byte[] datosRpdo = espec.getDatosRpdoScript();
+    		pForm.setDatosRpdo(datosRpdo != null ? new String( datosRpdo, ConstantesXML.ENCODING ) : null );
     		
     		byte[] urlFin = espec.getUrlFin();
     		pForm.setUrlFin( urlFin != null ? new String( urlFin, ConstantesXML.ENCODING ) : null);

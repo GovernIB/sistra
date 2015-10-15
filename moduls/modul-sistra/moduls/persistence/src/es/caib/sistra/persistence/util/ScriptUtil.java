@@ -266,6 +266,21 @@ public final class ScriptUtil {
     }
     
     
+   public static byte[] getScriptVersionOrNivel(byte[] scriptVersion, byte[] scriptNivel) {
+	   byte[] res = null;
+	    if (scriptNivel != null && scriptNivel.length > 0){
+	    	res = scriptNivel;
+   		}else{
+   			res = scriptVersion;
+   		} 
+	   return res;
+   }
+   
+   public static boolean existeScript(byte[] script) {
+	   return  (script != null && script.length > 0);
+   }
+    
+    
     //TODO: Quitar estas funciones
     /*
     private static final Pattern ID_PATTERN = Pattern.compile("f_\\w+");

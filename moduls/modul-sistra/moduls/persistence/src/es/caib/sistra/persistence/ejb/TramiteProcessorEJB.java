@@ -47,6 +47,7 @@ import es.caib.sistra.model.ConfiguracionFormulario;
 import es.caib.sistra.model.ConfiguracionGestorFlujoFormulario;
 import es.caib.sistra.model.ConfiguracionTramiteDinamica;
 import es.caib.sistra.model.ConstantesSTR;
+import es.caib.sistra.model.DatosDesglosadosInteresado;
 import es.caib.sistra.model.DatosFormulario;
 import es.caib.sistra.model.DatosPago;
 import es.caib.sistra.model.DatosSesion;
@@ -58,7 +59,6 @@ import es.caib.sistra.model.InstanciaBean;
 import es.caib.sistra.model.MensajeFront;
 import es.caib.sistra.model.MensajePlataforma;
 import es.caib.sistra.model.MensajeTramite;
-import es.caib.sistra.model.NombreInteresado;
 import es.caib.sistra.model.PasoTramitacion;
 import es.caib.sistra.model.RespuestaFront;
 import es.caib.sistra.model.ResultadoRegistrar;
@@ -79,8 +79,8 @@ import es.caib.sistra.persistence.plugins.CalculoPago;
 import es.caib.sistra.persistence.plugins.ConfiguracionDinamica;
 import es.caib.sistra.persistence.plugins.ConfiguracionDinamicaTramitePlugin;
 import es.caib.sistra.persistence.plugins.DatosIniciales;
-import es.caib.sistra.persistence.plugins.DatosInteresadoDesglosado;
 import es.caib.sistra.persistence.plugins.DestinatarioTramite;
+import es.caib.sistra.persistence.plugins.PluginDatosInteresadoDesglosado;
 import es.caib.sistra.persistence.plugins.PluginFormularios;
 import es.caib.sistra.persistence.plugins.PluginPagos;
 import es.caib.sistra.persistence.util.GeneradorAsiento;
@@ -1185,9 +1185,9 @@ public class TramiteProcessorEJB implements SessionBean {
 	    			calc.setModelo("046");
 	    			calc.setConcepto( ((TraDocumento) doc.getTraduccion(datosSesion.getLocale().getLanguage())).getDescripcion());
 	    			calc.setFechaDevengo( StringUtil.fechaACadena(new Date(),CalculoPago.FORMATO_FECHA_DEVENGO));
-	    			calc.setNif(this.calcularNifRepresentante());
-					NombreInteresado nomRpte = this.calcularNombreRepresentante();
-					calc.setNombre(nomRpte!=null?nomRpte.getNombreCompleto():"");
+	    			DatosDesglosadosInteresado datosRpte = this.calcularDatosRepresentante();
+	    			calc.setNif(datosRpte.getNif());
+					calc.setNombre(datosRpte.getApellidosNombre());
 	    			HashMap params = new HashMap();
 	        		params.put("DATOSPAGO",calc);	        		
 	        		evaluarScript(docNivel.getPagoCalcularPagoScript(),params);
@@ -4128,7 +4128,8 @@ public class TramiteProcessorEJB implements SessionBean {
 					// Si esta pendiente de flujo, es que los demas anteriores estan completados
 					if (paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_FLUJO)){
 						// Quién debe registrar es el que aparece como representante
-						String nifRpte = this.calcularNifRepresentante();
+						DatosDesglosadosInteresado datosRpte = this.calcularDatosRepresentante();
+						String nifRpte = datosRpte.getNif();
 						if (!tramite.getDatosSesion().getNifUsuario().equals(nifRpte)){
 							nifFlujo = nifRpte;
 						}						
@@ -4606,7 +4607,8 @@ public class TramiteProcessorEJB implements SessionBean {
     				
     				// Si esta activado el flujo de tramitacion
     				if (tramiteInfo.isFlujoTramitacion()){
-    					if (tramiteInfo.getDatosSesion().getNifUsuario().equals(calcularNifRepresentante())){    							
+    					DatosDesglosadosInteresado datosRpte = this.calcularDatosRepresentante();
+    					if (tramiteInfo.getDatosSesion().getNifUsuario().equals(datosRpte.getNif())){    							
         					completado = PasoTramitacion.ESTADO_PENDIENTE;    					 
         				}else{
        						completado = PasoTramitacion.ESTADO_PENDIENTE_FLUJO;    					
@@ -4832,28 +4834,11 @@ public class TramiteProcessorEJB implements SessionBean {
     private String generarAsiento(DestinatarioTramite dt) throws Exception{
     	
     	// Calculamos datos representante y representado
-    	NombreInteresado rpteNom=null,rpdoNom=null;
-    	String rpteProv=null,rpteLoca=null,rptePais=null,rpdoNif=null,rpteNif=null;    	
-    	
-    	//Datos representante
-		// -- Nif y nombre (puede estar vacío si es anónimo y no va a registro)
-    	rpteNif = this.calcularNifRepresentante();
-    	rpteNom = this.calcularNombreRepresentante();
-    	
-    	// -- Procedencia geográfica (obligatorio para registro)    	
-    	rpteProv= this.calcularProvinciaRepresentante();
-    	rpteLoca= this.calcularLocalidadRepresentante();
-    	rptePais= this.calcularPaisRepresentante();
-    	
-    	// Datos representado
-		// -- Nif y nombre
-    	rpdoNif = this.calcularNifRepresentado();
-    	rpdoNom = this.calcularNombreRepresentado();    	
+    	DatosDesglosadosInteresado datosRpte = this.calcularDatosRepresentante();
+    	DatosDesglosadosInteresado datosRpdo = this.calcularDatosRepresentado();    	    	
     	
     	// Generamos asiento (si hay autenticación, comprueba que quién envia es el usuario autenticado en la sesión)
-    	String xmlAsiento = GeneradorAsiento.generarAsientoRegistral(tramiteInfo,tramiteVersion,tramitePersistentePAD,			
-			rpteNif,rpteNom,rpteProv,rpteLoca,rptePais,
-			rpdoNif,rpdoNom,dt);
+    	String xmlAsiento = GeneradorAsiento.generarAsientoRegistral(tramiteInfo,tramiteVersion,tramitePersistentePAD, datosRpte, datosRpdo, dt);
     	
     	// Almacenamos asiento en el RDS y creamos documento en PAD
     	byte [] datosAsiento = GeneradorAsiento.XMLtoBytes(xmlAsiento);
@@ -5348,92 +5333,6 @@ public class TramiteProcessorEJB implements SessionBean {
 	}
 	
 	/**
-	 * Calcula el nif del representante según el script
-	 * @return
-	 */
-	private String calcularNifRepresentante() throws Exception{
-		
-		String rpteNif="";    	
-    	byte[] scriptRpteNif;
-    	
-    	EspecTramiteNivel especVersion = tramiteVersion.getEspecificaciones();
-    	EspecTramiteNivel especNivel = tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
-    			
-    	if (especNivel.getCampoRteNif() != null && especNivel.getCampoRteNif().length > 0 ){
-    		scriptRpteNif = especNivel.getCampoRteNif();
-    	}else{
-    		scriptRpteNif = especVersion.getCampoRteNif();
-    	}
-    	if (scriptRpteNif != null && scriptRpteNif.length > 0 ){
-    		// Evaluamos script
-    		rpteNif = this.evaluarScript(scriptRpteNif,null);
-    		// El script puede devolver un nif/cif valido o la cadena "NO-NIF" para especificar que no se especificará NIF.
-    		if ("NO-VALOR".equals(rpteNif)) {
-    			rpteNif="";  
-    		} else {	
-	    		// Normalizamos documento de identificación
-	        	rpteNif = NifCif.normalizarDocumento(rpteNif);
-	        	// Si se mete script de representante debe devolver un nif valido
-	    		if (!NifCif.esNIF(rpteNif) && !NifCif.esCIF(rpteNif) && !NifCif.esNIE(rpteNif)) {
-	    			throw new Exception("El script de nif de representante no devuelve un nif/cif/nie valido");
-	    		}
-    		}
-    	}
-    	
-    	return rpteNif;
-	}
-	
-	/**
-	 * Calcula el nombre de representante según el script
-	 * @return
-	 */
-	private NombreInteresado calcularNombreRepresentante() throws Exception{
-		
-		NombreInteresado nombreInteresado = null;
-		String rpteNom="";    	
-    	byte[] scriptRpteNom;
-    	
-    	EspecTramiteNivel especVersion = tramiteVersion.getEspecificaciones();
-    	EspecTramiteNivel especNivel = tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
-    	   
-    	if (especNivel.getCampoRteNom() != null && especNivel.getCampoRteNom().length > 0){
-    		scriptRpteNom = especNivel.getCampoRteNom();
-    	}else{
-    		scriptRpteNom = especVersion.getCampoRteNom();
-    	}
-    	
-    	if (scriptRpteNom != null && scriptRpteNom.length > 0 ){
-    		
-    		HashMap params = new HashMap();
-    		DatosInteresadoDesglosado nomInt = new DatosInteresadoDesglosado();
-    		params.put("DATOS_DESGLOSADOS",nomInt);
-    		rpteNom = this.evaluarScript(scriptRpteNom,params);
-    		
-    		// El script puede devolver un nombre valido (cadena completa o desglosado) o la cadena "NO-VALOR" para especificar que no se especificará nombre.
-    		
-    		if (!"NO-VALOR".equals(rpteNom)) {
-    			 nombreInteresado = new NombreInteresado();
-    			// Verificamos si se ha establecido el nombre de forma desglosada
-    			if (StringUtils.isNotBlank(nomInt.getNombre())) {
-    				nombreInteresado.setNombre(nomInt.getNombre());
-    				nombreInteresado.setApellido1(nomInt.getApellido1());
-    				nombreInteresado.setApellido2(nomInt.getApellido2());    	    				
-    				nombreInteresado.setNombreCompleto(StringUtil.formatearNombreApellidos(
-    						ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM,
-    						nomInt.getNombre(),
-    						nomInt.getApellido1(),
-    						nomInt.getApellido2()));
-    			} else if (!StringUtils.isBlank(rpteNom)) {
-    				nombreInteresado.setNombreCompleto(rpteNom);    				
-    			} else {
-    				throw new Exception("El script de nombre de representante no devuelve un nombre");
-    			}
-    		}
-    	}
-    	return nombreInteresado;
-	}
-	
-	/**
 	 * Calcula destinatario tramite dinamico según el script
 	 * @return
 	 */
@@ -5476,156 +5375,175 @@ public class TramiteProcessorEJB implements SessionBean {
 		return destTra;
 	}
 	
-	/**
-	 * Calcular nif representado según script
-	 * @return
-	 * @throws Exception
-	 */
-	private String calcularNifRepresentado() throws Exception{		
-    	String rpdoNif=null;    	
-    	byte[] scriptRpdoNif;
-    	
-    	EspecTramiteNivel especVersion = tramiteVersion.getEspecificaciones();
-    	EspecTramiteNivel especNivel = tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
-    	
-    	if (especNivel.getCampoRdoNif() != null && especNivel.getCampoRdoNif().length > 0){    	
-    		scriptRpdoNif = especNivel.getCampoRdoNif();
-    	}else{
-    		scriptRpdoNif = especVersion.getCampoRdoNif();
-    	}
-    	if (scriptRpdoNif != null && scriptRpdoNif.length > 0){    	
-    		rpdoNif = this.evaluarScript(scriptRpdoNif,null);
-        	if (StringUtils.isEmpty ( rpdoNif )){
-        		return null;
-        	}
-        	rpdoNif = rpdoNif.toUpperCase();
-        	
-        	// Normalizamos documento de identificación
-        	rpdoNif = NifCif.normalizarDocumento(rpdoNif);
-        	
-        	// Si se mete valor debe devolver un nif valido
-    		if (!NifCif.esNIF(rpdoNif) && !NifCif.esCIF(rpdoNif) && !NifCif.esNIE(rpdoNif)) {
-    			throw new Exception("El script de nif de representado no devuelve un nif/cif/nie valido");
-    		}
-        	
-    	}    	
-    	return rpdoNif;
-	}
-	
 	
 	/**
-	 * Calcular nif representado según script
-	 * @return
+	 * Calcula datos representado.
+	 * @return datos representado, nulo si no existe
 	 * @throws Exception
 	 */
-	private NombreInteresado calcularNombreRepresentado() throws Exception{		
+	private DatosDesglosadosInteresado calcularDatosRepresentado() throws Exception{		
 		
-		NombreInteresado nombreInteresado = null;
-	   	String rpdoNom=null;    	
-		byte[] scriptRpdoNom;
+		DatosDesglosadosInteresado datosRpdo = null;
 		
 		EspecTramiteNivel especVersion = tramiteVersion.getEspecificaciones();
 		EspecTramiteNivel especNivel = tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
-			
-    	if (especNivel.getCampoRdoNom() != null && especNivel.getCampoRdoNom().length > 0){
-    		scriptRpdoNom = especNivel.getCampoRdoNom();
-    	}else{
-    		scriptRpdoNom = especVersion.getCampoRdoNom();
-    	}        	
-    	if (scriptRpdoNom != null && scriptRpdoNom.length > 0 ){   
-    		HashMap params = new HashMap();
-    		DatosInteresadoDesglosado nomInt = new DatosInteresadoDesglosado();
-    		params.put("DATOS_DESGLOSADOS",nomInt);
-    		rpdoNom = this.evaluarScript(scriptRpdoNom,params);
-    		
-    		nombreInteresado = new NombreInteresado();
-    		nombreInteresado.setNombreCompleto(rpdoNom);
-    		
-    		// Verificamos si se ha establecido el nombre de forma desglosada
-			if (StringUtils.isNotBlank(nomInt.getNombre())) {
-				nombreInteresado.setNombre(nomInt.getNombre());
-				nombreInteresado.setApellido1(nomInt.getApellido1());
-				nombreInteresado.setApellido2(nomInt.getApellido2());    	
-				nombreInteresado.setNombreCompleto(StringUtil.formatearNombreApellidos(
-						ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM,
-						nomInt.getNombre(),
-						nomInt.getApellido1(),
-						nomInt.getApellido2()));
+
+		// Comprobamos si se ha de ejecutar script de nombre o de datos desglosados
+		byte [] scriptDatosDesglosados = ScriptUtil.getScriptVersionOrNivel(especVersion.getDatosRpdoScript(),especNivel.getDatosRpdoScript());
+		boolean datosDesglosados = ScriptUtil.existeScript(scriptDatosDesglosados) ;
+		
+		// Si tiene script de datos desglosados, ejecutamos script unico
+		if (datosDesglosados) {
+			// Script de datos desglosados (new style)
+			datosRpdo = ejecutarScriptDatosDesglosadosInteresado(scriptDatosDesglosados);    		
+		} else {		
+			// Si no, ejecutamos los distintos scripts (nif, nombre,...)
+			// - Nif
+			String rpdoNif="";
+			byte [] scriptRpdoNif = ScriptUtil.getScriptVersionOrNivel(especVersion.getCampoRdoNif(),especNivel.getCampoRdoNif());
+			if (ScriptUtil.existeScript(scriptRpdoNif)){
+				rpdoNif = this.evaluarScript(scriptRpdoNif,null);
+	    		// El script puede devolver un nif/cif valido o la cadena "NO-VALOR" para especificar que no se especificará NIF.
+	    		if (StringUtils.isNotBlank(rpdoNif)) {
+	    			// Normalizamos documento de identificación
+	    			datosRpdo = new DatosDesglosadosInteresado();
+	    			datosRpdo.setAnonimo(false);
+		        	rpdoNif = NifCif.normalizarDocumento(rpdoNif);
+	    		}
 			}
-    		
-    		
-    	}    	
-    	return nombreInteresado;
+			// - Nombre
+			byte [] scriptRpdoNom = ScriptUtil.getScriptVersionOrNivel(especVersion.getCampoRdoNom(),especNivel.getCampoRdoNom());
+			if (datosRpdo != null && ScriptUtil.existeScript(scriptRpdoNom)){
+				String rpdoNom = this.evaluarScript(scriptRpdoNom,null);
+				datosRpdo.setApellidosNombre(rpdoNom);				
+			}			
+		}
+		
+		// Validaciones
+		// - Si no es anonimo, 
+		if (datosRpdo != null) {
+			// debe devolver un nif valido
+			if (!NifCif.esNIF(datosRpdo.getNif()) && !NifCif.esCIF(datosRpdo.getNif()) && !NifCif.esNIE(datosRpdo.getNif())) {		
+				throw new Exception("Los scripts de representado no devuelven un nif/cif/nie valido");
+			}
+			// debe devolver un nombre (completo o desglosado)
+			if (StringUtils.isBlank(datosRpdo.getApellidosNombre()) && StringUtils.isBlank(datosRpdo.getNombre())){
+				throw new Exception("Los scripts de representado no establecen el nombre");
+			}
+		}
+		
+		return datosRpdo;
+		
 	}
 	
+	
 	/**
-	 * Calcula provincia representante según script
-	 * @return
+	 * Calcula datos representante.
+	 * @return datos representante
 	 * @throws Exception
 	 */
-	private String calcularProvinciaRepresentante() throws Exception{	
-		String rpteProv=null;    	
-		byte[] scriptRpteProv;
+	private DatosDesglosadosInteresado calcularDatosRepresentante() throws Exception{		
+		
+		DatosDesglosadosInteresado datosRpte = null;
 		
 		EspecTramiteNivel especVersion = tramiteVersion.getEspecificaciones();
 		EspecTramiteNivel especNivel = tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
+
+		// Comprobamos si se ha de ejecutar script de nombre o de datos desglosados
+		byte [] scriptDatosDesglosados = ScriptUtil.getScriptVersionOrNivel(especVersion.getDatosRpteScript(),especNivel.getDatosRpteScript());
+		boolean datosDesglosados = ScriptUtil.existeScript(scriptDatosDesglosados) ;
 		
-		if (especNivel.getCampoCodigoProvincia() != null && especNivel.getCampoCodigoProvincia().length > 0){
-			scriptRpteProv = especNivel.getCampoCodigoProvincia();
-		}else{
-			scriptRpteProv = especVersion.getCampoCodigoProvincia();
+		// Si tiene script de datos desglosados, ejecutamos script unico
+		if (datosDesglosados) {
+			// Script de datos desglosados (new style)
+			datosRpte = ejecutarScriptDatosDesglosadosInteresado(scriptDatosDesglosados);    		
+		} else {		
+			// Si no, ejecutamos los distintos scripts (nif, nombre,...)
+			datosRpte = new DatosDesglosadosInteresado();
+			datosRpte.setAnonimo(true);
+			// - Nif
+			String rpteNif="";
+			byte [] scriptRpteNif = ScriptUtil.getScriptVersionOrNivel(especVersion.getCampoRteNif(),especNivel.getCampoRteNif());
+			if (ScriptUtil.existeScript(scriptRpteNif)){
+				rpteNif = this.evaluarScript(scriptRpteNif,null);
+	    		// El script puede devolver un nif/cif valido o la cadena "NO-VALOR" para especificar que no se especificará NIF.
+	    		if (!("NO-VALOR".equals(rpteNif))) {
+	    			// Normalizamos documento de identificación
+	    			datosRpte.setAnonimo(false);
+		        	rpteNif = NifCif.normalizarDocumento(rpteNif);
+	    		}
+			}
+			// - Nombre
+			byte [] scriptRpteNom = ScriptUtil.getScriptVersionOrNivel(especVersion.getCampoRteNom(),especNivel.getCampoRteNom());
+			if (!datosRpte.isAnonimo() && ScriptUtil.existeScript(scriptRpteNom)){
+				String rpteNom = this.evaluarScript(scriptRpteNom,null);
+				if (!("NO-VALOR".equals(rpteNom))){
+					datosRpte.setApellidosNombre(rpteNom);
+				}
+			}
+			// - Procedencia geografica
+			byte [] scriptPais = ScriptUtil.getScriptVersionOrNivel(especVersion.getCampoCodigoPais(),especNivel.getCampoCodigoPais());
+			if (ScriptUtil.existeScript(scriptPais)){
+				String pais = this.evaluarScript(scriptPais,null);
+				datosRpte.setCodigoPais(pais);				
+			}
+			byte [] scriptProvincia = ScriptUtil.getScriptVersionOrNivel(especVersion.getCampoCodigoProvincia(),especNivel.getCampoCodigoProvincia());
+			if (ScriptUtil.existeScript(scriptProvincia)){
+				String codigoProvincia = this.evaluarScript(scriptProvincia,null);
+				datosRpte.setCodigoProvincia(codigoProvincia);				
+			}
+			byte [] scriptMunicipio = ScriptUtil.getScriptVersionOrNivel(especVersion.getCampoCodigoLocalidad(),especNivel.getCampoCodigoLocalidad());
+			if (ScriptUtil.existeScript(scriptMunicipio)){
+				String codigoMunicipio = this.evaluarScript(scriptMunicipio,null);
+				datosRpte.setCodigoMunicipio(codigoMunicipio);				
+			}
 		}
-		if (scriptRpteProv != null && scriptRpteProv.length > 0 ){
-			rpteProv = this.evaluarScript(scriptRpteProv,null);
+		
+		// Validaciones
+		// - Si no es anonimo, 
+		if (!datosRpte.isAnonimo()) {
+			// debe devolver un nif valido
+			if (!NifCif.esNIF(datosRpte.getNif()) && !NifCif.esCIF(datosRpte.getNif()) && !NifCif.esNIE(datosRpte.getNif())) {		
+				throw new Exception("Los scripts de representante no devuelven un nif/cif/nie valido");
+			}
+			// debe devolver un nombre (completo o desglosado)
+			if (StringUtils.isBlank(datosRpte.getApellidosNombre()) && StringUtils.isBlank(datosRpte.getNombre())){
+				throw new Exception("Los scripts de representante no establecen el nombre");
+			}
 		}
-		return rpteProv;
+		
+		return datosRpte;
+		
 	}
-	
-	/**
-	 * Calcula localidad representante según script
-	 * @return
-	 * @throws Exception
-	 */
-	private String calcularLocalidadRepresentante() throws Exception{	
-		String rpteLoca=null;    	
-		byte[] scriptRpteLoca;
-		
-		EspecTramiteNivel especVersion = tramiteVersion.getEspecificaciones();
-		EspecTramiteNivel especNivel = tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
-		
-		if (especNivel.getCampoCodigoLocalidad() != null && especNivel.getCampoCodigoLocalidad().length > 0){
-			scriptRpteLoca = especNivel.getCampoCodigoLocalidad();
-		}else{
-			scriptRpteLoca = especVersion.getCampoCodigoLocalidad();
+
+	private DatosDesglosadosInteresado ejecutarScriptDatosDesglosadosInteresado(byte[] scriptDatosDesglosados)
+			throws ProcessorException, Exception {
+		DatosDesglosadosInteresado datosInt = new DatosDesglosadosInteresado();		
+		HashMap params = new HashMap();
+		PluginDatosInteresadoDesglosado resultScript = new PluginDatosInteresadoDesglosado();
+		params.put("INTERESADO",resultScript);
+		this.evaluarScript(scriptDatosDesglosados,params);
+		datosInt.setAnonimo(resultScript.isAnonimo());
+		datosInt.setNif(NifCif.normalizarDocumento(resultScript.getNif()));
+		datosInt.setNombre(resultScript.getNombre());
+		datosInt.setApellido1(resultScript.getApellido1());
+		datosInt.setApellido2(resultScript.getApellido2());
+		if (!resultScript.isAnonimo() && StringUtils.isBlank(resultScript.getApellidosNombre())) {
+			datosInt.setApellidosNombre(StringUtil.formatearNombreApellidos(
+				ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM,
+				resultScript.getNombre(),
+				resultScript.getApellido1(),
+				resultScript.getApellido2()));    		
 		}
-		if (scriptRpteLoca != null && scriptRpteLoca.length > 0 ){
-			rpteLoca = this.evaluarScript(scriptRpteLoca,null);
-		}
-		return rpteLoca;
-	}
-	
-	/**
-	 * Calcula pais representante según script
-	 * @return
-	 * @throws Exception
-	 */
-	private String calcularPaisRepresentante() throws Exception{	
-		String rptePais=null;    	
-		byte[] scriptRptePais;
-		
-		EspecTramiteNivel especVersion = tramiteVersion.getEspecificaciones();
-		EspecTramiteNivel especNivel = tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
-		
-		if (especNivel.getCampoCodigoPais() != null && especNivel.getCampoCodigoPais().length > 0){
-			scriptRptePais = especNivel.getCampoCodigoPais();
-		}else{
-			scriptRptePais = especVersion.getCampoCodigoPais();
-		}
-		if (scriptRptePais != null && scriptRptePais.length > 0 ){
-			rptePais = this.evaluarScript(scriptRptePais,null);
-		}
-		return rptePais;
-	}
+		datosInt.setCodigoPais(resultScript.getCodigoPais());
+		datosInt.setCodigoProvincia(resultScript.getCodigoProvincia());
+		datosInt.setCodigoMunicipio(resultScript.getCodigoLocalidad());
+		datosInt.setDireccion(resultScript.getDireccion());
+		datosInt.setCodigoPostal(resultScript.getCodigoPostal());
+		datosInt.setTelefono(resultScript.getTelefono());
+		datosInt.setEmail(resultScript.getEmail());
+		return datosInt;
+	}			
 	
 	/**
 	 * Obtiene fecha caducidad del trámite en función de los dias de persistencia

@@ -30,11 +30,14 @@ public class EspecificacionesGenericasForm extends TraduccionValidatorForm
 	private String campoRteNom;
 	private String campoRdoNif;
 	private String campoRdoNom;
+	private String datosRpte;
+	private String datosRpdo;
 	private String urlFin;
     private String avisoSMS;
     private String avisoEmail;
     private String checkEnvio;
     private String destinatarioTramite;
+    
 
     public String getDestinatarioTramite() {
 		return destinatarioTramite;
@@ -98,6 +101,8 @@ public class EspecificacionesGenericasForm extends TraduccionValidatorForm
 		setCampoRteNom(null);
 		setCampoRdoNif(null);
 		setCampoRdoNom(null);
+		setDatosRpte(null);
+		setDatosRpdo(null);
 		setUrlFin(null);
 		setAvisoEmail(null);
 		setAvisoSMS(null);
@@ -265,6 +270,22 @@ public class EspecificacionesGenericasForm extends TraduccionValidatorForm
 
 	public void setCheckEnvio(String checkEnvio) {
 		this.checkEnvio = checkEnvio;
+	}
+
+	public String getDatosRpte() {
+		return datosRpte;
+	}
+
+	public void setDatosRpte(String datosRpte) {
+		this.datosRpte = datosRpte;
+	}
+
+	public String getDatosRpdo() {
+		return datosRpdo;
+	}
+
+	public void setDatosRpdo(String datosRpdo) {
+		this.datosRpdo = datosRpdo;
 	}	
 
 }

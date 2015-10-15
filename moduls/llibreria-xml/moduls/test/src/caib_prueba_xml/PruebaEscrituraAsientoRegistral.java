@@ -63,18 +63,20 @@ public class PruebaEscrituraAsientoRegistral {
 			IdentificacionInteresadoDesglosada identificacionInteresadoDesglosada = factoria.crearIdentificacionInteresadoDesglosada();
 			identificacionInteresadoDesglosada.setNombre("nombre");
 			identificacionInteresadoDesglosada.setApellido1("apellido 1");
-			identificacionInteresadoDesglosada.setApellido2("apellido 2");
-			
+			identificacionInteresadoDesglosada.setApellido2("apellido 2");						
 			dInteresado.setIdentificacionInteresadoDesglosada(identificacionInteresadoDesglosada );
+			
 			
 			DireccionCodificada direccion = factoria.crearDireccionCodificada();
 			direccion.setCodigoProvincia("01");
 			direccion.setCodigoMunicipio("02");
 			direccion.setPaisOrigen("es");
 			//direccion.setNombreMunicipio("Municipio");
-			//direccion.setDomicilio ("Calle");
+			direccion.setDomicilio ("Calle del Pez, num. 71");
+			direccion.setCodigoPostal("46020");
+			direccion.setTelefono("961234567");
+			direccion.setEmail("email@aa.es");
 			dInteresado.setDireccionCodificada (direccion);
-			
 			asiento.getDatosInteresado().add (dInteresado);								
 									
 			// Datos delegado
@@ -84,7 +86,7 @@ public class PruebaEscrituraAsientoRegistral {
 			dDelegado.setTipoIdentificacion (new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE));
 			//dInteresado.setNumeroIdentificacion ("1111111Z");
 			dDelegado.setNumeroIdentificacion ("");
-			dDelegado.setFormatoDatosInteresado (ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
+			dDelegado.setFormatoDatosInteresado (ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);			
 			//dInteresado.setIdentificacionInteresado ("Nombre Apellido");											
 			dDelegado.setIdentificacionInteresado ("Apellido1 Apellido2, Nombre");
 			

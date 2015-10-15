@@ -71,6 +71,8 @@ public class EditarEspecificacionesGenericasAction extends BaseAction{
             espec.setCampoRteNom( especificacionesGenericasForm.getCampoRteNom().getBytes(ConstantesXML.ENCODING) );
             espec.setCampoRdoNif( especificacionesGenericasForm.getCampoRdoNif().getBytes(ConstantesXML.ENCODING) );
             espec.setCampoRdoNom( especificacionesGenericasForm.getCampoRdoNom().getBytes(ConstantesXML.ENCODING) );
+            espec.setDatosRpteScript(especificacionesGenericasForm.getDatosRpte().getBytes(ConstantesXML.ENCODING) );
+            espec.setDatosRpdoScript(especificacionesGenericasForm.getDatosRpdo().getBytes(ConstantesXML.ENCODING) );
             espec.setUrlFin( especificacionesGenericasForm.getUrlFin().getBytes(ConstantesXML.ENCODING) );
             espec.setAvisoEmail( StringUtils.defaultString(especificacionesGenericasForm.getAvisoEmail()).getBytes(ConstantesXML.ENCODING) );
             espec.setAvisoSMS( StringUtils.defaultString(especificacionesGenericasForm.getAvisoSMS()).getBytes(ConstantesXML.ENCODING) );

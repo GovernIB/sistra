@@ -530,7 +530,8 @@ public class FactoriaObjetosXMLRegistroImpl
 			direccion.setNombreProvincia (direccionJAXB.getNOMBREPROVINCIA ());
 			direccion.setPaisOrigen (direccionJAXB.getPAISORIGEN ());
 			direccion.setTelefono (direccionJAXB.getTELEFONO ());
-			direccion.setFAX (direccionJAXB.getFAX ());			
+			direccion.setFAX (direccionJAXB.getFAX ());		
+			direccion.setEmail(direccionJAXB.getEMAIL());
 		}
 		
 		return direccion;
@@ -757,6 +758,7 @@ public class FactoriaObjetosXMLRegistroImpl
 			direccionCodificadaRaw.setNOMBREPROVINCIA (direccionCodificada.getNombreProvincia());
 			direccionCodificadaRaw.setPAISORIGEN (direccionCodificada.getPaisOrigen());
 			direccionCodificadaRaw.setTELEFONO (direccionCodificada.getTelefono());
+			direccionCodificadaRaw.setEMAIL(direccionCodificada.getEmail());	
 		}
 		
 		return direccionCodificadaRaw;

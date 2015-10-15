@@ -19,9 +19,9 @@ import es.caib.regtel.model.ValorOrganismo;
 import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
 import es.caib.sistra.model.ConstantesSTR;
 import es.caib.sistra.model.DatoJustificante;
+import es.caib.sistra.model.DatosDesglosadosInteresado;
 import es.caib.sistra.model.DocumentoFront;
 import es.caib.sistra.model.EspecTramiteNivel;
-import es.caib.sistra.model.NombreInteresado;
 import es.caib.sistra.model.ReferenciaCampo;
 import es.caib.sistra.model.TraDatoJustificante;
 import es.caib.sistra.model.TraTramite;
@@ -84,9 +84,8 @@ public class GeneradorAsiento {
 	 */
 	public static String generarAsientoRegistral(
 			TramiteFront tramiteInfo,
-			TramiteVersion tramiteVersion,TramitePersistentePAD tramitePAD,			
-			String rpteNif,NombreInteresado rpteNom,String rpteProv,String rpteLoca,String rptePais,
-			String rpdoNif,NombreInteresado rpdoNombre, DestinatarioTramite dt) throws Exception{		
+			TramiteVersion tramiteVersion,TramitePersistentePAD tramitePAD,	
+			DatosDesglosadosInteresado datosRpte, DatosDesglosadosInteresado datosRpdo, DestinatarioTramite dt) throws Exception{		
 		
 		try{
 			RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
@@ -125,20 +124,17 @@ public class GeneradorAsiento {
 
 			// Si el trámite es autenticado se requiere nif y nombre
 			boolean requiereRpte = (tramitePAD.getNivelAutenticacion() != 'A');
-	    	if ( StringUtils.isBlank(rpteNif) && requiereRpte){
-	    		throw new Exception("El nif del rpte no puede estar vacío");
+	    	if ( datosRpte.isAnonimo() && requiereRpte){
+	    		throw new Exception("Debe indicarse los datos del representante");
 	    	}
-	    	if ( (rpteNom == null || StringUtils.isBlank (rpteNom.getNombreCompleto())) && requiereRpte){
-				throw new Exception("El nombre del rpte no puede estar vacío");
-			}
 	    	
 			dInteresadoRpte.setNivelAutenticacion(new Character(tramiteInfo.getDatosSesion().getNivelAutenticacion()));
 			if (tramiteInfo.getDatosSesion().getNivelAutenticacion() != 'A'){
 				dInteresadoRpte.setUsuarioSeycon(tramiteInfo.getDatosSesion().getCodigoUsuario());						
 			}
 			dInteresadoRpte.setTipoInteresado (ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTANTE);		
-			if (StringUtils.isNotEmpty(rpteNif)){
-				switch (NifCif.validaDocumento(rpteNif)){
+			if (StringUtils.isNotEmpty(datosRpte.getNif())){
+				switch (NifCif.validaDocumento(datosRpte.getNif())){
 					case NifCif.TIPO_DOCUMENTO_NIF:
 						dInteresadoRpte.setTipoIdentificacion (new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIF));
 						break;
@@ -154,67 +150,33 @@ public class GeneradorAsiento {
 			}else{
 				dInteresadoRpte.setTipoIdentificacion (new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIF));
 			}
-			dInteresadoRpte.setNumeroIdentificacion (rpteNif);
+			dInteresadoRpte.setNumeroIdentificacion (datosRpte.getNif());
 			dInteresadoRpte.setFormatoDatosInteresado (ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
+						
+			dInteresadoRpte.setIdentificacionInteresado (datosRpte.getApellidosNombre());
 			
-			if (rpteNom != null) {
-				dInteresadoRpte.setIdentificacionInteresado (rpteNom.getNombreCompleto());
-				
-				if (StringUtils.isNotBlank(rpteNom.getNombre())) {
-					IdentificacionInteresadoDesglosada identificacionInteresadoDesglosada = factoria.crearIdentificacionInteresadoDesglosada();
-					identificacionInteresadoDesglosada.setNombre(rpteNom.getNombre());
-					identificacionInteresadoDesglosada.setApellido1(rpteNom.getApellido1());
-					identificacionInteresadoDesglosada.setApellido2(rpteNom.getApellido2());
-					dInteresadoRpte.setIdentificacionInteresadoDesglosada(identificacionInteresadoDesglosada);
-				}
-			} else {
-				dInteresadoRpte.setIdentificacionInteresado ("");
+			if (StringUtils.isNotBlank(datosRpte.getNombre())) {
+				IdentificacionInteresadoDesglosada identificacionInteresadoDesglosada = factoria.crearIdentificacionInteresadoDesglosada();
+				identificacionInteresadoDesglosada.setNombre(datosRpte.getNombre());
+				identificacionInteresadoDesglosada.setApellido1(datosRpte.getApellido1());
+				identificacionInteresadoDesglosada.setApellido2(datosRpte.getApellido2());
+				dInteresadoRpte.setIdentificacionInteresadoDesglosada(identificacionInteresadoDesglosada);
 			}
-			
-			// Verificamos datos procedencia geográfica
-	    	if (StringUtils.isNotEmpty(rptePais)){
-	    		
-	    		rptePais = rptePais.toUpperCase();
-	    		
-	    		//  Codigo pais (para España permitimos código "ES" o "ESP")
-	    		if (rptePais.equals("ES") || rptePais.equals("ESP")) rptePais = ConstantesSTR.CODIGO_PAIS_ESPANYA;	    		
-	    		if (rptePais.length() != 3) throw new Exception("El código de país no contiene un código de 3 carácteres (ver tabla países): " + rptePais);
-	    		
-	    		// Si pais no es España no se toman en cuenta el codigo de provincia / municipio
-	    		if (!"ESP".equals(rptePais)){
-	    			rpteLoca = "";
-	    			rpteProv = "";
-	    		}
-	    	}
-	    	
-	    	// Verificamos que si el destino es registro se haya especificado la info geografica
+		
+			// Verificamos que si el destino es registro se haya especificado la info geografica
 	    	if (tramiteVersion.getDestino() == ConstantesSTR.DESTINO_REGISTRO){
-	    		if (StringUtils.isEmpty(rptePais)) {
+	    		if (StringUtils.isEmpty(datosRpte.getCodigoPais())) {
 	    			throw new Exception("No se ha establecido correctamente la información geográfica del representante: no se ha especificado código país");
 	    		}
-	    		if (rptePais.equals(ConstantesSTR.CODIGO_PAIS_ESPANYA)){
-	    			if (StringUtils.isEmpty(rpteLoca) || StringUtils.isEmpty(rpteProv)){
+	    		if (esEspanya(datosRpte.getCodigoPais())){
+	    			if (StringUtils.isEmpty(datosRpte.getCodigoProvincia()) || StringUtils.isEmpty(datosRpte.getCodigoMunicipio())){
 	    				throw new Exception("No se ha establecido correctamente la información geográfica del representante: no se ha especificado código localidad o de provincia");
 	    			}
 	    		}    		    	
-	    	}			
+	    	}				    	
 			
-	    	// Establecemos la info geografica
-	    	if (StringUtils.isNotEmpty(rptePais)){
-	    		DireccionCodificada direccion = factoria.crearDireccionCodificada();
-				direccion.setCodigoProvincia(rpteProv);
-				direccion.setCodigoMunicipio(rpteLoca);
-				direccion.setPaisOrigen(rptePais);
-				if (rptePais.equals(ConstantesSTR.CODIGO_PAIS_ESPANYA)){
-					if (!StringUtils.isEmpty(rpteLoca)){
-						direccion.setNombreMunicipio( obtenerNombreMunicipio ( rpteProv, rpteLoca ) );
-					}
-					if (!StringUtils.isEmpty(rpteProv)) {
-						direccion.setNombreProvincia( obtenerNombreProvincia ( rpteProv ) );
-					}
-				}
-				dInteresadoRpte.setDireccionCodificada(direccion);
-			}
+	    	// Establecemos info de direccion
+	    	dInteresadoRpte.setDireccionCodificada(generarDireccionCodificada(factoria, datosRpte));
 			
 			asiento.getDatosInteresado().add(dInteresadoRpte);
 			
@@ -235,10 +197,10 @@ public class GeneradorAsiento {
 	    	
 			
 			// Creamos datos representado (si corresponde)
-			if (rpdoNif != null && !rpteNif.equals(rpdoNif)){
+			if (datosRpdo != null && !datosRpte.getNif().equals(datosRpdo.getNif())){
 				dInteresadoRpdo = factoria.crearDatosInteresado();
 				dInteresadoRpdo.setTipoInteresado (ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTADO);		
-				switch (NifCif.validaDocumento(rpdoNif)){
+				switch (NifCif.validaDocumento(datosRpdo.getNif())){
 					case NifCif.TIPO_DOCUMENTO_NIF:
 						dInteresadoRpdo.setTipoIdentificacion (new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIF));
 						break;
@@ -251,21 +213,24 @@ public class GeneradorAsiento {
 					default:
 						throw new Exception("El número de identificación del representado ni es nif, ni cif, ni nie");
 				}					
-				dInteresadoRpdo.setNumeroIdentificacion (rpdoNif);
+				dInteresadoRpdo.setNumeroIdentificacion (datosRpdo.getNif());
 				dInteresadoRpdo.setFormatoDatosInteresado (ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
-				if (rpdoNombre == null || StringUtils.isEmpty (rpdoNombre.getNombreCompleto())){
+				if (StringUtils.isEmpty (datosRpdo.getApellidosNombre())){
 		    		throw new Exception("Se ha indicado el nif del representado pero no el nombre");
 		    	}   				
 				
-				dInteresadoRpdo.setIdentificacionInteresado (rpdoNombre.getNombreCompleto());
+				dInteresadoRpdo.setIdentificacionInteresado (datosRpdo.getApellidosNombre());
 				
-				if (StringUtils.isNotBlank(rpdoNombre.getNombre())) {
+				if (StringUtils.isNotBlank(datosRpdo.getNombre())) {
 					IdentificacionInteresadoDesglosada identificacionInteresadoDesglosada = factoria.crearIdentificacionInteresadoDesglosada();
-					identificacionInteresadoDesglosada.setNombre(rpdoNombre.getNombre());
-					identificacionInteresadoDesglosada.setApellido1(rpdoNombre.getApellido1());
-					identificacionInteresadoDesglosada.setApellido2(rpdoNombre.getApellido2());
+					identificacionInteresadoDesglosada.setNombre(datosRpdo.getNombre());
+					identificacionInteresadoDesglosada.setApellido1(datosRpdo.getApellido1());
+					identificacionInteresadoDesglosada.setApellido2(datosRpdo.getApellido2());
 					dInteresadoRpdo.setIdentificacionInteresadoDesglosada(identificacionInteresadoDesglosada);
 				}
+				
+				// Establecemos info de direccion
+				dInteresadoRpdo.setDireccionCodificada(generarDireccionCodificada(factoria, datosRpdo));
 				
 				asiento.getDatosInteresado().add(dInteresadoRpdo);				
 			}
@@ -368,6 +333,8 @@ public class GeneradorAsiento {
 		}
 		
 	}
+
+	
 	
 	/**
 	 * Genera XML de datos propios
@@ -1027,4 +994,38 @@ public class GeneradorAsiento {
 		else return scriptGenerico;
 	}
 	
+	private static boolean esEspanya(String codigoPais) {
+		return codigoPais != null && ("ES".equals(codigoPais.toUpperCase()) || "ESP".equals(codigoPais.toUpperCase()));	
+	}
+	
+	private static DireccionCodificada generarDireccionCodificada(
+			FactoriaObjetosXMLRegistro factoria,
+			DatosDesglosadosInteresado datosInt)
+			throws Exception {
+		DireccionCodificada direccion = null;
+		boolean hayDireccion = (StringUtils.isNotEmpty(datosInt.getCodigoPais()) || StringUtils.isNotEmpty(datosInt.getTelefono()) || 
+				 StringUtils.isNotEmpty(datosInt.getEmail()));
+		if (hayDireccion){
+			direccion = factoria.crearDireccionCodificada();
+			if (StringUtils.isNotEmpty(datosInt.getCodigoPais())) {
+				if (esEspanya(datosInt.getCodigoPais())) {
+					direccion.setPaisOrigen(ConstantesSTR.CODIGO_PAIS_ESPANYA);
+					direccion.setCodigoProvincia(datosInt.getCodigoProvincia());
+					direccion.setCodigoMunicipio(datosInt.getCodigoMunicipio());
+					direccion.setNombreMunicipio( obtenerNombreMunicipio ( datosInt.getCodigoProvincia(), datosInt.getCodigoMunicipio() ) );
+					direccion.setNombreProvincia( obtenerNombreProvincia ( datosInt.getCodigoProvincia() ) );						
+				} else {
+					if (datosInt.getCodigoPais().length() != 3) {
+			    		throw new Exception("El código de país no contiene un código de 3 carácteres (ver tabla países): " + datosInt.getCodigoPais());	    			    					    	
+			    	}
+					direccion.setPaisOrigen(datosInt.getCodigoPais().toUpperCase());
+				}
+			}
+			direccion.setDomicilio(datosInt.getDireccion());
+			direccion.setCodigoPostal(datosInt.getCodigoPostal());	    	
+			direccion.setTelefono(datosInt.getTelefono());
+			direccion.setEmail(datosInt.getEmail());				
+		}
+		return direccion;
+	}
 }

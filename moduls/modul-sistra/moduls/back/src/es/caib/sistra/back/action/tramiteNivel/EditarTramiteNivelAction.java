@@ -81,6 +81,8 @@ public class EditarTramiteNivelAction extends BaseAction{
             tramiteNivel.getEspecificaciones().setCampoRteNom( tramiteNivelForm.getCampoRteNom().getBytes(ConstantesXML.ENCODING) );
             tramiteNivel.getEspecificaciones().setCampoRdoNif( tramiteNivelForm.getCampoRdoNif().getBytes(ConstantesXML.ENCODING) );
             tramiteNivel.getEspecificaciones().setCampoRdoNom( tramiteNivelForm.getCampoRdoNom().getBytes(ConstantesXML.ENCODING) );
+            tramiteNivel.getEspecificaciones().setDatosRpteScript(tramiteNivelForm.getDatosRpte().getBytes(ConstantesXML.ENCODING) );
+            tramiteNivel.getEspecificaciones().setDatosRpdoScript(tramiteNivelForm.getDatosRpdo().getBytes(ConstantesXML.ENCODING) );
             tramiteNivel.getEspecificaciones().setUrlFin( tramiteNivelForm.getUrlFin().getBytes(ConstantesXML.ENCODING) );
             tramiteNivel.getEspecificaciones().setAvisoEmail( StringUtils.defaultString(tramiteNivelForm.getAvisoEmail()).getBytes(ConstantesXML.ENCODING) );
             tramiteNivel.getEspecificaciones().setAvisoSMS( StringUtils.defaultString(tramiteNivelForm.getAvisoSMS()).getBytes(ConstantesXML.ENCODING) );
