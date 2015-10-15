@@ -97,6 +97,7 @@
         <xs:element minOccurs="0" ref="TELEFONO"/>
         <xs:element minOccurs="0" ref="FAX"/>
         <xs:element minOccurs="0" ref="PAIS_ORIGEN"/>
+        <xs:element minOccurs="0" ref="EMAIL"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -111,6 +112,7 @@
   <xs:element name="TELEFONO" type="xs:string"/>
   <xs:element name="FAX" type="xs:string"/>
   <xs:element name="PAIS_ORIGEN" type="xs:string"/>
+  <xs:element name="EMAIL" type="xs:string"/>
   <xs:element name="DATOS_ASUNTO">
     <xs:complexType>
       <xs:sequence>

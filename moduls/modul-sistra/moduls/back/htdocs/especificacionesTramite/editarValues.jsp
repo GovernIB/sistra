@@ -77,6 +77,10 @@
     <td class="input"><html:textarea tabindex="10" property="campoRteNom" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=campoRteNom&titulo=especificacionesTramite.campoRteNom" %>');"/></td>
 </tr>
 <tr>
+    <td class="label"><bean:message key="especificacionesTramite.datosRte"/></td>
+    <td class="input"><html:textarea tabindex="10" property="datosRpte" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=datosRpte&titulo=especificacionesTramite.datosRte" %>');"/></td>
+</tr>
+<tr>
 	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.referenciaRepresentado"/></td>
 </tr>
 <tr>
@@ -86,6 +90,10 @@
 <tr>
     <td class="label"><bean:message key="especificacionesTramite.campoRdoNom"/></td>
     <td class="input"><html:textarea tabindex="10" property="campoRdoNom" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=campoRdoNom&titulo=especificacionesTramite.campoRdoNom" %>');"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.datosRdo"/></td>
+    <td class="input"><html:textarea tabindex="10" property="datosRpdo" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=datosRpdo&titulo=especificacionesTramite.datosRdo" %>');"/></td>
 </tr>
 <tr>
 	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.destinatarioTramite"/></td>
