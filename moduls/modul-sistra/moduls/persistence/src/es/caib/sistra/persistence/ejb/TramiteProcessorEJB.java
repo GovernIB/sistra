@@ -5410,7 +5410,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	    			// Normalizamos documento de identificación
 	    			datosRpdo = new DatosDesglosadosInteresado();
 	    			datosRpdo.setAnonimo(false);
-		        	rpdoNif = NifCif.normalizarDocumento(rpdoNif);
+	    			datosRpdo.setNif(NifCif.normalizarDocumento(rpdoNif));
 	    		}
 			}
 			// - Nombre
@@ -5474,7 +5474,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	    		if (!("NO-VALOR".equals(rpteNif))) {
 	    			// Normalizamos documento de identificación
 	    			datosRpte.setAnonimo(false);
-		        	rpteNif = NifCif.normalizarDocumento(rpteNif);
+	    			datosRpte.setNif(NifCif.normalizarDocumento(rpteNif));
 	    		}
 			}
 			// - Nombre
