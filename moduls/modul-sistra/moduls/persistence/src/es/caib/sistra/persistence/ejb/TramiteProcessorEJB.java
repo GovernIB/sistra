@@ -5395,9 +5395,11 @@ public class TramiteProcessorEJB implements SessionBean {
 		// Si tiene script de datos desglosados, ejecutamos script unico
 		if (datosDesglosados) {
 			// Script de datos desglosados (new style)
+			log.debug("Calculando datos representado mediante script datos desglosados");
 			datosRpdo = ejecutarScriptDatosDesglosadosInteresado(scriptDatosDesglosados);    		
 		} else {		
 			// Si no, ejecutamos los distintos scripts (nif, nombre,...)
+			log.debug("Calculando datos representado mediante scripts independientes");
 			// - Nif
 			String rpdoNif="";
 			byte [] scriptRpdoNif = ScriptUtil.getScriptVersionOrNivel(especVersion.getCampoRdoNif(),especNivel.getCampoRdoNif());
@@ -5423,7 +5425,7 @@ public class TramiteProcessorEJB implements SessionBean {
 		// - Si no es anonimo, 
 		if (datosRpdo != null) {
 			// debe devolver un nif valido
-			if (!NifCif.esNIF(datosRpdo.getNif()) && !NifCif.esCIF(datosRpdo.getNif()) && !NifCif.esNIE(datosRpdo.getNif())) {		
+			if (StringUtils.isBlank(datosRpdo.getNif()) || !(NifCif.esNIF(datosRpdo.getNif()) || NifCif.esCIF(datosRpdo.getNif()) || NifCif.esNIE(datosRpdo.getNif()))) {		
 				throw new Exception("Los scripts de representado no devuelven un nif/cif/nie valido");
 			}
 			// debe devolver un nombre (completo o desglosado)
@@ -5455,9 +5457,11 @@ public class TramiteProcessorEJB implements SessionBean {
 		
 		// Si tiene script de datos desglosados, ejecutamos script unico
 		if (datosDesglosados) {
-			// Script de datos desglosados (new style)
+			// Script de datos desglosados (new style)			
+			log.debug("Calculando datos representante mediante script datos desglosados");
 			datosRpte = ejecutarScriptDatosDesglosadosInteresado(scriptDatosDesglosados);    		
-		} else {		
+		} else {
+			log.debug("Calculando datos representante mediante scripts independientes");
 			// Si no, ejecutamos los distintos scripts (nif, nombre,...)
 			datosRpte = new DatosDesglosadosInteresado();
 			datosRpte.setAnonimo(true);
@@ -5503,7 +5507,7 @@ public class TramiteProcessorEJB implements SessionBean {
 		// - Si no es anonimo, 
 		if (!datosRpte.isAnonimo()) {
 			// debe devolver un nif valido
-			if (!NifCif.esNIF(datosRpte.getNif()) && !NifCif.esCIF(datosRpte.getNif()) && !NifCif.esNIE(datosRpte.getNif())) {		
+			if (StringUtils.isBlank(datosRpte.getNif()) || !(NifCif.esNIF(datosRpte.getNif()) || NifCif.esCIF(datosRpte.getNif()) || NifCif.esNIE(datosRpte.getNif()))) {		
 				throw new Exception("Los scripts de representante no devuelven un nif/cif/nie valido");
 			}
 			// debe devolver un nombre (completo o desglosado)
