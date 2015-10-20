@@ -5511,9 +5511,11 @@ public class TramiteProcessorEJB implements SessionBean {
 				throw new Exception("Los scripts de representante no devuelven un nif/cif/nie valido");
 			}
 			// debe devolver un nombre (completo o desglosado)
+			/* Quitamos este control ya que antes no se comprobaba si existia nombre rpte
 			if (StringUtils.isBlank(datosRpte.getApellidosNombre()) && StringUtils.isBlank(datosRpte.getNombre())){
 				throw new Exception("Los scripts de representante no establecen el nombre");
 			}
+			*/
 		}
 		
 		return datosRpte;
