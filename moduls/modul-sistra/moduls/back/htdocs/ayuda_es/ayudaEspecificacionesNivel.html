@@ -64,69 +64,88 @@
      </td>
   </tr>
   <tr> 
-    <td>Procedencia geogr&aacute;fica</td>
-    <td><p>Para crear el asiento de tramites de <strong>tipo registro</strong> 
-        es necesario calcular la procedencia geogr&aacute;fica.. Para ello hay 
-        que indicar los valores de los c&oacute;digos de provincia, localidad y pa&iacute;s. 
-        El tipo de estos campos es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> 
-        y espera como resultado el valor del c&oacute;digo correspondiente. 
-      <p>Este dato es <strong>obligatorio</strong> especificarlo (bien en las 
-        especificaciones gen&eacute;ricas o por nivel) <strong>para los tramites 
-        de tipo registro</strong>. Para el resto de trámites se incluirá en el 
-        asiento si existe.</p>
-        <p>
-        Los c&oacute;digos de provincia, localidad y pa&iacute;s est&aacute;n basados en la codificaci&oacute;n INE.
-        Existen dominios gen&eacute;ricos para la obtenci&oacute;n de estas listas de valores:
-        <ul>
-        <li>Pa&iacute;s: Dominio GEPAISES</li>
-        <li>Provincias (España): Dominio GEPROVINCI</li>
-        <li>Municipios de una provincia: Dominio GEGMUNICI</li>
-        </ul>
-        </p></td>
-  </tr>
-  <tr> 
     <td>Referencia representante</td>
-    <td><p>Para crear el asiento es necesario indicar qui&eacute;n es el representante. 
-        Para ello hay que indicar los valores de los campos del formulario que 
-        contengan el NIF y el nombre completo del representante (seg&uacute;n formato asiento registral). El tipo de estos 
-        campos es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> 
-        y espera en cada caso el valor del NIF y el nombre completo.</p>
-        
-        <p> 
-        En el script del nombre, en lugar de establecer una cadena con el nombre completo, se pueden devolver los datos del interesado de  
-        forma desglosada (nombre, apellidos, etc.):
-        <br/>
-        	<em>
-		   		// Establecer datos de forma desglosada<br/>
-		   		DATOS_DESGLOSADOS.setNombre('Nombre');<br/>
-		   		DATOS_DESGLOSADOS.setApellido1('Apellido1');<br/>
-		   		DATOS_DESGLOSADOS.setApellido2('Apellido2');<br/>		    
-		   		DATOS_DESGLOSADOS.setDireccion('C. Principal, 48 - pta 7');<br/>		
-		   		DATOS_DESGLOSADOS.setCodigoPostal('07001');<br/>		
-		   		DATOS_DESGLOSADOS.setTelefono('912345678');<br/>		
-		      </em>    
-        </p>
-        
-      <p>Este dato es <strong>obligatorio</strong> especificarlo si el trámite es autenticado (en las 
-        especificaciones gen&eacute;ricas o por nivel).  <br>
-        <br>
-        La &uacute;nica excepci&oacute;n permitida es para acceso An&oacute;nimo. Si el destino es registro el nif podr&aacute; ser opcional pero el
+    <td>
+    	<p>Para crear el asiento es necesario indicar qui&eacute;n es el representante y su procedencia geogr&aacute;fica.</p>
+    	
+    	<p>Se puede indicar de dos formas:
+    		<ul>
+    			<li>Scripts separados (nif, nombre, provincia, localidad y pa&iacute;s): se especifican los datos uno en cada script</li>
+    				<ul>
+    					<li>Nif: debe indicarse el NIF</li>
+    					<li>Nombre: nombre completo</li>
+    					<li>Pa&iacute;s: debe indicarse el c&oacute;digo de pa&iacute;s</li>
+    					<li>Provincia: debe indicarse el c&oacute;digo de provincia</li>
+    					<li>Localidad: debe indicarse el c&oacute;digo de localidad</li>
+    				</ul>
+    			<li>Script unificado de datos representante: en un solo script se especifican los datos (adem&aacute;s se pueden incluir los datos postales)
+    				<br/>
+        				<em>
+					   		// Indica si es anonimo <br/>
+							INTERESADO.setAnonimo(false);<br/>
+							// Nif<br/>
+							INTERESADO.setNif("11111111H");<br/>
+							// Se puede indicar el nombre de forma desglosada o completa (tiene preferencia la desglosada)<br/>
+							INTERESADO.setNombre("Jose");<br/>
+							INTERESADO.setApellido1("Garcia");<br/>
+							INTERESADO.setApellido2("Lopez");<br/>
+							INTERESADO.setApellidosNombre("Garcia Lopez, Jose");<br/>
+							// Procedencia geografica<br/>
+							INTERESADO.setCodigoPais("ESP");<br/>
+							INTERESADO.setCodigoProvincia("7");<br/>
+							INTERESADO.setCodigoLocalidad("40");<br/>
+							// Datos postales<br/>
+							INTERESADO.setDireccion("C. Principal, 40 pta 7");<br/>
+							INTERESADO.setCodigoPostal("07040");<br/>
+							INTERESADO.setTelefono("901234567");<br/>
+							INTERESADO.setEmail("correo@dominio.es");<br/>	
+		      			</em>  
+    			</li>
+    		</ul>    	
+    	</p>  
+    	
+    	<p>Estos datos son <strong>obligatorios</strong> especificarlos si el trámite es autenticado (en las especificaciones gen&eacute;ricas o por nivel).<br>
+        <br>La &uacute;nica excepci&oacute;n permitida es para acceso An&oacute;nimo. Si el destino es registro el nif podr&aacute; ser opcional pero el
         nombre ser&aacute; obligatorio. Si el destino no es registro el nif y el nombre podr&aacute;n ser opcionales.
-        Para no establecer el nif o el nombre se deber&aacute; dejar vac&iacute;o el script o bien que el script devuelva la cadena "NO-VALOR".</p></td>
+        Para no establecer el nif o el nombre se deber&aacute; en funci&oacute;n del script usado:
+        <ul>
+        	<li>Scripts separados: dejar vac&iacute;o el script o bien que el script devuelva la cadena "NO-VALOR"</li> 
+        	<li>Script unificado: para que sea an&oacute;nimo hay que indicarlo mediante la funcion setAnonimo</li>
+        </ul>
+        </p>
+    	
+    	 <p>
+        	El tipo de estos campos es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> 
+        	y espera en cada caso el valor del NIF y el nombre completo.
+        </p>
+        	
+        
+        <p>Para los datos geogr&aacute;ficos existen dominios gen&eacute;ricos para la obtenci&oacute;n de estas listas de valores:
+        	<ul>
+        		<li>Pa&iacute;s: Dominio GEPAISES</li>
+        		<li>Provincias (España): Dominio GEPROVINCI</li>
+        		<li>Municipios de una provincia: Dominio GEGMUNICI</li>
+        	</ul>
+        </p>
+               
   </tr>
   <tr> 
     <td>Referencia representado</td>
-    <td><p>
-    	En caso de que exista representaci&oacute;n es necesario indicar qui&eacute;n 
-        es el representado. Para ello hay que indicar los valores de los campos del formulario que 
-        contengan el DNI y el nombre completo del representado (seg&uacute;n formato asiento registral). El tipo de estos 
-        campos es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> y espera en cada caso el valor del DNI y el nombre completo. 
-        </p>
-        <p>
-        Al igual que en la referencia de representante, se pueden establecer los datos desglosados en el script del nombre.
-        </p>
-     </td>
-        
+    <td>
+    	<p>En caso de que exista representaci&oacute;n es necesario indicar qui&eacute;n es el representado.</p> 
+    	<p>Se puede indicar de dos formas:
+    		<ul>
+    			<li>Scripts separados (nif, nombre): se especifican los datos uno en cada script</li>
+    				<ul>
+    					<li>Nif: debe indicarse el NIF</li>
+    					<li>Nombre: nombre completo</li>    					
+    				</ul>
+    			<li>Script unificado de datos representado: en un solo script se especifican los datos (adem&aacute;s se pueden incluir los datos postales). 
+    			Tienen el mismo formato que el script de representante</li> 
+    		</ul>
+    	</p>
+    	<p>El tipo de estos campos es <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a> y espera en cada caso el valor del NIF y el nombre completo.</p>       
+     </td>        
   </tr>
   
     <tr> 

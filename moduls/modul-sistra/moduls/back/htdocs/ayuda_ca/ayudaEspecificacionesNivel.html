@@ -69,71 +69,84 @@
       </td>
   </tr>
   <tr> 
-    <td>Procedència geogr&agrave;fica</td>
+    <td>Refer&egrave;ncia representant</td>
     <td>
-    	<p>Per a crear el seient de tràmits de <strong>tipus registre</strong> 
-        és necessari calcular la procedència geogr&agrave;fica.. Per a això cal 
-        indicar els valors dels codis de província, localitat i pais. El tipus 
-        d'aquestos camps és <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaScript.jsp">script</a> 
-        i espera com resultat el valor del codi corresponent. 
-       </p>
-      <p>Aquesta dada és <strong>obligatori</strong> especificar-la (bé en les 
-        especificacions gen&egrave;riques o per nivell) <strong>per als tràmits 
-        de tipus registre</strong>. Per la resta de tràmits s'inclourá en el 
-        seient si existeix.
-       </p>
-         <p>
-        Els codis de prov&iacute;ncia, localitat i pa&iacute;s estan basats en la codificaci&oacute; INE. Existeixen dominis gen&egrave;rics per a l'obtenci&oacute; d'aquestes llistes de valors:
+    	<p>Per crear el seient cal indicar qui &eacute;s el representant i la seva proced&egrave;ncia geogr&agrave;fica.</p>
+    	
+    	<p>Es pot indicar de dues maneres:
+    		<ul>
+    			<li>Scripts separats (NIF, nom, prov&iacute;ncia, localitat i pa&iacute;s): s'especifiquen les dades un a cada script</li>
+    				<ul>
+    					<li>Nif: cal indicar el NIF</li>
+    					<li>Nom: nom complet</li>
+    					<li>Pa&iacute;s: s'ha d'indicar el codi de pa&iacute;s</li>
+    					<li>Prov&iacute;ncia: s'ha d'indicar el codi de prov&iacute;ncia</li>
+    					<li>Localitat: s'ha d'indicar el codi de localitat</li>
+    				</ul>
+    			<li>Script unificat de dades representant: en un sol script s'especifiquen les dades (a m&eacute;s es poden incloure les dades postals)
+    				<br/>
+        				<em>
+					   		// Indica si es anonimo <br/>
+							INTERESADO.setAnonimo(false);<br/>
+							// Nif<br/>
+							INTERESADO.setNif("11111111H");<br/>
+							// Se puede indicar el nombre de forma desglosada o completa (tiene preferencia la desglosada)<br/>
+							INTERESADO.setNombre("Jose");<br/>
+							INTERESADO.setApellido1("Garcia");<br/>
+							INTERESADO.setApellido2("Lopez");<br/>
+							INTERESADO.setApellidosNombre("Garcia Lopez, Jose");<br/>
+							// Procedencia geografica<br/>
+							INTERESADO.setCodigoPais("ESP");<br/>
+							INTERESADO.setCodigoProvincia("7");<br/>
+							INTERESADO.setCodigoLocalidad("40");<br/>
+							// Datos postales<br/>
+							INTERESADO.setDireccion("C. Principal, 40 pta 7");<br/>
+							INTERESADO.setCodigoPostal("07040");<br/>
+							INTERESADO.setTelefono("901234567");<br/>
+							INTERESADO.setEmail("correo@dominio.es");<br/>	
+		      			</em>  
+    			</li>
+    		</ul>    	
+    	</p>  
+    	
+    	<br />
+    	<p>Aquestes dades s&oacute;n <strong>obligat&ograve;ries</strong> especificar si el tr&agrave;mit &eacute;s autenticat (en les especificacions gen&egrave;riques o per nivell).<br>
+        <br>L'&uacute;nica excepci&oacute; permesa &eacute;s per a acc&eacute;s An&ograve;nim. Si la destinaci&oacute; &eacute;s registre el NIF podr&agrave; ser opcional per&ograve; el nom ser&agrave; obligatori. Si el dest&iacute; no &eacute;s registre el NIF i el nom podran ser opcionals. Per no establir el NIF o el nom s'haur&agrave; en funci&oacute; del script usat:
         <ul>
-        <li>Pa&iacute;s: Domini GEPAISES</li>
-        <li>Provincies (Espanya): Domini GEPROVINCI</li>
-        <li>Municipis d'una prov&iacute;nci: Dominio GEGMUNICI</li>
+        	<li>Scripts separats: deixar buit l'script o b&eacute; que l'script torni la cadena &quot;NO-VALOR&quot;</li> 
+        	<li>Script unificat: perqu&egrave; sigui an&ograve;nim cal indicar-ho mitjan&ccedil;ant la funci&oacute; setAnonimo</li>
         </ul>
-        </p>        
-        </td>
-  </tr>
-  <tr> 
-    <td>Referència representant</td>
-    <td><p>Per a crear el seient caldrà indicar qui és el representant. Per a 
-        això cal indicar els valors dels camps del formulari que continguin el 
-        NIF i el nom complet del representant. El tipus d'aquests camps és <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaScript.jsp">script</a> 
-        i espera en cada cas el valor del NIF i el nom complet (segons format seient registral). </p>
-        
-        <p> 
-        En el script del nom, en lloc d'establir una cadena amb el nom complet, es poden retornar les dades de l'interessat de 
-		forma desglossada (nom, cognoms, etc.):
-        <br/>
-        	<em>
-		   		// Establecer datos de forma desglosada<br/>
-		   		DATOS_DESGLOSADOS.setNombre('Nombre');<br/>
-		   		DATOS_DESGLOSADOS.setApellido1('Apellido1');<br/>
-		   		DATOS_DESGLOSADOS.setApellido2('Apellido2');<br/>	
-		   		DATOS_DESGLOSADOS.setDireccion('C. Principal, 48 - pta 7');<br/>		
-		   		DATOS_DESGLOSADOS.setCodigoPostal('07001');<br/>		
-		   		DATOS_DESGLOSADOS.setTelefono('912345678');<br/>			        
-		      </em>    
         </p>
-        
-        
-      <p>Aquesta dada és <strong>obligatori</strong> especificar-la en els tr&agrave;mits autenticats (en les 
-        especificacions gen&egrave;riques o per nivell). <br>
-        <br>
-        L'&uacute;nica excepci&oacute; permesa és per a l'accés An&ograve;nim. 
-        Si la destinaci&oacute; &eacute;s registre el nif podrà ser opcional però el nom ser&agrave; obligatori. 
-        Si la destinaci&oacute; no &eacute;s registre el nif i el nom podran ser opcionals. 
-        Per a no establir el nif o el nom s'haur&agrave; de deixar buit el script o b&eacute; que el script retorni la cadena "NO-VALOR".</p></td>
+    	
+    	 <p>
+        	El tipus d'aquests camps &eacute;s <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaScript.jsp">script</a> 
+        	i espera en cada cas el valor del NIF i el nom complet.
+        </p>
+        <p>Per les dades geogr&agrave;fiques existeixen dominis gen&egrave;rics per a l'obtenci&oacute; d'aquestes llistes de valors:
+        	<ul>
+        		<li>Pa&iacute;s: Domini GEPAISES</li>
+        		<li>Prov&iacute;ncies (Espanya): Domini GEPROVINCI</li>
+        		<li>Municipis d'una prov&iacute;ncia: Domini GEGMUNICI</li>
+        	</ul>
+        </p>               
   </tr>
   <tr> 
     <td>Refer&egrave;ncia representat</td>
-    <td><p>En cas de que existeixi representaci&oacute; &eacute;s necessari indicar qui 
-        &eacute;s el representat. Per a aix&ograve; cal indicar les <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaReferencia.jsp">referències</a> 
-        dels camps del formulari que continguin el DNI i el nom complet del representat (segons format seient registral).</p>
-        <p>
-        Igual que en la referència de representant, es poden establir les dades desglossades en el script del nom.
-        </p>
-        </td>
+    <td>
+    	<p>En cas que hi hagi representaci&oacute; cal indicar qui &eacute;s el representat.</p> 
+    	<p>Es pot indicar de dues maneres:
+    		<ul>
+    			<li>Scripts separats ( nif , nom ) : s'especifiquen les dades un a cada script</li>
+    				<ul>
+    					<li>Nif : cal indicar el NIF</li>
+    					<li>Nom : nom complet</li>    					
+    				</ul>
+    			<li>Script unificat de dades representat : en un sol script s'especifiquen les dades (a m&eacute;s es poden incloure les dades postals ) . Tenen el mateix format que l'script de representant</li> 
+    		</ul>
+    	</p>
+    	<p>El tipus d'aquests camps &eacute;s <a class="enlaceAyuda" href="/sistraback/ayuda_ca/ayudaScript.jsp">script</a> i espera en cada cas el valor del NIF i el nom complet.</p>       
+     </td>        
   </tr>
-   
    <tr> 
     <td>Script de destinatari tr&agrave;mit</td>
     <td>

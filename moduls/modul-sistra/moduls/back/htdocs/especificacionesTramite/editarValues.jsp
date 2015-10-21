@@ -51,7 +51,15 @@
     <td class="input"><html:textarea tabindex="10" property="validacionInicioScript" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=validacionInicioScript&titulo=especificacionesTramite.validacionInicioScript" %>');"/></td>
 </tr>
 <tr>
-	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.procedenciaGeografica"/></td>
+	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.referenciaRepresentante"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.campoRteNif"/></td>
+    <td class="input"><html:textarea tabindex="10" property="campoRteNif" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=campoRteNif&titulo=especificacionesTramite.campoRteNif" %>');"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="especificacionesTramite.campoRteNom"/></td>
+    <td class="input"><html:textarea tabindex="10" property="campoRteNom" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=campoRteNom&titulo=especificacionesTramite.campoRteNom" %>');"/></td>
 </tr>
 <tr>
     <td class="label"><bean:message key="especificacionesTramite.campoCodigoProvincia"/></td>
@@ -64,17 +72,6 @@
 <tr>
     <td class="label"><bean:message key="especificacionesTramite.campoCodigoPais"/></td>
     <td class="input"><html:textarea tabindex="10" property="paisScript" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=paisScript&titulo=especificacionesTramite.campoCodigoPais" %>');"/></td>
-</tr>
-<tr>
-	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.referenciaRepresentante"/></td>
-</tr>
-<tr>
-    <td class="label"><bean:message key="especificacionesTramite.campoRteNif"/></td>
-    <td class="input"><html:textarea tabindex="10" property="campoRteNif" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=campoRteNif&titulo=especificacionesTramite.campoRteNif" %>');"/></td>
-</tr>
-<tr>
-    <td class="label"><bean:message key="especificacionesTramite.campoRteNom"/></td>
-    <td class="input"><html:textarea tabindex="10" property="campoRteNom" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=campoRteNom&titulo=especificacionesTramite.campoRteNom" %>');"/></td>
 </tr>
 <tr>
     <td class="label"><bean:message key="especificacionesTramite.datosRte"/></td>
