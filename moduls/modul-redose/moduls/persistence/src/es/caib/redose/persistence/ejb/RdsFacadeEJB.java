@@ -128,7 +128,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 			ENTORNO =props.getProperty("entorno");	
 			OPENOFFICE_HOST=props.getProperty("openoffice.host");
 			OPENOFFICE_PUERTO=props.getProperty("openoffice.port");		
-			BARCODE_VERIFIER_MOSTRAR= "true".equals(props.getProperty("urlVerificacion.barcode.mostrar"));
+			BARCODE_VERIFIER_MOSTRAR= "true".equals(StringUtils.defaultIfEmpty(props.getProperty("urlVerificacion.barcode.mostrar"),"true"));
 			USAR_CSV= "true".equals(props.getProperty("urlVerificacion.csv"));
 			URL_CSV = props.getProperty("sistra.url") + "/redosefront/init.do?csv=";
 			CLAVE_CIFRADO = props.getProperty("clave.cifrado");
