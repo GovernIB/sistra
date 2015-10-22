@@ -22,7 +22,7 @@ public final class UnidadAdministrativaItemRenderer implements TreeitemRenderer 
     /**
      * Renderiza nodo.
      */
-    public void render(final Treeitem item, final Object data) {
+    public void render(final Treeitem item, final Object data, final int index) {
     	final Object pt = ((TreeNode) data).getData();
     	UnidadAdministrativa ua = (UnidadAdministrativa) pt;
     	

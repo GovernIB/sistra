@@ -34,7 +34,7 @@ public final class PagosListitemRenderer implements ListitemRenderer {
      * @see org.zkoss.zul.ListitemRenderer#render(org.zkoss.zul.Listitem,
      * java.lang.Object)
      */   
-    public void render(final Listitem item, final Object data) {
+    public void render(final Listitem item, final Object data, final int index) {
 
     	final Documento ft = (Documento) data;
 

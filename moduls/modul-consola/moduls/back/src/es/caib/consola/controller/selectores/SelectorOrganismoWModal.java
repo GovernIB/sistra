@@ -85,7 +85,7 @@ public class SelectorOrganismoWModal extends BaseComposer {
 		}
 		
         listOrganismos.setItemRenderer(new ListitemRenderer() {
-            public void render(final Listitem item, final Object data) {
+            public void render(final Listitem item, final Object data, final int index) {
                 final OrganoResponsable reg = (OrganoResponsable) data;
                 item.setValue(reg);
                 item.setLabel(reg.getDescripcion());
@@ -110,7 +110,7 @@ public class SelectorOrganismoWModal extends BaseComposer {
 			ConsolaUtil.generaDelegateException(e);
 		}
     	
-    	listOrganismos.selectItemApi(null);       
+    	listOrganismos.selectItem(null);       
     	listOrganismos.setModel(new BindingListModelList(organismos, true));   
     }
     
@@ -128,7 +128,7 @@ public class SelectorOrganismoWModal extends BaseComposer {
         }	
             
         OrganoResponsable value = (OrganoResponsable) ((Listitem) listOrganismos
-                    .getSelectedItemApi()).getValue();        
+                    .getSelectedItem()).getValue();        
 
 
         // Generamos evento de seleccion

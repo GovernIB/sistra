@@ -83,7 +83,7 @@ public class SelectorProcedimientoWModal extends BaseComposer {
 		}
 		
         listboxResultados.setItemRenderer(new ListitemRenderer() {
-            public void render(final Listitem item, final Object data) {
+            public void render(final Listitem item, final Object data, final int index) {
                 final Procedimiento reg = (Procedimiento) data;
                 item.setValue(reg);
                 item.setLabel(reg.getIdentificador());
@@ -108,7 +108,7 @@ public class SelectorProcedimientoWModal extends BaseComposer {
 			ConsolaUtil.generaDelegateException(e);
 		}
     	
-    	listboxResultados.selectItemApi(null);       
+    	listboxResultados.selectItem(null);       
     	listboxResultados.setModel(new BindingListModelList(resultados, true));   
     }
     
@@ -125,7 +125,7 @@ public class SelectorProcedimientoWModal extends BaseComposer {
         	return;
         }	
             
-        Object value = ((Listitem) listboxResultados.getSelectedItemApi()).getValue();        
+        Object value = ((Listitem) listboxResultados.getSelectedItem()).getValue();        
 
 
         // Generamos evento de seleccion

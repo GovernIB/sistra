@@ -82,7 +82,7 @@ public class SelectorGestorWModal extends BaseComposer {
 		}
 		
         listboxResultados.setItemRenderer(new ListitemRenderer() {
-            public void render(final Listitem item, final Object data) {
+            public void render(final Listitem item, final Object data, final int index) {
                 final GestorBandeja reg = (GestorBandeja) data;
                 item.setValue(reg);
                 item.setLabel(reg.getSeyconID());
@@ -107,7 +107,7 @@ public class SelectorGestorWModal extends BaseComposer {
 			ConsolaUtil.generaDelegateException(e);
 		}
     	
-    	listboxResultados.selectItemApi(null);       
+    	listboxResultados.selectItem(null);       
     	listboxResultados.setModel(new BindingListModelList(resultados, true));   
     }
     
@@ -124,7 +124,7 @@ public class SelectorGestorWModal extends BaseComposer {
         	return;
         }	
             
-        Object value = ((Listitem) listboxResultados.getSelectedItemApi()).getValue();        
+        Object value = ((Listitem) listboxResultados.getSelectedItem()).getValue();        
 
 
         // Generamos evento de seleccion

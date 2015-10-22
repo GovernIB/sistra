@@ -9,15 +9,15 @@ import java.util.List;
 
 import org.zkoss.zul.AbstractListModel;
 import org.zkoss.zul.FieldComparator;
-import org.zkoss.zul.ListModelExt;
 import org.zkoss.zul.event.ListDataEvent;
+import org.zkoss.zul.ext.Sortable;
 
 /**
  * Class SortingPagingListModel.
  */
 @SuppressWarnings("serial")
 public abstract class SortingPagingListModel extends AbstractListModel
-        implements ListModelExt {
+        implements Sortable {
 
     /**
      * Atributo constante DIR_ASC.

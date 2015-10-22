@@ -14,7 +14,7 @@ import es.caib.consola.controller.gestor.model.ModeloVisualizarPlugin;
  */
 public class PluginScriptListitemRender implements ListitemRenderer {
 
-    public final void render(final Listitem item, final Object data) {
+    public final void render(final Listitem item, final Object data, final int index) {
         final ModeloVisualizarPlugin entidad = (ModeloVisualizarPlugin) data;
         
         item.setValue(entidad);

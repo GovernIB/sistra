@@ -7,16 +7,16 @@ package es.caib.zkutils.zk.model;
 import java.util.Comparator;
 
 import org.zkoss.zul.AbstractTreeModel;
-import org.zkoss.zul.TreeModelExt;
 import org.zkoss.zul.TreeitemComparator;
 import org.zkoss.zul.event.TreeDataEvent;
+import org.zkoss.zul.ext.Sortable;
 
 import es.caib.zkutils.ConstantesZK;
 
 /**
  * Class TreeModelOD.
  */
-public class TreeModelOD extends AbstractTreeModel implements TreeModelExt {
+public class TreeModelOD extends AbstractTreeModel implements Sortable {
 
     /**
      * Atributo constante serialVersionUID.
@@ -109,4 +109,9 @@ public class TreeModelOD extends AbstractTreeModel implements TreeModelExt {
                     TreeDataEvent.STRUCTURE_CHANGED);
         }
     }
+
+	public String getSortDirection(Comparator arg0) {
+		// TODO ZK6 VER QUE SE NECESITA
+		return "ascending"; 
+	}
 }

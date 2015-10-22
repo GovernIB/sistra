@@ -94,7 +94,7 @@ public final class SimacCommonUtils {
         for (final Iterator<Comboitem> itCombo = items.iterator(); itCombo
                 .hasNext();) {
             final Comboitem next = itCombo.next();
-            if (next.getValue().equals(value)) {
+            if (next.<Object>getValue().equals(value)) {
                 combo.setSelectedItem(next);
                 break;
             }
@@ -134,13 +134,7 @@ public final class SimacCommonUtils {
      *            Parámetro tittle
      */
     public static void mostrarError(final String message, final String tittle) {
-        try {
-            Messagebox.show(message, tittle, Messagebox.OK, Messagebox.ERROR);
-
-        } catch (final InterruptedException ex) {
-            throw new ShowMessageException(
-                    "Ha ocurrido un error mostrando el mensaje", ex);
-        }
+        Messagebox.show(message, tittle, Messagebox.OK, Messagebox.ERROR);
     }
 
     /**
@@ -155,10 +149,6 @@ public final class SimacCommonUtils {
         } catch (final SuspendNotAllowedException ex) {
             throw new ShowMessageException(
                     "Ha ocurrido un error(ShowMessage) en abriendo la ventana modal",
-                    ex);
-        } catch (final InterruptedException ex) {
-            throw new ShowMessageException(
-                    "Ha ocurrido un error(Interrupted) en abriendo la ventana modal ",
                     ex);
         }
     }
@@ -177,13 +167,7 @@ public final class SimacCommonUtils {
      */
     public static void mostrarMessageBox(final String message,
             final String tittle, final int buttons, final String icon) {
-        try {
-            Messagebox.show(message, tittle, buttons, icon);
-
-        } catch (final InterruptedException ex) {
-            throw new ShowMessageException(
-                    "Ha ocurrido un error mostrando el mensaje", ex);
-        }
+        Messagebox.show(message, tittle, buttons, icon);
     }
 
     /**
@@ -203,14 +187,7 @@ public final class SimacCommonUtils {
     public static void mostrarMessageBox(final String message,
             final String tittle, final int buttons, final String icon,
             final EventListener listener) {
-        try {
-            Messagebox.show(message, tittle, buttons, icon, listener);
-
-        } catch (final InterruptedException ex) {
-            throw new ShowMessageException(
-                    "Ha ocurrido un error mostrando el mensaje con listener",
-                    ex);
-        }
+        Messagebox.show(message, tittle, buttons, icon, listener);
     }
 
     /**

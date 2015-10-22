@@ -35,7 +35,7 @@ public final class MensajesListitemRenderer implements ListitemRenderer {
      * @see org.zkoss.zul.ListitemRenderer#render(org.zkoss.zul.Listitem,
      * java.lang.Object)
      */   
-    public void render(final Listitem item, final Object data) {
+    public void render(final Listitem item, final Object data, final int index) {
 
     	final MensajeTramite ft = (MensajeTramite) data;
 
