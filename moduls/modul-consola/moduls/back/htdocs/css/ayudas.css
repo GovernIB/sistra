@@ -237,3 +237,10 @@ vertical-align:top;
 	padding:5px;
 	overflow: auto;
 }
+
+/* ZK6 */
+li, dt, dd, pre, body {
+	font-family: arial,sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+}

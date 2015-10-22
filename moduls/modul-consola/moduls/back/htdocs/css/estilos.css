@@ -16,7 +16,7 @@
 .gtt-content-layout {
 	padding: 2px;
 	background: #F7F7F7;
-	border: 1px solid #000066;
+	/* border: 1px solid #000066; */
 }
 
 /* Script */
@@ -72,7 +72,7 @@
 	font-size: 10px;
 }
 
-/* Evitamos que los textarea se puedan cambiar de tamaÃ±o en firefox */
+/* Evitamos que los textarea se puedan cambiar de tamaño en firefox */
 textarea {
 	resize: none;
 }
@@ -147,6 +147,7 @@ div.imc-cap {
 	padding: .3em 0 .2em 0;
 	background: transparent url(../images/fons_idioma.gif) repeat-x left
 		bottom;
+	font-size: .75em;
 }
 
 .z-label.label_idiomes {
@@ -166,8 +167,16 @@ div.imc-cap {
 	color: #000;
 }
 
+div.menu2 {
+	overflow: auto;
+	width: 100%;
+	color: #fff;
+	padding: 0 0 .5em 0;
+	background: #456b84 url(../images/fons.gif) repeat-x left top;
+}
+
 div.imc-cap .marc {
-	overflow: hidden;
+	overflow: auto;
 	width: 100%;
 	color: #fff;
 	padding: 0 0 .5em 0;
@@ -192,6 +201,10 @@ div.imc-cap span.entorn {
 	border-top: 0;
 }
 
+div.imc-cap .entorn-lo {
+	background-color: #FFD800;
+}
+
 div.imc-cap .entorn-de {
 	background-color: #408611;
 }
@@ -211,6 +224,7 @@ div.imc-cap .aplicacio {
 	margin: .5em 0 0 1.5em;
 	padding-right: 1em;
 	border-right: 1px solid #7d98a9;
+	font-size: .75em;
 }
 
 div.imc-cap .aplicacio .imc-p .entradeta {
@@ -224,7 +238,7 @@ div.imc-cap .aplicacio .imc-p .entradeta {
 div.imc-cap .aplicacio .imc-p .titol {
 	font: normal 100% 'TrebuchetMS', 'Trebuchet MS', Arial, Helvetica,
 		sans-serif;
-	font-size: 1.7em;
+	font-size: 1.4em;
 	font-style: italic;
 }
 
@@ -257,12 +271,12 @@ div.imc-cap .logo {
 	float: right;
 	width: 10%;
 	min-width: 11em;
-	width: 12em;
-	height: 4.2em;
+	width: 12em;	
 	margin-right: 1.5em;
-	padding-top: .5em;
-	background: transparent url(../images/gva.png) no-repeat center right;
+	background: transparent url(../images/portsdebalears.png) no-repeat center;
+	/* background-size: 170px 57px; */
 	border-left: 1px solid #7d98a9;
+	height: 3.2em;
 }
 
 /* Miga de pan */
@@ -294,7 +308,12 @@ div.imc-cap .logo {
 }
 
 /* menuitem y menubar*/
-.z-menu-item .z-menu-item-btn {
+.z-menuitem .z-menuitem-btn {
+	font-weight: bold;
+	color: white;
+}
+
+.z-menu .z-menu-btn  {
 	font-weight: bold;
 	color: white;
 }
@@ -313,4 +332,8 @@ div.imc-cap .logo {
 	margin-bottom: 5px; 
 	background-color: white; 
 	border: 1px inset #E6E6E6;
+}
+
+.etiqueta{
+	font-weight: bold;
 }
