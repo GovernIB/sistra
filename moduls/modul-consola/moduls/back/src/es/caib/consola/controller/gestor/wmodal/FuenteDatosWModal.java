@@ -226,7 +226,7 @@ public class FuenteDatosWModal extends BaseComposer {
     public final void onClick$btnEditCampo() {
     	final Object valueSelected = obtenerItemSeleccionado(listboxCamposFuenteDatos);
         if (valueSelected != null) {
-        	CampoFuenteDatos data = (CampoFuenteDatos) ((Listitem) listboxCamposFuenteDatos.getSelectedItemApi()
+        	CampoFuenteDatos data = (CampoFuenteDatos) ((Listitem) listboxCamposFuenteDatos.getSelectedItem()
                     .clone()).getValue();
             final Map<String, Object> map = new HashMap<String, Object>();
             map.put(ConstantesWEB.PARAM_MODO_ACCESO, TypeModoAcceso.EDICION);            
@@ -315,7 +315,7 @@ public class FuenteDatosWModal extends BaseComposer {
 		try {
 			FuenteDatos fd = DelegateUtil.getFuenteDatosDelegate().obtenerFuenteDatos(fuenteDatos.getIdentificador());
 			camposFuentesDatosList = ConsolaUtil.setToList(fd.getCampos());
-			listboxCamposFuenteDatos.selectItemApi(null);
+			listboxCamposFuenteDatos.selectItem(null);
 			listboxCamposFuenteDatos.setModel(new BindingListModelList(camposFuentesDatosList, true));			
 		} catch (DelegateException e) {					
 			ConsolaUtil.generaDelegateException(e);

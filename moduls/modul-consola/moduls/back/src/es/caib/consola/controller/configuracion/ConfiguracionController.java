@@ -302,7 +302,7 @@ public class ConfiguracionController extends BaseComposer {
 	private void refrescarListaOrganismos() {
 		try {
     		organismos = DelegateUtil.getOrganoResponsableDelegate().listarOrganoResponsables(filtroActualOrganismo);
-			listOrganismos.selectItemApi(null);	       
+			listOrganismos.selectItem(null);	       
 	        listOrganismos.setModel(new BindingListModelList(organismos, true));			
 		} catch (es.caib.sistra.persistence.delegate.DelegateException e) {					
 			ConsolaUtil.generaDelegateException(e);
@@ -322,7 +322,7 @@ public class ConfiguracionController extends BaseComposer {
     public final void onClick$btnEditaOrganismo() {    	
     	final Object valueSelected = obtenerItemSeleccionado(listOrganismos);
         if (valueSelected != null) {
-        	OrganoResponsable organismo = (OrganoResponsable) ((Listitem) listOrganismos.getSelectedItemApi()
+        	OrganoResponsable organismo = (OrganoResponsable) ((Listitem) listOrganismos.getSelectedItem()
                     .clone()).getValue();
         	final Map<String, Object> map = new HashMap<String, Object>();
             map.put(ConstantesWEB.PARAM_MODO_ACCESO, TypeModoAcceso.EDICION);            
@@ -483,7 +483,7 @@ public class ConfiguracionController extends BaseComposer {
 	private void refrescarListaProcedimientos() {
 		try {
 			procedimientos = es.caib.bantel.persistence.delegate.DelegateUtil.getTramiteDelegate().listarProcedimientos(filtroActualProcedimiento);
-			listProcedimientos.selectItemApi(null);	       
+			listProcedimientos.selectItem(null);	       
 			listProcedimientos.setModel(new BindingListModelList(procedimientos, true));			
 		} catch (es.caib.bantel.persistence.delegate.DelegateException e) {					
 			ConsolaUtil.generaDelegateException(e);
@@ -504,7 +504,7 @@ public class ConfiguracionController extends BaseComposer {
     public final void onClick$btnEditaProcedimiento() {
     	final Object valueSelected = obtenerItemSeleccionado(listProcedimientos);
         if (valueSelected != null) {
-        	Procedimiento procedimiento = (Procedimiento) ((Listitem) listProcedimientos.getSelectedItemApi()
+        	Procedimiento procedimiento = (Procedimiento) ((Listitem) listProcedimientos.getSelectedItem()
                     .clone()).getValue();
             final Map<String, Object> map = new HashMap<String, Object>();
             map.put(ConstantesWEB.PARAM_MODO_ACCESO, TypeModoAcceso.EDICION);            
@@ -666,7 +666,7 @@ public class ConfiguracionController extends BaseComposer {
 	private void refrescarListaGestoresBandeja() {
 		try {
 			gestoresBandeja = es.caib.bantel.persistence.delegate.DelegateUtil.getGestorBandejaDelegate().listarGestoresBandeja(filtroActualGestores);
-			listGestoresBandeja.selectItemApi(null);
+			listGestoresBandeja.selectItem(null);
 			listGestoresBandeja.setModel(new BindingListModelList(gestoresBandeja, true));			
 		} catch (es.caib.bantel.persistence.delegate.DelegateException e) {					
 			ConsolaUtil.generaDelegateException(e);
@@ -687,7 +687,7 @@ public class ConfiguracionController extends BaseComposer {
     public final void onClick$btnEditaGestorBandeja() {
     	final Object valueSelected = obtenerItemSeleccionado(listGestoresBandeja);
         if (valueSelected != null) {
-        	GestorBandeja data = (GestorBandeja) ((Listitem) listGestoresBandeja.getSelectedItemApi()
+        	GestorBandeja data = (GestorBandeja) ((Listitem) listGestoresBandeja.getSelectedItem()
                     .clone()).getValue();
             final Map<String, Object> map = new HashMap<String, Object>();
             map.put(ConstantesWEB.PARAM_MODO_ACCESO, TypeModoAcceso.EDICION);            
@@ -850,7 +850,7 @@ public class ConfiguracionController extends BaseComposer {
 	private void refrescarListaCuentasEnvio() {
 		try {
 			cuentasEnvio = es.caib.mobtratel.persistence.delegate.DelegateUtil.getCuentaDelegate().listarCuentas(filtroActualCuentasEnvio);
-			listCuentasEnvio.selectItemApi(null);
+			listCuentasEnvio.selectItem(null);
 			listCuentasEnvio.setModel(new BindingListModelList(cuentasEnvio, true));			
 		} catch (es.caib.mobtratel.persistence.delegate.DelegateException e) {					
 			ConsolaUtil.generaDelegateException(e);
@@ -871,7 +871,7 @@ public class ConfiguracionController extends BaseComposer {
     public final void onClick$btnEditaCuentaEnvio() {
     	final Object valueSelected = obtenerItemSeleccionado(listCuentasEnvio);
         if (valueSelected != null) {
-        	Cuenta data = (Cuenta) ((Listitem) listCuentasEnvio.getSelectedItemApi()
+        	Cuenta data = (Cuenta) ((Listitem) listCuentasEnvio.getSelectedItem()
                     .clone()).getValue();
             final Map<String, Object> map = new HashMap<String, Object>();
             map.put(ConstantesWEB.PARAM_MODO_ACCESO, TypeModoAcceso.EDICION);            
@@ -1034,7 +1034,7 @@ public class ConfiguracionController extends BaseComposer {
 	private void refrescarListaGestoresFormulario() {
 		try {
 			gestoresFormulario = es.caib.sistra.persistence.delegate.DelegateUtil.getGestorFormularioDelegate().listar(filtroActualGestoresFormulario);
-			listGestoresFormulario.selectItemApi(null);
+			listGestoresFormulario.selectItem(null);
 			listGestoresFormulario.setModel(new BindingListModelList(gestoresFormulario, true));			
 		} catch (es.caib.sistra.persistence.delegate.DelegateException e) {					
 			ConsolaUtil.generaDelegateException(e);
@@ -1055,7 +1055,7 @@ public class ConfiguracionController extends BaseComposer {
     public final void onClick$btnEditaGestorFormulario() {
     	final Object valueSelected = obtenerItemSeleccionado(listGestoresFormulario);
         if (valueSelected != null) {
-        	GestorFormulario data = (GestorFormulario) ((Listitem) listGestoresFormulario.getSelectedItemApi()
+        	GestorFormulario data = (GestorFormulario) ((Listitem) listGestoresFormulario.getSelectedItem()
                     .clone()).getValue();
             final Map<String, Object> map = new HashMap<String, Object>();
             map.put(ConstantesWEB.PARAM_MODO_ACCESO, TypeModoAcceso.EDICION);            
@@ -1229,7 +1229,7 @@ public class ConfiguracionController extends BaseComposer {
                     Messagebox.EXCLAMATION);
         } else {
         	// TODO VER TEMA PERMISOS
-        	AlertaPlataforma error = (AlertaPlataforma) ((Listitem) listErrores.getSelectedItemApi()
+        	AlertaPlataforma error = (AlertaPlataforma) ((Listitem) listErrores.getSelectedItem()
                     .clone()).getValue();
             map.put(ConstantesWEB.PARAM_MODO_ACCESO, TypeModoAcceso.EDICION);            
 			map.put(ConstantesWEB.ERROR_PLATAFORMA, error);            
@@ -1265,7 +1265,7 @@ public class ConfiguracionController extends BaseComposer {
 	private void refrescarListaFormateadores() {
 		try {
 			formateadores = es.caib.redose.persistence.delegate.DelegateUtil.getFormateadorDelegate().listar();
-			listFormateadores.selectItemApi(null);
+			listFormateadores.selectItem(null);
 			listFormateadores.setModel(new BindingListModelList(formateadores, true));			
 		} catch (es.caib.redose.persistence.delegate.DelegateException e) {					
 			ConsolaUtil.generaDelegateException(e);
@@ -1286,7 +1286,7 @@ public class ConfiguracionController extends BaseComposer {
     public final void onClick$btnEditaFormateador() {
     	final Object valueSelected = obtenerItemSeleccionado(listFormateadores);
         if (valueSelected != null) {
-        	Formateador data = (Formateador) ((Listitem) listFormateadores.getSelectedItemApi()
+        	Formateador data = (Formateador) ((Listitem) listFormateadores.getSelectedItem()
                     .clone()).getValue();
             final Map<String, Object> map = new HashMap<String, Object>();
             map.put(ConstantesWEB.PARAM_MODO_ACCESO, TypeModoAcceso.EDICION);            
@@ -1411,7 +1411,7 @@ public class ConfiguracionController extends BaseComposer {
 	private void refrescarListaUbicaciones() {
 		try {
 			ubicaciones = es.caib.redose.persistence.delegate.DelegateUtil.getUbicacionDelegate().listarUbicaciones();
-			listUbicaciones.selectItemApi(null);
+			listUbicaciones.selectItem(null);
 			listUbicaciones.setModel(new BindingListModelList(ubicaciones, true));			
 		} catch (es.caib.redose.persistence.delegate.DelegateException e) {					
 			ConsolaUtil.generaDelegateException(e);
@@ -1432,7 +1432,7 @@ public class ConfiguracionController extends BaseComposer {
     public final void onClick$btnEditaUbicacion() {
     	final Object valueSelected = obtenerItemSeleccionado(listUbicaciones);
         if (valueSelected != null) {
-        	Ubicacion data = (Ubicacion) ((Listitem) listUbicaciones.getSelectedItemApi()
+        	Ubicacion data = (Ubicacion) ((Listitem) listUbicaciones.getSelectedItem()
                     .clone()).getValue();
             final Map<String, Object> map = new HashMap<String, Object>();
             map.put(ConstantesWEB.PARAM_MODO_ACCESO, TypeModoAcceso.EDICION);            

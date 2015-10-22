@@ -91,7 +91,7 @@ public class GestorBandejaWModal extends BaseComposer {
      	
      	// Lista procedimientos
      	listboxProcedimientos.setItemRenderer(new ListitemRenderer() {
-            public void render(final Listitem item, final Object data) {
+            public void render(final Listitem item, final Object data, final int index) {
                 final Procedimiento reg = (Procedimiento) data;
                 item.setValue(reg);
                 item.setLabel(reg.getIdentificador());

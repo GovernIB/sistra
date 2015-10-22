@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
@@ -11,6 +13,7 @@ import org.zkoss.zul.DefaultTreeModel;
 import org.zkoss.zul.DefaultTreeNode;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Tree;
+import org.zkoss.zul.TreeModel;
 import org.zkoss.zul.Treeitem;
 import org.zkoss.zul.Window;
 
@@ -89,17 +92,27 @@ public class VersionTramiteController extends BaseComposer {
 		}
                
         tree.setItemRenderer(new TreeVersionTramiteItemRenderer(this));
+        
+        
         tree.setModel(createTreeModel());
+       
+        
         final int alto = Integer.parseInt(session.getAttribute("DesktopHeight").toString()) - ConstantesWEB.HEADER_HEIGHT;
         tree.setHeight(alto + "px");
-        
+       
+      
+        /* ZK6
         tree.selectItem((Treeitem) tree.getTreechildren().getItems().iterator().next());
-        
+        */
         
         tree.addEventListener(Events.ON_CLICK, new TreeVersionTramiteEventListener(this, ConstantesWEB.EVENTO_TREEITEM_CLICK));
         
+        /*
+        ZK6
         final Event event = new Event(Events.ON_CLICK, tree, (Treeitem) tree.getTreechildren().getItems().iterator().next());
         Events.postEvent(event);
+      	*/
+        
         // TODO GESTIONAR MODO DE ACCESO
         
         
@@ -140,7 +153,6 @@ public class VersionTramiteController extends BaseComposer {
                         ConstantesWEB.EVENTO_VERSION_GUARDAR_INFORMACION));
         */
     }
-    
     
     /**
      * Crea model para el arbol.
@@ -186,9 +198,73 @@ public class VersionTramiteController extends BaseComposer {
     	
 		final DefaultTreeModel model = new DefaultTreeModel(
                 new DefaultTreeNode(null, fijos));
+        
         return model;
+             
+    }
+    
+    /**
+     * Crea model para el arbol.
+     * @return model
+     */
+    private DefaultTreeModel createTreeModel_NEW() {
+    
+    	// Documentos
+    	final List<NodoArbolVersionTramite> formularios = new ArrayList<NodoArbolVersionTramite>();
+    	final List<NodoArbolVersionTramite> anexos = new ArrayList<NodoArbolVersionTramite>();
+    	final List<NodoArbolVersionTramite> pagos = new ArrayList<NodoArbolVersionTramite>();
+    	for (Iterator it = this.version.getDocumentos().iterator(); it.hasNext();) {
+    		Documento doc = (Documento) it.next();
+    		switch (doc.getTipo()) {
+	    		case Documento.TIPO_FORMULARIO:
+	    			formularios.add(new NodoArbolVersionTramite(TypeNodoArbolVersionTramite.FORMULARIO, doc.getCodigo()));
+	    			break;
+	    		case Documento.TIPO_ANEXO:
+	    			anexos.add(new NodoArbolVersionTramite(TypeNodoArbolVersionTramite.ANEXO, doc.getCodigo()));
+	    			break;
+	    		case Documento.TIPO_PAGO:
+	    			pagos.add(new NodoArbolVersionTramite(TypeNodoArbolVersionTramite.PAGO, doc.getCodigo()));
+	    			break;    			
+    		}    		
+    	}
+    	DefaultTreeNode[] tnDocForms = convertToArrayDefaultTreeNode(formularios);
+    	DefaultTreeNode[] tnDocAnexos = convertToArrayDefaultTreeNode(anexos);
+    	DefaultTreeNode[] tnDocPagos = convertToArrayDefaultTreeNode(pagos);
+    	    	
+    	// Contenido arbol
+    	DefaultTreeNode[] tn = 	new DefaultTreeNode[] {
+				    	 			new DefaultTreeNode(new NodoArbolVersionTramite(TypeNodoArbolVersionTramite.PROPIEDADES_VERSION, null)),
+				    	 			new DefaultTreeNode(new NodoArbolVersionTramite(TypeNodoArbolVersionTramite.CONTROL_ACCESO, null)),
+				    	 			new DefaultTreeNode(new NodoArbolVersionTramite(TypeNodoArbolVersionTramite.MENSAJES_VALIDACION, null)),
+				    	 			new DefaultTreeNode(new NodoArbolVersionTramite(TypeNodoArbolVersionTramite.PROPIEDADES_VERSION, null)),
+				    	 			new DefaultTreeNode(new NodoArbolVersionTramite(TypeNodoArbolVersionTramite.LISTA_PASOS, null), 
+				    	 					new DefaultTreeNode[] {
+				    	 						new DefaultTreeNode(new NodoArbolVersionTramite(TypeNodoArbolVersionTramite.DEBE_SABER, null)),				    	 						
+				    	 						new DefaultTreeNode(new NodoArbolVersionTramite(TypeNodoArbolVersionTramite.RELLENAR, null), tnDocForms),
+				    	 						new DefaultTreeNode(new NodoArbolVersionTramite(TypeNodoArbolVersionTramite.ANEXAR, null), tnDocAnexos),
+				    	 						new DefaultTreeNode(new NodoArbolVersionTramite(TypeNodoArbolVersionTramite.PAGAR, null), tnDocPagos),
+				    	 						new DefaultTreeNode(new NodoArbolVersionTramite(TypeNodoArbolVersionTramite.REGISTRAR, null))
+				    	 					}				    	 			
+				    	 			)
+	    	 					  };
+    	final DefaultTreeModel model = new DefaultTreeModel(
+                new DefaultTreeNode(null, tn));
+        
+        return model;        
     }
 
+
+	private DefaultTreeNode[] convertToArrayDefaultTreeNode(
+			List<NodoArbolVersionTramite> lista) {
+		DefaultTreeNode[] res = null;
+		if (lista != null && lista.size() > 0) {
+			res = new DefaultTreeNode[lista.size()];
+			for (int i=0; i < lista.size(); i++) {
+				res[i] = new DefaultTreeNode(lista.get(i));
+			}			
+		}
+		return res;
+	}
 
 	public TramiteVersion getVersion() {
 		return version;

@@ -85,7 +85,7 @@ public class VersionModeloWModal extends BaseComposer {
      	
      	// Item renderer lista versiones
      	listPlantillas.setItemRenderer(new ListitemRenderer() {
-            public void render(final Listitem item, final Object data) {
+            public void render(final Listitem item, final Object data, final int index) {
                 final Plantilla reg = (Plantilla) data;
                 item.setValue(reg);
                 item.setLabel(reg.getTipo());                               
@@ -151,7 +151,7 @@ public class VersionModeloWModal extends BaseComposer {
 		try {
 			if (versionModelo != null) {
 				plantillas = ConsolaUtil.setToList(es.caib.redose.persistence.delegate.DelegateUtil.getPlantillaDelegate().listarPlantillasVersion(versionModelo.getCodigo()));
-				listPlantillas.selectItemApi(null);
+				listPlantillas.selectItem(null);
 				listPlantillas.setModel(new BindingListModelList(plantillas, true));			
 			}
 		} catch (es.caib.redose.persistence.delegate.DelegateException e) {					
@@ -271,7 +271,7 @@ public class VersionModeloWModal extends BaseComposer {
     public final void onClick$btnEditaPlantilla() {
     	final Object valueSelected = obtenerItemSeleccionado(listPlantillas);
         if (valueSelected != null) {
-        	Plantilla data = (Plantilla) ((Listitem) listPlantillas.getSelectedItemApi()
+        	Plantilla data = (Plantilla) ((Listitem) listPlantillas.getSelectedItem()
                     .clone()).getValue();
             final Map<String, Object> map = new HashMap<String, Object>();
             map.put(ConstantesWEB.PARAM_MODO_ACCESO, TypeModoAcceso.EDICION);            

@@ -35,7 +35,7 @@ public class TramiteListitemRenderer implements ListitemRenderer {
      * @see org.zkoss.zul.ListitemRenderer#render(org.zkoss.zul.Listitem,
      * java.lang.Object)
      */
-    public final void render(final Listitem item, final Object data) {
+    public final void render(final Listitem item, final Object data, final int index) {
         final Tramite reg = (Tramite) data;
         item.setValue(reg);
         item.appendChild(GTTUtilsWeb.nuevaCeldaDetalle(GTTUtilsWeb.nuevaEtiquetaDetalle(reg.getIdentificador()), "white-space: nowrap;"));

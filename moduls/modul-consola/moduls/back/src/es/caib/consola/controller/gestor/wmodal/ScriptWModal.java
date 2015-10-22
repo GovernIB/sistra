@@ -19,7 +19,7 @@ import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabbox;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Window;
-import org.zkoss.zul.api.Textbox;
+import org.zkoss.zul.Textbox;
 
 import es.caib.consola.ConstantesWEB;
 import es.caib.consola.controller.gestor.model.ModeloVisualizarPlugin;

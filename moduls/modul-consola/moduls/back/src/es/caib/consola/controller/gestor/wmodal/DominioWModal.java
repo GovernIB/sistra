@@ -394,7 +394,7 @@ public class DominioWModal extends BaseComposer {
 	    	
 	    	// - Autenticacion
 	    	if (ok) {
-		    	dominioModif.setAutenticacionExplicita(autenticacionExplicita.getSelectedItem().getValue().charAt(0));
+		    	dominioModif.setAutenticacionExplicita(((String) autenticacionExplicita.getSelectedItem().getValue()).charAt(0));
 		        String claveCifrado = (String) DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().get("clave.cifrado");					 
 		        dominioModif.setUsr(CifradoUtil.cifrar(claveCifrado,autenticacionExplicitaUsuario.getValue()));
 		        dominioModif.setPwd(CifradoUtil.cifrar(claveCifrado,autenticacionExplicitaPassword.getValue()));

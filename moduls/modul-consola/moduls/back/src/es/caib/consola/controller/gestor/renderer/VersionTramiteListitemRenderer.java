@@ -30,7 +30,7 @@ public class VersionTramiteListitemRenderer implements ListitemRenderer {
     }
 
    
-    public final void render(final Listitem item, final Object data) {
+    public final void render(final Listitem item, final Object data, final int index) {
         final TramiteVersion reg = (TramiteVersion) data;
         item.setValue(reg);
         item.appendChild(new Listcell(String.valueOf(reg.getVersion())));

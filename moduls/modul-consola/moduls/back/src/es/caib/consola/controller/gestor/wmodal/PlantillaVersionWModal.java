@@ -97,7 +97,7 @@ public class PlantillaVersionWModal extends BaseComposer {
      	
      	// Item renderer lista versiones
      	listPlantillasIdioma.setItemRenderer(new ListitemRenderer() {
-            public void render(final Listitem item, final Object data) {
+            public void render(final Listitem item, final Object data, final int index) {
                 final PlantillaIdioma reg = (PlantillaIdioma) data;
                 item.setValue(reg);
                 item.setLabel(Labels.getLabel("idioma." + reg.getIdioma()));                               
@@ -106,7 +106,7 @@ public class PlantillaVersionWModal extends BaseComposer {
      	
      	// Item renderer 
      	formateador.setItemRenderer(new ComboitemRenderer() {
-			public void render(Comboitem item, Object data) throws Exception {
+			public void render(Comboitem item, Object data, final int index) throws Exception {
 				final Formateador reg = (Formateador) data;
                 item.setValue(reg.getIdentificador() + "");
                 item.setLabel(reg.getDescripcion()); 
@@ -194,7 +194,7 @@ public class PlantillaVersionWModal extends BaseComposer {
 		try {
 			if (plantillaVersion != null) {
 				plantillasIdioma = ConsolaUtil.mapToList(DelegateUtil.getPlantillaIdiomaDelegate().listarPlantillasIdiomaPlantilla(plantillaVersion.getCodigo()));
-				listPlantillasIdioma.selectItemApi(null);
+				listPlantillasIdioma.selectItem(null);
 				listPlantillasIdioma.setModel(new BindingListModelList(plantillasIdioma, true));			
 			}
 		} catch (DelegateException e) {					
@@ -308,7 +308,7 @@ public class PlantillaVersionWModal extends BaseComposer {
     public final void onClick$btnEditaPlantillaIdioma() {
     	final Object valueSelected = obtenerItemSeleccionado(listPlantillasIdioma);
         if (valueSelected != null) {
-        	PlantillaIdioma data = (PlantillaIdioma) ((Listitem) listPlantillasIdioma.getSelectedItemApi()
+        	PlantillaIdioma data = (PlantillaIdioma) ((Listitem) listPlantillasIdioma.getSelectedItem()
                     .clone()).getValue();
             final Map<String, Object> map = new HashMap<String, Object>();
             map.put(ConstantesWEB.PARAM_MODO_ACCESO, TypeModoAcceso.EDICION);            

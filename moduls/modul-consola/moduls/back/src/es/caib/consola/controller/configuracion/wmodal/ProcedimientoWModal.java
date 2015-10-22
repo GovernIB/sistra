@@ -99,7 +99,7 @@ public class ProcedimientoWModal extends BaseComposer {
      	
      	// Lista procedimientos
      	listaGestores.setItemRenderer(new ListitemRenderer() {
-            public void render(final Listitem item, final Object data) {
+            public void render(final Listitem item, final Object data, final int index) {
                 final GestorBandeja reg = (GestorBandeja) data;
                 item.setValue(reg);
                 item.setLabel(reg.getSeyconID());

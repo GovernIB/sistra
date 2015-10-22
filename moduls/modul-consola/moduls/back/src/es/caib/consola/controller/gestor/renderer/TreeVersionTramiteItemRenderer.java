@@ -32,7 +32,7 @@ public final class TreeVersionTramiteItemRenderer implements TreeitemRenderer {
         versionTramiteController = pVersionTramiteController;
     }
 
-    public void render(final Treeitem item, final Object data) {
+    public void render(final Treeitem item, final Object data, final int index) {
     	final Object pt = ((TreeNode) data).getData();
         item.setValue(data);
         final Treerow tr = new Treerow();

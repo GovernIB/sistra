@@ -384,7 +384,7 @@ public class ProcesamientoProcedimientoWModal extends BaseComposer {
 		        // - Autenticacion
 		        if (ok) {
 			        procedimiento.setInmediata(inmediato.isChecked()?'S':'N');
-			        procedimiento.setAutenticacionEJB(autenticacionExplicita.getSelectedItem().getValue().charAt(0));
+			        procedimiento.setAutenticacionEJB(((String) autenticacionExplicita.getSelectedItem().getValue()).charAt(0));
 			        String claveCifrado = (String) DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().get("clave.cifrado");					 
 			        procedimiento.setUsr(CifradoUtil.cifrar(claveCifrado,autenticacionExplicitaUsuario.getValue()));
 			        procedimiento.setPwd(CifradoUtil.cifrar(claveCifrado,autenticacionExplicitaPassword.getValue()));
@@ -424,7 +424,7 @@ public class ProcesamientoProcedimientoWModal extends BaseComposer {
 	private void refrescarListaFuenteDatos() {
 		try {
 			fuentesDatos = DelegateUtil.getFuenteDatosDelegate().listarFuentesDatos(procedimiento.getIdentificador());			
-			listFuenteDatos.selectItemApi(null);
+			listFuenteDatos.selectItem(null);
 			listFuenteDatos.setModel(new BindingListModelList(fuentesDatos, true));			
 		} catch (DelegateException e) {					
 			ConsolaUtil.generaDelegateException(e);
@@ -445,7 +445,7 @@ public class ProcesamientoProcedimientoWModal extends BaseComposer {
     public final void onClick$btnEditaFuenteDatos() {
     	final Object valueSelected = obtenerItemSeleccionado(listFuenteDatos);
         if (valueSelected != null) {
-        	FuenteDatos data = (FuenteDatos) ((Listitem) listFuenteDatos.getSelectedItemApi()
+        	FuenteDatos data = (FuenteDatos) ((Listitem) listFuenteDatos.getSelectedItem()
                     .clone()).getValue();
             final Map<String, Object> map = new HashMap<String, Object>();
             map.put(ConstantesWEB.PARAM_MODO_ACCESO, TypeModoAcceso.EDICION);            

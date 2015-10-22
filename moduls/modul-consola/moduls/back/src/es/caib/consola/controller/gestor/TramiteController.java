@@ -177,7 +177,7 @@ public class TramiteController extends BaseComposer {
             btnEditaVersion.setLabel(Labels.getLabel(ConstantesWEB.CONSULTAR));
             popupEditaVersion.setLabel(Labels.getLabel(ConstantesWEB.CONSULTAR));
             
-            final Listitem item = (Listitem) listVersiones.getSelectedItemApi();
+            final Listitem item = (Listitem) listVersiones.getSelectedItem();
             final TramiteVersion version = (TramiteVersion) item.getValue();
             
             if ( "S".equals(version.getBloqueadoModificacion())
@@ -227,7 +227,7 @@ public class TramiteController extends BaseComposer {
     public final void onClick$btnEditaVersion() {    	    	
     	
         if (versionSeleccionada()) {
-            final Listitem item = (Listitem) listVersiones.getSelectedItemApi()
+            final Listitem item = (Listitem) listVersiones.getSelectedItem()
                     .clone();
             TramiteVersion version = (TramiteVersion) item.getValue();
             session.setAttribute(ConstantesWEB.VERSION, version.getCodigo());
@@ -253,7 +253,7 @@ public class TramiteController extends BaseComposer {
                         public void onEvent(final Event event) {
                             if (((Integer) event.getData()).intValue() == Messagebox.YES) {
                                 final Listitem selectedItem = (Listitem) listVersiones
-                                        .getSelectedItemApi();
+                                        .getSelectedItem();
                                 final Version r = (Version) selectedItem
                                         .getValue();
                                 try {
@@ -287,7 +287,7 @@ public class TramiteController extends BaseComposer {
     public final void onClick$btnBloquear() {
     	/*
         if (versionSeleccionada()) {
-            final Listitem item = (Listitem) listVersiones.getSelectedItemApi()
+            final Listitem item = (Listitem) listVersiones.getSelectedItem()
                     .clone();
             final Version version = (Version) item.getValue();
 
@@ -358,7 +358,7 @@ public class TramiteController extends BaseComposer {
     	
     	// TODO CONTROLAR CUANDO SE PUEDE EXPORTAR
     	if (versionSeleccionada()) {
-    		final Listitem item = (Listitem) listVersiones.getSelectedItemApi()
+    		final Listitem item = (Listitem) listVersiones.getSelectedItem()
             .clone();
     		final TramiteVersion version = (TramiteVersion) item.getValue();
 	    	 final Map<String, Object> map = new HashMap<String, Object>();
@@ -375,7 +375,7 @@ public class TramiteController extends BaseComposer {
      */
     public final void onClick$btnDesbloquear() {
     	if (versionSeleccionada()) {
-            final Listitem item = (Listitem) listVersiones.getSelectedItemApi()
+            final Listitem item = (Listitem) listVersiones.getSelectedItem()
                     .clone();
             final TramiteVersion version = (TramiteVersion) item.getValue();
 

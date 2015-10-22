@@ -90,7 +90,7 @@ public class ModeloDocumentoWModal extends BaseComposer {
      	
      	// Item renderer lista versiones
      	listVersiones.setItemRenderer(new ListitemRenderer() {
-            public void render(final Listitem item, final Object data) {
+            public void render(final Listitem item, final Object data, final int index) {
                 final Version reg = (Version) data;
                 item.setValue(reg);
                 item.setLabel(reg.getVersion() + (StringUtils.isNotBlank(reg.getDescripcion()) ? "-" + reg.getDescripcion() : ""));                               
@@ -159,7 +159,7 @@ public class ModeloDocumentoWModal extends BaseComposer {
 		try {
 			if (modeloDocumento != null) {
 				versiones = ConsolaUtil.setToList(es.caib.redose.persistence.delegate.DelegateUtil.getVersionDelegate().listarVersionesModelo(modeloDocumento.getCodigo()));
-				listVersiones.selectItemApi(null);
+				listVersiones.selectItem(null);
 				listVersiones.setModel(new BindingListModelList(versiones, true));			
 			}
 		} catch (es.caib.redose.persistence.delegate.DelegateException e) {					
@@ -273,7 +273,7 @@ public class ModeloDocumentoWModal extends BaseComposer {
     public final void onClick$btnEditaVersion() {
     	final Object valueSelected = obtenerItemSeleccionado(listVersiones);
         if (valueSelected != null) {
-        	Version data = (Version) ((Listitem) listVersiones.getSelectedItemApi()
+        	Version data = (Version) ((Listitem) listVersiones.getSelectedItem()
                     .clone()).getValue();
             final Map<String, Object> map = new HashMap<String, Object>();
             map.put(ConstantesWEB.PARAM_MODO_ACCESO, TypeModoAcceso.EDICION);            

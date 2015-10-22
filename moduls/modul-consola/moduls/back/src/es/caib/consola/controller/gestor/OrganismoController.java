@@ -411,7 +411,7 @@ public class OrganismoController extends BaseComposer {
 	                    Messagebox.EXCLAMATION);
 	        } else {
 	        	// Metemos en sesion el codigo tramite que se esta editando
-	        	final Listitem item = (Listitem) listTramites.getSelectedItemApi()
+	        	final Listitem item = (Listitem) listTramites.getSelectedItem()
 	                    .clone();
 	            final Tramite tramite = (Tramite) item.getValue();
 	            session.setAttribute(ConstantesWEB.TRAMITE, tramite.getCodigo());
@@ -458,7 +458,7 @@ public class OrganismoController extends BaseComposer {
 	                        public void onEvent(final Event event) {
 	                            if (((Integer) event.getData()).intValue() == Messagebox.YES) {
 	                                final Listitem selectedItem = (Listitem) listTramites
-	                                        .getSelectedItemApi();
+	                                        .getSelectedItem();
 	                                final Tramite r = (Tramite) selectedItem
 	                                        .getValue();
 	
@@ -575,7 +575,7 @@ public class OrganismoController extends BaseComposer {
 	private void refrescarListaDominios() {
 		try {
 			dominios = DelegateUtil.getDominioDelegate().listarDominios(usuarioLogado.getOrganismo(), filtroActualDominio);
-			listDominios.selectItemApi(null);	       
+			listDominios.selectItem(null);	       
 			listDominios.setModel(new BindingListModelList(dominios, true));			
 		} catch (DelegateException e) {					
 			ConsolaUtil.generaDelegateException(e);
@@ -600,7 +600,7 @@ public class OrganismoController extends BaseComposer {
     public final void onClick$btnEditaDominio() {
     	final Object valueSelected = obtenerItemSeleccionado(listDominios);
         if (valueSelected != null) {
-        	Dominio dominio = (Dominio) ((Listitem) listDominios.getSelectedItemApi()
+        	Dominio dominio = (Dominio) ((Listitem) listDominios.getSelectedItem()
                     .clone()).getValue();
             final Map<String, Object> map = new HashMap<String, Object>();
             map.put(ConstantesWEB.PARAM_MODO_ACCESO, TypeModoAcceso.EDICION);            
@@ -763,7 +763,7 @@ public class OrganismoController extends BaseComposer {
 	private void refrescarListaDocumentos() {
 		try {
 			documentos = es.caib.redose.persistence.delegate.DelegateUtil.getModeloDelegate().listarModelos(filtroActualDocumento);
-			listDocumentos.selectItemApi(null);	       
+			listDocumentos.selectItem(null);	       
 			listDocumentos.setModel(new BindingListModelList(documentos, true));			
 		} catch (es.caib.redose.persistence.delegate.DelegateException e) {					
 			ConsolaUtil.generaDelegateException(e);
@@ -788,7 +788,7 @@ public class OrganismoController extends BaseComposer {
     public final void onClick$btnEditaDocumento() {
     	final Object valueSelected = obtenerItemSeleccionado(listDocumentos);
         if (valueSelected != null) {
-        	Modelo modelo = (Modelo) ((Listitem) listDocumentos.getSelectedItemApi()
+        	Modelo modelo = (Modelo) ((Listitem) listDocumentos.getSelectedItem()
                     .clone()).getValue();
             final Map<String, Object> map = new HashMap<String, Object>();
             map.put(ConstantesWEB.PARAM_MODO_ACCESO, TypeModoAcceso.EDICION);            
@@ -946,7 +946,7 @@ public class OrganismoController extends BaseComposer {
 		try {
 			// TODO FILTRO X ORGANO
 			procedimientos = es.caib.bantel.persistence.delegate.DelegateUtil.getTramiteDelegate().listarProcedimientos(filtroActualProcedimiento);
-			listProcedimientos.selectItemApi(null);	       
+			listProcedimientos.selectItem(null);	       
 			listProcedimientos.setModel(new BindingListModelList(procedimientos, true));			
 		} catch (es.caib.bantel.persistence.delegate.DelegateException e) {					
 			ConsolaUtil.generaDelegateException(e);
@@ -967,7 +967,7 @@ public class OrganismoController extends BaseComposer {
     public final void onClick$btnEditaProcedimiento() {
     	final Object valueSelected = obtenerItemSeleccionado(listProcedimientos);
         if (valueSelected != null) {
-        	Procedimiento procedimiento = (Procedimiento) ((Listitem) listProcedimientos.getSelectedItemApi()
+        	Procedimiento procedimiento = (Procedimiento) ((Listitem) listProcedimientos.getSelectedItem()
                     .clone()).getValue();
             final Map<String, Object> map = new HashMap<String, Object>();
             map.put(ConstantesWEB.PARAM_MODO_ACCESO, TypeModoAcceso.EDICION);            
@@ -1058,7 +1058,7 @@ public class OrganismoController extends BaseComposer {
                     Messagebox.EXCLAMATION);
         } else {
         	// TODO VER TEMA PERMISOS
-        	FormularioReusable formulario = (FormularioReusable) ((Listitem) listFormularios.getSelectedItemApi()
+        	FormularioReusable formulario = (FormularioReusable) ((Listitem) listFormularios.getSelectedItem()
                     .clone()).getValue();
             map.put(ConstantesWEB.PARAM_MODO_ACCESO, TypeModoAcceso.EDICION);            
 			map.put(ConstantesWEB.PARAMETER_FORMULARIO_REUSABLE, formulario);            

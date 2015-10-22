@@ -32,7 +32,7 @@ public class OrganismoListitemRenderer implements ListitemRenderer {
      * @see org.zkoss.zul.ListitemRenderer#render(org.zkoss.zul.Listitem,
      * java.lang.Object)
      */
-    public final void render(final Listitem item, final Object data) {
+    public final void render(final Listitem item, final Object data, final int index) {
         final OrganoResponsable org = (OrganoResponsable) data;
         item.setValue(org);
         

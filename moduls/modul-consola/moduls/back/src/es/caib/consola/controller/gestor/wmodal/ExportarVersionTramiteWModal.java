@@ -8,7 +8,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zkplus.databind.BindingListModelList;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
-import org.zkoss.zul.api.Listbox;
+import org.zkoss.zul.Listbox;
 
 import es.caib.consola.ConstantesWEB;
 import es.caib.consola.model.Usuario;

@@ -82,7 +82,7 @@ public class PlantillaIdiomaWModal extends BaseComposer {
      	
      	// Idiomas
      	idioma.setItemRenderer(new ComboitemRenderer() {
-			public void render(Comboitem item, Object data) throws Exception {
+			public void render(Comboitem item, Object data, final int index) throws Exception {
 				final String reg = (String) data;
                 item.setValue(reg);
                 item.setLabel(Labels.getLabel("idioma." + reg)); 
@@ -102,7 +102,7 @@ public class PlantillaIdiomaWModal extends BaseComposer {
 	private void refrescarComboIdiomas() {		
 		try {
 			List idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
-			idioma.setSelectedItemApi(null);
+			idioma.setSelectedItem(null);
 			idioma.setModel(new ListModelList(idiomas, true));			
 		} catch (DelegateException e) {					
 			ConsolaUtil.generaDelegateException(e);
