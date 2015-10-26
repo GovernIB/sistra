@@ -113,7 +113,7 @@
 				
 				<logic:equal name="es.caib.zonaper.front.DATOS_SESION" property="perfilAcceso" scope="session" value="<%=ConstantesZPE.DELEGACION_PERFIL_ACCESO_CIUDADANO%>">	
 				<div class="botonera">
-					<button type="submit" tabindex="9"><bean:message key="actualizarDatosPersonales.guardar"/></button>
+					<button type="submit"><bean:message key="actualizarDatosPersonales.guardar"/></button>
 				</div>
 				</logic:equal>
 				
