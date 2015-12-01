@@ -134,7 +134,7 @@ public class AvisosExpediente {
 		log.debug("Buscamos configuracion a nivel de zona personal");
 		if (StringUtils.isNotEmpty(expe.getSeyconCiudadano())){
 			PadAplicacionDelegate pad = DelegateUtil.getPadAplicacionDelegate();
-			PersonaPAD ciud = pad.obtenerDatosPersonaPADporUsuario(expe.getSeyconCiudadano());			
+			PersonaPAD ciud = pad.obtenerDatosPersonaPADporNif(expe.getNifRepresentante());			
 			if (ciud.isHabilitarAvisosExpediente()){
 				emailZP=ciud.getEmail();
 				if (alertasSmsZonaPersonal) {
