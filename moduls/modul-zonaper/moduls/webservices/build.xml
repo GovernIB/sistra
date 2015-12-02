@@ -67,6 +67,7 @@
                 </webinf>
             	<webinf dir="${etc.dir}">
 	               	<include name="*cxf*.xml"/>
+            		<include name="jboss-classloading.xml"/>
                 </webinf>
             	<lib dir="${cxf.home}">
     				<include name="*.jar"/>
