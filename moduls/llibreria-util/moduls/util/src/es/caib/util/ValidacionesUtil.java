@@ -802,21 +802,6 @@ public class ValidacionesUtil
 			//CIF del govern
 			if ("S0711001H".equalsIgnoreCase(cif)) return true;
 			
-			//CIF del consell de Malloca 
-			if ("S0711002F".equalsIgnoreCase(cif)) return true;
-			
-			//CIF del consell de Menorca 
-			if ("S0733002J".equalsIgnoreCase(cif)) return true;
-			
-			//CIF del consell d'Eivissa 
-			if ("S0733001B".equalsIgnoreCase(cif)) return true;
-			
-			//CIF del consell de Formentera 
-			if ("P0702400C".equalsIgnoreCase(cif)) return true;
-			
-			//CIF d'altres entitats locals
-			if (cif != null && (cif.toUpperCase().startsWith("P07") || cif.toUpperCase().startsWith("P57"))) return true;
-			
 			return false;
 			
 		}
