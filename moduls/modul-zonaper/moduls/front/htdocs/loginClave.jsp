@@ -300,7 +300,7 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 			
 			<% if (niveles.indexOf("C")>=0 || niveles.indexOf("U")>=0){ %>
 			<div id="indexCD">
-				<img style="display: block;margin-left: auto; margin-right: auto;" src = "images/logo_Clave.png" alt="<bean:message key="login.clave.titulo" />"/>
+				<img style="display: block;margin-left: auto; margin-right: auto;" src = "../images/logo_Clave.png" alt="<bean:message key="login.clave.titulo" />"/>
 				<p><bean:message key="login.clave.instrucciones" /></p>
 				
 				<form name="formCD" action="<%=urlClave%>" method="post">
@@ -314,7 +314,7 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 				</form>					
 				
 				<p>
-					<a href="http://http://clave.gob.es"><bean:message key="login.clave.mesInfoText" /></a>
+					<a href="http://clave.gob.es" target="_blank"><bean:message key="login.clave.mesInfoText" /></a>
 				</p>
 				
 			</div>
