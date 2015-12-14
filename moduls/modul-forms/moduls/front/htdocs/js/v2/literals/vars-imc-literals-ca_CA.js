@@ -6,5 +6,5 @@ var txtAjuda = "Ajuda",
 	txtActiva = "Activa",
 	txtDesactiva = "Desactiva",
 	txtEnviantDades = "Enviant dades",
-	txtEspere = "Espere una mica, si un plau";
+	txtEspere = "Esperau un moment, per favor";
 
