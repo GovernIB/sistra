@@ -380,7 +380,7 @@ public class PDFDocument {
 	{
 		document = new Document(PageSize.A4, 36, 36, 36, 50);
 		writer = PdfWriter.getInstance(document,os);		
-		writer.setEncryption(null, null,2052, PdfWriter.STRENGTH40BITS);
+		writer.setEncryption(null, null, PdfWriter.AllowCopy | PdfWriter.AllowPrinting, PdfWriter.STRENGTH40BITS);
 		writer.setPageEvent(new EndPage(this.getCabecera(),this.getPie(),this.getBarcode(),this.isPaginar()));		
 		document.open();				
 		//Pintar la cabecera que proceda: No pitar, cabecera normal o cabecera pequeña
@@ -407,7 +407,7 @@ public class PDFDocument {
 		else 
 			document = new Document(PageSize.A4, 36, 36, 36, 50);
 		writer = PdfWriter.getInstance(document,os);		
-		writer.setEncryption(null, null,2052, PdfWriter.STRENGTH40BITS);
+		writer.setEncryption(null, null,PdfWriter.AllowCopy | PdfWriter.AllowPrinting, PdfWriter.STRENGTH40BITS);
 		writer.setPageEvent(new EndPage(this.getCabecera(),this.getPie(),this.getBarcode(),this.isPaginar()));		
 		document.open();				
 		//Pintar la cabecera que proceda: No pitar, cabecera normal o cabecera pequeña
