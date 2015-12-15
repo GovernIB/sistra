@@ -356,7 +356,7 @@ public class UtilPDF {
 	 */
 	public static void establecerSoloImpresion(OutputStream pdfOut,InputStream pdfIn) throws Exception{
 		PdfReader reader = new PdfReader(pdfIn);
-		PdfEncryptor.encrypt(reader, pdfOut, null,null, PdfWriter.AllowPrinting, false);		
+		PdfEncryptor.encrypt(reader, pdfOut, null,null, PdfWriter.AllowCopy | PdfWriter.AllowPrinting, false);		
     }
 	
 	/**
