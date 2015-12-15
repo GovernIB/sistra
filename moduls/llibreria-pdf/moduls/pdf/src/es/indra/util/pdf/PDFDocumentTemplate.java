@@ -186,7 +186,7 @@ public class PDFDocumentTemplate {
 		//pdfs.setEncryption(null, null, PdfWriter.AllowPrinting, true);
 		// Introducimos encriptación de 40 bits para que sea compatible con Acrobat 4.0
 		// La encriptación de 128 sólo es compatible con 5.0 o superior
-		pdfs.setEncryption(null, null, PdfWriter.AllowPrinting, PdfWriter.STRENGTH40BITS);
+		pdfs.setEncryption(null, null, PdfWriter.AllowCopy | PdfWriter.AllowPrinting, PdfWriter.STRENGTH40BITS);
 		
 	}
 

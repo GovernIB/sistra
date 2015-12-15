@@ -330,7 +330,7 @@ public class UtilPDF {
 	{
 		Document document = new Document(PageSize.A4);
 		PdfWriter writer = PdfWriter.getInstance(document,os);
-		writer.setEncryption(null, null, PdfWriter.AllowPrinting, PdfWriter.STRENGTH40BITS);
+		writer.setEncryption(null, null, PdfWriter.AllowCopy | PdfWriter.AllowPrinting, PdfWriter.STRENGTH40BITS);
 		document.open();		
 		document.newPage();
 		writer.setPageEmpty(false);   					
