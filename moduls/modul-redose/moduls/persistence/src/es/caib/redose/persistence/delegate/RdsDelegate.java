@@ -119,6 +119,17 @@ public class RdsDelegate implements StatelessDelegate {
    }
     
     /**
+     * Consulta un documento del RDS de tipo estructurado formateado con una plantilla para meter en registro.
+     */
+    public DocumentoRDS consultarDocumentoFormateadoRegistro(ReferenciaRDS refRds)  throws DelegateException{
+    	try {
+            return getFacade().consultarDocumentoFormateadoRegistro(refRds);    		    		
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+   } 
+    
+    /**
      * Consulta un documento del RDS de tipo estructurado formateado con una plantilla
      */
     public DocumentoRDS consultarDocumentoFormateado(ReferenciaRDS refRds)  throws DelegateException{

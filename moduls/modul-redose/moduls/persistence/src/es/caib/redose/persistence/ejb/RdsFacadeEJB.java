@@ -451,7 +451,17 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
         return documentoRDS;
     }
 
-	
+    /**
+     * Consulta un documento del RDS de tipo estructurado formateado con una plantilla.
+     * Se mete parametro adicional para forzar que no meta la marca de agua de "Sin validez" en caso de que sea un documento que tenga sello de registro.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
+     */  
+    public DocumentoRDS consultarDocumentoFormateadoRegistro(ReferenciaRDS refRds) throws ExcepcionRDS {    	
+    	return consultarDocumentoFormateadoImpl(refRds,null,null, true);
+    }        
         
     /**
      * Consulta un documento del RDS de tipo estructurado formateado con una plantilla
@@ -461,7 +471,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.auto}"
      */  
     public DocumentoRDS consultarDocumentoFormateado(ReferenciaRDS refRds) throws ExcepcionRDS {    	
-    	return consultarDocumentoFormateado(refRds,null,null);
+    	return consultarDocumentoFormateadoImpl(refRds,null,null, false);
     }
     
     /**
@@ -472,7 +482,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.auto}"
      */  
     public DocumentoRDS consultarDocumentoFormateado(ReferenciaRDS refRds,String idioma) throws ExcepcionRDS {    	
-    	return consultarDocumentoFormateado(refRds,null,idioma);
+    	return consultarDocumentoFormateadoImpl(refRds,null,idioma, false);
     }
     
     
@@ -507,7 +517,13 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.auto}"
      */    
     public DocumentoRDS consultarDocumentoFormateado(ReferenciaRDS refRds,String tipoPlantilla,String idioma) throws ExcepcionRDS {    	
-    	Session session = getSession();
+    	return consultarDocumentoFormateadoImpl(refRds, tipoPlantilla, idioma, false);            	
+	            
+    }
+
+	private DocumentoRDS consultarDocumentoFormateadoImpl(ReferenciaRDS refRds,
+			String tipoPlantilla, String idioma, boolean paraRegistro) throws ExcepcionRDS {
+		Session session = getSession();
     	DocumentoRDS documentoRDS;
 	    try {	    	
 	    	// Realizamos consulta doc RDS
@@ -569,7 +585,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    	}
 	    	
 	    	// Formateamos documento
-	    	DocumentoRDS docFormateado = formatearDocumentoImpl(documentoRDS,plantilla);
+	    	DocumentoRDS docFormateado = formatearDocumentoImpl(documentoRDS,plantilla, paraRegistro);
 	    	
 	    	// Realizamos apunte en el log de operaciones
 	    	this.doLogOperacion(getUsuario(),CONSULTAR_DOCUMENTO_FORMATEADO,"consulta documento formateado " + refRds.getCodigo() );
@@ -582,9 +598,8 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	        throw new ExcepcionRDS("No se ha podido obtener documento formateado ",he);
 	    } finally {
 	        close(session);
-	    }            	
-	            
-    }
+	    }
+	}
    
     /**
     * 
@@ -641,7 +656,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 	    	}
 	    		
 	    	// Formateamos documento
-	    	DocumentoRDS docFormateado = formatearDocumentoImpl(documentoRDS,plantilla);
+	    	DocumentoRDS docFormateado = formatearDocumentoImpl(documentoRDS,plantilla, false);
 	    	
 		    // Devolvemos documento RDS formateado
 		    return docFormateado;
@@ -1742,10 +1757,11 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
      * 
      * @param documentoRDS  Documento a formatear
      * @param plantilla Plantilla con la que se debe formatear
+     * @param paraRegistro Si es para registro y no debe meter el sense validesa
      * @param usos Usos del documento por si es necesario stampar sello de registro
      * @throws Exception
      */
-    private DocumentoRDS formatearDocumentoImpl(DocumentoRDS documentoRDS, PlantillaIdioma plantilla) throws Exception{
+    private DocumentoRDS formatearDocumentoImpl(DocumentoRDS documentoRDS, PlantillaIdioma plantilla, boolean paraRegistro) throws Exception{
     	
     	// Comprobaciones formateador
     	if (plantilla == null){
@@ -1769,8 +1785,8 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	// En caso de que se haya establecido generar sello de registro/preregistro (envio/preenvio) lo generamos
     	boolean docValido=true;
     	if (plantilla.getPlantilla().getSello() == 'S'){
-    		// Si no hay sello marcamos como doc no valido -> no barcode + marca de agua
-    		if (!stampSello(docFormateado,usos)) docValido=false;
+    		// Si no hay sello marcamos como doc no valido -> no barcode + marca de agua (EXCEPTO SI ES PARA REGISTRO, QUE NO LO TENDRA TODAVIA)
+    		if (!stampSello(docFormateado,usos) && !paraRegistro ) docValido=false;
     	}
     	
     	//	En caso de que se haya establecido generar codigo de barras lo generamos (el documento debe existir en 
@@ -1963,7 +1979,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 		docRDS = consultarDocumentoImpl(referenciaRDS,true);
 		
 		// Formateamos documento
-		DocumentoRDS docRDSFormat = consultarDocumentoFormateado(referenciaRDS,plantillaDocumento,idiomaDocumento);
+		DocumentoRDS docRDSFormat = consultarDocumentoFormateadoImpl(referenciaRDS,plantillaDocumento,idiomaDocumento, false);
 		
 		// Devolvemos documento
 		DocumentoVerifier docVer = new DocumentoVerifier();
