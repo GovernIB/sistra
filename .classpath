@@ -166,14 +166,13 @@
 	<classpathentry kind="lib" path="lib/commons-fileupload-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-2.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.5.jar"/>
-	<classpathentry kind="lib" path="lib/zk/breeze-5.0.7.jar"/>
 	<classpathentry kind="lib" path="lib/zk/codemirror-5.0.jar"/>
-	<classpathentry kind="lib" path="lib/zk/zcommon-5.0.7.jar"/>
-	<classpathentry kind="lib" path="lib/zk/zcommons-el-1.1.0.jar"/>
-	<classpathentry kind="lib" path="lib/zk/zhtml-5.0.7.jar"/>
-	<classpathentry kind="lib" path="lib/zk/zk-5.0.7.jar"/>
-	<classpathentry kind="lib" path="lib/zk/zkplus-5.0.7.jar"/>
-	<classpathentry kind="lib" path="lib/zk/zul-5.0.7.jar"/>
-	<classpathentry kind="lib" path="lib/zk/zweb-5.0.7.jar"/>
+	<classpathentry kind="lib" path="lib/zk/zcommon-6.5.4.jar"/>
+	<classpathentry kind="lib" path="lib/zk/zel-6.5.4.jar"/>
+	<classpathentry kind="lib" path="lib/zk/zhtml-6.5.4.jar"/>
+	<classpathentry kind="lib" path="lib/zk/zk-6.5.4.jar"/>
+	<classpathentry kind="lib" path="lib/zk/zkplus-6.5.4.jar"/>
+	<classpathentry kind="lib" path="lib/zk/zul-6.5.4.jar"/>
+	<classpathentry kind="lib" path="lib/zk/zweb-6.5.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
