@@ -182,96 +182,33 @@
     function validaCIF( cif )
     {
 
-        cif = cif.toUpperCase();
-
-        if(cif.length != 9){
-             //alert("El cif debe de tener nueve dígitos");
-             return false;
+    	valor = cif.toUpperCase();
+		
+		var patronCif = "^[ABCDEFGHJKLMNPQRSUVW]{1}[0-9]{7}([0-9]||[ABCDEFGHIJ]){1}$";
+		var regExp=new RegExp(patronCif);
+		if (!regExp.test(valor)) {
+			return false;
+		}
+		
+		var codigoControl = valor.substring(valor.length - 1, valor.length);
+		
+		var v1 = [ 0, 2, 4, 6, 8, 1, 3, 5, 7, 9 ];
+		var v2 = [ "J", "A", "B", "C", "D", "E", "F", "G", "H", "I" ];
+		
+		var suma = 0;
+        for (i = 2; i <= 6; i += 2) {
+        	suma += v1[parseInt(valor.substring(i - 1, i), 10)];
+            suma += parseInt(valor.substring(i, i + 1));
         }
-
-        letrasComienzo1 = "ABCDEFGHNU";
-        letrasComienzo2 = "PQS";
-        letrasFin = "JABCDEFGHI";
-        numeros = "0123456789";
-
-        caracter0 = cif.substring(0,1);
-        caracter8 = cif.substring(8,9);
-
-        if(letrasComienzo1.indexOf(caracter0) != -1){
-            if(letrasFin.indexOf(caracter8) != -1)
-                terminaNumero = false;
-            else{
-                if(numeros.indexOf(caracter8) != -1){
-                    terminaNumero = true;
-                }else{
-                    // alert("CIF erróneo");
-                    return false;
-                }
-            }
+		
+        suma += v1[parseInt(valor.substring(7, 8))];
+        suma = (10 - (suma % 10));
+        if (suma == 10) {
+            suma = 0;
         }
-        else{
-            if(letrasComienzo2.indexOf(caracter0) != -1){
-                if(letrasFin.indexOf(caracter8) != -1)
-                    terminaNumero = false;
-                else{
-                    // alert("CIF erróneo");
-                    return false;
-                }
-            }
-            else{
-                 // alert("CIF erróneo");
-                 return false;
-                }
-        }
-
-        for(i=1; i<=7; i++){
-            if(numeros.indexOf(cif.substring(i, i+1)) == -1)
-            {
-             // alert("CIF erróneo");
-             return false;
-            }
-        }
-
-
-        R1 = parseInt(cif.substring(2,3)) +
-             parseInt(cif.substring(4,5)) +
-             parseInt(cif.substring(6,7));
-
-
-        R21 = 2 * parseInt(cif.substring(1,2));
-        if(R21 > 9)
-            R21 = 1 + R21 % 10;
-
-        R22 = 2 * parseInt(cif.substring(3,4));
-        if(R22 > 9)
-            R22 = 1 + R22 % 10;
-
-        R23 = 2 * parseInt(cif.substring(5,6));
-        if(R23 > 9)
-            R23 = 1 + R23 % 10;
-
-        R24 = 2 * parseInt(cif.substring(7,8));
-        if(R24 > 9)
-            R24 = 1 + R24 % 10;
-
-        DC = (10 - ((R1 + R21 + R22 + R23 + R24) % 10)) % 10;
-
-        if(terminaNumero){
-            if(parseInt(caracter8) == DC)
-                return true;
-            else{
-                  // alert("CIF erróneo");
-                  return false;
-                }
-        }
-        else{
-            if(caracter8 == letrasFin.substring(DC, DC+1))
-                return true;
-            else{
-                 // alert("CIF erróneo");
-                 return false;
-                }
-        }
+        var letraControl = v2[suma];
+        res = (codigoControl == (suma + "") || codigoControl.toUpperCase() == letraControl);
+        return res;
     }
     
     function esNIE(temp){
