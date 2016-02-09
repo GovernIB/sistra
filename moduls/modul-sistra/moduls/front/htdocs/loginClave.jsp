@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=ISO-8859-1"%>
-<%@ page import="java.util.*, org.apache.struts.Globals, org.apache.catalina.authenticator.SavedRequest, es.caib.util.ConvertUtil, java.io.FileInputStream" %>
+<%@ page import="java.util.*, org.apache.struts.Globals, org.apache.catalina.authenticator.SavedRequest, es.caib.util.ConvertUtil, java.io.FileInputStream,es.caib.sistra.plugins.PluginFactory, es.caib.sistra.plugins.login.PluginLoginIntf, java.lang.reflect.Method" %>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
@@ -28,12 +28,10 @@
 	es.caib.zonaper.model.OrganismoInfo infoOrg = delegateF.obtenerOrganismoInfo();
 	
 	// Configuracion plugin login Clave: obtener contexto login
-	String pathConf = System.getProperty("ad.path.properties");
-	FileInputStream fisLogin = new FileInputStream(pathConf + "sistra/plugins/plugin-login.properties");
-	Properties propiedadesLogin = new Properties();
-	propiedadesLogin.load(fisLogin);
-	String contextAutenticadorClave = propiedadesLogin.getProperty("contextAutenticadorClave");
-	fisLogin.close();
+	PluginLoginIntf plg = PluginFactory.getInstance().getPluginLogin();
+	Method method = plg.getClass().getDeclaredMethod("obtenerContextoAutenticadorClave");
+	Object result = method.invoke(plg);
+	String contextAutenticadorClave =  (String) result;		
 	
 	// Idioma
 	language = request.getParameter("language");

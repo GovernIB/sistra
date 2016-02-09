@@ -15,6 +15,7 @@
 	
 <target name="prepare" description="Prepara los directorios de trabajo">
 	<mkdir dir="${output.dir}"/>
+	<mkdir dir="${output.dir}/etc"/>
 	<mkdir dir="${output.dir}/ear"/>
 	<mkdir dir="${output.dir}/lib"/>
 	<mkdir dir="${output.dir}/client"/>	
@@ -26,6 +27,7 @@
 </target>
 	
 <target name="propagate">
+	<ant dir="moduls/llibreria-configuracionutil" target="${task}" inheritall="false"/>	
 	<ant dir="moduls/llibreria-dbutils" target="${task}" inheritall="false"/>
 	<ant dir="moduls/llibreria-graficos" target="${task}" inheritall="false"/>
 	<ant dir="moduls/llibreria-pdf" target="${task}" inheritall="false"/>
@@ -150,6 +152,8 @@
 			<zipfileset dir="${output.dir}/lib" prefix="lib"/>					
 		</ear>
 	
+	<antcall target="generateSAR"/>
+	
 </target>	
 	
 <target name="cleanModuls" description="Destruye los directorios de trabajo de todos los modulos">
@@ -189,5 +193,43 @@
     <ant antfile="moduls/modul-zonaper/build-db.xml" target="initdb" inheritall="false"/>
     <copy file="moduls/modul-zonaper/output/schema.sql" tofile="product/schema-zonaper.sql"/>
 </target>
+		
+	
+<target name="generateSAR">		
+	
+	<!-- Generacion del jboss-service.xml -->
+	<java classname="es.caib.sistra.configuracionutil.ConfiguracionSAR">
+		<classpath>
+			<fileset dir="${basedir}/lib">
+		    	<include name="commons-io*.jar"/>
+				<include name="commons-lang*.jar"/>   
+			</fileset>	
+			<fileset dir="${output.dir}/lib">
+		    	<include name="sistra-configuracion.jar"/>   
+			</fileset>
+		</classpath>
+		
+		<!-- Nombre del MBEAN del SAR -->
+		<arg value="sistra-config"/>
+		<!-- Directorio donde se generara el jboss-service.xml -->
+		<arg value="${output.dir}/etc"/>
+		<!-- Prefijo propiedades -->
+		<arg value="es.caib.sistra.configuracion.sistra."/>
+		<!-- Directorio donde estan los ficheros de configuracion -->
+		<arg value="${basedir}/doc/resources/config/sistra"/>
+		<!-- Nombre ficheros propiedades a tratar separados por coma -->
+		<arg value="global,sistra,zonaper,bantel,redose,regtel,mobtratel,forms,audita"/>
+		<!-- Nombre ficheros propiedades a tratar separados por coma (se incluye tal cual, sin prefijo) -->
+		<arg value="sar-config"/>
+		
+	</java>
+	
+	<!-- Generacion del SAR -->
+	<delete file="${output.dir}/ear/1-sistra.sar" quiet="yes"/>
+    <jar jarfile="${output.dir}/ear/1-sistra.sar">
+        <metainf dir="${output.dir}/etc" includes="*.xml"/>
+    </jar>    	
+</target>
+
 	
 </project>

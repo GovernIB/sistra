@@ -9,35 +9,36 @@ import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.apache.ws.security.handler.WSHandlerConstants;
 
 import es.caib.util.ws.ConfigurationUtil;
-import es.caib.util.ws.Constantes;
 
 public class UsernameTokenAuthorizationInterceptorOut extends WSS4JOutInterceptor{
+	
+	protected boolean activar;
+    protected boolean generarTimestamp;
 	
 	public UsernameTokenAuthorizationInterceptorOut(Map<String, Object> properties) {
 		
 		super(properties);
 		
 		try{		
-			String tipoConfiguracion = (String) properties.get("tipoConfiguracion");
-			if (tipoConfiguracion == null) {
-				tipoConfiguracion = Constantes.TIPO_CONFIGURACION_PROPERTIES;
-			}
-			
-			Properties props;
-			if (Constantes.TIPO_CONFIGURACION_PROPERTIES.equals(tipoConfiguracion)) {
-				props = ConfigurationUtil.getInstance().obtenerPropiedades();							
-			 } else {
-				 props = System.getProperties();
-			 }
-			 
-			 
-			 String auth = props.getProperty("sistra.ws.authenticacion");
-			 String timestamp = props.getProperty("sistra.ws.authenticacion.usernameToken.generateTimestamp");
-			 if ("USERNAMETOKEN".equals(auth) && "true".equals(timestamp)){
-				 properties.put( "action", WSHandlerConstants.TIMESTAMP);
-			 } else {
-				 properties.put( "action", WSHandlerConstants.NO_SECURITY);				
-			 }			 
+			// Verificamos si esta marcado la activacion mediante xml o es mediante propiedades
+	    	if ( properties.get("activar") != null) {
+	    		// Activacion mediante XML
+	    		activar =  Boolean.parseBoolean((String) properties.get("activar"));
+	    		generarTimestamp = Boolean.parseBoolean((String) properties.get("generarTimestamp"));
+	    	} else {
+	    		// Activacion mediante propiedades (para SISTRA)
+	    		Properties props = ConfigurationUtil.getInstance().obtenerPropiedades();							
+	    		String auth = props.getProperty("sistra.ws.authenticacion");
+	    		activar = "USERNAMETOKEN".equals(auth);
+	    		String timestamp = props.getProperty("sistra.ws.authenticacion.usernameToken.generateTimestamp");
+	    		generarTimestamp = "true".equals(timestamp);
+	    	}
+	    	
+    		if (activar && generarTimestamp){
+    			properties.put( "action", WSHandlerConstants.TIMESTAMP + " " + properties.get("action"));
+    		} else {
+    			properties.put( "action", WSHandlerConstants.NO_SECURITY);				
+    		}			 
 		 }catch (Exception ex){
 			 throw new Fault(ex);
 		 }		 
@@ -45,26 +46,7 @@ public class UsernameTokenAuthorizationInterceptorOut extends WSS4JOutIntercepto
 	}
 		
 	public void handleMessage(SoapMessage msg) throws Fault {
-		String auth = null;
-		 try{	
-			String tipoConfiguracion = (String) this.getProperties().get("tipoConfiguracion");
-			if (tipoConfiguracion == null) {
-					tipoConfiguracion = Constantes.TIPO_CONFIGURACION_PROPERTIES;
-			}
-				
-			Properties props;
-			if (Constantes.TIPO_CONFIGURACION_PROPERTIES.equals(tipoConfiguracion)) {
-				props = ConfigurationUtil.getInstance().obtenerPropiedades();							
-			 } else {
-				 props = System.getProperties();
-			}
-			 
-			 auth = props.getProperty("sistra.ws.authenticacion");			 
-		 }catch (Exception ex){
-			 throw new Fault(ex);
-		 }
-		 
-		 if (!"USERNAMETOKEN".equals(auth)) {
+		if (!activar) {
 			 return;
 		 }else{
 			 super.handleMessage(msg);

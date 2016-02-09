@@ -30,7 +30,6 @@ import org.jboss.security.SubjectSecurityManager;
 import org.springframework.beans.factory.annotation.Required;
 
 import es.caib.util.ws.ConfigurationUtil;
-import es.caib.util.ws.Constantes;
 
 /**
  * CXF Interceptor that provides HTTP Basic Authentication validation.
@@ -57,16 +56,10 @@ public class BasicAuthAuthorizationInterceptor extends SoapHeaderInterceptor {
     protected SubjectSecurityManager authMgr;
     protected String unauthenticatedCalls;
     protected String securityDomain;
-    protected String tipoConfiguracion = "properties"; // Configuracion por properties o system 
-	
-    /**
-     * Indica si la configucion es por fichero de properties o por propiedades sistema.
-     * Si es por propiedades sistema debe ser el fichero de global.properties de sistra. 
-     * @param activar
-     */
-    public void setTipoConfiguracion(String conf) {
-        this.tipoConfiguracion = conf;
-    }
+    
+    // Indica si se activa directamente mediante configuracion xml
+    protected String activar;
+    
     
     /** 
      * initialize this authenticationhandler lazy, after the options have been
@@ -90,6 +83,7 @@ public class BasicAuthAuthorizationInterceptor extends SoapHeaderInterceptor {
          isInitialised = true;
          authMgr=null;
          shouldValidateUnauthenticatedCalls=false;
+         
          if (securityDomain != null) {
             try {
                // bind against the jboss security subsystem
@@ -163,23 +157,29 @@ public class BasicAuthAuthorizationInterceptor extends SoapHeaderInterceptor {
     @Override 
     public void handleMessage(Message message) throws Fault {
     	log.debug("BasicAuthAuthorizationInterceptor - handleMessage init");
-    	String auth = null;
-		 try{		
-			 Properties propiedades;
-			 if (Constantes.TIPO_CONFIGURACION_PROPERTIES.equals(this.tipoConfiguracion)) {
-				propiedades = ConfigurationUtil.getInstance().obtenerPropiedades();							
-			 } else {
-				 propiedades = System.getProperties();
+    	
+    	// Verificamos si esta marcado la activacion mediante xml o es mediante propiedades
+    	if (activar != null) {
+    		// Activacion mediante XML
+    		if ("false".equals(activar)) {
+    			log.debug("BasicAuthAuthorizationInterceptor - handleMessage end (no basic auth)");
+    			return;
+    		}
+    	} else {
+     		 // Activacion mediante propiedades (para SISTRA)
+	    	 String auth = null;
+			 try{		
+				 Properties propiedades = ConfigurationUtil.getInstance().obtenerPropiedades();							
+				 auth = propiedades.getProperty("sistra.ws.authenticacion");
+			 }catch (Exception ex){
+				 log.debug("BasicAuthAuthorizationInterceptor - exception: " + ex.getMessage(), ex);
+				 throw new Fault(ex);
 			 }
-			 auth = propiedades.getProperty("sistra.ws.authenticacion");
-		 }catch (Exception ex){
-			 log.debug("BasicAuthAuthorizationInterceptor - exception: " + ex.getMessage(), ex);
-			 throw new Fault(ex);
-		 }
-		 if (!"BASIC".equals(auth)) {
-			 log.debug("BasicAuthAuthorizationInterceptor - handleMessage end (no basic auth: " + auth + ")");
-			 return;
-		 }
+			 if (!"BASIC".equals(auth)) {
+				 log.debug("BasicAuthAuthorizationInterceptor - handleMessage end (no basic auth: " + auth + ")");
+				 return;
+			 }
+    	}
     	
     	
         // This is set by CXF
@@ -279,4 +279,12 @@ public class BasicAuthAuthorizationInterceptor extends SoapHeaderInterceptor {
         os.flush();
         os.close();
     }
+
+	public String getActivar() {
+		return activar;
+	}
+
+	public void setActivar(String activar) {
+		this.activar = activar;
+	}
 }

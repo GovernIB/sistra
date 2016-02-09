@@ -14,6 +14,7 @@ import es.caib.sistra.model.OrganismoInfo;
 public class ConfigurationUtil {
 
 	private static ConfigurationUtil confUtil = new ConfigurationUtil();
+	private static final String PREFIX_SAR = "es.caib.sistra.configuracion.sistra.";
 	private Properties propiedades = null;
 	private OrganismoInfo organismoInfo = null;
 	
@@ -89,7 +90,39 @@ public class ConfigurationUtil {
 	 *
 	 */
 	private void readProperties() throws Exception{
-		 InputStream fisGlobal=null,fisModul=null; 
+		String sar = System.getProperty(PREFIX_SAR + "sar");
+		if (sar != null && "true".equals(sar)) {
+			readPropertiesFromSAR();
+		} else {
+			readPropertiesFromFilesystem();
+		}
+	}
+
+	/**
+	 * Lee propiedades desde SAR.
+	 * @throws Exception
+	 */
+	private void readPropertiesFromSAR() throws Exception {
+		propiedades = new Properties();
+		Properties propSystem = System.getProperties();
+		for (Iterator it = propSystem.keySet().iterator(); it.hasNext();) {
+			String key = (String) it.next();
+			String value = propSystem.getProperty(key);
+			if (key.startsWith(PREFIX_SAR + "global")) {
+				propiedades.put(key.substring((PREFIX_SAR + "global").length() + 1), value);
+			}
+			if (key.startsWith(PREFIX_SAR + "sistra")) {
+				propiedades.put(key.substring((PREFIX_SAR + "sistra").length() + 1), value);
+			}			
+		}
+	}
+	
+	/**
+	 * Lee propiedades desde filesystem.
+	 * @throws Exception
+	 */
+	private void readPropertiesFromFilesystem() throws Exception {
+		InputStream fisGlobal=null,fisModul=null; 
 		 propiedades = new Properties();
          try {
         	 // Path directorio de configuracion
@@ -109,7 +142,7 @@ public class ConfigurationUtil {
          } finally {
              try{if (fisGlobal != null){fisGlobal.close();}}catch(Exception ex){}
              try{if (fisModul != null){fisModul.close();}}catch(Exception ex){}
-         }		
+         }
 	}
 	
 }

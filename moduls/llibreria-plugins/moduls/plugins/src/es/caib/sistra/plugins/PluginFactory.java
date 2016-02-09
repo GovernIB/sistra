@@ -1,6 +1,8 @@
 package es.caib.sistra.plugins;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,21 +30,46 @@ public class PluginFactory {
 	private static Map clasesPlugins = new HashMap();
 	private static Properties props = null;
 	private static PluginFactory pluginFactory=null;
+	private static final String PREFIX_SAR = "es.caib.sistra.configuracion.sistra.";
 	
 	/**
 	 * Constructor. Lee fichero de propiedades global donde se han definido los plugins.
 	 */
 	private PluginFactory() throws Exception{
-		FileInputStream fis=null;
+		
 		try{
-			fis = new FileInputStream(System.getProperty("ad.path.properties") + "sistra/global.properties");
-			props = new Properties();
-			props.load(fis);
+			String sar = System.getProperty(PREFIX_SAR + "sar");
+			if (sar != null && "true".equals(sar)) {
+				readPropertiesFromSAR();
+			} else {
+				readPropertiesFromFilesystem();
+			}						
 		}catch(Exception ex){
-			throw new Exception("Error accediendo a fichero global de propiedades 'sistra/global.properties'",ex);
-		}finally{
-			try{if(fis!=null) fis.close();}catch(Exception ex2){}
+			throw new Exception("Error accediendo a propiedades globales",ex);
 		}
+	}
+	
+	/**
+	 * Lee propiedades desde SAR.
+	 * @throws Exception
+	 */
+	private void readPropertiesFromSAR() throws Exception {
+		props = new Properties();
+		Properties propSystem = System.getProperties();
+		for (Iterator it = propSystem.keySet().iterator(); it.hasNext();) {
+			String key = (String) it.next();
+			String value = propSystem.getProperty(key);
+			if (key.startsWith(PREFIX_SAR + "global")) {
+				props.put(key.substring((PREFIX_SAR + "global").length() + 1), value);
+			}	
+		}
+	}
+
+	private void readPropertiesFromFilesystem() throws Exception {
+		FileInputStream fis = new FileInputStream(System.getProperty("ad.path.properties") + "sistra/global.properties");
+		props = new Properties();
+		props.load(fis);
+		fis.close();
 	}
 	
 	/**

@@ -5,7 +5,6 @@ import java.util.Properties;
 import javax.xml.ws.BindingProvider;
 
 import es.caib.util.ws.ConfigurationUtil;
-import es.caib.util.ws.Constantes;
 
 public class WsClientSistraUtil {
 	
@@ -21,7 +20,7 @@ public class WsClientSistraUtil {
 	 */
 	public static void configurePort(BindingProvider port, String url,
 			String user, String pass) throws Exception {
-		configurePort(port, url, null, user, pass, Constantes.TIPO_CONFIGURACION_PROPERTIES);
+		configurePort(port, url, null, user, pass);
 	}
 
 	/**
@@ -35,27 +34,8 @@ public class WsClientSistraUtil {
 	 */
 	public static void configurePort(BindingProvider port, String url, String soapAction,
 			String user, String pass) throws Exception {
-		configurePort(port, url, soapAction, user, pass, Constantes.TIPO_CONFIGURACION_PROPERTIES);
-	}
-	
-	/**
-	 * Configura puerto segun la configuracion de sistra seleccionando desde donde coge la configuracion (properties o system)
-	 * 
-	 * @param port
-	 * @param url
-	 * @param user
-	 * @param pass
-	 * @throws Exception
-	 */
-	public static void configurePort(BindingProvider port, String url, String soapAction,
-			String user, String pass, String tipoConfiguracion) throws Exception {
-
-		Properties props;
-		if (Constantes.TIPO_CONFIGURACION_PROPERTIES.equals(tipoConfiguracion)) {
-			props = ConfigurationUtil.getInstance().obtenerPropiedades();
-		} else {	
-			props = System.getProperties();
-		}
+		
+		Properties props = ConfigurationUtil.getInstance().obtenerPropiedades();
 		
 		String auth = props.getProperty("sistra.ws.authenticacion");
 
