@@ -832,7 +832,9 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
         	// Devolvemos lista de tramites
         	List resultList = new ArrayList();
         	for (Iterator it = resultMap.keySet().iterator(); it.hasNext();) {
-        		resultList.add(resultMap.get(it.next()));
+        		TramitePersistente tp = (TramitePersistente) resultMap.get(it.next());
+        		Hibernate.initialize(tp.getDocumentos());
+				resultList.add(tp);
         	}
         	return resultList;
         	

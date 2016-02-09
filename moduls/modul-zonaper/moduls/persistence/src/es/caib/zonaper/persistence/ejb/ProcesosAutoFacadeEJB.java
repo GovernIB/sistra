@@ -659,7 +659,7 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 			boolean avisar = false;			
 			for (Iterator it2 = tramite.getDocumentos().iterator(); it2.hasNext();) {
 				DocumentoPersistente dp = (DocumentoPersistente) it2.next();
-				if (dp.getTipoDocumento() == DocumentoPersistentePAD.TIPO_PAGO) {
+				if (DocumentoPersistentePAD.TIPO_PAGO.equals(dp.getTipoDocumento()) && "S".equals(dp.getEsPagoTelematico())) {
 					// Si esta pagado, hay que avisar
 					if (dp.getEstado() == DocumentoPersistentePAD.ESTADO_CORRECTO) {
 						avisar = true;						
