@@ -19,7 +19,17 @@ import org.apache.commons.logging.LogFactory;
 
 import es.caib.mobtratel.persistence.delegate.DelegateMobTraTelUtil;
 import es.caib.mobtratel.persistence.delegate.MobTraTelDelegate;
+import es.caib.redose.modelInterfaz.DocumentoRDS;
+import es.caib.redose.modelInterfaz.ReferenciaRDS;
+import es.caib.redose.persistence.delegate.DelegateRDSUtil;
+import es.caib.redose.persistence.delegate.RdsDelegate;
+import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.pagos.ConstantesPago;
+import es.caib.sistra.plugins.pagos.EstadoSesionPago;
+import es.caib.sistra.plugins.pagos.PluginPagosIntf;
 import es.caib.util.CredentialUtil;
+import es.caib.xml.pago.XmlDatosPago;
+import es.caib.zonaper.model.DocumentoPersistente;
 import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.ElementoExpedienteItf;
 import es.caib.zonaper.model.Entrada;
@@ -32,6 +42,7 @@ import es.caib.zonaper.model.NotificacionTelematica;
 import es.caib.zonaper.model.RegistroExternoPreparado;
 import es.caib.zonaper.model.TramitePersistente;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
+import es.caib.zonaper.modelInterfaz.DocumentoPersistentePAD;
 import es.caib.zonaper.persistence.delegate.BackupDelegate;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.EntradaPreregistroDelegate;
@@ -635,24 +646,80 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 		
 		// Generamos aviso para los tramites
 		for (Iterator it = tramites.iterator(); it.hasNext();) {
+			
 			TramitePersistente tramite = (TramitePersistente) it.next();
+			
+			// Verificamos si tiene activada las alertas
 			if (StringUtils.isBlank(tramite.getAlertasTramitacionEmail()) && 
 					StringUtils.isBlank(tramite.getAlertasTramitacionSms())) {
 				continue;
 			}
 			
-			try {
-				// Generamos aviso a traves de mobtratel
-				AvisoAlertasTramitacion.getInstance().avisarPagoRealizadoTramitePendiente(tramite);	
-				// Marcamos como avisado
-				delegate.avisoPagoTelematicoFinalizado(tramite.getIdPersistencia());
-			} catch (Exception exc) {
-				// Mostramos error en log y continuamos con siguiente tramite
-				backupLog.error("Error realizando alerta de tramitacion", exc);				
+			// Verificamos si tiene un pago realizado
+			boolean avisar = false;			
+			for (Iterator it2 = tramite.getDocumentos().iterator(); it2.hasNext();) {
+				DocumentoPersistente dp = (DocumentoPersistente) it2.next();
+				if (dp.getTipoDocumento() == DocumentoPersistentePAD.TIPO_PAGO) {
+					// Si esta pagado, hay que avisar
+					if (dp.getEstado() == DocumentoPersistentePAD.ESTADO_CORRECTO) {
+						avisar = true;						
+					} 
+					// Si esta iniciado, hay que verificar si esta pagado
+					if (dp.getEstado() == DocumentoPersistentePAD.ESTADO_INCORRECTO) {
+						avisar = isPagoPendienteConfirmado(dp);
+					}
+					// Si hay que avisar, no seguimos mirando
+					if (avisar) {
+						break;
+					}
+				}
+			}
+			
+			if (avisar) {
+				try {
+					// Generamos aviso a traves de mobtratel
+					AvisoAlertasTramitacion.getInstance().avisarPagoRealizadoTramitePendiente(tramite);	
+					// Marcamos como avisado
+					delegate.avisoPagoTelematicoFinalizado(tramite.getIdPersistencia());
+				} catch (Exception exc) {
+					// Mostramos error en log y continuamos con siguiente tramite
+					backupLog.error("Error realizando alerta de tramitacion", exc);				
+				}
 			}
 		}		
 		
 	}
 
 
+	/**
+	 * Verifica contra el plugin de pago si el pago esta confirmado.
+	 * @param dp
+	 * @return
+	 * @throws Exception
+	 */
+	private boolean isPagoPendienteConfirmado(DocumentoPersistente dp) throws Exception {
+		
+		boolean res = false;
+		
+		// Obtenemos datos pago para obtener el localizador
+		RdsDelegate rdsDlg = DelegateRDSUtil.getRdsDelegate();
+		DocumentoRDS pagoRds = rdsDlg.consultarDocumento(new ReferenciaRDS(dp.getRdsCodigo().longValue(), dp.getRdsClave()));
+		XmlDatosPago xmlPago = new XmlDatosPago();
+		xmlPago.setBytes(pagoRds.getDatosFichero());
+		
+		// Invocamos al plugin de pago para verificar estado sesion pago
+		if (StringUtils.isNotBlank(xmlPago.getLocalizador())) {
+			String pluginId = xmlPago.getPluginId();
+			if (StringUtils.isBlank(pluginId)) {
+				pluginId = PluginFactory.ID_PLUGIN_DEFECTO;
+			}
+			PluginPagosIntf pluginPagos = PluginFactory.getInstance().getPluginPagos(pluginId);
+			EstadoSesionPago estadoSesionPago = pluginPagos.comprobarEstadoSesionPago(xmlPago.getLocalizador());
+			res = (estadoSesionPago.getEstado() == ConstantesPago.SESIONPAGO_PAGO_CONFIRMADO);			
+		}
+		
+		return res;
+	}
+	
+	
 }
