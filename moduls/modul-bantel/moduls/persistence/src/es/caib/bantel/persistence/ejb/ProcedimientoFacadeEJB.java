@@ -119,7 +119,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB {
     	Session session = getSession();
     	try
     	{
-    		Query query = session.createQuery( "FROM Procedimiento o order by o.descripcion");
+    		Query query = session.createQuery( "FROM Procedimiento o order by o.identificador");
     		query.setCacheable( true );
     		return query.list();
     	}
@@ -143,7 +143,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB {
     	Session session = getSession();
     	try
     	{
-    		Query query = session.createQuery( "FROM Procedimiento o WHERE upper(o.descripcion) like :filtroDesc order by o.descripcion");
+    		Query query = session.createQuery( "FROM Procedimiento o WHERE upper(o.descripcion) like :filtroDesc order by o.identificador");
             query.setParameter("filtroDesc", "%" + StringUtils.defaultString(filtro).toUpperCase() + "%");
     		query.setCacheable( true );
     		return query.list();
