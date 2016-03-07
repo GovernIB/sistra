@@ -2,6 +2,7 @@ package es.caib.bantel.front.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -38,12 +39,9 @@ public class AltaNotificacionController extends BaseController
 		
 		// Establecemos url back
 		String urlSistra = "";
-		try{
-			ConfiguracionDelegate delegate = DelegateUtil.getConfiguracionDelegate();
-			urlSistra = delegate.obtenerConfiguracion().getProperty("sistra.url.back");
-		}catch (Exception e) {
-			urlSistra = "";
-		}
+		ConfiguracionDelegate delegate = DelegateUtil.getConfiguracionDelegate();
+		Properties propsConfig = delegate.obtenerConfiguracion();
+		urlSistra = propsConfig.getProperty("sistra.url.back") + propsConfig.getProperty("sistra.contextoRaiz");
 		request.setAttribute( "urlSistraAFirma", urlSistra );
 		
 		// Comprobamos si puede cambiar el plazo de notificaciones

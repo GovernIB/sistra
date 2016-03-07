@@ -7,6 +7,10 @@ import java.io.Serializable;
  */
 public class Constants implements Serializable 
 {
+	
+	/** Contexto raiz sistra */
+	public static final String CONTEXTO_RAIZ = "es.caib.sistra.contextRoot";
+	
 	/**
 	 * Atributo donde se guarda el lenguaje establecido en la pagina de login
 	 */
@@ -95,6 +99,7 @@ public class Constants implements Serializable
      */
     public static final String FILTRO_KEY = "es.caib.zonaper.front.filtro"; // Palabra de filtro
     public static final String FILTRO_LISTA_KEY = "es.caib.zonaper.front.filtroLista"; // Expedientes filtrados
+	
     
     
 }

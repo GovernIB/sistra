@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -70,21 +71,25 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
         // 	- se controla la entrega de las notificaciones
         try{
         	ConfiguracionDelegate config = DelegateUtil.getConfiguracionDelegate();
+        	Properties configProps = config.obtenerConfiguracion();
         	
-        	String mostrarIframe = config.obtenerConfiguracion().getProperty("sistra.iframe");
+			String mostrarIframe = configProps.getProperty("sistra.iframe");
 			getServletContext().setAttribute(Constants.MOSTRAR_EN_IFRAME,new Boolean(mostrarIframe).booleanValue());
         	
-        	String controlEntregaNotif = config.obtenerConfiguracion().getProperty("notificaciones.controlEntrega.habilitar");
+        	String controlEntregaNotif = configProps.getProperty("notificaciones.controlEntrega.habilitar");
         	if (StringUtils.isBlank(controlEntregaNotif)) {
         		controlEntregaNotif = "false";
         	}
 			getServletContext().setAttribute(Constants.CONTROLAR_ENTREGA_NOTIFICACIONES,new Boolean(controlEntregaNotif).booleanValue());
 			
-			String apartadoAlertas = config.obtenerConfiguracion().getProperty("avisos.apartadoAlertas");
+			String apartadoAlertas = configProps.getProperty("avisos.apartadoAlertas");
         	if (StringUtils.isBlank(apartadoAlertas)) {
         		apartadoAlertas = "true";
         	}
 			getServletContext().setAttribute(Constants.HABILITAR_APARTADO_ALERTAS,new Boolean(apartadoAlertas).booleanValue());
+			
+			getServletContext().setAttribute(Constants.CONTEXTO_RAIZ,StringUtils.defaultString(configProps.getProperty("sistra.contextoRaiz"), ""));
+			
         }catch(Exception ex){
         	log.error("Error obteniendo la variable iframe",ex);
         	throw new ServletException(ex);

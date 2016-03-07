@@ -25,7 +25,7 @@ public class DelegacionesController extends BaseController
 		}
 		request.setAttribute("firmarDelegacionRepresentante",firmarDelegacionRepresentante);	
 		
-		String urlSistra = props.getProperty("sistra.url.back");
+		String urlSistra = props.getProperty("sistra.url.back") + props.getProperty("sistra.contextoRaiz");
 		request.setAttribute( "urlSistraAFirma", urlSistra );
 	}
 	

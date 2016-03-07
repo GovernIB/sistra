@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -164,7 +165,8 @@ public class AvisosExpediente {
 		// Obtenemos propiedades organismo
 		ConfiguracionDelegate cfd = DelegateUtil.getConfiguracionDelegate();
 		OrganismoInfo oi = cfd.obtenerOrganismoInfo();
-		String urlSistra = cfd.obtenerConfiguracion().getProperty("sistra.url");
+		Properties propsConfig = cfd.obtenerConfiguracion();
+		String urlSistra =  propsConfig.getProperty("sistra.url") + propsConfig.getProperty("sistra.contextoRaiz");
 		
 		// Establecemos textos de email y SMS 
 		String tituloEmail,textoEmail,textoSMS;		
@@ -264,7 +266,7 @@ public class AvisosExpediente {
 				literalTextoAccesoNotificacion = "aviso.email.textoAcceso.notificacion.certificado";				
 			}
 			
-			String controlEntregaNotif = cfd.obtenerConfiguracion().getProperty("notificaciones.controlEntrega.habilitar");
+			String controlEntregaNotif = propsConfig.getProperty("notificaciones.controlEntrega.habilitar");
         	if (StringUtils.isBlank(controlEntregaNotif)) {
         		controlEntregaNotif = "false";
         	}

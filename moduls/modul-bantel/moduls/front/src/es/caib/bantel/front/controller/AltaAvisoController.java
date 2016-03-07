@@ -1,6 +1,7 @@
 package es.caib.bantel.front.controller;
 
 import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +30,8 @@ public class AltaAvisoController extends BaseController
 		String urlSistra = "";
 		try{
 			ConfiguracionDelegate delegate = DelegateUtil.getConfiguracionDelegate();
-			urlSistra = delegate.obtenerConfiguracion().getProperty("sistra.url.back");
+			Properties propsConfig = delegate.obtenerConfiguracion();
+			urlSistra = propsConfig.getProperty("sistra.url.back") + propsConfig.getProperty("sistra.contextoRaiz");
 		}catch (Exception e) {
 			urlSistra = "";
 		}

@@ -23,7 +23,7 @@ public class PortadaAction extends BaseAction
             HttpServletResponse response) throws Exception 
     {				 	 	
 		OrganismoInfo oi = (OrganismoInfo) request.getSession().getServletContext().getAttribute(Constants.ORGANISMO_INFO_KEY);
-		response.sendRedirect("/zonaperfront/redireccion.jsp?url=" + StringEscapeUtils.escapeHtml(oi.getUrlPortal()));
+		response.sendRedirect(request.getSession().getServletContext().getAttribute(Constants.CONTEXTO_RAIZ) + "/zonaperfront/redireccion.jsp?url=" + StringEscapeUtils.escapeHtml(oi.getUrlPortal()));
  		return null;
 	}
 

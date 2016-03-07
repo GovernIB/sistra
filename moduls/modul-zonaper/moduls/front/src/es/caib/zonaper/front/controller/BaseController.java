@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
@@ -61,7 +62,8 @@ public abstract class BaseController implements Controller {
 			String urlSistra = "";
 			try{
 				ConfiguracionDelegate delegate = DelegateUtil.getConfiguracionDelegate();
-				urlSistra = delegate.obtenerConfiguracion().getProperty("sistra.url");
+				Properties propsConfig = delegate.obtenerConfiguracion();
+				urlSistra = propsConfig.getProperty("sistra.url") + propsConfig.getProperty("sistra.contextoRaiz");
 			}catch (Exception e) {
 				urlSistra = "";
 			}
