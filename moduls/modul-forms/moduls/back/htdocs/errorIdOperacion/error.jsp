@@ -8,7 +8,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title></title>
-<link href="/formback/css/styleA.css" rel="stylesheet" type="text/css" />
+<link href="css/styleA.css" rel="stylesheet" type="text/css" />
 <link href="aaaaaaaaaaaa" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -22,7 +22,7 @@
 				<div id="capaInfo" class='error'>	
 					<p class="atencion"><bean:message key="errors.idOperacion.error" /></p>
 					<p class="atencion"><bean:message key="errors.idOperacion.recordatorio" /></p>
-					<p><html:link href="/formback/back/formulario/lista.do"><bean:message key="errors.idOperacion.continuar" /></html:link></p>
+					<p><html:link href="back/formulario/lista.do"><bean:message key="errors.idOperacion.continuar" /></html:link></p>
 				</div>
 				<!-- end capa de informacion -->
 			</div>

@@ -23,8 +23,6 @@ function obrir(url, name, x, y) {
 <body>
 <!--  cabecera -->
 <tiles:insert name="header"/>
-<!--  tabs -->
-<!-- tiles:insert name="tabs"/-->
 <!-- continguts -->
 <div id="contenedor">
 <tiles:insert name="main"/>

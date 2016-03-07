@@ -19,6 +19,10 @@ li {
 <p class="estilo1">
 <ul>
 <%
+
+// Context Path
+String contextPath = request.getContextPath().substring(0, request.getContextPath().indexOf("/tramites"));
+
 Connection con = null;
 ResultSet rs = null;
 Statement s = null;
@@ -64,7 +68,7 @@ try {
    		while (st.hasMoreTokens()){
    			idioma = st.nextToken();
 %>
-			[<a href="/sistrafront/inicio?language=<%=idioma%>&modelo=<%=id%>&version=<%=version%>"><%=idioma%></a>]
+			[<a href="<%=contextPath%>/sistrafront/inicio?language=<%=idioma%>&modelo=<%=id%>&version=<%=version%>"><%=idioma%></a>]
 			&nbsp;
 <%   			
    		}

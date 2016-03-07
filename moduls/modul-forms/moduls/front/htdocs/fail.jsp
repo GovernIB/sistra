@@ -7,14 +7,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+
 <title><bean:write name="<%=org.ibit.rol.form.front.Constants.ORGANISMO_INFO_KEY%>" property="nombre"/></title>
-<link href="/sistrafront/estilos/estilos.css" rel="stylesheet" type="text/css" />
+
+<link rel="stylesheet" href="estilo_caib/css/forms-0.0.2.css" type="text/css" />
+
 <logic:notEmpty name="<%=org.ibit.rol.form.front.Constants.ORGANISMO_INFO_KEY%>" property="urlCssCustom">
 	<link href="<bean:write name="<%=org.ibit.rol.form.front.Constants.ORGANISMO_INFO_KEY%>" property="urlCssCustom" />" rel="stylesheet" type="text/css" />
 </logic:notEmpty>
-<script type="text/javascript" src="/sistrafront/js/globales.js"></script>
+ 
 </head>
-<body onLoad="mostrarInfo()">
+<body>
 <div id="contenidor">
 	<!--  cabecera -->
 <!-- capçal -->
@@ -29,22 +32,9 @@
 	<div id="capsalfranja"></div>
 	<!-- continguts -->
 	<div id="continguts">
-		<div id="tramitacion">
-			<!-- paso en cuestión -->
-			<div id="pasoInf">
-	<!-- capa de información -->
-	<div id="capaInfoFondo"></div>
-	<div id="capaInfo" class='error'>	
-		<p class="atencion"><bean:message key="message.atencion" /></p>
-		<p><html:errors /></p>
-				<p><a href="/sistrafront/main.do"><bean:message key="message.continuar" /></a></p>
-	</div>
-	<!-- end capa de informacion -->
-
+		 <div id="formularioFORM">
 			<h2><bean:message key="errors.general.titulo" /></h2>
-				<p class="ultimo"><html:errors /></p>
-			<div class="separacio"></div>
-			</div>
+			<p class="ultimo"><html:errors /></p>			
 		</div>
 	</div>
 	<!-- pie pagina -->

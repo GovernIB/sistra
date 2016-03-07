@@ -157,4 +157,4 @@
 			</logic:present>
 
 
-			<p class="tornarArrere"><strong><a href="/mobtratelfront/busquedaEnvios.do"><bean:message key="detalleEnvio.volver"/></a></strong></p>
+			<p class="tornarArrere"><strong><a href="busquedaEnvios.do"><bean:message key="detalleEnvio.volver"/></a></strong></p>

@@ -35,4 +35,4 @@
 			</table> 
 		</logic:notEmpty>
 	</div>
-	<p class="tornarArrere"><strong><a href="/mobtratelfront/init.do"><bean:message key="editarEnvio.volver"/></a></strong></p>
+	<p class="tornarArrere"><strong><a href="init.do"><bean:message key="editarEnvio.volver"/></a></strong></p>

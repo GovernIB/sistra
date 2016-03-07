@@ -88,4 +88,4 @@
 </logic:notPresent>	
 
 
-<p class="tornarArrere"><strong><a href="/mobtratelfront/init.do"><bean:message key="detalleEnvio.volver"/></a></strong></p>
+<p class="tornarArrere"><strong><a href="init.do"><bean:message key="detalleEnvio.volver"/></a></strong></p>

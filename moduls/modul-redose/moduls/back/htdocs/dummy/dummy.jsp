@@ -13,7 +13,7 @@
 <table class="nomarc">
     <tr><td class="titulo"><bean:message key="main.title" /></td></tr>
     <tr><td>&nbsp;</td></tr>
-    <tr><td align="center"><html:link href="/redoseback/upload.jsp">Upload</html:link></td></tr>
+    <tr><td align="center"><html:link href="upload.jsp">Upload</html:link></td></tr>
 </table>
 </body>
 </html:html>

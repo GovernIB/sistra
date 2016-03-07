@@ -76,14 +76,14 @@
 			<ul>
 				<logic:equal name="lang" value="ca">
 					<li><strong>catal&agrave;</strong> . </li>
-					<li><a href="/redosefront/init.do?lang=es&<%=request.getAttribute("queryString")%>" title="Cambiar el idioma a Espa&ntilde;ol">espa&ntilde;ol</a> . </li>
+					<li><a href="init.do?lang=es&<%=request.getAttribute("queryString")%>" title="Cambiar el idioma a Espa&ntilde;ol">espa&ntilde;ol</a> . </li>
 				</logic:equal>				
 				<logic:equal name="lang" value="es">
-					<li><a href="/redosefront/init.do?lang=ca&<%=request.getAttribute("queryString")%>" title="Cambiar el idioma a Catal&agrave;">catal&agrave;</a> . </li>
+					<li><a href="init.do?lang=ca&<%=request.getAttribute("queryString")%>" title="Cambiar el idioma a Catal&agrave;">catal&agrave;</a> . </li>
 					<li><strong>espa&ntilde;ol</strong> . </li>
 				</logic:equal>
 				<logic:equal name="lang" value="en">
-					<li><a href="/redosefront/init.do?lang=en&id=<%=request.getAttribute("queryString")%>" title="Change language to English">english</a> . </li>
+					<li><a href="init.do?lang=en&id=<%=request.getAttribute("queryString")%>" title="Change language to English">english</a> . </li>
 					<li><strong>english</strong> . </li>
 				</logic:equal>
 			</ul>
