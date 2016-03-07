@@ -441,9 +441,7 @@ function repintarParametros(datos){
      }
      // -->
 </script>
-<bean:define id="urlConfirmacion" type="java.lang.String">
-	<html:rewrite href="/zonaperback/init.do" paramId="lang" paramName="<%= Globals.LOCALE_KEY  %>" paramProperty="language" paramScope="session"/>
-</bean:define>
+
 <bean:define id="urlArbol">
     <html:rewrite page="/arbolUnidades.do"/>
 </bean:define>

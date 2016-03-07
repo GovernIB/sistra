@@ -152,7 +152,7 @@
 										<bean:message key="comprobarDocumento.firmadoPor"/>
 										<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request" type="es.caib.sistra.plugins.firma.FirmaIntf">							
 											&nbsp;
-											<a href="/bantelfront/mostrarFirmaDocumento.do?codigo=<%=documento.getCodigoRDS()%>&clave=<%=documento.getClaveRDS()%>&nif=<%=firma.getNif()%>" >
+											<a href="mostrarFirmaDocumento.do?codigo=<%=documento.getCodigoRDS()%>&clave=<%=documento.getClaveRDS()%>&nif=<%=firma.getNif()%>" >
 												<bean:write name="firma" property="nombreApellidos"/>  									
 											</a>	
 										</logic:iterate>			
@@ -161,7 +161,7 @@
 									<logic:notEmpty name="<%=\"CUST-\" + codigoFirma %>" scope="request">
 										<br/>
 										<bean:message key="comprobarDocumento.urlCustodia"/>
-										<a href="/bantelfront/mostrarDocumentoCustodia.do?codigo=<%=documento.getCodigoRDS()%>&clave=<%=documento.getClaveRDS()%>" target="_blank">
+										<a href="mostrarDocumentoCustodia.do?codigo=<%=documento.getCodigoRDS()%>&clave=<%=documento.getClaveRDS()%>" target="_blank">
 											<bean:write name="<%=\"CUST-\" + codigoFirma %>" />
 										</a>														
 									</logic:notEmpty>

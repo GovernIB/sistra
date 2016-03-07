@@ -6,9 +6,6 @@
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 
-<bean:define id="urlConfirmacion" type="java.lang.String">
-	<html:rewrite href="/zonaperback/init.do" paramId="lang" paramName="<%= Globals.LOCALE_KEY  %>" paramProperty="language" paramScope="session"/>
-</bean:define>
 <bean:define id="btnAltaAvis" type="java.lang.String">
 	<bean:message key='expediente.altaAviso'/>
 </bean:define>

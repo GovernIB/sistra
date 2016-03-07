@@ -14,7 +14,7 @@
 <link href="./estilos/cuadromando.css" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 <!--
-CONTEXTPATH = "/auditfront";
+
 function redirige(url,obj) {
 	obj.location.replace(url);
 }
@@ -43,7 +43,6 @@ function refrescarInicio(){
 </script>
 <!-- import the calendar script -->
 <link rel="alternate stylesheet" type="text/css" media="all" href="js/calendar-brown.css" title="summer" />
-<!-- <link rel="stylesheet" href="/gred2/estilos/estil_form.css" type="text/css"> //-->
 <script type="text/javascript" src="js/calendar.js"></script>
 <script type="text/javascript" src="js/lang/calendar-es.js"></script>
 <script type="text/javascript" src="js/calendario.js"></script>

@@ -159,7 +159,7 @@
 								<logic:notEmpty name="<%=codigoFirmaAsiento %>" scope="request">
 									<logic:iterate name="<%=codigoFirmaAsiento %>" id="firma" scope="request" type="es.caib.sistra.plugins.firma.FirmaIntf">							
 										&nbsp;
-										<a href="/bantelfront/mostrarFirmaDocumento.do?codigo=<%=codigoFirmaAsiento%>&clave=<%=claveFirmaAsiento%>&nif=<%=firma.getNif()%>" >
+										<a href="mostrarFirmaDocumento.do?codigo=<%=codigoFirmaAsiento%>&clave=<%=claveFirmaAsiento%>&nif=<%=firma.getNif()%>" >
 											<bean:write name="firma" property="nombreApellidos"/>  									
 										</a>	
 									</logic:iterate>												
@@ -168,7 +168,7 @@
 								<logic:notEmpty name="<%=\"CUST-\" + codigoFirmaAsiento %>" scope="request">
 									<br/>
 									<bean:message key="comprobarDocumento.urlCustodia"/>
-									<a href="/bantelfront/mostrarDocumentoCustodia.do?codigo=<%=codigoFirmaAsiento%>&clave=<%=claveFirmaAsiento%>" target="_blank">
+									<a href="mostrarDocumentoCustodia.do?codigo=<%=codigoFirmaAsiento%>&clave=<%=claveFirmaAsiento%>" target="_blank">
 										<bean:write name="<%=\"CUST-\" + codigoFirmaAsiento %>" />
 									</a>																										
 								</logic:notEmpty>
@@ -306,7 +306,7 @@
 											<bean:message key="comprobarDocumento.firmadoPor"/>
 											<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request" type="es.caib.sistra.plugins.firma.FirmaIntf">							
 												&nbsp;
-												<a href="/bantelfront/mostrarFirmaDocumento.do?codigo=<%=documento.getRdsCodigo()%>&clave=<%=documento.getRdsClave()%>&nif=<%=firma.getNif()%>" >
+												<a href="<bean:write name="<%=es.caib.bantel.front.Constants.CONTEXTO_RAIZ%>" paramScope="session"/>/bantelfront/mostrarFirmaDocumento.do?codigo=<%=documento.getRdsCodigo()%>&clave=<%=documento.getRdsClave()%>&nif=<%=firma.getNif()%>" >
 													<bean:write name="firma" property="nombreApellidos"/>  									
 												</a>	
 											</logic:iterate>			
@@ -315,7 +315,7 @@
 										<logic:notEmpty name="<%=\"CUST-\" + codigoFirma %>" scope="request">
 											<br/>
 											<bean:message key="comprobarDocumento.urlCustodia"/>
-											<a href="/bantelfront/mostrarDocumentoCustodia.do?codigo=<%=documento.getRdsCodigo()%>&clave=<%=documento.getRdsClave()%>" target="_blank">
+											<a href="<bean:write name="<%=es.caib.bantel.front.Constants.CONTEXTO_RAIZ%>" paramScope="session"/>/bantelfront/mostrarDocumentoCustodia.do?codigo=<%=documento.getRdsCodigo()%>&clave=<%=documento.getRdsClave()%>" target="_blank">
 												<bean:write name="<%=\"CUST-\" + codigoFirma %>" />
 											</a>														
 										</logic:notEmpty>
