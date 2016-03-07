@@ -4,6 +4,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.Iterator;
+import java.util.Properties;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.Globals;
@@ -78,7 +80,11 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
             //Indicamos si se tiene que ejecutar dentro de un iframe o no
             try{
             	ConfiguracionDelegate configuracion = DelegateUtil.getConfiguracionDelegate();
-            	getServletContext().setAttribute(Constants.MOSTRAR_EN_IFRAME,new Boolean(configuracion.obtenerConfiguracion().getProperty("sistra.iframe")).booleanValue());
+            	Properties configProps = configuracion.obtenerConfiguracion();
+				getServletContext().setAttribute(Constants.MOSTRAR_EN_IFRAME,new Boolean(configProps.getProperty("sistra.iframe")).booleanValue());
+            	
+            	getServletContext().setAttribute(Constants.CONTEXTO_RAIZ,StringUtils.defaultString(configProps.getProperty("sistra.contextoRaiz"), ""));
+            	
             }catch(Exception ex){
             	log.error("Error obteniendo la variable iframe",ex);
             	throw new ServletException(ex);

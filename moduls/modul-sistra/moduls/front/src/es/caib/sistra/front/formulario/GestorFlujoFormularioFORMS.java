@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.Credentials;
@@ -54,6 +55,7 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 	private static String URL_CANCEL = null;
 	private static String URL_REDIRECCION_CANCEL = null;
 	private static String URL_SISTRA = null;
+	private static String CONTEXTO_RAIZ = null;
 	// - Nombre parametros
 	private static String RESULT_PARAM 	= "es.caib.sistra.front.formulario.result@";
 	private static String CANCEL_PARAM 	= "es.caib.sistra.front.formulario.cancelacio@";
@@ -90,14 +92,17 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 		{
 			try
 			{
-				String urlSistra = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("sistra.url");
+				Properties propsConfig = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+				String urlSistra = propsConfig.getProperty("sistra.url");
+				String contextoSistra = propsConfig.getProperty("sistra.contextoRaiz");
 				
 				// Urls sistra
 				URL_SISTRA 					= urlSistra;
-				URL_OK  					= urlSistra + getParametroConfiguracion( initParams,  "sistra.urlSisTraOK" );
-				URL_REDIRECCION_OK 			= urlSistra + getParametroConfiguracion( initParams,  "sistra.urlRedireccionOK" );
-				URL_CANCEL  				= urlSistra + getParametroConfiguracion( initParams,  "sistra.urlSisTraCancel" );
-				URL_REDIRECCION_CANCEL 		= urlSistra + getParametroConfiguracion( initParams,  "sistra.urlRedireccionCancel" );
+				CONTEXTO_RAIZ 				= contextoSistra;
+				URL_OK  					= urlSistra + CONTEXTO_RAIZ +  getParametroConfiguracion( initParams,  "sistra.urlSisTraOK" );
+				URL_REDIRECCION_OK 			= urlSistra + CONTEXTO_RAIZ + getParametroConfiguracion( initParams,  "sistra.urlRedireccionOK" );
+				URL_CANCEL  				= urlSistra + CONTEXTO_RAIZ + getParametroConfiguracion( initParams,  "sistra.urlSisTraCancel" );
+				URL_REDIRECCION_CANCEL 		= urlSistra + CONTEXTO_RAIZ + getParametroConfiguracion( initParams,  "sistra.urlRedireccionCancel" );
 				
 			}
 			catch ( Exception exc )
@@ -193,14 +198,16 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 				
 		try{
 			urlGestor = confGestorForm.getGestorFormulario().getUrlGestor();
-			urlGestor = StringUtil.replace(urlGestor,"@sistra.url@",URL_SISTRA);
+			urlGestor = StringUtil.replace(urlGestor,"@sistra.url@",URL_SISTRA);			
 			
 			URL_TRAMITACION_FORMULARIO 	= confGestorForm.getGestorFormulario().getUrlTramitacionFormulario();
 			URL_REDIRECCION_FORMULARIO 	= confGestorForm.getGestorFormulario().getUrlRedireccionFormulario();
 			
 			// Reemplazamos urls que pueden llevar parametrizada la url
 			URL_TRAMITACION_FORMULARIO = StringUtil.replace(URL_TRAMITACION_FORMULARIO,"@forms.server@",urlGestor);
-			URL_REDIRECCION_FORMULARIO 	= StringUtil.replace(URL_REDIRECCION_FORMULARIO,"@forms.server@",urlGestor);			
+			URL_TRAMITACION_FORMULARIO = StringUtil.replace(URL_TRAMITACION_FORMULARIO,"@sistra.contextoRaiz@",CONTEXTO_RAIZ);
+			URL_REDIRECCION_FORMULARIO 	= StringUtil.replace(URL_REDIRECCION_FORMULARIO,"@forms.server@",urlGestor);
+			URL_REDIRECCION_FORMULARIO 	= StringUtil.replace(URL_REDIRECCION_FORMULARIO,"@sistra.contextoRaiz@",CONTEXTO_RAIZ);
 			
 			log.debug( "URL_TRAMITACION_FORMULARIO:" + URL_TRAMITACION_FORMULARIO);
 		}catch(Exception ex){

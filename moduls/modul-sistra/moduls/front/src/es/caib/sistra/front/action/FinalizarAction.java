@@ -58,8 +58,7 @@ public class FinalizarAction extends BaseAction
 			return mapping.findForward( "success" );
 		}else{
 			request.getSession().setAttribute(Constants.URL_REDIRECCION_SESSION_KEY, urlFin);
-			response.sendRedirect("/sistrafront/redireccion.jsp");
-			//response.sendRedirect("/sistrafront/redireccion.jsp?url=" + URLEncoder.encode(urlFin));
+			response.sendRedirect(request.getSession().getServletContext().getAttribute(Constants.CONTEXTO_RAIZ) + "/sistrafront/redireccion.jsp");			
 			return null;
 		}
 	}

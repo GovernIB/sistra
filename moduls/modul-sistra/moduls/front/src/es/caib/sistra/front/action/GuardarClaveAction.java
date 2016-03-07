@@ -50,7 +50,8 @@ public class GuardarClaveAction extends BaseAction
 		
 		// Obtenemos url donde esta instalado sistra
 		Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
-		String urlSistra = props.getProperty("sistra.url");
+		String urlSistra = props.getProperty("sistra.url") + props.getProperty("sistra.contextoRaiz");
+		
 		
 		// Obtenemos props organismo
 		OrganismoInfo oi = (OrganismoInfo) request.getSession().getServletContext().getAttribute(Constants.ORGANISMO_INFO_KEY);

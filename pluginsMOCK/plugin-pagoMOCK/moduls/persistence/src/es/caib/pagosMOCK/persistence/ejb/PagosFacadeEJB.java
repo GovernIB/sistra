@@ -13,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 
 import es.caib.pagosMOCK.model.SesionPagoMOCK;
 import es.caib.pagosMOCK.model.TokenAccesoMOCK;
+import es.caib.pagosMOCK.persistence.util.Configuracion;
 import es.caib.pagosMOCK.persistence.util.DatabaseMOCK;
 import es.caib.pagosMOCK.persistence.util.GeneradorId;
 import es.caib.sistra.plugins.pagos.ConstantesPago;
@@ -86,7 +87,8 @@ public class PagosFacadeEJB implements SessionBean {
 			// Devolvemos sesion de pago creada
 			SesionPago sesionPago = new SesionPago();
 			sesionPago.setLocalizador(loca);
-			sesionPago.setUrlSesionPago("/pagosMockFront/init.do?token="+token);
+			String contextoRaiz = Configuracion.getInstance().getProperty("sistra.contextoRaiz");
+			sesionPago.setUrlSesionPago(contextoRaiz + "/pagosMockFront/init.do?token="+token);
 			
 			log.debug("Iniciada sesion pago: localizador " + loca + " / token acceso: " + token);
 			
@@ -131,7 +133,8 @@ public class PagosFacadeEJB implements SessionBean {
 			// Devolvemos sesion de pago creada
 			SesionPago sesionPago = new SesionPago();
 			sesionPago.setLocalizador(sesionMOCK.getLocalizador());
-			sesionPago.setUrlSesionPago("/pagosMockFront/init.do?token="+token);
+			String contextoRaiz = Configuracion.getInstance().getProperty("sistra.contextoRaiz");
+			sesionPago.setUrlSesionPago(contextoRaiz + "/pagosMockFront/init.do?token="+token);
 			
 			log.debug("Reanudada sesion pago: localizador " + sesionMOCK.getLocalizador() + " / token acceso: " + token);
 			return sesionPago;

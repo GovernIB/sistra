@@ -1,6 +1,8 @@
 package es.caib.sistra.front.controller;
 
 
+import java.util.Properties;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,12 +42,10 @@ public class TramiteController extends BaseController
 		request.setAttribute( Constants.MODO_AUTENTICACION_KEY, String.valueOf( this.getMetodoAutenticacion( request ) ));
 		
 		String urlSistra = "";
-		try{
-			ConfiguracionDelegate delegate = DelegateUtil.getConfiguracionDelegate();
-			urlSistra = delegate.obtenerConfiguracion().getProperty("sistra.url");
-		}catch (Exception e) {
-			urlSistra = "";
-		}
+		ConfiguracionDelegate delegate = DelegateUtil.getConfiguracionDelegate();
+		Properties propsConfig = delegate.obtenerConfiguracion();
+		urlSistra = propsConfig.getProperty("sistra.url") + propsConfig.getProperty("sistra.contextoRaiz");
+		
 		request.setAttribute( "urlSistraAFirma", urlSistra );
 		
 	}

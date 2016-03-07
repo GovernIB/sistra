@@ -1,5 +1,7 @@
 package es.caib.sistra.front.action;
 
+import java.util.Properties;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -41,7 +43,8 @@ public class IrAPagoAction extends BaseAction
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request );
 		
 		// Establecemos urls de retorno a sistra y de mantenimiento de sesion
-		String urlSistra = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("sistra.url");
+		Properties propsConfig = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+		String urlSistra =  propsConfig.getProperty("sistra.url");
 		String urlRetorno = urlSistra + request.getContextPath() +  
 							"/protected/confirmarPago.do?" +
 							"ID_INSTANCIA="+(String) request.getAttribute("ID_INSTANCIA")	+

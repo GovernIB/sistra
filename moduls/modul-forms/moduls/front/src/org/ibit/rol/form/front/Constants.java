@@ -25,5 +25,8 @@ public class Constants implements Serializable {
     * Atributo de sesion donde se guarda si la ayuda esta activada
     */
    public static final String AYUDA_ACTIVADA_KEY = "org.ibit.rol.form.front.ayudaActivada";
+   
+   /** Contexto raiz sistra */
+	public static final String CONTEXTO_RAIZ = "es.caib.sistra.contextRoot";
     
 }

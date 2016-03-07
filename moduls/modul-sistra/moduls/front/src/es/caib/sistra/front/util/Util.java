@@ -1,6 +1,7 @@
 package es.caib.sistra.front.util;
 import java.security.SecureRandom;
 import java.util.Iterator;
+import java.util.Properties;
 
 import javax.naming.InitialContext;
 
@@ -82,7 +83,8 @@ public class Util
 	public static String generaUrlMantenimientoSesion(String idInstancia){
 		if (urlMantenimientoSesion == null) {
 			try{
-				urlMantenimientoSesion = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("sistra.url");
+				Properties configProps = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+				urlMantenimientoSesion = configProps.getProperty("sistra.url") + configProps.getProperty("sistra.contextoRaiz"); 
 				urlMantenimientoSesion += "/sistrafront/protected/mantenimientoSesionForm?"+InstanciaManager.ID_INSTANCIA+"=";
 			}catch(Exception ex){
 				log.error("Error obteniendo propiedad 'sistra.url'",ex);

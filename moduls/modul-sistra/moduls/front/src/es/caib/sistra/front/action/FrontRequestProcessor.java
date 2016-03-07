@@ -65,13 +65,18 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
         	throw new ServletException(ex);
         }
     	
-        //Indicamos si se tiene que ejecutar dentro de un iframe o no y si son obligatorios los avisos
+        //Indicamos si se tiene que ejecutar dentro de un iframe o no,si son obligatorios los avisos y contexto raiz
         try{
         	ConfiguracionDelegate config = DelegateUtil.getConfiguracionDelegate();
         	Properties configProps = config.obtenerConfiguracion();
-			getServletContext().setAttribute(Constants.MOSTRAR_EN_IFRAME,new Boolean(configProps.getProperty("sistra.iframe")).booleanValue());
+			
+        	getServletContext().setAttribute(Constants.MOSTRAR_EN_IFRAME,new Boolean(configProps.getProperty("sistra.iframe")).booleanValue());
         	
 			getServletContext().setAttribute(Constants.AVISOS_OBLIGATORIOS_NOTIFICACIONES,StringUtils.defaultString(configProps.getProperty("sistra.avisoObligatorioNotificaciones"), "false"));
+						      	
+			getServletContext().setAttribute(Constants.CONTEXTO_RAIZ,StringUtils.defaultString(configProps.getProperty("sistra.contextoRaiz"), ""));
+			
+		
         }catch(Exception ex){
         	log.error("Error obteniendo la variable iframe",ex);
         	throw new ServletException(ex);
