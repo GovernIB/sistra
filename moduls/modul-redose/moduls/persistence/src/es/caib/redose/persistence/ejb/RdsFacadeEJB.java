@@ -123,7 +123,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 		// Obtenemos configuracion
 		try{
 			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
-			URL_VERIFIER = props.getProperty("sistra.url") + "/redosefront/init.do?id=";
+			URL_VERIFIER = props.getProperty("sistra.url") + props.getProperty("sistra.contextoRaiz")+ "/redosefront/init.do?id=";
 			TEXT_VERIFIER=props.getProperty("verifier.text");
 			ENTORNO =props.getProperty("entorno");	
 			OPENOFFICE_HOST=props.getProperty("openoffice.host");
