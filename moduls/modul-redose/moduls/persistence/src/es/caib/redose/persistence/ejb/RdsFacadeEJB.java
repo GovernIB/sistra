@@ -130,7 +130,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
 			OPENOFFICE_PUERTO=props.getProperty("openoffice.port");		
 			BARCODE_VERIFIER_MOSTRAR= "true".equals(StringUtils.defaultIfEmpty(props.getProperty("urlVerificacion.barcode.mostrar"),"true"));
 			USAR_CSV= "true".equals(props.getProperty("urlVerificacion.csv"));
-			URL_CSV = props.getProperty("sistra.url") + "/redosefront/init.do?csv=";
+			URL_CSV = props.getProperty("sistra.url") + props.getProperty("sistra.contextoRaiz") + "/redosefront/init.do?csv=";
 			CLAVE_CIFRADO = props.getProperty("clave.cifrado");
 					
 			// Comprobamos si hay que integrarse con sistema de custodia y gestion documental			
