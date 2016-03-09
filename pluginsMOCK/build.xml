@@ -15,6 +15,7 @@
 	
 <target name="prepare" description="Prepara los directorios de trabajo">
 	<mkdir dir="${output.dir}"/>
+	<mkdir dir="${output.dir}/etc"/>
 	<mkdir dir="${output.dir}/ear"/>
 	<mkdir dir="${output.dir}/lib"/>
 </target>
@@ -53,7 +54,13 @@
 </target>
 	
 <target name="assemble" description="assemble ear" depends="checkJbossVersion">
-	<ear earfile="${output.dir}/ear/2-${projecte}.ear" appxml="${etc}/application.xml">
+	
+	<copy file="${etc}/application.xml" todir="${output.dir}/etc" overwrite="true"/>
+	<replace file="${output.dir}/etc/application.xml">
+	     <replacefilter token="@contextoRaiz@" value="${contextoRaiz}"/>
+	</replace>
+	
+	<ear earfile="${output.dir}/ear/2-${projecte}.ear" appxml="${output.dir}/etc/application.xml">
 		<manifest>
 			<attribute name="Created-By" value="${indra}"/>
 		    <attribute name="Specification-Title" value="${projecte} for ${release.env}"/>				

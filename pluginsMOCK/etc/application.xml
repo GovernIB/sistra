@@ -21,7 +21,7 @@
     <module>
         <web>
             <web-uri>pagosMOCK-front.war</web-uri>
-            <context-root>sistra/pagosMockFront</context-root>
+            <context-root>@contextoRaiz@pagosMockFront</context-root>
         </web>
     </module>  
    
