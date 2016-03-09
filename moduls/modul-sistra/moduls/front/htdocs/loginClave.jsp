@@ -25,6 +25,7 @@
 	es.caib.zonaper.persistence.delegate.ConfiguracionDelegate delegateF = es.caib.zonaper.persistence.delegate.DelegateUtil.getConfiguracionDelegate();
 	java.util.Properties configProperties =  delegateF.obtenerConfiguracion();
 	String urlSistra = configProperties.getProperty("sistra.url");
+	String contextoRaiz = configProperties.getProperty("sistra.contextoRaiz");
 	es.caib.zonaper.model.OrganismoInfo infoOrg = delegateF.obtenerOrganismoInfo();
 	
 	// Configuracion plugin login Clave: obtener contexto login
@@ -184,9 +185,9 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 	} else {
 		// Url Callback
 		if (request.getContextPath().indexOf("zonaperfront") != -1) {
-			urlCallback = urlSistra + "/zonaperfront/protected/redireccionClave.jsp";
+			urlCallback = urlSistra + contextoRaiz + "/zonaperfront/protected/redireccionClave.jsp";
 		} else {
-			urlCallback = urlSistra + "/sistrafront/protected/redireccionClave.jsp";
+			urlCallback = urlSistra + contextoRaiz + "/sistrafront/protected/redireccionClave.jsp";
 		}
 		// Metodos permitidos
 		metodos = niveles; // Ver metodos de autenticacion permitidos

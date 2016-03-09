@@ -100,13 +100,13 @@
 	    <module>
 	        <web>
 	            <web-uri>1-audit-front.war</web-uri>
-	            <context-root>auditfront</context-root>
+	            <context-root>@contextoRaiz@auditfront</context-root>
 	        </web>
 	    </module>
         <module>
 	        <web>
 	            <web-uri>1-audit-admin.war</web-uri>
-	            <context-root>auditadmin</context-root>
+	            <context-root>@contextoRaiz@auditadmin</context-root>
 	        </web>
 	    </module>
     
@@ -117,25 +117,25 @@
 	    <module>
 	        <web>
 	            <web-uri>2-redose-back.war</web-uri>
-	            <context-root>redoseback</context-root>
+	            <context-root>@contextoRaiz@redoseback</context-root>
 	        </web>
 	    </module>
 	    <module>
 	        <web>
 	            <web-uri>2-redose-front.war</web-uri>
-	            <context-root>redosefront</context-root>
+	            <context-root>@contextoRaiz@redosefront</context-root>
 	        </web>
 	    </module>
 		<module>
 	        <web>
 	            <web-uri>2-redose-admin.war</web-uri>
-	            <context-root>redoseadmin</context-root>
+	            <context-root>@contextoRaiz@redoseadmin</context-root>
 	        </web>
 	    </module>
 	    <module>
 			<web>
 				<web-uri>2-redose-ws.war</web-uri>
-				<context-root>redosews</context-root>
+				<context-root>@contextoRaiz@redosews</context-root>
 			</web>
 		</module>
 		
@@ -148,43 +148,43 @@
 	   	<module>
 	       <web>
 	           <web-uri>3-zonaper-front.war</web-uri>
-	           <context-root>zonaperfront</context-root>
+	           <context-root>@contextoRaiz@zonaperfront</context-root>
 	       </web>
 	   	</module>
 	    <module>
 	       <web>
 	           <web-uri>3-zonaper-admin.war</web-uri>
-	           <context-root>zonaperadmin</context-root>
+	           <context-root>@contextoRaiz@zonaperadmin</context-root>
 	       </web>
 	   </module>
 	   <module>
 	       <web>
 	           <web-uri>3-zonaper-back.war</web-uri>
-	           <context-root>zonaperback</context-root>
+	           <context-root>@contextoRaiz@zonaperback</context-root>
 	       </web>
 	   </module>
 	   <module>
 	       <web>
 	           <web-uri>3-zonaper-filter.war</web-uri>
-	           <context-root>zonaperfilter</context-root>
+	           <context-root>@contextoRaiz@zonaperfilter</context-root>
 	       </web>
 	   </module>
 	   <module>
 	       <web>
 	           <web-uri>3-zonaper-helpdesk.war</web-uri>
-	           <context-root>zonaperhelpdesk</context-root>
+	           <context-root>@contextoRaiz@zonaperhelpdesk</context-root>
 	       </web>
 	   </module>
 		<module>
 			<web>
 				<web-uri>3-zonaper-ws.war</web-uri>
-				<context-root>zonaperws</context-root>
+				<context-root>@contextoRaiz@zonaperws</context-root>
 			</web>
 		</module>
 		<module>
 	       <web>
 	           <web-uri>3-zonaper-delega.war</web-uri>
-	           <context-root>zonaperdelega</context-root>
+	           <context-root>@contextoRaiz@zonaperdelega</context-root>
 	       </web>
 	   </module>
 	 <!-- Mòdul bantel -->
@@ -194,25 +194,25 @@
 	    <module>
 	        <web>
 	            <web-uri>4-bantel-front.war</web-uri>
-	            <context-root>bantelfront</context-root>
+	            <context-root>@contextoRaiz@bantelfront</context-root>
 	        </web>
 	    </module>
 	     <module>
 	        <web>
 	            <web-uri>4-bantel-admin.war</web-uri>
-	            <context-root>banteladmin</context-root>
+	            <context-root>@contextoRaiz@banteladmin</context-root>
 	        </web>
 	    </module>
 	    <module>
 	        <web>
 	            <web-uri>4-bantel-back.war</web-uri>
-	            <context-root>bantelback</context-root>
+	            <context-root>@contextoRaiz@bantelback</context-root>
 	        </web>
 	    </module>
 	    <module>
 	        <web>
 	            <web-uri>4-bantel-ws.war</web-uri>
-	            <context-root>bantelws</context-root>
+	            <context-root>@contextoRaiz@bantelws</context-root>
 	        </web>
 	    </module>
 
@@ -224,25 +224,25 @@
 	    <module>
 	        <web>
 	            <web-uri>5-sistra-listar.war</web-uri>
-	            <context-root>tramites</context-root>
+	            <context-root>@contextoRaiz@tramites</context-root>
 	        </web>
 	    </module>
 	    <module>
 	        <web>
 	            <web-uri>5-sistra-back.war</web-uri>
-	            <context-root>sistraback</context-root>
+	            <context-root>@contextoRaiz@sistraback</context-root>
 	        </web>
 	    </module>
 	    <module>
 	        <web>
 	            <web-uri>5-sistra-front.war</web-uri>
-	            <context-root>sistrafront</context-root>
+	            <context-root>@contextoRaiz@sistrafront</context-root>
 	        </web>
 	    </module>
 	    <module>
 	        <web>
 	            <web-uri>5-sistra-admin.war</web-uri>
-	            <context-root>sistraadmin</context-root>
+	            <context-root>@contextoRaiz@sistraadmin</context-root>
 	        </web>
 	    </module>
 
@@ -253,19 +253,19 @@
 	    <module>
 	        <web>
 	            <web-uri>6-form-front.war</web-uri>
-	            <context-root>formfront</context-root>
+	            <context-root>@contextoRaiz@formfront</context-root>
 	        </web>
 	    </module>
 	    <module>
 	        <web>
 	            <web-uri>6-form-back.war</web-uri>
-	            <context-root>formback</context-root>
+	            <context-root>@contextoRaiz@formback</context-root>
 	        </web>
 	    </module>
 	    <module>
 	        <web>
 	            <web-uri>6-form-admin.war</web-uri>
-	            <context-root>formadmin</context-root>
+	            <context-root>@contextoRaiz@formadmin</context-root>
 	        </web>
 	    </module>
 
@@ -276,25 +276,25 @@
 	    <module>
 	        <web>
 	            <web-uri>7-mobtratel-back.war</web-uri>
-	            <context-root>mobtratelback</context-root>
+	            <context-root>@contextoRaiz@mobtratelback</context-root>
 	        </web>
 	    </module>
 	    <module>
 	        <web>
 	            <web-uri>7-mobtratel-front.war</web-uri>
-	            <context-root>mobtratelfront</context-root>
+	            <context-root>@contextoRaiz@mobtratelfront</context-root>
 	        </web>
 	    </module>
 	    <module>
 	        <web>
 	            <web-uri>7-mobtratel-admin.war</web-uri>
-	            <context-root>mobtrateladmin</context-root>
+	            <context-root>@contextoRaiz@mobtrateladmin</context-root>
 	        </web>
 	    </module>
 	    <module>
 	        <web>
 	            <web-uri>7-mobtratel-ws.war</web-uri>
-	            <context-root>mobtratelws</context-root>
+	            <context-root>@contextoRaiz@mobtratelws</context-root>
 	        </web>
 	    </module>
 
@@ -305,7 +305,7 @@
 	    <module>
 			<web>
 				<web-uri>8-regtel-ws.war</web-uri>
-				<context-root>regtelws</context-root>
+				<context-root>@contextoRaiz@regtelws</context-root>
 			</web>
 		</module>
     

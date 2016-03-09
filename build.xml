@@ -16,6 +16,7 @@
 <target name="prepare" description="Prepara los directorios de trabajo">
 	<mkdir dir="${output.dir}"/>
 	<mkdir dir="${output.dir}/etc"/>
+	<mkdir dir="${output.dir}/etc/consola"/>
 	<mkdir dir="${output.dir}/ear"/>
 	<mkdir dir="${output.dir}/lib"/>
 	<mkdir dir="${output.dir}/client"/>	
@@ -65,9 +66,14 @@
 		<param name="task" value="main"/>
 	</antcall>
 	
+	<copy file="${etc.dir}/jboss-${jboss.version}/application.xml" todir="${output.dir}/etc" overwrite="true"/>
+	<replace file="${output.dir}/etc/application.xml">
+	     <replacefilter token="@contextoRaiz@" value="${contextoRaiz}"/>
+	</replace>
+	
 	<delete file="${output.dir}/ear/1-sistra.ear" quiet="yes"/>
 	
-	<ear earfile="${output.dir}/ear/1-sistra.ear" appxml="${etc.dir}/jboss-${jboss.version}/application.xml">
+	<ear earfile="${output.dir}/ear/1-sistra.ear" appxml="${output.dir}/etc/application.xml">
 		<manifest>
 			<attribute name="Created-By" value="${indra}"/>
 		    <attribute name="Specification-Title" value="${projecte}"/>				
@@ -124,7 +130,12 @@
 		<zipfileset dir="${output.dir}/lib" prefix="lib"/>					
 	</ear>	
 	
-	<ear earfile="${output.dir}/ear/2-sistra-consola.ear" appxml="${etc.dir}/consola/jboss-${jboss.version}/application.xml">
+	<copy file="${etc.dir}/consola/jboss-${jboss.version}/application.xml" todir="${output.dir}/etc/consola" overwrite="true"/>
+	<replace file="${output.dir}/etc/consola/application.xml">
+	     <replacefilter token="@contextoRaiz@" value="${contextoRaiz}"/>
+	</replace>
+	
+	<ear earfile="${output.dir}/ear/2-sistra-consola.ear" appxml="${output.dir}/etc/consola/application.xml">
 			<manifest>
 				<attribute name="Created-By" value="${indra}"/>
 			    <attribute name="Specification-Title" value="${projecte}"/>				
