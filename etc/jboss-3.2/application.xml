@@ -100,7 +100,7 @@
 	    <module>
 	        <web>
 	            <web-uri>1-audit-front.war</web-uri>
-	            <context-root>@contextoRaiz@auditfront</context-root>
+	            <context-root>@contextoRaiz@auditgest</context-root>
 	        </web>
 	    </module>
         <module>
@@ -194,7 +194,7 @@
 	    <module>
 	        <web>
 	            <web-uri>4-bantel-front.war</web-uri>
-	            <context-root>@contextoRaiz@bantelfront</context-root>
+	            <context-root>@contextoRaiz@bantelgest</context-root>
 	        </web>
 	    </module>
 	     <module>
@@ -282,7 +282,7 @@
 	    <module>
 	        <web>
 	            <web-uri>7-mobtratel-front.war</web-uri>
-	            <context-root>@contextoRaiz@mobtratelfront</context-root>
+	            <context-root>@contextoRaiz@mobtratelgest</context-root>
 	        </web>
 	    </module>
 	    <module>

@@ -11,6 +11,10 @@
 	<bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="referenciaPortal("+ lang +")"%>'/>
 </bean:define>
 
+<bean:define id="urlSistra"  type="java.lang.String">
+	<bean:write name="<%=es.caib.sistra.front.Constants.CONTEXTO_RAIZ%>"/>
+</bean:define>
+	
 <bean:define id="tramite" name="tramite" type="es.caib.sistra.model.TramiteFront" />
 
 <bean:define id="urlGuardarClave">
@@ -219,7 +223,7 @@ function avisoGuardarClave(){
 					</p>			
 				</logic:notEmpty>
 
-				<p class="apartado"><bean:message key="guardarClave.textoEstadoTramitacion" arg0="" arg1="<%=referenciaPortal%>"/></p>	
+				<p class="apartado"><bean:message key="guardarClave.textoEstadoTramitacion" arg0="<%=urlSistra%>" arg1="<%=referenciaPortal%>"/></p>	
 				
 				<p class="apartado"><bean:message key="guardarClave.textoGuardar" /></p>	
 

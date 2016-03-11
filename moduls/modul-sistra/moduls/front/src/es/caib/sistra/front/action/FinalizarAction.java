@@ -1,7 +1,5 @@
 package es.caib.sistra.front.action;
 
-import java.net.URLEncoder;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -44,7 +42,7 @@ public class FinalizarAction extends BaseAction
 			// No valido para consulta/asistente
 			if (urlFin.equals("[ZONAPER]")){ 
 				String idPersistencia = delegate.obtenerIdPersistencia();
-				urlFin = "/zonaperfront/inicio?language=" + this.getLang(request) + "&tramite=" + idPersistencia;				
+				urlFin = request.getSession().getServletContext().getAttribute(Constants.CONTEXTO_RAIZ) + "/zonaperfront/inicio?language=" + this.getLang(request) + "&tramite=" + idPersistencia;				
 			}
 			 
 			delegate.finalizarTramite();			

@@ -68,7 +68,7 @@ public class BuscarDocumentos extends BaseAction
 			DocumentoFirmar documento = (DocumentoFirmar)documentos.get(i);
 			contenido = contenido+"<li>";
 			if (documento.getTipoDocumento().equals("FICHERO")) { 
-			contenido = contenido+"<a href=\"/bantelfront/abrirDocumento.do?codigo="+documento.getCodigoRDS()+"&clave="+documento.getClaveRDS()+"\" >"+StringEscapeUtils.escapeHtml(documento.getTitulo())+"</a>";
+			contenido = contenido+"<a href=\"abrirDocumento.do?codigo="+documento.getCodigoRDS()+"&clave="+documento.getClaveRDS()+"\" >"+StringEscapeUtils.escapeHtml(documento.getTitulo())+"</a>";
 			contenido = contenido+"<div id=\"infoFirmado-"+documento.getCodigoRDS()+"\" style=\"display:inline;\">";
 			if(!documento.isFirmar()){
 				if (documento.isFirmable()) {
