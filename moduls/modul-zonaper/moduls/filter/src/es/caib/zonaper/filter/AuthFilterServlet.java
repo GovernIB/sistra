@@ -3,6 +3,7 @@ package es.caib.zonaper.filter;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.security.Principal;
+import java.util.Properties;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -21,6 +22,7 @@ import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
+import es.caib.zonaper.persistence.delegate.DelegateUtil;
 
 
 
@@ -56,9 +58,11 @@ public class AuthFilterServlet implements Filter
 			enabled = Boolean.valueOf( filterConfig.getInitParameter( "enabled" ) ).booleanValue();
 			if ( conf == null )
 			{
+				Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+				
 				conf = new AuthConf();
-				conf.setAuthURL( filterConfig.getInitParameter( "auth-url" ) );
-				conf.setAuthErrorURL( filterConfig.getInitParameter( "auth-error" ) );
+				conf.setAuthURL( props.getProperty("sistra.contextoRaiz") + filterConfig.getInitParameter( "auth-url" ) );
+				conf.setAuthErrorURL( props.getProperty("sistra.contextoRaiz") +  filterConfig.getInitParameter( "auth-error" ) );
 				conf.setExcluded( filterConfig.getInitParameter( "excluded-url" ) );
 			}
 			String authImpl = filterConfig.getInitParameter( "auth-class" );
