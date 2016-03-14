@@ -23,8 +23,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import com.lowagie.text.Font;
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import javax.imageio.ImageIO;
 
 import es.caib.regtel.model.ConstantesRegtel;
 import es.caib.util.StringUtil;
@@ -168,9 +167,8 @@ public class ImprimirSelloAction extends BaseAction
         g.dispose();
 
         // Enviar el fondo de la imagen
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();                
-        JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(bos);
-        encoder.encode(image);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ImageIO.write(image, "jpeg", bos);
         
         return bos.toByteArray();
         
