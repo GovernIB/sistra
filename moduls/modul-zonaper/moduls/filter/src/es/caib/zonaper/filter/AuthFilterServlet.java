@@ -48,6 +48,8 @@ public class AuthFilterServlet implements Filter
 	public static String PARAMETER_PERFIL_KEY = "perfilAF";
 	public static String PARAMETER_ENTIDAD_KEY = "entidadAF";
 	
+	public static String CONTEXTO_RAIZ = "";
+	
 	
 	public void init(FilterConfig filterConfig) throws ServletException
 	{
@@ -59,10 +61,11 @@ public class AuthFilterServlet implements Filter
 			if ( conf == null )
 			{
 				Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+				CONTEXTO_RAIZ = props.getProperty("sistra.contextoRaiz");
 				
 				conf = new AuthConf();
-				conf.setAuthURL( props.getProperty("sistra.contextoRaiz") + filterConfig.getInitParameter( "auth-url" ) );
-				conf.setAuthErrorURL( props.getProperty("sistra.contextoRaiz") +  filterConfig.getInitParameter( "auth-error" ) );
+				conf.setAuthURL( CONTEXTO_RAIZ  + filterConfig.getInitParameter( "auth-url" ) );
+				conf.setAuthErrorURL( CONTEXTO_RAIZ +  filterConfig.getInitParameter( "auth-error" ) );
 				conf.setExcluded( filterConfig.getInitParameter( "excluded-url" ) );
 			}
 			String authImpl = filterConfig.getInitParameter( "auth-class" );
@@ -213,7 +216,7 @@ public class AuthFilterServlet implements Filter
 			if (DelegatePADUtil.getPadDelegate().esDelegado()){
 				// Redirigimos a pagina peticion perfil acceso
 				String lang = Util.getLang( req );
-				StringBuffer sbAuthAction = new StringBuffer( "/zonaperfilter/perfilAccesoPAD.do" );
+				StringBuffer sbAuthAction = new StringBuffer( CONTEXTO_RAIZ + "/zonaperfilter/perfilAccesoPAD.do" );
 				sbAuthAction.append( sbAuthAction.indexOf( "?" ) >= 0 ? "&" : "?" ).append( "urlOriginal=" ).append( URLEncoder.encode( Util.getUrl( req ), "UTF-8" ) );
 				if ( !StringUtils.isEmpty( lang ) )
 				{
