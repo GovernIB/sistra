@@ -91,7 +91,7 @@ public class AuthFilterServlet implements Filter
 			HttpServletRequest req = ( HttpServletRequest ) request;
 			HttpServletResponse res = ( HttpServletResponse ) response;
 			
-			System.out.println(ConstantesZPE.DELEGACION_PERFIL_ACCESO_KEY + " = " + req.getSession().getAttribute(ConstantesZPE.DELEGACION_PERFIL_ACCESO_KEY));
+			if ( _log.isDebugEnabled() ) _log.debug(ConstantesZPE.DELEGACION_PERFIL_ACCESO_KEY + " = " + req.getSession().getAttribute(ConstantesZPE.DELEGACION_PERFIL_ACCESO_KEY));
 			
 			// Filtro de autenticacion 
 			if ( enabled && req.getAttribute( "internal") == null )
@@ -217,7 +217,9 @@ public class AuthFilterServlet implements Filter
 				// Redirigimos a pagina peticion perfil acceso
 				String lang = Util.getLang( req );
 				StringBuffer sbAuthAction = new StringBuffer( CONTEXTO_RAIZ + "/zonaperfilter/perfilAccesoPAD.do" );
-				sbAuthAction.append( sbAuthAction.indexOf( "?" ) >= 0 ? "&" : "?" ).append( "urlOriginal=" ).append( URLEncoder.encode( Util.getUrl( req ), "UTF-8" ) );
+				String urlOriginal = Util.getUrl( req );
+				if ( _log.isDebugEnabled() ) _log.debug("Url origen: " + urlOriginal);
+				sbAuthAction.append( sbAuthAction.indexOf( "?" ) >= 0 ? "&" : "?" ).append( "urlOriginal=" ).append( URLEncoder.encode( urlOriginal, "UTF-8" ) );
 				if ( !StringUtils.isEmpty( lang ) )
 				{
 					sbAuthAction.append( "&lang=" ).append( lang );

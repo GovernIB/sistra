@@ -90,6 +90,7 @@ public class ActualizarDatosPADAction extends Action
 			}
 		}
 		
+		if ( _log.isDebugEnabled() ) _log.debug( "Redirigiendo a URL original " + formulario.getUrlOriginal() );
 		response.sendRedirect( formulario.getUrlOriginal() );
 		return null;
 	}
