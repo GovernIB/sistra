@@ -9,6 +9,7 @@
 <bean:define id="urlArbol">
     <html:rewrite page="/arbolForms.do"/>
 </bean:define>
+<bean:define id="contextoRaizSistra" name="<%=es.caib.sistra.back.Constants.CONTEXTO_RAIZ%>" type="java.lang.String"/>
 
 <script type="text/javascript">
      <!--
@@ -62,7 +63,7 @@
      function abrirForms(){
      	campoModelo = document.getElementsByName("values.formularioFormsModelo").item(0).value;
      	campoVersion = document.getElementsByName("values.formularioFormsVersion").item(0).value;
-     	window.open("/formback/init.do?modelo="+campoModelo+"&version="+campoVersion,"FORMS");
+     	window.open("<%=contextoRaizSistra%>/formback/init.do?modelo="+campoModelo+"&version="+campoVersion,"FORMS");
      }
      
      // -->
