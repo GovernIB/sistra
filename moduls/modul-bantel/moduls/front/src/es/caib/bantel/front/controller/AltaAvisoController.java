@@ -31,7 +31,7 @@ public class AltaAvisoController extends BaseController
 		try{
 			ConfiguracionDelegate delegate = DelegateUtil.getConfiguracionDelegate();
 			Properties propsConfig = delegate.obtenerConfiguracion();
-			urlSistra = propsConfig.getProperty("sistra.url.back") + propsConfig.getProperty("sistra.contextoRaiz");
+			urlSistra = propsConfig.getProperty("sistra.url.back");
 		}catch (Exception e) {
 			urlSistra = "";
 		}

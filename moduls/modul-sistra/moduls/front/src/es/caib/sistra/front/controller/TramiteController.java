@@ -44,7 +44,7 @@ public class TramiteController extends BaseController
 		String urlSistra = "";
 		ConfiguracionDelegate delegate = DelegateUtil.getConfiguracionDelegate();
 		Properties propsConfig = delegate.obtenerConfiguracion();
-		urlSistra = propsConfig.getProperty("sistra.url") + propsConfig.getProperty("sistra.contextoRaiz");
+		urlSistra = propsConfig.getProperty("sistra.url");
 		
 		request.setAttribute( "urlSistraAFirma", urlSistra );
 		

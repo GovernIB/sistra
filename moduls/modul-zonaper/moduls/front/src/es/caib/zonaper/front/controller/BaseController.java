@@ -63,7 +63,7 @@ public abstract class BaseController implements Controller {
 			try{
 				ConfiguracionDelegate delegate = DelegateUtil.getConfiguracionDelegate();
 				Properties propsConfig = delegate.obtenerConfiguracion();
-				urlSistra = propsConfig.getProperty("sistra.url") + propsConfig.getProperty("sistra.contextoRaiz");
+				urlSistra = propsConfig.getProperty("sistra.url");
 			}catch (Exception e) {
 				urlSistra = "";
 			}

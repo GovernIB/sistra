@@ -34,7 +34,7 @@ public class EntidadesController extends BaseController {
 		ConfiguracionDelegate delegate = DelegateUtil
 				.getConfiguracionDelegate();
 		Properties propsConfig = delegate.obtenerConfiguracion();
-		urlSistra = propsConfig.getProperty("sistra.url.back") + propsConfig.getProperty("sistra.contextoRaiz");
+		urlSistra = propsConfig.getProperty("sistra.url.back");
 
 		request.setAttribute("provincias", provincias);
 		request.setAttribute("municipios", municipios);

@@ -41,7 +41,7 @@ public class AltaNotificacionController extends BaseController
 		String urlSistra = "";
 		ConfiguracionDelegate delegate = DelegateUtil.getConfiguracionDelegate();
 		Properties propsConfig = delegate.obtenerConfiguracion();
-		urlSistra = propsConfig.getProperty("sistra.url.back") + propsConfig.getProperty("sistra.contextoRaiz");
+		urlSistra = propsConfig.getProperty("sistra.url.back");
 		request.setAttribute( "urlSistraAFirma", urlSistra );
 		
 		// Comprobamos si puede cambiar el plazo de notificaciones
