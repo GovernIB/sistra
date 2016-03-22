@@ -1,6 +1,8 @@
 package es.caib.bantel.modelInterfaz;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Informacion del procedimiento.
@@ -34,7 +36,10 @@ public class ProcedimientoBTE implements Serializable {
 	 * Indica email respuesta para avisos procedimiento.
 	 */
 	private String emailRespuestaAvisosProcedimiento;
-	
+	/**
+	 * Emails gestores.
+	 */
+	private List emailGestores = new ArrayList();
 	
 	public String getRemitenteAvisosProcedimiento() {
 		return remitenteAvisosProcedimiento;
@@ -81,6 +86,12 @@ public class ProcedimientoBTE implements Serializable {
 	public void setPermitirPlazoNotificacionesVariable(
 			boolean permitirPlazoNotificacionesVariable) {
 		this.permitirPlazoNotificacionesVariable = permitirPlazoNotificacionesVariable;
+	}
+	public List getEmailGestores() {
+		return emailGestores;
+	}
+	public void setEmailGestores(List emailGestores) {
+		this.emailGestores = emailGestores;
 	}
 	
 }

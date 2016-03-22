@@ -23,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 
 import es.caib.bantel.model.ConsultaFuenteDatos;
 import es.caib.bantel.model.DocumentoBandeja;
+import es.caib.bantel.model.GestorBandeja;
 import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.model.TramiteBandeja;
 import es.caib.bantel.modelInterfaz.ConstantesBTE;
@@ -218,6 +219,16 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 		pb.setPermitirPlazoNotificacionesVariable("S".equals(p.getPermitirPlazoNotificacionesVariable()));
 		pb.setEmailRespuestaAvisosProcedimiento(p.getEmailRespuestaAvisosProcedimiento());
 		pb.setRemitenteAvisosProcedimiento(p.getRemitenteAvisosProcedimiento());
+		
+		if (p.getGestores() != null) {
+			for (Iterator it = p.getGestores().iterator(); it.hasNext();){
+				GestorBandeja g = (GestorBandeja) it.next();
+				if (StringUtils.isNotBlank(g.getEmail())) {
+					pb.getEmailGestores().add(g.getEmail());
+				}
+			}
+		}
+		
 		return pb;
 	}
 	

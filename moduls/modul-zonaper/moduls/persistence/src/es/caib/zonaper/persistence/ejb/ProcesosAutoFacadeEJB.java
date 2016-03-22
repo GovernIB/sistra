@@ -1,9 +1,12 @@
 package es.caib.zonaper.persistence.ejb;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.ejb.CreateException;
@@ -13,10 +16,14 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
+import es.caib.mobtratel.modelInterfaz.MensajeEnvio;
+import es.caib.mobtratel.modelInterfaz.MensajeEnvioEmail;
 import es.caib.mobtratel.persistence.delegate.DelegateMobTraTelUtil;
 import es.caib.mobtratel.persistence.delegate.MobTraTelDelegate;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
@@ -43,11 +50,15 @@ import es.caib.zonaper.model.RegistroExternoPreparado;
 import es.caib.zonaper.model.TramitePersistente;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.modelInterfaz.DocumentoPersistentePAD;
+import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.persistence.delegate.BackupDelegate;
+import es.caib.zonaper.persistence.delegate.DelegateException;
+import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.EntradaPreregistroDelegate;
 import es.caib.zonaper.persistence.delegate.ExpedienteDelegate;
 import es.caib.zonaper.persistence.delegate.LogRegistroDelegate;
+import es.caib.zonaper.persistence.delegate.PadDelegate;
 import es.caib.zonaper.persistence.delegate.ProcesoRechazarNotificacionDelegate;
 import es.caib.zonaper.persistence.delegate.ProcesoRevisarRegistrosDelegate;
 import es.caib.zonaper.persistence.delegate.RegistroExternoPreparadoDelegate;
@@ -55,6 +66,7 @@ import es.caib.zonaper.persistence.delegate.TramitePersistenteDelegate;
 import es.caib.zonaper.persistence.util.AvisoAlertasTramitacion;
 import es.caib.zonaper.persistence.util.AvisosExpediente;
 import es.caib.zonaper.persistence.util.ConfigurationUtil;
+import es.caib.zonaper.persistence.util.LiteralesAvisosMovilidad;
 import es.caib.zonaper.persistence.util.UsernamePasswordCallbackHandler;
 
 /**
@@ -74,6 +86,8 @@ import es.caib.zonaper.persistence.util.UsernamePasswordCallbackHandler;
 public abstract class ProcesosAutoFacadeEJB implements SessionBean
 {
 	private static Log backupLog = LogFactory.getLog( ProcesosAutoFacadeEJB.class );
+	private String cuentaSistra;
+	private String avisosGestorHabilitado;
 	
 	/**
      * @ejb.create-method
@@ -644,6 +658,11 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 		TramitePersistenteDelegate delegate = DelegateUtil.getTramitePersistenteDelegate();
 		List tramites = delegate.obtenerTramitesPendienteAvisoPagoTelematicoFinalizado();
 		
+		List procedimientosAvisar = new ArrayList();
+		Map procedimientosInfo = new HashMap(); 
+		Map procedimientosTramite = new HashMap();
+		boolean avisarGestor = false;		
+		
 		// Generamos aviso para los tramites
 		for (Iterator it = tramites.iterator(); it.hasNext();) {
 			
@@ -653,6 +672,13 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 			if (StringUtils.isBlank(tramite.getAlertasTramitacionEmail()) && 
 					StringUtils.isBlank(tramite.getAlertasTramitacionSms())) {
 				continue;
+			}
+			
+			// Obtenemos mails gestores
+			if (!procedimientosInfo.containsKey(tramite.getIdProcedimiento())) {
+				ProcedimientoBTE proc = es.caib.bantel.persistence.delegate.DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(tramite.getIdProcedimiento());
+				procedimientosInfo.put(tramite.getIdProcedimiento(), proc);
+				procedimientosTramite.put(tramite.getIdProcedimiento(), new ArrayList());
 			}
 			
 			// Verificamos si tiene un pago realizado
@@ -676,6 +702,14 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 			}
 			
 			if (avisar) {
+				// Indicamos que tras los avisos al ciudadano hay que avisar al gestor
+				avisarGestor = true;
+				if (!procedimientosAvisar.contains(tramite.getIdProcedimiento())) {
+					procedimientosAvisar.add(tramite.getIdProcedimiento());
+				}				
+				((List) procedimientosTramite.get(tramite.getIdProcedimiento())).add(tramite);
+
+				// Generamos aviso al ciudadano
 				try {
 					// Generamos aviso a traves de mobtratel
 					AvisoAlertasTramitacion.getInstance().avisarPagoRealizadoTramitePendiente(tramite);	
@@ -688,6 +722,66 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 			}
 		}		
 		
+		// Aviso al gestor		
+		if (isAvisosGestorHabilitado() && avisarGestor) {
+			
+			MobTraTelDelegate mob = DelegateMobTraTelUtil.getMobTraTelDelegate();		
+			PadDelegate padDelegate = DelegatePADUtil.getPadDelegate();
+		
+			for (Iterator it = procedimientosAvisar.iterator(); it.hasNext();) {
+				String idProc = (String) it.next();
+				
+				ProcedimientoBTE proc = (ProcedimientoBTE) procedimientosInfo.get(idProc);
+				List trams = (List) procedimientosTramite.get(idProc);
+				
+				if (proc.getEmailGestores().size() <= 0) {
+					continue;
+				}
+				
+				String textoEmail = StringEscapeUtils.escapeHtml("Trámites pendientes de finalizar con pagos realizados:") + "</br>";
+				textoEmail += "<ul>";
+				for (Iterator itTram = trams.iterator(); itTram.hasNext();){
+					TramitePersistente tram = (TramitePersistente) itTram.next();
+					textoEmail += "<li>";
+					if (tram.getNivelAutenticacion() == 'A') {
+						textoEmail += StringEscapeUtils.escapeHtml("Acceso anónimo - Identificador trámite: " + tram.getIdPersistencia());
+					} else {
+						PersonaPAD pers = padDelegate.obtenerDatosPersonaPADporUsuario(tram.getUsuario());
+						String nomPers = "";
+						if (pers != null) {
+							nomPers = pers.getNif() + " - " + pers.getNombreCompleto() ;
+						} else {
+							nomPers = tram.getUsuario() ;
+						}
+						textoEmail += StringEscapeUtils.escapeHtml("Acceso autenticado (" + nomPers + ") - Identificador trámite: " + tram.getIdPersistencia());
+					}					
+					textoEmail += "</li>";
+				}
+				textoEmail += "</ul>";
+				
+				MensajeEnvioEmail mensEmail = new MensajeEnvioEmail();
+				String[] dest = new String[proc.getEmailGestores().size()];
+				for (int i=0;i<proc.getEmailGestores().size();i++) {
+					dest[i] = (String) proc.getEmailGestores().get(i);
+				}
+				mensEmail.setDestinatarios(dest);				
+				mensEmail.setTitulo(proc.getDescripcion() + ": existen trámites pendientes de finalizar con pagos realizados");
+				mensEmail.setHtml(true);				
+				mensEmail.setTexto(textoEmail);
+				
+				MensajeEnvio mens = new MensajeEnvio();
+				mens.setNombre("Aviso trámite pendiente y pago realizado (" + proc.getIdentificador() + ")");
+				mens.setCuentaEmisora(getCuentaSistra());
+				mens.setInmediato(true);
+				mens.addEmail(mensEmail);
+				try {
+					mob.envioMensaje(mens );
+				} catch (Exception exc) {
+					// Mostramos error en log y continuamos con siguiente tramite
+					backupLog.error("Error realizando alerta de tramitacion", exc);				
+				}				
+			}
+		}				
 	}
 
 
@@ -721,5 +815,27 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 		return res;
 	}
 	
+	
+	private String getCuentaSistra(){
+		if (StringUtils.isEmpty(cuentaSistra)) {
+			try {
+				cuentaSistra = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisos.cuentaEnvio.avisosExpediente");
+			} catch (DelegateException e) {
+				backupLog.error("Error obteniendo cuenta sistra", e);			
+			}
+		}
+		return cuentaSistra;					
+	}
+	
+	private boolean isAvisosGestorHabilitado(){		
+		if (avisosGestorHabilitado == null) {
+			try {
+				avisosGestorHabilitado = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("scheduler.alertasTramitacion.pagoFinalizado.avisarGestores");
+			} catch (DelegateException e) {
+				avisosGestorHabilitado = "false";			
+			}
+		}
+		return "true".equals(avisosGestorHabilitado);					
+	}
 	
 }
