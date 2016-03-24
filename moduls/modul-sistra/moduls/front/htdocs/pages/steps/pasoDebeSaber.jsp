@@ -7,12 +7,11 @@
 <bean:define id="anexos" name="tramite" property="anexos" />
 <html:xhtml/>
 <bean:define id="lang" value="<%=((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage()%>" type="java.lang.String"/>
+
+<bean:define id="contextoSistra" name="<%=es.caib.sistra.front.Constants.CONTEXTO_RAIZ%>" type="java.lang.String"/>
+
 <bean:define id="referenciaPortal"  type="java.lang.String">
 	<bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="referenciaPortal("+ lang +")"%>'/>
-</bean:define>
-
-<bean:define id="urlSistra"  type="java.lang.String">
-	<bean:write name="<%=es.caib.sistra.front.Constants.CONTEXTO_RAIZ%>"/>
 </bean:define>
 	
 <bean:define id="tramite" name="tramite" type="es.caib.sistra.model.TramiteFront" />
@@ -223,7 +222,7 @@ function avisoGuardarClave(){
 					</p>			
 				</logic:notEmpty>
 
-				<p class="apartado"><bean:message key="guardarClave.textoEstadoTramitacion" arg0="<%=urlSistra%>" arg1="<%=referenciaPortal%>"/></p>	
+				<p class="apartado"><bean:message key="guardarClave.textoEstadoTramitacion" arg0="<%=contextoSistra%>" arg1="<%=referenciaPortal%>"/></p>	
 				
 				<p class="apartado"><bean:message key="guardarClave.textoGuardar" /></p>	
 
