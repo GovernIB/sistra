@@ -30,8 +30,8 @@
 	
 	// Configuracion plugin login Clave: obtener contexto login
 	PluginLoginIntf plg = PluginFactory.getInstance().getPluginLogin();
-	Method method = plg.getClass().getDeclaredMethod("obtenerContextoAutenticadorClave");
-	Object result = method.invoke(plg);
+	Method method = plg.getClass().getDeclaredMethod("obtenerContextoAutenticadorClave", null);
+	Object result = method.invoke(plg, null);
 	String contextAutenticadorClave =  (String) result;		
 	
 	// Idioma
