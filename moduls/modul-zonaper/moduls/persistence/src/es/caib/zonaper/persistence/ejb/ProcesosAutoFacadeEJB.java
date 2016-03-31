@@ -681,18 +681,18 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 				procedimientosTramite.put(tramite.getIdProcedimiento(), new ArrayList());
 			}
 			
-			// Verificamos si tiene un pago realizado
+			// Verificamos si tiene un pago telematico realizado
 			boolean avisar = false;			
 			for (Iterator it2 = tramite.getDocumentos().iterator(); it2.hasNext();) {
 				DocumentoPersistente dp = (DocumentoPersistente) it2.next();
-				if (DocumentoPersistentePAD.TIPO_PAGO.equals(dp.getTipoDocumento()) && "S".equals(dp.getEsPagoTelematico())) {
+				if (DocumentoPersistentePAD.TIPO_PAGO.equals(dp.getTipoDocumento())) {
 					// Si esta pagado, hay que avisar
-					if (dp.getEstado() == DocumentoPersistentePAD.ESTADO_CORRECTO) {
+					if (dp.getEstado() == DocumentoPersistentePAD.ESTADO_CORRECTO  && "S".equals(dp.getEsPagoTelematico())) {
 						avisar = true;						
 					} 
 					// Si esta iniciado, hay que verificar si esta pagado
 					if (dp.getEstado() == DocumentoPersistentePAD.ESTADO_INCORRECTO) {
-						avisar = isPagoPendienteConfirmado(dp);
+						avisar = isPagoTelematicoPendienteConfirmado(dp);
 					}
 					// Si hay que avisar, no seguimos mirando
 					if (avisar) {
@@ -786,12 +786,12 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 
 
 	/**
-	 * Verifica contra el plugin de pago si el pago esta confirmado.
+	 * Verifica contra el plugin de pago si es un pago telematico y esta confirmado.
 	 * @param dp
 	 * @return
 	 * @throws Exception
 	 */
-	private boolean isPagoPendienteConfirmado(DocumentoPersistente dp) throws Exception {
+	private boolean isPagoTelematicoPendienteConfirmado(DocumentoPersistente dp) throws Exception {
 		
 		boolean res = false;
 		
@@ -809,7 +809,11 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 			}
 			PluginPagosIntf pluginPagos = PluginFactory.getInstance().getPluginPagos(pluginId);
 			EstadoSesionPago estadoSesionPago = pluginPagos.comprobarEstadoSesionPago(xmlPago.getLocalizador());
-			res = (estadoSesionPago.getEstado() == ConstantesPago.SESIONPAGO_PAGO_CONFIRMADO);			
+			
+			// Debe ser telematico y estar confirmado
+			res = (estadoSesionPago.getTipo() == ConstantesPago.TIPOPAGO_TELEMATICO) &&
+					(estadoSesionPago.getEstado() == ConstantesPago.SESIONPAGO_PAGO_CONFIRMADO);	
+			
 		}
 		
 		return res;
