@@ -805,7 +805,7 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
         	Date ahora = new Date();
         	
         	Query query = session.createQuery("select distinct d.tramitePersistente FROM DocumentoPersistente AS d " +
-        			"WHERE d.tramitePersistente.alertasTramitacionGenerar = 'S' and d.esPagoTelematico = 'S' and (d.estado = 'S' or d.estado = 'N') ");
+        			"WHERE d.tramitePersistente.alertasTramitacionGenerar = 'S' and ( (d.esPagoTelematico = 'S' and d.estado = 'S') or d.estado = 'N') ");
         	List tramites = query.list();
            
         	Map resultMap = new HashMap();
