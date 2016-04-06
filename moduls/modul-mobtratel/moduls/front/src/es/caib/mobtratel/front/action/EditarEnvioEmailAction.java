@@ -113,25 +113,25 @@ public class EditarEnvioEmailAction extends BaseAction
 		}
 		catch(PermisoException e)
 		{
-			System.out.println(e.getCause());
+			log.error(e);
 			request.setAttribute( "errorFormato", e.getMessage());
 			return mapping.findForward( "success" );
 		}
 		catch(FormatoException e)
 		{
-			System.out.println(e.getMessage());
+			log.error(e);
 			request.setAttribute( "errorFormato", e.getMessage());
 			return mapping.findForward( "success" );
 		}
         catch(LimiteDestinatariosException e)
         {
-        	System.out.println(e.getCause());
+        	log.error(e);
         	request.setAttribute( "errorFormato", e.getMessage());
         	return mapping.findForward( "success" );
         }
 		catch(MobilidadException e)
 		{
-			System.out.println(e.getCause());
+			log.error(e);
 			request.setAttribute( "errorFormato", e.getMessage());
 			return mapping.findForward( "success" );
 		}

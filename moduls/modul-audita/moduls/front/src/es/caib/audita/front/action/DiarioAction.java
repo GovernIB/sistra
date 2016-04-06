@@ -67,11 +67,9 @@ public class DiarioAction extends BaseAction
 		}
 		try {
 			fechaInicio = dateFormat.parse(ls_inicio);
-//			System.out.println("fechaInicio: " + fechaInicio.toLocaleString());
 			if(!ls_final.equals(""))
 			{
 			   fechaFinal = dateFormat.parse(ls_final);
-			   //System.out.println("fechaFinal: " + fechaFinal.toLocaleString());
 			}
 		} catch (ParseException e) {
 			_log.error( "Error al parsear las fechas: " + e.getMessage(), e );			

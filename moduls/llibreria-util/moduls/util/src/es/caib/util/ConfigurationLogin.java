@@ -163,9 +163,6 @@ public class ConfigurationLogin extends javax.security.auth.login.Configuration 
 
 		lookahead = nextToken();
 		while (lookahead != StreamTokenizer.TT_EOF) {
-
-			if (testing)
-				System.out.print("\tReading next config entry: ");
 			parseLoginEntry(newConfig);
 		}
 	}
@@ -182,9 +179,7 @@ public class ConfigurationLogin extends javax.security.auth.login.Configuration 
 		appName = st.sval;
 		lookahead = nextToken();
 
-		if (testing)
-			System.out.println("appName = " + appName);
-
+		
 		match("{");
 
 		// get the modules
@@ -227,17 +222,7 @@ public class ConfigurationLogin extends javax.security.auth.login.Configuration 
 
 			lookahead = nextToken();
 
-			// create the new element
-			if (testing) {
-				System.out.print("\t\t" + moduleClass + ", " + sflag);
-				java.util.Iterator i = options.keySet().iterator();
-				while (i.hasNext()) {
-					key = (String) i.next();
-					System.out.print(", " + key + "="
-							+ (String) options.get(key));
-				}
-				System.out.println("");
-			}
+			// create the new element			
 			AppConfigurationEntry entry = new AppConfigurationEntry(
 					moduleClass, controlFlag, options);
 			configEntries.add(entry);
@@ -255,10 +240,7 @@ public class ConfigurationLogin extends javax.security.auth.login.Configuration 
 			Object[] source = { appName };
 			throw new IOException(form.format(source));
 		}
-		newConfig.put(appName, configEntries);
-		if (testing)
-			System.out.println("\t\t***Added entry for " + appName
-					+ " to overall configuration***");
+		newConfig.put(appName, configEntries);		
 	}
 
 	private String match(String expect) throws IOException {

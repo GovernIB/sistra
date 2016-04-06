@@ -411,8 +411,6 @@ public class DbUtilRowProcessor implements RowProcessor {
      */
     private boolean isCompatibleType(Object value, Class type) {
         // Do object check first, then primitives
-    	//System.out.println( "type: " + type.getName() + "; value = " + value + " Es Integer.TYPE " + type.equals(Integer.TYPE) );
-    	//System.out.println( "type: " + type.getName() + "class: " + value.getClass().getName() );  
     	
         if (value == null || type.isInstance(value)) {
             return true;

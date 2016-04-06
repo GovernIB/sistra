@@ -55,7 +55,6 @@ public class DatosEntorno {
 			ls_valor = l_props.getProperty(as_variable);
 			if (ls_valor == null)
 			{
-				System.out.println(" La variable: " + as_variable + " es nula en el contexto. ");
 				return null;
 			}
 			
@@ -67,7 +66,6 @@ public class DatosEntorno {
 		}
 		catch (Throwable e)
 		{
-			System.out.println("Excepción al intentar obtener variable configuración '" + as_variable + "': \n" + e.toString());
 			return null; 
 		}
 		finally

@@ -74,7 +74,8 @@ public class ValoresFuenteDatosBTE implements Serializable {
 	 * Imprime el dominio por la consola
 	 *
 	 */
-	public void print(){
+	public String print(){
+		String result = "";
 		for (int i=0;i<filas.size();i++){
 			HashMap fila = (HashMap) filas.get(i);
 			String ls_fila="";
@@ -82,8 +83,9 @@ public class ValoresFuenteDatosBTE implements Serializable {
 				String ls_key = (String) it.next();
 				ls_fila += "[" + ls_key.toUpperCase() + "=" + fila.get(ls_key.toUpperCase()) + "]  ";				
 			}
-			System.out.println(ls_fila);
+			result += ls_fila + "\n";
 		}
+		return result;
 	}
 
 	/**

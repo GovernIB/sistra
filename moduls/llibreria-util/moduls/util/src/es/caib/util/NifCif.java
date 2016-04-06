@@ -164,9 +164,7 @@ public class NifCif {
 			suma = (10 - (suma % 10));
 
 			if (suma == 10)
-				suma = 0;
-			
-			//System.out.println( "DC [" + codigoControl + "] se coge [" + v2[suma] + "]"  );
+				suma = 0;						
 			
 			if (codigoControl.equals("" + suma)
 					|| codigoControl.toUpperCase().equals( v2[suma] ) )
@@ -205,7 +203,6 @@ public class NifCif {
 		if (valor.startsWith("Z")) numero = "2" + numero;		
 		
 		String letra = valor.substring(1).replaceAll("[^a-z^A-Z]", "");
-		//System.out.println ( letra + ": " + getLetraNIF(numero) );
 		if (!letra.equals( getLetraNIF(numero) ) )
 		{
 			return false;
@@ -241,12 +238,10 @@ public class NifCif {
 			valor = valor.substring( 1 );
 		}
 		*/
-		//System.out.print( valor + " : :" );
+	
 		String part1 =  valor.substring(0,2);
 		String part2 =  valor.substring( 2, valor.length() - 2 );
-		String part3 =  valor.substring( valor.length() - 2 );
-		
-		//System.out.println( "part1 " + part1 + " part2: " + part2 + " part3 " + part3 );
+		String part3 =  valor.substring( valor.length() - 2 );		
 		
 		if ( part2.length() == 8 && part2.charAt( 0 ) == '0' )
 		{
@@ -256,9 +251,7 @@ public class NifCif {
 		String numero = part1 + part2;
 		String dc = part3;
 		
-
-		
-		//System.out.println( "NUMERO [" + numero + "]" );
+	
 		
 		//int iNumero = Integer.parseInt( numero, 10 );
 		//int iDc = Integer.parseInt( dc, 10 );
@@ -266,7 +259,6 @@ public class NifCif {
 		long iDc = Long.parseLong( dc, 10 );
 		
 				
-		// System.out.println( "numero " + numero + "dc: " + dc + " dc calculado " + ( iNumero % 97 ) );
 		
 		if (iNumero % 97 != iDc)
 		{

@@ -77,7 +77,7 @@ public class AnalizadorDoc {
 							//sustituimos el . por /
 							nombre = nombre.replace('_', '/');
 							xpath = "/FORMULARIO/" + nombre;
-							//System.out.println("Nombre campo: " + nom);
+							
 						} else if (necoe.getValue() instanceof CTFFTextInput) {
 							//si es textinput debemos buscar un elemento de texto
 							List<Object> lstText = XmlUtils.getJAXBNodesViaXPath(binder, elem, ".//w:t[not(@xml:space)]", false);

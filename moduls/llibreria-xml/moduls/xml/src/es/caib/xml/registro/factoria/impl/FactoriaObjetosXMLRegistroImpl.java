@@ -113,7 +113,6 @@ public class FactoriaObjetosXMLRegistroImpl
 		Object obj = null;
 		try {			
 			obj = unmshJustificante.unmarshal(datosXMLJustificante);
-			System.out.println ("El tipo es : " +  obj.getClass().getName());
 			JUSTIFICANTE justificanteJAXB = (JUSTIFICANTE) obj;
 			justificante = new Justificante ();
 			

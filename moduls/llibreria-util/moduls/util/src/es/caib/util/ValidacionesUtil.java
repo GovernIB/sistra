@@ -169,8 +169,7 @@ public class ValidacionesUtil
 	public static boolean esNumeroCuentaValido( String numeroCuenta )
 	{
 		//String numeroCuentaNormalizado = NifCif.normalizarDocumento( numeroCuenta );
-		
-		//System.out.println( numeroCuentaNormalizado );
+			
 		
 		if ( !Pattern.matches(RE_CUENTA, numeroCuenta)) return false;
 		
@@ -192,12 +191,6 @@ public class ValidacionesUtil
 	 */
 	public static boolean esNumeroCuentaValido( String entidad, String sucursal, String dc, String cuenta )
 	{
-/*		
-		System.out.println( "entidad " + entidad );
-		System.out.println( "sucursal " + sucursal );
-		System.out.println( "dc " + dc );
-		System.out.println( "cuenta " + cuenta );
-		*/
 		if ( Integer.parseInt( entidad, 10 ) < 1 )
 			return false;
 		
@@ -215,8 +208,7 @@ public class ValidacionesUtil
         
         if(calculo0>=10) calculo0 = 11 - calculo0;
         if(calculo1>=10) calculo1 = 11 - calculo1;
-        
-        //System.out.println( "calculo0 = " + calculo0 + "; calculo1 = " + calculo1 );
+              
         
         if(calculo0 != Integer.parseInt( dc.substring( 0,1 ), 10 ) || calculo1 != Integer.parseInt( dc.substring( 1,2 ), 10 ) )
         {
