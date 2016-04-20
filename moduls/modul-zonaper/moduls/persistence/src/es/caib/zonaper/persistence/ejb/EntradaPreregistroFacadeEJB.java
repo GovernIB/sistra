@@ -51,15 +51,15 @@ import es.caib.zonaper.persistence.util.ConfigurationUtil;
  *  transaction-type="Container"
  *
  * @ejb.transaction type="Required"
- * 
+ *
  * @ejb.env-entry name="roleHelpDesk" type="java.lang.String" value="${role.helpdesk}"
  * @ejb.env-entry name="roleRegistro" type="java.lang.String" value="${role.registro}"
  * @ejb.env-entry name="roleGestor" type="java.lang.String" value="${role.gestor}"
- * 
+ *
  * @ejb.security-role-ref role-name="${role.helpdesk}" role-link="${role.helpdesk}"
  * @ejb.security-role-ref role-name="${role.registro}" role-link="${role.registro}"
- * @ejb.security-role-ref role-name="${role.gestor}" role-link="${role.gestor}" 
- * 
+ * @ejb.security-role-ref role-name="${role.gestor}" role-link="${role.gestor}"
+ *
  */
 public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
 
@@ -73,11 +73,11 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
 	private static final String KEY_TIPO = "TIPO";
 	private static final String KEY_NIVEL = "NIVEL";
 	private static final String KEY_WHERE = "WHERE";
-	
+
 	private String roleHelpDesk;
 	private String roleRegistro;
 	private String roleGestor;
-	
+
 	/**
      * @ejb.create-method
      * @ejb.permission role-name="${role.todos}"
@@ -86,58 +86,58 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
 	public void ejbCreate() throws CreateException {
 		super.ejbCreate();
 		try{
-			InitialContext initialContext = new InitialContext();			 
-			roleHelpDesk = (( String ) initialContext.lookup( "java:comp/env/roleHelpDesk" ));	
-			roleRegistro = (( String ) initialContext.lookup( "java:comp/env/roleRegistro" ));		
+			InitialContext initialContext = new InitialContext();
+			roleHelpDesk = (( String ) initialContext.lookup( "java:comp/env/roleHelpDesk" ));
+			roleRegistro = (( String ) initialContext.lookup( "java:comp/env/roleRegistro" ));
 			roleGestor = (( String ) initialContext.lookup( "java:comp/env/roleGestor" ));
 		}catch(Exception ex){
 			log.error(ex);
 		}
 	}
-	
+
     /**
      * Obtiene entrada preregistro de forma autenticada
-     * 
+     *
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
     public EntradaPreregistro obtenerEntradaPreregistroAutenticada(Long id) {
-        
-    	// Cargamos entradaPreregistro        	
+
+    	// Cargamos entradaPreregistro
     	EntradaPreregistro entradaPreregistro = this.recuperarEntradaPorCodigo(id);
-    	
+
     	// Control acceso expediente
-    	controlAccesoAutenticadoExpediente(entradaPreregistro); 
-        
+    	controlAccesoAutenticadoExpediente(entradaPreregistro);
+
         return entradaPreregistro;
-      
-    	
+
+
     }
 
-	
-    
+
+
     /**
      *  Obtiene entrada preregistro de forma anonima
-     * 
+     *
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
     public EntradaPreregistro obtenerEntradaPreregistroAnonima(Long id,String claveAcceso) {
-    	
-    	// Cargamos entradaPreregistro  
-    	EntradaPreregistro entradaPreregistro = this.recuperarEntradaPorCodigo(id);    	       
-        
+
+    	// Cargamos entradaPreregistro
+    	EntradaPreregistro entradaPreregistro = this.recuperarEntradaPorCodigo(id);
+
         // Control acceso anonimo expediente
     	controlAccesoAnonimoExpediente(claveAcceso, entradaPreregistro);
-    	
+
     	return entradaPreregistro;
     }
 
-	
-    
+
+
     /**
      * Obtiene entrada por id (registro, gestor y auto)
-     * 
+     *
      * @ejb.interface-method
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
@@ -147,75 +147,75 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
         return recuperarEntradaPorCodigo(id);
     }
 
-	
-    
+
+
     /**
      *  Obtiene entrada por id persistencia. Según tipo de acceso se comprobará acceso a la entrada.
      *  Si helpdesk no hay control acceso. Si autenticado se comprueba que el nif corresponda a la entrada.
-     *  
-     * 
+     *
+     *
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.helpdesk}"
      * @ejb.permission role-name="${role.auto}"
-     * 
+     *
      */
     public EntradaPreregistro obtenerEntradaPreregistro(String idPersistencia) {
     	try {
 	    	EntradaPreregistro entradaPreregistro = recuperarEntradaPreregistroPorIdPersistencia(idPersistencia);
-	    	// Control acceso  (role helpdesk salta comprobacion)    	
+	    	// Control acceso  (role helpdesk salta comprobacion)
 	    	if (entradaPreregistro != null && !this.ctx.isCallerInRole(roleHelpDesk)){
 	    		// Obtenemos codigo expediente asociado
 	    		Long idExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerCodigoExpedienteElemento(ElementoExpediente.TIPO_ENTRADA_PREREGISTRO, entradaPreregistro.getCodigo());
 	        	// Obtenemos metodo de autenticacion
-	    		Principal sp = this.ctx.getCallerPrincipal();	  
+	    		Principal sp = this.ctx.getCallerPrincipal();
 	        	PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
 	        	char metodoAutenticacion = plgLogin.getMetodoAutenticacion(sp);
 	        	// Controlamos acceso anonimo
 	        	if (metodoAutenticacion == 'A') {
 	        		if (!DelegateUtil.getExpedienteDelegate().verificarAccesoExpedienteAnonimo(idExpediente, idPersistencia)) {
 	            		throw new Exception("No tiene acceso a entrada preregistro: " + idPersistencia);
-	            	}        		
+	            	}
 	        	}else{
-	        	// Controlamos acceso autenticado	        	
+	        	// Controlamos acceso autenticado
 	        		if (!DelegateUtil.getExpedienteDelegate().verificarAccesoExpedienteAutenticado(idExpediente)) {
 	            		throw new Exception("No tiene acceso a entrada preregistro: " + idPersistencia);
-	            	}	        		
-	        	}                		
+	            	}
+	        	}
 	    	}
 	    	return entradaPreregistro;
     	} catch (Exception ex){
     		throw new EJBException("Excepcion accediendo a entrada preregistro: " + ex.getMessage(), ex);
     	}
     }
-    
+
     /**
      * Busca entrada preregistro anonima por id persistencia. El control de acceso es el id persistencia.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
     public EntradaPreregistro obtenerEntradaPreregistroAnonima(String idPersistencia) {
-    	EntradaPreregistro entradaPreregistro = recuperarEntradaPreregistroPorIdPersistencia(idPersistencia);   
+    	EntradaPreregistro entradaPreregistro = recuperarEntradaPreregistroPorIdPersistencia(idPersistencia);
     	if (entradaPreregistro != null && entradaPreregistro.getNivelAutenticacion() != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO) {
         	entradaPreregistro = null;
         }
-        return entradaPreregistro;           
+        return entradaPreregistro;
     }
 
     /**
-     * Busca entrada preregistro autenticada por id persistencia 
+     * Busca entrada preregistro autenticada por id persistencia
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
     public EntradaPreregistro obtenerEntradaPreregistroAutenticada(String idPersistencia) {
     	// Recuperamos entrada
-    	EntradaPreregistro entradaPreregistro = recuperarEntradaPreregistroPorIdPersistencia(idPersistencia);   
-    	// Control acceso expediente 
+    	EntradaPreregistro entradaPreregistro = recuperarEntradaPreregistroPorIdPersistencia(idPersistencia);
+    	// Control acceso expediente
     	controlAccesoAutenticadoExpediente(entradaPreregistro);
-    	return entradaPreregistro;    	
+    	return entradaPreregistro;
     }
-	
-    
+
+
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.registro}"
@@ -225,7 +225,7 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
     public EntradaPreregistro obtenerEntradaPreregistroPorNumero(String numeroPreregistro) {
         Session session = getSession();
         try {
-        	// Cargamos entradaPreregistro        	
+        	// Cargamos entradaPreregistro
         	Query query = session
             .createQuery("FROM EntradaPreregistro AS m WHERE m.numeroPreregistro = :numeroPreregistro")
             .setParameter("numeroPreregistro",numeroPreregistro);
@@ -234,10 +234,10 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
             	return null;
             	//throw new HibernateException("No existe trámite con id " + id);
             }
-            EntradaPreregistro entradaPreregistro = (EntradaPreregistro)  query.uniqueResult();             
-            
+            EntradaPreregistro entradaPreregistro = (EntradaPreregistro)  query.uniqueResult();
+
         	// Cargamos documentos
-        	Hibernate.initialize(entradaPreregistro.getDocumentos());        	
+        	Hibernate.initialize(entradaPreregistro.getDocumentos());
             return entradaPreregistro;
         } catch (HibernateException he) {
         	throw new EJBException(he);
@@ -245,29 +245,29 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-    
-   
+
+
 	/**
- 	 * 
- 	 * Confirma entrada preregistro. 
+ 	 *
+ 	 * Confirma entrada preregistro.
  	 * Si es confirmacion automatica debe poder presentar dicho tramite.
  	 * Si no es automatica y es confirmado incorrectamente, debera tener role gestor.
  	 * Si no es automatica y no es confirmado incorrectamente, debera tener role registro.
- 	 * 
+ 	 *
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.registro}"
      * @ejb.permission role-name="${role.gestor}"
      */
     public void confirmarEntradaPreregistro(Long codigo, String numeroRegistro,
-			Date fechaConfirmacion, String oficinaRegistroPresencial, boolean confirmadoAutomaticamente, boolean confirmadoIncorrecto) {   
+			Date fechaConfirmacion, String oficinaRegistroPresencial, boolean confirmadoAutomaticamente, boolean confirmadoIncorrecto) {
     	// Recupera entrada
     	EntradaPreregistro entrada = this.recuperarEntradaPorCodigo(codigo);
-    	
+
     	Session session = getSession();
-        try {        	
+        try {
         	// Confirmacion automatica: control acceso para presentar preregistro
-        	if (confirmadoAutomaticamente) {    	    	
+        	if (confirmadoAutomaticamente) {
     			verificarPermisosPresentacionPreregistro(entrada);
         	} else {
         		// Confirmacion manual: debe tener role registro
@@ -281,53 +281,53 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
 	        		}
         		}
         	}
-        	
+
         	// Updateamos
         	entrada.setNumeroRegistro(numeroRegistro);
         	entrada.setFechaConfirmacion(fechaConfirmacion);
         	entrada.setOficinaRegistro(oficinaRegistroPresencial);
-        	entrada.setConfirmadoAutomaticamente(confirmadoAutomaticamente?'S':'N');        	
+        	entrada.setConfirmadoAutomaticamente(confirmadoAutomaticamente?'S':'N');
         	session.update(entrada);
-        	                    	            
+
         } catch (Exception he) {
             throw new EJBException(he);
         } finally {
             close(session);
-        }    	
+        }
     }
-    	
-    	
+
+
  	/**
- 	 * 
+ 	 *
  	 * Graba nueva entrada preregistro.
- 	 * 
+ 	 *
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
-    public Long grabarNuevaEntradaPreregistro(EntradaPreregistro entrada) {        
+    public Long grabarNuevaEntradaPreregistro(EntradaPreregistro entrada) {
     	Session session = getSession();
-        try {        	
-        	
+        try {
+
         	// Control acceso para presentar preregistro
     		verificarPermisosPresentacionPreregistro(entrada);
-        	
+
         	// updateamos
         	if (entrada.getCodigo() == null){
         		session.save(entrada);
         	}else{
         		throw new Exception("No se puede modificar entrada");
         	}
-        	                    	
+
             return entrada.getCodigo();
         } catch (Exception he) {
             throw new EJBException(he);
         } finally {
-        	
+
             close(session);
         }
     }
-    
-    
+
+
     /** Obtiene estado entrada preregistro
      * @return N: No existe / T: Terminada / C: Pendiente confirmacion
      * @ejb.interface-method
@@ -346,49 +346,50 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
     	return estado;
     }
 
-	
-    
-    
+
+
+
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.auto}"
      */
-    public List listarEntradaPreregistrosCaducados( Date fecha ) 
+    public List listarEntradaPreregistrosCaducados( Date fecha, int limite )
     {
         Session session = getSession();
-        try {     
-        	
-        	
+        try {
+
+
             Query query = session
             .createQuery("FROM EntradaPreregistro AS m WHERE m.fechaCaducidad < :fecha and m.fechaConfirmacion is null ORDER BY m.fecha ASC")
             .setParameter("fecha", fecha );
             //query.setCacheable(true);
+            query.setMaxResults(limite);
             List tramites = query.list();
-            
+
             // Cargamos documentos
             for (Iterator it=tramites.iterator();it.hasNext();){
             	EntradaPreregistro entradaPreregistro = (EntradaPreregistro) it.next();
             	Hibernate.initialize(entradaPreregistro.getDocumentos());
             }
-            
+
             return tramites;
-            
+
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
             close(session);
         }
     }
-    
+
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.helpdesk}"
      */
     public List listarEntradaPreregistrosNifModelo(String nif, String modelo, Date fechaInicial, Date fechaFinal, String nivelAutenticacion) {
         Session session = getSession();
-        try {     
-        	
-        	
+        try {
+
+
             Query query = session
             .createQuery("FROM EntradaPreregistro AS m WHERE " +
             			((nivelAutenticacion != null && "A".equals(nivelAutenticacion)) ? " m.nifRepresentante like :nif " : " m.nifRepresentante = :nif ")+
@@ -406,16 +407,16 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
             query.setParameter("fechaInicial",fechaInicial);
             query.setParameter("fechaFinal",fechaFinal);
 
-            
+
             return query.list();
-            
+
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
             close(session);
         }
     }
-    
+
 
     /**
      * @ejb.interface-method
@@ -432,10 +433,10 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-    	
+
     /**
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.auto}" 
+     * @ejb.permission role-name="${role.auto}"
      * @param tramitePersistenteBackup
      * @return
      */
@@ -466,39 +467,40 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
         } finally {
             close(session);
         }
-    	
+
     }
-    
-    
+
+
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.auto}"
      */
-    public List listarEntradaPreregistroBackup( Date fecha ) {
+    public List listarEntradaPreregistroBackup( Date fecha, int limit ) {
     	Session session = getSession();
-        try {      
+        try {
             Query query = session
             .createQuery("FROM EntradaPreregistroBackup AS m WHERE m.fechaCaducidad < :fecha")
             .setParameter("fecha", fecha );
             //query.setCacheable(true);
+            query.setMaxResults(limit);
             List entradas = query.list();
-            
+
             // Cargamos documentos
             for (Iterator it=entradas.iterator();it.hasNext();){
             	EntradaPreregistroBackup entradaPreregistroBackup = (EntradaPreregistroBackup) it.next();
             	Hibernate.initialize(entradaPreregistroBackup.getDocumentosBackup());
             }
-            
+
             return entradas;
-            
+
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
             close(session);
         }
     }
-    
-    
+
+
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.auto}"
@@ -511,7 +513,7 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
     	{
 	    	EntradaPreregistroBackup entradaBackup = new EntradaPreregistroBackup();
 	    	BeanUtils.copyProperties( entradaBackup, entradaPreregistro );
-			Set setDocumentos = entradaPreregistro.getDocumentos(); 
+			Set setDocumentos = entradaPreregistro.getDocumentos();
 			for ( Iterator it = setDocumentos.iterator(); it.hasNext(); )
 			{
 				DocumentoEntradaPreregistro documento = ( DocumentoEntradaPreregistro ) it.next();
@@ -530,7 +532,7 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
     		close( session );
     	}
     }
-    	
+
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.helpdesk}"
@@ -542,13 +544,13 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
     	condiciones.put(KEY_WHERE, "WHERE m.fechaConfirmacion IS NULL AND ");
     	return getListaEntradaPreregistro(condiciones, filtro);
     }
-    
+
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.helpdesk}"
      */
     public List listarEntradaPreregistrosConfirmados( Date fechaInicial, Date fechaFinal, String modelo, String caducidad, String tipo, String nivel ) {
-    	
+
     	Hashtable filtro = getFiltro(fechaInicial, fechaFinal, modelo, caducidad, tipo, nivel);
     	Hashtable condiciones = getCondiciones(filtro);
     	condiciones.put(KEY_WHERE, "WHERE m.fechaConfirmacion IS NOT NULL AND ");
@@ -560,54 +562,54 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.helpdesk}"
      */
     public List listarEntradaPreregistros( Date fechaInicial, Date fechaFinal, String modelo, String caducidad, String tipo, String nivel ) {
-    	
+
     	Hashtable filtro = getFiltro(fechaInicial, fechaFinal, modelo, caducidad, tipo, nivel);
     	Hashtable condiciones = getCondiciones(filtro);
     	condiciones.put(KEY_WHERE, "WHERE ");
     	return getListaEntradaPreregistro(condiciones, filtro);
     }
-    
+
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.auto}"
      */
     public List obtenerTramitesPendienteAvisoPreregistroSinConfirmar() {
     	 Session session = getSession();
-         try {     
-        	 
+         try {
+
         	Properties props = ConfigurationUtil.getInstance().obtenerPropiedades();
          	String avisoInicial = props.getProperty("scheduler.alertasTramitacion.preregistroPendiente.avisoInicial");
          	String repeticion = props.getProperty("scheduler.alertasTramitacion.preregistroPendiente.repeticion");
-         	
+
          	if (StringUtils.isBlank(avisoInicial) || StringUtils.isBlank(repeticion)) {
          		throw new Exception("No se han configurado las propiedades para alertas de tramitacion en el zonaper.properties");
          	}
-         	
+
          	int repeticionInt;
          	try {
          		repeticionInt = Integer.parseInt(repeticion);
          	} catch (NumberFormatException nfe) {
          		throw new Exception("scheduler.alertasTramitacion.preregistroPendiente.repeticion no tiene un valor valido (zonaper.properties)");
          	}
-         	
+
          	int avisoInicialInt;
          	try {
          		avisoInicialInt = Integer.parseInt(avisoInicial);
          	} catch (NumberFormatException nfe) {
          		throw new Exception("scheduler.alertasTramitacion.preregistroPendiente.avisoInicial no tiene un valor valido (zonaper.properties)");
          	}
-         	
+
          	// Si aviso inicial = 0, no se generan alertas
          	if (avisoInicialInt <= 0) {
          		return new ArrayList();
          	}
-         	
+
          	Date ahora = new Date();
-         	        	 
+
          	Query query = session
             .createQuery("FROM EntradaPreregistro AS m WHERE m.fechaConfirmacion is null and m.alertasTramitacionGenerar = 'S'");
             List preregistros = query.list();
-             
+
 
         	Map resultMap = new HashMap();
         	for (Iterator it = preregistros.iterator(); it.hasNext();) {
@@ -630,21 +632,21 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
         			}
         		}
         	}
-        	
+
         	// Devolvemos lista de preregistros
         	List resultList = new ArrayList();
         	for (Iterator it = resultMap.keySet().iterator(); it.hasNext();) {
         		resultList.add(resultMap.get(it.next()));
         	}
         	return resultList;
-                        
+
          } catch (Exception he) {
              throw new EJBException(he);
          } finally {
              close(session);
          }
     }
-    
+
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.auto}"
@@ -653,32 +655,32 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
     	EntradaPreregistro entradaPreregistro = null;
         Session session = getSession();
         try {
-        	// Cargamos entradaPreregistro        	
+        	// Cargamos entradaPreregistro
         	Query query = session
             .createQuery("FROM EntradaPreregistro AS m WHERE m.idPersistencia = :id")
-            .setParameter("id",idPersistencia);            
+            .setParameter("id",idPersistencia);
             if (query.list().isEmpty()){
             	throw new Exception("No existe entrada preregistro");
             }
-            
+
             EntradaPreregistro entrada = (EntradaPreregistro) query.uniqueResult();
             entrada.setAlertasTramitacionFechaUltima(new Date());
             session.update(entrada);
-            
+
         } catch (Exception he) {
         	throw new EJBException(he);
         } finally {
             close(session);
-        }		
-    	
+        }
+
     }
-    
+
     // ---------------------------------------------------------------------------
     //	FUNCIONES PRIVADAS
     // ---------------------------------------------------------------------------
 
     /**
-     * Genera un Hashtable a partir de los filtros 
+     * Genera un Hashtable a partir de los filtros
      * @param fechaInicial
      * @param fechaFinal
      * @param modelo
@@ -689,7 +691,7 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
      */
     private Hashtable getFiltro(Date fechaInicial, Date fechaFinal, String modelo, String caducidad, String tipo, String nivel) {
     	Hashtable filtro = new Hashtable();
-		
+
 		filtro.put(KEY_MODELO, modelo);
 		filtro.put(KEY_FECHA_INICIO, fechaInicial);
 		filtro.put(KEY_FECHA_FIN, fechaFinal);
@@ -698,20 +700,20 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
 		filtro.put(KEY_NIVEL, nivel);
 		return filtro;
     }
-    
+
     /**
      * Genera las condiciones a partir de los valores de filtro
      * @param filtro
      * @return
      */
     private Hashtable getCondiciones(Hashtable filtro){
-    	
+
     	Hashtable condiciones = new Hashtable();
     	String modelo = (String)filtro.get(KEY_MODELO);
     	String caducidad = (String)filtro.get(KEY_CADUCIDAD);
     	String tipo = (String)filtro.get(KEY_TIPO);
     	String nivel = (String)filtro.get(KEY_NIVEL);
-    	
+
     	String hql_modelo;
 
     	if ("0".equals(modelo)) {
@@ -719,11 +721,11 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
     	} else {
     		hql_modelo = " AND m.tramite = :modelo ";
     	}
-    	
+
     	condiciones.put(KEY_MODELO, hql_modelo);
-    	
+
     	String hql_caducidad;
-    	
+
     	if ("S".equals(caducidad)) {
     		hql_caducidad = " AND m.fechaCaducidad <= :fechaActual ";
     	} else if ("N".equals(caducidad)) {
@@ -731,32 +733,32 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
     	} else {
     		hql_caducidad = " AND :fechaActual = :fechaActual ";
     	}
-    	
+
     	condiciones.put(KEY_CADUCIDAD, hql_caducidad);
-    	
+
     	String hql_tipo;
-    	
+
     	if ("T".equals(tipo)) {
     		hql_tipo = " AND :tipo = :tipo ";
     	} else {
     		hql_tipo = " AND m.tipo = :tipo ";
     	}
-    	
+
     	condiciones.put(KEY_TIPO, hql_tipo);
-    	
+
     	String hql_nivel;
-    	
+
     	if ("T".equals(nivel)) {
     		hql_nivel = " AND :nivel = :nivel ";
     	} else {
     		hql_nivel = " AND m.nivelAutenticacion = :nivel ";
     	}
-    	
+
     	condiciones.put(KEY_NIVEL, hql_nivel);
-    	
+
     	return condiciones;
     }
-    
+
     /**
      * Ejecuta la consulta a partir de las condiciones y el valor de los filtros
      * @param condiciones
@@ -764,7 +766,7 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
      * @return
      */
     private List getListaEntradaPreregistro(Hashtable condiciones, Hashtable filtro) {
-    	
+
     	Session session = getSession();
 
 		String hql_where = (String)condiciones.get(KEY_WHERE);
@@ -799,19 +801,19 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
     	}
 
     }
-  	
+
     private EntradaPreregistro recuperarEntradaPreregistroPorIdPersistencia(
 			String idPersistencia) {
 		EntradaPreregistro entradaPreregistro = null;
         Session session = getSession();
         try {
-        	// Cargamos entradaPreregistro        	
+        	// Cargamos entradaPreregistro
         	Query query = session
             .createQuery("FROM EntradaPreregistro AS m WHERE m.idPersistencia = :id")
             .setParameter("id",idPersistencia);
             //query.setCacheable(true);
             if (!query.list().isEmpty()){
-            	entradaPreregistro = (EntradaPreregistro)  query.uniqueResult();  
+            	entradaPreregistro = (EntradaPreregistro)  query.uniqueResult();
             	// Cargamos documentos
             	Hibernate.initialize(entradaPreregistro.getDocumentos());
             }
@@ -822,15 +824,15 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
         }
 		return entradaPreregistro;
 	}
-    
+
     private EntradaPreregistro recuperarEntradaPorCodigo(Long id) {
 		Session session = getSession();
         try {
-        	// 	Cargamos entradaPreregistro        	
+        	// 	Cargamos entradaPreregistro
         	EntradaPreregistro entradaPreregistro = (EntradaPreregistro) session.load(EntradaPreregistro.class, id);
-        	
+
         	// Cargamos documentos
-        	Hibernate.initialize(entradaPreregistro.getDocumentos());        	
+        	Hibernate.initialize(entradaPreregistro.getDocumentos());
             return entradaPreregistro;
         } catch (HibernateException he) {
         	throw new EJBException(he);
@@ -838,29 +840,29 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
             close(session);
         }
 	}
-    
+
     private void verificarPermisosPresentacionPreregistro(EntradaPreregistro obj) throws Exception {
 		Principal sp = this.ctx.getCallerPrincipal();
 		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
 		if (plgLogin.getMetodoAutenticacion(sp) != 'A'){
-			// Para autenticados comprobamos si es el usuario o es un delegado con permiso para presentar	        	
+			// Para autenticados comprobamos si es el usuario o es un delegado con permiso para presentar
 			if (!plgLogin.getNif(this.ctx.getCallerPrincipal()).equals(obj.getNifRepresentante())){
 				// Si no es el usuario quien accede miramos si es un delegado
 		    	String permisos = DelegateUtil.getDelegacionDelegate().obtenerPermisosDelegacion(obj.getNifRepresentante());
 		    	if (StringUtils.isEmpty(permisos) || permisos.indexOf(ConstantesZPE.DELEGACION_PERMISO_PRESENTAR_TRAMITE) == -1){
-		    		throw new Exception("Acceso no permitido a entrada preregistro " + obj.getIdPersistencia()  + " no pertenece al usuario ni es delegado con permiso de presentar - usuario " + sp.getName());	                		
+		    		throw new Exception("Acceso no permitido a entrada preregistro " + obj.getIdPersistencia()  + " no pertenece al usuario ni es delegado con permiso de presentar - usuario " + sp.getName());
 		    	}
 			}
-		}else{	        		
+		}else{
 			// Para anonimos vale con el id persistencia
 			if (obj.getNivelAutenticacion() != 'A'){
 				throw new Exception("Acceso no permitido a entrada preregistro " + obj.getIdPersistencia() + " - usuario " + sp.getName());
 			}
 		}
-    }    	
-    
+    }
+
     /**
-	 * Comprueba acceso anonimo a expediente	
+	 * Comprueba acceso anonimo a expediente
 	 * @param claveAcceso
 	 * @param entradaPreregistro
 	 */
@@ -877,7 +879,7 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
     		throw new EJBException("No se puede verificar acceso a entrada");
     	}
 	}
-    
+
     private void controlAccesoAutenticadoExpediente(
 			EntradaPreregistro entradaPreregistro) {
 		try {
@@ -885,11 +887,11 @@ public abstract class EntradaPreregistroFacadeEJB extends HibernateEJB {
     			Long idExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerCodigoExpedienteElemento(ElementoExpediente.TIPO_ENTRADA_PREREGISTRO, entradaPreregistro.getCodigo());
     	    	if (!DelegateUtil.getExpedienteDelegate().verificarAccesoExpedienteAutenticado(idExpediente)) {
     	    		throw new Exception("No tiene acceso a entrada prregistro");
-    	    	}	
+    	    	}
     		}
         } catch (Exception he) {
             throw new EJBException(he);
         }
 	}
-    
+
 }

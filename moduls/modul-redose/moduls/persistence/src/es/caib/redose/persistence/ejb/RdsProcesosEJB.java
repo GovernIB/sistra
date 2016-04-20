@@ -31,34 +31,36 @@ import es.caib.sistra.plugins.custodia.PluginCustodiaIntf;
  *  name="redose/persistence/RdsProcesos"
  *  jndi-name="es.caib.redose.persistence.RdsProcesos"
  *  type="Stateless"
- *  view-type="remote" 
+ *  view-type="remote"
  *  transaction-type="Container"
  *
  *  @ejb.transaction type="NotSupported"
- * 
- * 
+ *
+ *
  */
 public abstract class RdsProcesosEJB implements SessionBean {
 
 	private static Log log = LogFactory.getLog( RdsProcesosEJB.class );
-	
+
 	private static boolean existepluginCustodia;
-	
+
 	private int limitePurgado = 1000;
-	
+
+	private int limiteConsolidacionGD = 1000;
+
 	/**
      * @ejb.create-method
      * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.auto}"
      */
-	public void ejbCreate() throws CreateException {		
+	public void ejbCreate() throws CreateException {
 		existepluginCustodia = true;
 		PluginCustodiaIntf pluginCustodia = null;
 		try{
-			pluginCustodia = PluginFactory.getInstance().getPluginCustodia();				
+			pluginCustodia = PluginFactory.getInstance().getPluginCustodia();
 		}catch(Exception e){
 			existepluginCustodia = false;
-		}		
+		}
 		try{
 			String limiteStr = es.caib.redose.persistence.util.ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("scheduler.jobPurgadoDocumentos.limite");
 			if (limiteStr != null) {
@@ -66,12 +68,20 @@ public abstract class RdsProcesosEJB implements SessionBean {
 			}
 		}catch(Exception e){
 			limitePurgado = 1000;
-		}	
+		}
+		try{
+			String limiteGDStr = es.caib.redose.persistence.util.ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("scheduler.jobConsolidacionGestorDocumental.limite");
+			if (limiteGDStr != null) {
+				limiteConsolidacionGD = Integer.parseInt(limiteGDStr);
+			}
+		}catch(Exception e){
+			limiteConsolidacionGD = 1000;
+		}
 	}
-	
+
 	/**
 	 * Proceso de borrado de documentos sin usos.
-	 * 
+	 *
      * @ejb.interface-method
      * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.auto}"
@@ -84,13 +94,13 @@ public abstract class RdsProcesosEJB implements SessionBean {
     	// Purgamos documentos custodia
     	borradoDocumentosCustodia();
     	// Purgamos definitivamente los ficheros externos marcados para borrar.
-         borradoDocumentosExternos(); 
+         borradoDocumentosExternos();
     }
-	
-    
+
+
    /**
 	 * Proceso de consolidacion de documentos en gestor documental
-	 * 
+	 *
      * @ejb.interface-method
      * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.auto}"
@@ -99,22 +109,27 @@ public abstract class RdsProcesosEJB implements SessionBean {
     	log.debug( "Proceso consolidacion Gestor Documental");
 		try{
 			RdsAdminDelegate delegate = DelegateUtil.getRdsAdminDelegate();
-			
+
 			// Recuperamos documentos a consolidar
 			List docs = delegate.listarDocumentosPendientesConsolidar();
 			if (docs == null) {
 				log.debug( "Job consolidacion Gestor Documental: no existen documentos a consolidar");
 				return;
 			}
-			
+
 			// Consolidamos documentos
 			log.debug( "Job consolidacion Gestor Documental: hay " + docs.size() + " documentos a consolidar");
-			
+
 			int i=0;
 			for (Iterator it = docs.iterator();it.hasNext();){
+
+				if (i > limiteConsolidacionGD) {
+					log.debug( "Job consolidacion Gestor Documental: se ha llegado al limite, se dejan los siguientes para el proximo proceso");
+				}
+
 				Documento doc = (Documento) it.next();
 				ReferenciaRDS refRDS = new ReferenciaRDS(doc.getCodigo().longValue(),doc.getClave());
-				
+
 				try{
 					delegate.consolidarDocumentoCustodia(refRDS);
 					i++;
@@ -123,26 +138,26 @@ public abstract class RdsProcesosEJB implements SessionBean {
 					log.error("No se ha podido consolidar en custodia el documento " + doc.getCodigo() + ". Se intenta consolidar el siguiente.", ex);
 					continue;
 				}
-				
-			}	
+
+			}
 			log.debug( "Proceso consolidacion Gestor Documental: se han consolidado " + i + " documentos");
 		}catch(Exception e){
 			throw new ExcepcionRDS("Error al consolidar los docuemntos en el gestor documental", e);
 		}
     }
-	
+
 	// -----------------------------------------------------------------------------------------------
     //  FUNCIONES PRIVADAS
     // -----------------------------------------------------------------------------------------------
 	/**
 	 * Proceso de borrado de documentos sin usos
-	 *   
+	 *
      */
-    private void borradoDocumentosSinUsos() throws ExcepcionRDS{    	
-    	
-    	log.debug("Proceso borrado de documentos sin usos");    	
+    private void borradoDocumentosSinUsos() throws ExcepcionRDS{
+
+    	log.debug("Proceso borrado de documentos sin usos");
     	RdsAdminDelegate rd = DelegateUtil.getRdsAdminDelegate();
-    	
+
     	// Recuperamos documentos sin usos
     	List docs = null;
     	try{
@@ -152,7 +167,7 @@ public abstract class RdsProcesosEJB implements SessionBean {
     		log.error("Error obteniendo los documentos sin usos",ex);
     		throw new ExcepcionRDS("Error obteniendo los documentos sin usos",ex);
     	}
-    	
+
     	// Borramos los docs sin usos que lleven sin modificarse más de 24 horas
     	long ahora = (new Date()).getTime();
     	long periodo = (24 * 60 * 60 * 1000);
@@ -177,11 +192,11 @@ public abstract class RdsProcesosEJB implements SessionBean {
 			}
     	}
     	log.debug( "Proceso borrado de documentos sin usos: se han marcado para borrar " + i + " documentos");
-    }   
+    }
 
     /**
 	 * Proceso de borrado de documentos en custodia
-	 *     
+	 *
      */
     private void borradoDocumentosCustodia() throws ExcepcionRDS{
     	log.debug( "Proceso borrado documentos en custodia");
@@ -190,7 +205,7 @@ public abstract class RdsProcesosEJB implements SessionBean {
 			if(existepluginCustodia){
 				int num = 0;
 				List documentosParaBorrar = rd.listarVersionesCustodiaParaBorrar();
-				if(documentosParaBorrar != null){					
+				if(documentosParaBorrar != null){
 					for(int i=0;i<documentosParaBorrar.size();i++){
 						if ( num > limitePurgado) {
 			    			log.debug("Limite de docs a purgar alcanzado. Se continuará en siguiente purga.");
@@ -204,10 +219,10 @@ public abstract class RdsProcesosEJB implements SessionBean {
 						}catch(Exception e){
 							log.error("No se ha podido borrar el documento de Custodia con id= "+vc.getCodigo());
 						}
-					}				
+					}
 				}
 				log.debug( "Proceso borrado documentos en custodia: se han borrado " + num + " documentos");
-			}			
+			}
 		}catch(Exception e){
 			throw new ExcepcionRDS("Error al eliminar los docuemntso de custodia ", e);
 		}
@@ -215,11 +230,11 @@ public abstract class RdsProcesosEJB implements SessionBean {
 
    /**
 	 * Proceso de borrado de documentos sin usos
-	 *     
+	 *
      */
-    private void borradoDocumentosDefinitivamente() throws ExcepcionRDS{    	
-    	
-    	log.debug("Proceso borrado definitivo de documentos marcados para borrar");    	
+    private void borradoDocumentosDefinitivamente() throws ExcepcionRDS{
+
+    	log.debug("Proceso borrado definitivo de documentos marcados para borrar");
     	RdsAdminDelegate rd = DelegateUtil.getRdsAdminDelegate();
     	ConfiguracionDelegate confDelg = DelegateUtil.getConfiguracionDelegate();
     	// Recuperamos documentos marcados para borrar y lleven sin modificarse más de 'scheduler.jobBorrarDocumentosDefinitivamente.meses' (propiedad del fichero redose.properties) meses borrados
@@ -236,8 +251,8 @@ public abstract class RdsProcesosEJB implements SessionBean {
     		log.error("Error obteniendo los documentos marcados para borrar",ex);
     		throw new ExcepcionRDS("Error obteniendo los documentos marcados para borrar",ex);
     	}
-    	
-    	// Borramos los docs que tengan la marca de borrados.  
+
+    	// Borramos los docs que tengan la marca de borrados.
     	int num = 0;
     	for (Iterator it=docs.iterator();it.hasNext();){
     		if ( num > limitePurgado) {
@@ -254,18 +269,18 @@ public abstract class RdsProcesosEJB implements SessionBean {
 				// Capturamos error para poder continuar el proceso de borrado
 				log.error("Error al eliminar documento " + d.getCodigo(),e);
 			}
-    	}    	
+    	}
     	log.debug( "Proceso borrado definitivo de documentos marcados para borrar: se han borrado " + num + " documentos");
     }
-    
+
     /**
      * Proceso de eliminar definitivamente los ficheros externos marcados para borrar.
      * @throws ExcepcionRDS
      */
-    private void borradoDocumentosExternos() throws ExcepcionRDS {    
+    private void borradoDocumentosExternos() throws ExcepcionRDS {
     	log.debug( "Proceso borrado definitivo documentos externos");
     	RdsAdminDelegate rd = DelegateUtil.getRdsAdminDelegate();
-    	try{    		
+    	try{
 			List documentosParaBorrar = rd.listarFicherosExternosParaBorrar();
 			int num = 0;
 			if(documentosParaBorrar != null){
@@ -284,13 +299,13 @@ public abstract class RdsProcesosEJB implements SessionBean {
 					}catch(Exception e){
 						log.error("No se ha podido eliminar el fichero externo " + fe.getReferenciaExterna() + ". Se intenta borrar el siguiente.", e);
 					}
-				}				
+				}
 			}
 			log.debug( "Proceso definitivo documentos externos: se han borrado " + num + " documentos");
 		}catch(Exception e){
 			throw new ExcepcionRDS("Error al eliminar los ficheros externos marcados para borrar", e);
 		}
-		
+
 	}
 
 }

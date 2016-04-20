@@ -28,7 +28,7 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
+
     public EntradaPreregistro obtenerEntradaPreregistroAutenticada(Long idEntradaPreregistro) throws DelegateException {
         try {
             return getFacade().obtenerEntradaPreregistroAutenticada(idEntradaPreregistro);
@@ -36,7 +36,7 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
+
     public EntradaPreregistro obtenerEntradaPreregistroAutenticada(String idPersistencia) throws DelegateException {
         try {
             return getFacade().obtenerEntradaPreregistroAutenticada(idPersistencia);
@@ -44,7 +44,7 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
+
     public EntradaPreregistro obtenerEntradaPreregistroAnonima(Long idEntradaPreregistro,String idPersistencia) throws DelegateException {
         try {
             return getFacade().obtenerEntradaPreregistroAnonima(idEntradaPreregistro,idPersistencia);
@@ -52,7 +52,7 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
+
     public EntradaPreregistro obtenerEntradaPreregistro(String idPersistencia) throws DelegateException {
         try {
             return getFacade().obtenerEntradaPreregistro(idPersistencia);
@@ -60,7 +60,7 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
+
     public EntradaPreregistro obtenerEntradaPreregistro(Long id)throws DelegateException {
         try {
             return getFacade().obtenerEntradaPreregistro(id);
@@ -68,74 +68,74 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
+
     public EntradaPreregistro obtenerEntradaPreregistroPorNumero( String numeroPreregistro ) throws DelegateException {
         try {
         	return getFacade().obtenerEntradaPreregistroPorNumero( numeroPreregistro );
         } catch (Exception e) {
             throw new DelegateException(e);
         }
-        
+
     }
-    
+
 
     public List listarEntradaPreregistrosNifModelo(String nif, String modelo, Date fechaInicial, Date fechaFinal, String nivelAutenticacion) throws DelegateException
     {
-    	try 
+    	try
     	{
     		return getFacade().listarEntradaPreregistrosNifModelo( nif, modelo, fechaInicial, fechaFinal, nivelAutenticacion );
     	}
-    	catch (Exception e) 
+    	catch (Exception e)
     	{
-    		e.printStackTrace();	
+    		e.printStackTrace();
             throw new DelegateException(e);
         }
     }
-        
-    
+
+
 
     public void backupEntradaPreregistro( EntradaPreregistro preregistro ) throws DelegateException {
     	try {
-            getFacade().backupEntradaPreregistro( preregistro );            
+            getFacade().backupEntradaPreregistro( preregistro );
         } catch (Exception e) {
             throw new DelegateException(e);
         }
     }
-    
+
     public void borrarEntradaPreregistro(Long id) throws DelegateException {
         try {
-            getFacade().borrarEntradaPreregistro(id);            
+            getFacade().borrarEntradaPreregistro(id);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
-    }    
-    public List listarEntradaPreregistroBackup( Date fecha ) throws DelegateException {
+    }
+    public List listarEntradaPreregistroBackup( Date fecha, int limite ) throws DelegateException {
     	try {
-           return getFacade().listarEntradaPreregistroBackup( fecha );            
+           return getFacade().listarEntradaPreregistroBackup( fecha, limite );
         } catch (Exception e) {
             throw new DelegateException(e);
         }
     }
     public void borrarEntradaPreregistroBackup( EntradaPreregistroBackup entradaPreregistroBackup ) throws DelegateException {
     	try {
-            getFacade().borrarEntradaPreregistroBackup( entradaPreregistroBackup );            
+            getFacade().borrarEntradaPreregistroBackup( entradaPreregistroBackup );
         } catch (Exception e) {
             throw new DelegateException(e);
         }
     }
-    
-    public List listarEntradaPreregistrosCaducados( Date fecha ) throws DelegateException 
+
+    public List listarEntradaPreregistrosCaducados( Date fecha, int maxTram ) throws DelegateException
     {
     	try
     	{
-    		return getFacade().listarEntradaPreregistrosCaducados( fecha );
+    		return getFacade().listarEntradaPreregistrosCaducados( fecha, maxTram );
     	}
     	catch (Exception e) {
             throw new DelegateException(e);
         }
     }
 
-    public List listarEntradaPreregistrosNoConfirmados( Date fechaInicial, Date fechaFinal, String modelo, String caducidad, String tipo, String nivel ) throws DelegateException 
+    public List listarEntradaPreregistrosNoConfirmados( Date fechaInicial, Date fechaFinal, String modelo, String caducidad, String tipo, String nivel ) throws DelegateException
     {
     	try
     	{
@@ -145,8 +145,8 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
-    public List listarEntradaPreregistrosConfirmados( Date fechaInicial, Date fechaFinal, String modelo, String caducidad, String tipo, String nivel ) throws DelegateException 
+
+    public List listarEntradaPreregistrosConfirmados( Date fechaInicial, Date fechaFinal, String modelo, String caducidad, String tipo, String nivel ) throws DelegateException
     {
     	try
     	{
@@ -156,8 +156,8 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
-    public List listarEntradaPreregistros( Date fechaInicial, Date fechaFinal, String modelo, String caducidad, String tipo, String nivel ) throws DelegateException 
+
+    public List listarEntradaPreregistros( Date fechaInicial, Date fechaFinal, String modelo, String caducidad, String tipo, String nivel ) throws DelegateException
     {
     	try
     	{
@@ -167,8 +167,8 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
-    public EntradaPreregistro obtenerEntradaPreregistroAnonima(String idPersistencia)  throws DelegateException 
+
+    public EntradaPreregistro obtenerEntradaPreregistroAnonima(String idPersistencia)  throws DelegateException
     {
     	try
     	{
@@ -178,7 +178,7 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
+
     public void confirmarEntradaPreregistro(Long codigo, String numeroRegistro,
 			Date fechaConfirmacion, String oficinaRegistroPresencial, boolean confirmadoAutomaticamente, boolean confirmadoIncorrecto)  throws DelegateException  {
     	try
@@ -189,8 +189,8 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
     	catch (Exception e) {
             throw new DelegateException(e);
         }
-	}                  
-    
+	}
+
     public String obtenerEstadoEntradaPreregistro(String idPersistencia)  throws DelegateException {
     	try
     	{
@@ -200,7 +200,7 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
+
     public List obtenerTramitesPendienteAvisoPreregistroSinConfirmar() throws DelegateException {
     	try
     	{
@@ -210,7 +210,7 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-        
+
     public void avisoPreregistroSinConfirmar(String idPersistencia) throws DelegateException {
     	try
     	{
@@ -223,13 +223,13 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-  private EntradaPreregistroFacade getFacade() throws NamingException,CreateException,RemoteException {      	    	
+  private EntradaPreregistroFacade getFacade() throws NamingException,CreateException,RemoteException {
     	return EntradaPreregistroFacadeUtil.getHome( ).create();
     }
 
-    protected EntradaPreregistroDelegate() throws DelegateException {       
+    protected EntradaPreregistroDelegate() throws DelegateException {
     }
 
-	
+
 }
 

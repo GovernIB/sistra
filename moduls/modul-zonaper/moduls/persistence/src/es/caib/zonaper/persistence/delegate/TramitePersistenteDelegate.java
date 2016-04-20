@@ -29,7 +29,7 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
+
     public TramitePersistente obtenerTramitePersistenteBackup(String idPersistencia) throws DelegateException {
         try {
             return getFacade().obtenerTramitePersistenteBackup(idPersistencia);
@@ -37,7 +37,7 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
+
     public TramitePersistente obtenerTramitePersistente(String idPersistencia) throws DelegateException {
         try {
             return getFacade().obtenerTramitePersistente(idPersistencia);
@@ -45,16 +45,16 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-        
+
     public List listarTramitePersistentesUsuario() throws DelegateException {
         try {
             return getFacade().listarTramitePersistentesUsuario();
         } catch (Exception e) {
-        	e.printStackTrace();	
+        	e.printStackTrace();
             throw new DelegateException(e);
         }
     }
-        
+
     public List listarTramitePersistentesEntidadDelegada(String nifEntidad) throws DelegateException {
         try {
             return getFacade().listarTramitePersistentesEntidadDelegada(nifEntidad);
@@ -62,12 +62,12 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-        
+
     public int numeroTramitesPersistentesUsuario() throws DelegateException {
         try {
             return getFacade().numeroTramitesPersistentesUsuario();
         } catch (Exception e) {
-        	e.printStackTrace();	
+        	e.printStackTrace();
             throw new DelegateException(e);
         }
     }
@@ -76,7 +76,7 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
         try {
             return getFacade().numeroTramitesPersistentesAnonimos(fechaInicial,fechaFinal,modelo);
         } catch (Exception e) {
-        	e.printStackTrace();	
+        	e.printStackTrace();
             throw new DelegateException(e);
         }
     }
@@ -85,68 +85,68 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
         try {
             return getFacade().listarTramitesPersistentes(fechaInicial,fechaFinal,modelo,nivelAutenticacion);
         } catch (Exception e) {
-        	e.printStackTrace();	
+        	e.printStackTrace();
             throw new DelegateException(e);
         }
     }
-        
+
     public List listarTramitesPersistentesBackup(Date fechaInicial, Date fechaFinal, String modelo, String nivelAutenticacion) throws DelegateException {
         try {
             return getFacade().listarTramitesPersistentesBackup(fechaInicial,fechaFinal,modelo,nivelAutenticacion);
         } catch (Exception e) {
-        	e.printStackTrace();	
+        	e.printStackTrace();
             throw new DelegateException(e);
         }
     }
-        
+
     public List listarTramitePersistentesUsuario(String tramite,int version) throws DelegateException {
         try {
             return getFacade().listarTramitePersistentesUsuario(tramite,version);
         } catch (Exception e) {
-        	e.printStackTrace();	
+        	e.printStackTrace();
             throw new DelegateException(e);
         }
     }
-        
+
     public void borrarTramitePersistente(String id) throws DelegateException {
         try {
-            getFacade().borrarTramitePersistente(id);            
+            getFacade().borrarTramitePersistente(id);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
     }
-    
+
     public void borrarDocumentosTramitePersistente(String id) throws DelegateException {
         try {
-            getFacade().borrarDocumentosTramitePersistente(id);            
+            getFacade().borrarDocumentosTramitePersistente(id);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
     }
-    
+
     public void backupTramitePersistente( TramitePersistente tramitePersistente ) throws DelegateException
     {
     	try
     	{
     		getFacade().backupTramitePersistente( tramitePersistente );
     	}
-    	catch (Exception e) 
+    	catch (Exception e)
 	    {
 	        throw new DelegateException(e);
 	    }
     }
-    
-    public List listarTramitePersistentesCaducados( Date fecha ) throws DelegateException
+
+    public List listarTramitePersistentesCaducados( Date fecha, int maxTram ) throws DelegateException
     {
     	try
     	{
-    		return getFacade().listarTramitePersistentesCaducados( fecha );
+    		return getFacade().listarTramitePersistentesCaducados( fecha, maxTram );
     	}
     	catch (Exception e) {
             throw new DelegateException(e);
         }
     }
-    
+
     public void borrarTramitePersistenteBackup( TramitePersistenteBackup tramitePersistenteBackup ) throws DelegateException{
     	try
     	{
@@ -156,11 +156,11 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
-    public List listarTramitePersistentesBackup( Date fecha ) throws DelegateException{
+
+    public List listarTramitePersistentesBackup( Date fecha, int maxTram ) throws DelegateException{
     	try
     	{
-    		return getFacade().listarTramitePersistentesBackup( fecha );
+    		return getFacade().listarTramitePersistentesBackup( fecha, maxTram );
     	}
     	catch (Exception e) {
             throw new DelegateException(e);
@@ -169,12 +169,12 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
 
     /**
      * Obtiene documento persistente
-     * 
+     *
      * @param codigo del documento
      * @return Documento relacionado con el codigo entrado
-     * 
+     *
      */
-	public DocumentoPersistente obtenerDocumentoTramitePersistente(Long codigo) throws DelegateException	
+	public DocumentoPersistente obtenerDocumentoTramitePersistente(Long codigo) throws DelegateException
 	{
 		try
 		{
@@ -185,7 +185,7 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	 public void actualizarInfoDelegacionDocumentoTramitePersistente(Long codigo, String estadoDelegacion,
 	    		String firmantes, String firmantesPendientes) throws DelegateException	{
 		 try
@@ -198,7 +198,7 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
 				throw new DelegateException( e );
 			}
 	 }
-	 
+
 	 public void actualizarInfoDelegacionTramitePersistente(String idPersistencia, String estadoDelegacion)throws DelegateException	{
 		 try
 			{
@@ -220,7 +220,7 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
 				throw new DelegateException( e );
 			}
 	 }
-	 
+
 	 public void avisoPagoTelematicoFinalizado(String idPersistencia) throws DelegateException	{
 		 try
 			{
@@ -231,7 +231,7 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
 				throw new DelegateException( e );
 			}
 	 }
-	 
+
 	 public List obtenerTramitesPendienteAvisoPagoTelematicoFinalizado() throws DelegateException	{
 		 try
 			{
@@ -242,16 +242,16 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
 				throw new DelegateException( e );
 			}
 	 }
-	 
+
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-    private TramitePersistenteFacade getFacade() throws NamingException,CreateException,RemoteException {      	    	
+    private TramitePersistenteFacade getFacade() throws NamingException,CreateException,RemoteException {
     	return TramitePersistenteFacadeUtil.getHome( ).create();
     }
 
     protected TramitePersistenteDelegate() throws DelegateException {
-        
-    }                  
+
+    }
 }
 
