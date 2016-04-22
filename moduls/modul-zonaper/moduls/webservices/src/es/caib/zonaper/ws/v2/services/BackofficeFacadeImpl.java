@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import es.caib.zonaper.modelInterfaz.ConfiguracionAvisosExpedientePAD;
 import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.EstadoPago;
 import es.caib.zonaper.modelInterfaz.EstadoPagosTramite;
@@ -14,6 +15,7 @@ import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeUtil;
+import es.caib.zonaper.ws.v2.model.ConfiguracionAvisosExpediente;
 import es.caib.zonaper.ws.v2.model.DocumentoExpediente;
 import es.caib.zonaper.ws.v2.model.EstadoPagos;
 import es.caib.zonaper.ws.v2.model.EventoExpediente;
@@ -22,17 +24,17 @@ import es.caib.zonaper.ws.v2.model.TipoEstadoPago;
 import es.caib.zonaper.ws.v2.model.TipoEstadoTramite;
 
 
-@javax.jws.WebService(portName = "BackofficeFacade", serviceName = "BackofficeFacadeService", 
-        targetNamespace = "urn:es:caib:zonaper:ws:v2:services", 
+@javax.jws.WebService(portName = "BackofficeFacade", serviceName = "BackofficeFacadeService",
+        targetNamespace = "urn:es:caib:zonaper:ws:v2:services",
         endpointInterface = "es.caib.zonaper.ws.v2.services.BackofficeFacade")
 public class BackofficeFacadeImpl implements BackofficeFacade {
 
 	private static Log log = LogFactory.getLog(BackofficeFacadeImpl.class);
-	
-	public void altaEventoExpediente(long unidadAdministrativa, String identificadorExpediente, String claveExpediente, EventoExpediente evento) throws es.caib.zonaper.ws.v2.services.BackofficeFacadeException{		
-		try{					
+
+	public void altaEventoExpediente(long unidadAdministrativa, String identificadorExpediente, String claveExpediente, EventoExpediente evento) throws es.caib.zonaper.ws.v2.services.BackofficeFacadeException{
+		try{
 			EventoExpedientePAD evPAD = eventoWSToEventoPAD(evento);
-			
+
 			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
 			pad.altaEvento(unidadAdministrativa, identificadorExpediente, claveExpediente, evPAD);
 		}catch( Exception exc ){
@@ -40,54 +42,54 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			// exc.printStackTrace();
 		     throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
-		 
-		 
+
+
 	}
 
-	public String altaExpediente(Expediente expediente) throws es.caib.zonaper.ws.v2.services.BackofficeFacadeException{	
+	public String altaExpediente(Expediente expediente) throws es.caib.zonaper.ws.v2.services.BackofficeFacadeException{
 		try {
 			ExpedientePAD expPAD = expedienteWSToExpedientePAD(expediente);
 			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
 			String id = pad.altaExpediente(expPAD);
-			return id;		
+			return id;
 		} catch (Exception exc) {
 			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
 			// exc.printStackTrace();
 		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
 	}
-	
-	
+
+
 	public boolean existeZonaPersonalUsuario(String nifUsuario) throws BackofficeFacadeException {
 		try {
 			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
-			return pad.existeZonaPersonalUsuario(nifUsuario);		
+			return pad.existeZonaPersonalUsuario(nifUsuario);
 		} catch (Exception exc) {
 			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
 			// exc.printStackTrace();
 		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
 	}
-	
+
 	public String altaZonaPersonalUsuario(String nif, String nombre,
 			String apellido1, String apellido2)
 			throws BackofficeFacadeException {
 		try {
 			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
-			return pad.altaZonaPersonalUsuario(nif, nombre, apellido1, apellido2);		
+			return pad.altaZonaPersonalUsuario(nif, nombre, apellido1, apellido2);
 		} catch (Exception exc) {
 			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
 			// exc.printStackTrace();
 		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
-		}		
+		}
 	}
-	
+
 	public EstadoPagos obtenerEstadoPagosTramite(String identificadorPersistenciaTramite) throws BackofficeFacadeException {
 		try {
-			
+
 			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
-			EstadoPagosTramite estados = pad.obtenerEstadoPagosTramite(identificadorPersistenciaTramite);		
-			
+			EstadoPagosTramite estados = pad.obtenerEstadoPagosTramite(identificadorPersistenciaTramite);
+
 			EstadoPagos res = new EstadoPagos();
 			res.setEstadoTramite(TipoEstadoTramite.valueOf(estados.getEstadoTramite()));
 			if (estados.getEstadoPagos() != null) {
@@ -100,14 +102,43 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 				}
 			}
 			return res;
-			
+
 		} catch (Exception exc) {
 			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
 			// exc.printStackTrace();
 		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
 	}
-	
+
+	public void modificarAvisosExpediente(long unidadAdministrativa,
+			String identificadorExpediente, String claveExpediente,
+			ConfiguracionAvisosExpediente configuracionAvisosExpediente) throws BackofficeFacadeException {
+		try {
+
+			ConfiguracionAvisosExpedientePAD confExp = configuracionAvisosExpedienteWsToconfiguracionAvisosExpedientePAD(configuracionAvisosExpediente);
+
+			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
+			pad.modificarAvisosExpediente(unidadAdministrativa, identificadorExpediente,claveExpediente, confExp );
+		} catch (Exception exc) {
+			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
+			// exc.printStackTrace();
+		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
+		}
+	}
+
+
+	public boolean existeExpediente(long unidadAdministrativa, String identificadorExpediente) throws BackofficeFacadeException {
+		try {
+			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
+			return pad.existeExpediente(unidadAdministrativa, identificadorExpediente);
+		} catch (Exception exc) {
+			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
+			// exc.printStackTrace();
+		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
+		}
+	}
+
+
 	// --------------------------------------------------------------
 	//		FUNCIONES AUXILIARES
 	// --------------------------------------------------------------
@@ -138,18 +169,18 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 				docPAD.setTitulo(StringUtils.defaultIfEmpty(docWS.getTitulo().getValue(),null));
 			}
 			if(docWS.getVersionRDS() != null){
-				docPAD.setVersionRDS(docWS.getVersionRDS().getValue());		
+				docPAD.setVersionRDS(docWS.getVersionRDS().getValue());
 			}
 		}
-		return docPAD;	
+		return docPAD;
 	}
-	
+
 	private EventoExpedientePAD eventoWSToEventoPAD(EventoExpediente evWS) throws Exception{
 		EventoExpedientePAD evPAD = new EventoExpedientePAD();
 		if(evWS != null){
 			evPAD.setTitulo(StringUtils.defaultIfEmpty(evWS.getTitulo(),null));
 			if(evWS.getEnlaceConsulta() != null){
-				evPAD.setEnlaceConsulta(StringUtils.defaultIfEmpty(evWS.getEnlaceConsulta().getValue(),null));		
+				evPAD.setEnlaceConsulta(StringUtils.defaultIfEmpty(evWS.getEnlaceConsulta().getValue(),null));
 			}
 			evPAD.setTexto(StringUtils.defaultIfEmpty(evWS.getTexto(),null));
 			if(evWS.getTextoSMS() != null){
@@ -158,18 +189,18 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			if(evWS.getAccesiblePorClave() != null){
 				evPAD.setAccesiblePorClave(evWS.getAccesiblePorClave().getValue());
 			}
-			// Copiamos documentos		
+			// Copiamos documentos
 			if (evWS.getDocumentos() != null && evWS.getDocumentos().getValue() != null && evWS.getDocumentos().getValue().getDocumento() != null){
 				for (int i=0;i<evWS.getDocumentos().getValue().getDocumento().size();i++){
 					DocumentoExpedientePAD docPAD = documentoWSToDocumentoPAD(evWS.getDocumentos().getValue().getDocumento().get(i));
-					evPAD.addDocumento(docPAD);			
-				}				
+					evPAD.addDocumento(docPAD);
+				}
 			}
 		}
-		
-		return evPAD;		
-	}		
-	
+
+		return evPAD;
+	}
+
 	private ExpedientePAD expedienteWSToExpedientePAD(Expediente exWS) throws Exception{
 		ExpedientePAD exPAD = new ExpedientePAD();
 		if(exWS != null){
@@ -193,16 +224,16 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			if(exWS.getNumeroEntradaBTE() != null){
 				exPAD.setNumeroEntradaBTE(StringUtils.defaultIfEmpty(exWS.getNumeroEntradaBTE().getValue(),null));
 			}
-			exPAD.setUnidadAdministrativa(exWS.getUnidadAdministrativa());		
-						
-			// Copiamos eventos	
+			exPAD.setUnidadAdministrativa(exWS.getUnidadAdministrativa());
+
+			// Copiamos eventos
 			if (exWS.getEventos() != null && exWS.getEventos().getValue() != null && exWS.getEventos().getValue().getEvento() != null ){
 				for (int i=0;i<exWS.getEventos().getValue().getEvento().size();i++){
 					EventoExpedientePAD evPAD = eventoWSToEventoPAD(exWS.getEventos().getValue().getEvento().get(i));
-					exPAD.getElementos().add(evPAD);			
+					exPAD.getElementos().add(evPAD);
 				}
 			}
-			
+
 			// Copiamos configuracion avisos
 			if (exWS.getConfiguracionAvisos() != null && exWS.getConfiguracionAvisos().getValue() != null){
 				if(exWS.getConfiguracionAvisos().getValue().getAvisoEmail() != null){
@@ -216,9 +247,26 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 				}
 			}
 		}
-		return exPAD;		
+		return exPAD;
 	}
 
-	
+	private ConfiguracionAvisosExpedientePAD configuracionAvisosExpedienteWsToconfiguracionAvisosExpedientePAD(
+			ConfiguracionAvisosExpediente confWS) {
+		ConfiguracionAvisosExpedientePAD confPAD = new ConfiguracionAvisosExpedientePAD();
+		if (confWS != null){
+			if(confWS.getAvisoEmail() != null){
+				confPAD.setAvisoEmail(StringUtils.defaultIfEmpty(confWS.getAvisoEmail().getValue(),null));
+			}
+			if(confWS.getAvisoSMS() != null){
+				confPAD.setAvisoSMS(StringUtils.defaultIfEmpty(confWS.getAvisoSMS().getValue(),null));
+			}
+			if(confWS.getHabilitarAvisos() != null){
+				confPAD.setHabilitarAvisos(confWS.getHabilitarAvisos().getValue());
+			}
+		}
+		return confPAD;
+	}
+
+
 
 }

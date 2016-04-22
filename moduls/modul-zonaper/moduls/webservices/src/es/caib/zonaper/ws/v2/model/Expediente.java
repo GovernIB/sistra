@@ -63,24 +63,24 @@ public class Expediente {
     protected long unidadAdministrativa;
     @XmlElement(required = true)
     protected String claveExpediente;
-    @XmlElementRef(name = "identificadorProcedimiento", type = JAXBElement.class)
+    @XmlElementRef(name = "identificadorProcedimiento", type = JAXBElement.class, required = false)
     protected JAXBElement<String> identificadorProcedimiento;
     @XmlElement(required = true)
     protected String idioma;
     @XmlElement(required = true)
     protected String descripcion;
     protected boolean autenticado;
-    @XmlElementRef(name = "nifRepresentante", type = JAXBElement.class)
+    @XmlElementRef(name = "nifRepresentante", type = JAXBElement.class, required = false)
     protected JAXBElement<String> nifRepresentante;
-    @XmlElementRef(name = "nifRepresentado", type = JAXBElement.class)
+    @XmlElementRef(name = "nifRepresentado", type = JAXBElement.class, required = false)
     protected JAXBElement<String> nifRepresentado;
-    @XmlElementRef(name = "nombreRepresentado", type = JAXBElement.class)
+    @XmlElementRef(name = "nombreRepresentado", type = JAXBElement.class, required = false)
     protected JAXBElement<String> nombreRepresentado;
-    @XmlElementRef(name = "numeroEntradaBTE", type = JAXBElement.class)
+    @XmlElementRef(name = "numeroEntradaBTE", type = JAXBElement.class, required = false)
     protected JAXBElement<String> numeroEntradaBTE;
-    @XmlElementRef(name = "configuracionAvisos", type = JAXBElement.class)
+    @XmlElementRef(name = "configuracionAvisos", type = JAXBElement.class, required = false)
     protected JAXBElement<ConfiguracionAvisosExpediente> configuracionAvisos;
-    @XmlElementRef(name = "eventos", type = JAXBElement.class)
+    @XmlElementRef(name = "eventos", type = JAXBElement.class, required = false)
     protected JAXBElement<EventosExpediente> eventos;
 
     /**

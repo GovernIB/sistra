@@ -37,11 +37,11 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ConfiguracionAvisosExpediente {
 
-    @XmlElementRef(name = "habilitarAvisos", type = JAXBElement.class)
+    @XmlElementRef(name = "habilitarAvisos", type = JAXBElement.class, required = false)
     protected JAXBElement<Boolean> habilitarAvisos;
-    @XmlElementRef(name = "avisoSMS", type = JAXBElement.class)
+    @XmlElementRef(name = "avisoSMS", type = JAXBElement.class, required = false)
     protected JAXBElement<String> avisoSMS;
-    @XmlElementRef(name = "avisoEmail", type = JAXBElement.class)
+    @XmlElementRef(name = "avisoEmail", type = JAXBElement.class, required = false)
     protected JAXBElement<String> avisoEmail;
 
     /**

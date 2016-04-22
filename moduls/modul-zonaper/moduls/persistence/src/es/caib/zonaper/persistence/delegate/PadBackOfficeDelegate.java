@@ -25,13 +25,13 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 		{
 			return getFacade().altaExpediente( expediente );
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
             throw new DelegateException(e);
         }
 	}
-	
-	public ExpedientePAD consultaExpediente( long unidadAdministrativa, String identificadorExpediente ) throws DelegateException	
+
+	public ExpedientePAD consultaExpediente( long unidadAdministrativa, String identificadorExpediente ) throws DelegateException
 	{
 		try
 		{
@@ -42,8 +42,8 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
-	public ExpedientePAD consultaExpediente( long unidadAdministrativa, String identificadorExpediente, String claveExpediente ) throws DelegateException	
+
+	public ExpedientePAD consultaExpediente( long unidadAdministrativa, String identificadorExpediente, String claveExpediente ) throws DelegateException
 	{
 		try
 		{
@@ -54,8 +54,8 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
-	public void altaEvento( long unidadAdministrativa, String identificadorExpediente, EventoExpedientePAD evento )  throws DelegateException	
+
+	public void altaEvento( long unidadAdministrativa, String identificadorExpediente, EventoExpedientePAD evento )  throws DelegateException
 	{
 		try
 		{
@@ -66,8 +66,8 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
-	public void altaEvento( long unidadAdministrativa, String identificadorExpediente, String claveExpediente, EventoExpedientePAD evento )  throws DelegateException	
+
+	public void altaEvento( long unidadAdministrativa, String identificadorExpediente, String claveExpediente, EventoExpedientePAD evento )  throws DelegateException
 	{
 		try
 		{
@@ -79,7 +79,7 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 		}
 	}
 
-	public boolean existeZonaPersonalUsuario( String nifUsuario ) throws DelegateException	
+	public boolean existeZonaPersonalUsuario( String nifUsuario ) throws DelegateException
 	{
 		try
 		{
@@ -90,8 +90,8 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
-	public String altaZonaPersonalUsuario( String nif, String nombre, String apellido1, String apellido2)  throws DelegateException	
+
+	public String altaZonaPersonalUsuario( String nif, String nombre, String apellido1, String apellido2)  throws DelegateException
 	{
 		try
 		{
@@ -102,8 +102,8 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 			throw new DelegateException( e );
 		}
 	}
-		
-	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String numeroRegistro) throws DelegateException	
+
+	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String numeroRegistro) throws DelegateException
 	{
 		try
 		{
@@ -114,20 +114,20 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	public void modificarAvisosExpediente( long unidadAdministrativa, String identificadorExpediente, String claveExpediente, ConfiguracionAvisosExpedientePAD configuracionAvisos) throws DelegateException
 	{
 		try
 		{
 			getFacade().modificarAvisosExpediente( unidadAdministrativa, identificadorExpediente, claveExpediente, configuracionAvisos );
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
             throw new DelegateException(e);
         }
 	}
-	
-	public void bajaExpediente( long unidadAdministrativa, String identificadorExpediente , String claveExpediente)   throws DelegateException	
+
+	public void bajaExpediente( long unidadAdministrativa, String identificadorExpediente , String claveExpediente)   throws DelegateException
 	{
 		try
 		{
@@ -140,7 +140,7 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 	}
 
 
-	public EstadoPagosTramite obtenerEstadoPagosTramite(String identificadorPersistenciaTramite)  throws DelegateException	
+	public EstadoPagosTramite obtenerEstadoPagosTramite(String identificadorPersistenciaTramite)  throws DelegateException
 	{
 		try
 		{
@@ -152,8 +152,20 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 		}
 	}
 
+	public boolean existeExpediente(long unidadAdministrativa,
+			String identificadorExpediente) throws DelegateException {
+		try
+		{
+			return getFacade().existeExpediente(unidadAdministrativa, identificadorExpediente);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
 
-	
+
+
 	/*
 	public EventoExpedientePAD obtenerEventoExpediente( long unidadAdministrativa, String idExpediente, String fechaEvento ) throws DelegateException
 	{
@@ -166,7 +178,7 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	public EventoExpedientePAD obtenerEventoExpediente( long unidadAdministrativa, String idExpediente, String claveExpediente, String fechaEvento ) throws DelegateException
 	{
 		try
@@ -179,16 +191,16 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 		}
 	}
 	*/
-	
+
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
 	private Hashtable homeProperties;
-	
+
 	public void setProperties(Hashtable props){
 		homeProperties = props;
 	}
-	
+
     private PadBackOfficeFacade getFacade() throws NamingException,CreateException,RemoteException
     {
     	if (homeProperties != null)
@@ -196,4 +208,6 @@ public class PadBackOfficeDelegate implements StatelessDelegate
     	else
     		return PadBackOfficeFacadeUtil.getHome().create();
     }
+
+
 }

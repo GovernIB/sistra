@@ -50,15 +50,15 @@ public class EventoExpediente {
     protected String titulo;
     @XmlElement(required = true)
     protected String texto;
-    @XmlElementRef(name = "textoSMS", type = JAXBElement.class)
+    @XmlElementRef(name = "textoSMS", type = JAXBElement.class, required = false)
     protected JAXBElement<String> textoSMS;
-    @XmlElementRef(name = "enlaceConsulta", type = JAXBElement.class)
+    @XmlElementRef(name = "enlaceConsulta", type = JAXBElement.class, required = false)
     protected JAXBElement<String> enlaceConsulta;
-    @XmlElementRef(name = "fecha", type = JAXBElement.class)
+    @XmlElementRef(name = "fecha", type = JAXBElement.class, required = false)
     protected JAXBElement<String> fecha;
-    @XmlElementRef(name = "accesiblePorClave", type = JAXBElement.class)
+    @XmlElementRef(name = "accesiblePorClave", type = JAXBElement.class, required = false)
     protected JAXBElement<Boolean> accesiblePorClave;
-    @XmlElementRef(name = "documentos", type = JAXBElement.class)
+    @XmlElementRef(name = "documentos", type = JAXBElement.class, required = false)
     protected JAXBElement<DocumentosExpediente> documentos;
 
     /**
