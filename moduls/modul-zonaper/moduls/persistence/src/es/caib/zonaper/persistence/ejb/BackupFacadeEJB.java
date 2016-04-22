@@ -102,12 +102,20 @@ public abstract class BackupFacadeEJB extends HibernateEJB
 	 */
 	private void eliminaTramitesPersistentesCaducados( Date fechaEjecucion, int maxTram ) throws DelegateException
 	{
+		long inicio, fin;
+		int count = 0;
+		inicio = System.currentTimeMillis();
 		backupLog.debug( "Eliminando tramites persistentes caducados. Fecha [ " + fechaEjecucion + "]" );
 		TramitePersistenteDelegate tramitePersistenteDelegate = DelegateUtil.getTramitePersistenteDelegate();
 		List lstTramitesPersistentesCaducados = tramitePersistenteDelegate.listarTramitePersistentesCaducados( fechaEjecucion, maxTram );
 
 		for ( int i = 0; i < lstTramitesPersistentesCaducados.size(); i++ )
 		{
+			// Limitamos maximo de documentos
+			if (count > maxTram){
+				//Dejamos para siguiente ejecucion del proceso de backup
+				break;
+			}
 
 			TramitePersistente tramitePersistente = ( TramitePersistente ) lstTramitesPersistentesCaducados.get( i );
 
@@ -117,8 +125,11 @@ public abstract class BackupFacadeEJB extends HibernateEJB
 			}catch (Exception ex){
 				log.error( "Excepcion realizando backup de tramite persistente caducado con codigo " + tramitePersistente.getCodigo(),ex);
 			}
+			count ++;
 
 		}
+		fin = System.currentTimeMillis();
+		backupLog.debug( "Se han trasladado a la tabla de backup " + lstTramitesPersistentesCaducados.size() + " tramites persistentes en " + ( fin - inicio ) + " milisegundos");
 	}
 
 	/**
@@ -130,12 +141,20 @@ public abstract class BackupFacadeEJB extends HibernateEJB
 	 */
 	private void eliminaEntradasPrerregistroCaducadas( Date fechaEjecucion, int maxTram ) throws DelegateException
 	{
+		long inicio, fin;
+		int count = 0;
+		inicio = System.currentTimeMillis();
 		backupLog.debug( "Eliminando entradas prerregistro caducadas. Fecha [ " + fechaEjecucion + "]" );
 		EntradaPreregistroDelegate prerregistroDelegate = DelegateUtil.getEntradaPreregistroDelegate();
 		List lstEntradasPrerregistroCaducados = prerregistroDelegate.listarEntradaPreregistrosCaducados( fechaEjecucion, maxTram );
 		for ( int i = 0; i < lstEntradasPrerregistroCaducados.size(); i++ )
 		{
 
+			// Limitamos maximo de documentos
+			if (count > maxTram){
+				//Dejamos para siguiente ejecucion del proceso de backup
+				break;
+			}
 			EntradaPreregistro entradaPrerregistro = ( EntradaPreregistro ) lstEntradasPrerregistroCaducados.get( i );
 
 			//  Realizamos backup del tramite controlando la excepcion para que siga el proceso de backup
@@ -144,7 +163,10 @@ public abstract class BackupFacadeEJB extends HibernateEJB
 			}catch (Exception ex){
 				log.error( "Excepcion realizando backup de tramite preregistro caducado con codigo " + entradaPrerregistro.getCodigo(),ex);
 			}
+			count ++;
 		}
+		fin = System.currentTimeMillis();
+		backupLog.debug( "Se han trasladado a la tabla de backup " + lstEntradasPrerregistroCaducados.size() + " entradas de prerregistro caducadas en " + ( fin - inicio ) + " milisegundos");		
 	}
 
 	/**
@@ -186,12 +208,20 @@ public abstract class BackupFacadeEJB extends HibernateEJB
 	 */
 	private void eliminaTramitesPersistentesBackup( Date fechaEjecucion, int maxTram ) throws DelegateException
 	{
+		long inicio, fin;
+		int count = 0;
+		inicio = System.currentTimeMillis();
 		backupLog.debug( "Eliminando tramites persistentes de la tabla de tramites backup. Fecha [ " + fechaEjecucion + "]" );
 		TramitePersistenteDelegate tramitePersistenteDelegate = DelegateUtil.getTramitePersistenteDelegate();
 		List lstTramitesPersistentesBackup = tramitePersistenteDelegate.listarTramitePersistentesBackup( fechaEjecucion, maxTram );
 		for ( int i = 0; i < lstTramitesPersistentesBackup.size(); i++ )
 		{
-
+			// Limitamos maximo de documentos
+			if (count > maxTram){
+				//Dejamos para siguiente ejecucion del proceso de backup
+				break;
+			}
+			
 			TramitePersistenteBackup tramitePersistenteBackup = ( TramitePersistenteBackup ) lstTramitesPersistentesBackup.get( i );
 
 			try{
@@ -203,8 +233,10 @@ public abstract class BackupFacadeEJB extends HibernateEJB
 			}catch (Exception ex){
 				log.error( "Excepcion realizando la eliminación del tramite de la tabla de backup con codigo: " + tramitePersistenteBackup.getCodigo(),ex);
 			}
-
+			count ++;
 		}
+		fin = System.currentTimeMillis();
+		backupLog.debug( "Se han eliminado " + lstTramitesPersistentesBackup.size() + " tramites persistentes de la tabla de backup en " + ( fin - inicio ) + " milisegundos");
 	}
 
 	/**
@@ -216,12 +248,21 @@ public abstract class BackupFacadeEJB extends HibernateEJB
 	 */
 	private void eliminaEntradasPrerregistroBackup( Date fechaEjecucion, int maxTram ) throws DelegateException
 	{
+		long inicio, fin;
+		int count = 0;
+		inicio = System.currentTimeMillis();
 		backupLog.debug( "Eliminando entradas prerregistro de la trabla de backup. Fecha [ " + fechaEjecucion + "]" );
 		EntradaPreregistroDelegate prerregistroDelegate = DelegateUtil.getEntradaPreregistroDelegate();
 		List lstEntradasPrerregistroBackup = prerregistroDelegate.listarEntradaPreregistroBackup( fechaEjecucion, maxTram );
 		for ( int i = 0; i < lstEntradasPrerregistroBackup.size(); i++ )
 		{
 
+			// Limitamos maximo de documentos
+			if (count > maxTram){
+				//Dejamos para siguiente ejecucion del proceso de backup
+				break;
+			}
+			
 			EntradaPreregistroBackup entradaPreregistroBackup = ( EntradaPreregistroBackup ) lstEntradasPrerregistroBackup.get( i );
 
 			try{
@@ -229,6 +270,9 @@ public abstract class BackupFacadeEJB extends HibernateEJB
 			}catch (Exception ex){
 				log.error( "Excepcion realizando backup de tramite preregistro de la tabla de backup " + entradaPreregistroBackup.getCodigo(),ex);
 			}
+			count ++;
 		}
+		fin = System.currentTimeMillis();
+		backupLog.debug( "Se han eliminado " + lstEntradasPrerregistroBackup.size() + " entradas de prerregistro de la tabla de backup en " + ( fin - inicio ) + " milisegundos");
 	}
 }
