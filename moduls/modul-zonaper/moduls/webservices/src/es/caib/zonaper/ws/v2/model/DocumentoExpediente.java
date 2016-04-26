@@ -47,21 +47,21 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class DocumentoExpediente {
 
-    @XmlElementRef(name = "titulo", type = JAXBElement.class, required = false)
+    @XmlElementRef(name = "titulo", type = JAXBElement.class)
     protected JAXBElement<String> titulo;
-    @XmlElementRef(name = "nombre", type = JAXBElement.class, required = false)
+    @XmlElementRef(name = "nombre", type = JAXBElement.class)
     protected JAXBElement<String> nombre;
-    @XmlElementRef(name = "contenidoFichero", type = JAXBElement.class, required = false)
+    @XmlElementRef(name = "contenidoFichero", type = JAXBElement.class)
     protected JAXBElement<byte[]> contenidoFichero;
-    @XmlElementRef(name = "modeloRDS", type = JAXBElement.class, required = false)
+    @XmlElementRef(name = "modeloRDS", type = JAXBElement.class)
     protected JAXBElement<String> modeloRDS;
-    @XmlElementRef(name = "versionRDS", type = JAXBElement.class, required = false)
+    @XmlElementRef(name = "versionRDS", type = JAXBElement.class)
     protected JAXBElement<Integer> versionRDS;
-    @XmlElementRef(name = "codigoRDS", type = JAXBElement.class, required = false)
+    @XmlElementRef(name = "codigoRDS", type = JAXBElement.class)
     protected JAXBElement<Long> codigoRDS;
-    @XmlElementRef(name = "claveRDS", type = JAXBElement.class, required = false)
+    @XmlElementRef(name = "claveRDS", type = JAXBElement.class)
     protected JAXBElement<String> claveRDS;
-    @XmlElementRef(name = "estructurado", type = JAXBElement.class, required = false)
+    @XmlElementRef(name = "estructurado", type = JAXBElement.class)
     protected JAXBElement<Boolean> estructurado;
 
     /**
