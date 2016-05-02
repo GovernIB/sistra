@@ -17,10 +17,10 @@ import es.caib.sistra.persistence.delegate.DelegateUtil;
  * @web.servlet name="inicio"
  * @web.servlet-mapping url-pattern="/inicio"
  */
-public class InicioServlet extends HttpServlet 
+public class InicioServlet extends HttpServlet
 {
 	protected static Log log = LogFactory.getLog(InicioServlet.class);
-	
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
@@ -29,8 +29,8 @@ public class InicioServlet extends HttpServlet
 
     	// Construimos url destino
     	//String urlIni = request.getRequestURL().toString();
-     	String urlFin = request.getContextPath() + "/protected/init.do?" + request.getQueryString(); 	
-     	
+     	String urlFin = request.getContextPath() + "/protected/init.do?" + request.getQueryString();
+
      	// Comprobamos si debemos invalidar la sesion al iniciar
      	Boolean resetearSesion;
      	resetearSesion = (Boolean) this.getServletContext().getAttribute(Constants.RESETEAR_SESION_WEB);
@@ -45,11 +45,10 @@ public class InicioServlet extends HttpServlet
      		this.getServletContext().setAttribute(Constants.RESETEAR_SESION_WEB,resetearSesion);
      	}
      	if (resetearSesion.booleanValue()){
-     		log.debug("Invalidamos la sesion");
      		request.getSession().invalidate();
      	}
-    	
+
     	// Redirigimos
-     	response.sendRedirect(urlFin);	
+     	response.sendRedirect(urlFin);
 	}
 }

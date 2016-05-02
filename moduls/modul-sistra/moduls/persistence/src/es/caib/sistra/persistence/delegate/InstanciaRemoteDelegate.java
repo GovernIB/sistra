@@ -23,7 +23,7 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 	public void create(String tramite, int version,char nivel, Locale idioma,Map parametrosInicio,  String perfilAcceso, String nifEntidad)
 			throws DelegateException
 	{
-		try 
+		try
 		{
 			TramiteProcessor remote = TramiteProcessorUtil.getHome().create( tramite, version,nivel, idioma, parametrosInicio,   perfilAcceso,  nifEntidad );
 			remoteHandle = remote.getHandle();
@@ -34,11 +34,11 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 	    } catch (NamingException e) {
 	        throw new DelegateException(e);
 	    }
-	        
+
 
 	}
-	
-	
+
+
 
 	public InstanciaBean obtenerInstanciaBean() throws DelegateException
 	{
@@ -56,34 +56,34 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 
 	public RespuestaFront informacionInicial() throws DelegateException
 	{
-        try 
+        try
         {
         	return getRemote().informacionInicial();
-        } catch (RemoteException e) 
+        } catch (RemoteException e)
         {
             throw new DelegateException(e);
         }
 	}
-	
-	
+
+
 	public RespuestaFront obtenerTramitesPersistencia(String tramite,int version) throws DelegateException
-	{		
-		 try 
+	{
+		 try
 	        {
 	        	return getRemote().obtenerTramitesPersistencia(tramite,version);
-	        } catch (RemoteException e) 
+	        } catch (RemoteException e)
 	        {
 	            throw new DelegateException(e);
-	        }        
+	        }
 	}
 
 	public RespuestaFront iniciarTramite() throws DelegateException
 	{
-        try 
+        try
         {
         	return getRemote().iniciarTramite(  );
-        } 
-        catch (RemoteException e) 
+        }
+        catch (RemoteException e)
         {
             throw new DelegateException(e);
         }
@@ -92,23 +92,23 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 	public RespuestaFront cargarTramite( String idPersistencia)
 			throws DelegateException
 	{
-        try 
+        try
         {
         	return getRemote().cargarTramite(  idPersistencia );
-        } 
-        catch (RemoteException e) 
+        }
+        catch (RemoteException e)
         {
             throw new DelegateException(e);
         }
 	}
-	
+
 	public RespuestaFront pasoActual() throws DelegateException
 	{
-        try 
+        try
         {
         	return getRemote().pasoActual();
-        } 
-        catch (RemoteException e) 
+        }
+        catch (RemoteException e)
         {
             throw new DelegateException(e);
         }
@@ -116,11 +116,11 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 
 	public RespuestaFront siguientePaso() throws DelegateException
 	{
-        try 
+        try
         {
         	return getRemote().siguientePaso();
-        } 
-        catch (RemoteException e) 
+        }
+        catch (RemoteException e)
         {
             throw new DelegateException(e);
         }
@@ -128,11 +128,11 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 
 	public RespuestaFront anteriorPaso() throws DelegateException
 	{
-        try 
+        try
         {
         	return getRemote().anteriorPaso();
-        } 
-        catch (RemoteException e) 
+        }
+        catch (RemoteException e)
         {
             throw new DelegateException(e);
         }
@@ -140,11 +140,11 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 
 	public RespuestaFront irAPaso(int paso) throws DelegateException
 	{
-        try 
+        try
         {
         	return getRemote().irAPaso( paso );
-        } 
-        catch (RemoteException e) 
+        }
+        catch (RemoteException e)
         {
             throw new DelegateException(e);
         }
@@ -153,11 +153,11 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 	public RespuestaFront irAFormulario(String identificador, int instancia)
 			throws DelegateException
 	{
-        try 
+        try
         {
         	return getRemote().irAFormulario( identificador, instancia );
-        } 
-        catch (RemoteException e) 
+        }
+        catch (RemoteException e)
         {
             throw new DelegateException(e);
         }
@@ -167,11 +167,11 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 			int instancia, String datosAnteriores, String datosNuevos, boolean guardadoSinFinalizar)
 			throws DelegateException
 	{
-        try 
+        try
         {
         	return getRemote().guardarFormulario( identificador, instancia, datosAnteriores, datosNuevos, guardadoSinFinalizar );
-        } 
-        catch (RemoteException e) 
+        }
+        catch (RemoteException e)
         {
             throw new DelegateException(e);
         }
@@ -180,10 +180,10 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 	public RespuestaFront borrarAnexo(String identificador, int instancia)
 			throws DelegateException
 	{
-        try 
+        try
         {
         	return getRemote().borrarAnexo( identificador, instancia );
-        } 
+        }
         catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -191,45 +191,45 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 
 	public RespuestaFront anexarDocumento(String identificador,int instancia,String descPersonalizada, FirmaIntf firma, boolean firmaDelegada) throws DelegateException
 	{
-        try 
+        try
         {
         	return getRemote().anexarDocumento( identificador, instancia, descPersonalizada, firma, firmaDelegada );
-        } catch (RemoteException e) 
+        } catch (RemoteException e)
         {
             throw new DelegateException(e);
         }
 	}
-	
+
 	public RespuestaFront uploadAnexo(String identificador,int instancia,byte[] datosDocumento,String nomFichero,String extension,String descPersonalizada) throws DelegateException
 	{
-        try 
+        try
         {
         	return getRemote().uploadAnexo(identificador, instancia, datosDocumento, nomFichero, extension, descPersonalizada);
-        } catch (RemoteException e) 
+        } catch (RemoteException e)
         {
             throw new DelegateException(e);
         }
 	}
-	
+
 	public RespuestaFront downloadAnexo(String identificador,int instancia) throws DelegateException
 	{
-        try 
+        try
         {
         	return getRemote().downloadAnexo( identificador, instancia);
-        } catch (RemoteException e) 
+        } catch (RemoteException e)
         {
             throw new DelegateException(e);
         }
 	}
-	
-	
-	
+
+
+
 	public RespuestaFront irAPago(String identificador, int instancia, String urlRetorno, String urlMantenimientoSesion) throws DelegateException
 	{
-		try 
+		try
         {
 			return getRemote().irAPago( identificador, instancia, urlRetorno, urlMantenimientoSesion);
-        } catch (RemoteException e) 
+        } catch (RemoteException e)
         {
             throw new DelegateException(e);
         }
@@ -237,23 +237,23 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 
 	public RespuestaFront confirmarPago(String identificador, int instancia) throws DelegateException
 	{
-		try 
+		try
         {
 			return getRemote().confirmarPago( identificador, instancia );
         }
-		catch (RemoteException e) 
+		catch (RemoteException e)
         {
             throw new DelegateException(e);
         }
 	}
-	
+
 	public RespuestaFront anularPago(String identificador, int instancia) throws DelegateException
 	{
-		try 
+		try
         {
 			return getRemote().anularPago( identificador, instancia );
         }
-		catch (RemoteException e) 
+		catch (RemoteException e)
         {
             throw new DelegateException(e);
         }
@@ -261,52 +261,52 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 
 	public RespuestaFront borrarTramite() throws DelegateException
 	{
-        try 
+        try
         {
         	return getRemote().borrarTramitePersistencia();
-        } 
-        catch (RemoteException e) 
+        }
+        catch (RemoteException e)
         {
             throw new DelegateException(e);
         }
-	}	
+	}
 
 	public RespuestaFront registrarTramite(String asiento, FirmaIntf firma)
 			throws DelegateException
 	{
-        try 
+        try
         {
         	return getRemote().registrarTramite( asiento, firma );
-        	
-        } catch (RemoteException e) 
+
+        } catch (RemoteException e)
         {
             throw new DelegateException(e);
         }
 	}
-	
+
 	public RespuestaFront mostrarDocumento( String idDocumento, int instancia) throws DelegateException {
-		try 
+		try
         {
         	return getRemote().mostrarDocumento( idDocumento,  instancia);
-        	
-        } catch (RemoteException e) 
+
+        } catch (RemoteException e)
         {
             throw new DelegateException(e);
         }
 	}
-	
+
 	public RespuestaFront mostrarJustificante() throws DelegateException {
-		try 
+		try
         {
         	return getRemote().mostrarJustificante();
-        	
-        } catch (RemoteException e) 
+
+        } catch (RemoteException e)
         {
             throw new DelegateException(e);
         }
 	}
-	
-	public RespuestaFront firmarFormulario(String identificador,int instancia,FirmaIntf firma,boolean firmaDelegada) throws DelegateException 
+
+	public RespuestaFront firmarFormulario(String identificador,int instancia,FirmaIntf firma,boolean firmaDelegada) throws DelegateException
 	{
 		try
 		{
@@ -328,9 +328,9 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
-	
-	
+
+
+
 	public RespuestaFront mostrarDocumentoConsulta(int numDoc) throws DelegateException
 	{
 		try
@@ -342,7 +342,7 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	public RespuestaFront irAFirmarFormulario(String identificador, int instancia) throws DelegateException {
 		try
 		{
@@ -375,18 +375,18 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	public void habilitarNotificacion(boolean habilitarNotificacion, String emailAviso, String smsAviso)  throws DelegateException {
 		try
 		{
-			 getRemote().habilitarNotificacion(habilitarNotificacion, emailAviso, smsAviso);			             
+			 getRemote().habilitarNotificacion(habilitarNotificacion, emailAviso, smsAviso);
 		}
 		catch( RemoteException e )
 		{
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	public void finalizarSesionPago(String identificador, int instancia) throws DelegateException{
 		try
 		{
@@ -396,10 +396,10 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 		{
 			throw new DelegateException( e );
 		}
-		
+
 	}
-	
-	
+
+
 	public RespuestaFront mostrarFormularioDebug(String idDocumento, int instancia) throws DelegateException {
 		try
 		{
@@ -409,9 +409,9 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 		{
 			throw new DelegateException( e );
 		}
-		
+
 	}
-	
+
 	public RespuestaFront remitirDelegacionPresentacionTramite()  throws DelegateException {
 		try
 		{
@@ -421,9 +421,9 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 		{
 			throw new DelegateException( e );
 		}
-		
+
 	}
-	
+
 	public RespuestaFront remitirDelegacionFirmaDocumentos()  throws DelegateException{
 		try
 		{
@@ -433,9 +433,9 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 		{
 			throw new DelegateException( e );
 		}
-		
+
 	}
-	
+
 
 	public void resetHabilitarNotificacion() throws DelegateException {
 		try
@@ -447,7 +447,7 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	public RespuestaFront finalizarTramite() throws DelegateException {
 		try
 		{
@@ -456,12 +456,23 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 		catch( RemoteException e )
 		{
 			throw new DelegateException( e );
-		}	
+		}
 	}
-	
-	public void destroy() 
+
+	public boolean isDebugEnabled() throws DelegateException {
+		try
+		{
+			return getRemote().isDebugEnabled();
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+
+	public void destroy()
 	{
-        try 
+        try
         {
             getRemote().remove();
         } catch (RemoteException e) {
@@ -487,8 +498,8 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 
 
 
-	
-	
+
+
 
 
 

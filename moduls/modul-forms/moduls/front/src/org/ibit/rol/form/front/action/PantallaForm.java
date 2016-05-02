@@ -99,6 +99,7 @@ public class PantallaForm extends DynaValidatorForm {
 
             InstanciaDelegate delegate = RegistroManager.recuperarInstancia(request);
             Pantalla pantalla = delegate.obtenerPantalla();
+            boolean debugEnabled = delegate.isDebugEnabled();
 
             Map dades = ScriptUtil.prefixMap(getMap(), "f_");
             dades.putAll(delegate.obtenerDatosListasElementos());
@@ -108,7 +109,7 @@ public class PantallaForm extends DynaValidatorForm {
                 Campo campo = (Campo) pantalla.getCampos().get(i);
                 String expresion = campo.getExpresionValidacion();
                 if (expresion != null && expresion.length() > 0) {
-                    boolean correct = ScriptUtil.evalBoolScript(expresion, dades);
+                    boolean correct = ScriptUtil.evalBoolScript(expresion, dades, debugEnabled);
                     if (!correct) {
                         TraCampo traCampo = (TraCampo) campo.getTraduccion();
                         String mensaje = traCampo.getMensajeValidacion();
@@ -121,7 +122,7 @@ public class PantallaForm extends DynaValidatorForm {
                         errors.add(campo.getNombreLogico(), error);
                     }
                 }
-                
+
                 // Validacion captcha
                 if (campo instanceof Captcha) {
                 	String valorCaptcha = delegate.obtenerCaptcha(campo.getNombreLogico());
@@ -131,9 +132,9 @@ public class PantallaForm extends DynaValidatorForm {
     					TraCampo traCampo = (TraCampo) campo.getTraduccion();
     					ActionError error = new ActionError("errors.captcha", traCampo.getNombre());
     					errors.add(campo.getNombreLogico(), error);
-    				}    				
+    				}
                 }
-            
+
             }
         } catch (DelegateException e) {
             log.error("Excepción en validate", e);

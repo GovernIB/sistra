@@ -41,16 +41,14 @@ public class IrAFormularioTramiteReducido extends BaseAction
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
-		if ( _log.isDebugEnabled() )
-		_log.debug( "Inicio circuito reducido" );
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request );
 		RespuestaFront respuestaFront = null;
 		do
 		{
 			respuestaFront = delegate.siguientePaso();
-			
+
 		}while( respuestaFront.getInformacionTramite().getPasoTramitacion().getTipoPaso() < PasoTramitacion.PASO_RELLENAR );
-		
+
 		List lstFormularios = respuestaFront.getInformacionTramite().getFormularios();
 		if ( lstFormularios.size() < 1 )
 		{
@@ -62,14 +60,12 @@ public class IrAFormularioTramiteReducido extends BaseAction
 		String idInstancia = InstanciaManager.getIdInstancia( request );
 		formulario.getIdentificador();
 		formulario.getInstancia();
-		IrAFormularioForm formStruts = ( IrAFormularioForm ) obtenerActionForm( mapping, request, "/protected/irAFormulario" ); 
+		IrAFormularioForm formStruts = ( IrAFormularioForm ) obtenerActionForm( mapping, request, "/protected/irAFormulario" );
 		formStruts.setID_INSTANCIA( idInstancia );
 		formStruts.setIdentificador( formulario.getIdentificador() );
 		formStruts.setInstancia( formulario.getInstancia() );
 		formStruts.setModelo( formulario.getModelo() );
 		//request.setAttribute( Globals.FORM_BEANS_KEY, formStruts );
-		if ( _log.isDebugEnabled() )
-		_log.debug( "Ir al formulario; Identificador[ " + formulario.getIdentificador()+ "] Instancia[" + formulario.getInstancia() + "] Modelo [" + formulario.getModelo() + "]" );
 		return mapping.findForward( "success" );
 	}
 

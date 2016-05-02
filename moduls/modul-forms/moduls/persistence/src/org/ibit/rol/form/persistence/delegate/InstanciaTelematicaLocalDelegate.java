@@ -14,9 +14,9 @@ public class InstanciaTelematicaLocalDelegate extends InstanciaLocalDelegate imp
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
-    public synchronized void create(String xmlConfiguracion, String xmlInicializacion) throws DelegateException {
+    public synchronized void create(String xmlConfiguracion, String xmlInicializacion, boolean debugEnabled) throws DelegateException {
         try {
-            local = InstanciaTelematicaProcessorUtil.getLocalHome().create(xmlConfiguracion, xmlInicializacion);
+            local = InstanciaTelematicaProcessorUtil.getLocalHome().create(xmlConfiguracion, xmlInicializacion, debugEnabled);
         } catch (CreateException e) {
             throw new DelegateException(e);
         } catch (EJBException e) {
@@ -57,7 +57,7 @@ public class InstanciaTelematicaLocalDelegate extends InstanciaLocalDelegate imp
             throw new DelegateException(e);
         }
     }
-    
+
     public String cancelarFormulario() throws DelegateException {
         try {
            return ((InstanciaTelematicaProcessorLocal) local).cancelarFormulario();
@@ -65,7 +65,7 @@ public class InstanciaTelematicaLocalDelegate extends InstanciaLocalDelegate imp
             throw new DelegateException(e);
         }
     }
-    
+
     public String obtenerUrlSistraMantenimientoSesion()  throws DelegateException {
         try {
            return ((InstanciaTelematicaProcessorLocal) local).obtenerUrlSistraMantenimientoSesion();
@@ -73,7 +73,7 @@ public class InstanciaTelematicaLocalDelegate extends InstanciaLocalDelegate imp
             throw new DelegateException(e);
         }
     }
-    
+
     public  boolean permitirGuardarSinTerminar() throws DelegateException{
         try {
            return ((InstanciaTelematicaProcessorLocal) local).permitirGuardarSinTerminar();

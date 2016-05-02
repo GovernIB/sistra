@@ -19,7 +19,7 @@ import es.caib.audita.persistence.delegate.DelegateUtil;
  *  path="/anual"
  *  scope="request"
  *  validate="false"
- *  
+ *
  * @struts.action-forward
  *  name="success" path=".anual"
  *
@@ -34,19 +34,19 @@ public class AnualAction extends BaseAction
 			throws Exception
 	{
 		AnualForm formulario = ( AnualForm ) form;
-		_log.debug( "execute" );
-		
+
+
 		int li_anyoFinal = formulario.getAnyoFinal();
 		if(formulario.getAnyoFinal() == 0)
 		{
 			li_anyoFinal = formulario.getAnyoInicio() + 1;
 		}
-		
+
 		AuditoriaDelegate delegate = DelegateUtil.getAuditoriaDelegate();
-		request.setAttribute( "cuadroMando", 
+		request.setAttribute( "cuadroMando",
 				              delegate.obtenerCuadroMandoIntervaloTemporal( getLang(request), formulario.getAnyoInicio(), li_anyoFinal) );
-		
-		
+
+
 		String anyoInicio = String.valueOf(formulario.getAnyoInicio());
 		String anyoFinal = String.valueOf(formulario.getAnyoFinal());
 		request.setAttribute("anyoInicio", anyoInicio);
@@ -56,7 +56,7 @@ public class AnualAction extends BaseAction
 		request.setAttribute("desde", "01/01/" + anyoInicio);
 		request.setAttribute("hasta", hasta);
 
-		
+
 		return mapping.findForward( "success" );
 	}
 

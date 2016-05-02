@@ -32,7 +32,7 @@ public class InicioController extends BaseController
 		anyos.add(String.valueOf(anyo+3));
 		request.setAttribute("anyos", anyos);
 
-		_log.debug( "execute" );
+
 	}
 
 }

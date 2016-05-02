@@ -54,7 +54,7 @@ public interface InstanciaDelegate extends Delegate {
     void introducirDatosPantalla(Map valores) throws DelegateException;
 
     void introducirAnexo(String nombre, Anexo anexo) throws DelegateException;
-    
+
     Object expresionAutorellenableCampo(String nombre) throws DelegateException;
 
     Object expresionAutocalculoCampo(String nombre) throws DelegateException;
@@ -62,7 +62,7 @@ public interface InstanciaDelegate extends Delegate {
     boolean expresionDependenciaCampo(String nombre) throws DelegateException;
 
     String expresionDependenciaCampoV2(String nombre)throws DelegateException;
-    
+
     List expresionValoresPosiblesCampo(String nombre) throws DelegateException;
 
     Anexo obtenerAnexo(String nombre) throws DelegateException;
@@ -82,24 +82,26 @@ public interface InstanciaDelegate extends Delegate {
     Result[] ejecutarSalidas() throws DelegateException;
 
     void destroy();
-    
+
     // -- INDRA: LISTA ELEMENTOS
     public List obtenerDatosListaElementos(String nombreCampo)throws DelegateException;
     public List obtenerCamposTablaListaElementos(String nombreCampo)throws DelegateException;
     public void avanzarPantallaDetalle(String campo,String accion,String index) throws DelegateException;
-    public void retrocederPantallaDetalle(boolean saveData) throws DelegateException;        
-    public void eliminarElemento(String campo,String indice)throws DelegateException;   
-    public Map obtenerDatosListasElementos() throws DelegateException;           
-    public void subirElemento(String campo,String indice)throws DelegateException;   
-    public void bajarElemento(String campo,String indice) throws DelegateException;   
-    // -- INDRA: FIN	
-    
+    public void retrocederPantallaDetalle(boolean saveData) throws DelegateException;
+    public void eliminarElemento(String campo,String indice)throws DelegateException;
+    public Map obtenerDatosListasElementos() throws DelegateException;
+    public void subirElemento(String campo,String indice)throws DelegateException;
+    public void bajarElemento(String campo,String indice) throws DelegateException;
+    // -- INDRA: FIN
+
     // -- INDRA: LOG SCRIPT
     public List obtenerLogScripts() throws DelegateException;
-    public void limpiarLogScripts() throws DelegateException; 
+    public void limpiarLogScripts() throws DelegateException;
     // -- INDRA: LOG SCRIPT
 
     public String obtenerCaptcha(String fieldName) throws DelegateException;
 	public void regenerarCaptcha(String fieldName) throws DelegateException;
- 
+
+	public boolean isDebugEnabled() throws DelegateException;
+
 }

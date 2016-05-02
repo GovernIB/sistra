@@ -4,7 +4,7 @@ import java.util.Map;
 
 public interface InstanciaTelematicaDelegate extends InstanciaDelegate {
 
-    void create(String xmlConfiguracion, String xmlInicializacion) throws DelegateException;
+    void create(String xmlConfiguracion, String xmlInicializacion, boolean debugEnabled) throws DelegateException;
 
     void avanzarPantalla() throws DelegateException;
 
@@ -15,9 +15,9 @@ public interface InstanciaTelematicaDelegate extends InstanciaDelegate {
     String tramitarFormulario(boolean guardarSinTerminar) throws DelegateException;
 
     String cancelarFormulario() throws DelegateException;
-    
+
     String obtenerUrlSistraMantenimientoSesion()  throws DelegateException;
-    
+
     boolean permitirGuardarSinTerminar() throws DelegateException;
-    
+
 }

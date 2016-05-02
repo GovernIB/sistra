@@ -26,20 +26,20 @@ import es.caib.util.StringUtil;
  * @struts.action
  *  path="/back/dominio/realizarPing"
  *  name="pingDominioForm"
- *  scope="session"   
+ *  scope="session"
  *
  * @struts.action-forward
  *  name="success" path=".dominio.ping"
  */
 public class RealizarPingDominioAction extends BaseAction {
-	
+
 	 protected static Log log = LogFactory.getLog( RealizarPingDominioAction.class );
-	
+
      public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
-    	 
+
     	PingDominioForm fForm = (PingDominioForm) form;
-    	
+
     	List params = new ArrayList();
     	if (StringUtils.isNotEmpty(fForm.getParametros())){
     		StringTokenizer st = new StringTokenizer(fForm.getParametros(),"#");
@@ -47,11 +47,11 @@ public class RealizarPingDominioAction extends BaseAction {
     			params.add(st.nextToken());
     		}
     	}
-    	    	
+
     	try{
-	    	ValoresDominio val = DelegateSISTRAUtil.getSistraDelegate().obtenerDominio(fForm.getDominio(),params);
+	    	ValoresDominio val = DelegateSISTRAUtil.getSistraDelegate().obtenerDominio(fForm.getDominio(),params, true);
 	    	if (val.isError()){
-	    		request.setAttribute("error",val.getDescripcionError());	    		
+	    		request.setAttribute("error",val.getDescripcionError());
 	    	}else{
 	    		request.setAttribute("valores",val);
 	    	}
@@ -59,9 +59,9 @@ public class RealizarPingDominioAction extends BaseAction {
     		String error = StringUtil.stackTraceToString(ex);
     		request.setAttribute("error",error);
     	}
-    	
+
     	return mapping.findForward("success");
-        
+
     }
 
 }

@@ -3,13 +3,13 @@
 <project name="sistra.util" default="main" basedir=".">
 
 	<property name="home.dir" location="${basedir}/../.."/>
-	
+
     <property file="${basedir}/build.properties"/>
 	<property file="${home.dir}/config.properties"/>
-	
+
     <property name="modul" value="util"/>
     <property name="package" value="es.caib.sistra.util"/>
-    
+
 	<property name="lib.dir" location="${home.dir}/../../lib"/>
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
@@ -24,17 +24,17 @@
     <property name="jar.product" location="${output.dir}/moduls"/>
 	<property name="distribucion.dir" location="${home.dir}/../../product"/>
 
-    <path id="jar.class.path">  
+    <path id="jar.class.path">
     	<fileset dir="${lib.dir}">
-	    	<include name="commons-codec-*.jar"/>
-    		<include name="commons-lang-*.jar"/>
+	    	<include name="commons-*.jar"/>
     		<include name="javacsv.jar"/>
+    		<include name="ejb-2_0.jar"/>
     	</fileset>
-    	<fileset dir="${distribucion.dir}/lib"> 
+    	<fileset dir="${distribucion.dir}/lib">
             <include name="sistra-plugins.jar"/>
         </fileset>
-    </path>	
-	
+    </path>
+
     <target name="prepare">
         <mkdir dir="${jar.classes}"/>
         <mkdir dir="${jar.doc.api}"/>
@@ -62,9 +62,9 @@
             basedir="${jar.classes}">
             <manifest>
                 <attribute name="Created-By" value="${indra}"/>
-            	<attribute name="Specification-Title" value="${modul}"/>				
+            	<attribute name="Specification-Title" value="${modul}"/>
         		<attribute name="Specification-Version" value="${release.version} build${release.build} ${release.date}"/>
-            </manifest>           
+            </manifest>
         </jar>
     </target>
 

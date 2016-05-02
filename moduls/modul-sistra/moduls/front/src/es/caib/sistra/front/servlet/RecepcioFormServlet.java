@@ -24,39 +24,41 @@ import es.caib.sistra.front.util.FlujoFormularioRequestHelper;
  * @web.servlet name="recepcioForm"
  * @web.servlet-mapping url-pattern="/recepcionFormulario"
  */
-public class RecepcioFormServlet extends HttpServlet 
+public class RecepcioFormServlet extends HttpServlet
 {
 	private static Log logger = LogFactory.getLog(RecepcioFormServlet.class);
-	
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-    	logger.debug( "DEBUGFORM: RecepcioFormServlet - Charset: " + request.getCharacterEncoding());
-        
+
+
         String tokenGestionFormulario = "";
         String xmlInicial = "";
         String xmlFinal = "";
         String sinFinalizar = "";
+        boolean debugEnabled = false;
+
         if (FileUpload.isMultipartContent(request)) {
             try {
                 DiskFileUpload fileUpload = new DiskFileUpload();
                 List fileItems = fileUpload.parseRequest(request);
 
-                for (int i = 0; i < fileItems.size(); i++) 
+                for (int i = 0; i < fileItems.size(); i++)
                 {
-                	
+
                     FileItem fileItem = (FileItem) fileItems.get(i);
                     if ( !fileItem.isFormField() )
                     {
-	                    if (fileItem.getFieldName().equals(Constants.GESTOR_FORM_PARAM_XML_DATOS_INI)) 
+	                    if (fileItem.getFieldName().equals(Constants.GESTOR_FORM_PARAM_XML_DATOS_INI))
 	                    {
 	                        xmlInicial = fileItem.getString();
 	                    }
-	
-	                    if (fileItem.getFieldName().equals(Constants.GESTOR_FORM_PARAM_XML_DATOS_FIN)) 
+
+	                    if (fileItem.getFieldName().equals(Constants.GESTOR_FORM_PARAM_XML_DATOS_FIN))
 	                    {
 	                        xmlFinal = fileItem.getString();
 	                    }
@@ -66,6 +68,10 @@ public class RecepcioFormServlet extends HttpServlet
                     	if ( fileItem.getFieldName().equals( Constants.GESTOR_FORM_PARAM_ALMACENAMIENTO_GESTOR_FORMULARIO ) )
                     	{
                     		tokenGestionFormulario = fileItem.getString();
+                    	}
+                    	if ( fileItem.getFieldName().equals( Constants.GESTOR_FORM_PARAM_DEBUGENABLED ) )
+                    	{
+                    		debugEnabled = "true".equals(fileItem.getString());
                     	}
                     }
                 }
@@ -79,11 +85,13 @@ public class RecepcioFormServlet extends HttpServlet
             tokenGestionFormulario = request.getParameter( Constants.GESTOR_FORM_PARAM_ALMACENAMIENTO_GESTOR_FORMULARIO );
         }
 
-        logger.debug( "DEBUGFORM: RecepcioFormServlet - id gestor formulario: " + tokenGestionFormulario);
-        logger.debug( "DEBUGFORM: RecepcioFormServlet - XML Inicial: " + xmlInicial);
-        logger.debug( "DEBUGFORM: RecepcioFormServlet - XML Final: " + xmlFinal);
-        logger.debug( "DEBUGFORM: RecepcioFormServlet - Sin Finalizar: " + sinFinalizar);
-        
+        if (debugEnabled) {
+	        logger.debug( "DEBUGFORM: RecepcioFormServlet - id gestor formulario: " + tokenGestionFormulario);
+	        logger.debug( "DEBUGFORM: RecepcioFormServlet - XML Inicial: " + xmlInicial);
+	        logger.debug( "DEBUGFORM: RecepcioFormServlet - XML Final: " + xmlFinal);
+	        logger.debug( "DEBUGFORM: RecepcioFormServlet - Sin Finalizar: " + sinFinalizar);
+        }
+
         String token = null;
     	String msgError = null;
     	try
@@ -92,7 +100,7 @@ public class RecepcioFormServlet extends HttpServlet
     		if (gestorFormularios == null) {
     			throw new Exception("No se encuentra gestor de formularios en contexto");
     		}
-    		token = gestorFormularios.guardarDatosFormulario( xmlInicial, xmlFinal, "S".equals(sinFinalizar) );       	
+    		token = gestorFormularios.guardarDatosFormulario( xmlInicial, xmlFinal, "S".equals(sinFinalizar) );
     		if (token == null) {
     			msgError = "Error al guadar datos formulario en gestor formulario";
     		}
@@ -102,11 +110,11 @@ public class RecepcioFormServlet extends HttpServlet
     		logger.error("Error intentando almacenar xml formulario", exc );
     		msgError = "Excepcion: " + exc.getMessage();
     	}
-		
-    	
+
+
     	// Devolvemos token
     	if (token == null) {
-    		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, msgError);    	    
+    		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, msgError);
     	} else {
 	    	byte[] encBytes = token.getBytes("UTF-8");
 			response.reset();
@@ -114,7 +122,7 @@ public class RecepcioFormServlet extends HttpServlet
 	        response.setContentType("text/plain; charset=UTF-8");
 	        response.getOutputStream().write(encBytes);
 	        response.flushBuffer();
-    	}    
-        
+    	}
+
 	}
 }

@@ -14,7 +14,7 @@ public interface InstanciaDelegate extends Delegate
 	RespuestaFront informacionInicial() throws DelegateException;
 	RespuestaFront obtenerTramitesPersistencia(String tramite,int version) throws DelegateException;
 	RespuestaFront iniciarTramite() throws DelegateException;
-	RespuestaFront cargarTramite(String idPersistencia) throws DelegateException; 
+	RespuestaFront cargarTramite(String idPersistencia) throws DelegateException;
 	RespuestaFront pasoActual() throws DelegateException;
 	RespuestaFront siguientePaso() throws DelegateException;
 	RespuestaFront anteriorPaso() throws DelegateException;
@@ -26,25 +26,27 @@ public interface InstanciaDelegate extends Delegate
 	RespuestaFront downloadAnexo(String identificador,int instancia) throws DelegateException;
 	RespuestaFront anexarDocumento(String identificador,int instancia, String descPersonalizada,  FirmaIntf firma, boolean firmaDelegada) throws DelegateException;
 	RespuestaFront irAPago(String identificador,int instancia, String urlRetorno, String urlMantenimientoSesion) throws DelegateException;
-	RespuestaFront confirmarPago(String identificador,int instancia) throws DelegateException;	
-	RespuestaFront anularPago(String identificador, int instancia) throws DelegateException;	
+	RespuestaFront confirmarPago(String identificador,int instancia) throws DelegateException;
+	RespuestaFront anularPago(String identificador, int instancia) throws DelegateException;
 	void finalizarSesionPago(String identificador,int instancia) throws DelegateException;
 	RespuestaFront borrarTramite() throws DelegateException;
 	RespuestaFront registrarTramite(String asiento,FirmaIntf firma) throws DelegateException;
 	RespuestaFront mostrarDocumento(String idDocumento, int instancia) throws DelegateException;
 	RespuestaFront mostrarJustificante() throws DelegateException;
 	RespuestaFront irAFirmarFormulario(String identificador,int instancia) throws DelegateException;
-	RespuestaFront firmarFormulario(String identificador,int instancia,FirmaIntf firma, boolean firmaDelegada) throws DelegateException; 
+	RespuestaFront firmarFormulario(String identificador,int instancia,FirmaIntf firma, boolean firmaDelegada) throws DelegateException;
 	RespuestaFront remitirFlujoTramitacion() throws DelegateException;
 	RespuestaFront mostrarDocumentoConsulta( int numDoc ) throws DelegateException;
-	public String obtenerUrlFin() throws DelegateException; 
-	public String obtenerIdPersistencia() throws DelegateException;	   
+	public String obtenerUrlFin() throws DelegateException;
+	public String obtenerIdPersistencia() throws DelegateException;
 	public void habilitarNotificacion(boolean habilitarNotificacion, String emailAviso, String smsAviso) throws DelegateException;
 	public void resetHabilitarNotificacion() throws DelegateException;
 	public RespuestaFront mostrarFormularioDebug( String idDocumento, int instancia ) throws DelegateException;
 	public RespuestaFront remitirDelegacionPresentacionTramite()  throws DelegateException;
 	public RespuestaFront remitirDelegacionFirmaDocumentos()  throws DelegateException;
 	public RespuestaFront finalizarTramite() throws DelegateException;
-	
+
+	public boolean isDebugEnabled() throws DelegateException;
+
 	void destroy();
 }

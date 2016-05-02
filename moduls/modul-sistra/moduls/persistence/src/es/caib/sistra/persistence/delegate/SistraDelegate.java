@@ -29,16 +29,24 @@ public class SistraDelegate implements StatelessDelegate {
         }
     }
 
-	
+
 	public ValoresDominio obtenerDominio( String id,List parametros ) throws DelegateException {
         try {
-            return getFacade().obtenerDominio(id,parametros);
+            return getFacade().obtenerDominio(id,parametros, false);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
     }
-	
-	
+
+	public ValoresDominio obtenerDominio( String id,List parametros, boolean debugEnabled ) throws DelegateException {
+        try {
+            return getFacade().obtenerDominio(id,parametros, debugEnabled);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+
+
 	public InformacionLoginTramite obtenerInfoLoginTramite( String modelo,int version, String idioma ) throws DelegateException {
         try {
             return getFacade().obtenerInfoLoginTramite(modelo,version,idioma);
@@ -46,16 +54,16 @@ public class SistraDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
- 
+
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-    private SistraFacade getFacade() throws NamingException,RemoteException,CreateException {         	    	
+    private SistraFacade getFacade() throws NamingException,RemoteException,CreateException {
     	return SistraFacadeUtil.getHome( ).create();
     }
-    
 
-    protected SistraDelegate() throws DelegateException {      
-    }                  
+
+    protected SistraDelegate() throws DelegateException {
+    }
 }
 

@@ -28,22 +28,22 @@ import es.caib.sistra.persistence.delegate.InstanciaDelegate;
  *
  * @struts.action-forward
  *  name="fail" path="/fail.do"
- *  
+ *
  * @struts.action-forward
  *  name="redireccion" path=".redireccion"
  */
 public class ConfirmarPagoAction extends BaseAction
 {
 	protected static Log log = LogFactory.getLog(ConfirmarPagoAction.class);
-	  
+
 	public ActionForward executeTask(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-            HttpServletResponse response) throws Exception 
+            HttpServletResponse response) throws Exception
     {
 		ConfirmarPagoForm formulario = ( ConfirmarPagoForm ) form;
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request );
 		RespuestaFront respuesta = delegate.confirmarPago( formulario.getIdentificador(), formulario.getInstancia() );
 		this.setRespuestaFront( request, respuesta );
-		
+
 		// En caso de que se haya confirmado correctamente el pago notificamos que se de por finalizada la sesion de pago
 		if (!this.isSetError(request)){
 			DocumentoFront docPago = respuesta.getInformacionTramite().getPago(formulario.getIdentificador(), formulario.getInstancia());
@@ -51,11 +51,11 @@ public class ConfirmarPagoAction extends BaseAction
 				try{
 					delegate.finalizarSesionPago(formulario.getIdentificador(), formulario.getInstancia());
 				}catch(Exception ex){
-					log.debug("Error finalizando sesion pago",ex);
+					log.error("Error finalizando sesion pago",ex);
 				}
 			}
 		}
-		
+
 		// Si se ha pasado a paso registrar, redirigimo a irAPAso
 		if (respuesta.getInformacionTramite().getPasoTramitacion().getTipoPaso() == PasoTramitacion.PASO_REGISTRAR) {
 			request.setAttribute( "accionRedireccion", "/protected/irAPaso.do" );

@@ -103,26 +103,28 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
 
     //Valor devuelto por el sistema de tramitación al mandarle un get/post.
     private String respuesta;
-    
+
     // Indica si se permite guardar sin terminar
 	private boolean guardarSinTerminar;
 
     /**
      * @ejb.create-method
      * @ejb.permission unchecked="true"
-     * 
+     *
      * @param XMLDatosConfig-> Documento XML con los datos de configuración del trámite.
      * @param XMLValoresInit-> Documento XML con los valores iniciales para prerellenar los campos del formulario.
      */
     public void ejbCreate(String XMLDatosConfig,
-                          String XMLValoresInit) throws CreateException {
+                          String XMLValoresInit, boolean debugEnabled) throws CreateException {
         super.ejbCreate();
         session = getReadOnlySession();
         try {
-        	
+
+        	this.setDebugEnabled(debugEnabled);
+
         	if (permitirScriptDebug())
              	logScript = new LogsScripts();
-        	
+
             if ( (XMLDatosConfig == null) || (XMLDatosConfig.trim().length() == 0) ) {
                 closeReadOnly(session);
                 throw new CreateException("No existe documento xml de configuración");
@@ -179,7 +181,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                 throw new CreateException("El perfil con código " + obtenerValor(CODIGO_PERFIL) + " no existe");
             }
             perfil = (PerfilUsuario) perfiles.get(0);
-            log.debug("Perfil " + obtenerValor(CODIGO_PERFIL) + " cargado");
+            debug("Perfil " + obtenerValor(CODIGO_PERFIL) + " cargado");
             /*
               Obtengo el formulario seleccionado.
             */
@@ -198,7 +200,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                 throw new CreateException("El formulario " + obtenerValor(MODELO) + " versión " +obtenerValor(VERSION)+ " no existe");
             }
             formulario = (Formulario) formularios.get(0);
-            log.debug("Formulario " + obtenerValor(MODELO) + " version " + obtenerValor(VERSION) + " cargado");
+            debug("Formulario " + obtenerValor(MODELO) + " version " + obtenerValor(VERSION) + " cargado");
             /*
               Inicializo la estructura.
             */
@@ -210,15 +212,15 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                 for (Iterator iterCamp = pantalla.getCampos().iterator(); iterCamp.hasNext();) {
                     Campo campo = (Campo) iterCamp.next();
                     Hibernate.initialize(campo.getValidaciones());
-                    
+
                     // Para ComboBox añadimos validacion obligatorio
                     if (campo instanceof ComboBox && ((ComboBox) campo).isObligatorio()) {
                     	Validacion validacion = new Validacion();
                     	Mascara mascara = DelegateUtil.getMascaraDelegate().obtenerMascara("required");
-						validacion.setMascara(mascara);					
+						validacion.setMascara(mascara);
 						campo.addValidacion(validacion);
                     }
-                    
+
                     Hibernate.initialize(campo.getValoresPosibles());
                     boolean bloquear = CampoUtils.bloquearCampo(campo, docXMLConfig, XPATH_BLOQ_TODOS, XPATH_BLOQ_CAMPO);
                     if (bloquear) {
@@ -226,7 +228,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                     }
                 }
             }
-            log.debug("Estructura inicializada");
+            debug("Estructura inicializada");
 
             /*
               Asigno el idioma al formulario.
@@ -241,32 +243,32 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                 closeReadOnly(session);
                 throw new CreateException("El formulario " + obtenerValor(MODELO) + " versión " + obtenerValor(VERSION) + " no tiene pantalla inicial");
             }
-            log.debug("Obtenida pantalla inicial");
+            debug("Obtenida pantalla inicial");
 
             /*
               Inicializo los campos con los valores iniciales, a partir del fichero XML 'XMLValoresInit'
             */
-            //  INDRA: LISTA ELEMENTOS 
+            //  INDRA: LISTA ELEMENTOS
             Map variablesScript = variablesScript();
         	// Cargamos datos campos pantalla (excepto listas elementos)
-            datosActual = PantallaUtils.valoresDefecto(pantallaActual, docXMLIni,variablesScript ,obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO));
+            datosActual = PantallaUtils.valoresDefecto(pantallaActual, docXMLIni,variablesScript ,obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO), this.isDebugEnabled());
             // En caso de que la pantalla tenga un campo lista de elementos lo cargamos
             List listaLel  = PantallaUtils.buscarCamposListaElementos(pantallaActual);
             for (Iterator it = listaLel.iterator();it.hasNext();){
             	ListaElementos lel = (ListaElementos) it.next();
-            	List valoresLista = PantallaUtils.valoresDefectoListaElementos(lel,this.formulario,pantallaActual,docXMLIni,variablesScript, obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO));
-            	this.datosListasElementos.put(CampoUtils.getReferenciaListaElementos(pantallaActual.getNombre(),lel.getNombreLogico()),valoresLista);    
+            	List valoresLista = PantallaUtils.valoresDefectoListaElementos(lel,this.formulario,pantallaActual,docXMLIni,variablesScript, obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO), this.isDebugEnabled());
+            	this.datosListasElementos.put(CampoUtils.getReferenciaListaElementos(pantallaActual.getNombre(),lel.getNombreLogico()),valoresLista);
             }
-            
-            // INDRA: LISTA ELEMENTOS 
-            log.debug("Generados valores por defecto");
 
-            
+            // INDRA: LISTA ELEMENTOS
+            debug("Generados valores por defecto");
+
+
             // Check permitir guardar sin terminar
             guardarSinTerminar = "S".equals(obtenerValor(GUARDAR_SIN_TERMINAR));
-            
+
             session.disconnect();
-            
+
         } catch (Exception e) {
             closeReadOnly(session);
             throw new EJBException(e);
@@ -312,22 +314,22 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                 }
             } else {
                 Map variables  = variablesScriptActuals();
-                String nombre  = (String) ScriptUtil.evalScript(expresion, variables);
-                
+                String nombre  = (String) ScriptUtil.evalScript(expresion, variables, this.isDebugEnabled());
+
                 // INDRA: AVANZAR HASTA UNA PANTALLA ANTERIOR ES EQUIVALENTE A RETROCEDER A ESA PANTALLA
                 Pantalla destino = formulario.findPantalla(nombre);
                 if (destino == null) {
                     log.warn("La pantalla \"" + nombre + "\" no existe!!");
                 }
                 if (pilaPantallasAnteriores.contains(destino)) {
-                    log.debug("La pantalla \"" + nombre + "\" ya ha sido procesada. Retrocedemos hasta esa pantalla");
+                    debug("La pantalla \"" + nombre + "\" ya ha sido procesada. Retrocedemos hasta esa pantalla");
                 	retrocederPantalla(nombre);
-                	return;                                   
+                	return;
                 }
                 // INDRA: AVANZAR HASTA UNA PANTALLA ANTERIOR ES EQUIVALENTE A RETROCEDER A ESA PANTALLA
-                
+
                 // Si no es una pantalla anterior, la hacemos la actual
-                pantallaActual = destino;                
+                pantallaActual = destino;
             }
         }
         /*
@@ -338,38 +340,38 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
           fsi
         */
         if (pantallaActual != null) {
-            
+
             // Intentar recuperar datos introducidos en la última visita.
             if (pantallasDatosPosteriores.containsKey(pantallaActual.getNombre())) {
                 datosActual = (Map) pantallasDatosPosteriores.get(pantallaActual.getNombre());
                 pantallasDatosPosteriores.remove(pantallaActual.getNombre());
 
-                
-				// INDRA	: MODIFICACION SUPERVISADA POR IBIT PARA BUG DE DESPLEGABLES DEPENDIENTES                
+
+				// INDRA	: MODIFICACION SUPERVISADA POR IBIT PARA BUG DE DESPLEGABLES DEPENDIENTES
                 INDRA_refrescarValoresPosibles(datosActual);
 				// INDRA	: FIN MODIFICACION
 
             } else {
-            	
+
             	// Pantalla cargada por primera vez: cargamos datos (xml o x defecto)
-            	// INDRA: LISTA ELEMENTOS            	
+            	// INDRA: LISTA ELEMENTOS
             	Map variablesScript = variablesScript();
             	// Cargamos datos campos pantalla (excepto listas elementos)
-                datosActual = PantallaUtils.valoresDefecto(pantallaActual, docXMLIni,variablesScript ,obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO));
+                datosActual = PantallaUtils.valoresDefecto(pantallaActual, docXMLIni,variablesScript ,obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO), this.isDebugEnabled());
                 // En caso de que la pantalla tenga un campo lista de elementos lo cargamos
                 List listaLel  = PantallaUtils.buscarCamposListaElementos(pantallaActual);
                 for (Iterator it = listaLel.iterator();it.hasNext();){
                 	ListaElementos lel = (ListaElementos) it.next();
 	                if (lel != null){
-	                	List valoresLista = PantallaUtils.valoresDefectoListaElementos(lel,this.formulario,pantallaActual,docXMLIni,variablesScript, obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO));
-	                	this.datosListasElementos.put(CampoUtils.getReferenciaListaElementos(pantallaActual.getNombre(),lel.getNombreLogico()),valoresLista);    
+	                	List valoresLista = PantallaUtils.valoresDefectoListaElementos(lel,this.formulario,pantallaActual,docXMLIni,variablesScript, obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO), this.isDebugEnabled());
+	                	this.datosListasElementos.put(CampoUtils.getReferenciaListaElementos(pantallaActual.getNombre(),lel.getNombreLogico()),valoresLista);
 	                }
                 }
                 // INDRA: LISTA ELEMENTOS
             }
-            log.debug("Pantalla Actual: " + pantallaActual.getNombre());
+            debug("Pantalla Actual: " + pantallaActual.getNombre());
         } else {
-            log.debug("Pantalla Actual es null");
+            debug("Pantalla Actual es null");
         }
     }
 
@@ -403,27 +405,27 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
      * @ejb.permission unchecked="true"
      */
     public String tramitarFormulario(boolean guardarSinTerminar) {
-        log.debug("voy a tramitar el formulario...");
+        debug("voy a tramitar el formulario...");
         String urlSisTra = obtenerValor(URL_SIS_TRA_OK);
         if (urlSisTra == null) {
             throw new EJBException("urlSisTraOK no encontrada");
         }
-        
+
         // Si se guarda sin terminar, vuelco datos de la pantalla actual y posteriores
         if (guardarSinTerminar) {
-          // Almaceno en pila la pantalla actual 
+          // Almaceno en pila la pantalla actual
           pilaPantallasAnteriores.push(pantallaActual);
           pilaDatosAnteriores.push(datosActual);
           // Almaceno en pila las pantallas posteriores
           for (Iterator it = pantallasDatosPosteriores.keySet().iterator(); it.hasNext();){
         	String nomPantalla = (String) it.next();
         	pilaPantallasAnteriores.push(formulario.findPantalla(nomPantalla));
-            pilaDatosAnteriores.push(pantallasDatosPosteriores.get(nomPantalla));        	
-          }          
+            pilaDatosAnteriores.push(pantallasDatosPosteriores.get(nomPantalla));
+          }
         }
-        
+
         String xmlIni = obtenerXMLValoresOriginales();
-        
+
         String xmlFin = obtenerXMLValoresFinales(guardarSinTerminar);
         boolean exito = enviarDocumentosXMLSisTra(urlSisTra,
                                                   xmlIni,
@@ -442,7 +444,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
             urlRedireccion = insertarParametro(urlRedireccion,
                                                obtenerValor(NOM_PARAM_TOKEN_RETORNO),
                                                respuesta);
-            log.debug("redirecciono a " + urlRedireccion);
+            debug("redirecciono a " + urlRedireccion);
             return urlRedireccion;
         }
     }
@@ -454,7 +456,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
      * @ejb.permission unchecked="true"
      */
     public String cancelarFormulario() {
-        log.debug("voy a cancelar el formulario...");
+        debug("voy a cancelar el formulario...");
         String urlSisTra = obtenerValor(URL_SIS_TRA_CANCEL);
         if (urlSisTra == null) {
             throw new EJBException("urlSisTraKO no encontrada");
@@ -470,18 +472,18 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
             urlRedireccion = insertarParametro(urlRedireccion,
                                                obtenerValor(NOM_PARAM_TOKEN_RETORNO),
                                                respuesta);
-            log.debug("redirecciono...");
+            debug("redirecciono...");
             return urlRedireccion;
         }
     }
-    
-    
+
+
     /**
      * Obtiene url para mantener la sesion de sistra mientras se rellena el formulario
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public String obtenerUrlSistraMantenimientoSesion() {        
+    public String obtenerUrlSistraMantenimientoSesion() {
         String urlSisTra = obtenerValor(URL_SIS_TRA_MANTENIMIENTO_SESION);
         if (urlSisTra == null) {
             throw new EJBException(URL_SIS_TRA_MANTENIMIENTO_SESION + " no encontrada");
@@ -494,11 +496,11 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public boolean permitirGuardarSinTerminar() {        
+    public boolean permitirGuardarSinTerminar() {
         return guardarSinTerminar;
     }
-    
-    
+
+
    /*
     CallBack method ejbRemove() para liberar los recursos, entre ellos la sesión.
    */
@@ -510,11 +512,11 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
           docXMLConfig = null;
           docXMLIni = null;
       } finally {
-          log.debug("fin ejbRemove():" + this.getClass().getName());
+          debug("fin ejbRemove():" + this.getClass().getName());
       }
    }
-  
-    
+
+
     /******************************************************************************************
      *                    FIN LÓGICA DE NEGOCIO. INICIO METODOS AUXILIARES.                   *
      ******************************************************************************************/
@@ -636,7 +638,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
      * Genera el documento XML con los valores finales de los campos.
      * @param guardarSinTerminar Indica si se guarda sin terminar, para que no tenga en cuenta restricciones de valores obligatorios
      * @return Devuelve el documento XML con los valores finales de los campos del formulario.
-     * @throws Exception 
+     * @throws Exception
      */
     private String obtenerXMLValoresFinales(boolean guardarSinTerminar) throws EJBException {
         Map datosPantalla;
@@ -649,16 +651,16 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
         return documentToString(docXMLFin);
     }
 
-    
+
     private void generarNodosPantalla(Document docXMLFin,Pantalla pantalla,Map datosPantalla,boolean detalle,String xpathLista, boolean guardarSinTerminar) throws EJBException{
     	for (Iterator j = pantalla.getCampos().iterator(); j.hasNext();) {
             Campo campo = (Campo) j.next();
-            String xPath = campo.getEtiquetaPDF();                      
-            
+            String xPath = campo.getEtiquetaPDF();
+
             if ( (xPath != null) && (xPath.trim().length() > 0)) {
-            	
-            	if (detalle) xPath = xpathLista +"/" + xPath; 
-            	
+
+            	if (detalle) xPath = xpathLista +"/" + xPath;
+
                 if (campo.isIndexed()) {
                     /*
                       Campos indexados   : TreeBox, ListBox, ComboBox, RadioButton.
@@ -668,9 +670,9 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                         /*ListBox-> Campo de selección múltiple*/
                         String[] valoresIndex = (String[]) datosPantalla.get(campo.getNombreLogico());
                         Object[] valoresText  = (Object[]) datosPantalla.get(campo.getNombreLogico() + "_text");
-                        
+
                         // INDRA: COMPROBACION OBLIGATORIO
-                        // INDRA 2013:  NO TIENE EFECTO, YA QUE NO PUEDE ESTABLECERSE SI ES OBLIGATORIO 
+                        // INDRA 2013:  NO TIENE EFECTO, YA QUE NO PUEDE ESTABLECERSE SI ES OBLIGATORIO
                         if (!guardarSinTerminar && campo.findValidacion("required") != null) {
                         	if (valoresIndex.length == 0) {
                         		log.error("Error generando XML: campo con XPATH " + xPath + " debe contener valor");
@@ -682,24 +684,24 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                             if ( (valoresIndex[k] != null) && (valoresText[k] != null) ) {
                                 docXMLFin = crearNodo(docXMLFin, xPath, valoresIndex[k], true, String.valueOf(valoresText[k]));
                             }
-                        }                       
-                        
+                        }
+
                         // Nodo vacio sin valores
                         if (valoresIndex.length == 0) {
                         	 docXMLFin = crearNodo(docXMLFin, xPath, null, true, null);
                         }
-                        
+
                     } else {
-                    	
+
                     	// ComboBox, RadioButton
-                    	
+
                     	// INDRA: COMPROBACION OBLIGATORIO
-                        if ( 
-                        	 (!guardarSinTerminar && campo.findValidacion("required") != null) || 
-                         	 ( 
+                        if (
+                        	 (!guardarSinTerminar && campo.findValidacion("required") != null) ||
+                         	 (
                          		!guardarSinTerminar &&
-                         	    (campo instanceof ComboBox) && 
-                         		(((ComboBox) campo).isObligatorio())) 
+                         	    (campo instanceof ComboBox) &&
+                         		(((ComboBox) campo).isObligatorio()))
                          	){
                         	   	if ( (datosPantalla.get(campo.getNombreLogico()) == null) ||
 	                                 (datosPantalla.get(campo.getNombreLogico() + "_text") == null) ) {
@@ -708,7 +710,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
 	                        	}
                         }
                         // INDRA: COMPROBACION OBLIGATORIO
-                    	
+
                         if ( (datosPantalla.get(campo.getNombreLogico()) != null) &&
                              (datosPantalla.get(campo.getNombreLogico() + "_text") != null) ){
                             String valorIndex = String.valueOf(datosPantalla.get(campo.getNombreLogico()));
@@ -716,15 +718,15 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                             docXMLFin = crearNodo(docXMLFin, xPath, valorIndex, true, valorText);
                         } else {
                         	 // Nodo vacio sin valores
-                            docXMLFin = crearNodo(docXMLFin, xPath, null, true, null);                            
+                            docXMLFin = crearNodo(docXMLFin, xPath, null, true, null);
                         }
                     }
                 } else {
                     /*Campos no indexados: CheckBox, TextBox.*/
                 	if (campo instanceof ListaElementos){
-                		                		
+
                 		if (detalle) throw new EJBException("Una pantalla detalle no puede tener una lista de elementos");
-                		
+
                 		String referenciaCampo = CampoUtils.getReferenciaListaElementos(pantalla.getNombre(),campo.getNombreLogico());
                         List listaElementos = (List) this.datosListasElementos.get(referenciaCampo);
                         if (listaElementos != null){
@@ -736,7 +738,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                         }
                 	}else{
                 		String valorCampo = String.valueOf(datosPantalla.get(campo.getNombreLogico()));
-                		
+
                 		// INDRA: COMPROBACION OBLIGATORIO
                         if (!guardarSinTerminar && campo.findValidacion("required") != null) {
                         	if (StringUtils.isBlank(valorCampo)) {
@@ -745,21 +747,21 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                         	}
                         }
                         // INDRA: COMPROBACION OBLIGATORIO
-                		
+
                         if (valorCampo != null) {
                             docXMLFin = crearNodo(docXMLFin, xPath, valorCampo, false, null);
                         } else {
                         	 // Nodo vacio sin valores
-                            docXMLFin = crearNodo(docXMLFin, xPath, null, true, null);                            
+                            docXMLFin = crearNodo(docXMLFin, xPath, null, true, null);
                         }
                 	}
                 }
             }
         }
     }
-    
-    
-    
+
+
+
     /**
      * Devuelve la representación de un Document XML en String bien formateado
      * y con codificación UTF-8.
@@ -793,15 +795,15 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
      */
     private Document crearNodo(Document doc,          String xPath,          String valorCampo,
                                boolean campoIndexado, String valorTextCampo) throws EJBException {
-        
+
     	String[] path = xPath.split("/");
-        
+
         // Validamos que al menos tenga 2 elementos el xpath
         if (path.length < 2){
         	log.error("Campo configurado con xpath erroneo: '" + xPath + "'" );
         	throw new EJBException("Campo configurado con xpath erroneo: '" + xPath + "'" );
         }
-                
+
         if (doc.getRootElement() == null) {
             doc.setRootElement(doc.addElement(path[1]));
         }
@@ -815,8 +817,8 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                 	if (valorCampo != null) {
 	                    if (campoIndexado){
 	                        nodoElement = nodoElement.addAttribute(obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO), valorCampo);
-	                        nodoElement = addText(nodoElement,valorTextCampo);                        
-	                    } else {                    	
+	                        nodoElement = addText(nodoElement,valorTextCampo);
+	                    } else {
 	                        nodoElement = addText(nodoElement,valorCampo);
 	                    }
                 	}
@@ -829,7 +831,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                     if (valorCampo != null) {
 	                    if (campoIndexado) {
 	                        nodoElement = nodoElement.addAttribute(obtenerValor(NOM_ATRIB_INDEX_CAMPO_INDEXADO), valorCampo);
-	                        nodoElement = addText(nodoElement,valorTextCampo);                        
+	                        nodoElement = addText(nodoElement,valorTextCampo);
 	                    } else {
 	                        nodoElement = addText(nodoElement,valorCampo);
 	                    }
@@ -838,17 +840,17 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
             }
         }
         return doc;
-    }    
-    
+    }
+
     /*
      * Añade texto teniendo en cuenta saltos de linea
      */
     private Element addText(Element e,String text){
-    	if (text.indexOf("\n") != -1) { 
-            e = e.addCDATA(text); 
-        } else { 
+    	if (text.indexOf("\n") != -1) {
+            e = e.addCDATA(text);
+        } else {
             e = e.addText(text);
-        } 
+        }
     	return e;
     }
 
@@ -856,7 +858,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
       Postea los documentos "xmlIni" y "xmlFin" a través de la "url"
     */
     private boolean enviarDocumentosXMLSisTra(String url, String xmlIni, String xmlFin, String guardarSinTerminar, String nomParam1, String nomParam2, String nomParam3) {
-        log.debug("http post a " + url);
+        debug("http post a " + url);
         HttpClient cliente = new HttpClient();
         PostMethod post = new PostMethod(url);
         post.addRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
@@ -864,7 +866,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
         post.addParameter(nomParam1, xmlIni);
         post.addParameter(nomParam2, xmlFin);
         post.addParameter(nomParam3, guardarSinTerminar);
-        
+
         try {
             int estado = cliente.executeMethod(post);
             if (estado != HttpStatus.SC_OK) {
@@ -872,7 +874,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                 respuesta = post.getResponseBodyAsString();
                 return false;
             }
-            log.debug("http post a " + url + "finalizado con exito");
+            debug("http post a " + url + "finalizado con exito");
             respuesta = post.getResponseBodyAsString();
             return true;
         } catch (HttpException e) {
@@ -890,7 +892,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
       Genera una llamada http a la url especificada en el parámetro "url".
     */
     private boolean enviarCancelacionSisTra(String url) {
-        log.debug("http get a " + url + "...");
+        debug("http get a " + url + "...");
         HttpClient cliente = new HttpClient();
         GetMethod get = new GetMethod(url);
         //Por defecto 3 reintentos ante errores recuperables.
@@ -906,7 +908,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                 respuesta = get.getResponseBodyAsString();
                 return false;
             }
-            log.debug("http get a " + url + "finalizado con exito");
+            debug("http get a " + url + "finalizado con exito");
             respuesta = get.getResponseBodyAsString();
             return true;
         } catch (HttpException e) {
@@ -936,6 +938,6 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
         return sb.toString();
     }
 
-   
-   
+
+
 }

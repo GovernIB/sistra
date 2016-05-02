@@ -38,19 +38,16 @@ public class AsistenteTramiteReducido extends BaseAction
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
-		if ( _log.isDebugEnabled() ) _log.debug( "Asistente circuito reducido" );
-		
-		
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request );
-		
+
 		// 1º Nos posicionamos en el siguiente paso: imprimir
 		RespuestaFront respuestaFront = null;
 		do
 		{
 			respuestaFront = delegate.siguientePaso();
-			
+
 		}while( respuestaFront.getInformacionTramite().getPasoTramitacion().getTipoPaso() != PasoTramitacion.PASO_IMPRIMIR );
-		
+
 		request.setAttribute( "accionRedireccion", "/protected/irAPaso.do" );
 		return mapping.findForward( "success" );
 	}

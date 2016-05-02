@@ -12,12 +12,12 @@ public class CuadroMandoTemporalController extends BaseController
 {
 
 	private static Log _log = LogFactory.getLog( CuadroMandoTemporalController.class );
-	
+
 	public void execute(ComponentContext tileContext,
 			HttpServletRequest request, HttpServletResponse response,
 			ServletContext servletContext) throws Exception
 	{
-		_log.debug( "CuadroMandoTemporalController" );
+
 	}
 
 }

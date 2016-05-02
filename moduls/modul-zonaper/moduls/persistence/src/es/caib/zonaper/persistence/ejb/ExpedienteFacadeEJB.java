@@ -96,7 +96,7 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 	}
 	
 	/**
-     * @throws ExcepcionPAD 
+     * 
 	 * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
@@ -127,7 +127,7 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 	}
 	
 	/**
-     * @throws ExcepcionPAD 
+     * 
 	 * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
@@ -161,7 +161,7 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 		
 	
 	/**
-     * @throws ExcepcionPAD 
+     * 
 	 * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */

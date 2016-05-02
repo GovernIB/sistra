@@ -66,7 +66,7 @@ import es.caib.sistra.persistence.util.ScriptUtil;
  */
 public class AuditoriaCuadernoFacadeEJB implements SessionBean
 {
-	
+
 	private static Log _log = LogFactory.getLog( AuditoriaCuadernoFacadeEJB.class );
 	//private static String EXPRESION = "((DominioSistraPluginCache)||(DominioSistraPlugin)||(PLUGIN_DOMINIOS\\.crearDominio)){1}\\(\\s*'(\\w+)'[^)]*\\)";
 	private static String EXPRESION = "(DominioSistraPluginCache||DominioSistraPlugin||PLUGIN_DOMINIOS\\.crearDominio)\\(\\s*'(\\w+)'[^)]*\\)";
@@ -77,14 +77,14 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 	private static Pattern PATTERN2 = Pattern.compile( EXPRESION2 );
 	private static int SCRIPTS_POSITION = 0;
 	private static int DOMINIOS_POSITION = 1;
-	
-	//private static Object[][] metodosAuditoria = new Object[][] 
-	private static String [] metodosCampoFormulario = new String []{ 	
-		"expresionAutocalculo", "expresionPostProceso", "expresionValoresPosibles", 
-		"expresionValidacion",  "expresionDependencia" };  
+
+	//private static Object[][] metodosAuditoria = new Object[][]
+	private static String [] metodosCampoFormulario = new String []{
+		"expresionAutocalculo", "expresionPostProceso", "expresionValoresPosibles",
+		"expresionValidacion",  "expresionDependencia" };
   	private static Map propsAuditoria = new HashMap();
-  	static 
-	{ 
+  	static
+	{
 		propsAuditoria.put( Pantalla.class , new String []{ "expresion" } );
 		propsAuditoria.put(  PropiedadSalida.class, new String []{ "valor" } );
 		propsAuditoria.put(  CheckBox.class, metodosCampoFormulario );
@@ -95,18 +95,18 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 		propsAuditoria.put(  TextBox.class, metodosCampoFormulario );
 		propsAuditoria.put(  Patron.class,new String []{  "codigo" } );
 		propsAuditoria.put(  DatoJustificante.class,new String []{  "visibleScript", "valorCampoScript" } );
-		propsAuditoria.put(  EspecTramiteNivel.class, new String []{ "campoRdoNif", "campoRteNif", "campoRdoNom", "campoRteNom", 
-									"campoCodigoPais", "campoCodigoProvincia", 
+		propsAuditoria.put(  EspecTramiteNivel.class, new String []{ "campoRdoNif", "campoRteNif", "campoRdoNom", "campoRteNom",
+									"campoCodigoPais", "campoCodigoProvincia",
 									"campoCodigoLocalidad", "validacionInicioScript" } );
-		propsAuditoria.put(  DocumentoNivel.class, new String []{ "flujoTramitacionScript",  
-								"formularioDatosInicialesScript", "formularioConfiguracionScript", 
-								"formularioPlantillaScript", "formularioValidacionPostFormScript", 
-								"pagoCalcularPagoScript", "formularioModificacionPostFormScript", 
+		propsAuditoria.put(  DocumentoNivel.class, new String []{ "flujoTramitacionScript",
+								"formularioDatosInicialesScript", "formularioConfiguracionScript",
+								"formularioPlantillaScript", "formularioValidacionPostFormScript",
+								"pagoCalcularPagoScript", "formularioModificacionPostFormScript",
 								"firmante", "obligatorioScript" }  );
-		
+
 	}
-	
-	
+
+
 	/**
      * @ejb.create-method
      * @ejb.permission unchecked = "true"
@@ -114,7 +114,7 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 	public void ejbCreate() throws CreateException {
 
 	}
-	
+
 	public void setSessionContext(SessionContext ctx) throws EJBException,
 			RemoteException
 	{
@@ -139,7 +139,7 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 		// TODO Auto-generated method stub
 
 	}
-	
+
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.admin}"
@@ -159,9 +159,9 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 			{
 				FicheroCuaderno fichero = ( FicheroCuaderno ) it.next();
 				Object entidadActual = obtenerEntidadActualPersistente( fichero );
-				
+
 				// Si no existe
-				if ( entidadActual == null ) 
+				if ( entidadActual == null )
 				{
 					if  ( _log.isDebugEnabled() )
 					{
@@ -187,7 +187,7 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 						}
 						return true;
 					}
-					
+
 					DatosAuditoriaCuaderno datosAuditoriaTramite = auditarTramiteVersion( idTramite, TramiteVersion.fromXml( fichero.getContenido() ), tramiteVersion,  dominiosCuaderno );
 					if ( datosAuditoriaTramite.isAuditoriaRequerida() )
 					{
@@ -218,15 +218,15 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 			}
 		return false;
 	}
-	
-	
-	
+
+
+
     /**
      * @ejb.interface-method
      * @ejb.permission role-name="${role.audit}"
      */
 	public DatosAuditoriaCuaderno auditoriaCuaderno( Long codigoCuadernoCarga ) throws Exception
-	{ 
+	{
 		if ( _log.isDebugEnabled() )
 		{
 			_log.debug( "Auditando cuaderno "  + codigoCuadernoCarga );
@@ -239,7 +239,7 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 		for ( Iterator it = cuadernoCarga.getFicheros().iterator(); it.hasNext(); )
 		{
 			FicheroCuaderno ficheroCuaderno = ( FicheroCuaderno ) it.next();
-			Object entidadActual = obtenerEntidadActualPersistente( ficheroCuaderno ); 
+			Object entidadActual = obtenerEntidadActualPersistente( ficheroCuaderno );
 			if ( ficheroCuaderno.isTramite() )
 			{
 				String idTramite = this.obtenerIdEntidad( ficheroCuaderno.getNombre() );
@@ -267,22 +267,22 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 				datosAuditoria.getListaDominios().add( auditarDominio( dominio, dominioActual ) );
 			}
 		}
-		
+
 		// Por ultimo, se recorren los dominios del cuaderno y se compara con la lista de auditoria de dominios
 		// Si no existen en la lista de auditoria de cuaderno se trata de un dominio no utilizado
 		// en el resto de ficheros del cuaderno. ( ESTADO_NUEVO_EN_CUADERNO o ESTADO_EXISTENTE_MODIFICADO_EN_CUADERNO )
 		//datosAuditoria.getListaDominios().addAll( auditarScriptsCuaderno( dominiosCuaderno, datosAuditoria.getListaDominios() ) );
-		
+
 		if ( _log.isDebugEnabled() ) _log.debug( "Lista de dominios: " + datosAuditoria.getListaDominios() );
-		
+
 		return datosAuditoria;
 	}
-	
+
 	private CuadernoCarga obtenerCuadernoCarga( Long codigoCuadernoCarga ) throws Exception
 	{
 		return DelegateUtil.getCuadernoCargaDelegate().obtenerCuadernoCarga( codigoCuadernoCarga );
 	}
-	
+
 	private Set obtenerListaDominiosCuaderno( CuadernoCarga cuadernoCarga )
 	{
 		if ( _log.isDebugEnabled() )
@@ -303,9 +303,9 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 		}
 		return setDominios;
 	}
-	
+
 	/**
-	 * Para un trámite, dominio o formulario, devuelve su versión actual persistente 
+	 * Para un trámite, dominio o formulario, devuelve su versión actual persistente
 	 * @param ficheroCuaderno
 	 * @return TramiteVersion, Dominio o Formulario según el tipo del fichero del cuaderno de carga
 	 * @throws Exception
@@ -319,7 +319,7 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 		if ( ficheroCuaderno.isTramite() )
 		{
 			Object[] tupla = ( Object[] ) obtenerIdVersionTramite( ficheroCuaderno.getNombre() );
-			
+
 			return obtenerTramiteVersionCompleto( (String ) tupla[0], (( Integer ) tupla[1] ).intValue() );
 		}
 		if ( ficheroCuaderno.isForm() )
@@ -336,8 +336,8 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 		}
 		return null;
 	}
-	
-	private Formulario obtenerFormulario( String modelo, int version, boolean completo ) throws org.ibit.rol.form.persistence.delegate.DelegateException
+
+	private Formulario obtenerFormulario( String modelo, int version, boolean completo ) throws Exception
 	{
 		FormularioDelegate formDelegate = org.ibit.rol.form.persistence.delegate.DelegateUtil.getFormularioDelegate();
 		Formulario formulario = formDelegate.obtenerFormulario( modelo, version );
@@ -347,8 +347,8 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 		}
 		return formulario;
 	}
-	
-	
+
+
 	/* NOT USED
 	private TramiteVersion obtenerUltimaVersion ( Tramite tramite ) throws DelegateException
 	{
@@ -367,7 +367,7 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 			for ( Iterator it = versiones.iterator(); it.hasNext(); )
 			{
 				tramiteVersion = ( TramiteVersion ) it.next();
-				
+
 			}
 		}
 		// Si tiene alguna versión, devolvemos la última versión completa
@@ -386,12 +386,12 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 	{
 		return DelegateUtil.getTramiteVersionDelegate().obtenerTramiteVersionCompleto( identificador, version );
 	}
-	
+
 	private Dominio obtenerDominio( String identificadorDominio ) throws DelegateException
 	{
 		return DelegateUtil.getDominioDelegate().obtenerDominio( identificadorDominio );
 	}
-	
+
 	private ElementoAuditoriaDominio auditarDominio( Dominio dominio, Dominio dominioExistente ) throws DelegateException
 	{
 		ElementoAuditoriaDominio datosAuditoria = new ElementoAuditoriaDominio();
@@ -407,7 +407,7 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 		}
 		return datosAuditoria;
 	}
-	
+
 	/**
 	 * Audita la versión de un trámite
 	 * @param versionExistente
@@ -430,7 +430,7 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 			_log.debug( "dominios utilizados por el tramite cuaderno " + domsVersionCuaderno );
 		}
 
-		
+
 		Object[] datosVersionExistente = null;
 		Map scriptsVersionExistente = null;
 		if ( versionExistente != null )
@@ -444,7 +444,7 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 		}
 		return auditarEntidad( scriptsVersionCuaderno, domsVersionCuaderno, scriptsVersionExistente, dominiosCuaderno );
 	}
-	
+
 	/**
 	 * Audita un formulario
 	 * @param formularioAAuditar
@@ -463,13 +463,13 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 		Object[] datosFormularioCuaderno = inspectFormulario( formularioAAuditar );
 		Map scriptsFormularioCuaderno = ( Map ) datosFormularioCuaderno[ SCRIPTS_POSITION ];
 		Set domsFormularioCuaderno = ( Set ) datosFormularioCuaderno [ DOMINIOS_POSITION ];
-		
+
 		if ( _log.isDebugEnabled() )
 		{
 			_log.debug( "scripts formulario cuaderno  " + scriptsFormularioCuaderno );
 			_log.debug( "dominios utilizados por el formulario cuaderno " + domsFormularioCuaderno );
 		}
-		
+
 		Object[] datosFormularioExistente = null;
 		Map scriptsFormularioExistente = null;
 		if ( formularioExistente != null )
@@ -503,13 +503,13 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 		DatosAuditoriaCuaderno datosAuditoria = new DatosAuditoriaCuaderno();
 		Set listaDatosDominio = new LinkedHashSet();
 		List listaDatosScript  = new ArrayList();
-		// Analizamos dominios 
+		// Analizamos dominios
 		for ( Iterator it = dominiosRequeridos.iterator(); it.hasNext(); )
 		{
 			String idDominio = ( String ) it.next();
 			ElementoAuditoriaDominio elementoDominio = new ElementoAuditoriaDominio();
 			Dominio dominioCuaderno = null;
-			Dominio dominioExistente = obtenerDominio( idDominio ); 
+			Dominio dominioExistente = obtenerDominio( idDominio );
 			elementoDominio.setNombre( idDominio );
 			// Comprobamos si viene en el cuaderno de carga
 			for ( Iterator it2 = dominiosCuaderno.iterator(); it2.hasNext(); )
@@ -580,7 +580,7 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 			String estado = null;
 			//ElementoAuditoriaScript elementoAuditoriaScript = new ElementoAuditoriaScript();
 			ElementoAuditoriaScript elementoAuditoriaScript = null;
-			
+
 			// Si no existen scripts para la entidad, se marca como "script nuevo"
 			if ( scriptsExistentes == null )
 			{
@@ -605,7 +605,7 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 				else
 				{
 					String scriptExistente 	= ( String ) scriptsExistentes.get( key );
-					if ( !scriptCuaderno.equals( scriptExistente ) ) 
+					if ( !scriptCuaderno.equals( scriptExistente ) )
 					{
 						if ( _log.isDebugEnabled() )
 						{
@@ -638,10 +638,10 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 		datosAuditoria.setListaScriptsAuditar( listaDatosScript );
 		return datosAuditoria;
 	}
-	 
-	
+
+
 	/**
-	 * 
+	 *
 	 * @param tramiteVersion
 	 * @return
 	 * @throws Exception
@@ -657,7 +657,7 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 		LinkedHashSet setDominios = new LinkedHashSet();
 		//String idTramite = tramiteVersion.getTramite().getIdentificador();
 		int version = tramiteVersion.getVersion();
-		
+
 		inspectEntidad( AuditoriaUtil.getIdTraVer( idTramite, version ), especificacionesGenericas, lhmScripts,  setDominios);
 		List datosJustificante = especificacionesGenericas.getDatosJustificante();
 		for ( Iterator it = datosJustificante.iterator(); it.hasNext(); )
@@ -665,11 +665,11 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 			DatoJustificante datoJustificante = ( DatoJustificante ) it.next();
 			if ( datoJustificante.getTipo() == DatoJustificante.TIPO_CAMPO || datoJustificante.getTipo() == DatoJustificante.TIPO_INDICE)
 			{
-				inspectEntidad( AuditoriaUtil.getIdTraVerJust( idTramite, version, datoJustificante.getTipo(), datoJustificante.getOrden()), 
+				inspectEntidad( AuditoriaUtil.getIdTraVerJust( idTramite, version, datoJustificante.getTipo(), datoJustificante.getOrden()),
 						datoJustificante, lhmScripts, setDominios );
 			}
 		}
-		
+
 		for (Iterator it = tramiteVersion.getNiveles().iterator();it.hasNext();)
 		{
     		TramiteNivel tn  = (TramiteNivel) it.next();
@@ -692,9 +692,9 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
     	}
 		return new Object[] { lhmScripts, setDominios };
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param formulario
 	 * @return
 	 * @throws Exception
@@ -703,12 +703,12 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 	{
 		LinkedHashMap lhmScripts = new LinkedHashMap();
 		LinkedHashSet listaDominios = new LinkedHashSet();
-		for (int i = 0; i < formulario.getPantallas().size(); i++) 
+		for (int i = 0; i < formulario.getPantallas().size(); i++)
 		{
 	         Pantalla pantalla = (Pantalla)formulario.getPantallas().get(i);
 	         String idPantalla = AuditoriaUtil.getIdPantalla( formulario.getModelo(), formulario.getVersion(), pantalla.getNombre() );
 	         inspectEntidad( idPantalla, pantalla, lhmScripts, listaDominios );
-	         for (int j = 0; j < pantalla.getCampos().size(); j++) 
+	         for (int j = 0; j < pantalla.getCampos().size(); j++)
 	         {
 	        	 Campo campo =  (Campo)pantalla.getCampos().get(j);
 	        	 campo.getTipoValor();
@@ -720,11 +720,11 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 	        	 }
 	         }
 		}
-		for (int i = 0; i < formulario.getSalidas().size(); i++) 
+		for (int i = 0; i < formulario.getSalidas().size(); i++)
 		{
             Salida salida = (Salida) formulario.getSalidas().get(i);
             salida.getPunto().getNombre();
-            for (Iterator iterator = salida.getPropiedades().iterator(); iterator.hasNext();) 
+            for (Iterator iterator = salida.getPropiedades().iterator(); iterator.hasNext();)
             {
                 PropiedadSalida propiedad = (PropiedadSalida) iterator.next();
                 if ( propiedad.isExpresion() )
@@ -735,8 +735,8 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
         }
 		return new Object[] { lhmScripts, listaDominios };
 	}
-	
-	
+
+
 	/**
 	 * Metodo que ejecuta los métodos que pueden contener scripts para la entidad.
 	 * Analiza la entidad y obtiene los scripts utilizados, así como los dominios que son necesarios
@@ -759,12 +759,12 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 			String nombrePropiedad = propiedadesAuditar[i];
 			String methodName = "get" + StringUtils.capitalise( nombrePropiedad );
 			Object objValPropiedad = MethodUtils.invokeMethod( object, methodName, null );
-			String script = null;  
+			String script = null;
 			if ( objValPropiedad == null )
 			{
 				continue;
 			}
-			
+
 			if ( objValPropiedad instanceof byte[] )
 			{
 				script = ScriptUtil.scriptToString( ( byte [] ) objValPropiedad );
@@ -773,44 +773,44 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 			{
 				script = ( String ) objValPropiedad;
 			}
-			
+
 			if ( _log.isDebugEnabled() )
 			{
 				_log.debug( identificador + " property " + nombrePropiedad + " has value " + script );
 			}
-			
+
 			listaAuditoria.put( identificador + "-" + nombrePropiedad, script );
-			dominios.addAll ( obtenerListaDominiosUtilizados( script ) ); 
+			dominios.addAll ( obtenerListaDominiosUtilizados( script ) );
 			if ( _log.isDebugEnabled() )
 			{
 				_log.debug( "Dominios utilizados tras el paso por el identificador " + identificador + ": " + dominios );
 			}
 		}
-		
-		
-			
+
+
+
 		//propsAuditoria
 	}
-	
+
 	private Set obtenerListaDominiosUtilizados( String script )
 	{
 		LinkedHashSet set = new LinkedHashSet();
-		
+
 		Matcher matcher = PATTERN1.matcher( script );
 		while ( matcher.find() )
 		{
 			set.add( matcher.group( 2 ) );
 		}
-		
+
 		Matcher matcher2 = PATTERN2.matcher( script );
 		while ( matcher2.find() )
 		{
 			set.add( matcher2.group( 2 ) );
 		}
-		
+
 		return set;
 	}
-	
+
 	private String obtenerIdEntidad( String nomFicXml )
 	{
 		String idTramite = null;
@@ -829,7 +829,7 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 		}
 		return idTramite;
 	}
-	
+
 	private Object[] obtenerIdVersionTramite( String nomFicXml ) throws Exception
 	{
 		String idTramite = null;
@@ -851,12 +851,12 @@ public class AuditoriaCuadernoFacadeEJB implements SessionBean
 		return new Object [] { idTramite, new Integer( verTramite ) };
 	}
 
-	
+
 	private String removeExtension( String fileName )
 	{
 		return fileName.replaceAll( "\\..*$", "" );
 	}
-	
-	
+
+
 
 }

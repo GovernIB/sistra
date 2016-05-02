@@ -9,6 +9,7 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 import javax.ejb.RemoveException;
 import javax.naming.NamingException;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -178,14 +179,14 @@ public class InstanciaLocalDelegate implements InstanciaDelegate {
             throw new DelegateException(e);
         }
     }
-    
+
     public synchronized Object expresionAutorellenableCampo(String nombre) throws DelegateException {
         try {
             return local.expresionAutorellenableCampo(nombre);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
-    }  
+    }
 
     public synchronized boolean expresionDependenciaCampo(String nombre) throws DelegateException {
         try {
@@ -194,7 +195,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate {
             throw new DelegateException(e);
         }
     }
-    
+
     public synchronized String expresionDependenciaCampoV2(String nombre) throws DelegateException {
         try {
             return local.expresionDependenciaCampoV2(nombre);
@@ -274,7 +275,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate {
             throw new DelegateException(e);
         }
     }
-    
+
     public synchronized void regenerarCaptcha(String fieldName) throws DelegateException {
         try {
             local.regenerarCaptcha(fieldName);
@@ -282,7 +283,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate {
             throw new DelegateException(e);
         }
     }
-    
+
     public Result[] ejecutarSalidas() throws DelegateException {
         try {
             return local.ejecutarSalidas();
@@ -291,7 +292,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate {
         }
     }
 
-    
+
     public synchronized void destroy() {
         try {
             if (local != null) {
@@ -303,7 +304,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate {
             ;
         }
     }
-    
+
     // --- INDRA: LISTA ELEMENTOS
     public synchronized List obtenerDatosListaElementos(String nombreCampo) throws DelegateException {
     	try {
@@ -320,7 +321,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate {
             throw new DelegateException(e);
         }
 	}
-	
+
 	public synchronized void avanzarPantallaDetalle(String campo, String accion, String index) throws DelegateException {
 		try {
             local.avanzarPantallaDetalle(campo,accion,index);
@@ -328,7 +329,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate {
             throw new DelegateException(e);
         }
 	}
-	
+
 	 public synchronized void retrocederPantallaDetalle(boolean saveData) throws DelegateException{
 			try {
 	            local.retrocederPantallaDetalle(saveData);
@@ -336,30 +337,30 @@ public class InstanciaLocalDelegate implements InstanciaDelegate {
 	            throw new DelegateException(e);
 	        }
 		}
-	
+
 	public synchronized void eliminarElemento(String campo,String indice) throws DelegateException {
 		try {
             local.eliminarElemento(campo,indice);
         } catch (EJBException e) {
             throw new DelegateException(e);
-        }			
+        }
 	}
-	
+
 	public synchronized Map obtenerDatosListasElementos() throws DelegateException {
 		try {
             return local.obtenerDatosListasElementos();
         } catch (EJBException e) {
             throw new DelegateException(e);
-        }			
+        }
 	}
-	
+
 	public synchronized void subirElemento(String campo, String indice) throws DelegateException {
 		try {
             local.subirElemento(campo,indice);
         } catch (EJBException e) {
             throw new DelegateException(e);
-        }	
-		
+        }
+
 	}
 
 	public synchronized void bajarElemento(String campo, String indice) throws DelegateException {
@@ -367,31 +368,39 @@ public class InstanciaLocalDelegate implements InstanciaDelegate {
             local.bajarElemento(campo,indice);
         } catch (EJBException e) {
             throw new DelegateException(e);
-        }	
-		
+        }
+
 	}
     // --- INDRA: LISTA ELEMENTOS
-	
-	
-	
+
+
+
 	// -- INDRA: LOG SCRIPTS
     public List obtenerLogScripts() throws DelegateException{
     	try {
            return local.obtenerLogScripts();
         } catch (EJBException e) {
             throw new DelegateException(e);
-        }	
+        }
     }
-    
+
     public void limpiarLogScripts() throws DelegateException{
     	try {
             local.limpiarLogScripts();
         } catch (EJBException e) {
             throw new DelegateException(e);
-        }	
+        }
     }
-    // -- INDRA: LOG SCRIPTS   
-    
+    // -- INDRA: LOG SCRIPTS
+
+    public boolean isDebugEnabled() throws DelegateException{
+    	try {
+            return local.isDebugEnabled();
+        } catch (EJBException e) {
+            throw new DelegateException(e);
+        }
+    }
+
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
@@ -401,11 +410,11 @@ public class InstanciaLocalDelegate implements InstanciaDelegate {
     protected InstanciaLocalDelegate() {
     }
 
-	
 
-	
 
-	
-	
+
+
+
+
 
 }

@@ -16,7 +16,7 @@ import es.caib.audita.persistence.delegate.DelegateUtil;
  *  path="/inicio"
  *  scope="request"
  *  validate="false"
- *  
+ *
  *  @struts.action-forward
  *  name="success" path=".inicio"
  *
@@ -27,16 +27,15 @@ import es.caib.audita.persistence.delegate.DelegateUtil;
 public class InicioAction extends BaseAction
 {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-            HttpServletResponse response) throws Exception 
+            HttpServletResponse response) throws Exception
     {
-		//_log.debug( "execute" );
-		
-		
-		
+
+
+
 		AuditoriaDelegate delegate = DelegateUtil.getAuditoriaDelegate();
 		CuadroMandoInicio cuadroMandoDetalle = delegate.obtenerCuadroMandoInicio(getLang(request));
 		request.setAttribute( "cuadro", cuadroMandoDetalle);
-		
+
 
 		return mapping.findForward( "success" );
     }

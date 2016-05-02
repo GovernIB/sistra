@@ -336,7 +336,7 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
     
 	/**
 	 * Valida cambio de datos de la persona PAD y devuelve codigos de error
-	 * @throws ExcepcionPAD 
+	 * 
 	 * 
 	 * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"

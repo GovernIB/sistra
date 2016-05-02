@@ -19,6 +19,8 @@ import es.caib.sistra.front.util.TramiteRequestHelper;
 import es.caib.sistra.model.RespuestaFront;
 import es.caib.sistra.model.TramiteFront;
 
+import org.apache.commons.logging.Log;
+
 /**
  * Controller con métodos de utilidad.
  */
@@ -56,27 +58,27 @@ public abstract class BaseController implements Controller {
         return TramiteRequestHelper.getLocale( request );
 
     }
-    
+
     protected RespuestaFront getRespuestaFront( HttpServletRequest request )
     {
     	return TramiteRequestHelper.getRespuestaFront( request );
     }
-    
+
     protected TramiteFront getTramiteFront( HttpServletRequest request )
     {
     	return TramiteRequestHelper.getTramiteFront( request );
     }
-    
+
     protected Principal getPrincipal( HttpServletRequest request )
     {
     	return TramiteRequestHelper.getPrincipal( request );
     }
-    
+
     protected char getMetodoAutenticacion( HttpServletRequest request ) throws Exception
     {
     	return TramiteRequestHelper.getMetodoAutenticacion( request );
     }
-    
+
     protected Map getParametros( HttpServletRequest request )
     {
     	return TramiteRequestHelper.getParametros( request );

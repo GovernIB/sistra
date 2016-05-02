@@ -20,36 +20,36 @@ import org.xml.sax.SAXException;
 import es.caib.sistra.model.betwixt.Configurator;
 
 public class TramiteVersion  implements TramiteEspecificado, Serializable {
-	
+
 	public final static char CONSULTA_EJB='E';
 	public final static char CONSULTA_WEBSERVICE='W';
-	
+
 	public final static char EJB_REMOTO = 'R';
 	public final static char EJB_LOCAL  = 'L';
-	
+
 	public final static char AUTENTICACION_EXPLICITA_SINAUTENTICAR 	= 'N';
-	public final static char AUTENTICACION_EXPLICITA_ESTANDAR 	= 'S';	
-	public final static char AUTENTICACION_EXPLICITA_ORGANISMO 	= 'C';	
-	
-    // Fields    
+	public final static char AUTENTICACION_EXPLICITA_ESTANDAR 	= 'S';
+	public final static char AUTENTICACION_EXPLICITA_ORGANISMO 	= 'C';
+
+    // Fields
      private Long codigo;
      private EspecTramiteNivel especificaciones;
      private Tramite tramite;
      private int version;
      private String motivo;
      private String organoDestino;
-     private Long unidadAdministrativa;     
+     private Long unidadAdministrativa;
      private Timestamp InicioPlazo;
-     private Timestamp FinPlazo;    
+     private Timestamp FinPlazo;
      private char destino;
      private char preenvioConfirmacionAutomatica='N';
-     private char firmar='N';     
+     private char firmar='N';
      private String registroOficina;
      private String registroAsunto;
      private char consultaTipoAcceso=CONSULTA_EJB;
      private String consultaEJB;
-     private char consultaLocalizacion = EJB_LOCAL;     
-     private String consultaUrl;     
+     private char consultaLocalizacion = EJB_LOCAL;
+     private String consultaUrl;
      private String consultaWSVersion;
      private char consultaAuth=AUTENTICACION_EXPLICITA_SINAUTENTICAR ;
      private String consultaAuthUser;
@@ -60,20 +60,22 @@ public class TramiteVersion  implements TramiteEspecificado, Serializable {
      private char reducido='N';
      private char redireccionFin='N';
      private char registroAutomatico='N';
-     
+
      private String cuadernoCargaTag;
      private Date fechaExportacion;
-     
+
      private char anonimoDefecto = 'N';
-     
+
      private Set niveles = new HashSet(0);
      //private Map niveles = new HashMap(0);
-     private Map mensajes= new HashMap(0);     
+     private Map mensajes= new HashMap(0);
      private Set documentos = new HashSet(0);
-     
+
+     private char debugEnabled='N';
+
     // Constructors
 
-    /** default constructor */
+	/** default constructor */
     public TramiteVersion() {
     }
 
@@ -149,16 +151,16 @@ public class TramiteVersion  implements TramiteEspecificado, Serializable {
 		this.version = version;
 	}
 
-	
+
 	/*
-	public void addMensaje(MensajeTramite mens) {    	
+	public void addMensaje(MensajeTramite mens) {
 		mens.setTramiteVersion(this);
     	mensajes.put(mens.getIdentificador(),mens);
     }
     */
-	
+
 	/**
-	 *	Para compatibilidad con betwixt 
+	 *	Para compatibilidad con betwixt
 	 * @param identificador
 	 * @param mens
 	 */
@@ -168,75 +170,75 @@ public class TramiteVersion  implements TramiteEspecificado, Serializable {
 		mensajes.put( identificador, mens );
 	}
 
-    public void removeMensaje(MensajeTramite mens) {    	
-    	mensajes.remove(mens.getIdentificador());    	
-    }	
-	
-    public void addDocumento(Documento doc) {    	
+    public void removeMensaje(MensajeTramite mens) {
+    	mensajes.remove(mens.getIdentificador());
+    }
+
+    public void addDocumento(Documento doc) {
     	doc.setTramiteVersion(this);
     	documentos.add(doc);
     }
 
-    public void removeDocumento(Documento doc) {    	
-    	documentos.remove(doc);    	
+    public void removeDocumento(Documento doc) {
+    	documentos.remove(doc);
     }
 
     public Set getNiveles() {
 		return niveles;
 	}
-	
+
 	public void setNiveles(Set niveles) {
 		this.niveles = niveles;
 	}
-	
+
 	/**
 	 * Metodo por compatibilidad con betwixt
 	 * @param nivel
-	 */ 
-	public void addNivele(TramiteNivel nivel) {    	
+	 */
+	public void addNivele(TramiteNivel nivel) {
 	    	this.addTramiteNivel( nivel );
 	 }
-	 
-	 public void addTramiteNivel(TramiteNivel nivel) {    	
+
+	 public void addTramiteNivel(TramiteNivel nivel) {
 	    	nivel.setTramiteVersion(this);
 	        niveles.add(nivel);
 	 }
-	 
-    public void removeNivel(TramiteNivel nivel) {    	
-    	niveles.remove(nivel);    	
-    }	
-    
+
+    public void removeNivel(TramiteNivel nivel) {
+    	niveles.remove(nivel);
+    }
+
 	public void setCurrentLang(String currentLang) {
-		
+
         for (Iterator iterator = niveles.iterator();iterator.hasNext();) {
             TramiteNivel tramiteNivel = (TramiteNivel) iterator.next();
             tramiteNivel.setCurrentLang(currentLang);
         }
-        
+
         for (Iterator iterator = documentos.iterator();iterator.hasNext();) {
             Documento documento = (Documento) iterator.next();
             documento.setCurrentLang(currentLang);
-        } 
-        
+        }
+
         for (Iterator iterator = mensajes.keySet().iterator();iterator.hasNext();) {
         	String ls_key = (String) iterator.next();
             MensajeTramite mensajeTramite = (MensajeTramite) mensajes.get(ls_key);
             mensajeTramite.setCurrentLang(currentLang);
         }
-        
+
         especificaciones.setCurrentLang(currentLang);
     }
-    
-    
+
+
 	public TramiteNivel getTramiteNivel(char nivel) {
 		// Buscamos tramite que tenga especificado el nivel
 		for (Iterator it=niveles.iterator();it.hasNext();){
 			TramiteNivel tn = (TramiteNivel) it.next();
 			if (tn.getNivelAutenticacion().indexOf(nivel) != -1) return tn;
-		}		
+		}
 		return null;
  	}
-	
+
     /*
     public Map getNiveles() {
 		return niveles;
@@ -245,44 +247,44 @@ public class TramiteVersion  implements TramiteEspecificado, Serializable {
 	public void setNiveles(Map niveles) {
 		this.niveles = niveles;
 	}
-	
+
 	public TramiteNivel getTramiteNivel(char nivel) {
 		return (TramiteNivel) this.niveles.get(Character.toString(nivel));
 	}
-	
-	public void addTramiteNivel(TramiteNivel nivel) {		
+
+	public void addTramiteNivel(TramiteNivel nivel) {
     	nivel.setTramiteVersion(this);
-    	niveles.put(nivel.getNivelAutenticacion(),nivel);        
+    	niveles.put(nivel.getNivelAutenticacion(),nivel);
 	}
- 
-	public void removeNivel(TramiteNivel nivel) {    	
-		niveles.remove(nivel.getNivelAutenticacion());    	
-	}	
-		
+
+	public void removeNivel(TramiteNivel nivel) {
+		niveles.remove(nivel.getNivelAutenticacion());
+	}
+
 	public void setCurrentLang(String currentLang) {
-		
+
         for (Iterator iterator = niveles.keySet().iterator();iterator.hasNext();) {
-        	String ls_key = (String) iterator.next();        	
-            TramiteNivel tramiteNivel = (TramiteNivel) niveles.get(ls_key); 
+        	String ls_key = (String) iterator.next();
+            TramiteNivel tramiteNivel = (TramiteNivel) niveles.get(ls_key);
             tramiteNivel.setCurrentLang(currentLang);
         }
-        
+
         for (Iterator iterator = documentos.iterator();iterator.hasNext();) {
             Documento documento = (Documento) iterator.next();
             documento.setCurrentLang(currentLang);
-        } 
-        
+        }
+
         for (Iterator iterator = mensajes.keySet().iterator();iterator.hasNext();) {
         	String ls_key = (String) iterator.next();
             MensajeTramite mensajeTramite = (MensajeTramite) mensajes.get(ls_key);
             mensajeTramite.setCurrentLang(currentLang);
         }
-        
+
         especificaciones.setCurrentLang(currentLang);
     }
 
 	*/
-    
+
 	public String getConsultaEJB() {
 		return consultaEJB;
 	}
@@ -420,7 +422,7 @@ public class TramiteVersion  implements TramiteEspecificado, Serializable {
 	public void setConsultaAuthUser(String consultaAuthUser) {
 		this.consultaAuthUser = consultaAuthUser;
 	}
-	
+
 	public static TramiteVersion fromXml( byte[] xml )
 	{
 		TramiteVersion t = null;
@@ -444,7 +446,7 @@ public class TramiteVersion  implements TramiteEspecificado, Serializable {
 		}
 		return t;
 	}
-	
+
 	public byte[] toXml()
     {
 		byte[] result = null;
@@ -530,7 +532,14 @@ public class TramiteVersion  implements TramiteEspecificado, Serializable {
 		this.registroAutomatico = registroAutomatico;
 	}
 
-	
-	
+	public char getDebugEnabled() {
+		return debugEnabled;
+	}
+
+	public void setDebugEnabled(char debugEnabled) {
+		this.debugEnabled = debugEnabled;
+	}
+
+
 
 }

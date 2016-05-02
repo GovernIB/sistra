@@ -28,7 +28,7 @@ import es.caib.sistra.persistence.delegate.InstanciaDelegate;
  *
  * @struts.action-forward
  *  name="urlfin" path="/protected/finalizar.do"
- *  
+ *
  * @struts.action-forward
  *  name="error" path="/fail.do"
  *
@@ -43,8 +43,6 @@ public class RegistrarTramiteReducido extends BaseAction
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
-		if ( _log.isDebugEnabled() )
-		_log.debug( "Registro circuito reducido" );
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request );
 		// 1º Nos posicionamos en el paso registrar
 		RespuestaFront respuestaFront = null;
@@ -53,32 +51,32 @@ public class RegistrarTramiteReducido extends BaseAction
 		{
 			// Avanzamos hasta paso registrar
 			respuestaFront = delegate.siguientePaso();
-			
+
 			// Controlamos si hay error
-			if (respuestaFront.getMensaje() != null && 
+			if (respuestaFront.getMensaje() != null &&
 				 (respuestaFront.getMensaje().getTipo() ==	 MensajeFront.TIPO_ERROR || respuestaFront.getMensaje().getTipo() == MensajeFront.TIPO_ERROR_CONTINUABLE )
 				){
 					this.setRespuestaFront(request,respuestaFront);
 					return null;
 			}
-			
+
 			// Si no avanzamos de paso -> error
-			if (respuestaFront.getInformacionTramite().getPasoTramitacion().getTipoPaso() == tipoPasoAnterior) 
+			if (respuestaFront.getInformacionTramite().getPasoTramitacion().getTipoPaso() == tipoPasoAnterior)
 				throw new Exception("La configuracion del tramite no es correcta para circuito reducido: no se puede avanzar hasta el paso registrar despues de rellenar");
 			else
 				tipoPasoAnterior = respuestaFront.getInformacionTramite().getPasoTramitacion().getTipoPaso();
-		}while( respuestaFront.getInformacionTramite().getPasoTramitacion().getTipoPaso() < PasoTramitacion.PASO_REGISTRAR );		
-		
+		}while( respuestaFront.getInformacionTramite().getPasoTramitacion().getTipoPaso() < PasoTramitacion.PASO_REGISTRAR );
+
 		// 2º Obtenemos el asiento registral
 		AsientoCompleto asiento = (AsientoCompleto) respuestaFront.getParametros().get( "asiento" );
-		
+
 		// 3º Registramos el trámite
 		RespuestaFront res = delegate.registrarTramite( asiento.getAsiento(), null );
 		this.setRespuestaFront( request, res );
-		
+
 		// 4º Redirigimos a paso final
 			// Controlamos si esta activado la redirección a la url de finalización
-		if (	
+		if (
 				respuestaFront.getInformacionTramite().getPasoTramitacion().getTipoPaso() == PasoTramitacion.PASO_FINALIZAR &&
 				respuestaFront.getInformacionTramite().isRedireccionFin()
 			){

@@ -10,25 +10,25 @@ import java.util.Map;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 
 /**
- * Clase que se utiliza para pasar al front la 
+ * Clase que se utiliza para pasar al front la
  * información del trámite
  */
 public class TramiteFront  implements Serializable{
-	
+
 	/**
 	 * Modelo del trámite
 	 */
 	private String modelo;
-	
+
 	/**
 	 * Versión del trámite
 	 */
 	private int version;
-	
+
 	/**
 	 * Datos de la sesión
 	 */
-	private DatosSesion datosSesion;	
+	private DatosSesion datosSesion;
 	/**
 	 * Descripcion del trámite
 	 */
@@ -55,11 +55,11 @@ public class TramiteFront  implements Serializable{
 	 */
 	private char tipoTramitacionDependiente;
 	/**
-	 * Permite flujo de tramitacion 
+	 * Permite flujo de tramitacion
 	 */
 	private boolean flujoTramitacion=false;
 	/**
-	 * Pasar a Nif Flujo: Si tiene valor indica que el trámite esta pendiente de pasar a ese nif 
+	 * Pasar a Nif Flujo: Si tiene valor indica que el trámite esta pendiente de pasar a ese nif
 	 */
 	private String flujoTramitacionNif;
 	/**
@@ -80,23 +80,23 @@ public class TramiteFront  implements Serializable{
 	 */
 	private boolean remitirDelegacionPresentacion=false;
 	/**
-	 * Descargar plantillas 
+	 * Descargar plantillas
 	 */
 	private boolean descargarPlantillas=false;
 	/**
-	 * Instrucciones inicio del trámite 
+	 * Instrucciones inicio del trámite
 	 */
 	private String informacionInicio;
 	/**
-	 * Instrucciones finalización del trámite 
+	 * Instrucciones finalización del trámite
 	 */
 	private String instruccionesFin;
 	/**
-	 * Instrucciones entrega del trámite 
+	 * Instrucciones entrega del trámite
 	 */
 	private String instruccionesEntrega;
 	/**
-	 * Mensaje fecha limite para entrega presencial 
+	 * Mensaje fecha limite para entrega presencial
 	 */
 	private String mensajeFechaLimiteEntregaPresencial;
 	/**
@@ -135,78 +135,89 @@ public class TramiteFront  implements Serializable{
 	 * Lista de anexos
 	 */
 	private ArrayList anexos=new ArrayList();
-	
+
 	/**
 	 * Indica si es un trámite con circuito reducido
 	 */
 	private boolean circuitoReducido = false;
-	
+
 	/**
 	 * Indica si tras enviar un trámite se redirige a la url de finalización sin mostrar pantalla justificante
 	 */
 	private boolean redireccionFin = false;
-	
+
 	/**
 	 * Indica si se realiza el registro automaticamente al entrar al paso de registro.
 	 */
 	private boolean registroAutomatico = false;
-	
+
 	/**
 	 * Plazo inicio presentacion tramite
 	 */
 	private Date fechaInicioPlazo=null;
-	
+
 	/**
 	 * Plazo fin presentacion tramite
 	 */
 	private Date fechaFinPlazo=null;
-	
+
 	/**
 	 * Tag cuaderno de carga al que pertenece
 	 */
 	private String tagCuadernoCarga;
-	
+
 	/**
 	 * Map con los mensajes genéricos de plataforma
 	 */
 	private Map mensajesPlataforma = new HashMap();
-	
+
 	/**
 	 * Fecha de exportación del xml del cual se ha importado
 	 */
 	private Date fechaExportacion;
-	
+
 	/**
 	 * Indica el trámite permite notificación telemática ( N No / S Si  / O Obligatoria)
 	 */
 	private String habilitarNotificacionTelematica;
-	
+
 	/**
 	 * Indica la seleccion del ciudadano en caso de que el trámite permita notificación telemática
 	 */
-	private Boolean seleccionNotificacionTelematica;	
-	
+	private Boolean seleccionNotificacionTelematica;
+
 	/**
 	 * Indica si son obligatorios los avisos para las notificaciones
 	 */
 	private boolean obligatorioAvisosNotificaciones;
-	
+
 	/**
 	 * Indica si permite que el ciudadano establezca un sms si activa lo avisos.
 	 */
 	private boolean permiteSMS;
-	
+
 	/**
 	 * Indica el email del ciudadano en caso de que active los avisos
 	 */
 	private String seleccionEmailAviso;
-	
+
 	/**
 	 * Indica el sms del ciudadano en caso de que active los avisos
 	 */
 	private String seleccionSmsAviso;
-	
-	
+
+	/**
+	 * Debug enabled.
+	 */
+	private boolean debugEnabled;
+
+
+	public boolean isDebugEnabled() {
+		return debugEnabled;
+	}
+	public void setDebugEnabled(boolean debugEnabled) {
+		this.debugEnabled = debugEnabled;
+	}
 	public String getDescripcion() {
 		return descripcion;
 	}
@@ -219,7 +230,7 @@ public class TramiteFront  implements Serializable{
 	public void setDiasPersistencia(int diasPersistencia) {
 		this.diasPersistencia = diasPersistencia;
 	}
-	
+
 	public boolean getFirmar() {
 		return firmar;
 	}
@@ -306,10 +317,10 @@ public class TramiteFront  implements Serializable{
 	public void setCompulsarDocumentos(char compulsarDocumentos) {
 		this.compulsarDocumentos = compulsarDocumentos;
 	}
-	
+
 	/**
 	 * Indice del paso que representa el punto de no retorno.
-	 * ( el indice del paso PASO_REGISTRAR ) 
+	 * ( el indice del paso PASO_REGISTRAR )
 	 */
 	public int getPasoNoRetorno()
 	{
@@ -339,8 +350,8 @@ public class TramiteFront  implements Serializable{
 	}
 	public void setTipoTramitacionDependiente(char tipoTramitacionDependiente) {
 		this.tipoTramitacionDependiente = tipoTramitacionDependiente;
-	}	
-	
+	}
+
 	public PasoTramitacion getPasoTramitacion()
 	{
 		ArrayList pasos = this.getPasos();
@@ -350,7 +361,7 @@ public class TramiteFront  implements Serializable{
 		}
 		return null;
 	}
-	
+
 	private DocumentoFront getDocumentoPorIdentificadorEInstancia( java.util.List lDocumentos, String identificador, int instancia )
 	{
 		for ( Iterator it = lDocumentos.iterator(); it.hasNext(); )
@@ -363,7 +374,7 @@ public class TramiteFront  implements Serializable{
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Obtiene numero de instancias correctas para un identificador
 	 * @param lDocumentos
@@ -383,23 +394,23 @@ public class TramiteFront  implements Serializable{
 		}
 		return num;
 	}
-		
-	
+
+
 	public DocumentoFront getPago( String identificador, int instancia )
 	{
 		return getDocumentoPorIdentificadorEInstancia( getPagos(), identificador, instancia );
 	}
-	
+
 	public DocumentoFront getAnexo( String identificador, int instancia )
 	{
 		return getDocumentoPorIdentificadorEInstancia( getAnexos(), identificador, instancia );
 	}
-	
+
 	public DocumentoFront getFormulario( String identificador, int instancia )
 	{
 		return getDocumentoPorIdentificadorEInstancia( getFormularios(), identificador, instancia );
 	}
-	
+
 	/**
 	 * Obtiene numero de instancias para un documento anexo
 	 * @param identificador
@@ -409,7 +420,7 @@ public class TramiteFront  implements Serializable{
 	{
 		return getNumeroInstanciasPorIdentificador( getAnexos(), identificador);
 	}
-	
+
 	/**
 	 * Indica si se ha iniciado el proceso de pagos y no dejamos modificar formularios
 	 */
@@ -550,7 +561,7 @@ public class TramiteFront  implements Serializable{
 	public void setRemitirDelegacionPresentacion(
 			boolean remitirDelegacionPresentacion) {
 		this.remitirDelegacionPresentacion = remitirDelegacionPresentacion;
-	}	
+	}
 	public boolean isPermiteSMS() {
 		return permiteSMS;
 	}
@@ -582,5 +593,5 @@ public class TramiteFront  implements Serializable{
 	public void setRegistroAutomatico(boolean registroAutomatico) {
 		this.registroAutomatico = registroAutomatico;
 	}
-	
+
 }

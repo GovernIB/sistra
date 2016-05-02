@@ -35,10 +35,10 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 
 	public InstanciaBean obtenerInstanciaBean() throws DelegateException
 	{
-		try 
+		try
         {
         	return local.obtenerInstanciaBean();
-        } catch (EJBException e) 
+        } catch (EJBException e)
         {
             throw new DelegateException(e);
         }
@@ -46,33 +46,33 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 
 	public RespuestaFront informacionInicial() throws DelegateException
 	{
-        try 
+        try
         {
         	return local.informacionInicial();
-        } catch (EJBException e) 
+        } catch (EJBException e)
         {
             throw new DelegateException(e);
         }
 	}
-	
+
 	public RespuestaFront obtenerTramitesPersistencia(String tramite,int version) throws DelegateException
 	{
-        try 
+        try
         {
         	return local.obtenerTramitesPersistencia(tramite,version);
-        } catch (EJBException e) 
+        } catch (EJBException e)
         {
             throw new DelegateException(e);
         }
 	}
-		
+
 	public RespuestaFront iniciarTramite() throws DelegateException
 	{
-        try 
+        try
         {
         	return local.iniciarTramite();
-        } 
-        catch (EJBException e) 
+        }
+        catch (EJBException e)
         {
             throw new DelegateException(e);
         }
@@ -81,23 +81,23 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 	public RespuestaFront cargarTramite(String idPersistencia)
 			throws DelegateException
 	{
-        try 
+        try
         {
         	return local.cargarTramite(idPersistencia );
-        } 
-        catch (EJBException e) 
+        }
+        catch (EJBException e)
         {
             throw new DelegateException(e);
         }
 	}
-	
+
 	public RespuestaFront pasoActual() throws DelegateException
 	{
-        try 
+        try
         {
         	return local.pasoActual();
-        } 
-        catch (EJBException e) 
+        }
+        catch (EJBException e)
         {
             throw new DelegateException(e);
         }
@@ -105,11 +105,11 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 
 	public RespuestaFront siguientePaso() throws DelegateException
 	{
-        try 
+        try
         {
         	return local.siguientePaso();
-        } 
-        catch (EJBException e) 
+        }
+        catch (EJBException e)
         {
             throw new DelegateException(e);
         }
@@ -117,11 +117,11 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 
 	public RespuestaFront anteriorPaso() throws DelegateException
 	{
-        try 
+        try
         {
         	return local.anteriorPaso();
-        } 
-        catch (EJBException e) 
+        }
+        catch (EJBException e)
         {
             throw new DelegateException(e);
         }
@@ -129,11 +129,11 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 
 	public RespuestaFront irAPaso(int paso) throws DelegateException
 	{
-        try 
+        try
         {
         	return local.irAPaso( paso );
-        } 
-        catch (EJBException e) 
+        }
+        catch (EJBException e)
         {
             throw new DelegateException(e);
         }
@@ -142,11 +142,11 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 	public RespuestaFront irAFormulario(String identificador, int instancia)
 			throws DelegateException
 	{
-        try 
+        try
         {
         	return local.irAFormulario( identificador, instancia );
-        } 
-        catch (EJBException e) 
+        }
+        catch (EJBException e)
         {
             throw new DelegateException(e);
         }
@@ -156,11 +156,11 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 			int instancia, String datosAnteriores, String datosNuevos, boolean guardadoSinFinalizar)
 			throws DelegateException
 	{
-        try 
+        try
         {
         	return local.guardarFormulario( identificador, instancia, datosAnteriores, datosNuevos , guardadoSinFinalizar);
-        } 
-        catch (EJBException e) 
+        }
+        catch (EJBException e)
         {
             throw new DelegateException(e);
         }
@@ -169,10 +169,10 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 	public RespuestaFront borrarAnexo(String identificador, int instancia)
 			throws DelegateException
 	{
-        try 
+        try
         {
         	return local.borrarAnexo( identificador, instancia );
-        } 
+        }
         catch (EJBException e) {
             throw new DelegateException(e);
         }
@@ -180,44 +180,44 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 
 	public RespuestaFront anexarDocumento(String identificador,int instancia, String descPersonalizada, FirmaIntf firma, boolean firmaDelegada) throws DelegateException
 	{
-        try 
+        try
         {
         	return local.anexarDocumento( identificador, instancia, descPersonalizada, firma, firmaDelegada );
-        } catch (EJBException e) 
+        } catch (EJBException e)
         {
             throw new DelegateException(e);
         }
 	}
-	
+
 	public RespuestaFront uploadAnexo(String identificador,int instancia,byte[] datosDocumento,String nomFichero,String extension,String descPersonalizada) throws DelegateException
 	{
-        try 
+        try
         {
         	return local.uploadAnexo(identificador, instancia, datosDocumento, nomFichero, extension, descPersonalizada);
-        } catch (EJBException e) 
+        } catch (EJBException e)
         {
             throw new DelegateException(e);
         }
 	}
-	
+
 	public RespuestaFront downloadAnexo(String identificador,int instancia) throws DelegateException
 	{
-        try 
+        try
         {
         	return local.downloadAnexo( identificador, instancia);
-        } catch (EJBException e) 
+        } catch (EJBException e)
         {
             throw new DelegateException(e);
         }
 	}
-	
+
 	public RespuestaFront irAPago(String identificador, int instancia, String urlRetorno, String urlMantenimientoSesion) throws DelegateException
 	{
-		try 
+		try
         {
 			return local.irAPago( identificador, instancia, urlRetorno, urlMantenimientoSesion );
-        } 
-		catch (EJBException e) 
+        }
+		catch (EJBException e)
         {
             throw new DelegateException(e);
         }
@@ -225,76 +225,76 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 
 	public RespuestaFront confirmarPago(String identificador, int instancia) throws DelegateException
 	{
-		try 
+		try
         {
 			return local.confirmarPago( identificador, instancia);
         }
-		catch (EJBException e) 
+		catch (EJBException e)
         {
             throw new DelegateException(e);
         }
 	}
-	
+
 	public RespuestaFront anularPago(String identificador, int instancia) throws DelegateException
 	{
-		try 
+		try
         {
 			return local.anularPago( identificador, instancia);
         }
-		catch (EJBException e) 
+		catch (EJBException e)
         {
             throw new DelegateException(e);
         }
 	}
-	
+
 	public RespuestaFront borrarTramite() throws DelegateException
 	{
-        try 
+        try
         {
         	return local.borrarTramitePersistencia();
-        } 
-        catch (EJBException e) 
+        }
+        catch (EJBException e)
         {
             throw new DelegateException(e);
         }
-	}	
-	
+	}
+
 	public RespuestaFront registrarTramite(String asiento, FirmaIntf firma)
 			throws DelegateException
 	{
-        try 
+        try
         {
         	return local.registrarTramite( asiento, firma );
-        	
-        } catch (EJBException e) 
+
+        } catch (EJBException e)
         {
             throw new DelegateException(e);
         }
 	}
-	
+
 	public RespuestaFront mostrarDocumento( String idDocumento, int instancia) throws DelegateException {
-		   try 
+		   try
 	        {
 	        	return local.mostrarDocumento( idDocumento, instancia) ;
-	        	
-	        } catch (EJBException e) 
+
+	        } catch (EJBException e)
 	        {
 	            throw new DelegateException(e);
 	        }
 	}
 
 	public RespuestaFront mostrarJustificante() throws DelegateException {
-		   try 
+		   try
 	        {
 	        	return local.mostrarJustificante();
-	        	
-	        } catch (EJBException e) 
+
+	        } catch (EJBException e)
 	        {
 	            throw new DelegateException(e);
 	        }
 	}
-	
-	public RespuestaFront firmarFormulario(String identificador,int instancia,FirmaIntf firma,boolean firmaDelegada) throws DelegateException 
+
+	public RespuestaFront firmarFormulario(String identificador,int instancia,FirmaIntf firma,boolean firmaDelegada) throws DelegateException
 	{
 		try
 		{
@@ -305,7 +305,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	public RespuestaFront remitirFlujoTramitacion() throws DelegateException{
 		try
 		{
@@ -316,9 +316,9 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
-	
-	
+
+
+
 	public RespuestaFront mostrarDocumentoConsulta(int numDoc) throws DelegateException
 	{
 		try
@@ -330,7 +330,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	public RespuestaFront irAFirmarFormulario(String identificador, int instancia) throws DelegateException {
 		try
 		{
@@ -341,7 +341,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	public String obtenerUrlFin() throws DelegateException {
 		try
 		{
@@ -374,8 +374,8 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
-	
+
+
 	public void finalizarSesionPago(String identificador, int instancia) throws DelegateException  {
 		try
 		{
@@ -385,9 +385,9 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 		{
 			throw new DelegateException( e );
 		}
-		
+
 	}
-	
+
 	public RespuestaFront mostrarFormularioDebug(String idDocumento, int instancia) throws DelegateException {
 		try
 		{
@@ -398,7 +398,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	public RespuestaFront remitirDelegacionPresentacionTramite()  throws DelegateException{
 		try
 		{
@@ -409,7 +409,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	public RespuestaFront remitirDelegacionFirmaDocumentos()  throws DelegateException{
 		try
 		{
@@ -420,7 +420,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
+
 
 	public void resetHabilitarNotificacion() throws DelegateException {
 		try
@@ -432,7 +432,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	public RespuestaFront finalizarTramite() throws DelegateException {
 		try
 		{
@@ -443,7 +443,18 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
+
+	public boolean isDebugEnabled() throws DelegateException {
+		try
+		{
+			return local.isDebugEnabled();
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+
 	public void destroy()
 	{
 		try {
@@ -457,21 +468,21 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
         }
 
 	}
-	
-	
-	
+
+
+
 	/* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
 
     private TramiteProcessorLocal local;
 
-    protected InstanciaLocalDelegate() 
+    protected InstanciaLocalDelegate()
     {
     }
 
 
-	
-	
-	
+
+
+
 }

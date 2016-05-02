@@ -25,13 +25,12 @@ public class MostrarGraficoFicheroAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
-		
-		_log.debug( "execute" );
+
 		String ls_fichero = (String) request.getParameter("fichero");
 		AuditoriaDelegate delegate = DelegateUtil.getAuditoriaDelegate();
 		byte[] datos = delegate.obtenerGraficoFichero(ls_fichero);
 		response.getOutputStream().write(datos);
-		
+
 		return null;
 	}
 }

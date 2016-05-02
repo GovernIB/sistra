@@ -31,7 +31,6 @@ public class BajaFicheroExportacionAction extends BaseAction{
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-        log.debug("Entramos en BajaFicheroExportacion");
         FicheroExportacionDelegate delegate = DelegateUtil.getFicheroExportacionDelegate();
 
         String idString = request.getParameter("codigo");
@@ -39,7 +38,7 @@ public class BajaFicheroExportacionAction extends BaseAction{
             log.warn("El paràmetre codigo és null!!");
             return mapping.findForward("fail");
         }
-        
+
         delegate.borrarFicheroExportacion(idString);
         //request.setAttribute("reloadMenu", "true");
 

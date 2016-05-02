@@ -24,7 +24,7 @@ import es.caib.audita.persistence.delegate.DelegateUtil;
  *  path="/diario"
  *  scope="request"
  *  validate="false"
- *  
+ *
  * @struts.action-forward
  *  name="success" path=".diario"
  *
@@ -41,14 +41,14 @@ public class DiarioAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
-		
-		_log.debug( "execute" );
+
+
 		DiarioForm formulario = ( DiarioForm ) form;
-		
+
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Date fechaInicio = null;
 		Date fechaFinal = null;
-		String ls_inicio = Util.getNumber(formulario.getDiaInicio(),2) + "/" + 
+		String ls_inicio = Util.getNumber(formulario.getDiaInicio(),2) + "/" +
 						   Util.getNumber(formulario.getMesInicio(),2) + "/" +
 		                   formulario.getAnyoInicio();
 		String ls_final = "";
@@ -56,7 +56,7 @@ public class DiarioAction extends BaseAction
 		if((formulario.getDiaFinal() != 0) && (formulario.getMesFinal() != 0) &&
 		   (formulario.getAnyoFinal() != 0))
 		{
-			ls_final = Util.getNumber(formulario.getDiaFinal(),2) + "/" + 
+			ls_final = Util.getNumber(formulario.getDiaFinal(),2) + "/" +
 					   Util.getNumber(formulario.getMesFinal(),2) + "/" +
                        formulario.getAnyoFinal();
 			existeHasta = true;
@@ -72,14 +72,14 @@ public class DiarioAction extends BaseAction
 			   fechaFinal = dateFormat.parse(ls_final);
 			}
 		} catch (ParseException e) {
-			_log.error( "Error al parsear las fechas: " + e.getMessage(), e );			
+			_log.error( "Error al parsear las fechas: " + e.getMessage(), e );
 		}
 
-		
+
 		AuditoriaDelegate delegate = DelegateUtil.getAuditoriaDelegate();
-		request.setAttribute( "cuadroMando", 
+		request.setAttribute( "cuadroMando",
 				delegate.obtenerCuadroMandoIntervaloTemporal( getLang(request),fechaInicio, fechaFinal ));
-		
+
 		/*
 		String desde = Util.getNumber(formulario.getDiaInicio(),2) + "/" +
 					   Util.getNumber(formulario.getMesInicio(),2) + "/" +
@@ -99,7 +99,7 @@ public class DiarioAction extends BaseAction
 
 		return mapping.findForward( "success" );
 	}
-	
+
 	private String getNextDay(String today)
 	{
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -109,7 +109,7 @@ public class DiarioAction extends BaseAction
 			ll_fecha += DIA;
 			fecha.setTime(ll_fecha);
 			return sdf.format(fecha);
-		} catch (ParseException e) {			
+		} catch (ParseException e) {
 			_log.error("Excepcion " + e.getMessage(), e);
 			return null;
 		}

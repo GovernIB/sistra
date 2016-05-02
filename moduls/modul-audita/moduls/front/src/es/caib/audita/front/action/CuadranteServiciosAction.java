@@ -25,7 +25,7 @@ import es.caib.audita.persistence.delegate.DelegateUtil;
  *  path="/cuadranteServicios"
  *  scope="request"
  *  validate="false"
- *  
+ *
  * @struts.action-forward
  *  name="success" path=".cuadranteServicios"
  *
@@ -40,39 +40,39 @@ public class CuadranteServiciosAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
-		
-		_log.debug( "execute" );
-		
+
+
+
 		CuadranteServiciosForm formulario = ( CuadranteServiciosForm ) form;
 		String ls_desde = formulario.getDesde();
 		String ls_opcion = formulario.getOpcion();
 		String ls_evento = formulario.getEvento();
 		String ls_detalle = formulario.getDetalle();
-		
+
 		if(ls_detalle == null) // Inicializamos detalle
 		{
 			ls_detalle = "0";
 		}
-		
+
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Date fecha = dateFormat.parse(ls_desde);
-		
+
 		request.setAttribute("anyoInicio", ls_desde.substring(6));
 		request.setAttribute("mesInicio", ls_desde.substring(3,5));
-		
+
 		request.setAttribute("desde",ls_desde);
 		request.setAttribute("opcion",ls_opcion);
 		request.setAttribute("evento",ls_evento);
 		request.setAttribute("detalle",ls_detalle);
-		
+
 		if(ls_opcion.equals("anual")) ls_opcion = AuditConstants.ANUAL;
 		if(ls_opcion.equals("mensual")) ls_opcion = AuditConstants.MENSUAL;
 		if(ls_opcion.equals("diario")) ls_opcion = AuditConstants.DIARIO;
-		
+
 		AuditoriaDelegate delegate = DelegateUtil.getAuditoriaDelegate();
 		CuadroMandoTablaCruzada cuadroMando = delegate.obtenerCuadroMandoTablaCruzada(getLang(request),ls_evento,ls_opcion,fecha);
 		request.setAttribute( "cuadroMando", cuadroMando);
-		
+
 		List eventos = delegate.obtenerListaEventosDetalle(getLang(request));
 		request.setAttribute( "eventos", eventos);
 

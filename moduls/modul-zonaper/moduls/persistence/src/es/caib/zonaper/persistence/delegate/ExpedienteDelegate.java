@@ -259,7 +259,7 @@ public class ExpedienteDelegate implements StatelessDelegate
 
 	
 	/**
-     * @throws ExcepcionPAD 
+     * 
 	 * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */

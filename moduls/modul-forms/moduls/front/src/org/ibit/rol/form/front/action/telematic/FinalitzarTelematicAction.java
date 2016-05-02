@@ -65,6 +65,7 @@ public class FinalitzarTelematicAction extends BaseAction {
         }
 
         InstanciaTelematicaDelegate tDelegate = (InstanciaTelematicaDelegate) delegate;
+        boolean debugEnabled = tDelegate.isDebugEnabled();
 
         if (isCancelled(request)) {
 
@@ -75,7 +76,9 @@ public class FinalitzarTelematicAction extends BaseAction {
 
             } else if (request.getParameter("DISCARD") != null) {
 
-                log.debug("Cancel·lant formulari");
+            	if (debugEnabled) {
+            		log.debug("Cancel·lant formulari");
+            	}
 
                 try {
                     String redirectUrl = tDelegate.cancelarFormulario();

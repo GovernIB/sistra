@@ -22,7 +22,7 @@ import es.caib.sistra.model.TramiteFront;
 
 public class PasosNecesariosController extends TramiteController
 {
-	private static Log _log = LogFactory.getLog( PasosNecesariosController.class ); 
+	private static Log _log = LogFactory.getLog( PasosNecesariosController.class );
 	public void execute(ComponentContext tileContext,
 			HttpServletRequest request, HttpServletResponse response,
 			ServletContext servletContext) throws Exception
@@ -36,32 +36,31 @@ public class PasosNecesariosController extends TramiteController
 			Util.establecerTituloYCuerpo( tramite, paso );
 		}
 		request.setAttribute( "pasos", lstPasos );
-		
+
 		// Calculamos navegación enlace siguiente
 		Map navegacion = calcularNavegacion(tramite);
-		
-		if ( _log.isDebugEnabled() )
-		{
+
+		if (tramite.isDebugEnabled()) {
 			for (int i = 0;i<tramite.getPasos().size();i++)
-			{
-				_log.debug( "PASO " + i + " - <" + ((List) navegacion.get("anterior")).get(i).toString() + "> <" + ((List) navegacion.get("siguiente")).get(i).toString() + ">");
-			}		
+				{
+					_log.debug("PASO " + i + " - <" + ((List) navegacion.get("anterior")).get(i).toString() + "> <" + ((List) navegacion.get("siguiente")).get(i).toString() + ">");
+				}
 		}
 		request.setAttribute( "navegacion", navegacion );
-		
+
 		// En caso de flujo de tramitación verificamos si esta en estado de pasar y a quien
-		if (tramite.isFlujoTramitacion()) {			
+		if (tramite.isFlujoTramitacion()) {
 			// Si hay que pasarlo a algún Nif lo indicamos:
 			String nifFlujo=tramite.getFlujoTramitacionNif();
 			if (!StringUtils.isEmpty(nifFlujo)){
 				request.setAttribute("pasarFlujoTramitacion",nifFlujo);
-			}				
+			}
 		}
-		
+
 		//
 		// 	COMPROBAMOS SI HAY DELEGACION Y HAY QUE PASAR EL TRAMITE
 		//
-		
+
 		// Si estamos en pantalla de anexar documento no mostramos la zona de remitir
 		//org.apache.struts.action.mapping.instance=ActionConfig[path=/protected/irAAnexar,name=irAAnexarForm,scope=request,type=es.caib.sistra.front.action.IrAAnexarAction
 		ActionConfig action = (ActionConfig) request.getAttribute("org.apache.struts.action.mapping.instance");
@@ -75,14 +74,14 @@ public class PasosNecesariosController extends TramiteController
 				return;
 			}
 		}
-		
-		
+
+
 		// En caso de trámite de consulta y paso justificante, enviamos a la configuración de resultado consulta
 		if ( tramite.isConsultar() && tramite.getPasoTramitacion().getTipoPaso() == PasoTramitacion.PASO_FINALIZAR )
 		{
 			request.setAttribute( "zonaPasoTramite", ".step7ResultadoConsulta" );
 		}
-		
+
 		// En caso de tramite anonimo controlamos si la clave ya ha sido almacenada
 		if (tramite.getDatosSesion().getNivelAutenticacion() == 'A'){
 			if (request.getSession().getAttribute(Constants.CLAVE_ALMACENADA_KEY + "-" + tramite.getIdPersistencia()) != null){
@@ -90,9 +89,9 @@ public class PasosNecesariosController extends TramiteController
 			}
 		}
 	}
-	
+
 	/**
-	 * Calculamos navegación enlace siguiente 
+	 * Calculamos navegación enlace siguiente
 	 * @param tramite
 	 * @return
 	 */
@@ -103,13 +102,13 @@ public class PasosNecesariosController extends TramiteController
 		List anteriores = new ArrayList();
 		navegacion.put("anterior",anteriores);
 		navegacion.put("siguiente",siguientes);
-		
-		boolean habilitarSiguiente,habilitarAnterior,completadosAnteriores=true;		
+
+		boolean habilitarSiguiente,habilitarAnterior,completadosAnteriores=true;
 		for ( int i = 0; i < tramite.getPasos().size(); i++ )
 		{
-			 			
-			PasoTramitacion paso = ( PasoTramitacion ) tramite.getPasos().get( i );			
-			
+
+			PasoTramitacion paso = ( PasoTramitacion ) tramite.getPasos().get( i );
+
 			// Comprobación de pasos anteriores completados
 			// (damos por completados los pendientes de flujo y de delegacion)
 			PasoTramitacion pasoAnterior =  null;
@@ -127,9 +126,9 @@ public class PasosNecesariosController extends TramiteController
 						completadosAnteriores = false;
 				}
 			}
-			
-			
-			// SE HA ENVIADO EL TRAMITE			
+
+
+			// SE HA ENVIADO EL TRAMITE
 			if ( i < tramite.getPasoActual() &&
 				 tramite.getPasoActual() > tramite.getPasoNoRetorno() &&
 				 i <= tramite.getPasoNoRetorno()) {
@@ -137,48 +136,48 @@ public class PasosNecesariosController extends TramiteController
 				habilitarSiguiente = false;
 				habilitarAnterior  = false;
 				siguientes.add(i,new Boolean(habilitarSiguiente));
-				anteriores.add(i,new Boolean(habilitarAnterior));			
+				anteriores.add(i,new Boolean(habilitarAnterior));
 				continue;
 			}
-			
-			// PASO COMPLETADO					
+
+			// PASO COMPLETADO
 			if (paso.getCompletado().equals(PasoTramitacion.ESTADO_COMPLETADO)) {
-			
+
 				// Siguiente siempre que todos los pasos anteriores esten completados y no tiene que ser el último
 				if (completadosAnteriores && i<(tramite.getPasos().size()-1)){
 					habilitarSiguiente = true;
 				}else{
 					habilitarSiguiente = false;
-				}	
-				
+				}
+
 				// Si se ha enviado no dejamos volver atrás
 				if (paso.getTipoPaso() == PasoTramitacion.PASO_FINALIZAR) {
 					habilitarAnterior = false;
 				}else{
 					habilitarAnterior = true;
 				}
-				
+
 				/**
 				 * MODIFICACION: NO MOSTRAMOS PAGINA DE PASOS
 				 */
 				if ( i > 0 && pasoAnterior.getTipoPaso() == PasoTramitacion.PASO_PASOS)
 					habilitarAnterior = false;
-				
+
 				siguientes.add(i,new Boolean(habilitarSiguiente));
 				anteriores.add(i,new Boolean(habilitarAnterior));
 				continue;
 			}
-			
-			// PASO PENDIENTE DE FLUJO 
+
+			// PASO PENDIENTE DE FLUJO
 			if (paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_FLUJO)
 				||
 				paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_DELEGACION_PRESENTACION)
 				||
 				paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_DELEGACION_FIRMA)
 				){
-				
+
 				// Permitimos anterior
-				habilitarAnterior = true;							
+				habilitarAnterior = true;
 
 				// Mostramos siguiente si estamos en paso Rellenar y el siguiente es anexar
 				if (	paso.getTipoPaso() == PasoTramitacion.PASO_RELLENAR &&
@@ -188,46 +187,46 @@ public class PasosNecesariosController extends TramiteController
 				}else{
 						habilitarSiguiente = false;
 				}
-				
+
 				/**
 				 * MODIFICACION: NO MOSTRAMOS PAGINA DE PASOS
 				 */
 				if (i > 0 && pasoAnterior.getTipoPaso() == PasoTramitacion.PASO_PASOS)
 					habilitarAnterior = false;
-				
+
 				siguientes.add(i,new Boolean(habilitarSiguiente));
 				anteriores.add(i,new Boolean(habilitarAnterior));
 				continue;
-			}				
-				
-			
-			// PASO NO COMPLETADO						
+			}
+
+
+			// PASO NO COMPLETADO
 			if (paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE)){
-				
+
 				habilitarSiguiente = false;
 				habilitarAnterior = false;
-								
-				// Si se han completado todas los anteriores mostramos anterior				
+
+				// Si se han completado todas los anteriores mostramos anterior
 				if (completadosAnteriores){
 					habilitarAnterior = true;
 				}
-								
+
 				/**
 				 * MODIFICACION: NO MOSTRAMOS PAGINA DE PASOS
 				 */
 				if (i > 0 && pasoAnterior.getTipoPaso() == PasoTramitacion.PASO_PASOS)
 					habilitarAnterior = false;
-				
+
 				siguientes.add(i,new Boolean(habilitarSiguiente));
 				anteriores.add(i,new Boolean(habilitarAnterior));
-								
-			}						
-						
-		}		
-		
+
+			}
+
+		}
+
 		return navegacion;
 	}
-	
-	
-	
+
+
+
 }

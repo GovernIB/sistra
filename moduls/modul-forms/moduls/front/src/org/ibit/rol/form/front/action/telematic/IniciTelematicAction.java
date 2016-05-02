@@ -29,13 +29,18 @@ public class IniciTelematicAction extends BaseAction {
                                  HttpServletResponse response) throws Exception {
 
         IniciTelematicForm itForm = (IniciTelematicForm) form;
-        log.debug("Recibida petición telemática");
-        log.debug("XML Data: " + itForm.getXmlData());
-        log.debug("XML Config: " + itForm.getXmlConfig());
+
+        boolean debugEnabled = "true".equals(itForm.getDebugEnabled());
+
+        if (debugEnabled) {
+	        log.debug("Recibida petición telemática");
+	        log.debug("XML Data: " + itForm.getXmlData());
+	        log.debug("XML Config: " + itForm.getXmlConfig());
+        }
 
         InstanciaTelematicaDelegate delegate = DelegateUtil.getInstanciaTelematica();
 
-        delegate.create(itForm.getXmlConfig(), itForm.getXmlData());
+        delegate.create(itForm.getXmlConfig(), itForm.getXmlData(), debugEnabled);
 
         // Se ha inicializado con exito. Registramos la instáncia.
         String token = RegistroManager.preregistrarInstancia(request, delegate);

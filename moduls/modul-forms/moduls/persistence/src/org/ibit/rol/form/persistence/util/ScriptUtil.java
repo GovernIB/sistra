@@ -23,56 +23,58 @@ import org.ibit.rol.form.persistence.plugins.PluginLog;
 public final class ScriptUtil {
 
 	protected static Log log = LogFactory.getLog(ScriptUtil.class);
-	
+
 //	 ---- INDRA: VBLE ESPECIAL PARA LOGEAR SCRIPTS
 	public static final String ID_LOG_SCRIPT="ID_LOG_SCRIPT";
-	public static final String ID_PLUGIN_LOG="PLUGIN_LOG";	
+	public static final String ID_PLUGIN_LOG="PLUGIN_LOG";
 //	 ---- INDRA: VBLE ESPECIAL PARA LOGEAR SCRIPTS
-	
-	
+
+
     private ScriptUtil() {
 
     }
 
-    public static Object evalScript(String script, Map params) {
-        log.debug("- Evaluando script: " + script);
-        log.debug("- Parametros: " + params);
-        
+    public static Object evalScript(String script, Map params, boolean debugEnabled) {
+        if (debugEnabled) {
+	    	log.debug("- Evaluando script: " + script);
+	        log.debug("- Parametros: " + params);
+        }
+
         String strParams = parametrosToString(params);
-        
+
         LogScript logScript = new LogScript();
         logScript.setScript(script);
         logScript.setParametros(strParams);
-        
-        // --- INDRA: objeto logScript ----------------------                   
-        // Buscamos en los parametros el objeto ScriptLog  
-        LogsScripts logsScripts = (LogsScripts) params.get(ID_LOG_SCRIPT);        
+
+        // --- INDRA: objeto logScript ----------------------
+        // Buscamos en los parametros el objeto ScriptLog
+        LogsScripts logsScripts = (LogsScripts) params.get(ID_LOG_SCRIPT);
         if (logsScripts!=null) logsScripts.addLog(logScript);
         // --- INDRA: objeto logScript ----------------------
-        
+
         try {
             BSFManager manager = new BSFManager();
 
-            
+
             // --- INDRA ----------------------
-            // Preparamos plugin para log                   
-            PluginLog plgLog = new PluginLog(logScript);
+            // Preparamos plugin para log
+            PluginLog plgLog = new PluginLog(logScript, debugEnabled);
             if (params == null){
 				params = new HashMap();
 			}
             params.put(ID_PLUGIN_LOG,plgLog);
-            // --- INDRA ---------------------- 			
-			
-            
+            // --- INDRA ----------------------
+
+
             List nullValueNames = new ArrayList();
             if (params != null) {
                 for (Iterator iterator = params.keySet().iterator(); iterator.hasNext();) {
                 	String name = (String) iterator.next();
-                	
+
                 	// -- INDRA: NO PASAMOS OBJETO LOGSCRIPT
                 	if (name.equals(ID_LOG_SCRIPT)) continue;
                 	// -- INDRA: NO PASAMOS OBJETO LOGSCRIPT
-                	
+
                     Object value = params.get(name);
                     if (value != null) {
                         manager.declareBean(name, value, value.getClass());
@@ -98,20 +100,22 @@ public final class ScriptUtil {
             engine.terminate();
             manager.terminate();
 
-            log.debug("- Resultado: " + result);
-            logScript.setResultado(result);            
-            
+            if (debugEnabled) {
+            	log.debug("- Resultado: " + result);
+            }
+            logScript.setResultado(result);
+
             return result;
 
         } catch (BSFException be) {
             log.error("Error ejecutando script: " + be.getMessage() + "\nScript: " + script + "\nParametros: " + strParams, be.getTargetException());
-            logScript.setExcepcion(be.getMessage()); 	
+            logScript.setExcepcion(be.getMessage());
             return null;
         }
     }
 
-    public static boolean evalBoolScript(String script, Map params) {
-        Object result = evalScript(script, params);
+    public static boolean evalBoolScript(String script, Map params, boolean debugEnabled) {
+        Object result = evalScript(script, params, debugEnabled);
         if (result == null || !(result instanceof Boolean) ) {
             return false;
         }
@@ -154,7 +158,7 @@ public final class ScriptUtil {
         }
         return deps;
     }
-    
+
     /**
      * Convierte a string la lista de parametros
      * @param params
@@ -164,9 +168,9 @@ public final class ScriptUtil {
     	String key;
     	StringBuffer sb = new StringBuffer(params.size() * 50);
     	sb.append("{");
-    	boolean primer=true;    	
+    	boolean primer=true;
     	for (Iterator it=params.keySet().iterator();it.hasNext();){
-    		key = (String) it.next();    		
+    		key = (String) it.next();
     		if (key.equals(ScriptUtil.ID_LOG_SCRIPT) || key.equals(ScriptUtil.ID_PLUGIN_LOG)) continue;
     		if (primer){
     			primer = false;
@@ -175,9 +179,9 @@ public final class ScriptUtil {
     		}
     		sb.append(key);
     		sb.append("=");
-    		sb.append(params.get(key));    		
+    		sb.append(params.get(key));
     	}
     	sb.append("}");
-        return sb.toString();  
+        return sb.toString();
     }
 }

@@ -13,7 +13,7 @@ public class ResumenController extends BaseController
 	private static Log _log = LogFactory.getLog( ResumenController.class );
 	public void execute(ComponentContext tileContext, HttpServletRequest request, HttpServletResponse response, ServletContext servletContext) throws Exception
 	{
-		_log.debug( "execute" );
+
 	}
 
 }

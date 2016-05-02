@@ -10,69 +10,71 @@ import es.caib.sistra.model.TramiteFront;
 
 public interface GestorFlujoFormulario extends Storable
 {
-	
+
 	/**
 	 * Idenficador gestor formularios.
 	 * @param idGestor
 	 */
 	public void setId(String idGestor);
-	
+
 	/**
 	 * Idenficador gestor formularios.
 	 * @return idGestor
 	 */
 	public String getId();
-	
-	
+
+
 	/**
 	 * Inicializacion de la clase
 	 * @param initParams
 	 */
 	public void init(Map initParams);
-	
+
 	/**
 	 * Realiza conexión con sistema de rellenado de formularios para pasarle la información necesaria
-	 * 
+	 *
 	 * @param confGestorForm	Configuración específica del gestor de formularios
 	 * @param formulario	DocumentFront con la información del formulario a abrir
 	 * @param informacionTramite	TramiteFront con la información del trámite
-	 * @param parametrosRetorno	Parámetros que debe retornar el sistema de formularios al invocar a sistra 
+	 * @param parametrosRetorno	Parámetros que debe retornar el sistema de formularios al invocar a sistra
 	 * @return
 	 */
-	public String irAFormulario( 
+	public String irAFormulario(
 			ConfiguracionGestorFlujoFormulario confGestorForm,
 			DocumentoFront formulario,
 			TramiteFront informacionTramite,
 			Map parametrosRetorno );
-	
+
 	/**
 	 * Realiza el proceso de guardar los datos del formulario
-	 * 
+	 *
 	 * @param xmlInicial XML con los datos originales
 	 * @param xmlActual XML con los nuevos datos
 	 * @param guardadoSinFinalizar Indica si se ha guardado el formulario sin finalizar
 	 * @return Devuelve el token al sistema de rellenado de formularios para que pueda redirigir el navegador al sistema de tramitación
 	 */
 	public String guardarDatosFormulario( String xmlInicial, String xmlActual, boolean guardadoSinFinalizar );
-	
+
 	/**
-	 * Una vez guardado el formulario desde el sistema de rellenado de formularios se redirige el navegador al sistema de tramitación 
-	 * 
+	 * Una vez guardado el formulario desde el sistema de rellenado de formularios se redirige el navegador al sistema de tramitación
+	 *
 	 * @param token
+	 * @param debug
 	 * @return
 	 */
-	public ResultadoProcesoFormulario continuarTramitacion( String token );
+	public ResultadoProcesoFormulario continuarTramitacion( String token, boolean debug );
 
 	/**
 	 * Permite cancelar el rellenado de un formulario
 	 * @return Devuelve el token al sistema de rellenado de formularios para que pueda redirigir el navegador al sistema de tramitación
 	 */
 	public String cancelarFormulario();
-	
+
 	/**
 	 * Una vez cancelado el formulario en el sistema de rellenado permite continuar con la tramitación
-	 * @return 
+	 * @param debug
+	 * @return
 	 */
-	public boolean continuarCancelacion( String token );
+	public boolean continuarCancelacion( String token, boolean debug );
 
 }

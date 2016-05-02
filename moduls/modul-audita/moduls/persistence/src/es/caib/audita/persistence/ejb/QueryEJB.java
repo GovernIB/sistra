@@ -35,7 +35,7 @@ public abstract class QueryEJB extends DbUtilQueryExecutor implements SessionBea
 	private QueryReader queryReader;
     protected SessionContext ctx = null;
 
-    public void setSessionContext(SessionContext ctx) 
+    public void setSessionContext(SessionContext ctx)
     {
         this.ctx = ctx;
         try
@@ -47,15 +47,15 @@ public abstract class QueryEJB extends DbUtilQueryExecutor implements SessionBea
         	log.error( exc );
         }
     }
-    
-    public void ejbCreate() throws CreateException 
+
+    public void ejbCreate() throws CreateException
     {
     }
 
 	public void ejbRemove() throws EJBException, RemoteException
 	{
 	}
-	
+
 	protected String getQuery( String propertyName ) throws SQLException
 	{
 		try
@@ -68,7 +68,7 @@ public abstract class QueryEJB extends DbUtilQueryExecutor implements SessionBea
 			throw new SQLException( exc.getMessage() );
 		}
 	}
-	
+
 	protected Connection getConnection() throws SQLException
 	{
 		// TODO : El initial context y el datasource se pueden cachear
@@ -104,36 +104,32 @@ public abstract class QueryEJB extends DbUtilQueryExecutor implements SessionBea
 	}
 
 	protected List queryForBeanList(Connection conn, String sql, Object[] params,
-			Class beanClass) throws SQLException 
+			Class beanClass) throws SQLException
 	{
 		String query = this.getQuery( sql );
-		log.debug( "Querying [" + sql + "] for class [" + beanClass.getName() + "]. SQL: ["  + query + "]" + " PARAMS " + params );
 		return super.queryForBeanList( conn, query, params, beanClass );
 	}
-	
+
 	protected List queryForBeanList(String sql, Class beanClass)
-	throws java.sql.SQLException 
+	throws java.sql.SQLException
 	{
 		String query = this.getQuery( sql );
-		log.debug( "Querying [" + sql + "] for class [" + beanClass.getName() + "]. SQL: ["  + query + "]" );
 		return super.queryForBeanList(  query, beanClass );
 	}
-	
+
 	protected List queryForMapList(Connection conn, String sql, Object[] params)
-	throws java.sql.SQLException 
+	throws java.sql.SQLException
 	{
 		String query = this.getQuery( sql );
-		log.debug( "Querying [" + sql + "] for Map. SQL: ["  + query + "]" + " PARAMS " + logParams ( params ) );
 		return super.queryForMapList( conn, query, params );
 	}
-	
-	protected List queryForMapList(String sql) throws java.sql.SQLException 
+
+	protected List queryForMapList(String sql) throws java.sql.SQLException
 	{
 		String query = this.getQuery( sql );
-		log.debug( "Querying [" + sql + "] for Map. SQL: ["  + query + "]" );
 		return super.queryForMapList( query );
 	}
-	
+
 	/**
 	 * Realiza el update sql pero la consulta se le pasa como parametro, no lo coge
 	 * del fichero de properties
@@ -143,13 +139,12 @@ public abstract class QueryEJB extends DbUtilQueryExecutor implements SessionBea
 	 * @throws java.sql.SQLException
 	 */
 
-	protected int updateConstructed(Connection conn, String sql, Object[] params) throws java.sql.SQLException 
+	protected int updateConstructed(Connection conn, String sql, Object[] params) throws java.sql.SQLException
 	{
-		log.debug( "updateConstructed: Querying [" + sql + "]" );
 		return super.update( conn, sql, params );
 	}
-	
-	
+
+
 	/**
 	 * Realiza la consulta sql pero la consulta se le pasa como parametro, no lo coge
 	 * del fichero de properties
@@ -159,12 +154,11 @@ public abstract class QueryEJB extends DbUtilQueryExecutor implements SessionBea
 	 * @throws java.sql.SQLException
 	 */
 
-	protected List queryForMapListConstructed(Connection conn, String sql, Object[] params) throws java.sql.SQLException 
+	protected List queryForMapListConstructed(Connection conn, String sql, Object[] params) throws java.sql.SQLException
 	{
-		log.debug( "queryForMapListConstructed: Querying [" + sql + "]" );
 		return super.queryForMapList( conn, sql, params );
 	}
-	
+
 	/**
 	 * Realiza la consulta sql pero la consulta se le pasa como parametro, no lo coge
 	 * del fichero de properties
@@ -174,29 +168,26 @@ public abstract class QueryEJB extends DbUtilQueryExecutor implements SessionBea
 	 * @throws java.sql.SQLException
 	 */
 
-	protected List queryForMapListConstructed(String sql, Object[] params) throws java.sql.SQLException 
+	protected List queryForMapListConstructed(String sql, Object[] params) throws java.sql.SQLException
 	{
-		log.debug( "Querying [" + sql + "]" );
 		return super.queryForMapList( sql, params );
 	}
 
 
-	
-	protected int update(Connection conn, String sql, Object[] params) 
+
+	protected int update(Connection conn, String sql, Object[] params)
 	throws java.sql.SQLException
 	{
 		String query = this.getQuery( sql );
-		log.debug( "Updating [" + sql + "]. SQL: ["  + query + "]" + " PARAMS " + params );
 		return super.update( conn, query, params );
 	}
-	
+
 	protected int update(String sql, Object[] params) throws SQLException
 	{
 		String query = this.getQuery( sql );
-		log.debug( "Updating [" + sql + "]. SQL: ["  + query + "]" + " PARAMS " + params );
 		return super.update( query, params );
 	}
-	
+
 	protected Long obtenerValorSecuencia( String key ) throws SQLException
 	{
 		List resultadoConsulta = this.queryForMapList( key );
@@ -217,7 +208,7 @@ public abstract class QueryEJB extends DbUtilQueryExecutor implements SessionBea
 		}
 		throw new SQLException( "No se puede obtener el valor de la secuencia " + key  );
 	}
-	
+
 	private String logParams( Object [] params )
 	{
 		StringBuffer sbReturn = new StringBuffer( "{" );
@@ -232,7 +223,7 @@ public abstract class QueryEJB extends DbUtilQueryExecutor implements SessionBea
 		sbReturn.append( "}" );
 		return sbReturn.toString();
 	}
-	
+
 	protected QueryReader getQueryReader()
 	{
 		return queryReader;

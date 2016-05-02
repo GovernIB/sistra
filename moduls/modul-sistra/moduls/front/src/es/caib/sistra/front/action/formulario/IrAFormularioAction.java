@@ -32,85 +32,88 @@ import es.caib.sistra.persistence.delegate.InstanciaDelegate;
  *
  * @struts.action-forward
  *  name="fail" path=".mainLayout"
- *  
+ *
  * @struts.action-forward
  *  name="mostrarDocumento" path=".mainLayout"
- *  
+ *
  *  @struts.action-forward
  *  name="error" path="/fail.do"
  */
 public class IrAFormularioAction extends BaseAction
 {
-	
+
 	private static Log log = LogFactory.getLog( IrAFormularioAction.class );
-	
+
 	public ActionForward executeTask(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-            HttpServletResponse response) throws Exception 
+            HttpServletResponse response) throws Exception
     {
-		
+
 		IrAFormularioForm formularioForm = ( IrAFormularioForm ) form;
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request );
 		/**En los parametros de vuelta de la llamada irAFormulario, tendremos lo siguiente :
-		- Parametros: 
+		- Parametros:
 			* datos = <xml> datos iniciales del formulario.
 			* configuracion = es.caib.sistra.model.ConfiguracionFormulario@11e1e67
 			* modelo = 001
 			* version = 1
 			*/
-	
+
 		RespuestaFront respuestaFront = delegate.irAFormulario( formularioForm.getIdentificador(), formularioForm.getInstancia() );
 		this.setRespuestaFront( request, respuestaFront );
-		
+
 		if ( this.isSetMessage( request ) )
 		{
 			return mapping.findForward( "fail" );
 		}
-		
+
 		TramiteFront tramiteInfo = respuestaFront.getInformacionTramite();
-		
+
 		DocumentoFront formulario = tramiteInfo.getFormulario( formularioForm.getIdentificador(), formularioForm.getInstancia() );
-		
+
 		if ( formulario == null )
 		{
 			this.setErrorMessage( request, "errors.formulario.exist", new Object[ ]{ formulario.getDescripcion(), new Integer( formulario.getVersion() )} );
 			return mapping.findForward( "error" );
 		}
-		
-		
+
+
 		ConfiguracionGestorFlujoFormulario confGestorForm = ( ConfiguracionGestorFlujoFormulario ) respuestaFront.getParametros().get( "configuracionGestorForm" );
-				
+
 		// Si el formulario esta marcado como solo lectura mostramos documento
-		if (confGestorForm.getConfiguracionFormulario().isReadOnly()){			
+		if (confGestorForm.getConfiguracionFormulario().isReadOnly()){
 			return mapping.findForward("mostrarDocumento");
 		}
-		
+
 		// NO confundir con el que se se genera en un paso posterior para que forms redirija la pagina.
-		String tokenGestionFormulario = Util.generateToken(); 
-		
-		GestorFlujoFormulario gestorFormularios = this.crearGestorFormulario( request,tokenGestionFormulario);		
-		
+		String tokenGestionFormulario = Util.generateToken();
+
+		GestorFlujoFormulario gestorFormularios = this.crearGestorFormulario( request,tokenGestionFormulario);
+
 		Map parametrosRetorno = new LinkedHashMap();
 		//parametrosRetorno.put( "jsessionid", request.getSession().getId() );
-		parametrosRetorno.put( Constants.GESTOR_FORM_PARAM_ALMACENAMIENTO_GESTOR_FORMULARIO, tokenGestionFormulario ); 
+		parametrosRetorno.put( Constants.GESTOR_FORM_PARAM_ALMACENAMIENTO_GESTOR_FORMULARIO, tokenGestionFormulario );
 		parametrosRetorno.put( Constants.GESTOR_FORM_PARAM_TOKEN_LLAMADA, formularioForm.getID_INSTANCIA() );
-		
+		parametrosRetorno.put(Constants.GESTOR_FORM_PARAM_DEBUGENABLED, tramiteInfo.isDebugEnabled());
+
 		// Redireccionamos a la url proporcionada por el gestor de formularios
-		String urlRedireccion = response.encodeRedirectURL( 
-					gestorFormularios.irAFormulario(confGestorForm,formulario,tramiteInfo,parametrosRetorno) 
+		String urlRedireccion = response.encodeRedirectURL(
+					gestorFormularios.irAFormulario(confGestorForm,formulario,tramiteInfo,parametrosRetorno)
 				);
 		if (urlRedireccion == null){
 			this.setErrorMessage( request, "errors.errorConexionForm");
 			return mapping.findForward( "error" );
 		}
-		
+
 		// log.debug("Redireccionant a: " + urlRedireccion );
-		
-		log.debug("DEBUGFORM: IrAFormularioAction [GF:" + tokenGestionFormulario + "]" );
-		
+
+		if (tramiteInfo.isDebugEnabled()) {
+			log.debug("DEBUGFORM: IrAFormularioAction [GF:" + tokenGestionFormulario + "]" );
+		}
+
         response.sendRedirect( urlRedireccion );
-        
+
 		return null;
 		//return mapping.findForward("success");
     }
-	
+
 }

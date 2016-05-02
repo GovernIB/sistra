@@ -31,8 +31,6 @@ public class ContinuacioTelematicAction extends BaseAction {
 
         String idInstancia = request.getParameter(RegistroManager.ID_INSTANCIA);
 
-        log.debug("Recibida continuación telemática: " + idInstancia);
-
         boolean success = RegistroManager.asignarInstanciaPreregistrada(request, idInstancia);
 
         if (!success) {
@@ -44,10 +42,16 @@ public class ContinuacioTelematicAction extends BaseAction {
 
         InstanciaDelegate delegate = RegistroManager.recuperarInstancia(request);
         setLocale(request, delegate.obtenerIdioma());
-      
+
+        boolean debugEnabled = delegate.isDebugEnabled();
+
+        if (debugEnabled) {
+        	log.debug("Recibida continuación telemática: " + idInstancia);
+        }
+
         // Inicializamos ayuda
-        request.getSession().setAttribute(Constants.AYUDA_ACTIVADA_KEY, "true");	
-        
+        request.getSession().setAttribute(Constants.AYUDA_ACTIVADA_KEY, "true");
+
         response.sendRedirect(prepareRedirectInstanciaURL(request, response, request.getAttribute("securePath") + "/ver.do"));
         response.flushBuffer();
         return null;

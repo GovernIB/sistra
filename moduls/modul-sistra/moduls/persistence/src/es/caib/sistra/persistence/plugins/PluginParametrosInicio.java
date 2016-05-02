@@ -10,19 +10,23 @@ import org.apache.commons.logging.LogFactory;
  * Plugin que permite tracear scripts
  */
 public class PluginParametrosInicio {
-	private static Log log = LogFactory.getLog(PluginParametrosInicio.class);	
-	
+
 	Map parametrosInicio;
-	
-	public PluginParametrosInicio(Map parametros){		
-		parametrosInicio = parametros;		
+	private static Log log = LogFactory.getLog(PluginParametrosInicio.class);
+	private boolean debugEnabled;
+
+	public PluginParametrosInicio(Map parametros, boolean pdebugEnabled){
+		parametrosInicio = parametros;
 		if (parametrosInicio == null) parametrosInicio = new HashMap();
+		debugEnabled = pdebugEnabled;
 	}
-	
+
 	public String getParametro(String name){
 		String valor = (String) parametrosInicio.get(name);
 		if (valor == null) valor = "";
-		log.debug("Accediendo a parametro inicio " + name + ". Valor parametro: " + valor);		
+		if (debugEnabled) {
+			log.debug("Accediendo a parametro inicio " + name + ". Valor parametro: " + valor);
+		}
 		return valor;
 	}
 }

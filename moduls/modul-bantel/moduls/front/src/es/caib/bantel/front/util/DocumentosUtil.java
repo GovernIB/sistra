@@ -32,9 +32,9 @@ public final class DocumentosUtil {
     private DocumentosUtil() {
 
     }
-    
 
-	
+
+
 	/**
 	 * Crea un documento RDS a partir del documento pasado por el aviso, los datos del formulario
 	 * @param documento documentoRDS
@@ -42,13 +42,13 @@ public final class DocumentosUtil {
 	 * @param form formulario con los datos del aviso
 	 * @param fir la firma del documento
 	 * @return un documento RDS que ya estara pasa a pdf
-	 * @throws ExcepcionPAD
+	 * @throws Exception
 	 */
-	public static DocumentoRDS crearDocumentoRDS(DocumentoFirmar documento, String unidadAdministrativa, boolean convertirPDF) throws ExcepcionPAD
-	{		
+	public static DocumentoRDS crearDocumentoRDS(DocumentoFirmar documento, String unidadAdministrativa, boolean convertirPDF) throws Exception
+	{
 		try {
 			RdsDelegate rdsDelegate = DelegateRDSUtil.getRdsDelegate();
-					
+
 			DocumentoRDS docRDS = new DocumentoRDS();
 			docRDS.setDatosFichero( documento.getContenidoFichero() );
 			docRDS.setFechaRDS( new Date() );
@@ -56,7 +56,7 @@ public final class DocumentosUtil {
 			docRDS.setTitulo( documento.getTitulo() );
 			docRDS.setNombreFichero( documento.getNombre() );
 			docRDS.setExtensionFichero( getExtension( documento.getNombre() ) );
-		
+
 			// Segun el tipo le asignamos un modelo
 			TransformacionRDS transf = null;
 			if ( documento.getTipoDocumento().equals("FICHERO"))
@@ -68,7 +68,7 @@ public final class DocumentosUtil {
 					transf = new TransformacionRDS();
 					transf.setBarcodePDF(true);
 					transf.setConvertToPDF(true);
-				}	
+				}
 			}
 			else
 			{
@@ -76,7 +76,7 @@ public final class DocumentosUtil {
 				docRDS.setEstructurado( true );
 				docRDS.setVersion( 1 );
 			}
-			
+
 			// Creamos documento
 			ReferenciaRDS refRDS;
 			if (transf != null) {
@@ -88,11 +88,11 @@ public final class DocumentosUtil {
 			docRDS = rdsDelegate.consultarDocumento(refRDS,true);
 			return docRDS;
 		} catch (es.caib.redose.persistence.delegate.DelegateException e) {
-			throw new ExcepcionPAD("Excepcion creando documento en el RDS",e);
+			throw new Exception("Excepcion creando documento en el RDS",e);
 		}
 
 	}
-	
+
 	public static String getExtension(String filename){
 		if(filename.lastIndexOf(".") != -1){
 			return filename.substring(filename.lastIndexOf(".") + 1);
@@ -100,7 +100,7 @@ public final class DocumentosUtil {
 			return "";
 		}
 	}
-	
+
 	public static String removeExtension(String filename){
 		if(filename.lastIndexOf(".") != -1){
 			return filename.substring(0,filename.lastIndexOf("."));
@@ -108,14 +108,14 @@ public final class DocumentosUtil {
 			return filename;
 		}
 	}
-	
+
 	public static String formatearFichero(String rutaFitxer) {
-		
+
 		rutaFitxer = rutaFitxer.replace("\\","|");
 		rutaFitxer = rutaFitxer.replace("|","\\\\");
 		return rutaFitxer;
 	}
-	
+
 	public static boolean noExisteDocumento(String titulo, HttpServletRequest request, String llista){
 		boolean noExiste = true;
 		ArrayList documentos;
@@ -132,7 +132,7 @@ public final class DocumentosUtil {
 		}
 		return noExiste;
 	}
-	
+
 	public static boolean extensionCorrecta(String nombre){
 		boolean correcta = false;
 		nombre = getExtension(nombre);
@@ -173,7 +173,7 @@ public final class DocumentosUtil {
 			request.setAttribute("URL-"+doc.getReferenciaRDS().getCodigo(),documentoExternoNotificacion.getUrl());
 		}
 	}
-	
+
 	// Carga firmas, codigo de custodia y url doc externo notificacion en la request
 	public static void cargarFirmasDocumentosExpedientePad(List documentos, HttpServletRequest request, String tipo) throws Exception{
 		// Vamos a buscar las firmas de los documentos si existen y las meteremos en la request
@@ -192,5 +192,5 @@ public final class DocumentosUtil {
 			}
 		}
 	}
-	
+
 }

@@ -31,34 +31,34 @@ public class MostrarGraficoAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
-		
-		_log.debug( "execute" );
-		
+
+
+
 		String ls_desde = (String) request.getParameter("desde");
 		String ls_opcion = (String) request.getParameter("opcion");
 		String ls_evento = (String) request.getParameter("evento");
-		
-		
+
+
 		ConfiguracionGrafico conf = new ConfiguracionGrafico();
 		conf.setAlto(350);
 		conf.setAncho(750);
 		conf.setLeyenda(true);
 		conf.setColorSeries("ROJO-AZUL-VERDE-GRIS-NARANJA-ROSA-AMARILLO-CYAN");
-		
+
 //		GeneradorGraficos.generarImagen(datos,conf,response.getOutputStream());
-		
+
 		AuditoriaDelegate delegate = DelegateUtil.getAuditoriaDelegate();
 		// Realizar llamada a obtener grafico
-		
+
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Date fecha = sdf.parse(ls_desde);
 
 		DatosGrafico datosGrafico = delegate.obtenerDatosGrafico(ls_evento, fecha, ls_opcion );
-		
+
 		// Generar imagen
-		
+
 		GeneradorGraficos.generarImagen(datosGrafico,conf,response.getOutputStream());
-		
+
 		return null;
 	}
 }

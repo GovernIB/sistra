@@ -9,8 +9,17 @@ public class IniciTelematicForm extends ActionForm {
 
     String xmlData;
     String xmlConfig;
-    
-    public String getXmlData() {
+    String debugEnabled;
+
+    public String getDebugEnabled() {
+		return debugEnabled;
+	}
+
+	public void setDebugEnabled(String debugEnabled) {
+		this.debugEnabled = debugEnabled;
+	}
+
+	public String getXmlData() {
         return xmlData;
     }
 

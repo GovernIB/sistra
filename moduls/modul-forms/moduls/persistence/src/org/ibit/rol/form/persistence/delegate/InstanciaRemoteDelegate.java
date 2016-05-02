@@ -191,7 +191,7 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate {
             throw new DelegateException(e);
         }
     }
-    
+
     public synchronized Object expresionAutocalculoCampo(String nombre) throws DelegateException {
         try {
             return getRemote().expresionAutocalculoCampo(nombre);
@@ -207,7 +207,7 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate {
             throw new DelegateException(e);
         }
     }
-    
+
     public synchronized String expresionDependenciaCampoV2(String nombre) throws DelegateException {
         try {
             return  getRemote().expresionDependenciaCampoV2(nombre);
@@ -288,8 +288,8 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate {
             throw new DelegateException(e);
         }
     }
-    
-    // --- INDRA: LISTA ELEMENTOS 
+
+    // --- INDRA: LISTA ELEMENTOS
     public synchronized List obtenerDatosListaElementos(String nombreCampo) throws DelegateException {
     	  try {
               return getRemote().obtenerDatosListaElementos(nombreCampo);
@@ -305,7 +305,7 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate {
 	            throw new DelegateException(e);
 	        }
 	}
-	
+
 	public synchronized void avanzarPantallaDetalle(String campo, String accion, String index) throws DelegateException {
 		try {
 			getRemote().avanzarPantallaDetalle(campo,accion,index);
@@ -313,37 +313,37 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate {
             throw new DelegateException(e);
         }
 	}
-	
+
 	 public synchronized void retrocederPantallaDetalle(boolean saveData) throws DelegateException{
 			try {
 				getRemote().retrocederPantallaDetalle(saveData);
 	        } catch (RemoteException e) {
 	            throw new DelegateException(e);
 	        }
-		}	
-	
+		}
+
 	public synchronized void eliminarElemento(String campo, String indice) throws DelegateException {
 		try {
 			getRemote().eliminarElemento(campo,indice);
         } catch (RemoteException e) {
             throw new DelegateException(e);
-        }	
-		
+        }
+
 	}
 	public synchronized Map obtenerDatosListasElementos() throws DelegateException {
 		try {
 			return getRemote().obtenerDatosListasElementos();
         } catch (RemoteException e) {
             throw new DelegateException(e);
-        }			
+        }
 	}
 	public synchronized void subirElemento(String campo, String indice) throws DelegateException {
 		try {
 			getRemote().subirElemento(campo,indice);
         } catch (RemoteException e) {
             throw new DelegateException(e);
-        }	
-		
+        }
+
 	}
 
 	public synchronized void bajarElemento(String campo, String indice) throws DelegateException {
@@ -351,48 +351,56 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate {
 			getRemote().bajarElemento(campo,indice);
         } catch (RemoteException e) {
             throw new DelegateException(e);
-        }	
-		
+        }
+
 	}
-		
+
 	// --- INDRA: LISTA ELEMENTOS
-	
-	
-	
+
+
+
 	//	 -- INDRA: LOG SCRIPTS
     public List obtenerLogScripts() throws DelegateException{
     	try {
            return getRemote().obtenerLogScripts();
         } catch (RemoteException e) {
             throw new DelegateException(e);
-        }	
+        }
     }
-    
+
     public void limpiarLogScripts() throws DelegateException{
     	try {
     		getRemote().limpiarLogScripts();
         } catch (RemoteException e) {
             throw new DelegateException(e);
-        }	
+        }
     }
     // -- INDRA: LOG SCRIPTS
-	
+
     public synchronized String obtenerCaptcha(String fieldName) throws DelegateException {
     	try {
     		return getRemote().obtenerCaptcha(fieldName);
         } catch (RemoteException e) {
             throw new DelegateException(e);
-        }	
+        }
     }
-    
+
     public synchronized void regenerarCaptcha(String fieldName) throws DelegateException{
     	try {
     		getRemote().regenerarCaptcha(fieldName);
         } catch (RemoteException e) {
             throw new DelegateException(e);
-        }	
+        }
     }
-    
+
+    public boolean isDebugEnabled() throws DelegateException {
+    	try {
+    		return getRemote().isDebugEnabled();
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+
     public synchronized void destroy() {
         try {
             getRemote().remove();
@@ -416,8 +424,8 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate {
     protected InstanciaRemoteDelegate() {
     }
 
-	
 
-	
+
+
 
 }

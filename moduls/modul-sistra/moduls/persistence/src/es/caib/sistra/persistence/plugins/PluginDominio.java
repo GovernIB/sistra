@@ -46,31 +46,39 @@ import es.caib.util.EjbUtil;
  * Plugin que permite acceder a dominios
  */
 public class PluginDominio {
-	
+
 	private static Log log = LogFactory.getLog(PluginDominio.class);
-	
+
 	private static final String SEPARATOR = "#@@#";
-	
+
 	private Hashtable dominios = new Hashtable();
 	private Hashtable parametrosDominios = new Hashtable();
 	private Hashtable valoresDominios = new Hashtable();
-		
+
+	private boolean debugEnabled;
+
+	public PluginDominio(boolean pDebugEnabled) {
+		super();
+		debugEnabled = pDebugEnabled;
+	}
+
+
 	/**
 	 * Crea instancia de un determinado dominio
 	 * @param idDominio Identificador dominio
 	 * @return Clave para poder acceder al dominio a través del plugin
 	 */
-	public String crearDominio(String idDominio){				
+	public String crearDominio(String idDominio){
 		String ls_clave = generarClave();
 		ArrayList parametros = new ArrayList();
-		dominios.put(ls_clave,idDominio);		
+		dominios.put(ls_clave,idDominio);
 		parametrosDominios.put(ls_clave,parametros);
 		return ls_clave;
 	}
-	
+
 	/**
 	 * Establece parametro para el dominio
-	 * 
+	 *
 	 * @param claveDominio
 	 * @param parametro
 	 * @throws Exception
@@ -81,64 +89,64 @@ public class PluginDominio {
 		// Establecemos parametro
 		((List) parametrosDominios.get(claveDominio)).add(parametro);
 	}
-	
+
 	/**
 	 * Recupera los valores de un dominio (previamente debe haberse creado)
 	 * @param claveDominio Clave del dominio generado
-	 * @return identificador generado para poder consultar el dominio 
+	 * @return identificador generado para poder consultar el dominio
 	 */
 	public void recuperaDominio(String claveDominio) throws Exception
 	{
 		// Comprobamos que existe dominio
-		if (!dominios.containsKey(claveDominio)) throw new Exception("No existe instancia del dominio");				
-		
+		if (!dominios.containsKey(claveDominio)) throw new Exception("No existe instancia del dominio");
+
 		// Obtenemos identificador dominio y parametros
 		String idDominio = (String) dominios.get(claveDominio);
 		List parametros = (List) parametrosDominios.get(claveDominio);
-						
+
 		// Recuperamos datos dominio y los almacemos
-		ValoresDominio dominio = resuelveDominio( idDominio,parametros);				
-		dominios.put(claveDominio,dominio);		
+		ValoresDominio dominio = resuelveDominio( idDominio,parametros);
+		dominios.put(claveDominio,dominio);
 	}
-		
+
 	/**
 	 * Devolvemos dominio almacenado con la clave indicada
 	 * @return Devuelve dominio.
 	 */
-	public ValoresDominio getValoresDominio(String claveDominio)throws Exception{	
+	public ValoresDominio getValoresDominio(String claveDominio)throws Exception{
 		// Comprobamos que existe dominio
 		if (!dominios.containsKey(claveDominio)) throw new Exception("No existe instancia del dominio");
 		return (ValoresDominio) dominios.get(claveDominio);
 	}
-	
+
 	/**
 	 * Borra dominio
 	 * @param idDom
 	 */
-	public void removeDominio(String claveDominio) throws Exception{	
+	public void removeDominio(String claveDominio) throws Exception{
 		// Comprobamos que existe dominio
 		if (!dominios.containsKey(claveDominio)) throw new Exception("No existe instancia del dominio");
 		dominios.remove(claveDominio);
 		parametrosDominios.remove(claveDominio);
-		if (valoresDominios.containsKey(claveDominio)) valoresDominios.remove(claveDominio);		
+		if (valoresDominios.containsKey(claveDominio)) valoresDominios.remove(claveDominio);
 	}
-	
-	
+
+
 	// --- FUNCIONES AUXILIARES ----
 	private String generarClave(){
-		String idDom = Long.toString(System.currentTimeMillis());		
+		String idDom = Long.toString(System.currentTimeMillis());
 		return idDom;
 	}
-	
-	private ValoresDominio resuelveDominio(String idDominio,List parametros) throws Exception{		
+
+	private ValoresDominio resuelveDominio(String idDominio,List parametros) throws Exception{
 		// Obtenemos informacion dominio
 		String url = "";
 		String cacheKey =  null;
 		Dominio dominio;
 		try{
-			log.debug("Accediendo a dominio " + idDominio);
+			debug("Accediendo a dominio " + idDominio);
 			dominio = DelegateUtil.getDominioDelegate().obtenerDominio(idDominio);
-			if (dominio == null) throw new Exception("No se devuelve dominio");			
+			if (dominio == null) throw new Exception("No se devuelve dominio");
 		}catch(Exception e){
 			throw new Exception("No se puede encontrar dominio con id " + idDominio ,e);
 		}
@@ -152,12 +160,12 @@ public class PluginDominio {
 		}
 		// Comprobamos si el dominio es cacheable y tiene los datos cacheados
 		if ( dominio.getCacheable() == 'S' )
-		{	
+		{
 			cacheKey = idDominio + SEPARATOR + parametros.hashCode();
 			ValoresDominio cached = ( ValoresDominio ) getFromCache(cacheKey);
 	        if (cached != null) return cached;
 		}
-						
+
 		// Accedemos a dominio
 		ValoresDominio valoresDominio = null;
 		switch (dominio.getTipo())
@@ -177,46 +185,46 @@ public class PluginDominio {
 			default:
 				throw new Exception("Tipo de dominio no soportado: " + dominio.getTipo());
 		}
-		
+
 		// Controlamos que el dominio devuelve datos nulos
 		if (valoresDominio == null) throw new Exception("Dominio " + dominio.getIdentificador() + " devuelve datos nulos");
-		
+
 		// Comprobamos si debe cachearse (si es cacheable y no tiene error)
 		if ( dominio.getCacheable() == 'S' && !valoresDominio.isError() )
 		{
 			this.saveToCache( cacheKey, valoresDominio );
 		}
-		
+
 		return valoresDominio;
 	}
-	
+
 	private ValoresDominio resuelveDominioFuenteDatos(Dominio dominio,
 			List parametros, String url) throws Exception {
 		ValoresFuenteDatosBTE vfd = DelegateBTEUtil.getBteSistraDelegate().consultaFuenteDatos(dominio.getSql(), parametros);
 		ValoresDominio vd = new ValoresDominio();
 		BeanUtils.copyProperties(vd, vfd);
-		return vd;		
+		return vd;
 	}
 
 	private ValoresDominio resuelveDominioEJB(Dominio dominio,List parametros, String url) throws Exception
 	{
-		log.debug("Accedemos a Dominio EJB");
+		debug("Accedemos a Dominio EJB");
 		LoginContext lc = null;
 		String jndiName = dominio.getJNDIName();
 		DominioEJBHome home = null;
 		try
 		{
 			if ( dominio.isSecured() )
-			{	
-				CallbackHandler handler = null; 
-				
+			{
+				CallbackHandler handler = null;
+
 				switch (dominio.getAutenticacionExplicita()){
 					// Autenticacion implicita
 					case Dominio.AUTENTICACION_EXPLICITA_SINAUTENTICAR:
 						break;
 					// Autenticacion explicita a traves de usuario/password
 					case Dominio.AUTENTICACION_EXPLICITA_ESTANDAR:
-						log.debug("Autenticación explicita a traves de usuario/password");
+						debug("Autenticación explicita a traves de usuario/password");
 						String claveCifrado = (String) DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().get("clave.cifrado");
 						String user = CifradoUtil.descifrar(claveCifrado,dominio.getUsr());
 						String pass = CifradoUtil.descifrar(claveCifrado,dominio.getPwd());
@@ -224,22 +232,22 @@ public class PluginDominio {
 						break;
                     // Autenticacion explicita a traves de plugin autenticacion organismo
 					case Dominio.AUTENTICACION_EXPLICITA_ORGANISMO:
-						log.debug("Autenticación explicita a traves de plugin autenticacion organismo");
+						debug("Autenticación explicita a traves de plugin autenticacion organismo");
 						AutenticacionExplicitaInfo authInfo = null;
 						try{
 							authInfo = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo(ConstantesLogin.TIPO_DOMINIO, dominio.getIdentificador());
-							log.debug("Usuario plugin autenticacion organismo: " + authInfo.getUser());
+							debug("Usuario plugin autenticacion organismo: " + authInfo.getUser());
 						}catch (Exception ex){
 							throw new Exception("Excepcion obteniendo informacion autenticacion explicita a traves de plugin organismo",ex);
-						}						
+						}
 						handler = new UsernamePasswordCallbackHandler( authInfo.getUser(), authInfo.getPassword() );
 						break;
 				}
-								
+
 				lc = new LoginContext("client-login", handler);
 			    lc.login();
 			}
-			
+
 			home = ( DominioEJBHome ) lookupHome( dominio, jndiName, url, DominioEJBHome.class );
 			DominioEJB dominioEJB = home.create();
 			return dominioEJB.obtenerDominio( dominio.getIdentificador(), parametros );
@@ -257,23 +265,23 @@ public class PluginDominio {
 			}
 		}
 	}
-	
-			
+
+
 	private Object lookupHome( Dominio dominio, String jndiName,String url, Class narrowTo) throws Exception {
-		
+
 		if (dominio.getLocalizacionEJB() == Dominio.EJB_LOCAL){
-			log.debug("Acceso local a " + dominio.getJNDIName());
+			debug("Acceso local a " + dominio.getJNDIName());
 		}else{
-			log.debug("Acceso remoto a " + dominio.getJNDIName() + " [" + url + "]");
+			debug("Acceso remoto a " + dominio.getJNDIName() + " [" + url + "]");
 		}
-		
-		return EjbUtil.lookupHome(dominio.getJNDIName(),(dominio.getLocalizacionEJB() == Dominio.EJB_LOCAL),url,narrowTo);  		
+
+		return EjbUtil.lookupHome(dominio.getJNDIName(),(dominio.getLocalizacionEJB() == Dominio.EJB_LOCAL),url,narrowTo);
 	}
-		
+
 	private ValoresDominio resuelveDominioWS(Dominio dominio,List parametros, String url) throws Exception
 	{
-		log.debug("Accedemos a Dominio WS");
-		
+		debug("Accedemos a Dominio WS");
+
 		// Obtenemos informacion de autenticacion
 		String user=null,pass=null;
 		switch (dominio.getAutenticacionExplicita()){
@@ -282,26 +290,26 @@ public class PluginDominio {
 				break;
 			// Autenticacion explicita a traves de usuario/password
 			case Dominio.AUTENTICACION_EXPLICITA_ESTANDAR:
-				log.debug("Autenticación explicita a traves de usuario/password");
+				debug("Autenticación explicita a traves de usuario/password");
 				String claveCifrado = (String) DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().get("clave.cifrado");
 				user = CifradoUtil.descifrar(claveCifrado,dominio.getUsr());
 				pass = CifradoUtil.descifrar(claveCifrado,dominio.getPwd());
 				break;
 	        // Autenticacion explicita a traves de plugin autenticacion organismo
 			case Dominio.AUTENTICACION_EXPLICITA_ORGANISMO:
-				log.debug("Autenticación explicita a traves de plugin autenticacion organismo");
+				debug("Autenticación explicita a traves de plugin autenticacion organismo");
 				AutenticacionExplicitaInfo authInfo = null;
 				try{
 					authInfo = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo(ConstantesLogin.TIPO_DOMINIO, dominio.getIdentificador());
-					log.debug("Usuario plugin autenticacion organismo: " + authInfo.getUser());
+					debug("Usuario plugin autenticacion organismo: " + authInfo.getUser());
 				}catch (Exception ex){
 					throw new Exception("Excepcion obteniendo informacion autenticacion explicita a traves de plugin organismo",ex);
-				}				
+				}
 				user = authInfo.getUser();
-				pass = authInfo.getPassword();			
+				pass = authInfo.getPassword();
 				break;
 		}
-		
+
 		if(dominio.getVersionWS() != null && "v1".equals(dominio.getVersionWS())){
 			return es.caib.sistra.wsClient.v1.client.ClienteWS.obtenerDominio(url,dominio.getSoapActionWS(),user,pass,dominio.getIdentificador(),parametros);
 		}else if(dominio.getVersionWS() != null && "v2".equals(dominio.getVersionWS())){
@@ -309,12 +317,12 @@ public class PluginDominio {
 		}else{
 			throw new Exception("Excepcion obteniendo la versión "+dominio.getVersionWS()+" del WS de obtención de dominios. ");
 		}
-		       		
+
 	}
-	
-	
+
+
 	private ValoresDominio resuelveDominioSQL(Dominio dominio,List parametros, String url)throws Exception{
-		log.debug("Dominio SQL");
+		debug("Dominio SQL");
 		// Obtenemos datasource
 		DataSource datasource;
 		Connection con = null;
@@ -323,20 +331,20 @@ public class PluginDominio {
 			datasource  = ( javax.sql.DataSource ) ctx.lookup("java:/" + url);
 	      } catch( Exception e ) {
 	              throw new Exception( "Error consiguiendo conexion : "+e.toString() );
-	      }	  
-	      
-	   
-	    try{	    	  
+	      }
+
+
+	    try{
 	    	// Obtenemos conexion
 	    	con = datasource.getConnection();
 			// Creamos sentencia
 		    PreparedStatement stmt = con.prepareStatement(dominio.getSql());
-		    
+
 		    // TODO: Incompatible amb drivers Postgresql. Detectar del tipu de base de dades i emprar-ho o no condicionalment.
-		    // I documentar com es pot aconseguir el mateix efecte a la configuració per exemple del datasource per evitar 
+		    // I documentar com es pot aconseguir el mateix efecte a la configuració per exemple del datasource per evitar
 		    // "long running queries" que puguin tombar el servidor de base de dades.
 		    //stmt.setQueryTimeout(60);
-	        			      
+
 			// Establecemos parametros
 		    ParameterMetaData paramMetaData = stmt.getParameterMetaData();
 		    for (int i=0;i<parametros.size();i++){
@@ -348,34 +356,34 @@ public class PluginDominio {
     			}
 	    		stmt.setObject(i+1,(String) parametros.get(i), type);
 		    }
-		    
+
 		    // Ejecutamos sentencia
 		    stmt.execute();
 		    ResultSet rs = stmt.getResultSet();
-		    	    
+
 			// Creamos ValoresDominio
 			ValoresDominio val = new ValoresDominio();
 			int numCols = rs.getMetaData().getColumnCount();
 			String ls_valor;
-			String ls_columnas[] = new String[numCols];		
+			String ls_columnas[] = new String[numCols];
 			for (int i=0;i<numCols;i++){
 				ls_columnas[i] = rs.getMetaData().getColumnName(i+1);
-			}		
+			}
 			Object l_valor;
-			int fila=0;		
+			int fila=0;
 			while (rs.next()){
 				fila = val.addFila();
-				for (int i=0;i<numCols;i++){					
+				for (int i=0;i<numCols;i++){
 					l_valor = rs.getObject(i + 1);
 					if (!rs.wasNull()){
 						ls_valor = l_valor.toString();
 					}else{
 						ls_valor = null;
 					}
-					val.setValor(fila,ls_columnas[i],ls_valor);				
+					val.setValor(fila,ls_columnas[i],ls_valor);
 				}
 			}
-			log.debug("Dominio resuelto");
+			debug("Dominio resuelto");
 			return val;
 	    }finally{
 	    	if (con != null){
@@ -383,7 +391,7 @@ public class PluginDominio {
 	    	}
 	    }
 	}
-	
+
 	private static Cache getCache() throws CacheException {
         String cacheName = PluginDominio.class.getName();
         CacheManager cacheManager = CacheManager.getInstance();
@@ -413,17 +421,15 @@ public class PluginDominio {
         Cache cache = getCache();
         cache.put(new Element(key, value));
     }
-	
-	
+
+
     public static void limpiarCache(String idDominio) throws CacheException{
-    	log.debug("Queremos borrarCache: " + idDominio);
         String cacheName = PluginDominio.class.getName();
         CacheManager cacheManager = CacheManager.getInstance();
         Cache cache;
         if (cacheManager.cacheExists(cacheName)) {
             cache = cacheManager.getCache(cacheName);
             List keys = cache.getKeys();
-        	log.debug("Queremos borrarCache: " + idDominio + " que tiene " + keys.size() + " elementos.");
     		for (Iterator it=keys.iterator();it.hasNext();){
     			String key = (String) it.next();
     			int idx = key.indexOf(SEPARATOR);
@@ -432,6 +438,12 @@ public class PluginDominio {
         }
 
     }
-    
+
+    private void debug(String mensaje) {
+    	if (this.debugEnabled) {
+    		log.debug(mensaje);
+    	}
+    }
+
 }
 

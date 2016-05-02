@@ -29,11 +29,11 @@ public final class CampoUtils {
      * @param variables Map amb els valors dels camps emplenats (les claus són f_xxx per
      * els camps de la mateixa pantalla i f_yyy_xxx per els camps de la pantalla yyy.)
      */
-    public static void calcularValoresPosibles(Campo campo, Map variables) {
+    public static void calcularValoresPosibles(Campo campo, Map variables, boolean debugEnabled) {
         final String script = campo.getExpresionValoresPosibles();
         if (script != null && script.trim().length() > 0) {
             List valores = new LinkedList();
-            Object result = ScriptUtil.evalScript(script, variables);
+            Object result = ScriptUtil.evalScript(script, variables, debugEnabled);
             if (result != null) {
                 if (result instanceof Collection) {
                     valores.addAll((Collection) result);
@@ -56,10 +56,10 @@ public final class CampoUtils {
         }
     }
 
-    public static Object calcularValorDefecto(Campo campo, Map variables) {
+    public static Object calcularValorDefecto(Campo campo, Map variables, boolean debugEnabled) {
         final String script = campo.getExpresionValoresPosibles();
         if (script != null && script.trim().length() > 0) {
-            return ScriptUtil.evalScript(script, variables);
+            return ScriptUtil.evalScript(script, variables, debugEnabled);
         }
         return null;
     }
@@ -72,7 +72,7 @@ public final class CampoUtils {
      * @param xPathBloqCampo expresión xPath que busca si hay campos a bloquear.
      * @return true si el campo debe estar bloqueado. false e.o.c.
      */
-    public static boolean bloquearCampo(Campo campo, Document doc, String xPathBloqTodos, String xPathBloqCampo) {        
+    public static boolean bloquearCampo(Campo campo, Document doc, String xPathBloqTodos, String xPathBloqCampo) {
         if (doc.selectSingleNode(xPathBloqTodos) != null) {
             return true;
         } else {
@@ -89,34 +89,34 @@ public final class CampoUtils {
             return false;
         }
     }
-    
+
     // -- INDRA: UTILIDAD PARA EJECUTAR EXPRESION DE AUTORRELLENABLE
     /**
      * Executarà l'expressió de autorrelleno del camp i retorna llista de valors calculats
-     * 
+     *
      * Para campos lista de elementos usará una variable de tipo ListaElementos
-     * 
+     *
      * @param campo
      * @param variables Map amb els valors dels camps emplenats (les claus són f_xxx per
      * els camps de la mateixa pantalla i f_yyy_xxx per els camps de la pantalla yyy.)
      */
-    public static List calcularAutorrellenable(Campo campo, Map variables) {
+    public static List calcularAutorrellenable(Campo campo, Map variables, boolean debugEnabled) {
         final String script = campo.getExpresionAutorellenable();
         List valores = new LinkedList();
-        if (script != null && script.trim().length() > 0) {                    	 
-        	
+        if (script != null && script.trim().length() > 0) {
+
         	// Si es un campo lista de elementos usamos variable LISTAELEMENTOS
         	if (campo instanceof ListaElementos){
         		variables.put("LISTAELEMENTOS",new DatosListaElementos());
         	}
-        	
-             Object result = ScriptUtil.evalScript(script, variables);
-             
-             // Si es un campo lista de elementos no esperara ningun valor, ya que 
+
+             Object result = ScriptUtil.evalScript(script, variables, debugEnabled);
+
+             // Si es un campo lista de elementos no esperara ningun valor, ya que
              // los valores se han establecido mendiante la vble LISTAELEMENTOS
              if (campo instanceof ListaElementos){
             	 // Devolvemos como resultado la lista de elementos
-            	 valores.add(variables.get("LISTAELEMENTOS"));            	 
+            	 valores.add(variables.get("LISTAELEMENTOS"));
              }else{
              // Si no es un campo lista de elementos esperara un valor o lista de valores
              if (result != null) {
@@ -126,14 +126,14 @@ public final class CampoUtils {
                 	 valores.addAll(Arrays.asList((Object[]) result));
                  } else if (result instanceof ValorPosible) {
                      valores.add(result);
-                 } else if (result instanceof NativeArray) {                 	
-                 	NativeArray params = (NativeArray) result;        	
+                 } else if (result instanceof NativeArray) {
+                 	NativeArray params = (NativeArray) result;
              		if ( params != null )
              		{
              			Object [] ids = params.getIds();
              			for ( int i = 0; i < ids.length; i++ )
              			{
-             				Object valorParametro = params.get( (( Integer ) ids[i] ).intValue() , params ); 
+             				Object valorParametro = params.get( (( Integer ) ids[i] ).intValue() , params );
              				ValorPosible vp = new ValorPosible();
                             vp.setDefecto(false);
                             vp.setValor(valorParametro.toString());
@@ -141,9 +141,9 @@ public final class CampoUtils {
                             trVp.setEtiqueta(valorParametro.toString());
                             vp.setTraduccion(campo.getCurrentLang(), trVp);
                             vp.setCurrentLang(campo.getCurrentLang());
-                            valores.add(vp);             				
+                            valores.add(vp);
              			}
-             		}                  		
+             		}
                  }else {
                      ValorPosible vp = new ValorPosible();
                      vp.setDefecto(false);
@@ -160,7 +160,7 @@ public final class CampoUtils {
         return valores;
     }
     // -- INDRA: FIN
-    
+
     // -- INDRA: OBTENER REFERENCIAS CAMPO DETALLE
     public static String getPantallaListaElementos(String referencia){
     	return referencia.split("#@#")[0];
@@ -172,5 +172,5 @@ public final class CampoUtils {
     	return pantalla + "#@#" + campo;
     }
     // -- INDRA: FIN
-    
+
 }

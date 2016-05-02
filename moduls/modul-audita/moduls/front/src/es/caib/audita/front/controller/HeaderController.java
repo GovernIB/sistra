@@ -15,28 +15,22 @@ public class HeaderController extends BaseController
 	private static String OPCION_ANUAL = "anual";
 	private static String OPCION_MENSUAL = "mensual";
 	private static String OPCION_DIARIO = "diario";
-	
+
 	private static Log _log = LogFactory.getLog( HeaderController.class );
-	
+
 	public void execute(ComponentContext tileContext,
 			HttpServletRequest request, HttpServletResponse response,
 			ServletContext servletContext) throws Exception
 	{
-		_log.debug( "getContextPath() :" + request.getContextPath() );
-		_log.debug( "getPathInfo() " + request.getPathInfo() );
-		_log.debug( "getPathTranslated() " + request.getPathTranslated() );
-		_log.debug( "getQueryString() " + request.getQueryString() );
-		_log.debug( "getRequestURI() " + request.getRequestURI() );
-		_log.debug( "getRequestURL() " + request.getRequestURL() );
-		
+
 		String url = request.getRequestURL().toString();
 		String opcion = getOpcionPestanya( url );
-		
+
 		request.setAttribute( "opcion", opcion );
-		
-		
+
+
 	}
-	
+
 	private String getOpcionPestanya( String url )
 	{
 		if ( url.indexOf( OPCION_INICIO ) != -1 || url.indexOf( "init" ) != -1 ||

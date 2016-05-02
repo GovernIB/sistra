@@ -21,7 +21,7 @@ import es.caib.sistra.front.util.FlujoFormularioRequestHelper;
 public class CancelarFormServlet extends HttpServlet {
 
 	private static Log logger = LogFactory.getLog(CancelarFormServlet.class);
-	
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
@@ -29,9 +29,12 @@ public class CancelarFormServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     	String tokenGestionFormulario = request.getParameter( Constants.GESTOR_FORM_PARAM_ALMACENAMIENTO_GESTOR_FORMULARIO );
-    	
-    	logger.debug( "DEBUGFORM: CancelarFormServlet - Id gestor form: " + tokenGestionFormulario + " - Charset: " + request.getCharacterEncoding());
-    	
+    	boolean debugEnabled = "true".equals(request.getParameter( Constants.GESTOR_FORM_PARAM_DEBUGENABLED ));
+
+    	if (debugEnabled) {
+    		logger.debug( "DEBUGFORM: CancelarFormServlet - Id gestor form: " + tokenGestionFormulario + " - Charset: " + request.getCharacterEncoding());
+    	}
+
     	String token = null;
     	String msgError = null;
     	try
@@ -50,10 +53,10 @@ public class CancelarFormServlet extends HttpServlet {
     		logger.error( "Error intentando cancelar proceso formulario", exc );
     		msgError = "Excepcion: " + exc.getMessage();
     	}
-    	
-        
+
+
     	if (token == null) {
-    		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, msgError);    	    
+    		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, msgError);
     	} else {
 	    	byte[] encBytes = token.getBytes( "UTF-8" );
 	        response.reset();

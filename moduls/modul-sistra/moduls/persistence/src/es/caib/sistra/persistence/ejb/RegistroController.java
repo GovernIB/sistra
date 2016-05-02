@@ -58,16 +58,26 @@ import es.caib.zonaper.persistence.delegate.PadDelegate;
 
 /**
  * Realiza operaciones de registro según destino:
- * 	- Registro: Si registro telemático realiza apunte registral y apunte en bandeja. 
+ * 	- Registro: Si registro telemático realiza apunte registral y apunte en bandeja.
  * 				Si preregistro genera justificante preregistro.
  * 	- Envío: 	Si envio telemático realiza apunte en bandeja y genera justificante envío.
  * 				Si preregistro genera justificante preregistro.
- *  - Consulta:	Invoca a EJB de consulta y obtiene resultado 
+ *  - Consulta:	Invoca a EJB de consulta y obtiene resultado
  */
-public class RegistroController 
+public class RegistroController
 {
-	Log log = LogFactory.getLog( RegistroController.class );
-	
+
+
+	private Log log = LogFactory.getLog( RegistroController.class );
+	private boolean debugEnabled;
+
+
+	public RegistroController(boolean pdebugEnabled) {
+		super();
+		debugEnabled = pdebugEnabled;
+	}
+
+
 	/**
 	 * Realiza proceso de registro (para tramites con destino envio y registro)
 	 * @param tipoDestino
@@ -78,14 +88,14 @@ public class RegistroController
 	 * @throws Exception
 	 */
 	public ResultadoRegistrar registrar(char tipoDestino,String idPersistencia,AsientoCompleto asientoCompleto,Map referenciasRDS)throws Exception {
-					
-		log.debug("Realizamos registro");
-		
-		ReferenciaRDS refAsiento;						
-							
+
+		debug("Realizamos registro");
+
+		ReferenciaRDS refAsiento;
+
 		// Obtenemos referencia RDS del asiento
 		refAsiento = (ReferenciaRDS) referenciasRDS.get(ConstantesAsientoXML.IDENTIFICADOR_ASIENTO + "-1");
-		
+
 		// Parseamos asiento y datos propios
     	FactoriaObjetosXMLRegistro factoriaRT = ServicioRegistroXML.crearFactoriaObjetosXML();
 		AsientoRegistral asientoXML = factoriaRT.crearAsientoRegistral (
@@ -94,41 +104,41 @@ public class RegistroController
 		DatosPropios datosPropiosXML = factoriaDP.crearDatosPropios (
 				new ByteArrayInputStream(asientoCompleto.getDatosPropios().getBytes(ConstantesXML.ENCODING))
 			);
-		
+
 		// Comprobamos si existe documentación a aportar
-		boolean aportarDoc = false;									
+		boolean aportarDoc = false;
 		if (datosPropiosXML.getInstrucciones().getDocumentosEntregar() != null && datosPropiosXML.getInstrucciones().getDocumentosEntregar().getDocumento().size() > 0) {
 			aportarDoc = true;
-		}						
-					
+		}
+
 		// Si no hay que aportar documentación iniciamos proceso telemático
 		if (!aportarDoc) {
-			
-			// Si el destino es registro realizamos registro telemático				
+
+			// Si el destino es registro realizamos registro telemático
 			if (tipoDestino == ConstantesSTR.DESTINO_REGISTRO)
 			{
-				return registrarImpl_Registro(tipoDestino,idPersistencia,asientoCompleto,referenciasRDS,refAsiento,asientoXML, datosPropiosXML);					
+				return registrarImpl_Registro(tipoDestino,idPersistencia,asientoCompleto,referenciasRDS,refAsiento,asientoXML, datosPropiosXML);
 			}else{
 			// Si el destino es la bandeja realizamos envío
 				return registrarImpl_Envio(tipoDestino,idPersistencia,asientoCompleto,referenciasRDS,refAsiento,asientoXML, datosPropiosXML);
 			}
-																
-		}else{	
+
+		}else{
 			// Si hay que aportar documentación iniciamos proceso preregistro
-			return registrarImpl_Preregistro(tipoDestino,idPersistencia,asientoCompleto,referenciasRDS,refAsiento,asientoXML, datosPropiosXML);				
-		}	
-		
-		
-		
-	}	
-	
-	
+			return registrarImpl_Preregistro(tipoDestino,idPersistencia,asientoCompleto,referenciasRDS,refAsiento,asientoXML, datosPropiosXML);
+		}
+
+
+
+	}
+
+
 	public ResultadoRegistrar consultar(char tipoAcceso,String jndi,boolean local,String url,char autenticacion,String user,String pass,
 			String identificadorProcedimiento, String identificadorTramite,Map datosFormulario, String versionWS) throws Exception {
-	// Realiza proceso de consulta (para tramites con destino consulta)		
-		log.debug("Realizamos consulta");
-		
-		//	En caso de requerir autenticación explícita obtenemos el usuario/password			
+	// Realiza proceso de consulta (para tramites con destino consulta)
+		debug("Realizamos consulta");
+
+		//	En caso de requerir autenticación explícita obtenemos el usuario/password
 		String userAuth=null,passAuth=null;
 		switch (autenticacion){
 			// No requiere autenticacion explicita
@@ -136,40 +146,40 @@ public class RegistroController
 				break;
 			// Requiere autenticacion explicita basada en usuario y password
 			case TramiteVersion.AUTENTICACION_EXPLICITA_ESTANDAR:
-				log.debug("Autenticación explicita STANDARD");
-				
+				debug("Autenticación explicita STANDARD");
+
 				String claveCifrado = (String) DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().get("clave.cifrado");
 				String userPlain = CifradoUtil.descifrar(claveCifrado,user);
 				String passPlain = CifradoUtil.descifrar(claveCifrado,pass);
-				
+
 				userAuth = userPlain;
-				passAuth = passPlain; 
+				passAuth = passPlain;
 				break;
 			// Requiere autenticacion explicita manejada por organismo
 			case TramiteVersion.AUTENTICACION_EXPLICITA_ORGANISMO:
-				log.debug("Autenticación explicita manejada por organismo");
+				debug("Autenticación explicita manejada por organismo");
 				AutenticacionExplicitaInfo infoAuth = null;
 				try{
 					infoAuth = PluginFactory.getInstance().getPluginAutenticacionExplicita().getAutenticacionInfo(ConstantesLogin.TIPO_PROCEDIMIENTO, identificadorProcedimiento);
-					log.debug("Usuario plugin autenticacion organismo: " + infoAuth.getUser());
+					debug("Usuario plugin autenticacion organismo: " + infoAuth.getUser());
 				}catch (Exception ex){
 					throw new Exception("Excepcion obteniendo informacion autenticacion explicita a traves de plugin organismo",ex);
 				}
 				userAuth = infoAuth.getUser();
-				passAuth = infoAuth.getPassword(); 				
+				passAuth = infoAuth.getPassword();
 				break;
 		}
-		
-		
+
+
 		// Segun tipo acceso realizamos la consulta
 		if (tipoAcceso == TramiteVersion.CONSULTA_EJB){
 			return consultarImpl_EJB(jndi,local,url,userAuth,passAuth,datosFormulario,identificadorTramite, identificadorProcedimiento);
 		}else{
 			return consultarImpl_WS(url,userAuth,passAuth,identificadorTramite, identificadorProcedimiento,datosFormulario,versionWS);
 		}
-		
+
 	}
-	
+
 	/**
 	 * Realiza proceso de consulta a través de Web Service
 	 * @param url
@@ -186,18 +196,18 @@ public class RegistroController
 			}else if(versionWS != null && "v2".equals(versionWS)){
 				docRes = es.caib.sistra.wsClient.v2.client.ClienteWS.realizarConsulta(url,null,user,pass,identificadorTramite,datosFormulario);
 			}else{
-				throw new Exception("Excepcion obteniendo la versión "+versionWS+" del WS de consulta. ");				
+				throw new Exception("Excepcion obteniendo la versión "+versionWS+" del WS de consulta. ");
 			}
 			// Devolvemos resultado consulta
 			ResultadoRegistrar res = new ResultadoRegistrar();
     		res.setTipo(ResultadoRegistrar.CONSULTA);
     		res.setProcedimiento(identificadorProcedimiento);
     		res.setDocumentos(docRes);
-    		return res;				
+    		return res;
 	}
-		
-	
-	
+
+
+
 	/**
 	 * Realiza proceso de consulta a través de EJB
 	 * @param jndi
@@ -211,42 +221,42 @@ public class RegistroController
 	 * @throws Exception
 	 */
 	private ResultadoRegistrar consultarImpl_EJB(String jndi,boolean local,String url,String user,String pass,Map datosFormulario,String identificadorTramite, String identificadorProcedimiento)throws Exception {
-		
-		log.debug("Realizamos consulta via EJB");
-		
-		LoginContext lc = null;				
+
+		debug("Realizamos consulta via EJB");
+
+		LoginContext lc = null;
 		try
 		{
-			// Realizamos autenticacion explicita en caso necesario			
+			// Realizamos autenticacion explicita en caso necesario
 			if (user != null){
 				CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass );
 				lc = new LoginContext("client-login", handler);
 			    lc.login();
-			    log.debug("Autenticación explicita realizada");
+			    debug("Autenticación explicita realizada");
 			}
-							
+
 			// Obtenemos destino consulta
-			log.debug("Accedemos a BackOffice ...");
+			debug("Accedemos a BackOffice ...");
 			es.caib.sistra.persistence.intf.ConsultaEJBHome home =(es.caib.sistra.persistence.intf.ConsultaEJBHome) EjbUtil.lookupHome(jndi,local,url,ConsultaEJBHome.class);
 			es.caib.sistra.persistence.intf.ConsultaEJB ejb = home.create();
-									
-			// Obtenemos datos formularios			
+
+			// Obtenemos datos formularios
 			FormularioConsulta [] forms = new FormularioConsulta[datosFormulario.size()];
 			int num=0;
-			for (Iterator it = datosFormulario.keySet().iterator();it.hasNext();){				
-				String key = (String) it.next();		
+			for (Iterator it = datosFormulario.keySet().iterator();it.hasNext();){
+				String key = (String) it.next();
 				forms[num] = new FormularioConsulta();
 				forms[num].setIdentificador(StringUtil.getModelo(key));
 				forms[num].setNumeroInstancia(StringUtil.getVersion(key));
 				forms[num].setXml( ((DatosFormulario) datosFormulario.get(key)).getString() );
 				num++;
-			}			
-			
+			}
+
 			// Realizamos consulta
 			DocumentoConsulta docs[] = ejb.realizarConsulta(identificadorTramite,forms);
-			//DocumentoConsulta docs[] = ejb.realizarConsulta(forms);			
-			log.debug("Consulta realizada: " + docs.length + "docs.");
-			
+			//DocumentoConsulta docs[] = ejb.realizarConsulta(forms);
+			debug("Consulta realizada: " + docs.length + "docs.");
+
 			// Devolvemos resultado
 			ArrayList docRes = new ArrayList();
 			for (int i=0;i<docs.length;i++){
@@ -256,7 +266,7 @@ public class RegistroController
 			res.setProcedimiento(identificadorProcedimiento);
 			res.setTipo(ResultadoRegistrar.CONSULTA);
 			res.setDocumentos(docRes);
-			return res;				
+			return res;
 		}
 		catch( Exception exc )
 		{
@@ -271,156 +281,156 @@ public class RegistroController
 			}
 		}
 	}
-			
-	
+
+
 	// Realiza proceso de registro telemático.
-	// En caso de error se genera una excepción de registro telemático que contiene en caso de haberse invocado el RTE el resultado temporal del registro 
+	// En caso de error se genera una excepción de registro telemático que contiene en caso de haberse invocado el RTE el resultado temporal del registro
 	private ResultadoRegistrar registrarImpl_Registro(char tipoDestino,String idPersistencia,AsientoCompleto asientoCompleto,Map referenciasRDS,ReferenciaRDS refAsiento,AsientoRegistral asientoXML, DatosPropios datosPropiosXML)throws RegistroTelematicoException{
-				
+
 		ResultadoRegistroTelematico resultadoTemporal = null;
-		
+
 		try{
-			log.debug("Iniciamos proceso de registro telemático...");
-													
+			debug("Iniciamos proceso de registro telemático...");
+
 			// Registramos en RTE
 			RegistroTelematicoDelegate ejbRegistro = DelegateRegtelUtil.getRegistroTelematicoDelegate();
 			resultadoTemporal = ejbRegistro.registroEntrada( refAsiento, referenciasRDS );
-			log.debug( "Se ha invocado al RTE con num. reg.:" + resultadoTemporal.getResultadoRegistro().getNumeroRegistro());																
-			
-			// Obtenemos referencia Justificante generado por el registro	
+			debug( "Se ha invocado al RTE con num. reg.:" + resultadoTemporal.getResultadoRegistro().getNumeroRegistro());
+
+			// Obtenemos referencia Justificante generado por el registro
 			ReferenciaRDS refJustificante = resultadoTemporal.getReferenciaRDSJustificante();
-								
+
 			// Generamos resultado
 			String numeroRegistro = resultadoTemporal.getResultadoRegistro().getNumeroRegistro();
-			Timestamp fechaRegistro = new Timestamp( StringUtil.cadenaAFecha( resultadoTemporal.getResultadoRegistro().getFechaRegistro(), "yyyyMMddHHmmss" ).getTime());						
+			Timestamp fechaRegistro = new Timestamp( StringUtil.cadenaAFecha( resultadoTemporal.getResultadoRegistro().getFechaRegistro(), "yyyyMMddHHmmss" ).getTime());
 			ResultadoRegistrar resultadoRegistrar = new ResultadoRegistrar();
 			resultadoRegistrar.setTipo(ResultadoRegistrar.REGISTRO_TELEMATICO);
 			resultadoRegistrar.setProcedimiento(datosPropiosXML.getInstrucciones().getIdentificadorProcedimiento());
 			resultadoRegistrar.setNumero(numeroRegistro);
-			resultadoRegistrar.setFecha(fechaRegistro);			
+			resultadoRegistrar.setFecha(fechaRegistro);
 			resultadoRegistrar.setRdsJustificante(refJustificante);
-			
+
 			// Realizamos apunte en Bandeja (el log en la PAD lo realiza el interfaz de registro telemático)
-			generarEntradaBandeja(refAsiento,refJustificante,referenciasRDS); 
-		
+			generarEntradaBandeja(refAsiento,refJustificante,referenciasRDS);
+
 			// Devolvemos resultado
-			log.debug("Registro telemático efectuado: " + resultadoRegistrar.getNumero());
+			debug("Registro telemático efectuado: " + resultadoRegistrar.getNumero());
 			return resultadoRegistrar;
 		}catch (Exception ex){
 			// Si ha pasado una excepción, lanzamos una excepción de registro que contenga resultado temporal de registro
 			throw new RegistroTelematicoException("No se puede comprobar el asiento",MensajeFront.MENSAJE_ASIENTOINCORRECTO,ex,resultadoTemporal);
-		}		
+		}
 	}
-	
-	
+
+
 	// Realiza proceso de envio
 	private ResultadoRegistrar registrarImpl_Envio(char tipoDestino,String idPersistencia,AsientoCompleto asientoCompleto,Map referenciasRDS,ReferenciaRDS refAsiento,AsientoRegistral asientoXML, DatosPropios datosPropiosXML)throws Exception{
-				
-		log.debug("Iniciamos proceso de envío telemático...");
-		
+
+		debug("Iniciamos proceso de envío telemático...");
+
 		String numeroEnvio;
 		Timestamp fechaEnvio;
 		ReferenciaRDS refJustificante;
-		
+
 		// Generamos justificante
 		fechaEnvio = new Timestamp(System.currentTimeMillis());
 		numeroEnvio = generarNumeroEnvio();
 		refJustificante = generarJustificante(asientoCompleto,asientoXML,numeroEnvio,fechaEnvio);
-		
+
 		// Genera usos RDS para asiento, justificante y documentos asociados
 		generarUsosRDS(ConstantesRDS.TIPOUSO_ENVIO,asientoXML,referenciasRDS,refAsiento,refJustificante,numeroEnvio,fechaEnvio);
-		
+
 		// Generamos resultado
 		ResultadoRegistrar resultadoRegistrar = new ResultadoRegistrar();
 		resultadoRegistrar.setTipo(ResultadoRegistrar.ENVIO);
 		resultadoRegistrar.setProcedimiento(datosPropiosXML.getInstrucciones().getIdentificadorProcedimiento());
 		resultadoRegistrar.setNumero(numeroEnvio);
-		resultadoRegistrar.setFecha(fechaEnvio);			
+		resultadoRegistrar.setFecha(fechaEnvio);
 		resultadoRegistrar.setRdsJustificante(refJustificante);
-		
+
 		// Realizamos apunte en Bandeja
-		generarEntradaBandeja(refAsiento,refJustificante,referenciasRDS); 
-	
+		generarEntradaBandeja(refAsiento,refJustificante,referenciasRDS);
+
 		// Generamos apunte en log PAD
 		generarLogPAD(refAsiento,refJustificante,referenciasRDS);
-		
+
 		// Devolvemos resultado
-		log.debug("Envío telemático efectuado: " + resultadoRegistrar.getNumero());
+		debug("Envío telemático efectuado: " + resultadoRegistrar.getNumero());
 		return resultadoRegistrar;
-		
+
 	}
-	
-	
+
+
 	// Realiza proceso de preregistro
 	private ResultadoRegistrar registrarImpl_Preregistro(char tipoDestino,String idPersistencia,AsientoCompleto asientoCompleto,Map referenciasRDS,ReferenciaRDS refAsiento,AsientoRegistral asientoXML, DatosPropios datosPropiosXML)throws Exception{
-		
-		log.debug("Iniciamos proceso de preregistro...");		
-				
+
+		debug("Iniciamos proceso de preregistro...");
+
 		//  Generamos número de preregistro
 		String numeroPreregistro = generarNumeroPreregistro(tipoDestino);
 		Timestamp fechaPreregistro = new Timestamp(System.currentTimeMillis());
-				
+
 		// Generamos justificante
 		ReferenciaRDS refJustificante = generarJustificante(asientoCompleto,asientoXML,numeroPreregistro,fechaPreregistro);
-		
+
 		// Genera usos RDS para asiento, justificante y documentos asociados
 		generarUsosRDS(ConstantesRDS.TIPOUSO_PREREGISTRO,asientoXML,referenciasRDS,refAsiento,refJustificante,numeroPreregistro,fechaPreregistro);
-			
+
 		// Generamos resultado
 		ResultadoRegistrar resultadoRegistrar = new ResultadoRegistrar();
 		resultadoRegistrar.setTipo(ResultadoRegistrar.PREREGISTRO);
 		resultadoRegistrar.setProcedimiento(datosPropiosXML.getInstrucciones().getIdentificadorProcedimiento());
 		resultadoRegistrar.setNumero(numeroPreregistro);
-		resultadoRegistrar.setFecha(fechaPreregistro);			
+		resultadoRegistrar.setFecha(fechaPreregistro);
 		resultadoRegistrar.setRdsJustificante(refJustificante);
-				
+
 		// Generamos apunte en log PAD
 		generarLogPAD(refAsiento,refJustificante,referenciasRDS);
-		
+
 		// Devolvemos resultado
-		log.debug("Preregistro efectuado: " + resultadoRegistrar.getNumero());
+		debug("Preregistro efectuado: " + resultadoRegistrar.getNumero());
 		return resultadoRegistrar;
-		
+
 	}
-	
-		
+
+
 	/**
 	 * Genera entrada en la bandeja telemática para registros y envíos
-	 * 
+	 *
 	 * @param ReferenciaRDS Referencia Asiento
 	 * @return String Número de entrada en Bandeja
 	 */
-	private void generarEntradaBandeja(ReferenciaRDS refAsiento,ReferenciaRDS refJustificante, Map refDocumentos) throws Exception{		
+	private void generarEntradaBandeja(ReferenciaRDS refAsiento,ReferenciaRDS refJustificante, Map refDocumentos) throws Exception{
 		BteSistraDelegate bte = DelegateBTEUtil.getBteSistraDelegate();
-		bte.crearEntradaTelematica(refAsiento,refJustificante,refDocumentos);				
+		bte.crearEntradaTelematica(refAsiento,refJustificante,refDocumentos);
 	}
-		
+
 	/**
 	 * Generar justificante de registro y lo almacena en el RDS (SOLO PARA ENVIOS Y PREREGISTROS, PARA REGISTROS SE GENERA EN EL INTERFAZ DE REGISTRO)
-	 * 
+	 *
 	 * @param ReferenciaRDS Referencia Asiento
 	 * @return String Número de entrada en Bandeja
 	 */
 	private ReferenciaRDS generarJustificante(AsientoCompleto asiento,AsientoRegistral asientoXML,String numRegistro,Timestamp fechaRegistro) throws Exception{
-		
+
 		// Generamos justificante a partir asiento
-		String justificante = 
+		String justificante =
 			"<?xml version=\"1.0\" encoding=\"" + ConstantesXML.ENCODING + "\" standalone=\"yes\"?>" +
-			"<JUSTIFICANTE version=\"1.0\">" +  
-			asiento.getAsiento().substring(asiento.getAsiento().indexOf("<ASIENTO_REGISTRAL")) +			
-			"  <NUMERO_REGISTRO>"+ numRegistro +"</NUMERO_REGISTRO> " + 
+			"<JUSTIFICANTE version=\"1.0\">" +
+			asiento.getAsiento().substring(asiento.getAsiento().indexOf("<ASIENTO_REGISTRAL")) +
+			"  <NUMERO_REGISTRO>"+ numRegistro +"</NUMERO_REGISTRO> " +
 			"  <FECHA_REGISTRO>"+ StringUtil.fechaACadena(fechaRegistro,ConstantesAsientoXML.FECHA_REGISTRO_FORMATO) + "</FECHA_REGISTRO> " +
-			" </JUSTIFICANTE> ";									
-		
-		// Insertamos justificante en RDS		
+			" </JUSTIFICANTE> ";
+
+		// Insertamos justificante en RDS
 		DocumentoRDS docRds = new DocumentoRDS();
 		docRds.setModelo(ConstantesRDS.MODELO_JUSTIFICANTE_REGISTRO);
 		docRds.setVersion(ConstantesRDS.VERSION_JUSTIFICANTE);
 		docRds.setDatosFichero(justificante.getBytes(ConstantesXML.ENCODING));
-		docRds.setTitulo( ConstantesSTR.CAT_LANGUAGE.equals(  asientoXML.getDatosAsunto().getIdiomaAsunto() ) ? ConstantesSTR.PDF_FILE_TITLE_CAT : ConstantesSTR.PDF_FILE_TITLE_CAS );	    		
-		docRds.setNombreFichero("justificante.xml");	    		
+		docRds.setTitulo( ConstantesSTR.CAT_LANGUAGE.equals(  asientoXML.getDatosAsunto().getIdiomaAsunto() ) ? ConstantesSTR.PDF_FILE_TITLE_CAT : ConstantesSTR.PDF_FILE_TITLE_CAS );
+		docRds.setNombreFichero("justificante.xml");
 		docRds.setExtensionFichero("xml");
-		docRds.setUnidadAdministrativa(Long.parseLong(asientoXML.getDatosAsunto().getCodigoUnidadAdministrativa()));	
+		docRds.setUnidadAdministrativa(Long.parseLong(asientoXML.getDatosAsunto().getCodigoUnidadAdministrativa()));
 		for (Iterator it = asientoXML.getDatosInteresado().iterator();it.hasNext();){
     		DatosInteresado di = (DatosInteresado) it.next();
     		if (di.getTipoInteresado().equals(ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTANTE)){
@@ -431,12 +441,12 @@ public class RegistroController
     	}
 		docRds.setIdioma(asientoXML.getDatosAsunto().getIdiomaAsunto());
 		RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
-		ReferenciaRDS ref =rds.insertarDocumento(docRds);		
-		
+		ReferenciaRDS ref =rds.insertarDocumento(docRds);
+
 		// Devolvemos referencia
 		return ref;
 	}
-				
+
 	/**
 	 * Generar apuntes Log PAD
 	 * @param idPersistencia ID Persistencia
@@ -446,57 +456,57 @@ public class RegistroController
 	 * @throws Exception
 	 */
 	private void generarLogPAD(	ReferenciaRDS refAsiento, ReferenciaRDS refJustificante,
-								Map referenciasRds) throws Exception{	
-		
-		PadDelegate pad = DelegatePADUtil.getPadDelegate();  
-		pad.logPad(refAsiento,refJustificante,referenciasRds);			
+								Map referenciasRds) throws Exception{
+
+		PadDelegate pad = DelegatePADUtil.getPadDelegate();
+		pad.logPad(refAsiento,refJustificante,referenciasRds);
 	}
-	
-	
+
+
 	 /**
      * Genera Número de Preregistro
      * @return
      */
     private String generarNumeroPreregistro(char tipoDestino) throws Exception{
     	 GeneradorDelegate gen = DelegateUtil.getGeneradorDelegate();
-    	 return gen.generarNumeroPreregistro(tipoDestino);    	 
+    	 return gen.generarNumeroPreregistro(tipoDestino);
     }
-    
+
     /**
      * Genera Número de Envío
      * @return
      */
     private String generarNumeroEnvio() throws Exception{
     	 GeneradorDelegate gen = DelegateUtil.getGeneradorDelegate();
-    	 return gen.generarNumeroEnvio();    	 
+    	 return gen.generarNumeroEnvio();
     }
-    
+
     /**
 	 * Genera usos RDS en preregistro para asiento, justificante y documentos asociados
 	 */
 	private void generarUsosRDS(String tipoUso,AsientoRegistral asientoXML,Map referenciasRDS,
 			ReferenciaRDS refAsiento, ReferenciaRDS refJustificante,
 			String numero, Date fecha) throws Exception{
-		
+
 		RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
 		UsoRDS uso;
-		
-		// Creamos uso para asiento					
+
+		// Creamos uso para asiento
 		uso = new UsoRDS();
 		uso.setReferenciaRDS(refAsiento);
 		uso.setReferencia(numero);
-		uso.setTipoUso(tipoUso);	
+		uso.setTipoUso(tipoUso);
 		uso.setFechaSello(fecha);
 		rds.crearUso(uso);
-		
-		// Creamos uso para justificante					
+
+		// Creamos uso para justificante
 		uso = new UsoRDS();
 		uso.setReferenciaRDS(refJustificante);
 		uso.setReferencia(numero);
 		uso.setTipoUso(tipoUso);
 		uso.setFechaSello(fecha);
 		rds.crearUso(uso);
-		
+
 		// Creamos usos para documentos asiento
 		Iterator it = asientoXML.getDatosAnexoDocumentacion().iterator();
     	while (it.hasNext()){
@@ -506,8 +516,14 @@ public class RegistroController
 			uso.setTipoUso(tipoUso);
 			uso.setFechaSello(fecha);
 			rds.crearUso(uso);
-    	}    	
-		
+    	}
+
 	}
-    
+
+	private void debug(String mensaje) {
+    	if (this.debugEnabled) {
+    		log.debug(mensaje);
+    	}
+    }
+
 }

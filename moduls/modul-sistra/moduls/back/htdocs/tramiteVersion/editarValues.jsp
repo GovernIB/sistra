@@ -25,7 +25,7 @@
      }
      // -->
 </script>
-    	
+
 <script type="text/javascript">
      <!--
      function mostrarArbolUnidades(url) {
@@ -34,7 +34,7 @@
      }
      // -->
 </script>
-    	
+
 
 <html:hidden property="idTramite" />
 <tr>
@@ -77,14 +77,14 @@
 		    <td width="3%"><em>dd/mm/yyyy hh:mi:ss</em></td>
 		</tr>
 	</table>
-	</td>	
+	</td>
 </tr>
 <tr>
     <td class="labelo"><bean:message key="tramiteVersion.idiomas"/></td>
     <td class="input">
     <logic:iterate id="lenguaje" name="listaLenguajes" type="java.lang.String">
 		<bean:write name="lenguaje"/><html:multibox property="idiomas" value="<%=lenguaje%>"/>
-	</logic:iterate>    
+	</logic:iterate>
     </td>
 </tr>
 <tr>
@@ -109,11 +109,11 @@
 		    			<td width="10%">&nbsp;</td>
 		    			<td><bean:message key="tramiteVersion.redireccionFin"/></td>
 		    			<td nowrap="nowrap" width="1%">Si<html:radio property="values.redireccionFin" value="S"/></td>
-		    			<td nowrap="nowrap" width="1%">No<html:radio property="values.redireccionFin" value="N"/></td>	    			
-		    			<td width="30%">&nbsp;</td>		    		
-		    		</tr>		    		
+		    			<td nowrap="nowrap" width="1%">No<html:radio property="values.redireccionFin" value="N"/></td>
+		    			<td width="30%">&nbsp;</td>
+		    		</tr>
 		    	</table>
-		    </td> 
+		    </td>
 </tr>
 <tr>
 	    <td class="labelo"><bean:message key="tramiteVersion.anonimoDefecto"/></td>
@@ -173,8 +173,8 @@
 		    <td>&nbsp;</td>
 		    <td>&nbsp;</td>
 		  </tr>
-		</table>    	
-    </td>    
+		</table>
+    </td>
 </tr>
 <tr>
     <td class="labelo"><bean:message key="tramiteVersion.organoDestino"/></td>
@@ -249,4 +249,18 @@
     <td class="label"><bean:message key="tramiteVersion.consultaAutenticacionExplicita.password"/></td>
     <td class="input"><html:text styleClass="text" tabindex="10" property="passPlain" maxlength="50"/></td>
 </tr>
-
+<tr>
+	<td class="separador" colspan="2"><bean:message key="tramiteVersion.debug"/></td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="tramiteVersion.debugEnabled"/></td>
+    <td class="input">
+    	<table>
+    		<tr>
+    			<td nowrap="nowrap" width="1%">Si<html:radio property="values.debugEnabled" value="S"/></td>
+    			<td nowrap="nowrap" width="1%">No<html:radio property="values.debugEnabled" value="N"/></td>
+    			<td>&nbsp;</td>
+    		</tr>
+    	</table>
+    </td>
+</tr>

@@ -39,12 +39,12 @@ public final class PantallaUtils {
 
     }
 
-   
+
     /**
-     * 
+     *
      * FUNCION NO SE EMPLEA PARA FORMULARIOS TELEMATICOS
-     * 
-     * 
+     *
+     *
      * Calcula els valors inicials dels camps d'una pantalla.
      * @param pantalla
      * @param variables Map amb els valors dels camps emplenats (les claus són f_xxx per
@@ -52,7 +52,7 @@ public final class PantallaUtils {
      * @return Valors inicials.
      * TODO Tenir en compte filebox
      */
-    public static Map valoresDefecto(Pantalla pantalla, Map variables) {
+    public static Map valoresDefecto(Pantalla pantalla, Map variables, boolean debugEnabled) {
         List campos = pantalla.getCampos();
         Map valores = new HashMap(campos.size());
 
@@ -66,7 +66,7 @@ public final class PantallaUtils {
                 String initial = null;
 
                 if (campo.getExpresionValoresPosibles() != null && campo.getExpresionValoresPosibles().trim().length() > 0) {
-                    CampoUtils.calcularValoresPosibles(campo, variables);
+                    CampoUtils.calcularValoresPosibles(campo, variables, debugEnabled);
                 }
                 List valoresPosibles = campo.getAllValoresPosibles();
 
@@ -92,7 +92,7 @@ public final class PantallaUtils {
 
                     if (campo.getExpresionValoresPosibles() != null
                             && campo.getExpresionValoresPosibles().trim().length() > 0) {
-                        Object calculat = CampoUtils.calcularValorDefecto(campo, variables);
+                        Object calculat = CampoUtils.calcularValorDefecto(campo, variables, debugEnabled);
                         if (calculat != null) initial = calculat.toString();
                     } else {
                         TraValorPosible traVp = ((TraValorPosible) ((TextBox) campo).getValorPosible().getTraduccion());
@@ -104,7 +104,7 @@ public final class PantallaUtils {
 
                     // campo.isIndexed
                     tipoValor = "java.lang.String";
-                    
+
                     for (int j = 0; j < valoresPosibles.size(); j++) {
                         ValorPosible vp = (ValorPosible) valoresPosibles.get(j);
                         if (vp.isDefecto()) {
@@ -112,7 +112,7 @@ public final class PantallaUtils {
                             break;
                         }
                     }
-                    
+
                 }
 
                 Class clazz = getClass(tipoValor);
@@ -138,7 +138,7 @@ public final class PantallaUtils {
      * @param nombreAtributo es el nombre del atributo con el indice a seleccionar en un campo de tipo indexado.
      * @return valores iniciales de los campos de la pantalla.
      */
-    public static Map valoresDefecto(Pantalla pantalla, Document doc, Map variables, String nombreAtributo) {
+    public static Map valoresDefecto(Pantalla pantalla, Document doc, Map variables, String nombreAtributo, boolean debugEnabled) {
         List campos = pantalla.getCampos();
         Map valores = new HashMap(campos.size());
         //valorEtiqueta mantiene, para los campos indexados, el valor asociado a cada índice seleccionado.
@@ -149,23 +149,23 @@ public final class PantallaUtils {
                 hasText = false;
                 Campo campo = (Campo) iterator.next();
                 String key = campo.getNombreLogico();
-                
+
                 if (campo instanceof ListaElementos) continue;
-                
+
                 if (campo.getExpresionValoresPosibles() != null &&
                     campo.getExpresionValoresPosibles().trim().length() > 0) {
-                    CampoUtils.calcularValoresPosibles(campo, variables);
+                    CampoUtils.calcularValoresPosibles(campo, variables, debugEnabled);
                 }
-                
+
                 boolean autorrellenable = false;
                 List autorelleno = null;
                 if (campo.getExpresionAutorellenable() != null &&
                     campo.getExpresionAutorellenable().trim().length() > 0) {
                 		autorrellenable = true;
-                    	autorelleno = CampoUtils.calcularAutorrellenable(campo,variables);
+                    	autorelleno = CampoUtils.calcularAutorrellenable(campo,variables, debugEnabled);
                 }
-                
-                
+
+
                 String xpath = campo.getEtiquetaPDF();
                 boolean valorDesdeXML = (xpath != null) && (xpath.trim().length() > 0) &&
                         (doc != null) && (doc.selectSingleNode(xpath) != null);
@@ -178,10 +178,10 @@ public final class PantallaUtils {
                         //valor por defecto definido desde documento xml.
                         valIni = doc.selectSingleNode(xpath).getText().trim();
                         if (!"true".equals(valIni)) valIni = "false";
-                    } else if (autorrellenable) {   
-                    	//valor por expresion de autorrelleno                    	
-                    	valIni = (autorelleno.size()<=0?"false":(!((ValorPosible)autorelleno.get(0)).getValor().equals("true")?"false":"true"));                    	
-                    }else{	
+                    } else if (autorrellenable) {
+                    	//valor por expresion de autorrelleno
+                    	valIni = (autorelleno.size()<=0?"false":(!((ValorPosible)autorelleno.get(0)).getValor().equals("true")?"false":"true"));
+                    }else{
                         //valor por defecto definido en el mismo campo.
                         boolean defecto = ((CheckBox) campo).isValorDefecto();
                         valIni = String.valueOf(defecto);
@@ -217,8 +217,8 @@ public final class PantallaUtils {
                           es de tipo Object
                         */
                         valorEtiqueta = valoresTextIndex.toArray();
-                    } else if (autorrellenable) {   
-                    	//valor por expresion de autorrelleno                    	
+                    } else if (autorrellenable) {
+                    	//valor por expresion de autorrelleno
                         for (Iterator i = autorelleno.iterator(); i.hasNext();) {
                             ValorPosible element = (ValorPosible) i.next();
                             String vInicial =element.getValor();
@@ -243,7 +243,7 @@ public final class PantallaUtils {
                           es de tipo Object
                         */
                         valorEtiqueta = valoresTextIndex.toArray();
-                    	
+
                     } else {
                         //valor por defecto definido en el mismo campo
                         for (int j = 0; j < valoresPosibles.size(); j++) {
@@ -270,14 +270,14 @@ public final class PantallaUtils {
                         //valor por defecto definido desde documento xml.
                         valIni = doc.selectSingleNode(xpath).getText().trim();
 
-                    }else if (autorrellenable) {   
-                    	//valor por expresion de autorrelleno                    	
-                    	valIni = (autorelleno.size()<=0?"":((ValorPosible)autorelleno.get(0)).getValor());                    	
+                    }else if (autorrellenable) {
+                    	//valor por expresion de autorrelleno
+                    	valIni = (autorelleno.size()<=0?"":((ValorPosible)autorelleno.get(0)).getValor());
                     } else {
                         //valor por defecto definido en el mismo campo
                         String exprValPos = campo.getExpresionValoresPosibles();
                         if (exprValPos != null && exprValPos.trim().length() > 0) {
-                            Object calculat = CampoUtils.calcularValorDefecto(campo, variables);
+                            Object calculat = CampoUtils.calcularValorDefecto(campo, variables, debugEnabled);
                             if (calculat != null) valIni = calculat.toString();
                         } else {
                             TraValorPosible traVp = ((TraValorPosible) ((TextBox) campo).getValorPosible().getTraduccion());
@@ -301,9 +301,9 @@ public final class PantallaUtils {
                             }
                         }
 
-                    }else if (autorrellenable) {   
-                    	//valor por expresion de autorrelleno                    	                    	
-                    	valIni = (autorelleno.size()<=0?"":((ValorPosible)autorelleno.get(0)).getValor());  
+                    }else if (autorrellenable) {
+                    	//valor por expresion de autorrelleno
+                    	valIni = (autorelleno.size()<=0?"":((ValorPosible)autorelleno.get(0)).getValor());
                         for (Iterator i = valoresPosibles.iterator(); i.hasNext();) {
                             ValorPosible vp = (ValorPosible) i.next();
                             if (vp.getValor().equals(valIni)) {
@@ -314,12 +314,12 @@ public final class PantallaUtils {
                                 hasText = true;
                                 break;
                             }
-                        }                   	
+                        }
                     } else {
                         // Valor por defecto definido en el mismo campo
                     	for (int j = 0; j < valoresPosibles.size(); j++) {
                             ValorPosible vp = (ValorPosible) valoresPosibles.get(j);
-                            
+
                             // Cogemos el por defecto
                             if (vp.isDefecto()) {
                                 valIni = vp.getValor();
@@ -328,12 +328,12 @@ public final class PantallaUtils {
                                 hasText = true;
                                 break;
                             }
-                        }	                                            	
+                        }
                     }
                 } else if (campo instanceof Captcha) {
                 	valIni = CaptchaUtils.generateCaptcha();
                 }
-                
+
                 //
                 Class clazz = getClass(tipoValor);
                 Object value = toValue(valIni, clazz);
@@ -399,8 +399,8 @@ public final class PantallaUtils {
      * Si la pantalla tiene un campo de tipo Lista Elementos carga los valores por defecto de ese campo
      * @return Si tiene un campo lista de elementos devuelve un List con los elementos, si no tiene un campo lista de elementos devuelve nulo.
      */
-    public static List valoresDefectoListaElementos(ListaElementos campo, Formulario formulario,Pantalla pantalla, Document doc, Map variables, String nombreAtributo) {
-    	
+    public static List valoresDefectoListaElementos(ListaElementos campo, Formulario formulario,Pantalla pantalla, Document doc, Map variables, String nombreAtributo, boolean debugEnabled) {
+
     	// Buscamos pantalla asociada a la lista de elementos
     	String referencia = CampoUtils.getReferenciaListaElementos(pantalla.getNombre(),campo.getNombreLogico());
     	Pantalla p = buscarPantallaListaElementos(formulario,referencia);
@@ -408,23 +408,23 @@ public final class PantallaUtils {
            	log.error("No se encuenta pantalla detalle asociada al campo lista de elementos: " + campo.getNombreLogico());
            	return new ArrayList(); // Retornamos datos vacios
          }
-    	
+
     	// Comprobamos si existen datos en el XML
-        List valoresXML = valoresListaElementosFromXML(campo,p,doc,variables,nombreAtributo);
-        	
+        List valoresXML = valoresListaElementosFromXML(campo,p,doc,variables,nombreAtributo, debugEnabled);
+
         // Si hay datos provenientes del XML, cargamos esos datos
         if (valoresXML.size() > 0){
         	return valoresXML;
             	}
-        
+
         // Si no hay datos del XML, comprobamos si tiene una expresion autorrellenable
         if (campo.getExpresionAutorellenable() != null &&
             campo.getExpresionAutorellenable().trim().length() > 0) {
-            	List resultScript = CampoUtils.calcularAutorrellenable(campo,variables);
+            	List resultScript = CampoUtils.calcularAutorrellenable(campo,variables, debugEnabled);
             	if (resultScript == null){
             		return new ArrayList();
             	}
-            	// El resultado del script autorrellenable es una variable del tipo DatosListaElementos            	
+            	// El resultado del script autorrellenable es una variable del tipo DatosListaElementos
             	if (!(resultScript.get(0) instanceof DatosListaElementos)){
             		log.error("El script autorrellenable no ha devuelto una variable DatosListaElementos para el campo lista de elementos: " + campo.getNombreLogico());
                    	return new ArrayList(); // Retornamos datos vacios
@@ -433,22 +433,22 @@ public final class PantallaUtils {
             	DatosListaElementos datosListaElementos = (DatosListaElementos) resultScript.get(0);
             	List valoresAutorrelleno = new ArrayList();
             	for (int i = 1;i<=datosListaElementos.geNumeroElementos(); i++) {
-            		Map dataElemento = valoresElementoFromDatosListaElementos(p, variables, datosListaElementos, i);
+            		Map dataElemento = valoresElementoFromDatosListaElementos(p, variables, datosListaElementos, i, debugEnabled);
             		valoresAutorrelleno.add(dataElemento);
             }
-                return valoresAutorrelleno;                
+                return valoresAutorrelleno;
             }
-            
+
         // Si no hay datos del XML y no hay script de autorrelleno, retornamos datos vacios
         return new ArrayList();
-            	
-    }	
-    	
-  
+
+    }
+
+
     /**
      * Obtiene los datos de la lista de elementos desde el XML
      */
-    private static List valoresListaElementosFromXML(Campo campoLista,Pantalla pantallaDetalle, Document doc, Map variables, String nombreAtributo) {
+    private static List valoresListaElementosFromXML(Campo campoLista,Pantalla pantallaDetalle, Document doc, Map variables, String nombreAtributo, boolean debugEnabled) {
     	List listaElementos = new ArrayList();
 		String xpath = campoLista.getEtiquetaPDF();
 		if (StringUtils.isEmpty(xpath)) return listaElementos;
@@ -457,19 +457,19 @@ public final class PantallaUtils {
 		for (int i = 1;i<=elementos.size(); i++) {
 			Map variablesScript = new HashMap();
 			variablesScript.putAll(variables);
-			Map datosElemento = valoresElementoFromXML(pantallaDetalle, doc, variablesScript, nombreAtributo, xpathElemento + i);
+			Map datosElemento = valoresElementoFromXML(pantallaDetalle, doc, variablesScript, nombreAtributo, xpathElemento + i, debugEnabled);
 			listaElementos.add(datosElemento);
 		}
-		return listaElementos;    	
+		return listaElementos;
     }
-   
-   
-    
+
+
+
     /**
 	 * Realiza la carga desde el xml de un elemento de una lista de elementos
 	 */
-    private static Map valoresElementoFromXML(Pantalla pantalla, Document doc, Map variables, String nombreAtributo,String xpathElemento) {
-        
+    private static Map valoresElementoFromXML(Pantalla pantalla, Document doc, Map variables, String nombreAtributo,String xpathElemento, boolean debugEnabled) {
+
     	List campos = pantalla.getCampos();
         Map valores = new HashMap(campos.size());
         //valorEtiqueta mantiene, para los campos indexados, el valor asociado a cada índice seleccionado.
@@ -480,12 +480,12 @@ public final class PantallaUtils {
                 hasText = false;
                 Campo campo = (Campo) iterator.next();
                 String key = campo.getNombreLogico();
-                
+
                 if (campo.getExpresionValoresPosibles() != null &&
                     campo.getExpresionValoresPosibles().trim().length() > 0) {
-                    CampoUtils.calcularValoresPosibles(campo, variables);
+                    CampoUtils.calcularValoresPosibles(campo, variables, debugEnabled);
                 }
-                
+
                 String xpath = (StringUtils.isEmpty(campo.getEtiquetaPDF())?campo.getEtiquetaPDF():xpathElemento+"/"+campo.getEtiquetaPDF());
                 boolean valorDesdeXML = (xpath != null) && (xpath.trim().length() > 0) &&
                         (doc != null) && (doc.selectSingleNode(xpath) != null);
@@ -498,7 +498,7 @@ public final class PantallaUtils {
                         //valor por defecto definido desde documento xml.
                         valIni = doc.selectSingleNode(xpath).getText().trim();
                         if (!"true".equals(valIni)) valIni = "false";
-                    } else{	
+                    } else{
                         //valor por defecto definido en el mismo campo.
                         boolean defecto = ((CheckBox) campo).isValorDefecto();
                         valIni = String.valueOf(defecto);
@@ -559,7 +559,7 @@ public final class PantallaUtils {
                         //valor por defecto definido en el mismo campo
                         String exprValPos = campo.getExpresionValoresPosibles();
                         if (exprValPos != null && exprValPos.trim().length() > 0) {
-                            Object calculat = CampoUtils.calcularValorDefecto(campo, variables);
+                            Object calculat = CampoUtils.calcularValorDefecto(campo, variables, debugEnabled);
                             if (calculat != null) valIni = calculat.toString();
                         } else {
                             TraValorPosible traVp = ((TraValorPosible) ((TextBox) campo).getValorPosible().getTraduccion());
@@ -594,12 +594,12 @@ public final class PantallaUtils {
                                 hasText = true;
                                 break;
                             }
-                        }                    	
+                        }
                     }
                 } else if (campo instanceof Captcha) {
                 	valIni = CaptchaUtils.generateCaptcha();
                 }
-                
+
                 //
                 Class clazz = getClass(tipoValor);
                 Object value = toValue(valIni, clazz);
@@ -617,8 +617,8 @@ public final class PantallaUtils {
         }
         return valores;
     }
-     
-    
+
+
     /**
      * Busca si una pantalla tiene un campo Lista Elementos
      * @param pantalla
@@ -633,12 +633,12 @@ public final class PantallaUtils {
         for (Iterator iterator = campos.iterator(); iterator.hasNext();) {
         	campo = (Campo) iterator.next();
         	if ((campo instanceof ListaElementos)) {
-        		lista.add(campo);        		
+        		lista.add(campo);
         	}
         }
         return lista;
-    }    
-         
+    }
+
     /**
      * Busca en el formulario la pantalla asociada a la lista de elementos
      * @param formulario
@@ -655,36 +655,36 @@ public final class PantallaUtils {
          }
     	return null;
     }
-    
-    
-    private static Map valoresElementoFromDatosListaElementos(Pantalla pantalla, Map variables, DatosListaElementos datosLEL, int indiceElemento) {
+
+
+    private static Map valoresElementoFromDatosListaElementos(Pantalla pantalla, Map variables, DatosListaElementos datosLEL, int indiceElemento, boolean debugEnabled) {
     	List campos = pantalla.getCampos();
         Map valores = new HashMap(campos.size());
         //valorEtiqueta mantiene, para los campos indexados, el valor asociado a cada índice seleccionado.
         Object valorEtiqueta = null;
         boolean hasText;
-        
+
         for (Iterator iterator = campos.iterator(); iterator.hasNext();) {
             try {
                 hasText = false;
                 Campo campo = (Campo) iterator.next();
                 String key = campo.getNombreLogico();
-                
+
                 if (campo.getExpresionValoresPosibles() != null &&
                     campo.getExpresionValoresPosibles().trim().length() > 0) {
-                    CampoUtils.calcularValoresPosibles(campo, variables);
+                    CampoUtils.calcularValoresPosibles(campo, variables, debugEnabled);
                 }
-                
-                List valoresPosibles = campo.getAllValoresPosibles();                
+
+                List valoresPosibles = campo.getAllValoresPosibles();
                 String tipoValor = campo.getTipoValor();
                 String valIni=null;
                 Object valElemento = datosLEL.getDatoElemento(indiceElemento,campo.getNombreLogico());
                 boolean valorFromDatosListaElementos = (valElemento != null);
-                
+
                 if (campo instanceof CheckBox) {
                     if (valorFromDatosListaElementos) {
                         if (!"true".equals((String) valElemento)) valIni = "false";
-                    } else{	
+                    } else{
                         boolean defecto = ((CheckBox) campo).isValorDefecto();
                         valIni = String.valueOf(defecto);
                     }
@@ -695,7 +695,7 @@ public final class PantallaUtils {
                     if (valorFromDatosListaElementos) {
                     	List valoresInit = (List) valElemento;
                         for (Iterator i = valoresInit.iterator(); i.hasNext();) {
-                        	String vInicial = (String) i.next();                            
+                        	String vInicial = (String) i.next();
                             for (Iterator j = valoresPosibles.iterator(); j.hasNext();) {
                                 ValorPosible vp = (ValorPosible) j.next();
                                 String vPosible = vp.getValor();
@@ -742,7 +742,7 @@ public final class PantallaUtils {
                         //valor por defecto definido en el mismo campo
                         String exprValPos = campo.getExpresionValoresPosibles();
                         if (exprValPos != null && exprValPos.trim().length() > 0) {
-                            Object calculat = CampoUtils.calcularValorDefecto(campo, variables);
+                            Object calculat = CampoUtils.calcularValorDefecto(campo, variables, debugEnabled);
                             if (calculat != null) valIni = calculat.toString();
                         } else {
                             TraValorPosible traVp = ((TraValorPosible) ((TextBox) campo).getValorPosible().getTraduccion());
@@ -782,7 +782,7 @@ public final class PantallaUtils {
                 } else if (campo instanceof Captcha) {
                 	valIni = CaptchaUtils.generateCaptcha();
                 }
-                
+
                 //
                 Class clazz = getClass(tipoValor);
                 Object value = toValue(valIni, clazz);
@@ -800,7 +800,7 @@ public final class PantallaUtils {
         }
         return valores;
     }
-    
+
     // --- INDRA: LISTA ELEMENTOS ----
-    
+
 }

@@ -75,17 +75,21 @@ import org.mozilla.javascript.NativeArray;
  * @ejb.permission unchecked="true"
  * @ejb.transaction type="Required"
  * @jboss.container-configuration name="InstanciaProcessor Stateful SessionBean"
- *  
+ *
  */
 public abstract class InstanciaProcessorEJB extends HibernateEJB {
     //
     protected static final Log log = LogFactory.getLog(InstanciaProcessorEJB.class);
 
-    protected Boolean scriptDebug;
-    
+    protected boolean debugEnabled;
+
+
+
+	protected Boolean scriptDebug;
+
     // LOG SCRIPTS (Solo instanciado cuando se permita el debug de scripts)
     protected LogsScripts logScript;
-        
+
     protected Session session = null;
 
     protected Locale locale = null;
@@ -97,17 +101,17 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
     protected String campoPantallaDetalleActual;
     protected String accionPantallaDetalleActual;
     protected String indexPantallaDetalleActual;
-    
+
     protected Map anexos = new HashMap();
 
     protected Stack pilaPantallasAnteriores = new Stack();
     protected Stack pilaDatosAnteriores = new Stack();
 
     protected Map pantallasDatosPosteriores = new LinkedHashMap();
-    
+
     //------------ INDRA ------------------------------------------------------------------------
-    // Map de datos de componentes lista (key: referencia componentes / value: List de maps de datos) 
-    protected Map datosListasElementos = new HashMap(); 
+    // Map de datos de componentes lista (key: referencia componentes / value: List de maps de datos)
+    protected Map datosListasElementos = new HashMap();
     //------------ INDRA ------------------------------------------------------------------------
 
     /**
@@ -115,7 +119,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
      * @ejb.create-method
      */
     public void ejbCreate(String modelo, Locale idioma, String codiPerfil) throws CreateException {
-        ejbCreate(modelo, idioma, codiPerfil, 1);        
+        ejbCreate(modelo, idioma, codiPerfil, 1);
     }
 
     /**
@@ -124,15 +128,15 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
      */
     public void ejbCreate(String modelo, Locale idioma, String codiPerfil, int version) throws CreateException {
         super.ejbCreate();
-        
+
     	session = getReadOnlySession();
-        
+
         try {
             locale = idioma;
 
             if (permitirScriptDebug())
             	logScript = new LogsScripts();
-            
+
             Query queryPerfil = session.createQuery("FROM PerfilUsuario AS p WHERE p.codigoEstandard = :codigo");
             queryPerfil.setParameter("codigo", codiPerfil);
             queryPerfil.setCacheable(true);
@@ -143,7 +147,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
             }
             perfil = (PerfilUsuario) perfiles.get(0);
 
-            log.debug("Carregat perfil");
+            debug("Carregat perfil");
 
             Query query = session.createQuery("FROM Formulario AS f WHERE f.modelo = :modelo and f.version = :version");
             query.setString("modelo", modelo);
@@ -156,7 +160,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
             }
             formulario = (Formulario) formularios.get(0);
 
-            log.debug("Carregat formulari");
+            debug("Carregat formulari");
 
             //Inicialitzar estructura
             Hibernate.initialize(formulario.getPantallas());
@@ -174,7 +178,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
             }
             formulario.setCurrentLang(locale.getLanguage());
 
-            log.debug("Inicialitzada estructura.");
+            debug("Inicialitzada estructura.");
 
             pantallaActual = formulario.findPantallaInicial();
             if (pantallaActual == null) {
@@ -182,11 +186,11 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
                 throw new CreateException("El formulario " + modelo + " no tiene pantalla inicial");
             }
 
-            log.debug("Obtinguda pantalla inicial.");
+            debug("Obtinguda pantalla inicial.");
 
-            datosActual = PantallaUtils.valoresDefecto(pantallaActual, variablesScript());
+            datosActual = PantallaUtils.valoresDefecto(pantallaActual, variablesScript(), debugEnabled);
 
-            log.debug("Preparats valors per defecte.");
+            debug("Preparats valors per defecte.");
 
             session.disconnect();
         } catch (HibernateException e) {
@@ -349,18 +353,18 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
     public Map obtenerDatosPantalla() {
         return datosActual;
     }
-    
+
     /**
      * Obtiene los datos de pantallas anteriores, prefijados con f_&lt;nombre pantalla%gt;_
      * @ejb.interface-method
      */
     public Map obtenerDatosAnteriores() {
         Map vals = variablesScript();
-        
+
         // Eliminamos var internas para log
        vals.remove(ScriptUtil.ID_LOG_SCRIPT);
        vals.remove(ScriptUtil.ID_PLUGIN_LOG);
-        
+
         return vals;
     }
 
@@ -391,17 +395,17 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
           por lo que no se actualizará su valor.
         */
         eliminaDatosCamposBloqueados(datos);
-        
+
         // Elimina campos de captcha
         eliminaDatosCamposCaptcha(datos);
 
         // Establece datos en pantalla
         datosActual.putAll(datos);
-        Map variables = variablesScriptActuals();        
+        Map variables = variablesScriptActuals();
         for (int j = 0; j < pantallaActual.getCampos().size(); j++) {
             Campo campo = (Campo) pantallaActual.getCampos().get(j);
             if (!campo.isBloqueado()) {
-                
+
             	if (campo instanceof CheckBox) {
                     Object valor = datos.get(campo.getNombreLogico());
                     if (valor == null) {
@@ -411,7 +415,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
 
                 if (campo.isIndexed()) {
                     // Para los campos indexados calculamos los textos asociados al codigo )campo_text)
-                	CampoUtils.calcularValoresPosibles(campo, variables);
+                	CampoUtils.calcularValoresPosibles(campo, variables, this.isDebugEnabled());
                     Object valor = null;
                     Object index = datos.get(campo.getNombreLogico());
                     if (index != null) {
@@ -439,8 +443,8 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
         }
     }
 
-    
-    
+
+
     /**
      * Actualiza los datos asociados a la pantalla actual, una vez esta se ha procesado.
      * Si un campo está bloqueado, entonces no se debe actualizar su valor, ya que este no
@@ -449,15 +453,15 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
      * @ejb.interface-method
      */
     public void INDRA_refrescarValoresPosibles(Map datos) {
-        
-    	Map variables = variablesScriptActuals();        
+
+    	Map variables = variablesScriptActuals();
         for (int j = 0; j < pantallaActual.getCampos().size(); j++) {
-        
+
         	Campo campo = (Campo) pantallaActual.getCampos().get(j);
             if (!campo.isBloqueado()) {
-               
+
                 if (campo.isIndexed()) {
-                    CampoUtils.calcularValoresPosibles(campo, variables);
+                    CampoUtils.calcularValoresPosibles(campo, variables, this.isDebugEnabled());
                     /*
                     Object valor = null;
                     Object index = datos.get(campo.getNombreLogico());
@@ -487,8 +491,8 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
         }
     }
 
-    
-    
+
+
     /**
      * Introduce un anexo.
      * @ejb.interface-method
@@ -500,9 +504,9 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
 
     /**
      * Devuelve el valor de autocalcular un campo.
-     * 
+     *
      * Devuelve un string para campos monovaluados o una lista (de strings) para campos multivaluados
-     * 
+     *
      * @ejb.interface-method
      */
     public Object expresionAutocalculoCampo(String nombre) {
@@ -514,39 +518,39 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
             return new ArrayList();
         }
 
-        Object result = ScriptUtil.evalScript(script, variablesScriptActuals());
-                
+        Object result = ScriptUtil.evalScript(script, variablesScriptActuals(), this.isDebugEnabled());
+
         if (result instanceof NativeArray) {
-        	
+
         	List lstParams = new LinkedList();
-        	
+
         	// Array de strings
-        	NativeArray params = (NativeArray) result;        	
+        	NativeArray params = (NativeArray) result;
     		if ( params != null )
     		{
     			Object [] ids = params.getIds();
     			for ( int i = 0; i < ids.length; i++ )
     			{
-    				Object valorParametro = params.get( (( Integer ) ids[i] ).intValue() , params ); 
+    				Object valorParametro = params.get( (( Integer ) ids[i] ).intValue() , params );
     				lstParams.add( valorParametro.toString() );
     			}
-    		}     
-    		
+    		}
+
     		return lstParams;
         }else {
         	// Cadena simple
-        	return ((result!=null?result.toString():""));        	
+        	return ((result!=null?result.toString():""));
         }
-     
+
     }
 
     /**
      * Devuelve el valor de autorellenar un campo.
-     * 
+     *
      * Devuelve:
      * 	-  un string para campos monovaluados
      *  -  una lista de strings para campos multivaluados
-     * 
+     *
      * @ejb.interface-method
      */
     public Object expresionAutorellenableCampo(String nombre) {
@@ -560,39 +564,39 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
 
         // Obtenemos vbles actuales
         Map variables = variablesScriptActuals();
-        
-        // La expresion autorrellenable para un campo lista de elementos sólo esta 
+
+        // La expresion autorrellenable para un campo lista de elementos sólo esta
         // permitida si depende de datos de pantallas anteriores
     	if (campo instanceof ListaElementos){
     		return "";
     	}
-    	
-        Object result = ScriptUtil.evalScript(script, variables);
-                
+
+        Object result = ScriptUtil.evalScript(script, variables, this.isDebugEnabled());
+
         if (result instanceof NativeArray) {
-        	
+
         	List resultList = new LinkedList();
-        	
+
         	// Array de strings
-        	NativeArray params = (NativeArray) result;        	
+        	NativeArray params = (NativeArray) result;
     		if ( params != null )
     		{
     			Object [] ids = params.getIds();
     			for ( int i = 0; i < ids.length; i++ )
     			{
-    				Object valorParametro = params.get( (( Integer ) ids[i] ).intValue() , params ); 
+    				Object valorParametro = params.get( (( Integer ) ids[i] ).intValue() , params );
     				resultList.add( valorParametro.toString() );
     			}
-    		}    
-    		
+    		}
+
     		return resultList;
         }else {
         	// Cadena simple
-        	return ((result!=null?result.toString():""));        	
+        	return ((result!=null?result.toString():""));
         }
     }
 
-    
+
     /**
      * Devuelve el valor de la dependencia de un campo.
      * @ejb.interface-method
@@ -606,7 +610,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
             return false;
         }
 
-        return ScriptUtil.evalBoolScript(script, variablesScriptActuals());
+        return ScriptUtil.evalBoolScript(script, variablesScriptActuals(), this.isDebugEnabled());
     }
 
     /**
@@ -622,10 +626,10 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
             return "";
         }
 
-        Object res = ScriptUtil.evalScript(script, variablesScriptActuals());
+        Object res = ScriptUtil.evalScript(script, variablesScriptActuals(), this.isDebugEnabled());
         return (res!=null?res.toString():"");
     }
-    
+
     /**
      * Calcula los valors posibles de un campo.
      * @ejb.interface-method
@@ -634,7 +638,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
         Campo campo = pantallaActual.findCampo(nombre);
         if (campo == null) return null;
 
-        CampoUtils.calcularValoresPosibles(campo, variablesScriptActuals());
+        CampoUtils.calcularValoresPosibles(campo, variablesScriptActuals(), this.isDebugEnabled());
         return campo.getAllValoresPosibles();
     }
 
@@ -669,10 +673,10 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
                 if (expresion == null || expresion.trim().length() == 0) { // Pantalla siguiente en orden
                 	int orden = pantallaActual.getOrden() + 1;
                     pantallaActual = formulario.findPantalla(orden);
-                    if (pantallaActual == null) log.warn("La pantalla con índice " + orden + " no existe!!");                                           
+                    if (pantallaActual == null) log.warn("La pantalla con índice " + orden + " no existe!!");
                 } else { // Evaluar script
                     Map variables = variablesScriptActuals();
-                    String nombre = (String) ScriptUtil.evalScript(expresion, variables);
+                    String nombre = (String) ScriptUtil.evalScript(expresion, variables, this.isDebugEnabled());
                     pantallaActual = formulario.findPantalla(nombre);
                     if (pantallaActual == null) log.warn("La pantalla \"" + nombre + "\" no existe!!");
                 }
@@ -689,11 +693,11 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
                     datosActual = (Map) pantallasDatosPosteriores.get(pantallaActual.getNombre());
                     pantallasDatosPosteriores.remove(pantallaActual.getNombre());
                 } else {
-                    datosActual = PantallaUtils.valoresDefecto(pantallaActual, variablesScript());
+                    datosActual = PantallaUtils.valoresDefecto(pantallaActual, variablesScript(), debugEnabled);
                 }
-                log.debug("Pantalla Actual: " + pantallaActual.getNombre());
+                debug("Pantalla Actual: " + pantallaActual.getNombre());
             } else {
-                log.debug("Pantalla Actual es null");
+                debug("Pantalla Actual es null");
             }
 
             session.disconnect();
@@ -703,7 +707,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
             throw new EJBException(he);
         }
     }
-   
+
     /**
      * Retrocede a la pantalla anterior.
      * @ejb.interface-method
@@ -722,22 +726,22 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
         }
 
         if (pantallaActual != null) {
-            log.debug("Pantalla Actual: " + pantallaActual.getNombre());
+            debug("Pantalla Actual: " + pantallaActual.getNombre());
         } else {
-            log.debug("Pantalla Actual es null");
+            debug("Pantalla Actual es null");
         }
     }
-    
+
     /**
      * Retrocede a la pantalla anterior desde una pantalla detalle.
      * @ejb.interface-method
      */
     public void retrocederPantallaDetalle(boolean saveData) {
-    	
+
         // Guardamos datos elemento en map de datos listas elementos
     	if (saveData)
     		guardarElementoActual();
-    	
+
         // Desapilamos pantalla anterior con sus datos
     	if (pilaPantallasAnteriores.isEmpty()) {
             pantallaActual = null;
@@ -748,9 +752,9 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
         }
 
         if (pantallaActual != null) {
-            log.debug("Pantalla Actual: " + pantallaActual.getNombre());
+            debug("Pantalla Actual: " + pantallaActual.getNombre());
         } else {
-            log.debug("Pantalla Actual es null");
+            debug("Pantalla Actual es null");
         }
     }
     /**
@@ -817,7 +821,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
                                         Map params = new HashMap();
                                         params.put("input", valor);
                                         setContextVariables(params);
-                                        etiqueta = ScriptUtil.evalScript(script, params);
+                                        etiqueta = ScriptUtil.evalScript(script, params, this.isDebugEnabled());
                                     } else {
                                         String pattern = patron.getCodigo();
                                         Format format = null;
@@ -879,7 +883,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
                                 Map params = new HashMap();
                                 params.put("input", etiqueta);
                                 setContextVariables(params);
-                                etiqueta = ScriptUtil.evalScript(expresion, params);
+                                etiqueta = ScriptUtil.evalScript(expresion, params, this.isDebugEnabled());
                             }
                         }
 
@@ -946,7 +950,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
                 Salida salida = (Salida) salidas.get(i);
                 String conectorClass = salida.getPunto().getImplementacion();
                 String conectorName = salida.getPunto().getNombre();
-                log.debug("Processant conector " + conectorName);
+                debug("Processant conector " + conectorName);
                 try {
                     Conector conector = ConectorConfigurator.initConector(conectorClass);
 
@@ -961,7 +965,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
                             Hibernate.initialize(propSal.getPlantilla());
                             value = propSal.getPlantilla();
                         } else if (propSal.isExpresion()) { // O una expresión a evaluar
-                            value = ScriptUtil.evalScript(propSal.getValor(), variables);
+                            value = ScriptUtil.evalScript(propSal.getValor(), variables, this.isDebugEnabled());
                         } else { // O directamente un valor (String)
                             value = propSal.getValor();
                         }
@@ -979,7 +983,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
                 }
             }
 
-            session.disconnect();            
+            session.disconnect();
             return resultados;
         } catch (HibernateException e) {
             closeReadOnly(session);
@@ -1009,11 +1013,11 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
     }
 
     public void ejbPassivate() throws EJBException, RemoteException {
-        log.debug("passivated");
+        debug("passivated");
     }
 
     public void ejbActivate() throws EJBException, RemoteException {
-        log.debug("activated");
+        debug("activated");
     }
 
 
@@ -1025,20 +1029,20 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
     protected Map variablesScriptActuals() {
         Map variables = ScriptUtil.prefixMap(datosActual, "f_");
         variables.putAll(variablesScript());
-        
+
         // --- INDRA: LISTA ELEMENTOS ----
-        Map variablesListasElementos = this.variablesScriptListaElementos(pantallaActual);            
-        variables.putAll(variablesListasElementos);         
+        Map variablesListasElementos = this.variablesScriptListaElementos(pantallaActual);
+        variables.putAll(variablesListasElementos);
         // --- INDRA: LISTA ELEMENTOS ----
-        
+
         // ---- INDRA: VBLE ESPECIAL PARA LOGEAR SCRIPTS
         variables.put(ScriptUtil.ID_LOG_SCRIPT,logScript);
         // ---- INDRA: VBLE ESPECIAL PARA LOGEAR SCRIPTS
-        
+
         return variables;
     }
-    
-    
+
+
 
     /**
      * Obtiene un map de nombre, valor de las variables que se pueden
@@ -1053,12 +1057,12 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
             Map datos = (Map) pilaDatosAnteriores.elementAt(i);
             Map vars = ScriptUtil.prefixMap(datos, "f_" + pantalla.getNombre() + "_");
             variables.putAll(vars);
-            
+
             // --- INDRA: LISTA ELEMENTOS ----
-            Map variablesListasElementos = this.variablesScriptListaElementos(pantalla);            
-            variables.putAll(variablesListasElementos);            		 
+            Map variablesListasElementos = this.variablesScriptListaElementos(pantalla);
+            variables.putAll(variablesListasElementos);
             // --- INDRA: LISTA ELEMENTOS ----
-            
+
             // ---- INDRA: VBLE ESPECIAL PARA LOGEAR SCRIPTS
             variables.put(ScriptUtil.ID_LOG_SCRIPT,logScript);
             // ---- INDRA: VBLE ESPECIAL PARA LOGEAR SCRIPTS
@@ -1083,7 +1087,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
                 return valorPosible;
             }
         }
-        log.debug("Valor " + valor + " no trobat a la llista.");
+        debug("Valor " + valor + " no trobat a la llista.");
         return null;
     }
 
@@ -1102,7 +1106,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
             }
         }
     }
-    
+
     /**
      * Elimina del mapa que contiene los valores de los campos de captcha (no se deben actualizar).
      */
@@ -1110,20 +1114,20 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
         for (Iterator i = pantallaActual.getCampos().iterator(); i.hasNext();) {
             Campo campo = (Campo) i.next();
             if (campo instanceof Captcha) {
-                datos.remove(campo.getNombreLogico());                
+                datos.remove(campo.getNombreLogico());
             }
         }
     }
-    
-    
-    // ---- INDRA: SOPORTE A LISTAS DE ELEMENTOS 
+
+
+    // ---- INDRA: SOPORTE A LISTAS DE ELEMENTOS
     /**
      * Obtiene los elementos de una lista de elementos
      * @ejb.interface-method
      */
     public List obtenerDatosListaElementos(String nombreCampo) {
         String referencia = CampoUtils.getReferenciaListaElementos(this.pantallaActual.getNombre(),nombreCampo);
-        return (List) this.datosListasElementos.get(referencia);     	
+        return (List) this.datosListasElementos.get(referencia);
     }
     /**
      * Obtiene la lista de campos que se muestran en la tabla
@@ -1131,7 +1135,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
      */
     public List obtenerCamposTablaListaElementos(String nombreCampo) {
         String referencia = CampoUtils.getReferenciaListaElementos(this.pantallaActual.getNombre(),nombreCampo);
-        Pantalla p = encontrarPantallaDetalle(referencia);        
+        Pantalla p = encontrarPantallaDetalle(referencia);
         List camposTabla = new ArrayList();
         for (Iterator it=p.getCampos().iterator();it.hasNext();){
         	Campo c = (Campo) it.next();
@@ -1139,8 +1143,8 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
         }
         return camposTabla;
     }
-    
-    
+
+
     /**
      * Pasa a la pantalla de detalle
      * @ejb.interface-method
@@ -1148,33 +1152,33 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
     public void avanzarPantallaDetalle(String campo,String accion,String index) {
         try {
             session.reconnect();
-            
+
             // Procesar la pantalla
             pilaPantallasAnteriores.push(pantallaActual);
             pilaDatosAnteriores.push(datosActual);
 
             // Obtener la pantalla detalle
             String referencia = CampoUtils.getReferenciaListaElementos(this.pantallaActual.getNombre(),campo);
-            Pantalla p = encontrarPantallaDetalle(referencia);            
+            Pantalla p = encontrarPantallaDetalle(referencia);
             pantallaActual = p;
-            
+
             if (accion.equals("insertar")){
             	// insertar --> obtenemos datos por defecto
-            	datosActual = PantallaUtils.valoresDefecto(pantallaActual,null,variablesScript(),null);
+            	datosActual = PantallaUtils.valoresDefecto(pantallaActual,null,variablesScript(),null, this.isDebugEnabled());
             }else{
             	// modificar --> obtenemos datos elemento
-            	datosActual = obtenerElemento(index); 
+            	datosActual = obtenerElemento(index);
             	// Refrescamos valores posibles de los campos
             	INDRA_refrescarValoresPosibles(datosActual);
             }
-           
+
             // Guardamos operacion a realizar en el detalle: campo,accion,index
             this.accionPantallaDetalleActual = accion;
             this.campoPantallaDetalleActual = campo;
-            this.indexPantallaDetalleActual = index;            
-            
-            log.debug("Pantalla Actual: " + pantallaActual.getNombre());
-                        
+            this.indexPantallaDetalleActual = index;
+
+            debug("Pantalla Actual: " + pantallaActual.getNombre());
+
             session.disconnect();
 
         } catch (HibernateException he) {
@@ -1182,7 +1186,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
             throw new EJBException(he);
         }
     }
-    
+
     protected Pantalla encontrarPantallaDetalle(String referencia){
     	Pantalla p = null;
     	boolean enc=false;
@@ -1196,42 +1200,42 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
         if (!enc) throw new EJBException("No se encuentra pantalla detalle asociada a campo " + referencia);
         return p;
     }
-    
-    
+
+
     /**
-     * Actualiza los datos asociados al elemento actual de una lista de elementos 
+     * Actualiza los datos asociados al elemento actual de una lista de elementos
      */
     private void guardarElementoActual() {
-    	
+
     	String accion=this.accionPantallaDetalleActual;
     	String indice=this.indexPantallaDetalleActual;
     	Map datos = this.datosActual;
-        
+
     	// Obtenemos lista de elementos del campo
     	String referenciaCampoListaElementos = this.pantallaActual.getComponenteListaElementos();
     	if (StringUtils.isEmpty(referenciaCampoListaElementos)){
     		log.error("Pantalla '" + this.pantallaActual.getNombre() + "' no es una pagina de detalle de lista elementos" );
-    		return;    		
-    	}    	    	    	
-    	List elementosCampoListaElementos = (List) this.datosListasElementos.get(referenciaCampoListaElementos);    	
+    		return;
+    	}
+    	List elementosCampoListaElementos = (List) this.datosListasElementos.get(referenciaCampoListaElementos);
     	if (elementosCampoListaElementos == null) {
     		elementosCampoListaElementos = new ArrayList();
     		this.datosListasElementos.put(referenciaCampoListaElementos,elementosCampoListaElementos);
-    	}    	
-    	
+    	}
+
     	// Validamos parametros
     	if (StringUtils.isEmpty(accion) || (!accion.equals("insertar") && !accion.equals("modificar"))){
     		log.error("Accion no valida para introducirDatosPantallaDetalle: "+ accion);
     		return;
-    	}    	
+    	}
     	int ind;
     	try{
     		ind = Integer.parseInt(indice);
     	}catch(NumberFormatException ne){
     		log.error("El parametro indice no es un numero");
-    		return;    		
-    	}    	
-    	
+    		return;
+    	}
+
     	// Establece datos actuales elemento
     	if (accion.equals("modificar")){
     		if (ind < 0 || ind > elementosCampoListaElementos.size() - 1){
@@ -1241,96 +1245,96 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
     		elementosCampoListaElementos.set(ind,datos);
     	}else{
     		if (ind <0 || ind >= elementosCampoListaElementos.size() - 1){
-    			elementosCampoListaElementos.add(datos); 
+    			elementosCampoListaElementos.add(datos);
     		}else{
-    			elementosCampoListaElementos.add(ind + 1,datos); 
-    		}    		
+    			elementosCampoListaElementos.add(ind + 1,datos);
+    		}
     	}
-    	
+
     }
 
-    
+
     /**
      * Elimina elemento de una lista de elementos
      * @ejb.interface-method
      */
     public void eliminarElemento(String campo,String indice) {
-        
+
     	// Obtenemos lista de elementos del campo
     	String referenciaCampoListaElementos = CampoUtils.getReferenciaListaElementos(pantallaActual.getNombre(),campo);
     	if (StringUtils.isEmpty(referenciaCampoListaElementos)){
     		log.error("Pantalla '" + this.pantallaActual.getNombre() + "' no es una pagina de detalle de lista elementos" );
-    		return;    		
-    	}    	    	    	
-    	List elementosCampoListaElementos = (List) this.datosListasElementos.get(referenciaCampoListaElementos);    	
+    		return;
+    	}
+    	List elementosCampoListaElementos = (List) this.datosListasElementos.get(referenciaCampoListaElementos);
     	if (elementosCampoListaElementos == null) {
     		elementosCampoListaElementos = new ArrayList();
     		this.datosListasElementos.put(referenciaCampoListaElementos,elementosCampoListaElementos);
-    	}    	
-    	
+    	}
+
     	// Validamos parametros
     	int ind;
     	try{
     		ind = Integer.parseInt(indice);
     	}catch(NumberFormatException ne){
     		log.error("El parametro indice no es un numero");
-    		return;    		
-    	}    	
-    	
+    		return;
+    	}
+
     	// Obtenemos datos actuales elemento
 		if (ind < 0 || ind > elementosCampoListaElementos.size() - 1){
 			log.error("No existe elemento a modificar");
     		return;
 		}
 		elementosCampoListaElementos.remove(ind);
-    	
+
     }
-    
-    
+
+
     /**
      * Sube elemento de orden de una lista de elementos
      * @ejb.interface-method
      */
     public void subirElemento(String campo,String indice) {
-    	cambiarOrden(campo,indice,true);    	    	
+    	cambiarOrden(campo,indice,true);
     }
-    
+
     /**
      * Baja elemento de orden de una lista de elementos
      * @ejb.interface-method
      */
     public void bajarElemento(String campo,String indice) {
-    	cambiarOrden(campo,indice,false);    	    	
+    	cambiarOrden(campo,indice,false);
     }
-    
+
     private void cambiarOrden(String campo,String indice,boolean subir){
 //    	 Obtenemos lista de elementos del campo
     	String referenciaCampoListaElementos = CampoUtils.getReferenciaListaElementos(pantallaActual.getNombre(),campo);
     	if (StringUtils.isEmpty(referenciaCampoListaElementos)){
     		log.error("Pantalla '" + this.pantallaActual.getNombre() + "' no es una pagina de detalle de lista elementos" );
-    		return;    		
-    	}    	    	    	
-    	List elementosCampoListaElementos = (List) this.datosListasElementos.get(referenciaCampoListaElementos);    	
+    		return;
+    	}
+    	List elementosCampoListaElementos = (List) this.datosListasElementos.get(referenciaCampoListaElementos);
     	if (elementosCampoListaElementos == null) {
     		elementosCampoListaElementos = new ArrayList();
     		this.datosListasElementos.put(referenciaCampoListaElementos,elementosCampoListaElementos);
-    	}    	
-    	
+    	}
+
     	// Validamos parametros
     	int ind;
     	try{
     		ind = Integer.parseInt(indice);
     	}catch(NumberFormatException ne){
     		log.error("El parametro indice no es un numero");
-    		return;    		
-    	}    	
-    	
+    		return;
+    	}
+
     	// Comprobamos que existe elemento
 		if (ind < 0 || ind > elementosCampoListaElementos.size() - 1){
 			log.error("No existe elemento a modificar");
     		return;
 		}
-		
+
 		//	Cambiamos posicion
 		if (subir){
 			if (ind == 0) return; // Ya esta el primero
@@ -1344,65 +1348,65 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
 			elementosCampoListaElementos.add(ind + 1,o);
 		}
     }
-    
+
     /**
-     * Obtiene datos elemento     
+     * Obtiene datos elemento
      */
     private Map obtenerElemento(String indice) {
-        
+
     	// Obtenemos lista de elementos del campo
     	String referenciaCampoListaElementos = this.pantallaActual.getComponenteListaElementos();
     	if (StringUtils.isEmpty(referenciaCampoListaElementos)){
     		log.error("Pantalla '" + this.pantallaActual.getNombre() + "' no es una pagina de detalle de lista elementos" );
     		return new HashMap();
-    	}    	    	    	
+    	}
     	if (StringUtils.isEmpty(referenciaCampoListaElementos)){
     		log.error("Pantalla '" + this.pantallaActual.getNombre() + "' no es una pagina de detalle de lista elementos" );
-    		return new HashMap();    		
-    	}    	    	    	
-    	List elementosCampoListaElementos = (List) this.datosListasElementos.get(referenciaCampoListaElementos);    	
+    		return new HashMap();
+    	}
+    	List elementosCampoListaElementos = (List) this.datosListasElementos.get(referenciaCampoListaElementos);
     	if (elementosCampoListaElementos == null) {
     		elementosCampoListaElementos = new ArrayList();
     		this.datosListasElementos.put(referenciaCampoListaElementos,elementosCampoListaElementos);
-    	}    	
-    	
-    	// Validamos parametros    	    	
+    	}
+
+    	// Validamos parametros
 		int ind;
     	try{
     		ind = Integer.parseInt(indice);
     	}catch(NumberFormatException ne){
     		log.error("El parametro indice no es un numero");
-    		return new HashMap();    		
-    	}    	
+    		return new HashMap();
+    	}
     	// Obtenemos datos actuales elemento
 		if (ind < 0 || ind > elementosCampoListaElementos.size() - 1){
 			log.error("No existe elemento a modificar");
 			return new HashMap();
 		}
 		Map datosElemento = (Map) elementosCampoListaElementos.get(ind);
-		
+
 		// Devolvemos una copia para que los valores no se modifiquen
 		Map copia = new HashMap();
 		copia.putAll(datosElemento);
 		return copia;
-		
+
     }
-    
+
     /**
      * Obtiene map con variables asociadas a los campos de listas de elementos de una pantalla
-     * 
+     *
      * f_campoLista_size,f_campoLista_id1_campox .... f_campoLista_id1_campoy],f_campoLista_idn_campox .... f_campoLista_idn_campoy
-     * 
+     *
      * @param p
      * @return
      */
-    protected Map variablesScriptListaElementos(Pantalla pantalla){    	
+    protected Map variablesScriptListaElementos(Pantalla pantalla){
     	Map variables = new HashMap();
-    	
+
     	// Si no es la pantalla actual introducimos prefijo pantalla
     	String prefix="";
     	if (pantalla.getId().longValue() != pantallaActual.getId().longValue()) prefix = pantalla.getNombre()+"_";
-    	
+
         if (StringUtils.isEmpty(pantalla.getComponenteListaElementos())){
         	for (Iterator it=pantalla.getCampos().iterator();it.hasNext();){
         		Campo campo = (Campo) it.next();
@@ -1415,39 +1419,39 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
         			variables.putAll(variablesElemento);
         		}
         	}
-        }       
-        
+        }
+
         return variables;
     }
-    
+
     /**
      * Obtiene los datos de las listas de elementos de la pantalla actual, prefijados con f_&lt;nombre pantalla%gt;_
      * @ejb.interface-method
      */
-    public Map obtenerDatosListasElementos() {    	
+    public Map obtenerDatosListasElementos() {
         return variablesScriptListaElementos(pantallaActual);
     }
-    
+
     /**
      * Obtiene la accion a realizar sobre el detalle y el indice del elemento
      * ejb.interface-method
-     
+
      YA SE HARA SI HACE FALTA (HABRIA Q VER EN Q SCRIPTS SE PONE, igual basta con ponerlo en variablesScriptListaElementos detectando
      si es una pantalla de detalle
-     
+
     public Map obtenerAccionIndicePantallaDetalle() throws DelegateException {
     	Map vars = new HashMap();
     	String prefix = CampoUtils.getPantallaListaElementos(pantallaActual.getComponenteListaElementos());
-    	
+
     	vars.put("f_"+);
-    	
+
     	return vars;
     }
     */
-    
+
     // --- INDRA: FIN
-    
-    
+
+
     // -- INDRA: LOG SCRIPTS
     /**
      * Obtiene el log de los scripts
@@ -1455,41 +1459,41 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
      */
     public List obtenerLogScripts() {
     	if (logScript == null) return null;
-    	return logScript.getLogs();    	
+    	return logScript.getLogs();
     }
-    
+
     /**
      * Resetea el log de los scripts
      * @ejb.interface-method
      */
-    public void limpiarLogScripts() {    	
+    public void limpiarLogScripts() {
     	if (logScript != null) logScript.resetLogs();
     }
-    
+
     protected boolean permitirScriptDebug(){
-    	
+
     	// Obtenemos entorno: desarrollo o produccion
-    	if (scriptDebug == null) {    	
+    	if (scriptDebug == null) {
 	        try{
 	        	String entorno = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("entorno");
-				if ("DESARROLLO".equals(entorno))				
+				if ("DESARROLLO".equals(entorno))
 					scriptDebug = new Boolean(true);
-				else 
-					scriptDebug = new Boolean(false);	        			    
+				else
+					scriptDebug = new Boolean(false);
 	    	}catch (Exception ex){
-	    		scriptDebug=new Boolean(false);	
+	    		scriptDebug=new Boolean(false);
 	    	}
     	}
-    	
+
     	return scriptDebug.booleanValue();
     }
-    // -- INDRA: LOG SCRIPTS    
-    
+    // -- INDRA: LOG SCRIPTS
+
     /**
      * Obtener captcha.
      * @param fieldName nombre campo
      * @return captcha
-     * 
+     *
      * @ejb.interface-method
      */
     public String obtenerCaptcha(String fieldName) {
@@ -1499,15 +1503,15 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
     	Campo captcha = pantallaActual.findCampo(fieldName);
     	if (captcha == null || !(captcha instanceof Captcha)) {
     		return "";
-    	}    	
-    	return (String) this.datosActual.get(fieldName);    	
+    	}
+    	return (String) this.datosActual.get(fieldName);
     }
-    
-    
+
+
     /**
      * Regenera captcha.
      * @param fieldName nombre campo
-     * 
+     *
      * @ejb.interface-method
      */
     public void regenerarCaptcha(String fieldName) {
@@ -1517,11 +1521,29 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
     	Campo captcha = pantallaActual.findCampo(fieldName);
     	if (captcha == null || !(captcha instanceof Captcha)) {
     		return;
-    	}    	
+    	}
     	String newValue = CaptchaUtils.generateCaptcha();
-		this.datosActual.put(fieldName, newValue );    	
+		this.datosActual.put(fieldName, newValue );
     }
-    
-    
+
+    /**
+     * Obtiene si debug enabled.
+     * @ejb.interface-method
+     */
+    public boolean isDebugEnabled() {
+		return debugEnabled;
+	}
+
+	protected void setDebugEnabled(boolean debugEnabled) {
+		this.debugEnabled = debugEnabled;
+	}
+
+	protected void debug(String mensaje) {
+		if (this.debugEnabled) {
+			log.debug(mensaje);
+		}
+	}
+
+
 }
 

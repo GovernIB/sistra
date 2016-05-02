@@ -22,53 +22,58 @@ import es.caib.sistra.persistence.delegate.InstanciaDelegate;
  *  path="/protected/continuarFormCancelacion"
  *  scope="request"
  *  validate="false"
- * 
+ *
  * @struts.action-forward
  *  name="success" path=".redireccion"
- * 
+ *
  * @struts.action-forward
  *  name="error" path="/fail.do"
  */
 public class ContinuarCancelacionAction extends BaseAction
 {
-	
+
 	private static Log log = LogFactory.getLog(ContinuarCancelacionAction.class);
-			
+
 	public ActionForward executeTask(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		
+
 		ContinuarTramitacionForm formulario = (ContinuarTramitacionForm) form;
-		
-		log.debug("DEBUGFORM: ContinuarCancelacionAction [GF:" + formulario.getGstfrm() + " - TF:" + formulario.getTOKEN() + "]" );
-		
+
+		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request );
+
+		boolean debug = delegate.isDebugEnabled();
+
+		if (debug) {
+			log.debug("DEBUGFORM: ContinuarCancelacionAction [GF:" + formulario.getGstfrm() + " - TF:" + formulario.getTOKEN() + "]" );
+		}
+
 		// Obtiene gestor formulario del contexto
 		GestorFlujoFormulario gestorFormularios = this.obtenerGestorFormulario( request, formulario.getGstfrm());
 		if ( gestorFormularios == null )
 		{
 			throw new Exception("No se encuentra gestor formulario en contexto");
 		}
-		
+
 		// Recupera informacion del gestor de formularios y borra gestor del contexto
-		boolean resultadoProcesoFormulario = gestorFormularios.continuarCancelacion( formulario.getTOKEN() );
+		boolean resultadoProcesoFormulario = gestorFormularios.continuarCancelacion( formulario.getTOKEN(), debug );
 		if ( !resultadoProcesoFormulario )
 		{
 			this.setErrorMessage( request, "errors.errorCancelacionForm" );
 		}
 		this.resetGestorFormulario( request, formulario.getGstfrm() );
-		
-		
+
+
 		// Recupera instancia tramitacion y va a paso actual
-		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request );
 		RespuestaFront respuestaFront = delegate.pasoActual();
         // Si es trámite con circuito reducido abandonamos tramite
 		// Si no, vamos a paso actual
 		String accionRedireccion = "/protected/irAPaso.do";
-		if ( respuestaFront != null 
-        		&& respuestaFront.getInformacionTramite() != null && 
+		if ( respuestaFront != null
+        		&& respuestaFront.getInformacionTramite() != null &&
         			respuestaFront.getInformacionTramite().isCircuitoReducido() )
         {
-			// Simplemente abandonamos el trámite 
-			accionRedireccion = "/protected/abandonarTramite.do";			
+			// Simplemente abandonamos el trámite
+			accionRedireccion = "/protected/abandonarTramite.do";
         }
 		request.setAttribute( "accionRedireccion", accionRedireccion );
         return mapping.findForward( "success" );

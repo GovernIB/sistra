@@ -42,14 +42,17 @@ public final class ScriptUtil {
 
     /**
      * Evalua Script devolviendo resultado
-     * 
+     *
      * @param script	Cadena con el script a ejecutar
      * @param params	Parámetros del script
      * @return Objeto con el resultado (normalmente será un String)
      */
-    public static Object evalScript(String script, Map params) {
-        log.debug("Evaluando script:\n" + script);
-        log.debug("Parametros:\n" + params);
+    public static Object evalScript(String script, Map params, boolean debugEnabled) {
+
+    	if (debugEnabled) {
+	        log.debug("Evaluando script:\n" + script);
+	        log.debug("Parametros:\n" + params);
+    	}
         try {
             BSFManager manager = new BSFManager();
 
@@ -82,32 +85,34 @@ public final class ScriptUtil {
             engine.terminate();
             manager.terminate();
 
-            log.debug("Resultado: " + result);
+            if (debugEnabled) {
+            	log.debug("Resultado: " + result);
+            }
 
             return result;
 
         } catch (BSFException be) {
-            log.error("Error ejecutando script: " + be.getMessage(), be.getTargetException());
+            log.error("Error ejecutando script: " + be.getMessage() + ". \nScript: \n" + script, be.getTargetException());
             return null;
         }
     }
 
     /**
      * Evalua script suponiendo que el resultado será un booleano
-     * 
+     *
      * @param script	Cadena con el script a ejecutar
      * @param params	Parámetros del script
      * @return booleano
      */
-    public static boolean evalBoolScript(String script, Map params) {
-        Object result = evalScript(script, params);
+    public static boolean evalBoolScript(String script, Map params, boolean debugEnabled) {
+        Object result = evalScript(script, params, debugEnabled);
         if (result == null || !(result instanceof Boolean) ) {
             return false;
         }
 
         return ((Boolean) result).booleanValue();
     }
-    
+
     /**
      * Devuelve charset utilizado para serializar los strings en BBDD
      * @return
@@ -115,7 +120,7 @@ public final class ScriptUtil {
     public static String getCharset(){
     	return ConstantesXML.ENCODING;
     }
-    
+
     /**
      * Convierte script a bytes
      * @param script
@@ -125,133 +130,135 @@ public final class ScriptUtil {
     public static byte[] scriptToBytes(String script) throws Exception{
     	return script.getBytes(getCharset());
     }
-    
+
     /**
      * Convierte bytes a script
      * @param script
      * @return
      * @throws Exception
      */
-    public static String scriptToString(byte[] script) throws Exception{    	
+    public static String scriptToString(byte[] script) throws Exception{
     	return new String(script,getCharset());
     }
-    
-    
+
+
     /**
-     * Evalua script de tramitación (sin permitir modificar formularios a través del plugin) 
-     * 
+     * Evalua script de tramitación (sin permitir modificar formularios a través del plugin)
+     *
      * @param script
      * @param params
      * @param tramiteVersion
      * @param datosFormularios
      * @param infoPersistencia
      * @param infoSesion
+     * @param debugEnabled
      * @return
      * @throws ProcessorException
      */
     public static String evaluarScriptTramitacion(byte[] script, HashMap params, TramiteVersion tramiteVersion,HashMap datosFormularios,
-    		TramitePersistentePAD infoPersistencia,DatosSesion infoSesion) throws ProcessorException{    
+    		TramitePersistentePAD infoPersistencia,DatosSesion infoSesion, boolean debugEnabled) throws ProcessorException{
     	return evaluarScriptSistra(script,params,tramiteVersion,datosFormularios,
-    	    		infoPersistencia,infoSesion,true,null);
-    } 	
-    
-    
-    /**
-     * Evalua script de tramitación (permitiendo modificar formularios a través del plugin) 
-     * 
-     * @param script
-     * @param params
-     * @param tramiteVersion
-     * @param datosFormularios
-     * @param infoPersistencia
-     * @param infoSesion
-     * @return
-     * @throws ProcessorException
-     */
-    public static String evaluarScriptTramitacion(byte[] script, HashMap params, TramiteVersion tramiteVersion,HashMap datosFormularios,
-    		TramitePersistentePAD infoPersistencia,DatosSesion infoSesion,boolean readOnlyPluginForms,List formulariosModificados) throws ProcessorException{    
-    	return evaluarScriptSistra(script,params,tramiteVersion,datosFormularios,
-    	    		infoPersistencia,infoSesion,readOnlyPluginForms,formulariosModificados);
+    	    		infoPersistencia,infoSesion,true,null, debugEnabled);
     }
-    
-    	
+
+
+    /**
+     * Evalua script de tramitación (permitiendo modificar formularios a través del plugin)
+     *
+     * @param script
+     * @param params
+     * @param tramiteVersion
+     * @param datosFormularios
+     * @param infoPersistencia
+     * @param infoSesion
+     * @param debugEnabled
+     * @return
+     * @throws ProcessorException
+     */
+    public static String evaluarScriptTramitacion(byte[] script, HashMap params, TramiteVersion tramiteVersion,HashMap datosFormularios,
+    		TramitePersistentePAD infoPersistencia,DatosSesion infoSesion,boolean readOnlyPluginForms,List formulariosModificados, boolean debugEnabled) throws ProcessorException{
+    	return evaluarScriptSistra(script,params,tramiteVersion,datosFormularios,
+    	    		infoPersistencia,infoSesion,readOnlyPluginForms,formulariosModificados, debugEnabled);
+    }
+
+
    private static String evaluarScriptSistra(byte[] script, HashMap params, TramiteVersion tramiteVersion,HashMap datosFormularios,
-    	    		TramitePersistentePAD infoPersistencia,DatosSesion infoSesion,boolean readOnlyPluginForms,List formulariosModificados) throws ProcessorException{	
+    	    		TramitePersistentePAD infoPersistencia,DatosSesion infoSesion,boolean readOnlyPluginForms,List formulariosModificados, boolean debugEnabled) throws ProcessorException{
     	Object result;
     	ErrorScript err = new ErrorScript();
-    	
+
     	try{
 			// Convertimos script a String
 			String ls_script;
 			ls_script = ScriptUtil.scriptToString(script);
-			
+
 			// Si no existe la hash de parametros la creamos
 			if (params == null){
 				params = new HashMap();
 			}
-			
-			// Preparamos variable para indicar error			    	
+
+			// Preparamos variable para indicar error
     		params.put("ERRORSCRIPT",err);
-			
+
     		// Preparamos plugin para acceso a parametros inicio (si no hay  información de persistencia
     		// este plugin sera pasado en los parametros. Esto pasará al iniciar el trámite.)
     		if (infoPersistencia != null){
-    			PluginParametrosInicio plgIni = new PluginParametrosInicio(infoPersistencia.getParametrosInicio());
+    			PluginParametrosInicio plgIni = new PluginParametrosInicio(infoPersistencia.getParametrosInicio(),debugEnabled);
     			params.put("PLUGIN_PARAMETROSINICIO",plgIni);
     		}
-    		
+
     		// Preparamos plugin para acceso dominios
-			PluginDominio plgDom = new PluginDominio();
+			PluginDominio plgDom = new PluginDominio(debugEnabled);
 			params.put("PLUGIN_DOMINIOS",plgDom);
-			
+
 			// Preparamos plugin para acceso a datos formularios
 			PluginFormularios plgForms = new PluginFormularios(readOnlyPluginForms);
 			plgForms.setDatosFormularios(datosFormularios);
 			plgForms.setEstadoPersistencia(infoPersistencia);
 			params.put("PLUGIN_FORMULARIOS",plgForms);
-			
+
 			// Generamos plugin para acceder a anexos
 			PluginAnexos plgAnexos = new PluginAnexos();
 			plgAnexos.setEstadoPersistencia(infoPersistencia);
 			params.put("PLUGIN_ANEXOS",plgAnexos);
-			
+
 			// Preparamos plugin para acceso a datos sesion
 			PluginDatosSesion plgSes = new PluginDatosSesion();
 			plgSes.setDatosSesion( (infoPersistencia != null? infoPersistencia.getIdPersistencia() : null), infoSesion);
 			params.put("PLUGIN_DATOSSESION",plgSes);
-			
+
 			// Preparamos plugin para acceso a datos tramite
 			PluginDatosTramite plgTram = new PluginDatosTramite();
 			plgTram.setTramiteVersion(tramiteVersion);
 			params.put("PLUGIN_TRAMITE",plgTram);
-			
+
 			// Preparamos plugin para log
-			PluginLog plgLog = new PluginLog();
-			params.put("PLUGIN_LOG",plgLog);	
-			
+			PluginLog plgLog = new PluginLog(debugEnabled);
+			params.put("PLUGIN_LOG",plgLog);
+
 			// Preparamos plugin para acceso a mensajes validación
 			PluginMensajes plgMensajes = new PluginMensajes(tramiteVersion);
 			params.put("PLUGIN_MENSAJES",plgMensajes);
-			
-			// Ejecutamos script			
-			result = ScriptUtil.evalScript(ls_script,params);
+
+			// Ejecutamos script
+			result = ScriptUtil.evalScript(ls_script,params, debugEnabled);
 			if (result == null){
-				throw new Exception("Excepción BSF (ver logs)");
+				throw new Exception("Excepción BSF (ver logs) - Tramite " + tramiteVersion.getTramite().getIdentificador() + " - V" + tramiteVersion.getVersion());
 			}
-			
+
 			// Establecemos formularios modificados
-			if (!readOnlyPluginForms){				
-				for (int i=0;i<plgForms.getFormulariosDatosModificados().size();i++) 
-					formulariosModificados.add(plgForms.getFormulariosDatosModificados().get(i));								
+			if (!readOnlyPluginForms){
+				for (int i=0;i<plgForms.getFormulariosDatosModificados().size();i++)
+					formulariosModificados.add(plgForms.getFormulariosDatosModificados().get(i));
 			}
-			
+
 		}catch (Exception e){
 			log.error("Excepción no controlada ejecutando script de validacion",e);
 			throw new ProcessorException("Excepción evaluando script: " + script,MensajeFront.MENSAJE_EXCEPCIONSCRIPT,e);
-		}		 
-		
+		}
+
 		// Si existe error generamos excepción
-		if (err.isExisteError()){			
+		if (err.isExisteError()){
 			if (StringUtils.isNotEmpty(err.getMensajeError()) || StringUtils.isNotEmpty(err.getMensajeDinamicoError())){
 				log.error("Script marcado con error de proceso. Mensaje error: " + (StringUtils.isNotEmpty(err.getMensajeDinamicoError())?err.getMensajeDinamicoError():err.getMensajeError()) + ".\n Script:" + script);
 				throw new ProcessorException("Script marcado con error de proceso. Mensaje error: " + (StringUtils.isNotEmpty(err.getMensajeDinamicoError())?err.getMensajeDinamicoError():err.getMensajeError()),err.getMensajeError(),err.getMensajeDinamicoError());
@@ -259,28 +266,28 @@ public final class ScriptUtil {
 				log.error("Script marcado con error de proceso. No hay mensaje error.\n Script:" + script);
 				throw new ProcessorException("Script marcado con error de proceso. No hay mensaje error.",MensajeFront.MENSAJE_EXCEPCIONSCRIPT);
 			}
-		}			
-		
-		// Devolvemos resultado		
-		return result.toString();    	
+		}
+
+		// Devolvemos resultado
+		return result.toString();
     }
-    
-    
+
+
    public static byte[] getScriptVersionOrNivel(byte[] scriptVersion, byte[] scriptNivel) {
 	   byte[] res = null;
 	    if (scriptNivel != null && scriptNivel.length > 0){
 	    	res = scriptNivel;
    		}else{
    			res = scriptVersion;
-   		} 
+   		}
 	   return res;
    }
-   
+
    public static boolean existeScript(byte[] script) {
 	   return  (script != null && script.length > 0);
    }
-    
-    
+
+
     //TODO: Quitar estas funciones
     /*
     private static final Pattern ID_PATTERN = Pattern.compile("f_\\w+");
@@ -296,13 +303,13 @@ public final class ScriptUtil {
         }
         return deps;
     }
-    
-            
+
+
      * Filtra una Map con las entradas que tienen el prefijo indicado
-     * 
+     *
      * @param map	Map
      * @param prefix	Prefijo
-     * @return	Map filtrada por el prefijo     
+     * @return	Map filtrada por el prefijo
     public static Map prefixMap(Map map, String prefix) {
         if (map == null) return new HashMap();
 
@@ -313,5 +320,5 @@ public final class ScriptUtil {
         }
         return prefixedMap;
     }
-    */            
+    */
 }

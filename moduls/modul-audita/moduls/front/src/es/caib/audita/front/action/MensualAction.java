@@ -20,7 +20,7 @@ import es.caib.audita.persistence.delegate.DelegateUtil;
  *  path="/mensual"
  *  scope="request"
  *  validate="false"
- *  
+ *
  * @struts.action-forward
  *  name="success" path=".mensual"
  *
@@ -34,10 +34,10 @@ public class MensualAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
-		
-		_log.debug( "execute" );
+
+
 		MensualForm formulario = ( MensualForm ) form;
-		
+
 		int li_anyoFinal = formulario.getAnyoFinal();
 		int li_mesFinal = formulario.getMesFinal();
 		if((formulario.getAnyoFinal() == 0) && (formulario.getMesFinal() == 0))
@@ -53,9 +53,9 @@ public class MensualAction extends BaseAction
 				li_mesFinal = formulario.getMesInicio() + 1;
 			}
 		}
-		
+
 		AuditoriaDelegate delegate = DelegateUtil.getAuditoriaDelegate();
-		request.setAttribute( "cuadroMando", 
+		request.setAttribute( "cuadroMando",
 				delegate.obtenerCuadroMandoIntervaloTemporal( getLang(request),
 						                                      formulario.getAnyoInicio(),
 						                                      formulario.getMesInicio(),
@@ -70,7 +70,7 @@ public class MensualAction extends BaseAction
 		request.setAttribute("mesInicio", mesInicio);
 		request.setAttribute("anyoFinal", anyoFinal);
 		request.setAttribute("mesFinal", mesFinal);
-		
+
 		String hasta = (formulario.getAnyoFinal() == 0) ? "" : ("01/" + mesFinal + "/" + anyoFinal);
 
 		request.setAttribute("desde", "01/" + mesInicio + "/" + anyoInicio);

@@ -22,7 +22,7 @@ import es.caib.sistra.persistence.delegate.InstanciaDelegate;
 public class MantenimientoSesionFormServlet extends HttpServlet {
 
 	private static Log logger = LogFactory.getLog(MantenimientoSesionFormServlet.class);
-	
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
@@ -30,9 +30,9 @@ public class MantenimientoSesionFormServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     	String idInstancia = (String) request.getParameter(InstanciaManager.ID_INSTANCIA);
-    	
-    	logger.debug("Mantenimiento sesion sistra - comprobando ejb de sesion de tramitacion [ID_INSTANCIA: " + idInstancia + "]");
-        
+
+    	// logger.debug("Mantenimiento sesion sistra - comprobando ejb de sesion de tramitacion [ID_INSTANCIA: " + idInstancia + "]");
+
         boolean sesionActiva = false;
     	try
     	{
@@ -41,27 +41,27 @@ public class MantenimientoSesionFormServlet extends HttpServlet {
     		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request );
     		String idPersistencia = delegate.obtenerIdPersistencia();
     		sesionActiva=true;
-    		logger.debug("Mantenimiento sesion sistra - ejb de sesion de tramitacion activo");
+    		// logger.debug("Mantenimiento sesion sistra - ejb de sesion de tramitacion activo");
     	}catch(DelegateException de){
 			if (de.getCause().getClass().equals(NoSuchObjectLocalException.class)){
-    			// Sesion de tramitacion finalizada: no existe EJB de sesion    				
+    			// Sesion de tramitacion finalizada: no existe EJB de sesion
     			sesionActiva=false;
-    			logger.debug("Mantenimiento sesion sistra - ejb de sesion de tramitacion ya no existe. Sesion de tramitacion finalizada.");
+    			// logger.debug("Mantenimiento sesion sistra - ejb de sesion de tramitacion ya no existe. Sesion de tramitacion finalizada.");
 			}else{
-				// Sesion de tramitacion finalizada: error desconocido    				
+				// Sesion de tramitacion finalizada: error desconocido
     			sesionActiva=false;
-    			logger.debug("Mantenimiento sesion sistra - no se ha podido comprobar si el ejb de sesion de tramitacion existe.",de);
+    			// logger.debug("Mantenimiento sesion sistra - no se ha podido comprobar si el ejb de sesion de tramitacion existe.",de);
 			}
-			
-		}    
+
+		}
     	catch( Exception exc )
     	{
-    		logger.debug("Mantenimiento sesion sistra - no se ha podido comprobar si el ejb de sesion de tramitacion existe.",exc);    		
+    		// logger.debug("Mantenimiento sesion sistra - no se ha podido comprobar si el ejb de sesion de tramitacion existe.",exc);
     	}
 
-    	
-    	logger.debug("Mantenimiento sesion sistra - retornando sesion tramitacion activa = " + sesionActiva);
-        
+
+    	// logger.debug("Mantenimiento sesion sistra - retornando sesion tramitacion activa = " + sesionActiva);
+
     	byte[] encBytes = (sesionActiva + "").getBytes( "UTF-8" );
         response.reset();
         response.setContentLength(encBytes.length);
