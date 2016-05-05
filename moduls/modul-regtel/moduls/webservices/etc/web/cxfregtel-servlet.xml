@@ -7,9 +7,9 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License. You may obtain a copy of the License at
- 
+
   http://www.apache.org/licenses/LICENSE-2.0
- 
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -26,7 +26,12 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 http://cxf.apache.org/bindings/soap http://cxf.apache.org/schemas/configuration/soap.xsd
 http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
-	<bean id="Regtel_BasicSecurityInterceptor" class="es.caib.util.ws.server.BasicAuthAuthorizationInterceptor">  
+	<bean id="Regtel_LoggingInInterceptor" class="es.caib.util.ws.server.LoggingInInterceptor"/>
+
+    <bean id="Regtel_LoggingOutInterceptor" class="es.caib.util.ws.server.LoggingOutInterceptor"/>
+
+
+	<bean id="Regtel_BasicSecurityInterceptor" class="es.caib.util.ws.server.BasicAuthAuthorizationInterceptor">
       <property name="securityDomain" value="java:/jaas/seycon" />
       <property name="unauthenticatedCalls" value="true" />
     </bean>
@@ -60,57 +65,71 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
         wsdlLocation="WEB-INF/wsdl/regtel/v1/BackofficeFacade.wsdl"
         address="/v1/BackofficeFacade"
         bindingUri="Regtel_BackofficeFacade_v1">
+
+        <!--
         <jaxws:features>
 		    <bean class="org.apache.cxf.feature.LoggingFeature"/>
         </jaxws:features>
-                
-	   <jaxws:inInterceptors>	 
-	 	  <!--  Interceptor ws-security usernameToken -->	 	 
-	 	 <ref bean="Regtel_UsernameTokenSecurityInterceptor"/>	 	 	 	  	      
+         -->
+
+	   <jaxws:inInterceptors>
+	     <!--  Interceptor logging -->
+	 	 <ref bean="Regtel_LoggingInInterceptor"/>
+	 	  <!--  Interceptor ws-security usernameToken -->
+	 	 <ref bean="Regtel_UsernameTokenSecurityInterceptor"/>
    	 	  <!--  Interceptor security basic authentication -->
-	      <ref bean="Regtel_BasicSecurityInterceptor"/>	      
+	      <ref bean="Regtel_BasicSecurityInterceptor"/>
 		</jaxws:inInterceptors>
-                
-        <jaxws:outInterceptors>	 
-	 	  <!--  Interceptor ws-security timestamp -->	 	 
-		 	 <ref bean="Regtel_UsernameTokenSecurityInterceptorOut"/>	 	 	 	  	         	 	   
+
+        <jaxws:outInterceptors>
+         <!--  Interceptor logging -->
+	 	 <ref bean="Regtel_LoggingOutInterceptor"/>
+	 	  <!--  Interceptor ws-security timestamp -->
+		 	 <ref bean="Regtel_UsernameTokenSecurityInterceptorOut"/>
 		</jaxws:outInterceptors>
-        
-         <jaxws:outFaultInterceptors>	 
-	 	  <!--  Interceptor ws-security timestamp -->	 	 
-	 	 <ref bean="Regtel_UsernameTokenSecurityInterceptorOut"/>	 	 	 	  	         	 	   
-	 	</jaxws:outFaultInterceptors>  
-	 	
- 	        
+
+         <jaxws:outFaultInterceptors>
+	 	  <!--  Interceptor ws-security timestamp -->
+	 	 <ref bean="Regtel_UsernameTokenSecurityInterceptorOut"/>
+	 	</jaxws:outFaultInterceptors>
+
+
     </jaxws:endpoint>
-    
+
     <jaxws:endpoint
         id="Regtel_BackofficeFacade_v2"
         implementor="es.caib.regtel.ws.v2.services.BackofficeFacadeImpl"
         wsdlLocation="WEB-INF/wsdl/regtel/v2/BackofficeFacade.wsdl"
         address="/v2/BackofficeFacade"
         bindingUri="Regtel_BackofficeFacade_v2">
+
+        <!--
         <jaxws:features>
 		    <bean class="org.apache.cxf.feature.LoggingFeature"/>
         </jaxws:features>
-                
-	   <jaxws:inInterceptors>	 
-	 	  <!--  Interceptor ws-security usernameToken -->	 	 
-	 	 <ref bean="Regtel_UsernameTokenSecurityInterceptor"/>	 	 	 	  	      
+          -->
+
+	   <jaxws:inInterceptors>
+	     <!--  Interceptor logging -->
+	 	 <ref bean="Regtel_LoggingInInterceptor"/>
+	 	  <!--  Interceptor ws-security usernameToken -->
+	 	 <ref bean="Regtel_UsernameTokenSecurityInterceptor"/>
    	 	  <!--  Interceptor security basic authentication -->
-	      <ref bean="Regtel_BasicSecurityInterceptor"/>	      
+	      <ref bean="Regtel_BasicSecurityInterceptor"/>
 	 	</jaxws:inInterceptors>
-       
-       <jaxws:outInterceptors>	 
-	 	  <!--  Interceptor ws-security timestamp -->	 	 
-		 	 <ref bean="Regtel_UsernameTokenSecurityInterceptorOut"/>	 	 	 	  	         	 	   
+
+       <jaxws:outInterceptors>
+        <!--  Interceptor logging -->
+	 	 <ref bean="Regtel_LoggingOutInterceptor"/>
+	 	  <!--  Interceptor ws-security timestamp -->
+		 	 <ref bean="Regtel_UsernameTokenSecurityInterceptorOut"/>
 		</jaxws:outInterceptors>
-		
-		<jaxws:outFaultInterceptors>	 
-	 	  <!--  Interceptor ws-security timestamp -->	 	 
-	 	 <ref bean="Regtel_UsernameTokenSecurityInterceptorOut"/>	 	 	 	  	         	 	   
-	 	</jaxws:outFaultInterceptors>  
-                
+
+		<jaxws:outFaultInterceptors>
+	 	  <!--  Interceptor ws-security timestamp -->
+	 	 <ref bean="Regtel_UsernameTokenSecurityInterceptorOut"/>
+	 	</jaxws:outFaultInterceptors>
+
     </jaxws:endpoint>
-    
+
 </beans>
