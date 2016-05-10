@@ -32,7 +32,7 @@ import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
  *  path="/realizarAltaNotificacion"
  *  validate="true"
  *  input = ".altaNotificacion"
- *  
+ *
  * @struts.action-forward
  *  name="success" path=".recuperarExpediente"
  *
@@ -45,46 +45,48 @@ import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
 public class RealizarAltaNotificacionAction extends BaseAction
 {
 	protected static Log log = LogFactory.getLog(RealizarAltaNotificacionAction.class);
-	
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-            HttpServletResponse response) throws Exception 
+            HttpServletResponse response) throws Exception
     {
 		DetalleNotificacionForm notificacionForm = (DetalleNotificacionForm)form;
 		request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,"3");
 		ArrayList documentos;
-		
+
 		// Recuperamos de sesion el expediente actual
 		String idExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY);
 		Long uniAdm = (Long) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY);
 		String claveExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY);
-		
+
 		try{
-			
+
 			// Recupera expediente
 			PadBackOfficeDelegate ejb = new PadBackOfficeDelegate();
 			ExpedientePAD expediente = ejb.consultaExpediente(uniAdm.longValue(), idExpe, claveExpe);
-			
+
 			if(request.getSession().getAttribute("documentosAltaNotificacion") == null){
 				documentos = new ArrayList();
 			}else{
 				documentos = (ArrayList)request.getSession().getAttribute("documentosAltaNotificacion");
 			}
-			
+
 			// Plazo: solo si acuse de recibo
 			Integer plazo = null;
 			if ("S".equals(notificacionForm.getAcuse()) && !("0".equals(notificacionForm.getDiasPlazo()))) {
 				plazo = new Integer(notificacionForm.getDiasPlazo());
 			}
-			
+
 			RegistroSalidaHelper r = new RegistroSalidaHelper();
 			r.setOficinaRegistro(notificacionForm.getOrganoDestino(),notificacionForm.getOficinaRegistro());
 			r.setExpediente(uniAdm,idExpe,claveExpe);
-			
-			
+
+
 			// Obtenemos nombre y apellidos persona
 			PersonaPAD p = DelegateUtil.getConsultaPADDelegate().obtenerDatosPADporNif(expediente.getNifRepresentante());
-					
-			
+			if (p == null) {
+				throw new Exception("No se ha encontrado la persona con NIF: " + expediente.getNifRepresentante());
+			}
+
 			r.setDatosInteresadoDesglosado(notificacionForm.getNif(),p.getNombre(),p.getApellido1(),p.getApellido2(), StringUtils.isEmpty(notificacionForm.getUsuarioSey())?null:notificacionForm.getUsuarioSey(),notificacionForm.getCodigoPais(),notificacionForm.getNombrePais(),notificacionForm.getCodigoProvincia(),notificacionForm.getNombreProvincia(),notificacionForm.getCodigoMunicipio(),notificacionForm.getNombreMunicipio());
 			r.setDatosNotificacion(notificacionForm.getIdioma(),notificacionForm.getTipoAsunto(),notificacionForm.getTituloAviso(),
 					notificacionForm.getTextoAviso(),(StringUtils.isNotEmpty(notificacionForm.getTextoSmsAviso())?notificacionForm.getTextoSmsAviso():null),
@@ -98,29 +100,29 @@ public class RealizarAltaNotificacionAction extends BaseAction
 				r.setTramiteSubsanacion(notificacionForm.getDescripcionTramiteSubsanacion(),notificacionForm.getIdentificadorTramiteSubsanacion(),notificacionForm.getVersionTramiteSubsanacionInteger().intValue(),parametros);
 			}
 			if(documentos != null){
-				
+
 				for(int i=0;i<documentos.size();i++){
 					ReferenciaRDS refRDS = new ReferenciaRDS(((DocumentoExpedientePAD)documentos.get(i)).getCodigoRDS(),((DocumentoExpedientePAD)documentos.get(i)).getClaveRDS());
-					r.addDocumento(refRDS);					
+					r.addDocumento(refRDS);
 				}
 			}
 			ReferenciaRDSAsientoRegistral ar = r.generarAsientoRegistral("LOCAL");
 			ResultadoRegistroTelematico res = r.registrar("LOCAL",ar);
-			
+
 			request.getSession().setAttribute("documentosAltaNotificacion",null);
 			request.getSession().setAttribute("parametrosAltaNotificacion",null);
-			
+
 			// Redirigimos a la consulta del expediente
 			response.sendRedirect("recuperarExpediente.do?unidadAdm=" + uniAdm + "&identificadorExp=" + idExpe + "&claveExp=" + claveExpe );
 			return null;
-						
+
 		}catch(Exception e){
 			log.error("Excepcion alta notificacion",e);
 			request.setAttribute( "enlace", "altaNotif");
 			String mensajeOk = MensajesUtil.getValue("error.notificacio.Excepcion", request);
 			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk + ": " + e.getMessage());
 			return mapping.findForward("fail");
-		}		
+		}
     }
-		
+
 }
