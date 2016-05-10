@@ -66,13 +66,12 @@ import es.caib.zonaper.persistence.delegate.TramitePersistenteDelegate;
 import es.caib.zonaper.persistence.util.AvisoAlertasTramitacion;
 import es.caib.zonaper.persistence.util.AvisosExpediente;
 import es.caib.zonaper.persistence.util.ConfigurationUtil;
-import es.caib.zonaper.persistence.util.LiteralesAvisosMovilidad;
 import es.caib.zonaper.persistence.util.UsernamePasswordCallbackHandler;
 
 /**
  * SessionBean que realiza procesos auto.
  * Los metodos se ejecutaran con el usuario auto
- * 
+ *
  *
  * @ejb.bean
  *  name="zonaper/persistence/ProcesosAutoFacade"
@@ -88,265 +87,265 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 	private static Log backupLog = LogFactory.getLog( ProcesosAutoFacadeEJB.class );
 	private String cuentaSistra;
 	private String avisosGestorHabilitado;
-	
+
 	/**
      * @ejb.create-method
      * @ejb.permission unchecked = "true"
      */
 	public void ejbCreate() throws CreateException {
-		
+
 	}
-	
+
 
 	/**
 	 * Procesa tramites caducados
-	 * 
+	 *
      * @ejb.interface-method
      * @ejb.permission unchecked = "true"
-     * 
+     *
      */
 	public void procesaTramitesCaducados() {
 
 		backupLog.debug("Procesa tramites caducados");
-		
-		LoginContext lc = null;		
-		try{					
-			// Realizamos login JAAS con usuario para proceso automatico	
+
+		LoginContext lc = null;
+		try{
+			// Realizamos login JAAS con usuario para proceso automatico
 			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
 			String user = props.getProperty("auto.user");
 			String pass = props.getProperty("auto.pass");
-			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass );
 			lc = new LoginContext("client-login", handler);
 			lc.login();
-			
+
 			// Actualizamos estado expediente
-			doProcesaTramitesCaducados();	
-			
+			doProcesaTramitesCaducados();
+
 		}catch (Exception le){
 			throw new EJBException("Excepcion al ejecutar proceso",le);
-		}finally{				
+		}finally{
 			// Hacemos el logout
 			if ( lc != null ){
 				try{lc.logout();}catch(Exception exl){}
 			}
 		}
 	}
-	
+
 	/**
 	 * Procesa tramites caducados
-	 * 
+	 *
      * @ejb.interface-method
      * @ejb.permission unchecked = "true"
-     * 
+     *
      */
 	public void procesaEliminarTramitesBackup() {
 
 		backupLog.debug("Elimina tramites backup");
-		
-		LoginContext lc = null;		
-		try{					
-			// Realizamos login JAAS con usuario para proceso automatico	
+
+		LoginContext lc = null;
+		try{
+			// Realizamos login JAAS con usuario para proceso automatico
 			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
 			String user = props.getProperty("auto.user");
 			String pass = props.getProperty("auto.pass");
-			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass );
 			lc = new LoginContext("client-login", handler);
 			lc.login();
-			
+
 			// Actualizamos estado expediente
-			doProcesaEliminarTramitesBackup();	
-			
+			doProcesaEliminarTramitesBackup();
+
 		}catch (Exception le){
 			throw new EJBException("Excepcion al ejecutar proceso",le);
-		}finally{				
+		}finally{
 			// Hacemos el logout
 			if ( lc != null ){
 				try{lc.logout();}catch(Exception exl){}
 			}
 		}
 	}
-	
+
 
 
 	/**
-	 * Actualiza estado de un expediente	
-	 * 
+	 * Actualiza estado de un expediente
+	 *
      * @ejb.interface-method
      * @ejb.permission unchecked = "true"
-     * 
+     *
      */
-	public void actualizaEstadoExpediente(Long id)  
+	public void actualizaEstadoExpediente(Long id)
 	{
 		backupLog.debug("actualiza estado expediente " + id);
-		
-		LoginContext lc = null;		
-		try{					
-			// Realizamos login JAAS con usuario para proceso automatico	
+
+		LoginContext lc = null;
+		try{
+			// Realizamos login JAAS con usuario para proceso automatico
 			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
 			String user = props.getProperty("auto.user");
 			String pass = props.getProperty("auto.pass");
-			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass );
 			lc = new LoginContext("client-login", handler);
 			lc.login();
-			
+
 			// Actualizamos estado expediente
-			doActualizaEstadoExpediente(id);	
-			
+			doActualizaEstadoExpediente(id);
+
 		}catch (Exception le){
 			throw new EJBException("Excepcion al ejecutar proceso",le);
-		}finally{				
+		}finally{
 			// Hacemos el logout
 			if ( lc != null ){
 				try{lc.logout();}catch(Exception exl){}
 			}
 		}
 	}
-	
+
 	/**
 	 * Actualiza estado de un expediente a partir de un elemento del expediente.
 	 * Si el elemento no pertenece a un expediente no hace nada.
-	 * 
+	 *
      * @ejb.interface-method
      * @ejb.permission unchecked = "true"
-     * 
+     *
      */
-	public void actualizaEstadoExpedienteDelElementoExpediente(String tipoElementoExpediente,Long codigoElementoExpediente)  
+	public void actualizaEstadoExpedienteDelElementoExpediente(String tipoElementoExpediente,Long codigoElementoExpediente)
 	{
 		backupLog.debug("actualiza estado expediente del elemento expediente " + tipoElementoExpediente + " - " + codigoElementoExpediente );
-		
-		LoginContext lc = null;		
-		try{					
-			// Realizamos login JAAS con usuario para proceso automatico	
+
+		LoginContext lc = null;
+		try{
+			// Realizamos login JAAS con usuario para proceso automatico
 			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
 			String user = props.getProperty("auto.user");
 			String pass = props.getProperty("auto.pass");
-			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass );
 			lc = new LoginContext("client-login", handler);
 			lc.login();
-			
+
 			// Obtenemos elemento expediente
 			ElementoExpediente elementoExpe = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpediente(tipoElementoExpediente,codigoElementoExpediente);
-			
+
 			// Actualizamos estado expediente asociado
 			if (elementoExpe != null){
 				doActualizaEstadoExpediente(elementoExpe.getExpediente().getCodigo());
 			}
-				
+
 		}catch (Exception le){
 			throw new EJBException("Excepcion al ejecutar proceso",le);
-		}finally{				
+		}finally{
 			// Hacemos el logout
 			if ( lc != null ){
 				try{lc.logout();}catch(Exception exl){}
 			}
 		}
 	}
-	
-	
+
+
 	/**
 	 * Genera aviso de creacion de un elemento de un expediente
-	 * 
+	 *
      * @ejb.interface-method
      * @ejb.permission unchecked = "true"
-     * 
+     *
      */
 	public String avisoCreacionElementoExpediente(ElementoExpediente ele) {
-		
+
 		backupLog.debug("aviso creacion elemento expediente");
-		
-		LoginContext lc = null;		
-		try{					
-			// Realizamos login JAAS con usuario para proceso automatico					
+
+		LoginContext lc = null;
+		try{
+			// Realizamos login JAAS con usuario para proceso automatico
 			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
 			String user = props.getProperty("auto.user");
 			String pass = props.getProperty("auto.pass");
-			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass );
 			lc = new LoginContext("client-login", handler);
 			lc.login();
-			
+
 			// Realizamos aviso
 			String idEnvio = AvisosExpediente.getInstance().avisoCreacionElementoExpediente(ele);
-			
+
 			// Asociamos aviso al elemento del expediente
 			DelegateUtil.getElementoExpedienteDelegate().establecerAvisoElementoExpediente(ele.getCodigo(), idEnvio);
-			
+
 			return idEnvio;
 		}catch (LoginException le){
 			throw new EJBException("Excepcion al ejecutar proceso",le);
 		}catch (Exception e){
 			throw new EJBException("Error realizando aviso creacion elemento expediente con usuario auto",e);
-		}finally{				
+		}finally{
 			// Hacemos el logout
 			if ( lc != null ){
 				try{lc.logout();}catch(Exception exl){}
 			}
 		}
-		
+
 	}
-	
-	
+
+
 	/**
 	 * Revisa si los registros efectuados se han consolidado y registros externos que se han preparado para firmar a ver si se han relizado
-	 * 
+	 *
      * @ejb.interface-method
      * @ejb.permission unchecked = "true"
-     * 
+     *
      */
-	public void revisarRegistrosEfectuados()  
+	public void revisarRegistrosEfectuados()
 	{
 		backupLog.debug("Revisar registros efectuados");
-		
-		LoginContext lc = null;		
-		try{					
-			// Realizamos login JAAS con usuario para proceso automatico	
+
+		LoginContext lc = null;
+		try{
+			// Realizamos login JAAS con usuario para proceso automatico
 			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
 			String user = props.getProperty("auto.user");
 			String pass = props.getProperty("auto.pass");
-			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass );
 			lc = new LoginContext("client-login", handler);
 			lc.login();
-			
+
 			// Revisar registros efectuados
 			doRevisarRegistrosEfectuados();
-			
+
 			// Revisar registros externos
-			doRevisarRegistrosExternosPreparados();					
-			
+			doRevisarRegistrosExternosPreparados();
+
 		}catch (Exception le){
 			throw new EJBException("Excepcion al ejecutar proceso",le);
-		}finally{				
+		}finally{
 			// Hacemos el logout
 			if ( lc != null ){
 				try{lc.logout();}catch(Exception exl){}
 			}
 		}
 	}
-	
-	
+
+
 	/**
 	 * Control entrega de las notificaciones
-	 * 
+	 *
      * @ejb.interface-method
      * @ejb.permission unchecked = "true"
-     * 
+     *
      */
-	public void controlEntregaNotificaciones()  
+	public void controlEntregaNotificaciones()
 	{
 		backupLog.debug("Control entrega notificaciones");
-		
-		LoginContext lc = null;		
-		try{					
-			// Realizamos login JAAS con usuario para proceso automatico	
+
+		LoginContext lc = null;
+		try{
+			// Realizamos login JAAS con usuario para proceso automatico
 			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
 			String user = props.getProperty("auto.user");
 			String pass = props.getProperty("auto.pass");
-			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass );
 			lc = new LoginContext("client-login", handler);
 			lc.login();
-			
+
 			// Recuperamos notificaciones fuera de plazo
 			List notificaciones = DelegateUtil.getNotificacionTelematicaDelegate().listarNotificacionesTelematicasFueraPlazo();
-			
+
 			// Marcamos como rechazada cada notificacion
 			ProcesoRechazarNotificacionDelegate dlg = DelegateUtil.getProcesoRechazarNotificacionDelegate();
 			for (Iterator it = notificaciones.iterator(); it.hasNext();) {
@@ -355,123 +354,123 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 					dlg.rechazarNotificacion(not.getCodigo());
 				}catch (Exception e){
 					backupLog.error("Error rechazando notificacion " + not.getCodigo() + " :" + e.getMessage(), e);
-				}					
-			}			
+				}
+			}
 		}catch (Exception le){
 			throw new EJBException("Excepcion al ejecutar proceso",le);
-		}finally{				
+		}finally{
 			// Hacemos el logout
 			if ( lc != null ){
 				try{lc.logout();}catch(Exception exl){}
 			}
 		}
 	}
-	
-	
+
+
 	/**
      * Actualiza estado expediente con la informacion de un tramite de subsanacion
      * @param entrada
      * @param tramiteSubsanacion
      * @throws Exception
-     * 
+     *
      * @ejb.interface-method
      * @ejb.permission unchecked = "true"
      */
-    public void actualizarExpedienteTramiteSubsanacion(Long codigoEntrada, String tipoEntrada) throws Exception{    
-    	backupLog.debug("Actualizar expediente con tramite subsanacion");		
-		LoginContext lc = null;		
-		try{	
-			
-			// Realizamos login JAAS con usuario para proceso automatico	
+    public void actualizarExpedienteTramiteSubsanacion(Long codigoEntrada, String tipoEntrada) throws Exception{
+    	backupLog.debug("Actualizar expediente con tramite subsanacion");
+		LoginContext lc = null;
+		try{
+
+			// Realizamos login JAAS con usuario para proceso automatico
 			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
 			String user = props.getProperty("auto.user");
 			String pass = props.getProperty("auto.pass");
-			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass );
 			lc = new LoginContext("client-login", handler);
 			lc.login();
-			
+
 			doActualizarExpedienteTramiteSubsanacion(codigoEntrada, tipoEntrada);
-			
+
     }catch (Exception le){
 		throw new EJBException("Excepcion al ejecutar proceso",le);
-	}finally{				
+	}finally{
 		// Hacemos el logout
 		if ( lc != null ){
 			try{lc.logout();}catch(Exception exl){}
 		}
 	}
 	}
-    
-    
+
+
     /**
 	 * Alertas tramitacion
-	 * 
+	 *
      * @ejb.interface-method
      * @ejb.permission unchecked = "true"
-     * 
+     *
      */
-	public void alertasTramitacion()  
+	public void alertasTramitacion()
 	{
 		backupLog.debug("Alertas tramitacion");
-		
-		LoginContext lc = null;		
-		try{					
-			// Realizamos login JAAS con usuario para proceso automatico	
+
+		LoginContext lc = null;
+		try{
+			// Realizamos login JAAS con usuario para proceso automatico
 			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
 			String user = props.getProperty("auto.user");
 			String pass = props.getProperty("auto.pass");
-			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass );
 			lc = new LoginContext("client-login", handler);
 			lc.login();
-			
+
 			// Realizamos alertas tramitacion pago telematico finalizado sin finalizar tramite
 			realizarAlertasTramitacionPagoFinalizado();
-			
+
 			// Realizamos alertas tramitacion preregistro sin confirmar
 			realizarAlertasTramitacionPreregistroSinConfirmar();
-			
+
 		}catch (Exception le){
 			throw new EJBException("Excepcion al ejecutar proceso",le);
-		}finally{				
+		}finally{
 			// Hacemos el logout
 			if ( lc != null ){
 				try{lc.logout();}catch(Exception exl){}
 			}
 		}
 	}
-	
+
 		/**
-	    * Realiza aviso de que ha registrado un trámite (solo se genera mail, sms no). 
+	    * Realiza aviso de que ha registrado un trámite (solo se genera mail, sms no).
 	    *  @ejb.interface-method
 	    *  @ejb.permission unchecked = "true"
 	    */
-		public void alertaTramitacionTramiteRealizado(Entrada entrada, String email) 
+		public void alertaTramitacionTramiteRealizado(Entrada entrada, String email)
 		{
 			backupLog.debug("Alerta tramitacion tramite realizado");
-			
-			LoginContext lc = null;		
-			try{					
-				// Realizamos login JAAS con usuario para proceso automatico	
+
+			LoginContext lc = null;
+			try{
+				// Realizamos login JAAS con usuario para proceso automatico
 				Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
 				String user = props.getProperty("auto.user");
 				String pass = props.getProperty("auto.pass");
-				CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+				CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass );
 				lc = new LoginContext("client-login", handler);
 				lc.login();
-				
+
 				// Capturamos posible excepcion xa q no interfiera en proceso registro
 	    		AvisoAlertasTramitacion.getInstance().avisarTramiteRealizado(entrada, email);
-	    		
+
 			}catch (Exception le){
 				throw new EJBException("Excepcion al ejecutar proceso",le);
-			}finally{				
+			}finally{
 				// Hacemos el logout
 				if ( lc != null ){
 					try{lc.logout();}catch(Exception exl){}
 				}
 			}
 		}
-	
+
 	// ----------------------------------------------------------------------------------------------
 	//	FUNCIONES AUXILIARES
 	// ----------------------------------------------------------------------------------------------
@@ -485,16 +484,16 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 			}
 			return e;
 		}
-		return null;		
+		return null;
 	}
-	
+
 
 	private void doActualizaEstadoExpediente(Long id) throws Exception{
 		// Obtenemos ultimo elemento del expediente y obtenemos su detalle
 		ElementoExpedienteItf de = null;
-		ElementoExpediente e = obtenerUltimoElementoExpediente(id);		
+		ElementoExpediente e = obtenerUltimoElementoExpediente(id);
 		de = DelegateUtil.getElementoExpedienteDelegate().obtenerDetalleElementoExpediente(e.getCodigo());
-		
+
 		// Calculamos estado y fecha fin
 		String estado = null;
 		Date fechaFin = null;
@@ -505,7 +504,7 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 			if ( ((EntradaPreregistro) de).getFechaConfirmacion() != null ){
 			estado = ConstantesZPE.ESTADO_SOLICITUD_ENVIADA;
 			}else{
-				estado = ConstantesZPE.ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL;				
+				estado = ConstantesZPE.ESTADO_SOLICITUD_ENVIADA_PENDIENTE_DOCUMENTACION_PRESENCIAL;
 			}
 			fechaFin = ((EntradaPreregistro) de).getFecha();
 		}else if (e.getTipoElemento().equals(ElementoExpediente.TIPO_AVISO_EXPEDIENTE)){
@@ -529,10 +528,10 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 				fechaFin = notificacionTelematica.getFechaRegistro();
 			}
 		}
-		
+
 		// Actualizamos expediente
 		DelegateUtil.getExpedienteDelegate().actualizaEstadoExpedienteAuto(id, estado, fechaFin);
-		
+
 	}
     /**
      * Revisa registros efectuados para ver si se han consolidado
@@ -550,12 +549,12 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 				} catch (Exception ex) {
 					// Pasamos a siguiente registro
 					backupLog.debug("Excepcion al revisar registro " + logReg.getId().getNumeroRegistro() + ": " + ex.getMessage());
-				}				
+				}
 			}
 		}
 	}
-    
-	
+
+
 	private void doActualizarExpedienteTramiteSubsanacion(Long codigoEntrada, String tipoEntrada) throws Exception{
 		Entrada entrada = null;
 		if (tipoEntrada.equals(ElementoExpediente.TIPO_ENTRADA_TELEMATICA)){
@@ -566,12 +565,12 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 		if (entrada == null){
 			throw new Exception("No se encuentra entrada con codigo " + tipoEntrada + "-" + codigoEntrada);
 		}
-		
+
 		ExpedienteDelegate ed = DelegateUtil.getExpedienteDelegate();
 		Expediente expe = ed.obtenerExpedienteAuto(entrada.getSubsanacionExpedienteUA().longValue(),entrada.getSubsanacionExpedienteCodigo());
 		if (expe == null){
 			throw new Exception("No existe expediente indicado en datos propios: " + entrada.getSubsanacionExpedienteUA()+ " - " + entrada.getSubsanacionExpedienteCodigo());
-		}    	
+		}
     	ElementoExpediente el = new ElementoExpediente();
     	el.setExpediente(expe);
     	el.setTipoElemento(entrada instanceof EntradaTelematica?ElementoExpediente.TIPO_ENTRADA_TELEMATICA:ElementoExpediente.TIPO_ENTRADA_PREREGISTRO);
@@ -582,7 +581,7 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
     	expe.addElementoExpediente(el,entrada);
     	DelegateUtil.getExpedienteDelegate().grabarExpedienteReal(expe);
 	}
-	
+
 	/**
 	 * Comprueba si hay registros externos preparados caducados y los elimina.
 	 */
@@ -592,29 +591,29 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 		List regs = dlg.listarCaducados();
 		if (regs != null) {
 			for (Iterator it = regs.iterator();it.hasNext();){
-				RegistroExternoPreparado r = (RegistroExternoPreparado) it.next();				
+				RegistroExternoPreparado r = (RegistroExternoPreparado) it.next();
 				try {
 					procRevDlg.revisarRegistroExternoPreparado(r);
 				} catch (Exception ex) {
 					// Pasamos a siguiente registro
 					backupLog.debug("Excepcion al revisar registro externo preparado " + r.getIdPersistencia() + ": " + ex.getMessage());
 				}
-			}			
-		}				
+			}
+		}
 	}
-	
+
 
 	private void doProcesaTramitesCaducados() throws Exception {
 		BackupDelegate delegate = DelegateUtil.getBackupDelegate();
 		String borradoPreregistro = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("scheduler.backup.schedule.borradoPreregistro");
 		boolean scheduleBorradoPreregistro = Boolean.valueOf(borradoPreregistro).booleanValue();
-		backupLog.debug( "Job borrado tramites caducados [borrado prerregistros = " + scheduleBorradoPreregistro + "]");		
+		backupLog.debug( "Job borrado tramites caducados [borrado prerregistros = " + scheduleBorradoPreregistro + "]");
 		Date fechaEjecucion = new Date();
-		delegate.procesaTramitesCaducados( fechaEjecucion, scheduleBorradoPreregistro );		
+		delegate.procesaTramitesCaducados( fechaEjecucion, scheduleBorradoPreregistro );
 	}
-	
 
-	
+
+
 	private void doProcesaEliminarTramitesBackup() throws Exception {
 		BackupDelegate delegate = DelegateUtil.getBackupDelegate();
 		backupLog.debug( "Job borrado tramites backup");
@@ -622,32 +621,32 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
         cal.setTime(new Date());
         String meses = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("scheduler.borradoBackup.meses");
         cal.add(Calendar.MONTH,  (Integer.parseInt(meses) * -1) );
-		delegate.procesaEliminarTramitesBackup( cal.getTime() );		
+		delegate.procesaEliminarTramitesBackup( cal.getTime() );
 	}
-	
+
 
 	private void realizarAlertasTramitacionPreregistroSinConfirmar() throws Exception{
 		// Recuperamos preregistros pendientes de avisar
 		EntradaPreregistroDelegate delegate = DelegateUtil.getEntradaPreregistroDelegate();
 		List preregistros = delegate.obtenerTramitesPendienteAvisoPreregistroSinConfirmar();
 		MobTraTelDelegate mob = DelegateMobTraTelUtil.getMobTraTelDelegate();
-		
+
 		// Generamos aviso para los tramites
 		for (Iterator it = preregistros.iterator(); it.hasNext();) {
 			EntradaPreregistro preregistro = (EntradaPreregistro) it.next();
-			if (StringUtils.isBlank(preregistro.getAlertasTramitacionEmail()) && 
+			if (StringUtils.isBlank(preregistro.getAlertasTramitacionEmail()) &&
 					StringUtils.isBlank(preregistro.getAlertasTramitacionSms())) {
 				continue;
 			}
-			
+
 			try {
 				// Generamos aviso a traves de mobtratel
-				AvisoAlertasTramitacion.getInstance().avisarPreregistroPendiente(preregistro);	
+				AvisoAlertasTramitacion.getInstance().avisarPreregistroPendiente(preregistro);
 				// Marcamos como avisado
 				delegate.avisoPreregistroSinConfirmar(preregistro.getIdPersistencia());
 			} catch (Exception exc) {
 				// Mostramos error en log y continuamos con siguiente tramite
-				backupLog.error("Error realizando alerta de tramitacion", exc);				
+				backupLog.error("Error realizando alerta de tramitacion", exc);
 			}
 		}
 	}
@@ -657,39 +656,38 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 		// Recuperamos tramites pendientes de avisar
 		TramitePersistenteDelegate delegate = DelegateUtil.getTramitePersistenteDelegate();
 		List tramites = delegate.obtenerTramitesPendienteAvisoPagoTelematicoFinalizado();
-		
+
 		List procedimientosAvisar = new ArrayList();
-		Map procedimientosInfo = new HashMap(); 
+		Map procedimientosInfo = new HashMap();
 		Map procedimientosTramite = new HashMap();
-		boolean avisarGestor = false;		
-		
+		List avisosCiudadanoTramite = new ArrayList();
+		boolean avisarGestor = false;
+		boolean avisarCiudadano = false;
+
 		// Generamos aviso para los tramites
 		for (Iterator it = tramites.iterator(); it.hasNext();) {
-			
+
 			TramitePersistente tramite = (TramitePersistente) it.next();
-			
+
 			// Verificamos si tiene activada las alertas
-			if (StringUtils.isBlank(tramite.getAlertasTramitacionEmail()) && 
-					StringUtils.isBlank(tramite.getAlertasTramitacionSms())) {
-				continue;
-			}
-			
+			avisarCiudadano =  StringUtils.isNotBlank(tramite.getAlertasTramitacionEmail()) || StringUtils.isNotBlank(tramite.getAlertasTramitacionSms());
+
 			// Obtenemos mails gestores
 			if (!procedimientosInfo.containsKey(tramite.getIdProcedimiento())) {
 				ProcedimientoBTE proc = es.caib.bantel.persistence.delegate.DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(tramite.getIdProcedimiento());
 				procedimientosInfo.put(tramite.getIdProcedimiento(), proc);
 				procedimientosTramite.put(tramite.getIdProcedimiento(), new ArrayList());
 			}
-			
+
 			// Verificamos si tiene un pago telematico realizado
-			boolean avisar = false;			
+			boolean avisar = false;
 			for (Iterator it2 = tramite.getDocumentos().iterator(); it2.hasNext();) {
 				DocumentoPersistente dp = (DocumentoPersistente) it2.next();
 				if (DocumentoPersistentePAD.TIPO_PAGO.equals(dp.getTipoDocumento())) {
 					// Si esta pagado, hay que avisar
 					if (dp.getEstado() == DocumentoPersistentePAD.ESTADO_CORRECTO  && "S".equals(dp.getEsPagoTelematico())) {
-						avisar = true;						
-					} 
+						avisar = true;
+					}
 					// Si esta iniciado, hay que verificar si esta pagado
 					if (dp.getEstado() == DocumentoPersistentePAD.ESTADO_INCORRECTO) {
 						avisar = isPagoTelematicoPendienteConfirmado(dp);
@@ -700,48 +698,59 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 					}
 				}
 			}
-			
+
 			if (avisar) {
-				// Indicamos que tras los avisos al ciudadano hay que avisar al gestor
+				// Al menos hay un tramite para avisar, asi que indicamos que tras los avisos al ciudadano hay que avisar al gestor
 				avisarGestor = true;
+
 				if (!procedimientosAvisar.contains(tramite.getIdProcedimiento())) {
 					procedimientosAvisar.add(tramite.getIdProcedimiento());
-				}				
+				}
 				((List) procedimientosTramite.get(tramite.getIdProcedimiento())).add(tramite);
 
 				// Generamos aviso al ciudadano
-				try {
-					// Generamos aviso a traves de mobtratel
-					AvisoAlertasTramitacion.getInstance().avisarPagoRealizadoTramitePendiente(tramite);	
-					// Marcamos como avisado
-					delegate.avisoPagoTelematicoFinalizado(tramite.getIdPersistencia());
-				} catch (Exception exc) {
-					// Mostramos error en log y continuamos con siguiente tramite
-					backupLog.error("Error realizando alerta de tramitacion", exc);				
+				if (avisarCiudadano) {
+					try {
+						// Generamos aviso a traves de mobtratel
+						AvisoAlertasTramitacion.getInstance().avisarPagoRealizadoTramitePendiente(tramite);
+						// Marcamos como avisado
+						delegate.avisoPagoTelematicoFinalizado(tramite.getIdPersistencia());
+						// Añadimos a lista de tramites avisados a ciudadano
+						avisosCiudadanoTramite.add(tramite.getCodigo());
+					} catch (Exception exc) {
+						// Mostramos error en log y continuamos con siguiente tramite
+						backupLog.error("Error realizando alerta de tramitacion", exc);
+					}
 				}
+
 			}
-		}		
-		
-		// Aviso al gestor		
+		}
+
+		// Aviso al gestor
 		if (isAvisosGestorHabilitado() && avisarGestor) {
-			
-			MobTraTelDelegate mob = DelegateMobTraTelUtil.getMobTraTelDelegate();		
+
+			MobTraTelDelegate mob = DelegateMobTraTelUtil.getMobTraTelDelegate();
 			PadDelegate padDelegate = DelegatePADUtil.getPadDelegate();
-		
+
+			boolean enviadoAvisoCiudadano = false;
+
 			for (Iterator it = procedimientosAvisar.iterator(); it.hasNext();) {
 				String idProc = (String) it.next();
-				
+
 				ProcedimientoBTE proc = (ProcedimientoBTE) procedimientosInfo.get(idProc);
 				List trams = (List) procedimientosTramite.get(idProc);
-				
+
 				if (proc.getEmailGestores().size() <= 0) {
 					continue;
 				}
-				
+
 				String textoEmail = StringEscapeUtils.escapeHtml("Trámites pendientes de finalizar con pagos realizados:") + "</br>";
 				textoEmail += "<ul>";
 				for (Iterator itTram = trams.iterator(); itTram.hasNext();){
 					TramitePersistente tram = (TramitePersistente) itTram.next();
+
+					enviadoAvisoCiudadano = avisosCiudadanoTramite.contains(tram.getCodigo());
+
 					textoEmail += "<li>";
 					if (tram.getNivelAutenticacion() == 'A') {
 						textoEmail += StringEscapeUtils.escapeHtml("Acceso anónimo - Identificador trámite: " + tram.getIdPersistencia());
@@ -754,21 +763,26 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 							nomPers = tram.getUsuario() ;
 						}
 						textoEmail += StringEscapeUtils.escapeHtml("Acceso autenticado (" + nomPers + ") - Identificador trámite: " + tram.getIdPersistencia());
-					}					
+					}
+
+					if (enviadoAvisoCiudadano) {
+						textoEmail += StringEscapeUtils.escapeHtml(" (avisado a ciudadano)");
+					}
+
 					textoEmail += "</li>";
 				}
 				textoEmail += "</ul>";
-				
+
 				MensajeEnvioEmail mensEmail = new MensajeEnvioEmail();
 				String[] dest = new String[proc.getEmailGestores().size()];
 				for (int i=0;i<proc.getEmailGestores().size();i++) {
 					dest[i] = (String) proc.getEmailGestores().get(i);
 				}
-				mensEmail.setDestinatarios(dest);				
+				mensEmail.setDestinatarios(dest);
 				mensEmail.setTitulo(proc.getDescripcion() + ": existen trámites pendientes de finalizar con pagos realizados");
-				mensEmail.setHtml(true);				
+				mensEmail.setHtml(true);
 				mensEmail.setTexto(textoEmail);
-				
+
 				MensajeEnvio mens = new MensajeEnvio();
 				mens.setNombre("Aviso trámite pendiente y pago realizado (" + proc.getIdentificador() + ")");
 				mens.setCuentaEmisora(getCuentaSistra());
@@ -778,10 +792,10 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 					mob.envioMensaje(mens );
 				} catch (Exception exc) {
 					// Mostramos error en log y continuamos con siguiente tramite
-					backupLog.error("Error realizando alerta de tramitacion", exc);				
-				}				
+					backupLog.error("Error realizando alerta de tramitacion", exc);
+				}
 			}
-		}				
+		}
 	}
 
 
@@ -792,15 +806,15 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 	 * @throws Exception
 	 */
 	private boolean isPagoTelematicoPendienteConfirmado(DocumentoPersistente dp) throws Exception {
-		
+
 		boolean res = false;
-		
+
 		// Obtenemos datos pago para obtener el localizador
 		RdsDelegate rdsDlg = DelegateRDSUtil.getRdsDelegate();
 		DocumentoRDS pagoRds = rdsDlg.consultarDocumento(new ReferenciaRDS(dp.getRdsCodigo().longValue(), dp.getRdsClave()));
 		XmlDatosPago xmlPago = new XmlDatosPago();
 		xmlPago.setBytes(pagoRds.getDatosFichero());
-		
+
 		// Invocamos al plugin de pago para verificar estado sesion pago
 		if (StringUtils.isNotBlank(xmlPago.getLocalizador())) {
 			String pluginId = xmlPago.getPluginId();
@@ -809,37 +823,37 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 			}
 			PluginPagosIntf pluginPagos = PluginFactory.getInstance().getPluginPagos(pluginId);
 			EstadoSesionPago estadoSesionPago = pluginPagos.comprobarEstadoSesionPago(xmlPago.getLocalizador());
-			
+
 			// Debe ser telematico y estar confirmado
 			res = (estadoSesionPago.getTipo() == ConstantesPago.TIPOPAGO_TELEMATICO) &&
-					(estadoSesionPago.getEstado() == ConstantesPago.SESIONPAGO_PAGO_CONFIRMADO);	
-			
+					(estadoSesionPago.getEstado() == ConstantesPago.SESIONPAGO_PAGO_CONFIRMADO);
+
 		}
-		
+
 		return res;
 	}
-	
-	
+
+
 	private String getCuentaSistra(){
 		if (StringUtils.isEmpty(cuentaSistra)) {
 			try {
 				cuentaSistra = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisos.cuentaEnvio.avisosExpediente");
 			} catch (DelegateException e) {
-				backupLog.error("Error obteniendo cuenta sistra", e);			
+				backupLog.error("Error obteniendo cuenta sistra", e);
 			}
 		}
-		return cuentaSistra;					
+		return cuentaSistra;
 	}
-	
-	private boolean isAvisosGestorHabilitado(){		
+
+	private boolean isAvisosGestorHabilitado(){
 		if (avisosGestorHabilitado == null) {
 			try {
 				avisosGestorHabilitado = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("scheduler.alertasTramitacion.pagoFinalizado.avisarGestores");
 			} catch (DelegateException e) {
-				avisosGestorHabilitado = "false";			
+				avisosGestorHabilitado = "false";
 			}
 		}
-		return "true".equals(avisosGestorHabilitado);					
+		return "true".equals(avisosGestorHabilitado);
 	}
-	
+
 }
