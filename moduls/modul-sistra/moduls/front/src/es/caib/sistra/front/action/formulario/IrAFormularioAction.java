@@ -93,7 +93,7 @@ public class IrAFormularioAction extends BaseAction
 		//parametrosRetorno.put( "jsessionid", request.getSession().getId() );
 		parametrosRetorno.put( Constants.GESTOR_FORM_PARAM_ALMACENAMIENTO_GESTOR_FORMULARIO, tokenGestionFormulario );
 		parametrosRetorno.put( Constants.GESTOR_FORM_PARAM_TOKEN_LLAMADA, formularioForm.getID_INSTANCIA() );
-		parametrosRetorno.put(Constants.GESTOR_FORM_PARAM_DEBUGENABLED, tramiteInfo.isDebugEnabled());
+		parametrosRetorno.put(Constants.GESTOR_FORM_PARAM_DEBUGENABLED, Boolean.toString(tramiteInfo.isDebugEnabled()));
 
 		// Redireccionamos a la url proporcionada por el gestor de formularios
 		String urlRedireccion = response.encodeRedirectURL(
