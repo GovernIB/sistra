@@ -6,23 +6,23 @@
 <application>
     <display-name>LIBRERIAS PLUGIN</display-name>
     <description><![CDATA[Proyecto IBCEGE]]></description>
-	
+
 	<!--  Libs con los plugins -->
-    <module><java>plugin-regtelMOCK.jar</java></module> 
-    <module><java>plugin-pagosMOCK.jar</java></module> 
+    <module><java>plugin-regtelMOCK.jar</java></module>
+    <module><java>plugin-pagosMOCK.jar</java></module>
     <module><java>plugin-loginMOCK.jar</java></module>
-    <module><java>plugin-firmaMOCK.jar</java></module> 
-    <module><java>plugin-smsMOCK.jar</java></module>  
-    <module><java>plugin-custodiaMOCK.jar</java></module>  
+    <module><java>plugin-firmaMOCK.jar</java></module>
+    <module><java>plugin-smsMOCK.jar</java></module>
+    <module><java>plugin-custodiaMOCK.jar</java></module>
     <module><java>plugin-gestorDocumentalMOCK.jar</java></module>
     <!--  Asistente de pago Mock -->
-    <module><java>pagosMOCK-model.jar</java></module>    
-    <module><ejb>pagosMOCK-persistence.jar</ejb></module>    
+    <module><java>pagosMOCK-model.jar</java></module>
+    <module><ejb>pagosMOCK-persistence.jar</ejb></module>
     <module>
         <web>
             <web-uri>pagosMOCK-front.war</web-uri>
-            <context-root>@contextoRaiz@pagosMockFront</context-root>
+            <context-root>@contextoRaizFront@pagosMockFront</context-root>
         </web>
-    </module>  
-   
+    </module>
+
 </application>
