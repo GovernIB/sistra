@@ -47,32 +47,32 @@ public class GuardarClaveAction extends BaseAction
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request );
 		RespuestaFront respuestaFront = delegate.pasoActual();
 		TramiteFront tramiteInfo = respuestaFront.getInformacionTramite();
-		
+
 		// Obtenemos url donde esta instalado sistra
 		Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
-		String urlSistra = props.getProperty("sistra.url") + props.getProperty("sistra.contextoRaiz");
-		
-		
+		String urlSistra = props.getProperty("sistra.url") + props.getProperty("sistra.contextoRaiz.front");
+
+
 		// Obtenemos props organismo
 		OrganismoInfo oi = (OrganismoInfo) request.getSession().getServletContext().getAttribute(Constants.ORGANISMO_INFO_KEY);
-		
-		// Generamos nombre de fichero		
+
+		// Generamos nombre de fichero
 		String lang = this.getLang(request);
-		String nombreFichero = ConstantesSTR.CAT_LANGUAGE.equals( lang ) ? Constants.NOMBRE_FICHERO_CLAVEPERSISTENCIA_CAT : Constants.NOMBRE_FICHERO_CLAVEPERSISTENCIA_CAS; 		
+		String nombreFichero = ConstantesSTR.CAT_LANGUAGE.equals( lang ) ? Constants.NOMBRE_FICHERO_CLAVEPERSISTENCIA_CAT : Constants.NOMBRE_FICHERO_CLAVEPERSISTENCIA_CAS;
 		String shortDesc = StringUtil.escapeBadCharacters( tramiteInfo.getDescripcion() );
 		int nMaxIndex = shortDesc.length() > Constants.MAX_FILE_NAME_SIZE ? Constants.MAX_FILE_NAME_SIZE :  shortDesc.length();
 		shortDesc = shortDesc.substring( 0, nMaxIndex );
 		//nombreFichero = nombreFichero.replaceAll( "<\\?>", shortDesc + "_" + StringUtil.fechaACadena( new Date(), "yyyyMMddHHmmss" ) );
 		nombreFichero = nombreFichero.replaceAll( "<\\?>", StringUtil.fechaACadena( new Date(), "dd-MM-yyyy_HH-mm-ss" ) );
-		
-		// Generamos html con la clave		
-		InputStream plantillaHtml = this.getClass().getResourceAsStream("GuardarClavePlantilla.properties");		
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();		
+
+		// Generamos html con la clave
+		InputStream plantillaHtml = this.getClass().getResourceAsStream("GuardarClavePlantilla.properties");
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ConvertUtil.copy(plantillaHtml,bos);
-		
+
 		String  textoContinuarTramitacion = this.getResources(request).getMessage(this.getLocale(request),"guardarClave.textoContinuarTramitacion",tramiteInfo.getIdPersistencia(),Integer.toString(tramiteInfo.getDiasPersistencia()));
 		String  textoPlazoEntrega = "";
-	
+
 		if (tramiteInfo.getFechaFinPlazo() != null){
 			if (tramiteInfo.getTipoTramitacion() == 'T'){
 				textoPlazoEntrega = this.getResources(request).getMessage(this.getLocale(request),"guardarClave.textoPlazoEntrega.telematica",StringUtil.fechaACadena(tramiteInfo.getFechaFinPlazo(),"dd-MM-yyyy"));
@@ -80,10 +80,10 @@ public class GuardarClaveAction extends BaseAction
 				textoPlazoEntrega = this.getResources(request).getMessage(this.getLocale(request),"guardarClave.textoPlazoEntrega.presencial",StringUtil.fechaACadena(tramiteInfo.getFechaFinPlazo(),"dd-MM-yyyy"));
 			}
 		}
-				
+
 		String  textoEstadoTramitacion = this.getResources(request).getMessage(this.getLocale(request),"guardarClave.textoEstadoTramitacion", urlSistra, oi.getReferenciaPortal().get(lang));
 		String  textoEnlace = this.getResources(request).getMessage(this.getLocale(request),"guardarClave.textoEnlace");
-		
+
 		String html = bos.toString();
 		html = StringUtil.replace(html,"[#TITULO_TRAMITE#]",tramiteInfo.getDescripcion());
 		html = StringUtil.replace(html,"[#CONTINUAR_TRAMITACION#]",textoContinuarTramitacion);
@@ -98,14 +98,14 @@ public class GuardarClaveAction extends BaseAction
 		html = StringUtil.replace(html,"[#URL_PORTAL#]",oi.getUrlPortal());
 		html = StringUtil.replace(html,"[#LOGO_ORGANISMO#]",oi.getUrlLogo());
 		html = StringUtil.replace(html,"[#URL_SISTRA#]",urlSistra);
-		
-		byte [] datosFichero = html.getBytes("iso-8859-1");		
-				
+
+		byte [] datosFichero = html.getBytes("iso-8859-1");
+
 		// Guardamos en sesion un flag que nos indica que la clave ya ha sido almacenada (para no mostrar mensaje)
 		request.getSession().setAttribute(Constants.CLAVE_ALMACENADA_KEY + "-" + tramiteInfo.getIdPersistencia(),"true");
-		
+
 		// Volcamos a fichero
-		request.setAttribute( Constants.NOMBREFICHERO_KEY, nombreFichero );		
+		request.setAttribute( Constants.NOMBREFICHERO_KEY, nombreFichero );
 		request.setAttribute( Constants.DATOSFICHERO_KEY, datosFichero );
 		return mapping.findForward( "success" );
 	}

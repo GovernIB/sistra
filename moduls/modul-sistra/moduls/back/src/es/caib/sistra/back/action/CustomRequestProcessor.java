@@ -38,26 +38,26 @@ public class CustomRequestProcessor extends TilesRequestProcessor {
     private List supportedLangs = null;
 
     public void init(ActionServlet actionServlet,ModuleConfig moduleConfig) throws ServletException{
-    	
+
     	super.init(actionServlet,moduleConfig);
-    	
+
     	String obligAvisosNotif;
     	String contextoSistra;
     	try {
 	    	// Indicamos si son obligatorias los avisos para las notificaciones
 	        ConfiguracionDelegate config = DelegateUtil.getConfiguracionDelegate();
 	    	Properties configProps = config.obtenerConfiguracion();
-	    	contextoSistra = StringUtils.defaultString(configProps.getProperty("sistra.contextoRaiz"), "");
-	        obligAvisosNotif = StringUtils.defaultString(configProps.getProperty("sistra.avisoObligatorioNotificaciones"), "false");		        
+	    	contextoSistra = StringUtils.defaultString(configProps.getProperty("sistra.contextoRaiz.back"), "");
+	        obligAvisosNotif = StringUtils.defaultString(configProps.getProperty("sistra.avisoObligatorioNotificaciones"), "false");
     	}catch (Exception ex){
         	log.error("Error obteniendo obligatoriedad avisos para notificaciones (ponemos a false): " + ex.getMessage(),ex);
         	obligAvisosNotif = "false";
         	contextoSistra = "";
         }
     	getServletContext().setAttribute(Constants.AVISOS_OBLIGATORIOS_NOTIFICACIONES,obligAvisosNotif);
-    	getServletContext().setAttribute(Constants.CONTEXTO_RAIZ, contextoSistra);
+    	getServletContext().setAttribute(Constants.CONTEXTO_RAIZ_BACK, contextoSistra);
     }
-    
+
     /**
      * Inicializa los idiomas soportados por la aplicación
      */
@@ -77,8 +77,8 @@ public class CustomRequestProcessor extends TilesRequestProcessor {
             supportedLangs.add( "es" );
             supportedLangs.add( "en" );
             supportedLangs.add( "de" );
-            log.info("Supported langs: " + supportedLangs);                        
-            
+            log.info("Supported langs: " + supportedLangs);
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -151,7 +151,7 @@ public class CustomRequestProcessor extends TilesRequestProcessor {
             throws ServletException {
         super.processPopulate(request, response, form, mapping);
     }
-    
+
     @Override
     protected void processNoCache(HttpServletRequest request, HttpServletResponse response)
     {

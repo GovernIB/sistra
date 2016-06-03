@@ -4,7 +4,7 @@
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%
-	
+
 	// Parametros login clave
 	SavedRequest savedRequest = null;
 	boolean esLoginClave = false;
@@ -12,38 +12,38 @@
 	String urlCallback = null;
 	String metodos = null;
 	String urlClave = null;
-	String urlDestino = null;	
-	String language = null;	
-	
+	String urlDestino = null;
+	String language = null;
+
 	// Url origen
 	savedRequest = (SavedRequest) session.getAttribute("savedrequest");
-	
+
 	// Indica si es login despues de pasar por clave
 	esLoginClave = savedRequest.getRequestURI().endsWith("/protected/redireccionClave.jsp");
-	
+
 	// Configuracion organismo
 	es.caib.zonaper.persistence.delegate.ConfiguracionDelegate delegateF = es.caib.zonaper.persistence.delegate.DelegateUtil.getConfiguracionDelegate();
 	java.util.Properties configProperties =  delegateF.obtenerConfiguracion();
 	String urlSistra = configProperties.getProperty("sistra.url");
-	String contextoRaiz = configProperties.getProperty("sistra.contextoRaiz");
+	String contextoRaiz = configProperties.getProperty("sistra.contextoRaiz.front");
 	es.caib.zonaper.model.OrganismoInfo infoOrg = delegateF.obtenerOrganismoInfo();
-	
+
 	// Configuracion plugin login Clave: obtener contexto login
 	PluginLoginIntf plg = PluginFactory.getInstance().getPluginLogin();
 	Method method = plg.getClass().getDeclaredMethod("obtenerContextoAutenticadorClave", null);
 	Object result = method.invoke(plg, null);
-	String contextAutenticadorClave =  (String) result;		
-	
+	String contextAutenticadorClave =  (String) result;
+
 	// Idioma
 	language = request.getParameter("language");
 	if (language == null) {
-		language = request.getParameter("lang");			
+		language = request.getParameter("lang");
 	}
-	if (language == null) {			
+	if (language == null) {
 		language = "es";
 	}
 	request.setAttribute("lang", language);
-	
+
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
@@ -66,18 +66,18 @@ function ocultarAyudaAdmin() {
 
 // Abre pantalla de ayuda
 function mostrarAyudaAdmin() {
-	
-	
+
+
 	var capaI = document.getElementById('contactoAdministrador');
 
 
-	
+
 	// tama?os de la ventana y la p?gina
 	var ventanaX = document.documentElement.clientWidth;
 	var ventanaY = document.documentElement.clientHeight;
 	var capaY = document.getElementById('contenidor').offsetHeight;
-	
-/*	
+
+/*
 	// la capa de fondo ocupa toda la p?gina
 	with (capaIF) {
 		if(ventanaY > capaY) style.height = ventanaY + 'px';
@@ -86,11 +86,11 @@ function mostrarAyudaAdmin() {
 		else style.MozOpacity = 0.3;
 		if(document.all) style.width = ventanaX + 'px';
 		style.display = 'block';
-	}	
+	}
 	// OJO, descomentar si se quiere poder pulsar en cualquier parte de la pantalla
 	//capaIF.onclick = cerrarInfo;
-*/	
-	
+*/
+
 	// mostramos, miramos su tama?o y centramos la capaInfo con respecto a la ventana
 	capaI.style.display = 'block';
 	capaInfoX = capaI.offsetWidth;
@@ -99,8 +99,8 @@ function mostrarAyudaAdmin() {
 		style.left = (ventanaX-capaInfoX)/2 + 'px';
 		style.top = (((ventanaY-capaInfoY)/2)+ document.documentElement.scrollTop) + 'px';
 	}
-	
-	
+
+
 }
 -->
 </script>
@@ -141,13 +141,13 @@ else browser = "An unknown browser";
 
 if (!version) {
 	aux = detect.substring(place + thestring.length);
-		
+
 	posDecimal = aux.indexOf('.');
 	version = aux.substring(0, posDecimal);
 	do{
 	  version = version + '' + aux.charAt(posDecimal);
 	  posDecimal++;
-	}while (!isNaN(aux.charAt(posDecimal)) && posDecimal < aux.length);		
+	}while (!isNaN(aux.charAt(posDecimal)) && posDecimal < aux.length);
 }
 
 
@@ -178,10 +178,10 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 <%
 
 	//Si la url origen es redireccionClave.jsp, hacemos login automatico
-	if (esLoginClave) {		
+	if (esLoginClave) {
 		// Obtenemos ticket pasado por POST
 		String[] values = savedRequest.getParameterValues("ticket");
-		ticketClave = values[0];						
+		ticketClave = values[0];
 	} else {
 		// Url Callback
 		if (request.getContextPath().indexOf("zonaperfront") != -1) {
@@ -191,38 +191,38 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 		}
 		// Metodos permitidos
 		metodos = niveles; // Ver metodos de autenticacion permitidos
-		// Url redireccion clave			
+		// Url redireccion clave
 		urlClave = urlSistra + "/" + contextAutenticadorClave + "/iniciarSesionClave.html";
 		// Url destino
 		urlDestino = savedRequest.getRequestURI();
 		if (savedRequest.getQueryString() != null) {
 			urlDestino += "?" + savedRequest.getQueryString();
 		}
-	}	
+	}
 
-	//  Contacto soporte 
+	//  Contacto soporte
     String telefonoSoporte = infoOrg.getTelefonoIncidencias();
     if (telefonoSoporte == null) {
       telefonoSoporte = "&nbsp;";
     }
     request.setAttribute("telefonoSoporte", telefonoSoporte);
-    
+
     String urlSoporte = infoOrg.getUrlSoporteIncidencias();
     if (urlSoporte == null) {
        urlSoporte = "&nbsp;";
     }
     request.setAttribute("urlSoporte", urlSoporte);
-    
+
     String emailSoporte = infoOrg.getEmailSoporteIncidencias();
     if (emailSoporte == null) {
        emailSoporte = "&nbsp;";
     }
     request.setAttribute("emailSoporte",emailSoporte);
-    
+
 	// Construimos url de soporte reemplazando variables
 	String tituloTramite = es.caib.util.StringUtil.replace(textoAtencion,"\"","\\\"");
     String urlSoporteFinal = es.caib.util.StringUtil.replace(urlSoporte,"@asunto@",tituloTramite);
-    urlSoporteFinal = es.caib.util.StringUtil.replace(urlSoporteFinal,"@idioma@",language);		    
+    urlSoporteFinal = es.caib.util.StringUtil.replace(urlSoporteFinal,"@idioma@",language);
 %>
 
 </head>
@@ -241,9 +241,9 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 			</logic:notEqual>
 			<logic:equal name="telefonoSoporte" value="&nbsp;" >
 				<bean:message key="administrador.soporteUrl" arg0="<%=urlSoporteFinal%>"/>
-			</logic:equal>					
+			</logic:equal>
 		</logic:notEqual>
-		
+
 		<!--  Soporte por email y telefono (opcional) -->
 		<logic:equal name="urlSoporte" value="&nbsp;" >
 			<logic:notEqual name="emailSoporte" value="&nbsp;" >
@@ -252,28 +252,28 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 				</logic:notEqual>
 				<logic:equal name="telefonoSoporte" value="&nbsp;" >
 					<bean:message key="administrador.soporteEmail" arg0="<%=emailSoporte%>"/>
-				</logic:equal>					
+				</logic:equal>
 			</logic:notEqual>
-		</logic:equal>	
+		</logic:equal>
 	</p>
 	<p align="center">
 		<a title="<bean:message key="message.continuar"/>" onclick="javascript:ocultarAyudaAdmin();" href="javascript:void(0);">
 		<bean:message key="message.continuar"/>
 		</a>
-	</p>	
+	</p>
 </div>
 <%-- </logic:equal> --%>
 
 
 <div id="contenidor">
-	<!-- capçal -->	
+	<!-- capçal -->
 	<div id="capsal">
 		<a href="<%=infoOrg.getUrlPortal()%>" accesskey="0"><img id="logoCAIB" class="logo" src="<%=infoOrg.getUrlLoginLogo()%>" alt="Logo <%=infoOrg.getNombre()%>" /></a>
 	</div>
-	
+
 	<!-- títol -->
 	<p id="titolAplicacio"><bean:message key="login.titulo"/></p>
-	
+
 	<!-- continguts -->
 	<div id="continguts">
 		<!-- tramitacion -->
@@ -283,25 +283,25 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 			<bean:message key="login.clave.redirigiendoClave" />
 			<form id="loginClave" action="j_security_check" method="post">
 				<input name="j_username" id="j_username" type="hidden" value="{TICKET-<%=session.getId()%>}"/>
-				<input name="j_password" id="j_password" type="hidden" value="<%=ticketClave%>"/>							
-			</form>	
+				<input name="j_password" id="j_password" type="hidden" value="<%=ticketClave%>"/>
+			</form>
 			<% } %>
-			
-			
-			
+
+
+
 			<% if (!esLoginClave) { %>
-						
+
 			<bean:message key="login.presentacion.parrafo1" />
 			<%if (textoAtencion.length() > 0){ %>
 			:<p id="nomTramit"><%=textoAtencion%></p>
-			<%}%>	
+			<%}%>
 			<p><bean:message key="login.presentacion.parrafo2" /></p>
-			
+
 			<% if (niveles.indexOf("C")>=0 || niveles.indexOf("U")>=0){ %>
 			<div id="indexCD">
 				<img style="display: block;margin-left: auto; margin-right: auto;" src = "../images/logo_Clave.png" alt="<bean:message key="login.clave.titulo" />"/>
 				<p><bean:message key="login.clave.instrucciones" /></p>
-				
+
 				<form name="formCD" action="<%=urlClave%>" method="post">
 					<input type="hidden" name="metodos" value="<%=metodos%>" />
 					<input type="hidden" name="urlCallbackLogin" value="<%=ConvertUtil.cadenaToBase64UrlSafe(urlCallback)%>" />
@@ -309,54 +309,54 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 					<input type="hidden" name="idioma" value="<%=language%>" />
 					<p class="formBotonera">
 						<input type="submit" value="<bean:message key="login.boton.iniciar" />" title="<bean:message key="login.boton.iniciar" />" />
-					</p>					
-				</form>					
-				
+					</p>
+				</form>
+
 				<p>
 					<a href="http://clave.gob.es" target="_blank"><bean:message key="login.clave.mesInfoText" /></a>
 				</p>
-				
+
 			</div>
 			<%} %>
-									
+
 			<% if (niveles.indexOf("A")>=0){ %>
 			<div id="indexAN">
 				<h2><bean:message key="login.anonimo.titulo" /></h2>
 				<p><bean:message key="login.anonimo.instrucciones.parrafo1" /></p>
-				<form name="formAN" method="post" action="j_security_check">				
+				<form name="formAN" method="post" action="j_security_check">
 					<input name="j_username" id="j_username" type="hidden" value="nobody" />
 					<input name="j_password" id="j_password" type="hidden" value="nobody" />
 					<p class="formBotonera">
 					<input name="formANboton" type="submit" value="<bean:message key="login.boton.iniciar" />" title="<bean:message key="login.anonimo.boton.title" />"/>
 					</p>
 				</form>
-			</div>			
+			</div>
 			<%} %>
 			<% } %>
-			
+
 			<div class="sep"></div>
-	
-		</div>	
-	</div>		
-	
+
+		</div>
+	</div>
+
 	<!-- peu -->
-	<div id="peu">  
-		
+	<div id="peu">
+
 		<div class="esquerra">&copy; <%=infoOrg.getNombre()%></div>
-			
+
 			<!-- contacte -->
 			<div class="centre">
-				<%=infoOrg.getPieContactoHTML()%>				
+				<%=infoOrg.getPieContactoHTML()%>
 			</div>
-			
+
 			<!-- /contacte -->
 			<div class="dreta">
-				<bean:message key="header.mailAdministrador"/> 
+				<bean:message key="header.mailAdministrador"/>
 				<a href="javascript:void(0)" onclick="mostrarAyudaAdmin();">
 				<bean:message key="header.mailAdministrador.enlace"/>
-				</a>.				
+				</a>.
 			</div>
-		
+
 	</div>
 </div>
 </body>

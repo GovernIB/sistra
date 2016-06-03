@@ -20,12 +20,12 @@ import es.caib.sistra.plugins.pagos.ConstantesPago;
 
 public class Util
 {
-	private static String version = null;	
+	private static String version = null;
 	private static String urlMantenimientoSesion = null;
-	
+
 	private static Log log = LogFactory.getLog(Util.class);
 	private static Boolean entornoDesarrollo = null;
-	
+
 	/**
 	 * Obtiene version (en web.xml)
 	 */
@@ -37,11 +37,11 @@ public class Util
 			}catch(Exception ex){
 				log.error("Error obteniendo propiedad 'release.cvs.tag'",ex);
 				version = null;
-			}		
+			}
 		}
 		return version;
 	}
-	
+
 
 	/**
 	 * Genera un token
@@ -58,11 +58,11 @@ public class Util
 	 		if (rn.length() < 8) {
 	 			for (int i=rn.length();i<8;i++){
 	 				rn += "0";
-	 			}			
+	 			}
 	 		}
     		String tokenStr = String.valueOf(System.currentTimeMillis())  + rn;
-    		
-    		// Pasamos a B64 
+
+    		// Pasamos a B64
 			byte[] bytes = tokenStr.getBytes("UTF-8");
 	    	byte[] encBytes = Base64.encodeBase64(bytes);
 		    token = new String(encBytes, "UTF-8");
@@ -74,7 +74,7 @@ public class Util
     	}
     	return token;
     }
-    
+
 	/**
 	 * Genera una url para mantener la sesion abierta cuando se salta a otra aplicación (Forms, pagos, etc.)
 	 * @param request Request
@@ -84,17 +84,17 @@ public class Util
 		if (urlMantenimientoSesion == null) {
 			try{
 				Properties configProps = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
-				urlMantenimientoSesion = configProps.getProperty("sistra.url") + configProps.getProperty("sistra.contextoRaiz"); 
+				urlMantenimientoSesion = configProps.getProperty("sistra.url") + configProps.getProperty("sistra.contextoRaiz.front");
 				urlMantenimientoSesion += "/sistrafront/protected/mantenimientoSesionForm?"+InstanciaManager.ID_INSTANCIA+"=";
 			}catch(Exception ex){
 				log.error("Error obteniendo propiedad 'sistra.url'",ex);
 				urlMantenimientoSesion = null;
-			}		
+			}
 		}
 		return (urlMantenimientoSesion + idInstancia);
-		
+
 	}
-	
+
 	/**
 	 * Indica si es entorno de desarrollo
 	 * @return true: entorno desarrollo / false: entorno produccion
@@ -102,16 +102,16 @@ public class Util
 	public static boolean esEntornoDesarrollo(){
 		if (entornoDesarrollo  == null) {
 			try{
-				entornoDesarrollo = new Boolean ("DESARROLLO".equals(DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("entorno")));				
+				entornoDesarrollo = new Boolean ("DESARROLLO".equals(DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("entorno")));
 			}catch(Exception ex){
 				log.error("Error obteniendo propiedad 'entorno'",ex);
 				entornoDesarrollo = null;
-			}		
+			}
 		}
 		return (entornoDesarrollo != null?entornoDesarrollo.booleanValue():false);
-		
+
 	}
-	
+
 	/**
 	 * Establece sobre el paso de tramitacion el titulo y cuerpo.
 	 * @param tramite TramiteFront
@@ -130,7 +130,7 @@ public class Util
 		char nivelAutenticacion = tramite.getDatosSesion().getNivelAutenticacion();
 		switch( tipoPaso )
 		{
-			case PasoTramitacion.PASO_DEBESABER : 
+			case PasoTramitacion.PASO_DEBESABER :
 			{
 				String informacionInicio = tramite.getInformacionInicio();
 				if ( !StringUtils.isEmpty( informacionInicio ) )
@@ -179,12 +179,12 @@ public class Util
 							}
 							break;
 					}
-					
+
 					if (tipoPago == ConstantesPago.TIPOPAGO_AMBOS) {
 						break;
 					}
 				}
-				
+
 				paso.setClaveCuerpo( textKey + "." + tipoPago );
 				return;
 			}
@@ -239,7 +239,7 @@ public class Util
 					titleKey += ".envio";
 					tabKey += ".envio";
 				}
-				
+
 				if ( Constants.TIPO_CIRCUITO_TRAMITACION_TELEMATICO == tipoTramitacion   )
 				{
 					textKey += ".telematico";
@@ -255,9 +255,9 @@ public class Util
 				paso.setClaveTab( tabKey );
 				paso.setClaveTitulo( titleKey );
 				paso.setClaveCuerpo( textKey );
-				
+
 				return;
-			}				
+			}
 			default :
 			{
 				paso.setClaveCuerpo( keyPreffix + ".texto" );

@@ -54,7 +54,7 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
             IdiomaDelegate delegate = DelegateUtil.getIdiomaDelegate();
 
             // Lenguaje por defecto.
-            defaultLang = delegate.lenguajePorDefecto();		
+            defaultLang = delegate.lenguajePorDefecto();
             if (defaultLang == null) {
               log.debug("Default lang es NULL. Poniendo defaultlang a [ca].");
               defaultLang = "ca";
@@ -65,7 +65,7 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
             // Todos los lenguajes soportados (incluido el por defecto).
             supportedLangs = delegate.listarLenguajes();
             log.debug("Supported langs: " + supportedLangs);
-            
+
             // Inicializamos informacion organismo (almacenamos en contexto)
             try{
     	 		if (getServletContext().getAttribute(Constants.ORGANISMO_INFO_KEY) == null){
@@ -76,15 +76,15 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
             	log.error("Error obteniendo informacion organismo",ex);
             	throw new ServletException(ex);
             }
-            
+
             //Indicamos si se tiene que ejecutar dentro de un iframe o no
             try{
             	ConfiguracionDelegate configuracion = DelegateUtil.getConfiguracionDelegate();
             	Properties configProps = configuracion.obtenerConfiguracion();
 				getServletContext().setAttribute(Constants.MOSTRAR_EN_IFRAME,new Boolean(configProps.getProperty("sistra.iframe")).booleanValue());
-            	
-            	getServletContext().setAttribute(Constants.CONTEXTO_RAIZ,StringUtils.defaultString(configProps.getProperty("sistra.contextoRaiz"), ""));
-            	
+
+            	getServletContext().setAttribute(Constants.CONTEXTO_RAIZ,StringUtils.defaultString(configProps.getProperty("sistra.contextoRaiz.front"), ""));
+
             }catch(Exception ex){
             	log.error("Error obteniendo la variable iframe",ex);
             	throw new ServletException(ex);
@@ -144,7 +144,7 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
 
     public void process(HttpServletRequest request,
                         HttpServletResponse response)
-            throws IOException, ServletException {    	
+            throws IOException, ServletException {
         if (request.getCharacterEncoding() == null) {
             log.debug("CharacterEncoding és null, emprant utf-8");
             request.setCharacterEncoding("utf-8");
@@ -281,7 +281,7 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
         }
         return securePath;
     }
-    
+
     @Override
     protected void processNoCache(HttpServletRequest request, HttpServletResponse response)
     {
