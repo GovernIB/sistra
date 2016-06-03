@@ -6,22 +6,22 @@
 <application>
     <display-name>SISTRA</display-name>
     <description><![CDATA[Proyecto IBCEGE - SISTRA]]></description>
-	
+
 		<!-- Mòdul libs -->
-		
+
 		<!--  COMMONS -->
 		<module><java>lib/commons-lang-2.5.jar</java></module>
-	    <module><java>lib/commons-io-2.0.1.jar</java></module>	    	   	  
-	    
+	    <module><java>lib/commons-io-2.0.1.jar</java></module>
+
 	    <!--  UTILS -->
-		<module><java>lib/sistra-zkutils.jar</java></module>	    
-	    
+		<module><java>lib/sistra-zkutils.jar</java></module>
+
 		<!-- Mòdul consola -->
 		<module>
 	        <web>
 	            <web-uri>10-consola.war</web-uri>
-	            <context-root>@contextoRaiz@console</context-root>
+	            <context-root>@contextoRaizBack@console</context-root>
 	        </web>
 	    </module>
-            
+
 </application>

@@ -12,29 +12,29 @@
 <target name="clean" description="Destruye los directorios de trabajo">
 	<delete dir="${output.dir}" quiet="yes"/>
 </target>
-	
+
 <target name="prepare" description="Prepara los directorios de trabajo">
 	<mkdir dir="${output.dir}"/>
 	<mkdir dir="${output.dir}/etc"/>
 	<mkdir dir="${output.dir}/etc/consola"/>
 	<mkdir dir="${output.dir}/ear"/>
 	<mkdir dir="${output.dir}/lib"/>
-	<mkdir dir="${output.dir}/client"/>	
+	<mkdir dir="${output.dir}/client"/>
 	<mkdir dir="${output.dir}/client/ejb"/>
 	<mkdir dir="${output.dir}/client/wsdl"/>
 	<mkdir dir="${output.dir}/client/wsdl/sistra"/>
-	<mkdir dir="${output.dir}/client/wsdl/integracion"/>	
-	<mkdir dir="${output.dir}/javadoc"/>	
+	<mkdir dir="${output.dir}/client/wsdl/integracion"/>
+	<mkdir dir="${output.dir}/javadoc"/>
 </target>
-	
+
 <target name="propagate">
-	<ant dir="moduls/llibreria-configuracionutil" target="${task}" inheritall="false"/>	
+	<ant dir="moduls/llibreria-configuracionutil" target="${task}" inheritall="false"/>
 	<ant dir="moduls/llibreria-dbutils" target="${task}" inheritall="false"/>
 	<ant dir="moduls/llibreria-graficos" target="${task}" inheritall="false"/>
 	<ant dir="moduls/llibreria-pdf" target="${task}" inheritall="false"/>
 	<ant dir="moduls/llibreria-xml" target="${task}" inheritall="false"/>
 	<ant dir="moduls/llibreria-plugins" target="${task}" inheritall="false"/>
-	<ant dir="moduls/llibreria-util" target="${task}" inheritall="false"/>	
+	<ant dir="moduls/llibreria-util" target="${task}" inheritall="false"/>
 	<ant dir="moduls/llibreria-utilWs" target="${task}" inheritall="false"/>
 	<ant dir="moduls/modul-mobtratel" target="${task}" inheritall="false"/>
 	<ant dir="moduls/modul-audita" target="${task}" inheritall="false"/>
@@ -42,14 +42,14 @@
 	<ant dir="moduls/modul-zonaper" target="${task}" inheritall="false"/>
 	<ant dir="moduls/modul-bantel" target="${task}" inheritall="false"/>
 	<ant dir="moduls/modul-sistra" target="${task}" inheritall="false"/>
-	<ant dir="moduls/modul-forms" target="${task}" inheritall="false"/>	
+	<ant dir="moduls/modul-forms" target="${task}" inheritall="false"/>
 	<ant dir="moduls/modul-regtel" target="${task}" inheritall="false"/>
 	<!-- <ant dir="moduls/modul-libs" target="${task}" inheritall="false"/>-->
-	
-	<ant dir="moduls/llibreria-zk" target="${task}" inheritall="false"/>	
+
+	<ant dir="moduls/llibreria-zk" target="${task}" inheritall="false"/>
 	<ant dir="moduls/modul-consola" target="${task}" inheritall="false"/>
-		
-</target>	
+
+</target>
 
 <target name="checkJbossVersion">
 	<condition property="isJboss5">
@@ -59,24 +59,25 @@
 		<equals arg1="${jboss.version}" arg2="3.2"/>
 	</condition>
 </target>
-	
+
 <target name="compileModuls" description="Compila modulos" depends="checkJbossVersion">
-	
+
 	<antcall target="propagate">
 		<param name="task" value="main"/>
 	</antcall>
-	
+
 	<copy file="${etc.dir}/jboss-${jboss.version}/application.xml" todir="${output.dir}/etc" overwrite="true"/>
 	<replace file="${output.dir}/etc/application.xml">
-	     <replacefilter token="@contextoRaiz@" value="${contextoRaiz}"/>
+	     <replacefilter token="@contextoRaizBack@" value="${contextoRaiz.back}"/>
+		 <replacefilter token="@contextoRaizFront@" value="${contextoRaiz.front}"/>
 	</replace>
-	
+
 	<delete file="${output.dir}/ear/1-sistra.ear" quiet="yes"/>
-	
+
 	<ear earfile="${output.dir}/ear/1-sistra.ear" appxml="${output.dir}/etc/application.xml">
 		<manifest>
 			<attribute name="Created-By" value="${indra}"/>
-		    <attribute name="Specification-Title" value="${projecte}"/>				
+		    <attribute name="Specification-Title" value="${projecte}"/>
 		    <attribute name="Specification-Version" value="${release.version} build${release.build} ${release.date}"/>
 		</manifest>
 		<metainf dir="${etc.dir}/jboss-${jboss.version}">
@@ -101,7 +102,7 @@
 			<exclude name="activation.jar"/>
 			<exclude name="struts.jar"/>
 			<exclude name="simplecaptcha-1.2.1.jar"/>
-			
+
 			<exclude if="isJboss3" name="cglib-asm.jar"/>
 			<exclude name="commons-logging-1.0.4.jar"/>
 			<exclude name="ejb-2_0.jar"/>
@@ -127,18 +128,19 @@
 			<exclude name="jboss*"/>
 			<exclude name="jboss/*"/>
 		</zipfileset>
-		<zipfileset dir="${output.dir}/lib" prefix="lib"/>					
-	</ear>	
-	
+		<zipfileset dir="${output.dir}/lib" prefix="lib"/>
+	</ear>
+
 	<copy file="${etc.dir}/consola/jboss-${jboss.version}/application.xml" todir="${output.dir}/etc/consola" overwrite="true"/>
 	<replace file="${output.dir}/etc/consola/application.xml">
-	     <replacefilter token="@contextoRaiz@" value="${contextoRaiz}"/>
+		<replacefilter token="@contextoRaizBack@" value="${contextoRaiz.back}"/>
+		<replacefilter token="@contextoRaizFront@" value="${contextoRaiz.front}"/>
 	</replace>
-	
+
 	<ear earfile="${output.dir}/ear/2-sistra-consola.ear" appxml="${output.dir}/etc/consola/application.xml">
 			<manifest>
 				<attribute name="Created-By" value="${indra}"/>
-			    <attribute name="Specification-Title" value="${projecte}"/>				
+			    <attribute name="Specification-Title" value="${projecte}"/>
 			    <attribute name="Specification-Version" value="${release.version} build${release.build} ${release.date}"/>
 			</manifest>
 			<metainf dir="${etc.dir}/consola/jboss-${jboss.version}">
@@ -149,39 +151,39 @@
 			</metainf>
 			<metainf dir="${etc.dir}/consola" includes="cxf/org.apache.cxf.Logger"/>
 			<fileset dir="moduls/modul-consola/output/moduls"/>
-			
+
 			<!--
 			<zipfileset dir="${lib}/client" prefix="lib"/>
 			-->
-			
+
 			<zipfileset dir="${lib}" prefix="lib">
 				<include name="commons-collections-*.jar"/>
 				<include name="commons-fileupload-*.jar"/>
 				<include name="commons-io-*.jar"/>
 				<include name="commons-lang-*.jar"/>
 			</zipfileset>
-			<zipfileset dir="${output.dir}/lib" prefix="lib"/>					
+			<zipfileset dir="${output.dir}/lib" prefix="lib"/>
 		</ear>
-	
+
 	<antcall target="generateSAR"/>
-	
-</target>	
-	
+
+</target>
+
 <target name="cleanModuls" description="Destruye los directorios de trabajo de todos los modulos">
 	<antcall target="clean"/>
 	<antcall target="propagate">
 		<param name="task" value="clean"/>
 	</antcall>
 </target>
-	
+
 <target name="cleanLibsLicencia" description="Borra las librerias afectadas por temas de licencia">
 	<delete>
 	    <fileset dir="lib" includes="ojdbc14.jar"/>
 	</delete>
 	<!--
 	<delete>
-	    <fileset dir="integracio/clienteFirma/firma/aFirma" includes="*"/>		
-	</delete>	
+	    <fileset dir="integracio/clienteFirma/firma/aFirma" includes="*"/>
+	</delete>
 	-->
 </target>
 
@@ -204,22 +206,22 @@
     <ant antfile="moduls/modul-zonaper/build-db.xml" target="initdb" inheritall="false"/>
     <copy file="moduls/modul-zonaper/output/schema.sql" tofile="product/schema-zonaper.sql"/>
 </target>
-		
-	
-<target name="generateSAR">		
-	
+
+
+<target name="generateSAR">
+
 	<!-- Generacion del jboss-service.xml -->
 	<java classname="es.caib.sistra.configuracionutil.ConfiguracionSAR">
 		<classpath>
 			<fileset dir="${basedir}/lib">
 		    	<include name="commons-io*.jar"/>
-				<include name="commons-lang*.jar"/>   
-			</fileset>	
+				<include name="commons-lang*.jar"/>
+			</fileset>
 			<fileset dir="${output.dir}/lib">
-		    	<include name="sistra-configuracion.jar"/>   
+		    	<include name="sistra-configuracion.jar"/>
 			</fileset>
 		</classpath>
-		
+
 		<!-- Nombre del MBEAN del SAR -->
 		<arg value="sistra-config"/>
 		<!-- Directorio donde se generara el jboss-service.xml -->
@@ -232,15 +234,15 @@
 		<arg value="global,sistra,zonaper,bantel,redose,regtel,mobtratel,forms,audita"/>
 		<!-- Nombre ficheros propiedades a tratar separados por coma (se incluye tal cual, sin prefijo) -->
 		<arg value="sar-config"/>
-		
+
 	</java>
-	
+
 	<!-- Generacion del SAR -->
 	<delete file="${output.dir}/ear/1-sistra.sar" quiet="yes"/>
     <jar jarfile="${output.dir}/ear/1-sistra.sar">
         <metainf dir="${output.dir}/etc" includes="*.xml"/>
-    </jar>    	
+    </jar>
 </target>
 
-	
+
 </project>

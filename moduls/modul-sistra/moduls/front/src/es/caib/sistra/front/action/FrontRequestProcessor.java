@@ -41,9 +41,9 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
     private List supportedLangs = null;
 
     public void init(ActionServlet actionServlet,ModuleConfig moduleConfig) throws ServletException{
-    	
+
     	super.init(actionServlet,moduleConfig);
-    	
+
     	// Inicializamos implementacion de firma (almacenamos en contexto)
         try{
      		if (StringUtils.isEmpty((String) getServletContext().getAttribute(Constants.IMPLEMENTACION_FIRMA_KEY))){
@@ -53,7 +53,7 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
         	log.error("Error obteniendo implementacion firma",ex);
         	throw new ServletException(ex);
         }
- 		
+
  		// Inicializamos informacion organismo (almacenamos en contexto)
         try{
 	 		if (getServletContext().getAttribute(Constants.ORGANISMO_INFO_KEY) == null){
@@ -64,28 +64,28 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
         	log.error("Error obteniendo informacion organismo",ex);
         	throw new ServletException(ex);
         }
-    	
+
         //Indicamos si se tiene que ejecutar dentro de un iframe o no,si son obligatorios los avisos y contexto raiz
         try{
         	ConfiguracionDelegate config = DelegateUtil.getConfiguracionDelegate();
         	Properties configProps = config.obtenerConfiguracion();
-			
+
         	getServletContext().setAttribute(Constants.MOSTRAR_EN_IFRAME,new Boolean(configProps.getProperty("sistra.iframe")).booleanValue());
-        	
+
 			getServletContext().setAttribute(Constants.AVISOS_OBLIGATORIOS_NOTIFICACIONES,StringUtils.defaultString(configProps.getProperty("sistra.avisoObligatorioNotificaciones"), "false"));
-						      	
-			getServletContext().setAttribute(Constants.CONTEXTO_RAIZ,StringUtils.defaultString(configProps.getProperty("sistra.contextoRaiz"), ""));
-			
-		
+
+			getServletContext().setAttribute(Constants.CONTEXTO_RAIZ,StringUtils.defaultString(configProps.getProperty("sistra.contextoRaiz.front"), ""));
+
+
         }catch(Exception ex){
         	log.error("Error obteniendo la variable iframe",ex);
         	throw new ServletException(ex);
         }
-        
+
     }
-    
-    
-    
+
+
+
     /**
      * Inicializa los idiomas soportados por la aplicación
      */
@@ -101,7 +101,7 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
             // Todos los lenguajes soportados (incluido el por defecto).
             supportedLangs = delegate.listarLenguajes();
             log.info("Supported langs: " + supportedLangs);
-            
+
         } catch (DelegateException e) {
             throw new RuntimeException(e);
         }
@@ -113,11 +113,11 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
      * @param response
      */
     protected void processLocale(HttpServletRequest request, HttpServletResponse response) {
-    	
-    	
+
+
     	// DESHABILITAMOS PROCESAMIENTO DEL IDIOMA. PARA QUE NO SE PUEDA CAMBIAR A MITAD DE UN TRAMITE.
     	if (true) return;
-    	
+
         // Si se ha indicado que no se debe fijar no hacemos nada.
         if (!moduleConfig.getControllerConfig().getLocale()) {
             return;
@@ -185,7 +185,7 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
         }
         super.processPopulate(request, response, form, mapping);
     }
-    
+
     @Override
     protected void processNoCache(HttpServletRequest request, HttpServletResponse response)
     {

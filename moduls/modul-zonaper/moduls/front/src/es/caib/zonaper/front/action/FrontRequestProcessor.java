@@ -40,11 +40,11 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
     private String defaultLang = null;
     private List supportedLangs = null;
 
-    
+
  public void init(ActionServlet actionServlet,ModuleConfig moduleConfig) throws ServletException{
-    	
+
     	super.init(actionServlet,moduleConfig);
-    	
+
     	// Inicializamos implementacion de firma (almacenamos en contexto)
         try{
      		if (StringUtils.isEmpty((String) getServletContext().getAttribute(Constants.IMPLEMENTACION_FIRMA_KEY))){
@@ -54,7 +54,7 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
         	log.error("Error obteniendo implementacion firma",ex);
         	throw new ServletException(ex);
         }
- 		
+
  		// Inicializamos informacion organismo (almacenamos en contexto)
         try{
 	 		if (getServletContext().getAttribute(Constants.ORGANISMO_INFO_KEY) == null){
@@ -65,37 +65,37 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
         	log.error("Error obteniendo informacion organismo",ex);
         	throw new ServletException(ex);
         }
-    	
+
         //Indicamos si:
         //	- se tiene que ejecutar dentro de un iframe o no
         // 	- se controla la entrega de las notificaciones
         try{
         	ConfiguracionDelegate config = DelegateUtil.getConfiguracionDelegate();
         	Properties configProps = config.obtenerConfiguracion();
-        	
+
 			String mostrarIframe = configProps.getProperty("sistra.iframe");
 			getServletContext().setAttribute(Constants.MOSTRAR_EN_IFRAME,new Boolean(mostrarIframe).booleanValue());
-        	
+
         	String controlEntregaNotif = configProps.getProperty("notificaciones.controlEntrega.habilitar");
         	if (StringUtils.isBlank(controlEntregaNotif)) {
         		controlEntregaNotif = "false";
         	}
 			getServletContext().setAttribute(Constants.CONTROLAR_ENTREGA_NOTIFICACIONES,new Boolean(controlEntregaNotif).booleanValue());
-			
+
 			String apartadoAlertas = configProps.getProperty("avisos.apartadoAlertas");
         	if (StringUtils.isBlank(apartadoAlertas)) {
         		apartadoAlertas = "true";
         	}
 			getServletContext().setAttribute(Constants.HABILITAR_APARTADO_ALERTAS,new Boolean(apartadoAlertas).booleanValue());
-			
-			getServletContext().setAttribute(Constants.CONTEXTO_RAIZ,StringUtils.defaultString(configProps.getProperty("sistra.contextoRaiz"), ""));
-			
+
+			getServletContext().setAttribute(Constants.CONTEXTO_RAIZ,StringUtils.defaultString(configProps.getProperty("sistra.contextoRaiz.front"), ""));
+
         }catch(Exception ex){
         	log.error("Error obteniendo la variable iframe",ex);
         	throw new ServletException(ex);
         }
     }
-    
+
     /**
      * Inicializa los idiomas soportados por la aplicación
      */
@@ -128,7 +128,7 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
      */
     protected void processLocale(HttpServletRequest request, HttpServletResponse response) {
     	HttpSession session = request.getSession(true);
-    	
+
     	// Establecemos lenguaje despues del login (solo la primera vez)
     	if (request.getSession().getAttribute(Constants.KEY_LANGUAGE_LOGIN_SET) == null){
 			Locale localeLogin = (Locale) request.getSession().getAttribute(Constants.KEY_LANGUAGE_LOGIN);
@@ -139,8 +139,8 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
 	 			return;
 	 		}
     	}
- 		
-    	
+
+
     	// Si se ha indicado que no se debe fijar no hacemos nada.
         if (!moduleConfig.getControllerConfig().getLocale()) {
             return;
@@ -148,7 +148,7 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
 
         if (defaultLang == null) initLangs();
 
-        
+
 
         // Se ha especificado sobreescribir el locale
         String paramLang = request.getParameter("lang");

@@ -9,7 +9,7 @@
 <bean:define id="urlArbol">
     <html:rewrite page="/arbolForms.do"/>
 </bean:define>
-<bean:define id="contextoRaizSistra" name="<%=es.caib.sistra.back.Constants.CONTEXTO_RAIZ%>" type="java.lang.String"/>
+<bean:define id="contextoRaizSistra" name="<%=es.caib.sistra.back.Constants.CONTEXTO_RAIZ_BACK%>" type="java.lang.String"/>
 
 <script type="text/javascript">
      <!--
@@ -17,7 +17,7 @@
         var url = '<html:rewrite page="/documentoNivel/ayudaPantalla.jsp" />';
         obrir(url, "Edicion", 540, 400);
      }
-     
+
      function reloadVersionFormulario( desplegable )
      {
      	var urlActual = document.location.href;
@@ -28,44 +28,44 @@
 //     	alert( urlActual );
      	document.location.href = urlActual + "&documentoNivel.formularioFormsModelo=" + desplegable.options[ desplegable.selectedIndex ].value;
      }
-     
-     function mostrarArbolForms(url) {        
+
+     function mostrarArbolForms(url) {
         obrir(url, "Arbol", 540, 400);
      }
-     
+
     function resetearModeloVersion(){
 	    campoModelo = document.getElementsByName("values.formularioFormsModelo").item(0);
      	campoVersion = document.getElementsByName("values.formularioFormsVersion").item(0);
     	campoModelo.value="";
      	campoVersion.value="";
     }
-     
+
      function cambioGestorFormulario(){
 	    campoGestor = document.getElementsByName("values.formularioGestorFormulario").item(0);
      	campoModelo = document.getElementsByName("values.formularioFormsModelo").item(0);
      	campoVersion = document.getElementsByName("values.formularioFormsVersion").item(0);
      	botonForms = document.getElementById("botonForms");
      	botonAbrirForms = document.getElementById("botonAbrirForms");
-     	
+
      	if (campoGestor.options[campoGestor.selectedIndex].value == 'forms'){
      		botonForms.style.visibility="visible";
      		botonAbrirForms.style.visibility="visible";
-     		campoModelo.readOnly=true;   
-     		campoVersion.readOnly=true; 		
+     		campoModelo.readOnly=true;
+     		campoVersion.readOnly=true;
      	}else{
      		botonForms.style.visibility="hidden";
      		botonAbrirForms.style.visibility="hidden";
-     		campoModelo.readOnly=false;   
-     		campoVersion.readOnly=false; 		
-     	}     	
+     		campoModelo.readOnly=false;
+     		campoVersion.readOnly=false;
+     	}
      }
-     
+
      function abrirForms(){
      	campoModelo = document.getElementsByName("values.formularioFormsModelo").item(0).value;
      	campoVersion = document.getElementsByName("values.formularioFormsVersion").item(0).value;
      	window.open("<%=contextoRaizSistra%>/formback/init.do?modelo="+campoModelo+"&version="+campoVersion,"FORMS");
      }
-     
+
      // -->
 </script>
 <script type="text/javascript">
@@ -130,26 +130,26 @@
 <tr>
     <td class="label"><bean:message key="documentoNivel.formularioForms"/></td>
     <td class="input">
-    	<bean:message key="documentoNivel.formularioFormsModelo"/>    	
-		<html:text property="values.formularioFormsModelo"   size="11"/>    	
+    	<bean:message key="documentoNivel.formularioFormsModelo"/>
+		<html:text property="values.formularioFormsModelo"   size="11"/>
 		<bean:message key="documentoNivel.formularioFormsVersion"/>
-		<html:text property="values.formularioFormsVersion" size="3"/>    	
-				
-		<input type="button" id="botonForms" value="..."  class = "botonEditar" 
+		<html:text property="values.formularioFormsVersion" size="3"/>
+
+		<input type="button" id="botonForms" value="..."  class = "botonEditar"
 			onclick="mostrarArbolForms('<%=urlArbol + "?modelo=values.formularioFormsModelo&version=values.formularioFormsVersion" %>');"
 		/>
-		
-		<input type="button" id="botonAbrirForms" value="FORMS"  class = "botonEditar" 
+
+		<input type="button" id="botonAbrirForms" value="FORMS"  class = "botonEditar"
 			onclick="abrirForms();"
 		/>
-		
+
     </td>
 </tr>
 <tr>
     <td class="label"><bean:message key="documentoNivel.formularioGuardarSinTerminar"/></td>
     <td class="input">
-    	<bean:message key="afirmacion"/><html:radio property="values.formularioGuardarSinTerminar" value="S"/> 
-    	<bean:message key="negacion"/><html:radio property="values.formularioGuardarSinTerminar" value="N"/>     
+    	<bean:message key="afirmacion"/><html:radio property="values.formularioGuardarSinTerminar" value="S"/>
+    	<bean:message key="negacion"/><html:radio property="values.formularioGuardarSinTerminar" value="N"/>
     </td>
 </tr>
 <tr>

@@ -94,7 +94,7 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 			{
 				Properties propsConfig = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
 				String urlSistra = propsConfig.getProperty("sistra.url");
-				String contextoSistra = propsConfig.getProperty("sistra.contextoRaiz");
+				String contextoSistra = propsConfig.getProperty("sistra.contextoRaiz.front");
 
 				// Urls sistra
 				URL_SISTRA 					= urlSistra;
