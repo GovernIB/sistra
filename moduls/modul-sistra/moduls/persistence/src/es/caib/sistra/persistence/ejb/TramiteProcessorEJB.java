@@ -5499,7 +5499,7 @@ public class TramiteProcessorEJB implements SessionBean {
 			}
 			// - Nombre
 			byte [] scriptRpteNom = ScriptUtil.getScriptVersionOrNivel(especVersion.getCampoRteNom(),especNivel.getCampoRteNom());
-			if (!datosRpte.isAnonimo() && ScriptUtil.existeScript(scriptRpteNom)){
+			if (ScriptUtil.existeScript(scriptRpteNom)){
 				String rpteNom = this.evaluarScript(scriptRpteNom,null);
 				if (!("NO-VALOR".equals(rpteNom))){
 					datosRpte.setApellidosNombre(rpteNom);
