@@ -54,7 +54,7 @@
 		<html:hidden property="tipo"/>
 
 		<p class="botonera2">
-			<html:submit value="<%=btnAlta%>" onclick="recuperar();"/>
+			<html:submit value="<%=btnAlta%>"/>
 			<html:hidden property="tipo" value="E"/>
 			<html:hidden property="numeroEntrada"/>
 		</p>
