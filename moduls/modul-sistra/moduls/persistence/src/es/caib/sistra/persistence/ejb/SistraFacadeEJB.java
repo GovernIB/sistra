@@ -3,14 +3,22 @@ package es.caib.sistra.persistence.ejb;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.login.Configuration;
+import javax.security.auth.login.LoginContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import es.caib.sistra.model.AsientoCompleto;
+import es.caib.sistra.model.DocumentoFront;
+import es.caib.sistra.model.PasoTramitacion;
+import es.caib.sistra.model.RespuestaFront;
 import es.caib.sistra.model.TraTramite;
 import es.caib.sistra.model.Tramite;
 import es.caib.sistra.model.TramiteNivel;
@@ -18,8 +26,17 @@ import es.caib.sistra.model.TramiteVersion;
 import es.caib.sistra.modelInterfaz.InformacionLoginTramite;
 import es.caib.sistra.modelInterfaz.ValoresDominio;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
+import es.caib.sistra.persistence.delegate.InstanciaDelegate;
+import es.caib.sistra.persistence.intf.TramiteProcessor;
 import es.caib.sistra.persistence.plugins.PluginDominio;
+import es.caib.sistra.plugins.login.ConstantesLogin;
+import es.caib.util.ConfigurationLogin;
 import es.caib.util.StringUtil;
+import es.caib.util.UsernamePasswordCallbackHandler;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
+import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
+import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
+import es.caib.zonaper.persistence.delegate.PadDelegate;
 
 
 /**
@@ -54,6 +71,88 @@ public abstract class SistraFacadeEJB implements SessionBean
     {
 	//   this.ctx = ctx;
     }
+
+    /**
+	 * Intenta finalizar un tramite anonimo que se ha pagado pero no se ha finalizado.
+	 *
+	 *
+     * @ejb.interface-method
+     * @ejb.permission unchecked = "true"
+     * @ejb.transaction type="RequiresNew"
+     */
+	public boolean finalizarTramitePagadoAnonimo( String idPersistencia )
+	{
+
+		try {
+
+			log.debug("Se intenta finalizar automaticamente tramite " + idPersistencia);
+
+
+			PadDelegate pad = DelegatePADUtil.getPadDelegate();
+			TramitePersistentePAD tramPer = pad.obtenerTramitePersistente(idPersistencia);
+
+			if (tramPer.getNivelAutenticacion() != ConstantesLogin.LOGIN_ANONIMO) {
+				log.debug("Tramite " + idPersistencia + " no es anonimo");
+				return false;
+			}
+
+			RespuestaFront rf = null;
+
+			Map paramsInicio = tramPer.getParametrosInicio();
+			if (paramsInicio == null) {
+				paramsInicio = new HashMap();
+			}
+
+			log.debug("Cargar tramite de persistencia...");
+			InstanciaDelegate dlg = DelegateUtil.getInstanciaDelegate(true);
+			dlg.create(
+					tramPer.getTramite(), tramPer.getVersion(),
+					tramPer.getNivelAutenticacion(),
+					new Locale(tramPer.getIdioma()), paramsInicio,
+					ConstantesZPE.DELEGACION_PERFIL_ACCESO_CIUDADANO, null);
+			rf = dlg.cargarTramite(tramPer.getIdPersistencia());
+
+			if (rf.getInformacionTramite().getPasoTramitacion().getTipoPaso() == PasoTramitacion.PASO_PAGAR) {
+				// Esta en paso pagar, pasamos a siguiente paso
+				log.debug("Esta en paso PAGAR, intentamos pasar a siguiente paso...");
+				rf = dlg.siguientePaso();
+			}
+
+			// Si sigue estando en paso pagar, intentamos confirmar pago
+			if (rf.getInformacionTramite().getPasoTramitacion().getTipoPaso() == PasoTramitacion.PASO_PAGAR) {
+				for (Iterator it = rf.getInformacionTramite().getPagos().iterator(); it.hasNext();) {
+					DocumentoFront df = (DocumentoFront) it.next();
+					rf = dlg.confirmarPago(df.getIdentificador(), df.getInstancia());
+				}
+			}
+
+			// Verifica si esta en paso registrar
+			if (rf.getInformacionTramite().getPasoTramitacion().getTipoPaso() != PasoTramitacion.PASO_REGISTRAR) {
+				log.warn("Tramite " + idPersistencia + " no se puede finalizar automaticamente: no esta en paso REGISTRAR");
+				return false;
+			}
+
+			// Registrar
+			log.debug("Esta en paso REGISTRAR, se intenta registrar...");
+			AsientoCompleto asiento = (AsientoCompleto) rf.getParametros().get(
+					"asiento");
+			rf = dlg.registrarTramite(asiento.getAsiento(), null);
+
+			// Verifica si ha terminado
+			if (rf.getInformacionTramite().getPasoTramitacion().getTipoPaso() == PasoTramitacion.PASO_FINALIZAR) {
+				log.info("Tramite " + idPersistencia + " finalizado automaticamente");
+				return true;
+			} else {
+				log.warn("Tramite " + idPersistencia + " no se puede finalizar automaticamente: no se ha podido registrar");
+				return false;
+			}
+
+		} catch (Exception ex) {
+			log.warn("Tramite " + idPersistencia + " no se puede finalizar automaticamente: " + ex.getMessage());
+			return false;
+		}
+
+	}
 
 	/**
 	 * Obtiene un map con la descripcion de los trámites  (KEY=Id Tramite / VALUE=Descripción)

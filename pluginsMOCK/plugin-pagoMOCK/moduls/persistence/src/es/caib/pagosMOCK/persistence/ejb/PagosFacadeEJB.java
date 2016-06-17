@@ -156,12 +156,24 @@ public class PagosFacadeEJB implements SessionBean {
 			log.debug("Comprobar estado sesion pago: localizador " + localizador);
 			EstadoSesionPago estado = new EstadoSesionPago();
 
+
+
 			// Obtenemos sesion de pago
 			SesionPagoMOCK sesionMOCK = DatabaseMOCK.obtenerSesionPago(localizador);
 			if (sesionMOCK == null) {
 				estado.setEstado(ConstantesPago.SESIONPAGO_NO_EXISTE_SESION);
 				return estado;
 			}
+
+
+			Date fc = new Date();
+			sesionMOCK.getEstadoPago().setTipo(ConstantesPago.TIPOPAGO_TELEMATICO);
+			sesionMOCK.getEstadoPago().setEstado(ConstantesPago.SESIONPAGO_PAGO_CONFIRMADO);
+			sesionMOCK.getEstadoPago().setFechaPago(new Date());
+			sesionMOCK.getEstadoPago().setIdentificadorPago("NRC"+ fc.getTime());
+			DatabaseMOCK.guardarSesionPago(sesionMOCK);
+
+
 
 			log.debug("Estado=" + sesionMOCK.getEstadoPago().getEstado() );
 			return sesionMOCK.getEstadoPago();

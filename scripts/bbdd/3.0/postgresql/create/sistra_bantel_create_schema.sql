@@ -6,7 +6,7 @@
 --
 -- TOC entry 150 (class 1259 OID 187860)
 -- Dependencies: 3
--- Name: bte_arcfex; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_arcfex; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE bte_arcfex (
@@ -47,7 +47,7 @@ COMMENT ON COLUMN bte_arcfex.afe_datos IS 'DATOS FICHERO';
 --
 -- TOC entry 151 (class 1259 OID 187873)
 -- Dependencies: 3
--- Name: bte_avisos; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_avisos; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE bte_avisos (
@@ -88,7 +88,7 @@ COMMENT ON COLUMN bte_avisos.avi_fcavis IS 'Fecha ultimo aviso';
 --
 -- TOC entry 156 (class 1259 OID 187918)
 -- Dependencies: 1850 3
--- Name: bte_camfue; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_camfue; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE bte_camfue (
@@ -140,7 +140,7 @@ COMMENT ON COLUMN bte_camfue.cfu_ident IS 'Id campo';
 --
 -- TOC entry 144 (class 1259 OID 187775)
 -- Dependencies: 3
--- Name: bte_docum; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_docum; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE bte_docum (
@@ -281,7 +281,7 @@ COMMENT ON COLUMN bte_docum.doc_firma IS 'Para documentos a presentar presencial
 --
 -- TOC entry 145 (class 1259 OID 187784)
 -- Dependencies: 3
--- Name: bte_ficexp; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_ficexp; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE bte_ficexp (
@@ -304,7 +304,7 @@ COMMENT ON COLUMN bte_ficexp.fic_idetra IS 'IDENTIFICADOR DEL TRÁMITE';
 --
 -- TOC entry 157 (class 1259 OID 187926)
 -- Dependencies: 3
--- Name: bte_filfue; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_filfue; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE bte_filfue (
@@ -345,7 +345,7 @@ COMMENT ON COLUMN bte_filfue.fif_codfue IS 'Codigo interno fuente datos';
 --
 -- TOC entry 158 (class 1259 OID 187932)
 -- Dependencies: 3
--- Name: bte_fuedat; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_fuedat; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE bte_fuedat (
@@ -406,7 +406,7 @@ COMMENT ON COLUMN bte_fuedat.fue_idepro IS 'IDENTIFICADOR DEL PROCEDIMIENTO';
 --
 -- TOC entry 147 (class 1259 OID 187803)
 -- Dependencies: 3
--- Name: bte_gespro; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_gespro; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE bte_gespro (
@@ -447,7 +447,7 @@ COMMENT ON COLUMN bte_gespro.gap_idepro IS 'IDENTIFICADOR DEL PROCEDIMIENTO';
 --
 -- TOC entry 146 (class 1259 OID 187792)
 -- Dependencies: 1839 1840 1841 1842 1843 1844 3
--- Name: bte_gestor; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_gestor; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE bte_gestor (
@@ -548,7 +548,7 @@ COMMENT ON COLUMN bte_gestor.ges_avinot IS 'INDICA SI SE GENERA MENSAJE DE AVISO
 --
 -- TOC entry 148 (class 1259 OID 187811)
 -- Dependencies: 1845 1846 1847 1848 1849 3
--- Name: bte_proapl; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_proapl; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE bte_proapl (
@@ -636,7 +636,7 @@ COMMENT ON COLUMN bte_proapl.tap_tipacc IS 'TIPO DE ACCESO AL BACKOFFICE: EJB (E
 -- Name: COLUMN bte_proapl.tap_url; Type: COMMENT; Schema: public; Owner: sistra
 --
 
-COMMENT ON COLUMN bte_proapl.tap_url IS 'INDICA SEGÚN TIPO DE ACCESO: 
+COMMENT ON COLUMN bte_proapl.tap_url IS 'INDICA SEGÚN TIPO DE ACCESO:
 - EJB: JNDI EJB
 - WEBSERVICE: URL WEBSERVICE
 ';
@@ -668,7 +668,7 @@ COMMENT ON COLUMN bte_proapl.tap_ejbrem IS 'PARA TIPO DOMINIO EJB INDICA SI EL E
 
 COMMENT ON COLUMN bte_proapl.tap_ejbaut IS 'PARA TIPO DOMINIO EJB/WS INDICA:
  - N: autenticación implícita de forma que el contenedor EJBs traspasa autenticacion
- - S: explícita a traves de usuario/password 
+ - S: explícita a traves de usuario/password
  - C: explícita a través plugin autenticación del organismo';
 
 
@@ -884,7 +884,7 @@ CREATE SEQUENCE bte_seqvcf
 --
 -- TOC entry 149 (class 1259 OID 187828)
 -- Dependencies: 3
--- Name: bte_tramit; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_tramit; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE bte_tramit (
@@ -1289,7 +1289,7 @@ COMMENT ON COLUMN bte_tramit.tra_inipro IS 'INDICA FECHA DE INICIO DE PROCESO. S
 --
 -- TOC entry 159 (class 1259 OID 187942)
 -- Dependencies: 3
--- Name: bte_valcfu; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_valcfu; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE bte_valcfu (
@@ -1350,7 +1350,7 @@ COMMENT ON COLUMN bte_valcfu.vcf_valor IS 'Valor';
 --
 -- TOC entry 1874 (class 2606 OID 187867)
 -- Dependencies: 150 150
--- Name: bte_afe_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_afe_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY bte_arcfex
@@ -1360,7 +1360,7 @@ ALTER TABLE ONLY bte_arcfex
 --
 -- TOC entry 1876 (class 2606 OID 187877)
 -- Dependencies: 151 151
--- Name: bte_avi_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_avi_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY bte_avisos
@@ -1370,7 +1370,7 @@ ALTER TABLE ONLY bte_avisos
 --
 -- TOC entry 1878 (class 2606 OID 187923)
 -- Dependencies: 156 156
--- Name: bte_cfu_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_cfu_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY bte_camfue
@@ -1380,7 +1380,7 @@ ALTER TABLE ONLY bte_camfue
 --
 -- TOC entry 1852 (class 2606 OID 187782)
 -- Dependencies: 144 144
--- Name: bte_doc_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_doc_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY bte_docum
@@ -1390,7 +1390,7 @@ ALTER TABLE ONLY bte_docum
 --
 -- TOC entry 1855 (class 2606 OID 187791)
 -- Dependencies: 145 145
--- Name: bte_ficexp_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_ficexp_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY bte_ficexp
@@ -1400,7 +1400,7 @@ ALTER TABLE ONLY bte_ficexp
 --
 -- TOC entry 1882 (class 2606 OID 187930)
 -- Dependencies: 157 157
--- Name: bte_fif_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_fif_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY bte_filfue
@@ -1410,7 +1410,7 @@ ALTER TABLE ONLY bte_filfue
 --
 -- TOC entry 1885 (class 2606 OID 187939)
 -- Dependencies: 158 158
--- Name: bte_fue_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_fue_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY bte_fuedat
@@ -1420,7 +1420,7 @@ ALTER TABLE ONLY bte_fuedat
 --
 -- TOC entry 1859 (class 2606 OID 187810)
 -- Dependencies: 147 147 147
--- Name: bte_gap_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_gap_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY bte_gespro
@@ -1430,7 +1430,7 @@ ALTER TABLE ONLY bte_gespro
 --
 -- TOC entry 1857 (class 2606 OID 187802)
 -- Dependencies: 146 146
--- Name: bte_ges_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_ges_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY bte_gestor
@@ -1440,7 +1440,7 @@ ALTER TABLE ONLY bte_gestor
 --
 -- TOC entry 1863 (class 2606 OID 187841)
 -- Dependencies: 149 149
--- Name: bte_numpre_uni; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_numpre_uni; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY bte_tramit
@@ -1450,7 +1450,7 @@ ALTER TABLE ONLY bte_tramit
 --
 -- TOC entry 1865 (class 2606 OID 187839)
 -- Dependencies: 149 149
--- Name: bte_numreg_uni; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_numreg_uni; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY bte_tramit
@@ -1460,7 +1460,7 @@ ALTER TABLE ONLY bte_tramit
 --
 -- TOC entry 1861 (class 2606 OID 187822)
 -- Dependencies: 148 148
--- Name: bte_tap_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_tap_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY bte_proapl
@@ -1470,7 +1470,7 @@ ALTER TABLE ONLY bte_proapl
 --
 -- TOC entry 1868 (class 2606 OID 187835)
 -- Dependencies: 149 149
--- Name: bte_tra_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_tra_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY bte_tramit
@@ -1480,7 +1480,7 @@ ALTER TABLE ONLY bte_tramit
 --
 -- TOC entry 1870 (class 2606 OID 187837)
 -- Dependencies: 149 149
--- Name: bte_tranum_uni; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_tranum_uni; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY bte_tramit
@@ -1490,7 +1490,7 @@ ALTER TABLE ONLY bte_tramit
 --
 -- TOC entry 1889 (class 2606 OID 187949)
 -- Dependencies: 159 159
--- Name: bte_vcf_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_vcf_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY bte_valcfu
@@ -1500,7 +1500,7 @@ ALTER TABLE ONLY bte_valcfu
 --
 -- TOC entry 1879 (class 1259 OID 187924)
 -- Dependencies: 156 156
--- Name: bte_cfuident_ak; Type: INDEX; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_cfuident_ak; Type: INDEX; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE UNIQUE INDEX bte_cfuident_ak ON bte_camfue USING btree (cfu_codfue, cfu_ident);
@@ -1509,7 +1509,7 @@ CREATE UNIQUE INDEX bte_cfuident_ak ON bte_camfue USING btree (cfu_codfue, cfu_i
 --
 -- TOC entry 1880 (class 1259 OID 187925)
 -- Dependencies: 156
--- Name: bte_codfue_i; Type: INDEX; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_codfue_i; Type: INDEX; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE INDEX bte_codfue_i ON bte_camfue USING btree (cfu_codfue);
@@ -1518,7 +1518,7 @@ CREATE INDEX bte_codfue_i ON bte_camfue USING btree (cfu_codfue);
 --
 -- TOC entry 1853 (class 1259 OID 187783)
 -- Dependencies: 144
--- Name: bte_doctra_fk_i; Type: INDEX; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_doctra_fk_i; Type: INDEX; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE INDEX bte_doctra_fk_i ON bte_docum USING btree (doc_codtra);
@@ -1527,7 +1527,7 @@ CREATE INDEX bte_doctra_fk_i ON bte_docum USING btree (doc_codtra);
 --
 -- TOC entry 1883 (class 1259 OID 187931)
 -- Dependencies: 157
--- Name: bte_fiffue_i; Type: INDEX; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_fiffue_i; Type: INDEX; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE INDEX bte_fiffue_i ON bte_filfue USING btree (fif_codfue);
@@ -1536,7 +1536,7 @@ CREATE INDEX bte_fiffue_i ON bte_filfue USING btree (fif_codfue);
 --
 -- TOC entry 1886 (class 1259 OID 187940)
 -- Dependencies: 158
--- Name: bte_fueide_ak; Type: INDEX; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_fueide_ak; Type: INDEX; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE UNIQUE INDEX bte_fueide_ak ON bte_fuedat USING btree (fue_ident);
@@ -1545,7 +1545,7 @@ CREATE UNIQUE INDEX bte_fueide_ak ON bte_fuedat USING btree (fue_ident);
 --
 -- TOC entry 1887 (class 1259 OID 187941)
 -- Dependencies: 158
--- Name: bte_fueidp_i; Type: INDEX; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_fueidp_i; Type: INDEX; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE INDEX bte_fueidp_i ON bte_fuedat USING btree (fue_idepro);
@@ -1554,7 +1554,7 @@ CREATE INDEX bte_fueidp_i ON bte_fuedat USING btree (fue_idepro);
 --
 -- TOC entry 1866 (class 1259 OID 187859)
 -- Dependencies: 149 149 149
--- Name: bte_tra_busent_i; Type: INDEX; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_tra_busent_i; Type: INDEX; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE INDEX bte_tra_busent_i ON bte_tramit USING btree (tra_idetra, tra_proces, tra_fecha);
@@ -1563,7 +1563,7 @@ CREATE INDEX bte_tra_busent_i ON bte_tramit USING btree (tra_idetra, tra_proces,
 --
 -- TOC entry 1871 (class 1259 OID 187843)
 -- Dependencies: 149
--- Name: bte_tratap_fk_i; Type: INDEX; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_tratap_fk_i; Type: INDEX; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE INDEX bte_tratap_fk_i ON bte_tramit USING btree (tra_idepro);
@@ -1572,7 +1572,7 @@ CREATE INDEX bte_tratap_fk_i ON bte_tramit USING btree (tra_idepro);
 --
 -- TOC entry 1872 (class 1259 OID 187842)
 -- Dependencies: 149
--- Name: bte_tratra_i; Type: INDEX; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_tratra_i; Type: INDEX; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE INDEX bte_tratra_i ON bte_tramit USING btree (tra_idetra);
@@ -1581,7 +1581,7 @@ CREATE INDEX bte_tratra_i ON bte_tramit USING btree (tra_idetra);
 --
 -- TOC entry 1890 (class 1259 OID 187950)
 -- Dependencies: 159
--- Name: bte_vcfcfu_i; Type: INDEX; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_vcfcfu_i; Type: INDEX; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE INDEX bte_vcfcfu_i ON bte_valcfu USING btree (vcf_codcfu);
@@ -1590,7 +1590,7 @@ CREATE INDEX bte_vcfcfu_i ON bte_valcfu USING btree (vcf_codcfu);
 --
 -- TOC entry 1891 (class 1259 OID 187951)
 -- Dependencies: 159
--- Name: bte_vcffif_i; Type: INDEX; Schema: public; Owner: sistra; Tablespace: 
+-- Name: bte_vcffif_i; Type: INDEX; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE INDEX bte_vcffif_i ON bte_valcfu USING btree (vcf_codfif);
@@ -1742,3 +1742,10 @@ comment on column BTE_PROAPL.TAP_AVIREM is
 
 comment on column BTE_PROAPL.TAP_AVIREP is
 'EMAIL PARA RESPUESTA PARA AVISOS PROCEDIMIENTO';
+
+-- V3.1.3
+-- BANTEL: IDENTIFICADOR DE PROCEDIMIENTO EXTERNO
+alter table BTE_PROAPL add TAP_IDEPEX character varying(20);
+
+comment on column BTE_PROAPL.TAP_IDEPEX is
+'Identificador del procedimiento administrativo externo';

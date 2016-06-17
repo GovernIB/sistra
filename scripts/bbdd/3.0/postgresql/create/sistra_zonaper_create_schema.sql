@@ -155,7 +155,7 @@ create table ZPE_DOCPER  (
    DPE_GENDES           VARCHAR(255),
    DPE_DLGEST VARCHAR(2),
    DPE_DLGFIR VARCHAR(4000),
-   DPE_DLGFIP VARCHAR(4000)  
+   DPE_DLGFIP VARCHAR(4000)
 );
 
 comment on column ZPE_DOCPER.DPE_DLGEST is
@@ -566,7 +566,7 @@ create table ZPE_EXPEDI  (
    EXP_FECINI           DATE,
    EXP_FECULT           DATE,
    EXP_ESTADO           VARCHAR(2),
-   EXP_AVISOS           VARCHAR(1)  NOT NULL,   
+   EXP_AVISOS           VARCHAR(1)  NOT NULL,
    EXP_AVISMS           VARCHAR(10),
    EXP_AVIEMA           VARCHAR(500),
    EXP_NIFRTE           VARCHAR(12),
@@ -1531,7 +1531,7 @@ comment on column ZPE_REGEXT.REG_NOMRDO is
 alter table ZPE_REGEXT
    add constraint ZPE_REG_PK primary key (REG_CODIGO);
 
-   
+
 create table ZPE_DOCREG  (
    DRE_CODIGO           BIGINT                      not null,
    DRE_CODREG           BIGINT                      not null,
@@ -1564,7 +1564,7 @@ alter table ZPE_DOCREG
    add constraint ZPE_REREG_FK foreign key (DRE_CODREG)
       references ZPE_REGEXT (REG_CODIGO);
 
-      
+
 create table ZPE_REGLOG  (
    RLG_TIPREG           VARCHAR(1)                     not null,
    RLG_NUMREG           VARCHAR(50)                    not null,
@@ -1642,9 +1642,9 @@ comment on column ZPE_DELEGA.DEL_ANULAD is
 
 alter table ZPE_DELEGA
    add constraint ZPE_DEL_PK primary key (DEL_CODIGO);
-   
 
-   
+
+
    create table ZPE_SUBPAR  (
    SBP_CODIGO           VARCHAR(50)                    not null,
    SBP_UNIADM           BIGINT                      not null,
@@ -1710,7 +1710,7 @@ alter table ZPE_RGPEXT
 
 
 
-   
+
 CREATE SEQUENCE ZPE_SEQIND;
 
 create table ZPE_INDELE  (
@@ -1719,7 +1719,7 @@ create table ZPE_INDELE  (
    IND_TIPEL            VARCHAR(1)                     not null,
    IND_CODEL            BIGINT                      not null,
    IND_DESCR            VARCHAR(1000)                  not null,
-   IND_VALOR            VARCHAR(4000)                 
+   IND_VALOR            VARCHAR(4000)
 );
 
 comment on table ZPE_INDELE is
@@ -1745,7 +1745,7 @@ comment on column ZPE_INDELE.IND_VALOR is
 
 alter table ZPE_INDELE
    add constraint ZPE_INDELE_PK primary key (IND_CODIGO);
-   
+
 create index ZPE_INDELE_IDX on ZPE_INDELE (
    IND_NIF ASC
 );
@@ -1787,7 +1787,7 @@ alter table ZPE_ELEEX add ELE_ACCEXP BOOLEAN default false not null;
 
 comment on column ZPE_ELEEX.ELE_ACCEXP is
 'Indica si elemento proporciona acceso a expediente de forma anónima a traves de su id persistencia';
- 
+
 /* ACCESO ANONIMO NOTIF POR CLAVE */
 ALTER table ZPE_NOTTEL ADD NOT_ACCCLA  BOOLEAN default false not null;
 comment on column ZPE_NOTTEL.NOT_ACCCLA is
@@ -1802,11 +1802,11 @@ comment on column ZPE_HISTEX.HIE_ACCCLA is
 alter table ZPE_NOTTEL  add NOT_TIPFIR  VARCHAR(3);
 
 comment on column ZPE_NOTTEL.NOT_TIPFIR is
-'En caso de que se haya firmado el acuse de recibo indica el tipo de firma: 
+'En caso de que se haya firmado el acuse de recibo indica el tipo de firma:
  CER: Certificado digital
  CLA: Clave de acceso';
- 
- 
+
+
  /* ACTUALIZAR PROPS TABLA BACKUP DE TRAMITES */
  ALTER table ZPE_TPEBCK  add  TPB_DLGEST VARCHAR(2);
 
@@ -1814,7 +1814,7 @@ comment on column ZPE_NOTTEL.NOT_TIPFIR is
 'ESTADO DE DELEGACION: PASO A FIRMA DOCUMENTO, PASO A PRESENTACION TRAMITE';
 
  ALTER table ZPE_TPEBCK  add    TPB_DELEGA           VARCHAR(1536);
- 
+
  comment on column ZPE_TPEBCK.TPB_DELEGA is
 'INDICA QUE EL TRAMITE SE ESTA EFECTUANDO DE FORMA DELEGADA PARA ESTE USUARIO (SOLO PARA NIVEL C Y U)';
 
@@ -1839,12 +1839,12 @@ comment on column ZPE_DPEBCK.DPB_DLGFIP is
 'NIFS QUE QUEDAN POR FIRMAR EL DOCUMENTO SEPARADOS POR #';
 
  -- V2.2.7
- 
+
  ALTER TABLE ZPE_TRAPER ADD TPE_ALTGEN VARCHAR(1) default 'N' not null;
 ALTER TABLE ZPE_TRAPER ADD TPE_ALTEMA VARCHAR(500);
 ALTER TABLE ZPE_TRAPER ADD TPE_ALTSMS VARCHAR(10);
 ALTER TABLE ZPE_TRAPER ADD TPE_ALTFEC TIMESTAMP;
-   
+
 comment on column ZPE_TRAPER.TPE_ALTGEN is 'INDICA SI SE GENERAN ALERTAS DE TRAMITACION (S/N)';
 comment on column ZPE_TRAPER.TPE_ALTEMA is 'EMAIL PARA GENERAR ALERTAS';
 comment on column ZPE_TRAPER.TPE_ALTSMS is 'SMS PARA GENERAR ALERTAS';
@@ -1861,7 +1861,7 @@ ALTER table ZPE_TPEBCK ADD TPB_ALTGEN VARCHAR(1) default 'N' not null;
 ALTER TABLE ZPE_TPEBCK ADD TPB_ALTEMA VARCHAR(500);
 ALTER TABLE ZPE_TPEBCK ADD TPB_ALTSMS VARCHAR(10);
 ALTER TABLE ZPE_TPEBCK ADD TPB_ALTFEC TIMESTAMP;
-   
+
 comment on column ZPE_TPEBCK.TPB_ALTGEN is 'INDICA SI SE GENERAN ALERTAS DE TRAMITACION (S/N)';
 comment on column ZPE_TPEBCK.TPB_ALTEMA is 'EMAIL PARA GENERAR ALERTAS';
 comment on column ZPE_TPEBCK.TPB_ALTSMS is 'SMS PARA GENERAR ALERTAS';
@@ -1873,13 +1873,13 @@ ALTER table ZPE_DPEBCK  ADD DPB_PAGTEL VARCHAR(1) default 'N' not null;
 
 comment on column ZPE_DPEBCK.DPB_TIPO is 'TIPO DOCUMENTO: FORMULARIO (F) / PAGO (P) / ANEXO (A)';
 comment on column ZPE_DPEBCK.DPB_PAGTEL is 'EN CASO DE QUE SEA DE TIPO PAGO, INDICA SI ES TELEMATICO (S/N)';
- 
+
 
 ALTER table ZPE_PREREG ADD PRE_ALTGEN VARCHAR(1) default 'N' not null;
 ALTER TABLE ZPE_PREREG ADD PRE_ALTEMA VARCHAR(500);
 ALTER TABLE ZPE_PREREG ADD PRE_ALTSMS VARCHAR(10);
 ALTER TABLE ZPE_PREREG ADD PRE_ALTFEC TIMESTAMP;
-   
+
 comment on column ZPE_PREREG.PRE_ALTGEN is 'INDICA SI SE GENERAN ALERTAS DE TRAMITACION (S/N)';
 comment on column ZPE_PREREG.PRE_ALTEMA is 'EMAIL PARA GENERAR ALERTAS';
 comment on column ZPE_PREREG.PRE_ALTSMS is 'SMS PARA GENERAR ALERTAS';
@@ -1889,7 +1889,7 @@ ALTER table ZPE_PREBCK ADD PRB_ALTGEN VARCHAR(1) default 'N' not null;
 ALTER TABLE ZPE_PREBCK ADD PRB_ALTEMA VARCHAR(500);
 ALTER TABLE ZPE_PREBCK ADD PRB_ALTSMS VARCHAR(10);
 ALTER TABLE ZPE_PREBCK ADD PRB_ALTFEC TIMESTAMP;
-   
+
 comment on column ZPE_PREBCK.PRB_ALTGEN is 'INDICA SI SE GENERAN ALERTAS DE TRAMITACION (S/N)';
 comment on column ZPE_PREBCK.PRB_ALTEMA is 'EMAIL PARA GENERAR ALERTAS';
 comment on column ZPE_PREBCK.PRB_ALTSMS is 'SMS PARA GENERAR ALERTAS';
@@ -1927,3 +1927,13 @@ alter table ZPE_NOTTEL  add  NOT_FECREC DATE;
 
 comment on column ZPE_NOTTEL.NOT_FECREC is
 'Fecha en la que se rechaza la notificacion';
+
+-- V3.1.3
+-- FIN TRAMITE AUTO PARA TRAMITES CON PAGO FINALIZADO
+ALTER table ZPE_TRAPER  ADD TPE_ALTFINA character varying(1) default 'N' not null;
+comment on column ZPE_TRAPER.TPE_ALTFINA is
+'INDICA SI SE INTENTA FINALIZAR TRAMITE ANONIMO CUANDO SE GENERA ALERTA DE TRAMITE INACABADO CON PAGO REALIZADO';
+
+ALTER table ZPE_TPEBCK   ADD TPB_ALTFINA character varying(1) default 'N' not null;
+comment on column ZPE_TPEBCK .TPB_ALTFINA is
+'INDICA SI SE INTENTA FINALIZAR TRAMITE ANONIMO CUANDO SE GENERA ALERTA DE TRAMITE INACABADO CON PAGO REALIZADO';

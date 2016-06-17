@@ -55,6 +55,14 @@ public class SistraDelegate implements StatelessDelegate {
         }
     }
 
+	public boolean finalizarTramitePagadoAnonimo( String idPersistencia )  throws DelegateException {
+        try {
+            return getFacade().finalizarTramitePagadoAnonimo(idPersistencia);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

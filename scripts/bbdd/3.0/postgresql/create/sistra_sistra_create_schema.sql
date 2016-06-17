@@ -7,7 +7,7 @@
 --
 -- TOC entry 156 (class 1259 OID 188764)
 -- Dependencies: 3
--- Name: str_datjus; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_datjus; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_datjus (
@@ -98,7 +98,7 @@ COMMENT ON COLUMN str_datjus.djs_visible IS 'Permite configurar si el elemento s
 --
 -- TOC entry 157 (class 1259 OID 188772)
 -- Dependencies: 3
--- Name: str_dmunic; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_dmunic; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_dmunic (
@@ -140,7 +140,7 @@ COMMENT ON COLUMN str_dmunic.mun_denofi IS 'Denominacion Oficial';
 --
 -- TOC entry 158 (class 1259 OID 188778)
 -- Dependencies: 1928 1929 1930 3
--- Name: str_docniv; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_docniv; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_docniv (
@@ -372,7 +372,7 @@ COMMENT ON COLUMN str_docniv.dnv_pagplg IS 'Para Pagos: indica si se usa un plug
 --
 -- TOC entry 159 (class 1259 OID 188790)
 -- Dependencies: 1931 1932 1933 3
--- Name: str_docum; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_docum; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_docum (
@@ -584,7 +584,7 @@ COMMENT ON COLUMN str_docum.doc_foraju IS 'Para Formulario: se indica si el form
 --
 -- TOC entry 160 (class 1259 OID 188803)
 -- Dependencies: 1934 1935 3
--- Name: str_domin; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_domin; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_domin (
@@ -650,7 +650,7 @@ COMMENT ON COLUMN str_domin.dom_tipo IS 'Tipo de dominio: Sql (S) / Ejb (E) / We
 -- Name: COLUMN str_domin.dom_url; Type: COMMENT; Schema: public; Owner: sistra
 --
 
-COMMENT ON COLUMN str_domin.dom_url IS 'Indica según tipo de dominio: 
+COMMENT ON COLUMN str_domin.dom_url IS 'Indica según tipo de dominio:
 - Ejb: JNDI ejb que resuelve dominio
 - Sql: JNDI datasource origen de datos
 - Webservice: Url webservice';
@@ -691,7 +691,7 @@ COMMENT ON COLUMN str_domin.dom_ejbrem IS 'Para tipo dominio Ejb indica si el ej
 
 COMMENT ON COLUMN str_domin.dom_ejbstd IS 'Para tipo dominio Ejb/Ws indica si se debe realizar:
  - N: autenticación implícita de forma que el contenedor EJBs traspasa autenticacion
- - S: explícita a traves de usuario/password 
+ - S: explícita a traves de usuario/password
  - C: explícita a través plugin autenticación del organismo';
 
 
@@ -752,7 +752,7 @@ COMMENT ON COLUMN str_domin.dom_wssoa IS 'WS: Soap action';
 --
 -- TOC entry 161 (class 1259 OID 188815)
 -- Dependencies: 3
--- Name: str_dpais; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_dpais; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_dpais (
@@ -770,7 +770,7 @@ CREATE TABLE str_dpais (
 --
 -- TOC entry 162 (class 1259 OID 188820)
 -- Dependencies: 3
--- Name: str_dprovi; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_dprovi; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_dprovi (
@@ -786,7 +786,7 @@ CREATE TABLE str_dprovi (
 --
 -- TOC entry 163 (class 1259 OID 188825)
 -- Dependencies: 1936 1937 1938 1939 1940 1941 1942 1943 3
--- Name: str_espniv; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_espniv; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_espniv (
@@ -1038,7 +1038,7 @@ COMMENT ON COLUMN str_espniv.etn_alesms IS 'Indica si se permiten sms en los avi
 --
 -- TOC entry 164 (class 1259 OID 188837)
 -- Dependencies: 3
--- Name: str_gesfrm; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_gesfrm; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_gesfrm (
@@ -1109,7 +1109,7 @@ COMMENT ON COLUMN str_gesfrm.gsf_urlred IS 'URL REDIRECCION FORMULARIO (PUEDE CO
 --
 -- TOC entry 184 (class 1259 OID 189122)
 -- Dependencies: 3
--- Name: str_grptra; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_grptra; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_grptra (
@@ -1150,7 +1150,7 @@ COMMENT ON COLUMN str_grptra.grt_codtra IS 'CODIGO TRAMITE';
 --
 -- TOC entry 183 (class 1259 OID 189112)
 -- Dependencies: 3
--- Name: str_grpusu; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_grpusu; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_grpusu (
@@ -1191,7 +1191,7 @@ COMMENT ON COLUMN str_grpusu.gru_codusu IS 'CODIGO USUARIO';
 --
 -- TOC entry 182 (class 1259 OID 189107)
 -- Dependencies: 3
--- Name: str_grupos; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_grupos; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_grupos (
@@ -1242,7 +1242,7 @@ COMMENT ON COLUMN str_grupos.grp_descp IS 'Descripción grupo';
 --
 -- TOC entry 165 (class 1259 OID 188845)
 -- Dependencies: 3
--- Name: str_idioma; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_idioma; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_idioma (
@@ -1265,7 +1265,7 @@ COMMENT ON TABLE str_idioma IS 'Tabla de idiomas';
 --
 -- TOC entry 166 (class 1259 OID 188850)
 -- Dependencies: 3
--- Name: str_impfic; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_impfic; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_impfic (
@@ -1336,7 +1336,7 @@ COMMENT ON COLUMN str_impfic.imf_xml IS 'XML';
 --
 -- TOC entry 167 (class 1259 OID 188858)
 -- Dependencies: 3
--- Name: str_import; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_import; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_import (
@@ -1451,7 +1451,7 @@ COMMENT ON COLUMN str_import.imp_fecenv IS 'Fecha de envio a auditoria por parte
 --
 -- TOC entry 168 (class 1259 OID 188866)
 -- Dependencies: 1944 3
--- Name: str_menpla; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_menpla; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_menpla (
@@ -1509,7 +1509,7 @@ COMMENT ON COLUMN str_menpla.mpl_activo IS 'INDICA SI EL MENSAJE ESTA ACTIVADO';
 --
 -- TOC entry 169 (class 1259 OID 188872)
 -- Dependencies: 3
--- Name: str_mentra; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_mentra; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_mentra (
@@ -1560,7 +1560,7 @@ COMMENT ON COLUMN str_mentra.mtr_identi IS 'Código funcional mensaje';
 --
 -- TOC entry 170 (class 1259 OID 188879)
 -- Dependencies: 3
--- Name: str_orgres; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_orgres; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_orgres (
@@ -1839,7 +1839,7 @@ CREATE SEQUENCE str_seqtrv
 --
 -- TOC entry 171 (class 1259 OID 188884)
 -- Dependencies: 3
--- Name: str_tradjs; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_tradjs; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_tradjs (
@@ -1890,7 +1890,7 @@ COMMENT ON COLUMN str_tradjs.tdj_desc IS 'Descripción campo/bloque';
 --
 -- TOC entry 172 (class 1259 OID 188889)
 -- Dependencies: 3
--- Name: str_tradnv; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_tradnv; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_tradnv (
@@ -1941,7 +1941,7 @@ COMMENT ON COLUMN str_tradnv.tdn_info IS 'Información documento. Puede sobreesc
 --
 -- TOC entry 173 (class 1259 OID 188897)
 -- Dependencies: 3
--- Name: str_tradoc; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_tradoc; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_tradoc (
@@ -2002,7 +2002,7 @@ COMMENT ON COLUMN str_tradoc.trd_info IS 'Información documento. Puede sobreesc
 --
 -- TOC entry 174 (class 1259 OID 188905)
 -- Dependencies: 3
--- Name: str_traetn; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_traetn; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_traetn (
@@ -2093,7 +2093,7 @@ COMMENT ON COLUMN str_traetn.tet_feclim IS 'Mensaje de fecha limite particulariz
 --
 -- TOC entry 175 (class 1259 OID 188913)
 -- Dependencies: 3
--- Name: str_tramit; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_tramit; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_tramit (
@@ -2136,7 +2136,7 @@ COMMENT ON COLUMN str_tramit.tra_idproc IS 'Identificador del procedimiento al q
 --
 -- TOC entry 176 (class 1259 OID 188920)
 -- Dependencies: 3
--- Name: str_trampl; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_trampl; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_trampl (
@@ -2187,7 +2187,7 @@ COMMENT ON COLUMN str_trampl.tmp_desc IS 'Descripción mensaje';
 --
 -- TOC entry 177 (class 1259 OID 188928)
 -- Dependencies: 3
--- Name: str_tramtr; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_tramtr; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_tramtr (
@@ -2238,7 +2238,7 @@ COMMENT ON COLUMN str_tramtr.tmt_desc IS 'Mensaje';
 --
 -- TOC entry 178 (class 1259 OID 188936)
 -- Dependencies: 3
--- Name: str_traniv; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_traniv; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_traniv (
@@ -2299,7 +2299,7 @@ COMMENT ON COLUMN str_traniv.tnv_codetn IS 'Especificaciones trámite que pueden
 --
 -- TOC entry 179 (class 1259 OID 188943)
 -- Dependencies: 3
--- Name: str_tratra; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_tratra; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_tratra (
@@ -2350,7 +2350,7 @@ COMMENT ON COLUMN str_tratra.ttr_desc IS 'Descripción del trámite';
 --
 -- TOC entry 180 (class 1259 OID 188948)
 -- Dependencies: 1945 1946 1947 1948 1949 1950 1951 1952 1953 1954 3
--- Name: str_traver; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_traver; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_traver (
@@ -2563,7 +2563,7 @@ COMMENT ON COLUMN str_traver.trv_conurl IS 'Para trámite con destino Consulta s
 
 COMMENT ON COLUMN str_traver.trv_conaut IS 'Para trámite con destino Consulta indica si se debe realizar:
  - N: autenticación implícita de forma que el contenedor EJBs traspasa autenticacion
- - S: explícita a traves de usuario/password 
+ - S: explícita a traves de usuario/password
  - C: explícita a través plugin autenticación del organismo';
 
 
@@ -2654,7 +2654,7 @@ COMMENT ON COLUMN str_traver.trv_feccar IS 'Fecha en la que se ha exportado (al 
 -- Name: COLUMN str_traver.trv_anodef; Type: COMMENT; Schema: public; Owner: sistra
 --
 
-COMMENT ON COLUMN str_traver.trv_anodef IS 'Autenticacion anonima por defecto: Si esta activado y en caso de que este seleccionado A y existan otros niveles de autenticacion (C o U)  en el tramite, 
+COMMENT ON COLUMN str_traver.trv_anodef IS 'Autenticacion anonima por defecto: Si esta activado y en caso de que este seleccionado A y existan otros niveles de autenticacion (C o U)  en el tramite,
 si se accede al tramite sin estar autenticado se realizara una autenticacion anonima automatica. Si se esta autenticado se respetara la autenticacion actual
 (siempre que este permitida en el tramite)';
 
@@ -2671,7 +2671,7 @@ COMMENT ON COLUMN str_traver.trv_regaut IS 'Registro automatico: al llegar al pa
 --
 -- TOC entry 181 (class 1259 OID 189097)
 -- Dependencies: 3
--- Name: str_usutra; Type: TABLE; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_usutra; Type: TABLE; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE TABLE str_usutra (
@@ -2712,7 +2712,7 @@ COMMENT ON COLUMN str_usutra.ust_codtra IS 'CODIGO TRAMITE';
 --
 -- TOC entry 1956 (class 2606 OID 188771)
 -- Dependencies: 156 156
--- Name: str_djs_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_djs_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_datjus
@@ -2722,7 +2722,7 @@ ALTER TABLE ONLY str_datjus
 --
 -- TOC entry 1961 (class 2606 OID 188789)
 -- Dependencies: 158 158
--- Name: str_dnv_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_dnv_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_docniv
@@ -2732,7 +2732,7 @@ ALTER TABLE ONLY str_docniv
 --
 -- TOC entry 1963 (class 2606 OID 188787)
 -- Dependencies: 158 158 158
--- Name: str_dnvniv_uni; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_dnvniv_uni; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_docniv
@@ -2742,7 +2742,7 @@ ALTER TABLE ONLY str_docniv
 --
 -- TOC entry 1965 (class 2606 OID 188802)
 -- Dependencies: 159 159
--- Name: str_doc_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_doc_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_docum
@@ -2752,7 +2752,7 @@ ALTER TABLE ONLY str_docum
 --
 -- TOC entry 1967 (class 2606 OID 188800)
 -- Dependencies: 159 159 159
--- Name: str_docide_uni; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_docide_uni; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_docum
@@ -2762,7 +2762,7 @@ ALTER TABLE ONLY str_docum
 --
 -- TOC entry 1969 (class 2606 OID 188814)
 -- Dependencies: 160 160
--- Name: str_dom_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_dom_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_domin
@@ -2772,7 +2772,7 @@ ALTER TABLE ONLY str_domin
 --
 -- TOC entry 1971 (class 2606 OID 188812)
 -- Dependencies: 160 160
--- Name: str_domide_uni; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_domide_uni; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_domin
@@ -2782,7 +2782,7 @@ ALTER TABLE ONLY str_domin
 --
 -- TOC entry 1977 (class 2606 OID 188836)
 -- Dependencies: 163 163
--- Name: str_etn_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_etn_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_espniv
@@ -2792,7 +2792,7 @@ ALTER TABLE ONLY str_espniv
 --
 -- TOC entry 2023 (class 2606 OID 189111)
 -- Dependencies: 182 182
--- Name: str_grp_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_grp_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_grupos
@@ -2802,7 +2802,7 @@ ALTER TABLE ONLY str_grupos
 --
 -- TOC entry 2027 (class 2606 OID 189126)
 -- Dependencies: 184 184 184
--- Name: str_grt_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_grt_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_grptra
@@ -2812,7 +2812,7 @@ ALTER TABLE ONLY str_grptra
 --
 -- TOC entry 2025 (class 2606 OID 189116)
 -- Dependencies: 183 183 183
--- Name: str_gru_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_gru_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_grpusu
@@ -2822,7 +2822,7 @@ ALTER TABLE ONLY str_grpusu
 --
 -- TOC entry 1979 (class 2606 OID 188844)
 -- Dependencies: 164 164
--- Name: str_gsf_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_gsf_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_gesfrm
@@ -2832,7 +2832,7 @@ ALTER TABLE ONLY str_gesfrm
 --
 -- TOC entry 1981 (class 2606 OID 188849)
 -- Dependencies: 165 165
--- Name: str_idi_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_idi_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_idioma
@@ -2842,7 +2842,7 @@ ALTER TABLE ONLY str_idioma
 --
 -- TOC entry 1983 (class 2606 OID 188857)
 -- Dependencies: 166 166
--- Name: str_imf_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_imf_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_impfic
@@ -2852,7 +2852,7 @@ ALTER TABLE ONLY str_impfic
 --
 -- TOC entry 1985 (class 2606 OID 188865)
 -- Dependencies: 167 167
--- Name: str_imp_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_imp_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_import
@@ -2862,7 +2862,7 @@ ALTER TABLE ONLY str_import
 --
 -- TOC entry 1987 (class 2606 OID 188871)
 -- Dependencies: 168 168
--- Name: str_menpla_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_menpla_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_menpla
@@ -2872,7 +2872,7 @@ ALTER TABLE ONLY str_menpla
 --
 -- TOC entry 1989 (class 2606 OID 188878)
 -- Dependencies: 169 169
--- Name: str_mtr_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_mtr_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_mentra
@@ -2882,7 +2882,7 @@ ALTER TABLE ONLY str_mentra
 --
 -- TOC entry 1991 (class 2606 OID 188876)
 -- Dependencies: 169 169 169
--- Name: str_mtride_uni; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_mtride_uni; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_mentra
@@ -2892,7 +2892,7 @@ ALTER TABLE ONLY str_mentra
 --
 -- TOC entry 1958 (class 2606 OID 188776)
 -- Dependencies: 157 157 157
--- Name: str_mun_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_mun_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_dmunic
@@ -2902,7 +2902,7 @@ ALTER TABLE ONLY str_dmunic
 --
 -- TOC entry 1993 (class 2606 OID 188883)
 -- Dependencies: 170 170
--- Name: str_org_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_org_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_orgres
@@ -2912,7 +2912,7 @@ ALTER TABLE ONLY str_orgres
 --
 -- TOC entry 1973 (class 2606 OID 188819)
 -- Dependencies: 161 161
--- Name: str_pai_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_pai_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_dpais
@@ -2922,7 +2922,7 @@ ALTER TABLE ONLY str_dpais
 --
 -- TOC entry 1975 (class 2606 OID 188824)
 -- Dependencies: 162 162
--- Name: str_pro_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_pro_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_dprovi
@@ -2932,7 +2932,7 @@ ALTER TABLE ONLY str_dprovi
 --
 -- TOC entry 1995 (class 2606 OID 188888)
 -- Dependencies: 171 171 171
--- Name: str_tdj_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_tdj_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_tradjs
@@ -2942,7 +2942,7 @@ ALTER TABLE ONLY str_tradjs
 --
 -- TOC entry 1997 (class 2606 OID 188896)
 -- Dependencies: 172 172 172
--- Name: str_tdn_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_tdn_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_tradnv
@@ -2952,7 +2952,7 @@ ALTER TABLE ONLY str_tradnv
 --
 -- TOC entry 2001 (class 2606 OID 188912)
 -- Dependencies: 174 174 174
--- Name: str_tet_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_tet_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_traetn
@@ -2962,7 +2962,7 @@ ALTER TABLE ONLY str_traetn
 --
 -- TOC entry 2009 (class 2606 OID 188935)
 -- Dependencies: 177 177 177
--- Name: str_tmt_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_tmt_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_tramtr
@@ -2972,7 +2972,7 @@ ALTER TABLE ONLY str_tramtr
 --
 -- TOC entry 2011 (class 2606 OID 188942)
 -- Dependencies: 178 178
--- Name: str_tnv_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_tnv_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_traniv
@@ -2982,7 +2982,7 @@ ALTER TABLE ONLY str_traniv
 --
 -- TOC entry 2013 (class 2606 OID 188940)
 -- Dependencies: 178 178 178
--- Name: str_tnvniv_uni; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_tnvniv_uni; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_traniv
@@ -2992,7 +2992,7 @@ ALTER TABLE ONLY str_traniv
 --
 -- TOC entry 2003 (class 2606 OID 188919)
 -- Dependencies: 175 175
--- Name: str_tra_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_tra_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_tramit
@@ -3002,7 +3002,7 @@ ALTER TABLE ONLY str_tramit
 --
 -- TOC entry 2005 (class 2606 OID 188917)
 -- Dependencies: 175 175
--- Name: str_traide_uni; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_traide_uni; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_tramit
@@ -3012,7 +3012,7 @@ ALTER TABLE ONLY str_tramit
 --
 -- TOC entry 2007 (class 2606 OID 188927)
 -- Dependencies: 176 176 176
--- Name: str_trampl_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_trampl_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_trampl
@@ -3022,7 +3022,7 @@ ALTER TABLE ONLY str_trampl
 --
 -- TOC entry 1999 (class 2606 OID 188904)
 -- Dependencies: 173 173 173
--- Name: str_trd_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_trd_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_tradoc
@@ -3032,7 +3032,7 @@ ALTER TABLE ONLY str_tradoc
 --
 -- TOC entry 2017 (class 2606 OID 188966)
 -- Dependencies: 180 180
--- Name: str_trv_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_trv_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_traver
@@ -3042,7 +3042,7 @@ ALTER TABLE ONLY str_traver
 --
 -- TOC entry 2019 (class 2606 OID 188964)
 -- Dependencies: 180 180 180
--- Name: str_trvver_uni; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_trvver_uni; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_traver
@@ -3052,7 +3052,7 @@ ALTER TABLE ONLY str_traver
 --
 -- TOC entry 2015 (class 2606 OID 188947)
 -- Dependencies: 179 179 179
--- Name: str_ttr_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_ttr_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_tratra
@@ -3062,7 +3062,7 @@ ALTER TABLE ONLY str_tratra
 --
 -- TOC entry 2021 (class 2606 OID 189101)
 -- Dependencies: 181 181 181
--- Name: str_ust_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_ust_pk; Type: CONSTRAINT; Schema: public; Owner: sistra; Tablespace:
 --
 
 ALTER TABLE ONLY str_usutra
@@ -3072,7 +3072,7 @@ ALTER TABLE ONLY str_usutra
 --
 -- TOC entry 1959 (class 1259 OID 188777)
 -- Dependencies: 157
--- Name: str_munpro_idx; Type: INDEX; Schema: public; Owner: sistra; Tablespace: 
+-- Name: str_munpro_idx; Type: INDEX; Schema: public; Owner: sistra; Tablespace:
 --
 
 CREATE INDEX str_munpro_idx ON str_dmunic USING btree (mun_provin);
@@ -3406,4 +3406,15 @@ comment on column STR_ESPNIV.ETN_RTEDAT is
 'Datos desglosados representante (nif, nombre, direccion, email,...)';
 comment on column STR_ESPNIV.ETN_RDODAT is
 'Datos desglosados representado (nif, nombre, direccion, email,...)';
+
+-- V3.1.3
+-- SISTRA: DEBUG POR TRAMITE
+alter table STR_TRAVER  add  TRV_DEBUG      character varying(1)                    default 'N' not null;
+comment on column STR_TRAVER.TRV_DEBUG is 'Indica si el debug esta habilitado';
+
+-- SISTRA: FIN TRAMITE AUTO PARA TRAMITES CON PAGO FINALIZADO
+alter table STR_ESPNIV  add ETN_ALEFIN  character varying(1) default 'N' not null;
+comment on column STR_ESPNIV.ETN_ALEFIN is
+'Indica si se intenta finalizar autom�ticamente el tr�mite antes de realizar la alerta de tr�mites inacabados con pago realizado';
+
 

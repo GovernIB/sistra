@@ -1,5 +1,7 @@
 package es.caib.zonaper.persistence.ejb;
 
+import java.rmi.RemoteException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,6 +14,7 @@ import java.util.Properties;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 import javax.ejb.SessionBean;
+import javax.ejb.SessionContext;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
@@ -30,7 +33,10 @@ import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
+import es.caib.sistra.persistence.delegate.DelegateSISTRAUtil;
+import es.caib.sistra.persistence.delegate.SistraDelegate;
 import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.login.ConstantesLogin;
 import es.caib.sistra.plugins.pagos.ConstantesPago;
 import es.caib.sistra.plugins.pagos.EstadoSesionPago;
 import es.caib.sistra.plugins.pagos.PluginPagosIntf;
@@ -87,6 +93,14 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 	private static Log backupLog = LogFactory.getLog( ProcesosAutoFacadeEJB.class );
 	private String cuentaSistra;
 	private String avisosGestorHabilitado;
+
+	private SessionContext context = null;
+
+	public void setSessionContext(SessionContext ctx)
+			throws EJBException,
+			RemoteException {
+					context = ctx;
+		}
 
 	/**
      * @ejb.create-method
@@ -413,15 +427,9 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 	{
 		backupLog.debug("Alertas tramitacion");
 
-		LoginContext lc = null;
+		Principal p = this.context.getCallerPrincipal();
+
 		try{
-			// Realizamos login JAAS con usuario para proceso automatico
-			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
-			String user = props.getProperty("auto.user");
-			String pass = props.getProperty("auto.pass");
-			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass );
-			lc = new LoginContext("client-login", handler);
-			lc.login();
 
 			// Realizamos alertas tramitacion pago telematico finalizado sin finalizar tramite
 			realizarAlertasTramitacionPagoFinalizado();
@@ -431,12 +439,9 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 
 		}catch (Exception le){
 			throw new EJBException("Excepcion al ejecutar proceso",le);
-		}finally{
-			// Hacemos el logout
-			if ( lc != null ){
-				try{lc.logout();}catch(Exception exl){}
-			}
 		}
+
+
 	}
 
 		/**
@@ -626,176 +631,334 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 
 
 	private void realizarAlertasTramitacionPreregistroSinConfirmar() throws Exception{
-		// Recuperamos preregistros pendientes de avisar
-		EntradaPreregistroDelegate delegate = DelegateUtil.getEntradaPreregistroDelegate();
-		List preregistros = delegate.obtenerTramitesPendienteAvisoPreregistroSinConfirmar();
-		MobTraTelDelegate mob = DelegateMobTraTelUtil.getMobTraTelDelegate();
 
-		// Generamos aviso para los tramites
-		for (Iterator it = preregistros.iterator(); it.hasNext();) {
-			EntradaPreregistro preregistro = (EntradaPreregistro) it.next();
-			if (StringUtils.isBlank(preregistro.getAlertasTramitacionEmail()) &&
-					StringUtils.isBlank(preregistro.getAlertasTramitacionSms())) {
+		LoginContext lc = null;
+		try{
+			// Realizamos login JAAS con usuario para proceso automatico
+			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+			String user = props.getProperty("auto.user");
+			String pass = props.getProperty("auto.pass");
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass );
+			lc = new LoginContext("client-login", handler);
+			lc.login();
+
+			// Recuperamos preregistros pendientes de avisar
+			EntradaPreregistroDelegate delegate = DelegateUtil.getEntradaPreregistroDelegate();
+			List preregistros = delegate.obtenerTramitesPendienteAvisoPreregistroSinConfirmar();
+			MobTraTelDelegate mob = DelegateMobTraTelUtil.getMobTraTelDelegate();
+
+			// Generamos aviso para los tramites
+			for (Iterator it = preregistros.iterator(); it.hasNext();) {
+				EntradaPreregistro preregistro = (EntradaPreregistro) it.next();
+				if (StringUtils.isBlank(preregistro.getAlertasTramitacionEmail()) &&
+						StringUtils.isBlank(preregistro.getAlertasTramitacionSms())) {
+					continue;
+				}
+
+				try {
+					// Generamos aviso a traves de mobtratel
+					AvisoAlertasTramitacion.getInstance().avisarPreregistroPendiente(preregistro);
+					// Marcamos como avisado
+					delegate.avisoPreregistroSinConfirmar(preregistro.getIdPersistencia());
+				} catch (Exception exc) {
+					// Mostramos error en log y continuamos con siguiente tramite
+					backupLog.error("Error realizando alerta de tramitacion", exc);
+				}
+			}
+
+		}finally{
+			// Hacemos el logout
+			if ( lc != null ){
+				try{lc.logout();}catch(Exception exl){}
+			}
+		}
+
+	}
+
+
+	private void realizarAlertasTramitacionPagoFinalizado() throws Exception {
+
+		// Obtenemos tramites pagados pendientes finalizar
+		Map tramitesPagadosPendientesFinalizar = obtenerTramitesPagadosPendienteFinalizar();
+
+		// Intentamos finalizar los marcados para finalizar automaticamente
+		List tramsFinalizados = finalizarTramitesAnonimosAutomaticamente(tramitesPagadosPendientesFinalizar);
+
+		// Realiza avisos a ciudadano y a gestor
+		realizarAvisos(tramitesPagadosPendientesFinalizar, tramsFinalizados);
+
+
+	}
+
+	private void realizarAvisos(Map tramitesPagadosPendientesFinalizar,
+			List tramsFinalizados)  throws Exception {
+
+		if (tramitesPagadosPendientesFinalizar.size() == 0) {
+			return;
+		}
+
+		LoginContext lc = null;
+		try {
+			// Realizamos login JAAS con usuario para proceso automatico
+			Properties props = DelegateUtil.getConfiguracionDelegate()
+					.obtenerConfiguracion();
+			String user = props.getProperty("auto.user");
+			String pass = props.getProperty("auto.pass");
+			CallbackHandler handler = new UsernamePasswordCallbackHandler(user,
+					pass);
+			lc = new LoginContext("client-login", handler);
+			lc.login();
+
+			// Realizamos envio a los ciudadanos
+			List tramitesAvisados = realizarAvisosCiudadanos(tramitesPagadosPendientesFinalizar, tramsFinalizados);
+
+			// Realizar avisos gestores
+			realizarAvisosGestores(tramitesPagadosPendientesFinalizar, tramsFinalizados, tramitesAvisados);
+
+		} finally {
+			// Hacemos el logout
+			if (lc != null) {
+				try {
+					lc.logout();
+				} catch (Exception exl) {
+				}
+			}
+		}
+
+	}
+
+	private void realizarAvisosGestores(Map tramitesPagadosPendientesFinalizar,
+			List tramsFinalizados, List tramitesAvisados) throws Exception {
+
+		// Verificamos si esta habilitado el aviso a gestores
+		if (!isAvisosGestorHabilitado()) {
+			return;
+		}
+
+		// Obtenemos procedimientos asociados a los tramites parar obtener mail gestores
+		Map procedimientosInfo = new HashMap();
+		Map procedimientosTramite = new HashMap();
+		for (Iterator it = tramitesPagadosPendientesFinalizar.keySet().iterator(); it.hasNext();) {
+			TramitePersistente tp = (TramitePersistente) tramitesPagadosPendientesFinalizar.get(it.next());
+			// Añadimos info procedimiento
+			if (!procedimientosInfo.containsKey(tp.getIdProcedimiento())) {
+				ProcedimientoBTE proc = es.caib.bantel.persistence.delegate.DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(tp.getIdProcedimiento());
+				procedimientosInfo.put(tp.getIdProcedimiento(), proc);
+				procedimientosTramite.put(tp.getIdProcedimiento(), new ArrayList());
+			}
+			// Añadimos tramite al procedimiento
+			((List) procedimientosTramite.get(tp.getIdProcedimiento())).add(tp);
+		}
+
+
+		// Realizamos avisos a gestores por procedimiento
+		MobTraTelDelegate mob = DelegateMobTraTelUtil.getMobTraTelDelegate();
+		PadDelegate padDelegate = DelegatePADUtil.getPadDelegate();
+
+		boolean enviadoAvisoCiudadano = false;
+		boolean finalizadoAutomaticamente = false;
+
+		for (Iterator it = procedimientosInfo.keySet().iterator(); it.hasNext();) {
+			String idProc = (String) it.next();
+			ProcedimientoBTE proc = (ProcedimientoBTE) procedimientosInfo.get(idProc);
+			List trams = (List) procedimientosTramite.get(idProc);
+
+			if (proc.getEmailGestores().size() <= 0) {
 				continue;
 			}
 
+			String textoEmail = StringEscapeUtils.escapeHtml("Trámites pendientes de finalizar con pagos realizados:") + "</br>";
+			textoEmail += "<ul>";
+			for (Iterator itTram = trams.iterator(); itTram.hasNext();){
+				TramitePersistente tram = (TramitePersistente) itTram.next();
+
+				enviadoAvisoCiudadano = tramitesAvisados.contains(tram.getCodigo());
+				finalizadoAutomaticamente = tramsFinalizados.contains(tram.getCodigo());
+
+				textoEmail += "<li>";
+				if (tram.getNivelAutenticacion() == 'A') {
+					textoEmail += StringEscapeUtils.escapeHtml("Acceso anónimo - Identificador trámite: " + tram.getIdPersistencia());
+				} else {
+					PersonaPAD pers = padDelegate.obtenerDatosPersonaPADporUsuario(tram.getUsuario());
+					String nomPers = "";
+					if (pers != null) {
+						nomPers = pers.getNif() + " - " + pers.getNombreCompleto() ;
+					} else {
+						nomPers = tram.getUsuario() ;
+					}
+					textoEmail += StringEscapeUtils.escapeHtml("Acceso autenticado (" + nomPers + ") - Identificador trámite: " + tram.getIdPersistencia());
+				}
+
+				if (enviadoAvisoCiudadano) {
+					textoEmail += StringEscapeUtils.escapeHtml(" (avisado a ciudadano)");
+				}
+				if (finalizadoAutomaticamente) {
+					textoEmail += StringEscapeUtils.escapeHtml(" (finalizado automáticamente)");
+				}
+
+				textoEmail += "</li>";
+			}
+			textoEmail += "</ul>";
+
+			MensajeEnvioEmail mensEmail = new MensajeEnvioEmail();
+			String[] dest = new String[proc.getEmailGestores().size()];
+			for (int i=0;i<proc.getEmailGestores().size();i++) {
+				dest[i] = (String) proc.getEmailGestores().get(i);
+			}
+			mensEmail.setDestinatarios(dest);
+			mensEmail.setTitulo(proc.getDescripcion() + ": existen trámites pendientes de finalizar con pagos realizados");
+			mensEmail.setHtml(true);
+			mensEmail.setTexto(textoEmail);
+
+			MensajeEnvio mens = new MensajeEnvio();
+			mens.setNombre("Aviso trámite pendiente y pago realizado (" + proc.getIdentificador() + ")");
+			mens.setCuentaEmisora(getCuentaSistra());
+			mens.setInmediato(true);
+			mens.addEmail(mensEmail);
 			try {
-				// Generamos aviso a traves de mobtratel
-				AvisoAlertasTramitacion.getInstance().avisarPreregistroPendiente(preregistro);
-				// Marcamos como avisado
-				delegate.avisoPreregistroSinConfirmar(preregistro.getIdPersistencia());
+				mob.envioMensaje(mens );
 			} catch (Exception exc) {
 				// Mostramos error en log y continuamos con siguiente tramite
 				backupLog.error("Error realizando alerta de tramitacion", exc);
 			}
 		}
+
 	}
 
+	private List realizarAvisosCiudadanos(
+			Map tramitesPagadosPendientesFinalizar, List tramsFinalizados) throws Exception {
 
-	private void realizarAlertasTramitacionPagoFinalizado() throws Exception {
-		// Recuperamos tramites pendientes de avisar
+		List tramitesAvisados = new ArrayList();
 		TramitePersistenteDelegate delegate = DelegateUtil.getTramitePersistenteDelegate();
-		List tramites = delegate.obtenerTramitesPendienteAvisoPagoTelematicoFinalizado();
 
-		List procedimientosAvisar = new ArrayList();
-		Map procedimientosInfo = new HashMap();
-		Map procedimientosTramite = new HashMap();
-		List avisosCiudadanoTramite = new ArrayList();
-		boolean avisarGestor = false;
-		boolean avisarCiudadano = false;
+		for (Iterator it = tramitesPagadosPendientesFinalizar.keySet().iterator(); it.hasNext();) {
 
-		// Generamos aviso para los tramites
-		for (Iterator it = tramites.iterator(); it.hasNext();) {
+			TramitePersistente tramite = (TramitePersistente) tramitesPagadosPendientesFinalizar.get(it.next());
 
-			TramitePersistente tramite = (TramitePersistente) it.next();
+			// Comprobamos si se ha finalizado automaticamente
+			if (tramsFinalizados.contains(tramite.getCodigo())) {
+				continue;
+			}
 
 			// Verificamos si tiene activada las alertas
-			avisarCiudadano =  StringUtils.isNotBlank(tramite.getAlertasTramitacionEmail()) || StringUtils.isNotBlank(tramite.getAlertasTramitacionSms());
+			boolean avisarCiudadano =  StringUtils.isNotBlank(tramite.getAlertasTramitacionEmail()) || StringUtils.isNotBlank(tramite.getAlertasTramitacionSms());
 
-			// Obtenemos mails gestores
-			if (!procedimientosInfo.containsKey(tramite.getIdProcedimiento())) {
-				ProcedimientoBTE proc = es.caib.bantel.persistence.delegate.DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(tramite.getIdProcedimiento());
-				procedimientosInfo.put(tramite.getIdProcedimiento(), proc);
-				procedimientosTramite.put(tramite.getIdProcedimiento(), new ArrayList());
-			}
-
-			// Verificamos si tiene un pago telematico realizado
-			boolean avisar = false;
-			for (Iterator it2 = tramite.getDocumentos().iterator(); it2.hasNext();) {
-				DocumentoPersistente dp = (DocumentoPersistente) it2.next();
-				if (DocumentoPersistentePAD.TIPO_PAGO.equals(dp.getTipoDocumento())) {
-					// Si esta pagado, hay que avisar
-					if (dp.getEstado() == DocumentoPersistentePAD.ESTADO_CORRECTO  && "S".equals(dp.getEsPagoTelematico())) {
-						avisar = true;
-					}
-					// Si esta iniciado, hay que verificar si esta pagado
-					if (dp.getEstado() == DocumentoPersistentePAD.ESTADO_INCORRECTO) {
-						avisar = isPagoTelematicoPendienteConfirmado(dp);
-					}
-					// Si hay que avisar, no seguimos mirando
-					if (avisar) {
-						break;
-					}
-				}
-			}
-
-			if (avisar) {
-				// Al menos hay un tramite para avisar, asi que indicamos que tras los avisos al ciudadano hay que avisar al gestor
-				avisarGestor = true;
-
-				if (!procedimientosAvisar.contains(tramite.getIdProcedimiento())) {
-					procedimientosAvisar.add(tramite.getIdProcedimiento());
-				}
-				((List) procedimientosTramite.get(tramite.getIdProcedimiento())).add(tramite);
-
-				// Generamos aviso al ciudadano
-				if (avisarCiudadano) {
-					try {
-						// Generamos aviso a traves de mobtratel
-						AvisoAlertasTramitacion.getInstance().avisarPagoRealizadoTramitePendiente(tramite);
-						// Marcamos como avisado
-						delegate.avisoPagoTelematicoFinalizado(tramite.getIdPersistencia());
-						// Añadimos a lista de tramites avisados a ciudadano
-						avisosCiudadanoTramite.add(tramite.getCodigo());
-					} catch (Exception exc) {
-						// Mostramos error en log y continuamos con siguiente tramite
-						backupLog.error("Error realizando alerta de tramitacion", exc);
-					}
-				}
-
-			}
-		}
-
-		// Aviso al gestor
-		if (isAvisosGestorHabilitado() && avisarGestor) {
-
-			MobTraTelDelegate mob = DelegateMobTraTelUtil.getMobTraTelDelegate();
-			PadDelegate padDelegate = DelegatePADUtil.getPadDelegate();
-
-			boolean enviadoAvisoCiudadano = false;
-
-			for (Iterator it = procedimientosAvisar.iterator(); it.hasNext();) {
-				String idProc = (String) it.next();
-
-				ProcedimientoBTE proc = (ProcedimientoBTE) procedimientosInfo.get(idProc);
-				List trams = (List) procedimientosTramite.get(idProc);
-
-				if (proc.getEmailGestores().size() <= 0) {
-					continue;
-				}
-
-				String textoEmail = StringEscapeUtils.escapeHtml("Trámites pendientes de finalizar con pagos realizados:") + "</br>";
-				textoEmail += "<ul>";
-				for (Iterator itTram = trams.iterator(); itTram.hasNext();){
-					TramitePersistente tram = (TramitePersistente) itTram.next();
-
-					enviadoAvisoCiudadano = avisosCiudadanoTramite.contains(tram.getCodigo());
-
-					textoEmail += "<li>";
-					if (tram.getNivelAutenticacion() == 'A') {
-						textoEmail += StringEscapeUtils.escapeHtml("Acceso anónimo - Identificador trámite: " + tram.getIdPersistencia());
-					} else {
-						PersonaPAD pers = padDelegate.obtenerDatosPersonaPADporUsuario(tram.getUsuario());
-						String nomPers = "";
-						if (pers != null) {
-							nomPers = pers.getNif() + " - " + pers.getNombreCompleto() ;
-						} else {
-							nomPers = tram.getUsuario() ;
-						}
-						textoEmail += StringEscapeUtils.escapeHtml("Acceso autenticado (" + nomPers + ") - Identificador trámite: " + tram.getIdPersistencia());
-					}
-
-					if (enviadoAvisoCiudadano) {
-						textoEmail += StringEscapeUtils.escapeHtml(" (avisado a ciudadano)");
-					}
-
-					textoEmail += "</li>";
-				}
-				textoEmail += "</ul>";
-
-				MensajeEnvioEmail mensEmail = new MensajeEnvioEmail();
-				String[] dest = new String[proc.getEmailGestores().size()];
-				for (int i=0;i<proc.getEmailGestores().size();i++) {
-					dest[i] = (String) proc.getEmailGestores().get(i);
-				}
-				mensEmail.setDestinatarios(dest);
-				mensEmail.setTitulo(proc.getDescripcion() + ": existen trámites pendientes de finalizar con pagos realizados");
-				mensEmail.setHtml(true);
-				mensEmail.setTexto(textoEmail);
-
-				MensajeEnvio mens = new MensajeEnvio();
-				mens.setNombre("Aviso trámite pendiente y pago realizado (" + proc.getIdentificador() + ")");
-				mens.setCuentaEmisora(getCuentaSistra());
-				mens.setInmediato(true);
-				mens.addEmail(mensEmail);
+			if (avisarCiudadano) {
 				try {
-					mob.envioMensaje(mens );
+					// Generamos aviso a traves de mobtratel
+					AvisoAlertasTramitacion.getInstance().avisarPagoRealizadoTramitePendiente(tramite);
+					// Marcamos como avisado
+					delegate.avisoPagoTelematicoFinalizado(tramite.getIdPersistencia());
+					tramitesAvisados.add(tramite.getCodigo());
 				} catch (Exception exc) {
 					// Mostramos error en log y continuamos con siguiente tramite
 					backupLog.error("Error realizando alerta de tramitacion", exc);
 				}
 			}
 		}
+
+		return tramitesAvisados;
+
+	}
+
+	private List finalizarTramitesAnonimosAutomaticamente(
+			Map tramitesPagadosPendientesFinalizar) {
+
+		List tramsFinalizados = new ArrayList();
+
+		if (tramitesPagadosPendientesFinalizar != null) {
+
+			SistraDelegate sistraDlg = DelegateSISTRAUtil.getSistraDelegate();
+
+			for (Iterator it = tramitesPagadosPendientesFinalizar.keySet().iterator(); it.hasNext();) {
+				Long codTramite = (Long) it.next();
+				TramitePersistente tp = (TramitePersistente) tramitesPagadosPendientesFinalizar.get(codTramite);
+
+				// Si esta marcado para finalizar automaticamente y es anonimo intentamos finalizarlo
+				if (tp.getNivelAutenticacion() == ConstantesLogin.LOGIN_ANONIMO && "S".equals(tp.getAlertasTramitacionFinAuto())) {
+					boolean finalizadoOk;
+					try {
+						finalizadoOk = sistraDlg.finalizarTramitePagadoAnonimo(tp.getIdPersistencia());
+					} catch (Exception e) {
+						backupLog.equals("Excepcion finalizando tramite " + tp.getIdPersistencia() + " automaticamente: " + e.getMessage());
+						finalizadoOk = false;
+					}
+					if (finalizadoOk) {
+						tramsFinalizados.add(codTramite);
+					}
+				}
+			}
+
+		}
+
+		return tramsFinalizados;
+	}
+
+	private Map obtenerTramitesPagadosPendienteFinalizar()
+			throws DelegateException, LoginException, Exception {
+		Map tramitesPagadosPendientesFinalizar = new HashMap();
+		LoginContext lc = null;
+		try {
+			// Realizamos login JAAS con usuario para proceso automatico
+			Properties props = DelegateUtil.getConfiguracionDelegate()
+					.obtenerConfiguracion();
+			String user = props.getProperty("auto.user");
+			String pass = props.getProperty("auto.pass");
+			CallbackHandler handler = new UsernamePasswordCallbackHandler(user,
+					pass);
+			lc = new LoginContext("client-login", handler);
+			lc.login();
+
+			// Recuperamos tramites pendientes de avisar
+			TramitePersistenteDelegate delegate = DelegateUtil
+					.getTramitePersistenteDelegate();
+			List tramites = delegate
+					.obtenerTramitesPendienteAvisoPagoTelematicoFinalizado();
+
+			// Obtenemos que tramites deben avisarse
+			for (Iterator it = tramites.iterator(); it.hasNext();) {
+
+				TramitePersistente tramite = (TramitePersistente) it.next();
+
+				// Verificamos si tiene un pago telematico realizado
+				boolean avisar = false;
+				for (Iterator it2 = tramite.getDocumentos().iterator(); it2
+						.hasNext();) {
+					DocumentoPersistente dp = (DocumentoPersistente) it2.next();
+					if (DocumentoPersistentePAD.TIPO_PAGO.equals(dp
+							.getTipoDocumento())) {
+						// Si esta pagado, hay que avisar
+						if (dp.getEstado() == DocumentoPersistentePAD.ESTADO_CORRECTO
+								&& "S".equals(dp.getEsPagoTelematico())) {
+							avisar = true;
+						}
+						// Si esta iniciado, hay que verificar si esta pagado
+						if (dp.getEstado() == DocumentoPersistentePAD.ESTADO_INCORRECTO) {
+							avisar = isPagoTelematicoPendienteConfirmado(dp);
+						}
+						// Si hay que avisar, no seguimos mirando
+						if (avisar) {
+							break;
+						}
+					}
+				}
+
+				if (avisar) {
+					tramitesPagadosPendientesFinalizar.put(tramite.getCodigo(),
+							tramite);
+				}
+			}
+
+		} finally {
+			// Hacemos el logout
+			if (lc != null) {
+				try {
+					lc.logout();
+				} catch (Exception exl) {
+				}
+			}
+		}
+		return tramitesPagadosPendientesFinalizar;
 	}
 
 

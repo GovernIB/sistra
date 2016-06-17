@@ -1885,9 +1885,11 @@ public class TramiteProcessorEJB implements SessionBean {
 		EspecTramiteNivel espTramite = (EspecTramiteNivel) tramiteVersion.getEspecificaciones();
 		EspecTramiteNivel espNivel = (EspecTramiteNivel) tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
 		String alertasTramitacionGenerar = espTramite.getHabilitarAlertasTramitacion();
+		String alertasTramitacionFinAuto = espTramite.getFinalizarTramiteAuto();
 		boolean permitirSms = "S".equals(espTramite.getPermitirSMSAlertasTramitacion());
 		if ( !ConstantesSTR.ALERTASTRAMITACION_SINESPECIFICAR.equals(espNivel.getHabilitarAlertasTramitacion())){
 			alertasTramitacionGenerar = espNivel.getHabilitarAlertasTramitacion();
+			alertasTramitacionFinAuto = espNivel.getFinalizarTramiteAuto();
 			permitirSms = "S".equals(espNivel.getPermitirSMSAlertasTramitacion());
 		}
 		String emailAlertas = null;
@@ -1900,6 +1902,7 @@ public class TramiteProcessorEJB implements SessionBean {
 		}
 
 		tramitePersistentePAD.setAlertasTramitacionGenerar(alertasTramitacionGenerar);
+		tramitePersistentePAD.setAlertasTramitacionFinAuto(alertasTramitacionFinAuto);
 		tramitePersistentePAD.setAlertasTramitacionEmail(emailAlertas);
 		tramitePersistentePAD.setAlertasTramitacionSms(smsAlertas);
 		actualizarPAD();

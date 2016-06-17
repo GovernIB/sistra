@@ -99,7 +99,7 @@
     <td class="label"><bean:message key="especificacionesTramite.destinatarioTramite"/></td>
     <td class="input"><html:textarea tabindex="10" property="destinatarioTramite" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=destinatarioTramite&titulo=especificacionesTramite.destinatarioTramite" %>');"/></td>
 </tr>
-<tr>	
+<tr>
 	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.opcionesFin"/></td>
 </tr>
 <tr>
@@ -116,20 +116,20 @@
 <tr>
     <td class="labelo"><bean:message key="especificacionesTramite.habilitarNotificacionTelematica"/></td>
     <td class="input">
-    	<html:select property="values.habilitarNotificacionTelematica">                    
+    	<html:select property="values.habilitarNotificacionTelematica">
     		<logic:iterate id="opcion" name="habilitarNotificacionOptions" type="es.caib.sistra.model.Opcion">
     			<html:option value="<%=opcion.getCodigo()%>"  key="<%=opcion.getDescripcion()%>"  />
 	    	</logic:iterate>
-	    </html:select>    	    	
+	    </html:select>
     </td>
 </tr>
 <!--  Avisos: solo si son obligatorios los avisos para notificaciones -->
 <logic:equal name="habilitarAvisos" value="true">
 	<tr>
-	    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAvisos.permitirSMS"/></td>    
+	    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAvisos.permitirSMS"/></td>
 	    <td class="input">
-	    	<bean:message key="afirmacion"/><html:radio property="values.permitirSMS" value="S"/> 
-	    	<bean:message key="negacion"/><html:radio property="values.permitirSMS" value="N"/> 
+	    	<bean:message key="afirmacion"/><html:radio property="values.permitirSMS" value="S"/>
+	    	<bean:message key="negacion"/><html:radio property="values.permitirSMS" value="N"/>
 	   	</td>
 	</tr>
 </logic:equal>
@@ -140,18 +140,26 @@
 <tr>
     <td class="labelo"><bean:message key="especificacionesTramite.habilitarAlertasTramitacion"/></td>
     <td class="input">
-    	<html:select property="values.habilitarAlertasTramitacion">                    
+    	<html:select property="values.habilitarAlertasTramitacion">
     		<logic:iterate id="opcion" name="habilitarAlertasTramitacionOptions" type="es.caib.sistra.model.Opcion">
     			<html:option value="<%=opcion.getCodigo()%>"  key="<%=opcion.getDescripcion()%>"  />
 	    	</logic:iterate>
-	    </html:select>    	    	
+	    </html:select>
     </td>
 </tr>
 <tr>
-    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAlertasTramitacion.permitirSMS"/></td>    
+    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAlertasTramitacion.permitirSMS"/></td>
     <td class="input">
-    	<bean:message key="afirmacion"/><html:radio property="values.permitirSMSAlertasTramitacion" value="S"/> 
-    	<bean:message key="negacion"/><html:radio property="values.permitirSMSAlertasTramitacion" value="N"/> 
+    	<bean:message key="afirmacion"/><html:radio property="values.permitirSMSAlertasTramitacion" value="S"/>
+    	<bean:message key="negacion"/><html:radio property="values.permitirSMSAlertasTramitacion" value="N"/>
+   	</td>
+</tr>
+
+<tr>
+    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAlertasTramitacion.finAuto"/></td>
+    <td class="input">
+    	<bean:message key="afirmacion"/><html:radio property="values.finalizarTramiteAuto" value="S"/>
+    	<bean:message key="negacion"/><html:radio property="values.finalizarTramiteAuto" value="N"/>
    	</td>
 </tr>
 
@@ -181,22 +189,22 @@
 <tr>
     <td class="label"><bean:message key="especificacionesTramite.separador.datosJustificante.ocultarNifNombre"/></td>
     <td class="input">
-    	<html:select property="values.ocultarNifNombreJustif">                    
+    	<html:select property="values.ocultarNifNombreJustif">
     		<logic:iterate id="opcion" name="personalizacionJustificanteOptions" type="es.caib.sistra.model.Opcion">
     			<html:option value="<%=opcion.getCodigo()%>"  key="<%=opcion.getDescripcion()%>"  />
 	    	</logic:iterate>
-	    </html:select>    	    	
+	    </html:select>
     </td>
 </tr>
 <tr>
     <td class="label"><bean:message key="especificacionesTramite.separador.datosJustificante.ocultarClaveTramitacion"/></td>
     <td class="input">
-    	<html:select property="values.ocultarClaveTramitacionJustif">                    
+    	<html:select property="values.ocultarClaveTramitacionJustif">
     		<logic:iterate id="opcion" name="personalizacionJustificanteOptions" type="es.caib.sistra.model.Opcion">
     			<html:option value="<%=opcion.getCodigo()%>"  key="<%=opcion.getDescripcion()%>"  />
 	    	</logic:iterate>
-	    </html:select>    	    	
-    </td>   
+	    </html:select>
+    </td>
 </tr>
 <tr>
     <td class="label"><bean:message key="especificacionesTramite.separador.datosJustificante.datosSolicitud"/></td>

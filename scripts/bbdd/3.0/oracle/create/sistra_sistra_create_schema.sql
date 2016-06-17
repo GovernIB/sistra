@@ -304,7 +304,7 @@ comment on column STR_DOMIN.DOM_TIPO is
 'Tipo de dominio: Sql (S) / Ejb (E) / Webservice (W)';
 
 comment on column STR_DOMIN.DOM_URL is
-'Indica según tipo de dominio: 
+'Indica según tipo de dominio:
 - Ejb: JNDI ejb que resuelve dominio
 - Sql: JNDI datasource origen de datos
 - Webservice: Url webservice';
@@ -321,7 +321,7 @@ comment on column STR_DOMIN.DOM_EJBREM is
 comment on column STR_DOMIN.DOM_EJBSTD is
 'Para tipo dominio Ejb/Ws indica si se debe realizar:
  - N: autenticación implícita de forma que el contenedor EJBs traspasa autenticacion
- - S: explícita a traves de usuario/password 
+ - S: explícita a traves de usuario/password
  - C: explícita a través plugin autenticación del organismo';
 
  comment on column STR_DOMIN.DOM_USR is
@@ -382,13 +382,13 @@ create table STR_ESPNIV  (
    ETN_RDONOM           BLOB,
    ETN_DIAPRE           NUMBER(3)                      default 0,
    ETN_FLUTRA           VARCHAR2(1)                    default 'N' not null,
-   ETN_URLFIN           BLOB,   
+   ETN_URLFIN           BLOB,
    ETN_AVISMS           BLOB,
    ETN_AVIEMA           BLOB,
    ETN_NOTTEL           VARCHAR2(1)                    default 'N' not null,
    ETN_CHKENV           BLOB,
    ETN_DSTTRA           BLOB,
-   ETN_PERSMS 			VARCHAR2(1) 					default 'N' not null   
+   ETN_PERSMS 			VARCHAR2(1) 					default 'N' not null
 );
 
 comment on table STR_ESPNIV is
@@ -948,7 +948,7 @@ comment on column STR_TRAVER.TRV_CONURL is
 comment on column STR_TRAVER.TRV_CONAUT is
 'Para trámite con destino Consulta indica si se debe realizar:
  - N: autenticación implícita de forma que el contenedor EJBs traspasa autenticacion
- - S: explícita a traves de usuario/password 
+ - S: explícita a traves de usuario/password
  - C: explícita a través plugin autenticación del organismo';
 
 comment on column STR_TRAVER.TRV_CONUSU is
@@ -979,7 +979,7 @@ comment on column STR_TRAVER.TRV_FECCAR is
 'Fecha en la que se ha exportado (al importar el xml se alimentará este campo del xml origen)';
 
 comment on column STR_TRAVER.TRV_ANODEF is
-'Autenticacion anonima por defecto: Si esta activado y en caso de que este seleccionado A y existan otros niveles de autenticacion (C o U)  en el tramite, 
+'Autenticacion anonima por defecto: Si esta activado y en caso de que este seleccionado A y existan otros niveles de autenticacion (C o U)  en el tramite,
 si se accede al tramite sin estar autenticado se realizara una autenticacion anonima automatica. Si se esta autenticado se respetara la autenticacion actual
 (siempre que este permitida en el tramite)';
 
@@ -1184,8 +1184,8 @@ alter table STR_GRPTRA
 alter table STR_GRPTRA
    add constraint STR_GRTTRA_FK foreign key (GRT_CODTRA)
       references STR_TRAMIT (TRA_CODIGO);
-      
-      
+
+
 --- V2.1.0
 alter table STR_ESPNIV  add ETN_JNOCLA           VARCHAR2(1)       DEFAULT 'N'     not null ;
 
@@ -1195,19 +1195,19 @@ comment on column STR_ESPNIV.ETN_JNOCLA is
 'Indica si se oculta la clave de tramitacion en el pdf de justificante estandard';
 
 comment on column STR_ESPNIV.ETN_JNONN is
-'Indica si se oculta el nif y nombre en el pdf de justificante estandard';      
+'Indica si se oculta el nif y nombre en el pdf de justificante estandard';
 
 
- 
+
 -- V2.2.2
 alter table STR_DOCNIV  add  DNV_PAGPLG           VARCHAR2(50) default '.' NOT NULL;
 
 comment on column STR_DOCNIV.DNV_PAGPLG is
 	'Para Pagos: indica si se usa un plugin adicional de pagos. Si no usara el defecto.';
-	
+
 -- V2.2.6 to 2.2.7
 alter table STR_ESPNIV  add ETN_ALETRA VARCHAR2(1) default 'N' not null;
-alter table STR_ESPNIV  add ETN_ALESMS VARCHAR2(1) default 'N' not null;   
+alter table STR_ESPNIV  add ETN_ALESMS VARCHAR2(1) default 'N' not null;
 
 comment on column STR_ESPNIV.ETN_ALETRA is
 'Indica si se generan alertas de tramitacion (previas envio tramite): N: No permite /  S Si permite, el ciudadano elige / O: Obligatoria notificación telemática / X: No especificada';
@@ -1218,8 +1218,8 @@ comment on column STR_ESPNIV.ETN_ALESMS is
 alter table STR_TRAVER add TRV_REGAUT VARCHAR2(1) default 'N' not null;
 
 comment on column STR_TRAVER.TRV_REGAUT is
-'Registro automatico: al llegar al paso registrar se dispara automaticamente el envio';	
-	
+'Registro automatico: al llegar al paso registrar se dispara automaticamente el envio';
+
 -- V2.3.0
 alter table STR_DOMIN  add  DOM_WSSOA            VARCHAR2(100);
 comment on column STR_DOMIN.DOM_WSSOA is
@@ -1241,3 +1241,14 @@ comment on column STR_ESPNIV.ETN_RTEDAT is
 'Datos desglosados representante (nif, nombre, direccion, email,...)';
 comment on column STR_ESPNIV.ETN_RDODAT is
 'Datos desglosados representado (nif, nombre, direccion, email,...)';
+
+-- V3.1.3
+-- SISTRA: DEBUG POR TRAMITE
+alter table STR_TRAVER  add  TRV_DEBUG            VARCHAR2(1)                    default 'N' not null;
+comment on column STR_TRAVER.TRV_DEBUG is 'Indica si el debug esta habilitado';
+
+-- SISTRA: FIN TRAMITE AUTO PARA TRAMITES CON PAGO FINALIZADO
+alter table STR_ESPNIV  add ETN_ALEFIN  VARCHAR2(1) default 'N' not null;
+comment on column STR_ESPNIV.ETN_ALEFIN is
+'Indica si se intenta finalizar automáticamente el trámite antes de realizar la alerta de trámites inacabados con pago realizado';
+

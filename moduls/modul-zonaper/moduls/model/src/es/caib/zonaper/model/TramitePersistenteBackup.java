@@ -10,7 +10,7 @@ import es.caib.util.StringUtil;
 
 public class TramitePersistenteBackup
 {
-	// Fields    	
+	// Fields
     private Long codigo;
     private String idPersistencia;
     private String tramite;
@@ -18,21 +18,22 @@ public class TramitePersistenteBackup
     private String descripcion;
     private char nivelAutenticacion;
     private String usuario;
-    private String usuarioFlujoTramitacion;    
+    private String usuarioFlujoTramitacion;
     private Timestamp fechaCreacion;
-    private Timestamp fechaModificacion;  
+    private Timestamp fechaModificacion;
     private Timestamp fechaCaducidad;
     private String idioma;
-    private Set documentosBackup = new HashSet(0);     
+    private Set documentosBackup = new HashSet(0);
     private String parametrosInicio;
     private String delegado;
     private String estadoDelegacion;
-    
+
     private String alertasTramitacionGenerar;
-    private String alertasTramitacionEmail; 
+    private String alertasTramitacionEmail;
     private String alertasTramitacionSms;
     private Date alertasTramitacionFechaUltima;
-    
+    private String alertasTramitacionFinAuto;
+
 	/* (non-Javadoc)
 	 * @see es.caib.zonaper.model.ITramitePersistente#getCodigo()
 	 */
@@ -87,7 +88,7 @@ public class TramitePersistenteBackup
 	 */
 	public void setFechaModificacion(Timestamp fechaModificacion) {
 		this.fechaModificacion = fechaModificacion;
-	}	
+	}
 
 	/* (non-Javadoc)
 	 * @see es.caib.zonaper.model.ITramitePersistente#getTramite()
@@ -122,7 +123,7 @@ public class TramitePersistenteBackup
 	 */
 	public String getUsuario() {
 		return usuario;
-	}	
+	}
 
 	/* (non-Javadoc)
 	 * @see es.caib.zonaper.model.ITramitePersistente#setUsuario(java.lang.String)
@@ -144,20 +145,20 @@ public class TramitePersistenteBackup
 	public void setVersion(int version) {
 		this.version = version;
 	}
-    
+
 	/* (non-Javadoc)
 	 * @see es.caib.zonaper.model.ITramitePersistente#addDocumento(es.caib.zonaper.model.DocumentoPersistente)
 	 */
 	public void addDocumentoBackup(DocumentoPersistenteBackup doc) {
-		doc.setTramitePersistenteBackup(this);    	
+		doc.setTramitePersistenteBackup(this);
         documentosBackup.add(doc);
     }
 
     /* (non-Javadoc)
 	 * @see es.caib.zonaper.model.ITramitePersistente#removeDocumento(es.caib.zonaper.model.DocumentoPersistente)
 	 */
-    public void removeDocumentoBackup(DocumentoPersistenteBackup doc) {    	
-    	documentosBackup.remove(doc);    	
+    public void removeDocumentoBackup(DocumentoPersistenteBackup doc) {
+    	documentosBackup.remove(doc);
     }
 
 	/* (non-Javadoc)
@@ -196,16 +197,16 @@ public class TramitePersistenteBackup
 
 	private void setParametrosInicio(String parametrosInicio) {
 		this.parametrosInicio = parametrosInicio;
-	}	    
-    
-	public void setParametrosInicioMap(Map parametrosInicio) throws Exception{
-		this.setParametrosInicio(StringUtil.serializarMap(parametrosInicio));		
 	}
-		
+
+	public void setParametrosInicioMap(Map parametrosInicio) throws Exception{
+		this.setParametrosInicio(StringUtil.serializarMap(parametrosInicio));
+	}
+
 	public Map getParametrosInicioMap() throws Exception {
 		return (this.getParametrosInicio()!=null?StringUtil.deserializarMap(this.getParametrosInicio()):null);
 	}
-		
+
 
 	/* (non-Javadoc)
 	 * @see es.caib.zonaper.model.ITramitePersistente#getFechaCaducidad()
@@ -289,5 +290,13 @@ public class TramitePersistenteBackup
 
 	public void setAlertasTramitacionFechaUltima(Date alertasTramitacionFechaUltima) {
 		this.alertasTramitacionFechaUltima = alertasTramitacionFechaUltima;
+	}
+
+	public String getAlertasTramitacionFinAuto() {
+		return alertasTramitacionFinAuto;
+	}
+
+	public void setAlertasTramitacionFinAuto(String alertasTramitacionFinAuto) {
+		this.alertasTramitacionFinAuto = alertasTramitacionFinAuto;
 	}
 }

@@ -7,55 +7,56 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class TramitePersistentePAD implements Serializable {
-	
+
 	public final static char AUTENTICACION_CERTIFICADO = 'C';
 	public final static char AUTENTICACION_USUARIOPASSWORD = 'U';
 	public final static char AUTENTICACION_ANONIMO = 'A';
-		
+
 	/**
-	 * Para trámites que se ejecutan de forma delegada indica que el usuario que tiene actualmente el trámite 
+	 * Para trámites que se ejecutan de forma delegada indica que el usuario que tiene actualmente el trámite
 	 * ha realizado todas sus acciones sobre el paso pero queda que otro usuario presente el trámite
 	 */
 	public static final String ESTADO_PENDIENTE_DELEGACION_PRESENTACION = "DP";
-	
+
 	/**
-	 * Para trámites que se ejecutan de forma delegada indica que el usuario que tiene actualmente el trámite 
+	 * Para trámites que se ejecutan de forma delegada indica que el usuario que tiene actualmente el trámite
 	 * ha realizado todas sus acciones sobre el paso pero queda que otro delegado firme algun formulario o anexo
 	 */
-	public static final String ESTADO_PENDIENTE_DELEGACION_FIRMA = "DF";	
-	
+	public static final String ESTADO_PENDIENTE_DELEGACION_FIRMA = "DF";
+
 	/**
 	 * Indica que no se generan alertas tramitacion.
 	 */
 	public static final String ALERTASTRAMITACION_GENERAR_NO = "N";
-	
+
 	/**
 	 * Indica que se generan alertas tramitacion (se generara por email/sms segun exista email/sms).
 	 */
-	public static final String ALERTASTRAMITACION_GENERAR_SI = "S";	
-	
+	public static final String ALERTASTRAMITACION_GENERAR_SI = "S";
+
 	private String idPersistencia;
-	private String tramite;  
+	private String tramite;
     private int version;
     private String descripcion;
     private char nivelAutenticacion;
     private String usuario;
     private String usuarioFlujoTramitacion;
     private Timestamp fechaCreacion;
-    private Timestamp fechaModificacion;   
+    private Timestamp fechaModificacion;
     private Timestamp fechaCaducidad;
     private String idioma;
     private Map documentos = new HashMap(0);
     private Map parametrosInicio;
     private String delegado;
 	private String estadoDelegacion;
-	
+
 	 private String alertasTramitacionGenerar = "N";
-     private String alertasTramitacionEmail; 
+     private String alertasTramitacionEmail;
      private String alertasTramitacionSms;
-     
+     private String alertasTramitacionFinAuto = "N";
+
      private String idProcedimiento;
-	
+
     public String getDelegado() {
 		return delegado;
 	}
@@ -85,7 +86,7 @@ public class TramitePersistentePAD implements Serializable {
 	}
 	public void setIdPersistencia(String idPersistencia) {
 		this.idPersistencia = idPersistencia;
-	}	
+	}
 	public char getNivelAutenticacion() {
 		return nivelAutenticacion;
 	}
@@ -110,7 +111,7 @@ public class TramitePersistentePAD implements Serializable {
 	public void setTramite(String tramite) {
 		this.tramite = tramite;
 	}
-	
+
 	/**
 	 * Devuelve número de instancias de un documento
 	 * @param identificador
@@ -125,7 +126,7 @@ public class TramitePersistentePAD implements Serializable {
     	}
     	return numeroInstancias;
 	}
-	
+
 	/**
 	 * Devuelve número de instancias de un documento con un estado determinado
 	 * @param identificador
@@ -140,7 +141,7 @@ public class TramitePersistentePAD implements Serializable {
     	}
     	return numeroInstancias;
 	}
-    
+
 	/**
 	 * Devuelve número de instancia máxima de un documento
 	 * @param identificador
@@ -155,13 +156,13 @@ public class TramitePersistentePAD implements Serializable {
     	}
     	return max;
 	}
-	
+
 	/**
 	 * Borra documento reordenando instancias
 	 * @param identificador
 	 * @param instancia
 	 */
-	public void borrarDocumento(String identificador,int instancia){			
+	public void borrarDocumento(String identificador,int instancia){
 		// Borramos documento de la colección
 		getDocumentos().remove(identificador + "-" + instancia);
 		// Reordenamos instancias
@@ -170,12 +171,12 @@ public class TramitePersistentePAD implements Serializable {
     		String ls_key = (String) it.next();
     		DocumentoPersistentePAD doc = (DocumentoPersistentePAD) getDocumentos().get(ls_key);
     		if (doc.getIdentificador().equals(identificador) && (instancia < doc.getNumeroInstancia())) {
-    			doc.setNumeroInstancia(doc.getNumeroInstancia() - 1);    			
+    			doc.setNumeroInstancia(doc.getNumeroInstancia() - 1);
     		}
     		docsReordenados.put(doc.getIdentificador() + "-" + doc.getNumeroInstancia(),doc);
-    	}    	
+    	}
     	getDocumentos().clear();
-    	setDocumentos(docsReordenados);    	    	
+    	setDocumentos(docsReordenados);
 	}
 	public String getDescripcion()
 	{
@@ -239,6 +240,12 @@ public class TramitePersistentePAD implements Serializable {
 	public void setIdProcedimiento(String idProcedimiento) {
 		this.idProcedimiento = idProcedimiento;
 	}
-        
-    
+	public String getAlertasTramitacionFinAuto() {
+		return alertasTramitacionFinAuto;
+	}
+	public void setAlertasTramitacionFinAuto(String alertasTramitacionFinAuto) {
+		this.alertasTramitacionFinAuto = alertasTramitacionFinAuto;
+	}
+
+
 }

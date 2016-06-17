@@ -9,8 +9,8 @@ import java.util.Set;
 import es.caib.util.StringUtil;
 
 public class TramitePersistente implements java.io.Serializable {
-  	
-	// Fields    	
+
+	// Fields
      private Long codigo;
      private String idPersistencia;
      private String tramite;
@@ -20,21 +20,22 @@ public class TramitePersistente implements java.io.Serializable {
      private String usuario;
      private String usuarioFlujoTramitacion;
      private Timestamp fechaCreacion;
-     private Timestamp fechaModificacion;  
+     private Timestamp fechaModificacion;
      private Timestamp fechaCaducidad;
      private String idioma;
-     private Set documentos = new HashSet(0);     
+     private Set documentos = new HashSet(0);
      private String parametrosInicio;
      private String delegado;
      private String estadoDelegacion;
-     
+
      private String alertasTramitacionGenerar;
-     private String alertasTramitacionEmail; 
+     private String alertasTramitacionEmail;
      private String alertasTramitacionSms;
      private Date alertasTramitacionFechaUltima;
-     
+     private String alertasTramitacionFinAuto;
+
      private String idProcedimiento;
-     
+
     // Constructors
     /** default constructor */
     public TramitePersistente() {
@@ -70,7 +71,7 @@ public class TramitePersistente implements java.io.Serializable {
 
 	public void setFechaModificacion(Timestamp fechaModificacion) {
 		this.fechaModificacion = fechaModificacion;
-	}	
+	}
 
 	public String getTramite() {
 		return tramite;
@@ -90,7 +91,7 @@ public class TramitePersistente implements java.io.Serializable {
 
 	public String getUsuario() {
 		return usuario;
-	}	
+	}
 
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
@@ -103,14 +104,14 @@ public class TramitePersistente implements java.io.Serializable {
 	public void setVersion(int version) {
 		this.version = version;
 	}
-    
+
 	public void addDocumento(DocumentoPersistente doc) {
-		doc.setTramitePersistente(this);    	
+		doc.setTramitePersistente(this);
         documentos.add(doc);
     }
 
-    public void removeDocumento(DocumentoPersistente doc) {    	
-    	documentos.remove(doc);    	
+    public void removeDocumento(DocumentoPersistente doc) {
+    	documentos.remove(doc);
     }
 
 	public String getIdPersistencia() {
@@ -137,12 +138,12 @@ public class TramitePersistente implements java.io.Serializable {
 
 	private void setParametrosInicio(String parametrosInicio) {
 		this.parametrosInicio = parametrosInicio;
-	}	    
-    
-	public void setParametrosInicioMap(Map parametrosInicio) throws Exception{
-		this.setParametrosInicio(StringUtil.serializarMap(parametrosInicio));		
 	}
-		
+
+	public void setParametrosInicioMap(Map parametrosInicio) throws Exception{
+		this.setParametrosInicio(StringUtil.serializarMap(parametrosInicio));
+	}
+
 	public Map getParametrosInicioMap() throws Exception {
 		return (this.getParametrosInicio()!=null?StringUtil.deserializarMap(this.getParametrosInicio()):null);
 	}
@@ -225,5 +226,13 @@ public class TramitePersistente implements java.io.Serializable {
 
 	public void setIdProcedimiento(String idProcedimiento) {
 		this.idProcedimiento = idProcedimiento;
+	}
+
+	public String getAlertasTramitacionFinAuto() {
+		return alertasTramitacionFinAuto;
+	}
+
+	public void setAlertasTramitacionFinAuto(String alertasTramitacionFinAuto) {
+		this.alertasTramitacionFinAuto = alertasTramitacionFinAuto;
 	}
 }

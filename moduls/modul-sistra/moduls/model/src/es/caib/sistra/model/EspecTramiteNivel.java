@@ -6,7 +6,7 @@ import java.util.List;
 public class EspecTramiteNivel  extends Traducible {
 
 
-    // Fields    
+    // Fields
      private Long codigo;
      private String activo="N";
      private byte[] validacionInicioScript;
@@ -28,10 +28,11 @@ public class EspecTramiteNivel  extends Traducible {
      // X: Sin especificar (para sobreescribir x nivel) / N: No permite /  S: Permite
      private String habilitarAlertasTramitacion = "X";
      private String permitirSMSAlertasTramitacion = "N"; // S / N
-     
+     private String finalizarTramiteAuto = "N"; // S / N
+
      private byte[] avisoSMS;
      private byte[] avisoEmail;
-     private List datosJustificante = new ArrayList();     
+     private List datosJustificante = new ArrayList();
      private String flujoTramitacion="N";
      private byte[] checkEnvio;
      private String ocultarClaveTramitacionJustif = "X";
@@ -40,7 +41,7 @@ public class EspecTramiteNivel  extends Traducible {
       * Script que permite cambiar el destinatario del trámite (oficina registro,organo destino y unidad administrativa)
       */
      private byte[] destinatarioTramite;
-     
+
     // Constructors
     /** default constructor */
     public EspecTramiteNivel() {
@@ -86,32 +87,32 @@ public class EspecTramiteNivel  extends Traducible {
 		this.diasPersistencia = diasPersistencia;
 	}
 
-	
+
 	/**
 	 * Compatibilidad con betwixt
 	 * @param dat
 	 */
-	
+
 	public void addDatosJustificante( DatoJustificante dat )
 	{
 		addDatoJustificante( dat );
 	}
-	
+
 	public void addDatoJustificante(DatoJustificante dat) {
 		dat.setEspecTramiteNivel(this);
 		dat.setOrden(datosJustificante.size());
     	datosJustificante.add(dat);
     }
 
-    public void removeDatoJustificante(DatoJustificante dat) {    	
+    public void removeDatoJustificante(DatoJustificante dat) {
     	int ind = datosJustificante.indexOf(dat);
 		datosJustificante.remove(ind);
         for (int i = ind; i < datosJustificante.size(); i++) {
         	DatoJustificante p = (DatoJustificante) datosJustificante.get(i);
             p.setOrden(i);
-        }    	
+        }
     }
-    
+
     public void upOrdenDatoJustificante( DatoJustificante dat )
     {
     	int ind = datosJustificante.indexOf(dat);
@@ -124,7 +125,7 @@ public class EspecTramiteNivel  extends Traducible {
             datosJustificante.set( ind - 1, dat );
     	}
     }
-    
+
     public void downOrdenDatoJustificante( DatoJustificante dat )
     {
     	int ind = datosJustificante.indexOf(dat);
@@ -137,15 +138,15 @@ public class EspecTramiteNivel  extends Traducible {
             datosJustificante.set( ind + 1, dat );
     	}
     }
-	        
+
 	public void setCurrentLang(String currentLang) {
-        super.setCurrentLang(currentLang);                   
+        super.setCurrentLang(currentLang);
         for (int i = 0; i < datosJustificante.size(); i++) {
         	DatoJustificante dat = (DatoJustificante) datosJustificante.get(i);
         	dat.setCurrentLang(currentLang);
-        }        
+        }
     }
-    
+
 	public void addTraduccion(String lang, TraEspecTramiteNivel traduccion) {
         setTraduccion(lang, traduccion);
     }
@@ -301,8 +302,8 @@ public class EspecTramiteNivel  extends Traducible {
 	public void setCheckEnvio(byte[] checkEnvio) {
 		this.checkEnvio = checkEnvio;
 	}
-    
-	
+
+
 	public byte[] getDestinatarioTramite() {
 		return destinatarioTramite;
 	}
@@ -382,7 +383,17 @@ public class EspecTramiteNivel  extends Traducible {
 	public void setDatosRpdoScript(byte[] datosRpdoScript) {
 		this.datosRpdoScript = datosRpdoScript;
 	}
-    
-	
+
+
+	public String getFinalizarTramiteAuto() {
+		return finalizarTramiteAuto;
+	}
+
+
+	public void setFinalizarTramiteAuto(String finalizarTramiteAuto) {
+		this.finalizarTramiteAuto = finalizarTramiteAuto;
+	}
+
+
 
 }

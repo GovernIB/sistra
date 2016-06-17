@@ -132,7 +132,7 @@ comment on column BTE_GESPRO.GAP_IDEPRO is
 
 alter table BTE_GESPRO
    add constraint BTE_GAP_PK primary key (GAP_CODGES, GAP_IDEPRO);
-   
+
 create table BTE_PROAPL  (
    TAP_IDEPRO           VARCHAR2(100)                    not null,
    TAP_DESC             VARCHAR2(100)                   not null,
@@ -177,7 +177,7 @@ comment on column BTE_PROAPL.TAP_TIPACC is
 'TIPO DE ACCESO AL BACKOFFICE: EJB (E) / WEBSERVICE (W)';
 
 comment on column BTE_PROAPL.TAP_URL is
-'INDICA SEGÚN TIPO DE ACCESO: 
+'INDICA SEGÚN TIPO DE ACCESO:
 - EJB: JNDI EJB
 - WEBSERVICE: URL WEBSERVICE
 ';
@@ -191,7 +191,7 @@ comment on column BTE_PROAPL.TAP_EJBREM is
 comment on column BTE_PROAPL.TAP_EJBAUT is
 'PARA TIPO DOMINIO EJB/WS INDICA:
  - N: autenticación implícita de forma que el contenedor EJBs traspasa autenticacion
- - S: explícita a traves de usuario/password 
+ - S: explícita a traves de usuario/password
  - C: explícita a través plugin autenticación del organismo';
 
 comment on column BTE_PROAPL.TAP_USR is
@@ -220,9 +220,9 @@ comment on column BTE_PROAPL.TAP_SMS is
 
 alter table BTE_PROAPL
    add constraint BTE_TAP_PK primary key (TAP_IDEPRO);
-   
+
 alter table BTE_GESPRO add constraint BTE_GAPTAP_FK foreign key (GAP_IDEPRO)
-      references BTE_PROAPL (TAP_IDEPRO);  
+      references BTE_PROAPL (TAP_IDEPRO);
 
 create table BTE_TRAMIT  (
    TRA_CODIGO           NUMBER(20)                      not null,
@@ -263,7 +263,7 @@ create table BTE_TRAMIT  (
    TRA_SBEXID           VARCHAR2(50),
    TRA_SBEXUA           NUMBER(19),
    TRA_IDEPRO           VARCHAR2(100)                   not null,
-   TRA_INIPRO           DATE                            not null 
+   TRA_INIPRO           DATE                            not null
 );
 
 
@@ -410,7 +410,7 @@ create index BTE_TRATAP_FK_I on BTE_TRAMIT (
 alter table BTE_TRAMIT add constraint BTE_TRATAP_FK foreign key (TRA_IDEPRO)
       references BTE_PROAPL (TAP_IDEPRO);
 
-	  
+
 alter table BTE_DOCUM
    add constraint BTE_DOCTRA_FK foreign key (DOC_CODTRA)
       references BTE_TRAMIT (TRA_CODIGO);
@@ -456,13 +456,13 @@ alter table BTE_ARCFEX
 
 alter table BTE_ARCFEX
    add constraint BTE_AFEFIC_FK foreign key (AFE_IDEFIC)
-      references BTE_FICEXP (FIC_IDETRA);      
+      references BTE_FICEXP (FIC_IDETRA);
 
---INSERT INTO BTE_ARCFEX 
+--INSERT INTO BTE_ARCFEX
 --	SELECT BTE_FICEXP.FIC_IDETRA, BTE_FICEXP.FIC_DATOS
 --		FROM BTE_FICEXP;
 
-      
+
 -- V2.1.0
 
 create table BTE_AVISOS  (
@@ -500,7 +500,7 @@ comment on column BTE_GESTOR.GES_AVINOT is
 'INDICA SI SE GENERA MENSAJE DE AVISO AL GESTOR PARA AVISAR ESTADO NOTIFICACIONES';
 
 
-ALTER table BTE_PROAPL  ADD 
+ALTER table BTE_PROAPL  ADD
    TAP_AVINOT           VARCHAR2(1)                    default 'N' not null;
 
 comment on column BTE_PROAPL.TAP_AVINOT is
@@ -511,7 +511,7 @@ ALTER TABLE BTE_GESTOR DROP COLUMN GES_INFORM;
 
 ALTER TABLE BTE_GESTOR DROP COLUMN GES_AVISO;
 
-      
+
 --- update 2.2.0
 
 create sequence BTE_SEQCFU;
@@ -696,3 +696,10 @@ comment on column BTE_PROAPL.TAP_AVIREM is
 
 comment on column BTE_PROAPL.TAP_AVIREP is
 'EMAIL PARA RESPUESTA PARA AVISOS PROCEDIMIENTO';
+
+-- V3.1.3
+-- BANTEL: IDENTIFICADOR DE PROCEDIMIENTO EXTERNO
+alter table BTE_PROAPL add TAP_IDEPEX VARCHAR2(20);
+
+comment on column BTE_PROAPL.TAP_IDEPEX is
+'Identificador del procedimiento administrativo externo';
