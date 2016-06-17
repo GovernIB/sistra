@@ -18,6 +18,7 @@ import es.caib.bantel.persistence.delegate.ConfiguracionDelegate;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
+import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
 
 /**
@@ -25,19 +26,22 @@ import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
  * 	name="detalleNotificacionForm"
  *  path="/altaNotificacion"
  *  validate="true"
- *  
+ *
  * @struts.action-forward
  *  name="success" path=".altaNotificacion"
  *
  * @struts.action-forward
  *  name="fail" path=".error"
+ *
+ *  @struts.action-forward
+ *  name="entraAltaPersona" path=".altaNotificacionCrearPersona"
  */
 public class AltaNotificacionAction extends BaseAction
 {
 	protected static Log log = LogFactory.getLog(AltaNotificacionAction.class);
-	
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-            HttpServletResponse response) throws Exception 
+            HttpServletResponse response) throws Exception
     {
 		DetalleNotificacionForm notificacionForm = (DetalleNotificacionForm)form;
 		request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,"3");
@@ -47,30 +51,37 @@ public class AltaNotificacionAction extends BaseAction
 		MensajesUtil.setMsg(this.getResources(request));
 		ExpedientePAD exp;
 		String codMensajeError = "error.notificacio.Excepcion";
-		
+
 		// Recuperamos de sesion el expediente actual
 		String idExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY);
 		Long uniAdm = (Long) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY);
 		String claveExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY);
-		
-		try{		 
-			
+
+		try{
+
 			// Recuperamos expediente
 			exp = ejb.consultaExpediente(uniAdm, idExpe,claveExpe);
 			if(exp == null){
 				codMensajeError = "error.expediente.consulta";
 				throw new Exception("No se ha encontrado expediente");
 			}
-			
+
 			// Recuperamos procedimiento
 			Procedimiento procedimiento = DelegateUtil.getTramiteDelegate().obtenerProcedimiento(exp.getIdentificadorProcedimiento());
-			
+
 			// Verificamos que el expediente tenga nif
 			if(StringUtils.isBlank(exp.getNifRepresentante())) {
 				codMensajeError = "error.notificacio.noNif";
 				throw new Exception("Expediente no tiene habilitado los avisos");
 			}
-			
+
+			// Si no existe persona, redirigimos a pantalla para crear persona
+			PersonaPAD persona = DelegatePADUtil.getPadDelegate().obtenerDatosPersonaPADporNif(exp.getNifRepresentante());
+			if (persona == null) {
+				request.setAttribute("nifPersona", exp.getNifRepresentante());
+				return mapping.findForward("entraAltaPersona");
+			}
+
 			// Verificamos que el expediente tenga activados los avisos (si la notif requiere avisos)
 			ConfiguracionDelegate delegate = DelegateUtil.getConfiguracionDelegate();
 			String strAvisosNotif = delegate.obtenerConfiguracion().getProperty("sistra.avisoObligatorioNotificaciones");
@@ -78,13 +89,13 @@ public class AltaNotificacionAction extends BaseAction
 			if (!StringUtils.isBlank(strAvisosNotif)) {
 				avisosNotif = Boolean.parseBoolean(strAvisosNotif);
 			}
-			if (avisosNotif && 
+			if (avisosNotif &&
 					!(exp.getConfiguracionAvisos() != null && exp.getConfiguracionAvisos().getHabilitarAvisos() != null && exp.getConfiguracionAvisos().getHabilitarAvisos().booleanValue()) ) {
 				codMensajeError = "error.notificacio.AvisosObligatorios";
 				throw new Exception("Expediente no tiene habilitado los avisos");
 			}
-			
-			
+
+
 			// Precargamos datos expediente
 			notificacionForm.setDescripcionExpediente(exp.getDescripcion());
 			notificacionForm.setIdiomaExp(exp.getIdioma());
@@ -92,42 +103,42 @@ public class AltaNotificacionAction extends BaseAction
 			notificacionForm.setCodigoPais("ESP");
 			notificacionForm.setCodigoProvincia("7");
 			notificacionForm.setCodigoMunicipio("");
-			if (exp.getConfiguracionAvisos() != null && exp.getConfiguracionAvisos().getHabilitarAvisos() != null && 
+			if (exp.getConfiguracionAvisos() != null && exp.getConfiguracionAvisos().getHabilitarAvisos() != null &&
 					exp.getConfiguracionAvisos().getHabilitarAvisos().booleanValue() && StringUtils.isNotBlank(exp.getConfiguracionAvisos().getAvisoSMS())) {
 				notificacionForm.setPermitirSms("S");
 			}
-			
-			
+
+
 			notificacionForm.setNif(exp.getNifRepresentante());
-			
+
 			// Intentamos obtener nombre de la persona si esta registrada en zonaper
 			PersonaPAD p = DelegateUtil.getConsultaPADDelegate().obtenerDatosPADporNif(exp.getNifRepresentante());
-			if (p != null){					
+			if (p != null){
 				notificacionForm.setUsuarioSey(p.getUsuarioSeycon());
-				notificacionForm.setApellidos(p.getApellidosNombre());				
+				notificacionForm.setApellidos(p.getApellidosNombre());
 			}
-			
-			// Acceso por defecto por clave			
+
+			// Acceso por defecto por clave
 			notificacionForm.setAccesoPorClave(procedimiento.getAccesoClaveDefecto());
-					
+
 			// Oficina y organo registro
 			notificacionForm.setOficinaRegistro(procedimiento.getOficinaRegistro());
 			notificacionForm.setOrganoDestino(procedimiento.getOrganoRegistro());
-			
+
 			// Plazo x defecto
 			notificacionForm.setDiasPlazo("0");
-						
-			return mapping.findForward( "success" );							
-			
+
+			return mapping.findForward( "success" );
+
 		}catch(Exception e){
 			log.error("Excepcion mostrando alta notificacion",e);
 			String mensajeError = MensajesUtil.getValue(codMensajeError, request);
 			request.setAttribute( Constants.MESSAGE_KEY,mensajeError);
 			request.setAttribute("enlace","true");
-			request.setAttribute("enlaceUrl","recuperarExpediente.do?identificadorExp=" + idExpe + "&unidadAdm=" + uniAdm + "&claveExp=" + claveExpe);			
+			request.setAttribute("enlaceUrl","recuperarExpediente.do?identificadorExp=" + idExpe + "&unidadAdm=" + uniAdm + "&claveExp=" + claveExpe);
 			return mapping.findForward("fail");
-		}		
+		}
     }
-	
-	
+
+
 }
