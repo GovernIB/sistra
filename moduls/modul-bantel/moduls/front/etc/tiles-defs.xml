@@ -21,34 +21,34 @@
     <definition
    		name=".exportarCSV"
    		extends=".mainLayout"
-   		controllerClass="es.caib.bantel.front.controller.ExportCSVController">	
+   		controllerClass="es.caib.bantel.front.controller.ExportCSVController">
    		<put name="main" value="/exportarCSV.jsp"/>
-	</definition>  
-    
-    
+	</definition>
+
+
   	<definition
    		name=".confirmacionPreregistros"
-   		extends=".mainLayout">	
+   		extends=".mainLayout">
    		<put name="main" value="/confirmacionPreregistros.jsp"/>
-	</definition>    
-        
+	</definition>
+
   	<definition
    		name=".informacionPreregistro"
-   		extends=".mainLayout">	
+   		extends=".mainLayout">
    		<put name="main" value="/informacionPreregistro.jsp"/>
-	</definition>    
-        
+	</definition>
+
     <definition
     	name=".formularioBusqueda"
-    	path="/formularioBusqueda.jsp" 
+    	path="/formularioBusqueda.jsp"
     	controllerClass="es.caib.bantel.front.controller.FormularioBusquedaController"/>
-    	
+
     <definition
     	name=".busqueda"
-    	extends=".mainLayout">	
+    	extends=".mainLayout">
     	<put name="main" value=".resultadoBusqueda"/>
    	</definition>
-   	
+
    	<definition
     	name=".resultadoBusqueda"
     	path="/resultadoBusqueda.jsp" />
@@ -56,145 +56,151 @@
 
  <definition
     	name=".formularioBusquedaExpedientes"
-    	path="/formularioBusquedaExpedientes.jsp" 
+    	path="/formularioBusquedaExpedientes.jsp"
     	controllerClass="es.caib.bantel.front.controller.FormularioBusquedaController"/>
-    	
+
     <definition
     	name=".busquedaExpedientes"
-    	extends=".mainLayout">	
+    	extends=".mainLayout">
     	<put name="main" value=".resultadoBusquedaExpedientes"/>
    	</definition>
-   	
+
    	<definition
     	name=".resultadoBusquedaExpedientes"
     	path="/resultadoBusquedaExpedientes.jsp" />
 
    	<definition
    		name=".detalle"
-   		extends=".mainLayout">	
+   		extends=".mainLayout">
    		<put name="main" value=".detalleTramite"/>
-	</definition>	
-    
+	</definition>
+
     <definition
     	name=".detalleTramite"
     	path="/detalleTramite.jsp" />
-    	
+
     <definition
     	name=".mensaje"
     	extends=".mainLayout"
-    	controllerClass="es.caib.bantel.front.controller.MessageController">	
+    	controllerClass="es.caib.bantel.front.controller.MessageController">
     	<put name="main" value="/moduls/mensaje.jsp"/>
    	</definition>
-	
+
 	<definition
    		name=".altaExpediente"
-   		extends=".mainLayout" 
-   		controllerClass="es.caib.bantel.front.controller.AltaExpedienteController">	
+   		extends=".mainLayout"
+   		controllerClass="es.caib.bantel.front.controller.AltaExpedienteController">
    		<put name="main" value="/altaExpediente.jsp"/>
-	</definition>  
-	
+	</definition>
+
+	<definition
+   		name=".entradaAltaExpedienteCrearPersona"
+   		extends=".mainLayout">
+   		<put name="main" value="/entradaAltaExpedienteCrearPersona.jsp"/>
+	</definition>
+
 	<definition
    		name=".entradaAltaExpediente"
    		extends=".mainLayout"
-   		controllerClass="es.caib.bantel.front.controller.AltaExpedienteController">	
+   		controllerClass="es.caib.bantel.front.controller.AltaExpedienteController">
    		<put name="main" value="/entradaAltaExpediente.jsp"/>
-	</definition>    
-	
+	</definition>
+
 	<definition
    		name=".altaAviso"
    		extends=".mainLayout"
-   		controllerClass="es.caib.bantel.front.controller.AltaAvisoController">		
+   		controllerClass="es.caib.bantel.front.controller.AltaAvisoController">
    		<put name="main" value="/altaAviso.jsp"/>
-	</definition>   
+	</definition>
 
 	<definition
    		name=".altaNotificacion"
    		extends=".mainLayout"
-   		controllerClass="es.caib.bantel.front.controller.AltaNotificacionController">		
+   		controllerClass="es.caib.bantel.front.controller.AltaNotificacionController">
    		<put name="main" value="/altaNotificacion.jsp"/>
-	</definition>   
-	
+	</definition>
+
 	<definition
    		name=".realizarAltaExpediente"
-   		extends=".mainLayout">	
+   		extends=".mainLayout">
    		<put name="main" value="/confirmacionAltaExpediente.jsp"/>
-	</definition>   
-	
+	</definition>
+
 	<definition
    		name=".realizarAltaAviso"
-   		extends=".mainLayout">	
+   		extends=".mainLayout">
    		<put name="main" value="/confirmacionAltaExpediente.jsp"/>
-	</definition>   
+	</definition>
 
 	<definition
    		name=".realizarAltaNotificacion"
-   		extends=".mainLayout">	
+   		extends=".mainLayout">
    		<put name="main" value="/confirmacionAltaExpediente.jsp"/>
-	</definition>   
+	</definition>
 
 	<definition
    		name=".recuperarExpediente"
    		extends=".mainLayout"
-   		controllerClass="es.caib.bantel.front.controller.RecuperacionExpedienteController">	
+   		controllerClass="es.caib.bantel.front.controller.RecuperacionExpedienteController">
    		<put name="main" value="/detalleExpediente.jsp"/>
-	</definition>   
-	
+	</definition>
+
 	<definition
    		name=".detalleAviso"
-   		extends=".mainLayout">	
+   		extends=".mainLayout">
    		<put name="main" value="/detalleAviso.jsp"/>
-	</definition>   
-	
+	</definition>
+
 	<definition
    		name=".detalleNotificacion"
-   		extends=".mainLayout">	
+   		extends=".mainLayout">
    		<put name="main" value="/detalleNotificacion.jsp"/>
-	</definition>   
-	
+	</definition>
+
 	<definition
    		name=".detalleTramiteRecuperado"
-   		extends=".mainLayout">	
+   		extends=".mainLayout">
    		<put name="main" value="/detalleTramiteRecuperado.jsp"/>
-	</definition>   
+	</definition>
 
 	<definition name=".error" extends=".mensaje"/>
-     
+
     <definition name=".arbolUnidades" path="/arbolUnidades.jsp" />
     <definition name=".funcsNodesUnidades" path="/js/funcsNodesUnidades.jsp"
      controllerClass="es.caib.bantel.front.controller.FuncsNodesUnidadesController" />
-  
+
   	<definition
    		name=".firmarDocumentosAviso"
-   		extends=".mainLayout">	
+   		extends=".mainLayout">
    		<put name="main" value="/firmarDocumentosAviso.jsp"/>
-	</definition>   
-  	
+	</definition>
+
   	<definition
    		name=".firmarDocumentosNotificacion"
-   		extends=".mainLayout">	
+   		extends=".mainLayout">
    		<put name="main" value="/firmarDocumentosNotificacion.jsp"/>
 	</definition>
-	
+
 	<definition
     	name=".fuenteDatos"
     	extends=".mainLayout"
-    	controllerClass="es.caib.bantel.front.controller.ListaFuenteDatosController">	
+    	controllerClass="es.caib.bantel.front.controller.ListaFuenteDatosController">
     	<put name="main" value="/listaFuenteDatos.jsp"/>
    	</definition>
-	
-	
+
+
 	<definition
     	name=".detalleFuenteDatos"
-    	extends=".mainLayout">	
+    	extends=".mainLayout">
     	<put name="main" value="/detalleFuenteDatos.jsp"/>
    	</definition>
-   	
+
    	<definition
     	name=".importCSVFuenteDatos"
-    	extends=".mainLayout">	
+    	extends=".mainLayout">
     	<put name="main" value="/importCSVFuenteDatos.jsp"/>
    	</definition>
-   	
-	
+
+
 </tiles-definitions>
 

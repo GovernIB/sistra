@@ -20,6 +20,8 @@ import es.caib.bantel.modelInterfaz.TramiteBTE;
 import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
 import es.caib.bantel.persistence.delegate.DelegateException;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
+import es.caib.zonaper.modelInterfaz.PersonaPAD;
+import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
 
 /**
  * @struts.action
@@ -27,9 +29,13 @@ import es.caib.bantel.persistence.delegate.DelegateUtil;
  *  path="/altaEntradaExpediente"
  *  validate="true"
  *  input = ".entradaAltaExpediente"
- *  
+ *
  * @struts.action-forward
  *  name="success" path=".altaExpediente"
+ *
+ * @struts.action-forward
+ *  name="entraAltaPersona" path=".entradaAltaExpedienteCrearPersona"
+ *
  *
  * @struts.action-forward
  *  name="fail" path=".error"
@@ -37,29 +43,38 @@ import es.caib.bantel.persistence.delegate.DelegateUtil;
 public class AltaEntradaExpedienteAction extends BaseAction
 {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-            HttpServletResponse response) throws Exception 
-    {		
+            HttpServletResponse response) throws Exception
+    {
 		MessageResources resources = ((MessageResources) request.getAttribute(Globals.MESSAGES_KEY));
-		try{		
-			
+		try{
+
 			// Preparamos alta expediente indicando numero de entrada
-			
+
 			DetalleExpedienteForm expForm = (DetalleExpedienteForm)form;
 			request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,"3");
-			
+
 			// Consultamos entrada
-			TramiteBTE entrada = consultaEntradaBTE(expForm.getNumeroEntrada());	
+			TramiteBTE entrada = consultaEntradaBTE(expForm.getNumeroEntrada());
 			if (entrada == null){
 				request.setAttribute("message",resources.getMessage( getLocale( request ), "errors.tramiteNoExiste"));
-				return mapping.findForward( "fail" );				
+				return mapping.findForward( "fail" );
 			}
-				
-			// Si es entrada anonima debe tener indicado el nif 
+
+			// Si es entrada anonima debe tener indicado el nif
 			if (entrada.getNivelAutenticacion() == 'A' && StringUtils.isEmpty(entrada.getUsuarioNif())){
 				request.setAttribute("message",resources.getMessage( getLocale( request ), "errors.anomimoSinNif"));
 				return mapping.findForward( "fail" );
 			}
-			
+
+			// Si no existe persona, redirigimos a pantalla para crear persona
+			if (StringUtils.isNotBlank(entrada.getUsuarioNif())) {
+				PersonaPAD persona = DelegatePADUtil.getPadDelegate().obtenerDatosPersonaPADporNif(entrada.getUsuarioNif());
+				if (persona == null) {
+					request.setAttribute("nifPersona", entrada.getUsuarioNif());
+					return mapping.findForward("entraAltaPersona");
+				}
+			}
+
 			// Recuperamos procedimientos accesibles por gestor y vemos si es gestor del procedimiento al que pertenece la entrada
 			GestorBandeja gestor = DelegateUtil.getGestorBandejaDelegate().obtenerGestorBandeja(this.getPrincipal(request).getName());
 			if (gestor == null || gestor.getProcedimientosGestionados() == null || gestor.getProcedimientosGestionados().size() == 0) {
@@ -78,7 +93,7 @@ public class AltaEntradaExpedienteAction extends BaseAction
 				request.setAttribute("message",resources.getMessage( getLocale( request ), "errors.noGestorEntrada"));
 				return mapping.findForward( "fail" );
 			}
-			
+
 			request.setAttribute("existeEntrada","S");
 			expForm.setIdentificadorProcedimiento(entrada.getIdentificadorProcedimiento());
 			expForm.setUsuarioSeycon(StringUtils.defaultString(entrada.getUsuarioSeycon()));
@@ -88,7 +103,7 @@ public class AltaEntradaExpedienteAction extends BaseAction
 			expForm.setNombre(StringUtils.defaultString(entrada.getUsuarioNombre()));
 			expForm.setNumeroEntrada(entrada.getNumeroEntrada());
 			expForm.setEmail(entrada.getAvisoEmail());
-			
+
 			if ("S".equals(entrada.getHabilitarAvisos())) {
 				expForm.setHabilitarAvisos(entrada.getHabilitarAvisos());
 				expForm.setMovil(entrada.getAvisoSMS());
@@ -96,18 +111,18 @@ public class AltaEntradaExpedienteAction extends BaseAction
 			} else {
 				expForm.setHabilitarAvisos("N");
 			}
-												
+
 			return mapping.findForward( "success" );
-			
+
 		}catch(Exception ex){
 			request.setAttribute("message",ex.getMessage());
-			return mapping.findForward( "fail" );	
+			return mapping.findForward( "fail" );
 		}
-		
+
     }
-	
+
 	private TramiteBTE consultaEntradaBTE(String numeroEntrada) throws DelegateException{
 		return DelegateBTEUtil.getBteDelegate().obtenerEntrada(numeroEntrada);
 	}
-	
+
 }

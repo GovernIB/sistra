@@ -14,7 +14,10 @@ import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleExpedienteForm;
 import es.caib.bantel.front.util.MensajesUtil;
 import es.caib.bantel.model.GestorBandeja;
+import es.caib.bantel.model.TramiteBandeja;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
+import es.caib.zonaper.modelInterfaz.PersonaPAD;
+import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
 
 /**
  * @struts.action
@@ -22,10 +25,10 @@ import es.caib.bantel.persistence.delegate.DelegateUtil;
  *  path="/altaExpediente"
  *  validate="true"
  *  input = ".entradaAltaExpediente"
- *  
+ *
  * @struts.action-forward
  *  name="success" path=".altaExpediente"
- *  
+ *
  * @struts.action-forward
  *  name="entraAlta" path=".entradaAltaExpediente"
  *
@@ -35,42 +38,43 @@ import es.caib.bantel.persistence.delegate.DelegateUtil;
 public class AltaExpedienteAction extends BaseAction
 {
 	protected static Log log = LogFactory.getLog(AltaExpedienteAction.class);
-	
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-            HttpServletResponse response) throws Exception 
+            HttpServletResponse response) throws Exception
     {
-		
+
 		try{
-			
+
 			MensajesUtil.setMsg(this.getResources(request));
 			DetalleExpedienteForm expForm = (DetalleExpedienteForm)form;
-			
+
 			request.getSession().setAttribute(Constants.OPCION_SELECCIONADA_KEY,"3");
-			
-			// Si es expediente asociado a entrada bandeja redirigimos a pantalla correspondiente
+
+			// Vamos a pantalla para indicar si se genera a partir entrada o sin entrada
 			if(StringUtils.isNotEmpty(expForm.getFlagValidacion()) && expForm.getFlagValidacion().equals("entradaAlta")){
+				// Si existe persona procedemos con el alta
 				expForm.setFlagValidacion("");
 				return mapping.findForward("entraAlta");
 			}
-			
-			// Si es expediente no asociado a una entrada bandeja comprobamos que el gestor tenga procedimientos 
+
+			// Si es expediente no asociado a una entrada bandeja comprobamos que el gestor tenga procedimientos
 			expForm.setNumeroEntrada("");
-			
+
 			// Activamos por defecto los avisos
 			expForm.setHabilitarAvisos("S");
-			
+
 			// Ponemos por defecto el idioma
 			expForm.setIdioma("ca");
-			
+
 			// Comprobamos si es gestor de procedimientos
 			GestorBandeja gestor = DelegateUtil.getGestorBandejaDelegate().obtenerGestorBandeja(this.getPrincipal(request).getName());
 			if (gestor == null || gestor.getProcedimientosGestionados() == null || gestor.getProcedimientosGestionados().size() == 0) {
 				request.setAttribute("message",this.getResources(request).getMessage( getLocale( request ), "errors.noGestor"));
 				return mapping.findForward( "fail" );
-			}			
-			
+			}
+
 			return mapping.findForward( "success" );
-			
+
 		}catch(Exception e){
 			log.error("Excepcion mostrando alta expediente",e);
 			return mapping.findForward("fail");
