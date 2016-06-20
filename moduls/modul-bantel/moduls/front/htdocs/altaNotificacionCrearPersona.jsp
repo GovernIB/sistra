@@ -11,12 +11,43 @@
 	function volver(){
 		document.location='<html:rewrite page="/busquedaExpedientes.do"/>';
 	}
+	
+	function realizarAltaDestinatario(){
+ 		var nifAlta = $("#nifAltaDestinatario").val();
+ 		var nombreAlta = $("#nombreAltaDestinatario").val();
+ 		var ape1Alta = $("#apellido1AltaDestinatario").val();
+ 		var ape2Alta = $("#apellido2AltaDestinatario").val();
+
+ 		if(confirm ( "<bean:message key='expediente.alta.altaDestinatario.confirmacion' />" )){
+
+ 			var mapVars = {};
+ 			mapVars["nif"] = nifAlta;
+ 			mapVars["nombre"] = nombreAlta;
+ 			mapVars["apellido1"] = ape1Alta;
+ 			mapVars["apellido2"] = ape2Alta;
+
+ 			$.ajax({
+				type: "POST",
+				url: "altaPersona.do",
+				contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+				data: mapVars,
+				dataType: "json",
+				error: function() {
+					alert("Error enviando datos al servidor. Intentelo de nuevo.");					
+				},
+				success: function(json) {					
+					if (json.error == "") {
+	 					alert("<bean:message key="expediente.alta.altaDestinatario.altaRealizada"/>");
+	 					document.forms["1"].submit();
+	 				} else {
+	 	 				alert(json.error);
+	 				}						
+				}
+			});
+ 	 		
+ 		}
+ 	}
 </script>
-
-
-<bean:define id="btnAlta" type="java.lang.String">
-	<bean:message key="mensaje.continuar"/>
-</bean:define>
 
 <bean:define id="nifPersona" type="java.lang.String" name="nifPersona"/>
 
@@ -44,16 +75,36 @@
 
 	<p><bean:message key="notificacion.alta.noExisteDestinatario"/></p>
 
-	<!--  PENDIENTE METER CREACION PERSONA -->
-	AQUI HAY QUE METER LA CREACION DE PERSONA COMO ESTA EN EL ALTA DE EXPEDIENTE NORMAL PARA NIF: <bean:write name="nifPersona"/> O LO PONES ASÍ <%=nifPersona%>
-
-
+	<!--  capa alta destinatario -->
+	 <div id="altaDestinatario">	
+	 	<p>
+			<bean:message key="expediente.alta.altaDestinatario.intro"/>
+		</p>	
+	 	<form  class="remarcar opcions">
+	 		<p>
+				<label for="nifAltaDestinatario"><bean:message key="expediente.alta.altaDestinatario.nif"/></label>
+				<input type="text" id="nifAltaDestinatario" name="nifAltaDestinatario" size="12"  class="nif" value="<%=nifPersona%>" readonly/>
+			</p>
+	 		<p>
+				<label for="nombreAltaDestinatario"><bean:message key="expediente.alta.altaDestinatario.nombre"/></label>
+				<input type="text" id="nombreAltaDestinatario" name="nombreAltaDestinatario" class="pc40" maxlength="50" />
+			</p>
+			<p>
+				<label for="apellido1AltaDestinatario"><bean:message key="expediente.alta.altaDestinatario.apellido1"/></label>
+				<input type="text" id="apellido1AltaDestinatario" name="apellido1AltaDestinatario" class="pc40" maxlength="50"/>
+			</p>
+			<p>
+				<label for="apellido2AltaDestinatario"><bean:message key="expediente.alta.altaDestinatario.apellido2"/></label>
+				<input type="text" id="apellido2AltaDestinatario" name="apellido2AltaDestinatario" class="pc40" maxlength="50"/>
+			</p>
+			<p class="botonera">
+				<input type="button" onclick="realizarAltaDestinatario();" value="<bean:message key="expediente.alta.altaDestinatario.botonAlta"/>"/>			
+			</p>
+	 	</form> 	
+	</div>
 
 	<!--  PENDIENTE ESTABLECER NUM ENTRADA -->
 	<html:form action="altaNotificacion" styleClass="remarcar opcions">
-		<p class="botonera2">
-			<html:submit value="<%=btnAlta%>"/>
-		</p>
 	</html:form>
 
 
