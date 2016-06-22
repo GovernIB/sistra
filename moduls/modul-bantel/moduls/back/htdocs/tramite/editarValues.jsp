@@ -3,6 +3,9 @@
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <html:xhtml/>
+<bean:define id="urlArbol">
+    <html:rewrite page="/arbolProcs.do"/>
+</bean:define>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.4.1.min.js"></script>
 <script type="text/javascript">
      <!--
@@ -17,8 +20,32 @@
         url = url + "?codigoTramiteError=" + $("#identificadorProcedimiento").val();
         obrir(url, "Errores", 540, 400);
 	}
+     
+    function mostrarArbolForms(url) {        
+         obrir(url, "Arbol", 540, 400);
+    }
+     
      // -->
 </script>
+<script type="text/javascript">
+     <!--
+     function edit(url) {
+       obrir(url, "Edicion", 940, 600);
+     }
+     // -->
+</script>
+<tr>
+	<td class="separador" colspan="2"><bean:message key="tramite.procExterno"/></td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="tramite.idProcExt"/></td>
+    <td class="input">
+    	<html:text styleClass="data" tabindex="1" property="values.idProcExt" styleId="identificadorProcedimiento" maxlength="20" readonly="true"  />
+    	<input type="button" id="botonForms" value="..." class = "botonEditar"
+			onclick="mostrarArbolForms('<%=urlArbol + "?identificador=values.idProcExt" %>');"
+		/>
+    </td>
+</tr>
 <tr>
 	<td class="separador" colspan="2"><bean:message key="tramite.definicion"/></td>
 </tr>

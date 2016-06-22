@@ -15,6 +15,16 @@
     parameter=".tramite.lista"/>
     
     <action
+    path="/arbolProcs"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".arbolProcs"/>
+
+    <action
+    path="/tramite/funcsNodesProcs"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".tramite.funcsNodesProcs"/> 
+    
+    <action
     path="/back/gestorBandeja/lista"
     type="org.apache.struts.actions.ForwardAction"
     parameter=".gestorBandeja.lista"/>

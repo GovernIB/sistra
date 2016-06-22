@@ -48,6 +48,9 @@
         <put name="values.codigo" value="values.identificador" />
         <put name="paginaValues" value="/tramite/editarValues.jsp"/>
     </definition>
+    <definition name=".arbolProcs" path="/arbolProcs.jsp" />
+    <definition name=".tramite.funcsNodesProcs" path="/js/funcsNodesProcs.jsp"
+     controllerClass="es.caib.bantel.back.action.tramite.FuncsNodesProcsController" />
      <definition name=".tramite.lista" path="/tramite/lista.jsp"
         controllerClass="es.caib.bantel.back.action.tramite.ListaTramitesController"/>
         

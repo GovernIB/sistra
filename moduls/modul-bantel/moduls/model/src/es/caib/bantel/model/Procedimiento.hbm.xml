@@ -10,6 +10,7 @@
       <generator class="assigned"/>
     </id>	
 	
+	<property name="idProcExt" column="TAP_IDEPEX" length="20" />
 	<property name="descripcion"  column="TAP_DESC" not-null="true" length="100"/>
     <property name="inmediata"  column="TAP_INMED" length="1"/>
     <property name="intervaloInforme" column="TAP_INFORM"/>    

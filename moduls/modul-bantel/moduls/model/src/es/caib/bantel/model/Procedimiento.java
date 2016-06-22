@@ -21,7 +21,8 @@ public class Procedimiento implements Serializable{
 	public final static char AUTENTICACION_ORGANISMO 	= 'C';
 		
 	private String identificador;
-	private String descripcion;		
+	private String descripcion;
+	private String idProcExt;
 	private char inmediata = 'N';
 	private Long intervaloInforme;
 	private char tipoAcceso=ACCESO_EJB;
@@ -61,6 +62,13 @@ public class Procedimiento implements Serializable{
 	}
 	public void setIdentificador(String identificador) {
 		this.identificador = identificador;
+	}
+	
+	public String getIdProcExt() {
+		return idProcExt;
+	}
+	public void setIdProcExt(String idProcExt) {
+		this.idProcExt = idProcExt;
 	}
 	
 	public String getDescripcion() {

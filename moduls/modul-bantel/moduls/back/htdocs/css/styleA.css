@@ -602,6 +602,10 @@ input.textLargo
     width: 430px; 
 }
 
+input.botonEditar {
+    height: 2em;
+}
+
 input.textCorto
 {
     padding: 3px 3px;
