@@ -282,7 +282,9 @@ function avisoGuardarClave(){
 					<a href="javascript:void(0);" onclick="mostrarPasos(this);"><bean:message key="pasoDebeSaber.enlaceMostrarPasos"/></a>.
 				</p>
 
+
 		<!-- pasos -->
+		
 		<logic:notEmpty name="pasos">
 				<bean:define id="pasos" name="pasos" type="java.util.ArrayList"/>
 				<div id="pasosExplicacion">
@@ -303,6 +305,14 @@ function avisoGuardarClave(){
 					<!--  end iteracion pasos -->
 				</div>
 		</logic:notEmpty>
+	
+		<!--  información relativa a LOPD -->		
+		<logic:present name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="avisoLOPD("+ lang +")"%>'>
+			<logic:notEmpty name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="avisoLOPD("+ lang +")"%>'>	
+				<h2 class="lopd"><bean:message key="pasoDebeSaber.lopd"/></h2>
+				<p class="apartado"><bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="avisoLOPD("+ lang +")"%>'/></p>	
+			</logic:notEmpty>
+		</logic:present>
 
 
 		<!--  informacion inicio -->

@@ -376,6 +376,7 @@ span.detalleDoc {color:brown;background-color:#f7f7f7;FONT-SIZE: 0.9em;display:b
 #pasoInf h2.nuestroAsistente { padding-left:1.7em; background:#fff url(../imgs/tramitacion/iconos/nuestroasistente.gif) no-repeat left center; }
 #pasoInf h2.pasos { padding-left:1.7em; margin-left:1em; background:#f7f7f7 url(../imgs/tramitacion/iconos/pasos.gif) no-repeat left center; }
 #pasoInf h2.indicaciones { padding-left:1.7em; background:#fff url(../imgs/tramitacion/iconos/caracteristicas.gif) no-repeat left center; }
+#pasoInf h2.lopd { padding-left:1.7em; background:#fff url(../imgs/tramitacion/iconos/ico_atencion.gif) no-repeat left center; }
 #pasoInf h2.plantillas { padding-left:1.7em; background:#fff url(../imgs/enlaces/05guardar.gif) no-repeat left center; }
 
 #pasosDL { font-size:.9em; margin-left:2em; }

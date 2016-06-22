@@ -67,7 +67,7 @@ public class ConfigurationUtil {
 				
 				
 				
-	    		// Obtenemos titulo y referencia a la zona personal
+	    		// Obtenemos titulo y referencia a la zona personal y avisos LOPD del organismo si los hubiera
 	    		for (Iterator it=propiedades.keySet().iterator();it.hasNext();){
 	    			String key = (String) it.next();
 	    			if (key.startsWith("organismo.zonapersonal.titulo.")){
@@ -75,6 +75,9 @@ public class ConfigurationUtil {
 	    			}
 	    			if (key.startsWith("organismo.zonapersonal.referencia.")){
 	    				organismoInfo.getReferenciaPortal().put(key.substring(key.lastIndexOf(".") +1),propiedades.get(key));
+	    			}
+	    			if (key.startsWith("organismo.lopd.aviso.")){
+	    				organismoInfo.getAvisoLOPD().put(key.substring(key.lastIndexOf(".") +1), propiedades.get(key));
 	    			}
 	    		}	    		
 	    }         

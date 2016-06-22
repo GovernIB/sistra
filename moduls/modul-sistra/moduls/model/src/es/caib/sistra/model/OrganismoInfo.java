@@ -22,6 +22,7 @@ public class OrganismoInfo {
 	private String urlLoginCssCustom;
 	private Map tituloPortal = new HashMap(); // Titulos portal con el key como idioma
 	private Map referenciaPortal = new HashMap(); // Referencias portal con el key como idioma
+	private Map avisoLOPD = new HashMap(); // Aviso LOPD con el key como idioma
 	
 	
 	public String getUrlCssCustom() {
@@ -95,6 +96,12 @@ public class OrganismoInfo {
 	}
 	public void setUrlLoginCssCustom(String urlLoginCssCustom) {
 		this.urlLoginCssCustom = urlLoginCssCustom;
+	}
+	public Map getAvisoLOPD() {
+		return avisoLOPD;
+	}
+	public void setAvisoLOPD(Map avisoLOPD) {
+		this.avisoLOPD = avisoLOPD;
 	}
 	
 }
