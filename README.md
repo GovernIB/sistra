@@ -1,4 +1,4 @@
-# ![Logo](https://raw.githubusercontent.com/GovernIB/sistra/binaris/projectinfo_Attachments/icon.jpg) SISTRA
+# ![Logo](https://github.com/GovernIB/maven/raw/binaris/sistra/projectinfo_Attachments/icon.jpg) SISTRA
 
 
 **Descripció**
@@ -20,13 +20,13 @@ Sistema de tramitació administrativa de les Illes Balears
 
 **Captures de pantalla**
 
-![Certificat d'Empadronament](https://raw.githubusercontent.com/GovernIB/sistra/binaris/projectinfo_Attachments/screenshots/313151.jpg)<br/>
+![Certificat d'Empadronament](https://github.com/GovernIB/maven/raw/binaris/sistra/projectinfo_Attachments/screenshots/313151.jpg)<br/>
 Certificat d'Empadronament
 
-![Llista de tràmits](https://raw.githubusercontent.com/GovernIB/sistra/binaris/projectinfo_Attachments/screenshots/313149.jpg)<br/>
+![Llista de tràmits](https://github.com/GovernIB/maven/raw/binaris/sistra/projectinfo_Attachments/screenshots/313149.jpg)<br/>
 Llista de tràmits
 
-![Sol·licitud de llicència de pesca recreativa](https://raw.githubusercontent.com/GovernIB/sistra/binaris/projectinfo_Attachments/screenshots/313147.jpg)<br/>
+![Sol·licitud de llicència de pesca recreativa](https://github.com/GovernIB/maven/raw/binaris/sistra/projectinfo_Attachments/screenshots/313147.jpg)<br/>
 Sol·licitud de llicència de pesca recreativa
 
 
