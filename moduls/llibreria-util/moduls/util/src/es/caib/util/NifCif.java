@@ -29,7 +29,7 @@ public class NifCif {
 	public static String SIN_CIAS = "[0-9]{0,13}[" + LETRAS + "]{1}";
 	public static String SIN_CIF = "[ABCDEFGHJKLMNPQRSUVW]{1}[0-9]{7}([0-9]||[ABCDEFGHIJ]){1}";	                                 
 	//public static String SIN_NIE = "^\\s*[X|Y][\\/|\\s\\-]?[0-9]{1,8}[\\/|\\s\\-]?[A-Z]{1}\\s*$";
-	public static String SIN_NIE = "[X|Y][0-9]{1,8}[A-Z]{1}";
+	public static String SIN_NIE = "[X|Y|Z][0-9]{1,8}[A-Z]{1}";
 	public static String SIN_SS = "^\\s*[0-9]{2}[\\/|\\s\\-]?[0-9]{7,8}[\\/|\\s\\-]?[0-9]{2}\\s*$";
 	
 	public static HashMap sociedad = new HashMap();
@@ -193,7 +193,7 @@ public class NifCif {
 	
 	private static boolean esNIEDC( String valor )
 	{
-		if ( !Pattern.matches( "^[X|Y]{1}[0-9]{1,8}[" + LETRAS + "]{1}$", valor ) )
+		if ( !Pattern.matches( "^[X|Y|Z]{1}[0-9]{1,8}[" + LETRAS + "]{1}$", valor ) )
 		{
 			return false;
 		}
