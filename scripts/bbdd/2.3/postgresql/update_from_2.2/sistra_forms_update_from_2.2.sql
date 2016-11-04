@@ -5,8 +5,8 @@
 COMMIT;
 
 ALTER table RFR_COMPON ADD  COM_COLSPN           BIGINT                      default 1 not null;
-ALTER table RFR_COMPON ADD  COM_SINETQ           BIGINT                      default 0 not null;
-ALTER table RFR_COMPON ADD  COM_CUADRO           BIGINT                      default 0 not null;
+ALTER table RFR_COMPON ADD  COM_SINETQ           boolean                      default false not null;
+ALTER table RFR_COMPON ADD  COM_CUADRO           boolean                      default false not null;
 ALTER table RFR_COMPON ADD  COM_CUACAB           BIGINT                      default 0 not null;
 ALTER table RFR_COMPON ADD  COM_ALINEACION       VARCHAR(1)                    default 'I' not null;
 ALTER table RFR_COMPON ADD  COM_SECLET           VARCHAR(2);
