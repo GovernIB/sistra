@@ -455,6 +455,29 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 		}
 	}
 
+	public boolean verificarMovil(String smsCodigo) throws DelegateException {
+		try
+		{
+			return local.verificarMovil(smsCodigo);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	public void resetCodigoSmsVerificarMovil() throws DelegateException {
+		try
+		{
+			local.resetCodigoSmsVerificarMovil();
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	
 	public void destroy()
 	{
 		try {

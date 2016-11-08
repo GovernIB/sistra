@@ -150,6 +150,17 @@ public class AvisoAlertasTramitacion {
 	
 	}
 	
+	/**
+	 * Enviar SMS para verificar movil.  
+	 * 
+	 */
+	 public void enviarSmsVerificarMovil(String idPersistencia, String idProcedimiento, String movil, String codigoSms, String idioma) throws Exception{
+		 String mensaje = LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.sms.alertaTramitacion.smsVerificarMovil");
+		 mensaje=StringUtil.replace(mensaje,"{0}", codigoSms);
+		 MensajeEnvioSms mensSms = crearMensajeSms(movil, mensaje);
+		 enviarMensaje(idPersistencia, idProcedimiento, null, mensSms);			
+	}
+	
 	//--------------------------------------------------------------------------
 	// FUNCIONES DE UTILIDAD
 	//--------------------------------------------------------------------------

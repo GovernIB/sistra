@@ -46,6 +46,7 @@
 
     <property name="avisoSMS" type="binary" column="ETN_AVISMS"/>
     <property name="avisoEmail" type="binary" column="ETN_AVIEMA"/>
+    <property name="verificarMovil" column="ETN_CHKSMS"/>
 
     <property name="diasPrerregistro" column="ETN_DIAPRE" length="3"/>
 

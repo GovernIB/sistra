@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class name="es.caib.zonaper.model.LogVerificacionMovil" table="ZPE_LOGVMV">
+	 <cache usage="read-write"/>	
+     <id name="codigo" unsaved-value="null" column="VMV_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">ZPE_SEQVMV</param>
+          </generator>
+      </id>
+				
+	<property name="idPersistencia" column="VMV_IDPER" not-null="true"/>
+	<property name="movil" column="VMV_MOVIL" not-null="true"/>
+	<property name="codigoSms" column="VMV_CODSMS" not-null="true"/>
+	<property name="fecha" column="VMV_FECHA" not-null="true"/>
+	
+</class>
+</hibernate-mapping>

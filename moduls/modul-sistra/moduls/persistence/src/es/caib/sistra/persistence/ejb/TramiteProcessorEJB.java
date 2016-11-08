@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.security.Principal;
+import java.security.SecureRandom;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,6 +25,8 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.login.LoginContext;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -96,6 +99,7 @@ import es.caib.sistra.plugins.pagos.EstadoSesionPago;
 import es.caib.sistra.plugins.pagos.PluginPagosIntf;
 import es.caib.sistra.plugins.pagos.SesionPago;
 import es.caib.sistra.plugins.pagos.SesionSistra;
+import es.caib.sistra.plugins.sms.PluginSmsIntf;
 import es.caib.util.CredentialUtil;
 import es.caib.util.DataUtil;
 import es.caib.util.NifCif;
@@ -114,6 +118,7 @@ import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
 import es.caib.zonaper.persistence.delegate.DelegateException;
 import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
 import es.caib.zonaper.persistence.delegate.PadDelegate;
+import es.caib.sistra.persistence.util.UsernamePasswordCallbackHandler;
 import es.indra.util.pdf.UtilPDF;
 
 // TODO FLUJO TRAMITACION PARA PAGOS
@@ -189,10 +194,10 @@ public class TramiteProcessorEJB implements SessionBean {
 	// Indica si aceptamos notificacion telematica (en caso de que se permita)
 	private Boolean habilitarNotificacionTelematica;
 
-	// Indica email de aviso (en caso de que se permita)
+	// Indica email de aviso
 	private String emailAviso;
 
-	// Indica sms de aviso (en caso de que se permita)
+	// Indica sms de aviso
 	private String smsAviso;
 
 	// Indica si es entorno de desarrollo
@@ -207,6 +212,12 @@ public class TramiteProcessorEJB implements SessionBean {
 	// Upload temporal de documentos en paso anexar
 	private Map uploadAnexos = new HashMap();
 
+	// Codigo enviado por SMS para verificacion de movil
+	private String codigoSmsVerificarMovil = null;
+
+	// Indica si se ha verificado el movil
+	private boolean verificadoMovil;
+	
 	public TramiteProcessorEJB() {
 		super();
 	}
@@ -3138,6 +3149,58 @@ public class TramiteProcessorEJB implements SessionBean {
     	this.smsAviso = null;
     }
 
+    
+    /**
+     * Verificacion movil.
+     *
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     *
+     */
+    public boolean verificarMovil(String smsCodigo)
+    {
+    	
+    	boolean verificado = false;
+    	
+    	try {
+    		if (StringUtils.equalsIgnoreCase(this.codigoSmsVerificarMovil, smsCodigo) ) {
+	    		// Registramos en log
+		    	DelegatePADUtil.getPadDelegate().logSmsVerificarMovil(this.tramitePersistentePAD.getIdPersistencia(), this.smsAviso, this.codigoSmsVerificarMovil);
+		    	// Indicamos que se ha verificado
+		    	verificado = true;
+	    	}	    	
+    	}catch (Exception e){
+    		log.error(mensajeLog("Exception al mostrar documento consulta"),e);
+
+    		MensajeFront mens = new MensajeFront();
+    		mens.setTipo(MensajeFront.TIPO_ERROR);
+    		mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ERRORDESCONOCIDO));
+    		mens.setMensajeExcepcion(e.getMessage());
+
+    		RespuestaFront resFront = generarRespuestaFront(mens,null);
+    		setRollbackOnly();
+    	}
+    	
+    	this.verificadoMovil = verificado;
+    	return this.verificadoMovil;
+    }
+    
+    /**
+     * Enviar codigo de nuevo.
+     *
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     *
+     */
+    public void resetCodigoSmsVerificarMovil()
+    {
+    	// Reseteamos codigo para que se vuelva a enviar SMS al ir a paso
+    	this.codigoSmsVerificarMovil = null;    	
+    }
+    
+    
+
+    
     //  -------------------------------------------------------
     // 	---------- Funciones auxiliares -----------------------
     //  -------------------------------------------------------
@@ -3945,6 +4008,13 @@ public class TramiteProcessorEJB implements SessionBean {
 
     		// Indicamos si son obligatorias los avisos para las notificaciones
     		tramiteInfo.setObligatorioAvisosNotificaciones(this.avisosObligatoriosNotif);
+    		
+    		// Verificacion movil en paso registro
+    		if ( !ConstantesSTR.VERIFICARMOVIL_SINESPECIFICAR.equals(espNivel.getVerificarMovil())){
+    			tramiteInfo.setVerificarMovil(ConstantesSTR.VERIFICARMOVIL_HABILITADA.equals(espNivel.getVerificarMovil()));
+    		}else { 
+    			tramiteInfo.setVerificarMovil(ConstantesSTR.VERIFICARMOVIL_HABILITADA.equals(espTramite.getVerificarMovil()));
+    		}
 
     	}
 
@@ -4031,12 +4101,12 @@ public class TramiteProcessorEJB implements SessionBean {
     	// Establece seleccion de notificacion telematica
     	if (tramiteInfo.getHabilitarNotificacionTelematica() != ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA) {
     		tramiteInfo.setSeleccionNotificacionTelematica(this.habilitarNotificacionTelematica);
-    		tramiteInfo.setSeleccionEmailAviso(this.emailAviso);
-	    	if (tramiteInfo.isPermiteSMS()) {
-	    		tramiteInfo.setSeleccionSmsAviso(this.smsAviso);
-	    	}
     	}
-
+    	
+    	// Establece email / sms
+    	tramiteInfo.setSeleccionEmailAviso(this.emailAviso);
+	    tramiteInfo.setSeleccionSmsAviso(this.smsAviso);
+	    
     	// Establece en caso de flujo de tramitación si esta en estado de pasar y a quien
     	// Si esta pendiente de pasar establece el campo flujoTramitacionNif
     	calcularFlujoTramitacion(tramiteInfo);
@@ -4046,6 +4116,9 @@ public class TramiteProcessorEJB implements SessionBean {
     	//  - en caso de que haya documentos pendientes de firma se puede enviar a bandeja de firma
     	//
     	calcularDelegacion(tramiteInfo);
+    	
+    	// Indica si se ha verificado el movil
+    	tramiteInfo.setVerificadoMovil(verificadoMovil);
     }
 
     /**
@@ -4064,23 +4137,25 @@ public class TramiteProcessorEJB implements SessionBean {
     	TramiteNivel tn = tramiteVersion.getTramiteNivel(nivelAutenticacion);
 
     	return ('S' == tramiteVersion.getReducido())
-    	&& tramiteVersion.getDocumentos().size() == 1
-    	&& tramiteVersion.getFirmar() == 'N'
-    	&& !(
-    			(
-    					tn.getEspecificaciones().getHabilitarNotificacionTelematica().equals("S") ||
-    					tn.getEspecificaciones().getHabilitarNotificacionTelematica().equals("O")
-    			)
-    			||
-    			(
-    					tn.getEspecificaciones().getHabilitarNotificacionTelematica().equals("X") &&
-    					(
-    					 tramiteVersion.getEspecificaciones().getHabilitarNotificacionTelematica().equals("S") ||
-    					 tramiteVersion.getEspecificaciones().getHabilitarNotificacionTelematica().equals("O"))
-    					)
-    			)
-    	&& ( ( Documento ) tramiteVersion.getDocumentos().iterator().next() ).getTipo() == Documento.TIPO_FORMULARIO
-    	&& ( ( Documento ) tramiteVersion.getDocumentos().iterator().next() ).getDocumentoNivel( nivelAutenticacion ).getFirmar() == 'N';
+		    	&& tramiteVersion.getDocumentos().size() == 1
+		    	&& tramiteVersion.getFirmar() == 'N'
+		    	&& !(
+		    			(
+		    					tn.getEspecificaciones().getHabilitarNotificacionTelematica().equals("S") ||
+		    					tn.getEspecificaciones().getHabilitarNotificacionTelematica().equals("O")
+		    			)
+		    			||
+		    			(
+		    					tn.getEspecificaciones().getHabilitarNotificacionTelematica().equals("X") &&
+		    					(
+		    					 tramiteVersion.getEspecificaciones().getHabilitarNotificacionTelematica().equals("S") ||
+		    					 tramiteVersion.getEspecificaciones().getHabilitarNotificacionTelematica().equals("O"))
+		    					)
+		    			)
+		    	&& ( ( Documento ) tramiteVersion.getDocumentos().iterator().next() ).getTipo() == Documento.TIPO_FORMULARIO
+		    	&& ( ( Documento ) tramiteVersion.getDocumentos().iterator().next() ).getDocumentoNivel( nivelAutenticacion ).getFirmar() == 'N' 
+		    	&& (  !ConstantesSTR.VERIFICARMOVIL_HABILITADA.equals(tramiteVersion.getEspecificaciones().getVerificarMovil()) 
+		    			&& !ConstantesSTR.VERIFICARMOVIL_HABILITADA.equals(tn.getEspecificaciones().getVerificarMovil())) ;
     }
 
     // En caso de flujo de tramitación establece si esta en estado de pasar y a quien
@@ -4694,11 +4769,14 @@ public class TramiteProcessorEJB implements SessionBean {
 		    				// Establecemos el asiento como parametro del paso
 		    				param.put("asiento",asiento);
     			}
-
-    			// Si esta pendiente de seleccionar notificacion calculamos email/sms por defecto
-    			if (pendienteSeleccionarNotif) {
-    				param.put("emailAvisoDefault", calcularEmailAvisoDefecto());
-    				param.put("smsAvisoDefault", calcularSmsAvisoDefecto());
+    			
+    			// Calculamos email/movil contacto por defecto (script datos contacto o info zona personal)
+    			this.emailAviso = calcularEmailAvisoDefecto();
+    			this.smsAviso = calcularSmsAvisoDefecto();				    			
+    			
+    			// Si hay que verificar movil enviamos SMS
+    			if (tramiteInfo.isVerificarMovil() && StringUtils.isBlank(codigoSmsVerificarMovil)) {
+    				codigoSmsVerificarMovil = enviarCodigoSmsVerificarMovil(this.smsAviso);    				
     			}
 
     			break;
@@ -4713,6 +4791,34 @@ public class TramiteProcessorEJB implements SessionBean {
     	}
     	return param;
     }
+    
+    /**
+     * Envia código de verificación al móvil.
+     * @param movil numero movil
+     * @return
+     */
+    private String enviarCodigoSmsVerificarMovil(String movil) throws Exception {
+    	LoginContext lc = null;		
+		try{					
+			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+			String user = props.getProperty("auto.user");
+			String pass = props.getProperty("auto.pass");
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			lc = new LoginContext("client-login", handler);
+			lc.login();
+			
+			String codigo = generateCodigoSms();
+	    	DelegatePADUtil.getPadDelegate().enviarSmsVerificarMovil(this.tramitePersistentePAD.getIdPersistencia(), this.tramitePersistentePAD.getIdProcedimiento(),
+	    				movil, codigo, this.tramitePersistentePAD.getIdioma());    			
+			return codigo;
+			
+		}finally{				
+			// Hacemos el logout
+			if ( lc != null ){
+				try{lc.logout();}catch(Exception exl){}
+			}
+		}			    
+	}
 
     /**
      * Calcula email por defecto para los avisos. Si esta rellenado el script de avisos lo ejecutara y si no
@@ -6281,5 +6387,12 @@ public class TramiteProcessorEJB implements SessionBean {
 	   if (!this.context.getRollbackOnly()) {
 		   this.context.setRollbackOnly();
 	   }
+   }
+   
+   private String generateCodigoSms(){
+	   SecureRandom sr = new SecureRandom();
+		String rn = "" + sr.nextInt(9999);
+		rn = StringUtils.leftPad(rn, 4, '0');
+		return rn;
    }
 }

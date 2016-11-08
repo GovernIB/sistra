@@ -68,5 +68,8 @@
 	name="seleccionNotificacionAvisosForm"
 	type="es.caib.sistra.front.form.SeleccionNotificacionAvisosForm"/>
 <form-bean
+	name="verificarMovilForm"
+	type="es.caib.sistra.front.form.VerificarMovilForm"/>
+<form-bean
 	name="downloadDocumentoForm"
 	type="es.caib.sistra.front.form.DownloadDocumentoForm"/>	

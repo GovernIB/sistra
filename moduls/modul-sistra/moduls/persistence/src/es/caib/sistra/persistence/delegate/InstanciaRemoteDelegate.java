@@ -469,6 +469,29 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 			throw new DelegateException( e );
 		}
 	}
+	
+	public boolean verificarMovil(String smsCodigo) throws DelegateException {
+		try
+		{
+			return getRemote().verificarMovil(smsCodigo);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	public void resetCodigoSmsVerificarMovil() throws DelegateException {
+		try
+		{
+			getRemote().resetCodigoSmsVerificarMovil();
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+
 
 	public void destroy()
 	{

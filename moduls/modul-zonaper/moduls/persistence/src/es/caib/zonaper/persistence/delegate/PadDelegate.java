@@ -391,6 +391,31 @@ public class PadDelegate implements StatelessDelegate {
 			throw new DelegateException( e );
 		}
 	}
+	
+	public void enviarSmsVerificarMovil(String idPersistencia, String idProcedimiento, String movil, String codigoSms, String idioma) throws DelegateException	
+	{
+		try
+		{
+		 	getFacade().enviarSmsVerificarMovil(idPersistencia, idProcedimiento, movil, codigoSms, idioma);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	public void logSmsVerificarMovil(String idPersistencia, String movil, String codigoSms) throws DelegateException	
+	{
+		try
+		{
+		 	getFacade().logSmsVerificarMovil(idPersistencia, movil, codigoSms);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

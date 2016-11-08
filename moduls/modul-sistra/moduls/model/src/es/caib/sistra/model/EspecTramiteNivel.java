@@ -29,6 +29,9 @@ public class EspecTramiteNivel  extends Traducible {
      private String habilitarAlertasTramitacion = "X";
      private String permitirSMSAlertasTramitacion = "N"; // S / N
      private String finalizarTramiteAuto = "N"; // S / N
+     
+     private String verificarMovil = "N"; // S / N
+     
 
      private byte[] avisoSMS;
      private byte[] avisoEmail;
@@ -392,6 +395,16 @@ public class EspecTramiteNivel  extends Traducible {
 
 	public void setFinalizarTramiteAuto(String finalizarTramiteAuto) {
 		this.finalizarTramiteAuto = finalizarTramiteAuto;
+	}
+
+
+	public String getVerificarMovil() {
+		return verificarMovil;
+	}
+
+
+	public void setVerificarMovil(String verificarMovil) {
+		this.verificarMovil = verificarMovil;
 	}
 
 

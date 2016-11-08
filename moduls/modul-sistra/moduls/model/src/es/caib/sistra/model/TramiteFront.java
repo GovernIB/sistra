@@ -210,7 +210,16 @@ public class TramiteFront  implements Serializable{
 	 * Debug enabled.
 	 */
 	private boolean debugEnabled;
-
+	
+	/**
+	 * Indica si se debe verificar el movil en paso de registro.
+	 */
+	private boolean verificarMovil;
+	
+	/**
+	 * Indica si se ha verificado el movil en caso de que se deba verificar el movil en paso de registro.
+	 */
+	private boolean verificadoMovil;
 
 	public boolean isDebugEnabled() {
 		return debugEnabled;
@@ -592,6 +601,18 @@ public class TramiteFront  implements Serializable{
 	}
 	public void setRegistroAutomatico(boolean registroAutomatico) {
 		this.registroAutomatico = registroAutomatico;
+	}
+	public boolean isVerificarMovil() {
+		return verificarMovil;
+	}
+	public void setVerificarMovil(boolean verificarMovil) {
+		this.verificarMovil = verificarMovil;
+	}
+	public boolean isVerificadoMovil() {
+		return verificadoMovil;
+	}
+	public void setVerificadoMovil(boolean verificadoMovil) {
+		this.verificadoMovil = verificadoMovil;
 	}
 
 }

@@ -57,8 +57,8 @@
 				
 		<!--  Seleccion  avisos -->
 		<logic:equal name="seleccionAvisos" value="true">
-				<bean:define id="emailAvisoDefault" name="emailAvisoDefault" type="java.lang.String"/>
-				<bean:define id="smsAvisoDefault" name="smsAvisoDefault" type="java.lang.String"/>				
+				<bean:define id="emailAvisoDefault" name="tramite" property="seleccionEmailAviso" type="java.lang.String"/>
+				<bean:define id="smsAvisoDefault" name="tramite" property="seleccionSmsAviso" type="java.lang.String"/>				
 				<p><bean:message key="finalizacion.avisos.confirmacion"/></p>				
 				<p align="center">
 					Email: <html:text property="emailSeleccionAviso"  value="<%=emailAvisoDefault%>" size="30"/>
@@ -82,6 +82,44 @@
 	</div>
 </logic:present>
 
+
+<!--  Pendiente confirmar movil: inicio capa -->
+<logic:present name="verificarMovil">
+	
+	<bean:define id="smsAviso" name="tramite" property="seleccionSmsAviso" type="java.lang.String"/>	
+	
+	<div class="alerta">
+		<html:form action="/protected/verificarMovil">
+		<html:hidden property="ID_INSTANCIA" value="<%=ID_INSTANCIA%>"/>	
+		
+		<logic:present name="errorVerificacionMovil">		
+		<p><strong><bean:message key="finalizacion.verificarMovil.errorVerificacionMovil"/></strong></p>
+		</logic:present>
+				
+		<p><bean:message key="finalizacion.verificarMovil.confirmacion"  arg0="<%=smsAviso%>"/></p>
+		<p align="center">
+			<input type="text" name="codigoSms" size="5"/>									
+		</p>				
+		<p align="center">	
+			<html:submit><bean:message key="finalizacion.verificarMovil.validar"/></html:submit>
+		</p>	
+		</html:form>
+		
+		<html:form action="/protected/reenviarSmsVerificarMovil">
+		<html:hidden property="ID_INSTANCIA" value="<%=ID_INSTANCIA%>"/>	
+				
+		<p><bean:message key="finalizacion.verificarMovil.reenvio"/></p>
+		<p align="center">	
+			<html:submit><bean:message key="finalizacion.verificarMovil.reenviar"/></html:submit>
+		</p>	
+		</html:form>
+		
+		<!--  Errores validacion -->
+		<html:errors/>
+		
+	</div>
+	
+</logic:present>
 
 
 
@@ -409,7 +447,7 @@
 					</p>					
 				</logic:equal>			
 			</logic:present>			
-		</logic:notEqual>
+		</logic:notEqual>							
 			
 		<!--  Firma de envio -->
 		<!--  MOSTRAMOS FIRMA: CUANDO HAYA QUE FIRMAR Y SE HAYA AUTENTICADO CON CERTIFICADO -->

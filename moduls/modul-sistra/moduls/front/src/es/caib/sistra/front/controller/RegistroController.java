@@ -101,6 +101,18 @@ public class RegistroController extends FinalizacionController
 		}			
 		
 		//
+		// 	COMPROBAMOS SI TENEMOS QUE PEDIR VERIFICACION MOVIL 
+		//	(antes debe ir la confirmacion de notificacion telematica)
+		// 
+		if (tramite.isVerificarMovil() && !tramite.isVerificadoMovil()) {
+			// Marcamos para que pida la confirmacion			
+			request.setAttribute("verificarMovil","true");
+			// Evitamos que continue hasta que se confirme la notificacion
+			return;			
+		}
+		
+		
+		//
 		//	EXTRAEMOS ETIQUETAS SEGUN CIRCUITO
 		//
 		

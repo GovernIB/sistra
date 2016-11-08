@@ -51,6 +51,12 @@ public class EspecificacionNivelController implements Controller{
     	
     	request.setAttribute( "personalizacionJustificanteOptions", listaOpcionesPersJustif);
     	
+    	List listaOpcionesVerificarMovil = new ArrayList(); 
+    	listaOpcionesVerificarMovil.add(new Opcion(ConstantesSTR. VERIFICARMOVIL_SINESPECIFICAR, "sinEspecificar"));
+    	listaOpcionesVerificarMovil.add(new Opcion(ConstantesSTR. VERIFICARMOVIL_HABILITADA, "afirmacion"));
+    	listaOpcionesVerificarMovil.add(new Opcion(ConstantesSTR. VERIFICARMOVIL_NOHABILITADA, "negacion"));    	    	
+    	
+    	request.setAttribute( "verificarMovilOptions", listaOpcionesVerificarMovil);
     	
     	request.setAttribute( "habilitarAvisos", request.getSession().getServletContext().getAttribute(Constants.AVISOS_OBLIGATORIOS_NOTIFICACIONES));
     }

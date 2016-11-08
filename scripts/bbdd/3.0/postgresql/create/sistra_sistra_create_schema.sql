@@ -3418,3 +3418,5 @@ comment on column STR_ESPNIV.ETN_ALEFIN is
 'Indica si se intenta finalizar automáticamente el trámite antes de realizar la alerta de trámites inacabados con pago realizado';
 
 
+-- V3.1.4
+alter table STR_ESPNIV add ETN_CHKSMS  character varying(1)  default 'N' not null;

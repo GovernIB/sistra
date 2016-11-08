@@ -174,7 +174,16 @@
     <td class="labelo"><bean:message key="especificacionesTramite.habilitarAvisos.avisoSMS"/></td>
     <td class="input"><html:textarea tabindex="10" property="avisoSMS" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=avisoSMS&titulo=especificacionesTramite.avisoSMS" %>');"/></td>
 </tr>
-
+<tr>
+    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAlertasTramitacion.verificarMovil"/></td>
+    <td class="input">
+    	<html:select property="values.verificarMovil">
+    		<logic:iterate id="opcion" name="verificarMovilOptions" type="es.caib.sistra.model.Opcion">
+    			<html:option value="<%=opcion.getCodigo()%>"  key="<%=opcion.getDescripcion()%>"  />
+	    	</logic:iterate>
+	    </html:select>
+    </td>
+</tr>
 
 <logic:present name="<%=bean%>" property="values.codigo">
 	<bean:define id="codigo" name="<%= bean %>" property="values.codigo"/>

@@ -76,6 +76,7 @@ import es.caib.zonaper.model.Expediente;
 import es.caib.zonaper.model.IndiceElemento;
 import es.caib.zonaper.model.LogRegistro;
 import es.caib.zonaper.model.LogRegistroId;
+import es.caib.zonaper.model.LogVerificacionMovil;
 import es.caib.zonaper.model.NotificacionTelematica;
 import es.caib.zonaper.model.Page;
 import es.caib.zonaper.model.ParametrosSubsanacion;
@@ -104,6 +105,7 @@ import es.caib.zonaper.persistence.delegate.PadAplicacionDelegate;
 import es.caib.zonaper.persistence.delegate.RegistroExternoDelegate;
 import es.caib.zonaper.persistence.delegate.RegistroExternoPreparadoDelegate;
 import es.caib.zonaper.persistence.delegate.TramitePersistenteDelegate;
+import es.caib.zonaper.persistence.util.AvisoAlertasTramitacion;
 import es.caib.zonaper.persistence.util.CalendarioUtil;
 import es.caib.zonaper.persistence.util.ConfigurationUtil;
 import es.caib.zonaper.persistence.util.GeneradorId;
@@ -947,6 +949,44 @@ public abstract class PadFacadeEJB implements SessionBean{
 	}
 
 
+	/**
+     * Envia SMS para verificar movil.
+     *
+     *  @ejb.interface-method
+     *  @ejb.permission role-name="${role.auto}"
+     *
+     */
+	public void enviarSmsVerificarMovil(String idPersistencia, String idProcedimiento, String movil, String codigoSms, String idioma) throws ExcepcionPAD
+	{
+		try
+		{
+			AvisoAlertasTramitacion.getInstance().enviarSmsVerificarMovil(idPersistencia, idProcedimiento, movil, codigoSms, idioma);
+		}catch (Exception ex){
+			throw new ExcepcionPAD("Error enviando sms para verificar movil",ex);
+		}
+	}
+
+	/**
+     * Envia SMS para verificar movil.
+     *
+     *  @ejb.interface-method
+     *  @ejb.permission role-name="${role.todos}"
+     *
+     */
+	public void logSmsVerificarMovil(String idPersistencia, String movil, String codigoSms) throws ExcepcionPAD
+	{
+		try
+		{
+			LogVerificacionMovil logRegistro = new LogVerificacionMovil();
+			logRegistro.setCodigoSms(codigoSms);
+			logRegistro.setIdPersistencia(idPersistencia);
+			logRegistro.setMovil(movil);
+			logRegistro.setFecha(new Date());
+			DelegateUtil.getLogVerificacionMovilDelegate().grabarLogVerificacionMovil(logRegistro );				
+		}catch (Exception ex){
+			throw new ExcepcionPAD("Error enviando sms para verificar movil",ex);
+		}
+	}
 
     // ------------------------ Funciones utilidad ----------------------------------------------------------------
     /**

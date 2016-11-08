@@ -108,5 +108,9 @@ public final class DelegateUtil {
     public static ProcesoRevisarRegistrosDelegate getProcesoRevisarRegistrosDelegate() {
         return (ProcesoRevisarRegistrosDelegate) DelegateFactory.getDelegate(ProcesoRevisarRegistrosDelegate.class);
     }
+    
+    public static LogVerificacionMovilDelegate getLogVerificacionMovilDelegate() {
+        return (LogVerificacionMovilDelegate) DelegateFactory.getDelegate(LogVerificacionMovilDelegate.class);
+    }
 }
 
