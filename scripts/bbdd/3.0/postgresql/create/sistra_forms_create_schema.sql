@@ -82,7 +82,7 @@ CREATE TABLE rfr_compon (
     com_txtipo character varying(2),
     COM_LBLTIPO VARCHAR(2) default 'NO' not null,
     COM_ORIENT  VARCHAR(1) default 'H' not null,
-    COM_LDEIND bigint default 0 not null,
+    COM_LDEIND boolean default false not null,
     TRC_PLACEH VARCHAR(100)    
 );
 
