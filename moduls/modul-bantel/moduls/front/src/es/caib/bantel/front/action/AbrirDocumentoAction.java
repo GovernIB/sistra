@@ -49,6 +49,9 @@ public class AbrirDocumentoAction extends BaseAction
 			documentoRDS = rdsDelegate.consultarDocumentoFormateado(refRDS);
 		} else {
 			documentoRDS = rdsDelegate.consultarDocumento(refRDS);
+			if (documentoRDS.isEstructurado()){
+				documentoRDS = rdsDelegate.consultarDocumentoFormateado(refRDS);
+			}
 		}
 	
 	
