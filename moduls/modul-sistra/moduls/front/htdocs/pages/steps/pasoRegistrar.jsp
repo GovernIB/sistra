@@ -16,7 +16,9 @@
         <html:rewrite page="/protected/resetSeleccionNotificacionTelematicaAvisos.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
 <bean:define id="entornoDesarrollo" value="<%=Boolean.toString(es.caib.sistra.front.util.Util.esEntornoDesarrollo())%>"/>
-
+<bean:define id="urlResetSmsCodigo">
+        <html:rewrite page="/protected/reenviarSmsVerificarMovil.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
+</bean:define>
 <!--  Flujo de tramite -->
 <logic:present name="pasarFlujoTramitacion">
 </logic:present>
@@ -95,27 +97,24 @@
 		<logic:present name="errorVerificacionMovil">		
 		<p><strong><bean:message key="finalizacion.verificarMovil.errorVerificacionMovil"/></strong></p>
 		</logic:present>
+		
+		<logic:present name="reenviadoVerificacionMovil">		
+		<p><strong><bean:message key="finalizacion.verificarMovil.reenviadoVerificacionMovil"/></strong></p>
+		</logic:present>
 				
 		<p><bean:message key="finalizacion.verificarMovil.confirmacion"  arg0="<%=smsAviso%>"/></p>
 		<p align="center">
-			<input type="text" name="codigoSms" size="5"/>									
-		</p>				
-		<p align="center">	
-			<html:submit><bean:message key="finalizacion.verificarMovil.validar"/></html:submit>
-		</p>	
+			<input type="text" name="codigoSms" size="4"/>	
+			<html:submit><bean:message key="finalizacion.verificarMovil.validar"/></html:submit>								
+		</p>					
 		</html:form>
 		
-		<html:form action="/protected/reenviarSmsVerificarMovil">
-		<html:hidden property="ID_INSTANCIA" value="<%=ID_INSTANCIA%>"/>	
-				
-		<p><bean:message key="finalizacion.verificarMovil.reenvio"/></p>
-		<p align="center">	
-			<html:submit><bean:message key="finalizacion.verificarMovil.reenviar"/></html:submit>
-		</p>	
-		</html:form>
-		
-		<!--  Errores validacion -->
-		<html:errors/>
+		<p>
+			<i>
+				<bean:message key="finalizacion.verificarMovil.reenvio"/> 
+				<html:link href="<%=urlResetSmsCodigo%>"><bean:message key="finalizacion.verificarMovil.reenviar"/></html:link>
+			</i>
+		</p>
 		
 	</div>
 	

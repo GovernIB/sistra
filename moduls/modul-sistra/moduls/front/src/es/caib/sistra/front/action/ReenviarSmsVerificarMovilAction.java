@@ -31,6 +31,7 @@ public class ReenviarSmsVerificarMovilAction extends BaseAction
     {
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request );
 		delegate.resetCodigoSmsVerificarMovil();
+		request.setAttribute("reenviadoVerificacionMovil", "true");
 		return mapping.findForward("success");
     }
 	
