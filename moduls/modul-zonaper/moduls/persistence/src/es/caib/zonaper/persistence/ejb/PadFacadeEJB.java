@@ -2007,7 +2007,7 @@ public abstract class PadFacadeEJB implements SessionBean{
 			EntradaPreregistroDelegate delegate = DelegateUtil.getEntradaPreregistroDelegate();
 			delegate.confirmarEntradaPreregistro(entrada.getCodigo(), entrada.getNumeroRegistro(),
 					entrada.getFechaConfirmacion(), oficinaRegistroPresencial,
-					entrada.getConfirmadoAutomaticamente() == 'S',
+					tipoConfirmacionPreregistro.equals(ConstantesBTE.CONFIRMACIONPREREGISTRO_AUTOMATICA),
 					tipoConfirmacionPreregistro.equals(ConstantesBTE.CONFIRMACIONPREREGISTRO_GESTOR));
 
 			// Generamos usos en RDS en caso de que se genere registro de entrada
