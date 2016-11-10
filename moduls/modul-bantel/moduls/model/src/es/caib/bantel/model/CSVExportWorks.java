@@ -1,5 +1,6 @@
 package es.caib.bantel.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,7 +10,7 @@ import java.util.Map;
  * Contenedor de trabajos de exportacion
  *
  */
-public class CSVExportWorks {
+public class CSVExportWorks implements Serializable {
 
 	public final static String KEY_CSV_WORKS = "es.caib.bantel.csv-works-session-key";
 	private final static int CLEAN_PERIOD = 3600000;  // 1 HORA
