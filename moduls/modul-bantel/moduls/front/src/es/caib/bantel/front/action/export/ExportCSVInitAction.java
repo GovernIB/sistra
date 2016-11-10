@@ -73,7 +73,7 @@ public class ExportCSVInitAction extends BaseAction
 					result = "ERROR:" +  resources.getMessage( getLocale( request ), "exportCSV.fechaInicioNoValida");
 					throw new Exception("Fecha inicio incorrecta");	
 				}
-				desde = DataUtil.obtenerUltimaHora(desde);
+				desde = DataUtil.obtenerPrimeraHora(desde);
 			}
 		
 			Date hasta=null;		
