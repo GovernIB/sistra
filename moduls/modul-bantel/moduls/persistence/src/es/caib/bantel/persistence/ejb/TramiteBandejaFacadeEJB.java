@@ -633,6 +633,8 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 	    			csv[i] = extractCSVDocumento("FORMULARIO", entrada, columnXPath, forms);
 	    		} else if (columnXPath.startsWith("DOCUMENTO.")) {
 	    			csv[i] = extractCSVDocumento("DOCUMENTO", entrada, columnXPath, forms);
+	    		} else if (columnXPath.startsWith("PAGO.")){
+	    			csv[i] = extractCSVDocumento("PAGO", entrada, columnXPath, forms);
 	    		} else if (columnXPath.startsWith("TRAMITE.")) {
 	    			// Valor obtenido de la entrada
 	    			xpath= columnXPath.substring(("TRAMITE.").length());	
@@ -679,7 +681,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 		if (!forms.containsKey(keyForm)){
 			DocumentoBTE doc = entrada.getDocumento(idForm,Integer.parseInt(idInstancia));
 			if (doc != null && doc.getPresentacionTelematica() != null){	  
-				if (tipoDocumento.equals("FORMULARIO")) {
+				if (tipoDocumento.equals("FORMULARIO") || tipoDocumento.equals("PAGO")) {
 					Analizador analiza = new Analizador ();
 			    	HashMapIterable hti = analiza.analizar (new String(doc.getPresentacionTelematica().getContent(),ConstantesXML.ENCODING));
 			    	forms.put(keyForm,hti);	    			    			
@@ -698,7 +700,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 		String csv = "";
 		if (valuesForm != null){
 			
-			Object o = valuesForm.get(referenciaXPath(xpath));
+			Object o = valuesForm.get(referenciaXPath(xpath, tipoDocumento));
 			List valores;
 			
 			if (o != null){
@@ -801,8 +803,8 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 	 * @param referenciaCampo
 	 * @return
 	 */
-	protected String referenciaXPath(String referenciaCampo){
-		String xpath = "/FORMULARIO/"+referenciaCampo.replaceAll("\\.","/");
+	protected String referenciaXPath(String referenciaCampo, String tipoDocumento){
+		String xpath = "/"+ tipoDocumento + "/"+referenciaCampo.replaceAll("\\.","/");
 		if (xpath.endsWith(TramiteBandejaFacadeEJB.CODIGO_LISTAS)) xpath = xpath.substring(0,xpath.indexOf(TramiteBandejaFacadeEJB.CODIGO_LISTAS));
 		return xpath;
 	}
