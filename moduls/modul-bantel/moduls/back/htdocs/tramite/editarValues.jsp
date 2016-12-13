@@ -40,7 +40,7 @@
 <tr>
     <td class="labelo"><bean:message key="tramite.idProcExt"/></td>
     <td class="input">
-    	<html:text styleClass="data" tabindex="1" property="values.idProcExt" styleId="identificadorProcedimiento" maxlength="20" readonly="true"  />
+    	<html:text styleClass="data" tabindex="1" property="values.idProcExt" styleId="identificadorProcedimientoExt" maxlength="20" readonly="true"  />
     	<input type="button" id="botonForms" value="..." class = "botonEditar"
 			onclick="mostrarArbolForms('<%=urlArbol + "?identificador=values.idProcExt" %>');"
 		/>
