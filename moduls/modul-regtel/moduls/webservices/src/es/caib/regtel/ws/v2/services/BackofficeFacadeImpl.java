@@ -425,7 +425,22 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 				diIntf.setCodigoProvincia((di.getCodigoProvincia() != null)? di.getCodigoProvincia().getValue() : "");
 				diIntf.setAutenticado((di.getAutenticado()!= null)? di.getAutenticado().getValue() : false);
 				diIntf.setNif(di.getNif());
-				diIntf.setNombreApellidos(di.getNombreApellidos());
+				
+				if (di.getNombreApellidosDesglosado() != null) {
+					IdentificacionInteresadoDesglosada identificacionInteresadoDesglosada = new IdentificacionInteresadoDesglosada();
+					identificacionInteresadoDesglosada.setNombre(di.getNombreApellidosDesglosado().getNombre());
+					identificacionInteresadoDesglosada.setApellido1(di.getNombreApellidosDesglosado().getApellido1());
+					identificacionInteresadoDesglosada.setApellido2(di.getNombreApellidosDesglosado().getApellido2());
+					diIntf.setIdentificacionUsuarioDesglosada(identificacionInteresadoDesglosada);
+					diIntf.setNombreApellidos(StringUtil.formatearNombreApellidos(
+							ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM,
+							di.getNombreApellidosDesglosado().getNombre(),
+							di.getNombreApellidosDesglosado().getApellido1(),
+							di.getNombreApellidosDesglosado().getApellido2()));
+				} else {
+					diIntf.setNombreApellidos(di.getNombreApellidos());
+				}
+				
 				diIntf.setNombreLocalidad((di.getNombreLocalidad() != null)? di.getNombreLocalidad().getValue() : "");
 				diIntf.setNombrePais((di.getNombrePais() != null)? di.getNombrePais().getValue() : "");
 				diIntf.setNombreProvincia((di.getNombreProvincia() != null)? di.getNombreProvincia().getValue() : "");
