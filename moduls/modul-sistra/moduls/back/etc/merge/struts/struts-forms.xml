@@ -111,3 +111,7 @@
  <form-bean
     name="pingDominioForm"
     type="es.caib.sistra.back.form.PingDominioForm" />
+    
+<form-bean
+    name="buscarServiciosForm"
+    type="es.caib.sistra.back.form.BuscarServiciosForm" />

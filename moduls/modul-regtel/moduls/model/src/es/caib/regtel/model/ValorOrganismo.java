@@ -15,6 +15,10 @@ public class ValorOrganismo implements Serializable{
 	 * Descripción
 	 */
 	private String descripcion;
+	/**
+	 * Código padre
+	 */
+	private String codigoPadre;
 	
 	/**
 	 * Obtiene código
@@ -43,5 +47,11 @@ public class ValorOrganismo implements Serializable{
 	 */
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+	public String getCodigoPadre() {
+		return codigoPadre;
+	}
+	public void setCodigoPadre(String codigoPadre) {
+		this.codigoPadre = codigoPadre;
 	}	
 }

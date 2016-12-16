@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="moduls/llibreria-plugins/moduls/plugins/src"/>
+	<classpathentry kind="src" path="moduls/modul-sistra/moduls/incidencias/src"/>
 	<classpathentry kind="src" path="moduls/modul-consola/moduls/back/src"/>
 	<classpathentry kind="src" path="moduls/llibreria-zk/moduls/zkutils/src"/>
 	<classpathentry kind="src" path="pluginsMOCK/plugin-emailMOCK/moduls/plugins/src"/>

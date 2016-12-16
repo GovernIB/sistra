@@ -249,6 +249,7 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 					ValorOrganismo val = new ValorOrganismo();
 					val.setCodigo(s.getCodigo());
 					val.setDescripcion(s.getDescripcion());
+					val.setCodigoPadre(s.getCodigoPadre());
 					result.add(val);
 				}
 			}
