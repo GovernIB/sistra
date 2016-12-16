@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="sistra.incidencias" default="main" basedir=".">
+
+    <property file="${basedir}/build.properties"/>
+
+    <property name="modul" value="incidencias"/>
+
+    <property name="home.dir" location="${basedir}/../.."/>
+    <property file="${home.dir}/config.properties"/>
+	<property file="${home.dir}/../../config.properties"/>
+	<property name="lib.dir" location="${home.dir}/../../lib"/>
+	<property name="distribucion.dir" location="${home.dir}/../../product"/>
+	
+    <property name="output.dir" location="${home.dir}/output"/>
+    <property name="modul.output.dir" location="${output.dir}/${modul}"/>
+
+    <property name="etc.dir" location="${basedir}/etc"/>
+	
+	<property name="web.src" location="${basedir}/src"/>
+    <property name="web.htdocs" location="${basedir}/htdocs"/>
+	<property name="web.classes" location="${modul.output.dir}/classes"/>
+	<property name="web.product" location="${output.dir}/moduls"/>
+	
+	
+    <!-- Crea tots els directoris de treball necessaris -->
+    <target name="prepare">
+        <mkdir dir="${web.product}"/>
+    	<mkdir dir="${web.classes}"/>
+    </target>
+	
+	 <path id="web.class.path">
+        <fileset dir="${lib.dir}">
+        	<include name="*.jar"/>
+        </fileset>    	
+	 	<fileset dir="${web.product}">
+            <include name="5-${prj.name}-model.jar" />
+            <include name="5-${prj.name}-persistence-client.jar" />	 		
+        </fileset>
+	 	<fileset dir="${lib.dir}/client">
+    		<include name="bantel-client.jar"/>        	
+       	</fileset>       	
+	 	<fileset dir="${distribucion.dir}/lib"> 
+	 	    <include name="sistra-util.jar"/>
+	 	 </fileset>
+    </path>
+	
+	<target name="web.compile" depends="prepare">
+    	<javac
+            destdir="${web.classes}"
+            classpathref="web.class.path"
+            debug="${javac.debug}"
+            deprecation="${javac.deprecation}"
+            optimize="${javac.optimize}" encoding="iso-8859-1"
+    		source="1.5"
+    		        	target="1.5"
+            >
+            <src path="${web.src}"/>            
+        </javac>    	
+	    <copy todir="${web.classes}" overwrite="true">											
+		    <fileset dir="${web.src}">
+		    	<include name="**/*.html"/>
+		    </fileset> 		   
+	    </copy>
+		
+		<copy todir="${web.classes}" overwrite="true">											
+		    <fileset dir="${etc.dir}/resources">
+		    	<include name="**/*.properties"/>
+		    </fileset> 		   
+	    </copy>    	
+    	
+    </target>
+
+    <target name="web.war" depends="web.compile">
+        <delete file="${web.product}/5-${prj.name}-${modul}.war" quiet="yes"/>
+        <war warfile="${web.product}/5-${prj.name}-${modul}.war"
+            basedir="${web.htdocs}" webxml="${etc.dir}/web.xml">
+        	<classes dir="${web.classes}"/>
+        	<lib file="${lib.dir}/jstl.jar"/>
+        	<lib file="${lib.dir}/standard.jar"/>
+            <manifest>
+                <attribute name="Created-By" value="${indra}"/>
+            </manifest>
+        </war>
+    </target>
+
+
+   <target name="main" depends="web.war" description="Construeye el war"/>
+
+</project>

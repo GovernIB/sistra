@@ -1,3 +1,4 @@
+<%@page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-15" %>
 <%@ page import="es.caib.sistra.model.MensajeFront,es.caib.util.StringUtil,org.apache.commons.lang.StringEscapeUtils,es.caib.sistra.front.Constants" %>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
@@ -53,6 +54,22 @@
 		<p><%=mensajeHtml%></p>
 		<bean:define id="mostrarMensajeDebug" value="<%=request.getSession().getServletContext().getInitParameter(\"mensaje.debug\")%>" />
 		<logic:equal name="mostrarMensajeDebug" value="true">
+			
+			<p>
+				<i>
+				<%=es.caib.util.StringUtil.fechaACadena(new Date(),"dd/MM/yyyy HH:mm:ss")%>  
+			
+				<logic:notEmpty name="<%=Constants.MENSAJE_DEBUG_TRAMITE_DESC_KEY%>">
+					- <bean:write name="<%=Constants.MENSAJE_DEBUG_TRAMITE_DESC_KEY%>"/> (<bean:write name="<%=Constants.MENSAJE_DEBUG_TRAMITE_ID_KEY%>"/>)
+				</logic:notEmpty>
+				
+				<logic:notEmpty name="<%=Constants.MENSAJE_DEBUG_AUTENTICACION%>">
+					<bean:define id="mensajeDebugAuth" name="<%=Constants.MENSAJE_DEBUG_AUTENTICACION%>" type="java.lang.String" />
+					 - <bean:message key="<%=mensajeDebugAuth%>" />
+				</logic:notEmpty>
+				</i>
+			</p>
+		
 			<logic:notEmpty name="mensajeFront" property="mensajeExcepcion">
 				<a style="color:#808080;" onclick="$('#mensajeDepuracionDiv').show();"><bean:message key="mensajeDepuracion.enlace"/></a>
 				<div id="mensajeDepuracionDiv" style="display:none;">

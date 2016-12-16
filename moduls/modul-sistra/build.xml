@@ -136,6 +136,7 @@
 		<ant dir="moduls/front" target="${task}" inheritall="false"/>
 		<ant dir="moduls/admin" target="${task}" inheritall="false"/>
 		<ant dir="moduls/listar" target="${task}" inheritall="false"/>
+		<ant dir="moduls/incidencias" target="${task}" inheritall="false"/>
 	</target>
 	
 	<target name="interfaz" depends="prepare">

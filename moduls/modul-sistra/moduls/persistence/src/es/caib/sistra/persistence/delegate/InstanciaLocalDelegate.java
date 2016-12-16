@@ -477,6 +477,16 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 		}
 	}
 	
+	public RespuestaFront obtenerInfoTramite() throws DelegateException {
+		try
+		{
+			return local.obtenerInfoTramite();
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
 	
 	public void destroy()
 	{

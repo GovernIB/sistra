@@ -245,7 +245,12 @@
 	            <context-root>@contextoRaizBack@sistraadmin</context-root>
 	        </web>
 	    </module>
-
+		 <module>
+	        <web>
+	            <web-uri>5-sistra-incidencias.war</web-uri>
+	            <context-root>@contextoRaizFront@incidencias</context-root>
+	        </web>
+	    </module>
 
 	 <!-- Mòdul forms -->
 	    <module><java>6-form-model.jar</java></module>

@@ -47,8 +47,8 @@ public interface InstanciaDelegate extends Delegate
 	public RespuestaFront finalizarTramite() throws DelegateException;
 	public boolean verificarMovil(String smsCodigo) throws DelegateException;
 	public void resetCodigoSmsVerificarMovil() throws DelegateException;
-
 	public boolean isDebugEnabled() throws DelegateException;
+	public RespuestaFront obtenerInfoTramite() throws DelegateException;
 
 	void destroy();
 }

@@ -19,6 +19,14 @@
             <context-root>tramites</context-root>
         </web>
     </module>
+    
+    <module>
+        <web>
+            <web-uri>incidencias.war</web-uri>
+            <context-root>incidencias</context-root>
+        </web>
+    </module>
+    
     <module>
         <web>
             <web-uri>5-sistra-back.war</web-uri>
@@ -37,5 +45,5 @@
             <context-root>sistraadmin</context-root>
         </web>
     </module>
-	
+    
 </application>

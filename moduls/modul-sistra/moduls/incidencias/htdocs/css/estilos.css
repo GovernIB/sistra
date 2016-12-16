@@ -1,0 +1,40 @@
+/* CSS Document */
+
+/* formateig */
+
+body, h1, h2, h3, h4, h5, h6, form, table, caption, tr, td, ul, ol, li, dl, dt, dd, p, img, button, object, iframe, fieldset, legend { margin:0; padding:0; outline:0; }
+img { border:0; }
+
+/* COMUNS */
+
+body { font:normal 80% 'TrebuchetMS', 'Trebuchet MS', Arial, Helvetica, sans-serif; color:#666; background-color:#fff; }
+a { color:#000; text-decoration:none; }
+a:hover { color:#c33; }
+a.pequenyo {color:#06f;font-size: xx-small}
+
+input, select, textarea, button { font:normal 1em Arial, Helvetica, sans-serif; color:#000; line-height:1.3em !important; }
+
+#contenidor { width:58em; margin:1.2em auto; }
+#continguts { background-color:#fff; }
+
+#continguts p { position:relative; }
+
+#continguts p.importante { background-color:#ecf4fb; padding:1em;}
+
+/* enllaços */
+
+a { position:relative; }
+a.importante { color:#c33; }
+
+/* titols */
+
+h1 { font-size:1.3em; margin:0 0 1em 0; }
+h2 { font-size:1.2em; margin:1em 0; position:relative; }
+h2.marca { background-color:#f4f3ed; }
+h3 { font-size:1.1em; margin:0 0 1em 0; position:relative; }
+h4 { font-size:1em; margin:0 0 1em 0; }
+h1.invisible, h2.invisible, h3.invisible, h4.invisible { display:none; }
+
+#continguts table { margin-bottom:1.5em; border:0; empty-cells:hide; border-collapse:collapse; }
+#continguts table th { float:left; width:10em; font-size:1.1em; font-variant:small-caps; font-weight:normal; text-align:right; padding-right:.8em; }
+#continguts table td { font-weight:bold; padding-bottom:.5em; }

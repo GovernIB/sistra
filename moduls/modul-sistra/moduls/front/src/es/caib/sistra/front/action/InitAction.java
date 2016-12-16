@@ -161,10 +161,11 @@ public class InitAction extends BaseAction
         // la descripcion y los dias de persistencia del tramite, para mostrarlos en la cabecera.
         String descripcion 		= ( String ) hsmParametros.get( Constants.DESCRIPCION_TRAMITE_PARAMS_KEY );
         String diaspersistencia = ( String ) hsmParametros.get( Constants.DIAS_PERSISTENCIA_PARAMS_KEY );
+        String identificador = ( String ) hsmParametros.get( "identificador" );
         // Idem para los datos de sesion
         DatosSesion datosSesion = ( DatosSesion ) hsmParametros.get( Constants.DATOS_SESION_PARAMS_KEY ); 
         
-        request.setAttribute( Constants.DESCRIPCION_TRAMITE_PARAMS_KEY, descripcion );
+        request.setAttribute( Constants.DESCRIPCION_TRAMITE_PARAMS_KEY, descripcion + " (" + identificador + ")");
         request.setAttribute( Constants.DIAS_PERSISTENCIA_PARAMS_KEY, diaspersistencia );
         request.setAttribute( Constants.DATOS_SESION_PARAMS_KEY, datosSesion );
         

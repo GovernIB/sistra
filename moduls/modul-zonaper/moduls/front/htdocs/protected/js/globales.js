@@ -137,7 +137,7 @@ function checkVersionNavegador(errorIE,errorFirefox){
 	}
 	
 	if (browser != "") {
-		//obtenemos el substring donde empieza la versión
+		//obtenemos el substring donde empieza la versiï¿½n
 		aux = detect.substring(place + thestring.length);
 		//buscamos donde esta el separador decimal
 		posDecimal = aux.indexOf('.');
@@ -176,4 +176,12 @@ function b64ToB64UrlSafe(b64){
 	b64UrlSafe = b64UrlSafe.replace(/\//g,"_");
 	b64UrlSafe = b64UrlSafe.replace(/(\r\n|[\r\n])/g,"");
 	return b64UrlSafe;
+}
+
+function mostrarFormularioIncidencias(url) {
+	var capaI = document.getElementById('contactoAdministradorContent');	
+	capaI.innerHTML = 
+		'<iframe src="' + url + '" style="border: 0pt none; width: 500px; height: 350px;" scrolling="no"></iframe>';
+	$.ocultarAyuda(false);
+	$.mostrarAyuda(false);
 }

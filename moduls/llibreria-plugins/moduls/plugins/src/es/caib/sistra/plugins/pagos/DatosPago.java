@@ -7,7 +7,11 @@ import java.util.Date;
  * Datos de un pago
  */
 public class DatosPago implements Serializable{
-	
+
+	/**
+	 * Id procedimiento.
+	 */
+	private String idProcedimiento;
 	/**
 	 * Modelo trámite
 	 */
@@ -24,6 +28,10 @@ public class DatosPago implements Serializable{
 	 * Nombre trámite
 	 */
 	 private String nombreTramite;
+	 /**
+	 * Fecha inicio tramite.
+	 */
+	private Date fechaInicioTramite;
 	 /**
 	  * Nombre usuario
 	  */
@@ -83,6 +91,8 @@ public class DatosPago implements Serializable{
 	 * Mensaje a mostrar en caso de que se exceda el tiempo de pago.
 	 */
 	private String mensajeTiempoMaximoPago;
+	
+
 	
 	/**
 	 * Concepto de la tasa
@@ -307,5 +317,17 @@ public class DatosPago implements Serializable{
 	}
 	public void setMensajeTiempoMaximoPago(String mensajeTiempoMaximoPago) {
 		this.mensajeTiempoMaximoPago = mensajeTiempoMaximoPago;
+	}
+	public String getIdProcedimiento() {
+		return idProcedimiento;
+	}
+	public void setIdProcedimiento(String idProcedimiento) {
+		this.idProcedimiento = idProcedimiento;
+	}
+	public Date getFechaInicioTramite() {
+		return fechaInicioTramite;
+	}
+	public void setFechaInicioTramite(Date fechaInicioTramite) {
+		this.fechaInicioTramite = fechaInicioTramite;
 	}	
 }

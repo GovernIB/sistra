@@ -13,6 +13,19 @@
 		<bean:write name="<%=es.caib.zonaper.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="tituloPortal("+ lang +")"%>'/>
 	</bean:define>
 	
+	<bean:define id="urlFormularioIncidencias">
+		<html:rewrite page="/protected/mostrarFormularioIncidencias.do"/>
+	</bean:define>
+
+<script type="text/javascript">
+<!--
+	function formularioIncidencias() {
+		mostrarFormularioIncidencias('<%=urlFormularioIncidencias%>');
+	}
+-->
+</script>
+
+	
 <logic:equal name="<%=es.caib.zonaper.front.Constants.MOSTRAR_EN_IFRAME%>" value="false">
 
 		<!-- logo illes balears -->

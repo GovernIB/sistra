@@ -349,6 +349,17 @@ public class TramiteProcessorEJB implements SessionBean {
 		return instancia;
 	}
 
+	/**
+	 * Obtiene info tramite.
+	 *
+	 * @ejb.interface-method
+	 * @ejb.permission role-name="${role.todos}"
+	 */
+	public RespuestaFront obtenerInfoTramite(){
+		return generarRespuestaFront(null, null);
+	}
+	
+	
 
 	/**
 	 * Obtiene InstanciaBean para poder serializarlo en la capa de front
@@ -390,6 +401,7 @@ public class TramiteProcessorEJB implements SessionBean {
     		// Devolvemos como parámetros la descripción del trámite y los niveles
     		HashMap param = new HashMap();
     		RespuestaFront res = new RespuestaFront();
+    		param.put("identificador", this.tramiteVersion.getTramite().getIdentificador());
     		param.put("descripcion", ((TraTramite) this.tramiteVersion.getTramite().getTraduccion( this.datosSesion.getLocale().getLanguage())).getDescripcion());
     		param.put("niveles",ls_niveles);
     		// En caso de pasar un nivel obtenemos dias persistencia del nivel
@@ -1282,6 +1294,8 @@ public class TramiteProcessorEJB implements SessionBean {
 	        		dp.setTipoPago(datosPago.getTipoPago());
 					dp.setFechaMaximaPago(fechaLimitePago);
 					dp.setMensajeTiempoMaximoPago(calc.getMensajeFechaLimitePago());
+					dp.setFechaInicioTramite(this.tramitePersistentePAD.getFechaCreacion());
+					dp.setIdProcedimiento(this.tramiteInfo.getIdProcedimiento());
 
 	        		SesionSistra ss = new SesionSistra();
 	        		ss.setUrlMantenimientoSesionSistra(urlMantenimientoSesion);
@@ -3862,6 +3876,8 @@ public class TramiteProcessorEJB implements SessionBean {
     	// Establecemos propiedades generales tramite (sólo hace falta la primera vez)
     	if (tramiteInfo == null){
     		tramiteInfo = new TramiteFront();
+    		tramiteInfo.setFechaCreacion(tramitePersistentePAD.getFechaCreacion());
+    		tramiteInfo.setIdProcedimiento(this.tramiteVersion.getTramite().getProcedimiento());
     		tramiteInfo.setModelo( this.tramiteVersion.getTramite().getIdentificador() );
     		tramiteInfo.setVersion( this.tramiteVersion.getVersion() );
     		tramiteInfo.setDatosSesion(this.datosSesion);

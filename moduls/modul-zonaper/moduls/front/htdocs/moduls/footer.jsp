@@ -67,7 +67,8 @@
 						</logic:equal>					
 					</logic:notEqual>
 				</logic:equal>					
-			</p>			
+			</p>		
+			<div id="contactoAdministradorContent"></div>	
 			<p align="center">
 				<a id="suportDescartar" title="<bean:message key="footer.soporte.continuar"/>" href="javascript:void(0);">
 					<bean:message key="footer.soporte.continuar"/>

@@ -234,16 +234,13 @@ function ocultarAyudaAdmin() {
 
 // Abre pantalla de ayuda
 function mostrarAyudaAdmin() {
+	var capaI = document.getElementById('contactoAdministradorContent');	
+	capaI.innerHTML = "";
+	mostrarSoporte();
+}
 	
-	/*
-	alert(tituloTramite);
 	
-	alert(escape(tituloTramite));
-	alert(unescape(tituloTramite));
-	
-	ventana = window.open("contactoAdministrador.do?tituloTramite="+escape(tituloTramite),"ayudaAdministrador","width=500,height=200,scrollbars=1,top=100,left=300");	
-	ventana.focus();
-	*/
+function mostrarSoporte() {
 	
 	var capaI = document.getElementById('contactoAdministrador');
 
@@ -278,8 +275,7 @@ function mostrarAyudaAdmin() {
 		style.left = (ventanaX-capaInfoX)/2 + 'px';
 		style.top = (((ventanaY-capaInfoY)/2)+ document.documentElement.scrollTop) + 'px';
 	}
-	
-	
+		
 }
 
 function URLEncode(text)
@@ -402,7 +398,7 @@ function checkVersionNavegador(errorIE,errorFirefox){
 	}
 	
 	if (browser != "") {
-		//obtenemos el substring donde empieza la versión
+		//obtenemos el substring donde empieza la versiï¿½n
 		aux = detect.substring(place + thestring.length);
 		//buscamos donde esta el separador decimal
 		posDecimal = aux.indexOf('.');
@@ -446,4 +442,12 @@ function b64ToB64UrlSafe(b64){
 function estaIframe() {
 	contenidor_H = document.getElementById("contenidor").offsetHeight;
 	top.window.document.getElementById("frm").style.height = parseInt((contenidor_H/14.5), 10) + "em";
+}
+
+
+function mostrarFormularioIncidencias(url) {
+	var capaI = document.getElementById('contactoAdministradorContent');	
+	capaI.innerHTML = 
+		'<iframe src="' + url + '" style="border: 0pt none; width: 500px; height: 350px;" scrolling="no"></iframe>';
+	mostrarSoporte();
 }

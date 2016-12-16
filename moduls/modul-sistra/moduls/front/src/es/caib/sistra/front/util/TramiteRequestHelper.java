@@ -45,7 +45,7 @@ public class TramiteRequestHelper
 		if ( tramite != null )
 		{
 			request.setAttribute( Constants.TRAMITE_KEY, tramite );
-			request.setAttribute( Constants.DESCRIPCION_TRAMITE_PARAMS_KEY, tramite.getDescripcion() );
+			request.setAttribute( Constants.DESCRIPCION_TRAMITE_PARAMS_KEY, tramite.getDescripcion() + " (" + tramite.getModelo() + ")" );
 			request.setAttribute( Constants.DIAS_PERSISTENCIA_PARAMS_KEY, String.valueOf( tramite.getDiasPersistencia() ));
 			request.setAttribute( Constants.DATOS_SESION_PARAMS_KEY, tramite.getDatosSesion() );
 		}

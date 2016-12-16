@@ -120,4 +120,12 @@ public class Constants implements Serializable {
 
 	/** Atributo de sesion donde se establecera la url a la que ir. */
 	public static final String URL_REDIRECCION_SESSION_KEY ="es.caib.sistra.front.URL_REDIRECCION_SESSION_KEY";
+
+	public static final String MENSAJE_DEBUG_TRAMITE_DESC_KEY = "msgDebugTramiteDesc";
+	
+	public static final String MENSAJE_DEBUG_TRAMITE_ID_KEY = "msgDebugTramiteId";
+
+	public static final String MENSAJE_DEBUG_AUTENTICACION = "msgDebugAutenticacion";
+	
+	public static final String FORMULARIO_INCIDENCIAS = "FORMULARIO_INCIDENCIAS";
 }

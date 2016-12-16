@@ -1,4 +1,4 @@
-// Suport tècnic
+// Suport tï¿½cnic
 
 $(document).ready(function(){
 	// borde de la tabla llistat
@@ -7,9 +7,10 @@ $(document).ready(function(){
 	}
 	// amaguem la capa ajuda
 	$("#suportTecnic").css("display","none");
-	// obrir ajuda
-	$("#equipSuport").click(function () {
-		if ($("#fons").size() == 0) {
+	
+	$.mostrarAyuda = function(fade)
+	{
+	  if ($("#fons").size() == 0) {
 			// tamany escritori treball
 			finestraX = document.documentElement.clientWidth;
 			finestraY = document.documentElement.clientHeight;
@@ -31,7 +32,9 @@ $(document).ready(function(){
 				$("#fons").height(finestraY);
 			}
 			// mostrem suport
-			$("#suportTecnic").fadeIn("slow");
+			if (fade) {
+				$("#suportTecnic").fadeIn("slow");
+			}
 			suportW = $(document).find("#suportTecnic").width();
 			suportH = $(document).find("#suportTecnic").height();
 			suportL = (finestraX-suportW)/2;
@@ -44,12 +47,26 @@ $(document).ready(function(){
 				$("#suportTecnic").css("top",suportT+finestraScrollT+"px");
 			}
 		}
-	});
-	$("#suportDescartar").click(function () {
+	}
+	
+	$.ocultarAyuda = function(fade)
+	{
 		if ($.browser.msie && $.browser.version < 7) {
 			$("select").css("display","inline");
 		}	
 		$("#fons").remove();
-		$("#suportTecnic").fadeOut("slow");
+		if (fade) {
+			$("#suportTecnic").fadeOut("slow");
+		}
+	}
+	
+	// obrir ajuda
+	$("#equipSuport").click(function () {
+		var capaI = document.getElementById('contactoAdministradorContent');	
+		capaI.innerHTML = "";
+		$.mostrarAyuda(true);
+	});
+	$("#suportDescartar").click(function () {
+		$.ocultarAyuda(true);
 	});
 });

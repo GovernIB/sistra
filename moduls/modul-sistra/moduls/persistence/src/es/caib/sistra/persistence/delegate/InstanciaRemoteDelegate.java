@@ -492,6 +492,18 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 		}
 	}
 
+	
+	public RespuestaFront obtenerInfoTramite() throws DelegateException {
+		try
+		{
+			return getRemote().obtenerInfoTramite();
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+		
+	}
 
 	public void destroy()
 	{

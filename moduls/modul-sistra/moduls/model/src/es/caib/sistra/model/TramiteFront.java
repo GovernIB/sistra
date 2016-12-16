@@ -16,6 +16,16 @@ import es.caib.zonaper.modelInterfaz.PersonaPAD;
 public class TramiteFront  implements Serializable{
 
 	/**
+	 * Fecha creacion tramite.
+	 */
+	private Date fechaCreacion;
+	
+	/**
+	 * Id procedimiento.
+	 */
+	private String idProcedimiento;
+	
+	/**
 	 * Modelo del trámite
 	 */
 	private String modelo;
@@ -613,6 +623,18 @@ public class TramiteFront  implements Serializable{
 	}
 	public void setVerificadoMovil(boolean verificadoMovil) {
 		this.verificadoMovil = verificadoMovil;
+	}
+	public Date getFechaCreacion() {
+		return fechaCreacion;
+	}
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+	public String getIdProcedimiento() {
+		return idProcedimiento;
+	}
+	public void setIdProcedimiento(String idProcedimiento) {
+		this.idProcedimiento = idProcedimiento;
 	}
 
 }
