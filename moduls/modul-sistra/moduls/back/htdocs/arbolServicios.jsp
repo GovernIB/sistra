@@ -2,7 +2,7 @@
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%
 String id = request.getParameter("id");
-String urlFuncsNodes = "/tramiteVersion/funcsNodesUnidades.do?id=" + id;
+String urlFuncsNodes = "/tramiteVersion/funcsNodesServicios.do?id=" + id;
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html lang="en">
@@ -56,6 +56,8 @@ function findOption(options, valor)
 
 <body topmargin=16 marginheight=16>
 
+
+
 <!-- By making any changes to this code you are violating your user agreement.
      Corporate users or any others that want to remove the link should check 
 	 the online FAQ for instructions on how to obtain a version without the link -->
@@ -70,11 +72,25 @@ function findOption(options, valor)
     border: 2px solid white /*#d8dfe7*/;
     background-color: #515b67;height:20px;width:500px;
     border-spacing: 2;
-    margin: 10px 10px 10px 10px;">Unidades Administrativas</DIV> 
+    margin: 10px 10px 10px 10px;"><bean:message key="tramiteVersion.organoDestino" /></DIV>
+
+<div id="wrapper" style="text-align: center">    
+    <div id="buscador" style="display: inline-block;">
+    	<html:form action="/back/tramiteVersion/buscarServicios">
+			<html:hidden property="idCampo" value="<%=id%>"/>
+			<html:text property="filtro" value=""/>
+			<html:submit styleClass="button"><bean:message key="menu.buscar" /></html:submit>
+		</html:form>
+    </div>
+</div>
+    
+     
 <!-- Build the browser's objects and display default view of the 
      tree. -->
-<div id="wrapperTree" style="margin: 10px 10px 10px 30px;">
+<div id="wrapperTree" style="margin: 10px 10px 10px 30px;">    
 	<script type="text/javascript">initializeDocument();<%=request.getParameter("id")==null?"":"irANodo(\"" + request.getParameter("id") + "\");"%></script>
 </div>
+
+
 
 </html>

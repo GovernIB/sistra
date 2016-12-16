@@ -15,6 +15,11 @@ public class ServicioDestinatario implements Serializable{
 	 */
 	private String descripcion;
 	/**
+	 * Código padre
+	 */
+	private String codigoPadre;
+	
+	/**
 	 * Obtiene código
 	 * @return Código
 	 */
@@ -41,5 +46,20 @@ public class ServicioDestinatario implements Serializable{
 	 */
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+	/**
+	 * Obtiene codigo padre
+	 * @return codigo padre
+	 */
+	public String getCodigoPadre() {
+		return codigoPadre;
+	}
+	
+	/**
+	 * Establece codigo padre
+	 * @param codigo padre
+	 */
+	public void setCodigoPadre(String codigoPadre) {
+		this.codigoPadre = codigoPadre;
 	}	
 }

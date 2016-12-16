@@ -107,6 +107,16 @@
     parameter=".tramiteVersion.funcsNodesUnidades"/> 
     
      <action
+    path="/arbolServicios"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".arbolServicios"/>
+    
+    <action
+    path="/tramiteVersion/funcsNodesServicios"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".tramiteVersion.funcsNodesServicios"/>
+    
+     <action
     path="/arbolForms"
     type="org.apache.struts.actions.ForwardAction"
     parameter=".arbolForms"/>

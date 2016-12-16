@@ -9,7 +9,7 @@
     <definition name=".mainLayout" path="/init.jsp"/>
 
 
-<!-- Componente que muestra las pestañas de idiomas, select es la seleccionada -->
+<!-- Componente que muestra las pestaï¿½as de idiomas, select es la seleccionada -->
     <definition name=".langtabs" path="/moduls/langtabs.jsp"
         controllerClass="es.caib.sistra.back.action.ListaIdiomasController">
         <put name="select" value=""/>
@@ -159,6 +159,12 @@
     <definition name=".arbolUnidades" path="/arbolUnidades.jsp" />
     <definition name=".tramiteVersion.funcsNodesUnidades" path="/js/funcsNodesUnidades.jsp"
      controllerClass="es.caib.sistra.back.action.tramiteVersion.FuncsNodesUnidadesController" />
+     
+    <definition name=".arbolServicios" path="/arbolServicios.jsp" />
+    <definition name=".tramiteVersion.funcsNodesServicios" path="/js/funcsNodesServicios.jsp"
+     controllerClass="es.caib.sistra.back.action.tramiteVersion.FuncsNodesServiciosController" /> 
+     
+    <definition name=".busquedaServicios" path="/busquedaServicios.jsp" />
   
     <definition name=".tramiteVersion.importar" path="/tramiteVersion/importar.jsp"/>
     

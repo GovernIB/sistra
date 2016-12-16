@@ -6,6 +6,9 @@
 <bean:define id="urlArbol">
     <html:rewrite page="/arbolUnidades.do"/>
 </bean:define>
+<bean:define id="urlArbolServicios">
+    <html:rewrite page="/arbolServicios.do"/>
+</bean:define>
 <bean:define id="urlEditarText">
     <html:rewrite page="/editarText.jsp"/>
 </bean:define>
@@ -32,6 +35,11 @@
         //var url = '<html:rewrite page="/arbolUnidades.do" />';
         obrir(url, "Arbol", 540, 400);
      }
+     
+     function mostrarArbolServicios(url) {
+         //var url = '<html:rewrite page="/arbolServicios.do" />';
+         obrir(url, "Arbol", 540, 400);
+      }
      // -->
 </script>
 
@@ -182,6 +190,7 @@
     	<html:select property="values.organoDestino">
    			<html:options collection="listaorganosdestino" property="CODIGO" labelProperty="DESCRIPCION" />
     	</html:select>
+    	<input type="button" value="..."  class = "botonEditar" onclick="mostrarArbolServicios('<%=urlArbolServicios + "?id=values.organoDestino" %>');"/>
     </td>
 </tr>
 <tr>
@@ -198,7 +207,7 @@
     <td class="input">
     	<html:select property="values.registroOficina">
    			<html:options collection="listaoficinasregistro" property="CODIGO" labelProperty="DESCRIPCION" />
-    	</html:select>
+    	</html:select>    	
     </td>
 </tr>
 <tr>
