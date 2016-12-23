@@ -41,7 +41,7 @@ a:hover { color: #c33; }
 #imc-contenidor { width:58em; padding:1.2em 0; margin:0 auto; }
 
 .imc-cap { text-align:center; border-bottom: 1px solid #ccc; }
-	.imc-cap img { font-size:2em; font-weight:bold; color:#000; width:8.3em; height:2.5em; }
+	.imc-cap img { font-size:2em; font-weight:bold; color:#000; }
 	.imc-cap h1 { font-size:1.4em; font-weight:bold; text-align:center; padding:.2em 0;  }
 	.imc-cap .imc-usuari { padding-bottom:.3em; }
 		.imc-cap .imc-usuari p,

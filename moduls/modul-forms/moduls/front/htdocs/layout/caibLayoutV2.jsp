@@ -138,7 +138,7 @@
 							classStyle = "class=\"imc-pasos-ultim\"";
 						}
 				%>		
-						<li <%=classStyle%>>Paso <%=i + 1%><br><%=pasosList.get(i)%></li>
+						<li <%=classStyle%>><bean:message bundle="caibMessages" key="cabecera.Paso"/> <%=i + 1%><br><%=pasosList.get(i)%></li>
 				<%				
 					}
 				%>				
