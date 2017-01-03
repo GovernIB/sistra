@@ -114,7 +114,7 @@ public class FormularioIncidenciaservlet extends HttpServlet
 			
 			String destinatariosProp = propiedadesConfiguracion.getProperty("incidencias.mail.tipo." + paramString.get("problemaTipo"));
 			String emailDs = propiedadesConfiguracion.getProperty("incidencias.mailDs");
-			String titulo = getLiteral(lang, "incidencias.email.titulo");
+			String titulo = getLiteral(lang, "incidencias.email.asunto");
 			
 			String textoHtml = construyeMensajeHtml(lang, paramString);
 			List<String> destinatarios = getDestinatarios(destinatariosProp, paramString.get("procedimientoId"));

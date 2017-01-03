@@ -59,10 +59,15 @@ public class FailController extends BaseController
 			
 			String tramiteDesc = respuestaFront.getInformacionTramite().getDescripcion();		
 			String tramiteId = respuestaFront.getInformacionTramite().getModelo();
+			String tramiteClave = respuestaFront.getInformacionTramite().getIdPersistencia();
+			String tramiteNifUsuario = respuestaFront.getInformacionTramite().getDatosSesion().getNifUsuario();
 			
 			request.setAttribute( Constants.MENSAJE_DEBUG_TRAMITE_DESC_KEY, tramiteDesc );
 			request.setAttribute( Constants.MENSAJE_DEBUG_TRAMITE_ID_KEY, tramiteId );
+			request.setAttribute( Constants.MODO_AUTENTICACION_KEY, TramiteRequestHelper.getMetodoAutenticacion(request));
 			request.setAttribute( Constants.MENSAJE_DEBUG_AUTENTICACION, "message.debugAutenticacion." + TramiteRequestHelper.getMetodoAutenticacion(request));
+			request.setAttribute( Constants.MENSAJE_DEBUG_TRAMITE_CLAVEPERSISTENCIA, tramiteClave);
+			request.setAttribute( Constants.MENSAJE_DEBUG_TRAMITE_NIF_USUARIO, tramiteNifUsuario );
 			
 			
 		} catch (Exception ex) {

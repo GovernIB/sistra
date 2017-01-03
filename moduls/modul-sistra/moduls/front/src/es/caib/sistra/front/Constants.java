@@ -127,5 +127,9 @@ public class Constants implements Serializable {
 
 	public static final String MENSAJE_DEBUG_AUTENTICACION = "msgDebugAutenticacion";
 	
+	public static final String MENSAJE_DEBUG_TRAMITE_CLAVEPERSISTENCIA = "msgDebugPersistencia";
+	
+	public static final String MENSAJE_DEBUG_TRAMITE_NIF_USUARIO = "msgDebugNifUsuario";
+	
 	public static final String FORMULARIO_INCIDENCIAS = "FORMULARIO_INCIDENCIAS";
 }

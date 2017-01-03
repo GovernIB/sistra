@@ -57,15 +57,24 @@
 			
 			<p>
 				<i>
-				<%=es.caib.util.StringUtil.fechaACadena(new Date(),"dd/MM/yyyy HH:mm:ss")%>  
+				<%=es.caib.util.StringUtil.fechaACadena(new Date(),"dd/MM/yyyy HH:mm:ss")%></br>  
 			
 				<logic:notEmpty name="<%=Constants.MENSAJE_DEBUG_TRAMITE_DESC_KEY%>">
-					- <bean:write name="<%=Constants.MENSAJE_DEBUG_TRAMITE_DESC_KEY%>"/> (<bean:write name="<%=Constants.MENSAJE_DEBUG_TRAMITE_ID_KEY%>"/>)
+					- <bean:write name="<%=Constants.MENSAJE_DEBUG_TRAMITE_DESC_KEY%>"/> (<bean:write name="<%=Constants.MENSAJE_DEBUG_TRAMITE_ID_KEY%>"/>)</br>
 				</logic:notEmpty>
 				
 				<logic:notEmpty name="<%=Constants.MENSAJE_DEBUG_AUTENTICACION%>">
 					<bean:define id="mensajeDebugAuth" name="<%=Constants.MENSAJE_DEBUG_AUTENTICACION%>" type="java.lang.String" />
-					 - <bean:message key="<%=mensajeDebugAuth%>" />
+					 - <bean:message key="<%=mensajeDebugAuth%>" /></br>
+				</logic:notEmpty>
+				
+				<logic:notEmpty name="<%=Constants.MENSAJE_DEBUG_TRAMITE_CLAVEPERSISTENCIA%>">
+					<logic:equal name="metodoAutenticacion" value="A">
+						- <bean:message key="message.msgDebugPersistencia" />: <bean:write name="<%=Constants.MENSAJE_DEBUG_TRAMITE_CLAVEPERSISTENCIA%>"/>
+					</logic:equal>
+					<logic:notEqual name="metodoAutenticacion" value="A">
+						- <bean:message key="message.msgDebugNifUsuario" />: <bean:write name="<%=Constants.MENSAJE_DEBUG_TRAMITE_NIF_USUARIO%>"/>
+					</logic:notEqual>
 				</logic:notEmpty>
 				</i>
 			</p>

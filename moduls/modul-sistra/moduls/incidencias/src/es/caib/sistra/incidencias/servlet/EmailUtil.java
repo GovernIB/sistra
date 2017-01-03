@@ -35,12 +35,12 @@ public class EmailUtil {
 			
 			Multipart multipart = new MimeMultipart();
 			
-			if (fileContent != null) {
-				
-				// Message Part
-				BodyPart htmlBodyPart = new MimeBodyPart(); 
-				htmlBodyPart.setContent(textoHtml , "text/html");
-				multipart.addBodyPart(htmlBodyPart); 
+			// Message Part
+			BodyPart htmlBodyPart = new MimeBodyPart(); 
+			htmlBodyPart.setContent(textoHtml, "text/html");
+			multipart.addBodyPart(htmlBodyPart); 
+			
+			if (fileContent != null && fileContent.length != 0) {
 			
 				// Attachment Part
 				BodyPart attachmentBodyPart = new MimeBodyPart(); 
@@ -59,12 +59,13 @@ public class EmailUtil {
 			String mailFrom = mailSession.getProperty("mail.from");
 			msg.setFrom(new InternetAddress(mailFrom));
 			
-			if (fileContent != null) {
+			/*if (fileContent != null) {
 				msg.setContent(multipart);
 			} else {
 				msg.setContent(textoHtml, "text/html");
-			}
+			}*/
 			
+			msg.setContent(multipart);
 			
 			Transport.send(msg);
 			ret = true;

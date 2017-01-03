@@ -3,12 +3,59 @@
 <%@ page isELIgnored="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%
+	es.caib.sistra.persistence.delegate.ConfiguracionDelegate delegateF = es.caib.sistra.persistence.delegate.DelegateUtil.getConfiguracionDelegate();
+	
+	es.caib.sistra.model.OrganismoInfo infoOrg = delegateF.obtenerOrganismoInfo();
+	
+%>
 <fmt:setLocale value="${lang}" />
 <fmt:setBundle basename="incidencias-messages" />
 <html xmlns="http://www.w3.org/1999/xhtml" lang="${lang}" xml:lang="${lang}">
+<script type="text/javascript">
+<!--
+function validaFormulario( form )
+    {
+		var filter  = /^\w+([\.\+\-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/;
+		var filter2  = /^\+?\d{1,3}?[- .]?\(?(?:\d{2,3})\)?[- .]?\d\d\d[- .]?\d\d\d\d$/;
+		if ( form.email.value == null || form.email.value == '' )
+		{
+			if ( form.telefono.value == null || form.telefono.value == '' )
+			{
+				alert( "<fmt:message key="incidencias.contactoVacio"/>" );	
+				form.telefono.focus();
+				return false;
+			} else {
+				if ( !filter2.test( form.telefono.value ) )
+				{
+					alert( "<fmt:message key="incidencias.telefonoIncorrecto"/>" );	
+					form.telefono.focus();
+					return false;
+				}
+			}
+		} else {
+			if ( !filter.test( form.email.value ) )
+			{
+				alert( "<fmt:message key="incidencias.emailIncorrecto"/>" );	
+				form.email.focus();
+				return false;
+			}
+		}
+		
+		if ( form.problemaDesc.value == null || form.problemaDesc.value == '' ){
+			alert( "<fmt:message key="incidencias.descripcionVacia"/>" );	
+			form.problemaDesc.focus();
+			return false;
+		}
+		
+		return true;
+	}
+
+-->
+</script>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-	<title>Govern de les Illes Balears</title>
+	<title><%=infoOrg.getNombre()%></title>
 	<link href="css/estilos.css" rel="stylesheet" type="text/css" />
 </head>
   <body>
@@ -16,7 +63,7 @@
   	
 	<div id="contenidor">
   		<div id="continguts">
-  			
+  		<h2><fmt:message key="incidencias.tituloForm"/></h2>	
   		<form action="formulario" method="post" enctype="multipart/form-data">
 		    	<input name="lang" type="hidden" value="${lang}"/>
 		  		<input name="tramiteDesc" type="hidden" value="${param.tramiteDesc}"/>
@@ -35,11 +82,11 @@
 							<td><input name="nombre" type="text" value="${param.nombre}" size="40"/></td>
 						</tr>
 						<tr>
-							<th><fmt:message key="incidencias.telefono"/></th>
+							<th>* <fmt:message key="incidencias.telefono"/></th>
 							<td><input name="telefono" type="text" value="" size="10"/></td>
 						</tr>
 						<tr>
-							<th><fmt:message key="incidencias.email"/></th>
+							<th>* <fmt:message key="incidencias.email"/></th>
 							<td><input name="email" type="text" value="" size="40"/></td>
 						</tr>
 						<tr>
@@ -53,7 +100,7 @@
 							</td>
 						</tr>
 						<tr>
-							<th><fmt:message key="incidencias.problemaDesc"/></th>
+							<th>* <fmt:message key="incidencias.problemaDesc"/></th>
 							<td><textarea name="problemaDesc" rows="4" cols="40"></textarea></td>
 						</tr>
 						<tr>
@@ -64,7 +111,7 @@
 							<td colspan="2">&nbsp;</td>							
 						</tr>
 						<tr>
-							<td colspan="2" align="center"><input type="submit" value="<fmt:message key="incidencias.enviar"/>"></td>							
+							<td colspan="2" align="center"><input type="submit" value="<fmt:message key="incidencias.enviar"/>" onclick="return validaFormulario( this.form );"></td>							
 						</tr>								
 					</tbody>			
 				</table>				
