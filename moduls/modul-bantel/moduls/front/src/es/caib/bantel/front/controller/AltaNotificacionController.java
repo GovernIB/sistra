@@ -20,6 +20,8 @@ import es.caib.bantel.persistence.delegate.ConfiguracionDelegate;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
 import es.caib.regtel.persistence.delegate.RegistroTelematicoDelegate;
+import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.login.PluginLoginIntf;
 import es.caib.sistra.plugins.regtel.ConstantesPluginRegistro;
 
 public class AltaNotificacionController extends BaseController
@@ -48,6 +50,12 @@ public class AltaNotificacionController extends BaseController
 		String idProcedimiento = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_PROCEDIMIENTO_KEY);
 		Procedimiento p = DelegateUtil.getTramiteDelegate().obtenerProcedimiento(idProcedimiento);
 		request.setAttribute("permitirPlazoNotificacionesVariable", p != null ? p.getPermitirPlazoNotificacionesVariable() : "N");		
+		
+		// Firmante
+		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
+		String nifFirmante = plgLogin.getNif(this.getPrincipal(request));
+		request.setAttribute("nifFirmante", nifFirmante);
+		
 	}
 
 	

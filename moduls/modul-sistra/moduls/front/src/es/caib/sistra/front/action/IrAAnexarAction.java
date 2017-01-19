@@ -17,6 +17,8 @@ import es.caib.sistra.model.DocumentoFront;
 import es.caib.sistra.model.RespuestaFront;
 import es.caib.sistra.model.TramiteFront;
 import es.caib.sistra.persistence.delegate.InstanciaDelegate;
+import es.caib.sistra.plugins.login.ConstantesLogin;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 
 /**
  * @struts.action
@@ -61,6 +63,7 @@ public class IrAAnexarAction extends BaseAction
 		}
 		
 		// Comprobamos si hay que realizar la firma delegada o digital
+		String[] nifFirmantes = null;
 		if (anexo.isFirmar()){
 			if (anexo.isFirmaDelegada()){
 				mostrarFirmaDigital = "D";
@@ -69,7 +72,7 @@ public class IrAAnexarAction extends BaseAction
 			}
 			
 			// Formateamos lista de firmantes
-			String[] nifFirmantes = anexo.getFirmante().split("#");
+			nifFirmantes = anexo.getFirmante().split("#");
 			String[] nomFirmantes = anexo.getNombreFirmante().split("#");
 			
 			String partY = " y ";
@@ -91,7 +94,23 @@ public class IrAAnexarAction extends BaseAction
 			}
 			
 		}
-
+		
+		
+		// Identificamos firmante para plugin firma web
+		String nifFirmante = "";
+		if (nifFirmantes != null && nifFirmantes.length == 1) {
+			nifFirmante = nifFirmantes[0];
+		} else if (respuestaFront.getInformacionTramite().getDatosSesion().getNivelAutenticacion() != ConstantesLogin.LOGIN_ANONIMO) {
+			String perfilAcceso = respuestaFront.getInformacionTramite().getDatosSesion().getPerfilAcceso();
+			if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(perfilAcceso)) {
+				nifFirmante = respuestaFront.getInformacionTramite().getDatosSesion().getNifDelegado();
+			} else {
+				nifFirmante = respuestaFront.getInformacionTramite().getDatosSesion().getNifUsuario();
+			}
+		}
+		
+		
+		request.setAttribute( "nifFirmante", nifFirmante);
 		request.setAttribute( "anexo", anexo );
 		request.setAttribute(Constants.MOSTRAR_FIRMA_DIGITAL,mostrarFirmaDigital);
 		request.setAttribute( "listaFirmantes", listaFirmantes );

@@ -7,6 +7,9 @@ import java.io.Serializable;
  */
 public class Constants implements Serializable {
 
+	/** Contexto raiz sistra */
+	public static final String CONTEXTO_RAIZ = "es.caib.sistra.contextRootFront";
+	
     /**
      * Atributo de contexto donde se guarda el lenguaje por defecto.
      */

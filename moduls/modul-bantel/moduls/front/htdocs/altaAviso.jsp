@@ -8,6 +8,10 @@
 
 <bean:define id="idiomaExpediente" name="detalleAvisoForm" property="idioma" type="java.lang.String"/>
 
+<bean:define id="retornoFirmaWeb">
+        <html:rewrite page="/retornoFirmaWeb.do"/>
+</bean:define>
+
 <script type="text/javascript" src="js/ajuda.js"></script>
 <script type="text/javascript" src="js/funcions.js"></script>
 <script type="text/javascript" src="js/mensaje.js"></script>	
@@ -34,14 +38,27 @@
 			<script type="text/javascript" src="<%=request.getContextPath()%>/firma/caib/js/firma.js"></script>
 	</logic:equal>
 	
+	<logic:equal name="<%=es.caib.bantel.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">	
+			<script type="text/javascript" src="<%=request.getContextPath()%>/firma/firmaWeb/js/configFirmaWeb.js"></script>
+			<script type="text/javascript" src="<%=request.getContextPath()%>/firma/firmaWeb/js/firmaweb.js"></script>
+			<script type="text/javascript">		
+				FIRMAWEB_CONTEXTO = '<bean:write name="<%=es.caib.bantel.front.Constants.CONTEXTO_RAIZ%>"/>';			
+			</script>
+	</logic:equal>
+	
 <!--  FIRMA DIGITAL -->
 <script type="text/javascript">
 <!--
+	
+	var mensajeFirmando = '<bean:message key="firmarDocumento.mensajeFirmando"/>';
+	var mensajeEnviando = '<bean:message key="firmarDocumento.mensajeEnviando"/>';
+
+
 	<logic:equal name="<%=es.caib.bantel.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
 		
 		var contentType = '<%= es.caib.util.FirmaUtil.obtenerContentTypeCAIB(es.caib.util.FirmaUtil.CAIB_DOCUMENT_NOTIFICACIO_CONTENT_TYPE) %>';
-		var mensajeEnviando = '<bean:message key="anexarDocumentos.mensajeAnexar"/>';
 		
 		function firmarCAIB(form){		
 			var firma = '';	
@@ -108,13 +125,13 @@
 	
 	function anexarDocumento(form)
 	{
-		Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "Firmando documento..."});
+		Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: mensajeFirmando});
 	
 		<logic:equal name="<%=es.caib.bantel.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
-			firmarAFirma(form);
-			return;
+			firmarAFirma(form);		
 		</logic:equal>
+		
 		<logic:equal name="<%=es.caib.bantel.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">	
 			if (!firmarCAIB(form)){ 
@@ -122,6 +139,12 @@
 				return;
 			}
 			anexarDocumentoContinuacion(form);
+		</logic:equal>
+		
+		<logic:equal name="<%=es.caib.bantel.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+			 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">
+			 Mensaje.cancelar();	
+			 firmarFirmaWeb();
 		</logic:equal>
 	}
 	
@@ -160,6 +183,45 @@
 		prepararEntornoFirma();
 	</logic:equal>
 	
+	
+	<logic:equal name="<%=es.caib.bantel.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+		 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">
+		 
+		 function firmarFirmaWeb(){		
+			 var docB64UrlSafe = $('#documentoB64').val();
+			 var fileName = $('#filename').val()
+			 var urlCallBackApp = "<bean:write name="retornoFirmaWeb"/>";
+			 var urlCallBackAppCancel = "<bean:write name="retornoFirmaWeb"/>?error=true";
+			 
+			 var paramOthers = null;
+			 var callback = {url:urlCallBackApp, paramSignature:"firma", paramOthers:paramOthers, urlCancel: urlCallBackAppCancel, target: "self"};
+			 var options = {contenedor:"contenedor"};
+			 
+			 var lang = "<%=((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage()%>";
+			 var nif = "<bean:write name="nifFirmante"/>";
+			 
+			 $.mostrarFirmaWeb(
+					 lang,
+					 nif,
+					 docB64UrlSafe,
+					 fileName,
+					 callback,
+					 options);			 
+		 }
+
+		 
+		 function callbackFirmaWeb(error, firma){
+			 $.ocultarFirmaWeb();
+			 if (error != 'true') {
+				 Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: mensajeEnviando});
+				 document.getElementById("firma").value=firma;
+				 anexarDocumentoContinuacion();			 
+			 }
+		 }
+		 
+	</logic:equal>	 
+	
+	
 	function botonCancelarFirmar() {
 		$('#firmarDocumentosApplet').hide('slow');
 	}
@@ -169,12 +231,12 @@
 
 <script type="text/javascript">
 
-var htmlInfoFirmado = "- <strong><bean:message key="detalleTramite.datosTramite.envio.firmado"/></strong>";
+var htmlInfoFirmado = "- <strong><bean:message key="firmarDocumento.documentoFirmado"/></strong>";
 
 //funcion que anexa un documento, se ejecuta desde el iframe
 function altaDocument(form, url){
 	
-	Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "Enviando datos..."});
+	Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: mensajeEnviando});
 
 	var permitida = false;
 	var error = "";
@@ -245,7 +307,7 @@ function alta(){
 	}
 	
 	if(confirm ( "<bean:message key='aviso.alta.confirmacion' />" )){
-		Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "Enviando datos..."});
+		Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: mensajeEnviando});
 		document.detalleAvisoForm.rutaFitxer.value = document.uploadAvisoForm.documentoAnexoFichero.value;
 		document.detalleAvisoForm.action='<html:rewrite page="/realizarAltaAviso.do"/>';
 		document.detalleAvisoForm.submit();
@@ -265,6 +327,7 @@ function mostrarFirmar(nombre,codigoRDS,claveRDS){
 			if (datos.error==""){								
 				var nombreF = '<p class="titol"> <bean:message key="aviso.firmar"/> </p>'; 
 				$('#documentoB64').val(datos.base64);
+				$('#filename').val(datos.filename);
 				$('#firmarDocumentosApplet').show('slow');
 				$('#anexar').hide('slow');
 				$('#firma').val('');
@@ -569,6 +632,7 @@ function errorFileUploaded(error){
 						<div id="firmarDocumentosApplet">
 						<form name="formFirma">	
 							<input type='hidden' id='documentoB64' name='documentoB64' value='' />
+							<input type='hidden' id='filename' name='filename' value='' />
 							<input type='hidden' id='firma' name='firma' value=''/>
 							<input type='hidden' id='nombreFirmar' name='nombreFirmar' value=''/>
 							<input type='hidden' id='codigoRDSFirmar' name='codigoRDSFirmar' value=''/>

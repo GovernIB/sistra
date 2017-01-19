@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +24,8 @@ import org.apache.struts.tiles.TilesRequestProcessor;
 
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.zonaper.delega.Constants;
+import es.caib.zonaper.persistence.delegate.ConfiguracionDelegate;
+import es.caib.zonaper.persistence.delegate.DelegateUtil;
 
 
 /**
@@ -45,10 +48,18 @@ public class DelegaRequestProcessor extends TilesRequestProcessor {
         	if (StringUtils.isEmpty((String) getServletContext().getAttribute(Constants.IMPLEMENTACION_FIRMA_KEY))){
      			getServletContext().setAttribute(Constants.IMPLEMENTACION_FIRMA_KEY,PluginFactory.getInstance().getPluginFirma().getProveedor());
      		}
+        	
+        	ConfiguracionDelegate config = DelegateUtil.getConfiguracionDelegate();
+        	Properties configProps = config.obtenerConfiguracion();
+        	
+        	getServletContext().setAttribute(Constants.CONTEXTO_RAIZ,StringUtils.defaultString(configProps.getProperty("sistra.contextoRaiz.front"), ""));
+        	
         }catch (Exception ex){
         	log.error("Error obteniendo implementacion firma",ex);
         	throw new ServletException(ex);
         }
+        
+        
     	
     }
  

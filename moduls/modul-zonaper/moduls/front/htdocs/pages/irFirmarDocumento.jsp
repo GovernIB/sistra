@@ -5,11 +5,22 @@
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 
+<bean:define id="urlIrFirmarDoc">
+    <html:rewrite page="/protected/irFirmarDocumento.do"/>
+</bean:define>
+
+<bean:define id="urlFirmarDoc">
+    <html:rewrite page="/protected/firmarDocumento.do"/>
+</bean:define>
+
+<bean:define id="sesion" name="<%=es.caib.zonaper.front.Constants.DATOS_SESION_KEY%>" type="es.caib.zonaper.model.DatosSesion" />
+
 <script type="text/javascript" src="js/mensaje.js"></script>
+
 <script type="text/javascript">
 <!--
-	var mensajeEnviando = '<bean:message key="anexarDocumentos.mensajeAnexar"/>';
-	var mensajePreparando = '<bean:message key="anexar.documento.preparar"/>';
+	var mensajeEnviando = '<bean:message key="bandejaFirma.enviando"/>';
+	
 	<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 				 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
 			
@@ -95,66 +106,68 @@
 						sistra_ClienteaFirma_SignatureFormat,
 						"",
 						saveSignatureCallback,
-						showLogCallback);
-					/**	
-			var contenidoFichero = $('#documentoB64').val();
-			if ( contenidoFichero == '' )
-			{
-				alert( "<bean:message key="firmarDocumento.introducirFichero"/>" );
-				return false;
-			}
-					
-			clienteFirma.initialize();
-			clienteFirma.setShowErrors(false);
-			clienteFirma.setSignatureAlgorithm(sistra_ClienteaFirma_SignatureAlgorithm);
-			clienteFirma.setSignatureMode(sistra_ClienteaFirma_SignatureMode);
-			clienteFirma.setSignatureFormat(sistra_ClienteaFirma_SignatureFormat);
-			if($('#documentoB64').val() == null || $('#documentoB64').val() == ''){
-				return false;
-			}
-			
-			// Pasamos de b64 urlSafe a b64
-			var b64 = b64UrlSafeToB64($('#documentoB64').val());
-		
-			clienteFirma.setData(b64);
-			clienteFirma.sign();
-			
-			if(clienteFirma.isError()){
-				error = 'Error: '+clienteFirma.getErrorMessage();
-				alert(error);
-				return false;
-			}else{	
-			    firma = clienteFirma.getSignatureBase64Encoded();
-			    firma = b64ToB64UrlSafe(firma);
-   				form.firma.value = firma;
-			    return true;
-			}**/
+						showLogCallback);					
 		}
 			
 		prepararEntornoFirma();
 	</logic:equal>
+	
+	<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+		 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">
+		 
+		 function firmarFirmaWeb(){		
+			 var docB64UrlSafe = document.firmarDocumentoDelegadoForm.documentoB64.value;
+			 var identificador = document.firmarDocumentoDelegadoForm.identificador.value;
+			 var urlCallBackApp = "<bean:write name="urlFirmarDoc"/>";
+			 var urlCallBackAppCancel = "<bean:write name="urlIrFirmarDoc"/>?identificador=" + identificador;
+			 			
+			 var paramOthers = {documentoB64:docB64UrlSafe, identificador:identificador};
+			 var callback = {url:urlCallBackApp, paramSignature:"firma", paramOthers:paramOthers, urlCancel: urlCallBackAppCancel};
+			 
+			 var lang = "<%=((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage()%>";
+			 var nif = "<%=sesion.getNifUsuario()%>";
+			 
+			 $.mostrarFirmaWeb(
+					 lang,
+					 nif,
+					 docB64UrlSafe,
+					 "<bean:write name="documentoParaFirmar" property="nombreFicheroAnexo" />",
+					 callback,
+					 null);			 
+		 }
+		 
+	</logic:equal>	
 	
 	function firmarDocumento(form)
 	{
 		mostrarMensaje();
 		<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
+			// Firmar (submit se hara en callback)
 			firmarAFirma(form);
-			return;
 		</logic:equal>
+		
 		<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>" value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
+			// Firmar
 			if (!firmarCAIB(form)){
 				Mensaje.cancelar();	
 				return;					
 			}
-		</logic:equal>					
+			// Enviar formulario
+			form.submit();
+		</logic:equal>		
 		
-		// Enviar formulario
-		form.submit();
+		<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>" value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">									
+			// Firmar (submit se hara en pasarela)
+			Mensaje.cancelar();
+			firmarFirmaWeb();
+		</logic:equal>		
+		
+		
 	}
 	
 	function mostrarMensaje(){
- 		Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "Enviando datos..."});
+ 		Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: mensajeEnviando});
 	}
 	
 //-->
@@ -162,7 +175,6 @@
 <bean:define id="urlAbrirDocumento" type="java.lang.String">
 	<html:rewrite page="/protected/abrirDocumento.do"/>
 </bean:define>
-<bean:define id="sesion" name="<%=es.caib.zonaper.front.Constants.DATOS_SESION_KEY%>" type="es.caib.zonaper.model.DatosSesion" />
 
 <h1><bean:message key="bandejaFirma.firmarDocumento"/> - <bean:write name="documentoParaFirmar" property="descripcionDocumento" /></h1>
 	
@@ -186,13 +198,13 @@
 	<p class="apartado">								
 		<bean:message key="firmarDocumento.instrucciones.firmarOtro" arg0="<%=sesion.getNifUsuario()%>"/>
 	</p>						
-	<!--  Instrucciones firma y Applet firma (depende de implementacion firma) -->
-	<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
-				 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
-		<html:form action="/protected/firmarDocumento" enctype="multipart/form-data">
+	<html:form action="/protected/firmarDocumento" enctype="multipart/form-data">
 			<html:hidden styleId="documentoB64" property="documentoB64"/>
 			<html:hidden styleId="identificador" property="identificador"/>
 			<html:hidden styleId="firma" property="firma"/>
+	<!--  Instrucciones firma y Applet firma (depende de implementacion firma) -->
+	<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+				 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
 			<p class="apartado">
 				<bean:message key="firmarDocumento.aFirma.anexo.instrucciones"/>
 			</p>
@@ -200,15 +212,10 @@
 			<!--  BOTON FIRMAR -->
 			<p class="formBotonera">
 				<input name="formCDboton" type="button" value="<bean:message key="firmarDocumento.boton.iniciar" />" title="<bean:message key="firmarDocumento.boton.iniciar" />" onclick="firmarDocumento(this.form);" />
-			</p>			
-		</html:form>
+			</p>					
 	</logic:equal>
 	<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
-				 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
-		<html:form action="/protected/firmarDocumento" enctype="multipart/form-data">	
-			<html:hidden styleId="documentoB64" property="documentoB64"/>
-			<html:hidden styleId="identificador" property="identificador"/>
-			<html:hidden styleId="firma" property="firma"/>
+				 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">											
 			<p class="apartado"><bean:message key="firmarDocumento.certificado.instrucciones.iniciarDispositivo" /></p>
 			<div class="pas">
 				<p>
@@ -229,7 +236,14 @@
 			</div>		
 			<p class="botonera">
 				<input name="formCDboton" type="button" value="<bean:message key="firmarDocumento.boton.iniciar" />" title="<bean:message key="firmarDocumento.boton.iniciar" />" onclick="firmarDocumento(this.form);" />
-			</p>						
-		</html:form>	
+			</p>								
 	</logic:equal>
+	<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+				 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">
+			<!--  BOTON FIRMAR -->
+			<p class="formBotonera">
+				<input name="formCDboton" type="button" value="<bean:message key="firmarDocumento.boton.iniciar" />" title="<bean:message key="firmarDocumento.boton.iniciar" />" onclick="firmarDocumento(this.form);" />
+			</p>	 
+	</logic:equal>						
+	</html:form>
 </div>	

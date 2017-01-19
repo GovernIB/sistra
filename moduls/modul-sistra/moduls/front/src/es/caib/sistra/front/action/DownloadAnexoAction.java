@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+
 import es.caib.util.ConvertUtil;
 import es.caib.sistra.front.form.DownloadDocumentoForm;
 import es.caib.sistra.front.json.JSONObject;
@@ -38,16 +39,19 @@ public class DownloadAnexoAction extends BaseAction
 		
 		// Recuperamos anexo uploadeado
 		String documento = null;
+		String nombrefichero = null;
 		RespuestaFront resp = delegate.downloadAnexo(formulario.getIdentificador(), formulario.getInstancia());
 		if (resp.getMensaje() == null || resp.getMensaje().getTipo() != MensajeFront.TIPO_ERROR) {
 			byte[] datosFichero = (byte[]) resp.getParametros().get("datosfichero");
 			documento = ConvertUtil.bytesToBase64UrlSafe(datosFichero);
+			nombrefichero = (String) resp.getParametros().get("nombrefichero");
 		}
 		
 		// Devolvemos fichero
 		if(documento != null && !"".equals(documento)){
 			jsonObject.put("error","");
 			jsonObject.put("documento",documento);
+			jsonObject.put("nombrefichero",nombrefichero);
 		}else{
 			jsonObject.put("error","anexar.documento.null");
 		}

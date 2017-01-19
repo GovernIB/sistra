@@ -83,7 +83,11 @@ public class IrFirmarDocumentoAction extends BaseAction
 			docFront.setDescripcionGenerico(doc.getDescripcionGenerico());
 			docFront.setEstado(doc.getEstado());
 			docFront.setIdentificador(doc.getIdentificador());
-			docFront.setNombreFicheroAnexo(doc.getNombreFicheroAnexo());
+			if ("A".equals(docFront.getTipoDocumento())){
+				docFront.setNombreFicheroAnexo(doc.getNombreFicheroAnexo());
+			} else {
+				docFront.setNombreFicheroAnexo("formulario.xml");
+			}
 			docFront.setNumeroInstancia(doc.getNumeroInstancia());
 			docFront.setRdsClave(doc.getRdsClave());
 			docFront.setRdsCodigo(doc.getRdsCodigo());

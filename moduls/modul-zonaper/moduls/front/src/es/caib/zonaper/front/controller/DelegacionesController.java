@@ -29,9 +29,12 @@ public class DelegacionesController extends BaseController
 			ServletContext servletContext) throws Exception
 	{
 		List delegaciones = new ArrayList();
+		String nifFirmante = "";
+		
 		try{
 			DelegacionDelegate deleg = DelegateUtil.getDelegacionDelegate();
 			ConsultaPADDelegate consulta = DelegateUtil.getConsultaPADDelegate();
+			
 			if(request.getSession().getAttribute( Constants.DATOS_SESION_KEY ) != null){
 				DatosSesion datosSes = (DatosSesion)request.getSession().getAttribute( Constants.DATOS_SESION_KEY );
 				String nifEntidad = "";
@@ -48,6 +51,8 @@ public class DelegacionesController extends BaseController
 					delFront.setNombreDelegado(consulta.obtenerDatosPADporNif(delFront.getNifDelegado()).getNombreCompleto());
 					delegaciones.add(delFront);
 				}
+				
+				nifFirmante = datosSes.getNifUsuario();
 			}
 			request.setAttribute("delegaciones",delegaciones);
 		}catch(Exception e){
@@ -57,8 +62,10 @@ public class DelegacionesController extends BaseController
 		// Obtenemos descripcion Mi portal		 
 		OrganismoInfo info = (OrganismoInfo) request.getSession().getServletContext().getAttribute(Constants.ORGANISMO_INFO_KEY);
 		Locale locale = this.getLocale( request);
-		request.setAttribute("tituloMiPortal",(String) info.getTituloPortal().get(locale.getLanguage())); 
-		
+		request.setAttribute("tituloMiPortal",(String) info.getTituloPortal().get(locale.getLanguage()));
+
+		// Nif firmante
+		request.setAttribute("nifFirmante", nifFirmante);
 	}
 	
 	private DelegacionFront delToDelFront(Delegacion del){

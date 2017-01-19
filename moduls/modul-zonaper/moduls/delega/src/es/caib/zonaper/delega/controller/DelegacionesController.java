@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.tiles.ComponentContext;
 
+import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.login.PluginLoginIntf;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 
 
@@ -27,6 +29,11 @@ public class DelegacionesController extends BaseController
 		
 		String urlSistra = props.getProperty("sistra.url.back");
 		request.setAttribute( "urlSistraAFirma", urlSistra );
+		
+		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
+		String nifFirmante = plgLogin.getNif(this.getPrincipal(request));
+		request.setAttribute("nifFirmante", nifFirmante);
+		
 	}
 	
 }

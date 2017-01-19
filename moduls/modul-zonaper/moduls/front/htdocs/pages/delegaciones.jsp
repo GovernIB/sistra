@@ -17,15 +17,26 @@
 <bean:define id="sesion" name="<%=es.caib.zonaper.front.Constants.DATOS_SESION_KEY%>" type="es.caib.zonaper.model.DatosSesion" />
 <bean:define id="tituloMiPortal" name="tituloMiPortal" type="java.lang.String" />
 
+<bean:define id="urlMostrarDelegaciones">
+    <html:rewrite page="/protected/mostrarDelegaciones.do"/>
+</bean:define>
+
+<bean:define id="urlCrearDelegacion">
+    <html:rewrite page="/protected/crearDelegacionExt.do"/>
+</bean:define>
+
 
 <logic:match name="permisosEntidad"  value="<%=es.caib.zonaper.modelInterfaz.ConstantesZPE.DELEGACION_PERMISO_REPRESENTANTE_ENTIDAD %>">
 <script type="text/javascript">
-<!--				      
+<!--
+
+var mensajeEnviando = '<bean:message key="delegaciones.enviando"/>';
+var mensajeFirmando = '<bean:message key="delegaciones.firmando"/>';
+
 <logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 				 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
 		
 	var contentType = '<%= es.caib.util.FirmaUtil.obtenerContentTypeCAIB(es.caib.util.FirmaUtil.CAIB_DOCUMENT_NOTIFICACIO_CONTENT_TYPE) %>';
-	var mensajeEnviando = '<bean:message key="anexarDocumentos.mensajeAnexar"/>';
 		
 	function firmarCAIB(form){		
 		var firma = '';	
@@ -110,6 +121,33 @@
 				 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
 	prepararEntornoFirma();
 </logic:equal>
+
+<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+	 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">
+	 
+	 function firmarFirmaWeb(codigoRDS, claveRDS){		
+		 
+		 var docB64UrlSafe = document.detalleDelegacionForm.documentoB64.value;
+		 var urlCallBackApp = "<bean:write name="urlCrearDelegacion"/>";
+		 var urlCallBackAppCancel = "<bean:write name="urlMostrarDelegaciones"/>";
+		 
+		 var paramOthers = {codigoRDS:codigoRDS, claveRDS:claveRDS};
+		 var callback = {url:urlCallBackApp, paramSignature:"firmaJSP", paramOthers:paramOthers, urlCancel: urlCallBackAppCancel};
+		 
+		 var lang = "<%=((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage()%>";
+		 var nif = "<bean:write name="nifFirmante"/>";
+		 
+		 $.mostrarFirmaWeb(
+				 lang,
+				 nif,
+				 docB64UrlSafe,
+				 "delegacion.xml",
+				 callback,
+				 null);			 
+	 }
+	 
+</logic:equal>	
+
 //-->
 </script>
 
@@ -148,7 +186,7 @@ function crearDelegacion(form){
 		alert("<bean:message key="delegaciones.buscar.usuario"/>");
 		return;
 	}
-	Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "Enviando datos..."});
+	Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: mensajeEnviando});
 	var nifDelegado = $("#nifDelegado").val();	
 	var fechaInicioDelegacion = $("#fechaInicioDelegacion").val();	
 	var fechaFinDelegacion = $("#fechaFinDelegacion").val();
@@ -158,34 +196,48 @@ function crearDelegacion(form){
 	$.postJSON(url_json, data, 
 		function(datos){
 			if (datos.error==""){
-				Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "Firmando datos..."});
+				Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: mensajeFirmando});
 				$('#documentoB64').val(datos.datos);
+				
 				<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 						 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
+					// Firma (el envio se hara en el callback)
 					url_jsonAFIRMA = '<html:rewrite page="/protected/crearDelegacion.do"/>';
 					dataAFIRMA ='codigoRDS='+datos.codigo+'&claveRDS='+datos.clave;//+'&firmaJSP='+$('#firma').val();
-					firmarAFirma(form); return;					
+					firmarAFirma(form); 
+					return;					
 				</logic:equal>
+				
 				<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 							 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">	
+					// Firmar
 					if (!firmarCAIB(form)){ 
 						Mensaje.cancelar();	
 						return;
 					}
+					// Enviar
+					var url_json2 = '<html:rewrite page="/protected/crearDelegacion.do"/>';
+					var data2 ='codigoRDS='+datos.codigo+'&claveRDS='+datos.clave+'&firmaJSP='+$('#firma').val();
+					$.postJSON(url_json2, data2, function(datos2) {
+						if (datos2.error==""){								
+							alert("<bean:message key="delegaciones.alta.correcta"/>");							
+							document.detalleDelegacionForm.action='<html:rewrite page="/protected/mostrarDelegaciones.do" />';
+							document.detalleDelegacionForm.submit();
+							Mensaje.cancelar();	
+						}else{
+							Mensaje.cancelar();	
+							alert(datos2.error);
+						}
+			        });					
 				</logic:equal>	
-				var url_json2 = '<html:rewrite page="/protected/crearDelegacion.do"/>';
-				var data2 ='codigoRDS='+datos.codigo+'&claveRDS='+datos.clave+'&firmaJSP='+$('#firma').val();
-				$.postJSON(url_json2, data2, function(datos2) {
-					if (datos2.error==""){								
-						alert("<bean:message key="delegaciones.alta.correcta"/>");							
-						document.detalleDelegacionForm.action='<html:rewrite page="/protected/mostrarDelegaciones.do" />';
-						document.detalleDelegacionForm.submit();
-						Mensaje.cancelar();	
-					}else{
-						Mensaje.cancelar();	
-						alert(datos2.error);
-					}
-		        });
+				
+				<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">
+					 // Firma WEB (el envio se hara a traves pasarela)
+					 Mensaje.cancelar();	
+					 firmarFirmaWeb(datos.codigo, datos.clave);
+				</logic:equal>
+				
 			}else{
 				Mensaje.cancelar();	
 				alert(datos.error);
@@ -194,7 +246,7 @@ function crearDelegacion(form){
 }
 
 function anularDelegacion(codigo){
-	Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "Enviando datos..."});
+	Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: mensajeEnviando});
 	var url_json = '<html:rewrite page="/protected/anularDelegacion.do"/>';
 	var data ='codigoDelegacion='+codigo;
 	$.postJSON(url_json, data, 

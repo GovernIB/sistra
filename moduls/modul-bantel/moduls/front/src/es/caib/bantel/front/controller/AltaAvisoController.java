@@ -12,6 +12,8 @@ import org.apache.struts.tiles.ComponentContext;
 import es.caib.bantel.front.util.Dominios;
 import es.caib.bantel.persistence.delegate.ConfiguracionDelegate;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
+import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.login.PluginLoginIntf;
 
 public class AltaAvisoController extends BaseController
 {
@@ -36,6 +38,11 @@ public class AltaAvisoController extends BaseController
 			urlSistra = "";
 		}
 		request.setAttribute( "urlSistraAFirma", urlSistra );
+		
+		// Firmante
+		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
+		String nifFirmante = plgLogin.getNif(this.getPrincipal(request));
+		request.setAttribute("nifFirmante", nifFirmante);
 		
 	}
 

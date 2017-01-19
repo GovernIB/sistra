@@ -18,6 +18,10 @@ public interface PluginFirmaIntf extends PluginSistraIntf{
 	 * Proveedor CAIB
 	 */
 	public static String PROVEEDOR_CAIB = "CAIB";
+	/**
+	 * Proveedor Firma WEB IBIT
+	 */
+	public static String PROVEEDOR_FIRMAWEB = "FIRMAWEB";
 	
 	/**
 	 * Formatos de firma estandar : CADES-ATTACHED.

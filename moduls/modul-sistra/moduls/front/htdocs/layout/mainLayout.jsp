@@ -35,6 +35,15 @@
 	</script>
 </logic:equal>		
 
+<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+			 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">		
+		<script type="text/javascript" src="<%=request.getContextPath()%>/firma/firmaWeb/js/configFirmaWeb.js"></script>
+		<script type="text/javascript" src="<%=request.getContextPath()%>/firma/firmaWeb/js/firmaweb.js"></script>		
+		<script type="text/javascript">		
+			FIRMAWEB_CONTEXTO = '<bean:write name="<%=es.caib.sistra.front.Constants.CONTEXTO_RAIZ%>"/>';			
+		</script>	
+</logic:equal>
+
 <!-- DETECCION NAVEGADOR (Compatibles: IE >= 7 , FireFox >= 4)-->
 <script type="text/javascript">
 <!--

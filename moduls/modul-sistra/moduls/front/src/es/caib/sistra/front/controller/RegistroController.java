@@ -16,10 +16,12 @@ import es.caib.sistra.model.ConstantesSTR;
 import es.caib.sistra.model.DocumentoFront;
 import es.caib.sistra.model.PasoTramitacion;
 import es.caib.sistra.model.TramiteFront;
+import es.caib.sistra.plugins.login.ConstantesLogin;
 import es.caib.util.ConvertUtil;
 import es.caib.util.StringUtil;
 import es.caib.xml.datospropios.factoria.impl.Instrucciones;
 import es.caib.xml.registro.factoria.impl.DatosInteresado;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 
 public class RegistroController extends FinalizacionController
 {
@@ -172,6 +174,20 @@ public class RegistroController extends FinalizacionController
 			mostrarFirmaDigital="S";
 		}		
 		request.setAttribute(Constants.MOSTRAR_FIRMA_DIGITAL,mostrarFirmaDigital);
+		// - Nif firmante para plugin firma web
+		String nifFirmante = "";
+		if (mostrarFirmaDigital.equals("S")) {
+			if (tramite.getDatosSesion().getNivelAutenticacion() != ConstantesLogin.LOGIN_ANONIMO) {
+				String perfilAcceso = tramite.getDatosSesion().getPerfilAcceso();
+				if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(perfilAcceso)) {
+					nifFirmante = tramite.getDatosSesion().getNifDelegado();
+				} else {
+					nifFirmante = tramite.getDatosSesion().getNifUsuario();
+				}
+			}
+		}
+		request.setAttribute("nifFirmante",nifFirmante);
+	
 				
 		// Comprobamos si:
 		//	- existe algún pago realizado	

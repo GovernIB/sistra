@@ -10,6 +10,13 @@
 <bean:define id="urlBorrarAnexo">
         <html:rewrite page="/protected/borrarAnexo.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
+<bean:define id="urlAnexarDocumento">
+        <html:rewrite page="/protected/anexarDocumento.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
+</bean:define>
+<bean:define id="urlIrAAnexarDocumento">
+        <html:rewrite page="/protected/irAAnexar.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
+</bean:define>
+
 <script type="text/javascript">
 <!--
 	var mensajeUploadeando = '<bean:message key="anexarDocumentos.mensajeUpload"/>';
@@ -138,6 +145,39 @@
 				prepararEntornoFirma();
 			</logic:equal>
 	</logic:equal>	
+	
+	
+
+	<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+		 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">
+		 
+		 function firmarFirmaWeb(){		
+			 
+			 ocultarCapaInfo();
+			 
+			 var docB64UrlSafe = $('#documentoFirmar').val();
+			 var nombreFichero = $('#nombreFichero').val();
+			 
+			 var urlCallBackApp = "<bean:write name="urlAnexarDocumento"/>";
+			 var urlCallBackAppCancel = "<bean:write name="urlIrAAnexarDocumento"/>&identificador=" + document.anexarDocumentoForm.identificador.value + "&instancia=" + document.anexarDocumentoForm.instancia.value;
+			 
+			 var paramOthers = {instancia:document.anexarDocumentoForm.instancia.value, identificador:document.anexarDocumentoForm.identificador.value, firmaDelegada:document.anexarDocumentoForm.firmaDelegada.value, descPersonalizada: document.uploadDocumentoForm.descPersonalizada.value};
+			 var callback = {url:urlCallBackApp, paramSignature:"firma", paramOthers:paramOthers, urlCancel: urlCallBackAppCancel};
+			 
+			 var lang = "<%=((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage()%>";
+			 
+			 var nif = "<bean:write name="nifFirmante"/>";
+			 
+			 $.mostrarFirmaWeb(
+					 lang,
+					 nif,
+					 docB64UrlSafe,
+					 nombreFichero,
+					 callback,
+					 null);			 
+		 }
+		 
+	</logic:equal>	 
 
 
 	function showApplet(mostrar) {
@@ -199,30 +239,52 @@
 
 		<logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="S">		
 
-			// Firmamos
 			<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 						 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
+				// Firmamos (el submit se realizara en el callback)
 				firmarAFirma(form);
-				return;
-				
 			</logic:equal>
-			<logic:equal name="implementacionFirma" value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">												
+			
+			<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+						value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">
+				
+				// Firmamos
 				if (!firmarCAIB(form)) {
 					ocultarCapaInfo();
 					showApplet(true);
 					return;
-				}					
-			</logic:equal>					
+				}		
+				// Enviamos form
+				ocultarCapaInfo();
+				accediendoEnviando(mensajeEnviando);
+				form.submit();
+				
+			</logic:equal>	
+			
+			
+			<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+				value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">
+		
+				// Firmamos redirigiendo a pasarela
+				firmarFirmaWeb();
+				
+			</logic:equal>	
+			
 		</logic:equal>	
 				
-		ocultarCapaInfo();
-		accediendoEnviando(mensajeEnviando);
-
-		// Enviar formulario
-		form.submit();
+		
+		<logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="N">	
+			// Enviamos form
+			ocultarCapaInfo();
+			accediendoEnviando(mensajeEnviando);
+			form.submit();	
+		</logic:equal>	
+		
+		
+		
 	}
 	
-	function fileUploaded(idInstancia, identificador, instancia){
+	function fileUploaded(idInstancia, identificador, instancia, documento){
 		var url_json = '<html:rewrite page="/protected/downloadAnexo.do"/>';
 
 		
@@ -236,6 +298,7 @@
 			function(datos){
 				if (datos.error==""){								
 					$('#documentoFirmar').val(datos.documento);
+					$('#nombreFichero').val(datos.nombrefichero);					
 					anexarDocumento(document.anexarDocumentoForm);
 				}else{
 					var mensajeErrorUpload = '<bean:message key="anexar.documento.null"/>';
@@ -387,6 +450,7 @@
 								<bean:message key="anexarDocumentos.anexar.instrucciones.parrafo1"/>
 								<br/>
 								<input type='hidden' id='documentoFirmar' name='documentoFirmar' value='' />
+								<input type='hidden' id='nombreFichero' name='nombreFichero' value='' />
 								<html:hidden name="irAAnexarForm" property="ID_INSTANCIA"/>
 								<html:hidden name="irAAnexarForm" property="instancia" />	
 								<html:hidden name="irAAnexarForm" property="identificador" />

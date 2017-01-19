@@ -57,6 +57,8 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
         	Properties configProps = config.obtenerConfiguracion();
 			getServletContext().setAttribute(Constants.GESTIONEXPEDIENTES_OBLIGATORIOAVISOS,StringUtils.defaultString(configProps.getProperty("gestionExpedientes.avisosObligatorios"), "false"));
 			
+			getServletContext().setAttribute(Constants.CONTEXTO_RAIZ,StringUtils.defaultString(configProps.getProperty("sistra.contextoRaiz.front"), ""));
+			
         }catch (Exception ex){
         	log.error("Error obteniendo implementacion firma",ex);
         	throw new ServletException(ex);

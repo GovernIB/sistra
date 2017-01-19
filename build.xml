@@ -17,6 +17,7 @@
 	<mkdir dir="${output.dir}"/>
 	<mkdir dir="${output.dir}/etc"/>
 	<mkdir dir="${output.dir}/etc/consola"/>
+	<mkdir dir="${output.dir}/etc/firmaWeb"/>
 	<mkdir dir="${output.dir}/ear"/>
 	<mkdir dir="${output.dir}/lib"/>
 	<mkdir dir="${output.dir}/client"/>
@@ -48,6 +49,7 @@
 
 	<ant dir="moduls/llibreria-zk" target="${task}" inheritall="false"/>
 	<ant dir="moduls/modul-consola" target="${task}" inheritall="false"/>
+	<ant dir="moduls/modul-firmaWeb" target="${task}" inheritall="false"/>
 
 </target>
 
@@ -163,8 +165,32 @@
 				<include name="commons-lang-*.jar"/>
 			</zipfileset>
 			<zipfileset dir="${output.dir}/lib" prefix="lib"/>
-		</ear>
+	</ear>
+	
 
+	<copy file="${etc.dir}/firmaWeb/jboss-${jboss.version}/application.xml" todir="${output.dir}/etc/firmaWeb" overwrite="true"/>
+	<replace file="${output.dir}/etc/firmaWeb/application.xml">
+		<replacefilter token="@contextoRaizBack@" value="${contextoRaiz.back}"/>
+		<replacefilter token="@contextoRaizFront@" value="${contextoRaiz.front}"/>
+	</replace>
+
+	<ear earfile="${output.dir}/ear/3-sistra-firmaWeb.ear" appxml="${output.dir}/etc/firmaWeb/application.xml">
+			<manifest>
+				<attribute name="Created-By" value="${indra}"/>
+			    <attribute name="Specification-Title" value="${projecte}"/>
+			    <attribute name="Specification-Version" value="${release.version} build${release.build} ${release.date}"/>
+			</manifest>
+			<metainf dir="${etc.dir}/firmaWeb/jboss-${jboss.version}">
+				<include if="isJboss3" name="jboss-app.xml"/>
+			</metainf>
+			<metainf dir="${etc.dir}/firmaWeb">
+				<include if="isJboss5" name="jboss-classloading.xml"/>
+			</metainf>
+			<metainf dir="${etc.dir}/firmaWeb" includes="cxf/org.apache.cxf.Logger"/>
+			<fileset dir="moduls/modul-firmaWeb/output/moduls"/>			
+	</ear>
+	
+	
 	<antcall target="generateSAR"/>
 
 </target>
@@ -237,11 +263,18 @@
 
 	</java>
 
-	<!-- Generacion del SAR -->
+	<!-- Generacion del SAR de SISTRA-->
 	<delete file="${output.dir}/ear/1-sistra.sar" quiet="yes"/>
     <jar jarfile="${output.dir}/ear/1-sistra.sar">
         <metainf dir="${output.dir}/etc" includes="*.xml"/>
     </jar>
+	
+	<!-- Generacion del SAR de FIRMAWEB-->
+	<delete file="${output.dir}/ear/3-sistra-firmaWeb.sar" quiet="yes"/>
+    <jar jarfile="${output.dir}/ear/3-sistra-firmaWeb.sar">
+        <metainf dir="${etc.dir}/firmaWeb/sar" includes="*.xml"/>
+    </jar>
+	
 </target>
 
 

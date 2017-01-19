@@ -15,6 +15,16 @@
 <script type="text/javascript" src="js/fechas.js"></script>
 <script type="text/javascript" src="js/funcions.js"></script>
 <script type="text/javascript" src="js/mensaje.js"></script>
+
+<bean:define id="urlMostrarDelegaciones">
+    <html:rewrite page="/delegacionesEntidad.do"/>
+</bean:define>
+
+<bean:define id="urlCrearDelegacion">
+    <html:rewrite page="/asignarRepresentanteExt.do"/>
+</bean:define>
+
+
 <logic:equal name="firmarDelegacionRepresentante" value="true">
 	<!--  Scripts para firma (depende implementacion) -->
 	<logic:equal name="<%=es.caib.zonaper.delega.Constants.IMPLEMENTACION_FIRMA_KEY%>"
@@ -31,6 +41,17 @@
 			value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">	
 		<script type="text/javascript" src="<%=request.getContextPath()%>/firma/caib/js/firma.js"></script>
 	</logic:equal>
+	
+	<logic:equal name="<%=es.caib.zonaper.delega.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+			value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">	
+		<script type="text/javascript" src="<%=request.getContextPath()%>/firma/firmaWeb/js/configFirmaWeb.js"></script>
+		<script type="text/javascript" src="<%=request.getContextPath()%>/firma/firmaWeb/js/firmaweb.js"></script>	
+		<script type="text/javascript">		
+			FIRMAWEB_CONTEXTO = '<bean:write name="<%=es.caib.zonaper.delega.Constants.CONTEXTO_RAIZ%>"/>';			
+		</script>
+	</logic:equal>
+	
+	
 	<script type="text/javascript">
 	<!--
 	<logic:equal name="<%=es.caib.zonaper.delega.Constants.IMPLEMENTACION_FIRMA_KEY%>"
@@ -122,6 +143,37 @@
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
 		prepararEntornoFirma();
 	</logic:equal>
+	
+	
+	<logic:equal name="<%=es.caib.zonaper.delega.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+		 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">
+		 
+		 function firmarFirmaWeb(codigoRDS, claveRDS){		
+			 
+			 var nifDelegante = $("#nif").val();
+			 var nifDelegado = $("#nifDelegado").val();
+			 var docB64UrlSafe = $('#documentoB64').val();
+			 var urlCallBackApp = "<bean:write name="urlCrearDelegacion"/>";
+			 var urlCallBackAppCancel = "<bean:write name="urlMostrarDelegaciones"/>?nif=" + nifDelegante;
+			 
+			 var paramOthers = {nifDelegado:nifDelegado, nifDelegante:nifDelegante, codigoRDS:codigoRDS, claveRDS:claveRDS};
+			 var callback = {url:urlCallBackApp, paramSignature:"firmaJSP", paramOthers:paramOthers, urlCancel: urlCallBackAppCancel};
+			 var options = {contenedor:"contenedor"};
+			 
+			 var lang = "<%=((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage()%>";
+			 var nif = "<bean:write name="nifFirmante"/>";
+			 
+			 $.mostrarFirmaWeb(
+					 lang,
+					 nif,
+					 docB64UrlSafe,
+					 "delegacion.xml",
+					 callback,
+					 options);			 
+		 }
+		 
+	</logic:equal>	
+	
 	//-->
 	</script>
 </logic:equal>
@@ -186,38 +238,52 @@ function asignarRepresentante(form){
 				Mensaje.mostrar({tipo: "mensaje", modo: "ejecutando", fundido: "si", titulo: "<bean:message key="delegaciones.enviando"/>"});
 				<logic:equal name="firmarDelegacionRepresentante" value="true">
 					$('#documentoB64').val(datos.datos);
+					
 					<logic:equal name="<%=es.caib.zonaper.delega.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 							 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
+						// Firmar (el envio se hara en el callback)
 						url_json2Afirma = '<html:rewrite page="/asignarRepresentante.do"/>';
 						data2Afirma ='nifDelegante='+nifDelegante+'&codigoRDS='+datos.codigo+'&claveRDS='+datos.clave;
 						firmarAFirma(form);
 						return;
 					</logic:equal>
+					
 					<logic:equal name="<%=es.caib.zonaper.delega.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 								 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">	
+						// Firmar
 						if (!firmarCAIB(form)){ 
 							Mensaje.cancelar();	
 							return;
 						}
-					</logic:equal>	
+						
+					</logic:equal>
+					
+					<logic:equal name="<%=es.caib.zonaper.delega.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+						 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">
+						 Mensaje.cancelar();	
+						 // Firmar (la redireccion se hara en la pasarela)
+						 firmarFirmaWeb(datos.codigo, datos.clave);
+					</logic:equal>
+					
 				</logic:equal>				
-				var url_json2 = '<html:rewrite page="/asignarRepresentante.do"/>';
-				var data2 ='nifDelegante='+nifDelegante+'&codigoRDS='+datos.codigo+'&claveRDS='+datos.clave+'&firmaJSP='+$('#firma').val();
-				$.postJSON(url_json2, data2, function(datos2) {
-					if (datos2.error==""){	
-						alert("<bean:message key="delegaciones.alta.correcta"/>");							
-						document.detalleEntidadForm.submit();
-			            Mensaje.cancelar();	
-					}else{
-						Mensaje.cancelar();	
-						alert(datos2.error);
-						if(datos2.representante == 'N'){
-							$("#divRepresentante").show();
-						}else{
-							$("#divRepresentante").hide();
-						}
-					}
-		        });
+				// Enviar
+						var url_json2 = '<html:rewrite page="/asignarRepresentante.do"/>';
+						var data2 ='nifDelegante='+nifDelegante+'&codigoRDS='+datos.codigo+'&claveRDS='+datos.clave+'&firmaJSP='+$('#firma').val();
+						$.postJSON(url_json2, data2, function(datos2) {
+							if (datos2.error==""){	
+								alert("<bean:message key="delegaciones.alta.correcta"/>");							
+								document.detalleEntidadForm.submit();
+					            Mensaje.cancelar();	
+							}else{
+								Mensaje.cancelar();	
+								alert(datos2.error);
+								if(datos2.representante == 'N'){
+									$("#divRepresentante").show();
+								}else{
+									$("#divRepresentante").hide();
+								}
+							}
+				        });
 			}else{
 				Mensaje.cancelar();	
 				alert(datos.error);

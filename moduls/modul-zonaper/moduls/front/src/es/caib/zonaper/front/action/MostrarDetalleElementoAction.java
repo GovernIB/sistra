@@ -18,12 +18,14 @@ import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
+import es.caib.sistra.plugins.login.ConstantesLogin;
 import es.caib.xml.ConstantesXML;
 import es.caib.xml.documentoExternoNotificacion.factoria.FactoriaObjetosXMLDocumentoExternoNotificacion;
 import es.caib.xml.documentoExternoNotificacion.factoria.ServicioDocumentoExternoNotificacionXML;
 import es.caib.xml.documentoExternoNotificacion.factoria.impl.DocumentoExternoNotificacion;
 import es.caib.zonaper.front.Constants;
 import es.caib.zonaper.front.form.DetalleElementoForm;
+import es.caib.zonaper.model.DatosSesion;
 import es.caib.zonaper.model.DocumentoEntradaPreregistro;
 import es.caib.zonaper.model.DocumentoEntradaTelematica;
 import es.caib.zonaper.model.DocumentoEventoExpediente;
@@ -33,6 +35,7 @@ import es.caib.zonaper.model.EntradaPreregistro;
 import es.caib.zonaper.model.EntradaTelematica;
 import es.caib.zonaper.model.EventoExpediente;
 import es.caib.zonaper.model.NotificacionTelematica;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 
 /**
@@ -122,6 +125,16 @@ public class MostrarDetalleElementoAction extends BaseAction {
 					cargarFirmas(not.getDocumentos(),request,tipo);
 					return mapping.findForward("notificacionRecibida"+anonimo);
 				}else{
+					// Indicamos firmante: si usuario esta autenticado
+					String nifFirmante = "";
+					DatosSesion datosSesion = this.getDatosSesion(request);
+					if (datosSesion.getNivelAutenticacion() != ConstantesLogin.LOGIN_ANONIMO) {
+						nifFirmante = datosSesion.getNifUsuario();
+					} else {
+						nifFirmante = not.getNifRepresentante();
+					}
+					request.setAttribute("nifFirmante", nifFirmante); 	
+					// Redirigimos a not pendiente
 					return mapping.findForward("notificacionPendiente"+anonimo);
 				}
 			}else if (ElementoExpediente.TIPO_ENTRADA_TELEMATICA.equals(tipo)){

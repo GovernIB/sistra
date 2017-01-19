@@ -12,12 +12,18 @@
 	<bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="referenciaPortal("+ lang +")"%>'/>
 </bean:define>
 <bean:define id="ID_INSTANCIA" name="ID_INSTANCIA" type="java.lang.String"/>
+<bean:define id="urlRegistrarTramite">
+        <html:rewrite page="/protected/registrarTramite.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
+</bean:define>
 <bean:define id="urlResetSeleccionNotificacionTelematica">
         <html:rewrite page="/protected/resetSeleccionNotificacionTelematicaAvisos.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
 <bean:define id="entornoDesarrollo" value="<%=Boolean.toString(es.caib.sistra.front.util.Util.esEntornoDesarrollo())%>"/>
 <bean:define id="urlResetSmsCodigo">
         <html:rewrite page="/protected/reenviarSmsVerificarMovil.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
+</bean:define>
+<bean:define id="urlIrAPaso">
+        <html:rewrite page="/protected/irAPaso.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
 <!--  Flujo de tramite -->
 <logic:present name="pasarFlujoTramitacion">
@@ -571,7 +577,7 @@
 						console.log("Type: " + errorType + "\nMessage: " + errorMessage);
 					}
 					
-					var formularioFirma, mensajeFirma;
+					var formularioFirma;
 					function firmarAFirma(formulario){
 					
 						if (MiniApplet == undefined) { 
@@ -592,30 +598,63 @@
 					
 					prepararEntornoFirma();
 			</logic:equal>			
+			
+			<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+				 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">
+				 
+				 function firmarFirmaWeb(){		
+					 var urlCallBackApp = "<bean:write name="urlRegistrarTramite"/>";
+					 var urlCallBackAppCancel = "<bean:write name="urlIrAPaso"/>&step=4";
+					 
+					 var paramOthers = {asiento:document.registrarTramiteForm.asiento.value};
+					 var callback = {url:urlCallBackApp, paramSignature:"firma", paramOthers:paramOthers, urlCancel: urlCallBackAppCancel};
+					 
+					 var lang = "<%=((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage()%>";
+					 var nif = "<bean:write name="nifFirmante"/>";
+					 
+					 $.mostrarFirmaWeb(
+							 lang,
+							 nif,
+							 document.registrarTramiteForm.asiento.value,
+							 "asiento.xml",
+							 callback,
+							 null);			 
+				 }
+				 
+			</logic:equal>
 		
 			function enviar(formulario)
 			{
 				// Firmamos
 				<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 							 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
-						mensajeFirma = mensajeEnviando;
-						firmarAFirma(formulario); return;
+						// Firmar (el envio se hara en el callback)	 						
+						firmarAFirma(formulario); 						
 				</logic:equal>
+
 				<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 							 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">	
-					    if (!firmarCAIB(formulario)) {
+						// Firmar
+						if (!firmarCAIB(formulario)) {
 							 return;
-						}					
+						}							    
+						 // Enviamos
+						formulario.submit();										
+						// Mostramos capa de envio
+						$('#appletDiv').hide();	
+						accediendoEnviando(mensajeEnviando);					    
 				</logic:equal>
-								
-				// Enviamos
-				formulario.submit();				
 				
-				// Mostramos capa de envio
-				$('#appletDiv').hide();	
-				accediendoEnviando(mensajeEnviando);
+				<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">									
+					// Firmamos y esperamos redireccion action a pasarela
+					firmarFirmaWeb();					
+				</logic:equal>
+				
 			}
-		</logic:equal>		
+		</logic:equal>
+		
+		
 		
 		<logic:equal name="mostrarFirmaDigital" value="N">
 			function enviar(formulario){
@@ -632,6 +671,7 @@
 		<%--  Si se indica la url de acceso a un documento, abrimos en nueva ventana --%>	
 		<logic:present name="urlAcceso">
 			<script type="text/javascript">
+			
 				// Abrimos ventana plataforma pagos
 				window.open("<bean:write name="urlAcceso" filter="false"/>");
 			</script>

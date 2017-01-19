@@ -1,0 +1,74 @@
+@charset "utf-8";
+
+/* formateig */
+
+body, form, table, caption, tr, tr, td, ul, ol, li, dl, img, button, p, h1, h2, h3, h4, h5, h6, dl, dt, dd, object, iframe, dl, dt, dd, legend, fieldset { margin:0; padding:0; outline:0; }
+img { border:0; }
+
+/* comuns */
+
+body { font:normal 80% 'TrebuchetMS', 'Trebuchet MS', Arial, Helvetica, sans-serif; color:#666; background-color:#fff; }
+a { color:#000; text-decoration:underline; cursor:pointer; }
+a:hover { color:#c33; }
+a.veure { text-align:center; }
+a.destacat { color:#c33; }
+a.destacat:hover { color:#000; }
+
+.invisible { display:none; }
+.important { font-weight:bold; }
+
+input, select, textarea, button { font:normal 1em Arial, Helvetica, sans-serif; color:#666; line-height:1.3em !important; }
+
+/* ids */
+
+#contenidor { margin:1em 1em 1em 1em; }
+
+#continguts { overflow:hidden; width:100%; margin-bottom:4em; }
+
+
+/* generals */
+
+h1 { font-size:1.2em; margin-bottom:.8em; }
+h2 { font-size:1.1em; margin-top:2em;  }
+h3 { font-size:1em; text-decoration: underline;}
+
+p { line-height:1.2em; margin:.6em 0; }
+p.alerta { padding:1em 1em 1em 3.7em; background:#f2f2f2 url(../imgs/icones/atencio.gif) no-repeat 1em 1em; }
+p.error { padding:1em 1em 1em 3.7em; background:#f2f2f2 url(../imgs/icones/ico_error.gif) no-repeat 1em 1em; }
+p.volver { position:relative; clear:both; border-top:1px dashed #f4f4f4; padding:1em 0 .5em 2em; background:url(../imgs/icones/04tornar.gif) no-repeat left 1em #fff; }
+p.centro { text-align:center;}
+.error
+{
+	color: Red;
+}
+
+#fondo { position:absolute; display:none; top:0; left:0; width:100%; height:200px; background-color:#000; z-index:2; }
+
+div.missatge { position:absolute; top:0; left:0; width:51em; color:#666; padding:0 1em 0 4em; background:url(../imgs/icones/atencio.gif) no-repeat 1em 1em #fff; border:1em solid #f2f2f2; z-index:3; }
+div.missatge p { margin:1em 0; }
+div.missatge div.botonera { text-align:center; padding:1em; }
+div.missatge button { font-size:.9em; padding:.1em .5em; overflow:visible; vertical-align:middle;}
+div.missatge button img { vertical-align:middle; margin-right:.3em; }
+div#enviando2 { position:absolute; display:none; top:0; left:0; width:45em; text-align:center; background:url(../imgs/enviando.gif) no-repeat center 1em #fff; border:1em solid #85bbe4; padding:5em 1em 2em 1em; z-index:12; }
+
+form div.botonera { text-align:center; padding:1em; }
+form div.botonera input { font-size:1.3em; }
+
+p { line-height:1.4em; }
+	
+
+#footer {
+   position:absolute;
+   bottom:0;
+   width:100%;
+   height:60px;
+}
+
+#enviando{
+    position: absolute;
+    height: 50px;
+    width: 50px;
+    background:url(../imgs/enviando.gif) no-repeat center 1em #fff;
+    top:calc(50% - 50px/2); /* height divided by 2*/
+    left:calc(50% - 50px/2); /* width divided by 2*/
+}

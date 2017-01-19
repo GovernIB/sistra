@@ -11,6 +11,9 @@
 <bean:define id="urlFirmarDocumento">
         <html:rewrite page="/protected/firmarFormulario.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
+<bean:define id="urlIrAFirmarFormulario">
+        <html:rewrite page="/protected/irAFirmarFormulario.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
+</bean:define>
 
 <logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_FIRMA_DIGITAL%>" value="S">		
 <script type="text/javascript">
@@ -84,21 +87,55 @@
 	</logic:equal>
 
 	
+	<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+		 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">
+		 
+		 function firmarFirmaWeb(){		
+			 var docB64UrlSafe = document.formFirma.base64XmlForm.value;
+			 var urlCallBackApp = "<bean:write name="urlFirmarDocumento"/>";
+			 var urlCallBackAppCancel = "<bean:write name="urlIrAFirmarFormulario"/>&identificador=" + document.firmarFormularioForm.identificador.value + "&instancia=" + document.firmarFormularioForm.instancia.value;
+			 
+			 var paramOthers = {instancia:document.firmarFormularioForm.instancia.value, identificador:document.firmarFormularioForm.identificador.value, firmaDelegada:document.firmarFormularioForm.firmaDelegada.value};
+			 var callback = {url:urlCallBackApp, paramSignature:"firma", paramOthers:paramOthers, urlCancel: urlCallBackAppCancel};
+			 
+			 var lang = "<%=((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage()%>";
+			 var nif = "<bean:write name="nifFirmante"/>";
+			 
+			 $.mostrarFirmaWeb(
+					 lang,
+					 nif,
+					 docB64UrlSafe,
+					 "formulario.xml",
+					 callback,
+					 null);			 
+		 }
+		 
+	</logic:equal>	 
+	
+	
 	
 	function firmarDocumento()
 	{	
 		// Firmamos
 		<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>" 
 					value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
-			firmarAFirma(); return;
+			// Firmamos y esperamos funcion callback
+			firmarAFirma();
 		</logic:equal>
 		<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
-			if (!firmarCAIB()) return;					
+			// Firmamos
+			if (!firmarCAIB()) return;
+			// Enviamos documento
+			document.firmarFormularioForm.submit ();
+		</logic:equal>
+		<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">									
+			// Firmamos y esperamos redireccion action
+			firmarFirmaWeb();					
 		</logic:equal>
 	
-		// Enviamos documento
-		document.firmarFormularioForm.submit ();
+		
 	}
 
 
@@ -145,6 +182,7 @@
 			
 		</form>
 	</logic:equal>
+	<!--  Firma CAIB -->
 	<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>" 
 				value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
 		<!--  Applet firma CAIB-->
@@ -169,6 +207,22 @@
 					<input type="password" name="PIN" id="PIN" class="txt"/>
 				</p>
 			</div>
+			
+			<!--  BOTON FIRMAR -->
+			<p class="formBotonera">
+				<input name="formCDboton" type="button" value="<bean:message key="firmarDocumento.boton.iniciar" />" title="<bean:message key="firmarDocumento.boton.iniciar" />" onclick="firmarDocumento();" />
+			</p>			
+			
+		</form>
+	</logic:equal>
+	
+	
+	<!--  Firma WEB -->
+	<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>" 
+				value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">									
+		<!--  Applet firma CAIB-->
+		<form name="formFirma">
+			<input type="hidden" name="base64XmlForm" value="<bean:write name="base64XmlForm" />"/>
 			
 			<!--  BOTON FIRMAR -->
 			<p class="formBotonera">

@@ -86,6 +86,7 @@ public class IrFirmarDocumentoAction extends BaseAction
 				if(trobat){
 					jsonFirma = ConvertUtil.bytesToBase64UrlSafe(docRDS.getDatosFichero());
 					jsonObject.put("base64",jsonFirma);
+					jsonObject.put("filename",docRDS.getNombreFichero());
 					jsonObject.put("error","");
 				}else{
 					jsonObject.put("base64",jsonFirma);

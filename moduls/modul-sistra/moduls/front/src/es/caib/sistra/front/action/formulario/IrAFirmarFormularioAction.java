@@ -18,7 +18,9 @@ import es.caib.sistra.model.DocumentoFront;
 import es.caib.sistra.model.RespuestaFront;
 import es.caib.sistra.model.TramiteFront;
 import es.caib.sistra.persistence.delegate.InstanciaDelegate;
+import es.caib.sistra.plugins.login.ConstantesLogin;
 import es.caib.util.ConvertUtil;
+import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 
 /**
  * @struts.action
@@ -69,6 +71,7 @@ public class IrAFirmarFormularioAction extends BaseAction
 		// Indicamos si debemos mostrar la firma digital o firma delegada
 		String mostrarFirmaDigital = "N";
 		String listaFirmantes = "";
+		String[] nifFirmantes = null;
 		if (f.isFirmar()){
 			if (f.isFirmaDelegada()){
 				mostrarFirmaDigital = "D";
@@ -76,7 +79,7 @@ public class IrAFirmarFormularioAction extends BaseAction
 				mostrarFirmaDigital = "S";
 			}
 			// Formateamos lista de firmantes
-			String[] nifFirmantes = f.getFirmante().split("#");
+			nifFirmantes = f.getFirmante().split("#");
 			String[] nomFirmantes = f.getNombreFirmante().split("#");
 			
 			String partY = " y ";
@@ -99,7 +102,21 @@ public class IrAFirmarFormularioAction extends BaseAction
 		}
 		request.setAttribute(Constants.MOSTRAR_FIRMA_DIGITAL,mostrarFirmaDigital);
 		request.setAttribute( "listaFirmantes", listaFirmantes );
-				
+		
+		// Identificamos firmante para plugin firma web
+		String nifFirmante = "";
+		if (nifFirmantes != null && nifFirmantes.length == 1) {
+			nifFirmante = nifFirmantes[0];
+		} else if (respuestaFront.getInformacionTramite().getDatosSesion().getNivelAutenticacion() != ConstantesLogin.LOGIN_ANONIMO) {
+			String perfilAcceso = respuestaFront.getInformacionTramite().getDatosSesion().getPerfilAcceso();
+			if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(perfilAcceso)) {
+				nifFirmante = respuestaFront.getInformacionTramite().getDatosSesion().getNifDelegado();
+			} else {
+				nifFirmante = respuestaFront.getInformacionTramite().getDatosSesion().getNifUsuario();
+			}
+		}
+		request.setAttribute( "nifFirmante", nifFirmante );
+		
 		this.setRespuestaFront( request, respuestaFront );
 		return mapping.findForward("success");
 	}

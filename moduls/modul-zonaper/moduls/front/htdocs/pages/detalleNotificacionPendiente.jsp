@@ -17,6 +17,15 @@
 <bean:define id="mensaje" type="java.lang.String">
 	<bean:write name="avisoNotificacion" property="texto" />
 </bean:define>
+
+<bean:define id="urlDetalleNotificacion">
+    <html:rewrite page="/protected/mostrarDetalleElemento.do"/>
+</bean:define>
+
+<bean:define id="urlAbrirNotificacion">
+    <html:rewrite page="/protected/abrirNotificacion.do"/>
+</bean:define>
+
 <%
 	// Reemplazamos saltos de linea por <br/>
  	String mensajeHtml = mensaje;
@@ -25,18 +34,7 @@
 
 <logic:equal name="puedeAbrir" value="S">
 <script type="text/javascript">
-    <!-- 
-	function enviar(firmarAcuse)
-	{
-	   	// Realizamos firma
-		if (firmarAcuse){
-			realizarFirmaAcuse();					
-		}
-						
-		// Enviamos
-		var formulario = document.getElementById("formularioEnvio");
-		formulario.submit();
-	}
+<!-- 	
 <logic:notEmpty name="tipoFirma">
 <logic:equal name="tipoFirma" value="CERT">
  	<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
@@ -81,6 +79,9 @@
 				firma = b64ToB64UrlSafe(signatureB64);
 				var formulario = document.getElementById("formularioEnvio");
 				formulario.firma.value = firma;
+				
+				// Enviamos			
+				formulario.submit();
 			}
 			
 			function showLogCallback(errorType, errorMessage) {
@@ -109,27 +110,76 @@
 			}
 			prepararEntornoFirma();
 	</logic:equal>	
-
-
-	function realizarFirmaAcuse()
+	
+	
+	<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+		 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">
+		 
+		 function firmarFirmaWeb(){		
+			 var docB64UrlSafe = document.abrirNotificacionForm.asiento.value;
+			 var urlCallBackApp = "<bean:write name="urlAbrirNotificacion"/>";
+			 var urlCallBackAppCancel = "<bean:write name="urlDetalleNotificacion"/>?tipo=N&codigo=" + document.abrirNotificacionForm.codigo.value;
+			 
+			 var paramOthers = {codigo:document.abrirNotificacionForm.codigo.value, asiento:document.abrirNotificacionForm.asiento.value, tipoFirma:document.abrirNotificacionForm.tipoFirma.value};
+			 var callback = {url:urlCallBackApp, paramSignature:"firma", paramOthers:paramOthers, urlCancel: urlCallBackAppCancel};
+			 
+			 var lang = "<%=((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage()%>";
+			 var nif = "<bean:write name="nifFirmante"/>";
+			 
+			 $.mostrarFirmaWeb(
+					 lang,
+					 nif,
+					 docB64UrlSafe,
+					 "asiento.xml",
+					 callback,
+					 null);			 
+		 }
+		 
+	</logic:equal>	
+	
+	function enviar(firmarAcuse)
 	{
-		// Realizamos firma
-		<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
-					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
-				firmarAFirma(); return;
-		</logic:equal>
-		<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
-					 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
-				if (!firmarCAIB()) return;					
-		</logic:equal>	
+    	// Realizamos firma
+		if (firmarAcuse){
+			// Realizamos firma
+			<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+						 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
+					// Firmar (se enviara en el callback)	 
+					firmarAFirma();
+			</logic:equal>
+			<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+						 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">									
+					// Firmamos
+					if (!firmarCAIB()) return;
+					// Enviamos			
+					var formulario = document.getElementById("formularioEnvio");
+					formulario.submit();				
+			</logic:equal>		
+			<logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
+					 	value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">									
+				// Firmamos y esperamos redireccion action
+				firmarFirmaWeb();					
+			</logic:equal>
+		} else {					
+			// Enviamos
+			var formulario = document.getElementById("formularioEnvio");
+			formulario.submit();
+		}
+		
 	}
+    
 	
 </logic:equal>
 <logic:equal name="tipoFirma" value="CLAVE">
-	function realizarFirmaAcuse()
+	
+	function enviar(firmarAcuse)
 	{
-		// No hay que hacer nada
+    	// Enviamos
+		var formulario = document.getElementById("formularioEnvio");
+		formulario.submit();
 	}
+    
+	
 </logic:equal>
 </logic:notEmpty>
 	 -->	

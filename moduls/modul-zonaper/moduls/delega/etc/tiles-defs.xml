@@ -36,6 +36,13 @@
    	</definition>
    	
    	<definition
+    	name=".delegacionesManejarExt"
+    	extends=".mainLayout"
+    	controller="es.caib.zonaper.delega.controller.DelegacionesController">	
+    	<put name="main" value="/delegacionesExt.jsp"/>
+   	</definition>
+   	
+   	<definition
     	name=".formularioBusqueda"
        	path="/formularioBusqueda.jsp"/>
     
