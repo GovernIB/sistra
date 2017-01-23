@@ -13,6 +13,7 @@ import org.fundaciobit.plugins.signatureweb.api.ISignatureWebPlugin;
 import org.fundaciobit.plugins.webutils.AbstractWebPlugin;
 
 import es.caib.firmaweb.model.SistraSignaturesSet;
+import es.caib.firmaweb.util.ConfigurationUtil;
 import es.caib.firmaweb.util.SignatureSetStore;
 import es.caib.firmaweb.util.SignatureWebPluginManager;
 
@@ -183,9 +184,13 @@ public class RequestPluginServlet extends HttpServlet {
 			  }
 	
 			  protected static String getAbsoluteURLBase(HttpServletRequest request) {
-
-				    return request.getScheme() + "://" + request.getServerName() + ":"
-				        + +request.getServerPort() + request.getContextPath();
+				  	String urlFront = ""; 
+				  	try {
+						urlFront = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.url");
+					} catch (Exception e) {
+						throw new RuntimeException("No se puede acceder a la configuracion de sistra");
+					}
+				  	return urlFront + request.getContextPath();
 
 				  }
 }

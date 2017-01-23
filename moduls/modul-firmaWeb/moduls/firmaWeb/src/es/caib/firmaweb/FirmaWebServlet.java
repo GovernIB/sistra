@@ -39,6 +39,7 @@ import es.caib.firmaweb.model.DocumentData;
 import es.caib.firmaweb.model.Plugin;
 import es.caib.firmaweb.model.SistraSignaturesSet;
 import es.caib.firmaweb.util.Base64UrlSafe;
+import es.caib.firmaweb.util.ConfigurationUtil;
 import es.caib.firmaweb.util.SignaturePluginManager;
 import es.caib.firmaweb.util.SignatureSetStore;
 import es.caib.firmaweb.util.SignatureWebPluginManager;
@@ -76,6 +77,7 @@ public class FirmaWebServlet extends HttpServlet {
 				finalizarFirma(request, response);			
 			}			
 		} catch (Exception ex) {
+			log.error("Excepcion no controlada: " + ex, ex);
 			throw new ServletException("Excepcion no controlada: " + ex);
 		}
 	}
@@ -181,8 +183,12 @@ public class FirmaWebServlet extends HttpServlet {
 		int signatureIndex = -1;
 		String contextPlugin = "/common/signwebmodule";
 		
+		String urlFront = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.url");
 		String relativeRequestPluginBasePath = request.getContextPath() + contextPlugin + "/requestPlugin/" + signaturesSet.getSignaturesSetID() + "/" + signatureIndex; 
-		String absoluteRequestPluginBasePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + relativeRequestPluginBasePath;
+		String absoluteRequestPluginBasePath = urlFront + relativeRequestPluginBasePath;
+		
+		log.debug(" - URL relativeRequestPluginBasePath: " + relativeRequestPluginBasePath);
+		log.debug(" - URL absoluteRequestPluginBasePath: " + absoluteRequestPluginBasePath);
 
 		// Long pluginID = signaturesSet.getPluginID();   v2??  
 		
