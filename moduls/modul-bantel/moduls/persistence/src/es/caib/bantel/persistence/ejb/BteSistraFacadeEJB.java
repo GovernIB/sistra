@@ -161,6 +161,7 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
      */
     public ValoresFuenteDatosBTE consultaFuenteDatos(String consultaFuenteDatos, List parametros)  throws ExcepcionBTE{
     	try{
