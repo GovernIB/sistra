@@ -2,10 +2,15 @@ package es.caib.redose.admin.scheduler.conf;
 
 import java.util.Map;
 
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.login.LoginContext;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import es.caib.redose.admin.util.UsernamePasswordCallbackHandler;
 import es.caib.redose.persistence.delegate.DelegateUtil;
+import es.caib.redose.persistence.util.ConfigurationUtil;
 
 public class SchedulerConfiguration
 {
@@ -26,8 +31,18 @@ public class SchedulerConfiguration
 	
 	private SchedulerConfiguration()
 	{
+		LoginContext lc = null;
+		
 		try
 		{
+			String user = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("auto.user");
+			String pass = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("auto.pass");
+			
+            CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass );
+            
+            lc = new LoginContext("client-login", handler);
+            lc.login();
+            
 			properties = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
 		}
 		catch( Exception exc )

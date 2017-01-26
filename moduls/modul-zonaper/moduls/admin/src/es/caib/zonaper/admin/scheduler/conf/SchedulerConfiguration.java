@@ -2,10 +2,15 @@ package es.caib.zonaper.admin.scheduler.conf;
 
 import java.util.Map;
 
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.login.LoginContext;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
+import es.caib.zonaper.persistence.util.ConfigurationUtil;
+import es.caib.zonaper.persistence.util.UsernamePasswordCallbackHandler;
 
 public class SchedulerConfiguration
 {
@@ -26,13 +31,26 @@ public class SchedulerConfiguration
 	
 	private SchedulerConfiguration()
 	{
+		LoginContext lc = null;
+		
 		try
 		{
+			String user = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("auto.user");
+			String pass = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("auto.pass");
+			
+            CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass );
+            
+            lc = new LoginContext("client-login", handler);
+            lc.login();
+			
 			properties = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
-		}
-		catch( Exception exc )
-		{
-			log.error( exc );
+		}catch (Exception ex){
+            // Informamos al log                    
+            log.error("Error obteniendo configuracion: " + ex.getMessage(),ex);
+		}finally{
+            if ( lc != null ){
+                  try{lc.logout();}catch(Exception exl){}
+            }                                 
 		}
 	}
 		

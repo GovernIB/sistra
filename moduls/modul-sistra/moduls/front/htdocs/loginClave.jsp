@@ -1,12 +1,12 @@
 <%@ page contentType="text/html; charset=ISO-8859-1"%>
-<%@ page import="java.util.*, org.apache.struts.Globals, org.apache.catalina.authenticator.SavedRequest, es.caib.util.ConvertUtil, java.io.FileInputStream,es.caib.sistra.plugins.PluginFactory, es.caib.sistra.plugins.login.PluginLoginIntf, java.lang.reflect.Method" %>
+<%@ page import="java.util.*, org.apache.struts.Globals, es.caib.util.ConvertUtil, java.io.FileInputStream,es.caib.sistra.plugins.PluginFactory, es.caib.sistra.plugins.login.PluginLoginIntf, java.lang.reflect.Method" %>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%
 
 	// Parametros login clave
-	SavedRequest savedRequest = null;
+	Object savedRequest = null;
 	boolean esLoginClave = false;
 	String ticketClave = null;
 	String urlCallback = null;
@@ -15,12 +15,9 @@
 	String urlDestino = null;
 	String language = null;
 
-	// Url origen
-	savedRequest = (SavedRequest) session.getAttribute("savedrequest");
-
-	// Indica si es login despues de pasar por clave
-	esLoginClave = savedRequest.getRequestURI().endsWith("/protected/redireccionClave.jsp");
-
+	// Request origen 
+	savedRequest = session.getAttribute("savedrequest");
+	
 	// Configuracion organismo
 	es.caib.zonaper.persistence.delegate.ConfiguracionDelegate delegateF = es.caib.zonaper.persistence.delegate.DelegateUtil.getConfiguracionDelegate();
 	java.util.Properties configProperties =  delegateF.obtenerConfiguracion();
@@ -43,7 +40,18 @@
 		language = "es";
 	}
 	request.setAttribute("lang", language);
-
+	
+	
+	// Obtenemos url origen y query string
+	Method methodUrlOrigen = savedRequest.getClass().getDeclaredMethod("getRequestURI", null);
+	String urlSavedRequest =  (String) methodUrlOrigen.invoke(savedRequest, null);
+	Method methodQueryString = savedRequest.getClass().getDeclaredMethod("getQueryString", null);
+	String queryStringSavedRequest =  (String) methodQueryString.invoke(savedRequest, null);
+	
+		
+	// Indica si es login despues de pasar por clave
+	esLoginClave = urlSavedRequest.endsWith("/protected/redireccionClave.jsp");
+	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
@@ -179,8 +187,12 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 
 	//Si la url origen es redireccionClave.jsp, hacemos login automatico
 	if (esLoginClave) {
+			
 		// Obtenemos ticket pasado por POST
-		String[] values = savedRequest.getParameterValues("ticket");
+		Class[] paramsParametersOrigen = new Class[] {String.class};
+		Method methodParametersOrigen = savedRequest.getClass().getDeclaredMethod("getParameterValues", paramsParametersOrigen);
+		String[] values =  (String []) methodParametersOrigen.invoke(savedRequest, new String("ticket"));
+		System.out.println( "VALORES:" + values.length );
 		ticketClave = values[0];
 	} else {
 		// Url Callback
@@ -194,9 +206,9 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 		// Url redireccion clave
 		urlClave = urlSistra + "/" + contextAutenticadorClave + "/iniciarSesionClave.html";
 		// Url destino
-		urlDestino = savedRequest.getRequestURI();
-		if (savedRequest.getQueryString() != null) {
-			urlDestino += "?" + savedRequest.getQueryString();
+		urlDestino = urlSavedRequest;
+		if (queryStringSavedRequest != null) {
+			urlDestino += "?" + queryStringSavedRequest;
 		}
 	}
 
