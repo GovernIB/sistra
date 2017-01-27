@@ -10,6 +10,9 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-15" />
 	<title>Govern de les Illes Balears</title>
 	<link href="css/estils.css" rel="stylesheet" type="text/css" />
+	<c:if test="${not empty urlCssCustom}">
+		<link href="<bean:write name="${urlCssCustom}" />" rel="stylesheet" type="text/css" />    
+	</c:if>	
 </head>
 <body onload="document.getElementById('frmCallback').submit()">
 	<form id="frmCallback" action="${callbackAppUrl}" method="post" target="${callbackTarget}">
