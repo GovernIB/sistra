@@ -65,6 +65,12 @@ public class FirmaWebServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		try {
+			// Css personalizado
+			String urlCssCustom = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("organismo.cssLoginCustom");
+			if (urlCssCustom != null) {
+				request.setAttribute("urlCssCustom", urlCssCustom);
+			}
+			
 			// Accion
 			String accion = request.getParameter("accion");
 			if ("iniciarFirma".equals(accion)) {
