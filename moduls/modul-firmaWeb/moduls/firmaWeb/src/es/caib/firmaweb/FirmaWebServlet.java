@@ -142,7 +142,9 @@ public class FirmaWebServlet extends HttpServlet {
 		
 		SistraSignaturesSet signaturesSet = (SistraSignaturesSet) SignatureSetStore.load(signaturesSetID);
 		
-		String urlInfoFirma = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("organismo.urlInfoFirma");
+		String lang = signaturesSet.getCommonInfoSignature().getLanguageUI();
+		
+		String urlInfoFirma = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("organismo.urlInfoFirma"+"."+lang);
 		
 		// Obtiene plugins  
 		List<Plugin> plugins = pluginManager.getAllPlugins();
@@ -159,7 +161,7 @@ public class FirmaWebServlet extends HttpServlet {
 			}
 		}	
 		
-		request.setAttribute("lang", signaturesSet.getCommonInfoSignature().getLanguageUI());
+		request.setAttribute("lang", lang);
 		request.setAttribute("plugins", pluginsValidos);
 		request.setAttribute("signaturesSetID", signaturesSetID);
 		request.setAttribute("urlCancel", signaturesSet.getCallbackAppUrlCancel());
