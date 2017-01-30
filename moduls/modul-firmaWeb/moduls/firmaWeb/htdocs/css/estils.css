@@ -21,7 +21,9 @@ input, select, textarea, button { font:normal 1em Arial, Helvetica, sans-serif; 
 
 /* ids */
 
-#contenidor { margin:1em 1em 1em 1em; }
+/* #contenidor { margin:1em 1em 1em 1em; } */
+
+#plugins { margin:1em 1em 1em 1em; }
 
 #continguts { overflow:hidden; width:100%; margin-bottom:4em; }
 

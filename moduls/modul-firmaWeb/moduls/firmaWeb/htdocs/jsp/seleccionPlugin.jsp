@@ -12,7 +12,7 @@
 	<link href="css/estils.css" rel="stylesheet" type="text/css" />
 	
 	<c:if test="${not empty urlCssCustom}">
-		<link href="<bean:write name="${urlCssCustom}" />" rel="stylesheet" type="text/css" />    
+		<link href="${urlCssCustom}" rel="stylesheet" type="text/css" />    
 	</c:if>	
 	
 	<script type="text/javascript">
@@ -41,10 +41,16 @@
 	<p class="alerta">
 		<fmt:message key="seleccionar"/>
 	</p>
+	<div id="plugins">
+	<p>
+		<fmt:message key="infoFirma">
+			<fmt:param value="${urlInfoFirma}"/>
+		</fmt:message>
+	</p>
 	<br/>
 	<c:forEach var="plugin" items="${plugins}">
 		<h3><fmt:message key="plugin.${plugin.pluginID}.titulo"/></h3>
-		<p><fmt:message key="plugin.${plugin.pluginID}.texto"/> (<a href="<fmt:message key="plugin.${plugin.pluginID}.url"/>" target="_blank"/><fmt:message key="masInfo"/></a>)</p>
+		<p><fmt:message key="plugin.${plugin.pluginID}.texto"/></p>
 		<div class="botonera">
 			<input onclick="firmar('${plugin.pluginID}');" value="<fmt:message key="plugin.${plugin.pluginID}.firmar"/>" type="button"/>	
 		</div>		
@@ -55,6 +61,7 @@
 		<p class="centro">
 			<input type="button" onclick="javascript:volverAsistenteTramitacion();" value="<fmt:message key="cancelar"/>"/>
 		</p>
+	</div>
 	</div>	
 	
 	</div>		

@@ -66,7 +66,7 @@ public class FirmaWebServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		try {
 			// Css personalizado
-			String urlCssCustom = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("organismo.cssLoginCustom");
+			String urlCssCustom = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("organismo.cssCustom");
 			if (urlCssCustom != null) {
 				request.setAttribute("urlCssCustom", urlCssCustom);
 			}
@@ -142,6 +142,8 @@ public class FirmaWebServlet extends HttpServlet {
 		
 		SistraSignaturesSet signaturesSet = (SistraSignaturesSet) SignatureSetStore.load(signaturesSetID);
 		
+		String urlInfoFirma = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("organismo.urlInfoFirma");
+		
 		// Obtiene plugins  
 		List<Plugin> plugins = pluginManager.getAllPlugins();
 		List<Plugin> pluginsValidos = new ArrayList<Plugin>();				
@@ -162,6 +164,7 @@ public class FirmaWebServlet extends HttpServlet {
 		request.setAttribute("signaturesSetID", signaturesSetID);
 		request.setAttribute("urlCancel", signaturesSet.getCallbackAppUrlCancel());
 		request.setAttribute("target", signaturesSet.getCallbackAppTarget());
+		request.setAttribute("urlInfoFirma", urlInfoFirma);
 		
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher( "/WEB-INF/jsp/seleccionPlugin.jsp" );
 		dispatcher.forward( request, response );

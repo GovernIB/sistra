@@ -4,6 +4,7 @@ import java.security.SecureRandom;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.fundaciobit.plugins.signatureweb.api.SignaturesSetWeb;
 
@@ -17,7 +18,7 @@ import org.fundaciobit.plugins.signatureweb.api.SignaturesSetWeb;
  */
 public class SignatureSetStore {
 	
-	public static final Map<String, SignaturesSetWeb> almacen = new HashMap<String, SignaturesSetWeb>();
+	public static final ConcurrentHashMap<String, SignaturesSetWeb> almacen = new ConcurrentHashMap<String, SignaturesSetWeb>();
 	
 	private static final long TIMEOUT = 60L * 60L * 1000L; // 60 minutos en ms
 	
