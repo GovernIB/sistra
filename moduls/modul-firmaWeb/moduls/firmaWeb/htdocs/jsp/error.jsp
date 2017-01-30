@@ -11,7 +11,7 @@
 	<title>Govern de les Illes Balears</title>
 	<link href="css/estils.css" rel="stylesheet" type="text/css" />
 	<c:if test="${not empty urlCssCustom}">
-		<link href="<bean:write name="${urlCssCustom}" />" rel="stylesheet" type="text/css" />    
+		<link href="${urlCssCustom}" rel="stylesheet" type="text/css" />    
 	</c:if>	
 	
 	<script type="text/javascript">
