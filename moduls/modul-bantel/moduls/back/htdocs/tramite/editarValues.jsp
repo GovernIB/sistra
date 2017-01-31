@@ -6,6 +6,9 @@
 <bean:define id="urlArbol">
     <html:rewrite page="/arbolProcs.do"/>
 </bean:define>
+<bean:define id="urlArbolServicios">
+    <html:rewrite page="/arbolServicios.do"/>
+</bean:define>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.4.1.min.js"></script>
 <script type="text/javascript">
      <!--
@@ -24,6 +27,11 @@
     function mostrarArbolForms(url) {        
          obrir(url, "Arbol", 540, 400);
     }
+    
+    function mostrarArbolServicios(url) {
+        //var url = '<html:rewrite page="/arbolServicios.do" />';
+        obrir(url, "Arbol", 540, 400);
+     }
      
      // -->
 </script>
@@ -84,6 +92,7 @@
     	<html:select property="values.organoRegistro">
    			<html:options collection="listaOrganos" property="codigo" labelProperty="descripcion" />
     	</html:select>
+    	<input type="button" value="..."  class = "botonEditar" onclick="mostrarArbolServicios('<%=urlArbolServicios + "?id=values.organoRegistro" %>');"/>
     </td>
 </tr>
 <tr>
