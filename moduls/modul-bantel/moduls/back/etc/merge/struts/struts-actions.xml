@@ -3,7 +3,6 @@
     type="org.apache.struts.actions.ForwardAction"
     parameter=".mainLayout"/>
 
-
    <action
     path="/menu"
     type="org.apache.struts.actions.ForwardAction"
@@ -22,8 +21,18 @@
     <action
     path="/tramite/funcsNodesProcs"
     type="org.apache.struts.actions.ForwardAction"
-    parameter=".tramite.funcsNodesProcs"/> 
+    parameter=".tramite.funcsNodesProcs"/>
     
+    <action
+    path="/arbolServicios"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".arbolServicios"/>
+    
+    <action
+    path="/tramite/funcsNodesServicios"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".tramite.funcsNodesServicios"/>
+     
     <action
     path="/back/gestorBandeja/lista"
     type="org.apache.struts.actions.ForwardAction"
