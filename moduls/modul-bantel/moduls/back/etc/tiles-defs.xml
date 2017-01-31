@@ -51,6 +51,11 @@
     <definition name=".arbolProcs" path="/arbolProcs.jsp" />
     <definition name=".tramite.funcsNodesProcs" path="/js/funcsNodesProcs.jsp"
      controllerClass="es.caib.bantel.back.action.tramite.FuncsNodesProcsController" />
+     <definition name=".arbolServicios" path="/arbolServicios.jsp" />
+    <definition name=".tramite.funcsNodesServicios" path="/js/funcsNodesServicios.jsp"
+     controllerClass="es.caib.bantel.back.action.tramite.FuncsNodesServiciosController" /> 
+     
+    <definition name=".busquedaServicios" path="/busquedaServicios.jsp" />
      <definition name=".tramite.lista" path="/tramite/lista.jsp"
         controllerClass="es.caib.bantel.back.action.tramite.ListaTramitesController"/>
         

@@ -5,6 +5,12 @@
  white-space:nowrap;
  }
  
+ span.txtBuscador { 
+	font-size: 8pt;
+	font-family: verdana,helvetica;
+	color: #464F59;
+}
+ 
  A  {
  text-decoration: none;
  color: #464F59;
