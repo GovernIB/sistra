@@ -28,3 +28,6 @@
     className="es.caib.bantel.back.action.TraFormBeanConfig">
     <set-property property="valuesClassName" value="es.caib.bantel.model.CampoFuenteDatos" />
 </form-bean>
+<form-bean
+    name="buscarServiciosForm"
+    type="es.caib.bantel.back.form.BuscarServiciosForm" />

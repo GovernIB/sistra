@@ -45,7 +45,8 @@
         	<include name="*.jar" />
         </fileset>
     	<fileset dir="${lib.dir}/client">
-    	   <include name="sistra-client.jar"/>    	        
+    	   <include name="sistra-client.jar"/>
+    	   <include name="regtel-client.jar"/>
         </fileset>
     	<fileset dir="${distribucion.dir}/lib">    	
     	 	<include name="sistra-xml.jar"/>
