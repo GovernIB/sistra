@@ -102,6 +102,8 @@ public class FirmaWebServlet extends HttpServlet {
 		
 		SistraSignaturesSet ss = (SistraSignaturesSet) SignatureSetStore.load(idFirmada);
 		
+		String lang = ss.getCommonInfoSignature().getLanguageUI();
+		
 		SignatureSetStore.remove(idFirmada);
 				
 		if (ss.getStatusSignaturesSet().getStatus() == StatusSignaturesSet.STATUS_FINAL_OK) {
@@ -109,7 +111,7 @@ public class FirmaWebServlet extends HttpServlet {
 		    StatusSignature status = fis.getStatusSignature();
 		    if (status.getStatus() == StatusSignature.STATUS_FINAL_OK) {
 		    	// - Redirige JSP
-		    	request.setAttribute("lang", ss.getCommonInfoSignature().getLanguageUI());
+		    	request.setAttribute("lang", lang);
 		    	request.setAttribute("callbackAppUrl", ss.getCallbackAppUrl());
 		    	request.setAttribute("callbackAppParamSignature", ss.getCallbackAppParamSignature());
 		    	request.setAttribute("callbackAppParamOthers", ss.getCallbackAppParamOthers());
@@ -123,6 +125,7 @@ public class FirmaWebServlet extends HttpServlet {
 		
 		
 		// Error
+		request.setAttribute("lang", lang);
 		request.setAttribute("error", ss.getStatusSignaturesSet().getErrorMsg());
 		request.setAttribute("errorCodigo", ss.getStatusSignaturesSet().getStatus());
 		request.setAttribute("urlCancel", ss.getCallbackAppUrlCancel());
