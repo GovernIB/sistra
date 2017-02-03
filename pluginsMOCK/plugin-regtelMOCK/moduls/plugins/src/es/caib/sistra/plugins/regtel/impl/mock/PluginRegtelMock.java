@@ -73,20 +73,24 @@ public class PluginRegtelMock implements PluginRegistroIntf{
 	}
 
 	public List obtenerServiciosDestino() {
-		ServicioDestinatario ofRaiz = new ServicioDestinatario();
-		ofRaiz.setCodigo("S0");
-		ofRaiz.setDescripcion("Servicio 0");
 		
 		List lista = new ArrayList();
-		lista.add(ofRaiz);
+		
+		for (int i=1;i<=10;i++){
+			ServicioDestinatario of = new ServicioDestinatario();
+			of.setCodigo("U" + i);
+			of.setDescripcion("Unidad " + i);
+			of.setCodigoPadre("S" + i);
+			lista.add(of);
+		}
 		
 		for (int i=1;i<=10;i++){
 			ServicioDestinatario of = new ServicioDestinatario();
 			of.setCodigo("S" + i);
-			of.setDescripcion("Servicio " + i);
-			of.setCodigoPadre(ofRaiz.getCodigo());
+			of.setDescripcion("Servicio " + i);			
 			lista.add(of);
-		}
+		}				
+		
 		return lista;
 	}
 

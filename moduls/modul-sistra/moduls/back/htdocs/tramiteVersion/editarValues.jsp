@@ -207,7 +207,7 @@
     <td class="input">
     	<html:select property="values.registroOficina">
    			<html:options collection="listaoficinasregistro" property="CODIGO" labelProperty="DESCRIPCION" />
-    	</html:select>    	
+    	</html:select>
     </td>
 </tr>
 <tr>

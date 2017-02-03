@@ -19,9 +19,8 @@ String urlFuncsNodes = "/tramiteVersion/funcsNodesServicios.do?id=" + id;
 	 
 <script type="text/javascript">
 
-function seleccionar(descripcion)
-{
-     codigo = descripcion.substr(2);
+function seleccionar(codigo)
+{    
      var index = findOption(opener.document.getElementsByName('<%= id %>').item(0).options, codigo);
      opener.document.getElementsByName('<%= id %>').item(0).options[index].selected = 'selected';
      window.close();
