@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -17,12 +16,12 @@ import org.apache.struts.Globals;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.util.MessageResources;
 
-import es.caib.regtel.model.ConstantesRegtel;
 import es.caib.regtel.model.ValorOrganismo;
 import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
 import es.caib.regtel.persistence.delegate.RegistroTelematicoDelegate;
 import es.caib.sistra.back.action.BaseController;
-import es.caib.sistra.modelInterfaz.ConstantesDominio;
+import es.caib.sistra.back.util.NodoArbol;
+import es.caib.sistra.back.util.UtilArbol;
 
 public class FuncsNodesServiciosController extends BaseController
 {
@@ -32,42 +31,45 @@ public class FuncsNodesServiciosController extends BaseController
     public void perform(ComponentContext arg0, HttpServletRequest request, HttpServletResponse arg2, ServletContext arg3) throws ServletException, IOException
     {
         try {
-            RegistroTelematicoDelegate dlgRte = DelegateRegtelUtil.getRegistroTelematicoDelegate();
-            List organosDestino = dlgRte.obtenerServiciosDestino();
-            request.setAttribute( "unidadesAdministrativas", createNodos(request, organosDestino));
+        	RegistroTelematicoDelegate regtel = DelegateRegtelUtil.getRegistroTelematicoDelegate();
+            List organosDestino = regtel.obtenerServiciosDestino(); 
+        	request.setAttribute( "nodosArbol", createNodos(request, organosDestino));
         } catch (Exception e) {
             throw new ServletException(e);
         }
 	}
     
     
-    private List createNodos(HttpServletRequest request, List unidadesAdministrativas)
+    private List createNodos(HttpServletRequest request, List organosDestino)
     {
-    	ArrayList result = new ArrayList();
-		String parentId = "foldersTree"; 
+    	List result = new ArrayList();
+    	int indexCampo = 0;
 		
-		NodoUnidadAdministrativa nodoRaiz = new NodoUnidadAdministrativa();
-    	nodoRaiz.setId(parentId);
+    	String idNodoRaiz = "foldersTree"; 
+		NodoArbol nodoRaiz = new NodoArbol();
+		nodoRaiz.setIdCampo(idNodoRaiz);
+    	nodoRaiz.setId(idNodoRaiz);
 		nodoRaiz.setDescripcion(getResources(request).getMessage((Locale) request.getSession().getAttribute(Globals.LOCALE_KEY),"tramiteVersion.organoDestino"));
     	result.add( nodoRaiz );
+    	    	  
     	
-    	NodoUnidadAdministrativa nodo = null;
-
-    	// Cogemos el primero que es el Padre de todos
+    	NodoArbol nodo = null;
     	
-    	for(int i=0; i<unidadesAdministrativas.size(); i++)
+	  	// Establecemos servicios
+    	for(int i=0; i<organosDestino.size(); i++)
     	{
-    		ValorOrganismo vo = (ValorOrganismo) unidadesAdministrativas.get(i);
-    		nodo = new NodoUnidadAdministrativa();
-    		String descripcion = vo.getDescripcion();
-    		if(descripcion == null) continue;
-    		nodo.setDescripcion(vo.getCodigo() + " - " + descripcion);
-    		String codigo = "c_" + vo.getCodigo();
-    		nodo.setId(codigo);
-    		nodo.setFolder(true);
+    		ValorOrganismo vo = (ValorOrganismo) organosDestino.get(i);
+    		if(vo.getDescripcion() == null) continue;
+    		
+    		indexCampo++;
+    		nodo = new NodoArbol();
+    		nodo.setIdCampo("c"+ indexCampo);
+    		nodo.setId(vo.getCodigo());
+    		nodo.setDescripcion(vo.getDescripcion());
+    		nodo.setSeleccionable(true);
     		if(vo.getCodigoPadre() != null)
-    		{
-       			nodo.setParentId("c_" + vo.getCodigoPadre());
+    		{    			
+       			nodo.setParentId(vo.getCodigoPadre());
     		}
     		else
     		{
@@ -75,6 +77,10 @@ public class FuncsNodesServiciosController extends BaseController
     		}
     		result.add(nodo);
     	}
+    	
+    	// Rellenamos idcampo padre
+    	result = UtilArbol.prepararArbol(result);
+    	
     	return result;
     }
     
