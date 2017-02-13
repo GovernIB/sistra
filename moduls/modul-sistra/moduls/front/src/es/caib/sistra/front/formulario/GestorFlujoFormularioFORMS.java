@@ -381,7 +381,7 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 
 		Propiedad propiedadNombreTramite = factory.crearPropiedad();
 		propiedadNombreTramite.setNombre( "tramite" );
-		propiedadNombreTramite.setValor( informacionTramite.getDescripcion() );
+		propiedadNombreTramite.setValor( informacionTramite.getDescripcion() + " (" +  informacionTramite.getModelo() + ")");
 		objXmlConfiguracion.getPropiedades().put(propiedadNombreTramite.getNombre(),propiedadNombreTramite);
 
 		Propiedad propiedadNombreFormulario = factory.crearPropiedad();
