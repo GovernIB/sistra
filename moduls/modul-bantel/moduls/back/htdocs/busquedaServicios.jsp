@@ -51,7 +51,7 @@
     border: 2px solid white /*#d8dfe7*/;
     background-color: #515b67;height:20px;width:500px;
     border-spacing: 2;
-    margin: 10px 10px 10px 10px;"><bean:message key="tramite.organoDestino" /></DIV>
+    margin: 10px 10px 10px 10px;"><bean:message key="tramite.gestionExpedientes.servicioRegistro" /></DIV>
     
     <div id="wrapper" style="text-align: center">    
 	    <div id="buscador" style="display: inline-block;">
