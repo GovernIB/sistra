@@ -119,6 +119,10 @@
     <td class="input"><html:text styleClass="textLargo" tabindex="10" property="values.emailRespuestaAvisosProcedimiento" maxlength="255"/></td>
 </tr>
 <tr>
+    <td class="label"><bean:message key="tramite.avisosIncidencias.mail"/></td>
+    <td class="input"><html:text styleClass="textLargo" tabindex="10" property="values.emailIncidencias" maxlength="255"/></td>
+</tr>
+<tr>
 	<td class="separador" colspan="2"><bean:message key="tramite.avisoBackOffice"/></td>
 </tr>
 <tr>

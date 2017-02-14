@@ -220,6 +220,7 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 		pb.setPermitirPlazoNotificacionesVariable("S".equals(p.getPermitirPlazoNotificacionesVariable()));
 		pb.setEmailRespuestaAvisosProcedimiento(p.getEmailRespuestaAvisosProcedimiento());
 		pb.setRemitenteAvisosProcedimiento(p.getRemitenteAvisosProcedimiento());
+		pb.setEmailIncidencias(p.getEmailIncidencias());
 		
 		if (p.getGestores() != null) {
 			for (Iterator it = p.getGestores().iterator(); it.hasNext();){

@@ -42,6 +42,9 @@
   	<property name="remitenteAvisosProcedimiento" column="TAP_AVIREM"/>
   	<property name="emailRespuestaAvisosProcedimiento" column="TAP_AVIREP"/>
   	
+  	<property name="emailIncidencias" column="TAP_AVIINC"/>
+  	
+  	
   	<set name="gestores" table="BTE_GESPRO" inverse="true">
         <key column="GAP_IDEPRO"/>
         <many-to-many column="GAP_CODGES" class="es.caib.bantel.model.GestorBandeja"/>
