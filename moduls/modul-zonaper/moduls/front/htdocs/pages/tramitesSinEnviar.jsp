@@ -12,14 +12,14 @@
 <bean:define id="contextoRaizSistra" name="<%=es.caib.zonaper.front.Constants.CONTEXTO_RAIZ%>" type="java.lang.String"/>
 
 <bean:define id="urlTramitacion" type="java.lang.String">
-	<html:rewrite href="<%=contextoRaizSistra + "/sistrafront/inicio"%>" paramId="language" paramName="language" paramProperty="language" />
+	<html:rewrite href='<%=contextoRaizSistra + "/sistrafront/inicio"%>' paramId="language" paramName="language" paramProperty="language" />
 </bean:define>
 
 
 <bean:define id="nivelAutenticacion" name="es.caib.zonaper.front.DATOS_SESION" property="nivelAutenticacion" scope="session" type="java.lang.Character"/>
 
 <bean:define id="nivelAutenticacionDescripcion" type="java.lang.String">
-	<bean:message key="<%=\"tramitesSinEnviar.nivelAutenticacion.\"+nivelAutenticacion%>" />
+	<bean:message key='<%=\"tramitesSinEnviar.nivelAutenticacion.\"+nivelAutenticacion%>' />
 </bean:define>
 
 
@@ -114,14 +114,14 @@
 						</logic:equal>
 						
 						<td>
-							<bean:message key="<%=\"tramitesSinEnviar.idioma.\" + tramitePersistente.getIdioma()%>"/>
+							<bean:message key='<%=\"tramitesSinEnviar.idioma.\" + tramitePersistente.getIdioma()%>'/>
 						</td>												
 						<td><bean:write name="tramitePersistente" property="fechaModificacion" format="dd/MM/yyyy HH:mm"/></td>												
 						<td><bean:write name="tramitePersistente" property="fechaCaducidad" format="dd/MM/yyyy"/></td>												
 						<td>					
 							<!--  Descripcion del trámite con link si puede continuarse -->
 							<logic:equal name="link" value="true">
-								<html:link href="<%= urlTramitacion + \"&amp;modelo=\" + tramitePersistente.getTramite() + \"&amp;version=\" + tramitePersistente.getVersion() + paramLink%>" paramId="idPersistencia" paramName="tramitePersistente" paramProperty="idPersistencia">
+								<html:link href='<%= urlTramitacion + \"&amp;modelo=\" + tramitePersistente.getTramite() + \"&amp;version=\" + tramitePersistente.getVersion() + paramLink%>' paramId="idPersistencia" paramName="tramitePersistente" paramProperty="idPersistencia">
 									<bean:write name="tramitePersistente" property="descripcion"/>								
 								</html:link>
 							</logic:equal>							

@@ -8,9 +8,9 @@
 	{				
 		
 		if (!esLoginClave) {
-			String savedRequestUrl = savedRequest.getRequestURI();
-			if (savedRequest.getQueryString() != null) {
-				savedRequestUrl += "?" + savedRequest.getQueryString();
+			String savedRequestUrl = urlSavedRequest;
+			if (queryStringSavedRequest != null) {
+				savedRequestUrl += "?" + queryStringSavedRequest;
 			}
 			
 			// Comprobamos que el punto de entrada sea válido
