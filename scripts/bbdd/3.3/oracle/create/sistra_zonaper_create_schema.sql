@@ -2018,3 +2018,16 @@ comment on column ZPE_LOGVMV.VMV_FECHA is
 
 alter table ZPE_LOGVMV
    add constraint ZPE_VMV_PK primary key (VMV_CODIGO);
+
+-- V3.3.1
+drop index ZPE_NOTNRG_UNI; 
+
+alter table ZPE_REGLOG  add RLG_IDEENT  VARCHAR2(100);
+
+alter table ZPE_REGLOG drop constraint ZPE_RLG_PK; 
+drop index ZPE_RLG_PK; 
+
+alter table ZPE_REGLOG  modify RLG_IDEENT not null;
+
+alter table ZPE_REGLOG add constraint ZPE_RLG_PK primary key (RLG_TIPREG, RLG_IDEENT, RLG_NUMREG);
+    
