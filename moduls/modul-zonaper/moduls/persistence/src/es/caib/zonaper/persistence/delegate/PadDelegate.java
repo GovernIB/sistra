@@ -218,11 +218,11 @@ public class PadDelegate implements StatelessDelegate {
         }
 	}
 	
-	public Date obtenerAcuseRecibo(String numeroRegistro )throws DelegateException
+	public Date obtenerAcuseRecibo(String entidad, String numeroRegistro )throws DelegateException
 	{
 		try
 		{
-			return getFacade().obtenerAcuseRecibo( numeroRegistro );
+			return getFacade().obtenerAcuseRecibo( entidad, numeroRegistro );
 		}
 		catch (Exception e) 
 		{
@@ -242,9 +242,9 @@ public class PadDelegate implements StatelessDelegate {
         }
 	}
 	
-	public void logRegistro(char tipo, String numeroRegistro, Date fechaRegistro, String error) throws DelegateException{
+	public void logRegistro(String entidad, char tipo, String numeroRegistro, Date fechaRegistro, String error) throws DelegateException{
 		try{
-			getFacade().logRegistro(tipo,numeroRegistro,fechaRegistro,error);
+			getFacade().logRegistro(entidad,tipo,numeroRegistro,fechaRegistro,error);
 		}catch (Exception e){
             throw new DelegateException(e);
         }

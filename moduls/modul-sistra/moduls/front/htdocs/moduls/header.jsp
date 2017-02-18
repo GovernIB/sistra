@@ -74,7 +74,8 @@
 	%>
 <logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_EN_IFRAME%>" value="false">
 <div id="contactoAdministrador" class="contactoAdministrador">
-	<h1 class="ayuda"><bean:message key="administrador.ayuda"/></h1>	
+	<h1 class="ayuda"><bean:message key="administrador.ayuda"/></h1>
+	<div id="contactoAdministradorUrl">	
 	<p>		
 			<!--  Soporte por url y telefono (opcional) -->
 			<logic:notEqual name="urlSoporte"  value="&nbsp;" >
@@ -98,6 +99,7 @@
 				</logic:notEqual>
 			</logic:equal>			
 	</p>
+	</div>
 	<div id="contactoAdministradorContent"></div>
 	<p align="center">
 		<a title="<bean:message key="message.continuar"/>" onclick="javascript:ocultarAyudaAdmin();" href="javascript:void(0);">

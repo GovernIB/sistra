@@ -56,9 +56,9 @@ public class NotificacionTelematicaDelegate implements StatelessDelegate {
         }
     }
 
-    public NotificacionTelematica obtenerNotificacionTelematica(String numeroRegistro) throws DelegateException {
+    public NotificacionTelematica obtenerNotificacionTelematica(String entidad, String numeroRegistro) throws DelegateException {
         try {
-            return getFacade().obtenerNotificacionTelematica(numeroRegistro);
+            return getFacade().obtenerNotificacionTelematica(entidad, numeroRegistro);
         } catch (Exception e) {
             throw new DelegateException(e);
         }

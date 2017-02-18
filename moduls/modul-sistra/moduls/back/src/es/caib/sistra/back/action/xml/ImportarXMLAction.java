@@ -3,6 +3,9 @@ package es.caib.sistra.back.action.xml;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.betwixt.io.BeanReader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -12,21 +15,21 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
+import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
 import es.caib.regtel.model.ConstantesRegtel;
 import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
 import es.caib.regtel.persistence.delegate.RegistroTelematicoDelegate;
 import es.caib.sistra.back.action.BaseAction;
 import es.caib.sistra.back.action.menu.Nodo;
 import es.caib.sistra.back.form.ImportarVersionTramiteForm;
+import es.caib.sistra.model.Tramite;
 import es.caib.sistra.model.TramiteVersion;
 import es.caib.sistra.model.betwixt.Configurator;
 import es.caib.sistra.modelInterfaz.ConstantesDominio;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
 import es.caib.sistra.persistence.delegate.TramiteVersionDelegate;
 import es.caib.sistra.persistence.util.UtilDominios;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @struts.action
@@ -60,26 +63,30 @@ public class ImportarXMLAction extends BaseAction
             TramiteVersion tramiteVersion = (TramiteVersion) beanReader.parse(iForm.getFitxer().getInputStream());
             tramiteVersion.setVersion( iForm.getVersion() );
             
+            // Obtenemos entidad asociada a tramite
+            Tramite tramite = DelegateUtil.getTramiteDelegate().obtenerTramite(iForm.getCodigoTramite());
+            ProcedimientoBTE proc =  DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(tramite.getProcedimiento());
+            String entidad = proc.getEntidad().getIdentificador();
             
             RegistroTelematicoDelegate dlgRte = DelegateRegtelUtil.getRegistroTelematicoDelegate();
 //            request.setAttribute( "listaunidadesadministrativas", ajustarTamListaDesplegable(  obtenerValoresDominio( ConstantesDominio.DOMINIO_SAC_UNIDADES_ADMINISTRATIVAS  ),  MAX_COMBO_DESC , "DESCRIPCION") );
          
             if(tramiteVersion.getOrganoDestino() != null){
-            	if(!dlgRte.existeServicioDestino(tramiteVersion.getOrganoDestino())){
+            	if(!dlgRte.existeServicioDestino(entidad, tramiteVersion.getOrganoDestino())){
 					messages.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.organo.destino.no.existe"));
             		error = true;
             	}
             }
             
             if(tramiteVersion.getRegistroAsunto() != null){
-            	if(!dlgRte.existeTipoAsunto(tramiteVersion.getRegistroAsunto())){
+            	if(!dlgRte.existeTipoAsunto(entidad, tramiteVersion.getRegistroAsunto())){
             		messages.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.tipo.asunto.no.existe"));
             		error = true;
             	}
             }
 			
 			if(tramiteVersion.getRegistroOficina() != null){
-				if(!dlgRte.existeOficinaRegistro(ConstantesRegtel.REGISTRO_ENTRADA, tramiteVersion.getRegistroOficina())){
+				if(!dlgRte.existeOficinaRegistro(ConstantesRegtel.REGISTRO_ENTRADA, entidad, tramiteVersion.getRegistroOficina())){
 					messages.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.oficina.registro.no.existe"));
             		error = true;
             	}

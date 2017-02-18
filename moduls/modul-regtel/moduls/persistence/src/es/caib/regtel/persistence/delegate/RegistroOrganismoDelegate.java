@@ -40,111 +40,111 @@ public class RegistroOrganismoDelegate implements StatelessDelegate {
 	    }	 	 
 	 }
 	
-	public ResultadoRegistro confirmarPreregistro(String oficina,String codigoProvincia,String codigoMunicipio,String descripcionMunicipio,Justificante justificantePreregistro,ReferenciaRDS refJustificante,ReferenciaRDS refAsiento,Map refAnexos) throws DelegateException
+	public ResultadoRegistro confirmarPreregistro(String entidad, String oficina,String codigoProvincia,String codigoMunicipio,String descripcionMunicipio,Justificante justificantePreregistro,ReferenciaRDS refJustificante,ReferenciaRDS refAsiento,Map refAnexos) throws DelegateException
 	{
 		try
 		{			
-			return getFacade().confirmarPreregistro(oficina, codigoProvincia, codigoMunicipio, descripcionMunicipio, justificantePreregistro,refJustificante, refAsiento, refAnexos);				
+			return getFacade().confirmarPreregistro(entidad, oficina, codigoProvincia, codigoMunicipio, descripcionMunicipio, justificantePreregistro,refJustificante, refAsiento, refAnexos);				
 		} catch (Exception e) {
 	        throw new DelegateException(e);
 	    }	 	 
 	 }
 	
-	 public void anularRegistroEntrada(String numeroRegistro, Date fechaRegistro) throws DelegateException
+	 public void anularRegistroEntrada(String entidad, String numeroRegistro, Date fechaRegistro) throws DelegateException
 		{
 			try
 			{			
-				getFacade().anularRegistroEntrada(numeroRegistro, fechaRegistro);				
+				getFacade().anularRegistroEntrada(entidad, numeroRegistro, fechaRegistro);				
 			} catch (Exception e) {
 		        throw new DelegateException(e);
 		    }	 	 
 		 }
 	 
-	 public void anularRegistroSalida(String numeroRegistro, Date fechaRegistro) throws DelegateException
+	 public void anularRegistroSalida(String entidad, String numeroRegistro, Date fechaRegistro) throws DelegateException
 		{
 			try
 			{			
-				getFacade().anularRegistroSalida(numeroRegistro, fechaRegistro);				
+				getFacade().anularRegistroSalida(entidad, numeroRegistro, fechaRegistro);				
 			} catch (Exception e) {
 		        throw new DelegateException(e);
 		    }	 	 
 		 }
 	
-	public List obtenerOficinasRegistro(char tipoRegistro) throws DelegateException
+	public List obtenerOficinasRegistro(String entidad, char tipoRegistro) throws DelegateException
 	{
 		try
 		{			
-			return getFacade().obtenerOficinasRegistro(tipoRegistro);				
+			return getFacade().obtenerOficinasRegistro(entidad, tipoRegistro);				
 		} catch (Exception e) {
 	        throw new DelegateException(e);
 	    }	 	 
 	 }
 	
-	public List obtenerOficinasRegistroUsuario(char tipoRegistro, String usuario) throws DelegateException
+	public List obtenerOficinasRegistroUsuario(String entidad, char tipoRegistro, String usuario) throws DelegateException
 	{
 		try
 		{			
-			return getFacade().obtenerOficinasRegistroUsuario(tipoRegistro, usuario);				
+			return getFacade().obtenerOficinasRegistroUsuario(entidad, tipoRegistro, usuario);				
 		} catch (Exception e) {
 	        throw new DelegateException(e);
 	    }	 	 
 	 } 
 	
-	public List obtenerTiposAsunto() throws DelegateException
+	public List obtenerTiposAsunto(String entidad) throws DelegateException
 	{
 		try
 		{			
-			return getFacade().obtenerTiposAsunto();				
+			return getFacade().obtenerTiposAsunto(entidad);				
 		} catch (Exception e) {
 	        throw new DelegateException(e);
 	    }	 	 
 	 }
 	
-	public List obtenerServiciosDestino() throws DelegateException
+	public List obtenerServiciosDestino(String entidad) throws DelegateException
 	{
 		try
 		{			
-			return getFacade().obtenerServiciosDestino();				
+			return getFacade().obtenerServiciosDestino(entidad);				
 		} catch (Exception e) {
 	        throw new DelegateException(e);
 	    }	 	 
 	 }
 	
-	public boolean existeOficinaRegistro(char tipoRegistro, String oficinaRegistro) throws DelegateException 
+	public boolean existeOficinaRegistro(char tipoRegistro, String entidad, String oficinaRegistro) throws DelegateException 
 	{ 
 		try
 		{			
-			return getFacade().existeOficinaRegistro(tipoRegistro, oficinaRegistro);				
+			return getFacade().existeOficinaRegistro(tipoRegistro, entidad, oficinaRegistro);				
 		} catch (Exception e) {
 	        throw new DelegateException(e);
 	    }	 	 
 	 } 
 	
-	public boolean existeTipoAsunto(String tipoAsunto) throws DelegateException 
+	public boolean existeTipoAsunto(String entidad, String tipoAsunto) throws DelegateException 
 	{
 		try
 		{			
-			return getFacade().existeTipoAsunto(tipoAsunto);				
+			return getFacade().existeTipoAsunto(entidad, tipoAsunto);				
 		} catch (Exception e) {
 	        throw new DelegateException(e);
 	    }	 	 
 	 }
 	
-	public boolean existeServicioDestino(String servicioDestino) throws DelegateException
+	public boolean existeServicioDestino(String entidad, String servicioDestino) throws DelegateException
 	{
 		try
 		{			
-			return getFacade().existeServicioDestino(servicioDestino);				
+			return getFacade().existeServicioDestino(entidad, servicioDestino);				
 		} catch (Exception e) {
 	        throw new DelegateException(e);
 	    }	 	 
 	 }
 	
-	public String obtenerDescripcionSelloOficina(char tipoRegistro, String oficina)  throws DelegateException
+	public String obtenerDescripcionSelloOficina(char tipoRegistro, String entidad, String oficina)  throws DelegateException
 	{
 		try
 		{			
-			return getFacade().obtenerDescripcionSelloOficina(tipoRegistro, oficina);				
+			return getFacade().obtenerDescripcionSelloOficina(tipoRegistro,entidad,  oficina);				
 		} catch (Exception e) {
 	        throw new DelegateException(e);
 	    }	 	 

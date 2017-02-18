@@ -26,6 +26,8 @@ import es.caib.audita.modelInterfaz.ConstantesAuditoria;
 import es.caib.audita.modelInterfaz.Evento;
 import es.caib.audita.persistence.delegate.DelegateAUDUtil;
 import es.caib.bantel.modelInterfaz.ConstantesBTE;
+import es.caib.bantel.modelInterfaz.EntidadBTE;
+import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
 import es.caib.bantel.persistence.delegate.BteSistraDelegate;
 import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
 import es.caib.redose.modelInterfaz.ConstantesRDS;
@@ -418,14 +420,17 @@ public abstract class PadFacadeEJB implements SessionBean{
     {
     		// Obtenemos entrada preregistro
     		EntradaPreregistro entrada = null;
+    		String entidad = null;
 			try {
 				entrada = DelegateUtil.getEntradaPreregistroDelegate().obtenerEntradaPreregistro( codigoPreregistro );
-			} catch (es.caib.zonaper.persistence.delegate.DelegateException e) {
+				ProcedimientoBTE proc = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(entrada.getProcedimiento());
+				entidad = proc.getEntidad().getIdentificador();
+			} catch (Exception e) {
 				throw new ExcepcionPAD("No se puede acceder a la entrada de preregistro " + codigoPreregistro, e);
 			}
 
 			// Realizamos confirmacion preregistro
-	    	confirmarPreregistroImpl(entrada,ConstantesBTE.CONFIRMACIONPREREGISTRO_REGISTRO,oficina,codProvincia, codMunicipio, descMunicipio,null,null);
+	    	confirmarPreregistroImpl(entrada,ConstantesBTE.CONFIRMACIONPREREGISTRO_REGISTRO,entidad,oficina,codProvincia, codMunicipio, descMunicipio,null,null);
 
     }
 
@@ -440,12 +445,15 @@ public abstract class PadFacadeEJB implements SessionBean{
     public void confirmarPreenvioAutomatico( Long codigoPreregistro, String oficina, String codProvincia,String codMunicipio, String descMunicipio) throws ExcepcionPAD
     {
     	EntradaPreregistro entrada = null;
+    	String entidad = null;
 		try {
 			entrada = DelegateUtil.getEntradaPreregistroDelegate().obtenerEntradaPreregistro( codigoPreregistro );
-		} catch (es.caib.zonaper.persistence.delegate.DelegateException e) {
+			ProcedimientoBTE proc = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(entrada.getProcedimiento());
+			entidad = proc.getEntidad().getIdentificador();
+		} catch (Exception e) {
 			throw new ExcepcionPAD("No se puede acceder a la entrada de preregistro " + codigoPreregistro, e);
 		}
-    	confirmarPreregistroImpl( entrada,ConstantesBTE.CONFIRMACIONPREREGISTRO_AUTOMATICA_REGISTRO,oficina, codProvincia, codMunicipio, descMunicipio,null,null);
+    	confirmarPreregistroImpl( entrada,ConstantesBTE.CONFIRMACIONPREREGISTRO_AUTOMATICA_REGISTRO, entidad, oficina, codProvincia, codMunicipio, descMunicipio,null,null);
     }
 
 
@@ -523,7 +531,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	if (!ep.getNumeroPreregistro().equals(numeroPreregistro))
     		throw new ExcepcionPAD("Numero de preregistro no coincide");
 
-    	confirmarPreregistroImpl(ep,ConstantesBTE.CONFIRMACIONPREREGISTRO_AUTOMATICA,null,null,null,null,numeroPreregistro,fechaPreregistro);
+    	confirmarPreregistroImpl(ep,ConstantesBTE.CONFIRMACIONPREREGISTRO_AUTOMATICA,null,null,null,null,null,numeroPreregistro,fechaPreregistro);
     }
 
 
@@ -545,7 +553,7 @@ public abstract class PadFacadeEJB implements SessionBean{
 		} catch (es.caib.zonaper.persistence.delegate.DelegateException e) {
 			throw new ExcepcionPAD("No se puede acceder a la entrada de preregistro " + codigoPreregistro, e);
 		}
-    	confirmarPreregistroImpl( entrada,ConstantesBTE.CONFIRMACIONPREREGISTRO_GESTOR,null,null,null,null,numeroRegistro,fechaRegistro);
+    	confirmarPreregistroImpl( entrada,ConstantesBTE.CONFIRMACIONPREREGISTRO_GESTOR,null,null,null,null,null,numeroRegistro,fechaRegistro);
     }
 
 
@@ -658,11 +666,21 @@ public abstract class PadFacadeEJB implements SessionBean{
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
      */
-    public Date obtenerAcuseRecibo(String numeroRegistro) throws ExcepcionPAD
+    public Date obtenerAcuseRecibo(String entidad, String numeroRegistro) throws ExcepcionPAD
     {
     	try{
+    		
+    		// Por compatibilidad con versiones anteriores el codigo entidad puede ser nulo. Solo permitido si solo existe 1 entidad.
+        	if (entidad == null) {
+        		List entidades = DelegateBTEUtil.getBteSistraDelegate().obtenerEntidades();
+        		if (entidades.size() != 1) {
+        			throw new Exception("No se ha indicado el código de entidad");
+        		}
+        		entidad = ( (EntidadBTE) entidades.get(0)).getIdentificador();
+        	}
+    		
     		NotificacionTelematicaDelegate td = DelegateUtil.getNotificacionTelematicaDelegate();
-    		NotificacionTelematica not = td.obtenerNotificacionTelematica(numeroRegistro);
+    		NotificacionTelematica not = td.obtenerNotificacionTelematica(entidad, numeroRegistro);
     		if (not == null || not.isRechazada()) return null;
     		return not.getFechaAcuse();
     	}catch (Exception ex){
@@ -703,11 +721,11 @@ public abstract class PadFacadeEJB implements SessionBean{
      * @param numeroRegistro Numero de registro
      * @param fechaRegistro Fecha de registro
      */
-    public void logRegistro(char tipo, String numeroRegistro, Date fechaRegistro, String error) throws ExcepcionPAD{
+    public void logRegistro(String entidad, char tipo, String numeroRegistro, Date fechaRegistro, String error) throws ExcepcionPAD{
     	try{
     		LogRegistroDelegate dlg = DelegateUtil.getLogRegistroDelegate();
     		LogRegistro logReg = new LogRegistro();
-    		LogRegistroId logRegId = new LogRegistroId(tipo+"",numeroRegistro);
+    		LogRegistroId logRegId = new LogRegistroId(entidad, tipo+"",numeroRegistro);
     		logReg.setId(logRegId);
     		logReg.setFechaRegistro(fechaRegistro);
     		logReg.setDescripcionError(error);
@@ -1929,7 +1947,7 @@ public abstract class PadFacadeEJB implements SessionBean{
 
 
 	// Realiza proceso de confirmacion de registro teniendo en cuenta si debe hacer registro o no (para confirmacion de incorrectos)
-	private void confirmarPreregistroImpl( EntradaPreregistro entrada, String tipoConfirmacionPreregistro,String oficina, String codProvincia,String codMunicipio, String descMunicipio, String numeroRegistroPI,Date fechaRegistroPI) throws ExcepcionPAD
+	private void confirmarPreregistroImpl(EntradaPreregistro entrada, String tipoConfirmacionPreregistro, String entidad, String oficina, String codProvincia,String codMunicipio, String descMunicipio, String numeroRegistroPI,Date fechaRegistroPI) throws ExcepcionPAD
     {
     	ResultadoRegistro resultadoRegistro = null;
     	boolean exitoProceso = false;
@@ -1959,7 +1977,7 @@ public abstract class PadFacadeEJB implements SessionBean{
 			 */
 			if (tipoConfirmacionPreregistro.equals(ConstantesBTE.CONFIRMACIONPREREGISTRO_REGISTRO) ||
 				tipoConfirmacionPreregistro.equals(ConstantesBTE.CONFIRMACIONPREREGISTRO_AUTOMATICA_REGISTRO) ){
-			    	resultadoRegistro = DelegateRegtelUtil.getRegistroTelematicoDelegate().confirmarPreregistro(oficina, codProvincia,codMunicipio,descMunicipio,justificante,refRDSJustificante,refRDSAsiento,mapRefRDSDocumentos);
+			    	resultadoRegistro = DelegateRegtelUtil.getRegistroTelematicoDelegate().confirmarPreregistro(entidad, oficina, codProvincia,codMunicipio,descMunicipio,justificante,refRDSJustificante,refRDSAsiento,mapRefRDSDocumentos);
 					numeroRegistro = resultadoRegistro.getNumeroRegistro();
 					fechaRegistro = StringUtil.cadenaAFecha( resultadoRegistro.getFechaRegistro(), StringUtil.FORMATO_REGISTRO );
 					oficinaRegistroPresencial = oficina;
@@ -2225,7 +2243,5 @@ public abstract class PadFacadeEJB implements SessionBean{
 
 		return expPAD;
 	}
-
-
 
 }

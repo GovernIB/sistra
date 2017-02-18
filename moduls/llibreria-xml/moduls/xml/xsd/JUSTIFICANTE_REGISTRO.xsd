@@ -28,6 +28,7 @@
   <xs:element name="DATOS_ORIGEN">
     <xs:complexType>
       <xs:sequence>
+      	<xs:element minOccurs="0" ref="CODIGO_ENTIDAD"/>
         <xs:element ref="CODIGO_ENTIDAD_REGISTRAL_ORIGEN"/>
         <xs:element ref="NUMERO_REGISTRO"/>
         <xs:element ref="FECHA_ENTRADA_REGISTRO"/>
@@ -35,6 +36,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="CODIGO_ENTIDAD" type="xs:string"/>
   <xs:element name="CODIGO_ENTIDAD_REGISTRAL_ORIGEN" type="xs:string"/>
   <xs:element name="NUMERO_REGISTRO" type="xs:string"/>
   <xs:element name="FECHA_ENTRADA_REGISTRO" type="xs:string"/>

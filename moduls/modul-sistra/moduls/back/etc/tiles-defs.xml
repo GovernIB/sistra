@@ -61,7 +61,7 @@
         controllerClass="es.caib.sistra.back.action.organo.ListaOrganosController"/>
     
     <!-- ====================== TRAMITE =================== -->
-    <definition name=".tramite.editar" extends=".editar">
+    <definition name=".tramite.editar" extends=".editar" controllerClass="es.caib.sistra.back.action.tramite.TramiteController">
         <put name="title" value="tramite.title"/>
         <put name="alta.title" value="tramite.alta"/>
         <put name="modificacion.title" value="tramite.modificacion"/>

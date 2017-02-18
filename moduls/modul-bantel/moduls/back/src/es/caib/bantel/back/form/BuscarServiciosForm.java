@@ -7,6 +7,8 @@ public class BuscarServiciosForm extends ValidatorForm
 	private String idCampo;
 	
 	private String filtro;
+	
+	private String entidad;
 
 	public String getIdCampo() {
 		return idCampo;
@@ -22,6 +24,14 @@ public class BuscarServiciosForm extends ValidatorForm
 
 	public void setFiltro(String filtro) {
 		this.filtro = filtro;
+	}
+
+	public String getEntidad() {
+		return entidad;
+	}
+
+	public void setEntidad(String entidad) {
+		this.entidad = entidad;
 	}
 	
 	

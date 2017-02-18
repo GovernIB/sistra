@@ -21,6 +21,7 @@ import org.apache.commons.logging.LogFactory;
 import es.caib.audita.modelInterfaz.ConstantesAuditoria;
 import es.caib.audita.modelInterfaz.Evento;
 import es.caib.audita.persistence.delegate.DelegateAUDUtil;
+import es.caib.bantel.modelInterfaz.EntidadBTE;
 import es.caib.bantel.modelInterfaz.TramiteBTE;
 import es.caib.bantel.persistence.delegate.BteDelegate;
 import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
@@ -485,11 +486,20 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
      */
-	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String numeroRegistro) throws ExcepcionPAD
+	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String entidad, String numeroRegistro) throws ExcepcionPAD
     {
     	try
     	{
-    		NotificacionTelematica not = DelegateUtil.getNotificacionTelematicaDelegate().obtenerNotificacionTelematica(numeroRegistro);
+    		// Por compatibilidad con versiones anteriores el codigo entidad puede ser nulo. Solo permitido si solo existe 1 entidad.
+        	if (entidad == null) {
+        		List entidades = DelegateBTEUtil.getBteSistraDelegate().obtenerEntidades();
+        		if (entidades.size() != 1) {
+        			throw new Exception("No se ha indicado el código de entidad");
+        		}
+        		entidad = ( (EntidadBTE) entidades.get(0)).getIdentificador();
+        	}
+    		
+    		NotificacionTelematica not = DelegateUtil.getNotificacionTelematicaDelegate().obtenerNotificacionTelematica(entidad, numeroRegistro);
     		if (not == null) {
     			return null;
     		}

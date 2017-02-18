@@ -13,6 +13,10 @@ public class ProcedimientoBTE implements Serializable {
 	 */
 	private String identificador;
 	/**
+	 * Entidad.
+	 */
+	private EntidadBTE entidad;
+	/**
 	 * Descripción.
 	 */
 	private String descripcion;	
@@ -92,6 +96,12 @@ public class ProcedimientoBTE implements Serializable {
 	}
 	public void setEmailGestores(List emailGestores) {
 		this.emailGestores = emailGestores;
+	}
+	public EntidadBTE getEntidad() {
+		return entidad;
+	}
+	public void setEntidad(EntidadBTE entidad) {
+		this.entidad = entidad;
 	}
 	
 }

@@ -70,6 +70,7 @@
 			<xsd:element name="obtenerAcuseRecibo">
 				<xsd:complexType>
 					<xsd:sequence>
+						<xsd:element name="entidad" type="xsd:string" nillable="true" minOccurs="0"/>
 						<xsd:element name="numeroRegistro" type="xsd:string"/>
 					</xsd:sequence>
 				</xsd:complexType>
@@ -84,6 +85,7 @@
 			<xsd:element name="obtenerDetalleAcuseRecibo">
 				<xsd:complexType>
 					<xsd:sequence>
+						<xsd:element name="entidad" type="xsd:string" nillable="true" minOccurs="0"/>
 						<xsd:element name="numeroRegistro" type="xsd:string"/>
 					</xsd:sequence>
 				</xsd:complexType>

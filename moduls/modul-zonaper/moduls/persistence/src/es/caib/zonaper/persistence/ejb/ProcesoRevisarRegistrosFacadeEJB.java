@@ -77,9 +77,9 @@ public abstract class ProcesoRevisarRegistrosFacadeEJB extends HibernateEJB
 					backupLog.debug( "Revisando registro " + logReg.getId().getNumeroRegistro() + ": registro confirmado");
 				}else{
 					if(logReg.getId().getTipoRegistro().equals(ConstantesAsientoXML.TIPO_REGISTRO_SALIDA+"")){
-						dlgOrg.anularRegistroSalida(logReg.getId().getNumeroRegistro(), logReg.getFechaRegistro());
+						dlgOrg.anularRegistroSalida(logReg.getId().getEntidad(), logReg.getId().getNumeroRegistro(), logReg.getFechaRegistro());
 					}else{
-						dlgOrg.anularRegistroEntrada(logReg.getId().getNumeroRegistro(), logReg.getFechaRegistro());
+						dlgOrg.anularRegistroEntrada(logReg.getId().getEntidad(), logReg.getId().getNumeroRegistro(), logReg.getFechaRegistro());
 					}
 					logReg.setAnulado("S");
 					dlg.grabarLogRegistro(logReg);				

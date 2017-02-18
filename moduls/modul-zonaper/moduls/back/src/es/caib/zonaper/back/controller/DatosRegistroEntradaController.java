@@ -14,6 +14,8 @@ import org.apache.struts.Globals;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.util.MessageResources;
 
+import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
+import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
 import es.caib.regtel.model.ConstantesRegtel;
 import es.caib.util.StringUtil;
 import es.caib.xml.registro.factoria.FactoriaObjetosXMLRegistro;
@@ -37,6 +39,11 @@ public class DatosRegistroEntradaController extends BaseController
 		
 		EntradaPreregistro preregistro = ( EntradaPreregistro ) request.getAttribute( "preregistro" );
 		
+		// Obtenemos codigo entidad
+		ProcedimientoBTE proc = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(preregistro.getProcedimiento());
+		String entidad = proc.getEntidad().getIdentificador();
+		
+		
 		// Parseo del asiento registral
 		FactoriaObjetosXMLRegistro factoria = ServicioRegistroXML.crearFactoriaObjetosXML();
 		AsientoRegistral asiento 			= factoria.crearAsientoRegistral( new ByteArrayInputStream( consultarDocumentoRDS ( preregistro.getCodigoRdsAsiento(), preregistro.getClaveRdsAsiento() ) ) );
@@ -45,6 +52,7 @@ public class DatosRegistroEntradaController extends BaseController
 		// 		- Oficina, tipo asunto, idioma, organo destino
 		String oficina = request.getParameter( "oficina" );
 		oficina = StringUtils.isEmpty( oficina ) ? "" : oficina; 
+		
 		String tipoAsunto 				= asiento.getDatosAsunto().getTipoAsunto();
 		String idiomaAsunto 			= asiento.getDatosAsunto().getIdiomaAsunto();
 		String codigoOrganoDestino 		= asiento.getDatosAsunto().getCodigoOrganoDestino();
@@ -83,9 +91,9 @@ public class DatosRegistroEntradaController extends BaseController
 						
         // Obtenemos listas de valores (Lista de ValorDominio]
 		// 	- Obtenemos oficinas usuario
-		List lstOficinas =  dominios.obtenerOficinas(ConstantesRegtel.REGISTRO_ENTRADA, request.getUserPrincipal().getName());
+		List lstOficinas =  dominios.obtenerOficinas(entidad, ConstantesRegtel.REGISTRO_ENTRADA, request.getUserPrincipal().getName());
 		//	- Obtener tipos de asunto
-		List lstTiposAsunto = dominios.obtenerTiposAsunto();
+		List lstTiposAsunto = dominios.obtenerTiposAsunto(entidad);
 		//  - Obtener municipios baleares
 		List lstMunicipiosBaleares = dominios.listarLocalidadesProvincia(Constants.CODIGO_PROVINCIA_BALEARES);
 		ValorDominio opcVacio = new ValorDominio();

@@ -17,6 +17,8 @@ import org.apache.struts.action.ActionMapping;
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.form.DetalleNotificacionForm;
 import es.caib.bantel.front.util.MensajesUtil;
+import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
+import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.regtel.model.ReferenciaRDSAsientoRegistral;
@@ -63,6 +65,10 @@ public class RealizarAltaNotificacionAction extends BaseAction
 			// Recupera expediente
 			PadBackOfficeDelegate ejb = new PadBackOfficeDelegate();
 			ExpedientePAD expediente = ejb.consultaExpediente(uniAdm.longValue(), idExpe, claveExpe);
+			
+			// Obtenemos procedimiento
+			ProcedimientoBTE proc = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(expediente.getIdentificadorProcedimiento());
+			String entidad = proc.getEntidad().getIdentificador();
 
 			if(request.getSession().getAttribute("documentosAltaNotificacion") == null){
 				documentos = new ArrayList();
@@ -77,7 +83,7 @@ public class RealizarAltaNotificacionAction extends BaseAction
 			}
 
 			RegistroSalidaHelper r = new RegistroSalidaHelper();
-			r.setOficinaRegistro(notificacionForm.getOrganoDestino(),notificacionForm.getOficinaRegistro());
+			r.setOficinaRegistro(entidad, notificacionForm.getOrganoDestino(),notificacionForm.getOficinaRegistro());
 			r.setExpediente(uniAdm,idExpe,claveExpe);
 
 

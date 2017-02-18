@@ -7,11 +7,12 @@
 <tiles-definitions>
 
     <definition name=".menu" path="/menu.jsp">
-        <putList name="independientes">
+        <putList name="independientes">        	        
             <add type="definition" value=".menu.tramite.listar" />
             <add type="definition" value=".menu.gestorBandeja.listar" />
             <add type="definition" value=".menu.ficheroExportacion.listar" />
             <add type="definition" value=".menu.fuenteDatos.listar" />
+            <add type="definition" value=".menu.entidad.listar" />
         </putList>
     </definition>
 
@@ -37,6 +38,10 @@
     <!-- ====================== Especificacions ====================== -->
     <!-- ============================================================= -->
 
+    <definition name=".menu.entidad.listar" extends=".menu.individual">
+        <put name="titulo" value="menu.entidad.lista"/>
+        <put name="link" value="/back/entidad/lista"/>
+    </definition>
     <definition name=".menu.tramite.listar" extends=".menu.individual">
         <put name="titulo" value="menu.tramite.lista"/>
         <put name="link" value="/back/tramite/lista"/>

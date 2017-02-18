@@ -44,7 +44,7 @@ public class TestHelpersRegistro {
 	
 	public static void testRegistroEntrada() throws Exception{
 		RegistroEntradaHelper reh = new RegistroEntradaHelper();
-		reh.setOficinaRegistro("1100","13");
+		reh.setOficinaRegistro("Entidad1","1100","13");
 		reh.setDatosInteresado("33456299Q","Sanz Villanueva Rafael","rsanz","es","España","46","Valencia","130","Massamagrell");
 		reh.setDatosAsunto("1","es","OT","Prueba registro entrada");
 		reh.addDocumento(ConstantesRDS.MODELO_ANEXO_GENERICO,1,"Doc de prueba".getBytes("UTF-8"),"Doc de prueba","txt",null,null);
@@ -61,7 +61,7 @@ public class TestHelpersRegistro {
 	public static void testRegistroSalida() throws Exception{
 		RegistroSalidaHelper rsh = new RegistroSalidaHelper();
 		rsh.setExpediente(1,"EXP/TEST/2010/1","xxx");
-		rsh.setOficinaRegistro("1100","13");
+		rsh.setOficinaRegistro("Entidad1","1100","13");
 		rsh.setDatosInteresado("33456299Q","Sanz Villanueva Rafael","rsanz","es","España","46","Valencia","130","Massamagrell");
 		rsh.setDatosNotificacion("es","OT","Titulo aviso","Texto aviso","Texto SMS Aviso","Titulo oficio","Texto oficio",true);
 		rsh.addDocumento(ConstantesRDS.MODELO_ANEXO_GENERICO,1,"Doc de prueba".getBytes("UTF-8"),"Doc de prueba","txt",null,null);

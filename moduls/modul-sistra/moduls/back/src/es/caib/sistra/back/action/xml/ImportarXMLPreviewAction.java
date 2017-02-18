@@ -13,6 +13,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
+import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
 import es.caib.regtel.model.ConstantesRegtel;
 import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
 import es.caib.regtel.persistence.delegate.RegistroTelematicoDelegate;
@@ -20,6 +22,7 @@ import es.caib.sistra.back.Constants;
 import es.caib.sistra.back.action.BaseAction;
 import es.caib.sistra.back.form.ImportarVersionTramiteForm;
 import es.caib.sistra.back.form.ImportarVersionTramiteProcessForm;
+import es.caib.sistra.model.Tramite;
 import es.caib.sistra.model.TramiteVersion;
 import es.caib.sistra.model.betwixt.Configurator;
 import es.caib.sistra.modelInterfaz.ConstantesDominio;
@@ -52,6 +55,11 @@ public class ImportarXMLPreviewAction extends BaseAction
         TramiteVersionDelegate delegate = DelegateUtil.getTramiteVersionDelegate();
         ImportarVersionTramiteForm iForm = (ImportarVersionTramiteForm) form;
         if (iForm.getFitxer() != null) {
+        	
+        	// Obtenemos entidad asociada a tramite
+            Tramite tramite = DelegateUtil.getTramiteDelegate().obtenerTramite(iForm.getCodigoTramite());
+            ProcedimientoBTE proc =  DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(tramite.getProcedimiento());
+            String entidad = proc.getEntidad().getIdentificador();
 
             BeanReader beanReader = new BeanReader();
             Configurator.configure(beanReader);
@@ -67,21 +75,21 @@ public class ImportarXMLPreviewAction extends BaseAction
             
             String organoDestino = null;
             if(tramiteVersion.getOrganoDestino() != null){
-            	if(dlgRte.existeServicioDestino(tramiteVersion.getOrganoDestino())){
+            	if(dlgRte.existeServicioDestino(entidad, tramiteVersion.getOrganoDestino())){
             		organoDestino = tramiteVersion.getOrganoDestino();
             	}
             }
             
             String asunto = null;
             if(tramiteVersion.getRegistroAsunto() != null){
-            	if(dlgRte.existeTipoAsunto(tramiteVersion.getRegistroAsunto())){
+            	if(dlgRte.existeTipoAsunto(entidad, tramiteVersion.getRegistroAsunto())){
             		asunto = tramiteVersion.getRegistroAsunto();
             	}
             }
 			
             String registroOficina = null;
 			if(tramiteVersion.getRegistroOficina() != null){
-				if(dlgRte.existeOficinaRegistro(ConstantesRegtel.REGISTRO_ENTRADA, tramiteVersion.getRegistroOficina())){
+				if(dlgRte.existeOficinaRegistro(ConstantesRegtel.REGISTRO_ENTRADA, entidad, tramiteVersion.getRegistroOficina())){
 					registroOficina = tramiteVersion.getRegistroOficina();
             	}
 			}
@@ -101,10 +109,13 @@ public class ImportarXMLPreviewAction extends BaseAction
             	}
             }
 			
+			// 
+			
 			// Pasamos a pantalla para cambiar parametros registro
 			ImportarVersionTramiteProcessForm iFormProcess = (ImportarVersionTramiteProcessForm) obtenerActionForm(mapping,request,"/importar/xmlProcess");
 			iFormProcess.setCodigoTramite(iForm.getCodigoTramite());
 			iFormProcess.setUnidadAdministrativa(unidadAdministrativa);
+			iFormProcess.setEntidad(entidad);
 			iFormProcess.setRegistroOficina(registroOficina);
 			iFormProcess.setOrganoDestino(organoDestino);
 			iFormProcess.setRegistroAsunto(asunto);

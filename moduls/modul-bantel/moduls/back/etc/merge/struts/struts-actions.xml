@@ -14,6 +14,11 @@
     parameter=".tramite.lista"/>
     
     <action
+    path="/back/entidad/lista"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".entidad.lista"/>
+    
+    <action
     path="/arbolProcs"
     type="org.apache.struts.actions.ForwardAction"
     parameter=".arbolProcs"/>

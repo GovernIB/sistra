@@ -110,7 +110,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		AcuseRecibo acuse = null;
 		try{
 			RegistroTelematicoWsDelegate rtd = DelegateUtil.getRegistroTelematicoWsDelegate();
-			es.caib.regtel.model.ws.AcuseRecibo acuseIntf = rtd.obtenerAcuseRecibo(numeroRegistro);
+			es.caib.regtel.model.ws.AcuseRecibo acuseIntf = rtd.obtenerAcuseRecibo(null, numeroRegistro);
 			acuse = acuseIntfToAcuseWS(acuseIntf);
 			return acuse;
 		}catch(Exception ex){

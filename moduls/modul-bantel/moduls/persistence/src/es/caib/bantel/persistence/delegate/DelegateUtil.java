@@ -8,6 +8,10 @@ public final class DelegateUtil {
     private DelegateUtil() {
 
     }
+    
+    public static EntidadDelegate getEntidadDelegate() {
+        return (EntidadDelegate) DelegateFactory.getDelegate(EntidadDelegate.class);
+    }
    
     public static TramiteBandejaDelegate getTramiteBandejaDelegate() {
         return (TramiteBandejaDelegate) DelegateFactory.getDelegate(TramiteBandejaDelegate.class);

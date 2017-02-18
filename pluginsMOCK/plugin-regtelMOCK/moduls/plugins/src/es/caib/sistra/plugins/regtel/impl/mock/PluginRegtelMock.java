@@ -38,7 +38,12 @@ public class PluginRegtelMock implements PluginRegistroIntf{
 		return res;
 	}
 
-	public ResultadoRegistro confirmarPreregistro(String usuario, String arg0, String arg1, String arg2, String arg3, Justificante arg4, ReferenciaRDS arg5, ReferenciaRDS arg6, Map arg7) throws Exception {
+	public ResultadoRegistro confirmarPreregistro(String usuario, String entidad, String arg0, String arg1, String arg2, String arg3, Justificante arg4, ReferenciaRDS arg5, ReferenciaRDS arg6, Map arg7) throws Exception {
+		
+		if (entidad == null) {
+			throw new RuntimeException("Falta entidad");
+		}
+		
 		ResultadoRegistro res = new ResultadoRegistro();
 		Date fc = new Date();
 		res.setFechaRegistro(fc);
@@ -46,7 +51,12 @@ public class PluginRegtelMock implements PluginRegistroIntf{
 		return res;
 	}
 
-	public List obtenerOficinasRegistro(char tipoRegistro) {
+	public List obtenerOficinasRegistro(String entidad, char tipoRegistro) {
+		
+		if (entidad == null) {
+			throw new RuntimeException("Falta entidad");
+		}
+		
 		List lista = new ArrayList();
 		for (int i=1;i<=10;i++){
 			OficinaRegistro of = new OficinaRegistro();
@@ -57,11 +67,16 @@ public class PluginRegtelMock implements PluginRegistroIntf{
 		return lista;
 	}
 
-	public List obtenerOficinasRegistroUsuario(char tipoRegistro, String arg0) {
-		return obtenerOficinasRegistro(tipoRegistro);
+	public List obtenerOficinasRegistroUsuario(String entidad, char tipoRegistro, String arg0) {
+		return obtenerOficinasRegistro(entidad, tipoRegistro);
 	}
 
-	public List obtenerTiposAsunto() {
+	public List obtenerTiposAsunto(String entidad) {
+		
+		if (entidad == null) {
+			throw new RuntimeException("Falta entidad");
+		}
+		
 		List lista = new ArrayList();
 		for (int i=1;i<=10;i++){
 			TipoAsunto of = new TipoAsunto();
@@ -72,7 +87,11 @@ public class PluginRegtelMock implements PluginRegistroIntf{
 		return lista;
 	}
 
-	public List obtenerServiciosDestino() {
+	public List obtenerServiciosDestino(String entidad) {
+		
+		if (entidad == null) {
+			throw new RuntimeException("Falta entidad");
+		}
 		
 		List lista = new ArrayList();
 		
@@ -94,15 +113,28 @@ public class PluginRegtelMock implements PluginRegistroIntf{
 		return lista;
 	}
 
-	public void anularRegistroEntrada(String numeroRegistro, Date fechaRegistro) throws Exception {
+	public void anularRegistroEntrada(String entidad, String numeroRegistro, Date fechaRegistro) throws Exception {
+		
+		if (entidad == null) {
+			throw new RuntimeException("Falta entidad");
+		}
 		
 	}
 
-	public void anularRegistroSalida(String numeroRegistro, Date fechaRegistro) throws Exception {
+	public void anularRegistroSalida(String entidad, String numeroRegistro, Date fechaRegistro) throws Exception {
+		
+		if (entidad == null) {
+			throw new RuntimeException("Falta entidad");
+		}
 		
 	}
 
-	public String obtenerDescripcionSelloOficina(char tipoRegistro, String oficina) {		
+	public String obtenerDescripcionSelloOficina(char tipoRegistro, String entidad, String oficina) {
+		
+		if (entidad == null) {
+			throw new RuntimeException("Falta entidad");
+		}
+		
 		return "OFICINA " + oficina;
 	}
 

@@ -129,8 +129,9 @@ public class RegistroSalidaHelper{
 	 * @param organo Organo emisor de la notificacion segun tablas maestras REGWEB (Obligatorio) 
 	 * @param oficinaRegistro Oficina registro segun tablas maestras REGWEB (Obligatorio) 
 	 */
-	public void setOficinaRegistro(String organo,String oficinaRegistro) throws ExcepcionRegistroTelematico{
+	public void setOficinaRegistro(String entidad, String organo,String oficinaRegistro) throws ExcepcionRegistroTelematico{
 		try{	
+			datosOrigen.setCodigoEntidad(entidad);
 			datosOrigen.setCodigoEntidadRegistralOrigen(oficinaRegistro);			
 			datosAsunto.setCodigoOrganoDestino(organo);
 			setOficina=true;
@@ -423,7 +424,7 @@ public class RegistroSalidaHelper{
 			// Comprobamos organo destino
 			boolean enc=false;
 			try{				
-				List svd = regtelEJB.obtenerServiciosDestino();				
+				List svd = regtelEJB.obtenerServiciosDestino(datosOrigen.getCodigoEntidad());				
 				for (Iterator it=svd.iterator();it.hasNext();){
 					ValorOrganismo vo =  (ValorOrganismo) it.next();
 					if (vo.getCodigo().equals(datosAsunto.getCodigoOrganoDestino())){

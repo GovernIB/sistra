@@ -1,4 +1,10 @@
 <form-bean
+    name="entidadForm"
+    type="es.caib.bantel.back.form.EntidadForm"
+    className="es.caib.bantel.back.action.TraFormBeanConfig">
+    <set-property property="valuesClassName" value="es.caib.bantel.model.Entidad" />
+</form-bean>
+<form-bean
     name="tramiteForm"
     type="es.caib.bantel.back.form.TramiteForm"
     className="es.caib.bantel.back.action.TraFormBeanConfig">

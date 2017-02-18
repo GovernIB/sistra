@@ -6,6 +6,7 @@ public class ImportarVersionTramiteProcessForm extends ActionForm
 {
 	private Long codigoTramite;
 	private Long unidadAdministrativa;
+	private String entidad;
 	private String organoDestino;
 	private String registroOficina;
     private String registroAsunto;
@@ -39,6 +40,12 @@ public class ImportarVersionTramiteProcessForm extends ActionForm
 	}
 	public void setCodigoTramite(Long codigoTramite) {
 		this.codigoTramite = codigoTramite;
+	}
+	public String getEntidad() {
+		return entidad;
+	}
+	public void setEntidad(String entidad) {
+		this.entidad = entidad;
 	}
 	
 		

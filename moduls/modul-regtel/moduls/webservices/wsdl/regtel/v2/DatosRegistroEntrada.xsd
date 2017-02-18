@@ -6,7 +6,7 @@
 	<xs:import namespace="urn:es:caib:regtel:ws:v2:model:DatosAsunto" schemaLocation="DatosAsunto.xsd"/>
 	<xs:import namespace="urn:es:caib:regtel:ws:v2:model:Documento" schemaLocation="Documento.xsd"/>
 	<xs:complexType name="DatosRegistroEntrada">
-		<xs:sequence>
+		<xs:sequence>		
 			<xs:element name="oficinaRegistral" type="ns1:OficinaRegistral"/>
 			<xs:element name="datosInteresado" type="ns2:DatosInteresado"  nillable="true"/>
 			<xs:element name="datosRepresentado" type="ns5:DatosRepresentado"  nillable="true"/>

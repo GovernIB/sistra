@@ -1,9 +1,4 @@
 package es.caib.bantel.back.action.tramite;
-import org.apache.struts.tiles.ComponentContext;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
@@ -11,6 +6,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.Controller;
 
 import es.caib.bantel.persistence.delegate.DelegateException;
@@ -33,7 +31,7 @@ public class ListaTramitesController implements Controller
 
             ProcedimientoDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
             request.setAttribute("tramiteOptions", tramiteDelegate.listarProcedimientos() );
-
+            
         } catch (DelegateException e) {
             throw new ServletException(e);
         }

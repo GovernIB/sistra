@@ -10,6 +10,7 @@ $(document).ready(function(){
 	
 	$.mostrarAyuda = function(fade)
 	{
+		
 	  if ($("#fons").size() == 0) {
 			// tamany escritori treball
 			finestraX = document.documentElement.clientWidth;
@@ -64,6 +65,7 @@ $(document).ready(function(){
 	$("#equipSuport").click(function () {
 		var capaI = document.getElementById('contactoAdministradorContent');	
 		capaI.innerHTML = "";
+		mostrarCapa('contactoAdministradorUrl', true);	
 		$.mostrarAyuda(true);
 	});
 	$("#suportDescartar").click(function () {

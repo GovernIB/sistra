@@ -14,6 +14,7 @@ import es.caib.regtel.model.ConstantesRegtel;
 import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
 import es.caib.regtel.persistence.delegate.RegistroTelematicoDelegate;
 import es.caib.sistra.back.action.BaseController;
+import es.caib.sistra.back.form.ImportarVersionTramiteProcessForm;
 import es.caib.sistra.modelInterfaz.ConstantesDominio;
 
 public class ImportarXMLPreviewController extends BaseController
@@ -21,11 +22,14 @@ public class ImportarXMLPreviewController extends BaseController
     public void perform(ComponentContext arg0, HttpServletRequest request, HttpServletResponse arg2, ServletContext arg3) throws ServletException, IOException
     {
         try {
+        	
+        	ImportarVersionTramiteProcessForm form = (ImportarVersionTramiteProcessForm) request.getAttribute("importarVersionTramiteProcessForm");
+        	
         	 // Obtenemos info registro
             RegistroTelematicoDelegate dlgRte = DelegateRegtelUtil.getRegistroTelematicoDelegate();
-            List organosDestino = dlgRte.obtenerServiciosDestino();
-            List oficinasRegistro = dlgRte.obtenerOficinasRegistro(ConstantesRegtel.REGISTRO_ENTRADA);
-            List tiposAsunto = dlgRte.obtenerTiposAsunto();
+            List organosDestino = dlgRte.obtenerServiciosDestino(form.getEntidad());
+            List oficinasRegistro = dlgRte.obtenerOficinasRegistro(form.getEntidad(), ConstantesRegtel.REGISTRO_ENTRADA);
+            List tiposAsunto = dlgRte.obtenerTiposAsunto(form.getEntidad());
                        
             // Establecemos listas de valores
             request.setAttribute( "listaorganosdestino", ajustarTamListaDesplegable ( organosDestino, MAX_COMBO_DESC , "DESCRIPCION")  );

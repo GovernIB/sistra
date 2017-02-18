@@ -62,17 +62,17 @@ public class RegistroTelematicoWsDelegate implements StatelessDelegate {
         }
     }
 
-	public AcuseRecibo obtenerAcuseRecibo(String numeroRegistro)  throws DelegateException { 
+	public AcuseRecibo obtenerAcuseRecibo(String entidad, String numeroRegistro)  throws DelegateException { 
         try {
-            return getFacade().obtenerAcuseRecibo(numeroRegistro);
+            return getFacade().obtenerAcuseRecibo(entidad, numeroRegistro);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
     }
 	
-	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String numeroRegistro) throws DelegateException { 
+	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String entidad, String numeroRegistro) throws DelegateException { 
         try {
-            return getFacade().obtenerDetalleAcuseRecibo(numeroRegistro);
+            return getFacade().obtenerDetalleAcuseRecibo(entidad, numeroRegistro);
         } catch (Exception e) {
             throw new DelegateException(e);
         }

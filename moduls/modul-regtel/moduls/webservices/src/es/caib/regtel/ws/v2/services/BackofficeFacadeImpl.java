@@ -139,11 +139,11 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		return rr;
 	}
 
-	public AcuseRecibo obtenerAcuseRecibo(String numeroRegistro) throws BackofficeFacadeException {
+	public AcuseRecibo obtenerAcuseRecibo(String entidad, String numeroRegistro) throws BackofficeFacadeException {
 		AcuseRecibo acuse = null;
 		try{
 			RegistroTelematicoWsDelegate rtd = DelegateUtil.getRegistroTelematicoWsDelegate();
-			es.caib.regtel.model.ws.AcuseRecibo acuseIntf = rtd.obtenerAcuseRecibo(numeroRegistro);
+			es.caib.regtel.model.ws.AcuseRecibo acuseIntf = rtd.obtenerAcuseRecibo(entidad, numeroRegistro);
 			acuse = acuseIntfToAcuseWS(acuseIntf);
 			return acuse;
 		}catch(Exception ex){
@@ -153,11 +153,11 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		}
 	}
 	
-	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String numeroRegistro) throws BackofficeFacadeException {
+	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String entidad, String numeroRegistro) throws BackofficeFacadeException {
 		DetalleAcuseRecibo acuse = null;
 		try{
 			RegistroTelematicoWsDelegate rtd = DelegateUtil.getRegistroTelematicoWsDelegate();
-			es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo acuseIntf = rtd.obtenerDetalleAcuseRecibo(numeroRegistro);
+			es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo acuseIntf = rtd.obtenerDetalleAcuseRecibo(entidad, numeroRegistro);
 			if (acuseIntf == null)  {
 				throw new Exception("No existe notificacion: " + numeroRegistro);
 			}	
@@ -291,6 +291,9 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			if(entrada.getOficinaRegistral() != null){
 				OficinaRegistral or = entrada.getOficinaRegistral();
 				es.caib.regtel.model.ws.OficinaRegistral orIntf = new es.caib.regtel.model.ws.OficinaRegistral();
+				if (or.getEntidad() != null) {
+					orIntf.setEntidad(or.getEntidad().getValue());
+				}
 				orIntf.setCodigoOficina(or.getCodigoOficina());
 				orIntf.setCodigoOrgano(or.getCodigoOrgano());
 				rEnt.setOficinaRegistral(orIntf);
@@ -413,6 +416,9 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			if(notificacion.getOficinaRegistral() != null){
 				OficinaRegistral or = notificacion.getOficinaRegistral();
 				es.caib.regtel.model.ws.OficinaRegistral orIntf = new es.caib.regtel.model.ws.OficinaRegistral();
+				if (or.getEntidad() != null) {
+					orIntf.setEntidad(or.getEntidad().getValue());
+				}
 				orIntf.setCodigoOficina(or.getCodigoOficina());
 				orIntf.setCodigoOrgano(or.getCodigoOrgano());
 				rSal.setOficinaRegistral(orIntf);

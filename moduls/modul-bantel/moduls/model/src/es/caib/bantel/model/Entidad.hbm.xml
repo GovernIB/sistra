@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+    
+<hibernate-mapping>
+<class  name="es.caib.bantel.model.Entidad" table="BTE_ENTIDAD">
+	
+	<cache usage="read-write"/>
+    
+    <id name="identificador" unsaved-value="null" column="ENT_IDEENT" >
+      <generator class="assigned"/>
+    </id>	
+		
+	<property name="descripcion"  column="ENT_NOMBRE" not-null="true" length="200"/>  
+  	
+</class>
+</hibernate-mapping>

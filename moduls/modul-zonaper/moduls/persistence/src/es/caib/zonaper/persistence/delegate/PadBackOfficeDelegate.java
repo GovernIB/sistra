@@ -103,11 +103,11 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 		}
 	}
 
-	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String numeroRegistro) throws DelegateException
+	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String entidad, String numeroRegistro) throws DelegateException
 	{
 		try
 		{
-			return getFacade().obtenerDetalleAcuseRecibo( numeroRegistro);
+			return getFacade().obtenerDetalleAcuseRecibo( entidad, numeroRegistro);
 		}
 		catch( Exception e )
 		{

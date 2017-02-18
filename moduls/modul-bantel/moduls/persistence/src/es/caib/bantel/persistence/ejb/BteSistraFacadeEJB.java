@@ -2,6 +2,7 @@ package es.caib.bantel.persistence.ejb;
 
 import java.io.ByteArrayInputStream;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 
 import es.caib.bantel.model.ConsultaFuenteDatos;
 import es.caib.bantel.model.DocumentoBandeja;
+import es.caib.bantel.model.Entidad;
 import es.caib.bantel.model.GestorBandeja;
 import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.model.TramiteBandeja;
@@ -30,6 +32,7 @@ import es.caib.bantel.modelInterfaz.ConstantesBTE;
 import es.caib.bantel.modelInterfaz.DatosDocumentoPresencial;
 import es.caib.bantel.modelInterfaz.DatosDocumentoTelematico;
 import es.caib.bantel.modelInterfaz.DocumentoBTE;
+import es.caib.bantel.modelInterfaz.EntidadBTE;
 import es.caib.bantel.modelInterfaz.ExcepcionBTE;
 import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
 import es.caib.bantel.modelInterfaz.TramiteBTE;
@@ -195,23 +198,50 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
     public ProcedimientoBTE obtenerProcedimiento(String idProcedimiento)  throws ExcepcionBTE{
     	try{
 	    	Procedimiento p = DelegateUtil.getTramiteDelegate().obtenerProcedimiento(idProcedimiento);
-	    	ProcedimientoBTE res = convertProcedimientoToProcedimientoBTE(p);
+	    	Entidad e = DelegateUtil.getEntidadDelegate().obtenerEntidad(p.getEntidad());
+	    	ProcedimientoBTE res = convertProcedimientoToProcedimientoBTE(p, e);
 	    	return res;
     	}catch (Exception ex){
     		throw new ExcepcionBTE("No se ha podido consultar procedimiento  " + idProcedimiento + " : " + ex.getMessage(),ex);
     	}
     }
     
+    /**
+     * Consulta entidades.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public List obtenerEntidades() throws ExcepcionBTE{
+    	try{
+    		List res = new ArrayList();
+	    	List entidades = DelegateUtil.getEntidadDelegate().listarEntidades();
+	    	if (entidades != null) {
+	    		for (Iterator it = entidades.iterator(); it.hasNext();) {
+	    			Entidad e = (Entidad) it.next();
+	    			EntidadBTE eb = new EntidadBTE();
+	    			eb.setIdentificador(e.getIdentificador());
+	    			eb.setDescripcion(e.getDescripcion());
+	    			res.add(eb);
+	    		}
+	    	}
+	    	return res;
+    	}catch (Exception ex){
+    		throw new ExcepcionBTE("No se ha podido listar entidades : " + ex.getMessage(),ex);
+    	}
+    }
 
 	// ------------------------ Funciones utilidad ----------------------------------------------------------------
 
     /**
      * Convierte Procedimiento a ProcedimientoBTE.
      * @param p Procedimiento
+     * @param e 
      * @return ProcedimientoBTE
      */
 	private ProcedimientoBTE convertProcedimientoToProcedimientoBTE(
-			Procedimiento p) {
+			Procedimiento p, Entidad e) {
 		ProcedimientoBTE pb = new ProcedimientoBTE();
 		pb.setIdentificador(p.getIdentificador());
 		pb.setDescripcion(p.getDescripcion());
@@ -229,6 +259,11 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 				}
 			}
 		}
+		
+		EntidadBTE eb = new EntidadBTE();
+		eb.setIdentificador(e.getIdentificador());
+		eb.setDescripcion(e.getDescripcion());
+		pb.setEntidad(eb);
 		
 		return pb;
 	}

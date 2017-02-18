@@ -15,6 +15,7 @@ import es.caib.xml.registro.factoria.ConstantesAsientoXML;
 public class DatosOrigen extends NodoRegistroBase {
 	
 	// Variables miembro
+	private String codigoEntidad;
 	private String codigoEntidadRegistralOrigen;
 	private String numeroRegistro;
 	private Date fechaEntradaRegistro;
@@ -143,6 +144,17 @@ public class DatosOrigen extends NodoRegistroBase {
 			DatosOrigen dOrigen = (DatosOrigen) obj;
 			
 			// Comprobar código entidad registral origen
+			String codEnt = getCodigoEntidad ();
+			String codEntExt = dOrigen.getCodigoEntidad ();
+			
+			if ((codEnt != null) || (codEntExt != null))
+				if ( (codEntExt != null) && (codEnt != null) ){
+					if (!codEnt.equals (codEntExt)) return false;
+				}
+				else
+					if ((codEnt != null) || (codEntExt != null)) return false;
+			
+			// Comprobar código entidad registral origen
 			String codEntRegOrigen = getCodigoEntidadRegistralOrigen ();
 			String codEntRegOrigenExt = dOrigen.getCodigoEntidadRegistralOrigen ();
 			
@@ -186,6 +198,14 @@ public class DatosOrigen extends NodoRegistroBase {
 		}
 		
 		return super.equals (obj);
+	}
+
+	public String getCodigoEntidad() {
+		return codigoEntidad;
+	}
+
+	public void setCodigoEntidad(String codigoEntidad) {
+		this.codigoEntidad = codigoEntidad;
 	}
 
 }

@@ -35,6 +35,8 @@ import org.apache.commons.logging.LogFactory;
 import es.caib.audita.modelInterfaz.ConstantesAuditoria;
 import es.caib.audita.modelInterfaz.Evento;
 import es.caib.audita.persistence.delegate.DelegateAUDUtil;
+import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
+import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
 import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
@@ -5507,10 +5509,13 @@ public class TramiteProcessorEJB implements SessionBean {
 
 			// Validamos resultado calculo
 			destTra.setCalculado(true);
-
-			if (!this.validarCodigoOficina(destTra.getOficinaRegistral()))
+			
+			// Obtenemos entidad procedimiento
+			String entidad = obtenerEntidadProcedimiento(destTra.getProcedimiento());
+			
+			if (!this.validarCodigoOficina(entidad, destTra.getOficinaRegistral()))
 				throw new Exception("El codigo de oficina establecido por el script no es valido");
-			if (!this.validarCodigoOrgano(destTra.getOrganoDestino()))
+			if (!this.validarCodigoOrgano(entidad, destTra.getOrganoDestino()))
 				throw new Exception("El codigo de organo destino establecido por el script no es valido");
 			if (!this.validarCodigoUA(destTra.getUnidadAdministrativa()))
 				throw new Exception("El codigo de unidad administrativa establecido por el script no es valido");
@@ -5518,6 +5523,13 @@ public class TramiteProcessorEJB implements SessionBean {
 		}
 
 		return destTra;
+	}
+
+	private String obtenerEntidadProcedimiento(String idProcedimiento) throws Exception {
+		String entidad;
+		ProcedimientoBTE proc = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(idProcedimiento);
+		entidad = proc.getEntidad().getIdentificador();
+		return entidad;
 	}
 
 
@@ -6157,12 +6169,13 @@ public class TramiteProcessorEJB implements SessionBean {
 
 	 /**
 	  * Valida si la oficina de registro es válida
+	 * @param entidad 
 	  * @param codOrgano Codigo oficina
 	  * @return true/false
 	  * @throws Exception
 	  */
-	 private boolean validarCodigoOficina(String codOficina) throws Exception{
-		List oficinas = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerOficinasRegistro(ConstantesRegtel.REGISTRO_ENTRADA);
+	 private boolean validarCodigoOficina(String codOficina, String entidad) throws Exception{
+		List oficinas = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerOficinasRegistro(entidad, ConstantesRegtel.REGISTRO_ENTRADA);
 		for (Iterator it = oficinas.iterator();it.hasNext();){
 			ValorOrganismo vo = (ValorOrganismo) it.next();
 			if (vo.getCodigo().equals(codOficina)){
@@ -6176,11 +6189,12 @@ public class TramiteProcessorEJB implements SessionBean {
 	 /**
 	  * Valida si el codigo de organo destino es válido
 	  * @param codOrgano Codigo organos destino
+	 * @param entidad 
 	  * @return true/false
 	  * @throws Exception
 	  */
-	 private boolean validarCodigoOrgano(String codOrgano) throws Exception{
-		List organos = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerServiciosDestino();
+	 private boolean validarCodigoOrgano(String codOrgano, String entidad) throws Exception{
+		List organos = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerServiciosDestino(entidad);
 		for (Iterator it = organos.iterator();it.hasNext();){
 			ValorOrganismo vo = (ValorOrganismo) it.next();
 			if (vo.getCodigo().equals(codOrgano)){

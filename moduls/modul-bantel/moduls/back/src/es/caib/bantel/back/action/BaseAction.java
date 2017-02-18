@@ -14,18 +14,21 @@ import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.RequestUtils;
 
 import es.caib.bantel.back.form.CampoFuenteDatosForm;
+import es.caib.bantel.back.form.EntidadForm;
 import es.caib.bantel.back.form.FicheroExportacionForm;
 import es.caib.bantel.back.form.FuenteDatosForm;
 import es.caib.bantel.back.form.GestorBandejaForm;
 import es.caib.bantel.back.form.TramiteForm;
 import es.caib.bantel.back.taglib.Constants;
 import es.caib.bantel.model.CampoFuenteDatos;
+import es.caib.bantel.model.Entidad;
 import es.caib.bantel.model.FicheroExportacion;
 import es.caib.bantel.model.FuenteDatos;
 import es.caib.bantel.model.GestorBandeja;
 import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.persistence.delegate.DelegateException;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
+import es.caib.bantel.persistence.delegate.EntidadDelegate;
 import es.caib.bantel.persistence.delegate.FicheroExportacionDelegate;
 import es.caib.bantel.persistence.delegate.FuenteDatosDelegate;
 import es.caib.bantel.persistence.delegate.GestorBandejaDelegate;
@@ -131,6 +134,21 @@ public abstract class BaseAction extends Action {
 		
 		return tramite;
 	}
+    
+    protected Entidad guardarEntidad(ActionMapping mapping, HttpServletRequest request, String idEntidad)
+    	    throws DelegateException 
+    	    {
+    			EntidadForm pForm = (EntidadForm) obtenerActionForm(mapping, request, "/back/entidad/editar");
+    			
+    			EntidadDelegate delegate = DelegateUtil.getEntidadDelegate();
+    			Entidad entidad = delegate.obtenerEntidad(idEntidad);
+    			
+    			pForm.setValues(entidad);
+    			
+    			request.setAttribute("idEntidad", idEntidad);
+    			
+    			return entidad;
+    		}
     
     protected FicheroExportacion guardarFicheroExportacion(ActionMapping mapping, HttpServletRequest request, String idFicheroExportacion)
     throws DelegateException 

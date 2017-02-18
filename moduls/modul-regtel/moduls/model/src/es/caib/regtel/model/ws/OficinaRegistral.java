@@ -3,6 +3,7 @@ package es.caib.regtel.model.ws;
 
 public class OficinaRegistral {
 
+	private String entidad;
     private String codigoOficina;
     private String codigoOrgano;
 
@@ -21,5 +22,13 @@ public class OficinaRegistral {
     public void setCodigoOrgano(String value) {
         this.codigoOrgano = value;
     }
+
+	public String getEntidad() {
+		return entidad;
+	}
+
+	public void setEntidad(String entidad) {
+		this.entidad = entidad;
+	}
 
 }

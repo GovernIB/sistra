@@ -21,6 +21,9 @@ import net.sf.hibernate.Session;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 
+import es.caib.bantel.modelInterfaz.EntidadBTE;
+import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
+import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
 import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
@@ -118,23 +121,53 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
      */
-    public NotificacionTelematica obtenerNotificacionTelematica(String numeroRegistro) {
+    public NotificacionTelematica obtenerNotificacionTelematica(String entidad, String numeroRegistro) {
         Session session = getSession();
         try {
+        	
+        	// Verificamos que entidad no es nulo
+        	if (entidad == null) {
+        		throw new Exception("No se ha indicado código entidad");
+        	}
+        	
         	// Cargamos notificacionTelematica        	
         	Query query = session
             .createQuery("FROM NotificacionTelematica AS m WHERE m.numeroRegistro = :numeroRegistro")
             .setParameter("numeroRegistro",numeroRegistro);
             //query.setCacheable(true);
-            if (query.list().isEmpty()){
+            
+        	List res = query.list();
+        	
+        	if (res.isEmpty()){
             	return null;            	
             }
-            NotificacionTelematica notificacionTelematica = (NotificacionTelematica)  query.uniqueResult();
-                        
+            
+            // El num de registro puede no ser unico por entidad. Recuperamos y verificamos que el codigo entidad pertenezca al procedimiento
+        	NotificacionTelematica resultado = null;
+            for (Iterator it = res.iterator(); it.hasNext();) {
+            	 NotificacionTelematica notificacionTelematica = (NotificacionTelematica)  it.next();
+            	 
+            	 // Obtenemos procedimiento a partir del expediente
+            	 ElementoExpediente eex = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpediente(ElementoExpediente.TIPO_NOTIFICACION, notificacionTelematica.getCodigo());
+            	 String idProc = eex.getExpediente().getIdProcedimiento();
+            	 ProcedimientoBTE proc = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(idProc);
+            	 
+            	 // Verificamos que sea la misma entidad
+            	 if (proc.getEntidad().equals(entidad)) {
+            		 resultado = notificacionTelematica;
+            		 break;
+            	 }
+            	 
+            }
+                                    
         	// Cargamos documentos
-        	Hibernate.initialize(notificacionTelematica.getDocumentos());        	
-            return notificacionTelematica;
-        } catch (HibernateException he) {
+            if (resultado != null) {
+            	Hibernate.initialize(resultado.getDocumentos());
+            }
+            
+            return resultado;
+            
+        } catch (Exception he) {
         	throw new EJBException(he);
         } finally {
             close(session);

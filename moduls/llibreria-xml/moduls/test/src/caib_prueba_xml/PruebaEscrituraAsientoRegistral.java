@@ -41,6 +41,7 @@ public class PruebaEscrituraAsientoRegistral {
 			
 			// Crear datos origen
 			DatosOrigen dOrigen = factoria.crearDatosOrigen();
+			dOrigen.setCodigoEntidad("Entidad1");
 			dOrigen.setCodigoEntidadRegistralOrigen ("14");
 			//dOrigen.setTipoRegistro (new Character (ConstantesAsientoXML.TIPO_ENVIO));
 			// dOrigen.setTipoRegistro (new Character (ConstantesAsientoXML.TIPO_REGISTRO_SALIDA));

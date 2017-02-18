@@ -41,12 +41,13 @@ public class BuscarServiciosAction extends BaseAction {
 
 		BuscarServiciosForm bf = (BuscarServiciosForm) form;
 		
+		
 		try {
 			// Buscar servicios
 			String filtro = bf.getFiltro();
 
-			RegistroTelematicoDelegate dlgRte = DelegateRegtelUtil.getRegistroTelematicoDelegate();
-			List organosDestino = dlgRte.obtenerServiciosDestino();
+			RegistroTelematicoDelegate dlgRte = DelegateRegtelUtil.getRegistroTelematicoDelegate();			
+			List organosDestino = dlgRte.obtenerServiciosDestino(bf.getEntidad());
 			
 			// Limpiamos los que no cumplan el filtro
 			List result = new ArrayList();
@@ -65,11 +66,13 @@ public class BuscarServiciosAction extends BaseAction {
 			}
 			
 			request.setAttribute("id", bf.getIdCampo());
+			request.setAttribute("entidad", bf.getEntidad());
 			request.setAttribute("servicios", result);
 			return mapping.findForward("success");
 		} catch (Exception e) {
 			log.error("Excepcion buscando servicios: " + e.getMessage(), e);
 			request.setAttribute("id", bf.getIdCampo());
+			request.setAttribute("entidad", bf.getEntidad());
 			return mapping.findForward("fail");
 		}
 		

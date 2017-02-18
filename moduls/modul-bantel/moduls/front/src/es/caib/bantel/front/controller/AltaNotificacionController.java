@@ -36,9 +36,6 @@ public class AltaNotificacionController extends BaseController
 		DetalleNotificacionForm notificacionForm = (DetalleNotificacionForm) request.getAttribute("detalleNotificacionForm");
 		request.setAttribute("autenticado",Boolean.toString(StringUtils.isNotEmpty(notificacionForm.getUsuarioSey())));
 		
-		// Cargamos listas valores
-		carregarLlistes(request);
-		
 		// Establecemos url back
 		String urlSistra = "";
 		ConfiguracionDelegate delegate = DelegateUtil.getConfiguracionDelegate();
@@ -49,17 +46,20 @@ public class AltaNotificacionController extends BaseController
 		// Comprobamos si puede cambiar el plazo de notificaciones
 		String idProcedimiento = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_PROCEDIMIENTO_KEY);
 		Procedimiento p = DelegateUtil.getTramiteDelegate().obtenerProcedimiento(idProcedimiento);
-		request.setAttribute("permitirPlazoNotificacionesVariable", p != null ? p.getPermitirPlazoNotificacionesVariable() : "N");		
+		request.setAttribute("permitirPlazoNotificacionesVariable", p != null ? p.getPermitirPlazoNotificacionesVariable() : "N");			
 		
 		// Firmante
 		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
 		String nifFirmante = plgLogin.getNif(this.getPrincipal(request));
 		request.setAttribute("nifFirmante", nifFirmante);
 		
+		// Cargamos listas valores
+		carregarLlistes(request, p);
+		
 	}
 
 	
-	private void carregarLlistes(HttpServletRequest request) throws Exception{
+	private void carregarLlistes(HttpServletRequest request, Procedimiento p) throws Exception{
 		
 		DetalleNotificacionForm notificacionForm = (DetalleNotificacionForm) request.getAttribute("detalleNotificacionForm");
 		
@@ -72,11 +72,11 @@ public class AltaNotificacionController extends BaseController
 		List municipios = Dominios.listarLocalidadesProvincia(notificacionForm.getCodigoProvincia());
 		request.setAttribute("municipios",municipios);
 		RegistroTelematicoDelegate dlgRte = DelegateRegtelUtil.getRegistroTelematicoDelegate();
-        List organosDestino = dlgRte.obtenerServiciosDestino();
+        List organosDestino = dlgRte.obtenerServiciosDestino(p.getEntidad());
         request.setAttribute( "listaorganosdestino", regtelToBantel(organosDestino));
-        List oficinasRegistro = dlgRte.obtenerOficinasRegistro(ConstantesPluginRegistro.REGISTRO_SALIDA);
+        List oficinasRegistro = dlgRte.obtenerOficinasRegistro(p.getEntidad(), ConstantesPluginRegistro.REGISTRO_SALIDA);
         request.setAttribute( "listaoficinasregistro", regtelToBantel(oficinasRegistro));
-        List tiposAsunto = dlgRte.obtenerTiposAsunto();
+        List tiposAsunto = dlgRte.obtenerTiposAsunto(p.getEntidad());
         request.setAttribute("tiposAsunto", regtelToBantel(tiposAsunto));
 	}
 	

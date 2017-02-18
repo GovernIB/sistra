@@ -178,7 +178,17 @@ function b64ToB64UrlSafe(b64){
 	return b64UrlSafe;
 }
 
+function mostrarCapa(capa, mostrar) {
+	var capaU = document.getElementById(capa);
+	if (mostrar) {
+		capaU.style.display = 'block';
+	} else {
+		capaU.style.display = 'none';
+	}
+}
+
 function mostrarFormularioIncidencias(url) {
+	mostrarCapa('contactoAdministradorUrl', false);
 	var capaI = document.getElementById('contactoAdministradorContent');	
 	capaI.innerHTML = 
 		'<iframe src="' + url + '" style="border: 0pt none; width: 500px; height: 370px;" scrolling="no"></iframe>';

@@ -7,14 +7,15 @@ import java.io.Serializable;
  */
 public class LogRegistroId implements Serializable {
 
+	private String entidad;
     private String tipoRegistro;
     private String numeroRegistro;
     
     
     
-	public LogRegistroId(String tipoRegistro, String numeroRegistro) {
+	public LogRegistroId(String entidad, String tipoRegistro, String numeroRegistro) {
 		super();
-		// TODO Auto-generated constructor stub
+		this.entidad = entidad;
 		this.tipoRegistro = tipoRegistro;
 		this.numeroRegistro = numeroRegistro;
 	}
@@ -49,7 +50,10 @@ public class LogRegistroId implements Serializable {
 					.getTipoRegistro().equals(castOther.getTipoRegistro())))
 				&& ((this.getNumeroRegistro() == castOther.getNumeroRegistro()) || (this
 						.getNumeroRegistro() != null	&& castOther.getNumeroRegistro() != null && this
-						.getNumeroRegistro().equals(castOther.getNumeroRegistro())));
+						.getNumeroRegistro().equals(castOther.getNumeroRegistro())))
+				&& ((this.getEntidad() == castOther.getEntidad()) || (this
+						.getEntidad() != null	&& castOther.getEntidad() != null && this
+						.getEntidad().equals(castOther.getEntidad())));
 	}
 
 	public int hashCode() {
@@ -63,6 +67,12 @@ public class LogRegistroId implements Serializable {
 				+ (getNumeroRegistro() == null ? 0 : this.getNumeroRegistro()
 						.hashCode());
 		return result;
+	}
+	public String getEntidad() {
+		return entidad;
+	}
+	public void setEntidad(String entidad) {
+		this.entidad = entidad;
 	}
     
 }

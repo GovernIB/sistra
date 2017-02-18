@@ -54,6 +54,7 @@ public interface PluginRegistroIntf extends PluginSistraIntf {
 	 * RDS tanto del asiento registral como de los anexos. 
 	 * 
 	 * @param usuario Usuario conectado
+	 * @param entidad Entidad en la que se ha confirmado el preregistro
 	 * @param oficina Oficina registral en la que se ha confirmado el preregistro
 	 * @param codigoProvincia Código municipio del ciudadano (código INE)
 	 * @param codigoMunicipio Código provincia del ciudadano (código INE)
@@ -69,7 +70,7 @@ public interface PluginRegistroIntf extends PluginSistraIntf {
 	 * @return ResultadoRegistro Devuelve número y fecha de registro
 	 * @throws Exception
 	 */	
-	public ResultadoRegistro confirmarPreregistro(String usuario, String oficina,String codigoProvincia,String codigoMunicipio,String descripcionMunicipio,Justificante justificantePreregistro,ReferenciaRDS refJustificante,ReferenciaRDS refAsiento,Map refAnexos) throws Exception;												  
+	public ResultadoRegistro confirmarPreregistro(String usuario, String entidad, String oficina,String codigoProvincia,String codigoMunicipio,String descripcionMunicipio,Justificante justificantePreregistro,ReferenciaRDS refJustificante,ReferenciaRDS refAsiento,Map refAnexos) throws Exception;												  
 	
 	/**
 	 * Anular registro de entrada 
@@ -82,11 +83,12 @@ public interface PluginRegistroIntf extends PluginSistraIntf {
 	 * registros efectuados estan enlazados con una entrada en la Bandeja Telematica. Si no existe dicho enlace
 	 * significara que se hizo un rollback del proceso de registro y se debe anular el registro efectuado.   
 	 * 
+	 * @param entidad Entidad.
 	 * @param numeroRegistro Numero de registro.
 	 * @param fechaRegistro Fecha de registro
 	 * @throws Exception
 	 */
-	public void anularRegistroEntrada(String numeroRegistro, Date fechaRegistro) throws Exception;
+	public void anularRegistroEntrada(String entidad, String numeroRegistro, Date fechaRegistro) throws Exception;
 	
 	/**
 	 * Realiza apunte registral de registro de salida
@@ -119,48 +121,54 @@ public interface PluginRegistroIntf extends PluginSistraIntf {
 	 * registros efectuados estan enlazados con una notificacion telematica. Si no existe dicho enlace
 	 * significara que se hizo un rollback del proceso de registro y se debe anular el registro efectuado.   
 	 * 
+	 * @param entidad Entidad.
 	 * @param numeroRegistro Numero de registro.
 	 * @param fechaRegistro Fecha de registro
 	 * @throws Exception
 	 */
-	public void anularRegistroSalida(String numeroRegistro, Date fechaRegistro) throws Exception;
+	public void anularRegistroSalida(String entidad, String numeroRegistro, Date fechaRegistro) throws Exception;
 	
 	/**
 	 * Obtiene lista de oficinas registrales
+	 * @param entidad Entidad.
 	 * @param tipo Entrada / Salida (E/S) 
 	 * @return List Lista de oficinas registro
 	 * @see OficinaRegistro
 	 */
-	public List obtenerOficinasRegistro(char tipo);
+	public List obtenerOficinasRegistro(String entidad, char tipo);
 	
 	/**
 	 * Obtiene lista de oficinas registrales para los que el usuario de registro tiene permiso
+	 * @param entidad Entidad.
 	 * @param tipo Entrada / Salida (E/S)
 	 * @param usuario Identificador usuario
 	 * @return List Lista de oficinas registro
 	 * @see OficinaRegistro
 	 */
-	public List obtenerOficinasRegistroUsuario(char tipo, String usuario);
+	public List obtenerOficinasRegistroUsuario(String entidad, char tipo, String usuario);
 	
 	/**
 	 * Obtiene tipos de asunto
+	 * @param entidad Entidad.
 	 * @return List Lista de tipos de asunto
 	 * @see TipoAsunto
 	 */
-	public List obtenerTiposAsunto();
+	public List obtenerTiposAsunto(String entidad);
 	
 	/**
 	 * Obtiene lista de servicios destinatarios
+	 * @param entidad Entidad.
 	 * @return List Lista de servicios destinatarios
 	 * @see ServicioDestinatario
 	 */
-	public List obtenerServiciosDestino();
+	public List obtenerServiciosDestino(String entidad);
 
 	/**
 	 * Obtiene descripción de la oficina para la estampación del sello en un preregistro.
+	 * @param entidad Entidad.
 	 * @param tipo Entrada / Salida (E/S) 
 	 * @param oficina Código oficina
 	 */
-	public String obtenerDescripcionSelloOficina(char tipo, String oficina);
+	public String obtenerDescripcionSelloOficina(char tipo, String entidad, String oficina);
 		
 }

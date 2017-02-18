@@ -11,6 +11,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
+import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
 import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
@@ -88,6 +90,10 @@ public class GeneradorAsiento {
 			DatosDesglosadosInteresado datosRpte, DatosDesglosadosInteresado datosRpdo, DestinatarioTramite dt, boolean debugEnabled) throws Exception{
 
 		try{
+			
+			// Obtenemos entidad procedimiento
+			String entidad = obtenerEntidadProcedimiento(tramitePAD.getIdProcedimiento());
+			
 			RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
 			DocumentoPersistentePAD docPAD;
 			DocumentoRDS docRDS;
@@ -101,6 +107,7 @@ public class GeneradorAsiento {
 
 			// Crear datos origen
 			DatosOrigen dOrigen = factoria.crearDatosOrigen();
+			dOrigen.setCodigoEntidad(entidad);
 			dOrigen.setCodigoEntidadRegistralOrigen (dt.getOficinaRegistral());
 			if (isTramitePresencial( tramiteInfo.getTipoTramitacion(), tramiteInfo.getTipoTramitacionDependiente() )){
 				if (tramiteVersion.getDestino() == ConstantesSTR.DESTINO_REGISTRO){
@@ -283,7 +290,7 @@ public class GeneradorAsiento {
 			dAsunto.setTipoAsunto (tramiteVersion.getRegistroAsunto());
 			dAsunto.setExtractoAsunto ( ((TraTramite) tramiteVersion.getTramite().getTraduccion(tramiteInfo.getDatosSesion().getLocale().getLanguage())).getDescripcion());
 			dAsunto.setCodigoOrganoDestino (dt.getOrganoDestino());
-			dAsunto.setDescripcionOrganoDestino(obtenerDescripcionOrgano(dt.getOrganoDestino()));
+			dAsunto.setDescripcionOrganoDestino(obtenerDescripcionOrgano(entidad, dt.getOrganoDestino()));
 
 			dAsunto.setCodigoUnidadAdministrativa(dt.getUnidadAdministrativa().toString());
 
@@ -884,9 +891,9 @@ public class GeneradorAsiento {
 		return tipoTramitacion == ConstantesSTR.TIPO_TRAMITACION_PRESENCIAL || ( tipoTramitacion == ConstantesSTR.TIPO_TRAMITACION_DEPENDIENTE && tipoTramitacionDependiente == ConstantesSTR.TIPO_TRAMITACION_PRESENCIAL );
 	}
 
-	private static String obtenerDescripcionOrgano(String codOrgano) throws Exception{
+	private static String obtenerDescripcionOrgano(String entidad, String codOrgano) throws Exception{
 
-		List organos = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerServiciosDestino();
+		List organos = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerServiciosDestino(entidad);
 
 		for (Iterator it = organos.iterator();it.hasNext();){
 			ValorOrganismo vo = (ValorOrganismo) it.next();
@@ -1020,5 +1027,12 @@ public class GeneradorAsiento {
 			direccion.setEmail(datosInt.getEmail());
 		}
 		return direccion;
+	}
+	
+	private static String obtenerEntidadProcedimiento(String idProcedimiento) throws Exception {
+		String entidad;
+		ProcedimientoBTE proc = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(idProcedimiento);
+		entidad = proc.getEntidad().getIdentificador();
+		return entidad;
 	}
 }

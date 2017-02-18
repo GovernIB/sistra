@@ -41,7 +41,6 @@ import es.caib.util.NifCif;
 import es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
-import es.caib.zonaper.persistence.delegate.DelegateException;
 import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
 import es.caib.zonaper.persistence.delegate.PadDelegate;
@@ -220,7 +219,7 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 			
 			if(notificacion.getOficinaRegistral() != null){
 				OficinaRegistral of = notificacion.getOficinaRegistral();
-				r.setOficinaRegistro(of.getCodigoOrgano(),of.getCodigoOficina());
+				r.setOficinaRegistro(of.getEntidad(), of.getCodigoOrgano(),of.getCodigoOficina());
 			}
 			if(notificacion.getDatosNotificacion() != null){
 				DatosNotificacion dn = notificacion.getDatosNotificacion();
@@ -276,10 +275,10 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 	 * @ejb.permission role-name = "${role.gestor}"
 	 * @ejb.permission role-name = "${role.auto}"
      */
-	public AcuseRecibo obtenerAcuseRecibo(String numeroRegistro) throws Exception {
+	public AcuseRecibo obtenerAcuseRecibo(String entidad, String numeroRegistro) throws Exception {
 		AcuseRecibo ar = null;
-		RegistroTelematicoDelegate rtd = DelegateRegtelUtil.getRegistroTelematicoDelegate();
-		Date date = rtd.obtenerAcuseRecibo(numeroRegistro);
+		RegistroTelematicoDelegate rtd = DelegateRegtelUtil.getRegistroTelematicoDelegate();		
+		Date date = rtd.obtenerAcuseRecibo(entidad, numeroRegistro);
 		ar = new AcuseRecibo();
 		ar.setFechaAcuseRecibo(date);
 		return ar;
@@ -293,10 +292,10 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 	 * @ejb.permission role-name = "${role.gestor}"
 	 * @ejb.permission role-name = "${role.auto}"
      */
-	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String numeroRegistro)  throws Exception {
+	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String entidad, String numeroRegistro)  throws Exception {
 		try {
 			PadBackOfficeDelegate 	ejb = new PadBackOfficeDelegate();
-			return ejb.obtenerDetalleAcuseRecibo(numeroRegistro);		
+			return ejb.obtenerDetalleAcuseRecibo(entidad, numeroRegistro);
 		} catch (Exception ex) {
 			throw new ExcepcionRegistroTelematico("Excepcion obteniendo detalle acuse recibo: " + numeroRegistro + " - error: " + ex.getMessage(), ex);
 		}
@@ -323,7 +322,7 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 			}
 			if(dEnt.getOficinaRegistral() != null){
 				OficinaRegistral of = dEnt.getOficinaRegistral();
-				r.setOficinaRegistro(of.getCodigoOrgano(),of.getCodigoOficina());
+				r.setOficinaRegistro(of.getEntidad(), of.getCodigoOrgano(),of.getCodigoOficina());
 			}
 			if(dEnt.getDatosAsunto() != null){
 				DatosAsunto da = dEnt.getDatosAsunto();

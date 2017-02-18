@@ -85,9 +85,8 @@ public class PruebaLecturaAsientoRegistral {
 	
 	private static void imprimirDatosOrigen (DatosOrigen o){
 		System.out.println ("DATOS ORIGEN");
-		
+		System.out.println ("Código entidad: " + o.getCodigoEntidad());
 		System.out.println ("Código entidad registral origen: " + o.getCodigoEntidadRegistralOrigen());
-		
 		System.out.println ("Fecha entrada registro: " + o.getFechaEntradaRegistro() );
 		System.out.println ("Número registro: " + o.getNumeroRegistro());
 		System.out.println ("Tipo registro: " + o.getTipoRegistro());

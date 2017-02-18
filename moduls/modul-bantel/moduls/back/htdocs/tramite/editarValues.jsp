@@ -2,13 +2,17 @@
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
+
 <html:xhtml/>
+
 <bean:define id="urlArbol">
     <html:rewrite page="/arbolProcs.do"/>
 </bean:define>
 <bean:define id="urlArbolServicios">
     <html:rewrite page="/arbolServicios.do"/>
 </bean:define>
+<bean:define id="entidad" name="entidad" type="java.lang.String"/>
+
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.4.1.min.js"></script>
 <script type="text/javascript">
      <!--
@@ -43,6 +47,28 @@
      // -->
 </script>
 <tr>
+	<td class="separador" colspan="2"><bean:message key="tramite.definicion"/></td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="tramite.identificador"/></td>
+    <td class="input"><html:text styleClass="data" tabindex="1" property="values.identificador" styleId="identificadorProcedimiento" maxlength="20" readonly="<%= request.getAttribute( \"idReadOnly\" ) != null %>" /></td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="tramite.descripcion"/></td>
+    <td class="input"><html:text styleClass="textLargo" tabindex="10" property="values.descripcion" maxlength="100"/></td>
+</tr>
+<tr>
+    <td class="label"><bean:message key="tramite.entidad"/></td>
+    <td class="input">
+    	<html:select property="values.entidad" disabled="<%= request.getAttribute( \"idReadOnly\" ) != null %>" >
+   			<html:options collection="listaEntidades" property="identificador" labelProperty="descripcion" />
+    	</html:select>
+    	<logic:present name="idReadOnly">
+    		<html:hidden property="values.entidad"/>
+    	</logic:present>
+    </td>
+</tr>
+<tr>
 	<td class="separador" colspan="2"><bean:message key="tramite.procExterno"/></td>
 </tr>
 <tr>
@@ -54,18 +80,9 @@
 		/>
     </td>
 </tr>
-<tr>
-	<td class="separador" colspan="2"><bean:message key="tramite.definicion"/></td>
-</tr>
-<tr>
-    <td class="labelo"><bean:message key="tramite.identificador"/></td>
-    <td class="input"><html:text styleClass="data" tabindex="1" property="values.identificador" styleId="identificadorProcedimiento" maxlength="20" readonly="<%= request.getAttribute( \"idReadOnly\" ) != null %>" /></td>
-</tr>
-<tr>
-    <td class="labelo"><bean:message key="tramite.descripcion"/></td>
-    <td class="input"><html:text styleClass="textLargo" tabindex="10" property="values.descripcion" maxlength="100"/></td>
-</tr>
 
+
+<logic:present name="idReadOnly">                                    
 
 <tr>
 	<td class="separador" colspan="2"><bean:message key="tramite.gestionExpedientes"/></td>
@@ -92,7 +109,7 @@
     	<html:select property="values.organoRegistro">
    			<html:options collection="listaOrganos" property="codigo" labelProperty="descripcion" />
     	</html:select>
-    	<input type="button" value="..."  class = "botonEditar" onclick="mostrarArbolServicios('<%=urlArbolServicios + "?id=values.organoRegistro" %>');"/>
+    	<input type="button" value="..."  class = "botonEditar" onclick="mostrarArbolServicios('<%=urlArbolServicios + "?id=values.organoRegistro&entidad=" + entidad %>');"/>
     </td>
 </tr>
 <tr>
@@ -199,3 +216,5 @@
 		</tr>
 	</logic:present>
 </logic:notEmpty>
+
+</logic:present>

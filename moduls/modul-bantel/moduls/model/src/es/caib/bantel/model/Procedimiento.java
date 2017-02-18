@@ -22,6 +22,7 @@ public class Procedimiento implements Serializable{
 		
 	private String identificador;
 	private String descripcion;
+	private String entidad;
 	private String idProcExt;
 	private char inmediata = 'N';
 	private Long intervaloInforme;
@@ -231,6 +232,11 @@ public class Procedimiento implements Serializable{
 			String emailRespuestaAvisosProcedimiento) {
 		this.emailRespuestaAvisosProcedimiento = emailRespuestaAvisosProcedimiento;
 	}
-	
+	public String getEntidad() {
+		return entidad;
+	}
+	public void setEntidad(String entidad) {
+		this.entidad = entidad;
+	}
 	
 }

@@ -31,8 +31,9 @@ public class FuncsNodesServiciosController extends BaseController
     public void perform(ComponentContext arg0, HttpServletRequest request, HttpServletResponse arg2, ServletContext arg3) throws ServletException, IOException
     {
         try {
+        	String entidad = request.getParameter("entidad");
         	RegistroTelematicoDelegate regtel = DelegateRegtelUtil.getRegistroTelematicoDelegate();
-            List organosDestino = regtel.obtenerServiciosDestino(); 
+            List organosDestino = regtel.obtenerServiciosDestino(entidad); 
         	request.setAttribute( "nodosArbol", createNodos(request, organosDestino));
         } catch (Exception e) {
             throw new ServletException(e);

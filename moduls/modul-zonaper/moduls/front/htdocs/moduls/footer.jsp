@@ -45,6 +45,7 @@
 	<!-- ayuda -->
 		<div id="suportTecnic">
 			<h2><bean:message key="footer.soporte.ayuda"/></h2>
+			<div id="contactoAdministradorUrl">
 			<p>
 				<!--  Soporte por url y telefono (opcional) -->
 				<logic:notEqual name="urlSoporte" value="&nbsp;">
@@ -68,6 +69,7 @@
 					</logic:notEqual>
 				</logic:equal>					
 			</p>		
+			</div>
 			<div id="contactoAdministradorContent"></div>	
 			<p align="center">
 				<a id="suportDescartar" title="<bean:message key="footer.soporte.continuar"/>" href="javascript:void(0);">

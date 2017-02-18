@@ -138,9 +138,9 @@ public abstract class DominiosFacadeEJB implements SessionBean {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.registro}"
      */
-    public List obtenerOficinas(char tipoRegistro, String usuario) {
+    public List obtenerOficinas(String entidad, char tipoRegistro, String usuario) {
     	try{    		
-    		List oficinas = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerOficinasRegistroUsuario(tipoRegistro, usuario);
+    		List oficinas = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerOficinasRegistroUsuario(entidad,tipoRegistro, usuario);
     		return listValorOrganismoToListValorDominio(oficinas);    		
     	}catch (Exception ex){
     		throw new EJBException(ex);    	
@@ -153,9 +153,9 @@ public abstract class DominiosFacadeEJB implements SessionBean {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.registro}"
      */
-    public String obtenerDescripcionSelloOficina(char tipoRegistro, String oficina) {
+    public String obtenerDescripcionSelloOficina(char tipoRegistro, String entidad, String oficina) {
     	try{    		
-    		return DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerDescripcionSelloOficina(tipoRegistro, oficina);    		    	
+    		return DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerDescripcionSelloOficina(tipoRegistro, entidad, oficina);    		    	
     	}catch (Exception ex){
     		throw new EJBException(ex);    	
     	}    		    
@@ -167,9 +167,9 @@ public abstract class DominiosFacadeEJB implements SessionBean {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.registro}"
      */
-    public List obtenerTiposAsunto() {
+    public List obtenerTiposAsunto(String entidad) {
     	try{
-    		List asuntos = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerTiposAsunto();
+    		List asuntos = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerTiposAsunto(entidad);
     		return listValorOrganismoToListValorDominio(asuntos);
     	}catch (Exception ex){
     		throw new EJBException(ex);    	

@@ -23,8 +23,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import com.lowagie.text.Font;
+
 import javax.imageio.ImageIO;
 
+import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
+import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
 import es.caib.regtel.model.ConstantesRegtel;
 import es.caib.util.StringUtil;
 import es.caib.zonaper.back.Constants;
@@ -72,11 +75,15 @@ public class ImprimirSelloAction extends BaseAction
 		String numeroRegistro 	= preregistro.getNumeroRegistro();
 		Date fechaRegistro 		= preregistro.getFechaConfirmacion();
 		
+		// OBtenemos entidad asociada
+		ProcedimientoBTE proc =  DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(preregistro.getProcedimiento());
+        String entidad = proc.getEntidad().getIdentificador();
+		
 		String strFechaRegistro = StringUtil.timestampACadena( fechaRegistro );
 		
 		String descOficina = "";
 		if (StringUtils.isNotBlank(pi.getCodigoOficinaRegistro())) {
-			descOficina = DelegateUtil.getDominiosDelegate().obtenerDescripcionSelloOficina(ConstantesRegtel.REGISTRO_ENTRADA, pi.getCodigoOficinaRegistro());
+			descOficina = DelegateUtil.getDominiosDelegate().obtenerDescripcionSelloOficina(ConstantesRegtel.REGISTRO_ENTRADA, entidad, pi.getCodigoOficinaRegistro());
 			if ( descOficina == null )
 			{
 				this.setMessage( request, "errors.descSelloOficinaVacio" );

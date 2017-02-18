@@ -476,6 +476,7 @@ public class FactoriaObjetosXMLRegistroImpl
 		if (datosOrigenJAXB != null){
 			datosOrigen = crearDatosOrigen ();
 			
+			datosOrigen.setCodigoEntidad (datosOrigenJAXB.getCODIGOENTIDAD());
 			datosOrigen.setCodigoEntidadRegistralOrigen (datosOrigenJAXB.getCODIGOENTIDADREGISTRALORIGEN());
 			datosOrigen.setNumeroRegistro (datosOrigenJAXB.getNUMEROREGISTRO());
 			
@@ -716,7 +717,7 @@ public class FactoriaObjetosXMLRegistroImpl
 			dOrigenRaw = new DATOSORIGEN ();
 			Date fechaEntradaRegistro = datosOrigen.getFechaEntradaRegistro();
 			
-			
+			dOrigenRaw.setCODIGOENTIDAD (datosOrigen.getCodigoEntidad());
 			dOrigenRaw.setCODIGOENTIDADREGISTRALORIGEN (datosOrigen.getCodigoEntidadRegistralOrigen());
 			dOrigenRaw.setFECHAENTRADAREGISTRO ( ( (fechaEntradaRegistro != null) ? fmt.format (fechaEntradaRegistro) : "") );
 			dOrigenRaw.setNUMEROREGISTRO (datosOrigen.getNumeroRegistro());

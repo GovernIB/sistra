@@ -7,6 +7,9 @@
 <class  name="es.caib.zonaper.model.LogRegistro" table="ZPE_REGLOG">
 	<cache usage="read-write"/>
   	<composite-id name="id" class="es.caib.zonaper.model.LogRegistroId" >
+  		<key-property name="entidad" type="string">
+   		 	<column name="RLG_IDEENT" />
+    	</key-property>
 	    <key-property name="tipoRegistro" type="string" length="1">
 		    <column name="RLG_TIPREG" />
 	    </key-property>

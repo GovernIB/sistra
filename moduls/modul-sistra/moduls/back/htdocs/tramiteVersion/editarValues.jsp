@@ -12,6 +12,8 @@
 <bean:define id="urlEditarText">
     <html:rewrite page="/editarText.jsp"/>
 </bean:define>
+<bean:define id="entidad" name="entidad" type="java.lang.String"/>
+
 <html:xhtml/>
 <script type="text/javascript">
      <!--
@@ -190,7 +192,7 @@
     	<html:select property="values.organoDestino">
    			<html:options collection="listaorganosdestino" property="CODIGO" labelProperty="DESCRIPCION" />
     	</html:select>
-    	<input type="button" value="..."  class = "botonEditar" onclick="mostrarArbolServicios('<%=urlArbolServicios + "?id=values.organoDestino" %>');"/>
+    	<input type="button" value="..."  class = "botonEditar" onclick="mostrarArbolServicios('<%=urlArbolServicios + "?id=values.organoDestino&entidad=" + entidad %>');"/>
     </td>
 </tr>
 <tr>

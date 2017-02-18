@@ -14,13 +14,14 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.Controller;
 
+import es.caib.bantel.back.form.TramiteForm;
+import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
+import es.caib.bantel.persistence.delegate.EntidadDelegate;
 import es.caib.bantel.persistence.delegate.VersionWSDelegate;
 import es.caib.sistra.modelInterfaz.ValoresDominio;
 import es.caib.sistra.persistence.delegate.DelegateSISTRAUtil;
-import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.regtel.ConstantesPluginRegistro;
-import es.caib.sistra.plugins.regtel.PluginRegistroIntf;
 
 
 public class TramiteController implements Controller
@@ -36,21 +37,42 @@ public class TramiteController implements Controller
 		{
             log.debug("Entramos en versionWSController");
             
-            // Obtenemos lista de versiones
-            VersionWSDelegate vWSdelegate = DelegateUtil.getVersionWSDelegate();
-            List versiones = vWSdelegate.obtenerVersiones();
-            request.setAttribute( "listaVersionesWS", versiones);
+            List versiones = new ArrayList();
+            List unidades= new ArrayList();
+            List oficinas= new ArrayList();
+            List organos= new ArrayList();
+            List listaEntidades= new ArrayList();
+            String entidad = "";
+             
+            // Entidades
+    		EntidadDelegate entidadDelegate = DelegateUtil.getEntidadDelegate();
+    		listaEntidades= entidadDelegate.listarEntidades();	   
             
-            // Obtenemos lista de u.a.
-            List unidades=listarUnidadesAdministrativas();
+            // Mostramos solo para modificaciones
+            if (request.getAttribute("idReadOnly") != null) {
+            	
+            	// Obtenemos entidad asociada
+            	TramiteForm formulario = ( TramiteForm ) request.getSession().getAttribute("tramiteForm");
+            	Procedimiento procedimiento = ( Procedimiento ) formulario.getValues();
+            	entidad = procedimiento.getEntidad();
+            	
+            	// Obtenemos lista de versiones
+	            VersionWSDelegate vWSdelegate = DelegateUtil.getVersionWSDelegate();
+	            versiones = vWSdelegate.obtenerVersiones();
+	            // Obtenemos lista de u.a.
+	            unidades=listarUnidadesAdministrativas();
+	         	// Obtenemos oficinas y organos
+	            oficinas=listarOficinasSalida(entidad);
+	    		organos=listarOrganos(entidad);
+	    		         
+            }            
+            request.setAttribute( "listaVersionesWS", versiones);
     		request.setAttribute("listaUnidadesAdministrativa",unidades);
-    		
-    		 // Obtenemos oficinas y organos
-            List oficinas=listarOficinasSalida();
     		request.setAttribute("listaOficinas",oficinas);
-    		List organos=listarOrganos();
     		request.setAttribute("listaOrganos",organos);
-
+    		request.setAttribute("listaEntidades", listaEntidades );
+    		request.setAttribute("entidad", entidad );
+    		
         } catch (Exception e) {
             throw new ServletException(e);
         }
@@ -60,21 +82,21 @@ public class TramiteController implements Controller
 
 	/**
 	 * Listar organos.
+	 * @param entidad 
 	 * @return organos
 	 */
-	private List listarOrganos()  throws Exception {
-		PluginRegistroIntf plgRegistro = PluginFactory.getInstance().getPluginRegistro();
-		List servicios = plgRegistro.obtenerServiciosDestino();
+	private List listarOrganos(String entidad)  throws Exception {
+		List servicios = es.caib.regtel.persistence.delegate.DelegateUtil.getRegistroOrganismoDelegate().obtenerServiciosDestino(entidad);
 		return servicios;
 	}
 
 	/**
 	 * Lista oficinas registro salida.
+	 * @param entidad 
 	 * @return oficinas
 	 */
-	private List listarOficinasSalida() throws Exception {
-		PluginRegistroIntf plgRegistro = PluginFactory.getInstance().getPluginRegistro();
-		List oficinas = plgRegistro.obtenerOficinasRegistro(ConstantesPluginRegistro.REGISTRO_SALIDA);
+	private List listarOficinasSalida(String entidad) throws Exception {
+		List oficinas =  es.caib.regtel.persistence.delegate.DelegateUtil.getRegistroOrganismoDelegate().obtenerOficinasRegistro(entidad, ConstantesPluginRegistro.REGISTRO_SALIDA);		
 		return oficinas;
 	}
 

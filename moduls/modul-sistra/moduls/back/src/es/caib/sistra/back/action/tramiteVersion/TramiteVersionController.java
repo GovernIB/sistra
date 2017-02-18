@@ -12,13 +12,20 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.tiles.ComponentContext;
 
+import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
+import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
 import es.caib.regtel.model.ConstantesRegtel;
 import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
 import es.caib.regtel.persistence.delegate.RegistroTelematicoDelegate;
 import es.caib.sistra.back.action.BaseController;
+import es.caib.sistra.back.form.DocumentoNivelForm;
+import es.caib.sistra.back.form.TramiteVersionForm;
+import es.caib.sistra.model.Documento;
+import es.caib.sistra.model.Tramite;
 import es.caib.sistra.modelInterfaz.ConstantesDominio;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
 import es.caib.sistra.persistence.delegate.IdiomaDelegate;
+import es.caib.sistra.persistence.delegate.TramiteDelegate;
 import es.caib.sistra.persistence.delegate.VersionWSDelegate;
 
 /**
@@ -36,6 +43,14 @@ public class TramiteVersionController extends BaseController{
          try {
             log.debug("Entramos en TramiteVersionController");
             
+            // OBtenemos entidad
+            TramiteDelegate tramDelegate = DelegateUtil.getTramiteDelegate();
+            TramiteVersionForm formulario = ( TramiteVersionForm ) request.getSession().getAttribute("tramiteVersionForm");			
+			Tramite tramite = tramDelegate.obtenerTramite(formulario.getIdTramite());
+			ProcedimientoBTE proc = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(tramite.getProcedimiento());
+			String entidad = proc.getEntidad().getIdentificador();
+			request.setAttribute( "entidad", entidad );
+            
             // Obtenemos lista de idiomas
             IdiomaDelegate delegate = DelegateUtil.getIdiomaDelegate();
             List lenguajes = delegate.listarLenguajes();
@@ -49,9 +64,9 @@ public class TramiteVersionController extends BaseController{
            
             // Obtenemos info registro
            RegistroTelematicoDelegate dlgRte = DelegateRegtelUtil.getRegistroTelematicoDelegate();
-           List organosDestino = dlgRte.obtenerServiciosDestino();
-           List oficinasRegistro = dlgRte.obtenerOficinasRegistro(ConstantesRegtel.REGISTRO_ENTRADA);
-           List tiposAsunto = dlgRte.obtenerTiposAsunto();
+           List organosDestino = dlgRte.obtenerServiciosDestino(entidad);
+           List oficinasRegistro = dlgRte.obtenerOficinasRegistro(entidad, ConstantesRegtel.REGISTRO_ENTRADA);
+           List tiposAsunto = dlgRte.obtenerTiposAsunto(entidad);
                       
            // Establecemos listas de valores
            request.setAttribute( "listaorganosdestino", ajustarTamListaDesplegable ( organosDestino, MAX_COMBO_DESC , "DESCRIPCION")  );

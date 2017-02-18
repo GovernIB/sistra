@@ -35,6 +35,23 @@
         </putList>
     </definition>
     
+        <!-- ====================== entidad =================== -->
+    <definition name=".entidad.editar" extends=".editar"  
+    	controllerClass="es.caib.bantel.back.action.entidad.EntidadController">
+        <put name="title" value="entidad.title"/>
+        <put name="alta.title" value="entidad.alta"/>
+        <put name="modificacion.title" value="entidad.modificacion"/>
+        <put name="subtitle" value="entidad.subtitulo"/>
+        <put name="validateMethod" value="validateEntidadForm"/>
+        <put name="form.action" value="/back/entidad/editar"/>
+        <put name="form.bean" value="entidadForm"/>
+        <put name="values.codigo" value="values.identificador" />
+        <put name="paginaValues" value="/entidad/editarValues.jsp"/>
+    </definition>
+    <definition name=".entidad.lista" path="/entidad/lista.jsp"
+        controllerClass="es.caib.bantel.back.action.entidad.ListaEntidadController"/>
+    
+    
     <!-- ====================== procedimiento =================== -->
     <definition name=".tramite.editar" extends=".editar"  
     	controllerClass="es.caib.bantel.back.action.tramite.TramiteController">
