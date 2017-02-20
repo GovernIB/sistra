@@ -7,6 +7,8 @@ import java.util.Properties;
 
 import es.caib.sistra.model.OrganismoInfo;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Accede a la configuracion del modulo
  *
@@ -61,6 +63,12 @@ public class ConfigurationUtil {
 				organismoInfo.setPieContactoHTML(propiedades.getProperty("organismo.footer.contacto"));
 				organismoInfo.setTelefonoIncidencias(propiedades.getProperty("organismo.soporteTecnico.telefono"));
 				organismoInfo.setUrlSoporteIncidencias(propiedades.getProperty("organismo.soporteTecnico.url"));
+				String formularioIncidencias = propiedades.getProperty("organismo.soporteTecnico.formulario");
+				if (StringUtils.isNotBlank(formularioIncidencias) && "true".equals(formularioIncidencias)) {
+					organismoInfo.setFormularioIncidencias(true);
+				} else {
+					organismoInfo.setFormularioIncidencias(false);
+				}
 				organismoInfo.setEmailSoporteIncidencias(propiedades.getProperty("organismo.soporteTecnico.email"));
 				organismoInfo.setUrlCssCustom(propiedades.getProperty("organismo.cssCustom"));
 				organismoInfo.setUrlLoginCssCustom(propiedades.getProperty("organismo.cssLoginCustom"));

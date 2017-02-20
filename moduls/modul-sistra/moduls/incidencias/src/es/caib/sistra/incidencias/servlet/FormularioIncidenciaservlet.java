@@ -243,7 +243,7 @@ public class FormularioIncidenciaservlet extends HttpServlet
 		String paramValue = paramString.get(paramName);		
 		if (StringUtils.isNotBlank(paramValue)) {
 			if ("problemaTipo".equals(paramName)) {
-				paramValue = getLiteral(lang, "incidencias.problema." + paramValue);
+				paramValue = getDescIncidencia(lang, paramValue);
 			}
 			
 			res += "<tr><th>" + StringEscapeUtils.escapeHtml(paramDesc) + "</th><td>" + StringEscapeUtils.escapeHtml(paramValue) +"</td></tr>";
@@ -274,11 +274,15 @@ public class FormularioIncidenciaservlet extends HttpServlet
 			String[] listTipos = tipos.split(",");
 			for (String t : listTipos) {
 				String descTipo = null;    					
-				descTipo = getLiteral(lang, "incidencias.problema." + t);
+				descTipo = getDescIncidencia(lang, t);
 				problemasLista.put(t, descTipo);				    				
 			}
 		}
 		return problemasLista;
+	}
+	
+	private String getDescIncidencia(String lang, String tipoIncidencia){
+		return propiedadesConfiguracion.getProperty("incidencias." + tipoIncidencia + "." + lang);
 	}
 	
 	private String getLiteral(String lang, String codLiteral) {

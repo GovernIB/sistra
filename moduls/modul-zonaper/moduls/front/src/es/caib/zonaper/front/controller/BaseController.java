@@ -20,6 +20,7 @@ import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.Controller;
 import org.apache.struts.util.MessageResources;
 
+import es.caib.util.ContactoUtil;
 import es.caib.util.StringUtil;
 import es.caib.zonaper.front.Constants;
 import es.caib.zonaper.front.util.ZonapersFrontRequestHelper;
@@ -69,6 +70,28 @@ public abstract class BaseController implements Controller {
 			}
 			request.getSession().setAttribute( "urlSistraAFirma", urlSistra );
 		}
+		
+		// Generamos literal de contacto
+		OrganismoInfo oi = (OrganismoInfo) servletContext.getAttribute(Constants.ORGANISMO_INFO_KEY);
+		
+		String telefono = oi.getTelefonoIncidencias();
+		String email = oi.getEmailSoporteIncidencias();
+		String url = oi.getUrlSoporteIncidencias();
+		boolean formulario = oi.getFormularioIncidencias();
+		String asunto = (String) oi.getReferenciaPortal().get(locale.getLanguage());
+		
+		String lang = locale.getLanguage();
+		
+		String literalContacto;
+		try {
+			literalContacto = ContactoUtil.generarLiteralContacto(telefono, email, url,
+				asunto, formulario, lang);
+		} catch (Exception e) {
+		       throw new ServletException(e);	    
+		}
+		
+		request.setAttribute("literalContacto", literalContacto);
+		
     }
 
     abstract public void execute(ComponentContext tileContext,

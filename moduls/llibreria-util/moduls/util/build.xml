@@ -29,6 +29,7 @@
 	    	<include name="commons-*.jar"/>
     		<include name="javacsv.jar"/>
     		<include name="ejb-2_0.jar"/>
+    		<include name="struts.jar"/>
     	</fileset>
     	<fileset dir="${distribucion.dir}/lib">
             <include name="sistra-plugins.jar"/>
@@ -57,9 +58,15 @@
 
     <target name="jar.jar" depends="jar.compile">
         <delete file="${jar.product}/sistra-util.jar" quiet="yes"/>
-        <jar
-            jarfile="${jar.product}/sistra-util.jar"
-            basedir="${jar.classes}">
+        <jar jarfile="${jar.product}/sistra-util.jar">
+            
+            <fileset dir="${jar.classes}" 
+               includes="**/*.class"/>
+                  
+			<fileset dir="${jar.src}">
+		      	<include name="**/*.properties"/>
+		    </fileset>
+		    
             <manifest>
                 <attribute name="Created-By" value="${indra}"/>
             	<attribute name="Specification-Title" value="${modul}"/>

@@ -64,6 +64,7 @@ $(document).ready(function(){
 	$("#equipSuport").click(function () {
 		var capaI = document.getElementById('contactoAdministradorContent');	
 		capaI.innerHTML = "";
+		mostrarCapa('contactoAdministradorSoporte', true);	
 		$.mostrarAyuda(true);
 	});
 	$("#suportDescartar").click(function () {
