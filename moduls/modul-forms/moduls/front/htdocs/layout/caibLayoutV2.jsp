@@ -9,6 +9,10 @@
 
 <bean:define id="locale" name="<%=Globals.LOCALE_KEY%>" scope="Session" type="java.util.Locale"/>
 
+<bean:define id="urlFormularioIncidencias">
+ <html:rewrite page="/mostrarFormularioIncidencias.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
+</bean:define>
+
 <!--  Retorno pantalla detalle -->
 <logic:present name="listaelementos@retorno" scope="request">
 	<html lang="<%=locale.getLanguage()%>_<%=locale.getLanguage().toUpperCase()%>">
@@ -70,7 +74,8 @@
 	<script src="<html:rewrite page='<%="/js/v2/literals/jquery-imc-literals-calendari-" + locale.getLanguage() + "_" + locale.getLanguage().toUpperCase() + ".js"%>'/>"></script>
 	<script src="<html:rewrite page='<%="/js/v2/literals/vars-imc-literals-" + locale.getLanguage() + "_" + locale.getLanguage().toUpperCase() + ".js"%>'/>"></script>	
 	<script src="<html:rewrite page='/js/v2/jquery-imc-comuns.js'/>"></script>
-	<script src="<html:rewrite page='/js/v2/jquery-imc-forms-funcions.js'/>"></script>	
+	<script src="<html:rewrite page='/js/v2/jquery-imc-forms-funcions.js'/>"></script>
+	<script src="<html:rewrite page='/js/v2/ayuda.js'/>"></script>		
 		
 	<logic:present name="pantalla">
 		<script src="<html:rewrite page='/js/v2/xmlhttp.js'/>"></script>		
@@ -79,6 +84,14 @@
 	
 	<!-- inicia! -->
 	<script src="<html:rewrite page='/js/v2/jquery-imc-forms-inicia.js'/>"></script>
+	
+	<script type="text/javascript">
+	<!--
+		function formularioIncidencias() {
+			mostrarFormularioIncidencias('<%=urlFormularioIncidencias%>');
+		}
+	-->
+	</script>
 	
 		
 </head>
@@ -193,22 +206,52 @@
 			<address>
 				<bean:write name="<%=org.ibit.rol.form.front.Constants.ORGANISMO_INFO_KEY%>" property="pieContactoHTML" filter="false"/>				
 			</address>
-			<!--  
-			<p class="imc-ajuda-suport">¿Necesita Ayuda? Contacte con el <a href="#">equipo de soporte</a>.</p>
-			 -->			 
-			<logic:present name="pantalla">				
-				<bean:define id="urlLog" type="java.lang.String">
-				        <html:rewrite page="/logScript.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
-				</bean:define>
-				 <% if (org.ibit.rol.form.front.util.Util.permitirDebugScript())  { %>
-					<input type="button" onclick="obrir('<%=urlLog%>','log',600,600)" value="Debug script" />
-				<% } %>
-			</logic:present>
+			
+			
+			<p class="imc-ajuda-suport">
+				<bean:message key="header.mailAdministrador"/>
+				<a href="javascript:void(0)" onclick="mostrarAyudaAdmin();">
+				<bean:message key="header.mailAdministrador.enlace"/>
+				</a>.
+			</p>
+				
+			
 		</aside>
 		</logic:equal>
 	
 	</div>
 	<!-- /contenidor -->
+
+	
+	<logic:present name="pantalla">
+		<p align="center">				
+				<bean:define id="urlLog" type="java.lang.String">
+				        <html:rewrite page="/logScript.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
+				</bean:define>
+				 <% if (org.ibit.rol.form.front.util.Util.permitirDebugScript())  { %>
+					<input type="button" onclick="obrir('<%=urlLog%>','log',600,600)" value="Debug script" />
+				<% } %>	
+		</p>
+	</logic:present>
+				
+
+	<!-- Contacto soporte -->		
+	<div id="contactoAdministrador" class="contactoAdministrador">
+		<h1 class="ayuda"><bean:message key="administrador.ayuda"/></h1>
+		<div id="contactoAdministradorSoporte">	
+		<p class="ayuda">		
+			<bean:write name="literalContacto" filter="false"/>			
+		</p>
+		</div>
+		<div id="contactoAdministradorContent"></div>
+		<p align="center">
+			<a title="<bean:message key="message.continuar"/>" onclick="javascript:ocultarAyudaAdmin();" href="javascript:void(0);">
+			<bean:message key="message.continuar"/>
+			</a>
+		</p>	
+	</div>	
+	<!--  /Ayuda -->
+
 
 </body>
 
