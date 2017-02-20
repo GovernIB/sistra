@@ -1,21 +1,47 @@
-<%@ page contentType="text/html; charset=ISO-8859-1" import="java.util.*, org.apache.struts.Globals" %>
+<%@ page contentType="text/html; charset=ISO-8859-1"%>
+<%@ page import="java.util.*, org.apache.struts.Globals, es.caib.util.ConvertUtil, java.io.FileInputStream,es.caib.sistra.plugins.PluginFactory, es.caib.sistra.plugins.login.PluginLoginIntf, java.lang.reflect.Method" %>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%
+	
+	// Parametros login clave
+	Object savedRequest = null;
+	boolean esLoginClave = false;
+	String ticketClave = null;
+	String urlCallback = null;	
+	String urlClave = null;
+	String urlDestino = null;	
+	String language = null;	
+	
+	// Request origen 
+	savedRequest = session.getAttribute("savedrequest");
+	
+	// Configuracion
 	es.caib.zonaper.persistence.delegate.ConfiguracionDelegate delegateF = es.caib.zonaper.persistence.delegate.DelegateUtil.getConfiguracionDelegate();
-	
 	java.util.Properties configProperties =  delegateF.obtenerConfiguracion();
-	
 	String urlSistra = configProperties.getProperty("sistra.url");
-	
+	String contextoRaiz = configProperties.getProperty("sistra.contextoRaiz.front");
 	es.caib.zonaper.model.OrganismoInfo infoOrg = delegateF.obtenerOrganismoInfo();
 	
-	String lang = request.getParameter("language");
-	if (lang == null) {
-	   lang = "ca";
+	// Idioma
+	language = request.getParameter("language");
+	if (language == null) {
+		language = request.getParameter("lang");			
 	}
-	request.setAttribute("lang", lang);
+	if (language == null) {			
+		language = "es";
+	}
+	request.setAttribute("lang", language);
+	
+	// Obtenemos url origen y query string
+	Method methodUrlOrigen = savedRequest.getClass().getDeclaredMethod("getRequestURI", null);
+	String urlSavedRequest =  (String) methodUrlOrigen.invoke(savedRequest, null);
+	Method methodQueryString = savedRequest.getClass().getDeclaredMethod("getQueryString", null);
+	String queryStringSavedRequest =  (String) methodQueryString.invoke(savedRequest, null);
+	
+	// Indica si es login despues de pasar por clave
+	esLoginClave = savedRequest.getRequestURI().endsWith("/protected/loginClave.jsp");
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -26,6 +52,11 @@
 <link href="<%=infoOrg.getUrlLoginCssCustom()%>" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
 <!--
+function loginClave()
+{
+	document.getElementById('loginClave').submit();
+}
+
 
 function ocultarAyudaAdmin() {
 	var capaI = document.getElementById('contactoAdministrador');
@@ -76,13 +107,13 @@ function mostrarAyudaAdmin() {
 <!-- DETECCION NAVEGADOR (Compatibles: IE >=6 , FireFox >= 1.5)-->
 <script type="text/javascript">
 <!--
+
 function checkIt(string)
 {
 	place = detect.indexOf(string) + 1;
 	thestring = string;
 	return place;
 }
-
 
 var detect = navigator.userAgent.toLowerCase();
 var OS,browser,version,total,thestring,aux,posDecimal;
@@ -143,78 +174,33 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 <%@ include file="loginCustom.jsp" %>
 <!--  PARTICULARIZACION LOGIN -->
 
-<% if (niveles.indexOf("C")>=0){ %>
-<!--  FIRMA DIGITAL -->
-<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/configClienteaFirmaSistra.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/miniapplet.js"></script>	
-		
-
-<script type="text/javascript">
-<!--	
-		base = "<%=urlSistra%><%=request.getContextPath()%>/firma/aFirma";
-		baseDownloadURL = "<%=urlSistra%><%=request.getContextPath()%>/firma/aFirma";
-
-		function prepararEntornoFirma(){
-			MiniApplet.cargarMiniApplet(base);
-		}
-		
-		function saveSignatureCallback(signatureB64) {
-				if (signatureB64 == "AA==") {
-					alert("<bean:message key="firma.miniapplet.appletinactivo" />");
-					return false;
-				}
-				document.formCD.j_password.value = "{FIRMA:"+signatureB64+"}";	
-				document.formCD.submit();
-		}
-		
-		function showLogCallback(errorType, errorMessage) {
-				error = 'Error: '+errorMessage;
-				alert(error);
-				console.log("Type: " + errorType + "\nMessage: " + errorMessage);
-				return false;
-		}
-		
-		function loginCertificado(form){
-	      	if (MiniApplet == undefined) { 
-	          alert("No se ha podido instalar el entorno de firma");
-	          return false;
-	       	}
-	      	
-	      	var cadena = document.formCD.j_username.value;
-			MiniApplet.sign(
-				cadena,
-				sistra_ClienteaFirma_SignatureAlgorithm,//"SHA1withRSA",
-				sistra_ClienteaFirma_SignatureFormat,//"CAdES",
-				"",
-				saveSignatureCallback,
-				showLogCallback);
-		}
-		
-//-->
-</script>
-<% } else { %>
-<script type="text/javascript">
-<!--			
-		function prepararEntornoFirma() {
-			// no fer res
-		}
-//-->
-</script>
-<% } %>
-
-</head>
-
-<body>
-
-	<script type="text/javascript">
-	<!--			
-	prepararEntornoFirma();
-	//-->
-	</script>
-
-
 <%
-    //  Contacto soporte 
+
+	//Si la url origen es loginClave.jsp, hacemos login automatico
+	if (esLoginClave) {		
+		// Obtenemos ticket pasado por POST
+		Class[] paramsParametersOrigen = new Class[] {String.class};
+		Method methodParametersOrigen = savedRequest.getClass().getDeclaredMethod("getParameterValues", paramsParametersOrigen);
+		String[] values =  (String []) methodParametersOrigen.invoke(savedRequest, new String("ticket"));
+		System.out.println( "VALORES:" + values.length );
+		ticketClave = values[0];						
+	} else {
+		// Url Callback
+		if (request.getContextPath().indexOf("zonaperfront") != -1) {
+			urlCallback = urlSistra + contextoRaiz + "/zonaperfront/protected/loginClave.jsp";
+		} else {
+			urlCallback = urlSistra + contextoRaiz + "/sistrafront/protected/loginClave.jsp";
+		}		
+		// Url redireccion clave			
+		urlClave = urlSistra + contextoRaiz + "/clientcert-login/init.do";
+		// Url destino
+		urlDestino = urlSavedRequest;
+		if (queryStringSavedRequest != null) {
+			urlDestino += "?" + queryStringSavedRequest;
+		}
+	}	
+
+	//  Contacto soporte 
     String telefonoSoporte = infoOrg.getTelefonoIncidencias();
     if (telefonoSoporte == null) {
       telefonoSoporte = "&nbsp;";
@@ -236,8 +222,14 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 	// Construimos url de soporte reemplazando variables
 	String tituloTramite = es.caib.util.StringUtil.replace(textoAtencion,"\"","\\\"");
     String urlSoporteFinal = es.caib.util.StringUtil.replace(urlSoporte,"@asunto@",tituloTramite);
-    urlSoporteFinal = es.caib.util.StringUtil.replace(urlSoporteFinal,"@idioma@",lang);		    
+    urlSoporteFinal = es.caib.util.StringUtil.replace(urlSoporteFinal,"@idioma@",language);		    
 %>
+
+</head>
+
+<body <%=(esLoginClave?"onload='loginClave();'":"")%> >
+
+
 <%-- <logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_EN_IFRAME%>" value="false"> --%>
 <div id="contactoAdministrador" class="contactoAdministrador">
 	<h1 class="ayuda"><bean:message key="administrador.ayuda"/></h1>
@@ -286,25 +278,38 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 	<div id="continguts">
 		<!-- tramitacion -->
 		<div id="tramitacion">
-		
 			<br />
+			<% if (esLoginClave) { %>
+			<bean:message key="login.clave.redirigiendoClave" />
+			<form id="loginClave" action="j_security_check" method="post">
+				<input name="j_username" id="j_username" type="hidden" value="{TICKET-<%=session.getId()%>}"/>
+				<input name="j_password" id="j_password" type="hidden" value="<%=ticketClave%>"/>							
+			</form>	
+			<% } %>
+			
+			
+			
+			<% if (!esLoginClave) { %>
+						
 			<bean:message key="login.presentacion.parrafo1" />
 			<%if (textoAtencion.length() > 0){ %>
 			:<p id="nomTramit"><%=textoAtencion%></p>
 			<%}%>	
 			<p><bean:message key="login.presentacion.parrafo2" /></p>
 			
-			<% if (niveles.indexOf("C")>=0){ %>
+			<% if (niveles.indexOf("C")>=0 ){ %>
 			<div id="indexCD">
-				<h2><bean:message key="login.certificado.titulo" /></h2>
-				<p><bean:message key="login.certificado.instrucciones.parrafo" /></p>
-				<form name="formCD" method="post" action="j_security_check">
-					<input name="j_username" id="j_username" type="hidden" value="<%=request.getSession().getId()%>"/>
-					<input name="j_password" id="j_password" type="hidden" />				
+				<h2><bean:message key="login.clave.titulo" /></h2>
+				<p><bean:message key="login.clave.instrucciones" /></p>
+				
+				<form name="formCD" action="<%=urlClave%>" method="post">
+					<input type="hidden" name="urlCallbackLogin" value="<%=ConvertUtil.cadenaToBase64UrlSafe(urlCallback)%>" />
+					<input type="hidden" name="urlDestino" value="<%=ConvertUtil.cadenaToBase64UrlSafe(urlDestino)%>" />
+					<input type="hidden" name="idioma" value="<%=language%>" />
 					<p class="formBotonera">
-						<input type="button" onClick="loginCertificado();" value="<bean:message key="login.boton.iniciar" />" title="<bean:message key="login.certificado.boton.title" />" />
-					</p>	
-				</form>
+						<input type="submit" value="<bean:message key="login.boton.iniciar" />" title="<bean:message key="login.boton.iniciar" />" />
+					</p>					
+				</form>					
 			</div>
 			<%} %>
 			<% if (niveles.indexOf("U")>=0){ %>			
@@ -318,7 +323,7 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 					<p class="formBotonera"><input name="formUCboton" type="submit" value="<bean:message key="login.boton.iniciar" />" title="<bean:message key="login.usuario.boton.title" />" /></p>
 				</form>			
 			</div>
-			<%} %>
+			<%} %>						
 			<% if (niveles.indexOf("A")>=0){ %>
 			<div id="indexAN">
 				<h2><bean:message key="login.anonimo.titulo" /></h2>
@@ -332,6 +337,8 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 				</form>
 			</div>			
 			<%} %>
+			<% } %>
+			
 			<div class="sep"></div>
 	
 		</div>	
