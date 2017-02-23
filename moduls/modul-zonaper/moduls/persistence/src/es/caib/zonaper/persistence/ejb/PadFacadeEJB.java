@@ -956,11 +956,11 @@ public abstract class PadFacadeEJB implements SessionBean{
      *  @ejb.permission role-name="${role.auto}"
      *
      */
-	public void enviarSmsVerificarMovil(String idPersistencia, String idProcedimiento, String movil, String codigoSms, String idioma) throws ExcepcionPAD
+	public void enviarSmsVerificarMovil(String idPersistencia, String idProcedimiento, String movil, String codigoSms, String idioma, int minutosCaducidad) throws ExcepcionPAD
 	{
 		try
 		{
-			AvisoAlertasTramitacion.getInstance().enviarSmsVerificarMovil(idPersistencia, idProcedimiento, movil, codigoSms, idioma);
+			AvisoAlertasTramitacion.getInstance().enviarSmsVerificarMovil(idPersistencia, idProcedimiento, movil, codigoSms, idioma, minutosCaducidad);
 		}catch (Exception ex){
 			throw new ExcepcionPAD("Error enviando sms para verificar movil",ex);
 		}
