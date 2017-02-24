@@ -105,7 +105,7 @@ function validaFormulario( form )
 						</tr>
 						<tr>
 							<th><fmt:message key="incidencias.anexo"/></th>
-							<td><input name=anexo type="file"/></td>
+							<td style="max-width:30px; overflow:hidden; white-space:nowrap;"><input name=anexo type="file"/></td>
 						</tr>	
 						<tr>
 							<td colspan="2">&nbsp;</td>							
