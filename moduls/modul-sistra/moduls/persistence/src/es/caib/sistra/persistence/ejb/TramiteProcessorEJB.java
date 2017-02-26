@@ -5512,7 +5512,8 @@ public class TramiteProcessorEJB implements SessionBean {
 			
 			// Obtenemos entidad procedimiento
 			String entidad = obtenerEntidadProcedimiento(destTra.getProcedimiento());
-			
+			if (entidad == null)
+				throw new Exception("El codigo de procedimiento no es valido");
 			if (!this.validarCodigoOficina(entidad, destTra.getOficinaRegistral()))
 				throw new Exception("El codigo de oficina establecido por el script no es valido");
 			if (!this.validarCodigoOrgano(entidad, destTra.getOrganoDestino()))
@@ -5526,9 +5527,11 @@ public class TramiteProcessorEJB implements SessionBean {
 	}
 
 	private String obtenerEntidadProcedimiento(String idProcedimiento) throws Exception {
-		String entidad;
+		String entidad = null;
 		ProcedimientoBTE proc = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(idProcedimiento);
-		entidad = proc.getEntidad().getIdentificador();
+		if (proc != null) {
+			entidad = proc.getEntidad().getIdentificador();
+		}
 		return entidad;
 	}
 
@@ -6174,7 +6177,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	  * @return true/false
 	  * @throws Exception
 	  */
-	 private boolean validarCodigoOficina(String codOficina, String entidad) throws Exception{
+	 private boolean validarCodigoOficina( String entidad, String codOficina) throws Exception{
 		List oficinas = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerOficinasRegistro(entidad, ConstantesRegtel.REGISTRO_ENTRADA);
 		for (Iterator it = oficinas.iterator();it.hasNext();){
 			ValorOrganismo vo = (ValorOrganismo) it.next();
@@ -6193,7 +6196,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	  * @return true/false
 	  * @throws Exception
 	  */
-	 private boolean validarCodigoOrgano(String codOrgano, String entidad) throws Exception{
+	 private boolean validarCodigoOrgano(String entidad, String codOrgano) throws Exception{
 		List organos = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerServiciosDestino(entidad);
 		for (Iterator it = organos.iterator();it.hasNext();){
 			ValorOrganismo vo = (ValorOrganismo) it.next();
