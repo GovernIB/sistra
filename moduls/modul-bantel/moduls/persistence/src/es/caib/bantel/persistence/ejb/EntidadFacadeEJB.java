@@ -136,7 +136,7 @@ public abstract class EntidadFacadeEJB extends HibernateEJB {
     	try {        	        	
 	    	
 	    	// Comprueba si hay entradas de este tramtie        	
-	    	Query query = session.createQuery("SELECT COUNT(*) FROM Procedimiento AS t WHERE t.entidad.identificador = :id");            
+	    	Query query = session.createQuery("SELECT COUNT(*) FROM Procedimiento AS t WHERE t.entidad = :id");            
 	        query.setParameter("id", id);
 	        if (Long.parseLong(query.uniqueResult().toString()) > 0) return false;            
 	                    
