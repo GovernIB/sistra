@@ -3,16 +3,22 @@ package org.ibit.rol.form.front.action;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.struts.Globals;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.util.MessageResources;
+import org.ibit.rol.form.front.Constants;
 import org.ibit.rol.form.front.registro.RegistroManager;
 import org.ibit.rol.form.model.Formulario;
+import org.ibit.rol.form.model.OrganismoInfo;
 import org.ibit.rol.form.persistence.delegate.InstanciaDelegate;
 import org.ibit.rol.form.persistence.delegate.InstanciaTelematicaDelegate;
+
+import es.caib.util.ContactoUtil;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.util.List;
 import java.util.Map;
 
@@ -90,6 +96,22 @@ public class PenultimaController extends BaseController {
         } else {
             request.setAttribute("actionPath", "/calcularResultados");
         }
+        
+        // Generamos literal de contacto
+ 		OrganismoInfo oi = (OrganismoInfo) servletContext.getAttribute(Constants.ORGANISMO_INFO_KEY);
+ 		
+ 		String telefono = oi.getTelefonoIncidencias();
+ 		String email = oi.getEmailSoporteIncidencias();
+ 		String url = oi.getUrlSoporteIncidencias();
+ 		boolean formIncidencias = oi.getFormularioIncidencias();
+ 		
+ 		String tituloTramite = (String) propiedadesForm.get("tramite");
+ 		String lang = delegate.obtenerIdioma().getLanguage();
+ 		
+ 		String literalContacto = ContactoUtil.generarLiteralContacto(telefono, email, url,
+ 			tituloTramite, formIncidencias, lang);
+ 		
+ 		request.setAttribute("literalContacto", literalContacto);
     }
 
 }

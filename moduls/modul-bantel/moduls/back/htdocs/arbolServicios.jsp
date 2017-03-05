@@ -2,8 +2,7 @@
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%
 String id = request.getParameter("id");
-String entidad = request.getParameter("entidad");
-String urlFuncsNodes = "/tramite/funcsNodesServicios.do?id=" + id + "&entidad=" + entidad;
+String urlFuncsNodes = "/tramite/funcsNodesServicios.do?id=" + id;
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html lang="en">
@@ -78,7 +77,6 @@ function findOption(options, valor)
     <div id="buscador" style="display: inline-block;">
     	<html:form action="/back/tramite/buscarServicios">
 			<html:hidden property="idCampo" value="<%=id%>"/>
-			<html:hidden property="entidad" value="<%=entidad%>"/>
 			<html:text property="filtro" value=""/>
 			<html:submit styleClass="button"><bean:message key="menu.buscar" /></html:submit>
 		</html:form>

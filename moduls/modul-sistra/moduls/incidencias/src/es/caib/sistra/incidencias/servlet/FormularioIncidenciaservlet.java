@@ -117,7 +117,7 @@ public class FormularioIncidenciaservlet extends HttpServlet
 			String titulo = getLiteral(lang, "incidencias.email.asunto");
 			
 			String textoHtml = construyeMensajeHtml(lang, paramString);
-			List<String> destinatarios = getDestinatarios(destinatariosProp, paramString.get("procedimientoId"));
+			List<String> destinatarios = getDestinatarios(destinatariosProp, paramString.get("procedimientoId"), paramString.get("problemaTipo"));
 			if (destinatarios.size() == 0) {
 				throw new Exception("No se ha especificado lista de destinatarios");
 			}
@@ -138,19 +138,30 @@ public class FormularioIncidenciaservlet extends HttpServlet
 		dispatcher.forward( request, response );
 	}
 
-	private List<String> getDestinatarios(String destinatariosProp, String idProcedimiento) {
+	private List<String> getDestinatarios(String destinatariosProp, String idProcedimiento, String tipoIncidencia) {
 		List<String> resultado = new ArrayList<String>();
-		String[] destinatarios = destinatariosProp.split(",");
-		for (String s : destinatarios) {
-			if ("#correo.gestor#".equals(s)) {
-				if (StringUtils.isNotBlank(idProcedimiento)) {
-					List<String> correoGestores = getCorreoGestores(idProcedimiento);
-					resultado.addAll(correoGestores);				
+		
+		if (destinatariosProp != null && !destinatariosProp.equals("")){ 
+			String[] destinatarios = destinatariosProp.trim().split(",");
+			for (String s : destinatarios) {
+				if ("#correo.gestor#".equals(s)) {
+					if (StringUtils.isNotBlank(idProcedimiento)) {
+						List<String> correoGestores = getCorreoGestores(idProcedimiento);
+						resultado.addAll(correoGestores);				
+					}
+				} else {
+					resultado.add(s);
 				}
-			} else {
-				resultado.add(s);
 			}
 		}
+		
+		if ("FUN".equals(tipoIncidencia)){
+			if (StringUtils.isNotBlank(idProcedimiento)){
+				List<String> correoIncidencias = getCorreoIncidencia(idProcedimiento);
+				resultado.addAll(correoIncidencias);
+			}
+		}
+		
 		return resultado;
 	}
 
@@ -182,6 +193,37 @@ public class FormularioIncidenciaservlet extends HttpServlet
 		}
 		return correoGestores;
 	}
+	
+	private List<String> getCorreoIncidencia(String idProcedimiento) {
+		List<String> correoIncidencias = new ArrayList<String>();
+		LoginContext lc = null;		
+		try{					
+			String user = propiedadesConfiguracion.getProperty("auto.user");
+			String pass = propiedadesConfiguracion.getProperty("auto.pass");
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			lc = new LoginContext("client-login", handler);
+			lc.login();
+			
+			BteSistraDelegate bte = DelegateBTEUtil.getBteSistraDelegate();
+			ProcedimientoBTE p = bte.obtenerProcedimiento(idProcedimiento);
+			if (p.getEmailIncidencias() != null) {
+				String[] destinatarios = p.getEmailIncidencias().split(";");
+				for (String s : destinatarios){
+					log.debug("Correo de incidencias " + s );
+					correoIncidencias.add(s);
+				}
+			}
+			
+		} catch (Exception ex) {
+			log.error("Error accediendo a correos de incidencias para procedimiento " + idProcedimiento);			
+		}finally{				
+			// Hacemos el logout
+			if ( lc != null ){
+				try{lc.logout();}catch(Exception exl){}
+			}
+		}
+		return correoIncidencias;
+	}
 
 	private String construyeMensajeHtml(String lang, Map<String, String> paramString) {
 		String listaCampos = "";
@@ -201,7 +243,7 @@ public class FormularioIncidenciaservlet extends HttpServlet
 		String paramValue = paramString.get(paramName);		
 		if (StringUtils.isNotBlank(paramValue)) {
 			if ("problemaTipo".equals(paramName)) {
-				paramValue = getLiteral(lang, "incidencias.problema." + paramValue);
+				paramValue = getDescIncidencia(lang, paramValue);
 			}
 			
 			res += "<tr><th>" + StringEscapeUtils.escapeHtml(paramDesc) + "</th><td>" + StringEscapeUtils.escapeHtml(paramValue) +"</td></tr>";
@@ -232,11 +274,15 @@ public class FormularioIncidenciaservlet extends HttpServlet
 			String[] listTipos = tipos.split(",");
 			for (String t : listTipos) {
 				String descTipo = null;    					
-				descTipo = getLiteral(lang, "incidencias.problema." + t);
+				descTipo = getDescIncidencia(lang, t);
 				problemasLista.put(t, descTipo);				    				
 			}
 		}
 		return problemasLista;
+	}
+	
+	private String getDescIncidencia(String lang, String tipoIncidencia){
+		return propiedadesConfiguracion.getProperty("incidencias." + tipoIncidencia + "." + lang);
 	}
 	
 	private String getLiteral(String lang, String codLiteral) {

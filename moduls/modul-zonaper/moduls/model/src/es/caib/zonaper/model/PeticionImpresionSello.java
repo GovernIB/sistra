@@ -1,6 +1,8 @@
 package es.caib.zonaper.model;
 
-public class PeticionImpresionSello {
+import java.io.Serializable;
+
+public class PeticionImpresionSello implements Serializable {
 
 	private Long codigoEntradaPreregistro;
 	

@@ -8,8 +8,10 @@
 <bean:define id="locale" name="org.apache.struts.action.LOCALE" scope="session" />
 <bean:define id="language" name="org.apache.struts.action.LOCALE" scope="session" />
 
+<bean:define id="contextoRaizSistra" name="<%=es.caib.zonaper.front.Constants.CONTEXTO_RAIZ%>" type="java.lang.String"/>
+
 <bean:define id="urlTramitacion" type="java.lang.String">
-	<html:rewrite href="/sistrafront/inicio" paramId="language" paramName="language" paramProperty="language" />
+	<html:rewrite href="<%=contextoRaizSistra + "/sistrafront/inicio"%>" paramId="language" paramName="language" paramProperty="language" />
 </bean:define>
 
 		<!-- titol -->

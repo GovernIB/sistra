@@ -36,7 +36,8 @@ public class MostrarFormularioIncidenciasAction extends BaseAction
 		String lang = "es";
 		
 		DatosSesion datosSesion = this.getDatosSesion(request);
-		lang = datosSesion.getLocale().getLanguage();
+		lang = this.getLocale(request).getLanguage();
+		
 		if (datosSesion.getNivelAutenticacion() != ConstantesLogin.LOGIN_ANONIMO) {
 			nif = datosSesion.getNifUsuario();
 			nombre = datosSesion.getNombreUsuario();

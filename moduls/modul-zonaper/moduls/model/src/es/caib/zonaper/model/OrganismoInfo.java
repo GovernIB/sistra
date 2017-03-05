@@ -17,6 +17,7 @@ public class OrganismoInfo {
 	private String pieContactoHTML;
 	private String telefonoIncidencias;
 	private String urlSoporteIncidencias;
+	private boolean FormularioIncidencias;
 	private String emailSoporteIncidencias;
 	private String urlCssCustom;
 	private String urlLoginCssCustom;
@@ -65,6 +66,12 @@ public class OrganismoInfo {
 	}
 	public void setUrlSoporteIncidencias(String urlTramiteIncidencias) {
 		this.urlSoporteIncidencias = urlTramiteIncidencias;
+	}
+	public boolean getFormularioIncidencias() {
+		return FormularioIncidencias;
+	}
+	public void setFormularioIncidencias(boolean urlFormularioIncidencias) {
+		this.FormularioIncidencias = urlFormularioIncidencias;
 	}
 	public Map getReferenciaPortal() {
 		return referenciaPortal;

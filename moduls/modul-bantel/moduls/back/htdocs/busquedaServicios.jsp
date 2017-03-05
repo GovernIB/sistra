@@ -8,7 +8,6 @@
 <html lang="en">
 
 <bean:define id="id" name="id" type="java.lang.String"/>
-<bean:define id="entidad" name="entidad" type="java.lang.String"/>
 
 <head>
 	<link
@@ -52,13 +51,12 @@
     border: 2px solid white /*#d8dfe7*/;
     background-color: #515b67;height:20px;width:500px;
     border-spacing: 2;
-    margin: 10px 10px 10px 10px;"><bean:message key="tramite.organoDestino" /></DIV>
+    margin: 10px 10px 10px 10px;"><bean:message key="tramite.gestionExpedientes.servicioRegistro" /></DIV>
     
     <div id="wrapper" style="text-align: center">    
 	    <div id="buscador" style="display: inline-block;">
 	    	<html:form action="/back/tramite/buscarServicios">
 				<html:hidden property="idCampo" value="<%=id%>"/>
-				<html:hidden property="entidad" value="<%=entidad%>"/>
 				<html:text property="filtro" value=""/>
 				<html:submit styleClass="button"><bean:message key="menu.buscar" /></html:submit>
 			</html:form>

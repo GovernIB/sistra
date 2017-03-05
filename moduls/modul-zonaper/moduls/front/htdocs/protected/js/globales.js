@@ -188,7 +188,7 @@ function mostrarCapa(capa, mostrar) {
 }
 
 function mostrarFormularioIncidencias(url) {
-	mostrarCapa('contactoAdministradorUrl', false);
+	mostrarCapa('contactoAdministradorSoporte', false);
 	var capaI = document.getElementById('contactoAdministradorContent');	
 	capaI.innerHTML = 
 		'<iframe src="' + url + '" style="border: 0pt none; width: 500px; height: 370px;" scrolling="no"></iframe>';

@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Properties;
 
+import org.apache.commons.lang.StringUtils;
+
 import es.caib.zonaper.model.OrganismoInfo;
 
 /**
@@ -62,6 +64,12 @@ public class ConfigurationUtil {
 				organismoInfo.setTelefonoIncidencias(propiedades.getProperty("organismo.soporteTecnico.telefono"));
 				organismoInfo.setUrlSoporteIncidencias(propiedades.getProperty("organismo.soporteTecnico.url"));
 				organismoInfo.setEmailSoporteIncidencias(propiedades.getProperty("organismo.soporteTecnico.email"));
+				String formularioIncidencias = propiedades.getProperty("organismo.soporteTecnico.formulario");
+				if (StringUtils.isNotBlank(formularioIncidencias) && "true".equals(formularioIncidencias)) {
+					organismoInfo.setFormularioIncidencias(true);
+				} else {
+					organismoInfo.setFormularioIncidencias(false);
+				}
 				organismoInfo.setUrlCssCustom(propiedades.getProperty("organismo.cssCustom"));
 				organismoInfo.setUrlLoginCssCustom(propiedades.getProperty("organismo.cssLoginCustom"));
 				

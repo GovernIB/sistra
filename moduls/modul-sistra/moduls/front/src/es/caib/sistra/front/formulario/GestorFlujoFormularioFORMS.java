@@ -367,27 +367,47 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 			propiedadNombreUsuario.setNombre( "usuario" );
 			propiedadNombreUsuario.setValor( LiteralesUtil.getLiteral(locale.getLanguage(), "datosUsuario.anonimo") );
 			objXmlConfiguracion.getPropiedades().put(propiedadNombreUsuario.getNombre(),propiedadNombreUsuario);
-
-			Propiedad propiedadClaveTramitacion = factory.crearPropiedad();
-			propiedadClaveTramitacion.setNombre( "claveTramitacion" );
-			propiedadClaveTramitacion.setValor( informacionTramite.getIdPersistencia() );
-			objXmlConfiguracion.getPropiedades().put(propiedadClaveTramitacion.getNombre(),propiedadClaveTramitacion);
 		} else {
 			Propiedad propiedadNombreUsuario = factory.crearPropiedad();
 			propiedadNombreUsuario.setNombre( "usuario" );
 			propiedadNombreUsuario.setValor( informacionTramite.getDatosSesion().getNombreCompletoUsuario() );
 			objXmlConfiguracion.getPropiedades().put(propiedadNombreUsuario.getNombre(),propiedadNombreUsuario);
+			
+			Propiedad propiedadNifUsuario = factory.crearPropiedad();
+			propiedadNifUsuario.setNombre( "nif" );
+			propiedadNifUsuario.setValor( informacionTramite.getDatosSesion().getNifUsuario() );
+			objXmlConfiguracion.getPropiedades().put(propiedadNifUsuario.getNombre(),propiedadNifUsuario);
 		}
+
+		Propiedad propiedadClaveTramitacion = factory.crearPropiedad();
+		propiedadClaveTramitacion.setNombre( "claveTramitacion" );
+		propiedadClaveTramitacion.setValor( informacionTramite.getIdPersistencia() );
+		objXmlConfiguracion.getPropiedades().put(propiedadClaveTramitacion.getNombre(),propiedadClaveTramitacion);
 
 		Propiedad propiedadNombreTramite = factory.crearPropiedad();
 		propiedadNombreTramite.setNombre( "tramite" );
-		propiedadNombreTramite.setValor( informacionTramite.getDescripcion() );
+		propiedadNombreTramite.setValor( informacionTramite.getDescripcion() + " (" +  informacionTramite.getModelo() + ")");
 		objXmlConfiguracion.getPropiedades().put(propiedadNombreTramite.getNombre(),propiedadNombreTramite);
+
+		Propiedad propiedadIdTramite = factory.crearPropiedad();
+		propiedadIdTramite.setNombre( "tramiteId" );
+		propiedadIdTramite.setValor( informacionTramite.getModelo());
+		objXmlConfiguracion.getPropiedades().put(propiedadIdTramite.getNombre(),propiedadIdTramite);
+		
+		Propiedad propiedadFechaTramite = factory.crearPropiedad();
+		propiedadFechaTramite.setNombre( "fechaTramite" );
+		propiedadFechaTramite.setValor(StringUtil.fechaACadena(informacionTramite.getFechaCreacion(), StringUtil.FORMATO_TIMESTAMP));
+		objXmlConfiguracion.getPropiedades().put(propiedadFechaTramite.getNombre(),propiedadFechaTramite);
 
 		Propiedad propiedadNombreFormulario = factory.crearPropiedad();
 		propiedadNombreFormulario.setNombre( "formulario" );
 		propiedadNombreFormulario.setValor( formulario.getDescripcion() );
 		objXmlConfiguracion.getPropiedades().put(propiedadNombreFormulario.getNombre(),propiedadNombreFormulario);
+
+		Propiedad propiedadProcedimiento = factory.crearPropiedad();
+		propiedadProcedimiento.setNombre( "procedimiento" );
+		propiedadProcedimiento.setValor( informacionTramite.getIdProcedimiento() );
+		objXmlConfiguracion.getPropiedades().put(propiedadProcedimiento.getNombre(),propiedadProcedimiento);
 
 
 		// Propiedades específicas establecidas por script

@@ -4819,6 +4819,11 @@ public class TramiteProcessorEJB implements SessionBean {
     	LoginContext lc = null;		
 		try{					
 			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+			String caducidad = props.getProperty("envio.verificarMovil.minutosCaducidad");
+			int minutosCaducidad = 0;
+			if (StringUtils.isNotBlank(caducidad)) {
+				minutosCaducidad = Integer.parseInt(caducidad);
+			}
 			String user = props.getProperty("auto.user");
 			String pass = props.getProperty("auto.pass");
 			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
@@ -4827,7 +4832,7 @@ public class TramiteProcessorEJB implements SessionBean {
 			
 			String codigo = generateCodigoSms();
 	    	DelegatePADUtil.getPadDelegate().enviarSmsVerificarMovil(this.tramitePersistentePAD.getIdPersistencia(), this.tramitePersistentePAD.getIdProcedimiento(),
-	    				movil, codigo, this.tramitePersistentePAD.getIdioma());    			
+	    				movil, codigo, this.tramitePersistentePAD.getIdioma(), minutosCaducidad);    			
 			return codigo;
 			
 		}finally{				
