@@ -2,6 +2,8 @@ package es.caib.zonaper.persistence.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,7 +80,7 @@ public class AvisoAlertasTramitacion {
 			}
 			mensEmail = crearMensajeEmail(email, entrada.getIdioma(), mensaje);			
 		}		
-		enviarMensaje(entrada.getIdPersistencia(), entrada.getProcedimiento(), mensEmail, null);
+		enviarMensaje(entrada.getIdPersistencia(), entrada.getProcedimiento(), mensEmail, null, 0);
 	
 	}
 
@@ -112,7 +114,7 @@ public class AvisoAlertasTramitacion {
 			mensaje=StringUtil.replace(mensaje,"{0}",oi.getNombre().toUpperCase());
 			mensSms = crearMensajeSms(tramite.getAlertasTramitacionSms().trim(), mensaje);			
 		}
-		enviarMensaje(tramite.getIdPersistencia(), tramite.getIdProcedimiento(), mensEmail, mensSms);
+		enviarMensaje(tramite.getIdPersistencia(), tramite.getIdProcedimiento(), mensEmail, mensSms, 0);
 	
 	}
 	
@@ -146,7 +148,7 @@ public class AvisoAlertasTramitacion {
 			mensaje=StringUtil.replace(mensaje,"{0}",oi.getNombre().toUpperCase());
 			mensSms = crearMensajeSms(preregistro.getAlertasTramitacionSms().trim(), mensaje);			
 		}
-		enviarMensaje(preregistro.getIdPersistencia(), preregistro.getProcedimiento(), mensEmail, mensSms);
+		enviarMensaje(preregistro.getIdPersistencia(), preregistro.getProcedimiento(), mensEmail, mensSms, 0);
 	
 	}
 	
@@ -154,11 +156,11 @@ public class AvisoAlertasTramitacion {
 	 * Enviar SMS para verificar movil.  
 	 * 
 	 */
-	 public void enviarSmsVerificarMovil(String idPersistencia, String idProcedimiento, String movil, String codigoSms, String idioma) throws Exception{
+	 public void enviarSmsVerificarMovil(String idPersistencia, String idProcedimiento, String movil, String codigoSms, String idioma, int minutosCaducidad) throws Exception{
 		 String mensaje = LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.sms.alertaTramitacion.smsVerificarMovil");
 		 mensaje=StringUtil.replace(mensaje,"{0}", codigoSms);
 		 MensajeEnvioSms mensSms = crearMensajeSms(movil, mensaje);
-		 enviarMensaje(idPersistencia, idProcedimiento, null, mensSms);			
+		 enviarMensaje(idPersistencia, idProcedimiento, null, mensSms, minutosCaducidad);			
 	}
 	
 	//--------------------------------------------------------------------------
@@ -180,7 +182,7 @@ public class AvisoAlertasTramitacion {
 		
 		// Reemplazamos texto "Mi portal" por enlace
 		String textoMiPortal = (String) oi.getReferenciaPortal().get(idioma);
-		String urlMiPortal = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.url") + "/zonaperfront";
+		String urlMiPortal = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.url") + ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.contextoRaiz.front") + "/zonaperfront";
 		textoEmail = StringUtil.replace(textoEmail, textoMiPortal, "<a href=\"" + urlMiPortal + "\">" + textoMiPortal + "</a>");
 		
 		// Creamos MensajeEnvio
@@ -206,10 +208,15 @@ public class AvisoAlertasTramitacion {
 	 * Realizamos envio del mensaje al modulo de movilidad con usuario auto  
 	 * @param idProcedimiento 
 	 */
-	private void enviarMensaje(String idPersistencia, String idProcedimiento, MensajeEnvioEmail mensajeEmail, MensajeEnvioSms mensajeSms) throws Exception{
+	private void enviarMensaje(String idPersistencia, String idProcedimiento, MensajeEnvioEmail mensajeEmail, MensajeEnvioSms mensajeSms, int minutosCaducidad) throws Exception{
 		if (mensajeEmail != null || mensajeSms != null) {
 			log.debug("Creamos mensajeEnvio");
 			MensajeEnvio mens = new MensajeEnvio();
+			if (minutosCaducidad != 0){
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.MINUTE, minutosCaducidad);
+				mens.setFechaCaducidad(new Timestamp(cal.getTime().getTime()));
+			}
 			mens.setNombre("Aviso automático de alertas de tramitacion: " + idPersistencia);
 			mens.setCuentaEmisora(cuentaSistra);
 			mens.setInmediato(true);

@@ -57,6 +57,10 @@ public class Procedimiento implements Serializable{
 	 */
 	private String emailRespuestaAvisosProcedimiento;
 	
+	/**
+	 * Indica email para envío de incidencias
+	 */
+	private String emailIncidencias;
 	
 	public String getIdentificador() {
 		return identificador;
@@ -231,6 +235,12 @@ public class Procedimiento implements Serializable{
 	public void setEmailRespuestaAvisosProcedimiento(
 			String emailRespuestaAvisosProcedimiento) {
 		this.emailRespuestaAvisosProcedimiento = emailRespuestaAvisosProcedimiento;
+	}
+	public String getEmailIncidencias() {
+		return emailIncidencias;
+	}
+	public void setEmailIncidencias(String emailIncidencias) {
+		this.emailIncidencias = emailIncidencias;
 	}
 	public String getEntidad() {
 		return entidad;

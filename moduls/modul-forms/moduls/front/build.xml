@@ -38,6 +38,8 @@
     <property name="web.doc.api" location="${doc}/api/${modul}"/>
     <property name="web.product" location="${output.dir}/moduls"/>
 
+    <property name="distribucion.dir" location="${home.dir}/../../product"/>
+
     <path id="web.class.path">
         <fileset dir="${lib.dir}">
         	<include name="*.jar" />
@@ -45,6 +47,9 @@
         <fileset dir="${web.product}">
             <include name="6-form-model.jar" />
             <include name="6-form-persistence.jar" />
+        </fileset>
+        <fileset dir="${distribucion.dir}/lib"> 
+            <include name="sistra-util.jar"/>            
         </fileset>
     </path>
 

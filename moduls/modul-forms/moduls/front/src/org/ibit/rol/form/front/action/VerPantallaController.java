@@ -12,7 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.struts.Globals;
 import org.apache.struts.tiles.ComponentContext;
+import org.apache.struts.util.MessageResources;
+import org.ibit.rol.form.front.Constants;
 import org.ibit.rol.form.front.registro.RegistroManager;
 import org.ibit.rol.form.model.AyudaPantalla;
 import org.ibit.rol.form.model.Campo;
@@ -20,6 +23,7 @@ import org.ibit.rol.form.model.ComboBox;
 import org.ibit.rol.form.model.Formulario;
 import org.ibit.rol.form.model.ListBox;
 import org.ibit.rol.form.model.ListaElementos;
+import org.ibit.rol.form.model.OrganismoInfo;
 import org.ibit.rol.form.model.Pantalla;
 import org.ibit.rol.form.model.RadioButton;
 import org.ibit.rol.form.model.TablaListaElementos;
@@ -27,6 +31,8 @@ import org.ibit.rol.form.model.TraPantalla;
 import org.ibit.rol.form.persistence.delegate.InstanciaDelegate;
 import org.ibit.rol.form.persistence.delegate.InstanciaTelematicaDelegate;
 import org.ibit.rol.form.persistence.util.ScriptUtil;
+
+import es.caib.util.ContactoUtil;
 
 /**
  * Obtiene los recursos necesarios para renderizar la plantilla.
@@ -41,6 +47,7 @@ public class VerPantallaController extends BaseController {
 
         InstanciaDelegate delegate = RegistroManager.recuperarInstancia(request);
         boolean telematic = (delegate instanceof InstanciaTelematicaDelegate);
+        
 
         // Fijar formulario
         Formulario formulario = delegate.obtenerFormulario();
@@ -80,9 +87,10 @@ public class VerPantallaController extends BaseController {
         // Propiedades del formulario en el caso de que sea telemático
         boolean mostrarPantallaFin = true;
         boolean mostrarBotonGuardar = Boolean.valueOf(!telematic);
+        Map propiedadesForm = null;
         if (telematic) {
             InstanciaTelematicaDelegate itd = (InstanciaTelematicaDelegate) delegate;
-            Map propiedadesForm = itd.obtenerPropiedadesFormulario();
+            propiedadesForm = itd.obtenerPropiedadesFormulario();
             request.setAttribute("propiedadesForm", propiedadesForm);
             try{
         		mostrarPantallaFin = (propiedadesForm.get("pantallaFin.mostrar")!=null?Boolean.parseBoolean((String)propiedadesForm.get("pantallaFin.mostrar")):false);
@@ -92,7 +100,7 @@ public class VerPantallaController extends BaseController {
         	}
         	mostrarBotonGuardar = itd.permitirGuardarSinTerminar();
         }
-
+        
         // Botones que van a salir: distinguimos pantalla normal y pantalla detalle de lista
         if (StringUtils.isEmpty(pantalla.getComponenteListaElementos())){
         	// Pantalla normal
@@ -185,5 +193,23 @@ public class VerPantallaController extends BaseController {
         	}
         }
         // -- INDRA: LISTA ELEMENTOS
+        
+        
+        // Generamos literal de contacto
+		OrganismoInfo oi = (OrganismoInfo) servletContext.getAttribute(Constants.ORGANISMO_INFO_KEY);
+		
+		String telefono = oi.getTelefonoIncidencias();
+		String email = oi.getEmailSoporteIncidencias();
+		String url = oi.getUrlSoporteIncidencias();
+		boolean formIncidencias = oi.getFormularioIncidencias();
+		
+		String tituloTramite = (String) propiedadesForm.get("tramite");
+		String lang = delegate.obtenerIdioma().getLanguage();
+		
+		String literalContacto = ContactoUtil.generarLiteralContacto( telefono, email, url,
+			tituloTramite, formIncidencias, lang);
+		
+		request.setAttribute("literalContacto", literalContacto);
+        
     }
 }

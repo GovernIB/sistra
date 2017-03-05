@@ -392,11 +392,11 @@ public class PadDelegate implements StatelessDelegate {
 		}
 	}
 	
-	public void enviarSmsVerificarMovil(String idPersistencia, String idProcedimiento, String movil, String codigoSms, String idioma) throws DelegateException	
+	public void enviarSmsVerificarMovil(String idPersistencia, String idProcedimiento, String movil, String codigoSms, String idioma, int minutosCaducidad) throws DelegateException	
 	{
 		try
 		{
-		 	getFacade().enviarSmsVerificarMovil(idPersistencia, idProcedimiento, movil, codigoSms, idioma);
+		 	getFacade().enviarSmsVerificarMovil(idPersistencia, idProcedimiento, movil, codigoSms, idioma, minutosCaducidad);
 		}
 		catch( Exception e )
 		{

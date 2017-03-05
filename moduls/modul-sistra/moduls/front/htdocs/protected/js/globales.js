@@ -234,7 +234,7 @@ function ocultarAyudaAdmin() {
 
 // Abre pantalla de ayuda
 function mostrarAyudaAdmin() {
-	mostrarCapa('contactoAdministradorUrl', true)
+	mostrarCapaSoporte('contactoAdministradorSoporte', true);
 	var capaI = document.getElementById('contactoAdministradorContent');	
 	capaI.innerHTML = "";
 	mostrarSoporte();
@@ -446,7 +446,7 @@ function estaIframe() {
 }
 
 
-function mostrarCapa(capa, mostrar) {
+function mostrarCapaSoporte(capa, mostrar) {
 	var capaU = document.getElementById(capa);
 	if (mostrar) {
 		capaU.style.display = 'block';
@@ -458,7 +458,7 @@ function mostrarCapa(capa, mostrar) {
 
 function mostrarFormularioIncidencias(url) {
 	
-	mostrarCapa('contactoAdministradorUrl', false)
+	mostrarCapaSoporte('contactoAdministradorSoporte', false);
 	
 	var capaI = document.getElementById('contactoAdministradorContent');	
 	capaI.innerHTML = 

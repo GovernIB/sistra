@@ -5,6 +5,7 @@ import java.util.Properties;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.form.model.OrganismoInfo;
@@ -66,6 +67,12 @@ public abstract class ConfiguracionFacadeEJB extends HibernateEJB  {
     		oi.setPieContactoHTML(props.getProperty("organismo.footer.contacto"));
     		oi.setTelefonoIncidencias(props.getProperty("organismo.soporteTecnico.telefono"));
     		oi.setUrlSoporteIncidencias(props.getProperty("organismo.soporteTecnico.url"));
+    		String formularioIncidencias = props.getProperty("organismo.soporteTecnico.formulario");
+			if (StringUtils.isNotBlank(formularioIncidencias) && "true".equals(formularioIncidencias)) {
+				oi.setFormularioIncidencias(true);
+			} else {
+				oi.setFormularioIncidencias(false);
+			}
     		oi.setEmailSoporteIncidencias(props.getProperty("organismo.soporteTecnico.email")); 
     		oi.setUrlCssCustom(props.getProperty("organismo.cssCustom"));
     		return oi;

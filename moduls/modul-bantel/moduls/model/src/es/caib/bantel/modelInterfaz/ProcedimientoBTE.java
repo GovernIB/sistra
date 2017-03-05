@@ -41,6 +41,10 @@ public class ProcedimientoBTE implements Serializable {
 	 */
 	private String emailRespuestaAvisosProcedimiento;
 	/**
+	 * Indica email respuesta para incidencias.
+	 */
+	private String emailIncidencias;
+	/**
 	 * Emails gestores.
 	 */
 	private List emailGestores = new ArrayList();
@@ -57,6 +61,13 @@ public class ProcedimientoBTE implements Serializable {
 	public void setEmailRespuestaAvisosProcedimiento(
 			String emailRespuestaAvisosProcedimiento) {
 		this.emailRespuestaAvisosProcedimiento = emailRespuestaAvisosProcedimiento;
+	}
+	
+	public String getEmailIncidencias() {
+		return emailIncidencias;
+	}
+	public void setEmailIncidencias(String emailIncidencias) {
+		this.emailIncidencias = emailIncidencias;
 	}
 	
 	

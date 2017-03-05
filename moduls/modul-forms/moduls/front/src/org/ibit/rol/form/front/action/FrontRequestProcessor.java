@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.Iterator;
 import java.util.Properties;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import org.apache.struts.action.ActionServlet;
 import org.apache.struts.tiles.TilesRequestProcessor;
 import org.apache.struts.tiles.DefinitionsFactoryException;
 import org.apache.struts.tiles.ComponentDefinition;
+import org.apache.struts.util.MessageResources;
 import org.ibit.rol.form.front.Constants;
 import org.ibit.rol.form.front.registro.RegistroManager;
 import org.ibit.rol.form.persistence.delegate.ConfiguracionDelegate;
@@ -69,8 +71,9 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
             // Inicializamos informacion organismo (almacenamos en contexto)
             try{
     	 		if (getServletContext().getAttribute(Constants.ORGANISMO_INFO_KEY) == null){
+    	 			// Obtenemos info organismo y alamcenamos en contexto
     	 			OrganismoInfo oi = DelegateUtil.getConfiguracionDelegate().obtenerOrganismoInfo();
-    	 			getServletContext().setAttribute(Constants.ORGANISMO_INFO_KEY,oi);
+    	 			getServletContext().setAttribute(Constants.ORGANISMO_INFO_KEY,oi);    	 			
     	 		}
             }catch (Exception ex){
             	log.error("Error obteniendo informacion organismo",ex);
@@ -93,6 +96,8 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
             throw new ServletException(e);
         }
     }
+
+	
 
     /**
      * Elije el lenguaje en el que se servira la petición.
