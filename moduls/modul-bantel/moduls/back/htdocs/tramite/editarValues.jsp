@@ -80,17 +80,6 @@
 		/>
     </td>
 </tr>
-<tr>
-	<td class="separador" colspan="2"><bean:message key="tramite.definicion"/></td>
-</tr>
-<tr>
-    <td class="labelo"><bean:message key="tramite.identificador"/></td>
-    <td class="input"><html:text styleClass="data" tabindex="1" property="values.identificador" styleId="identificadorProcedimiento" maxlength="20" readonly="<%= request.getAttribute( \"idReadOnly\" ) != null %>" /></td>
-</tr>
-<tr>
-    <td class="labelo"><bean:message key="tramite.descripcion"/></td>
-    <td class="input"><html:text styleClass="textLargo" tabindex="10" property="values.descripcion" maxlength="100"/></td>
-</tr>
 
 <logic:present name="idReadOnly">                                    
 
