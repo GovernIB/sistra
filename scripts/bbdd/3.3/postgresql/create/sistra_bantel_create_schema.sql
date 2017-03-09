@@ -1716,17 +1716,17 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 
 -- UPDATE 2.3.3 TO 2.3.4
 
-ALTER table BTE_PROAPL ADD  TAP_PLNOTV  VARCHAR(1) default 'N' not null;
+ALTER table BTE_PROAPL ADD  TAP_PLNOTV  character varying(1) default 'N' not null;
 comment on column BTE_PROAPL.TAP_PLNOTV is 'INDICA SI PERMITE PLAZO NOTIFICACIONES VARIABLE (S/N)';
 
-ALTER table BTE_PROAPL ALTER COLUMN TAP_URL TYPE VARCHAR(500);
+ALTER table BTE_PROAPL ALTER COLUMN TAP_URL TYPE character varying(500);
 
 -- UPDATE 2.39 TO 2.3.10
-ALTER table BTE_PROAPL  ADD  TAP_REGOFI          VARCHAR(25);
-ALTER table BTE_PROAPL  ADD TAP_REGORG           VARCHAR(25);
-ALTER table BTE_PROAPL  ADD  TAP_CLAVE           VARCHAR(1)  default 'N' not null;
-ALTER table BTE_PROAPL  ADD TAP_AVIREM           VARCHAR(255);
-ALTER table BTE_PROAPL  ADD TAP_AVIREP           VARCHAR(255);
+ALTER table BTE_PROAPL  ADD  TAP_REGOFI          character varying(25);
+ALTER table BTE_PROAPL  ADD TAP_REGORG           character varying(25);
+ALTER table BTE_PROAPL  ADD  TAP_CLAVE           character varying(1)  default 'N' not null;
+ALTER table BTE_PROAPL  ADD TAP_AVIREM           character varying(255);
+ALTER table BTE_PROAPL  ADD TAP_AVIREP           character varying(255);
 
 comment on column BTE_PROAPL.TAP_REGOFI is
 'OFICINA REGISTRO (DEFECTO GESTION EXPEDIENTES)';

@@ -28,30 +28,30 @@ create sequence ZPE_SEQTPE;
 create table ZPE_DOCENT  (
    DEN_CODIGO           BIGINT                      not null,
    DEN_CODENT           BIGINT                      not null,
-   DEN_DOCIDE           VARCHAR(5)                     not null,
+   DEN_DOCIDE           character varying(5)                     not null,
    DEN_DOCNUM           BIGINT                       not null,
-   DEN_DESC             VARCHAR(500)                   not null,
+   DEN_DESC             character varying(500)                   not null,
    DEN_RDSCOD           BIGINT                      not null,
-   DEN_RDSCLA           VARCHAR(10)                    not null
+   DEN_RDSCLA           character varying(10)                    not null
 );
 
 comment on column ZPE_DOCENT.DEN_CODIGO is
-'C√≥digo interno';
+'CÛdigo interno';
 
 comment on column ZPE_DOCENT.DEN_CODENT is
-'C√≥digo entrada';
+'CÛdigo entrada';
 
 comment on column ZPE_DOCENT.DEN_DOCIDE is
 'Identificador documento';
 
 comment on column ZPE_DOCENT.DEN_DOCNUM is
-'N√∫mero instancia';
+'N˙mero instancia';
 
 comment on column ZPE_DOCENT.DEN_DESC is
-'Descripci√≥n documento';
+'DescripciÛn documento';
 
 comment on column ZPE_DOCENT.DEN_RDSCOD is
-'C√≥digo RDS del documento';
+'CÛdigo RDS del documento';
 
 comment on column ZPE_DOCENT.DEN_RDSCLA is
 'Clave RDS del documento';
@@ -67,20 +67,20 @@ create table ZPE_DOCHIE  (
    DHE_CODIGO           BIGINT                      not null,
    DHE_CODHIE           BIGINT                      not null,
    DHE_RDSCOD           BIGINT                      not null,
-   DHE_RDSCLA           VARCHAR(10)                    not null,
-   DHE_TITULO           VARCHAR(256)                   not null,
+   DHE_RDSCLA           character varying(10)                    not null,
+   DHE_TITULO           character varying(256)                   not null,
    DHE_ORDEN            BIGINT
 );
 
 
 comment on table ZPE_DOCHIE is
-'Documento perteneciente a un evento del hist√≥rico de ';
+'Documento perteneciente a un evento del histÛrico de ';
 
 comment on column ZPE_DOCHIE.DHE_CODIGO is
-'Identificador √∫nico del documento';
+'Identificador ⁄nico del documento';
 
 comment on column ZPE_DOCHIE.DHE_CODHIE is
-'Identificador √∫nico del evento';
+'Identificador ⁄nico del evento';
 
 comment on column ZPE_DOCHIE.DHE_RDSCOD is
 'Codigo rds del documento';
@@ -103,33 +103,33 @@ create index ZPE_DHEHIE_FK_I on ZPE_DOCHIE (
 create table ZPE_DOCNOT  (
    DNO_CODIGO           BIGINT                      not null,
    DNO_CODNOT           BIGINT                      not null,
-   DNO_DOCIDE           VARCHAR(5)                     not null,
+   DNO_DOCIDE           character varying(5)                     not null,
    DNO_DOCNUM           BIGINT                       not null,
-   DNO_DESC             VARCHAR(500)                   not null,
+   DNO_DESC             character varying(500)                   not null,
    DNO_RDSCOD           BIGINT                      not null,
-   DNO_RDSCLA           VARCHAR(10)                    not null,
+   DNO_RDSCLA           character varying(10)                    not null,
    DNO_ORDEN            BIGINT
 );
 
 
 
 comment on column ZPE_DOCNOT.DNO_CODIGO is
-'C√≥digo interno';
+'CÛdigo interno';
 
 comment on column ZPE_DOCNOT.DNO_CODNOT is
-'C√≥digo notificacion';
+'CÛdigo notificacion';
 
 comment on column ZPE_DOCNOT.DNO_DOCIDE is
 'Identificador documento';
 
 comment on column ZPE_DOCNOT.DNO_DOCNUM is
-'N√∫mero instancia';
+'N˙mero instancia';
 
 comment on column ZPE_DOCNOT.DNO_DESC is
-'Descripci√≥n documento';
+'DescripciÛn documento';
 
 comment on column ZPE_DOCNOT.DNO_RDSCOD is
-'C√≥digo RDS del documento';
+'CÛdigo RDS del documento';
 
 comment on column ZPE_DOCNOT.DNO_RDSCLA is
 'Clave RDS del documento';
@@ -146,16 +146,16 @@ create index ZPE_DNONOT_FK_I on ZPE_DOCNOT (
 create table ZPE_DOCPER  (
    DPE_CODIGO           BIGINT                      not null,
    DPE_CODTPE           BIGINT                      not null,
-   DPE_DOCIDE           VARCHAR(5)                     not null,
+   DPE_DOCIDE           character varying(5)                     not null,
    DPE_DOCNUM           BIGINT                       not null,
-   DPE_ESTADO           VARCHAR(1)                     not null,
+   DPE_ESTADO           character varying(1)                     not null,
    DPE_RDSCOD           BIGINT,
-   DPE_RDSCLA           VARCHAR(10),
-   DPE_NOMFIC           VARCHAR(255),
-   DPE_GENDES           VARCHAR(255),
-   DPE_DLGEST VARCHAR(2),
-   DPE_DLGFIR VARCHAR(4000),
-   DPE_DLGFIP VARCHAR(4000)
+   DPE_RDSCLA           character varying(10),
+   DPE_NOMFIC           character varying(255),
+   DPE_GENDES           character varying(255),
+   DPE_DLGEST character varying(2),
+   DPE_DLGFIR character varying(4000),
+   DPE_DLGFIP character varying(4000)
 );
 
 comment on column ZPE_DOCPER.DPE_DLGEST is
@@ -180,7 +180,7 @@ comment on column ZPE_DOCPER.DPE_DOCIDE is
 'IDENTIFICADOR DOCUMENTO';
 
 comment on column ZPE_DOCPER.DPE_DOCNUM is
-'NUMERO INSTANCIA DOCUMENTO. TENDRA SIGNIFICADO PARA LOS DOCUMENTOS GENERICOS, PARA LOS DEM√ÅS SER√Å 1.';
+'NUMERO INSTANCIA DOCUMENTO. TENDRA SIGNIFICADO PARA LOS DOCUMENTOS GENERICOS, PARA LOS DEM¡S SER¡Å 1.';
 
 comment on column ZPE_DOCPER.DPE_ESTADO is
 'ESTADO: CORRECTO (S) / INCORRECTO (N)  / VACIO (V)';
@@ -195,7 +195,7 @@ comment on column ZPE_DOCPER.DPE_NOMFIC is
 'NOMBRE DE ULTIMO FICHERO ANEXADO PARA DOCUMENTOS ANEXOS';
 
 comment on column ZPE_DOCPER.DPE_GENDES is
-'DESCRIPCION PERSONALIZADA PARA GEN√âRICOS';
+'DESCRIPCION PERSONALIZADA PARA GEN…RICOS';
 
 alter table ZPE_DOCPER
    add constraint ZPE_DPEIDE_UNI unique (DPE_CODTPE, DPE_DOCIDE, DPE_DOCNUM);
@@ -210,45 +210,45 @@ create index ZPE_DPETPE_FK_I on ZPE_DOCPER (
 create table ZPE_DOCPRE  (
    DPR_CODIGO           BIGINT                      not null,
    DPR_CODPRE           BIGINT                      not null,
-   DPR_PRESE            VARCHAR(1)                     not null,
-   DPR_DESC             VARCHAR(500)                   not null,
-   DPR_DOCIDE           VARCHAR(5),
+   DPR_PRESE            character varying(1)                     not null,
+   DPR_DESC             character varying(500)                   not null,
+   DPR_DOCIDE           character varying(5),
    DPR_DOCNUM           BIGINT,
    DPR_RDSCOD           BIGINT,
-   DPR_RDSCLA           VARCHAR(10),
-   DPR_TIPDOC           VARCHAR(1),
-   DPR_COMPUL           VARCHAR(1),
-   DPR_FOTPIA           VARCHAR(1),
-   DPR_FIRMA            VARCHAR(1),
-   DPR_OK               VARCHAR(1)
+   DPR_RDSCLA           character varying(10),
+   DPR_TIPDOC           character varying(1),
+   DPR_COMPUL           character varying(1),
+   DPR_FOTPIA           character varying(1),
+   DPR_FIRMA            character varying(1),
+   DPR_OK               character varying(1)
 );
 
 comment on table ZPE_DOCPRE is
 'Documentos asociados al preregistro';
 
 comment on column ZPE_DOCPRE.DPR_CODIGO is
-'C√≥digo interno';
+'CÛdigo interno';
 
 comment on column ZPE_DOCPRE.DPR_CODPRE is
-'C√≥digo entrada';
+'CÛdigo entrada';
 
 comment on column ZPE_DOCPRE.DPR_PRESE is
-'Indica si el documento requiere acci√≥n presencial';
+'Indica si el documento requiere acciÛn presencial';
 
 comment on column ZPE_DOCPRE.DPR_DESC is
-'Descripci√≥n documento';
+'DescripciÛn documento';
 
 comment on column ZPE_DOCPRE.DPR_DOCIDE is
-'Identificador documento  (Para documentos anexados telem√°ticamente sirve para asociar con documento del asiento)';
+'Identificador documento  (Para documentos anexados telem·ticamente sirve para asociar con documento del asiento)';
 
 comment on column ZPE_DOCPRE.DPR_DOCNUM is
-'N√∫mero instancia  (Para documentos anexados telem√°ticamente sirve para asociar con documento del asiento)';
+'N˙mero instancia  (Para documentos anexados telem·ticamente sirve para asociar con documento del asiento)';
 
 comment on column ZPE_DOCPRE.DPR_RDSCOD is
-'Para documentos anexados telem√°ticamente: C√≥digo RDS del documento';
+'Para documentos anexados telem·ticamente: CÛdigo RDS del documento';
 
 comment on column ZPE_DOCPRE.DPR_RDSCLA is
-'Para documentos anexados telem√°ticamente: Clave RDS del documento';
+'Para documentos anexados telem·ticamente: Clave RDS del documento';
 
 comment on column ZPE_DOCPRE.DPR_TIPDOC is
 'Para documentos a presentar presencialmente: Indica tipo de documento J/F/A/P (Justificante/Formulario/Anexo/Pago)';
@@ -275,12 +275,12 @@ create index ZPE_DPRPRE_FK_I on ZPE_DOCPRE (
 create table ZPE_DPEBCK  (
    DPB_CODIGO           BIGINT                      not null,
    DPB_CODTPB           BIGINT                      not null,
-   DPB_DOCIDE           VARCHAR(5)                     not null,
+   DPB_DOCIDE           character varying(5)                     not null,
    DPB_DOCNUM           BIGINT                       not null,
-   DPB_ESTADO           VARCHAR(1)                     not null,
+   DPB_ESTADO           character varying(1)                     not null,
    DPB_RDSCOD           BIGINT,
-   DPB_RDSCLA           VARCHAR(10),
-   DPB_NOMFIC           VARCHAR(255)
+   DPB_RDSCLA           character varying(10),
+   DPB_NOMFIC           character varying(255)
 );
 
 comment on table ZPE_DPEBCK is
@@ -296,7 +296,7 @@ comment on column ZPE_DPEBCK.DPB_DOCIDE is
 'IDENTIFICADOR DOCUMENTO';
 
 comment on column ZPE_DPEBCK.DPB_DOCNUM is
-'NUMERO INSTANCIA DOCUMENTO. TENDRA SIGNIFICADO PARA LOS DOCUMENTOS GENERICOS, PARA LOS DEM√ÅS SER√Å 1.';
+'NUMERO INSTANCIA DOCUMENTO. TENDRA SIGNIFICADO PARA LOS DOCUMENTOS GENERICOS, PARA LOS DEM¡ÅS SER¡Å 1.';
 
 comment on column ZPE_DPEBCK.DPB_ESTADO is
 'ESTADO: CORRECTO (S) / INCORRECTO (N)';
@@ -320,33 +320,33 @@ create index ZPE_DPBTPB_FK_I on ZPE_DPEBCK (
 create table ZPE_DPRBCK  (
    DRB_CODIGO           BIGINT                      not null,
    DRB_CODPRE           BIGINT                      not null,
-   DRB_PRESE            VARCHAR(1)                     not null,
-   DRB_DESC             VARCHAR(500)                   not null,
-   DRB_DOCIDE           VARCHAR(5),
+   DRB_PRESE            character varying(1)                     not null,
+   DRB_DESC             character varying(500)                   not null,
+   DRB_DOCIDE           character varying(5),
    DRB_DOCNUM           BIGINT,
    DRB_RDSCOD           BIGINT,
-   DRB_RDSCLA           VARCHAR(10),
-   DRB_TIPDOC           VARCHAR(1),
-   DRB_COMPUL           VARCHAR(1),
-   DRB_FOTPIA           VARCHAR(1),
-   DRB_FIRMA            VARCHAR(1),
-   DRB_OK               VARCHAR(1)
+   DRB_RDSCLA           character varying(10),
+   DRB_TIPDOC           character varying(1),
+   DRB_COMPUL           character varying(1),
+   DRB_FOTPIA           character varying(1),
+   DRB_FIRMA            character varying(1),
+   DRB_OK               character varying(1)
 );
 
 comment on table ZPE_DPRBCK is
 'Documentos asociados al preregistro backup';
 
 comment on column ZPE_DPRBCK.DRB_CODIGO is
-'C√≥digo interno';
+'CÛdigo interno';
 
 comment on column ZPE_DPRBCK.DRB_CODPRE is
-'C√≥digo entrada';
+'CÛdigo entrada';
 
 comment on column ZPE_DPRBCK.DRB_PRESE is
-'Indica si el documento requiere acci√≥n presencial';
+'Indica si el documento requiere acciÛn presencial';
 
 comment on column ZPE_DPRBCK.DRB_DESC is
-'Descripci√≥n documento';
+'DescripciÛn documento';
 
 comment on column ZPE_DPRBCK.DRB_DOCIDE is
 'Identificador documento  (sirve para asociar con documento del asiento)';
@@ -355,10 +355,10 @@ comment on column ZPE_DPRBCK.DRB_DOCNUM is
 'N√∫mero instancia  (sirve para asociar con documento del asiento)';
 
 comment on column ZPE_DPRBCK.DRB_RDSCOD is
-'Para documentos anexados telem√°ticamente: C√≥digo RDS del documento';
+'Para documentos anexados telem·ticamente: CÛdigo RDS del documento';
 
 comment on column ZPE_DPRBCK.DRB_RDSCLA is
-'Para documentos anexados telem√°ticamente: Clave RDS del documento';
+'Para documentos anexados telem·ticamente: Clave RDS del documento';
 
 comment on column ZPE_DPRBCK.DRB_TIPDOC is
 'Para documentos a presentar presencialmente: Indica tipo de documento J/F/A/P (Justificante/Formulario/Anexo/Pago)';
@@ -385,29 +385,29 @@ create index ZPE_DRBPRB_FK_I on ZPE_DPRBCK (
 create table ZPE_ELEEX  (
    ELE_CODIGO           BIGINT                      not null,
    ELE_CODEXP           BIGINT                      not null,
-   ELE_FECHA            DATE                            not null,
-   ELE_TIPO             VARCHAR(1)                     not null,
+   ELE_FECHA            timestamp with time zone 	NOT NULL,
+   ELE_TIPO             character varying(1)                     not null,
    ELE_CODELE           BIGINT                      not null,
-   ELE_CODAVI           VARCHAR(50)
+   ELE_CODAVI           character varying(50)
 );
 
 comment on table ZPE_ELEEX is
 'Elementos del expediente';
 
 comment on column ZPE_ELEEX.ELE_CODIGO is
-'Identificador √∫nico del elemento de expediente';
+'Identificador ⁄nico del elemento de expediente';
 
 comment on column ZPE_ELEEX.ELE_CODEXP is
-'Identificador interno √∫nico del expediente';
+'Identificador interno ˙nico del expediente';
 
 comment on column ZPE_ELEEX.ELE_FECHA is
-'Fecha creaci√≥n';
+'Fecha creaciÛn';
 
 comment on column ZPE_ELEEX.ELE_TIPO is
 'Tipo evento (T Tramite telematic/ P Tramite preregistro / N Notificacion / A Aviso)';
 
 comment on column ZPE_ELEEX.ELE_CODELE is
-'Codigo elemento destino (seg√∫n tipo evento)';
+'Codigo elemento destino (seg˙n tipo evento)';
 
 comment on column ZPE_ELEEX.ELE_CODAVI is
 'Codigo aviso movilidad asociado al elemento';
@@ -426,71 +426,71 @@ create index ZPE_EXPELE_FK_I on ZPE_ELEEX (
 
 create table ZPE_ENTTEL  (
    ENT_CODIGO           BIGINT                      not null,
-   ENT_TIPO             VARCHAR(1)                     not null,
-   ENT_IDEPER           VARCHAR(50)                    not null,
-   ENT_NIVAUT           VARCHAR(1)                     not null,
-   ENT_DESC             VARCHAR(200)                   not null,
-   ENT_USER             VARCHAR(1536),
-   ENT_NUMREG           VARCHAR(50)                    not null,
-   ENT_FECHA            DATE                            not null,
+   ENT_TIPO             character varying(1)                     not null,
+   ENT_IDEPER           character varying(50)                    not null,
+   ENT_NIVAUT           character varying(1)                     not null,
+   ENT_DESC             character varying(200)                   not null,
+   ENT_USER             character varying(1536),
+   ENT_NUMREG           character varying(50)                    not null,
+   ENT_FECHA            timestamp with time zone 				 NOT NULL,
    ENT_CODASI           BIGINT                      not null,
-   ENT_CLAASI           VARCHAR(10)                    not null,
+   ENT_CLAASI           character varying(10)                    not null,
    ENT_CODJUS           BIGINT                      not null,
-   ENT_CLAJUS           VARCHAR(10)                    not null,
-   ENT_IDIOMA           VARCHAR(2)                     not null,
-   ENT_NIFRTE           VARCHAR(12),
-   ENT_NOMRTE           VARCHAR(500),
-   ENT_NIFRDO           VARCHAR(12),
-   ENT_NOMRDO           VARCHAR(500),
-   ENT_TRAMOD           VARCHAR(20),
+   ENT_CLAJUS           character varying(10)                    not null,
+   ENT_IDIOMA           character varying(2)                     not null,
+   ENT_NIFRTE           character varying(12),
+   ENT_NOMRTE           character varying(500),
+   ENT_NIFRDO           character varying(12),
+   ENT_NOMRDO           character varying(500),
+   ENT_TRAMOD           character varying(20),
    ENT_TRAVER           BIGINT,
-   ENT_AVISOS           VARCHAR(1),
-   ENT_AVISMS           VARCHAR(10),
-   ENT_AVIEMA           VARCHAR(500),
-   ENT_NOTTEL           VARCHAR(1),
-   ENT_NIFDLG           VARCHAR(12),
-   ENT_NOMDLG           VARCHAR(500),
-   ent_sbexid           VARCHAR(50),
+   ENT_AVISOS           character varying(1),
+   ENT_AVISMS           character varying(10),
+   ENT_AVIEMA           character varying(500),
+   ENT_NOTTEL           character varying(1),
+   ENT_NIFDLG           character varying(12),
+   ENT_NOMDLG           character varying(500),
+   ent_sbexid           character varying(50),
    ent_sbexua           BIGINT,
-   ENT_IDEPRO           VARCHAR(100)
+   ENT_IDEPRO           character varying(100)
 );
 
 
 comment on table ZPE_ENTTEL is
-'Log de entradas telem√°ticas';
+'Log de entradas telem·ticas';
 
 comment on column ZPE_ENTTEL.ENT_CODIGO is
-'C√≥digo interno entrada';
+'CÛdigo interno entrada';
 
 comment on column ZPE_ENTTEL.ENT_TIPO is
-'Tipo de entrada: E (Registro Entrada) / B (Env√≠o Bandeja)';
+'Tipo de entrada: E (Registro Entrada) / B (EnvÌo Bandeja)';
 
 comment on column ZPE_ENTTEL.ENT_IDEPER is
 'IDENTIFICADOR DE PERSISTENCIA. ';
 
 comment on column ZPE_ENTTEL.ENT_NIVAUT is
-'Nivel autenticaci√≥n U (Usuario) / C (Certificado) / A (An√≥nimo)';
+'Nivel autenticaciÛn U (Usuario) / C (Certificado) / A (AnÛnimo)';
 
 comment on column ZPE_ENTTEL.ENT_DESC is
-'Descripci√≥n del tr√°mite';
+'DescripciÛn del tr·mite';
 
 comment on column ZPE_ENTTEL.ENT_USER is
 'En caso de estar autenticado referencia usuario Seycon que realiza la entrada';
 
 comment on column ZPE_ENTTEL.ENT_NUMREG is
-'Indica el n¬∫ de registro/n¬∫ de env√≠o';
+'Indica el n∫ de registro/n∫ de envÌo';
 
 comment on column ZPE_ENTTEL.ENT_FECHA is
-'Fecha de registro / env√≠o';
+'Fecha de registro / envÌo';
 
 comment on column ZPE_ENTTEL.ENT_CODASI is
-'C√≥digo de la referencia RDS del asiento';
+'CÛdigo de la referencia RDS del asiento';
 
 comment on column ZPE_ENTTEL.ENT_CLAASI is
 'Clave de la referencia RDS del asiento';
 
 comment on column ZPE_ENTTEL.ENT_CODJUS is
-'C√≥digo de la referencia RDS del justificante';
+'CÛdigo de la referencia RDS del justificante';
 
 comment on column ZPE_ENTTEL.ENT_CLAJUS is
 'Clave de la referencia RDS del justificante';
@@ -511,10 +511,10 @@ comment on column ZPE_ENTTEL.ENT_NOMRDO is
 'En caso de existir representado, indica nombre del representado';
 
 comment on column ZPE_ENTTEL.ENT_TRAMOD is
-'MODELO TRAMITE (Permite nulos ya que es un campo a√±adido a posteriori)';
+'MODELO TRAMITE (Permite nulos ya que es un campo aÒadido a posteriori)';
 
 comment on column ZPE_ENTTEL.ENT_TRAVER is
-'VERSION TRAMITE (Permite nulos ya que es un campo a√±adido a posteriori)';
+'VERSION TRAMITE (Permite nulos ya que es un campo aÒadido a posteriori)';
 
 comment on column ZPE_ENTTEL.ENT_AVISOS is
 'Indica si se habilitan los avisos para expediente';
@@ -551,26 +551,26 @@ create unique index ZPE_ENTIDP_UNI on ZPE_ENTTEL (
 
 create table ZPE_EXPEDI  (
    EXP_CODIGO           BIGINT                      not null,
-   EXP_CLAVE            VARCHAR(50),
-   EXP_IDIOMA           VARCHAR(2)                     not null,
-   EXP_FECEXP           DATE                            not null,
-   EXP_FECCON           DATE,
-   EXP_IDEXP            VARCHAR(50)                    not null,
-   EXP_DESC             VARCHAR(512)                   not null,
-   EXP_SEYCIU           VARCHAR(1536),
-   EXP_USER             VARCHAR(1536)                  not null,
-   EXP_NIFRDO           VARCHAR(10),
-   EXP_NOMRDO           VARCHAR(500),
+   EXP_CLAVE            character varying(50),
+   EXP_IDIOMA           character varying(2)                     not null,
+   EXP_FECEXP           timestamp with time zone 				 NOT NULL,
+   EXP_FECCON           timestamp with time zone 				 NOT NULL,
+   EXP_IDEXP            character varying(50)                    not null,
+   EXP_DESC             character varying(512)                   not null,
+   EXP_SEYCIU           character varying(1536),
+   EXP_USER             character varying(1536)                  not null,
+   EXP_NIFRDO           character varying(10),
+   EXP_NOMRDO           character varying(500),
    EXP_UNIADM           BIGINT                      not null,
-   EXP_NUMBTE           VARCHAR(50),
-   EXP_FECINI           DATE,
-   EXP_FECULT           DATE,
-   EXP_ESTADO           VARCHAR(2),
-   EXP_AVISOS           VARCHAR(1)  NOT NULL,
-   EXP_AVISMS           VARCHAR(10),
-   EXP_AVIEMA           VARCHAR(500),
-   EXP_NIFRTE           VARCHAR(12),
-   EXP_IDEPRO           VARCHAR(100)                   not null
+   EXP_NUMBTE           character varying(50),
+   EXP_FECINI           timestamp with time zone,
+   EXP_FECULT           timestamp with time zone,
+   EXP_ESTADO           character varying(2),
+   EXP_AVISOS           character varying(1)  NOT NULL,   
+   EXP_AVISMS           character varying(10),
+   EXP_AVIEMA           character varying(500),
+   EXP_NIFRTE           character varying(12),
+   EXP_IDEPRO           character varying(100)                   not null
 );
 
 
@@ -581,7 +581,7 @@ comment on column ZPE_EXPEDI.EXP_NIFRTE is
 
 
 comment on column ZPE_EXPEDI.EXP_CODIGO is
-'Identificador interno √∫nico del expediente';
+'Identificador interno ˙nico del expediente';
 
 comment on column ZPE_EXPEDI.EXP_UNIADM is
 'Unidad administrativa que da de alta el expediente';
@@ -596,7 +596,7 @@ comment on column ZPE_EXPEDI.EXP_FECEXP is
 'Fecha de alta del expediente';
 
 comment on column ZPE_EXPEDI.EXP_DESC is
-'Descripci√≥n del expediente';
+'DescripciÛn del expediente';
 
 comment on column ZPE_EXPEDI.EXP_IDIOMA is
 'Idioma de tramitacion del expediente';
@@ -631,8 +631,8 @@ comment on column ZPE_EXPEDI.EXP_ESTADO is
 SE: Solicitud enviada
 AP: Aviso pendiente
 AR: Aviso recibido
-NP: Notificaci√≥n pendiente
-NR: Notificaci√≥n recibida';
+NP: NotificaciÛn pendiente
+NR: NotificaciÛn recibida';
 
 comment on column ZPE_EXPEDI.EXP_AVISOS is
 'Indica si se habilitan los avisos para expediente';
@@ -651,20 +651,20 @@ alter table ZPE_EXPEDI
 
 create table ZPE_HISTEX  (
    HIE_CODIGO           BIGINT                      not null,
-   HIE_FECEVE           DATE                            not null,
-   HIE_FECCON           DATE,
-   HIE_TITULO           VARCHAR(500)                   not null,
-   HIE_TEXTO            VARCHAR(4000)                  not null,
-   HIE_TXTSMS           VARCHAR(255),
-   HIE_ENLCON           VARCHAR(512),
-   HIE_USER             VARCHAR(1536)                  not null
+   HIE_FECEVE           timestamp with time zone 	NOT NULL,
+   HIE_FECCON           timestamp with time zone			,
+   HIE_TITULO           character varying(500)                   not null,
+   HIE_TEXTO            character varying(4000)                  not null,
+   HIE_TXTSMS           character varying(255),
+   HIE_ENLCON           character varying(512),
+   HIE_USER             character varying(1536)                  not null
 );
 
 comment on table ZPE_HISTEX is
-'Hist√≥rico de eventos para un expediente';
+'HistÛrico de eventos para un expediente';
 
 comment on column ZPE_HISTEX.HIE_CODIGO is
-'Identificador √∫nico del evento';
+'Identificador ˙nico del evento';
 
 comment on column ZPE_HISTEX.HIE_FECEVE is
 'Fecha del evento';
@@ -692,72 +692,72 @@ alter table ZPE_HISTEX
 
 create table ZPE_NOTTEL  (
    NOT_CODIGO           BIGINT                      not null,
-   NOT_USER             VARCHAR(1536),
-   NOT_NUMREG           VARCHAR(50)                    not null,
-   NOT_FECHA            DATE                            not null,
+   NOT_USER             character varying(1536),
+   NOT_NUMREG           character varying(50)                    not null,
+   NOT_FECHA            timestamp with time zone 	NOT NULL,
    NOT_CODASI           BIGINT                      not null,
-   NOT_CLAASI           VARCHAR(10)                    not null,
+   NOT_CLAASI           character varying(10)                    not null,
    NOT_CODJUS           BIGINT                      not null,
-   NOT_CLAJUS           VARCHAR(10)                    not null,
+   NOT_CLAJUS           character varying(10)                    not null,
    NOT_CODAVI           BIGINT                      not null,
-   NOT_CLAAVI           VARCHAR(10)                    not null,
-   NOT_TITAVI           VARCHAR(500)                   not null,
+   NOT_CLAAVI           character varying(10)                    not null,
+   NOT_TITAVI           character varying(500)                   not null,
    NOT_CODOFR           BIGINT                      not null,
-   NOT_CLAOFR           VARCHAR(10)                    not null,
-   NOT_IDIOMA           VARCHAR(2)                     not null,
-   NOT_NIFRTE           VARCHAR(12)                    not null,
-   NOT_NOMRTE           VARCHAR(500)                   not null,
-   NOT_NIFRDO           VARCHAR(12),
-   NOT_NOMRDO           VARCHAR(500),
+   NOT_CLAOFR           character varying(10)                    not null,
+   NOT_IDIOMA           character varying(2)                     not null,
+   NOT_NIFRTE           character varying(12)                    not null,
+   NOT_NOMRTE           character varying(500)                   not null,
+   NOT_NIFRDO           character varying(12),
+   NOT_NOMRDO           character varying(500),
    NOT_CODACU           BIGINT,
-   NOT_CLAACU           VARCHAR(10),
-   NOT_FECACU           DATE,
-   NOT_FIRACU           BIGINT                      default 1 not null,
-   NOT_SEYGES           VARCHAR(1536)                  not null,
-   NOT_SUBDES           VARCHAR(500),
-   NOT_SUBIDE           VARCHAR(20),
+   NOT_CLAACU           character varying(10),
+   NOT_FECACU           timestamp with time zone,
+   NOT_FIRACU           BOOLEAN                      default TRUE not null,
+   NOT_SEYGES           character varying(1536)                  not null,
+   NOT_SUBDES           character varying(500),
+   NOT_SUBIDE           character varying(20),
    NOT_SUBVER           BIGINT,
-   NOT_SUBPAR           VARCHAR(4000),
-   NOT_FECPLZ           DATE,
-   NOT_RECHAZ          BIGINT
+   NOT_SUBPAR           character varying(4000),
+   NOT_FECPLZ           timestamp with time zone,
+   NOT_RECHAZ           BOOLEAN
 );
 
 
 comment on column ZPE_NOTTEL.NOT_FECPLZ is
-'Indica fecha de plazo de fin de apertura de la notificaci√≥n (en caso de que se controle fecha entrega)';
+'Indica fecha de plazo de fin de apertura de la notificaciÛn (en caso de que se controle fecha entrega)';
 
 comment on column ZPE_NOTTEL.NOT_RECHAZ is
 'Indica que la notificacion esta rechazada (en caso de que se controle fecha entrega)';
 
 comment on table ZPE_NOTTEL is
-'Log de notificaciones telem√°ticas';
+'Log de notificaciones telem·ticas';
 
 comment on column ZPE_NOTTEL.NOT_CODIGO is
-'C√≥digo interno salida';
+'CÛdigo interno salida';
 
 comment on column ZPE_NOTTEL.NOT_USER is
-'Referencia usuario Seycon que debe recoger la notificaci√≥n';
+'Referencia usuario Seycon que debe recoger la notificaciÛn';
 
 comment on column ZPE_NOTTEL.NOT_NUMREG is
-'Indica el n¬∫ de registro de salida';
+'Indica el n∫ de registro de salida';
 
 comment on column ZPE_NOTTEL.NOT_FECHA is
 'Fecha de registro de salida';
 
 comment on column ZPE_NOTTEL.NOT_CODASI is
-'C√≥digo de la referencia RDS del asiento';
+'CÛdigo de la referencia RDS del asiento';
 
 comment on column ZPE_NOTTEL.NOT_CLAASI is
 'Clave de la referencia RDS del asiento';
 
 comment on column ZPE_NOTTEL.NOT_CODJUS is
-'C√≥digo de la referencia RDS del justificante';
+'CÛdigo de la referencia RDS del justificante';
 
 comment on column ZPE_NOTTEL.NOT_CLAJUS is
 'Clave de la referencia RDS del justificante';
 
 comment on column ZPE_NOTTEL.NOT_CODAVI is
-'C√≥digo de la referencia RDS del aviso de notificacion';
+'CÛdigo de la referencia RDS del aviso de notificacion';
 
 comment on column ZPE_NOTTEL.NOT_CLAAVI is
 'Clave de la referencia  RDS del aviso de notificacion';
@@ -766,7 +766,7 @@ comment on column ZPE_NOTTEL.NOT_TITAVI is
 'Titulo aviso (cacheamos para optimizar visualizacion listas)';
 
 comment on column ZPE_NOTTEL.NOT_CODOFR is
-'C√≥digo de la referencia RDS del oficio de remision';
+'CÛdigo de la referencia RDS del oficio de remision';
 
 comment on column ZPE_NOTTEL.NOT_CLAOFR is
 'Clave de la referencia RDS del oficio de remision';
@@ -775,10 +775,10 @@ comment on column ZPE_NOTTEL.NOT_IDIOMA is
 'Idioma en el que se ha realizado';
 
 comment on column ZPE_NOTTEL.NOT_NIFRTE is
-'Indica NIF del representante (Quien debe recoger la notificaci√≥n)';
+'Indica NIF del representante (Quien debe recoger la notificaciÛn)';
 
 comment on column ZPE_NOTTEL.NOT_NOMRTE is
-'Indica nombre del representante (Quien debe recoger la notificaci√≥n)';
+'Indica nombre del representante (Quien debe recoger la notificaciÛn)';
 
 comment on column ZPE_NOTTEL.NOT_NIFRDO is
 'En caso de existir representado, indica NIF del representado';
@@ -787,7 +787,7 @@ comment on column ZPE_NOTTEL.NOT_NOMRDO is
 'En caso de existir representado, indica nombre del representado';
 
 comment on column ZPE_NOTTEL.NOT_CODACU is
-'En caso de que se haya firmado el acuse de recibo, indica el c√≥digo de la referencia RDS del aviso de notificacion';
+'En caso de que se haya firmado el acuse de recibo, indica el cÛdigo de la referencia RDS del aviso de notificacion';
 
 comment on column ZPE_NOTTEL.NOT_CLAACU is
 'En caso de que se haya firmado el acuse de recibo, indica la clave de la referencia RDS del aviso de notificacion';
@@ -802,16 +802,16 @@ comment on column ZPE_NOTTEL.NOT_SEYGES is
 'Indica usuario seycon del gestor que da de alta la notificacion';
 
 comment on column ZPE_NOTTEL.NOT_SUBDES is
-'En caso de que haya tr√°mite de subsanaci√≥n indica la descripci√≥n del tr√°mite';
+'En caso de que haya tr·mite de subsanaciÛn indica la descripciÛn del tr·mite';
 
 comment on column ZPE_NOTTEL.NOT_SUBIDE is
-'En caso de que haya tr√°mite de subsanaci√≥n indica el id del tr√°mite';
+'En caso de que haya tr·mite de subsanaciÛn indica el id del tr·mite';
 
 comment on column ZPE_NOTTEL.NOT_SUBVER is
-'En caso de que haya tr√°mite de subsanaci√≥n indica la versi√≥n del tr√°mite';
+'En caso de que haya tr·mite de subsanaciÛn indica la versiÛn del tr·mite';
 
 comment on column ZPE_NOTTEL.NOT_SUBPAR is
-'En caso de que haya tr√°mite de subsanaci√≥n indica los par√°metros de inicio  del tr√°mite';
+'En caso de que haya tr·mite de subsanaciÛn indica los par·metros de inicio del tr·mite';
 
 alter table ZPE_NOTTEL
    add constraint ZPE_NOT_PK primary key (NOT_CODIGO);
@@ -822,44 +822,44 @@ create unique index ZPE_NOTNRG_UNI on ZPE_NOTTEL (
 
 create table ZPE_PERSON  (
    PER_CODIGO           BIGINT                      not null,
-   PER_SEYCON           VARCHAR(1536)                  not null,
-   PER_IDENTI           VARCHAR(12)                    not null,
-   PER_TIPPER           VARCHAR(1)                     not null,
-   PER_NOMBRE           VARCHAR(50)                    not null,
-   PER_APELL1           VARCHAR(50),
-   PER_APELL2           VARCHAR(50),
-   PER_FECALT           DATE                            not null,
-   PER_FECULM           DATE                            not null,
-   PER_DIR              VARCHAR(200),
-   PER_CPOSTAL          VARCHAR(5),
-   PER_PROV             VARCHAR(2),
-   PER_MUNI             VARCHAR(10),
-   PER_TELF             VARCHAR(20),
-   PER_TELM             VARCHAR(20),
-   PER_EMAIL            VARCHAR(50),
-   PER_AVIEXP           BIGINT                      default 0,
-   PER_AVITRA           BIGINT                      default 0,
-   PER_DELEGA           VARCHAR(1)                    default 'N' not null,
-   PER_SEYMOD VARCHAR(4000)
+   PER_SEYCON           character varying(1536)                  not null,
+   PER_IDENTI           character varying(12)                    not null,
+   PER_TIPPER           character varying(1)                     not null,
+   PER_NOMBRE           character varying(50)                    not null,
+   PER_APELL1           character varying(50),
+   PER_APELL2           character varying(50),
+   PER_FECALT           timestamp with time zone 				NOT NULL,
+   PER_FECULM           timestamp with time zone 				NOT NULL,
+   PER_DIR              character varying(200),
+   PER_CPOSTAL          character varying(5),
+   PER_PROV             character varying(2),
+   PER_MUNI             character varying(10),
+   PER_TELF             character varying(20),
+   PER_TELM             character varying(20),
+   PER_EMAIL            character varying(50),
+   PER_AVIEXP           BOOLEAN                      default FALSE,
+   PER_AVITRA           BOOLEAN                      default FALSE,
+   PER_DELEGA           character varying(1)                    default 'N' not null,
+   PER_SEYMOD 			character varying(4000)
 );
 
 comment on table ZPE_PERSON is
-'Informaci√≥n personal de los usuarios de la zona personal. Dirigida tanto a personas f√≠sicas como jur√≠dicas.';
+'InformaciÛn personal de los usuarios de la zona personal. Dirigida tanto a personas fÌsicas como jurÌdicas.';
 
 comment on column ZPE_PERSON.PER_CODIGO is
-'Identificador √∫nico de la persona en la pad';
+'Identificador ˙nico de la persona en la pad';
 
 comment on column ZPE_PERSON.PER_SEYCON is
-'Codigo seycon de la persona. Es √∫nico.';
+'Codigo seycon de la persona. Es ˙nico.';
 
 comment on column ZPE_PERSON.PER_IDENTI is
-'Documento legal de identificaci√≥n de la persona ( NIF, CIF, NIE ).';
+'Documento legal de identificaciÛn de la persona ( NIF, CIF, NIE ).';
 
 comment on column ZPE_PERSON.PER_TIPPER is
-'F - Persona fisica, J - Persona jur√≠dica.';
+'F - Persona fisica, J - Persona jurÌdica.';
 
 comment on column ZPE_PERSON.PER_NOMBRE is
-'Nombre de la persona. En caso de personas jur√≠dicas, nombre de la empresa o entidad';
+'Nombre de la persona. En caso de personas jurÌdicas, nombre de la empresa o entidad';
 
 comment on column ZPE_PERSON.PER_APELL1 is
 'Primer apellido de la persona.';
@@ -871,34 +871,34 @@ comment on column ZPE_PERSON.PER_FECALT is
 'Fecha de alta de la persona';
 
 comment on column ZPE_PERSON.PER_FECULM is
-'Fecha de √∫ltima modificaci√≥n de la persona';
+'Fecha de ˙ltima modificaciÛn de la persona';
 
 comment on column ZPE_PERSON.PER_DIR is
-'Direcci√≥n';
+'DirecciÛn';
 
 comment on column ZPE_PERSON.PER_CPOSTAL is
-'C√≥digo postal';
+'CÛdigo postal';
 
 comment on column ZPE_PERSON.PER_PROV is
-'C√≥digo provincia';
+'CÛdigo provincia';
 
 comment on column ZPE_PERSON.PER_MUNI is
-'C√≥digo municipio';
+'CÛdigo municipio';
 
 comment on column ZPE_PERSON.PER_TELF is
-'Tel√©fono fijo';
+'TelÈfono fijo';
 
 comment on column ZPE_PERSON.PER_TELM is
-'Tel√©fono m√≥vil';
+'TelÈfono mÛvil';
 
 comment on column ZPE_PERSON.PER_EMAIL is
-'Correo electr√≥nico';
+'Correo electrÛnico';
 
 comment on column ZPE_PERSON.PER_AVIEXP is
 'Avisos sobre expedienes (notificaciones,eventos,etc)';
 
 comment on column ZPE_PERSON.PER_AVITRA is
-'Avisos 3 d√≠as antes del plazo borrado tr√°mite persistente';
+'Avisos 3 dÌas antes del plazo borrado tr·mite persistente';
 
 comment on column ZPE_PERSON.PER_DELEGA is
 'Indica si esta habilitada la delegacion';
@@ -919,48 +919,48 @@ create index ZPE_PERIDE_IDX on ZPE_PERSON (
 
 create table ZPE_PREBCK  (
    PRB_CODIGO           BIGINT                      not null,
-   PRB_NUMPRE           VARCHAR(50)                    not null,
-   PRB_IDIOMA           VARCHAR(2)                     not null,
-   PRB_FECHA            DATE                            not null,
-   PRB_FECCAD           DATE                            not null,
-   PRB_IDEPER           VARCHAR(50)                    not null,
-   PRB_DESC             VARCHAR(200)                   not null,
-   PRB_TIPO             VARCHAR(1)                     not null,
-   PRB_NIVAUT           VARCHAR(1)                     not null,
-   PRB_USER             VARCHAR(1536),
+   PRB_NUMPRE           character varying(50)                    not null,
+   PRB_IDIOMA           character varying(2)                     not null,
+   PRB_FECHA            timestamp with time zone 				 NOT NULL,
+   PRB_FECCAD           timestamp with time zone 				 NOT NULL,
+   PRB_IDEPER           character varying(50)                    not null,
+   PRB_DESC             character varying(200)                   not null,
+   PRB_TIPO             character varying(1)                     not null,
+   PRB_NIVAUT           character varying(1)                     not null,
+   PRB_USER             character varying(1536),
    PRB_CODASI           BIGINT                      not null,
-   PRB_CLAASI           VARCHAR(10)                    not null,
+   PRB_CLAASI           character varying(10)                    not null,
    PRB_CODJUS           BIGINT                      not null,
-   PRB_CLAJUS           VARCHAR(10)                    not null,
-   PRB_NUMREG           VARCHAR(50),
-   PRB_FECREG           DATE,
-   PRB_NIFRTE           VARCHAR(12),
-   PRB_NOMRTE           VARCHAR(500),
-   PRB_NIFRDO           VARCHAR(12),
-   PRB_NOMRDO           VARCHAR(500),
-   PRB_TRAMOD           VARCHAR(20),
+   PRB_CLAJUS           character varying(10)                    not null,
+   PRB_NUMREG           character varying(50),
+   PRB_FECREG           timestamp with time zone,
+   PRB_NIFRTE           character varying(12),
+   PRB_NOMRTE           character varying(500),
+   PRB_NIFRDO           character varying(12),
+   PRB_NOMRDO           character varying(500),
+   PRB_TRAMOD           character varying(20),
    PRB_TRAVER           BIGINT,
-   PRB_CONAUT           VARCHAR(1)                    default 'N' not null,
-   PRB_AVISOS           VARCHAR(1),
-   PRB_AVISMS           VARCHAR(10),
-   PRB_AVIEMA           VARCHAR(500),
-   PRB_NOTTEL           VARCHAR(1),
-   PRB_NIFDLG           VARCHAR(12),
-   PRB_NOMDLG           VARCHAR(500),
-   prb_sbexid           VARCHAR(50),
+   PRB_CONAUT           character varying(1)                    default 'N' not null,
+   PRB_AVISOS           character varying(1),
+   PRB_AVISMS           character varying(10),
+   PRB_AVIEMA           character varying(500),
+   PRB_NOTTEL           character varying(1),
+   PRB_NIFDLG           character varying(12),
+   PRB_NOMDLG           character varying(500),
+   prb_sbexid           character varying(50),
    prb_sbexua           BIGINT,
-   PRB_IDEPRO           VARCHAR(100)
+   PRB_IDEPRO           character varying(100)
 );
 
 
 comment on table ZPE_PREBCK is
-'Log de preregistro (regsitros y env√≠os) backup';
+'Log de preregistro (regsitros y envÌos) backup';
 
 comment on column ZPE_PREBCK.PRB_CODIGO is
-'C√≥digo interno entrada';
+'CÛdigo interno entrada';
 
 comment on column ZPE_PREBCK.PRB_NUMPRE is
-'N√∫mero de preregistro / preenvio generado por Sistema de Tramitaci√≥n';
+'N˙mero de preregistro / preenvio generado por Sistema de TramitaciÛn';
 
 comment on column ZPE_PREBCK.PRB_IDIOMA is
 'Idioma en el que se ha realizado';
@@ -969,40 +969,40 @@ comment on column ZPE_PREBCK.PRB_FECHA is
 'Fecha de preregistro';
 
 comment on column ZPE_PREBCK.PRB_FECCAD is
-'Fecha tope para realizar la confirmaci√≥n';
+'Fecha tope para realizar la confirmaciÛn';
 
 comment on column ZPE_PREBCK.PRB_IDEPER is
 'IDENTIFICADOR DE PERSISTENCIA. ';
 
 comment on column ZPE_PREBCK.PRB_DESC is
-'Descripci√≥n del tr√°mite';
+'DescripciÛn del tr·mite';
 
 comment on column ZPE_PREBCK.PRB_TIPO is
-'Tipo de entrada: P (PreRegistro Entrada) / N (PreEnv√≠o Bandeja)';
+'Tipo de entrada: P (PreRegistro Entrada) / N (PreEnvÌo Bandeja)';
 
 comment on column ZPE_PREBCK.PRB_NIVAUT is
-'Nivel autenticaci√≥n U (Usuario) / C (Certificado) / A (An√≥nimo)';
+'Nivel autenticaciÛn U (Usuario) / C (Certificado) / A (AnÛnimo)';
 
 comment on column ZPE_PREBCK.PRB_USER is
 'En caso de estar autenticado referencia usuario Seycon';
 
 comment on column ZPE_PREBCK.PRB_CODASI is
-'C√≥digo de la referencia RDS del asiento';
+'CÛdigo de la referencia RDS del asiento';
 
 comment on column ZPE_PREBCK.PRB_CLAASI is
 'Clave de la referencia RDS del asiento';
 
 comment on column ZPE_PREBCK.PRB_CODJUS is
-'C√≥digo de la referencia RDS del justificante';
+'CÛdigo de la referencia RDS del justificante';
 
 comment on column ZPE_PREBCK.PRB_CLAJUS is
 'Clave de la referencia RDS del justificante';
 
 comment on column ZPE_PREBCK.PRB_NUMREG is
-'Cuando se confirme el preregistro indica el n¬∫ de registro / env√≠o confirmado ';
+'Cuando se confirme el preregistro indica el n∫ de registro / envÌo confirmado ';
 
 comment on column ZPE_PREBCK.PRB_FECREG is
-'Fecha de la confirmaci√≥n del registro / env√≠o. Un preregistro estar√° confirmado si tiene alimentada esta fecha.';
+'Fecha de la confirmaciÛn del registro / envÌo. Un preregistro estar· confirmado si tiene alimentada esta fecha.';
 
 comment on column ZPE_PREBCK.PRB_NIFRTE is
 'Indica NIF del representante';
@@ -1017,10 +1017,10 @@ comment on column ZPE_PREBCK.PRB_NOMRDO is
 'En caso de existir representado, indica nombre del representado';
 
 comment on column ZPE_PREBCK.PRB_TRAMOD is
-'MODELO TRAMITE (Permite nulos ya que es un campo a√±adido a posteriori)';
+'MODELO TRAMITE (Permite nulos ya que es un campo aÒadido a posteriori)';
 
 comment on column ZPE_PREBCK.PRB_TRAVER is
-'VERSION TRAMITE (Permite nulos ya que es un campo a√±adido a posteriori)';
+'VERSION TRAMITE (Permite nulos ya que es un campo aÒadido a posteriori)';
 
 comment on column ZPE_PREBCK.PRB_CONAUT is
 'Indica si el preregistro se ha confirmado automaticamente';
@@ -1056,48 +1056,48 @@ alter table ZPE_PREBCK
 
 create table ZPE_PREREG  (
    PRE_CODIGO           BIGINT                      not null,
-   PRE_NUMPRE           VARCHAR(50)                    not null,
-   PRE_IDIOMA           VARCHAR(2)                     not null,
-   PRE_FECHA            DATE                            not null,
-   PRE_FECCAD           DATE                            not null,
-   PRE_IDEPER           VARCHAR(50)                    not null,
-   PRE_DESC             VARCHAR(200)                   not null,
-   PRE_TIPO             VARCHAR(1)                     not null,
-   PRE_NIVAUT           VARCHAR(1)                     not null,
-   PRE_USER             VARCHAR(1536),
+   PRE_NUMPRE           character varying(50)                    not null,
+   PRE_IDIOMA           character varying(2)                     not null,
+   PRE_FECHA            timestamp with time zone 				 NOT NULL,
+   PRE_FECCAD           timestamp with time zone 				 NOT NULL,
+   PRE_IDEPER           character varying(50)                    not null,
+   PRE_DESC             character varying(200)                   not null,
+   PRE_TIPO             character varying(1)                     not null,
+   PRE_NIVAUT           character varying(1)                     not null,
+   PRE_USER             character varying(1536),
    PRE_CODASI           BIGINT                      not null,
-   PRE_CLAASI           VARCHAR(10)                    not null,
+   PRE_CLAASI           character varying(10)                    not null,
    PRE_CODJUS           BIGINT                      not null,
-   PRE_CLAJUS           VARCHAR(10)                    not null,
-   PRE_NUMREG           VARCHAR(50),
-   PRE_FECREG           DATE,
-   PRE_NIFRTE           VARCHAR(12),
-   PRE_NOMRTE           VARCHAR(500),
-   PRE_NIFRDO           VARCHAR(12),
-   PRE_NOMRDO           VARCHAR(500),
-   PRE_TRAMOD           VARCHAR(20),
+   PRE_CLAJUS           character varying(10)                    not null,
+   PRE_NUMREG           character varying(50),
+   PRE_FECREG           timestamp with time zone,
+   PRE_NIFRTE           character varying(12),
+   PRE_NOMRTE           character varying(500),
+   PRE_NIFRDO           character varying(12),
+   PRE_NOMRDO           character varying(500),
+   PRE_TRAMOD           character varying(20),
    PRE_TRAVER           BIGINT,
-   PRE_CONAUT           VARCHAR(1)                    default 'N' not null,
-   PRE_AVISOS           VARCHAR(1),
-   PRE_AVISMS           VARCHAR(10),
-   PRE_AVIEMA           VARCHAR(500),
-   PRE_NOTTEL           VARCHAR(1),
-   PRE_NIFDLG           VARCHAR(12),
-   PRE_NOMDLG           VARCHAR(500),
-   pre_sbexid           VARCHAR(50),
+   PRE_CONAUT           character varying(1)                    default 'N' not null,
+   PRE_AVISOS           character varying(1),
+   PRE_AVISMS           character varying(10),
+   PRE_AVIEMA           character varying(500),
+   PRE_NOTTEL           character varying(1),
+   PRE_NIFDLG           character varying(12),
+   PRE_NOMDLG           character varying(500),
+   pre_sbexid           character varying(50),
    pre_sbexua           BIGINT,
-   PRE_IDEPRO           VARCHAR(100)
+   PRE_IDEPRO           character varying(100)
 );
 
 
 comment on table ZPE_PREREG is
-'Log de preregistro (regsitros y env√≠os)';
+'Log de preregistro (regsitros y envÌos)';
 
 comment on column ZPE_PREREG.PRE_CODIGO is
-'C√≥digo interno entrada';
+'CÛdigo interno entrada';
 
 comment on column ZPE_PREREG.PRE_NUMPRE is
-'N√∫mero de preregistro / preenvio generado por Sistema de Tramitaci√≥n';
+'N˙mero de preregistro / preenvio generado por Sistema de TramitaciÛn';
 
 comment on column ZPE_PREREG.PRE_IDIOMA is
 'Idioma en el que se ha realizado';
@@ -1106,40 +1106,40 @@ comment on column ZPE_PREREG.PRE_FECHA is
 'Fecha de preregistro';
 
 comment on column ZPE_PREREG.PRE_FECCAD is
-'Fecha tope para realizar la confirmaci√≥n';
+'Fecha tope para realizar la confirmaciÛn';
 
 comment on column ZPE_PREREG.PRE_IDEPER is
 'IDENTIFICADOR DE PERSISTENCIA. ';
 
 comment on column ZPE_PREREG.PRE_DESC is
-'Descripci√≥n del tr√°mite';
+'DescripciÛn del tr·mite';
 
 comment on column ZPE_PREREG.PRE_TIPO is
-'Tipo de entrada: P (PreRegistro Entrada) / N (PreEnv√≠o Bandeja)';
+'Tipo de entrada: P (PreRegistro Entrada) / N (PreEnvÌo Bandeja)';
 
 comment on column ZPE_PREREG.PRE_NIVAUT is
-'Nivel autenticaci√≥n U (Usuario) / C (Certificado) / A (An√≥nimo)';
+'Nivel autenticaciÛn U (Usuario) / C (Certificado) / A (AnÛnimo)';
 
 comment on column ZPE_PREREG.PRE_USER is
 'En caso de estar autenticado referencia usuario Seycon';
 
 comment on column ZPE_PREREG.PRE_CODASI is
-'C√≥digo de la referencia RDS del asiento';
+'CÛdigo de la referencia RDS del asiento';
 
 comment on column ZPE_PREREG.PRE_CLAASI is
 'Clave de la referencia RDS del asiento';
 
 comment on column ZPE_PREREG.PRE_CODJUS is
-'C√≥digo de la referencia RDS del justificante';
+'CÛdigo de la referencia RDS del justificante';
 
 comment on column ZPE_PREREG.PRE_CLAJUS is
 'Clave de la referencia RDS del justificante';
 
 comment on column ZPE_PREREG.PRE_NUMREG is
-'Cuando se confirme el preregistro indica el n¬∫ de registro / env√≠o confirmado ';
+'Cuando se confirme el preregistro indica el n∫ de registro / envÌo confirmado ';
 
 comment on column ZPE_PREREG.PRE_FECREG is
-'Fecha de la confirmaci√≥n del registro / env√≠o. Un preregistro estar√° confirmado si tiene alimentada esta fecha.';
+'Fecha de la confirmaciÛn del registro / envÌo. Un preregistro estar· confirmado si tiene alimentada esta fecha.';
 
 comment on column ZPE_PREREG.PRE_NIFRTE is
 'Indica NIF del representante';
@@ -1154,10 +1154,10 @@ comment on column ZPE_PREREG.PRE_NOMRDO is
 'En caso de existir representado, indica nombre del representado';
 
 comment on column ZPE_PREREG.PRE_TRAMOD is
-'MODELO TRAMITE (Permite nulos ya que es un campo a√±adido a posteriori)';
+'MODELO TRAMITE (Permite nulos ya que es un campo aÒadido a posteriori)';
 
 comment on column ZPE_PREREG.PRE_TRAVER is
-'VERSION TRAMITE (Permite nulos ya que es un campo a√±adido a posteriori)';
+'VERSION TRAMITE (Permite nulos ya que es un campo aÒadido a posteriori)';
 
 comment on column ZPE_PREREG.PRE_CONAUT is
 'Indica si el preregistro se ha confirmado automaticamente';
@@ -1200,30 +1200,30 @@ create unique index ZPE_PRENPR_UNI on ZPE_PREREG (
 );
 
 create table ZPE_RPAGOS  (
-   PAG_LOCALI           VARCHAR(100)                   not null,
-   PAG_NOMTRA           VARCHAR(200),
-   PAG_MODELO           VARCHAR(100),
-   PAG_IDTASA           VARCHAR(100),
-   PAG_CONCEP           VARCHAR(200),
-   PAG_DATADV           DATE,
-   PAG_IMPORT           VARCHAR(100),
-   PAG_NIFDEC           VARCHAR(12),
-   PAG_NOMDEC           VARCHAR(200),
-   PAG_ESTADO           BIGINT,
-   PAG_TIPO             VARCHAR(1),
-   PAG_IDENTP           VARCHAR(200),
-   PAG_DATAPG           DATE,
+   PAG_LOCALI           character varying(100)                   not null,
+   PAG_NOMTRA           character varying(200),
+   PAG_MODELO           character varying(100),
+   PAG_IDTASA           character varying(100),
+   PAG_CONCEP           character varying(200),
+   PAG_DATADV           timestamp with time zone,
+   PAG_IMPORT           character varying(100),
+   PAG_NIFDEC           character varying(12),
+   PAG_NOMDEC           character varying(200),
+   PAG_ESTADO           BOOLEAN,
+   PAG_TIPO             character varying(1),
+   PAG_IDENTP           character varying(200),
+   PAG_DATAPG           timestamp with time zone,
    PAG_RECIBO           TEXT,
-   PAG_URLSTR           VARCHAR(400),
-   PAG_URLMNT           VARCHAR(400),
-   PAG_TOKEN            VARCHAR(100),
-   PAG_DATALI           DATE,
-   PAG_NOMUSU           VARCHAR(200),
-   PAG_TIPOPG           VARCHAR(1),
-   PAG_IDIOMA           VARCHAR(2),
-   PAG_FINAL            VARCHAR(1),
-   PAG_IDETRA           VARCHAR(50),
-   PAG_MODTRA           VARCHAR(20),
+   PAG_URLSTR           character varying(400),
+   PAG_URLMNT           character varying(400),
+   PAG_TOKEN            character varying(100),
+   PAG_DATALI           timestamp with time zone,
+   PAG_NOMUSU           character varying(200),
+   PAG_TIPOPG           character varying(1),
+   PAG_IDIOMA           character varying(2),
+   PAG_FINAL            character varying(1),
+   PAG_IDETRA           character varying(50),
+   PAG_MODTRA           character varying(20),
    PAG_VERTRA           BIGINT
 );
 
@@ -1234,7 +1234,7 @@ comment on column ZPE_RPAGOS.PAG_LOCALI is
 'Localizador sesion de pago';
 
 comment on column ZPE_RPAGOS.PAG_NOMTRA is
-'Nombre del tr√°mite';
+'Nombre del tr·mite';
 
 comment on column ZPE_RPAGOS.PAG_MODELO is
 'Modelo tasa';
@@ -1276,7 +1276,7 @@ comment on column ZPE_RPAGOS.PAG_URLSTR is
 'Url retorno a SISTRA';
 
 comment on column ZPE_RPAGOS.PAG_URLMNT is
-'Url mantenimiento sesi√≥n SISTRA';
+'Url mantenimiento sesiÛn SISTRA';
 
 comment on column ZPE_RPAGOS.PAG_TOKEN is
 'Token sesion pago portal contribuent';
@@ -1297,13 +1297,13 @@ comment on column ZPE_RPAGOS.PAG_FINAL is
 'Indica si el pago ha finalizado';
 
 comment on column ZPE_RPAGOS.PAG_IDETRA is
-'Identificador del tr√°mite (Id persistencia)';
+'Identificador del tr·mite (Id persistencia)';
 
 comment on column ZPE_RPAGOS.PAG_MODTRA is
-'Modelo del tr√°mite';
+'Modelo del tr·mite';
 
 comment on column ZPE_RPAGOS.PAG_VERTRA is
-'Versi√≥n del tr√°mite';
+'VersiÛn del tr·mite';
 
 
 alter table ZPE_RPAGOS
@@ -1311,18 +1311,18 @@ alter table ZPE_RPAGOS
 
 create table ZPE_TPEBCK  (
    TPB_CODIGO           BIGINT                      not null,
-   TPB_IDEPER           VARCHAR(50)                    not null,
-   TPB_TRAMOD           VARCHAR(20)                    not null,
+   TPB_IDEPER           character varying(50)                    not null,
+   TPB_TRAMOD           character varying(20)                    not null,
    TPB_TRAVER           BIGINT                       not null,
-   TPB_TRADES           VARCHAR(200)                   not null,
-   TPB_NIVAUT           VARCHAR(1)                     not null,
-   TPB_USER             VARCHAR(1536),
-   TPB_FECINI           DATE                            not null,
-   TPB_FECMOD           DATE                            not null,
-   TPB_PARINI           VARCHAR(4000),
-   TPB_FECCAD           DATE                            not null,
-   TPB_IDIOMA           VARCHAR(2)                     not null,
-   TPB_FLUTRA           VARCHAR(1536)
+   TPB_TRADES           character varying(200)                   not null,
+   TPB_NIVAUT           character varying(1)                     not null,
+   TPB_USER             character varying(1536),
+   TPB_FECINI           timestamp with time zone NOT NULL,
+   TPB_FECMOD           timestamp with time zone NOT NULL,
+   TPB_PARINI           character varying(4000),
+   TPB_FECCAD           timestamp with time zone NOT NULL,
+   TPB_IDIOMA           character varying(2)                     not null,
+   TPB_FLUTRA           character varying(1536)
 );
 
 comment on table ZPE_TPEBCK is
@@ -1356,7 +1356,7 @@ comment on column ZPE_TPEBCK.TPB_FECMOD is
 'FECHA ULTIMA MODIFICACION';
 
 comment on column ZPE_TPEBCK.TPB_PARINI is
-'PARAMETROS DE INICIO DEL TRAMITE (PARAMETROS QUE APARECEN EN LA REQUEST AL INICIAR EL TR√ÅMITE)';
+'PARAMETROS DE INICIO DEL TRAMITE (PARAMETROS QUE APARECEN EN LA REQUEST AL INICIAR EL TR¡ÅMITE)';
 
 comment on column ZPE_TPEBCK.TPB_FECCAD is
 'FECHA DE CADUCIDAD CALCULADA A PARTIR DE LOS DIAS DE PERSISTENCIA';
@@ -1365,27 +1365,27 @@ comment on column ZPE_TPEBCK.TPB_IDIOMA is
 'IDIOMA DEL TRAMITE';
 
 comment on column ZPE_TPEBCK.TPB_FLUTRA is
-'USUARIO QUE ESTA COMPLETANDO EL TR√ÅMITE (SOLO PARA NIVELES C Y U) ';
+'USUARIO QUE ESTA COMPLETANDO EL TR¡ÅMITE (SOLO PARA NIVELES C Y U) ';
 
 alter table ZPE_TPEBCK
    add constraint ZPE_TPB_PK primary key (TPB_CODIGO);
 
 create table ZPE_TRAPER  (
    TPE_CODIGO           BIGINT                      not null,
-   TPE_IDEPER           VARCHAR(50)                    not null,
-   TPE_TRAMOD           VARCHAR(20)                    not null,
+   TPE_IDEPER           character varying(50)                    not null,
+   TPE_TRAMOD           character varying(20)                    not null,
    TPE_TRAVER           BIGINT                       not null,
-   TPE_TRADES           VARCHAR(200)                   not null,
-   TPE_NIVAUT           VARCHAR(1)                     not null,
-   TPE_USER             VARCHAR(1536),
-   TPE_FECINI           DATE                            not null,
-   TPE_FECMOD           DATE                            not null,
-   TPE_PARINI           VARCHAR(4000),
-   TPE_FECCAD           DATE                            not null,
-   TPE_IDIOMA           VARCHAR(2)                     not null,
-   TPE_FLUTRA           VARCHAR(1536),
-   TPE_DELEGA           VARCHAR(1536),
-   TPE_DLGEST           VARCHAR(2)
+   TPE_TRADES           character varying(200)                   not null,
+   TPE_NIVAUT           character varying(1)                     not null,
+   TPE_USER             character varying(1536),
+   TPE_FECINI           timestamp with time zone NOT NULL,
+   TPE_FECMOD           timestamp with time zone NOT NULL,
+   TPE_PARINI           character varying(4000),
+   TPE_FECCAD           timestamp with time zone NOT NULL,
+   TPE_IDIOMA           character varying(2)                     not null,
+   TPE_FLUTRA           character varying(1536),
+   TPE_DELEGA           character varying(1536),
+   TPE_DLGEST           character varying(2)
 );
 
 
@@ -1416,13 +1416,13 @@ comment on column ZPE_TRAPER.TPE_USER is
 'USUARIO QUE INICIA EL TR√ÅMITE (SOLO PARA NIVELES C Y U) ';
 
 comment on column ZPE_TRAPER.TPE_FECINI is
-'FECHA CREACI√ìN';
+'FECHA CREACI”ìN';
 
 comment on column ZPE_TRAPER.TPE_FECMOD is
 'FECHA ULTIMA MODIFICACION';
 
 comment on column ZPE_TRAPER.TPE_PARINI is
-'PARAMETROS DE INICIO DEL TRAMITE (PARAMETROS QUE APARECEN EN LA REQUEST AL INICIAR EL TR√ÅMITE)';
+'PARAMETROS DE INICIO DEL TRAMITE (PARAMETROS QUE APARECEN EN LA REQUEST AL INICIAR EL TR¡ÅMITE)';
 
 comment on column ZPE_TRAPER.TPE_FECCAD is
 'FECHA DE CADUCIDAD CALCULADA A PARTIR DE LOS DIAS DE PERSISTENCIA';
@@ -1431,7 +1431,7 @@ comment on column ZPE_TRAPER.TPE_IDIOMA is
 'IDIOMA DEL TRAMITE';
 
 comment on column ZPE_TRAPER.TPE_FLUTRA is
-'USUARIO QUE ESTA COMPLETANDO EL TR√ÅMITE (SOLO PARA NIVELES C Y U) ';
+'USUARIO QUE ESTA COMPLETANDO EL TR¡ÅMITE (SOLO PARA NIVELES C Y U) ';
 
 comment on column ZPE_TRAPER.TPE_DELEGA is
 'USUARIO QUE  ESTA EFECTUANDO DE EL TRAMITE DE FORMA DELEGADA  (SOLO PARA NIVEL C Y U)';
@@ -1481,41 +1481,41 @@ alter table ZPE_ELEEX
 
 create table ZPE_REGEXT  (
    REG_CODIGO           BIGINT                      not null,
-   REG_NIVAUT           VARCHAR(1),
-   REG_DESC             VARCHAR(200)                   not null,
-   REG_USER             VARCHAR(1536),
-   REG_NUMREG           VARCHAR(50)                    not null,
-   REG_FECHA            DATE                            not null,
+   REG_NIVAUT           character varying(1),
+   REG_DESC             character varying(200)                   not null,
+   REG_USER             character varying(1536),
+   REG_NUMREG           character varying(50)                    not null,
+   REG_FECHA            timestamp with time zone NOT NULL,
    REG_CODASI           BIGINT                      not null,
-   REG_CLAASI           VARCHAR(10)                    not null,
+   REG_CLAASI           character varying(10)                    not null,
    REG_CODJUS           BIGINT                      not null,
-   REG_CLAJUS           VARCHAR(10)                    not null,
-   REG_IDIOMA           VARCHAR(2)                     not null,
-   REG_NIFRTE           VARCHAR(12),
-   REG_NOMRTE           VARCHAR(500),
-   REG_NIFRDO           VARCHAR(12),
-   REG_NOMRDO           VARCHAR(500)
+   REG_CLAJUS           character varying(10)                    not null,
+   REG_IDIOMA           character varying(2)                     not null,
+   REG_NIFRTE           character varying(12),
+   REG_NOMRTE           character varying(500),
+   REG_NIFRDO           character varying(12),
+   REG_NOMRDO           character varying(500)
 );
 comment on table ZPE_REGEXT is
-'Log de entradas telem√°ticas';
+'Log de entradas telem·ticas';
 comment on column ZPE_REGEXT.REG_CODIGO is
-'C√≥digo interno entrada';
+'CÛdigo interno entrada';
 comment on column ZPE_REGEXT.REG_NIVAUT is
-'Nivel autenticaci√≥n usuario para el que se realiza el registro(OPCIONAL): U (Usuario) / C (Certificado) / A (An√≥nimo)';
+'Nivel autenticaciÛn usuario para el que se realiza el registro(OPCIONAL): U (Usuario) / C (Certificado) / A (AnÛnimo)';
 comment on column ZPE_REGEXT.REG_DESC is
-'Descripci√≥n del tr√°mite';
+'DescripciÛn del tr·mite';
 comment on column ZPE_REGEXT.REG_USER is
 'En caso de estar autenticado referencia usuario Seycon que realiza la entrada';
 comment on column ZPE_REGEXT.REG_NUMREG is
-'Indica el n¬∫ de registro/n¬∫ de env√≠o';
+'Indica el n∫ de registro/n∫ de envÌo';
 comment on column ZPE_REGEXT.REG_FECHA is
-'Fecha de registro / env√≠o';
+'Fecha de registro / envÌo';
 comment on column ZPE_REGEXT.REG_CODASI is
-'C√≥digo de la referencia RDS del asiento';
+'CÛdigo de la referencia RDS del asiento';
 comment on column ZPE_REGEXT.REG_CLAASI is
 'Clave de la referencia RDS del asiento';
 comment on column ZPE_REGEXT.REG_CODJUS is
-'C√≥digo de la referencia RDS del justificante';
+'CÛdigo de la referencia RDS del justificante';
 comment on column ZPE_REGEXT.REG_CLAJUS is
 'Clave de la referencia RDS del justificante';
 comment on column ZPE_REGEXT.REG_IDIOMA is
@@ -1535,24 +1535,24 @@ alter table ZPE_REGEXT
 create table ZPE_DOCREG  (
    DRE_CODIGO           BIGINT                      not null,
    DRE_CODREG           BIGINT                      not null,
-   DRE_DOCIDE           VARCHAR(5)                     not null,
+   DRE_DOCIDE           character varying(5)                     not null,
    DRE_DOCNUM           BIGINT                       not null,
-   DRE_DESC             VARCHAR(500)                   not null,
+   DRE_DESC             character varying(500)                   not null,
    DRE_RDSCOD           BIGINT                      not null,
-   DRE_RDSCLA           VARCHAR(10)                    not null
+   DRE_RDSCLA           character varying(10)                    not null
 );
 comment on column ZPE_DOCREG.DRE_CODIGO is
-'C√≥digo interno';
+'CÛdigo interno';
 comment on column ZPE_DOCREG.DRE_CODREG is
-'C√≥digo entrada registro tramites no sistra';
+'CÛdigo entrada registro tramites no sistra';
 comment on column ZPE_DOCREG.DRE_DOCIDE is
 'Identificador documento';
 comment on column ZPE_DOCREG.DRE_DOCNUM is
-'N√∫mero instancia';
+'N˙mero instancia';
 comment on column ZPE_DOCREG.DRE_DESC is
-'Descripci√≥n documento';
+'DescripciÛn documento';
 comment on column ZPE_DOCREG.DRE_RDSCOD is
-'C√≥digo RDS del documento';
+'CÛdigo RDS del documento';
 comment on column ZPE_DOCREG.DRE_RDSCLA is
 'Clave RDS del documento';
 alter table ZPE_DOCREG
@@ -1566,15 +1566,15 @@ alter table ZPE_DOCREG
 
 
 create table ZPE_REGLOG  (
-   RLG_TIPREG           VARCHAR(1)                     not null,
-   RLG_NUMREG           VARCHAR(50)                    not null,
-   RLG_FECREG           DATE                            not null,
-   RLG_ERROR            VARCHAR(2000),
-   RLG_ANULAD           VARCHAR(1)
+   RLG_TIPREG           character varying(1)                     not null,
+   RLG_NUMREG           character varying(50)                    not null,
+   RLG_FECREG           timestamp with time zone NOT NULL,
+   RLG_ERROR            character varying(2000),
+   RLG_ANULAD           character varying(1)
 );
 
 comment on table ZPE_REGLOG is
-'Log de entradas telem√°ticas';
+'Log de entradas telem·ticas';
 comment on column ZPE_REGLOG.RLG_TIPREG is
 'Tipo de registro  Entrada (E) / Salida (S)';
 comment on column ZPE_REGLOG.RLG_NUMREG is
@@ -1582,7 +1582,7 @@ comment on column ZPE_REGLOG.RLG_NUMREG is
 comment on column ZPE_REGLOG.RLG_FECREG is
 'Fecha de registro';
 comment on column ZPE_REGLOG.RLG_ERROR is
-'descripci√≥n del error al dar de alta en registro';
+'descripciÛn del error al dar de alta en registro';
 alter table ZPE_REGLOG
    add constraint ZPE_RLG_PK primary key (RLG_TIPREG, RLG_NUMREG);
 
@@ -1597,14 +1597,14 @@ create sequence ZPE_SEQDEL;
 
 create table ZPE_DELEGA  (
    DEL_CODIGO           BIGINT                      not null,
-   DEL_DLGTE            VARCHAR(12)                    not null,
-   DEL_DLGDO            VARCHAR(12)                    not null,
-   DEL_PERMIS           VARCHAR(10)                    not null,
-   DEL_INIDLG           DATE                            not null,
-   DEL_FINDLG           DATE                            not null,
+   DEL_DLGTE            character varying(12)                    not null,
+   DEL_DLGDO            character varying(12)                    not null,
+   DEL_PERMIS           character varying(10)                    not null,
+   DEL_INIDLG           timestamp with time zone NOT NULL,
+   DEL_FINDLG           timestamp with time zone NOT NULL,
    DEL_CODRDS           BIGINT                      not null,
-   DEL_CLARDS           VARCHAR(10)                    not null,
-   DEL_ANULAD           VARCHAR(1)                    default 'N' not null
+   DEL_CLARDS           character varying(10)                    not null,
+   DEL_ANULAD           character varying(1)                    default 'N' not null
 );
 
 comment on table ZPE_DELEGA is
@@ -1646,18 +1646,18 @@ alter table ZPE_DELEGA
 
 
    create table ZPE_SUBPAR  (
-   SBP_CODIGO           VARCHAR(50)                    not null,
+   SBP_CODIGO           character varying(50)                    not null,
    SBP_UNIADM           BIGINT                      not null,
-   SBP_IDEXP            VARCHAR(50)                    not null,
-   SBP_PARAMS           VARCHAR(4000),
-   SBP_FECHA            DATE                            not null
+   SBP_IDEXP            character varying(50)                    not null,
+   SBP_PARAMS           character varying(4000),
+   SBP_FECHA            timestamp with time zone NOT NULL
 );
 
 comment on table ZPE_SUBPAR is
 'PARAMETROS DE INICIO DE TRAMITE DE SUBSANACION';
 
 comment on column ZPE_SUBPAR.SBP_CODIGO is
-'Codigo de acceso par√°metros inicio tr√°mite subsanaci√≥n';
+'Codigo de acceso par·metros inicio tr·mite subsanaciÛn';
 
 comment on column ZPE_SUBPAR.SBP_UNIADM is
 'Unidad administrativa que da de alta el expediente';
@@ -1677,18 +1677,18 @@ alter table ZPE_SUBPAR
 
 create table ZPE_RGPEXT  (
    RGP_RDSCOD           BIGINT                      not null,
-   RGP_RDSCLA           VARCHAR(10)                    not null,
-   RGP_RDSANE           VARCHAR(4000),
-   RGP_IDEPER           VARCHAR(50)                    not null,
-   RGP_FECINI           date                            not null,
-   RGP_FECFIN           DATE                            not null
+   RGP_RDSCLA           character varying(10)                    not null,
+   RGP_RDSANE           character varying(4000),
+   RGP_IDEPER           character varying(50)                    not null,
+   RGP_FECINI           timestamp with time zone NOT NULL,
+   RGP_FECFIN           timestamp with time zone NOT NULL
 );
 
 comment on table ZPE_RGPEXT is
-'Log de preparaci√≥n de asientos para firmar y registrar con posterioridad (para registros de entrada externos, es decir no realizados por Sistra)';
+'Log de preparaciÛn de asientos para firmar y registrar con posterioridad (para registros de entrada externos, es decir no realizados por Sistra)';
 
 comment on column ZPE_RGPEXT.RGP_RDSCOD is
-'C√≥digo RDS del asiento';
+'CÛdigo RDS del asiento';
 
 comment on column ZPE_RGPEXT.RGP_RDSCLA is
 'Clave RDS del asiento';
@@ -1703,7 +1703,7 @@ comment on column ZPE_RGPEXT.RGP_FECINI is
 'Fecha en la que se ha preparado el asiento';
 
 comment on column ZPE_RGPEXT.RGP_FECFIN is
-'Fecha en la que se si no es registrado el asiento se eliminar√°';
+'Fecha en la que se si no es registrado el asiento se eliminar·';
 
 alter table ZPE_RGPEXT
    add constraint ZPE_RGP_PK primary key (RGP_RDSCOD);
@@ -1715,15 +1715,15 @@ CREATE SEQUENCE ZPE_SEQIND;
 
 create table ZPE_INDELE  (
    IND_CODIGO           BIGINT                      not null,
-   IND_NIF              VARCHAR(10)                    not null,
-   IND_TIPEL            VARCHAR(1)                     not null,
+   IND_NIF              character varying(10)                    not null,
+   IND_TIPEL            character varying(1)                     not null,
    IND_CODEL            BIGINT                      not null,
-   IND_DESCR            VARCHAR(1000)                  not null,
-   IND_VALOR            VARCHAR(4000)
+   IND_DESCR            character varying(1000)                  not null,
+   IND_VALOR            character varying(4000)
 );
 
 comment on table ZPE_INDELE is
-'Indices de b√∫squeda asociadas a elementos de un expediente (solo para autenticados)';
+'Indices de b˙squeda asociadas a elementos de un expediente (solo para autenticados)';
 
 comment on column ZPE_INDELE.IND_CODIGO is
 'Codigo interno';
@@ -1753,10 +1753,10 @@ create index ZPE_INDELE_IDX on ZPE_INDELE (
 -- V2.1.0
 
 
-alter table ZPE_EXPEDI add EXP_TIPO VARCHAR(1);
+alter table ZPE_EXPEDI add EXP_TIPO character varying(1);
 
 comment on column ZPE_EXPEDI.EXP_TIPO is
-'Tipo expediente: E (Expediente real) / V (Expediente virtual de una entrada para la que a√∫n no se ha generado expediente)';
+'Tipo expediente: E (Expediente real) / V (Expediente virtual de una entrada para la que a˙n no se ha generado expediente)';
 
 alter table ZPE_EXPEDI alter column EXP_TIPO set not null;
 
@@ -1765,16 +1765,16 @@ alter table ZPE_EXPEDI alter column EXP_UNIADM drop not null;
 alter table ZPE_EXPEDI alter column EXP_USER drop not null;
 
 
-alter table ZPE_NOTTEL add NOT_IDEPER VARCHAR(50);
+alter table ZPE_NOTTEL add NOT_IDEPER character varying(50);
 
 alter table ZPE_NOTTEL alter column NOT_IDEPER set  not null;
 
 
-alter table ZPE_HISTEX add HIE_IDEPER VARCHAR(50);
+alter table ZPE_HISTEX add HIE_IDEPER character varying(50);
 
 alter table ZPE_HISTEX alter column HIE_IDEPER set not null;
 
-alter table ZPE_ELEEX add ELE_IDPELE VARCHAR(50);
+alter table ZPE_ELEEX add ELE_IDPELE character varying(50);
 
 alter table ZPE_ELEEX alter column ELE_IDPELE set not null;
 
@@ -1786,7 +1786,7 @@ create unique index ZPE_ELEIDP_UNI on ZPE_ELEEX (
 alter table ZPE_ELEEX add ELE_ACCEXP BOOLEAN default false not null;
 
 comment on column ZPE_ELEEX.ELE_ACCEXP is
-'Indica si elemento proporciona acceso a expediente de forma an√≥nima a traves de su id persistencia';
+'Indica si elemento proporciona acceso a expediente de forma anÛnima a traves de su id persistencia';
 
 /* ACCESO ANONIMO NOTIF POR CLAVE */
 ALTER table ZPE_NOTTEL ADD NOT_ACCCLA  BOOLEAN default false not null;
@@ -1799,7 +1799,7 @@ comment on column ZPE_HISTEX.HIE_ACCCLA is
 'Indica si se permite que el evento sea accesible mediante clave (id persistencia evento)';
 
 /* TIPO FIRMA NOTIFICACION */
-alter table ZPE_NOTTEL  add NOT_TIPFIR  VARCHAR(3);
+alter table ZPE_NOTTEL  add NOT_TIPFIR  character varying(3);
 
 comment on column ZPE_NOTTEL.NOT_TIPFIR is
 'En caso de que se haya firmado el acuse de recibo indica el tipo de firma:
@@ -1808,26 +1808,26 @@ comment on column ZPE_NOTTEL.NOT_TIPFIR is
 
 
  /* ACTUALIZAR PROPS TABLA BACKUP DE TRAMITES */
- ALTER table ZPE_TPEBCK  add  TPB_DLGEST VARCHAR(2);
+ ALTER table ZPE_TPEBCK  add  TPB_DLGEST character varying(2);
 
  comment on column ZPE_TPEBCK.TPB_DLGEST is
 'ESTADO DE DELEGACION: PASO A FIRMA DOCUMENTO, PASO A PRESENTACION TRAMITE';
 
- ALTER table ZPE_TPEBCK  add    TPB_DELEGA           VARCHAR(1536);
+ ALTER table ZPE_TPEBCK  add    TPB_DELEGA           character varying(1536);
 
  comment on column ZPE_TPEBCK.TPB_DELEGA is
 'INDICA QUE EL TRAMITE SE ESTA EFECTUANDO DE FORMA DELEGADA PARA ESTE USUARIO (SOLO PARA NIVEL C Y U)';
 
-ALTER table ZPE_DPEBCK ADD DPB_GENDES           VARCHAR(255);
+ALTER table ZPE_DPEBCK ADD DPB_GENDES           character varying(255);
 
-ALTER table ZPE_DPEBCK ADD DPB_DLGEST           VARCHAR(2);
+ALTER table ZPE_DPEBCK ADD DPB_DLGEST           character varying(2);
 
-ALTER table ZPE_DPEBCK ADD DPB_DLGFIR           VARCHAR(4000);
+ALTER table ZPE_DPEBCK ADD DPB_DLGFIR           character varying(4000);
 
-ALTER table ZPE_DPEBCK  ADD DPB_DLGFIP           VARCHAR(4000);
+ALTER table ZPE_DPEBCK  ADD DPB_DLGFIP           character varying(4000);
 
 comment on column ZPE_DPEBCK.DPB_GENDES is
-'DESCRIPCION PERSONALIZADA PARA GEN√âRICOS';
+'DESCRIPCION PERSONALIZADA PARA GEN…âRICOS';
 
 comment on column ZPE_DPEBCK.DPB_DLGEST is
 'ESTADO DE DELEGACION: PASO A FIRMA DOCUMENTO';
@@ -1840,9 +1840,9 @@ comment on column ZPE_DPEBCK.DPB_DLGFIP is
 
  -- V2.2.7
 
- ALTER TABLE ZPE_TRAPER ADD TPE_ALTGEN VARCHAR(1) default 'N' not null;
-ALTER TABLE ZPE_TRAPER ADD TPE_ALTEMA VARCHAR(500);
-ALTER TABLE ZPE_TRAPER ADD TPE_ALTSMS VARCHAR(10);
+ ALTER TABLE ZPE_TRAPER ADD TPE_ALTGEN character varying(1) default 'N' not null;
+ALTER TABLE ZPE_TRAPER ADD TPE_ALTEMA character varying(500);
+ALTER TABLE ZPE_TRAPER ADD TPE_ALTSMS character varying(10);
 ALTER TABLE ZPE_TRAPER ADD TPE_ALTFEC TIMESTAMP;
 
 comment on column ZPE_TRAPER.TPE_ALTGEN is 'INDICA SI SE GENERAN ALERTAS DE TRAMITACION (S/N)';
@@ -1851,15 +1851,15 @@ comment on column ZPE_TRAPER.TPE_ALTSMS is 'SMS PARA GENERAR ALERTAS';
 comment on column ZPE_TRAPER.TPE_ALTFEC is 'FECHA ULTIMA ALERTA';
 
 
-ALTER table ZPE_DOCPER  ADD DPE_TIPO VARCHAR(1);
-ALTER table ZPE_DOCPER  ADD DPE_PAGTEL VARCHAR(1) default 'N' not null;
+ALTER table ZPE_DOCPER  ADD DPE_TIPO character varying(1);
+ALTER table ZPE_DOCPER  ADD DPE_PAGTEL character varying(1) default 'N' not null;
 
 comment on column ZPE_DOCPER.DPE_TIPO is 'TIPO DOCUMENTO: FORMULARIO (F) / PAGO (P) / ANEXO (A)';
 comment on column ZPE_DOCPER.DPE_PAGTEL is 'EN CASO DE QUE SEA DE TIPO PAGO, INDICA SI ES TELEMATICO (S/N)';
 
-ALTER table ZPE_TPEBCK ADD TPB_ALTGEN VARCHAR(1) default 'N' not null;
-ALTER TABLE ZPE_TPEBCK ADD TPB_ALTEMA VARCHAR(500);
-ALTER TABLE ZPE_TPEBCK ADD TPB_ALTSMS VARCHAR(10);
+ALTER table ZPE_TPEBCK ADD TPB_ALTGEN character varying(1) default 'N' not null;
+ALTER TABLE ZPE_TPEBCK ADD TPB_ALTEMA character varying(500);
+ALTER TABLE ZPE_TPEBCK ADD TPB_ALTSMS character varying(10);
 ALTER TABLE ZPE_TPEBCK ADD TPB_ALTFEC TIMESTAMP;
 
 comment on column ZPE_TPEBCK.TPB_ALTGEN is 'INDICA SI SE GENERAN ALERTAS DE TRAMITACION (S/N)';
@@ -1868,16 +1868,16 @@ comment on column ZPE_TPEBCK.TPB_ALTSMS is 'SMS PARA GENERAR ALERTAS';
 comment on column ZPE_TPEBCK.TPB_ALTFEC is 'FECHA ULTIMA ALERTA';
 
 
-ALTER table ZPE_DPEBCK  ADD DPB_TIPO VARCHAR(1);
-ALTER table ZPE_DPEBCK  ADD DPB_PAGTEL VARCHAR(1) default 'N' not null;
+ALTER table ZPE_DPEBCK  ADD DPB_TIPO character varying(1);
+ALTER table ZPE_DPEBCK  ADD DPB_PAGTEL character varying(1) default 'N' not null;
 
 comment on column ZPE_DPEBCK.DPB_TIPO is 'TIPO DOCUMENTO: FORMULARIO (F) / PAGO (P) / ANEXO (A)';
 comment on column ZPE_DPEBCK.DPB_PAGTEL is 'EN CASO DE QUE SEA DE TIPO PAGO, INDICA SI ES TELEMATICO (S/N)';
 
 
-ALTER table ZPE_PREREG ADD PRE_ALTGEN VARCHAR(1) default 'N' not null;
-ALTER TABLE ZPE_PREREG ADD PRE_ALTEMA VARCHAR(500);
-ALTER TABLE ZPE_PREREG ADD PRE_ALTSMS VARCHAR(10);
+ALTER table ZPE_PREREG ADD PRE_ALTGEN character varying(1) default 'N' not null;
+ALTER TABLE ZPE_PREREG ADD PRE_ALTEMA character varying(500);
+ALTER TABLE ZPE_PREREG ADD PRE_ALTSMS character varying(10);
 ALTER TABLE ZPE_PREREG ADD PRE_ALTFEC TIMESTAMP;
 
 comment on column ZPE_PREREG.PRE_ALTGEN is 'INDICA SI SE GENERAN ALERTAS DE TRAMITACION (S/N)';
@@ -1885,9 +1885,9 @@ comment on column ZPE_PREREG.PRE_ALTEMA is 'EMAIL PARA GENERAR ALERTAS';
 comment on column ZPE_PREREG.PRE_ALTSMS is 'SMS PARA GENERAR ALERTAS';
 comment on column ZPE_PREREG.PRE_ALTFEC is 'FECHA ULTIMA ALERTA';
 
-ALTER table ZPE_PREBCK ADD PRB_ALTGEN VARCHAR(1) default 'N' not null;
-ALTER TABLE ZPE_PREBCK ADD PRB_ALTEMA VARCHAR(500);
-ALTER TABLE ZPE_PREBCK ADD PRB_ALTSMS VARCHAR(10);
+ALTER table ZPE_PREBCK ADD PRB_ALTGEN character varying(1) default 'N' not null;
+ALTER TABLE ZPE_PREBCK ADD PRB_ALTEMA character varying(500);
+ALTER TABLE ZPE_PREBCK ADD PRB_ALTSMS character varying(10);
 ALTER TABLE ZPE_PREBCK ADD PRB_ALTFEC TIMESTAMP;
 
 comment on column ZPE_PREBCK.PRB_ALTGEN is 'INDICA SI SE GENERAN ALERTAS DE TRAMITACION (S/N)';
@@ -1898,7 +1898,7 @@ comment on column ZPE_PREBCK.PRB_ALTFEC is 'FECHA ULTIMA ALERTA';
 -- UPDATE FROM 2.3.3 TO 2.3.4
 
 -- CONTROL SMS
-ALTER table ZPE_TRAPER  ADD TPE_IDEPRO VARCHAR(100);
+ALTER table ZPE_TRAPER  ADD TPE_IDEPRO character varying(100);
 comment on column ZPE_TRAPER.TPE_IDEPRO is 'ID PROCEDIMIENTO';
 
 -- PLAZO VBLE NOTIF
@@ -1907,13 +1907,13 @@ comment on column ZPE_NOTTEL.NOT_DIAPLZ is 'En caso de que se establezca un plaz
 
 -- UPDATE FROM 2.3.4 TO 2.3.5
 -- IMPRIMIR SELLO PREREG CONFIRMADO
-ALTER table ZPE_PREREG ADD PRE_OFIREG VARCHAR(100);
+ALTER table ZPE_PREREG ADD PRE_OFIREG character varying(100);
 comment on column ZPE_PREREG.PRE_OFIREG is 'Oficina registro en la que se ha confirmado';
-ALTER table ZPE_PREBCK ADD PRB_OFIREG VARCHAR2(100);
+ALTER table ZPE_PREBCK ADD PRB_OFIREG character varying(100);
 comment on column ZPE_PREBCK.PRB_OFIREG is 'Oficina registro en la que se ha confirmado';
 
 -- UPDATE FROM 2.3.5 TO 2.3.6
-ALTER table ZPE_PERSON ADD PER_IDEMOD VARCHAR(4000);
+ALTER table ZPE_PERSON ADD PER_IDEMOD character varying(4000);
 comment on column ZPE_PERSON.PER_IDEMOD is 'Ante cambios de NIF se almacenan los NIF anteriores a modo de log';
 
 -- V2.3.9
@@ -1923,7 +1923,7 @@ create index ZPE_INDELE_IDX2 on ZPE_INDELE (
 );
 
 -- UPDATE V2.3.9 TO V2.3.10
-alter table ZPE_NOTTEL  add  NOT_FECREC DATE;
+alter table ZPE_NOTTEL  add  NOT_FECREC timestamp with time zone;
 
 comment on column ZPE_NOTTEL.NOT_FECREC is
 'Fecha en la que se rechaza la notificacion';

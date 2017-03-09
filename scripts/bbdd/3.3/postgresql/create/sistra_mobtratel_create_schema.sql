@@ -8,11 +8,11 @@ create sequence MOB_SEQMSS;
 create sequence MOB_SEQPER;
 
 create table MOB_CUENTA  (
-   CUE_CODIGO           VARCHAR(5)                     not null,
-   CUE_NOMBRE           VARCHAR(100)                   not null,
-   CUE_EMAIL            VARCHAR(500),
-   CUE_SMS              VARCHAR(50),
-   CUE_DEFECT           BIGINT                       not null
+   CUE_CODIGO           character varying(5)                     not null,
+   CUE_NOMBRE           character varying(100)                   not null,
+   CUE_EMAIL            character varying(500),
+   CUE_SMS              character varying(50),
+   CUE_DEFECT           BOOLEAN                       not null
 );
 
 comment on table MOB_CUENTA is
@@ -38,15 +38,15 @@ alter table MOB_CUENTA
 
 create table MOB_ENVIOS  (
    ENV_ID               BIGINT                      not null,
-   ENV_CODCUE           VARCHAR(5),
-   ENV_NOMBRE           VARCHAR(100)                   not null,
-   ENV_FCPROG           DATE,
-   ENV_FCENV            DATE,
-   ENV_FCCAD            DATE,
-   ENV_SEYCON           VARCHAR(50),
-   ENV_FCREG            DATE                            not null,
+   ENV_CODCUE           character varying(5),
+   ENV_NOMBRE           character varying(100)                   not null,
+   ENV_FCPROG           timestamp with time zone,
+   ENV_FCENV            timestamp with time zone,
+   ENV_FCCAD            timestamp with time zone,
+   ENV_SEYCON           character varying(50),
+   ENV_FCREG            timestamp with time zone NOT NULL,
    ENV_ESTADO           BIGINT                       not null,
-   ENV_INMED            BIGINT                      default 0 not null
+   ENV_INMED            BOOLEAN                      default FALSE not null
 );
 
 comment on table MOB_ENVIOS is
@@ -93,14 +93,14 @@ alter table MOB_ENVIOS
 create table MOB_MSEMAI  (
    MSE_CODIGO           BIGINT                      not null,
    MSE_IDENV            BIGINT                      not null,
-   MSE_TITULO           VARCHAR(1000),
+   MSE_TITULO           character varying(1000),
    MSE_MENSAJ           BYTEA,
-   MSE_HTML             BIGINT                      default 0 not null,
+   MSE_HTML             BOOLEAN                      default FALSE not null,
    MSE_EMAILS           BYTEA                            not null,
-   MSE_ERROR            VARCHAR(500),
-   MSE_ESTADO           BIGINT                       not null,
-   MSE_INIENV           DATE,
-   MSE_FINENV           DATE,
+   MSE_ERROR            character varying(500),
+   MSE_ESTADO           BOOLEAN                       not null,
+   MSE_INIENV           timestamp with time zone,
+   MSE_FINENV           timestamp with time zone,
    MSE_NDEST            BIGINT,
    MSE_NDESTE           BIGINT,
    MSE_EMAILE           BYTEA
@@ -155,13 +155,13 @@ create table MOB_MSSMS  (
    MSS_IDENV            BIGINT,
    MSS_MENSAJ           BYTEA                            not null,
    MSS_TELFS            BYTEA                            not null,
-   MSS_ERROR            VARCHAR(500),
+   MSS_ERROR            character varying(500),
    MSS_ESTADO           BIGINT                       not null,
    MSS_NDEST            BIGINT,
    MSS_NDESTE           BIGINT,
    MSS_TELFSE           BYTEA,
-   MSS_INIENV           DATE,
-   MSS_FINENV           DATE
+   MSS_INIENV           timestamp with time zone,
+   MSS_FINENV           timestamp with time zone
 );
 
 comment on column MOB_MSSMS.MSS_CODIGO is
@@ -210,10 +210,10 @@ create index MOB_MSSENV_FK_I on MOB_MSSMS (
 
 create table MOB_PERMIS  (
    PER_CODIGO           BIGINT                       not null,
-   PER_SEYCON           VARCHAR(50)                    not null,
-   PER_CODCUE           VARCHAR(5)                     not null,
-   PER_SMS              BIGINT                       not null,
-   PER_EMAIL            BIGINT                       not null
+   PER_SEYCON           character varying(50)                    not null,
+   PER_CODCUE           character varying(5)                     not null,
+   PER_SMS              BOOLEAN                       not null,
+   PER_EMAIL            BOOLEAN                       not null
 );
 
 comment on table MOB_PERMIS is
@@ -255,11 +255,11 @@ alter table MOB_PERMIS
 
  -- 1.1.4 TO 1.1.5
  alter table MOB_MSEMAI  add
-   MSE_ACKENV           BIGINT                      default 0 not null;
+   MSE_ACKENV           BOOLEAN                      default FALSE not null;
 alter table MOB_MSEMAI  add   
-   MSE_ACKEST           VARCHAR(1);
+   MSE_ACKEST           character varying(1);
 alter table MOB_MSEMAI  add   
-   MSE_ACKERR           VARCHAR(4000);
+   MSE_ACKERR           character varying(4000);
 
 comment on column MOB_MSEMAI.MSE_ACKENV is
 'INDICA SI SE CONTROLA SI SE HA REALIZADO EL ENVIO. SOLO PERMITIDO CUANDO HAYA UN UNICO DESTINATARIO.';
@@ -272,11 +272,11 @@ comment on column MOB_MSEMAI.MSE_ACKERR is
 
 
 alter table MOB_MSSMS  add
-   MSS_ACKENV           BIGINT                      default 0 not null;
+   MSS_ACKENV           BOOLEAN                      default FALSE not null;
 alter table MOB_MSSMS  add   
-   MSS_ACKEST           VARCHAR(1);
+   MSS_ACKEST           character varying(1);
 alter table MOB_MSSMS  add   
-   MSS_ACKERR           VARCHAR(4000);
+   MSS_ACKERR           character varying(4000);
    
 
 comment on column MOB_MSSMS.MSS_ACKENV is
@@ -288,9 +288,14 @@ comment on column MOB_MSSMS.MSS_ACKEST is
 comment on column MOB_MSSMS.MSS_ACKERR is
 'EN CASO DE CONTROLAR LA REALIZACION DEL ENVIO Y QUE EL ESTADO SEA ERRONEO INDICA EL MOTIVO DEL ERROR';   
  
+-- V 2.3.4
+ALTER table MOB_ENVIOS  ADD ENV_IDPROC character varying(100);
+
+comment on column MOB_ENVIOS.ENV_IDPROC is 'ID PROCEDIMIENTO ASOCIADO (OPCIONAL)';
+ 
 -- UPDATE 2.39 TO 2.3.10
-ALTER table MOB_MSEMAI  ADD  MSE_REMITE           VARCHAR(500);
-ALTER table MOB_MSEMAI  ADD  MSE_REPLTO           VARCHAR(500);
+ALTER table MOB_MSEMAI  ADD  MSE_REMITE           character varying(500);
+ALTER table MOB_MSEMAI  ADD  MSE_REPLTO           character varying(500);
 
 comment on column MOB_MSEMAI.MSE_REMITE is
 'TEXTO QUE APARECE COMO REMITENTE';

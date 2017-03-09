@@ -51,7 +51,7 @@ CREATE TABLE rfr_compon (
     com_estilo character varying(128),
     com_etipdf character varying(128),
     com_numero bigint,
-    com_oculto bigint,
+    com_oculto boolean,
     com_expaur character varying(4000),
     com_expaut character varying(4000),
     com_expdep character varying(4000),
@@ -62,28 +62,28 @@ CREATE TABLE rfr_compon (
     com_codpat bigint,
     com_filas bigint,
     com_column bigint,
-    com_multil bigint,
-    com_obliga bigint,
+    com_multil boolean,
+    com_obliga boolean,
     com_altura bigint,
-    com_valdef bigint,
+    com_valdef boolean,
     com_maxsiz bigint,
-    com_multif bigint,
-    com_selmul bigint,
-    com_extree bigint,
-    com_mostab bigint DEFAULT 0 NOT NULL,
+    com_multif boolean,
+    com_selmul boolean,
+    com_extree boolean,
+    com_mostab boolean NOT NULL DEFAULT false,
     com_anccol bigint,
-    com_ancmax bigint DEFAULT 0 NOT NULL,
+    com_ancmax boolean NOT NULL DEFAULT false,
     com_colspn bigint DEFAULT 1 NOT NULL,
-    com_sinetq boolean DEFAULT false NOT NULL,
-    com_cuadro boolean DEFAULT false NOT NULL,
-    com_cuacab bigint DEFAULT 0 NOT NULL,
+    com_sinetq boolean NOT NULL DEFAULT false,
+    com_cuadro boolean NOT NULL DEFAULT false,
+    com_cuacab boolean NOT NULL DEFAULT false,
     com_alineacion character varying(1) DEFAULT 'I'::character varying NOT NULL,
     com_seclet character varying(2),
     com_txtipo character varying(2),
-    COM_LBLTIPO VARCHAR(2) default 'NO' not null,
-    COM_ORIENT  VARCHAR(1) default 'H' not null,
-    COM_LDEIND boolean default false not null,
-    TRC_PLACEH VARCHAR(100)    
+    COM_LBLTIPO character varying(2) default 'NO' not null,
+    COM_ORIENT  character varying(1) default 'H' not null,
+    COM_LDEIND boolean NOT NULL DEFAULT false,
+    TRC_PLACEH character varying(100)    
 );
 
 
@@ -97,23 +97,23 @@ CREATE TABLE rfr_compon (
 
 CREATE TABLE rfr_formul (
     for_codi bigint NOT NULL,
-    for_modelo character varying(3) NOT NULL,
+    for_modelo character varying(20) NOT NULL,
     for_ulnuse bigint NOT NULL,
     for_urlen1 character varying(256),
     for_urlen2 character varying(256),
-    for_hasbco bigint NOT NULL,
+    for_hasbco boolean NOT NULL,
     for_bcodex bigint,
     for_bcodey bigint,
     for_dtd bigint,
     for_logti1 bigint,
     for_logti2 bigint,
     for_verfun bigint DEFAULT 0 NOT NULL,
-    for_esbloq bigint NOT NULL,
+    for_esbloq boolean NOT NULL,
     for_mtvblq character varying(2048),
     for_versio bigint NOT NULL,
-    for_lastve bigint NOT NULL,
+    for_lastve boolean NOT NULL,
     for_tagcar character varying(100),
-    for_feccar date
+    for_feccar timestamp with time zone
 );
 
 
@@ -136,10 +136,10 @@ COMMENT ON COLUMN rfr_formul.for_verfun IS 'Codigo de version';
 
 CREATE TABLE rfr_forseg (
     fsg_codi bigint NOT NULL,
-    fsg_https bigint NOT NULL,
-    fsg_reqlog bigint NOT NULL,
-    fsg_reqcer bigint NOT NULL,
-    fsg_reqfir bigint NOT NULL
+    fsg_https boolean NOT NULL,
+    fsg_reqlog boolean NOT NULL,
+    fsg_reqcer boolean NOT NULL,
+    fsg_reqfir boolean NOT NULL
 );
 
 
@@ -234,7 +234,7 @@ CREATE TABLE rfr_grpusu (
 -- Name: TABLE rfr_grpusu; Type: COMMENT; Schema: public; Owner: sistra
 --
 
-COMMENT ON TABLE rfr_grpusu IS 'AsignaciÃ³n de usuarios a grupos';
+COMMENT ON TABLE rfr_grpusu IS 'Asignación de usuarios a grupos';
 
 
 --
@@ -285,7 +285,7 @@ COMMENT ON TABLE rfr_grupos IS 'Grupos de usuarios para establecer permisos de a
 -- Name: COLUMN rfr_grupos.grp_codigo; Type: COMMENT; Schema: public; Owner: sistra
 --
 
-COMMENT ON COLUMN rfr_grupos.grp_codigo IS 'CÃ³digo grupo';
+COMMENT ON COLUMN rfr_grupos.grp_codigo IS 'Código grupo';
 
 
 --
@@ -303,7 +303,7 @@ COMMENT ON COLUMN rfr_grupos.grp_nombre IS 'Nombre grupo';
 -- Name: COLUMN rfr_grupos.grp_descp; Type: COMMENT; Schema: public; Owner: sistra
 --
 
-COMMENT ON COLUMN rfr_grupos.grp_descp IS 'DescripciÃ³n grupo';
+COMMENT ON COLUMN rfr_grupos.grp_descp IS 'Descripción grupo';
 
 
 --
@@ -376,8 +376,8 @@ CREATE TABLE rfr_pantal (
     pan_nombre character varying(128) NOT NULL,
     pan_orden bigint NOT NULL,
     pan_expres character varying(4000),
-    pan_ultima bigint,
-    pan_inicia bigint,
+    pan_ultima boolean,
+    pan_inicia boolean,
     pan_codfor bigint NOT NULL,
     pan_detall character varying(300)
 );
@@ -395,7 +395,7 @@ CREATE TABLE rfr_patron (
     pat_codi bigint NOT NULL,
     pat_nombre character varying(128) NOT NULL,
     pat_descri character varying(4000),
-    pat_ejecut bigint NOT NULL,
+    pat_ejecut boolean NOT NULL,
     pat_codigo character varying(4000)
 );
 
@@ -427,7 +427,7 @@ CREATE TABLE rfr_prosal (
     prs_codi bigint NOT NULL,
     prs_nombre character varying(128) NOT NULL,
     prs_valor character varying(4000),
-    prs_expres bigint,
+    prs_expres boolean,
     prs_codsal bigint NOT NULL,
     prs_codpla bigint
 );
@@ -733,7 +733,8 @@ CREATE TABLE rfr_tracam (
     trc_nombre character varying(256) NOT NULL,
     trc_ayuda character varying(4000),
     trc_codidi character varying(2) NOT NULL,
-    trc_menval character varying(256)
+    trc_menval character varying(256),
+    trc_placeh character varying(100)   
 );
 
 
@@ -963,7 +964,7 @@ CREATE TABLE rfr_valpos (
     vap_codcam bigint,
     vap_orden bigint NOT NULL,
     vap_valor character varying(128),
-    vap_defect bigint
+    vap_defect boolean
 );
 
 
@@ -978,7 +979,7 @@ CREATE TABLE rfr_valpos (
 CREATE TABLE rfr_versio (
     ver_codigo bigint NOT NULL,
     ver_nombre character varying(100) NOT NULL,
-    ver_fecha date NOT NULL,
+    ver_fecha timestamp with time zone NOT NULL,
     ver_sufix character varying(10)
 );
 

@@ -55,7 +55,7 @@ CREATE TABLE rds_docum (
     doc_codver bigint NOT NULL,
     doc_clave character varying(10) NOT NULL,
     doc_titulo character varying(200) NOT NULL,
-    doc_fecha date NOT NULL,
+    doc_fecha timestamp with time zone NOT NULL,
     doc_nif character varying(11),
     doc_seycon character varying(1536),
     doc_uniadm bigint NOT NULL,
@@ -249,7 +249,7 @@ CREATE TABLE rds_ficext (
 -- Name: TABLE rds_ficext; Type: COMMENT; Schema: public; Owner: sistra
 --
 
-COMMENT ON TABLE rds_ficext IS 'UBICACIÓN EN REPOSITORIO DE FICHEROS EXTERNOS (PLUGIN UBICACION NO DEFECTO)';
+COMMENT ON TABLE rds_ficext IS 'UBICACIӓN EN REPOSITORIO DE FICHEROS EXTERNOS (PLUGIN UBICACION NO DEFECTO)';
 
 
 --
@@ -317,7 +317,7 @@ CREATE TABLE rds_ficher (
 -- Name: TABLE rds_ficher; Type: COMMENT; Schema: public; Owner: sistra
 --
 
-COMMENT ON TABLE rds_ficher IS 'UBICACIÓN EN BD DE REPOSITORIO DE FICHEROS';
+COMMENT ON TABLE rds_ficher IS 'UBICACI�N EN BD DE REPOSITORIO DE FICHEROS';
 
 
 --
@@ -484,7 +484,7 @@ CREATE TABLE rds_logegd (
     log_seycon character varying(1536) NOT NULL,
     log_deserr character varying(4000) NOT NULL,
     log_error bytea NOT NULL,
-    log_fecha date NOT NULL,
+    log_fecha timestamp with time zone NOT NULL,
     log_coddoc bigint NOT NULL
 );
 
@@ -555,7 +555,7 @@ CREATE TABLE rds_logope (
     log_codigo bigint NOT NULL,
     log_codtop character varying(4) NOT NULL,
     log_desope character varying(1000) NOT NULL,
-    log_fecha date NOT NULL,
+    log_fecha timestamp with time zone NOT NULL,
     log_seycon character varying(1536) NOT NULL
 );
 
@@ -1217,9 +1217,9 @@ CREATE TABLE rds_usos (
     uso_codigo bigint NOT NULL,
     uso_codtiu character varying(3) NOT NULL,
     uso_coddoc bigint NOT NULL,
-    uso_fecha date NOT NULL,
+    uso_fecha timestamp with time zone NOT NULL,
     uso_ref character varying(100) NOT NULL,
-    uso_fcsell date
+    uso_fcsell timestamp with time zone
 );
 
 
@@ -1297,7 +1297,7 @@ COMMENT ON COLUMN rds_usos.uso_fcsell IS 'PARA TIPO DE USO QUE PERMITEN ESTABLEC
 CREATE TABLE rds_vercus (
     cus_codigo character varying(100) NOT NULL,
     cus_coddoc bigint NOT NULL,
-    cus_fecha date NOT NULL,
+    cus_fecha timestamp with time zone NOT NULL,
     cus_borrar character varying(1) NOT NULL
 );
 

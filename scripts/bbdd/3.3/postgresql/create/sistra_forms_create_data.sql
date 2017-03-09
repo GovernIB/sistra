@@ -215,8 +215,8 @@ INSERT INTO rfr_perusu (per_codi, per_codest, per_patico) VALUES (3, 'CAIB_AZUL'
 -- Data for Name: rfr_patron; Type: TABLE DATA; Schema: public; Owner: sistra
 --
 
-INSERT INTO rfr_patron (pat_codi, pat_nombre, pat_descri, pat_ejecut, pat_codigo) VALUES (1, 'Moneda, euros', '', 0, '#,##0.00 EUR');
-INSERT INTO rfr_patron (pat_codi, pat_nombre, pat_descri, pat_ejecut, pat_codigo) VALUES (2, 'Tanto porciento', '', 0, '#0.0# ''%''');
+INSERT INTO rfr_patron (pat_codi, pat_nombre, pat_descri, pat_ejecut, pat_codigo) VALUES (1, 'Moneda, euros', '', false, '#,##0.00 EUR');
+INSERT INTO rfr_patron (pat_codi, pat_nombre, pat_descri, pat_ejecut, pat_codigo) VALUES (2, 'Tanto porciento', '', false, '#0.0# ''%''');
 
 
 --

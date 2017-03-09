@@ -591,7 +591,7 @@ CREATE TABLE str_domin (
     dom_codigo bigint NOT NULL,
     dom_identi character varying(20) NOT NULL,
     dom_tipo character varying(1) NOT NULL,
-    dom_url character varying(200),
+    dom_url character varying(500),
     dom_sql character varying(4000),
     dom_jndi character varying(100),
     dom_ejbrem character varying(1),
