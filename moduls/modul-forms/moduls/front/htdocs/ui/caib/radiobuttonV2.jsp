@@ -26,7 +26,7 @@
 			<% int i = 0; %>
 			<logic:iterate name="campo" property="allValoresPosibles" id="opcion" type="org.ibit.rol.form.model.ValorPosible">
 			<li>
-				<html:radio property="<%=nombre%>" styleId="<%=nombre + "_" + i%>" value="<%=opcion.getValor()%>"
+				<html:radio property="<%=nombre%>" styleId="<%=nombre + \"_\" + i%>" value="<%=opcion.getValor()%>"
 	            	disabled="<%=(disabled || bloqueado)%>"
 	            	onclick='<%=(!autocalculo && !bloqueado) ? "onFieldChange(this.form, this.name)" : ""%>'	        	            	           
 	        	/>
