@@ -25,11 +25,11 @@
 			<li>
 				<label>
 					<logic:equal name="campo" property="seleccionMultiple" value="true">
-						<html:checkbox property="<%=nombre%>" styleId="<%=nombre + "_" + i%>" value="<%=opcion.getValor()%>"
+						<html:checkbox property="<%=nombre%>" styleId="<%=nombre + \"_\" + i%>" value="<%=opcion.getValor()%>"
 							onclick='<%=(!autocalculo && !bloqueado) ? "onFieldChange(this.form, this.name)" : ""%>'/>
 					</logic:equal>
 					<logic:equal name="campo" property="seleccionMultiple" value="false">
-						<html:radio property="<%=nombre%>" styleId="<%=nombre + "_" + i%>" value="<%=opcion.getValor()%>"
+						<html:radio property="<%=nombre%>" styleId="<%=nombre + \"_\" + i%>" value="<%=opcion.getValor()%>"
 							onclick='<%=(!autocalculo && !bloqueado) ? "onFieldChange(this.form, this.name)" : ""%>'/>
 					</logic:equal>						
 					<span><%=((org.ibit.rol.form.model.TraValorPosible) opcion.getTraduccion()).getEtiqueta()%></span>
