@@ -18,7 +18,7 @@
 		</p>
 		<logic:notEmpty name="estado">
 			<bean:define id="estado" name="estado" type="java.lang.String" />
-			<p class="alerta"><bean:message key="<%= "resultadoBusquedaEstado.informacionEstado." + estado %>" /></p>
+			<p class="alerta"><bean:message key="<%= \"resultadoBusquedaEstado.informacionEstado.\" + estado %>" /></p>
 		</logic:notEmpty>
 		<logic:empty name="estado">
 			<logic:empty name="lstPagos">

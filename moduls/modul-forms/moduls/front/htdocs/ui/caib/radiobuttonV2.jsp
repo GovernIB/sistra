@@ -30,7 +30,7 @@
 	            	disabled="<%=(disabled || bloqueado)%>"
 	            	onclick='<%=(!autocalculo && !bloqueado) ? "onFieldChange(this.form, this.name)" : ""%>'	        	            	           
 	        	/>
-				<label for="<%=nombre + \"_\" + i%>"><%=((org.ibit.rol.form.model.TraValorPosible) opcion.getTraduccion()).getEtiqueta()%></label>				
+				<label for="<%=nombre + "_" + i%>"><%=((org.ibit.rol.form.model.TraValorPosible) opcion.getTraduccion()).getEtiqueta()%></label>				
 			</li>
 			<% i++; %>
 			</logic:iterate>			
