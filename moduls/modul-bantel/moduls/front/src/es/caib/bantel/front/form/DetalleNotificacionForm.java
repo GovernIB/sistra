@@ -400,6 +400,12 @@ public class DetalleNotificacionForm extends ValidatorForm
         	if(StringUtils.isEmpty(codigoPais)){
         		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("notificacion.pais", request)));
         	}
+        	if(StringUtils.isEmpty(oficinaRegistro)){
+        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("notificacion.oficina", request)));
+        	}
+        	if(StringUtils.isEmpty(organoDestino)){
+        		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("notificacion.organo", request)));
+        	}
         	if( "ESP".equals(codigoPais) && (StringUtils.isEmpty(codigoProvincia))){
         		errors.add("altaNotificacion", new ActionError("errors.required", MensajesUtil.getValue("notificacion.provincia", request)));
         	}        	

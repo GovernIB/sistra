@@ -75,6 +75,10 @@ public class AltaNotificacionController extends BaseController
 	private List regtelToBantel(List lista){
 		List listaBantel = new ArrayList();
 		if(lista != null){
+			ValorOrganismo voIni = new ValorOrganismo();
+			voIni.setCodigo("");
+			voIni.setDescripcion("");
+			listaBantel.add(voIni);
 			for(int i=0;i<lista.size();i++){
 				ValorOrganismo vo = new ValorOrganismo();
 				vo.setCodigo(((es.caib.regtel.model.ValorOrganismo)lista.get(i)).getCodigo());
