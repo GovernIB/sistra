@@ -11,6 +11,10 @@
         <html:rewrite page="/retornoFirmaWeb.do"/>
 </bean:define>
 
+<bean:define id="urlArbolServicios">
+    <html:rewrite page="/arbolServicios.do"/>
+</bean:define>
+
 <script type="text/javascript" src="js/ajuda.js"></script>
 <script type="text/javascript" src="js/funcions.js"></script>
 <script type="text/javascript" src="js/mensaje.js"></script>	
@@ -501,6 +505,12 @@ function repintarParametros(datos){
      function mostrarArbolUnidades(url) {
         obrir(url, "Arbol", 540, 400);
      }
+     
+     function mostrarArbolServicios(url) {
+        //var url = '<html:rewrite page="/arbolServicios.do" />';
+        obrir(url, "Arbol", 540, 400);
+     }
+     
      // -->
 </script>
 
@@ -606,6 +616,7 @@ function repintarParametros(datos){
 							</logic:iterate>
 						</logic:present>
 			    	</html:select>
+			    	<input type="button" value="..."  class = "botonEditar" onclick="mostrarArbolServicios('<%=urlArbolServicios + "?id=organoDestino" %>');"/>
 				</p>
 				
 				<p class="titol major">

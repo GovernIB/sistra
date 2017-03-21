@@ -6,4 +6,14 @@
     <action
     path="/funcsNodesUnidades"
     type="org.apache.struts.actions.ForwardAction"
-    parameter=".funcsNodesUnidades"/> 
+    parameter=".funcsNodesUnidades"/>
+    
+    <action
+    path="/arbolServicios"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".arbolServicios"/>
+    
+    <action
+    path="/funcsNodesServicios"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".funcsNodesServicios"/> 

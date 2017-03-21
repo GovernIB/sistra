@@ -61,5 +61,8 @@
     type="es.caib.bantel.front.form.MostrarDocumentoCustodiaForm" />   
 <form-bean
     name="importarCSVFuenteDatosForm"
-    type="es.caib.bantel.front.form.ImportarCSVFuenteDatosForm" />     
+    type="es.caib.bantel.front.form.ImportarCSVFuenteDatosForm" />
+<form-bean
+    name="buscarServiciosForm"
+    type="es.caib.bantel.front.form.BuscarServiciosForm" />  
     
