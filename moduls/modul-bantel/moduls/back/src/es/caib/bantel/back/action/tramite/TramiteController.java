@@ -22,6 +22,8 @@ import es.caib.bantel.persistence.delegate.VersionWSDelegate;
 import es.caib.sistra.modelInterfaz.ValoresDominio;
 import es.caib.sistra.persistence.delegate.DelegateSISTRAUtil;
 import es.caib.sistra.plugins.regtel.ConstantesPluginRegistro;
+import es.caib.sistra.plugins.regtel.OficinaRegistro;
+import es.caib.sistra.plugins.regtel.ServicioDestinatario;
 
 
 public class TramiteController implements Controller
@@ -86,7 +88,16 @@ public class TramiteController implements Controller
 	 * @return organos
 	 */
 	private List listarOrganos(String entidad)  throws Exception {
-		List servicios = es.caib.regtel.persistence.delegate.DelegateUtil.getRegistroOrganismoDelegate().obtenerServiciosDestino(entidad);
+	
+		List servicios = new ArrayList();
+		
+		ServicioDestinatario sVacio = new ServicioDestinatario();
+		sVacio.setCodigoPadre("");
+		sVacio.setCodigo("");
+		sVacio.setDescripcion("");
+		servicios.add(sVacio);
+		servicios.addAll(es.caib.regtel.persistence.delegate.DelegateUtil.getRegistroOrganismoDelegate().obtenerServiciosDestino(entidad));
+		
 		return servicios;
 	}
 
@@ -96,7 +107,15 @@ public class TramiteController implements Controller
 	 * @return oficinas
 	 */
 	private List listarOficinasSalida(String entidad) throws Exception {
-		List oficinas =  es.caib.regtel.persistence.delegate.DelegateUtil.getRegistroOrganismoDelegate().obtenerOficinasRegistro(entidad, ConstantesPluginRegistro.REGISTRO_SALIDA);		
+		
+		List oficinas = new ArrayList();
+		
+		OficinaRegistro ofVacia = new OficinaRegistro();
+		ofVacia.setCodigo("");
+		ofVacia.setDescripcion("");
+		oficinas.add(ofVacia);
+		oficinas.addAll(plgRegistro.obtenerOficinasRegistro(es.caib.regtel.persistence.delegate.DelegateUtil.getRegistroOrganismoDelegate().obtenerOficinasRegistro(entidad, ConstantesPluginRegistro.REGISTRO_SALIDA));
+			
 		return oficinas;
 	}
 
