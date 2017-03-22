@@ -1650,7 +1650,7 @@ CREATE SEQUENCE str_seqdom
 -- Name: str_seqe09; Type: SEQUENCE; Schema: public; Owner: sistra
 --
 
-CREATE SEQUENCE str_seqe09
+CREATE SEQUENCE str_seqe17
     START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
@@ -1778,7 +1778,7 @@ CREATE SEQUENCE str_seqorg
 -- Name: str_seqp09; Type: SEQUENCE; Schema: public; Owner: sistra
 --
 
-CREATE SEQUENCE str_seqp09
+CREATE SEQUENCE str_seqp17
     START WITH 1
     INCREMENT BY 1
     NO MAXVALUE

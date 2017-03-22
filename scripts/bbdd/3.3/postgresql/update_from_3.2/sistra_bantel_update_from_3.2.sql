@@ -37,7 +37,10 @@ commit;
 -- MODIFICAR SEGUN ENTIDAD
 
 
-alter table BTE_PROAPL modify TAP_IDEENT character varying(100) not null;
+alter table BTE_PROAPL alter column TAP_IDEENT character varying(100);
+
+alter table BTE_PROAPL alter column TAP_IDEENT set not null;
+
 
 
 

@@ -11,8 +11,7 @@ drop index ZPE_RLG_PK;
 UPDATE ZPE_REGLOG SET RLG_IDEENT = 'XXXX';
 COMMIT;
 
-
-alter table ZPE_REGLOG  modify RLG_IDEENT not null;
+alter table ZPE_REGLOG alter column RLG_IDEENT set not null;
 
 alter table ZPE_REGLOG add constraint ZPE_RLG_PK primary key (RLG_TIPREG, RLG_IDEENT, RLG_NUMREG);
    

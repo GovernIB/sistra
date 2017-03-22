@@ -12,7 +12,7 @@ create table MOB_CUENTA  (
    CUE_NOMBRE           character varying(100)                   not null,
    CUE_EMAIL            character varying(500),
    CUE_SMS              character varying(50),
-   CUE_DEFECT           BOOLEAN                       not null
+   CUE_DEFECT           bigint                       not null
 );
 
 comment on table MOB_CUENTA is
