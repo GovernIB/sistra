@@ -114,7 +114,7 @@ public class TramiteController implements Controller
 		ofVacia.setCodigo("");
 		ofVacia.setDescripcion("");
 		oficinas.add(ofVacia);
-		oficinas.addAll(plgRegistro.obtenerOficinasRegistro(es.caib.regtel.persistence.delegate.DelegateUtil.getRegistroOrganismoDelegate().obtenerOficinasRegistro(entidad, ConstantesPluginRegistro.REGISTRO_SALIDA));
+		oficinas.addAll(es.caib.regtel.persistence.delegate.DelegateUtil.getRegistroOrganismoDelegate().obtenerOficinasRegistro(entidad, ConstantesPluginRegistro.REGISTRO_SALIDA));
 			
 		return oficinas;
 	}
