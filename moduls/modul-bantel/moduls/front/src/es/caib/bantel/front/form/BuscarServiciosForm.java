@@ -4,6 +4,8 @@ import org.apache.struts.validator.ValidatorForm;
 
 public class BuscarServiciosForm extends ValidatorForm
 {
+	private String entidad;
+	
 	private String idCampo;
 	
 	private String filtro;
@@ -24,5 +26,11 @@ public class BuscarServiciosForm extends ValidatorForm
 		this.filtro = filtro;
 	}
 	
-	
+	public String getEntidad() {
+		return entidad;
+	}
+
+	public void setEntidad(String entidad) {
+		this.entidad = entidad;
+	}
 }

@@ -8,6 +8,7 @@
 <html lang="en">
 
 <bean:define id="id" name="id" type="java.lang.String"/>
+<bean:define id="entidad" name="entidad" type="java.lang.String"/>
 
 <head>
 	<link
@@ -57,6 +58,7 @@
 	    <div id="buscador" style="display: inline-block;">
 	    	<html:form action="/back/tramite/buscarServicios">
 				<html:hidden property="idCampo" value="<%=id%>"/>
+				<html:hidden property="entidad" value="<%=entidad%>"/>
 				<html:text property="filtro" value=""/>
 				<html:submit styleClass="button"><bean:message key="menu.buscar" /></html:submit>
 			</html:form>

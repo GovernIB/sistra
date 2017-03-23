@@ -12,6 +12,7 @@
 <bean:define id="urlArbolServicios">
     <html:rewrite page="/arbolServicios.do"/>
 </bean:define>
+<bean:define id="entidad" name="entidad" type="java.lang.String"/>
 <html:html locale="true" xhtml="true">
 <head>
    <title><bean:message key="tramiteVersion.titulo"/></title>
@@ -64,7 +65,7 @@
 	    	<html:select property="organoDestino">
 	   			<html:options collection="listaorganosdestino" property="CODIGO" labelProperty="DESCRIPCION" />
 	    	</html:select>
-	    	<input type="button" value="..."  class = "botonEditar" onclick="mostrarArbolServicios('<%=urlArbolServicios + "?id=organoDestino" %>');"/>
+	    	<input type="button" value="..."  class = "botonEditar" onclick="mostrarArbolServicios('<%=urlArbolServicios + "?id=organoDestino&entidad=" + entidad %>');"/>
 	    </td>
 	</tr>
 	<tr>

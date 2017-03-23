@@ -32,6 +32,7 @@ public class ImportarXMLPreviewController extends BaseController
             List tiposAsunto = dlgRte.obtenerTiposAsunto(form.getEntidad());
                        
             // Establecemos listas de valores
+            request.setAttribute("entidad", form.getEntidad());
             request.setAttribute( "listaorganosdestino", ajustarTamListaDesplegable ( organosDestino, MAX_COMBO_DESC , "DESCRIPCION")  );
             request.setAttribute( "listaoficinasregistro", ajustarTamListaDesplegable ( oficinasRegistro, MAX_COMBO_DESC , "DESCRIPCION")  );
             request.setAttribute( "listatiposasunto", ajustarTamListaDesplegable ( tiposAsunto, MAX_COMBO_DESC , "DESCRIPCION")  );

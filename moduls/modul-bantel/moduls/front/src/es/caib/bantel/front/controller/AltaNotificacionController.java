@@ -43,9 +43,13 @@ public class AltaNotificacionController extends BaseController
 		urlSistra = propsConfig.getProperty("sistra.url.back");
 		request.setAttribute( "urlSistraAFirma", urlSistra );
 		
+		String entidad = "";
+		
 		// Comprobamos si puede cambiar el plazo de notificaciones
 		String idProcedimiento = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_PROCEDIMIENTO_KEY);
 		Procedimiento p = DelegateUtil.getTramiteDelegate().obtenerProcedimiento(idProcedimiento);
+		entidad = p.getEntidad();
+		request.setAttribute("entidad", entidad );
 		request.setAttribute("permitirPlazoNotificacionesVariable", p != null ? p.getPermitirPlazoNotificacionesVariable() : "N");			
 		
 		// Firmante

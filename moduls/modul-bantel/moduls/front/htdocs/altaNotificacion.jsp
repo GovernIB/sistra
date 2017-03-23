@@ -14,6 +14,7 @@
 <bean:define id="urlArbolServicios">
     <html:rewrite page="/arbolServicios.do"/>
 </bean:define>
+<bean:define id="entidad" name="entidad" type="java.lang.String"/>
 
 <script type="text/javascript" src="js/ajuda.js"></script>
 <script type="text/javascript" src="js/funcions.js"></script>
@@ -616,7 +617,7 @@ function repintarParametros(datos){
 							</logic:iterate>
 						</logic:present>
 			    	</html:select>
-			    	<input type="button" value="..."  class = "botonEditar" onclick="mostrarArbolServicios('<%=urlArbolServicios + "?id=organoDestino" %>');"/>
+			    	<input type="button" value="..."  class = "botonEditar" onclick="mostrarArbolServicios('<%=urlArbolServicios + "?id=organoDestino&entidad=" + entidad %>');"/>
 				</p>
 				
 				<p class="titol major">
