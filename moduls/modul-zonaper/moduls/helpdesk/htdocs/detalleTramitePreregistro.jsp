@@ -89,7 +89,7 @@
 								<tr>
 									<th class="tramits"></th>
 									<td>
-										<html:link href="<%= urlMostrarDocumento + "&amp;codigo=" + documento.getCodigoRDS() + "&amp;clave=" +documento.getClaveRDS()%>" >
+										<html:link href="<%= urlMostrarDocumento + \"&amp;codigo=\" + documento.getCodigoRDS() + \"&amp;clave=\" +documento.getClaveRDS()%>" >
 											<bean:write name="documento" property="identificador" />
 											<logic:notEmpty name="documento" property="descripcion">
 												&nbsp;-&nbsp;<bean:write name="documento" property="descripcion" />
