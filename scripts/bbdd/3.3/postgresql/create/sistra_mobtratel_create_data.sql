@@ -1,6 +1,6 @@
 ﻿/* DAMOS DE ALTA CUENTA DE TEST (HABRIA QUE ELIMINARLA)*/
 INSERT INTO MOB_CUENTA ( CUE_CODIGO, CUE_NOMBRE, CUE_EMAIL, CUE_SMS,
 CUE_DEFECT ) VALUES ( 
-'TEST', 'CUENTA DE TEST (Para eliminar posteriormente)', 'es.caib.mobtratel.mailTest', 'ID SMS', true); 
+'TEST', 'CUENTA DE TEST (Para eliminar posteriormente)', 'es.caib.mobtratel.mailTest', 'ID SMS', 1); 
 
 COMMIT;

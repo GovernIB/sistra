@@ -457,9 +457,5 @@ INSERT INTO rfr_trpeus (tpe_codper, tpe_nombre, tpe_descri, tpe_codidi) VALUES (
 -- PostgreSQL database dump complete
 --
 
--- v3.3.4
-insert into BTE_ENTIDAD (ENT_IDEENT, ENT_NOMBRE) values ('XXXX','NOMBRE ENTIDAD');
-update BTE_PROAPL set TAP_IDEENT = 'XXXX';
-commit;
 -- MODIFICAR SEGUN ENTIDAD
 
