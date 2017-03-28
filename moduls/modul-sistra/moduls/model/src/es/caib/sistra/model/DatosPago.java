@@ -74,6 +74,12 @@ public class DatosPago implements Serializable{
 	}
 	
 	// --------- GETTERS / SETTERS  ------------------------------	
+	public String getCodigoEntidad() {
+		return xmlPago.getCodigoEntidad();
+	}
+	public void setCodigoEntidad(String codigo) {
+		xmlPago.setCodigoEntidad(codigo);
+	}
 	public String getIdTasa() {
 		return xmlPago.getIdTasa();
 	}

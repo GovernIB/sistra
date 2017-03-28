@@ -79,10 +79,21 @@ public class FormateadorPdfJustificante implements FormateadorDocumento{
 		props.load(new ByteArrayInputStream(plantilla.getArchivo().getDatos()));
 		String urlLogo = props.getProperty("urlLogo");
 		
+		
 		// Parseamos asiento
     	FactoriaObjetosXMLRegistro factoria = ServicioRegistroXML.crearFactoriaObjetosXML();
 		Justificante justificante = factoria.crearJustificanteRegistro(new ByteArrayInputStream (documento.getDatosFichero()));
 		AsientoRegistral asiento = justificante.getAsientoRegistral();
+		
+		// Verificamos si tiene logo personalizado por entidad
+		if (StringUtils.isNotBlank(asiento.getDatosOrigen().getCodigoEntidad())) {
+			String urlLogoEntidad = props.getProperty("urlLogo." + asiento.getDatosOrigen().getCodigoEntidad().trim());
+			if (StringUtils.isNotBlank(urlLogoEntidad)) {
+				urlLogo = urlLogoEntidad;
+			}
+		}
+		
+		
 		// -- Leemos lista de documentos aportados		
 		Lista lista = new Lista();    	
     	ReferenciaRDS refDatosPropios=null;

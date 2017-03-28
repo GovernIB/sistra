@@ -77,6 +77,15 @@ public class FormateadorPdfAsiento implements FormateadorDocumento{
 		// Parseamos asiento
     	FactoriaObjetosXMLRegistro factoria = ServicioRegistroXML.crearFactoriaObjetosXML();		
 		AsientoRegistral asiento = factoria.crearAsientoRegistral(new ByteArrayInputStream (documento.getDatosFichero()));
+		
+		// Verificamos si tiene logo personalizado por entidad
+		if (StringUtils.isNotBlank(asiento.getDatosOrigen().getCodigoEntidad())) {
+			String urlLogoEntidad = props.getProperty("urlLogo." + asiento.getDatosOrigen().getCodigoEntidad().trim());
+			if (StringUtils.isNotBlank(urlLogoEntidad)) {
+				urlLogo = urlLogoEntidad;
+			}
+		}		
+		
 		// -- Leemos lista de documentos aportados		
 		Lista lista = new Lista();    	
     	ReferenciaRDS refDatosPropios=null;

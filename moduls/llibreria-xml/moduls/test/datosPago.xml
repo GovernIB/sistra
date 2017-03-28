@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PAGO modelo="modelo" version="1" >
     <DATOS_PAGO>
-        <TIPO>P</TIPO>
+        <CODIGO_ENTIDAD>XXXX</CODIGO_ENTIDAD>
+        <TIPO>T</TIPO>
         <ESTADO>S</ESTADO>
         <ORGANO_EMISOR>ieb</ORGANO_EMISOR>
         <MODELO>modelo1</MODELO>
         <ID_TASA>tasa1</ID_TASA>
         <IMPORTE>100</IMPORTE>
-        <FECHA_DEVENGO>20130527090410</FECHA_DEVENGO>
+        <FECHA_DEVENGO>20170328114341</FECHA_DEVENGO>
         <CONCEPTO>concepto pago</CONCEPTO>
         <DECLARANTE>
             <NIF>33456299Q</NIF>
@@ -21,7 +22,7 @@
                 <PISO/>
                 <PUERTA/>
             </DOMICILIO>
-            <TELEFONO/>
+            <TELEFONO>616893324</TELEFONO>
             <FAX/>
             <LOCALIDAD/>
             <PROVINCIA/>
@@ -31,7 +32,7 @@
     <DATOS_PASARELA>
         <NUMERO_DUI>dui123</NUMERO_DUI>
         <LOCALIZADOR>loca123</LOCALIZADOR>
-        <FECHA_PAGO/>
+        <FECHA_PAGO>20170328114341</FECHA_PAGO>
         <JUSTIFICANTE/>
     </DATOS_PASARELA>
     <INSTRUCCIONES_PRESENCIAL>

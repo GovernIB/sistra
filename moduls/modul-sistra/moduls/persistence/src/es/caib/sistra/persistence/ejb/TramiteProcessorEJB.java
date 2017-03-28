@@ -1250,9 +1250,14 @@ public class TramiteProcessorEJB implements SessionBean {
 		    	    	return generarRespuestaFront(mensTiempoExcedido,null);
 	        		}
 
+	        		String entidad = obtenerEntidadProcedimiento(tramitePersistentePAD.getIdProcedimiento());
+	    			if (entidad == null)
+	    				throw new Exception("El codigo de procedimiento no es valido");
+	        		
 	        		// Creamos los datos del pago
 	        		datosPago = new DatosPago();
 	        		datosPago.setPluginId(PluginFactory.ID_PLUGIN_DEFECTO.equals(docNivel.getPagoPlugin())?null:docNivel.getPagoPlugin());
+	        		datosPago.setCodigoEntidad(entidad);
 	        		datosPago.setTipoPago(docNivel.getPagoMetodos());
 	        		datosPago.setEstado(DocumentoPersistentePAD.ESTADO_INCORRECTO);
 	        		datosPago.setOrganoEmisor(calc.getOrganoEmisor());
@@ -6433,4 +6438,5 @@ public class TramiteProcessorEJB implements SessionBean {
 		rn = StringUtils.leftPad(rn, 4, '0');
 		return rn;
    }
+    
 }
