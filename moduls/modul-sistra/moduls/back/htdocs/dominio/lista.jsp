@@ -32,6 +32,24 @@
 
 <br />
 
+<table class="nomarc">
+      <tr>
+        <td align="left">
+            <button class="buttond" type="button" onclick="forward('<html:rewrite page="/back/dominio/alta.do" paramId="idOrgano" paramName="codigoOrganoOrigen"/>')">
+                <bean:message key="boton.nuevo" />
+            </button>
+      	<logic:notEmpty name="codigoOrganoOrigen">
+            <button class="buttond" type="button" onclick="forward('<html:rewrite page="/back/dominio/importar.do" paramId="codigoOrganoOrigen" paramName="codigoOrganoOrigen"/>')">
+                <bean:message key="boton.importar" />
+            </button>
+	    </logic:notEmpty>        
+        </td>
+      </tr>
+</table>
+
+
+<br />
+
 <logic:empty name="dominioOptions">
     <table class="marc">
       <tr><td class="alert"><bean:message key="dominio.selec.vacio" /></td></tr>
@@ -53,7 +71,14 @@
 
                     <bean:define id="descripcion" name="dominio" property="identificador" type="java.lang.String"/>
                     <bean:define id="mensajeBaja"><bean:message arg0='<%=modDominio.toString()%>' arg1='<%=StringUtils.escape(descripcion)%>' key='dominio.baja' /></bean:define>
-                    <bean:define id="urlBaja"><html:rewrite page="/back/dominio/baja.do" paramId="codigo" paramName="dominio" paramProperty="codigo"/></bean:define>
+                    <bean:define id="urlBaja">
+                    <logic:notEmpty name="codigoOrganoOrigen">
+                    	<html:rewrite page='<%= "/back/dominio/baja.do?codigo=" + modDominio.toString() %>' paramId="codigoOrganoOrigen" paramName="codigoOrganoOrigen"/>
+                    </logic:notEmpty>
+                    <logic:empty name="codigoOrganoOrigen">
+                    	<html:rewrite page="/back/dominio/baja.do" paramId="codigo" paramName="dominio" paramProperty="codigo"/>
+                    </logic:empty>
+                    </bean:define>
                 	<bean:define id="urlExportar"><html:rewrite page="/back/dominio/exportar.do" paramId="codigo" paramName="dominio" paramProperty="codigo"/></bean:define>
                     <button class="button" type="button" onclick="confirmAndForward('<%= StringUtils.escape ( mensajeBaja )%>', '<%=urlBaja%>')"><bean:message key="boton.baixa" /></button>
                     <button class="button" type="button" onclick="forward('<%=urlExportar%>')"><bean:message key="boton.exportar" /></button>
@@ -62,23 +87,7 @@
         </logic:iterate>
     </table>
 </logic:notEmpty>
-
-<br />
-
-    <table class="nomarc">
-      <tr>
-        <td align="left">
-            <button class="buttond" type="button" onclick="forward('<html:rewrite page="/back/dominio/alta.do" paramId="idOrgano" paramName="codigoOrganoOrigen"/>')">
-                <bean:message key="boton.nuevo" />
-            </button>
-      	<logic:notEmpty name="codigoOrganoOrigen">
-            <button class="buttond" type="button" onclick="forward('<html:rewrite page="/back/dominio/importar.do" paramId="codigoOrganoOrigen" paramName="codigoOrganoOrigen"/>')">
-                <bean:message key="boton.importar" />
-            </button>
-	    </logic:notEmpty>        
-        </td>
-      </tr>
-    </table>
+   
 
 </body>
 </html:html>
