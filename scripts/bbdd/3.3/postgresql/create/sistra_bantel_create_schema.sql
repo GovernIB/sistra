@@ -1777,8 +1777,6 @@ alter table BTE_ENTIDAD
 alter table BTE_PROAPL
    add constraint BTE_TAPENT_FK foreign key (TAP_IDEENT)
       references BTE_ENTIDAD (ENT_IDEENT);
-      
-alter table BTE_PROAPL alter column TAP_IDEENT character varying(100);
 
 alter table BTE_PROAPL alter column TAP_IDEENT set not null;
 

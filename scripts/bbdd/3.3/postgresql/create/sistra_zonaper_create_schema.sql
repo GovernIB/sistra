@@ -1976,8 +1976,7 @@ drop index ZPE_NOTNRG_UNI;
 
 alter table ZPE_REGLOG  add RLG_IDEENT  character varying(100);
 
-alter table ZPE_REGLOG drop constraint ZPE_RLG_PK; 
-drop index ZPE_RLG_PK; 
+alter table ZPE_REGLOG drop constraint ZPE_RLG_PK;
 
 alter table ZPE_REGLOG alter column RLG_IDEENT set not null;
 

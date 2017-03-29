@@ -45,7 +45,7 @@ SELECT pg_catalog.setval('str_seqdom', 12, true);
 -- Name: str_seqe09; Type: SEQUENCE SET; Schema: public; Owner: sistra
 --
 
-SELECT pg_catalog.setval('str_seqe09', 1, false);
+SELECT pg_catalog.setval('str_seqe17', 1, false);
 
 
 --
@@ -117,7 +117,7 @@ SELECT pg_catalog.setval('str_seqorg', 1, true);
 -- Name: str_seqp09; Type: SEQUENCE SET; Schema: public; Owner: sistra
 --
 
-SELECT pg_catalog.setval('str_seqp09', 1, false);
+SELECT pg_catalog.setval('str_seqp17', 1, false);
 
 
 --
