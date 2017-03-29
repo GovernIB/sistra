@@ -182,7 +182,7 @@ public class AvisoAlertasTramitacion {
 		
 		// Reemplazamos texto "Mi portal" por enlace
 		String textoMiPortal = (String) oi.getReferenciaPortal().get(idioma);
-		String urlMiPortal = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.url") + ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.contextoRaiz.front") + "/zonaperfront";
+		String urlMiPortal = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.url") + ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.contextoRaiz.front") + "/zonaperfront/protected/init.do?lang=" + idioma;
 		textoEmail = StringUtil.replace(textoEmail, textoMiPortal, "<a href=\"" + urlMiPortal + "\">" + textoMiPortal + "</a>");
 		
 		// Creamos MensajeEnvio
