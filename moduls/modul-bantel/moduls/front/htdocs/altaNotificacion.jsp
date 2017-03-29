@@ -686,7 +686,7 @@ function repintarParametros(datos){
 						<html:option value="0"><bean:message key="notificacion.diasPlazo.defecto"/></html:option>
 						<logic:equal name="permitirPlazoNotificacionesVariable" value="S">
 						<% for (int i = 1; i <= 60; i=i+1) { %>
-						<html:option value="<%=i + ""%>"><%=i%> <bean:message key="notificacion.diasPlazo.dias"/></html:option>
+						<html:option value="<%=i + \"\"%>"><%=i%> <bean:message key="notificacion.diasPlazo.dias"/></html:option>
 						<% } %>
 						</logic:equal>
 					  </html:select>

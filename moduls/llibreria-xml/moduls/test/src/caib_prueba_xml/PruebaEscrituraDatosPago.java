@@ -18,20 +18,22 @@ public class PruebaEscrituraDatosPago {
 	public static void main(String[] args) throws Exception {
 		// Generamos xml de pago
 		XmlDatosPago xmlPago = new XmlDatosPago();
+		xmlPago.setCodigoEntidad("XXXX");
 		xmlPago.setModeloRDSPago("modelo");
 		xmlPago.setVersionRDSPago(1);
 		xmlPago.setNif("33456299Q");
 		xmlPago.setNombre("Rafael Sanz Villanueva");
+		xmlPago.setTelefono("616893324");
 		xmlPago.setOrganoEmisor("ieb");
 		xmlPago.setModelo("modelo1");
 		xmlPago.setConcepto("concepto pago");
 		xmlPago.setIdTasa("tasa1");
 		xmlPago.setFechaDevengo(new Date());
-		xmlPago.setTipoPago('P');
+		xmlPago.setTipoPago('T');
 		xmlPago.setLocalizador("loca123");
 		xmlPago.setEstado('S');
 		xmlPago.setNumeroDUI("dui123");
-		xmlPago.setFechaPago(null);
+		xmlPago.setFechaPago(new Date());
 		xmlPago.setImporte("100");
 		xmlPago.setInstruccionesPresencialTexto("texto de instrucciones");
 		xmlPago.setInstruccionesPresencialEntidad1Nombre("Sa Nostra");

@@ -22,6 +22,8 @@ public class XmlDatosPago implements Serializable{
 	private String modeloRDSPago; 
 	private int versionRDSPago;
 	
+	private String codigoEntidad;
+	
 	private char tipoPago; // Tipo de pago: Presencial (P) / Telemático (T)
 	
 	// Plugin usado (si es el por defecto, no aparece en el XML)
@@ -88,6 +90,7 @@ public class XmlDatosPago implements Serializable{
 	// Constantes para la generación del xml
 	public final static String XML_ROOT = "/PAGO";
 	public final static String XML_PLUGIN_ID = XML_ROOT + "/DATOS_PAGO/PLUGIN_ID";
+	public final static String XML_CODIGO_ENTIDAD = XML_ROOT + "/DATOS_PAGO/CODIGO_ENTIDAD";
 	public final static String XML_TIPO = XML_ROOT + "/DATOS_PAGO/TIPO";
 	public final static String XML_ESTADO = XML_ROOT + "/DATOS_PAGO/ESTADO";
 	public final static String XML_ORGANO_EMISOR = XML_ROOT + "/DATOS_PAGO/ORGANO_EMISOR";
@@ -212,6 +215,12 @@ public class XmlDatosPago implements Serializable{
 		if (this.getPluginId() != null) {
 			nodo = new Nodo(XML_PLUGIN_ID, this.getPluginId());		
 			nodo.setXpath(XML_PLUGIN_ID);
+			map.put(nodo.getXpath(),nodo);
+		}
+		
+		if (this.getCodigoEntidad() != null) {
+			nodo = new Nodo(XML_CODIGO_ENTIDAD, this.getCodigoEntidad());		
+			nodo.setXpath(XML_CODIGO_ENTIDAD);
 			map.put(nodo.getXpath(),nodo);
 		}
 		
@@ -482,6 +491,7 @@ public class XmlDatosPago implements Serializable{
 		SimpleDateFormat sdf = new SimpleDateFormat( XmlDatosPago.FORMATO_FECHAS );
 		Nodo nodo;
 		this.setPluginId(  map.get(XML_PLUGIN_ID) != null? ((Nodo) map.get(XML_PLUGIN_ID)).getValor():null);
+		this.setCodigoEntidad( map.get(XML_CODIGO_ENTIDAD) != null? ((Nodo) map.get(XML_CODIGO_ENTIDAD)).getValor():null);
 		this.setTipoPago( ((Nodo) map.get(XML_TIPO)).getValor().charAt(0));
 		this.setEstado( ((Nodo) map.get(XML_ESTADO)).getValor().charAt(0));		
 		this.setOrganoEmisor( map.get(XML_ORGANO_EMISOR) != null? ((Nodo) map.get(XML_ORGANO_EMISOR)).getValor():null);
@@ -985,6 +995,14 @@ public class XmlDatosPago implements Serializable{
 
 	public void setFechaLimitePago(Date fechaLimitePago) {
 		this.fechaLimitePago = fechaLimitePago;
+	}
+
+	public String getCodigoEntidad() {
+		return codigoEntidad;
+	}
+
+	public void setCodigoEntidad(String codigoEntidad) {
+		this.codigoEntidad = codigoEntidad;
 	}
 	
 }
