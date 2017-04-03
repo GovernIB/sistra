@@ -60,8 +60,17 @@ public class CargarTramiteAction extends BaseAction
 		MensajeFront mensaje = respuestaFront.getMensaje();
 		
 		if(mensaje != null && MensajeFront.MENSAJE_TRAMITETERMINADO.equals(mensaje.getMensaje())){
+			
+			String entidadParam = "";
+			if (respuestaFront.getInformacionTramite() != null && respuestaFront.getInformacionTramite().getEntidad() != null) {
+				entidadParam = "&entidad" +  respuestaFront.getInformacionTramite().getEntidad();
+			}
+			
 			 // Redirigimos a zonaperfront
-	 	    response.sendRedirect(request.getSession().getServletContext().getAttribute(Constants.CONTEXTO_RAIZ) + "/zonaperfront/protected/init.do?tramite=" + idPersistencia + (StringUtils.isBlank(formulario.getLanguage())?"":"&language="+formulario.getLanguage()));
+	 	    String urlZonaper = "/zonaperfront/protected/init.do?tramite=" + idPersistencia +
+	 	    			(StringUtils.isBlank(formulario.getLanguage())?"":"&language="+formulario.getLanguage()) + 
+	 	    			entidadParam;
+			response.sendRedirect(request.getSession().getServletContext().getAttribute(Constants.CONTEXTO_RAIZ) + urlZonaper);
 	 	    return null;
 		}
 		this.setRespuestaFront( request, respuestaFront );

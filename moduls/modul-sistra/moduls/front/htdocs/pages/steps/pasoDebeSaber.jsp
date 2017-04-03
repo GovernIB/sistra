@@ -222,7 +222,7 @@ function avisoGuardarClave(){
 					</p>			
 				</logic:notEmpty>
 
-				<p class="apartado"><bean:message key="guardarClave.textoEstadoTramitacion" arg0="<%=contextoSistra%>" arg1="<%=referenciaPortal%>"/></p>	
+				<p class="apartado"><bean:message key="guardarClave.textoEstadoTramitacion" arg0="<%=contextoSistra%>" arg1="<%=referenciaPortal%>" arg2="<%=tramite.getEntidad()%>"/></p>	
 				
 				<p class="apartado"><bean:message key="guardarClave.textoGuardar" /></p>	
 

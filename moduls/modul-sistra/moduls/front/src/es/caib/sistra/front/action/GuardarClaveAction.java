@@ -81,7 +81,7 @@ public class GuardarClaveAction extends BaseAction
 			}
 		}
 
-		String  textoEstadoTramitacion = this.getResources(request).getMessage(this.getLocale(request),"guardarClave.textoEstadoTramitacion", urlSistra, oi.getReferenciaPortal().get(lang));
+		String  textoEstadoTramitacion = this.getResources(request).getMessage(this.getLocale(request),"guardarClave.textoEstadoTramitacion", urlSistra, oi.getReferenciaPortal().get(lang),tramiteInfo.getEntidad());
 		String  textoEnlace = this.getResources(request).getMessage(this.getLocale(request),"guardarClave.textoEnlace");
 
 		String html = bos.toString();

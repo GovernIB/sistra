@@ -9,6 +9,7 @@ import org.apache.struts.action.ActionMapping;
 
 import es.caib.sistra.front.Constants;
 import es.caib.sistra.front.util.InstanciaManager;
+import es.caib.sistra.model.RespuestaFront;
 import es.caib.sistra.persistence.delegate.InstanciaDelegate;
 
 /**
@@ -40,9 +41,14 @@ public class FinalizarAction extends BaseAction
 			
 			// Comprobamos si tras terminar el tramite se debe ir a la zona personal a mostrar el tramite
 			// No valido para consulta/asistente
-			if (urlFin.equals("[ZONAPER]")){ 
-				String idPersistencia = delegate.obtenerIdPersistencia();
-				urlFin = request.getSession().getServletContext().getAttribute(Constants.CONTEXTO_RAIZ) + "/zonaperfront/inicio?language=" + this.getLang(request) + "&tramite=" + idPersistencia;				
+			if (urlFin.equals("[ZONAPER]")){
+				
+				// Obtenemos info tramite para obtener entidad
+				RespuestaFront respuestaFront = delegate.obtenerInfoTramite();
+				String entidad = respuestaFront.getInformacionTramite().getEntidad();
+				String idPersistencia = respuestaFront.getInformacionTramite().getIdPersistencia();
+				
+				urlFin = request.getSession().getServletContext().getAttribute(Constants.CONTEXTO_RAIZ) + "/zonaperfront/inicio?language=" + this.getLang(request) + "&tramite=" + idPersistencia + "&entidad=" + entidad;				
 			}
 			 
 			delegate.finalizarTramite();			
