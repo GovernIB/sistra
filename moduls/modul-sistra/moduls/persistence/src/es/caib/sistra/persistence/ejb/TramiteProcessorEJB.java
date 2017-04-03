@@ -1282,7 +1282,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	        		datosPago.setTelefono(calc.getTelefono());
 
 	    	    	// Iniciamos sesion de pago contra el plugin de pagos
-	        		es.caib.sistra.plugins.pagos.DatosPago dp = new es.caib.sistra.plugins.pagos.DatosPago();
+	        		es.caib.sistra.plugins.pagos.DatosPago dp = new es.caib.sistra.plugins.pagos.DatosPago();	        		
 	        		dp.setConcepto(datosPago.getConcepto());
 	        		dp.setFechaDevengo(datosPago.getFechaDevengo());
 	        		dp.setIdioma(datosSesion.getLocale().getLanguage());
@@ -1303,6 +1303,7 @@ public class TramiteProcessorEJB implements SessionBean {
 					dp.setMensajeTiempoMaximoPago(calc.getMensajeFechaLimitePago());
 					dp.setFechaInicioTramite(this.tramitePersistentePAD.getFechaCreacion());
 					dp.setIdProcedimiento(this.tramiteInfo.getIdProcedimiento());
+					dp.setEntidad(this.tramiteInfo.getEntidad());
 
 	        		SesionSistra ss = new SesionSistra();
 	        		ss.setUrlMantenimientoSesionSistra(urlMantenimientoSesion);
@@ -3884,7 +3885,8 @@ public class TramiteProcessorEJB implements SessionBean {
     	if (tramiteInfo == null){
     		tramiteInfo = new TramiteFront();
     		tramiteInfo.setFechaCreacion(tramitePersistentePAD.getFechaCreacion());
-    		tramiteInfo.setIdProcedimiento(this.tramiteVersion.getTramite().getProcedimiento());
+    		tramiteInfo.setIdProcedimiento(tramitePersistentePAD.getIdProcedimiento());
+    		tramiteInfo.setEntidad(obtenerEntidadProcedimiento(tramitePersistentePAD.getIdProcedimiento()));
     		tramiteInfo.setModelo( this.tramiteVersion.getTramite().getIdentificador() );
     		tramiteInfo.setVersion( this.tramiteVersion.getVersion() );
     		tramiteInfo.setDatosSesion(this.datosSesion);

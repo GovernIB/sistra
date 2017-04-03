@@ -12,9 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.struts.Globals;
 import org.apache.struts.tiles.ComponentContext;
-import org.apache.struts.util.MessageResources;
 import org.ibit.rol.form.front.Constants;
 import org.ibit.rol.form.front.registro.RegistroManager;
 import org.ibit.rol.form.model.AyudaPantalla;
@@ -196,7 +194,7 @@ public class VerPantallaController extends BaseController {
         
         
         // Generamos literal de contacto
-		OrganismoInfo oi = (OrganismoInfo) servletContext.getAttribute(Constants.ORGANISMO_INFO_KEY);
+		OrganismoInfo oi = getOrganismoInfo(request);
 		
 		String telefono = oi.getTelefonoIncidencias();
 		String email = oi.getEmailSoporteIncidencias();

@@ -9,6 +9,10 @@ import java.util.Date;
 public class DatosPago implements Serializable{
 
 	/**
+	 * Entidad.
+	 */
+	private String entidad;
+	/**
 	 * Id procedimiento.
 	 */
 	private String idProcedimiento;
@@ -329,5 +333,11 @@ public class DatosPago implements Serializable{
 	}
 	public void setFechaInicioTramite(Date fechaInicioTramite) {
 		this.fechaInicioTramite = fechaInicioTramite;
+	}
+	public String getEntidad() {
+		return entidad;
+	}
+	public void setEntidad(String entidad) {
+		this.entidad = entidad;
 	}	
 }

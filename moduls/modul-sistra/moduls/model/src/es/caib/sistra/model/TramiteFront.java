@@ -21,6 +21,11 @@ public class TramiteFront  implements Serializable{
 	private Date fechaCreacion;
 	
 	/**
+	 * Entidad.
+	 */
+	private String entidad;
+	
+	/**
 	 * Id procedimiento.
 	 */
 	private String idProcedimiento;
@@ -635,6 +640,12 @@ public class TramiteFront  implements Serializable{
 	}
 	public void setIdProcedimiento(String idProcedimiento) {
 		this.idProcedimiento = idProcedimiento;
+	}
+	public String getEntidad() {
+		return entidad;
+	}
+	public void setEntidad(String entidad) {
+		this.entidad = entidad;
 	}
 
 }

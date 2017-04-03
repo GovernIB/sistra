@@ -12,6 +12,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
+import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
 import es.caib.mobtratel.modelInterfaz.MensajeEnvio;
 import es.caib.mobtratel.modelInterfaz.MensajeEnvioEmail;
 import es.caib.mobtratel.persistence.delegate.DelegateMobTraTelUtil;
@@ -27,7 +29,6 @@ import es.caib.xml.avisonotificacion.factoria.ServicioAvisoNotificacionXML;
 import es.caib.xml.avisonotificacion.factoria.impl.AvisoNotificacion;
 import es.caib.zonaper.model.NotificacionTelematica;
 import es.caib.zonaper.model.OrganismoInfo;
-import es.caib.zonaper.persistence.delegate.ConfiguracionDelegate;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 
 /**
@@ -61,19 +62,19 @@ public class AvisosDelegacion {
 	/**
     * Realiza aviso de que un tramite esta pendiente de registrarse   
     */
-	public void avisarPendientePresentacionTramite(String entidadMail, String idioma,  String entidadDesc, String tramiteDesc) throws Exception
+	public void avisarPendientePresentacionTramite(String idProcedimiento, String entidadMail, String idioma,  String entidadDesc, String tramiteDesc) throws Exception
 	{
 		String mensajeDelega=LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.delegacion.pendientePresentacionTramite");
 		mensajeDelega=StringUtil.replace(mensajeDelega,"{0}",tramiteDesc);
 		mensajeDelega=StringUtil.replace(mensajeDelega,"{1}",entidadDesc);		
-		enviarAvisoDelegacion(entidadMail, idioma, mensajeDelega);			
+		enviarAvisoDelegacion(idProcedimiento, entidadMail, idioma, mensajeDelega);			
 	}
 	
 	/**
      * Realiza aviso de que un tramite esta pendiente de firmar documentos
 	 * @throws Exception 
      */
-	public void avisarPendienteFirmarDocumentos(String entidadMail, String idioma,String entidadDesc, String tramiteDesc,List documentos,List firmantes) throws Exception
+	public void avisarPendienteFirmarDocumentos(String idProcedimiento, String entidadMail, String idioma,String entidadDesc, String tramiteDesc,List documentos,List firmantes) throws Exception
 	{
 		String mensajeDelega=LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.delegacion.pendienteFirmarDocumentos.inicio");
 		mensajeDelega=StringUtil.replace(mensajeDelega,"{0}",tramiteDesc);
@@ -91,21 +92,21 @@ public class AvisosDelegacion {
 		
 		mensajeDelega += sb.toString() + LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.delegacion.pendienteFirmarDocumentos.fin");
 		
-		enviarAvisoDelegacion(entidadMail, idioma, mensajeDelega);		
+		enviarAvisoDelegacion(idProcedimiento, entidadMail, idioma, mensajeDelega);		
 	}
 	
 	/**
      * Realiza aviso de que un delegado ha rechazado un documento para firmar
 	 * @throws Exception 
      */
-	public void avisarRechazoDocumento(String entidadMail, String idioma,String entidadDesc, String tramiteDesc, String documentoDesc, String firmante) throws Exception
+	public void avisarRechazoDocumento(String idProcedimiento, String entidadMail, String idioma,String entidadDesc, String tramiteDesc, String documentoDesc, String firmante) throws Exception
 	{
 		String mensajeDelega=LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.delegacion.rechazoFirmaDocumento");
 		mensajeDelega=StringUtil.replace(mensajeDelega,"{0}",firmante);
 		mensajeDelega=StringUtil.replace(mensajeDelega,"{1}",documentoDesc);	
 		mensajeDelega=StringUtil.replace(mensajeDelega,"{2}",tramiteDesc);
 		mensajeDelega=StringUtil.replace(mensajeDelega,"{3}",entidadDesc);
-		enviarAvisoDelegacion(entidadMail, idioma, mensajeDelega);		
+		enviarAvisoDelegacion(idProcedimiento, entidadMail, idioma, mensajeDelega);		
 	}
 	
 	/**
@@ -113,12 +114,12 @@ public class AvisosDelegacion {
      * retomar el tramite
 	 * @throws Exception 
      */
-	public void avisarContinuarTramite(String entidadMail, String idioma,String entidadDesc, String tramiteDesc) throws Exception
+	public void avisarContinuarTramite(String idProcedimiento, String entidadMail, String idioma,String entidadDesc, String tramiteDesc) throws Exception
 	{
 		String mensajeDelega=LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.delegacion.continuarTramite");
 		mensajeDelega=StringUtil.replace(mensajeDelega,"{0}",tramiteDesc);
 		mensajeDelega=StringUtil.replace(mensajeDelega,"{1}",entidadDesc);		
-		enviarAvisoDelegacion(entidadMail, idioma, mensajeDelega);		
+		enviarAvisoDelegacion(idProcedimiento, entidadMail, idioma, mensajeDelega);		
 	}
 	
 	
@@ -126,9 +127,11 @@ public class AvisosDelegacion {
 	//--------------------------------------------------------------------------
 	// FUNCIONES DE UTILIDAD
 	//--------------------------------------------------------------------------
-	private void enviarAvisoDelegacion(String entidadMail, String idioma,  String mensajeDelega) throws Exception{
-		ConfiguracionDelegate cfd = DelegateUtil.getConfiguracionDelegate();
-		OrganismoInfo oi = cfd.obtenerOrganismoInfo();
+	private void enviarAvisoDelegacion(String idProcedimiento, String entidadMail, String idioma,  String mensajeDelega) throws Exception{
+		
+		String entidad = obtenerEntidadProcedimiento(idProcedimiento);
+		OrganismoInfo oi = ConfigurationUtil.getInstance().obtenerOrganismoInfo(entidad);
+		
 		String tituloEmail=LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.delegacion.titulo");
 		tituloEmail=StringUtil.replace(tituloEmail,"{0}",oi.getNombre().toUpperCase());
 		
@@ -217,6 +220,15 @@ public class AvisosDelegacion {
 		}
 		return (String) plantillas.get(idPlantilla);
 	}
+	
+	private String obtenerEntidadProcedimiento(String idProcedimiento) throws Exception {
+		String entidad = null;
+		ProcedimientoBTE proc = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(idProcedimiento);
+		if (proc != null) {
+			entidad = proc.getEntidad().getIdentificador();
+		}
+		return entidad;
+	}	
 	
 	
 }

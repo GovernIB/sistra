@@ -257,12 +257,7 @@ public class ExpedienteDelegate implements StatelessDelegate
         }
 	}
 
-	
-	/**
-     * 
-	 * @ejb.interface-method
-     * @ejb.permission role-name="${role.todos}"
-     */
+		
 	public boolean verificarAccesoExpedienteAutenticado(Long id) throws DelegateException
 	{
 		try
@@ -275,6 +270,18 @@ public class ExpedienteDelegate implements StatelessDelegate
         }
 	}
 
+		
+	public String obtenerEntidadExpediente( Long codigoExpediente ) throws DelegateException
+	{
+		try
+		{
+			return getFacade().obtenerEntidadExpediente( codigoExpediente ) ;
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
 	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

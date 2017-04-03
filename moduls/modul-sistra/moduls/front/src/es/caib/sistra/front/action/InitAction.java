@@ -91,7 +91,7 @@ public class InitAction extends BaseAction
 			redirectForward.setRedirect(true);
 			redirectForward.setPath(url);
 			return redirectForward;
-		}
+		}		
 		
 		// Se inicializa el lenguaje.
  		InitForm initForm = ( InitForm ) form;
@@ -155,7 +155,6 @@ public class InitAction extends BaseAction
         
         // Recuperamos parametros respuesta
         HashMap hsmParametros = respuestaFront.getParametros();
-        
         
         // Obtenemos de los parametros de vuelta de la llamada a infoLogin
         // la descripcion y los dias de persistencia del tramite, para mostrarlos en la cabecera.

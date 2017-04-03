@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -15,6 +16,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.util.RequestUtils;
 
+import es.caib.sistra.front.Constants;
 import es.caib.sistra.front.SesionCaducadaException;
 import es.caib.sistra.front.formulario.GestorFlujoFormulario;
 import es.caib.sistra.front.util.FlujoFormularioRequestHelper;
@@ -178,6 +180,34 @@ public abstract class BaseAction extends Action
     	TramiteRequestHelper.setErrorHandled( request );
     }
     
+    protected void setOrganismoInfoEntidad(HttpServletRequest request, RespuestaFront respuestaFront) throws Exception {
+    	// Establecemos info organismo particularizada por entidad
+		if (respuestaFront != null && respuestaFront.getInformacionTramite() != null && StringUtils.isNotBlank(respuestaFront.getInformacionTramite().getEntidad())) {
+	        OrganismoInfo oi = DelegateUtil.getConfiguracionDelegate().obtenerOrganismoInfo(respuestaFront.getInformacionTramite().getEntidad());
+	        request.getSession().setAttribute(Constants.ORGANISMO_INFO_KEY,oi);
+		}	
+    }
+    
+    protected OrganismoInfo getOrganismoInfo(HttpServletRequest request) throws Exception {
+    	
+    	OrganismoInfo oi = null;
+    	
+    	// Obtenemos organismo info sesion
+    	oi = (OrganismoInfo) request.getSession().getAttribute(Constants.ORGANISMO_INFO_KEY);
+    	
+    	// Obtenemos organismo info generico
+    	if (oi == null) {
+    		oi = (OrganismoInfo) request.getSession().getServletContext().getAttribute(Constants.ORGANISMO_INFO_KEY);
+    	}
+    	
+    	if (oi == null) {
+    		oi = DelegateUtil.getConfiguracionDelegate().obtenerOrganismoInfo();
+    	}
+    	
+    	return oi;
+    	
+    }
+    
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception 
     {
@@ -193,15 +223,15 @@ public abstract class BaseAction extends Action
     		}catch(DelegateException de){
     			if (de.getCause().getClass().equals(NoSuchObjectLocalException.class)){
 	    			// Error no recuperable: sesion de tramitacion finalizada
-    		    	OrganismoInfo oi = DelegateUtil.getConfiguracionDelegate().obtenerOrganismoInfo();
-    		    	String refPortal = (String) oi.getReferenciaPortal().get(((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage());
+    				OrganismoInfo oi = getOrganismoInfo(request);
+    				String refPortal = (String) oi.getReferenciaPortal().get(((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage());
     				TramiteRequestHelper.setErrorMessage(request,"errors.sesionTramitacionFinalizada",new Object[] {refPortal});	    			
 	        		return mapping.findForward( "error" );
     			}
     			throw de;
     		} catch(SesionCaducadaException se){
     			// Error no recuperable: sesion de tramitacion finalizada
-		    	OrganismoInfo oi = DelegateUtil.getConfiguracionDelegate().obtenerOrganismoInfo();
+    			OrganismoInfo oi = getOrganismoInfo(request);
 		    	String refPortal = (String) oi.getReferenciaPortal().get(((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage());
 	    		TramiteRequestHelper.setErrorMessage(request,"errors.sesionTramitacionFinalizada",new Object[] {refPortal});	    			
 	        	return mapping.findForward( "error" );    			

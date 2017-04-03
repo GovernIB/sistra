@@ -1,5 +1,6 @@
 package es.caib.zonaper.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +9,7 @@ import java.util.Map;
  * customizar la presentación de los módulos
  *
  */
-public class OrganismoInfo {
+public class OrganismoInfo implements Serializable{
 
 	private String nombre;
 	private String urlLogo;

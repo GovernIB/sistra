@@ -12,6 +12,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
+import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
 import es.caib.mobtratel.modelInterfaz.MensajeEnvio;
 import es.caib.mobtratel.modelInterfaz.MensajeEnvioEmail;
 import es.caib.mobtratel.modelInterfaz.MensajeEnvioSms;
@@ -59,6 +61,10 @@ public class AvisoAlertasTramitacion {
     */
 	public void avisarTramiteRealizado(Entrada entrada, String email) throws Exception
 	{
+		
+		String entidad = obtenerEntidadProcedimiento(entrada.getProcedimiento());
+		OrganismoInfo oi = ConfigurationUtil.getInstance().obtenerOrganismoInfo(entidad);
+		
 		MensajeEnvioEmail mensEmail = null;
 		if (StringUtils.isNotEmpty(email)) {
 			String msgFinRegistro = "aviso.alertasTramitacion.registroFinalizado";
@@ -78,7 +84,7 @@ public class AvisoAlertasTramitacion {
 				mensajeFcCaducidad=StringUtil.replace(mensajeFcCaducidad,"{0}",StringUtil.fechaACadena(((EntradaPreregistro) entrada).getFechaCaducidad(), "dd/MM/yyyy HH:mm"));
 				mensaje = mensaje + "\n\n" + mensajeFcCaducidad;
 			}
-			mensEmail = crearMensajeEmail(email, entrada.getIdioma(), mensaje);			
+			mensEmail = crearMensajeEmail(oi, email, entrada.getIdioma(), mensaje);			
 		}		
 		enviarMensaje(entrada.getIdPersistencia(), entrada.getProcedimiento(), mensEmail, null, 0);
 	
@@ -90,6 +96,9 @@ public class AvisoAlertasTramitacion {
     */
 	public void avisarPagoRealizadoTramitePendiente(TramitePersistente tramite) throws Exception
 	{
+		String entidad = obtenerEntidadProcedimiento(tramite.getIdProcedimiento());
+		OrganismoInfo oi = ConfigurationUtil.getInstance().obtenerOrganismoInfo(entidad);
+
 		MensajeEnvioEmail mensEmail = null;
 		if (StringUtils.isNotEmpty(tramite.getAlertasTramitacionEmail())) {
 			String mensaje=LiteralesAvisosMovilidad.getLiteral(tramite.getIdioma(),"aviso.alertasTramitacion.pagoRealizadoTramitePendiente");
@@ -105,12 +114,11 @@ public class AvisoAlertasTramitacion {
 				mensajeFcCaducidad=StringUtil.replace(mensajeFcCaducidad,"{0}",StringUtil.fechaACadena(tramite.getFechaCaducidad(), "dd/MM/yyyy HH:mm"));
 				mensaje = mensaje + "\n\n" + mensajeFcCaducidad;
 			}
-			mensEmail = crearMensajeEmail(tramite.getAlertasTramitacionEmail(), tramite.getIdioma(), mensaje);			
+			mensEmail = crearMensajeEmail(oi, tramite.getAlertasTramitacionEmail(), tramite.getIdioma(), mensaje);			
 		}
 		MensajeEnvioSms mensSms = null;
 		if (StringUtils.isNotEmpty(tramite.getAlertasTramitacionSms()) && ValidacionesUtil.validarMovil(tramite.getAlertasTramitacionSms().trim())) {
-			String mensaje = LiteralesAvisosMovilidad.getLiteral(tramite.getIdioma(),"aviso.sms.alertaTramitacion.pagoFinalizadoTramitePendiente");
-			OrganismoInfo oi = ConfigurationUtil.getInstance().obtenerOrganismoInfo();
+			String mensaje = LiteralesAvisosMovilidad.getLiteral(tramite.getIdioma(),"aviso.sms.alertaTramitacion.pagoFinalizadoTramitePendiente");			
 			mensaje=StringUtil.replace(mensaje,"{0}",oi.getNombre().toUpperCase());
 			mensSms = crearMensajeSms(tramite.getAlertasTramitacionSms().trim(), mensaje);			
 		}
@@ -123,6 +131,9 @@ public class AvisoAlertasTramitacion {
     */
 	public void avisarPreregistroPendiente(EntradaPreregistro preregistro) throws Exception
 	{
+		String entidad = obtenerEntidadProcedimiento(preregistro.getProcedimiento());
+		OrganismoInfo oi = ConfigurationUtil.getInstance().obtenerOrganismoInfo(entidad);
+		
 		MensajeEnvioEmail mensEmail = null;
 		if (StringUtils.isNotEmpty(preregistro.getAlertasTramitacionEmail())) {
 			String mensaje=LiteralesAvisosMovilidad.getLiteral(preregistro.getIdioma(),"aviso.alertasTramitacion.preregistroPendienteConfirmar");
@@ -139,12 +150,11 @@ public class AvisoAlertasTramitacion {
 				mensajeFcCaducidad=StringUtil.replace(mensajeFcCaducidad,"{0}",StringUtil.fechaACadena(preregistro.getFechaCaducidad(), "dd/MM/yyyy HH:mm"));
 				mensaje = mensaje + "\n\n" + mensajeFcCaducidad;			
 			}
-			mensEmail = crearMensajeEmail(preregistro.getAlertasTramitacionEmail(), preregistro.getIdioma(), mensaje);			
+			mensEmail = crearMensajeEmail(oi, preregistro.getAlertasTramitacionEmail(), preregistro.getIdioma(), mensaje);			
 		}
 		MensajeEnvioSms mensSms = null;
 		if (StringUtils.isNotEmpty(preregistro.getAlertasTramitacionSms()) && ValidacionesUtil.validarMovil(preregistro.getAlertasTramitacionSms().trim())) {
-			String mensaje = LiteralesAvisosMovilidad.getLiteral(preregistro.getIdioma(),"aviso.sms.alertaTramitacion.preregistroPendienteConfirmar");
-			OrganismoInfo oi = ConfigurationUtil.getInstance().obtenerOrganismoInfo();
+			String mensaje = LiteralesAvisosMovilidad.getLiteral(preregistro.getIdioma(),"aviso.sms.alertaTramitacion.preregistroPendienteConfirmar");			
 			mensaje=StringUtil.replace(mensaje,"{0}",oi.getNombre().toUpperCase());
 			mensSms = crearMensajeSms(preregistro.getAlertasTramitacionSms().trim(), mensaje);			
 		}
@@ -166,8 +176,7 @@ public class AvisoAlertasTramitacion {
 	//--------------------------------------------------------------------------
 	// FUNCIONES DE UTILIDAD
 	//--------------------------------------------------------------------------
-	private MensajeEnvioEmail crearMensajeEmail(String email, String idioma,  String mensaje) throws Exception{
-		OrganismoInfo oi = ConfigurationUtil.getInstance().obtenerOrganismoInfo();
+	private MensajeEnvioEmail crearMensajeEmail(OrganismoInfo oi, String email, String idioma,  String mensaje) throws Exception{
 		String tituloEmail=LiteralesAvisosMovilidad.getLiteral(idioma,"aviso.alertasTramitacion.titulo");
 		tituloEmail=StringUtil.replace(tituloEmail,"{0}",oi.getNombre().toUpperCase());
 		
@@ -249,4 +258,13 @@ public class AvisoAlertasTramitacion {
 		return (String) plantillas.get(idPlantilla);
 	}
 		
+	private String obtenerEntidadProcedimiento(String idProcedimiento) throws Exception {
+		String entidad = null;
+		ProcedimientoBTE proc = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(idProcedimiento);
+		if (proc != null) {
+			entidad = proc.getEntidad().getIdentificador();
+		}
+		return entidad;
+	}	
+	
 }

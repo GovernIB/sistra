@@ -1010,6 +1010,9 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			FactoriaObjetosXMLRegistro factoria = ServicioRegistroXML.crearFactoriaObjetosXML();
 			factoria.setEncoding(ConstantesXML.ENCODING);
 			
+			// Obtiene entidad expediente
+			String entidad = DelegateUtil.getExpedienteDelegate().obtenerEntidadExpediente(notificacion.getCodigo());
+			
 			// Usuario autenticado
 			Principal sp =this.ctx.getCallerPrincipal();
 			PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
@@ -1027,6 +1030,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			DatosOrigen dOrigen = factoria.crearDatosOrigen();
 			dOrigen.setCodigoEntidadRegistralOrigen ( asientoNotificacion.getDatosOrigen().getCodigoEntidadRegistralOrigen() );				
 			dOrigen.setTipoRegistro( new Character( ConstantesAsientoXML.TIPO_ACUSE_RECIBO )  );
+			dOrigen.setCodigoEntidad(entidad);
 			dOrigen.setNumeroRegistro (notificacion.getNumeroRegistro() );
 			dOrigen.setFechaEntradaRegistro( notificacion.getFechaRegistro() );
 			asiento.setDatosOrigen (dOrigen);
@@ -1211,97 +1215,6 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
        }	   
    }
       
-	
-    /* NO USADAS ? 
-     * ejb.interface-method
-     * ejb.permission role-name="${role.todos}"
-     
-    public List listarNotificacionesTelematicasUsuario() {
-        Session session = getSession();
-        try {     
-        	String usua = this.ctx.getCallerPrincipal().getName();
-        	if (usua == null) return null;
-        	
-            Query query = session
-            .createQuery("FROM NotificacionTelematica AS m WHERE m.usuarioSeycon = :usuario ORDER BY m.fechaRegistro DESC")
-            .setParameter("usuario",usua);
-            //query.setCacheable(true);
-            List tramites = query.list();
-            
-            // Cargamos documentos
-            for (Iterator it=tramites.iterator();it.hasNext();){
-            	NotificacionTelematica notificacionTelematica = (NotificacionTelematica) it.next();
-            	Hibernate.initialize(notificacionTelematica.getDocumentos());
-            }
-            
-            return tramites;
-            
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
-    
-     ejb.interface-method
-     ejb.permission role-name="${role.todos}" 
-     
-	public int numeroNotificacionesUsuario()
-	{
-		String seyconCiudadano = this.ctx.getCallerPrincipal().getName();
-    	
-		Session session = getSession();
-        try 
-        {
-        	Query query = session
-            .createQuery("SELECT count(*) FROM NotificacionTelematica AS e WHERE e.usuarioSeycon = :seyconCiudadano")
-            .setParameter("seyconCiudadano",seyconCiudadano);
-            return ( (Integer) query.iterate().next() ).intValue();
-        }
-        catch( HibernateException he )
-        {
-        	throw new EJBException( he );
-        }
-        catch( Exception exc )
-        {
-        	throw new EJBException( exc );
-        }
-        finally
-        {
-        	close( session );
-        }
-	}
-	
-	
-     ejb.interface-method
-     ejb.permission role-name="${role.todos}" 
-     
-	public int numeroNotificacionesNuevasUsuario()
-	{
-		String seyconCiudadano = this.ctx.getCallerPrincipal().getName();
-    	
-		Session session = getSession();
-        try 
-        {
-        	Query query = session
-            .createQuery("SELECT count(*) FROM NotificacionTelematica AS e WHERE e.usuarioSeycon = :seyconCiudadano and e.fechaAcuse is null")
-            .setParameter("seyconCiudadano",seyconCiudadano);
-            return ( (Integer) query.iterate().next() ).intValue();
-        }
-        catch( HibernateException he )
-        {
-        	throw new EJBException( he );
-        }
-        catch( Exception exc )
-        {
-        	throw new EJBException( exc );
-        }
-        finally
-        {
-        	close( session );
-        }
-	}
    
-    */
-    
+   
 }

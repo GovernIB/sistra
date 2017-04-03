@@ -12,6 +12,9 @@ import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.Controller;
 import org.apache.struts.util.MessageResources;
 import org.apache.struts.Globals;
+import org.ibit.rol.form.front.Constants;
+import org.ibit.rol.form.model.OrganismoInfo;
+import org.ibit.rol.form.persistence.delegate.DelegateUtil;
 
 /**
  * Controller con métodos de utilidad.
@@ -54,4 +57,25 @@ public abstract class BaseController implements Controller {
         return (locale);
 
     }
+    
+ protected OrganismoInfo getOrganismoInfo(HttpServletRequest request) throws Exception {
+    	
+    	OrganismoInfo oi = null;
+    	
+    	// Obtenemos organismo info sesion
+    	oi = (OrganismoInfo) request.getSession().getAttribute(Constants.ORGANISMO_INFO_KEY);
+    	
+    	// Obtenemos organismo info generico
+    	if (oi == null) {
+    		oi = (OrganismoInfo) request.getSession().getServletContext().getAttribute(Constants.ORGANISMO_INFO_KEY);
+    	}
+    	
+    	if (oi == null) {
+    		oi = DelegateUtil.getConfiguracionDelegate().obtenerOrganismoInfo();
+    	}
+    	
+    	return oi;
+    	
+    }
+    
 }

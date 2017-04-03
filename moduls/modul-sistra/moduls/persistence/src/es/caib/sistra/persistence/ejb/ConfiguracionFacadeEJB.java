@@ -63,6 +63,23 @@ public abstract class ConfiguracionFacadeEJB extends HibernateEJB  {
     		throw new EJBException(ex);
     	}         
     }
+    
+    /**
+	 * 
+	 * Obtiene las propiedades de configuracion referentes al organismo y las empaqueta en 
+	 * una clase de modelo
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked = "true"
+     */
+    public OrganismoInfo obtenerOrganismoInfo(String entidad) {    	
+    	try{
+    		OrganismoInfo oi = ConfigurationUtil.getInstance().obtenerOrganismoInfo(entidad);
+    		return oi;
+    	}catch(Exception ex){
+    		throw new EJBException(ex);
+    	}  
+    }
         	
 
 }

@@ -23,6 +23,10 @@
 	String urlSistra = configProperties.getProperty("sistra.url");
 	String contextoRaiz = configProperties.getProperty("sistra.contextoRaiz.front");
 	es.caib.zonaper.model.OrganismoInfo infoOrg = delegateF.obtenerOrganismoInfo();
+	if (request.getParameter("entidad") != null) {
+		infoOrg = delegateF.obtenerOrganismoInfo( (String) request.getParameter("entidad"));
+	}
+
 	
 	// Idioma
 	language = request.getParameter("language");

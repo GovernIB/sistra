@@ -333,6 +333,12 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 		propiedadReducido.setNombre( "circuitoReducido" );
 		propiedadReducido.setValor( Boolean.toString(informacionTramite.isCircuitoReducido()));
 		objXmlConfiguracion.getPropiedades().put(propiedadReducido.getNombre(),propiedadReducido);
+		
+		// - Entidad
+		Propiedad propiedadEntidad = factory.crearPropiedad();
+		propiedadEntidad.setNombre( "entidad" );
+		propiedadEntidad.setValor( informacionTramite.getEntidad());
+		objXmlConfiguracion.getPropiedades().put(propiedadEntidad.getNombre(),propiedadEntidad);
 
 
 		// - Pasos tramite (no pasamos paso Pasos)

@@ -2,6 +2,7 @@ package es.caib.zonaper.front.action;
 
 import java.security.Principal;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,6 +21,7 @@ import es.caib.util.CredentialUtil;
 import es.caib.zonaper.front.Constants;
 import es.caib.zonaper.model.DatosSesion;
 import es.caib.zonaper.model.ElementoExpediente;
+import es.caib.zonaper.model.OrganismoInfo;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.persistence.delegate.DelegateException;
@@ -57,6 +59,19 @@ public class InitAction extends BaseAction
 			datosSesion = crearSesion(request);
 			this.setDatosSesion( request, datosSesion );
 		}
+		
+		
+		// Inicializamos informacion organismo por entidad (almacenamos en sesion, priorizando sobre info contexto)
+        try{
+        	if (request.getParameter("entidad") != null) {
+	    		OrganismoInfo oi = DelegateUtil.getConfiguracionDelegate().obtenerOrganismoInfo((String) request.getParameter("entidad"));
+		 		request.getSession().setAttribute(Constants.ORGANISMO_INFO_KEY,oi);		 		    	
+    		}
+        }catch (Exception ex){
+        	throw new ServletException(ex);
+        }
+		
+		
 		
 		// Enlaces directos a elementos: notificacion , aviso y tramite
 		if (request.getParameter("notificacion")!=null || request.getParameter("aviso")!=null || request.getParameter("tramite")!=null ) {

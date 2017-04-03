@@ -19,6 +19,8 @@ import net.sf.hibernate.Session;
 
 import org.apache.commons.lang.StringUtils;
 
+import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
+import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
 import es.caib.util.CredentialUtil;
@@ -746,9 +748,44 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
 	    }
 	}
 	
+	/**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+	public String obtenerEntidadExpediente( Long codigoExpediente )
+	{
+		try {
+			String entidad = null;
+			
+			// Obtiene expediente
+			Expediente expe = obtenerExpedienteImpl(codigoExpediente);
+			if (expe == null) {
+				throw new Exception("No existe expediente con codigo: " + codigoExpediente);
+			}
+			
+			// Obtiene entidad procedimiento
+			entidad = obtenerEntidadProcedimiento(expe.getIdProcedimiento());
+			
+			return entidad;
+		} catch (Exception e) {
+			log.error("Error obteniendo entidad procedimiento: " + e.getMessage(), e);
+			throw new EJBException("Error obteniendo entidad procedimiento: " + e.getMessage(), e);
+		}
+	}
+	
 	// ------------------------------------------------------------------------------------------------------------------
 	//		FUNCIONES AUXILIARES
 	// ------------------------------------------------------------------------------------------------------------------
+	
+	private String obtenerEntidadProcedimiento(String idProcedimiento) throws Exception {
+	   String entidad = null;
+	   ProcedimientoBTE proc = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(idProcedimiento);
+	   if (proc != null) {
+		   entidad = proc.getEntidad().getIdentificador();
+	   }
+	   return entidad;
+   }
 	
 	private Expediente obtenerExpedienteImpl(long unidadAdministrativa,
 			String identificadorExpediente) {
