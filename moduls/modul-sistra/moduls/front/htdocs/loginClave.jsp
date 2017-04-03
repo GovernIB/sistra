@@ -24,6 +24,9 @@
 	String urlSistra = configProperties.getProperty("sistra.url");
 	String contextoRaiz = configProperties.getProperty("sistra.contextoRaiz.front");
 	es.caib.zonaper.model.OrganismoInfo infoOrg = delegateF.obtenerOrganismoInfo();
+	if (request.getParameter("entidad") != null) {
+		infoOrg = delegateF.obtenerOrganismoInfo( (String) request.getParameter("entidad"));
+	}
 
 	// Configuracion plugin login Clave: obtener contexto login
 	PluginLoginIntf plg = PluginFactory.getInstance().getPluginLogin();

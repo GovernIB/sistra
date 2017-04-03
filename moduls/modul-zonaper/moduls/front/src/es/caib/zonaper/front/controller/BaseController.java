@@ -53,10 +53,15 @@ public abstract class BaseController implements Controller {
 		String title = resources.getMessage( locale, Constants.MENU_NAVEGACION_PREFFIX + "." + entryKey );
 		
 		// Obtenemos info organismo
-		OrganismoInfo info = (OrganismoInfo) request.getSession().getServletContext().getAttribute(Constants.ORGANISMO_INFO_KEY);
+		OrganismoInfo oi;
+		try {
+			oi = getOrganismoInfo(request);
+		} catch (Exception e1) {
+			throw new ServletException(e1);
+		}
 		
 		request.setAttribute( "title", title );
-		request.setAttribute( "enlaces", buildEnlacesNavegacion( resources, entryKey, locale, info) );
+		request.setAttribute( "enlaces", buildEnlacesNavegacion( resources, entryKey, locale, oi) );
 		request.setAttribute( "backAction", tileContext.getAttribute( "backAction" ) );						
         
 		if(request.getSession().getAttribute("urlSistraAFirma") == null || "".equals(request.getSession().getAttribute("urlSistraAFirma"))){
@@ -72,8 +77,6 @@ public abstract class BaseController implements Controller {
 		}
 		
 		// Generamos literal de contacto
-		OrganismoInfo oi = (OrganismoInfo) servletContext.getAttribute(Constants.ORGANISMO_INFO_KEY);
-		
 		String telefono = oi.getTelefonoIncidencias();
 		String email = oi.getEmailSoporteIncidencias();
 		String url = oi.getUrlSoporteIncidencias();
@@ -186,4 +189,24 @@ public abstract class BaseController implements Controller {
     public String getIdPersistencia(HttpServletRequest request){
 		return (String) request.getSession().getAttribute(Constants.KEY_ANONIMO_ID_PERSISTENCIA);
 	}
+    
+	protected OrganismoInfo getOrganismoInfo(HttpServletRequest request) throws Exception {
+    	
+    	OrganismoInfo oi = null;
+    	
+    	// Obtenemos organismo info sesion
+    	oi = (OrganismoInfo) request.getSession().getAttribute(Constants.ORGANISMO_INFO_KEY);
+    	
+    	// Obtenemos organismo info generico
+    	if (oi == null) {
+    		oi = (OrganismoInfo) request.getSession().getServletContext().getAttribute(Constants.ORGANISMO_INFO_KEY);
+    	}
+    	
+    	if (oi == null) {
+    		oi = DelegateUtil.getConfiguracionDelegate().obtenerOrganismoInfo();
+    	}
+    	
+    	return oi;
+    	
+    }
 }

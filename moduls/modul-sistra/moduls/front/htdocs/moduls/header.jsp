@@ -5,7 +5,7 @@
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 
 <bean:define id="lang" value="<%=((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage()%>" type="java.lang.String"/>
-<bean:define id="datosSesion" name="datossesion" type="es.caib.sistra.model.DatosSesion" /> 
+
 <bean:define id="urlPortal">
 	<bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property="urlPortal"/>
 </bean:define>

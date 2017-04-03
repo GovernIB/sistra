@@ -1,5 +1,8 @@
 package org.ibit.rol.form.front.action.telematic;
 
+import java.util.Map;
+
+import org.ibit.rol.form.front.Constants;
 import org.ibit.rol.form.front.action.BaseAction;
 import org.ibit.rol.form.front.registro.RegistroManager;
 import org.ibit.rol.form.persistence.delegate.DelegateUtil;
@@ -41,6 +44,13 @@ public class IniciTelematicAction extends BaseAction {
         InstanciaTelematicaDelegate delegate = DelegateUtil.getInstanciaTelematica();
 
         delegate.create(itForm.getXmlConfig(), itForm.getXmlData(), debugEnabled);
+        
+        // Inicializamos info organismo por entidad
+        Map propiedadesForm = delegate.obtenerPropiedadesFormulario();
+        if (propiedadesForm.get("entidad") != null) {
+        	 request.getSession().setAttribute(Constants.ORGANISMO_INFO_KEY, DelegateUtil.getConfiguracionDelegate().obtenerOrganismoInfo((String) propiedadesForm.get("entidad")));
+        }
+    
 
         // Se ha inicializado con exito. Registramos la instáncia.
         String token = RegistroManager.preregistrarInstancia(request, delegate);

@@ -1,5 +1,6 @@
 package es.caib.sistra.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +9,7 @@ import java.util.Map;
  * customizar la presentación de los módulos
  *
  */
-public class OrganismoInfo {
+public class OrganismoInfo implements Serializable{
 
 	private String nombre;
 	private String urlLogo;
@@ -23,8 +24,7 @@ public class OrganismoInfo {
 	private String urlLoginCssCustom;
 	private Map tituloPortal = new HashMap(); // Titulos portal con el key como idioma
 	private Map referenciaPortal = new HashMap(); // Referencias portal con el key como idioma
-	private Map avisoLOPD = new HashMap(); // Aviso LOPD con el key como idioma
-	
+	private Map avisoLOPD = new HashMap(); // Aviso LOPD con el key como idioma	
 	
 	public String getUrlCssCustom() {
 		return urlCssCustom;

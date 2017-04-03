@@ -35,7 +35,6 @@ import es.caib.zonaper.model.Expediente;
 import es.caib.zonaper.model.NotificacionTelematica;
 import es.caib.zonaper.model.OrganismoInfo;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
-import es.caib.zonaper.persistence.delegate.ConfiguracionDelegate;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.PadAplicacionDelegate;
 
@@ -163,9 +162,9 @@ public class AvisosExpediente {
 		ElementoExpedienteItf detalleEle = DelegateUtil.getElementoExpedienteDelegate().obtenerDetalleElementoExpediente(ele.getCodigo());
 
 		// Obtenemos propiedades organismo
-		ConfiguracionDelegate cfd = DelegateUtil.getConfiguracionDelegate();
-		OrganismoInfo oi = cfd.obtenerOrganismoInfo();
-		Properties propsConfig = cfd.obtenerConfiguracion();
+		String entidad = obtenerEntidadProcedimiento(expe.getIdProcedimiento());
+		OrganismoInfo oi = ConfigurationUtil.getInstance().obtenerOrganismoInfo(entidad);
+		Properties propsConfig = ConfigurationUtil.getInstance().obtenerPropiedades();
 		String urlSistra =  propsConfig.getProperty("sistra.url") + propsConfig.getProperty("sistra.contextoRaiz.front");
 
 		// Establecemos textos de email y SMS
@@ -491,4 +490,13 @@ public class AvisosExpediente {
 	}
 
 
+	private String obtenerEntidadProcedimiento(String idProcedimiento) throws Exception {
+		String entidad = null;
+		ProcedimientoBTE proc = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(idProcedimiento);
+		if (proc != null) {
+			entidad = proc.getEntidad().getIdentificador();
+		}
+		return entidad;
+	}	
+	
 }

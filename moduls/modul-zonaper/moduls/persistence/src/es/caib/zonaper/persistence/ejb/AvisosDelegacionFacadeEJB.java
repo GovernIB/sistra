@@ -78,7 +78,7 @@ public abstract class AvisosDelegacionFacadeEJB extends HibernateEJB
 						lc.login();
 						
 						// Realizamos aviso 
-						AvisosDelegacion.getInstance().avisarPendientePresentacionTramite(ent.getEmail(),tp.getIdioma(),ent.getNombreCompleto(),tp.getDescripcion());
+						AvisosDelegacion.getInstance().avisarPendientePresentacionTramite(tp.getIdProcedimiento(), ent.getEmail(),tp.getIdioma(),ent.getNombreCompleto(),tp.getDescripcion());
 					}finally{				
 						// Hacemos el logout
 						if ( lc != null ){
@@ -130,7 +130,7 @@ public abstract class AvisosDelegacionFacadeEJB extends HibernateEJB
 						lc.login();
 						
 						// Realizamos aviso 
-						AvisosDelegacion.getInstance().avisarPendienteFirmarDocumentos(ent.getEmail(),tp.getIdioma(),ent.getNombreCompleto(),tp.getDescripcion(),documentos,firmantes);
+						AvisosDelegacion.getInstance().avisarPendienteFirmarDocumentos(tp.getIdProcedimiento(), ent.getEmail(),tp.getIdioma(),ent.getNombreCompleto(),tp.getDescripcion(),documentos,firmantes);
 					}finally{				
 						// Hacemos el logout
 						if ( lc != null ){
@@ -182,7 +182,7 @@ public abstract class AvisosDelegacionFacadeEJB extends HibernateEJB
 						lc.login();
 						
 						// Realizamos aviso 
-						AvisosDelegacion.getInstance().avisarRechazoDocumento(ent.getEmail(),tp.getIdioma(),ent.getNombreCompleto(),tp.getDescripcion(),nomDoc,nifUsuario + " - " + nomUsuario);
+						AvisosDelegacion.getInstance().avisarRechazoDocumento(tp.getIdProcedimiento(), ent.getEmail(),tp.getIdioma(),ent.getNombreCompleto(),tp.getDescripcion(),nomDoc,nifUsuario + " - " + nomUsuario);
 					}finally{				
 						// Hacemos el logout
 						if ( lc != null ){
@@ -225,7 +225,7 @@ public abstract class AvisosDelegacionFacadeEJB extends HibernateEJB
 						lc.login();
 						
 						// Realizamos aviso 
-						AvisosDelegacion.getInstance().avisarContinuarTramite(ent.getEmail(),tp.getIdioma(),ent.getNombreCompleto(),tp.getDescripcion());
+						AvisosDelegacion.getInstance().avisarContinuarTramite(tp.getIdProcedimiento(), ent.getEmail(),tp.getIdioma(),ent.getNombreCompleto(),tp.getDescripcion());
 					}finally{				
 						// Hacemos el logout
 						if ( lc != null ){

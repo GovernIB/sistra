@@ -22,7 +22,7 @@ public class PortadaAction extends BaseAction
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception 
     {				 	 	
-		OrganismoInfo oi = (OrganismoInfo) request.getSession().getServletContext().getAttribute(Constants.ORGANISMO_INFO_KEY);
+		OrganismoInfo oi = getOrganismoInfo(request);
 		response.sendRedirect(request.getSession().getServletContext().getAttribute(Constants.CONTEXTO_RAIZ) + "/zonaperfront/redireccion.jsp?url=" + StringEscapeUtils.escapeHtml(oi.getUrlPortal()));
  		return null;
 	}

@@ -55,7 +55,7 @@ public class TramiteController extends BaseController
 		
 		// Generamos literal de contacto
 		MessageResources messages = (MessageResources) request.getAttribute(Globals.MESSAGES_KEY);
-		OrganismoInfo oi = (OrganismoInfo) servletContext.getAttribute(Constants.ORGANISMO_INFO_KEY);
+		OrganismoInfo oi = getOrganismoInfo(request);
 		
 		String telefono = oi.getTelefonoIncidencias();
 		String email = oi.getEmailSoporteIncidencias();
@@ -77,6 +77,26 @@ public class TramiteController extends BaseController
 		request.setAttribute("literalContacto", literalContacto);
 		
 	}
+	
+	 protected OrganismoInfo getOrganismoInfo(HttpServletRequest request) throws Exception {
+	    	
+	    	OrganismoInfo oi = null;
+	    	
+	    	// Obtenemos organismo info sesion
+	    	oi = (OrganismoInfo) request.getSession().getAttribute(Constants.ORGANISMO_INFO_KEY);
+	    	
+	    	// Obtenemos organismo info generico
+	    	if (oi == null) {
+	    		oi = (OrganismoInfo) request.getSession().getServletContext().getAttribute(Constants.ORGANISMO_INFO_KEY);
+	    	}
+	    	
+	    	if (oi == null) {
+	    		oi = DelegateUtil.getConfiguracionDelegate().obtenerOrganismoInfo();
+	    	}
+	    	
+	    	return oi;
+	    	
+	    }
 	
 	
 

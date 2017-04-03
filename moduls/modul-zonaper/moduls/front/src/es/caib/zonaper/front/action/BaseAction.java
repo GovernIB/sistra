@@ -17,6 +17,8 @@ import org.apache.struts.util.RequestUtils;
 import es.caib.zonaper.front.Constants;
 import es.caib.zonaper.front.util.ZonapersFrontRequestHelper;
 import es.caib.zonaper.model.DatosSesion;
+import es.caib.zonaper.model.OrganismoInfo;
+import es.caib.zonaper.persistence.delegate.DelegateUtil;
 
 
 /**
@@ -74,6 +76,26 @@ public abstract class BaseAction extends Action
         }
         newForm.reset(newMapping, request);
         return newForm;
+    }
+	
+	protected OrganismoInfo getOrganismoInfo(HttpServletRequest request) throws Exception {
+    	
+    	OrganismoInfo oi = null;
+    	
+    	// Obtenemos organismo info sesion
+    	oi = (OrganismoInfo) request.getSession().getAttribute(Constants.ORGANISMO_INFO_KEY);
+    	
+    	// Obtenemos organismo info generico
+    	if (oi == null) {
+    		oi = (OrganismoInfo) request.getSession().getServletContext().getAttribute(Constants.ORGANISMO_INFO_KEY);
+    	}
+    	
+    	if (oi == null) {
+    		oi = DelegateUtil.getConfiguracionDelegate().obtenerOrganismoInfo();
+    	}
+    	
+    	return oi;
+    	
     }
 
 }

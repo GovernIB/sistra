@@ -53,6 +53,10 @@ public class CargarTramiteAction extends BaseAction
 		idPersistencia = idPersistencia.trim();
 		
 		RespuestaFront respuestaFront = delegate.cargarTramite(idPersistencia);
+		
+		// Establecemos info organismo particularizada por entidad
+		setOrganismoInfoEntidad(request, respuestaFront);			
+
 		MensajeFront mensaje = respuestaFront.getMensaje();
 		
 		if(mensaje != null && MensajeFront.MENSAJE_TRAMITETERMINADO.equals(mensaje.getMensaje())){

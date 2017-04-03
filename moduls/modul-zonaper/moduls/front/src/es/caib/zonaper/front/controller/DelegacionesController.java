@@ -60,7 +60,7 @@ public class DelegacionesController extends BaseController
 		}
 		
 		// Obtenemos descripcion Mi portal		 
-		OrganismoInfo info = (OrganismoInfo) request.getSession().getServletContext().getAttribute(Constants.ORGANISMO_INFO_KEY);
+		OrganismoInfo info = getOrganismoInfo(request);
 		Locale locale = this.getLocale( request);
 		request.setAttribute("tituloMiPortal",(String) info.getTituloPortal().get(locale.getLanguage()));
 

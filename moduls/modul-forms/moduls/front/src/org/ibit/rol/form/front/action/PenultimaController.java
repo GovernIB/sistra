@@ -98,7 +98,7 @@ public class PenultimaController extends BaseController {
         }
         
         // Generamos literal de contacto
- 		OrganismoInfo oi = (OrganismoInfo) servletContext.getAttribute(Constants.ORGANISMO_INFO_KEY);
+ 		OrganismoInfo oi = getOrganismoInfo(request);
  		
  		String telefono = oi.getTelefonoIncidencias();
  		String email = oi.getEmailSoporteIncidencias();

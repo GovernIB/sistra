@@ -10,6 +10,9 @@
 	String urlSistra = configProperties.getProperty("sistra.url");
 	
 	es.caib.zonaper.model.OrganismoInfo infoOrg = delegateF.obtenerOrganismoInfo();
+	if (request.getParameter("entidad") != null) {
+		infoOrg = delegateF.obtenerOrganismoInfo( (String) request.getParameter("entidad"));
+	}
 	
 	String lang = request.getParameter("language");
 	if (lang == null) {
