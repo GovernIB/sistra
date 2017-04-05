@@ -4792,12 +4792,14 @@ public class TramiteProcessorEJB implements SessionBean {
 		    				// cambiamos de UA todos los docs en el RDS
 		    				if (dt.isCalculado()) cambiarUADocs(dt);
 		    				// Establecemos el asiento como parametro del paso
-		    				param.put("asiento",asiento);
-		    				// Calculamos email/movil contacto por defecto (script datos contacto o info zona personal)
-		        			this.emailAviso = calcularEmailAvisoDefecto();
-		        			this.smsAviso = calcularSmsAvisoDefecto();	
+		    				param.put("asiento",asiento);		    				
     			}
     			
+    			if ( pendienteSeleccionarNotif ) {
+    				// Calculamos email/movil contacto por defecto (script datos contacto o info zona personal)
+        			this.emailAviso = calcularEmailAvisoDefecto();
+        			this.smsAviso = calcularSmsAvisoDefecto();	
+    			}
     						    			
     			
     			// Si hay que verificar movil enviamos SMS
