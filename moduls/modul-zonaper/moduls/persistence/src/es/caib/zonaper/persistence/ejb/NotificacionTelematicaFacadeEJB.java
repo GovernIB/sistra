@@ -1010,8 +1010,10 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 			FactoriaObjetosXMLRegistro factoria = ServicioRegistroXML.crearFactoriaObjetosXML();
 			factoria.setEncoding(ConstantesXML.ENCODING);
 			
+			
 			// Obtiene entidad expediente
-			String entidad = DelegateUtil.getExpedienteDelegate().obtenerEntidadExpediente(notificacion.getCodigo());
+			Long idExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerCodigoExpedienteElemento(ElementoExpediente.TIPO_NOTIFICACION, notificacion.getCodigo());
+			String entidad = DelegateUtil.getExpedienteDelegate().obtenerEntidadExpediente(idExpediente);
 			
 			// Usuario autenticado
 			Principal sp =this.ctx.getCallerPrincipal();
