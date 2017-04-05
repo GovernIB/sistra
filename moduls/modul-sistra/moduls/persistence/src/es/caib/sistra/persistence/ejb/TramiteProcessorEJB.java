@@ -4793,11 +4793,12 @@ public class TramiteProcessorEJB implements SessionBean {
 		    				if (dt.isCalculado()) cambiarUADocs(dt);
 		    				// Establecemos el asiento como parametro del paso
 		    				param.put("asiento",asiento);
+		    				// Calculamos email/movil contacto por defecto (script datos contacto o info zona personal)
+		        			this.emailAviso = calcularEmailAvisoDefecto();
+		        			this.smsAviso = calcularSmsAvisoDefecto();	
     			}
     			
-    			// Calculamos email/movil contacto por defecto (script datos contacto o info zona personal)
-    			this.emailAviso = calcularEmailAvisoDefecto();
-    			this.smsAviso = calcularSmsAvisoDefecto();				    			
+    						    			
     			
     			// Si hay que verificar movil enviamos SMS
     			if (tramiteInfo.isVerificarMovil() && StringUtils.isBlank(codigoSmsVerificarMovil)) {
