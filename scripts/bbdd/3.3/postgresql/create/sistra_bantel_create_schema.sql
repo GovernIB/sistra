@@ -1750,6 +1750,12 @@ alter table BTE_PROAPL add TAP_IDEPEX character varying(20);
 comment on column BTE_PROAPL.TAP_IDEPEX is
 'Identificador del procedimiento administrativo externo';
 
+-- V3.1.4
+alter table BTE_PROAPL add TAP_AVIINC character varying(255);
+
+comment on column BTE_PROAPL.TAP_AVIINC is
+'Email para envío de incidencias';
+
 -- V3.3.4
 alter table BTE_PROAPL add TAP_IDEENT character varying(100);
 comment on column BTE_PROAPL.TAP_IDEENT is 'IDENTIFICADOR ENTRADA';
