@@ -4786,9 +4786,11 @@ public class TramiteProcessorEJB implements SessionBean {
 		    				param.put("asiento",asiento);
     			}
     			
-    			// Calculamos email/movil contacto por defecto (script datos contacto o info zona personal)
-    			this.emailAviso = calcularEmailAvisoDefecto();
-    			this.smsAviso = calcularSmsAvisoDefecto();				    			
+    			if ( pendienteSeleccionarNotif ) {
+    			    // Calculamos email/movil contacto por defecto (script datos contacto o info zona personal)
+    			    this.emailAviso = calcularEmailAvisoDefecto();
+    			    this.smsAviso = calcularSmsAvisoDefecto();	
+    			}			    			
     			
     			// Si hay que verificar movil enviamos SMS
     			if (tramiteInfo.isVerificarMovil() && StringUtils.isBlank(codigoSmsVerificarMovil)) {
