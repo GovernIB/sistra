@@ -65,7 +65,7 @@ public class FuncsNodesServiciosController implements Controller
     		nodo = new NodoArbol();
     		nodo.setIdCampo("c"+ indexCampo);
     		nodo.setId(vo.getCodigo());
-    		nodo.setDescripcion(vo.getDescripcion());
+    		nodo.setDescripcion(vo.getCodigo() + " - " + vo.getDescripcion());
     		nodo.setSeleccionable(true);
     		if(vo.getCodigoPadre() != null)
     		{    			

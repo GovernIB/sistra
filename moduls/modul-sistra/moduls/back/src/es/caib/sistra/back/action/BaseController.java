@@ -38,10 +38,10 @@ public abstract class BaseController implements Controller
     
     protected List ajustarTamListaDesplegable( List listaDominio, int longitud, String keyCampo )
     {
-    	return ajustarTamListaDesplegable( listaDominio, longitud, keyCampo, true );
+    	return ajustarTamListaDesplegable( listaDominio, longitud, keyCampo, true, false );
     }
     
-    protected List ajustarTamListaDesplegable( List listaDominio, int longitud, String keyCampo, boolean blankParam )
+    protected List ajustarTamListaDesplegable( List listaDominio, int longitud, String keyCampo, boolean blankParam, boolean concatDesc )
     {
     	List lstReturn = new ArrayList();
     	if ( blankParam )
@@ -60,11 +60,19 @@ public abstract class BaseController implements Controller
     		if (fila instanceof Map){
     			Map filaMap = ( Map ) fila;
     			valorCampo = ( String ) filaMap.get("CODIGO");
-    			descCampo = (String) filaMap.get(keyCampo);
+    			if (concatDesc){
+    				descCampo = valorCampo + " - " + (String) filaMap.get(keyCampo);
+    			}else{
+    				descCampo = (String) filaMap.get(keyCampo);
+    			}
     		}else { // Ajuste para que funcione con los dominios de registro
     			ValorOrganismo vo = (ValorOrganismo) fila;
     			valorCampo = vo.getCodigo();
-    			descCampo = vo.getDescripcion();
+    			if (concatDesc){
+    				descCampo = valorCampo + " - " + vo.getDescripcion();
+    			}else{
+    				descCampo = vo.getDescripcion();
+    			}
     		}
     		
     		// Ajustamos tamanyo
