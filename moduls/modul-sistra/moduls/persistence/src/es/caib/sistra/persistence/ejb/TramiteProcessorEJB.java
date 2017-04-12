@@ -4766,14 +4766,16 @@ public class TramiteProcessorEJB implements SessionBean {
     			// SI HAY PAGOS CON ESTADO ES INCORRECTO
     			//eliminarPagosNoFinalizados();
 
+    			boolean pendienteFlujo = paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_FLUJO);
+    			boolean pendienteDelegacion = paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_DELEGACION_PRESENTACION);
+    			boolean pendienteSeleccionarNotif = (!tramiteInfo.getHabilitarNotificacionTelematica().equals(ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA) && tramiteInfo.getSeleccionNotificacionTelematica() == null);
+    			boolean pendienteEnvioSmsVerificacion = tramiteInfo.isVerificarMovil() && StringUtils.isBlank(codigoSmsVerificarMovil);
+    			
+    			
     			// No generar asiento si:
     			//		- esta pendiente de flujo
     			//	    - esta pendiente de seleccionar notificacion telematica o selecciona avisos
     			//		- se esta tramitando en forma delegada y el usuario no tiene permiso para presentar el tramite
-
-    			boolean pendienteFlujo = paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_FLUJO);
-    			boolean pendienteDelegacion = paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_DELEGACION_PRESENTACION);
-    			boolean pendienteSeleccionarNotif = (!tramiteInfo.getHabilitarNotificacionTelematica().equals(ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA) && tramiteInfo.getSeleccionNotificacionTelematica() == null);
     			if (  !(pendienteDelegacion || pendienteFlujo || pendienteSeleccionarNotif) ) {
     						// Calculamos destinatario tramite (por si se especifica dinamicamente)
 		    				DestinatarioTramite dt = this.calcularDestinatarioTramite();
@@ -4786,14 +4788,16 @@ public class TramiteProcessorEJB implements SessionBean {
 		    				param.put("asiento",asiento);
     			}
     			
-    			if ( pendienteSeleccionarNotif ) {
-    			    // Calculamos email/movil contacto por defecto (script datos contacto o info zona personal)
+    			// Calculamos email/movil contacto por defecto (script datos contacto o info zona personal)
+    			// 	- si esta pendiente de seleccionar la notificacion
+    			//  - si hay que verificar movil
+    			if ( pendienteSeleccionarNotif || pendienteEnvioSmsVerificacion) {
     			    this.emailAviso = calcularEmailAvisoDefecto();
     			    this.smsAviso = calcularSmsAvisoDefecto();	
     			}			    			
     			
     			// Si hay que verificar movil enviamos SMS
-    			if (tramiteInfo.isVerificarMovil() && StringUtils.isBlank(codigoSmsVerificarMovil)) {
+    			if (pendienteEnvioSmsVerificacion) {
     				codigoSmsVerificarMovil = enviarCodigoSmsVerificarMovil(this.smsAviso);    				
     			}
 
@@ -4816,6 +4820,11 @@ public class TramiteProcessorEJB implements SessionBean {
      * @return
      */
     private String enviarCodigoSmsVerificarMovil(String movil) throws Exception {
+    	
+    	if (StringUtils.isBlank(movil)) {
+    		throw new Exception("No se ha establecido valor para el movil (verificacion sms)");
+    	}
+    	
     	LoginContext lc = null;		
 		try{					
 			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
