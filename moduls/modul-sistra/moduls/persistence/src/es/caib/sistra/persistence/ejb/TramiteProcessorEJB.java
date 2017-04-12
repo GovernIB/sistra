@@ -4800,6 +4800,9 @@ public class TramiteProcessorEJB implements SessionBean {
     			if (pendienteEnvioSmsVerificacion) {
     				codigoSmsVerificarMovil = enviarCodigoSmsVerificarMovil(this.smsAviso);    				
     			}
+    			
+    			param.put("emailAvisoDefault", this.emailAviso);
+				param.put("smsAvisoDefault", this.smsAviso);
 
     			break;
     		case PasoTramitacion.PASO_FINALIZAR :
