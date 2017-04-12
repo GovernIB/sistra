@@ -418,7 +418,9 @@
 							<bean:message key="finalizacion.avisos.textoHabilitada"/> <br/>
 							<ul>
 								<logic:notEmpty name="seleccionEmailAviso"><li>Email: <bean:write name="seleccionEmailAviso"/></li></logic:notEmpty>
+								<logic:equal name="tramite" property="permiteSMS" value="true">	
 								<logic:notEmpty name="seleccionSmsAviso"><li>Sms: <bean:write name="seleccionSmsAviso"/></li></logic:notEmpty>
+								</logic:equal>
 							</ul>
 						</p>
 					</logic:equal>

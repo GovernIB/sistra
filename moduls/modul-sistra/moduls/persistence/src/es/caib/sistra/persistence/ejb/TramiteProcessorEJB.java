@@ -3147,7 +3147,9 @@ public class TramiteProcessorEJB implements SessionBean {
     {
     	this.habilitarNotificacionTelematica = new Boolean(habilitarNotificacion);
     	this.emailAviso = emailAviso;
-    	this.smsAviso = smsAviso;
+    	if (tramiteInfo.isPermiteSMS()) {  
+    		this.smsAviso = smsAviso;
+    	}
     }
 
     /**
@@ -3160,7 +3162,9 @@ public class TramiteProcessorEJB implements SessionBean {
     public void resetHabilitarNotificacion() {
     	this.habilitarNotificacionTelematica = null;
     	this.emailAviso = null;
-    	this.smsAviso = null;
+    	if (tramiteInfo.isPermiteSMS()) {    			
+    		this.smsAviso = null;
+    	}
     }
 
     
@@ -4800,6 +4804,9 @@ public class TramiteProcessorEJB implements SessionBean {
     			if (pendienteEnvioSmsVerificacion) {
     				codigoSmsVerificarMovil = enviarCodigoSmsVerificarMovil(this.smsAviso);    				
     			}
+    			
+    			param.put("emailAvisoDefault", this.emailAviso);
+				param.put("smsAvisoDefault", this.smsAviso);
 
     			break;
     		case PasoTramitacion.PASO_FINALIZAR :
