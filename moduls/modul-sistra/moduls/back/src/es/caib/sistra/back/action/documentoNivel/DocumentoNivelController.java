@@ -62,7 +62,7 @@ public class DocumentoNivelController extends BaseController
 	       	 	valoresDominio.setValor(fila, "CODIGO", plgsPago[i]);
 	       	 	valoresDominio.setValor(fila, "DESCRIPCION", plgsPago[i]);
        	 	}
-			request.setAttribute( "listaPluginsPago", ajustarTamListaDesplegable( valoresDominio.getFilas(), MAX_COMBO_DESC, "DESCRIPCION" , false) );
+       	 	request.setAttribute( "listaPluginsPago", ajustarTamListaDesplegable( valoresDominio.getFilas(), MAX_COMBO_DESC, "DESCRIPCION" , false, false) );
        	 	
        	 	
         }

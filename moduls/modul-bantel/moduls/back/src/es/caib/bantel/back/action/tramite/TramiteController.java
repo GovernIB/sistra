@@ -14,6 +14,9 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.Controller;
 
+import es.caib.regtel.model.ValorOrganismo;
+import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
+import es.caib.regtel.persistence.delegate.RegistroTelematicoDelegate;
 import es.caib.bantel.back.form.TramiteForm;
 import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
@@ -81,22 +84,25 @@ public class TramiteController implements Controller
 		
 
 	}
-
-	/**
-	 * Listar organos.
-	 * @param entidad 
-	 * @return organos
-	 */
-	private List listarOrganos(String entidad)  throws Exception {
 	
+	private List listarOrganos(String entidad)  throws Exception {
+		RegistroTelematicoDelegate dlgRte = DelegateRegtelUtil.getRegistroTelematicoDelegate();
+		List organosDestino = dlgRte.obtenerServiciosDestino(entidad);
 		List servicios = new ArrayList();
 		
-		ServicioDestinatario sVacio = new ServicioDestinatario();
+		ValorOrganismo sVacio = new ValorOrganismo();
 		sVacio.setCodigoPadre("");
 		sVacio.setCodigo("");
 		sVacio.setDescripcion("");
 		servicios.add(sVacio);
-		servicios.addAll(es.caib.regtel.persistence.delegate.DelegateUtil.getRegistroOrganismoDelegate().obtenerServiciosDestino(entidad));
+		
+		for(int i=0;i<organosDestino.size();i++){
+			// Obtenemos valor
+			ValorOrganismo vo = new ValorOrganismo();
+			vo.setCodigo(((es.caib.regtel.model.ValorOrganismo)organosDestino.get(i)).getCodigo());
+			vo.setDescripcion(((es.caib.regtel.model.ValorOrganismo)organosDestino.get(i)).getCodigo() + " - " + ((es.caib.regtel.model.ValorOrganismo)organosDestino.get(i)).getDescripcion());
+			servicios.add(vo);
+		}
 		
 		return servicios;
 	}

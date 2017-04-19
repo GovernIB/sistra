@@ -77,14 +77,14 @@ public class AltaNotificacionController extends BaseController
 		request.setAttribute("municipios",municipios);
 		RegistroTelematicoDelegate dlgRte = DelegateRegtelUtil.getRegistroTelematicoDelegate();
         List organosDestino = dlgRte.obtenerServiciosDestino(p.getEntidad());
-        request.setAttribute( "listaorganosdestino", regtelToBantel(organosDestino));
+        request.setAttribute( "listaorganosdestino", regtelToBantel(organosDestino, true));
         List oficinasRegistro = dlgRte.obtenerOficinasRegistro(p.getEntidad(), ConstantesPluginRegistro.REGISTRO_SALIDA);
-        request.setAttribute( "listaoficinasregistro", regtelToBantel(oficinasRegistro));
+        request.setAttribute( "listaoficinasregistro", regtelToBantel(oficinasRegistro, false));
         List tiposAsunto = dlgRte.obtenerTiposAsunto(p.getEntidad());
-        request.setAttribute("tiposAsunto", regtelToBantel(tiposAsunto));
+        request.setAttribute("tiposAsunto", regtelToBantel(tiposAsunto, false));
 	}
 	
-	private List regtelToBantel(List lista){
+	private List regtelToBantel(List lista, boolean concatDesc){
 		List listaBantel = new ArrayList();
 		if(lista != null){
 			ValorOrganismo voIni = new ValorOrganismo();
@@ -94,7 +94,11 @@ public class AltaNotificacionController extends BaseController
 			for(int i=0;i<lista.size();i++){
 				ValorOrganismo vo = new ValorOrganismo();
 				vo.setCodigo(((es.caib.regtel.model.ValorOrganismo)lista.get(i)).getCodigo());
-				vo.setDescripcion(((es.caib.regtel.model.ValorOrganismo)lista.get(i)).getDescripcion());
+				if (concatDesc){
+					vo.setDescripcion(((es.caib.regtel.model.ValorOrganismo)lista.get(i)).getCodigo() + " - " + ((es.caib.regtel.model.ValorOrganismo)lista.get(i)).getDescripcion());
+				}else{
+					vo.setDescripcion(((es.caib.regtel.model.ValorOrganismo)lista.get(i)).getDescripcion());	
+				}
 				listaBantel.add(vo);
 			}
 		}

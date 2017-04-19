@@ -33,7 +33,7 @@ public class ImportarXMLPreviewController extends BaseController
                        
             // Establecemos listas de valores
             request.setAttribute("entidad", form.getEntidad());
-            request.setAttribute( "listaorganosdestino", ajustarTamListaDesplegable ( organosDestino, MAX_COMBO_DESC , "DESCRIPCION")  );
+            request.setAttribute( "listaorganosdestino", ajustarTamListaDesplegable ( organosDestino, MAX_COMBO_DESC , "DESCRIPCION", true, true)  );
             request.setAttribute( "listaoficinasregistro", ajustarTamListaDesplegable ( oficinasRegistro, MAX_COMBO_DESC , "DESCRIPCION")  );
             request.setAttribute( "listatiposasunto", ajustarTamListaDesplegable ( tiposAsunto, MAX_COMBO_DESC , "DESCRIPCION")  );
             request.setAttribute( "listaunidadesadministrativas", ajustarTamListaDesplegable(  obtenerValoresDominio( ConstantesDominio.DOMINIO_SAC_UNIDADES_ADMINISTRATIVAS  ),  MAX_COMBO_DESC , "DESCRIPCION") );
