@@ -89,7 +89,7 @@ $(document).ready(function(){
 				$("#firmaWeb").css("border","0.5em solid #85bbe4");				
 			}
 			
-			$("#firmaWeb").html('<iframe src="' + FIRMAWEB_CONTEXTO + FIRMAWEB_SERVLET + '?accion=firmar&signaturesSetID=' + signaturesSetID + '" style="border: 0pt none; width: 500px; height: 400px;" scrolling="no"></iframe>');
+			$("#firmaWeb").html('<iframe src="' + FIRMAWEB_CONTEXTO + FIRMAWEB_SERVLET + '?accion=firmar&signaturesSetID=' + signaturesSetID + '" style="border: 0pt none; width: 500px; height: 450px;" scrolling="no"></iframe>');
 			
 			// mostrem suport
 			$("#firmaWeb").fadeIn("slow");

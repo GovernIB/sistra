@@ -107,7 +107,6 @@
 	<classpathentry kind="lib" path="lib/jms.jar"/>
 	<classpathentry kind="lib" path="lib/js.jar"/>
 	<classpathentry kind="lib" path="lib/mail.jar"/>
-	<classpathentry kind="lib" path="lib/ojdbc14.jar"/>
 	<classpathentry kind="lib" path="lib/quartz-all-1.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/resolver.jar"/>
 	<classpathentry kind="lib" path="lib/servlet.jar"/>
@@ -187,5 +186,6 @@
 	<classpathentry kind="lib" path="lib/firmaWeb/plugins-api-1.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/firmaWeb/plugins-webutils-1.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/firmaWeb/mime-util-2.1.3.jar"/>
+	<classpathentry kind="lib" path="lib/ojdbc14.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

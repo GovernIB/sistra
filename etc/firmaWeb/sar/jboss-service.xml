@@ -1,7 +1,7 @@
 <server>
 <mbean code="org.jboss.varia.property.SystemPropertiesService" name="jboss:type=Service,name=firmaWeb">
 <attribute name="Properties">
-es.caib.firmaweb.signaturewebplugins.path=/app/caib/sistra/plugins/firmaweb.properties
+es.caib.firmaweb.signaturewebplugins.path=/conf/pasarelaBIT/plugins.properties
 </attribute>
 </mbean>
 </server>

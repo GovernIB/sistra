@@ -98,6 +98,9 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
     	LoginContext lc = null;
     	
     	try{
+    		
+    		log.debug("Inicio proceso aviso Backoffices");
+    		
     		// Realizamos login JAAS con usuario para proceso automatico
 			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
 			String user = props.getProperty("auto.user");
@@ -144,6 +147,7 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
     		log.error("Excepción en proceso de aviso a BackOffices",ex);
     		throw new ExcepcionBTE("Excepción en proceso de aviso a BackOffices",ex);
     	}finally{
+    		log.debug("Fin proceso aviso Backoffices");
     		// Hacemos el logout
 			if ( lc != null ){
 				try{lc.logout();}catch(Exception exl){}

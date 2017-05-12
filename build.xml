@@ -129,6 +129,7 @@
 			<exclude name="cxf/*"/>
 			<exclude name="jboss*"/>
 			<exclude name="jboss/*"/>
+			<exclude name="firmaWeb/*"/>
 		</zipfileset>
 		<zipfileset dir="${output.dir}/lib" prefix="lib"/>
 	</ear>
