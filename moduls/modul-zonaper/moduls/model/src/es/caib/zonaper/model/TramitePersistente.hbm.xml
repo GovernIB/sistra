@@ -36,6 +36,8 @@
 
 
     <property name="idProcedimiento"  column="TPE_IDEPRO"/>
+    
+    <property name="persistente"  column="TPE_PERSIS"/>
 
 	<set name="documentos" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="DPE_DOCIDE">
 		<cache usage="read-write"/>

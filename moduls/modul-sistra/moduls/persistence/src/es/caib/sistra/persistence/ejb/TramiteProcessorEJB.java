@@ -3558,7 +3558,7 @@ public class TramiteProcessorEJB implements SessionBean {
     private void inicializarTramite() throws Exception{
     	try{
 	    	RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
-
+	    	
 	    	tramitePersistentePAD = new TramitePersistentePAD();
 	    	tramitePersistentePAD.setTramite(tramiteVersion.getTramite().getIdentificador());
 	    	tramitePersistentePAD.setVersion(tramiteVersion.getVersion());
@@ -3572,8 +3572,13 @@ public class TramiteProcessorEJB implements SessionBean {
 	    			tramitePersistentePAD.setDelegado(datosSesion.getCodigoDelegado());
 	    		}
 	    	}
+	    	
 	    	// Almacenamos los parametros de inicio del trámite
 	    	tramitePersistentePAD.setParametrosInicio(this.parametrosInicio);
+	    	
+	    	// Indica si es persistente (si no es circuito reducido)
+	    	tramitePersistentePAD.setPersistente(isCircuitoReducido( tramiteVersion, this.datosSesion.getNivelAutenticacion())?"N":"S");
+	    	
 	    	// Fecha de caducidad
 	    	tramitePersistentePAD.setFechaCaducidad(this.getFechaCaducidad());
 
@@ -3673,7 +3678,7 @@ public class TramiteProcessorEJB implements SessionBean {
 
     }
 
-    /**
+	/**
      * Comprueba si existe tramite en la PAD
      * @param idPersistencia
      * @throws ProcessorException
@@ -5756,6 +5761,11 @@ public class TramiteProcessorEJB implements SessionBean {
 		// Si no se indica persistencia le damos un año
 		if (diasPersistencia <= 0) {
 			diasPersistencia = 365;
+		}
+		
+		// Si es circuito reducido damos 1 dia para que termine
+		if (isCircuitoReducido( tramiteVersion, this.datosSesion.getNivelAutenticacion())) {
+			diasPersistencia = 1;
 		}
 
 		Date fechaCaducidad = (new Timestamp(System.currentTimeMillis() + (diasPersistencia * 24 * 60 * 60 * 1000L)));

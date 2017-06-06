@@ -86,17 +86,22 @@
 </logic:present>
 <div id="contenidor">
 	<!--  cabecera -->
-	<tiles:insert name="header"/>
-	<!--  datos usuario -->
-	<tiles:insert name="datosUsuario"/>
-	<div id="capsalfranja"></div>
+	<logic:present name="ID_INSTANCIA">
+		<tiles:insert name="header"/>
+		<!--  datos usuario -->
+		<tiles:insert name="datosUsuario"/>
+		<div id="capsalfranja"></div>
+	</logic:present>
+	
 	<!-- continguts -->
 	<div id="continguts">
 	<tiles:insert name="main"/>
 	</div>
 	<!-- pie pagina -->
 	<!--  <div id="peuVora"></div> -->
+	<logic:present name="ID_INSTANCIA">
 	<tiles:insert name="footer"/>
+	</logic:present>
 </div><!-- contenedor -->
 </body>
 </html:html>

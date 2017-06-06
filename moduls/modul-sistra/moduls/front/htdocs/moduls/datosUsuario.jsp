@@ -5,6 +5,7 @@
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
+
 <script type="text/javascript">
 <!--
 function cancelarTramite( url )
@@ -16,9 +17,13 @@ function cancelarTramite( url )
 }
 -->
 </script>
+
+<logic:present name="ID_INSTANCIA">
+
 <bean:define id="urlEliminarTramite">
         <html:rewrite page="/protected/abandonarTramite.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
+
 <div id="capsalUsuari">
 
 <!--  Acceso anonimo -->
@@ -63,3 +68,5 @@ function cancelarTramite( url )
 </logic:notEqual>
 
 </div>
+
+</logic:present>

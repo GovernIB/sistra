@@ -35,6 +35,8 @@ public class TramitePersistente implements java.io.Serializable {
      private String alertasTramitacionFinAuto;
 
      private String idProcedimiento;
+     
+     private String persistente; // S / N
 
     // Constructors
     /** default constructor */
@@ -234,5 +236,13 @@ public class TramitePersistente implements java.io.Serializable {
 
 	public void setAlertasTramitacionFinAuto(String alertasTramitacionFinAuto) {
 		this.alertasTramitacionFinAuto = alertasTramitacionFinAuto;
+	}
+
+	public String getPersistente() {
+		return persistente;
+	}
+
+	public void setPersistente(String persistente) {
+		this.persistente = persistente;
 	}
 }

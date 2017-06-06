@@ -30,6 +30,10 @@
     <property name="alertasTramitacionSms"  column="TPB_ALTSMS"/>
     <property name="alertasTramitacionFechaUltima"  column="TPB_ALTFEC"/>
     <property name="alertasTramitacionFinAuto"  column="TPB_ALTFINA"/>
+    
+    <property name="idProcedimiento"  column="TPB_IDEPRO"/>
+    
+    <property name="persistente"  column="TPB_PERSIS"/>
 
 	<set name="documentosBackup" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="DPB_DOCIDE">
 		<cache usage="read-write"/>

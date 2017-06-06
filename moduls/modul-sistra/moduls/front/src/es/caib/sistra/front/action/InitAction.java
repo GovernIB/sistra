@@ -177,12 +177,18 @@ public class InitAction extends BaseAction
         }
         
         
+        /** 
+         
+         QUITAMOS ESTA REDIRECCION, LOS DE CIRCUITO REDUCIDO YA NO SE MOSTRARAN EN LA ZONA PERSONAL PARA RETOMARSE 
+         
         // Si se trata de un trámite reducido, siempre a la pantalla de trámite nuevo
         Boolean isCircuitoReducido = ( Boolean ) hsmParametros.get( Constants.TRAMITE_REDUCIDO_KEY );
         if ( isCircuitoReducido.booleanValue() )
         {
         	return mapping.findForward( "nuevoTramite" );
         }
+        
+        */
         
         /*
          * 	MODIFICACION: PARA ANONIMOS YA NO SE MUESTRA PAGINA QUE PERMITE INICIAR O CARGAR. SIEMPRE A NUEVO TRAMITE.

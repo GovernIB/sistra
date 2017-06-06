@@ -33,10 +33,10 @@ public class TramitesSinEnviarController extends BaseController
 		
 		if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(datosSesion.getPerfilAcceso())){
 			// Obtenemos tramites persistentes asociados a la entidad delegada	
-			lResult = zonaPersonalDelegate.obtenerTramitesPersistentesEntidadDelegada(datosSesion.getNifEntidad());
+			lResult = zonaPersonalDelegate.obtenerTramitesPersistentesEntidadDelegada(datosSesion.getNifEntidad(), true);
 		}else{			
 		// Obtenemos tramites persistentes asociados al usuario	
-			lResult = zonaPersonalDelegate.obtenerTramitesPersistentesUsuario();
+			lResult = zonaPersonalDelegate.obtenerTramitesPersistentesUsuario(true);
 		}
 		
 		request.setAttribute( "tramitesPersistentes", lResult );

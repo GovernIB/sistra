@@ -9,9 +9,12 @@
 <bean:define id="urlPortal">
 	<bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property="urlPortal"/>
 </bean:define>
+
+<logic:present name="ID_INSTANCIA">
 <bean:define id="urlFormularioIncidencias">
  <html:rewrite page="/protected/mostrarFormularioIncidencias.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
+
 <script type="text/javascript">
 <!--
 	function formularioIncidencias() {
@@ -50,3 +53,4 @@
 	</p>	
 </div>
 </logic:equal>
+</logic:present>

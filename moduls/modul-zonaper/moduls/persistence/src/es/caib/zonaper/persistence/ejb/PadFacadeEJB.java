@@ -223,6 +223,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	return tramitePersistenteToTramitePersistentePAD(tramitePersistente);
     }
 
+    
 
     /**
      * Obtiene lista de tramites persistentes que tiene pendientes por completar el usuario,
@@ -232,7 +233,7 @@ public abstract class PadFacadeEJB implements SessionBean{
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
-    public List obtenerTramitesPersistentesUsuario() throws ExcepcionPAD{
+    public List obtenerTramitesPersistentesUsuario(boolean filtrarPersistentes) throws ExcepcionPAD{
     	// Cargamos tramitePersistente
     	List tramites;
     	try{
@@ -246,9 +247,24 @@ public abstract class PadFacadeEJB implements SessionBean{
     	List tramitesPAD = new ArrayList(tramites.size());
     	for (Iterator it = tramites.iterator();it.hasNext();){
     		TramitePersistente tramitePersistente = (TramitePersistente) it.next();
-    		tramitesPAD.add(tramitePersistenteToTramitePersistentePAD(tramitePersistente));
+    		if ("S".equals(tramitePersistente.getPersistente())) {
+    			tramitesPAD.add(tramitePersistenteToTramitePersistentePAD(tramitePersistente));
+    		}
     	}
     	return tramitesPAD;
+    }
+    
+
+    /**
+     * Obtiene lista de tramites persistentes que tiene pendientes por completar el usuario,
+     * o bien ha remitido a otro usuario
+     *
+     *
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public List obtenerTramitesPersistentesUsuario() throws ExcepcionPAD{
+    	return obtenerTramitesPersistentesUsuario(false);
     }
 
 
@@ -260,7 +276,7 @@ public abstract class PadFacadeEJB implements SessionBean{
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
-    public List obtenerTramitesPersistentesEntidadDelegada(String nifEntidad) throws ExcepcionPAD{
+    public List obtenerTramitesPersistentesEntidadDelegada(String nifEntidad, boolean filtroPersistentes) throws ExcepcionPAD{
 
     	// Cargamos tramitePersistente
     	List tramites;
@@ -275,9 +291,23 @@ public abstract class PadFacadeEJB implements SessionBean{
     	List tramitesPAD = new ArrayList(tramites.size());
     	for (Iterator it = tramites.iterator();it.hasNext();){
     		TramitePersistente tramitePersistente = (TramitePersistente) it.next();
-    		tramitesPAD.add(tramitePersistenteToTramitePersistentePAD(tramitePersistente));
+    		if ("S".equals(tramitePersistente.getPersistente())) {
+    			tramitesPAD.add(tramitePersistenteToTramitePersistentePAD(tramitePersistente));
+    		}
     	}
     	return tramitesPAD;
+    }
+    
+    /**
+     * Obtiene lista de tramites persistentes que tiene pendientes por completar el usuario,
+     * o bien ha remitido a otro usuario
+     *
+     *
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public List obtenerTramitesPersistentesEntidadDelegada(String nifEntidad) throws ExcepcionPAD{
+    	return obtenerTramitesPersistentesEntidadDelegada(nifEntidad, true); 
     }
 
     /**
@@ -1761,6 +1791,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	    	t.setIdioma(tpad.getIdioma());
     	    	t.setParametrosInicioMap(tpad.getParametrosInicio());
     	    	t.setIdProcedimiento(tpad.getIdProcedimiento());
+    	    	t.setPersistente(tpad.getPersistente());
     		}
 
     		// Establecemos usuario que tiene actualmente el trámite

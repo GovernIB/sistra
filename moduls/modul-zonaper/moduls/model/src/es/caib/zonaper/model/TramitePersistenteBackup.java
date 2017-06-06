@@ -34,6 +34,10 @@ public class TramitePersistenteBackup
     private Date alertasTramitacionFechaUltima;
     private String alertasTramitacionFinAuto;
 
+    private String idProcedimiento;
+    
+    private String persistente; // S / N
+    
 	/* (non-Javadoc)
 	 * @see es.caib.zonaper.model.ITramitePersistente#getCodigo()
 	 */
@@ -298,5 +302,21 @@ public class TramitePersistenteBackup
 
 	public void setAlertasTramitacionFinAuto(String alertasTramitacionFinAuto) {
 		this.alertasTramitacionFinAuto = alertasTramitacionFinAuto;
+	}
+
+	public String getIdProcedimiento() {
+		return idProcedimiento;
+	}
+
+	public void setIdProcedimiento(String idProcedimiento) {
+		this.idProcedimiento = idProcedimiento;
+	}
+
+	public String getPersistente() {
+		return persistente;
+	}
+
+	public void setPersistente(String persistente) {
+		this.persistente = persistente;
 	}
 }

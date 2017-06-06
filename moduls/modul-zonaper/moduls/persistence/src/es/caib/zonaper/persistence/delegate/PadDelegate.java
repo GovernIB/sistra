@@ -45,6 +45,14 @@ public class PadDelegate implements StatelessDelegate {
         }
     }
 	
+	public List obtenerTramitesPersistentesUsuario(boolean filtroPersistentes) throws DelegateException {
+        try {
+            return getFacade().obtenerTramitesPersistentesUsuario(filtroPersistentes);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+	
 	public List obtenerTramitesPersistentesUsuario(String tramite,int version) throws DelegateException {
         try {
             return getFacade().obtenerTramitesPersistentesUsuario(tramite,version);
@@ -56,6 +64,14 @@ public class PadDelegate implements StatelessDelegate {
     public List obtenerTramitesPersistentesEntidadDelegada(String nifEntidad)throws DelegateException {
         try {
             return getFacade().obtenerTramitesPersistentesEntidadDelegada(nifEntidad);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public List obtenerTramitesPersistentesEntidadDelegada(String nifEntidad, boolean filtroPersistentes)throws DelegateException {
+        try {
+            return getFacade().obtenerTramitesPersistentesEntidadDelegada(nifEntidad, filtroPersistentes);
         } catch (Exception e) {
             throw new DelegateException(e);
         }

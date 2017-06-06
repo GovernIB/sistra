@@ -56,6 +56,8 @@ public class TramitePersistentePAD implements Serializable {
      private String alertasTramitacionFinAuto = "N";
 
      private String idProcedimiento;
+     
+     private String persistente;
 
     public String getDelegado() {
 		return delegado;
@@ -245,6 +247,12 @@ public class TramitePersistentePAD implements Serializable {
 	}
 	public void setAlertasTramitacionFinAuto(String alertasTramitacionFinAuto) {
 		this.alertasTramitacionFinAuto = alertasTramitacionFinAuto;
+	}
+	public String getPersistente() {
+		return persistente;
+	}
+	public void setPersistente(String persistente) {
+		this.persistente = persistente;
 	}
 
 
