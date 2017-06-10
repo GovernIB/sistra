@@ -13,8 +13,18 @@ li {
            margin-top: 10px;
        }
 -->
-</style>	
+</style>
+<% 
+
+	es.caib.sistra.persistence.delegate.ConfiguracionDelegate delegateF = es.caib.sistra.persistence.delegate.DelegateUtil.getConfiguracionDelegate();
+	
+	java.util.Properties configProperties =  delegateF.obtenerConfiguracion();
+	
+	String entorno = configProperties.getProperty("entorno");
+	
+%>	
 <body>
+<% if (entorno.equals("DESARROLLO")){ %>
 <h2>Lista de Trámites</h2>
 <p class="estilo1">
 <ul>
@@ -86,6 +96,8 @@ try {
 %>	
 </li>
 </ul>
-</p>
+</p><%} else {%>
+<h2>Página no disponible</h2>
+<%}%>
 </body>
 </html>      

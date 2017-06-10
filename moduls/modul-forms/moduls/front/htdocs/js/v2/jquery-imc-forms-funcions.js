@@ -741,7 +741,7 @@ function control_refill(name, valors) {
 			},
 			mostra = function() {
 				elm_select.fadeIn(200, function() {
-					elm_select.find("a:first").focus();
+					/* elm_select.find("a:first").focus();*/
 				});
 				dadesFormateig({ element: el_element });
 			};
