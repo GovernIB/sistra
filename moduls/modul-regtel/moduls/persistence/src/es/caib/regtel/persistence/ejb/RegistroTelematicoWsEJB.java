@@ -6,12 +6,16 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.ejb.CreateException;
+import javax.ejb.EJBException;
 import javax.ejb.SessionBean;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import es.caib.bantel.modelInterfaz.EntidadBTE;
+import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
+import es.caib.bantel.persistence.delegate.DelegateException;
 import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
@@ -81,29 +85,40 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 	 * @ejb.permission role-name = "${role.gestor}"
      * @ejb.permission role-name = "${role.auto}"
      */
-	public ResultadoRegistroTelematico registroEntrada(DatosRegistroEntrada dEnt)  throws Exception{
-		
-		/* ------------------------------------------------------------------------------------- 
-		 * Anterior a version 1.1.0 era obligatorio introducir el usuario seycon y el nif.
-		 * A partir de la version 1.1.0 no es obligatorio introducir el usuario seycon. Se introduce
-		 * el parametro autenticado (boolean) y el nif.
-		 * 
-		 * Por motivos de compatibilidad introduce el usuario seycon a partir del nif en caso de que
-		 * sea autenticado y no se informe
-		 * 
-		 * ------------------------------------------------------------------------------------- */		 
-		 establecerUsuarioSeycon(dEnt);
-		 /* ------------------------------------------------------------------------------------- */
-		
-		
-		RegistroEntradaHelper r = new RegistroEntradaHelper();
-		inicializarRegistroEntrada(r, dEnt);
-		ReferenciaRDSAsientoRegistral ar = r.generarAsientoRegistral("LOCAL");
-		ResultadoRegistroTelematico res = r.registrar("LOCAL",ar);
-		return res;
+	public ResultadoRegistroTelematico registroEntrada(DatosRegistroEntrada dEnt)  throws ExcepcionRegistroTelematico {
+		try {
+			/* ------------------------------------------------------------------------------------- 
+			 * Anterior a version 1.1.0 era obligatorio introducir el usuario seycon y el nif.
+			 * A partir de la version 1.1.0 no es obligatorio introducir el usuario seycon. Se introduce
+			 * el parametro autenticado (boolean) y el nif.
+			 * 
+			 * Por motivos de compatibilidad introduce el usuario seycon a partir del nif en caso de que
+			 * sea autenticado y no se informe
+			 * 
+			 * ------------------------------------------------------------------------------------- */		 
+			 establecerUsuarioSeycon(dEnt);
+			 /* ------------------------------------------------------------------------------------- */
+			
+			 /* ------------------------------------------------------------------------------------
+			  * Por compatibilidad con version anterior a multientidad, si viene sin datos de entidad 
+			  * se coge la entidad de bantel. Solo permitido si solo existe 1 entidad.
+			  * ------------------------------------------------------------------------------------
+			  */
+			 establecerEntidad(dEnt);
+			 
+			
+			RegistroEntradaHelper r = new RegistroEntradaHelper();
+			inicializarRegistroEntrada(r, dEnt);
+			ReferenciaRDSAsientoRegistral ar = r.generarAsientoRegistral("LOCAL");
+			ResultadoRegistroTelematico res = r.registrar("LOCAL",ar);
+			return res;
+			
+		} catch (Exception ex) {
+			throw new ExcepcionRegistroTelematico("Excepcion registro: " + ex.getMessage(), ex);
+		}
 	}
 	
-	
+
 	/**
 	 * @param dEnt datos Registro Entrada 
 	 * @return ReferenciaRDSAsientoRegistral
@@ -113,39 +128,52 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
      * @ejb.permission role-name = "${role.auto}"
      */
 	
-	public ReferenciaRDSAsientoRegistral prepararRegistroEntrada(DatosRegistroEntrada dEnt, int diasPersistencia) throws Exception {
+	public ReferenciaRDSAsientoRegistral prepararRegistroEntrada(DatosRegistroEntrada dEnt, int diasPersistencia) throws ExcepcionRegistroTelematico {
 		
-		/* ------------------------------------------------------------------------------------- 
-		  Anterior a version 1.1.0 era obligatorio introducir el usuario seycon y el nif.
-		 * A partir de la version 1.1.0 no es obligatorio introducir el usuario seycon. Se introduce
-		 * el parametro autenticado (boolean) y el nif.
-		 * 
-		 * Por motivos de compatibilidad introduce el usuario seycon a partir del nif en caso de que
-		 * sea autenticado y no se informe
-		 * ------------------------------------------------------------------------------------- */		 
-		 establecerUsuarioSeycon(dEnt);
-		 /* ------------------------------------------------------------------------------------- */
-		
-		RegistroEntradaHelper r = new RegistroEntradaHelper();
-		inicializarRegistroEntrada(r, dEnt);
-		ReferenciaRDSAsientoRegistral raWS = r.generarAsientoRegistral("LOCAL");
-		
-		// Si se indican dias de persistencia se crearan para el asiento y los anexos un uso de persistencia
-		// y se realizara el log de este registro preparado en la zona personal para que una vez pasen los dias
-		// de persistencia se eliminen estos usos
-		if (diasPersistencia > 0) {
-			// Generamos un id de persistencia unico
-			String idPersistencia = generarIdPersistenciaAsiento(raWS);
+		try {
+			/* ------------------------------------------------------------------------------------- 
+			  Anterior a version 1.1.0 era obligatorio introducir el usuario seycon y el nif.
+			 * A partir de la version 1.1.0 no es obligatorio introducir el usuario seycon. Se introduce
+			 * el parametro autenticado (boolean) y el nif.
+			 * 
+			 * Por motivos de compatibilidad introduce el usuario seycon a partir del nif en caso de que
+			 * sea autenticado y no se informe
+			 * ------------------------------------------------------------------------------------- */		 
+			 establecerUsuarioSeycon(dEnt);
+			 
+			 /* ------------------------------------------------------------------------------------
+			  * Por compatibilidad con version anterior a multientidad, si viene sin datos de entidad 
+			  * se coge la entidad de bantel. Solo permitido si solo existe 1 entidad.
+			  * ------------------------------------------------------------------------------------
+			  */
+			 establecerEntidad(dEnt);
+			 
+			 
 			
-			// Crear uso de persistencia para asiento y anexo
-			generarUsosRDSPrepararRegistro(idPersistencia, raWS);
+			RegistroEntradaHelper r = new RegistroEntradaHelper();
+			inicializarRegistroEntrada(r, dEnt);
+			ReferenciaRDSAsientoRegistral raWS = r.generarAsientoRegistral("LOCAL");
 			
-			// Realizar log en la zona personal
-			PadDelegate pad = DelegatePADUtil.getPadDelegate();
-			pad.logRegistroExternoPreparado(raWS.getAsientoRegistral(), raWS.getAnexos(), idPersistencia, diasPersistencia);
+			// Si se indican dias de persistencia se crearan para el asiento y los anexos un uso de persistencia
+			// y se realizara el log de este registro preparado en la zona personal para que una vez pasen los dias
+			// de persistencia se eliminen estos usos
+			if (diasPersistencia > 0) {
+				// Generamos un id de persistencia unico
+				String idPersistencia = generarIdPersistenciaAsiento(raWS);
+				
+				// Crear uso de persistencia para asiento y anexo
+				generarUsosRDSPrepararRegistro(idPersistencia, raWS);
+				
+				// Realizar log en la zona personal
+				PadDelegate pad = DelegatePADUtil.getPadDelegate();
+				pad.logRegistroExternoPreparado(raWS.getAsientoRegistral(), raWS.getAnexos(), idPersistencia, diasPersistencia);
+			}
+			
+			return raWS;
+		
+		} catch (Exception ex) {
+			throw new ExcepcionRegistroTelematico("Excepcion registro: " + ex.getMessage(), ex);
 		}
-		
-		return raWS;
 	}
 
 	/**
@@ -157,20 +185,24 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 	 * @ejb.permission role-name = "${role.gestor}"
      * @ejb.permission role-name = "${role.auto}"
      */
-	public ResultadoRegistroTelematico registroEntradaConFirma(ReferenciaRDSAsientoRegistral referenciaRDS, FirmaIntf firma) throws Exception {
-		RegistroEntradaHelper r = new RegistroEntradaHelper();
-		RdsDelegate rdsDelegate = DelegateRDSUtil.getRdsDelegate();
-		rdsDelegate.asociarFirmaDocumento(referenciaRDS.getAsientoRegistral(), firma);
-		ResultadoRegistroTelematico res = r.registrar("LOCAL",referenciaRDS);
-		
-		// Tras registrar comprobamos si el registro tenia usos de persistencia y si es asi los borramos
-		 List lu = rdsDelegate.listarUsos(referenciaRDS.getAsientoRegistral());
-		 if (lu != null && lu.size() > 1) {
-			 String idPersistencia = generarIdPersistenciaAsiento(referenciaRDS);
-			 rdsDelegate.eliminarUsos(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE, idPersistencia);
-		 }
-		
-		return res;
+	public ResultadoRegistroTelematico registroEntradaConFirma(ReferenciaRDSAsientoRegistral referenciaRDS, FirmaIntf firma) throws ExcepcionRegistroTelematico {
+		try {
+			RegistroEntradaHelper r = new RegistroEntradaHelper();
+			RdsDelegate rdsDelegate = DelegateRDSUtil.getRdsDelegate();
+			rdsDelegate.asociarFirmaDocumento(referenciaRDS.getAsientoRegistral(), firma);
+			ResultadoRegistroTelematico res = r.registrar("LOCAL",referenciaRDS);
+			
+			// Tras registrar comprobamos si el registro tenia usos de persistencia y si es asi los borramos
+			 List lu = rdsDelegate.listarUsos(referenciaRDS.getAsientoRegistral());
+			 if (lu != null && lu.size() > 1) {
+				 String idPersistencia = generarIdPersistenciaAsiento(referenciaRDS);
+				 rdsDelegate.eliminarUsos(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE, idPersistencia);
+			 }
+			
+			return res;
+		} catch (Exception ex) {
+			throw new ExcepcionRegistroTelematico("Excepcion registro: " + ex.getMessage(), ex);
+		}
 	}
    
 	/**
@@ -181,73 +213,84 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 	 * @ejb.permission role-name = "${role.gestor}"
      * @ejb.permission role-name = "${role.auto}"
      */
-	public ResultadoRegistroTelematico registroSalida(DatosRegistroSalida notificacion) throws Exception {
-		
-		/* ------------------------------------------------------------------------------------- 
-		  Anterior a version 1.1.0 era obligatorio introducir el usuario seycon y el nif.
-		 * A partir de la version 1.1.0 no es obligatorio introducir el usuario seycon. Se introduce
-		 * el parametro autenticado (boolean) y el nif.
-		 * 
-		 * Por motivos de compatibilidad introduce el usuario seycon a partir del nif en caso de que
-		 * sea autenticado y no se informe
-		 * ------------------------------------------------------------------------------------- */		 
-		 establecerUsuarioSeycon(notificacion);
-		 /* ------------------------------------------------------------------------------------- */		
-		
-		RegistroSalidaHelper r = new RegistroSalidaHelper();
-		if(notificacion != null){
-			if(notificacion.getDatosExpediente() != null){
-				DatosExpediente de = notificacion.getDatosExpediente();
-				r.setExpediente(de.getUnidadAdministrativa(), de.getIdentificadorExpediente(), de.getClaveExpediente());
-			}
-			if(notificacion.getDatosInteresado() != null){
-				DatosInteresado di = notificacion.getDatosInteresado();				
-				if (di.getIdentificacionUsuarioDesglosada() != null) {
-					r.setDatosInteresadoDesglosado(di.getNif(),di.getIdentificacionUsuarioDesglosada().getNombre(), di.getIdentificacionUsuarioDesglosada().getApellido1(), di.getIdentificacionUsuarioDesglosada().getApellido2(),di.getIdentificadorUsuario(), di.getCodigoPais(),di.getNombrePais(), di.getCodigoProvincia(), di.getNombreProvincia(), di.getCodigoLocalidad(), di.getNombreLocalidad());
-				} else {					
-					r.setDatosInteresado(di.getNif(),di.getNombreApellidos(), di.getIdentificadorUsuario(), di.getCodigoPais(),di.getNombrePais(), di.getCodigoProvincia(), di.getNombreProvincia(), di.getCodigoLocalidad(), di.getNombreLocalidad());
-				}
-			}
-			if(notificacion.getDatosRepresentado() != null){
-				DatosRepresentado dr = notificacion.getDatosRepresentado();				
-				if (dr.getIdentificacionUsuarioDesglosada() != null) {
-					r.setDatosRepresentadoDesglosado(dr.getNif(), dr.getIdentificacionUsuarioDesglosada().getNombre(), dr.getIdentificacionUsuarioDesglosada().getApellido1(), dr.getIdentificacionUsuarioDesglosada().getApellido2());
-				} else {
-					r.setDatosRepresentado(dr.getNif(), dr.getNombreApellidos());					
-				}
-			}
+	public ResultadoRegistroTelematico registroSalida(DatosRegistroSalida notificacion) throws ExcepcionRegistroTelematico {
+		try {
+			/* ------------------------------------------------------------------------------------- 
+			  Anterior a version 1.1.0 era obligatorio introducir el usuario seycon y el nif.
+			 * A partir de la version 1.1.0 no es obligatorio introducir el usuario seycon. Se introduce
+			 * el parametro autenticado (boolean) y el nif.
+			 * 
+			 * Por motivos de compatibilidad introduce el usuario seycon a partir del nif en caso de que
+			 * sea autenticado y no se informe
+			 * ------------------------------------------------------------------------------------- */		 
+			 establecerUsuarioSeycon(notificacion);
+			 
+			 /* ------------------------------------------------------------------------------------
+			  * Por compatibilidad con version anterior a multientidad, si viene sin datos de entidad 
+			  * se coge la entidad de bantel. Solo permitido si solo existe 1 entidad.
+			  * ------------------------------------------------------------------------------------
+			  */
+			 establecerEntidad(notificacion);
 			
-			if(notificacion.getOficinaRegistral() != null){
-				OficinaRegistral of = notificacion.getOficinaRegistral();
-				r.setOficinaRegistro(of.getEntidad(), of.getCodigoOrgano(),of.getCodigoOficina());
-			}
-			if(notificacion.getDatosNotificacion() != null){
-				DatosNotificacion dn = notificacion.getDatosNotificacion();
-				if(dn.getAviso() != null && dn.getOficioRemision() != null){
-					r.setDatosNotificacion(dn.getIdioma(), dn.getTipoAsunto(), dn.getAviso().getTitulo(), 
-							dn.getAviso().getTexto(), dn.getAviso().getTextoSMS(), dn.getOficioRemision().getTitulo(),
-							dn.getOficioRemision().getTexto(), dn.isAcuseRecibo(),
-							dn.getAccesiblePorClave(), dn.getPlazo());
+			 
+			
+			RegistroSalidaHelper r = new RegistroSalidaHelper();
+			if(notificacion != null){
+				if(notificacion.getDatosExpediente() != null){
+					DatosExpediente de = notificacion.getDatosExpediente();
+					r.setExpediente(de.getUnidadAdministrativa(), de.getIdentificadorExpediente(), de.getClaveExpediente());
 				}
-				if (dn.getOficioRemision().getTramiteSubsanacion() != null){
-					r.setTramiteSubsanacion(dn.getOficioRemision().getTramiteSubsanacion().getDescripcionTramite(),dn.getOficioRemision().getTramiteSubsanacion().getIdentificadorTramite(),dn.getOficioRemision().getTramiteSubsanacion().getVersionTramite().intValue(),dn.getOficioRemision().getTramiteSubsanacion().getParametrosTramite());
+				if(notificacion.getDatosInteresado() != null){
+					DatosInteresado di = notificacion.getDatosInteresado();				
+					if (di.getIdentificacionUsuarioDesglosada() != null) {
+						r.setDatosInteresadoDesglosado(di.getNif(),di.getIdentificacionUsuarioDesglosada().getNombre(), di.getIdentificacionUsuarioDesglosada().getApellido1(), di.getIdentificacionUsuarioDesglosada().getApellido2(),di.getIdentificadorUsuario(), di.getCodigoPais(),di.getNombrePais(), di.getCodigoProvincia(), di.getNombreProvincia(), di.getCodigoLocalidad(), di.getNombreLocalidad());
+					} else {					
+						r.setDatosInteresado(di.getNif(),di.getNombreApellidos(), di.getIdentificadorUsuario(), di.getCodigoPais(),di.getNombrePais(), di.getCodigoProvincia(), di.getNombreProvincia(), di.getCodigoLocalidad(), di.getNombreLocalidad());
+					}
 				}
-			}
-			if(notificacion.getDocumentos() != null){
-				ArrayList docs = notificacion.getDocumentos();
-				for(int i=0;i<docs.size();i++){
-					if (docs.get(i) instanceof DocumentoRDS){
-						DocumentoRDS doc = (DocumentoRDS)docs.get(i);
-						r.addDocumento(doc.getModelo(),doc.getVersion(),doc.getDatosFichero(),doc.getNombreFichero(),doc.getExtensionFichero(),doc.getPlantilla(),doc.getFirmas());
-					}else if (docs.get(i) instanceof ReferenciaRDS){
-						r.addDocumento((ReferenciaRDS)docs.get(i));
+				if(notificacion.getDatosRepresentado() != null){
+					DatosRepresentado dr = notificacion.getDatosRepresentado();				
+					if (dr.getIdentificacionUsuarioDesglosada() != null) {
+						r.setDatosRepresentadoDesglosado(dr.getNif(), dr.getIdentificacionUsuarioDesglosada().getNombre(), dr.getIdentificacionUsuarioDesglosada().getApellido1(), dr.getIdentificacionUsuarioDesglosada().getApellido2());
+					} else {
+						r.setDatosRepresentado(dr.getNif(), dr.getNombreApellidos());					
+					}
+				}
+				
+				if(notificacion.getOficinaRegistral() != null){
+					OficinaRegistral of = notificacion.getOficinaRegistral();
+					r.setOficinaRegistro(of.getEntidad(), of.getCodigoOrgano(),of.getCodigoOficina());
+				}
+				if(notificacion.getDatosNotificacion() != null){
+					DatosNotificacion dn = notificacion.getDatosNotificacion();
+					if(dn.getAviso() != null && dn.getOficioRemision() != null){
+						r.setDatosNotificacion(dn.getIdioma(), dn.getTipoAsunto(), dn.getAviso().getTitulo(), 
+								dn.getAviso().getTexto(), dn.getAviso().getTextoSMS(), dn.getOficioRemision().getTitulo(),
+								dn.getOficioRemision().getTexto(), dn.isAcuseRecibo(),
+								dn.getAccesiblePorClave(), dn.getPlazo());
+					}
+					if (dn.getOficioRemision().getTramiteSubsanacion() != null){
+						r.setTramiteSubsanacion(dn.getOficioRemision().getTramiteSubsanacion().getDescripcionTramite(),dn.getOficioRemision().getTramiteSubsanacion().getIdentificadorTramite(),dn.getOficioRemision().getTramiteSubsanacion().getVersionTramite().intValue(),dn.getOficioRemision().getTramiteSubsanacion().getParametrosTramite());
+					}
+				}
+				if(notificacion.getDocumentos() != null){
+					ArrayList docs = notificacion.getDocumentos();
+					for(int i=0;i<docs.size();i++){
+						if (docs.get(i) instanceof DocumentoRDS){
+							DocumentoRDS doc = (DocumentoRDS)docs.get(i);
+							r.addDocumento(doc.getModelo(),doc.getVersion(),doc.getDatosFichero(),doc.getNombreFichero(),doc.getExtensionFichero(),doc.getPlantilla(),doc.getFirmas());
+						}else if (docs.get(i) instanceof ReferenciaRDS){
+							r.addDocumento((ReferenciaRDS)docs.get(i));
+						}
 					}
 				}
 			}
+			ReferenciaRDSAsientoRegistral ar = r.generarAsientoRegistral("LOCAL");
+			ResultadoRegistroTelematico res = r.registrar("LOCAL",ar);
+			return res;
+		} catch (Exception ex) {
+			throw new ExcepcionRegistroTelematico("Excepcion registro: " + ex.getMessage(), ex);
 		}
-		ReferenciaRDSAsientoRegistral ar = r.generarAsientoRegistral("LOCAL");
-		ResultadoRegistroTelematico res = r.registrar("LOCAL",ar);
-		return res;
 	}
 	
 	/**
@@ -275,13 +318,27 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 	 * @ejb.permission role-name = "${role.gestor}"
 	 * @ejb.permission role-name = "${role.auto}"
      */
-	public AcuseRecibo obtenerAcuseRecibo(String entidad, String numeroRegistro) throws Exception {
-		AcuseRecibo ar = null;
-		RegistroTelematicoDelegate rtd = DelegateRegtelUtil.getRegistroTelematicoDelegate();		
-		Date date = rtd.obtenerAcuseRecibo(entidad, numeroRegistro);
-		ar = new AcuseRecibo();
-		ar.setFechaAcuseRecibo(date);
-		return ar;
+	public AcuseRecibo obtenerAcuseRecibo(String entidad, String numeroRegistro) throws ExcepcionRegistroTelematico {
+		try {
+			 /* ------------------------------------------------------------------------------------
+			  * Por compatibilidad con version anterior a multientidad, si viene sin datos de entidad 
+			  * se coge la entidad de bantel. Solo permitido si solo existe 1 entidad.
+			  * ------------------------------------------------------------------------------------
+			  */
+			 if (entidad == null) {
+				 entidad = obtenerCodigoEntidadDefecto();
+			 }
+			
+			
+			AcuseRecibo ar = null;
+			RegistroTelematicoDelegate rtd = DelegateRegtelUtil.getRegistroTelematicoDelegate();		
+			Date date = rtd.obtenerAcuseRecibo(entidad, numeroRegistro);
+			ar = new AcuseRecibo();
+			ar.setFechaAcuseRecibo(date);
+			return ar;
+		} catch (Exception ex) {
+			throw new ExcepcionRegistroTelematico("Excepcion registro: " + ex.getMessage(), ex);
+		}
 	}
 	
 	/**
@@ -292,8 +349,17 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 	 * @ejb.permission role-name = "${role.gestor}"
 	 * @ejb.permission role-name = "${role.auto}"
      */
-	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String entidad, String numeroRegistro)  throws Exception {
+	public DetalleAcuseRecibo obtenerDetalleAcuseRecibo(String entidad, String numeroRegistro)  throws ExcepcionRegistroTelematico {
 		try {
+			/* ------------------------------------------------------------------------------------
+			  * Por compatibilidad con version anterior a multientidad, si viene sin datos de entidad 
+			  * se coge la entidad de bantel. Solo permitido si solo existe 1 entidad.
+			  * ------------------------------------------------------------------------------------
+			  */
+			 if (entidad == null) {
+				 entidad = obtenerCodigoEntidadDefecto();
+			 }
+			
 			PadBackOfficeDelegate 	ejb = new PadBackOfficeDelegate();
 			return ejb.obtenerDetalleAcuseRecibo(entidad, numeroRegistro);
 		} catch (Exception ex) {
@@ -453,4 +519,32 @@ public abstract class RegistroTelematicoWsEJB  implements SessionBean
 		String idPersistencia = Constantes.PREFIJO_USO_PREPARARREGISTRO + ra.getAsientoRegistral().getCodigo();
 		return idPersistencia;
 	}
+	
+	
+	private void establecerEntidad(DatosRegistroEntrada dEnt) throws Exception {
+		if (dEnt.getOficinaRegistral().getEntidad() == null) {
+    		String codigoEntidad = obtenerCodigoEntidadDefecto();
+    		dEnt.getOficinaRegistral().setEntidad(codigoEntidad);
+    	}
+	}
+
+
+	private String obtenerCodigoEntidadDefecto() throws DelegateException,
+			Exception {
+		List entidades = DelegateBTEUtil.getBteSistraDelegate().obtenerEntidades();
+		if (entidades.size() != 1) {
+			throw new Exception("No se ha indicado el código de entidad");
+		}
+		String codigoEntidad = ((EntidadBTE) entidades.get(0)).getIdentificador();
+		return codigoEntidad;
+	}
+	
+	private void establecerEntidad(DatosRegistroSalida notificacion) throws Exception {
+		if (notificacion.getOficinaRegistral().getEntidad() == null) {
+    		String codigoEntidad = obtenerCodigoEntidadDefecto();
+    		notificacion.getOficinaRegistral().setEntidad(codigoEntidad);
+    	}
+	}
+
+	
 }
