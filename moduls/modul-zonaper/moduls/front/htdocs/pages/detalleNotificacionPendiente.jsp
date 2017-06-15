@@ -184,7 +184,11 @@
 </logic:notEmpty>
 
 
+<<<<<<< HEAD
 <logic:equal name="notificacion" property="firmarAcuse" value="false">
+=======
+<logic:equal name="notificacion" property="firmarAcuse" value="true">
+>>>>>>> branch 'sistra-3.3' of https://github.com/GovernIB/sistra.git
 	function enviar(firmarAcuse)
 	{
 		// Enviamos
