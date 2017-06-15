@@ -182,6 +182,16 @@
 	
 </logic:equal>
 </logic:notEmpty>
+
+
+<logic:equal name="notificacion" property="firmarAcuse" value="true">
+	function enviar(firmarAcuse)
+	{
+		// Enviamos
+		var formulario = document.getElementById("formularioEnvio");
+		formulario.submit();
+	}
+</logic:equal>
 	 -->	
 </script>
 </logic:equal>
