@@ -184,7 +184,7 @@
 </logic:notEmpty>
 
 
-<logic:equal name="notificacion" property="firmarAcuse" value="true">
+<logic:equal name="notificacion" property="firmarAcuse" value="false">
 	function enviar(firmarAcuse)
 	{
 		// Enviamos

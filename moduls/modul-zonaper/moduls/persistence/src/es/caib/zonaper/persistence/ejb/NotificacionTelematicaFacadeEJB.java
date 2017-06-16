@@ -153,7 +153,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
             	 ProcedimientoBTE proc = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(idProc);
             	 
             	 // Verificamos que sea la misma entidad
-            	 if (proc.getEntidad().equals(entidad)) {
+            	 if (proc.getEntidad().getIdentificador().equals(entidad)) {
             		 resultado = notificacionTelematica;
             		 break;
             	 }
