@@ -18,18 +18,23 @@
     <property name="web.htdocs" location="${basedir}/htdocs"/>
     <property name="web.product" location="${output.dir}/moduls"/>
 	
+	<property name="web.gen.etc" location="${modul.output.dir}/gen-etc"/>
+	
     <!-- Crea tots els directoris de treball necessaris -->
     <target name="prepare">
         <mkdir dir="${web.product}"/>
+    	<mkdir dir="${web.gen.etc}"/>
+    	<copy todir="${web.gen.etc}"><fileset dir="${etc.dir}"/></copy>
     </target>
 
-    <target name="web.war">
+    <target name="web.war" depends="prepare">
         <delete file="${web.product}/5-${prj.name}-${modul}.war" quiet="yes"/>
         <war warfile="${web.product}/5-${prj.name}-${modul}.war"
             basedir="${web.htdocs}" webxml="${etc.dir}/web.xml">
             <manifest>
                 <attribute name="Created-By" value="${indra}"/>
             </manifest>
+        	<webinf dir="${web.gen.etc}" includes="*.xml" excludes="web.xml"/>
         </war>
     </target>
 
