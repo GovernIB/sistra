@@ -4,7 +4,7 @@ comment on column RDS_DOCUM.DOC_CSV is 'CSV';
 CREATE UNIQUE INDEX RDS_DOC_AK ON RDS_DOCUM USING btree (DOC_CSV);
 
 create table RDS_TABCSV  (
-   TCS_CODIGO          character varying((1)                     not null,
+   TCS_CODIGO          character varying(1)    not null,
    TCS_CLAVES          bytea                   not null
 );
 

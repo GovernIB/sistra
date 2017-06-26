@@ -1749,3 +1749,10 @@ alter table BTE_PROAPL add TAP_IDEPEX character varying(20);
 
 comment on column BTE_PROAPL.TAP_IDEPEX is
 'Identificador del procedimiento administrativo externo';
+
+-- V3.1.4
+-- BANTEL: IDENTIFICADOR DE PROCEDIMIENTO EXTERNO
+alter table BTE_PROAPL add TAP_AVIINC character varying(255);
+
+comment on column BTE_PROAPL.TAP_AVIINC is
+'Email para envio de incidencias';
