@@ -23,7 +23,7 @@ public class HeaderController extends BaseController
 			ServletContext servletContext) throws Exception
 	{
 
-		String url = request.getRequestURL().toString();
+		String url = (String) request.getAttribute("javax.servlet.forward.request_uri");
 		String opcion = getOpcionPestanya( url );
 
 		request.setAttribute( "opcion", opcion );
