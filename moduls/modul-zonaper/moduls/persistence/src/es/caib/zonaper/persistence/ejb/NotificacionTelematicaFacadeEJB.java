@@ -846,7 +846,7 @@ public abstract class NotificacionTelematicaFacadeEJB extends HibernateEJB {
 	private Map paramsPluginFirma(PluginFirmaIntf plgFirma)
 			throws Exception {
 		Map params = new HashMap();
-		if (plgFirma.getProveedor().equals(PluginFirmaIntf.PROVEEDOR_CAIB)) {
+		if (plgFirma.getProveedor().equals(PluginFirmaIntf.PROVEEDOR_FIRMAWEB)) {
 			// Establecemos content type correspondiente
 			params.put(	FirmaUtil.CAIB_PARAMETER_CONTENT_TYPE,
 						FirmaUtil.obtenerContentTypeCAIB(FirmaUtil.CAIB_ACUSE_NOTIFICACIO_CONTENT_TYPE));
