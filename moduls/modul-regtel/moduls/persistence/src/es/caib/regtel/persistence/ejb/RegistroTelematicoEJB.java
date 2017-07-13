@@ -771,7 +771,7 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 	private Map paramsPluginFirma(char tipoRegistro, PluginFirmaIntf plgFirma)
 			throws Exception {
 		Map params = new HashMap();
-		if (plgFirma.getProveedor().equals(PluginFirmaIntf.PROVEEDOR_FIRMAWEB)){						
+		if (FirmaUtil.isPluginCAIB()){						
 			// Establecemos content type correspondiente
 			if (tipoRegistro == ConstantesAsientoXML.TIPO_REGISTRO_SALIDA){
 				params.put(FirmaUtil.CAIB_PARAMETER_CONTENT_TYPE, FirmaUtil.obtenerContentTypeCAIB(FirmaUtil.CAIB_JUSTIFICANT_EIXIDA_CONTENT_TYPE) );

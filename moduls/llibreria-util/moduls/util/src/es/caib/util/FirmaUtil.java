@@ -59,6 +59,27 @@ public class FirmaUtil {
 	}
 	
 	/**
+	 * Verifica si el plugin es de CAIB (busca metodo getContentType).
+	 * @return
+	 * @throws Exception
+	 */
+	public static boolean isPluginCAIB() throws Exception{
+		boolean result = false;
+		PluginFirmaIntf plgFirma = PluginFactory.getInstance().getPluginFirma();
+		Method[] methods = plgFirma.getClass().getDeclaredMethods();
+		if (methods != null){
+			for (int i=0; i<methods.length; i++){
+				if (methods[i].getName().equals("getContentType")) {
+					result = true;
+					break;
+				}
+			}
+		}
+		return result;
+	}
+	
+	
+	/**
 	 * Obtiene tipo de content type de CAIB. Solo para plugin de CAIB.
 	 * @param tipoContentType
 	 * @return
@@ -69,9 +90,6 @@ public class FirmaUtil {
 		if (!contentTypesCAIB.containsKey(tipoContentType)){
 			//	Invocamos por reflection al metodo de obtener content type del plugin de firma caib
 			PluginFirmaIntf plgFirma = PluginFactory.getInstance().getPluginFirma();				
-			if (!plgFirma.getProveedor().equals(PluginFirmaIntf.PROVEEDOR_CAIB)){
-				throw new Exception("El plugin no es de CAIB");
-			}
 			Method m = null;
 			try{
 				Class[] params = new Class[] {String.class};
@@ -88,7 +106,6 @@ public class FirmaUtil {
 		
 		return  (String) contentTypesCAIB.get(tipoContentType);
 		 
-		
 	}
 	
 		
