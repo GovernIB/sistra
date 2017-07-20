@@ -9,10 +9,6 @@ import es.caib.xml.EstablecerPropiedadException;
  *
  */
 public class IdentificacionInteresadoDesglosada extends NodoRegistroBase {
-	//Ctes de maxima longitud de campos
-	private static final int MAX_LON_NOMBRE = 255;
-	private static final int MAX_LON_APELLIDO1 = 100;
-	private static final int MAX_LON_APELLIDO2 = 100;
 		
 	private String nombre;
 	private String apellido1;
@@ -26,8 +22,7 @@ public class IdentificacionInteresadoDesglosada extends NodoRegistroBase {
 	}
 
 
-	public void setNombre(String nombre) throws EstablecerPropiedadException {
-		validaLongitudCampo ("IdentificacionInteresadoDesglosada", "nombre", nombre, MAX_LON_NOMBRE);
+	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
 
@@ -37,8 +32,7 @@ public class IdentificacionInteresadoDesglosada extends NodoRegistroBase {
 	}
 
 
-	public void setApellido1(String apellido1) throws EstablecerPropiedadException {
-		validaLongitudCampo ("IdentificacionInteresadoDesglosada", "apellido1", apellido1, MAX_LON_APELLIDO1);
+	public void setApellido1(String apellido1) {
 		this.apellido1 = apellido1;
 	}
 
@@ -48,8 +42,7 @@ public class IdentificacionInteresadoDesglosada extends NodoRegistroBase {
 	}
 
 
-	public void setApellido2(String apellido2) throws EstablecerPropiedadException {
-		validaLongitudCampo ("IdentificacionInteresadoDesglosada", "apellido2", apellido2, MAX_LON_APELLIDO2);
+	public void setApellido2(String apellido2) {
 		this.apellido2 = apellido2;
 	}
 
