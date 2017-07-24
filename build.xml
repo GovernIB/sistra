@@ -184,7 +184,7 @@
 			<metainf dir="${etc.dir}/firmaWeb/jboss-${jboss.version}">
 				<include if="isJboss3" name="jboss-app.xml"/>
 			</metainf>
-			<metainf dir="${etc.dir}/firmaWeb">
+			<metainf dir="${etc.dir}/firmaWeb/jboss-${jboss.version}">
 				<include if="isJboss5" name="jboss-classloading.xml"/>
 			</metainf>
 			<metainf dir="${etc.dir}/firmaWeb" includes="cxf/org.apache.cxf.Logger"/>
