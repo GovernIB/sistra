@@ -18,12 +18,7 @@ public class DireccionCodificada extends NodoRegistroBase {
 	private static final int MAX_LON_NOMBRE_MUNICIPIO = 30;
 	private static final int MAX_LON_CODIGO_POBLACION = 2;
 	private static final int MAX_LON_NOMBRE_POBLACION = 30;
-	private static final int MAX_LON_DOMICILIO = 45;
-	private static final int MAX_LON_CODIGO_POSTAL = 5;
-	private static final int MAX_LON_TELEFONO = 15;
-	private static final int MAX_LON_FAX = 15;
 	private static final int MAX_LON_PAIS_ORIGEN = 30;
-	private static final int MAX_LON_EMAIL = 160;
 		
 	private String codigoProvincia;
 	private String nombreProvincia;
@@ -156,9 +151,7 @@ public class DireccionCodificada extends NodoRegistroBase {
 	/* (non-Javadoc)
 	 * @see es.caib.xml.registro.factoria.DireccionCodificada#setDomicilio(java.lang.String)
 	 */
-	public void setDomicilio(String domicilio) throws EstablecerPropiedadException {
-		validaLongitudCampo ("DireccionCodificada", "Domicilio", domicilio, MAX_LON_DOMICILIO);
-		
+	public void setDomicilio(String domicilio) {		
 		this.domicilio = domicilio;
 	}
 
@@ -172,10 +165,7 @@ public class DireccionCodificada extends NodoRegistroBase {
 	/* (non-Javadoc)
 	 * @see es.caib.xml.registro.factoria.DireccionCodificada#setCodigoPostal(java.lang.String)
 	 */
-	public void setCodigoPostal(String codigoPostal)
-			throws EstablecerPropiedadException {
-		validaLongitudCampo ("DireccionCodificada", "CodigoPostal", codigoPostal, MAX_LON_CODIGO_POSTAL);
-		
+	public void setCodigoPostal(String codigoPostal) {		
 		this.codigoPostal = codigoPostal;
 	}
 
@@ -189,10 +179,7 @@ public class DireccionCodificada extends NodoRegistroBase {
 	/* (non-Javadoc)
 	 * @see es.caib.xml.registro.factoria.DireccionCodificada#setTelefono(java.lang.String)
 	 */
-	public void setTelefono(String telefono)
-			throws EstablecerPropiedadException {
-		validaLongitudCampo ("DireccionCodificada", "Telefono", telefono, MAX_LON_TELEFONO);
-		
+	public void setTelefono(String telefono){		
 		this.telefono = telefono;
 	}
 
@@ -206,9 +193,7 @@ public class DireccionCodificada extends NodoRegistroBase {
 	/* (non-Javadoc)
 	 * @see es.caib.xml.registro.factoria.DireccionCodificada#setFAX(java.lang.String)
 	 */
-	public void setFAX(String FAX) throws EstablecerPropiedadException {
-		validaLongitudCampo ("DireccionCodificada", "FAX", FAX, MAX_LON_FAX);
-		
+	public void setFAX(String FAX) {
 		this.fax = FAX;
 	}
 
@@ -235,8 +220,7 @@ public class DireccionCodificada extends NodoRegistroBase {
 	}
 
 
-	public void setEmail(String email) throws EstablecerPropiedadException {
-		validaLongitudCampo ("DireccionCodificada", "email", email, MAX_LON_EMAIL);
+	public void setEmail(String email) {
 		this.email = email;
 	}
 
