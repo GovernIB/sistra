@@ -171,11 +171,15 @@
 
 	<copy file="${etc.dir}/firmaWeb/jboss-${jboss.version}/application.xml" todir="${output.dir}/etc/firmaWeb" overwrite="true"/>
 	<replace file="${output.dir}/etc/firmaWeb/application.xml">
+	    <!--   	Para FirmaWEB no habrá contexto RAIZ 
 		<replacefilter token="@contextoRaizBack@" value="${contextoRaiz.back}"/>
 		<replacefilter token="@contextoRaizFront@" value="${contextoRaiz.front}"/>
+		 -->
+		<replacefilter token="@contextoRaizBack@" value=""/>
+		<replacefilter token="@contextoRaizFront@" value=""/>
 	</replace>
 
-	<ear earfile="${output.dir}/ear/3-sistra-firmaWeb.ear" appxml="${output.dir}/etc/firmaWeb/application.xml">
+	<ear earfile="${output.dir}/ear/firmaweb.ear" appxml="${output.dir}/etc/firmaWeb/application.xml">
 			<manifest>
 				<attribute name="Created-By" value="${indra}"/>
 			    <attribute name="Specification-Title" value="${projecte}"/>
@@ -271,8 +275,8 @@
     </jar>
 	
 	<!-- Generacion del SAR de FIRMAWEB-->
-	<delete file="${output.dir}/ear/3-sistra-firmaWeb.sar" quiet="yes"/>
-    <jar jarfile="${output.dir}/ear/3-sistra-firmaWeb.sar">
+	<delete file="${output.dir}/ear/firmaweb.sar" quiet="yes"/>
+    <jar jarfile="${output.dir}/ear/firmaweb.sar">
         <metainf dir="${etc.dir}/firmaWeb/sar" includes="*.xml"/>
     </jar>
 	

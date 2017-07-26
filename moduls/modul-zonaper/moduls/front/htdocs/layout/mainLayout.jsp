@@ -43,7 +43,9 @@
 		<script type="text/javascript" src="<%=request.getContextPath()%>/firma/firmaWeb/js/configFirmaWeb.js"></script>
 		<script type="text/javascript" src="<%=request.getContextPath()%>/firma/firmaWeb/js/firmaweb.js"></script>
 		<script type="text/javascript">		
-			FIRMAWEB_CONTEXTO = '<bean:write name="<%=es.caib.zonaper.front.Constants.CONTEXTO_RAIZ%>"/>';			
+			// No se quiere que FIRMAWEB vaya en contexto Sistra
+			// FIRMAWEB_CONTEXTO = '<bean:write name="<%=es.caib.zonaper.front.Constants.CONTEXTO_RAIZ%>"/>';			
+			FIRMAWEB_CONTEXTO = '';
 		</script>			
 </logic:equal>
 

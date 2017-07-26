@@ -39,8 +39,10 @@
 			 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">		
 		<script type="text/javascript" src="<%=request.getContextPath()%>/firma/firmaWeb/js/configFirmaWeb.js"></script>
 		<script type="text/javascript" src="<%=request.getContextPath()%>/firma/firmaWeb/js/firmaweb.js"></script>		
-		<script type="text/javascript">		
-			FIRMAWEB_CONTEXTO = '<bean:write name="<%=es.caib.sistra.front.Constants.CONTEXTO_RAIZ%>"/>';			
+		<script type="text/javascript">						
+			// No se quiere que FIRMAWEB vaya en contexto Sistra
+			// FIRMAWEB_CONTEXTO = '<bean:write name="<%=es.caib.sistra.front.Constants.CONTEXTO_RAIZ%>"/>';			
+			FIRMAWEB_CONTEXTO = '';
 		</script>	
 </logic:equal>
 

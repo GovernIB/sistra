@@ -10,7 +10,7 @@
     <module>
         <web>
             <web-uri>firmaWeb.war</web-uri>
-            <context-root>@contextoRaizFront@firmaWeb</context-root>
+            <context-root>@contextoRaizFront@firmaweb</context-root>
         </web>
     </module>
 

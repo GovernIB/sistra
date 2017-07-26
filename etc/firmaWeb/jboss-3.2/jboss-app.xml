@@ -4,7 +4,7 @@
 
 <jboss-app>
     <loader-repository>
-        es.caib.sistra.firmaWeb:loader=3-sistra-firmaWeb.ear
+        es.caib.sistra.firmaWeb:loader=firmaweb.ear
         <loader-repository-config>
             java2ParentDelegation=false
         </loader-repository-config>
