@@ -38,7 +38,7 @@
 		<c:if test="${empty error}">
 		    <fmt:message key="errorGenerico"/>
 		</c:if>
-		<c:if test="${not empty var1}">
+		<c:if test="${not empty error}">
 		    ${error}
 		</c:if>	
 		<c:if test="${not empty errorCodigo}">
