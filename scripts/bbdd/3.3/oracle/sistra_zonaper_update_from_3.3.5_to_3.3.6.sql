@@ -1,0 +1,4 @@
+create index ZPE_TRAPER_IDX on ZPE_TRAPER (
+   TPE_USER ASC,
+   TPE_FLUTRA ASC
+);

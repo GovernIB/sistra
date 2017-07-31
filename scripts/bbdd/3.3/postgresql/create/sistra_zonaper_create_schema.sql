@@ -1993,3 +1993,9 @@ alter table ZPE_TPEBCK add  TPB_PERSIS           character varying(1)           
 comment on column ZPE_TPEBCK.TPB_IDEPRO is 'ID PROCEDIMIENTO';
 
 comment on column ZPE_TPEBCK.TPB_PERSIS is  'INDICA QUE ES PERSISTENTE ';
+
+-- V3.3.6
+create index ZPE_TRAPER_IDX on ZPE_TRAPER (
+   TPE_USER ASC,
+   TPE_FLUTRA ASC
+);
