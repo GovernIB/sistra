@@ -30,7 +30,7 @@ public class SignaturePluginManager <P extends ISignaturePlugin> {
 	protected static Log log = LogFactory.getLog(SignaturePluginManager.class);
   
   // Properties BASE
-  public static final String PROPERTIES_BASE = "es.caib.sistra.firmaweb.";
+  public static final String PROPERTIES_BASE = "es.caib.firmaweb.";
   
   // Cache de Plugins
   private List<Plugin> plugins = null;
