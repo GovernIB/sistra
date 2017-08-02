@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import es.caib.util.ws.client.WsClientUtil;
 
 /**
  * 
@@ -14,12 +18,14 @@ import org.apache.commons.lang.StringUtils;
  */
 public class NifCif {
 
+	private static Log log = LogFactory.getLog(NifCif.class);
 	
 	public static final int DOCUMENTO_NO_VALIDO = -1;
 	public static final int TIPO_DOCUMENTO_NIF = 1;
 	public static final int TIPO_DOCUMENTO_CIF = 2;
 	public static final int TIPO_DOCUMENTO_NIE = 3;
 	public static final int TIPO_DOCUMENTO_NSS = 4;
+	public static final int TIPO_DOCUMENTO_PASAPORTE = 5;
 	
 	//public static String LETRAS_ESPECIAL = "ABCDEFGHIJ";
 	//public static String SIN_NIF_ESPECIAL = "[K|L][0-9]{7}[" + LETRAS_ESPECIAL + "]{1}";
@@ -27,7 +33,12 @@ public class NifCif {
 	public static String LETRAS = "TRWAGMYFPDXBNJZSQVHLCKE";	
 	public static String SIN_NIF = "[K|L|M]?[0-9]{0,8}[" + LETRAS + "]{1}";	
 	public static String SIN_CIAS = "[0-9]{0,13}[" + LETRAS + "]{1}";
-	public static String SIN_CIF = "[ABCDEFGHJKLMNPQRSUVW]{1}[0-9]{7}([0-9]||[ABCDEFGHIJ]){1}";	                                 
+	public static String SIN_CIF = "[ABCDEFGHJKLMNPQRSUVW]{1}[0-9]{7}([0-9]||[ABCDEFGHIJ]){1}";
+	
+	// TODO PASAPORTE VERIFICAR EXP REGULAR
+	public static String SIN_PASAPORTE_PREFIX = "[A-Z]{3}/"; // CODPAIS/ 
+	public static String SIN_PASAPORTE = SIN_PASAPORTE_PREFIX + ".{1,20}"; // Formato CODPAIS/NUMPASAPORTE  CODPAIS (3 letras) y NUMPASAPORTE (20 caracteres)
+	
 	//public static String SIN_NIE = "^\\s*[X|Y][\\/|\\s\\-]?[0-9]{1,8}[\\/|\\s\\-]?[A-Z]{1}\\s*$";
 	public static String SIN_NIE = "[X|Y|Z][0-9]{1,8}[A-Z]{1}";
 	public static String SIN_SS = "^\\s*[0-9]{2}[\\/|\\s\\-]?[0-9]{7,8}[\\/|\\s\\-]?[0-9]{2}\\s*$";
@@ -117,7 +128,7 @@ public class NifCif {
 
 			return letraNIF.equals(letra);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 		}
 		return false;
 	}
@@ -170,7 +181,7 @@ public class NifCif {
 					|| codigoControl.toUpperCase().equals( v2[suma] ) )
 				return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 		}
 
 		return false;
@@ -186,9 +197,24 @@ public class NifCif {
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error(exc);
 		}
 		return false;
+	}
+	
+	
+	public static boolean esPasaporte( String valor )
+	{
+		boolean res = false;
+		try
+		{
+			res = Pattern.matches(SIN_PASAPORTE, valor);			
+		}
+		catch( Exception exc )
+		{
+			log.error(exc);
+		}
+		return res;
 	}
 	
 	private static boolean esNIEDC( String valor )
@@ -220,7 +246,7 @@ public class NifCif {
 		}
 		catch( Exception exc )
 		{
-			exc.printStackTrace();
+			log.error(exc);
 		}
 		return false;
 	}
@@ -275,7 +301,18 @@ public class NifCif {
 		if ( esCIF( valor ) ) return TIPO_DOCUMENTO_CIF;
 		if ( esNIE( valor ) ) return TIPO_DOCUMENTO_NIE;
 		if ( esNumeroSeguridadSocial( valor ) ) return TIPO_DOCUMENTO_NSS;
+		if ( esPasaporte(valor)) return TIPO_DOCUMENTO_PASAPORTE;
 		return DOCUMENTO_NO_VALIDO;
+	}
+	
+	/**
+	 * Extrae número pasaporte CODPAIS/NUMPASAPORTE a partir del formato interno usado por Sistra (P/CODPAIS/NUMPASAPORTE).
+	 * @param pasaporte
+	 * @return
+	 */
+	public static String obtieneNumeroPasaporte(String pasaporte) {
+		String numPasaporte = pasaporte.substring(2);
+		return numPasaporte;
 	}
 	
 
@@ -293,9 +330,11 @@ public class NifCif {
             // Rellenamos con 0
             if (doc.length() == 0) {
             	return "";
-            }
-            final String primerCaracter = doc.substring(0, 1);
-            if (Pattern.matches("[^A-Z]", primerCaracter)) {
+            }            
+            if (Pattern.matches(SIN_PASAPORTE_PREFIX, doc.substring(0, 4))) {
+            	// TODO PASAPORTE Ver si es necesaria alguna normalizacion
+            	doc = doc;
+            } else if (Pattern.matches("[^A-Z]", doc.substring(0, 1))) {
                 // Es nif
                 doc = StringUtils.leftPad(doc, 9, '0');
             } else {
@@ -327,7 +366,7 @@ public class NifCif {
 			return letraNIF.equals(letra);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);			
 		}
 		return false;
 	}

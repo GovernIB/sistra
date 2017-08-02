@@ -146,7 +146,9 @@ public class RegistroEntradaHelper{
 			else if (NifCif.esCIF(nifNormalizado))
 				datosRpte.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_CIF));
 			else if (NifCif.esNIE(nifNormalizado))
-				datosRpte.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE));					
+				datosRpte.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE));
+			else if (NifCif.esPasaporte(nifNormalizado))
+				datosRpte.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_PASAPORTE));
 			
 			datosRpte.setNumeroIdentificacion(nifNormalizado);
 			datosRpte.setFormatoDatosInteresado(ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);			
@@ -211,6 +213,8 @@ public class RegistroEntradaHelper{
 				datosRpdo.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_CIF));
 			else if (NifCif.esNIE(nifNormalizado))
 				datosRpdo.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE));
+			else if (NifCif.esPasaporte(nifNormalizado))
+				datosRpdo.setTipoIdentificacion(new Character(ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_PASAPORTE));
 			datosRpdo.setFormatoDatosInteresado(ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
 			if (nombre == null) {
 				datosRpdo.setIdentificacionInteresado(apellidosNombre);

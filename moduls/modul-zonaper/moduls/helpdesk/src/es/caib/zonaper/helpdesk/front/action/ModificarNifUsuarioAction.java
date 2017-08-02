@@ -45,7 +45,7 @@ public class ModificarNifUsuarioAction extends BaseAction
     	String nifNormalizado = NifCif.normalizarDocumento(modificarForm.getUsuarioNifNew());
     	
     	// Validamos nif
-    	if (!NifCif.esNIF(nifNormalizado) && !NifCif.esCIF(nifNormalizado) && !NifCif.esNIE(nifNormalizado) ) {
+    	if (!NifCif.esNIF(nifNormalizado) && !NifCif.esCIF(nifNormalizado) && !NifCif.esNIE(nifNormalizado)  && !NifCif.esPasaporte(nifNormalizado) ) {
     		request.setAttribute(Constants.MENSAJE_KEY,getResources(request).getMessage("usuarios.nifNoValido"));
     		return mapping.findForward( "success" );
     	}		

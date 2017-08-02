@@ -4454,8 +4454,8 @@ public class TramiteProcessorEJB implements SessionBean {
 							}
 							fmte = NifCif.normalizarDocumento(fmte);
 							int validarNif = NifCif.validaDocumento(fmte);
-							if (validarNif != NifCif.TIPO_DOCUMENTO_NIF && validarNif != NifCif.TIPO_DOCUMENTO_CIF && validarNif != NifCif.TIPO_DOCUMENTO_NIE ){
-								throw new Exception("El valor '" + fmte + "' no es un NIF/CIF/NIE valido");
+							if (validarNif != NifCif.TIPO_DOCUMENTO_NIF && validarNif != NifCif.TIPO_DOCUMENTO_CIF && validarNif != NifCif.TIPO_DOCUMENTO_NIE && validarNif != NifCif.TIPO_DOCUMENTO_PASAPORTE ){
+								throw new Exception("El valor '" + fmte + "' no es un NIF/CIF/NIE/Pasaporte valido");
 							}
 							PersonaPAD persona = obtenerDatosPADporNif(fmte);
 							if (persona != null){
@@ -5616,8 +5616,8 @@ public class TramiteProcessorEJB implements SessionBean {
 		// - Si no es anonimo,
 		if (datosRpdo != null) {
 			// debe devolver un nif valido
-			if (StringUtils.isBlank(datosRpdo.getNif()) || !(NifCif.esNIF(datosRpdo.getNif()) || NifCif.esCIF(datosRpdo.getNif()) || NifCif.esNIE(datosRpdo.getNif()))) {
-				throw new Exception("Los scripts de representado no devuelven un nif/cif/nie valido");
+			if (StringUtils.isBlank(datosRpdo.getNif()) || !(NifCif.esNIF(datosRpdo.getNif()) || NifCif.esCIF(datosRpdo.getNif()) || NifCif.esNIE(datosRpdo.getNif())  || NifCif.esPasaporte(datosRpdo.getNif()))) {
+				throw new Exception("Los scripts de representado no devuelven un nif/cif/nie/pasaporte valido");
 			}
 			// debe devolver un nombre (completo o desglosado)
 			if (StringUtils.isBlank(datosRpdo.getApellidosNombre()) && StringUtils.isBlank(datosRpdo.getNombre())){
@@ -5698,8 +5698,8 @@ public class TramiteProcessorEJB implements SessionBean {
 		// - Si no es anonimo,
 		if (!datosRpte.isAnonimo()) {
 			// debe devolver un nif valido
-			if (StringUtils.isBlank(datosRpte.getNif()) || !(NifCif.esNIF(datosRpte.getNif()) || NifCif.esCIF(datosRpte.getNif()) || NifCif.esNIE(datosRpte.getNif()))) {
-				throw new Exception("Los scripts de representante no devuelven un nif/cif/nie valido");
+			if (StringUtils.isBlank(datosRpte.getNif()) || !(NifCif.esNIF(datosRpte.getNif()) || NifCif.esCIF(datosRpte.getNif()) || NifCif.esNIE(datosRpte.getNif()) || NifCif.esPasaporte(datosRpte.getNif()))) {
+				throw new Exception("Los scripts de representante no devuelven un nif/cif/nie/pasaporte valido");
 			}
 			// debe devolver un nombre (completo o desglosado)
 			/* Quitamos este control ya que antes no se comprobaba si existia nombre rpte
@@ -5721,7 +5721,11 @@ public class TramiteProcessorEJB implements SessionBean {
 		params.put("INTERESADO",resultScript);
 		this.evaluarScript(scriptDatosDesglosados,params);
 		datosInt.setAnonimo(resultScript.isAnonimo());
-		datosInt.setNif(NifCif.normalizarDocumento(resultScript.getNif()));
+		if (StringUtils.isNotBlank(resultScript.getNif())) {
+			datosInt.setNif(NifCif.normalizarDocumento(resultScript.getNif()));
+		} else if (StringUtils.isNotBlank(resultScript.getPasaporte())) {
+			datosInt.setNif(NifCif.normalizarDocumento(resultScript.getPasaporte()));
+		}
 		datosInt.setNombre(resultScript.getNombre());
 		datosInt.setApellido1(resultScript.getApellido1());
 		datosInt.setApellido2(resultScript.getApellido2());

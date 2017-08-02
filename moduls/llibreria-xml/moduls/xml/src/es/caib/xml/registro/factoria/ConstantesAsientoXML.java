@@ -131,6 +131,10 @@ public class ConstantesAsientoXML {
 	 */
 	public static final char DATOSINTERESADO_TIPO_IDENTIFICACION_NIE = 'E';	
 	/**
+	 * Constante de tipo de identificación PASAPORTE 
+	 */
+	public static final char DATOSINTERESADO_TIPO_IDENTIFICACION_PASAPORTE = 'P';
+	/**
 	 * Constante de formato de datos de interesado con apellido y nombre 
 	 */
 	public static final String DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM = "AN";

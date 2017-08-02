@@ -47,6 +47,17 @@ public class ValidacionesUtil
 	  }
 
 	  /*************************************************************************************************/
+	  /* esPasaporte (String cadena)								           */
+	  /*											           */
+	  /* Función que verifica que la cadena alfanumérica suministrada se corresponde con un Pasaporte válido.*/	  
+	  /*************************************************************************************************/
+
+	  public static boolean esPasaporte (String cadena)
+	  {
+	    return NifCif.esPasaporte (cadena);
+	  }
+	  
+	  /*************************************************************************************************/
 	  /* esCif (String cadena)								           */
 	  /*											           */
 	  /* Función que verifica que la cadena alfanumérica suministrada se corresponde con un CIF válido.*/

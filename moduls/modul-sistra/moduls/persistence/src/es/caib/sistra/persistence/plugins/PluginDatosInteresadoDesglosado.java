@@ -9,6 +9,8 @@ public class PluginDatosInteresadoDesglosado {
 	
 	private String nif;
 	
+	private String pasaporte;
+	
 	private String apellidosNombre;
 	
 	private String nombre;
@@ -133,6 +135,14 @@ public class PluginDatosInteresadoDesglosado {
 
 	public void setNif(String nif) {
 		this.nif = nif;
+	}
+
+	public String getPasaporte() {
+		return pasaporte;
+	}
+
+	public void setPasaporte(String pasaporte) {
+		this.pasaporte = pasaporte;
 	}
 	
 }

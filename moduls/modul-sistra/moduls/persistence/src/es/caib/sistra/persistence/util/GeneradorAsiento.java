@@ -151,12 +151,16 @@ public class GeneradorAsiento {
 					case NifCif.TIPO_DOCUMENTO_NIE:
 						dInteresadoRpte.setTipoIdentificacion (new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE));
 						break;
+					case NifCif.TIPO_DOCUMENTO_PASAPORTE:
+						dInteresadoRpte.setTipoIdentificacion (new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_PASAPORTE));
+						break;
 					default:
-						throw new Exception("El número de identificación del representante ni es nif, ni cif, ni nie");
+						throw new Exception("El número de identificación del representante ni es nif, ni cif, ni nie, ni pasaporte");
 				}
 			}else{
 				dInteresadoRpte.setTipoIdentificacion (new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIF));
 			}
+						
 			dInteresadoRpte.setNumeroIdentificacion (datosRpte.getNif());
 			dInteresadoRpte.setFormatoDatosInteresado (ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
 
@@ -217,8 +221,11 @@ public class GeneradorAsiento {
 					case NifCif.TIPO_DOCUMENTO_NIE:
 						dInteresadoRpdo.setTipoIdentificacion (new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE));
 						break;
+					case NifCif.TIPO_DOCUMENTO_PASAPORTE:
+						dInteresadoRpdo.setTipoIdentificacion (new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_PASAPORTE));
+						break;
 					default:
-						throw new Exception("El número de identificación del representado ni es nif, ni cif, ni nie");
+						throw new Exception("El número de identificación del representado ni es nif, ni cif, ni nie, ni pasaporte");
 				}
 				dInteresadoRpdo.setNumeroIdentificacion (datosRpdo.getNif());
 				dInteresadoRpdo.setFormatoDatosInteresado (ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
@@ -263,8 +270,11 @@ public class GeneradorAsiento {
 					case NifCif.TIPO_DOCUMENTO_NIE:
 						dInteresadoDlgdo.setTipoIdentificacion (new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE));
 						break;
+					case NifCif.TIPO_DOCUMENTO_PASAPORTE:
+						dInteresadoDlgdo.setTipoIdentificacion (new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_PASAPORTE));
+						break;
 					default:
-						throw new Exception("El número de identificación del delegado ni es nif, ni cif, ni nie");
+						throw new Exception("El número de identificación del delegado ni es nif, ni cif, ni nie, ni pasaporte");
 				}
 				dInteresadoDlgdo.setNumeroIdentificacion (dlgdoNif);
 				dInteresadoDlgdo.setFormatoDatosInteresado (ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);

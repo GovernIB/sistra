@@ -58,8 +58,11 @@ public class Util
 				case NifCif.TIPO_DOCUMENTO_NIE:
 					tipoDocumento = ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE;
 					break;
+				case NifCif.TIPO_DOCUMENTO_PASAPORTE:
+					tipoDocumento = ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_PASAPORTE;
+					break;
 				default:
-					throw new Exception("El número de identificación del representante ni es nif, ni cif, ni nie");
+					throw new Exception("El número de identificación del representante ni es nif, ni cif, ni nie, ni pasaporte");
 			}
 		}
 		return new Character( tipoDocumento );

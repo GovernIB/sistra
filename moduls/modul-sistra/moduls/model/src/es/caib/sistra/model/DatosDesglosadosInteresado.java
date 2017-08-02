@@ -8,7 +8,7 @@ package es.caib.sistra.model;
  */
 public class DatosDesglosadosInteresado {
 	
-	private boolean anonimo;
+	private boolean anonimo;	
 	
 	private String nif;
 	
@@ -137,7 +137,5 @@ public class DatosDesglosadosInteresado {
 	public void setNif(String nif) {
 		this.nif = nif;
 	}
-	
-	
 
 }

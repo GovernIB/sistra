@@ -548,13 +548,13 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
     	String nifNormalizado = NifCif.normalizarDocumento(nif);
     	
     	// Validamos nif
-    	if (!NifCif.esNIF(nifNormalizado) && !NifCif.esCIF(nifNormalizado) && !NifCif.esNIE(nifNormalizado) ) {
-    		throw new ExcepcionPAD("No es un nif/cif/nie valido");
+    	if (!NifCif.esNIF(nifNormalizado) && !NifCif.esCIF(nifNormalizado) && !NifCif.esNIE(nifNormalizado)  && !NifCif.esPasaporte(nifNormalizado)) {
+    		throw new ExcepcionPAD("No es un nif/cif/nie/pasaporte valido");
     	}
     	
     	// Verificamos que no exista ese nif
     	if ( this.obtenerDatosPersonaPorDocumentoIdentificacionLegal(nifNormalizado) != null) {
-    		throw new ExcepcionPAD("Ya existe un usuario con ese nif/cif/nie");
+    		throw new ExcepcionPAD("Ya existe un usuario con ese nif/cif/nie/pasaporte");
     	}
     	
     	// Obtenemos datos usuario a partir codigo antiguo
