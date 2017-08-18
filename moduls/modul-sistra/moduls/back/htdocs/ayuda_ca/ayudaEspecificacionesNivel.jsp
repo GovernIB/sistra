@@ -86,20 +86,22 @@
     			<li>Script unificat de dades representant: en un sol script s'especifiquen les dades (a m&eacute;s es poden incloure les dades postals)
     				<br/>
         				<em>
-					   		// Indica si es anonimo <br/>
+					   		// Indica si és anònim <br/>
 							INTERESADO.setAnonimo(false);<br/>
-							// Nif<br/>
+							// NIF<br/>
 							INTERESADO.setNif("11111111H");<br/>
-							// Se puede indicar el nombre de forma desglosada o completa (tiene preferencia la desglosada)<br/>
+							// Passaport (És excloent amb el seteig del NIF, i el format del document haurà de ser CODPAIS(3)/NUMPASSAPORT(20))<br/>
+							INTERESADO.setPasaporte("ESP/1234567");<br/>
+							// Es pot indicar el nom de forma desglossada o completa (té preferència la desglossada)<br/>
 							INTERESADO.setNombre("Jose");<br/>
 							INTERESADO.setApellido1("Garcia");<br/>
 							INTERESADO.setApellido2("Lopez");<br/>
 							INTERESADO.setApellidosNombre("Garcia Lopez, Jose");<br/>
-							// Procedencia geografica<br/>
+							// Procedència geogràfica<br/>
 							INTERESADO.setCodigoPais("ESP");<br/>
 							INTERESADO.setCodigoProvincia("7");<br/>
 							INTERESADO.setCodigoLocalidad("40");<br/>
-							// Datos postales<br/>
+							// Dades postals<br/>
 							INTERESADO.setDireccion("C. Principal, 40 pta 7");<br/>
 							INTERESADO.setCodigoPostal("07040");<br/>
 							INTERESADO.setTelefono("901234567");<br/>

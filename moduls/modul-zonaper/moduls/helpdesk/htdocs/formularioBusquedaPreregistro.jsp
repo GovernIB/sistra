@@ -67,7 +67,7 @@
 			/* Nif: si no esta vacio validamos nif */
 			if(!isEmptyObject(form.nif))
 			{ 
-				if (!validaNIF(form.nif.value) && !validaCIF(form.nif.value) && !validaNIE(form.nif.value)) {
+				if (!validaNIF(form.nif.value) && !validaCIF(form.nif.value) && !validaNIE(form.nif.value) && !validaPasaporte(form.nif.value)) {
 					alert("<bean:message key='error.nifValido'/>");
 					return false;
 				}

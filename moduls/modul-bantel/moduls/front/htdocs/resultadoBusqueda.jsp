@@ -23,7 +23,7 @@
 			<th><bean:message key="resultadoBusqueda.numeroEntrada"/></th>
 			<th><bean:message key="resultadoBusqueda.fecha"/></th>			
 			<th><bean:message key="resultadoBusqueda.numeroRegistro"/></th>
-			<th>NIF</th>
+			<th><bean:message key="resultadoBusqueda.nif"/></th>
 			<!-- 
 			<th><bean:message key="resultadoBusqueda.procedimiento"/></th>
 			 -->

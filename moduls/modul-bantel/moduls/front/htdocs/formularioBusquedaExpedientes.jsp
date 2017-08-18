@@ -25,7 +25,7 @@
 			<html:text property="fechaDesde" styleId="fechaDesde" size="10"/>  
 			<bean:message key="formularioBusqueda.fechaHasta"/>
 			<html:text property="fechaHasta" styleId="fechaHasta" size="10"/>  				
-			<bean:message key="formularioBusquedaExpedientes.nif"/>  <html:text property="usuarioNif" size="9" />
+			<bean:message key="formularioBusquedaExpedientes.nif"/>  <html:text property="usuarioNif" size="23" />
 			<bean:message key="formularioBusquedaExpedientes.idExpediente"/>
 			<html:text property="idExpediente" size="30"/> 
 			<bean:message key="formularioBusquedaExpedientes.numeroEntrada"/>

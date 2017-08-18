@@ -202,7 +202,8 @@
 					</logic:equal>
 				</logic:present>
 				>
-					NIF: <html:text property="usuarioNif"  styleId="usuarioNif" size="9" />
+					<bean:message key="formularioBusqueda.documento"/>:
+					<html:text property="usuarioNif"  styleId="usuarioNif" size="23" />
 				</label>
 			</p>
 			<p>

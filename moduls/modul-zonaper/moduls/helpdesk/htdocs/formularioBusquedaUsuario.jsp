@@ -41,9 +41,12 @@
 					{
 						if(!validaNIE(un.value))
 						{
-							alert("<bean:message key='error.nifValido'/>");
-							un.focus();
-							return false;
+							if(!validaPasaporte(un.value))
+							{
+								alert("<bean:message key='error.nifValido'/>");
+								un.focus();
+								return false;
+							}
 						}
 					}
 				}
@@ -77,7 +80,8 @@
 		<html:form action="busquedaUsuario" styleClass="formulari" onsubmit="return validaFormulario(this);">
 			<p>
 				<label id="labelN" for="usuarioNif" >
-					NIF/CIF: <html:text property="usuarioNif" styleId="usuarioNif" size="9" />
+					<bean:message key="formularioBusqueda.documento"/>:
+					<html:text property="usuarioNif" styleId="usuarioNif" size="23" />
 				</label>
 				<label for="usuarioCodi">
 					<bean:message key="formularioBusqueda.codigoUsuario"/>: 

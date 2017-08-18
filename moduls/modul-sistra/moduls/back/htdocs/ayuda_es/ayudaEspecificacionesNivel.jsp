@@ -85,6 +85,8 @@
 							INTERESADO.setAnonimo(false);<br/>
 							// Nif<br/>
 							INTERESADO.setNif("11111111H");<br/>
+							// Pasaporte (Es exluyente con el seteo del NIF, y el formato del documento deberá ser CODPAIS(3)/NUMPASAPORTE(20))<br/>
+							INTERESADO.setPasaporte("ESP/1234567");<br/>
 							// Se puede indicar el nombre de forma desglosada o completa (tiene preferencia la desglosada)<br/>
 							INTERESADO.setNombre("Jose");<br/>
 							INTERESADO.setApellido1("Garcia");<br/>

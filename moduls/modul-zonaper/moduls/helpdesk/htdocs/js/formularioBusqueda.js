@@ -211,6 +211,14 @@
         return res;
     }
     
+    function validaPasaporte ( pasaporte ){
+    	var patronPasaporte = "^[A-Z]{3}/.{1,20}$";
+		var regExp=new RegExp(patronPasaporte);
+		if (!regExp.test(valor)) {
+			return false;
+		}
+    }
+    
     function esNIE(temp){
 		if (/^[XYZ]/.test(temp)) return true;
 		return false;
@@ -388,8 +396,11 @@
 					{									
 						if(!validaNIE(un.value))
 						{			
-							un.focus();
-							return "error.nifValido";
+							if(!validaPasaporte(un.value))
+							{
+								un.focus();
+								return "error.nifValido";
+							}
 						}
 					}					
 				}

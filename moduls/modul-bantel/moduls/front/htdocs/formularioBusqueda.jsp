@@ -49,7 +49,8 @@
 						<html:option value="<%=ConstantesBTE.ENTRADA_PROCESADA%>" ><bean:message key="formularioBusqueda.procesada.correctas"/></html:option>
 						<html:option value="<%=ConstantesBTE.ENTRADA_PROCESADA_ERROR%>" ><bean:message key="formularioBusqueda.procesada.error"/></html:option>
 					</html:select>		
-					NIF <html:text property="usuarioNif" size="9" /> 
+					<bean:message key="formularioBusqueda.nif"/>
+					<html:text property="usuarioNif" size="23" /> 
 					<bean:message key="formularioBusqueda.nom"/> <html:text property="usuarioNombre" size="15"/>		
 			<!-- 
 					&nbsp;&nbsp;&nbsp;&nbsp;<span><a href="javascript:void(0);" onclick="obrirRecercaAv(this);">[+]</a></span>
