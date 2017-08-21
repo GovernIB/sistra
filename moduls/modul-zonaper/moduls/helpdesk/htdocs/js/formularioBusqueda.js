@@ -212,6 +212,9 @@
     }
     
     function validaPasaporte ( pasaporte ){
+    	
+    	valor = pasaporte.toUpperCase();
+    	
     	var patronPasaporte = "^[A-Z]{3}/.{1,20}$";
 		var regExp=new RegExp(patronPasaporte);
 		if (!regExp.test(valor)) {
