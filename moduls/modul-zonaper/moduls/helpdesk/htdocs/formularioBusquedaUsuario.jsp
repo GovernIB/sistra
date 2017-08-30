@@ -80,7 +80,7 @@
 		<html:form action="busquedaUsuario" styleClass="formulari" onsubmit="return validaFormulario(this);">
 			<p>
 				<label id="labelN" for="usuarioNif" >
-					<bean:message key="formularioBusqueda.documento"/>:
+					<bean:message key="formularioBusqueda.nif"/>:
 					<html:text property="usuarioNif" styleId="usuarioNif" size="23" />
 				</label>
 				<label for="usuarioCodi">
