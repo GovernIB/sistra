@@ -6,6 +6,8 @@
 
 <bean:define id="sesion" name="<%=es.caib.zonaper.front.Constants.DATOS_SESION_KEY%>" type="es.caib.zonaper.model.DatosSesion" />
 
+<bean:define id="urlEnlaceNotificacionExterna" name="notificacionesExternas" type="java.lang.String"/>
+
 		<!-- titol -->
 			<h1>
 				<bean:message key="menuAutenticado.encabezamiento" />
@@ -29,7 +31,10 @@
 				<h2><bean:message key="menuAutenticado.misTramites" /></h2>
 				<ul>
 					<li><html:link action="/protected/tramitesSinEnviar"><bean:message key="menuAutenticado.misTramites.tramitesSinEnviar" /></html:link></li>
-					<li><html:link action="/protected/estadoExpedientes"><bean:message key="menuAutenticado.misTramites.estadoTramites" /></html:link></li>						
+					<li><html:link action="/protected/estadoExpedientes"><bean:message key="menuAutenticado.misTramites.estadoTramites" /></html:link></li>
+					<logic:notEmpty name="notificacionesExternas">
+						<li><html:link href="<%=urlEnlaceNotificacionExterna%>"><bean:message key="menuAutenticado.misTramites.notificacionesExternas"/></html:link></li>
+					</logic:notEmpty>
 				</ul>
 			</div>
 			<!-- /tramits -->
