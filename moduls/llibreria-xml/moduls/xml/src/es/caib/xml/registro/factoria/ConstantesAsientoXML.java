@@ -93,7 +93,7 @@ public class ConstantesAsientoXML {
 	/**
 	 * NUMERO_IDENTIFICACIÓN: Tamaño máximo
 	 */			
-	public static final int DATOSINTERESADO_NUMERO_IDENTIFICACION_MAX = 15;
+	public static final int DATOSINTERESADO_NUMERO_IDENTIFICACION_MAX = 50;
 	/**
 	 * FORMATO_DATOS_INTERESADO: Tamaño máximo
 	 */

@@ -322,24 +322,30 @@ public class NifCif {
 	public static String normalizarDocumento(String nif){
 		String doc = null;		
         if (nif != null) {
-        	// Quitamos espacios y otros caracteres
-            doc = nif.toUpperCase();
-            doc = doc.replaceAll("[\\/\\s\\-]", "");
-            // Rellenamos con 0
-            if (doc.length() == 0) {
-            	return "";
-            }            
-            if (Pattern.matches(SIN_PASAPORTE_PREFIX, doc.substring(0, 4))) {
+        	
+        	// Pasamos a mayusculas y hacemos trim
+        	doc = nif.toUpperCase();
+        	doc = nif.trim();
+        	
+        	if (Pattern.matches(SIN_PASAPORTE_PREFIX, doc.substring(0, 4))) {
             	// TODO PASAPORTE Ver si es necesaria alguna normalizacion
             	doc = doc;
-            } else if (Pattern.matches("[^A-Z]", doc.substring(0, 1))) {
-                // Es nif
-                doc = StringUtils.leftPad(doc, 9, '0');
             } else {
-                // es cif o nie
-                final String letraInicio = doc.substring(0, 1);
-                final String resto = doc.substring(1);
-                doc = letraInicio + StringUtils.leftPad(resto, 8, '0');
+	        	// Quitamos espacios y otros caracteres            
+	            doc = doc.replaceAll("[\\/\\s\\-]", "");
+	            // Rellenamos con 0
+	            if (doc.length() == 0) {
+	            	return "";
+	            }            
+	            if (Pattern.matches("[^A-Z]", doc.substring(0, 1))) {
+	                // Es nif
+	                doc = StringUtils.leftPad(doc, 9, '0');
+	            } else {
+	                // es cif o nie
+	                final String letraInicio = doc.substring(0, 1);
+	                final String resto = doc.substring(1);
+	                doc = letraInicio + StringUtils.leftPad(resto, 8, '0');
+	            }
             }
         }
         return doc;

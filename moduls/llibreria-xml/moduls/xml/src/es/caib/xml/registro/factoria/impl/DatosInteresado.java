@@ -74,7 +74,8 @@ public class DatosInteresado extends NodoRegistroBase {
 		// Validar longitud de campo y valor en lista
 		Character valoresPermitidos[] = {new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_CIF),				
 				new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIF),
-				new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE)};
+				new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIE),
+				new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_PASAPORTE)};
 		
 		validaLongitudCampo("DatosInteresado", "TipoIdentificacion", tipoIdentificacion, ConstantesAsientoXML.DATOSINTERESADO_TIPOIDENTIFICACION_MAX);
 		validaCampoConListaValores ("DatosInteresado", "TipoIdentificacion", tipoIdentificacion, valoresPermitidos);
