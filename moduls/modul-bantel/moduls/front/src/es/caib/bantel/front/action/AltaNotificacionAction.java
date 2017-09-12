@@ -16,6 +16,7 @@ import es.caib.bantel.front.util.MensajesUtil;
 import es.caib.bantel.model.Procedimiento;
 import es.caib.bantel.persistence.delegate.ConfiguracionDelegate;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
+import es.caib.util.NifCif;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
@@ -51,6 +52,7 @@ public class AltaNotificacionAction extends BaseAction
 		MensajesUtil.setMsg(this.getResources(request));
 		ExpedientePAD exp;
 		String codMensajeError = "error.notificacio.Excepcion";
+		Boolean bloqueaClave = new Boolean( false );
 
 		// Recuperamos de sesion el expediente actual
 		String idExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY);
@@ -74,6 +76,12 @@ public class AltaNotificacionAction extends BaseAction
 				codMensajeError = "error.notificacio.noNif";
 				throw new Exception("Expediente no tiene habilitado los avisos");
 			}
+			
+			if (NifCif.esPasaporte(exp.getNifRepresentante())){
+				bloqueaClave = new Boolean( true );
+			}
+			
+			request.setAttribute("bloqueaClave",bloqueaClave);
 
 			// Si no existe persona, redirigimos a pantalla para crear persona
 			PersonaPAD persona = DelegatePADUtil.getPadDelegate().obtenerDatosPersonaPADporNif(exp.getNifRepresentante());

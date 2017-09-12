@@ -6,6 +6,7 @@
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 
 <bean:define id="idiomaExpediente" name="detalleNotificacionForm" property="idiomaExp" type="java.lang.String"/>
+<bean:define id="bloqueaClave" type="java.lang.Boolean" name="bloqueaClave"/>
 
 <bean:define id="retornoFirmaWeb">
         <html:rewrite page="/retornoFirmaWeb.do"/>
@@ -695,11 +696,12 @@ function repintarParametros(datos){
 				</p>
 				
 				<p>
+						
 					<label for="accesoPorClave"><bean:message key="notificacion.accesoPorClave"/><sup>*</sup></label>
-					<html:select  property="accesoPorClave">
+					<html:select disabled="<%=bloqueaClave%>"  property="accesoPorClave">
 						<html:option value="S"><bean:message key="expediente.si"/></html:option>
 						<html:option value="N"><bean:message key="expediente.no"/></html:option>
-					  </html:select>
+					</html:select>
 				</p>
 				
 				<p>

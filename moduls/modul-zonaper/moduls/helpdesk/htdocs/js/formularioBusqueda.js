@@ -220,6 +220,7 @@
 		if (!regExp.test(valor)) {
 			return false;
 		}
+		return true;
     }
     
     function esNIE(temp){
