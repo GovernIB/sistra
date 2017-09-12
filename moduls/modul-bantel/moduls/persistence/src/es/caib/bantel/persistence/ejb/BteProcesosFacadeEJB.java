@@ -22,6 +22,8 @@ import javax.security.auth.login.LoginContext;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jboss.security.SecurityContext; 
+import org.jboss.security.SecurityContextAssociation;
 
 import es.caib.bantel.model.AvisosBandeja;
 import es.caib.bantel.model.DetalleEntradasProcedimiento;
@@ -107,7 +109,7 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 			String pass = props.getProperty("auto.pass");
 			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
 			lc = new LoginContext("client-login", handler);
-			lc.login();	
+			lc.login();
     		
 	    	// Recuperamos lista de procedimientos
 	    	ProcedimientoDelegate td = DelegateUtil.getTramiteDelegate();
@@ -118,7 +120,11 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 	    	Date ahora = new Date();
 	    	Date hasta = new Date( ahora.getTime() - (intervaloSeguridad * 60 * 1000) );
 	    	
+	    	
 	    	BteOperacionesProcesosDelegate opd = DelegateUtil.getBteOperacionesProcesosDelegate();
+	    	
+    		boolean workaround = (props.getProperty("sistra.workaround.jmsError") != null ? "true".equals(props.getProperty("sistra.workaround.jmsError")): false);
+	    	
 	    	for (Iterator it = procedimientos.iterator();it.hasNext();){
 	    		Procedimiento procedimiento =  (Procedimiento) it.next();
 	    		
@@ -134,10 +140,16 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 	        		// Calculamos fecha limite: restamos a fecha actual el numero maximo de dias limite para avisar
 	        		Date fechaLimite = DataUtil.sumarDias(new Date(), maximoDiasAviso * -1);
 	        		opd.marcarEntradasCaducadas(procedimiento.getIdentificador(), fechaLimite);
-	        	}  
+	        	}
+				
+				SecurityContext oldContext = SecurityContextAssociation.getSecurityContext();
 	    		
 	    		// Si se ha cumplido el intervalo avisamos al backoffice de las nuevas entradas
 	    		avisoBackOffice(procedimiento,hasta);
+	      		
+	      		if (workaround){
+	      			SecurityContextAssociation.setSecurityContext( oldContext );
+	      		}
 	    		
 	    		// Guardamos tiempo en que se ha realizado el aviso	    	
 	    		opd.marcarAvisoRealizado(procedimiento.getIdentificador(), ahora);    	
@@ -277,6 +289,8 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
     		// Obtenemos entradas no procesadas    		    		    	
     		TramiteBandejaDelegate tbd = (TramiteBandejaDelegate) DelegateUtil.getTramiteBandejaDelegate();
     		
+    		SecurityContext context = SecurityContextAssociation.getSecurityContext();
+    		
     		// Obtenemos tramites del procedimiento que tienen entradas pendientes y generamos un mensaje por tramite
     		String idTramites[] = tbd.obtenerIdTramitesProcedimiento(procedimiento.getIdentificador(),ConstantesBTE.ENTRADA_NO_PROCESADA,null,hasta);
     		if (idTramites != null) {
@@ -299,7 +313,9 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 						sender.send(msg,DeliveryMode.NON_PERSISTENT,4,0);				
 		    		}
     			}
-    		}    	   	
+    		}
+    		
+    		SecurityContextAssociation.setSecurityContext( context );
     }    	    
     
     private void avisoGestorImpl(String tipoAviso) throws ExcepcionBTE {

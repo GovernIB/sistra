@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Random;
 
 import javax.ejb.CreateException;
@@ -21,6 +22,10 @@ import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.jboss.security.SecurityContext;
+import org.jboss.security.SecurityContextAssociation;
 
 import es.caib.bantel.model.ConsultaFuenteDatos;
 import es.caib.bantel.model.DocumentoBandeja;
@@ -79,6 +84,8 @@ import es.caib.xml.registro.factoria.impl.Justificante;
  * 
  */
 public abstract class BteSistraFacadeEJB implements SessionBean  {
+	
+	private static Log log = LogFactory.getLog(BteSistraFacadeEJB.class);
 
 	/**
      * @ejb.create-method
@@ -483,8 +490,17 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
     		// Devolvemos número entrada generada
     		String res = tb.getNumeroEntrada();
     		
+    		Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+    		boolean workaround = (props.getProperty("sistra.workaround.jmsError") != null ? "true".equals(props.getProperty("sistra.workaround.jmsError")): false);
+    		
+    		SecurityContext oldContext = SecurityContextAssociation.getSecurityContext();
+    		
     		// Aviso BackOffice
         	avisoBackOffice(res);
+     		
+        	if (workaround){
+        		SecurityContextAssociation.setSecurityContext( oldContext );
+        	}
         	
         	// Devolvemos número entrada generada
         	return  res;
@@ -689,6 +705,7 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 		    QueueConnectionFactory factory = (QueueConnectionFactory) ctx.lookup("java:/JmsXA");
 		    QueueConnection cnn = factory.createQueueConnection();
 		    
+		    
 		    // Creamos sesion transacted para que hasta q no se haga commit no se envíe el mensaje
 		    QueueSession sess = cnn.createQueueSession(true,0);    		
 		    
@@ -699,6 +716,7 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 			cnn.close();
 		
 		}
+		
     	    	
     }
     

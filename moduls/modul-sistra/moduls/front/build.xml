@@ -58,6 +58,9 @@
             <include name="5-${prj.name}-model.jar" />
             <include name="5-${prj.name}-persistence-client.jar" />
         </fileset>
+    	<fileset dir="${lib.dir}/jboss"> 
+    	    <include name="*.jar"/>
+    	</fileset>
     </path>
 
     <path id="doclet.class.path">
