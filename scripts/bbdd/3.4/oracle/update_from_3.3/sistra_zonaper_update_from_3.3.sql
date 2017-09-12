@@ -1,4 +1,4 @@
-alter table ZPE_PERSON modify ZPE_PERSON VARCHAR2(50);
+alter table ZPE_PERSON modify PER_IDENTI VARCHAR2(50);
 
 alter table ZPE_EXPEDI modify EXP_NIFRTE VARCHAR2(50);
 alter table ZPE_EXPEDI modify EXP_NIFRDO VARCHAR2(50);
