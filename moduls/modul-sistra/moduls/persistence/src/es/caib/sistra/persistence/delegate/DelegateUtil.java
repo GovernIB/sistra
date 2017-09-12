@@ -103,4 +103,8 @@ public final class DelegateUtil {
     public static VersionWSDelegate getVersionWSDelegate(){
     	return (VersionWSDelegate) DelegateFactory.getDelegate(VersionWSDelegate.class);
     }
+    
+    public static DominioSqlDelegate getDominioSqlDelegate(){
+    	return (DominioSqlDelegate) DelegateFactory.getDelegate(DominioSqlDelegate.class);
+    }
 }

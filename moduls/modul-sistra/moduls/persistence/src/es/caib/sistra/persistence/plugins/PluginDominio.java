@@ -320,76 +320,11 @@ public class PluginDominio {
 
 	}
 
-
 	private ValoresDominio resuelveDominioSQL(Dominio dominio,List parametros, String url)throws Exception{
 		debug("Dominio SQL");
-		// Obtenemos datasource
-		DataSource datasource;
-		Connection con = null;
-		try {
-			InitialContext ctx = new InitialContext();
-			datasource  = ( javax.sql.DataSource ) ctx.lookup("java:/" + url);
-	      } catch( Exception e ) {
-	              throw new Exception( "Error consiguiendo conexion : "+e.toString() );
-	      }
-
-
-	    try{
-	    	// Obtenemos conexion
-	    	con = datasource.getConnection();
-			// Creamos sentencia
-		    PreparedStatement stmt = con.prepareStatement(dominio.getSql());
-
-		    // TODO: Incompatible amb drivers Postgresql. Detectar del tipu de base de dades i emprar-ho o no condicionalment.
-		    // I documentar com es pot aconseguir el mateix efecte a la configuració per exemple del datasource per evitar
-		    // "long running queries" que puguin tombar el servidor de base de dades.
-		    //stmt.setQueryTimeout(60);
-
-			// Establecemos parametros
-		    ParameterMetaData paramMetaData = stmt.getParameterMetaData();
-		    for (int i=0;i<parametros.size();i++){
-		    	int type;
-		    	try { // Intentar obtenir tipus específic del paràmetre.
-		    		type = paramMetaData.getParameterType(i+1);
-	    		} catch (SQLException sqle) { // Si no està soportat emprarem VARCHAR ja que és el més compatible
-	    			type = Types.VARCHAR;
-    			}
-	    		stmt.setObject(i+1,(String) parametros.get(i), type);
-		    }
-
-		    // Ejecutamos sentencia
-		    stmt.execute();
-		    ResultSet rs = stmt.getResultSet();
-
-			// Creamos ValoresDominio
-			ValoresDominio val = new ValoresDominio();
-			int numCols = rs.getMetaData().getColumnCount();
-			String ls_valor;
-			String ls_columnas[] = new String[numCols];
-			for (int i=0;i<numCols;i++){
-				ls_columnas[i] = rs.getMetaData().getColumnName(i+1);
-			}
-			Object l_valor;
-			int fila=0;
-			while (rs.next()){
-				fila = val.addFila();
-				for (int i=0;i<numCols;i++){
-					l_valor = rs.getObject(i + 1);
-					if (!rs.wasNull()){
-						ls_valor = l_valor.toString();
-					}else{
-						ls_valor = null;
-					}
-					val.setValor(fila,ls_columnas[i],ls_valor);
-				}
-			}
-			debug("Dominio resuelto");
-			return val;
-	    }finally{
-	    	if (con != null){
-	    		try{con.close();}catch(Exception e){}
-	    	}
-	    }
+		ValoresDominio valores = DelegateUtil.getDominioSqlDelegate().resuelveDominioSQL(dominio, parametros, url, this.debugEnabled);
+		debug("Dominio resuelto");
+		return valores;		
 	}
 
 	private static Cache getCache() throws CacheException {
