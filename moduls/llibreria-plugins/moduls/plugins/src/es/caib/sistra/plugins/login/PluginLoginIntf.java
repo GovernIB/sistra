@@ -33,33 +33,4 @@ public interface PluginLoginIntf  extends PluginSistraIntf {
 	 * @return Nombre completo
 	 */
 	public String getNombreCompleto(Principal principal);
-	
-	/**
-	 * Obtiene el nif del representante (en caso de que lo haya)
-	 * @param principal Principal autenticado en el login
-	 * @return nif representante
-	 */
-	public String getRepresentanteNif(Principal principal);
-	
-	/**
-	 * Obtiene el nombre del representante (en caso de que lo haya)
-	 * @param principal Principal autenticado en el login
-	 * @return Nombre representante
-	 */
-	public String getRepresentanteNombre(Principal principal);
-	
-	/**
-	 * Obtiene el apellido1 del representante (en caso de que lo haya)
-	 * @param principal Principal autenticado en el login
-	 * @return Apellido1 representante
-	 */
-	public String getRepresentanteApellido1(Principal principal);
-	
-	/**
-	 * Obtiene el apellido2 del representante (en caso de que lo haya)
-	 * @param principal Principal autenticado en el login
-	 * @return Apellido2 representante
-	 */
-	public String getRepresentanteApellido2(Principal principal);
-	
 }

@@ -114,10 +114,6 @@
 	<em> municipio = PLUGIN_DATOSSESION.getMunicipio();</em><br>
 	<em> habilitarAvisos = PLUGIN_DATOSSESION.getHabilitarAvisos();</em><br/>
 	<em> perfilAcceso = PLUGIN_DATOSSESION.getPerfilAcceso(); // CIUDADANO / DELEGADO </em>	
-	<em> nifRpte = PLUGIN_DATOSSESION.getRepresentanteNifCertificado(); // En caso de certificado, si hay representado </em></br>
-	<em> nomRpte = PLUGIN_DATOSSESION.getNombreRepresentanteCertificado(); // En caso de certificado, si hay representado </em></br>
-	<em> ape1Rpte = PLUGIN_DATOSSESION.getApellido1RepresentanteCertificado(); // En caso de certificado, si hay representado </em></br>
-	<em> ape2Rpte = PLUGIN_DATOSSESION.getApellido2RepresentanteCertificado(); // En caso de certificado, si hay representado </em></br>
 	<br/>
 	<br/>
 	En cas que el perfil d'acc&eacute;s sigui DELEGADO les dades anteriors es referiran a l'entitat que delega 
