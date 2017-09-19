@@ -32,8 +32,9 @@ public class DatosSesion implements Serializable{
 	// Idioma
 	private Locale locale;
 
-	
-	
+	// Datos representante provenientes del certificado (usuario autenticado con certificado)
+	private DatosRepresentanteCertificado datosRepresentanteCertificado;
+		
 	
 	public void setNivelAutenticacion(char nivelAutenticacion) {
 		this.nivelAutenticacion = nivelAutenticacion;
@@ -110,5 +111,12 @@ public class DatosSesion implements Serializable{
 	}
 	public void setPermisosDelegacion(String permisosDelegacion) {
 		this.permisosDelegacion = permisosDelegacion;
+	}
+	public DatosRepresentanteCertificado getDatosRepresentanteCertificado() {
+		return datosRepresentanteCertificado;
+	}
+	public void setDatosRepresentanteCertificado(
+			DatosRepresentanteCertificado datosRepresentanteCertificado) {
+		this.datosRepresentanteCertificado = datosRepresentanteCertificado;
 	}
 }

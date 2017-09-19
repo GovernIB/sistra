@@ -1,6 +1,7 @@
 package es.caib.sistra.persistence.plugins;
 
 import java.io.Serializable;
+import java.security.Principal;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -121,5 +122,38 @@ public class PluginDatosSesion implements Serializable{
 	public String getIdTramitacion() {
 		return idTramitacion;
 	}
+	
+	public String getRepresentanteNifCertificado() {
+		String res = "";
+		if (this.datosSesion.getDatosRepresentanteCertificado() != null) {
+			res = this.datosSesion.getDatosRepresentanteCertificado().getNif();
+		}
+		return res;
+	}
+	
+	public String getNombreRepresentanteCertificado() {
+		String res = "";
+		if (this.datosSesion.getDatosRepresentanteCertificado() != null) {
+			res = this.datosSesion.getDatosRepresentanteCertificado().getNombre();
+		}
+		return res;
+	}
+	
+	public String getApellido1RepresentanteCertificado() {
+		String res = "";
+		if (this.datosSesion.getDatosRepresentanteCertificado() != null) {
+			res = this.datosSesion.getDatosRepresentanteCertificado().getApellido1();
+		}
+		return res;
+	}
+	
+	public String getApellido2RepresentanteCertificado() {
+		String res = "";
+		if (this.datosSesion.getDatosRepresentanteCertificado() != null) {
+			res = this.datosSesion.getDatosRepresentanteCertificado().getApellido2();
+		}
+		return res;
+	}
+	
 	
 }

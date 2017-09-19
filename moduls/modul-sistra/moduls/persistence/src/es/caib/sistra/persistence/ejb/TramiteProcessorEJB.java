@@ -3,6 +3,7 @@ package es.caib.sistra.persistence.ejb;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -55,6 +56,7 @@ import es.caib.sistra.model.ConstantesSTR;
 import es.caib.sistra.model.DatosDesglosadosInteresado;
 import es.caib.sistra.model.DatosFormulario;
 import es.caib.sistra.model.DatosPago;
+import es.caib.sistra.model.DatosRepresentanteCertificado;
 import es.caib.sistra.model.DatosSesion;
 import es.caib.sistra.model.Documento;
 import es.caib.sistra.model.DocumentoFront;
@@ -5454,6 +5456,13 @@ public class TramiteProcessorEJB implements SessionBean {
 				// Si se accede como ciudadano ponemos como usuario el usuario autenticado
 				datosSesion.setCodigoUsuario(sp.getName());
 				datosSesion.setPersonaPAD(personaPAD);
+				
+				// Establecemos datos representante certificado si lo admite el plugin
+				if (plgLogin.getMetodoAutenticacion(sp) == CredentialUtil.NIVEL_AUTENTICACION_CERTIFICADO) {
+					DatosRepresentanteCertificado drc = obtenerDatosRepresentanteCertificado(plgLogin, sp);
+					datosSesion.setDatosRepresentanteCertificado(drc);
+				}
+				
 			}else{
 				throw new Exception("Perfil de acceso no valido: " + perfilAcceso);
 			}
@@ -6467,6 +6476,33 @@ public class TramiteProcessorEJB implements SessionBean {
 		String rn = "" + sr.nextInt(9999);
 		rn = StringUtils.leftPad(rn, 4, '0');
 		return rn;
+   }
+   
+   
+   private DatosRepresentanteCertificado obtenerDatosRepresentanteCertificado(PluginLoginIntf plgLogin, Principal sp) {
+	   	
+	    DatosRepresentanteCertificado res = null;
+	   
+		try{
+			// Detectamos si el plugin lo admite
+			Method m = null;
+			Class[] params = new Class[] {Principal.class};
+			m = plgLogin.getClass().getDeclaredMethod("getRepresentanteNif", params);
+
+			// Obtenemos datos del principal
+			if (plgLogin.getRepresentanteNif(sp) != null) {
+				res = new DatosRepresentanteCertificado();
+				res.setNif(plgLogin.getRepresentanteNif(sp));
+				res.setNombre(plgLogin.getRepresentanteNombre(sp));
+				res.setApellido1(plgLogin.getRepresentanteApellido1(sp));
+				res.setApellido2(plgLogin.getRepresentanteApellido2(sp));
+			}
+			
+		}catch (java.lang.NoSuchMethodException ex){
+			res = null;
+		}
+		
+		return res;
    }
     
 }
