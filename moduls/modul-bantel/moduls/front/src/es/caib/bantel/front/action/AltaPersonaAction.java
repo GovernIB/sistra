@@ -38,8 +38,11 @@ public class AltaPersonaAction extends Action
 			 String nombre = StringUtils.trim(request.getParameter("nombre"));
 			 String apellido1 = StringUtils.trim(request.getParameter("apellido1"));	
 			 String apellido2 = StringUtils.trim(request.getParameter("apellido2"));
+			 String codigoPais = StringUtils.trim(request.getParameter("codigoPais"));
 			 
+			 _log.debug("País del pasaporte: " + codigoPais);
 			 _log.debug("alta persona: " + nif + " - " + nombre + " - " + apellido1 + " - " + apellido2);
+			 
 			 
 			// Validar nif
 			int tipoNif = NifCif.DOCUMENTO_NO_VALIDO;
@@ -48,7 +51,15 @@ public class AltaPersonaAction extends Action
 			}  else {
 				tipoNif = NifCif.validaDocumento(nif);
 				if (tipoNif != NifCif.TIPO_DOCUMENTO_CIF && tipoNif != NifCif.TIPO_DOCUMENTO_NIF && tipoNif != NifCif.TIPO_DOCUMENTO_NIE && tipoNif != NifCif.TIPO_DOCUMENTO_PASAPORTE) {
-					error = getMessage(request, "expediente.alta.altaDestinatario.errorNifNoValido");
+					if (codigoPais != null && !codigoPais.equals("")){
+						nif = codigoPais + "/"  + nif;
+						tipoNif = NifCif.validaDocumento(nif);
+					} else {
+						error = getMessage(request, "expediente.alta.altaDestinatario.errorPaisVacio");
+					}
+					if (tipoNif != NifCif.TIPO_DOCUMENTO_PASAPORTE && StringUtils.isEmpty(error)){
+						error = getMessage(request, "expediente.alta.altaDestinatario.errorNifNoValido");
+					}
 				}
 			}
 			

@@ -75,6 +75,7 @@
 
      function realizarAltaDestinatario(){
  		var nifAlta = $("#nifAltaDestinatario").val();
+ 		var codPais = $("#codigoPais").val();
  		var nombreAlta = $("#nombreAltaDestinatario").val();
  		var ape1Alta = $("#apellido1AltaDestinatario").val();
  		var ape2Alta = $("#apellido2AltaDestinatario").val();
@@ -83,6 +84,7 @@
 
  			var mapVars = {};
  			mapVars["nif"] = nifAlta;
+ 			mapVars["codigoPais"] = codPais;
  			mapVars["nombre"] = nombreAlta;
  			mapVars["apellido1"] = ape1Alta;
  			mapVars["apellido2"] = ape2Alta;
@@ -336,11 +338,19 @@
  	<p>
 		<bean:message key="expediente.alta.altaDestinatario.intro"/>
 	</p>	
- 	<form  class="remarcar opcions">
+ 	<form class="remarcar opcions">
  		<p>
 			<label for="nifAltaDestinatario"><bean:message key="expediente.alta.altaDestinatario.nif"/></label>
 			<input type="text" id="nifAltaDestinatario" name="nifAltaDestinatario" size="12"  class="nif"/>
 		</p>
+		<p>
+			<label for="codigoPais"><bean:message key="expediente.alta.altaDestinatario.pais"/><sup>*</sup></label>
+			<select name="codigoPais" id="codigoPais" property="codigoPais" class="pc20">
+				<logic:iterate id="pais" name="paises">	
+					<option value="<%=((es.caib.bantel.front.json.Pais)pais).getCodigo()%>" ><bean:write name="pais" property="descripcion"/></option>
+				</logic:iterate>
+			<select>
+		</p>		
  		<p>
 			<label for="nombreAltaDestinatario"><bean:message key="expediente.alta.altaDestinatario.nombre"/></label>
 			<input type="text" id="nombreAltaDestinatario" name="nombreAltaDestinatario" class="pc40" maxlength="50" />
