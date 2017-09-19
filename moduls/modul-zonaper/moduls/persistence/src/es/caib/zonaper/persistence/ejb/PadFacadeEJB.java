@@ -39,6 +39,7 @@ import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.regtel.model.ResultadoRegistro;
 import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
+import es.caib.sistra.persistence.delegate.DelegateSISTRAUtil;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
 import es.caib.util.CredentialUtil;
@@ -1021,6 +1022,7 @@ public abstract class PadFacadeEJB implements SessionBean{
      *  @ejb.permission role-name="${role.todos}"
      *
      */
+	
 	public void logSmsVerificarMovil(String idPersistencia, String movil, String codigoSms) throws ExcepcionPAD
 	{
 		try
@@ -1035,6 +1037,100 @@ public abstract class PadFacadeEJB implements SessionBean{
 			throw new ExcepcionPAD("Error enviando sms para verificar movil",ex);
 		}
 	}
+	
+	
+    /**
+     * Obtiene lista de procedimientos en los que ha participado usuario (tramites persistentes y expedientes).
+     *
+     *
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public List obtenerProcedimientosUsuario() throws ExcepcionPAD{
+    	try {
+	    	List procsId = new ArrayList();
+	    		
+	    	// Recuperamos id procedimientos de tramites persistentes 
+	    	List tramites = this.obtenerTramitesPersistentesUsuario();
+	    	for (Iterator it = tramites.iterator(); it.hasNext();) {
+	    		TramitePersistente tp = (TramitePersistente) it.next();
+	    		if (!procsId.contains(tp.getIdProcedimiento())) {
+	    			procsId.add(tp.getIdProcedimiento());
+	    		}
+	    	}
+	    	
+	    	// Recuperamos id procedimientos de expedientes
+	    	List procsIdExpe = DelegateUtil.getExpedienteDelegate().obtenerProcedimientosId();
+	    	for (Iterator it = procsIdExpe.iterator(); it.hasNext();) {
+	    		String idProcExpe = (String) it.next();
+	    		if (!procsId.contains(idProcExpe)) {
+	    			procsId.add(idProcExpe);
+	    		}
+	    	}
+	    	
+	    	// Recuperamos procedimientos de Bantel y dejamos solo los del usuario
+	    	List res = new ArrayList();
+	    	List procsBte = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimientos();
+	    	for (Iterator it = procsBte.iterator(); it.hasNext();) {
+	    		ProcedimientoBTE proc = (ProcedimientoBTE) it.next();
+	    		if (procsId.contains(proc.getIdentificador())) {
+	    			res.add(proc);
+	    		}
+	    	}
+	    	
+	    	return res;
+    	
+	    }catch (Exception ex){
+			throw new ExcepcionPAD("Error consultando procedimientos usuario",ex);
+		}
+    	
+    }
+    
+    /**
+     * Obtiene lista de tramites en los que ha participado usuario.
+     *
+     *
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public List obtenerTramitesIdUsuario() throws ExcepcionPAD{
+    	try {
+	    	List tramitesId = new ArrayList();
+	    		
+	    	// Recuperamos id tramite de tramites persistentes 
+	    	List tramites = this.obtenerTramitesPersistentesUsuario();
+	    	for (Iterator it = tramites.iterator(); it.hasNext();) {
+	    		TramitePersistente tp = (TramitePersistente) it.next();
+	    		if (!tramitesId.contains(tp.getTramite())) {
+	    			tramitesId.add(tp.getTramite());
+	    		}
+	    	}
+	    	
+	    	// Recuperamos id tramite de entradas telematicas  
+	    	List tramiteIdsTel = DelegateUtil.getEntradaTelematicaDelegate().listarTramiteIds();
+	    	for (Iterator it = tramiteIdsTel.iterator(); it.hasNext();) {
+	    		String idTramiteTel = (String) it.next();
+	    		if (!tramitesId.contains(idTramiteTel)) {
+	    			tramitesId.add(idTramiteTel);
+	    		}
+	    	}
+	    	
+	    	// Recuperamos id tramite de entradas preregistro  
+	    	List tramiteIdsPre = DelegateUtil.getEntradaPreregistroDelegate().listarTramiteIds();
+	    	for (Iterator it = tramiteIdsPre.iterator(); it.hasNext();) {
+	    		String idTramitePre = (String) it.next();
+	    		if (!tramitesId.contains(idTramitePre)) {
+	    			tramitesId.add(idTramitePre);
+	    		}
+	    	}
+	    	
+	    	return tramitesId;
+    	
+	    }catch (Exception ex){
+			throw new ExcepcionPAD("Error consultando tramites usuario",ex);
+		}
+    	
+    }
 
     // ------------------------ Funciones utilidad ----------------------------------------------------------------
     /**

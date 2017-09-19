@@ -214,6 +214,29 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
     }
     
     /**
+     * Consulta lista procedimentos.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public List obtenerProcedimientos()  throws ExcepcionBTE{
+    	try{
+    		List res = new ArrayList();
+	    	List lp = DelegateUtil.getTramiteDelegate().listarProcedimientos();
+	    	for (Iterator it = lp.iterator(); it.hasNext();) {
+	    		Procedimiento p = (Procedimiento) it.next();
+	    		Entidad e = DelegateUtil.getEntidadDelegate().obtenerEntidad(p.getEntidad());
+		    	ProcedimientoBTE proc = convertProcedimientoToProcedimientoBTE(p, e);
+		    	res.add(proc);
+	    	}
+	    	return res;
+    	}catch (Exception ex){
+    		throw new ExcepcionBTE("No se ha podido consultar lista procedimientos: " + ex.getMessage(),ex);
+    	}
+    }
+    
+    /**
      * Consulta entidades.
      * 
      * @ejb.interface-method

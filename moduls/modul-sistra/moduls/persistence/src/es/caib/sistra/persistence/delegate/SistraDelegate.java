@@ -62,6 +62,14 @@ public class SistraDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+	
+	public List obtenerListaTramites(String lang)  throws DelegateException {
+        try {
+            return getFacade().obtenerListaTramites(lang);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
 
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

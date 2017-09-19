@@ -220,6 +220,15 @@ public class EntradaPreregistroDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
+    public List listarTramiteIds() throws DelegateException {
+        try {
+            return getFacade().listarTramiteIds();
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

@@ -34,9 +34,15 @@ import org.apache.commons.logging.LogFactory;
 import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
 import es.caib.bantel.persistence.delegate.BteSistraDelegate;
 import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
+import es.caib.sistra.modelInterfaz.TramiteInfo;
 import es.caib.sistra.persistence.delegate.DelegateException;
+import es.caib.sistra.persistence.delegate.DelegateSISTRAUtil;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
+import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.login.PluginLoginIntf;
+import es.caib.util.CredentialUtil;
 import es.caib.util.UsernamePasswordCallbackHandler;
+import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
 
 
 public class FormularioIncidenciaservlet extends HttpServlet
@@ -262,6 +268,44 @@ public class FormularioIncidenciaservlet extends HttpServlet
 		// - Obtiene lista de problemas
 		Map<String, String> problemasLista = obtenerListaProblemas(lang);    			
 		request.setAttribute("problemasLista", problemasLista);
+		
+		
+		// - Obtiene lista de procedimientos en caso de que no se haya fijado
+		try {
+			PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();	
+			
+			// TODO LISTA PROCS O LISTA TRAMITES, SEGUN QUIERAN
+			
+			// TODO LISTA PROCS
+			if (StringUtils.isEmpty(request.getParameter("procedimientoId")) && plgLogin.getMetodoAutenticacion(request.getUserPrincipal()) != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO) {			
+				List procedimientos = DelegatePADUtil.getPadDelegate().obtenerProcedimientosUsuario();
+				request.setAttribute("mostrarListaProcedimientos", "S");
+				request.setAttribute("listaProcedimientos", procedimientos);
+			}
+			
+			// TODO LISTA TRAMITES
+			if (StringUtils.isEmpty(request.getParameter("tramiteId")) && plgLogin.getMetodoAutenticacion(request.getUserPrincipal()) != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO) {			
+				List tramitesId = DelegatePADUtil.getPadDelegate().obtenerTramitesIdUsuario();
+				
+				// Recuperamos descripciones tramites
+				List tramites = DelegateSISTRAUtil.getSistraDelegate().obtenerListaTramites(lang);
+				List tramitesUsuario = new ArrayList();				
+				for (Iterator it = tramites.iterator(); it.hasNext();) {
+				   TramiteInfo ti = (TramiteInfo) it.next();
+				   if (tramitesId.contains(ti.getCodigo())) {
+					   tramitesUsuario.add(ti);
+				   }
+				}
+				request.setAttribute("mostrarListaTramites", "S");
+				request.setAttribute("listaTramites", tramitesUsuario);
+			}
+			
+			
+		} catch (Exception ex) {
+			// No mostramos nada
+		}			
+
+		
 		// - Redirige JSP
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher( "/WEB-INF/jsp/formulario.jsp" );
 		dispatcher.forward( request, response );

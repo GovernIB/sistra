@@ -1,5 +1,6 @@
 package es.caib.sistra.persistence.ejb;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -24,6 +25,7 @@ import es.caib.sistra.model.Tramite;
 import es.caib.sistra.model.TramiteNivel;
 import es.caib.sistra.model.TramiteVersion;
 import es.caib.sistra.modelInterfaz.InformacionLoginTramite;
+import es.caib.sistra.modelInterfaz.TramiteInfo;
 import es.caib.sistra.modelInterfaz.ValoresDominio;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
 import es.caib.sistra.persistence.delegate.InstanciaDelegate;
@@ -152,6 +154,55 @@ public abstract class SistraFacadeEJB implements SessionBean
 			return false;
 		}
 
+	}
+	
+	/**
+	 * Obtiene lista de tramites con su descripcion y el procedimiento al que pertenecen
+	 *
+	 *
+     * @ejb.interface-method
+     * @ejb.permission unchecked = "true"
+     */
+	public List obtenerListaTramites(String idioma) {
+		
+		try
+		{
+			// Obtenemos lista con descripcion de los tramites
+			List res = new ArrayList();
+
+			List tramites = DelegateUtil.getTramiteDelegate().listarTramites();
+
+			for (Iterator it=tramites.iterator();it.hasNext();){
+				 Tramite tramite = (Tramite) it.next();
+				 TraTramite tra = (TraTramite) tramite.getTraduccion(idioma);
+				 String descTramite = "";
+				 if (tra != null){
+					 descTramite = tra.getDescripcion();
+				 }else{
+					tra = (TraTramite) tramite.getTraduccion("es");
+					if (tra != null){
+						descTramite = tra.getDescripcion();
+					 }else{
+						 descTramite =  tramite.getIdentificador();
+					 }
+				 }
+				 
+				 TramiteInfo t = new TramiteInfo();
+				 t.setCodigo(tramite.getIdentificador());
+				 t.setDescripcion(descTramite);
+				 t.setProcedimientoId(tramite.getProcedimiento());
+				 res.add(t);
+			}
+
+			return res;
+		}
+		catch( Exception exc )
+		{
+			// Error: devolvemos nulo
+			log.error("Excepción al recuperar lista de tramites: " + exc.getMessage(),exc);
+			return null;
+		}
+		
 	}
 
 	/**

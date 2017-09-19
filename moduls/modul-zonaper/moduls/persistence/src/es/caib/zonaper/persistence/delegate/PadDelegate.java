@@ -432,6 +432,30 @@ public class PadDelegate implements StatelessDelegate {
 		}
 	}
 	
+	public List obtenerProcedimientosUsuario() throws DelegateException	
+	{
+		try
+		{
+		 	return getFacade().obtenerProcedimientosUsuario();
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+	
+	 public List obtenerTramitesIdUsuario() throws DelegateException	
+		{
+			try
+			{
+			 	return getFacade().obtenerProcedimientosUsuario();
+			}
+			catch( Exception e )
+			{
+				throw new DelegateException( e );
+			}
+		}
+	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

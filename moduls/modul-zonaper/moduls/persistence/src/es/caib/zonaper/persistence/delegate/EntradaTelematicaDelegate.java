@@ -101,6 +101,15 @@ public class EntradaTelematicaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
+    public List listarTramiteIds() throws DelegateException {
+        try {
+            return getFacade().listarTramiteIds();
+        } catch (Exception e) {
+        	e.printStackTrace();	
+            throw new DelegateException(e);
+        }
+    }
         
 
     /* ========================================================= */

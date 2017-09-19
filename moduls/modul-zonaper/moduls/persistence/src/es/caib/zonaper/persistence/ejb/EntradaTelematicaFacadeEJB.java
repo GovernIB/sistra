@@ -257,6 +257,32 @@ public abstract class EntradaTelematicaFacadeEJB extends HibernateEJB {
     }
    
     
+    /**
+     *  Lista tramites ids del usuario autenticado.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.tothom}"
+     */
+    public List listarTramiteIds() {
+        Session session = getSession();
+        try {     
+        	
+        	Principal sp = this.ctx.getCallerPrincipal();
+        	PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
+        	
+        	Query query = session
+        			.createQuery("SELECT DISTINCT m.tramite FROM EntradaTelematica AS m WHERE m.nifRepresentante = :nif");
+            query.setParameter("nif", plgLogin.getNif(sp));
+            
+            return query.list();
+            
+        } catch (Exception he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
     // ---------------------------------------------------------------------------------------------
     // 	FUNCIONES PRIVADAS
     // ---------------------------------------------------------------------------------------------

@@ -29,7 +29,6 @@ import es.caib.zonaper.model.Expediente;
 import es.caib.zonaper.model.Page;
 import es.caib.zonaper.modelInterfaz.ConfiguracionAvisosExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
-import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
 import es.caib.zonaper.modelInterfaz.FiltroBusquedaExpedientePAD;
 import es.caib.zonaper.persistence.delegate.DelegateException;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
@@ -46,6 +45,7 @@ import es.caib.zonaper.persistence.delegate.ElementoExpedienteDelegate;
  *  transaction-type="Container"
  *
  * @ejb.transaction type="Required"
+ * 
  */
 public abstract class ExpedienteFacadeEJB extends HibernateEJB
 {
@@ -602,6 +602,52 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
         }
 		
 	}
+	
+	/**
+	 * Busca id procedimientos usados en expedientes del usuario logeado
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}" 
+     */
+	public List obtenerProcedimientosId() {
+		List resultado = new ArrayList();
+		Session session = getSession();
+        try 
+        {
+        	// Obtenemos nif usuario autenticado
+        	String nifUser = PluginFactory.getInstance().getPluginLogin().getNif(this.ctx.getCallerPrincipal());
+        	Query query = 
+            		session.createQuery( 
+            				"SELECT e.idProcedimiento FROM Expediente AS e WHERE e.nifRepresentante = :nifUser")
+            		.setParameter("nifUser",nifUser);   
+        	
+        	List result = query.list();
+        	if (result != null) {
+        		for (Iterator it = result.iterator(); it.hasNext();) {
+        			String idProc = (String) it.next();
+        			if (!resultado.contains(idProc)) {
+        				resultado.add(idProc);
+        			}
+        		}
+        	}
+        	
+        	return resultado;
+        	
+        }
+        catch( HibernateException he )
+        {
+        	throw new EJBException( he );
+        }
+        catch( Exception exc )
+        {
+        	throw new EJBException( exc );
+        }
+        finally
+        {
+        	close( session );
+        }
+	}
+	
 	
 	/**
 	 * Realiza búsqueda paginada para expedientes del usuario logeado

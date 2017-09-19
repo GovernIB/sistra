@@ -283,6 +283,18 @@ public class ExpedienteDelegate implements StatelessDelegate
         }
 	}
 	
+	public List obtenerProcedimientosId() throws DelegateException
+	{
+		try
+		{
+			return getFacade().obtenerProcedimientosId( ) ;
+		}
+		catch (Exception e) 
+		{
+            throw new DelegateException(e);
+        }
+	}
+	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
