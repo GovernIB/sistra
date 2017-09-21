@@ -47,14 +47,15 @@
                 <td class="outputd" width="70%">
                     <bean:write name="tramite" property="identificador" />
                     <bean:define id="identificadorTramite" name="tramite" property="identificador" type="java.lang.String"/>
-                    (<bean:write name="tramite" property="descripcion" />)
+                    <logic:present name ="tramite" property="traduccion.descripcion">
+                   		(<bean:write name="tramite" property="traduccion.descripcion" />)
+                   	</logic:present>
                 </td>
                 <td align="right">
                     <bean:define id="urlEditar"><html:rewrite page="/back/tramite/seleccion.do" paramId="codigo" paramName="tramite" paramProperty="identificador"/></bean:define>
                     <button class="button" type="button" onclick="forward('<%=urlEditar%>')"><bean:message key="boton.selec" /></button>
 
-                    <bean:define id="descripcion" name="tramite" property="descripcion" type="java.lang.String"/>
-                    <bean:define id="mensajeBaja"><bean:message arg0='<%="identificador"%>' arg1='<%=StringUtils.escape(descripcion)%>' key='tramite.baja' /></bean:define>
+                    <bean:define id="mensajeBaja"><bean:message arg0='<%="identificador"%>' arg1='<%=StringUtils.escape("traduccion.descripcion")%>' key='tramite.baja' /></bean:define>
                     <bean:define id="urlBaja"><html:rewrite page="/back/tramite/baja.do" paramId="codigo" paramName="tramite" paramProperty="identificador"/></bean:define>
                     <button class="button" type="button" onclick="confirmAndForward('<%=mensajeBaja%>', '<%=urlBaja%>')"><bean:message key="boton.baixa" /></button>
                 </td>

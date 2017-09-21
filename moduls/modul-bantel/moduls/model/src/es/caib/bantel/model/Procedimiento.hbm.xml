@@ -12,7 +12,6 @@
 
 	<property name="entidad" column="TAP_IDEENT"  not-null="true"/>
 	<property name="idProcExt" column="TAP_IDEPEX" length="20" />
-	<property name="descripcion"  column="TAP_DESC" not-null="true" length="100"/>
     <property name="inmediata"  column="TAP_INMED" length="1"/>
     
     <property name="intervaloInforme" column="TAP_INFORM"/>    
@@ -50,7 +49,16 @@
   	<set name="gestores" table="BTE_GESPRO" inverse="true">
         <key column="GAP_IDEPRO"/>
         <many-to-many column="GAP_CODGES" class="es.caib.bantel.model.GestorBandeja"/>
-    </set>    
+    </set>
+    
+    <map name="traducciones" cascade="all" table="BTE_PROTRA">
+          <cache usage="read-write"/>
+          <key column="PRO_IDEPRO"/>
+          <index column="PRO_CODIDI" type="string" length="2"/>
+          <composite-element class="es.caib.bantel.model.TraProcedimiento">
+              <property name="descripcion" length="100" column="PRO_DESC"/>
+          </composite-element>
+     </map>
   	
 </class>
 </hibernate-mapping>

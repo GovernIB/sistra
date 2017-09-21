@@ -63,6 +63,7 @@
         <put name="form.action" value="/back/tramite/editar"/>
         <put name="form.bean" value="tramiteForm"/>
         <put name="values.codigo" value="values.identificador" />
+        <put name="paginaTraduccion" value="/tramite/editarTraduccion.jsp"/>
         <put name="paginaValues" value="/tramite/editarValues.jsp"/>
     </definition>
     <definition name=".arbolProcs" path="/arbolProcs.jsp" />

@@ -20,6 +20,7 @@ import org.zkoss.zul.Window;
 
 import es.caib.bantel.model.GestorBandeja;
 import es.caib.bantel.model.Procedimiento;
+import es.caib.bantel.model.TraProcedimiento;
 import es.caib.bantel.persistence.delegate.DelegateException;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.delegate.ProcedimientoDelegate;
@@ -135,7 +136,8 @@ public class ProcedimientoWModal extends BaseComposer {
 			
 			if (procedimiento != null) {
 				codigo.setValue(procedimiento.getIdentificador());
-				descripcion.setValue(procedimiento.getDescripcion());		
+				TraProcedimiento proc = (TraProcedimiento) procedimiento.getTraduccion("ca");
+				descripcion.setValue(proc.getDescripcion());		
 			
 				// Organismo (pendiente)
 			
@@ -224,7 +226,7 @@ public class ProcedimientoWModal extends BaseComposer {
 		        		procUpdate = procedimiento;
 		        	}
 		        	
-		        	procUpdate.setDescripcion(descripcion.getValue());
+		        	//procUpdate.setDescripcion(descripcion.getValue());
 		        	procUpdate.setUnidadAdministrativa(StringUtils.isNotBlank(unidadAdministrativaCodigo)?Long.parseLong(unidadAdministrativaCodigo): null);
 		        	procUpdate.setPermitirSms(checkAvisoNotificaciones.isChecked()?"S":"N");
 		        	procUpdate.setAvisarNotificaciones(checkAvisoNotificaciones.isChecked()?"S":"N");

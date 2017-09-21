@@ -32,6 +32,7 @@ import es.caib.bantel.model.DocumentoBandeja;
 import es.caib.bantel.model.Entidad;
 import es.caib.bantel.model.GestorBandeja;
 import es.caib.bantel.model.Procedimiento;
+import es.caib.bantel.model.TraProcedimiento;
 import es.caib.bantel.model.TramiteBandeja;
 import es.caib.bantel.modelInterfaz.ConstantesBTE;
 import es.caib.bantel.modelInterfaz.DatosDocumentoPresencial;
@@ -273,8 +274,9 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
 	private ProcedimientoBTE convertProcedimientoToProcedimientoBTE(
 			Procedimiento p, Entidad e) {
 		ProcedimientoBTE pb = new ProcedimientoBTE();
+		TraProcedimiento proc = (TraProcedimiento) p.getTraduccion("ca");
 		pb.setIdentificador(p.getIdentificador());
-		pb.setDescripcion(p.getDescripcion());
+		pb.setDescripcion(proc.getDescripcion());
 		pb.setUnidadAdministrativa(p.getUnidadAdministrativa());
 		pb.setPermitirSMS("S".equals(p.getPermitirSms()));
 		pb.setPermitirPlazoNotificacionesVariable("S".equals(p.getPermitirPlazoNotificacionesVariable()));

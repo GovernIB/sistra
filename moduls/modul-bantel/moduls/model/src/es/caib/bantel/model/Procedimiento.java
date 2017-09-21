@@ -3,9 +3,13 @@ package es.caib.bantel.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
-public class Procedimiento implements Serializable{
+import es.caib.bantel.model.Traducible;
+import es.caib.bantel.model.TraProcedimiento;
+
+public class Procedimiento extends Traducible implements Serializable{
 	
 	// Tipo de acceso al BackOffice para realizar los avisos
 	public final static char ACCESO_EJB='E';
@@ -21,7 +25,7 @@ public class Procedimiento implements Serializable{
 	public final static char AUTENTICACION_ORGANISMO 	= 'C';
 		
 	private String identificador;
-	private String descripcion;
+	//private String descripcion;
 	private String entidad;
 	private String idProcExt;
 	private char inmediata = 'N';
@@ -76,12 +80,12 @@ public class Procedimiento implements Serializable{
 		this.idProcExt = idProcExt;
 	}
 	
-	public String getDescripcion() {
+/*	public String getDescripcion() {
 		return descripcion;
 	}
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
-	}
+	}*/
 	public Set getGestores() {
 		return gestores;
 	}
@@ -248,5 +252,9 @@ public class Procedimiento implements Serializable{
 	public void setEntidad(String entidad) {
 		this.entidad = entidad;
 	}
+
+    public void addTraduccion(String lang, TraProcedimiento traduccion) {
+        setTraduccion(lang, traduccion);
+    }
 	
 }

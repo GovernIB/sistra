@@ -22,6 +22,7 @@
 
 		<mapping resource="es/caib/bantel/model/Entidad.hbm.xml" />
 		<mapping resource="es/caib/bantel/model/Procedimiento.hbm.xml" />
+		<mapping resource="es/caib/bantel/model/Idioma.hbm.xml" />
         <mapping resource="es/caib/bantel/model/TramiteBandeja.hbm.xml" />
         <mapping resource="es/caib/bantel/model/DocumentoBandeja.hbm.xml" />
         <mapping resource="es/caib/bantel/model/GestorBandeja.hbm.xml" />

@@ -54,10 +54,6 @@
     <td class="input"><html:text styleClass="data" tabindex="1" property="values.identificador" styleId="identificadorProcedimiento" maxlength="20" readonly="<%= request.getAttribute( \"idReadOnly\" ) != null %>" /></td>
 </tr>
 <tr>
-    <td class="labelo"><bean:message key="tramite.descripcion"/></td>
-    <td class="input"><html:text styleClass="textLargo" tabindex="10" property="values.descripcion" maxlength="100"/></td>
-</tr>
-<tr>
     <td class="label"><bean:message key="tramite.entidad"/></td>
     <td class="input">
     	<html:select property="values.entidad" disabled="<%= request.getAttribute( \"idReadOnly\" ) != null %>" >

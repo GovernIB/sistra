@@ -30,6 +30,7 @@ import org.zkoss.zul.Window;
 
 import es.caib.bantel.model.FuenteDatos;
 import es.caib.bantel.model.Procedimiento;
+import es.caib.bantel.model.TraProcedimiento;
 import es.caib.bantel.persistence.delegate.DelegateException;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.delegate.ProcedimientoDelegate;
@@ -209,7 +210,8 @@ public class ProcesamientoProcedimientoWModal extends BaseComposer {
      */
 	private void mapearDatos() {
 		codigo.setValue(procedimiento.getIdentificador());
-		descripcion.setValue(procedimiento.getDescripcion());	
+		TraProcedimiento proc = (TraProcedimiento) procedimiento.getTraduccion("ca");
+		descripcion.setValue(proc.getDescripcion());
 		
 		activo.setChecked(procedimiento.getIntervaloInforme() != null && procedimiento.getIntervaloInforme().longValue() > 0);
 		intervalo.setValue( (procedimiento.getIntervaloInforme() != null)? Integer.parseInt(procedimiento.getIntervaloInforme().toString()) :0 );

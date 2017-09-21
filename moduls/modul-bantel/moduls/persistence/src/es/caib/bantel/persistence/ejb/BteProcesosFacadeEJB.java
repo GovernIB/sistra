@@ -29,6 +29,7 @@ import es.caib.bantel.model.AvisosBandeja;
 import es.caib.bantel.model.DetalleEntradasProcedimiento;
 import es.caib.bantel.model.GestorBandeja;
 import es.caib.bantel.model.Procedimiento;
+import es.caib.bantel.model.TraProcedimiento;
 import es.caib.bantel.modelInterfaz.ConstantesBTE;
 import es.caib.bantel.modelInterfaz.ExcepcionBTE;
 import es.caib.bantel.persistence.delegate.AvisosBandejaDelegate;
@@ -194,7 +195,8 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 			DetalleNotificacionesProcedimiento dn) {
     	boolean existen = false;
     	StringBuffer mensaje = new StringBuffer(1024);
-    	mensaje.append("<strong> * " + StringEscapeUtils.escapeHtml(procedimiento.getIdentificador() + " - " + procedimiento.getDescripcion()) + "</strong>");
+    	TraProcedimiento proc = (TraProcedimiento) procedimiento.getTraduccion("ca");
+    	mensaje.append("<strong> * " + StringEscapeUtils.escapeHtml(procedimiento.getIdentificador() + " - " + proc.getDescripcion()) + "</strong>");
     	mensaje.append("<ul>");
     	if (de != null) {    		
 	    	if (de.existenEntradas()) {

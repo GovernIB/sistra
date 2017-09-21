@@ -32,8 +32,8 @@
 
 <tiles:useAttribute id="idCodigo" name="values.codigo" classname="java.lang.String" scope="page"/>
 
-<tiles:useAttribute name="paginaValues" scope="page" />
 <tiles:useAttribute name="paginaTraduccion" scope="page" />
+<tiles:useAttribute name="paginaValues" scope="page" />
 <html:html locale="true" xhtml="true">
 <head>
    <title><bean:message name="title"/></title>
@@ -126,7 +126,7 @@
     <logic:notEmpty name="paginaValues">
         <table class="marc"><tiles:insert attribute="paginaValues" /></table><br />
     </logic:notEmpty>
-    
+        
     <logic:notEmpty name="paginaTraduccion">
         <tiles:insert definition=".langtabs">
             <tiles:put name="select" beanName="<%=bean%>" beanProperty="lang" />

@@ -1,5 +1,8 @@
 package es.caib.bantel.persistence.delegate;
 
+import es.caib.bantel.persistence.delegate.DelegateFactory;
+import es.caib.bantel.persistence.delegate.IdiomaDelegate;
+
 /**
  * Define métodos estáticos para obtener delegates.
  */
@@ -59,6 +62,10 @@ public final class DelegateUtil {
     
     public static FuenteDatosDelegate getFuenteDatosDelegate() {
         return (FuenteDatosDelegate) DelegateFactory.getDelegate(FuenteDatosDelegate.class);
+    }
+    
+    public static IdiomaDelegate getIdiomaDelegate() {
+        return (IdiomaDelegate) DelegateFactory.getDelegate(IdiomaDelegate.class);
     }
     
 }

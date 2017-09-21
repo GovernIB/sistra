@@ -10,13 +10,15 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import es.caib.bantel.back.taglib.Constants;
+import es.caib.bantel.back.util.MensajesUtil;
 import es.caib.bantel.model.Procedimiento;
+import es.caib.bantel.model.TraProcedimiento;
 import es.caib.bantel.persistence.delegate.DelegateException;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.delegate.ProcedimientoDelegate;
 
 
-public class TramiteForm extends BantelForm implements InitForm
+public class TramiteForm extends TraduccionValidatorForm implements InitForm
 {
 
 	protected static Log log = LogFactory.getLog(TramiteForm.class);
@@ -39,6 +41,23 @@ public class TramiteForm extends BantelForm implements InitForm
         	
         	// Comprobamos restricciones
         	if (tramite.getIntervaloInforme() != null && tramite.getIntervaloInforme().longValue() > 0){
+        		
+        		TraProcedimiento traPro = (TraProcedimiento)tramite.getTraduccion("es");
+            	if (traPro != null ){
+            		if(StringUtils.isEmpty(traPro.getDescripcion())){
+            			errors.add("values.traduccion", new ActionError("errors.descripcion.vacio",MensajesUtil.getValue("es")));
+            		}
+            	}else{
+            		errors.add("values.traduccion", new ActionError("errors.descripcion.vacio", MensajesUtil.getValue("es") ));
+            	}
+            	traPro = (TraProcedimiento)tramite.getTraduccion("ca");
+            	if(traPro != null){
+            		if(StringUtils.isEmpty(traPro.getDescripcion())){
+            			errors.add("values.traduccion", new ActionError("errors.descripcion.vacio", MensajesUtil.getValue("ca") ));
+            		}
+            	}else{
+            		errors.add("values.traduccion", new ActionError("errors.descripcion.vacio", MensajesUtil.getValue("ca") ));
+            	}
 
         		// Url
         		if ( (tramite.getTipoAcceso() == Procedimiento.ACCESO_EJB && tramite.getLocalizacionEJB() == Procedimiento.EJB_REMOTO) 

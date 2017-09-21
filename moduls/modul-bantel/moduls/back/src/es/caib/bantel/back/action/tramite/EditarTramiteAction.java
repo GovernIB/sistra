@@ -43,7 +43,9 @@ public class EditarTramiteAction extends BaseAction{
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-    	request.setAttribute( "idReadOnly", new Boolean( true ) );
+    	if (isModificacion(request)){
+    		request.setAttribute( "idReadOnly", new Boolean( true ) );
+    	}
     	
         log.debug("Entramos en EditarTramite");
 
@@ -78,6 +80,9 @@ public class EditarTramiteAction extends BaseAction{
             return mapping.findForward("success");
 
         }
+        
+        // Cambio de idioma
+        tramiteForm.reloadLang();
 
         return mapping.findForward("reload");
     }       

@@ -11,7 +11,7 @@
 			<field property="values.identificador" depends="required" page="1">
                 <arg0 key="tramite.identificador" />
             </field>
-   			<field property="values.descripcion" depends="required" page="1">
+            <field property="traduccion.descripcion" depends="required" page="1">
                 <arg0 key="tramite.descripcion" />
             </field>
 		</form>
