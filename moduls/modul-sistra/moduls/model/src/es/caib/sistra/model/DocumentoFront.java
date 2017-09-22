@@ -1,6 +1,8 @@
 package es.caib.sistra.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Clase que se utiliza para pasar al front la 
@@ -99,6 +101,10 @@ public class DocumentoFront  implements Serializable{
 	 * En caso de existir varios estarian separados por # 
 	 */
 	private String nombreFirmante;
+	/**
+	 * Indica las representaciones que hay en la firmas (map con key nif y como valor el nombre y nif del representante).
+	 */
+	private Map representantesFirmas = new HashMap();
 	/**
 	 * Indica si el documento ha sido firmado
 	 */
@@ -408,6 +414,12 @@ public class DocumentoFront  implements Serializable{
 	}
 	public void setFormularioGuardarSinTerminar(boolean formularioGuardarSinTerminar) {
 		this.formularioGuardarSinTerminar = formularioGuardarSinTerminar;
+	}
+	public Map getRepresentantesFirmas() {
+		return representantesFirmas;
+	}
+	public void setRepresentantesFirmas(Map representantesFirmas) {
+		this.representantesFirmas = representantesFirmas;
 	}
 	
 }

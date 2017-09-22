@@ -31,4 +31,20 @@ public class PluginLoginMOCK implements PluginLoginIntf {
 		return mp.getNombreCompleto();		
 	}
 	
+	public String getRepresentanteNif(Principal principal) {
+		return null;
+	}
+
+	public String getRepresentanteNombre(Principal principal) {
+		return null;
+	}
+
+	public String getRepresentanteApellido1(Principal principal) {
+		return null;
+	}
+
+	public String getRepresentanteApellido2(Principal principal) {
+		return null;
+	}
+	
 }

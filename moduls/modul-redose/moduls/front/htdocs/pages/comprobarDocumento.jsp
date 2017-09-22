@@ -50,7 +50,10 @@
 				<logic:iterate name="firmas" id="firma" >							
 				<li class="firma">					
 						<strong><bean:message key="comprobarDocumento.firmaDigital"/>:</strong> 				
-						<bean:message key="comprobarDocumento.firmadoPor"/> <bean:write name="firma" property="nombreApellidos"/> 										
+						<bean:message key="comprobarDocumento.firmadoPor"/> <bean:write name="firma" property="nombreApellidos"/> 
+						<logic:notEmpty name="firma" property="nifRepresentante">
+							&nbsp; <bean:message key="firma.representadoPor"/> <bean:write name="firma" property="nombreApellidosRepresentante"/> - NIF: <bean:write name="firma" property="nifRepresentante"/>
+						</logic:notEmpty>										
 						
 						<bean:define id="indice" value="<%=Integer.toString(indiceFirma)%>"/>
 						-	

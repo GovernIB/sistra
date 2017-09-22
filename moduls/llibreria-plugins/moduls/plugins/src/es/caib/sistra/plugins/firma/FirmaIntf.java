@@ -31,4 +31,17 @@ public interface FirmaIntf extends Serializable{
 	 */
 	public byte[] getContenidoFirma();	
 	
+	/**
+	 * Obtiene el nif/cif del representante. El nif debe estar normalizado a 9 carácteres y mayúsculas sin espacios en blanco ni guiones.
+	 * @return nif/cif del firmante
+	 */
+	public String getNifRepresentante();
+	
+	/**
+	 * Obtiene el nombre y apellidos del firmante
+	 * @return nombre y apellidos del firmante
+	 */
+	public String getNombreApellidosRepresentante();
+	
+	
 }

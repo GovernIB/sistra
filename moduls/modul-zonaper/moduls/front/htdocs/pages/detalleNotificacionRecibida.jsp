@@ -77,7 +77,10 @@
 						<logic:notEmpty name="<%=codigoFirma %>" scope="request">
 							<bean:message key="comprobarDocumento.firmadoPor"/>
 							<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request">							
-								&nbsp;<bean:write name="firma" property="nombreApellidos"/>  										
+								&nbsp;<bean:write name="firma" property="nombreApellidos"/> 
+								<logic:notEmpty name="firma" property="nifRepresentante">
+									&nbsp; <bean:message key="firma.representadoPor"/> <bean:write name="firma" property="nombreApellidosRepresentante"/> - NIF: <bean:write name="firma" property="nifRepresentante"/>
+								</logic:notEmpty> 										
 							</logic:iterate>			
 						</logic:notEmpty>
 					</li>

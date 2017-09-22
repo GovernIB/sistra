@@ -84,4 +84,16 @@ public class FirmaMock implements FirmaIntf{
 		}	
 	}
 
+	@Override
+	public String getNifRepresentante() {
+		// TODO Auto-generated method stub
+		return "33456299Q";
+	}
+
+	@Override
+	public String getNombreApellidosRepresentante() {
+		// TODO Auto-generated method stub
+		return "Rafa Sanz Villanueva";
+	}
+
 }

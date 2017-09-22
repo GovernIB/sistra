@@ -5,6 +5,7 @@
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 <html:xhtml/>
+<bean:define id="lang" value="<%=((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage()%>" type="java.lang.String"/>
 <bean:define id="urlFormulario">
         <html:rewrite page="/protected/irAFormulario.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
@@ -160,17 +161,7 @@
 							<logic:equal name="formulario" property="firmado" value="true">
 								<span class="detalleDoc"> 
 									<img src="imgs/tramitacion/iconos/ico_firma_aceptada.gif" alt="<bean:message key="pasoRellenar.iconografia.firmaDocumentoRealizada"/>" title="<bean:message key="pasoRellenar.iconografia.firmaDocumentoRealizada"/>"/>
-									<logic:notEmpty name="formulario" property="firmante">
-										<logic:match name="formulario" property="firmante" value="#">
-											<bean:message key="pasoRellenar.formularios.firmadosDigitalmente" arg0="<%=es.caib.util.StringUtil.replace(formulario.getFirmante(),\"#\",\" - \")%>"/>
-										</logic:match>	
-										<logic:notMatch name="formulario" property="firmante" value="#">
-											<bean:message key="pasoRellenar.formularios.firmadoDigitalmente" arg0="<%=formulario.getFirmante()%>"/>
-										</logic:notMatch>																									
-									</logic:notEmpty>
-									<logic:empty name="formulario" property="firmante">						
-										<bean:message key="pasoRellenar.formularios.firmadoDigitalmente.noComprobarFirmante"/>
-									</logic:empty>
+									<%=es.caib.sistra.front.util.Util.generaTextoFirma(formulario, lang) %>									
 								</span>
 							</logic:equal>						
 						</logic:equal>
@@ -188,4 +179,5 @@
 			<!-- capa accediendo formularios -->
 			<div id="capaInfoFondo"></div>
 			<div id="capaInfoForms"></div>
+			
 			

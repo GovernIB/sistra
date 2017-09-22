@@ -5,6 +5,7 @@
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 <html:xhtml/>
+<bean:define id="lang" value="<%=((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage()%>" type="java.lang.String"/>
 <bean:define id="urlAnexar">
         <html:rewrite page="/protected/irAAnexar.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
@@ -268,17 +269,7 @@
 												<logic:equal name="anexo" property="firmado" value="true">
 													<span class="detalleDoc">
 															<img src="imgs/tramitacion/iconos/ico_firma_aceptada.gif" alt="<bean:message key="pasoAnexar.iconografia.firmaDocumentoRealizada"/>" title="<bean:message key="pasoAnexar.iconografia.firmaDocumentoRealizada"/>"/>															
-															<logic:notEmpty name="anexo" property="firmante">
-																<logic:match name="anexo" property="firmante" value="#">
-																	<bean:message key="pasoAnexar.documentos.documentoFirmadosDigitalmente" arg0="<%=es.caib.util.StringUtil.replace(anexo.getFirmante(),\"#\",\" - \")%>"/>
-																</logic:match>	
-																<logic:notMatch name="anexo" property="firmante" value="#">
-																	<bean:message key="pasoAnexar.documentos.documentoFirmadoDigitalmente" arg0="<%=anexo.getFirmante()%>"/>
-																</logic:notMatch>															
-															</logic:notEmpty>
-															<logic:empty name="anexo" property="firmante">
-																<bean:message key="pasoAnexar.documentos.documentoFirmadoDigitalmente.noComprobarFirmante"/>
-															</logic:empty>
+															<%=es.caib.sistra.front.util.Util.generaTextoFirma(anexo, lang) %>
 													</span>
 												</logic:equal>
 											</logic:equal>
