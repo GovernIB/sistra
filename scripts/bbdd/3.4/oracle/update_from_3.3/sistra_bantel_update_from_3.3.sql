@@ -2,10 +2,21 @@ alter table BTE_TRAMIT modify TRA_NIFRTE VARCHAR2(50);
 alter table BTE_TRAMIT modify TRA_NIFRDO VARCHAR2(50);
 alter table BTE_TRAMIT modify TRA_NIFDLG VARCHAR2(50);
 
+create table BTE_IDIOMA  (
+   IDI_CODIGO           VARCHAR2(2)                     not null,
+   IDI_ORDEN            NUMBER(2)                       not null
+);
+
+comment on table BTE_IDIOMA is
+'Tabla de idiomas';
+
+alter table BTE_IDIOMA
+   add constraint BTE_IDI_PK primary key (IDI_CODIGO);
+
 create table BTE_TRAPRO  (
    PRO_IDEPRO           VARCHAR2(100)                      not null,
    PRO_CODIDI           VARCHAR2(2)                     not null,
-   PRO_DESC             VARCHAR2(100)                   not null
+   PRO_DESC             VARCHAR2(1000)                   not null
 );
 
 comment on table BTE_TRAPRO is
@@ -24,23 +35,14 @@ alter table BTE_TRAPRO
    add constraint BTE_PRO_PK primary key (PRO_IDEPRO, PRO_CODIDI);
    
 alter table BTE_TRAPRO
-   add constraint STR_TPROIDI_FK foreign key (PRO_CODIDI)
+   add constraint BTE_TPROIDI_FK foreign key (PRO_CODIDI)
       references BTE_IDIOMA (IDI_CODIGO);
 
 alter table BTE_TRAPRO
-   add constraint STR_TPROIDI_FK foreign key (PRO_IDEPRO)
-      references BTE_PROAPL (TRA_IDEPRO);
+   add constraint BTE_PROTAP_FK foreign key (PRO_IDEPRO)
+      references BTE_PROAPL (TAP_IDEPRO);
    
-create table BTE_IDIOMA  (
-   IDI_CODIGO           VARCHAR2(2)                     not null,
-   IDI_ORDEN            NUMBER(2)                       not null
-);
 
-comment on table BTE_IDIOMA is
-'Tabla de idiomas';
-
-alter table BTE_IDIOMA
-   add constraint BTE_IDI_PK primary key (IDI_CODIGO);
  
 /* IDIOMAS */
 INSERT INTO BTE_IDIOMA ( IDI_CODIGO, IDI_ORDEN ) VALUES ( 

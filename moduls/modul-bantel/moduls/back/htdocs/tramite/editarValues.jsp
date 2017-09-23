@@ -46,22 +46,25 @@
      }
      // -->
 </script>
+
+<html:hidden property="readOnly" value="<%= request.getAttribute( \"idReadOnly\" ).toString() %>"/> 
+
 <tr>
 	<td class="separador" colspan="2"><bean:message key="tramite.definicion"/></td>
 </tr>
 <tr>
     <td class="labelo"><bean:message key="tramite.identificador"/></td>
-    <td class="input"><html:text styleClass="data" tabindex="1" property="values.identificador" styleId="identificadorProcedimiento" maxlength="20" readonly="<%= request.getAttribute( \"idReadOnly\" ) != null %>" /></td>
+    <td class="input"><html:text styleClass="data" tabindex="1" property="values.identificador" styleId="identificadorProcedimiento" maxlength="20" readonly="<%= Boolean.parseBoolean((String) request.getAttribute( \"idReadOnly\" )) %>" /></td>
 </tr>
 <tr>
     <td class="label"><bean:message key="tramite.entidad"/></td>
     <td class="input">
-    	<html:select property="values.entidad" disabled="<%= request.getAttribute( \"idReadOnly\" ) != null %>" >
+    	<html:select property="values.entidad" disabled="<%= Boolean.parseBoolean((String) request.getAttribute( \"idReadOnly\" )) %>" >
    			<html:options collection="listaEntidades" property="identificador" labelProperty="descripcion" />
     	</html:select>
-    	<logic:present name="idReadOnly">
+    	<logic:equal name="idReadOnly" value="true">
     		<html:hidden property="values.entidad"/>
-    	</logic:present>
+    	</logic:equal>
     </td>
 </tr>
 <tr>
@@ -77,7 +80,7 @@
     </td>
 </tr>
 
-<logic:present name="idReadOnly">                                    
+<logic:equal name="idReadOnly" value="true">                                                                        
 
 <tr>
 	<td class="separador" colspan="2"><bean:message key="tramite.gestionExpedientes"/></td>
@@ -216,4 +219,4 @@
 	</logic:present>
 </logic:notEmpty>
 
-</logic:present>
+</logic:equal>

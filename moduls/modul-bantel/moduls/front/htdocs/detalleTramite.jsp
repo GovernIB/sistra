@@ -331,7 +331,10 @@
 											<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request" type="es.caib.sistra.plugins.firma.FirmaIntf">							
 												&nbsp;
 												<a href="mostrarFirmaDocumento.do?codigo=<%=documento.getRdsCodigo()%>&clave=<%=documento.getRdsClave()%>&nif=<%=firma.getNif()%>" >
-													<bean:write name="firma" property="nombreApellidos"/>  									
+													<bean:write name="firma" property="nombreApellidos"/>  	
+													<logic:notEmpty name="firma" property="nifRepresentante">
+														&nbsp; <bean:message key="firma.representadoPor"/> <bean:write name="firma" property="nombreApellidosRepresentante"/> - NIF: <bean:write name="firma" property="nifRepresentante"/>
+													</logic:notEmpty> 								
 												</a>	
 											</logic:iterate>
 											</span>			

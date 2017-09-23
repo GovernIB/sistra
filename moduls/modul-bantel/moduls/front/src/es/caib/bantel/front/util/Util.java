@@ -2,6 +2,9 @@ package es.caib.bantel.front.util;
 
 import javax.naming.InitialContext;
 
+import es.caib.bantel.model.Procedimiento;
+import es.caib.bantel.model.TraProcedimiento;
+
 public class Util {
 	private static String version = null;	
 	
@@ -20,4 +23,5 @@ public class Util {
 		return version;
 	}
 	
+
 }

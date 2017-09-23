@@ -26,6 +26,9 @@ public class AltaTramiteAction extends BaseAction {
         TramiteForm fForm = (TramiteForm) obtenerActionForm(mapping,request, "/back/tramite/editar");
         fForm.destroy( mapping, request );
         
+        fForm.setReadOnly("false");
+        request.setAttribute( "idReadOnly", "false" );
+        
         return mapping.findForward("success");
     }
 

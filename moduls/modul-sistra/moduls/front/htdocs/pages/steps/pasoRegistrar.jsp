@@ -246,18 +246,8 @@
 							<!--  Información firmante -->
 							<logic:equal name="formulario" property="firmar" value="true">
 								<span class="detalleDoc"> 
-									<img src="imgs/tramitacion/iconos/doc_firmar.gif"/>		
-									<logic:empty name="formulario" property="firmante">
-										<bean:message key="finalizacion.resumen.documentos.firmadopor.noComprobarFirmante"/>							
-									</logic:empty>
-									<logic:notEmpty name="formulario" property="firmante">
-										<logic:match name="formulario" property="firmante" value="#">
-											<bean:message key="finalizacion.resumen.documentos.firmadospor" arg0="<%=es.caib.util.StringUtil.replace(formulario.getFirmante(),\"#\",\" - \")%>"/>
-										</logic:match>	
-										<logic:notMatch name="formulario" property="firmante" value="#">
-										<bean:message key="finalizacion.resumen.documentos.firmadopor" arg0="<%=formulario.getFirmante()%>"/>							
-										</logic:notMatch>											
-									</logic:notEmpty>
+									<img src="imgs/tramitacion/iconos/doc_firmar.gif"/>	
+									<%=es.caib.sistra.front.util.Util.generaTextoFirma(formulario, lang) %>									
 								</span>
 							</logic:equal>
 							</span>
@@ -297,18 +287,8 @@
 								<!--  Información firmante -->
 								<logic:equal name="anexo" property="firmar" value="true">
 									<span class="detalleDoc"> 
-										<img src="imgs/tramitacion/iconos/doc_firmar.gif"/>									
-										<logic:empty name="anexo" property="firmante">
-											<bean:message key="finalizacion.resumen.documentos.firmadopor.noComprobarFirmante" arg0="<%=anexo.getFirmante()%>"/>							
-										</logic:empty>
-										<logic:notEmpty name="anexo" property="firmante">
-											<logic:match name="anexo" property="firmante" value="#">
-												<bean:message key="finalizacion.resumen.documentos.firmadospor" arg0="<%=es.caib.util.StringUtil.replace(anexo.getFirmante(),\"#\",\" - \")%>"/>
-											</logic:match>	
-											<logic:notMatch name="anexo" property="firmante" value="#">
-											<bean:message key="finalizacion.resumen.documentos.firmadopor" arg0="<%=anexo.getFirmante()%>"/>							
-											</logic:notMatch>											
-										</logic:notEmpty>
+										<img src="imgs/tramitacion/iconos/doc_firmar.gif"/>
+										<%=es.caib.sistra.front.util.Util.generaTextoFirma(anexo, lang) %>
 									</span>
 								</logic:equal>
 								

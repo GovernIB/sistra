@@ -43,14 +43,17 @@ public class EditarTramiteAction extends BaseAction{
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-    	if (isModificacion(request)){
-    		request.setAttribute( "idReadOnly", new Boolean( true ) );
+    	log.debug("Entramos en EditarTramite");
+    	
+    	TramiteForm tramiteForm = (TramiteForm) form;
+    	
+    	if (isModificacion(request)) {
+    		request.setAttribute( "idReadOnly", "true" );    	
     	}
     	
-        log.debug("Entramos en EditarTramite");
-
+    	
         ProcedimientoDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
-        TramiteForm tramiteForm = (TramiteForm) form;
+        
         Procedimiento tramite = (Procedimiento) tramiteForm.getValues();
 
         if (isCancelled(request)) {

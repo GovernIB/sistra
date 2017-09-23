@@ -1,7 +1,12 @@
 <%@ page language="java" import="es.caib.bantel.model.Procedimiento"%>
+<%@ page language="java" import="es.caib.bantel.back.util.Util"%>
+<%@ page import="org.apache.struts.Globals"%>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
+
+<bean:define id="idioma" name="<%=Globals.LOCALE_KEY%>" property="language" scope="session" type="java.lang.String" />
+
 <html:xhtml/>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.4.1.min.js"></script>
 <script type="text/javascript">
@@ -32,7 +37,7 @@
     	<html:select property="idProcedimiento">
 			<logic:iterate id="procedimiento" name="procedimientosOptions" type="es.caib.bantel.model.Procedimiento">															
 				<html:option value="<%=procedimiento.getIdentificador()%>">
-					<%=procedimiento.getIdentificador() + "-" + (procedimiento.getDescripcion().length()>60?procedimiento.getDescripcion().substring(0,60)+"...":procedimiento.getDescripcion())%>
+					<%=Util.getDescripcionProcedimientoCombo(procedimiento, idioma)%>
 				</html:option>
 			</logic:iterate>
 		</html:select>

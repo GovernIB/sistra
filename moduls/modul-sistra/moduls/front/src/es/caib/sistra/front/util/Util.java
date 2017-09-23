@@ -15,7 +15,9 @@ import es.caib.sistra.model.DocumentoFront;
 import es.caib.sistra.model.PasoTramitacion;
 import es.caib.sistra.model.TramiteFront;
 import es.caib.sistra.persistence.delegate.DelegateUtil;
+import es.caib.sistra.persistence.util.Literales;
 import es.caib.sistra.plugins.pagos.ConstantesPago;
+import es.caib.util.StringUtil;
 
 
 public class Util
@@ -264,4 +266,35 @@ public class Util
 			}
 		}
 	}
+	
+	
+	
+	public static String generaTextoFirma(DocumentoFront df, String lang) throws Exception {
+
+		String res = "";
+		String[] params = {"",""};
+		String key = "";
+		
+		if (StringUtils.isNotBlank(df.getFirmante())) {
+			if (df.getFirmante().contains("#")) {
+				params[0] = StringUtil.replace(df.getFirmante(),"#"," - ");
+				key = "firma.firmadospor";			
+			} else {
+				params[0] = df.getFirmante();
+				key = "firma.firmadopor";
+				
+				if (df.getRepresentantesFirmas().get(df.getFirmante()) != null) {
+					params[1] = (String) df.getRepresentantesFirmas().get(df.getFirmante());
+					key = "firma.firmadoRepresentadoPor";	
+				}								
+			}
+		} else {
+			key = "firma.noComprobarFirmante";			
+		}
+		
+		res = LiteralesUtil.getLiteral(lang, key, params);
+		
+		return res;
+	}
+	
 }

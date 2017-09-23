@@ -84,4 +84,14 @@ public class FirmaMock implements FirmaIntf{
 		}	
 	}
 
+	public String getNifRepresentante() {
+		// No implementado
+		return null;
+	}
+
+	public String getNombreApellidosRepresentante() {
+		// No implementado
+		return null;
+	}
+
 }

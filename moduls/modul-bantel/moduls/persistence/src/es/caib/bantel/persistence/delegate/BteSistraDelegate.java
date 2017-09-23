@@ -82,9 +82,9 @@ public class BteSistraDelegate implements StatelessDelegate {
         }
     }
     
-    public List obtenerProcedimientos() throws DelegateException {
+    public List obtenerProcedimientos(String lang) throws DelegateException {
         try {
-            return getFacade().obtenerProcedimientos();
+            return getFacade().obtenerProcedimientos(lang);
         } catch (Exception e) {
         	throw new DelegateException(e);
         }

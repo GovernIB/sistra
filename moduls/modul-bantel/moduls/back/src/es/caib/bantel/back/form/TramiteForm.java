@@ -25,6 +25,7 @@ public class TramiteForm extends TraduccionValidatorForm implements InitForm
 	
 	private String userPlain;
 	private String passPlain;
+	private String readOnly;
 	
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
 	{		
@@ -123,6 +124,14 @@ public class TramiteForm extends TraduccionValidatorForm implements InitForm
 
 	public void setUserPlain(String userPlain) {
 		this.userPlain = userPlain;
+	}
+
+	public String getReadOnly() {
+		return readOnly;
+	}
+
+	public void setReadOnly(String readOnly) {
+		this.readOnly = readOnly;
 	}
 
 }

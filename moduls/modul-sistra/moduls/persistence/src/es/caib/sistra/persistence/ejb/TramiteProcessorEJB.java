@@ -96,6 +96,7 @@ import es.caib.sistra.persistence.util.ScriptUtil;
 import es.caib.sistra.persistence.util.UtilDominios;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.firma.FirmaIntf;
+import es.caib.sistra.plugins.firma.PluginFirmaIntf;
 import es.caib.sistra.plugins.login.ConstantesLogin;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
 import es.caib.sistra.plugins.pagos.ConstantesPago;
@@ -4483,7 +4484,6 @@ public class TramiteProcessorEJB implements SessionBean {
 				}
 			}
 
-
 			// En caso de que mediante script no se haya indicado firmante y el acceso no sea anónimo
 			// el firmante será el iniciador del trámite
 			if (StringUtils.isEmpty(docInfo.getFirmante()) && CredentialUtil.NIVEL_AUTENTICACION_ANONIMO != tramiteInfo.getDatosSesion().getNivelAutenticacion()){
@@ -4523,9 +4523,19 @@ public class TramiteProcessorEJB implements SessionBean {
 			docInfo.setPendienteFirmaDelegada(DocumentoPersistentePAD.ESTADO_PENDIENTE_DELEGACION_FIRMA.equals(docPad.getDelegacionEstado()));
 			// Indicamos si la ha rechazado un delegado
 			docInfo.setRechazadaFirmaDelegada(DocumentoPersistentePAD.ESTADO_RECHAZADO_DELEGACION_FIRMA.equals(docPad.getDelegacionEstado()));
+			
+			
+			// Miramos que firmas tienen representacion
+			List firmas = (List) this.firmaDocumentos.get(docPad.getRefRDS().toString());
+			if (firmas != null) {
+				 for (Iterator it=firmas.iterator();it.hasNext();){
+		    		 FirmaIntf f = (FirmaIntf) it.next();
+		    		 if (StringUtils.isNotBlank(f.getNifRepresentante())) {
+		    			 docInfo.getRepresentantesFirmas().put(f.getNif(), f.getNombreApellidosRepresentante() + " (" + f.getNifRepresentante() + ")");
+		    		 }		    		 
+		    	 }
+			}						
 		}
-
-
 
 		if (docNivel.getTraduccion() != null)
 			docInfo.setInformacion(((TraDocumentoNivel) docNivel.getTraduccion()).getInformacion());

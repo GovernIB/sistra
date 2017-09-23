@@ -73,7 +73,7 @@ public class RecuperacionExpedienteAction extends BaseAction
 			String permitirPlazoNotifVble = "N";			
 			Procedimiento procedimiento = DelegateUtil.getTramiteDelegate().obtenerProcedimiento(exp.getIdentificadorProcedimiento());
 			if (procedimiento != null) {
-				descProc += " - " + procedimiento.getTraduccion("ca").toString();
+				descProc += " - " + procedimiento.getTraduccion(exp.getIdioma()).toString();
 				permitirSms = procedimiento.getPermitirSms();
 				permitirPlazoNotifVble = procedimiento.getPermitirPlazoNotificacionesVariable();
 			}

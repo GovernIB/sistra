@@ -3,10 +3,13 @@
 <%@ page import="es.caib.bantel.modelInterfaz.ConstantesBTE"%>
 <%@ page import="es.caib.zonaper.modelInterfaz.ConstantesZPE"%>
 <%@ page import="es.caib.xml.registro.factoria.ConstantesAsientoXML" %>
+<%@ page import="es.caib.bantel.front.util.UtilBantelFront"%>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
+
+<bean:define id="idioma" name="<%=Globals.LOCALE_KEY%>" property="language" scope="session" type="java.lang.String" />
 
 <script type="text/javascript" src="js/formularioBusquedaExpedientes.jsp"></script>
 
@@ -37,7 +40,7 @@
 				<html:option value="-1" ><bean:message key="formularioBusqueda.tramite.todos"/></html:option>
 				<logic:iterate id="procedimiento" name="procedimientos" type="es.caib.bantel.model.Procedimiento">															
 					<html:option value="<%=procedimiento.getIdentificador()%>">
-						<%=procedimiento.getIdentificador() + "-" + (procedimiento.getDescripcion().length()>60?procedimiento.getDescripcion().substring(0,60)+"...":procedimiento.getDescripcion())%>
+						<%=UtilBantelFront.getDescripcionProcedimientoCombo(procedimiento, idioma)%>
 					</html:option>
 				</logic:iterate>
 			</html:select>
