@@ -278,7 +278,7 @@ public class FormularioIncidenciaservlet extends HttpServlet
 			
 			// TODO LISTA PROCS
 			if (StringUtils.isEmpty(request.getParameter("procedimientoId")) && plgLogin.getMetodoAutenticacion(request.getUserPrincipal()) != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO) {			
-				List procedimientos = DelegatePADUtil.getPadDelegate().obtenerProcedimientosUsuario();
+				List procedimientos = DelegatePADUtil.getPadDelegate().obtenerProcedimientosUsuario(lang);
 				request.setAttribute("mostrarListaProcedimientos", "S");
 				request.setAttribute("listaProcedimientos", procedimientos);
 			}
@@ -302,7 +302,7 @@ public class FormularioIncidenciaservlet extends HttpServlet
 			
 			
 		} catch (Exception ex) {
-			// No mostramos nada
+			log.error("Error al listar procedimientos del usuario: " + ex.getMessage(), ex);
 		}			
 
 		

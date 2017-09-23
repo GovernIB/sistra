@@ -69,7 +69,9 @@
 		    <fileset dir="${etc.dir}/resources">
 		    	<include name="**/*.properties"/>
 		    </fileset> 		   
-	    </copy>    	
+	    </copy>
+		
+		
     	
     </target>
 
@@ -78,6 +80,9 @@
         <war warfile="${web.product}/5-${prj.name}-${modul}.war"
             basedir="${web.htdocs}" webxml="${etc.dir}/web.xml">
         	<classes dir="${web.classes}"/>
+        	<webinf dir="${etc.dir}">
+        		<include name="jboss-web.xml"/>
+        	</webinf>
         	<lib file="${lib.dir}/jstl.jar"/>
         	<lib file="${lib.dir}/standard.jar"/>
             <manifest>
@@ -85,7 +90,6 @@
             </manifest>
         </war>
     </target>
-
 
    <target name="main" depends="web.war" description="Construeye el war"/>
 

@@ -89,6 +89,20 @@ function validaFormulario( form )
 							<th>* <fmt:message key="incidencias.email"/></th>
 							<td><input name="email" type="text" value="" size="40"/></td>
 						</tr>
+                		<c:if test="${mostrarListaProcedimientos == 'S'}">
+						<tr>
+							<th>* <fmt:message key="incidencias.procedimiento"/></th>
+							<td>
+								<select name="procedimientoSelec">
+										<c:forEach var="procedimiento" items="${listaProcedimientos}">
+                        					<option value="${procedimiento.identificador}">
+                        					${procedimiento.descripcion}
+                        					</option>
+                    					</c:forEach>
+            					</select>
+							</td>
+						</tr>
+						</c:if> 
 						<tr>
 							<th><fmt:message key="incidencias.problemaTipo"/></th>
 							<td>
