@@ -91,7 +91,7 @@ function validaFormulario( form )
 						</tr>
                 		<c:if test="${mostrarListaProcedimientos == 'S'}">
 						<tr>
-							<th>* <fmt:message key="incidencias.procedimiento"/></th>
+							<th>* <fmt:message key="incidencias.procedimientoSelec"/></th>
 							<td>
 								<select name="procedimientoSelec">
 										<c:forEach var="procedimiento" items="${listaProcedimientos}">
