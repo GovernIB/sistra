@@ -41,7 +41,7 @@ public class SeleccionTramiteAction extends BaseAction{
        
         guardarTramite(mapping, request, idString);
 
-        request.setAttribute( "idReadOnly", new Boolean( true ) );
+        request.setAttribute( "idReadOnly", "true" );
         request.setAttribute( "codigoTramiteError", idString );
         return mapping.findForward("success");
     }

@@ -4,6 +4,8 @@ import org.apache.commons.lang.StringUtils;
 
 import es.caib.bantel.front.form.BusquedaTramitesForm;
 import es.caib.bantel.model.CriteriosBusquedaTramite;
+import es.caib.bantel.model.Procedimiento;
+import es.caib.bantel.model.TraProcedimiento;
 import es.caib.util.StringUtil;
 
 public class UtilBantelFront {
@@ -31,6 +33,17 @@ public class UtilBantelFront {
 		criterios.setUsuarioNombre( formularioBusqueda.getUsuarioNombre() );
 		criterios.setNumeroEntrada(formularioBusqueda.getNumeroEntrada());
 		return criterios;
+	}
+	
+	public static String getDescripcionProcedimientoCombo(Procedimiento procedimiento, String lang) {		
+		String id = procedimiento.getIdentificador(); 
+		String desc = ((TraProcedimiento) procedimiento.getTraduccion(lang)).getDescripcion();
+		
+		if (desc.length() > 60) {
+			desc = desc.substring(0,60) + "...";
+		}
+		
+		return id + "-" + desc;				
 	}
 	
 	

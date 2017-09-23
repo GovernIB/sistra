@@ -1046,7 +1046,7 @@ public abstract class PadFacadeEJB implements SessionBean{
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
-    public List obtenerProcedimientosUsuario() throws ExcepcionPAD{
+    public List obtenerProcedimientosUsuario(String lang) throws ExcepcionPAD{
     	try {
 	    	List procsId = new ArrayList();
 	    		
@@ -1070,7 +1070,7 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    	
 	    	// Recuperamos procedimientos de Bantel y dejamos solo los del usuario
 	    	List res = new ArrayList();
-	    	List procsBte = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimientos();
+	    	List procsBte = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimientos(lang);
 	    	for (Iterator it = procsBte.iterator(); it.hasNext();) {
 	    		ProcedimientoBTE proc = (ProcedimientoBTE) it.next();
 	    		if (procsId.contains(proc.getIdentificador())) {

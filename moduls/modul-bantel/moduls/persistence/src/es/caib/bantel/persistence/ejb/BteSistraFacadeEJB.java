@@ -207,7 +207,8 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
     	try{
 	    	Procedimiento p = DelegateUtil.getTramiteDelegate().obtenerProcedimiento(idProcedimiento);
 	    	Entidad e = DelegateUtil.getEntidadDelegate().obtenerEntidad(p.getEntidad());
-	    	ProcedimientoBTE res = convertProcedimientoToProcedimientoBTE(p, e);
+	    	// TODO Fuera de BTE solo se usa la descripcion para avisos a gestores, cuyo email es en castellano
+	    	ProcedimientoBTE res = convertProcedimientoToProcedimientoBTE(p, e, "es");
 	    	return res;
     	}catch (Exception ex){
     		throw new ExcepcionBTE("No se ha podido consultar procedimiento  " + idProcedimiento + " : " + ex.getMessage(),ex);
@@ -221,14 +222,14 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
      * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      */
-    public List obtenerProcedimientos()  throws ExcepcionBTE{
+    public List obtenerProcedimientos(String lang)  throws ExcepcionBTE{
     	try{
     		List res = new ArrayList();
 	    	List lp = DelegateUtil.getTramiteDelegate().listarProcedimientos();
 	    	for (Iterator it = lp.iterator(); it.hasNext();) {
 	    		Procedimiento p = (Procedimiento) it.next();
 	    		Entidad e = DelegateUtil.getEntidadDelegate().obtenerEntidad(p.getEntidad());
-		    	ProcedimientoBTE proc = convertProcedimientoToProcedimientoBTE(p, e);
+		    	ProcedimientoBTE proc = convertProcedimientoToProcedimientoBTE(p, e, lang);
 		    	res.add(proc);
 	    	}
 	    	return res;
@@ -269,12 +270,13 @@ public abstract class BteSistraFacadeEJB implements SessionBean  {
      * Convierte Procedimiento a ProcedimientoBTE.
      * @param p Procedimiento
      * @param e 
+     * @param lang 
      * @return ProcedimientoBTE
      */
 	private ProcedimientoBTE convertProcedimientoToProcedimientoBTE(
-			Procedimiento p, Entidad e) {
-		ProcedimientoBTE pb = new ProcedimientoBTE();
-		TraProcedimiento proc = (TraProcedimiento) p.getTraduccion("ca");
+			Procedimiento p, Entidad e, String lang) {
+		ProcedimientoBTE pb = new ProcedimientoBTE();		
+		TraProcedimiento proc = (TraProcedimiento) p.getTraduccion(lang);
 		pb.setIdentificador(p.getIdentificador());
 		pb.setDescripcion(proc.getDescripcion());
 		pb.setUnidadAdministrativa(p.getUnidadAdministrativa());

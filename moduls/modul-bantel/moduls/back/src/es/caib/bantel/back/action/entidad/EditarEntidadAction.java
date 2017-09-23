@@ -42,7 +42,7 @@ public class EditarEntidadAction extends BaseAction{
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-    	request.setAttribute( "idReadOnly", new Boolean( true ) );
+    	request.setAttribute( "idReadOnly", "true" );
     	
         log.debug("Entramos en EditarEntidadAction");
 

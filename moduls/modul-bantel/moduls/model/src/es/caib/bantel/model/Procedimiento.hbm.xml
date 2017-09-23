@@ -51,12 +51,12 @@
         <many-to-many column="GAP_CODGES" class="es.caib.bantel.model.GestorBandeja"/>
     </set>
     
-    <map name="traducciones" cascade="all" table="BTE_PROTRA">
+    <map name="traducciones" cascade="all" table="BTE_TRAPRO">
           <cache usage="read-write"/>
           <key column="PRO_IDEPRO"/>
           <index column="PRO_CODIDI" type="string" length="2"/>
           <composite-element class="es.caib.bantel.model.TraProcedimiento">
-              <property name="descripcion" length="100" column="PRO_DESC"/>
+              <property name="descripcion" column="PRO_DESC"/>
           </composite-element>
      </map>
   	

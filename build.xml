@@ -16,7 +16,7 @@
 <target name="prepare" description="Prepara los directorios de trabajo">
 	<mkdir dir="${output.dir}"/>
 	<mkdir dir="${output.dir}/etc"/>
-	<mkdir dir="${output.dir}/etc/consola"/>
+<!-- 	<mkdir dir="${output.dir}/etc/consola"/>   -->
 	<mkdir dir="${output.dir}/etc/firmaWeb"/>
 	<mkdir dir="${output.dir}/ear"/>
 	<mkdir dir="${output.dir}/lib"/>
@@ -48,7 +48,7 @@
 	<!-- <ant dir="moduls/modul-libs" target="${task}" inheritall="false"/>-->
 
 	<ant dir="moduls/llibreria-zk" target="${task}" inheritall="false"/>
-	<ant dir="moduls/modul-consola" target="${task}" inheritall="false"/>
+<!-- 	<ant dir="moduls/modul-consola" target="${task}" inheritall="false"/>  -->
 	<ant dir="moduls/modul-firmaWeb" target="${task}" inheritall="false"/>
 
 </target>
@@ -134,6 +134,7 @@
 		<zipfileset dir="${output.dir}/lib" prefix="lib"/>
 	</ear>
 
+	<!-- 
 	<copy file="${etc.dir}/consola/jboss-${jboss.version}/application.xml" todir="${output.dir}/etc/consola" overwrite="true"/>
 	<replace file="${output.dir}/etc/consola/application.xml">
 		<replacefilter token="@contextoRaizBack@" value="${contextoRaiz.back}"/>
@@ -155,10 +156,6 @@
 			<metainf dir="${etc.dir}/consola" includes="cxf/org.apache.cxf.Logger"/>
 			<fileset dir="moduls/modul-consola/output/moduls"/>
 
-			<!--
-			<zipfileset dir="${lib}/client" prefix="lib"/>
-			-->
-
 			<zipfileset dir="${lib}" prefix="lib">
 				<include name="commons-collections-*.jar"/>
 				<include name="commons-fileupload-*.jar"/>
@@ -167,7 +164,7 @@
 			</zipfileset>
 			<zipfileset dir="${output.dir}/lib" prefix="lib"/>
 	</ear>
-	
+ 	-->	
 
 	<copy file="${etc.dir}/firmaWeb/jboss-${jboss.version}/application.xml" todir="${output.dir}/etc/firmaWeb" overwrite="true"/>
 	<replace file="${output.dir}/etc/firmaWeb/application.xml">

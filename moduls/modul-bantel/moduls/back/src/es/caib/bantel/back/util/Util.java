@@ -2,6 +2,9 @@ package es.caib.bantel.back.util;
 
 import javax.naming.InitialContext;
 
+import es.caib.bantel.model.Procedimiento;
+import es.caib.bantel.model.TraProcedimiento;
+
 public class Util {
 	private static String version = null;	
 	
@@ -18,6 +21,17 @@ public class Util {
 			}		
 		}
 		return version;
+	}
+	
+	public static String getDescripcionProcedimientoCombo(Procedimiento procedimiento, String lang) {		
+		String id = procedimiento.getIdentificador(); 
+		String desc = ((TraProcedimiento) procedimiento.getTraduccion(lang)).getDescripcion();
+		
+		if (desc.length() > 60) {
+			desc = desc.substring(0,60) + "...";
+		}
+		
+		return id + "-" + desc;				
 	}
 	
 }

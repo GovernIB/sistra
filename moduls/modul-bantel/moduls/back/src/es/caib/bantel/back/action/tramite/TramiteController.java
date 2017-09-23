@@ -42,6 +42,14 @@ public class TramiteController implements Controller
 		{
             log.debug("Entramos en versionWSController");
             
+            if ("true".equals(request.getParameter("readOnly"))) {
+            	request.setAttribute("idReadOnly", "true");
+            } 
+            
+            if (request.getAttribute("idReadOnly") == null) {
+            	request.setAttribute("idReadOnly", "false");
+            }
+            
             List versiones = new ArrayList();
             List unidades= new ArrayList();
             List oficinas= new ArrayList();
@@ -53,10 +61,12 @@ public class TramiteController implements Controller
     		EntidadDelegate entidadDelegate = DelegateUtil.getEntidadDelegate();
     		listaEntidades= entidadDelegate.listarEntidades();	   
             
+    		
+    		
             // Mostramos solo para modificaciones
-            if (request.getAttribute("idReadOnly") != null) {
+            if ("true".equals(request.getAttribute("idReadOnly").toString())) {
             	
-            	// Obtenemos entidad asociada
+            	// Obtenemos entidad asociada           
             	TramiteForm formulario = ( TramiteForm ) request.getSession().getAttribute("tramiteForm");
             	Procedimiento procedimiento = ( Procedimiento ) formulario.getValues();
             	entidad = procedimiento.getEntidad();

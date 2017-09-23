@@ -59,7 +59,7 @@
 			<logic:iterate id="tramite" name="tramiteOptions" type="es.caib.bantel.model.Procedimiento">		
 				<tr>			
 					<td align="left">
-						<html:multibox property="tramites" value="<%= tramite.getIdentificador() %>"/> <bean:write name="tramite" property="identificador"/> - <bean:write name="tramite" property="descripcion"/>
+						<html:multibox property="tramites" value="<%= tramite.getIdentificador() %>"/> <bean:write name="tramite" property="identificador"/> - <bean:write name="tramite" property="traduccion.descripcion"/>
 					</td>
 				</tr>			
 			</logic:iterate>
