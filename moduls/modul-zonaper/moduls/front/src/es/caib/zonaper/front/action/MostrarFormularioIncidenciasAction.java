@@ -50,7 +50,8 @@ public class MostrarFormularioIncidenciasAction extends BaseAction
 		if (datosSesion.getNivelAutenticacion() != ConstantesLogin.LOGIN_ANONIMO) {
 			nif = datosSesion.getNifUsuario();
 			nombre = datosSesion.getNombreUsuario();
-			
+		} else {
+		
 			// Si es anonimo pasamos el tramite / procedimiento en cuestion
 			if (this.getIdPersistencia(request) != null) {
 				
@@ -74,7 +75,7 @@ public class MostrarFormularioIncidenciasAction extends BaseAction
 				}	
 			}
 			
-		}						
+		}
 		 
 		 String contextoRaiz = (String) request.getSession().getServletContext().getAttribute(Constants.CONTEXTO_RAIZ);
 		 String url = contextoRaiz + "/incidencias/formulario?";
