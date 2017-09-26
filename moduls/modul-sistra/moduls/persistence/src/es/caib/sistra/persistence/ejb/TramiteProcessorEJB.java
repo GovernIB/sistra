@@ -4490,9 +4490,21 @@ public class TramiteProcessorEJB implements SessionBean {
 				docInfo.setFirmante( tramiteInfo.getFlujoTramitacionDatosPersonaIniciador().getNif());
 			}
 
-			// Evaluamos estado firma documentos
+			// Evaluamos estado firma documentos y que firmas tienen representacion
 			if (docInfo.getEstado() == DocumentoFront.ESTADO_CORRECTO){
-				docInfo.setFirmado(this.firmaDocumentos.containsKey(docPad.getRefRDS().toString()));
+				
+				List firmas = (List) this.firmaDocumentos.get(docPad.getRefRDS().toString());
+				
+				docInfo.setFirmado(firmas != null);
+				
+				if (firmas != null) {
+					 for (Iterator it=firmas.iterator();it.hasNext();){
+			    		 FirmaIntf f = (FirmaIntf) it.next();
+			    		 if (StringUtils.isNotBlank(f.getNifRepresentante())) {
+			    			 docInfo.getRepresentantesFirmas().put(f.getNif(), f.getNombreApellidosRepresentante() + " (" + f.getNifRepresentante() + ")");
+			    		 }		    		 
+			    	 }
+				}		
 			}
 
 			// Comprobamos si te tiene que firmar de forma delegada
@@ -4523,18 +4535,7 @@ public class TramiteProcessorEJB implements SessionBean {
 			docInfo.setPendienteFirmaDelegada(DocumentoPersistentePAD.ESTADO_PENDIENTE_DELEGACION_FIRMA.equals(docPad.getDelegacionEstado()));
 			// Indicamos si la ha rechazado un delegado
 			docInfo.setRechazadaFirmaDelegada(DocumentoPersistentePAD.ESTADO_RECHAZADO_DELEGACION_FIRMA.equals(docPad.getDelegacionEstado()));
-			
-			
-			// Miramos que firmas tienen representacion
-			List firmas = (List) this.firmaDocumentos.get(docPad.getRefRDS().toString());
-			if (firmas != null) {
-				 for (Iterator it=firmas.iterator();it.hasNext();){
-		    		 FirmaIntf f = (FirmaIntf) it.next();
-		    		 if (StringUtils.isNotBlank(f.getNifRepresentante())) {
-		    			 docInfo.getRepresentantesFirmas().put(f.getNif(), f.getNombreApellidosRepresentante() + " (" + f.getNifRepresentante() + ")");
-		    		 }		    		 
-		    	 }
-			}						
+						
 		}
 
 		if (docNivel.getTraduccion() != null)
