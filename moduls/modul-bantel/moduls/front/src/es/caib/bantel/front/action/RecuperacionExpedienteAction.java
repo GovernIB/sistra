@@ -17,6 +17,7 @@ import org.apache.struts.util.MessageResources;
 import es.caib.bantel.front.Constants;
 import es.caib.bantel.front.util.MensajesUtil;
 import es.caib.bantel.model.Procedimiento;
+import es.caib.bantel.model.TraProcedimiento;
 import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.util.StringUtil;
 import es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo;
@@ -72,8 +73,9 @@ public class RecuperacionExpedienteAction extends BaseAction
 			String permitirSms = "N";
 			String permitirPlazoNotifVble = "N";			
 			Procedimiento procedimiento = DelegateUtil.getTramiteDelegate().obtenerProcedimiento(exp.getIdentificadorProcedimiento());
+			TraProcedimiento proc = (TraProcedimiento) procedimiento.getTraduccion(exp.getIdioma());
 			if (procedimiento != null) {
-				descProc += " - " + procedimiento.getTraduccion(exp.getIdioma()).toString();
+				descProc += " - " + proc.getDescripcion();
 				permitirSms = procedimiento.getPermitirSms();
 				permitirPlazoNotifVble = procedimiento.getPermitirPlazoNotificacionesVariable();
 			}

@@ -260,6 +260,16 @@ public class FormularioIncidenciaservlet extends HttpServlet
 				paramValue = getDescIncidencia(lang, paramValue);
 			}
 			
+			if ("procedimientoSelec".equals(paramName)) {
+				try{
+
+					BteSistraDelegate bte = DelegateBTEUtil.getBteSistraDelegate();
+					ProcedimientoBTE p = bte.obtenerProcedimiento(paramString.get("procedimientoSelec"), lang);	
+				} catch (Exception ex) {
+					log.error("Error accediendo a descripción del procedimiento " + paramString.get("procedimientoSelec"));			
+				}
+			}
+			
 			res += "<tr><th>" + StringEscapeUtils.escapeHtml(paramDesc) + "</th><td>" + StringEscapeUtils.escapeHtml(paramValue) +"</td></tr>";
 		}
 		return res;

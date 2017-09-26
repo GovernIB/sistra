@@ -230,14 +230,14 @@
 						<bean:define id="idProcEntrada" name="detalleExpedienteForm" property="identificadorProcedimiento" type="java.lang.String"/>							
 						<logic:iterate id="procedimiento" name="procedimientosGestor">
 							<logic:equal name="procedimiento" property="identificador" value="<%=idProcEntrada%>">
-								<bean:write name="procedimiento" property="identificador"/> - <bean:write name="procedimiento" property="descripcion"/>
+								<bean:write name="procedimiento" property="identificador"/> - <bean:write name="procedimiento" property="traduccion.descripcion"/>
 							</logic:equal>															
 						</logic:iterate>
 					</logic:present>
 					<logic:notPresent name="existeEntrada">
 						<html:select property="identificadorProcedimiento" styleClass="pc40" styleId="identificadorProcedimiento" onchange="fillProcedimiento();">
 							<logic:iterate id="procedimiento" name="procedimientosGestor">							
-								<html:option value="<%=((es.caib.bantel.model.Procedimiento)procedimiento).getIdentificador()%>" ><bean:write name="procedimiento" property="identificador"/> - <bean:write name="procedimiento" property="descripcion"/></html:option>
+								<html:option value="<%=((es.caib.bantel.model.Procedimiento)procedimiento).getIdentificador()%>" ><bean:write name="procedimiento" property="identificador"/> - <bean:write name="procedimiento" property="traduccion.descripcion"/></html:option>
 							</logic:iterate>
 						</html:select>
 					</logic:notPresent>					
