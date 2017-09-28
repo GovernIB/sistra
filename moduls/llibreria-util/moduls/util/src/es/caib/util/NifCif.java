@@ -321,7 +321,7 @@ public class NifCif {
 	 */
 	public static String normalizarDocumento(String nif){
 		String doc = null;		
-        if (nif != null) {
+        if (nif != null && !StringUtils.isEmpty(nif)) {
         	
         	// Pasamos a mayusculas y hacemos trim
         	doc = nif.toUpperCase();
