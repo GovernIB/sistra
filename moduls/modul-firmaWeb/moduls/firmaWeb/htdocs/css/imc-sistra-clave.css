@@ -1,0 +1,92 @@
+body {
+    font: 80% 'TrebuchetMS','Trebuchet MS',Arial,Helvetica,sans-serif;
+    color: #666;
+    padding: 1em;
+    background-color: #fff;
+}
+
+h3 {
+    font-size: 1.4em;
+    font-weight: bold;
+    text-align: center;
+    padding: .2em 0;
+    margin: 0;
+}
+
+form {
+	text-align: center;
+}
+
+form table { width: 100%; max-width: 25em; margin: 0 auto; border-collapse: collapse; empty-cells: show; }
+
+form table td { display: block; width: 100%; font-size: 1em; }
+form table td:first-child { width: 100%; text-align: center; font-size: .8em; padding-bottom: 1em; }
+
+form table table { border: 1px solid #f2f2f2; }
+form table table td { display: table-cell; line-height: 1.3em; }
+
+form table table tr td:first-child { width: 1em; vertical-align: top; padding: .5em; }
+form table table tr td:not(:first-child) { padding: .3em; }
+
+form table table tr b { font-size: .9em; }
+form table table tr i { font-size: .9em; }
+form table table tr small { font-size: .8em; }
+
+.radio, .checkbox {
+    padding-left: .7em;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+    margin: 0;
+}
+
+button {
+	display: inline-block;
+	text-align: left;
+	/*font: 1.5em 'TrebuchetMS','Trebuchet MS',Arial,Helvetica,sans-serif;*/
+	font-variant: small-caps;
+	line-height: 1em;
+	padding: 1em;
+	text-shadow: none;
+	border: none;
+	border-radius: 0;
+	-moz-transition: all .2s linear;
+	-webkit-transition: all .2s linear;
+	-ms-transition: all .2s linear;
+	-o-transition: all .2s linear;
+	-kthtml-transition: all .2s linear;
+	transition: all .2s linear;
+}
+
+button.btn {
+	font: 1.3em 'TrebuchetMS','Trebuchet MS',Arial,Helvetica,sans-serif;
+	text-shadow: none;
+	padding: .5em 1em;
+	background: none;
+	background-color: #FFEACC;
+	border: none;
+	border-radius: 0;
+}
+
+button.btn-primary {
+	color: #fff;
+	padding: .5em 1em;
+	background-color: #88c684;
+	background-image: url(../imgs/nav/bt-finalitza-icon.png), url(../imgs/nav/bt-abandona-cercle.png);
+	background-repeat: no-repeat, no-repeat;
+	background-position: 83% 50%, 86% -2em;
+	text-shadow: none;
+	border: none;
+	border-radius: 0;
+}
+
+button.btn:hover, button.btn:focus {
+	background: none;
+	background-color: #e3bd86;
+	background-position: 83% 50%, 86% 50%;
+}
+
+button.btn-primary:hover, button.btn-primary:focus {
+	background-color: #5cb057;
+}
