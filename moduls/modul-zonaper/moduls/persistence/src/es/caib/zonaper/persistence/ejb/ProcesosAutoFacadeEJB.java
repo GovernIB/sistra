@@ -802,7 +802,14 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 
 			MensajeEnvioEmail mensEmail = new MensajeEnvioEmail();
 			
-			String[] dest = proc.getEmailIncidencias().split(";");
+			String emailsInc = proc.getEmailIncidencias();
+			String [] dest;
+			
+			if (!StringUtils.isEmpty(emailsInc)){
+				dest = emailsInc.split(";");
+			} else {
+				dest = new String[0];
+			}
 			
 			mensEmail.setDestinatarios(dest);
 			mensEmail.setTitulo(proc.getDescripcion() + ": existen trámites pendientes de finalizar con pagos realizados");
