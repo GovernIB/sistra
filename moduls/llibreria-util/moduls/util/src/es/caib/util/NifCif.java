@@ -325,7 +325,7 @@ public class NifCif {
         	
         	// Pasamos a mayusculas y hacemos trim
         	doc = nif.toUpperCase();
-        	doc = nif.trim();
+        	doc = doc.trim();
         	
         	if (Pattern.matches(SIN_PASAPORTE_PREFIX, doc.substring(0, 4))) {
             	// TODO PASAPORTE Ver si es necesaria alguna normalizacion
