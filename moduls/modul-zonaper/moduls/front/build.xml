@@ -45,6 +45,7 @@
             <include name="*.jar"/>
         </fileset>
     	<fileset dir="${lib.dir}/client">
+    	    <include name="bantel-client.jar"/>
     		<include name="sistra-client.jar"/>
         	<include name="redose-client.jar"/>
     		<include name="audita-client.jar"/>

@@ -683,6 +683,25 @@ public class StringUtil {
 	    	return  StringUtils.isNotBlank(usuario) && Pattern.matches(PATRON_USUARIO, usuario);
 	    }
 	    
-	    
+
+	    /**
+	     * Genera nombre fichero justificante.
+	     * @param nr Num reg
+	     * @param dr Fec reg
+	     * @return Nombre fichero
+	     * @throws Exception
+	     */
+	    public static  String generarNombreFicheroJustificante(String lang, String nr, Date dr)
+				throws Exception {
+			String nomfic = "Justificant_";
+			if ("es".equals(lang))  {
+				nomfic = "Justificante_";
+			}
+			nomfic = StringUtil.normalizarNombreFichero(nomfic +
+					StringUtil.replace(nr,"/","-") + "_" +
+					StringUtil.fechaACadena(dr, StringUtil.FORMATO_REGISTRO) +
+					".pdf");
+			return nomfic;
+		}
 	    
 }

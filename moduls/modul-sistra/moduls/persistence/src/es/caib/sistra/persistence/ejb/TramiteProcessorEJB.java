@@ -104,6 +104,7 @@ import es.caib.sistra.plugins.pagos.EstadoSesionPago;
 import es.caib.sistra.plugins.pagos.PluginPagosIntf;
 import es.caib.sistra.plugins.pagos.SesionPago;
 import es.caib.sistra.plugins.pagos.SesionSistra;
+import es.caib.sistra.plugins.regtel.PluginRegistroIntf;
 import es.caib.sistra.plugins.sms.PluginSmsIntf;
 import es.caib.util.CredentialUtil;
 import es.caib.util.DataUtil;
@@ -2884,85 +2885,27 @@ public class TramiteProcessorEJB implements SessionBean {
     		boolean tramitacionPresencial = tramiteInfo.getTipoTramitacion() == ConstantesSTR.TIPO_TRAMITACION_PRESENCIAL ||
 			( tramiteInfo.getTipoTramitacion() == ConstantesSTR.TIPO_TRAMITACION_DEPENDIENTE &&
 			  tramiteInfo.getTipoTramitacionDependiente() == ConstantesSTR.TIPO_TRAMITACION_PRESENCIAL);
-
-    		// Comprobamos si mostramos justificante standard o formulario justificante
-    		// y en el caso de justificante standard si se deben anexar al justificante
-    		String identificadorFJ = null;
-    		int instanciaFJ=1;
-    		List formsJustif = new ArrayList();
-    		for (Iterator it=this.tramiteInfo.getFormularios().iterator();it.hasNext();){
-				DocumentoFront doc = (DocumentoFront) it.next();
-
-				// Formulario justificante (nos quedamos con el primero)
-				if (identificadorFJ == null && doc.getEstado() == DocumentoFront.ESTADO_CORRECTO && doc.isFormularioJustificante()){
-					identificadorFJ=doc.getIdentificador();
-					instanciaFJ=doc.getInstancia();
-				}
-
-				// Formularios a anexar al justificante standard
-				if (doc.isFormularioAnexarJustificante() && doc.getEstado() == DocumentoFront.ESTADO_CORRECTO) {
-					formsJustif.add(doc.getIdentificador() + "-" + doc.getInstancia());
-				}
-
+    		
+    		
+    		// Si es tramitacion presencial mostramos justificante generado por Sistra.     		
+    		byte[] content = null;
+    		if (tramitacionPresencial) {
+    			content = generarJustificante(true);
+    		} else {
+    			// Si es tramite telematico intentamos mostrar justificante generado por Registro
+    			PluginRegistroIntf plgRegistro = PluginFactory.getInstance().getPluginRegistro();
+    			content = plgRegistro.obtenerJustificanteRegistroEntrada(tramiteInfo.getEntidad(), resultadoRegistro.getNumero(), resultadoRegistro.getFecha());
+    			// Si registro no muestra justificante, mostramos el de la plataforma
+    			if (content == null) {
+    				content = generarJustificante(false);
+    			}
     		}
-
-    		String nomfic=null;
-    		byte[] content=null;
-    		RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
-    		if (identificadorFJ==null){
-    			// Mostramos justificante standard
-	    		ReferenciaRDS refRds = this.resultadoRegistro.getRdsJustificante();
-	    		DocumentoRDS docRds = rds.consultarDocumentoFormateado(refRds,this.datosSesion.getLocale().getLanguage());
-	    		nomfic=docRds.getNombreFichero();
-	    		content=docRds.getDatosFichero();
-
-	    		// En caso de que la tramitacion sea telematica y que el justificante sea estandar comprobamos si hay que anexar formularios al justificante.
-	    		if (!tramitacionPresencial && formsJustif.size() > 0) {
-	    			InputStream [] pdfIn = new ByteArrayInputStream[formsJustif.size() + 1];
-	    			pdfIn[0] = new ByteArrayInputStream(content);
-	    			int i = 1;
-	    			for (Iterator it = formsJustif.iterator(); it.hasNext();) {
-	    				String refDoc = (String) it.next();
-	    				DocumentoPersistentePAD docPAD = (DocumentoPersistentePAD) this.tramitePersistentePAD.getDocumentos().get(refDoc);
-	    				DocumentoRDS docRdsForJus = rds.consultarDocumentoFormateado(docPAD.getRefRDS(),this.datosSesion.getLocale().getLanguage());
-	    				pdfIn[i] = new ByteArrayInputStream(docRdsForJus.getDatosFichero());
-	    				i++;
-	    			}
-	    			ByteArrayOutputStream bos = new ByteArrayOutputStream(8192);
-	    			UtilPDF.concatenarPdf(bos, pdfIn);
-	    			content = bos.toByteArray();
-	    		}
-
-    		}else{
-    			// Consultamos documento formateado al RDS generando copias para interesado y administracion
-        		DocumentoPersistentePAD docPAD = (DocumentoPersistentePAD) this.tramitePersistentePAD.getDocumentos().get(identificadorFJ + "-" + instanciaFJ);
-        		ReferenciaRDS refRds = docPAD.getRefRDS();
-
-        		DocumentoRDS docRds;
-
-        		// En caso de que no sea completamente telematico mostramos 2 copias
-        		if (tramitacionPresencial)
-        		{
-        			docRds = rds.consultarDocumentoFormateadoCopiasInteresadoAdmon(refRds,this.datosSesion.getLocale().getLanguage());
-        		}else{
-        			docRds = rds.consultarDocumentoFormateado(refRds,this.datosSesion.getLocale().getLanguage());
-        		}
-        		nomfic=docRds.getNombreFichero();
-        		content = docRds.getDatosFichero();
-    		}
+    		    		
 
     		// Devolvemos nombre y datos del fichero
     		HashMap param = new HashMap();
     		// Normalizamos nombre justificante
-    		// param.put("nombrefichero",nomfic);
-    		nomfic = "Justificant_";
-    		if ("es".equals(this.datosSesion.getLocale().getLanguage()))  {
-    			nomfic = "Justificante_";
-    		}
-    		nomfic = StringUtil.normalizarNombreFichero(nomfic +
-    				StringUtil.replace(resultadoRegistro.getNumero(),"/","-") + "_" +
-    				StringUtil.fechaACadena(resultadoRegistro.getFecha(), StringUtil.FORMATO_REGISTRO) +
-    				".pdf");
+    		String nomfic = StringUtil.generarNombreFicheroJustificante(this.datosSesion.getLocale().getLanguage(), resultadoRegistro.getNumero(), resultadoRegistro.getFecha());
     		param.put("nombrefichero",nomfic);
     		param.put("datosfichero",content);
     		return this.generarRespuestaFront(null,param);
@@ -2981,6 +2924,77 @@ public class TramiteProcessorEJB implements SessionBean {
     	}
 
     }
+
+    
+    // Genera justificante prereregistro
+	private byte[] generarJustificante(boolean tramitacionPresencial) throws Exception {
+		// Comprobamos si mostramos justificante standard o formulario justificante
+		// y en el caso de justificante standard si se deben anexar al justificante
+		String identificadorFJ = null;
+		int instanciaFJ=1;
+		List formsJustif = new ArrayList();
+		for (Iterator it=this.tramiteInfo.getFormularios().iterator();it.hasNext();){
+			DocumentoFront doc = (DocumentoFront) it.next();
+
+			// Formulario justificante (nos quedamos con el primero)
+			if (identificadorFJ == null && doc.getEstado() == DocumentoFront.ESTADO_CORRECTO && doc.isFormularioJustificante()){
+				identificadorFJ=doc.getIdentificador();
+				instanciaFJ=doc.getInstancia();
+			}
+
+			// Formularios a anexar al justificante standard
+			if (doc.isFormularioAnexarJustificante() && doc.getEstado() == DocumentoFront.ESTADO_CORRECTO) {
+				formsJustif.add(doc.getIdentificador() + "-" + doc.getInstancia());
+			}
+
+		}
+
+		String nomfic=null;
+		byte[] content=null;
+		RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
+		if (identificadorFJ==null){
+			// Mostramos justificante standard
+    		ReferenciaRDS refRds = this.resultadoRegistro.getRdsJustificante();
+    		DocumentoRDS docRds = rds.consultarDocumentoFormateado(refRds,this.datosSesion.getLocale().getLanguage());
+    		nomfic=docRds.getNombreFichero();
+    		content=docRds.getDatosFichero();
+
+    		// En caso de que la tramitacion sea telematica y que el justificante sea estandar comprobamos si hay que anexar formularios al justificante.
+    		if (!tramitacionPresencial && formsJustif.size() > 0) {
+    			InputStream [] pdfIn = new ByteArrayInputStream[formsJustif.size() + 1];
+    			pdfIn[0] = new ByteArrayInputStream(content);
+    			int i = 1;
+    			for (Iterator it = formsJustif.iterator(); it.hasNext();) {
+    				String refDoc = (String) it.next();
+    				DocumentoPersistentePAD docPAD = (DocumentoPersistentePAD) this.tramitePersistentePAD.getDocumentos().get(refDoc);
+    				DocumentoRDS docRdsForJus = rds.consultarDocumentoFormateado(docPAD.getRefRDS(),this.datosSesion.getLocale().getLanguage());
+    				pdfIn[i] = new ByteArrayInputStream(docRdsForJus.getDatosFichero());
+    				i++;
+    			}
+    			ByteArrayOutputStream bos = new ByteArrayOutputStream(8192);
+    			UtilPDF.concatenarPdf(bos, pdfIn);
+    			content = bos.toByteArray();
+    		}
+
+		}else{
+			// Consultamos documento formateado al RDS generando copias para interesado y administracion
+    		DocumentoPersistentePAD docPAD = (DocumentoPersistentePAD) this.tramitePersistentePAD.getDocumentos().get(identificadorFJ + "-" + instanciaFJ);
+    		ReferenciaRDS refRds = docPAD.getRefRDS();
+
+    		DocumentoRDS docRds;
+
+    		// En caso de que no sea completamente telematico mostramos 2 copias
+    		if (tramitacionPresencial)
+    		{
+    			docRds = rds.consultarDocumentoFormateadoCopiasInteresadoAdmon(refRds,this.datosSesion.getLocale().getLanguage());
+    		}else{
+    			docRds = rds.consultarDocumentoFormateado(refRds,this.datosSesion.getLocale().getLanguage());
+    		}
+    		nomfic=docRds.getNombreFichero();
+    		content = docRds.getDatosFichero();
+		}
+		return content;
+	}
 
 
     /**
