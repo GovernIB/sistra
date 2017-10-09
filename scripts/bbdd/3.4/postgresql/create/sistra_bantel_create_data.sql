@@ -1,0 +1,5 @@
+-- v3.3.4
+-- MODIFICAR SEGUN ENTIDAD
+insert into BTE_ENTIDAD (ENT_IDEENT, ENT_NOMBRE) values ('XXXX','NOMBRE ENTIDAD');
+update BTE_PROAPL set TAP_IDEENT = 'XXXX';
+commit;
