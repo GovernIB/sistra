@@ -135,7 +135,7 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
     	try
     	{
     		// Solo puede acceder el propio usuario, el usuario auto o un usuario delegado
-    		Principal sp = this.ctx.getCallerPrincipal();
+    		/*Principal sp = this.ctx.getCallerPrincipal();
     		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
     		if (!this.ctx.isCallerInRole(roleGestor) && !this.ctx.isCallerInRole(roleDelegacion) && !this.ctx.isCallerInRole(roleAuto) && ! plgLogin.getNif(sp).equalsIgnoreCase(nif)){
     			// Comprobamos si es un delegado de la entidad
@@ -144,7 +144,7 @@ public abstract class PadAplicacionFacadeEJB extends HibernateEJB {
     				throw new Exception("Solo puede acceder el propio usuario, un delegado, el usuario auto o un usuario con rol delegación o role gestor");
     		}
     		
-    		}
+    		}*/
     		Persona persona = this.obtenerDatosPersonaPorDocumentoIdentificacionLegal( nif );
     		return personaToPersonaPAD( persona );
     	}
