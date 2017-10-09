@@ -1,7 +1,7 @@
 package es.caib.sistra.front.controller;
 
 import java.io.ByteArrayInputStream;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -15,15 +15,13 @@ import es.caib.sistra.front.util.InstanciaManager;
 import es.caib.sistra.model.AsientoCompleto;
 import es.caib.sistra.persistence.delegate.InstanciaDelegate;
 import es.caib.xml.ConstantesXML;
-import es.caib.xml.datospropios.factoria.impl.DatosPropios;
 import es.caib.xml.datospropios.factoria.FactoriaObjetosXMLDatosPropios;
-import es.caib.xml.datospropios.factoria.impl.Instrucciones;
 import es.caib.xml.datospropios.factoria.ServicioDatosPropiosXML;
-import es.caib.xml.registro.factoria.ConstantesAsientoXML;
+import es.caib.xml.datospropios.factoria.impl.DatosPropios;
+import es.caib.xml.datospropios.factoria.impl.Instrucciones;
 import es.caib.xml.registro.factoria.FactoriaObjetosXMLRegistro;
 import es.caib.xml.registro.factoria.ServicioRegistroXML;
 import es.caib.xml.registro.factoria.impl.AsientoRegistral;
-import es.caib.xml.registro.factoria.impl.DatosInteresado;
 
 public class FinalizacionController extends BaseController
 {
@@ -47,6 +45,8 @@ public class FinalizacionController extends BaseController
 		// Obtenemos instrucciones de finalizacion
 		request.setAttribute( "instrucciones", obtenerInstrucciones( resultado ) );
 
+		// Obtener lista documentos
+		request.setAttribute( "documentacion", obtenerDocumentacion(resultado ) );
 		
 		// Comprobamos si se va a redirigir a la zona personal
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request.getParameter("ID_INSTANCIA"), request );
@@ -71,22 +71,13 @@ public class FinalizacionController extends BaseController
 		
 	}
 	
-	public DatosInteresado obtenerRepresentante( AsientoCompleto asientoCompleto ) throws Exception
-	 {
-    	FactoriaObjetosXMLRegistro factoriaRT = ServicioRegistroXML.crearFactoriaObjetosXML();
+	public List obtenerDocumentacion(AsientoCompleto asientoCompleto ) throws Exception {
+		FactoriaObjetosXMLRegistro factoriaRT = ServicioRegistroXML.crearFactoriaObjetosXML();
 		AsientoRegistral asientoRegistral = factoriaRT.crearAsientoRegistral (
 				new ByteArrayInputStream(asientoCompleto.getAsiento().getBytes(ConstantesXML.ENCODING)));
-		
-		DatosInteresado datosInteresado = null;
-		for ( Iterator it = asientoRegistral.getDatosInteresado().iterator(); it.hasNext(); )
-		{
-			datosInteresado = ( DatosInteresado ) it.next();
-			if ( ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTANTE.equals( datosInteresado.getTipoInteresado() ) )
-			{
-				return datosInteresado;
-			}
-		}
-		return datosInteresado;
-	 }
+		return asientoRegistral.getDatosAnexoDocumentacion();			
+	}
+	
+	
 
 }

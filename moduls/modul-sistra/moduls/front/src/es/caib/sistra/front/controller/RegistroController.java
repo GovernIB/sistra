@@ -1,5 +1,6 @@
 package es.caib.sistra.front.controller;
 
+import java.io.ByteArrayInputStream;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -19,7 +20,12 @@ import es.caib.sistra.model.TramiteFront;
 import es.caib.sistra.plugins.login.ConstantesLogin;
 import es.caib.util.ConvertUtil;
 import es.caib.util.StringUtil;
+import es.caib.xml.ConstantesXML;
 import es.caib.xml.datospropios.factoria.impl.Instrucciones;
+import es.caib.xml.registro.factoria.ConstantesAsientoXML;
+import es.caib.xml.registro.factoria.FactoriaObjetosXMLRegistro;
+import es.caib.xml.registro.factoria.ServicioRegistroXML;
+import es.caib.xml.registro.factoria.impl.AsientoRegistral;
 import es.caib.xml.registro.factoria.impl.DatosInteresado;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 
@@ -234,6 +240,23 @@ public class RegistroController extends FinalizacionController
 		
 	}
 	
+	public DatosInteresado obtenerRepresentante( AsientoCompleto asientoCompleto ) throws Exception
+	 {
+		FactoriaObjetosXMLRegistro factoriaRT = ServicioRegistroXML.crearFactoriaObjetosXML();
+		AsientoRegistral asientoRegistral = factoriaRT.crearAsientoRegistral (
+				new ByteArrayInputStream(asientoCompleto.getAsiento().getBytes(ConstantesXML.ENCODING)));
+		
+		DatosInteresado datosInteresado = null;
+		for ( Iterator it = asientoRegistral.getDatosInteresado().iterator(); it.hasNext(); )
+		{
+			datosInteresado = ( DatosInteresado ) it.next();
+			if ( ConstantesAsientoXML.DATOSINTERESADO_TIPO_REPRESENTANTE.equals( datosInteresado.getTipoInteresado() ) )
+			{
+				return datosInteresado;
+			}
+		}
+		return datosInteresado;
+	 }
 	
 	
 }

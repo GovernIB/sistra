@@ -170,5 +170,31 @@ public interface PluginRegistroIntf extends PluginSistraIntf {
 	 * @param oficina Código oficina
 	 */
 	public String obtenerDescripcionSelloOficina(char tipo, String entidad, String oficina);
-		
+	
+	/**
+	 * Obtener justificante registro entrada (PDF)
+	 * <br/>
+	 * Si no tiene esta funcionalidad deberá devolver null. En ese caso la plataforma muestra uno propio.   
+	 * 
+	 * @param entidad Entidad.
+	 * @param numeroRegistro Numero de registro.
+	 * @param fechaRegistro Fecha de registro
+	 * @return content
+	 * @throws Exception
+	 */
+	public byte[] obtenerJustificanteRegistroEntrada(String entidad, String numeroRegistro, Date fechaRegistro) throws Exception;
+	
+	/**
+	 * Obtener justificante registro salida (PDF)
+	 * <br/>
+	 * Si no tiene esta funcionalidad deberá devolver null. En ese caso la plataforma muestra uno propio.   
+	 * 
+	 * @param entidad Entidad.
+	 * @param numeroRegistro Numero de registro.
+	 * @param fechaRegistro Fecha de registro
+	 * @return content
+	 * @throws Exception
+	 */
+	public byte[] obtenerJustificanteRegistroSalida(String entidad, String numeroRegistro, Date fechaRegistro) throws Exception;
+	
 }

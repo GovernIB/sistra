@@ -16,6 +16,9 @@ import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
+import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.regtel.PluginRegistroIntf;
+import es.caib.util.StringUtil;
 
 /**
  * @struts.action
@@ -40,15 +43,26 @@ public class MostrarJustificanteAction extends BaseAction
 		
 		TramiteBandeja t = tramiteDelegate.obtenerTramiteBandeja(entrada.getCodigo());
 		
-		ReferenciaRDS refRDS = new ReferenciaRDS();
-		refRDS.setCodigo(t.getCodigoRdsJustificante().longValue());
-		refRDS.setClave(t.getClaveRdsJustificante());
+		byte[] content = null;
 		
-		RdsDelegate rdsDelegate = DelegateRDSUtil.getRdsDelegate();
-		DocumentoRDS documentoRDS = rdsDelegate.consultarDocumentoFormateado(refRDS,t.getIdioma());
+		// Intentamos obtener justificante del Registro
+		PluginRegistroIntf plgRegistro = PluginFactory.getInstance().getPluginRegistro();
+		content = plgRegistro.obtenerJustificanteRegistroEntrada(t.getProcedimiento().getEntidad(), t.getNumeroRegistro(), t.getFechaRegistro());
+		// Si no se puede obtener, se muestra el de la plataforma
+		if (content == null) {
+			ReferenciaRDS refRDS = new ReferenciaRDS();
+			refRDS.setCodigo(t.getCodigoRdsJustificante().longValue());
+			refRDS.setClave(t.getClaveRdsJustificante());
+			
+			RdsDelegate rdsDelegate = DelegateRDSUtil.getRdsDelegate();
+			DocumentoRDS documentoRDS = rdsDelegate.consultarDocumentoFormateado(refRDS,t.getIdioma());
+			
+			content = documentoRDS.getDatosFichero();
+		}
 		
-		request.setAttribute( Constants.NOMBREFICHERO_KEY, documentoRDS.getNombreFichero() );		
-		request.setAttribute( Constants.DATOSFICHERO_KEY, documentoRDS.getDatosFichero());
+		String nomFic = StringUtil.generarNombreFicheroJustificante(t.getIdioma(), t.getNumeroRegistro(), t.getFechaRegistro());
+		request.setAttribute( Constants.NOMBREFICHERO_KEY, nomFic );					
+		request.setAttribute( Constants.DATOSFICHERO_KEY, content);
 		
 		return mapping.findForward("success");		
     }
