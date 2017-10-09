@@ -40,25 +40,25 @@ public class TramiteForm extends TraduccionValidatorForm implements InitForm
         {
         	Procedimiento tramite = ( Procedimiento ) this.getValues();
         	
+        	TraProcedimiento traPro = (TraProcedimiento)tramite.getTraduccion("es");
+        	if (traPro != null ){
+        		if(StringUtils.isEmpty(traPro.getDescripcion())){
+        			errors.add("values.traduccion", new ActionError("errors.descripcion.vacio",MensajesUtil.getValue("es")));
+        		}
+        	}else{
+        		errors.add("values.traduccion", new ActionError("errors.descripcion.vacio", MensajesUtil.getValue("es") ));
+        	}
+        	traPro = (TraProcedimiento)tramite.getTraduccion("ca");
+        	if(traPro != null){
+        		if(StringUtils.isEmpty(traPro.getDescripcion())){
+        			errors.add("values.traduccion", new ActionError("errors.descripcion.vacio", MensajesUtil.getValue("ca") ));
+        		}
+        	}else{
+        		errors.add("values.traduccion", new ActionError("errors.descripcion.vacio", MensajesUtil.getValue("ca") ));
+        	}
+        	
         	// Comprobamos restricciones
-        	if (tramite.getIntervaloInforme() != null && tramite.getIntervaloInforme().longValue() > 0){
-        		
-        		TraProcedimiento traPro = (TraProcedimiento)tramite.getTraduccion("es");
-            	if (traPro != null ){
-            		if(StringUtils.isEmpty(traPro.getDescripcion())){
-            			errors.add("values.traduccion", new ActionError("errors.descripcion.vacio",MensajesUtil.getValue("es")));
-            		}
-            	}else{
-            		errors.add("values.traduccion", new ActionError("errors.descripcion.vacio", MensajesUtil.getValue("es") ));
-            	}
-            	traPro = (TraProcedimiento)tramite.getTraduccion("ca");
-            	if(traPro != null){
-            		if(StringUtils.isEmpty(traPro.getDescripcion())){
-            			errors.add("values.traduccion", new ActionError("errors.descripcion.vacio", MensajesUtil.getValue("ca") ));
-            		}
-            	}else{
-            		errors.add("values.traduccion", new ActionError("errors.descripcion.vacio", MensajesUtil.getValue("ca") ));
-            	}
+        	if (tramite.getPeriodica() == 'S'){
 
         		// Url
         		if ( (tramite.getTipoAcceso() == Procedimiento.ACCESO_EJB && tramite.getLocalizacionEJB() == Procedimiento.EJB_REMOTO) 

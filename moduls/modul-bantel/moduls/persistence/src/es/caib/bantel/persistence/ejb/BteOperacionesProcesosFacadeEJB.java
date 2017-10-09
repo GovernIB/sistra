@@ -98,7 +98,7 @@ public abstract class BteOperacionesProcesosFacadeEJB implements SessionBean  {
 	    	de.setProcesadasError(tbd.obtenerTotalEntradasProcedimiento(procedimiento.getIdentificador(),ConstantesBTE.ENTRADA_PROCESADA_ERROR,desde,hasta));
 	    	de.setNoProcesadas(tbd.obtenerTotalEntradasProcedimiento(procedimiento.getIdentificador(),ConstantesBTE.ENTRADA_NO_PROCESADA,desde,hasta));
 	    	
-	    	if (procedimiento.getIntervaloInforme() != null && procedimiento.getIntervaloInforme().longValue() > 0){
+	    	if (procedimiento.getPeriodica() == 'S'){
 	    		de.setProcesadasErrorPendientes(tbd.obtenerTotalEntradasProcedimiento(procedimiento.getIdentificador(),ConstantesBTE.ENTRADA_PROCESADA_ERROR,null,hasta));
 	    		de.setNoProcesadasPendientes(tbd.obtenerTotalEntradasProcedimiento(procedimiento.getIdentificador(),ConstantesBTE.ENTRADA_NO_PROCESADA,null,desde));
 	    	}

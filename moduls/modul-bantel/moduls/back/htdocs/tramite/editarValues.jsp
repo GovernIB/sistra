@@ -36,6 +36,33 @@
         //var url = '<html:rewrite page="/arbolServicios.do" />';
         obrir(url, "Arbol", 540, 400);
      }
+    
+    function lanzaAviso(){
+    	var procedimiento = $("#identificadorProcedimiento").val();
+
+			var mapVars = {};
+			mapVars["proc"] = procedimiento;	
+    	
+		if(confirm ( "<bean:message key='tramite.lanzarAviso.confirmacion' />" )){
+			$.ajax({
+	    		type: "POST",
+	    		url: "lanzaAviso.do",
+	    		contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+	    		data: mapVars,
+	    		dataType: "json",
+	    		error: function() {
+	    			alert("Error enviando datos al servidor. Intentelo de nuevo.");					
+	    		},
+	    		success: function(json) {					
+	    			if (json.error == "") {
+	    	 			alert("<bean:message key="tramite.lanzarAviso.entradasAvisadas"/>");
+	    	 		} else {
+	    	 	 		alert(json.error);
+	    	 		}						
+	    		}
+	    	});
+		}
+    }
      
      // -->
 </script>
@@ -141,15 +168,16 @@
 	<td class="separador" colspan="2"><bean:message key="tramite.avisoBackOffice"/></td>
 </tr>
 <tr>
-    <td class="label"><bean:message key="tramite.intervaloInforme"/></td>
-    <td class="input">
-    	<html:text styleClass="textCorto" tabindex="10" property="values.intervaloInforme" maxlength="2"/>
-    	<i><bean:message key="tramite.intervaloInformeNulo"/></i>
-    </td>
+	<td class="label"><bean:message key="tramite.periodica"/></td>
+    <td class="input">Si<html:radio property="values.periodica" value="S"/> No <html:radio property="values.periodica" value="N"/></td>
 </tr>
 <tr>
     <td class="label"><bean:message key="tramite.inmediata"/></td>
     <td class="input">Si<html:radio property="values.inmediata" value="S"/> No <html:radio property="values.inmediata" value="N"/></td>
+</tr>
+<tr>
+	<td class="label"><bean:message key="tramite.forzarAviso"/></td>
+	<td class="input"><input type="button" onclick="lanzaAviso();" value="<bean:message key="tramite.lanzarAviso.value"/>"  class="button"/></td>            
 </tr>
 <tr>
     <td class="label"><bean:message key="tramite.gestionExpedientes.permitirAvisosNotificaciones"/></td>

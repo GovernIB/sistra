@@ -1,5 +1,6 @@
 package es.caib.bantel.persistence.ejb;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -71,6 +72,7 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 	private static Log log = LogFactory.getLog(BteProcesosFacadeEJB.class);
 	private long intervaloSeguridad=0;
 	private int maximoDiasAviso=0;
+	private long intervaloAviso=30;
 		
 	/**
      * @ejb.create-method
@@ -87,16 +89,31 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 		}catch(Exception ex){
 			log.error("Excepcion obteniendo parametro de maximo dias aviso. Se tomara valor="+maximoDiasAviso,ex );
 		}
+		try{			 
+			intervaloAviso =  Long.parseLong(DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("avisoPeriodico.intervaloAviso"));			
+		}catch(Exception ex){
+			log.error("Excepcion obteniendo parametro de intervalo de aviso. Se tomara valor="+intervaloAviso,ex );
+		}
 		
 	}
 	
-    /**
+	/**
      * Realiza proceso de aviso de nuevas entradas a BackOffices
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked = "true"
      */
-    public void avisoBackOffices()  throws ExcepcionBTE{
+	public void avisoBackOffices()  throws ExcepcionBTE{
+		avisoBackOffices(null);
+	}
+	
+	/**
+     * Realiza proceso de aviso de nuevas entradas a BackOffices
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked = "true"
+     */
+    public void avisoBackOffices(String idProcedimiento)  throws ExcepcionBTE{
     	
     	LoginContext lc = null;
     	
@@ -111,10 +128,17 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
 			lc = new LoginContext("client-login", handler);
 			lc.login();
+			
+			List procedimientos =  new ArrayList();
+			ProcedimientoDelegate td = DelegateUtil.getTramiteDelegate();
     		
-	    	// Recuperamos lista de procedimientos
-	    	ProcedimientoDelegate td = DelegateUtil.getTramiteDelegate();
-	    	List procedimientos = td.listarProcedimientos();
+	    	if (idProcedimiento == null){
+	    		// Recuperamos lista de procedimientos
+		    	procedimientos = td.listarProcedimientos();
+	    	} else {
+	    		procedimientos.add(td.obtenerProcedimiento(idProcedimiento));
+	    	}
+			
 	    		    	
 	    	// Para los tramites que tengan configurado el proceso de aviso consultamos nuevas entradas (aplicando intervalo de seguridad para evitar
 	    	// solapamiento entre aviso inmediato y periodico)
@@ -129,12 +153,15 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
 	    	for (Iterator it = procedimientos.iterator();it.hasNext();){
 	    		Procedimiento procedimiento =  (Procedimiento) it.next();
 	    		
-	    		// Si no tiene un intervalo positivo no esta habilitado el proceso de aviso para el trámite 
-	    		if (procedimiento.getIntervaloInforme() == null || procedimiento.getIntervaloInforme().intValue() <= 0) continue;
-	    		
-	    		// Comprobamos si se ha cumplido el intervalo
-	    		if (procedimiento.getUltimoAviso() != null &&
-	    			( (procedimiento.getUltimoAviso().getTime() + (procedimiento.getIntervaloInforme().longValue() * 60 * 1000)) > ahora.getTime() ) ) continue;
+	    		// Comprobaciones aplicables al aviso periodico
+	    		if(idProcedimiento == null){
+		    		// Comprobamos si tiene el aviso periodico activado pero asegurandonos que no se ha lanzado el aviso manualmente
+		    		if (procedimiento.getPeriodica() == 'N') continue;
+		    		
+		    		// Comprobamos si se ha cumplido el intervalo fijado por propiedades
+		    		if (procedimiento.getUltimoAviso() != null &&
+		    			( (procedimiento.getUltimoAviso().getTime() + (intervaloAviso * 60 * 1000)) > ahora.getTime() ) ) continue;
+	    		}
 	    		
 	    		// Marcamos con error las entradas que no han sido procesadas	    		
 				if (maximoDiasAviso > 0) {

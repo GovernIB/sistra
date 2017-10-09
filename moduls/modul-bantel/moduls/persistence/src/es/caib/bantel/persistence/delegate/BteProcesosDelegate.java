@@ -13,6 +13,15 @@ import es.caib.bantel.persistence.util.BteProcesosFacadeUtil;
  */
 public class BteProcesosDelegate implements StatelessDelegate {
 
+
+	public void avisoBackOffices(String idProcedimiento) throws DelegateException {
+        try {
+            getFacade().avisoBackOffices(idProcedimiento);
+        } catch (Exception e) {
+        	e.printStackTrace();	
+            throw new DelegateException(e);
+        }
+    }
 	public void avisoBackOffices() throws DelegateException {
         try {
             getFacade().avisoBackOffices();

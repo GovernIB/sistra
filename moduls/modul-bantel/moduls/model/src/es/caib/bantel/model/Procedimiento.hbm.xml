@@ -13,8 +13,8 @@
 	<property name="entidad" column="TAP_IDEENT"  not-null="true"/>
 	<property name="idProcExt" column="TAP_IDEPEX" length="20" />
     <property name="inmediata"  column="TAP_INMED" length="1"/>
-    
-    <property name="intervaloInforme" column="TAP_INFORM"/>    
+    <property name="periodica"  column="TAP_PERIO" length="1"/>
+       
   	<property name="tipoAcceso"  column="TAP_TIPACC" length="1" not-null="true"/> 
   	<property name="url"  column="TAP_URL" length="500" />   	
   	<property name="versionWS"  column="TAP_WSVER" length="10" />

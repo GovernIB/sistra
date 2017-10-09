@@ -29,7 +29,8 @@ public class Procedimiento extends Traducible implements Serializable{
 	private String entidad;
 	private String idProcExt;
 	private char inmediata = 'N';
-	private Long intervaloInforme;
+	private char periodica = 'N';
+	//private Long intervaloInforme;
 	private char tipoAcceso=ACCESO_EJB;
 	private String url;
 	private String versionWS;
@@ -98,12 +99,19 @@ public class Procedimiento extends Traducible implements Serializable{
 	public void setInmediata(char inmediata) {
 		this.inmediata = inmediata;
 	}
-	public Long getIntervaloInforme() {
+
+	public char getPeriodica() {
+		return periodica;
+	}
+	public void setPeriodica(char periodica) {
+		this.periodica = periodica;
+	}
+	/*public Long getIntervaloInforme() {
 		return intervaloInforme;
 	}
 	public void setIntervaloInforme(Long intervaloInforme) {
 		this.intervaloInforme = intervaloInforme;
-	}	
+	}	*/
 	public String getRolAcceso() {
 		return rolAcceso;
 	}
@@ -159,12 +167,9 @@ public class Procedimiento extends Traducible implements Serializable{
 		this.autenticacionEJB = autenticacionEJB;
 	}	
 	
-	/**
-	 * Avisos estan habilitados si el intervalo tiene valor positivo
-	 * @return
-	 */
+	
 	public boolean avisosEnabled(){
-		return (this.getIntervaloInforme() != null && this.getIntervaloInforme().longValue() > 0);
+		return (this.getPeriodica() == 'S');
 	}
 	public Date getUltimoAviso() {
 		return ultimoAviso;
