@@ -19,15 +19,32 @@ $(document).ready(function(){
 	  
 	  if ($("#fonsFirmaWeb").size() == 0) {
 		  
+		  
+		  	// Configuracion por defecto
+		  	var signType = FIRMAWEB_SIGN_TYPE;
+		  	var signMode = FIRMAWEB_SIGN_MODE;
+		  	var signAlg  = FIRMAWEB_SIGN_ALGORITHM;
+		  	
+		  	// Si esta habilitada la firma de PDF, miramos si el fichero a firmar es PDF
+		  	if (FIRMAWEB_ENABLE_SIGN_PDF ) {
+		  		// Verificamos si es extension PDF
+		  		var pos = filename.lastIndexOf(".");
+				var ext = filename.substring(pos + 1);
+				if (ext.toUpperCase() == "PDF") {
+			  		signType = FIRMAWEB_SIGN_TYPE_PDF;
+				  	signMode = FIRMAWEB_SIGN_MODE_PDF;
+				  	signAlg  = FIRMAWEB_SIGN_ALGORITHM_PDF;
+				}
+		  	}
 		  		  	
 		  	var params = { accion: "iniciarFirma",
 		  				   documentoContentB64UrlSafe: documentoB64UrlSafe,
 		  				   documentoFileName: filename,
 		  				   documentoNif: nif,
 		  				   configLang: lang,
-		  				   configSignType:FIRMAWEB_SIGN_TYPE,
-		  				   configSignMode: FIRMAWEB_SIGN_MODE,
-		  				   configSignAlgorithm: FIRMAWEB_SIGN_ALGORITHM,
+		  				   configSignType: signType,
+		  				   configSignMode: signMode,
+		  				   configSignAlgorithm: signAlg,
 		  				   callbackUrl: callback.url,
 		  				   callbackParamSignature: callback.paramSignature,
 		  				   callbackUrlCancel: callback.urlCancel,

@@ -179,7 +179,6 @@ public class DocumentoFront  implements Serializable{
 	 */
 	private boolean formularioGuardarSinTerminar;
 	
-	
 	public char getEstado() {
 		return estado;
 	}

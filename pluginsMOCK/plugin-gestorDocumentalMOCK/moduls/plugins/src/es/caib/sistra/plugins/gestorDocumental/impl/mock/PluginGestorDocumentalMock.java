@@ -198,7 +198,7 @@ public class PluginGestorDocumentalMock implements PluginGestorDocumentalIntf{
 	
 	private void guardarVersionFormateada(DocumentoRDS doc, String path) throws Exception{
 		RdsDelegate dlg = DelegateRDSUtil.getRdsDelegate();
-		DocumentoRDS docFormateado = dlg.consultarDocumentoFormateado(doc.getReferenciaRDS(),doc.getPlantilla(), null);
+		DocumentoRDS docFormateado = dlg.consultarDocumentoFormateado(doc.getReferenciaRDS());
 		guardarDocumento(docFormateado.getDatosFichero(),docFormateado.getNombreFichero(),"",path );
 	}
 	

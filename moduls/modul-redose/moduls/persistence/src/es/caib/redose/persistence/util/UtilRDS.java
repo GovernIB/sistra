@@ -16,6 +16,7 @@ public class UtilRDS {
 	 */
 	public final static DocumentoRDS cloneDocumentoRDS(DocumentoRDS doc){
 		DocumentoRDS docNew = new DocumentoRDS();	
+		docNew.setIdioma(doc.getIdioma());
 		docNew.setTitulo(doc.getTitulo());
 		docNew.setCodigoUbicacion(doc.getCodigoUbicacion());
 		docNew.setEstructurado(doc.isEstructurado());		
@@ -24,6 +25,7 @@ public class UtilRDS {
 		docNew.setFirmas(doc.getFirmas());
 		docNew.setHashFichero(doc.getHashFichero());
 		docNew.setModelo(doc.getModelo());
+		docNew.setVersion(doc.getVersion());
 		docNew.setNif(doc.getNif());
 		docNew.setPlantilla(doc.getPlantilla());
 		docNew.setReferenciaRDS(doc.getReferenciaRDS());

@@ -37,6 +37,10 @@ public class DocumentoVerifier  implements java.io.Serializable {
 	 */
 	private boolean estructurado; 
 	/**
+	 * Indica si el documento es estructurado (XML), pero tiene PDF consolidado.
+	 */
+	private boolean formateado;
+	/**
 	 * Extensión del fichero asociado al documento
 	 */
 	private String extensionFichero;	
@@ -103,6 +107,12 @@ public class DocumentoVerifier  implements java.io.Serializable {
 	}
 	public void setNombreFicheroFormateado(String nombreFicheroFormateado) {
 		this.nombreFicheroFormateado = nombreFicheroFormateado;
+	}
+	public boolean isFormateado() {
+		return formateado;
+	}
+	public void setFormateado(boolean formateado) {
+		this.formateado = formateado;
 	} 
 		
 	

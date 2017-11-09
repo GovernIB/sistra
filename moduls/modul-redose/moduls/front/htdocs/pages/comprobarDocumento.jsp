@@ -25,8 +25,13 @@
 			<!-- Tipo de documento -->
 			<logic:equal name="documento" property="estructurado" value="true">
 				<li class="documento">					
-					<strong><bean:message key="comprobarDocumento.tipoDocumento"/>:</strong> XML - 
-					<strong><bean:message key="comprobarDocumento.visualizacion"/>:</strong> PDF 										
+					<strong><bean:message key="comprobarDocumento.tipoDocumento"/>:</strong> 
+						<logic:equal name="documento" property="formateado" value="true">
+							PDF
+						</logic:equal>
+						<logic:equal name="documento" property="formateado" value="false">
+							XML - <strong><bean:message key="comprobarDocumento.visualizacion"/>:</strong> PDF
+						</logic:equal>					 										
 				</li>			
 			</logic:equal>
 			<logic:equal name="documento" property="estructurado" value="false">

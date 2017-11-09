@@ -103,6 +103,11 @@ public class DocumentoRDS  implements java.io.Serializable {
 	 * Indica CSV del documento (campo calculado por el REDOSE en caso de que tenga CSV).
 	 */
 	private String csv;
+	
+	/**
+	 * Referencia RDS del documento formateado consolidado (para estructurados).
+	 */
+	private ReferenciaRDS referenciaRDSFormateado;
 		
 	// Getters / Setters
 	/**
@@ -390,6 +395,12 @@ public class DocumentoRDS  implements java.io.Serializable {
 	}
 	public void setCsv(String csv) {
 		this.csv = csv;
+	}
+	public ReferenciaRDS getReferenciaRDSFormateado() {
+		return referenciaRDSFormateado;
+	}
+	public void setReferenciaRDSFormateado(ReferenciaRDS documentoConsolidado) {
+		this.referenciaRDSFormateado = documentoConsolidado;
 	}	
 	
 }

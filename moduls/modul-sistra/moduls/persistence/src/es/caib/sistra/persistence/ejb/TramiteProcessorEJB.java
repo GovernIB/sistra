@@ -3,6 +3,7 @@ package es.caib.sistra.persistence.ejb;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -106,6 +107,7 @@ import es.caib.sistra.plugins.pagos.SesionPago;
 import es.caib.sistra.plugins.pagos.SesionSistra;
 import es.caib.sistra.plugins.regtel.PluginRegistroIntf;
 import es.caib.sistra.plugins.sms.PluginSmsIntf;
+import es.caib.util.ConvertUtil;
 import es.caib.util.CredentialUtil;
 import es.caib.util.DataUtil;
 import es.caib.util.NifCif;
@@ -154,6 +156,9 @@ public class TramiteProcessorEJB implements SessionBean {
 
 	// Indica si hay debug
 	private boolean debugEnabled = false;
+	
+	// Indica si hay que consolidar los PDFs formateados
+	private boolean consolidarPdfFormateadoFormularios = false;
 
 	// Datos de inicio de sesión
 	private DatosSesion datosSesion = null;
@@ -330,6 +335,9 @@ public class TramiteProcessorEJB implements SessionBean {
 
 			// Indica si son obligatorios los avisos para las notificaciones
 			this.avisosObligatoriosNotif = "true".equals(props.getProperty("sistra.avisoObligatorioNotificaciones"));
+			
+			// Indica si se deben consolidar los PDFs formateados de formularios
+			this.consolidarPdfFormateadoFormularios = "true".equals(props.getProperty("consolidarPDF.formularios"));
 
 		} catch (Exception e) {
             throw new EJBException("Excepcion al iniciar tramite: " + e.getMessage(), e);
@@ -1777,6 +1785,12 @@ public class TramiteProcessorEJB implements SessionBean {
 	    	docRds.setDatosFichero(datosFormNuevos.getBytes());
 	    	docRds.setFirmas( new FirmaIntf[]{} );
 	    	rds.actualizarDocumento(docRds);
+	    	
+	    	// En caso de se consoliden los formularios, generamos documento consolidado asociado al formulario
+	    	if (this.consolidarPdfFormateadoFormularios) {
+	    		ReferenciaRDS refConsolidado = rds.generarDocumentoFormateado(docRds.getReferenciaRDS());
+	    	}
+	    	
 
 	    	// Reseteamos info de firma delegada
 	    	docPad.setDelegacionEstado(null);
@@ -1967,7 +1981,35 @@ public class TramiteProcessorEJB implements SessionBean {
 
 	    	// Establecemos respuesta front
 	    	HashMap param = new HashMap();
-	    	param.put("datos",datosForm.getString());
+	    	
+	    	byte[] datos = null;
+	    	String formateado = null;
+	    		    	
+	    	// Verificamos si tiene documento formateado para pasar el PDF
+	    	DocumentoPersistentePAD docPAD = (DocumentoPersistentePAD) this.tramitePersistentePAD.getDocumentos().get(identificador + "-" + instancia);
+    		ReferenciaRDS refRds = docPAD.getRefRDS();
+	    	RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
+	    	DocumentoRDS docRds = rds.consultarDocumento(refRds, false);
+	    	if (docRds.getReferenciaRDSFormateado() != null) {
+	    		DocumentoRDS docRdsFormateado = rds.consultarDocumento(docRds.getReferenciaRDSFormateado(), true); 
+	    		datos = docRdsFormateado.getDatosFichero();
+	    		
+	    		// Eliminamos permisos para poder firmarlo
+	    		ByteArrayInputStream is = new ByteArrayInputStream(datos);
+	    		ByteArrayOutputStream os = new ByteArrayOutputStream(datos.length);  
+	    		UtilPDF.eliminarPermisos(os, is);
+	    		is.close();
+	    		os.close();
+	    		datos = os.toByteArray();
+	    		
+	    		formateado = "S";
+	    	} else {
+	    		datos = datosForm.getString().getBytes("UTF-8");
+	    		formateado = "N";
+	    	}
+	    	
+	    	param.put("datos",datos);
+	    	param.put("formateado", formateado);
 
 	    	return this.generarRespuestaFront(null,param);
     	}catch (ProcessorException pe){

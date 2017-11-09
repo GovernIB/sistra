@@ -46,7 +46,7 @@ public class FinalizacionController extends BaseController
 		request.setAttribute( "instrucciones", obtenerInstrucciones( resultado ) );
 
 		// Obtener lista documentos
-		request.setAttribute( "documentacion", obtenerDocumentacion(resultado ) );
+		// request.setAttribute( "documentacion", obtenerDocumentacion(resultado ) );
 		
 		// Comprobamos si se va a redirigir a la zona personal
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request.getParameter("ID_INSTANCIA"), request );

@@ -154,7 +154,7 @@ public abstract class RdsProcesosEJB implements SessionBean {
 	 *
      */
     private void borradoDocumentosSinUsos() throws ExcepcionRDS{
-
+    	
     	log.debug("Proceso borrado de documentos sin usos");
     	RdsAdminDelegate rd = DelegateUtil.getRdsAdminDelegate();
 

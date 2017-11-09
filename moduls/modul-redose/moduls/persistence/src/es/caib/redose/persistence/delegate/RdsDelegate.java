@@ -275,6 +275,21 @@ public class RdsDelegate implements StatelessDelegate {
         }         	
     }
     
+    /**
+     * Genera documento formateado asociandolo al original. 
+	 * 
+     * @param refDocumentoOrigen Referencia documento origen
+     * @return Retorna referencia RDS documento formateado.
+     * @throws DelegateException
+     */
+    public ReferenciaRDS generarDocumentoFormateado(ReferenciaRDS refDocumentoOrigen) throws DelegateException{
+    	try {
+            return getFacade().generarDocumentoFormateado(refDocumentoOrigen);
+         } catch (Exception e) {
+             throw new DelegateException(e);
+         }         	
+     }
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

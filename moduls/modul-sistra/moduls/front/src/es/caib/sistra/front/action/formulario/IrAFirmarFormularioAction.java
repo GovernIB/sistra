@@ -63,10 +63,13 @@ public class IrAFirmarFormularioAction extends BaseAction
 		// Pasamos a firmar formulario 
 		respuestaFront = delegate.irAFirmarFormulario( formulario.getIdentificador(), formulario.getInstancia() );
 		
-		// Establecemos datos formulario
-		String xmlFormulario = ( String )respuestaFront.getParametros().get( "datos" );
-		String base64EncXml = ConvertUtil.cadenaToBase64UrlSafe( xmlFormulario );
+		// Establecemos datos formulario		
+		byte[] datosFormulario =  (byte[]) respuestaFront.getParametros().get( "datos" );
+		String formateado = (String) respuestaFront.getParametros().get( "formateado" );
+		
+		String base64EncXml = ConvertUtil.bytesToBase64UrlSafe(datosFormulario);
 		request.setAttribute( "base64XmlForm", base64EncXml );
+		request.setAttribute("formateado", formateado);
 		
 		// Indicamos si debemos mostrar la firma digital o firma delegada
 		String mostrarFirmaDigital = "N";

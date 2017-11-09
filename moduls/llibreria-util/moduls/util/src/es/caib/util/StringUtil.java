@@ -319,6 +319,18 @@ public class StringUtil {
 	  	 
 	  
 	  // --- FUNCION DE NORMALIZACION DE NOMBRE DE FICHEROS
+	    
+	    /**
+	     * Obtiene nombre fichero sin extension.
+	     */
+	    public static String getNombreFichero(String filename){
+			if(filename.lastIndexOf(".") != -1){
+				return filename.substring(0, filename.lastIndexOf("."));
+			}else{
+				return filename;
+			}
+		}
+	    
 	    /**
 	     * Obtiene extension fichero.
 	     */

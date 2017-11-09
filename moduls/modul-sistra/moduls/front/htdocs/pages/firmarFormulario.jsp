@@ -92,6 +92,7 @@
 		 
 		 function firmarFirmaWeb(){		
 			 var docB64UrlSafe = document.formFirma.base64XmlForm.value;
+			 var formateado = document.formFirma.formateado.value;
 			 var urlCallBackApp = "<bean:write name="urlFirmarDocumento"/>";
 			 var urlCallBackAppCancel = "<bean:write name="urlIrAFirmarFormulario"/>&identificador=" + document.firmarFormularioForm.identificador.value + "&instancia=" + document.firmarFormularioForm.instancia.value;
 			 
@@ -101,11 +102,16 @@
 			 var lang = "<%=((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage()%>";
 			 var nif = "<bean:write name="nifFirmante"/>";
 			 
+			 var filename = "formulario.xml";
+			 if (formateado == "S") {
+				 filename = "formulario.pdf";
+			 }
+			 
 			 $.mostrarFirmaWeb(
 					 lang,
 					 nif,
 					 docB64UrlSafe,
-					 "formulario.xml",
+					 filename,
 					 callback,
 					 null);			 
 		 }
@@ -171,7 +177,7 @@
 	<logic:equal name="<%=es.caib.sistra.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
 				 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
 		<form name="formFirma">
-			<input type="hidden" name="base64XmlForm" value="<bean:write name="base64XmlForm" />"/>
+			<input type="hidden" name="base64XmlForm" value="<bean:write name="base64XmlForm" />"/>			
 			
 			<p><bean:message key="firmarDocumento.aFirma.formulario.instrucciones"/></p>
 			
@@ -223,6 +229,7 @@
 		<!--  Applet firma CAIB-->
 		<form name="formFirma">
 			<input type="hidden" name="base64XmlForm" value="<bean:write name="base64XmlForm" />"/>
+			<input type="hidden" name="formateado" value="<bean:write name="formateado" />"/>
 			
 			<!--  BOTON FIRMAR -->
 			<p class="formBotonera">

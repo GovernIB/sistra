@@ -35,6 +35,9 @@ public class Documento  implements java.io.Serializable {
      private String referenciaGestorDocumental;
      private String csv;
 
+     private Documento documentoFormateado; // Referencia a un documento formateado
+     private String formateado = "N"; // Indica si es formateado (S/N)
+     
     // Constructors
 
     /** default constructor */
@@ -226,6 +229,30 @@ public class Documento  implements java.io.Serializable {
 
 	public void setCsv(String csv) {
 		this.csv = csv;
+	}
+
+
+
+	public Documento getDocumentoFormateado() {
+		return documentoFormateado;
+	}
+
+
+
+	public void setDocumentoFormateado(Documento documentoFormateado) {
+		this.documentoFormateado = documentoFormateado;
+	}
+
+
+
+	public String getFormateado() {
+		return formateado;
+	}
+
+
+
+	public void setFormateado(String formateado) {
+		this.formateado = formateado;
 	}
 
 

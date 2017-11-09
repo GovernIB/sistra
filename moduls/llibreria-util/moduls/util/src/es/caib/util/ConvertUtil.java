@@ -124,7 +124,8 @@ public class ConvertUtil {
     	if ( safe ) b64 = escapeChars64UrlSafe( b64 );
     	return b64; 
     }
-   private static byte[] base64UrlSafeToBytes(String cadenaB64) throws Exception
+   
+    public static byte[] base64UrlSafeToBytes(String cadenaB64) throws Exception
     {
     	return base64ToBytes( cadenaB64, true );
     }

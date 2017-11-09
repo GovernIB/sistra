@@ -16,7 +16,7 @@
 </head>
 <body onload="document.getElementById('frmCallback').submit()">
 	<form id="frmCallback" action="${callbackAppUrl}" method="post" target="${callbackTarget}">
-		<input type="hidden" name="${callbackAppParamSignature}" value="${firmaB64}"/>
+		<input type="hidden" name="${callbackAppParamSignature}" value="${firmaFormato}${firmaB64}"/>
 		<c:forEach var="entry" items="${callbackAppParamOthers}">
 			<input type="hidden" name="${entry.key}" value="${entry.value}"/>
 		</c:forEach>  				

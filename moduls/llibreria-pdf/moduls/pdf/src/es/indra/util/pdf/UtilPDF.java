@@ -360,6 +360,18 @@ public class UtilPDF {
     }
 	
 	/**
+	 * Eliminar permisos
+	 * @param pdfOut Outputstream al pdf de salida sin los permisos aplicados
+	 * @param pdfIn InputStreams del pdf sobre el que se deben quitar los permisos
+	 */
+	public static void eliminarPermisos(OutputStream pdfOut,InputStream pdfIn) throws Exception{
+		PdfReader reader = new PdfReader(pdfIn);
+		PdfStamper stamper = new PdfStamper(reader, pdfOut);
+	    stamper.close();
+	    reader.close();		
+    }
+	
+	/**
 	 * Detecta si un pdf es PDF/A
 	 * @param pdfIn
 	 * @return

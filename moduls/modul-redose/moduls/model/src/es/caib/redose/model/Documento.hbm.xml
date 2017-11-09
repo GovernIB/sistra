@@ -32,8 +32,12 @@
         
 		<property name="csv" type="string" column="DOC_CSV" length="50" />
 		
+		<property name = "formateado" type="string" column="DOC_ESFORM" length="1" />
+		
+		<many-to-one name="documentoFormateado" class="es.caib.redose.model.Documento" column="DOC_DOCFOR" />
+		
 		<many-to-one name="plantilla" class="es.caib.redose.model.Plantilla" column="DOC_CODPLA" />
-
+		
         <set name="usos" inverse="true" lazy="true" cascade="all-delete-orphan">
         	<cache usage="read-write"/>
             <key column="USO_CODDOC"/>

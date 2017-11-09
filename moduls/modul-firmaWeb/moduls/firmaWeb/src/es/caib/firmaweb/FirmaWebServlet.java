@@ -110,6 +110,12 @@ public class FirmaWebServlet extends HttpServlet {
 			FileInfoSignature fis = ss.getFileInfoSignatureArray()[0];
 		    StatusSignature status = fis.getStatusSignature();
 		    if (status.getStatus() == StatusSignature.STATUS_FINAL_OK) {
+		    	// Vemos si hemos de indicar formato de firma PADES
+		    	String formato = "";
+		    	if ("PAdES".equalsIgnoreCase(fis.getSignType())) {
+		    		formato = "[FORMATO:PADES]";
+		    	}
+		    	
 		    	// - Redirige JSP
 		    	request.setAttribute("lang", lang);
 		    	request.setAttribute("callbackAppUrl", ss.getCallbackAppUrl());
@@ -117,6 +123,7 @@ public class FirmaWebServlet extends HttpServlet {
 		    	request.setAttribute("callbackAppParamOthers", ss.getCallbackAppParamOthers());
 		    	request.setAttribute("callbackTarget", ss.getCallbackAppTarget());
 		    	request.setAttribute("firmaB64", Base64UrlSafe.encodeB64UrlSafe(status.getSignedData()));
+		    	request.setAttribute("firmaFormato", formato);
 				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher( "/WEB-INF/jsp/redirectApp.jsp" );
 				dispatcher.forward( request, response );
 				return;
@@ -281,7 +288,7 @@ public class FirmaWebServlet extends HttpServlet {
 	
 	private SistraSignaturesSet createSignaturesSet(String signaturesSetID, String urlFinal, ConfigData cd, DocumentData dd, CallbackData cbd) throws Exception {
 		
-		
+		// TODO CONSPDF FALTA MERGE CON CAMBIO NORMALIZACION ALEX
 		// Creamos fichero temporal
 		String fnm = FilenameUtils.getBaseName(dd.getDocumentoFilename());
 		String ext = FilenameUtils.getExtension(dd.getDocumentoFilename());

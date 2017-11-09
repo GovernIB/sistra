@@ -71,7 +71,7 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
     	Session session = this.getSession();
     	try{
     		// Obtenemos documentos sin usos
-	    	Query query = session.createQuery("FROM Documento AS d WHERE size(d.usos) = 0 and (d.borrado is null or d.borrado='N')");            
+	    	Query query = session.createQuery("FROM Documento AS d WHERE size(d.usos) = 0 and (d.borrado is null or d.borrado='N') and d.formateado = 'N'");            
             List result = query.list();
             return result;            
     	}catch(Exception ex){
@@ -387,6 +387,7 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
      * Funcion que realiza el borrado de un documento en el RDS
      */
     private void eliminarDocumentoImpl(ReferenciaRDS refRds) throws ExcepcionRDS{
+    	
     	// Borramos documento
     	Session session = getSession();
     	Documento documento;
@@ -421,6 +422,11 @@ public abstract class RdsAdminFacadeEJB extends HibernateEJB {
         	log.error("No se ha podido eliminar fichero "+refRds.getCodigo()+" en ubicación " + ubicacion.getCodigoUbicacion());
         	throw new EJBException(e);
         }
+        
+    	// Verificamos si tiene documento formateado asociado y lo borramos tambien    	
+    	if (documento.getDocumentoFormateado() != null) {
+    		eliminarDocumentoImpl(new ReferenciaRDS(documento.getDocumentoFormateado().getCodigo(), documento.getDocumentoFormateado().getClave()));
+    	}
     }
      
     
