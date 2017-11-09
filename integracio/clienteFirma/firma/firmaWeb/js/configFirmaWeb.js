@@ -2,7 +2,7 @@
 
 // Indica si firma los PDS con formato distinto (FIRMAWEB_SIGN_TYPE_PDF).
 // El plugin de firma debe adaptarse, ya que se enviara como prefijo a la firma el campo [FORMATO:PADES]
-var FIRMAWEB_ENABLE_SIGN_PDF = true;
+var FIRMAWEB_ENABLE_SIGN_PDF = false;
 
 
 // Para CAIB: FIRMAWEB_SIGN_TYPE=SIME / FIRMAWEB_SIGN_MODE = 1
