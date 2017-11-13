@@ -48,6 +48,7 @@ import es.caib.firmaweb.util.SignaturePluginManager;
 import es.caib.firmaweb.util.SignatureSetStore;
 import es.caib.firmaweb.util.SignatureWebPluginManager;
 import es.caib.firmaweb.util.Utils;
+import es.caib.util.GeneradorId;
 
 
 /**
@@ -294,8 +295,8 @@ public class FirmaWebServlet extends HttpServlet {
 		
 		// TODO CONSPDF FALTA MERGE CON CAMBIO NORMALIZACION ALEX
 		// Creamos fichero temporal
-		String fnm = FilenameUtils.getBaseName(dd.getDocumentoFilename());
-		String ext = FilenameUtils.getExtension(dd.getDocumentoFilename());
+		String fnm = FilenameUtils.getBaseName(GeneradorId.generarId());
+		String ext = FilenameUtils.getExtension(dd.getDocumentoFilename());		
 		File fileToSign = File.createTempFile(fnm, "." + ext);
 		
 		ByteArrayInputStream bis = new ByteArrayInputStream(Base64UrlSafe.decodeB64UrlSafe(dd.getDocumentoB64UrlSafe()));
