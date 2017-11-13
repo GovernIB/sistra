@@ -347,6 +347,7 @@ p.ayudaPagoP { border-top:1px dashed #f4f4f4; margin-bottom:2em; padding-top:1em
 #tramitacion #pasoInf table#tablaDocAportar td { padding:.5em; }
 #tramitacion #pasoInf table#tablaDocAportar td.doc { font-weight:bold; text-align:center; width:25%; }
 #tramitacion #pasoInf table#tablaDocAportar td.doc2 { font-weight:bold; text-align:center; }
+#tramitacion #pasoInf table#tablaDocAportar td.guardar { padding:.9em; text-align:center; }
 
 /* inicio simulado tramite */
 
@@ -559,3 +560,27 @@ a.button-print {
 }
 
 a.button-print:before { content:""; display:inline-block; width:1em; height:1em; vertical-align:middle; margin-right:.5em; background:transparent url(../imgs/enlaces/bt-imprimir.png) no-repeat left center; }
+
+/* boton guardar */	
+a.button-guardar {
+	color:#000;
+	text-decoration:none;
+	padding:.3em .8em;
+	background: #f2f2f2; /* Old browsers */
+	background: -moz-linear-gradient(top,  #f2f2f2 0%, #f2f2f2 50%, #dddddd 51%, #f2f2f2 100%, #cfcfcf 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f2f2f2), color-stop(50%,#f2f2f2), color-stop(51%,#dddddd), color-stop(100%,#f2f2f2), color-stop(100%,#cfcfcf));
+	background: -webkit-linear-gradient(top,  #f2f2f2 0%,#f2f2f2 50%,#dddddd 51%,#f2f2f2 100%,#cfcfcf 100%);
+	background: -o-linear-gradient(top,  #f2f2f2 0%,#f2f2f2 50%,#dddddd 51%,#f2f2f2 100%,#cfcfcf 100%);
+	background: -ms-linear-gradient(top,  #f2f2f2 0%,#f2f2f2 50%,#dddddd 51%,#f2f2f2 100%,#cfcfcf 100%);
+	background: linear-gradient(to bottom,  #f2f2f2 0%,#f2f2f2 50%,#dddddd 51%,#f2f2f2 100%,#cfcfcf 100%);
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#f2f2f2, endColorstr=#cfcfcf)";
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', endColorstr='#cfcfcf',GradientType=0 );
+	border:1px solid #707070;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	-o-border-radius:3px;
+	-ms-border-radius:3px;
+	border-radius:3px;
+}
+
+a.button-guardar:before { content:""; display:inline-block; width:1em; height:1em; vertical-align:middle; margin-right:.5em; background:transparent url(../imgs/enlaces/05guardar.gif) no-repeat left center; }

@@ -2934,9 +2934,12 @@ public class TramiteProcessorEJB implements SessionBean {
     		if (tramitacionPresencial) {
     			content = generarJustificante(true);
     		} else {
+    			if (tramiteVersion.getDestino() == ConstantesSTR.DESTINO_REGISTRO){
     			// Si es tramite telematico intentamos mostrar justificante generado por Registro
     			PluginRegistroIntf plgRegistro = PluginFactory.getInstance().getPluginRegistro();
     			content = plgRegistro.obtenerJustificanteRegistroEntrada(tramiteInfo.getEntidad(), resultadoRegistro.getNumero(), resultadoRegistro.getFecha());
+    			}
+    			
     			// Si registro no muestra justificante, mostramos el de la plataforma
     			if (content == null) {
     				content = generarJustificante(false);

@@ -19,6 +19,7 @@ import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.regtel.PluginRegistroIntf;
 import es.caib.util.StringUtil;
+import es.caib.xml.registro.factoria.ConstantesAsientoXML;
 
 /**
  * @struts.action
@@ -45,9 +46,13 @@ public class MostrarJustificanteAction extends BaseAction
 		
 		byte[] content = null;
 		
-		// Intentamos obtener justificante del Registro
-		PluginRegistroIntf plgRegistro = PluginFactory.getInstance().getPluginRegistro();
-		content = plgRegistro.obtenerJustificanteRegistroEntrada(t.getProcedimiento().getEntidad(), t.getNumeroRegistro(), t.getFechaRegistro());
+		
+		// Si la entrada es de registro
+		if (t.getTipo() == ConstantesAsientoXML.TIPO_REGISTRO_ENTRADA){
+			PluginRegistroIntf plgRegistro = PluginFactory.getInstance().getPluginRegistro();
+			content = plgRegistro.obtenerJustificanteRegistroEntrada(t.getProcedimiento().getEntidad(), t.getNumeroRegistro(), t.getFechaRegistro());
+		}
+		
 		// Si no se puede obtener, se muestra el de la plataforma
 		if (content == null) {
 			ReferenciaRDS refRDS = new ReferenciaRDS();

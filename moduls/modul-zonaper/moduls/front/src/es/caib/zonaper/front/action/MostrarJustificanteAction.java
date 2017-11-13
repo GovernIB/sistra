@@ -78,13 +78,18 @@ public class MostrarJustificanteAction extends BaseAction
 			content = generarJustificanteRegistro(entrada);
 			numReg = entrada.getNumeroPreregistro();
 		} else {
-			ProcedimientoBTE proc = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(entrada.getProcedimiento());
-			// Si es tramite telematico intentamos mostrar justificante generado por Registro
-			PluginRegistroIntf plgRegistro = PluginFactory.getInstance().getPluginRegistro();
-			content = plgRegistro.obtenerJustificanteRegistroEntrada(proc.getEntidad().getIdentificador(), entrada.getNumeroRegistro(), entrada.getFecha());
-			// Si registro no muestra justificante, mostramos el de la plataforma
-			if (content == null) {
+			if (entrada.getTipo() == ConstantesAsientoXML.TIPO_ENVIO){
+				//Si es envio, generamos justificante plataforma
 				content = generarJustificanteRegistro(entrada);
+			} else {
+				ProcedimientoBTE proc = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(entrada.getProcedimiento());
+				// Si es tramite telematico intentamos mostrar justificante generado por Registro
+				PluginRegistroIntf plgRegistro = PluginFactory.getInstance().getPluginRegistro();
+				content = plgRegistro.obtenerJustificanteRegistroEntrada(proc.getEntidad().getIdentificador(), entrada.getNumeroRegistro(), entrada.getFecha());
+				// Si registro no muestra justificante, mostramos el de la plataforma
+				if (content == null) {
+					content = generarJustificanteRegistro(entrada);
+				}
 			}
 			numReg = entrada.getNumeroRegistro();
 		}
