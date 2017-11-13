@@ -426,13 +426,21 @@ public class GeneradorAsiento {
 				especNivel);
 
 		Instrucciones instrucciones = factoria.crearInstrucciones();
-		String instruccionesTextCircuitoTelematico,instruccionesTextCircuitoPresencial;
+		String instruccionesTextCircuitoTelematico,instruccionesTextCircuitoPresencial,instruccionesTextCircuitoPresencialPuntos;
 		if (StringUtils.isNotEmpty(tramiteInfo.getInstruccionesFin())){
 			instruccionesTextCircuitoTelematico = tramiteInfo.getInstruccionesFin();
 			instruccionesTextCircuitoPresencial = tramiteInfo.getInstruccionesFin();
 		}else{
 			instruccionesTextCircuitoTelematico = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"mensaje.datospropios.telematico");
 			instruccionesTextCircuitoPresencial = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"mensaje.datospropios.presencial");
+			instruccionesTextCircuitoPresencialPuntos = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"mensaje.datospropios.presencial.puntosRegistro");
+			
+			String puntosRegistro = StringUtils.defaultString(ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("organismo.puntosEntregaDoc.url"), "");
+			
+			if (!puntosRegistro.isEmpty()){
+				instruccionesTextCircuitoPresencialPuntos = StringUtil.replace(instruccionesTextCircuitoPresencialPuntos, "#PUNTOS_REGISTRO#", puntosRegistro);
+				instruccionesTextCircuitoPresencial = instruccionesTextCircuitoPresencial + " " + instruccionesTextCircuitoPresencialPuntos;
+			}
 
 			// Se muestran datos de seguimiento si:
 			//	- es autenticado
