@@ -2886,15 +2886,17 @@ public class TramiteProcessorEJB implements SessionBean {
 			( tramiteInfo.getTipoTramitacion() == ConstantesSTR.TIPO_TRAMITACION_DEPENDIENTE &&
 			  tramiteInfo.getTipoTramitacionDependiente() == ConstantesSTR.TIPO_TRAMITACION_PRESENCIAL);
     		
-    		
     		// Si es tramitacion presencial mostramos justificante generado por Sistra.     		
     		byte[] content = null;
     		if (tramitacionPresencial) {
     			content = generarJustificante(true);
     		} else {
-    			// Si es tramite telematico intentamos mostrar justificante generado por Registro
-    			PluginRegistroIntf plgRegistro = PluginFactory.getInstance().getPluginRegistro();
-    			content = plgRegistro.obtenerJustificanteRegistroEntrada(tramiteInfo.getEntidad(), resultadoRegistro.getNumero(), resultadoRegistro.getFecha());
+    			if (tramiteVersion.getDestino() == ConstantesSTR.DESTINO_REGISTRO){
+    				// Si es tramite telematico intentamos mostrar justificante generado por Registro
+        			PluginRegistroIntf plgRegistro = PluginFactory.getInstance().getPluginRegistro();
+        			content = plgRegistro.obtenerJustificanteRegistroEntrada(tramiteInfo.getEntidad(), resultadoRegistro.getNumero(), resultadoRegistro.getFecha());
+    			}
+    			
     			// Si registro no muestra justificante, mostramos el de la plataforma
     			if (content == null) {
     				content = generarJustificante(false);

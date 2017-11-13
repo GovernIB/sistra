@@ -44,7 +44,7 @@
 			<h2><bean:message key="pasoJustificante.guardarJustificante"/></h2>
 			
 			<p>
-				<bean:message key="pasoJustificante.guardarJustificante.informacion"/>					
+				<bean:message name="textoJustificante"/>
 			</p>
 			<p class="ultimo">
 				<bean:message key="pasoJustificante.guardarJustificante.recordatorioZonaPersonal.inicio" arg0="<%=referenciaPortal%>" />

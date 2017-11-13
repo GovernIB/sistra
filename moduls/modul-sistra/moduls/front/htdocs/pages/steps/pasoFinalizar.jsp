@@ -24,12 +24,12 @@
 	<h2><bean:message key="finalizacion.finTelematico"/></h2>
 	<!--  Instrucciones fin -->
 	<p>
-		<bean:write name="instrucciones" property="textoInstrucciones"/>
+		<bean:write name="instrucciones" property="textoInstrucciones" filter="false"/>
 	</p>
 	<!--  Instrucciones para guardar justificante -->
 	<h3 class="titGuardar"><bean:message key="pasoJustificante.guardarJustificante"/></h3>	
 	<p class="apartado">
-		<bean:message key="pasoJustificante.guardarJustificante.informacion"/>			
+		<bean:message name="textoJustificante" />		
 		<!-- 				
 			<bean:message key="pasoJustificante.guardarJustificante.recordatorioZonaPersonal.inicio" arg0="<%=referenciaPortal%>" />
 		 -->			
@@ -37,7 +37,32 @@
 	<p class="centrado">
 		<input name="guardarJustificanteBoton" id="guardarJustificanteBoton" type="button" value="<bean:message key="pasoJustificante.guardarJustificante.boton"/>"
 			 onclick="javascript:document.location.href='<%= urlMostrarDocumento + "&identificador=JUSTIFICANTE"%>'" />
+	</p></br></br></br>
+	<h3 class="titGuardar"><bean:message key="pasoJustificante.guardarRestoDocumentacion"/></h3>	
+	<p class="apartado">
+		<bean:message key="pasoJustificante.guardarRestoDocumentacion.informacion"/>			
+		<!-- 				
+			<bean:message key="pasoJustificante.guardarJustificante.recordatorioZonaPersonal.inicio" arg0="<%=referenciaPortal%>" />
+		 -->			
 	</p>
+	<table cellpadding="0" cellspacing="0" id="tablaDocAportar">
+			<tr>
+				<th width="80%"><bean:message key="pasoJustificante.guardarRestoDocumentacion.documentaAGuardar"/></th>
+				<th width="20%"></th>
+			</tr>
+		<logic:iterate id="doc" name="documentacion" type="es.caib.xml.registro.factoria.impl.DatosAnexoDocumentacion">
+			<logic:notEqual name="doc" property="tipoDocumento" value="D">
+				<tr>
+					<td class="doc2"><bean:write name="doc" property="extractoDocumento" /></td>
+					<td class="guardar">
+						<html:link styleClass="button-guardar" href="<%= urlMostrarDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) %>">
+							<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardar"/>					
+						</html:link>
+					</td>
+				</tr>
+			</logic:notEqual>
+		</logic:iterate>
+	</table>
 </logic:notPresent>
 
 
@@ -47,7 +72,7 @@
 	<h2><bean:message key="finalizacion.entregarSolicitudFirmada"/></h2>
 	<!--  Instrucciones fin -->
 	<p>
-		<bean:write name="instrucciones" property="textoInstrucciones" />
+		<bean:write name="instrucciones" property="textoInstrucciones" filter="false"/>
 	</p>
 	<!-- Fecha tope entrega documentacion presencial-->	
 	<p class="alerta">

@@ -133,6 +133,8 @@ public class RegistroController extends FinalizacionController
 		String instruccionesKey = registro ? "registro.instrucciones.registro" : "registro.instrucciones.envio" ;
 		String importanteKey 	= registro ? "registro.importante.registro" : "registro.importante.envio" ;
 		String suffix = "";
+		String textoJustificante = registro ? "pasoJustificante.guardarJustificante.informacion.registro" : "pasoJustificante.guardarJustificante.informacion.envio";
+		
 			
 		if ( Constants.TIPO_CIRCUITO_TRAMITACION_DEPENDE == tipoTramitacion  )
 		{
@@ -151,6 +153,7 @@ public class RegistroController extends FinalizacionController
 		request.setAttribute( "instruccionesKey", instruccionesKey );
 		request.setAttribute( "importanteKey", importanteKey );
 		request.setAttribute( "botonKey", botonKey );
+		request.setAttribute( "textoJustificante", textoJustificante );
 						
 		//
 		// 	EXTRAEMOS INFO PARA MOSTRAR RESUMEN TRAMITE
