@@ -41,7 +41,10 @@
     <path id="web.class.path">
     	<fileset dir="${lib.dir}">
     	   <include name="*.jar"/>    	        
-        </fileset>     	    	
+        </fileset>
+    	<fileset dir="${distribucion.dir}/lib"> 
+    	   <include name="sistra-util.jar"/>
+    	</fileset>
 		<fileset dir="${lib.dir}/firmaWeb">
     	   <include name="*.jar"/>    	        
         </fileset>    			
