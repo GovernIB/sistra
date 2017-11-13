@@ -2,8 +2,11 @@ package es.caib.firmaweb;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -11,6 +14,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -307,8 +311,7 @@ public class FirmaWebServlet extends HttpServlet {
 		Calendar expiryDate = Calendar.getInstance();
 		expiryDate.add(Calendar.MINUTE, 60);	
 		
-		
-		String filtreCertificats = "filters.1=nonexpired:"; // Filtro certificados (ver doc miniapplet)			
+		String filtreCertificats = getFiltroCertificados(); // Filtro certificados (ver doc miniapplet)			
 		String username = dd.getDocumentoNif(); // Username (NIF) 
 		String administrationID = dd.getDocumentoNif(); // AdministrationID (NIF)
 		final PolicyInfoSignature policyInfoSignature = null; // Politica de firma (opcional, en ejemplo a null)
@@ -353,7 +356,21 @@ public class FirmaWebServlet extends HttpServlet {
 		return signaturesSet;
 	}
 	
-	
+	private static String getFiltroCertificados() {
+	  	String filtro = ""; 
+	  	try {
+	  		String pluginPropertiesPath = System.getProperty("es.caib.firmaweb.signaturewebplugins.path");
+	  		File pluginPropertiesFile = new File(pluginPropertiesPath);
+	  		Properties pluginProperties = new Properties();
+	  		Reader reader = new InputStreamReader(new FileInputStream(pluginPropertiesFile), "UTF-8");
+	        pluginProperties.load(reader);
+			filtro = pluginProperties.getProperty("es.caib.firmaweb.filtroscertificados");
+		} catch (Exception e) {
+			throw new RuntimeException("No se puede acceder a la configuración de firmaweb");
+		}
+	  	return filtro;
+
+	}
 	
 	
 }
