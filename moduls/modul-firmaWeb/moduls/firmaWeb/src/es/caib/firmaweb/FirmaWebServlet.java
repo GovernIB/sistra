@@ -48,7 +48,7 @@ import es.caib.firmaweb.util.SignaturePluginManager;
 import es.caib.firmaweb.util.SignatureSetStore;
 import es.caib.firmaweb.util.SignatureWebPluginManager;
 import es.caib.firmaweb.util.Utils;
-import es.caib.util.GeneradorId;
+import es.caib.firmaweb.util.GeneradorId;
 
 
 /**
