@@ -58,7 +58,7 @@ import es.caib.zonaper.persistence.delegate.PadDelegate;
  *  view-type="remote"
  *  transaction-type="Container"
  *
- * @ejb.transaction type="Required"
+ * @ejb.transaction type="NotSupported"
  * 
  * @ejb.env-entry name="colaAvisos" value="queue/AvisadorBTE" 
  * 
