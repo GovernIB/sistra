@@ -3890,9 +3890,22 @@ public class TramiteProcessorEJB implements SessionBean {
     		this.tramitePersistentePAD = null;
     		throw pe;
     	}catch (Exception e){
-    		// Damos el tramite como no inicializado
-    		this.tramitePersistentePAD = null;
-    		throw (new ProcessorException("Error al cargar el trámite persistente",MensajeFront.MENSAJE_ERRORDESCONOCIDO,e));
+    		String infoDebug = "idPersistencia: " + idPersistencia;
+            try {
+                   if (this.tramitePersistentePAD != null && this.tramitePersistentePAD.getDocumentos() != null) {
+                          infoDebug += " / Documentos:";
+                          for (Iterator it = this.tramitePersistentePAD.getDocumentos().keySet().iterator(); it.hasNext();) {
+                                 infoDebug += " " + it.next().toString(); 
+                          }
+                   }
+            } catch (Exception e1){
+                   // No hacemos nada
+            }
+            log.error("Error al cargar el trámite persistente: " + infoDebug);
+            
+            // Damos el tramite como no inicializado
+            this.tramitePersistentePAD = null;
+            throw (new ProcessorException("Error al cargar el trámite persistente", MensajeFront.MENSAJE_ERRORDESCONOCIDO,e));
     	}
 
     }
