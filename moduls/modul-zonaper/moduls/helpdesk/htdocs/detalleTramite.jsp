@@ -98,7 +98,7 @@
 									</td>
 								</tr>
 								</logic:equal>
-								<logic:notEqual name="documento" property="estado" value="S" %>">
+								<logic:notEqual name="documento" property="estado" value="S">
 								<tr>
 									<th class="tramits"></th>
 									<td>
