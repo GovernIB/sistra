@@ -71,6 +71,7 @@ function validaFormulario( form )
 		  		<input name="procedimientoId" type="hidden" value="${param.procedimientoId}"/>
 		  		<input name="fechaCreacion" type="hidden" value=" ${param.fechaCreacion}"/>
 		  		<input name="idPersistencia" type="hidden" value="${param.idPersistencia}"/>
+		  		<input name="nivelAutenticacion" type="hidden" value="${param.nivelAutenticacion}"/>
 				<table>
 					<tbody>
 						<tr>

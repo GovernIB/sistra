@@ -57,7 +57,7 @@ public class FormularioIncidenciaservlet extends HttpServlet
 	private static String plantillaHtml = null;
 	
 	private static String[] camposFormulario = { "tramiteDesc", "tramiteId",
-			"procedimientoId", "fechaCreacion", "idPersistencia", "nif",
+			"procedimientoId", "fechaCreacion", "idPersistencia","nivelAutenticacion", "nif",
 			"nombre", "telefono", "email","procedimientoSelec", "problemaTipo", "problemaDesc" };	 
 	
 	public void init() {
@@ -132,6 +132,12 @@ public class FormularioIncidenciaservlet extends HttpServlet
 			
 			String textoHtml = construyeMensajeHtml(lang, paramString);
 			List<String> destinatarios = getDestinatarios(destinatariosProp, procedimiento, paramString.get("problemaTipo"));
+			
+			String paramValue = paramString.get("problemaTipo");	
+			if (StringUtils.isNotBlank(paramValue)){
+				titulo = titulo + " - " + getDescIncidencia(lang, paramValue);
+			}
+			
 			if (destinatarios.size() == 0) {
 				throw new Exception("No se ha especificado lista de destinatarios");
 			}
@@ -246,7 +252,11 @@ public class FormularioIncidenciaservlet extends HttpServlet
 		}				
 		
 		String mensaje = getPlantilla();
-		mensaje = StringUtils.replace(mensaje, "[#TITULO#]", getLiteral(lang, "incidencias.email.titulo"));
+		String paramValue = paramString.get("problemaTipo");	
+		if (StringUtils.isNotBlank(paramValue)){
+			paramValue = getDescIncidencia(lang, paramValue);
+		}
+		mensaje = StringUtils.replace(mensaje, "[#TITULO#]", getLiteral(lang, "incidencias.email.titulo") + " - " + paramValue);
 		mensaje = StringUtils.replace(mensaje, "[#CONTENIDO#]", listaCampos);
 		
 		return mensaje;
@@ -258,6 +268,10 @@ public class FormularioIncidenciaservlet extends HttpServlet
 		if (StringUtils.isNotBlank(paramValue)) {
 			if ("problemaTipo".equals(paramName)) {
 				paramValue = getDescIncidencia(lang, paramValue);
+			}
+			
+			if ("nivelAutenticacion".equals(paramName)) {
+				paramValue = getDescNivelesAutenticacion(lang, paramValue);
 			}
 			
 			if ("procedimientoSelec".equals(paramName)) {
@@ -324,6 +338,10 @@ public class FormularioIncidenciaservlet extends HttpServlet
 	
 	private String getDescIncidencia(String lang, String tipoIncidencia){
 		return propiedadesConfiguracion.getProperty("incidencias." + tipoIncidencia + "." + lang);
+	}
+	
+	private String getDescNivelesAutenticacion(String lang, String nivelAutenticacion){
+		return getLiteral(lang, "incidencias.nivelesAutenticacion." + nivelAutenticacion);
 	}
 	
 	private String getLiteral(String lang, String codLiteral) {

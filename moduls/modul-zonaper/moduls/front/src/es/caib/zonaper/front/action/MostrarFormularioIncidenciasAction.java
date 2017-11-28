@@ -42,10 +42,12 @@ public class MostrarFormularioIncidenciasAction extends BaseAction
 		String tramiteId = "";
 		String procedimientoId = "";
 		String fechaCreacion = "";
-		String idPersistencia = "";		
+		String idPersistencia = "";
+		String nivelAutenticacion = "";
 		
 		DatosSesion datosSesion = this.getDatosSesion(request);
 		lang = this.getLocale(request).getLanguage();
+		nivelAutenticacion = String.valueOf(datosSesion.getNivelAutenticacion());
 		
 		if (datosSesion.getNivelAutenticacion() != ConstantesLogin.LOGIN_ANONIMO) {
 			nif = datosSesion.getNifUsuario();
@@ -86,7 +88,8 @@ public class MostrarFormularioIncidenciasAction extends BaseAction
 		 url += "&tramiteId=" + encodeParameter(tramiteId);
 		 url += "&procedimientoId=" + encodeParameter(procedimientoId);
 		 url += "&fechaCreacion=" + encodeParameter(fechaCreacion);
-		 url += "&idPersistencia=" + encodeParameter(idPersistencia);				 
+		 url += "&idPersistencia=" + encodeParameter(idPersistencia);
+		 url += "&nivelAutenticacion=" + encodeParameter(nivelAutenticacion);
 		 		 		 
 		 response.sendRedirect(url);		 
 		 return null;

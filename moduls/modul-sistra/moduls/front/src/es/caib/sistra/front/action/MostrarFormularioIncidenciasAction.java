@@ -42,6 +42,7 @@ public class MostrarFormularioIncidenciasAction extends BaseAction
 		String idPersistencia = "";
 		String fechaCreacion = "";
 		String lang = "es";
+		String nivelAutenticacion = "";
 		
 		try {
 			InstanciaDelegate delegate = InstanciaManager
@@ -50,6 +51,7 @@ public class MostrarFormularioIncidenciasAction extends BaseAction
 			respuestaFront = delegate.obtenerInfoTramite();
 
 			lang = respuestaFront.getInformacionTramite().getDatosSesion().getLocale().getLanguage();
+			nivelAutenticacion = String.valueOf(respuestaFront.getInformacionTramite().getDatosSesion().getNivelAutenticacion());
 			idPersistencia = respuestaFront.getInformacionTramite().getIdPersistencia();
 			tramiteDesc = respuestaFront.getInformacionTramite().getDescripcion();		
 			tramiteId = respuestaFront.getInformacionTramite().getModelo();
@@ -73,8 +75,9 @@ public class MostrarFormularioIncidenciasAction extends BaseAction
 		 url += "&nif=" + encodeParameter(nif);
 		 url += "&nombre=" + encodeParameter(nombre);
 		 url += "&fechaCreacion=" + encodeParameter(fechaCreacion);
+		 url += "&nivelAutenticacion=" + encodeParameter(nivelAutenticacion);
 		 
-		 response.sendRedirect(url);		 
+		 response.sendRedirect(url);	 
 		 return null;
      }
 
