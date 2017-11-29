@@ -38,7 +38,7 @@ public class NifCif {
 	public static String SIN_PASAPORTE = SIN_PASAPORTE_PREFIX + ".{1,20}"; // Formato CODPAIS/NUMPASAPORTE  CODPAIS (3 letras) y NUMPASAPORTE (20 caracteres)
 	
 	//public static String SIN_NIE = "^\\s*[X|Y][\\/|\\s\\-]?[0-9]{1,8}[\\/|\\s\\-]?[A-Z]{1}\\s*$";
-	public static String SIN_NIE = "[X|Y|Z][0-9]{1,8}[A-Z]{1}";
+	public static String SIN_NIE = "[X|Y|Z][0-9]{1,7}[A-Z]{1}";
 	public static String SIN_SS = "^\\s*[0-9]{2}[\\/|\\s\\-]?[0-9]{7,8}[\\/|\\s\\-]?[0-9]{2}\\s*$";
 	
 	public static HashMap sociedad = new HashMap();
