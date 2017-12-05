@@ -20,13 +20,16 @@ import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.pagos.EstadoSesionPago;
+import es.caib.sistra.plugins.pagos.PluginPagosIntf;
 import es.caib.xml.ConstantesXML;
 import es.caib.xml.analiza.Analizador;
 import es.caib.xml.analiza.Nodo;
+import es.caib.xml.pago.XmlDatosPago;
 import es.caib.xml.util.HashMapIterable;
 import es.caib.zonaper.helpdesk.front.Constants;
 import es.caib.zonaper.helpdesk.front.form.DetallePagoForm;
 import es.caib.zonaper.model.DetallePagoTelematico;
+import es.caib.zonaper.model.PagoTelematico;
 
 /**
  * @struts.action
@@ -80,6 +83,33 @@ public class DetallePagoAction extends BaseAction
 		documentoRDS = rdsDelegate.consultarDocumento( referenciaRDS );
 		byte[] byteArraySolicitud = documentoRDS.getDatosFichero();
 		SimpleDateFormat sdf = new SimpleDateFormat( FORMATO_FECHAS );
+		
+		XmlDatosPago xmlPago = new XmlDatosPago();
+		xmlPago.setBytes(byteArraySolicitud);
+		
+		// Invocamos al plugin de pago para verificar estado sesion pago
+		String pluginId = xmlPago.getPluginId();
+		if (StringUtils.isBlank(pluginId)) {
+			pluginId = PluginFactory.ID_PLUGIN_DEFECTO;
+		}
+		PluginPagosIntf pluginPagos = PluginFactory.getInstance().getPluginPagos(pluginId);
+		EstadoSesionPago estadoSesionPago = pluginPagos.comprobarEstadoSesionPago(xmlPago.getLocalizador());
+				
+		PagoTelematico pt = new PagoTelematico();
+				
+		String estado = null;
+		switch(estadoSesionPago.getEstado()){
+		case 0: estado = Constants.XMLPAGO_NO_INICIADO;
+				break;
+		case 1: estado = Constants.XMLPAGO_EN_CURSO;
+				break;
+		case 2: estado = Constants.XMLPAGO_CONFIRMADO;
+				break;
+		case 3:	estado = Constants.XMLPAGO_PENDIENTE_CONFIRMAR;
+				break;
+		case 4:	estado = Constants.XMLPAGO_TIEMPO_EXCEDIDO;
+				break;		
+		}
 
 		// Parseamos los datos del formulario a la hash			
 		Analizador analizador = new Analizador ();			
@@ -88,17 +118,16 @@ public class DetallePagoAction extends BaseAction
 		dpt.setIdPlugin((map.get(XML_ID_PLUGIN) != null) ? ((Nodo) map.get(XML_ID_PLUGIN)).getValor() : PluginFactory.ID_PLUGIN_DEFECTO);
 		dpt.setEstadoPlataforma(Constants.XMLPAGO_NO_INICIADO);
 		dpt.setEstadoPortal(Constants.PAGO_NO_COMPROBADO);
-		String estadoPago = (map.get(XML_ESTADO) != null) ? ((Nodo) map.get(XML_ESTADO)).getValor() : null;
+		String estadoPago = (estado != null) ? estado : null;
 		if(estadoPago != null) dpt.setEstadoPlataforma(estadoPago);
-
-		String tipoPago =  ((Nodo) map.get(XML_TIPO)).getValor();
-		dpt.setTipo(tipoPago.charAt(0));
-		dpt.setDui( (map.get(XML_NUMERO_DUI) != null) ? ((Nodo) map.get(XML_NUMERO_DUI)).getValor() : null);
-		dpt.setLocalizador((map.get(XML_LOCALIZADOR) != null) ? ((Nodo) map.get(XML_LOCALIZADOR)).getValor() : null);
-		Nodo nodo = (Nodo) map.get(XML_FECHA_PAGO);		
-		if ( nodo != null){
-			dpt.setFecha( StringUtils.isNotEmpty(nodo.getValor()) ? new Timestamp(sdf.parse(nodo.getValor()).getTime()):null);
-		}
+		
+		dpt.setTipo(estadoSesionPago.getTipo());
+		dpt.setDui( (estadoSesionPago.getIdentificadorPago() != null) ? estadoSesionPago.getIdentificadorPago() : null);
+		dpt.setLocalizador((xmlPago.getLocalizador() != null) ? xmlPago.getLocalizador() : null);
+		if (estadoSesionPago.getFechaPago() != null){
+			String fecha = sdf.format(estadoSesionPago.getFechaPago());
+			dpt.setFecha( StringUtils.isNotEmpty(fecha) ? new Timestamp(estadoSesionPago.getFechaPago().getTime()):null);	
+		}	
 		dpt.setIdioma(detallePagoFormulario.getIdioma());
 		dpt.setNombre( (map.get(XML_NOMBRE) != null) ? ((Nodo) map.get(XML_NOMBRE)).getValor() : null);
 		dpt.setNif( (map.get(XML_NIF) != null) ? ((Nodo) map.get(XML_NIF)).getValor() : null);
@@ -113,14 +142,8 @@ public class DetallePagoAction extends BaseAction
 		 *    
 		 */
 		EstadoSesionPago esp  = null;
-		try{
-			if(estadoPago.equals(Constants.XMLPAGO_PENDIENTE_CONFIRMAR)){
-				if(dpt.getLocalizador() != null){
-					esp = PluginFactory.getInstance().getPluginPagos(dpt.getIdPlugin()).comprobarEstadoSesionPago(dpt.getLocalizador());					
-				}
-			}
-		}catch(Exception ex){
-			log.error("Error consultando estado sesion de pago",ex);			
+		if(estadoPago.equals(Constants.XMLPAGO_PENDIENTE_CONFIRMAR)){
+			esp = estadoSesionPago;
 		}
 		
 		/* 

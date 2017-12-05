@@ -24,9 +24,14 @@ import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
+import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.pagos.ConstantesPago;
+import es.caib.sistra.plugins.pagos.EstadoSesionPago;
+import es.caib.sistra.plugins.pagos.PluginPagosIntf;
 import es.caib.xml.ConstantesXML;
 import es.caib.xml.analiza.Analizador;
 import es.caib.xml.analiza.Nodo;
+import es.caib.xml.pago.XmlDatosPago;
 import es.caib.xml.util.HashMapIterable;
 import es.caib.zonaper.helpdesk.front.Constants;
 import es.caib.zonaper.helpdesk.front.form.PagosTelematicosForm;
@@ -91,13 +96,13 @@ public class BusquedaPagosTelematicosAction extends BaseAction
 			{
 				String clave = pagosForm.getClavePersistencia();
 				// Tramites Persistentes y Backup
-				fillPagosTramitePersistentePorClave(clave,result);
+				fillPagosTramitePersistentePorClave(clave,result, Constants.MODO_AUTENTICACION_ANONIMO);
 
 				// Entradas Telematicas
-				fillPagosEntradasTelematicasPorClave(clave,result);
+				fillPagosEntradasTelematicasPorClave(clave,result, Constants.MODO_AUTENTICACION_ANONIMO);
 				
 				// Pre-Registros
-				fillPagosPreRegistrosPorClave(clave,result);
+				fillPagosPreRegistrosPorClave(clave,result, Constants.MODO_AUTENTICACION_ANONIMO);
 			}
 		}
 		else
@@ -146,12 +151,12 @@ public class BusquedaPagosTelematicosAction extends BaseAction
 		return mapping.findForward( "success" );
     }
 
-	private void fillPagosTramitePersistentePorClave(String clave, List result) throws Exception
+	private void fillPagosTramitePersistentePorClave(String clave, List result, char autenticacion) throws Exception
 	{
 		// Buscamos en la zona de persistencia
 		TramitePersistenteDelegate delegate = DelegateUtil.getTramitePersistenteDelegate();
 		TramitePersistente tp = delegate.obtenerTramitePersistente(clave);
-		if(tp != null)
+		if(tp != null && tp.getNivelAutenticacion() == autenticacion)
 		{
 			fillPagosFromTramitePersistente(tp,result,false);
 		}
@@ -159,7 +164,7 @@ public class BusquedaPagosTelematicosAction extends BaseAction
 		// Buscamos en Backup de Tramites Persistentes
 		tp = delegate.obtenerTramitePersistenteBackup(clave);
 		
-		if(tp != null)
+		if(tp != null && tp.getNivelAutenticacion() == autenticacion)
 		{
 			fillPagosFromTramitePersistente(tp,result,true);
 		}
@@ -175,11 +180,11 @@ public class BusquedaPagosTelematicosAction extends BaseAction
 		}
 	}
 	
-	private void fillPagosEntradasTelematicasPorClave(String clave, List result) throws Exception
+	private void fillPagosEntradasTelematicasPorClave(String clave, List result, char autenticacion) throws Exception
 	{
 	 	EntradaTelematicaDelegate  etd = DelegateUtil.getEntradaTelematicaDelegate();
 	 	EntradaTelematica et = etd.obtenerEntradaTelematica(clave); 
-		if(et != null)
+		if(et != null && et.getNivelAutenticacion() == autenticacion)
 		{
 			fillPagosFromEntradaTelematica(et,result);
 		}
@@ -279,11 +284,11 @@ public class BusquedaPagosTelematicosAction extends BaseAction
 	
 	}
 
-	private void fillPagosPreRegistrosPorClave(String clave, List result) throws Exception
+	private void fillPagosPreRegistrosPorClave(String clave, List result, char autenticacion) throws Exception
 	{
 		EntradaPreregistroDelegate  epd = DelegateUtil.getEntradaPreregistroDelegate();
 		EntradaPreregistro ep = epd.obtenerEntradaPreregistro(clave);    	
-		if(ep != null)
+		if(ep != null && ep.getNivelAutenticacion() == autenticacion)
 		{
 			fillPagosFromPreRegistro(ep,result);
 		}
@@ -346,21 +351,48 @@ public class BusquedaPagosTelematicosAction extends BaseAction
 		// Comprobamos si es un documento de pago
 		DocumentoRDS documentoRDS = rdsDelegate.consultarDocumento(ref,false);
 		if(!documentoRDS.getModelo().equals(ConstantesRDS.MODELO_PAGO)) return null;
-		
+				
 		// Si es un documento de pago obtenemos datos del pago
 		documentoRDS = rdsDelegate.consultarDocumento( ref );
-			Analizador analizador = new Analizador ();			
-    	HashMapIterable map = analizador.analizar ( new ByteArrayInputStream(documentoRDS.getDatosFichero()), ConstantesXML.ENCODING );
-			PagoTelematico pt = new PagoTelematico();
-			pt.setEstado( (map.get(XML_ESTADO) != null) ? ((Nodo) map.get(XML_ESTADO)).getValor() : null);
-			pt.setTipo( ((Nodo) map.get(XML_TIPO)).getValor().charAt(0));
-			pt.setLocalizador( (map.get(XML_LOCALIZADOR) != null) ? ((Nodo) map.get(XML_LOCALIZADOR)).getValor() : null);
-			pt.setDui((map.get(XML_NUMERO_DUI) != null) ? ((Nodo) map.get(XML_NUMERO_DUI)).getValor() : null);
-		Nodo nodo = (Nodo) map.get(XML_FECHA_PAGO);		
-			if ( nodo != null){
-				pt.setFechaPago( StringUtils.isNotEmpty(nodo.getValor()) ? new Timestamp(sdf.parse(nodo.getValor()).getTime()):null);
-			}
-			return pt;
+		
+		XmlDatosPago xmlPago = new XmlDatosPago();
+		xmlPago.setBytes(documentoRDS.getDatosFichero());
+		
+		// Invocamos al plugin de pago para verificar estado sesion pago
+		String pluginId = xmlPago.getPluginId();
+		if (StringUtils.isBlank(pluginId)) {
+			pluginId = PluginFactory.ID_PLUGIN_DEFECTO;
+		}
+		PluginPagosIntf pluginPagos = PluginFactory.getInstance().getPluginPagos(pluginId);
+		EstadoSesionPago estadoSesionPago = pluginPagos.comprobarEstadoSesionPago(xmlPago.getLocalizador());
+		
+		PagoTelematico pt = new PagoTelematico();
+		
+		String estado = null;
+		switch(estadoSesionPago.getEstado()){
+		case 0: estado = Constants.XMLPAGO_NO_INICIADO;
+				break;
+		case 1: estado = Constants.XMLPAGO_EN_CURSO;
+				break;
+		case 2: estado = Constants.XMLPAGO_CONFIRMADO;
+				break;
+		case 3:	estado = Constants.XMLPAGO_PENDIENTE_CONFIRMAR;
+				break;
+		case 4:	estado = Constants.XMLPAGO_TIEMPO_EXCEDIDO;
+				break;		
+		}
+		
+		pt.setEstado( (estado != null) ? estado : null);
+		pt.setTipo( estadoSesionPago.getTipo());
+		pt.setLocalizador( (xmlPago.getLocalizador() != null) ? xmlPago.getLocalizador() : null);
+		pt.setDui((estadoSesionPago.getIdentificadorPago() != null) ? estadoSesionPago.getIdentificadorPago() : null);
+		
+		SimpleDateFormat df = new SimpleDateFormat(Constants.FORMATO_FECHAS);
+		if (estadoSesionPago.getFechaPago() != null){
+			String fecha = df.format(estadoSesionPago.getFechaPago());
+			pt.setFechaPago( StringUtils.isNotEmpty(fecha) ? new Timestamp(estadoSesionPago.getFechaPago().getTime()):null);	
+		}
+		return pt;
 	
 	}
 
