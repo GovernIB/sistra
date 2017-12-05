@@ -26,12 +26,12 @@ public class Constants implements Serializable {
 	public static String XMLPAGO_CONFIRMADO = "S";
 	public static String XMLPAGO_NO_INICIADO = "V";
 	public static String XMLPAGO_PENDIENTE_CONFIRMAR = "N";
+	public static String XMLPAGO_EN_CURSO = "C";
+	public static String XMLPAGO_TIEMPO_EXCEDIDO = "T";
 	
 	public static String PAGO_PAGADO = "PP";
 	public static String PAGO_NO_PAGADO = "PNP";
 	public static String PAGO_NO_COMPROBADO = "PNC";
-	
-	
 	
 	public static char PRESENCIAL = 'P';
 	public static char TELEMATICO = 'T';

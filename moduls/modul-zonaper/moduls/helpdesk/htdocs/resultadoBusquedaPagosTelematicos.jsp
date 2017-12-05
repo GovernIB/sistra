@@ -85,6 +85,12 @@
 						<logic:equal name="pago" property="estado" value='<%= Constants.XMLPAGO_PENDIENTE_CONFIRMAR %>'>
 							<bean:message key="resultadoBusqueda.estadoPago.iniciado"/>	
 						</logic:equal>
+						<logic:equal name="pago" property="estado" value='<%= Constants.XMLPAGO_EN_CURSO %>'>
+							<bean:message key="resultadoBusqueda.estadoPago.enCurso"/>	
+						</logic:equal>
+						<logic:equal name="pago" property="estado" value='<%= Constants.XMLPAGO_TIEMPO_EXCEDIDO %>'>
+							<bean:message key="resultadoBusqueda.estadoPago.tiempoExcedido"/>	
+						</logic:equal>
 						</strong>
 					</td>
 					<td>
