@@ -9,10 +9,12 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.util.RequestUtils;
 import org.apache.struts.validator.ValidatorForm;
+
 import es.caib.bantel.back.action.TraduccionFormBeanConfig;
 import es.caib.bantel.model.Idioma;
 import es.caib.bantel.model.Traduccion;
 import es.caib.bantel.model.Traducible;
+import es.caib.bantel.back.taglib.Constants;
 
 
 /**
@@ -150,6 +152,26 @@ public class TraduccionValidatorForm extends ValidatorForm implements InitForm {
 
     public void setTraduccion(Traduccion traduccion) {
         values.setTraduccion(lang, traduccion);
+    }
+    
+    /** Retorna true si se ha pulsado un botón submit de alta */
+    protected boolean isAlta(HttpServletRequest request) {
+      return (request.getParameter(Constants.ALTA_PROPERTY) != null);
+    }
+
+    /** Retorna true si se ha pulsado un botón submit de baja */
+    protected boolean isBaja(HttpServletRequest request) {
+      return (request.getParameter(Constants.BAIXA_PROPERTY) != null);
+    }
+
+    /** Retorna true si se ha pulsado un botón submit de modificación */
+    protected boolean isModificacion(HttpServletRequest request) {
+      return (request.getParameter(Constants.MODIFICACIO_PROPERTY) != null);
+    }
+
+     /** Retorna true si se ha pulsado un botón submit de selección */
+    protected boolean isSeleccion(HttpServletRequest request) {
+      return (request.getParameter(Constants.SELECCIO_PROPERTY) != null);
     }
 
 }

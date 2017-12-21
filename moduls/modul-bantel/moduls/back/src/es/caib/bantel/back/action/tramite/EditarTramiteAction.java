@@ -55,6 +55,9 @@ public class EditarTramiteAction extends BaseAction{
         ProcedimientoDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
         
         Procedimiento tramite = (Procedimiento) tramiteForm.getValues();
+        
+        // Elimina traducciones que no son validas
+        tramiteForm.validaTraduccion(mapping, request);
 
         if (isCancelled(request)) {
             log.debug("isCancelled");
