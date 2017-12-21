@@ -7,6 +7,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import es.caib.bantel.back.action.BaseAction;
+import es.caib.bantel.back.util.MensajesUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +31,7 @@ public class SeleccionTramiteAction extends BaseAction{
                                  HttpServletResponse response) throws Exception {
 
     	log.debug("Entramos en SeleccionTramite");
+    	MensajesUtil.setMsg(this.getResources(request));
 
         String idString = request.getParameter("codigo");
         if (idString == null || idString.length() == 0) {

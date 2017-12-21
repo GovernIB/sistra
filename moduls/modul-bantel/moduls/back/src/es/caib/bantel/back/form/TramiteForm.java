@@ -40,61 +40,65 @@ public class TramiteForm extends TraduccionValidatorForm implements InitForm
         {
         	Procedimiento tramite = ( Procedimiento ) this.getValues();
         	
-        	TraProcedimiento traPro = (TraProcedimiento)tramite.getTraduccion("es");
-        	if (traPro != null ){
-        		if(StringUtils.isEmpty(traPro.getDescripcion())){
-        			errors.add("values.traduccion", new ActionError("errors.descripcion.vacio",MensajesUtil.getValue("es")));
-        		}
-        	}else{
-        		errors.add("values.traduccion", new ActionError("errors.descripcion.vacio", MensajesUtil.getValue("es") ));
-        	}
-        	traPro = (TraProcedimiento)tramite.getTraduccion("ca");
-        	if(traPro != null){
-        		if(StringUtils.isEmpty(traPro.getDescripcion())){
-        			errors.add("values.traduccion", new ActionError("errors.descripcion.vacio", MensajesUtil.getValue("ca") ));
-        		}
-        	}else{
-        		errors.add("values.traduccion", new ActionError("errors.descripcion.vacio", MensajesUtil.getValue("ca") ));
-        	}
-        	
-        	// Comprobamos restricciones
-        	if (tramite.getPeriodica() == 'S'){
-
-        		// Url
-        		if ( (tramite.getTipoAcceso() == Procedimiento.ACCESO_EJB && tramite.getLocalizacionEJB() == Procedimiento.EJB_REMOTO) 
-        			|| 
-        			tramite.getTipoAcceso() == Procedimiento.ACCESO_WEBSERVICE){
-		    			if (StringUtils.isEmpty(tramite.getUrl())){
-		        			errors.add("values.url", new ActionError("errors.url.vacia"));
-		        		}        			
-        		}
-        		//version WS
-        		if(tramite.getTipoAcceso() == Procedimiento.ACCESO_WEBSERVICE){
-        			if (StringUtils.isEmpty(tramite.getVersionWS())){
-	        			errors.add("values.versionWS", new ActionError("errors.versionWS.vacia"));
+        	if(isAlta(request) || isModificacion(request)){
+        		
+	        	TraProcedimiento traPro = (TraProcedimiento)tramite.getTraduccion("es");
+	        	if (traPro != null ){
+	        		if(StringUtils.isEmpty(traPro.getDescripcion())){
+	        			errors.add("values.traduccion", new ActionError("errors.descripcion.vacio",MensajesUtil.getValue("es")));
 	        		}
-        		}
-        		
-        		// Jndi
-        		if (tramite.getTipoAcceso() == Procedimiento.ACCESO_EJB && StringUtils.isEmpty(tramite.getJndiEJB())){
-		    		errors.add("values.jndiEJB", new ActionError("errors.jndi.vacia"));		        	        		
-        		}
-        		
-        		// Usr y pswd
-        		if (tramite.getAutenticacionEJB() == Procedimiento.AUTENTICACION_ESTANDAR){        		
-        			if (StringUtils.isEmpty(userPlain) || StringUtils.isEmpty(passPlain))
-        				errors.add("userPlain", new ActionError("errors.userpasswd.vacio"));
-        		}
-        		
-        	}
-        	        	
-        	// Comprobamos que no exista otro trámite con ese código
-        	if (  request.getParameter(Constants.ALTA_PROPERTY) != null  ) {
-		    	ProcedimientoDelegate delegate = DelegateUtil.getTramiteDelegate();
-		    	Procedimiento tramiteTmp = delegate.obtenerProcedimiento( tramite.getIdentificador() );
-		    	if ( tramiteTmp != null ) 		    	{
-		    		errors.add("values.identificador", new ActionError("errors.tramite.duplicado", tramite.getIdentificador() ));
-		    	} 
+	        	}else{
+	        		errors.add("values.traduccion", new ActionError("errors.descripcion.vacio", MensajesUtil.getValue("es") ));
+	        	}
+	        	traPro = (TraProcedimiento)tramite.getTraduccion("ca");
+	        	if(traPro != null){
+	        		if(StringUtils.isEmpty(traPro.getDescripcion())){
+	        			errors.add("values.traduccion", new ActionError("errors.descripcion.vacio", MensajesUtil.getValue("ca") ));
+	        		}
+	        	}else{
+	        		errors.add("values.traduccion", new ActionError("errors.descripcion.vacio", MensajesUtil.getValue("ca") ));
+	        	}
+	        	
+	        	// Comprobamos restricciones
+	        	if (tramite.getPeriodica() == 'S'){
+	
+	        		// Url
+	        		if ( (tramite.getTipoAcceso() == Procedimiento.ACCESO_EJB && tramite.getLocalizacionEJB() == Procedimiento.EJB_REMOTO) 
+	        			|| 
+	        			tramite.getTipoAcceso() == Procedimiento.ACCESO_WEBSERVICE){
+			    			if (StringUtils.isEmpty(tramite.getUrl())){
+			        			errors.add("values.url", new ActionError("errors.url.vacia"));
+			        		}        			
+	        		}
+	        		//version WS
+	        		if(tramite.getTipoAcceso() == Procedimiento.ACCESO_WEBSERVICE){
+	        			if (StringUtils.isEmpty(tramite.getVersionWS())){
+		        			errors.add("values.versionWS", new ActionError("errors.versionWS.vacia"));
+		        		}
+	        		}
+	        		
+	        		// Jndi
+	        		if (tramite.getTipoAcceso() == Procedimiento.ACCESO_EJB && StringUtils.isEmpty(tramite.getJndiEJB())){
+			    		errors.add("values.jndiEJB", new ActionError("errors.jndi.vacia"));		        	        		
+	        		}
+	        		
+	        		// Usr y pswd
+	        		if (tramite.getAutenticacionEJB() == Procedimiento.AUTENTICACION_ESTANDAR){        		
+	        			if (StringUtils.isEmpty(userPlain) || StringUtils.isEmpty(passPlain))
+	        				errors.add("userPlain", new ActionError("errors.userpasswd.vacio"));
+	        		}
+	        		
+	        	}
+	        	        	
+	        	// Comprobamos que no exista otro trámite con ese código
+	        	if (  request.getParameter(Constants.ALTA_PROPERTY) != null  ) {
+			    	ProcedimientoDelegate delegate = DelegateUtil.getTramiteDelegate();
+			    	Procedimiento tramiteTmp = delegate.obtenerProcedimiento( tramite.getIdentificador() );
+			    	if ( tramiteTmp != null ) 		    	{
+			    		errors.add("values.identificador", new ActionError("errors.tramite.duplicado", tramite.getIdentificador() ));
+			    	} 
+	        	}
+        	
         	}
         
         }
