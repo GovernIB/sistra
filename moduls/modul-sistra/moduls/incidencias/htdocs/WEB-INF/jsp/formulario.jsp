@@ -94,7 +94,7 @@ function validaFormulario( form )
 						<tr>
 							<th>* <fmt:message key="incidencias.procedimientoSelec"/></th>
 							<td>
-								<select name="procedimientoSelec">
+								<select name="procedimientoSelec" style="width:272px;">
 										<c:forEach var="procedimiento" items="${listaProcedimientos}">
                         					<option value="${procedimiento.identificador}">
                         					${procedimiento.descripcion}
