@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -12,6 +13,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
+
+
+
 
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
@@ -41,8 +45,10 @@ import es.caib.sistra.persistence.delegate.DelegateUtil;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
 import es.caib.util.CredentialUtil;
+import es.caib.util.DataUtil;
 import es.caib.util.UsernamePasswordCallbackHandler;
 import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
+import es.caib.zonaper.persistence.delegate.PadDelegate;
 
 
 public class FormularioIncidenciaservlet extends HttpServlet
@@ -293,6 +299,11 @@ public class FormularioIncidenciaservlet extends HttpServlet
 			HttpServletResponse response) throws ServletException, IOException {
 		// - Idioma
 		String lang = "ca";
+		Date fechaLimite = null;
+		int dias = Integer.parseInt(StringUtils.defaultIfEmpty(propiedadesConfiguracion.getProperty("incidencias.dias"), "0"));
+		if (dias > 0){
+			fechaLimite = DataUtil.sumarDias(new Date(), dias * -1);
+		}
 		if (request.getParameter("lang") != null) {
 			lang = request.getParameter("lang");
 		}
@@ -306,7 +317,8 @@ public class FormularioIncidenciaservlet extends HttpServlet
 		try {
 			PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();	
 			if (StringUtils.isEmpty(request.getParameter("procedimientoId")) && plgLogin.getMetodoAutenticacion(request.getUserPrincipal()) != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO) {			
-				List procedimientos = DelegatePADUtil.getPadDelegate().obtenerProcedimientosUsuario(lang);
+				PadDelegate pad = DelegatePADUtil.getPadDelegate();
+				List procedimientos = pad.obtenerProcedimientosUsuario(lang, fechaLimite);
 				request.setAttribute("mostrarListaProcedimientos", "S");
 				request.setAttribute("listaProcedimientos", procedimientos);
 			}

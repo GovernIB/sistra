@@ -255,6 +255,35 @@ public abstract class PadFacadeEJB implements SessionBean{
     	return tramitesPAD;
     }
     
+    /**
+     * Obtiene lista de tramites persistentes que tiene pendientes por completar el usuario,
+     * con una fecha límite
+     *
+     *
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public List obtenerTramitesPersistentesUsuario(Date fecha) throws ExcepcionPAD{
+    	// Cargamos tramitePersistente
+    	List tramites;
+    	try{
+    		TramitePersistenteDelegate td = DelegateUtil.getTramitePersistenteDelegate();
+    		tramites = td.listarTramitePersistentesUsuario(fecha);
+    	}catch (Exception ex){
+    		throw new ExcepcionPAD("No se ha podido recuperar trámites persistentes del usuario: " + this.ctx.getCallerPrincipal().getName(),ex);
+    	}
+
+        // Pasamos a TramitePersistentePAD
+    	List tramitesPAD = new ArrayList(tramites.size());
+    	for (Iterator it = tramites.iterator();it.hasNext();){
+    		TramitePersistente tramitePersistente = (TramitePersistente) it.next();
+    		if ("S".equals(tramitePersistente.getPersistente())) {
+    			tramitesPAD.add(tramitePersistenteToTramitePersistentePAD(tramitePersistente));
+    		}
+    	}
+    	return tramitesPAD;
+    }
+    
 
     /**
      * Obtiene lista de tramites persistentes que tiene pendientes por completar el usuario,
@@ -1046,12 +1075,17 @@ public abstract class PadFacadeEJB implements SessionBean{
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      */
-    public List obtenerProcedimientosUsuario(String lang) throws ExcepcionPAD{
+    public List obtenerProcedimientosUsuario(String lang, Date fecha) throws ExcepcionPAD{
     	try {
 	    	List procsId = new ArrayList();
+	    	List tramites = new ArrayList();
 	    		
-	    	// Recuperamos id procedimientos de tramites persistentes 
-	    	List tramites = this.obtenerTramitesPersistentesUsuario();
+	    	// Recuperamos id procedimientos de tramites persistentes
+	    	if (fecha == null){
+	    		tramites = this.obtenerTramitesPersistentesUsuario();
+	    	} else{
+	    		tramites = this.obtenerTramitesPersistentesUsuario(fecha);
+	    	}
 	    	for (Iterator it = tramites.iterator(); it.hasNext();) {
 	    		TramitePersistentePAD tp = (TramitePersistentePAD) it.next();
 	    		if (!procsId.contains(tp.getIdProcedimiento())) {
@@ -1060,7 +1094,7 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    	}
 	    	
 	    	// Recuperamos id procedimientos de expedientes
-	    	List procsIdExpe = DelegateUtil.getExpedienteDelegate().obtenerProcedimientosId();
+	    	List procsIdExpe = DelegateUtil.getExpedienteDelegate().obtenerProcedimientosId(fecha);
 	    	for (Iterator it = procsIdExpe.iterator(); it.hasNext();) {
 	    		String idProcExpe = (String) it.next();
 	    		if (!procsId.contains(idProcExpe)) {

@@ -432,11 +432,11 @@ public class PadDelegate implements StatelessDelegate {
 		}
 	}
 	
-	public List obtenerProcedimientosUsuario(String lang) throws DelegateException	
+	public List obtenerProcedimientosUsuario(String lang, Date fecha) throws DelegateException	
 	{
 		try
 		{
-		 	return getFacade().obtenerProcedimientosUsuario(lang);
+		 	return getFacade().obtenerProcedimientosUsuario(lang, fecha);
 		}
 		catch( Exception e )
 		{
