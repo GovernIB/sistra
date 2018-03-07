@@ -75,8 +75,13 @@ public class FinalizacionController extends BaseController
 		
 		ByteArrayInputStream inputStream = new ByteArrayInputStream ( xmlDatosPropios.getBytes( ConstantesXML.ENCODING ) );
 		DatosPropios datosPropios = factoriaDatosPropios.crearDatosPropios ( inputStream );
+<<<<<<< HEAD
 		
 		Instrucciones instrucciones = datosPropios.getInstrucciones();
+=======
+	    
+	    Instrucciones instrucciones = datosPropios.getInstrucciones();
+>>>>>>> refs/heads/sistra-3.4
 		
 		return instrucciones;
 		

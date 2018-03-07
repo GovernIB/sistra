@@ -1209,6 +1209,10 @@ public class TramiteProcessorEJB implements SessionBean {
 	    					SesionSistra ss = new SesionSistra();
 	    	        		ss.setUrlMantenimientoSesionSistra(urlMantenimientoSesion);
 	    	        		ss.setUrlRetornoSistra(urlRetorno);
+	    	        		ss.setNivelAutenticacion(Character.toString(this.datosSesion.getNivelAutenticacion()));
+	    	        		ss.setNifUsuario(this.datosSesion.getNifUsuario());
+	    	        		ss.setNombreCompletoUsuario(this.datosSesion.getNombreCompletoUsuario());
+	    	        		ss.setCodigoUsuario(this.datosSesion.getCodigoUsuario());
 	    	        		SesionPago sesionPago = PluginFactory.getInstance().getPluginPagos(docNivel.getPagoPlugin()).reanudarSesionPago(datosPago.getLocalizador(),ss);
 	    	        		// Devolvemos indicando la url de redireccion
 	    	        		param.put("urlsesionpago",sesionPago.getUrlSesionPago());
@@ -1320,6 +1324,10 @@ public class TramiteProcessorEJB implements SessionBean {
 	        		SesionSistra ss = new SesionSistra();
 	        		ss.setUrlMantenimientoSesionSistra(urlMantenimientoSesion);
 	        		ss.setUrlRetornoSistra(urlRetorno);
+	        		ss.setNivelAutenticacion(Character.toString(this.datosSesion.getNivelAutenticacion()));
+	        		ss.setNifUsuario(this.datosSesion.getNifUsuario());
+	        		ss.setNombreCompletoUsuario(this.datosSesion.getNombreCompletoUsuario());
+	        		ss.setCodigoUsuario(this.datosSesion.getCodigoUsuario());
 
 	        		SesionPago sesionPago = PluginFactory.getInstance().getPluginPagos(docNivel.getPagoPlugin()).iniciarSesionPago(dp,ss);
 

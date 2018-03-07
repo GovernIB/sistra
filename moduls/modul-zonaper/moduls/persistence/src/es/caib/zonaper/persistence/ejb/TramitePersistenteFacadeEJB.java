@@ -289,6 +289,43 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
+    
+    /**
+    *
+    * Obtiene lista de tramites persistentes que tiene pendientes por completar el usuario
+    * o bien ha remitido a otro usuario con una fecha límite
+    *
+    * @ejb.interface-method
+    * @ejb.permission role-name="${role.todos}"
+    */
+   public List listarTramitePersistentesUsuario(Date fecha) {
+       Session session = getSession();
+       try {
+       	Principal sp = this.ctx.getCallerPrincipal();
+       	PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
+       	if (plgLogin.getMetodoAutenticacion(sp) == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO) throw new HibernateException("Debe estar autenticado");
+
+           Query query = session
+           .createQuery("FROM TramitePersistente AS m WHERE (m.usuarioFlujoTramitacion = :usuario or m.usuario = :usuario) AND m.fechaModificacion >= :fechaLimite ORDER BY m.fechaModificacion DESC")
+           .setParameter("usuario",sp.getName());
+                   query.setParameter("fechaLimite",fecha);
+           //query.setCacheable(true);
+           List tramites = query.list();
+
+           // Cargamos documentos
+           for (Iterator it=tramites.iterator();it.hasNext();){
+           	TramitePersistente tramitePersistente = (TramitePersistente) it.next();
+           	Hibernate.initialize(tramitePersistente.getDocumentos());
+           }
+
+           return tramites;
+
+       } catch (Exception he) {
+           throw new EJBException(he);
+       } finally {
+           close(session);
+       }
+   }
 
     /**
      *

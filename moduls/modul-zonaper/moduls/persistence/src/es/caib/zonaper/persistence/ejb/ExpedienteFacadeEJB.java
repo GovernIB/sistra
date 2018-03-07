@@ -609,17 +609,29 @@ public abstract class ExpedienteFacadeEJB extends HibernateEJB
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}" 
      */
-	public List obtenerProcedimientosId() {
+	public List obtenerProcedimientosId(Date fecha) {
 		List resultado = new ArrayList();
 		Session session = getSession();
         try 
         {
+        	// Construimos sql viendo si aplicamos filtro expedientes
+        	String sqlFiltro = "";
+        	if (fecha != null) {
+        		// Añadimos lista de expedientes	
+        		sqlFiltro = " AND e.fecha >= :fechaLimite"; 	        		        
+        	}
+        	
         	// Obtenemos nif usuario autenticado
         	String nifUser = PluginFactory.getInstance().getPluginLogin().getNif(this.ctx.getCallerPrincipal());
         	Query query = 
             		session.createQuery( 
-            				"SELECT e.idProcedimiento FROM Expediente AS e WHERE e.nifRepresentante = :nifUser")
-            		.setParameter("nifUser",nifUser);   
+            				"SELECT e.idProcedimiento FROM Expediente AS e WHERE e.nifRepresentante = :nifUser" + 
+                    				sqlFiltro + " ORDER BY e.fecha DESC")
+            		.setParameter("nifUser",nifUser);
+        	
+        	if (fecha != null){
+    			query.setParameter("fechaLimite",fecha);
+        	}
         	
         	List result = query.list();
         	if (result != null) {

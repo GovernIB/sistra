@@ -283,11 +283,11 @@ public class ExpedienteDelegate implements StatelessDelegate
         }
 	}
 	
-	public List obtenerProcedimientosId() throws DelegateException
+	public List obtenerProcedimientosId(Date fecha) throws DelegateException
 	{
 		try
 		{
-			return getFacade().obtenerProcedimientosId( ) ;
+			return getFacade().obtenerProcedimientosId(fecha) ;
 		}
 		catch (Exception e) 
 		{

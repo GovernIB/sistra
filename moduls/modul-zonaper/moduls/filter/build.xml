@@ -157,7 +157,7 @@
     	
        <replace file="${web.gen.etc}/web.xml">
           <replacefilter token="@role.todos@" value="${role.todos}"/>
-       	<replacefilter token="@web.login-config@" value="${web.login-config}"/>      
+       	<replacefilter token="@web.login-config@" value="${web.front.login-config}"/>
        	
        		<!-- cas: reemplazo comentarios -->
        		  <replacefilter token="@cas.enabled.comment.init@" value="${cas.enabled.comment.init}"/>        	 

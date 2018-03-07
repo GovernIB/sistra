@@ -113,6 +113,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.auto}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public List listarProcedimientos()
     {
@@ -137,6 +138,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.auto}"
+     * @ejb.permission role-name="${role.todos}"
      */
     public List listarProcedimientos(String filtro)
     {

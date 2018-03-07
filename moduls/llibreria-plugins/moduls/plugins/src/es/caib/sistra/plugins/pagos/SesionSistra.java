@@ -19,6 +19,26 @@ public class SesionSistra implements Serializable{
 	 * esta url en las páginas de la pasarela de pagos.
 	 */
 	private String urlMantenimientoSesionSistra;
+	
+	/**
+	 * Nivel de autenticación de sesión en sistra. 
+	 */
+	private String nivelAutenticacion;
+	
+	/**
+	 * NIF de usuario autenticado de sesión en sistra.
+	 */
+	private String NifUsuario;
+	
+	/**
+	 * Nombre completo de usuario autenticado de sesión en sistra.
+	 */
+	private String NombreCompletoUsuario;
+	
+	/**
+	 * codigo de usuario autenticado de sesión en sistra.
+	 */
+	private String codigoUsuario;
 
 	/**
 	 * Url de mantenimiento de sesión en sistra. Como método para mantener la sesión activa en sistra se puede incluir
@@ -50,6 +70,38 @@ public class SesionSistra implements Serializable{
 	 */
 	public void setUrlRetornoSistra(String urlRetornoSistra) {
 		this.urlRetornoSistra = urlRetornoSistra;
+	}
+	
+	public String getNivelAutenticacion() {
+		return nivelAutenticacion;
+	}
+
+	public void setNivelAutenticacion(String nivelAutenticacion) {
+		this.nivelAutenticacion = nivelAutenticacion;
+	}
+
+	public String getNifUsuario() {
+		return NifUsuario;
+	}
+
+	public void setNifUsuario(String nifUsuario) {
+		NifUsuario = nifUsuario;
+	}
+
+	public String getNombreCompletoUsuario() {
+		return NombreCompletoUsuario;
+	}
+
+	public void setNombreCompletoUsuario(String nombreCompletoUsuario) {
+		NombreCompletoUsuario = nombreCompletoUsuario;
+	}
+
+	public String getCodigoUsuario() {
+		return codigoUsuario;
+	}
+
+	public void setCodigoUsuario(String codigoUsuario) {
+		this.codigoUsuario = codigoUsuario;
 	}
 	
 	

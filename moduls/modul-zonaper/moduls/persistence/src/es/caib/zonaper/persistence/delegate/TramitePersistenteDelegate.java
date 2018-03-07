@@ -54,6 +54,15 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
+    public List listarTramitePersistentesUsuario(Date fecha) throws DelegateException {
+        try {
+            return getFacade().listarTramitePersistentesUsuario(fecha);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            throw new DelegateException(e);
+        }
+    }
 
     public List listarTramitePersistentesEntidadDelegada(String nifEntidad) throws DelegateException {
         try {
