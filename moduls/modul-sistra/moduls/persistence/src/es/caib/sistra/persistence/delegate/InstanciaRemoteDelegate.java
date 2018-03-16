@@ -10,6 +10,7 @@ import javax.ejb.Handle;
 import javax.ejb.RemoveException;
 import javax.naming.NamingException;
 
+import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.sistra.model.InstanciaBean;
 import es.caib.sistra.model.RespuestaFront;
 import es.caib.sistra.persistence.intf.TramiteProcessor;
@@ -288,6 +289,17 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 		try
         {
         	return getRemote().mostrarDocumento( idDocumento,  instancia);
+
+        } catch (RemoteException e)
+        {
+            throw new DelegateException(e);
+        }
+	}
+	
+	public DocumentoRDS recuperaInfoDocumento( String idDocumento, int instancia) throws DelegateException {
+		try
+        {
+        	return getRemote().recuperaInfoDocumento(idDocumento, instancia) ;
 
         } catch (RemoteException e)
         {

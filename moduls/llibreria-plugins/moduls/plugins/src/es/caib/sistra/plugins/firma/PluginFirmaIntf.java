@@ -44,6 +44,10 @@ public interface PluginFirmaIntf extends PluginSistraIntf{
 	 */
 	public static String FORMATO_FIRMA_PADES = "PADES";
 	/**
+	 * Formatos de firma estandar : SMIME.
+	 */
+	public static String FORMATO_FIRMA_SMIME = "SMIME";
+	/**
 	 * Formatos de firma estandar : PKCS7.
 	 */
 	public static String FORMATO_FIRMA_PKCS7 = "PKCS7";

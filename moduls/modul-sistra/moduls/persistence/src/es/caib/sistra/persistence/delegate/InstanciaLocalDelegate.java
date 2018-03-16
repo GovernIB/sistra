@@ -8,6 +8,7 @@ import javax.ejb.EJBException;
 import javax.ejb.RemoveException;
 import javax.naming.NamingException;
 
+import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.sistra.model.InstanciaBean;
 import es.caib.sistra.model.RespuestaFront;
 import es.caib.sistra.persistence.intf.TramiteProcessorLocal;
@@ -276,6 +277,17 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 		   try
 	        {
 	        	return local.mostrarDocumento( idDocumento, instancia) ;
+
+	        } catch (EJBException e)
+	        {
+	            throw new DelegateException(e);
+	        }
+	}
+	
+	public DocumentoRDS recuperaInfoDocumento( String idDocumento, int instancia) throws DelegateException {
+		   try
+	        {
+	        	return local.recuperaInfoDocumento(idDocumento, instancia) ;
 
 	        } catch (EJBException e)
 	        {

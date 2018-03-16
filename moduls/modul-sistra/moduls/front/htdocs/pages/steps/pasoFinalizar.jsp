@@ -54,10 +54,20 @@
 			<logic:notEqual name="doc" property="tipoDocumento" value="D">
 				<tr>
 					<td class="doc2"><bean:write name="doc" property="extractoDocumento" /></td>
+					
 					<td class="guardar">
-						<html:link styleClass="button-guardar" href="<%= urlMostrarDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) %>">
-							<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardar"/>					
-						</html:link>
+						<logic:equal name="doc" property="tipoDocumento" value="F">
+							<logic:equal name="documentacionLink" property="<%=doc.getIdentificadorDocumento()%>" value="true">
+								<html:link styleClass="button-guardar" href="<%= urlMostrarDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) %>">
+								<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardar"/>					
+								</html:link>
+							</logic:equal>
+						</logic:equal>
+						<logic:notEqual name="doc" property="tipoDocumento" value="F">
+							<html:link styleClass="button-guardar" href="<%= urlMostrarDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) %>">
+								<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardar"/>					
+							</html:link>
+						</logic:notEqual>
 					</td>
 				</tr>
 			</logic:notEqual>

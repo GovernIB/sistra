@@ -103,7 +103,11 @@ public class DocumentoRDS  implements java.io.Serializable {
 	 * Indica CSV del documento (campo calculado por el REDOSE en caso de que tenga CSV).
 	 */
 	private String csv;
-		
+	/**
+	 * Indica si el documento tiene plantilla de visualización asociada
+	 */
+	private boolean plantillaVisualizacion;
+
 	// Getters / Setters
 	/**
 	 * Indica si el documento es estructurado (XML).Este dato es establecido por el RDS según el modelo del documento.
@@ -390,6 +394,13 @@ public class DocumentoRDS  implements java.io.Serializable {
 	}
 	public void setCsv(String csv) {
 		this.csv = csv;
-	}	
+	}
+	
+	public boolean isPlantillaVisualizacion() {
+		return plantillaVisualizacion;
+	}
+	public void setPlantillaVisualizacion(boolean plantillaVisualizacion) {
+		this.plantillaVisualizacion = plantillaVisualizacion;
+	}
 	
 }

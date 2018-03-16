@@ -1326,6 +1326,7 @@ public abstract class RdsFacadeEJB extends HibernateEJB {
     	documentoRDS.setIdioma(doc.getIdioma());
     	documentoRDS.setReferenciaGestorDocumental(doc.getReferenciaGestorDocumental());
     	documentoRDS.setCsv(doc.getCsv());
+    	documentoRDS.setPlantillaVisualizacion(doc.getVersion().getPlantillas().size() > 0);
 
     	VersionCustodiaDelegate vcDelg = DelegateUtil.getVersionCustodiaDelegate();
     	try {
