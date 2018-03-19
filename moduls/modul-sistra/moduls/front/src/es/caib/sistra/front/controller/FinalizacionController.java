@@ -1,6 +1,8 @@
 package es.caib.sistra.front.controller;
 
 import java.io.ByteArrayInputStream;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -8,14 +10,21 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.tiles.ComponentContext;
 
+import es.caib.redose.modelInterfaz.DocumentoRDS;
+import es.caib.redose.modelInterfaz.ReferenciaRDS;
+import es.caib.redose.persistence.delegate.DelegateRDSUtil;
+import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.sistra.front.Constants;
 import es.caib.sistra.front.util.InstanciaManager;
 import es.caib.sistra.model.AsientoCompleto;
+import es.caib.sistra.model.DocumentoFront;
 import es.caib.sistra.model.TramiteFront;
 import es.caib.sistra.persistence.delegate.InstanciaDelegate;
+import es.caib.util.StringUtil;
 import es.caib.xml.ConstantesXML;
 import es.caib.xml.datospropios.factoria.FactoriaObjetosXMLDatosPropios;
 import es.caib.xml.datospropios.factoria.ServicioDatosPropiosXML;
@@ -24,7 +33,12 @@ import es.caib.xml.datospropios.factoria.impl.Instrucciones;
 import es.caib.xml.registro.factoria.FactoriaObjetosXMLRegistro;
 import es.caib.xml.registro.factoria.ServicioRegistroXML;
 import es.caib.xml.registro.factoria.impl.AsientoRegistral;
+import es.caib.xml.registro.factoria.impl.DatosAnexoDocumentacion;
 import es.caib.xml.registro.factoria.impl.Justificante;
+import es.caib.zonaper.modelInterfaz.DocumentoPersistentePAD;
+import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
+import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
+import es.caib.zonaper.persistence.delegate.PadDelegate;
 
 public class FinalizacionController extends BaseController
 {
@@ -38,6 +52,7 @@ public class FinalizacionController extends BaseController
 		
 		TramiteFront tramite 			= this.getTramiteFront( request );
 		Map params = this.getParametros( request );
+		String idPersistencia = tramite.getIdPersistencia();
 		
 		AsientoCompleto resultado = ( AsientoCompleto ) params.get( Constants.RESULTADO_REGISTRO_KEY );
 		
@@ -57,10 +72,33 @@ public class FinalizacionController extends BaseController
 		request.setAttribute( "instrucciones", obtenerInstrucciones( resultado ) );
 
 		// Obtener lista documentos
-		request.setAttribute( "documentacion", obtenerDocumentacion(resultado ) );
+		List documentacion = obtenerDocumentacion(resultado );
+		
+		request.setAttribute( "documentacion", documentacion );
+		
+		// Detectamos si los documentos formularios de la solicitud tienen plantilla asociada para saber si mostrarlo en el frontal
+		Map documentacionLink = new HashMap();
+
+		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request.getParameter("ID_INSTANCIA"), request );
+		
+		for (Iterator it=documentacion.iterator();it.hasNext();){
+			DatosAnexoDocumentacion doc = (DatosAnexoDocumentacion) it.next();
+
+			DocumentoRDS documentoRDS = delegate.recuperaInfoDocumento(StringUtil.getModelo(doc.getIdentificadorDocumento()), StringUtil.getVersion(doc.getIdentificadorDocumento()));
+			
+			if ("F".equals(doc.getTipoDocumento().toString())){
+				if(documentoRDS.isPlantillaVisualizacion()){
+					documentacionLink.put(doc.getIdentificadorDocumento(),"true");
+				}else{
+					documentacionLink.put(doc.getIdentificadorDocumento(),"false");
+				}
+					
+			}
+		}
+		
+		request.setAttribute( "documentacionLink", documentacionLink );
 		
 		// Comprobamos si se va a redirigir a la zona personal
-		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request.getParameter("ID_INSTANCIA"), request );
 		String urlFin = delegate.obtenerUrlFin();
 		request.setAttribute( "irAZonaPersonal", new Boolean("[ZONAPER]".equals(urlFin)));
 		

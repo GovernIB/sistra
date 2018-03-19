@@ -3,6 +3,7 @@ package es.caib.sistra.persistence.delegate;
 import java.util.Locale;
 import java.util.Map;
 
+import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.sistra.model.InstanciaBean;
 import es.caib.sistra.model.RespuestaFront;
 import es.caib.sistra.plugins.firma.FirmaIntf;
@@ -32,6 +33,7 @@ public interface InstanciaDelegate extends Delegate
 	RespuestaFront borrarTramite() throws DelegateException;
 	RespuestaFront registrarTramite(String asiento,FirmaIntf firma) throws DelegateException;
 	RespuestaFront mostrarDocumento(String idDocumento, int instancia) throws DelegateException;
+	DocumentoRDS recuperaInfoDocumento(String idDocumento, int instancia) throws DelegateException;
 	RespuestaFront mostrarJustificante() throws DelegateException;
 	RespuestaFront irAFirmarFormulario(String identificador,int instancia) throws DelegateException;
 	RespuestaFront firmarFormulario(String identificador,int instancia,FirmaIntf firma, boolean firmaDelegada) throws DelegateException;

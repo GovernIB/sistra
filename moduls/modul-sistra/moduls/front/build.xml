@@ -48,6 +48,7 @@
         </fileset>
     	<fileset dir="${lib.dir}/client">
         	<include name="zonaper-client.jar"/>
+    		<include name="redose-client.jar"/>
        	</fileset>       	
     	<fileset dir="${distribucion.dir}/lib"> 
             <include name="sistra-util.jar"/>

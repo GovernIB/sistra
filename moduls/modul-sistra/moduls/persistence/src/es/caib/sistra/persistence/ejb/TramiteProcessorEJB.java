@@ -2865,6 +2865,35 @@ public class TramiteProcessorEJB implements SessionBean {
     	}
 
     }
+    
+    /**
+     * Recupera DocumentoRDS a partir del idDocumento y el número de instancia
+     *
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     *
+     * @param idDocumento
+     * @param instancia
+     * @return
+     */
+    public DocumentoRDS recuperaInfoDocumento( String idDocumento, int instancia )
+    {
+    	try
+    	{
+    		// Consultamos documento formateado al RDS
+    		DocumentoPersistentePAD docPAD = (DocumentoPersistentePAD) this.tramitePersistentePAD.getDocumentos().get(idDocumento + "-" + instancia);
+    		ReferenciaRDS refRds = docPAD.getRefRDS();
+
+    		RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
+    		DocumentoRDS docRds = rds.consultarDocumento(refRds,false);
+    		return docRds;
+
+    	}catch (Exception e){
+    		log.error("Excepción al recuperar documento " + idDocumento + " instancia " + instancia,e);
+    		throw new EJBException("Excepción al recuperar documento " + idDocumento + " instancia " + instancia,e);
+    	}
+
+    }
 
     /**
      * Muestra XML del formulario para debug
