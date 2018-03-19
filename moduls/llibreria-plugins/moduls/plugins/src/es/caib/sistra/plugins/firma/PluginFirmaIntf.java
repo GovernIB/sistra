@@ -47,6 +47,10 @@ public interface PluginFirmaIntf extends PluginSistraIntf{
 	 * Formatos de firma estandar : PKCS7.
 	 */
 	public static String FORMATO_FIRMA_PKCS7 = "PKCS7";
+	/**
+	 * Formatos de firma estandar : PADES.
+	 */
+	public static String FORMATO_FIRMA_SMIME = "SMIME";
 	
 	/**
 	 * Obtiene proveedor de firma (ver constantes PROVEEDOR)
