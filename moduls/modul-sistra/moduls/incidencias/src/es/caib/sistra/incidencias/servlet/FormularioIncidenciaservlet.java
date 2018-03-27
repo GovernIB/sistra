@@ -133,8 +133,7 @@ public class FormularioIncidenciaservlet extends HttpServlet
 				procedimiento = paramString.get("procedimientoId");
 			} else if (StringUtils.isNotBlank(paramString.get("procedimientoSelec"))){
 				procedimiento = paramString.get("procedimientoSelec");
-			}
-			
+			}			
 			
 			String textoHtml = construyeMensajeHtml(lang, paramString);
 			List<String> destinatarios = getDestinatarios(destinatariosProp, procedimiento, paramString.get("problemaTipo"));
@@ -142,6 +141,10 @@ public class FormularioIncidenciaservlet extends HttpServlet
 			String paramValue = paramString.get("problemaTipo");	
 			if (StringUtils.isNotBlank(paramValue)){
 				titulo = titulo + " - " + getDescIncidencia(lang, paramValue);
+			}
+			
+			if (StringUtils.isNotBlank(procedimiento)){
+				titulo = titulo + " - " + procedimiento;
 			}
 			
 			if (destinatarios.size() == 0) {
@@ -258,11 +261,12 @@ public class FormularioIncidenciaservlet extends HttpServlet
 		}				
 		
 		String mensaje = getPlantilla();
-		String paramValue = paramString.get("problemaTipo");	
+		String paramValue = paramString.get("problemaTipo");
 		if (StringUtils.isNotBlank(paramValue)){
 			paramValue = getDescIncidencia(lang, paramValue);
 		}
-		mensaje = StringUtils.replace(mensaje, "[#TITULO#]", getLiteral(lang, "incidencias.email.titulo") + " - " + paramValue);
+		String titulo = getLiteral(lang, "incidencias.email.titulo") + " - " + paramValue;
+		mensaje = StringUtils.replace(mensaje, "[#TITULO#]", titulo);
 		mensaje = StringUtils.replace(mensaje, "[#CONTENIDO#]", listaCampos);
 		
 		return mensaje;
