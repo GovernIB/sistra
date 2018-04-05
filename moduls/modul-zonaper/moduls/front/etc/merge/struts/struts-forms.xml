@@ -17,6 +17,10 @@
 <form-bean
     name="mostrarDocumentoForm"
     type="es.caib.zonaper.front.form.MostrarDocumentoForm"/> 
+    
+<form-bean
+    name="mostrarFirmaDocumentoForm"
+    type="es.caib.zonaper.front.form.MostrarFirmaDocumentoForm" /> 
 
 <form-bean
     name="infoTramiteAnonimoForm"

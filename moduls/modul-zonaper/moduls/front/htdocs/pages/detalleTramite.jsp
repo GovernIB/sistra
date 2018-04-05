@@ -228,7 +228,7 @@
 		<!-- docus -->
 		<h3><bean:message key="detalleTramite.documentos" /></h3>
 		<ul>
-			<logic:iterate id="documento" name="entrada" property="documentos">
+			<logic:iterate id="documento" name="entrada" property="documentos" type="es.caib.zonaper.model.DocumentoEntrada">
 				<logic:present name="documento"  property="identificador">
 					<logic:notEmpty name="documento" property="codigoRDS">
 						<logic:notEqual name="documento" property="codigoRDS" value="0">
@@ -242,11 +242,13 @@
 									</bean:define>
 									<logic:notEmpty name="<%=codigoFirma %>" scope="request">
 										<bean:message key="comprobarDocumento.firmadoPor"/>
-										<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request">							
-											&nbsp;<bean:write name="firma" property="nombreApellidos"/> 
-											<logic:notEmpty name="firma" property="nifRepresentante">
-												&nbsp; <bean:message key="firma.representadoPor"/> <bean:write name="firma" property="nombreApellidosRepresentante"/> - NIF: <bean:write name="firma" property="nifRepresentante"/>
-											</logic:notEmpty>										
+										<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request" type="es.caib.sistra.plugins.firma.FirmaIntf">							
+											&nbsp;
+											<a href="mostrarFirmaDocumento.do?codigo=<%=documento.getCodigoRDS()%>&clave=<%=documento.getClaveRDS()%>&nif=<%=firma.getNif()%>" >
+												<bean:write name="firma" property="nombreApellidos"/> 
+												<logic:notEmpty name="firma" property="nifRepresentante">
+													&nbsp; <bean:message key="firma.representadoPor"/> <bean:write name="firma" property="nombreApellidosRepresentante"/> - NIF: <bean:write name="firma" property="nifRepresentante"/>
+												</logic:notEmpty>										
 										</logic:iterate>			
 									</logic:notEmpty>									
 								</li>
