@@ -306,6 +306,17 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
             throw new DelegateException(e);
         }
 	}
+	
+	public RespuestaFront recuperaFirmasDocumento( String idDocumento, int instancia, String nif) throws DelegateException {
+		   try
+	        {
+	        	return getRemote().recuperaFirmasDocumento( idDocumento, instancia, nif) ;
+
+	        } catch (RemoteException e)
+	        {
+	            throw new DelegateException(e);
+	        }
+	}
 
 	public RespuestaFront mostrarJustificante() throws DelegateException {
 		try

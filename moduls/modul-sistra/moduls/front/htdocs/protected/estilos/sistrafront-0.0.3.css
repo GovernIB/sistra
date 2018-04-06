@@ -583,4 +583,4 @@ a.button-guardar {
 	border-radius:3px;
 }
 
-a.button-guardar:before { content:""; display:inline-block; width:1em; height:1em; vertical-align:middle; margin-right:.5em; background:transparent url(../imgs/enlaces/05guardar.gif) no-repeat left center; }
+a.button-guardar:before { content:""; display:inline-block; width:1.1em; height:1em; vertical-align:middle; margin-right:.5em; background:transparent url(../imgs/enlaces/05guardar.gif) no-repeat left center; }

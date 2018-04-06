@@ -12,6 +12,9 @@
 <bean:define id="urlMostrarDocumento">
         <html:rewrite page="/protected/mostrarDocumento.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
+<bean:define id="urlMostrarFirmaDocumento">
+        <html:rewrite page="/protected/mostrarFirmaDocumento.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
+</bean:define>
 <bean:define id="urlFinalizar">
         <html:rewrite page="/protected/finalizar.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
@@ -47,26 +50,91 @@
 	</p>
 	<table cellpadding="0" cellspacing="0" id="tablaDocAportar">
 			<tr>
-				<th width="80%"><bean:message key="pasoJustificante.guardarRestoDocumentacion.documentaAGuardar"/></th>
-				<th width="20%"></th>
+				<th width="70%"><bean:message key="pasoJustificante.guardarRestoDocumentacion.documentaAGuardar"/></th>
+				<th width="30%"></th>
 			</tr>
 		<logic:iterate id="doc" name="documentacion" type="es.caib.xml.registro.factoria.impl.DatosAnexoDocumentacion">
 			<logic:notEqual name="doc" property="tipoDocumento" value="D">
 				<tr>
-					<td class="doc2"><bean:write name="doc" property="extractoDocumento" /></td>
+					<td class="doc2"><bean:write name="doc" property="extractoDocumento" />
+						<logic:present name="documentacionFirmada" property="<%=doc.getIdentificadorDocumento()%>">
+						<bean:size id="numFirmas" name="documentacionFirmada" />
+						(<bean:message key="pasoJustificante.guardarRestoDocumentacion.firmadoPor"/>
+						<logic:iterate name="documentacionFirmada" indexId="index" property="<%=doc.getIdentificadorDocumento()%>" id="firma" type="es.caib.sistra.plugins.firma.FirmaIntf">							
+							<% if (index.intValue() != 0 && (index.intValue() < (numFirmas.intValue() - 1))) { %> - <% } %>
+							<bean:write name="firma" property="nombreApellidos"/>  	
+							<logic:notEmpty name="firma" property="nifRepresentante">
+								&nbsp; <bean:message key="firma.representadoPor"/> <bean:write name="firma" property="nombreApellidosRepresentante"/> - NIF: <bean:write name="firma" property="nifRepresentante"/>
+							</logic:notEmpty>
+						</logic:iterate>)
+						</logic:present>
+					</td>
 					
 					<td class="guardar">
 						<logic:equal name="doc" property="tipoDocumento" value="F">
 							<logic:equal name="documentacionLink" property="<%=doc.getIdentificadorDocumento()%>" value="true">
-								<html:link styleClass="button-guardar" href="<%= urlMostrarDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) %>">
-								<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardar"/>					
-								</html:link>
+								<logic:present name="documentacionFirmada" property="<%=doc.getIdentificadorDocumento()%>">
+									<logic:iterate name="documentacionFirmada" property="<%=doc.getIdentificadorDocumento()%>" id="firma" type="es.caib.sistra.plugins.firma.FirmaIntf" indexId="indexForms">
+										<logic:equal name="firma" property="formatoFirma" value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.FORMATO_FIRMA_PADES%>">
+											<html:link styleClass="button-guardar" href="<%=urlMostrarFirmaDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) + \"&nif=\" + firma.getNif()%>" >
+											<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardarFirmado"/>					
+											</html:link>
+										</logic:equal>
+										<logic:notEqual name="firma" property="formatoFirma" value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.FORMATO_FIRMA_PADES%>">
+				 							<% if (indexForms.intValue() == 0) { %>
+											<div>
+												<html:link styleClass="button-guardar" href="<%= urlMostrarDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) %>">
+												<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardar"/>					
+												</html:link>
+											</div>
+											<% } %>
+											<div style="margin-top: 1em">
+												<html:link styleClass="button-guardar" href="<%=urlMostrarFirmaDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) + \"&nif=\" + firma.getNif()%>">
+												<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardarFirma"/>			
+												</html:link>
+											</div>
+										</logic:notEqual>
+									</logic:iterate>
+								</logic:present>
+								<logic:notPresent name="documentacionFirmada" property="<%=doc.getIdentificadorDocumento()%>">
+									<html:link styleClass="button-guardar" href="<%= urlMostrarDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) %>">
+									<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardar"/><br/>					
+									</html:link>
+								</logic:notPresent>
 							</logic:equal>
+							
 						</logic:equal>
 						<logic:notEqual name="doc" property="tipoDocumento" value="F">
-							<html:link styleClass="button-guardar" href="<%= urlMostrarDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) %>">
-								<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardar"/>					
-							</html:link>
+							<logic:present name="documentacionFirmada" property="<%=doc.getIdentificadorDocumento()%>">
+									<logic:iterate name="documentacionFirmada" indexId="indexDocs" property="<%=doc.getIdentificadorDocumento()%>" id="firma" type="es.caib.sistra.plugins.firma.FirmaIntf">
+										<logic:equal name="firma" property="formatoFirma"
+				 								value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.FORMATO_FIRMA_PADES%>">
+											<html:link styleClass="button-guardar" href="<%=urlMostrarFirmaDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) + \"&nif=\" + firma.getNif()%>">
+											<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardarFirmado"/>					
+											</html:link>
+										</logic:equal>
+										<logic:notEqual name="firma" property="formatoFirma"
+				 								value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.FORMATO_FIRMA_PADES%>">
+				 							<% if (indexDocs.intValue() == 0) { %>
+				 							<div>
+												<html:link styleClass="button-guardar" href="<%= urlMostrarDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) %>">
+												<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardar"/><br/>					
+												</html:link>
+											</div>
+											<% } %>
+											<div style="margin-top: 1em">
+												<html:link styleClass="button-guardar" href="<%=urlMostrarFirmaDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) + \"&nif=\" + firma.getNif()%>">
+												<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardarFirma"/><br/>			
+												</html:link>
+											</div>
+										</logic:notEqual>
+									</logic:iterate>
+								</logic:present>
+								<logic:notPresent name="documentacionFirmada" property="<%=doc.getIdentificadorDocumento()%>">
+									<html:link styleClass="button-guardar" href="<%= urlMostrarDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) %>">
+									<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardar"/><br/>					
+									</html:link>
+								</logic:notPresent>
 						</logic:notEqual>
 					</td>
 				</tr>

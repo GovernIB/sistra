@@ -294,6 +294,17 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 	            throw new DelegateException(e);
 	        }
 	}
+	
+	public RespuestaFront recuperaFirmasDocumento( String idDocumento, int instancia, String nif) throws DelegateException {
+		   try
+	        {
+	        	return local.recuperaFirmasDocumento( idDocumento, instancia, nif) ;
+
+	        } catch (EJBException e)
+	        {
+	            throw new DelegateException(e);
+	        }
+	}
 
 	public RespuestaFront mostrarJustificante() throws DelegateException {
 		   try

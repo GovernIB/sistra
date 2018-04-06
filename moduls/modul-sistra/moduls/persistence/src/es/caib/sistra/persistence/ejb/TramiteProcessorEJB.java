@@ -96,6 +96,7 @@ import es.caib.sistra.persistence.util.Literales;
 import es.caib.sistra.persistence.util.ScriptUtil;
 import es.caib.sistra.persistence.util.UtilDominios;
 import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.firma.FicheroFirma;
 import es.caib.sistra.plugins.firma.FirmaIntf;
 import es.caib.sistra.plugins.firma.PluginFirmaIntf;
 import es.caib.sistra.plugins.login.ConstantesLogin;
@@ -2891,6 +2892,73 @@ public class TramiteProcessorEJB implements SessionBean {
     	}catch (Exception e){
     		log.error("Excepción al recuperar documento " + idDocumento + " instancia " + instancia,e);
     		throw new EJBException("Excepción al recuperar documento " + idDocumento + " instancia " + instancia,e);
+    	}
+
+    }
+    
+    /**
+     * Recupera firma de documentos a partir del idDocumento, número de instancia y NIF del firmante
+     *
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     *
+     * @param idDocumento
+     * @param instancia
+     * @param nif
+     * @return
+     */
+    public RespuestaFront recuperaFirmasDocumento( String idDocumento, int instancia, String nif )
+    {
+    	try
+    	{
+    		// Consultamos documento formateado al RDS
+    		DocumentoPersistentePAD docPAD = (DocumentoPersistentePAD) this.tramitePersistentePAD.getDocumentos().get(idDocumento + "-" + instancia);
+    		ReferenciaRDS refRds = docPAD.getRefRDS();
+
+    		RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
+    		DocumentoRDS docRds = rds.consultarDocumento(refRds);
+    		
+    		FirmaIntf firma = null;
+    		if (docRds.getFirmas() != null) {
+    			for (int i = 0; i < docRds.getFirmas().length; i++) {
+    				if (docRds.getFirmas()[i].getNif().equals(nif)) {
+    					firma = docRds.getFirmas()[i];
+    					break;
+    				}
+    			}
+    		}
+    		
+    		String nombreFichero="Error";
+    		byte[] datosFichero="Error".getBytes();
+    		String extension = null;
+    		if (firma != null) {
+    			PluginFirmaIntf plgFirma = PluginFactory.getInstance().getPluginFirma();
+    			ByteArrayInputStream bis = new ByteArrayInputStream(docRds.getDatosFichero());
+    			FicheroFirma ficheroFirma = plgFirma.parseFirmaToFile(bis, firma);
+    			bis.close();
+    			nombreFichero = ficheroFirma.getNombreFichero();
+    			extension = nombreFichero.substring(nombreFichero.indexOf('.'));
+    			nombreFichero = docRds.getNombreFichero().substring(0,docRds.getNombreFichero().indexOf('.')) + "_" + firma.getNif() + extension;
+    			datosFichero = ficheroFirma.getContenido();
+    		}
+    		
+    		// Devolvemos nombre y datos del fichero
+    		HashMap param = new HashMap();
+    		param.put("nombrefichero",nombreFichero);
+    		param.put("datosfichero",datosFichero);
+    		return this.generarRespuestaFront(null,param);
+
+    	}catch (Exception e){
+    		log.error(mensajeLog("Exception al registrar"),e);
+
+    		MensajeFront mens = new MensajeFront();
+    		mens.setTipo(MensajeFront.TIPO_ERROR);
+    		mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ERRORDESCONOCIDO));
+    		mens.setMensajeExcepcion(e.getMessage());
+
+    		RespuestaFront resFront = generarRespuestaFront(mens,null);
+    		setRollbackOnly();
+    		return resFront;
     	}
 
     }

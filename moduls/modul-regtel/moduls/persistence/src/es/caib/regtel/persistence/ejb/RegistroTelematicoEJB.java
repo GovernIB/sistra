@@ -717,21 +717,6 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
 				// Firmamos justificante
 				is = FirmaUtil.cadenaToInputStream(justificante);
 				firmaJustificante = plgFirma.firmar(is,this.nombreCertificado,params);
-				
-				// Buscamos si hay que firmar formularios para un registro de entrada
-				if (tipoRegistro == ConstantesAsientoXML.TIPO_REGISTRO_ENTRADA) {
-					RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();				
-					if (datosPropios != null && datosPropios.getInstrucciones().getFormulariosJustificante() != null && 
-							datosPropios.getInstrucciones().getFormulariosJustificante().getFormularios() != null) {					
-						for (Iterator it = datosPropios.getInstrucciones().getFormulariosJustificante().getFormularios().iterator(); it.hasNext();) {
-							String refDoc = (String) it.next();
-							ReferenciaRDS refRdsForm = (ReferenciaRDS) refDocs.get(refDoc);
-							DocumentoRDS form = rds.consultarDocumento(refRdsForm);
-							FirmaIntf firmaForm = plgFirma.firmar(new ByteArrayInputStream(form.getDatosFichero()),this.nombreCertificado,params);
-							rds.asociarFirmaDocumento(refRdsForm, firmaForm);
-						}
-					}
-				}
 				 
 							
 			} catch (Exception ex) {

@@ -34,6 +34,7 @@ public interface InstanciaDelegate extends Delegate
 	RespuestaFront registrarTramite(String asiento,FirmaIntf firma) throws DelegateException;
 	RespuestaFront mostrarDocumento(String idDocumento, int instancia) throws DelegateException;
 	DocumentoRDS recuperaInfoDocumento(String idDocumento, int instancia) throws DelegateException;
+	RespuestaFront recuperaFirmasDocumento(String idDocumento, int instancia, String nif) throws DelegateException;
 	RespuestaFront mostrarJustificante() throws DelegateException;
 	RespuestaFront irAFirmarFormulario(String identificador,int instancia) throws DelegateException;
 	RespuestaFront firmarFormulario(String identificador,int instancia,FirmaIntf firma, boolean firmaDelegada) throws DelegateException;

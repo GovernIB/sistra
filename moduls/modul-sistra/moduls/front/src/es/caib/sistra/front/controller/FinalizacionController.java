@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.tiles.ComponentContext;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
@@ -42,7 +44,7 @@ import es.caib.zonaper.persistence.delegate.PadDelegate;
 
 public class FinalizacionController extends BaseController
 {
-
+	private static Log _log = LogFactory.getLog( FinalizacionController.class );
 	public void execute(ComponentContext tileContext,
 			HttpServletRequest request, HttpServletResponse response,
 			ServletContext servletContext) throws Exception
@@ -78,6 +80,8 @@ public class FinalizacionController extends BaseController
 		
 		// Detectamos si los documentos formularios de la solicitud tienen plantilla asociada para saber si mostrarlo en el frontal
 		Map documentacionLink = new HashMap();
+		
+		Map documentacionFirmada = new HashMap();
 
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request.getParameter("ID_INSTANCIA"), request );
 		
@@ -94,9 +98,19 @@ public class FinalizacionController extends BaseController
 				}
 					
 			}
+			
+			if (documentoRDS.getFirmas() != null){
+				
+				documentacionFirmada.put(doc.getIdentificadorDocumento(),documentoRDS.getFirmas());
+			}
+			
+			
+			
+			
 		}
 		
 		request.setAttribute( "documentacionLink", documentacionLink );
+		request.setAttribute( "documentacionFirmada", documentacionFirmada );
 		
 		// Comprobamos si se va a redirigir a la zona personal
 		String urlFin = delegate.obtenerUrlFin();
