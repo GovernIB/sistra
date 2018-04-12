@@ -71,7 +71,8 @@ public class EditarTramiteAction extends BaseAction{
         
         
         if (isAlta(request) || isModificacion(request)) {
-            log.debug("isAlta || isModificacio");                      
+            log.debug("isAlta || isModificacio");
+            log.info("ENTRA A GRABAR PROCEDIMIENTO");
             
             String claveCifrado = (String) DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().get("clave.cifrado");
             tramite.setUsr(CifradoUtil.cifrar(claveCifrado,tramiteForm.getUserPlain()));
@@ -82,6 +83,8 @@ public class EditarTramiteAction extends BaseAction{
             log.debug("Creat/Actualitzat " + tramite.getIdentificador());
 
             guardarTramite(mapping, request, tramite.getIdentificador());
+            
+            request.setAttribute( "idReadOnly", "true" );
 
             return mapping.findForward("success");
 

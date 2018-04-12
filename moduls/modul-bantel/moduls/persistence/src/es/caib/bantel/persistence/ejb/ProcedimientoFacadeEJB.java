@@ -55,6 +55,9 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB {
              	return null;             	
              }
              Procedimiento tramite = ( Procedimiento ) query.uniqueResult();
+             if (tramite != null){
+            	 tramite.setIdentificadorBD(tramite.getIdentificador());
+             }
              return tramite;
          } catch (HibernateException he) {
              throw new EJBException(he);
@@ -72,7 +75,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB {
     	Session session = getSession();
         try {
         	
-        	Procedimiento tramite = obtenerProcedimiento(obj.getIdentificador()); 
+        	if (obj.getTraducciones() == null  || obj.getTraducciones().size() != 2 ){
+            	throw new HibernateException("No se puede insertar el procedimiento " + obj.getIdentificador() + " sin descripciones");
+            }
+        	
+        	Procedimiento tramite = obtenerProcedimiento(obj.getIdentificador());
         	if ( tramite == null )
         	{
         		session.save( obj );

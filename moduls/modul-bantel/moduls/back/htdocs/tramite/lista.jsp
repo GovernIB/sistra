@@ -55,7 +55,8 @@
                     <bean:define id="urlEditar"><html:rewrite page="/back/tramite/seleccion.do" paramId="codigo" paramName="tramite" paramProperty="identificador"/></bean:define>
                     <button class="button" type="button" onclick="forward('<%=urlEditar%>')"><bean:message key="boton.selec" /></button>
 
-                    <bean:define id="mensajeBaja"><bean:message arg0='<%="identificador"%>' arg1='<%=StringUtils.escape("traduccion.descripcion")%>' key='tramite.baja' /></bean:define>
+                    <bean:define id="descripcion" name="tramite" property="traduccion.descripcion" type="java.lang.String"/>
+                    <bean:define id="mensajeBaja"><bean:message arg0='<%=StringUtils.escape(identificadorTramite)%>' arg1='<%=StringUtils.escape(descripcion)%>' key='tramite.baja' /></bean:define>
                     <bean:define id="urlBaja"><html:rewrite page="/back/tramite/baja.do" paramId="codigo" paramName="tramite" paramProperty="identificador"/></bean:define>
                     <button class="button" type="button" onclick="confirmAndForward('<%=mensajeBaja%>', '<%=urlBaja%>')"><bean:message key="boton.baixa" /></button>
                 </td>
