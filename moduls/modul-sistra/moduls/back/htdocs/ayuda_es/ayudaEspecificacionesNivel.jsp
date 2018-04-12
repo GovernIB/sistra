@@ -149,12 +149,38 @@
     	<p>El tipo de estos campos es <a class="enlaceAyuda" href="../ayuda_es/ayudaScript.jsp">script</a> y espera en cada caso el valor del NIF y el nombre completo.</p>
      </td>
   </tr>
+  
+  <tr>
+    <td>Script procedimiento destino tr&aacute;mite</td>
+    <td>
+    	<p>
+    		Este script permite establecer din&aacute;micamente el procedimiento destino del tr&aacute;mite
+    		Aunque se establezca din&aacute;micamente por script se deber&aacute;n establecer un valor inicial en el alta del tr&aacute;mite.
+    		Por defecto el procedimiento destino del tr&aacute;mite tendrá ese valor.
+    	</p>
+    	<p>
+	      	El tipo de este campo es <a class="enlaceAyuda" href="../ayuda_es/ayudaScript.jsp">script</a>
+		    y no se espera ning&uacute;n resultado. En caso de error se debe generar un error de script.
+		<p/>
+		<p>
+		    Este script se ejecuta al inicio del trámite y no puede depender de datos de los formularios.
+		</p>
+		<p>
+		    Para establecer los valores del destinatario se dispondr&aacute; del plugin <em>PROCEDIMIENTO_DESTINO_TRAMITE</em>. El m&eacute;todo disponible es:
+   			<br/>
+		   	<em>
+		   		// Establecer procedimiento destinatario dinamicamente<br/>
+		   		PROCEDIMIENTO_DESTINO_TRAMITE.setProcedimiento('PROC1');<br/>
+		      </em>
+		 </p>
+	  </td>
+  </tr>
 
-    <tr>
+  <tr>
     <td>Script de destinatario tr&aacute;mite</td>
     <td>
     	<p>
-    		Este script permite establecer din&aacute;micamente el destinatario del tr&aacute;mite: procedimiento, oficina registral, organo destino y unidad administrativa.
+    		Este script permite establecer din&aacute;micamente el destinatario del tr&aacute;mite: oficina registral, organo destino y unidad administrativa.
     		Aunque se establezca din&aacute;micamente por script se deber&aacute;n establecer unos valores iniciales en la ficha de la versi&oacute;n del tr&aacute;mite.
     		Por defecto el destinatario tendr&aacute; estos valores.
     	</p>
@@ -163,14 +189,13 @@
 		    y no se espera ning&uacute;n resultado. En caso de error se debe generar un error de script.
 		<p/>
 		<p>
-		    Este script se ejecuta al inicio del tr&aacute;mite y no puede depender de datos de los formularios.
+		    Este script se ejecuta en el paso registrar y por tanto puede depender de datos de los formularios introducidos previamente por el ciudadano.
 		</p>
 		<p>
 		    Para establecer los valores del destinatario se dispondr&aacute; del plugin <em>DESTINATARIO_TRAMITE</em>. Los m&eacute;todos disponibles son:
    			<br/>
 		   	<em>
 		   		// Establecer destinatario dinamicamente<br/>
-		   		DESTINATARIO_TRAMITE.setProcedimiento('PROC1');<br/>
 		   		DESTINATARIO_TRAMITE.setOficinaRegistral('OF1');<br/>
 		   		DESTINATARIO_TRAMITE.setOrganoDestino('1');<br/>
 		        DESTINATARIO_TRAMITE.setUnidadAdministrativa('2');<br/>

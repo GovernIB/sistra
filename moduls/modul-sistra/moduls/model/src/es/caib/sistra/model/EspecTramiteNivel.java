@@ -44,8 +44,13 @@ public class EspecTramiteNivel  extends Traducible {
       * Script que permite cambiar el destinatario del trámite (oficina registro,organo destino y unidad administrativa)
       */
      private byte[] destinatarioTramite;
+     /***
+      * Script que permite cambiar el destinatario del trámite (procedimiento)
+      */
+     private byte[] procedimientoDestinoTramite;
 
-    // Constructors
+
+	// Constructors
     /** default constructor */
     public EspecTramiteNivel() {
     }
@@ -314,6 +319,16 @@ public class EspecTramiteNivel  extends Traducible {
 
 	public void setDestinatarioTramite(byte[] destinatarioTramite) {
 		this.destinatarioTramite = destinatarioTramite;
+	}
+	
+
+    public byte[] getProcedimientoDestinoTramite() {
+		return procedimientoDestinoTramite;
+	}
+
+
+	public void setProcedimientoDestinoTramite(byte[] procedimientoDestinoTramite) {
+		this.procedimientoDestinoTramite = procedimientoDestinoTramite;
 	}
 
 

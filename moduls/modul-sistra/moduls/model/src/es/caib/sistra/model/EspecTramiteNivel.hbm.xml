@@ -33,6 +33,8 @@
     <property name="checkEnvio" type="binary" column="ETN_CHKENV"/>
 
     <property name="destinatarioTramite" type="binary" column="ETN_DSTTRA"/>
+    
+    <property name="procedimientoDestinoTramite" type="binary" column="ETN_PRODST"/>
 
     <property name="urlFin" type="binary" column="ETN_URLFIN"/>
 

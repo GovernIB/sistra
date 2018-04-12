@@ -224,6 +224,9 @@ public abstract class BaseAction extends Action {
     		byte[] destinatarioTramite = espec.getDestinatarioTramite();
     		pForm.setDestinatarioTramite( destinatarioTramite != null ? new String( destinatarioTramite, ConstantesXML.ENCODING ) : null);
     		
+    		byte[] procedimientoDestinoTramite = espec.getProcedimientoDestinoTramite();
+    		pForm.setProcedimientoDestinoTramite( procedimientoDestinoTramite != null ? new String( procedimientoDestinoTramite, ConstantesXML.ENCODING ) : null);
+    		
     	}catch (Exception ex){
 			throw new DelegateException(ex);
 		}
@@ -339,6 +342,9 @@ public abstract class BaseAction extends Action {
     		
     		byte[] destinatarioTramite = espec.getDestinatarioTramite();
     		pForm.setDestinatarioTramite( destinatarioTramite != null ? new String( destinatarioTramite, ConstantesXML.ENCODING ) : null);
+    		
+    		byte[] procedimientoDestinoTramite = espec.getProcedimientoDestinoTramite();
+    		pForm.setProcedimientoDestinoTramite( procedimientoDestinoTramite != null ? new String( procedimientoDestinoTramite, ConstantesXML.ENCODING ) : null);
     		
     	}catch (Exception ex){
 			throw new DelegateException(ex);

@@ -100,6 +100,10 @@
     <td class="input"><html:textarea tabindex="10" property="destinatarioTramite" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=destinatarioTramite&titulo=especificacionesTramite.destinatarioTramite" %>');"/></td>
 </tr>
 <tr>
+    <td class="label"><bean:message key="especificacionesTramite.procedimientoDestinoTramite"/></td>
+    <td class="input"><html:textarea tabindex="10" property="procedimientoDestinoTramite" /><input type="button" value="..."  class = "botonEditar" onclick="edit('<%=urlEditarText + "?id=procedimientoDestinoTramite&titulo=especificacionesTramite.procedimientoDestinoTramite" %>');"/></td>
+</tr>
+<tr>
 	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.opcionesFin"/></td>
 </tr>
 <tr>

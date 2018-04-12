@@ -34,7 +34,8 @@ public class TramiteNivelForm extends TramiteValidatorForm
     private String avisoEmail;
     private String checkEnvio;
     private String destinatarioTramite;
-	
+    private String procedimientoDestinoTramite;
+
 	private String [] nivelesAutenticacionSelected = null;
 
 	public Long getIdTramiteVersion()
@@ -71,6 +72,7 @@ public class TramiteNivelForm extends TramiteValidatorForm
         this.setAvisoSMS(null);
         this.setCheckEnvio(null);
         this.setDestinatarioTramite(null);
+        this.setProcedimientoDestinoTramite(null);
     }
 	
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
@@ -240,6 +242,14 @@ public class TramiteNivelForm extends TramiteValidatorForm
 
 	public void setDestinatarioTramite(String destinatarioTramite) {
 		this.destinatarioTramite = destinatarioTramite;
+	}
+	
+	public String getProcedimientoDestinoTramite() {
+		return procedimientoDestinoTramite;
+	}
+
+	public void setProcedimientoDestinoTramite(String procedimientoDestinoTramite) {
+		this.procedimientoDestinoTramite = procedimientoDestinoTramite;
 	}
 
 	public String getDatosRpte() {
