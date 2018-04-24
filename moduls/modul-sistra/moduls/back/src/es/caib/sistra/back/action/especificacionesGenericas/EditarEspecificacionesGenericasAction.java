@@ -78,6 +78,7 @@ public class EditarEspecificacionesGenericasAction extends BaseAction{
             espec.setAvisoSMS( StringUtils.defaultString(especificacionesGenericasForm.getAvisoSMS()).getBytes(ConstantesXML.ENCODING) );
             espec.setCheckEnvio(especificacionesGenericasForm.getCheckEnvio().getBytes(ConstantesXML.ENCODING) );
             espec.setDestinatarioTramite(especificacionesGenericasForm.getDestinatarioTramite().getBytes(ConstantesXML.ENCODING) );
+            espec.setProcedimientoDestinoTramite(especificacionesGenericasForm.getProcedimientoDestinoTramite().getBytes(ConstantesXML.ENCODING));
             
             especTramiteNivelDelegate.grabarEspecTramiteNivel( espec );
 

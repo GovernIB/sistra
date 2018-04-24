@@ -62,7 +62,7 @@
         <put name="validateMethod" value="validateTramiteForm"/>
         <put name="form.action" value="/back/tramite/editar"/>
         <put name="form.bean" value="tramiteForm"/>
-        <put name="values.codigo" value="values.identificador" />
+        <put name="values.codigo" value="values.identificadorBD" />
         <put name="paginaTraduccion" value="/tramite/editarTraduccion.jsp"/>
         <put name="paginaValues" value="/tramite/editarValues.jsp"/>
     </definition>

@@ -116,7 +116,7 @@
     <html:hidden property="page" />
 <logic:equal name="idCodigo" value="values.codigo" >    
     <html:hidden property="<%= idCodigo %>" />
-</logic:equal>    
+</logic:equal>
     
     <logic:notEmpty name="paginaTraduccion">
         <html:hidden property="lang" />    

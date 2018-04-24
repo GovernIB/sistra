@@ -25,7 +25,9 @@ public class Procedimiento extends Traducible implements Serializable{
 	public final static char AUTENTICACION_ORGANISMO 	= 'C';
 		
 	private String identificador;
-	//private String descripcion;
+	// identificador que no se persiste
+	private String identificadorBD;
+
 	private String entidad;
 	private String idProcExt;
 	private char inmediata = 'N';
@@ -79,6 +81,13 @@ public class Procedimiento extends Traducible implements Serializable{
 	}
 	public void setIdProcExt(String idProcExt) {
 		this.idProcExt = idProcExt;
+	}
+	
+	public String getIdentificadorBD() {
+		return identificadorBD;
+	}
+	public void setIdentificadorBD(String identificadorBD) {
+		this.identificadorBD = identificadorBD;
 	}
 	
 /*	public String getDescripcion() {

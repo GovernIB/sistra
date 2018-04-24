@@ -149,11 +149,36 @@
     	<p>El tipus d'aquests camps &eacute;s <a class="enlaceAyuda" href="../ayuda_ca/ayudaScript.jsp">script</a> i espera en cada cas el valor del NIF i el nom complet.</p>
      </td>
   </tr>
-   <tr>
+  <tr>
+    <td>Script procediment dest&iacute; tr&agrave;mit</td>
+    <td>
+    	<p>
+    		Aquest script permet establir din&agrave;micament el procedimient dest&iacute; del tr&agrave;mit
+    		Encara que s'estableixi din&agrave;micament per script s'haur&agrave; d'establir un valor inicial a l'alta del tr&agrave;mit.
+    		Per defecte el procediment dest&iacute; del tr&agrave;mit tindr&agrave; aquest valor.
+    	</p>
+    	<p>
+    		El tipus d'aquest camp &eacute;s <a class="enlaceAyuda" href="/sistraback/ayuda_es/ayudaScript.jsp">script</a>
+    		i no s'espera cap resultat. En cas d'error s'ha de generar un error de script.
+    	</p>
+		<p>
+		    Aquest script s'ejecuta al inici del tr&agrave;mit i NO pot dependre de dades dels formularis.
+		</p>
+		<p>
+		    Per a establir els valors del destinatari es disposar&agrave; del plugin <em>PROCEDIMIENTO_DESTINO_TRAMITE</em>. El m&egrave;tode disponible &eacute;s:
+   			<br/>
+		   	<em>
+		   		// Establir procediment dest&iacute; din&agrave;micament<br/>
+		   		PROCEDIMIENTO_DESTINO_TRAMITE.setProcedimiento('PROC1');<br/>
+		      </em>
+		 </p>
+	  </td>
+  </tr>
+  <tr>
     <td>Script de destinatari tr&agrave;mit</td>
     <td>
     	<p>
-    		Aquest script permet establir din&agrave;micament el destinatari del tr&agrave;mit: procediment, oficina registral, organ destinació
+    		Aquest script permet establir din&agrave;micament el destinatari del tr&agrave;mit: oficina registral, organ destinació
     		i unitat administrativa. Encara que s'estableixi din&agrave;micament per script s'haurien d'establir uns valors
     		inicials en la fitxa de la versi&oacute; del tr&agrave;mit. Per defecte el destinatari tindr&agrave; aquests valors.
     	</p>
@@ -162,13 +187,12 @@
     		i no s'espera cap resultat. En cas d'error s'ha de generar un error de script.
     	</p>
     	<p>
-		    Aquest script s'ejecuta al inici del tr&agrave;mit i no pot dependre de dades dels formularis.</p>
+		    Aquest script s'executa a la passa registrar del tr&agrave;mit i per tant pot dependre de dades dels formularis introdu&iuml;des previament pel ciutad&agrave;.</p>
     	<p>
 			Per a establir els valors del destinatari es disposar&agrave; del plugin <em>DESTINATARIO_TRAMITE</em>.	Els m&egrave;todes disponibles s&oacute;n:
    			<br/>
 		   	<em>
-		   		// Establecer destinatario dinamicamente<br/>
-		   		DESTINATARIO_TRAMITE.setProcedimiento('PROC1');<br/>
+		   		// Establir destinatari din&agrave;micament<br/>
 		   		DESTINATARIO_TRAMITE.setOficinaRegistral('OF1');<br/>
 		   		DESTINATARIO_TRAMITE.setOrganoDestino('1');<br/>
 		        DESTINATARIO_TRAMITE.setUnidadAdministrativa('2');<br/>

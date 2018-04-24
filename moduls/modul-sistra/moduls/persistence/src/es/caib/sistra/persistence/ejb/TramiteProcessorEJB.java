@@ -91,6 +91,7 @@ import es.caib.sistra.persistence.plugins.DestinatarioTramite;
 import es.caib.sistra.persistence.plugins.PluginDatosInteresadoDesglosado;
 import es.caib.sistra.persistence.plugins.PluginFormularios;
 import es.caib.sistra.persistence.plugins.PluginPagos;
+import es.caib.sistra.persistence.plugins.ProcedimientoDestinoTramite;
 import es.caib.sistra.persistence.util.GeneradorAsiento;
 import es.caib.sistra.persistence.util.Literales;
 import es.caib.sistra.persistence.util.ScriptUtil;
@@ -3750,7 +3751,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	    	tramitePersistentePAD.setFechaCaducidad(this.getFechaCaducidad());
 
 	    	// Calculamos destinatario tramite por si se especifica procedimiento dinamicamente
-	    	DestinatarioTramite dt = calcularDestinatarioTramite();
+	    	ProcedimientoDestinoTramite dt = calcularProcedimientoDestinoTramite();
 	    	tramitePersistentePAD.setIdProcedimiento(dt.getProcedimiento());
 
 	    	// Guardamos documentos
@@ -5723,11 +5724,13 @@ public class TramiteProcessorEJB implements SessionBean {
     	}
 
     	DestinatarioTramite destTra = new DestinatarioTramite();
+    	ProcedimientoDestinoTramite procDest = this.calcularProcedimientoDestinoTramite();
+    	
     	destTra.setCalculado(false);
     	destTra.setOficinaRegistral(tramiteVersion.getRegistroOficina());
     	destTra.setOrganoDestino(tramiteVersion.getOrganoDestino());
     	destTra.setUnidadAdministrativa(tramiteVersion.getUnidadAdministrativa().toString());
-    	destTra.setProcedimiento(tramiteVersion.getTramite().getProcedimiento());
+    	destTra.setProcedimiento(procDest.getProcedimiento());
 
 		if (scriptDestinatario != null && scriptDestinatario.length>0){
 			// Realizamos calculo destinatario
@@ -5752,6 +5755,39 @@ public class TramiteProcessorEJB implements SessionBean {
 		}
 
 		return destTra;
+	}
+	
+	/**
+	 * Calcula dinámicamente el procedimiento destino tramite según script
+	 * @return
+	 */
+	private ProcedimientoDestinoTramite calcularProcedimientoDestinoTramite() throws Exception{
+		EspecTramiteNivel especVersion = tramiteVersion.getEspecificaciones();
+    	EspecTramiteNivel especNivel = tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
+
+    	byte scriptProcedimientoDestino[];
+    	if (especNivel.getDestinatarioTramite() != null && especNivel.getDestinatarioTramite().length > 0 ){
+    		scriptProcedimientoDestino = especNivel.getProcedimientoDestinoTramite();
+    	}else{
+    		scriptProcedimientoDestino = especVersion.getProcedimientoDestinoTramite();
+    	}
+
+    	ProcedimientoDestinoTramite procDestTra = new ProcedimientoDestinoTramite();
+    	procDestTra.setCalculado(false);
+    	procDestTra.setProcedimiento(tramiteVersion.getTramite().getProcedimiento());
+
+		if (scriptProcedimientoDestino != null && scriptProcedimientoDestino.length>0){
+			// Realizamos calculo destinatario
+			HashMap params = new HashMap();
+			params.put("PROCEDIMIENTO_DESTINO_TRAMITE",procDestTra);
+			this.evaluarScript(scriptProcedimientoDestino,params);
+
+			// Validamos resultado calculo
+			procDestTra.setCalculado(true);
+
+		}
+
+		return procDestTra;
 	}
 
 	private String obtenerEntidadProcedimiento(String idProcedimiento) throws Exception {
