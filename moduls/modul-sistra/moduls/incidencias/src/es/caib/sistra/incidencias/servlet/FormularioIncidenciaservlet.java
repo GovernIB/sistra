@@ -64,7 +64,7 @@ public class FormularioIncidenciaservlet extends HttpServlet
 	
 	private static String[] camposFormulario = { "tramiteDesc", "tramiteId",
 			"procedimientoId", "fechaCreacion", "idPersistencia","nivelAutenticacion", "nif",
-			"nombre", "telefono", "email","procedimientoSelec", "problemaTipo", "problemaDesc" };	 
+			"nombre", "telefono", "email","horarioContacto","procedimientoSelec", "problemaTipo", "problemaDesc" };	 
 	
 	public void init() {
 		// Inicializa props
