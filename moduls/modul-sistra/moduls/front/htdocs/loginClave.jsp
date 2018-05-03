@@ -23,6 +23,10 @@
 	java.util.Properties configProperties =  delegateF.obtenerConfiguracion();
 	String urlSistra = configProperties.getProperty("sistra.url");
 	String contextoRaiz = configProperties.getProperty("sistra.contextoRaiz.front");
+	boolean usuarioContrasenya = (configProperties
+			.getProperty("sistra.login.usuarioContrasenya") != null ? "true"
+			.equals(configProperties.getProperty("sistra.login.usuarioContrasenya"))
+			: false);
 	es.caib.zonaper.model.OrganismoInfo infoOrg = delegateF.obtenerOrganismoInfo();
 	if (request.getParameter("entidad") != null) {
 		infoOrg = delegateF.obtenerOrganismoInfo( (String) request.getParameter("entidad"));
@@ -333,7 +337,18 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 
 			</div>
 			<%} %>
-
+			<% if (niveles.indexOf("U")>=0 && usuarioContrasenya){ %>			
+			<div id="indexUC">
+				<h2><bean:message key="login.usuario.titulo" /></h2>
+				<p><bean:message key="login.usuario.instrucciones.parrafo1" /></p>
+				<form name="formUC" method="post" action="j_security_check">
+					<label for="USUARIO"><bean:message key="login.usuario.usuario" /></label> <input name="j_username" id="j_username" type="text" class="txt" />
+					<div class="separacio"></div>
+					<label for="CONTRASENYA"><bean:message key="login.usuario.passwd" /></label> <input name="j_password" id="j_password" type="password" class="txt" />
+					<p class="formBotonera"><input name="formUCboton" type="submit" value="<bean:message key="login.boton.iniciar" />" title="<bean:message key="login.usuario.boton.title" />" /></p>
+				</form>			
+			</div>
+			<%} %>
 			<% if (niveles.indexOf("A")>=0){ %>
 			<div id="indexAN">
 				<h2><bean:message key="login.anonimo.titulo" /></h2>
