@@ -32,6 +32,17 @@ li {
 
 // Context Path
 String contextPath = request.getContextPath().substring(0, request.getContextPath().indexOf("/tramites"));
+// Buscamos un locale enviado por el navegador que nos coincida con los soportados.
+Enumeration enumer = request.getLocales();
+String lang = "";
+while (enumer.hasMoreElements()) {
+	Locale locale = (Locale) enumer.nextElement();
+    lang = locale.getLanguage().trim();
+
+    if (lang.equals("ca") || lang.equals("es")) {
+      break;
+    }
+}
 
 Connection con = null;
 ResultSet rs = null;
@@ -50,13 +61,16 @@ try {
   	InitialContext iniCtx = new InitialContext( ht );		
 	javax.sql.DataSource datasource  = ( javax.sql.DataSource ) iniCtx.lookup( jndiDatasource );
 	
+	PreparedStatement stmt = null;
 	con = datasource.getConnection();
 	
-	s = con.createStatement();
 	// TODO: Incompatible amb drivers Postgresql. Si realment es necessari, cercar
 	// alternativa igual que a PluguinDominio, sinó llevar.
     //s.setQueryTimeout(30);
-	rs = s.executeQuery("SELECT TRA_IDENTI, TRV_VERSIO,TTR_DESC, TRV_IDISOP FROM STR_TRAMIT,STR_TRAVER,STR_TRATRA WHERE STR_TRAMIT.TRA_CODIGO = STR_TRAVER.TRV_CODTRA AND STR_TRAMIT.TRA_CODIGO = STR_TRATRA.TTR_CODTRA AND STR_TRATRA.TTR_CODIDI = 'es'  ORDER BY TRA_IDENTI,TRV_VERSIO");            
+    String query = "SELECT TRA_IDENTI, TRV_VERSIO,TTR_DESC, TRV_IDISOP FROM STR_TRAMIT,STR_TRAVER,STR_TRATRA WHERE STR_TRAMIT.TRA_CODIGO = STR_TRAVER.TRV_CODTRA AND STR_TRAMIT.TRA_CODIGO = STR_TRATRA.TTR_CODTRA AND STR_TRATRA.TTR_CODIDI = ? ORDER BY TRA_IDENTI,TRV_VERSIO";
+	stmt = con.prepareStatement(query);
+	stmt.setString(1, lang);
+	rs = stmt.executeQuery();     
 	
 	String id="",des,idAnt;
 	int version;
