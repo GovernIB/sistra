@@ -8,6 +8,7 @@
 	// Parametros login clave
 	Object savedRequest = null;
 	boolean esLoginClave = false;
+	boolean esError = false;
 	String ticketClave = null;
 	String urlCallback = null;
 	String metodos = null;
@@ -58,6 +59,11 @@
 		
 	// Indica si es login despues de pasar por clave
 	esLoginClave = urlSavedRequest.endsWith("/protected/redireccionClave.jsp");
+	
+	// Indica si es redirección por login erróneo
+	if (request.getParameter("error") != null){
+		esError = Boolean.parseBoolean(request.getParameter("error"));
+	}
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -246,7 +252,7 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 
 </head>
 
-<body <%=(esLoginClave?"onload='loginClave();'":"")%> >
+<body <%=(esLoginClave && esError?"onload='loginClave();'":"")%> >
 
 
 <%-- <logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_EN_IFRAME%>" value="false"> --%>
@@ -315,6 +321,10 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 			:<p id="nomTramit"><%=textoAtencion%></p>
 			<%}%>
 			<p><bean:message key="login.presentacion.parrafo2" /></p>
+			
+			<%if (esError){ %>
+			<div class="error"><h2><bean:message key="login.error" /></h2></div>
+			<%}%>
 
 			<% if (niveles.indexOf("C")>=0 || niveles.indexOf("U")>=0){ %>
 			<div id="indexCD">
