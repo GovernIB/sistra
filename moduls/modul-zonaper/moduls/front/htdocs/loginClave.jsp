@@ -252,7 +252,7 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 
 </head>
 
-<body <%=(esLoginClave && esError?"onload='loginClave();'":"")%> >
+<body <%=(esLoginClave && !esError?"onload='loginClave();'":"")%> >
 
 
 <%-- <logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_EN_IFRAME%>" value="false"> --%>
