@@ -2,6 +2,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" %>
 <%@ page import="org.apache.commons.lang.StringUtils"%>
+<%@ page import="org.apache.commons.lang.StringEscapeUtils"%>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
@@ -56,7 +57,7 @@
                     <button class="button" type="button" onclick="forward('<%=urlEditar%>')"><bean:message key="boton.selec" /></button>
 
                     <bean:define id="descripcion" name="tramite" property="traduccion.descripcion" type="java.lang.String"/>
-                    <bean:define id="mensajeBaja"><bean:message arg0='<%=StringUtils.escape(identificadorTramite)%>' arg1='<%=StringUtils.escape(descripcion)%>' key='tramite.baja' /></bean:define>
+                    <bean:define id="mensajeBaja"><bean:message arg0='<%=StringUtils.escape(identificadorTramite)%>' arg1='<%=StringEscapeUtils.escapeJavaScript(descripcion)%>' key='tramite.baja' /></bean:define>
                     <bean:define id="urlBaja"><html:rewrite page="/back/tramite/baja.do" paramId="codigo" paramName="tramite" paramProperty="identificador"/></bean:define>
                     <button class="button" type="button" onclick="confirmAndForward('<%=mensajeBaja%>', '<%=urlBaja%>')"><bean:message key="boton.baixa" /></button>
                 </td>
