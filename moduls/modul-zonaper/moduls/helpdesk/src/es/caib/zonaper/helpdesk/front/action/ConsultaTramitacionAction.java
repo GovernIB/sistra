@@ -113,7 +113,11 @@ public class ConsultaTramitacionAction extends BaseAction
 			LogTramitacion logTramitacion = new LogTramitacion();
 			logTramitacion.setClavePersistencia(evento.getIdPersistencia());
 			descTramite = (String) descTramites.get(evento.getModeloTramite());
-			if(descTramite == null) descTramite = "";
+			if(descTramite == null) {
+				descTramite = evento.getModeloTramite();
+			}else{
+				descTramite = evento.getModeloTramite() + "-" + descTramite;
+			}
 			logTramitacion.setDescTramite(descTramite);
 			logTramitacion.setHora(Util.convertDate(evento.getFecha()));
 			logTramitacion.setTipoEvento((String) tiposEvento.get(evento.getTipo()));

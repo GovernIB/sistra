@@ -42,6 +42,12 @@ function validaFormulario( form )
 			}
 		}
 		
+		if (form.horarioContacto.value == null || form.horarioContacto.value == '' ){
+			alert( "<fmt:message key="incidencias.horarioContactoVacio"/>" );	
+			form.horarioContacto.focus();
+			return false;
+		}
+		
 		if ( form.problemaDesc.value == null || form.problemaDesc.value == '' ){
 			alert( "<fmt:message key="incidencias.descripcionVacia"/>" );	
 			form.problemaDesc.focus();
@@ -89,6 +95,10 @@ function validaFormulario( form )
 						<tr>
 							<th>* <fmt:message key="incidencias.email"/></th>
 							<td><input name="email" type="text" value="" size="40"/></td>
+						</tr>
+						<tr>
+							<th>* <fmt:message key="incidencias.horarioContacto"/></th>
+							<td><input name="horarioContacto" type="text" value="" size="40"/></td>
 						</tr>
                 		<c:if test="${mostrarListaProcedimientos == 'S'}">
 						<tr>

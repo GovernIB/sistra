@@ -278,7 +278,11 @@ public class BusquedaEstadoTramiteAction extends BaseAction
 					tpr.setIdioma(tp.getIdioma());
 					tpr.setIdPersistencia(tp.getIdPersistencia());
 					descTramite = (String) descTramites.get(tp.getTramite());
-					if(descTramite == null) descTramite = "";
+					if(descTramite == null){
+						descTramite = tp.getTramite();
+					}else{
+						descTramite = tp.getTramite() + "-" + descTramite;
+					}
 					tpr.setTramite(descTramite);
 					tpr.setVersion(tp.getVersion());
 					if (backup)

@@ -138,4 +138,7 @@ p#nomTramit { padding:1em 1em 1em 4.2em; background:url(../images/nom_tramit.gif
 
 div.contactoAdministrador { position:absolute;z-index:50; padding:0 1em 1em 3.5em; border:10px solid #003575; top:0;left:0;display:none;background-color:#fff;}
 
+div.error { padding:1em 0 1em 4em; margin:2em 0; background:#f2f2f2 url(../images/ico_error.gif) no-repeat 1em 1em; }
+div.error h2 { margin-top:0; }
+
 

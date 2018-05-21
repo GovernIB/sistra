@@ -8,6 +8,7 @@
 	// Parametros login clave
 	Object savedRequest = null;
 	boolean esLoginClave = false;
+	boolean esError = false;
 	String ticketClave = null;
 	String urlCallback = null;
 	String metodos = null;
@@ -23,6 +24,10 @@
 	java.util.Properties configProperties =  delegateF.obtenerConfiguracion();
 	String urlSistra = configProperties.getProperty("sistra.url");
 	String contextoRaiz = configProperties.getProperty("sistra.contextoRaiz.front");
+	boolean usuarioContrasenya = (configProperties
+			.getProperty("sistra.login.usuarioContrasenya") != null ? "true"
+			.equals(configProperties.getProperty("sistra.login.usuarioContrasenya"))
+			: false);
 	es.caib.zonaper.model.OrganismoInfo infoOrg = delegateF.obtenerOrganismoInfo();
 	if (request.getParameter("entidad") != null) {
 		infoOrg = delegateF.obtenerOrganismoInfo( (String) request.getParameter("entidad"));
@@ -54,6 +59,11 @@
 		
 	// Indica si es login despues de pasar por clave
 	esLoginClave = urlSavedRequest.endsWith("/protected/redireccionClave.jsp");
+	
+	// Indica si es redirección por login erróneo
+	if (request.getParameter("error") != null){
+		esError = Boolean.parseBoolean(request.getParameter("error"));
+	}
 	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -242,7 +252,7 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 
 </head>
 
-<body <%=(esLoginClave?"onload='loginClave();'":"")%> >
+<body <%=(esLoginClave && !esError?"onload='loginClave();'":"")%> >
 
 
 <%-- <logic:equal name="<%=es.caib.sistra.front.Constants.MOSTRAR_EN_IFRAME%>" value="false"> --%>
@@ -312,6 +322,10 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 			<%}%>
 			<p><bean:message key="login.presentacion.parrafo2" /></p>
 
+			<%if (esError){ %>
+			<div class="error"><h2><bean:message key="login.error" /></h2></div>
+			<%}%>
+
 			<% if (niveles.indexOf("C")>=0 || niveles.indexOf("U")>=0){ %>
 			<div id="indexCD">
 				<img style="display: block;margin-left: auto; margin-right: auto;" src = "../images/logo_Clave.png" alt="<bean:message key="login.clave.titulo" />"/>
@@ -331,6 +345,19 @@ if (browser == "Firefox" && parseFloat( version, 10) < 4 ){
 					<a href="http://clave.gob.es" target="_blank"><bean:message key="login.clave.mesInfoText" /></a>
 				</p>
 
+			</div>
+			<%} %>
+			
+			<% if (niveles.indexOf("U")>=0 && usuarioContrasenya){ %>			
+			<div id="indexUC">
+				<h2><bean:message key="login.usuario.titulo" /></h2>
+				<p><bean:message key="login.usuario.instrucciones.parrafo1" /></p>
+				<form name="formUC" method="post" action="j_security_check">
+					<label for="USUARIO"><bean:message key="login.usuario.usuario" /></label> <input name="j_username" id="j_username" type="text" class="txt" />
+					<div class="separacio"></div>
+					<label for="CONTRASENYA"><bean:message key="login.usuario.passwd" /></label> <input name="j_password" id="j_password" type="password" class="txt" />
+					<p class="formBotonera"><input name="formUCboton" type="submit" value="<bean:message key="login.boton.iniciar" />" title="<bean:message key="login.usuario.boton.title" />" /></p>
+				</form>			
 			</div>
 			<%} %>
 
