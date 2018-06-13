@@ -92,8 +92,8 @@ public abstract class BteFacadeEJB implements SessionBean  {
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
      */
-    public String[] obtenerNumerosEntradas(String identificadorProcedimiento, String identificadorTramite) throws ExcepcionBTE{
-    	return obtenerNumerosEntradas(identificadorProcedimiento, identificadorTramite,"N",null,null); 
+    public String[] obtenerNumerosEntradas(Long codigoProcedimiento, String identificadorTramite) throws ExcepcionBTE{
+    	return obtenerNumerosEntradas(codigoProcedimiento, identificadorTramite,"N",null,null); 
     }
        
     /**
@@ -140,7 +140,7 @@ public abstract class BteFacadeEJB implements SessionBean  {
     	// Devolvemos referencias a entradas    
      	try{
      		TramiteBandejaDelegate td = DelegateUtil.getTramiteBandejaDelegate();  
-     		List refs = td.obtenerReferenciasEntradas(identificadorProcedimiento,identificadorTramite,procesada,desde,hasta);
+     		List refs = td.obtenerReferenciasEntradas(procedimiento.getCodigo(),identificadorTramite,procesada,desde,hasta);
      		ReferenciaEntradaBTE[] result = new ReferenciaEntradaBTE[refs.size()] ;
      		int i=0;	
      		for (Iterator it=refs.iterator();it.hasNext();){
@@ -161,7 +161,7 @@ public abstract class BteFacadeEJB implements SessionBean  {
     
     /**
      * Obtiene números de entradas de la BTE
-     * @param identificadorProcedimiento Identificador de procedimiento a consultar (obligatorio)
+     * @param codigoProcedimiento Identificador de procedimiento a consultar (obligatorio)
      * @param identificadorTramite Identificador de trámite a consultar (obligatorio)
      * @param procesada	Indica si recupera entradas procesadas / no procesadas / con error ( "S" / "N" / "X"). Si este parametro es nulo recupera todas las entradas. 
      * @param desde Permite establecer la fecha inicial a partir de la cual se recuperarán las entradas. Si este parametro es nulo no se toma en cuenta.
@@ -173,7 +173,7 @@ public abstract class BteFacadeEJB implements SessionBean  {
      * @ejb.permission role-name="${role.gestor}"
      * @ejb.permission role-name="${role.auto}"
      */
-    public String[] obtenerNumerosEntradas(String identificadorProcedimiento, String identificadorTramite,String procesada,Date desde,Date hasta) throws ExcepcionBTE{
+    public String[] obtenerNumerosEntradas(Long codigoProcedimiento, String identificadorTramite,String procesada,Date desde,Date hasta) throws ExcepcionBTE{
     	
     	// Obtenemos información del trámite para establecer validación de acceso
     	// TODO Verificar comprobación acceso desde BackOffices: comprobación de rol o comprobación de usuario seycon
@@ -181,7 +181,7 @@ public abstract class BteFacadeEJB implements SessionBean  {
     	// Obtenemos números entradas    	
     	try{
     		TramiteBandejaDelegate td = DelegateUtil.getTramiteBandejaDelegate();        	        	
-    		return td.obtenerNumerosEntradas(identificadorProcedimiento, identificadorTramite,procesada,desde,hasta);
+    		return td.obtenerNumerosEntradas(codigoProcedimiento, identificadorTramite,procesada,desde,hasta);
     	}catch (Exception ex){
     		throw new ExcepcionBTE("No se ha podido recuperar los números de entrada",ex);
     	}

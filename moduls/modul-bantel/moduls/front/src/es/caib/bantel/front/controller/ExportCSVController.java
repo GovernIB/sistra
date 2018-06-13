@@ -44,7 +44,7 @@ public class ExportCSVController extends BaseController
 					FicheroExportacion fic = ficheroExportacionDelegate.findFicheroExportacion(idsTramite[i]);
 					if (fic != null) {
 						TramiteExportarCSV tcsv = new TramiteExportarCSV();
-						tcsv.setIdProcedimientoTramite(procedimiento.getIdentificador() + "@#@" + fic.getIdentificadorTramite());
+						tcsv.setIdProcedimientoTramite(procedimiento.getCodigo() + "@#@" + fic.getIdentificadorTramite());
 						tcsv.setDescripcion("Procedimiento: " + procedimiento.getIdentificador() + " - Trámite: " + fic.getIdentificadorTramite());
 						lstTramitesCSV.add(tcsv);
 					}

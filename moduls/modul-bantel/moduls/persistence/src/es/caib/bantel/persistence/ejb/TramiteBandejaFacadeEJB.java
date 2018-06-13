@@ -330,9 +330,9 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.auto}"
      * @ejb.permission role-name="${role.gestor}"    
      */
-    public List obtenerReferenciasEntradas(String identificadorProcedimiento, String identificadorTramite,String procesada,Date desde,Date hasta)
+    public List obtenerReferenciasEntradas(Long codigoProcedimiento, String identificadorTramite,String procesada,Date desde,Date hasta)
     {
-    	return this.obtenerReferenciasEntradaImpl(identificadorProcedimiento, identificadorTramite,procesada,desde,hasta);
+    	return this.obtenerReferenciasEntradaImpl(codigoProcedimiento, identificadorTramite,procesada,desde,hasta);
     	
     }
    
@@ -343,9 +343,9 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.admin}"
      * @ejb.permission role-name="${role.auto}"
      */
-    public String[] obtenerNumerosEntradas(String identificadorProcedimiento, String identificadorTramite,String procesada,Date desde,Date hasta)
+    public String[] obtenerNumerosEntradas(Long codigoProcedimiento, String identificadorTramite,String procesada,Date desde,Date hasta)
     {
-    	 List results = this.obtenerReferenciasEntradaImpl(identificadorProcedimiento, identificadorTramite,procesada,desde,hasta);    	
+    	 List results = this.obtenerReferenciasEntradaImpl(codigoProcedimiento, identificadorTramite,procesada,desde,hasta);    	
     	 String [] numeros = new String[results.size()];
 		 for (int i=0;i<results.size();i++){
 			 numeros[i] = ((ReferenciaTramiteBandeja) results.get(i)).getNumeroEntrada();
@@ -951,7 +951,9 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 		 // Especificamos procedimiento
 		 if ( StringUtils.isNotBlank(criteriosBusqueda.getIdentificadorProcedimiento()))
 		 {
-			 Procedimiento procedimiento = (Procedimiento) session.load(Procedimiento.class,criteriosBusqueda.getIdentificadorProcedimiento());
+			 Query query = session.createQuery("FROM Procedimiento AS m WHERE m.identificador = :idProcedimiento");
+			 query.setParameter("idProcedimiento", criteriosBusqueda.getIdentificadorProcedimiento());
+			 Procedimiento procedimiento = (Procedimiento) query.uniqueResult();
 			 criteria.add( Expression.eq("procedimiento",procedimiento ) );
 		 }else{
 			 // procedimientos a los que esta asociado el gestor
@@ -1057,9 +1059,11 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 		 // Especificamos procedimiento
 		 if ( StringUtils.isNotBlank(criteriosBusqueda.getIdentificadorProcedimiento()))
 		 {
-			 Procedimiento procedimiento = (Procedimiento) session.load(Procedimiento.class,criteriosBusqueda.getIdentificadorProcedimiento());
+			 Query query = session.createQuery("FROM Procedimiento AS m WHERE m.identificador = :idProcedimiento");
+			 query.setParameter("idProcedimiento", criteriosBusqueda.getIdentificadorProcedimiento());
+			 Procedimiento procedimiento = (Procedimiento) query.uniqueResult();
 			 sb.append(" t.procedimiento = ? and ");			 
-			 params.add(procedimiento);			 
+			 params.add(procedimiento);	
 		 }else{
 			 // procedimientos a los que esta asociado el gestor
 			 if (gestor != null) {
@@ -1176,7 +1180,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
     }    
     
     
-    private List obtenerReferenciasEntradaImpl(String identificadorProcedimiento,String identificadorTramite,String procesada, Date desde,Date hasta){
+    private List obtenerReferenciasEntradaImpl(Long codigoProcedimiento,String identificadorTramite,String procesada, Date desde,Date hasta){
     	
 		Session session = getSession();
 		boolean desdeBool = false;
@@ -1184,7 +1188,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
 		boolean procesadaBool = false;
 		List  numeros = new  ArrayList();
         try {
-        	String sql = "Select {TB.*} FROM BTE_TRAMIT {TB} WHERE {TB}.TRA_IDETRA = :idtramite AND {TB}.TRA_IDEPRO = :idProcedimiento";
+        	String sql = "Select {TB.*} FROM BTE_TRAMIT {TB} WHERE {TB}.TRA_IDETRA = :idtramite AND {TB}.TRA_CODPRO = :codigoProcedimiento";
 
         	//Especificamos estado procesamiento entrada
         	if ( !StringUtils.isEmpty(procesada) ){
@@ -1211,7 +1215,7 @@ public abstract class TramiteBandejaFacadeEJB extends HibernateEJB {
    			sql = sql + " order by {TB}.TRA_FECHA desc";
         	//"Select {TB.*} FROM BTE_TRAMIT {TB} WHERE {TB}.TRA_IDETRA = :idtramite and {TB}.TRA_PROCES = :procesada and {TB}.TRA_FECHA >= :desde and {TB}.TRA_FECHA <= :hasta order by {TB}.TRA_FECHA desc"
         	Query query = session.createSQLQuery(sql,"TB",TramiteBandeja.class );
-            query.setParameter("idProcedimiento", identificadorProcedimiento);
+            query.setParameter("codigoProcedimiento", codigoProcedimiento);
             query.setParameter("idtramite", identificadorTramite);
             if(procesadaBool){
             	query.setParameter("procesada", procesada);

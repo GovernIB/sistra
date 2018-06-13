@@ -18,7 +18,7 @@ import es.caib.bantel.persistence.delegate.DelegateUtil;
 import es.caib.bantel.persistence.delegate.ProcedimientoDelegate;
 
 
-public class TramiteForm extends TraduccionValidatorForm implements InitForm
+public class TramiteForm extends TraduccionValidatorForm
 {
 
 	protected static Log log = LogFactory.getLog(TramiteForm.class);
@@ -39,6 +39,13 @@ public class TramiteForm extends TraduccionValidatorForm implements InitForm
         try 
         {
         	Procedimiento tramite = ( Procedimiento ) this.getValues();
+        	
+        	ProcedimientoDelegate delegate = DelegateUtil.getTramiteDelegate();
+	    	Procedimiento tramiteTmp = delegate.obtenerProcedimiento( tramite.getIdentificador() );
+	    	if ( tramiteTmp != null &&  tramiteTmp.getIdentificador().equals( tramite.getIdentificador() ) && !tramiteTmp.getCodigo().equals( tramite.getCodigo() ) ) 		    	
+	    	{
+	    		errors.add("values.identificador", new ActionError("errors.tramite.duplicado", tramite.getIdentificador() ));
+	    	} 
         	
         	if(isAlta(request) || isModificacion(request)){
         		
@@ -89,15 +96,6 @@ public class TramiteForm extends TraduccionValidatorForm implements InitForm
 	        		}
 	        		
 	        	}
-	        	        	
-	        	// Comprobamos que no exista otro trámite con ese código
-	        	if (  request.getParameter(Constants.ALTA_PROPERTY) != null  ) {
-			    	ProcedimientoDelegate delegate = DelegateUtil.getTramiteDelegate();
-			    	Procedimiento tramiteTmp = delegate.obtenerProcedimiento( tramite.getIdentificador() );
-			    	if ( tramiteTmp != null ) 		    	{
-			    		errors.add("values.identificador", new ActionError("errors.tramite.duplicado", tramite.getIdentificador() ));
-			    	} 
-	        	}
         	
         	}
         
@@ -129,7 +127,7 @@ public class TramiteForm extends TraduccionValidatorForm implements InitForm
 	public void setUserPlain(String userPlain) {
 		this.userPlain = userPlain;
 	}
-
+	
 	public String getReadOnly() {
 		return readOnly;
 	}

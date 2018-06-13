@@ -113,10 +113,8 @@
 
 <html:errors/>
 <html:form action="<%=action%>" styleId="<%=bean%>" enctype="multipart/form-data" >
-    <html:hidden property="page" />
-<logic:equal name="idCodigo" value="values.codigo" >    
+    <html:hidden property="page" />   
     <html:hidden property="<%= idCodigo %>" />
-</logic:equal>
     
     <logic:notEmpty name="paginaTraduccion">
         <html:hidden property="lang" />    

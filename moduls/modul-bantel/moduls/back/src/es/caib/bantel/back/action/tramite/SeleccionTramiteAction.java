@@ -39,9 +39,11 @@ public class SeleccionTramiteAction extends BaseAction{
             return mapping.findForward("fail");
         }
 
-        log.debug("Seleccionar el tramite " + idString);
+        Long id = new Long(idString);
+        
+        log.debug("Seleccionar el tramite " + id);
        
-        guardarTramite(mapping, request, idString);
+        guardarTramite(mapping, request, id);
 
         request.setAttribute( "idReadOnly", "true" );
         request.setAttribute( "codigoTramiteError", idString );

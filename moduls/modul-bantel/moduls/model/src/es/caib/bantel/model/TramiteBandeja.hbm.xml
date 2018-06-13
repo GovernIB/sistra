@@ -18,7 +18,7 @@
     <property name="tipo"  column="TRA_TIPO"  not-null="true" length="1"/>
     <property name="procesada"  column="TRA_PROCES"  not-null="true" length="1"/>
   	
-  	<many-to-one name="procedimiento" column="TRA_IDEPRO" not-null="true"/>
+  	<many-to-one name="procedimiento" column="TRA_CODPRO" not-null="true"/>
   	
   	<property name="identificadorTramite"  column="TRA_IDETRA"  not-null="true" length="20"/>
     <property name="versionTramite"  column="TRA_VERTRA"  not-null="true" length="2"/>

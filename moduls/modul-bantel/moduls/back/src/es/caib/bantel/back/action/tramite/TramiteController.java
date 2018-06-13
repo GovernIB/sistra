@@ -64,7 +64,7 @@ public class TramiteController implements Controller
     		
     		
             // Mostramos solo para modificaciones
-            if ("true".equals(request.getAttribute("idReadOnly").toString())) {
+    		if ("true".equals(request.getAttribute("idReadOnly").toString())) {
             	
             	// Obtenemos entidad asociada           
             	TramiteForm formulario = ( TramiteForm ) request.getSession().getAttribute("tramiteForm");

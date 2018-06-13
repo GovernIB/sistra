@@ -16,7 +16,7 @@
 	<property name="identificador" column="FUE_IDENT" not-null="true" length="20"/>
 	<property name="descripcion"  column="FUE_DESC" not-null="true" length="500"/>
    
-    <many-to-one name="procedimiento" column="FUE_IDEPRO" not-null="true"/>       
+    <many-to-one name="procedimiento" column="FUE_CODPRO" not-null="true"/>
   	
   	<set name="campos" cascade="all-delete-orphan" inverse="true" lazy="true" order-by="CFU_CODIGO">
 	    <key column="CFU_CODFUE"/>

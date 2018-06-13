@@ -45,7 +45,6 @@
         <put name="validateMethod" value="validateEntidadForm"/>
         <put name="form.action" value="/back/entidad/editar"/>
         <put name="form.bean" value="entidadForm"/>
-        <put name="values.codigo" value="values.identificador" />
         <put name="paginaValues" value="/entidad/editarValues.jsp"/>
     </definition>
     <definition name=".entidad.lista" path="/entidad/lista.jsp"
@@ -62,9 +61,9 @@
         <put name="validateMethod" value="validateTramiteForm"/>
         <put name="form.action" value="/back/tramite/editar"/>
         <put name="form.bean" value="tramiteForm"/>
-        <put name="values.codigo" value="values.identificadorBD" />
         <put name="paginaTraduccion" value="/tramite/editarTraduccion.jsp"/>
         <put name="paginaValues" value="/tramite/editarValues.jsp"/>
+        <put name="values.codigo" value="values.codigo" />
     </definition>
     <definition name=".arbolProcs" path="/arbolProcs.jsp" />
     <definition name=".tramite.funcsNodesProcs" path="/js/funcsNodesProcs.jsp"
@@ -142,6 +141,10 @@
     
     <definition name=".campoFuenteDatos.lista" path="/campoFuenteDatos/lista.jsp" controllerClass="es.caib.bantel.back.action.campoFuenteDatos.ListaCamposFuenteDatosController">
         <put name="id" value="" />
-    </definition> 	 
+    </definition>
+    
+    <!-- ==================== ERROR ================= -->
+    
+	<definition name=".idOperacion.error" path="/errorIdOperacion/error.jsp"/>
      	 
 </tiles-definitions>

@@ -109,7 +109,7 @@ public abstract class BaseAction extends Action {
     }
     
     
-    protected Procedimiento guardarTramite(ActionMapping mapping, HttpServletRequest request, String idTramite)
+    protected Procedimiento guardarTramite(ActionMapping mapping, HttpServletRequest request, Long idTramite)
     throws DelegateException 
     {
 		TramiteForm pForm = (TramiteForm) obtenerActionForm(mapping, request, "/back/tramite/editar");

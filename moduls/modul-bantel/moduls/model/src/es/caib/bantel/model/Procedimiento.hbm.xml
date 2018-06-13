@@ -6,10 +6,13 @@
 <hibernate-mapping>
 <class  name="es.caib.bantel.model.Procedimiento" table="BTE_PROAPL">
 	<cache usage="read-write"/>
-    <id name="identificador" unsaved-value="null" column="TAP_IDEPRO" >
-      <generator class="assigned"/>
-    </id>	
+	<id name="codigo" unsaved-value="null" column="TAP_CODIGO">
+          <generator class="sequence">
+              <param name="sequence">BTE_SEQPRO</param>
+          </generator>
+    </id>
 
+	<property name="identificador"  column="TAP_IDEPRO" length="100" not-null="true"/> 
 	<property name="entidad" column="TAP_IDEENT"  not-null="true"/>
 	<property name="idProcExt" column="TAP_IDEPEX" length="20" />
     <property name="inmediata"  column="TAP_INMED" length="1"/>
@@ -47,13 +50,13 @@
   	
   	
   	<set name="gestores" table="BTE_GESPRO" inverse="true">
-        <key column="GAP_IDEPRO"/>
+        <key column="GAP_CODPRO"/>
         <many-to-many column="GAP_CODGES" class="es.caib.bantel.model.GestorBandeja"/>
     </set>
     
     <map name="traducciones" cascade="all" table="BTE_TRAPRO">
           <cache usage="read-write"/>
-          <key column="PRO_IDEPRO"/>
+          <key column="PRO_CODPRO"/>
           <index column="PRO_CODIDI" type="string" length="2"/>
           <composite-element class="es.caib.bantel.model.TraProcedimiento">
               <property name="descripcion" column="PRO_DESC"/>

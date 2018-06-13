@@ -42,7 +42,9 @@ public class BajaTramiteAction extends BaseAction{
             return mapping.findForward("fail");
         }
         
-        if (!tramiteDelegate.puedoBorrarProcedimiento(idString)){
+        Long id = new Long(idString);
+        
+        if (!tramiteDelegate.puedoBorrarProcedimiento(id)){
         	ActionErrors messages = new ActionErrors();
         	//messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("errors.elementoNoPuedeBorrarse"));        	
         	messages.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.tramiteNoPuedeBorrarse"));
@@ -50,7 +52,7 @@ public class BajaTramiteAction extends BaseAction{
         	return mapping.findForward("success");
         }
         
-        tramiteDelegate.borrarProcedimiento(idString);
+        tramiteDelegate.borrarProcedimiento(id);
         //request.setAttribute("reloadMenu", "true");
 
         return mapping.findForward("success");

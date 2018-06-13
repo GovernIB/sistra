@@ -65,18 +65,18 @@ public abstract class BteOperacionesProcesosFacadeEJB implements SessionBean  {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.auto}"
      */
-    public void marcarEntradasCaducadas(String idProcedimiento,
+    public void marcarEntradasCaducadas(String identificadorProcedimiento,
 			Date fechaLimite) throws ExcepcionBTE {
     	try {
 			// Marcamos como procesadas con error las que han caducado
 			CriteriosBusquedaTramite criterios = new CriteriosBusquedaTramite();
-			criterios.setIdentificadorProcedimiento(idProcedimiento);
+			criterios.setIdentificadorProcedimiento(identificadorProcedimiento);
 			criterios.setProcesada(ConstantesBTE.ENTRADA_NO_PROCESADA.charAt(0));
 			criterios.setFechaInicioProcesamientoMaximo(fechaLimite);
 			TramiteBandejaDelegate delegate = DelegateUtil.getTramiteBandejaDelegate();
 			delegate.procesarEntradas(criterios,ConstantesBTE.ENTRADA_PROCESADA_ERROR, "Ha pasado el limite maximo establecido para avisarse al backoffice");
     	} catch (DelegateException e) {
-			throw new ExcepcionBTE("Excepcion marcando entradas como caducadas para procedimiento " + idProcedimiento, e);			
+			throw new ExcepcionBTE("Excepcion marcando entradas como caducadas para procedimiento " + identificadorProcedimiento, e);			
 		}  
     }	
     

@@ -35,17 +35,17 @@ public class BteDelegate implements StatelessDelegate {
         }
     }
     
-    public String[] obtenerNumerosEntradas(String identificadorProcedimiento, String identificadorTramite) throws DelegateException {
+    public String[] obtenerNumerosEntradas(Long codigoProcedimiento, String identificadorTramite) throws DelegateException {
         try {
-            return getFacade().obtenerNumerosEntradas(identificadorProcedimiento, identificadorTramite);
+            return getFacade().obtenerNumerosEntradas(codigoProcedimiento, identificadorTramite);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
     }
     
-    public String[] obtenerNumerosEntradas(String identificadorProcedimiento,String identificadorTramite,String procesada,Date desde,Date hasta) throws DelegateException {
+    public String[] obtenerNumerosEntradas(Long codigoProcedimiento,String identificadorTramite,String procesada,Date desde,Date hasta) throws DelegateException {
         try {
-            return getFacade().obtenerNumerosEntradas(identificadorProcedimiento, identificadorTramite,procesada,desde,hasta);
+            return getFacade().obtenerNumerosEntradas(codigoProcedimiento, identificadorTramite,procesada,desde,hasta);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
