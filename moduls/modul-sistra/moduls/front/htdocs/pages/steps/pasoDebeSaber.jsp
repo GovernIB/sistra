@@ -311,9 +311,9 @@ function avisoGuardarClave(){
 			<logic:notEmpty name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="tituloLOPD("+ lang +")"%>'>	
 				<h2 class="lopd"><bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="tituloLOPD("+ lang +")"%>'/></h2>
 			</logic:notEmpty>
-			<logic:Empty name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="tituloLOPD("+ lang +")"%>'>	
+			<logic:empty name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="tituloLOPD("+ lang +")"%>'>	
 				<h2 class="lopd"><bean:message key="pasoDebeSaber.lopd"/></h2>
-			</logic:Empty>
+			</logic:empty>
 		</logic:present>
 	
 		<!--  información relativa a LOPD -->		
