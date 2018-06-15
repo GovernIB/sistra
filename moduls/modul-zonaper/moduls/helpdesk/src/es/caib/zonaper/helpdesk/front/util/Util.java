@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.text.NumberFormat;
 
 import javax.naming.InitialContext;
 
@@ -360,6 +361,13 @@ public class Util
 				}		
 			}
 			return version;
+		}
+		
+		public static String importeEnEuros(String importe){
+			Float imp = Float.parseFloat(importe) / 100;
+			Locale esp = new Locale("es", "ES");
+	        NumberFormat formatter = NumberFormat.getCurrencyInstance(esp);
+	        return formatter.format(imp);
 		}
 
 }

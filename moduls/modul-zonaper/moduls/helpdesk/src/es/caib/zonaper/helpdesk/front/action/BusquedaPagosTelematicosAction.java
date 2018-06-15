@@ -3,10 +3,12 @@ package es.caib.zonaper.helpdesk.front.action;
 import java.io.ByteArrayInputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +37,7 @@ import es.caib.xml.pago.XmlDatosPago;
 import es.caib.xml.util.HashMapIterable;
 import es.caib.zonaper.helpdesk.front.Constants;
 import es.caib.zonaper.helpdesk.front.form.PagosTelematicosForm;
+import es.caib.zonaper.helpdesk.front.util.Util;
 import es.caib.zonaper.model.DocumentoEntradaPreregistro;
 import es.caib.zonaper.model.DocumentoEntradaTelematica;
 import es.caib.zonaper.model.DocumentoPersistente;
@@ -304,6 +307,7 @@ public class BusquedaPagosTelematicosAction extends BaseAction
 
 		for(Iterator itSet = documentos.iterator(); itSet.hasNext(); )
 		{
+	        
 			DocumentoPersistente dp = (DocumentoPersistente) itSet.next();
 			if ( dp.getRdsClave() != null )
 			{
@@ -386,6 +390,7 @@ public class BusquedaPagosTelematicosAction extends BaseAction
 		pt.setTipo( estadoSesionPago.getTipo());
 		pt.setLocalizador( (xmlPago.getLocalizador() != null) ? xmlPago.getLocalizador() : null);
 		pt.setDui((estadoSesionPago.getIdentificadorPago() != null) ? estadoSesionPago.getIdentificadorPago() : null);
+		pt.setImporte( (xmlPago.getImporte()!= null) ? Util.importeEnEuros(xmlPago.getImporte()) : null);
 		
 		SimpleDateFormat df = new SimpleDateFormat(Constants.FORMATO_FECHAS);
 		if (estadoSesionPago.getFechaPago() != null){

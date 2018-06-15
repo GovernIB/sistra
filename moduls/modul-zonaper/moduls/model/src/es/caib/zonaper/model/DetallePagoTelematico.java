@@ -21,7 +21,8 @@ public class DetallePagoTelematico implements Serializable{
     private String url;
     private String nombre;
     private String tasa;
-    private String concepto;
+    private String importe;
+	private String concepto;
     private String codigoPostal;
     private String nif;
     private char tipo;
@@ -97,6 +98,12 @@ public class DetallePagoTelematico implements Serializable{
 	}
 	public void setTasa(String tasa) {
 		this.tasa = tasa;
+	}
+    public String getImporte() {
+		return importe;
+	}
+	public void setImporte(String importe) {
+		this.importe = importe;
 	}
 	public String getNif() {
 		return nif;
