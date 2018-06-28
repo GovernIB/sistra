@@ -45,6 +45,7 @@
         <put name="validateMethod" value="validateEntidadForm"/>
         <put name="form.action" value="/back/entidad/editar"/>
         <put name="form.bean" value="entidadForm"/>
+        <put name="values.codigo" value="values.identificador" />
         <put name="paginaValues" value="/entidad/editarValues.jsp"/>
     </definition>
     <definition name=".entidad.lista" path="/entidad/lista.jsp"
