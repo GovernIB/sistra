@@ -325,7 +325,7 @@ public abstract class BteProcesosFacadeEJB implements SessionBean  {
     		if (idTramites != null) {
     			for (int i = 0; i < idTramites.length; i++) {
     		
-    				String  entradas [] = tbd.obtenerNumerosEntradas(procedimiento.getIdentificador(), idTramites[i], ConstantesBTE.ENTRADA_NO_PROCESADA,null,hasta);
+    				String  entradas [] = tbd.obtenerNumerosEntradas(procedimiento.getCodigo(), idTramites[i], ConstantesBTE.ENTRADA_NO_PROCESADA,null,hasta);
 		    		
 		    		log.debug("Aviso de " + entradas.length + " nuevas entradas para backoffice trámite " + idTramites[i] + " hasta " + StringUtil.fechaACadena(hasta,StringUtil.FORMATO_TIMESTAMP) + " (Procedimiento: " + procedimiento.getIdentificador() + ")");
 		    		

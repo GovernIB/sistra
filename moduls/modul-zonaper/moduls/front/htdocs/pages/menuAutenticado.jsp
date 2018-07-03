@@ -5,10 +5,24 @@
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 
 <bean:define id="sesion" name="<%=es.caib.zonaper.front.Constants.DATOS_SESION_KEY%>" type="es.caib.zonaper.model.DatosSesion" />
+<bean:define id="lang" value="<%=((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage()%>" type="java.lang.String"/>
 
 <bean:define id="urlEnlaceNotificacionExterna" name="notificacionesExternas" type="java.lang.String"/>
+<bean:define id="infoNotificacionsNoSistra" type="java.util.Map" name="infoNotificacionsNoSistra"/>
 
-		<!-- titol -->
+			<%
+				String info = infoNotificacionsNoSistra.get(lang).toString();
+			if (!info.isEmpty()){
+			%>
+				<div class="missatge">
+					<h3>
+						<b><bean:message key="menuAutenticado.mensaje.importante"/>:</b>
+					</h3>
+					<p><%=info%></p>
+				</div>
+			<%}%>
+			
+			<!-- titol -->
 			<h1>
 				<bean:message key="menuAutenticado.encabezamiento" />
 			</h1>

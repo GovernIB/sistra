@@ -98,6 +98,9 @@ public class ConfigurationUtil {
 			if (key.startsWith("organismo.lopd.aviso.")){
 				oi.getAvisoLOPD().put(key.substring(key.lastIndexOf(".") +1), propiedades.get(key));
 			}
+			if (key.startsWith("organismo.lopd.titulo.")){
+				oi.getTituloLOPD().put(key.substring(key.lastIndexOf(".") +1), propiedades.get(key));
+			}
 		}
 		
 		return oi;

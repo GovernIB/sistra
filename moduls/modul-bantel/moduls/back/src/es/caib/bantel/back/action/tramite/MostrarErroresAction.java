@@ -39,8 +39,9 @@ public class MostrarErroresAction extends BaseAction{
     		jsonObject.put("error",this.getResources(request).getMessage("tramite.error.mostrarError.no.codigo"));
         }else{
         	try {
+        		Long id = new Long(idString);
         		ProcedimientoDelegate delegate = DelegateUtil.getTramiteDelegate();
-	    		Procedimiento tramite = delegate.obtenerProcedimiento(idString);
+	    		Procedimiento tramite = delegate.obtenerProcedimiento(id);
 	    		if(tramite != null && tramite.getErrores() != null){
     			
     				ArrayList errores = new ArrayList();

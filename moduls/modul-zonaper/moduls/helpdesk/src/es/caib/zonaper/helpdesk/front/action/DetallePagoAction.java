@@ -28,6 +28,7 @@ import es.caib.xml.pago.XmlDatosPago;
 import es.caib.xml.util.HashMapIterable;
 import es.caib.zonaper.helpdesk.front.Constants;
 import es.caib.zonaper.helpdesk.front.form.DetallePagoForm;
+import es.caib.zonaper.helpdesk.front.util.Util;
 import es.caib.zonaper.model.DetallePagoTelematico;
 import es.caib.zonaper.model.PagoTelematico;
 
@@ -60,6 +61,7 @@ public class DetallePagoAction extends BaseAction
 	private final static String XML_NOMBRE = XML_ROOT + "/DATOS_PAGO/DECLARANTE/NOMBRE";
 	private final static String XML_NIF = XML_ROOT + "/DATOS_PAGO/DECLARANTE/NIF";
 	private final static String XML_TASA = XML_ROOT + "/DATOS_PAGO/ID_TASA";
+	private final static String XML_IMPORTE = XML_ROOT + "/DATOS_PAGO/IMPORTE";
 	private final static String XML_CODIGO_POSTAL = XML_ROOT + "/DATOS_PAGO/DECLARANTE/CODIGOPOSTAL";
 	
 	protected static Log log = LogFactory.getLog(DetallePagoAction.class);
@@ -132,6 +134,7 @@ public class DetallePagoAction extends BaseAction
 		dpt.setNombre( (map.get(XML_NOMBRE) != null) ? ((Nodo) map.get(XML_NOMBRE)).getValor() : null);
 		dpt.setNif( (map.get(XML_NIF) != null) ? ((Nodo) map.get(XML_NIF)).getValor() : null);
 		dpt.setTasa( (map.get(XML_TASA) != null) ? ((Nodo) map.get(XML_TASA)).getValor() : null);
+		dpt.setImporte( (map.get(XML_IMPORTE) != null) ? Util.importeEnEuros(((Nodo) map.get(XML_IMPORTE)).getValor()) : null);
 		dpt.setCodigoPostal( (map.get(XML_CODIGO_POSTAL) != null) ? ((Nodo) map.get(XML_CODIGO_POSTAL)).getValor() : null);
 		
 		

@@ -156,8 +156,10 @@ public abstract class GestorBandejaFacadeEJB extends HibernateEJB
         	if ( identificadoresTramites != null )
         	{        		                		
         		for ( int i = 0; i < identificadoresTramites.length; i++  )
-        		{        			
-        			Procedimiento tramite = ( Procedimiento ) session.load( Procedimiento.class, identificadoresTramites[i] );
+        		{
+        			Query query = session.createQuery("FROM Procedimiento AS m WHERE m.identificador = :idProcedimiento");
+       			 	query.setParameter("idProcedimiento", identificadoresTramites[i]);
+       			 	Procedimiento tramite = (Procedimiento) query.uniqueResult();
         			gest.addTramiteGestionado( tramite );     
         		}
         	}               	

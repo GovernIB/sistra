@@ -72,6 +72,10 @@ div.anonim p.registre { font-style:italic; }
 div.modul ul { list-style:none; margin-top:.5em; margin-left:1em; }
 div.modul ul li { padding-bottom:.3em; }
 
+div.missatge { background-color: #fefbd8 }
+div.missatge h3 { margin:1em; background:url(../imgs/tramitaciontelematica/ico_atencion.gif) no-repeat .1em .8em; padding:1em 1em 0 2em }
+div.missatge p { padding:0 0.7em 1em 1em }
+
 /* formularis */
 
 form { padding:2em 0; }

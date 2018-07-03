@@ -1,9 +1,12 @@
 <%@ page language="java" import="es.caib.bantel.model.Procedimiento"%>
+<%@ page import="es.caib.bantel.back.util.Util"%>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 
 <html:xhtml/>
+
+<input type="hidden" name="idOperacion" value="<%=Util.getIdOperacion(request)%>"/>	
 
 <bean:define id="urlArbol">
     <html:rewrite page="/arbolProcs.do"/>

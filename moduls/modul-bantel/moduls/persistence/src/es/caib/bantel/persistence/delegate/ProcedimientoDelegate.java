@@ -20,13 +20,21 @@ public class ProcedimientoDelegate implements StatelessDelegate {
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
-    public String grabarProcedimiento(Procedimiento procedimiento) throws DelegateException {
+    public Long grabarProcedimiento(Procedimiento procedimiento) throws DelegateException {
         try {
             return getFacade().grabarProcedimiento(procedimiento);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
     }
+    
+    public Procedimiento obtenerProcedimiento(Long id) throws DelegateException {
+        try {
+            return getFacade().obtenerProcedimiento(id);
+        } catch (Exception e) {
+            throw new DelegateException(e);
+        }
+    }      
 
     public Procedimiento obtenerProcedimiento(String idproc) throws DelegateException {
         try {
@@ -36,7 +44,7 @@ public class ProcedimientoDelegate implements StatelessDelegate {
         }
     }        
         
-    public void borrarProcedimiento(String id) throws DelegateException {
+    public void borrarProcedimiento(Long id) throws DelegateException {
         try {
             getFacade().borrarProcedimiento(id);            
         } catch (Exception e) {
@@ -84,7 +92,7 @@ public class ProcedimientoDelegate implements StatelessDelegate {
          }
      }
     
-    public boolean puedoBorrarProcedimiento(String id)throws DelegateException 
+    public boolean puedoBorrarProcedimiento(Long id)throws DelegateException 
     {
   	   try
   	   {

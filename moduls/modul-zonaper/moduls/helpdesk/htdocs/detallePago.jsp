@@ -36,6 +36,10 @@
 					<td><bean:write name="pago" property="tasa"/></td>
 				</tr>
 				<tr>
+					<th><bean:message key="detallePago.datosPago.importe"/></th>
+					<td><bean:write name="pago" property="importe"/></td>
+				</tr>
+				<tr>
 					<th><bean:message key="detallePago.datosPago.estadoPlataforma"/></th>
 					<td>
 						<logic:equal name="pago" property="estadoPlataforma" value='<%= Constants.XMLPAGO_CONFIRMADO %>'>
@@ -125,6 +129,7 @@
 					<th><bean:message key="detallePago.asistentePago.localizador"/></th>
 					<td><bean:write name="pago" property="localizador"/></td>
 				</tr>
+				
 			</tbody>
 			</table>
 			</logic:present>

@@ -92,11 +92,11 @@ public class TramiteBandejaDelegate implements StatelessDelegate {
     
     }
     
-    public List obtenerReferenciasEntradas(String identificadorProcedimiento, String identificadorTramite,String procesada,Date desde,Date hasta) throws DelegateException
+    public List obtenerReferenciasEntradas(Long codigoProcedimiento, String identificadorTramite,String procesada,Date desde,Date hasta) throws DelegateException
     {
     	try 
     	{
-    		return getFacade().obtenerReferenciasEntradas(identificadorProcedimiento, identificadorTramite, procesada, desde, hasta );
+    		return getFacade().obtenerReferenciasEntradas(codigoProcedimiento, identificadorTramite, procesada, desde, hasta );
     	} 
     	catch (Exception e) 
     	{
@@ -105,11 +105,11 @@ public class TramiteBandejaDelegate implements StatelessDelegate {
     }
     
     
-    public String[] obtenerNumerosEntradas(String identificadorProcedimiento, String identificadorTramite,String procesada,Date desde,Date hasta) throws DelegateException
+    public String[] obtenerNumerosEntradas(Long codigoProcedimiento, String identificadorTramite,String procesada,Date desde,Date hasta) throws DelegateException
     {
     	try 
     	{
-    		return getFacade().obtenerNumerosEntradas(identificadorProcedimiento, identificadorTramite, procesada, desde, hasta );
+    		return getFacade().obtenerNumerosEntradas(codigoProcedimiento, identificadorTramite, procesada, desde, hasta );
     	} 
     	catch (Exception e) 
     	{

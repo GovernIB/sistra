@@ -89,11 +89,11 @@ public class ExportCSVInitAction extends BaseAction
 		
 			// Buscamos entradas a exportar
 			String [] ids = f.getIdentificadorProcedimientoTramite().split("@#@");
-			String idProcedimiento = ids[0];
+			Long codigoProcedimiento = new Long(ids[0]);
 			String idTramite = ids[1];
 			
 			TramiteBandejaDelegate delegate = DelegateUtil.getTramiteBandejaDelegate();
-			String [] numEntradas = delegate.obtenerNumerosEntradas(idProcedimiento, idTramite,procesada,desde,hasta);
+			String [] numEntradas = delegate.obtenerNumerosEntradas(codigoProcedimiento, idTramite,procesada,desde,hasta);
 			
 			if (numEntradas == null || numEntradas.length == 0){
 				result = "ERROR:" + resources.getMessage( getLocale( request ), "exportCSV.noHayEntradas");				

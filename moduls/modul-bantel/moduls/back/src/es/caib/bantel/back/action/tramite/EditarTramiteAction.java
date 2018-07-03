@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import es.caib.bantel.back.util.Util;
 
 import es.caib.bantel.back.action.BaseAction;
 import es.caib.bantel.back.form.TramiteForm;
@@ -31,7 +32,10 @@ import es.caib.util.CifradoUtil;
  *
  * @struts.action-forward
  *  name="success" path=".tramite.editar"
- *
+ * 
+ * @struts.action-forward
+ * name="error" path=".idOperacion.error"
+ * 
  * @struts.action-forward
  *  name="cancel" path=".tramite.lista"
  *  
@@ -59,6 +63,7 @@ public class EditarTramiteAction extends BaseAction{
         // Elimina traducciones que no son validas
         tramiteForm.validaTraduccion(mapping, request);
 
+        if(Util.getOperacionPermitida(request)){
         if (isCancelled(request)) {
             log.debug("isCancelled");
             return mapping.findForward("cancel");
@@ -80,9 +85,9 @@ public class EditarTramiteAction extends BaseAction{
             
             tramiteDelegate.grabarProcedimiento( tramite );
             //request.setAttribute("reloadMenu", "true");
-            log.debug("Creat/Actualitzat " + tramite.getIdentificador());
+            log.debug("Creat/Actualitzat " + tramite.getCodigo());
 
-            guardarTramite(mapping, request, tramite.getIdentificador());
+            guardarTramite(mapping, request, tramite.getCodigo());
             
             request.setAttribute( "idReadOnly", "true" );
 
@@ -94,6 +99,10 @@ public class EditarTramiteAction extends BaseAction{
         tramiteForm.reloadLang();
 
         return mapping.findForward("reload");
+        }else{
+       		log.debug("Error el id de operación modificado es diferente al id de operación de la sesión.");
+        	return mapping.findForward("error");
+       	}
     }       
 
 }

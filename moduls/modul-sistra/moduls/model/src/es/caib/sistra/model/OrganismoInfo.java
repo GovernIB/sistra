@@ -24,7 +24,8 @@ public class OrganismoInfo implements Serializable{
 	private String urlLoginCssCustom;
 	private Map tituloPortal = new HashMap(); // Titulos portal con el key como idioma
 	private Map referenciaPortal = new HashMap(); // Referencias portal con el key como idioma
-	private Map avisoLOPD = new HashMap(); // Aviso LOPD con el key como idioma	
+	private Map avisoLOPD = new HashMap(); // Aviso LOPD con el key como idioma
+	private Map tituloLOPD = new HashMap(); // Titulo LOPD con el key como idioma
 	
 	public String getUrlCssCustom() {
 		return urlCssCustom;
@@ -109,6 +110,13 @@ public class OrganismoInfo implements Serializable{
 	}
 	public void setAvisoLOPD(Map avisoLOPD) {
 		this.avisoLOPD = avisoLOPD;
+	}
+	
+	public Map getTituloLOPD() {
+		return tituloLOPD;
+	}
+	public void setTituloLOPD(Map tituloLOPD) {
+		this.tituloLOPD = tituloLOPD;
 	}
 	
 }

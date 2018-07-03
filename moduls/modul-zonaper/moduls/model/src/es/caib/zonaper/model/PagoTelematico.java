@@ -17,7 +17,8 @@ public class PagoTelematico implements Serializable{
     private String idioma;
     private String localizador;
     private String dui;
-    private String estado;
+    private String importe;
+	private String estado;
     private String estadoTramite;
     private String url;
     private Long codigoRDS;
@@ -95,6 +96,12 @@ public class PagoTelematico implements Serializable{
 	}
 	public void setDui(String dui) {
 		this.dui = dui;
+	}
+    public String getImporte() {
+		return importe;
+	}
+	public void setImporte(String importe) {
+		this.importe = importe;
 	}
 
     

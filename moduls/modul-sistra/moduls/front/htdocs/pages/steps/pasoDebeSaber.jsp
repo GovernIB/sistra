@@ -305,12 +305,21 @@ function avisoGuardarClave(){
 					<!--  end iteracion pasos -->
 				</div>
 		</logic:notEmpty>
+		
+		<!--  información relativa a LOPD -->		
+		<logic:present name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="tituloLOPD("+ lang +")"%>'>
+			<logic:notEmpty name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="tituloLOPD("+ lang +")"%>'>	
+				<h2 class="lopd"><bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="tituloLOPD("+ lang +")"%>'/></h2>
+			</logic:notEmpty>
+			<logic:empty name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="tituloLOPD("+ lang +")"%>'>	
+				<h2 class="lopd"><bean:message key="pasoDebeSaber.lopd"/></h2>
+			</logic:empty>
+		</logic:present>
 	
 		<!--  información relativa a LOPD -->		
 		<logic:present name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="avisoLOPD("+ lang +")"%>'>
-			<logic:notEmpty name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="avisoLOPD("+ lang +")"%>'>	
-				<h2 class="lopd"><bean:message key="pasoDebeSaber.lopd"/></h2>
-				<p class="apartado"><bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="avisoLOPD("+ lang +")"%>'/></p>	
+			<logic:notEmpty name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="avisoLOPD("+ lang +")"%>'>
+				<p class="apartado"><bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="avisoLOPD("+ lang +")"%>' filter="false"/></p>	
 			</logic:notEmpty>
 		</logic:present>
 
