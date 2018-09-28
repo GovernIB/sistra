@@ -1,6 +1,8 @@
 package es.caib.bantel.front.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -45,7 +47,7 @@ public class FormularioBusquedaController extends BaseController
 		GestorBandeja gestor = gestorBandejaDelegate.obtenerGestorBandeja(this.getPrincipal(request).getName());
 		List procedimientos = new ArrayList();
 		// Si no existe devolvemos lista de tramites gestionados vacía
-		String permitirCambioEstadoMasivo = "N";	
+		String permitirCambioEstadoMasivo = "N";
 		if (gestor != null && gestor.getProcedimientosGestionados() != null){			
 			for (Iterator it = gestor.getProcedimientosGestionados().iterator(); it.hasNext();){
 				Procedimiento proc = (Procedimiento) it.next();
@@ -53,6 +55,14 @@ public class FormularioBusquedaController extends BaseController
 			}
 			permitirCambioEstadoMasivo = Character.toString(gestor.getPermitirCambioEstadoMasivo());
 		}
+		
+		Collections.sort(procedimientos, new Comparator<Procedimiento>() {
+		    @Override
+		    public int compare(Procedimiento p1, Procedimiento p2) {
+		        return p1.getIdentificador().compareTo(
+		                p2.getIdentificador());
+		    }
+		});
 		
 		// Establcemos valores combos
 		request.setAttribute( "procedimientos", procedimientos );
