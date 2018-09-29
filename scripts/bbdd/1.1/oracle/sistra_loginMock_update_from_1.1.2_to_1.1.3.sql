@@ -1,4 +1,0 @@
-INSERT INTO SC_WL_USUGRU ( UGR_CODUSU, UGR_CODGRU ) VALUES ( 
-'delega', 'tothom'); 
-
-COMMIT;

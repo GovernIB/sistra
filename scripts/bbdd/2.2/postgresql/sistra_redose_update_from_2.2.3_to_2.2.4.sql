@@ -1,1 +1,0 @@
-alter table RDS_FICEXT  alter column   FIE_REFFEC  type TIMESTAMP;

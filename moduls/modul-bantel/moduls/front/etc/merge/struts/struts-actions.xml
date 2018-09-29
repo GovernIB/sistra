@@ -1,9 +1,0 @@
-    <action
-    path="/arbolUnidades"
-    type="org.apache.struts.actions.ForwardAction"
-    parameter=".arbolUnidades"/>
-
-    <action
-    path="/funcsNodesUnidades"
-    type="org.apache.struts.actions.ForwardAction"
-    parameter=".funcsNodesUnidades"/> 

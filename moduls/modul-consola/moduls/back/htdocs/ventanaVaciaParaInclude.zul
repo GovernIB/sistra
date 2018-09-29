@@ -1,5 +1,0 @@
-<!--
-	Ventana vacia para trampear include.setSrc() de ZK.
-	Ver el uso en AmaraWindow.java
--->
-<window/> 

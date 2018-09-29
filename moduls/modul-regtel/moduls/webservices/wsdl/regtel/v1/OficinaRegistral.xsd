@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:es:caib:regtel:ws:v1:model:OficinaRegistral" targetNamespace="urn:es:caib:regtel:ws:v1:model:OficinaRegistral" version="1.0">
-	<xs:complexType name="OficinaRegistral">
-		<xs:sequence>
-			<xs:element name="codigoOficina" type="xs:string"/>
-			<xs:element name="codigoOrgano" type="xs:string"/>
-		</xs:sequence>
-	</xs:complexType>
-</xs:schema>

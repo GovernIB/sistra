@@ -1,7 +1,0 @@
-<classloading xmlns="urn:jboss:classloading:1.0"
-              name="3-zonaper-ws.war"
-              domain="zonaper-ws-domain"
-              export-all="NON_EMPTY" 
-              import-all="true"
-			  >
-</classloading>

@@ -1,8 +1,0 @@
- <mbean code="org.jboss.mq.server.jmx.Queue"
-	 name="jboss.mq.destination:service=Queue,name=AvisadorBTE">
-	 <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>	
-	 <!-- redelivery delay 30 [s] -->
-	 <attribute name="RedeliveryDelay">30000</attribute>
-	 <!-- unlimited redelivery -->
-	 <attribute name="RedeliveryLimit">3</attribute>
-  </mbean>
