@@ -23,6 +23,13 @@ public class InicioController extends BaseController
 		Calendar fecha = Calendar.getInstance();
 	    int anyo = fecha.get(Calendar.YEAR);
 		List anyos = new ArrayList();
+		anyos.add(String.valueOf(anyo-10));
+		anyos.add(String.valueOf(anyo-9));
+		anyos.add(String.valueOf(anyo-8));
+		anyos.add(String.valueOf(anyo-7));
+		anyos.add(String.valueOf(anyo-6));
+		anyos.add(String.valueOf(anyo-5));
+		anyos.add(String.valueOf(anyo-4));
 		anyos.add(String.valueOf(anyo-3));
 		anyos.add(String.valueOf(anyo-2));
 		anyos.add(String.valueOf(anyo-1));
