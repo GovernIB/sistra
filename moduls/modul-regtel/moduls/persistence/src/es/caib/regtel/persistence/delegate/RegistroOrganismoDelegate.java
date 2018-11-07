@@ -110,6 +110,16 @@ public class RegistroOrganismoDelegate implements StatelessDelegate {
 	    }	 	 
 	 }
 	
+	public String obtenerDescServiciosDestino(String servicioDestino)  throws DelegateException
+	{
+		try
+		{			
+			return getFacade().obtenerDescServiciosDestino(servicioDestino);				
+		} catch (Exception e) {
+	        throw new DelegateException(e);
+	    }	 	 
+	 }
+	
 	public boolean existeOficinaRegistro(char tipoRegistro, String entidad, String oficinaRegistro) throws DelegateException 
 	{ 
 		try

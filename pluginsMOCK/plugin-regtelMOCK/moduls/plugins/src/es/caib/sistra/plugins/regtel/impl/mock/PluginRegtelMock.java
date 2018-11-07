@@ -113,6 +113,25 @@ public class PluginRegtelMock implements PluginRegistroIntf{
 		return lista;
 	}
 
+	public String obtenerDescServiciosDestino(String servicioDestino) {
+		
+		if (servicioDestino == null){
+			throw new RuntimeException("No se puede obtener la descripción de un servicio destino nulo");
+		}
+		
+		String descripcion = null;		
+		String tipo = servicioDestino.substring(0, 1);
+		String elemento = servicioDestino.substring(servicioDestino.length() - 1);
+		
+		if ("U".equals(tipo)){
+			descripcion = "Unidad ";
+		} else {
+			descripcion = "Servicio ";
+		}
+		
+		return descripcion + elemento;
+	}
+
 	public void anularRegistroEntrada(String entidad, String numeroRegistro, Date fechaRegistro) throws Exception {
 		
 		if (entidad == null) {
@@ -136,6 +155,20 @@ public class PluginRegtelMock implements PluginRegistroIntf{
 		}
 		
 		return "OFICINA " + oficina;
+	}
+
+	@Override
+	public byte[] obtenerJustificanteRegistroEntrada(String entidad,
+			String numeroRegistro, Date fechaRegistro) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public byte[] obtenerJustificanteRegistroSalida(String entidad,
+			String numeroRegistro, Date fechaRegistro) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

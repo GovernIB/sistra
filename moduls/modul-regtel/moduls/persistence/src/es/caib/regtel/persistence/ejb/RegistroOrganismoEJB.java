@@ -259,6 +259,25 @@ public abstract class RegistroOrganismoEJB  implements SessionBean
 			throw new ExcepcionRegistroOrganismo("Excepcion obteniendo servicios destino del plugin de registro",ex);
 		}  			
 	}
+	
+	/**
+	 * Obtiene descripción de un servicio destinatario
+	 * @ejb.interface-method
+	 * @ejb.permission role-name = "${role.todos}"
+	 * @ejb.permission role-name = "${role.auto}"
+	 */
+	public String obtenerDescServiciosDestino(String servicioDestinatario) throws ExcepcionRegistroOrganismo{
+		try{
+			log.debug("Obtenemos plugin de registro");
+			PluginRegistroIntf	plgRegistro = PluginFactory.getInstance().getPluginRegistro();
+			log.debug("Invocamos el plugin con la funcion de obtener servicios destino");
+			String resReg = plgRegistro.obtenerDescServiciosDestino(servicioDestinatario);
+			return resReg;
+			
+		}catch (Exception ex){
+			throw new ExcepcionRegistroOrganismo("Excepcion obteniendo descripción del servicio destino" + servicioDestinatario + " del plugin de registro",ex);
+		}  			
+	}
    
 	
 	/**

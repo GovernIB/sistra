@@ -162,6 +162,13 @@ public interface PluginRegistroIntf extends PluginSistraIntf {
 	 * @see ServicioDestinatario
 	 */
 	public List obtenerServiciosDestino(String entidad);
+	
+	/**
+	 * Obtiene la descripción de un servicio destinatario
+	 * @param servicioDestino codigo del servicio destino.
+	 * @return String Descripción de servicio destino
+	 */
+	public String obtenerDescServiciosDestino(String servicioDestino);
 
 	/**
 	 * Obtiene descripción de la oficina para la estampación del sello en un preregistro.

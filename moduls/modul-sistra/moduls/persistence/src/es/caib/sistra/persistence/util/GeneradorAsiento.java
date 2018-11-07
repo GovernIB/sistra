@@ -911,13 +911,10 @@ public class GeneradorAsiento {
 
 	private static String obtenerDescripcionOrgano(String entidad, String codOrgano) throws Exception{
 
-		List organos = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerServiciosDestino(entidad);
-
-		for (Iterator it = organos.iterator();it.hasNext();){
-			ValorOrganismo vo = (ValorOrganismo) it.next();
-			if (vo.getCodigo().equals(codOrgano)){
-				return vo.getDescripcion();
-			}
+		String desc = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerDescServiciosDestino(codOrgano);
+		
+		if (desc != null){
+			return desc;
 		}
 
 		// Error: No se encuentra organo destino
