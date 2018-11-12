@@ -111,6 +111,16 @@ public class RegistroTelematicoDelegate implements StatelessDelegate {
         }
     }
 	
+	public String obtenerDescServiciosDestino(String servicioDestino)  throws DelegateException
+	{
+		try
+		{			
+			return getFacade().obtenerDescServiciosDestino(servicioDestino);				
+		} catch (Exception e) {
+	        throw new DelegateException(e);
+	    }	 	 
+	 }
+	
 	public boolean existeServicioDestino(String entidad, String servicioDestino) throws DelegateException { 
         try {
             return getFacade().existeServicioDestino(entidad, servicioDestino);

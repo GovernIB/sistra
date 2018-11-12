@@ -6470,12 +6470,9 @@ public class TramiteProcessorEJB implements SessionBean {
 	  * @throws Exception
 	  */
 	 private boolean validarCodigoOrgano(String entidad, String codOrgano) throws Exception{
-		List organos = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerServiciosDestino(entidad);
-		for (Iterator it = organos.iterator();it.hasNext();){
-			ValorOrganismo vo = (ValorOrganismo) it.next();
-			if (vo.getCodigo().equals(codOrgano)){
-				return true;
-			}
+		String desc = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerDescServiciosDestino(codOrgano);
+		if (desc != null){
+			return true;
 		}
 		return false;
 	}

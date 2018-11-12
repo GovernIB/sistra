@@ -370,6 +370,25 @@ public abstract class RegistroTelematicoEJB  implements SessionBean
    }
 	
 	/**
+	 * Obtiene la descripcion de un servicio destino
+	 * 
+	 * @return descripcion del servicio destino
+	 * @throws ExcepcionRegistroTelematico
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission role-name = "${role.todos}" 
+	 * @ejb.permission role-name = "${role.auto}"   	 
+	 * 
+	 */
+	public String obtenerDescServiciosDestino(String servicioDestino)  throws ExcepcionRegistroTelematico{
+	   try{
+			return DelegateUtil.getRegistroOrganismoDelegate().obtenerDescServiciosDestino(servicioDestino);			
+		}catch (Exception ex){
+			throw new ExcepcionRegistroTelematico("Excepcion obteniendo descripción del servicio destino " + servicioDestino + " en registro organismo",ex);
+		} 
+   }
+	
+	/**
 	 * Mira si existe o no un servicio de destino
 	 * 
 	 * @param servicioDestino identificador del servicio de destino

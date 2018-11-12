@@ -4,6 +4,48 @@
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
+<script type="text/javascript">
+<!--
+function descargaJustificante( url )
+{
+	accediendoEnviando("<bean:message key="pasoJustificante.guardarJustificante.descargando"/>");
+	$.ajax({
+        url: url,
+        method: "GET",
+        xhrFields: {
+            responseType: "blob"
+        },
+        success: function (data, textStatus, xhr) {
+			
+			var newBlob = new Blob([data], {type: "application/pdf"})
+			
+			var header = xhr.getResponseHeader("Content-Disposition");
+			var startIndex = header.indexOf("filename=") + 9;
+			var endIndex = header.length - 1;
+			var filename = header.substring(startIndex, endIndex);
+			
+			if (window.navigator && window.navigator.msSaveOrOpenBlob) { // para IE
+				ocultarCapaInfo();
+				window.navigator.msSaveOrOpenBlob(newBlob, filename);
+			} else { // para no IE (chrome, firefox etc.)
+				const datos = window.URL.createObjectURL(newBlob); 
+				var a = document.createElement("a");
+				a.href = datos;
+				a.download = filename;
+				document.body.appendChild(a);
+				ocultarCapaInfo();
+				a.click();
+				setTimeout(function(){
+					// Para Firefox es necesario retrasar el revocado de ObjectURL
+					document.body.removeChild(link);
+					window.URL.revokeObjectURL(data);
+				}, 100);
+			}
+        }
+	});
+}
+-->
+</script>
 <html:xhtml/>
 <bean:define id="lang" value="<%=((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage()%>" type="java.lang.String"/>
 <bean:define id="referenciaPortal"  type="java.lang.String">
@@ -39,7 +81,7 @@
 	</p>
 	<p class="centrado">
 		<input name="guardarJustificanteBoton" id="guardarJustificanteBoton" type="button" value="<bean:message key="pasoJustificante.guardarJustificante.boton"/>"
-			 onclick="javascript:document.location.href='<%= urlMostrarDocumento + "&identificador=JUSTIFICANTE"%>'" />
+			 onclick="javascript:descargaJustificante('<%= urlMostrarDocumento + "&identificador=JUSTIFICANTE"%>')" />
 	</p></br></br></br>
 	<h3 class="titGuardar"><bean:message key="pasoJustificante.guardarRestoDocumentacion"/></h3>	
 	<p class="apartado">
@@ -267,4 +309,8 @@ value="<bean:message key="finalizacion.boton.finalizar"/>"
 
 </p>
 
-<div class="sep"></div>
+<div class="sep"></div>				
+		
+<!-- capa accediendo formularios -->
+<div id="capaInfoFondo"></div>
+<div id="capaInfoForms"></div>
