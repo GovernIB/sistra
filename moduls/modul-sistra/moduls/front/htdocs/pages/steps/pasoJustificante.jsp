@@ -11,41 +11,50 @@
 <!--
 function descargaJustificante( url )
 {
-	accediendoEnviando("<bean:message key="pasoJustificante.guardarJustificante.descargando"/>");
-	$.ajax({
-        url: url,
-        method: "GET",
-        xhrFields: {
-            responseType: "blob"
-        },
-        success: function (data, textStatus, xhr) {
-			
-			var newBlob = new Blob([data], {type: "application/pdf"})
-			
-			var header = xhr.getResponseHeader("Content-Disposition");
-			var startIndex = header.indexOf("filename=") + 9;
-			var endIndex = header.length - 1;
-			var filename = header.substring(startIndex, endIndex);
-			
-			if (window.navigator && window.navigator.msSaveOrOpenBlob) { // para IE
-				ocultarCapaInfo();
-				window.navigator.msSaveOrOpenBlob(newBlob, filename);
-			} else { // para no IE (chrome, firefox etc.)
-				const datos = window.URL.createObjectURL(newBlob); 
-				var a = document.createElement("a");
-				a.href = datos;
-				a.download = filename;
-				document.body.appendChild(a);
-				ocultarCapaInfo();
-				a.click();
-				setTimeout(function(){
-					// Para Firefox es necesario retrasar el revocado de ObjectURL
-					document.body.removeChild(link);
-					window.URL.revokeObjectURL(data);
-				}, 100);
-			}
-        }
-	});
+	if (isIE () && isIE () < 10){
+		var just = document.getElementById('guardarJustificanteBotonOc');
+		just.click();	
+	} else {
+		accediendoEnviando("<bean:message key="pasoJustificante.guardarJustificante.descargando"/>");
+	    xhr = new XMLHttpRequest();
+		xhr.open('GET', url, true);
+		xhr.responseType = 'arraybuffer';
+		xhr.onreadystatechange = function(e) {
+		   	if (this.readyState == 4 && this.status == 200) {
+		        var newBlob = new Blob([this.response], {type:"application/pdf"});
+					
+				var header = xhr.getResponseHeader("Content-Disposition");
+				var startIndex = header.indexOf("filename=") + 9;
+				var endIndex = header.length - 1;
+				var filename = header.substring(startIndex, endIndex);
+					
+				if (window.navigator && window.navigator.msSaveOrOpenBlob) { // para IE
+					ocultarCapaInfo();
+					window.navigator.msSaveOrOpenBlob(newBlob, filename);
+				} else { // para no IE (chrome, firefox etc.)
+					var datos = window.URL.createObjectURL(newBlob); 
+					var a = document.createElement("a");
+					a.href = datos;
+					a.download = filename;
+					document.body.appendChild(a);
+					ocultarCapaInfo();
+					a.click();
+					setTimeout(function(){
+						// Para Firefox es necesario retrasar el revocado de ObjectURL
+						document.body.removeChild(link);
+						window.URL.revokeObjectURL(data);
+					}, 100);
+				}
+		   	}
+		};
+		xhr.send();
+	}
+	
+}
+
+function isIE () {
+  var myNav = navigator.userAgent.toLowerCase();
+  return (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) : false;
 }
 -->
 </script>
@@ -244,6 +253,8 @@ function descargaJustificante( url )
 			<p class="centrado">
 				<input name="guardarJustificanteBoton" id="guardarJustificanteBoton" type="button" value="<bean:message key="pasoJustificante.guardarJustificante.boton"/>"
 					 onclick="javascript:descargaJustificante('<%= urlMostrarDocumento + "&identificador=JUSTIFICANTE"%>')" />
+				<input name="guardarJustificanteBotonOc" id="guardarJustificanteBotonOc" type="button" style="display:none" value="<bean:message key="pasoJustificante.guardarJustificante.boton"/>"
+			 		 onclick="javascript:document.location.href='<%= urlMostrarDocumento + "&identificador=JUSTIFICANTE"%>'" />
 					 </p>
 			<p id="getAdobeReader">
 					<bean:message key="pasoJustificante.guardarJustificante.informacionPDF"/>

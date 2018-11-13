@@ -141,7 +141,7 @@ opacidad = 0;
 function mostrarCapa() {
 	if(opacidad < 100) {
 		opacidad += 20;
-		if(document.all) document.getElementById('capaInfoForms').filters.alpha.opacity = opacidad;
+		if(document.all && typeof document.getElementById('capaInfoForms').filters != 'undefined') document.getElementById('capaInfoForms').filters.alpha.opacity = opacidad;
 		else document.getElementById('capaInfoForms').style.opacity = opacidad/100;
 		tiempo = setTimeout('mostrarCapa()', 50);
 	} else {
