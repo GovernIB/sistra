@@ -11,9 +11,9 @@
 <!--
 function descargaJustificante( url )
 {
+	var just = document.getElementById('guardarJustificanteBotonOc');
 	if (isIE () && isIE () < 10){
-		var just = document.getElementById('guardarJustificanteBotonOc');
-		just.click();	
+		just.click();
 	} else {
 		accediendoEnviando("<bean:message key="pasoJustificante.guardarJustificante.descargando"/>");
 	    xhr = new XMLHttpRequest();
@@ -21,35 +21,39 @@ function descargaJustificante( url )
 		xhr.responseType = 'arraybuffer';
 		xhr.onreadystatechange = function(e) {
 		   	if (this.readyState == 4 && this.status == 200) {
-		        var newBlob = new Blob([this.response], {type:"application/pdf"});
+		   		if (xhr.getResponseHeader("Content-Type") == "text/html"){
+		   			just.click();
+		   		}else{
+		   			var newBlob = new Blob([this.response], {type:"application/pdf"});
 					
-				var header = xhr.getResponseHeader("Content-Disposition");
-				var startIndex = header.indexOf("filename=") + 9;
-				var endIndex = header.length - 1;
-				var filename = header.substring(startIndex, endIndex);
-					
-				if (window.navigator && window.navigator.msSaveOrOpenBlob) { // para IE
-					ocultarCapaInfo();
-					window.navigator.msSaveOrOpenBlob(newBlob, filename);
-				} else { // para no IE (chrome, firefox etc.)
-					var datos = window.URL.createObjectURL(newBlob); 
-					var a = document.createElement("a");
-					a.href = datos;
-					a.download = filename;
-					document.body.appendChild(a);
-					ocultarCapaInfo();
-					a.click();
-					setTimeout(function(){
-						// Para Firefox es necesario retrasar el revocado de ObjectURL
-						document.body.removeChild(link);
-						window.URL.revokeObjectURL(data);
-					}, 100);
-				}
+					var header = xhr.getResponseHeader("Content-Disposition");
+					var startIndex = header.indexOf("filename=") + 9;
+					var endIndex = header.length - 1;
+					var filename = header.substring(startIndex, endIndex);
+						
+					if (window.navigator && window.navigator.msSaveOrOpenBlob) { // para IE
+						ocultarCapaInfo();
+						window.navigator.msSaveOrOpenBlob(newBlob, filename);
+					} else { // para no IE (chrome, firefox etc.)
+						var datos = window.URL.createObjectURL(newBlob); 
+						var a = document.createElement("a");
+						a.href = datos;
+						a.download = filename;
+						document.body.appendChild(a);
+						ocultarCapaInfo();
+						a.click();
+						setTimeout(function(){
+							// Para Firefox es necesario retrasar el revocado de ObjectURL
+							document.body.removeChild(link);
+							window.URL.revokeObjectURL(data);
+						}, 100);
+					}
+		   		}
+		        
 		   	}
 		};
 		xhr.send();
 	}
-	
 }
 
 function isIE () {
