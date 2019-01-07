@@ -177,13 +177,13 @@
 	<classpathentry kind="lib" path="lib/zk/zul-6.5.4.jar"/>
 	<classpathentry kind="lib" path="lib/zk/zweb-6.5.4.jar"/>
 	<classpathentry kind="lib" path="lib/firmaWeb/plugin-signatureserver-api-2.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/firmaWeb/plugin-signatureserver-miniappletutils-2.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/firmaWeb/plugin-signatureserver-miniappletutils-2.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/firmaWeb/plugin-signatureweb-afirma_triphase_server_lib-1.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/firmaWeb/plugin-signatureweb-afirma_triphase_server-2.0.7.jar"/>
 	<classpathentry kind="lib" path="lib/firmaWeb/plugin-signatureweb-api-2.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/firmaWeb/plugin-signatureweb-miniappletinclient-2.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/firmaWeb/plugin-signatureweb-miniappletinserver-2.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/firmaWeb/plugin-signatureweb-miniappletutils-2.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/firmaWeb/plugin-signatureweb-miniappletutils-2.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/firmaWeb/plugins-api-1.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/firmaWeb/plugins-webutils-1.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/firmaWeb/mime-util-2.1.3.jar"/>
