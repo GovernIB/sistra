@@ -1,10 +1,13 @@
 # ![Logo](https://github.com/GovernIB/maven/raw/binaris/sistra/projectinfo_Attachments/icon.jpg) SISTRA
-
+> - Versió Estable: __sistra-3.5.8__ (Tag [sistra-3.5.8](https://github.com/GovernIB/sistra/tree/sistra-3.5.8))
+> - Versió Desenvolupament: __sistra-3.5__ (branca [sistra-3.5](https://github.com/GovernIB/sistra/tree/sistra-3.5))
 
 **Descripció**
 
 Sistema de tramitació administrativa de les Illes Balears
 
+
+[**Documentació**](https://github.com/GovernIB/sistra/tree/sistra-3.5.8/doc/pdf)
 
 **Característiques**
 
@@ -17,17 +20,4 @@ Sistema de tramitació administrativa de les Illes Balears
 * Programming Language: Java
 * Translations: Catalan &  Spanish
 * User Interface: Web-based
-
-**Captures de pantalla**
-
-![Certificat d'Empadronament](https://github.com/GovernIB/maven/raw/binaris/sistra/projectinfo_Attachments/screenshots/313151.jpg)<br/>
-Certificat d'Empadronament
-
-![Llista de tràmits](https://github.com/GovernIB/maven/raw/binaris/sistra/projectinfo_Attachments/screenshots/313149.jpg)<br/>
-Llista de tràmits
-
-![Sol·licitud de llicència de pesca recreativa](https://github.com/GovernIB/maven/raw/binaris/sistra/projectinfo_Attachments/screenshots/313147.jpg)<br/>
-Sol·licitud de llicència de pesca recreativa
-
-
 
