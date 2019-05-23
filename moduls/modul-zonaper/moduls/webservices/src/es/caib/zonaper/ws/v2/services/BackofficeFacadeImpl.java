@@ -1,20 +1,32 @@
 package es.caib.zonaper.ws.v2.services;
 
 
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
 import es.caib.zonaper.modelInterfaz.ConfiguracionAvisosExpedientePAD;
 import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.EstadoPago;
 import es.caib.zonaper.modelInterfaz.EstadoPagosTramite;
 import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
+import es.caib.zonaper.modelInterfaz.UsuarioAutenticadoInfoPAD;
+import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeUtil;
+import es.caib.zonaper.persistence.delegate.ProcesosAutoDelegate;
 import es.caib.zonaper.ws.v2.model.ConfiguracionAvisosExpediente;
 import es.caib.zonaper.ws.v2.model.DocumentoExpediente;
 import es.caib.zonaper.ws.v2.model.EstadoPagos;
@@ -22,6 +34,10 @@ import es.caib.zonaper.ws.v2.model.EventoExpediente;
 import es.caib.zonaper.ws.v2.model.Expediente;
 import es.caib.zonaper.ws.v2.model.TipoEstadoPago;
 import es.caib.zonaper.ws.v2.model.TipoEstadoTramite;
+import es.caib.zonaper.ws.v2.model.TramitesPersistentes;
+import es.caib.zonaper.ws.v2.model.UsuarioAutenticadoInfo;
+
+
 
 
 @javax.jws.WebService(portName = "BackofficeFacade", serviceName = "BackofficeFacadeService",
@@ -107,6 +123,46 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
 			// exc.printStackTrace();
 		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
+		}
+	}
+	
+	public TramitesPersistentes obtenerPersistentes(String nif,
+			XMLGregorianCalendar fechaDesde, XMLGregorianCalendar fechaHasta)
+			throws BackofficeFacadeException {
+		try{
+			
+			Date desdeDate=null;
+			Date hastaDate=null;
+			if(fechaDesde != null){
+				desdeDate = fechaDesde.toGregorianCalendar().getTime();
+			}if(fechaHasta != null){
+				hastaDate = fechaHasta.toGregorianCalendar().getTime();
+			}					
+			
+			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
+			List persistentes = pad.obtenerPersistentes(nif, desdeDate, hastaDate);
+			
+			TramitesPersistentes res = new TramitesPersistentes();
+			
+			if (persistentes != null) {
+				for (Iterator it = persistentes.iterator(); it.hasNext();) {
+					TramitePersistentePAD ep = (TramitePersistentePAD) it.next();
+					es.caib.zonaper.ws.v2.model.TramitePersistente rep = new es.caib.zonaper.ws.v2.model.TramitePersistente();
+					rep.setIdTramite(ep.getIdProcedimiento());
+					rep.setIdioma(ep.getIdioma());
+					rep.setIdSesionTramitacion(ep.getIdPersistencia());
+					rep.setDescripcionTramite(ep.getTramite());
+					rep.setFechaInicio(dateToXmlGregorianCalendar(ep.getFechaCreacion()));
+					rep.setFechaUltimoAcceso(dateToXmlGregorianCalendar(ep.getFechaModificacion()));
+					res.getTramitePersistente().add(rep);
+				}
+			}
+			
+			return res;
+			
+		} catch (Exception exc) {
+			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
+		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());	
 		}
 	}
 
@@ -266,7 +322,80 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		}
 		return confPAD;
 	}
+	
+	private UsuarioAutenticadoInfoPAD usuarioAutenticadoInfoWsTousuarioAutenticadoInfoPAD(
+			UsuarioAutenticadoInfo confWS) throws Exception {
+		UsuarioAutenticadoInfoPAD confPAD = new UsuarioAutenticadoInfoPAD();
+		if (confWS != null){
+			if(confWS.getApellido1() != null){
+				confPAD.setApellido1(StringUtils.defaultIfEmpty(confWS.getApellido1(),null));
+			}
+			if(confWS.getApellido2() != null){
+				confPAD.setApellido2(StringUtils.defaultIfEmpty(confWS.getApellido2(),null));
+			}
+			if(confWS.getAutenticacion() != null){
+				if("c".equals(confWS.getAutenticacion())){
+					confPAD.setAutenticacion("C");
+				}else{
+					throw new Exception("no se puede obtener tiquet para la autenticación " + confWS.getAutenticacion());
+				}
+				
+			}
+			if(confWS.getEmail() != null){
+				confPAD.setEmail(StringUtils.defaultIfEmpty(confWS.getEmail(),null));
+			}
+			if(confWS.getMetodoAutenticacion() != null){
+				if("CLAVE_CERTIFICADO".equals(confWS.getMetodoAutenticacion())){
+					confPAD.setMetodoAutenticacion("aFirma");					
+				}else if ("CLAVE_PIN".equals(confWS.getMetodoAutenticacion())){
+					confPAD.setMetodoAutenticacion("AEAT");
+				}else if ("CLAVE_PERMANENTE".equals(confWS.getMetodoAutenticacion())){
+					confPAD.setMetodoAutenticacion("SS");
+				}else{
+					throw new Exception("el método de autenticación " + confWS.getMetodoAutenticacion() + " no está soportado");
+				}
+			}
+			if(confWS.getNif() != null){
+				confPAD.setNif(StringUtils.defaultIfEmpty(confWS.getNif(),null));
+			}
+			if(confWS.getNombre() != null){
+				confPAD.setNombre(StringUtils.defaultIfEmpty(confWS.getNombre(),null));
+			}
+			if(confWS.getUsername() != null){
+				confPAD.setUsername(StringUtils.defaultIfEmpty(confWS.getUsername(),null));
+			}
+		}
+		return confPAD;
+	}
+	
+	private XMLGregorianCalendar dateToXmlGregorianCalendar(Date date) throws Exception{
+		try {
+			if(date != null){
+				GregorianCalendar c = new GregorianCalendar();
+				c.setTime(date);
+				return DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+			}
+		} catch (DatatypeConfigurationException e) {}
+		return null;
+	}
 
+	@Override
+	public String obtenerTiquetAcceso(String idSesionTramitacion,
+			UsuarioAutenticadoInfo usuarioAutenticadoInfo)
+			throws BackofficeFacadeException {
+		try {
+
+			UsuarioAutenticadoInfoPAD usuAut = usuarioAutenticadoInfoWsTousuarioAutenticadoInfoPAD(usuarioAutenticadoInfo);
+
+			ProcesosAutoDelegate delegate = DelegateUtil.getProcesosAutoDelegate();
+			String res = delegate.obtenerTiquetAcceso(idSesionTramitacion, usuAut );
+			return res;
+		} catch (Exception exc) {
+			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
+			// exc.printStackTrace();
+		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
+		}
+	}
 
 
 }

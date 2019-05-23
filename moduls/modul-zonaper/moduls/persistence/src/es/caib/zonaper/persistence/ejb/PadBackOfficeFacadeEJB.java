@@ -77,6 +77,7 @@ import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.modelInterfaz.TramiteExpedientePAD;
+import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
 import es.caib.zonaper.persistence.delegate.ConsultaPADDelegate;
 import es.caib.zonaper.persistence.delegate.DelegateException;
 import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
@@ -86,6 +87,7 @@ import es.caib.zonaper.persistence.delegate.EventoExpedienteDelegate;
 import es.caib.zonaper.persistence.delegate.ExpedienteDelegate;
 import es.caib.zonaper.persistence.delegate.IndiceElementoDelegate;
 import es.caib.zonaper.persistence.delegate.PadDelegate;
+import es.caib.zonaper.persistence.delegate.TramitePersistenteDelegate;
 import es.caib.zonaper.persistence.util.GeneradorId;
 
 
@@ -584,7 +586,48 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
     		throw new ExcepcionPAD("Error obteniendo estado pagos tramite",ex);
     	}
     }
-
+	
+	/**
+	 *
+	 * Obtiene tramites persistentes para un nif en un periodo de tiempo
+    *
+	 * @param nif numero de documento para el que se buscan las solicitudes persistentes
+	 * @param fechaDesde fecha a partir de la cual se buscan solicitudes persistentes
+	 * @param fechaHasta fecha hasta la que se buscan solicitudes persistentes
+	 * @throws ExcepcionPAD
+	 *
+	 * @ejb.interface-method
+    *
+    * @ejb.permission role-name="${role.auto}"
+    */
+	
+	public List obtenerPersistentes(String nif, Date fechaDesde, Date fechaHasta ) throws ExcepcionPAD {
+		// Cargamos tramitePersistente
+    	List tramites;
+		try{			
+    		// Buscamos tramite de persistencia
+			
+			PersonaPAD persona = DelegateUtil.getConsultaPADDelegate().obtenerDatosPADporNif(NifCif.normalizarDocumento(nif));
+			if (persona == null){
+				throw new ExcepcionPAD("El usuario con el nif consultado no existe en el sistema");
+			}
+			
+			TramitePersistenteDelegate td = DelegateUtil.getTramitePersistenteDelegate();
+			tramites = td.listarTramitesPersistentesNif(persona.getUsuarioSeycon(), fechaDesde, fechaHasta);
+		}catch( Exception ex ){
+    		throw new ExcepcionPAD("Error obteniendo trámites persistentes del nif " + nif, ex);
+    	}
+		
+        // Pasamos a TramitePersistentePAD
+    	List tramitesPAD = new ArrayList(tramites.size());
+    	for (Iterator it = tramites.iterator();it.hasNext();){
+    		TramitePersistente tramitePersistente = (TramitePersistente) it.next();
+    		if ("S".equals(tramitePersistente.getPersistente())) {
+    			tramitesPAD.add(tramitePersistenteToTramitePersistentePAD(tramitePersistente));
+    		}
+    	}
+    	return tramitesPAD;
+	}
 
 
 	/**
@@ -1829,5 +1872,43 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 			}
 			return res;
 		}
+		
+		/**
+	     * Convierte TramitePersistente en TramitePersistentePAD
+	     * @param t
+	     * @return
+	     */
+	    private TramitePersistentePAD tramitePersistenteToTramitePersistentePAD(TramitePersistente t) throws ExcepcionPAD{
+	    	try{
+	    		if (t == null) {
+	    			return null;
+	    		}
+
+		    	TramitePersistentePAD tpad = new TramitePersistentePAD();
+		    	tpad.setIdPersistencia(t.getIdPersistencia());
+		    	tpad.setTramite(t.getTramite());
+		    	tpad.setVersion(t.getVersion());
+		    	tpad.setDescripcion( t.getDescripcion() );
+		    	tpad.setIdProcedimiento(t.getIdProcedimiento());
+		    	tpad.setNivelAutenticacion(t.getNivelAutenticacion());
+		    	tpad.setUsuario(t.getUsuario());
+		    	tpad.setUsuarioFlujoTramitacion(t.getUsuarioFlujoTramitacion());
+		    	tpad.setFechaCreacion(t.getFechaCreacion());
+		    	tpad.setFechaModificacion(t.getFechaModificacion());
+		    	tpad.setFechaCaducidad(t.getFechaCaducidad());
+		    	tpad.setIdioma(t.getIdioma());
+		    	tpad.setParametrosInicio(t.getParametrosInicioMap());
+		    	tpad.setDelegado(t.getDelegado());
+		    	tpad.setEstadoDelegacion(t.getEstadoDelegacion());
+
+		    	tpad.setAlertasTramitacionGenerar(t.getAlertasTramitacionGenerar());
+		    	tpad.setAlertasTramitacionFinAuto(t.getAlertasTramitacionFinAuto());
+		    	tpad.setAlertasTramitacionEmail(t.getAlertasTramitacionEmail());
+		    	tpad.setAlertasTramitacionSms(t.getAlertasTramitacionSms());
+		    	return tpad;
+	    	}catch (Exception e){
+	    		throw new ExcepcionPAD("No se ha podido convertir TramitePersistente en TramitePersistentePAD",e);
+	    	}
+	    }
 
 }

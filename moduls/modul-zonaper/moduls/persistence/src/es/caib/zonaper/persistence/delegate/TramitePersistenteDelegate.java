@@ -98,6 +98,15 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
+    public List listarTramitesPersistentesNif(String nif, Date fechaInicial, Date fechaFinal) throws DelegateException {
+        try {
+            return getFacade().listarTramitesPersistentesNif(nif, fechaInicial, fechaFinal);
+        } catch (Exception e) {
+        	e.printStackTrace();
+            throw new DelegateException(e);
+        }
+    }
 
     public List listarTramitesPersistentesBackup(Date fechaInicial, Date fechaFinal, String modelo, String nivelAutenticacion) throws DelegateException {
         try {

@@ -2,6 +2,7 @@ package es.caib.zonaper.persistence.delegate;
 
 import java.rmi.RemoteException;
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
@@ -13,6 +14,8 @@ import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.persistence.intf.PadBackOfficeFacade;
 import es.caib.zonaper.persistence.util.PadBackOfficeFacadeUtil;
+
+import java.util.Date;
 
 public class PadBackOfficeDelegate implements StatelessDelegate
 {
@@ -151,6 +154,18 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 			throw new DelegateException( e );
 		}
 	}
+	
+	public List obtenerPersistentes(String nif, Date fechaDesde, Date fechaHasta )  throws DelegateException
+	{
+		try
+		{
+			return getFacade().obtenerPersistentes(nif, fechaDesde, fechaHasta);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
 
 	public boolean existeExpediente(long unidadAdministrativa,
 			String identificadorExpediente) throws DelegateException {
@@ -163,7 +178,6 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 			throw new DelegateException( e );
 		}
 	}
-
 
 
 	/*

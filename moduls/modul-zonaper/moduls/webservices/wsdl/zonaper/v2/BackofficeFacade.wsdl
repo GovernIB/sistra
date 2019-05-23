@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:impl="urn:es:caib:zonaper:ws:v2:services" xmlns:intf="urn:es:caib:zonaper:ws:v2:model:BackofficeFacade" xmlns:tns1="urn:es:caib:zonaper:ws:v2:model:Expediente" xmlns:tns2="urn:es:caib:zonaper:ws:v2:model:EventoExpediente" xmlns:tns3="urn:es:caib:zonaper:ws:v2:model:EstadoPago" xmlns:tns4="urn:es:caib:zonaper:ws:v2:model:ConfiguracionAvisosExpediente" targetNamespace="urn:es:caib:zonaper:ws:v2:services" name="BackofficeFacade">
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:impl="urn:es:caib:zonaper:ws:v2:services" xmlns:intf="urn:es:caib:zonaper:ws:v2:model:BackofficeFacade" xmlns:tns1="urn:es:caib:zonaper:ws:v2:model:Expediente" xmlns:tns2="urn:es:caib:zonaper:ws:v2:model:EventoExpediente" xmlns:tns3="urn:es:caib:zonaper:ws:v2:model:EstadoPago" xmlns:tns4="urn:es:caib:zonaper:ws:v2:model:ConfiguracionAvisosExpediente" xmlns:tns5="urn:es:caib:zonaper:ws:v2:model:TramitePersistente" xmlns:tns6="urn:es:caib:zonaper:ws:v2:model:UsuarioAutenticadoInfo" targetNamespace="urn:es:caib:zonaper:ws:v2:services" name="BackofficeFacade">
 	<wsdl:types>
 		<schema elementFormDefault="qualified" targetNamespace="urn:es:caib:zonaper:ws:v2:model:BackofficeFacade" xmlns="http://www.w3.org/2001/XMLSchema" version="1.0">
 			<xsd:import namespace="urn:es:caib:zonaper:ws:v2:model:Expediente" schemaLocation="Expediente.xsd"/>
 			<xsd:import namespace="urn:es:caib:zonaper:ws:v2:model:EventoExpediente" schemaLocation="EventoExpediente.xsd"/>
 			<xsd:import namespace="urn:es:caib:zonaper:ws:v2:model:EstadoPago" schemaLocation="EstadoPago.xsd"/>
 			<xsd:import namespace="urn:es:caib:zonaper:ws:v2:model:ConfiguracionAvisosExpediente" schemaLocation="ConfiguracionAvisosExpediente.xsd"/>
+			<xsd:import namespace="urn:es:caib:zonaper:ws:v2:model:TramitePersistente" schemaLocation="TramitePersistente.xsd"/>
+			<xsd:import namespace="urn:es:caib:zonaper:ws:v2:model:UsuarioAutenticadoInfo" schemaLocation="UsuarioAutenticadoInfo.xsd"/>
 			<xsd:element name="altaExpediente">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -106,6 +108,37 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:element name="obtenerPersistentes">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="nif" type="xsd:string"/>
+						<xsd:element name="fechaDesde" type="xsd:dateTime"/>
+						<xsd:element name="fechaHasta" type="xsd:dateTime"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="obtenerPersistentesResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="obtenerPersistentesReturn" type="tns5:TramitesPersistentes"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="obtenerTiquetAcceso">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="idSesionTramitacion" type="xsd:string"/>
+						<xsd:element name="usuarioAutenticadoInfo" type="tns6:UsuarioAutenticadoInfo"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="obtenerTiquetAccesoResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="obtenerTiquetAccesoReturn" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 			<complexType name="BackofficeFacadeException">
 				<sequence/>
 			</complexType>
@@ -157,6 +190,18 @@
 	<wsdl:message name="obtenerEstadoPagosTramiteResponse">
 		<wsdl:part name="parameters" element="intf:obtenerEstadoPagosTramiteResponse"/>
 	</wsdl:message>
+	<wsdl:message name="obtenerPersistentesRequest">
+		<wsdl:part name="parameters" element="intf:obtenerPersistentes"/>
+	</wsdl:message>
+	<wsdl:message name="obtenerPersistentesResponse">
+		<wsdl:part name="parameters" element="intf:obtenerPersistentesResponse"/>
+	</wsdl:message>
+	<wsdl:message name="obtenerTiquetAccesoRequest">
+		<wsdl:part name="parameters" element="intf:obtenerTiquetAcceso"/>
+	</wsdl:message>
+	<wsdl:message name="obtenerTiquetAccesoResponse">
+		<wsdl:part name="parameters" element="intf:obtenerTiquetAccesoResponse"/>
+	</wsdl:message>	
 	<wsdl:portType name="BackofficeFacade">
 		<wsdl:operation name="altaExpediente">
 			<wsdl:input name="altaExpedienteRequest" message="impl:altaExpedienteRequest"/>
@@ -193,6 +238,16 @@
 			<wsdl:output name="obtenerEstadoPagosTramiteResponse" message="impl:obtenerEstadoPagosTramiteResponse"/>
 			<wsdl:fault name="BackofficeFacadeException" message="impl:BackofficeFacadeException"/>
 		</wsdl:operation>
+		<wsdl:operation name="obtenerPersistentes">
+			<wsdl:input name="obtenerPersistentesRequest" message="impl:obtenerPersistentesRequest"/>
+			<wsdl:output name="obtenerPersistentesResponse" message="impl:obtenerPersistentesResponse"/>
+			<wsdl:fault name="BackofficeFacadeException" message="impl:BackofficeFacadeException"/>
+		</wsdl:operation>
+		<wsdl:operation name="obtenerTiquetAcceso">
+			<wsdl:input name="obtenerTiquetAccesoRequest" message="impl:obtenerTiquetAccesoRequest"/>
+			<wsdl:output name="obtenerTiquetAccesoResponse" message="impl:obtenerTiquetAccesoResponse"/>
+			<wsdl:fault name="BackofficeFacadeException" message="impl:BackofficeFacadeException"/>
+		</wsdl:operation>	
 	</wsdl:portType>
 	<wsdl:binding name="BackofficeFacadeSoapBinding" type="impl:BackofficeFacade">
 		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
@@ -269,6 +324,30 @@
 			</wsdl:fault>
 		</wsdl:operation>
 		<wsdl:operation name="obtenerEstadoPagosTramite">
+			<soap:operation/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="BackofficeFacadeException">
+				<soap:fault name="BackofficeFacadeException" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="obtenerPersistentes">
+			<soap:operation/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="BackofficeFacadeException">
+				<soap:fault name="BackofficeFacadeException" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+				<wsdl:operation name="obtenerTiquetAcceso">
 			<soap:operation/>
 			<wsdl:input>
 				<soap:body use="literal"/>
