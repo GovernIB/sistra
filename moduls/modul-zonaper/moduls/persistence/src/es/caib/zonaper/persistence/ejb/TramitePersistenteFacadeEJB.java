@@ -524,7 +524,7 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
      * que su fecha de ultima modificacion este comprendida en el rango pasado como parametro
      *
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
      */
     public List listarTramitesPersistentesNif(String usuario, Date fechaInicial, Date fechaFinal) {
         Session session = getSession();
