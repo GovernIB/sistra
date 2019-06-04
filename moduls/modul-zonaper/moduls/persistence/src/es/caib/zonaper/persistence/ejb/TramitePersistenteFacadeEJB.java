@@ -518,6 +518,37 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
+    
+    /**
+     * Obtiene la lista de tramites en persistencia para un usuario y
+     * que su fecha de ultima modificacion este comprendida en el rango pasado como parametro
+     *
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public List listarTramitesPersistentesNif(String usuario, Date fechaInicial, Date fechaFinal) {
+        Session session = getSession();
+        try {
+            Query query = session
+            .createQuery("FROM TramitePersistente AS m WHERE m.nivelAutenticacion != 'A' and (m.usuarioFlujoTramitacion = :usuario or m.usuario = :usuario) and m.fechaModificacion <= :fechaFinal and m.fechaModificacion >= :fechaInicial ORDER BY m.fechaModificacion DESC");
+            query.setParameter("usuario",usuario);
+            query.setParameter("fechaInicial",fechaInicial);
+            query.setParameter("fechaFinal",fechaFinal);
+
+            List tramites = query.list();
+
+            return tramites;
+
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        }
+    	catch( Exception exc )
+    	{
+    		throw new EJBException( exc );
+    	}finally {
+            close(session);
+        }
+    }
 
     /**
      * Obtiene la lista de tramites en persistencia en backup pasando el nivel de autenticacion como parámetro y

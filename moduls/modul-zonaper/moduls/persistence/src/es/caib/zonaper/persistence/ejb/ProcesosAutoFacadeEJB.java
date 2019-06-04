@@ -2,6 +2,10 @@ package es.caib.zonaper.persistence.ejb;
 
 import java.rmi.RemoteException;
 import java.security.Principal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,9 +19,11 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
+import javax.naming.InitialContext;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
+import javax.sql.DataSource;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -41,7 +47,9 @@ import es.caib.sistra.plugins.pagos.ConstantesPago;
 import es.caib.sistra.plugins.pagos.EstadoSesionPago;
 import es.caib.sistra.plugins.pagos.PluginPagosIntf;
 import es.caib.util.CredentialUtil;
+import es.caib.util.StringUtil;
 import es.caib.xml.pago.XmlDatosPago;
+import es.caib.xml.registro.factoria.ConstantesAsientoXML;
 import es.caib.zonaper.model.DocumentoPersistente;
 import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.ElementoExpedienteItf;
@@ -56,7 +64,9 @@ import es.caib.zonaper.model.RegistroExternoPreparado;
 import es.caib.zonaper.model.TramitePersistente;
 import es.caib.zonaper.modelInterfaz.ConstantesZPE;
 import es.caib.zonaper.modelInterfaz.DocumentoPersistentePAD;
+import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
+import es.caib.zonaper.modelInterfaz.UsuarioAutenticadoInfoPAD;
 import es.caib.zonaper.persistence.delegate.BackupDelegate;
 import es.caib.zonaper.persistence.delegate.DelegateException;
 import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
@@ -72,6 +82,7 @@ import es.caib.zonaper.persistence.delegate.TramitePersistenteDelegate;
 import es.caib.zonaper.persistence.util.AvisoAlertasTramitacion;
 import es.caib.zonaper.persistence.util.AvisosExpediente;
 import es.caib.zonaper.persistence.util.ConfigurationUtil;
+import es.caib.zonaper.persistence.util.GeneradorId;
 import es.caib.zonaper.persistence.util.UsernamePasswordCallbackHandler;
 
 /**
@@ -93,6 +104,8 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 	private static Log backupLog = LogFactory.getLog( ProcesosAutoFacadeEJB.class );
 	private String cuentaSistra;
 	private String avisosGestorHabilitado;
+	private String queryTiquet;
+	private static String URL_CONTINUACION_TRAMITACION = "/sistrafront/protected/init.do";
 
 	private SessionContext context = null;
 
@@ -474,6 +487,78 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 					try{lc.logout();}catch(Exception exl){}
 				}
 			}
+		}
+		
+		/**
+		 * Crea y devuelve ticket de acceso para tramite persistente recuperado de la carpeta ciudadana
+		 * 
+	     * @ejb.interface-method
+	     * @ejb.permission role-name = "${role.auto}"
+	     * 
+	     */
+		public String obtenerTiquetAcceso(String idSesionTramitacion,
+				UsuarioAutenticadoInfoPAD usuarioAutenticadoInfo) throws DelegateException
+		{
+	        Connection conn = null;
+	        PreparedStatement ps = null;
+	        ResultSet rs = null;
+	        try {
+	        	
+	        	// Buscamos tramite de persistencia
+				
+				TramitePersistenteDelegate td = DelegateUtil.getTramitePersistenteDelegate();
+				final TramitePersistente tp = td.obtenerTramitePersistente(idSesionTramitacion);
+				
+				if (tp == null){
+					throw new EJBException("No existe ningún trámite persistente con identificador de sesión " + idSesionTramitacion);
+				}
+	            
+	        	conn = getConnection();
+	            
+	            // Genera ticket y almacena en sesion
+	            final String ticketId = GeneradorId.generarId();
+	            
+	            // Calculamos URL de redireccion
+	            String urlRedir = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.url") + ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.contextoRaiz.front") + "/sistrafront/protected/redireccionClave.jsp";
+	            
+	            // Calculamos URL destino
+	            String urlDest = URL_CONTINUACION_TRAMITACION + "?language=" + tp.getIdioma()  +"&modelo=" + tp.getTramite() + "&version=" + tp.getVersion() + "&perfilAF=CIUDADANO&idPersistencia=" + tp.getIdPersistencia() ;
+	            
+	            final Calendar calendar = Calendar.getInstance();
+	            calendar.setTime(new Date());        
+	            
+	            ps = conn
+	                    .prepareStatement(getQueryTiquet());
+	            ps.setString(1, tp.getIdioma());
+	            ps.setString(2, usuarioAutenticadoInfo.getMetodoAutenticacion());
+	            ps.setString(3, urlRedir);
+	            ps.setString(4, urlDest);
+	            ps.setString(5, ticketId);
+	            ps.setTimestamp(6,
+	                    new java.sql.Timestamp(calendar.getTimeInMillis()));
+	            ps.setString(7, usuarioAutenticadoInfo.getAutenticacion());
+	            ps.setString(8, usuarioAutenticadoInfo.getNif());
+	            ps.setString(9, StringUtil.formatearNombreApellidos(
+	            		"NA",
+	    				usuarioAutenticadoInfo.getNombre(),
+	    				usuarioAutenticadoInfo.getApellido1(),
+	    				usuarioAutenticadoInfo.getApellido2()));
+	            ps.executeUpdate();
+	            return urlRedir + "?ticket=" + ticketId;
+	        }catch (Exception e) {
+	        	throw new EJBException( "No se ha podido crear ticket de acceso para la sesión : " + idSesionTramitacion, e);    
+	        } finally {
+	            if (ps != null)
+	                try {
+	                    ps.close();
+	                } catch (final SQLException e) {
+	                }
+	            if (conn != null)
+	                try {
+	                    conn.close();
+	                } catch (final SQLException ex) {
+	                }
+	        }
 		}
 
 	// ----------------------------------------------------------------------------------------------
@@ -1024,5 +1109,30 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 		}
 		return "true".equals(avisosGestorHabilitado);
 	}
+	
+	private String getQueryTiquet(){
+		if (StringUtils.isEmpty(queryTiquet)) {
+			try {
+				queryTiquet = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion().getProperty("ticketAutenticacion.query");
+			} catch (DelegateException e) {
+				backupLog.error("Error obteniendo query para la creación de tiquet de autenticacion", e);
+			}
+		}
+		return queryTiquet;
+	}
+	
+    private Connection getConnection() throws Exception {
+        Connection conn;
+        final InitialContext ctx = new InitialContext();
+    	Properties props = ConfigurationUtil.getInstance().obtenerPropiedades();
+    	String datasourceTicketClave = props.getProperty("ticketAutenticacion.datasource");
+
+    	if (StringUtils.isBlank(datasourceTicketClave)) {
+    		throw new Exception("No se ha configurado el datasource para acceder a la tabla de tickets de autenticación en zonaper.properties");
+    	}
+        final DataSource ds = (DataSource) ctx.lookup(datasourceTicketClave);
+        conn = ds.getConnection();
+        return conn;
+    }
 
 }

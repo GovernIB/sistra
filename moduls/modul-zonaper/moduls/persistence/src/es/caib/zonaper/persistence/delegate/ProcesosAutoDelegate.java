@@ -7,6 +7,7 @@ import javax.naming.NamingException;
 
 import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.Entrada;
+import es.caib.zonaper.modelInterfaz.UsuarioAutenticadoInfoPAD;
 import es.caib.zonaper.persistence.intf.ProcesosAutoFacade;
 import es.caib.zonaper.persistence.util.ProcesosAutoFacadeUtil;
 
@@ -100,6 +101,16 @@ public class ProcesosAutoDelegate implements StatelessDelegate
 		}catch (Exception e) {
 			throw new DelegateException(e);
         }
+	}
+	
+	public String obtenerTiquetAcceso(String idSesionTramitacion,
+			UsuarioAutenticadoInfoPAD usuarioAutenticadoInfo) throws DelegateException {
+		try{
+			return getFacade().obtenerTiquetAcceso(idSesionTramitacion, usuarioAutenticadoInfo);
+		}catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
 	}
 	
     /* ========================================================= */

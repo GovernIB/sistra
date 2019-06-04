@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:es:caib:zonaper:ws:v2:model:TramitePersistente" targetNamespace="urn:es:caib:zonaper:ws:v2:model:TramitePersistente" version="1.0">
+	<xs:complexType name="TramitePersistente">
+		<xs:sequence>
+			<xs:element name="descripcionTramite" type="xs:string"/>
+			<xs:element name="fechaInicio" type="xs:dateTime"/>
+			<xs:element name="fechaUltimoAcceso" type="xs:dateTime"/>
+			<xs:element name="idSesionTramitacion" type="xs:string"/>
+			<xs:element name="idTramite" type="xs:string"/>
+			<xs:element name="idioma" type="xs:string"/>
+			<xs:element name="versionTramite" type="xs:int"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TramitesPersistentes">
+		<xs:sequence>
+			<xs:element name="tramitePersistente" type="tns:TramitePersistente" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -62,6 +62,10 @@
 				<arg value="-p" />
 				<arg value="urn:es:caib:zonaper:ws:v2:model:EstadoPago=es.caib.zonaper.ws.v2.model" />
 				<arg value="-p" />
+				<arg value="urn:es:caib:zonaper:ws:v2:model:TramitePersistente=es.caib.zonaper.ws.v2.model" />
+				<arg value="-p" />
+				<arg value="urn:es:caib:zonaper:ws:v2:model:UsuarioAutenticadoInfo=es.caib.zonaper.ws.v2.model" />
+				<arg value="-p" />
 				<arg value="urn:es:caib:zonaper:ws:v2:model:BackofficeFacade=es.caib.zonaper.ws.v2.model" />
 											
 				<arg value="-d" />

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:es:caib:zonaper:ws:v2:model:UsuarioAutenticadoInfo" targetNamespace="urn:es:caib:zonaper:ws:v2:model:UsuarioAutenticadoInfo" version="1.0">
+	<xs:complexType name="UsuarioAutenticadoInfo">
+		<xs:sequence>
+			<xs:element name="apellido1" type="xs:string"/>
+			<xs:element name="apellido2" type="xs:string"/>
+			<xs:element name="autenticacion">
+				<xs:simpleType>
+				  <xs:restriction base="xs:string">
+				    <xs:enumeration value="c"/>
+				    <xs:enumeration value="a"/>
+				  </xs:restriction>
+				</xs:simpleType>
+			</xs:element> 
+			<xs:element name="email" type="xs:string"/>
+			<xs:element name="metodoAutenticacion">
+				<xs:simpleType>
+				  <xs:restriction base="xs:string">
+				    <xs:enumeration value="ANONIMO"/>
+				    <xs:enumeration value="CLAVE_CERTIFICADO"/>
+				    <xs:enumeration value="CLAVE_PIN"/>
+				    <xs:enumeration value="CLAVE_PERMANENTE"/>
+				  </xs:restriction>
+				</xs:simpleType>
+			</xs:element> 			
+			<xs:element name="nif" type="xs:string"/>
+			<xs:element name="nombre" type="xs:string"/>
+			<xs:element name="username" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
