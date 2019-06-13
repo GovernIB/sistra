@@ -535,7 +535,7 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 	            ps.setString(4, urlDest);
 	            ps.setString(5, ticketId);
 	            ps.setTimestamp(6,
-	                    new java.sql.Timestamp(calendar.getTimeInMillis()));
+	                    new java.sql.Timestamp(calendar.getTimeInMillis()));            
 	            ps.setString(7, usuarioAutenticadoInfo.getAutenticacion());
 	            ps.setString(8, usuarioAutenticadoInfo.getNif());
 	            ps.setString(9, StringUtil.formatearNombreApellidos(
@@ -543,6 +543,8 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 	    				usuarioAutenticadoInfo.getNombre(),
 	    				usuarioAutenticadoInfo.getApellido1(),
 	    				usuarioAutenticadoInfo.getApellido2()));
+	            ps.setTimestamp(10,
+	                    new java.sql.Timestamp(calendar.getTimeInMillis()));		            
 	            ps.executeUpdate();
 	            return urlRedir + "?ticket=" + ticketId;
 	        }catch (Exception e) {
