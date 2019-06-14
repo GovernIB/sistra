@@ -518,11 +518,13 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 	            // Genera ticket y almacena en sesion
 	            final String ticketId = GeneradorId.generarId();
 	            
+	            final String contextoRaiz = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.contextoRaiz.front");
+	            
 	            // Calculamos URL de redireccion
-	            String urlRedir = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.url") + ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.contextoRaiz.front") + "/sistrafront/protected/redireccionClave.jsp";
+	            String urlRedir = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.url") + contextoRaiz + "/sistrafront/protected/redireccionClave.jsp";
 	            
 	            // Calculamos URL destino
-	            String urlDest = URL_CONTINUACION_TRAMITACION + "?language=" + tp.getIdioma()  +"&modelo=" + tp.getTramite() + "&version=" + tp.getVersion() + "&perfilAF=CIUDADANO&idPersistencia=" + tp.getIdPersistencia() ;
+	            String urlDest =  contextoRaiz + URL_CONTINUACION_TRAMITACION + "?language=" + tp.getIdioma()  +"&modelo=" + tp.getTramite() + "&version=" + tp.getVersion() + "&perfilAF=CIUDADANO&idPersistencia=" + tp.getIdPersistencia() ;
 	            
 	            final Calendar calendar = Calendar.getInstance();
 	            calendar.setTime(new Date());        
