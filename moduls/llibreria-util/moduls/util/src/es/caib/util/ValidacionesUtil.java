@@ -229,6 +229,34 @@ public class ValidacionesUtil
 		return true;
 	}
 	
+	/**
+	 * Valida el código SWIFT de identificación del banco
+	 * No admite ningún tipo de separador, tan sólo el código SWIFT
+	 * @param codigo
+	 * @return
+	 */
+	public boolean esNumeroSwiftValido(final String codigo) {
+		return codigo != null && (codigo.length() == 8 || codigo.length() == 11);
+	}
+	
+	/**
+	 * Valida un código SWIFT a partir del código del banco, el país, la localidad y la sucursal
+	 * @param entidad
+	 * @param sucursal
+	 * @param dc
+	 * @param cuenta
+	 * @return
+	 */
+	public boolean esNumeroSwiftValido(final String banco, final String pais, final String localidad,
+			final String sucursal) {
+		final boolean codigoBancoCorrecto = banco != null && banco.length() == 4;
+		final boolean codigoPaisCorrecto = pais != null && pais.length() == 2;
+		final boolean codigoLocalidadCorrecto = localidad != null && localidad.length() == 2;
+		final boolean codigoSucursalCorrecto = sucursal == null || (sucursal != null && sucursal.length() == 3);
+
+		return codigoBancoCorrecto && codigoPaisCorrecto && codigoLocalidadCorrecto && codigoSucursalCorrecto;
+	}
+	
 	  public static boolean hayAniosDistancia (String fechaIni, String fechaFin, int aniosDist, String formatoFecha)
 	  {
 	    // Declaración de variables.
