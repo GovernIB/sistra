@@ -235,7 +235,7 @@ public class ValidacionesUtil
 	 * @param codigo
 	 * @return
 	 */
-	public boolean esNumeroSwiftValido(final String codigo) {
+	public static boolean esNumeroSwiftValido(final String codigo) {
 		return codigo != null && (codigo.length() == 8 || codigo.length() == 11);
 	}
 	
@@ -247,7 +247,7 @@ public class ValidacionesUtil
 	 * @param cuenta
 	 * @return
 	 */
-	public boolean esNumeroSwiftValido(final String banco, final String pais, final String localidad,
+	public static boolean esNumeroSwiftValido(final String banco, final String pais, final String localidad,
 			final String sucursal) {
 		final boolean codigoBancoCorrecto = banco != null && banco.length() == 4;
 		final boolean codigoPaisCorrecto = pais != null && pais.length() == 2;
