@@ -546,7 +546,7 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 	    				usuarioAutenticadoInfo.getApellido1(),
 	    				usuarioAutenticadoInfo.getApellido2()));
 	            ps.setTimestamp(10,
-	                    new java.sql.Timestamp(calendar.getTimeInMillis()));		            
+	                    new java.sql.Timestamp(calendar.getTimeInMillis()));	            
 	            ps.executeUpdate();
 	            return urlRedir + "?ticket=" + ticketId;
 	        }catch (Exception e) {
