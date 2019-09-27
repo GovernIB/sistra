@@ -4,14 +4,6 @@
 		<xs:sequence>
 			<xs:element name="apellido1" type="xs:string"/>
 			<xs:element name="apellido2" type="xs:string"/>
-			<xs:element name="autenticacion">
-				<xs:simpleType>
-				  <xs:restriction base="xs:string">
-				    <xs:enumeration value="c"/>
-				    <xs:enumeration value="a"/>
-				  </xs:restriction>
-				</xs:simpleType>
-			</xs:element> 
 			<xs:element name="email" type="xs:string"/>
 			<xs:element name="metodoAutenticacion">
 				<xs:simpleType>

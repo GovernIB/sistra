@@ -66,6 +66,13 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		try {
 			ExpedientePAD expPAD = expedienteWSToExpedientePAD(expediente);
 			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
+			boolean exExp = pad.existeExpediente(expediente.getUnidadAdministrativa(), expediente.getIdentificadorExpediente());
+			if(exExp){
+				log.error("Excepcion en webservice: el expediente " + expediente.getIdentificadorExpediente() + " ya existe y no puede ser creado de nuevo");
+				// exc.printStackTrace();
+			    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException("Excepcion en webservice: el expediente " + expediente.getIdentificadorExpediente() + " ya existe y no puede ser creado de nuevo"
+			    		,new BackofficeFacadeException());
+			}
 			String id = pad.altaExpediente(expPAD);
 			return id;
 		} catch (Exception exc) {
@@ -326,6 +333,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 	private UsuarioAutenticadoInfoPAD usuarioAutenticadoInfoWsTousuarioAutenticadoInfoPAD(
 			UsuarioAutenticadoInfo confWS) throws Exception {
 		UsuarioAutenticadoInfoPAD confPAD = new UsuarioAutenticadoInfoPAD();
+		String nivelAutenticacion = "U";
 		if (confWS != null){
 			if(confWS.getApellido1() != null){
 				confPAD.setApellido1(StringUtils.defaultIfEmpty(confWS.getApellido1(),null));
@@ -344,9 +352,11 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			if(confWS.getEmail() != null){
 				confPAD.setEmail(StringUtils.defaultIfEmpty(confWS.getEmail(),null));
 			}
+			
 			if(confWS.getMetodoAutenticacion() != null){
 				if("CLAVE_CERTIFICADO".equals(confWS.getMetodoAutenticacion())){
-					confPAD.setMetodoAutenticacion("aFirma");					
+					confPAD.setMetodoAutenticacion("aFirma");
+					nivelAutenticacion = "C";
 				}else if ("CLAVE_PIN".equals(confWS.getMetodoAutenticacion())){
 					confPAD.setMetodoAutenticacion("AEAT");
 				}else if ("CLAVE_PERMANENTE".equals(confWS.getMetodoAutenticacion())){
@@ -355,6 +365,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 					throw new Exception("el método de autenticación " + confWS.getMetodoAutenticacion() + " no está soportado");
 				}
 			}
+			confPAD.setAutenticacion(nivelAutenticacion);
 			if(confWS.getNif() != null){
 				confPAD.setNif(StringUtils.defaultIfEmpty(confWS.getNif(),null));
 			}
