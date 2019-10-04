@@ -314,7 +314,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
                 }
             } else {
                 Map variables  = variablesScriptActuals();
-                String nombre  = (String) ScriptUtil.evalScript(expresion, variables, this.isDebugEnabled());
+                String nombre  = (String) ScriptUtil.evalScript(PantallaUtils.generarElementoScript(pantallaActual), expresion, variables, this.isDebugEnabled());
 
                 // INDRA: AVANZAR HASTA UNA PANTALLA ANTERIOR ES EQUIVALENTE A RETROCEDER A ESA PANTALLA
                 Pantalla destino = formulario.findPantalla(nombre);

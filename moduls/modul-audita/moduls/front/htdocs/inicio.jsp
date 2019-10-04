@@ -4,11 +4,11 @@
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <div style="padding:10px; ">
 	<!-- PÁGINA DE INICIO -->
-	
+
 	<p style="border-bottom:1px dotted #CCCCCC; margin-top:0; ">
-	    <html:link action="/refresh" style="margin-left:20px; " title="Actualizar el contenido de esta página"><bean:message key="inicio.refrescarDatos"/></html:link>
+	   <html:link action="/refresh" style="margin-left:20px; " title="Actualizar el contenido de esta página"><bean:message key="inicio.refrescarDatos"/></html:link>
 	</p>
-		
+
 	<h1><bean:message key="inicio.titulo"/></h1>
 	<logic:present name="cuadro" >
 	<p style="border-bottom:1px dotted #CCCCCC; margin-top:0; "><em><bean:message key="inicio.ultimaActualizacion"/>: <bean:write name="cuadro" property="ultimaActualizacion" /></em></p>
@@ -88,7 +88,7 @@
 		<td><bean:write name="tramitado" property="modelo" />&nbsp;</td>
 		<td><bean:write name="tramitado" property="organismo" />&nbsp;</td>
 		<td align="center"><bean:write name="tramitado" property="valor" />&nbsp;</td>
-	</tr>								
+	</tr>
 	</logic:iterate>
 	</table>
 	<!-- los MAS ACCEDIDO -->
@@ -109,7 +109,7 @@
 		<td><bean:write name="accedido" property="modelo" />&nbsp;</td>
 		<td><bean:write name="accedido" property="organismo" />&nbsp;</td>
 		<td align="center"><bean:write name="accedido" property="valor" />&nbsp;</td>
-	</tr>								
+	</tr>
 	</logic:iterate>
 	</table>
 	<!-- ULTIMOS servicios -->
@@ -132,7 +132,7 @@
 		<td><bean:write name="ultimo" property="organismo" />&nbsp;</td>
 		<td align="center"><bean:write name="ultimo" property="valor" />&nbsp;</td>
 		<td align="center"><bean:write name="ultimo" property="fecha" />&nbsp;</td>
-	</tr>								
+	</tr>
 	</logic:iterate>
 	</table>
 	</logic:present>

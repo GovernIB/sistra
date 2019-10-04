@@ -33,7 +33,7 @@ public final class CampoUtils {
         final String script = campo.getExpresionValoresPosibles();
         if (script != null && script.trim().length() > 0) {
             List valores = new LinkedList();
-            Object result = ScriptUtil.evalScript(script, variables, debugEnabled);
+            Object result = ScriptUtil.evalScript(generarElementoScript(campo), script, variables, debugEnabled);
             if (result != null) {
                 if (result instanceof Collection) {
                     valores.addAll((Collection) result);
@@ -59,10 +59,14 @@ public final class CampoUtils {
     public static Object calcularValorDefecto(Campo campo, Map variables, boolean debugEnabled) {
         final String script = campo.getExpresionValoresPosibles();
         if (script != null && script.trim().length() > 0) {
-            return ScriptUtil.evalScript(script, variables, debugEnabled);
+            return ScriptUtil.evalScript(generarElementoScript(campo), script, variables, debugEnabled);
         }
         return null;
     }
+
+	public static String generarElementoScript(Campo campo) {
+		return campo.getPantalla().getFormulario().getModelo() + "." + campo.getPantalla().getNombre() + "." + campo.getNombreLogico();
+	}
 
     /**
      * Decide si un campo debe estar bloqueado o no.
@@ -110,7 +114,9 @@ public final class CampoUtils {
         		variables.put("LISTAELEMENTOS",new DatosListaElementos());
         	}
 
-             Object result = ScriptUtil.evalScript(script, variables, debugEnabled);
+
+
+             Object result = ScriptUtil.evalScript(generarElementoScript(campo), script, variables, debugEnabled);
 
              // Si es un campo lista de elementos no esperara ningun valor, ya que
              // los valores se han establecido mendiante la vble LISTAELEMENTOS
