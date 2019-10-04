@@ -155,7 +155,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
      */
 	public String altaExpediente( ExpedientePAD expediente ) throws ExcepcionPAD
 	{
-		log.debug( "Alta expediente " + expediente.getIdentificadorExpediente() );
+		log.debug( "[ ALTA EXPEDIENTE " + expediente.getIdentificadorExpediente() + "] - Inicio alta expediente ");
 
 		/*
 		 * -------------------------------------------------------------------------------------------------
@@ -175,6 +175,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 
 
 		// Si se indica el tramite que origina el expediente buscamos tramite y chequeamos enlace
+		log.debug( "[ ALTA EXPEDIENTE " + expediente.getIdentificadorExpediente() + "] - Recupera entrada a partir de numero entrada BTE ");
 		Entrada entrada = recuperarEntrada(expediente.getNumeroEntradaBTE());
 
 		/*
@@ -196,10 +197,14 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 		}
 
 		// Verifica alta expediente
+		log.debug( "[ ALTA EXPEDIENTE " + expediente.getIdentificadorExpediente() + "] - Verifica alta expediente ");
 		verificarAltaExpediente(expediente, entrada);
 
 		// Realizamos alta expediente
+		log.debug( "[ ALTA EXPEDIENTE " + expediente.getIdentificadorExpediente() + "] - Realizamos alta expediente ");
 		String idExpediente = altaExpedienteImpl(expediente, entrada);
+
+		log.debug( "[ ALTA EXPEDIENTE " + expediente.getIdentificadorExpediente() + "] - Alta expediente realizada ");
 
 		return idExpediente;
 	}
@@ -500,7 +505,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
         		}
         		entidad = ( (EntidadBTE) entidades.get(0)).getIdentificador();
         	}
-    		
+
     		NotificacionTelematica not = DelegateUtil.getNotificacionTelematicaDelegate().obtenerNotificacionTelematica(entidad, numeroRegistro);
     		if (not == null) {
     			return null;
@@ -586,7 +591,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
     		throw new ExcepcionPAD("Error obteniendo estado pagos tramite",ex);
     	}
     }
-	
+
 	/**
 	 *
 	 * Obtiene tramites persistentes para un nif en un periodo de tiempo
@@ -600,24 +605,24 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
     *
     * @ejb.permission role-name="${role.auto}"
     */
-	
+
 	public List obtenerPersistentes(String nif, Date fechaDesde, Date fechaHasta ) throws ExcepcionPAD {
 		// Cargamos tramitePersistente
     	List tramites;
-		try{			
+		try{
     		// Buscamos tramite de persistencia
-			
+
 			PersonaPAD persona = DelegateUtil.getConsultaPADDelegate().obtenerDatosPADporNif(NifCif.normalizarDocumento(nif));
 			if (persona == null){
 				throw new ExcepcionPAD("El usuario con el nif consultado no existe en el sistema");
 			}
-			
+
 			TramitePersistenteDelegate td = DelegateUtil.getTramitePersistenteDelegate();
 			tramites = td.listarTramitesPersistentesNif(persona.getUsuarioSeycon(), fechaDesde, fechaHasta);
 		}catch( Exception ex ){
     		throw new ExcepcionPAD("Error obteniendo trámites persistentes del nif " + nif, ex);
     	}
-		
+
         // Pasamos a TramitePersistentePAD
     	List tramitesPAD = new ArrayList(tramites.size());
     	for (Iterator it = tramites.iterator();it.hasNext();){
@@ -1551,14 +1556,17 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 
 			// Si tiene entrada asociada, obtenemos expediente virtual para convertirlo posteriormente a real
 			if (entrada != null) {
+				log.debug( "[ ALTA EXPEDIENTE IMPL " + expediente.getIdentificadorExpediente() + "] - obtenemos expediente virtual para convertirlo posteriormente a real ");
 				// Obtenemos expediente virtual asociado a la entrada
 				Long codigoExpedienteVirtual = DelegateUtil.getElementoExpedienteDelegate().obtenerCodigoExpedienteElemento(entrada instanceof EntradaTelematica?ElementoExpediente.TIPO_ENTRADA_TELEMATICA:ElementoExpediente.TIPO_ENTRADA_PREREGISTRO,entrada.getCodigo());
 				expeVirtual = delegate.obtenerExpedienteVirtual(codigoExpedienteVirtual);
 
 				// Borramos indices busqueda asociado a expediente virtual
+				log.debug( "[ ALTA EXPEDIENTE IMPL " + expediente.getIdentificadorExpediente() + "] - Borramos indices busqueda asociado a expediente virtual ");
 				DelegateUtil.getIndiceElementoDelegate().borrarIndicesElemento(IndiceElemento.TIPO_EXPEDIENTE, codigoExpedienteVirtual);
 
 				// Creamos elemento expediente asociado a la entrada
+				log.debug( "[ ALTA EXPEDIENTE IMPL " + expediente.getIdentificadorExpediente() + "] - Creamos elemento expediente asociado a la entrada ");
 				el.setFecha(entrada.getFecha());
 				el.setTipoElemento(entrada instanceof EntradaTelematica?ElementoExpediente.TIPO_ENTRADA_TELEMATICA:ElementoExpediente.TIPO_ENTRADA_PREREGISTRO);
 				el.setCodigoElemento(entrada.getCodigo());
@@ -1568,6 +1576,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 			}
 
 			// Creamos los eventos indicados en el expediente y actualizamos expediente
+			log.debug( "[ ALTA EXPEDIENTE IMPL " + expediente.getIdentificadorExpediente() + "] - Creamos los eventos indicados en el expediente y actualizamos expediente ");
 			EventoExpedienteDelegate evd = DelegateUtil.getEventoExpedienteDelegate();
 			for ( Iterator it = expediente.getElementos().iterator(); it.hasNext(); )
 			{
@@ -1603,13 +1612,16 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 			// Guardamos expediente
 			// Si existe un expediente virtual lo convertimos a real
 			if (expeVirtual != null) {
+				log.debug( "[ ALTA EXPEDIENTE IMPL " + expediente.getIdentificadorExpediente() + "] - Guardamos expediente (expediente virtual lo convertimos a real) ");
 				delegate.convertirExpedienteVirtualAReal(expeVirtual, exped);
 			} else {
+				log.debug( "[ ALTA EXPEDIENTE IMPL " + expediente.getIdentificadorExpediente() + "] - Guardamos expediente ");
 				delegate.grabarExpedienteReal(exped);
 			}
 
 
 			// Realizamos aviso de movilidad si en el alta se han generado eventos
+			log.debug( "[ ALTA EXPEDIENTE IMPL " + expediente.getIdentificadorExpediente() + "] - Realizamos aviso de movilidad si en el alta se han generado eventos ");
 			exped = delegate.obtenerExpedienteReal(exped.getUnidadAdministrativa().longValue(),exped.getIdExpediente(), exped.getClaveExpediente());
 			for ( Iterator it = exped.getElementos().iterator(); it.hasNext(); ){
 				ElementoExpediente ele = (ElementoExpediente) it.next();
@@ -1619,9 +1631,11 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 
 			// Generamos indices de busqueda para expedientes y avisos (solo con nif)
 			if (StringUtils.isNotEmpty(exped.getNifRepresentante())) {
+				log.debug( "[ ALTA EXPEDIENTE IMPL " + expediente.getIdentificadorExpediente() + "] - Generamos indices de busqueda para expedientes y avisos ");
 				crearIndicesExpediente(exped);
 			}
 
+			log.debug( "[ ALTA EXPEDIENTE IMPL " + expediente.getIdentificadorExpediente() + "] - Finalizada alta ");
 
 			return expediente.getIdentificadorExpediente();
 		} catch (Exception e) {
@@ -1872,7 +1886,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 			}
 			return res;
 		}
-		
+
 		/**
 	     * Convierte TramitePersistente en TramitePersistentePAD
 	     * @param t

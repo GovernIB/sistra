@@ -54,7 +54,7 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
+
     public List listarTramitePersistentesUsuario(Date fecha) throws DelegateException {
         try {
             return getFacade().listarTramitePersistentesUsuario(fecha);
@@ -98,7 +98,7 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
+
     public List listarTramitesPersistentesNif(String nif, Date fechaInicial, Date fechaFinal) throws DelegateException {
         try {
             return getFacade().listarTramitesPersistentesNif(nif, fechaInicial, fechaFinal);
@@ -254,6 +254,17 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
 		 try
 			{
 			 	return getFacade().obtenerTramitesPendienteAvisoPagoTelematicoFinalizado();
+			}
+			catch( Exception e )
+			{
+				throw new DelegateException( e );
+			}
+	 }
+
+	 public void actualizarUsuarioTramite(String nif, String usuarioOld, String usuarioNew) throws DelegateException	{
+		 try
+			{
+			 	getFacade().actualizarUsuarioTramite(nif, usuarioOld, usuarioNew);
 			}
 			catch( Exception e )
 			{

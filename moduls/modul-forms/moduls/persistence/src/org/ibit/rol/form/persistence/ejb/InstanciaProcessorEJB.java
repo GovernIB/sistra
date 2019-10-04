@@ -518,7 +518,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
             return new ArrayList();
         }
 
-        Object result = ScriptUtil.evalScript(script, variablesScriptActuals(), this.isDebugEnabled());
+        Object result = ScriptUtil.evalScript(CampoUtils.generarElementoScript(campo), script, variablesScriptActuals(), this.isDebugEnabled());
 
         if (result instanceof NativeArray) {
 
@@ -571,7 +571,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
     		return "";
     	}
 
-        Object result = ScriptUtil.evalScript(script, variables, this.isDebugEnabled());
+        Object result = ScriptUtil.evalScript(CampoUtils.generarElementoScript(campo), script, variables, this.isDebugEnabled());
 
         if (result instanceof NativeArray) {
 
@@ -610,7 +610,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
             return false;
         }
 
-        return ScriptUtil.evalBoolScript(script, variablesScriptActuals(), this.isDebugEnabled());
+        return ScriptUtil.evalBoolScript(CampoUtils.generarElementoScript(campo), script, variablesScriptActuals(), this.isDebugEnabled());
     }
 
     /**
@@ -626,7 +626,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
             return "";
         }
 
-        Object res = ScriptUtil.evalScript(script, variablesScriptActuals(), this.isDebugEnabled());
+        Object res = ScriptUtil.evalScript(CampoUtils.generarElementoScript(campo), script, variablesScriptActuals(), this.isDebugEnabled());
         return (res!=null?res.toString():"");
     }
 
@@ -676,7 +676,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
                     if (pantallaActual == null) log.warn("La pantalla con índice " + orden + " no existe!!");
                 } else { // Evaluar script
                     Map variables = variablesScriptActuals();
-                    String nombre = (String) ScriptUtil.evalScript(expresion, variables, this.isDebugEnabled());
+                    String nombre = (String) ScriptUtil.evalScript(PantallaUtils.generarElementoScript(pantallaActual), expresion, variables, this.isDebugEnabled());
                     pantallaActual = formulario.findPantalla(nombre);
                     if (pantallaActual == null) log.warn("La pantalla \"" + nombre + "\" no existe!!");
                 }
@@ -821,7 +821,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
                                         Map params = new HashMap();
                                         params.put("input", valor);
                                         setContextVariables(params);
-                                        etiqueta = ScriptUtil.evalScript(script, params, this.isDebugEnabled());
+                                        etiqueta = ScriptUtil.evalScript(CampoUtils.generarElementoScript(campo), script, params, this.isDebugEnabled());
                                     } else {
                                         String pattern = patron.getCodigo();
                                         Format format = null;
@@ -883,7 +883,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
                                 Map params = new HashMap();
                                 params.put("input", etiqueta);
                                 setContextVariables(params);
-                                etiqueta = ScriptUtil.evalScript(expresion, params, this.isDebugEnabled());
+                                etiqueta = ScriptUtil.evalScript(CampoUtils.generarElementoScript(campo), expresion, params, this.isDebugEnabled());
                             }
                         }
 
@@ -965,7 +965,7 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
                             Hibernate.initialize(propSal.getPlantilla());
                             value = propSal.getPlantilla();
                         } else if (propSal.isExpresion()) { // O una expresión a evaluar
-                            value = ScriptUtil.evalScript(propSal.getValor(), variables, this.isDebugEnabled());
+                            value = ScriptUtil.evalScript(formulario.getModelo(), propSal.getValor(), variables, this.isDebugEnabled());
                         } else { // O directamente un valor (String)
                             value = propSal.getValor();
                         }
@@ -1543,7 +1543,6 @@ public abstract class InstanciaProcessorEJB extends HibernateEJB {
 			log.debug(mensaje);
 		}
 	}
-
 
 }
 

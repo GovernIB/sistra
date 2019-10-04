@@ -47,10 +47,10 @@ public final class ScriptUtil {
      * @param params	Parámetros del script
      * @return Objeto con el resultado (normalmente será un String)
      */
-    public static Object evalScript(String script, Map params, boolean debugEnabled) {
+    public static Object evalScript(String idTramite, int numVersion, String script, Map params, boolean debugEnabled) {
 
     	if (debugEnabled) {
-	        log.debug("Evaluando script:\n" + script);
+	        log.debug("[" + idTramite + "-" + numVersion + "] Evaluando script:\n" + script);
 	        log.debug("Parametros:\n" + params);
     	}
         try {
@@ -92,7 +92,7 @@ public final class ScriptUtil {
             return result;
 
         } catch (BSFException be) {
-            log.error("Error ejecutando script: " + be.getMessage() + ". \nScript: \n" + script, be.getTargetException());
+            log.error("[" + idTramite + "-" + numVersion + "] Error ejecutando script: " + be.getMessage() + ". \nScript: \n" + script, be.getTargetException());
             return null;
         }
     }
@@ -104,8 +104,8 @@ public final class ScriptUtil {
      * @param params	Parámetros del script
      * @return booleano
      */
-    public static boolean evalBoolScript(String script, Map params, boolean debugEnabled) {
-        Object result = evalScript(script, params, debugEnabled);
+    public static boolean evalBoolScript(String idTramite, int numVersion, String script, Map params, boolean debugEnabled) {
+        Object result = evalScript(idTramite,  numVersion, script, params, debugEnabled);
         if (result == null || !(result instanceof Boolean) ) {
             return false;
         }
@@ -241,7 +241,7 @@ public final class ScriptUtil {
 			params.put("PLUGIN_MENSAJES",plgMensajes);
 
 			// Ejecutamos script
-			result = ScriptUtil.evalScript(ls_script,params, debugEnabled);
+			result = ScriptUtil.evalScript(tramiteVersion.getTramite().getIdentificador(), tramiteVersion.getVersion(), ls_script,params, debugEnabled);
 			if (result == null){
 				throw new Exception("Excepción BSF (ver logs) - Tramite " + tramiteVersion.getTramite().getIdentificador() + " - V" + tramiteVersion.getVersion());
 			}

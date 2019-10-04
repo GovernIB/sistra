@@ -25,6 +25,7 @@ import org.ibit.rol.form.model.ListBox;
 import org.ibit.rol.form.model.TreeBox;
 import org.ibit.rol.form.persistence.delegate.DelegateException;
 import org.ibit.rol.form.persistence.delegate.InstanciaDelegate;
+import org.ibit.rol.form.persistence.util.CampoUtils;
 import org.ibit.rol.form.persistence.util.ScriptUtil;
 
 /**
@@ -109,7 +110,7 @@ public class PantallaForm extends DynaValidatorForm {
                 Campo campo = (Campo) pantalla.getCampos().get(i);
                 String expresion = campo.getExpresionValidacion();
                 if (expresion != null && expresion.length() > 0) {
-                    boolean correct = ScriptUtil.evalBoolScript(expresion, dades, debugEnabled);
+                    boolean correct = ScriptUtil.evalBoolScript(CampoUtils.generarElementoScript(campo), expresion, dades, debugEnabled);
                     if (!correct) {
                         TraCampo traCampo = (TraCampo) campo.getTraduccion();
                         String mensaje = traCampo.getMensajeValidacion();

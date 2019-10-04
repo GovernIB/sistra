@@ -16,13 +16,13 @@ import es.indra.util.graficos.generadorGraficos.DatosGrafico;
 
 public class AuditoriaDelegate implements StatelessDelegate
 {
-	
+
 	/* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
 	public DatosGrafico obtenerDatosGrafico(String tipoEvento,Date fecha,String modo) throws DelegateException
 	{
-		try 
+		try
 		{
 			return getFacade().obtenerDatosGrafico(tipoEvento,fecha,modo);
 		}
@@ -30,10 +30,10 @@ public class AuditoriaDelegate implements StatelessDelegate
 	        throw new DelegateException(e);
 	    }
 	}
-	
+
 	public List obtenerListaEventos(String idioma) throws DelegateException
 	{
-		try 
+		try
 		{
 			return getFacade().obtenerListaEventos(idioma);
 		}
@@ -41,10 +41,10 @@ public class AuditoriaDelegate implements StatelessDelegate
 	        throw new DelegateException(e);
 	    }
 	}
-	
+
 	public List obtenerListaEventosGrafico(String idioma) throws DelegateException
 	{
-		try 
+		try
 		{
 			return getFacade().obtenerListaEventosGrafico(idioma);
 		}
@@ -52,10 +52,10 @@ public class AuditoriaDelegate implements StatelessDelegate
 	        throw new DelegateException(e);
 	    }
 	}
-	
+
 	public List obtenerCuadroMandoIntervaloTemporal(String idioma, int anyoInicio, int anyoFinal ) throws DelegateException
 	{
-		try 
+		try
 		{
 			return getFacade().obtenerCuadroMandoIntervaloTemporal( idioma, anyoInicio, anyoFinal );
 		}
@@ -63,10 +63,10 @@ public class AuditoriaDelegate implements StatelessDelegate
 	        throw new DelegateException(e);
 	    }
 	}
-	
+
 	public List obtenerCuadroMandoIntervaloTemporal( String idioma, int anyoInicio, int mesInicio, int anyoFinal, int mesFinal ) throws DelegateException
 	{
-		try 
+		try
 		{
 			return getFacade().obtenerCuadroMandoIntervaloTemporal( idioma, anyoInicio,mesInicio, anyoFinal, mesFinal );
 		}
@@ -74,10 +74,10 @@ public class AuditoriaDelegate implements StatelessDelegate
 	        throw new DelegateException(e);
 	    }
 	}
-	
+
 	public List obtenerCuadroMandoIntervaloTemporal( String idioma, Date fechaInicio, Date fechaFinal )  throws DelegateException
 	{
-		try 
+		try
 		{
 			return getFacade().obtenerCuadroMandoIntervaloTemporal( idioma, fechaInicio, fechaFinal );
 		}
@@ -85,10 +85,10 @@ public class AuditoriaDelegate implements StatelessDelegate
 	        throw new DelegateException(e);
 	    }
 	}
-	
+
 	public CuadroMandoDetalle obtenerCuadroMandoDetalle(String idioma, String tipoEvento,String modo,Date fechaInicio, Date fechaFinal )  throws DelegateException
 	{
-		try 
+		try
 		{
 			return getFacade().obtenerCuadroMandoDetalle(  idioma, tipoEvento, modo, fechaInicio,  fechaFinal);
 		}
@@ -96,10 +96,10 @@ public class AuditoriaDelegate implements StatelessDelegate
 	        throw new DelegateException(e);
 	    }
 	}
-	
+
 	public CuadroMandoTablaCruzada obtenerCuadroMandoTablaCruzada(String idioma, String tipoEvento,String modo,Date fecha)  throws DelegateException
 	{
-		try 
+		try
 		{
 			return getFacade().obtenerCuadroMandoTablaCruzada(idioma, tipoEvento, modo, fecha);
 		}
@@ -110,7 +110,7 @@ public class AuditoriaDelegate implements StatelessDelegate
 
 	public List obtenerListaEventosDetalle(String idioma) throws DelegateException
 	{
-		try 
+		try
 		{
 			return getFacade().obtenerListaEventosDetalle(idioma);
 		}
@@ -121,7 +121,7 @@ public class AuditoriaDelegate implements StatelessDelegate
 
 	public CuadroMandoInicio obtenerCuadroMandoInicio(String idioma)  throws DelegateException
 	{
-		try 
+		try
 		{
 			return getFacade().obtenerCuadroMandoInicio(idioma);
 		}
@@ -129,11 +129,11 @@ public class AuditoriaDelegate implements StatelessDelegate
 	        throw new DelegateException(e);
 	    }
 	}
-	
 
+/*
 	public void generaCuadroMandoInicio()  throws DelegateException
 	{
-		try 
+		try
 		{
 			 getFacade().generaCuadroMandoInicio();
 		}
@@ -141,12 +141,77 @@ public class AuditoriaDelegate implements StatelessDelegate
 	        throw new DelegateException(e);
 	    }
 	}
-		
+*/
+
+	public void generaCuadroMandoInicioEstadisticasServicios()  throws DelegateException
+	{
+		try
+		{
+			 getFacade().generaCuadroMandoInicioEstadisticasServicios();
+		}
+		catch (Exception e) {
+	        throw new DelegateException(e);
+	    }
+	}
+
+	public void generaCuadroMandoInicioEstadisticasPortal(String ls_fcDesde, String ls_fcHasta) throws DelegateException	{
+		try
+		{
+			 getFacade().generaCuadroMandoInicioEstadisticasPortal(ls_fcDesde, ls_fcHasta);
+		}
+		catch (Exception e) {
+	        throw new DelegateException(e);
+	    }
+	}
+
+	public void generaCuadroMandoInicioEstadisticasTramitacion(String ls_fcDesde, String ls_fcHasta)  throws DelegateException
+	{
+		try
+		{
+			 getFacade().generaCuadroMandoInicioEstadisticasTramitacion(ls_fcDesde, ls_fcHasta);
+		}
+		catch (Exception e) {
+	        throw new DelegateException(e);
+	    }
+	}
+
+	public void generaCuadroMandoInicioEstadisticasMasTramitados()  throws DelegateException
+	{
+		try
+		{
+			 getFacade().generaCuadroMandoInicioEstadisticasMasTramitados();
+		}
+		catch (Exception e) {
+	        throw new DelegateException(e);
+	    }
+	}
+
+	public void generaCuadroMandoInicioEstadisticasMasAccedidos()  throws DelegateException
+	{
+		try
+		{
+			 getFacade().generaCuadroMandoInicioEstadisticasMasAccedidos();
+		}
+		catch (Exception e) {
+	        throw new DelegateException(e);
+	    }
+	}
+
+	public void generaCuadroMandoInicioEstadisticasUltimosAlta()  throws DelegateException
+	{
+		try
+		{
+			 getFacade().generaCuadroMandoInicioEstadisticasUltimosAlta();
+		}
+		catch (Exception e) {
+	        throw new DelegateException(e);
+	    }
+	}
 
 
 	public byte[] obtenerGraficoFichero(String fichero)  throws DelegateException
 	{
-		try 
+		try
 		{
 			return getFacade().obtenerGraficoFichero(fichero);
 		}
@@ -155,10 +220,10 @@ public class AuditoriaDelegate implements StatelessDelegate
 	    }
 	}
 
-	
+
 	public List obtenerAuditoria(Date fechaIni,Date fechaFin,char nivelAutenticacion,String autenticacion)throws DelegateException
 	{
-		try 
+		try
 		{
 			return getFacade().obtenerAuditoria(fechaIni,fechaFin,nivelAutenticacion,autenticacion);
 		}
@@ -168,18 +233,18 @@ public class AuditoriaDelegate implements StatelessDelegate
 	}
 
 
-	
+
 	/* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
-    
-    private AuditoriaFacade getFacade() throws NamingException,CreateException,RemoteException 
+
+    private AuditoriaFacade getFacade() throws NamingException,CreateException,RemoteException
     {
     	return AuditoriaFacadeUtil.getHome().create();
     }
-    
-    protected AuditoriaDelegate()  throws DelegateException 
+
+    protected AuditoriaDelegate()  throws DelegateException
     {
-       
+
     }
 
 }

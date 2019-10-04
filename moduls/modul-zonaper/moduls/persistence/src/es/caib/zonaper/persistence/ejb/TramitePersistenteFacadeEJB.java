@@ -36,6 +36,7 @@ import es.caib.zonaper.model.DocumentoPersistente;
 import es.caib.zonaper.model.DocumentoPersistenteBackup;
 import es.caib.zonaper.model.TramitePersistente;
 import es.caib.zonaper.model.TramitePersistenteBackup;
+import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.persistence.util.ConfigurationUtil;
 import es.caib.zonaper.persistence.util.GeneradorId;
@@ -289,7 +290,57 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-    
+
+    /**
+    *
+    * Actualiza usuario en trámites de persistencia.
+    *
+    * @ejb.interface-method
+   * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.helpdesk}"
+    */
+   public void actualizarUsuarioTramite(String nif, String usuarioOld, String usuarioNew) {
+       Session session = getSession();
+       try {
+
+	    	// Permite realizar el cambio al role helpdesk o bien al propio usuario (verifica que el nif es el mismo)
+	       	if (!this.ctx.isCallerInRole(roleHelpdesk)){
+	       		Principal sp = this.ctx.getCallerPrincipal();
+	       		PluginLoginIntf plgLogin;
+	       		plgLogin = PluginFactory.getInstance().getPluginLogin();
+	       		if (!plgLogin.getNif(sp).equalsIgnoreCase(nif)){
+	       			throw new ExcepcionPAD("El usuario no tiene el mismo nif");
+	       		}
+	       	}
+
+    	   // Recupera tramites en los que aparece el usuario
+    	   Query query = session
+           .createQuery("FROM TramitePersistente AS m WHERE (m.usuarioFlujoTramitacion = :usuarioOld or m.usuario = :usuarioOld or m.delegado = :usuarioOld)")
+           .setParameter("usuarioOld",usuarioOld);
+           List tramites = query.list();
+
+           // Actualiza usuario en cada tramite
+           for (Iterator it=tramites.iterator();it.hasNext();){
+	           	TramitePersistente tramitePersistente = (TramitePersistente) it.next();
+	           	if (usuarioOld.equals(tramitePersistente.getUsuario())) {
+	           		tramitePersistente.setUsuario(usuarioNew);
+	           	}
+	           	if (usuarioOld.equals(tramitePersistente.getUsuarioFlujoTramitacion())) {
+	           		tramitePersistente.setUsuarioFlujoTramitacion(usuarioNew);
+	           	}
+	           	if (usuarioOld.equals(tramitePersistente.getDelegado())) {
+	           		tramitePersistente.setDelegado(usuarioNew);
+	           	}
+           	    session.update(tramitePersistente);
+           }
+
+       } catch (Exception he) {
+           throw new EJBException(he);
+       } finally {
+           close(session);
+       }
+   }
+
     /**
     *
     * Obtiene lista de tramites persistentes que tiene pendientes por completar el usuario
@@ -518,7 +569,7 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-    
+
     /**
      * Obtiene la lista de tramites en persistencia para un usuario y
      * que su fecha de ultima modificacion este comprendida en el rango pasado como parametro

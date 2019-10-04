@@ -34,9 +34,9 @@ public final class ScriptUtil {
 
     }
 
-    public static Object evalScript(String script, Map params, boolean debugEnabled) {
+    public static Object evalScript(String elementoScript, String script, Map params, boolean debugEnabled) {
         if (debugEnabled) {
-	    	log.debug("- Evaluando script: " + script);
+	    	log.debug("- [" + elementoScript + "] Evaluando script: " + script);
 	        log.debug("- Parametros: " + params);
         }
 
@@ -108,14 +108,14 @@ public final class ScriptUtil {
             return result;
 
         } catch (BSFException be) {
-            log.error("Error ejecutando script: " + be.getMessage() + "\nScript: " + script + "\nParametros: " + strParams, be.getTargetException());
+            log.error("[" + elementoScript + "] Error ejecutando script: " + be.getMessage() + "\nScript: " + script + "\nParametros: " + strParams, be.getTargetException());
             logScript.setExcepcion(be.getMessage());
             return null;
         }
     }
 
-    public static boolean evalBoolScript(String script, Map params, boolean debugEnabled) {
-        Object result = evalScript(script, params, debugEnabled);
+    public static boolean evalBoolScript(String elementoScript, String script, Map params, boolean debugEnabled) {
+        Object result = evalScript(elementoScript, script, params, debugEnabled);
         if (result == null || !(result instanceof Boolean) ) {
             return false;
         }

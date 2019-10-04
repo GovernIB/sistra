@@ -46,7 +46,7 @@ import es.indra.util.graficos.generadorGraficos.DatosGrafico;
 
 /**
  * Stateless SessionBean que proporciona el interfaz al front de la aplicacion de auditoria
- * del sistema de tramitación para acceder a las estadísticas de cada uno de los eventos 
+ * del sistema de tramitación para acceder a las estadísticas de cada uno de los eventos
  *
  * @ejb.bean
  *  name="audita/persistence/AuditoriaFacade"
@@ -54,30 +54,30 @@ import es.indra.util.graficos.generadorGraficos.DatosGrafico;
  *  type="Stateless"
  *  view-type="remote"
  *  transaction-type="Container"
- *  
+ *
  * @ejb.transaction type="Required"
- * 
+ *
  */
 public abstract class AuditoriaFacadeEJB extends QueryEJB
 {
-	
+
 //    protected static String JNDI_SISTRA = "";
-	
+
 //    protected static String JNDI_ROLSAC = "";
 
 //    private static final String FICHERO_PROPIEDADES = "Auditoria.properties";
-	
+
 	private Log log = LogFactory.getLog( AuditoriaFacadeEJB.class);
-	
+
 	/**
      * @ejb.create-method
-     * @ejb.permission unchecked = "true" 
+     * @ejb.permission unchecked = "true"
      */
-	public void ejbCreate() throws CreateException 
+	public void ejbCreate() throws CreateException
 	{
 		super.ejbCreate();
 	}
-	
+
 	private List obtenerListaTiposEvento(String modulo)
 	{
 		List lst = null;
@@ -86,7 +86,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 			lst = this.queryForMapList( "sql.select.eventos", new Object[]{ modulo } );
 		}
 		catch( Exception exc )
-		{			
+		{
 			log.error("Excepcion: " + exc.getMessage(), exc);
 		}
 		return lst;
@@ -105,7 +105,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		}
 		return lst;
 	}
-	
+
 
 	private EventoAuditado construyeAuditoriaTipoEvento(String idioma,  Map resultadoConsulta , String modo, Date fechaInicio, Date fechaFinal )
 	{
@@ -126,7 +126,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		}
 		eventoAuditado.setOpcionesVisualizacion(ls_opciones);
 		int index = ls_opciones.indexOf(AuditConstants.TOTAL);
-		
+
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		String ls_fechaInicio = dateFormat.format(fechaInicio);
 		String ls_fechaFinal = "";
@@ -134,11 +134,11 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		{
 			ls_fechaFinal = dateFormat.format(fechaFinal);
 		}
-		
+
 		String ls_query = "";
-		
+
 		/* Obtenemos estadisticas total */
-		
+
 		if(index != -1)
 		{
 			List lst = null;
@@ -162,10 +162,10 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 				log.error("Excepcion: " + exc.getMessage(), exc);
 			}
 		}
-		
+
 		/* Obtenemos estadisticas por idiomas */
-		
-		
+
+
 		index = ls_opciones.indexOf(AuditConstants.TOTAL_IDIOMAS);
 		if(index != -1)
 		{
@@ -191,18 +191,18 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 					totalIdioma.put(ls_idioma,total);
 				}
 				eventoAuditado.setTotalesIdioma(totalIdioma);
-				
+
 			}
 			catch( Exception exc )
 			{
 				log.error("Excepcion: " + exc.getMessage(), exc);
 			}
 		}
-		
+
 
 		/* Obtenemos estadisticas por nivel de autenticación */
-		
-		
+
+
 		index = ls_opciones.indexOf(AuditConstants.TOTAL_NIVEL_AUTH);
 		if(index != -1)
 		{
@@ -239,19 +239,19 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 				}
 				*/
 				eventoAuditado.setTotalesNivelAutenticacion(totalNivelAutenticacion);
-				
+
 			}
 			catch( Exception exc )
 			{
 				log.error("Excepcion: " + exc.getMessage(), exc);
 			}
 		}
-		
-		
+
+
 
 		/* Obtenemos estadisticas evento especial */
-		
-		
+
+
 		index = ls_opciones.indexOf(AuditConstants.PARTICULARIDADES_VISUALIZACION);
 		if(index != -1)
 		{
@@ -291,7 +291,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 	}
 
 
-	
+
 	/**
 	 * Obtiene el cuadro de mando para el intervalo temporal contenido entre dos fechas.
 	 * Devuelve una lista List de objetos de tipo es.caib.audita.model.Modulo
@@ -302,17 +302,17 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		List eventosAuditados = null;
 		Modulo modulo;
 		List modulos = obtenerListaModulos();
-		
+
 		// 1º Recuperamos los modulos y se iteran
 		//Modulo modulo1 = new Modulo();
-		
+
 		//List lstModulos = this.queryForMapList( "query" );
 		// 2º Obtenemos para cada modulo los tipos de evento
-		
+
 		for(int i=0; i<modulos.size(); i++)
 		{
 			eventosAuditados = new ArrayList();
-			modulo = new Modulo(); 
+			modulo = new Modulo();
 			Map mResult = ( Map ) modulos.get(i);
 			String ls_nombre = ( String ) mResult.get( "mod_modul" );
 			modulo.setModulo(ls_nombre);
@@ -320,22 +320,22 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 			modulo.setOrden(orden.intValue());
 			String ls_descripcion = ( String ) mResult.get( (idioma.equals(ConstantesAuditoria.LANGUAGE_CATALAN)) ? "mod_descca" : "mod_desc" );
 			modulo.setDescripcion(ls_descripcion);
-			
+
 			// Recuperamos tipos de evento
 			List lstTiposEventos = this.obtenerListaTiposEvento(ls_nombre);
 			for(int j=0; j<lstTiposEventos.size();j++)
 			{
 				Map mEvento = (Map) lstTiposEventos.get(j);
-				
+
 				// Si el evento no tiene propiedades de visualizacion no se muestra
 				String ls_opciones = (String) mEvento.get("tip_prpcls");
 				if (ls_opciones==null||ls_opciones.equals("")) continue;
-				
+
 				EventoAuditado evento = construyeAuditoriaTipoEvento(idioma, mEvento, modo, fechaInicio,fechaFinal);
 				eventosAuditados.add(evento);
 			}
 
-			Collections.sort(eventosAuditados, 
+			Collections.sort(eventosAuditados,
 	    		    		 new Comparator(){
 	            				public int compare(Object o1, Object o2)
 	            				{
@@ -348,7 +348,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 			lstReturn.add(modulo);
 		}
 
-		Collections.sort(lstReturn, 
+		Collections.sort(lstReturn,
 	    		 new Comparator(){
    				public int compare(Object o1, Object o2)
    				{
@@ -356,11 +356,11 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
    					Modulo m2 = (Modulo) o2;
    					return m1.getOrden()- m2.getOrden();
    				}});
-		
+
 		return lstReturn;
 
 	}
-	
+
 	private BigDecimal getTotal(List lista, String tipo)
 	{
 		for(int i=0; i<lista.size(); i++)
@@ -375,10 +375,10 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		}
 		return BigDecimal.valueOf(0);
 	}
-	
 
-	
-	
+
+
+
 //	protected String getJndiSistra()
 //	{
 //		if(JNDI_SISTRA.equals(""))
@@ -394,8 +394,8 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 //		}
 //		return AuditoriaFacadeEJB.JNDI_SISTRA;
 //	}
-//	
-	
+//
+
 //	protected String getJndiRolsac()
 //	{
 //		if(JNDI_ROLSAC.equals(""))
@@ -411,12 +411,12 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 //		}
 //		return AuditoriaFacadeEJB.JNDI_ROLSAC;
 //	}
-	
+
 
 //----------------------------------------------------------------
 //----------- METODOS EJB ----------------------------------------
 //----------------------------------------------------------------
-	
+
 	/**
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked = "true"
@@ -444,7 +444,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		}
 		return eventos;
 	}
-	
+
 	/**
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked = "true"
@@ -457,7 +457,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		try
 		{
 			con = this.getConnection();
-			ParticularidadesVisualizacionHandler handler = 
+			ParticularidadesVisualizacionHandler handler =
 				ParticularidadesVisualizacionFactoria.getInstance().getHandler( ls_handler, con, modo, tipoEvento, fecha, null, null );
 			datos = handler.obtenerDatosGrafico();
 			return datos;
@@ -473,7 +473,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 				try {
 					con.close();
 				} catch (SQLException e) {
-					
+
 					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
@@ -481,7 +481,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 
 		return datos;
 	}
-	
+
 	/**
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked = "true"
@@ -509,8 +509,8 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		return getCuadroMandoIntervaloTemporal(idioma, AuditConstants.ANUAL, fechaInicio,fechaFinal);
 
 	}
-	
-	
+
+
 	/**
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked = "true"
@@ -539,7 +539,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		}
 		return getCuadroMandoIntervaloTemporal(idioma, AuditConstants.MENSUAL, fechaInicio,fechaFinal);
 	}
-	
+
 	/**
 	 * Obtiene el cuadro de mando para el intervalo temporal contenido entre dos fechas.
 	 * Devuelve una lista List de objetos de tipo es.caib.audita.model.Modulo
@@ -550,12 +550,12 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 	{
 		return getCuadroMandoIntervaloTemporal(idioma, AuditConstants.DIARIO, fechaInicio,fechaFinal);
 	}
-	
+
 	private String obtenerHandler(String evento)
 	{
 		String handler = null;
 		List lst = null;
-		
+
 
 	//	Connection con = null;
 		try
@@ -579,15 +579,15 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 				try {
 					con.close();
 				} catch (SQLException e) {
-					
+
 					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 		}
 		*/
 	}
-	
-	
+
+
 	/**
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked = "true"
@@ -617,7 +617,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 				try {
 					con.close();
 				} catch (SQLException e) {
-					
+
 					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
@@ -625,7 +625,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 
 		return null;
 	}
-	
+
 	/**
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked = "true"
@@ -655,7 +655,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 				try {
 					con.close();
 				} catch (SQLException e) {
-					
+
 					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
@@ -663,7 +663,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 
 		return null;
 	}
-	
+
 	/**
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked = "true"
@@ -691,7 +691,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		}
 		return eventos;
 	}
-	
+
 	/**
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked = "true"
@@ -720,10 +720,108 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		return eventos;
 	}
 
+
 	/**
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked = "true"
 	 */
+	public void generaCuadroMandoInicioEstadisticasServicios()
+	{
+		CuadroMandoInicioDelegate cmd = DelegateUtil.getCuadroMandoInicioDelegate();
+		try{
+			log.info("Generacion cuadro mando inicio: generaEstadisticasServicios");
+			cmd.generaEstadisticasServicios();
+		} catch (DelegateException e) {
+			log.error("Error generando datos para pagina inicio",e);
+			log.error("Excepcion: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked = "true"
+	 */
+	public void generaCuadroMandoInicioEstadisticasPortal(String ls_fcDesde, String ls_fcHasta) {
+		CuadroMandoInicioDelegate cmd = DelegateUtil.getCuadroMandoInicioDelegate();
+		try{
+			log.info("Generacion cuadro mando inicio: generaEstadisticasPortal");
+			cmd.generaEstadisticasPortal(ls_fcDesde, ls_fcHasta);
+		} catch (DelegateException e) {
+			log.error("Error generando datos para pagina inicio",e);
+			log.error("Excepcion: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked = "true"
+	 */
+	public void generaCuadroMandoInicioEstadisticasTramitacion(String ls_fcDesde, String ls_fcHasta)
+	{
+		CuadroMandoInicioDelegate cmd = DelegateUtil.getCuadroMandoInicioDelegate();
+		try{
+			log.info("Generacion cuadro mando inicio: generaEstadisticasTramitacion");
+			cmd.generaEstadisticasTramitacion(ls_fcDesde, ls_fcHasta);
+		} catch (DelegateException e) {
+			log.error("Error generando datos para pagina inicio",e);
+			log.error("Excepcion: " + e.getMessage(), e);
+		}
+	}
+
+
+	/**
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked = "true"
+	 */
+	public void generaCuadroMandoInicioEstadisticasMasTramitados()
+	{
+		CuadroMandoInicioDelegate cmd = DelegateUtil.getCuadroMandoInicioDelegate();
+		try{
+			log.info("Generacion cuadro mando inicio: generaEstadisticasMasTramitados");
+			cmd.generaEstadisticasMasTramitados();
+		} catch (DelegateException e) {
+			log.error("Error generando datos para pagina inicio",e);
+			log.error("Excepcion: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked = "true"
+	 */
+	public void generaCuadroMandoInicioEstadisticasMasAccedidos()
+	{
+		CuadroMandoInicioDelegate cmd = DelegateUtil.getCuadroMandoInicioDelegate();
+		try{
+			log.info("Generacion cuadro mando inicio: generaEstadisticasMasAccedidos");
+			cmd.generaEstadisticasMasAccedidos();
+		} catch (DelegateException e) {
+			log.error("Error generando datos para pagina inicio",e);
+			log.error("Excepcion: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked = "true"
+	 */
+	public void generaCuadroMandoInicioEstadisticasUltimosAlta()
+	{
+		CuadroMandoInicioDelegate cmd = DelegateUtil.getCuadroMandoInicioDelegate();
+		try{
+			log.info("Generacion cuadro mando inicio: generaEstadisticasUltimosAlta");
+			cmd.generaEstadisticasUltimosAlta();
+		} catch (DelegateException e) {
+			log.error("Error generando datos para pagina inicio",e);
+			log.error("Excepcion: " + e.getMessage(), e);
+		}
+	}
+
+
+	/*
+
+	  DESGLOSAMOS EN VARIOS
+
 	public void generaCuadroMandoInicio()
 	{
 		// Buscamos fechas para historial
@@ -731,11 +829,11 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		String ls_fcDesde = null;
 		try {
 			ls_fcHasta = Util.getFechaActual("DD/MM/YYYY");
-			ls_fcDesde = ls_fcHasta.substring(0,6) + (Integer.parseInt(ls_fcHasta.substring(6).trim()) - 1);			
+			ls_fcDesde = ls_fcHasta.substring(0,6) + (Integer.parseInt(ls_fcHasta.substring(6).trim()) - 1);
 		} catch (Throwable e) {
 			log.error("Error obteniendo intervalo de fechas",e);
 			log.error("Excepcion: " + e.getMessage(), e);
-		}			
+		}
 
 		log.info("Comienza generar cuadro mando inicio...");
 		CuadroMandoInicioDelegate cmd = DelegateUtil.getCuadroMandoInicioDelegate();
@@ -760,6 +858,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		}
 
 	}
+	*/
 
 	/**
 	 * @ejb.interface-method
@@ -774,7 +873,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		try
 		{
 			con = this.getConnection();
-			
+
 
 			/* Consultamos las estadisticas de las tramitaciones*/
 			lst = this.queryForMapList(con, "sql.select.cuadroInicio", new Object[] {} );
@@ -814,7 +913,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 			valor = (Number)mResult.get("ini_ptlbz");
 			portal.setAccesosBuzon(valor.intValue());
 			cuadroMando.setPortal(portal);
-			
+
 			/* Tramitacion */
 			InicioTramitacion tramitacion = new InicioTramitacion();
 			valor = (Number)mResult.get("ini_restmx");
@@ -826,7 +925,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 			valor = (Number)mResult.get("ini_trapr");
 			tramitacion.setTramitesPreRegistro(valor.intValue());
 			cuadroMando.setTramitacion(tramitacion);
-			
+
 			/* Los más tramitados */
 			LineaDetalleTramitados tramitados = null;
 			for(int i=0; i<5; i++)
@@ -844,7 +943,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 				tramitados.setValor(valor.intValue());
 				cuadroMando.addDetalleTramitados(tramitados);
 			}
-			
+
 
 			/* Los más Accedidos */
 			LineaDetalleAccedidos accedidos = null;
@@ -883,16 +982,16 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 				ultimos.setValor(valor.intValue());
 				cuadroMando.addDetalleUltimos(ultimos);
 			}
-			
+
 			return cuadroMando;
-			
+
 
 		}
 		catch( Exception exc )
 		{
 			log.error("Excepcion: " + exc.getMessage(), exc);
 			return null;
-		}	
+		}
 		finally
 		{
 			if(con != null)
@@ -900,14 +999,14 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 				try {
 					con.close();
 				} catch (SQLException e) {
-					
+
 					log.error("Excepcion: " + e.getMessage(), e);
 				}
 			}
 		}
 
 	}
-	
+
 	private String getHistorial(String idioma, String fecha)
 	{
 		String ls_mes = Util.getDescripcionMes(idioma,fecha.substring(3,5));
@@ -928,7 +1027,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 		try {
 			/* Obtenemos path imagenes */
 			Properties props = recuperaConfiguracion();
-			String pathImages = props.getProperty("pathImages");			
+			String pathImages = props.getProperty("pathImages");
 			FileInputStream fis = new FileInputStream(pathImages + fichero);
 			byte[] buffer= new byte[8024];
 			fis.read(buffer);
@@ -938,28 +1037,28 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 			return null;
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * Obtiene auditoria de un tramite anónimo o un usuario autenticado entre dos fechas.
 	 * Devuelve lista de eventos auditados.
-	 * 
+	 *
 	 * @param fechaIni Fecha inicio
 	 * @param fechaFin Fecha fin
 	 * @param nivelAutenticacion Nivel autenticacion (A/C/U)
 	 * @param autenticacion Identificador autenticación: Si A -> Clave persistencia / Si C/U-> Usuario seycon
 	 * @return Lista de eventos. Null si error.
-	 * 
+	 *
      * @ejb.interface-method
      * @ejb.permission role-name = "${role.helpdesk}"
 	 */
 	public List obtenerAuditoria(Date fechaIni,Date fechaFin,char nivelAutenticacion,String autenticacion)
 	{
-		List eventos = new ArrayList();		
+		List eventos = new ArrayList();
 		try
 		{	String sql = "sql.select.auditoria.anonimo";
 			List lst;
-			if (nivelAutenticacion != 'A')	
+			if (nivelAutenticacion != 'A')
 			{
 				sql="sql.select.auditoria.autenticado";
 				String stFcIni = Util.getFecha(new Timestamp(fechaIni.getTime()),"DD/MM/YYYY HH24:MI:SS");
@@ -970,15 +1069,15 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 			{
 				lst = this.queryForMapList(sql,new Object[]{ Character.toString(nivelAutenticacion),autenticacion });
 			}
-			
+
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-			
-			
+
+
 			for(int i=0; i<lst.size(); i++)
 			{
 				Map mResult = ( Map ) lst.get(i);
-				
-				Evento evento = new Evento();				
+
+				Evento evento = new Evento();
 				evento.setCodigo(Long.parseLong(mResult.get( "AUD_CODI" ).toString()));
 				evento.setFecha(sdf.parse((String) mResult.get( "fecha" )));
 				evento.setTipo(mResult.get( "AUD_TIPO" ).toString());
@@ -995,7 +1094,7 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 				evento.setClave((String) mResult.get( "AUD_CLAVE" ));
 				eventos.add(evento);
 			}
-			
+
 			return eventos;
 		}
 		catch( Exception exc )
@@ -1003,17 +1102,17 @@ public abstract class AuditoriaFacadeEJB extends QueryEJB
 			log.error("Excepcion: " + exc.getMessage(), exc);
 			return null;
 		}
-		
+
 	}
-	
+
 	/**
 	 * Recupera configuracion del modulo
-	 * @throws DelegateException 
+	 * @throws DelegateException
 	 */
 	private Properties recuperaConfiguracion() throws DelegateException{
 		return DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
 	}
-	
+
 
 
 }

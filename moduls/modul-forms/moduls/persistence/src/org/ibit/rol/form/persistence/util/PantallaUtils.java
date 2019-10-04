@@ -803,4 +803,9 @@ public final class PantallaUtils {
 
     // --- INDRA: LISTA ELEMENTOS ----
 
+
+    public static String generarElementoScript(Pantalla pantalla) {
+		return pantalla.getFormulario().getModelo() + "." + pantalla.getNombre();
+	}
+
 }
