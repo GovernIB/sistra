@@ -155,10 +155,10 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 				for (Iterator it = persistentes.iterator(); it.hasNext();) {
 					TramitePersistentePAD ep = (TramitePersistentePAD) it.next();
 					es.caib.zonaper.ws.v2.model.TramitePersistente rep = new es.caib.zonaper.ws.v2.model.TramitePersistente();
-					rep.setIdTramite(ep.getIdProcedimiento());
+					rep.setIdTramite(ep.getTramite());
 					rep.setIdioma(ep.getIdioma());
 					rep.setIdSesionTramitacion(ep.getIdPersistencia());
-					rep.setDescripcionTramite(ep.getTramite());
+					rep.setDescripcionTramite(ep.getDescripcion());
 					rep.setFechaInicio(dateToXmlGregorianCalendar(ep.getFechaCreacion()));
 					rep.setFechaUltimoAcceso(dateToXmlGregorianCalendar(ep.getFechaModificacion()));
 					res.getTramitePersistente().add(rep);
