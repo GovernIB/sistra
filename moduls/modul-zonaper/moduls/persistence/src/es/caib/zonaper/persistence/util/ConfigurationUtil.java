@@ -70,6 +70,7 @@ public class ConfigurationUtil {
 		if (propiedades == null) obtenerPropiedades();
 		OrganismoInfo oi = new  OrganismoInfo();
 		oi.setNombre(propiedades.getProperty("organismo.nombre"));
+		oi.setEntidadDefecto(propiedades.getProperty("organismo.entidadDefecto"));
 		oi.setUrlLogo(propiedades.getProperty("organismo.logo"));
 		oi.setUrlLoginLogo(propiedades.getProperty("organismo.logo.login"));
 		oi.setUrlPortal(propiedades.getProperty("organismo.portal.url"));

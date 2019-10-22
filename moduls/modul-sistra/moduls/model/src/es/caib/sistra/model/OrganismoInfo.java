@@ -12,6 +12,7 @@ import java.util.Map;
 public class OrganismoInfo implements Serializable{
 
 	private String nombre;
+	private String entidadDefecto;
 	private String urlLogo;
 	private String urlLoginLogo;
 	private String urlPortal;
@@ -27,6 +28,12 @@ public class OrganismoInfo implements Serializable{
 	private Map avisoLOPD = new HashMap(); // Aviso LOPD con el key como idioma
 	private Map tituloLOPD = new HashMap(); // Titulo LOPD con el key como idioma
 	
+	public String getEntidadDefecto() {
+		return entidadDefecto;
+	}
+	public void setEntidadDefecto(String entidadDefecto) {
+		this.entidadDefecto = entidadDefecto;
+	}
 	public String getUrlCssCustom() {
 		return urlCssCustom;
 	}

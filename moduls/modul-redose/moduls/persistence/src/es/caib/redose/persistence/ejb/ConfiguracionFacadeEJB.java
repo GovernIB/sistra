@@ -61,6 +61,7 @@ public abstract class ConfiguracionFacadeEJB extends HibernateEJB  {
     		Properties props = ConfigurationUtil.getInstance().obtenerPropiedades();
     		OrganismoInfo oi = new  OrganismoInfo();
     		oi.setNombre(props.getProperty("organismo.nombre"));
+    		oi.setEntidadDefecto(props.getProperty("organismo.entidadDefecto"));
     		oi.setUrlLogo(props.getProperty("organismo.logo"));
     		oi.setUrlPortal(props.getProperty("organismo.portal.url"));
     		oi.setPieContactoHTML(props.getProperty("organismo.footer.contacto"));

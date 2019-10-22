@@ -8,6 +8,7 @@ package es.caib.redose.model;
 public class OrganismoInfo {
 
 	private String nombre;
+	private String entidadDefecto;
 	private String urlLogo;
 	private String urlPortal;
 	private String pieContactoHTML;
@@ -16,6 +17,13 @@ public class OrganismoInfo {
 	private String emailSoporteIncidencias;
 	private String urlCssCustom;
 	
+	
+	public String getEntidadDefecto() {
+		return entidadDefecto;
+	}
+	public void setEntidadDefecto(String entidadDefecto) {
+		this.entidadDefecto = entidadDefecto;
+	}
 	public String getUrlCssCustom() {
 		return urlCssCustom;
 	}

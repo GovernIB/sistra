@@ -133,6 +133,7 @@ public class ConfigurationUtil {
 		OrganismoInfo oi = new OrganismoInfo();
 		if (propiedades == null) obtenerPropiedades();
 		oi.setNombre(propiedades.getProperty("organismo.nombre"));
+		oi.setEntidadDefecto(propiedades.getProperty("organismo.entidadDefecto"));
 		oi.setUrlLogo(propiedades.getProperty("organismo.logo"));
 		oi.setUrlLoginLogo(propiedades.getProperty("organismo.logo.login"));
 		oi.setUrlPortal(propiedades.getProperty("organismo.portal.url"));
