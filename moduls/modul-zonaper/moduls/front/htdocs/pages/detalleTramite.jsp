@@ -248,7 +248,8 @@
 												<bean:write name="firma" property="nombreApellidos"/> 
 												<logic:notEmpty name="firma" property="nifRepresentante">
 													&nbsp; <bean:message key="firma.representadoPor"/> <bean:write name="firma" property="nombreApellidosRepresentante"/> - NIF: <bean:write name="firma" property="nifRepresentante"/>
-												</logic:notEmpty>										
+												</logic:notEmpty>
+											</a>										
 										</logic:iterate>			
 									</logic:notEmpty>									
 								</li>
