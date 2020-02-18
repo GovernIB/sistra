@@ -24,35 +24,43 @@ import org.apache.ws.security.WSConstants;
 import org.apache.ws.security.handler.WSHandlerConstants;
 
 public class WsClientUtil {
-	
+
 	private static Log log = LogFactory.getLog(WsClientUtil.class);
-	
+
 	public static void configurePort(BindingProvider port, String url, String soapAction,
-			String user, String pass,String auth,boolean generateTimestamp,boolean logCalls, boolean disableCnCheck, boolean disableChunked) throws Exception {
+			String user, String pass,String auth,boolean generateTimestamp,boolean logCalls, boolean disableCnCheck, boolean disableChunked,
+			Integer timeoutSeconds) throws Exception {
 
 		Client client = ClientProxy.getClient(port);
 		HTTPConduit conduit = (HTTPConduit) client.getConduit();
-		
+		HTTPClientPolicy policy = conduit.getClient();
 		Endpoint cxfEndpoint = client.getEndpoint();
-		
+
+		// Log calls
 		if (logCalls) {
 			client.getInInterceptors().add(new LoggingInInterceptor());
 			client.getOutInterceptors().add(new LoggingOutInterceptor());
 		}
-		
+
+		// Timeout
+		if (timeoutSeconds != null) {
+			policy.setReceiveTimeout(timeoutSeconds * 1000L);
+		}
+
+		// Autenticacion
 		if (user != null) {
 			if ("BASIC".equals(auth)) {
-				
+
 				log.debug("Utilizando autenticacion basic");
-				
+
 				port.getRequestContext().put(BindingProvider.USERNAME_PROPERTY,
 						user);
 				port.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY,
 						pass);
 			} else if ("USERNAMETOKEN".equals(auth)) {
-				
+
 				log.debug("Utilizando autenticacion ws-security usernameToken");
-				
+
 				Map<String, Object> outProps = new HashMap<String, Object>();
 				outProps.put(WSHandlerConstants.ACTION, (generateTimestamp ? WSHandlerConstants.TIMESTAMP
 						+ " " : "")
@@ -61,11 +69,11 @@ public class WsClientUtil {
 				outProps.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_TEXT);
 				ClientPasswordCallback cp = new ClientPasswordCallback(pass);
 				outProps.put(WSHandlerConstants.PW_CALLBACK_REF, cp);
-	
+
 				WSS4JOutInterceptor wssOut = new WSS4JOutInterceptor(outProps);
 				cxfEndpoint.getOutInterceptors().add(wssOut);
 				cxfEndpoint.getOutInterceptors().add(new SAAJOutInterceptor());
-	
+
 			} else {
 				throw new Exception("Tipo de autenticacion ws no soportada: "
 						+ auth);
@@ -77,22 +85,21 @@ public class WsClientUtil {
 
 		// Vemos si hay que validar el certificado del servidor al que se invoca en comunicacion https
 		if (disableCnCheck) {
-			
+
 			log.debug("No se va a comprobar el certificado del servidor invocado (https)");
-			
+
 			TLSClientParameters tlsParams = new TLSClientParameters();
 			tlsParams.setDisableCNCheck(true);
 			conduit.setTlsClientParameters(tlsParams);
 		}
-		
+
 		// Vemos si hay que pasar por proxy
 		String proxyHost = System.getProperty("http.proxyHost");
 		if (proxyHost != null && !"".equals(proxyHost)) {
 			if (!validateNonProxyHosts(url)) {
-				
+
 				log.debug("Estableciendo autenticacion para proxy");
-				
-				HTTPClientPolicy policy = conduit.getClient();
+
 				policy.setProxyServer(proxyHost);
 				policy.setProxyServerPort(Integer.parseInt(System
 						.getProperty("http.proxyPort")));
@@ -103,28 +110,36 @@ public class WsClientUtil {
 						System.getProperty("http.proxyPassword"));
 			}
 		}
-		
-		
+
+
 		// Vemos si deshabilitamos modo chuncked (por defecto habilitado)
 		if (disableChunked) {
 			log.debug("Deshabilitamos modo chuncked");
-			HTTPClientPolicy policy = conduit.getClient();
-			policy.setAllowChunking(false);	        
+			policy.setAllowChunking(false);
 		}
-		
-		
+
+
 		// Soap-Action
 		if (StringUtils.isNotBlank(soapAction)) {
-			port.getRequestContext().put( 
-				    BindingProvider.SOAPACTION_URI_PROPERTY, 
+			port.getRequestContext().put(
+				    BindingProvider.SOAPACTION_URI_PROPERTY,
 				    soapAction);
 		}
-		
-			        
+
 	}
-	
+
+
+
+	public static void configurePort(BindingProvider port, String url, String soapAction,
+			String user, String pass,String auth,boolean generateTimestamp,boolean logCalls, boolean disableCnCheck, boolean disableChunked) throws Exception {
+
+		configurePort(port, url, soapAction,
+				user, pass, auth, generateTimestamp, logCalls, disableCnCheck, disableChunked, null);
+
+	}
+
 	/**
-	 * Busca els host de la url indicada dentro de la propiedad http.nonProxyHosts de la JVM 
+	 * Busca els host de la url indicada dentro de la propiedad http.nonProxyHosts de la JVM
 	 * @param url Endpoint del ws
 	 * @return true si el host esta dentro de la propiedad, fals en caso contrario
 	 */
@@ -150,6 +165,6 @@ public class WsClientUtil {
 		}
 		return existe;
 	}
-	
+
 
 }
