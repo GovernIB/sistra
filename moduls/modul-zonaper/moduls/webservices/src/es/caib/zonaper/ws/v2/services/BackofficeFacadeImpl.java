@@ -132,25 +132,25 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
 	}
-	
+
 	public TramitesPersistentes obtenerPersistentes(String nif,
 			XMLGregorianCalendar fechaDesde, XMLGregorianCalendar fechaHasta)
 			throws BackofficeFacadeException {
 		try{
-			
+
 			Date desdeDate=null;
 			Date hastaDate=null;
 			if(fechaDesde != null){
 				desdeDate = fechaDesde.toGregorianCalendar().getTime();
 			}if(fechaHasta != null){
 				hastaDate = fechaHasta.toGregorianCalendar().getTime();
-			}					
-			
+			}
+
 			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
 			List persistentes = pad.obtenerPersistentes(nif, desdeDate, hastaDate);
-			
+
 			TramitesPersistentes res = new TramitesPersistentes();
-			
+
 			if (persistentes != null) {
 				for (Iterator it = persistentes.iterator(); it.hasNext();) {
 					TramitePersistentePAD ep = (TramitePersistentePAD) it.next();
@@ -164,12 +164,12 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 					res.getTramitePersistente().add(rep);
 				}
 			}
-			
+
 			return res;
-			
+
 		} catch (Exception exc) {
 			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
-		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());	
+		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
 		}
 	}
 
@@ -329,7 +329,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		}
 		return confPAD;
 	}
-	
+
 	private UsuarioAutenticadoInfoPAD usuarioAutenticadoInfoWsTousuarioAutenticadoInfoPAD(
 			UsuarioAutenticadoInfo confWS) throws Exception {
 		UsuarioAutenticadoInfoPAD confPAD = new UsuarioAutenticadoInfoPAD();
@@ -347,14 +347,14 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 				}else{
 					throw new Exception("no se puede obtener tiquet para la autenticación " + confWS.getAutenticacion());
 				}
-				
+
 			}
 			if(confWS.getEmail() != null){
 				confPAD.setEmail(StringUtils.defaultIfEmpty(confWS.getEmail(),null));
 			}
-			
+
 			if(confWS.getMetodoAutenticacion() != null){
-				if("CLAVE_CERTIFICADO".equals(confWS.getMetodoAutenticacion())){
+				if("CLAVE_CERTIFICADO".equals(confWS.getMetodoAutenticacion()) || "CLIENTCERT".equals(confWS.getMetodoAutenticacion())){
 					confPAD.setMetodoAutenticacion("aFirma");
 					nivelAutenticacion = "C";
 				}else if ("CLAVE_PIN".equals(confWS.getMetodoAutenticacion())){
@@ -378,7 +378,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		}
 		return confPAD;
 	}
-	
+
 	private XMLGregorianCalendar dateToXmlGregorianCalendar(Date date) throws Exception{
 		try {
 			if(date != null){

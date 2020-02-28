@@ -12,9 +12,10 @@
 				    <xs:enumeration value="CLAVE_CERTIFICADO"/>
 				    <xs:enumeration value="CLAVE_PIN"/>
 				    <xs:enumeration value="CLAVE_PERMANENTE"/>
+				    <xs:enumeration value="CLIENTCERT"/>
 				  </xs:restriction>
 				</xs:simpleType>
-			</xs:element> 			
+			</xs:element>
 			<xs:element name="nif" type="xs:string"/>
 			<xs:element name="nombre" type="xs:string"/>
 			<xs:element name="username" type="xs:string"/>

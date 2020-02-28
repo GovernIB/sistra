@@ -1,28 +1,28 @@
 <%
-	// ----- PARTICULARIZACION DE CODIGO PARA LOGIN (LO DEMAS IGUAL PARA TRAMITACION Y ZONA PERSONAL) ---------------------	
-	String niveles = "CLAVE_CERTIFICADO;CLAVE_PIN;CLAVE_PERMANENTE;ANONIMO";
+	// ----- PARTICULARIZACION DE CODIGO PARA LOGIN (LO DEMAS IGUAL PARA TRAMITACION Y ZONA PERSONAL) ---------------------
+	String niveles = "CLAVE_CERTIFICADO;CLAVE_PIN;CLAVE_PERMANENTE;ANONIMO;CLIENTCERT";
 	String textoAtencion="";
 	String modo = null;
-	
+
 	try
-	{				
-		
+	{
+
 		if (!esLoginClave) {
 			String savedRequestUrl = urlSavedRequest;
 			if (queryStringSavedRequest != null) {
 				savedRequestUrl += "?" + queryStringSavedRequest;
 			}
-			
+
 			// Comprobamos que el punto de entrada sea válido
 			String in = request.getContextPath() + "/protected/init.do";
 			if (!savedRequestUrl.startsWith(in)) throw new Exception("Punto de entrada no válido:" + savedRequestUrl);
-			
+
 			if ( savedRequestUrl.indexOf( "?" ) > 0 )
 			{
 				in = in + "?";
 				String params = savedRequestUrl.substring(in.length());
 				savedRequestUrl = params;
-				
+
 				StringTokenizer st = new StringTokenizer(savedRequestUrl,"&");
 				String element;
 				while (st.hasMoreElements())
@@ -42,11 +42,12 @@
 					}
 				}
 			}
-			
+
 			// Filtramos niveles acceso
 			if (modo != null){
 				String nivelesModo = "";
 		 		if (niveles.indexOf("CLAVE_CERTIFICADO") >= 0 && modo.indexOf("C") >= 0 ) nivelesModo += "CLAVE_CERTIFICADO;";
+		 		if (niveles.indexOf("CLIENTCERT") >= 0 && modo.indexOf("C") >= 0 ) nivelesModo += "CLIENTCERT;";
 		 		if (niveles.indexOf("CLAVE_PIN;CLAVE_PERMANENTE") >= 0 && modo.indexOf("U") >= 0 ) nivelesModo += "CLAVE_PIN;CLAVE_PERMANENTE;";
 		 		if (niveles.indexOf("ANONIMO") >= 0 && modo.indexOf("A") >= 0 ) nivelesModo += "ANONIMO";
 		 		if (nivelesModo.endsWith(";")) {
@@ -55,17 +56,17 @@
 		 		niveles = nivelesModo;
 			}
 		}
-		
-		
+
+
 		session.setAttribute(Globals.LOCALE_KEY, new Locale(language));
 		//System.out.println( "CLM Language: [" + language + "]" + new Locale(language) );
-	
+
 	}catch(Exception ex)
 	{
 		ex.printStackTrace();
 		out.println("ERROR AUTENTICACION: " + ex.toString());
 		return;
 	}
-	
+
 	// ----- FIN PARTICULARIZACION DE CODIGO PARA LOGIN (LO DEMAS IGUAL PARA TRAMITACION Y ZONA PERSONAL) ---------------------
 %>
