@@ -1,8 +1,9 @@
+<%@ page import="es.caib.sistra.persistence.delegate.*,es.caib.sistra.model.*" %>
 <%
 	// ----- PARTICULARIZACION DE CODIGO PARA LOGIN (LO DEMAS IGUAL PARA TRAMITACION Y ZONA PERSONAL) ---------------------
 	String niveles = "CLAVE_CERTIFICADO;CLAVE_PIN;CLAVE_PERMANENTE;ANONIMO;CLIENTCERT";
 	String textoAtencion="";
-	String modo = null;
+	String modo = "";
 
 	try
 	{
@@ -43,18 +44,35 @@
 				}
 			}
 
-			// Filtramos niveles acceso
-			if (modo != null){
-				String nivelesModo = "";
-		 		if (niveles.indexOf("CLAVE_CERTIFICADO") >= 0 && modo.indexOf("C") >= 0 ) nivelesModo += "CLAVE_CERTIFICADO;";
-		 		if (niveles.indexOf("CLIENTCERT") >= 0 && modo.indexOf("C") >= 0 ) nivelesModo += "CLIENTCERT;";
-		 		if (niveles.indexOf("CLAVE_PIN;CLAVE_PERMANENTE") >= 0 && modo.indexOf("U") >= 0 ) nivelesModo += "CLAVE_PIN;CLAVE_PERMANENTE;";
-		 		if (niveles.indexOf("ANONIMO") >= 0 && modo.indexOf("A") >= 0 ) nivelesModo += "ANONIMO";
-		 		if (nivelesModo.endsWith(";")) {
-					nivelesModo = nivelesModo.substring(0, nivelesModo.length() - 1);
-				}
-		 		niveles = nivelesModo;
+			// Obtenemos descripcion y metodos de autenticacion permitidos
+			TramiteVersionDelegate delegate = DelegateUtil.getTramiteVersionDelegate();
+			TramiteVersion tv = delegate.obtenerTramiteVersion(modelo,version);
+			tramite = ((TraTramite) (tv.getTramite().getTraduccion(language))).getDescripcion();
+			String nivelesTramite = "";
+			for (Iterator it = tv.getNiveles().iterator();it.hasNext();){
+				TramiteNivel tn = (TramiteNivel) it.next();
+				nivelesTramite = nivelesTramite + tn.getNivelAutenticacion();
 			}
+
+			// Si se establece modo, no se hace caso de los niveles del tramite
+			String filtroNiveles = null;
+			if (modo.length() > 0){
+				filtroNiveles = modo;
+			} else {
+				filtroNiveles = nivelesTramite;
+			}
+
+			// Filtramos niveles acceso
+			String nivelesModo = "";
+	 		if (niveles.indexOf("CLAVE_CERTIFICADO") >= 0 && (filtroNiveles.indexOf("C") >= 0  )) nivelesModo += "CLAVE_CERTIFICADO;";
+	 		if (niveles.indexOf("CLIENTCERT") >= 0 && filtroNiveles.indexOf("C") >= 0 ) nivelesModo += "CLIENTCERT;";
+	 		if (niveles.indexOf("CLAVE_PIN;CLAVE_PERMANENTE") >= 0 && filtroNiveles.indexOf("U") >= 0 ) nivelesModo += "CLAVE_PIN;CLAVE_PERMANENTE;";
+	 		if (niveles.indexOf("ANONIMO") >= 0 && filtroNiveles.indexOf("A") >= 0 ) nivelesModo += "ANONIMO";
+	 		if (nivelesModo.endsWith(";")) {
+				nivelesModo = nivelesModo.substring(0, nivelesModo.length() - 1);
+			}
+	 		niveles = nivelesModo;
+
 		}
 
 
