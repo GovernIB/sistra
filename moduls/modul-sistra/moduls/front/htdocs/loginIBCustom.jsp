@@ -1,9 +1,11 @@
-<%@ page import="es.caib.sistra.persistence.delegate.*,es.caib.sistra.model.*" %>
+<%@ page import="java.util.*, es.caib.sistra.persistence.delegate.*,es.caib.sistra.model.*" %>
 <%
 	// ----- PARTICULARIZACION DE CODIGO PARA LOGIN (LO DEMAS IGUAL PARA TRAMITACION Y ZONA PERSONAL) ---------------------
 	String niveles = "";
 	String textoAtencion="";
 	String modo = "";
+	String modelo=null;
+	int version=-1;
 
 	try
 	{
@@ -40,6 +42,10 @@
 					else if (element.startsWith("autenticacion="))
 					{
 						modo = element.substring(("autenticacion=").length());
+					} else if (element.startsWith("modelo=")){
+						modelo = element.substring(("modelo=").length());
+					} else if (element.startsWith("version=")){
+						version = Integer.parseInt(element.substring(("version=").length()));
 					}
 				}
 			}
@@ -47,7 +53,6 @@
 			// Obtenemos descripcion y metodos de autenticacion permitidos
 			TramiteVersionDelegate delegate = DelegateUtil.getTramiteVersionDelegate();
 			TramiteVersion tv = delegate.obtenerTramiteVersion(modelo,version);
-			tramite = ((TraTramite) (tv.getTramite().getTraduccion(language))).getDescripcion();
 			String nivelesTramite = "";
 			for (Iterator it = tv.getNiveles().iterator();it.hasNext();){
 				TramiteNivel tn = (TramiteNivel) it.next();
