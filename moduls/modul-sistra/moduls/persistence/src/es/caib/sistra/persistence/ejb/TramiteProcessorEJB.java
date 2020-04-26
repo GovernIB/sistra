@@ -3,7 +3,6 @@ package es.caib.sistra.persistence.ejb;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -95,6 +94,7 @@ import es.caib.sistra.persistence.plugins.ProcedimientoDestinoTramite;
 import es.caib.sistra.persistence.util.GeneradorAsiento;
 import es.caib.sistra.persistence.util.Literales;
 import es.caib.sistra.persistence.util.ScriptUtil;
+import es.caib.sistra.persistence.util.UsernamePasswordCallbackHandler;
 import es.caib.sistra.persistence.util.UtilDominios;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.firma.FicheroFirma;
@@ -107,9 +107,8 @@ import es.caib.sistra.plugins.pagos.EstadoSesionPago;
 import es.caib.sistra.plugins.pagos.PluginPagosIntf;
 import es.caib.sistra.plugins.pagos.SesionPago;
 import es.caib.sistra.plugins.pagos.SesionSistra;
+import es.caib.sistra.plugins.regtel.ConstantesPluginRegistro;
 import es.caib.sistra.plugins.regtel.PluginRegistroIntf;
-import es.caib.sistra.plugins.sms.PluginSmsIntf;
-import es.caib.util.ConvertUtil;
 import es.caib.util.CredentialUtil;
 import es.caib.util.DataUtil;
 import es.caib.util.NifCif;
@@ -128,7 +127,6 @@ import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
 import es.caib.zonaper.persistence.delegate.DelegateException;
 import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
 import es.caib.zonaper.persistence.delegate.PadDelegate;
-import es.caib.sistra.persistence.util.UsernamePasswordCallbackHandler;
 import es.indra.util.pdf.UtilPDF;
 
 // TODO FLUJO TRAMITACION PARA PAGOS
@@ -158,7 +156,7 @@ public class TramiteProcessorEJB implements SessionBean {
 
 	// Indica si hay debug
 	private boolean debugEnabled = false;
-	
+
 	// Indica si hay que consolidar los PDFs formateados
 	private boolean consolidarPdfFormateadoFormularios = false;
 
@@ -230,7 +228,7 @@ public class TramiteProcessorEJB implements SessionBean {
 
 	// Indica si se ha verificado el movil
 	private boolean verificadoMovil;
-	
+
 	public TramiteProcessorEJB() {
 		super();
 	}
@@ -337,7 +335,7 @@ public class TramiteProcessorEJB implements SessionBean {
 
 			// Indica si son obligatorios los avisos para las notificaciones
 			this.avisosObligatoriosNotif = "true".equals(props.getProperty("sistra.avisoObligatorioNotificaciones"));
-			
+
 			// Indica si se deben consolidar los PDFs formateados de formularios
 			this.consolidarPdfFormateadoFormularios = "true".equals(props.getProperty("consolidarPDF.formularios"));
 
@@ -374,8 +372,8 @@ public class TramiteProcessorEJB implements SessionBean {
 	public RespuestaFront obtenerInfoTramite(){
 		return generarRespuestaFront(null, null);
 	}
-	
-	
+
+
 
 	/**
 	 * Obtiene InstanciaBean para poder serializarlo en la capa de front
@@ -1271,7 +1269,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	        		String entidad = obtenerEntidadProcedimiento(tramitePersistentePAD.getIdProcedimiento());
 	    			if (entidad == null)
 	    				throw new Exception("El codigo de procedimiento no es valido");
-	        		
+
 	        		// Creamos los datos del pago
 	        		datosPago = new DatosPago();
 	        		datosPago.setPluginId(PluginFactory.ID_PLUGIN_DEFECTO.equals(docNivel.getPagoPlugin())?null:docNivel.getPagoPlugin());
@@ -1300,7 +1298,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	        		datosPago.setTelefono(calc.getTelefono());
 
 	    	    	// Iniciamos sesion de pago contra el plugin de pagos
-	        		es.caib.sistra.plugins.pagos.DatosPago dp = new es.caib.sistra.plugins.pagos.DatosPago();	        		
+	        		es.caib.sistra.plugins.pagos.DatosPago dp = new es.caib.sistra.plugins.pagos.DatosPago();
 	        		dp.setConcepto(datosPago.getConcepto());
 	        		dp.setFechaDevengo(datosPago.getFechaDevengo());
 	        		dp.setIdioma(datosSesion.getLocale().getLanguage());
@@ -1795,12 +1793,12 @@ public class TramiteProcessorEJB implements SessionBean {
 	    	docRds.setDatosFichero(datosFormNuevos.getBytes());
 	    	docRds.setFirmas( new FirmaIntf[]{} );
 	    	rds.actualizarDocumento(docRds);
-	    	
+
 	    	// En caso de se consoliden los formularios, generamos documento consolidado asociado al formulario
 	    	if (this.consolidarPdfFormateadoFormularios) {
 	    		ReferenciaRDS refConsolidado = rds.generarDocumentoFormateado(docRds.getReferenciaRDS());
 	    	}
-	    	
+
 
 	    	// Reseteamos info de firma delegada
 	    	docPad.setDelegacionEstado(null);
@@ -1991,33 +1989,33 @@ public class TramiteProcessorEJB implements SessionBean {
 
 	    	// Establecemos respuesta front
 	    	HashMap param = new HashMap();
-	    	
+
 	    	byte[] datos = null;
 	    	String formateado = null;
-	    		    	
+
 	    	// Verificamos si tiene documento formateado para pasar el PDF
 	    	DocumentoPersistentePAD docPAD = (DocumentoPersistentePAD) this.tramitePersistentePAD.getDocumentos().get(identificador + "-" + instancia);
     		ReferenciaRDS refRds = docPAD.getRefRDS();
 	    	RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
 	    	DocumentoRDS docRds = rds.consultarDocumento(refRds, false);
 	    	if (docRds.getReferenciaRDSFormateado() != null) {
-	    		DocumentoRDS docRdsFormateado = rds.consultarDocumento(docRds.getReferenciaRDSFormateado(), true); 
+	    		DocumentoRDS docRdsFormateado = rds.consultarDocumento(docRds.getReferenciaRDSFormateado(), true);
 	    		datos = docRdsFormateado.getDatosFichero();
-	    		
+
 	    		// Eliminamos permisos para poder firmarlo
 	    		ByteArrayInputStream is = new ByteArrayInputStream(datos);
-	    		ByteArrayOutputStream os = new ByteArrayOutputStream(datos.length);  
+	    		ByteArrayOutputStream os = new ByteArrayOutputStream(datos.length);
 	    		UtilPDF.eliminarPermisos(os, is);
 	    		is.close();
 	    		os.close();
 	    		datos = os.toByteArray();
-	    		
+
 	    		formateado = "S";
 	    	} else {
 	    		datos = datosForm.getString().getBytes("UTF-8");
 	    		formateado = "N";
 	    	}
-	    	
+
 	    	param.put("datos",datos);
 	    	param.put("formateado", formateado);
 
@@ -2867,7 +2865,7 @@ public class TramiteProcessorEJB implements SessionBean {
     	}
 
     }
-    
+
     /**
      * Recupera DocumentoRDS a partir del idDocumento y el número de instancia
      *
@@ -2896,7 +2894,7 @@ public class TramiteProcessorEJB implements SessionBean {
     	}
 
     }
-    
+
     /**
      * Recupera firma de documentos a partir del idDocumento, número de instancia y NIF del firmante
      *
@@ -2918,7 +2916,7 @@ public class TramiteProcessorEJB implements SessionBean {
 
     		RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
     		DocumentoRDS docRds = rds.consultarDocumento(refRds);
-    		
+
     		FirmaIntf firma = null;
     		if (docRds.getFirmas() != null) {
     			for (int i = 0; i < docRds.getFirmas().length; i++) {
@@ -2928,7 +2926,7 @@ public class TramiteProcessorEJB implements SessionBean {
     				}
     			}
     		}
-    		
+
     		String nombreFichero="Error";
     		byte[] datosFichero="Error".getBytes();
     		String extension = null;
@@ -2942,7 +2940,7 @@ public class TramiteProcessorEJB implements SessionBean {
     			nombreFichero = docRds.getNombreFichero().substring(0,docRds.getNombreFichero().indexOf('.')) + "_" + firma.getNif() + extension;
     			datosFichero = ficheroFirma.getContenido();
     		}
-    		
+
     		// Devolvemos nombre y datos del fichero
     		HashMap param = new HashMap();
     		param.put("nombrefichero",nombreFichero);
@@ -3033,32 +3031,58 @@ public class TramiteProcessorEJB implements SessionBean {
     		boolean tramitacionPresencial = tramiteInfo.getTipoTramitacion() == ConstantesSTR.TIPO_TRAMITACION_PRESENCIAL ||
 			( tramiteInfo.getTipoTramitacion() == ConstantesSTR.TIPO_TRAMITACION_DEPENDIENTE &&
 			  tramiteInfo.getTipoTramitacionDependiente() == ConstantesSTR.TIPO_TRAMITACION_PRESENCIAL);
-    		
-    		
-    		// Si es tramitacion presencial mostramos justificante generado por Sistra.     		
-    		byte[] content = null;
-    		if (tramitacionPresencial) {
-    			content = generarJustificante(true);
-    		} else {
-    			if (tramiteVersion.getDestino() == ConstantesSTR.DESTINO_REGISTRO){
-    			// Si es tramite telematico intentamos mostrar justificante generado por Registro
-    			PluginRegistroIntf plgRegistro = PluginFactory.getInstance().getPluginRegistro();
-    			content = plgRegistro.obtenerJustificanteRegistroEntrada(tramiteInfo.getEntidad(), resultadoRegistro.getNumero(), resultadoRegistro.getFecha());
-    			}
-    			
-    			// Si registro no muestra justificante, mostramos el de la plataforma
-    			if (content == null) {
-    				content = generarJustificante(false);
-    			}
-    		}
-    		    		
 
-    		// Devolvemos nombre y datos del fichero
+
+    		// Si es preregistro mostramos justificante generado por Sistra.
+    		// Si es tramitacion mostramos justificante generado por registro y si no lo genera, muestra generado por Sistra
+    		byte[] content = null;
+    		String referencia = null;
+    		boolean pendienteGenerar = false;
+    		try {
+	    		if (tramitacionPresencial) {
+	    			content = generarJustificante(true);
+	    		} else {
+	    			if (tramiteVersion.getDestino() == ConstantesSTR.DESTINO_REGISTRO){
+		    			// Si es tramite telematico intentamos mostrar justificante generado por Registro
+		    			PluginRegistroIntf plgRegistro = PluginFactory.getInstance().getPluginRegistro();
+		    			switch (plgRegistro.obtenerTipoJustificanteRegistroEntrada()) {
+			    			case ConstantesPluginRegistro.JUSTIFICANTE_DESCARGA:
+		    					content = plgRegistro.obtenerJustificanteRegistroEntrada(tramiteInfo.getEntidad(), resultadoRegistro.getNumero(), resultadoRegistro.getFecha());
+		    					// Si registro no muestra justificante, mostramos el de la plataforma
+			        			if (content == null) {
+			        				content = generarJustificante(false);
+			        			}
+			        			break;
+			    			case ConstantesPluginRegistro.JUSTIFICANTE_REFERENCIA:
+			    				referencia = plgRegistro.obtenerReferenciaJustificanteRegistroEntrada(tramiteInfo.getEntidad(), resultadoRegistro.getNumero(), resultadoRegistro.getFecha());
+			    				break;
+			   				default:
+			   					throw new Exception("Tipo de justificante no permitido: " + plgRegistro.obtenerTipoJustificanteRegistroEntrada());
+		    			}
+	    			}
+	    		}
+    		} catch (Exception ex) {
+				log.warn("No se ha podido obtener justificante de entrada: " + ex.getMessage(), ex);
+				pendienteGenerar = true;
+			}
+
+    		// Devolvemos justificante
     		HashMap param = new HashMap();
-    		// Normalizamos nombre justificante
-    		String nomfic = StringUtil.generarNombreFicheroJustificante(this.datosSesion.getLocale().getLanguage(), resultadoRegistro.getNumero(), resultadoRegistro.getFecha());
-    		param.put("nombrefichero",nomfic);
-    		param.put("datosfichero",content);
+    		if (pendienteGenerar) {
+    			// Indicamos que esta pendiente generar
+    			param.put("pendienteGenerar", "true");
+    		} else {
+	    		if (content != null) {
+		    		// Retornamos contenido justificante
+		    		String nomfic = StringUtil.generarNombreFicheroJustificante(this.datosSesion.getLocale().getLanguage(), resultadoRegistro.getNumero(), resultadoRegistro.getFecha());
+		    		param.put("nombrefichero",nomfic);
+		    		param.put("datosfichero",content);
+	    		} else {
+	    			// Retornamos referencia justificante
+	    			param.put("urlAcceso",referencia);
+	    		}
+    		}
+
     		return this.generarRespuestaFront(null,param);
 
     	}catch (Exception e){
@@ -3076,7 +3100,7 @@ public class TramiteProcessorEJB implements SessionBean {
 
     }
 
-    
+
     // Genera justificante prereregistro
 	private byte[] generarJustificante(boolean tramitacionPresencial) throws Exception {
 		// Comprobamos si mostramos justificante standard o formulario justificante
@@ -3323,7 +3347,7 @@ public class TramiteProcessorEJB implements SessionBean {
     {
     	this.habilitarNotificacionTelematica = new Boolean(habilitarNotificacion);
     	this.emailAviso = emailAviso;
-    	if (tramiteInfo.isPermiteSMS()) {  
+    	if (tramiteInfo.isPermiteSMS()) {
     		this.smsAviso = smsAviso;
     	}
     }
@@ -3338,12 +3362,12 @@ public class TramiteProcessorEJB implements SessionBean {
     public void resetHabilitarNotificacion() {
     	this.habilitarNotificacionTelematica = null;
     	this.emailAviso = null;
-    	if (tramiteInfo.isPermiteSMS()) {    			
+    	if (tramiteInfo.isPermiteSMS()) {
     		this.smsAviso = null;
     	}
     }
 
-    
+
     /**
      * Verificacion movil.
      *
@@ -3353,16 +3377,16 @@ public class TramiteProcessorEJB implements SessionBean {
      */
     public boolean verificarMovil(String smsCodigo)
     {
-    	
+
     	boolean verificado = false;
-    	
+
     	try {
     		if (StringUtils.equalsIgnoreCase(this.codigoSmsVerificarMovil, smsCodigo) ) {
 	    		// Registramos en log
 		    	DelegatePADUtil.getPadDelegate().logSmsVerificarMovil(this.tramitePersistentePAD.getIdPersistencia(), this.smsAviso, this.codigoSmsVerificarMovil);
 		    	// Indicamos que se ha verificado
 		    	verificado = true;
-	    	}	    	
+	    	}
     	}catch (Exception e){
     		log.error(mensajeLog("Exception al mostrar documento consulta"),e);
 
@@ -3374,11 +3398,11 @@ public class TramiteProcessorEJB implements SessionBean {
     		RespuestaFront resFront = generarRespuestaFront(mens,null);
     		setRollbackOnly();
     	}
-    	
+
     	this.verificadoMovil = verificado;
     	return this.verificadoMovil;
     }
-    
+
     /**
      * Enviar codigo de nuevo.
      *
@@ -3389,12 +3413,12 @@ public class TramiteProcessorEJB implements SessionBean {
     public void resetCodigoSmsVerificarMovil()
     {
     	// Reseteamos codigo para que se vuelva a enviar SMS al ir a paso
-    	this.codigoSmsVerificarMovil = null;    	
+    	this.codigoSmsVerificarMovil = null;
     }
-    
-    
 
-    
+
+
+
     //  -------------------------------------------------------
     // 	---------- Funciones auxiliares -----------------------
     //  -------------------------------------------------------
@@ -3726,7 +3750,7 @@ public class TramiteProcessorEJB implements SessionBean {
     private void inicializarTramite() throws Exception{
     	try{
 	    	RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
-	    	
+
 	    	tramitePersistentePAD = new TramitePersistentePAD();
 	    	tramitePersistentePAD.setTramite(tramiteVersion.getTramite().getIdentificador());
 	    	tramitePersistentePAD.setVersion(tramiteVersion.getVersion());
@@ -3740,13 +3764,13 @@ public class TramiteProcessorEJB implements SessionBean {
 	    			tramitePersistentePAD.setDelegado(datosSesion.getCodigoDelegado());
 	    		}
 	    	}
-	    	
+
 	    	// Almacenamos los parametros de inicio del trámite
 	    	tramitePersistentePAD.setParametrosInicio(this.parametrosInicio);
-	    	
+
 	    	// Indica si es persistente (si no es circuito reducido)
 	    	tramitePersistentePAD.setPersistente(isCircuitoReducido( tramiteVersion, this.datosSesion.getNivelAutenticacion())?"N":"S");
-	    	
+
 	    	// Fecha de caducidad
 	    	tramitePersistentePAD.setFechaCaducidad(this.getFechaCaducidad());
 
@@ -4044,14 +4068,14 @@ public class TramiteProcessorEJB implements SessionBean {
                    if (this.tramitePersistentePAD != null && this.tramitePersistentePAD.getDocumentos() != null) {
                           infoDebug += " / Documentos:";
                           for (Iterator it = this.tramitePersistentePAD.getDocumentos().keySet().iterator(); it.hasNext();) {
-                                 infoDebug += " " + it.next().toString(); 
+                                 infoDebug += " " + it.next().toString();
                           }
                    }
             } catch (Exception e1){
                    // No hacemos nada
             }
             log.error("Error al cargar el trámite persistente: " + infoDebug);
-            
+
             // Damos el tramite como no inicializado
             this.tramitePersistentePAD = null;
             throw (new ProcessorException("Error al cargar el trámite persistente", MensajeFront.MENSAJE_ERRORDESCONOCIDO,e));
@@ -4098,6 +4122,13 @@ public class TramiteProcessorEJB implements SessionBean {
     		tramiteInfo.setIdPersistencia(tramitePersistentePAD.getIdPersistencia());
     		tramiteInfo.setTipoTramitacion(this.tipoTramitacion);
     		tramiteInfo.setPasos(this.pasosTramitacion);
+
+    		if (tramiteVersion.getDestino() == ConstantesSTR.DESTINO_REGISTRO) {
+    			PluginRegistroIntf plgRegistro = PluginFactory.getInstance().getPluginRegistro();
+    			if (plgRegistro.obtenerTipoJustificanteRegistroEntrada() == ConstantesPluginRegistro.JUSTIFICANTE_REFERENCIA) {
+    				tramiteInfo.setJustificanteRedireccion(true);
+    			}
+    		}
 
     		// Plazo presentacion
     		if (this.configuracionDinamica.isPlazoDinamico()){
@@ -4223,11 +4254,11 @@ public class TramiteProcessorEJB implements SessionBean {
 
     		// Indicamos si son obligatorias los avisos para las notificaciones
     		tramiteInfo.setObligatorioAvisosNotificaciones(this.avisosObligatoriosNotif);
-    		
+
     		// Verificacion movil en paso registro
     		if ( !ConstantesSTR.VERIFICARMOVIL_SINESPECIFICAR.equals(espNivel.getVerificarMovil())){
     			tramiteInfo.setVerificarMovil(ConstantesSTR.VERIFICARMOVIL_HABILITADA.equals(espNivel.getVerificarMovil()));
-    		}else { 
+    		}else {
     			tramiteInfo.setVerificarMovil(ConstantesSTR.VERIFICARMOVIL_HABILITADA.equals(espTramite.getVerificarMovil()));
     		}
 
@@ -4317,11 +4348,11 @@ public class TramiteProcessorEJB implements SessionBean {
     	if (tramiteInfo.getHabilitarNotificacionTelematica() != ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA) {
     		tramiteInfo.setSeleccionNotificacionTelematica(this.habilitarNotificacionTelematica);
     	}
-    	
+
     	// Establece email / sms
     	tramiteInfo.setSeleccionEmailAviso(this.emailAviso);
 	    tramiteInfo.setSeleccionSmsAviso(this.smsAviso);
-	    
+
     	// Establece en caso de flujo de tramitación si esta en estado de pasar y a quien
     	// Si esta pendiente de pasar establece el campo flujoTramitacionNif
     	calcularFlujoTramitacion(tramiteInfo);
@@ -4331,7 +4362,7 @@ public class TramiteProcessorEJB implements SessionBean {
     	//  - en caso de que haya documentos pendientes de firma se puede enviar a bandeja de firma
     	//
     	calcularDelegacion(tramiteInfo);
-    	
+
     	// Indica si se ha verificado el movil
     	tramiteInfo.setVerificadoMovil(verificadoMovil);
     }
@@ -4368,8 +4399,8 @@ public class TramiteProcessorEJB implements SessionBean {
 		    					)
 		    			)
 		    	&& ( ( Documento ) tramiteVersion.getDocumentos().iterator().next() ).getTipo() == Documento.TIPO_FORMULARIO
-		    	&& ( ( Documento ) tramiteVersion.getDocumentos().iterator().next() ).getDocumentoNivel( nivelAutenticacion ).getFirmar() == 'N' 
-		    	&& (  !ConstantesSTR.VERIFICARMOVIL_HABILITADA.equals(tramiteVersion.getEspecificaciones().getVerificarMovil()) 
+		    	&& ( ( Documento ) tramiteVersion.getDocumentos().iterator().next() ).getDocumentoNivel( nivelAutenticacion ).getFirmar() == 'N'
+		    	&& (  !ConstantesSTR.VERIFICARMOVIL_HABILITADA.equals(tramiteVersion.getEspecificaciones().getVerificarMovil())
 		    			&& !ConstantesSTR.VERIFICARMOVIL_HABILITADA.equals(tn.getEspecificaciones().getVerificarMovil())) ;
     }
 
@@ -4670,19 +4701,19 @@ public class TramiteProcessorEJB implements SessionBean {
 
 			// Evaluamos estado firma documentos y que firmas tienen representacion
 			if (docInfo.getEstado() == DocumentoFront.ESTADO_CORRECTO){
-				
+
 				List firmas = (List) this.firmaDocumentos.get(docPad.getRefRDS().toString());
-				
+
 				docInfo.setFirmado(firmas != null);
-				
+
 				if (firmas != null) {
 					 for (Iterator it=firmas.iterator();it.hasNext();){
 			    		 FirmaIntf f = (FirmaIntf) it.next();
 			    		 if (StringUtils.isNotBlank(f.getNifRepresentante())) {
 			    			 docInfo.getRepresentantesFirmas().put(f.getNif(), f.getNombreApellidosRepresentante() + " (" + f.getNifRepresentante() + ")");
-			    		 }		    		 
+			    		 }
 			    	 }
-				}		
+				}
 			}
 
 			// Comprobamos si te tiene que firmar de forma delegada
@@ -4713,7 +4744,7 @@ public class TramiteProcessorEJB implements SessionBean {
 			docInfo.setPendienteFirmaDelegada(DocumentoPersistentePAD.ESTADO_PENDIENTE_DELEGACION_FIRMA.equals(docPad.getDelegacionEstado()));
 			// Indicamos si la ha rechazado un delegado
 			docInfo.setRechazadaFirmaDelegada(DocumentoPersistentePAD.ESTADO_RECHAZADO_DELEGACION_FIRMA.equals(docPad.getDelegacionEstado()));
-						
+
 		}
 
 		if (docNivel.getTraduccion() != null)
@@ -4974,7 +5005,7 @@ public class TramiteProcessorEJB implements SessionBean {
     			// CASO NO POSIBLE, NO SE PUEDE  NO SE PUEDE PASAR DEL PASO DE PAGOS
     			// SI HAY PAGOS CON ESTADO ES INCORRECTO
     			//eliminarPagosNoFinalizados();
-    			
+
     			boolean pendienteFlujo = paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_FLUJO);
     			boolean pendienteDelegacion = paso.getCompletado().equals(PasoTramitacion.ESTADO_PENDIENTE_DELEGACION_PRESENTACION);
     			boolean pendienteSeleccionarNotif = (!tramiteInfo.getHabilitarNotificacionTelematica().equals(ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA) && tramiteInfo.getSeleccionNotificacionTelematica() == null);
@@ -4995,22 +5026,22 @@ public class TramiteProcessorEJB implements SessionBean {
 		    				// cambiamos de UA todos los docs en el RDS
 		    				if (dt.isCalculado()) cambiarUADocs(dt);
 		    				// Establecemos el asiento como parametro del paso
-		    				param.put("asiento",asiento);		    				
+		    				param.put("asiento",asiento);
     			}
-    			
+
     			// Calculamos email/movil contacto por defecto (script datos contacto o info zona personal)
     		    // 	- si esta pendiente de seleccionar la notificacion
     		    //  - si hay que verificar movil
     		    if ( pendienteSeleccionarNotif || pendienteEnvioSmsVerificacion) {
     		    	this.emailAviso = calcularEmailAvisoDefecto();
-    		    	this.smsAviso = calcularSmsAvisoDefecto();	
-    		    }			    			
-    		    			
+    		    	this.smsAviso = calcularSmsAvisoDefecto();
+    		    }
+
     		    // Si hay que verificar movil enviamos SMS
     		    if (pendienteEnvioSmsVerificacion) {
-    		    	codigoSmsVerificarMovil = enviarCodigoSmsVerificarMovil(this.smsAviso);    				
+    		    	codigoSmsVerificarMovil = enviarCodigoSmsVerificarMovil(this.smsAviso);
     		    }
-    		    			
+
     		    param.put("emailAvisoDefault", this.emailAviso);
     			param.put("smsAvisoDefault", this.smsAviso);
 
@@ -5026,15 +5057,15 @@ public class TramiteProcessorEJB implements SessionBean {
     	}
     	return param;
     }
-    
+
     /**
      * Envia código de verificación al móvil.
      * @param movil numero movil
      * @return
      */
     private String enviarCodigoSmsVerificarMovil(String movil) throws Exception {
-    	LoginContext lc = null;		
-		try{					
+    	LoginContext lc = null;
+		try{
 			Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
 			String caducidad = props.getProperty("envio.verificarMovil.minutosCaducidad");
 			int minutosCaducidad = 0;
@@ -5043,21 +5074,21 @@ public class TramiteProcessorEJB implements SessionBean {
 			}
 			String user = props.getProperty("auto.user");
 			String pass = props.getProperty("auto.pass");
-			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass ); 					
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass );
 			lc = new LoginContext("client-login", handler);
 			lc.login();
-			
+
 			String codigo = generateCodigoSms();
 	    	DelegatePADUtil.getPadDelegate().enviarSmsVerificarMovil(this.tramitePersistentePAD.getIdPersistencia(), this.tramitePersistentePAD.getIdProcedimiento(),
-	    				movil, codigo, this.tramitePersistentePAD.getIdioma(), minutosCaducidad);    			
+	    				movil, codigo, this.tramitePersistentePAD.getIdioma(), minutosCaducidad);
 			return codigo;
-			
-		}finally{				
+
+		}finally{
 			// Hacemos el logout
 			if ( lc != null ){
 				try{lc.logout();}catch(Exception exl){}
 			}
-		}			    
+		}
 	}
 
     /**
@@ -5645,13 +5676,13 @@ public class TramiteProcessorEJB implements SessionBean {
 				// Si se accede como ciudadano ponemos como usuario el usuario autenticado
 				datosSesion.setCodigoUsuario(sp.getName());
 				datosSesion.setPersonaPAD(personaPAD);
-				
+
 				// Establecemos datos representante certificado si lo admite el plugin
 				if (plgLogin.getMetodoAutenticacion(sp) == CredentialUtil.NIVEL_AUTENTICACION_CERTIFICADO) {
 					DatosRepresentanteCertificado drc = obtenerDatosRepresentanteCertificado(plgLogin, sp);
 					datosSesion.setDatosRepresentanteCertificado(drc);
 				}
-				
+
 			}else{
 				throw new Exception("Perfil de acceso no valido: " + perfilAcceso);
 			}
@@ -5725,7 +5756,7 @@ public class TramiteProcessorEJB implements SessionBean {
 
     	DestinatarioTramite destTra = new DestinatarioTramite();
     	ProcedimientoDestinoTramite procDest = this.calcularProcedimientoDestinoTramite();
-    	
+
     	destTra.setCalculado(false);
     	destTra.setOficinaRegistral(tramiteVersion.getRegistroOficina());
     	destTra.setOrganoDestino(tramiteVersion.getOrganoDestino());
@@ -5740,7 +5771,7 @@ public class TramiteProcessorEJB implements SessionBean {
 
 			// Validamos resultado calculo
 			destTra.setCalculado(true);
-			
+
 			// Obtenemos entidad procedimiento
 			String entidad = obtenerEntidadProcedimiento(destTra.getProcedimiento());
 			if (entidad == null)
@@ -5756,7 +5787,7 @@ public class TramiteProcessorEJB implements SessionBean {
 
 		return destTra;
 	}
-	
+
 	/**
 	 * Calcula dinámicamente el procedimiento destino tramite según script
 	 * @return
@@ -5999,7 +6030,7 @@ public class TramiteProcessorEJB implements SessionBean {
 		if (diasPersistencia <= 0) {
 			diasPersistencia = 365;
 		}
-		
+
 		// Si es circuito reducido damos 1 dia para que termine
 		if (isCircuitoReducido( tramiteVersion, this.datosSesion.getNivelAutenticacion())) {
 			diasPersistencia = 1;
@@ -6445,7 +6476,7 @@ public class TramiteProcessorEJB implements SessionBean {
 
 	 /**
 	  * Valida si la oficina de registro es válida
-	 * @param entidad 
+	 * @param entidad
 	  * @param codOrgano Codigo oficina
 	  * @return true/false
 	  * @throws Exception
@@ -6465,7 +6496,7 @@ public class TramiteProcessorEJB implements SessionBean {
 	 /**
 	  * Valida si el codigo de organo destino es válido
 	  * @param codOrgano Codigo organos destino
-	 * @param entidad 
+	 * @param entidad
 	  * @return true/false
 	  * @throws Exception
 	  */
@@ -6691,19 +6722,19 @@ public class TramiteProcessorEJB implements SessionBean {
 		   this.context.setRollbackOnly();
 	   }
    }
-   
+
    private String generateCodigoSms(){
 	   SecureRandom sr = new SecureRandom();
 		String rn = "" + sr.nextInt(9999);
 		rn = StringUtils.leftPad(rn, 4, '0');
 		return rn;
    }
-   
-   
+
+
    private DatosRepresentanteCertificado obtenerDatosRepresentanteCertificado(PluginLoginIntf plgLogin, Principal sp) {
-	   	
+
 	    DatosRepresentanteCertificado res = null;
-	   
+
 		try{
 			// Detectamos si el plugin lo admite
 			Method m = null;
@@ -6718,12 +6749,12 @@ public class TramiteProcessorEJB implements SessionBean {
 				res.setApellido1(plgLogin.getRepresentanteApellido1(sp));
 				res.setApellido2(plgLogin.getRepresentanteApellido2(sp));
 			}
-			
+
 		}catch (java.lang.NoSuchMethodException ex){
 			res = null;
 		}
-		
+
 		return res;
    }
-    
+
 }

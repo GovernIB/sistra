@@ -76,6 +76,7 @@ public class Constants implements Serializable {
 	public static final String NOMBREFICHERO_KEY = "nombrefichero";
 	public static final String DATOSFICHERO_KEY = "datosfichero";
 	public static final String URLFICHERO_KEY = "urlAcceso";
+	public static final String PENDIENTE_GENERAR_KEY = "pendienteGenerar";
 
 	public static final String DATOS_SESION_PARAMS_KEY 			= "datossesion";
 	public static final String NIVELES_AUTENTICACION_PARAMS_KEY 	= "niveles";
@@ -122,14 +123,14 @@ public class Constants implements Serializable {
 	public static final String URL_REDIRECCION_SESSION_KEY ="es.caib.sistra.front.URL_REDIRECCION_SESSION_KEY";
 
 	public static final String MENSAJE_DEBUG_TRAMITE_DESC_KEY = "msgDebugTramiteDesc";
-	
+
 	public static final String MENSAJE_DEBUG_TRAMITE_ID_KEY = "msgDebugTramiteId";
 
 	public static final String MENSAJE_DEBUG_AUTENTICACION = "msgDebugAutenticacion";
-	
+
 	public static final String MENSAJE_DEBUG_TRAMITE_CLAVEPERSISTENCIA = "msgDebugPersistencia";
-	
+
 	public static final String MENSAJE_DEBUG_TRAMITE_NIF_USUARIO = "msgDebugNifUsuario";
-	
+
 	public static final String FORMULARIO_INCIDENCIAS = "FORMULARIO_INCIDENCIAS";
 }

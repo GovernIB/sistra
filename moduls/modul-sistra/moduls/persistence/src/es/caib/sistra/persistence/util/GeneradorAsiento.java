@@ -90,10 +90,11 @@ public class GeneradorAsiento {
 			DatosDesglosadosInteresado datosRpte, DatosDesglosadosInteresado datosRpdo, DestinatarioTramite dt, boolean debugEnabled) throws Exception{
 
 		try{
-			
-			// Obtenemos entidad procedimiento
-			String entidad = obtenerEntidadProcedimiento(tramitePAD.getIdProcedimiento());
-			
+
+			// Obtenemos info procedimiento
+			ProcedimientoBTE procBTE = obtenerProcedimiento(tramitePAD.getIdProcedimiento());
+			String entidad = procBTE.getEntidad().getIdentificador();
+
 			RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
 			DocumentoPersistentePAD docPAD;
 			DocumentoRDS docRDS;
@@ -160,7 +161,7 @@ public class GeneradorAsiento {
 			}else{
 				dInteresadoRpte.setTipoIdentificacion (new Character (ConstantesAsientoXML.DATOSINTERESADO_TIPO_IDENTIFICACION_NIF));
 			}
-						
+
 			dInteresadoRpte.setNumeroIdentificacion (datosRpte.getNif());
 			dInteresadoRpte.setFormatoDatosInteresado (ConstantesAsientoXML.DATOSINTERESADO_FORMATODATOSINTERESADO_APENOM);
 
@@ -419,6 +420,9 @@ public class GeneradorAsiento {
 		//	En caso de que existan instrucciones específicas se muestran
 		//
 
+
+		ProcedimientoBTE procBTE = obtenerProcedimiento(tramitePAD.getIdProcedimiento());
+
 		// Personalizacion justificante estandar
 		String ocultarClave = obtenerOcultarClaveTramitacion(especVersion,
 				especNivel);
@@ -434,9 +438,9 @@ public class GeneradorAsiento {
 			instruccionesTextCircuitoTelematico = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"mensaje.datospropios.telematico");
 			instruccionesTextCircuitoPresencial = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"mensaje.datospropios.presencial");
 			instruccionesTextCircuitoPresencialPuntos = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"mensaje.datospropios.presencial.puntosRegistro");
-			
+
 			String puntosRegistro = StringUtils.defaultString(ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("organismo.puntosEntregaDoc.url"), "");
-			
+
 			if (!puntosRegistro.isEmpty()){
 				instruccionesTextCircuitoPresencialPuntos = StringUtil.replace(instruccionesTextCircuitoPresencialPuntos, "#PUNTOS_REGISTRO#", puntosRegistro);
 				instruccionesTextCircuitoPresencial = instruccionesTextCircuitoPresencial + " " + instruccionesTextCircuitoPresencialPuntos;
@@ -475,6 +479,7 @@ public class GeneradorAsiento {
 
 		// ---- Identificador de procedimiento
 		instrucciones.setIdentificadorProcedimiento(dt.getProcedimiento());
+		instrucciones.setIdentificadorSIA(procBTE.getIdSIA());
 
 		// ---- Opciones notificacion telematica
 		establecerOpcionesNotificacion(tramiteInfo, instrucciones);
@@ -912,7 +917,7 @@ public class GeneradorAsiento {
 	private static String obtenerDescripcionOrgano(String entidad, String codOrgano) throws Exception{
 
 		String desc = DelegateRegtelUtil.getRegistroTelematicoDelegate().obtenerDescServiciosDestino(codOrgano);
-		
+
 		if (desc != null){
 			return desc;
 		}
@@ -1043,11 +1048,9 @@ public class GeneradorAsiento {
 		}
 		return direccion;
 	}
-	
-	private static String obtenerEntidadProcedimiento(String idProcedimiento) throws Exception {
-		String entidad;
+
+	private static ProcedimientoBTE obtenerProcedimiento(String idProcedimiento) throws Exception {
 		ProcedimientoBTE proc = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(idProcedimiento);
-		entidad = proc.getEntidad().getIdentificador();
-		return entidad;
+		return proc;
 	}
 }

@@ -19,17 +19,17 @@ public class TramiteFront  implements Serializable{
 	 * Fecha creacion tramite.
 	 */
 	private Date fechaCreacion;
-	
+
 	/**
 	 * Entidad.
 	 */
 	private String entidad;
-	
+
 	/**
 	 * Id procedimiento.
 	 */
 	private String idProcedimiento;
-	
+
 	/**
 	 * Modelo del trámite
 	 */
@@ -122,6 +122,10 @@ public class TramiteFront  implements Serializable{
 	 * Indica si el trámite se debe registrar
 	 */
 	private boolean registrar;
+	/**
+	 * Indica si el justificante de registro se muestra por redirección.
+	 */
+	private boolean justificanteRedireccion;
 	/**
 	 * Indica si el trámite es de tipo consulta
 	 */
@@ -225,12 +229,12 @@ public class TramiteFront  implements Serializable{
 	 * Debug enabled.
 	 */
 	private boolean debugEnabled;
-	
+
 	/**
 	 * Indica si se debe verificar el movil en paso de registro.
 	 */
 	private boolean verificarMovil;
-	
+
 	/**
 	 * Indica si se ha verificado el movil en caso de que se deba verificar el movil en paso de registro.
 	 */
@@ -647,5 +651,12 @@ public class TramiteFront  implements Serializable{
 	public void setEntidad(String entidad) {
 		this.entidad = entidad;
 	}
+	public boolean isJustificanteRedireccion() {
+		return justificanteRedireccion;
+	}
+	public void setJustificanteRedireccion(boolean justificanteRedireccion) {
+		this.justificanteRedireccion = justificanteRedireccion;
+	}
+
 
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
-    
+
 <hibernate-mapping>
 <class  name="es.caib.bantel.model.Procedimiento" table="BTE_PROAPL">
 	<cache usage="read-write"/>
@@ -12,48 +12,50 @@
           </generator>
     </id>
 
-	<property name="identificador"  column="TAP_IDEPRO" length="100" not-null="true"/> 
+	<property name="identificador"  column="TAP_IDEPRO" length="100" not-null="true"/>
 	<property name="entidad" column="TAP_IDEENT"  not-null="true"/>
 	<property name="idProcExt" column="TAP_IDEPEX" length="20" />
+	<property name="idProcSia" column="TAP_IDESIA " length="100" />
+
     <property name="inmediata"  column="TAP_INMED" length="1"/>
     <property name="periodica"  column="TAP_PERIO" length="1"/>
-       
-  	<property name="tipoAcceso"  column="TAP_TIPACC" length="1" not-null="true"/> 
-  	<property name="url"  column="TAP_URL" length="500" />   	
+
+  	<property name="tipoAcceso"  column="TAP_TIPACC" length="1" not-null="true"/>
+  	<property name="url"  column="TAP_URL" length="500" />
   	<property name="versionWS"  column="TAP_WSVER" length="10" />
-  	<property name="localizacionEJB"  column="TAP_EJBREM" length="1" not-null="true"/> 
-  	<property name="autenticacionEJB"  column="TAP_EJBAUT" length="1" not-null="true"/>   	 
+  	<property name="localizacionEJB"  column="TAP_EJBREM" length="1" not-null="true"/>
+  	<property name="autenticacionEJB"  column="TAP_EJBAUT" length="1" not-null="true"/>
   	<property name="jndiEJB"  column="TAP_JNDI" length="100" />
-  	<property name="usr"  column="TAP_USR" length="200" /> 
-  	<property name="pwd"  column="TAP_PWD" length="50" />   	
+  	<property name="usr"  column="TAP_USR" length="200" />
+  	<property name="pwd"  column="TAP_PWD" length="50" />
   	<property name="rolAcceso" column="TAP_ROL" length="100"/>
   	<property name="ultimoAviso" column="TAP_AVISO"/>
-  	<property name="errores" type="binary" column="TAP_ERRORS"/>  
-  	
+  	<property name="errores" type="binary" column="TAP_ERRORS"/>
+
   	<property name="unidadAdministrativa" column="TAP_UNIADM"/>
   	<property name="permitirSms" column="TAP_SMS" not-null="true"/>
   	<property name="oficinaRegistro" column="TAP_REGOFI"/>
   	<property name="organoRegistro" column="TAP_REGORG"/>
-  	
+
   	<property name="accesoClaveDefecto" column="TAP_CLAVE"/>
-  	
+
   	<property name="avisarNotificaciones" column="TAP_AVINOT" not-null="true"/>
-  	
+
   	<property name="soapActionWS" column="TAP_WSSOA"/>
-  	
+
   	<property name="permitirPlazoNotificacionesVariable" column="TAP_PLNOTV"/>
-  	
+
   	<property name="remitenteAvisosProcedimiento" column="TAP_AVIREM"/>
   	<property name="emailRespuestaAvisosProcedimiento" column="TAP_AVIREP"/>
-  	
+
   	<property name="emailIncidencias" column="TAP_AVIINC"/>
-  	
-  	
+
+
   	<set name="gestores" table="BTE_GESPRO" inverse="true">
         <key column="GAP_CODPRO"/>
         <many-to-many column="GAP_CODGES" class="es.caib.bantel.model.GestorBandeja"/>
     </set>
-    
+
     <map name="traducciones" cascade="all" table="BTE_TRAPRO">
           <cache usage="read-write"/>
           <key column="PRO_CODPRO"/>
@@ -62,6 +64,6 @@
               <property name="descripcion" column="PRO_DESC"/>
           </composite-element>
      </map>
-  	
+
 </class>
 </hibernate-mapping>

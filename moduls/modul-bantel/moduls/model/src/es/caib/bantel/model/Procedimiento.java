@@ -10,25 +10,26 @@ import es.caib.bantel.model.Traducible;
 import es.caib.bantel.model.TraProcedimiento;
 
 public class Procedimiento extends Traducible implements Serializable{
-	
+
 	// Tipo de acceso al BackOffice para realizar los avisos
 	public final static char ACCESO_EJB='E';
 	public final static char ACCESO_WEBSERVICE='W';
-	
+
 	// localizacionEJB
 	public final static char EJB_REMOTO = 'R';
 	public final static char EJB_LOCAL  = 'L';
-	
+
 	// tipoAccesoEJB
 	public final static char AUTENTICACION_SIN 	= 'N';
 	public final static char AUTENTICACION_ESTANDAR 	= 'S';
 	public final static char AUTENTICACION_ORGANISMO 	= 'C';
-		
+
 	private Long codigo;
 	private String identificador;
 
 	private String entidad;
 	private String idProcExt;
+	private String idProcSia;
 	private char inmediata = 'N';
 	private char periodica = 'N';
 	//private Long intervaloInforme;
@@ -42,18 +43,18 @@ public class Procedimiento extends Traducible implements Serializable{
 	private String usr;
 	private String pwd;
 	private String rolAcceso;
-	private Date ultimoAviso;	
+	private Date ultimoAviso;
 	private byte[] errores;
 	private Set gestores = new HashSet(0);
 	private Long unidadAdministrativa;
 	private String permitirSms = "S";
 	private String avisarNotificaciones = "N";
 	private String permitirPlazoNotificacionesVariable = "N";
-	
+
 	private String oficinaRegistro;
 	private String organoRegistro;
 	private String accesoClaveDefecto = "N";
-	
+
 	/**
 	 * Indica remitente para avisos procedimiento.
 	 */
@@ -62,12 +63,12 @@ public class Procedimiento extends Traducible implements Serializable{
 	 * Indica email respuesta para avisos procedimiento.
 	 */
 	private String emailRespuestaAvisosProcedimiento;
-	
+
 	/**
 	 * Indica email para envío de incidencias
 	 */
 	private String emailIncidencias;
-	
+
 
 	public Long getCodigo() {
 		return codigo;
@@ -75,21 +76,21 @@ public class Procedimiento extends Traducible implements Serializable{
 	public void setCodigo(Long codigo) {
 		this.codigo = codigo;
 	}
-	
+
 	public String getIdentificador() {
 		return identificador;
 	}
 	public void setIdentificador(String identificador) {
 		this.identificador = identificador;
 	}
-	
+
 	public String getIdProcExt() {
 		return idProcExt;
 	}
 	public void setIdProcExt(String idProcExt) {
 		this.idProcExt = idProcExt;
 	}
-	
+
 /*	public String getDescripcion() {
 		return descripcion;
 	}
@@ -150,7 +151,7 @@ public class Procedimiento extends Traducible implements Serializable{
 	}
 	public void setTipoAcceso(char tipoAcceso) {
 		this.tipoAcceso = tipoAcceso;
-	}	
+	}
 	public String getUrl() {
 		return url;
 	}
@@ -174,9 +175,9 @@ public class Procedimiento extends Traducible implements Serializable{
 	}
 	public void setAutenticacionEJB(char autenticacionEJB) {
 		this.autenticacionEJB = autenticacionEJB;
-	}	
-	
-	
+	}
+
+
 	public boolean avisosEnabled(){
 		return (this.getPeriodica() == 'S');
 	}
@@ -185,7 +186,7 @@ public class Procedimiento extends Traducible implements Serializable{
 	}
 	public void setUltimoAviso(Date ultimoAviso) {
 		this.ultimoAviso = ultimoAviso;
-	}	
+	}
 	public byte[] getErrores() {
 		return errores;
 	}
@@ -270,5 +271,11 @@ public class Procedimiento extends Traducible implements Serializable{
     public void addTraduccion(String lang, TraProcedimiento traduccion) {
         setTraduccion(lang, traduccion);
     }
-	
+	public String getIdProcSia() {
+		return idProcSia;
+	}
+	public void setIdProcSia(String idProcSia) {
+		this.idProcSia = idProcSia;
+	}
+
 }
