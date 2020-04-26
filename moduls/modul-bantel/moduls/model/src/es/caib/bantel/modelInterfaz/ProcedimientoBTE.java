@@ -13,13 +13,18 @@ public class ProcedimientoBTE implements Serializable {
 	 */
 	private String identificador;
 	/**
+	 * Identificador SIA.
+	 */
+	private String idSIA;
+
+	/**
 	 * Entidad.
 	 */
 	private EntidadBTE entidad;
 	/**
 	 * Descripción.
 	 */
-	private String descripcion;	
+	private String descripcion;
 	/**
 	 * Unidad administrativa.
 	 */
@@ -48,7 +53,7 @@ public class ProcedimientoBTE implements Serializable {
 	 * Emails gestores.
 	 */
 	private List emailGestores = new ArrayList();
-	
+
 	public String getRemitenteAvisosProcedimiento() {
 		return remitenteAvisosProcedimiento;
 	}
@@ -62,15 +67,15 @@ public class ProcedimientoBTE implements Serializable {
 			String emailRespuestaAvisosProcedimiento) {
 		this.emailRespuestaAvisosProcedimiento = emailRespuestaAvisosProcedimiento;
 	}
-	
+
 	public String getEmailIncidencias() {
 		return emailIncidencias;
 	}
 	public void setEmailIncidencias(String emailIncidencias) {
 		this.emailIncidencias = emailIncidencias;
 	}
-	
-	
+
+
 	public String getIdentificador() {
 		return identificador;
 	}
@@ -114,5 +119,11 @@ public class ProcedimientoBTE implements Serializable {
 	public void setEntidad(EntidadBTE entidad) {
 		this.entidad = entidad;
 	}
-	
+	public String getIdSIA() {
+		return idSIA;
+	}
+	public void setIdSIA(String idSIA) {
+		this.idSIA = idSIA;
+	}
+
 }

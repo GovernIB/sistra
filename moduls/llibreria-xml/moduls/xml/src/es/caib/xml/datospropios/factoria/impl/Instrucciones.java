@@ -7,20 +7,21 @@ import es.caib.xml.EstablecerPropiedadException;
 /** Objeto de Instrucciones que encapsula el nodo XML INSTRUCCIONES de los documentos
  * XML de datos propios. Para la implementación se usa un objeto
  * generado mediante el API JAXB (Java Application XML Binding).
- * 
+ *
  * Campos requeridos: TextoInstrucciones
- * 
+ *
  * @author magroig
  *
  */
 public class Instrucciones extends NodoBaseDatosPropios  {
-			
+
 	private String textoInstrucciones;
 	private DocumentosEntregar documentosEntregar;
 	private Date fechaTopeEntrega;
 	private String textoFechaTopeEntrega;
 	private String identificadorPersistencia;
 	private String identificadorProcedimiento;
+	private String identificadorSIA;
 	private String habilitarNotificacionTelematica;
 	private String habilitarAvisos;
 	private String avisoSMS;
@@ -29,39 +30,39 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 	private FormulariosJustificante formulariosJustificante;
 	private PersonalizacionJustificante personalizacionJustificante;
 	private AlertasTramitacion alertasTramitacion;
-	
-	
+
+
 	Instrucciones (){
 		textoInstrucciones = null;
 		documentosEntregar = null;
 		fechaTopeEntrega = null;
-		identificadorPersistencia = null;	
+		identificadorPersistencia = null;
 		identificadorProcedimiento = null;
 		alertasTramitacion = null;
 	}
-			
+
 	/* (non-Javadoc)
 	 * @see es.caib.xml.datospropios.factoria.Instrucciones#getTextoInstrucciones()
 	 */
 	public String getTextoInstrucciones() {
 		return textoInstrucciones;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see es.caib.xml.datospropios.factoria.Instrucciones#setTextoInstrucciones(java.lang.String)
 	 */
 	public void setTextoInstrucciones(String textoInstrucciones)
 			throws EstablecerPropiedadException {
-		
+
 		validaCampoObligatorio("Instrucciones", "TextoInstrucciones", textoInstrucciones);
-		
+
 		this.textoInstrucciones = textoInstrucciones;
 	}
-	
-	public Date getFechaTopeEntrega() {			
-		return fechaTopeEntrega;		
+
+	public Date getFechaTopeEntrega() {
+		return fechaTopeEntrega;
 	}
-	
+
 	public void setFechaTopeEntrega(Date fechaTope) {
 		this.fechaTopeEntrega = fechaTope;
 	}
@@ -69,8 +70,8 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 	/* (non-Javadoc)
 	 * @see es.caib.xml.datospropios.factoria.Instrucciones#getDocumentosEntregar()
 	 */
-	public DocumentosEntregar getDocumentosEntregar() {				
-		return documentosEntregar;		
+	public DocumentosEntregar getDocumentosEntregar() {
+		return documentosEntregar;
 	}
 
 	/* (non-Javadoc)
@@ -79,45 +80,48 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 	public void setDocumentosEntregar(DocumentosEntregar documentos) throws EstablecerPropiedadException {
 		this.documentosEntregar = documentos;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see es.caib.xml.NodoXMLObj#comprobarDatosRequeridos()
 	 */
 	public void comprobarDatosRequeridos() throws EstablecerPropiedadException {
 		validaCampoObligatorio("instrucciones", "TextoInstrucciones", getTextoInstrucciones ());
-		
+
 		DocumentosEntregar docsEntregar = getDocumentosEntregar ();
 		if (docsEntregar != null) docsEntregar.comprobarDatosRequeridos();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	public boolean equals (Object obj){
 		if (obj instanceof Instrucciones){
-			
+
 			if (obj == null) return false;
-			
+
 			Instrucciones inst = (Instrucciones) obj;
-			
+
 			// Comprobar Texto Instrucciones
 			if (!objetosIguales (getTextoInstrucciones(), inst.getTextoInstrucciones())) return false;
-			
+
 			// Comprobar Documentos Entregar
 			if (!objetosIguales (getDocumentosEntregar(), inst.getDocumentosEntregar())) return false;
-			
+
 			// Comprobar Fecha Tope
 			if (!objetosIguales (getFechaTopeEntrega(), inst.getFechaTopeEntrega())) return false;
-			
+
 			// Comprobar Texto Fecha Tope
 			if (!objetosIguales (getTextoFechaTopeEntrega(), inst.getTextoFechaTopeEntrega())) return false;
-			
+
 			// Comprobar Id Persistencia
 			if (!objetosIguales (getIdentificadorPersistencia(), inst.getIdentificadorPersistencia())) return false;
-			
+
 			// Comprobar Id Procedimiento
 			if (!objetosIguales (getIdentificadorProcedimiento(), inst.getIdentificadorProcedimiento())) return false;
-						
+
+			// Comprobar Id SIA
+			if (!objetosIguales (getIdentificadorSIA(), inst.getIdentificadorSIA())) return false;
+
 			// Comprobar aviso sms
 			if (!objetosIguales (getAvisoSMS(), inst.getAvisoSMS())) return false;
 
@@ -126,26 +130,26 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 
 			// Comprobar habilitar avisos
 			if (!objetosIguales (getHabilitarAvisos(), inst.getHabilitarAvisos())) return false;
-			
+
 			//  Comprobar habilitar notificacion
 			if (!objetosIguales (getHabilitarNotificacionTelematica(), inst.getHabilitarNotificacionTelematica())) return false;
-			
+
 			//  Comprobar tramite subsanacion
 			if (!objetosIguales (getTramiteSubsanacion(), inst.getTramiteSubsanacion())) return false;
-			
+
 			//  Comprobar formularios justificante
 			if (!objetosIguales (getFormulariosJustificante(), inst.getFormulariosJustificante())) return false;
-			
+
 			//  Comprobar personalizacion justificante
 			if (!objetosIguales (getPersonalizacionJustificante(), inst.getPersonalizacionJustificante())) return false;
-			
+
 			//  Comprobar alertas tramitacion
 			if (!objetosIguales (getAlertasTramitacion(), inst.getAlertasTramitacion())) return false;
-			
+
 			// OK los objetos son equivalentes
 			return true;
 		}
-		
+
 		return super.equals (obj);
 	}
 
@@ -221,6 +225,14 @@ public class Instrucciones extends NodoBaseDatosPropios  {
 
 	public void setIdentificadorProcedimiento(String identificadorProcedimiento) {
 		this.identificadorProcedimiento = identificadorProcedimiento;
+	}
+
+	public String getIdentificadorSIA() {
+		return identificadorSIA;
+	}
+
+	public void setIdentificadorSIA(String identificadorSIA) {
+		this.identificadorSIA = identificadorSIA;
 	}
 
 	public PersonalizacionJustificante getPersonalizacionJustificante() {

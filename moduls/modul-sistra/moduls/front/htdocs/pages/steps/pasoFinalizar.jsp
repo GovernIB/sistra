@@ -6,7 +6,6 @@
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 <script type="text/javascript">
 <!--
-<!--
 function descargaJustificante( url )
 {
 	var just = document.getElementById('guardarJustificanteBotonOc');
@@ -16,38 +15,60 @@ function descargaJustificante( url )
 		accediendoEnviando("<bean:message key="pasoJustificante.guardarJustificante.descargando"/>");
 	    xhr = new XMLHttpRequest();
 		xhr.open('GET', url, true);
+
+		<logic:equal name="justificanteRedireccion" value="false">
 		xhr.responseType = 'arraybuffer';
+		</logic:equal>
+
+		<logic:equal name="justificanteRedireccion" value="true">
+		xhr.responseType = 'text';
+		</logic:equal>
+
 		xhr.onreadystatechange = function(e) {
-		   	if (this.readyState == 4 && this.status == 200) {
-		   		if (xhr.getResponseHeader("Content-Type") == "text/html"){
-		   			just.click();
-		   		}else{
-		   			var newBlob = new Blob([this.response], {type:"application/pdf"});
-					
-					var header = xhr.getResponseHeader("Content-Disposition");
-					var startIndex = header.indexOf("filename=") + 9;
-					var endIndex = header.length - 1;
-					var filename = header.substring(startIndex, endIndex);
-						
-					if (window.navigator && window.navigator.msSaveOrOpenBlob) { // para IE
-						ocultarCapaInfo();
-						window.navigator.msSaveOrOpenBlob(newBlob, filename);
-					} else { // para no IE (chrome, firefox etc.)
-						var datos = window.URL.createObjectURL(newBlob); 
-						var a = document.createElement("a");
-						a.href = datos;
-						a.download = filename;
-						document.body.appendChild(a);
-						ocultarCapaInfo();
-						a.click();
-						setTimeout(function(){
-							// Para Firefox es necesario retrasar el revocado de ObjectURL
-							document.body.removeChild(link);
-							window.URL.revokeObjectURL(data);
-						}, 100);
-					}
+		   	if (this.readyState == 4) {
+		   		if (this.status == 200) {
+		   			if (xhr.getResponseHeader("Content-Type") == "text/html"){
+			   			just.click();
+			   		}else{
+
+			   			<logic:equal name="justificanteRedireccion" value="false">
+				   			var newBlob = new Blob([this.response], {type:"application/pdf"});
+
+							var header = xhr.getResponseHeader("Content-Disposition");
+							var startIndex = header.indexOf("filename=") + 9;
+							var endIndex = header.length - 1;
+							var filename = header.substring(startIndex, endIndex);
+
+							if (window.navigator && window.navigator.msSaveOrOpenBlob) { // para IE
+								ocultarCapaInfo();
+								window.navigator.msSaveOrOpenBlob(newBlob, filename);
+							} else { // para no IE (chrome, firefox etc.)
+								var datos = window.URL.createObjectURL(newBlob);
+								var a = document.createElement("a");
+								a.href = datos;
+								a.download = filename;
+								document.body.appendChild(a);
+								ocultarCapaInfo();
+								a.click();
+								setTimeout(function(){
+									// Para Firefox es necesario retrasar el revocado de ObjectURL
+									document.body.removeChild(link);
+									window.URL.revokeObjectURL(data);
+								}, 100);
+							}
+						</logic:equal>
+
+						<logic:equal name="justificanteRedireccion" value="true">
+							ocultarCapaInfo();
+							window.open(this.response);
+						</logic:equal>
+
+			   		}
+		   		} else {
+		   			alert("<bean:message key="finalizacion.errorDescargaJustificante"/>");
+		   			ocultarCapaInfo();
 		   		}
-		        
+
 		   	}
 		};
 		xhr.send();
@@ -86,12 +107,12 @@ function isIE () {
 		<bean:write name="instrucciones" property="textoInstrucciones" filter="false"/>
 	</p>
 	<!--  Instrucciones para guardar justificante -->
-	<h3 class="titGuardar"><bean:message key="pasoJustificante.guardarJustificante"/></h3>	
+	<h3 class="titGuardar"><bean:message key="pasoJustificante.guardarJustificante"/></h3>
 	<p class="apartado">
-		<bean:message name="textoJustificante" />		
-		<!-- 				
+		<bean:message name="textoJustificante" />
+		<!--
 			<bean:message key="pasoJustificante.guardarJustificante.recordatorioZonaPersonal.inicio" arg0="<%=referenciaPortal%>" />
-		 -->			
+		 -->
 	</p>
 	<p class="centrado">
 		<input name="guardarJustificanteBoton" id="guardarJustificanteBoton" type="button" value="<bean:message key="pasoJustificante.guardarJustificante.boton"/>"
@@ -99,12 +120,12 @@ function isIE () {
 		<input name="guardarJustificanteBotonOc" id="guardarJustificanteBotonOc" type="button" style="display:none" value="<bean:message key="pasoJustificante.guardarJustificante.boton"/>"
 			 onclick="javascript:document.location.href='<%= urlMostrarDocumento + "&identificador=JUSTIFICANTE"%>'" />
 	</p></br></br></br>
-	<h3 class="titGuardar"><bean:message key="pasoJustificante.guardarRestoDocumentacion"/></h3>	
+	<h3 class="titGuardar"><bean:message key="pasoJustificante.guardarRestoDocumentacion"/></h3>
 	<p class="apartado">
-		<bean:message key="pasoJustificante.guardarRestoDocumentacion.informacion"/>			
-		<!-- 				
+		<bean:message key="pasoJustificante.guardarRestoDocumentacion.informacion"/>
+		<!--
 			<bean:message key="pasoJustificante.guardarJustificante.recordatorioZonaPersonal.inicio" arg0="<%=referenciaPortal%>" />
-		 -->			
+		 -->
 	</p>
 	<table cellpadding="0" cellspacing="0" id="tablaDocAportar">
 			<tr>
@@ -118,16 +139,16 @@ function isIE () {
 						<logic:present name="documentacionFirmada" property="<%=doc.getIdentificadorDocumento()%>">
 						<bean:size id="numFirmas" name="documentacionFirmada" />
 						(<bean:message key="pasoJustificante.guardarRestoDocumentacion.firmadoPor"/>
-						<logic:iterate name="documentacionFirmada" indexId="index" property="<%=doc.getIdentificadorDocumento()%>" id="firma" type="es.caib.sistra.plugins.firma.FirmaIntf">							
+						<logic:iterate name="documentacionFirmada" indexId="index" property="<%=doc.getIdentificadorDocumento()%>" id="firma" type="es.caib.sistra.plugins.firma.FirmaIntf">
 							<% if (index.intValue() != 0 && (index.intValue() < (numFirmas.intValue() - 1))) { %> - <% } %>
-							<bean:write name="firma" property="nombreApellidos"/>  	
+							<bean:write name="firma" property="nombreApellidos"/>
 							<logic:notEmpty name="firma" property="nifRepresentante">
 								&nbsp; <bean:message key="firma.representadoPor"/> <bean:write name="firma" property="nombreApellidosRepresentante"/> - NIF: <bean:write name="firma" property="nifRepresentante"/>
 							</logic:notEmpty>
 						</logic:iterate>)
 						</logic:present>
 					</td>
-					
+
 					<td class="guardar">
 						<logic:equal name="doc" property="tipoDocumento" value="F">
 							<logic:equal name="documentacionLink" property="<%=doc.getIdentificadorDocumento()%>" value="true">
@@ -135,20 +156,20 @@ function isIE () {
 									<logic:iterate name="documentacionFirmada" property="<%=doc.getIdentificadorDocumento()%>" id="firma" type="es.caib.sistra.plugins.firma.FirmaIntf" indexId="indexForms">
 										<logic:equal name="firma" property="formatoFirma" value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.FORMATO_FIRMA_PADES%>">
 											<html:link styleClass="button-guardar" href="<%=urlMostrarFirmaDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) + \"&nif=\" + firma.getNif()%>" >
-											<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardarFirmado"/>					
+											<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardarFirmado"/>
 											</html:link>
 										</logic:equal>
 										<logic:notEqual name="firma" property="formatoFirma" value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.FORMATO_FIRMA_PADES%>">
 				 							<% if (indexForms.intValue() == 0) { %>
 											<div>
 												<html:link styleClass="button-guardar" href="<%= urlMostrarDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) %>">
-												<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardar"/>					
+												<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardar"/>
 												</html:link>
 											</div>
 											<% } %>
 											<div style="margin-top: 1em">
 												<html:link styleClass="button-guardar" href="<%=urlMostrarFirmaDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) + \"&nif=\" + firma.getNif()%>">
-												<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardarFirma"/>			
+												<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardarFirma"/>
 												</html:link>
 											</div>
 										</logic:notEqual>
@@ -156,11 +177,11 @@ function isIE () {
 								</logic:present>
 								<logic:notPresent name="documentacionFirmada" property="<%=doc.getIdentificadorDocumento()%>">
 									<html:link styleClass="button-guardar" href="<%= urlMostrarDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) %>">
-									<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardar"/><br/>					
+									<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardar"/><br/>
 									</html:link>
 								</logic:notPresent>
 							</logic:equal>
-							
+
 						</logic:equal>
 						<logic:notEqual name="doc" property="tipoDocumento" value="F">
 							<logic:present name="documentacionFirmada" property="<%=doc.getIdentificadorDocumento()%>">
@@ -168,7 +189,7 @@ function isIE () {
 										<logic:equal name="firma" property="formatoFirma"
 				 								value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.FORMATO_FIRMA_PADES%>">
 											<html:link styleClass="button-guardar" href="<%=urlMostrarFirmaDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) + \"&nif=\" + firma.getNif()%>">
-											<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardarFirmado"/>					
+											<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardarFirmado"/>
 											</html:link>
 										</logic:equal>
 										<logic:notEqual name="firma" property="formatoFirma"
@@ -176,13 +197,13 @@ function isIE () {
 				 							<% if (indexDocs.intValue() == 0) { %>
 				 							<div>
 												<html:link styleClass="button-guardar" href="<%= urlMostrarDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) %>">
-												<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardar"/><br/>					
+												<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardar"/><br/>
 												</html:link>
 											</div>
 											<% } %>
 											<div style="margin-top: 1em">
 												<html:link styleClass="button-guardar" href="<%=urlMostrarFirmaDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) + \"&nif=\" + firma.getNif()%>">
-												<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardarFirma"/><br/>			
+												<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardarFirma"/><br/>
 												</html:link>
 											</div>
 										</logic:notEqual>
@@ -190,7 +211,7 @@ function isIE () {
 								</logic:present>
 								<logic:notPresent name="documentacionFirmada" property="<%=doc.getIdentificadorDocumento()%>">
 									<html:link styleClass="button-guardar" href="<%= urlMostrarDocumento + \"&identificador=\" + StringUtil.getModelo(doc.getIdentificadorDocumento()) + \"&instancia=\" + StringUtil.getVersion(doc.getIdentificadorDocumento()) %>">
-									<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardar"/><br/>					
+									<bean:message key="pasoJustificante.guardarRestoDocumentacion.guardar"/><br/>
 									</html:link>
 								</logic:notPresent>
 						</logic:notEqual>
@@ -203,14 +224,14 @@ function isIE () {
 
 
 <!--  Cuando hay docs a presentar (tramite con preregistro -->
-<logic:present name="instrucciones" property="documentosEntregar">	
+<logic:present name="instrucciones" property="documentosEntregar">
 	<!--  Titulo  -->
 	<h2><bean:message key="finalizacion.entregarSolicitudFirmada"/></h2>
 	<!--  Instrucciones fin -->
 	<p>
 		<bean:write name="instrucciones" property="textoInstrucciones" filter="false"/>
 	</p>
-	<!-- Fecha tope entrega documentacion presencial-->	
+	<!-- Fecha tope entrega documentacion presencial-->
 	<p class="alerta">
 		<!--  Mensaje x defecto -->
 		<logic:empty name="instrucciones" property="textoFechaTopeEntrega">
@@ -220,75 +241,75 @@ function isIE () {
 		<logic:notEmpty name="instrucciones" property="textoFechaTopeEntrega">
 			<strong><bean:write name="instrucciones" property="textoFechaTopeEntrega"/></strong>.
 		</logic:notEmpty>
-	</p>	
-	<!-- Listado de docs a presentar  -->	
-	<bean:define id="documentosEntregar" name="instrucciones" property="documentosEntregar"/>	
+	</p>
+	<!-- Listado de docs a presentar  -->
+	<bean:define id="documentosEntregar" name="instrucciones" property="documentosEntregar"/>
 	<logic:notEmpty name="documentosEntregar" property="documento">
 
 		<!--  Tabla de documentos a aportar -->
-			<h3 class="titDocumentacion"><bean:message key="finalizacion.documentacionAAportar"/></h3>	
+			<h3 class="titDocumentacion"><bean:message key="finalizacion.documentacionAAportar"/></h3>
 			<table cellpadding="0" cellspacing="0" id="tablaDocAportar">
 			<tr>
 				<th width="20%"><bean:message key="finalizacion.documentacionAAportar.documento"/></th>
 				<th width="60%"><bean:message key="finalizacion.documentacionAAportar.accion"/></th>
 				<th width="20%"></th>
-			</tr>			
+			</tr>
 		<logic:iterate id="documento" name="documentosEntregar" property="documento" type="es.caib.xml.datospropios.factoria.impl.Documento">
 			<tr>
 				<td class="doc2"><bean:write name="documento" property="titulo" /></td>
 			<logic:equal name="documento" property="tipo" value="J">
 				<td><bean:message key="finalizacion.instrucciones.justificante.firmar"/></td>
 			</logic:equal>
-			<logic:equal name="documento" property="tipo" value="G">			
+			<logic:equal name="documento" property="tipo" value="G">
 				<td><bean:message key="finalizacion.instrucciones.formularioJustificante.firmar"/></td>
 			</logic:equal>
-			<logic:equal name="documento" property="tipo" value="F">				
+			<logic:equal name="documento" property="tipo" value="F">
 				<td><bean:message key="finalizacion.instrucciones.formulario.firmar"/></td>
 			</logic:equal>
 				<logic:equal name="documento" property="tipo" value="A">
-				<%  
-					String keyMessage="finalizacion.instrucciones.anexo";							
-					keyMessage+= (documento.isCompulsar().booleanValue()) ? ".compulsar" : "";												
+				<%
+					String keyMessage="finalizacion.instrucciones.anexo";
+					keyMessage+= (documento.isCompulsar().booleanValue()) ? ".compulsar" : "";
 					keyMessage+= (documento.isFotocopia().booleanValue()) ? ".fotocopia" : "";
-					keyMessage+= (!documento.isFotocopia().booleanValue() && !documento.isCompulsar().booleanValue()) ? ".presencial" : "";											
+					keyMessage+= (!documento.isFotocopia().booleanValue() && !documento.isCompulsar().booleanValue()) ? ".presencial" : "";
 				%>
 				<td>
-					<bean:message key="<%=keyMessage%>"/>						
+					<bean:message key="<%=keyMessage%>"/>
 				</td>
 			</logic:equal>
 			<logic:equal name="documento" property="tipo" value="P">
 				<td><bean:message key="finalizacion.instrucciones.pago"/></td>
 			</logic:equal>
-			
+
 			<td>
 				<logic:equal name="documento" property="tipo" value="J">
 					<html:link styleClass="button-print" href="<%= urlMostrarDocumento + \"&identificador=JUSTIFICANTE\"%>" title="Justificante">
 						<bean:message key="finalizacion.imprimir"/>
-					</html:link>														
+					</html:link>
 				</logic:equal>
 				<logic:equal name="documento" property="tipo" value="G">
 					<html:link styleClass="button-print" href="<%= urlMostrarDocumento + \"&identificador=JUSTIFICANTE\"%>" title="Justificante">
 						<bean:message key="finalizacion.imprimir"/>
-					</html:link>						
+					</html:link>
 				</logic:equal>
 				<logic:equal name="documento" property="tipo" value="F">
 					<html:link styleClass="button-print" href="<%= urlMostrarDocumento + \"&identificador=\" + StringUtil.getModelo(documento.getIdentificador()) + \"&instancia=\" + StringUtil.getVersion(documento.getIdentificador()) %>" title="Firmar formulario">
-						<bean:message key="finalizacion.imprimir"/>					
-					</html:link>	
+						<bean:message key="finalizacion.imprimir"/>
+					</html:link>
 				</logic:equal>
 			</td>
 			</tr>
 		</logic:iterate>
-		</table>									
-		
-	<!--  Instrucciones entrega específicas-->				
+		</table>
+
+	<!--  Instrucciones entrega específicas-->
 	<logic:notEmpty name="tramite" property="instruccionesEntrega">
-		<h3 class="titEntrega"><bean:message key="finalizacion.documentacionAAportar.instruccionesEntrega"/></h3>	
+		<h3 class="titEntrega"><bean:message key="finalizacion.documentacionAAportar.instruccionesEntrega"/></h3>
 	 	<p class="apartado"><bean:write name="tramite" property="instruccionesEntrega" filter="false"/></p>
 	</logic:notEmpty>
-		
-	</logic:notEmpty>		
-	
+
+	</logic:notEmpty>
+
 	<!--  Alerta de entrega de documentacion -->
 	<script type="text/javascript">
 	<!--
@@ -296,13 +317,13 @@ function isIE () {
 	alert(mensajeAlertEntrega);
 	//-->
 	</script>
-	
-		
+
+
 </logic:present>
 
 
 
-<!--  Boton para cerrar tramite -->		
+<!--  Boton para cerrar tramite -->
 <p class="ultimo"></p>
 
 <br/>
@@ -316,17 +337,17 @@ function isIE () {
 <p class="centrado">
 <input name="finalizarPRBoton" id="finalizarPRBoton" type="button"
 <logic:equal name="irAZonaPersonal" value="true">
-value="<bean:message key="finalizacion.boton.irAZonaPersonal" arg0="<%=referenciaPortal%>" />" 		
+value="<bean:message key="finalizacion.boton.irAZonaPersonal" arg0="<%=referenciaPortal%>" />"
 </logic:equal>
 <logic:equal name="irAZonaPersonal" value="false">
-value="<bean:message key="finalizacion.boton.finalizar"/>" 		
+value="<bean:message key="finalizacion.boton.finalizar"/>"
 </logic:equal>
  onclick="javascript:document.location.href='<%= urlFinalizar.toString() %>';" />
 
 </p>
 
-<div class="sep"></div>				
-		
+<div class="sep"></div>
+
 <!-- capa accediendo formularios -->
 <div id="capaInfoFondo"></div>
 <div id="capaInfoForms"></div>

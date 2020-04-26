@@ -51,89 +51,92 @@ public class FinalizacionController extends BaseController
 	{
 		// Obtener los datos del resultado del registro y construir los objetos que estructuran
 		// las instrucciones a partir del xml de datos propios que viene en el resultado
-		
+
 		TramiteFront tramite 			= this.getTramiteFront( request );
 		Map params = this.getParametros( request );
 		String idPersistencia = tramite.getIdPersistencia();
-		
+
 		AsientoCompleto resultado = ( AsientoCompleto ) params.get( Constants.RESULTADO_REGISTRO_KEY );
-		
+
 		if ( resultado == null )
-		{			
+		{
 			return;
 		}
-		
+
 		boolean registro = tramite.getRegistrar();
-		
+
 		String textoJustificante = registro ? "pasoJustificante.guardarJustificante.informacion.registro" : "pasoJustificante.guardarJustificante.informacion.envio";
-		
+
+		// Indicamos si justificante se obtiene por redireccion
+		request.setAttribute( "justificanteRedireccion", Boolean.toString(tramite.isJustificanteRedireccion()));
+
 		// Obtenemos instrucciones de finalizacion
 		request.setAttribute( "textoJustificante", textoJustificante );
-		
+
 		// Obtenemos instrucciones de finalizacion
 		request.setAttribute( "instrucciones", obtenerInstrucciones( resultado ) );
 
 		// Obtener lista documentos
 		List documentacion = obtenerDocumentacion(resultado );
-		
+
 		request.setAttribute( "documentacion", documentacion );
-		
+
 		// Detectamos si los documentos formularios de la solicitud tienen plantilla asociada para saber si mostrarlo en el frontal
 		Map documentacionLink = new HashMap();
-		
+
 		Map documentacionFirmada = new HashMap();
 
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request.getParameter("ID_INSTANCIA"), request );
-		
+
 		for (Iterator it=documentacion.iterator();it.hasNext();){
 			DatosAnexoDocumentacion doc = (DatosAnexoDocumentacion) it.next();
 
 			DocumentoRDS documentoRDS = delegate.recuperaInfoDocumento(StringUtil.getModelo(doc.getIdentificadorDocumento()), StringUtil.getVersion(doc.getIdentificadorDocumento()));
-			
+
 			if ("F".equals(doc.getTipoDocumento().toString())){
 				if(documentoRDS.isPlantillaVisualizacion()){
 					documentacionLink.put(doc.getIdentificadorDocumento(),"true");
 				}else{
 					documentacionLink.put(doc.getIdentificadorDocumento(),"false");
 				}
-					
+
 			}
-			
+
 			if (documentoRDS.getFirmas() != null){
-				
+
 				documentacionFirmada.put(doc.getIdentificadorDocumento(),documentoRDS.getFirmas());
 			}
-			
-			
-			
-			
+
+
+
+
 		}
-		
+
 		request.setAttribute( "documentacionLink", documentacionLink );
 		request.setAttribute( "documentacionFirmada", documentacionFirmada );
-		
+
 		// Comprobamos si se va a redirigir a la zona personal
 		String urlFin = delegate.obtenerUrlFin();
 		request.setAttribute( "irAZonaPersonal", new Boolean("[ZONAPER]".equals(urlFin)));
-		
+
 	}
-	
+
 	public Instrucciones obtenerInstrucciones( AsientoCompleto asientoCompleto ) throws Exception
 	{
 		String xmlDatosPropios = asientoCompleto.getDatosPropios();
-		
+
 		FactoriaObjetosXMLDatosPropios factoriaDatosPropios = ServicioDatosPropiosXML.crearFactoriaObjetosXML();
 		factoriaDatosPropios.setEncoding( ConstantesXML.ENCODING );
-		
+
 		ByteArrayInputStream inputStream = new ByteArrayInputStream ( xmlDatosPropios.getBytes( ConstantesXML.ENCODING ) );
 		DatosPropios datosPropios = factoriaDatosPropios.crearDatosPropios ( inputStream );
-		
+
 		Instrucciones instrucciones = datosPropios.getInstrucciones();
-		
+
 		return instrucciones;
-		
+
 	}
-	
+
 	public List obtenerDocumentacion(AsientoCompleto asientoCompleto ) throws Exception {
 		FactoriaObjetosXMLRegistro factoriaRT = ServicioRegistroXML.crearFactoriaObjetosXML();
 		Justificante asientoRegistral = factoriaRT.crearJustificanteRegistro(
@@ -144,7 +147,7 @@ public class FinalizacionController extends BaseController
 		return asientoRegistral.getDatosAnexoDocumentacion();	*/
 
 	}
-	
-	
+
+
 
 }

@@ -40,6 +40,7 @@ public class Constants implements Serializable
 	public static String NOMBREFICHERO_KEY 			= "nombrefichero";
 	public static String DATOSFICHERO_KEY 			= "datosfichero";
 	public static String URLFICHERO_KEY 			= "urlAcceso";
+	public static String PENDIENTE_GENERAR_KEY 			= "pendienteGenerar";
 	public static String MENU_NAVEGACION_PREFFIX 	= "menu.navegacion";
 	public static String MENU_NAVEGACION_LAST 	= "menu.navegacion.ultimo";
 

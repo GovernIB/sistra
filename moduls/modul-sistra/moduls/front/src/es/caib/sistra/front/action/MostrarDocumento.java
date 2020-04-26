@@ -27,14 +27,14 @@ import es.caib.sistra.persistence.delegate.InstanciaDelegate;
  *
  * @struts.action-forward
  *  name="successUrl" path="/protected/irAPaso.do"
- *  
+ *
  * @struts.action-forward
  *  name="fail" path="/index.jsp"
  */
 public class MostrarDocumento extends BaseAction
 {
 	public ActionForward executeTask(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-            HttpServletResponse response) throws Exception 
+            HttpServletResponse response) throws Exception
     {
 		MostrarDocumentoForm formulario = ( MostrarDocumentoForm ) form;
 		InstanciaDelegate delegate = InstanciaManager.recuperarInstancia( request );
@@ -42,29 +42,42 @@ public class MostrarDocumento extends BaseAction
 
 		String identificador = formulario.getIdentificador();
 		int instancia = formulario.getInstancia();
-		
+
 		// Comprobamos si requerimos el justificante o es otro documento
-		if (identificador.equals("JUSTIFICANTE")){			
+		if (identificador.equals("JUSTIFICANTE")){
 			respuestaFront = delegate.mostrarJustificante();
-		}else{									
+		}else{
 			respuestaFront = delegate.mostrarDocumento( identificador,instancia );
 		}
 		this.setRespuestaFront( request, respuestaFront );
-		
-		
+
 		// Comprobamos si se nos devuelve un fichero o la url al mismo
 		Map mParams = respuestaFront.getParametros();
-		if (mParams.get(Constants.URLFICHERO_KEY) != null){
-			String urlFichero = ( String ) mParams.get( Constants.URLFICHERO_KEY );				
-			request.setAttribute( Constants.URLFICHERO_KEY, urlFichero );		
-			return mapping.findForward("successUrl");
-		}else{					
+		if ("true".equals(mParams.get(Constants.PENDIENTE_GENERAR_KEY))) {
+			// Pendiente generar, retornamos error
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
+		} else if (mParams.get(Constants.URLFICHERO_KEY) != null){
+			// Retornamos referencia justificante
+			String urlFichero = ( String ) mParams.get( Constants.URLFICHERO_KEY );
+			if (identificador.equals("JUSTIFICANTE")){
+				// El justificante se gestiona mediante ajax
+				response.setContentType("text/plain");
+				response.setHeader("Cache-Control", "no-cache");
+				response.getWriter().write(urlFichero);
+				return null;
+			} else {
+				request.setAttribute( Constants.URLFICHERO_KEY, urlFichero );
+				return mapping.findForward("successUrl");
+			}
+		}else{
+			// Retornamos contenido justificante
 			String nombreFichero = ( String ) mParams.get( Constants.NOMBREFICHERO_KEY );
 			byte[] datosFichero = ( byte[] ) mParams.get( Constants.DATOSFICHERO_KEY );
-					
-			request.setAttribute( Constants.NOMBREFICHERO_KEY, nombreFichero );		
+
+			request.setAttribute( Constants.NOMBREFICHERO_KEY, nombreFichero );
 			request.setAttribute( Constants.DATOSFICHERO_KEY, datosFichero );
-			
+
 			return mapping.findForward("success");
 		}
     }
