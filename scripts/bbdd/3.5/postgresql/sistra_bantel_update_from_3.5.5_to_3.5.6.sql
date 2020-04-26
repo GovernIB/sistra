@@ -1,18 +1,19 @@
-/* FKs */
+/* FKs 
 alter table BTE_TRAPRO drop constraint BTE_TPROIDI_FK;
 alter table BTE_FUEDAT drop constraint BTE_FUETAP_FK;
 alter table BTE_TRAMIT drop constraint BTE_TRATAP_FK;
 alter table BTE_GESPRO drop constraint BTE_GAPTAP_FK;
-
-/* Quitar PK */
+*/
+/* Quitar PK 
 alter table BTE_PROAPL drop constraint BTE_TAP_PK cascade;
-drop index BTE_TAP_PK;
+drop index BTE_TAP_PK;*/
 
-/* Add AK */
+/* Add AK 
 create unique index BTE_TAP_AK on BTE_PROAPL (TAP_IDEPRO ASC);
+*/
 
-/* Add nuevo codigo */
-alter table BTE_PROAPL add TAP_CODIGO bigint;
+/* Add nuevo codigo 
+alter table BTE_PROAPL add TAP_CODIGO bigint; */
 
 /* Crear secuencia */
 create sequence BTE_SEQPRO;
@@ -64,8 +65,14 @@ alter table BTE_GESPRO alter column GAP_CODPRO set not null;
 alter table BTE_GESPRO add constraint BTE_GAP_PK primary key (GAP_CODPRO, GAP_CODGES);
 alter table BTE_GESPRO add constraint BTE_GAPTAP_FK foreign key (GAP_CODPRO) references BTE_PROAPL (TAP_CODIGO);
 
-/* Borrar IDEPRO (tras revisar) */
+/*  
+ * IMPORTANTE: se comentan sentencias que provocabarían que la ejecución de este 
+ * script no tuviese vuelta atrás.
+ * Borrar IDEPRO (tras revisar)
+ */
+/*
 alter table BTE_TRAPRO drop column PRO_IDEPRO;
 alter table BTE_FUEDAT drop column FUE_IDEPRO;
 alter table BTE_TRAMIT drop column TRA_IDEPRO;
 alter table BTE_GESPRO drop column GAP_IDEPRO;
+*/
