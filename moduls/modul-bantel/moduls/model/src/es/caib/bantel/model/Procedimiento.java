@@ -29,7 +29,7 @@ public class Procedimiento extends Traducible implements Serializable{
 
 	private String entidad;
 	private String idProcExt;
-	private String idProcSia;
+	private Long idProcSia;
 	private char inmediata = 'N';
 	private char periodica = 'N';
 	//private Long intervaloInforme;
@@ -271,10 +271,10 @@ public class Procedimiento extends Traducible implements Serializable{
     public void addTraduccion(String lang, TraProcedimiento traduccion) {
         setTraduccion(lang, traduccion);
     }
-	public String getIdProcSia() {
+	public Long getIdProcSia() {
 		return idProcSia;
 	}
-	public void setIdProcSia(String idProcSia) {
+	public void setIdProcSia(Long idProcSia) {
 		this.idProcSia = idProcSia;
 	}
 

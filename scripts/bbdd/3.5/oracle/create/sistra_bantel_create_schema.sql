@@ -804,7 +804,12 @@ alter table BTE_GESPRO add constraint BTE_GAPTAP_FK foreign key (GAP_CODPRO) ref
 alter table BTE_TRAPRO drop column PRO_IDEPRO;
 alter table BTE_FUEDAT drop column FUE_IDEPRO;
 alter table BTE_TRAMIT drop column TRA_IDEPRO;
-alter table BTE_GESPRO drop column GAP_IDEPRO; 
+alter table BTE_GESPRO drop column GAP_IDEPRO;
 
 commit;
 
+/* - V3.5.15 */
+alter table BTE_PROAPL  add   TAP_IDESIA           NUMBER(20);
+
+comment on column BTE_PROAPL.TAP_IDESIA is
+'IDENTIFICADOR SIA';

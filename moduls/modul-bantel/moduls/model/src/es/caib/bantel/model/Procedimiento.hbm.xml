@@ -15,7 +15,7 @@
 	<property name="identificador"  column="TAP_IDEPRO" length="100" not-null="true"/>
 	<property name="entidad" column="TAP_IDEENT"  not-null="true"/>
 	<property name="idProcExt" column="TAP_IDEPEX" length="20" />
-	<property name="idProcSia" column="TAP_IDESIA " length="100" />
+	<property name="idProcSia" column="TAP_IDESIA " length="20" />
 
     <property name="inmediata"  column="TAP_INMED" length="1"/>
     <property name="periodica"  column="TAP_PERIO" length="1"/>

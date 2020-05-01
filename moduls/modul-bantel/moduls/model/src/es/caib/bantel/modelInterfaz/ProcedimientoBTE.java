@@ -15,7 +15,7 @@ public class ProcedimientoBTE implements Serializable {
 	/**
 	 * Identificador SIA.
 	 */
-	private String idSIA;
+	private Long idSIA;
 
 	/**
 	 * Entidad.
@@ -119,10 +119,10 @@ public class ProcedimientoBTE implements Serializable {
 	public void setEntidad(EntidadBTE entidad) {
 		this.entidad = entidad;
 	}
-	public String getIdSIA() {
+	public Long getIdSIA() {
 		return idSIA;
 	}
-	public void setIdSIA(String idSIA) {
+	public void setIdSIA(Long idSIA) {
 		this.idSIA = idSIA;
 	}
 

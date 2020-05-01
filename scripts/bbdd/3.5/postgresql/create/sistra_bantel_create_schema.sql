@@ -1824,7 +1824,7 @@ comment on column BTE_TRAPRO.PRO_DESC is
 
 alter table BTE_TRAPRO
    add constraint BTE_PRO_PK primary key (PRO_IDEPRO, PRO_CODIDI);
-   
+
 alter table BTE_TRAPRO
    add constraint BTE_TPROIDI_FK foreign key (PRO_CODIDI)
       references BTE_IDIOMA (IDI_CODIGO);
@@ -1833,13 +1833,13 @@ alter table BTE_TRAPRO
    add constraint BTE_PROTAP_FK foreign key (PRO_IDEPRO)
       references BTE_PROAPL (TAP_IDEPRO);
 
- 
+
 /* IDIOMAS */
-INSERT INTO BTE_IDIOMA ( IDI_CODIGO, IDI_ORDEN ) VALUES ( 
-'es', 1); 
-INSERT INTO BTE_IDIOMA ( IDI_CODIGO, IDI_ORDEN ) VALUES ( 
-'ca', 2);  
-   
+INSERT INTO BTE_IDIOMA ( IDI_CODIGO, IDI_ORDEN ) VALUES (
+'es', 1);
+INSERT INTO BTE_IDIOMA ( IDI_CODIGO, IDI_ORDEN ) VALUES (
+'ca', 2);
+
 INSERT INTO BTE_TRAPRO (PRO_IDEPRO, PRO_CODIDI, PRO_DESC)
 SELECT TAP_IDEPRO, 'es', TAP_DESC FROM BTE_PROAPL;
 
@@ -1919,3 +1919,9 @@ alter table BTE_TRAPRO drop column PRO_IDEPRO;
 alter table BTE_FUEDAT drop column FUE_IDEPRO;
 alter table BTE_TRAMIT drop column TRA_IDEPRO;
 alter table BTE_GESPRO drop column GAP_IDEPRO;
+
+/* - V3.5.15 */
+alter table BTE_PROAPL  add   TAP_IDESIA           NUMBER(20);
+
+comment on column BTE_PROAPL.TAP_IDESIA is
+'IDENTIFICADOR SIA';

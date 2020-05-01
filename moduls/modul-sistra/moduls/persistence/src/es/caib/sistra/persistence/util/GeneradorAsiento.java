@@ -479,7 +479,9 @@ public class GeneradorAsiento {
 
 		// ---- Identificador de procedimiento
 		instrucciones.setIdentificadorProcedimiento(dt.getProcedimiento());
-		instrucciones.setIdentificadorSIA(procBTE.getIdSIA());
+		if (procBTE.getIdSIA() != null) {
+			instrucciones.setIdentificadorSIA(procBTE.getIdSIA().toString());
+		}
 
 		// ---- Opciones notificacion telematica
 		establecerOpcionesNotificacion(tramiteInfo, instrucciones);
