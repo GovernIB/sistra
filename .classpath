@@ -2,12 +2,10 @@
 <classpath>
 	<classpathentry kind="src" path="moduls/llibreria-plugins/moduls/plugins/src"/>
 	<classpathentry kind="src" path="moduls/modul-sistra/moduls/incidencias/src"/>
-	<classpathentry kind="src" path="moduls/modul-consola/moduls/back/src"/>
 	<classpathentry kind="src" path="moduls/llibreria-zk/moduls/zkutils/src"/>
 	<classpathentry kind="src" path="pluginsMOCK/plugin-emailMOCK/moduls/plugins/src"/>
 	<classpathentry kind="src" path="moduls/modul-zonaper/moduls/delega/src"/>
 	<classpathentry kind="src" path="moduls/llibreria-utilWs/moduls/util/src"/>
-	<classpathentry kind="src" path="integracio/llibreria-casClient/moduls/casLoginModule/src"/>
 	<classpathentry kind="src" path="moduls/llibreria-dbutils/moduls/dbutils/src"/>
 	<classpathentry kind="src" path="moduls/llibreria-graficos/moduls/graficos/src"/>
 	<classpathentry kind="src" path="moduls/llibreria-pdf/moduls/pdf/src"/>
@@ -178,7 +176,6 @@
 	<classpathentry kind="lib" path="lib/zk/zweb-6.5.4.jar"/>
 	<classpathentry kind="lib" path="lib/firmaWeb/plugin-signatureserver-api-2.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/firmaWeb/plugin-signatureserver-miniappletutils-2.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/firmaWeb/plugin-signatureweb-afirma_triphase_server_lib-1.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/firmaWeb/plugin-signatureweb-afirma_triphase_server-2.0.7.jar"/>
 	<classpathentry kind="lib" path="lib/firmaWeb/plugin-signatureweb-api-2.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/firmaWeb/plugin-signatureweb-miniappletinclient-2.0.2.jar"/>

@@ -184,11 +184,5 @@ public class PluginRegtelMock implements PluginRegistroIntf{
 		return "http://www.google.es";
 	}
 
-	@Override
-	public String obtenerReferenciaJustificanteRegistroSalida(String entidad,
-			String numeroRegistro, Date fechaRegistro) throws Exception {
-		return "http://www.google.es";
-	}
-
 }
 
