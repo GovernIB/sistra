@@ -295,7 +295,7 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
             throw new DelegateException(e);
         }
 	}
-	
+
 	public DocumentoRDS recuperaInfoDocumento( String idDocumento, int instancia) throws DelegateException {
 		try
         {
@@ -306,7 +306,7 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
             throw new DelegateException(e);
         }
 	}
-	
+
 	public RespuestaFront recuperaFirmasDocumento( String idDocumento, int instancia, String nif) throws DelegateException {
 		   try
 	        {
@@ -492,7 +492,7 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	public boolean verificarMovil(String smsCodigo) throws DelegateException {
 		try
 		{
@@ -503,7 +503,7 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	public void resetCodigoSmsVerificarMovil() throws DelegateException {
 		try
 		{
@@ -515,7 +515,7 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 		}
 	}
 
-	
+
 	public RespuestaFront obtenerInfoTramite() throws DelegateException {
 		try
 		{
@@ -525,7 +525,7 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 		{
 			throw new DelegateException( e );
 		}
-		
+
 	}
 
 	public void destroy()
@@ -552,13 +552,5 @@ public class InstanciaRemoteDelegate implements InstanciaDelegate
 
     protected InstanciaRemoteDelegate() {
     }
-
-
-
-
-
-
-
-
 
 }

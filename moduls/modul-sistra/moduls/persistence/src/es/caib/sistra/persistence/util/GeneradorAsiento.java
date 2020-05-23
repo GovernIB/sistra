@@ -325,6 +325,25 @@ public class GeneradorAsiento {
 			dAnexo.setHashDocumento (docRDS.getHashFichero());
 			asiento.getDatosAnexoDocumentacion().add(dAnexo);
 
+			// Crear anexo para documento confirmacion
+			String idDocConfirmacion = ConstantesAsientoXML.IDENTIFICADOR_CONFIRMACION_REGISTRO+"-1";
+			docPAD = (DocumentoPersistentePAD) tramitePAD.getDocumentos().get(idDocConfirmacion);
+			if (docPAD != null) {
+				docRDS = rds.consultarDocumento(docPAD.getRefRDS(),false);
+				DatosAnexoDocumentacion dAnexoConf;
+				dAnexoConf = factoria.crearDatosAnexoDocumentacion();
+				dAnexoConf.setEstucturado (new Boolean(true));
+				// TODO CONFREG  ver si le damos un tipo propio
+				dAnexoConf.setTipoDocumento (new Character(ConstantesAsientoXML.DATOSANEXO_OTROS));
+				dAnexoConf.setIdentificadorDocumento (idDocConfirmacion);
+				dAnexoConf.setCodigoRDS(Long.toString(docPAD.getRefRDS().getCodigo()));
+				dAnexoConf.setCodigoNormalizado(ConstantesRDS.MODELO_ANEXO_GENERICO + "-1");
+				dAnexoConf.setNombreDocumento (docRDS.getNombreFichero());
+				dAnexoConf.setExtractoDocumento (docRDS.getTitulo());
+				dAnexoConf.setHashDocumento (docRDS.getHashFichero());
+				asiento.getDatosAnexoDocumentacion().add(dAnexoConf);
+			}
+
 			// Creamos anexos para documentos trámite: formularios, pagos y anexos
 			//--- Creamos anexos para formularios trámite
 			for (Iterator it = tramiteInfo.getFormularios().iterator();it.hasNext();){

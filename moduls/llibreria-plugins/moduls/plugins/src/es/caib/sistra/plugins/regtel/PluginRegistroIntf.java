@@ -166,7 +166,7 @@ public interface PluginRegistroIntf extends PluginSistraIntf {
 	/**
 	 * Obtiene la descripción de un servicio destinatario
 	 * @param servicioDestino codigo del servicio destino.
-	 * @return String Descripción de servicio destino
+	 * @return String Descripción de servicio destino (nulo si no encuentra servicio)
 	 */
 	public String obtenerDescServiciosDestino(String servicioDestino);
 

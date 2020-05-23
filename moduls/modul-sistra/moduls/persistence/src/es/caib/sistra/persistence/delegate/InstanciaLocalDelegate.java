@@ -283,7 +283,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 	            throw new DelegateException(e);
 	        }
 	}
-	
+
 	public DocumentoRDS recuperaInfoDocumento( String idDocumento, int instancia) throws DelegateException {
 		   try
 	        {
@@ -294,7 +294,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 	            throw new DelegateException(e);
 	        }
 	}
-	
+
 	public RespuestaFront recuperaFirmasDocumento( String idDocumento, int instancia, String nif) throws DelegateException {
 		   try
 	        {
@@ -488,7 +488,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	public void resetCodigoSmsVerificarMovil() throws DelegateException {
 		try
 		{
@@ -499,7 +499,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	public RespuestaFront obtenerInfoTramite() throws DelegateException {
 		try
 		{
@@ -510,7 +510,7 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	public void destroy()
 	{
 		try {
@@ -536,9 +536,6 @@ public class InstanciaLocalDelegate implements InstanciaDelegate
     protected InstanciaLocalDelegate()
     {
     }
-
-
-
 
 
 }

@@ -2,6 +2,7 @@ package es.caib.sistra.persistence.ejb;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -29,6 +30,7 @@ import javax.ejb.SessionContext;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -91,6 +93,7 @@ import es.caib.sistra.persistence.plugins.PluginDatosInteresadoDesglosado;
 import es.caib.sistra.persistence.plugins.PluginFormularios;
 import es.caib.sistra.persistence.plugins.PluginPagos;
 import es.caib.sistra.persistence.plugins.ProcedimientoDestinoTramite;
+import es.caib.sistra.persistence.util.ConfigurationUtil;
 import es.caib.sistra.persistence.util.GeneradorAsiento;
 import es.caib.sistra.persistence.util.Literales;
 import es.caib.sistra.persistence.util.ScriptUtil;
@@ -101,7 +104,9 @@ import es.caib.sistra.plugins.firma.FicheroFirma;
 import es.caib.sistra.plugins.firma.FirmaIntf;
 import es.caib.sistra.plugins.firma.PluginFirmaIntf;
 import es.caib.sistra.plugins.login.ConstantesLogin;
+import es.caib.sistra.plugins.login.EvidenciasAutenticacion;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
+import es.caib.sistra.plugins.login.PropiedadAutenticacion;
 import es.caib.sistra.plugins.pagos.ConstantesPago;
 import es.caib.sistra.plugins.pagos.EstadoSesionPago;
 import es.caib.sistra.plugins.pagos.PluginPagosIntf;
@@ -127,6 +132,10 @@ import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
 import es.caib.zonaper.persistence.delegate.DelegateException;
 import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
 import es.caib.zonaper.persistence.delegate.PadDelegate;
+import es.indra.util.pdf.PDFDocument;
+import es.indra.util.pdf.Parrafo;
+import es.indra.util.pdf.Propiedad;
+import es.indra.util.pdf.Seccion;
 import es.indra.util.pdf.UtilPDF;
 
 // TODO FLUJO TRAMITACION PARA PAGOS
@@ -228,6 +237,7 @@ public class TramiteProcessorEJB implements SessionBean {
 
 	// Indica si se ha verificado el movil
 	private boolean verificadoMovil;
+
 
 	public TramiteProcessorEJB() {
 		super();
@@ -3389,12 +3399,10 @@ public class TramiteProcessorEJB implements SessionBean {
 	    	}
     	}catch (Exception e){
     		log.error(mensajeLog("Exception al mostrar documento consulta"),e);
-
     		MensajeFront mens = new MensajeFront();
     		mens.setTipo(MensajeFront.TIPO_ERROR);
     		mens.setMensaje(traducirMensaje(MensajeFront.MENSAJE_ERRORDESCONOCIDO));
     		mens.setMensajeExcepcion(e.getMessage());
-
     		RespuestaFront resFront = generarRespuestaFront(mens,null);
     		setRollbackOnly();
     	}
@@ -4262,6 +4270,10 @@ public class TramiteProcessorEJB implements SessionBean {
     			tramiteInfo.setVerificarMovil(ConstantesSTR.VERIFICARMOVIL_HABILITADA.equals(espTramite.getVerificarMovil()));
     		}
 
+    		// TODO CONFREG VER EN QUE CASOS HAY QUE GENERAR DOC
+    		// Generar documento confirmacion registro
+    		tramiteInfo.setGenerarDocumentoConfirmacionRegistro("true".equals(ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("documentConfirmacionRegistro.generar")));
+
     	}
 
     	// Si el tipo de tramitación es dependiente habrá que calcular el estado actual de esta dependencia
@@ -4365,6 +4377,7 @@ public class TramiteProcessorEJB implements SessionBean {
 
     	// Indica si se ha verificado el movil
     	tramiteInfo.setVerificadoMovil(verificadoMovil);
+
     }
 
     /**
@@ -5213,6 +5226,20 @@ public class TramiteProcessorEJB implements SessionBean {
 
     // Genera asiento registral y datos propios y los almacena en el RDS y la PAD
     private AsientoCompleto generaAsientoRegistral(DestinatarioTramite dt) throws Exception{
+
+    	// Vemos si hay que generar documento confirmacion de registro
+    	if (this.tramiteInfo.isGenerarDocumentoConfirmacionRegistro()) {
+    		// Obtenemos id sesion autenticacion asociada a la autenticación actual
+    		// TODO CONFREG Si se quisiera generar habiendose identificado previamente, habría que gestionar otra sesion de autenticacion diferente a la autenticación de la aplicación
+    		Principal sp = this.context.getCallerPrincipal();
+    		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
+    		String idSesionAutenticacion = plgLogin.getIdSesionAutenticacion(sp);
+    		if (idSesionAutenticacion == null) {
+    			throw new Exception("La autenticación actual no tiene un id sesion de autenticacion");
+    		}
+    		// Forzamos a generarlo de nuevo (puede haberse autenticado de nuevo)
+    		generarPdfDocumentoConfirmacionRegistro(idSesionAutenticacion);
+    	}
 
     	// Generamos datos propios almacenandolos en el RDS
     	String xmlDatosPropios = generarDatosPropios(dt);
@@ -6756,5 +6783,148 @@ public class TramiteProcessorEJB implements SessionBean {
 
 		return res;
    }
+
+
+   // Generar documento de confirmacion de registro
+   private void generarPdfDocumentoConfirmacionRegistro(String idSesionAutenticacion) throws Exception{
+
+		// Obtenemos plugin login
+		PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
+
+		// Obtenemos evidencias a partir id sesion autenticacion
+		EvidenciasAutenticacion evidencias = null;
+		try {
+			evidencias = plgLogin
+					.getEvidenciasAutenticacion(idSesionAutenticacion);
+		} catch (Exception ex) {
+			throw new Exception(
+					"Error a recuperar las evidencias de autenticacion del servidor de autenticacion externo: "
+							+ ex.getMessage(), ex);
+		}
+		if (evidencias == null) {
+			throw new Exception("No se han recuperado evidencias de autenticacion (revise si la sesion es auditada)");
+		}
+
+		// Generamos PDF
+		byte[] pdf = generarPdfEvidencias(idSesionAutenticacion, evidencias);
+
+		// Comprobamos si existe en la PAD, si no lo creamos
+		String tituloDocumento = Literales.getLiteral(tramiteInfo
+				.getDatosSesion().getLocale().getLanguage(),
+				"documentoConfirmacionRegistro.fichero.titulo");
+		String fileName = Literales
+				.getLiteral(tramiteInfo.getDatosSesion().getLocale()
+						.getLanguage(),
+						"documentoConfirmacionRegistro.fichero.filenameSinExtension")
+				+ ".pdf";
+		String id = ConstantesAsientoXML.IDENTIFICADOR_CONFIRMACION_REGISTRO;
+		DocumentoPersistentePAD docPad = (DocumentoPersistentePAD) tramitePersistentePAD
+				.getDocumentos().get(id + "-1");
+		if (docPad == null) {
+			docPad = new DocumentoPersistentePAD();
+			docPad.setIdentificador(id);
+			docPad.setNumeroInstancia(1);
+			docPad.setNombreFicheroAnexo(fileName);
+			docPad.setEstado(DocumentoPersistentePAD.ESTADO_CORRECTO);
+			tramitePersistentePAD.getDocumentos().put(id + "-1", docPad);
+		}
+
+		// Almacenamos en RDS
+		RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
+		DocumentoRDS docRds;
+		// Si existe actualizamos documento en RDS
+		if (docPad.getRefRDS() != null) {
+			rds.actualizarFichero(docPad.getRefRDS(), pdf);
+		} else {
+			// Si no existe creamos documento y uso en RDS
+			docRds = new DocumentoRDS();
+			docRds.setModelo(ConstantesRDS.MODELO_ANEXO_GENERICO);
+			docRds.setVersion(1);
+			docRds.setDatosFichero(pdf);
+			docRds.setTitulo(tituloDocumento);
+			docRds.setNombreFichero(fileName);
+			docRds.setExtensionFichero("pdf");
+			docRds.setUnidadAdministrativa(tramiteVersion
+					.getUnidadAdministrativa().longValue());
+			if (datosSesion.getNivelAutenticacion() != 'A') {
+				docRds.setNif(datosSesion.getNifUsuario());
+				docRds.setUsuarioSeycon(datosSesion.getCodigoUsuario());
+			}
+			docRds.setIdioma(this.datosSesion.getLocale().getLanguage());
+			ReferenciaRDS ref = rds.insertarDocumento(docRds);
+			docPad.setReferenciaRDS(ref);
+			// Creamos uso
+			UsoRDS uso = new UsoRDS();
+			uso.setReferenciaRDS(ref);
+			uso.setTipoUso(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE);
+			uso.setReferencia(tramitePersistentePAD.getIdPersistencia());
+			rds.crearUso(uso);
+		}
+
+   }
+
+
+   /**
+    * Generar PDF evidencias
+    * @param evidencias evidencias
+    * @return PDF
+    */
+   private byte[] generarPdfEvidencias(String identificadorSesionAutenticacion, EvidenciasAutenticacion evidencias) throws Exception{
+
+	   // TODO No es multientidad
+	   String cabeceraTitulo = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"documentoConfirmacionRegistro.pdf.cabecera.titulo");
+	   String cabeceraLogoUrl = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"documentoConfirmacionRegistro.pdf.cabecera.logoUrl");
+	   String seccionConformidadTitulo = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"documentoConfirmacionRegistro.pdf.seccionConformidad.titulo");
+	   String seccionConformidadTexto = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"documentoConfirmacionRegistro.pdf.seccionConformidad.texto");
+	   String seccionEvidenciasTitulo = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"documentoConfirmacionRegistro.pdf.seccionEvidencias.titulo");
+	   String seccionHuellaTitulo = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"documentoConfirmacionRegistro.pdf.seccionHuella.titulo");
+	   String seccionHuellaTexto = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"documentoConfirmacionRegistro.pdf.seccionHuella.texto");
+	   seccionHuellaTexto = StringUtils.replace(seccionHuellaTexto, "{identificador_sesion}", identificadorSesionAutenticacion);
+	   seccionHuellaTexto = StringUtils.replace(seccionHuellaTexto, "{huella_electronica}", evidencias.getHuellaElectronica());
+
+	   PDFDocument docPDF = null;
+	   if (StringUtils.isNotBlank(cabeceraLogoUrl)) {
+		   docPDF = new PDFDocument(cabeceraTitulo, cabeceraLogoUrl);
+	   } else {
+		   docPDF = new PDFDocument(cabeceraTitulo);
+	   }
+
+	   Seccion seccion;
+	   Parrafo p;
+	   Propiedad propiedad;
+	   float []widths = {10f,30f};
+
+	   // Seccion conformidad
+	   seccion = new Seccion("A",seccionConformidadTitulo);
+	   seccion.setKeepTogether(true);
+	   p = new Parrafo(seccionConformidadTexto);
+	   seccion.addCampo(p);
+	   docPDF.addSeccion(seccion);
+
+	   	// Seccion evidencias
+		seccion = new Seccion("B", seccionEvidenciasTitulo);
+		for (Iterator it = evidencias.getEvidencias().iterator(); it.hasNext();) {
+			PropiedadAutenticacion evidencia = (PropiedadAutenticacion) it.next();
+			if (evidencia.isMostrar()) {
+				propiedad = new Propiedad(evidencia.getPropiedad(), evidencia.getValor(), widths);
+				seccion.addCampo(propiedad);
+			}
+		}
+		docPDF.addSeccion(seccion);
+
+		// Seccion huella
+		seccion = new Seccion("C", seccionHuellaTitulo);
+		seccion.setKeepTogether(true);
+		 p = new Parrafo(seccionHuellaTexto);
+		 seccion.addCampo(p);
+		   docPDF.addSeccion(seccion);
+
+   	ByteArrayOutputStream bos = new ByteArrayOutputStream();
+   	docPDF.generate(bos);
+   	byte[] pdf = bos.toByteArray();
+   	bos.close();
+   	return pdf;
+   }
+
 
 }

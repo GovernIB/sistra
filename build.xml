@@ -7,7 +7,7 @@
 <property name="etc.dir" value="etc"/>
 <property name="lib" value="lib"/>
 
-<target name="main" depends="clean,prepare,compileModuls"/>
+<target name="main" depends="clean,cleanModuls,prepare,compileModuls"/>
 
 <target name="clean" description="Destruye los directorios de trabajo">
 	<delete dir="${output.dir}" quiet="yes"/>
@@ -50,6 +50,9 @@
 	<ant dir="moduls/llibreria-zk" target="${task}" inheritall="false"/>
 <!-- 	<ant dir="moduls/modul-consola" target="${task}" inheritall="false"/>  -->
 	<ant dir="moduls/modul-firmaWeb" target="${task}" inheritall="false"/>
+
+	<!-- Integracion loginib -->
+	<ant dir="integracio/loginIB" target="${task}" inheritall="false"/>
 
 </target>
 
@@ -101,18 +104,20 @@
 			<exclude name="3-zonaper-filter.jar" />
 		</fileset>
 		<zipfileset dir="${lib}" prefix="lib">
-			<exclude name="activation.jar"/>
-			<exclude name="struts.jar"/>
-			<exclude name="simplecaptcha-1.2.1.jar"/>
 
 			<exclude if="isJboss3" name="cglib-asm.jar"/>
-			<exclude name="commons-logging-1.0.4.jar"/>
-			<exclude name="ejb-2_0.jar"/>
 			<exclude if="isJboss3" name="hibernate2.jar"/>
+
 			<exclude if="isJboss5" name="stax-api-1.0.1.jar"/>
 			<exclude if="isJboss5" name="jaxp-api-1.3.jar"/>
 			<exclude if="isJboss5" name="jaxb-api-2.1.jar"/>
 			<exclude if="isJboss5" name="xmlbeans-qname.jar"/>
+
+			<exclude name="activation.jar"/>
+			<exclude name="struts.jar"/>
+			<exclude name="simplecaptcha-1.2.1.jar"/>
+			<exclude name="commons-logging-1.0.4.jar"/>
+			<exclude name="ejb-2_0.jar"/>
 			<exclude name="bouncy/**"/>
 			<exclude name="jms.jar"/>
 			<exclude name="mail.jar"/>
@@ -130,11 +135,21 @@
 			<exclude name="jboss*"/>
 			<exclude name="jboss/*"/>
 			<exclude name="firmaWeb/*"/>
+
 		</zipfileset>
+
 		<zipfileset dir="${output.dir}/lib" prefix="lib"/>
+
+		<!-- Incluimos de serie plugin LoginIB -->
+		<zipfileset dir="${output.dir}/loginib" prefix="lib">
+			<include name="sistra-loginib-util.jar" />
+			<include name="sistra-loginib-pluginlogin.jar" />
+		</zipfileset>
+
+
 	</ear>
 
-	<!-- 
+	<!--
 	<copy file="${etc.dir}/consola/jboss-${jboss.version}/application.xml" todir="${output.dir}/etc/consola" overwrite="true"/>
 	<replace file="${output.dir}/etc/consola/application.xml">
 		<replacefilter token="@contextoRaizBack@" value="${contextoRaiz.back}"/>
@@ -164,11 +179,11 @@
 			</zipfileset>
 			<zipfileset dir="${output.dir}/lib" prefix="lib"/>
 	</ear>
- 	-->	
+ 	-->
 
 	<copy file="${etc.dir}/firmaWeb/jboss-${jboss.version}/application.xml" todir="${output.dir}/etc/firmaWeb" overwrite="true"/>
 	<replace file="${output.dir}/etc/firmaWeb/application.xml">
-	    <!--   	Para FirmaWEB no habrá contexto RAIZ 
+	    <!--   	Para FirmaWEB no habrá contexto RAIZ
 		<replacefilter token="@contextoRaizBack@" value="${contextoRaiz.back}"/>
 		<replacefilter token="@contextoRaizFront@" value="${contextoRaiz.front}"/>
 		 -->
@@ -189,10 +204,10 @@
 				<include if="isJboss5" name="jboss-classloading.xml"/>
 			</metainf>
 			<metainf dir="${etc.dir}/firmaWeb" includes="cxf/org.apache.cxf.Logger"/>
-			<fileset dir="moduls/modul-firmaWeb/output/moduls"/>			
+			<fileset dir="moduls/modul-firmaWeb/output/moduls"/>
 	</ear>
-	
-	
+
+
 	<antcall target="generateSAR"/>
 
 </target>
@@ -270,13 +285,13 @@
     <jar jarfile="${output.dir}/ear/1-sistra.sar">
         <metainf dir="${output.dir}/etc" includes="*.xml"/>
     </jar>
-	
+
 	<!-- Generacion del SAR de FIRMAWEB-->
 	<delete file="${output.dir}/ear/firmaweb.sar" quiet="yes"/>
     <jar jarfile="${output.dir}/ear/firmaweb.sar">
         <metainf dir="${etc.dir}/firmaWeb/sar" includes="*.xml"/>
     </jar>
-	
+
 </target>
 
 

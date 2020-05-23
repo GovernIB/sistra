@@ -240,6 +240,12 @@ public class TramiteFront  implements Serializable{
 	 */
 	private boolean verificadoMovil;
 
+	/**
+	 * Indica si debe generar documento de confirmación de registro.
+	 */
+	private boolean generarDocumentoConfirmacionRegistro;
+
+
 	public boolean isDebugEnabled() {
 		return debugEnabled;
 	}
@@ -657,6 +663,20 @@ public class TramiteFront  implements Serializable{
 	public void setJustificanteRedireccion(boolean justificanteRedireccion) {
 		this.justificanteRedireccion = justificanteRedireccion;
 	}
-
+	/**
+	 *	Devuelve generarDocumentoConfirmacionRegistro.
+	 * @return generarDocumentoConfirmacionRegistro
+	 */
+	public boolean isGenerarDocumentoConfirmacionRegistro() {
+		return generarDocumentoConfirmacionRegistro;
+	}
+	/**
+	 * Establece generarDocumentoConfirmacionRegistro.
+	 * @param generarDocumentoConfirmacionRegistro generarDocumentoConfirmacionRegistro
+	 */
+	public void setGenerarDocumentoConfirmacionRegistro(
+			boolean generarDocumentoConfirmacionRegistro) {
+		this.generarDocumentoConfirmacionRegistro = generarDocumentoConfirmacionRegistro;
+	}
 
 }

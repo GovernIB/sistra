@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="moduls/llibreria-plugins/moduls/plugins/src"/>
+	<classpathentry kind="src" path="moduls/llibreria-plugin-autenticacionExplicita/moduls/plugins/src"/>
+	<classpathentry kind="src" path="integracio/loginIB/moduls/loginibplugin/src"/>
+	<classpathentry kind="src" path="integracio/loginIB/moduls/loginibclient/src"/>
+	<classpathentry kind="src" path="integracio/loginIB/moduls/loginibmodule/src"/>
+	<classpathentry kind="src" path="integracio/loginIB/moduls/loginibutil/src"/>
 	<classpathentry kind="src" path="moduls/modul-sistra/moduls/incidencias/src"/>
 	<classpathentry kind="src" path="moduls/llibreria-zk/moduls/zkutils/src"/>
 	<classpathentry kind="src" path="pluginsMOCK/plugin-emailMOCK/moduls/plugins/src"/>
@@ -185,5 +190,10 @@
 	<classpathentry kind="lib" path="lib/firmaWeb/plugins-webutils-1.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/firmaWeb/mime-util-2.1.3.jar"/>
 	<classpathentry kind="lib" path="lib/ojdbc14.jar"/>
+	<classpathentry kind="lib" path="lib/jboss/jboss-client.jar"/>
+	<classpathentry kind="lib" path="lib/jboss/jboss-jaxrpc.jar"/>
+	<classpathentry kind="lib" path="lib/jboss/jboss-saaj.jar"/>
+	<classpathentry kind="lib" path="lib/jboss/jbosssx-client.jar"/>
+	<classpathentry kind="lib" path="lib/jboss/jbossweb.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

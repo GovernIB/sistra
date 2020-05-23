@@ -3,6 +3,8 @@ package es.caib.sistra.plugins.login.impl.mock;
 import java.security.Principal;
 
 import es.caib.mock.loginModule.MockPrincipal;
+import es.caib.sistra.plugins.login.EvidenciasAutenticacion;
+import es.caib.sistra.plugins.login.PeticionInicioSesionAutenticacion;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
 
 public class PluginLoginMOCK implements PluginLoginIntf {
@@ -12,15 +14,15 @@ public class PluginLoginMOCK implements PluginLoginIntf {
 	 */
 	public char getMetodoAutenticacion(Principal principal) {
 		MockPrincipal mp = (MockPrincipal) principal;
-		return mp.getMetodoAutenticacion();		
+		return mp.getMetodoAutenticacion();
 	}
-	
+
 	/**
 	 * Obtiene nif
 	 */
 	public String getNif(Principal principal) {
 		MockPrincipal mp = (MockPrincipal) principal;
-		return mp.getNif();		
+		return mp.getNif();
 	}
 
 	/**
@@ -28,9 +30,9 @@ public class PluginLoginMOCK implements PluginLoginIntf {
 	 */
 	public String getNombreCompleto(Principal principal) {
 		MockPrincipal mp = (MockPrincipal) principal;
-		return mp.getNombreCompleto();		
+		return mp.getNombreCompleto();
 	}
-	
+
 	public String getRepresentanteNif(Principal principal) {
 		return null;
 	}
@@ -46,5 +48,22 @@ public class PluginLoginMOCK implements PluginLoginIntf {
 	public String getRepresentanteApellido2(Principal principal) {
 		return null;
 	}
-	
+
+	@Override
+	public String iniciarSesionAutenticacion(
+			PeticionInicioSesionAutenticacion peticion) {
+		return null;
+	}
+
+	@Override
+	public String getIdSesionAutenticacion(Principal principal) {
+		return null;
+	}
+
+	@Override
+	public EvidenciasAutenticacion getEvidenciasAutenticacion(
+			String idSesionAutenticacion) {
+		return null;
+	}
+
 }
