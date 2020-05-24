@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -14,7 +13,6 @@ import es.caib.sistra.loginibclient.LoginIBClient;
 import es.caib.sistra.loginibclient.LoginIBClientException;
 import es.caib.sistra.loginibclient.json.JSONArray;
 import es.caib.sistra.loginibclient.json.JSONObject;
-import es.caib.sistra.loginibclient.json.TestJson;
 import es.caib.sistra.loginmodule.loginib.LoginIBPrincipal;
 import es.caib.sistra.plugins.login.EvidenciasAutenticacion;
 import es.caib.sistra.plugins.login.PeticionInicioSesionAutenticacion;
