@@ -3,12 +3,14 @@
 <%@ page import="es.caib.zonaper.modelInterfaz.ConstantesZPE"%>
 <%@ page import="es.caib.sistra.model.ConstantesSTR"%>
 <%@page import="es.caib.xml.registro.factoria.ConstantesAsientoXML"%>
+<%@page import="es.caib.sistra.front.Constants"%>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
 <%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles"%>
 <html:xhtml/>
 <bean:define id="lang" value="<%=((java.util.Locale) session.getAttribute(org.apache.struts.Globals.LOCALE_KEY)).getLanguage()%>" type="java.lang.String"/>
+<bean:define id="isTramiteReducido" name="<%= Constants.TRAMITE_REDUCIDO_KEY %>"/>
 <bean:define id="referenciaPortal"  type="java.lang.String">
 	<bean:write name="<%=es.caib.sistra.front.Constants.ORGANISMO_INFO_KEY%>" property='<%="referenciaPortal("+ lang +")"%>'/>
 </bean:define>
@@ -26,106 +28,111 @@
 <bean:define id="urlIrAPaso">
         <html:rewrite page="/protected/irAPaso.do" paramId="ID_INSTANCIA" paramName="ID_INSTANCIA"/>
 </bean:define>
-<!--  Flujo de tramite -->
-<logic:present name="pasarFlujoTramitacion">
-</logic:present>
 
-<!--  Pendiente presentacion delegacion -->
-<logic:present name="pendienteDelegacionPresentacion">
-</logic:present>
+<!--  Circuito reducido: solo llegara si debe confirmar documento consentimiento -->
+<logic:equal name="isTramiteReducido" value="false">
+
+	<!--  Flujo de tramite -->
+	<logic:present name="pasarFlujoTramitacion">
+	</logic:present>
+
+	<!--  Pendiente presentacion delegacion -->
+	<logic:present name="pendienteDelegacionPresentacion">
+	</logic:present>
 
 
-<!--  Pendiente confirmar notificacion: inicio capa -->
-<logic:present name="confirmarSeleccionNotificacionTelematica">
+	<!--  Pendiente confirmar notificacion: inicio capa -->
+	<logic:present name="confirmarSeleccionNotificacionTelematica">
 
-	<bean:define id="seleccionNotificacionTelematica" name="seleccionNotificacionTelematica" type="java.lang.String"/>
+		<bean:define id="seleccionNotificacionTelematica" name="seleccionNotificacionTelematica" type="java.lang.String"/>
 
-	<div class="alerta">
-		<html:form action="/protected/seleccionNotificacionTelematicaAvisos">
-		<html:hidden property="ID_INSTANCIA" value="<%=ID_INSTANCIA%>"/>
-		<html:hidden property="seleccionNotificacion"  styleId="seleccionNotificacion" value="<%=seleccionNotificacionTelematica%>"/>
+		<div class="alerta">
+			<html:form action="/protected/seleccionNotificacionTelematicaAvisos">
+			<html:hidden property="ID_INSTANCIA" value="<%=ID_INSTANCIA%>"/>
+			<html:hidden property="seleccionNotificacion"  styleId="seleccionNotificacion" value="<%=seleccionNotificacionTelematica%>"/>
 
-		<!-- Si notif no obligatoria mostramos confirmacion -->
-		<logic:equal name="notificacionObligatoria" value="false">
-				<p><bean:message key="finalizacion.notificacionTelematica.confirmacion" arg0="<%=referenciaPortal%>"/></p>
-				<p align="center">
-					<input type="radio" name="opc" <%=("true".equals(seleccionNotificacionTelematica)? "checked=\"checked\"" : "")%>  onclick="document.getElementById('seleccionNotificacion').value='true';" />
-					<bean:message key="finalizacion.notificacionTelematica.habilitar"/>
-					<input type="radio" name="opc" <%=("false".equals(seleccionNotificacionTelematica)? "checked=\"checked\"" : "")%>  onclick="document.getElementById('seleccionNotificacion').value='false';" />
-					<bean:message key="finalizacion.notificacionTelematica.deshabilitar"/>
-				</p>
-				<br/>
-		</logic:equal>
-		<!--  Si notif obligatoria mostramos mensaje -->
-		<logic:equal name="notificacionObligatoria" value="true">
-			<logic:equal name="seleccionNotificacionTelematica" value="true">
-				<p><bean:message key="finalizacion.notificacionTelematica.textoObligatoria"  arg0="<%=referenciaPortal%>"/></p>
-				<br/>
+			<!-- Si notif no obligatoria mostramos confirmacion -->
+			<logic:equal name="notificacionObligatoria" value="false">
+					<p><bean:message key="finalizacion.notificacionTelematica.confirmacion" arg0="<%=referenciaPortal%>"/></p>
+					<p align="center">
+						<input type="radio" name="opc" <%=("true".equals(seleccionNotificacionTelematica)? "checked=\"checked\"" : "")%>  onclick="document.getElementById('seleccionNotificacion').value='true';" />
+						<bean:message key="finalizacion.notificacionTelematica.habilitar"/>
+						<input type="radio" name="opc" <%=("false".equals(seleccionNotificacionTelematica)? "checked=\"checked\"" : "")%>  onclick="document.getElementById('seleccionNotificacion').value='false';" />
+						<bean:message key="finalizacion.notificacionTelematica.deshabilitar"/>
+					</p>
+					<br/>
 			</logic:equal>
-		</logic:equal>
+			<!--  Si notif obligatoria mostramos mensaje -->
+			<logic:equal name="notificacionObligatoria" value="true">
+				<logic:equal name="seleccionNotificacionTelematica" value="true">
+					<p><bean:message key="finalizacion.notificacionTelematica.textoObligatoria"  arg0="<%=referenciaPortal%>"/></p>
+					<br/>
+				</logic:equal>
+			</logic:equal>
 
-		<!--  Seleccion  avisos -->
-		<logic:equal name="seleccionAvisos" value="true">
-				<bean:define id="emailAvisoDefault" name="tramite" property="seleccionEmailAviso" type="java.lang.String"/>
-				<bean:define id="smsAvisoDefault" name="tramite" property="seleccionSmsAviso" type="java.lang.String"/>
-				<p><bean:message key="finalizacion.avisos.confirmacion"/></p>
-				<p align="center">
-					Email: <html:text property="emailSeleccionAviso"  value="<%=emailAvisoDefault%>" size="30"/>
-					<logic:equal name="permitirAvisoSMS" value="true">
-						&nbsp;&nbsp;&nbsp;
-						Sms: <html:text property="smsSeleccionAviso" value="<%=smsAvisoDefault%>" size="12"/>
-					</logic:equal>
-				</p>
-		</logic:equal>
+			<!--  Seleccion  avisos -->
+			<logic:equal name="seleccionAvisos" value="true">
+					<bean:define id="emailAvisoDefault" name="tramite" property="seleccionEmailAviso" type="java.lang.String"/>
+					<bean:define id="smsAvisoDefault" name="tramite" property="seleccionSmsAviso" type="java.lang.String"/>
+					<p><bean:message key="finalizacion.avisos.confirmacion"/></p>
+					<p align="center">
+						Email: <html:text property="emailSeleccionAviso"  value="<%=emailAvisoDefault%>" size="30"/>
+						<logic:equal name="permitirAvisoSMS" value="true">
+							&nbsp;&nbsp;&nbsp;
+							Sms: <html:text property="smsSeleccionAviso" value="<%=smsAvisoDefault%>" size="12"/>
+						</logic:equal>
+					</p>
+			</logic:equal>
 
-		<!--  Boton confirmacion notificacion: fin capa-->
-		<br/>
-		<p align="center">
-			<html:submit><bean:message key="finalizacion.notificacionAvisos.continuar"/></html:submit>
-		</p>
-		</html:form>
+			<!--  Boton confirmacion notificacion: fin capa-->
+			<br/>
+			<p align="center">
+				<html:submit><bean:message key="finalizacion.notificacionAvisos.continuar"/></html:submit>
+			</p>
+			</html:form>
 
-		<!--  Errores validacion -->
-		<html:errors/>
+			<!--  Errores validacion -->
+			<html:errors/>
 
-	</div>
-</logic:present>
+		</div>
+	</logic:present>
 
 
-<!--  Pendiente confirmar movil: inicio capa -->
-<logic:present name="verificarMovil">
+	<!--  Pendiente confirmar movil: inicio capa -->
+	<logic:present name="verificarMovil">
 
-	<bean:define id="smsAviso" name="tramite" property="seleccionSmsAviso" type="java.lang.String"/>
+		<bean:define id="smsAviso" name="tramite" property="seleccionSmsAviso" type="java.lang.String"/>
 
-	<div class="alerta">
-		<html:form action="/protected/verificarMovil">
-		<html:hidden property="ID_INSTANCIA" value="<%=ID_INSTANCIA%>"/>
+		<div class="alerta">
+			<html:form action="/protected/verificarMovil">
+			<html:hidden property="ID_INSTANCIA" value="<%=ID_INSTANCIA%>"/>
 
-		<logic:present name="errorVerificacionMovil">
-		<p><strong><bean:message key="finalizacion.verificarMovil.errorVerificacionMovil"/></strong></p>
-		</logic:present>
+			<logic:present name="errorVerificacionMovil">
+			<p><strong><bean:message key="finalizacion.verificarMovil.errorVerificacionMovil"/></strong></p>
+			</logic:present>
 
-		<logic:present name="reenviadoVerificacionMovil">
-		<p><strong><bean:message key="finalizacion.verificarMovil.reenviadoVerificacionMovil"/></strong></p>
-		</logic:present>
+			<logic:present name="reenviadoVerificacionMovil">
+			<p><strong><bean:message key="finalizacion.verificarMovil.reenviadoVerificacionMovil"/></strong></p>
+			</logic:present>
 
-		<p><bean:message key="finalizacion.verificarMovil.confirmacion"  arg0="<%=smsAviso%>"/></p>
-		<p align="center">
-			<input type="text" name="codigoSms" size="4"/>
-			<html:submit><bean:message key="finalizacion.verificarMovil.validar"/></html:submit>
-		</p>
-		</html:form>
+			<p><bean:message key="finalizacion.verificarMovil.confirmacion"  arg0="<%=smsAviso%>"/></p>
+			<p align="center">
+				<input type="text" name="codigoSms" size="4"/>
+				<html:submit><bean:message key="finalizacion.verificarMovil.validar"/></html:submit>
+			</p>
+			</html:form>
 
-		<p>
-			<i>
-				<bean:message key="finalizacion.verificarMovil.reenvio"/>
-				<html:link href="<%=urlResetSmsCodigo%>"><bean:message key="finalizacion.verificarMovil.reenviar"/></html:link>
-			</i>
-		</p>
+			<p>
+				<i>
+					<bean:message key="finalizacion.verificarMovil.reenvio"/>
+					<html:link href="<%=urlResetSmsCodigo%>"><bean:message key="finalizacion.verificarMovil.reenviar"/></html:link>
+				</i>
+			</p>
 
-	</div>
+		</div>
 
-</logic:present>
+	</logic:present>
+</logic:equal>
 
 
 <!--  Registro solicitud -->
@@ -184,6 +191,9 @@
 //-->
 </script>
 
+<!--  Circuito reducido: solo llegara si debe confirmar documento consentimiento -->
+<logic:equal name="isTramiteReducido" value="false">
+
 	<h2><bean:message name="tituloKey"/></h2>
 
 	<!--  Registro automatico -->
@@ -191,9 +201,13 @@
 		<p><bean:message key="registro.registroAutomatico"/></p>
 	</logic:present>
 	<!--  Registro automatico (fin) -->
+</logic:equal>
 
 	<!--  Registro no automatico -->
 	<logic:notPresent name="registroAutomatico">
+
+	<logic:equal name="isTramiteReducido" value="false">
+
 	<p><bean:message name="instruccionesKey"/></p>
 
 	<!--  Mensaje de alerta (si no es de tipo consulta)-->
@@ -440,6 +454,7 @@
 				</logic:equal>
 			</logic:present>
 		</logic:notEqual>
+</logic:equal>
 
 
 		<!--  Opcion de verificar documento de confirmacion -->

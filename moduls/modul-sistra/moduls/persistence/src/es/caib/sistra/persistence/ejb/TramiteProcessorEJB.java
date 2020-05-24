@@ -4270,10 +4270,6 @@ public class TramiteProcessorEJB implements SessionBean {
     			tramiteInfo.setVerificarMovil(ConstantesSTR.VERIFICARMOVIL_HABILITADA.equals(espTramite.getVerificarMovil()));
     		}
 
-    		// TODO CONFREG VER EN QUE CASOS HAY QUE GENERAR DOC
-    		// Generar documento confirmacion registro
-    		tramiteInfo.setGenerarDocumentoConfirmacionRegistro("true".equals(ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("documentConfirmacionRegistro.generar")));
-
     	}
 
     	// Si el tipo de tramitación es dependiente habrá que calcular el estado actual de esta dependencia
@@ -4353,8 +4349,35 @@ public class TramiteProcessorEJB implements SessionBean {
     	// Establecemos si se debe saltar a la url de fin tras enviar un trámite
     	tramiteInfo.setRedireccionFin(tramiteVersion.getRedireccionFin()== 'S');
 
+		// Establecemos si se genera documento confirmacion registro
+    	boolean generarDocumentoConfirmacionRegistro = false;
+    	if ("true".equals(ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("documentConfirmacionRegistro.generar"))) {
+    		generarDocumentoConfirmacionRegistro = true;
+    		String filtroDocumentoConfirmacionRegistro = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("documentConfirmacionRegistro.filtro");
+    		if (StringUtils.isNotBlank(filtroDocumentoConfirmacionRegistro)) {
+    			// Valores filtro: AUTENTICADO;TELEMATICO;PRESENCIAL
+        		boolean tramitacionPresencial = tramiteInfo.getTipoTramitacion() == ConstantesSTR.TIPO_TRAMITACION_PRESENCIAL ||
+    			( tramiteInfo.getTipoTramitacion() == ConstantesSTR.TIPO_TRAMITACION_DEPENDIENTE &&
+    			  tramiteInfo.getTipoTramitacionDependiente() == ConstantesSTR.TIPO_TRAMITACION_PRESENCIAL);
+    			if (filtroDocumentoConfirmacionRegistro.indexOf("AUTENTICADO") != -1 && datosSesion.getNivelAutenticacion() == 'A') {
+    				// Tramite anonimo y solo se generan para autenticados
+    				generarDocumentoConfirmacionRegistro = false;
+    			} else if (!tramitacionPresencial &&  filtroDocumentoConfirmacionRegistro.indexOf("TELEMATICO") == -1) {
+    				// Tramite telematico y no se generan para telematico
+    				generarDocumentoConfirmacionRegistro = false;
+    			} else if (tramitacionPresencial &&  filtroDocumentoConfirmacionRegistro.indexOf("PRESENCIAL") == -1) {
+    				// Tramite presencial y no se generan para presencial
+    				generarDocumentoConfirmacionRegistro = false;
+    			}
+    		}
+    	}
+		tramiteInfo.setGenerarDocumentoConfirmacionRegistro(generarDocumentoConfirmacionRegistro);
+
+
     	// Establecesmos si se registra automaticamente
-    	tramiteInfo.setRegistroAutomatico(tramiteVersion.getRegistroAutomatico() == 'S');
+    	if (tramiteInfo.isGenerarDocumentoConfirmacionRegistro()) {
+    		tramiteInfo.setRegistroAutomatico(tramiteVersion.getRegistroAutomatico() == 'S');
+    	}
 
     	// Establece seleccion de notificacion telematica
     	if (tramiteInfo.getHabilitarNotificacionTelematica() != ConstantesSTR.NOTIFICACIONTELEMATICA_NOPERMITIDA) {
@@ -5239,6 +5262,9 @@ public class TramiteProcessorEJB implements SessionBean {
     		}
     		// Forzamos a generarlo de nuevo (puede haberse autenticado de nuevo)
     		generarPdfDocumentoConfirmacionRegistro(idSesionAutenticacion);
+    	} else {
+    		// Eliminamos documento (si se ha generado anteriormente)
+    		borrarPdfDocumentoConfirmacionRegistro();
     	}
 
     	// Generamos datos propios almacenandolos en el RDS
@@ -5257,7 +5283,32 @@ public class TramiteProcessorEJB implements SessionBean {
     	return asientoCompleto;
     }
 
-    // Genera XML de asiento y lo almacena en RDS
+    /**
+     * Borramos documento confirmacion registro (si se ha generado anteriormente).
+     */
+    private void borrarPdfDocumentoConfirmacionRegistro() throws Exception {
+		String id = ConstantesAsientoXML.IDENTIFICADOR_CONFIRMACION_REGISTRO;
+		DocumentoPersistentePAD docPAD = (DocumentoPersistentePAD) tramitePersistentePAD
+				.getDocumentos().get(id + "-1");
+
+		// Actualizamos PAD (marcamos documento como no rellenado)
+		if (docPAD != null && docPAD.getEstado() == DocumentoPersistentePAD.ESTADO_CORRECTO) {
+			// --- Borramos pago del RDS
+	    	RdsDelegate rds = DelegateRDSUtil.getRdsDelegate();
+	    	UsoRDS uso = new UsoRDS();
+	    	uso.setReferenciaRDS(docPAD.getRefRDS());
+	    	uso.setReferencia(tramitePersistentePAD.getIdPersistencia());
+	    	uso.setTipoUso(ConstantesRDS.TIPOUSO_TRAMITEPERSISTENTE);
+	    	rds.eliminarUso(uso);
+	    		// --- Actualizamos la PAD
+	    	docPAD.setReferenciaRDS(null);
+	    	docPAD.setEstado(DocumentoPersistentePAD.ESTADO_NORELLENADO);
+	    	actualizarPAD();
+		}
+
+	}
+
+	// Genera XML de asiento y lo almacena en RDS
     private String generarAsiento(DestinatarioTramite dt) throws Exception{
 
     	// Calculamos datos representante y representado
@@ -6834,11 +6885,12 @@ public class TramiteProcessorEJB implements SessionBean {
 		DocumentoRDS docRds;
 		// Si existe actualizamos documento en RDS
 		if (docPad.getRefRDS() != null) {
+			docPad.setEstado(DocumentoPersistentePAD.ESTADO_CORRECTO);
 			rds.actualizarFichero(docPad.getRefRDS(), pdf);
 		} else {
 			// Si no existe creamos documento y uso en RDS
 			docRds = new DocumentoRDS();
-			docRds.setModelo(ConstantesRDS.MODELO_ANEXO_GENERICO);
+			docRds.setModelo(ConstantesRDS.MODELO_CONFIRMACION_REGISTRO);
 			docRds.setVersion(1);
 			docRds.setDatosFichero(pdf);
 			docRds.setTitulo(tituloDocumento);
@@ -6861,6 +6913,8 @@ public class TramiteProcessorEJB implements SessionBean {
 			rds.crearUso(uso);
 		}
 
+		// Actualizamos PAD
+		actualizarPAD();
    }
 
 

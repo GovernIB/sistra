@@ -46,8 +46,8 @@ public class ConstantesRDS {
 	 * Tipo de uso para envio de edictos al BOIB
 	 */
 	public final static String TIPOUSO_ENVEDICTE = "EDI";
-	
-	
+
+
 	// CONSTANTES TIPOS DE PLANTILLAS
 	/**
 	 * Tipo plantilla HTML
@@ -57,7 +57,7 @@ public class ConstantesRDS {
 	 * Tipo plantilla PDF
 	 */
 	public static final transient String PLANTILLA_TIPO_PDF="PDF";
-	
+
 	// CONSTANTES TIPOS DE MODELO
 	/**
 	 * Modelo asiento registral
@@ -74,7 +74,7 @@ public class ConstantesRDS {
 	/**
 	 * Modelo documento identidad
 	 */
-	public static final String MODELO_DOCUMENTO_IDENTIDAD= "GE0004DOCID";	
+	public static final String MODELO_DOCUMENTO_IDENTIDAD= "GE0004DOCID";
 	/**
 	 * Modelo Anexo genérico
 	 */
@@ -101,15 +101,20 @@ public class ConstantesRDS {
 	public static final String MODELO_NOTIFICACION= "GE0011NOTIFICA";
 	/**
 	 * Modelo documento externo notificacion: usado para documentos externos de anexos de
-	 * notificaciones y avisos en los que se indica una url al documento. En el redose se 
+	 * notificaciones y avisos en los que se indica una url al documento. En el redose se
 	 * almacenara un xml con la url de acceso.
 	 */
 	public static final String MODELO_NOTIFICACION_EXTERNO= "GE0013NOTIFEXT";
-	
+
 	/**
 	 * Modelo autorizacion delegacion
 	 */
 	public static final String MODELO_AUTORIZACION_DELEGACION= "GE0012DELEGA";
+
+	/**
+	 * Modelo consentimiento registro.
+	 */
+	public static final String MODELO_CONFIRMACION_REGISTRO= "GE0015CONSREG";
 
 	// VERSIONES ACTUALES DE MODELOS DE DOCUMENTOS UTILIZADOS
 	/**
@@ -136,21 +141,21 @@ public class ConstantesRDS {
 	 * Modelo oficio remision
 	 */
 	public static final int VERSION_OFICIO_REMISION = 1;
-		
-	
+
+
 	// ALGORITMO HASH UTILIZADO AL INSERTAR DOCUMENTO
 	/**
 	 * Algoritmo de hash utilizado al insertar un documento
 	 */
 	public static final String HASH_ALGORITMO = "SHA-512";
 	/**
-	 * Encoding utilizado 
+	 * Encoding utilizado
 	 */
 	public static final String HASH_ENCODING = "UTF-8";
-	
+
 	// PARA SINCRONIZACION CON GESTOR DOCUMENTAL INDICA QUE DOCUMENTOS NO SE MIGRARAN (DOCUMENTOS ANTIGUOS)
 	public static final String GESDOC_DOCUMENTO_NO_CONSOLIDABLE = "#NOCONSOLIDABLE#";
-	
-	
-	
+
+
+
 }

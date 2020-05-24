@@ -61,11 +61,21 @@ public class RegistrarTramiteReducido extends BaseAction
 			}
 
 			// Si no avanzamos de paso -> error
-			if (respuestaFront.getInformacionTramite().getPasoTramitacion().getTipoPaso() == tipoPasoAnterior)
+			if (respuestaFront.getInformacionTramite().getPasoTramitacion().getTipoPaso() == tipoPasoAnterior) {
 				throw new Exception("La configuracion del tramite no es correcta para circuito reducido: no se puede avanzar hasta el paso registrar despues de rellenar");
-			else
-				tipoPasoAnterior = respuestaFront.getInformacionTramite().getPasoTramitacion().getTipoPaso();
+			}
+
+			// Establecemos tipo de paso anterior
+			tipoPasoAnterior = respuestaFront.getInformacionTramite().getPasoTramitacion().getTipoPaso();
+
 		}while( respuestaFront.getInformacionTramite().getPasoTramitacion().getTipoPaso() < PasoTramitacion.PASO_REGISTRAR );
+
+
+		// En caso de que se deba confirmar documento consentimiento, mostramos paso registrar en formato reducido
+		if (respuestaFront.getInformacionTramite().isGenerarDocumentoConfirmacionRegistro()) {
+			request.setAttribute( "accionRedireccion", "/protected/irAPaso.do" );
+			return mapping.findForward( "success" );
+		}
 
 		// 2º Obtenemos el asiento registral
 		AsientoCompleto asiento = (AsientoCompleto) respuestaFront.getParametros().get( "asiento" );
