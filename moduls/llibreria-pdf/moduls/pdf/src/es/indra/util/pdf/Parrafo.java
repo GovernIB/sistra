@@ -14,15 +14,24 @@ import com.lowagie.text.pdf.PdfTable;
 public class Parrafo implements PDFObject {
 
 	private String texto;
-	
+
 	public static final int ALIGNMENT_LEFT = 0;
 
 	public static final int ALIGNMENT_CENTER = 1;
 
 	public static final int ALIGNMENT_RIGHT = 2;
-	
+
 	private int alignment;
-	
+
+	private float interlineado = 1f;
+
+	public Parrafo(String texto, int alignment, float interlineado) {
+		super();
+		this.texto = texto;
+		this.alignment = alignment;
+		this.interlineado = interlineado;
+	}
+
 	/**
 	 * @param texto
 	 * @param alignment
@@ -65,9 +74,11 @@ public class Parrafo implements PDFObject {
 
 
 	public void write(PDFDocument document, PdfPTable tabla) throws DocumentException {
-		Font f = document.getContext().getDefaultFont();				
+		Font f = document.getContext().getDefaultFont();
 		Paragraph bloque = new Paragraph(new Chunk(texto,f));
+
 		PdfPCell cell = new PdfPCell(bloque);
+		cell.setLeading(0, interlineado);
 		cell.setHorizontalAlignment(alignment);
 		cell.setBorder(Rectangle.LEFT | Rectangle.RIGHT);
 		cell.setPaddingLeft(30f);
@@ -75,5 +86,21 @@ public class Parrafo implements PDFObject {
 		tabla.addCell(cell);
 	}
 
-	
+	/**
+	 *	Devuelve interlineado.
+	 * @return interlineado
+	 */
+	public float getInterlineado() {
+		return interlineado;
+	}
+
+	/**
+	 * Establece interlineado.
+	 * @param interlineado interlineado
+	 */
+	public void setInterlineado(float interlineado) {
+		this.interlineado = interlineado;
+	}
+
+
 }

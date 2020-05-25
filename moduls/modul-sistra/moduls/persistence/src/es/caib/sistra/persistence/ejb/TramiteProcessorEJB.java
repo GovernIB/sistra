@@ -6959,42 +6959,61 @@ public class TramiteProcessorEJB implements SessionBean {
     */
    private byte[] generarPdfEvidencias(String identificadorSesionAutenticacion, EvidenciasAutenticacion evidencias) throws Exception{
 
-	   // TODO No es multientidad
-	   String cabeceraTitulo = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"documentoConfirmacionRegistro.pdf.cabecera.titulo");
-	   String cabeceraLogoUrl = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"documentoConfirmacionRegistro.pdf.cabecera.logoUrl");
-	   String seccionConformidadTitulo = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"documentoConfirmacionRegistro.pdf.seccionConformidad.titulo");
-	   String seccionConformidadTexto = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"documentoConfirmacionRegistro.pdf.seccionConformidad.texto");
-	   String seccionEvidenciasTitulo = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"documentoConfirmacionRegistro.pdf.seccionEvidencias.titulo");
-	   String seccionHuellaTitulo = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"documentoConfirmacionRegistro.pdf.seccionHuella.titulo");
-	   String seccionHuellaTexto = Literales.getLiteral(tramiteInfo.getDatosSesion().getLocale().getLanguage(),"documentoConfirmacionRegistro.pdf.seccionHuella.texto");
-	   seccionHuellaTexto = StringUtils.replace(seccionHuellaTexto, "{identificador_sesion}", identificadorSesionAutenticacion);
-	   seccionHuellaTexto = StringUtils.replace(seccionHuellaTexto, "{huella_electronica}", evidencias.getHuellaElectronica());
+		// TODO No es multientidad
+		String cabeceraTitulo = Literales.getLiteral(tramiteInfo
+				.getDatosSesion().getLocale().getLanguage(),
+				"documentoConfirmacionRegistro.pdf.cabecera.titulo");
+		String cabeceraLogoUrl = Literales.getLiteral(tramiteInfo
+				.getDatosSesion().getLocale().getLanguage(),
+				"documentoConfirmacionRegistro.pdf.cabecera.logoUrl");
+		String seccionConformidadTitulo = Literales.getLiteral(tramiteInfo
+				.getDatosSesion().getLocale().getLanguage(),
+				"documentoConfirmacionRegistro.pdf.seccionConformidad.titulo");
+		String seccionConformidadTexto = Literales.getLiteral(tramiteInfo
+				.getDatosSesion().getLocale().getLanguage(),
+				"documentoConfirmacionRegistro.pdf.seccionConformidad.texto");
+		String seccionEvidenciasTitulo = Literales.getLiteral(tramiteInfo
+				.getDatosSesion().getLocale().getLanguage(),
+				"documentoConfirmacionRegistro.pdf.seccionEvidencias.titulo");
+		String seccionHuellaTitulo = Literales.getLiteral(tramiteInfo
+				.getDatosSesion().getLocale().getLanguage(),
+				"documentoConfirmacionRegistro.pdf.seccionHuella.titulo");
+		String seccionHuellaTexto = Literales.getLiteral(tramiteInfo
+				.getDatosSesion().getLocale().getLanguage(),
+				"documentoConfirmacionRegistro.pdf.seccionHuella.texto");
+		seccionHuellaTexto = StringUtils.replace(seccionHuellaTexto,
+				"{identificador_sesion}", identificadorSesionAutenticacion);
+		seccionHuellaTexto = StringUtils.replace(seccionHuellaTexto,
+				"{huella_electronica}", evidencias.getHuellaElectronica());
 
-	   PDFDocument docPDF = null;
-	   if (StringUtils.isNotBlank(cabeceraLogoUrl)) {
-		   docPDF = new PDFDocument(cabeceraTitulo, cabeceraLogoUrl);
-	   } else {
-		   docPDF = new PDFDocument(cabeceraTitulo);
-	   }
+		PDFDocument docPDF = null;
+		if (StringUtils.isNotBlank(cabeceraLogoUrl)) {
+			docPDF = new PDFDocument(cabeceraTitulo, cabeceraLogoUrl);
+		} else {
+			docPDF = new PDFDocument(cabeceraTitulo);
+		}
 
-	   Seccion seccion;
-	   Parrafo p;
-	   Propiedad propiedad;
-	   float []widths = {10f,30f};
+		Seccion seccion;
+		Parrafo p;
+		Propiedad propiedad;
+		float[] widths = { 10f, 30f };
 
-	   // Seccion conformidad
-	   seccion = new Seccion("A",seccionConformidadTitulo);
-	   seccion.setKeepTogether(true);
-	   p = new Parrafo(seccionConformidadTexto);
-	   seccion.addCampo(p);
-	   docPDF.addSeccion(seccion);
+		// Seccion conformidad
+		seccion = new Seccion("A", seccionConformidadTitulo);
+		seccion.setKeepTogether(true);
+		p = new Parrafo(seccionConformidadTexto);
+		p.setInterlineado(1.3f);
+		seccion.addCampo(p);
+		docPDF.addSeccion(seccion);
 
-	   	// Seccion evidencias
+		// Seccion evidencias
 		seccion = new Seccion("B", seccionEvidenciasTitulo);
 		for (Iterator it = evidencias.getEvidencias().iterator(); it.hasNext();) {
-			PropiedadAutenticacion evidencia = (PropiedadAutenticacion) it.next();
+			PropiedadAutenticacion evidencia = (PropiedadAutenticacion) it
+					.next();
 			if (evidencia.isMostrar()) {
-				propiedad = new Propiedad(evidencia.getPropiedad(), evidencia.getValor(), widths);
+				propiedad = new Propiedad(evidencia.getPropiedad(),
+						evidencia.getValor(), widths);
 				seccion.addCampo(propiedad);
 			}
 		}
@@ -7003,16 +7022,17 @@ public class TramiteProcessorEJB implements SessionBean {
 		// Seccion huella
 		seccion = new Seccion("C", seccionHuellaTitulo);
 		seccion.setKeepTogether(true);
-		 p = new Parrafo(seccionHuellaTexto);
-		 seccion.addCampo(p);
-		   docPDF.addSeccion(seccion);
+		p = new Parrafo(seccionHuellaTexto);
+		p.setInterlineado(1.3f);
+		seccion.addCampo(p);
+		docPDF.addSeccion(seccion);
 
-   	ByteArrayOutputStream bos = new ByteArrayOutputStream();
-   	docPDF.generate(bos);
-   	byte[] pdf = bos.toByteArray();
-   	bos.close();
-   	return pdf;
-   }
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		docPDF.generate(bos);
+		byte[] pdf = bos.toByteArray();
+		bos.close();
+		return pdf;
+	}
 
 
 }
