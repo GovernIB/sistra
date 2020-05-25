@@ -115,7 +115,11 @@ public class PluginLoginIB implements PluginLoginIntf {
 		// Autenticacion frontal: LoginIB
 		if (principal instanceof LoginIBPrincipal) {
 			LoginIBPrincipal mp = (LoginIBPrincipal) principal;
-			return mp.getAutenticado().getNif();
+			String res = null;
+			if (mp.getAutenticado() != null) {
+				res = mp.getAutenticado().getNif();
+			}
+			return res;
 		}
 
 		// Autenticacion backs: Principal particularizado
@@ -131,7 +135,11 @@ public class PluginLoginIB implements PluginLoginIntf {
 		// Autenticacion frontal: LoginIB
 		if (principal instanceof LoginIBPrincipal) {
 			LoginIBPrincipal mp = (LoginIBPrincipal) principal;
-			return mp.getAutenticado().getNombreCompleto();
+			String res = null;
+			if (mp.getAutenticado() != null) {
+				res = mp.getAutenticado().getNombreCompleto();
+			}
+			return res;
 		}
 
 		// Autenticacion backs: Principal particularizado

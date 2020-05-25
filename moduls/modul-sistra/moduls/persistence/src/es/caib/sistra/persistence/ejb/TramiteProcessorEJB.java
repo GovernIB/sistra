@@ -4355,27 +4355,46 @@ public class TramiteProcessorEJB implements SessionBean {
     		generarDocumentoConfirmacionRegistro = true;
     		String filtroDocumentoConfirmacionRegistro = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("documentConfirmacionRegistro.filtro");
     		if (StringUtils.isNotBlank(filtroDocumentoConfirmacionRegistro)) {
-    			// Valores filtro: AUTENTICADO;TELEMATICO;PRESENCIAL
+    			// Verifica si tramitacion es presencial o telematica
         		boolean tramitacionPresencial = tramiteInfo.getTipoTramitacion() == ConstantesSTR.TIPO_TRAMITACION_PRESENCIAL ||
     			( tramiteInfo.getTipoTramitacion() == ConstantesSTR.TIPO_TRAMITACION_DEPENDIENTE &&
     			  tramiteInfo.getTipoTramitacionDependiente() == ConstantesSTR.TIPO_TRAMITACION_PRESENCIAL);
+        		// Verifica si se ha firmado un formulario o si se debe firmar el registro
+        		boolean firmaDigital =
+        				existeDocumentoFirmado(tramiteInfo.getFormularios())
+        				||
+        				(datosSesion.getNivelAutenticacion() == 'C' && !tramitacionPresencial && tramiteInfo.getFirmar());
+
+    			// Valores filtro: AUTENTICADO;TELEMATICO;PRESENCIAL;SIN_FIRMA_DIGITAL
+
+        		// AUTENTICADO: Verificamos si se debe generar solo para autenticados
     			if (filtroDocumentoConfirmacionRegistro.indexOf("AUTENTICADO") != -1 && datosSesion.getNivelAutenticacion() == 'A') {
-    				// Tramite anonimo y solo se generan para autenticados
     				generarDocumentoConfirmacionRegistro = false;
-    			} else if (!tramitacionPresencial &&  filtroDocumentoConfirmacionRegistro.indexOf("TELEMATICO") == -1) {
-    				// Tramite telematico y no se generan para telematico
+    			}
+
+    			// TELEMATICO: Verificamos si se debe permitir para tramites telematicos
+    			if (!tramitacionPresencial &&  filtroDocumentoConfirmacionRegistro.indexOf("TELEMATICO") == -1) {
     				generarDocumentoConfirmacionRegistro = false;
-    			} else if (tramitacionPresencial &&  filtroDocumentoConfirmacionRegistro.indexOf("PRESENCIAL") == -1) {
+    			}
+
+    			// PRESENCIAL: Verificamos si se debe permitir para tramites presenciales
+    			if (tramitacionPresencial &&  filtroDocumentoConfirmacionRegistro.indexOf("PRESENCIAL") == -1) {
+    				generarDocumentoConfirmacionRegistro = false;
+    			}
+
+    			// SIN_FIRMA_DIGITAL: Verificamos si se debe permitir solo para tramites sin firma digital (formulario firmado o registro con firma)
+    			if (!tramitacionPresencial && filtroDocumentoConfirmacionRegistro.indexOf("SIN_FIRMA_DIGITAL") != -1 && firmaDigital) {
     				// Tramite presencial y no se generan para presencial
     				generarDocumentoConfirmacionRegistro = false;
     			}
+
     		}
     	}
 		tramiteInfo.setGenerarDocumentoConfirmacionRegistro(generarDocumentoConfirmacionRegistro);
 
 
-    	// Establecesmos si se registra automaticamente
-    	if (tramiteInfo.isGenerarDocumentoConfirmacionRegistro()) {
+    	// Establecemos si se registra automaticamente (solo si no se debe generar documento confirmacion)
+    	if (!tramiteInfo.isGenerarDocumentoConfirmacionRegistro()) {
     		tramiteInfo.setRegistroAutomatico(tramiteVersion.getRegistroAutomatico() == 'S');
     	}
 
@@ -4403,7 +4422,22 @@ public class TramiteProcessorEJB implements SessionBean {
 
     }
 
-    /**
+    // Verifica si exise algun documento firmado
+	private boolean existeDocumentoFirmado(ArrayList documentos) {
+		boolean res = false;
+		if (documentos != null) {
+			for (Iterator it = documentos.iterator(); it.hasNext();) {
+				DocumentoFront doc = (DocumentoFront) it.next();
+				if (doc.isFirmado()) {
+					res = true;
+					break;
+				}
+			}
+		}
+		return res;
+	}
+
+	/**
      * Comprueba si puede configurarse como circuito reducido:
      * 	- no firma en tramite
      * 	- un único formulario sin firma
