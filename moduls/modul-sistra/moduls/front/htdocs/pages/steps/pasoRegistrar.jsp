@@ -648,7 +648,6 @@
 			// Enviar con firma digital
 			function enviar(formulario)
 			{
-				// TODO CONFREG Para firma haria falta?
 				<logic:present name="verificarDocumentoConfirmacionRegistro">
 					// Verificar documento confirmacion registro
 					var docVerificado = $('#documentoConfirmacionRegistroVerificado').attr('checked');
