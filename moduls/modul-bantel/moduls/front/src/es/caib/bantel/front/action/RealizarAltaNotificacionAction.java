@@ -28,6 +28,9 @@ import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
+
+import es.caib.util.NifCif;
+
 /**
  * @struts.action
  * 	name="detalleNotificacionForm"
@@ -59,12 +62,18 @@ public class RealizarAltaNotificacionAction extends BaseAction
 		String idExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_IDENTIFICADOR_KEY);
 		Long uniAdm = (Long) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_UNIDADADMIN_KEY);
 		String claveExpe = (String) request.getSession().getAttribute(Constants.EXPEDIENTE_ACTUAL_CLAVE_KEY);
+		
+		Boolean bloqueaClave = new Boolean( false );
 
 		try{
 
 			// Recupera expediente
 			PadBackOfficeDelegate ejb = new PadBackOfficeDelegate();
 			ExpedientePAD expediente = ejb.consultaExpediente(uniAdm.longValue(), idExpe, claveExpe);
+			
+			if (NifCif.esPasaporte(expediente.getNifRepresentante())){
+				bloqueaClave = new Boolean( true );
+			}			
 			
 			// Obtenemos procedimiento
 			ProcedimientoBTE proc = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimiento(expediente.getIdentificadorProcedimiento());
@@ -125,6 +134,7 @@ public class RealizarAltaNotificacionAction extends BaseAction
 		}catch(Exception e){
 			log.error("Excepcion alta notificacion",e);
 			request.setAttribute( "enlace", "altaNotif");
+			request.setAttribute("bloqueaClave",bloqueaClave);
 			String mensajeOk = MensajesUtil.getValue("error.notificacio.Excepcion", request);
 			request.setAttribute( Constants.MESSAGE_KEY,mensajeOk + ": " + e.getMessage());
 			return mapping.findForward("fail");
