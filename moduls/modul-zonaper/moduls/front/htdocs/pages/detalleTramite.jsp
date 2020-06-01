@@ -10,6 +10,7 @@
 <%@ page import="es.caib.xml.registro.factoria.ConstantesAsientoXML" %>
 <%@ page import="es.caib.redose.modelInterfaz.ConstantesRDS"%>
 <%@ page import="es.caib.util.StringUtil"%>
+<%@ page import="org.apache.commons.lang.StringEscapeUtils"%>
 
 <bean:define id="tipo" name="tipo" type="java.lang.String" />
 
@@ -209,7 +210,7 @@
 							<bean:define id="valorDato" name="dato" property="valor" type="java.lang.String"/>
 							<tr>
 								<th scope="row"><bean:write name="dato" property="descripcion"/>:</th>
-								<td><%= StringUtil.newLineToBr( valorDato ) %></td>
+								<td><%= StringUtil.newLineToBr( StringEscapeUtils.escapeHtml(valorDato) ) %></td>
 							</tr>
 						</logic:equal>
 						<logic:notEqual name="dato" property="tipo" value="C">

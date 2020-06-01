@@ -3,6 +3,7 @@
 <%@ page import="es.caib.redose.modelInterfaz.ConstantesRDS"%>
 <%@ page import="es.caib.xml.registro.factoria.ConstantesAsientoXML" %>
 <%@ page import="es.caib.xml.datospropios.factoria.ConstantesDatosPropiosXML" %>
+<%@ page import="org.apache.commons.lang.StringEscapeUtils"%>
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html"%>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean"%>
 <%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic"%>
@@ -296,7 +297,8 @@
 									<ul>
 							<logic:iterate id="dato" name="solicitud" property="dato">
 								<logic:equal name="dato" property="tipo" value="C">
-										<li><span class="label"><bean:write name="dato" property="descripcion"/>:</span> <span><bean:write name="dato" property="valor"/></span></li>
+								<bean:define id="descCampo" name="dato" property="valor" type="java.lang.String"/>
+										<li><span class="label"><bean:write name="dato" property="descripcion"/>:</span> <span><%=StringEscapeUtils.escapeHtml(descCampo)%></span></li>
 								</logic:equal>
 								<logic:notEqual name="dato" property="tipo" value="C">
 									<li><span class="label2nivel"><bean:write name="dato" property="descripcion"/></span></li>
