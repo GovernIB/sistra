@@ -311,10 +311,10 @@ public class PluginLoginIB implements PluginLoginIntf {
 		for (int i = 0; i<propiedadesJson.length(); i++) {
 			JSONObject evidencia = (JSONObject) propiedadesJson.get(i);
 			PropiedadAutenticacion p = new PropiedadAutenticacion();
-			p.setPropiedad((String) evidencia.get("propiedad"));
-			p.setValor((String) evidencia.get("valor"));
-			p.setTipo(TypePropiedad.fromString((String) evidencia.get("tipo")));
-			p.setMostrar("true".equals(evidencia.get("mostrar").toString()));
+			p.setPropiedad(client.getJSONObjectStringValue(evidencia, "propiedad"));
+			p.setValor(client.getJSONObjectStringValue(evidencia, "valor"));
+			p.setTipo(TypePropiedad.fromString(client.getJSONObjectStringValue(evidencia, "tipo")));
+			p.setMostrar("true".equals(client.getJSONObjectStringValue(evidencia, "mostrar")));
 			propsAutenticacion.add(p);
 		}
 

@@ -253,6 +253,24 @@ public class LoginIBClient {
 	}
 
 	/**
+	 * Obtiene valor JSON como string.
+	 *
+	 * @param json
+	 *            objeto json
+	 * @param propiedad
+	 *            propiedad
+	 * @return objeto json
+	 */
+	public String getJSONObjectStringValue(JSONObject json, String propiedad)  {
+		String res = null;
+		if (json != null && json.has(propiedad)
+				&& !JSONObject.NULL.equals(json.get(propiedad))) {
+			res = json.get(propiedad).toString();
+		}
+		return res;
+	}
+
+	/**
 	 * Codificar en Base64.
 	 *
 	 * @param cadena
