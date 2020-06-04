@@ -2771,7 +2771,9 @@ public class TramiteProcessorEJB implements SessionBean {
     		}
 
     		// Eliminamos trámite de la zona de persistencia, sin realizar back-up
-    		borrarPersistencia( false );
+    		if (tramiteVersion.getDestino() != ConstantesSTR.DESTINO_CONSULTA) {
+    			borrarPersistencia( false );
+    		}
 
     		// Damos el paso como completado
     		pasoRegistrar.setCompletado(PasoTramitacion.ESTADO_COMPLETADO);
