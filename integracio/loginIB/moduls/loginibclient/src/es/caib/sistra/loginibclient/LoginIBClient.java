@@ -59,9 +59,9 @@ public class LoginIBClient {
 				throw new Exception("LoginIBClient: No se ha establecido password");
 			}
 		} catch (Exception ex) {
-			log.error("Error inicializando propiedades",
+			log.error("Error inicializando propiedades: " + ex.getMessage(),
 					ex);
-			throw new LoginIBClientException("Error inicializando propiedades",
+			throw new LoginIBClientException("Error inicializando propiedades: " + ex.getMessage(),
 					ex);
 		}
 	}
@@ -114,8 +114,9 @@ public class LoginIBClient {
 			return datosAut;
 
 		} catch (Exception ex) {
+			log.error("Error obteniendo informacion ticket de LoginIB: " + ex.getMessage(), ex);
 			throw new LoginIBClientException(
-					"Error obteniendo datos de LoginIB: " + ex.getMessage());
+					"Error obteniendo informacion ticket de LoginIB: " + ex.getMessage(), ex);
 		} finally {
 			getMethod.releaseConnection();
 		}
@@ -158,8 +159,9 @@ public class LoginIBClient {
 			return datosAut;
 
 		} catch (Exception ex) {
+			log.error("Error obteniendo evidencias de LoginIB: " + ex.getMessage(), ex);
 			throw new LoginIBClientException(
-					"Error obteniendo datos de LoginIB: " + ex.getMessage());
+					"Error obteniendo evidencias de LoginIB: " + ex.getMessage());
 		} finally {
 			getMethod.releaseConnection();
 		}
@@ -196,6 +198,9 @@ public class LoginIBClient {
 					+ encodeBase64(user + ":" + password));
 			postMethod.setRequestEntity((new StringRequestEntity(json
 					.toString(), "application/json", "UTF-8")));
+
+			log.debug("Iniciando sesion autenticacion: URL: " + (url + "login") + " usuario: " + user + " JSON: " + json.toString());
+
 			client.executeMethod(postMethod);
 			final String loginPage = postMethod.getResponseBodyAsString();
 			if (postMethod.getStatusCode() != HttpStatus.SC_OK) {
@@ -203,6 +208,7 @@ public class LoginIBClient {
 			}
 			return loginPage;
 		} catch (Exception ex) {
+			log.error("Error iniciando sesion en LoginIB: " + ex.getMessage(), ex);
 			throw new LoginIBClientException(
 					"Error iniciando sesion en LoginIB: " + ex.getMessage(), ex);
 		} finally {
