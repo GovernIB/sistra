@@ -29,6 +29,10 @@
     	<fileset dir="${lib.dir}/jboss">
     	    <include name="*.jar"/>
     	</fileset>
+    	<fileset dir="${lib.dir}/loginibclient">
+    		<include name="httpclient-*.jar"/>
+    		<include name="httpcore-*.jar"/>
+   		</fileset>
     	<fileset dir="${lib.dir}">
     		<include name="commons-*.jar"/>
     		<include name="servlet.jar"/>
