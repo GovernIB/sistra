@@ -98,6 +98,9 @@
 	    <module><java>lib/sistra-loginib-util.jar</java></module>
 		<module><java>lib/sistra-loginib-pluginlogin.jar</java></module>
 
+		<!-- Plugin autenticacion explicita -->
+		<module><java>lib/sistra-plugin-login-autenticacionExplicita.jar</java></module>
+
 		<!-- Mòdul audita -->
 		<module><java>1-audit-model.jar</java></module>
 	    <module><ejb>1-audit-persistence.jar</ejb></module>

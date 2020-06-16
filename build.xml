@@ -37,6 +37,7 @@
 	<ant dir="moduls/llibreria-plugins" target="${task}" inheritall="false"/>
 	<ant dir="moduls/llibreria-util" target="${task}" inheritall="false"/>
 	<ant dir="moduls/llibreria-utilWs" target="${task}" inheritall="false"/>
+	<ant dir="moduls/llibreria-plugin-autenticacionExplicita" target="${task}" inheritall="false"/>
 	<ant dir="moduls/modul-mobtratel" target="${task}" inheritall="false"/>
 	<ant dir="moduls/modul-audita" target="${task}" inheritall="false"/>
 	<ant dir="moduls/modul-redose" target="${task}" inheritall="false"/>
