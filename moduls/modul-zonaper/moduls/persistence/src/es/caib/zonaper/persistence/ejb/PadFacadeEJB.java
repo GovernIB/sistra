@@ -224,7 +224,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	return tramitePersistenteToTramitePersistentePAD(tramitePersistente);
     }
 
-    
+
 
     /**
      * Obtiene lista de tramites persistentes que tiene pendientes por completar el usuario,
@@ -254,7 +254,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	}
     	return tramitesPAD;
     }
-    
+
     /**
      * Obtiene lista de tramites persistentes que tiene pendientes por completar el usuario,
      * con una fecha límite
@@ -283,7 +283,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	}
     	return tramitesPAD;
     }
-    
+
 
     /**
      * Obtiene lista de tramites persistentes que tiene pendientes por completar el usuario,
@@ -327,7 +327,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	}
     	return tramitesPAD;
     }
-    
+
     /**
      * Obtiene lista de tramites persistentes que tiene pendientes por completar el usuario,
      * o bien ha remitido a otro usuario
@@ -337,7 +337,7 @@ public abstract class PadFacadeEJB implements SessionBean{
      * @ejb.permission role-name="${role.todos}"
      */
     public List obtenerTramitesPersistentesEntidadDelegada(String nifEntidad) throws ExcepcionPAD{
-    	return obtenerTramitesPersistentesEntidadDelegada(nifEntidad, true); 
+    	return obtenerTramitesPersistentesEntidadDelegada(nifEntidad, true);
     }
 
     /**
@@ -729,7 +729,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     public Date obtenerAcuseRecibo(String entidad, String numeroRegistro) throws ExcepcionPAD
     {
     	try{
-    		
+
     		// Por compatibilidad con versiones anteriores el codigo entidad puede ser nulo. Solo permitido si solo existe 1 entidad.
         	if (entidad == null) {
         		List entidades = DelegateBTEUtil.getBteSistraDelegate().obtenerEntidades();
@@ -738,7 +738,7 @@ public abstract class PadFacadeEJB implements SessionBean{
         		}
         		entidad = ( (EntidadBTE) entidades.get(0)).getIdentificador();
         	}
-    		
+
     		NotificacionTelematicaDelegate td = DelegateUtil.getNotificacionTelematicaDelegate();
     		NotificacionTelematica not = td.obtenerNotificacionTelematica(entidad, numeroRegistro);
     		if (not == null || not.isRechazada()) return null;
@@ -1051,7 +1051,7 @@ public abstract class PadFacadeEJB implements SessionBean{
      *  @ejb.permission role-name="${role.todos}"
      *
      */
-	
+
 	public void logSmsVerificarMovil(String idPersistencia, String movil, String codigoSms) throws ExcepcionPAD
 	{
 		try
@@ -1061,13 +1061,13 @@ public abstract class PadFacadeEJB implements SessionBean{
 			logRegistro.setIdPersistencia(idPersistencia);
 			logRegistro.setMovil(movil);
 			logRegistro.setFecha(new Date());
-			DelegateUtil.getLogVerificacionMovilDelegate().grabarLogVerificacionMovil(logRegistro );				
+			DelegateUtil.getLogVerificacionMovilDelegate().grabarLogVerificacionMovil(logRegistro );
 		}catch (Exception ex){
 			throw new ExcepcionPAD("Error enviando sms para verificar movil",ex);
 		}
 	}
-	
-	
+
+
     /**
      * Obtiene lista de procedimientos en los que ha participado usuario (tramites persistentes y expedientes).
      *
@@ -1079,7 +1079,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     	try {
 	    	List procsId = new ArrayList();
 	    	List tramites = new ArrayList();
-	    		
+
 	    	// Recuperamos id procedimientos de tramites persistentes
 	    	if (fecha == null){
 	    		tramites = this.obtenerTramitesPersistentesUsuario();
@@ -1092,7 +1092,7 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    			procsId.add(tp.getIdProcedimiento());
 	    		}
 	    	}
-	    	
+
 	    	// Recuperamos id procedimientos de expedientes
 	    	List procsIdExpe = DelegateUtil.getExpedienteDelegate().obtenerProcedimientosId(fecha);
 	    	for (Iterator it = procsIdExpe.iterator(); it.hasNext();) {
@@ -1101,7 +1101,7 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    			procsId.add(idProcExpe);
 	    		}
 	    	}
-	    	
+
 	    	// Recuperamos procedimientos de Bantel y dejamos solo los del usuario
 	    	List res = new ArrayList();
 	    	List procsBte = DelegateBTEUtil.getBteSistraDelegate().obtenerProcedimientos(lang);
@@ -1111,15 +1111,30 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    			res.add(proc);
 	    		}
 	    	}
-	    	
+
 	    	return res;
-    	
+
 	    }catch (Exception ex){
 			throw new ExcepcionPAD("Error consultando procedimientos usuario",ex);
 		}
-    	
+
     }
-    
+    /**
+     * Obtiene numero tramites iniciados en intervalo.
+     *
+     *
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public int obtenerTramitesIniciadosIntervalo(String idTramite, int versionTramite, Date fechaInicio, Date fechaFin ) throws ExcepcionPAD{
+    	try{
+    		TramitePersistenteDelegate td = DelegateUtil.getTramitePersistenteDelegate();
+    		return td.obtenerTramitesIniciadosIntervalo(idTramite, versionTramite, fechaInicio, fechaFin);
+    	}catch (Exception ex){
+    		throw new ExcepcionPAD("No se ha podido recuperar tramites iniciados en intervalo: " + ex.getMessage(), ex);
+    	}
+    }
+
     /**
      * Obtiene lista de tramites en los que ha participado usuario.
      *
@@ -1130,8 +1145,8 @@ public abstract class PadFacadeEJB implements SessionBean{
     public List obtenerTramitesIdUsuario() throws ExcepcionPAD{
     	try {
 	    	List tramitesId = new ArrayList();
-	    		
-	    	// Recuperamos id tramite de tramites persistentes 
+
+	    	// Recuperamos id tramite de tramites persistentes
 	    	List tramites = this.obtenerTramitesPersistentesUsuario();
 	    	for (Iterator it = tramites.iterator(); it.hasNext();) {
 	    		TramitePersistentePAD tp = (TramitePersistentePAD) it.next();
@@ -1139,8 +1154,8 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    			tramitesId.add(tp.getTramite());
 	    		}
 	    	}
-	    	
-	    	// Recuperamos id tramite de entradas telematicas  
+
+	    	// Recuperamos id tramite de entradas telematicas
 	    	List tramiteIdsTel = DelegateUtil.getEntradaTelematicaDelegate().listarTramiteIds();
 	    	for (Iterator it = tramiteIdsTel.iterator(); it.hasNext();) {
 	    		String idTramiteTel = (String) it.next();
@@ -1148,8 +1163,8 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    			tramitesId.add(idTramiteTel);
 	    		}
 	    	}
-	    	
-	    	// Recuperamos id tramite de entradas preregistro  
+
+	    	// Recuperamos id tramite de entradas preregistro
 	    	List tramiteIdsPre = DelegateUtil.getEntradaPreregistroDelegate().listarTramiteIds();
 	    	for (Iterator it = tramiteIdsPre.iterator(); it.hasNext();) {
 	    		String idTramitePre = (String) it.next();
@@ -1157,13 +1172,13 @@ public abstract class PadFacadeEJB implements SessionBean{
 	    			tramitesId.add(idTramitePre);
 	    		}
 	    	}
-	    	
+
 	    	return tramitesId;
-    	
+
 	    }catch (Exception ex){
 			throw new ExcepcionPAD("Error consultando tramites usuario",ex);
 		}
-    	
+
     }
 
     // ------------------------ Funciones utilidad ----------------------------------------------------------------

@@ -12,6 +12,7 @@ import java.security.Principal;
 import java.security.SecureRandom;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -3519,6 +3520,20 @@ public class TramiteProcessorEJB implements SessionBean {
     	if (tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones().getActivo().equals("N")) {
     		debug(mensajeLog("Tramite inactivo"));
     		throw new ProcessorException("Tramite inactivo",MensajeFront.MENSAJE_TRAMITEINACTIVO);
+    	}
+
+    	// Valida limite concurrencia
+    	if (tramiteVersion.getLimiteTipo() == TramiteVersion.LIMITE_TRAMITACION_INICIOS) {
+    		Date fechaFin = new Date();
+    		final Calendar calendar = Calendar.getInstance();
+    		calendar.setTime(fechaFin);
+    		calendar.add(Calendar.MINUTE, tramiteVersion.getLimiteIntervalo() * -1);
+    		final Date fechaInicio = calendar.getTime();
+    		int tramitesIniciados = DelegatePADUtil.getPadDelegate().obtenerTramitesIniciadosIntervalo(tramiteVersion.getTramite().getIdentificador(), tramiteVersion.getVersion(), fechaInicio, fechaFin);
+    		if (tramitesIniciados >= tramiteVersion.getLimiteNumero()) {
+    			debug(mensajeLog("Limite concurrencia"));
+    			throw new ProcessorException("Limite concurrencia",MensajeFront.MENSAJE_LIMITETRAMITACION);
+    		}
     	}
 
     	//  Comprobamos restricciones en modo delegado

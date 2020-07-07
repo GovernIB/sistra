@@ -12,12 +12,13 @@ public class MensajeFront implements Serializable{
 	public static final int TIPO_WARNING=3;
 	// Error que implica la introducción de datos incorrectos por parte del usuario
 	public static final int TIPO_INFO=4;
-	
+
 	// Mensajes predefinidos
 	public static final String MENSAJE_ERRORDESCONOCIDO = "mensaje.error_desconocido";
 	public static final String MENSAJE_ERRORCAMBIOESPECIFICACIONES = "mensaje.error_cambio_especificaciones";
-	public static final String MENSAJE_TRAMITEBORRADO = "mensaje.tramite_borrado";	
+	public static final String MENSAJE_TRAMITEBORRADO = "mensaje.tramite_borrado";
 	public static final String MENSAJE_TRAMITEINACTIVO = "mensaje.tramite_inactivo";
+	public static final String MENSAJE_LIMITETRAMITACION = "mensaje.limite_tramitacion";
 	public static final String MENSAJE_ERRORSCRIPT = "mensaje.error_script";
 	public static final String MENSAJE_EXCEPCIONSCRIPT = "mensaje.excepcion_script";
 	public static final String MENSAJE_NOEXISTENIVEL = "mensaje.no_existe_nivel";
@@ -35,7 +36,7 @@ public class MensajeFront implements Serializable{
 	public static final String MENSAJE_PLAZONOABIERTO = "mensaje.plazo.no_abierto";
 	public static final String MENSAJE_PLAZOCERRADO = "mensaje.plazo.cerrado";
 	public static final String MENSAJE_NOEXISTETRAMITE = "mensaje.cargapersistente.no_existe_tramite";
-	public static final String MENSAJE_DIFERENTENIVEL = "mensaje.cargapersistente.diferente_nivel";	
+	public static final String MENSAJE_DIFERENTENIVEL = "mensaje.cargapersistente.diferente_nivel";
 	public static final String MENSAJE_TRAMITETERMINADO = "mensaje.cargapersistente.tramite_terminado";
 	public static final String MENSAJE_TRAMITEPENDIENTECONFIRMACION = "mensaje.cargapersistente.tramite_pendiente_confirmacion";
 	public static final String MENSAJE_ERRORINICIOPAGO = "mensaje.error_pagos.inicio_pago";
@@ -52,8 +53,8 @@ public class MensajeFront implements Serializable{
 	public static final String MENSAJE_ERROR_FIRMANTE_INCORRECTO="mensaje.error.firma.firmanteNoValido";
 	public static final String MENSAJE_ERROR_DOCUMENTO_NO_FIRMADO="mensaje.error.firma.documentoNoFirmado";
 	public static final String MENSAJE_ERROR_FLUJO_NO_USUARIO_SEYCON="mensaje.error.firma.flujoNoUsuarioSeycon";
-	public static final String MENSAJE_FLUJO_TRAMITE_ENVIADO="mensaje.firma.flujoTramiteEnviado";	
-	public static final String MENSAJE_DELEGADO_NO_PERMISO_RELLENAR = "mensaje.delegado.no_permiso_rellenar";	
+	public static final String MENSAJE_FLUJO_TRAMITE_ENVIADO="mensaje.firma.flujoTramiteEnviado";
+	public static final String MENSAJE_DELEGADO_NO_PERMISO_RELLENAR = "mensaje.delegado.no_permiso_rellenar";
 	public static final String MENSAJE_DELEGADO_TRAMITE_PENDIENTE_PRESENTAR="mensaje.delegado.pendiente_presentar";
 	public static final String MENSAJE_DELEGADO_TRAMITE_NO_MODIFICAR_PENDIENTE_PRESENTAR="mensaje.delegado.no_modificar_pendiente_presentar";
 	public static final String MENSAJE_DELEGADO_TRAMITE_PENDIENTE_FIRMA="mensaje.delegado.pendiente_firma";
@@ -61,11 +62,11 @@ public class MensajeFront implements Serializable{
 	public static final String MENSAJE_ERROR_MODIFICACION_FORM_POR_PENDIENTE_FIRMA = "mensaje.delegado.no_modif_form_por_pendiente_firma";
 	public static final String MENSAJE_ERROR_IDIOMA_NO_SOPORTADO = "mensaje.error_idioma_no_soportado";
 	public static final String MENSAJE_NO_BORRAR_SI_PAGOS = "mensaje.tramite_borrar_pagos";
-	
-	private String mensaje;	
+
+	private String mensaje;
 	private int tipo=TIPO_ERROR;
 	private String mensajeExcepcion;
-	
+
 	public String getMensaje() {
 		return mensaje;
 	}
@@ -84,6 +85,6 @@ public class MensajeFront implements Serializable{
 	public void setMensajeExcepcion(String mensajeExcepcion) {
 		this.mensajeExcepcion = mensajeExcepcion;
 	}
-	
-	
+
+
 }

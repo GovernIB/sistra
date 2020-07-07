@@ -20,15 +20,15 @@ import es.caib.sistra.persistence.delegate.TramiteVersionDelegate;
 public class TramiteVersionForm extends  TraForm implements InitForm
 {
 	private Long idTramite = null;
-	
+
 	private String inicioPlazo;
 	private String finPlazo;
-	
+
 	private String[] idiomas;
-	
+
 	private String userPlain;
 	private String passPlain;
-	
+
 	public Long getIdTramite()
 	{
 		return idTramite;
@@ -38,24 +38,24 @@ public class TramiteVersionForm extends  TraForm implements InitForm
 	{
 		this.idTramite = idTramite;
 	}
-	
-	public void destroy(ActionMapping mapping, HttpServletRequest request) 
+
+	public void destroy(ActionMapping mapping, HttpServletRequest request)
 	{
         super.destroy( mapping, request );
         this.setInicioPlazo( null );
         this.setFinPlazo( null );
         this.setIdiomas(null);
-       
+
     }
-	
-	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
+
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
     {
         ActionErrors errors = super.validate(mapping, request);
-        if (errors == null) 
+        if (errors == null)
         {
             errors = new ActionErrors();
         }
-                     
+
         // Inicio y fin de plazo
         if ( !Util.esCadenaVacia( inicioPlazo  ) )
         {
@@ -71,17 +71,17 @@ public class TramiteVersionForm extends  TraForm implements InitForm
         		errors.add( "tramiteVersion.finPlazo", new ActionError("errors.tramiteVersion.finPlazo" ) );
         	}
         }
-        
-        // Verificamos lista idiomas        
+
+        // Verificamos lista idiomas
         if (this.getIdiomas() == null || this.getIdiomas().length <= 0){
         	errors.add( "tramiteVersion.idiomas", new ActionError("errors.tramiteVersion.noIdiomas" ) );
         }
-        
+
         // Obtenemos valores del formulario
         TramiteVersion tramiteVersion = (TramiteVersion) getValues();
-        
+
         /*
-        // Comprobamos en caso de que el destino de trámite sea registro se indique que el trámite debe firmarse        
+        // Comprobamos en caso de que el destino de trámite sea registro se indique que el trámite debe firmarse
         if (tramiteVersion.getDestino() == ConstantesSTR.DESTINO_REGISTRO) {
         	if (tramiteVersion.getFirmar() == 'N')
         	{
@@ -89,25 +89,25 @@ public class TramiteVersionForm extends  TraForm implements InitForm
         	}
         }
         */
-        
+
         // Comprobamos en caso de que el destino de trámite sea consulta se rellenen los parametros de consulta
         if (tramiteVersion.getDestino() == ConstantesSTR.DESTINO_CONSULTA) {
-        	
+
         	// Debe indicarse la url en el caso de ser de tipo EJB y remoto o de ser webservice
-        	if ( (tramiteVersion.getConsultaTipoAcceso() == TramiteVersion.CONSULTA_EJB && tramiteVersion.getConsultaLocalizacion() == TramiteVersion.EJB_REMOTO)  ||        		
+        	if ( (tramiteVersion.getConsultaTipoAcceso() == TramiteVersion.CONSULTA_EJB && tramiteVersion.getConsultaLocalizacion() == TramiteVersion.EJB_REMOTO)  ||
         		  tramiteVersion.getConsultaTipoAcceso() == TramiteVersion.CONSULTA_WEBSERVICE){
         		if (Util.esCadenaVacia(tramiteVersion.getConsultaUrl())){
         			errors.add("values.consultaUrl", new ActionError("errors.tramiteVersion.urlVacia"));
         		}
         	}
-        	
+
         	//Debe indicarse la versión en el caso de ser de tipo webservice
         	if (tramiteVersion.getConsultaTipoAcceso() == TramiteVersion.CONSULTA_WEBSERVICE){
         		if (Util.esCadenaVacia(tramiteVersion.getConsultaWSVersion())){
         			errors.add("values.consultaWSVersion", new ActionError("errors.tramiteVersion.wsVersionVacia"));
         		}
         	}
-        	
+
         	// Debe indicarse el usuario/password en caso de tener autenticacion explicita estandard
         	if ( tramiteVersion.getConsultaAuth() == Dominio.AUTENTICACION_EXPLICITA_ESTANDAR){
           		if (Util.esCadenaVacia(userPlain)){
@@ -117,13 +117,13 @@ public class TramiteVersionForm extends  TraForm implements InitForm
           			errors.add("passPlain", new ActionError("errors.tramiteVersion.pwdVacia"));
           		}
           	}
-        	
-        }
-        
 
-        try 
+        }
+
+
+        try
         {
-            // Comprovar que la versión no está repetida            
+            // Comprovar que la versión no está repetida
             TramiteVersionDelegate delegate = DelegateUtil.getTramiteVersionDelegate();
             Set listaVersiones = delegate.listarTramiteVersiones( getIdTramite() );
             for ( Iterator it = listaVersiones.iterator(); it.hasNext(); )
@@ -134,22 +134,38 @@ public class TramiteVersionForm extends  TraForm implements InitForm
             		errors.add("tramite.version", new ActionError("errors.tramiteVersion.duplicado", "" + tramiteVersion.getVersion() ));
                 }
             }
-        
+
     	}
-    	catch (Exception e) 
+    	catch (Exception e)
     	{
             log.error(e);
-        } 
+        }
         /*
-    	catch (DelegateException e) 
+    	catch (DelegateException e)
     	{
             log.error(e);
         }
         */
+
+
+        // Comprobamos en caso de que el destino de trámite sea consulta se rellenen los parametros de consulta
+        if (tramiteVersion.getLimiteTipo() != TramiteVersion.LIMITE_TRAMITACION_NO_APLICAR) {
+
+        	// Si se aplica limite tramitacion debe indicarse el numero e intervalo
+        	if ( (tramiteVersion.getLimiteNumero() == null) ){
+        		errors.add("values.limiteNumero", new ActionError("errors.tramiteVersion.limiteTramitacion.limiteNumeroVacio"));
+        	}
+        	if ( (tramiteVersion.getLimiteIntervalo() == null) ){
+        		errors.add("values.limiteIntervalo", new ActionError("errors.tramiteVersion.limiteTramitacion.limiteIntervaloVacio"));
+        	}
+
+        }
+
+
         return errors;
     }
-	
-	 
+
+
 	public String getFinPlazo()
 	{
 		return finPlazo;
@@ -170,16 +186,16 @@ public class TramiteVersionForm extends  TraForm implements InitForm
 		this.inicioPlazo = inicioPlazo;
 	}
 
-	public void reset(ActionMapping mapping, HttpServletRequest request) 
+	public void reset(ActionMapping mapping, HttpServletRequest request)
 	{
 		super.reset( mapping, request );
 		this.setInicioPlazo(null);
 		this.setFinPlazo(null);
 		this.setIdiomas(null);
-		
+
 		TramiteVersion tv = (TramiteVersion) getValues();
 		if (tv != null) tv.setPreenvioConfirmacionAutomatica('N');
-		
+
 	}
 
 	public String[] getIdiomas() {
@@ -205,7 +221,7 @@ public class TramiteVersionForm extends  TraForm implements InitForm
 	public void setUserPlain(String userPlain) {
 		this.userPlain = userPlain;
 	}
-	
+
 
 }
 

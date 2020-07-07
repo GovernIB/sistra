@@ -30,7 +30,7 @@ import es.caib.sistra.persistence.delegate.TramiteVersionDelegate;
  * @struts.action-forward
  *  name="fail" path=".tramiteVersion.importar"
  */
-public class ImportarXMLProcessAction extends BaseAction 
+public class ImportarXMLProcessAction extends BaseAction
 {
     protected static final Log log = LogFactory.getLog(ImportarXMLProcessAction.class);
 
@@ -38,23 +38,27 @@ public class ImportarXMLProcessAction extends BaseAction
                                  HttpServletResponse response) throws Exception {
         TramiteVersionDelegate delegate = DelegateUtil.getTramiteVersionDelegate();
         ImportarVersionTramiteProcessForm iForm = (ImportarVersionTramiteProcessForm) form;
-        
+
 
         // Recuperamos de sesion el tramite version importado
         TramiteVersion tramiteVersion = (TramiteVersion) request.getSession().getAttribute(Constants.XML_IMPORTACION_KEY);
-        
+
         if (tramiteVersion != null) {
            // Cambiamos los parametros
            tramiteVersion.setRegistroOficina(iForm.getRegistroOficina());
            tramiteVersion.setRegistroAsunto(iForm.getRegistroAsunto());
            tramiteVersion.setOrganoDestino(iForm.getOrganoDestino());
-           tramiteVersion.setUnidadAdministrativa(iForm.getUnidadAdministrativa());          
+           tramiteVersion.setUnidadAdministrativa(iForm.getUnidadAdministrativa());
+
+           // Reseteamos limitacion
+           tramiteVersion.setLimiteTipo(tramiteVersion.LIMITE_TRAMITACION_NO_APLICAR);
+
            // Guardamos version tramite
            log.info("Gravant formulari: " + tramiteVersion.getVersion() );
            Long idTramiteVersion 	= delegate.grabarTramiteVersion( tramiteVersion, iForm.getCodigoTramite() );
-           guardarTramiteVersion(mapping, request, idTramiteVersion );         
+           guardarTramiteVersion(mapping, request, idTramiteVersion );
            this.setReloadTree( request, Nodo.IR_A_DEFINICION_TRAMITE_VERSION, idTramiteVersion );
-           return mapping.findForward("success");	        
+           return mapping.findForward("success");
         }
 
         return mapping.findForward("fail");

@@ -993,6 +993,29 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
         }
     }
 
+    /**
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.todos}"
+     */
+    public int obtenerTramitesIniciadosIntervalo(String idTramite, int versionTramite, Date fechaInicio, Date fechaFin ) {
+    	Session session = getSession();
+        try {
+          	Query query = session.createQuery(
+          			"select count(*) FROM TramitePersistente AS t " +
+        			"WHERE t.tramite = :idTramite and t.version = :versionTramite and " +
+          			"  t.fechaCreacion >= :fechaInicio and t.fechaCreacion <= :fechaFin ");
+          	query.setString("idTramite", idTramite);
+          	query.setInteger("versionTramite", versionTramite);
+          	query.setTimestamp("fechaInicio", fechaInicio);
+          	query.setTimestamp("fechaFin", fechaFin);
+          	Integer numTramites =  new Integer(query.uniqueResult().toString());
+        	return numTramites;
+        } catch (Exception he) {
+        	throw new EJBException("No se puede lista de tramites pendientes de avisos de pago",  he);
+        } finally {
+            close(session);
+        }
+    }
 
     // ------------------------------------------------------------------------------------------------------
     // 			FUNCIONES AUXILIARES

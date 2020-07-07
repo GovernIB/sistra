@@ -272,6 +272,17 @@ public class TramitePersistenteDelegate implements StatelessDelegate {
 			}
 	 }
 
+	 public int obtenerTramitesIniciadosIntervalo(String idTramite, int versionTramite, Date fechaInicio, Date fechaFin ) throws DelegateException	{
+		 try
+			{
+			 	return getFacade().obtenerTramitesIniciadosIntervalo(idTramite, versionTramite, fechaInicio, fechaFin);
+			}
+			catch( Exception e )
+			{
+				throw new DelegateException( e );
+			}
+	 }
+
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

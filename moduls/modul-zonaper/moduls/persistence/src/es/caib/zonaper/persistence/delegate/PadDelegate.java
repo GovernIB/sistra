@@ -44,7 +44,7 @@ public class PadDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-	
+
 	public List obtenerTramitesPersistentesUsuario(boolean filtroPersistentes) throws DelegateException {
         try {
             return getFacade().obtenerTramitesPersistentesUsuario(filtroPersistentes);
@@ -52,7 +52,7 @@ public class PadDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-	
+
 	public List obtenerTramitesPersistentesUsuario(String tramite,int version) throws DelegateException {
         try {
             return getFacade().obtenerTramitesPersistentesUsuario(tramite,version);
@@ -60,7 +60,7 @@ public class PadDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-		
+
     public List obtenerTramitesPersistentesEntidadDelegada(String nifEntidad)throws DelegateException {
         try {
             return getFacade().obtenerTramitesPersistentesEntidadDelegada(nifEntidad);
@@ -68,7 +68,7 @@ public class PadDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-    
+
     public List obtenerTramitesPersistentesEntidadDelegada(String nifEntidad, boolean filtroPersistentes)throws DelegateException {
         try {
             return getFacade().obtenerTramitesPersistentesEntidadDelegada(nifEntidad, filtroPersistentes);
@@ -76,7 +76,7 @@ public class PadDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-	
+
 	public String obtenerEstadoTramite(String idPersistencia) throws DelegateException {
         try {
             return getFacade().obtenerEstadoTramite(idPersistencia) ;
@@ -84,33 +84,33 @@ public class PadDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-        
+
 	public String grabarTramitePersistente(TramitePersistentePAD obj) throws DelegateException {
         try {
             return getFacade().grabarTramitePersistente(obj);
         } catch (Exception e) {
-        	e.printStackTrace();	
+        	e.printStackTrace();
             throw new DelegateException(e);
         }
     }
-        
+
 	public void borrarTramitePersistente(String idPersistencia, boolean backup) throws DelegateException {
         try {
-            getFacade().borrarTramitePersistente(idPersistencia, backup);            
+            getFacade().borrarTramitePersistente(idPersistencia, backup);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
     }
-	
-		
+
+
 	public void logPad(ReferenciaRDS refAsiento, ReferenciaRDS refJustificante,Map refDocumentos)  throws DelegateException{
 		try {
-            getFacade().logPad(refAsiento,refJustificante,refDocumentos);            
+            getFacade().logPad(refAsiento,refJustificante,refDocumentos);
         } catch (Exception e) {
             throw new DelegateException(e);
         }
 	}
-	
+
 	public void confirmarPreregistro( Long codigoPreregistro, String oficina, String codProvincia, String codMunicipio, String descMunicipio ) throws DelegateException
 	{
 		try
@@ -121,8 +121,8 @@ public class PadDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
 	}
-	
-	
+
+
 	public void confirmacionAutomaticaPreenvio(String idPersistencia, String numeroPreregistro,Timestamp fechaPreregistro) throws DelegateException
 	{
 		try
@@ -133,8 +133,8 @@ public class PadDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
 	}
-	
-	
+
+
 	public void confirmarPreenvioAutomatico( Long codigoPreregistro, String oficina, String codProvincia, String codMunicipio, String descMunicipio )throws DelegateException
 	{
 		try
@@ -145,7 +145,7 @@ public class PadDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
 	}
-	
+
 	/**
      * Metodo para confirmar un prerregistro que no se ha confirmado en punto de registro
      * (se ha presentado por registro normal o en otro lugar) y ha llegado al gestor
@@ -161,8 +161,8 @@ public class PadDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
 	}
-    
-	
+
+
     public PreregistroPAD obtenerInformacionPreregistro( String numeroPreregistro) throws DelegateException
 	{
 		try
@@ -172,39 +172,39 @@ public class PadDelegate implements StatelessDelegate {
 		catch (Exception e) {
             throw new DelegateException(e);
         }
-	}      
-		
+	}
+
 	public PersonaPAD obtenerDatosPersonaPADporUsuario( String usuario ) throws DelegateException
 	{
 		try
 		{
 			return getFacade().obtenerDatosPersonaPADporUsuario( usuario );
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
             throw new DelegateException(e);
         }
 	}
-	
+
 	public boolean existePersonaPADporUsuario( String usuario ) throws DelegateException
 	{
 		try
 		{
 			return getFacade().existePersonaPADporUsuario( usuario );
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
             throw new DelegateException(e);
         }
 	}
-	
+
 	public PersonaPAD obtenerDatosPersonaPADporNif( String nif ) throws DelegateException
 	{
 		try
 		{
 			return getFacade().obtenerDatosPersonaPADporNif( nif );
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
             throw new DelegateException(e);
         }
@@ -216,7 +216,7 @@ public class PadDelegate implements StatelessDelegate {
 		{
 			return getFacade().altaPersona( personaPAD );
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
             throw new DelegateException(e);
         }
@@ -228,36 +228,36 @@ public class PadDelegate implements StatelessDelegate {
 		{
 			getFacade().actualizarCodigoUsuario(  usuOld, usuNew );
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
             throw new DelegateException(e);
         }
 	}
-	
+
 	public Date obtenerAcuseRecibo(String entidad, String numeroRegistro )throws DelegateException
 	{
 		try
 		{
 			return getFacade().obtenerAcuseRecibo( entidad, numeroRegistro );
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
             throw new DelegateException(e);
         }
 	}
-	
+
 	public DetalleNotificacionesProcedimiento obtenerDetalleNotificacionesProcedimiento(String idProcedimiento,Date desde, Date hasta) throws DelegateException
 	{
 		try
 		{
 			return getFacade().obtenerDetalleNotificacionesProcedimiento(idProcedimiento, desde, hasta);
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
             throw new DelegateException(e);
         }
 	}
-	
+
 	public void logRegistro(String entidad, char tipo, String numeroRegistro, Date fechaRegistro, String error) throws DelegateException{
 		try{
 			getFacade().logRegistro(entidad,tipo,numeroRegistro,fechaRegistro,error);
@@ -265,7 +265,7 @@ public class PadDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
 	}
-	
+
 	public void logRegistroExternoPreparado(ReferenciaRDS referenciaAsiento, Map referenciaAnexos, String identificadorPersistencia, int diasPersistencia) throws DelegateException{
 		try{
 			getFacade().logRegistroExternoPreparado(referenciaAsiento, referenciaAnexos, identificadorPersistencia, diasPersistencia);
@@ -273,8 +273,8 @@ public class PadDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
 	}
-	
-	public boolean esDelegado() throws DelegateException	
+
+	public boolean esDelegado() throws DelegateException
 	{
 		try
 		{
@@ -285,8 +285,8 @@ public class PadDelegate implements StatelessDelegate {
 			throw new DelegateException( e );
 		}
 	}
-	
-	public ParametrosTramiteSubsanacionPAD recuperaParametrosTramiteSubsanacion(String key) throws DelegateException	
+
+	public ParametrosTramiteSubsanacionPAD recuperaParametrosTramiteSubsanacion(String key) throws DelegateException
 	{
 		try
 		{
@@ -297,15 +297,15 @@ public class PadDelegate implements StatelessDelegate {
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	/**
      * Obtiene permisos de delegacion sobre la entidad del usuario autenticado
-     * 
+     *
      * @param nif nif/cif entidad
      * @return permisos entidad
-     * 
+     *
      */
-	public String obtenerPermisosDelegacion(String nifEntidad)throws DelegateException	
+	public String obtenerPermisosDelegacion(String nifEntidad)throws DelegateException
 	{
 		try
 		{
@@ -316,38 +316,38 @@ public class PadDelegate implements StatelessDelegate {
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	/**
      * Obtiene permisos de delegacion sobre la entidad del nif indicado
-     * 
+     *
      * @param nif nif/cif entidad
      * @param nif nif usuario
      * @return permisos entidad
-     * 
+     *
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
      * @ejb.permission role-name="${role.auto}"
      */
-	public String obtenerPermisosDelegacion(String nifEntidad, String nifUsuario) throws DelegateException	
+	public String obtenerPermisosDelegacion(String nifEntidad, String nifUsuario) throws DelegateException
 	{
 		try
 		{
-			return getFacade().obtenerPermisosDelegacion( nifEntidad, nifUsuario);			
+			return getFacade().obtenerPermisosDelegacion( nifEntidad, nifUsuario);
 		}
 		catch( Exception e )
 		{
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	/**
      * Indica si la entidad tiene habilitada la delegacion
-     * 
+     *
      * @param nif nif/cif entidad
      * @return boolean
-     * 
+     *
      */
-	public boolean habilitadaDelegacion(String nifEntidad) throws DelegateException	
+	public boolean habilitadaDelegacion(String nifEntidad) throws DelegateException
 	{
 		try
 		{
@@ -358,14 +358,14 @@ public class PadDelegate implements StatelessDelegate {
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	/**
      * Indica que se ha remitido el tramite para la firma de documentos
-     * 
+     *
      * @param idPersistencia
-     * 
+     *
      */
-	public void avisarPendienteFirmarDocumentos(String idPersistencia) throws DelegateException	
+	public void avisarPendienteFirmarDocumentos(String idPersistencia) throws DelegateException
 	{
 		try
 		{
@@ -376,15 +376,15 @@ public class PadDelegate implements StatelessDelegate {
 			throw new DelegateException( e );
 		}
 	}
-	
-	
+
+
 	/**
      * Indica que se ha remitido el tramite para su presentacion
-     * 
+     *
      * @param idPersistencia
-     * 
+     *
      */
-	public void avisarPendientePresentacionTramite(String idPersistencia) throws DelegateException	
+	public void avisarPendientePresentacionTramite(String idPersistencia) throws DelegateException
 	{
 		try
 		{
@@ -395,8 +395,8 @@ public class PadDelegate implements StatelessDelegate {
 			throw new DelegateException( e );
 		}
 	}
-	
-	public PaginaPAD busquedaPaginadaExpedientesGestor(FiltroBusquedaExpedientePAD filtro, int numPagina, int longPagina) throws DelegateException	
+
+	public PaginaPAD busquedaPaginadaExpedientesGestor(FiltroBusquedaExpedientePAD filtro, int numPagina, int longPagina) throws DelegateException
 	{
 		try
 		{
@@ -407,8 +407,8 @@ public class PadDelegate implements StatelessDelegate {
 			throw new DelegateException( e );
 		}
 	}
-	
-	public void enviarSmsVerificarMovil(String idPersistencia, String idProcedimiento, String movil, String codigoSms, String idioma, int minutosCaducidad) throws DelegateException	
+
+	public void enviarSmsVerificarMovil(String idPersistencia, String idProcedimiento, String movil, String codigoSms, String idioma, int minutosCaducidad) throws DelegateException
 	{
 		try
 		{
@@ -419,8 +419,8 @@ public class PadDelegate implements StatelessDelegate {
 			throw new DelegateException( e );
 		}
 	}
-	
-	public void logSmsVerificarMovil(String idPersistencia, String movil, String codigoSms) throws DelegateException	
+
+	public void logSmsVerificarMovil(String idPersistencia, String movil, String codigoSms) throws DelegateException
 	{
 		try
 		{
@@ -431,8 +431,8 @@ public class PadDelegate implements StatelessDelegate {
 			throw new DelegateException( e );
 		}
 	}
-	
-	public List obtenerProcedimientosUsuario(String lang, Date fecha) throws DelegateException	
+
+	public List obtenerProcedimientosUsuario(String lang, Date fecha) throws DelegateException
 	{
 		try
 		{
@@ -443,8 +443,8 @@ public class PadDelegate implements StatelessDelegate {
 			throw new DelegateException( e );
 		}
 	}
-	
-	 public List obtenerTramitesIdUsuario() throws DelegateException	
+
+	 public List obtenerTramitesIdUsuario() throws DelegateException
 		{
 			try
 			{
@@ -455,16 +455,29 @@ public class PadDelegate implements StatelessDelegate {
 				throw new DelegateException( e );
 			}
 		}
-	
+
+
+	 public int obtenerTramitesIniciadosIntervalo(String idTramite, int versionTramite, Date fechaInicio, Date fechaFin) throws DelegateException
+		{
+			try
+			{
+			 	return getFacade().obtenerTramitesIniciadosIntervalo(idTramite, versionTramite,fechaInicio, fechaFin) ;
+			}
+			catch( Exception e )
+			{
+				throw new DelegateException( e );
+			}
+		}
+
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
-    private PadFacade getFacade() throws NamingException,CreateException,RemoteException {      	    	
+    private PadFacade getFacade() throws NamingException,CreateException,RemoteException {
     	return PadFacadeUtil.getHome( ).create();
     }
 
     protected PadDelegate() throws DelegateException {
-     
-    }                  
+
+    }
 }
 

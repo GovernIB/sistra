@@ -31,6 +31,9 @@ public class TramiteVersion  implements TramiteEspecificado, Serializable {
 	public final static char AUTENTICACION_EXPLICITA_ESTANDAR 	= 'S';
 	public final static char AUTENTICACION_EXPLICITA_ORGANISMO 	= 'C';
 
+	public final static char LIMITE_TRAMITACION_NO_APLICAR 	= 'N';
+	public final static char LIMITE_TRAMITACION_INICIOS 	= 'I';
+
     // Fields
      private Long codigo;
      private EspecTramiteNivel especificaciones;
@@ -72,6 +75,16 @@ public class TramiteVersion  implements TramiteEspecificado, Serializable {
      private Set documentos = new HashSet(0);
 
      private char debugEnabled='N';
+
+     /** Limite tramitacion: N, I (sin limite, iniciados x intervalo, ...) */
+     private char limiteTipo = LIMITE_TRAMITACION_NO_APLICAR;
+
+     /** Limite tramitacion: número x intervalo */
+     private Integer limiteNumero;
+
+     /** Limite tramitacion: minutos intervalo */
+     private Integer limiteIntervalo;
+
 
     // Constructors
 
@@ -538,6 +551,54 @@ public class TramiteVersion  implements TramiteEspecificado, Serializable {
 
 	public void setDebugEnabled(char debugEnabled) {
 		this.debugEnabled = debugEnabled;
+	}
+
+	/**
+	 *	Devuelve limiteTipo.
+	 * @return limiteTipo
+	 */
+	public char getLimiteTipo() {
+		return limiteTipo;
+	}
+
+	/**
+	 * Establece limiteTipo.
+	 * @param limiteTipo limiteTipo
+	 */
+	public void setLimiteTipo(char limiteTipo) {
+		this.limiteTipo = limiteTipo;
+	}
+
+	/**
+	 *	Devuelve limiteNumero.
+	 * @return limiteNumero
+	 */
+	public Integer getLimiteNumero() {
+		return limiteNumero;
+	}
+
+	/**
+	 * Establece limiteNumero.
+	 * @param limiteNumero limiteNumero
+	 */
+	public void setLimiteNumero(Integer limiteNumero) {
+		this.limiteNumero = limiteNumero;
+	}
+
+	/**
+	 *	Devuelve limiteIntervalo.
+	 * @return limiteIntervalo
+	 */
+	public Integer getLimiteIntervalo() {
+		return limiteIntervalo;
+	}
+
+	/**
+	 * Establece limiteIntervalo.
+	 * @param limiteIntervalo limiteIntervalo
+	 */
+	public void setLimiteIntervalo(Integer limiteIntervalo) {
+		this.limiteIntervalo = limiteIntervalo;
 	}
 
 

@@ -37,7 +37,7 @@
         //var url = '<html:rewrite page="/arbolUnidades.do" />';
         obrir(url, "Arbol", 540, 400);
      }
-     
+
      function mostrarArbolServicios(url) {
          //var url = '<html:rewrite page="/arbolServicios.do" />';
          obrir(url, "Arbol", 540, 400);
@@ -271,6 +271,29 @@
     			<td nowrap="nowrap" width="1%">Si<html:radio property="values.debugEnabled" value="S"/></td>
     			<td nowrap="nowrap" width="1%">No<html:radio property="values.debugEnabled" value="N"/></td>
     			<td>&nbsp;</td>
+    		</tr>
+    	</table>
+    </td>
+</tr>
+<tr>
+	<td class="separador" colspan="2"><bean:message key="tramiteVersion.limiteTramitacion.titulo"/></td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="tramiteVersion.limiteTramitacion.tipo"/></td>
+    <td class="input">
+    	<table>
+    		<tr>
+    			<td nowrap="nowrap" width="1%"><bean:message key="tramiteVersion.limiteTramitacion.noLimitar"/><html:radio property="values.limiteTipo" value="N"/></td>
+    			<td nowrap="nowrap" width="1%"><bean:message key="tramiteVersion.limiteTramitacion.limitarInicios"/><html:radio property="values.limiteTipo" value="I"/></td>
+    			<td>&nbsp;</td>
+    		</tr>
+    		<tr>
+    		    <td class="label"><bean:message key="tramiteVersion.limiteTramitacion.numero"/></td>
+    			<td class="input"><html:text styleClass="text" tabindex="1" property="values.limiteNumero" maxlength="5" /></td>
+    		</tr>
+    		<tr>
+    		    <td class="label"><bean:message key="tramiteVersion.limiteTramitacion.intervalo"/></td>
+    			<td class="input"><html:text styleClass="text" tabindex="1" property="values.limiteIntervalo" maxlength="3" /></td>
     		</tr>
     	</table>
     </td>

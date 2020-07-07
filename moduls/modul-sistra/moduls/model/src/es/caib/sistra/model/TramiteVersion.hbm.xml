@@ -46,6 +46,10 @@
 
    <property name="debugEnabled" column="TRV_DEBUG" not-null="true" length="1"/>
 
+   <property name="limiteTipo" column="TRV_LIMTIP" not-null="true" length="1"/>
+   <property name="limiteNumero" column="TRV_LIMNUM"/>
+   <property name="limiteIntervalo" column="TRV_LIMINT"/>
+
     <many-to-one name="especificaciones" cascade="all" column="TRV_CODETN" not-null="true"/>
     <many-to-one name="tramite" column="TRV_CODTRA" not-null="true"/>
 
