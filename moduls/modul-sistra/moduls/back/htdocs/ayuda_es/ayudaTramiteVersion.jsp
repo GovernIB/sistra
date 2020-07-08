@@ -127,4 +127,13 @@
     <td>En caso de requerir una autenticaci&oacute;n expl&iacute;cita se indica
       el usuario/password con la que se realiza</td>
   </tr>
+  <tr>
+    <td height="42">Limitar tramitaci&oacute;n</td>
+    <td>Permite establecer una limitaci&oacute;n respecto al inicio de solicitudes desde el asistente. Esta opci&oacute;n puede ser &uacute;til para tr&aacute;mites que puedan tener una alta concurrencia. Las opciones relativas a esta limitaci&oacute;n son:
+   		 <ul>
+      		<li>N&uacute;mero de tramitaciones: n&uacute;mero m&aacute;ximo de solicitudes que se permitir&aacute; iniciar en un intervalo de tiempo concreto.</li>
+      		<li>Intervalo (minutos): intervalo de tiempo, en minutos, al que aplicar&aacute; el n&uacute;mero m&aacute;ximo de tramitaciones establecido.</li>
+      	</ul>
+    </td>
+  </tr>
 </table>

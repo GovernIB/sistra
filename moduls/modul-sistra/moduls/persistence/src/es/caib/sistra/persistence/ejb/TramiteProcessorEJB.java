@@ -3529,8 +3529,9 @@ public class TramiteProcessorEJB implements SessionBean {
     		calendar.setTime(fechaFin);
     		calendar.add(Calendar.MINUTE, tramiteVersion.getLimiteIntervalo() * -1);
     		final Date fechaInicio = calendar.getTime();
-    		int tramitesIniciados = DelegatePADUtil.getPadDelegate().obtenerTramitesIniciadosIntervalo(tramiteVersion.getTramite().getIdentificador(), tramiteVersion.getVersion(), fechaInicio, fechaFin);
-    		if (tramitesIniciados >= tramiteVersion.getLimiteNumero()) {
+    		int tramitesIniciados = DelegatePADUtil.getPadDelegate().obtenerTramitesIniciadosIntervalo(tramiteVersion.getTramite().getIdentificador(),
+    				tramiteVersion.getVersion(), fechaInicio, fechaFin);
+    		if (tramitesIniciados > tramiteVersion.getLimiteNumero()) {
     			debug(mensajeLog("Limite concurrencia"));
     			throw new ProcessorException("Limite concurrencia",MensajeFront.MENSAJE_LIMITETRAMITACION);
     		}
