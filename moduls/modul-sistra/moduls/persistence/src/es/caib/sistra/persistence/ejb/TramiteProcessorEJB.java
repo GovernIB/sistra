@@ -3054,8 +3054,7 @@ public class TramiteProcessorEJB implements SessionBean {
     		try {
 	    		if (tramitacionPresencial) {
 	    			content = generarJustificante(true);
-	    		} else {
-	    			if (tramiteVersion.getDestino() == ConstantesSTR.DESTINO_REGISTRO){
+	    		} else if (tramiteVersion.getDestino() == ConstantesSTR.DESTINO_REGISTRO){
 		    			// Si es tramite telematico intentamos mostrar justificante generado por Registro
 		    			PluginRegistroIntf plgRegistro = PluginFactory.getInstance().getPluginRegistro();
 		    			switch (plgRegistro.obtenerTipoJustificanteRegistroEntrada()) {
@@ -3072,7 +3071,9 @@ public class TramiteProcessorEJB implements SessionBean {
 			   				default:
 			   					throw new Exception("Tipo de justificante no permitido: " + plgRegistro.obtenerTipoJustificanteRegistroEntrada());
 		    			}
-	    			}
+	    		} else {
+	    			// Tramitacion electronica que no es registro (bandeja)
+	    			content = generarJustificante(false);
 	    		}
     		} catch (Exception ex) {
 				log.warn("No se ha podido obtener justificante de entrada: " + ex.getMessage(), ex);
