@@ -3067,6 +3067,9 @@ public class TramiteProcessorEJB implements SessionBean {
 			        			break;
 			    			case ConstantesPluginRegistro.JUSTIFICANTE_REFERENCIA:
 			    				referencia = plgRegistro.obtenerReferenciaJustificanteRegistroEntrada(tramiteInfo.getEntidad(), resultadoRegistro.getNumero(), resultadoRegistro.getFecha());
+			    				if (StringUtils.isEmpty(referencia)) {
+			    					pendienteGenerar = true;
+			    				}
 			    				break;
 			   				default:
 			   					throw new Exception("Tipo de justificante no permitido: " + plgRegistro.obtenerTipoJustificanteRegistroEntrada());

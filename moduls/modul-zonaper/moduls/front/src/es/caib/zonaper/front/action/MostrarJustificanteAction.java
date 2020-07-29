@@ -5,6 +5,7 @@ import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
@@ -103,6 +104,9 @@ public class MostrarJustificanteAction extends BaseAction
 		    				break;
 		    			case ConstantesPluginRegistro.JUSTIFICANTE_REFERENCIA:
 		    				referencia = plgRegistro.obtenerReferenciaJustificanteRegistroEntrada(proc.getEntidad().getIdentificador(), entrada.getNumeroRegistro(), entrada.getFecha());
+		    				if (StringUtils.isEmpty(referencia)) {
+		    					pendienteGenerar = true;
+		    				}
 		    				break;
 		   				default:
 		   					throw new Exception("Tipo de justificante no permitido: " + plgRegistro.obtenerTipoJustificanteRegistroEntrada());
