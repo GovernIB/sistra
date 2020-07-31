@@ -2,6 +2,7 @@ package org.ibit.rol.form.persistence.ejb;
 //
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -10,21 +11,26 @@ import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
+import javax.net.ssl.SSLContext;
 
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.expression.Expression;
 
-import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -859,6 +865,44 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
     */
     private boolean enviarDocumentosXMLSisTra(String url, String xmlIni, String xmlFin, String guardarSinTerminar, String nomParam1, String nomParam2, String nomParam3) {
         debug("http post a " + url);
+
+        CloseableHttpClient  client = null;
+
+        try {
+
+        	client = HttpClientBuilder.create()
+    			    .setSSLSocketFactory(new SSLConnectionSocketFactory(SSLContext.getDefault(), new String[] { "TLSv1.1", "TLSv1.2" }, null,
+    			    		SSLConnectionSocketFactory.getDefaultHostnameVerifier()))
+    			    .build();
+    		HttpPost httpPost = new HttpPost(url);
+
+    		httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+         	List paramsPost = new ArrayList();
+         	paramsPost.add(new BasicNameValuePair(nomParam1, xmlIni));
+         	paramsPost.add(new BasicNameValuePair(nomParam2, xmlFin));
+         	paramsPost.add(new BasicNameValuePair(nomParam3, guardarSinTerminar));
+            httpPost.setEntity(new UrlEncodedFormEntity(paramsPost, "UTF-8"));
+
+            CloseableHttpResponse response = client.execute(httpPost);
+            int status = response.getStatusLine().getStatusCode();
+            respuesta =  EntityUtils.toString(response.getEntity());
+            if (status != HttpStatus.SC_OK) {
+            	log.warn("post failed: " + response.getStatusLine().getStatusCode());
+                return false;
+            } else {
+              debug("http post a " + url + "finalizado con exito");
+              return true;
+            }
+
+        } catch (Exception e) {
+            log.warn("Exception:" + e.toString());
+            return false;
+        } finally {
+        	 try { if (client != null) {client.close();} } catch (Exception e2) { }
+        }
+
+
+        /*
         HttpClient cliente = new HttpClient();
         PostMethod post = new PostMethod(url);
         post.addRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
@@ -866,6 +910,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
         post.addParameter(nomParam1, xmlIni);
         post.addParameter(nomParam2, xmlFin);
         post.addParameter(nomParam3, guardarSinTerminar);
+
 
         try {
             int estado = cliente.executeMethod(post);
@@ -886,6 +931,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
         } finally {
             post.releaseConnection();
         }
+        */
     }
 
     /*
@@ -893,14 +939,43 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
     */
     private boolean enviarCancelacionSisTra(String url) {
         debug("http get a " + url + "...");
+
+        CloseableHttpClient  client = null;
+
+        try {
+
+        	client = HttpClientBuilder.create()
+    			    .setSSLSocketFactory(new SSLConnectionSocketFactory(SSLContext.getDefault(), new String[] { "TLSv1.1", "TLSv1.2" }, null,
+    			    		SSLConnectionSocketFactory.getDefaultHostnameVerifier()))
+    			    .build();
+        	HttpGet request = new HttpGet(url);
+
+        	CloseableHttpResponse response = client.execute(request);
+
+        	int status = response.getStatusLine().getStatusCode();
+            respuesta =  EntityUtils.toString(response.getEntity());
+            if (status != HttpStatus.SC_OK) {
+            	log.warn("get failed: " + response.getStatusLine().getStatusCode());
+                return false;
+            } else {
+              debug("http get a " + url + "finalizado con exito");
+              return true;
+            }
+
+        } catch (Exception e) {
+            log.warn("Exception:" + e.toString());
+            return false;
+        } finally {
+        	 try { if (client != null) {client.close();} } catch (Exception e2) { }
+        }
+
+
+
+        /*
         HttpClient cliente = new HttpClient();
         GetMethod get = new GetMethod(url);
         //Por defecto 3 reintentos ante errores recuperables.
         cliente.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler());
-        /*
-          De esta manera redefinimos el número de reintentos http antre errores recuperables.
-          cliente.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(5,true));
-        */
         try {
             int estado = cliente.executeMethod(get);
             if (estado != HttpStatus.SC_OK) {
@@ -920,6 +995,7 @@ public abstract class InstanciaTelematicaProcessorEJB extends InstanciaProcessor
         } finally {
             get.releaseConnection();
         }
+        */
     }
 
     /**

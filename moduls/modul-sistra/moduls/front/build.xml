@@ -3,14 +3,14 @@
 <project name="sistra.front" default="main" basedir=".">
 
     <property file="${basedir}/build.properties"/>
-	
+
     <property name="modul" value="front"/>
     <property name="package" value="es.caib.${ant.project.name}"/>
 
     <property name="home.dir" location="${basedir}/../.."/>
     <property file="${home.dir}/config.properties"/>
 	<property file="${home.dir}/../../config.properties"/>
-	
+
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
 	<property name="zonaper.dir" location="${home.dir}/../modul-zonaper/output/moduls"/>
@@ -20,7 +20,7 @@
 
 	<property name="distribucion.dir" location="${home.dir}/../../product"/>
 	<property name="clienteFirma.dir" location="${home.dir}/../../integracio/clienteFirma"/>
-	
+
     <property name="web.src" location="${basedir}/src"/>
     <property name="web.etc" location="${basedir}/etc"/>
     <property name="web.doc" location="${basedir}/doc"/>
@@ -39,18 +39,21 @@
     <property name="doc" location="${output.dir}/doc"/>
     <property name="web.doc.api" location="${doc}/api/${modul}"/>
     <property name="web.product" location="${output.dir}/moduls"/>
-	
+
 	<property name="mensaje.debug" value="true"/>
 
     <path id="web.class.path">
         <fileset dir="${lib.dir}">
         	<include name="*.jar"/>
         </fileset>
+    	<fileset dir="${lib.dir}/loginibclient">
+        	<include name="*.jar"/>
+       	</fileset>
     	<fileset dir="${lib.dir}/client">
         	<include name="zonaper-client.jar"/>
     		<include name="redose-client.jar"/>
-       	</fileset>       	
-    	<fileset dir="${distribucion.dir}/lib"> 
+       	</fileset>
+    	<fileset dir="${distribucion.dir}/lib">
             <include name="sistra-util.jar"/>
             <include name="sistra-plugins.jar"/>
     		<include name="sistra-xml.jar"/>
@@ -59,7 +62,7 @@
             <include name="5-${prj.name}-model.jar" />
             <include name="5-${prj.name}-persistence-client.jar" />
         </fileset>
-    	<fileset dir="${lib.dir}/jboss"> 
+    	<fileset dir="${lib.dir}/jboss">
     	    <include name="*.jar"/>
     	</fileset>
     </path>
@@ -79,7 +82,7 @@
             />
         <tstamp>
             <format property="TODAY" pattern="dd-MM-yy"/>
-        </tstamp>        
+        </tstamp>
         <fail unless="front.auth.domain" message="La propiedad front.auth.domain no está definida en config.properties"/>
     	<fail unless="web.front.login-config" message="La propiedad web.front.login-config no está definida en config.properties"/>
     </target>
@@ -91,7 +94,7 @@
     	<mkdir dir="${web.gen.resources}"/>
         <mkdir dir="${web.classes}"/>
         <mkdir dir="${web.doc.api}"/>
-        <mkdir dir="${web.product}"/>    	
+        <mkdir dir="${web.product}"/>
     </target>
 
     <target name="web.gen.all" depends="prepare,init">
@@ -131,7 +134,7 @@
             	<contextparam
                     name="mensaje.debug"
                     value="${mensaje.debug}"
-                    description="Indica si se muestra mensaje de debug"/>               
+                    description="Indica si se muestra mensaje de debug"/>
             	<contextparam
                     name="es.caib.loginModule.util.LoginPage"
                     value="es.caib.sistra.plugins.login.impl.caib.LoginPageSistra"
@@ -171,19 +174,19 @@
     	    <equals arg1="${login-config}" arg2="CAS"/>
     	</condition>
     	<!-- cas: config comentarios -->
-    	
+
        <replace file="${web.gen.etc}/web.xml">
           <replacefilter token="@role.todos@" value="${role.todos}"/>
 	      <replacefilter token="@release.version@" value="${release.version}"/>
-          <replacefilter token="@web.login-config@" value="${web.front.login-config}"/>         	
-       	
+          <replacefilter token="@web.login-config@" value="${web.front.login-config}"/>
+
        	<!-- cas: reemplazo comentarios -->
-       	  <replacefilter token="@cas.enabled.comment.init@" value="${cas.enabled.comment.init}"/>        	 
-       	  <replacefilter token="@cas.enabled.comment.end@" value="${cas.enabled.comment.end}"/>        	 
-       	  <replacefilter token="@cas.enabled.noComment.init@" value="${cas.enabled.noComment.init}"/>        	 
-       	  <replacefilter token="@cas.enabled.noComment.end@" value="${cas.enabled.noComment.end}"/>       
-       	  <replacefilter token="@cas.urlCas@" value="${cas.urlCas}"/>              	  
-       	  <replacefilter token="@cas.urlSistra@" value="${cas.urlSistra.front}"/>       
+       	  <replacefilter token="@cas.enabled.comment.init@" value="${cas.enabled.comment.init}"/>
+       	  <replacefilter token="@cas.enabled.comment.end@" value="${cas.enabled.comment.end}"/>
+       	  <replacefilter token="@cas.enabled.noComment.init@" value="${cas.enabled.noComment.init}"/>
+       	  <replacefilter token="@cas.enabled.noComment.end@" value="${cas.enabled.noComment.end}"/>
+       	  <replacefilter token="@cas.urlCas@" value="${cas.urlCas}"/>
+       	  <replacefilter token="@cas.urlSistra@" value="${cas.urlSistra.front}"/>
        	  <!-- cas: reemplazo comentarios -->
        </replace>
 
@@ -208,37 +211,37 @@
 		</copydir>
 		-->
     	<!-- indra -->
-	    <copy todir="${web.classes}" overwrite="true">											
+	    <copy todir="${web.classes}" overwrite="true">
 		    <fileset dir="${web.src}">
 		    	<include name="**/*.properties"/>
-		    </fileset> 		   
+		    </fileset>
 	    </copy>
-    	<!-- indra -->    	
-    	
+    	<!-- indra -->
+
     	<copyfile dest="${web.gen.resources}/sistra-front-messages_es.properties" src="${web.resources}/sistra-front-messages.properties" forceoverwrite="true"/>
-    	
+
     </target>
 
     <target name="web.war" depends="web.compile">
-    	<copy todir="${web.htdocs}/protected" overwrite="true">											
+    	<copy todir="${web.htdocs}/protected" overwrite="true">
     		<fileset  dir="${clienteFirma.dir}/firma/aFirma" >
     			<include name="version.properties"/>
-    		</fileset>		   
+    		</fileset>
 	    </copy>
     	<delete file="${web.product}/5-${prj.name}-${modul}.war" quiet="yes"/>
         <war warfile="${web.product}/5-${prj.name}-${modul}.war"
             basedir="${web.htdocs}"
             webxml="${web.gen.etc}/web.xml"
             excludes="WEB-INF/**">
-    
+
         	<fileset dir="${clienteFirma.dir}" >
         		<exclude name="**/aFirma_old/**"/>
         	</fileset>
-        	
+
         	<fileset  dir="${clienteFirma.dir}/firma/aFirma" >
         		<include name="version.properties"/>
         	</fileset>
-        		
+
             <manifest>
                 <attribute name="Created-By" value="${indra}"/>
             </manifest>
@@ -247,10 +250,10 @@
             <classes dir="${web.resources}" includes="*.properties"/>
         	<classes dir="${web.classes}" includes="*.properties" />
         	<classes dir="${web.gen.resources}" includes="*.properties"/>
-        	
+
             <!-- <classes dir="${web.classes}/es/caib/sistra/front/formulario" includes="*.properties"/> -->
         	<lib file="${web.product}/3-zonaper-${modul}.jar"/>
-        	
+
         	<lib dir="${zonaper.dir}">
         		<include name="3-zonaper-filter.jar"/>
         	</lib>

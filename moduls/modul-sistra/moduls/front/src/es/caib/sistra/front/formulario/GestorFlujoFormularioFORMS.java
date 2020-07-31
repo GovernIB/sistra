@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+/*
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
@@ -20,9 +21,41 @@ import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpClientParams;
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import javax.net.ssl.SSLContext;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContexts;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 
 import es.caib.sistra.front.Constants;
 import es.caib.sistra.front.util.LiteralesUtil;
@@ -224,13 +257,25 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 
 		Locale locale = informacionTramite.getDatosSesion().getLocale();
 
+		/*
 		HttpClientParams paramsHttp = new HttpClientParams();
 		paramsHttp.setConnectionManagerTimeout(30 * 1000); // Esperamos 30 seg a conectar con Forms
 		paramsHttp.setSoTimeout(30 * 1000);
         HttpClient client = new HttpClient(paramsHttp);
         PostMethod method = new PostMethod(URL_TRAMITACION_FORMULARIO);
+        */
+
+		// TODO PENDIENTE TIMEOUT
+		CloseableHttpClient  client = null;
+
         try
         {
+        	client = HttpClientBuilder.create()
+    			    .setSSLSocketFactory(new SSLConnectionSocketFactory(SSLContext.getDefault(), new String[] { "TLSv1.1", "TLSv1.2" }, null,
+    			    		SSLConnectionSocketFactory.getDefaultHostnameVerifier()))
+    			    .build();
+    		 HttpPost httpPost = new HttpPost(URL_TRAMITACION_FORMULARIO);
+
         	// Genera xml de configuracion
         	String xmlConfiguracion = obtenerXMLConfiguracion(confGestorForm.getPropiedad("tituloAplicacion"),
     				formulario,
@@ -242,6 +287,8 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
     				parametrosRetorno );
 
         	// Vemos si hay que pasar por proxy
+        	// TODO PENDIENTE PROXY
+        	/*
     		String proxyHost = System.getProperty("http.proxyHost");
     		if (proxyHost != null && !"".equals(proxyHost)) {
     			if (!validateNonProxyHosts(URL_TRAMITACION_FORMULARIO)) {
@@ -254,20 +301,44 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
     		        client.getState().setProxyCredentials(authScope, credentials);
     			}
     		}
+    		*/
 
-    		// Realiza peticion y obtiene token de redireccion
+
+        	// Realiza peticion y obtiene token de redireccion
+        	httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+        	List paramsPost = new ArrayList();
+        	paramsPost.add(new BasicNameValuePair("xmlData", confGestorForm.getDatosActualesFormulario()));
+        	paramsPost.add(new BasicNameValuePair("xmlConfig", xmlConfiguracion));
+        	paramsPost.add(new BasicNameValuePair("debugEnabled", Boolean.toString(informacionTramite.isDebugEnabled())));
+            httpPost.setEntity(new UrlEncodedFormEntity(paramsPost, "UTF-8"));
+
+        	/*
 	        method.addRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
 	        method.getParams().setContentCharset("UTF-8");
 	        method.addParameter("xmlData", confGestorForm.getDatosActualesFormulario());
 	        method.addParameter("xmlConfig",
 	        			xmlConfiguracion );
 	        method.addParameter("debugEnabled", Boolean.toString(informacionTramite.isDebugEnabled()));
-            int status = client.executeMethod(method);
+	        int status = client.executeMethod(method);
             if (status != HttpStatus.SC_OK) {
                 log.error("Error iniciando tramite: " + status);
                 return null;
             }
             String token= method.getResponseBodyAsString();
+            */
+
+
+           String token = null;
+          CloseableHttpResponse response = client.execute(httpPost);
+          int status = response.getStatusLine().getStatusCode();
+
+          if (status == HttpStatus.SC_OK) {
+        	  token =  EntityUtils.toString(response.getEntity());
+          } else {
+        	  log.error("Error iniciando tramite: " + status);
+        	  return null;
+          }
+
 
             // Verificamos que el token sea valido (q no se devuelva pagina error, etc.)
             if (StringUtils.isBlank(token) || !Pattern.matches("[a-zA-Z0-9\\-_]{1,100}", token)) {
@@ -292,7 +363,7 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
         	log.error( "Error conectando con gestor formularios: " + e.getMessage(),e );
             return null;
         } finally {
-            method.releaseConnection();
+            try { if (client != null) {client.close();} } catch (Exception e2) { }
         }
 	}
 
@@ -333,7 +404,7 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 		propiedadReducido.setNombre( "circuitoReducido" );
 		propiedadReducido.setValor( Boolean.toString(informacionTramite.isCircuitoReducido()));
 		objXmlConfiguracion.getPropiedades().put(propiedadReducido.getNombre(),propiedadReducido);
-		
+
 		// - Entidad
 		Propiedad propiedadEntidad = factory.crearPropiedad();
 		propiedadEntidad.setNombre( "entidad" );
@@ -378,7 +449,7 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 			propiedadNombreUsuario.setNombre( "usuario" );
 			propiedadNombreUsuario.setValor( informacionTramite.getDatosSesion().getNombreCompletoUsuario() );
 			objXmlConfiguracion.getPropiedades().put(propiedadNombreUsuario.getNombre(),propiedadNombreUsuario);
-			
+
 			Propiedad propiedadNifUsuario = factory.crearPropiedad();
 			propiedadNifUsuario.setNombre( "nif" );
 			propiedadNifUsuario.setValor( informacionTramite.getDatosSesion().getNifUsuario() );
@@ -399,7 +470,7 @@ public class GestorFlujoFormularioFORMS implements GestorFlujoFormulario, Serial
 		propiedadIdTramite.setNombre( "tramiteId" );
 		propiedadIdTramite.setValor( informacionTramite.getModelo());
 		objXmlConfiguracion.getPropiedades().put(propiedadIdTramite.getNombre(),propiedadIdTramite);
-		
+
 		Propiedad propiedadFechaTramite = factory.crearPropiedad();
 		propiedadFechaTramite.setNombre( "fechaTramite" );
 		propiedadFechaTramite.setValor(StringUtil.fechaACadena(informacionTramite.getFechaCreacion(), StringUtil.FORMATO_TIMESTAMP));

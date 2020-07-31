@@ -13,7 +13,7 @@
 
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
-	
+
 	<property name="distribucion.dir" location="${home.dir}/../../product"/>
 
     <property name="lib.dir" location="${home.dir}/../../lib"/>
@@ -35,14 +35,17 @@
     <property name="ejb.product" location="${output.dir}/moduls"/>
 
     <path id="ejb.class.path">
+    	<fileset dir="${lib.dir}/loginibclient">
+        	<include name="*.jar" />
+        </fileset>
         <fileset dir="${lib.dir}">
         	<include name="*.jar" />
-        </fileset> 
-    	<fileset dir="${lib.dir}/client">    	
+        </fileset>
+    	<fileset dir="${lib.dir}/client">
     		<include name="zonaper-client.jar"/>
         	<include name="sistra-client.jar"/>
-    	</fileset>        	
-        <fileset dir="${distribucion.dir}/lib">    	
+    	</fileset>
+        <fileset dir="${distribucion.dir}/lib">
         	<include name="sistra-util.jar"/>
         </fileset>
         <fileset dir="${ejb.product}">
@@ -51,7 +54,7 @@
     </path>
 
     <path id="doclet.class.path">
-        <path refid="ejb.class.path"/>        
+        <path refid="ejb.class.path"/>
         <fileset dir="${xdoclet.dir}">
             <include name="*.jar"/>
         </fileset>
@@ -82,7 +85,7 @@
     </target>
 
     <target name="ejb.gen.all" depends="prepare,init">
-		
+
     	<ejbdoclet
             destdir="${ejb.gen.src}"
             excludedtags="@version,@author"
@@ -150,19 +153,19 @@
     		target="1.5">
             <src path="${ejb.src}"/>
             <src path="${ejb.gen.src}"/>
-    		
+
         </javac>
     	<!-- Indra
     	<copydir dest="${ejb.classes}" src="${ejb.src}">
 			<include name="**/*.properties"/>
 		</copydir>
     	-->
-        <copy todir="${ejb.classes}" overwrite="true">											
+        <copy todir="${ejb.classes}" overwrite="true">
     	    <fileset dir="${ejb.src}">
     	    	<include name="**/*.properties"/>
-    	    </fileset>     	
+    	    </fileset>
         </copy>
-    	
+
     	<!-- Indra -->
     </target>
 

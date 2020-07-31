@@ -17,7 +17,7 @@
      // Obrir un pop up
 	function obrir(url, name, x, y) {
 	   window.open(url, name, 'scrollbars=yes, resizable=yes, width=' + x + ',height=' + y);
-	}	
+	}
      // -->
 </script>
 
@@ -42,21 +42,21 @@
 						<img src="imgs/icones/form_procesado_no.gif" title="No procesado"/> <strong><bean:message key="detalleTramite.datosTramite.estado"/>:</strong> <bean:message key="detalleTramite.datosTramite.noProcesado"/>
 					</logic:equal>
 					<logic:equal name="tramite" property="procesada" value='S'>
-						<img src="imgs/icones/form_procesado_si.gif" title="Procesado"/> <strong><bean:message key="detalleTramite.datosTramite.estado"/>:</strong> <bean:message key="detalleTramite.datosTramite.procesado"/> 
+						<img src="imgs/icones/form_procesado_si.gif" title="Procesado"/> <strong><bean:message key="detalleTramite.datosTramite.estado"/>:</strong> <bean:message key="detalleTramite.datosTramite.procesado"/>
 					</logic:equal>
 					<logic:equal name="tramite" property="procesada" value='X'>
 						<img src="imgs/icones/form_procesado_error.gif" title="Con error"/> <strong><bean:message key="detalleTramite.datosTramite.estado"/>:</strong> <bean:message key="detalleTramite.datosTramite.procesadoError"/>
-					</logic:equal>		
+					</logic:equal>
 					<!--  Fecha de procesamiento -->
 					<logic:notEmpty name="tramite" property="fechaProcesamiento">
 						&nbsp;[<bean:write name="tramite" property="fechaProcesamiento" format="dd/MM/yyyy-HH:mm:ss"/>]
-					</logic:notEmpty>					
+					</logic:notEmpty>
 					<!--  Mensaje de estado de BO -->
 					<logic:notEmpty name="tramite" property="resultadoProcesamiento">
 						&nbsp; - <strong><bean:message key="detalleTramite.datosTramite.descripcionEstado"/>:&nbsp;</strong>
 						<html:textarea styleClass="detalle" tabindex="10" name="tramite"  property="resultadoProcesamiento" rows="1" cols="40" disabled="true" readonly="true"/>
 						<input type="button" value=" ... " onclick="edit('<%=urlEditarText + "?id=resultadoProcesamiento&titulo=detalleTramite.datosTramite.descripcionEstado" %>');"/>
-					</logic:notEmpty>									
+					</logic:notEmpty>
 					</p>
 					<p>
 					<!--  Icono envio / registro / preregistro / preenvio -->
@@ -66,7 +66,7 @@
 						</logic:equal>
 						<logic:equal name="tramite" property="firmada" value="N">
 							<img src="imgs/icones/envio.gif" title="<bean:message key="detalleTramite.datosTramite.envio"/>"/> <strong><bean:message key="detalleTramite.datosTramite.tipo"/>:</strong> <bean:message key="detalleTramite.datosTramite.envio"/>
-						</logic:equal>						
+						</logic:equal>
 					</logic:equal>
 					<logic:equal name="tramite" property="tipo" value="<%=Character.toString(ConstantesAsientoXML.TIPO_REGISTRO_ENTRADA)%>">
 						<logic:equal name="tramite" property="firmada" value="S">
@@ -81,8 +81,8 @@
 					</logic:equal>
 					<logic:equal name="tramite" property="tipo" value="<%=Character.toString(ConstantesAsientoXML.TIPO_PREREGISTRO)%>">
 						<img src="imgs/icones/preregistro.gif" title="Preregistro confirmado"/> <strong><bean:message key="detalleTramite.datosTramite.tipo"/>:</strong> <bean:message key="detalleTramite.datosTramite.preregistroConfirmado"/>
-					</logic:equal>	
-					</p>								
+					</logic:equal>
+					</p>
 					<!--  Icono certificado / usuario / anonimo -->
 					<p>
 					<logic:equal name="tramite" property="nivelAutenticacion" value="<%=Character.toString(ConstantesBTE.AUTENTICACION_CERTIFICADO)%>">
@@ -94,33 +94,33 @@
 					<logic:equal name="tramite" property="nivelAutenticacion" value="<%=Character.toString(ConstantesBTE.AUTENTICACION_ANONIMO)%>">
 						<img src="imgs/icones/anonimo.gif" title="Anonimo"/> <strong><bean:message key="detalleTramite.datosTramite.autenticacion"/>:</strong> <bean:message key="detalleTramite.datosTramite.autenticacion.anonimo"/>
 					</logic:equal>
-					</p>	
-					<logic:equal name="permitirCambioEstado" value="S">				
+					</p>
+					<logic:equal name="permitirCambioEstado" value="S">
 						<p>
-							<logic:equal name="tramite" property="procesada" value='X'>					
+							<logic:equal name="tramite" property="procesada" value='X'>
 								<bean:define id="marcarNoProcesado" type="java.lang.String">
-									<bean:message key="detalleTramite.datosTramite.marcarNoProcesado"/> 
+									<bean:message key="detalleTramite.datosTramite.marcarNoProcesado"/>
 								</bean:define>
 								<html:button value="<%=marcarNoProcesado%>" property="no_procesada" onclick="<%= \"javascript:document.location.href='\" + urlCambioEstado + \"&estado=N&estadoOld=\" + estadoOld + \"'\" %>"/>
 							</logic:equal>
-							<logic:equal name="tramite" property="procesada" value='S'>					
+							<logic:equal name="tramite" property="procesada" value='S'>
 								<bean:define id="marcarNoProcesado" type="java.lang.String">
-									<bean:message key="detalleTramite.datosTramite.marcarNoProcesado"/> 
+									<bean:message key="detalleTramite.datosTramite.marcarNoProcesado"/>
 								</bean:define>
 								<html:button value="<%=marcarNoProcesado%>" property="no_procesada" onclick="<%= \"javascript:document.location.href='\" + urlCambioEstado + \"&estado=N&estadoOld=\" + estadoOld + \"'\" %>"/>
 							</logic:equal>
 							<logic:equal name="tramite" property="procesada" value='N'>
 								<bean:define id="marcarProcesado" type="java.lang.String">
-									<bean:message key="detalleTramite.datosTramite.marcarProcesado"/> 
+									<bean:message key="detalleTramite.datosTramite.marcarProcesado"/>
 								</bean:define>
-								<html:button value="<%=marcarProcesado%>" property="procesar" onclick="<%= \"javascript:document.location.href='\" + urlCambioEstado + \"&estado=S&estadoOld=\" + estadoOld + \"'\" %>"/>						
-							</logic:equal>						
+								<html:button value="<%=marcarProcesado%>" property="procesar" onclick="<%= \"javascript:document.location.href='\" + urlCambioEstado + \"&estado=S&estadoOld=\" + estadoOld + \"'\" %>"/>
+							</logic:equal>
 						</p>
 					</logic:equal>
 			</div>
-			
+
 			<h3><bean:message key="detalleTramite.datosSolicitud"/></h3>
-			<div id="dadesJustificant">			
+			<div id="dadesJustificant">
 				<!--  Para tipo preregistro mostramos numero de registro con el que se ha confirmado -->
 				<logic:equal name="tramite" property="tipo" value="<%=Character.toString(ConstantesAsientoXML.TIPO_PREREGISTRO)%>">
 					<h4 class="titulo"><bean:message key="detalleTramite.datosSolicitud.datosRegistro"/></h4>
@@ -143,15 +143,15 @@
 						<ul>
 							<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.datosEnvio.numero"/>:</span> <span><bean:write name="tramite" property="numeroRegistro"/></span></li>
 							<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.datosEnvio.fecha"/>:</span> <span><bean:write name="tramite" property="fechaRegistro" format="dd/MM/yyyy - HH:mm 'h.'"/></span></li>
-						</ul>											
+						</ul>
 					</logic:equal>
 					<logic:notEqual name="tramite" property="tipo" value="<%=Character.toString(ConstantesAsientoXML.TIPO_ENVIO)%>">
 						<ul>
 							<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.datosEnvio.numero"/>:</span> <span><bean:write name="tramite" property="numeroPreregistro"/></span></li>
 							<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.datosEnvio.fecha"/>:</span> <span><bean:write name="tramite" property="fechaPreregistro" format="dd/MM/yyyy - HH:mm 'h.'"/></span></li>
-						</ul>													
+						</ul>
 					</logic:notEqual>
-				</logic:notEqual>	
+				</logic:notEqual>
 				<ul>
 					<li><span class="label"><bean:message key="detalleTramite.numeroEntrada"/>:</span> <span><bean:write name="tramite" property="numeroEntrada"/></span></li>
 					<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.asunto"/>:</span> <span><bean:write name="tramite" property="descripcionTramite"/></span></li>
@@ -167,7 +167,7 @@
 						<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.asunto.nombreDelegado"/>:</span> <span><bean:write name="tramite" property="delegadoNombre"/></span></li>
 						<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.asunto.nifDelegado"/>:</span> <span><bean:write name="tramite" property="delegadoNif"/></span></li>
 					</logic:notEmpty>
-					
+
 					<!-- Firma asiento -->
 					<bean:define id="codigoFirmaAsiento" type="java.lang.String">
 						<bean:write name="tramite" property="codigoRdsAsiento" />
@@ -176,53 +176,53 @@
 						<bean:define id="claveFirmaAsiento" type="java.lang.String">
 							<bean:write name="tramite" property="claveRdsAsiento" />
 						</bean:define>
-					
+
 					   <li>
-					   	   <span class="label"><bean:message key="detalleTramite.datosSolicitud.firma"/>:</span>	
+					   	   <span class="label"><bean:message key="detalleTramite.datosSolicitud.firma"/>:</span>
 						   <span class="pequenyo">
-							
+
 								<logic:notEmpty name="<%=codigoFirmaAsiento %>" scope="request">
-									<logic:iterate name="<%=codigoFirmaAsiento %>" id="firma" scope="request" type="es.caib.sistra.plugins.firma.FirmaIntf">							
+									<logic:iterate name="<%=codigoFirmaAsiento %>" id="firma" scope="request" type="es.caib.sistra.plugins.firma.FirmaIntf">
 										&nbsp;
 										<a href="mostrarFirmaDocumento.do?codigo=<%=codigoFirmaAsiento%>&clave=<%=claveFirmaAsiento%>&nif=<%=firma.getNif()%>" >
-											<bean:write name="firma" property="nombreApellidos"/>  									
-										</a>	
-									</logic:iterate>												
+											<bean:write name="firma" property="nombreApellidos"/>
+										</a>
+									</logic:iterate>
 								</logic:notEmpty>
-								
+
 								<logic:notEmpty name="<%=\"CUST-\" + codigoFirmaAsiento %>" scope="request">
 									<br/>
 									<bean:message key="comprobarDocumento.urlCustodia"/>
 									<a href="mostrarDocumentoCustodia.do?codigo=<%=codigoFirmaAsiento%>&clave=<%=claveFirmaAsiento%>" target="_blank">
 										<bean:write name="<%=\"CUST-\" + codigoFirmaAsiento %>" />
-									</a>																										
+									</a>
 								</logic:notEmpty>
-								
+
 							</span>
 						</li>
 					</logic:notEmpty>
-					
-										
+
+
 				</ul>
-				
+
 				<!-- Notificaciones telematicas y avisos -->
 				<logic:notEmpty name="datosPropios">
 						<logic:notEmpty name="datosPropios" property="instrucciones">
 							<logic:notEmpty name="datosPropios" property="instrucciones.habilitarNotificacionTelematica">
 								<logic:equal name="datosPropios" property="instrucciones.habilitarNotificacionTelematica" value="S">
-								<ul>	
+								<ul>
 									<li>
-										<span class="label"><bean:message key="detalleTramite.datosSolicitud.habilitarNotificaciones"/>:</span> 
+										<span class="label"><bean:message key="detalleTramite.datosSolicitud.habilitarNotificaciones"/>:</span>
 										<span>Si</span>
 									</li>
-								</ul>									
+								</ul>
 								</logic:equal>
 							</logic:notEmpty>
 							<logic:notEmpty name="datosPropios" property="instrucciones.habilitarAvisos">
 								<logic:equal name="datosPropios" property="instrucciones.habilitarAvisos" value="S">
-								<ul>	
+								<ul>
 									<li>
-										<span class="label"><bean:message key="detalleTramite.datosSolicitud.habilitarAvisos"/>:</span> 
+										<span class="label"><bean:message key="detalleTramite.datosSolicitud.habilitarAvisos"/>:</span>
 										<span>
 											<logic:notEmpty name="datosPropios" property="instrucciones.avisoEmail">
 												Email: <bean:write name="datosPropios" property="instrucciones.avisoEmail"/>
@@ -230,21 +230,21 @@
 											&nbsp;
 											<logic:notEmpty name="datosPropios" property="instrucciones.avisoSMS">
 												SMS: <bean:write name="datosPropios" property="instrucciones.avisoSMS"/>
-											</logic:notEmpty>											
+											</logic:notEmpty>
 										</span>
 									</li>
-								</ul>									
+								</ul>
 								</logic:equal>
-							</logic:notEmpty>							
+							</logic:notEmpty>
 						</logic:notEmpty>
 				</logic:notEmpty>
-				
-				<!--  accesso al justificante para entradas telematicas -->										
+
+				<!--  accesso al justificante para entradas telematicas -->
 				<logic:notEqual name="tramite" property="tipo" value="<%=Character.toString(ConstantesAsientoXML.TIPO_PREENVIO)%>">
 					<logic:notEqual name="tramite" property="tipo" value="<%=Character.toString(ConstantesAsientoXML.TIPO_PREREGISTRO)%>">
 					<ul>
 						<li>
-							<span class="label"><bean:message key="detalleTramite.datosSolicitud.justificante"/>:</span> 
+							<span class="label"><bean:message key="detalleTramite.datosSolicitud.justificante"/>:</span>
 							<span>
 								<html:link action="mostrarJustificante" paramId="codigo" paramName="tramite" paramProperty="codigo">
 									<bean:message key="detalleTramite.datosSolicitud.verJustificante"/>
@@ -254,56 +254,56 @@
 					</ul>
 					</logic:notEqual>
 				</logic:notEqual>
-				
-				
-				<!--  Datos de confirmacion del preregistro/preenvio -->										
+
+
+				<!--  Datos de confirmacion del preregistro/preenvio -->
 				<logic:notEqual name="tramite" property="tipo" value="<%=Character.toString(ConstantesAsientoXML.TIPO_REGISTRO_ENTRADA)%>">
 					<logic:notEqual name="tramite" property="tipo" value="<%=Character.toString(ConstantesAsientoXML.TIPO_ENVIO)%>">
-						<h4 class="titulo"><bean:message key="detalleTramite.datosSolicitud.datosConfirmacion"/></h4>					
+						<h4 class="titulo"><bean:message key="detalleTramite.datosSolicitud.datosConfirmacion"/></h4>
 						<ul>
 							<li>
-								<span class="label"><bean:message key="detalleTramite.datosSolicitud.datosConfirmacion.confirmadoPor"/>:</span> 
-								<logic:equal name="tramite" property="tipoConfirmacionPreregistro" value="<%=ConstantesBTE.CONFIRMACIONPREREGISTRO_GESTOR%>"> 
+								<span class="label"><bean:message key="detalleTramite.datosSolicitud.datosConfirmacion.confirmadoPor"/>:</span>
+								<logic:equal name="tramite" property="tipoConfirmacionPreregistro" value="<%=ConstantesBTE.CONFIRMACIONPREREGISTRO_GESTOR%>">
 									<span><bean:message key="detalleTramite.datosSolicitud.datosConfirmacion.confirmadoPorGestor"/></span>
 								</logic:equal>
-								<logic:equal name="tramite" property="tipoConfirmacionPreregistro" value="<%=ConstantesBTE.CONFIRMACIONPREREGISTRO_REGISTRO%>"> 
-									<span><bean:message key="detalleTramite.datosSolicitud.datosConfirmacion.confirmadoPorPuntoRegistro"/></span>									
+								<logic:equal name="tramite" property="tipoConfirmacionPreregistro" value="<%=ConstantesBTE.CONFIRMACIONPREREGISTRO_REGISTRO%>">
+									<span><bean:message key="detalleTramite.datosSolicitud.datosConfirmacion.confirmadoPorPuntoRegistro"/></span>
 								</logic:equal>
-								<logic:equal name="tramite" property="tipoConfirmacionPreregistro" value="<%=ConstantesBTE.CONFIRMACIONPREREGISTRO_AUTOMATICA%>"> 
-									<span><bean:message key="detalleTramite.datosSolicitud.datosConfirmacion.confirmadoPorAutomatica"/></span>									
+								<logic:equal name="tramite" property="tipoConfirmacionPreregistro" value="<%=ConstantesBTE.CONFIRMACIONPREREGISTRO_AUTOMATICA%>">
+									<span><bean:message key="detalleTramite.datosSolicitud.datosConfirmacion.confirmadoPorAutomatica"/></span>
 								</logic:equal>
-								<logic:equal name="tramite" property="tipoConfirmacionPreregistro" value="<%=ConstantesBTE.CONFIRMACIONPREREGISTRO_AUTOMATICA_REGISTRO%>"> 
-									<span><bean:message key="detalleTramite.datosSolicitud.datosConfirmacion.confirmadoPorAutomaticaRegistro"/></span>									
+								<logic:equal name="tramite" property="tipoConfirmacionPreregistro" value="<%=ConstantesBTE.CONFIRMACIONPREREGISTRO_AUTOMATICA_REGISTRO%>">
+									<span><bean:message key="detalleTramite.datosSolicitud.datosConfirmacion.confirmadoPorAutomaticaRegistro"/></span>
 								</logic:equal>
-							</li>	
+							</li>
 							<li>
 								<span class="label"><bean:message key="detalleTramite.datosSolicitud.datosConfirmacion.fecha"/>:</span> <span><bean:write name="tramite" property="fecha" format="dd/MM/yyyy - HH:mm 'h.'"/></span>
 							</li>
 							<!--  Mostramos numero de registro cuando haya pasado por registro de entrada -->
-							<logic:notEqual name="tramite" property="tipoConfirmacionPreregistro" value="<%=ConstantesBTE.CONFIRMACIONPREREGISTRO_GESTOR%>"> 
-								<logic:notEqual name="tramite" property="tipoConfirmacionPreregistro" value="<%=ConstantesBTE.CONFIRMACIONPREREGISTRO_AUTOMATICA%>"> 
+							<logic:notEqual name="tramite" property="tipoConfirmacionPreregistro" value="<%=ConstantesBTE.CONFIRMACIONPREREGISTRO_GESTOR%>">
+								<logic:notEqual name="tramite" property="tipoConfirmacionPreregistro" value="<%=ConstantesBTE.CONFIRMACIONPREREGISTRO_AUTOMATICA%>">
 									<li><span class="label"><bean:message key="detalleTramite.datosSolicitud.datosConfirmacion.numeroRegistro"/>:</span> <span><bean:write name="tramite" property="numeroRegistro"/></span></li>
 								</logic:notEqual>
 							</logic:notEqual>
-						</ul>	
-					</logic:notEqual>	
-				</logic:notEqual>	
-				
-				<!-- Datos solicitud -->				
+						</ul>
+					</logic:notEqual>
+				</logic:notEqual>
+
+				<!-- Datos solicitud -->
 					<logic:notEmpty name="datosPropios">
-						<logic:notEmpty name="datosPropios" property="solicitud">							
-							<bean:define id="solicitud" name="datosPropios" property="solicitud" />					
+						<logic:notEmpty name="datosPropios" property="solicitud">
+							<bean:define id="solicitud" name="datosPropios" property="solicitud" />
 									<h4 class="titulo"><bean:message key="detalleTramite.datosSolicitud"/>:</h4>
 									<ul>
-							<logic:iterate id="dato" name="solicitud" property="dato">
-								<logic:equal name="dato" property="tipo" value="C">
-								<bean:define id="descCampo" name="dato" property="valor" type="java.lang.String"/>
-										<li><span class="label"><bean:write name="dato" property="descripcion"/>:</span> <span><%=StringEscapeUtils.escapeHtml(descCampo)%></span></li>
-								</logic:equal>
-								<logic:notEqual name="dato" property="tipo" value="C">
-									<li><span class="label2nivel"><bean:write name="dato" property="descripcion"/></span></li>
-								</logic:notEqual>
-							</logic:iterate>									
+										<logic:iterate id="dato" name="solicitud" property="dato">
+											<logic:equal name="dato" property="tipo" value="C">
+												<bean:define id="descCampo" name="dato" property="valor" type="java.lang.String"/>
+												<li><span class="label"><bean:write name="dato" property="descripcion"/>:</span> <span><%=StringEscapeUtils.escapeHtml(descCampo)%></span></li>
+											</logic:equal>
+											<logic:notEqual name="dato" property="tipo" value="C">
+												<li><span class="label2nivel"><bean:write name="dato" property="descripcion"/></span></li>
+											</logic:notEqual>
+										</logic:iterate>
 									</ul>
 						</logic:notEmpty>
 				 	</logic:notEmpty>
@@ -321,7 +321,7 @@
 												[XML]
 											</html:link>
 										<%}%>
-										
+
 										<span class="pequenyo">
 										<bean:define id="codigoFirma" type="java.lang.String">
 											<bean:write name="documento" property="rdsCodigo" />
@@ -330,41 +330,41 @@
 											<br/>
 											<span class="pequenyo">
 											<bean:message key="comprobarDocumento.firmadoPor"/>
-											<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request" type="es.caib.sistra.plugins.firma.FirmaIntf">							
+											<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request" type="es.caib.sistra.plugins.firma.FirmaIntf">
 												&nbsp;
 												<a href="mostrarFirmaDocumento.do?codigo=<%=documento.getRdsCodigo()%>&clave=<%=documento.getRdsClave()%>&nif=<%=firma.getNif()%>" >
-													<bean:write name="firma" property="nombreApellidos"/>  	
+													<bean:write name="firma" property="nombreApellidos"/>
 													<logic:notEmpty name="firma" property="nifRepresentante">
 														&nbsp; <bean:message key="firma.representadoPor"/> <bean:write name="firma" property="nombreApellidosRepresentante"/> - NIF: <bean:write name="firma" property="nifRepresentante"/>
-													</logic:notEmpty> 								
-												</a>	
+													</logic:notEmpty>
+												</a>
 											</logic:iterate>
-											</span>			
+											</span>
 										</logic:notEmpty>
-										
+
 										<logic:notEmpty name="<%=\"CUST-\" + codigoFirma %>" scope="request">
 											<br/>
 											<bean:message key="comprobarDocumento.urlCustodia"/>
 											<a href="mostrarDocumentoCustodia.do?codigo=<%=documento.getRdsCodigo()%>&clave=<%=documento.getRdsClave()%>" target="_blank">
 												<bean:write name="<%=\"CUST-\" + codigoFirma %>" />
-											</a>																										
+											</a>
 										</logic:notEmpty>
 										</span>
-										
+
 									</li>
-							</logic:notEqual>					
+							</logic:notEqual>
 						</logic:notEmpty>
 					</logic:iterate>
 								</ul>
 					<logic:notEmpty name="datosPropios">
 						<logic:notEmpty name="datosPropios" property="instrucciones">
 							<bean:define id="instrucciones" name="datosPropios" property="instrucciones" />
-							<logic:present name="instrucciones" property="documentosEntregar" >					
+							<logic:present name="instrucciones" property="documentosEntregar" >
 									<bean:define id="documentosEntregar" name="instrucciones" property="documentosEntregar" />
 									<logic:notEmpty name="documentosEntregar" property="documento">
-									<h4 class="titulo"><bean:message key="detalleTramite.datosSolicitud.documentosAportados.presencial"/>:</h4>				
+									<h4 class="titulo"><bean:message key="detalleTramite.datosSolicitud.documentosAportados.presencial"/>:</h4>
 									<ul id="docs">
-										<logic:iterate id="documento" name="documentosEntregar" property="documento" type="es.caib.xml.datospropios.factoria.impl.Documento">										
+										<logic:iterate id="documento" name="documentosEntregar" property="documento" type="es.caib.xml.datospropios.factoria.impl.Documento">
 										<%
 												String messageKey = "detalleTramite.documentoPresencial";
 												switch (documento.getTipo().charValue()){
@@ -390,19 +390,19 @@
 														{
 															messageKey += ".fotocopia";
 														}
-														break;										
+														break;
 												 }
 											%>
-												<li><bean:write name="documento" property="titulo" /><br/><bean:message key="<%=messageKey%>"/></li>											
-										</logic:iterate>					
-									</ul>	
+												<li><bean:write name="documento" property="titulo" /><br/><bean:message key="<%=messageKey%>"/></li>
+										</logic:iterate>
+									</ul>
 								</logic:notEmpty>
-							</logic:present>	
-						</logic:notEmpty>	
-					</logic:notEmpty>	
+							</logic:present>
+						</logic:notEmpty>
+					</logic:notEmpty>
 			</div>
-			
-			
+
+
 			<!-- tornar enrere -->
 			<div id="enrere">
 				<logic:notPresent name="enlace">
@@ -411,8 +411,8 @@
 				<logic:present name="enlace">
 				<a href="javascript:history.back(1)">
 				</logic:present>
-				<bean:message key="detalleTramite.volver"/></a>					
+				<bean:message key="detalleTramite.volver"/></a>
 			</div>
 			<!-- /tornar enrere -->
-			
-			
+
+
