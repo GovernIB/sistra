@@ -185,7 +185,8 @@
 									<logic:iterate name="<%=codigoFirmaAsiento %>" id="firma" scope="request" type="es.caib.sistra.plugins.firma.FirmaIntf">
 										&nbsp;
 										<a href="mostrarFirmaDocumento.do?codigo=<%=codigoFirmaAsiento%>&clave=<%=claveFirmaAsiento%>&nif=<%=firma.getNif()%>" >
-											<bean:write name="firma" property="nombreApellidos"/>
+                                            <bean:define id="firmanteDesc" name="firma" property="nombreApellidos" type="java.lang.String"/>
+                                            <%=StringEscapeUtils.escapeHtml(firmanteDesc)%>
 										</a>
 									</logic:iterate>
 								</logic:notEmpty>
@@ -333,10 +334,12 @@
 											<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request" type="es.caib.sistra.plugins.firma.FirmaIntf">
 												&nbsp;
 												<a href="mostrarFirmaDocumento.do?codigo=<%=documento.getRdsCodigo()%>&clave=<%=documento.getRdsClave()%>&nif=<%=firma.getNif()%>" >
-													<bean:write name="firma" property="nombreApellidos"/>
-													<logic:notEmpty name="firma" property="nifRepresentante">
-														&nbsp; <bean:message key="firma.representadoPor"/> <bean:write name="firma" property="nombreApellidosRepresentante"/> - NIF: <bean:write name="firma" property="nifRepresentante"/>
-													</logic:notEmpty>
+                                                    <bean:define id="firmanteDesc" name="firma" property="nombreApellidos" type="java.lang.String"/>
+                                                    <%=StringEscapeUtils.escapeHtml(firmanteDesc)%>
+                                                    <logic:notEmpty name="firma" property="nifRepresentante">
+                                                    <bean:define id="firmanteRpteDesc" name="firma" property="nombreApellidosRepresentante" type="java.lang.String"/>
+                                                    &nbsp; <bean:message key="firma.representadoPor"/> <%=StringEscapeUtils.escapeHtml(firmanteRpteDesc)%>  - NIF: <bean:write name="firma" property="nifRepresentante"/>
+                                                </logic:notEmpty>
 												</a>
 											</logic:iterate>
 											</span>
