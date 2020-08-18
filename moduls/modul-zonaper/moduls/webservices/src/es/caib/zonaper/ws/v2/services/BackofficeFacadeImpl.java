@@ -1,32 +1,35 @@
 package es.caib.zonaper.ws.v2.services;
 
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.Duration;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.namespace.QName;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
+import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.modelInterfaz.ConfiguracionAvisosExpedientePAD;
 import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.EstadoPago;
 import es.caib.zonaper.modelInterfaz.EstadoPagosTramite;
 import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
+import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
 import es.caib.zonaper.modelInterfaz.UsuarioAutenticadoInfoPAD;
-import es.caib.zonaper.persistence.delegate.DelegateUtil;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeUtil;
-import es.caib.zonaper.persistence.delegate.ProcesosAutoDelegate;
 import es.caib.zonaper.ws.v2.model.ConfiguracionAvisosExpediente;
 import es.caib.zonaper.ws.v2.model.DocumentoExpediente;
 import es.caib.zonaper.ws.v2.model.EstadoPagos;
@@ -36,6 +39,9 @@ import es.caib.zonaper.ws.v2.model.TipoEstadoPago;
 import es.caib.zonaper.ws.v2.model.TipoEstadoTramite;
 import es.caib.zonaper.ws.v2.model.TramitesPersistentes;
 import es.caib.zonaper.ws.v2.model.UsuarioAutenticadoInfo;
+import es.caib.zonaper.ws.v2.model.elementoexpediente.ElementosExpediente;
+import es.caib.zonaper.ws.v2.model.elementoexpediente.FiltroElementosExpediente;
+import es.caib.zonaper.ws.v2.model.elementoexpediente.TipoElementoExpediente;
 
 
 
@@ -390,6 +396,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		return null;
 	}
 
+	/*
 	@Override
 	public String obtenerTiquetAcceso(String idSesionTramitacion,
 			UsuarioAutenticadoInfo usuarioAutenticadoInfo)
@@ -400,6 +407,50 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 
 			ProcesosAutoDelegate delegate = DelegateUtil.getProcesosAutoDelegate();
 			String res = delegate.obtenerTiquetAcceso(idSesionTramitacion, usuAut );
+			return res;
+		} catch (Exception exc) {
+			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
+			// exc.printStackTrace();
+		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
+		}
+	}
+	*/
+
+	@Override
+	public ElementosExpediente obtenerElementosExpediente(
+			FiltroElementosExpediente filtroElementosExpediente)
+			throws BackofficeFacadeException {
+
+		// TODO PENDIENTE
+
+		try {
+			ElementosExpediente res = new ElementosExpediente();
+			if  (filtroElementosExpediente.getTipos() != null && filtroElementosExpediente.getTipos().getTipo() != null) {
+				for (Iterator it = filtroElementosExpediente.getTipos().getTipo().iterator();it.hasNext();){
+					TipoElementoExpediente te = (TipoElementoExpediente) it.next();
+					es.caib.zonaper.ws.v2.model.elementoexpediente.ElementoExpediente ee = new es.caib.zonaper.ws.v2.model.elementoexpediente.ElementoExpediente();
+					ee.setTipo(te);
+					ee.setFecha(dateToXmlGregorianCalendar(new Date()));
+					res.getElemento().add(ee);
+					switch (te) {
+					case REGISTRO:
+					case ENVIO:
+					case PREENVIO:
+					case PREREGISTRO:
+						ee.setDescripcion("Trámite");
+						ee.setUrl("http://caibter.indra.es/sistrafront/zonaperfront/inicio?language=" + filtroElementosExpediente.getIdioma() + "&tramite=ID");
+						break;
+					case COMUNICACION:
+						ee.setDescripcion("Comunicación");
+						ee.setUrl("http://caibter.indra.es/sistrafront/zonaperfront/inicio?language=" + filtroElementosExpediente.getIdioma() + "&aviso=ID");
+						break;
+					case NOTIFICACION:
+						ee.setDescripcion("Notificación");
+						ee.setUrl("http://caibter.indra.es/sistrafront/zonaperfront/inicio?language=" + filtroElementosExpediente.getIdioma() + "&notificacion=ID");
+						break;
+					}
+				}
+			}
 			return res;
 		} catch (Exception exc) {
 			log.error("Excepcion en webservice: " + exc.getMessage(), exc);

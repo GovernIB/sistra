@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:es:caib:zonaper:ws:v2:model:ElementoExpediente" targetNamespace="urn:es:caib:zonaper:ws:v2:model:ElementoExpediente" version="1.0">
+
+	<xs:complexType name="ElementoExpediente">
+		<xs:sequence>
+			<xs:element name="tipo" type="tns:TipoElementoExpediente"/>
+			<xs:element name="descripcion" type="xs:string"/>
+			<xs:element name="fecha" type="xs:dateTime"/>
+			<xs:element name="pendiente" type="xs:boolean"/>
+			<xs:element name="url" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="ElementosExpediente">
+		<xs:sequence>
+			<xs:element name="elemento" type="tns:ElementoExpediente" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="FiltroElementosExpediente">
+		<xs:sequence>
+			<xs:element name="nif" type="xs:string"/>
+			<xs:element name="tipos" type="tns:TiposElementoExpediente"/>
+			<xs:element name="fechaInicio" type="xs:dateTime" nillable="true" minOccurs="0"/>
+			<xs:element name="fechaFin" type="xs:dateTime" nillable="true" minOccurs="0"/>
+			<xs:element name="idioma" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="TiposElementoExpediente">
+		<xs:sequence>
+			<xs:element name="tipo" type="tns:TipoElementoExpediente" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="TipoElementoExpediente">
+	  <xs:restriction base="xs:string">
+	    <xs:enumeration value="REGISTRO"/>
+	    <xs:enumeration value="ENVIO"/>
+	    <xs:enumeration value="PREREGISTRO"/>
+	    <xs:enumeration value="PREENVIO"/>
+	    <xs:enumeration value="NOTIFICACION"/>
+	    <xs:enumeration value="COMUNICACION"/>
+	  </xs:restriction>
+	</xs:simpleType>
+
+</xs:schema>

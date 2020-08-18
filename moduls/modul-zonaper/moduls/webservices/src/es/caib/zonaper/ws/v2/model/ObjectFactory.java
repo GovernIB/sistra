@@ -24,9 +24,6 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _ConfiguracionAvisosExpedienteAvisoSMS_QNAME = new QName("", "avisoSMS");
-    private final static QName _ConfiguracionAvisosExpedienteHabilitarAvisos_QNAME = new QName("", "habilitarAvisos");
-    private final static QName _ConfiguracionAvisosExpedienteAvisoEmail_QNAME = new QName("", "avisoEmail");
     private final static QName _Fault_QNAME = new QName("urn:es:caib:zonaper:ws:v2:model:BackofficeFacade", "fault");
     private final static QName _ExpedienteNifRepresentado_QNAME = new QName("", "nifRepresentado");
     private final static QName _ExpedienteConfiguracionAvisos_QNAME = new QName("", "configuracionAvisos");
@@ -35,6 +32,9 @@ public class ObjectFactory {
     private final static QName _ExpedienteIdentificadorProcedimiento_QNAME = new QName("", "identificadorProcedimiento");
     private final static QName _ExpedienteNifRepresentante_QNAME = new QName("", "nifRepresentante");
     private final static QName _ExpedienteNumeroEntradaBTE_QNAME = new QName("", "numeroEntradaBTE");
+    private final static QName _ConfiguracionAvisosExpedienteAvisoSMS_QNAME = new QName("", "avisoSMS");
+    private final static QName _ConfiguracionAvisosExpedienteHabilitarAvisos_QNAME = new QName("", "habilitarAvisos");
+    private final static QName _ConfiguracionAvisosExpedienteAvisoEmail_QNAME = new QName("", "avisoEmail");
     private final static QName _EventoExpedienteAccesiblePorClave_QNAME = new QName("", "accesiblePorClave");
     private final static QName _EventoExpedienteDocumentos_QNAME = new QName("", "documentos");
     private final static QName _EventoExpedienteFecha_QNAME = new QName("", "fecha");
@@ -57,195 +57,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AltaZonaPersonalUsuario }
-     * 
-     */
-    public AltaZonaPersonalUsuario createAltaZonaPersonalUsuario() {
-        return new AltaZonaPersonalUsuario();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerTiquetAcceso }
-     * 
-     */
-    public ObtenerTiquetAcceso createObtenerTiquetAcceso() {
-        return new ObtenerTiquetAcceso();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerTiquetAccesoResponse }
-     * 
-     */
-    public ObtenerTiquetAccesoResponse createObtenerTiquetAccesoResponse() {
-        return new ObtenerTiquetAccesoResponse();
-    }
-
-    /**
-     * Create an instance of {@link ExisteExpediente }
-     * 
-     */
-    public ExisteExpediente createExisteExpediente() {
-        return new ExisteExpediente();
-    }
-
-    /**
      * Create an instance of {@link ObtenerPersistentesResponse }
      * 
      */
     public ObtenerPersistentesResponse createObtenerPersistentesResponse() {
         return new ObtenerPersistentesResponse();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerEstadoPagosTramiteResponse }
-     * 
-     */
-    public ObtenerEstadoPagosTramiteResponse createObtenerEstadoPagosTramiteResponse() {
-        return new ObtenerEstadoPagosTramiteResponse();
-    }
-
-    /**
-     * Create an instance of {@link UsuarioAutenticadoInfo }
-     * 
-     */
-    public UsuarioAutenticadoInfo createUsuarioAutenticadoInfo() {
-        return new UsuarioAutenticadoInfo();
-    }
-
-    /**
-     * Create an instance of {@link ModificarAvisosExpedienteResponse }
-     * 
-     */
-    public ModificarAvisosExpedienteResponse createModificarAvisosExpedienteResponse() {
-        return new ModificarAvisosExpedienteResponse();
-    }
-
-    /**
-     * Create an instance of {@link AltaExpedienteResponse }
-     * 
-     */
-    public AltaExpedienteResponse createAltaExpedienteResponse() {
-        return new AltaExpedienteResponse();
-    }
-
-    /**
-     * Create an instance of {@link TramitePersistente }
-     * 
-     */
-    public TramitePersistente createTramitePersistente() {
-        return new TramitePersistente();
-    }
-
-    /**
-     * Create an instance of {@link EventoExpediente }
-     * 
-     */
-    public EventoExpediente createEventoExpediente() {
-        return new EventoExpediente();
-    }
-
-    /**
-     * Create an instance of {@link EstadoPago }
-     * 
-     */
-    public EstadoPago createEstadoPago() {
-        return new EstadoPago();
-    }
-
-    /**
-     * Create an instance of {@link AltaExpediente }
-     * 
-     */
-    public AltaExpediente createAltaExpediente() {
-        return new AltaExpediente();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerPersistentes }
-     * 
-     */
-    public ObtenerPersistentes createObtenerPersistentes() {
-        return new ObtenerPersistentes();
-    }
-
-    /**
-     * Create an instance of {@link AltaEventoExpedienteResponse }
-     * 
-     */
-    public AltaEventoExpedienteResponse createAltaEventoExpedienteResponse() {
-        return new AltaEventoExpedienteResponse();
-    }
-
-    /**
-     * Create an instance of {@link ConfiguracionAvisosExpediente }
-     * 
-     */
-    public ConfiguracionAvisosExpediente createConfiguracionAvisosExpediente() {
-        return new ConfiguracionAvisosExpediente();
-    }
-
-    /**
-     * Create an instance of {@link EventosExpediente }
-     * 
-     */
-    public EventosExpediente createEventosExpediente() {
-        return new EventosExpediente();
-    }
-
-    /**
-     * Create an instance of {@link DocumentosExpediente }
-     * 
-     */
-    public DocumentosExpediente createDocumentosExpediente() {
-        return new DocumentosExpediente();
-    }
-
-    /**
-     * Create an instance of {@link AltaZonaPersonalUsuarioResponse }
-     * 
-     */
-    public AltaZonaPersonalUsuarioResponse createAltaZonaPersonalUsuarioResponse() {
-        return new AltaZonaPersonalUsuarioResponse();
-    }
-
-    /**
-     * Create an instance of {@link ObtenerEstadoPagosTramite }
-     * 
-     */
-    public ObtenerEstadoPagosTramite createObtenerEstadoPagosTramite() {
-        return new ObtenerEstadoPagosTramite();
-    }
-
-    /**
-     * Create an instance of {@link Expediente }
-     * 
-     */
-    public Expediente createExpediente() {
-        return new Expediente();
-    }
-
-    /**
-     * Create an instance of {@link DocumentoExpediente }
-     * 
-     */
-    public DocumentoExpediente createDocumentoExpediente() {
-        return new DocumentoExpediente();
-    }
-
-    /**
-     * Create an instance of {@link ModificarAvisosExpediente }
-     * 
-     */
-    public ModificarAvisosExpediente createModificarAvisosExpediente() {
-        return new ModificarAvisosExpediente();
-    }
-
-    /**
-     * Create an instance of {@link EstadoPagos }
-     * 
-     */
-    public EstadoPagos createEstadoPagos() {
-        return new EstadoPagos();
     }
 
     /**
@@ -257,35 +73,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AltaEventoExpediente }
-     * 
-     */
-    public AltaEventoExpediente createAltaEventoExpediente() {
-        return new AltaEventoExpediente();
-    }
-
-    /**
-     * Create an instance of {@link ExisteExpedienteResponse }
-     * 
-     */
-    public ExisteExpedienteResponse createExisteExpedienteResponse() {
-        return new ExisteExpedienteResponse();
-    }
-
-    /**
      * Create an instance of {@link ExisteZonaPersonalUsuarioResponse }
      * 
      */
     public ExisteZonaPersonalUsuarioResponse createExisteZonaPersonalUsuarioResponse() {
         return new ExisteZonaPersonalUsuarioResponse();
-    }
-
-    /**
-     * Create an instance of {@link BackofficeFacadeException }
-     * 
-     */
-    public BackofficeFacadeException createBackofficeFacadeException() {
-        return new BackofficeFacadeException();
     }
 
     /**
@@ -297,30 +89,203 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * Create an instance of {@link AltaEventoExpedienteResponse }
      * 
      */
-    @XmlElementDecl(namespace = "", name = "avisoSMS", scope = ConfiguracionAvisosExpediente.class)
-    public JAXBElement<String> createConfiguracionAvisosExpedienteAvisoSMS(String value) {
-        return new JAXBElement<String>(_ConfiguracionAvisosExpedienteAvisoSMS_QNAME, String.class, ConfiguracionAvisosExpediente.class, value);
+    public AltaEventoExpedienteResponse createAltaEventoExpedienteResponse() {
+        return new AltaEventoExpedienteResponse();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Boolean }{@code >}}
+     * Create an instance of {@link ObtenerElementosExpediente }
      * 
      */
-    @XmlElementDecl(namespace = "", name = "habilitarAvisos", scope = ConfiguracionAvisosExpediente.class)
-    public JAXBElement<Boolean> createConfiguracionAvisosExpedienteHabilitarAvisos(Boolean value) {
-        return new JAXBElement<Boolean>(_ConfiguracionAvisosExpedienteHabilitarAvisos_QNAME, Boolean.class, ConfiguracionAvisosExpediente.class, value);
+    public ObtenerElementosExpediente createObtenerElementosExpediente() {
+        return new ObtenerElementosExpediente();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * Create an instance of {@link AltaExpediente }
      * 
      */
-    @XmlElementDecl(namespace = "", name = "avisoEmail", scope = ConfiguracionAvisosExpediente.class)
-    public JAXBElement<String> createConfiguracionAvisosExpedienteAvisoEmail(String value) {
-        return new JAXBElement<String>(_ConfiguracionAvisosExpedienteAvisoEmail_QNAME, String.class, ConfiguracionAvisosExpediente.class, value);
+    public AltaExpediente createAltaExpediente() {
+        return new AltaExpediente();
+    }
+
+    /**
+     * Create an instance of {@link Expediente }
+     * 
+     */
+    public Expediente createExpediente() {
+        return new Expediente();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerEstadoPagosTramite }
+     * 
+     */
+    public ObtenerEstadoPagosTramite createObtenerEstadoPagosTramite() {
+        return new ObtenerEstadoPagosTramite();
+    }
+
+    /**
+     * Create an instance of {@link EstadoPagos }
+     * 
+     */
+    public EstadoPagos createEstadoPagos() {
+        return new EstadoPagos();
+    }
+
+    /**
+     * Create an instance of {@link TramitePersistente }
+     * 
+     */
+    public TramitePersistente createTramitePersistente() {
+        return new TramitePersistente();
+    }
+
+    /**
+     * Create an instance of {@link ModificarAvisosExpedienteResponse }
+     * 
+     */
+    public ModificarAvisosExpedienteResponse createModificarAvisosExpedienteResponse() {
+        return new ModificarAvisosExpedienteResponse();
+    }
+
+    /**
+     * Create an instance of {@link DocumentoExpediente }
+     * 
+     */
+    public DocumentoExpediente createDocumentoExpediente() {
+        return new DocumentoExpediente();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerEstadoPagosTramiteResponse }
+     * 
+     */
+    public ObtenerEstadoPagosTramiteResponse createObtenerEstadoPagosTramiteResponse() {
+        return new ObtenerEstadoPagosTramiteResponse();
+    }
+
+    /**
+     * Create an instance of {@link DocumentosExpediente }
+     * 
+     */
+    public DocumentosExpediente createDocumentosExpediente() {
+        return new DocumentosExpediente();
+    }
+
+    /**
+     * Create an instance of {@link EventosExpediente }
+     * 
+     */
+    public EventosExpediente createEventosExpediente() {
+        return new EventosExpediente();
+    }
+
+    /**
+     * Create an instance of {@link ExisteExpediente }
+     * 
+     */
+    public ExisteExpediente createExisteExpediente() {
+        return new ExisteExpediente();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerPersistentes }
+     * 
+     */
+    public ObtenerPersistentes createObtenerPersistentes() {
+        return new ObtenerPersistentes();
+    }
+
+    /**
+     * Create an instance of {@link ModificarAvisosExpediente }
+     * 
+     */
+    public ModificarAvisosExpediente createModificarAvisosExpediente() {
+        return new ModificarAvisosExpediente();
+    }
+
+    /**
+     * Create an instance of {@link AltaExpedienteResponse }
+     * 
+     */
+    public AltaExpedienteResponse createAltaExpedienteResponse() {
+        return new AltaExpedienteResponse();
+    }
+
+    /**
+     * Create an instance of {@link AltaZonaPersonalUsuarioResponse }
+     * 
+     */
+    public AltaZonaPersonalUsuarioResponse createAltaZonaPersonalUsuarioResponse() {
+        return new AltaZonaPersonalUsuarioResponse();
+    }
+
+    /**
+     * Create an instance of {@link ExisteExpedienteResponse }
+     * 
+     */
+    public ExisteExpedienteResponse createExisteExpedienteResponse() {
+        return new ExisteExpedienteResponse();
+    }
+
+    /**
+     * Create an instance of {@link AltaZonaPersonalUsuario }
+     * 
+     */
+    public AltaZonaPersonalUsuario createAltaZonaPersonalUsuario() {
+        return new AltaZonaPersonalUsuario();
+    }
+
+    /**
+     * Create an instance of {@link AltaEventoExpediente }
+     * 
+     */
+    public AltaEventoExpediente createAltaEventoExpediente() {
+        return new AltaEventoExpediente();
+    }
+
+    /**
+     * Create an instance of {@link ConfiguracionAvisosExpediente }
+     * 
+     */
+    public ConfiguracionAvisosExpediente createConfiguracionAvisosExpediente() {
+        return new ConfiguracionAvisosExpediente();
+    }
+
+    /**
+     * Create an instance of {@link EstadoPago }
+     * 
+     */
+    public EstadoPago createEstadoPago() {
+        return new EstadoPago();
+    }
+
+    /**
+     * Create an instance of {@link ObtenerElementosExpedienteResponse }
+     * 
+     */
+    public ObtenerElementosExpedienteResponse createObtenerElementosExpedienteResponse() {
+        return new ObtenerElementosExpedienteResponse();
+    }
+
+    /**
+     * Create an instance of {@link EventoExpediente }
+     * 
+     */
+    public EventoExpediente createEventoExpediente() {
+        return new EventoExpediente();
+    }
+
+    /**
+     * Create an instance of {@link BackofficeFacadeException }
+     * 
+     */
+    public BackofficeFacadeException createBackofficeFacadeException() {
+        return new BackofficeFacadeException();
     }
 
     /**
@@ -393,6 +358,33 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "numeroEntradaBTE", scope = Expediente.class)
     public JAXBElement<String> createExpedienteNumeroEntradaBTE(String value) {
         return new JAXBElement<String>(_ExpedienteNumeroEntradaBTE_QNAME, String.class, Expediente.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "avisoSMS", scope = ConfiguracionAvisosExpediente.class)
+    public JAXBElement<String> createConfiguracionAvisosExpedienteAvisoSMS(String value) {
+        return new JAXBElement<String>(_ConfiguracionAvisosExpedienteAvisoSMS_QNAME, String.class, ConfiguracionAvisosExpediente.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link Boolean }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "habilitarAvisos", scope = ConfiguracionAvisosExpediente.class)
+    public JAXBElement<Boolean> createConfiguracionAvisosExpedienteHabilitarAvisos(Boolean value) {
+        return new JAXBElement<Boolean>(_ConfiguracionAvisosExpedienteHabilitarAvisos_QNAME, Boolean.class, ConfiguracionAvisosExpediente.class, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "avisoEmail", scope = ConfiguracionAvisosExpediente.class)
+    public JAXBElement<String> createConfiguracionAvisosExpedienteAvisoEmail(String value) {
+        return new JAXBElement<String>(_ConfiguracionAvisosExpedienteAvisoEmail_QNAME, String.class, ConfiguracionAvisosExpediente.class, value);
     }
 
     /**
