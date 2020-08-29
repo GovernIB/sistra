@@ -775,7 +775,8 @@ public class ValidacionesUtil
 		public static boolean validarEmail( String email )
 		{  
 			// validar email 
-			Pattern p = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
+			// Pattern p = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
+			Pattern p = Pattern.compile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$");
 			Matcher m = p.matcher(email);
 			boolean b = m.matches();
 			return b;
