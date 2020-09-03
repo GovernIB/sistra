@@ -337,8 +337,13 @@
                                                     <bean:define id="firmanteDesc" name="firma" property="nombreApellidos" type="java.lang.String"/>
                                                     <%=StringEscapeUtils.escapeHtml(firmanteDesc)%>
                                                     <logic:notEmpty name="firma" property="nifRepresentante">
-                                                    <logic:notEmpty name="firma" property="nombreApellidosRepresentante"><bean:define id="firmanteRpteDesc" name="firma" property="nombreApellidosRepresentante" type="java.lang.String"/>
-                                                    &nbsp; <bean:message key="firma.representadoPor"/> <%=StringEscapeUtils.escapeHtml(firmanteRpteDesc)%>  - </logic:notEmpty>NIF: <bean:write name="firma" property="nifRepresentante"/>
+                                                    <logic:notEmpty name="firma" property="nombreApellidosRepresentante">
+                                                    <bean:define id="firmanteRpteDesc" name="firma" property="nombreApellidosRepresentante" type="java.lang.String"/>
+                                                    &nbsp; <bean:message key="firma.representadoPor"/> <%=StringEscapeUtils.escapeHtml(firmanteRpteDesc)%>  - NIF: <bean:write name="firma" property="nifRepresentante"/>
+                                                    </logic:notEmpty>
+                                                    <logic:empty name="firma" property="nombreApellidosRepresentante">
+                                                    &nbsp; <bean:message key="firma.representadoPor"/> NIF: <bean:write name="firma" property="nifRepresentante"/>
+                                                    </logic:empty>
                                                 </logic:notEmpty>
 												</a>
 											</logic:iterate>
