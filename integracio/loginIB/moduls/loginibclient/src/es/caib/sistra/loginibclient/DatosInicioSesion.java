@@ -26,6 +26,8 @@ public class DatosInicioSesion {
 	private String urlCallback;
 	/** Url callback error. */
 	private String urlCallbackError;
+	/** Login Clave Auto. */
+	private boolean loginClaveAuto;
 	/**
 	 *	Devuelve idioma.
 	 * @return idioma
@@ -152,6 +154,20 @@ public class DatosInicioSesion {
 	 */
 	public void setAplicacion(String aplicacion) {
 		this.aplicacion = aplicacion;
+	}
+	/**
+	 *	Devuelve loginClaveAuto.
+	 * @return loginClaveAuto
+	 */
+	public boolean isLoginClaveAuto() {
+		return loginClaveAuto;
+	}
+	/**
+	 * Establece loginClaveAuto.
+	 * @param loginClaveAuto loginClaveAuto
+	 */
+	public void setLoginClaveAuto(boolean loginClaveAuto) {
+		this.loginClaveAuto = loginClaveAuto;
 	}
 
 }

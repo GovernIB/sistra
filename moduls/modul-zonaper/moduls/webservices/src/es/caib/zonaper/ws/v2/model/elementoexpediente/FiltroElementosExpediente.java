@@ -1,10 +1,11 @@
 
 package es.caib.zonaper.ws.v2.model.elementoexpediente;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -21,8 +22,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *       &lt;sequence>
  *         &lt;element name="nif" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="tipos" type="{urn:es:caib:zonaper:ws:v2:model:ElementoExpediente}TiposElementoExpediente"/>
- *         &lt;element name="fechaInicio" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
- *         &lt;element name="fechaFin" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
+ *         &lt;element name="fechaInicio" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
+ *         &lt;element name="fechaFin" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="idioma" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -46,12 +47,10 @@ public class FiltroElementosExpediente {
     protected String nif;
     @XmlElement(required = true)
     protected TiposElementoExpediente tipos;
-    @XmlElement(required = true)
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar fechaInicio;
-    @XmlElement(required = true)
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar fechaFin;
+    @XmlElementRef(name = "fechaInicio", type = JAXBElement.class)
+    protected JAXBElement<XMLGregorianCalendar> fechaInicio;
+    @XmlElementRef(name = "fechaFin", type = JAXBElement.class)
+    protected JAXBElement<XMLGregorianCalendar> fechaFin;
     @XmlElement(required = true)
     protected String idioma;
 
@@ -108,10 +107,10 @@ public class FiltroElementosExpediente {
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link JAXBElement }{@code <}{@link XMLGregorianCalendar }{@code >}
      *     
      */
-    public XMLGregorianCalendar getFechaInicio() {
+    public JAXBElement<XMLGregorianCalendar> getFechaInicio() {
         return fechaInicio;
     }
 
@@ -120,11 +119,11 @@ public class FiltroElementosExpediente {
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link JAXBElement }{@code <}{@link XMLGregorianCalendar }{@code >}
      *     
      */
-    public void setFechaInicio(XMLGregorianCalendar value) {
-        this.fechaInicio = value;
+    public void setFechaInicio(JAXBElement<XMLGregorianCalendar> value) {
+        this.fechaInicio = ((JAXBElement<XMLGregorianCalendar> ) value);
     }
 
     /**
@@ -132,10 +131,10 @@ public class FiltroElementosExpediente {
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link JAXBElement }{@code <}{@link XMLGregorianCalendar }{@code >}
      *     
      */
-    public XMLGregorianCalendar getFechaFin() {
+    public JAXBElement<XMLGregorianCalendar> getFechaFin() {
         return fechaFin;
     }
 
@@ -144,11 +143,11 @@ public class FiltroElementosExpediente {
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link JAXBElement }{@code <}{@link XMLGregorianCalendar }{@code >}
      *     
      */
-    public void setFechaFin(XMLGregorianCalendar value) {
-        this.fechaFin = value;
+    public void setFechaFin(JAXBElement<XMLGregorianCalendar> value) {
+        this.fechaFin = ((JAXBElement<XMLGregorianCalendar> ) value);
     }
 
     /**

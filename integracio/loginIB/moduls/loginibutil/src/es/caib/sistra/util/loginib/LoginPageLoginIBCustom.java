@@ -18,6 +18,9 @@ public class LoginPageLoginIBCustom {
 	/** Login anonimo automatico (sin pasar por LoginIB). */
 	private boolean loginAnonimoAuto;
 
+	/** Login clave automatico (pasando por LoginIB). */
+	private boolean loginClaveAuto;
+
 	/**
 	 *	Devuelve idioma.
 	 * @return idioma
@@ -64,6 +67,22 @@ public class LoginPageLoginIBCustom {
 	 */
 	public void setLoginAnonimoAuto(boolean loginAnonimoAuto) {
 		this.loginAnonimoAuto = loginAnonimoAuto;
+	}
+
+	/**
+	 *	Devuelve loginClaveAuto.
+	 * @return loginClaveAuto
+	 */
+	public boolean isLoginClaveAuto() {
+		return loginClaveAuto;
+	}
+
+	/**
+	 * Establece loginClaveAuto.
+	 * @param loginClaveAuto loginClaveAuto
+	 */
+	public void setLoginClaveAuto(boolean loginClaveAuto) {
+		this.loginClaveAuto = loginClaveAuto;
 	}
 
 }

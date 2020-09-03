@@ -488,13 +488,13 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 				}
 			}
 		}
-		
+
 		/**
 		 * Crea y devuelve ticket de acceso para tramite persistente recuperado de la carpeta ciudadana
-		 * 
+		 *
 	     * @ejb.interface-method
 	     * @ejb.permission role-name = "${role.auto}"
-	     * 
+	     *
 	     */
 		public String obtenerTiquetAcceso(String idSesionTramitacion,
 				UsuarioAutenticadoInfoPAD usuarioAutenticadoInfo) throws DelegateException
@@ -503,32 +503,32 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 	        PreparedStatement ps = null;
 	        ResultSet rs = null;
 	        try {
-	        	
+
 	        	// Buscamos tramite de persistencia
-				
+
 				TramitePersistenteDelegate td = DelegateUtil.getTramitePersistenteDelegate();
 				final TramitePersistente tp = td.obtenerTramitePersistente(idSesionTramitacion);
-				
+
 				if (tp == null){
 					throw new EJBException("No existe ningún trámite persistente con identificador de sesión " + idSesionTramitacion);
 				}
-	            
+
 	        	conn = getConnection();
-	            
+
 	            // Genera ticket y almacena en sesion
 	            final String ticketId = GeneradorId.generarId();
-	            
+
 	            final String contextoRaiz = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.contextoRaiz.front");
-	            
+
 	            // Calculamos URL de redireccion
 	            String urlRedir = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.url") + contextoRaiz + "/sistrafront/protected/redireccionClave.jsp";
-	            
+
 	            // Calculamos URL destino
 	            String urlDest =  contextoRaiz + URL_CONTINUACION_TRAMITACION + "?language=" + tp.getIdioma()  +"&modelo=" + tp.getTramite() + "&version=" + tp.getVersion() + "&perfilAF=CIUDADANO&idPersistencia=" + tp.getIdPersistencia() ;
-	            
+
 	            final Calendar calendar = Calendar.getInstance();
-	            calendar.setTime(new Date());        
-	            
+	            calendar.setTime(new Date());
+
 	            ps = conn
 	                    .prepareStatement(getQueryTiquet());
 	            ps.setString(1, tp.getIdioma());
@@ -537,7 +537,7 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 	            ps.setString(4, urlDest);
 	            ps.setString(5, ticketId);
 	            ps.setTimestamp(6,
-	                    new java.sql.Timestamp(calendar.getTimeInMillis()));            
+	                    new java.sql.Timestamp(calendar.getTimeInMillis()));
 	            ps.setString(7, usuarioAutenticadoInfo.getAutenticacion());
 	            ps.setString(8, usuarioAutenticadoInfo.getNif());
 	            ps.setString(9, StringUtil.formatearNombreApellidos(
@@ -546,11 +546,11 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 	    				usuarioAutenticadoInfo.getApellido1(),
 	    				usuarioAutenticadoInfo.getApellido2()));
 	            ps.setTimestamp(10,
-	                    new java.sql.Timestamp(calendar.getTimeInMillis()));	            
+	                    new java.sql.Timestamp(calendar.getTimeInMillis()));
 	            ps.executeUpdate();
 	            return urlRedir + "?ticket=" + ticketId;
 	        }catch (Exception e) {
-	        	throw new EJBException( "No se ha podido crear ticket de acceso para la sesión : " + idSesionTramitacion, e);    
+	        	throw new EJBException( "No se ha podido crear ticket de acceso para la sesión : " + idSesionTramitacion, e);
 	        } finally {
 	            if (ps != null)
 	                try {
@@ -564,6 +564,22 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 	                }
 	        }
 		}
+
+
+		/**
+	     *Obtiene url zonaper.
+	     *
+	     * @ejb.interface-method
+	     * @ejb.permission unchecked = "true"
+	     */
+	    public String obtenerUrlZonaper() throws Exception{
+	    	try {
+	    		final String contextoRaiz = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.contextoRaiz.front");
+	    		return ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.url") + contextoRaiz + "/zonaperfront";
+	    	}catch (Exception e) {
+	        	throw new EJBException( "No se ha podido obtener url zona personal", e);
+	        }
+	    }
 
 	// ----------------------------------------------------------------------------------------------
 	//	FUNCIONES AUXILIARES
@@ -668,6 +684,7 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
     	ElementoExpediente el = new ElementoExpediente();
     	el.setExpediente(expe);
     	el.setTipoElemento(entrada instanceof EntradaTelematica?ElementoExpediente.TIPO_ENTRADA_TELEMATICA:ElementoExpediente.TIPO_ENTRADA_PREREGISTRO);
+    	el.setBandeja(entrada.getTipo() == ConstantesAsientoXML.TIPO_ENVIO || entrada.getTipo() == ConstantesAsientoXML.TIPO_PREENVIO);
     	el.setFecha(entrada.getFecha());
     	el.setCodigoElemento(entrada.getCodigo());
     	el.setIdentificadorPersistencia(entrada.getIdPersistencia());
@@ -890,16 +907,16 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 			textoEmail += "</ul>";
 
 			MensajeEnvioEmail mensEmail = new MensajeEnvioEmail();
-			
+
 			String emailsInc = proc.getEmailIncidencias();
 			String [] dest;
-			
+
 			if (!StringUtils.isEmpty(emailsInc)){
 				dest = emailsInc.split(";");
 			} else {
 				dest = new String[0];
 			}
-			
+
 			mensEmail.setDestinatarios(dest);
 			mensEmail.setTitulo(proc.getDescripcion() + ": existen trámites pendientes de finalizar con pagos realizados");
 			mensEmail.setHtml(true);
@@ -1113,7 +1130,7 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 		}
 		return "true".equals(avisosGestorHabilitado);
 	}
-	
+
 	private String getQueryTiquet(){
 		if (StringUtils.isEmpty(queryTiquet)) {
 			try {
@@ -1124,7 +1141,7 @@ public abstract class ProcesosAutoFacadeEJB implements SessionBean
 		}
 		return queryTiquet;
 	}
-	
+
     private Connection getConnection() throws Exception {
         Connection conn;
         final InitialContext ctx = new InitialContext();

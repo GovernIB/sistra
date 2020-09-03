@@ -2020,12 +2020,12 @@ alter table ZPE_LOGVMV
    add constraint ZPE_VMV_PK primary key (VMV_CODIGO);
 
 -- V3.3.1
-drop index ZPE_NOTNRG_UNI; 
+drop index ZPE_NOTNRG_UNI;
 
 alter table ZPE_REGLOG  add RLG_IDEENT  VARCHAR2(100);
 
-alter table ZPE_REGLOG drop constraint ZPE_RLG_PK; 
-drop index ZPE_RLG_PK; 
+alter table ZPE_REGLOG drop constraint ZPE_RLG_PK;
+drop index ZPE_RLG_PK;
 
 alter table ZPE_REGLOG  modify RLG_IDEENT not null;
 
@@ -2046,4 +2046,12 @@ comment on column ZPE_TPEBCK.TPB_PERSIS is  'INDICA QUE ES PERSISTENTE ';
 create index ZPE_TRAPER_IDX on ZPE_TRAPER (
    TPE_USER ASC,
    TPE_FLUTRA ASC
-);    
+);
+
+-- V3.5.19
+alter table ZPE_ELEEX  add    ELE_BANDEJA   NUMBER(1) default 0 not null;
+comment on column ZPE_ELEEX.ELE_BANDEJA is 'Indica si destino bandeja para trámite telemático o preregistro';
+
+update  ZPE_ELEEX set ELE_BANDEJA = 1 where ELE_TIPO = 'T' and ELE_CODELE in (select ENT_CODIGO from ZPE_ENTTEL where ENT_TIPO = 'B');
+update  ZPE_ELEEX set ELE_BANDEJA = 1 where ELE_TIPO = 'P' and ELE_CODELE in (select PRE_CODIGO from ZPE_PREREG where PRE_TIPO = 'N');
+commit;

@@ -274,15 +274,14 @@ public class PluginLoginIB implements PluginLoginIntf {
 			datosInicioSesion.setEntidad(peticion.getEntidad());
 			datosInicioSesion.setForzarAutenticacion(peticion
 					.isForzarAutenticacion());
-
 			datosInicioSesion.setAuditar(auditar);
 			datosInicioSesion.setIdioma(peticion.getIdioma());
 			datosInicioSesion.setMetodosAutenticacion(metodosAutenticacion);
-			;
 			datosInicioSesion.setQaa(peticion.getQaa());
 			datosInicioSesion.setUrlCallback(peticion.getUrlCallback());
 			datosInicioSesion.setUrlCallbackError(peticion
 					.getUrlCallbackError());
+			datosInicioSesion.setLoginClaveAuto(peticion.isLoginClaveAuto());
 			String urlLogin = LoginIBClient.getInstance()
 					.iniciarSesionAutenticacion(datosInicioSesion);
 			return urlLogin;

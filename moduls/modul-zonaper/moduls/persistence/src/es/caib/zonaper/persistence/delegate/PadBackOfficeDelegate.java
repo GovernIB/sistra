@@ -12,6 +12,7 @@ import es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo;
 import es.caib.zonaper.modelInterfaz.EstadoPagosTramite;
 import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
+import es.caib.zonaper.modelInterfaz.FiltroBusquedaElementosExpedientePAD;
 import es.caib.zonaper.persistence.intf.PadBackOfficeFacade;
 import es.caib.zonaper.persistence.util.PadBackOfficeFacadeUtil;
 
@@ -154,7 +155,7 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
+
 	public List obtenerPersistentes(String nif, Date fechaDesde, Date fechaHasta )  throws DelegateException
 	{
 		try
@@ -179,6 +180,28 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 		}
 	}
 
+
+	public List obtenerElementosExpediente(FiltroBusquedaElementosExpedientePAD filtro, int pagina, int tamPagina) throws DelegateException {
+		try
+		{
+			return getFacade().obtenerElementosExpediente(filtro, pagina, tamPagina);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+
+	public Long obtenerTotalElementosExpediente(FiltroBusquedaElementosExpedientePAD filtro) throws DelegateException {
+		try
+		{
+			return getFacade().obtenerTotalElementosExpediente(filtro);
+		}
+		catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
 
 	/*
 	public EventoExpedientePAD obtenerEventoExpediente( long unidadAdministrativa, String idExpediente, String fechaEvento ) throws DelegateException

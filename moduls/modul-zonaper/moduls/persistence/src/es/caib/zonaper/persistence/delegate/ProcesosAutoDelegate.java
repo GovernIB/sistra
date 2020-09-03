@@ -16,7 +16,7 @@ public class ProcesosAutoDelegate implements StatelessDelegate
     /* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
-	
+
 	public void actualizaEstadoExpediente(Long id) throws DelegateException {
 		try
 		{
@@ -26,7 +26,7 @@ public class ProcesosAutoDelegate implements StatelessDelegate
             throw new DelegateException(e);
         }
 	}
-	
+
 	public void actualizaEstadoExpedienteDelElementoExpediente(String tipoElementoExpediente,Long codigoElementoExpediente) throws DelegateException {
 		try
 		{
@@ -36,7 +36,7 @@ public class ProcesosAutoDelegate implements StatelessDelegate
             throw new DelegateException(e);
         }
 	}
-	
+
 	public String avisoCreacionElementoExpediente(ElementoExpediente ele) throws DelegateException {
 		try
 		{
@@ -54,7 +54,7 @@ public class ProcesosAutoDelegate implements StatelessDelegate
 			throw new DelegateException(e);
         }
 	}
-	
+
 	public void controlEntregaNotificaciones() throws DelegateException {
 		try{
 			getFacade().controlEntregaNotificaciones();
@@ -62,7 +62,7 @@ public class ProcesosAutoDelegate implements StatelessDelegate
 			throw new DelegateException(e);
         }
 	}
-	
+
 	public void actualizarExpedienteTramiteSubsanacion(Long codigoEntrada, String tipoEntrada) throws DelegateException {
 		try{
 			getFacade().actualizarExpedienteTramiteSubsanacion(codigoEntrada, tipoEntrada);
@@ -70,7 +70,7 @@ public class ProcesosAutoDelegate implements StatelessDelegate
 			throw new DelegateException(e);
         }
 	}
-	
+
 	public void procesaTramitesCaducados() throws DelegateException {
 		try{
 			getFacade().procesaTramitesCaducados();
@@ -78,7 +78,7 @@ public class ProcesosAutoDelegate implements StatelessDelegate
 			throw new DelegateException(e);
         }
 	}
-	
+
 	public void procesaEliminarTramitesBackup() throws DelegateException {
 		try{
 			getFacade().procesaEliminarTramitesBackup();
@@ -86,7 +86,7 @@ public class ProcesosAutoDelegate implements StatelessDelegate
 			throw new DelegateException(e);
         }
 	}
-	
+
 	public void alertasTramitacion() throws DelegateException {
 		try{
 			getFacade().alertasTramitacion();
@@ -94,7 +94,7 @@ public class ProcesosAutoDelegate implements StatelessDelegate
 			throw new DelegateException(e);
         }
 	}
-	
+
 	public void alertaTramitacionTramiteRealizado(Entrada entrada, String email) throws DelegateException {
 		try{
 			getFacade().alertaTramitacionTramiteRealizado(entrada, email);
@@ -102,7 +102,7 @@ public class ProcesosAutoDelegate implements StatelessDelegate
 			throw new DelegateException(e);
         }
 	}
-	
+
 	public String obtenerTiquetAcceso(String idSesionTramitacion,
 			UsuarioAutenticadoInfoPAD usuarioAutenticadoInfo) throws DelegateException {
 		try{
@@ -112,7 +112,16 @@ public class ProcesosAutoDelegate implements StatelessDelegate
 			throw new DelegateException( e );
 		}
 	}
-	
+
+	 public String obtenerUrlZonaper() throws DelegateException {
+		try{
+			return getFacade().obtenerUrlZonaper();
+		}catch( Exception e )
+		{
+			throw new DelegateException( e );
+		}
+	}
+
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
@@ -120,11 +129,11 @@ public class ProcesosAutoDelegate implements StatelessDelegate
     {
     	return ProcesosAutoFacadeUtil.getHome( ).create();
     }
-    
-    protected ProcesosAutoDelegate()throws DelegateException 
-    {       
+
+    protected ProcesosAutoDelegate()throws DelegateException
+    {
     }
 
-	
+
 
 }

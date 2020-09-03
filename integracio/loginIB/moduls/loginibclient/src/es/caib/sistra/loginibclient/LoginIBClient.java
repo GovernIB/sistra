@@ -195,6 +195,9 @@ public class LoginIBClient {
       json.put("qaa", peticion.getQaa());
       json.put("urlCallback", peticion.getUrlCallback());
       json.put("urlCallbackError", peticion.getUrlCallbackError());
+      if (peticion.isLoginClaveAuto()) {
+    	  json.put("inicioClaveAutomatico", "true");
+      }
 
       final HttpClient httpClient = HttpClients.custom().build();
       final HttpUriRequest request = RequestBuilder.post().setUri(urlClave).setHeader("Authorization", "Basic " + getBasicCredentials())

@@ -35,23 +35,23 @@ import es.caib.zonaper.persistence.delegate.PadDelegate;
  *  path="/protected/init"
  *  scope="request"
  *  validate="false"
- *  
+ *
  * @struts.action-forward
  *  name="success" path="/protected/menuAutenticado.do"
- *  
+ *
  * @struts.action-forward
- *  name="inicioAnonimo" path="/protected/menuAnonimo.do" 
+ *  name="inicioAnonimo" path="/protected/menuAnonimo.do"
  *
  */
 public class InitAction extends BaseAction
 {
 
 	Log logger = LogFactory.getLog( InitAction.class );
-	
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-            HttpServletResponse response) throws Exception 
-    {				 	 		
- 		
+            HttpServletResponse response) throws Exception
+    {
+
 		// Si no existe sesion la creamos
 		DatosSesion datosSesion = this.getDatosSesion( request );
 		if ( datosSesion == null )
@@ -59,33 +59,37 @@ public class InitAction extends BaseAction
 			datosSesion = crearSesion(request);
 			this.setDatosSesion( request, datosSesion );
 		}
-		
-		
+
+
 		// Inicializamos informacion organismo por entidad (almacenamos en sesion, priorizando sobre info contexto)
         try{
         	if (request.getParameter("entidad") != null) {
 	    		OrganismoInfo oi = DelegateUtil.getConfiguracionDelegate().obtenerOrganismoInfo((String) request.getParameter("entidad"));
-		 		request.getSession().setAttribute(Constants.ORGANISMO_INFO_KEY,oi);		 		    	
+		 		request.getSession().setAttribute(Constants.ORGANISMO_INFO_KEY,oi);
     		}
         }catch (Exception ex){
         	throw new ServletException(ex);
         }
-		
-		
-		
+
+
+
 		// Enlaces directos a elementos: notificacion , aviso y tramite
 		if (request.getParameter("notificacion")!=null || request.getParameter("aviso")!=null || request.getParameter("tramite")!=null ) {
 			// Obtenemos codigo expediente asociado a enlace directo
-			Long codigoExpediente = obtenerCodigoExpedienteEnlaceDirecto(request);
-			// Redirigimos a elemento
-			if (codigoExpediente == null) {
-				throw new Exception("No se ha podido obtener expediente asociado");
+			ElementoExpediente elementoExpediente = obtenerElementoExpediente(request);
+			if (elementoExpediente == null) {
+				throw new Exception("No se ha podido obtener elemento expediente asociado");
 			}
-			response.sendRedirect(request.getContextPath() + "/protected/mostrarDetalleExpediente.do?id=" + codigoExpediente);
+			if ("true".equals(request.getParameter("accesoDirecto"))) {
+				request.getSession().setAttribute(Constants.ULTIMO_DETALLE_EXPEDIENTE,elementoExpediente.getExpediente().getCodigo());
+				response.sendRedirect(request.getContextPath() + "/protected/mostrarDetalleElemento.do?codigo=" + elementoExpediente.getCodigoElemento() + "&tipo=" + elementoExpediente.getTipoElemento());
+			} else {
+				response.sendRedirect(request.getContextPath() + "/protected/mostrarDetalleExpediente.do?id=" + elementoExpediente.getExpediente().getCodigo());
+			}
 			return null;
 		}
-		
-		
+
+
 		// Redirigimos a inicio segun tipo de autenticacion
 		if ( datosSesion.getNivelAutenticacion() == Constants.NIVEL_AUTENTICACION_ANONIMO )
 		{
@@ -97,52 +101,49 @@ public class InitAction extends BaseAction
 
 
 	/**
-	 * Obtiene codigo expediente asociado a: notificacion, aviso y tramite (si tras finalizar asistente se redirecciona a zona personal)
+	 * Obtiene elemento expediente asociado.
 	 * @param request
 	 * @return Codigo expediente a visualizar
 	 * @throws DelegateException
 	 */
-	private Long obtenerCodigoExpedienteEnlaceDirecto(HttpServletRequest request)
+	private ElementoExpediente obtenerElementoExpediente(HttpServletRequest request)
 			throws DelegateException {
-		
+
 		// Obtenemos idpersistencia
 		String idPersistencia = null;
-		if (request.getParameter("notificacion")!=null ){			
+		if (request.getParameter("notificacion")!=null ){
 			idPersistencia = request.getParameter("notificacion");
-		} else if (request.getParameter("aviso")!=null ){			
-			idPersistencia = request.getParameter("aviso");									
+		} else if (request.getParameter("aviso")!=null ){
+			idPersistencia = request.getParameter("aviso");
 		} else if (request.getParameter("tramite")!=null ){
-			idPersistencia = request.getParameter("tramite");			
+			idPersistencia = request.getParameter("tramite");
 		}
-		
+
 		// En caso de ser anonimo establecemos clave de acceso en sesion
 		if (this.getDatosSesion(request).getNivelAutenticacion() == 'A') {
 			this.setIdPersistencia(request, idPersistencia);
 		}
-		
+
 		// Obtenemos codigo expediente asociado
 		ElementoExpediente elementoExpediente = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpediente(idPersistencia);
 		if (elementoExpediente != null) {
 			// Verificamos que coincida el tipo
 			if (request.getParameter("notificacion")!=null &&
-					!elementoExpediente.getTipoElemento().equals(ElementoExpediente.TIPO_NOTIFICACION)){			
+					!elementoExpediente.getTipoElemento().equals(ElementoExpediente.TIPO_NOTIFICACION)){
 				elementoExpediente = null;
 			} else if (request.getParameter("aviso")!=null &&
-					!elementoExpediente.getTipoElemento().equals(ElementoExpediente.TIPO_AVISO_EXPEDIENTE)){			
-				elementoExpediente = null;					
+					!elementoExpediente.getTipoElemento().equals(ElementoExpediente.TIPO_AVISO_EXPEDIENTE)){
+				elementoExpediente = null;
 			} else if (request.getParameter("tramite")!=null  &&
 					!elementoExpediente.getTipoElemento().equals(ElementoExpediente.TIPO_ENTRADA_TELEMATICA) &&
 					!elementoExpediente.getTipoElemento().equals(ElementoExpediente.TIPO_ENTRADA_PREREGISTRO)){
-				elementoExpediente = null;		
-			}			
+				elementoExpediente = null;
+			}
 		}
-		
-		// Devolvemos codigo expediente
-		Long codigoExpediente = null;
-		if (elementoExpediente != null) {
-			codigoExpediente = elementoExpediente.getExpediente().getCodigo();
-		}
-		return codigoExpediente;
+
+		// Devolvemos elemento expediente
+		return elementoExpediente;
+
 	}
 
 	/**
@@ -159,19 +160,19 @@ public class InitAction extends BaseAction
 		try
 		{
 			Principal seyconPrincipal = this.getPrincipal( request );
-			
+
 			PluginLoginIntf plgLogin = PluginFactory.getInstance().getPluginLogin();
-			
+
 			datosSesion = new DatosSesion();
 			datosSesion.setNivelAutenticacion(  plgLogin.getMetodoAutenticacion(seyconPrincipal) );
 			datosSesion.setLocale( this.getLocale( request ));
-			
+
 			if ( datosSesion.getNivelAutenticacion() != CredentialUtil.NIVEL_AUTENTICACION_ANONIMO )
 			{
 				PadDelegate delegate = DelegatePADUtil.getPadDelegate();
 				PersonaPAD personaPAD = delegate.obtenerDatosPersonaPADporUsuario( seyconPrincipal.getName() );
-				datosSesion.setPersonaPAD(personaPAD);					
-				
+				datosSesion.setPersonaPAD(personaPAD);
+
 				datosSesion.setPerfilAcceso((String) request.getSession().getAttribute(ConstantesZPE.DELEGACION_PERFIL_ACCESO_KEY));
 				if (ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(datosSesion.getPerfilAcceso()) ){
 					String nifEntidad = (String) request.getSession().getAttribute(ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO_ENTIDAD_KEY);
@@ -185,14 +186,14 @@ public class InitAction extends BaseAction
 					// Miramos si el usuario tiene activada la delegacion
 					datosSesion.setPermitirDelegacion(delegate.habilitadaDelegacion(datosSesion.getNifUsuario())?"S":"N");
 				}
-				
-				
+
+
 			}else{
 				// Si entra como anonimo ponemos perfil a ciudadano
 				datosSesion.setPerfilAcceso(ConstantesZPE.DELEGACION_PERFIL_ACCESO_CIUDADANO);
 			}
-			
-			
+
+
 		}
 		catch( Exception exc )
 		{
@@ -201,7 +202,7 @@ public class InitAction extends BaseAction
 			logger.error( "Error accediendo a la zona personal", exc );
 			throw (exc);
 		}
-		
+
 		if (datosSesion != null && ConstantesZPE.DELEGACION_PERFIL_ACCESO_DELEGADO.equals(datosSesion.getPerfilAcceso())){
 			descripcion = "Acceso delegado " + datosSesion.getNifUsuario();
 			logEventoAccesoZonaPersonal( datosSesion.getNivelAutenticacion(), datosSesion.getCodigoEntidad(), datosSesion.getNifEntidad(), datosSesion.getNombreUsuario(), datosSesion.getLocale().getLanguage(),  result, descripcion );
@@ -210,9 +211,9 @@ public class InitAction extends BaseAction
 		}
 		return datosSesion;
 	}
-	
-	
-	public void logEventoAccesoZonaPersonal(  
+
+
+	public void logEventoAccesoZonaPersonal(
 			char nivelAutenticacion, String seyconUser, String idDocumentoIdPersonal, String nombre, String lang, String result, String descripcion ) throws Exception
 	{
 		try{
@@ -228,11 +229,11 @@ public class InitAction extends BaseAction
 			eventoAuditado.setDescripcion( descripcion );
 			eventoAuditado.setIdioma( lang );
 			eventoAuditado.setResultado( result );
-			DelegateAUDUtil.getAuditaDelegate().logEvento(eventoAuditado, true);			
+			DelegateAUDUtil.getAuditaDelegate().logEvento(eventoAuditado, true);
 		}catch(Exception ex){
 			logger.error("Excepción auditoria en InitAction Zona Personal: " + ex.getMessage(),ex);
 		}
 	}
-	
+
 
 }

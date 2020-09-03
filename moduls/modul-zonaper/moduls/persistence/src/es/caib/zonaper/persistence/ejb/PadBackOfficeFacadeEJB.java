@@ -74,6 +74,7 @@ import es.caib.zonaper.modelInterfaz.EstadoPagosTramite;
 import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExcepcionPAD;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
+import es.caib.zonaper.modelInterfaz.FiltroBusquedaElementosExpedientePAD;
 import es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD;
 import es.caib.zonaper.modelInterfaz.PersonaPAD;
 import es.caib.zonaper.modelInterfaz.TramiteExpedientePAD;
@@ -657,6 +658,41 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 	    	}
 	}
 
+	/**
+	 *
+	 *  Obtiene elementos expediente
+	 *
+	 * @ejb.interface-method
+    *
+    * @ejb.permission role-name="${role.auto}"
+    */
+	public List obtenerElementosExpediente(FiltroBusquedaElementosExpedientePAD filtro, int pagina, int tamPagina) throws ExcepcionPAD
+	{
+		try {
+		 	return DelegateUtil.getElementoExpedienteDelegate().obtenerElementosExpediente(filtro, pagina, tamPagina);
+		} catch( Exception ex )
+	    	{
+	    		throw new ExcepcionPAD("Error consultando elementos expedientes",ex);
+	    	}
+	}
+
+	/**
+	 *
+	 *  Obtiene total elementos expediente
+	 *
+	 * @ejb.interface-method
+   *
+   * @ejb.permission role-name="${role.auto}"
+   */
+	public Long obtenerTotalElementosExpediente(FiltroBusquedaElementosExpedientePAD filtro) throws ExcepcionPAD
+	{
+		try {
+		 	return DelegateUtil.getElementoExpedienteDelegate().obtenerTotalElementosExpediente(filtro);
+		} catch( Exception ex )
+	    	{
+	    		throw new ExcepcionPAD("Error total consultando elementos expedientes",ex);
+	    	}
+	}
 
 
 	/**
@@ -1569,6 +1605,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 				log.debug( "[ ALTA EXPEDIENTE IMPL " + expediente.getIdentificadorExpediente() + "] - Creamos elemento expediente asociado a la entrada ");
 				el.setFecha(entrada.getFecha());
 				el.setTipoElemento(entrada instanceof EntradaTelematica?ElementoExpediente.TIPO_ENTRADA_TELEMATICA:ElementoExpediente.TIPO_ENTRADA_PREREGISTRO);
+				el.setBandeja(entrada.getTipo() == ConstantesAsientoXML.TIPO_ENVIO || entrada.getTipo() == ConstantesAsientoXML.TIPO_PREENVIO);
 				el.setCodigoElemento(entrada.getCodigo());
 				el.setIdentificadorPersistencia(entrada.getIdPersistencia());
 				el.setAccesoAnonimoExpediente(entrada.getNivelAutenticacion() == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO );

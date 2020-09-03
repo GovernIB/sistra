@@ -1,31 +1,28 @@
 package es.caib.zonaper.ws.v2.services;
 
 
-import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.Duration;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.namespace.QName;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.modelInterfaz.ConfiguracionAvisosExpedientePAD;
+import es.caib.zonaper.modelInterfaz.DetalleElementoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.DocumentoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.EstadoPago;
 import es.caib.zonaper.modelInterfaz.EstadoPagosTramite;
 import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
+import es.caib.zonaper.modelInterfaz.FiltroBusquedaElementosExpedientePAD;
 import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
 import es.caib.zonaper.modelInterfaz.UsuarioAutenticadoInfoPAD;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
@@ -208,9 +205,129 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 	}
 
 
+	public ElementosExpediente obtenerElementosExpediente(
+			FiltroElementosExpediente filtroElementosExpediente,
+			Integer pagina, Integer tamPagina) throws BackofficeFacadeException {
+		try {
+
+			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
+			FiltroBusquedaElementosExpedientePAD filtro = generarFiltroElementosExpedientePAD(filtroElementosExpediente);
+			if (pagina == null) {
+				pagina = 0;
+			}
+			if (tamPagina == null ||tamPagina <= 0) {
+				tamPagina = 10;
+			}
+			List elementos = pad.obtenerElementosExpediente(filtro, pagina, tamPagina);
+
+			ElementosExpediente res = new ElementosExpediente();
+			for (Iterator it = elementos.iterator();it.hasNext();){
+				DetalleElementoExpedientePAD ei = (DetalleElementoExpedientePAD) it.next();
+				es.caib.zonaper.ws.v2.model.elementoexpediente.ElementoExpediente ee = new es.caib.zonaper.ws.v2.model.elementoexpediente.ElementoExpediente();
+				ee.setDescripcion(ei.getDescripcion());
+				ee.setTipo(convertToElementoExpediente(ei.getTipo()));
+				ee.setFecha(dateToXmlGregorianCalendar(ei.getFecha()));
+				ee.setUrl(ei.getUrl());
+				ee.setPendiente(ei.isPendiente());
+				res.getElemento().add(ee);
+			}
+
+			return res;
+		} catch (Exception exc) {
+			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
+			// exc.printStackTrace();
+		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
+		}
+	}
+
+	public long obtenerTotalElementosExpediente(
+			FiltroElementosExpediente filtroElementosExpediente)
+			throws BackofficeFacadeException {
+		try {
+
+			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
+			FiltroBusquedaElementosExpedientePAD filtro = generarFiltroElementosExpedientePAD(filtroElementosExpediente);
+			return pad.obtenerTotalElementosExpediente(filtro);
+		} catch (Exception exc) {
+			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
+			// exc.printStackTrace();
+		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
+		}
+	}
+
+
 	// --------------------------------------------------------------
 	//		FUNCIONES AUXILIARES
 	// --------------------------------------------------------------
+
+	private TipoElementoExpediente convertToElementoExpediente(String tipo) {
+		TipoElementoExpediente res = null;
+		if (DetalleElementoExpedientePAD.TIPO_REGISTRO.equals(tipo)) {
+			res = TipoElementoExpediente.REGISTRO;
+		}
+		if (DetalleElementoExpedientePAD.TIPO_ENVIO.equals(tipo)) {
+			res = TipoElementoExpediente.ENVIO;
+		}
+		if (DetalleElementoExpedientePAD.TIPO_PREREGISTRO.equals(tipo)) {
+			res = TipoElementoExpediente.PREREGISTRO;
+		}
+		if (DetalleElementoExpedientePAD.TIPO_PREENVIO.equals(tipo)) {
+			res = TipoElementoExpediente.PREENVIO;
+		}
+		if (DetalleElementoExpedientePAD.TIPO_NOTIFICACION.equals(tipo)) {
+			res = TipoElementoExpediente.NOTIFICACION;
+		}
+		if (DetalleElementoExpedientePAD.TIPO_AVISO.equals(tipo)) {
+			res = TipoElementoExpediente.COMUNICACION;
+		}
+		return res;
+	}
+
+	private FiltroBusquedaElementosExpedientePAD generarFiltroElementosExpedientePAD(
+			FiltroElementosExpediente filtroElementosExpediente) {
+
+		// Lista tipos
+		List<String> listaTipos = null;
+		if  (filtroElementosExpediente.getTipos() != null && filtroElementosExpediente.getTipos().getTipo() != null) {
+			listaTipos = new ArrayList<String>();
+			for (Iterator it = filtroElementosExpediente.getTipos().getTipo().iterator();it.hasNext();){
+				TipoElementoExpediente te = (TipoElementoExpediente) it.next();
+				switch (te) {
+				case REGISTRO:
+					listaTipos.add(DetalleElementoExpedientePAD.TIPO_REGISTRO);
+					break;
+				case ENVIO:
+					listaTipos.add(DetalleElementoExpedientePAD.TIPO_ENVIO);
+					break;
+				case PREENVIO:
+					listaTipos.add(DetalleElementoExpedientePAD.TIPO_PREENVIO);
+					break;
+				case PREREGISTRO:
+					listaTipos.add(DetalleElementoExpedientePAD.TIPO_PREREGISTRO);
+					break;
+				case COMUNICACION:
+					listaTipos.add(DetalleElementoExpedientePAD.TIPO_AVISO);
+					break;
+				case NOTIFICACION:
+					listaTipos.add(DetalleElementoExpedientePAD.TIPO_NOTIFICACION);
+					break;
+				}
+			}
+		}
+
+		FiltroBusquedaElementosExpedientePAD filtro = new FiltroBusquedaElementosExpedientePAD();
+		filtro.setIdioma(filtroElementosExpediente.getIdioma());
+		filtro.setNif(filtroElementosExpediente.getNif());
+		filtro.setTipos(listaTipos);
+		if (filtroElementosExpediente.getFechaInicio() != null && filtroElementosExpediente.getFechaInicio().getValue() != null) {
+			filtro.setFechaInicio(xmlGregorianCalendarToDate(filtroElementosExpediente.getFechaInicio().getValue()));
+		}
+		if (filtroElementosExpediente.getFechaFin() != null && filtroElementosExpediente.getFechaFin().getValue() != null) {
+			filtro.setFechaFin(xmlGregorianCalendarToDate(filtroElementosExpediente.getFechaFin().getValue()));
+		}
+		return filtro;
+	}
+
 	private DocumentoExpedientePAD documentoWSToDocumentoPAD(DocumentoExpediente docWS) throws Exception{
 		DocumentoExpedientePAD docPAD = new DocumentoExpedientePAD();
 		if(docWS != null){
@@ -385,6 +502,14 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		return confPAD;
 	}
 
+	private Date  xmlGregorianCalendarToDate(XMLGregorianCalendar xmlDate){
+		Date date = null;
+		if(xmlDate != null){
+			date = xmlDate.toGregorianCalendar().getTime();
+		}
+		return date;
+	}
+
 	private XMLGregorianCalendar dateToXmlGregorianCalendar(Date date) throws Exception{
 		try {
 			if(date != null){
@@ -416,48 +541,6 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 	}
 	*/
 
-	@Override
-	public ElementosExpediente obtenerElementosExpediente(
-			FiltroElementosExpediente filtroElementosExpediente)
-			throws BackofficeFacadeException {
-
-		// TODO PENDIENTE
-
-		try {
-			ElementosExpediente res = new ElementosExpediente();
-			if  (filtroElementosExpediente.getTipos() != null && filtroElementosExpediente.getTipos().getTipo() != null) {
-				for (Iterator it = filtroElementosExpediente.getTipos().getTipo().iterator();it.hasNext();){
-					TipoElementoExpediente te = (TipoElementoExpediente) it.next();
-					es.caib.zonaper.ws.v2.model.elementoexpediente.ElementoExpediente ee = new es.caib.zonaper.ws.v2.model.elementoexpediente.ElementoExpediente();
-					ee.setTipo(te);
-					ee.setFecha(dateToXmlGregorianCalendar(new Date()));
-					res.getElemento().add(ee);
-					switch (te) {
-					case REGISTRO:
-					case ENVIO:
-					case PREENVIO:
-					case PREREGISTRO:
-						ee.setDescripcion("Trámite");
-						ee.setUrl("http://caibter.indra.es/sistrafront/zonaperfront/inicio?language=" + filtroElementosExpediente.getIdioma() + "&tramite=ID");
-						break;
-					case COMUNICACION:
-						ee.setDescripcion("Comunicación");
-						ee.setUrl("http://caibter.indra.es/sistrafront/zonaperfront/inicio?language=" + filtroElementosExpediente.getIdioma() + "&aviso=ID");
-						break;
-					case NOTIFICACION:
-						ee.setDescripcion("Notificación");
-						ee.setUrl("http://caibter.indra.es/sistrafront/zonaperfront/inicio?language=" + filtroElementosExpediente.getIdioma() + "&notificacion=ID");
-						break;
-					}
-				}
-			}
-			return res;
-		} catch (Exception exc) {
-			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
-			// exc.printStackTrace();
-		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
-		}
-	}
 
 
 }

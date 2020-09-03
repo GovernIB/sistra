@@ -1308,6 +1308,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     		ElementoExpediente eleExpe = new ElementoExpediente();
     		eleExpe.setFecha(entrada.getFecha());
     		eleExpe.setTipoElemento(ElementoExpediente.TIPO_ENTRADA_TELEMATICA);
+    		eleExpe.setBandeja(entrada.getTipo() == ConstantesAsientoXML.TIPO_ENVIO);
     		eleExpe.setCodigoElemento(entrada.getCodigo());
     		eleExpe.setIdentificadorPersistencia(entrada.getIdPersistencia());
     		eleExpe.setAccesoAnonimoExpediente(entrada.getNivelAutenticacion() == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO );
@@ -1796,6 +1797,7 @@ public abstract class PadFacadeEJB implements SessionBean{
     		ElementoExpediente eleExpe = new ElementoExpediente();
     		eleExpe.setFecha(entrada.getFecha());
     		eleExpe.setTipoElemento(ElementoExpediente.TIPO_ENTRADA_PREREGISTRO);
+    		eleExpe.setBandeja(entrada.getTipo() == ConstantesAsientoXML.TIPO_PREENVIO);
     		eleExpe.setCodigoElemento(entrada.getCodigo());
     		eleExpe.setIdentificadorPersistencia(entrada.getIdPersistencia());
     		eleExpe.setAccesoAnonimoExpediente(entrada.getNivelAutenticacion() == CredentialUtil.NIVEL_AUTENTICACION_ANONIMO );

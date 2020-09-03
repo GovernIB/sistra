@@ -17,12 +17,13 @@
 
 		<property name="fecha" column="ELE_FECHA" not-null="true" />
 		<property name="tipoElemento"  column="ELE_TIPO"  not-null="true" length="1" />
+		<property name="bandeja"  column="ELE_BANDEJA"  not-null="true" />
 		<property name="codigoElemento"  column="ELE_CODELE"  not-null="true" />
 		<property name="codigoAviso"  column="ELE_CODAVI" />
 		<property name="identificadorPersistencia"  column="ELE_IDPELE" not-null="true" />
 		<property name="accesoAnonimoExpediente"  column="ELE_ACCEXP" not-null="true" />
-				
+
 		<many-to-one name="expediente" column="ELE_CODEXP" not-null="true"/>
-		
+
 	</class>
 </hibernate-mapping>

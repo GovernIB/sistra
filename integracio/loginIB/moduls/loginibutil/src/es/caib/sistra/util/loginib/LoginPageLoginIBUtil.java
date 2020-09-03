@@ -136,8 +136,9 @@ public class LoginPageLoginIBUtil {
 					urlCallbackError = urlDestino;
 				}
 
-				// Url destino (guardamos en sesion para despues redirigir)
 
+
+				// Url destino (guardamos en sesion para despues redirigir)
 				session.setAttribute("urlDestino", urlDestino);
 
 				// TODO FALTA TRATAR LOGIN ANONIMO AUTO (NO SE PASA PARAMETRO A LOGINIB)
@@ -160,6 +161,7 @@ public class LoginPageLoginIBUtil {
 				peticion.setUrlCallback(urlCallback);
 				peticion.setUrlCallbackError(entidadPortal);
 				peticion.setAuditar(null); // Dejamos que se audite segun lo configurado en plugin
+				peticion.setLoginClaveAuto(customizacionLogin.isLoginClaveAuto());
 
 				// TODO FORZAMOS A AUDITAR SIEMPRE (
 				peticion.setAuditar(true);
@@ -209,6 +211,7 @@ public class LoginPageLoginIBUtil {
 		String language = "es";
 		String niveles="CUA";
 		boolean anonimoAutomatico = false;
+		boolean claveAutomatico = false;
 
 		// Si intenta acceder a un trámite buscamos modelo y versión
 		String in = request.getContextPath() + "/protected/init.do";
@@ -232,11 +235,17 @@ public class LoginPageLoginIBUtil {
 			niveles = parameters.get("autenticacion");
 		}
 
+		// Inicio clave auto
+		if ("true".equals(parameters.get("loginClaveAuto"))) {
+			claveAutomatico = true;
+		}
+
 		// Devuelve customizacion para sistrafront
 		LoginPageLoginIBCustom custom = new LoginPageLoginIBCustom();
 		custom.setIdioma(language);
 		custom.setNivelesAutenticacion(niveles);
 		custom.setLoginAnonimoAuto(anonimoAutomatico);
+		custom.setLoginClaveAuto(claveAutomatico);
 		return custom;
 	}
 
@@ -248,6 +257,7 @@ public class LoginPageLoginIBUtil {
 		String language = "es";
 		String niveles="";
 		boolean anonimoAutomatico = false;
+		boolean claveAutomatico = false;
 
 		// Si intenta acceder a un trámite buscamos modelo y versión
 		String in = request.getContextPath() + "/protected/init.do";
@@ -271,6 +281,11 @@ public class LoginPageLoginIBUtil {
 			language = parameters.get("lang");
 		}
 
+		// Inicio clave auto
+		if ("true".equals(parameters.get("loginClaveAuto"))) {
+			claveAutomatico = true;
+		}
+
 		// Obtenemos descripcion y metodos de autenticacion permitidos
 		InformacionLoginTramite infoTramite = DelegateSISTRAUtil.getSistraDelegate().obtenerInfoLoginTramite(modelo, version, language);
 		niveles = infoTramite.getNivelesAutenticacion();
@@ -291,6 +306,7 @@ public class LoginPageLoginIBUtil {
 		custom.setIdioma(language);
 		custom.setNivelesAutenticacion(niveles);
 		custom.setLoginAnonimoAuto(anonimoAutomatico);
+		custom.setLoginClaveAuto(claveAutomatico);
 		return custom;
 	}
 

@@ -128,6 +128,8 @@
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="filtroElementosExpediente" type="tns6:FiltroElementosExpediente"/>
+						<xsd:element name="pagina" type="xsd:int" nillable="true" minOccurs="0"/>
+						<xsd:element name="tamPagina"  type="xsd:int" nillable="true" minOccurs="0"/>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
@@ -135,6 +137,20 @@
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="obtenerElementosExpedienteReturn" type="tns6:ElementosExpediente"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="obtenerTotalElementosExpediente">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="filtroElementosExpediente" type="tns6:FiltroElementosExpediente"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="obtenerTotalElementosExpedienteResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="obtenerTotalElementosExpedienteReturn" type="xsd:long"/>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
@@ -201,6 +217,12 @@
 	<wsdl:message name="obtenerElementosExpedienteResponse">
 		<wsdl:part name="parameters" element="intf:obtenerElementosExpedienteResponse"/>
 	</wsdl:message>
+	<wsdl:message name="obtenerTotalElementosExpedienteRequest">
+		<wsdl:part name="parameters" element="intf:obtenerTotalElementosExpediente"/>
+	</wsdl:message>
+	<wsdl:message name="obtenerTotalElementosExpedienteResponse">
+		<wsdl:part name="parameters" element="intf:obtenerTotalElementosExpedienteResponse"/>
+	</wsdl:message>
 	<wsdl:portType name="BackofficeFacade">
 		<wsdl:operation name="altaExpediente">
 			<wsdl:input name="altaExpedienteRequest" message="impl:altaExpedienteRequest"/>
@@ -245,6 +267,11 @@
 		<wsdl:operation name="obtenerElementosExpediente">
 			<wsdl:input name="obtenerElementosExpedienteRequest" message="impl:obtenerElementosExpedienteRequest"/>
 			<wsdl:output name="obtenerElementosExpedienteResponse" message="impl:obtenerElementosExpedienteResponse"/>
+			<wsdl:fault name="BackofficeFacadeException" message="impl:BackofficeFacadeException"/>
+		</wsdl:operation>
+		<wsdl:operation name="obtenerTotalElementosExpediente">
+			<wsdl:input name="obtenerTotalElementosExpedienteRequest" message="impl:obtenerTotalElementosExpedienteRequest"/>
+			<wsdl:output name="obtenerTotalElementosExpedienteResponse" message="impl:obtenerTotalElementosExpedienteResponse"/>
 			<wsdl:fault name="BackofficeFacadeException" message="impl:BackofficeFacadeException"/>
 		</wsdl:operation>
 	</wsdl:portType>
@@ -346,7 +373,19 @@
 				<soap:fault name="BackofficeFacadeException" use="literal"/>
 			</wsdl:fault>
 		</wsdl:operation>
-				<wsdl:operation name="obtenerElementosExpediente">
+		<wsdl:operation name="obtenerElementosExpediente">
+			<soap:operation/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="BackofficeFacadeException">
+				<soap:fault name="BackofficeFacadeException" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="obtenerTotalElementosExpediente">
 			<soap:operation/>
 			<wsdl:input>
 				<soap:body use="literal"/>
