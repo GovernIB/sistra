@@ -212,7 +212,6 @@ public class AvisosExpediente {
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.FECHAAVISO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.fechaAviso")));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ASUNTO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.asunto")));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.DESCRIPCION#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.descripcion")));
-			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDERAVISO#]",StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.accederAviso")));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.SOPORTE#]",LiteralesAvisosMovilidad.calcularTextoSoporte(oi, expe.getIdioma()));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDER#]", StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),literalTextoAccesoAviso, paramsLiteralTextoAccesoAviso)));
 			textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDERCERTIFICADO#]", StringEscapeUtils.escapeHtml(LiteralesAvisosMovilidad.getLiteral(expe.getIdioma(),"aviso.email.cuerpo.accederAviso.certificado")));
@@ -497,6 +496,6 @@ public class AvisosExpediente {
 			entidad = proc.getEntidad().getIdentificador();
 		}
 		return entidad;
-	}	
-	
+	}
+
 }

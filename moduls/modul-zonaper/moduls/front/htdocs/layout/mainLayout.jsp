@@ -13,7 +13,11 @@
 <logic:notEmpty name="<%=es.caib.zonaper.front.Constants.ORGANISMO_INFO_KEY%>" property="urlCssCustom">
 	<link href="<bean:write name="<%=es.caib.zonaper.front.Constants.ORGANISMO_INFO_KEY%>" property="urlCssCustom" />" rel="stylesheet" type="text/css" />
 </logic:notEmpty>
-<!-- 
+
+<logic:equal name="<%=es.caib.zonaper.front.Constants.ORGANISMO_INFO_KEY%>" property="embebedEnabled" value="true" >
+	<link href="css/zonaperfront-embebed.css" rel="stylesheet" type="text/css" media="screen" />
+</logic:equal>
+<!--
 <link href="css/estils_print.css" rel="stylesheet" type="text/css" media="print" />
  -->
 <script type="text/javascript" src="js/jquery-1.4.1.min.js"></script>
@@ -23,30 +27,30 @@
 
 <!--  Scripts para firma (depende implementacion) -->
 <logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
-			 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">		
-		<script type="text/javascript" src="<%=request.getContextPath()%>/firma/caib/js/firma.js"></script>			
+			 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_CAIB%>">
+		<script type="text/javascript" src="<%=request.getContextPath()%>/firma/caib/js/firma.js"></script>
 </logic:equal>
 
 <logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
-			 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">					
+			 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_AFIRMA%>">
 	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/configClienteaFirmaSistra.js"></script>
-	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/miniapplet.js"></script>	
-	<script type="text/javascript">		
+	<script type="text/javascript" src="<%=request.getContextPath()%>/firma/aFirma/js/miniapplet.js"></script>
+	<script type="text/javascript">
 		base = "<%=session.getAttribute("urlSistraAFirma")%><%=request.getContextPath()%>/firma/aFirma";
 		baseDownloadURL = "<%=session.getAttribute("urlSistraAFirma")%><%=request.getContextPath()%>/firma/aFirma";
 	</script>
-	
-</logic:equal>		
+
+</logic:equal>
 
 <logic:equal name="<%=es.caib.zonaper.front.Constants.IMPLEMENTACION_FIRMA_KEY%>"
-			 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">		
+			 value="<%=es.caib.sistra.plugins.firma.PluginFirmaIntf.PROVEEDOR_FIRMAWEB%>">
 		<script type="text/javascript" src="<%=request.getContextPath()%>/firma/firmaWeb/js/configFirmaWeb.js"></script>
 		<script type="text/javascript" src="<%=request.getContextPath()%>/firma/firmaWeb/js/firmaweb.js"></script>
-		<script type="text/javascript">		
+		<script type="text/javascript">
 			// No se quiere que FIRMAWEB vaya en contexto Sistra
-			// FIRMAWEB_CONTEXTO = '<bean:write name="<%=es.caib.zonaper.front.Constants.CONTEXTO_RAIZ%>"/>';			
+			// FIRMAWEB_CONTEXTO = '<bean:write name="<%=es.caib.zonaper.front.Constants.CONTEXTO_RAIZ%>"/>';
 			FIRMAWEB_CONTEXTO = '';
-		</script>			
+		</script>
 </logic:equal>
 
 
@@ -57,15 +61,15 @@
 		var errorIE="<bean:message key="errors.ie.versionminima" />";
 		var errorFirefox="<bean:message key="errors.firefox.versionminima" />";
 		checkVersionNavegador(errorIE,errorFirefox);
-		
+
 		// està dins d'un iframe?
 		if(top.window.location != self.window.location) {
 			contenidor_H = document.getElementById("contenidor").offsetHeight;
 			top.window.document.getElementById("frm").style.height = parseInt((contenidor_H/14.5), 10) + 2 + "em";
 		}
-		
+
 	}
-	
+
 -->
 </script>
 </head>
@@ -74,16 +78,29 @@
 <div style='visibility:hidden;position:absolute'>Version:<%=es.caib.zonaper.front.util.Util.getVersion()%></div>
 <div id="contenidor">
 	<!-- capsal -->
-	<tiles:insert name="header"/>		
+	<logic:equal name="<%=es.caib.zonaper.front.Constants.ORGANISMO_INFO_KEY%>" property="embebedEnabled" value="false" >
+	<tiles:insert name="header"/>
+	</logic:equal>
 	<!-- continguts -->
 	<div id="continguts">
 		<!-- titol -->
+		<logic:equal name="<%=es.caib.zonaper.front.Constants.ORGANISMO_INFO_KEY%>" property="embebedEnabled" value="false" >
 		<h1 id="titolPagina"></h1>
 		<div id="titolOmbra"></div>
+		</logic:equal>
 		<tiles:insert name="main"/>
 	</div>
+	<logic:equal name="<%=es.caib.zonaper.front.Constants.ORGANISMO_INFO_KEY%>" property="embebedEnabled" value="false" >
 	<tiles:insert name="footer"/>
+	</logic:equal>
 </div>
+<logic:equal name="<%=es.caib.zonaper.front.Constants.ORGANISMO_INFO_KEY%>" property="embebedEnabled" value="true" >
+<div id="embebed">
+    <p class="botonera">
+	<input id="btnRetornoCarpeta" name="btnRetornoCarpeta" type="button" value="<bean:message key="mensaje.volver"/>" onclick="document.location='<bean:write name="<%=es.caib.zonaper.front.Constants.ORGANISMO_INFO_KEY%>" property="embebedUrlRetorno"/>'"/>
+	</p>
+</div>
+</logic:equal>
 <div id="fondo"></div>
 </body>
 </html:html>

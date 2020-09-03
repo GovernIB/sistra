@@ -11,6 +11,7 @@ import org.apache.struts.action.ActionMapping;
 import es.caib.zonaper.front.Constants;
 import es.caib.zonaper.front.form.InfoTramiteAnonimoForm;
 import es.caib.zonaper.model.ElementoExpediente;
+import es.caib.zonaper.model.OrganismoInfo;
 import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
 import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
@@ -25,10 +26,10 @@ import es.caib.zonaper.persistence.delegate.PadDelegate;
  *
  * @struts.action-forward
  *  name="tramiteAnonimoSinEnviar" path=".tramiteAnonimoSinEnviar"
- * 
+ *
  * @struts.action-forward
  *  name="detalleExpediente" path="/protected/mostrarDetalleExpediente.do"
- * 
+ *
  * @struts.action-forward
  *  name="fail" path=".mensaje"
  */
@@ -37,7 +38,7 @@ public class InfoTramiteAnonimoAction extends BaseAction
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		InfoTramiteAnonimoForm formulario = ( InfoTramiteAnonimoForm ) form;
-		
+
 		// Obtenemos clave de acceso
 		if ( StringUtils.isEmpty( formulario.getIdPersistencia() ) )
 		{
@@ -45,10 +46,10 @@ public class InfoTramiteAnonimoAction extends BaseAction
 			return mapping.findForward( "fail" );
 		}
 		String idPersistencia = formulario.getIdPersistencia().trim();
-			
+
 		// Almacenamos en sesion la clave de acceso con que se entra
 		this.setIdPersistencia(request,idPersistencia);
-		
+
 		// Comprobamos si la clave hace referencia a algun tramite que todavia esta en persistencia
 		PadDelegate padDelegate = DelegatePADUtil.getPadDelegate();
 		TramitePersistentePAD tramitePersistente = padDelegate.obtenerTramitePersistente(idPersistencia);
@@ -63,15 +64,22 @@ public class InfoTramiteAnonimoAction extends BaseAction
 			// Comprobamos si se tiene acceso a algun expediente con esa clase
 			ElementoExpediente elementoExpe = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpediente(idPersistencia);
 			if (elementoExpe != null && elementoExpe.isAccesoAnonimoExpediente()) {
-				// Redirigimos a expediente
+				OrganismoInfo oi = this.getOrganismoInfo(request);
 				request.getSession().setAttribute(Constants.ULTIMO_DETALLE_EXPEDIENTE, elementoExpe.getExpediente().getCodigo());
-				return mapping.findForward("detalleExpediente");
-			}				
+				if (oi.isEmbebedEnabled()) {
+					// Redirigimos a detalle elemento
+					response.sendRedirect(request.getContextPath() + "/protected/mostrarDetalleElemento.do?codigo=" + elementoExpe.getCodigoElemento() + "&tipo=" + elementoExpe.getTipoElemento());
+					return null;
+				} else {
+					// Redirigimos a expediente
+					return mapping.findForward("detalleExpediente");
+				}
+			}
 		}
 
 		// Si no se ha redirigido antes es que no existe
 		request.setAttribute(Constants.MENSAJE_MENU_NAVEGACION, "menuAnonimo.mensaje" );
 		request.setAttribute(Constants.MENSAJE_TEXTO, "errors.tramiteNoExiste" );
-		return mapping.findForward( "fail" );						
+		return mapping.findForward( "fail" );
 	}
 }

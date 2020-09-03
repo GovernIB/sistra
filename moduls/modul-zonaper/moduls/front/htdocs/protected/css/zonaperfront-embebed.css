@@ -1,0 +1,6 @@
+@charset "utf-8";
+
+body { background-color:#707067; }
+#continguts { background-color:#fff; padding:20px; }
+div#embebed p.botonera { text-align:center; }
+div#embebed p #btnRetornoCarpeta { overflow:visible; font-size:1.1em; font-weight:bold; text-transform:uppercase; padding:.3em 1em; }

@@ -62,11 +62,14 @@ public class InitAction extends BaseAction
 
 
 		// Inicializamos informacion organismo por entidad (almacenamos en sesion, priorizando sobre info contexto)
+		OrganismoInfo oi = null;
         try{
         	if (request.getParameter("entidad") != null) {
-	    		OrganismoInfo oi = DelegateUtil.getConfiguracionDelegate().obtenerOrganismoInfo((String) request.getParameter("entidad"));
-		 		request.getSession().setAttribute(Constants.ORGANISMO_INFO_KEY,oi);
+	    		oi = DelegateUtil.getConfiguracionDelegate().obtenerOrganismoInfo((String) request.getParameter("entidad"));
+    		} else {
+    			oi = DelegateUtil.getConfiguracionDelegate().obtenerOrganismoInfo();
     		}
+        	request.getSession().setAttribute(Constants.ORGANISMO_INFO_KEY,oi);
         }catch (Exception ex){
         	throw new ServletException(ex);
         }
@@ -80,7 +83,7 @@ public class InitAction extends BaseAction
 			if (elementoExpediente == null) {
 				throw new Exception("No se ha podido obtener elemento expediente asociado");
 			}
-			if ("true".equals(request.getParameter("accesoDirecto"))) {
+			if (oi.isEmbebedEnabled()) {
 				request.getSession().setAttribute(Constants.ULTIMO_DETALLE_EXPEDIENTE,elementoExpediente.getExpediente().getCodigo());
 				response.sendRedirect(request.getContextPath() + "/protected/mostrarDetalleElemento.do?codigo=" + elementoExpediente.getCodigoElemento() + "&tipo=" + elementoExpediente.getTipoElemento());
 			} else {
@@ -95,7 +98,13 @@ public class InitAction extends BaseAction
 		{
 			return mapping.findForward( "inicioAnonimo" );
 		} else {
-			return mapping.findForward( "success" );
+			// Verificamos si Zonaper esta en modo embebed
+			if (oi.isEmbebedEnabled()) {
+				response.sendRedirect(oi.getEmbebedUrlMain());
+				return null;
+			} else {
+				return mapping.findForward( "success" );
+			}
 		}
     }
 

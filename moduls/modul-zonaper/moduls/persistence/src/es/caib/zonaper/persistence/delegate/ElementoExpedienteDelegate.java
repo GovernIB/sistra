@@ -162,7 +162,7 @@ public class ElementoExpedienteDelegate implements StatelessDelegate
         }
 	}
 
-	public List obtenerElementosExpediente(FiltroBusquedaElementosExpedientePAD filtro, int pagina, int tamPagina)	 throws DelegateException
+	public List obtenerElementosExpediente(FiltroBusquedaElementosExpedientePAD filtro, Integer pagina, Integer tamPagina)	 throws DelegateException
 	{
 		try
 		{

@@ -212,12 +212,6 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 
 			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
 			FiltroBusquedaElementosExpedientePAD filtro = generarFiltroElementosExpedientePAD(filtroElementosExpediente);
-			if (pagina == null) {
-				pagina = 0;
-			}
-			if (tamPagina == null ||tamPagina <= 0) {
-				tamPagina = 10;
-			}
 			List elementos = pad.obtenerElementosExpediente(filtro, pagina, tamPagina);
 
 			ElementosExpediente res = new ElementosExpediente();

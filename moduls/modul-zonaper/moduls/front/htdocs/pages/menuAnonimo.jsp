@@ -8,19 +8,19 @@
 <!--
 function validaFormulario( form )
     {
-    	// Eliminamos espacios en blanco    	
+    	// Eliminamos espacios en blanco
 		form.idPersistencia.value = form.idPersistencia.value.replace(/^\s+|\s+$/g,'');
-    
+
 		if ( form.idPersistencia.value == null || form.idPersistencia.value == '' )
 		{
-			alert( "<bean:message key="menuAnonimo.claveVacia" />" );	
+			alert( "<bean:message key="menuAnonimo.claveVacia" />" );
 			form.idPersistencia.focus();
 			return;
 		}
         var filter  = /^\w{8}\-\w{8}\-\w{8}$/;
         if ( !filter.test( form.idPersistencia.value ) )
         {
-        	alert( "<bean:message key="menuAnonimo.claveInvalida" />" );	
+        	alert( "<bean:message key="menuAnonimo.claveInvalida" />" );
 			form.idPersistencia.focus();
 			return;
         }
@@ -29,31 +29,31 @@ function validaFormulario( form )
 -->
 </script>
 
-		<!-- titol -->
+			<!-- titol -->
 			<h1>
 				<bean:message key="menuAnonimo.encabezamiento" />
 			</h1>
 			<!-- /titol -->
-			
+
 			<!-- meues dades -->
 			<div class="modul anonim">
 				<h2><bean:message key="menuAnonimo.misTramites" /></h2>
 				<p>
 					<bean:message key="menuAnonimo.misTramites.texto" />
-					
+
 					<html:form action="/protected/infoTramiteAnonimo">
 						<p>
-							<html:text property="idPersistencia" size="35"/> 
+							<html:text property="idPersistencia" size="35"/>
 							<input type="button" value="<bean:message key="menuAnonimo.misTramites.boton" />" onclick="javascript:validaFormulario( this.form );"/>
 						</p>
-					</html:form>					
-				
+					</html:form>
+
 				</p>
 			</div>
 			<!-- /meues dades -->
-					
+
 			<!-- subscripcions -->
-			<!-- 
+			<!--
 		 	<div class="modul anonim marc">
 				<h2><bean:message key="menuAnonimo.misSuscripciones"/></h2>
 				<ul>
@@ -62,4 +62,4 @@ function validaFormulario( form )
 			</div>
 			 -->
 			<!-- /subscripcions -->
-		
+

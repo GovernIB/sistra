@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Clase que modela la info de un organismo y permite 
+ * Clase que modela la info de un organismo y permite
  * customizar la presentación de los módulos
  *
  */
@@ -25,7 +25,11 @@ public class OrganismoInfo implements Serializable{
 	private String urlLoginCssCustom;
 	private Map tituloPortal = new HashMap(); // Titulos portal con el key como idioma
 	private Map referenciaPortal = new HashMap(); // Referencias portal con el key como idioma
-	
+
+	private boolean embebedEnabled;
+	private String  embebedUrlMain;
+	private String  embebedUrlRetorno;
+
 	public String getEntidadDefecto() {
 		return entidadDefecto;
 	}
@@ -110,5 +114,47 @@ public class OrganismoInfo implements Serializable{
 	public void setUrlLoginCssCustom(String urlLoginCssCustom) {
 		this.urlLoginCssCustom = urlLoginCssCustom;
 	}
-	
+	/**
+	 *	Devuelve embebedEnabled.
+	 * @return embebedEnabled
+	 */
+	public boolean isEmbebedEnabled() {
+		return embebedEnabled;
+	}
+	/**
+	 * Establece embebedEnabled.
+	 * @param embebedEnabled embebedEnabled
+	 */
+	public void setEmbebedEnabled(boolean embebedEnabled) {
+		this.embebedEnabled = embebedEnabled;
+	}
+	/**
+	 *	Devuelve embebedUrlMain.
+	 * @return embebedUrlMain
+	 */
+	public String getEmbebedUrlMain() {
+		return embebedUrlMain;
+	}
+	/**
+	 * Establece embebedUrlMain.
+	 * @param embebedUrlMain embebedUrlMain
+	 */
+	public void setEmbebedUrlMain(String embebedUrlMain) {
+		this.embebedUrlMain = embebedUrlMain;
+	}
+	/**
+	 *	Devuelve embebedUrlRetorno.
+	 * @return embebedUrlRetorno
+	 */
+	public String getEmbebedUrlRetorno() {
+		return embebedUrlRetorno;
+	}
+	/**
+	 * Establece embebedUrlRetorno.
+	 * @param embebedUrlRetorno embebedUrlRetorno
+	 */
+	public void setEmbebedUrlRetorno(String embebedUrlRetorno) {
+		this.embebedUrlRetorno = embebedUrlRetorno;
+	}
+
 }

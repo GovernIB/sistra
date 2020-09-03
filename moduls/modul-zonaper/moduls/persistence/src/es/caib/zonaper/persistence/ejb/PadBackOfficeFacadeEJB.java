@@ -666,7 +666,7 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
     *
     * @ejb.permission role-name="${role.auto}"
     */
-	public List obtenerElementosExpediente(FiltroBusquedaElementosExpedientePAD filtro, int pagina, int tamPagina) throws ExcepcionPAD
+	public List obtenerElementosExpediente(FiltroBusquedaElementosExpedientePAD filtro, Integer pagina, Integer tamPagina) throws ExcepcionPAD
 	{
 		try {
 		 	return DelegateUtil.getElementoExpedienteDelegate().obtenerElementosExpediente(filtro, pagina, tamPagina);

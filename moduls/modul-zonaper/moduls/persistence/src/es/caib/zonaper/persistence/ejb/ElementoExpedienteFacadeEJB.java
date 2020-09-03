@@ -353,7 +353,7 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 	 *
 	 * @ejb.permission role-name="${role.auto}"
 	 */
-	public List obtenerElementosExpediente(FiltroBusquedaElementosExpedientePAD filtro, int pagina, int tamPagina)	{
+	public List obtenerElementosExpediente(FiltroBusquedaElementosExpedientePAD filtro, Integer pagina, Integer tamPagina)	{
 
 		List result = new ArrayList();
 
@@ -363,13 +363,18 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 			Query query = generarQueryBusquedaElementosExpedientePAD(session,
 					filtro, false);
 
-			Page page = new Page( query, pagina, tamPagina);
-			List elementosExpediente = page.getList();
+			List elementosExpediente = null;
+			if (pagina == null || tamPagina == null) {
+				elementosExpediente = query.list();
+			} else {
+				Page page = new Page( query, pagina, tamPagina);
+				elementosExpediente = page.getList();
+			}
 
 			// Recorremos elementos expediente para recuperar datos
 			final String contextoRaiz = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.contextoRaiz.front");
     		String urlZonaper = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.url") + contextoRaiz +
-    				"/zonaperfront/inicio?language=" + filtro.getIdioma() + "&accesoDirecto=true&loginClaveAuto=true";
+    				"/zonaperfront/inicio?language=" + filtro.getIdioma() + "&loginClaveAuto=true";
 			for (Iterator it=elementosExpediente.iterator();it.hasNext();){
 				ElementoExpediente e = (ElementoExpediente) it.next();
 				ElementoExpedienteItf ei = obtenerDetalleElementoExpediente(e.getCodigo());

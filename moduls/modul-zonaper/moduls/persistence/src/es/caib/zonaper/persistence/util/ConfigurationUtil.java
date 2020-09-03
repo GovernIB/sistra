@@ -19,16 +19,16 @@ import es.caib.zonaper.model.OrganismoInfo;
 public class ConfigurationUtil {
 
 	private static Log log = LogFactory.getLog( ConfigurationUtil.class );
-	
+
 	private static ConfigurationUtil confUtil = new ConfigurationUtil();
 	private static final String PREFIX_SAR = "es.caib.sistra.configuracion.sistra.";
 	private Properties propiedades = null;
 	private OrganismoInfo organismoInfo = null;
-	
+
 	/**
 	 * Constructor privado
 	 */
-	private ConfigurationUtil(){		
+	private ConfigurationUtil(){
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class ConfigurationUtil {
 	public static ConfigurationUtil getInstance(){
 		return confUtil;
 	}
-	
+
 	/**
 	 * Obtiene las propiedades de configuracion
 	 * @return Propiedades configuracion
@@ -50,7 +50,7 @@ public class ConfigurationUtil {
 		}
 		return propiedades;
 	}
-	
+
 	/**
 	 * Unifica las propiedades del organismo en un objeto
 	 * @return Propiedades configuracion
@@ -59,11 +59,11 @@ public class ConfigurationUtil {
 	public synchronized OrganismoInfo obtenerOrganismoInfo() throws Exception{
 		// Creamos info para el organismo
 		if (organismoInfo == null){
-			organismoInfo = obtenerOrganismoInfoImpl();	    		
-	    }         
-		
+			organismoInfo = obtenerOrganismoInfoImpl();
+	    }
+
 		return organismoInfo;
-		
+
 	}
 
 	private OrganismoInfo obtenerOrganismoInfoImpl() throws Exception {
@@ -86,9 +86,9 @@ public class ConfigurationUtil {
 		}
 		oi.setUrlCssCustom(propiedades.getProperty("organismo.cssCustom"));
 		oi.setUrlLoginCssCustom(propiedades.getProperty("organismo.cssLoginCustom"));
-		
-		
-		
+
+
+
 		// Obtenemos titulo y referencia a la zona personal
 		for (Iterator it=propiedades.keySet().iterator();it.hasNext();){
 			String key = (String) it.next();
@@ -99,99 +99,104 @@ public class ConfigurationUtil {
 				oi.getReferenciaPortal().put(key.substring(key.lastIndexOf(".") +1),propiedades.get(key));
 			}
 		}
-		
+
+		// Si Zonaper esta en modo embebed
+		oi.setEmbebedEnabled("true".equals(propiedades.getProperty("embedded.enabled")));
+		oi.setEmbebedUrlMain(propiedades.getProperty("embedded.urlCarpeta.main"));
+		oi.setEmbebedUrlRetorno(propiedades.getProperty("embedded.urlCarpeta.retorno"));
+
 		return oi;
 	}
-	
-	
+
+
 	/**
 	 * Unifica las propiedades del organismo en un objeto
 	 * @return Propiedades configuracion
 	 * @throws Exception
 	 */
 	public OrganismoInfo obtenerOrganismoInfo(String entidad) throws Exception{
-		
+
 		// Obtenemos info por defecto
 		OrganismoInfo oi = obtenerOrganismoInfoImpl();
-		
+
 		// Sobreescribimos info por entidad
 		String valorPropEntidad = null;
-		
+
 		valorPropEntidad = obtenerPropiedadEntidad("organismo.nombre", entidad);
 		if (StringUtils.isNotBlank(valorPropEntidad)) {
 			oi.setNombre(valorPropEntidad);
 		}
-		
+
 		valorPropEntidad = obtenerPropiedadEntidad("organismo.logo", entidad);
 		if (StringUtils.isNotBlank(valorPropEntidad)) {
 			oi.setUrlLogo(valorPropEntidad);
 		}
-				
+
 		valorPropEntidad = obtenerPropiedadEntidad("organismo.logo.login", entidad);
 		if (StringUtils.isNotBlank(valorPropEntidad)) {
 			oi.setUrlLoginLogo(valorPropEntidad);
 		}
-		
+
 		valorPropEntidad = obtenerPropiedadEntidad("organismo.portal.url", entidad);
 		if (StringUtils.isNotBlank(valorPropEntidad)) {
 			oi.setUrlPortal(valorPropEntidad);
 		}
-		
+
 		valorPropEntidad = obtenerPropiedadEntidad("organismo.footer.contacto", entidad);
 		if (StringUtils.isNotBlank(valorPropEntidad)) {
 			oi.setPieContactoHTML(valorPropEntidad);
 		}
-		
+
 		valorPropEntidad = obtenerPropiedadEntidad("organismo.soporteTecnico.telefono", entidad);
 		if (StringUtils.isNotBlank(valorPropEntidad)) {
 			oi.setTelefonoIncidencias(valorPropEntidad);
 		}
-		
+
 		valorPropEntidad = obtenerPropiedadEntidad("organismo.soporteTecnico.url", entidad);
 		if (StringUtils.isNotBlank(valorPropEntidad)) {
 			oi.setUrlSoporteIncidencias(valorPropEntidad);
 		}
-		
+
 		valorPropEntidad = obtenerPropiedadEntidad("organismo.soporteTecnico.formulario", entidad);
 		if (StringUtils.isNotBlank(valorPropEntidad)) {
 			oi.setFormularioIncidencias(StringUtils.isNotBlank(valorPropEntidad) && "true".equals(valorPropEntidad));
 		}
-				
+
 		valorPropEntidad = obtenerPropiedadEntidad("organismo.soporteTecnico.email", entidad);
 		if (StringUtils.isNotBlank(valorPropEntidad)) {
 			oi.setEmailSoporteIncidencias(valorPropEntidad);
 		}
-		
+
 		valorPropEntidad = obtenerPropiedadEntidad("organismo.cssCustom", entidad);
 		if (StringUtils.isNotBlank(valorPropEntidad)) {
 			oi.setUrlCssCustom(valorPropEntidad);
 		}
-		
+
 		valorPropEntidad = obtenerPropiedadEntidad("organismo.cssLoginCustom", entidad);
 		if (StringUtils.isNotBlank(valorPropEntidad)) {
 			oi.setUrlLoginCssCustom(valorPropEntidad);
-		}			
-		
+		}
+
 		return oi;
-		
+
 	}
-	
-	
+
+
 	private String obtenerPropiedadEntidad(String nomProp, String entidad) {
 		String res = null;
 		try {
 			String nomPropEntidad = StringUtil.replace(nomProp,  "organismo.", "organismo.entidad." + entidad + ".");
-			res = propiedades.getProperty(nomPropEntidad);					
+			res = propiedades.getProperty(nomPropEntidad);
 		} catch (Exception ex) {
 			log.error("Error estableciendo propiedad entidad " + nomProp + ": " + ex.getMessage(), ex);
 		}
 		return res;
 	}
-	
-	
+
+
 	/**
 	 * Lee las propiedades de los ficheros de configuracion
-	 * @throws Exception 
+	 * @throws Exception
 	 *
 	 */
 	private void readProperties() throws Exception{
@@ -218,38 +223,38 @@ public class ConfigurationUtil {
 			}
 			if (key.startsWith(PREFIX_SAR + "zonaper")) {
 				propiedades.put(key.substring((PREFIX_SAR + "zonaper").length() + 1), value);
-			}			
+			}
 		}
 	}
-	
+
 	/**
 	 * Lee las propiedades de los ficheros de configuracion
-	 * @throws Exception 
+	 * @throws Exception
 	 *
 	 */
 	private void readPropertiesFromFilesystem() throws Exception{
-		 InputStream fisGlobal=null,fisModul=null; 
+		 InputStream fisGlobal=null,fisModul=null;
 		 propiedades = new Properties();
          try {
         	 // Path directorio de configuracion
         	 String pathConf = System.getProperty("ad.path.properties");
-        	 
+
          	 // Propiedades globales
         	 fisGlobal = new FileInputStream(pathConf + "sistra/global.properties");
         	 propiedades.load(fisGlobal);
-    		 
+
         	 // Propiedades modulo
     		 fisModul = new FileInputStream(pathConf + "sistra/zonaper.properties");
     		 propiedades.load(fisModul);
-        	 	    		 
+
          } catch (Exception e) {
         	 propiedades = null;
              throw new Exception("Excepcion accediendo a las propiedadades del modulo", e);
          } finally {
              try{if (fisGlobal != null){fisGlobal.close();}}catch(Exception ex){}
              try{if (fisModul != null){fisModul.close();}}catch(Exception ex){}
-         }		
+         }
 	}
-	
+
 }
 
