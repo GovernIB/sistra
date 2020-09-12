@@ -15,6 +15,8 @@ import net.sf.hibernate.Session;
 import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.ElementoExpedienteItf;
 import es.caib.zonaper.model.Entrada;
+import es.caib.zonaper.model.EntradaPreregistro;
+import es.caib.zonaper.model.EntradaTelematica;
 import es.caib.zonaper.model.EventoExpediente;
 import es.caib.zonaper.model.IndiceElemento;
 import es.caib.zonaper.model.NotificacionTelematica;
@@ -385,6 +387,10 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 					ee.setTipo(Character.toString(entrada.getTipo()));
 					ee.setFecha(entrada.getFecha());
 					ee.setUrl(urlZonaper + "&tramite=" + e.getIdentificadorPersistencia());
+					if (entrada instanceof EntradaPreregistro) {
+						EntradaPreregistro preregistro = (EntradaPreregistro) entrada;
+						ee.setPendiente(preregistro.getNumeroRegistro() == null);
+					}
 				} else if (ei instanceof NotificacionTelematica) {
 					NotificacionTelematica notificacion = (NotificacionTelematica) ei;
 					ee.setDescripcion(notificacion.getTituloAviso());
@@ -461,7 +467,7 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 			filtroFechaInicio = " AND e.fecha >= :fechaInicio";
 		}
 		if (filtro.getFechaFin() != null) {
-			filtroFechaFin = " AND e.fecha <= :fechafin";
+			filtroFechaFin = " AND e.fecha <= :fechaFin";
 		}
 		if (filtro.getTipos() != null && filtro.getTipos().size() > 0) {
 			List listaTipos = new ArrayList();

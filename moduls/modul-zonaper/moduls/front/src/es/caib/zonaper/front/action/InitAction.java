@@ -96,7 +96,13 @@ public class InitAction extends BaseAction
 		// Redirigimos a inicio segun tipo de autenticacion
 		if ( datosSesion.getNivelAutenticacion() == Constants.NIVEL_AUTENTICACION_ANONIMO )
 		{
-			return mapping.findForward( "inicioAnonimo" );
+			// Verificamos si estamos accediendo a elemento en particular
+			if (request.getParameter("claveAnonimo")!=null) {
+				response.sendRedirect(request.getContextPath() + "/protected/infoTramiteAnonimo.do?idPersistencia=" + request.getParameter("claveAnonimo"));
+				return null;
+			} else {
+				return mapping.findForward( "inicioAnonimo" );
+			}
 		} else {
 			// Verificamos si Zonaper esta en modo embebed
 			if (oi.isEmbebedEnabled()) {
