@@ -39,7 +39,6 @@ import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.regtel.model.ResultadoRegistro;
 import es.caib.regtel.persistence.delegate.DelegateRegtelUtil;
-import es.caib.sistra.persistence.delegate.DelegateSISTRAUtil;
 import es.caib.sistra.plugins.PluginFactory;
 import es.caib.sistra.plugins.login.PluginLoginIntf;
 import es.caib.util.CredentialUtil;
@@ -209,6 +208,7 @@ public abstract class PadFacadeEJB implements SessionBean{
      *
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
      */
     public TramitePersistentePAD obtenerTramitePersistente(String idPersistencia) throws ExcepcionPAD{
     	// Cargamos tramitePersistente
@@ -1180,6 +1180,8 @@ public abstract class PadFacadeEJB implements SessionBean{
 		}
 
     }
+
+
 
     // ------------------------ Funciones utilidad ----------------------------------------------------------------
     /**

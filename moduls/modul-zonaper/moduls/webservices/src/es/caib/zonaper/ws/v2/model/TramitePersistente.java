@@ -26,6 +26,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="idTramite" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="idioma" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="versionTramite" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="urlAcceso" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="autenticacion" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -42,7 +44,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "idSesionTramitacion",
     "idTramite",
     "idioma",
-    "versionTramite"
+    "versionTramite",
+    "urlAcceso",
+    "autenticacion"
 })
 public class TramitePersistente {
 
@@ -61,6 +65,10 @@ public class TramitePersistente {
     @XmlElement(required = true)
     protected String idioma;
     protected int versionTramite;
+    @XmlElement(required = true)
+    protected String urlAcceso;
+    @XmlElement(required = true)
+    protected String autenticacion;
 
     /**
      * Gets the value of the descripcionTramite property.
@@ -220,6 +228,54 @@ public class TramitePersistente {
      */
     public void setVersionTramite(int value) {
         this.versionTramite = value;
+    }
+
+    /**
+     * Gets the value of the urlAcceso property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUrlAcceso() {
+        return urlAcceso;
+    }
+
+    /**
+     * Sets the value of the urlAcceso property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUrlAcceso(String value) {
+        this.urlAcceso = value;
+    }
+
+    /**
+     * Gets the value of the autenticacion property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getAutenticacion() {
+        return autenticacion;
+    }
+
+    /**
+     * Sets the value of the autenticacion property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setAutenticacion(String value) {
+        this.autenticacion = value;
     }
 
 }

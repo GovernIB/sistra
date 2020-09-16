@@ -154,6 +154,20 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:element name="obtenerUrlAccesoAnonimo">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="clave" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="obtenerUrlAccesoAnonimoResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="obtenerUrlAccesoAnonimoReturn" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 			<complexType name="BackofficeFacadeException">
 				<sequence/>
 			</complexType>
@@ -223,6 +237,12 @@
 	<wsdl:message name="obtenerTotalElementosExpedienteResponse">
 		<wsdl:part name="parameters" element="intf:obtenerTotalElementosExpedienteResponse"/>
 	</wsdl:message>
+	<wsdl:message name="obtenerUrlAccesoAnonimoRequest">
+		<wsdl:part name="parameters" element="intf:obtenerUrlAccesoAnonimo"/>
+	</wsdl:message>
+	<wsdl:message name="obtenerUrlAccesoAnonimoResponse">
+		<wsdl:part name="parameters" element="intf:obtenerUrlAccesoAnonimoResponse"/>
+	</wsdl:message>
 	<wsdl:portType name="BackofficeFacade">
 		<wsdl:operation name="altaExpediente">
 			<wsdl:input name="altaExpedienteRequest" message="impl:altaExpedienteRequest"/>
@@ -272,6 +292,11 @@
 		<wsdl:operation name="obtenerTotalElementosExpediente">
 			<wsdl:input name="obtenerTotalElementosExpedienteRequest" message="impl:obtenerTotalElementosExpedienteRequest"/>
 			<wsdl:output name="obtenerTotalElementosExpedienteResponse" message="impl:obtenerTotalElementosExpedienteResponse"/>
+			<wsdl:fault name="BackofficeFacadeException" message="impl:BackofficeFacadeException"/>
+		</wsdl:operation>
+		<wsdl:operation name="obtenerUrlAccesoAnonimo">
+			<wsdl:input name="obtenerUrlAccesoAnonimoRequest" message="impl:obtenerUrlAccesoAnonimoRequest"/>
+			<wsdl:output name="obtenerUrlAccesoAnonimoResponse" message="impl:obtenerUrlAccesoAnonimoResponse"/>
 			<wsdl:fault name="BackofficeFacadeException" message="impl:BackofficeFacadeException"/>
 		</wsdl:operation>
 	</wsdl:portType>
@@ -385,7 +410,7 @@
 				<soap:fault name="BackofficeFacadeException" use="literal"/>
 			</wsdl:fault>
 		</wsdl:operation>
-		<wsdl:operation name="obtenerTotalElementosExpediente">
+		<wsdl:operation name="obtenerUrlAccesoAnonimo">
 			<soap:operation/>
 			<wsdl:input>
 				<soap:body use="literal"/>

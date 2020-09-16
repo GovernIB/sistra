@@ -9,6 +9,8 @@
 			<xs:element name="idTramite" type="xs:string"/>
 			<xs:element name="idioma" type="xs:string"/>
 			<xs:element name="versionTramite" type="xs:int"/>
+			<xs:element name="urlAcceso" type="xs:string"/>
+			<xs:element name="autenticacion" type="xs:string"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="TramitesPersistentes">

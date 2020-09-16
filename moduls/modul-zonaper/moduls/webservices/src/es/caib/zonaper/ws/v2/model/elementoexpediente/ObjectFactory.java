@@ -36,22 +36,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ElementosExpediente }
-     * 
-     */
-    public ElementosExpediente createElementosExpediente() {
-        return new ElementosExpediente();
-    }
-
-    /**
-     * Create an instance of {@link ElementoExpediente }
-     * 
-     */
-    public ElementoExpediente createElementoExpediente() {
-        return new ElementoExpediente();
-    }
-
-    /**
      * Create an instance of {@link FiltroElementosExpediente }
      * 
      */
@@ -65,6 +49,22 @@ public class ObjectFactory {
      */
     public TiposElementoExpediente createTiposElementoExpediente() {
         return new TiposElementoExpediente();
+    }
+
+    /**
+     * Create an instance of {@link ElementoExpediente }
+     * 
+     */
+    public ElementoExpediente createElementoExpediente() {
+        return new ElementoExpediente();
+    }
+
+    /**
+     * Create an instance of {@link ElementosExpediente }
+     * 
+     */
+    public ElementosExpediente createElementosExpediente() {
+        return new ElementosExpediente();
     }
 
     /**

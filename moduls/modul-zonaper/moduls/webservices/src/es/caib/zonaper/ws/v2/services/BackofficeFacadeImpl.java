@@ -25,6 +25,7 @@ import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.modelInterfaz.FiltroBusquedaElementosExpedientePAD;
 import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
 import es.caib.zonaper.modelInterfaz.UsuarioAutenticadoInfoPAD;
+import es.caib.zonaper.persistence.delegate.DelegatePADUtil;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeDelegate;
 import es.caib.zonaper.persistence.delegate.PadBackOfficeUtil;
 import es.caib.zonaper.ws.v2.model.ConfiguracionAvisosExpediente;
@@ -164,6 +165,8 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 					rep.setDescripcionTramite(ep.getDescripcion());
 					rep.setFechaInicio(dateToXmlGregorianCalendar(ep.getFechaCreacion()));
 					rep.setFechaUltimoAcceso(dateToXmlGregorianCalendar(ep.getFechaModificacion()));
+					rep.setAutenticacion(Character.toString(ep.getNivelAutenticacion()));
+					rep.setUrlAcceso(PadBackOfficeUtil.getBackofficeExpedienteDelegate().obtenerUrlTramitePersistente(ep));
 					res.getTramitePersistente().add(rep);
 				}
 			}
@@ -242,6 +245,18 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
 			FiltroBusquedaElementosExpedientePAD filtro = generarFiltroElementosExpedientePAD(filtroElementosExpediente);
 			return pad.obtenerTotalElementosExpediente(filtro);
+		} catch (Exception exc) {
+			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
+			// exc.printStackTrace();
+		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
+		}
+	}
+
+	public String obtenerUrlAccesoAnonimo(String clave)
+			throws BackofficeFacadeException {
+		try {
+			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
+			return pad.obtenerUrlAccesoAnonimo(clave);
 		} catch (Exception exc) {
 			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
 			// exc.printStackTrace();
@@ -514,27 +529,5 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 		} catch (DatatypeConfigurationException e) {}
 		return null;
 	}
-
-	/*
-	@Override
-	public String obtenerTiquetAcceso(String idSesionTramitacion,
-			UsuarioAutenticadoInfo usuarioAutenticadoInfo)
-			throws BackofficeFacadeException {
-		try {
-
-			UsuarioAutenticadoInfoPAD usuAut = usuarioAutenticadoInfoWsTousuarioAutenticadoInfoPAD(usuarioAutenticadoInfo);
-
-			ProcesosAutoDelegate delegate = DelegateUtil.getProcesosAutoDelegate();
-			String res = delegate.obtenerTiquetAcceso(idSesionTramitacion, usuAut );
-			return res;
-		} catch (Exception exc) {
-			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
-			// exc.printStackTrace();
-		    throw new es.caib.zonaper.ws.v2.services.BackofficeFacadeException(exc.getMessage(),new BackofficeFacadeException());
-		}
-	}
-	*/
-
-
 
 }

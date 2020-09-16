@@ -37,6 +37,7 @@ import es.caib.redose.modelInterfaz.UsoRDS;
 import es.caib.redose.persistence.delegate.DelegateRDSUtil;
 import es.caib.redose.persistence.delegate.RdsDelegate;
 import es.caib.sistra.plugins.PluginFactory;
+import es.caib.sistra.plugins.login.ConstantesLogin;
 import es.caib.sistra.plugins.pagos.ConstantesPago;
 import es.caib.sistra.plugins.pagos.EstadoSesionPago;
 import es.caib.sistra.plugins.pagos.PluginPagosIntf;
@@ -89,6 +90,7 @@ import es.caib.zonaper.persistence.delegate.ExpedienteDelegate;
 import es.caib.zonaper.persistence.delegate.IndiceElementoDelegate;
 import es.caib.zonaper.persistence.delegate.PadDelegate;
 import es.caib.zonaper.persistence.delegate.TramitePersistenteDelegate;
+import es.caib.zonaper.persistence.util.ConfigurationUtil;
 import es.caib.zonaper.persistence.util.GeneradorId;
 
 
@@ -693,6 +695,70 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 	    		throw new ExcepcionPAD("Error total consultando elementos expedientes",ex);
 	    	}
 	}
+
+    /**
+     * Obtiene lista de tramites en los que ha participado usuario.
+     *
+     *
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public String obtenerUrlAccesoAnonimo(String clave) throws ExcepcionPAD{
+    	try {
+    		boolean existe = false;
+    		String lang = "ca";
+
+			// Comprobamos si la clave hace referencia a algun tramite que todavia esta en persistencia
+			PadDelegate padDelegate = DelegatePADUtil.getPadDelegate();
+			TramitePersistentePAD tramitePersistente = padDelegate.obtenerTramitePersistente(clave);
+			if (tramitePersistente != null && tramitePersistente.getNivelAutenticacion() == ConstantesLogin.LOGIN_ANONIMO) {
+				lang = tramitePersistente.getIdioma();
+				existe = true;
+			} else {
+				// Comprobamos si se tiene acceso a algun expediente con esa clase
+				ElementoExpediente elementoExpe = DelegateUtil.getElementoExpedienteDelegate().obtenerElementoExpediente(clave);
+				if (elementoExpe != null && elementoExpe.isAccesoAnonimoExpediente()) {
+					lang = elementoExpe.getExpediente().getIdioma();
+					existe = true;
+				}
+			}
+
+			// Si existe devuelve url
+			String url = null;
+			if (existe) {
+				url = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.url") +
+					  ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.contextoRaiz.front") +
+	    				"/zonaperfront/protected/init.do?lang=" + lang + "&autenticacion=A&claveAnonimo="+clave;
+			}
+			return url;
+    	}catch (Exception ex){
+			throw new ExcepcionPAD("Error obteniendo url acceso anonimo",ex);
+		}
+    }
+
+
+    /**
+     * Obtiene url tramite persistente.
+     *
+     *
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.auto}"
+     */
+    public String obtenerUrlTramitePersistente(TramitePersistentePAD tp) throws ExcepcionPAD{
+    	try {
+			String url = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.url") +
+					  ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("sistra.contextoRaiz.front") +
+	    				"/sistrafront/protected/init.do?" +
+	    				"lang=" + tp.getIdioma() +
+	    				"&modelo=" + tp.getTramite() +
+	    				"&version=" + tp.getVersion() +
+	    				"&perfilAF=CIUDADANO" +
+	    				"&idPersistencia=" + tp.getIdPersistencia();
+			return url;
+    	}catch (Exception ex){
+			throw new ExcepcionPAD("Error obteniendo url tramite persistente",ex);
+		}
+    }
 
 
 	/**

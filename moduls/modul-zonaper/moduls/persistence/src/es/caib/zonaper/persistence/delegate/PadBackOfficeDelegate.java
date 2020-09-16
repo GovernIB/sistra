@@ -7,13 +7,17 @@ import java.util.List;
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
+import es.caib.zonaper.model.ElementoExpediente;
+import es.caib.zonaper.model.OrganismoInfo;
 import es.caib.zonaper.modelInterfaz.ConfiguracionAvisosExpedientePAD;
 import es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo;
 import es.caib.zonaper.modelInterfaz.EstadoPagosTramite;
 import es.caib.zonaper.modelInterfaz.EventoExpedientePAD;
 import es.caib.zonaper.modelInterfaz.ExpedientePAD;
 import es.caib.zonaper.modelInterfaz.FiltroBusquedaElementosExpedientePAD;
+import es.caib.zonaper.modelInterfaz.TramitePersistentePAD;
 import es.caib.zonaper.persistence.intf.PadBackOfficeFacade;
+import es.caib.zonaper.persistence.util.ConfigurationUtil;
 import es.caib.zonaper.persistence.util.PadBackOfficeFacadeUtil;
 
 import java.util.Date;
@@ -203,12 +207,10 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 		}
 	}
 
-	/*
-	public EventoExpedientePAD obtenerEventoExpediente( long unidadAdministrativa, String idExpediente, String fechaEvento ) throws DelegateException
-	{
+	public String obtenerUrlAccesoAnonimo(String clave) throws DelegateException {
 		try
 		{
-			return getFacade().obtenerEventoExpediente( unidadAdministrativa, idExpediente, fechaEvento );
+			return getFacade().obtenerUrlAccesoAnonimo(clave);
 		}
 		catch( Exception e )
 		{
@@ -216,18 +218,16 @@ public class PadBackOfficeDelegate implements StatelessDelegate
 		}
 	}
 
-	public EventoExpedientePAD obtenerEventoExpediente( long unidadAdministrativa, String idExpediente, String claveExpediente, String fechaEvento ) throws DelegateException
-	{
+	 public String obtenerUrlTramitePersistente(TramitePersistentePAD tp)  throws DelegateException {
 		try
 		{
-			return getFacade().obtenerEventoExpediente( unidadAdministrativa, idExpediente, claveExpediente, fechaEvento );
+			return getFacade().obtenerUrlTramitePersistente(tp);
 		}
 		catch( Exception e )
 		{
 			throw new DelegateException( e );
 		}
-	}
-	*/
+		}
 
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

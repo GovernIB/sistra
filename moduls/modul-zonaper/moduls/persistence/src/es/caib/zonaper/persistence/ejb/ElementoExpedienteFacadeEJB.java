@@ -7,8 +7,6 @@ import java.util.List;
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import org.apache.commons.lang.StringUtils;
-
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
@@ -16,8 +14,6 @@ import es.caib.zonaper.model.ElementoExpediente;
 import es.caib.zonaper.model.ElementoExpedienteItf;
 import es.caib.zonaper.model.Entrada;
 import es.caib.zonaper.model.EntradaPreregistro;
-import es.caib.zonaper.model.EntradaTelematica;
-import es.caib.zonaper.model.EventoExpediente;
 import es.caib.zonaper.model.IndiceElemento;
 import es.caib.zonaper.model.NotificacionTelematica;
 import es.caib.zonaper.model.Page;
@@ -189,6 +185,7 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 	 *
      * @ejb.interface-method
      * @ejb.permission role-name="${role.todos}"
+     * @ejb.permission role-name="${role.auto}"
      */
 	public ElementoExpediente obtenerElementoExpediente( String idPersistencia )
 	{
