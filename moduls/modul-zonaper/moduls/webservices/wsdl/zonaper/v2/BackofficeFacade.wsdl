@@ -410,6 +410,18 @@
 				<soap:fault name="BackofficeFacadeException" use="literal"/>
 			</wsdl:fault>
 		</wsdl:operation>
+		<wsdl:operation name="obtenerTotalElementosExpediente">
+			<soap:operation/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="BackofficeFacadeException">
+				<soap:fault name="BackofficeFacadeException" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
 		<wsdl:operation name="obtenerUrlAccesoAnonimo">
 			<soap:operation/>
 			<wsdl:input>

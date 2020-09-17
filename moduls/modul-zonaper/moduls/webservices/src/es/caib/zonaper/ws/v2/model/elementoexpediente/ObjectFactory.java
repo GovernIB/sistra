@@ -36,19 +36,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link FiltroElementosExpediente }
-     * 
-     */
-    public FiltroElementosExpediente createFiltroElementosExpediente() {
-        return new FiltroElementosExpediente();
-    }
-
-    /**
      * Create an instance of {@link TiposElementoExpediente }
      * 
      */
     public TiposElementoExpediente createTiposElementoExpediente() {
         return new TiposElementoExpediente();
+    }
+
+    /**
+     * Create an instance of {@link FiltroElementosExpediente }
+     * 
+     */
+    public FiltroElementosExpediente createFiltroElementosExpediente() {
+        return new FiltroElementosExpediente();
     }
 
     /**
