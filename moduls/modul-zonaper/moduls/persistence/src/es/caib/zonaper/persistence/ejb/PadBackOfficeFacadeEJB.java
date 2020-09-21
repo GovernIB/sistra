@@ -753,7 +753,8 @@ public abstract class PadBackOfficeFacadeEJB implements SessionBean
 	    				"&modelo=" + tp.getTramite() +
 	    				"&version=" + tp.getVersion() +
 	    				"&perfilAF=CIUDADANO" +
-	    				"&idPersistencia=" + tp.getIdPersistencia();
+	    				"&idPersistencia=" + tp.getIdPersistencia() +
+	    				"&loginClaveAuto=true";
 			return url;
     	}catch (Exception ex){
 			throw new ExcepcionPAD("Error obteniendo url tramite persistente",ex);
