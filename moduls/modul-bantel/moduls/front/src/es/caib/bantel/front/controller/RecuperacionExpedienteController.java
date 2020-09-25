@@ -14,7 +14,7 @@ import es.caib.bantel.front.util.Dominios;
 
 public class RecuperacionExpedienteController extends BaseController
 {
-		
+
 	public void execute(ComponentContext tileContext,
 			HttpServletRequest request, HttpServletResponse response,
 			ServletContext servletContext) throws Exception
@@ -26,10 +26,12 @@ public class RecuperacionExpedienteController extends BaseController
 			UnidadAdministrativa uni = (UnidadAdministrativa) unidades.get(0);
 			request.setAttribute("nombreUnidad",uni.getDescripcion());
 		}
-		
+
 		// Indica si son obligatorios los avisos en la creacion del expediente
-		request.setAttribute("obligatorioAvisos", request.getSession().getServletContext().getAttribute(Constants.GESTIONEXPEDIENTES_OBLIGATORIOAVISOS));		
-		
+		request.setAttribute("obligatorioAvisos", request.getSession().getServletContext().getAttribute(Constants.GESTIONEXPEDIENTES_OBLIGATORIOAVISOS));
+
+		// Indica si se permiten generar notificaciones
+		request.setAttribute("generarNotificaciones", request.getSession().getServletContext().getAttribute(Constants.GESTIONEXPEDIENTES_GENERARNOTIFICACIONES));
 	}
 
 }

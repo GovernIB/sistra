@@ -41,29 +41,29 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
     private String defaultLang = null;
     private List supportedLangs = null;
 
-    
+
  public void init(ActionServlet actionServlet,ModuleConfig moduleConfig) throws ServletException{
-    	
+
     	super.init(actionServlet,moduleConfig);
-    	    	
+
         try{
         	// Inicializamos implementacion de firma (almacenamos en contexto)
         	if (StringUtils.isEmpty((String) getServletContext().getAttribute(Constants.IMPLEMENTACION_FIRMA_KEY))){
      			getServletContext().setAttribute(Constants.IMPLEMENTACION_FIRMA_KEY,PluginFactory.getInstance().getPluginFirma().getProveedor());
      		}
-        	
+
         	// Inicializamos si se obligaran los avisos a los expedientes generados desde modulo de gestion expedientes
         	ConfiguracionDelegate config = DelegateUtil.getConfiguracionDelegate();
         	Properties configProps = config.obtenerConfiguracion();
 			getServletContext().setAttribute(Constants.GESTIONEXPEDIENTES_OBLIGATORIOAVISOS,StringUtils.defaultString(configProps.getProperty("gestionExpedientes.avisosObligatorios"), "false"));
-			
+			getServletContext().setAttribute(Constants.GESTIONEXPEDIENTES_GENERARNOTIFICACIONES,StringUtils.defaultString(configProps.getProperty("gestionExpedientes.generarNotificaciones"), "true"));
 			getServletContext().setAttribute(Constants.CONTEXTO_RAIZ,StringUtils.defaultString(configProps.getProperty("sistra.contextoRaiz.front"), ""));
-			
+
         }catch (Exception ex){
         	log.error("Error obteniendo implementacion firma",ex);
         	throw new ServletException(ex);
         }
-    	
+
     }
     /**
      * Inicializa los idiomas soportados por la aplicación
@@ -163,7 +163,7 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
         	log.error("Error obteniendo los datos del gestor",e);
         }
     }
-    
+
     @Override
     protected void processNoCache(HttpServletRequest request, HttpServletResponse response)
     {

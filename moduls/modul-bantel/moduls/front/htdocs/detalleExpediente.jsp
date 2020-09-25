@@ -19,17 +19,18 @@
 <bean:define id="habilitarAvisos" value="<%= (expediente.getConfiguracionAvisos().getHabilitarAvisos() == null?\"O\":(expediente.getConfiguracionAvisos().getHabilitarAvisos().booleanValue())?\"S\":\"N\")%>" type="java.lang.String"/>
 <bean:define id="observacionesElemento" name="observacionesElemento" type="java.util.List"/>
 <bean:define id="obligatorioAvisos" name="obligatorioAvisos" type="java.lang.String"/>
+<bean:define id="generarNotificaciones" name="generarNotificaciones" type="java.lang.String"/>
 
 <script type="text/javascript" src="js/ajuda.js"></script>
 <script type="text/javascript" src="js/funcions.js"></script>
-<script type="text/javascript" src="js/mensaje.js"></script>	
+<script type="text/javascript" src="js/mensaje.js"></script>
 <script type="text/javascript">
 
 	function aviso(){
 		document.forms["0"].action='<html:rewrite page="/altaAviso.do"/>';
 		document.forms["0"].submit();
 	}
-	
+
 	function notificacion(){
 		document.forms["0"].action='<html:rewrite page="/altaNotificacion.do"/>';
 		document.forms["0"].submit();
@@ -55,15 +56,15 @@
 		  $('#habilitarModif').val($('#habilitar').val());
 		  $('#emailModif').val($('#email').val());
 		  $('#smsModif').val($('#sms').val());
-		  
+
 		  Fondo.mostrar();
 		  cambioHabilitar();
-		  $('#divModificacionAvisos').show();			
+		  $('#divModificacionAvisos').show();
 	}
 
 	function esconderModificarAvisos(){
-		  Fondo.esconder();			
-		  $('#divModificacionAvisos').hide();		  
+		  Fondo.esconder();
+		  $('#divModificacionAvisos').hide();
 	}
 
 	function modificarAvisos() {
@@ -71,25 +72,25 @@
 		var habilitar = $('#habilitarModif').val();
 		var email =  $('#emailModif').val();
 		var sms = $('#smsModif').val();
-		
+
 		if (habilitar == "S" && email == "") {
 			alert("<bean:message key="expediente.aviso.configuracionAvisos.emailVacio"/>");
 			return;
-		}	
+		}
 
 		if (habilitar != "S") {
 				email = "";
 				sms = "";
 				$('#emailModif').val("");
 				$('#smsModif').val("");
-		}	 
+		}
 
 		<logic:equal name="permitirSms" value="N">
 			// Si no esta habilitado sms, reseteamos sms si se modifica
 			sms = "";
 		</logic:equal>
-		
-		
+
+
 		var data = {};
 		data["identificadorExpediente"] = '<bean:write name="expediente" property="identificadorExpediente"/>';
 		data["unidadAdministrativa"] = '<bean:write name="expediente" property="unidadAdministrativa"/>';
@@ -97,8 +98,8 @@
 		data["habilitar"] = habilitar;
 		data["email"] = email;
 		data["sms"] = sms;
-		
-		$.postJSON("modificarConfiguracionAvisos.do", data, modificarAvisosOk); 		
+
+		$.postJSON("modificarConfiguracionAvisos.do", data, modificarAvisosOk);
 	}
 
 	function modificarAvisosOk(json) {
@@ -113,25 +114,25 @@
 			if ($('#habilitar').val() == "S") {
 				$("#avisosHabilitados").text("<bean:message key="expediente.avisos.si"/>");
 			} else {
-				$("#avisosHabilitados").text("<bean:message key="expediente.avisos.no"/>");				
+				$("#avisosHabilitados").text("<bean:message key="expediente.avisos.no"/>");
 			}
-			
+
 			// Escondemos capa
 			alert("<bean:message key="expediente.aviso.configuracionAvisos.modificado"/>");
-			esconderModificarAvisos();			
+			esconderModificarAvisos();
 		} else {
 			alert(json.error);
-		}				
+		}
 	}
 
 	function cambioHabilitar() {
 		if ($('#habilitarModif').val() == "S") {
-			 $('#direcciones').show();		
+			 $('#direcciones').show();
 		} else {
-			 $('#direcciones').hide();			
-		}				
+			 $('#direcciones').hide();
+		}
 	}
-	
+
 	$(document).ready(function(){
 				$('#divModificacionAvisos').hide();
 				$.postJSON = function(url, data, callback) {
@@ -142,10 +143,10 @@
 				        'dataType': 'json',
 				        'success': callback,
 				        'error': function() {
-							alert("Error enviando datos al servidor. Intentelo de nuevo.");					
+							alert("Error enviando datos al servidor. Intentelo de nuevo.");
 						}
 				    });
-				};				
+				};
 			}
 		);
 </script>
@@ -155,19 +156,19 @@
 <!--		 /ajuda boto -->
 		<div id="opcions">
 				&nbsp;
-		</div>	
+		</div>
 		<!-- titol -->
 		<!--<h1>Gestión de expedientes</h1>-->
 		<!-- /titol -->
-		
+
 		<!-- ajuda -->
 		<div id="ajuda">
 			<h2><bean:message key="ajuda.titulo"/></h2>
 			<bean:message key="ajuda.expediente.detalle"/>
 		</div>
 		<!-- /ajuda -->
-		
-		
+
+
             <html:messages id="msg" message="true">
             <div class="correcte">
 				<p>
@@ -175,20 +176,20 @@
 				</p>
 			</div>
 			</html:messages>
-		
-		
-		
+
+
+
 		<!-- continguts -->
 		<div class="continguts">
-		
+
 			<p class="titol"><bean:message key="detalle.expediente.detalle" /></p>
-			
-			
+
+
 			<div class="avis">
 				<dl>
 					<dt><bean:message key="confirmacion.identificadorExpediente"/>:</dt>
 					<dd><logic:notEmpty name="expediente" property="identificadorExpediente"><bean:write name="expediente" property="identificadorExpediente"/></logic:notEmpty></dd>
-					<dt><bean:message key="confirmacion.unidadAdministrativa"/>:</dt>					
+					<dt><bean:message key="confirmacion.unidadAdministrativa"/>:</dt>
 					<dd><logic:notEmpty name="nombreUnidad" ><bean:write name="nombreUnidad" /></logic:notEmpty></dd>
 					<dt><bean:message key="expediente.identificadorProcedimiento"/>:</dt>
 					<dd><logic:notEmpty name="descripcionProcedimiento" ><bean:write name="descripcionProcedimiento" /></logic:notEmpty></dd>
@@ -215,25 +216,25 @@
 					<dd>
 						<span id="avisosHabilitados">
 							<logic:equal name="habilitarAvisos" value="O">
-								<bean:message key="expediente.avisos.opcional"/>															
+								<bean:message key="expediente.avisos.opcional"/>
 							</logic:equal>
 							<logic:equal name="habilitarAvisos" value="S">
-								<bean:message key="expediente.avisos.si"/>															
+								<bean:message key="expediente.avisos.si"/>
 							</logic:equal>
 							<logic:equal name="habilitarAvisos" value="N">
 								<bean:message key="expediente.avisos.no"/>
 							</logic:equal>
 						</span>
-						
+
 						<% if ("false".equals(obligatorioAvisos) || "S".equals(habilitarAvisos)) { %>
-						<img src="imgs/botons/cercar.gif" alt="<bean:message key="expediente.avisos.modificar"/>"  
+						<img src="imgs/botons/cercar.gif" alt="<bean:message key="expediente.avisos.modificar"/>"
 										onclick="javascript:mostrarModificarAvisos();"/>
 						<% } %>
-					</dd>					
-				</dl>				
+					</dd>
+				</dl>
 			</div>
-			
-			<logic:notEmpty name="expediente" property="elementos">						
+
+			<logic:notEmpty name="expediente" property="elementos">
 			<p class="titol"><bean:message key="detalle.expediente.historial"/></p>
 			<table class="historic">
 				<thead>
@@ -263,12 +264,12 @@
 							<%} %>
 						</td>
 						<td>
-							<!-- 
+							<!--
 							tipos:
 									N=notificacion
 									A=aviso
 									T=tramite
-							 -->						
+							 -->
 							<%if (elemento instanceof es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD) {%>
 								<a href="<%="mostrarDetalleElemento.do?tipo=N&codigo=" + indice + "&identificador=" + expediente.getIdentificadorExpediente() + "&unidad=" + expediente.getUnidadAdministrativa() + "&clave=" + expediente.getClaveExpediente()%>">
 									<bean:write name="elemento" property="tituloOficio"/>
@@ -291,19 +292,19 @@
 								<%}else if (((es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD)elemento).getDetalleAcuseRecibo().getEstado().equals(es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo.ESTADO_ENTREGADA)){%>
 									<bean:message key="detalle.notificacion.estado.entregada"/>
 								<%}else if (((es.caib.zonaper.modelInterfaz.NotificacionExpedientePAD)elemento).getDetalleAcuseRecibo().getEstado().equals(es.caib.zonaper.modelInterfaz.DetalleAcuseRecibo.ESTADO_RECHAZADA)){%>
-									<bean:message key="detalle.notificacion.estado.rechazada"/>											
-								<%} %>							
+									<bean:message key="detalle.notificacion.estado.rechazada"/>
+								<%} %>
 							<%}else if (elemento instanceof es.caib.zonaper.modelInterfaz.EventoExpedientePAD) {%>
 								<% if (((es.caib.zonaper.modelInterfaz.EventoExpedientePAD)elemento).getFechaConsulta() == null){%>
 									<bean:message key="detalle.aviso.estado.pendiente"/>
 								<%}else{%>
 									<bean:message key="detalle.aviso.estado.entregada"/>
-								<%} %>	
+								<%} %>
 							<%}else if (elemento instanceof es.caib.zonaper.modelInterfaz.TramiteExpedientePAD) {%>
 								<bean:message key="detalle.expediente.tramite.estado" />
-							<%} %>													
+							<%} %>
 						</td>
-						<td>							
+						<td>
 							<%=observacionesElemento.get(indexElemento)%>
 						</td>
 					</tr>
@@ -316,15 +317,17 @@
 				<p class="botonera">
 					<logic:empty name="expediente" property="elementos">
 						<html:submit value="<%=btnBajaExp%>" onclick="borrarExpediente();"/>
-					</logic:empty>			
-					<html:submit value="<%=btnAltaAvis%>" onclick="aviso();"/>
-					<html:submit value="<%=btnAltaNotif%>" onclick="notificacion();"/>
+					</logic:empty>
+					<logic:equal name="generarNotificaciones" value="S">
+						<html:submit value="<%=btnAltaAvis%>" onclick="aviso();"/>
+						<html:submit value="<%=btnAltaNotif%>" onclick="notificacion();"/>
+					</logic:equal>
 				</p>
 			</html:form>
-		
+
 			<!--  capa modificacion avisos expediente -->
-			 <div id="divModificacionAvisos" class="remarcar">	
-			 	
+			 <div id="divModificacionAvisos" class="remarcar">
+
 			 	<form id="formModifAvisos" method="post" class="remarcar opcions2">
 			 		<p class="titol2">
 						<bean:message key="expediente.aviso.configuracionAvisos.titulo"/>
@@ -332,22 +335,22 @@
 			 		<input type="hidden" id="habilitar" value="<%=habilitarAvisos%>"/>
 					<input type="hidden" id="email" value="<%=habilitarAvisos.equals("S")?StringUtils.defaultString(expediente.getConfiguracionAvisos().getAvisoEmail()):""%>"/>
 					<input type="hidden" id="sms" value="<%=habilitarAvisos.equals("S")?StringUtils.defaultString(expediente.getConfiguracionAvisos().getAvisoSMS()):""%>"/>
-			 		
+
 					<logic:equal name="obligatorioAvisos" value="true">
-						<input type="hidden" id="habilitarModif"  value="<%=habilitarAvisos%>"/>																			
+						<input type="hidden" id="habilitarModif"  value="<%=habilitarAvisos%>"/>
 					</logic:equal>
-					
+
 					<logic:equal name="obligatorioAvisos" value="false">
 						<p>
-						 <label><bean:message key="expediente.aviso.configuracionAvisos.habilitar"/><sup>*</sup></label>						
+						 <label><bean:message key="expediente.aviso.configuracionAvisos.habilitar"/><sup>*</sup></label>
 						 <select id="habilitarModif" class="pc40" onchange="cambioHabilitar()">
 						  <option value="S"><bean:message key="expediente.avisos.si"/></option>
 						  <option value="N"><bean:message key="expediente.avisos.no"/></option>
 						</select>
 					   </p>
 					</logic:equal>
-																	
-					
+
+
 					<span id="direcciones">
 			 		<p>
 						<label><bean:message key="expediente.aviso.configuracionAvisos.email"/><sup>*</sup></label>
@@ -366,27 +369,27 @@
 					</logic:equal>
 					</span>
 					<p class="botonera">
-						<input id="botonModificarAvisos" class="botonAlta" type='button' value='<bean:message key="expediente.aviso.configuracionAvisos.botonModificar"/>' 
-								onclick="if(modificarAvisos()){return true;}else{return false;}"/>							
+						<input id="botonModificarAvisos" class="botonAlta" type='button' value='<bean:message key="expediente.aviso.configuracionAvisos.botonModificar"/>'
+								onclick="if(modificarAvisos()){return true;}else{return false;}"/>
 						</p>
 						<br/>
 					<p>
 						<a id="botonCancelarAvisos" onclick="esconderModificarAvisos();"><bean:message key="expediente.aviso.configuracionAvisos.botonCancelar"/></a>
-					</p>										
-				</form>		 																												
-			</div>		
-			
+					</p>
+				</form>
+			</div>
+
 		</div>
 		<!-- /continguts -->
-		
-		 
-		
-		
+
+
+
+
 	<!-- tornar enrere -->
 		<div id="enrere">
 			<a href="#" onclick="javascript:volver()">
-				<bean:message key="detalle.aviso.tornar" />				
-			</a>				
+				<bean:message key="detalle.aviso.tornar" />
+			</a>
 		</div>
   <!-- /tornar enrere -->
 
