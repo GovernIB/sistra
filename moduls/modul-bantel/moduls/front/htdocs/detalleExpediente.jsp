@@ -318,7 +318,7 @@
 					<logic:empty name="expediente" property="elementos">
 						<html:submit value="<%=btnBajaExp%>" onclick="borrarExpediente();"/>
 					</logic:empty>
-					<logic:equal name="generarNotificaciones" value="S">
+					<logic:equal name="generarNotificaciones" value="true">
 						<html:submit value="<%=btnAltaAvis%>" onclick="aviso();"/>
 						<html:submit value="<%=btnAltaNotif%>" onclick="notificacion();"/>
 					</logic:equal>
