@@ -6,6 +6,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.tiles.ComponentContext;
 
 import es.caib.bantel.front.Constants;
@@ -31,7 +32,9 @@ public class RecuperacionExpedienteController extends BaseController
 		request.setAttribute("obligatorioAvisos", request.getSession().getServletContext().getAttribute(Constants.GESTIONEXPEDIENTES_OBLIGATORIOAVISOS));
 
 		// Indica si se permiten generar notificaciones
-		request.setAttribute("generarNotificaciones", request.getSession().getServletContext().getAttribute(Constants.GESTIONEXPEDIENTES_GENERARNOTIFICACIONES));
+		String roleNotifs = (String) request.getSession().getServletContext().getAttribute(Constants.GESTIONEXPEDIENTES_GENERARNOTIFICACIONES);
+		boolean generarNotifs = StringUtils.isEmpty(roleNotifs) || request.isUserInRole(roleNotifs);
+		request.setAttribute("generarNotificaciones", Boolean.toString(generarNotifs));
 	}
 
 }

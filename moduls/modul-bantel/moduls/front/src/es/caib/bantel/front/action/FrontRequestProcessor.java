@@ -56,7 +56,7 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
         	ConfiguracionDelegate config = DelegateUtil.getConfiguracionDelegate();
         	Properties configProps = config.obtenerConfiguracion();
 			getServletContext().setAttribute(Constants.GESTIONEXPEDIENTES_OBLIGATORIOAVISOS,StringUtils.defaultString(configProps.getProperty("gestionExpedientes.avisosObligatorios"), "false"));
-			getServletContext().setAttribute(Constants.GESTIONEXPEDIENTES_GENERARNOTIFICACIONES,StringUtils.defaultString(configProps.getProperty("gestionExpedientes.generarNotificaciones"), "true"));
+			getServletContext().setAttribute(Constants.GESTIONEXPEDIENTES_GENERARNOTIFICACIONES,StringUtils.defaultString(configProps.getProperty("gestionExpedientes.generarNotificaciones"), ""));
 			getServletContext().setAttribute(Constants.CONTEXTO_RAIZ,StringUtils.defaultString(configProps.getProperty("sistra.contextoRaiz.front"), ""));
 
         }catch (Exception ex){
