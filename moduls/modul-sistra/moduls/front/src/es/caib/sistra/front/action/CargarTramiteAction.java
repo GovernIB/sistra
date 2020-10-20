@@ -1,6 +1,8 @@
 package es.caib.sistra.front.action;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +16,7 @@ import es.caib.sistra.front.Constants;
 import es.caib.sistra.front.form.CargarTramiteForm;
 import es.caib.sistra.front.util.InstanciaManager;
 import es.caib.sistra.model.MensajeFront;
+import es.caib.sistra.model.ParametrosMensaje;
 import es.caib.sistra.model.PasoTramitacion;
 import es.caib.sistra.model.RespuestaFront;
 import es.caib.sistra.persistence.delegate.InstanciaDelegate;
@@ -78,6 +81,12 @@ public class CargarTramiteAction extends BaseAction
 
 		if ( mensaje != null && mensaje.getTipo() == MensajeFront.TIPO_ERROR  )
 		{
+			// Indicamos destino tras mensaje: zonaperfront
+			ParametrosMensaje param = new ParametrosMensaje();
+			param.setAction("irAZonaPersonal");
+			request.setAttribute( Constants.MENSAJE_PARAM, param );
+
+			// Mostramos pantalla error
 			return mapping.findForward( "fail" );
 		}
 

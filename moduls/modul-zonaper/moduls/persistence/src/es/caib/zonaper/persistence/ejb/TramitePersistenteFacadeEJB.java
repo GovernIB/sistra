@@ -581,7 +581,7 @@ public abstract class TramitePersistenteFacadeEJB extends HibernateEJB {
         Session session = getSession();
         try {
             Query query = session
-            .createQuery("FROM TramitePersistente AS m WHERE m.nivelAutenticacion != 'A' and (m.usuarioFlujoTramitacion = :usuario or m.usuario = :usuario) and m.fechaModificacion <= :fechaFinal and m.fechaModificacion >= :fechaInicial ORDER BY m.fechaModificacion DESC");
+            .createQuery("FROM TramitePersistente AS m WHERE m.nivelAutenticacion != 'A' and (m.usuarioFlujoTramitacion = :usuario or m.usuario = :usuario) and m.fechaCreacion <= :fechaFinal and m.fechaCreacion >= :fechaInicial ORDER BY m.fechaCreacion DESC");
             query.setParameter("usuario",usuario);
             query.setParameter("fechaInicial",fechaInicial);
             query.setParameter("fechaFinal",fechaFinal);
