@@ -336,6 +336,10 @@ public class LoginPageLoginIBUtil {
 	 */
 	private static Map<String, String> getQueryMap(String query)
 	{
+		if (query.startsWith("?")) {
+			query = query.substring(1);
+		}
+
 	    String[] params = query.split("&");
 	    Map<String, String> map = new HashMap<String, String>();
 	    for (String param : params)
