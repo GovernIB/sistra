@@ -1833,6 +1833,11 @@ public class TramiteProcessorEJB implements SessionBean {
 	    			formModifRDS.setDatosFichero(formModifDatos.getBytes());
 	    			rds.actualizarDocumento(formModifRDS);
 
+	    			// En caso de se consoliden los formularios, generamos documento consolidado asociado al formulario
+	    	    	if (this.consolidarPdfFormateadoFormularios) {
+	    	    		rds.generarDocumentoFormateado(formModifRDS.getReferenciaRDS());
+	    	    	}
+
 	    			// Reseteamos info de firma delegada
 	    			formModifPAD.setDelegacionEstado(null);
 	    			formModifPAD.setDelegacionFirmantes(null);
