@@ -2,7 +2,6 @@ package es.caib.sistra.persistence.ejb;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -31,7 +30,6 @@ import javax.ejb.SessionContext;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -41,6 +39,10 @@ import es.caib.audita.modelInterfaz.Evento;
 import es.caib.audita.persistence.delegate.DelegateAUDUtil;
 import es.caib.bantel.modelInterfaz.ProcedimientoBTE;
 import es.caib.bantel.persistence.delegate.DelegateBTEUtil;
+import es.caib.mobtratel.modelInterfaz.MensajeEnvio;
+import es.caib.mobtratel.modelInterfaz.MensajeEnvioEmail;
+import es.caib.mobtratel.persistence.delegate.DelegateMobTraTelUtil;
+import es.caib.mobtratel.persistence.delegate.MobTraTelDelegate;
 import es.caib.redose.modelInterfaz.ConstantesRDS;
 import es.caib.redose.modelInterfaz.DocumentoRDS;
 import es.caib.redose.modelInterfaz.ReferenciaRDS;
@@ -69,6 +71,7 @@ import es.caib.sistra.model.InstanciaBean;
 import es.caib.sistra.model.MensajeFront;
 import es.caib.sistra.model.MensajePlataforma;
 import es.caib.sistra.model.MensajeTramite;
+import es.caib.sistra.model.OrganismoInfo;
 import es.caib.sistra.model.PasoTramitacion;
 import es.caib.sistra.model.RespuestaFront;
 import es.caib.sistra.model.ResultadoRegistrar;
@@ -115,6 +118,7 @@ import es.caib.sistra.plugins.pagos.SesionPago;
 import es.caib.sistra.plugins.pagos.SesionSistra;
 import es.caib.sistra.plugins.regtel.ConstantesPluginRegistro;
 import es.caib.sistra.plugins.regtel.PluginRegistroIntf;
+import es.caib.util.ConvertUtil;
 import es.caib.util.CredentialUtil;
 import es.caib.util.DataUtil;
 import es.caib.util.NifCif;
@@ -239,6 +243,10 @@ public class TramiteProcessorEJB implements SessionBean {
 	// Indica si se ha verificado el movil
 	private boolean verificadoMovil;
 
+	// Cuenta envio alertas clave tramitacion
+	private String cuentaEnvioAvisosClaveTramitacion;
+
+
 
 	public TramiteProcessorEJB() {
 		super();
@@ -349,6 +357,9 @@ public class TramiteProcessorEJB implements SessionBean {
 
 			// Indica si se deben consolidar los PDFs formateados de formularios
 			this.consolidarPdfFormateadoFormularios = "true".equals(props.getProperty("consolidarPDF.formularios"));
+
+			// Cuenta envio alertas clave tramitacion
+			this.cuentaEnvioAvisosClaveTramitacion = props.getProperty("avisos.cuentaEnvio.avisosClaveTramitacion");
 
 		} catch (Exception e) {
             throw new EJBException("Excepcion al iniciar tramite: " + e.getMessage(), e);
@@ -1960,6 +1971,7 @@ public class TramiteProcessorEJB implements SessionBean {
 		EspecTramiteNivel espTramite = (EspecTramiteNivel) tramiteVersion.getEspecificaciones();
 		EspecTramiteNivel espNivel = (EspecTramiteNivel) tramiteVersion.getTramiteNivel(datosSesion.getNivelAutenticacion()).getEspecificaciones();
 		String alertasTramitacionGenerar = espTramite.getHabilitarAlertasTramitacion();
+		String alertasClaveTramitacionGenerar = espTramite.getAlertaClaveTramitacion();
 		String alertasTramitacionFinAuto = espTramite.getFinalizarTramiteAuto();
 		boolean permitirSms = "S".equals(espTramite.getPermitirSMSAlertasTramitacion());
 		if ( !ConstantesSTR.ALERTASTRAMITACION_SINESPECIFICAR.equals(espNivel.getHabilitarAlertasTramitacion())){
@@ -1967,20 +1979,91 @@ public class TramiteProcessorEJB implements SessionBean {
 			alertasTramitacionFinAuto = espNivel.getFinalizarTramiteAuto();
 			permitirSms = "S".equals(espNivel.getPermitirSMSAlertasTramitacion());
 		}
+		if ( !ConstantesSTR.ALERTASTRAMITACION_SINESPECIFICAR.equals(espNivel.getAlertaClaveTramitacion())){
+			alertasClaveTramitacionGenerar = espNivel.getAlertaClaveTramitacion();
+		}
 		String emailAlertas = null;
 		String smsAlertas = null;
-		if (ConstantesSTR.ALERTASTRAMITACION_PERMITIDA.equals(alertasTramitacionGenerar)) {
+		if (ConstantesSTR.ALERTASTRAMITACION_PERMITIDA.equals(alertasTramitacionGenerar) ||
+				(ConstantesSTR.ALERTASTRAMITACION_PERMITIDA.equals(alertasClaveTramitacionGenerar) && datosSesion.getNivelAutenticacion() == ConstantesLogin.LOGIN_ANONIMO)) {
 			emailAlertas = calcularEmailAvisoDefecto();
-			if (permitirSms) {
-				smsAlertas = calcularSmsAvisoDefecto();
-			}
+		}
+		if (ConstantesSTR.ALERTASTRAMITACION_PERMITIDA.equals(alertasTramitacionGenerar) && permitirSms) {
+			smsAlertas = calcularSmsAvisoDefecto();
 		}
 
+		// Para alertas tramitacion establecemos datos a nivel persistencia
 		tramitePersistentePAD.setAlertasTramitacionGenerar(alertasTramitacionGenerar);
 		tramitePersistentePAD.setAlertasTramitacionFinAuto(alertasTramitacionFinAuto);
 		tramitePersistentePAD.setAlertasTramitacionEmail(emailAlertas);
 		tramitePersistentePAD.setAlertasTramitacionSms(smsAlertas);
+
+		// Para alerta clave generamos correo con la clave tramitacion
+		if (ConstantesSTR.ALERTASTRAMITACION_PERMITIDA.equals(alertasClaveTramitacionGenerar) && datosSesion.getNivelAutenticacion() == ConstantesLogin.LOGIN_ANONIMO) {
+			enviarAvisoClaveTramitacion(emailAlertas);
+		}
+
 		actualizarPAD();
+	}
+
+	private void enviarAvisoClaveTramitacion(String emailAlertas)
+			throws es.caib.sistra.persistence.delegate.DelegateException,
+			Exception, es.caib.mobtratel.persistence.delegate.DelegateException {
+		Properties props = DelegateUtil.getConfiguracionDelegate().obtenerConfiguracion();
+		String idioma = datosSesion.getLocale().getLanguage();
+		String entidad = obtenerEntidadProcedimiento(tramitePersistentePAD.getIdProcedimiento());
+		if (entidad == null) {
+			throw new Exception("El codigo de procedimiento no es valido");
+		}
+		OrganismoInfo oi = ConfigurationUtil.getInstance().obtenerOrganismoInfo(entidad);
+
+		String urlAccesoTramite = props.getProperty("sistra.url") + props.getProperty("sistra.contextoRaiz.front") +
+				"/sistrafront/inicio?language=" + idioma +
+				"&modelo=" + tramitePersistentePAD.getTramite() +
+				"&version=" + tramitePersistentePAD.getVersion() +
+				"&idPersistencia=" + tramitePersistentePAD.getIdPersistencia() +
+				"&autenticacion=A";
+
+		String textoEmail = cargarPlantillaMailAvisoClaveTramitacion();
+		textoEmail = StringUtil.replace(textoEmail,"[#ORGANISMO.NOMBRE#]",oi.getNombre());
+		textoEmail = StringUtil.replace(textoEmail,"[#ORGANISMO.LOGO#]",oi.getUrlLogo());
+		textoEmail = StringUtil.replace(textoEmail,"[#TITULO#]", Literales.getLiteral(idioma, "avisosClaveTramitacion.titulo"));
+		textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AVISO#]", Literales.getLiteral(idioma, "avisosClaveTramitacion.textoAviso"));
+		textoEmail = StringUtil.replace(textoEmail,"[#CLAVETRAMITACION#]", tramitePersistentePAD.getIdPersistencia());
+		textoEmail = StringUtil.replace(textoEmail,"[#URL_ACCESO_CLAVE#]", urlAccesoTramite);
+		textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDER#]", Literales.getLiteral(idioma, "avisosClaveTramitacion.textoAcceder"));
+		textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AUTO#]", Literales.getLiteral(idioma, "avisosClaveTramitacion.textoAuto"));
+
+		MensajeEnvioEmail emailMsg = new MensajeEnvioEmail();
+		String[] destinatarios = {emailAlertas};
+		emailMsg.setDestinatarios(destinatarios);
+		emailMsg.setHtml(true);
+		emailMsg.setRemitente(Literales.getLiteral(idioma, "avisosClaveTramitacion.remitente"));
+		emailMsg.setTitulo(Literales.getLiteral(idioma, "avisosClaveTramitacion.titulo"));
+		emailMsg.setTexto(textoEmail);
+		MensajeEnvio mensaje = new MensajeEnvio();
+		mensaje.addEmail(emailMsg);
+		mensaje.setNombre("Aviso automático de clave tramitación " + tramitePersistentePAD.getIdPersistencia());
+		mensaje.setCuentaEmisora(cuentaEnvioAvisosClaveTramitacion);
+		mensaje.setInmediato(true);
+
+		// Realizamos envio con usuario auto
+	    LoginContext lc = null;
+		try{
+			String user = props.getProperty("auto.user");
+			String pass = props.getProperty("auto.pass");
+			CallbackHandler handler = new UsernamePasswordCallbackHandler( user, pass );
+			lc = new LoginContext("client-login", handler);
+			lc.login();
+			MobTraTelDelegate mob = DelegateMobTraTelUtil.getMobTraTelDelegate();
+			mob.envioMensaje(mensaje );
+		}finally{
+			// Hacemos el logout
+			if ( lc != null ){
+				try{lc.logout();}catch(Exception exl){}
+			}
+		}
+
 	}
 
     /**
@@ -7059,6 +7142,14 @@ public class TramiteProcessorEJB implements SessionBean {
 		byte[] pdf = bos.toByteArray();
 		bos.close();
 		return pdf;
+	}
+
+   private String cargarPlantillaMailAvisoClaveTramitacion() throws Exception{
+		InputStream is = TramiteProcessorEJB.class.getResourceAsStream("mailAvisoClaveTramitacion.html");
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ConvertUtil.copy(is,bos);
+		String plantilla = new String(bos.toByteArray());
+		return plantilla;
 	}
 
 

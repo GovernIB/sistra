@@ -10,7 +10,7 @@
     <property name="home.dir" location="${basedir}/../.."/>
     <property file="${home.dir}/config.properties"/>
 	<property file="${home.dir}/../../config.properties"/>
-	
+
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
 
@@ -19,7 +19,7 @@
     <property name="xdoclet.dir" location="${home.dir}/../../xdoclet"/>
 
 	<property name="distribucion.dir" location="${home.dir}/../../product"/>
-	
+
     <property name="ejb.src" location="${basedir}/src"/>
     <property name="ejb.etc" location="${basedir}/etc"/>
     <property name="ejb.doc" location="${basedir}/doc"/>
@@ -45,8 +45,9 @@
         	<include name="audita-client.jar"/>
         	<include name="regtel-client.jar"/>
         	<include name="forms-client.jar"/>
-       	</fileset>       	
-    	<fileset dir="${distribucion.dir}/lib"> 
+    		<include name="mobtratel-client.jar"/>
+       	</fileset>
+    	<fileset dir="${distribucion.dir}/lib">
             <include name="sistra-util.jar"/>
             <include name="sistra-plugins.jar"/>
     		<include name="sistra-xml.jar"/>
@@ -55,11 +56,11 @@
         <fileset dir="${ejb.product}">
             <include name="5-sistra-model.jar"/>
         	<include name="5-sistra-wsClient.jar"/>
-        </fileset> 
-    	<fileset dir="${lib.dir}/jboss"> 
+        </fileset>
+    	<fileset dir="${lib.dir}/jboss">
     		<include name="*.jar"/>
         </fileset>
-    	<fileset dir="${lib.dir}/cxf"> 
+    	<fileset dir="${lib.dir}/cxf">
     		<include name="*.jar"/>
         </fileset>
     </path>
@@ -170,6 +171,7 @@
         </javac>
     	<copydir dest="${ejb.classes}" src="${ejb.src}">
 			<include name="**/*.properties"/>
+    		<include name="**/*.html"/>
 		</copydir>
     </target>
 
@@ -198,12 +200,12 @@
                 <attribute name="Created-By" value="${indra}"/>
             </manifest>
             <include name="**/delegate/**/*.class" />
-            <include name="**/intf/**/*.class" />        	
+            <include name="**/intf/**/*.class" />
             <include name="**/util/**/*.class" />
             <include name="**/Hibernate.class"/>
             <include name="**/HibernateHome.class"/>
         </jar>
-    </target>		
+    </target>
 
     <target name="ejb.javadoc" depends="ejb.gen.all">
         <javadoc
@@ -226,5 +228,5 @@
 
     <target name="doc" depends="ejb.javadoc" description="Realiza las tareas de documentación"/>
     <target name="main" depends="ejb.jar,ejb.client" description="Construye el componente"/>
-	
+
 </project>

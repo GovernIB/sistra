@@ -149,7 +149,7 @@
     	<p>El tipo de estos campos es <a class="enlaceAyuda" href="../ayuda_es/ayudaScript.jsp">script</a> y espera en cada caso el valor del NIF y el nombre completo.</p>
      </td>
   </tr>
-  
+
   <tr>
     <td>Script procedimiento destino tr&aacute;mite</td>
     <td>
@@ -233,19 +233,25 @@
      <td>Alertas tramitaci&oacute;n</td>
      <td>
      	<p>
-     		Indica si se generan alertas avisando al ciudadano durante la fase de cumplimentaci&oacute;n y registro de una solicitud. Actualmente existen 3 posibles tipos de alertas:
+     		Indica si se generan alertas avisando al ciudadano durante la fase de cumplimentaci&oacute;n y registro de una solicitud.
+     		<br/>
+     		En caso de habilitar las alertas de tramitaci&oacute;n se deber&aacute; informar los Datos de contacto para establecer email / sms (solo para alertas finalizaci&oacute;n).
+     	</p>
+     	<p>
+     		Las <b>alertas de finalizaci&oacute;n</b> son las siguientes:
      		<ul>
      			<li>si se finaliza el tr&aacute;mite (email). Una &uacute;nica alerta tras finalizaci&oacute;n de solicitud.</li>
 	     		<li>si se realizan pagos y no se finaliza el tr&aacute;mite (email/SMS). Posibilidad de repetici&oacute;n peri&oacute;dica</li>
 	     		<li>se finaliza un preregistro pero no se confirma (email/SMS). Posibilidad de repetici&oacute;n peri&oacute;dica</li>
      		</ul>
-     		En caso de habilitar las alertas de tramitaci&oacute;n se deber&aacute; informar los Datos de contacto para establecer email/sms.
-     		<br/><br/>
      		En las alertas con repetición peri&oacute;dica se realizar&aacute; un aviso inicial y posteriormente una aviso peri&oacute;dico hasta que se supere la situaci&oacute;n que provoca la alerta.
      		A nivel de configuraci&oacute;n de la plataforma se establece si se debe generar la alerta, el tiempo de retardo para el aviso inicial, si se generan avisos peri&oacute;dicos y el intervalo de repetici&oacute;n.
      		Si tiene alguna duda sobre c&oacute;mo están configuradas las alertas, consulte con el administrador.
-     		<br/><br/>
+     		<br/>
      		Si se habilita la finalizaci&oacute;n autom&aacute;tica de tr&aacute;mites, antes de enviar correo de alerta se intentaran finalizar los tr&aacute;mites an&oacute;nimos que se hayan pagado y est&eacute;n pendientes de enviar.
+     	</p>
+     	<p>
+     		La <b>alerta de clave de tramitaci&oacute;n</b> permite para los tr&aacute;mites an&oacute;nimos enviar al ciudadano la clave de tramitaci&oacute;n por correo una vez rellene los formularios.
      	</p>
      </td>
    </tr>

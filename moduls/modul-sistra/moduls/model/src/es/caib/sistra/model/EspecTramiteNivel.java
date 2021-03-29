@@ -29,9 +29,9 @@ public class EspecTramiteNivel  extends Traducible {
      private String habilitarAlertasTramitacion = "X";
      private String permitirSMSAlertasTramitacion = "N"; // S / N
      private String finalizarTramiteAuto = "N"; // S / N
-     
+     private String alertaClaveTramitacion = "X";  // X: Sin especificar (para sobreescribir x nivel) / N: No permite /  S: Permite
      private String verificarMovil = "N"; // S / N
-     
+
 
      private byte[] avisoSMS;
      private byte[] avisoEmail;
@@ -320,7 +320,7 @@ public class EspecTramiteNivel  extends Traducible {
 	public void setDestinatarioTramite(byte[] destinatarioTramite) {
 		this.destinatarioTramite = destinatarioTramite;
 	}
-	
+
 
     public byte[] getProcedimientoDestinoTramite() {
 		return procedimientoDestinoTramite;
@@ -420,6 +420,24 @@ public class EspecTramiteNivel  extends Traducible {
 
 	public void setVerificarMovil(String verificarMovil) {
 		this.verificarMovil = verificarMovil;
+	}
+
+
+	/**
+	 *	Devuelve alertaClaveTramitacion.
+	 * @return alertaClaveTramitacion
+	 */
+	public String getAlertaClaveTramitacion() {
+		return alertaClaveTramitacion;
+	}
+
+
+	/**
+	 * Establece alertaClaveTramitacion.
+	 * @param alertaClaveTramitacion alertaClaveTramitacion
+	 */
+	public void setAlertaClaveTramitacion(String alertaClaveTramitacion) {
+		this.alertaClaveTramitacion = alertaClaveTramitacion;
 	}
 
 

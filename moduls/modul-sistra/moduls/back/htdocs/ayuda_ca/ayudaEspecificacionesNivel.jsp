@@ -231,17 +231,23 @@
      <td>Alertes tramitaci&oacute;</td>
      <td>
      	<p>
-     		Indica si es generen alertes avisant al ciutad&agrave; durant la fase d'emplenament i registre d'una sol·licitud. Actualment existeixen 3 possibles tipus d'alertes:
+     		Indica si es generen alertes avisant al ciutad&agrave; durant la fase d'emplenament i registre d'una sol·licitud.
+     		<br/>
+     		En cas d'habilitar les alertes de tramitaci&oacute; s'haura d'informar les dades de contacte per establir email / sms (nom&eacute;s per alertes finalitzaci&oacute;).
+     	</p>
+     	<p>
+     		Les <b>alertes de finalitzaci&oacute;</b> son:
      		<ul>
      			<li>si es finalitza el tr&agrave;mit (email). Una &uacute;nica alerta despr&eacute;s de finalitzaci&oacute; de sol·licitud</li>
 	     		<li>es realitzen pagaments i no es finalitza el tr&agrave;mit (email/SMS). Posibilitat de repetici&oacute; peri&ograve;dica</li>
 	     		<li>es finalitza un preregistre i no es confirma (email/SMS)</li>
      		</ul>
-     		En cas d'habilitar les alertes de tramitaci&oacute; s'haura d'informar les dades de contacte per establir email/sms.
-     		<br/><br/>
      		En les alertes amb repetici&oacute; peri&ograve;dica es realitzar&agrave; un av&iacute;s inicial i posteriorment una av&iacute;s peri&ograve;dic fins que se superi la situaci&oacute; que provoca l'alerta. A nivell de configuraci&oacute; de la plataforma s'estableix si s'ha de generar l'alerta, el temps de retard per a l'av&iacute;s inicial, si es generen avisos peri&ograve;dics i l'interval de repetici&oacute;. Si t&eacute; algun dubte sobre com estan configurades les alertes, consulteu amb l'administrador.
-     		<br/><br/>
-     		Si s'habilita la finalitzaci&oacute; autom&agrave;tica de tr&agrave;mits, abans d'enviar correu d'alerta es intentessin finalitzar els tr&agrave;mits an&ograve;nims que s'hagin pagat i estiguin pendents d'enviar.
+     		<br/>
+     		Si s'habilita la finalitzaci&oacute; autom&agrave;tica de tr&agrave;mits, abans d'enviar correu d'alerta es intentes sin finalitzar els tr&agrave;mits an&ograve;nims que s'hagin pagat i estiguin pendents d'enviar.
+     	</p>
+     	<p>
+     		L'<b>alerta de clau de tramitaci&oacute;</b> permiteix per als tr&agrave;mits an&ograve;nims enviar al ciutad&agrave; la clau de tramitaci&oacute; per correu una vegada ompli els formularis.
      	</p>
      </td>
    </tr>

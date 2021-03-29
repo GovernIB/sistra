@@ -185,8 +185,13 @@
 									<logic:iterate name="<%=codigoFirmaAsiento %>" id="firma" scope="request" type="es.caib.sistra.plugins.firma.FirmaIntf">
 										&nbsp;
 										<a href="mostrarFirmaDocumento.do?codigo=<%=codigoFirmaAsiento%>&clave=<%=claveFirmaAsiento%>&nif=<%=firma.getNif()%>" >
-                                            <bean:define id="firmanteDesc" name="firma" property="nombreApellidos" type="java.lang.String"/>
-                                            <%=StringEscapeUtils.escapeHtml(firmanteDesc)%>
+											<logic:notEmpty name="firma" property="nombreApellidos">
+	                                            <bean:define id="firmanteDesc" name="firma" property="nombreApellidos" type="java.lang.String"/>
+	                                            <%=StringEscapeUtils.escapeHtml(firmanteDesc)%>
+	                                        </logic:notEmpty>
+	                                        <logic:empty name="firma" property="nombreApellidos">
+	                                        	<%=firma.getNif()%>
+	                                        </logic:empty>
 										</a>
 									</logic:iterate>
 								</logic:notEmpty>

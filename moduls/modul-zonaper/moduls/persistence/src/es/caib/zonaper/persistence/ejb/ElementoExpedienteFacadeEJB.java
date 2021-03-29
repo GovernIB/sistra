@@ -387,11 +387,15 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 					if (entrada instanceof EntradaPreregistro) {
 						EntradaPreregistro preregistro = (EntradaPreregistro) entrada;
 						ee.setPendiente(preregistro.getNumeroRegistro() == null);
+						ee.setNumero(entrada.getNumeroPreregistro());
+					} else {
+						ee.setNumero(entrada.getNumeroRegistro());
 					}
 				} else if (ei instanceof NotificacionTelematica) {
 					NotificacionTelematica notificacion = (NotificacionTelematica) ei;
 					ee.setDescripcion(notificacion.getTituloAviso());
 					ee.setTipo(DetalleElementoExpedientePAD.TIPO_NOTIFICACION);
+					ee.setNumero(notificacion.getNumeroRegistro());
 					ee.setFecha(notificacion.getFechaRegistro());
 					ee.setPendiente(notificacion.getFechaAcuse() == null || notificacion.isRechazada());
 					ee.setUrl(urlZonaper + "&notificacion=" + e.getIdentificadorPersistencia());

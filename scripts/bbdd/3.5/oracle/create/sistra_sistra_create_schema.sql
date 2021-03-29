@@ -1254,3 +1254,7 @@ comment on column STR_ESPNIV.ETN_ALEFIN is
 
 -- V3.1.4
 alter table STR_ESPNIV add ETN_CHKSMS  VARCHAR2(1)  default 'N' not null;
+
+-- V3.5.24
+alter table STR_ESPNIV add  ETN_ALECLA  VARCHAR2(1) default 'N' not null;
+comment on column STR_ESPNIV.ETN_ALECLA is 'Indica si se envia email con la clave de tramitación para trámites anónimos tras finalizar formularios';

@@ -23,6 +23,7 @@ public class DetalleElementoExpedientePAD implements Serializable {
     private Date fecha;
     private boolean pendiente;
     private String url;
+    private String numero;
 
 	/**
 	 *	Devuelve tipo.
@@ -93,6 +94,20 @@ public class DetalleElementoExpedientePAD implements Serializable {
 	 */
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	/**
+	 *	Devuelve numero.
+	 * @return numero
+	 */
+	public String getNumero() {
+		return numero;
+	}
+	/**
+	 * Establece numero.
+	 * @param numero numero
+	 */
+	public void setNumero(String numero) {
+		this.numero = numero;
 	}
 
 }

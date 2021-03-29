@@ -142,9 +142,19 @@
 	<td class="separador" colspan="2"><bean:message key="especificacionesTramite.separador.alertasTramitacion"/></td>
 </tr>
 <tr>
-    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAlertasTramitacion"/></td>
+    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAlertasTramitacion.finalizacion"/></td>
     <td class="input">
     	<html:select property="values.habilitarAlertasTramitacion">
+    		<logic:iterate id="opcion" name="habilitarAlertasTramitacionOptions" type="es.caib.sistra.model.Opcion">
+    			<html:option value="<%=opcion.getCodigo()%>"  key="<%=opcion.getDescripcion()%>"  />
+	    	</logic:iterate>
+	    </html:select>
+    </td>
+</tr>
+<tr>
+    <td class="labelo"><bean:message key="especificacionesTramite.habilitarAlertasTramitacion.claveTramitacion"/></td>
+    <td class="input">
+    	<html:select property="values.alertaClaveTramitacion">
     		<logic:iterate id="opcion" name="habilitarAlertasTramitacionOptions" type="es.caib.sistra.model.Opcion">
     			<html:option value="<%=opcion.getCodigo()%>"  key="<%=opcion.getDescripcion()%>"  />
 	    	</logic:iterate>

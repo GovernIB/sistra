@@ -33,7 +33,7 @@
     <property name="checkEnvio" type="binary" column="ETN_CHKENV"/>
 
     <property name="destinatarioTramite" type="binary" column="ETN_DSTTRA"/>
-    
+
     <property name="procedimientoDestinoTramite" type="binary" column="ETN_PRODST"/>
 
     <property name="urlFin" type="binary" column="ETN_URLFIN"/>
@@ -45,6 +45,7 @@
 
     <property name="habilitarAlertasTramitacion" length="1" column="ETN_ALETRA"/>
     <property name="permitirSMSAlertasTramitacion" column="ETN_ALESMS" length="1" not-null="true"/>
+    <property name="alertaClaveTramitacion" column="ETN_ALECLA" length="1" not-null="true"/>
 
     <property name="avisoSMS" type="binary" column="ETN_AVISMS"/>
     <property name="avisoEmail" type="binary" column="ETN_AVIEMA"/>
