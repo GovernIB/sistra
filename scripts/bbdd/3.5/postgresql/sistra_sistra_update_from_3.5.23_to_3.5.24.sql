@@ -1,0 +1,2 @@
+alter table STR_ESPNIV add  ETN_ALECLA character varying(1) default 'N' not null;
+comment on column STR_ESPNIV.ETN_ALECLA is 'Indica si se envia email con la clave de tramitación para trámites anónimos tras finalizar formularios';
