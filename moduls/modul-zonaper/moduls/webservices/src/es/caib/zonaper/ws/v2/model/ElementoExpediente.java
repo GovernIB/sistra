@@ -1,9 +1,11 @@
 
-package es.caib.zonaper.ws.v2.model.elementoexpediente;
+package es.caib.zonaper.ws.v2.model;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -24,6 +26,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="fecha" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
  *         &lt;element name="pendiente" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="url" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="numero" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,12 +36,13 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ElementoExpediente", propOrder = {
+@XmlType(name = "ElementoExpediente", namespace = "urn:es:caib:zonaper:ws:v2:model:ElementoExpediente", propOrder = {
     "tipo",
     "descripcion",
     "fecha",
     "pendiente",
-    "url"
+    "url",
+    "numero"
 })
 public class ElementoExpediente {
 
@@ -52,6 +56,8 @@ public class ElementoExpediente {
     protected boolean pendiente;
     @XmlElement(required = true)
     protected String url;
+    @XmlElementRef(name = "numero", type = JAXBElement.class)
+    protected JAXBElement<String> numero;
 
     /**
      * Gets the value of the tipo property.
@@ -163,6 +169,30 @@ public class ElementoExpediente {
      */
     public void setUrl(String value) {
         this.url = value;
+    }
+
+    /**
+     * Gets the value of the numero property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     
+     */
+    public JAXBElement<String> getNumero() {
+        return numero;
+    }
+
+    /**
+     * Sets the value of the numero property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     
+     */
+    public void setNumero(JAXBElement<String> value) {
+        this.numero = ((JAXBElement<String> ) value);
     }
 
 }

@@ -8,6 +8,7 @@
 			<xs:element name="fecha" type="xs:dateTime"/>
 			<xs:element name="pendiente" type="xs:boolean"/>
 			<xs:element name="url" type="xs:string"/>
+			<xs:element name="numero" nillable="true" minOccurs="0" type="xs:string"/>
 		</xs:sequence>
 	</xs:complexType>
 

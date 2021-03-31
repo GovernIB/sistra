@@ -1,5 +1,5 @@
 
-package es.caib.zonaper.ws.v2.model.elementoexpediente;
+package es.caib.zonaper.ws.v2.model;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -34,7 +34,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "FiltroElementosExpediente", propOrder = {
+@XmlType(name = "FiltroElementosExpediente", namespace = "urn:es:caib:zonaper:ws:v2:model:ElementoExpediente", propOrder = {
     "nif",
     "tipos",
     "fechaInicio",

@@ -1,5 +1,5 @@
 
-package es.caib.zonaper.ws.v2.model.elementoexpediente;
+package es.caib.zonaper.ws.v2.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "TiposElementoExpediente", propOrder = {
+@XmlType(name = "TiposElementoExpediente", namespace = "urn:es:caib:zonaper:ws:v2:model:ElementoExpediente", propOrder = {
     "tipo"
 })
 public class TiposElementoExpediente {

@@ -1,5 +1,5 @@
 
-package es.caib.zonaper.ws.v2.model.elementoexpediente;
+package es.caib.zonaper.ws.v2.model;
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "TipoElementoExpediente")
+@XmlType(name = "TipoElementoExpediente", namespace = "urn:es:caib:zonaper:ws:v2:model:ElementoExpediente")
 @XmlEnum
 public enum TipoElementoExpediente {
 

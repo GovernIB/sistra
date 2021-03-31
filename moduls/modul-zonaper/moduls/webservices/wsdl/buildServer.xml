@@ -20,7 +20,7 @@
 
 	<target name="main">
 		<echo>
-			Para generar el cliente de una determinada versión hay que lanzar la tarea correspondiente	
+			Para generar el cliente de una determinada versión hay que lanzar la tarea correspondiente
 		</echo>
 	</target>
 
@@ -37,7 +37,7 @@
 			<arg value="urn:es:caib:zonaper:ws:v1:model:Expediente=es.caib.zonaper.ws.v1.model" />
 			<arg value="-p" />
 			<arg value="urn:es:caib:zonaper:ws:v1:model:BackofficeFacade=es.caib.zonaper.ws.v1.model" />
-			
+
 			<arg value="-d" />
 			<arg value="${src.dir}" />
 			<arg value="-wsdlLocation" />
@@ -67,7 +67,9 @@
 				<arg value="urn:es:caib:zonaper:ws:v2:model:UsuarioAutenticadoInfo=es.caib.zonaper.ws.v2.model" />
 				<arg value="-p" />
 				<arg value="urn:es:caib:zonaper:ws:v2:model:BackofficeFacade=es.caib.zonaper.ws.v2.model" />
-											
+				<arg value="-p" />
+				<arg value="urn:es:caib:zonaper:ws:v2:model:ElementoExpediente=es.caib.zonaper.ws.v2.model" />
+
 				<arg value="-d" />
 				<arg value="${src.dir}" />
 				<arg value="-wsdlLocation" />

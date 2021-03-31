@@ -37,9 +37,10 @@ import es.caib.zonaper.ws.v2.model.TipoEstadoPago;
 import es.caib.zonaper.ws.v2.model.TipoEstadoTramite;
 import es.caib.zonaper.ws.v2.model.TramitesPersistentes;
 import es.caib.zonaper.ws.v2.model.UsuarioAutenticadoInfo;
-import es.caib.zonaper.ws.v2.model.elementoexpediente.ElementosExpediente;
-import es.caib.zonaper.ws.v2.model.elementoexpediente.FiltroElementosExpediente;
-import es.caib.zonaper.ws.v2.model.elementoexpediente.TipoElementoExpediente;
+import es.caib.zonaper.ws.v2.model.ElementosExpediente;
+import es.caib.zonaper.ws.v2.model.FiltroElementosExpediente;
+import es.caib.zonaper.ws.v2.model.ObjectFactory;
+import es.caib.zonaper.ws.v2.model.TipoElementoExpediente;
 
 
 
@@ -216,19 +217,22 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 			PadBackOfficeDelegate pad = PadBackOfficeUtil.getBackofficeExpedienteDelegate();
 			FiltroBusquedaElementosExpedientePAD filtro = generarFiltroElementosExpedientePAD(filtroElementosExpediente);
 			List elementos = pad.obtenerElementosExpediente(filtro, pagina, tamPagina);
+			ObjectFactory objFactory = new ObjectFactory();
 
 			ElementosExpediente res = new ElementosExpediente();
 			for (Iterator it = elementos.iterator();it.hasNext();){
 				DetalleElementoExpedientePAD ei = (DetalleElementoExpedientePAD) it.next();
-				es.caib.zonaper.ws.v2.model.elementoexpediente.ElementoExpediente ee = new es.caib.zonaper.ws.v2.model.elementoexpediente.ElementoExpediente();
+				es.caib.zonaper.ws.v2.model.ElementoExpediente ee = new es.caib.zonaper.ws.v2.model.ElementoExpediente();
 				ee.setDescripcion(ei.getDescripcion());
 				ee.setTipo(convertToElementoExpediente(ei.getTipo()));
 				ee.setFecha(dateToXmlGregorianCalendar(ei.getFecha()));
 				ee.setUrl(ei.getUrl());
 				ee.setPendiente(ei.isPendiente());
+				if (StringUtils.isNotBlank(ei.getNumero())) {
+					ee.setNumero(objFactory.createElementoExpedienteNumero(ei.getNumero()));
+				}
 				res.getElemento().add(ee);
 			}
-
 			return res;
 		} catch (Exception exc) {
 			log.error("Excepcion en webservice: " + exc.getMessage(), exc);
