@@ -30,6 +30,7 @@ import javax.ejb.SessionContext;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -2025,14 +2026,14 @@ public class TramiteProcessorEJB implements SessionBean {
 				"&autenticacion=A";
 
 		String textoEmail = cargarPlantillaMailAvisoClaveTramitacion();
-		textoEmail = StringUtil.replace(textoEmail,"[#ORGANISMO.NOMBRE#]",oi.getNombre());
+		textoEmail = StringUtil.replace(textoEmail,"[#ORGANISMO.NOMBRE#]",StringEscapeUtils.escapeHtml(oi.getNombre()));
 		textoEmail = StringUtil.replace(textoEmail,"[#ORGANISMO.LOGO#]",oi.getUrlLogo());
-		textoEmail = StringUtil.replace(textoEmail,"[#TITULO#]", Literales.getLiteral(idioma, "avisosClaveTramitacion.titulo"));
-		textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AVISO#]", Literales.getLiteral(idioma, "avisosClaveTramitacion.textoAviso"));
+		textoEmail = StringUtil.replace(textoEmail,"[#TITULO#]", StringEscapeUtils.escapeHtml(Literales.getLiteral(idioma, "avisosClaveTramitacion.titulo")));
+		textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AVISO#]", StringEscapeUtils.escapeHtml(Literales.getLiteral(idioma, "avisosClaveTramitacion.textoAviso")));
 		textoEmail = StringUtil.replace(textoEmail,"[#CLAVETRAMITACION#]", tramitePersistentePAD.getIdPersistencia());
 		textoEmail = StringUtil.replace(textoEmail,"[#URL_ACCESO_CLAVE#]", urlAccesoTramite);
-		textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDER#]", Literales.getLiteral(idioma, "avisosClaveTramitacion.textoAcceder"));
-		textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AUTO#]", Literales.getLiteral(idioma, "avisosClaveTramitacion.textoAuto"));
+		textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.ACCEDER#]", StringEscapeUtils.escapeHtml(Literales.getLiteral(idioma, "avisosClaveTramitacion.textoAcceder")));
+		textoEmail = StringUtil.replace(textoEmail,"[#TEXTO.AUTO#]", StringEscapeUtils.escapeHtml(Literales.getLiteral(idioma, "avisosClaveTramitacion.textoAuto")));
 
 		MensajeEnvioEmail emailMsg = new MensajeEnvioEmail();
 		String[] destinatarios = {emailAlertas};
