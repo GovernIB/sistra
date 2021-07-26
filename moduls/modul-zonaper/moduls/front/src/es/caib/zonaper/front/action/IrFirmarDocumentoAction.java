@@ -24,6 +24,7 @@ import es.caib.zonaper.front.form.FirmarDocumentoDelegadoForm;
 import es.caib.zonaper.front.util.DocumentoPersistenteFront;
 import es.caib.zonaper.front.util.FirmanteFront;
 import es.caib.zonaper.model.DocumentoPersistente;
+import es.caib.zonaper.modelInterfaz.DocumentoPersistentePAD;
 import es.caib.zonaper.persistence.delegate.ConsultaPADDelegate;
 import es.caib.zonaper.persistence.delegate.DelegateException;
 import es.caib.zonaper.persistence.delegate.DelegateUtil;
@@ -38,19 +39,19 @@ import es.caib.zonaper.persistence.delegate.TramitePersistenteDelegate;
  *
  * @struts.action-forward
  * name="success" path=".irFirmarDocumento"
- * 
+ *
  * @struts.action-forward
  *  name="fail" path=".bandejaFirma"
  */
 public class IrFirmarDocumentoAction extends BaseAction
 {
 	private static Log log = LogFactory.getLog( IrFirmarDocumentoAction.class );
-	
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-            HttpServletResponse response) throws Exception 
+            HttpServletResponse response) throws Exception
     {
 		String identificador = request.getParameter("identificador");
-		
+
 		try{
 			FirmarDocumentoDelegadoForm firmarForm = (FirmarDocumentoDelegadoForm)form;
 			//Buscamos Documentos pendientes de firma de la entidad delegante
@@ -60,6 +61,13 @@ public class IrFirmarDocumentoAction extends BaseAction
 			ref.setClave(doc.getRdsClave());
 			ref.setCodigo(doc.getRdsCodigo());
 			DocumentoRDS docRDS = DelegateRDSUtil.getRdsDelegate().consultarDocumento(ref);
+
+			// Si es formulario, verificamos si tiene enlazado documento formateado
+			if ( DocumentoPersistentePAD.TIPO_FORMULARIO.equals(doc.getTipoDocumento()) && docRDS.getReferenciaRDSFormateado() != null) {
+				docRDS = DelegateRDSUtil.getRdsDelegate().consultarDocumento(docRDS.getReferenciaRDSFormateado());
+				doc.setNombreFicheroAnexo("formulario.pdf");
+			}
+
 			doc.setDescripcionDocumento(docRDS.getTitulo());
 			request.setAttribute("documentoParaFirmar",doc);
 			firmarForm.setDocumentoB64(ConvertUtil.bytesToBase64UrlSafe(docRDS.getDatosFichero()));
@@ -72,7 +80,7 @@ public class IrFirmarDocumentoAction extends BaseAction
 		}
 		return mapping.findForward("success");
     }
-	
+
 	private DocumentoPersistenteFront docPerToDocFront(DocumentoPersistente doc) throws Exception{
 		DocumentoPersistenteFront docFront = new DocumentoPersistenteFront();
 		if(doc != null){
@@ -92,8 +100,8 @@ public class IrFirmarDocumentoAction extends BaseAction
 			docFront.setRdsClave(doc.getRdsClave());
 			docFront.setRdsCodigo(doc.getRdsCodigo());
 			docFront.setTramitePersistente(doc.getTramitePersistente());
-			
-			List firmantes = new ArrayList();  
+
+			List firmantes = new ArrayList();
 			String[] firmantesDel;
 			if(docFront.getDelegacionFirmantes()!= null && StringUtils.isNotBlank(docFront.getDelegacionFirmantes())){
 				firmantesDel = docFront.getDelegacionFirmantes().split("#");
