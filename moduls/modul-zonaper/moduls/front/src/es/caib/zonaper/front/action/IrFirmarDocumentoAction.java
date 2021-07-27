@@ -62,23 +62,30 @@ public class IrFirmarDocumentoAction extends BaseAction
 			ref.setCodigo(doc.getRdsCodigo());
 			DocumentoRDS docRDS = DelegateRDSUtil.getRdsDelegate().consultarDocumento(ref);
 
+			log.debug("Recuperando documento para firmar :" + doc.getRdsClave());
+
 			// Si es formulario, verificamos si tiene enlazado documento formateado
 			if ( DocumentoPersistentePAD.TIPO_FORMULARIO.equals(doc.getTipoDocumento()) && docRDS.getReferenciaRDSFormateado() != null) {
+				log.debug("Documento " + doc.getRdsClave() + " es un formulario consolidado como pdf (" + docRDS.getReferenciaRDSFormateado().getCodigo() + ")");
 				docRDS = DelegateRDSUtil.getRdsDelegate().consultarDocumento(docRDS.getReferenciaRDSFormateado());
 				doc.setNombreFicheroAnexo("formulario.pdf");
+				log.debug("Recuperado formulario consolidado como pdf " + docRDS.getDatosFichero().length + " bytes" );
 			}
 
 			doc.setDescripcionDocumento(docRDS.getTitulo());
 			request.setAttribute("documentoParaFirmar",doc);
 			firmarForm.setDocumentoB64(ConvertUtil.bytesToBase64UrlSafe(docRDS.getDatosFichero()));
 			firmarForm.setIdentificador(doc.getCodigo()+"");
+
+			log.debug("Documento para firmar " + doc.getNombreFicheroAnexo() + " " + docRDS.getDatosFichero().length + " bytes" );
+
+			return mapping.findForward("success");
 		}catch(Exception e){
 			ActionErrors messages = new ActionErrors();
 			messages.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.irFirmar.documento.Firma"));
         	saveErrors(request,messages);
         	return mapping.findForward("fail");
 		}
-		return mapping.findForward("success");
     }
 
 	private DocumentoPersistenteFront docPerToDocFront(DocumentoPersistente doc) throws Exception{

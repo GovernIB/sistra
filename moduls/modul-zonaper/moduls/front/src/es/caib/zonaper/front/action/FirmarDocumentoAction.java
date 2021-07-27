@@ -27,16 +27,16 @@ import es.caib.zonaper.persistence.delegate.DelegateUtil;
  *
  * @struts.action-forward
  * name="success" path=".bandejaFirma"
- * 
+ *
  * @struts.action-forward
- *  name="fail" path=".irFirmarDocumento"
+ *  name="fail" path=".bandejaFirma"
  */
 public class FirmarDocumentoAction extends BaseAction
 {
 	private static Log log = LogFactory.getLog( FirmarDocumentoAction.class );
-	
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-            HttpServletResponse response) throws Exception 
+            HttpServletResponse response) throws Exception
     {
 		try{
 			FirmarDocumentoDelegadoForm docForm = (FirmarDocumentoDelegadoForm)form;
