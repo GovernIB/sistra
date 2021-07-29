@@ -62,7 +62,7 @@ public class IrFirmarDocumentoAction extends BaseAction
 			ref.setCodigo(doc.getRdsCodigo());
 			DocumentoRDS docRDS = DelegateRDSUtil.getRdsDelegate().consultarDocumento(ref);
 
-			log.debug("Recuperando documento para firmar :" + doc.getRdsClave());
+			log.debug("Recuperando documento para firmar :" + doc.getRdsCodigo());
 
 			// Si es formulario, verificamos si tiene enlazado documento formateado
 			if ( DocumentoPersistentePAD.TIPO_FORMULARIO.equals(doc.getTipoDocumento()) && docRDS.getReferenciaRDSFormateado() != null) {
