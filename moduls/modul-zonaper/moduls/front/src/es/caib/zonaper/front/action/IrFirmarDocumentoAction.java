@@ -92,17 +92,14 @@ public class IrFirmarDocumentoAction extends BaseAction
 		DocumentoPersistenteFront docFront = new DocumentoPersistenteFront();
 		if(doc != null){
 			docFront.setCodigo(doc.getCodigo());
+			docFront.setTipoDocumento(doc.getTipoDocumento());
 			docFront.setDelegacionEstado(doc.getDelegacionEstado());
 			docFront.setDelegacionFirmantes(doc.getDelegacionFirmantes());
 			docFront.setDelegacionFirmantesPendientes(doc.getDelegacionFirmantesPendientes());
 			docFront.setDescripcionGenerico(doc.getDescripcionGenerico());
 			docFront.setEstado(doc.getEstado());
 			docFront.setIdentificador(doc.getIdentificador());
-			if ("A".equals(docFront.getTipoDocumento())){
-				docFront.setNombreFicheroAnexo(doc.getNombreFicheroAnexo());
-			} else {
-				docFront.setNombreFicheroAnexo("formulario.xml");
-			}
+			docFront.setNombreFicheroAnexo(doc.getNombreFicheroAnexo());
 			docFront.setNumeroInstancia(doc.getNumeroInstancia());
 			docFront.setRdsClave(doc.getRdsClave());
 			docFront.setRdsCodigo(doc.getRdsCodigo());
