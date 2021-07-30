@@ -64,8 +64,8 @@ public class IrFirmarDocumentoAction extends BaseAction
 
 			log.debug("Recuperando documento para firmar :" + doc.getRdsCodigo());
 
-			// Si es formulario, verificamos si tiene enlazado documento formateado
-			if ( DocumentoPersistentePAD.TIPO_FORMULARIO.equals(doc.getTipoDocumento()) && docRDS.getReferenciaRDSFormateado() != null) {
+			// Si tiene enlazado documento formateado, hay que firmar el formateado
+			if ( docRDS.getReferenciaRDSFormateado() != null) {
 				log.debug("Documento " + doc.getRdsClave() + " es un formulario consolidado como pdf (" + docRDS.getReferenciaRDSFormateado().getCodigo() + ")");
 				docRDS = DelegateRDSUtil.getRdsDelegate().consultarDocumento(docRDS.getReferenciaRDSFormateado());
 				doc.setNombreFicheroAnexo("formulario.pdf");
