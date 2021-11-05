@@ -62,16 +62,16 @@
                 oRequired = new required();
                 for (x in oRequired) {
                 	var field = form[oRequired[x][0]];
-                
+
                 	if (field.type == 'hidden' ||
                 		field.type == 'text' ||
                         field.type == 'textarea' ||
                         field.type == 'file' ||
                         field.type == 'select-one' ||
                         field.type == 'radio' ||
-                        field.type == 'password' || 
+                        field.type == 'password' ||
                         field.type == 'number') {
-                        
+
                         var value = '';
 						// get field's value
 						if (field.type == "select-one") {
@@ -82,9 +82,9 @@
 						} else {
 							value = field.value;
 						}
-                        
+
                         if (trim(value).length == 0) {
-                        
+
 	                        if (i == 0) {
 	                            focusField = field;
 	                        }
@@ -93,25 +93,25 @@
                         }
                     }
                 }
-                                
+
                 if (fields.length > 0) {
                    focusField.focus();
-                   
+
                    //alert(fields.join('\n'));
-                   
+
                    var decoded = $("<div/>").html(fields.join('\n')).text();
                    alert(decoded);
-                   
-                   
+
+
                 }
                 return isValid;
             }
-            
+
             // Trim whitespace from left and right sides of s.
             function trim(s) {
                 return s.replace( /^\s*/, "" ).replace( /\s*$/, "" );
             }
-            
+
             ]]>
          </javascript>
 
@@ -149,10 +149,10 @@
                 oMinLength = new minlength();
                 for (x in oMinLength) {
                     var field = form[oMinLength[x][0]];
-                    
+
                     if (field.type == 'text' ||
                         field.type == 'textarea') {
-                        
+
                         var iMin = parseInt(oMinLength[x][2]("minlength"));
                         if ((trim(field.value).length > 0) && (field.value.length < iMin)) {
                             if (i == 0) {
@@ -194,10 +194,10 @@
                 oMaxLength = new maxlength();
                 for (x in oMaxLength) {
                     var field = form[oMaxLength[x][0]];
-                    
+
                     if (field.type == 'text' ||
                         field.type == 'textarea') {
-                        
+
                         var iMax = parseInt(oMaxLength[x][2]("maxlength"));
                         if (field.value.length > iMax) {
                             if (i == 0) {
@@ -239,11 +239,11 @@
                 oMasked = new mask();
                 for (x in oMasked) {
                     var field = form[oMasked[x][0]];
-                    
-                    if ((field.type == 'text' || 
-                         field.type == 'textarea') && 
+
+                    if ((field.type == 'text' ||
+                         field.type == 'textarea') &&
                          (field.value.length > 0)) {
-                        
+
                         if (!matchPattern(field.value, oMasked[x][2]("mask"))) {
                             if (i == 0) {
                                 focusField = field;
@@ -253,7 +253,7 @@
                         }
                     }
                 }
-                
+
                 if (fields.length > 0) {
                    focusField.focus();
                    alert(fields.join('\n'));
@@ -290,7 +290,7 @@
                 oByte = new ByteValidations();
                 for (x in oByte) {
                 	var field = form[oByte[x][0]];
-                	
+
                     if (field.type == 'text' ||
                         field.type == 'textarea' ||
                         field.type == 'select-one' ||
@@ -306,7 +306,7 @@
 						} else {
 							value = field.value;
 						}
-                        
+
                         if (value.length > 0) {
                             if (!isAllDigits(value)) {
                                 bValid = false;
@@ -327,7 +327,7 @@
 	                            }
                             }
 						}
-						
+
                     }
                 }
                 if (fields.length > 0) {
@@ -362,12 +362,12 @@
                 oShort = new ShortValidations();
                 for (x in oShort) {
                 	var field = form[oShort[x][0]];
-                	
+
                     if (field.type == 'text' ||
                         field.type == 'textarea' ||
                         field.type == 'select-one' ||
                         field.type == 'radio') {
-                        
+
                         var value = '';
 						// get field's value
 						if (field.type == "select-one") {
@@ -378,7 +378,7 @@
 						} else {
 							value = field.value;
 						}
-                        
+
                         if (value.length > 0) {
                             if (!isAllDigits(value)) {
                                 bValid = false;
@@ -388,7 +388,7 @@
                                 fields[i++] = oShort[x][1];
 
                             } else {
-                        
+
 	                            var iValue = parseInt(value);
 	                            if (isNaN(iValue) || !(iValue >= -32768 && iValue <= 32767)) {
 	                                if (i == 0) {
@@ -438,7 +438,7 @@
                         field.type == 'textarea' ||
                         field.type == 'select-one' ||
                         field.type == 'radio') {
-                        
+
                         var value = '';
 						// get field's value
 						if (field.type == "select-one") {
@@ -449,16 +449,16 @@
 						} else {
 							value = field.value;
 						}
-                        
+
                         if (value.length > 0) {
-                        
+
                             if (!isAllDigits(value)) {
                                 bValid = false;
                                 if (i == 0) {
 	                                focusField = field;
 	                            }
 						        fields[i++] = oInteger[x][1];
-						        
+
                             } else {
 	                            var iValue = parseInt(value);
 	                            if (isNaN(iValue) || !(iValue >= -2147483648 && iValue <= 2147483647)) {
@@ -492,7 +492,7 @@
                 } else if (argvalue.charAt(0) == "-") {
                     startFrom = 1;
                 }
-                
+
                 for (var n = startFrom; n < argvalue.length; n++) {
                     if (validChars.indexOf(argvalue.substring(n, n+1)) == -1) return false;
                 }
@@ -808,11 +808,11 @@
                 oRange = new intRange();
                 for (x in oRange) {
                     var field = form[oRange[x][0]];
-                    
+
                     if ((field.type == 'text' ||
                          field.type == 'textarea') &&
                         (field.value.length > 0)) {
-                        
+
                         var iMin = parseInt(oRange[x][2]("min"));
                         var iMax = parseInt(oRange[x][2]("max"));
                         var iValue = parseInt(field.value);
@@ -855,11 +855,11 @@
                 oRange = new floatRange();
                 for (x in oRange) {
                     var field = form[oRange[x][0]];
-                    
+
                     if ((field.type == 'text' ||
                          field.type == 'textarea') &&
                         (field.value.length > 0)) {
-                        
+
                         var fMin = parseFloat(oRange[x][2]("min"));
                         var fMax = parseFloat(oRange[x][2]("max"));
                         var fValue = parseFloat(field.value);
@@ -1041,7 +1041,7 @@
                var domArr=domain.match(atomPat);
                var len=domArr.length;
                if ((domArr[domArr.length-1].length < 2) ||
-                   (domArr[domArr.length-1].length > 3)) {
+                   (domArr[domArr.length-1].length > 4)) {
                    return false;
                }
                if (len < 2) {
