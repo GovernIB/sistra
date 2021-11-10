@@ -152,6 +152,9 @@ public class FrontRequestProcessor extends TilesRequestProcessor {
 
         // Se ha especificado sobreescribir el locale
         String paramLang = request.getParameter("lang");
+        if (paramLang == null) {
+        	paramLang = request.getParameter("language");
+        }
         if (paramLang != null) {
             if (supportedLangs.contains(paramLang)) {
                 log.info("Setting selected locale: " + paramLang);

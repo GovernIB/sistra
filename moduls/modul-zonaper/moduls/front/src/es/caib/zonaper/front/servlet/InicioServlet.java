@@ -18,29 +18,32 @@ import es.caib.zonaper.persistence.delegate.DelegateUtil;
  * @web.servlet name="inicio"
  * @web.servlet-mapping url-pattern="/inicio"
  */
-public class InicioServlet extends HttpServlet 
+public class InicioServlet extends HttpServlet
 {
 	protected static Log log = LogFactory.getLog(InicioServlet.class);
-	
-	
+
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	try{
-	    	// Construimos url destino.Eliminamos de la url el parametro de lenguaje
-	    	String urlFin = request.getContextPath() + "/protected/init.do";	     	     		    
+	    	// Construimos url destino.
+	    	String urlFin = request.getContextPath() + "/protected/init.do";
 	    	String params = (request.getQueryString()!=null?request.getQueryString():"");
+	    	// Eliminamos de la url el parametro de lenguaje
+	    	/*
 			int pos = params.indexOf("lang=");
 			if (pos >= 0){
-				int posFin = pos+"lang=es".length();			
-				params = params.substring(0,pos) + (params.length() > posFin?params.substring(posFin):"");		
+				int posFin = pos+"lang=es".length();
+				params = params.substring(0,pos) + (params.length() > posFin?params.substring(posFin):"");
 				params = StringUtil.replace(params,"&&","&");
 				if (params.startsWith("&")) params = params.substring(1);
 			}
+			*/
 			urlFin = urlFin + (params.length()>0?"?"+params:"");
-				     
+
 			// Comprobamos si debemos invalidar la sesion al iniciar
 	     	Boolean resetearSesion;
 	     	resetearSesion = (Boolean) this.getServletContext().getAttribute(Constants.RESETEAR_SESION_WEB);
@@ -58,9 +61,9 @@ public class InicioServlet extends HttpServlet
 	     		log.debug("Invalidamos la sesion");
 	     		request.getSession().invalidate();
 	     	}
-	    	
+
 	    	// Redirigimos
-	     	response.sendRedirect(urlFin);	
+	     	response.sendRedirect(urlFin);
 	    	}catch(Exception e){
     		throw new ServletException("Error redirigiendo a inicio",e);
     	}
