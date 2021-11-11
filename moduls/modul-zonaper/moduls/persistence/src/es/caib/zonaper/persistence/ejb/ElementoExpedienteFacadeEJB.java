@@ -366,8 +366,14 @@ public abstract class ElementoExpedienteFacadeEJB extends HibernateEJB
 			if (pagina == null || tamPagina == null) {
 				elementosExpediente = query.list();
 			} else {
-				Page page = new Page( query, pagina, tamPagina);
-				elementosExpediente = page.getList();
+				if (tamPagina <= 0) {
+					throw new Exception("El valor del parámetro 'tamPagina' no puede ser inferior o igual a 0");
+				} else if(pagina < 0) {
+					throw new Exception("El valor del parámetro 'pagina' no puede ser inferior a 0");
+				} else {
+					Page page = new Page( query, pagina, tamPagina);
+					elementosExpediente = page.getList();
+				}
 			}
 
 			// Recorremos elementos expediente para recuperar datos
