@@ -260,6 +260,12 @@ public class PluginLoginIB implements PluginLoginIntf {
 						metodosAutenticacion.length() - 1);
 			}
 
+			// Si no se permite usuario/password se elimina de los metodos de autenticacion
+			if (!peticion.isPermitirUserPass()) {
+				metodosAutenticacion.replace(";USUARIO_PASSWORD", "");
+			}
+
+
 			// Auditar autorizacion (si no se indica expresamente, establecemos valor configurado en plugin login)
 			boolean auditar;
 			if (peticion.getAuditar() != null) {

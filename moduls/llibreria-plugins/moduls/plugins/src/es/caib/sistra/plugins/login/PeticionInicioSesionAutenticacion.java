@@ -26,6 +26,8 @@ public class PeticionInicioSesionAutenticacion {
 	private String urlCallbackError;
 	/** Login Clave Auto. */
 	private boolean loginClaveAuto;
+	/** Indica si filtra autenticación usu/pass. */
+	private boolean permitirUserPass;
 	/**
 	 *	Devuelve idioma.
 	 * @return idioma
@@ -152,6 +154,20 @@ public class PeticionInicioSesionAutenticacion {
 	 */
 	public void setLoginClaveAuto(boolean loginClaveAuto) {
 		this.loginClaveAuto = loginClaveAuto;
+	}
+	/**
+	 *	Devuelve permitirUserPass.
+	 * @return permitirUserPass
+	 */
+	public boolean isPermitirUserPass() {
+		return permitirUserPass;
+	}
+	/**
+	 * Establece permitirUserPass.
+	 * @param permitirUserPass permitirUserPass
+	 */
+	public void setPermitirUserPass(boolean permitirUserPass) {
+		this.permitirUserPass = permitirUserPass;
 	}
 
 

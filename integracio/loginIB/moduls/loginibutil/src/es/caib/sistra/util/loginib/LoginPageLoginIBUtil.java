@@ -1,7 +1,9 @@
 package es.caib.sistra.util.loginib;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -157,6 +159,7 @@ public class LoginPageLoginIBUtil {
 				peticion.setForzarAutenticacion(false);
 				peticion.setIdioma(customizacionLogin.getIdioma());
 				peticion.setNivelesAutenticacion(customizacionLogin.getNivelesAutenticacion());
+				peticion.setPermitirUserPass(customizacionLogin.isPermitirUserPass());
 				peticion.setQaa(qaaAutenticacion);
 				peticion.setUrlCallback(urlCallback);
 				peticion.setUrlCallbackError(entidadPortal);
@@ -301,13 +304,41 @@ public class LoginPageLoginIBUtil {
 	 		niveles = nivelesModo;
 		}
 
+		// Filtro user/pass para nivel U
+		boolean permitirUP = permitirUsuarioPassword(modelo);
+
 		// Devuelve customizacion para sistrafront
 		LoginPageLoginIBCustom custom = new LoginPageLoginIBCustom();
 		custom.setIdioma(language);
 		custom.setNivelesAutenticacion(niveles);
 		custom.setLoginAnonimoAuto(anonimoAutomatico);
 		custom.setLoginClaveAuto(claveAutomatico);
+		custom.setPermitirUserPass(permitirUP);
 		return custom;
+	}
+
+
+
+	/**
+	 * Verifica si permite usuario/password (si esta definido en lista tramites que se permite).
+	 * @param modelo Modelo
+	 * @return boolean
+	 * @throws Exception
+	 */
+	private static boolean permitirUsuarioPassword(String modelo)
+			throws Exception {
+		boolean permitirUP = false;
+		String listaTramitesUPStr = ConfigurationUtil.getInstance().obtenerPropiedades().getProperty("metodosLoginIB.filtroUserPass.tramite");
+		if (listaTramitesUPStr != null) {
+		String[] lst = listaTramitesUPStr.split(";");
+			for (String s : lst) {
+				if (modelo.equals(s)) {
+					permitirUP = true;
+					break;
+				}
+			}
+		}
+		return permitirUP;
 	}
 
 

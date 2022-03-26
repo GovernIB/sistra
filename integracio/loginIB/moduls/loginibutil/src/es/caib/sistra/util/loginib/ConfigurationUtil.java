@@ -6,13 +6,15 @@ import java.util.Iterator;
 import java.util.Properties;
 
 /**
- * Accede a la configuracion global de sistra.
+ * Accede a la configuracion del modulo
  *
  */
 public class ConfigurationUtil {
 
 	private static ConfigurationUtil confUtil = new ConfigurationUtil();
 	private static final String PREFIX_SAR_SISTRA = "es.caib.sistra.configuracion.sistra.";
+	private static final String PREFIX_SAR_PLUGINS = "es.caib.sistra.configuracion.plugins.";
+	private static final String PROPERTIES_NAME = "plugin-loginIB";
 	private Properties propiedades = null;
 
 	/**
@@ -69,6 +71,9 @@ public class ConfigurationUtil {
 			if (key.startsWith(PREFIX_SAR_SISTRA + "global")) {
 				propiedades.put(key.substring((PREFIX_SAR_SISTRA + "global").length() + 1), value);
 			}
+			if (key.startsWith(PREFIX_SAR_PLUGINS + PROPERTIES_NAME)) {
+				propiedades.put(key.substring((PREFIX_SAR_PLUGINS + PROPERTIES_NAME).length() + 1), value);
+			}
 		}
 	}
 
@@ -82,6 +87,10 @@ public class ConfigurationUtil {
          	 // Propiedades globales
         	 fisGlobal = new FileInputStream(pathConf + "sistra/global.properties");
         	 propiedades.load(fisGlobal);
+
+        	 // Propiedades modulo
+    		 fisModul = new FileInputStream(pathConf + "sistra/plugins/" + PROPERTIES_NAME + ".properties");
+    		 propiedades.load(fisModul);
 
          } catch (Exception e) {
         	 propiedades = null;

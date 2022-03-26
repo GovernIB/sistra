@@ -21,6 +21,9 @@ public class LoginPageLoginIBCustom {
 	/** Login clave automatico (pasando por LoginIB). */
 	private boolean loginClaveAuto;
 
+	/** Indica si filtra autenticación usu/pass. */
+	private boolean permitirUserPass;
+
 	/**
 	 *	Devuelve idioma.
 	 * @return idioma
@@ -83,6 +86,22 @@ public class LoginPageLoginIBCustom {
 	 */
 	public void setLoginClaveAuto(boolean loginClaveAuto) {
 		this.loginClaveAuto = loginClaveAuto;
+	}
+
+	/**
+	 *	Devuelve filtroUserPass.
+	 * @return filtroUserPass
+	 */
+	public boolean isPermitirUserPass() {
+		return permitirUserPass;
+	}
+
+	/**
+	 * Establece filtroUserPass.
+	 * @param filtroUserPass filtroUserPass
+	 */
+	public void setPermitirUserPass(boolean filtroUserPass) {
+		this.permitirUserPass = filtroUserPass;
 	}
 
 }
