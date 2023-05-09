@@ -20,18 +20,18 @@ public class ValidacionesUtil
 {
 	private static String RE_CUENTA = "^[0-9]{20}$";
 	private static final String  DEFAULT_FORMAT = "dd/MM/yyyy";
-	
+
 	private static String SEPARADOR_PAR = ";@;";
 	private static String SEPARADOR_CAMPOS = "#@#";
 
-	
-	
-    
+
+
+
 	  /*************************************************************************************************/
 	  /* esNif (String cadena)								           */
 	  /*											           */
 	  /* Función que verifica que la cadena alfanumérica suministrada se corresponde con un NIF válido.*/
-	  /*                                                                                               */								         
+	  /*                                                                                               */
 	  /* Los PARÁMETROS DE ENTRADA que requiere la función son los siguientes:		           */
 	  /*   * cadena -----> parámetro del tipo STRING referente al número del NIF a validar.            */
 	  /*												   */
@@ -50,19 +50,19 @@ public class ValidacionesUtil
 	  /*************************************************************************************************/
 	  /* esPasaporte (String cadena)								           */
 	  /*											           */
-	  /* Función que verifica que la cadena alfanumérica suministrada se corresponde con un Pasaporte válido.*/	  
+	  /* Función que verifica que la cadena alfanumérica suministrada se corresponde con un Pasaporte válido.*/
 	  /*************************************************************************************************/
 
 	  public static boolean esPasaporte (String cadena)
 	  {
 	    return NifCif.esPasaporte (cadena);
 	  }
-	  
+
 	  /*************************************************************************************************/
 	  /* esCif (String cadena)								           */
 	  /*											           */
 	  /* Función que verifica que la cadena alfanumérica suministrada se corresponde con un CIF válido.*/
-	  /*                                                                                               */								         
+	  /*                                                                                               */
 	  /* Los PARÁMETROS DE ENTRADA que requiere la función son los siguientes:		           */
 	  /*   * cadena -----> parámetro del tipo STRING referente al número del CIF a validar.            */
 	  /*												   */
@@ -82,7 +82,7 @@ public class ValidacionesUtil
 	  /* esNie (String cadena)								           */
 	  /*											           */
 	  /* Función que verifica que la cadena alfanumérica suministrada se corresponde con un NIE válido.*/
-	  /*                                                                                               */								         
+	  /*                                                                                               */
 	  /* Los PARÁMETROS DE ENTRADA que requiere la función son los siguientes:		           */
 	  /*   * cadena -----> parámetro del tipo STRING referente al número del NIE a validar.            */
 	  /*												   */
@@ -103,7 +103,7 @@ public class ValidacionesUtil
 	  /*											           */
 	  /* Función que verifica que la cadena alfanumérica suministrada se corresponde con un Número de  */
 	  /* la Seguridad Social válido.								   */
-	  /*                                                                                               */								         
+	  /*                                                                                               */
 	  /* Los PARÁMETROS DE ENTRADA que requiere la función son los siguientes:		           */
 	  /*   * cadena -----> parámetro del tipo STRING referente al número de la Seguridad Social a      */
 	  /*                   validar.									   */
@@ -115,31 +115,31 @@ public class ValidacionesUtil
 	  /*   * Guillermo Corullón Lago. (01/01/2007)					           */
 	  /*************************************************************************************************/
 
-	  public static boolean esNumeroSeguridadSocial (String cadena) 
+	  public static boolean esNumeroSeguridadSocial (String cadena)
 	  {
-	    return NifCif.esNumeroSeguridadSocial (cadena); 
+	    return NifCif.esNumeroSeguridadSocial (cadena);
 	  }
-	
-	  
-	 
+
+
+
 	  /**
 	   * Valida numero IBAN
 	   * @param code codigo IBAN (no debe empezar por IBAN). Admite espacios y guiones.
 	   * @return true/false
 	   */
 	public static boolean esNumeroIBANValido(String code) {
-		
+
 		if (code == null) {
 			return false;
 		}
-		
+
 		try {
 			code = StringUtil.replace(code, " ", "");
 			code = StringUtil.replace(code, "-", "");
 		}catch (Exception ex) {
 			return false;
 		}
-		
+
 		long MODULUS = 97;
 		long MAX = 999999999;
 
@@ -162,16 +162,16 @@ public class ValidacionesUtil
 		}
 
 		boolean ok = ((total % MODULUS) == 1);
-		
+
 		// Para cuentas de España seguimos validando numero de cuenta
 		if (ok && code.startsWith("ES")) {
 			ok = esNumeroCuentaValido(code.substring(4));
 		}
-		
+
 		return ok;
 	}
 
-	  
+
 	/**
 	 * Valida un número de cuenta que viene todo junto en formato [entidad][sucursal][dc][cuenta]
 	 * No admite ningún tipo de separador, tan sólo las cifras del número de cuenta
@@ -181,18 +181,18 @@ public class ValidacionesUtil
 	public static boolean esNumeroCuentaValido( String numeroCuenta )
 	{
 		//String numeroCuentaNormalizado = NifCif.normalizarDocumento( numeroCuenta );
-			
-		
+
+
 		if ( !Pattern.matches(RE_CUENTA, numeroCuenta)) return false;
-		
+
 		String entidad = numeroCuenta.substring( 0,4 );
 		String sucursal = numeroCuenta.substring( 4,8 );
 		String dc = numeroCuenta.substring( 8, 10 );
 		String cuenta = numeroCuenta.substring( 10 );
-		
+
 		return esNumeroCuentaValido( entidad, sucursal, dc, cuenta );
 	}
-	
+
 	/**
 	 * Valida un número de cuenta a partir de la entidad, sucursal, dc y cuenta
 	 * @param entidad
@@ -205,31 +205,31 @@ public class ValidacionesUtil
 	{
 		if ( Integer.parseInt( entidad, 10 ) < 1 )
 			return false;
-		
-		
-        int calculo0 = 11 - 
-        		( 
+
+
+        int calculo0 = 11 -
+        		(
         				4 * Integer.parseInt( entidad.substring( 0, 1 ), 10 ) + 8 * Integer.parseInt( entidad.substring( 1, 2 ), 10 ) + 5*Integer.parseInt( entidad.substring( 2, 3 ), 10 ) + 10*Integer.parseInt( entidad.substring( 3, 4 ), 10 )
         				+ 9 * Integer.parseInt( sucursal.substring( 0, 1 ), 10 ) + 7*Integer.parseInt( sucursal.substring( 1, 2 ), 10 ) + 3*Integer.parseInt( sucursal.substring( 2, 3 ), 10 ) + 6*Integer.parseInt( sucursal.substring( 3, 4 ), 10 )
                 ) % 11;
-        
+
         int calculo1 = 11 - (1*Integer.parseInt( cuenta.substring( 0, 1 ), 10 ) + 2*Integer.parseInt( cuenta.substring( 1, 2 ), 10 ) + 4*Integer.parseInt( cuenta.substring( 2, 3 ), 10 )
                 + 8*Integer.parseInt( cuenta.substring( 3, 4 ), 10 ) + 5*Integer.parseInt( cuenta.substring( 4, 5 ), 10 ) + 10*Integer.parseInt( cuenta.substring( 5, 6 ), 10 )
                 + 9*Integer.parseInt( cuenta.substring( 6, 7 ), 10 ) + 7*Integer.parseInt( cuenta.substring( 7, 8 ), 10 ) + 3*Integer.parseInt( cuenta.substring( 8, 9 ), 10 )
                 + 6*Integer.parseInt( cuenta.substring( 9, 10 ), 10 )) % 11;
-        
+
         if(calculo0>=10) calculo0 = 11 - calculo0;
         if(calculo1>=10) calculo1 = 11 - calculo1;
-              
-        
+
+
         if(calculo0 != Integer.parseInt( dc.substring( 0,1 ), 10 ) || calculo1 != Integer.parseInt( dc.substring( 1,2 ), 10 ) )
         {
             return false;
         }
-		
+
 		return true;
 	}
-	
+
 	  public static boolean hayAniosDistancia (String fechaIni, String fechaFin, int aniosDist, String formatoFecha)
 	  {
 	    // Declaración de variables.
@@ -240,13 +240,13 @@ public class ValidacionesUtil
 
 	       Calendar iniCalendar;
 	       Calendar finCalendar;
-	  
+
 	    // Inicialización de variables.
 	       resultado = false;
-	     
+
 	       iniDate = DataUtil.data (fechaIni, formatoFecha);
 	       finDate = DataUtil.data (fechaFin, formatoFecha);
-	     
+
 	       iniCalendar = Calendar.getInstance ();
 	       if (iniDate == null) 		// No se proporciona una fechaIni válida.
 	       {
@@ -256,7 +256,7 @@ public class ValidacionesUtil
 	       {
 	       	 iniCalendar.setTime (iniDate); // Asignación de la fechaIni.
 	       }
-	     
+
 	       finCalendar = Calendar.getInstance ();
 	       if (finDate == null) 		// No se proporciona una fechaFin válida.
 	       {
@@ -266,12 +266,12 @@ public class ValidacionesUtil
 	       {
 	       	 finCalendar.setTime (finDate); // Asignación de la fechaFin.
 	       }
-	       
+
 	       if (aniosDist < 0)		// No se proporciona una distancia en años válida.
 	       {
 	       	 return resultado; 		// Salida de la función.
 	       }
-	       
+
 	       if (finCalendar.before (iniCalendar)) // La fecha menor de la comparación no es válida.
 	       {
 	       	 return resultado;		     // Salida de la función.
@@ -291,7 +291,7 @@ public class ValidacionesUtil
 	  /* Función que verifica que la distancia en años entre dos fechas dadas es MAYOR O IGUAL         */
 	  /* que un valor concreto. 									   */
 	  /* El formato asociado a las fechas que se comparan será el definido por defecto dd/mm/aaaa.     */
-	  /*                                                                                               */								         
+	  /*                                                                                               */
 	  /* Los PARÁMETROS DE ENTRADA que requiere la función son los siguientes:		           */
 	  /*   * fechaIni ------> parámetro del tipo STRING referente a la fecha MENOR de la comparación.  */
 	  /*   * fechaFin ------> parámetro del tipo STRING referente a la fecha MAYOR de la comparación.  */
@@ -304,7 +304,7 @@ public class ValidacionesUtil
 	  /*   * Guillermo Corullón Lago. (01/01/2007)						   */
 	  /*************************************************************************************************/
 
-	  public static boolean hayAniosDistancia (String fechaIni, String fechaFin, int aniosDist) 
+	  public static boolean hayAniosDistancia (String fechaIni, String fechaFin, int aniosDist)
 	  {
 	    return hayAniosDistancia (fechaIni, fechaFin, aniosDist, DEFAULT_FORMAT);
 	  }
@@ -314,7 +314,7 @@ public class ValidacionesUtil
 	  /*											           */
 	  /* Función que verifica que la distancia en años entre una fecha dada y la fecha actual del 	   */
 	  /* sistema es MAYOR O IGUAL que un valor concreto. 						   */
-	  /*                                                                                               */								         
+	  /*                                                                                               */
 	  /* Los PARÁMETROS DE ENTRADA que requiere la función son los siguientes:		           */
 	  /*   * fechaEvl ------> parámetro del tipo STRING referente a la fecha objeto de la comparación. */
 	  /*   * aniosDist -----> parámetro del tipo INT referente a la distancia en años entre las fechas.*/
@@ -327,7 +327,7 @@ public class ValidacionesUtil
 	  /*   * Guillermo Corullón Lago. (01/01/2007)						   */
 	  /*************************************************************************************************/
 
-	  public static boolean hayAniosDistancia (String fechaEvl, int aniosDist, String formatoFecha) 
+	  public static boolean hayAniosDistancia (String fechaEvl, int aniosDist, String formatoFecha)
 	  {
 	    // Declaración de variables.
 	       boolean  resultado;
@@ -337,13 +337,13 @@ public class ValidacionesUtil
 
 	       Calendar evlCalendar;
 	       Calendar sisCalendar;
-	  
+
 	    // Inicialización de variables.
 	       resultado = false;
-	     
+
 	       evlDate = DataUtil.data (fechaEvl, formatoFecha);
 	       sisDate = new Date ();
-	     
+
 	       evlCalendar = Calendar.getInstance ();
 	       if (evlDate == null) 		// No se proporciona una fechaEvl válida.
 	       {
@@ -353,15 +353,15 @@ public class ValidacionesUtil
 	       {
 	     	 evlCalendar.setTime (evlDate); // Asignación de la fechaEvl.
 	       }
-	     
+
 	       sisCalendar = Calendar.getInstance ();
 	       sisCalendar.setTime (sisDate);
-	       
+
 	       if (aniosDist < 0)		// No se proporciona una distancia en años válida.
 	       {
 	       	 return resultado; 		// Salida de la función.
 	       }
-	       
+
 	       if (sisCalendar.before (evlCalendar)) // La fecha menor de la comparación no es válida.
 	       {
 	       	 return resultado;		     // Salida de la función.
@@ -381,7 +381,7 @@ public class ValidacionesUtil
 	  /* Función que verifica que la distancia en años entre una fecha dada y la fecha actual del 	   */
 	  /* sistema es MAYOR O IGUAL que un valor concreto. 						   */
 	  /* El formato asociado a las fechas que se comparan será el definido por defecto dd/mm/aaaa.     */
-	  /*                                                                                               */								         
+	  /*                                                                                               */
 	  /* Los PARÁMETROS DE ENTRADA que requiere la función son los siguientes:		           */
 	  /*   * fechaEvl ------> parámetro del tipo STRING referente a la fecha objeto de la comparación. */
 	  /*   * aniosDist -----> parámetro del tipo INT referente a la distancia en años entre las fechas.*/
@@ -403,7 +403,7 @@ public class ValidacionesUtil
 	  /*											           */
 	  /* Función que verifica que la distancia en días entre dos fechas dadas es MAYOR O IGUAL         */
 	  /* que un valor concreto. 									   */
-	  /*                                                                                               */								         
+	  /*                                                                                               */
 	  /* Los PARÁMETROS DE ENTRADA que requiere la función son los siguientes:		           */
 	  /*   * fechaIni -----> parámetro del tipo STRING referente a la fecha MENOR de la comparación.   */
 	  /*   * fechaFin -----> parámetro del tipo STRING referente a la fecha MAYOR de la comparación.   */
@@ -428,13 +428,13 @@ public class ValidacionesUtil
 
 	       Calendar iniCalendar;
 	       Calendar finCalendar;
-	  
+
 	    // Inicialización de variables.
 	       resultado = false;
-	     
+
 	       iniDate = DataUtil.data (fechaIni, formatoFecha);
 	       finDate = DataUtil.data (fechaFin, formatoFecha);
-	       
+
 	       iniCalendar = Calendar.getInstance ();
 	       if (iniDate == null) 		// No se proporciona una fechaIni válida.
 	       {
@@ -444,7 +444,7 @@ public class ValidacionesUtil
 	       {
 	         iniCalendar.setTime (iniDate); // Asignación de la fechaIni.
 	       }
-	     
+
 	       finCalendar = Calendar.getInstance ();
 	       if (finDate == null) 		// No se proporciona una fechaFin válida.
 	       {
@@ -454,12 +454,12 @@ public class ValidacionesUtil
 	       {
 	         finCalendar.setTime (finDate); // Asignación de la fechaFin.
 	       }
-	       
+
 	       if (diasDist < 0)		// No se proporciona una distancia en días válida.
 	       {
 	       	 return resultado; 		// Salida de la función.
 	       }
-	       
+
 	       if (finCalendar.before (iniCalendar)) // La fecha menor de la comparación no es válida.
 	       {
 	       	 return resultado;		     // Salida de la función.
@@ -479,7 +479,7 @@ public class ValidacionesUtil
 	  /* Función que verifica que la distancia en días entre dos fechas dadas es MAYOR O IGUAL         */
 	  /* que un valor concreto. 									   */
 	  /* El formato asociado a las fechas que se comparan será el definido por defecto dd/mm/aaaa.     */
-	  /*                                                                                               */								         
+	  /*                                                                                               */
 	  /* Los PARÁMETROS DE ENTRADA que requiere la función son los siguientes:		           */
 	  /*   * fechaIni -----> parámetro del tipo STRING referente a la fecha MENOR de la comparación.   */
 	  /*   * fechaFin -----> parámetro del tipo STRING referente a la fecha MAYOR de la comparación.   */
@@ -493,7 +493,7 @@ public class ValidacionesUtil
 	  /*   * Vicent Ferrer i Pérez.   (24/01/2007)							   */
 	  /*************************************************************************************************/
 
-	  public static boolean hayDiasDistancia (String fechaIni, String fechaFin, int diasDist) 
+	  public static boolean hayDiasDistancia (String fechaIni, String fechaFin, int diasDist)
 	  {
 	    return hayDiasDistancia (fechaIni, fechaFin, diasDist, DEFAULT_FORMAT);
 	  }
@@ -503,7 +503,7 @@ public class ValidacionesUtil
 	  /*											           */
 	  /* Función que verifica que la distancia en días entre una fecha dada y la fecha actual del 	   */
 	  /* sistema es MAYOR O IGUAL que un valor concreto. 						   */
-	  /*                                                                                               */								         
+	  /*                                                                                               */
 	  /* Los PARÁMETROS DE ENTRADA que requiere la función son los siguientes:		           */
 	  /*   * fechaEvl -----> parámetro del tipo STRING referente a la fecha objeto de la comparación.  */
 	  /*   * diasDist -----> parámetro del tipo INT referente a la distancia en días entre las fechas. */
@@ -517,7 +517,7 @@ public class ValidacionesUtil
 	  /*   * Vicent Ferrer i Pérez.   (24/01/2007)							   */
 	  /*************************************************************************************************/
 
-	  public static boolean hayDiasDistancia (String fechaEvl, int diasDist, String formatoFecha) 
+	  public static boolean hayDiasDistancia (String fechaEvl, int diasDist, String formatoFecha)
 	  {
 	    // Declaración de variables.
 	       boolean  resultado;
@@ -527,13 +527,13 @@ public class ValidacionesUtil
 
 	       Calendar evlCalendar;
 	       Calendar sisCalendar;
-	  
+
 	    // Inicialización de variables.
 	       resultado = false;
-	     
+
 	       evlDate = DataUtil.data (fechaEvl, formatoFecha);
 	       sisDate = new Date ();
-	     
+
 	       evlCalendar = Calendar.getInstance ();
 	       if (evlDate == null) 		// No se proporciona una fechaEvl válida.
 	       {
@@ -543,7 +543,7 @@ public class ValidacionesUtil
 	       {
 	         evlCalendar.setTime (evlDate); // Asignación de la fechaEvl.
 	       }
-	     
+
 	       sisCalendar = Calendar.getInstance ();
 	       sisCalendar.setTime (sisDate);
 
@@ -551,7 +551,7 @@ public class ValidacionesUtil
 	       {
 	       	 return resultado; 		// Salida de la función.
 	       }
-	       
+
 	       if (sisCalendar.before (evlCalendar)) // La fecha menor de la comparación no es válida.
 	       {
 	       	 return resultado;		     // Salida de la función.
@@ -571,7 +571,7 @@ public class ValidacionesUtil
 	  /* Función que verifica que la distancia en días entre una fecha dada y la fecha actual del 	   */
 	  /* sistema es MAYOR O IGUAL que un valor concreto. 						   */
 	  /* El formato asociado a las fechas que se comparan será el definido por defecto dd/mm/aaaa.     */
-	  /*                                                                                               */								         
+	  /*                                                                                               */
 	  /* Los PARÁMETROS DE ENTRADA que requiere la función son los siguientes:		           */
 	  /*   * fechaEvl -----> parámetro del tipo STRING referente a la fecha objeto de la comparación.  */
 	  /*   * diasDist -----> parámetro del tipo INT referente a la distancia en días entre las fechas. */
@@ -588,7 +588,7 @@ public class ValidacionesUtil
 	  {
 	    return hayDiasDistancia (fechaEvl, diasDist, DEFAULT_FORMAT);
 	  }
-	  
+
 	  /**
 	   * Esta funcion devuelve el valor del campo pasado como parametro buscandolo en
 	   * la cadena de entrada. El formato de la cadena de entrada es el siguiente:
@@ -596,7 +596,7 @@ public class ValidacionesUtil
 	   * En el caso de no encontrar el campo devuelve cadena vacia.
 	 * @param cadena
 	 * @param campo
-	 * @return un string que representa el valor del campo pasado como parametro buscandolo en la cadena 
+	 * @return un string que representa el valor del campo pasado como parametro buscandolo en la cadena
 	 *         como parametro
 	 */
 	public static String getCampo(String cadena, String campo)
@@ -605,7 +605,7 @@ public class ValidacionesUtil
 			for(int i=0; i<pares.length; i++)
 			{
 				String[] campoValor = pares[i].split(ValidacionesUtil.SEPARADOR_PAR);
-				if((campoValor.length == 2) && (campoValor[0].equals(campo))) 
+				if((campoValor.length == 2) && (campoValor[0].equals(campo)))
 				{
 					return campoValor[1];
 				}
@@ -615,12 +615,12 @@ public class ValidacionesUtil
 	  }
 
 	  /**
-	   * Esta funcion comprueba que se recibe un String con todos los codigos rellenos. 
+	   * Esta funcion comprueba que se recibe un String con todos los codigos rellenos.
 	   * Es decir, se espera un string con el siguiente formato:
 	   * 	valor1separadorvalor2separador......
 	   * En el caso de que llegue un string en el que falte cualquier valor devuelve false.
 	 * @param datos
-	 * @return true o false segun detecta que contiene o no todos los valores esperados. 
+	 * @return true o false segun detecta que contiene o no todos los valores esperados.
 	 */
 	public static boolean validaLleno(String extension, String separador)
 	{
@@ -638,7 +638,7 @@ public class ValidacionesUtil
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Devuelve true si encuentra que hay huecos entre los codigos rellenos
 	 * @param extension
@@ -659,7 +659,7 @@ public class ValidacionesUtil
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Comprueba si el campo pasado como parámetro está en la lista o no.
 	 * @param lista
@@ -692,7 +692,7 @@ public class ValidacionesUtil
 		{
 			lista.add(campos[i]);
 		}
-		
+
 		int i = 1;
 		for(Iterator it = lista.iterator(); it.hasNext();i++)
 		{
@@ -708,12 +708,12 @@ public class ValidacionesUtil
 		if(repetidos.size() == 0) repetidos.add("0");
 		return repetidos;
 	}
-	
+
 	/**
 	 * Comprueba si hay repetidos en los valores de la cadena. La cadena que se espera tiene
 	 * el siguiente formato:
 	 * 		valor1separadorvalor2separadorvalor3,.....
-	 * 
+	 *
 	 * @param extension
 	 * @return true o false segun haya detectado si hay valores repetidos o no.
 	 */
@@ -731,12 +731,12 @@ public class ValidacionesUtil
 		}
 		return false;
 	}
-	
+
 	  /*************************************************************************************************/
 	  /* esCIAS (String cadena)								           */
 	  /*											           */
 	  /* Función que verifica que la cadena alfanumérica suministrada se corresponde con un CIAS válido.*/
-	  /*                                                                                               */								         
+	  /*                                                                                               */
 	  /* Los PARÁMETROS DE ENTRADA que requiere la función son los siguientes:		           */
 	  /*   * cadena -----> parámetro del tipo STRING referente al número del CIAS a validar.            */
 	  /*												   */
@@ -750,38 +750,38 @@ public class ValidacionesUtil
 	    return NifCif.esCIAS(cadena);
 	  }
 
-	
+
 	 /**
-	 * Devuelve el texto completo reemplazando el separador por un salto de línea. Cada item empezará con '- ' 
+	 * Devuelve el texto completo reemplazando el separador por un salto de línea. Cada item empezará con '- '
 	 */
 	  public static String getTextoCompleto(String texto,String separador)
 	  {
 		  String[] cadenas = texto.split(separador);
 		  StringBuffer result = new StringBuffer(texto.length() + 100);
 		  result.append("");
-		  
+
 		  for (int i=0;i<cadenas.length;i++){
-			  result.append("-" + cadenas[i] + "\r\n");			  			 
+			  result.append("-" + cadenas[i] + "\r\n");
 		  }
-		  		  
+
 		  return result.toString();
-	  }  
-	  
+	  }
+
 		/**
 		 * Realiza la validacion del email que se pasa como parametro
 		 * @param email
 		 * @return
 		 */
 		public static boolean validarEmail( String email )
-		{  
-			// validar email 
+		{
+			// validar email
 			// Pattern p = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
 			Pattern p = Pattern.compile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$");
 			Matcher m = p.matcher(email);
 			boolean b = m.matches();
 			return b;
 		}
-		
+
 		/**
 		 * Realiza la validacion del telefono movil que se pasa como parametro.Solo valida
 		 * aquellos telefonos con 9 cifras que empiecen por 6 o 7
@@ -789,8 +789,8 @@ public class ValidacionesUtil
 		 * @return
 		 */
 		public static boolean validarMovil( String movil)
-		{  
-			// validar email 
+		{
+			// validar email
 			Pattern p = Pattern.compile("[6-7][0-9]{8}");
 			Matcher m = p.matcher(movil);
 			boolean b = m.matches();
@@ -803,12 +803,12 @@ public class ValidacionesUtil
 		 * @return boolean si es entitat balear
 		 */
 		public static boolean esEntidadBalear(String cif){
-			
+
 			//CIF del govern
 			if ("S0711001H".equalsIgnoreCase(cif)) return true;
-			
+
 			return false;
-			
+
 		}
 
 
@@ -828,19 +828,19 @@ public class ValidacionesUtil
 				dBase = Double.parseDouble(base);
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
-				return null;			
+				return null;
 			}
-			
+
 			double dImportIva = dIva * dBase / (double)100.0d;
 
-			
-			DecimalFormat fmt = new DecimalFormat("0.00");  
-			
-			return fmt.format(Math.round(dImportIva*100.0d)/100.0d);  
+
+			DecimalFormat fmt = new DecimalFormat("0.00");
+
+			return fmt.format(Math.round(dImportIva*100.0d)/100.0d);
 		}
-		
+
 		/**
-		 * Calcula l'import total com a resulat d'aplicar un iva a una base imponible, amb 
+		 * Calcula l'import total com a resulat d'aplicar un iva a una base imponible, amb
 		 * precissió de 2 decimals.
 		 * @param string base imponible
 		 * @param string iva imponible
@@ -855,20 +855,20 @@ public class ValidacionesUtil
 				dBase = Double.parseDouble(base);
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
-				return null;			
+				return null;
 			}
-			
+
 			double dImportIva = dBase + dIva * dBase / (double)100.0d;
-			
-			
-			DecimalFormat fmt = new DecimalFormat("0.00");  
-			
-			return fmt.format(Math.round(dImportIva*100.0d)/100.0d);  
+
+
+			DecimalFormat fmt = new DecimalFormat("0.00");
+
+			return fmt.format(Math.round(dImportIva*100.0d)/100.0d);
 		}
-		
+
 		/**
 	 * Formatea un numero.
-	 * 
+	 *
 	 * @param number Numero a formatear.
 	 * @param numDecimals Numero de decimales con los que quedara el numero.
 	 * @param lang Idioma que determinará el formato (puntos, comas para decimales o miles)
@@ -1017,7 +1017,7 @@ public class ValidacionesUtil
 		}
 		return valido;
 	}
-	
+
 	/**
 	 * Valida un código SWIFT a partir del código del banco, el país, la localidad y la sucursal
 	 * @param banco     Código Banco
@@ -1030,15 +1030,15 @@ public class ValidacionesUtil
 			final String sucursal) {
 		final boolean codigoBancoCorrecto = banco != null && banco.length() == 4 && StringUtils.isAllUpperCase(banco);
 		final boolean codigoPaisCorrecto = pais != null && pais.length() == 2 && StringUtils.isAllUpperCase(pais);
-		final boolean codigoLocalidadCorrecto = localidad != null && localidad.length() == 2
-				&& (StringUtils.isNumeric(localidad) || StringUtils.isAllUpperCase(localidad));
+		final boolean codigoLocalidadCorrecto = localidad != null && localidad.length() == 2 &&
+                (StringUtils.isNumeric(localidad) || StringUtils.isAllUpperCase(localidad) || (StringUtils.isAlphanumeric(localidad) && localidad.matches("^[A-Z0-9]{2,}$")));
 		final boolean codigoSucursalCorrecto = esNumeroSwiftValidoSucursal(sucursal);
 
 		return codigoBancoCorrecto && codigoPaisCorrecto && codigoLocalidadCorrecto && codigoSucursalCorrecto;
 	}
-	
+
 	/**
-	 * Comprueba si el número de sucursal es válido (es opcional este dato). 
+	 * Comprueba si el número de sucursal es válido (es opcional este dato).
 	 * Tienen que ser o una cadena de letras mayúsculas o numérica (mezclado).
 	 *
 	 * @param sucursal
@@ -1059,5 +1059,5 @@ public class ValidacionesUtil
 			}
 		}
 		return validoSucursal;
-	}	
+	}
 }
