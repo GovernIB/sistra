@@ -1,6 +1,6 @@
 <%
 	// ----- PARTICULARIZACION DE CODIGO PARA LOGIN (LO DEMAS IGUAL PARA TRAMITACION Y ZONA PERSONAL) ---------------------
-	String niveles = "CLAVE_CERTIFICADO;CLAVE_PIN;CLAVE_PERMANENTE;ANONIMO;CLIENTCERT";
+	String niveles = "CLAVE_CERTIFICADO;CLAVE_PIN;CLAVE_PERMANENTE;ANONIMO;CLIENTCERT;CLAVE_MOVIL";
 	String textoAtencion="";
 	String modo = null;
 
@@ -49,6 +49,7 @@
 		 		if (niveles.indexOf("CLAVE_CERTIFICADO") >= 0 && modo.indexOf("C") >= 0 ) nivelesModo += "CLAVE_CERTIFICADO;";
 		 		if (niveles.indexOf("CLIENTCERT") >= 0 && modo.indexOf("C") >= 0 ) nivelesModo += "CLIENTCERT;";
 		 		if (niveles.indexOf("CLAVE_PIN;CLAVE_PERMANENTE") >= 0 && modo.indexOf("U") >= 0 ) nivelesModo += "CLAVE_PIN;CLAVE_PERMANENTE;";
+		 		if (niveles.indexOf("CLAVE_MOVIL") >= 0 && modo.indexOf("U") >= 0 ) nivelesModo += "CLAVE_MOVIL;";
 		 		if (niveles.indexOf("ANONIMO") >= 0 && modo.indexOf("A") >= 0 ) nivelesModo += "ANONIMO";
 		 		if (nivelesModo.endsWith(";")) {
 					nivelesModo = nivelesModo.substring(0, nivelesModo.length() - 1);

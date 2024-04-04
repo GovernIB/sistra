@@ -493,7 +493,7 @@ public class BackofficeFacadeImpl implements BackofficeFacade {
 				if("CLAVE_CERTIFICADO".equals(confWS.getMetodoAutenticacion()) || "CLIENTCERT".equals(confWS.getMetodoAutenticacion())){
 					confPAD.setMetodoAutenticacion("aFirma");
 					nivelAutenticacion = "C";
-				}else if ("CLAVE_PIN".equals(confWS.getMetodoAutenticacion())){
+				}else if ("CLAVE_PIN".equals(confWS.getMetodoAutenticacion()) || "CLAVE_MOVIL".equals(confWS.getMetodoAutenticacion()) ){
 					confPAD.setMetodoAutenticacion("AEAT");
 				}else if ("CLAVE_PERMANENTE".equals(confWS.getMetodoAutenticacion())){
 					confPAD.setMetodoAutenticacion("SS");

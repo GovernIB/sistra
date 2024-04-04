@@ -280,7 +280,8 @@ public class LoginIBModule extends AbstractServerLoginModule {
 			metodoAutenticacion = "C";
 		} else if ("CLAVE_PIN".equals(metAut)
 				|| "CLAVE_PERMANENTE".equals(metAut)
-				|| "USUARIO_PASSWORD".equals(metAut)) {
+				|| "USUARIO_PASSWORD".equals(metAut)
+				|| "CLAVE_MOVIL".equals(metAut)) {
 			metodoAutenticacion = "U";
 		}
 
