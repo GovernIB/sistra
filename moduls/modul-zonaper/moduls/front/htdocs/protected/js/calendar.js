@@ -1530,7 +1530,10 @@ Calendar.prototype.hideShowCovered = function () {
 					if (!cc.__msh_save_visibility) {
 						cc.__msh_save_visibility = getVisib(cc);
 					}
-					cc.style.visibility = "hidden";
+					//caso especial para que no se oculte este componente (caso de mostrarDelegaciones.do en zonaperfron)
+					if(cc.id != "permiso"){
+						cc.style.visibility = "hidden";
+					}
 				}
 			}
 		}
