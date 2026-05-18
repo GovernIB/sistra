@@ -184,17 +184,23 @@
 								<logic:notEmpty name="<%=codigoFirmaAsiento %>" scope="request">
 									<logic:iterate name="<%=codigoFirmaAsiento %>" id="firma" scope="request" type="es.caib.sistra.plugins.firma.FirmaIntf">
 										&nbsp;
-										<a href="mostrarFirmaDocumento.do?codigo=<%=codigoFirmaAsiento%>&clave=<%=claveFirmaAsiento%>&nif=<%=firma.getNif()%>" >
-											<logic:notEmpty name="firma" property="nombreApellidos">
-	                                            <bean:define id="firmanteDesc" name="firma" property="nombreApellidos" type="java.lang.String"/>
-	                                            <%=StringEscapeUtils.escapeHtml(firmanteDesc)%>
-	                                        </logic:notEmpty>
-	                                        <logic:empty name="firma" property="nombreApellidos">
-	                                        	<%=firma.getNif()%>
-	                                        </logic:empty>
+										<a href="mostrarFirmaDocumento.do?codigo=<%=codigoFirmaAsiento%>&clave=<%=claveFirmaAsiento%>&nif=<%=firma.getNif()%>">
+											<%
+												String nombreFirmante = firma.getNombreApellidos();
+												if (nombreFirmante != null && nombreFirmante.trim().length() > 0) {
+											%>
+													<%= StringEscapeUtils.escapeHtml(nombreFirmante) %>
+											<%
+												} else {
+											%>
+													<%= firma.getNif() %>
+											<%
+												}
+											%>
 										</a>
 									</logic:iterate>
 								</logic:notEmpty>
+															
 
 								<logic:notEmpty name="<%=\"CUST-\" + codigoFirmaAsiento %>" scope="request">
 									<br/>
