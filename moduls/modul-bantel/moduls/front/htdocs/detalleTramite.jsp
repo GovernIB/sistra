@@ -345,7 +345,16 @@
 											<logic:iterate name="<%=codigoFirma %>" id="firma" scope="request" type="es.caib.sistra.plugins.firma.FirmaIntf">
 												&nbsp;
 												<a href="mostrarFirmaDocumento.do?codigo=<%=documento.getRdsCodigo()%>&clave=<%=documento.getRdsClave()%>&nif=<%=firma.getNif()%>" >
-                                                    <bean:define id="firmanteDesc" name="firma" property="nombreApellidos" type="java.lang.String"/>
+                                                    													
+													<%
+														String firmanteDesc = "";
+														if (firma.getNombreApellidos() != null) {
+															firmanteDesc = firma.getNombreApellidos();
+														} else {
+															firmanteDesc = firma.getNif();
+														}
+													%>
+													
                                                     <%=StringEscapeUtils.escapeHtml(firmanteDesc)%>
                                                     <logic:notEmpty name="firma" property="nifRepresentante">
                                                     <logic:notEmpty name="firma" property="nombreApellidosRepresentante">
